@@ -237,7 +237,7 @@ module Csv
 
     def person_details_not_known?(log, attribute)
       details_known_field = PERSON_DETAILS.find { |key, _value| key == attribute }[1]["details_known_field"]
-      log[details_known_field] == 1
+      log[details_known_field] == 1 # Different in sales logs
     end
   end
 end

@@ -49,11 +49,8 @@ module Csv
     }.freeze
 
     PERSON_DETAILS = {}.tap { |hash|
-      (2..6).each do |i|
+      (1..6).each do |i|
         hash["age#{i}_known"] = { "refused_code" => "-9", "refused_label" => "Not known", "details_known_field" => "details_known_#{i}" }
-        hash["sex#{i}"] = { "refused_code" => "R", "refused_label" => "Prefers not to say", "details_known_field" => "details_known_#{i}" }
-        hash["relat#{i}"] = { "refused_code" => "R", "refused_label" => "Prefers not to say", "details_known_field" => "details_known_#{i}" }
-        hash["ecstat#{i}"] = { "refused_code" => "10", "refused_label" => "Prefers not to say", "details_known_field" => "details_known_#{i}" }
       end
     }.freeze
 
@@ -144,7 +141,7 @@ module Csv
 
     def person_details_not_known?(log, attribute)
       details_known_field = PERSON_DETAILS.find { |key, _value| key == attribute }[1]["details_known_field"]
-      log[details_known_field] == 1
+      log[details_known_field] == 2 # Different to lettings logs
     end
   end
 end
