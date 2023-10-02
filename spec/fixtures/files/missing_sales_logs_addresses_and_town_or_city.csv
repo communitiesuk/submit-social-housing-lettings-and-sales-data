@@ -1,3 +1,3 @@
-Sales log ID,Sale completion date,Purchaser code,Log owner,Owning organisation name,Address line 1,Address line 2,Town or City,County,Postcode,Local authority
-{id},2023-04-05,purchaser code,testy@example.com,Address test,,,,,,
-{id},2023-04-05,purchaser code,testy@example.com,Address test,existing address line 1,,,,,
+Issue type,Sales log ID,Sale completion date,Purchaser code,Log owner,Owning organisation name,Address line 1,Address line 2,Town or City,County,Postcode,Local authority
+Full address required,{id},2023-04-05,purchaser code,testy@example.com,Address test,,,,,,
+Missing town or city,{id},2023-04-05,purchaser code,testy@example.com,Address test,existing address line 1,,,,,
