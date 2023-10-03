@@ -118,17 +118,12 @@ module Csv
     }.freeze
 
     PERSON_DETAILS = {}.tap { |hash|
+      hash["age1"] = { "refused_code" => "-9", "refused_label" => "Not known", "age_known_field" => "age1_known" }
       (2..8).each do |i|
-        hash["age#{i}"] = { "refused_code" => "-9", "refused_label" => "Not known", "details_known_field" => "details_known_#{i}" }
+        hash["age#{i}"] = { "refused_code" => "-9", "refused_label" => "Not known", "details_known_field" => "details_known_#{i}", "age_known_field" => "age#{i}_known"  }
         hash["sex#{i}"] = { "refused_code" => "R", "refused_label" => "Prefers not to say", "details_known_field" => "details_known_#{i}" }
         hash["relat#{i}"] = { "refused_code" => "R", "refused_label" => "Prefers not to say", "details_known_field" => "details_known_#{i}" }
         hash["ecstat#{i}"] = { "refused_code" => "10", "refused_label" => "Prefers not to say", "details_known_field" => "details_known_#{i}" }
-      end
-    }.freeze
-
-    AGE_KNOWN_FIELDS = {}.tap { |hash|
-      (1..8).each do |i|
-        hash["age#{i}"] = { "age_known_field" => "age#{i}_known" }
       end
     }.freeze
 
@@ -163,7 +158,7 @@ module Csv
         get_label(value, attribute, log)
       elsif DATE_FIELDS.include? attribute
         log.public_send(attribute)&.iso8601
-      elsif (PERSON_DETAILS.any? { |key, _value| key == attribute } && person_details_not_known?(log, attribute)) || (AGE_KNOWN_FIELDS.any? { |key, _value| key == attribute } && age_not_known?(log, attribute) )
+      elsif PERSON_DETAILS.any? { |key, _value| key == attribute } && (person_details_not_known?(log, attribute) || age_not_known?(log, attribute))
         case @export_type
         when "codes"
           PERSON_DETAILS.find { |key, _value| key == attribute }[1]["refused_code"]
@@ -247,7 +242,7 @@ module Csv
     end
 
     def age_not_known?(log, attribute)
-      age_known_field = AGE_KNOWN_FIELDS.find { |key, _value| key == attribute }[1]["age_known_field"]
+      age_known_field = PERSON_DETAILS.find { |key, _value| key == attribute }[1]["age_known_field"]
       log[age_known_field] == 1
     end
   end
