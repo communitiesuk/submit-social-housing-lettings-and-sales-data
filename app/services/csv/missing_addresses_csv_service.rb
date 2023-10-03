@@ -6,24 +6,19 @@ module Csv
 
     def create_missing_lettings_addresses_csv
       logs_with_missing_addresses = @organisation.managed_lettings_logs
-      .imported
-      .filter_by_year(2023)
+      .imported_2023_with_old_form_id
       .where(needstype: 1, address_line1: nil, town_or_city: nil, uprn_known: [0, nil])
-      .where.not(old_form_id: nil)
 
       logs_with_missing_town_or_city = @organisation.managed_lettings_logs
-      .imported
-      .filter_by_year(2023)
+      .imported_2023_with_old_form_id
       .where(needstype: 1, town_or_city: nil, uprn_known: [0, nil])
-      .where.not(old_form_id: nil)
       .where.not(address_line1: nil)
 
       logs_with_wrong_uprn = if JSON.parse(ENV["SKIP_UPRN_ISSUE_ORG_IDS"]).include?(@organisation.id)
                                []
                              else
                                @organisation.managed_lettings_logs
-                                .imported
-                                .filter_by_year(2023)
+                                .imported_2023
                                 .where(needstype: 1)
                                 .where.not(uprn: nil)
                                 .where("uprn = propcode OR uprn = tenancycode OR town_or_city = 'Bristol'")
@@ -50,24 +45,19 @@ module Csv
 
     def create_missing_sales_addresses_csv
       logs_with_missing_addresses = @organisation.sales_logs
-      .imported
-      .filter_by_year(2023)
+      .imported_2023_with_old_form_id
       .where(address_line1: nil, town_or_city: nil, uprn_known: [0, nil])
-      .where.not(old_form_id: nil)
 
       logs_with_missing_town_or_city = @organisation.sales_logs
-      .imported
-      .filter_by_year(2023)
+      .imported_2023_with_old_form_id
       .where(town_or_city: nil, uprn_known: [0, nil])
-      .where.not(old_form_id: nil)
       .where.not(address_line1: nil)
 
       logs_with_wrong_uprn = if JSON.parse(ENV["SKIP_UPRN_ISSUE_ORG_IDS"]).include?(@organisation.id)
                                []
                              else
                                @organisation.sales_logs
-                                .imported
-                                .filter_by_year(2023)
+                                .imported_2023
                                 .where.not(uprn: nil)
                                 .where("uprn = purchid OR town_or_city = 'Bristol'")
                              end

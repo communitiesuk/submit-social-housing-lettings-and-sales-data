@@ -3,24 +3,19 @@ namespace :correct_addresses do
   task :send_missing_addresses_lettings_csv, %i[] => :environment do |_task, _args|
     Organisation.all.each do |organisation|
       logs_impacted_by_missing_address = organisation.managed_lettings_logs
-      .imported
-      .filter_by_year(2023)
-      .where(needstype: 1, address_line1: nil, town_or_city: nil, uprn_known: [0, nil])
-      .where.not(old_form_id: nil).count
+      .imported_2023_with_old_form_id
+      .where(needstype: 1, address_line1: nil, town_or_city: nil, uprn_known: [0, nil]).count
 
       logs_impacted_by_missing_town_or_city = organisation.managed_lettings_logs
-      .imported
-      .filter_by_year(2023)
+      .imported_2023_with_old_form_id
       .where(needstype: 1, town_or_city: nil, uprn_known: [0, nil])
-      .where.not(old_form_id: nil)
       .where.not(address_line1: nil).count
 
       logs_impacted_by_uprn_issue = if JSON.parse(ENV["SKIP_UPRN_ISSUE_ORG_IDS"]).include?(organisation.id)
                                       []
                                     else
                                       organisation.managed_lettings_logs
-                                      .imported
-                                      .filter_by_year(2023)
+                                      .imported_2023
                                       .where(needstype: 1)
                                       .where.not(uprn: nil)
                                       .where("uprn = propcode OR uprn = tenancycode OR town_or_city = 'Bristol'")
@@ -42,24 +37,19 @@ namespace :correct_addresses do
   task :send_missing_addresses_sales_csv, %i[] => :environment do |_task, _args|
     Organisation.all.each do |organisation|
       logs_impacted_by_missing_address = organisation.sales_logs
-      .imported
-      .filter_by_year(2023)
-      .where(address_line1: nil, town_or_city: nil, uprn_known: [0, nil])
-      .where.not(old_form_id: nil).count
+      .imported_2023_with_old_form_id
+      .where(address_line1: nil, town_or_city: nil, uprn_known: [0, nil]).count
 
       logs_impacted_by_missing_town_or_city = organisation.sales_logs
-      .imported
-      .filter_by_year(2023)
+      .imported_2023_with_old_form_id
       .where(town_or_city: nil, uprn_known: [0, nil])
-      .where.not(old_form_id: nil)
       .where.not(address_line1: nil).count
 
       logs_impacted_by_uprn_issue = if JSON.parse(ENV["SKIP_UPRN_ISSUE_ORG_IDS"]).include?(organisation.id)
                                       []
                                     else
                                       organisation.sales_logs
-                                      .imported
-                                      .filter_by_year(2023)
+                                      .imported_2023
                                       .where.not(uprn: nil)
                                       .where("uprn = purchid OR town_or_city = 'Bristol'")
                                     end
