@@ -4,7 +4,7 @@ class EmailMissingAddressesCsvJob < ApplicationJob
   BYTE_ORDER_MARK = "\uFEFF".freeze # Required to ensure Excel always reads CSV as UTF-8
 
   def perform(user_ids, organisation, log_type)
-    csv_service = Csv::MissingAddressesCsvService.new(organisation:)
+    csv_service = Csv::MissingAddressesCsvService.new(organisation)
     case log_type
     when "lettings"
       csv_string = csv_service.create_missing_lettings_addresses_csv

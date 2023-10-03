@@ -33,7 +33,7 @@ describe EmailMissingAddressesCsvJob do
     end
 
     it "creates a MissingAddressesCsvService with the correct organisation and calls create missing lettings logs adresses csv" do
-      expect(Csv::MissingAddressesCsvService).to receive(:new).with(organisation:)
+      expect(Csv::MissingAddressesCsvService).to receive(:new).with(organisation)
       expect(missing_addresses_csv_service).to receive(:create_missing_lettings_addresses_csv)
       job.perform(users.map(&:id), organisation, "lettings")
     end
@@ -52,7 +52,7 @@ describe EmailMissingAddressesCsvJob do
     end
 
     it "creates a MissingAddressesCsvService with the correct organisation and calls create missing sales logs adresses csv" do
-      expect(Csv::MissingAddressesCsvService).to receive(:new).with(organisation:)
+      expect(Csv::MissingAddressesCsvService).to receive(:new).with(organisation)
       expect(missing_addresses_csv_service).to receive(:create_missing_sales_addresses_csv)
       job.perform(users.map(&:id), organisation, "sales")
     end
