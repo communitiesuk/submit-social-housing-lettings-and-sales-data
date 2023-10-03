@@ -1,6 +1,8 @@
 namespace :correct_addresses do
   desc "Send missing lettings addresses csv"
-  task :send_missing_addresses_lettings_csv, %i[] => :environment do |_task, _args|
+  task :send_missing_addresses_lettings_csv, %i[skip_uprn_issue_organisations] => :environment do |_task, args|
+    skip_uprn_issue_organisations = args[:skip_uprn_issue_organisations]&.split(" ")&.map(&:to_i) || []
+
     Organisation.all.each do |organisation|
       logs_impacted_by_missing_address = organisation.managed_lettings_logs
       .imported_2023_with_old_form_id
@@ -11,7 +13,7 @@ namespace :correct_addresses do
       .where(needstype: 1, town_or_city: nil, uprn_known: [0, nil])
       .where.not(address_line1: nil).count
 
-      logs_impacted_by_uprn_issue = if JSON.parse(ENV["SKIP_UPRN_ISSUE_ORG_IDS"]).include?(organisation.id)
+      logs_impacted_by_uprn_issue = if skip_uprn_issue_organisations.include?(organisation.id)
                                       []
                                     else
                                       organisation.managed_lettings_logs
@@ -25,7 +27,7 @@ namespace :correct_addresses do
       if logs_impacted_by_missing_address >= missing_addresses_threshold || logs_impacted_by_missing_town_or_city >= missing_addresses_threshold || logs_impacted_by_uprn_issue.any?
         data_coordinators = organisation.users.where(role: 2).filter_by_active
         users_to_contact = data_coordinators.any? ? data_coordinators : organisation.users.filter_by_active
-        EmailMissingAddressesCsvJob.perform_later(users_to_contact.map(&:id), organisation, "lettings")
+        EmailMissingAddressesCsvJob.perform_later(users_to_contact.map(&:id), organisation, "lettings", skip_uprn_issue_organisations)
         Rails.logger.info("Sending missing lettings addresses CSV for #{organisation.name} to #{users_to_contact.map(&:email).join(', ')}")
       else
         Rails.logger.info("Missing addresses below threshold for #{organisation.name}")
@@ -34,7 +36,9 @@ namespace :correct_addresses do
   end
 
   desc "Send missing sales addresses csv"
-  task :send_missing_addresses_sales_csv, %i[] => :environment do |_task, _args|
+  task :send_missing_addresses_sales_csv, %i[skip_uprn_issue_organisations] => :environment do |_task, args|
+    skip_uprn_issue_organisations = args[:skip_uprn_issue_organisations]&.split(" ")&.map(&:to_i) || []
+
     Organisation.all.each do |organisation|
       logs_impacted_by_missing_address = organisation.sales_logs
       .imported_2023_with_old_form_id
@@ -45,7 +49,7 @@ namespace :correct_addresses do
       .where(town_or_city: nil, uprn_known: [0, nil])
       .where.not(address_line1: nil).count
 
-      logs_impacted_by_uprn_issue = if JSON.parse(ENV["SKIP_UPRN_ISSUE_ORG_IDS"]).include?(organisation.id)
+      logs_impacted_by_uprn_issue = if skip_uprn_issue_organisations.include?(organisation.id)
                                       []
                                     else
                                       organisation.sales_logs
@@ -57,7 +61,7 @@ namespace :correct_addresses do
       if logs_impacted_by_missing_address >= missing_addresses_threshold || logs_impacted_by_missing_town_or_city >= missing_addresses_threshold || logs_impacted_by_uprn_issue.any?
         data_coordinators = organisation.users.where(role: 2).filter_by_active
         users_to_contact = data_coordinators.any? ? data_coordinators : organisation.users.filter_by_active
-        EmailMissingAddressesCsvJob.perform_later(users_to_contact.map(&:id), organisation, "sales")
+        EmailMissingAddressesCsvJob.perform_later(users_to_contact.map(&:id), organisation, "sales", skip_uprn_issue_organisations)
         Rails.logger.info("Sending missing sales addresses CSV for #{organisation.name} to #{users_to_contact.map(&:email).join(', ')}")
       else
         Rails.logger.info("Missing addresses below threshold for #{organisation.name}")

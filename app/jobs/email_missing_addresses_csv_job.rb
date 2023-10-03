@@ -5,8 +5,8 @@ class EmailMissingAddressesCsvJob < ApplicationJob
   EXPIRATION_TIME = 72.hours.to_i
   MISSING_ADDRESSES_THRESHOLD = 50
 
-  def perform(user_ids, organisation, log_type)
-    csv_service = Csv::MissingAddressesCsvService.new(organisation)
+  def perform(user_ids, organisation, log_type, skip_uprn_issue_organisations)
+    csv_service = Csv::MissingAddressesCsvService.new(organisation, skip_uprn_issue_organisations)
     case log_type
     when "lettings"
       csv_string = csv_service.create_missing_lettings_addresses_csv

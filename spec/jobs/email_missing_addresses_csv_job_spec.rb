@@ -29,38 +29,38 @@ describe EmailMissingAddressesCsvJob do
   context "when sending missing lettings logs csv" do
     it "uses an appropriate filename in S3" do
       expect(storage_service).to receive(:write_file).with(/missing-lettings-logs-addresses-#{organisation.name}-.*\.csv/, anything)
-      job.perform(users.map(&:id), organisation, "lettings")
+      job.perform(users.map(&:id), organisation, "lettings", [1, 2])
     end
 
     it "creates a MissingAddressesCsvService with the correct organisation and calls create missing lettings logs adresses csv" do
-      expect(Csv::MissingAddressesCsvService).to receive(:new).with(organisation)
+      expect(Csv::MissingAddressesCsvService).to receive(:new).with(organisation, [1, 2])
       expect(missing_addresses_csv_service).to receive(:create_missing_lettings_addresses_csv)
-      job.perform(users.map(&:id), organisation, "lettings")
+      job.perform(users.map(&:id), organisation, "lettings", [1, 2])
     end
 
     it "sends emails to all the provided users" do
       expect(mailer).to receive(:send_missing_lettings_addresses_csv_download_mail).with(users[0], test_url, instance_of(Integer))
       expect(mailer).to receive(:send_missing_lettings_addresses_csv_download_mail).with(users[1], test_url, instance_of(Integer))
-      job.perform(users.map(&:id), organisation, "lettings")
+      job.perform(users.map(&:id), organisation, "lettings", [1, 2])
     end
   end
 
   context "when sending missing sales logs csv" do
     it "uses an appropriate filename in S3" do
       expect(storage_service).to receive(:write_file).with(/missing-sales-logs-addresses-#{organisation.name}-.*\.csv/, anything)
-      job.perform(users.map(&:id), organisation, "sales")
+      job.perform(users.map(&:id), organisation, "sales", [2, 3])
     end
 
     it "creates a MissingAddressesCsvService with the correct organisation and calls create missing sales logs adresses csv" do
-      expect(Csv::MissingAddressesCsvService).to receive(:new).with(organisation)
+      expect(Csv::MissingAddressesCsvService).to receive(:new).with(organisation, [2, 3])
       expect(missing_addresses_csv_service).to receive(:create_missing_sales_addresses_csv)
-      job.perform(users.map(&:id), organisation, "sales")
+      job.perform(users.map(&:id), organisation, "sales", [2, 3])
     end
 
     it "sends emails to all the provided users" do
       expect(mailer).to receive(:send_missing_sales_addresses_csv_download_mail).with(users[0], test_url, instance_of(Integer))
       expect(mailer).to receive(:send_missing_sales_addresses_csv_download_mail).with(users[1], test_url, instance_of(Integer))
-      job.perform(users.map(&:id), organisation, "sales")
+      job.perform(users.map(&:id), organisation, "sales", [2, 3])
     end
   end
 end

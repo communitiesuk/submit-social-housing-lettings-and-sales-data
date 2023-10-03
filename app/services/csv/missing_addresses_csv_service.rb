@@ -1,7 +1,8 @@
 module Csv
   class MissingAddressesCsvService
-    def initialize(organisation)
+    def initialize(organisation, skip_uprn_issue_organisations)
       @organisation = organisation
+      @skip_uprn_issue_organisations = skip_uprn_issue_organisations
     end
 
     def create_missing_lettings_addresses_csv
@@ -14,7 +15,7 @@ module Csv
       .where(needstype: 1, town_or_city: nil, uprn_known: [0, nil])
       .where.not(address_line1: nil)
 
-      logs_with_wrong_uprn = if JSON.parse(ENV["SKIP_UPRN_ISSUE_ORG_IDS"]).include?(@organisation.id)
+      logs_with_wrong_uprn = if @skip_uprn_issue_organisations.include?(@organisation.id)
                                []
                              else
                                @organisation.managed_lettings_logs
@@ -53,7 +54,7 @@ module Csv
       .where(town_or_city: nil, uprn_known: [0, nil])
       .where.not(address_line1: nil)
 
-      logs_with_wrong_uprn = if JSON.parse(ENV["SKIP_UPRN_ISSUE_ORG_IDS"]).include?(@organisation.id)
+      logs_with_wrong_uprn = if @skip_uprn_issue_organisations.include?(@organisation.id)
                                []
                              else
                                @organisation.sales_logs

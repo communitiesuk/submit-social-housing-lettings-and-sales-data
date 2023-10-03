@@ -3,7 +3,8 @@ require "rails_helper"
 RSpec.describe Csv::MissingAddressesCsvService do
   let(:organisation) { create(:organisation, name: "Address org") }
   let(:user) { create(:user, organisation:, email: "testy@example.com") }
-  let(:service) { described_class.new(organisation) }
+  let(:service) { described_class.new(organisation, skip_uprn_issue_organisations) }
+  let(:skip_uprn_issue_organisations) { [100, 200] }
 
   before do
     body_1 = {
@@ -137,10 +138,8 @@ RSpec.describe Csv::MissingAddressesCsvService do
         expect(csv).to eq(expected_content)
       end
 
-      context "and the organisation is in the SKIP_UPRN_ISSUE_ORG_IDS list" do
-        before do
-          allow(ENV).to receive(:[]).with("SKIP_UPRN_ISSUE_ORG_IDS").and_return([organisation.id].to_json)
-        end
+      context "and the organisation is marked as an organisation to skip" do
+        let(:skip_uprn_issue_organisations) { [organisation.id] }
 
         it "returns nil" do
           expect(service.create_missing_lettings_addresses_csv).to be_nil
@@ -276,10 +275,8 @@ RSpec.describe Csv::MissingAddressesCsvService do
         expect(csv).to eq(expected_content)
       end
 
-      context "and the organisation is in the SKIP_UPRN_ISSUE_ORG_IDS list" do
-        before do
-          allow(ENV).to receive(:[]).with("SKIP_UPRN_ISSUE_ORG_IDS").and_return([organisation.id].to_json)
-        end
+      context "and the organisation is marked as an organisation to skip" do
+        let(:skip_uprn_issue_organisations) { [organisation.id] }
 
         it "returns nil" do
           expect(service.create_missing_sales_addresses_csv).to be_nil
