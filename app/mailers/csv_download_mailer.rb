@@ -11,19 +11,19 @@ class CsvDownloadMailer < NotifyMailer
     )
   end
 
-  def send_missing_lettings_addresses_csv_download_mail(user, link)
+  def send_missing_lettings_addresses_csv_download_mail(user, link, duration)
     send_email(
       user.email,
       CSV_MISSING_LETTINGS_ADDRESSES_DOWNLOAD_TEMPLATE_ID,
-      { name: user.name, link: },
+      { name: user.name, link:, duration: ActiveSupport::Duration.build(duration).inspect },
     )
   end
 
-  def send_missing_sales_addresses_csv_download_mail(user, link)
+  def send_missing_sales_addresses_csv_download_mail(user, link, duration)
     send_email(
       user.email,
       CSV_MISSING_SALES_ADDRESSES_DOWNLOAD_TEMPLATE_ID,
-      { name: user.name, link: },
+      { name: user.name, link:, duration: ActiveSupport::Duration.build(duration).inspect },
     )
   end
 end

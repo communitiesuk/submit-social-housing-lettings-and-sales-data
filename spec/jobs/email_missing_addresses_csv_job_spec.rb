@@ -39,8 +39,8 @@ describe EmailMissingAddressesCsvJob do
     end
 
     it "sends emails to all the provided users" do
-      expect(mailer).to receive(:send_missing_lettings_addresses_csv_download_mail).with(users[0], test_url)
-      expect(mailer).to receive(:send_missing_lettings_addresses_csv_download_mail).with(users[1], test_url)
+      expect(mailer).to receive(:send_missing_lettings_addresses_csv_download_mail).with(users[0], test_url, instance_of(Integer))
+      expect(mailer).to receive(:send_missing_lettings_addresses_csv_download_mail).with(users[1], test_url, instance_of(Integer))
       job.perform(users.map(&:id), organisation, "lettings")
     end
   end
@@ -58,8 +58,8 @@ describe EmailMissingAddressesCsvJob do
     end
 
     it "sends emails to all the provided users" do
-      expect(mailer).to receive(:send_missing_sales_addresses_csv_download_mail).with(users[0], test_url)
-      expect(mailer).to receive(:send_missing_sales_addresses_csv_download_mail).with(users[1], test_url)
+      expect(mailer).to receive(:send_missing_sales_addresses_csv_download_mail).with(users[0], test_url, instance_of(Integer))
+      expect(mailer).to receive(:send_missing_sales_addresses_csv_download_mail).with(users[1], test_url, instance_of(Integer))
       job.perform(users.map(&:id), organisation, "sales")
     end
   end
