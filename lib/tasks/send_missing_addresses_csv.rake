@@ -1,8 +1,4 @@
 namespace :correct_addresses do
-  # rubocop:disable Lint/ConstantDefinitionInBlock
-  MISSING_ADDRESSES_THRESHOLD = 50
-  # rubocop:enable Lint/ConstantDefinitionInBlock
-
   desc "Send missing lettings addresses csv"
   task :send_missing_addresses_lettings_csv, %i[] => :environment do |_task, _args|
     Organisation.all.each do |organisation|
@@ -29,7 +25,9 @@ namespace :correct_addresses do
                                       .where.not(uprn: nil)
                                       .where("uprn = propcode OR uprn = tenancycode OR town_or_city = 'Bristol'")
                                     end
-      if logs_impacted_by_missing_address >= MISSING_ADDRESSES_THRESHOLD || logs_impacted_by_missing_town_or_city >= MISSING_ADDRESSES_THRESHOLD || logs_impacted_by_uprn_issue.any?
+
+      missing_addresses_threshold = EmailMissingAddressesCsvJob::MISSING_ADDRESSES_THRESHOLD
+      if logs_impacted_by_missing_address >= missing_addresses_threshold || logs_impacted_by_missing_town_or_city >= missing_addresses_threshold || logs_impacted_by_uprn_issue.any?
         data_coordinators = organisation.users.where(role: 2).filter_by_active
         users_to_contact = data_coordinators.any? ? data_coordinators : organisation.users.filter_by_active
         EmailMissingAddressesCsvJob.perform_later(users_to_contact.map(&:id), organisation, "lettings")
@@ -65,7 +63,8 @@ namespace :correct_addresses do
                                       .where.not(uprn: nil)
                                       .where("uprn = purchid OR town_or_city = 'Bristol'")
                                     end
-      if logs_impacted_by_missing_address >= MISSING_ADDRESSES_THRESHOLD || logs_impacted_by_missing_town_or_city >= MISSING_ADDRESSES_THRESHOLD || logs_impacted_by_uprn_issue.any?
+      missing_addresses_threshold = EmailMissingAddressesCsvJob::MISSING_ADDRESSES_THRESHOLD
+      if logs_impacted_by_missing_address >= missing_addresses_threshold || logs_impacted_by_missing_town_or_city >= missing_addresses_threshold || logs_impacted_by_uprn_issue.any?
         data_coordinators = organisation.users.where(role: 2).filter_by_active
         users_to_contact = data_coordinators.any? ? data_coordinators : organisation.users.filter_by_active
         EmailMissingAddressesCsvJob.perform_later(users_to_contact.map(&:id), organisation, "sales")

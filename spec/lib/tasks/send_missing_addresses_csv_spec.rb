@@ -46,7 +46,7 @@ RSpec.describe "correct_addresses" do
       let(:organisation) { create(:organisation, name: "test organisation") }
 
       before do
-        stub_const("MISSING_ADDRESSES_THRESHOLD", 5)
+        stub_const("EmailMissingAddressesCsvJob::MISSING_ADDRESSES_THRESHOLD", 5)
       end
 
       context "when org has more than 5 missing addresses and data coordinators" do
@@ -265,7 +265,7 @@ RSpec.describe "correct_addresses" do
       let(:organisation) { create(:organisation, name: "test organisation") }
 
       before do
-        stub_const("MISSING_ADDRESSES_THRESHOLD", 5)
+        stub_const("EmailMissingAddressesCsvJob::MISSING_ADDRESSES_THRESHOLD", 5)
       end
 
       context "when org has more than 5 missing addresses and data coordinators" do

@@ -3,6 +3,7 @@ class EmailMissingAddressesCsvJob < ApplicationJob
 
   BYTE_ORDER_MARK = "\uFEFF".freeze # Required to ensure Excel always reads CSV as UTF-8
   EXPIRATION_TIME = 72.hours.to_i
+  MISSING_ADDRESSES_THRESHOLD = 50
 
   def perform(user_ids, organisation, log_type)
     csv_service = Csv::MissingAddressesCsvService.new(organisation)
