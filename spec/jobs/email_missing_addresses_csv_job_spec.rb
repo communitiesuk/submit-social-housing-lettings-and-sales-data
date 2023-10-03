@@ -20,8 +20,6 @@ describe EmailMissingAddressesCsvJob do
     allow(Csv::MissingAddressesCsvService).to receive(:new).and_return(missing_addresses_csv_service)
     allow(missing_addresses_csv_service).to receive(:create_missing_lettings_addresses_csv).and_return("")
     allow(missing_addresses_csv_service).to receive(:create_missing_sales_addresses_csv).and_return("")
-    allow(missing_addresses_csv_service).to receive(:create_missing_lettings_town_or_city_csv).and_return("")
-    allow(missing_addresses_csv_service).to receive(:create_missing_sales_town_or_city_csv).and_return("")
 
     allow(CsvDownloadMailer).to receive(:new).and_return(mailer)
     allow(mailer).to receive(:send_missing_lettings_addresses_csv_download_mail)
