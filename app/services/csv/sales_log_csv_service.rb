@@ -49,8 +49,17 @@ module Csv
     }.freeze
 
     PERSON_DETAILS = {}.tap { |hash|
-      (1..6).each do |i|
-        hash["age#{i}_known"] = { "refused_code" => "-9", "refused_label" => "Not known", "details_known_field" => "details_known_#{i}" }
+      (2..6).each do |i|
+        hash["age#{i}"] = { "refused_code" => "-9", "refused_label" => "Not known", "details_known_field" => "details_known_#{i}" }
+        hash["sex#{i}"] = { "refused_code" => "R", "refused_label" => "Prefers not to say", "details_known_field" => "details_known_#{i}" }
+        hash["relat#{i}"] = { "refused_code" => "R", "refused_label" => "Prefers not to say", "details_known_field" => "details_known_#{i}" }
+        hash["ecstat#{i}"] = { "refused_code" => "10", "refused_label" => "Prefers not to say", "details_known_field" => "details_known_#{i}" }
+      end
+    }.freeze
+
+    AGE_KNOWN_FIELDS = {}.tap { |hash|
+      (2..6).each do |i|
+        hash["age#{i}"] = { "age_known_field" => "age#{i}_known" }
       end
     }.freeze
 
@@ -81,7 +90,7 @@ module Csv
         get_label(value, attribute, log)
       elsif DATE_FIELDS.include? attribute
         log.send(attribute)&.iso8601
-      elsif PERSON_DETAILS.any? { |key, _value| key == attribute } && person_details_not_known?(log, attribute)
+      elsif (PERSON_DETAILS.any? { |key, _value| key == attribute } && person_details_not_known?(log, attribute)) || (AGE_KNOWN_FIELDS.any? { |key, _value| key == attribute } && age_not_known?(log, attribute) )
         case @export_type
         when "codes"
           PERSON_DETAILS.find { |key, _value| key == attribute }[1]["refused_code"]
@@ -125,7 +134,7 @@ module Csv
 
     def sales_log_attributes
       ordered_questions = FormHandler.instance.ordered_sales_questions_for_all_years
-      ordered_questions.reject! { |q| q.id.match?(/((?<!la|age\d)_known)|(_check)|(_asked)/) }
+      ordered_questions.reject! { |q| q.id.match?(/((?<!la)_known)|(_check)|(_asked)/) }
       attributes = ordered_questions.flat_map do |question|
         if question.type == "checkbox"
           question.answer_options.keys
@@ -141,7 +150,12 @@ module Csv
 
     def person_details_not_known?(log, attribute)
       details_known_field = PERSON_DETAILS.find { |key, _value| key == attribute }[1]["details_known_field"]
-      log[details_known_field] == 1
+      log[details_known_field] == 2 # 1 for lettings logs, 2 for sales logs
+    end
+
+    def age_not_known?(log, attribute)
+      age_known_field = AGE_KNOWN_FIELDS.find { |key, _value| key == attribute }[1]["age_known_field"]
+      log[age_known_field] == 1
     end
   end
 end
