@@ -35,54 +35,15 @@ module Csv
         csv << ["Issue type", "Lettings log ID", "Tenancy start date", "Tenant code", "Property code", "Log owner", "Owning organisation name", "Managing organisation name", "UPRN", "Address line 1", "Address line 2 (optional)", "Town or City", "County (optional)", "Postcode"]
 
         logs_with_missing_addresses.each do |log|
-          csv << ["Full address required",
-                  log.id,
-                  log.startdate&.to_date,
-                  log.tenancycode,
-                  log.propcode,
-                  log.created_by&.email,
-                  log.owning_organisation&.name,
-                  log.managing_organisation&.name,
-                  log.uprn,
-                  log.address_line1,
-                  log.address_line2,
-                  log.town_or_city,
-                  log.county,
-                  log.postcode_full]
+          csv << lettings_log_to_csv_row(log, "Full address required")
         end
 
         logs_with_missing_town_or_city.each do |log|
-          csv << ["Missing town or city",
-                  log.id,
-                  log.startdate&.to_date,
-                  log.tenancycode,
-                  log.propcode,
-                  log.created_by&.email,
-                  log.owning_organisation&.name,
-                  log.managing_organisation&.name,
-                  log.uprn,
-                  log.address_line1,
-                  log.address_line2,
-                  log.town_or_city,
-                  log.county,
-                  log.postcode_full]
+          csv << lettings_log_to_csv_row(log, "Missing town or city")
         end
 
         logs_with_wrong_uprn.each do |log|
-          csv << ["UPRN issues",
-                  log.id,
-                  log.startdate&.to_date,
-                  log.tenancycode,
-                  log.propcode,
-                  log.created_by&.email,
-                  log.owning_organisation&.name,
-                  log.managing_organisation&.name,
-                  log.uprn,
-                  log.address_line1,
-                  log.address_line2,
-                  log.town_or_city,
-                  log.county,
-                  log.postcode_full]
+          csv << lettings_log_to_csv_row(log, "UPRN issues")
         end
       end
     end
@@ -116,50 +77,51 @@ module Csv
         csv << ["Issue type", "Sales log ID", "Sale completion date", "Purchaser code", "Log owner", "Owning organisation name", "UPRN", "Address line 1", "Address line 2 (optional)", "Town or City", "County (optional)", "Postcode"]
 
         logs_with_missing_addresses.each do |log|
-          csv << ["Full address required",
-                  log.id,
-                  log.saledate&.to_date,
-                  log.purchid,
-                  log.created_by&.email,
-                  log.owning_organisation&.name,
-                  log.uprn,
-                  log.address_line1,
-                  log.address_line2,
-                  log.town_or_city,
-                  log.county,
-                  log.postcode_full]
+          csv << sales_log_to_csv_row(log, "Full address required")
         end
 
         logs_with_missing_town_or_city.each do |log|
-          csv << ["Missing town or city",
-                  log.id,
-                  log.saledate&.to_date,
-                  log.purchid,
-                  log.created_by&.email,
-                  log.owning_organisation&.name,
-                  log.uprn,
-                  log.address_line1,
-                  log.address_line2,
-                  log.town_or_city,
-                  log.county,
-                  log.postcode_full]
+          csv << sales_log_to_csv_row(log, "Missing town or city")
         end
 
         logs_with_wrong_uprn.each do |log|
-          csv << ["UPRN issues",
-                  log.id,
-                  log.saledate&.to_date,
-                  log.purchid,
-                  log.created_by&.email,
-                  log.owning_organisation&.name,
-                  log.uprn,
-                  log.address_line1,
-                  log.address_line2,
-                  log.town_or_city,
-                  log.county,
-                  log.postcode_full]
+          csv << sales_log_to_csv_row(log, "UPRN issues")
         end
       end
+    end
+
+  private
+
+    def sales_log_to_csv_row(log, issue_type)
+      [issue_type,
+       log.id,
+       log.saledate&.to_date,
+       log.purchid,
+       log.created_by&.email,
+       log.owning_organisation&.name,
+       log.uprn,
+       log.address_line1,
+       log.address_line2,
+       log.town_or_city,
+       log.county,
+       log.postcode_full]
+    end
+
+    def lettings_log_to_csv_row(log, issue_type)
+      [issue_type,
+       log.id,
+       log.startdate&.to_date,
+       log.tenancycode,
+       log.propcode,
+       log.created_by&.email,
+       log.owning_organisation&.name,
+       log.managing_organisation&.name,
+       log.uprn,
+       log.address_line1,
+       log.address_line2,
+       log.town_or_city,
+       log.county,
+       log.postcode_full]
     end
   end
 end
