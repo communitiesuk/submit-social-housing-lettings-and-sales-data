@@ -27,7 +27,7 @@ namespace :correct_addresses do
                                       .filter_by_year(2023)
                                       .where(needstype: 1)
                                       .where.not(uprn: nil)
-                                      .where("uprn = propcode OR uprn = tenancycode or town_or_city = 'Bristol'")
+                                      .where("uprn = propcode OR uprn = tenancycode OR town_or_city = 'Bristol'")
                                     end
       if logs_impacted_by_missing_address >= MISSING_ADDRESSES_THRESHOLD || logs_impacted_by_missing_town_or_city >= MISSING_ADDRESSES_THRESHOLD || logs_impacted_by_uprn_issue.any?
         data_coordinators = organisation.users.where(role: 2).filter_by_active
@@ -63,7 +63,7 @@ namespace :correct_addresses do
                                       .imported
                                       .filter_by_year(2023)
                                       .where.not(uprn: nil)
-                                      .where("uprn = purchid or town_or_city = 'Bristol'")
+                                      .where("uprn = purchid OR town_or_city = 'Bristol'")
                                     end
       if logs_impacted_by_missing_address >= MISSING_ADDRESSES_THRESHOLD || logs_impacted_by_missing_town_or_city >= MISSING_ADDRESSES_THRESHOLD || logs_impacted_by_uprn_issue.any?
         data_coordinators = organisation.users.where(role: 2).filter_by_active

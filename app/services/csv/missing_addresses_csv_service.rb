@@ -26,7 +26,7 @@ module Csv
                                 .filter_by_year(2023)
                                 .where(needstype: 1)
                                 .where.not(uprn: nil)
-                                .where("uprn = propcode OR uprn = tenancycode or town_or_city = 'Bristol'")
+                                .where("uprn = propcode OR uprn = tenancycode OR town_or_city = 'Bristol'")
                              end
 
       return if logs_with_missing_addresses.empty? && logs_with_missing_town_or_city.empty? && logs_with_wrong_uprn.empty?
@@ -69,7 +69,7 @@ module Csv
                                 .imported
                                 .filter_by_year(2023)
                                 .where.not(uprn: nil)
-                                .where("uprn = purchid or town_or_city = 'Bristol'")
+                                .where("uprn = purchid OR town_or_city = 'Bristol'")
                              end
       return if logs_with_missing_addresses.empty? && logs_with_missing_town_or_city.empty? && logs_with_wrong_uprn.empty?
 
