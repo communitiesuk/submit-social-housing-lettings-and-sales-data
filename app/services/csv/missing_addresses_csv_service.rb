@@ -32,7 +32,7 @@ module Csv
       return if logs_with_missing_addresses.empty? && logs_with_missing_town_or_city.empty? && logs_with_wrong_uprn.empty?
 
       CSV.generate(headers: true) do |csv|
-        csv << ["Issue type", "Lettings log ID", "Tenancy start date", "Tenant code", "Property code", "Log owner", "Owning organisation name", "Managing organisation name", "UPRN", "Address line 1", "Address line 2", "Town or City", "County", "Postcode", "Local authority"]
+        csv << ["Issue type", "Lettings log ID", "Tenancy start date", "Tenant code", "Property code", "Log owner", "Owning organisation name", "Managing organisation name", "UPRN", "Address line 1", "Address line 2 (optional)", "Town or City", "County (optional)", "Postcode"]
 
         logs_with_missing_addresses.each do |log|
           csv << ["Full address required",
@@ -48,8 +48,7 @@ module Csv
                   log.address_line2,
                   log.town_or_city,
                   log.county,
-                  log.postcode_full,
-                  log.la]
+                  log.postcode_full]
         end
 
         logs_with_missing_town_or_city.each do |log|
@@ -66,8 +65,7 @@ module Csv
                   log.address_line2,
                   log.town_or_city,
                   log.county,
-                  log.postcode_full,
-                  log.la]
+                  log.postcode_full]
         end
 
         logs_with_wrong_uprn.each do |log|
@@ -84,8 +82,7 @@ module Csv
                   log.address_line2,
                   log.town_or_city,
                   log.county,
-                  log.postcode_full,
-                  log.la]
+                  log.postcode_full]
         end
       end
     end
@@ -116,7 +113,7 @@ module Csv
       return if logs_with_missing_addresses.empty? && logs_with_missing_town_or_city.empty? && logs_with_wrong_uprn.empty?
 
       CSV.generate(headers: true) do |csv|
-        csv << ["Issue type", "Sales log ID", "Sale completion date", "Purchaser code", "Log owner", "Owning organisation name", "UPRN", "Address line 1", "Address line 2", "Town or City", "County", "Postcode", "Local authority"]
+        csv << ["Issue type", "Sales log ID", "Sale completion date", "Purchaser code", "Log owner", "Owning organisation name", "UPRN", "Address line 1", "Address line 2 (optional)", "Town or City", "County (optional)", "Postcode"]
 
         logs_with_missing_addresses.each do |log|
           csv << ["Full address required",
@@ -130,8 +127,7 @@ module Csv
                   log.address_line2,
                   log.town_or_city,
                   log.county,
-                  log.postcode_full,
-                  log.la]
+                  log.postcode_full]
         end
 
         logs_with_missing_town_or_city.each do |log|
@@ -146,8 +142,7 @@ module Csv
                   log.address_line2,
                   log.town_or_city,
                   log.county,
-                  log.postcode_full,
-                  log.la]
+                  log.postcode_full]
         end
 
         logs_with_wrong_uprn.each do |log|
@@ -162,8 +157,7 @@ module Csv
                   log.address_line2,
                   log.town_or_city,
                   log.county,
-                  log.postcode_full,
-                  log.la]
+                  log.postcode_full]
         end
       end
     end

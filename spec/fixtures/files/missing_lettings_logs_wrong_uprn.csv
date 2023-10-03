@@ -1,2 +1,2 @@
-Issue type,Lettings log ID,Tenancy start date,Tenant code,Property code,Log owner,Owning organisation name,Managing organisation name,UPRN,Address line 1,Address line 2,Town or City,County,Postcode,Local authority
-UPRN issues,{id},2023-04-05,tenancycode,12,testy@example.com,Address org,Address org,12,Some Place,,Newcastle,,EC1N 2TD,
+Issue type,Lettings log ID,Tenancy start date,Tenant code,Property code,Log owner,Owning organisation name,Managing organisation name,UPRN,Address line 1,Address line 2 (optional),Town or City,County (optional),Postcode
+UPRN issues,{id},2023-04-05,tenancycode,12,testy@example.com,Address org,Address org,12,Some Place,,Newcastle,,EC1N 2TD
