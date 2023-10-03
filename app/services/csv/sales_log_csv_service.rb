@@ -58,7 +58,7 @@ module Csv
     }.freeze
 
     AGE_KNOWN_FIELDS = {}.tap { |hash|
-      (2..6).each do |i|
+      (1..6).each do |i|
         hash["age#{i}"] = { "age_known_field" => "age#{i}_known" }
       end
     }.freeze
