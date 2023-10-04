@@ -74,7 +74,7 @@ module Csv
         value = log.send(attribute)
         get_label(value, attribute, log)
       elsif DATE_FIELDS.include? attribute
-        log.send(attribute)&.iso8601
+        log.public_send(attribute)&.strftime("%F")
       else
         value = log.public_send(attribute)
         case @export_type

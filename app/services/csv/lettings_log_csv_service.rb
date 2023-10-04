@@ -156,7 +156,7 @@ module Csv
         value = log.public_send(attribute)
         get_label(value, attribute, log)
       elsif DATE_FIELDS.include? attribute
-        log.public_send(attribute)&.iso8601
+        log.public_send(attribute)&.strftime("%F")
       elsif PERSON_DETAILS.any? { |key, _value| key == attribute } && person_details_not_known?(log, attribute)
         case @export_type
         when "codes"
