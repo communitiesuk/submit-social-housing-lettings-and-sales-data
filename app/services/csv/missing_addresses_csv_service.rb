@@ -31,15 +31,15 @@ module Csv
         csv << ["Issue type", "Log ID", "Tenancy start date", "Tenant code", "Property reference", "Log owner", "Owning organisation", "Managing organisation", "UPRN", "Address Line 1", "Address Line 2 (optional)", "Town or City", "County (optional)", "Property’s postcode"]
 
         logs_with_missing_addresses.each do |log|
-          csv << lettings_log_to_csv_row(log, "Full address required")
+          csv << ["Full address required"] + lettings_log_to_csv_row(log)
         end
 
         logs_with_missing_town_or_city.each do |log|
-          csv << lettings_log_to_csv_row(log, "Missing town or city")
+          csv << ["Missing town or city"] + lettings_log_to_csv_row(log)
         end
 
         logs_with_wrong_uprn.each do |log|
-          csv << lettings_log_to_csv_row(log, "UPRN issues")
+          csv << ["UPRN issues"] + lettings_log_to_csv_row(log)
         end
       end
     end
@@ -68,24 +68,49 @@ module Csv
         csv << ["Issue type", "Log ID", "Sale completion date", "Purchaser code", "Log owner", "Owning organisation", "UPRN", "Address Line 1", "Address Line 2 (optional)", "Town or City", "County (optional)", "Property’s postcode"]
 
         logs_with_missing_addresses.each do |log|
-          csv << sales_log_to_csv_row(log, "Full address required")
+          csv << ["Full address required"] + sales_log_to_csv_row(log)
         end
 
         logs_with_missing_town_or_city.each do |log|
-          csv << sales_log_to_csv_row(log, "Missing town or city")
+          csv << ["Missing town or city"] + sales_log_to_csv_row(log)
         end
 
         logs_with_wrong_uprn.each do |log|
-          csv << sales_log_to_csv_row(log, "UPRN issues")
+          csv << ["UPRN issues"] + sales_log_to_csv_row(log)
+        end
+      end
+    end
+
+    def create_lettings_addresses_csv
+      logs = @organisation.managed_lettings_logs.filter_by_year(2023)
+      return if logs.empty?
+
+      CSV.generate(headers: true) do |csv|
+        csv << ["Lettings log ID", "Tenancy start date", "Tenant code", "Property code", "Log owner", "Owning organisation name", "Managing organisation name", "UPRN", "Address line 1", "Address line 2 (optional)", "Town or City", "County (optional)", "Postcode"]
+
+        logs.each do |log|
+          csv << lettings_log_to_csv_row(log)
+        end
+      end
+    end
+
+    def create_sales_addresses_csv
+      logs = @organisation.sales_logs.filter_by_year(2023)
+      return if logs.empty?
+
+      CSV.generate(headers: true) do |csv|
+        csv << ["Sales log ID", "Sale completion date", "Purchaser code", "Log owner", "Owning organisation name", "UPRN", "Address line 1", "Address line 2 (optional)", "Town or City", "County (optional)", "Postcode"]
+
+        logs.each do |log|
+          csv << sales_log_to_csv_row(log)
         end
       end
     end
 
   private
 
-    def sales_log_to_csv_row(log, issue_type)
-      [issue_type,
-       log.id,
+    def sales_log_to_csv_row(log)
+      [log.id,
        log.saledate&.to_date,
        log.purchid,
        log.created_by&.email,
@@ -98,9 +123,8 @@ module Csv
        log.postcode_full]
     end
 
-    def lettings_log_to_csv_row(log, issue_type)
-      [issue_type,
-       log.id,
+    def lettings_log_to_csv_row(log)
+      [log.id,
        log.startdate&.to_date,
        log.tenancycode,
        log.propcode,

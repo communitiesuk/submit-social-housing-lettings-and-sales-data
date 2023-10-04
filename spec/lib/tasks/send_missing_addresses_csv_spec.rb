@@ -477,4 +477,84 @@ RSpec.describe "correct_addresses" do
       end
     end
   end
+
+  describe ":create_addresses_lettings_csv", type: :task do
+    subject(:task) { Rake::Task["correct_addresses:create_addresses_lettings_csv"] }
+
+    before do
+      organisation.users.destroy_all
+      Rake.application.rake_require("tasks/send_missing_addresses_csv")
+      Rake::Task.define_task(:environment)
+      task.reenable
+    end
+
+    context "when the rake task is run" do
+      let(:organisation) { create(:organisation, name: "test organisation") }
+
+      context "and organisation ID is provided" do
+        it "enqueues the job with correct organisation" do
+          expect { task.invoke(organisation.id) }.to enqueue_job(CreateAddressesCsvJob).with(organisation, "lettings")
+        end
+
+        it "prints out the jobs enqueued" do
+          expect(Rails.logger).to receive(:info).with(nil)
+          expect(Rails.logger).to receive(:info).with("Creating lettings addresses CSV for test organisation")
+          task.invoke(organisation.id)
+        end
+      end
+
+      context "when organisation with given ID cannot be found" do
+        it "prints out error" do
+          expect(Rails.logger).to receive(:error).with("Organisation with ID fake not found")
+          task.invoke("fake")
+        end
+      end
+
+      context "when organisation ID is not given" do
+        it "raises an error" do
+          expect { task.invoke }.to raise_error(RuntimeError, "Usage: rake correct_addresses:create_addresses_lettings_csv['organisation_id']")
+        end
+      end
+    end
+  end
+
+  describe ":create_addresses_sales_csv", type: :task do
+    subject(:task) { Rake::Task["correct_addresses:create_addresses_sales_csv"] }
+
+    before do
+      organisation.users.destroy_all
+      Rake.application.rake_require("tasks/send_missing_addresses_csv")
+      Rake::Task.define_task(:environment)
+      task.reenable
+    end
+
+    context "when the rake task is run" do
+      let(:organisation) { create(:organisation, name: "test organisation") }
+
+      context "and organisation ID is provided" do
+        it "enqueues the job with correct organisation" do
+          expect { task.invoke(organisation.id) }.to enqueue_job(CreateAddressesCsvJob).with(organisation, "sales")
+        end
+
+        it "prints out the jobs enqueued" do
+          expect(Rails.logger).to receive(:info).with(nil)
+          expect(Rails.logger).to receive(:info).with("Creating sales addresses CSV for test organisation")
+          task.invoke(organisation.id)
+        end
+      end
+
+      context "when organisation with given ID cannot be found" do
+        it "prints out error" do
+          expect(Rails.logger).to receive(:error).with("Organisation with ID fake not found")
+          task.invoke("fake")
+        end
+      end
+
+      context "when organisation ID is not given" do
+        it "raises an error" do
+          expect { task.invoke }.to raise_error(RuntimeError, "Usage: rake correct_addresses:create_addresses_sales_csv['organisation_id']")
+        end
+      end
+    end
+  end
 end

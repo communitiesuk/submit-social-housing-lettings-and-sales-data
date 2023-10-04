@@ -308,4 +308,203 @@ RSpec.describe Csv::MissingAddressesCsvService do
       end
     end
   end
+
+  describe "#create_lettings_addresses_csv" do
+    context "when the organisation has lettings logs" do
+      let!(:lettings_log) do
+        create(:lettings_log,
+               tenancycode: "tenancycode1",
+               propcode: "propcode1",
+               startdate: Time.zone.local(2023, 4, 5),
+               created_by: user,
+               owning_organisation: organisation,
+               managing_organisation: organisation,
+               address_line1: "address",
+               town_or_city: "town",
+               old_id: "old_id_1",
+               old_form_id: "old_form_id_1",
+               needstype: 1,
+               uprn_known: 0)
+      end
+
+      let!(:lettings_log_missing_address) do
+        create(:lettings_log,
+               tenancycode: "tenancycode",
+               propcode: "propcode",
+               startdate: Time.zone.local(2023, 4, 5),
+               created_by: user,
+               owning_organisation: organisation,
+               managing_organisation: organisation,
+               address_line1: nil,
+               town_or_city: nil,
+               old_id: "old_id",
+               old_form_id: "old_form_id",
+               needstype: 1,
+               uprn_known: 0)
+      end
+
+      let!(:lettings_log_missing_town) do
+        create(:lettings_log,
+               tenancycode: "tenancycode",
+               propcode: "propcode",
+               startdate: Time.zone.local(2023, 4, 5),
+               created_by: user,
+               owning_organisation: organisation,
+               managing_organisation: organisation,
+               address_line1: "existing address",
+               town_or_city: nil,
+               old_id: "older_id",
+               old_form_id: "old_form_id",
+               needstype: 1,
+               uprn_known: 0)
+      end
+
+      let!(:lettings_log_wrong_uprn) do
+        create(:lettings_log,
+               tenancycode: "tenancycode",
+               propcode: "propcode",
+               startdate: Time.zone.local(2023, 4, 5),
+               created_by: user,
+               owning_organisation: organisation,
+               managing_organisation: organisation,
+               uprn: "123",
+               uprn_known: 1,
+               old_id: "oldest_id",
+               needstype: 1)
+      end
+
+      let!(:lettings_log_not_imported) do
+        create(:lettings_log,
+               tenancycode: "tenancycode",
+               propcode: "propcode",
+               startdate: Time.zone.local(2023, 4, 5),
+               created_by: user,
+               owning_organisation: organisation,
+               managing_organisation: organisation,
+               uprn: "123",
+               uprn_known: 1,
+               needstype: 1)
+      end
+
+      before do
+        create(:lettings_log, managing_organisation: organisation, old_id: "exists", startdate: Time.zone.local(2022, 4, 5))
+      end
+
+      it "returns a csv with relevant logs" do
+        csv = CSV.parse(service.create_lettings_addresses_csv)
+        expect(csv.count).to eq(6)
+        expect(csv).to include([lettings_log.id.to_s, "2023-04-05", "tenancycode1", "propcode1", "testy@example.com", "Address org", "Address org", nil, "address", nil, "town", nil, nil])
+        expect(csv).to include([lettings_log_missing_address.id.to_s, "2023-04-05", "tenancycode", "propcode", "testy@example.com", "Address org", "Address org", nil, nil, nil, nil, nil, nil])
+        expect(csv).to include([lettings_log_missing_town.id.to_s, "2023-04-05", "tenancycode", "propcode", "testy@example.com", "Address org", "Address org", nil, "existing address", nil, nil, nil, nil])
+        expect(csv).to include([lettings_log_wrong_uprn.id.to_s, "2023-04-05", "tenancycode", "propcode", "testy@example.com", "Address org", "Address org", "123", "Some Place", nil, "Bristol", nil, "BS1 1AD"])
+        expect(csv).to include([lettings_log_not_imported.id.to_s, "2023-04-05", "tenancycode", "propcode", "testy@example.com", "Address org", "Address org", "123", "Some Place", nil, "Bristol", nil, "BS1 1AD"])
+      end
+    end
+
+    context "when the organisation does not have relevant lettings logs" do
+      before do
+        create(:lettings_log, managing_organisation: organisation, startdate: Time.zone.local(2022, 4, 5))
+      end
+
+      it "returns nil" do
+        expect(service.create_lettings_addresses_csv).to be_nil
+      end
+    end
+  end
+
+  describe "#create_sales_addresses_csv" do
+    context "when the organisation has sales" do
+      let!(:sales_log) do
+        create(:sales_log,
+               purchid: "purchaser code",
+               saledate: Time.zone.local(2023, 4, 5),
+               created_by: user,
+               owning_organisation: organisation,
+               address_line1: "address",
+               town_or_city: "city",
+               old_id: "old_id_1",
+               old_form_id: "old_form_id_1",
+               uprn_known: 0)
+      end
+
+      let!(:sales_log_missing_address) do
+        create(:sales_log,
+               purchid: "purchaser code",
+               saledate: Time.zone.local(2023, 4, 5),
+               created_by: user,
+               owning_organisation: organisation,
+               address_line1: nil,
+               town_or_city: nil,
+               old_id: "old_id",
+               old_form_id: "old_form_id",
+               uprn_known: 0)
+      end
+
+      let!(:sales_log_missing_town) do
+        create(:sales_log,
+               purchid: "purchaser code",
+               saledate: Time.zone.local(2023, 4, 5),
+               created_by: user,
+               owning_organisation: organisation,
+               address_line1: "existing address line 1",
+               town_or_city: nil,
+               old_id: "older_id",
+               old_form_id: "old_form_id",
+               uprn_known: 0)
+      end
+
+      let!(:sales_log_wrong_uprn) do
+        create(:sales_log,
+               :completed,
+               purchid: "purchaser code",
+               saledate: Time.zone.local(2023, 4, 5),
+               created_by: user,
+               owning_organisation: organisation,
+               uprn: "123",
+               town_or_city: "Bristol",
+               old_id: "oldest_id",
+               uprn_known: 1,
+               uprn_confirmed: 1,
+               la: nil)
+      end
+
+      let!(:sales_log_not_imported) do
+        create(:sales_log,
+               :completed,
+               purchid: "purchaser code",
+               saledate: Time.zone.local(2023, 4, 5),
+               created_by: user,
+               owning_organisation: organisation,
+               uprn: "123",
+               town_or_city: "Bristol",
+               uprn_known: 1,
+               uprn_confirmed: 1,
+               la: nil)
+      end
+
+      before do
+        create(:sales_log, :completed, saledate: Time.zone.local(2022, 4, 5))
+      end
+
+      it "returns a csv with relevant logs" do
+        csv = CSV.parse(service.create_sales_addresses_csv)
+        expect(csv.count).to eq(6)
+        expect(csv).to include([sales_log.id.to_s, "2023-04-05", "purchaser code", "testy@example.com", "Address org", nil, "address", nil, "city", nil, nil])
+        expect(csv).to include([sales_log_missing_address.id.to_s, "2023-04-05", "purchaser code", "testy@example.com", "Address org", nil, nil, nil, nil, nil, nil])
+        expect(csv).to include([sales_log_missing_town.id.to_s, "2023-04-05", "purchaser code", "testy@example.com", "Address org", nil, "existing address line 1", nil, nil, nil, nil])
+        expect(csv).to include([sales_log_wrong_uprn.id.to_s, "2023-04-05", "purchaser code", "testy@example.com", "Address org", "123", "Some Place", nil, "Bristol", nil, "BS1 1AD"])
+        expect(csv).to include([sales_log_not_imported.id.to_s, "2023-04-05", "purchaser code", "testy@example.com", "Address org", "123", "Some Place", nil, "Bristol", nil, "BS1 1AD"])
+      end
+    end
+
+    context "when the organisation does not have relevant sales logs" do
+      before do
+        create(:sales_log, :completed, saledate: Time.zone.local(2022, 4, 5))
+      end
+
+      it "returns nil" do
+        expect(service.create_sales_addresses_csv).to be_nil
+      end
+    end
+  end
 end
