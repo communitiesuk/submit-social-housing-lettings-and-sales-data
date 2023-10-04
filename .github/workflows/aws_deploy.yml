@@ -61,7 +61,8 @@ jobs:
     environment: ${{ inputs.environment }}
     needs: push_docker_image
     if: |
-      always()
+      always() &&
+      false
 
     steps:
       - name: Configure AWS credentials
