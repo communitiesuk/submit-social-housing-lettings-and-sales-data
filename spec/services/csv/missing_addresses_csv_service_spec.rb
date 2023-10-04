@@ -406,8 +406,9 @@ RSpec.describe Csv::MissingAddressesCsvService do
         create(:lettings_log, managing_organisation: organisation, startdate: Time.zone.local(2022, 4, 5))
       end
 
-      it "returns nil" do
-        expect(service.create_lettings_addresses_csv).to be_nil
+      it "returns only headers" do
+        csv = service.create_lettings_addresses_csv
+        expect(csv).to eq "Log ID,Tenancy start date,Tenant code,Property reference,Log owner,Owning organisation,Managing organisation,UPRN,Address Line 1,Address Line 2 (optional),Town or City,County (optional),Property’s postcode\n"
       end
     end
   end
@@ -502,8 +503,9 @@ RSpec.describe Csv::MissingAddressesCsvService do
         create(:sales_log, :completed, saledate: Time.zone.local(2022, 4, 5))
       end
 
-      it "returns nil" do
-        expect(service.create_sales_addresses_csv).to be_nil
+      it "returns only headers" do
+        csv = service.create_sales_addresses_csv
+        expect(csv).to eq("Log ID,Sale completion date,Purchaser code,Log owner,Owning organisation,UPRN,Address Line 1,Address Line 2 (optional),Town or City,County (optional),Property’s postcode\n")
       end
     end
   end

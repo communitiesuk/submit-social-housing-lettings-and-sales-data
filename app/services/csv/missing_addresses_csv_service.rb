@@ -83,10 +83,9 @@ module Csv
 
     def create_lettings_addresses_csv
       logs = @organisation.managed_lettings_logs.filter_by_year(2023)
-      return if logs.empty?
 
       CSV.generate(headers: true) do |csv|
-        csv << ["Lettings log ID", "Tenancy start date", "Tenant code", "Property code", "Log owner", "Owning organisation name", "Managing organisation name", "UPRN", "Address line 1", "Address line 2 (optional)", "Town or City", "County (optional)", "Postcode"]
+        csv << ["Log ID", "Tenancy start date", "Tenant code", "Property reference", "Log owner", "Owning organisation", "Managing organisation", "UPRN", "Address Line 1", "Address Line 2 (optional)", "Town or City", "County (optional)", "Property’s postcode"]
 
         logs.each do |log|
           csv << lettings_log_to_csv_row(log)
@@ -96,10 +95,9 @@ module Csv
 
     def create_sales_addresses_csv
       logs = @organisation.sales_logs.filter_by_year(2023)
-      return if logs.empty?
 
       CSV.generate(headers: true) do |csv|
-        csv << ["Sales log ID", "Sale completion date", "Purchaser code", "Log owner", "Owning organisation name", "UPRN", "Address line 1", "Address line 2 (optional)", "Town or City", "County (optional)", "Postcode"]
+        csv << ["Log ID", "Sale completion date", "Purchaser code", "Log owner", "Owning organisation", "UPRN", "Address Line 1", "Address Line 2 (optional)", "Town or City", "County (optional)", "Property’s postcode"]
 
         logs.each do |log|
           csv << sales_log_to_csv_row(log)
