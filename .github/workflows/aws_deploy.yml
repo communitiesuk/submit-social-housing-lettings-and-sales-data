@@ -62,7 +62,7 @@ jobs:
     needs: push_docker_image
     if: |
       always() &&
-      needs.push_docker_image.result == 'success'
+      needs.push_docker_image.result == 'skipped'
 
     steps:
       - name: Configure AWS credentials
