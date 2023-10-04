@@ -25,9 +25,13 @@ namespace :correct_addresses do
 
       missing_addresses_threshold = EmailMissingAddressesCsvJob::MISSING_ADDRESSES_THRESHOLD
       if logs_impacted_by_missing_address >= missing_addresses_threshold || logs_impacted_by_missing_town_or_city >= missing_addresses_threshold || logs_impacted_by_uprn_issue.any?
+        issue_types = []
+        issue_types << "missing_address" if logs_impacted_by_missing_address.positive?
+        issue_types << "missing_town" if logs_impacted_by_missing_town_or_city.positive?
+        issue_types << "wrong_uprn" if logs_impacted_by_uprn_issue.any?
         data_coordinators = organisation.users.where(role: 2).filter_by_active
         users_to_contact = data_coordinators.any? ? data_coordinators : organisation.users.filter_by_active
-        EmailMissingAddressesCsvJob.perform_later(users_to_contact.map(&:id), organisation, "lettings", skip_uprn_issue_organisations)
+        EmailMissingAddressesCsvJob.perform_later(users_to_contact.map(&:id), organisation, "lettings", issue_types, skip_uprn_issue_organisations)
         Rails.logger.info("Sending missing lettings addresses CSV for #{organisation.name} to #{users_to_contact.map(&:email).join(', ')}")
       else
         Rails.logger.info("Missing addresses below threshold for #{organisation.name}")
@@ -59,9 +63,13 @@ namespace :correct_addresses do
                                     end
       missing_addresses_threshold = EmailMissingAddressesCsvJob::MISSING_ADDRESSES_THRESHOLD
       if logs_impacted_by_missing_address >= missing_addresses_threshold || logs_impacted_by_missing_town_or_city >= missing_addresses_threshold || logs_impacted_by_uprn_issue.any?
+        issue_types = []
+        issue_types << "missing_address" if logs_impacted_by_missing_address.positive?
+        issue_types << "missing_town" if logs_impacted_by_missing_town_or_city.positive?
+        issue_types << "wrong_uprn" if logs_impacted_by_uprn_issue.any?
         data_coordinators = organisation.users.where(role: 2).filter_by_active
         users_to_contact = data_coordinators.any? ? data_coordinators : organisation.users.filter_by_active
-        EmailMissingAddressesCsvJob.perform_later(users_to_contact.map(&:id), organisation, "sales", skip_uprn_issue_organisations)
+        EmailMissingAddressesCsvJob.perform_later(users_to_contact.map(&:id), organisation, "sales", issue_types, skip_uprn_issue_organisations)
         Rails.logger.info("Sending missing sales addresses CSV for #{organisation.name} to #{users_to_contact.map(&:email).join(', ')}")
       else
         Rails.logger.info("Missing addresses below threshold for #{organisation.name}")

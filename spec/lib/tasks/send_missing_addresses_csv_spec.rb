@@ -59,7 +59,7 @@ RSpec.describe "correct_addresses" do
         end
 
         it "enqueues the job with correct organisations" do
-          expect { task.invoke }.to enqueue_job(EmailMissingAddressesCsvJob).with(include(data_coordinator.id, data_coordinator2.id), organisation, "lettings", [])
+          expect { task.invoke }.to enqueue_job(EmailMissingAddressesCsvJob).with(include(data_coordinator.id, data_coordinator2.id), organisation, "lettings", %w[missing_address], [])
         end
 
         it "prints out the jobs enqueued" do
@@ -78,7 +78,7 @@ RSpec.describe "correct_addresses" do
         end
 
         it "enqueues the job with correct organisations" do
-          expect { task.invoke }.to enqueue_job(EmailMissingAddressesCsvJob).with(include(data_provider.id, data_provider2.id), organisation, "lettings", [])
+          expect { task.invoke }.to enqueue_job(EmailMissingAddressesCsvJob).with(include(data_provider.id, data_provider2.id), organisation, "lettings", %w[missing_address], [])
         end
 
         it "prints out the jobs enqueued" do
@@ -109,7 +109,7 @@ RSpec.describe "correct_addresses" do
         end
 
         it "enqueues the job with correct organisations" do
-          expect { task.invoke }.to enqueue_job(EmailMissingAddressesCsvJob).with(include(data_coordinator.id, data_coordinator2.id), organisation, "lettings", [])
+          expect { task.invoke }.to enqueue_job(EmailMissingAddressesCsvJob).with(include(data_coordinator.id, data_coordinator2.id), organisation, "lettings", %w[missing_town], [])
         end
 
         it "prints out the jobs enqueued" do
@@ -128,7 +128,7 @@ RSpec.describe "correct_addresses" do
         end
 
         it "enqueues the job with correct organisations" do
-          expect { task.invoke }.to enqueue_job(EmailMissingAddressesCsvJob).with(include(data_provider.id, data_provider2.id), organisation, "lettings", [])
+          expect { task.invoke }.to enqueue_job(EmailMissingAddressesCsvJob).with(include(data_provider.id, data_provider2.id), organisation, "lettings", %w[missing_town], [])
         end
 
         it "prints out the jobs enqueued" do
@@ -159,7 +159,7 @@ RSpec.describe "correct_addresses" do
         end
 
         it "enqueues the job with correct organisations" do
-          expect { task.invoke }.to enqueue_job(EmailMissingAddressesCsvJob).with(include(data_coordinator.id, data_coordinator2.id), organisation, "lettings", [])
+          expect { task.invoke }.to enqueue_job(EmailMissingAddressesCsvJob).with(include(data_coordinator.id, data_coordinator2.id), organisation, "lettings", %w[wrong_uprn], [])
         end
 
         it "prints out the jobs enqueued" do
@@ -178,7 +178,7 @@ RSpec.describe "correct_addresses" do
         end
 
         it "enqueues the job with correct organisations" do
-          expect { task.invoke }.to enqueue_job(EmailMissingAddressesCsvJob).with(include(data_provider.id, data_provider2.id), organisation, "lettings", [])
+          expect { task.invoke }.to enqueue_job(EmailMissingAddressesCsvJob).with(include(data_provider.id, data_provider2.id), organisation, "lettings", %w[wrong_uprn], [])
         end
 
         it "prints out the jobs enqueued" do
@@ -198,7 +198,7 @@ RSpec.describe "correct_addresses" do
         end
 
         it "enqueues the job with correct organisations" do
-          expect { task.invoke }.to enqueue_job(EmailMissingAddressesCsvJob).with(include(data_provider.id, data_provider2.id), organisation, "lettings", [])
+          expect { task.invoke }.to enqueue_job(EmailMissingAddressesCsvJob).with(include(data_provider.id, data_provider2.id), organisation, "lettings", %w[wrong_uprn], [])
         end
 
         it "prints out the jobs enqueued" do
@@ -218,6 +218,20 @@ RSpec.describe "correct_addresses" do
         end
       end
 
+      context "when org is included in skip_uprn_issue_organisations list but faces a different issue" do
+        let!(:data_provider) { create(:user, :data_provider, organisation:, email: "data_provider3@example.com") }
+        let!(:data_provider2) { create(:user, :data_provider, organisation:, email: "data_provider4@example.com") }
+
+        before do
+          create_list(:lettings_log, 5, :imported, startdate: Time.zone.local(2023, 9, 9), address_line1: nil, town_or_city: nil, needstype: 1, old_form_id: "form_2", owning_organisation: organisation, managing_organisation: organisation, created_by: organisation.users.first)
+          create_list(:lettings_log, 5, :imported, startdate: Time.zone.local(2023, 9, 9), uprn: "12", propcode: "12", needstype: 1, owning_organisation: organisation, managing_organisation: organisation, created_by: organisation.users.first)
+        end
+
+        it "does not enqueue the job" do
+          expect { task.invoke(organisation.id.to_s) }.to enqueue_job(EmailMissingAddressesCsvJob).with(include(data_provider.id, data_provider2.id), organisation, "lettings", %w[missing_address], [organisation.id])
+        end
+      end
+
       context "when skip_uprn_issue_organisations list is provided" do
         let!(:data_provider) { create(:user, :data_provider, organisation:, email: "data_provider3@example.com") }
         let!(:data_provider2) { create(:user, :data_provider, organisation:, email: "data_provider4@example.com") }
@@ -227,7 +241,7 @@ RSpec.describe "correct_addresses" do
         end
 
         it "does enqueues the job with correct skip_uprn_issue_organisations" do
-          expect { task.invoke("100 400") }.to enqueue_job(EmailMissingAddressesCsvJob).with(include(data_provider.id, data_provider2.id), organisation, "lettings", [100, 400])
+          expect { task.invoke("100 400") }.to enqueue_job(EmailMissingAddressesCsvJob).with(include(data_provider.id, data_provider2.id), organisation, "lettings", %w[wrong_uprn], [100, 400])
         end
       end
     end
@@ -290,7 +304,7 @@ RSpec.describe "correct_addresses" do
         end
 
         it "enqueues the job with correct organisations" do
-          expect { task.invoke("70 90") }.to enqueue_job(EmailMissingAddressesCsvJob).with(include(data_coordinator.id, data_coordinator2.id), organisation, "sales", [70, 90])
+          expect { task.invoke("70 90") }.to enqueue_job(EmailMissingAddressesCsvJob).with(include(data_coordinator.id, data_coordinator2.id), organisation, "sales", %w[missing_address], [70, 90])
         end
 
         it "prints out the jobs enqueued" do
@@ -309,7 +323,7 @@ RSpec.describe "correct_addresses" do
         end
 
         it "enqueues the job with correct organisations" do
-          expect { task.invoke }.to enqueue_job(EmailMissingAddressesCsvJob).with(include(data_provider.id, data_provider2.id), organisation, "sales", [])
+          expect { task.invoke }.to enqueue_job(EmailMissingAddressesCsvJob).with(include(data_provider.id, data_provider2.id), organisation, "sales", %w[missing_address], [])
         end
 
         it "prints out the jobs enqueued" do
@@ -340,7 +354,7 @@ RSpec.describe "correct_addresses" do
         end
 
         it "enqueues the job with correct organisations" do
-          expect { task.invoke }.to enqueue_job(EmailMissingAddressesCsvJob).with(include(data_coordinator.id, data_coordinator2.id), organisation, "sales", [])
+          expect { task.invoke }.to enqueue_job(EmailMissingAddressesCsvJob).with(include(data_coordinator.id, data_coordinator2.id), organisation, "sales", %w[missing_town], [])
         end
 
         it "prints out the jobs enqueued" do
@@ -359,7 +373,7 @@ RSpec.describe "correct_addresses" do
         end
 
         it "enqueues the job with correct organisations" do
-          expect { task.invoke }.to enqueue_job(EmailMissingAddressesCsvJob).with(include(data_provider.id, data_provider2.id), organisation, "sales", [])
+          expect { task.invoke }.to enqueue_job(EmailMissingAddressesCsvJob).with(include(data_provider.id, data_provider2.id), organisation, "sales", %w[missing_town], [])
         end
 
         it "prints out the jobs enqueued" do
@@ -390,7 +404,7 @@ RSpec.describe "correct_addresses" do
         end
 
         it "enqueues the job with correct organisations" do
-          expect { task.invoke }.to enqueue_job(EmailMissingAddressesCsvJob).with(include(data_coordinator.id, data_coordinator2.id), organisation, "sales", [])
+          expect { task.invoke }.to enqueue_job(EmailMissingAddressesCsvJob).with(include(data_coordinator.id, data_coordinator2.id), organisation, "sales", %w[wrong_uprn], [])
         end
 
         it "prints out the jobs enqueued" do
@@ -409,7 +423,7 @@ RSpec.describe "correct_addresses" do
         end
 
         it "enqueues the job with correct organisations" do
-          expect { task.invoke }.to enqueue_job(EmailMissingAddressesCsvJob).with(include(data_provider.id, data_provider2.id), organisation, "sales", [])
+          expect { task.invoke }.to enqueue_job(EmailMissingAddressesCsvJob).with(include(data_provider.id, data_provider2.id), organisation, "sales", %w[wrong_uprn], [])
         end
 
         it "prints out the jobs enqueued" do
@@ -429,7 +443,7 @@ RSpec.describe "correct_addresses" do
         end
 
         it "enqueues the job with correct organisations" do
-          expect { task.invoke }.to enqueue_job(EmailMissingAddressesCsvJob).with(include(data_provider.id, data_provider2.id), organisation, "sales", [])
+          expect { task.invoke }.to enqueue_job(EmailMissingAddressesCsvJob).with(include(data_provider.id, data_provider2.id), organisation, "sales", %w[wrong_uprn], [])
         end
 
         it "prints out the jobs enqueued" do
@@ -458,7 +472,7 @@ RSpec.describe "correct_addresses" do
         end
 
         it "does enqueues the job with correct skip_uprn_issue_organisations" do
-          expect { task.invoke("100 400") }.to enqueue_job(EmailMissingAddressesCsvJob).with(include(data_provider.id, data_provider2.id), organisation, "sales", [100, 400])
+          expect { task.invoke("100 400") }.to enqueue_job(EmailMissingAddressesCsvJob).with(include(data_provider.id, data_provider2.id), organisation, "sales", %w[wrong_uprn], [100, 400])
         end
       end
     end

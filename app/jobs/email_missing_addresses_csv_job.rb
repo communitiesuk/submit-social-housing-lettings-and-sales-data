@@ -5,7 +5,7 @@ class EmailMissingAddressesCsvJob < ApplicationJob
   EXPIRATION_TIME = 1.week.to_i
   MISSING_ADDRESSES_THRESHOLD = 5
 
-  def perform(user_ids, organisation, log_type, skip_uprn_issue_organisations)
+  def perform(user_ids, organisation, log_type, issue_types, skip_uprn_issue_organisations)
     csv_service = Csv::MissingAddressesCsvService.new(organisation, skip_uprn_issue_organisations)
     case log_type
     when "lettings"
@@ -27,7 +27,7 @@ class EmailMissingAddressesCsvJob < ApplicationJob
       user = User.find(id)
       next if user.blank?
 
-      CsvDownloadMailer.new.send(email_method, user, url, EXPIRATION_TIME)
+      CsvDownloadMailer.new.send(email_method, user, url, EXPIRATION_TIME, issue_types)
     end
   end
 end
