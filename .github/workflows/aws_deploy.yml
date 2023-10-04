@@ -24,6 +24,7 @@ env:
 
 jobs:
   push_docker_image:
+    if: inputs.environment != 'staging'
     name: Push docker image to AWS
     runs-on: ubuntu-latest
     permissions:
