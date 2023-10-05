@@ -15,6 +15,14 @@ RSpec.describe Csv::SalesLogCsvService do
       updated_at: fixed_time,
       owning_organisation: organisation,
       purchid: nil,
+      hholdcount: 3,
+      age4_known: 1,
+      details_known_5: 2,
+      age6_known: nil,
+      age6: nil,
+      ecstat6: nil,
+      relat6: nil,
+      sex6: nil,
     )
   end
   let(:service) { described_class.new(export_type: "labels") }
