@@ -30,6 +30,8 @@ module Imports
         import_from(folder, :update_childrens_care_referral)
       when "old_form_id"
         import_from(folder, :update_old_form_id)
+      when "postcode_full"
+        import_from(folder, :update_postcode_full)
       else
         raise "Updating #{field} is not supported by the field import service"
       end
@@ -451,6 +453,29 @@ module Imports
         end
       else
         @logger.warn("lettings log with old id #{old_id} not found")
+      end
+    end
+
+    def update_postcode_full(xml_doc)
+      return if meta_field_value(xml_doc, "form-name").include?("Sales")
+
+      old_id = meta_field_value(xml_doc, "document-id")
+      record = LettingsLog.find_by(old_id:)
+      return @logger.info("lettings log #{record.id} is not from 2022/23 collection period, skipping update") if record.collection_start_year != 2022
+      return @logger.warn("Could not find record matching legacy ID #{old_id}") if record.blank?
+      return @logger.info("lettings log #{record.id} has a value for postcode_full, skipping update") if record.postcode_full.present?
+
+      record.postcode_full = compose_postcode(xml_doc, "POSTCODE", "POSTCOD2")
+      if record.postcode_full.present?
+        record.postcode_known = postcode_known(record)
+        record.values_updated_at = Time.zone.now
+        if record.save
+          @logger.info("lettings log #{record.id} postcode_full value has been set to #{record.postcode_full}")
+        else
+          @logger.error("lettings log #{record.id} postcode_full value has not been set. Errors: #{record.errors.full_messages.join(', ')}")
+        end
+      else
+        @logger.info("lettings log #{record.id} is missing postcode_full, skipping update")
       end
     end
   end

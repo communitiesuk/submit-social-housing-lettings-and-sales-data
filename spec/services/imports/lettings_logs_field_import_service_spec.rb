@@ -1450,4 +1450,124 @@ RSpec.describe Imports::LettingsLogsFieldImportService do
       end
     end
   end
+
+  context "when updating postcode for 2022" do
+    let(:field) { "postcode_full" }
+    let(:lettings_log_id) { "00d2343e-d5fa-4c89-8400-ec3854b0f2b4" }
+    let(:lettings_log) { LettingsLog.find_by(old_id: lettings_log_id) }
+
+    before do
+      Timecop.freeze(2023, 5, 5)
+      Singleton.__init__(FormHandler)
+      Imports::LettingsLogsImportService.new(storage_service, logger).create_logs(fixture_directory)
+      lettings_log_file.rewind
+      lettings_log_xml.at_xpath("//xmlns:POSTCODE").content = "A1"
+      lettings_log_xml.at_xpath("//xmlns:POSTCOD2").content = "1AA"
+      lettings_log_file.rewind
+    end
+
+    after do
+      Timecop.unfreeze
+      Singleton.__init__(FormHandler)
+    end
+
+    context "when the lettings log has no postcode_full and postcode known is nil" do
+      before do
+        lettings_log.update!(startdate: Time.zone.local(2022, 5, 5), postcode_known: nil, postcode_full: nil)
+      end
+
+      it "updates postcode known to yes and updates postcode_full" do
+        expect(logger).to receive(:info).with("lettings log #{lettings_log.id} postcode_full value has been set to A1 1AA")
+        import_service.send(:update_postcode_full, lettings_log_xml)
+        lettings_log.reload
+        expect(lettings_log.postcode_known).to eq(1)
+        expect(lettings_log.postcode_full).to eq("A1 1AA")
+      end
+    end
+
+    context "when the lettings log has no postcode_full and postcode known is no" do
+      before do
+        Imports::LettingsLogsImportService.new(storage_service, logger).create_logs(fixture_directory)
+        lettings_log_file.rewind
+        lettings_log.update!(startdate: Time.zone.local(2022, 5, 5), postcode_known: 0, postcode_full: nil)
+      end
+
+      it "updates postcode known to yes and updates postcode_full if postcode is given" do
+        expect(logger).to receive(:info).with("lettings log #{lettings_log.id} postcode_full value has been set to A1 1AA")
+        import_service.send(:update_postcode_full, lettings_log_xml)
+        lettings_log.reload
+        expect(lettings_log.postcode_known).to eq(1)
+        expect(lettings_log.postcode_full).to eq("A1 1AA")
+      end
+
+      it "updates postcode known to yes and updates postcode_full if postcode is given and has trailing spaces" do
+        lettings_log_xml.at_xpath("//xmlns:POSTCODE").content = "A1"
+        lettings_log_xml.at_xpath("//xmlns:POSTCOD2").content = "1AA     "
+        lettings_log_file.rewind
+        expect(logger).to receive(:info).with("lettings log #{lettings_log.id} postcode_full value has been set to A1 1AA")
+        import_service.send(:update_postcode_full, lettings_log_xml)
+        lettings_log.reload
+        expect(lettings_log.postcode_known).to eq(1)
+        expect(lettings_log.postcode_full).to eq("A1 1AA")
+      end
+
+      it "does not update postcode_full if postcode is not given" do
+        lettings_log_xml.at_xpath("//xmlns:POSTCODE").content = ""
+        lettings_log_xml.at_xpath("//xmlns:POSTCOD2").content = ""
+        lettings_log_file.rewind
+        expect(logger).to receive(:info).with("lettings log #{lettings_log.id} is missing postcode_full, skipping update")
+        import_service.send(:update_postcode_full, lettings_log_xml)
+        lettings_log.reload
+        expect(lettings_log.postcode_known).to eq(0)
+        expect(lettings_log.postcode_full).to be_nil
+      end
+    end
+
+    context "when the lettings log has a different postcode_full value" do
+      before do
+        Imports::LettingsLogsImportService.new(storage_service, logger).create_logs(fixture_directory)
+        lettings_log_file.rewind
+        lettings_log.update!(startdate: Time.zone.local(2022, 5, 5), postcode_known: 1, postcode_full: "B1 1BB")
+      end
+
+      it "does not update the lettings_log postcode_full value" do
+        expect(logger).to receive(:info).with(/lettings log \d+ has a value for postcode_full, skipping update/)
+        expect { import_service.send(:update_postcode_full, lettings_log_xml) }
+          .not_to(change { lettings_log.reload.postcode_full })
+      end
+    end
+
+    context "when the lettings log has a validation error" do
+      before do
+        Imports::LettingsLogsImportService.new(storage_service, logger).create_logs(fixture_directory)
+        lettings_log_file.rewind
+        lettings_log.update!(startdate: Time.zone.local(2022, 5, 5))
+        lettings_log.ppostcode_full = "123"
+        lettings_log.save!(validate: false)
+      end
+
+      it "does not update the lettings_log postcode_full value and prints the error" do
+        expect(logger).to receive(:error).with(/lettings log \d+ postcode_full value has not been set. Errors: Ppostcode full Enter a postcode in the correct format/)
+        expect { import_service.send(:update_postcode_full, lettings_log_xml) }
+          .not_to(change { lettings_log.reload.postcode_full })
+      end
+    end
+
+    context "when the lettings log is for 2023/24 year" do
+      let(:lettings_log_id) { "00d2343e-d5fa-4c89-8400-ec3854b0f2b4" }
+
+      before do
+        lettings_log_xml.at_xpath("//xmlns:UPRN").content = nil
+        Imports::LettingsLogsImportService.new(storage_service, logger).create_logs(fixture_directory)
+        lettings_log_file.rewind
+        lettings_log.update!(startdate: Time.zone.local(2023, 4, 3), uprn: nil)
+      end
+
+      it "skips the log" do
+        expect(logger).to receive(:info).with(/lettings log \d+ is not from 2022\/23 collection period, skipping update/)
+        expect { import_service.send(:update_postcode_full, lettings_log_xml) }
+          .not_to(change { lettings_log.reload.postcode_full })
+      end
+    end
+  end
 end
