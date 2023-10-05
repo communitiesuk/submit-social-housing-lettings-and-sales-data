@@ -292,6 +292,44 @@ RSpec.describe Exports::LettingsLogExportService do
         end
       end
 
+      context "and underlying data changes between getting the logs and writting the manifest" do
+        before do
+          FactoryBot.create(:lettings_log, startdate: Time.zone.local(2022, 2, 1))
+          FactoryBot.create(:lettings_log, startdate: Time.zone.local(2022, 4, 1))
+        end
+
+        def remove_logs(logs)
+          logs.each(&:destroy)
+          file = Tempfile.new
+          doc = Nokogiri::XML("<forms/>")
+          doc.write_xml_to(file, encoding: "UTF-8")
+          file.rewind
+          file
+        end
+
+        def create_fake_maifest
+          file = Tempfile.new
+          doc = Nokogiri::XML("<forms/>")
+          doc.write_xml_to(file, encoding: "UTF-8")
+          file.rewind
+          file
+        end
+
+        it "maintains the same record number" do
+          # rubocop:disable RSpec/SubjectStub
+          allow(export_service).to receive(:build_export_xml) do |logs|
+            remove_logs(logs)
+          end
+          allow(export_service).to receive(:build_manifest_xml) do
+            create_fake_maifest
+          end
+
+          expect(export_service).to receive(:build_manifest_xml).with(1)
+          # rubocop:enable RSpec/SubjectStub
+          export_service.export_xml_lettings_logs
+        end
+      end
+
       context "when this is a second export (partial)" do
         before do
           start_time = Time.zone.local(2022, 6, 1)
