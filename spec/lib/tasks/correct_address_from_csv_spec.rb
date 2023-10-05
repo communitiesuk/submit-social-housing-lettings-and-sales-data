@@ -2,14 +2,15 @@ require "rails_helper"
 require "rake"
 
 RSpec.describe "data_import" do
-  def replace_entity_ids(lettings_log, second_lettings_log, third_lettings_log, export_template)
+  def replace_entity_ids(lettings_log, second_lettings_log, third_lettings_log, fourth_lettings_log, export_template)
     export_template.sub!(/\{id\}/, lettings_log.id.to_s)
     export_template.sub!(/\{id2\}/, second_lettings_log.id.to_s)
     export_template.sub!(/\{id3\}/, third_lettings_log.id.to_s)
+    export_template.sub!(/\{id4\}/, fourth_lettings_log.id.to_s)
   end
 
-  describe ":import_address_from_csv", type: :task do
-    subject(:task) { Rake::Task["data_import:import_address_from_csv"] }
+  describe ":import_lettings_addresses_from_csv", type: :task do
+    subject(:task) { Rake::Task["data_import:import_lettings_addresses_from_csv"] }
 
     let(:instance_name) { "paas_import_instance" }
     let(:storage_service) { instance_double(Storage::S3Service) }
@@ -82,10 +83,25 @@ RSpec.describe "data_import" do
                is_la_inferred: true)
       end
 
+      let!(:fourth_lettings_log) do
+        create(:lettings_log,
+               uprn_known: 1,
+               uprn: "1",
+               uprn_confirmed: nil,
+               address_line1: "wrong address line1",
+               address_line2: "wrong address 2",
+               town_or_city: "wrong town",
+               county: "wrong city",
+               postcode_known: 1,
+               postcode_full: "A1 1AA",
+               la: "E06000064",
+               is_la_inferred: true)
+      end
+
       before do
         allow(storage_service).to receive(:get_file_io)
         .with("addresses_reimport_123.csv")
-        .and_return(replace_entity_ids(lettings_log, second_lettings_log, third_lettings_log, File.open("./spec/fixtures/files/addresses_reimport.csv").read))
+        .and_return(replace_entity_ids(lettings_log, second_lettings_log, third_lettings_log, fourth_lettings_log, File.open("./spec/fixtures/files/addresses_reimport.csv").read))
       end
 
       it "updates the log address when old address was not given" do
@@ -97,7 +113,7 @@ RSpec.describe "data_import" do
         expect(lettings_log.address_line1).to eq("address 1")
         expect(lettings_log.address_line2).to eq("address 2")
         expect(lettings_log.town_or_city).to eq("town")
-        expect(lettings_log.county).to eq(nil)
+        expect(lettings_log.county).to eq("county")
         expect(lettings_log.postcode_known).to eq(1)
         expect(lettings_log.postcode_full).to eq("B1 1BB")
         expect(lettings_log.la).to eq("E08000035")
@@ -111,7 +127,7 @@ RSpec.describe "data_import" do
         expect(second_lettings_log.uprn).to eq(nil)
         expect(second_lettings_log.uprn_confirmed).to eq(nil)
         expect(second_lettings_log.address_line1).to eq("address 3")
-        expect(second_lettings_log.address_line2).to eq("address 4")
+        expect(second_lettings_log.address_line2).to eq(nil)
         expect(second_lettings_log.town_or_city).to eq("city")
         expect(second_lettings_log.county).to eq(nil)
         expect(second_lettings_log.postcode_known).to eq(1)
@@ -120,34 +136,49 @@ RSpec.describe "data_import" do
         expect(second_lettings_log.is_la_inferred).to eq(true)
       end
 
-      it "updates the log address when new address is not given" do
+      it "does not update log address when uprn is given" do
         task.invoke(addresses_csv_path)
         third_lettings_log.reload
-        expect(third_lettings_log.uprn_known).to eq(0)
-        expect(third_lettings_log.uprn).to eq(nil)
+        expect(third_lettings_log.uprn_known).to eq(1)
+        expect(third_lettings_log.uprn).to eq("1")
         expect(third_lettings_log.uprn_confirmed).to eq(nil)
-        expect(third_lettings_log.address_line1).to eq(nil)
-        expect(third_lettings_log.address_line2).to eq(nil)
-        expect(third_lettings_log.town_or_city).to eq(nil)
-        expect(third_lettings_log.county).to eq(nil)
+        expect(third_lettings_log.address_line1).to eq("wrong address line1")
+        expect(third_lettings_log.address_line2).to eq("wrong address 2")
+        expect(third_lettings_log.town_or_city).to eq("wrong town")
+        expect(third_lettings_log.county).to eq("wrong city")
         expect(third_lettings_log.postcode_known).to eq(1)
-        expect(third_lettings_log.postcode_full).to eq("C11CC")
-        expect(third_lettings_log.la).to eq(nil)
-        expect(third_lettings_log.is_la_inferred).to eq(false)
+        expect(third_lettings_log.postcode_full).to eq("A1 1AA")
+        expect(third_lettings_log.la).to eq("E06000064")
+      end
+
+      it "does not update log address when all required address fields are not present" do
+        task.invoke(addresses_csv_path)
+        fourth_lettings_log.reload
+        expect(fourth_lettings_log.uprn_known).to eq(1)
+        expect(fourth_lettings_log.uprn).to eq("1")
+        expect(fourth_lettings_log.uprn_confirmed).to eq(nil)
+        expect(fourth_lettings_log.address_line1).to eq("wrong address line1")
+        expect(fourth_lettings_log.address_line2).to eq("wrong address 2")
+        expect(fourth_lettings_log.town_or_city).to eq("wrong town")
+        expect(fourth_lettings_log.county).to eq("wrong city")
+        expect(fourth_lettings_log.postcode_known).to eq(1)
+        expect(fourth_lettings_log.postcode_full).to eq("A1 1AA")
+        expect(fourth_lettings_log.la).to eq("E06000064")
       end
 
       it "logs the progress of the update" do
-        expect(Rails.logger).to receive(:info).with("Updated lettings log #{lettings_log.id}, with address: address 1, address 2, town, B1 1BB")
-        expect(Rails.logger).to receive(:info).with("Updated lettings log #{second_lettings_log.id}, with address: address 3, address 4, city, B1 1BB")
-        expect(Rails.logger).to receive(:info).with("Updated lettings log #{third_lettings_log.id}, with address: , , , C11CC")
-        expect(Rails.logger).to receive(:info).with("Lettings log ID not provided for address: address 5, address 6, city, D1 1DD")
+        expect(Rails.logger).to receive(:info).with("Updated lettings log #{lettings_log.id}, with address: address 1, address 2, town, county, B1 1BB")
+        expect(Rails.logger).to receive(:info).with("Updated lettings log #{second_lettings_log.id}, with address: address 3, , city, , B1 1BB")
+        expect(Rails.logger).to receive(:info).with("Lettings log with ID #{third_lettings_log.id} contains uprn, skipping log")
+        expect(Rails.logger).to receive(:info).with("Lettings log with ID #{fourth_lettings_log.id} is missing required address data, skipping log")
+        expect(Rails.logger).to receive(:info).with("Lettings log ID not provided for address: Some Place, , Bristol, , BS1 1AD")
         expect(Rails.logger).to receive(:info).with("Could not find a lettings log with id fake_id")
 
         task.invoke(addresses_csv_path)
       end
 
       it "raises an error when no path is given" do
-        expect { task.invoke(nil) }.to raise_error(RuntimeError, "Usage: rake data_import:import_address_from_csv['csv_file_name']")
+        expect { task.invoke(nil) }.to raise_error(RuntimeError, "Usage: rake data_import:import_lettings_addresses_from_csv['csv_file_name']")
       end
     end
   end
