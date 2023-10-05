@@ -1,6 +1,6 @@
 module SchemesHelper
-  def display_scheme_attributes(scheme, user)
-    base_attributes = [
+  def display_scheme_attributes(scheme)
+    [
       { name: "Scheme code", value: scheme.id_to_display },
       { name: "Name", value: scheme.service_name, edit: true },
       { name: "Status", value: status_tag_from_resource(scheme) },
@@ -16,16 +16,6 @@ module SchemesHelper
       { name: "Intended length of stay", value: scheme.intended_stay },
       { name: "Availability", value: scheme_availability(scheme) },
     ]
-
-    if user.data_coordinator?
-      base_attributes.delete_if { |item| item[:name] == "Housing stock owned by" }
-    end
-
-    if scheme.has_other_client_group == "Yes"
-      base_attributes.append
-    end
-
-    base_attributes
   end
 
   def scheme_availability(scheme)
