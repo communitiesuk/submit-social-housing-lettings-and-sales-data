@@ -7,15 +7,16 @@ namespace :data_import do
 
     s3_service = Storage::S3Service.new(PlatformHelper.is_paas? ? Configuration::PaasConfigurationService.new : Configuration::EnvConfigurationService.new, ENV["IMPORT_PAAS_INSTANCE"])
     addresses_csv = CSV.parse(s3_service.get_file_io(file_name), headers: true)
+    contains_issue_type = addresses_csv.headers.include?("Issue type")
 
     addresses_csv.each do |row|
-      lettings_log_id = row[1]
-      uprn = row[8]
-      address_line1 = row[9]
-      address_line2 = row[10]
-      town_or_city = row[11]
-      county = row[12]
-      postcode_full = row[13]
+      lettings_log_id = contains_issue_type ? row[1] : row[0]
+      uprn = contains_issue_type ? row[8] : row[7]
+      address_line1 = contains_issue_type ? row[9] : row[8]
+      address_line2 = contains_issue_type ? row[10] : row[9]
+      town_or_city = contains_issue_type ?  row[11] : row[10]
+      county = contains_issue_type ? row[12] : row[11]
+      postcode_full = contains_issue_type ? row[13] : row[12]
 
       if lettings_log_id.blank?
         Rails.logger.info("Lettings log ID not provided for address: #{[address_line1, address_line2, town_or_city, county, postcode_full].join(', ')}")
@@ -64,15 +65,16 @@ namespace :data_import do
 
     s3_service = Storage::S3Service.new(PlatformHelper.is_paas? ? Configuration::PaasConfigurationService.new : Configuration::EnvConfigurationService.new, ENV["IMPORT_PAAS_INSTANCE"])
     addresses_csv = CSV.parse(s3_service.get_file_io(file_name), headers: true)
+    contains_issue_type = addresses_csv.headers.include?("Issue type")
 
     addresses_csv.each do |row|
-      sales_log_id = row[1]
-      uprn = row[6]
-      address_line1 = row[7]
-      address_line2 = row[8]
-      town_or_city = row[9]
-      county = row[10]
-      postcode_full = row[11]
+      sales_log_id = contains_issue_type ? row[1] : row[0]
+      uprn = contains_issue_type ? row[6] : row[5]
+      address_line1 = contains_issue_type ? row[7] : row[6]
+      address_line2 = contains_issue_type ? row[8] : row[7]
+      town_or_city = contains_issue_type ? row[9] : row[8]
+      county = contains_issue_type ? row[10] : row[9]
+      postcode_full = contains_issue_type ? row[11] : row[10]
 
       if sales_log_id.blank?
         Rails.logger.info("Sales log ID not provided for address: #{[address_line1, address_line2, town_or_city, county, postcode_full].join(', ')}")
