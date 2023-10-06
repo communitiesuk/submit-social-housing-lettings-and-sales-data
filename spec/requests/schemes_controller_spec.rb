@@ -2196,7 +2196,20 @@ RSpec.describe SchemesController, type: :request do
         expect(response).to have_http_status(:ok)
         expect(page).to have_content("Scheme details")
         expect(page).to have_content("This scheme contains confidential information")
-        expect(page).to have_content("Which organisation owns the housing stock for this scheme?")
+      end
+
+      context "when there are stock owners" do
+        let(:parent_organisation) { create(:organisation) }
+
+        before do
+          create(:organisation_relationship, parent_organisation:, child_organisation: user.organisation)
+          get "/schemes/#{scheme.id}/edit-name"
+        end
+
+        it "includes the owning organisation question" do
+          expect(response).to have_http_status(:ok)
+          expect(page).to have_content("Which organisation owns the housing stock for this scheme?")
+        end
       end
 
       context "when attempting to access secondary-client-group scheme page for another organisation" do
