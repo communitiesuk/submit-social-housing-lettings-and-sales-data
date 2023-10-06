@@ -820,10 +820,10 @@ RSpec.describe SchemesController, type: :request do
         context "when there are no stock owners" do
           let(:params) do
             { scheme: { service_name: "  testy ",
-                                   sensitive: "1",
-                                   scheme_type: "Foyer",
-                                   registered_under_care_act: "No",
-                                   arrangement_type: "D" } }
+                        sensitive: "1",
+                        scheme_type: "Foyer",
+                        registered_under_care_act: "No",
+                        arrangement_type: "D" } }
           end
 
           before do
@@ -931,7 +931,7 @@ RSpec.describe SchemesController, type: :request do
                         scheme_type: "",
                         registered_under_care_act: "",
                         arrangement_type: "",
-                        owning_organisation_id: ""} }
+                        owning_organisation_id: "" } }
           end
 
           it "renders the same page with error message" do
