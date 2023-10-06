@@ -80,7 +80,6 @@ jobs:
 
       - name: Get timestamp
         id: timestamp
-        if: inputs.environment != 'production'
         run: |
           echo "::set-output name=timestamp::$(echo "timestamp=$(date +%Y%m%d%H%M%S)")"
 
