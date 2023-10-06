@@ -95,14 +95,14 @@ jobs:
         id: tags
         run: |
           echo "commit-tag=$(if [[ ${{ inputs.environment == 'production' }} ]]; then echo $(git log -1 '--format=format:%H'); else echo ${{ github.sha }}; fi)" >> $GITHUB_OUTPUT
-          echo "additional-tag=$(if [[ ${{ inputs.environment == 'production' }} ]]; then echo ${{ inputs.release_tag }}; else echo ${{ steps.timestamp.outputs.timestamp }}; fi)" >> $GITHUB_OUTPUT
+          echo "additional-tag=$(if [[ ${{ inputs.environment == 'production' }} ]]; then echo ${{ inputs.release_tag }}-${{ steps.timestamp.outputs.timestamp }}; else echo ${{ steps.timestamp.outputs.timestamp }}; fi)" >> $GITHUB_OUTPUT
 
       - name: Add environment tag to existing image
         id: update-image-tags
         env:
           registry: ${{ steps.ecr-login.outputs.registry }}
           commit_tag: ${{ steps.tags.outputs.commit-tag }}
-          readable_tag: ${{ inputs.environment }}-${{ steps.tags.outputs.additional-tag }}-${{ steps.timestamp.outputs.timestamp }}
+          readable_tag: ${{ inputs.environment }}-${{ steps.tags.outputs.additional-tag }}
         run: |
           manifest=$(aws ecr batch-get-image --repository-name $repository --image-ids imageTag=$commit_tag --output text --query images[].imageManifest)
           aws ecr put-image --repository-name $repository --image-tag $readable_tag --image-manifest "$manifest"
