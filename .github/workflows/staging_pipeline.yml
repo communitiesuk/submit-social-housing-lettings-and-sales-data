@@ -15,10 +15,23 @@ defaults:
     shell: bash
 
 jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    outputs:
+      releasetag: ${{ steps.latestrelease.outputs.releasetag }}
+
+    steps:
+      - name: Get latest release with tag
+        id: latestrelease
+        run: |
+          echo "releasetag=$(curl -s https://api.github.com/repos/${REPO_URL}/releases/latest | jq '.tag_name' | sed 's/\"//g')" >> $GITHUB_OUTPUT
+
   aws_deploy:
     name: AWS Deploy
     if: github.ref == 'refs/heads/cldc-2563-aws-production-pipeline'
     # needs: [lint, test, feature_test, audit]
+    needs: test
     uses: ./.github/workflows/aws_deploy.yml
     with:
       aws_account_id: 977287343304
