@@ -161,10 +161,10 @@ module Csv
         get_label(value, attribute, log)
       elsif SYSTEM_DATE_FIELDS.include? attribute
         log.public_send(attribute)&.iso8601
-        case @export_type
       elsif USER_DATE_FIELDS.include? attribute
         log.public_send(attribute)&.strftime("%F")
       elsif PERSON_DETAILS.any? { |key, _value| key == attribute } && (person_details_not_known?(log, attribute) || age_not_known?(log, attribute))
+        case @export_type
         when "codes"
           PERSON_DETAILS.find { |key, _value| key == attribute }[1]["refused_code"]
         when "labels"
