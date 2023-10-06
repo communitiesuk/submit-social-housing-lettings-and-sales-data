@@ -111,27 +111,7 @@ RSpec.describe SchemesHelper do
     let(:coordinator_user) { FactoryBot.create(:user, :data_coordinator) }
 
     context "when scheme has no locations" do
-      it "returns correct display attributes for a support user" do
-        attributes = [
-          { name: "Scheme code", value: "S#{scheme.id}" },
-          { name: "Name", value: "Test service_name", edit: true },
-          { name: "Status", value: status_tag(:incomplete) },
-          { name: "Confidential information", value: "No", edit: true },
-          { name: "Type of scheme", value: "Housing for older people" },
-          { name: "Registered under Care Standards Act 2000", value: "Yes – registered care home providing personal care" },
-          { name: "Housing stock owned by", value: "Acme LTD Owning", edit: true },
-          { name: "Support services provided by", value: "A registered charity or voluntary organisation" },
-          { name: "Primary client group", value: "Rough sleepers" },
-          { name: "Has another client group", value: "Yes" },
-          { name: "Secondary client group", value: "Refugees (permanent)" },
-          { name: "Level of support given", value: "High level" },
-          { name: "Intended length of stay", value: "Permanent" },
-          { name: "Availability", value: "Active from 1 April 2021" },
-        ]
-        expect(display_scheme_attributes(scheme)).to eq(attributes)
-      end
-
-      it "returns correct display attributes for a coordinator user" do
+      it "returns correct display attributes" do
         attributes = [
           { name: "Scheme code", value: "S#{scheme.id}" },
           { name: "Name", value: "Test service_name", edit: true },
@@ -157,27 +137,7 @@ RSpec.describe SchemesHelper do
         FactoryBot.create(:location, scheme:)
       end
 
-      it "returns correct display attributes for a support user" do
-        attributes = [
-          { name: "Scheme code", value: "S#{scheme.id}" },
-          { name: "Name", value: "Test service_name", edit: true },
-          { name: "Status", value: status_tag(:active) },
-          { name: "Confidential information", value: "No", edit: true },
-          { name: "Type of scheme", value: "Housing for older people" },
-          { name: "Registered under Care Standards Act 2000", value: "Yes – registered care home providing personal care" },
-          { name: "Housing stock owned by", value: "Acme LTD Owning", edit: true },
-          { name: "Support services provided by", value: "A registered charity or voluntary organisation" },
-          { name: "Primary client group", value: "Rough sleepers" },
-          { name: "Has another client group", value: "Yes" },
-          { name: "Secondary client group", value: "Refugees (permanent)" },
-          { name: "Level of support given", value: "High level" },
-          { name: "Intended length of stay", value: "Permanent" },
-          { name: "Availability", value: "Active from 1 April 2021" },
-        ]
-        expect(display_scheme_attributes(scheme)).to eq(attributes)
-      end
-
-      it "returns correct display attributes for a coordinator user" do
+      it "returns correct display attributes" do
         attributes = [
           { name: "Scheme code", value: "S#{scheme.id}" },
           { name: "Name", value: "Test service_name", edit: true },
