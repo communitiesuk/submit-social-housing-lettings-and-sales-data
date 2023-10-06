@@ -29,6 +29,6 @@ class Form::Lettings::Questions::PersonWorkingSituation < ::Form::Question
     },
     "0" => { "value" => "Other" },
     "divider" => { "value" => true },
-    "10" => { "value" => "Tenant prefers not to say" },
+    "10" => { "value" => "Person prefers not to say" },
   }.freeze
 end

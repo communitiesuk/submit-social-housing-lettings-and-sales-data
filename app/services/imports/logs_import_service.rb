@@ -77,8 +77,8 @@ module Imports
     end
 
     def compose_postcode(xml_doc, outcode, incode)
-      outcode_value = string_or_nil(xml_doc, outcode)
-      incode_value = string_or_nil(xml_doc, incode)
+      outcode_value = string_or_nil(xml_doc, outcode)&.strip
+      incode_value = string_or_nil(xml_doc, incode)&.strip
       if outcode_value.nil? || incode_value.nil? || !"#{outcode_value} #{incode_value}".match(POSTCODE_REGEXP)
         nil
       else

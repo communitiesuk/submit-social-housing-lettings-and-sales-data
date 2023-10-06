@@ -90,11 +90,11 @@ module Exports
                                 retrieve_lettings_logs(start_time, recent_export, full_update).filter_by_year(collection)
                                       .where("created_at > ?", last_processed_marker)
                                       .order(:created_at)
-                                      .limit(MAX_XML_RECORDS)
+                                      .limit(MAX_XML_RECORDS).to_a
                               else
                                 retrieve_lettings_logs(start_time, recent_export, full_update).filter_by_year(collection)
                                 .order(:created_at)
-                                .limit(MAX_XML_RECORDS)
+                                .limit(MAX_XML_RECORDS).to_a
                               end
 
         break if lettings_logs_slice.empty?
