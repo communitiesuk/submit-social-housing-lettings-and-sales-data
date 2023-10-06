@@ -114,9 +114,6 @@ jobs:
           manifest=$(aws ecr batch-get-image --repository-name $repository --image-ids imageTag=$commit_tag --output text --query images[].imageManifest)
           aws ecr put-image --repository-name $repository --image-tag $readable_tag --image-manifest "$manifest"
           echo "image=$registry/$repository:$readable_tag" >> $GITHUB_ENV
-        # manifest=$(aws ecr batch-get-image --repository-name $repository --image-ids imageTag=$commit_tag --output text --query images[].imageManifest)
-        # aws ecr put-image --repository-name $repository --image-tag $readable_tag --image-manifest "$manifest"
-        # echo "image=$registry/$repository:$readable_tag" >> $GITHUB_ENV
 
       - name: Configure AWS credentials for environment
         uses: aws-actions/configure-aws-credentials@v3
