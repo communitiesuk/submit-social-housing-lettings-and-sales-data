@@ -104,7 +104,7 @@ jobs:
       - name: Construct environment-dependent tag
         id: tag
         run: |
-          echo "::set-output name=tag::$(if [[ ${{ inputs.environment == 'production' }} ]]; then ${{ steps.latestrelease.outputs.releasetag }}; else ${{ steps.timestamp.outputs.timestamp }}; fi)"
+          echo "::set-output name=tag::$(if [[ ${{ inputs.environment == 'production' }} ]]; then echo ${{ steps.latestrelease.outputs.releasetag }}; else echo ${{ steps.timestamp.outputs.timestamp }}; fi)"
 
       - name: Add environment tag to existing image
         env:
