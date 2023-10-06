@@ -89,9 +89,9 @@ namespace :correct_addresses do
   end
 
   desc "Send all 2023 lettings addresses csv"
-  task :create_addresses_lettings_csv, %i[organisation_id] => :environment do |_task, args|
+  task :create_lettings_addresses_csv, %i[organisation_id] => :environment do |_task, args|
     organisation_id = args[:organisation_id]
-    raise "Usage: rake correct_addresses:create_addresses_lettings_csv['organisation_id']" if organisation_id.blank?
+    raise "Usage: rake correct_addresses:create_lettings_addresses_csv['organisation_id']" if organisation_id.blank?
 
     organisation = Organisation.find_by(id: organisation_id)
     if organisation.present?
@@ -103,9 +103,9 @@ namespace :correct_addresses do
   end
 
   desc "Send all 2023 sales addresses csv"
-  task :create_addresses_sales_csv, %i[organisation_id] => :environment do |_task, args|
+  task :create_sales_addresses_csv, %i[organisation_id] => :environment do |_task, args|
     organisation_id = args[:organisation_id]
-    raise "Usage: rake correct_addresses:create_addresses_sales_csv['organisation_id']" if organisation_id.blank?
+    raise "Usage: rake correct_addresses:create_sales_addresses_csv['organisation_id']" if organisation_id.blank?
 
     organisation = Organisation.find_by(id: organisation_id)
     if organisation.present?

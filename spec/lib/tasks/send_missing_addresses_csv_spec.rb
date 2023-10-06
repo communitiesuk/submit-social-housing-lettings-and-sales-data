@@ -478,8 +478,8 @@ RSpec.describe "correct_addresses" do
     end
   end
 
-  describe ":create_addresses_lettings_csv", type: :task do
-    subject(:task) { Rake::Task["correct_addresses:create_addresses_lettings_csv"] }
+  describe ":create_lettings_addresses_csv", type: :task do
+    subject(:task) { Rake::Task["correct_addresses:create_lettings_addresses_csv"] }
 
     before do
       organisation.users.destroy_all
@@ -512,14 +512,14 @@ RSpec.describe "correct_addresses" do
 
       context "when organisation ID is not given" do
         it "raises an error" do
-          expect { task.invoke }.to raise_error(RuntimeError, "Usage: rake correct_addresses:create_addresses_lettings_csv['organisation_id']")
+          expect { task.invoke }.to raise_error(RuntimeError, "Usage: rake correct_addresses:create_lettings_addresses_csv['organisation_id']")
         end
       end
     end
   end
 
-  describe ":create_addresses_sales_csv", type: :task do
-    subject(:task) { Rake::Task["correct_addresses:create_addresses_sales_csv"] }
+  describe ":create_sales_addresses_csv", type: :task do
+    subject(:task) { Rake::Task["correct_addresses:create_sales_addresses_csv"] }
 
     before do
       organisation.users.destroy_all
@@ -552,7 +552,7 @@ RSpec.describe "correct_addresses" do
 
       context "when organisation ID is not given" do
         it "raises an error" do
-          expect { task.invoke }.to raise_error(RuntimeError, "Usage: rake correct_addresses:create_addresses_sales_csv['organisation_id']")
+          expect { task.invoke }.to raise_error(RuntimeError, "Usage: rake correct_addresses:create_sales_addresses_csv['organisation_id']")
         end
       end
     end
