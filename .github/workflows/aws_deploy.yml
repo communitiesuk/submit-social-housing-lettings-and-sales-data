@@ -111,7 +111,7 @@ jobs:
         env:
           registry: ${{ steps.ecr-login.outputs.registry }}
           commit_tag: ${{ steps.tags.outputs.commit-tag }}
-          readable_tag: ${{ inputs.environment }}-${{ steps.tags.outputs.additional-tag }}
+          readable_tag: ${{ inputs.environment }}-${{ steps.tags.outputs.additional-tag }}-${{ steps.timestamp.outputs.timestamp }}
         run: |
           manifest=$(aws ecr batch-get-image --repository-name $repository --image-ids imageTag=$commit_tag --output text --query images[].imageManifest)
           aws ecr put-image --repository-name $repository --image-tag $readable_tag --image-manifest "$manifest"
