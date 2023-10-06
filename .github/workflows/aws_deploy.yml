@@ -24,7 +24,6 @@ env:
   app_repo_role: arn:aws:iam::815624722760:role/core-application-repo
   aws_region: eu-west-2
   repository: core
-  REPO_URL: communitiesuk/submit-social-housing-lettings-and-sales-data
 
 jobs:
   push_docker_image:
