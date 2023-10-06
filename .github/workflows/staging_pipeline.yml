@@ -10,6 +10,9 @@ on:
       - synchronize
   workflow_dispatch:
 
+env:
+  REPO_URL: communitiesuk/submit-social-housing-lettings-and-sales-data
+
 defaults:
   run:
     shell: bash
