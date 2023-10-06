@@ -112,6 +112,7 @@ jobs:
           commit_tag: ${{ github.sha }}
           readable_tag: ${{ inputs.environment }}-${{ steps.tag.outputs.tag }}
         run: |
+          echo $commit_tag
           echo $readable_tag
           manifest=$(aws ecr batch-get-image --repository-name $repository --image-ids imageTag=$commit_tag --output text --query images[].imageManifest)
           echo $manifest
