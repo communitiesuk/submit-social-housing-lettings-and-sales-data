@@ -1069,7 +1069,7 @@ RSpec.describe "Schemes scheme Features" do
               it "lets me see amended details on the check answers page" do
                 expect(page).to have_content "FooBar"
                 expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
-                expect(page).to have_link("Change", href:  /schemes\/#{scheme.id}\/edit-name/, count: 2)
+                expect(page).to have_link("Change", href:  /schemes\/#{scheme.id}\/edit-name/, count: 3)
               end
             end
           end

@@ -457,7 +457,7 @@ RSpec.describe SchemesController, type: :request do
         expect(page).to have_content(specific_scheme.intended_stay)
       end
 
-      context "when coordinator attempts to see scheme belonging to a different organisation" do
+      context "when coordinator attempts to see scheme belonging to a different (and not their parent) organisation" do
         let!(:specific_scheme) { create(:scheme) }
 
         it "returns 401" do
@@ -474,7 +474,6 @@ RSpec.describe SchemesController, type: :request do
       end
 
       context "when looking at scheme details" do
-        let(:user) { create(:user, :data_coordinator) }
         let!(:scheme) { create(:scheme, owning_organisation: user.organisation) }
         let(:add_deactivations) { scheme.scheme_deactivation_periods << scheme_deactivation_period }
 
@@ -535,21 +534,68 @@ RSpec.describe SchemesController, type: :request do
       context "when coordinator attempts to see scheme belonging to a parent organisation" do
         let(:parent_organisation) { create(:organisation) }
         let!(:specific_scheme) { create(:scheme, owning_organisation: parent_organisation) }
+        let(:add_deactivations) { specific_scheme.scheme_deactivation_periods << scheme_deactivation_period }
 
         before do
           create(:location, scheme: specific_scheme)
           create(:organisation_relationship, parent_organisation:, child_organisation: user.organisation)
+          Timecop.freeze(Time.utc(2022, 10, 10))
+          sign_in user
+          add_deactivations
+          specific_scheme.save!
           get "/schemes/#{specific_scheme.id}"
         end
 
-        it "shows the scheme" do
-          expect(page).to have_content(specific_scheme.id_to_display)
+        after do
+          Timecop.unfreeze
         end
 
-        it "does not allow editing the scheme" do
-          expect(page).not_to have_link("Change")
-          expect(page).not_to have_content("Reactivate this scheme")
-          expect(page).not_to have_content("Deactivate this scheme")
+        context "with active scheme" do
+          let(:add_deactivations) {}
+
+          it "shows the scheme" do
+            expect(page).to have_content(specific_scheme.id_to_display)
+          end
+
+          it "allows editing" do
+            expect(page).to have_link("Change")
+          end
+
+          it "renders deactivate this scheme" do
+            expect(response).to have_http_status(:ok)
+            expect(page).to have_link("Deactivate this scheme", href: "/schemes/#{specific_scheme.id}/new-deactivation")
+          end
+        end
+
+        context "with deactivated scheme" do
+          let(:scheme_deactivation_period) { create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 10, 9), scheme: specific_scheme) }
+
+          it "renders reactivate this scheme" do
+            expect(response).to have_http_status(:ok)
+            expect(page).to have_link("Reactivate this scheme", href: "/schemes/#{specific_scheme.id}/new-reactivation")
+          end
+        end
+
+        context "with scheme that's deactivating soon" do
+          let(:scheme_deactivation_period) { create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 10, 12), scheme: specific_scheme) }
+
+          it "does not render toggle scheme link" do
+            expect(response).to have_http_status(:ok)
+            expect(page).not_to have_link("Reactivate this scheme")
+            expect(page).not_to have_link("Deactivate this scheme")
+          end
+        end
+
+        context "with scheme that's deactivating in more than 6 months" do
+          let(:scheme_deactivation_period) { create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2023, 5, 12), scheme: specific_scheme) }
+
+          it "does not render toggle scheme link" do
+            expect(response).to have_http_status(:ok)
+            expect(page).not_to have_link("Reactivate this scheme")
+            expect(page).to have_link("Deactivate this scheme")
+            expect(response.body).not_to include("<strong class=\"govuk-tag govuk-tag--yellow\">Deactivating soon</strong>")
+            expect(response.body).to include("<strong class=\"govuk-tag govuk-tag--green\">Active</strong>")
+          end
         end
       end
 
@@ -1813,7 +1859,7 @@ RSpec.describe SchemesController, type: :request do
           expect(response).to have_http_status(:ok)
           expect(path).to match("/schemes/#{scheme.id}")
           expect(page).to have_content(scheme.service_name)
-          assert_select "a", text: /Change/, count: 2
+          assert_select "a", text: /Change/, count: 3
         end
       end
     end
@@ -1958,7 +2004,7 @@ RSpec.describe SchemesController, type: :request do
           expect(response).to have_http_status(:ok)
           expect(path).to match("/schemes/#{scheme.id}")
           expect(page).to have_content(scheme.service_name)
-          assert_select "a", text: /Change/, count: 2
+          assert_select "a", text: /Change/, count: 3
         end
       end
     end
@@ -2016,7 +2062,7 @@ RSpec.describe SchemesController, type: :request do
         expect(response).to have_http_status(:ok)
         expect(page).to have_content("Scheme details")
         expect(page).to have_content("This scheme contains confidential information")
-        expect(page).not_to have_content("Which organisation owns the housing stock for this scheme?")
+        expect(page).to have_content("Which organisation owns the housing stock for this scheme?")
       end
 
       context "when attempting to access secondary-client-group scheme page for another organisation" do
