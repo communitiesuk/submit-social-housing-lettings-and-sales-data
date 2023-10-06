@@ -136,12 +136,15 @@ module Csv
       "prevloc_label" => "prevloc",
     }.freeze
 
-    DATE_FIELDS = %w[
+    SYSTEM_DATE_FIELDS = %w[
+      created_at
+      updated_at
+    ].freeze
+
+    USER_DATE_FIELDS = %w[
       mrcdate
       startdate
       voiddate
-      created_at
-      updated_at
     ].freeze
 
     def value(attribute, log)
@@ -155,7 +158,9 @@ module Csv
         attribute = FIELDS_ALWAYS_EXPORTED_AS_LABELS[attribute]
         value = log.public_send(attribute)
         get_label(value, attribute, log)
-      elsif DATE_FIELDS.include? attribute
+      elsif SYSTEM_DATE_FIELDS.include? attribute
+        log.public_send(attribute)&.iso8601
+      elsif USER_DATE_FIELDS.include? attribute
         log.public_send(attribute)&.strftime("%F")
       elsif PERSON_DETAILS.any? { |key, _value| key == attribute } && person_details_not_known?(log, attribute)
         case @export_type
