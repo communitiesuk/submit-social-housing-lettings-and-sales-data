@@ -106,6 +106,10 @@ jobs:
         run: |
           echo "::set-output name=tag::$(if [[ ${{ inputs.environment == 'production' }} ]]; then echo ${{ steps.latestrelease.outputs.releasetag }}; else echo ${{ steps.timestamp.outputs.timestamp }}; fi)"
 
+      - name: Debug
+        run: |
+          echo ${{ steps.tag.outputs.tag }}
+
       - name: Add environment tag to existing image
         env:
           registry: ${{ steps.ecr-login.outputs.registry }}
