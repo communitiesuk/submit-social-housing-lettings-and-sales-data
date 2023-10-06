@@ -16,6 +16,8 @@ jobs:
   test:
     name: Test
     runs-on: ubuntu-latest
+    outputs:
+      releasetag: ${{ steps.latestrelease.outputs.releasetag }}
 
     services:
       postgres:
@@ -48,7 +50,7 @@ jobs:
       - name: Get latest release with tag
         id: latestrelease
         run: |
-          echo "::set-output name=releasetag::$(curl -s https://api.github.com/repos/${REPO_URL}/releases/latest | jq '.tag_name' | sed 's/\"//g')"
+          echo "releasetag=$(curl -s https://api.github.com/repos/${REPO_URL}/releases/latest | jq '.tag_name' | sed 's/\"//g')" >> $GITHUB_OUTPUT
 
       - name: Confirm release tag
         run: |
@@ -258,14 +260,15 @@ jobs:
           cf set-env $APP_NAME SENTRY_DSN $SENTRY_DSN
           cf push $APP_NAME --strategy rolling
 
-  # aws_deploy:
-  #   name: AWS Deploy
-  #   if: github.ref == 'refs/heads/main'
-  #   needs: [lint, test, feature_test, audit]
-  #   uses: ./.github/workflows/aws_deploy.yml
-  #   with:
-  #     aws_account_id: 977287343304
-  #     aws_resource_prefix: core-prod
-  #     environment: production
-  #   permissions:
-  #     id-token: write
+  aws_deploy:
+    name: AWS Deploy
+    if: github.ref == 'refs/heads/main'
+    needs: [lint, test, feature_test, audit]
+    uses: ./.github/workflows/aws_deploy.yml
+    with:
+      aws_account_id: 977287343304
+      aws_resource_prefix: core-prod
+      environment: production
+      release_tag: ${{ needs.test.outputs.releasetag }}
+    permissions:
+      id-token: write
