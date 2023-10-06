@@ -106,10 +106,6 @@ jobs:
         run: |
           echo "::set-output name=tag::$(if [[ ${{ inputs.environment == 'production' }} ]]; then echo ${{ steps.latestrelease.outputs.releasetag }}; else echo ${{ steps.timestamp.outputs.timestamp }}; fi)"
 
-      - name: Debug
-        run: |
-          echo ${{ steps.tag.outputs.tag }}
-
       - name: Add environment tag to existing image
         env:
           registry: ${{ steps.ecr-login.outputs.registry }}
@@ -117,8 +113,10 @@ jobs:
           readable_tag: ${{ inputs.environment }}-${{ steps.tag.outputs.tag }}
         run: |
           manifest=$(aws ecr batch-get-image --repository-name $repository --image-ids imageTag=$commit_tag --output text --query images[].imageManifest)
-          aws ecr put-image --repository-name $repository --image-tag $readable_tag --image-manifest "$manifest"
-          echo "image=$registry/$repository:$readable_tag" >> $GITHUB_ENV
+          echo manifest
+        # manifest=$(aws ecr batch-get-image --repository-name $repository --image-ids imageTag=$commit_tag --output text --query images[].imageManifest)
+        # aws ecr put-image --repository-name $repository --image-tag $readable_tag --image-manifest "$manifest"
+        # echo "image=$registry/$repository:$readable_tag" >> $GITHUB_ENV
 
       - name: Configure AWS credentials for environment
         uses: aws-actions/configure-aws-credentials@v3
