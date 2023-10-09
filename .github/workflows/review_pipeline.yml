@@ -41,7 +41,7 @@ jobs:
           cf target -o $CF_ORG -s $CF_SPACE
           cf create-service postgres tiny-unencrypted-13 dluhc-core-review-${{ github.event.pull_request.number }}-postgres --wait
 
-  redis:
+  redis: 
     name: Provision redis
     runs-on: ubuntu-latest
     environment: review
