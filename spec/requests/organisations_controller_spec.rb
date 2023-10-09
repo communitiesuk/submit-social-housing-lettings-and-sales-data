@@ -717,10 +717,12 @@ RSpec.describe OrganisationsController, type: :request do
 
         context "when viewing a specific organisation's lettings logs" do
           let(:number_of_org1_lettings_logs) { 2 }
+          let(:number_of_org1_managed_lettings_logs) { 2 }
           let(:number_of_org2_lettings_logs) { 4 }
 
           before do
             create_list(:lettings_log, number_of_org1_lettings_logs, created_by: user)
+            create_list(:lettings_log, number_of_org1_managed_lettings_logs, managing_organisation: user.organisation)
             create(:lettings_log, created_by: user, status: "pending", skip_update_status: true)
             create_list(:lettings_log, number_of_org2_lettings_logs, created_by: nil, owning_organisation_id: unauthorised_organisation.id, managing_organisation_id: unauthorised_organisation.id)
 
@@ -728,9 +730,13 @@ RSpec.describe OrganisationsController, type: :request do
           end
 
           it "only shows logs for that organisation" do
-            expect(page).to have_content("#{number_of_org1_lettings_logs} total logs")
+            expect(page).to have_content("#{number_of_org1_lettings_logs + number_of_org1_managed_lettings_logs} total logs")
 
             organisation.lettings_logs.visible.map(&:id).each do |lettings_log_id|
+              expect(page).to have_link lettings_log_id.to_s, href: "/lettings-logs/#{lettings_log_id}"
+            end
+
+            organisation.managed_lettings_logs.visible.map(&:id).each do |lettings_log_id|
               expect(page).to have_link lettings_log_id.to_s, href: "/lettings-logs/#{lettings_log_id}"
             end
 
