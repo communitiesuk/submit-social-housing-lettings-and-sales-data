@@ -311,16 +311,16 @@ RSpec.describe Validations::Sales::FinancialValidations do
         record.type = 2
         record.equity = 1
         financial_validator.validate_equity_in_range_for_year_and_type(record)
-        expect(record.errors["equity"]).to include(match I18n.t("validations.financial.equity.under_min", min_equity: 10))
-        expect(record.errors["type"]).to include(match I18n.t("validations.financial.equity.under_min", min_equity: 10))
+        expect(record.errors["equity"]).to include(match I18n.t("validations.financial.equity.under_min", min_equity: 25))
+        expect(record.errors["type"]).to include(match I18n.t("validations.financial.equity.under_min", min_equity: 25))
       end
 
       it "adds an error for type 30, equity below min with the correct percentage" do
         record.type = 30
         record.equity = 1
         financial_validator.validate_equity_in_range_for_year_and_type(record)
-        expect(record.errors["equity"]).to include(match I18n.t("validations.financial.equity.under_min", min_equity: 25))
-        expect(record.errors["type"]).to include(match I18n.t("validations.financial.equity.under_min", min_equity: 25))
+        expect(record.errors["equity"]).to include(match I18n.t("validations.financial.equity.under_min", min_equity: 10))
+        expect(record.errors["type"]).to include(match I18n.t("validations.financial.equity.under_min", min_equity: 10))
       end
 
       it "does not add an error for equity in range with the correct percentage" do
