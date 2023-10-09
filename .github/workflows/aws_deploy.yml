@@ -51,7 +51,7 @@ jobs:
 
       - name: Check if image with tag already exists
         run: |
-          echo "image-exists=$(if aws ecr list-images --no-paginate --repository-name=$repository --query "imageIds[*].imageTag" | grep -q ${{ github.sha }}; then echo true; else echo false; fi)" >> $GITHUB_ENV
+          echo "image-exists=$(if aws ecr list-images --repository-name=$repository --query "imageIds[*].imageTag" | grep -q ${{ github.sha }}; then echo true; else echo false; fi)" >> $GITHUB_ENV
 
       - name: Check value of image-exists
         run: |
