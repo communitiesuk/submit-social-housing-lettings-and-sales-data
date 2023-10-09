@@ -49,6 +49,14 @@ jobs:
         with:
           mask-password: 'true'
 
+      - name: Check if image with tag already exists (hide errors?)
+        run: |
+          aws ecr describe-images --repository-name=$repository --image-ids=imageTag=${{ github.sha }} 2> /dev/null
+
+      - name: Check if image with tag already exists
+        run: |
+          aws ecr describe-images --repository-name=$repository --image-ids=imageTag=${{ github.sha }}
+
       - name: Build, tag, and push docker image to ECR
         id: build-image
         env:
