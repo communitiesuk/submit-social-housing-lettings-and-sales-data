@@ -59,7 +59,7 @@ jobs:
 
       - name: Build, tag, and push docker image to ECR
         id: build-image
-        if: env.image-exists == false
+        if: ${{ env.image-exists }} == false
         env:
           registry: ${{ steps.ecr-login.outputs.registry }}
           commit_tag: ${{ github.sha }}
