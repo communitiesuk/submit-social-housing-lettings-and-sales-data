@@ -52,6 +52,7 @@ jobs:
       - name: Check if image with tag already exists
         run: |
           echo "image-exists=$(if aws ecr list-images --no-paginate --repository-name=$repository --query "imageIds[*].imageTag" | grep -q ${{ github.sha }}; then echo true; else echo false; fi)" >> $GITHUB_ENV
+          echo ${{ env.image-exists }}
 
       - name: Build, tag, and push docker image to ECR
         id: build-image
