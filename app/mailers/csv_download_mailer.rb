@@ -29,27 +29,58 @@ class CsvDownloadMailer < NotifyMailer
 
 private
 
-  def issue_explanation(issue_types)
-    issue_type_explanations = {
-      "missing_address" => "- Full address required: The UPRN in some logs is incorrect, so address data was not imported.\n",
-      "missing_town" => "- Missing town or city: The town or city in some logs is missing. This data is required in the new version of CORE.\n",
-      "wrong_uprn" => "- UPRN may be incorrect: The UPRN in some logs may be incorrect, so wrong address data was imported. We think this is an issue because in some logs the UPRN is the same as the tenant code or property reference, and because your organisation has submitted logs for properties in Bristol for the first time.\n",
-    }
+  HELPDESK_URL = "https://dluhcdigital.atlassian.net/servicedesk/customer/portal/6/group/11".freeze
 
-    "Some address data is missing or incorrect. We've detected the following issues in your logs imported to the new version of CORE:\n\n#{issue_types.map { |issue_type| issue_type_explanations[issue_type] }.join('')}"
+  def issue_explanation(issue_types)
+    [
+      "We have found #{multiple_issue_types?(issue_types) ? 'these issues' : 'this issue'} in your logs imported to the new version of CORE:\n",
+      issue_types.include?("missing_address") ? "## Full address required\nThe Unique Property Reference number (UPRN) in some logs is incorrect, so the address data was not imported. Provide the full address and leave the UPRN column blank.\n" : "",
+      issue_types.include?("missing_town") ? "## Missing town or city\nThe town or city in some logs is missing. This data is required in the new version of CORE.\n" : "",
+      has_uprn_issues(issue_types) ? uprn_issue_explanation(issue_types) : "",
+    ].join("")
   end
 
   def how_to_fix(issue_types, link, log_type)
     [
       "You need to:\n\n",
-      "- download [this spreadsheet for #{log_type} logs](#{link})\n",
+      "- download [this spreadsheet for #{log_type} logs](#{link}). This link will expire in one week. To request another link, [contact the CORE helpdesk](#{HELPDESK_URL}).\n",
       issue_types.include?("missing_address") || issue_types.include?("missing_town") ? "- fill in the missing address data\n" : "",
-      if issue_types == %w[wrong_uprn]
-        "- check the address data\n"
-      else
-        !issue_types.include?("wrong_uprn") ? "- check that the existing address data is correct\n" : "- check the existing address data\n"
-      end,
-      issue_types.include?("wrong_uprn") ? "- correct any errors\n" : "",
+      uprn_issues_only(issue_types) ? "- check that the address data is correct\n" : "- check that the existing address data is correct\n",
+      has_uprn_issues(issue_types) ? "- correct any address errors\n" : "",
     ].join("")
+  end
+
+  def uprn_issues_only(issue_types)
+    issue_types == %w[wrong_uprn] || issue_types == %w[bristol_uprn] || issue_types.count == 2 && issue_types.include?("wrong_uprn") && issue_types.include?("bristol_uprn")
+  end
+
+  def has_uprn_issues(issue_types)
+    issue_types.include?("wrong_uprn") || issue_types.include?("bristol_uprn")
+  end
+
+  def multiple_issue_types?(issue_types)
+    issue_types.count > 1 && !uprn_issues_only(issue_types) || issue_types.count > 2
+  end
+
+  def uprn_issue_explanation(issue_types)
+    if issue_types.include?("wrong_uprn") && !issue_types.include?("bristol_uprn")
+      "## Incorrect UPRN\nThe UPRN in some logs may be incorrect, so the wrong address data may have been imported.
+
+In some of your logs, the UPRN is the same as the tenant code or property reference, but these are different things. Property references are codes that yourorganisation uses to identify properties. UPRNs are unique numbers assigned by the Ordnance Survey.
+
+If a log has the correct UPRN, leave the UPRN unchanged. If the UPRN is incorrect, clear the value and provide the full address instead. Alternatively, you can change the UPRN on the CORE system.\n"
+    elsif issue_types.include?("bristol_uprn") && !issue_types.include?("wrong_uprn")
+      "## Incorrect UPRN\nThe UPRN in some logs may be incorrect, so the wrong address data may have been imported. In some of your logs, the UPRN links to an address in Bristol, but this is the first time your organisation has submitted logs for properties in Bristol.
+
+If a log has the correct UPRN, leave the UPRN unchanged. If the UPRN is incorrect, clear the value and provide the full address instead. Alternatively, you can change the UPRN on the CORE system.\n"
+    else
+      "## Incorrect UPRN\nThe UPRN in some logs may be incorrect, so the wrong address data may have been imported. We think this is an issue for two reasons.
+
+In some of your logs, the UPRN links to an address in Bristol, but this is the first time your organisation has submitted logs for properties in Bristol.
+
+In other logs, the UPRN is the same as the tenant code or property reference, but these are different things. Property references are codes that your organisation uses to identify properties. UPRNs are unique numbers assigned by the Ordnance Survey.
+
+If a log has the correct UPRN, leave the UPRN unchanged. If the UPRN is incorrect, clear the value and provide the full address instead. Alternatively, you can change the UPRN on the CORE system."
+    end
   end
 end

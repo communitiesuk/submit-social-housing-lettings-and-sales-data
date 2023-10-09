@@ -20,15 +20,26 @@ namespace :correct_addresses do
                                       .imported_2023
                                       .where(needstype: 1)
                                       .where.not(uprn: nil)
-                                      .where("uprn = propcode OR uprn = tenancycode OR town_or_city = 'Bristol'")
+                                      .where("uprn = propcode OR uprn = tenancycode")
                                     end
 
+      logs_impacted_by_bristol_uprn_issue = if skip_uprn_issue_organisations.include?(organisation.id)
+                                              []
+                                            else
+                                              organisation.managed_lettings_logs
+                                              .imported_2023
+                                              .where(needstype: 1)
+                                              .where.not(uprn: nil)
+                                              .where("town_or_city = 'Bristol'")
+                                            end
+
       missing_addresses_threshold = EmailMissingAddressesCsvJob::MISSING_ADDRESSES_THRESHOLD
-      if logs_impacted_by_missing_address >= missing_addresses_threshold || logs_impacted_by_missing_town_or_city >= missing_addresses_threshold || logs_impacted_by_uprn_issue.any?
+      if logs_impacted_by_missing_address >= missing_addresses_threshold || logs_impacted_by_missing_town_or_city >= missing_addresses_threshold || logs_impacted_by_uprn_issue.any? || logs_impacted_by_bristol_uprn_issue.any?
         issue_types = []
         issue_types << "missing_address" if logs_impacted_by_missing_address.positive?
         issue_types << "missing_town" if logs_impacted_by_missing_town_or_city.positive?
         issue_types << "wrong_uprn" if logs_impacted_by_uprn_issue.any?
+        issue_types << "bristol_uprn" if logs_impacted_by_bristol_uprn_issue.any?
         data_coordinators = organisation.users.where(role: 2).filter_by_active
         users_to_contact = data_coordinators.any? ? data_coordinators : organisation.users.filter_by_active
         EmailMissingAddressesCsvJob.perform_later(users_to_contact.map(&:id), organisation, "lettings", issue_types, skip_uprn_issue_organisations)

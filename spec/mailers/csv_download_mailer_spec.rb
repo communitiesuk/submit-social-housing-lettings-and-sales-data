@@ -38,9 +38,11 @@ RSpec.describe CsvDownloadMailer do
         template_id: described_class::CSV_MISSING_LETTINGS_ADDRESSES_DOWNLOAD_TEMPLATE_ID,
         personalisation: {
           name: user.name,
-          issue_explanation: "Some address data is missing or incorrect. We've detected the following issues in your logs imported to the new version of CORE:\n\n- Missing town or city: The town or city in some logs is missing. This data is required in the new version of CORE.\n",
+          issue_explanation: "We have found this issue in your logs imported to the new version of CORE:
+## Missing town or city
+The town or city in some logs is missing. This data is required in the new version of CORE.\n",
           how_to_fix: "You need to:\n
-- download [this spreadsheet for lettings logs](#{link})
+- download [this spreadsheet for lettings logs](#{link}). This link will expire in one week. To request another link, [contact the CORE helpdesk](https://dluhcdigital.atlassian.net/servicedesk/customer/portal/6/group/11).
 - fill in the missing address data
 - check that the existing address data is correct\n",
           duration: "20 minutes",
@@ -61,11 +63,16 @@ RSpec.describe CsvDownloadMailer do
         template_id: described_class::CSV_MISSING_SALES_ADDRESSES_DOWNLOAD_TEMPLATE_ID,
         personalisation: {
           name: user.name,
-          issue_explanation: "Some address data is missing or incorrect. We've detected the following issues in your logs imported to the new version of CORE:\n\n- UPRN may be incorrect: The UPRN in some logs may be incorrect, so wrong address data was imported. We think this is an issue because in some logs the UPRN is the same as the tenant code or property reference, and because your organisation has submitted logs for properties in Bristol for the first time.\n",
+          issue_explanation: "We have found this issue in your logs imported to the new version of CORE:
+## Incorrect UPRN\nThe UPRN in some logs may be incorrect, so the wrong address data may have been imported.
+
+In some of your logs, the UPRN is the same as the tenant code or property reference, but these are different things. Property references are codes that yourorganisation uses to identify properties. UPRNs are unique numbers assigned by the Ordnance Survey.
+
+If a log has the correct UPRN, leave the UPRN unchanged. If the UPRN is incorrect, clear the value and provide the full address instead. Alternatively, you can change the UPRN on the CORE system.\n",
           how_to_fix: "You need to:\n
-- download [this spreadsheet for sales logs](#{link})
-- check the address data
-- correct any errors\n",
+- download [this spreadsheet for sales logs](#{link}). This link will expire in one week. To request another link, [contact the CORE helpdesk](https://dluhcdigital.atlassian.net/servicedesk/customer/portal/6/group/11).
+- check that the address data is correct
+- correct any address errors\n",
           duration: "20 minutes",
         },
       )
