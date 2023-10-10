@@ -17,9 +17,9 @@ RSpec.describe "data_import" do
     allow(ENV).to receive(:[]).with("IMPORT_PAAS_INSTANCE").and_return(instance_name)
     allow(ENV).to receive(:[]).with("VCAP_SERVICES").and_return("dummy")
 
-    WebMock.stub_request(:get, /api.postcodes.io/)
+    WebMock.stub_request(:get, /api\.postcodes\.io/)
       .to_return(status: 200, body: "{\"status\":404,\"error\":\"Postcode not found\"}", headers: {})
-    WebMock.stub_request(:get, /api.postcodes.io\/postcodes\/B11BB/)
+    WebMock.stub_request(:get, /api\.postcodes\.io\/postcodes\/B11BB/)
       .to_return(status: 200, body: '{"status":200,"result":{"admin_district":"Westminster","codes":{"admin_district":"E08000035"}}}', headers: {})
 
     body = {
