@@ -27,7 +27,6 @@ env:
 
 jobs:
   push_docker_image:
-    if: inputs.environment != 'production'
     name: Push docker image to AWS
     runs-on: ubuntu-latest
     permissions:
