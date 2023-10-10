@@ -582,7 +582,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
     describe "#field_5" do
       context "when null" do
-        let(:attributes) { { bulk_upload:, field_5: nil, field_15: "1" } }
+        let(:attributes) { { bulk_upload:, field_5: nil } }
 
         it "returns an error" do
           expect(parser.errors[:field_5]).to be_present
@@ -652,12 +652,22 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
       end
     end
 
+    describe "#field_15" do
+      context "when using New CORE ids" do
+
+      end
+
+      context "when using New CORE ids" do
+
+      end
+    end
+
     describe "#field_16" do
       context "when nullable not permitted" do
         let(:attributes) { { bulk_upload:, field_5: "2", field_16: nil } }
 
         it "cannot be nulled" do
-          expect(parser.errors[:field_16]).to be_present
+          expect(parser.errors[:field_16]).to include("You must answer scheme code")
         end
       end
 
@@ -669,92 +679,137 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
         end
       end
 
-      context "when matching scheme cannot be found" do
-        let(:attributes) { { bulk_upload:, field_5: "1", field_16: "123" } }
+      context "when using New CORE ids" do
+        context "when matching scheme cannot be found" do
+          let(:attributes) { { bulk_upload:, field_5: "1", field_16: "S123" } }
 
-        it "returns a setup error" do
-          expect(parser.errors.where(:field_16, category: :setup)).to be_present
+          it "returns a setup error" do
+            expect(parser.errors.where(:field_16, category: :setup).map(&:message)).to include("The scheme code is not correct")
+          end
+        end
+
+        context "when scheme belongs to someone else" do
+          let(:other_scheme) { create(:scheme, :with_old_visible_id) }
+          let(:attributes) { { bulk_upload:, field_5: "1", field_16: "S#{other_scheme.id}", field_1: owning_org.old_visible_id } }
+
+          it "returns a setup error" do
+            expect(parser.errors.where(:field_16, category: :setup).map(&:message)).to include("This scheme code does not belong to your organisation, or any of your stock owners / managing agents")
+          end
+        end
+
+        context "when scheme belongs to owning org" do
+          let(:scheme) { create(:scheme, :with_old_visible_id, owning_organisation: owning_org) }
+          let(:attributes) { { bulk_upload:, field_5: "1", field_16: "S#{scheme.id}", field_1: owning_org.old_visible_id } }
+
+          it "does not return an error" do
+            expect(parser.errors[:field_16]).to be_blank
+          end
+        end
+
+        context "when scheme belongs to managing org" do
+          let(:scheme) { create(:scheme, :with_old_visible_id, owning_organisation: managing_org) }
+          let(:attributes) { { bulk_upload:, field_5: "1", field_16: "S#{scheme.id}", field_2: managing_org.old_visible_id } }
+
+          it "does not return an error" do
+            expect(parser.errors[:field_16]).to be_blank
+          end
         end
       end
 
-      context "when scheme belongs to someone else" do
-        let(:other_scheme) { create(:scheme, :with_old_visible_id) }
-        let(:attributes) { { bulk_upload:, field_5: "1", field_16: other_scheme.old_visible_id, field_1: owning_org.old_visible_id } }
+      context "when using Old CORE ids" do
+        context "when matching scheme cannot be found" do
+          let(:attributes) { { bulk_upload:, field_5: "1", field_16: "123" } }
 
-        it "returns a setup error" do
-          expect(parser.errors.where(:field_16, category: :setup).map(&:message)).to include("This management group code does not belong to your organisation, or any of your stock owners / managing agents")
+          it "returns a setup error" do
+            expect(parser.errors.where(:field_16, category: :setup).map(&:message)).to include("The scheme code is not correct")
+          end
         end
-      end
 
-      context "when scheme belongs to owning org" do
-        let(:scheme) { create(:scheme, :with_old_visible_id, owning_organisation: owning_org) }
-        let(:attributes) { { bulk_upload:, field_5: "1", field_16: scheme.old_visible_id, field_1: owning_org.old_visible_id } }
+        context "when scheme belongs to someone else" do
+          let(:other_scheme) { create(:scheme, :with_old_visible_id) }
+          let(:attributes) { { bulk_upload:, field_5: "1", field_16: other_scheme.old_visible_id, field_1: owning_org.old_visible_id } }
 
-        it "does not return an error" do
-          expect(parser.errors[:field_16]).to be_blank
+          it "returns a setup error" do
+            expect(parser.errors.where(:field_16, category: :setup).map(&:message)).to include("This scheme code does not belong to your organisation, or any of your stock owners / managing agents")
+          end
         end
-      end
 
-      context "when scheme belongs to managing org" do
-        let(:scheme) { create(:scheme, :with_old_visible_id, owning_organisation: managing_org) }
-        let(:attributes) { { bulk_upload:, field_5: "1", field_16: scheme.old_visible_id, field_2: managing_org.old_visible_id } }
+        context "when scheme belongs to owning org" do
+          let(:scheme) { create(:scheme, :with_old_visible_id, owning_organisation: owning_org) }
+          let(:attributes) { { bulk_upload:, field_5: "1", field_16: scheme.old_visible_id, field_1: owning_org.old_visible_id } }
 
-        it "does not return an error" do
-          expect(parser.errors[:field_16]).to be_blank
+          it "does not return an error" do
+            expect(parser.errors[:field_16]).to be_blank
+          end
+        end
+
+        context "when scheme belongs to managing org" do
+          let(:scheme) { create(:scheme, :with_old_visible_id, owning_organisation: managing_org) }
+          let(:attributes) { { bulk_upload:, field_5: "1", field_16: scheme.old_visible_id, field_2: managing_org.old_visible_id } }
+
+          it "does not return an error" do
+            expect(parser.errors[:field_16]).to be_blank
+          end
         end
       end
     end
 
     describe "#field_17" do
-      context "when location does not exist" do
-        let(:scheme) { create(:scheme, :with_old_visible_id, owning_organisation: owning_org) }
-        let(:attributes) do
-          {
-            bulk_upload:,
-            field_5: "1",
-            field_16: scheme.old_visible_id,
-            field_17: "dontexist",
-            field_1: owning_org.old_visible_id,
-          }
+      context "when using New CORE ids" do
+        context "when location does not exist" do
+          let(:scheme) { create(:scheme, :with_old_visible_id, owning_organisation: owning_org) }
+          let(:attributes) do
+            {
+              bulk_upload:,
+              field_5: "1",
+              field_16: scheme.old_visible_id,
+              field_17: "dontexist",
+              field_1: owning_org.old_visible_id,
+            }
+          end
+
+          it "returns a setup error" do
+            expect(parser.errors.where(:field_17, category: :setup)).to be_present
+          end
         end
 
-        it "returns a setup error" do
-          expect(parser.errors.where(:field_17, category: :setup)).to be_present
+        context "when location exists" do
+          let(:scheme) { create(:scheme, :with_old_visible_id, owning_organisation: owning_org) }
+          let(:attributes) do
+            {
+              bulk_upload:,
+              field_5: "1",
+              field_16: scheme.old_visible_id,
+              field_17: location.old_visible_id,
+              field_1: owning_org.old_visible_id,
+            }
+          end
+
+          it "does not return an error" do
+            expect(parser.errors[:field_17]).to be_blank
+          end
+        end
+
+        context "when location exists but not related" do
+          let(:location) { create(:scheme, :with_old_visible_id) }
+          let(:attributes) do
+            {
+              bulk_upload:,
+              field_5: "1",
+              field_16: scheme.old_visible_id,
+              field_17: location.old_visible_id,
+              field_1: owning_org.old_visible_id,
+            }
+          end
+
+          it "returns a setup error" do
+            expect(parser.errors.where(:field_17, category: :setup)).to be_present
+          end
         end
       end
 
-      context "when location exists" do
-        let(:scheme) { create(:scheme, :with_old_visible_id, owning_organisation: owning_org) }
-        let(:attributes) do
-          {
-            bulk_upload:,
-            field_5: "1",
-            field_16: scheme.old_visible_id,
-            field_17: location.old_visible_id,
-            field_1: owning_org.old_visible_id,
-          }
-        end
+      context "when using Old CORE ids" do
 
-        it "does not return an error" do
-          expect(parser.errors[:field_17]).to be_blank
-        end
-      end
-
-      context "when location exists but not related" do
-        let(:location) { create(:scheme, :with_old_visible_id) }
-        let(:attributes) do
-          {
-            bulk_upload:,
-            field_5: "1",
-            field_16: scheme.old_visible_id,
-            field_17: location.old_visible_id,
-            field_1: owning_org.old_visible_id,
-          }
-        end
-
-        it "returns a setup error" do
-          expect(parser.errors.where(:field_17, category: :setup)).to be_present
-        end
       end
     end
 

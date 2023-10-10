@@ -332,6 +332,7 @@ class BulkUpload::Lettings::Year2023::RowParser
   validates :field_16,
             presence: {
               if: proc { [2, 4, 6, 8, 10, 12].include?(field_5) },
+              message: I18n.t("validations.not_answered", question: "scheme code"),
               category: :setup,
             },
             on: :after_log
@@ -464,7 +465,7 @@ class BulkUpload::Lettings::Year2023::RowParser
       "field_8",   # startdate
       "field_9",   # startdate
       "field_13",  # tenancycode
-      field_4 != 1 ? "field_17" : nil,  # location
+      field_4 != 1 ? location_field.to_s : nil,  # location
       field_4 != 2 ? "field_23" : nil,  # postcode
       field_4 != 2 ? "field_24" : nil,  # postcode
       "field_46",  # age1
@@ -734,43 +735,43 @@ private
 
     unless location.scheme == scheme
       block_log_creation!
-      errors.add(:field_17, "Scheme code must relate to a location that is owned by owning organisation or managing organisation", category: :setup)
+      errors.add(location_field, "#{scheme_or_management_group.capitalize} code must relate to a #{location_or_scheme} that is owned by owning organisation or managing organisation", category: :setup)
     end
   end
 
   def validate_location_exists
-    if scheme && field_17.present? && location.nil?
-      errors.add(:field_17, "Location could not be found with the provided scheme code", category: :setup)
+    if scheme && location.nil?
+      errors.add(location_field, "#{location_or_scheme.capitalize} could not be found with the provided #{scheme_or_management_group} code", category: :setup)
     end
   end
 
   def validate_location_data_given
-    if supported_housing? && field_17.blank?
-      errors.add(:field_17, I18n.t("validations.not_answered", question: "scheme code"), category: "setup")
+    if supported_housing? && location_id.blank?
+      errors.add(location_field, I18n.t("validations.not_answered", question: "#{location_or_scheme} code"), category: "setup")
     end
   end
 
   def validate_scheme_related
-    return unless field_16.present? && scheme.present?
+    return unless scheme_id.present? && scheme.present?
 
     owned_by_owning_org = owning_organisation && scheme.owning_organisation == owning_organisation
     owned_by_managing_org = managing_organisation && scheme.owning_organisation == managing_organisation
 
     unless owned_by_owning_org || owned_by_managing_org
       block_log_creation!
-      errors.add(:field_16, "This management group code does not belong to your organisation, or any of your stock owners / managing agents", category: :setup)
+      errors.add(scheme_field, "This #{scheme_or_management_group} code does not belong to your organisation, or any of your stock owners / managing agents", category: :setup)
     end
   end
 
   def validate_scheme_exists
-    if field_16.present? && scheme.nil?
-      errors.add(:field_16, "The management group code is not correct", category: :setup)
+    if scheme_id.present? && scheme.nil?
+      errors.add(scheme_field, "The #{scheme_or_management_group} code is not correct", category: :setup)
     end
   end
 
   def validate_scheme_data_given
-    if supported_housing? && field_16.blank?
-      errors.add(:field_16, I18n.t("validations.not_answered", question: "management group code"), category: "setup")
+    if supported_housing? && scheme_id.blank?
+      errors.add(scheme_field, I18n.t("validations.not_answered", question: "#{scheme_or_management_group} code"), category: "setup")
     end
   end
 
@@ -851,7 +852,7 @@ private
       errors.add(:field_8, error_message) # startdate
       errors.add(:field_9, error_message) # startdate
       errors.add(:field_13, error_message) # tenancycode
-      errors.add(:field_17, error_message) if field_4 != 1 # location
+      errors.add(location_field, error_message) if field_4 != 1 # location
       errors.add(:field_23, error_message) if field_4 != 2 # postcode_full
       errors.add(:field_24, error_message) if field_4 != 2 # postcode_full
       errors.add(:field_25, error_message) if field_4 != 2 # la
@@ -876,8 +877,8 @@ private
       owning_organisation_id: [:field_1],
       managing_organisation_id: [:field_2],
       renewal: [:field_6],
-      scheme: %i[field_16],
-      location: %i[field_17],
+      scheme: [scheme_field],
+      location: [location_field],
       created_by: [:field_3],
       needstype: [:field_4],
       rent_type: %i[field_5 field_10 field_11],
@@ -1258,13 +1259,43 @@ private
   end
 
   def scheme
-    @scheme ||= Scheme.find_by_id_on_multiple_fields(field_16)
+    return if field_16.nil?
+
+    @scheme ||= Scheme.find_by_id_on_multiple_fields(scheme_id)
   end
 
   def location
     return if scheme.nil?
 
-    @location ||= scheme.locations.find_by_id_on_multiple_fields(field_17)
+    @location ||= scheme.locations.find_by_id_on_multiple_fields(location_id)
+  end
+
+  def log_uses_new_scheme_id?
+    field_16&.start_with?("S")
+  end
+
+  def scheme_field
+    log_uses_new_scheme_id? ? :field_16 : :field_15
+  end
+
+  def scheme_id
+    log_uses_new_scheme_id? ? field_16 : field_15
+  end
+
+  def location_field
+    log_uses_new_scheme_id? ? :field_17 : :field_16
+  end
+
+  def location_id
+    log_uses_new_scheme_id? ? field_17 : field_16
+  end
+
+  def scheme_or_management_group
+    log_uses_new_scheme_id? ? "scheme" : "management group"
+  end
+
+  def location_or_scheme
+    log_uses_new_scheme_id? ? "location" : "scheme"
   end
 
   def renttype
