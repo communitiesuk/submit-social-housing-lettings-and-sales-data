@@ -49,8 +49,13 @@ jobs:
         with:
           mask-password: 'true'
 
+      - name: Check if image with tag already exists
+        run: |
+          echo "image-exists=$(if aws ecr list-images --repository-name=$repository --query "imageIds[*].imageTag" | grep -q ${{ github.sha }}; then echo true; else echo false; fi)" >> $GITHUB_ENV
+
       - name: Build, tag, and push docker image to ECR
         id: build-image
+        if: ${{ env.image-exists == 'false' }}
         env:
           registry: ${{ steps.ecr-login.outputs.registry }}
           commit_tag: ${{ github.sha }}
@@ -63,9 +68,6 @@ jobs:
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
     needs: push_docker_image
-    if: |
-      always() &&
-      (needs.push_docker_image.result == 'success' || needs.push_docker_image.result == 'skipped')
 
     steps:
       - name: Configure AWS credentials
