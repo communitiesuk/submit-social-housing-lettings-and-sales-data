@@ -262,7 +262,6 @@ jobs:
 
   aws_deploy:
     name: AWS Deploy
-    if: github.ref == 'refs/heads/main'
     needs: [lint, test, feature_test, audit]
     uses: ./.github/workflows/aws_deploy.yml
     with:
