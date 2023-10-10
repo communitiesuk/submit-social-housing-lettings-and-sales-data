@@ -50,6 +50,7 @@ namespace :data_import do
       lettings_log.postcode_known = lettings_log.postcode_full.present? ? 1 : nil
       lettings_log.is_la_inferred = nil
       lettings_log.la = nil
+      lettings_log.send("process_postcode_changes!")
       lettings_log.values_updated_at = Time.zone.now
 
       lettings_log.save!
@@ -108,6 +109,7 @@ namespace :data_import do
       sales_log.pcodenk = sales_log.postcode_full.present? ? 0 : nil
       sales_log.is_la_inferred = nil
       sales_log.la = nil
+      sales_log.send("process_postcode_changes!")
       sales_log.values_updated_at = Time.zone.now
 
       sales_log.save!

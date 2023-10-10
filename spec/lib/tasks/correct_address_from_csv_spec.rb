@@ -161,6 +161,15 @@ RSpec.describe "data_import" do
           expect(lettings_logs[2].la).to eq("E06000064")
         end
 
+        it "reinfers the LA if the postcode doesn't change" do
+          lettings_log.update!(postcode_full: "B1 1BB")
+          task.invoke(addresses_csv_path)
+          lettings_log.reload
+          expect(lettings_log.postcode_full).to eq("B1 1BB")
+          expect(lettings_log.la).to eq("E08000035")
+          expect(lettings_log.is_la_inferred).to eq(true)
+        end
+
         it "logs the progress of the update" do
           expect(Rails.logger).to receive(:info).with("Updated lettings log #{lettings_log.id}, with address: address 1, address 2, town, county, B1 1BB")
           expect(Rails.logger).to receive(:info).with("Updated lettings log #{lettings_logs[0].id}, with address: address 3, , city, , B1 1BB")
@@ -238,6 +247,15 @@ RSpec.describe "data_import" do
           expect(lettings_logs[2].postcode_known).to eq(1)
           expect(lettings_logs[2].postcode_full).to eq("A1 1AA")
           expect(lettings_logs[2].la).to eq("E06000064")
+        end
+
+        it "reinfers the LA if the postcode hasn't changed" do
+          lettings_log.update!(postcode_full: "B1 1BB")
+          task.invoke(all_addresses_csv_path)
+          lettings_log.reload
+          expect(lettings_log.postcode_full).to eq("B1 1BB")
+          expect(lettings_log.la).to eq("E08000035")
+          expect(lettings_log.is_la_inferred).to eq(true)
         end
 
         it "logs the progress of the update" do
@@ -364,6 +382,15 @@ RSpec.describe "data_import" do
           expect(sales_logs[2].la).to eq("E06000064")
         end
 
+        it "reinfers the LA if the postcode hasn't changed" do
+          sales_log.update!(postcode_full: "B1 1BB")
+          task.invoke(addresses_csv_path)
+          sales_log.reload
+          expect(sales_log.postcode_full).to eq("B1 1BB")
+          expect(sales_log.la).to eq("E08000035")
+          expect(sales_log.is_la_inferred).to eq(true)
+        end
+
         it "logs the progress of the update" do
           expect(Rails.logger).to receive(:info).with("Updated sales log #{sales_log.id}, with address: address 1, address 2, town, county, B1 1BB")
           expect(Rails.logger).to receive(:info).with("Updated sales log #{sales_logs[0].id}, with address: address 3, , city, , B1 1BB")
@@ -441,6 +468,15 @@ RSpec.describe "data_import" do
           expect(sales_logs[2].pcodenk).to eq(0)
           expect(sales_logs[2].postcode_full).to eq("LS16 6FT")
           expect(sales_logs[2].la).to eq("E06000064")
+        end
+
+        it "reinfers the LA if the postcode hasn't changed" do
+          sales_log.update!(postcode_full: "B1 1BB")
+          task.invoke(all_addresses_csv_path)
+          sales_log.reload
+          expect(sales_log.postcode_full).to eq("B1 1BB")
+          expect(sales_log.la).to eq("E08000035")
+          expect(sales_log.is_la_inferred).to eq(true)
         end
 
         it "logs the progress of the update" do
