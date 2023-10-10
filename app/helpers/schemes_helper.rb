@@ -34,6 +34,17 @@ module SchemesHelper
     return govuk_button_link_to "Reactivate this scheme", scheme_new_reactivation_path(scheme) if scheme.deactivated?
   end
 
+  def owning_organisation_options(current_user)
+    all_orgs = Organisation.all.map { |org| OpenStruct.new(id: org.id, name: org.name) }
+    user_org = [OpenStruct.new(id: current_user.organisation_id, name: current_user.organisation.name)]
+    stock_owners = current_user.organisation.stock_owners.map { |org| OpenStruct.new(id: org.id, name: org.name) }
+    current_user.support? ? all_orgs : user_org + stock_owners
+  end
+
+  def null_option
+    [OpenStruct.new(id: "", name: "Select an option")]
+  end
+
 private
 
   ActivePeriod = Struct.new(:from, :to)
