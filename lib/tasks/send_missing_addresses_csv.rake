@@ -87,4 +87,32 @@ namespace :correct_addresses do
       end
     end
   end
+
+  desc "Send all 2023 lettings addresses csv"
+  task :create_lettings_addresses_csv, %i[organisation_id] => :environment do |_task, args|
+    organisation_id = args[:organisation_id]
+    raise "Usage: rake correct_addresses:create_lettings_addresses_csv['organisation_id']" if organisation_id.blank?
+
+    organisation = Organisation.find_by(id: organisation_id)
+    if organisation.present?
+      CreateAddressesCsvJob.perform_later(organisation, "lettings")
+      Rails.logger.info("Creating lettings addresses CSV for #{organisation.name}")
+    else
+      Rails.logger.error("Organisation with ID #{organisation_id} not found")
+    end
+  end
+
+  desc "Send all 2023 sales addresses csv"
+  task :create_sales_addresses_csv, %i[organisation_id] => :environment do |_task, args|
+    organisation_id = args[:organisation_id]
+    raise "Usage: rake correct_addresses:create_sales_addresses_csv['organisation_id']" if organisation_id.blank?
+
+    organisation = Organisation.find_by(id: organisation_id)
+    if organisation.present?
+      CreateAddressesCsvJob.perform_later(organisation, "sales")
+      Rails.logger.info("Creating sales addresses CSV for #{organisation.name}")
+    else
+      Rails.logger.error("Organisation with ID #{organisation_id} not found")
+    end
+  end
 end
