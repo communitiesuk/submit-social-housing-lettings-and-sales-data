@@ -1,0 +1,7 @@
+Log ID,Tenancy start date,Tenant code,Property reference,Log owner,Owning organisation,Managing organisation,UPRN,Address Line 1,Address Line 2 (optional),Town or City,County (optional),Property’s postcode
+{id},2023-04-05,tenancycode,propcode,testy@example.com,Address org,Address org,,address 1,address 2,town,county,B1 1BB
+{id2},2023-04-05,tenancycode,propcode,testy@example.com,Address org,Address org,,address 3,,city,,B1 1BB
+{id3},2023-04-05,tenancycode,propcode,testy@example.com,Address org,Address org,123,Some Place,,Bristol,,BS1 1AD
+{id4},2023-04-05,tenancycode,propcode,testy@example.com,Address org,Address org,,Some Place,,,,BS1 1AD
+,2023-04-05,tenancycode,propcode,testy@example.com,Address org,Address org,,Some Place,,Bristol,,BS1 1AD
+fake_id,2023-04-05,tenancycode,propcode,testy@example.com,Address org,Address org,,Some Place,,Bristol,,BS1 1AD
