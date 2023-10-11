@@ -51,6 +51,6 @@ RSpec.describe Form::Lettings::Questions::RentType, type: :model do
   end
 
   it "has the guidance partial" do
-    expect(question.guidance_partial).to eq("rent_type_definitions")
+    expect(question.top_guidance_partial).to eq("rent_type_definitions")
   end
 end

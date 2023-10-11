@@ -31,13 +31,17 @@ RSpec.describe Form::Sales::Questions::MortgageLender, type: :model do
     expect(question.derived?).to be false
   end
 
-  it "is has correct guidance_position" do
+  it "is has correct guidance position" do
     expect(question.top_guidance?).to be false
     expect(question.bottom_guidance?).to be true
   end
 
-  it "is has correct guidance_partial" do
-    expect(question.guidance_partial).to eq("mortgage_lender")
+  it "is has correct bottom_guidance_partial" do
+    expect(question.bottom_guidance_partial).to eq("mortgage_lender")
+  end
+
+  it "is has correct top_guidance_partial" do
+    expect(question.top_guidance_partial).to be_nil
   end
 
   it "has the correct answer_options" do

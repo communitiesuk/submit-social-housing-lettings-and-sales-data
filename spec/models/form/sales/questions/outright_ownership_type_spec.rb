@@ -50,8 +50,12 @@ RSpec.describe Form::Sales::Questions::OutrightOwnershipType, type: :model do
     context "when the form is for year 2023/24" do
       let(:start_date) { Time.zone.local(2023, 4, 8) }
 
-      it "has the correct guidance_partial" do
-        expect(question.guidance_partial).to eq("outright_sale_type_definitions")
+      it "has the correct top_guidance_partial" do
+        expect(question.top_guidance_partial).to eq("outright_sale_type_definitions")
+      end
+
+      it "has the correct bottom_guidance_partial" do
+        expect(question.bottom_guidance_partial).to be_nil
       end
 
       it "is at the top" do
@@ -63,8 +67,12 @@ RSpec.describe Form::Sales::Questions::OutrightOwnershipType, type: :model do
     context "when the form is for before year 2023/24" do
       let(:start_date) { Time.zone.local(2022, 4, 8) }
 
-      it "does not display a guidance partial" do
-        expect(question.guidance_partial).to eq(nil)
+      it "does not display a top guidance partial" do
+        expect(question.top_guidance_partial).to eq(nil)
+      end
+
+      it "does not display a bottom guidance partial" do
+        expect(question.bottom_guidance_partial).to eq(nil)
       end
     end
   end

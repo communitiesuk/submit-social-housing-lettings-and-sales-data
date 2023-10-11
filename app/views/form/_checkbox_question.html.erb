@@ -1,4 +1,4 @@
-<%= render partial: "form/guidance/#{question.guidance_partial}" if question.top_guidance? %>
+<%= render partial: "form/guidance/#{question.top_guidance_partial}" if question.top_guidance? %>
 
 <%= f.govuk_check_boxes_fieldset question.id.to_sym,
     caption: caption(caption_text, page_header, conditional),
@@ -21,4 +21,4 @@
     <% end %>
 <% end %>
 
-<%= render partial: "form/guidance/#{question.guidance_partial}" if question.bottom_guidance? %>
+<%= render partial: "form/guidance/#{question.bottom_guidance_partial}" if question.bottom_guidance? %>

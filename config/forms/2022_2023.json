@@ -721,8 +721,7 @@
                   "header": "What is the void date?",
                   "hint_text": "For example, 27 3 2021.",
                   "type": "date",
-                  "guidance_partial": "void_date",
-                  "guidance_position": 2
+                  "bottom_guidance_partial": "void_date"
                 }
               },
               "depends_on": [
@@ -1170,7 +1169,7 @@
               "questions": {
                 "declaration": {
                   "header": "",
-                  "guidance_partial": "privacy_notice_tenant",
+                  "top_guidance_partial": "privacy_notice_tenant",
                   "check_answer_label": "Tenant has seen the privacy notice",
                   "check_answers_card_number": 0,
                   "type": "checkbox",
@@ -7286,7 +7285,7 @@
                 "net_income_known": {
                   "check_answer_label": "Do you know the household’s combined income?",
                   "header": "Do you know the household’s combined income after tax?",
-                  "guidance_partial": "what_counts_as_income",
+                  "top_guidance_partial": "what_counts_as_income",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -7318,7 +7317,7 @@
                 "earnings": {
                   "check_answer_label": "Total household income",
                   "header": "How much income does the household have in total?",
-                  "guidance_partial": "what_counts_as_income",
+                  "top_guidance_partial": "what_counts_as_income",
                   "hint_text": "",
                   "type": "numeric",
                   "min": 0,

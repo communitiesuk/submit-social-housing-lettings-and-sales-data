@@ -3,13 +3,8 @@ class Form::Question
                 :type, :min, :max, :step, :width, :fields_to_add, :result_field,
                 :conditional_for, :readonly, :answer_options, :page, :check_answer_label,
                 :inferred_answers, :hidden_in_check_answers, :inferred_check_answers_value,
-                :guidance_partial, :prefix, :suffix, :requires_js, :fields_added, :derived,
+                :top_guidance_partial, :bottom_guidance_partial, :prefix, :suffix, :requires_js, :fields_added, :derived,
                 :check_answers_card_number, :unresolved_hint_text, :question_number, :hide_question_number_on_page, :plain_label, :error_label
-
-  module GuidancePosition
-    TOP = 1
-    BOTTOM = 2
-  end
 
   def initialize(id, hsh, page)
     @id = id
@@ -17,8 +12,8 @@ class Form::Question
     if hsh
       @check_answer_label = hsh["check_answer_label"]
       @header = hsh["header"]
-      @guidance_partial = hsh["guidance_partial"]
-      @guidance_position = hsh["guidance_position"] || GuidancePosition::TOP
+      @top_guidance_partial = hsh["top_guidance_partial"]
+      @bottom_guidance_partial = hsh["bottom_guidance_partial"]
       @hint_text = hsh["hint_text"]
       @type = hsh["type"]
       @min = hsh["min"]
@@ -232,11 +227,11 @@ class Form::Question
   end
 
   def top_guidance?
-    @guidance_partial && @guidance_position == GuidancePosition::TOP
+    @top_guidance_partial.present?
   end
 
   def bottom_guidance?
-    @guidance_partial && @guidance_position == GuidancePosition::BOTTOM
+    @bottom_guidance_partial.present?
   end
 
   def is_derived_or_has_inferred_check_answers_value?(log)

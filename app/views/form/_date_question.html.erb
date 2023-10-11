@@ -1,4 +1,4 @@
-<%= render partial: "form/guidance/#{question.guidance_partial}" if question.top_guidance? %>
+<%= render partial: "form/guidance/#{question.top_guidance_partial}" if question.top_guidance? %>
 
 <%= f.govuk_date_field question.id.to_sym,
   caption: caption(caption_text, page_header, conditional),
@@ -9,4 +9,4 @@
   <%= govuk_inset_text(text: question.unresolved_hint_text) if question.unresolved_hint_text.present? && @log.unresolved %>
 <% end %>
 
-<%= render partial: "form/guidance/#{question.guidance_partial}" if question.bottom_guidance? %>
+<%= render partial: "form/guidance/#{question.bottom_guidance_partial}" if question.bottom_guidance? %>
