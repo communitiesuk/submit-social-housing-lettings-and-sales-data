@@ -329,10 +329,27 @@ class BulkUpload::Lettings::Year2023::RowParser
             },
             on: :after_log
 
+
+  validates :field_15,
+            presence: {
+              if: proc { [2, 4, 6, 8, 10, 12].include?(field_5) && log_uses_old_scheme_id? },
+              message: I18n.t("validations.not_answered", question: "management group code"),
+              category: :setup,
+            },
+            on: :after_log
+
   validates :field_16,
             presence: {
               if: proc { [2, 4, 6, 8, 10, 12].include?(field_5) },
               message: I18n.t("validations.not_answered", question: "scheme code"),
+              category: :setup,
+            },
+            on: :after_log
+
+  validates :field_17,
+            presence: {
+              if: proc { [2, 4, 6, 8, 10, 12].include?(field_5) && log_uses_new_scheme_id? },
+              message: I18n.t("validations.not_answered", question: "location code"),
               category: :setup,
             },
             on: :after_log
@@ -740,7 +757,7 @@ private
   end
 
   def validate_location_exists
-    if scheme && location.nil?
+    if scheme && location_id.present? && location.nil?
       errors.add(location_field, "#{location_or_scheme.capitalize} could not be found with the provided #{scheme_or_management_group} code", category: :setup)
     end
   end
@@ -1274,20 +1291,28 @@ private
     field_16&.start_with?("S")
   end
 
+  def log_uses_old_scheme_id?
+    field_16.present? && !field_16.start_with?("S")
+  end
+
   def scheme_field
-    log_uses_new_scheme_id? ? :field_16 : :field_15
+    return :field_16 if log_uses_new_scheme_id?
+    return :field_15 if log_uses_old_scheme_id?
   end
 
   def scheme_id
-    log_uses_new_scheme_id? ? field_16 : field_15
+    return field_16 if log_uses_new_scheme_id?
+    return field_15 if log_uses_old_scheme_id?
   end
 
   def location_field
-    log_uses_new_scheme_id? ? :field_17 : :field_16
+    return :field_17 if log_uses_new_scheme_id?
+    return :field_16 if log_uses_old_scheme_id?
   end
 
   def location_id
-    log_uses_new_scheme_id? ? field_17 : field_16
+    return field_17 if log_uses_new_scheme_id?
+    return field_16 if log_uses_old_scheme_id?
   end
 
   def scheme_or_management_group
