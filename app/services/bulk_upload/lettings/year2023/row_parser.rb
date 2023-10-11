@@ -868,8 +868,8 @@ private
       errors.add(:field_8, error_message) # startdate
       errors.add(:field_9, error_message) # startdate
       errors.add(:field_13, error_message) # tenancycode
-      errors.add(location_field, error_message) unless general_needs? && location_field.present? # location
-      errors.add(:field_16, error_message) unless general_needs? && location_field.blank? # add to Scheme field as unclear whether log uses New or Old CORE ids
+      errors.add(location_field, error_message) if !general_needs? && location_field.present? # location
+      errors.add(:field_16, error_message) if !general_needs? && location_field.blank? # add to Scheme field as unclear whether log uses New or Old CORE ids
       errors.add(:field_23, error_message) unless supported_housing? # postcode_full
       errors.add(:field_24, error_message) unless supported_housing? # postcode_full
       errors.add(:field_25, error_message) unless supported_housing? # la

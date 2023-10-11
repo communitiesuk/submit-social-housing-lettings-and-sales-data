@@ -19,7 +19,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
       bulk_upload:,
       field_1: owning_org.old_visible_id,
       field_2: managing_org.old_visible_id,
-      field_4: "1",
+      field_4: "2",
       field_5: "2",
       field_6: "2",
       field_7: now.day.to_s,
