@@ -1,0 +1,7 @@
+Issue type,Log ID,Sale completion date,Purchaser code,Log owner,Owning organisation,UPRN,Address Line 1,Address Line 2 (optional),Town or City,County (optional),Property's postcode
+Full address required,{id},2023-04-05,purchid,testy@example.com,Address org,,address 1,address 2,town,county,B1 1BB
+Missing town or city,{id2},2023-04-05,purchid,testy@example.com,Address org,,address 3,,city,,B1 1BB
+Incorrect UPRN,{id3},2023-04-05,purchid,testy@example.com,Address org,123,Some Place,,Bristol,,BS1 1AD
+Incorrect UPRN,{id4},2023-04-05,purchid,testy@example.com,Address org,,Some Place,,,,BS1 1AD
+Incorrect UPRN,,2023-04-05,purchid,testy@example.com,Address org,,Some Place,,Bristol,,BS1 1AD
+Incorrect UPRN,fake_id,2023-04-05,purchid,testy@example.com,Address org,,Some Place,,Bristol,,BS1 1AD
