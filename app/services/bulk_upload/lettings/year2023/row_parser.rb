@@ -329,7 +329,6 @@ class BulkUpload::Lettings::Year2023::RowParser
             },
             on: :after_log
 
-
   validates :field_15,
             presence: {
               if: proc { [2, 4, 6, 8, 10, 12].include?(field_5) && log_uses_old_scheme_id? },
@@ -482,7 +481,7 @@ class BulkUpload::Lettings::Year2023::RowParser
       "field_8",   # startdate
       "field_9",   # startdate
       "field_13",  # tenancycode
-      field_4 != 1 ? location_field.to_s : nil,  # location
+      field_4 != 1 ? location_field.to_s : nil, # location
       field_4 != 2 ? "field_23" : nil,  # postcode
       field_4 != 2 ? "field_24" : nil,  # postcode
       "field_46",  # age1
