@@ -14,6 +14,7 @@
     <%= render SubNavigationComponent.new(items: scheme_items(request.path, @scheme.id, "Locations")) %>
 
     <h2 class="govuk-visually-hidden">Scheme</h2>
+    <%= govuk_inset_text(text: edit_scheme_text(@scheme, current_user)) %>
 
     <%= govuk_summary_list do |summary_list| %>
       <% display_scheme_attributes(@scheme).each do |attr| %>

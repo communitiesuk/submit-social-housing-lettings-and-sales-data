@@ -83,6 +83,14 @@ module LocationsHelper
     user.support? || user.organisation == scheme.owning_organisation
   end
 
+  def edit_location_text(scheme, user)
+    if user.data_provider?
+      "If you think this location should be updated, ask a data coordinator to make the changes. Find your data coordinators on the #{link_to('users page', users_path)}.".html_safe
+    elsif user.data_coordinator? && user.organisation.parent_organisations.include?(scheme.owning_organisation)
+      "This location belongs to your stock owner #{scheme.owning_organisation.name}."
+    end
+  end
+
 private
 
   ActivePeriod = Struct.new(:from, :to)

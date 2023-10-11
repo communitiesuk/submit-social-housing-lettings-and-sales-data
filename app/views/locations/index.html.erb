@@ -12,7 +12,8 @@
 <div class="app-filter-layout" data-controller="filter-layout">
 
   <%= render SubNavigationComponent.new(items: scheme_items(request.path, @scheme.id, "Locations")) %>
-
+  <%= govuk_inset_text( text: edit_location_text(@scheme, current_user))%>
+  
   <%= render partial: "locations/location_filters" %>
   <div class="app-filter-layout__content">
     <h2 class="govuk-visually-hidden">Locations</h2>

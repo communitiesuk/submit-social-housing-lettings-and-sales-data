@@ -308,4 +308,39 @@ RSpec.describe LocationsHelper do
       end
     end
   end
+
+  describe "edit_location_text" do
+    let(:parent_organisation) { FactoryBot.create(:organisation, name: "Parent") }
+    let(:child_organisation) { FactoryBot.create(:organisation, name: "Child") }
+    let(:scheme) { FactoryBot.create(:scheme, owning_organisation: parent_organisation) }
+    let(:data_coordinator) { FactoryBot.create(:user, :data_coordinator, organisation: child_organisation) }
+    let(:data_provider) { FactoryBot.create(:user, :data_provider, organisation: child_organisation) }
+    let(:location) { FactoryBot.build(:location, scheme:) }
+
+    before do
+      create(:organisation_relationship, child_organisation:, parent_organisation:)
+    end
+
+    context "with data coordinator user" do
+      it "returns correct edit location text for a parent organisation location" do
+        expect(edit_location_text(scheme, data_coordinator)).to include("This location belongs to your stock owner Parent.")
+      end
+
+      it "returns nil when viewing your organisation location" do
+        data_coordinator.update!(organisation: parent_organisation)
+        expect(edit_location_text(scheme, data_coordinator)).to be_nil
+      end
+    end
+
+    context "with data provider user" do
+      it "returns correct edit location text for a parent organisation location" do
+        expect(edit_location_text(scheme, data_provider)).to include("If you think this location should be updated, ask a data coordinator to make the changes. Find your data coordinators on the ")
+      end
+
+      it "returns correct edit location text for your organisation location" do
+        data_provider.update!(organisation: parent_organisation)
+        expect(edit_location_text(scheme, data_provider)).to include("If you think this location should be updated, ask a data coordinator to make the changes. Find your data coordinators on the ")
+      end
+    end
+  end
 end
