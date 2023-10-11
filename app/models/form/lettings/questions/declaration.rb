@@ -6,7 +6,7 @@ class Form::Lettings::Questions::Declaration < ::Form::Question
     @header = "Declaration"
     @type = "checkbox"
     @check_answers_card_number = 0
-    @guidance_partial = "privacy_notice_tenant"
+    @top_guidance_partial = "privacy_notice_tenant"
     @answer_options = ANSWER_OPTIONS
     @question_number = 30
   end

@@ -1,4 +1,4 @@
-<%= render partial: "form/guidance/#{question.guidance_partial}" if question.top_guidance? %>
+<%= render partial: "form/guidance/#{question.top_guidance_partial}" if question.top_guidance? %>
 
 <div class="govuk-form-group">
   <label class="govuk-label govuk-label--<%= label_size(page_header, conditional, question) %>" for="lettings-log-<%= question.id %>-field">
@@ -22,4 +22,4 @@
   </div>
 </div>
 
-<%= render partial: "form/guidance/#{question.guidance_partial}" if question.bottom_guidance? %>
+<%= render partial: "form/guidance/#{question.bottom_guidance_partial}" if question.bottom_guidance? %>

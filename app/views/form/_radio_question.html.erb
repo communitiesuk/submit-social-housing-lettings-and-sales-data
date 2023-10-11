@@ -1,4 +1,4 @@
-<%= render partial: "form/guidance/#{question.guidance_partial}" if question.top_guidance? %>
+<%= render partial: "form/guidance/#{question.top_guidance_partial}" if question.top_guidance? %>
   <% banner = question.notification_banner(@log) %>
   <% if banner %>
     <%= govuk_notification_banner(
@@ -44,4 +44,4 @@
   <% end %>
 <% end %>
 
-<%= render partial: "form/guidance/#{question.guidance_partial}" if question.bottom_guidance? %>
+<%= render partial: "form/guidance/#{question.bottom_guidance_partial}" if question.bottom_guidance? %>

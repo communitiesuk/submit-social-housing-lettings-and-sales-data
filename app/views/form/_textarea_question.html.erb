@@ -1,4 +1,4 @@
-<%= render partial: "form/guidance/#{question.guidance_partial}" if question.top_guidance? %>
+<%= render partial: "form/guidance/#{question.top_guidance_partial}" if question.top_guidance? %>
 
 <%= f.govuk_text_area question.id.to_sym,
   caption: caption(caption_text, page_header, conditional),
@@ -7,4 +7,4 @@
   width: question.width || nil,
   **stimulus_html_attributes(question) %>
 
-<%= render partial: "form/guidance/#{question.guidance_partial}" if question.bottom_guidance? %>
+<%= render partial: "form/guidance/#{question.bottom_guidance_partial}" if question.bottom_guidance? %>
