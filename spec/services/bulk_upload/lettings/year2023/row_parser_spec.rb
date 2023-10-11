@@ -327,7 +327,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
                 :field_8, # startdate
                 :field_9, # startdate
                 :field_13, # tenancycode
-                :field_17, # location
+                :field_16, # location
                 :field_46, # age1
                 :field_47, # sex1
                 :field_50, # ecstat1
@@ -343,6 +343,44 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
           end
 
           context "with old core scheme and location ids" do
+            context "when a supported housing log already exists in the db" do
+              let(:attributes) { { bulk_upload:, field_4: "2", field_16: "123" } }
+
+              before do
+                parser.log.save!
+                parser.instance_variable_set(:@valid, nil)
+              end
+
+              it "is not a valid row" do
+                expect(parser).not_to be_valid
+              end
+
+              it "adds an error to all the fields used to determine duplicates" do
+                parser.valid?
+
+                error_message = "This is a duplicate log"
+
+                [
+                  :field_1, # owning_organisation
+                  :field_7, # startdate
+                  :field_8, # startdate
+                  :field_9, # startdate
+                  :field_13, # tenancycode
+                  :field_16, # location
+                  :field_46, # age1
+                  :field_47, # sex1
+                  :field_50, # ecstat1
+                  :field_132, # tcharge
+                ].each do |field|
+                  expect(parser.errors[field]).to include(error_message)
+                end
+
+                expect(parser.errors[:field_23]).not_to include(error_message)
+                expect(parser.errors[:field_24]).not_to include(error_message)
+                expect(parser.errors[:field_25]).not_to include(error_message)
+              end
+            end
+
             context "when a supported housing log with chcharges already exists in the db" do
               let(:bulk_upload) { create(:bulk_upload, :lettings, user:, needstype: 2) }
               let(:attributes) do
@@ -449,6 +487,44 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
           end
 
           context "with new core scheme and location ids" do
+            context "when a supported housing log already exists in the db" do
+              let(:attributes) { { bulk_upload:, field_4: "2", field_16: "S123" } }
+
+              before do
+                parser.log.save!
+                parser.instance_variable_set(:@valid, nil)
+              end
+
+              it "is not a valid row" do
+                expect(parser).not_to be_valid
+              end
+
+              it "adds an error to all the fields used to determine duplicates" do
+                parser.valid?
+
+                error_message = "This is a duplicate log"
+
+                [
+                  :field_1, # owning_organisation
+                  :field_7, # startdate
+                  :field_8, # startdate
+                  :field_9, # startdate
+                  :field_13, # tenancycode
+                  :field_17, # location
+                  :field_46, # age1
+                  :field_47, # sex1
+                  :field_50, # ecstat1
+                  :field_132, # tcharge
+                ].each do |field|
+                  expect(parser.errors[field]).to include(error_message)
+                end
+
+                expect(parser.errors[:field_23]).not_to include(error_message)
+                expect(parser.errors[:field_24]).not_to include(error_message)
+                expect(parser.errors[:field_25]).not_to include(error_message)
+              end
+            end
+
             context "when a supported housing log with chcharges already exists in the db" do
               let(:bulk_upload) { create(:bulk_upload, :lettings, user:, needstype: 2) }
               let(:attributes) do
