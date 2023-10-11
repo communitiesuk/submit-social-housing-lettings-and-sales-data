@@ -342,106 +342,214 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
             end
           end
 
-          context "when a supported housing log with chcharges already exists in the db" do
-            let(:bulk_upload) { create(:bulk_upload, :lettings, user:, needstype: 2) }
-            let(:attributes) do
-              valid_attributes.merge({ field_16: scheme.old_visible_id,
-                                       field_4: "2",
-                                       field_5: "2",
-                                       field_17: location.old_visible_id,
-                                       field_1: owning_org.old_visible_id,
-                                       field_125: 0,
-                                       field_44: 4,
-                                       field_127: "88" })
-            end
-
-            before do
-              parser.log.save!
-              parser.instance_variable_set(:@valid, nil)
-            end
-
-            it "is not a valid row" do
-              expect(parser).not_to be_valid
-            end
-
-            it "adds an error to all the fields used to determine duplicates" do
-              parser.valid?
-
-              error_message = "This is a duplicate log"
-
-              [
-                :field_1, # owning_organisation
-                :field_7, # startdate
-                :field_8, # startdate
-                :field_9, # startdate
-                :field_13, # tenancycode
-                :field_17, # location
-                :field_46, # age1
-                :field_47, # sex1
-                :field_50, # ecstat1
-                :field_127, # chcharge
-                :field_125, # household_charge
-              ].each do |field|
-                expect(parser.errors[field]).to include(error_message)
+          context "with old core scheme and location ids" do
+            context "when a supported housing log with chcharges already exists in the db" do
+              let(:bulk_upload) { create(:bulk_upload, :lettings, user:, needstype: 2) }
+              let(:attributes) do
+                valid_attributes.merge({ field_15: scheme.old_visible_id,
+                                         field_4: "2",
+                                         field_5: "2",
+                                         field_16: location.old_visible_id,
+                                         field_1: owning_org.old_visible_id,
+                                         field_125: 0,
+                                         field_44: 4,
+                                         field_127: "88" })
               end
 
-              expect(parser.errors[:field_23]).not_to include(error_message)
-              expect(parser.errors[:field_24]).not_to include(error_message)
-              expect(parser.errors[:field_25]).not_to include(error_message)
+              before do
+                parser.log.save!
+                parser.instance_variable_set(:@valid, nil)
+              end
+
+              it "is not a valid row" do
+                expect(parser).not_to be_valid
+              end
+
+              it "adds an error to all the fields used to determine duplicates" do
+                parser.valid?
+
+                error_message = "This is a duplicate log"
+
+                [
+                  :field_1, # owning_organisation
+                  :field_7, # startdate
+                  :field_8, # startdate
+                  :field_9, # startdate
+                  :field_13, # tenancycode
+                  :field_16, # location
+                  :field_46, # age1
+                  :field_47, # sex1
+                  :field_50, # ecstat1
+                  :field_127, # chcharge
+                  :field_125, # household_charge
+                ].each do |field|
+                  expect(parser.errors[field]).to include(error_message)
+                end
+
+                expect(parser.errors[:field_23]).not_to include(error_message)
+                expect(parser.errors[:field_24]).not_to include(error_message)
+                expect(parser.errors[:field_25]).not_to include(error_message)
+              end
+            end
+
+            context "when a supported housing log different chcharges already exists in the db" do
+              let(:bulk_upload) { create(:bulk_upload, :lettings, user:, needstype: 2) }
+              let(:attributes) do
+                valid_attributes.merge({ field_15: scheme.old_visible_id,
+                                         field_4: "2",
+                                         field_5: "2",
+                                         field_16: location.old_visible_id,
+                                         field_1: owning_org.old_visible_id,
+                                         field_125: 0,
+                                         field_44: 4,
+                                         field_127: "88" })
+              end
+              let(:attributes_too) do
+                valid_attributes.merge({ field_15: scheme.old_visible_id,
+                                         field_4: "2",
+                                         field_5: "2",
+                                         field_16: location.old_visible_id,
+                                         field_1: owning_org.old_visible_id,
+                                         field_125: 0,
+                                         field_44: 4,
+                                         field_127: "98" })
+              end
+              let(:parser_too) { described_class.new(attributes_too) }
+
+              before do
+                parser.log.save!
+                parser.instance_variable_set(:@valid, nil)
+              end
+
+              it "is a valid row" do
+                expect(parser_too).to be_valid
+              end
+
+              it "does not add an error to all the fields used to determine duplicates" do
+                parser_too.valid?
+
+                error_message = "This is a duplicate log"
+
+                [
+                  :field_1, # owning_organisation
+                  :field_7, # startdate
+                  :field_8, # startdate
+                  :field_9, # startdate
+                  :field_13, # tenancycode
+                  :field_16, # location
+                  :field_46, # age1
+                  :field_47, # sex1
+                  :field_50, # ecstat1
+                  :field_132, # tcharge
+                ].each do |field|
+                  expect(parser_too.errors[field]).not_to include(error_message)
+                end
+              end
             end
           end
 
-          context "when a supported housing log different chcharges already exists in the db" do
-            let(:bulk_upload) { create(:bulk_upload, :lettings, user:, needstype: 2) }
-            let(:attributes) do
-              valid_attributes.merge({ field_16: scheme.old_visible_id,
-                                       field_4: "2",
-                                       field_5: "2",
-                                       field_17: location.old_visible_id,
-                                       field_1: owning_org.old_visible_id,
-                                       field_125: 0,
-                                       field_44: 4,
-                                       field_127: "88" })
+          context "with new core scheme and location ids" do
+            context "when a supported housing log with chcharges already exists in the db" do
+              let(:bulk_upload) { create(:bulk_upload, :lettings, user:, needstype: 2) }
+              let(:attributes) do
+                valid_attributes.merge({ field_16: "S#{scheme.id}",
+                                         field_4: "2",
+                                         field_5: "2",
+                                         field_17: location.id,
+                                         field_1: owning_org.old_visible_id,
+                                         field_125: 0,
+                                         field_44: 4,
+                                         field_127: "88" })
+              end
+
+              before do
+                parser.log.save!
+                parser.instance_variable_set(:@valid, nil)
+              end
+
+              it "is not a valid row" do
+                expect(parser).not_to be_valid
+              end
+
+              it "adds an error to all the fields used to determine duplicates" do
+                parser.valid?
+
+                error_message = "This is a duplicate log"
+
+                [
+                  :field_1, # owning_organisation
+                  :field_7, # startdate
+                  :field_8, # startdate
+                  :field_9, # startdate
+                  :field_13, # tenancycode
+                  :field_17, # location
+                  :field_46, # age1
+                  :field_47, # sex1
+                  :field_50, # ecstat1
+                  :field_127, # chcharge
+                  :field_125, # household_charge
+                ].each do |field|
+                  expect(parser.errors[field]).to include(error_message)
+                end
+
+                expect(parser.errors[:field_23]).not_to include(error_message)
+                expect(parser.errors[:field_24]).not_to include(error_message)
+                expect(parser.errors[:field_25]).not_to include(error_message)
+              end
             end
-            let(:attributes_too) do
-              valid_attributes.merge({ field_16: scheme.old_visible_id,
-                                       field_4: "2",
-                                       field_5: "2",
-                                       field_17: location.old_visible_id,
-                                       field_1: owning_org.old_visible_id,
-                                       field_125: 0,
-                                       field_44: 4,
-                                       field_127: "98" })
-            end
-            let(:parser_too) { described_class.new(attributes_too) }
 
-            before do
-              parser.log.save!
-              parser.instance_variable_set(:@valid, nil)
-            end
+            context "when a supported housing log different chcharges already exists in the db" do
+              let(:bulk_upload) { create(:bulk_upload, :lettings, user:, needstype: 2) }
+              let(:attributes) do
+                valid_attributes.merge({ field_16: "S#{scheme.id}",
+                                         field_4: "2",
+                                         field_5: "2",
+                                         field_17: location.id,
+                                         field_1: owning_org.old_visible_id,
+                                         field_125: 0,
+                                         field_44: 4,
+                                         field_127: "88" })
+              end
+              let(:attributes_too) do
+                valid_attributes.merge({ field_16: "S#{scheme.id}",
+                                         field_4: "2",
+                                         field_5: "2",
+                                         field_17: location.id,
+                                         field_1: owning_org.old_visible_id,
+                                         field_125: 0,
+                                         field_44: 4,
+                                         field_127: "98" })
+              end
+              let(:parser_too) { described_class.new(attributes_too) }
 
-            it "is a valid row" do
-              expect(parser_too).to be_valid
-            end
+              before do
+                parser.log.save!
+                parser.instance_variable_set(:@valid, nil)
+              end
 
-            it "does not add an error to all the fields used to determine duplicates" do
-              parser_too.valid?
+              it "is a valid row" do
+                expect(parser_too).to be_valid
+              end
 
-              error_message = "This is a duplicate log"
+              it "does not add an error to all the fields used to determine duplicates" do
+                parser_too.valid?
 
-              [
-                :field_1, # owning_organisation
-                :field_7, # startdate
-                :field_8, # startdate
-                :field_9, # startdate
-                :field_13, # tenancycode
-                :field_17, # location
-                :field_46, # age1
-                :field_47, # sex1
-                :field_50, # ecstat1
-                :field_132, # tcharge
-              ].each do |field|
-                expect(parser_too.errors[field]).not_to include(error_message)
+                error_message = "This is a duplicate log"
+
+                [
+                  :field_1, # owning_organisation
+                  :field_7, # startdate
+                  :field_8, # startdate
+                  :field_9, # startdate
+                  :field_13, # tenancycode
+                  :field_17, # location
+                  :field_46, # age1
+                  :field_47, # sex1
+                  :field_50, # ecstat1
+                  :field_132, # tcharge
+                ].each do |field|
+                  expect(parser_too.errors[field]).not_to include(error_message)
+                end
               end
             end
           end
@@ -582,7 +690,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
     describe "#field_5" do
       context "when null" do
-        let(:attributes) { { bulk_upload:, field_5: nil } }
+        let(:attributes) { { bulk_upload:, field_5: nil, field_15: "1" } }
 
         it "returns an error" do
           expect(parser.errors[:field_5]).to be_present
@@ -1508,7 +1616,15 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
     describe "#location" do
       context "when lookup is via new core id" do
-        let(:attributes) { { bulk_upload:, field_16: scheme.old_visible_id, field_17: location.id, field_1: owning_org } }
+        let(:attributes) { { bulk_upload:, field_16: "S#{scheme.id}", field_17: location.id, field_1: owning_org } }
+
+        it "assigns the correct location" do
+          expect(parser.log.location).to eql(location)
+        end
+      end
+
+      context "when lookup is via old core id" do
+        let(:attributes) { { bulk_upload:, field_15: scheme.old_visible_id, field_16: location.old_visible_id, field_1: owning_org } }
 
         it "assigns the correct location" do
           expect(parser.log.location).to eql(location)
@@ -1517,8 +1633,16 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
     end
 
     describe "#scheme" do
-      context "when lookup is via id prefixed with S" do
+      context "when lookup is via new core id" do
         let(:attributes) { { bulk_upload:, field_16: "S#{scheme.id}", field_1: owning_org } }
+
+        it "assigns the correct scheme" do
+          expect(parser.log.scheme).to eql(scheme)
+        end
+      end
+
+      context "when lookup is via old core id" do
+        let(:attributes) { { bulk_upload:, field_15: scheme.old_visible_id, field_16: location.old_visible_id, field_1: owning_org } }
 
         it "assigns the correct scheme" do
           expect(parser.log.scheme).to eql(scheme)

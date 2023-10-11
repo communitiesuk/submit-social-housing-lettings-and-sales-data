@@ -749,20 +749,20 @@ private
   def validate_location_related
     return if scheme.blank? || location.blank?
 
-    unless location.scheme == scheme
+    if location.scheme != scheme && location_field.present?
       block_log_creation!
       errors.add(location_field, "#{scheme_or_management_group.capitalize} code must relate to a #{location_or_scheme} that is owned by owning organisation or managing organisation", category: :setup)
     end
   end
 
   def validate_location_exists
-    if scheme && location_id.present? && location.nil?
+    if scheme && location_id.present? && location.nil?  && location_field.present?
       errors.add(location_field, "#{location_or_scheme.capitalize} could not be found with the provided #{scheme_or_management_group} code", category: :setup)
     end
   end
 
   def validate_location_data_given
-    if supported_housing? && location_id.blank?
+    if supported_housing? && location_id.blank? && location_field.present?
       errors.add(location_field, I18n.t("validations.not_answered", question: "#{location_or_scheme} code"), category: "setup")
     end
   end
@@ -773,20 +773,20 @@ private
     owned_by_owning_org = owning_organisation && scheme.owning_organisation == owning_organisation
     owned_by_managing_org = managing_organisation && scheme.owning_organisation == managing_organisation
 
-    unless owned_by_owning_org || owned_by_managing_org
+    if !(owned_by_owning_org || owned_by_managing_org) && scheme_field.present?
       block_log_creation!
       errors.add(scheme_field, "This #{scheme_or_management_group} code does not belong to your organisation, or any of your stock owners / managing agents", category: :setup)
     end
   end
 
   def validate_scheme_exists
-    if scheme_id.present? && scheme.nil?
+    if scheme_id.present? && scheme_field.present? && scheme.nil?
       errors.add(scheme_field, "The #{scheme_or_management_group} code is not correct", category: :setup)
     end
   end
 
   def validate_scheme_data_given
-    if supported_housing? && scheme_id.blank?
+    if supported_housing? && scheme_field.present? && scheme_id.blank?
       errors.add(scheme_field, I18n.t("validations.not_answered", question: "#{scheme_or_management_group} code"), category: "setup")
     end
   end
@@ -868,7 +868,7 @@ private
       errors.add(:field_8, error_message) # startdate
       errors.add(:field_9, error_message) # startdate
       errors.add(:field_13, error_message) # tenancycode
-      errors.add(location_field, error_message) if field_4 != 1 # location
+      errors.add(location_field, error_message) if field_4 != 1 && location_field.present?# location
       errors.add(:field_23, error_message) if field_4 != 2 # postcode_full
       errors.add(:field_24, error_message) if field_4 != 2 # postcode_full
       errors.add(:field_25, error_message) if field_4 != 2 # la
