@@ -1,0 +1,2 @@
+Issue type,Log ID,Tenancy start date,Tenant code,Property reference,Log owner,Owning organisation,Managing organisation,UPRN,Address Line 1,Address Line 2 (optional),Town or City,County (optional),Property's postcode
+Missing town or city,{id},2023-04-05,tenancycode,propcode,testy@example.com,Address org,Address org,,existing address,,,,

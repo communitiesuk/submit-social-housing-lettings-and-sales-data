@@ -1,6 +1,7 @@
-lettings_log_id,address_line1,address_line2,town_or_city,postcode_full
-{id},address 1,address 2,town,B1 1BB
-{id2},address 3,address 4,city,B1 1BB
-{id3},,,,C1 1CC
-,address 5,address 6,city,D1 1DD
-fake_id,address 7,address 8,city,D1 1DD
+Issue type,Log ID,Tenancy start date,Tenant code,Property reference,Log owner,Owning organisation,Managing organisation,UPRN,Address Line 1,Address Line 2 (optional),Town or City,County (optional),Property's postcode
+Full address required,{id},2023-04-05,tenancycode,propcode,testy@example.com,Address org,Address org,,address 1,address 2,town,county,B1 1BB
+Missing town or city,{id2},2023-04-05,tenancycode,propcode,testy@example.com,Address org,Address org,,address 3,,city,,B1 1BB
+Incorrect UPRN,{id3},2023-04-05,tenancycode,propcode,testy@example.com,Address org,Address org,123,Some Place,,Bristol,,BS1 1AD
+Incorrect UPRN,{id4},2023-04-05,tenancycode,propcode,testy@example.com,Address org,Address org,,Some Place,,,,BS1 1AD
+Incorrect UPRN,,2023-04-05,tenancycode,propcode,testy@example.com,Address org,Address org,,Some Place,,Bristol,,BS1 1AD
+Incorrect UPRN,fake_id,2023-04-05,tenancycode,propcode,testy@example.com,Address org,Address org,,Some Place,,Bristol,,BS1 1AD
