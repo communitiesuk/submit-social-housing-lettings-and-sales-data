@@ -756,7 +756,7 @@ private
   end
 
   def validate_location_exists
-    if scheme && location_id.present? && location.nil?  && location_field.present?
+    if scheme && location_id.present? && location.nil? && location_field.present?
       errors.add(location_field, "#{location_or_scheme.capitalize} could not be found with the provided #{scheme_or_management_group} code", category: :setup)
     end
   end
@@ -869,7 +869,7 @@ private
       errors.add(:field_9, error_message) # startdate
       errors.add(:field_13, error_message) # tenancycode
       errors.add(location_field, error_message) if field_4 != 1 && location_field.present? # location
-      errors.add(:field_16, error_message) if field_4 != 1 && !location_field.present? # add to Scheme field as unclear whether log uses New or Old CORE ids
+      errors.add(:field_16, error_message) if field_4 != 1 && location_field.blank? # add to Scheme field as unclear whether log uses New or Old CORE ids
       errors.add(:field_23, error_message) if field_4 != 2 # postcode_full
       errors.add(:field_24, error_message) if field_4 != 2 # postcode_full
       errors.add(:field_25, error_message) if field_4 != 2 # la
