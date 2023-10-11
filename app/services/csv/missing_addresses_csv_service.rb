@@ -28,7 +28,7 @@ module Csv
       return if logs_with_missing_addresses.empty? && logs_with_missing_town_or_city.empty? && logs_with_wrong_uprn.empty?
 
       CSV.generate(headers: true) do |csv|
-        csv << ["Issue type", "Log ID", "Tenancy start date", "Tenant code", "Property reference", "Log owner", "Owning organisation", "Managing organisation", "UPRN", "Address Line 1", "Address Line 2 (optional)", "Town or City", "County (optional)", "Property’s postcode"]
+        csv << ["Issue type", "Log ID", "Tenancy start date", "Tenant code", "Property reference", "Log owner", "Owning organisation", "Managing organisation", "UPRN", "Address Line 1", "Address Line 2 (optional)", "Town or City", "County (optional)", "Property's postcode"]
 
         logs_with_missing_addresses.each do |log|
           csv << ["Full address required"] + lettings_log_to_csv_row(log)
@@ -39,7 +39,7 @@ module Csv
         end
 
         logs_with_wrong_uprn.each do |log|
-          csv << ["UPRN issues"] + lettings_log_to_csv_row(log)
+          csv << ["Incorrect UPRN"] + lettings_log_to_csv_row(log)
         end
       end
     end
@@ -65,7 +65,7 @@ module Csv
       return if logs_with_missing_addresses.empty? && logs_with_missing_town_or_city.empty? && logs_with_wrong_uprn.empty?
 
       CSV.generate(headers: true) do |csv|
-        csv << ["Issue type", "Log ID", "Sale completion date", "Purchaser code", "Log owner", "Owning organisation", "UPRN", "Address Line 1", "Address Line 2 (optional)", "Town or City", "County (optional)", "Property’s postcode"]
+        csv << ["Issue type", "Log ID", "Sale completion date", "Purchaser code", "Log owner", "Owning organisation", "UPRN", "Address Line 1", "Address Line 2 (optional)", "Town or City", "County (optional)", "Property's postcode"]
 
         logs_with_missing_addresses.each do |log|
           csv << ["Full address required"] + sales_log_to_csv_row(log)
@@ -76,7 +76,7 @@ module Csv
         end
 
         logs_with_wrong_uprn.each do |log|
-          csv << ["UPRN issues"] + sales_log_to_csv_row(log)
+          csv << ["Incorrect UPRN"] + sales_log_to_csv_row(log)
         end
       end
     end
@@ -85,7 +85,7 @@ module Csv
       logs = @organisation.managed_lettings_logs.filter_by_year(2023)
 
       CSV.generate(headers: true) do |csv|
-        csv << ["Log ID", "Tenancy start date", "Tenant code", "Property reference", "Log owner", "Owning organisation", "Managing organisation", "UPRN", "Address Line 1", "Address Line 2 (optional)", "Town or City", "County (optional)", "Property’s postcode"]
+        csv << ["Log ID", "Tenancy start date", "Tenant code", "Property reference", "Log owner", "Owning organisation", "Managing organisation", "UPRN", "Address Line 1", "Address Line 2 (optional)", "Town or City", "County (optional)", "Property's postcode"]
 
         logs.each do |log|
           csv << lettings_log_to_csv_row(log)
@@ -97,7 +97,7 @@ module Csv
       logs = @organisation.sales_logs.filter_by_year(2023)
 
       CSV.generate(headers: true) do |csv|
-        csv << ["Log ID", "Sale completion date", "Purchaser code", "Log owner", "Owning organisation", "UPRN", "Address Line 1", "Address Line 2 (optional)", "Town or City", "County (optional)", "Property’s postcode"]
+        csv << ["Log ID", "Sale completion date", "Purchaser code", "Log owner", "Owning organisation", "UPRN", "Address Line 1", "Address Line 2 (optional)", "Town or City", "County (optional)", "Property's postcode"]
 
         logs.each do |log|
           csv << sales_log_to_csv_row(log)

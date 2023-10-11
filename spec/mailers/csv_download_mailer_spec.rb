@@ -66,7 +66,7 @@ The town or city in some logs is missing. This data is required in the new versi
           issue_explanation: "We have found this issue in your logs imported to the new version of CORE:
 ## Incorrect UPRN\nThe UPRN in some logs may be incorrect, so the wrong address data may have been imported.
 
-In some of your logs, the UPRN is the same as the tenant code or property reference, but these are different things. Property references are codes that yourorganisation uses to identify properties. UPRNs are unique numbers assigned by the Ordnance Survey.
+In some of your logs, the UPRN is the same as the purchaser code, but these are different things. Purchaser codes are codes that your organisation uses to identify properties. UPRNs are unique numbers assigned by the Ordnance Survey.
 
 If a log has the correct UPRN, leave the UPRN unchanged. If the UPRN is incorrect, clear the value and provide the full address instead. Alternatively, you can change the UPRN on the CORE system.\n",
           how_to_fix: "You need to:\n

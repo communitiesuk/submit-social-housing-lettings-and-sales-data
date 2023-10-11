@@ -1,7 +1,7 @@
-Issue type,Log ID,Tenancy start date,Tenant code,Property reference,Log owner,Owning organisation,Managing organisation,UPRN,Address Line 1,Address Line 2 (optional),Town or City,County (optional),Property’s postcode
+Issue type,Log ID,Tenancy start date,Tenant code,Property reference,Log owner,Owning organisation,Managing organisation,UPRN,Address Line 1,Address Line 2 (optional),Town or City,County (optional),Property's postcode
 Full address required,{id},2023-04-05,tenancycode,propcode,testy@example.com,Address org,Address org,,address 1,address 2,town,county,B1 1BB
 Missing town or city,{id2},2023-04-05,tenancycode,propcode,testy@example.com,Address org,Address org,,address 3,,city,,B1 1BB
-UPRN issues,{id3},2023-04-05,tenancycode,propcode,testy@example.com,Address org,Address org,123,Some Place,,Bristol,,BS1 1AD
-UPRN issues,{id4},2023-04-05,tenancycode,propcode,testy@example.com,Address org,Address org,,Some Place,,,,BS1 1AD
-UPRN issues,,2023-04-05,tenancycode,propcode,testy@example.com,Address org,Address org,,Some Place,,Bristol,,BS1 1AD
-UPRN issues,fake_id,2023-04-05,tenancycode,propcode,testy@example.com,Address org,Address org,,Some Place,,Bristol,,BS1 1AD
+Incorrect UPRN,{id3},2023-04-05,tenancycode,propcode,testy@example.com,Address org,Address org,123,Some Place,,Bristol,,BS1 1AD
+Incorrect UPRN,{id4},2023-04-05,tenancycode,propcode,testy@example.com,Address org,Address org,,Some Place,,,,BS1 1AD
+Incorrect UPRN,,2023-04-05,tenancycode,propcode,testy@example.com,Address org,Address org,,Some Place,,Bristol,,BS1 1AD
+Incorrect UPRN,fake_id,2023-04-05,tenancycode,propcode,testy@example.com,Address org,Address org,,Some Place,,Bristol,,BS1 1AD
