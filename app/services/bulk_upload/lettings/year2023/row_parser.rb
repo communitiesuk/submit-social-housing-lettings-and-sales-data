@@ -331,7 +331,7 @@ class BulkUpload::Lettings::Year2023::RowParser
 
   validates :field_15,
             presence: {
-              if: proc { [2, 4, 6, 8, 10, 12].include?(field_5) && log_uses_old_scheme_id? },
+              if: proc { supported_housing? && log_uses_old_scheme_id? },
               message: I18n.t("validations.not_answered", question: "management group code"),
               category: :setup,
             },
@@ -339,7 +339,7 @@ class BulkUpload::Lettings::Year2023::RowParser
 
   validates :field_16,
             presence: {
-              if: proc { [2, 4, 6, 8, 10, 12].include?(field_5) },
+              if: proc { supported_housing? },
               message: I18n.t("validations.not_answered", question: "scheme code"),
               category: :setup,
             },
@@ -347,7 +347,7 @@ class BulkUpload::Lettings::Year2023::RowParser
 
   validates :field_17,
             presence: {
-              if: proc { [2, 4, 6, 8, 10, 12].include?(field_5) && log_uses_new_scheme_id? },
+              if: proc { supported_housing? && log_uses_new_scheme_id? },
               message: I18n.t("validations.not_answered", question: "location code"),
               category: :setup,
             },
@@ -481,9 +481,9 @@ class BulkUpload::Lettings::Year2023::RowParser
       "field_8",   # startdate
       "field_9",   # startdate
       "field_13",  # tenancycode
-      field_4 != 1 ? location_field.to_s : nil, # location
-      field_4 != 2 ? "field_23" : nil,  # postcode
-      field_4 != 2 ? "field_24" : nil,  # postcode
+      !general_needs? ? location_field.to_s : nil, # location
+      !supported_housing? ? "field_23" : nil,  # postcode
+      !supported_housing? ? "field_24" : nil,  # postcode
       "field_46",  # age1
       "field_47",  # sex1
       "field_50",  # ecstat1
@@ -577,8 +577,8 @@ private
       "ecstat1",
       "owning_organisation",
       "tcharge",
-      field_4 != 2 ? "postcode_full" : nil,
-      field_4 != 1 ? "location" : nil,
+      !supported_housing? ? "postcode_full" : nil,
+      !general_needs? ? "location" : nil,
       "tenancycode",
       log.chcharge.present? ? "chcharge" : nil,
     ].compact
@@ -868,17 +868,17 @@ private
       errors.add(:field_8, error_message) # startdate
       errors.add(:field_9, error_message) # startdate
       errors.add(:field_13, error_message) # tenancycode
-      errors.add(location_field, error_message) if field_4 != 1 && location_field.present? # location
-      errors.add(:field_16, error_message) if field_4 != 1 && location_field.blank? # add to Scheme field as unclear whether log uses New or Old CORE ids
-      errors.add(:field_23, error_message) if field_4 != 2 # postcode_full
-      errors.add(:field_24, error_message) if field_4 != 2 # postcode_full
-      errors.add(:field_25, error_message) if field_4 != 2 # la
+      errors.add(location_field, error_message) unless general_needs? && location_field.present? # location
+      errors.add(:field_16, error_message) unless general_needs? && location_field.blank? # add to Scheme field as unclear whether log uses New or Old CORE ids
+      errors.add(:field_23, error_message) unless supported_housing? # postcode_full
+      errors.add(:field_24, error_message) unless supported_housing? # postcode_full
+      errors.add(:field_25, error_message) unless supported_housing? # la
       errors.add(:field_46, error_message) # age1
       errors.add(:field_47, error_message) # sex1
       errors.add(:field_50, error_message) # ecstat1
       errors.add(:field_132, error_message) # tcharge
       errors.add(:field_127, error_message) if log.chcharge.present? # chcharge
-      errors.add(:field_125, error_message) if bulk_upload.needstype != 1 # household_charge
+      errors.add(:field_125, error_message) unless general_needs? # household_charge
     end
   end
 
