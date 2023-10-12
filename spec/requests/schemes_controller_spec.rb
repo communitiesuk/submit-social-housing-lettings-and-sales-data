@@ -201,15 +201,21 @@ RSpec.describe SchemesController, type: :request do
         assert_select ".govuk-tag", text: /Incomplete/, count: 1
       end
 
-      it "shows incomplete schemes at the top" do
-        schemes[0].update!(confirmed: nil)
-        schemes[2].update!(confirmed: false)
-        schemes[4].update!(confirmed: false)
-        get "/schemes"
+      it "shows schemes in alpabetical order" do
+        schemes[0].update!(service_name: "aaa")
+        schemes[1].update!(service_name: "daa")
+        schemes[2].update!(service_name: "baa")
+        schemes[3].update!(service_name: "Faa")
+        schemes[4].update!(service_name: "Caa")
+        get "/schemes", headers:, params: {}
+        all_links = page.all(".govuk-link")
+        scheme_links = all_links.select { |link| link[:href] =~ %r{^/schemes/\d+$} }
 
-        expect(page.all(".govuk-tag")[1].text).to eq("Incomplete")
-        expect(page.all(".govuk-tag")[2].text).to eq("Incomplete")
-        expect(page.all(".govuk-tag")[3].text).to eq("Incomplete")
+        expect(scheme_links[0][:href]).to eq("/schemes/#{schemes[0].id}")
+        expect(scheme_links[1][:href]).to eq("/schemes/#{schemes[2].id}")
+        expect(scheme_links[2][:href]).to eq("/schemes/#{schemes[4].id}")
+        expect(scheme_links[3][:href]).to eq("/schemes/#{schemes[1].id}")
+        expect(scheme_links[4][:href]).to eq("/schemes/#{schemes[3].id}")
       end
 
       it "displays a link to check answers page if the scheme is incomplete" do

@@ -123,15 +123,21 @@ RSpec.describe OrganisationsController, type: :request do
           end
         end
 
-        it "shows incomplete schemes at the top" do
-          schemes[0].update!(confirmed: nil, owning_organisation: user.organisation)
-          schemes[2].update!(confirmed: false, owning_organisation: user.organisation)
-          schemes[4].update!(confirmed: false, owning_organisation: user.organisation)
+        it "shows schemes in alpabetical order" do
+          schemes[0].update!(service_name: "aaa", owning_organisation: user.organisation)
+          schemes[1].update!(service_name: "daa", owning_organisation: user.organisation)
+          schemes[2].update!(service_name: "baa", owning_organisation: user.organisation)
+          schemes[3].update!(service_name: "Faa", owning_organisation: user.organisation)
+          schemes[4].update!(service_name: "Caa", owning_organisation: user.organisation)
           get "/organisations/#{organisation.id}/schemes", headers:, params: {}
+          all_links = page.all(".govuk-link")
+          scheme_links = all_links.select { |link| link[:href] =~ %r{^/schemes/\d+$} }
 
-          expect(page.all(".govuk-tag")[1].text).to eq("Incomplete")
-          expect(page.all(".govuk-tag")[2].text).to eq("Incomplete")
-          expect(page.all(".govuk-tag")[3].text).to eq("Incomplete")
+          expect(scheme_links[0][:href]).to eq("/schemes/#{schemes[0].id}")
+          expect(scheme_links[1][:href]).to eq("/schemes/#{schemes[2].id}")
+          expect(scheme_links[2][:href]).to eq("/schemes/#{schemes[4].id}")
+          expect(scheme_links[3][:href]).to eq("/schemes/#{schemes[1].id}")
+          expect(scheme_links[4][:href]).to eq("/schemes/#{schemes[3].id}")
         end
 
         context "with schemes that are not in scope for the user, i.e. that they do not belong to" do

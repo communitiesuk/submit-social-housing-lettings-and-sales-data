@@ -8,19 +8,17 @@ class Scheme < ApplicationRecord
 
   scope :filter_by_id, ->(id) { where(id: (id.start_with?("S") ? id[1..] : id)) }
   scope :search_by_service_name, ->(name) { where("service_name ILIKE ?", "%#{name}%") }
-  scope :search_by_postcode, ->(postcode) { left_joins(:locations).where("REPLACE(locations.postcode, ' ', '') ILIKE ?", "%#{postcode.delete(' ')}%") }
-  scope :search_by_location_name, ->(name) { left_joins(:locations).where("locations.name ILIKE ?", "%#{name}%") }
+  scope :search_by_postcode, ->(postcode) { where("schemes.id IN (SELECT DISTINCT scheme_id FROM locations WHERE REPLACE(locations.postcode, ' ', '') ILIKE ?)", "%#{postcode.delete(' ')}%") }
+  scope :search_by_location_name, ->(name) { where("schemes.id IN (SELECT DISTINCT scheme_id FROM locations WHERE locations.name ILIKE ?)", "%#{name}%") }
   scope :search_by, lambda { |param|
-                      select("schemes.*, lower(service_name) as lowercase_service_name")
-                                        .search_by_postcode(param)
+                      search_by_postcode(param)
                                           .or(search_by_service_name(param))
                                           .or(search_by_location_name(param))
-                                          .or(filter_by_id(param)).distinct
+                                          .or(filter_by_id(param))
                     }
 
   scope :order_by_service_name, lambda {
-    select("schemes.*, lower(service_name) as lowercase_service_name")
-      .order("lowercase_service_name ASC")
+    order("lower(service_name) ASC")
   }
   scope :filter_by_owning_organisation, ->(owning_organisation, _user = nil) { where(owning_organisation:) }
   scope :filter_by_status, lambda { |statuses, _user = nil|
