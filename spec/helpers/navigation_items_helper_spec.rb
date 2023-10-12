@@ -8,6 +8,51 @@ RSpec.describe NavigationItemsHelper do
 
   describe "#primary_items" do
     context "when the user is a data coordinator" do
+      context "when the user's org does not own stock" do
+        before do
+          current_user.organisation.update!(holds_own_stock: false)
+        end
+
+        let(:expected_navigation_items) do
+          [
+            NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", true),
+            NavigationItemsHelper::NavigationItem.new("Sales logs", "/sales-logs", false),
+            NavigationItemsHelper::NavigationItem.new("Users", users_path, false),
+            NavigationItemsHelper::NavigationItem.new("About your organisation", organisation_path, false),
+            NavigationItemsHelper::NavigationItem.new("Stock owners", "/organisations/#{current_user.organisation.id}/stock-owners", false),
+            NavigationItemsHelper::NavigationItem.new("Managing agents", "/organisations/#{current_user.organisation.id}/managing-agents", false),
+          ]
+        end
+
+        it "returns navigation items with the users item set as current" do
+          expect(primary_items("/lettings-logs", current_user)).to eq(expected_navigation_items)
+        end
+
+        context "when the user's org has a stock owner" do
+          before do
+            current_user.organisation.update!(holds_own_stock: false)
+            create(:organisation_relationship, child_organisation: current_user.organisation, parent_organisation: stock_owner)
+          end
+
+          let(:stock_owner) { create(:organisation) }
+          let(:expected_navigation_items) do
+            [
+              NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", true),
+              NavigationItemsHelper::NavigationItem.new("Sales logs", "/sales-logs", false),
+              NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
+              NavigationItemsHelper::NavigationItem.new("Users", users_path, false),
+              NavigationItemsHelper::NavigationItem.new("About your organisation", organisation_path, false),
+              NavigationItemsHelper::NavigationItem.new("Stock owners", "/organisations/#{current_user.organisation.id}/stock-owners", false),
+              NavigationItemsHelper::NavigationItem.new("Managing agents", "/organisations/#{current_user.organisation.id}/managing-agents", false),
+            ]
+          end
+
+          it "returns navigation items with the users item set as current" do
+            expect(primary_items("/lettings-logs", current_user)).to eq(expected_navigation_items)
+          end
+        end
+      end
+
       context "when the user is on the lettings logs page" do
         let(:expected_navigation_items) do
           [
@@ -140,6 +185,51 @@ RSpec.describe NavigationItemsHelper do
 
       it "includes schemes" do
         expect(primary_items("/", current_user)).to include(NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false))
+      end
+
+      context "when the user's org does not own stock" do
+        before do
+          current_user.organisation.update!(holds_own_stock: false)
+        end
+
+        let(:expected_navigation_items) do
+          [
+            NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", true),
+            NavigationItemsHelper::NavigationItem.new("Sales logs", "/sales-logs", false),
+            NavigationItemsHelper::NavigationItem.new("Users", users_path, false),
+            NavigationItemsHelper::NavigationItem.new("About your organisation", organisation_path, false),
+            NavigationItemsHelper::NavigationItem.new("Stock owners", "/organisations/#{current_user.organisation.id}/stock-owners", false),
+            NavigationItemsHelper::NavigationItem.new("Managing agents", "/organisations/#{current_user.organisation.id}/managing-agents", false),
+          ]
+        end
+
+        it "returns navigation items with the users item set as current" do
+          expect(primary_items("/lettings-logs", current_user)).to eq(expected_navigation_items)
+        end
+
+        context "when the user's org has a stock owner" do
+          before do
+            current_user.organisation.update!(holds_own_stock: false)
+            create(:organisation_relationship, child_organisation: current_user.organisation, parent_organisation: stock_owner)
+          end
+
+          let(:stock_owner) { create(:organisation) }
+          let(:expected_navigation_items) do
+            [
+              NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", true),
+              NavigationItemsHelper::NavigationItem.new("Sales logs", "/sales-logs", false),
+              NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
+              NavigationItemsHelper::NavigationItem.new("Users", users_path, false),
+              NavigationItemsHelper::NavigationItem.new("About your organisation", organisation_path, false),
+              NavigationItemsHelper::NavigationItem.new("Stock owners", "/organisations/#{current_user.organisation.id}/stock-owners", false),
+              NavigationItemsHelper::NavigationItem.new("Managing agents", "/organisations/#{current_user.organisation.id}/managing-agents", false),
+            ]
+          end
+
+          it "returns navigation items with the users item set as current" do
+            expect(primary_items("/lettings-logs", current_user)).to eq(expected_navigation_items)
+          end
+        end
       end
     end
 
