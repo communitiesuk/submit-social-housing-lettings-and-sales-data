@@ -3,7 +3,7 @@ class SchemesController < ApplicationController
   include Modules::SearchFilter
 
   before_action :authenticate_user!
-  before_action :find_resource, except: %i[index create new]
+  before_action :find_resource, except: %i[index create new changes]
   before_action :redirect_if_scheme_confirmed, only: %i[primary_client_group confirm_secondary_client_group secondary_client_group support details]
   before_action :authorize_user
   before_action :session_filters, if: :current_user, only: %i[index]
@@ -199,6 +199,10 @@ class SchemesController < ApplicationController
     render_not_found and return unless @scheme
 
     render "schemes/edit_name"
+  end
+
+  def changes
+    render "schemes/changes"
   end
 
 private

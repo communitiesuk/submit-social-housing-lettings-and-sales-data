@@ -1,0 +1,29 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+    <h1 class="govuk-heading-l">Schemes and locations</h1>
+    <h2 class="govuk-heading-m">What is a scheme?</h2>
+    <p class="govuk-body">A supported housing scheme (also known as a ‘supported housing service’) provides shared or self-contained housing for a particular client group, for example younger or vulnerable people.</p>
+
+    <h2 class="govuk-heading-m">What is a location?</h2>
+    <p class="govuk-body">A location is a postcode where supported housing is provided under a scheme. A scheme can have multiple locations, and a location can have multiple units at the same postcode.</p>
+
+    <h2 class="govuk-heading-m">How schemes have changed</h2>
+    <p class="govuk-body">We have restructured the way we group supported housing scheme data.</p>
+    <p class="govuk-body">On old CORE, a scheme’s data was split into management group and scheme. On new CORE, the data is split into scheme and location.</p>
+    <p class="govuk-body">These are the main changes:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>Schemes now store data about the stock owner and support provider. This was previously stored in management group.</li>
+      <li>Schemes still store data about the type of support, as they did in old CORE.</li>
+      <li>Schemes no longer store data about postcodes where support is provided. These are now in locations.</li>
+    </ul>
+    <p class="govuk-body">This new structure means data coordinators only needs to fill in support details once.</p>
+    <h2 class="govuk-heading-m">How schemes are migrated from old CORE</h2>
+    <p class="govuk-body">If your organisation has migrated from old CORE to new CORE, your existing schemes are on the <%= govuk_link_to("schemes page", schemes_path) %>, with the same details.</p>
+    <p class="govuk-body">Your migrated schemes have been restructured to match the new structure described above. Schemes with the same support details have been combined to prevent duplicates.</p>
+    <p class="govuk-body">All migrated schemes have new names and codes. The new scheme names were created automatically based on their support details. Some of these auto-generated names are quite long, so we recommend data coordinators rename them.</p>
+    <p class="govuk-body">If you upload logs in bulk, you can use either the new or old scheme codes in your template.</p>
+    <h2 class="govuk-heading-m">If you can’t find a scheme</h2>
+    <p class="govuk-body">You should be able to recognise a scheme migrated from old CORE by viewing its details or locations. Try searching for it by postcode.</p>
+    <p class="govuk-body">If you still can’t find a scheme that was migrated from old CORE, either create a new one if you know the details, or <%= govuk_link_to("contact the service desk", "https://dluhcdigital.atlassian.net/servicedesk/customer/portal/6/group/11", rel: "noreferrer noopener", target: "_blank") %> to report the problem. Only data coordinators can create and edit schemes.</p>
+  </div>
+</div>
