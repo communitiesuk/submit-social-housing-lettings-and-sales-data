@@ -111,7 +111,7 @@ RSpec.describe SchemesHelper do
     let(:coordinator_user) { FactoryBot.create(:user, :data_coordinator) }
 
     context "when scheme has no locations" do
-      it "returns correct display attributes for a support user" do
+      it "returns correct display attributes" do
         attributes = [
           { name: "Scheme code", value: "S#{scheme.id}" },
           { name: "Name", value: "Test service_name", edit: true },
@@ -128,26 +128,7 @@ RSpec.describe SchemesHelper do
           { name: "Intended length of stay", value: "Permanent" },
           { name: "Availability", value: "Active from 1 April 2021" },
         ]
-        expect(display_scheme_attributes(scheme, support_user)).to eq(attributes)
-      end
-
-      it "returns correct display attributes for a coordinator user" do
-        attributes = [
-          { name: "Scheme code", value: "S#{scheme.id}" },
-          { name: "Name", value: "Test service_name", edit: true },
-          { name: "Status", value: status_tag(:incomplete) },
-          { name: "Confidential information", value: "No", edit: true },
-          { name: "Type of scheme", value: "Housing for older people" },
-          { name: "Registered under Care Standards Act 2000", value: "Yes – registered care home providing personal care" },
-          { name: "Support services provided by", value: "A registered charity or voluntary organisation" },
-          { name: "Primary client group", value: "Rough sleepers" },
-          { name: "Has another client group", value: "Yes" },
-          { name: "Secondary client group", value: "Refugees (permanent)" },
-          { name: "Level of support given", value: "High level" },
-          { name: "Intended length of stay", value: "Permanent" },
-          { name: "Availability", value: "Active from 1 April 2021" },
-        ]
-        expect(display_scheme_attributes(scheme, coordinator_user)).to eq(attributes)
+        expect(display_scheme_attributes(scheme)).to eq(attributes)
       end
     end
 
@@ -156,7 +137,7 @@ RSpec.describe SchemesHelper do
         FactoryBot.create(:location, scheme:)
       end
 
-      it "returns correct display attributes for a support user" do
+      it "returns correct display attributes" do
         attributes = [
           { name: "Scheme code", value: "S#{scheme.id}" },
           { name: "Name", value: "Test service_name", edit: true },
@@ -173,31 +154,12 @@ RSpec.describe SchemesHelper do
           { name: "Intended length of stay", value: "Permanent" },
           { name: "Availability", value: "Active from 1 April 2021" },
         ]
-        expect(display_scheme_attributes(scheme, support_user)).to eq(attributes)
-      end
-
-      it "returns correct display attributes for a coordinator user" do
-        attributes = [
-          { name: "Scheme code", value: "S#{scheme.id}" },
-          { name: "Name", value: "Test service_name", edit: true },
-          { name: "Status", value: status_tag(:active) },
-          { name: "Confidential information", value: "No", edit: true },
-          { name: "Type of scheme", value: "Housing for older people" },
-          { name: "Registered under Care Standards Act 2000", value: "Yes – registered care home providing personal care" },
-          { name: "Support services provided by", value: "A registered charity or voluntary organisation" },
-          { name: "Primary client group", value: "Rough sleepers" },
-          { name: "Has another client group", value: "Yes" },
-          { name: "Secondary client group", value: "Refugees (permanent)" },
-          { name: "Level of support given", value: "High level" },
-          { name: "Intended length of stay", value: "Permanent" },
-          { name: "Availability", value: "Active from 1 April 2021" },
-        ]
-        expect(display_scheme_attributes(scheme, coordinator_user)).to eq(attributes)
+        expect(display_scheme_attributes(scheme)).to eq(attributes)
       end
 
       context "when the managing organisation is the owning organisation" do
         it "doesn't show the organisation providing support" do
-          attributes = display_scheme_attributes(scheme_where_managing_organisation_is_owning_organisation, support_user).find { |x| x[:name] == "Organisation providing support" }
+          attributes = display_scheme_attributes(scheme_where_managing_organisation_is_owning_organisation).find { |x| x[:name] == "Organisation providing support" }
           expect(attributes).to be_nil
         end
       end
@@ -206,7 +168,7 @@ RSpec.describe SchemesHelper do
         context "with no deactivations" do
           it "displays current collection start date as availability date if created_at is later than collection start date" do
             scheme.update!(created_at: Time.zone.local(2022, 4, 16))
-            availability_attribute = display_scheme_attributes(scheme, support_user).find { |x| x[:name] == "Availability" }[:value]
+            availability_attribute = display_scheme_attributes(scheme).find { |x| x[:name] == "Availability" }[:value]
 
             expect(availability_attribute).to eq("Active from 1 April 2021")
           end
@@ -221,7 +183,7 @@ RSpec.describe SchemesHelper do
             end
 
             it "displays the timeline of availability" do
-              availability_attribute = display_scheme_attributes(scheme, support_user).find { |x| x[:name] == "Availability" }[:value]
+              availability_attribute = display_scheme_attributes(scheme).find { |x| x[:name] == "Availability" }[:value]
 
               expect(availability_attribute).to eq("Active from 1 April 2021 to 9 August 2022\nDeactivated on 10 August 2022\nActive from 1 September 2022 to 14 September 2022\nDeactivated on 15 September 2022\nActive from 28 September 2022")
             end
@@ -235,7 +197,7 @@ RSpec.describe SchemesHelper do
             end
 
             it "displays the timeline of availability" do
-              availability_attribute = display_scheme_attributes(scheme, support_user).find { |x| x[:name] == "Availability" }[:value]
+              availability_attribute = display_scheme_attributes(scheme).find { |x| x[:name] == "Availability" }[:value]
 
               expect(availability_attribute).to eq("Active from 1 April 2021 to 9 August 2022\nDeactivated on 10 August 2022\nActive from 1 September 2022 to 14 September 2022\nDeactivated on 15 September 2022")
             end
@@ -251,7 +213,7 @@ RSpec.describe SchemesHelper do
             end
 
             it "displays the timeline of availability" do
-              availability_attribute = display_scheme_attributes(scheme, support_user).find { |x| x[:name] == "Availability" }[:value]
+              availability_attribute = display_scheme_attributes(scheme).find { |x| x[:name] == "Availability" }[:value]
 
               expect(availability_attribute).to eq("Active from 1 April 2021 to 14 June 2022\nDeactivated on 15 June 2022\nActive from 18 June 2022 to 23 September 2022\nDeactivated on 24 September 2022\nActive from 28 September 2022")
             end
@@ -265,7 +227,7 @@ RSpec.describe SchemesHelper do
             end
 
             it "displays the timeline of availability" do
-              availability_attribute = display_scheme_attributes(scheme, support_user).find { |x| x[:name] == "Availability" }[:value]
+              availability_attribute = display_scheme_attributes(scheme).find { |x| x[:name] == "Availability" }[:value]
 
               expect(availability_attribute).to eq("Active from 1 April 2021 to 14 June 2022\nDeactivated on 15 June 2022\nActive from 28 September 2022")
             end
@@ -282,7 +244,7 @@ RSpec.describe SchemesHelper do
             end
 
             it "displays the timeline of availability" do
-              availability_attribute = display_scheme_attributes(scheme, support_user).find { |x| x[:name] == "Availability" }[:value]
+              availability_attribute = display_scheme_attributes(scheme).find { |x| x[:name] == "Availability" }[:value]
 
               expect(availability_attribute).to eq("Active from 1 April 2021 to 14 June 2022\nDeactivated on 15 June 2022\nActive from 28 September 2022 to 23 October 2022\nDeactivated on 24 October 2022\nActive from 28 October 2022")
             end
@@ -297,7 +259,7 @@ RSpec.describe SchemesHelper do
           end
 
           it "displays the timeline of availability" do
-            availability_attribute = display_scheme_attributes(scheme, support_user).find { |x| x[:name] == "Availability" }[:value]
+            availability_attribute = display_scheme_attributes(scheme).find { |x| x[:name] == "Availability" }[:value]
 
             expect(availability_attribute).to eq("Active from 1 April 2021 to 9 October 2022\nDeactivated on 10 October 2022\nActive from 11 December 2022")
           end

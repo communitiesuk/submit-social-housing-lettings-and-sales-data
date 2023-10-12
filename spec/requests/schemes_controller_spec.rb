@@ -457,7 +457,7 @@ RSpec.describe SchemesController, type: :request do
         expect(page).to have_content(specific_scheme.intended_stay)
       end
 
-      context "when coordinator attempts to see scheme belonging to a different organisation" do
+      context "when coordinator attempts to see scheme belonging to a different (and not their parent) organisation" do
         let!(:specific_scheme) { create(:scheme) }
 
         it "returns 401" do
@@ -474,7 +474,6 @@ RSpec.describe SchemesController, type: :request do
       end
 
       context "when looking at scheme details" do
-        let(:user) { create(:user, :data_coordinator) }
         let!(:scheme) { create(:scheme, owning_organisation: user.organisation) }
         let(:add_deactivations) { scheme.scheme_deactivation_periods << scheme_deactivation_period }
 
@@ -535,21 +534,68 @@ RSpec.describe SchemesController, type: :request do
       context "when coordinator attempts to see scheme belonging to a parent organisation" do
         let(:parent_organisation) { create(:organisation) }
         let!(:specific_scheme) { create(:scheme, owning_organisation: parent_organisation) }
+        let(:add_deactivations) { specific_scheme.scheme_deactivation_periods << scheme_deactivation_period }
 
         before do
           create(:location, scheme: specific_scheme)
           create(:organisation_relationship, parent_organisation:, child_organisation: user.organisation)
+          Timecop.freeze(Time.utc(2022, 10, 10))
+          sign_in user
+          add_deactivations
+          specific_scheme.save!
           get "/schemes/#{specific_scheme.id}"
         end
 
-        it "shows the scheme" do
-          expect(page).to have_content(specific_scheme.id_to_display)
+        after do
+          Timecop.unfreeze
         end
 
-        it "does not allow editing the scheme" do
-          expect(page).not_to have_link("Change")
-          expect(page).not_to have_content("Reactivate this scheme")
-          expect(page).not_to have_content("Deactivate this scheme")
+        context "with active scheme" do
+          let(:add_deactivations) {}
+
+          it "shows the scheme" do
+            expect(page).to have_content(specific_scheme.id_to_display)
+          end
+
+          it "allows editing" do
+            expect(page).to have_link("Change")
+          end
+
+          it "renders deactivate this scheme" do
+            expect(response).to have_http_status(:ok)
+            expect(page).to have_link("Deactivate this scheme", href: "/schemes/#{specific_scheme.id}/new-deactivation")
+          end
+        end
+
+        context "with deactivated scheme" do
+          let(:scheme_deactivation_period) { create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 10, 9), scheme: specific_scheme) }
+
+          it "renders reactivate this scheme" do
+            expect(response).to have_http_status(:ok)
+            expect(page).to have_link("Reactivate this scheme", href: "/schemes/#{specific_scheme.id}/new-reactivation")
+          end
+        end
+
+        context "with scheme that's deactivating soon" do
+          let(:scheme_deactivation_period) { create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 10, 12), scheme: specific_scheme) }
+
+          it "does not render toggle scheme link" do
+            expect(response).to have_http_status(:ok)
+            expect(page).not_to have_link("Reactivate this scheme")
+            expect(page).not_to have_link("Deactivate this scheme")
+          end
+        end
+
+        context "with scheme that's deactivating in more than 6 months" do
+          let(:scheme_deactivation_period) { create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2023, 5, 12), scheme: specific_scheme) }
+
+          it "does not render toggle scheme link" do
+            expect(response).to have_http_status(:ok)
+            expect(page).not_to have_link("Reactivate this scheme")
+            expect(page).to have_link("Deactivate this scheme")
+            expect(response.body).not_to include("<strong class=\"govuk-tag govuk-tag--yellow\">Deactivating soon</strong>")
+            expect(response.body).to include("<strong class=\"govuk-tag govuk-tag--green\">Active</strong>")
+          end
         end
       end
 
@@ -678,56 +724,26 @@ RSpec.describe SchemesController, type: :request do
 
     context "when signed in as a data coordinator" do
       let(:user) { create(:user, :data_coordinator) }
-      let(:params) do
-        { scheme: { service_name: "  testy ",
-                    sensitive: "1",
-                    scheme_type: "Foyer",
-                    registered_under_care_act: "No",
-                    arrangement_type: "D" } }
-      end
 
       before do
         sign_in user
       end
 
-      it "creates a new scheme for user organisation with valid params and renders correct page" do
-        expect { post "/schemes", params: }.to change(Scheme, :count).by(1)
-        follow_redirect!
-        expect(response).to have_http_status(:ok)
-        expect(page).to have_content("What client group is this scheme intended for?")
-      end
-
-      it "creates a new scheme for user organisation with valid params" do
-        post "/schemes", params: params
-
-        expect(Scheme.last.owning_organisation_id).to eq(user.organisation_id)
-        expect(Scheme.last.service_name).to eq("testy")
-        expect(Scheme.last.scheme_type).to eq("Foyer")
-        expect(Scheme.last.sensitive).to eq("Yes")
-        expect(Scheme.last.registered_under_care_act).to eq("No")
-        expect(Scheme.last.id).not_to eq(nil)
-        expect(Scheme.last.has_other_client_group).to eq(nil)
-        expect(Scheme.last.primary_client_group).to eq(nil)
-        expect(Scheme.last.secondary_client_group).to eq(nil)
-        expect(Scheme.last.support_type).to eq(nil)
-        expect(Scheme.last.intended_stay).to eq(nil)
-        expect(Scheme.last.id_to_display).to match(/S*/)
-      end
-
-      context "when support services provider is selected" do
-        let(:params) do
-          { scheme: { service_name: "testy",
+      context "when making a scheme in the user's organisation" do
+        let!(:params) do
+          { scheme: { service_name: "  testy ",
                       sensitive: "1",
                       scheme_type: "Foyer",
                       registered_under_care_act: "No",
-                      arrangement_type: "R" } }
+                      owning_organisation_id: user.organisation.id,
+                      arrangement_type: "D" } }
         end
 
         it "creates a new scheme for user organisation with valid params and renders correct page" do
           expect { post "/schemes", params: }.to change(Scheme, :count).by(1)
           follow_redirect!
           expect(response).to have_http_status(:ok)
-          expect(page).to have_content(" What client group is this scheme intended for?")
+          expect(page).to have_content("What client group is this scheme intended for?")
         end
 
         it "creates a new scheme for user organisation with valid params" do
@@ -746,34 +762,198 @@ RSpec.describe SchemesController, type: :request do
           expect(Scheme.last.intended_stay).to eq(nil)
           expect(Scheme.last.id_to_display).to match(/S*/)
         end
+
+        context "when support services provider is selected" do
+          let(:params) do
+            { scheme: { service_name: "testy",
+                        sensitive: "1",
+                        scheme_type: "Foyer",
+                        registered_under_care_act: "No",
+                        owning_organisation_id: user.organisation.id,
+                        arrangement_type: "R" } }
+          end
+
+          it "creates a new scheme for user organisation with valid params and renders correct page" do
+            expect { post "/schemes", params: }.to change(Scheme, :count).by(1)
+            follow_redirect!
+            expect(response).to have_http_status(:ok)
+            expect(page).to have_content(" What client group is this scheme intended for?")
+          end
+
+          it "creates a new scheme for user organisation with valid params" do
+            post "/schemes", params: params
+
+            expect(Scheme.last.owning_organisation_id).to eq(user.organisation_id)
+            expect(Scheme.last.service_name).to eq("testy")
+            expect(Scheme.last.scheme_type).to eq("Foyer")
+            expect(Scheme.last.sensitive).to eq("Yes")
+            expect(Scheme.last.registered_under_care_act).to eq("No")
+            expect(Scheme.last.id).not_to eq(nil)
+            expect(Scheme.last.has_other_client_group).to eq(nil)
+            expect(Scheme.last.primary_client_group).to eq(nil)
+            expect(Scheme.last.secondary_client_group).to eq(nil)
+            expect(Scheme.last.support_type).to eq(nil)
+            expect(Scheme.last.intended_stay).to eq(nil)
+            expect(Scheme.last.id_to_display).to match(/S*/)
+          end
+        end
+
+        context "when required params are missing" do
+          let(:params) do
+            { scheme: { service_name: "",
+                        scheme_type: "",
+                        registered_under_care_act: "",
+                        arrangement_type: "" } }
+          end
+
+          it "renders the same page with error message" do
+            post "/schemes", params: params
+            expect(response).to have_http_status(:unprocessable_entity)
+            expect(page).to have_content("Create a new supported housing scheme")
+            expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.scheme_type.invalid"))
+            expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.registered_under_care_act.invalid"))
+            expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.arrangement_type.invalid"))
+            expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.service_name.invalid"))
+          end
+        end
+
+        context "when there are no stock owners" do
+          let(:params) do
+            { scheme: { service_name: "  testy ",
+                        sensitive: "1",
+                        scheme_type: "Foyer",
+                        registered_under_care_act: "No",
+                        arrangement_type: "D" } }
+          end
+
+          before do
+            user.organisation.stock_owners.destroy_all
+          end
+
+          it "infers the user's organisation" do
+            post "/schemes", params: params
+            expect(Scheme.last.owning_organisation_id).to eq(user.organisation_id)
+          end
+        end
+
+        context "when the organisation id param is included" do
+          let(:organisation) { create(:organisation) }
+          let(:params) { { scheme: { owning_organisation: organisation } } }
+
+          it "sets the owning organisation correctly" do
+            post "/schemes", params: params
+            expect(Scheme.last.owning_organisation_id).to eq(user.organisation_id)
+          end
+        end
       end
 
-      context "when required params are missing" do
+      context "when making a scheme in a parent organisation of the user's organisation" do
+        let(:parent_organisation) { create(:organisation) }
+        let!(:parent_schemes) { create_list(:scheme, 5, owning_organisation: parent_organisation) }
         let(:params) do
-          { scheme: { service_name: "",
-                      scheme_type: "",
-                      registered_under_care_act: "",
-                      arrangement_type: "" } }
+          { scheme: { service_name: "  testy ",
+                      sensitive: "1",
+                      scheme_type: "Foyer",
+                      registered_under_care_act: "No",
+                      owning_organisation_id: user.organisation.stock_owners.first.id,
+                      arrangement_type: "D" } }
         end
 
-        it "renders the same page with error message" do
-          post "/schemes", params: params
-          expect(response).to have_http_status(:unprocessable_entity)
-          expect(page).to have_content("Create a new supported housing scheme")
-          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.scheme_type.invalid"))
-          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.registered_under_care_act.invalid"))
-          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.arrangement_type.invalid"))
-          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.service_name.invalid"))
+        before do
+          create(:organisation_relationship, parent_organisation:, child_organisation: user.organisation)
+          parent_schemes.each do |scheme|
+            create(:location, scheme:)
+          end
         end
-      end
 
-      context "when the organisation id param is included" do
-        let(:organisation) { create(:organisation) }
-        let(:params) { { scheme: { owning_organisation: organisation } } }
+        it "creates a new scheme for user organisation with valid params and renders correct page" do
+          expect { post "/schemes", params: }.to change(Scheme, :count).by(1)
+          follow_redirect!
+          expect(response).to have_http_status(:ok)
+          expect(page).to have_content("What client group is this scheme intended for?")
+        end
 
-        it "sets the owning organisation correctly" do
+        it "creates a new scheme for user organisation with valid params" do
           post "/schemes", params: params
-          expect(Scheme.last.owning_organisation_id).to eq(user.organisation_id)
+
+          expect(Scheme.last.owning_organisation_id).to eq(user.organisation.stock_owners.first.id)
+          expect(Scheme.last.service_name).to eq("testy")
+          expect(Scheme.last.scheme_type).to eq("Foyer")
+          expect(Scheme.last.sensitive).to eq("Yes")
+          expect(Scheme.last.registered_under_care_act).to eq("No")
+          expect(Scheme.last.id).not_to eq(nil)
+          expect(Scheme.last.has_other_client_group).to eq(nil)
+          expect(Scheme.last.primary_client_group).to eq(nil)
+          expect(Scheme.last.secondary_client_group).to eq(nil)
+          expect(Scheme.last.support_type).to eq(nil)
+          expect(Scheme.last.intended_stay).to eq(nil)
+          expect(Scheme.last.id_to_display).to match(/S*/)
+        end
+
+        context "when support services provider is selected" do
+          let(:params) do
+            { scheme: { service_name: "testy",
+                        sensitive: "1",
+                        scheme_type: "Foyer",
+                        registered_under_care_act: "No",
+                        owning_organisation_id: user.organisation.stock_owners.first.id,
+                        arrangement_type: "R" } }
+          end
+
+          it "creates a new scheme for user organisation with valid params and renders correct page" do
+            expect { post "/schemes", params: }.to change(Scheme, :count).by(1)
+            follow_redirect!
+            expect(response).to have_http_status(:ok)
+            expect(page).to have_content(" What client group is this scheme intended for?")
+          end
+
+          it "creates a new scheme for user organisation with valid params" do
+            post "/schemes", params: params
+
+            expect(Scheme.last.owning_organisation_id).to eq(user.organisation.stock_owners.first.id)
+            expect(Scheme.last.service_name).to eq("testy")
+            expect(Scheme.last.scheme_type).to eq("Foyer")
+            expect(Scheme.last.sensitive).to eq("Yes")
+            expect(Scheme.last.registered_under_care_act).to eq("No")
+            expect(Scheme.last.id).not_to eq(nil)
+            expect(Scheme.last.has_other_client_group).to eq(nil)
+            expect(Scheme.last.primary_client_group).to eq(nil)
+            expect(Scheme.last.secondary_client_group).to eq(nil)
+            expect(Scheme.last.support_type).to eq(nil)
+            expect(Scheme.last.intended_stay).to eq(nil)
+            expect(Scheme.last.id_to_display).to match(/S*/)
+          end
+        end
+
+        context "when required params are missing" do
+          let(:params) do
+            { scheme: { service_name: "",
+                        scheme_type: "",
+                        registered_under_care_act: "",
+                        arrangement_type: "",
+                        owning_organisation_id: "" } }
+          end
+
+          it "renders the same page with error message" do
+            post "/schemes", params: params
+            expect(response).to have_http_status(:unprocessable_entity)
+            expect(page).to have_content("Create a new supported housing scheme")
+            expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.scheme_type.invalid"))
+            expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.registered_under_care_act.invalid"))
+            expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.arrangement_type.invalid"))
+            expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.owning_organisation_id.invalid"))
+            expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.service_name.invalid"))
+          end
+        end
+
+        context "when the organisation id param is included" do
+          let(:organisation) { create(:organisation) }
+          let(:params) { { scheme: { owning_organisation: organisation } } }
+
+          it "sets the owning organisation correctly" do
+            post "/schemes", params: params
+            expect(Scheme.last.owning_organisation_id).to eq(user.organisation.stock_owners.first.id)
+          end
         end
       end
     end
@@ -1813,7 +1993,7 @@ RSpec.describe SchemesController, type: :request do
           expect(response).to have_http_status(:ok)
           expect(path).to match("/schemes/#{scheme.id}")
           expect(page).to have_content(scheme.service_name)
-          assert_select "a", text: /Change/, count: 2
+          assert_select "a", text: /Change/, count: 3
         end
       end
     end
@@ -1958,7 +2138,7 @@ RSpec.describe SchemesController, type: :request do
           expect(response).to have_http_status(:ok)
           expect(path).to match("/schemes/#{scheme.id}")
           expect(page).to have_content(scheme.service_name)
-          assert_select "a", text: /Change/, count: 2
+          assert_select "a", text: /Change/, count: 3
         end
       end
     end
@@ -2016,7 +2196,20 @@ RSpec.describe SchemesController, type: :request do
         expect(response).to have_http_status(:ok)
         expect(page).to have_content("Scheme details")
         expect(page).to have_content("This scheme contains confidential information")
-        expect(page).not_to have_content("Which organisation owns the housing stock for this scheme?")
+      end
+
+      context "when there are stock owners" do
+        let(:parent_organisation) { create(:organisation) }
+
+        before do
+          create(:organisation_relationship, parent_organisation:, child_organisation: user.organisation)
+          get "/schemes/#{scheme.id}/edit-name"
+        end
+
+        it "includes the owning organisation question" do
+          expect(response).to have_http_status(:ok)
+          expect(page).to have_content("Which organisation owns the housing stock for this scheme?")
+        end
       end
 
       context "when attempting to access secondary-client-group scheme page for another organisation" do
