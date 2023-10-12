@@ -74,7 +74,7 @@ module Csv
       "prevloc_label" => "prevloc",
     }.freeze
 
-    DATE_FIELDS = %w[
+    SYSTEM_DATE_FIELDS = %w[
       created_at
       updated_at
     ].freeze
@@ -89,8 +89,8 @@ module Csv
         attribute = FIELDS_ALWAYS_EXPORTED_AS_LABELS[attribute]
         value = log.send(attribute)
         get_label(value, attribute, log)
-      elsif DATE_FIELDS.include? attribute
-        log.send(attribute)&.iso8601
+      elsif SYSTEM_DATE_FIELDS.include? attribute
+        log.public_send(attribute)&.iso8601
       elsif PERSON_DETAILS.any? { |key, _value| key == attribute } && (person_details_not_known?(log, attribute) || age_not_known?(log, attribute))
         case @export_type
         when "codes"
