@@ -11,14 +11,17 @@ class Scheme < ApplicationRecord
   scope :search_by_postcode, ->(postcode) { left_joins(:locations).where("REPLACE(locations.postcode, ' ', '') ILIKE ?", "%#{postcode.delete(' ')}%") }
   scope :search_by_location_name, ->(name) { left_joins(:locations).where("locations.name ILIKE ?", "%#{name}%") }
   scope :search_by, lambda { |param|
-                      search_by_postcode(param)
-                        .or(search_by_service_name(param))
-                        .or(search_by_location_name(param))
-                        .or(filter_by_id(param)).distinct
+                      select("schemes.*, lower(service_name) as lowercase_service_name")
+                                        .search_by_postcode(param)
+                                          .or(search_by_service_name(param))
+                                          .or(search_by_location_name(param))
+                                          .or(filter_by_id(param)).distinct
                     }
 
-  scope :order_by_completion, -> { order("schemes.confirmed ASC NULLS FIRST") }
-  scope :order_by_service_name, -> { order(service_name: :asc) }
+  scope :order_by_service_name, lambda {
+    select("schemes.*, lower(service_name) as lowercase_service_name")
+      .order("lowercase_service_name ASC")
+  }
   scope :filter_by_owning_organisation, ->(owning_organisation, _user = nil) { where(owning_organisation:) }
   scope :filter_by_status, lambda { |statuses, _user = nil|
     filtered_records = all
