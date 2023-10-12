@@ -11,6 +11,8 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
+    <%= govuk_inset_text(text: edit_location_text(@scheme, current_user)) %>
+
     <%= govuk_summary_list do |summary_list| %>
       <% display_location_attributes(@location).each do |attr| %>
         <%= summary_list.row do |row| %>
