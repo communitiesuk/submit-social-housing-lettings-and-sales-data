@@ -273,7 +273,7 @@ private
 
     required_params[:sensitive] = required_params[:sensitive].to_i if required_params[:sensitive]
 
-    if current_user.data_coordinator?
+    if current_user.data_coordinator? && current_user.organisation.stock_owners.count.zero?
       required_params[:owning_organisation_id] = current_user.organisation_id
     end
     required_params
@@ -289,10 +289,6 @@ private
     raise ActiveRecord::RecordNotFound unless @scheme
 
     @scheme
-  end
-
-  def user_allowed_action?
-    current_user.support? || current_user.organisation == @scheme&.owning_organisation || current_user.organisation.parent_organisations.exists?(@scheme&.owning_organisation_id)
   end
 
   def redirect_if_scheme_confirmed

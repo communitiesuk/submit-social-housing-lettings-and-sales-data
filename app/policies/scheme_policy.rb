@@ -12,7 +12,7 @@ class SchemePolicy
     if scheme == Scheme
       true
     else
-      user.organisation.parent_organisations.exists?(scheme&.owning_organisation_id) || scheme&.owning_organisation == user.organisation
+      scheme_owned_by_user_org_or_stock_owner
     end
   end
 
@@ -27,7 +27,7 @@ class SchemePolicy
   def update?
     return true if user.support?
 
-    user.data_coordinator? && (scheme&.owning_organisation == user.organisation)
+    user.data_coordinator? && scheme_owned_by_user_org_or_stock_owner
   end
 
   %w[
@@ -37,7 +37,7 @@ class SchemePolicy
     define_method method_name do
       return true if user.support?
 
-      user.organisation.parent_organisations.exists?(scheme&.owning_organisation_id) || scheme&.owning_organisation == user.organisation
+      scheme_owned_by_user_org_or_stock_owner
     end
   end
 
@@ -57,7 +57,13 @@ class SchemePolicy
     define_method method_name do
       return true if user.support?
 
-      user.data_coordinator? && scheme&.owning_organisation == user.organisation
+      user.data_coordinator? && scheme_owned_by_user_org_or_stock_owner
     end
+  end
+
+private
+
+  def scheme_owned_by_user_org_or_stock_owner
+    scheme&.owning_organisation == user.organisation || user.organisation.stock_owners.exists?(scheme&.owning_organisation_id)
   end
 end

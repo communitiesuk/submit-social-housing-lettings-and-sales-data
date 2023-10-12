@@ -179,7 +179,7 @@ RSpec.describe LocationsController, type: :request do
         get "/schemes/#{scheme.id}/locations"
       end
 
-      context "when coordinator attempts to see scheme belonging to a different organisation" do
+      context "when coordinator attempts to see scheme belonging to a different (and not their parent) organisation" do
         let(:another_scheme) { create(:scheme) }
 
         before do
@@ -302,8 +302,8 @@ RSpec.describe LocationsController, type: :request do
           end
         end
 
-        it "does not allow adding new locations" do
-          expect(page).not_to have_button("Add a location")
+        it "does allow adding new locations" do
+          expect(page).to have_button("Add a location")
         end
       end
     end

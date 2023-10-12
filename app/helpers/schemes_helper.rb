@@ -1,6 +1,6 @@
 module SchemesHelper
-  def display_scheme_attributes(scheme, user)
-    base_attributes = [
+  def display_scheme_attributes(scheme)
+    [
       { name: "Scheme code", value: scheme.id_to_display },
       { name: "Name", value: scheme.service_name, edit: true },
       { name: "Status", value: status_tag_from_resource(scheme) },
@@ -16,16 +16,6 @@ module SchemesHelper
       { name: "Intended length of stay", value: scheme.intended_stay },
       { name: "Availability", value: scheme_availability(scheme) },
     ]
-
-    if user.data_coordinator?
-      base_attributes.delete_if { |item| item[:name] == "Housing stock owned by" }
-    end
-
-    if scheme.has_other_client_group == "Yes"
-      base_attributes.append
-    end
-
-    base_attributes
   end
 
   def scheme_availability(scheme)
@@ -42,6 +32,17 @@ module SchemesHelper
   def toggle_scheme_link(scheme)
     return govuk_button_link_to "Deactivate this scheme", scheme_new_deactivation_path(scheme), warning: true if scheme.active? || scheme.deactivates_in_a_long_time?
     return govuk_button_link_to "Reactivate this scheme", scheme_new_reactivation_path(scheme) if scheme.deactivated?
+  end
+
+  def owning_organisation_options(current_user)
+    all_orgs = Organisation.all.map { |org| OpenStruct.new(id: org.id, name: org.name) }
+    user_org = [OpenStruct.new(id: current_user.organisation_id, name: current_user.organisation.name)]
+    stock_owners = current_user.organisation.stock_owners.map { |org| OpenStruct.new(id: org.id, name: org.name) }
+    current_user.support? ? all_orgs : user_org + stock_owners
+  end
+
+  def null_option
+    [OpenStruct.new(id: "", name: "Select an option")]
   end
 
 private
