@@ -6,6 +6,7 @@ class Form::Lettings::Questions::SchemeId < ::Form::Question
     @hint_text = "Enter scheme name or postcode"
     @type = "select"
     @answer_options = answer_options
+    @top_guidance_partial = "finding_scheme"
     @bottom_guidance_partial = "scheme_selection"
     @question_number = 9
     @inferred_answers = {
