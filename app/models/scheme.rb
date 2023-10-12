@@ -12,9 +12,9 @@ class Scheme < ApplicationRecord
   scope :search_by_location_name, ->(name) { where("schemes.id IN (SELECT DISTINCT scheme_id FROM locations WHERE locations.name ILIKE ?)", "%#{name}%") }
   scope :search_by, lambda { |param|
                       search_by_postcode(param)
-                                          .or(search_by_service_name(param))
-                                          .or(search_by_location_name(param))
-                                          .or(filter_by_id(param))
+                        .or(search_by_service_name(param))
+                        .or(search_by_location_name(param))
+                        .or(filter_by_id(param))
                     }
 
   scope :order_by_service_name, lambda {
