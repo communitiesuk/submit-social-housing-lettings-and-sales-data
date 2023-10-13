@@ -338,7 +338,7 @@ class LettingsLog < Log
   end
 
   def vacancy_reason_not_renewal_or_first_let?
-    [5, 6, 8, 9, 10, 11, 12, 13, 18, 19].include? rsnvac
+    [5, 6, 8, 9, 10, 11, 12, 13, 18, 19, 20].include? rsnvac
   end
 
   def previous_tenancy_was_temporary?
