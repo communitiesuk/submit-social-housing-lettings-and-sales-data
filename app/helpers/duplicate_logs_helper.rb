@@ -8,10 +8,12 @@ module DuplicateLogsHelper
         action: "delete_duplicates",
         "#{duplicate_log.class.name.underscore}_id": duplicate_log.id,
         original_log_id: original_log.id,
+        referrer: params[:referrer],
       )
     end
-
-    if !original_log.deleted?
+    if params[:referrer] == "duplicate_logs_banner"
+      govuk_button_link_to "Review other duplicates", duplicate_logs_path(referrer: params[:referrer])
+    elsif !original_log.deleted?
       govuk_button_link_to "Back to Log #{original_log.id}", send("#{original_log.class.name.underscore}_path", original_log)
     else
       type = duplicate_log.lettings? ? "lettings" : "sales"
@@ -25,7 +27,7 @@ module DuplicateLogsHelper
 
   def change_duplicate_logs_action_href(log, page_id, all_duplicates, original_log_id)
     first_remaining_duplicate_id = all_duplicates.map(&:id).reject { |id| id == log.id }.first
-    send("#{log.model_name.param_key}_#{page_id}_path", log, referrer: "duplicate_logs", first_remaining_duplicate_id:, original_log_id:)
+    send("#{log.model_name.param_key}_#{page_id}_path", log, referrer: params[:referrer] == "duplicate_logs_banner" ? "duplicate_logs_banner" : "duplicate_logs", first_remaining_duplicate_id:, original_log_id:)
   end
 
   def duplicates_for_user(user)

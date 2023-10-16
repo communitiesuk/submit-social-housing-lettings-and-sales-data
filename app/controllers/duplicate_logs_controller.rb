@@ -26,10 +26,8 @@ class DuplicateLogsController < ApplicationController
   end
 
   def index
-    render_not_found if @duplicates.blank?
-
     @duplicate_sets_count = @duplicates[:lettings].count + @duplicates[:sales].count
-    render_not_found if @duplicate_sets_count.zero?
+    render "duplicate_logs/no_more_duplicates" if @duplicate_sets_count.zero?
   end
 
 private
