@@ -28,6 +28,6 @@ RSpec.describe Form::Lettings::Pages::VoidDate, type: :model do
   end
 
   it "has the correct depends_on" do
-    expect(page.depends_on).to eq([{ "is_renewal?" => false, "vacancy_reason_not_renewal_or_first_let?" => true }, { "has_first_let_vacancy_reason?" => true, "is_renewal?" => false }])
+    expect(page.depends_on).to eq([{ "is_renewal?" => false }])
   end
 end
