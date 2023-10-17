@@ -580,6 +580,28 @@ RSpec.describe Validations::HouseholdValidations do
         expect(record.errors["renewal"])
           .to include(match I18n.t("validations.household.renewal_just_moved_to_area.renewal"))
       end
+
+      context "when validating layear and prevloc" do
+        it "household cannot have just moved to area if prevloc is the same as la" do
+          record.layear = 1
+          record.prevloc = "E07000084"
+          record.la = "E07000084"
+          record.startdate = Time.zone.now
+          household_validator.validate_layear_and_prevloc(record)
+          expect(record.errors["layear"])
+            .to include(match I18n.t("validations.household.same_la_just_moved_to_area.layear"))
+          expect(record.errors["prevloc"])
+            .to include(match I18n.t("validations.household.same_la_just_moved_to_area.previous_la"))
+          expect(record.errors["ppostcode_full"])
+          .to include(match I18n.t("validations.household.same_la_just_moved_to_area.previous_la"))
+          expect(record.errors["la"])
+            .to include(match I18n.t("validations.household.same_la_just_moved_to_area.current_la"))
+          expect(record.errors["postcode_full"])
+            .to include(match I18n.t("validations.household.same_la_just_moved_to_area.current_la"))
+          expect(record.errors["uprn"])
+            .to include(match I18n.t("validations.household.same_la_just_moved_to_area.current_la"))
+        end
+      end
     end
   end
 

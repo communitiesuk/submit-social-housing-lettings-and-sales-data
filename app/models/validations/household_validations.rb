@@ -116,6 +116,19 @@ module Validations::HouseholdValidations
     end
   end
 
+  def validate_layear_and_prevloc(record)
+    return unless record.layear && record.la && record.prevloc && record.collection_start_year
+
+    if record.la == record.prevloc && record.layear == 1 && record.collection_start_year >= 2023
+      record.errors.add :layear, :renewal_just_moved, message: I18n.t("validations.household.same_la_just_moved_to_area.layear")
+      record.errors.add :la, :renewal_just_moved, message: I18n.t("validations.household.same_la_just_moved_to_area.current_la")
+      record.errors.add :postcode_full, :renewal_just_moved, message: I18n.t("validations.household.same_la_just_moved_to_area.current_la")
+      record.errors.add :uprn, :renewal_just_moved, message: I18n.t("validations.household.same_la_just_moved_to_area.current_la")
+      record.errors.add :ppostcode_full, :renewal_just_moved, message: I18n.t("validations.household.same_la_just_moved_to_area.previous_la")
+      record.errors.add :prevloc, :renewal_just_moved, message: I18n.t("validations.household.same_la_just_moved_to_area.previous_la")
+    end
+  end
+
   def validate_combination_of_housing_needs_responses(record)
     if record.housingneeds == 1 && record.housingneeds_type == 3 && record.housingneeds_other&.zero?
       record.errors.add :housingneeds, I18n.t("validations.household.housingneeds.invalid")
