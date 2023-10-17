@@ -23,6 +23,10 @@
   }
 }
 
+.scheme-name-cell {
+  word-break: break-all;
+}
+
 .app-table-group:focus {
   box-shadow: 0 0 0 #{$govuk-focus-width * 2} $govuk-focus-colour;
   outline: $govuk-focus-width solid govuk-colour("black");
