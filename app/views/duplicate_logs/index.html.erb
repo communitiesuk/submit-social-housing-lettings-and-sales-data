@@ -24,7 +24,7 @@
         <% row.cell text: "Lettings" %>
         <% row.cell text: duplicate_set.map { |id| "Log #{id}" }.join(", ") %>
         <% row.cell do %>
-          <%= govuk_link_to "Review logs", lettings_log_duplicate_logs_path(duplicate_set.first, original_log_id: duplicate_set.first, referrer: params[:referrer]) %>
+          <%= govuk_link_to "Review logs", lettings_log_duplicate_logs_path(duplicate_set.first, original_log_id: duplicate_set.first, referrer: params[:referrer], organisation_id: params[:organisation_id]) %>
         <% end %>
       <% end %>
     <% end %>
@@ -33,7 +33,7 @@
         <% row.cell text: "Sales" %>
         <% row.cell text: duplicate_set.map { |id| "Log #{id}" }.join(", ") %>
         <% row.cell do %>
-          <%= govuk_link_to "Review logs", sales_log_duplicate_logs_path(duplicate_set.first, original_log_id: duplicate_set.first, referrer: params[:referrer]) %>
+          <%= govuk_link_to "Review logs", sales_log_duplicate_logs_path(duplicate_set.first, original_log_id: duplicate_set.first, referrer: params[:referrer], organisation_id: params[:organisation_id]) %>
         <% end %>
       <% end %>
     <% end %>
