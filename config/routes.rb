@@ -104,6 +104,7 @@ Rails.application.routes.draw do
       patch "reactivate", to: "locations#reactivate"
     end
   end
+  get "scheme-changes", to: "schemes#changes"
 
   resources :duplicate_logs, only: [:index], path: "/duplicate-logs"
 

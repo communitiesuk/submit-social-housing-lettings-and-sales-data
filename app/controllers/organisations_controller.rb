@@ -200,6 +200,10 @@ class OrganisationsController < ApplicationController
     redirect_to details_organisation_path(@organisation)
   end
 
+  def changes
+    render "schemes/changes"
+  end
+
 private
 
   def filter_type

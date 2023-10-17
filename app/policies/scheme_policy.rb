@@ -30,6 +30,10 @@ class SchemePolicy
     user.data_coordinator? && scheme_owned_by_user_org_or_stock_owner
   end
 
+  def changes?
+    true
+  end
+
   %w[
     show?
     check_answers?

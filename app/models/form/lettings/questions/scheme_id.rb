@@ -3,11 +3,11 @@ class Form::Lettings::Questions::SchemeId < ::Form::Question
     super("scheme_id", hsh, page)
     @check_answer_label = "Scheme name"
     @header = "What scheme is this log for?"
-    @hint_text = "Enter scheme name or postcode"
+    @hint_text = "Enter postcode or scheme name"
     @type = "select"
     @answer_options = answer_options
-    @guidance_position = GuidancePosition::BOTTOM
-    @guidance_partial = "scheme_selection"
+    @top_guidance_partial = "finding_scheme"
+    @bottom_guidance_partial = "scheme_selection"
     @question_number = 9
     @inferred_answers = {
       "location.name": {

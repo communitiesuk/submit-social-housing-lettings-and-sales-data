@@ -1,7 +1,8 @@
-<%= render partial: "form/guidance/#{question.guidance_partial}" if question.top_guidance? %>
 
 <% selected = @log.public_send(question.id) || "" %>
 <% answers = question.displayed_answer_options(@log, current_user).map { |key, value| OpenStruct.new(id: key, name: value.respond_to?(:service_name) ? value.service_name : nil, resource: value) } %>
+<%= render partial: "form/guidance/#{question.top_guidance_partial}" if question.top_guidance? %>
+
 <%= f.govuk_select(question.id.to_sym,
   label: legend(question, page_header, conditional),
   "data-controller": "accessible-autocomplete",
@@ -17,4 +18,4 @@
     <% end %>
   <% end %>
 
-<%= render partial: "form/guidance/#{question.guidance_partial}" if question.bottom_guidance? %>
+<%= render partial: "form/guidance/#{question.bottom_guidance_partial}" if question.bottom_guidance? %>
