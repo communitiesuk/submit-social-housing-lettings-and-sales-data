@@ -22,8 +22,8 @@
           <% row.key { attr[:name] } %>
           <% row.value do %>
             <%= details_html(attr) %>
-            <% if attr[:name] == "Status" && @scheme.confirmed? && @scheme.locations.confirmed.none? %>
-              <span class="app-!-colour-muted">Add a location to complete this scheme</span>
+            <% if attr[:name] == "Status" && @scheme.confirmed? && @scheme.locations.confirmed.none? && LocationPolicy.new(current_user, @scheme.locations.new).create? %>
+              <span class="app-!-colour-muted">Complete this scheme by adding a location using the <%= govuk_link_to("‘locations’ tab", scheme_locations_path(@scheme)) %>.</span>
             <% end %>
           <% end %>
           <% if SchemePolicy.new(current_user, @scheme).update? %>

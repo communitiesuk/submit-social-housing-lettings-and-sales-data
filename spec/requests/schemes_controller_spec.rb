@@ -603,7 +603,8 @@ RSpec.describe SchemesController, type: :request do
         it "shows the scheme as incomplete with text to explain" do
           get scheme_path(specific_scheme)
           expect(page).to have_content "Incomplete"
-          expect(page).to have_content "Add a location to complete this scheme"
+          expect(page).to have_content "Complete this scheme by adding a location using the"
+          expect(page).to have_link "‘locations’ tab"
         end
       end
 
@@ -612,7 +613,8 @@ RSpec.describe SchemesController, type: :request do
           create(:location, scheme: specific_scheme)
           get scheme_path(specific_scheme)
           expect(page).to have_content "Active"
-          expect(page).not_to have_content "Add a location to complete this scheme"
+          expect(page).not_to have_content "Complete this scheme by adding a location using the"
+          expect(page).not_to have_link "‘locations’ tab"
         end
       end
     end
