@@ -323,9 +323,9 @@ RSpec.describe DuplicateLogsController, type: :request do
     context "when the user is support" do
       let(:user) { create(:user, :support) }
 
-      it "renders not found" do
+      it "returns 200 status" do
         get duplicate_logs_path(organisation_id: user.organisation.id)
-        expect(response).to have_http_status(:not_found)
+        expect(response).to have_http_status(:ok)
       end
     end
 
