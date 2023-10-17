@@ -203,6 +203,9 @@ module Exports
       attribute_hash["created_by"] = lettings_log.created_by&.email
       attribute_hash["amended_by"] = lettings_log.updated_by&.email
 
+      attribute_hash["la"] = lettings_log.la
+      attribute_hash["postcode_full"] = lettings_log.postcode_full
+
       # Supported housing fields
       if lettings_log.is_supported_housing?
         attribute_hash["unittype_sh"] = lettings_log.unittype_sh

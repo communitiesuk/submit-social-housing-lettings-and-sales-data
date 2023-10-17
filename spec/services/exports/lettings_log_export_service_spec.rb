@@ -425,6 +425,9 @@ RSpec.describe Exports::LettingsLogExportService do
     let(:lettings_log) { FactoryBot.create(:lettings_log, :completed, :export, :sh, scheme:, location:, created_by: user, updated_by: other_user, owning_organisation: organisation, startdate: Time.zone.local(2022, 2, 2, 10, 36, 49), voiddate: Time.zone.local(2019, 11, 3), mrcdate: Time.zone.local(2020, 5, 5, 10, 36, 49), underoccupation_benefitcap: 4, sheltered: 1) }
 
     before do
+      lettings_log.postcode_full = nil
+      lettings_log.la = nil
+      lettings_log.save!(validate: false)
       FactoryBot.create(:location, scheme:, startdate: Time.zone.local(2021, 4, 1), units: nil)
     end
 
