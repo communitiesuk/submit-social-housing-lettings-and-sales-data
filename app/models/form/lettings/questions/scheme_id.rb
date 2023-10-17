@@ -3,7 +3,7 @@ class Form::Lettings::Questions::SchemeId < ::Form::Question
     super("scheme_id", hsh, page)
     @check_answer_label = "Scheme name"
     @header = "What scheme is this log for?"
-    @hint_text = "Enter scheme name or postcode"
+    @hint_text = "Enter postcode or scheme name"
     @type = "select"
     @answer_options = answer_options
     @top_guidance_partial = "finding_scheme"

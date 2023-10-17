@@ -28,7 +28,7 @@ RSpec.describe Form::Lettings::Questions::SchemeId, type: :model do
   end
 
   it "has the correct hint_text" do
-    expect(question.hint_text).to eq("Enter scheme name or postcode")
+    expect(question.hint_text).to eq("Enter postcode or scheme name")
   end
 
   it "has the correct conditional_for" do

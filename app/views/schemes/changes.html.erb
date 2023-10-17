@@ -1,3 +1,7 @@
+<% content_for :before_content do %>
+  <%= govuk_back_link(href: :back) %>
+<% end %>
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
     <h1 class="govuk-heading-l">Schemes and locations</h1>
@@ -24,6 +28,6 @@
     <p class="govuk-body">If you upload logs in bulk, you can use either the new or old scheme codes in your template.</p>
     <h2 class="govuk-heading-m">If you can’t find a scheme</h2>
     <p class="govuk-body">You should be able to recognise a scheme migrated from old CORE by viewing its details or locations. Try searching for it by postcode.</p>
-    <p class="govuk-body">If you still can’t find a scheme that was migrated from old CORE, either create a new one if you know the details, or <%= govuk_link_to("contact the service desk", "https://dluhcdigital.atlassian.net/servicedesk/customer/portal/6/group/11", rel: "noreferrer noopener", target: "_blank") %> to report the problem. Only data coordinators can create and edit schemes.</p>
+    <p class="govuk-body">If you still can’t find a scheme that was migrated from old CORE, either create a new one if you know the details, or <%= govuk_link_to("contact the helpdesk", "https://dluhcdigital.atlassian.net/servicedesk/customer/portal/6/group/11", rel: "noreferrer noopener", target: "_blank") %> to report the problem. Only data coordinators can create and edit schemes.</p>
   </div>
 </div>
