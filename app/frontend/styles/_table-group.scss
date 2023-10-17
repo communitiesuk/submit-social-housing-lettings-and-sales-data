@@ -9,11 +9,6 @@
     margin-bottom: -1px;
   }
 
-  .govuk-table__header,
-  .govuk-table__cell {
-    white-space: nowrap;
-  }
-
   &::-webkit-scrollbar {
     height: govuk-spacing(1);
     width: govuk-spacing(1);
@@ -26,6 +21,10 @@
   &::-webkit-scrollbar-track {
     background: govuk-colour("light-grey");
   }
+}
+
+.scheme-name-cell {
+  word-break: break-all;
 }
 
 .app-table-group:focus {

@@ -5,8 +5,9 @@
       <% end %>
     <%= table.head do |head| %>
       <%= head.row do |row| %>
-        <% row.cell(header: true, text: "Scheme", html_attributes: { scope: "col" }) %>
-        <% row.cell(header: true, text: "Code", html_attributes: { scope: "col" }) %>
+        <% row.cell(header: true, text: "Scheme", html_attributes: { scope: "col", class: "govuk-!-width-one-quarter" }) %>
+        <% row.cell(header: true, text: "Stock owner", html_attributes: { scope: "col" }) %>
+        <% row.cell(header: true, text: "Scheme code", html_attributes: { scope: "col" }) %>
         <% row.cell(header: true, text: "Locations", html_attributes: { scope: "col" }) %>
         <% row.cell(header: true, text: "Status", html_attributes: { scope: "col" }) %>
       <% end %>
@@ -14,7 +15,8 @@
     <% @schemes.each do |scheme| %>
       <%= table.body do |body| %>
         <%= body.row do |row| %>
-          <% row.cell(text: simple_format(scheme_cell(scheme), { class: "govuk-!-font-weight-bold" }, wrapper_tag: "div")) %>
+          <% row.cell(text: simple_format(scheme_cell(scheme), { class: "govuk-!-font-weight-bold scheme-name-cell" }, wrapper_tag: "div")) %>
+          <% row.cell(text: scheme.owning_organisation&.name) %>
           <% row.cell(text: scheme.id_to_display) %>
           <% row.cell(text: scheme.locations&.count) %>
           <% row.cell(text: status_tag_from_resource(scheme)) %>
