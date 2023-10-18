@@ -13,7 +13,7 @@ module DuplicateLogsHelper
       )
     end
     if params[:referrer] == "duplicate_logs_banner"
-      current_user.support? ? govuk_button_link_to("Review other duplicates", organisation_duplicates_path(organisation_id: params[:organisation_id] , referrer: params[:referrer])) : govuk_button_link_to("Review other duplicates", duplicate_logs_path(referrer: params[:referrer]))
+      current_user.support? ? govuk_button_link_to("Review other duplicates", organisation_duplicates_path(organisation_id: params[:organisation_id], referrer: params[:referrer])) : govuk_button_link_to("Review other duplicates", duplicate_logs_path(referrer: params[:referrer]))
     elsif !original_log.deleted?
       govuk_button_link_to "Back to Log #{original_log.id}", send("#{original_log.class.name.underscore}_path", original_log)
     else
