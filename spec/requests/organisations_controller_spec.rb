@@ -129,6 +129,7 @@ RSpec.describe OrganisationsController, type: :request do
           schemes[2].update!(service_name: "baa", owning_organisation: user.organisation)
           schemes[3].update!(service_name: "Faa", owning_organisation: user.organisation)
           schemes[4].update!(service_name: "Caa", owning_organisation: user.organisation)
+          same_org_scheme.update!(service_name: "zzz", owning_organisation: user.organisation)
           get "/organisations/#{organisation.id}/schemes", headers:, params: {}
           all_links = page.all(".govuk-link")
           scheme_links = all_links.select { |link| link[:href] =~ %r{^/schemes/\d+$} }
@@ -138,6 +139,7 @@ RSpec.describe OrganisationsController, type: :request do
           expect(scheme_links[2][:href]).to eq("/schemes/#{schemes[4].id}")
           expect(scheme_links[3][:href]).to eq("/schemes/#{schemes[1].id}")
           expect(scheme_links[4][:href]).to eq("/schemes/#{schemes[3].id}")
+          expect(scheme_links[5][:href]).to eq("/schemes/#{same_org_scheme.id}")
         end
 
         context "with schemes that are not in scope for the user, i.e. that they do not belong to" do
