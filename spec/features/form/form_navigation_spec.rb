@@ -176,4 +176,18 @@ RSpec.describe "Form Navigation" do
       end
     end
   end
+
+  describe "fixing duplicate logs" do
+    it "shows a correct cancel link" do
+      visit("lettings-logs/#{id}/tenant-code-test?first_remaining_duplicate_id=x&original_log_id=#{id}&referrer=duplicate_logs")
+      click_link(text: "Cancel")
+      expect(page).to have_current_path("/lettings-logs/#{id}/duplicate-logs?original_log_id=#{id}")
+    end
+
+    it "shows a correct Save Changes buttons" do
+      visit("lettings-logs/#{id}/tenant-code-test?first_remaining_duplicate_id=#{id}&original_log_id=#{id}&referrer=duplicate_logs")
+      click_button(text: "Save changes")
+      expect(page).to have_current_path("/lettings-logs/#{id}/duplicate-logs?original_log_id=#{id}")
+    end
+  end
 end
