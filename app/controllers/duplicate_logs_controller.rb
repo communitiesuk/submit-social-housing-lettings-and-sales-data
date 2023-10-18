@@ -64,7 +64,8 @@ private
       ["owning_organisation_id",
        "startdate",
        "tenancycode",
-       "postcode_full",
+       @log.form.start_date.year < 2023 || @log.uprn.blank? ? "postcode_full" : nil,
+       @log.form.start_date.year >= 2023 && @log.uprn.present? ? "uprn" : nil,
        "scheme_id",
        "location_id",
        "age1",
@@ -74,7 +75,14 @@ private
        "tcharge",
        @log.is_carehome? ? "chcharge" : nil].compact
     else
-      %w[owning_organisation_id saledate purchid age1 sex1 ecstat1 postcode_full]
+      ["owning_organisation_id",
+       "saledate",
+       "purchid",
+       "age1",
+       "sex1",
+       "ecstat1",
+       @log.form.start_date.year < 2023 || @log.uprn.blank? ? "postcode_full" : nil,
+       @log.form.start_date.year >= 2023 && @log.uprn.present? ? "uprn" : nil].compact
     end
   end
 
