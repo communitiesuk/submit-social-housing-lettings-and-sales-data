@@ -222,7 +222,6 @@ RSpec.describe DuplicateLogsController, type: :request do
             end
           end
         end
-
       end
 
       context "when user is a data provider" do
@@ -295,6 +294,7 @@ RSpec.describe DuplicateLogsController, type: :request do
                 expect(page).to have_content("This log had the same answers but it is no longer a duplicate. Make sure the answers are correct.")
               end
             end
+
             context "when accessed from the single log submission flow" do
               before do
                 allow(LettingsLog).to receive(:duplicate_logs).and_return(LettingsLog.none)
