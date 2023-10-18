@@ -590,30 +590,50 @@ RSpec.describe DuplicateLogsController, type: :request do
       end
 
       describe "viewing the page" do
-        before do
-          get organisation_duplicates_path(organisation_id: user.organisation_id)
+        context "when there are duplicate logs" do
+          before do
+            get organisation_duplicates_path(organisation_id: user.organisation_id)
+          end
+
+          it "has the correct headers" do
+            expect(page).to have_content("Type of logs")
+            expect(page).to have_content("Log IDs")
+          end
+
+          it "has the correct number of rows for each log type" do
+            expect(page).to have_selector("tbody tr td", text: "Lettings", count: 2)
+            expect(page).to have_selector("tbody tr td", text: "Sales", count: 1)
+          end
+
+          it "shows the log ids for each set of duplicates" do
+            expect(page).to have_content("Log 1, Log 2")
+            expect(page).to have_content("Log 3, Log 4, Log 5")
+            expect(page).to have_content("Log 11, Log 12")
+          end
+
+          it "shows links for each set of duplicates" do
+            expect(page).to have_link("Review logs", href: lettings_log_duplicate_logs_path(1, original_log_id: 1, organisation_id: user.organisation_id))
+            expect(page).to have_link("Review logs", href: lettings_log_duplicate_logs_path(3, original_log_id: 3, organisation_id: user.organisation_id))
+            expect(page).to have_link("Review logs", href: sales_log_duplicate_logs_path(11, original_log_id: 11, organisation_id: user.organisation_id))
+          end
         end
 
-        it "has the correct headers" do
-          expect(page).to have_content("Type of logs")
-          expect(page).to have_content("Log IDs")
-        end
+        context "when there are no duplicate logs" do
+          before do
+            allow(Organisation).to receive(:find).with(user.organisation_id.to_s).and_return(user.organisation)
+            allow(user.organisation).to receive(:duplicate_lettings_logs_sets).and_return([])
+            allow(user.organisation).to receive(:duplicate_sales_logs_sets).and_return([])
+            get organisation_duplicates_path(organisation_id: user.organisation_id)
+          end
 
-        it "has the correct number of rows for each log type" do
-          expect(page).to have_selector("tbody tr td", text: "Lettings", count: 2)
-          expect(page).to have_selector("tbody tr td", text: "Sales", count: 1)
-        end
+          it "has the correct headers" do
+            expect(page).to have_content("There are no more duplicate logs")
+            expect(page).to have_content("You have either changed or deleted all the duplicate logs.")
+          end
 
-        it "shows the log ids for each set of duplicates" do
-          expect(page).to have_content("Log 1, Log 2")
-          expect(page).to have_content("Log 3, Log 4, Log 5")
-          expect(page).to have_content("Log 11, Log 12")
-        end
-
-        it "shows links for each set of duplicates" do
-          expect(page).to have_link("Review logs", href: lettings_log_duplicate_logs_path(1, original_log_id: 1, organisation_id: user.organisation_id))
-          expect(page).to have_link("Review logs", href: lettings_log_duplicate_logs_path(3, original_log_id: 3, organisation_id: user.organisation_id))
-          expect(page).to have_link("Review logs", href: sales_log_duplicate_logs_path(11, original_log_id: 11, organisation_id: user.organisation_id))
+          it "shows back to all logs button" do
+            expect(page).to have_link("Back to all logs", href: lettings_logs_path)
+          end
         end
       end
     end
@@ -648,30 +668,49 @@ RSpec.describe DuplicateLogsController, type: :request do
       end
 
       describe "viewing the page" do
-        before do
-          get duplicate_logs_path
+        context "when there are duplicate logs" do
+          before do
+            get duplicate_logs_path
+          end
+
+          it "has the correct headers" do
+            expect(page).to have_content("Type of logs")
+            expect(page).to have_content("Log IDs")
+          end
+
+          it "has the correct number of rows for each log type" do
+            expect(page).to have_selector("tbody tr td", text: "Lettings", count: 2)
+            expect(page).to have_selector("tbody tr td", text: "Sales", count: 1)
+          end
+
+          it "shows the log ids for each set of duplicates" do
+            expect(page).to have_content("Log 1, Log 2")
+            expect(page).to have_content("Log 3, Log 4, Log 5")
+            expect(page).to have_content("Log 11, Log 12")
+          end
+
+          it "shows links for each set of duplicates" do
+            expect(page).to have_link("Review logs", href: lettings_log_duplicate_logs_path(1, original_log_id: 1))
+            expect(page).to have_link("Review logs", href: lettings_log_duplicate_logs_path(3, original_log_id: 3))
+            expect(page).to have_link("Review logs", href: sales_log_duplicate_logs_path(11, original_log_id: 11))
+          end
         end
 
-        it "has the correct headers" do
-          expect(page).to have_content("Type of logs")
-          expect(page).to have_content("Log IDs")
-        end
+        context "when there are no duplicate logs" do
+          before do
+            allow(user).to receive(:duplicate_lettings_logs_sets).and_return([])
+            allow(user).to receive(:duplicate_sales_logs_sets).and_return([])
+            get duplicate_logs_path
+          end
 
-        it "has the correct number of rows for each log type" do
-          expect(page).to have_selector("tbody tr td", text: "Lettings", count: 2)
-          expect(page).to have_selector("tbody tr td", text: "Sales", count: 1)
-        end
+          it "has the correct headers" do
+            expect(page).to have_content("There are no more duplicate logs")
+            expect(page).to have_content("You have either changed or deleted all the duplicate logs.")
+          end
 
-        it "shows the log ids for each set of duplicates" do
-          expect(page).to have_content("Log 1, Log 2")
-          expect(page).to have_content("Log 3, Log 4, Log 5")
-          expect(page).to have_content("Log 11, Log 12")
-        end
-
-        it "shows links for each set of duplicates" do
-          expect(page).to have_link("Review logs", href: lettings_log_duplicate_logs_path(1, original_log_id: 1))
-          expect(page).to have_link("Review logs", href: lettings_log_duplicate_logs_path(3, original_log_id: 3))
-          expect(page).to have_link("Review logs", href: sales_log_duplicate_logs_path(11, original_log_id: 11))
+          it "shows back to all logs button" do
+            expect(page).to have_link("Back to all logs", href: lettings_logs_path)
+          end
         end
       end
     end
