@@ -193,6 +193,19 @@ FactoryBot.define do
     trait :imported do
       old_id { Random.hex }
     end
+    trait :with_illness_without_type do
+      illness { 1 }
+      illness_type_1 { false }
+      illness_type_2 { false }
+      illness_type_3 { false }
+      illness_type_4 { false }
+      illness_type_5 { false }
+      illness_type_6 { false }
+      illness_type_7 { false }
+      illness_type_8 { false }
+      illness_type_9 { false }
+      illness_type_10 { false }
+    end
     created_at { Time.zone.today }
     updated_at { Time.zone.today }
   end
