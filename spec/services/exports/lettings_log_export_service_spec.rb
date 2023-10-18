@@ -33,7 +33,8 @@ RSpec.describe Exports::LettingsLogExportService do
   end
 
   before do
-    Timecop.travel(start_time)
+    Timecop.freeze(start_time)
+    Singleton.__init__(FormHandler)
     allow(storage_service).to receive(:write_file)
 
     # Stub the form handler to use the real form
