@@ -418,10 +418,9 @@ RSpec.describe DuplicateLogsController, type: :request do
     end
   end
 
-  describe "GET sales delete-duplicates" do
-    let(:headers) { { "Accept" => "text/html" } }
-    let(:id) { sales_log.id }
-    let(:request) { get "/sales-logs/#{id}/delete-duplicates?original_log_id=#{id}" }
+  describe "GET lettings delete-duplicates" do
+    let(:id) { lettings_log.id }
+    let(:request) { get "/lettings-logs/#{id}/delete-duplicates?original_log_id=#{id}" }
 
     before do
       allow(user).to receive(:need_two_factor_authentication?).and_return(false)
@@ -429,43 +428,85 @@ RSpec.describe DuplicateLogsController, type: :request do
     end
 
     context "when there are no duplicate logs" do
-      it "renders not found" do
+      it "renders page not found" do
         request
         expect(response).to have_http_status(:not_found)
       end
     end
 
-    context "when there is 1 duplicate log being deleted" do
-      let!(:duplicate_log) { create(:sales_log, :duplicate, created_by: user) }
+    context "when accessed from the duplicate logs banner flow" do
+      let(:request) { get "/lettings-logs/#{id}/delete-duplicates?original_log_id=#{id}&referrer=duplicate_logs_banner" }
 
-      it "renders page" do
-        request
-        expect(response).to have_http_status(:ok)
+      context "when there is 1 duplicate log being deleted" do
+        let!(:duplicate_log) { create(:lettings_log, :duplicate, created_by: user) }
 
-        expect(page).to have_content("Are you sure you want to delete this duplicate log?")
-        expect(page).to have_button(text: "Delete this log")
-        expect(page).to have_link(text: "Log #{duplicate_log.id}", href: sales_log_path(duplicate_log.id))
-        expect(page).not_to have_link(text: "Log #{id}", href: sales_log_path(id))
-        expect(page).to have_link(text: "Cancel", href: sales_log_duplicate_logs_path(id, original_log_id: id))
-        expect(page).to have_link(text: "Back", href: sales_log_duplicate_logs_path(id, original_log_id: id))
+        it "renders page with correct link params" do
+          request
+          expect(response).to have_http_status(:ok)
+
+          expect(page).to have_content("Are you sure you want to delete this duplicate log?")
+          expect(page).to have_content("This log will be deleted:")
+          expect(page).to have_button(text: "Delete this log")
+          expect(page).to have_link(text: "Log #{duplicate_log.id}", href: lettings_log_path(duplicate_log.id))
+          expect(page).not_to have_link(text: "Log #{id}", href: lettings_log_path(id))
+          expect(page).to have_link(text: "Cancel", href: lettings_log_duplicate_logs_path(id, original_log_id: id, referrer: "duplicate_logs_banner"))
+          expect(page).to have_link(text: "Back", href: lettings_log_duplicate_logs_path(id, original_log_id: id, referrer: "duplicate_logs_banner"))
+        end
+      end
+
+      context "when there are multiple duplicate logs being deleted" do
+        let!(:duplicate_log) { create(:lettings_log, :duplicate, created_by: user) }
+        let!(:duplicate_log_2) { create(:lettings_log, :duplicate, created_by: user) }
+
+        it "renders page with correct link params" do
+          request
+          expect(response).to have_http_status(:ok)
+
+          expect(page).to have_content("Are you sure you want to delete these duplicate logs?")
+          expect(page).to have_content("These logs will be deleted:")
+          expect(page).to have_button(text: "Delete these logs")
+          expect(page).to have_link(text: "Log #{duplicate_log.id}", href: lettings_log_path(duplicate_log.id))
+          expect(page).to have_link(text: "Log #{duplicate_log_2.id}", href: lettings_log_path(duplicate_log_2.id))
+          expect(page).to have_link(text: "Cancel", href: lettings_log_duplicate_logs_path(id, original_log_id: id, referrer: "duplicate_logs_banner"))
+          expect(page).to have_link(text: "Back", href: lettings_log_duplicate_logs_path(id, original_log_id: id, referrer: "duplicate_logs_banner"))
+        end
       end
     end
 
-    context "when there are multiple duplicate logs being deleted" do
-      let!(:duplicate_log) { create(:sales_log, :duplicate, created_by: user) }
-      let!(:duplicate_log_2) { create(:sales_log, :duplicate, created_by: user) }
+    context "when accessed from the single log submission flow" do
+      context "when there is 1 duplicate log being deleted" do
+        let!(:duplicate_log) { create(:lettings_log, :duplicate, created_by: user) }
 
-      it "renders page" do
-        request
-        expect(response).to have_http_status(:ok)
+        it "renders page" do
+          request
+          expect(response).to have_http_status(:ok)
 
-        expect(page).to have_content("Are you sure you want to delete these duplicate logs?")
-        expect(page).to have_content("These logs will be deleted:")
-        expect(page).to have_button(text: "Delete these logs")
-        expect(page).to have_link(text: "Log #{duplicate_log.id}", href: sales_log_path(duplicate_log.id))
-        expect(page).to have_link(text: "Log #{duplicate_log_2.id}", href: sales_log_path(duplicate_log_2.id))
-        expect(page).to have_link(text: "Cancel", href: sales_log_duplicate_logs_path(id, original_log_id: id))
-        expect(page).to have_link(text: "Back", href: sales_log_duplicate_logs_path(id, original_log_id: id))
+          expect(page).to have_content("Are you sure you want to delete this duplicate log?")
+          expect(page).to have_content("This log will be deleted:")
+          expect(page).to have_button(text: "Delete this log")
+          expect(page).to have_link(text: "Log #{duplicate_log.id}", href: lettings_log_path(duplicate_log.id))
+          expect(page).not_to have_link(text: "Log #{id}", href: lettings_log_path(id))
+          expect(page).to have_link(text: "Cancel", href: lettings_log_duplicate_logs_path(id, original_log_id: id))
+          expect(page).to have_link(text: "Back", href: lettings_log_duplicate_logs_path(id, original_log_id: id))
+        end
+      end
+
+      context "when there are multiple duplicate logs being deleted" do
+        let!(:duplicate_log) { create(:lettings_log, :duplicate, created_by: user) }
+        let!(:duplicate_log_2) { create(:lettings_log, :duplicate, created_by: user) }
+
+        it "renders page" do
+          request
+          expect(response).to have_http_status(:ok)
+
+          expect(page).to have_content("Are you sure you want to delete these duplicate logs?")
+          expect(page).to have_content("These logs will be deleted:")
+          expect(page).to have_button(text: "Delete these logs")
+          expect(page).to have_link(text: "Log #{duplicate_log.id}", href: lettings_log_path(duplicate_log.id))
+          expect(page).to have_link(text: "Log #{duplicate_log_2.id}", href: lettings_log_path(duplicate_log_2.id))
+          expect(page).to have_link(text: "Cancel", href: lettings_log_duplicate_logs_path(id, original_log_id: id))
+          expect(page).to have_link(text: "Back", href: lettings_log_duplicate_logs_path(id, original_log_id: id))
+        end
       end
     end
 
@@ -493,9 +534,10 @@ RSpec.describe DuplicateLogsController, type: :request do
     end
   end
 
-  describe "GET lettings delete-duplicates" do
-    let(:id) { lettings_log.id }
-    let(:request) { get "/lettings-logs/#{id}/delete-duplicates?original_log_id=#{id}" }
+  describe "GET sales delete-duplicates" do
+    let(:headers) { { "Accept" => "text/html" } }
+    let(:id) { sales_log.id }
+    let(:request) { get "/sales-logs/#{id}/delete-duplicates?original_log_id=#{id}" }
 
     before do
       allow(user).to receive(:need_two_factor_authentication?).and_return(false)
@@ -503,44 +545,85 @@ RSpec.describe DuplicateLogsController, type: :request do
     end
 
     context "when there are no duplicate logs" do
-      it "renders page not found" do
+      it "renders not found" do
         request
         expect(response).to have_http_status(:not_found)
       end
     end
 
-    context "when there is 1 duplicate log being deleted" do
-      let!(:duplicate_log) { create(:lettings_log, :duplicate, created_by: user) }
+    context "when accessed from the duplicate logs banner flow" do
+      let(:request) { get "/sales-logs/#{id}/delete-duplicates?original_log_id=#{id}&referrer=duplicate_logs_banner" }
 
-      it "renders page" do
-        request
-        expect(response).to have_http_status(:ok)
+      context "when there is 1 duplicate log being deleted" do
+        let!(:duplicate_log) { create(:sales_log, :duplicate, created_by: user) }
 
-        expect(page).to have_content("Are you sure you want to delete this duplicate log?")
-        expect(page).to have_content("This log will be deleted:")
-        expect(page).to have_button(text: "Delete this log")
-        expect(page).to have_link(text: "Log #{duplicate_log.id}", href: lettings_log_path(duplicate_log.id))
-        expect(page).not_to have_link(text: "Log #{id}", href: lettings_log_path(id))
-        expect(page).to have_link(text: "Cancel", href: lettings_log_duplicate_logs_path(id, original_log_id: id))
-        expect(page).to have_link(text: "Back", href: lettings_log_duplicate_logs_path(id, original_log_id: id))
+        it "renders page with correct link params" do
+          request
+          expect(response).to have_http_status(:ok)
+
+          expect(page).to have_content("Are you sure you want to delete this duplicate log?")
+          expect(page).to have_content("This log will be deleted:")
+          expect(page).to have_button(text: "Delete this log")
+          expect(page).to have_link(text: "Log #{duplicate_log.id}", href: sales_log_path(duplicate_log.id))
+          expect(page).not_to have_link(text: "Log #{id}", href: sales_log_path(id))
+          expect(page).to have_link(text: "Cancel", href: sales_log_duplicate_logs_path(id, original_log_id: id, referrer: "duplicate_logs_banner"))
+          expect(page).to have_link(text: "Back", href: sales_log_duplicate_logs_path(id, original_log_id: id, referrer: "duplicate_logs_banner"))
+        end
+      end
+
+      context "when there are multiple duplicate logs being deleted" do
+        let!(:duplicate_log) { create(:sales_log, :duplicate, created_by: user) }
+        let!(:duplicate_log_2) { create(:sales_log, :duplicate, created_by: user) }
+
+        it "renders page with correct link params" do
+          request
+          expect(response).to have_http_status(:ok)
+
+          expect(page).to have_content("Are you sure you want to delete these duplicate logs?")
+          expect(page).to have_content("These logs will be deleted:")
+          expect(page).to have_button(text: "Delete these logs")
+          expect(page).to have_link(text: "Log #{duplicate_log.id}", href: sales_log_path(duplicate_log.id))
+          expect(page).to have_link(text: "Log #{duplicate_log_2.id}", href: sales_log_path(duplicate_log_2.id))
+          expect(page).to have_link(text: "Cancel", href: sales_log_duplicate_logs_path(id, original_log_id: id, referrer: "duplicate_logs_banner"))
+          expect(page).to have_link(text: "Back", href: sales_log_duplicate_logs_path(id, original_log_id: id, referrer: "duplicate_logs_banner"))
+        end
       end
     end
 
-    context "when there are multiple duplicate logs being deleted" do
-      let!(:duplicate_log) { create(:lettings_log, :duplicate, created_by: user) }
-      let!(:duplicate_log_2) { create(:lettings_log, :duplicate, created_by: user) }
+    context "when accessed from the single log submission flow" do
+      context "when there is 1 duplicate log being deleted" do
+        let!(:duplicate_log) { create(:sales_log, :duplicate, created_by: user) }
 
-      it "renders page" do
-        request
-        expect(response).to have_http_status(:ok)
+        it "renders page" do
+          request
+          expect(response).to have_http_status(:ok)
 
-        expect(page).to have_content("Are you sure you want to delete these duplicate logs?")
-        expect(page).to have_content("These logs will be deleted:")
-        expect(page).to have_button(text: "Delete these logs")
-        expect(page).to have_link(text: "Log #{duplicate_log.id}", href: lettings_log_path(duplicate_log.id))
-        expect(page).to have_link(text: "Log #{duplicate_log_2.id}", href: lettings_log_path(duplicate_log_2.id))
-        expect(page).to have_link(text: "Cancel", href: lettings_log_duplicate_logs_path(id, original_log_id: id))
-        expect(page).to have_link(text: "Back", href: lettings_log_duplicate_logs_path(id, original_log_id: id))
+          expect(page).to have_content("Are you sure you want to delete this duplicate log?")
+          expect(page).to have_content("This log will be deleted:")
+          expect(page).to have_button(text: "Delete this log")
+          expect(page).to have_link(text: "Log #{duplicate_log.id}", href: sales_log_path(duplicate_log.id))
+          expect(page).not_to have_link(text: "Log #{id}", href: sales_log_path(id))
+          expect(page).to have_link(text: "Cancel", href: sales_log_duplicate_logs_path(id, original_log_id: id))
+          expect(page).to have_link(text: "Back", href: sales_log_duplicate_logs_path(id, original_log_id: id))
+        end
+      end
+
+      context "when there are multiple duplicate logs being deleted" do
+        let!(:duplicate_log) { create(:sales_log, :duplicate, created_by: user) }
+        let!(:duplicate_log_2) { create(:sales_log, :duplicate, created_by: user) }
+
+        it "renders page" do
+          request
+          expect(response).to have_http_status(:ok)
+
+          expect(page).to have_content("Are you sure you want to delete these duplicate logs?")
+          expect(page).to have_content("These logs will be deleted:")
+          expect(page).to have_button(text: "Delete these logs")
+          expect(page).to have_link(text: "Log #{duplicate_log.id}", href: sales_log_path(duplicate_log.id))
+          expect(page).to have_link(text: "Log #{duplicate_log_2.id}", href: sales_log_path(duplicate_log_2.id))
+          expect(page).to have_link(text: "Cancel", href: sales_log_duplicate_logs_path(id, original_log_id: id))
+          expect(page).to have_link(text: "Back", href: sales_log_duplicate_logs_path(id, original_log_id: id))
+        end
       end
     end
 
