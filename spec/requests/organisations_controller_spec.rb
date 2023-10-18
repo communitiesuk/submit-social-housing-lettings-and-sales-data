@@ -123,7 +123,7 @@ RSpec.describe OrganisationsController, type: :request do
           end
         end
 
-        it "shows schemes in alpabetical order" do
+        it "shows schemes in alphabetical order" do
           schemes[0].update!(service_name: "aaa", owning_organisation: user.organisation)
           schemes[1].update!(service_name: "daa", owning_organisation: user.organisation)
           schemes[2].update!(service_name: "baa", owning_organisation: user.organisation)
