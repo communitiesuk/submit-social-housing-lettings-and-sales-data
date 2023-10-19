@@ -279,6 +279,70 @@ RSpec.describe OrganisationsController, type: :request do
             expect(page).to have_content("To report a merge or update your organisation details, ")
             expect(page).to have_link("contact the helpdesk", href: "https://dluhcdigital.atlassian.net/servicedesk/customer/portal/6/group/11")
           end
+
+          it "does not display merge history if there is none" do
+            expect(page).not_to have_content("View all organisations that were merged into #{organisation.name}")
+          end
+
+          context "when the organisation has absorbed other organisations" do
+            let!(:absorbed_organisation) { create(:organisation, name: "First Absorbed Organisation") }
+            let!(:other_absorbed_organisation) { create(:organisation, name: "Other Absorbed Organisation") }
+            let!(:old_absorbed_organisation) { create(:organisation, name: "Old Absorbed Organisation") }
+
+            before do
+              absorbed_organisation.update!(merge_date: Time.zone.local(2023, 4, 3), absorbing_organisation: organisation)
+              other_absorbed_organisation.update!(merge_date: Time.zone.local(2023, 4, 3), absorbing_organisation: organisation)
+              old_absorbed_organisation.update!(merge_date: Time.zone.local(2023, 4, 2), absorbing_organisation: organisation)
+              get "/organisations/#{organisation.id}/details", headers:, params: {}
+            end
+
+            it "displays a list of absorbed organisations" do
+              expect(page).to have_content("View all organisations that were merged into #{organisation.name}")
+              expect(page).to have_content("Merge date: 3 April 2023")
+              expect(page).to have_content("First Absorbed Organisation")
+              expect(page).to have_content("Other Absorbed Organisation")
+              expect(page).not_to have_content("Old Absorbed Organisation")
+              expect(page).to have_content("ORG#{absorbed_organisation.id}")
+              expect(page).to have_content("ORG#{other_absorbed_organisation.id}")
+              expect(page).not_to have_content("ORG#{old_absorbed_organisation.id}")
+            end
+          end
+
+          context "when the organisation has absorbed other organisations without merge dates" do
+            let!(:absorbed_organisation) { create(:organisation, name: "First Absorbed Organisation") }
+            let!(:other_absorbed_organisation) { create(:organisation, name: "Other Absorbed Organisation") }
+
+            before do
+              absorbed_organisation.update!(merge_date: Time.zone.local(2023, 4, 3), absorbing_organisation: organisation)
+              other_absorbed_organisation.update!(merge_date: Time.zone.local(2023, 4, 3), absorbing_organisation: organisation)
+              get "/organisations/#{organisation.id}/details", headers:, params: {}
+            end
+
+            it "displays a list of absorbed organisations" do
+              expect(page).to have_content("View all organisations that were merged into #{organisation.name}")
+              expect(page).to have_content("Merge date:")
+              expect(page).to have_content("First Absorbed Organisation")
+              expect(page).to have_content("Other Absorbed Organisation")
+              expect(page).to have_content("ORG#{absorbed_organisation.id}")
+              expect(page).to have_content("ORG#{other_absorbed_organisation.id}")
+            end
+          end
+
+          context "when viewing absorbed organisation" do
+            let(:absorbing_organisation) { create(:organisation, name: "First Absorbing Organisation") }
+
+            context "and your organisation was absorbed" do
+              before do
+                organisation.update!(merge_date: Time.zone.local(2023, 4, 3), absorbing_organisation:)
+                get "/organisations/#{organisation.id}/details", headers:, params: {}
+              end
+
+              it "displays the organisation merge details" do
+                expect(response).not_to have_http_status(:not_found)
+                expect(page).to have_content("#{organisation.name} was merged into First Absorbing Organisation on 3 April 2023.")
+              end
+            end
+          end
         end
 
         context "with organisation that are not in scope for the user, i.e. that they do not belong to" do
