@@ -41,9 +41,17 @@
                        label: "Status",
                        category: "status",
                      } %>
+
+          <%= render partial: "filters/checkbox_filter",
+                     locals: {
+                       f:,
+                       options: needstype_filters,
+                       label: "Needs type",
+                       category: "needstypes",
+                     } %>
         <% end %>
 
-          <%= render partial: "filters/radio_filter",
+        <%= render partial: "filters/radio_filter",
                      locals: {
                        f:,
                        options: {

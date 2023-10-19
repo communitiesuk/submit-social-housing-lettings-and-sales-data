@@ -26,6 +26,7 @@ module FiltersHelper
       filters["organisation"].present? ||
       filters["managing_organisation"].present? ||
       filters["status"]&.compact_blank&.any? ||
+      filters["needstypes"]&.compact_blank&.any? ||
       filters["years"]&.compact_blank&.any? ||
       filters["bulk_upload_id"].present?
   end
@@ -53,6 +54,13 @@ module FiltersHelper
       "deactivating_soon" => "Deactivating soon",
       "reactivating_soon" => "Reactivating soon",
       "deactivated" => "Deactivated",
+    }.freeze
+  end
+
+  def needstype_filters
+    {
+      "1" => "General needs",
+      "2" => "Supported housing",
     }.freeze
   end
 
@@ -126,7 +134,7 @@ private
 
   def filters_count(filters)
     filters.each.sum do |category, category_filters|
-      if %w[status years bulk_upload_id].include?(category)
+      if %w[status needstypes years bulk_upload_id].include?(category)
         category_filters.count(&:present?)
       elsif %w[user owning_organisation managing_organisation].include?(category)
         1

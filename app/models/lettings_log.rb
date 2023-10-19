@@ -43,6 +43,13 @@ class LettingsLog < Log
   scope :filter_by_tenant_code, ->(tenant_code) { where("tenancycode ILIKE ?", "%#{tenant_code}%") }
   scope :filter_by_propcode, ->(propcode) { where("propcode ILIKE ?", "%#{propcode}%") }
   scope :filter_by_location_postcode, ->(postcode_full) { left_joins(:location).where("REPLACE(locations.postcode, ' ', '') ILIKE ?", "%#{postcode_full.delete(' ')}%") }
+  scope :filter_by_needstype, ->(needstype) { where(needstype:) }
+  scope :filter_by_needstypes, lambda { |needstypes, _user = nil|
+    first_needstype = needstypes.shift
+    query = filter_by_needstype(first_needstype)
+    needstypes.each { |needstype| query = query.or(filter_by_needstype(needstype)) }
+    query.all
+  }
   scope :search_by, lambda { |param|
     filter_by_location_postcode(param)
       .or(filter_by_tenant_code(param))
