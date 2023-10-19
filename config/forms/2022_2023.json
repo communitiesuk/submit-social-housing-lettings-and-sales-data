@@ -6991,7 +6991,8 @@
                   "type": "radio",
                   "answer_options": {
                     "1": {
-                      "value": "Internal transfer"
+                      "value": "Internal transfer",
+                      "hint": "Where the tenant has moved to another social property owned by the same landlord."
                     },
                     "2": {
                       "value": "Tenant applied directly (no referral or nomination)"
@@ -7048,7 +7049,8 @@
                   "type": "radio",
                   "answer_options": {
                     "1": {
-                      "value": "Internal transfer"
+                      "value": "Internal transfer",
+                      "hint": "Where the tenant has moved to another social property owned by the same landlord."
                     },
                     "2": {
                       "value": "Tenant applied directly (no nomination)"
@@ -7056,8 +7058,8 @@
                     "3": {
                       "value": "Nominated by a local housing authority"
                     },
-                    "4" : { 
-                      "value" : "Referred by local authority housing department" 
+                    "4" : {
+                      "value" : "Referred by local authority housing department"
                     },
                     "8": {
                       "value": "Re-located through official housing mobility scheme"
@@ -7111,7 +7113,8 @@
                   "type": "radio",
                   "answer_options": {
                     "1": {
-                      "value": "Internal transfer"
+                      "value": "Internal transfer",
+                      "hint": "Where the tenant has moved to another social property owned by the same landlord."
                     },
                     "2": {
                       "value": "Tenant applied directly (no referral)"
@@ -7171,7 +7174,8 @@
                   "type": "radio",
                   "answer_options": {
                     "1": {
-                      "value": "Internal transfer"
+                      "value": "Internal transfer",
+                      "hint": "Where the tenant has moved to another social property owned by the same landlord."
                     },
                     "2": {
                       "value": "Tenant applied directly (no referral or nomination)"

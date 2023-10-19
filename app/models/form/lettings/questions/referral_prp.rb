@@ -14,6 +14,7 @@ class Form::Lettings::Questions::ReferralPrp < ::Form::Question
   ANSWER_OPTIONS = {
     "1" => {
       "value" => "Internal transfer",
+      "hint" => "Where the tenant has moved to another social property owned by the same landlord.",
     },
     "2" => {
       "value" => "Tenant applied directly (no nomination)",
