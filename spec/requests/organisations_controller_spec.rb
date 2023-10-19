@@ -308,6 +308,24 @@ RSpec.describe OrganisationsController, type: :request do
             end
           end
 
+          context "when the organisation has absorbed other organisations during a closed collection period" do
+            let!(:absorbed_organisation) { create(:organisation, name: "First Absorbed Organisation") }
+            let!(:other_absorbed_organisation) { create(:organisation, name: "Other Absorbed Organisation") }
+
+            before do
+              absorbed_organisation.update!(merge_date: Time.zone.local(2021, 4, 3), absorbing_organisation: organisation)
+              other_absorbed_organisation.update!(merge_date: Time.zone.local(2021, 4, 3), absorbing_organisation: organisation)
+              get "/organisations/#{organisation.id}/details", headers:, params: {}
+            end
+
+            it "does not display absorbed organisations" do
+              expect(page).not_to have_content("View all organisations that were merged into #{organisation.name}")
+              expect(page).not_to have_content("Merge date: 3 April 2021")
+              expect(page).not_to have_content("First Absorbed Organisation")
+              expect(page).not_to have_content("Other Absorbed Organisation")
+            end
+          end
+
           context "when the organisation has absorbed other organisations without merge dates" do
             let!(:absorbed_organisation) { create(:organisation, name: "First Absorbed Organisation") }
             let!(:other_absorbed_organisation) { create(:organisation, name: "Other Absorbed Organisation") }

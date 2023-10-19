@@ -1,4 +1,4 @@
-<% if @organisation.absorbed_organisations.any? %>
+<% if @organisation.has_absorbed_organisations_during_open_collection_period? %>
   <%= govuk_details(summary_text: "View all organisations that were merged into #{@organisation.name}") do %>
     <p>Merge date: <%= @organisation.recent_merge_date&.to_formatted_s(:govuk_date) %></p>
     <%= govuk_table do |table| %>

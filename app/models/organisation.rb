@@ -156,4 +156,8 @@ class Organisation < ApplicationRecord
 
     absorbed_organisations.absorbed_on(recent_merge_date)
   end
+
+  def has_absorbed_organisations_during_open_collection_period?
+    absorbed_organisations.any? && (recent_merge_date.blank? || recent_merge_date.present? && recent_merge_date > FormHandler.instance.start_date_of_earliest_open_for_editing_collection_period)
+  end
 end
