@@ -109,6 +109,7 @@ class Scheme < ApplicationRecord
     "Medium level": 3,
     "High level": 4,
     "Nursing care in a care home": 5,
+    "Floating support": 6,
   }.freeze
 
   enum support_type: SUPPORT_TYPE, _suffix: true
@@ -225,7 +226,7 @@ class Scheme < ApplicationRecord
       "Medium level": "Staff on site daily or making frequent visits with some out-of-hours cover.",
       "High level": "Intensive level of staffing provided on a 24-hour basis.",
     }
-    Scheme.support_types.keys.excluding("Missing").map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize, description: hints[key.to_sym]) }
+    Scheme.support_types.keys.excluding("Missing").excluding("Floating support").map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize, description: hints[key.to_sym]) }
   end
 
   def intended_length_of_stay_options_with_hints

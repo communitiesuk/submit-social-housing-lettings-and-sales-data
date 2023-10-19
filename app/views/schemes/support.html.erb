@@ -15,7 +15,7 @@
 
       <% support_level_options_hints = { "Low level": "Staff visiting once a week, fortnightly or less.", "Medium level": "Staff on site daily or making frequent visits with some out-of-hours cover.", "High level": "Intensive level of staffing provided on a 24-hour basis." } %>
 
-      <% support_level_options_with_hints = Scheme.support_types.keys.excluding("Missing").map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize, description: support_level_options_hints[key.to_sym]) } %>
+      <% support_level_options_with_hints = Scheme.support_types.keys.excluding("Missing").excluding("Floating support").map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize, description: support_level_options_hints[key.to_sym]) } %>
 
       <%= f.govuk_collection_radio_buttons :support_type,
                                            support_level_options_with_hints,
