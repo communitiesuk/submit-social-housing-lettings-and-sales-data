@@ -58,12 +58,6 @@ module Csv
       end
     }.freeze
 
-    AGE_KNOWN_FIELDS = {}.tap { |hash|
-      (1..6).each do |i|
-        hash["age#{i}"] = { "age_known_field" => "age#{i}_known" }
-      end
-    }.freeze
-
     FIELDS_ALWAYS_EXPORTED_AS_CODES = %w[
       la
       prevloc

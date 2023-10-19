@@ -165,7 +165,7 @@ private
 
   def successful_redirect_path
     if FeatureToggle.deduplication_flow_enabled?
-      if is_referrer_type?("duplicate_logs")
+      if is_referrer_type?("duplicate_logs") || is_referrer_type?("duplicate_logs_banner")
         return correcting_duplicate_logs_redirect_path
       end
 
@@ -251,10 +251,10 @@ private
 
     if original_log.present? && current_user.send(class_name.pluralize).duplicate_logs(original_log).count.positive?
       flash[:notice] = deduplication_success_banner unless current_user.send(class_name.pluralize).duplicate_logs(@log).count.positive?
-      send("#{class_name}_duplicate_logs_path", original_log, original_log_id: original_log.id)
+      send("#{class_name}_duplicate_logs_path", original_log, original_log_id: original_log.id, referrer: params[:referrer], organisation_id: params[:organisation_id])
     else
       flash[:notice] = deduplication_success_banner
-      send("#{class_name}_duplicate_logs_path", "#{class_name}_id".to_sym => from_referrer_query("first_remaining_duplicate_id"), original_log_id: from_referrer_query("original_log_id"))
+      send("#{class_name}_duplicate_logs_path", "#{class_name}_id".to_sym => from_referrer_query("first_remaining_duplicate_id"), original_log_id: from_referrer_query("original_log_id"), referrer: params[:referrer], organisation_id: params[:organisation_id])
     end
   end
 
