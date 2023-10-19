@@ -1455,6 +1455,24 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
         end
       end
 
+      context "when neither UPRN nor address fields are given for a supported housing record" do
+        let(:bulk_upload) { create(:bulk_upload, :lettings, user:, needstype: 2) }
+        let(:attributes) do
+          { bulk_upload:,
+            field_15: scheme.old_visible_id,
+            field_4: "2",
+            field_5: "2",
+            field_16: location.old_visible_id,
+            field_1: "1" }
+        end
+
+        it "does not add UPRN errors" do
+          expect(parser.errors[:field_18]).to be_empty
+          expect(parser.errors[:field_19]).to be_empty
+          expect(parser.errors[:field_21]).to be_empty
+        end
+      end
+
       context "when UPRN is given but address fields are not" do
         let(:attributes) do
           {
