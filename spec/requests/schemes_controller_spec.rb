@@ -201,7 +201,7 @@ RSpec.describe SchemesController, type: :request do
         assert_select ".govuk-tag", text: /Incomplete/, count: 1
       end
 
-      it "shows schemes in alpabetical order" do
+      it "shows schemes in alphabetical order" do
         schemes[0].update!(service_name: "aaa")
         schemes[1].update!(service_name: "daa")
         schemes[2].update!(service_name: "baa")
