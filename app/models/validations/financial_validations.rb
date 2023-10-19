@@ -146,7 +146,7 @@ module Validations::FinancialValidations
 
 private
 
-  CHARGE_MAXIMUMS = {
+  CHARGE_MAXIMA_PER_WEEK = {
     scharge: {
       private_registered_provider: {
         general_needs: 800,
@@ -181,22 +181,39 @@ private
 
   PROVIDER_TYPE = { 1 => :local_authority, 2 => :private_registered_provider }.freeze
   NEEDSTYPE_VALUES = { 2 => :supported_housing, 1 => :general_needs }.freeze
+  CHARGE_NAMES = { :scharge => "service charge", :pscharge => "personal service charge", :supcharg => "support charge" }.freeze
+  FREQUENCIES = {
+    2 => "every 2 weeks",
+    3 => "every 4 weeks",
+    4 => "every calendar month",
+    9 => "weekly for 46 weeks",
+    8 => "weekly for 47 weeks",
+    7 => "weekly for 48 weeks",
+    6 => "weekly for 49 weeks",
+    5 => "weekly for 50 weeks",
+    1 => "weekly for 52 weeks",
+    10 => "weekly for 53 weeks",
+  }.freeze
 
   def validate_charges(record)
     return unless record.owning_organisation
 
     provider_type = record.owning_organisation.provider_type_before_type_cast
     %i[scharge pscharge supcharg].each do |charge|
-      maximum = CHARGE_MAXIMUMS.dig(charge, PROVIDER_TYPE[provider_type], NEEDSTYPE_VALUES[record.needstype])
+      maximum_per_week = CHARGE_MAXIMA_PER_WEEK.dig(charge, PROVIDER_TYPE[provider_type], NEEDSTYPE_VALUES[record.needstype])
 
-      if maximum.present? && record[:period].present? && record[charge].present? && !weekly_value_in_range(record, charge, 0.0, maximum)
-        record.errors.add charge, :outside_the_range, message: I18n.t("validations.financial.rent.#{charge}.#{PROVIDER_TYPE[provider_type]}.#{NEEDSTYPE_VALUES[record.needstype]}")
-      end
+      next unless maximum_per_week.present? && record[:period].present? && record[charge].present? && !weekly_value_in_range(record, charge, 0.0, maximum_per_week)
+
+      charge_name = CHARGE_NAMES[charge]
+      frequency = FREQUENCIES[record[:period]]
+      letting_type = NEEDSTYPE_VALUES[record.needstype].to_s.humanize(capitalize: false)
+      provider_type = PROVIDER_TYPE[provider_type].to_s.humanize(capitalize: false)
+      record.errors.add charge, :outside_the_range, message: I18n.t("validations.financial.rent.out_of_range", charge_name:, maximum_per_week:, frequency:, letting_type:, provider_type:)
     end
   end
 
   def weekly_value_in_range(record, field, min, max)
-    record[field].present? && record.weekly_value(record[field]).present? && record.weekly_value(record[field]).between?(min, max)
+    record.weekly_value(record[field])&.between?(min, max)
   end
 
   def validate_rent_range(record)

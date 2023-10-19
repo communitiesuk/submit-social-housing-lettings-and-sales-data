@@ -265,7 +265,7 @@ en:
           owning_organisation: "Enter a date when the owning organisation was active. %{owning_organisation} became inactive on %{owning_organisation_merge_date} and was replaced by %{owning_absorbing_organisation}."
           managing_organisation: "Enter a date when the managing organisation was active. %{managing_organisation} became inactive on %{managing_organisation_merge_date} and was replaced by %{managing_absorbing_organisation}."
           different_merge: "Enter a date when the owning and managing organisations were active. %{owning_organisation} became inactive on %{owning_organisation_merge_date} and was replaced by %{owning_absorbing_organisation}. %{managing_organisation} became inactive on %{managing_organisation_merge_date} and was replaced by %{managing_absorbing_organisation}."
-        invalid_absorbing_organisations_start_date: 
+        invalid_absorbing_organisations_start_date:
           same_organisation: "Enter a date when the owning and managing organisation was active. %{owning_organisation} became active on %{owning_organisation_available_from}."
           owning_organisation: "Enter a date when the owning organisation was active. %{owning_organisation} became active on %{owning_organisation_available_from}."
           managing_organisation: "Enter a date when the managing organisation was active. %{managing_organisation} became active on %{managing_organisation_available_from}."
@@ -367,27 +367,7 @@ en:
       negative_currency: "Enter an amount above 0"
       rent:
         less_than_shortfall: "Enter an amount that is more than the shortfall in basic rent"
-        scharge:
-          private_registered_provider:
-            general_needs: "Enter a value for the service charge between £0 and £800 per week if the landlord is a private registered provider and it is a general needs letting"
-            supported_housing: "Enter a value for the service charge between £0 and £800 per week if the landlord is a private registered provider and it is a supported housing letting"
-          local_authority:
-            general_needs: "Enter a value for the service charge between £0 and £500 per week if the landlord is a local authority and it is a general needs letting"
-            supported_housing: "Enter a value for the service charge between £0 and £500 per week if the landlord is a local authority and it is a supported housing letting"
-        pscharge:
-          private_registered_provider:
-            general_needs: "Enter a value for the personal service charge between £0 and £700 per week if the landlord is a private registered provider and it is a general needs letting"
-            supported_housing: "Enter a value for the personal service charge between £0 and £700 per week if the landlord is a private registered provider and it is a supported housing letting"
-          local_authority:
-            general_needs: "Enter a value for the personal service charge between £0 and £200 per week if the landlord is a local authority and it is a general needs letting"
-            supported_housing: "Enter a value for the personal service charge between £0 and £200 per week if the landlord is a local authority and it is a supported housing letting"
-        supcharg:
-          private_registered_provider:
-            general_needs: "Enter a value for the support charge between £0 and £800 per week if the landlord is a private registered provider and it is a general needs letting"
-            supported_housing: "Enter a value for the support charge between £0 and £800 per week if the landlord is a private registered provider and it is a supported housing letting"
-          local_authority:
-            general_needs: "Enter a value for the support charge between £0 and £200 per week if the landlord is a local authority and it is a general needs letting"
-            supported_housing: "Enter a value for the support charge between £0 and £200 per week if the landlord is a local authority and it is a supported housing letting"
+        out_of_range: "Enter a value for the %{charge_name} between £0 and £%{maximum_per_week} per week. £%{maximum_per_week} is the maximum limit per week for rent and charges paid %{frequency} for %{letting_type} lettings owned by a %{provider_type}."
       ecstat:
         over_hard_max: "Net income of %{hard_max} per week is too high given the tenant’s working situation"
       brent:
@@ -722,7 +702,7 @@ Make sure these answers are correct."
     charges:
       informative_text: "This is higher than we would expect."
       hint_text: "Check the following:<ul class=\"govuk-body-l app-panel--interruption\"><li>the decimal point</li><li>the frequency, for example every week or every calendar month</li><li>the needs type</li></ul>"
-  
+
 
   devise:
     email:
