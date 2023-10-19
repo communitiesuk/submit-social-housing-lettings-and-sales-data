@@ -50,5 +50,7 @@ module DataCollector
                        helper_specs: false,
                        controller_specs: false
     end
+
+    config.relative_url_root = ENV["RAILS_RELATIVE_URL_ROOT"]
   end
 end
