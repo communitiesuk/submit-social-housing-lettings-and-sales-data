@@ -181,7 +181,7 @@ private
 
   PROVIDER_TYPE = { 1 => :local_authority, 2 => :private_registered_provider }.freeze
   NEEDSTYPE_VALUES = { 2 => :supported_housing, 1 => :general_needs }.freeze
-  CHARGE_NAMES = { :scharge => "service charge", :pscharge => "personal service charge", :supcharg => "support charge" }.freeze
+  CHARGE_NAMES = { scharge: "service charge", pscharge: "personal service charge", supcharg: "support charge" }.freeze
   FREQUENCIES = {
     2 => "every 2 weeks",
     3 => "every 4 weeks",
