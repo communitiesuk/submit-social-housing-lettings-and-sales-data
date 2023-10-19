@@ -151,4 +151,15 @@ RSpec.describe Form::Lettings::Questions::LocationId, type: :model do
       expect(question.header).to eq("Which location is this letting for?")
     end
   end
+
+  describe "partial guidance" do
+    it "shows shows correct top_guidance_partial" do
+      expect(question.top_guidance_partial).to eq("finding_location")
+    end
+
+    it "is at the top" do
+      expect(question.top_guidance?).to eq(true)
+      expect(question.bottom_guidance?).to eq(false)
+    end
+  end
 end
