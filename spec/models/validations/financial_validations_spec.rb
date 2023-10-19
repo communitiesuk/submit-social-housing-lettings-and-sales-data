@@ -378,7 +378,7 @@ RSpec.describe Validations::FinancialValidations do
           charge: { field: "scharge", value: 801 },
           charge_name: "service charge",
           maximum_per_week: 800,
-         },
+        },
          {
            period: { label: "every calendar month", value: 4 },
            charge: { field: "scharge", value: 3471 },
@@ -437,9 +437,9 @@ RSpec.describe Validations::FinancialValidations do
         end
 
         [{
-           period: { label: "weekly for 52 weeks", value: 1 },
-           charge: { field: "scharge", value: 799 },
-         },
+          period: { label: "weekly for 52 weeks", value: 1 },
+          charge: { field: "scharge", value: 799 },
+        },
          {
            period: { label: "every calendar month", value: 4 },
            charge: { field: "scharge", value: 3400 },
@@ -494,7 +494,7 @@ RSpec.describe Validations::FinancialValidations do
           charge: { field: "scharge", value: 501 },
           charge_name: "service charge",
           maximum_per_week: 500,
-         },
+        },
          {
            period: { label: "every calendar month", value: 4 },
            charge: { field: "scharge", value: 2300 },
@@ -555,7 +555,7 @@ RSpec.describe Validations::FinancialValidations do
         [{
           period: { label: "weekly for 52 weeks", value: 1 },
           charge: { field: "scharge", value: 499 },
-         },
+        },
          {
            period: { label: "every calendar month", value: 4 },
            charge: { field: "scharge", value: 2000 },
@@ -606,7 +606,7 @@ RSpec.describe Validations::FinancialValidations do
           charge: { field: "scharge", value: 501 },
           charge_name: "service charge",
           maximum_per_week: 500,
-         },
+        },
          {
            period: { label: "every calendar month", value: 4 },
            charge: { field: "scharge", value: 2300 },
@@ -668,7 +668,7 @@ RSpec.describe Validations::FinancialValidations do
           [{
             period: { label: "weekly for 52 weeks", value: 1 },
             charge: { field: "scharge", value: nil },
-           },
+          },
            {
              period: { label: "weekly for 52 weeks", value: 1 },
              charge: { field: "pscharge", value: nil },
@@ -690,7 +690,7 @@ RSpec.describe Validations::FinancialValidations do
         [{
           period: { label: "weekly for 52 weeks", value: 1 },
           charge: { field: "scharge", value: 499 },
-         },
+        },
          {
            period: { label: "every calendar month", value: 4 },
            charge: { field: "scharge", value: 2000 },
