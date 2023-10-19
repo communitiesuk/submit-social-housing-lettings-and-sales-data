@@ -7056,8 +7056,8 @@
                     "3": {
                       "value": "Nominated by a local housing authority"
                     },
-                    "4" : { 
-                      "value" : "Referred by local authority housing department" 
+                    "4" : {
+                      "value" : "Referred by local authority housing department"
                     },
                     "8": {
                       "value": "Re-located through official housing mobility scheme"
@@ -8316,7 +8316,7 @@
                   }
                 }
               },
-              "interruption_screen_question_ids": ["brent", "startdate", "la", "beds", "rent_type", "needstype"]
+              "interruption_screen_question_ids": ["brent", "startdate", "la", "beds", "rent_type", "needstype", "period"]
             },
             "max_rent_value_check": {
               "depends_on": [
@@ -8361,7 +8361,7 @@
                   }
                 }
               },
-              "interruption_screen_question_ids": ["brent", "startdate", "la", "beds", "rent_type", "needstype"]
+              "interruption_screen_question_ids": ["brent", "startdate", "la", "beds", "rent_type", "needstype", "period"]
             },
             "scharge_value_check": {
               "depends_on": [
