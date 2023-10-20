@@ -93,7 +93,7 @@
           } %>
         <% end %>
 
-        <% if current_user.support? || non_support_with_multiple_managing_orgs? %>
+        <% if (current_user.support? || non_support_with_multiple_managing_orgs?) && user_or_org_lettings_path? %>
           <%= render partial: "filters/radio_filter", locals: {
             f:,
             options: {
