@@ -88,12 +88,12 @@ RSpec.describe DuplicateLogsController, type: :request do
             it "displays check your answers for each log with correct questions where UPRN is given" do
               lettings_log.update!(uprn: "123", uprn_known: 1, uprn_confirmed: 1)
               duplicate_logs[0].update!(uprn: "123", uprn_known: 1, uprn_confirmed: 1)
-              duplicate_logs[1].update!(uprn: "123", uprn_known: 1, uprn_confirmed: 1)
               get "/lettings-logs/#{lettings_log.id}/duplicate-logs?original_log_id=#{lettings_log.id}"
 
               expect(page).to have_content("Q5 - Tenancy start date", count: 3)
               expect(page).to have_content("Q7 - Tenant code", count: 3)
-              expect(page).to have_content("Q11 - UPRN", count: 3)
+              expect(page).to have_content("Q12 - Postcode", count: 1)
+              expect(page).to have_content("Q11 - UPRN", count: 2)
               expect(page).to have_content("Q32 - Lead tenant’s age", count: 3)
               expect(page).to have_content("Q33 - Lead tenant’s gender identity", count: 3)
               expect(page).to have_content("Q37 - Lead tenant’s working situation", count: 3)

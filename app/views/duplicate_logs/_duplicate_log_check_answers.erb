@@ -1,7 +1,7 @@
 <div class="x-govuk-summary-card govuk-!-margin-bottom-6">
   <div class="x-govuk-summary-card__body">
     <%= govuk_summary_list do |summary_list| %>
-      <% @duplicate_check_questions.each do |question| %>
+      <% log.duplicate_check_questions(current_user).each do |question| %>
         <% summary_list.row do |row| %>
           <% row.key { get_question_label(question) } %>
 
