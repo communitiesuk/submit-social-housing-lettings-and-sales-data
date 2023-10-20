@@ -42,7 +42,7 @@
                        category: "status",
                      } %>
 
-          <% if show_needstype_filter? %>
+          <% if has_logs_for_both_needstypes? && user_or_org_lettings_path? %>
             <%= render partial: "filters/checkbox_filter",
                        locals: {
                          f:,
@@ -73,7 +73,7 @@
                        category: "assigned_to",
                      } %>
 
-         <% if show_owning_org_filter? %>
+         <% if multiple_owning_orgs? && user_or_org_lettings_path? %>
           <%= render partial: "filters/radio_filter", locals: {
             f:,
             options: {
@@ -93,7 +93,7 @@
           } %>
         <% end %>
 
-        <% if show_managing_org_filter? %>
+        <% if multiple_managing_orgs? && user_or_org_lettings_path? %>
           <%= render partial: "filters/radio_filter", locals: {
             f:,
             options: {
