@@ -212,7 +212,6 @@ RSpec.describe "User Features" do
         other_supported_housing_logs.each do |supported_housing_log|
           expect(page).not_to have_link supported_housing_log.id.to_s, href: "/lettings-logs/#{supported_housing_log.id}"
         end
-
       end
     end
 
