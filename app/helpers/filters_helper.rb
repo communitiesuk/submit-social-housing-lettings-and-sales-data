@@ -116,6 +116,18 @@ module FiltersHelper
     user.support? || org.stock_owners.count > 1 || (org.holds_own_stock? && org.stock_owners.count.positive?)
   end
 
+  def show_needstype_filter?
+    [1,2].all?{ |needstype| current_user.lettings_logs.where(needstype:).count.positive? } && request.path.include?("/lettings-logs")
+  end
+
+  def show_owning_org_filter?
+    (current_user.support? || current_user.organisation.stock_owners.count > 1) && request.path == "/lettings-logs"
+  end
+
+  def show_managing_org_filter?
+    (current_user.support? || current_user.organisation.managing_agents.count > 1) && request.path == "/lettings-logs"
+  end
+
 private
 
   def applied_filters_count(filter_type)

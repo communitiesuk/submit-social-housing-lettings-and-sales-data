@@ -42,7 +42,7 @@
                        category: "status",
                      } %>
 
-          <% if request.path.include?("/lettings-logs") %>
+          <% if show_needstype_filter? %>
             <%= render partial: "filters/checkbox_filter",
                        locals: {
                          f:,
@@ -73,7 +73,7 @@
                        category: "assigned_to",
                      } %>
 
-         <% if (current_user.support? || current_user.organisation.stock_owners.count > 1) && request.path == "/lettings-logs" %>
+         <% if show_owning_org_filter? %>
           <%= render partial: "filters/radio_filter", locals: {
             f:,
             options: {
@@ -93,7 +93,7 @@
           } %>
         <% end %>
 
-        <% if (current_user.support? || current_user.organisation.managing_agents.count > 1) && request.path == "/lettings-logs" %>
+        <% if show_managing_org_filter? %>
           <%= render partial: "filters/radio_filter", locals: {
             f:,
             options: {
