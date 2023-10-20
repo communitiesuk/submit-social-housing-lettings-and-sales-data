@@ -63,20 +63,19 @@
       <%= f.hidden_field :interruption_page_referrer_type, value: @interruption_page_referrer_type %>
 
       <div class="govuk-button-group">
-        <% if !@page.interruption_screen? && if request.query_parameters["referrer"] != "check_answers" && request.query_parameters["referrer"] != "duplicate_logs" %>
-          <%= f.govuk_submit "Save and continue" %>
+      <% if accessed_from_duplicate_logs?(request.query_parameters["referrer"]) %>
+        <%= f.govuk_submit "Save changes" %>
+        <%= govuk_link_to "Cancel", send("#{@log.class.name.underscore}_duplicate_logs_path", @log, original_log_id: request.query_parameters["original_log_id"]) %>
+      <% elsif returning_to_question_page?(@page, request.query_parameters["referrer"]) %>
+        <%= f.govuk_submit "Save changes" %>
+        <%= govuk_link_to "Cancel", send(@log.form.cancel_path(@page, @log), @log) %>
+      <% else %>
+        <%= f.govuk_submit "Save and continue" %>
           <%= govuk_link_to(
             (@page.skip_text || "Skip for now"),
             (@page.skip_href(@log) || send(@log.form.next_page_redirect_path(@page, @log, current_user), @log)),
           ) %>
-          <% elsif request.query_parameters["referrer"] == "duplicate_logs" %>
-          <%= f.govuk_submit "Save changes" %>
-            <%= govuk_link_to "Cancel", send("#{@log.class.name.underscore}_duplicate_logs_path", @log, original_log_id: request.query_parameters["original_log_id"]) %>
-          <% else %>
-          <%= f.govuk_submit "Save changes" %>
-            <%= govuk_link_to "Cancel", send(@log.form.cancel_path(@page, @log), @log) %>
-          <% end %>
-        <% end %>
+      <% end %>
       </div>
     </div>
   </div>
