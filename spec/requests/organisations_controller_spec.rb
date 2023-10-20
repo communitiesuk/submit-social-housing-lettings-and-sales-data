@@ -784,6 +784,11 @@ RSpec.describe OrganisationsController, type: :request do
               expect(page).to have_title("#{organisation.name} (1 logs matching ‘#{log_to_search.id}’) - Submit social housing lettings and sales data (CORE) - GOV.UK")
             end
 
+            it "has search term in the search box" do
+              get "/organisations/#{organisation.id}/lettings-logs?search=#{log_to_search.id}", headers: headers, params: {}
+              expect(page).to have_field("search", with: log_to_search.id.to_s)
+            end
+
             it "shows lettings logs matching the id" do
               get "/organisations/#{organisation.id}/lettings-logs?search=#{log_to_search.id}", headers: headers, params: {}
               expect(page).to have_link(log_to_search.id.to_s)

@@ -22,6 +22,11 @@
                     label: "Status",
                     category: "status",
                   } %>
+
+        <% if request.params["search"].present? %>
+          <%= f.hidden_field :search, value: request.params["search"] %>
+        <% end %>
+
         <%= f.govuk_submit "Apply filters", class: "govuk-!-margin-bottom-0" %>
       <% end %>
     </div>
