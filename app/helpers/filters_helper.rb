@@ -116,16 +116,20 @@ module FiltersHelper
     user.support? || org.stock_owners.count > 1 || (org.holds_own_stock? && org.stock_owners.count.positive?)
   end
 
-  def has_logs_for_both_needstypes?
+  def logs_for_both_needstypes_present?
     [1, 2].all? { |needstype| current_user.lettings_logs.where(needstype:).count.positive? }
   end
 
-  def multiple_owning_orgs?
-    current_user.support? || current_user.organisation.stock_owners.count > 1
+  def non_support_with_multiple_owning_orgs?
+    current_user.organisation.stock_owners.count > 1 && user_lettings_path?
   end
 
-  def multiple_managing_orgs?
-    current_user.support? || current_user.organisation.managing_agents.count > 1
+  def non_support_with_multiple_managing_orgs?
+    current_user.organisation.managing_agents.count > 1 && user_lettings_path?
+  end
+
+  def user_lettings_path?
+    request.path == "/lettings-logs"
   end
 
   def user_or_org_lettings_path?
