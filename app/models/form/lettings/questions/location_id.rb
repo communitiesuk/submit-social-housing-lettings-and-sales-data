@@ -13,6 +13,7 @@ class Form::Lettings::Questions::LocationId < ::Form::Question
     }
     @question_number = 10
     @disable_clearing_if_not_routed_or_dynamic_answer_options = true
+    @top_guidance_partial = "finding_location"
   end
 
   def answer_options
