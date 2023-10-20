@@ -61,7 +61,7 @@ class LettingsLog < Log
   scope :unresolved, -> { where(unresolved: true) }
   scope :filter_by_organisation, ->(org, _user = nil) { where(owning_organisation: org).or(where(managing_organisation: org)) }
   scope :filter_by_owning_organisation, ->(owning_organisation, _user = nil) { where(owning_organisation:) }
-  scope :filter_by_managing_organisation, ->(managing_organisation, _user = nil) { where(managing_organisation:) }
+  scope :filter_by_managing_organisation,  ->(managing_organisation, _user = nil) { where(managing_organisation:) }
   scope :age1_answered, -> { where.not(age1: nil).or(where(age1_known: 1)) }
   scope :tcharge_answered, -> { where.not(tcharge: nil).or(where(household_charge: 1)).or(where(is_carehome: 1)) }
   scope :chcharge_answered, -> { where.not(chcharge: nil).or(where(is_carehome: [nil, 0])) }
