@@ -61,10 +61,10 @@ module Validations::SetupValidations
                                                           owning_organisation: record.owning_organisation.name,
                                                           owning_organisation_merge_date: record.owning_organisation.merge_date.to_formatted_s(:govuk_date),
                                                           owning_absorbing_organisation: record.owning_organisation.absorbing_organisation.name)
-      elsif owning_organisation&.absorbed_organisations.present? && owning_organisation.created_at.to_date > record.startdate.to_date
+      elsif owning_organisation&.absorbed_organisations.present? && owning_organisation.available_from.present? && owning_organisation.available_from.to_date > record.startdate.to_date
         record.errors.add :owning_organisation_id, I18n.t("validations.setup.owning_organisation.inactive_absorbing_organisation",
                                                           owning_organisation: record.owning_organisation.name,
-                                                          owning_organisation_available_from: record.owning_organisation.created_at.to_formatted_s(:govuk_date))
+                                                          owning_organisation_available_from: record.owning_organisation.available_from.to_formatted_s(:govuk_date))
       end
     end
 
@@ -74,10 +74,10 @@ module Validations::SetupValidations
                                                             managing_organisation: record.managing_organisation.name,
                                                             managing_organisation_merge_date: record.managing_organisation.merge_date.to_formatted_s(:govuk_date),
                                                             managing_absorbing_organisation: record.managing_organisation.absorbing_organisation.name)
-      elsif managing_organisation&.absorbed_organisations.present? && managing_organisation.created_at.to_date > record.startdate.to_date
+      elsif managing_organisation&.absorbed_organisations.present? && managing_organisation.available_from.present? && managing_organisation.available_from.to_date > record.startdate.to_date
         record.errors.add :managing_organisation_id, I18n.t("validations.setup.managing_organisation.inactive_absorbing_organisation",
                                                             managing_organisation: record.managing_organisation.name,
-                                                            managing_organisation_available_from: record.managing_organisation.created_at.to_formatted_s(:govuk_date))
+                                                            managing_organisation_available_from: record.managing_organisation.available_from.to_formatted_s(:govuk_date))
       end
     end
   end
@@ -221,11 +221,11 @@ private
   end
 
   def absorbing_owning_organisation_inactive?(record)
-    record.owning_organisation&.absorbed_organisations.present? && record.owning_organisation.created_at.to_date > record.startdate.to_date
+    record.owning_organisation&.absorbed_organisations.present? && record.owning_organisation.available_from.present? && record.owning_organisation.available_from.to_date > record.startdate.to_date
   end
 
   def absorbing_managing_organisation_inactive?(record)
-    record.managing_organisation&.absorbed_organisations.present? && record.managing_organisation.created_at.to_date > record.startdate.to_date
+    record.managing_organisation&.absorbed_organisations.present? && record.managing_organisation.available_from.present? && record.managing_organisation.available_from.to_date > record.startdate.to_date
   end
 
   def organisations_belong_to_same_merge?(organisation_a, organisation_b)
