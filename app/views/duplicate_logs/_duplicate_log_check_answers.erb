@@ -3,26 +3,24 @@
     <%= govuk_summary_list do |summary_list| %>
       <% log.duplicate_check_questions(current_user).each do |question| %>
         <% summary_list.row do |row| %>
-          <% row.key { get_question_label(question) } %>
+          <% row.key { duplicate_log_question_label(question) } %>
 
           <% row.value do %>
             <%= simple_format(
-              get_answer_label(question, log),
+              duplicate_log_answer_label(question, log),
               wrapper_tag: "span",
               class: "govuk-!-margin-right-4",
             ) %>
 
-            <% extra_value = question.get_extra_check_answer_value(log) %>
-
-            <% if extra_value && question.answer_label(log, current_user).present? %>
+            <% if duplicate_log_extra_value(question, log) && duplicate_log_answer_label_present(question, log, current_user) %>
               <%= simple_format(
-                extra_value,
+                duplicate_log_extra_value(question, log),
                 wrapper_tag: "span",
                 class: "govuk-!-font-weight-regular app-!-colour-muted",
               ) %>
             <% end %>
 
-            <% question.get_inferred_answers(log).each do |inferred_answer| %>
+            <% duplicate_log_inferred_answers(question, log).each do |inferred_answer| %>
               <span class="govuk-!-font-weight-regular app-!-colour-muted"><%= inferred_answer %></span>
             <% end %>
           <% end %>
