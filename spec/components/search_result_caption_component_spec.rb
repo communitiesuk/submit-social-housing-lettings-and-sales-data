@@ -11,7 +11,7 @@ RSpec.describe SearchResultCaptionComponent, type: :component do
 
   context "when search and filter results are found" do
     it "renders table caption including the search results and total" do
-      expect(result.to_html).to eq("<span class=\"govuk-!-margin-right-4\">\n    <strong>2</strong> users matching search and filters\n</span>\n")
+      expect(result.to_html).to eq("<span class=\"govuk-!-margin-right-4\">\n    <strong>2</strong> users matching search and filters<br>\n</span>\n")
     end
   end
 
@@ -19,7 +19,7 @@ RSpec.describe SearchResultCaptionComponent, type: :component do
     let(:filters_count) { nil }
 
     it "renders table caption including the search results and total" do
-      expect(result.to_html).to eq("<span class=\"govuk-!-margin-right-4\">\n    <strong>2</strong> users matching search\n</span>\n")
+      expect(result.to_html).to eq("<span class=\"govuk-!-margin-right-4\">\n    <strong>2</strong> users matching search<br>\n</span>\n")
     end
   end
 
@@ -27,7 +27,7 @@ RSpec.describe SearchResultCaptionComponent, type: :component do
     let(:searched) { nil }
 
     it "renders table caption including the search results and total" do
-      expect(result.to_html).to eq("<span class=\"govuk-!-margin-right-4\">\n    <strong>2</strong> users matching filters\n</span>\n")
+      expect(result.to_html).to eq("<span class=\"govuk-!-margin-right-4\">\n    <strong>2</strong> users matching filters<br>\n</span>\n")
     end
   end
 
@@ -44,7 +44,7 @@ RSpec.describe SearchResultCaptionComponent, type: :component do
     let(:count) { 0 }
 
     it "renders table caption with total count only" do
-      expect(result.to_html).to eq("<span class=\"govuk-!-margin-right-4\">\n    <strong>0</strong> users matching search and filters\n</span>\n")
+      expect(result.to_html).to eq("<span class=\"govuk-!-margin-right-4\">\n    <strong>0</strong> users matching search and filters<br>\n</span>\n")
     end
   end
 
@@ -52,7 +52,7 @@ RSpec.describe SearchResultCaptionComponent, type: :component do
     let(:count) { 1 }
 
     it "renders table caption with total count only" do
-      expect(result.to_html).to eq("<span class=\"govuk-!-margin-right-4\">\n    <strong>1</strong> user matching search and filters\n</span>\n")
+      expect(result.to_html).to eq("<span class=\"govuk-!-margin-right-4\">\n    <strong>1</strong> user matching search and filters<br>\n</span>\n")
     end
   end
 end
