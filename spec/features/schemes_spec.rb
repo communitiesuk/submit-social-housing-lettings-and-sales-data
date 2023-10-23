@@ -572,7 +572,7 @@ RSpec.describe "Schemes scheme Features" do
 
           it "displays information about a single location" do
             expect(page).to have_content "Locations"
-            expect(page).to have_content "#{scheme.locations.count} total location"
+            expect(page).to have_content "#{scheme.locations.count} matching location"
           end
 
           it "displays information about the first created location" do
@@ -585,7 +585,7 @@ RSpec.describe "Schemes scheme Features" do
             fill_in_and_save_second_location
             click_button "Save and return to locations"
             expect(page).to have_content "Locations"
-            expect(page).to have_content "#{scheme.locations.count} total location"
+            expect(page).to have_content "#{scheme.locations.count} matching location"
           end
 
           it "displays information about newly created location" do
