@@ -1,7 +1,7 @@
 <section class="app-table-group" tabindex="0" aria-labelledby="<%= title.dasherize %>">
   <%= govuk_table do |table| %>
     <%= table.caption(classes: %w[govuk-!-font-size-19 govuk-!-font-weight-regular]) do |caption| %>
-      <%= render(SearchResultCaptionComponent.new(searched:, count: pagy.count, item_label:, total_count:, item: "agents")) %>
+      <%= render(SearchResultCaptionComponent.new(searched:, count: pagy.count, item_label:, total_count:, item: "agents", filters_count: 0)) %>
     <% end %>
     <% @managing_agents.each do |managing_agent| %>
       <%= table.body do |body| %>
