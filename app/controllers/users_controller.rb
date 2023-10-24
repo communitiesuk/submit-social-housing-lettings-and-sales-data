@@ -5,7 +5,7 @@ class UsersController < ApplicationController
   include Modules::SearchFilter
 
   before_action :authenticate_user!
-  before_action :find_resource, except: %i[new create]
+  before_action :find_user, except: %i[new create]
   before_action :authenticate_scope!, except: %i[new]
   before_action :session_filters, if: :current_user, only: %i[index]
   before_action -> { filter_manager.serialize_filters_to_session }, if: :current_user, only: %i[index]
@@ -49,7 +49,8 @@ class UsersController < ApplicationController
   end
 
   def update
-    if @user.update(user_params)
+    validate_attributes
+    if @user.errors.empty? && @user.update(user_params)
       if @user == current_user
         bypass_sign_in @user
         flash[:notice] = I18n.t("devise.passwords.updated") if user_params.key?("password")
@@ -83,18 +84,18 @@ class UsersController < ApplicationController
 
   def new
     @organisation_id = params["organisation_id"]
-    @resource = User.new
+    @user = User.new
   end
 
   def create
-    @resource = User.new(user_params.merge(org_params).merge(password_params))
+    @user = User.new(user_params.merge(org_params).merge(password_params))
 
     validate_attributes
-    if @resource.errors.empty? && @resource.save
+    if @user.errors.empty? && @user.save
       redirect_to created_user_redirect_path
     else
-      unless @resource.errors[:organisation].empty?
-        @resource.errors.delete(:organisation)
+      unless @user.errors[:organisation].empty?
+        @user.errors.delete(:organisation)
       end
       render :new, status: :unprocessable_entity
     end
@@ -124,15 +125,15 @@ class UsersController < ApplicationController
 private
 
   def validate_attributes
-    @resource.validate
+    @user.validate
     if user_params[:role].present? && !current_user.assignable_roles.key?(user_params[:role].to_sym)
-      @resource.errors.add :role, I18n.t("validations.role.invalid")
+      @user.errors.add :role, I18n.t("validations.role.invalid")
     end
 
-    if user_params[:phone].blank?
-      @resource.errors.add :phone, :blank
-    elsif !valid_phone_number?(user_params[:phone])
-      @resource.errors.add :phone
+    if !user_params[:phone].nil? && user_params[:phone].blank?
+      @user.errors.add :phone, :blank
+    elsif !user_params[:phone].nil? && !valid_phone_number?(user_params[:phone])
+      @user.errors.add :phone
     end
   end
 
@@ -188,7 +189,7 @@ private
     end
   end
 
-  def find_resource
+  def find_user
     @user = User.find_by(id: params[:user_id]) || User.find_by(id: params[:id]) || current_user
   end
 
