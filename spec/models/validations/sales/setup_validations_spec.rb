@@ -188,7 +188,7 @@ RSpec.describe Validations::Sales::SetupValidations do
 
   describe "#validate_merged_organisations_saledate" do
     let(:record) { build(:sales_log) }
-    let(:absorbing_organisation) { create(:organisation, created_at: Time.zone.local(2023, 2, 1), name: "Absorbing org") }
+    let(:absorbing_organisation) { create(:organisation, created_at: Time.zone.local(2023, 2, 1), available_from: Time.zone.local(2023, 2, 1), name: "Absorbing org") }
     let(:merged_organisation) { create(:organisation, name: "Merged org") }
 
     around do |example|
@@ -218,15 +218,23 @@ RSpec.describe Validations::Sales::SetupValidations do
     end
 
     context "and owning organisation is not yet active during the saledate" do
-      it "does not allow saledate before absorbing organisation has been created" do
+      it "does not allow saledate before absorbing organisation has become available" do
         record.saledate = Time.zone.local(2023, 1, 1)
         record.owning_organisation_id = absorbing_organisation.id
         setup_validator.validate_merged_organisations_saledate(record)
         expect(record.errors["saledate"]).to include(match "Enter a date when the owning organisation was active. Absorbing org became active on 1 February 2023.")
       end
 
-      it "allows saledate after absorbing organisation has been created" do
+      it "allows saledate after absorbing organisation has become available" do
         record.saledate = Time.zone.local(2023, 2, 2)
+        record.owning_organisation_id = absorbing_organisation.id
+        setup_validator.validate_merged_organisations_saledate(record)
+        expect(record.errors["saledate"]).to be_empty
+      end
+
+      it "allows saledate if available from is not given" do
+        record.saledate = Time.zone.local(2023, 1, 1)
+        absorbing_organisation.update!(available_from: nil)
         record.owning_organisation_id = absorbing_organisation.id
         setup_validator.validate_merged_organisations_saledate(record)
         expect(record.errors["saledate"]).to be_empty
@@ -238,7 +246,7 @@ RSpec.describe Validations::Sales::SetupValidations do
     let(:record) { build(:sales_log) }
 
     context "when organisations are merged" do
-      let(:absorbing_organisation) { create(:organisation, created_at: Time.zone.local(2023, 2, 1), name: "Absorbing org") }
+      let(:absorbing_organisation) { create(:organisation, created_at: Time.zone.local(2023, 2, 1), available_from: Time.zone.local(2023, 2, 1), name: "Absorbing org") }
       let(:merged_organisation) { create(:organisation, name: "Merged org") }
 
       around do |example|
@@ -265,15 +273,23 @@ RSpec.describe Validations::Sales::SetupValidations do
       end
 
       context "and owning organisation is not yet active during the saledate" do
-        it "does not allow absorbing organisation before it had been created" do
+        it "does not allow absorbing organisation before it has become available" do
           record.saledate = Time.zone.local(2023, 1, 1)
           record.owning_organisation_id = absorbing_organisation.id
           setup_validator.validate_organisation(record)
           expect(record.errors["owning_organisation_id"]).to include(match "The owning organisation must be active on the sale completion date. Absorbing org became active on 1 February 2023.")
         end
 
-        it "allows absorbing organisation after it has been created" do
+        it "allows absorbing organisation after it has become available" do
           record.saledate = Time.zone.local(2023, 2, 2)
+          record.owning_organisation_id = absorbing_organisation.id
+          setup_validator.validate_organisation(record)
+          expect(record.errors["owning_organisation_id"]).to be_empty
+        end
+
+        it "allows absorbing organisation if available from is not given" do
+          record.saledate = Time.zone.local(2023, 1, 1)
+          absorbing_organisation.update!(available_from: nil)
           record.owning_organisation_id = absorbing_organisation.id
           setup_validator.validate_organisation(record)
           expect(record.errors["owning_organisation_id"]).to be_empty

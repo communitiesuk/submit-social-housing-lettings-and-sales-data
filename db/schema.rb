@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_13_093443) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_23_142854) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -440,6 +440,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_13_093443) do
     t.string "old_visible_id"
     t.datetime "merge_date"
     t.bigint "absorbing_organisation_id"
+    t.datetime "available_from"
     t.index ["absorbing_organisation_id"], name: "index_organisations_on_absorbing_organisation_id"
     t.index ["old_visible_id"], name: "index_organisations_on_old_visible_id", unique: true
   end
