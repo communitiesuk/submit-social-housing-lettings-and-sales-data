@@ -117,7 +117,7 @@ module FiltersHelper
   end
 
   def logs_for_both_needstypes_present?
-    [1, 2].all? { |needstype| current_user.lettings_logs.where(needstype:).count.positive? }
+    [1, 2].all? { |needstype| current_user.lettings_logs.visible.where(needstype:).count.positive? }
   end
 
   def non_support_with_multiple_owning_orgs?
