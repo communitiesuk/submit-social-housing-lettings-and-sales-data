@@ -2,7 +2,7 @@ class Merge::MergeOrganisationsService
   def initialize(absorbing_organisation_id:, merging_organisation_ids:, merge_date: Time.zone.today)
     @absorbing_organisation = Organisation.find(absorbing_organisation_id)
     @merging_organisations = Organisation.find(merging_organisation_ids)
-    @merge_date = merge_date
+    @merge_date = merge_date || Time.zone.today
   end
 
   def call

@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Merge::MergeOrganisationsService do
-  subject(:merge_organisations_service) { described_class.new(absorbing_organisation_id: absorbing_organisation.id, merging_organisation_ids: [merging_organisation_ids]) }
+  subject(:merge_organisations_service) { described_class.new(absorbing_organisation_id: absorbing_organisation.id, merging_organisation_ids: [merging_organisation_ids], merge_date: nil) }
 
   let(:absorbing_organisation) {    create(:organisation, holds_own_stock: false) }
   let(:absorbing_organisation_user) { create(:user, organisation: absorbing_organisation) }
