@@ -21,8 +21,8 @@ class Form::Lettings::Questions::StockOwner < ::Form::Question
 
     recently_absorbed_organisations = user.organisation.absorbed_organisations.merged_during_open_collection_period
     if !user.support? && user.organisation.holds_own_stock?
-      answer_opts[user.organisation.id] = if recently_absorbed_organisations.exists?
-                                            "#{user.organisation.name} (Your organisation, active as of #{user.organisation.created_at.to_fs(:govuk_date)})"
+      answer_opts[user.organisation.id] = if recently_absorbed_organisations.exists? && user.organisation.available_from.present?
+                                            "#{user.organisation.name} (Your organisation, active as of #{user.organisation.available_from.to_fs(:govuk_date)})"
                                           else
                                             "#{user.organisation.name} (Your organisation)"
                                           end

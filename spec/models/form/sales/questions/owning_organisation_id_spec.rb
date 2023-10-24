@@ -98,7 +98,7 @@ RSpec.describe Form::Sales::Questions::OwningOrganisationId, type: :model do
         let(:options) do
           {
             "" => "Select an option",
-            user.organisation.id => "User org (Your organisation, active as of 2 February 2021)",
+            user.organisation.id => "User org (Your organisation)",
             owning_org_1.id => "Owning org 1",
             merged_organisation.id => "Merged org (inactive as of 2 February 2023)",
           }
@@ -106,7 +106,6 @@ RSpec.describe Form::Sales::Questions::OwningOrganisationId, type: :model do
 
         before do
           merged_organisation.update!(merge_date: Time.zone.local(2023, 2, 2), absorbing_organisation: user.organisation)
-          user.organisation.update!(created_at: Time.zone.local(2021, 2, 2))
         end
 
         it "shows merged organisation as an option" do
@@ -114,7 +113,7 @@ RSpec.describe Form::Sales::Questions::OwningOrganisationId, type: :model do
         end
       end
 
-      context "when user's org has recently absorbed other orgs with parent organisations" do
+      context "when user's org has recently absorbed other orgs and it has available from date" do
         let(:merged_organisation) { create(:organisation, name: "Merged org") }
         let(:options) do
           {
@@ -126,9 +125,29 @@ RSpec.describe Form::Sales::Questions::OwningOrganisationId, type: :model do
         end
 
         before do
+          merged_organisation.update!(merge_date: Time.zone.local(2023, 2, 2), absorbing_organisation: user.organisation)
+          user.organisation.update!(available_from: Time.zone.local(2021, 2, 2))
+        end
+
+        it "shows available from date if it is given" do
+          expect(question.displayed_answer_options(log, user)).to eq(options)
+        end
+      end
+
+      context "when user's org has recently absorbed other orgs with parent organisations" do
+        let(:merged_organisation) { create(:organisation, name: "Merged org") }
+        let(:options) do
+          {
+            "" => "Select an option",
+            user.organisation.id => "User org (Your organisation)",
+            owning_org_1.id => "Owning org 1",
+            merged_organisation.id => "Merged org (inactive as of 2 February 2023)",
+          }
+        end
+
+        before do
           org_rel.update!(child_organisation: merged_organisation)
           merged_organisation.update!(merge_date: Time.zone.local(2023, 2, 2), absorbing_organisation: user.organisation)
-          user.organisation.update!(created_at: Time.zone.local(2021, 2, 2))
         end
 
         it "does not show merged organisations stock owners as options" do
@@ -150,7 +169,7 @@ RSpec.describe Form::Sales::Questions::OwningOrganisationId, type: :model do
           Timecop.freeze(Time.zone.local(2023, 4, 2))
           org_rel.update!(child_organisation: merged_organisation)
           merged_organisation.update!(merge_date: Time.zone.local(2021, 6, 2), absorbing_organisation: user.organisation)
-          user.organisation.update!(created_at: Time.zone.local(2021, 2, 2))
+          user.organisation.update!(available_from: Time.zone.local(2021, 2, 2))
         end
 
         it "shows merged organisation as an option" do

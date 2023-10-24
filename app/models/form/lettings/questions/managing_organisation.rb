@@ -23,8 +23,8 @@ class Form::Lettings::Questions::ManagingOrganisation < ::Form::Question
       if log.owning_organisation.holds_own_stock?
         opts[log.owning_organisation.id] = "#{log.owning_organisation.name} (Owning organisation)"
       end
-    elsif user.organisation.absorbed_organisations.exists?
-      opts[user.organisation.id] = "#{user.organisation.name} (Your organisation, active as of #{user.organisation.created_at.to_fs(:govuk_date)})"
+    elsif user.organisation.absorbed_organisations.exists? && user.organisation.available_from.present?
+      opts[user.organisation.id] = "#{user.organisation.name} (Your organisation, active as of #{user.organisation.available_from.to_fs(:govuk_date)})"
     else
       opts[user.organisation.id] = "#{user.organisation.name} (Your organisation)"
     end
