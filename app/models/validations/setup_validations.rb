@@ -194,20 +194,20 @@ private
     if absorbing_owning_organisation_inactive?(record) && absorbing_managing_organisation_inactive?(record)
       record.errors.add :startdate, I18n.t("validations.setup.startdate.invalid_absorbing_organisations_start_date.different_organisations",
                                            owning_organisation: record.owning_organisation.name,
-                                           owning_organisation_active_from: record.owning_organisation.created_at.to_formatted_s(:govuk_date),
+                                           owning_organisation_active_from: record.owning_organisation.available_from.to_formatted_s(:govuk_date),
                                            managing_organisation: record.managing_organisation.name,
-                                           managing_organisation_active_from: record.managing_organisation.created_at.to_formatted_s(:govuk_date))
+                                           managing_organisation_active_from: record.managing_organisation.available_from.to_formatted_s(:govuk_date))
     else
       if absorbing_owning_organisation_inactive?(record)
         record.errors.add :startdate, I18n.t("validations.setup.startdate.invalid_absorbing_organisations_start_date.owning_organisation",
                                              owning_organisation: record.owning_organisation.name,
-                                             owning_organisation_available_from: record.owning_organisation.created_at.to_formatted_s(:govuk_date))
+                                             owning_organisation_available_from: record.owning_organisation.available_from.to_formatted_s(:govuk_date))
       end
 
       if absorbing_managing_organisation_inactive?(record)
         record.errors.add :startdate, I18n.t("validations.setup.startdate.invalid_absorbing_organisations_start_date.managing_organisation",
                                              managing_organisation: record.managing_organisation.name,
-                                             managing_organisation_available_from: record.managing_organisation.created_at.to_formatted_s(:govuk_date))
+                                             managing_organisation_available_from: record.managing_organisation.available_from.to_formatted_s(:govuk_date))
       end
     end
   end
