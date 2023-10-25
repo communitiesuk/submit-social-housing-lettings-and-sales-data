@@ -35,6 +35,7 @@ Rails.application.routes.draw do
   get "/accessibility-statement", to: "content#accessibility_statement"
   get "/privacy-notice", to: "content#privacy_notice"
   get "/data-sharing-agreement", to: "content#data_sharing_agreement"
+  get "/service-unavailable", to: "maintenance#service_unavailable"
 
   get "/download-23-24-lettings-form", to: "start#download_23_24_lettings_form"
   get "/download-22-23-lettings-form", to: "start#download_22_23_lettings_form"

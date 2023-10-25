@@ -3,7 +3,16 @@ class ApplicationController < ActionController::Base
 
   rescue_from Pundit::NotAuthorizedError, with: :render_not_authorized
 
+  before_action :check_maintenance
   before_action :set_paper_trail_whodunnit
+
+  def check_maintenance
+    if FeatureToggle.maintenance_mode_enabled? && request.fullpath.split("?")[0].delete("/") != "service-unavailable"
+      redirect_to service_unavailable_path
+    elsif !FeatureToggle.maintenance_mode_enabled? && request.fullpath.split("?")[0].delete("/") == "service-unavailable"
+      redirect_back(fallback_location: root_path)
+    end
+  end
 
   def render_not_found
     render "errors/not_found", status: :not_found
