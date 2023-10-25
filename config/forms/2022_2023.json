@@ -8320,7 +8320,7 @@
                   }
                 }
               },
-              "interruption_screen_question_ids": ["brent", "startdate", "la", "beds", "rent_type", "needstype"]
+              "interruption_screen_question_ids": ["brent", "period", "startdate", "la", "beds", "rent_type", "needstype"]
             },
             "max_rent_value_check": {
               "depends_on": [
@@ -8365,7 +8365,7 @@
                   }
                 }
               },
-              "interruption_screen_question_ids": ["brent", "startdate", "la", "beds", "rent_type", "needstype"]
+              "interruption_screen_question_ids": ["brent", "period", "startdate", "la", "beds", "rent_type", "needstype"]
             },
             "scharge_value_check": {
               "depends_on": [

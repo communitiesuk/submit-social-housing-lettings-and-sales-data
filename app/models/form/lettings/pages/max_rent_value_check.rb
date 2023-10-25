@@ -19,6 +19,6 @@ class Form::Lettings::Pages::MaxRentValueCheck < ::Form::Page
   end
 
   def interruption_screen_question_ids
-    %w[brent startdate uprn postcode_full la beds rent_type needstype]
+    %w[brent period startdate uprn postcode_full la beds rent_type needstype]
   end
 end

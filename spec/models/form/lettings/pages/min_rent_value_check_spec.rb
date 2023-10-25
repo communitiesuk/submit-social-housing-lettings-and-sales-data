@@ -41,6 +41,6 @@ RSpec.describe Form::Lettings::Pages::MinRentValueCheck, type: :model do
   end
 
   it "has the correct interruption_screen_question_ids" do
-    expect(page.interruption_screen_question_ids).to eq(%w[brent startdate uprn postcode_full la beds rent_type needstype])
+    expect(page.interruption_screen_question_ids).to eq(%w[brent period startdate uprn postcode_full la beds rent_type needstype])
   end
 end
