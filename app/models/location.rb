@@ -16,7 +16,7 @@ class Location < ApplicationRecord
 
   before_validation :lookup_postcode!, if: :postcode_changed?
 
-  auto_strip_attributes :name
+  auto_strip_attributes :name, squish: true
 
   scope :search_by_postcode, ->(postcode) { where("REPLACE(postcode, ' ', '') ILIKE ?", "%#{postcode.delete(' ')}%") }
   scope :search_by_name, ->(name) { where("name ILIKE ?", "%#{name}%") }

@@ -75,7 +75,7 @@ class Scheme < ApplicationRecord
   validate :validate_confirmed
   validate :validate_owning_organisation
 
-  auto_strip_attributes :service_name
+  auto_strip_attributes :service_name, squish: true
 
   SENSITIVE = {
     No: 0,
