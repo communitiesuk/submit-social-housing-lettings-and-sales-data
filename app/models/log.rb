@@ -193,6 +193,13 @@ class Log < ApplicationRecord
     form.edit_end_date < Time.zone.now || older_than_previous_collection_year?
   end
 
+  def duplicate_check_questions(current_user)
+    duplicate_check_question_ids.map { |question_id|
+      question = form.get_question(question_id, self)
+      question if question.page.routed_to?(self, current_user)
+    }.compact
+  end
+
 private
 
   # Handle logs that are older than previous collection start date

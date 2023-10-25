@@ -601,6 +601,22 @@ class LettingsLog < Log
     public_send("details_known_#{person_index}") == 1
   end
 
+  def duplicate_check_question_ids
+    ["owning_organisation_id",
+     "startdate",
+     "tenancycode",
+     form.start_date.year < 2023 || uprn.blank? ? "postcode_full" : nil,
+     form.start_date.year >= 2023 && uprn.present? ? "uprn" : nil,
+     "scheme_id",
+     "location_id",
+     "age1",
+     "sex1",
+     "ecstat1",
+     household_charge == 1 ? "household_charge" : nil,
+     "tcharge",
+     is_carehome? ? "chcharge" : nil].compact
+  end
+
 private
 
   def reset_invalid_unresolved_log_fields!

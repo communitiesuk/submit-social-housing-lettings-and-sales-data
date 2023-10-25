@@ -29,6 +29,24 @@ RSpec.describe DuplicateLogsController, type: :request do
     end
 
     context "when user is signed in" do
+      before do
+        body = {
+          results: [
+            {
+              DPA: {
+                "POSTCODE": "LS16 6FT",
+                "POST_TOWN": "Westminster",
+                "PO_BOX_NUMBER": "321",
+                "DOUBLE_DEPENDENT_LOCALITY": "Double Dependent Locality",
+              },
+            },
+          ],
+        }.to_json
+
+        stub_request(:get, "https://api.os.uk/search/places/v1/uprn?key=OS_DATA_KEY&uprn=123")
+          .to_return(status: 200, body:, headers: {})
+      end
+
       context "when user is support" do
         let(:support_user_org) { create(:organisation) }
         let(:user) { create(:user, :support, organisation: support_user_org) }
@@ -65,6 +83,25 @@ RSpec.describe DuplicateLogsController, type: :request do
               expect(page).to have_link("Change", href: "/lettings-logs/#{lettings_log.id}/tenant-code?first_remaining_duplicate_id=#{duplicate_logs[0].id}&organisation_id=#{lettings_log.owning_organisation_id}&original_log_id=#{lettings_log.id}&referrer=duplicate_logs")
               expect(page).to have_link("Change", href: "/lettings-logs/#{duplicate_logs[0].id}/tenant-code?first_remaining_duplicate_id=#{lettings_log.id}&organisation_id=#{lettings_log.owning_organisation_id}&original_log_id=#{lettings_log.id}&referrer=duplicate_logs")
               expect(page).to have_link("Change", href: "/lettings-logs/#{duplicate_logs[1].id}/tenant-code?first_remaining_duplicate_id=#{lettings_log.id}&organisation_id=#{lettings_log.owning_organisation_id}&original_log_id=#{lettings_log.id}&referrer=duplicate_logs")
+            end
+
+            it "displays check your answers for each log with correct questions where UPRN is given" do
+              lettings_log.update!(uprn: "123", uprn_known: 1, uprn_confirmed: 1)
+              duplicate_logs[0].update!(uprn: "123", uprn_known: 1, uprn_confirmed: 1)
+              get "/lettings-logs/#{lettings_log.id}/duplicate-logs?original_log_id=#{lettings_log.id}"
+
+              expect(page).to have_content("Q5 - Tenancy start date", count: 3)
+              expect(page).to have_content("Q7 - Tenant code", count: 3)
+              expect(page).to have_content("Q12 - Postcode", count: 1)
+              expect(page).to have_content("Postcode (from UPRN)", count: 2)
+              expect(page).to have_content("Q32 - Lead tenant’s age", count: 3)
+              expect(page).to have_content("Q33 - Lead tenant’s gender identity", count: 3)
+              expect(page).to have_content("Q37 - Lead tenant’s working situation", count: 3)
+              expect(page).to have_content("Household rent and charges", count: 3)
+              expect(page).to have_link("Change", count: 24)
+              expect(page).to have_link("Change", href: "/lettings-logs/#{lettings_log.id}/tenant-code?first_remaining_duplicate_id=#{duplicate_logs[0].id}&original_log_id=#{lettings_log.id}&referrer=duplicate_logs")
+              expect(page).to have_link("Change", href: "/lettings-logs/#{duplicate_logs[0].id}/tenant-code?first_remaining_duplicate_id=#{lettings_log.id}&original_log_id=#{lettings_log.id}&referrer=duplicate_logs")
+              expect(page).to have_link("Change", href: "/lettings-logs/#{duplicate_logs[1].id}/tenant-code?first_remaining_duplicate_id=#{lettings_log.id}&original_log_id=#{lettings_log.id}&referrer=duplicate_logs")
             end
 
             it "displays buttons to delete" do
@@ -158,6 +195,24 @@ RSpec.describe DuplicateLogsController, type: :request do
               expect(page).to have_link("Change", href: "/sales-logs/#{sales_log.id}/purchaser-code?first_remaining_duplicate_id=#{duplicate_logs[0].id}&organisation_id=#{sales_log.owning_organisation_id}&original_log_id=#{sales_log.id}&referrer=duplicate_logs")
               expect(page).to have_link("Change", href: "/sales-logs/#{duplicate_logs[0].id}/purchaser-code?first_remaining_duplicate_id=#{sales_log.id}&organisation_id=#{sales_log.owning_organisation_id}&original_log_id=#{sales_log.id}&referrer=duplicate_logs")
               expect(page).to have_link("Change", href: "/sales-logs/#{duplicate_logs[1].id}/purchaser-code?first_remaining_duplicate_id=#{sales_log.id}&organisation_id=#{sales_log.owning_organisation_id}&original_log_id=#{sales_log.id}&referrer=duplicate_logs")
+            end
+
+            it "displays check your answers for each log with correct questions when UPRN is given" do
+              sales_log.update!(uprn: "123", uprn_known: 1)
+              duplicate_logs[0].update!(uprn: "123", uprn_known: 1)
+              duplicate_logs[1].update!(uprn: "123", uprn_known: 1)
+              get "/sales-logs/#{sales_log.id}/duplicate-logs?original_log_id=#{sales_log.id}"
+
+              expect(page).to have_content("Q1 - Sale completion date", count: 3)
+              expect(page).to have_content("Q2 - Purchaser code", count: 3)
+              expect(page).to have_content("Q20 - Lead buyer’s age", count: 3)
+              expect(page).to have_content("Q21 - Buyer 1’s gender identity", count: 3)
+              expect(page).to have_content("Q25 - Buyer 1's working situation", count: 3)
+              expect(page).to have_content("Postcode (from UPRN)", count: 3)
+              expect(page).to have_link("Change", count: 21)
+              expect(page).to have_link("Change", href: "/sales-logs/#{sales_log.id}/purchaser-code?first_remaining_duplicate_id=#{duplicate_logs[0].id}&original_log_id=#{sales_log.id}&referrer=duplicate_logs")
+              expect(page).to have_link("Change", href: "/sales-logs/#{duplicate_logs[0].id}/purchaser-code?first_remaining_duplicate_id=#{sales_log.id}&original_log_id=#{sales_log.id}&referrer=duplicate_logs")
+              expect(page).to have_link("Change", href: "/sales-logs/#{duplicate_logs[1].id}/purchaser-code?first_remaining_duplicate_id=#{sales_log.id}&original_log_id=#{sales_log.id}&referrer=duplicate_logs")
             end
 
             it "displays buttons to delete" do

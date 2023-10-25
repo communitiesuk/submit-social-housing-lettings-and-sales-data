@@ -436,4 +436,15 @@ class SalesLog < Log
 
     self.pcodenk = nil if errors.attribute_names.include? :postcode_full
   end
+
+  def duplicate_check_question_ids
+    ["owning_organisation_id",
+     "saledate",
+     "purchid",
+     "age1",
+     "sex1",
+     "ecstat1",
+     form.start_date.year < 2023 || uprn.blank? ? "postcode_full" : nil,
+     form.start_date.year >= 2023 && uprn.present? ? "uprn" : nil].compact
+  end
 end
