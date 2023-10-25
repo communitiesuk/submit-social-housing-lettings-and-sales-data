@@ -41,29 +41,39 @@
                        label: "Status",
                        category: "status",
                      } %>
+
+          <% if logs_for_both_needstypes_present?(@organisation) && user_or_org_lettings_path? %>
+            <%= render partial: "filters/checkbox_filter",
+                       locals: {
+                         f:,
+                         options: needstype_filters,
+                         label: "Needs type",
+                         category: "needstypes",
+                       } %>
+          <% end %>
         <% end %>
 
-          <%= render partial: "filters/radio_filter",
-                     locals: {
-                       f:,
-                       options: {
-                         "all": { label: "Any user" },
-                         "you": { label: "You" },
-                         "specific_user": {
-                           label: "Specific user",
-                           conditional_filter: {
-                             type: "select",
-                             label: "User",
-                             category: "user",
-                             options: assigned_to_filter_options(current_user),
-                           },
+        <%= render partial: "filters/radio_filter",
+                   locals: {
+                     f:,
+                     options: {
+                       "all": { label: "Any user" },
+                       "you": { label: "You" },
+                       "specific_user": {
+                         label: "Specific user",
+                         conditional_filter: {
+                           type: "select",
+                           label: "User",
+                           category: "user",
+                           options: assigned_to_filter_options(current_user),
                          },
                        },
-                       label: "Assigned to",
-                       category: "assigned_to",
-                     } %>
+                     },
+                     label: "Assigned to",
+                     category: "assigned_to",
+                   } %>
 
-         <% if current_user.support? || current_user.organisation.stock_owners.count > 1 && request.path == "/lettings-logs" %>
+         <% if current_user.support? || non_support_with_multiple_owning_orgs? %>
           <%= render partial: "filters/radio_filter", locals: {
             f:,
             options: {
@@ -83,7 +93,7 @@
           } %>
         <% end %>
 
-        <% if (current_user.support? || current_user.organisation.managing_agents.count > 1) && request.path == "/lettings-logs" %>
+        <% if (current_user.support? || non_support_with_multiple_managing_orgs?) && user_or_org_lettings_path? %>
           <%= render partial: "filters/radio_filter", locals: {
             f:,
             options: {

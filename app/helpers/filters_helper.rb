@@ -26,6 +26,7 @@ module FiltersHelper
       filters["organisation"].present? ||
       filters["managing_organisation"].present? ||
       filters["status"]&.compact_blank&.any? ||
+      filters["needstypes"]&.compact_blank&.any? ||
       filters["years"]&.compact_blank&.any? ||
       filters["bulk_upload_id"].present?
   end
@@ -53,6 +54,13 @@ module FiltersHelper
       "deactivating_soon" => "Deactivating soon",
       "reactivating_soon" => "Reactivating soon",
       "deactivated" => "Deactivated",
+    }.freeze
+  end
+
+  def needstype_filters
+    {
+      "1" => "General needs",
+      "2" => "Supported housing",
     }.freeze
   end
 
@@ -108,6 +116,29 @@ module FiltersHelper
     user.support? || org.stock_owners.count > 1 || (org.holds_own_stock? && org.stock_owners.count.positive?)
   end
 
+  def logs_for_both_needstypes_present?(organisation)
+    return true if current_user.support? && organisation.blank?
+    return [1, 2].all? { |needstype| organisation.lettings_logs.visible.where(needstype:).count.positive? } if current_user.support?
+
+    [1, 2].all? { |needstype| current_user.lettings_logs.visible.where(needstype:).count.positive? }
+  end
+
+  def non_support_with_multiple_owning_orgs?
+    current_user.organisation.stock_owners.count > 1 && user_lettings_path?
+  end
+
+  def non_support_with_multiple_managing_orgs?
+    current_user.organisation.managing_agents.count > 1 && user_lettings_path?
+  end
+
+  def user_lettings_path?
+    request.path == "/lettings-logs"
+  end
+
+  def user_or_org_lettings_path?
+    request.path.include?("/lettings-logs")
+  end
+
 private
 
   def applied_filters_count(filter_type)
@@ -126,7 +157,7 @@ private
 
   def filters_count(filters)
     filters.each.sum do |category, category_filters|
-      if %w[status years bulk_upload_id].include?(category)
+      if %w[years status needstypes bulk_upload_id].include?(category)
         category_filters.count(&:present?)
       elsif %w[user owning_organisation managing_organisation].include?(category)
         1
