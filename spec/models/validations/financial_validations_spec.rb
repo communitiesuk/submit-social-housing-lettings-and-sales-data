@@ -262,56 +262,74 @@ RSpec.describe Validations::FinancialValidations do
         before { record.needstype = 1 }
 
         [{
-          period: { label: "weekly", value: 1 },
+          period: { label: "weekly for 52 weeks", value: 1 },
           charge: { field: "scharge", value: 801 },
+          charge_name: "service charge",
+          maximum_per_period: "£800.00",
         },
          {
-           period: { label: "monthly", value: 4 },
+           period: { label: "every calendar month", value: 4 },
            charge: { field: "scharge", value: 3471 },
+           charge_name: "service charge",
+           maximum_per_period: "£3,466.00",
          },
          {
            period: { label: "every 2 weeks", value: 2 },
            charge: { field: "scharge", value: 1601 },
+           charge_name: "service charge",
+           maximum_per_period: "£1,600.00",
          },
          {
-           period: { label: "weekly", value: 1 },
+           period: { label: "weekly for 52 weeks", value: 1 },
            charge: { field: "pscharge", value: 701 },
+           charge_name: "personal service charge",
+           maximum_per_period: "£700.00",
          },
          {
-           period: { label: "monthly", value: 4 },
+           period: { label: "every calendar month", value: 4 },
            charge: { field: "pscharge", value: 3200 },
+           charge_name: "personal service charge",
+           maximum_per_period: "£3,033.00",
          },
          {
            period: { label: "every 2 weeks", value: 2 },
            charge: { field: "pscharge", value: 1401 },
+           charge_name: "personal service charge",
+           maximum_per_period: "£1,400.00",
          },
          {
-           period: { label: "weekly", value: 1 },
+           period: { label: "weekly for 52 weeks", value: 1 },
            charge: { field: "supcharg", value: 801 },
+           charge_name: "support charge",
+           maximum_per_period: "£800.00",
          },
          {
-           period: { label: "monthly", value: 4 },
+           period: { label: "every calendar month", value: 4 },
            charge: { field: "supcharg", value: 3471 },
+           charge_name: "support charge",
+           maximum_per_period: "£3,466.00",
          },
          {
            period: { label: "every 2 weeks", value: 2 },
            charge: { field: "supcharg", value: 1601 },
+           charge_name: "support charge",
+           maximum_per_period: "£1,600.00",
          }].each do |test_case|
           it "does not allow charges outside the range when period is #{test_case[:period][:label]}" do
             record.period = test_case[:period][:value]
             record[test_case[:charge][:field]] = test_case[:charge][:value]
             financial_validator.validate_rent_amount(record)
             expect(record.errors[test_case[:charge][:field]])
-              .to include(match I18n.t("validations.financial.rent.#{test_case[:charge][:field]}.private_registered_provider.general_needs"))
+              .to include(match I18n.t("validations.financial.rent.out_of_range", charge_name: test_case[:charge_name], maximum_per_period: test_case[:maximum_per_period], frequency: test_case[:period][:label], letting_type: "general needs", provider_type: "private registered provider"))
           end
         end
 
         [{
-          period: { label: "weekly", value: 1 },
+          period: { label: "weekly for 52 weeks", value: 1 },
           charge: { field: "scharge", value: 799 },
         },
          {
-           period: { label: "monthly", value: 4 },
+           period: { label: "every calendar month", value: 4 },
            charge: { field: "scharge", value: 3400 },
          },
          {
@@ -319,11 +337,11 @@ RSpec.describe Validations::FinancialValidations do
            charge: { field: "scharge", value: 1599 },
          },
          {
-           period: { label: "weekly", value: 1 },
+           period: { label: "weekly for 52 weeks", value: 1 },
            charge: { field: "pscharge", value: 699 },
          },
          {
-           period: { label: "monthly", value: 4 },
+           period: { label: "every calendar month", value: 4 },
            charge: { field: "pscharge", value: 2500 },
          },
          {
@@ -331,11 +349,11 @@ RSpec.describe Validations::FinancialValidations do
            charge: { field: "pscharge", value: 1399 },
          },
          {
-           period: { label: "weekly", value: 1 },
+           period: { label: "weekly for 52 weeks", value: 1 },
            charge: { field: "supcharg", value: 799 },
          },
          {
-           period: { label: "monthly", value: 4 },
+           period: { label: "every calendar month", value: 4 },
            charge: { field: "supcharg", value: 3000 },
          },
          {
@@ -356,56 +374,74 @@ RSpec.describe Validations::FinancialValidations do
         before { record.needstype = 2 }
 
         [{
-          period: { label: "weekly", value: 1 },
+          period: { label: "weekly for 52 weeks", value: 1 },
           charge: { field: "scharge", value: 801 },
+          charge_name: "service charge",
+          maximum_per_period: "£800.00",
         },
          {
-           period: { label: "monthly", value: 4 },
+           period: { label: "every calendar month", value: 4 },
            charge: { field: "scharge", value: 3471 },
+           charge_name: "service charge",
+           maximum_per_period: "£3,466.00",
          },
          {
            period: { label: "every 2 weeks", value: 2 },
            charge: { field: "scharge", value: 1601 },
+           charge_name: "service charge",
+           maximum_per_period: "£1,600.00",
          },
          {
-           period: { label: "weekly", value: 1 },
+           period: { label: "weekly for 52 weeks", value: 1 },
            charge: { field: "pscharge", value: 701 },
+           charge_name: "personal service charge",
+           maximum_per_period: "£700.00",
          },
          {
-           period: { label: "monthly", value: 4 },
+           period: { label: "every calendar month", value: 4 },
            charge: { field: "pscharge", value: 3200 },
+           charge_name: "personal service charge",
+           maximum_per_period: "£3,033.00",
          },
          {
            period: { label: "every 2 weeks", value: 2 },
            charge: { field: "pscharge", value: 1401 },
+           charge_name: "personal service charge",
+           maximum_per_period: "£1,400.00",
          },
          {
-           period: { label: "weekly", value: 1 },
+           period: { label: "weekly for 52 weeks", value: 1 },
            charge: { field: "supcharg", value: 801 },
+           charge_name: "support charge",
+           maximum_per_period: "£800.00",
          },
          {
-           period: { label: "monthly", value: 4 },
+           period: { label: "every calendar month", value: 4 },
            charge: { field: "supcharg", value: 3471 },
+           charge_name: "support charge",
+           maximum_per_period: "£3,466.00",
          },
          {
            period: { label: "every 2 weeks", value: 2 },
            charge: { field: "supcharg", value: 1601 },
+           charge_name: "support charge",
+           maximum_per_period: "£1,600.00",
          }].each do |test_case|
           it "does not allow charges outside the range when period is #{test_case[:period][:label]}" do
             record.period = test_case[:period][:value]
             record[test_case[:charge][:field]] = test_case[:charge][:value]
             financial_validator.validate_rent_amount(record)
             expect(record.errors[test_case[:charge][:field]])
-              .to include(match I18n.t("validations.financial.rent.#{test_case[:charge][:field]}.private_registered_provider.supported_housing"))
+              .to include(match I18n.t("validations.financial.rent.out_of_range", charge_name: test_case[:charge_name], maximum_per_period: test_case[:maximum_per_period], frequency: test_case[:period][:label], letting_type: "supported housing", provider_type: "private registered provider"))
           end
         end
 
         [{
-          period: { label: "weekly", value: 1 },
+          period: { label: "weekly for 52 weeks", value: 1 },
           charge: { field: "scharge", value: 799 },
         },
          {
-           period: { label: "monthly", value: 4 },
+           period: { label: "every calendar month", value: 4 },
            charge: { field: "scharge", value: 3400 },
          },
          {
@@ -413,11 +449,11 @@ RSpec.describe Validations::FinancialValidations do
            charge: { field: "scharge", value: 1599 },
          },
          {
-           period: { label: "weekly", value: 1 },
+           period: { label: "weekly for 52 weeks", value: 1 },
            charge: { field: "pscharge", value: 699 },
          },
          {
-           period: { label: "monthly", value: 4 },
+           period: { label: "every calendar month", value: 4 },
            charge: { field: "pscharge", value: 2500 },
          },
          {
@@ -425,11 +461,11 @@ RSpec.describe Validations::FinancialValidations do
            charge: { field: "pscharge", value: 1399 },
          },
          {
-           period: { label: "weekly", value: 1 },
+           period: { label: "weekly for 52 weeks", value: 1 },
            charge: { field: "supcharg", value: 799 },
          },
          {
-           period: { label: "monthly", value: 4 },
+           period: { label: "every calendar month", value: 4 },
            charge: { field: "supcharg", value: 3400 },
          },
          {
@@ -454,56 +490,74 @@ RSpec.describe Validations::FinancialValidations do
         before { record.needstype = 1 }
 
         [{
-          period: { label: "weekly", value: 1 },
+          period: { label: "weekly for 52 weeks", value: 1 },
           charge: { field: "scharge", value: 501 },
+          charge_name: "service charge",
+          maximum_per_period: "£500.00",
         },
          {
-           period: { label: "monthly", value: 4 },
+           period: { label: "every calendar month", value: 4 },
            charge: { field: "scharge", value: 2300 },
+           charge_name: "service charge",
+           maximum_per_period: "£2,166.00",
          },
          {
            period: { label: "every 2 weeks", value: 2 },
            charge: { field: "scharge", value: 1001 },
+           charge_name: "service charge",
+           maximum_per_period: "£1,000.00",
          },
          {
-           period: { label: "weekly", value: 1 },
+           period: { label: "weekly for 52 weeks", value: 1 },
            charge: { field: "pscharge", value: 201 },
+           charge_name: "personal service charge",
+           maximum_per_period: "£200.00",
          },
          {
-           period: { label: "monthly", value: 4 },
+           period: { label: "every calendar month", value: 4 },
            charge: { field: "pscharge", value: 1000 },
+           charge_name: "personal service charge",
+           maximum_per_period: "£866.00",
          },
          {
            period: { label: "every 2 weeks", value: 2 },
            charge: { field: "pscharge", value: 401 },
+           charge_name: "personal service charge",
+           maximum_per_period: "£400.00",
          },
          {
-           period: { label: "weekly", value: 1 },
+           period: { label: "weekly for 52 weeks", value: 1 },
            charge: { field: "supcharg", value: 201 },
+           charge_name: "support charge",
+           maximum_per_period: "£200.00",
          },
          {
-           period: { label: "monthly", value: 4 },
+           period: { label: "every calendar month", value: 4 },
            charge: { field: "supcharg", value: 1000 },
+           charge_name: "support charge",
+           maximum_per_period: "£866.00",
          },
          {
            period: { label: "every 2 weeks", value: 2 },
            charge: { field: "supcharg", value: 401 },
+           charge_name: "support charge",
+           maximum_per_period: "£400.00",
          }].each do |test_case|
           it "does not allow charges outside the range when period is #{test_case[:period][:label]}" do
             record.period = test_case[:period][:value]
             record[test_case[:charge][:field]] = test_case[:charge][:value]
             financial_validator.validate_rent_amount(record)
             expect(record.errors[test_case[:charge][:field]])
-              .to include(match I18n.t("validations.financial.rent.#{test_case[:charge][:field]}.local_authority.general_needs"))
+              .to include(match I18n.t("validations.financial.rent.out_of_range", charge_name: test_case[:charge_name], maximum_per_period: test_case[:maximum_per_period], frequency: test_case[:period][:label], letting_type: "general needs", provider_type: "local authority"))
           end
         end
 
         [{
-          period: { label: "weekly", value: 1 },
+          period: { label: "weekly for 52 weeks", value: 1 },
           charge: { field: "scharge", value: 499 },
         },
          {
-           period: { label: "monthly", value: 4 },
+           period: { label: "every calendar month", value: 4 },
            charge: { field: "scharge", value: 2000 },
          },
          {
@@ -511,11 +565,11 @@ RSpec.describe Validations::FinancialValidations do
            charge: { field: "scharge", value: 999 },
          },
          {
-           period: { label: "weekly", value: 1 },
+           period: { label: "weekly for 52 weeks", value: 1 },
            charge: { field: "pscharge", value: 199 },
          },
          {
-           period: { label: "monthly", value: 4 },
+           period: { label: "every calendar month", value: 4 },
            charge: { field: "pscharge", value: 800 },
          },
          {
@@ -523,11 +577,11 @@ RSpec.describe Validations::FinancialValidations do
            charge: { field: "pscharge", value: 399 },
          },
          {
-           period: { label: "weekly", value: 1 },
+           period: { label: "weekly for 52 weeks", value: 1 },
            charge: { field: "supcharg", value: 199.99 },
          },
          {
-           period: { label: "monthly", value: 4 },
+           period: { label: "every calendar month", value: 4 },
            charge: { field: "supcharg", value: 800 },
          },
          {
@@ -548,61 +602,79 @@ RSpec.describe Validations::FinancialValidations do
         before { record.needstype = 2 }
 
         [{
-          period: { label: "weekly", value: 1 },
+          period: { label: "weekly for 52 weeks", value: 1 },
           charge: { field: "scharge", value: 501 },
+          charge_name: "service charge",
+          maximum_per_period: "£500.00",
         },
          {
-           period: { label: "monthly", value: 4 },
+           period: { label: "every calendar month", value: 4 },
            charge: { field: "scharge", value: 2300 },
+           charge_name: "service charge",
+           maximum_per_period: "£2,166.00",
          },
          {
            period: { label: "every 2 weeks", value: 2 },
            charge: { field: "scharge", value: 1001 },
+           charge_name: "service charge",
+           maximum_per_period: "£1,000.00",
          },
          {
-           period: { label: "weekly", value: 1 },
+           period: { label: "weekly for 52 weeks", value: 1 },
            charge: { field: "pscharge", value: 201 },
+           charge_name: "personal service charge",
+           maximum_per_period: "£200.00",
          },
          {
-           period: { label: "monthly", value: 4 },
+           period: { label: "every calendar month", value: 4 },
            charge: { field: "pscharge", value: 1000 },
+           charge_name: "personal service charge",
+           maximum_per_period: "£866.00",
          },
          {
            period: { label: "every 2 weeks", value: 2 },
            charge: { field: "pscharge", value: 401 },
+           charge_name: "personal service charge",
+           maximum_per_period: "£400.00",
          },
          {
-           period: { label: "weekly", value: 1 },
+           period: { label: "weekly for 52 weeks", value: 1 },
            charge: { field: "supcharg", value: 201 },
+           charge_name: "support charge",
+           maximum_per_period: "£200.00",
          },
          {
-           period: { label: "monthly", value: 4 },
+           period: { label: "every calendar month", value: 4 },
            charge: { field: "supcharg", value: 1000 },
+           charge_name: "support charge",
+           maximum_per_period: "£866.00",
          },
          {
            period: { label: "every 2 weeks", value: 2 },
            charge: { field: "supcharg", value: 401 },
+           charge_name: "support charge",
+           maximum_per_period: "£400.00",
          }].each do |test_case|
           it "does not allow charges outside the range when period is #{test_case[:period][:label]}" do
             record.period = test_case[:period][:value]
             record[test_case[:charge][:field]] = test_case[:charge][:value]
             financial_validator.validate_rent_amount(record)
             expect(record.errors[test_case[:charge][:field]])
-              .to include(match I18n.t("validations.financial.rent.#{test_case[:charge][:field]}.local_authority.supported_housing"))
+              .to include(match I18n.t("validations.financial.rent.out_of_range", charge_name: test_case[:charge_name], maximum_per_period: test_case[:maximum_per_period], frequency: test_case[:period][:label], letting_type: "supported housing", provider_type: "local authority"))
           end
         end
 
         context "when charges are not given" do
           [{
-            period: { label: "weekly", value: 1 },
+            period: { label: "weekly for 52 weeks", value: 1 },
             charge: { field: "scharge", value: nil },
           },
            {
-             period: { label: "weekly", value: 1 },
+             period: { label: "weekly for 52 weeks", value: 1 },
              charge: { field: "pscharge", value: nil },
            },
            {
-             period: { label: "weekly", value: 1 },
+             period: { label: "weekly for 52 weeks", value: 1 },
              charge: { field: "supcharg", value: nil },
            }].each do |test_case|
             it "does not error" do
@@ -616,11 +688,11 @@ RSpec.describe Validations::FinancialValidations do
         end
 
         [{
-          period: { label: "weekly", value: 1 },
+          period: { label: "weekly for 52 weeks", value: 1 },
           charge: { field: "scharge", value: 499 },
         },
          {
-           period: { label: "monthly", value: 4 },
+           period: { label: "every calendar month", value: 4 },
            charge: { field: "scharge", value: 2000 },
          },
          {
@@ -628,11 +700,11 @@ RSpec.describe Validations::FinancialValidations do
            charge: { field: "scharge", value: 999 },
          },
          {
-           period: { label: "weekly", value: 1 },
+           period: { label: "weekly for 52 weeks", value: 1 },
            charge: { field: "pscharge", value: 199 },
          },
          {
-           period: { label: "monthly", value: 4 },
+           period: { label: "every calendar month", value: 4 },
            charge: { field: "pscharge", value: 800 },
          },
          {
@@ -640,11 +712,11 @@ RSpec.describe Validations::FinancialValidations do
            charge: { field: "pscharge", value: 399 },
          },
          {
-           period: { label: "weekly", value: 1 },
+           period: { label: "weekly for 52 weeks", value: 1 },
            charge: { field: "supcharg", value: 199.99 },
          },
          {
-           period: { label: "monthly", value: 4 },
+           period: { label: "every calendar month", value: 4 },
            charge: { field: "supcharg", value: 800 },
          },
          {
