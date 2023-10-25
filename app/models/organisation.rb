@@ -33,7 +33,6 @@ class Organisation < ApplicationRecord
   scope :search_by_name, ->(name) { where("name ILIKE ?", "%#{name}%") }
   scope :search_by, ->(param) { search_by_name(param) }
   scope :merged_during_open_collection_period, -> { where("merge_date >= ?", FormHandler.instance.start_date_of_earliest_open_for_editing_collection_period) }
-  scope :absorbed_on, ->(date) { where("merge_date = ?", date) }
 
   has_paper_trail
 
@@ -142,22 +141,9 @@ class Organisation < ApplicationRecord
     sales_logs.duplicate_sets.map { |array_str| array_str ? array_str.map(&:to_i) : [] }
   end
 
-  def recent_merge_date
-    if merge_date.present?
-      merge_date
-    elsif absorbed_organisations.any?
-      absorbed_organisations.map(&:merge_date).compact.max
-    end
-  end
+  def recently_absorbed_organisations_grouped_by_merge_date
+    return unless absorbed_organisations.present? && absorbed_organisations.merged_during_open_collection_period.present?
 
-  def recently_absorbed_organisations
-    return unless absorbed_organisations.any?
-    return absorbed_organisations if recent_merge_date.blank?
-
-    absorbed_organisations.absorbed_on(recent_merge_date)
-  end
-
-  def has_absorbed_organisations_during_open_collection_period?
-    absorbed_organisations.any? && (recent_merge_date.blank? || recent_merge_date.present? && recent_merge_date > FormHandler.instance.start_date_of_earliest_open_for_editing_collection_period)
+    absorbed_organisations.merged_during_open_collection_period.group_by(&:merge_date)
   end
 end
