@@ -45,6 +45,8 @@ module DerivedVariables::LettingsLogVariables
     end
     self.renttype = RENT_TYPE_MAPPING[rent_type]
     self.lettype = get_lettype
+    self.lar = get_lar
+    self.irproduct = get_irproduct
     self.totchild = get_totchild
     self.totelder = get_totelder
     self.totadult = get_totadult
@@ -306,5 +308,16 @@ private
     self.address_line2 = nil
     self.town_or_city = nil
     self.county = nil
+  end
+
+  def get_lar
+    return 1 if rent_type == 2
+    return 2 if rent_type == 1
+  end
+
+  def get_irproduct
+    return 1 if rent_type == 3
+    return 2 if rent_type == 4
+    return 3 if rent_type == 5
   end
 end
