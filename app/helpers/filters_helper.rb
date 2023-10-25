@@ -116,7 +116,10 @@ module FiltersHelper
     user.support? || org.stock_owners.count > 1 || (org.holds_own_stock? && org.stock_owners.count.positive?)
   end
 
-  def logs_for_both_needstypes_present?
+  def logs_for_both_needstypes_present?(organisation)
+    return true if current_user.support? && organisation.blank?
+    return [1, 2].all? { |needstype| organisation.lettings_logs.visible.where(needstype:).count.positive? } if current_user.support?
+
     [1, 2].all? { |needstype| current_user.lettings_logs.visible.where(needstype:).count.positive? }
   end
 

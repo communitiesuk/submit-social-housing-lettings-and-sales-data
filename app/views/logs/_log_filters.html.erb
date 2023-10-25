@@ -42,7 +42,7 @@
                        category: "status",
                      } %>
 
-          <% if (current_user.support? || logs_for_both_needstypes_present?) && user_or_org_lettings_path? %>
+          <% if logs_for_both_needstypes_present?(@organisation) && user_or_org_lettings_path? %>
             <%= render partial: "filters/checkbox_filter",
                        locals: {
                          f:,
