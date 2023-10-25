@@ -1,7 +1,9 @@
 class Merge::MergeOrganisationsService
-  def initialize(absorbing_organisation_id:, merging_organisation_ids:)
+  def initialize(absorbing_organisation_id:, merging_organisation_ids:, merge_date: Time.zone.today, absorbing_organisation_active_from_merge_date: false)
     @absorbing_organisation = Organisation.find(absorbing_organisation_id)
     @merging_organisations = Organisation.find(merging_organisation_ids)
+    @merge_date = merge_date || Time.zone.today
+    @absorbing_organisation_active_from_merge_date = absorbing_organisation_active_from_merge_date
   end
 
   def call
@@ -18,6 +20,7 @@ class Merge::MergeOrganisationsService
         merge_sales_logs(merging_organisation)
         mark_organisation_as_merged(merging_organisation)
       end
+      @absorbing_organisation.available_from = @merge_date if @absorbing_organisation_active_from_merge_date
       @absorbing_organisation.save!
       log_success_message
     rescue ActiveRecord::RecordInvalid => e
@@ -70,12 +73,12 @@ private
         new_scheme.locations << Location.new(location.attributes.except("id", "scheme_id")) unless location.deactivated?
       end
       @merged_schemes[merging_organisation.name] << { name: new_scheme.service_name, code: new_scheme.id }
-      SchemeDeactivationPeriod.create!(scheme:, deactivation_date: Time.zone.now)
+      SchemeDeactivationPeriod.create!(scheme:, deactivation_date: @merge_date)
     end
   end
 
   def merge_lettings_logs(merging_organisation)
-    merging_organisation.owned_lettings_logs.after_date(Time.zone.today).each do |lettings_log|
+    merging_organisation.owned_lettings_logs.after_date(@merge_date.to_time).each do |lettings_log|
       if lettings_log.scheme.present?
         scheme_to_set = @absorbing_organisation.owned_schemes.find_by(service_name: lettings_log.scheme.service_name)
         location_to_set = scheme_to_set.locations.find_by(name: lettings_log.location&.name, postcode: lettings_log.location&.postcode)
@@ -86,20 +89,20 @@ private
       lettings_log.owning_organisation = @absorbing_organisation
       lettings_log.save!
     end
-    merging_organisation.managed_lettings_logs.after_date(Time.zone.today).each do |lettings_log|
+    merging_organisation.managed_lettings_logs.after_date(@merge_date.to_time).each do |lettings_log|
       lettings_log.managing_organisation = @absorbing_organisation
       lettings_log.save!
     end
   end
 
   def merge_sales_logs(merging_organisation)
-    merging_organisation.sales_logs.after_date(Time.zone.today).each do |sales_log|
+    merging_organisation.sales_logs.after_date(@merge_date.to_time).each do |sales_log|
       sales_log.update(owning_organisation: @absorbing_organisation)
     end
   end
 
   def mark_organisation_as_merged(merging_organisation)
-    merging_organisation.update(merge_date: Time.zone.today, absorbing_organisation: @absorbing_organisation)
+    merging_organisation.update(merge_date: @merge_date, absorbing_organisation: @absorbing_organisation)
   end
 
   def log_success_message
