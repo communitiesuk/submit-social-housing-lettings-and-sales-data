@@ -140,4 +140,10 @@ class Organisation < ApplicationRecord
   def duplicate_sales_logs_sets
     sales_logs.duplicate_sets.map { |array_str| array_str ? array_str.map(&:to_i) : [] }
   end
+
+  def recently_absorbed_organisations_grouped_by_merge_date
+    return unless absorbed_organisations.present? && absorbed_organisations.merged_during_open_collection_period.present?
+
+    absorbed_organisations.merged_during_open_collection_period.group_by(&:merge_date)
+  end
 end
