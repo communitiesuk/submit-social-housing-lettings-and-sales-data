@@ -430,7 +430,7 @@ RSpec.describe UsersController, type: :request do
           end
 
           it "updates the table caption" do
-            expect(page).to have_content("1 user found matching ‘filter’ of 4 total users.")
+            expect(page).to have_content("1 user matching search")
           end
         end
 
@@ -466,7 +466,7 @@ RSpec.describe UsersController, type: :request do
             end
 
             it "updates the table caption" do
-              expect(page).to have_content("2 users found matching ‘joe’ of 4 total users.")
+              expect(page).to have_content("2 users matching search")
             end
           end
         end
@@ -1136,7 +1136,7 @@ RSpec.describe UsersController, type: :request do
       end
 
       it "shows the pagination count" do
-        expect(page).to have_content("4 total users")
+        expect(page).to have_content("4 matching users")
       end
 
       it "shows the download csv link" do
@@ -1164,7 +1164,7 @@ RSpec.describe UsersController, type: :request do
             end
 
             it "updates the table caption" do
-              expect(page).to have_content("1 user found matching ‘#{search_param}’ of 4 total users.")
+              expect(page).to have_content("1 user matching search")
             end
 
             it "includes the search term in the CSV download link" do
@@ -1207,7 +1207,7 @@ RSpec.describe UsersController, type: :request do
             end
 
             it "updates the table caption" do
-              expect(page).to have_content("2 users found matching ‘joe’ of 4 total users.")
+              expect(page).to have_content("2 users matching search")
             end
           end
         end

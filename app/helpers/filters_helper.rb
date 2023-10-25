@@ -139,11 +139,11 @@ module FiltersHelper
     request.path.include?("/lettings-logs")
   end
 
-private
-
   def applied_filters_count(filter_type)
     filters_count(applied_filters(filter_type))
   end
+
+private
 
   def applied_filters(filter_type)
     return {} unless session[session_name_for(filter_type)]

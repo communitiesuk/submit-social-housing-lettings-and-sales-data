@@ -89,7 +89,7 @@ RSpec.describe OrganisationsController, type: :request do
           end
 
           it "updates the table caption" do
-            expect(page).to have_content("1 scheme found matching ‘#{search_param}’")
+            expect(page).to have_content("1 scheme matching search")
           end
 
           it "has search in the title" do
@@ -171,7 +171,7 @@ RSpec.describe OrganisationsController, type: :request do
           end
 
           it "updates the table caption" do
-            expect(page).to have_content("1 scheme found matching ‘#{search_param}’")
+            expect(page).to have_content("1 scheme matching search")
           end
 
           it "has search in the title" do
@@ -332,7 +332,7 @@ RSpec.describe OrganisationsController, type: :request do
           end
 
           it "shows the pagination count" do
-            expect(page).to have_content("#{user.organisation.users.count} total users")
+            expect(page).to have_content("#{user.organisation.users.count} matching users")
           end
         end
 
@@ -716,7 +716,7 @@ RSpec.describe OrganisationsController, type: :request do
           total_number_of_orgs = Organisation.all.count
           expect(page).to have_link organisation.name, href: "organisations/#{organisation.id}/lettings-logs"
           expect(page).to have_link unauthorised_organisation.name, href: "organisations/#{unauthorised_organisation.id}/lettings-logs"
-          expect(page).to have_content("#{total_number_of_orgs} total organisations")
+          expect(page).to have_content("#{total_number_of_orgs} matching organisations")
         end
 
         it "shows a search bar" do
@@ -745,7 +745,7 @@ RSpec.describe OrganisationsController, type: :request do
           end
 
           it "only shows logs for that organisation" do
-            expect(page).to have_content("#{total_number_of_org1_logs} total logs")
+            expect(page).to have_content("#{total_number_of_org1_logs} matching logs")
 
             organisation.lettings_logs.visible.map(&:id).each do |lettings_log_id|
               expect(page).to have_link lettings_log_id.to_s, href: "/lettings-logs/#{lettings_log_id}"
@@ -782,6 +782,11 @@ RSpec.describe OrganisationsController, type: :request do
             it "has search results in the title" do
               get "/organisations/#{organisation.id}/lettings-logs?search=#{log_to_search.id}", headers: headers, params: {}
               expect(page).to have_title("#{organisation.name} (1 logs matching ‘#{log_to_search.id}’) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+            end
+
+            it "has search term in the search box" do
+              get "/organisations/#{organisation.id}/lettings-logs?search=#{log_to_search.id}", headers: headers, params: {}
+              expect(page).to have_field("search", with: log_to_search.id.to_s)
             end
 
             it "shows lettings logs matching the id" do
@@ -894,7 +899,7 @@ RSpec.describe OrganisationsController, type: :request do
           end
 
           it "only shows logs for that organisation" do
-            expect(page).to have_content("#{number_of_org1_sales_logs} total logs")
+            expect(page).to have_content("#{number_of_org1_sales_logs} matching logs")
             organisation.sales_logs.map(&:id).each do |sales_log_id|
               expect(page).to have_link sales_log_id.to_s, href: "/sales-logs/#{sales_log_id}"
             end
@@ -1028,7 +1033,7 @@ RSpec.describe OrganisationsController, type: :request do
               end
 
               it "updates the table caption" do
-                expect(page).to have_content("1 user found matching ‘#{search_param}’ of #{org_user_count} total users.")
+                expect(page).to have_content("1 user matching search")
               end
 
               context "when we need case insensitive search" do
@@ -1048,7 +1053,7 @@ RSpec.describe OrganisationsController, type: :request do
                 end
 
                 it "updates the table caption" do
-                  expect(page).to have_content("1 user found matching ‘#{search_param}’ of #{org_user_count} total users.")
+                  expect(page).to have_content("1 user matching search")
                 end
               end
             end
@@ -1070,13 +1075,13 @@ RSpec.describe OrganisationsController, type: :request do
               end
 
               it "updates the table caption" do
-                expect(page).to have_content("1 user found matching ‘#{search_param}’ of #{org_user_count} total users.")
+                expect(page).to have_content("1 user matching search")
               end
 
               context "when our search term matches an email and a name" do
                 let!(:matching_user) { create(:user, organisation:, name: "Foobar", email: "some@example.com") }
                 let!(:another_matching_user) { create(:user, organisation:, name: "Joe", email: "foobar@example.com") }
-                let!(:org_user_count) { User.where(organisation:).count }
+                let(:org_user_count) { User.where(organisation:).count }
                 let(:search_param) { "Foobar" }
 
                 before do
@@ -1098,7 +1103,7 @@ RSpec.describe OrganisationsController, type: :request do
                 end
 
                 it "updates the table caption" do
-                  expect(page).to have_content("2 users found matching ‘#{search_param}’ of #{org_user_count} total users.")
+                  expect(page).to have_content("2 users matching search")
                 end
               end
             end
@@ -1155,7 +1160,7 @@ RSpec.describe OrganisationsController, type: :request do
             end
 
             it "shows the total organisations count" do
-              expect(CGI.unescape_html(response.body)).to match("<strong>#{total_organisations_count}</strong> total organisations")
+              expect(CGI.unescape_html(response.body)).to match("<strong>#{total_organisations_count}</strong> matching organisations")
             end
 
             it "has pagination links" do
@@ -1189,7 +1194,7 @@ RSpec.describe OrganisationsController, type: :request do
             end
 
             it "updates the table caption" do
-              expect(page).to have_content("1 organisations found matching ‘#{search_param}’")
+              expect(page).to have_content("1 organisations matching search")
             end
 
             it "has search in the title" do
@@ -1205,7 +1210,7 @@ RSpec.describe OrganisationsController, type: :request do
               end
 
               it "updates the table caption" do
-                expect(page).to have_content("2 organisations found matching ‘#{search_param}’")
+                expect(page).to have_content("2 organisations matching search")
               end
 
               it "has search in the title" do

@@ -11,7 +11,7 @@
             <%= filters_applied_text(@filter_type) %>
           </p>
           <p class="govuk-!-text-align-right govuk-grid-column-one-half">
-            <%= reset_filters_link(@filter_type) %>
+            <%= reset_filters_link(@filter_type, { search: request.params["search"] }.compact) %>
           </p>
         </div>
 
@@ -41,6 +41,10 @@
             label: "Owned by",
             category: "owning_organisation_select",
           } %>
+        <% end %>
+
+        <% if request.params["search"].present? %>
+          <%= f.hidden_field :search, value: request.params["search"] %>
         <% end %>
 
         <%= f.govuk_submit "Apply filters", class: "govuk-!-margin-bottom-0" %>

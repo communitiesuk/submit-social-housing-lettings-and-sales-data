@@ -6,20 +6,53 @@ RSpec.describe SearchResultCaptionComponent, type: :component do
   let(:item_label) { "user" }
   let(:total_count) { 3 }
   let(:item) { "schemes" }
-  let(:path) { "path" }
+  let(:filters_count) { 1 }
+  let(:result) { render_inline(described_class.new(searched:, count:, item_label:, total_count:, item:, filters_count:)) }
 
-  it "renders table caption including the search results and total" do
-    result = render_inline(described_class.new(searched:, count:, item_label:, total_count:, item:, path:))
-    expect(result.to_html).to eq("<span class=\"govuk-!-margin-right-4\">\n    <strong>#{count}</strong> #{item_label} found matching ‘#{searched}’ of <strong>#{total_count}</strong> total #{item}. <a class=\"govuk-link\" href=\"path\">Clear search</a>\n</span>\n")
+  context "when search and filter results are found" do
+    it "renders table caption including the search results and total" do
+      expect(result.to_html).to eq("<span class=\"govuk-!-margin-right-4\">\n    <strong>2</strong> users matching search and filters<br>\n</span>\n")
+    end
   end
 
-  context "when no search results are found" do
+  context "when search results are found" do
+    let(:filters_count) { nil }
+
+    it "renders table caption including the search results and total" do
+      expect(result.to_html).to eq("<span class=\"govuk-!-margin-right-4\">\n    <strong>2</strong> users matching search<br>\n</span>\n")
+    end
+  end
+
+  context "when filter results are found" do
     let(:searched) { nil }
 
-    it "renders table caption with total count only" do
-      result = render_inline(described_class.new(searched:, count:, item_label:, total_count:, item:, path:))
+    it "renders table caption including the search results and total" do
+      expect(result.to_html).to eq("<span class=\"govuk-!-margin-right-4\">\n    <strong>2</strong> users matching filters<br>\n</span>\n")
+    end
+  end
 
-      expect(result.to_html).to eq("<span class=\"govuk-!-margin-right-4\">\n    <strong>#{count}</strong> total #{item}\n</span>\n")
+  context "when no search/filter is applied" do
+    let(:searched) { nil }
+    let(:filters_count) { nil }
+
+    it "renders table caption with total count only" do
+      expect(result.to_html).to eq("<span class=\"govuk-!-margin-right-4\">\n    <strong>#{count}</strong> matching #{item}\n</span>\n")
+    end
+  end
+
+  context "when nothing is found" do
+    let(:count) { 0 }
+
+    it "renders table caption with total count only" do
+      expect(result.to_html).to eq("<span class=\"govuk-!-margin-right-4\">\n    <strong>0</strong> users matching search and filters<br>\n</span>\n")
+    end
+  end
+
+  context "when 1 record is found" do
+    let(:count) { 1 }
+
+    it "renders table caption with total count only" do
+      expect(result.to_html).to eq("<span class=\"govuk-!-margin-right-4\">\n    <strong>1</strong> user matching search and filters<br>\n</span>\n")
     end
   end
 end

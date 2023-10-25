@@ -189,7 +189,7 @@ RSpec.describe "User Features" do
       end
 
       it "has correct page details" do
-        expect(page).to have_content("#{number_of_lettings_logs} total logs")
+        expect(page).to have_content("#{number_of_lettings_logs} matching logs")
         organisation.lettings_logs.map(&:id).each do |lettings_log_id|
           expect(page).to have_link lettings_log_id.to_s, href: "/lettings-logs/#{lettings_log_id}"
         end
@@ -237,7 +237,7 @@ RSpec.describe "User Features" do
       end
 
       it "can filter sales logs" do
-        expect(page).to have_content("#{number_of_sales_logs} total logs")
+        expect(page).to have_content("#{number_of_sales_logs} matching logs")
         organisation.sales_logs.map(&:id).each do |sales_log_id|
           expect(page).to have_link sales_log_id.to_s, href: "/sales-logs/#{sales_log_id}"
         end

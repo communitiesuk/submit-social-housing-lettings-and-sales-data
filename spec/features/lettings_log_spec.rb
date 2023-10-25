@@ -79,7 +79,7 @@ RSpec.describe "Lettings Log Features" do
       context "when no filters are selected" do
         it "displays the filters component with no clear button" do
           expect(page).to have_content("No filters applied")
-          expect(page).not_to have_content("Clear")
+          expect(page).not_to have_link("Clear", href: "/clear-filters?filter_type=lettings_logs")
         end
       end
 
@@ -97,7 +97,7 @@ RSpec.describe "Lettings Log Features" do
 
         it "displays the filters component with a correct count and clear button" do
           expect(page).to have_content("5 filters applied")
-          expect(page).to have_content("Clear")
+          expect(page).to have_link("Clear", href: "/clear-filters?filter_type=lettings_logs")
         end
 
         context "when clearing the filters" do
@@ -107,7 +107,7 @@ RSpec.describe "Lettings Log Features" do
 
           it "clears the filters and displays the filter component as before" do
             expect(page).to have_content("No filters applied")
-            expect(page).not_to have_content("Clear")
+            expect(page).not_to have_link("Clear", href: "/clear-filters?filter_type=lettings_logs")
           end
         end
       end
