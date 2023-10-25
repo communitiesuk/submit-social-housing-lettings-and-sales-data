@@ -1,8 +1,9 @@
 class Merge::MergeOrganisationsService
-  def initialize(absorbing_organisation_id:, merging_organisation_ids:, merge_date: Time.zone.today)
+  def initialize(absorbing_organisation_id:, merging_organisation_ids:, merge_date: Time.zone.today, absorbing_organisation_active_from_merge_date: false)
     @absorbing_organisation = Organisation.find(absorbing_organisation_id)
     @merging_organisations = Organisation.find(merging_organisation_ids)
     @merge_date = merge_date || Time.zone.today
+    @absorbing_organisation_active_from_merge_date = absorbing_organisation_active_from_merge_date
   end
 
   def call
@@ -19,6 +20,7 @@ class Merge::MergeOrganisationsService
         merge_sales_logs(merging_organisation)
         mark_organisation_as_merged(merging_organisation)
       end
+      @absorbing_organisation.available_from = @merge_date if @absorbing_organisation_active_from_merge_date
       @absorbing_organisation.save!
       log_success_message
     rescue ActiveRecord::RecordInvalid => e

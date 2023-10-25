@@ -54,6 +54,13 @@ RSpec.describe Merge::MergeOrganisationsService do
         expect(merging_organisation_user.organisation).to eq(merging_organisation)
       end
 
+      it "does not set available_from for absorbing organisation" do
+        merge_organisations_service.call
+
+        absorbing_organisation.reload
+        expect(absorbing_organisation.available_from).to be_nil
+      end
+
       context "and merging organisation rent periods" do
         before do
           OrganisationRentPeriod.create!(organisation: absorbing_organisation, rent_period: 1)
@@ -228,7 +235,7 @@ RSpec.describe Merge::MergeOrganisationsService do
         end
 
         context "and merging sales logs" do
-          let!(:sales_log) { create(:sales_log, saledate: Time.zone.yesterday, owning_organisation: merging_organisation) }
+          let!(:sales_log) { create(:sales_log, saledate: Time.zone.today, owning_organisation: merging_organisation) }
 
           before do
             create(:sales_log, saledate: Time.zone.today - 2.days, owning_organisation: merging_organisation)
@@ -257,8 +264,8 @@ RSpec.describe Merge::MergeOrganisationsService do
 
         context "and merging lettings logs" do
           let(:owning_organisation) { create(:organisation, holds_own_stock: true) }
-          let!(:owned_lettings_log) { create(:lettings_log, startdate: Time.zone.yesterday, owning_organisation: merging_organisation, created_by: merging_organisation_user) }
-          let!(:managed_lettings_log) { create(:lettings_log, startdate: Time.zone.yesterday) }
+          let!(:owned_lettings_log) { create(:lettings_log, startdate: Time.zone.today, owning_organisation: merging_organisation, created_by: merging_organisation_user) }
+          let!(:managed_lettings_log) { create(:lettings_log, startdate: Time.zone.today) }
 
           before do
             create(:organisation_relationship) { create(:organisation_relationship, parent_organisation: owning_organisation, child_organisation: merging_organisation) }
@@ -353,6 +360,28 @@ RSpec.describe Merge::MergeOrganisationsService do
             expect(owned_lettings_log.owning_organisation).to eq(merging_organisation)
             expect(owned_lettings_log_no_location.owning_organisation).to eq(merging_organisation)
           end
+        end
+
+        context "and absorbing_organisation_active_from_merge_date is true" do
+          subject(:merge_organisations_service) { described_class.new(absorbing_organisation_id: absorbing_organisation.id, merging_organisation_ids: [merging_organisation_ids], merge_date: Time.zone.yesterday, absorbing_organisation_active_from_merge_date: true) }
+
+          it "sets available from to merge_date for absorbing organisation" do
+            merge_organisations_service.call
+
+            absorbing_organisation.reload
+            expect(absorbing_organisation.available_from.to_date).to eq(Time.zone.yesterday)
+          end
+        end
+      end
+
+      context "and absorbing_organisation_active_from_merge_date is true" do
+        subject(:merge_organisations_service) { described_class.new(absorbing_organisation_id: absorbing_organisation.id, merging_organisation_ids: [merging_organisation_ids], absorbing_organisation_active_from_merge_date: true) }
+
+        it "sets available from to merge_date (today) for absorbing organisation" do
+          merge_organisations_service.call
+
+          absorbing_organisation.reload
+          expect(absorbing_organisation.available_from.to_date).to eq(Time.zone.today)
         end
       end
     end
