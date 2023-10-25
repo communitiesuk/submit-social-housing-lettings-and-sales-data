@@ -36,7 +36,7 @@ class Organisation < ApplicationRecord
 
   has_paper_trail
 
-  auto_strip_attributes :name
+  auto_strip_attributes :name, squish: true
 
   PROVIDER_TYPE = {
     LA: 1,

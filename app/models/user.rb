@@ -38,7 +38,7 @@ class User < ApplicationRecord
 
   has_one_time_password(encrypted: true)
 
-  auto_strip_attributes :name
+  auto_strip_attributes :name, squish: true
 
   ROLES = {
     data_provider: 1,
