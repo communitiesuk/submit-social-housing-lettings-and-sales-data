@@ -2270,6 +2270,58 @@ RSpec.describe LettingsLog do
         expect(lettings_log["housingneeds_g"]).to eq(1)
       end
     end
+
+    context "when saving rent_type" do
+      it "derives lar as yes (1) if rent_type is london affordable rent" do
+        lettings_log.update!({ rent_type: 2 })
+        record_from_db = described_class.find(lettings_log.id)
+        expect(record_from_db["lar"]).to eq(1)
+      end
+
+      it "derives lar as no (2) if rent_type is affordable rent" do
+        lettings_log.update!({ rent_type: 1 })
+        record_from_db = described_class.find(lettings_log.id)
+        expect(record_from_db["lar"]).to eq(2)
+      end
+
+      it "clears previously set lar if rent_type is not affordable rent" do
+        lettings_log.update!({ rent_type: 2 })
+        record_from_db = described_class.find(lettings_log.id)
+        expect(record_from_db["lar"]).to eq(1)
+
+        lettings_log.update!({ rent_type: 3 })
+        record_from_db = described_class.find(lettings_log.id)
+        expect(record_from_db["lar"]).to eq(nil)
+      end
+
+      it "derives irproduct as rent_to_buy (1) if rent_type is rent_to_buy (3)" do
+        lettings_log.update!({ rent_type: 3 })
+        record_from_db = described_class.find(lettings_log.id)
+        expect(record_from_db["irproduct"]).to eq(1)
+      end
+
+      it "derives irproduct as london_living_rent (2) if rent_type is london_living_rent (4)" do
+        lettings_log.update!({ rent_type: 4 })
+        record_from_db = described_class.find(lettings_log.id)
+        expect(record_from_db["irproduct"]).to eq(2)
+      end
+
+      it "derives irproduct as other_intermediate_rent_product (3) if rent_type is other_intermediate_rent_product (5)" do
+        lettings_log.update!({ rent_type: 5, irproduct_other: "other" })
+        record_from_db = described_class.find(lettings_log.id)
+        expect(record_from_db["irproduct"]).to eq(3)
+      end
+
+      it "clears previously set irproduct if rent_type is intermediate rent" do
+        lettings_log.update!({ rent_type: 4 })
+        record_from_db = described_class.find(lettings_log.id)
+        expect(record_from_db["irproduct"]).to eq(2)
+
+        lettings_log.update!({ rent_type: 2 })
+        record_from_db = described_class.find(lettings_log.id)
+        expect(record_from_db["irproduct"]).to eq(nil)
+      end
+    end
   end
 
   describe "optional fields" do
