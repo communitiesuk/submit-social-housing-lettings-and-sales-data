@@ -367,7 +367,7 @@ en:
       negative_currency: "Enter an amount above 0"
       rent:
         less_than_shortfall: "Enter an amount that is more than the shortfall in basic rent"
-        out_of_range: "Enter a value for the %{charge_name} between £0 and £%{maximum_per_week} per week. £%{maximum_per_week} is the maximum limit per week for rent and charges paid %{frequency} for %{letting_type} lettings owned by a %{provider_type}."
+        out_of_range: "Enter a value for the %{charge_name} between £0 and %{maximum_per_period} paid %{frequency}. %{maximum_per_period} is the max limit for rent and charges paid %{frequency} for %{letting_type} lettings owned by a %{provider_type}."
       ecstat:
         over_hard_max: "Net income of %{hard_max} per week is too high given the tenant’s working situation"
       brent:

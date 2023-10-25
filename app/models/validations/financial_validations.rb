@@ -195,8 +195,11 @@ private
       charge_name = CHARGE_NAMES[charge]
       frequency = record.form.get_question("period", record).label_from_value(record.period).downcase
       letting_type = NEEDSTYPE_VALUES[record.needstype].to_s.humanize(capitalize: false)
-      provider_type = PROVIDER_TYPE[provider_type].to_s.humanize(capitalize: false)
-      record.errors.add charge, :outside_the_range, message: I18n.t("validations.financial.rent.out_of_range", charge_name:, maximum_per_week:, frequency:, letting_type:, provider_type:)
+      provider_type_label = PROVIDER_TYPE[provider_type].to_s.humanize(capitalize: false)
+      maximum_per_period = record.weekly_to_value_per_period(maximum_per_week)
+
+      record.errors.add charge, :outside_the_range, message: I18n.t("validations.financial.rent.out_of_range", charge_name:, maximum_per_period:, frequency:, letting_type:, provider_type: provider_type_label)
+      record.errors.add :period, :outside_the_range, message: I18n.t("validations.financial.rent.out_of_range", charge_name:, maximum_per_period:, frequency:, letting_type:, provider_type: provider_type_label)
     end
   end
 
