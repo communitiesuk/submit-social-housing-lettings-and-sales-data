@@ -1,19 +1,35 @@
 desc "Squish names of locations, schemes, users, and organisations"
 task squish_names: :environment do
-  Location.find_each do |location|
+  Location.where("name LIKE ?", "%  %").each do |location|
     location.name&.squish!
-    location.save!(validate: false)
+    begin
+      location.save!
+    rescue StandardError => e
+      Sentry.capture_exception(e)
+    end
   end
-  Scheme.find_each do |scheme|
+  Scheme.where("service_name LIKE ?", "%  %").each do |scheme|
     scheme.service_name&.squish!
-    scheme.save!(validate: false)
+    begin
+      scheme.save!
+    rescue StandardError => e
+      Sentry.capture_exception(e)
+    end
   end
-  User.find_each do |user|
+  User.where("name LIKE ?", "%  %").each do |user|
     user.name&.squish!
-    user.save!(validate: false)
+    begin
+      user.save!
+    rescue StandardError => e
+      Sentry.capture_exception(e)
+    end
   end
-  Organisation.find_each do |organisation|
+  Organisation.where("name LIKE ?", "%  %").each do |organisation|
     organisation.name&.squish!
-    organisation.save!(validate: false)
+    begin
+      organisation.save!
+    rescue StandardError => e
+      Sentry.capture_exception(e)
+    end
   end
 end
