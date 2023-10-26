@@ -290,6 +290,29 @@ RSpec.describe Scheme, type: :model do
     end
   end
 
+  describe "status_at" do
+    let(:scheme) { FactoryBot.build(:scheme) }
+
+    before do
+      FactoryBot.create(:location, scheme:)
+      Timecop.freeze(2022, 6, 7)
+    end
+
+    after do
+      Timecop.unfreeze
+    end
+
+    context "when there have been previous deactivations" do
+      before do
+        FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 4), reactivation_date: Time.zone.local(2022, 6, 5), scheme:)
+      end
+
+      it "returns active if the scheme has no relevant deactivation records" do
+        expect(scheme.status_at(Time.zone.local(2022, 5, 5))).to eq(:active)
+      end
+    end
+  end
+
   describe "available_from" do
     context "when the scheme was created at the start of the 2022/23 collection window" do
       let(:scheme) { FactoryBot.build(:scheme, created_at: Time.zone.local(2022, 4, 6)) }
