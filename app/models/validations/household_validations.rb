@@ -73,7 +73,6 @@ module Validations::HouseholdValidations
     # 13 Children's home / Foster Care
     # 14 Bed and breakfast
     # 19 Rough Sleeping
-    # 21 Refuge
     # 23 Mobile home / Caravan
     # 24 Home Office Asylum Support
     # 25 Other
@@ -81,7 +80,7 @@ module Validations::HouseholdValidations
     # 27 Owner occupation (low-cost home ownership)
     # 28 Living with Friends or Family
     # 29 Prison / Approved Probation Hostel
-    if record.is_internal_transfer? && [3, 4, 7, 10, 13, 14, 19, 21, 23, 24, 25, 26, 27, 28, 29].include?(record.prevten)
+    if record.is_internal_transfer? && [3, 4, 7, 10, 13, 14, 19, 23, 24, 25, 26, 27, 28, 29].include?(record.prevten)
       label = record.form.get_question("prevten", record).present? ? record.form.get_question("prevten", record).label_from_value(record.prevten) : ""
       record.errors.add :prevten, :internal_transfer_non_social_housing, message: I18n.t("validations.household.prevten.internal_transfer", prevten: label)
       record.errors.add :referral, :internal_transfer_non_social_housing, message: I18n.t("validations.household.referral.prevten_invalid", prevten: label)
