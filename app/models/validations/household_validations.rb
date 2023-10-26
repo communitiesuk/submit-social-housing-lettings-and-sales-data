@@ -73,7 +73,6 @@ module Validations::HouseholdValidations
     # 13 Children's home / Foster Care
     # 14 Bed and breakfast
     # 19 Rough Sleeping
-    # 21 Refuge
     # 23 Mobile home / Caravan
     # 24 Home Office Asylum Support
     # 25 Other
