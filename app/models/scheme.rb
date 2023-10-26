@@ -267,8 +267,8 @@ class Scheme < ApplicationRecord
     scheme_deactivation_periods.deactivations_without_reactivation.first
   end
 
-  def recent_deactivation
-    scheme_deactivation_periods.order("created_at").last
+  def last_deactivation_before(date)
+    scheme_deactivation_periods.where("deactivation_date <= ?", date).order("created_at").last
   end
 
   def status
@@ -279,7 +279,7 @@ class Scheme < ApplicationRecord
     return :incomplete unless confirmed && locations.confirmed.any?
     return :deactivated if open_deactivation&.deactivation_date.present? && date >= open_deactivation.deactivation_date
     return :deactivating_soon if open_deactivation&.deactivation_date.present? && date < open_deactivation.deactivation_date
-    return :reactivating_soon if recent_deactivation&.reactivation_date.present? && date < recent_deactivation.reactivation_date
+    return :reactivating_soon if last_deactivation_before(date)&.reactivation_date.present? && date < last_deactivation_before(date).reactivation_date
 
     :active
   end
