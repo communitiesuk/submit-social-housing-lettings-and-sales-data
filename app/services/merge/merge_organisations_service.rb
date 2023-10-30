@@ -68,7 +68,7 @@ private
     merging_organisation.owned_schemes.each do |scheme|
       next if scheme.deactivated?
 
-      new_scheme = Scheme.create!(scheme.attributes.except("id", "owning_organisation_id").merge(owning_organisation: @absorbing_organisation))
+      new_scheme = Scheme.create!(scheme.attributes.except("id", "owning_organisation_id", "old_id").merge(owning_organisation: @absorbing_organisation))
       scheme.locations.each do |location|
         new_scheme.locations << Location.new(location.attributes.except("id", "scheme_id", "old_id")) unless location.deactivated?
       end
