@@ -68,9 +68,9 @@ private
     merging_organisation.owned_schemes.each do |scheme|
       next if scheme.deactivated?
 
-      new_scheme = Scheme.create!(scheme.attributes.except("id", "owning_organisation_id", "old_id").merge(owning_organisation: @absorbing_organisation))
+      new_scheme = Scheme.create!(scheme.attributes.except("id", "owning_organisation_id", "old_id", "old_visible_id").merge(owning_organisation: @absorbing_organisation))
       scheme.locations.each do |location|
-        new_scheme.locations << Location.new(location.attributes.except("id", "scheme_id", "old_id")) unless location.deactivated?
+        new_scheme.locations << Location.new(location.attributes.except("id", "scheme_id", "old_id", "old_visible_id")) unless location.deactivated?
       end
       @merged_schemes[merging_organisation.name] << { name: new_scheme.service_name, code: new_scheme.id }
       SchemeDeactivationPeriod.create!(scheme:, deactivation_date: @merge_date)
@@ -87,17 +87,18 @@ private
         lettings_log.location = location_to_set if location_to_set.present?
       end
       lettings_log.owning_organisation = @absorbing_organisation
-      lettings_log.save!
+      lettings_log.save!(validate: false)
     end
     merging_organisation.managed_lettings_logs.after_date(@merge_date.to_time).each do |lettings_log|
       lettings_log.managing_organisation = @absorbing_organisation
-      lettings_log.save!
+      lettings_log.save!(validate: false)
     end
   end
 
   def merge_sales_logs(merging_organisation)
     merging_organisation.sales_logs.after_date(@merge_date.to_time).each do |sales_log|
-      sales_log.update(owning_organisation: @absorbing_organisation)
+      sales_log.owning_organisation = @absorbing_organisation
+      sales_log.save!(validate: false)
     end
   end
 
