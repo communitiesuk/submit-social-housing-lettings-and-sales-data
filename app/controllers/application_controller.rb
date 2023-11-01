@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
   before_action :set_paper_trail_whodunnit
 
   def check_maintenance
-    if FeatureToggle.maintenance_mode_enabled? && request.fullpath.split("?")[0].delete("/") != "service-unavailable"
+    if FeatureToggle.maintenance_mode_enabled? && !%w[service-unavailable accessibility-statement privacy-notice cookies].include?(request.fullpath.split("?")[0].delete("/"))
       redirect_to service_unavailable_path
     elsif !FeatureToggle.maintenance_mode_enabled? && request.fullpath.split("?")[0].delete("/") == "service-unavailable"
       redirect_back(fallback_location: root_path)
