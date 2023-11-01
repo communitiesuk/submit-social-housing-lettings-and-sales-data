@@ -1022,7 +1022,6 @@ RSpec.describe Merge::MergeOrganisationsService do
           expect(merging_organisation_too.absorbing_organisation_id).to eq(new_absorbing_organisation.id)
         end
       end
-
     end
   end
 end
