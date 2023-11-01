@@ -16,9 +16,9 @@ class Form::Lettings::Pages::Address < ::Form::Page
   end
 
   def routed_to?(log, _current_user = nil)
-    return false if log.uprn_known.nil?
+    return true if log.uprn_known.nil?
     return false if log.is_supported_housing?
 
-    log.uprn_confirmed != 1 || log.uprn_known.zero?
+    log.uprn_known.zero? || log.uprn_confirmed&.zero?
   end
 end
