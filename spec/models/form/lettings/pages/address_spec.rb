@@ -35,8 +35,8 @@ RSpec.describe Form::Lettings::Pages::Address, type: :model do
     context "when uprn_known == nil" do
       let(:log) { create(:lettings_log, uprn_known: nil) }
 
-      it "returns false" do
-        expect(page.routed_to?(log)).to eq(false)
+      it "returns true" do
+        expect(page.routed_to?(log)).to eq(true)
       end
     end
 
