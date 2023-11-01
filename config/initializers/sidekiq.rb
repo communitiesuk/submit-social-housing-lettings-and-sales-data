@@ -39,5 +39,6 @@ Sidekiq.configure_server do |config|
 
   config.on(:shutdown) do
     Sidekiq::CLI.instance.launcher.quiet
+    Sidekiq::Cron::Job.all(&:destroy)
   end
 end
