@@ -165,7 +165,7 @@ RSpec.describe Merge::MergeOrganisationsService do
           expect(absorbing_organisation.owned_schemes.first.locations.count).to eq(2)
           expect(absorbing_organisation.owned_schemes.first.locations.first.postcode).to eq(location.postcode)
           expect(absorbing_organisation.owned_schemes.first.locations.first.old_id).to be_nil
-          expect(absorbing_organisation.owned_schemes.first.locations.first.old_visible_id).to eq(location.old_visible_id)
+          expect(absorbing_organisation.owned_schemes.first.locations.first.old_visible_id).to be_nil
           expect(scheme.scheme_deactivation_periods.count).to eq(1)
           expect(scheme.scheme_deactivation_periods.first.deactivation_date.to_date).to eq(Time.zone.today)
         end
@@ -676,7 +676,7 @@ RSpec.describe Merge::MergeOrganisationsService do
           expect(new_absorbing_organisation.owned_schemes.first.locations.count).to eq(2)
           expect(new_absorbing_organisation.owned_schemes.first.locations.first.postcode).to eq(location.postcode)
           expect(new_absorbing_organisation.owned_schemes.first.locations.first.old_id).to be_nil
-          expect(new_absorbing_organisation.owned_schemes.first.locations.first.old_visible_id).to eq(location.old_visible_id)
+          expect(new_absorbing_organisation.owned_schemes.first.locations.first.old_visible_id).to be_nil
           expect(scheme.scheme_deactivation_periods.count).to eq(1)
           expect(scheme.scheme_deactivation_periods.first.deactivation_date.to_date).to eq(Time.zone.today)
         end
