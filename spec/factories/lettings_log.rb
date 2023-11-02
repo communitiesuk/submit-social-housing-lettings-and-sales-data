@@ -3,7 +3,10 @@ FactoryBot.define do
     created_by { FactoryBot.create(:user) }
     owning_organisation { created_by.organisation }
     managing_organisation { created_by.organisation }
+    created_at { Time.zone.today }
+    updated_at { Time.zone.today }
     trait :setup_completed do
+      startdate_today
       renewal { 0 }
       needstype { 1 }
       rent_type { 1 }
@@ -206,7 +209,5 @@ FactoryBot.define do
       illness_type_9 { false }
       illness_type_10 { false }
     end
-    created_at { Time.zone.today }
-    updated_at { Time.zone.today }
   end
 end
