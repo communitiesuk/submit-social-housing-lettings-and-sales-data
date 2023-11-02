@@ -1,12 +1,14 @@
-name: Production CI/CD Pipeline
+name: Staging CI/CD Pipeline
 
 on:
-  # release:
-  #   types: [released]
+  push:
+    branches:
+      - main
+  pull_request:
+    types:
+      - opened
+      - synchronize
   workflow_dispatch:
-
-env:
-  REPO_URL: communitiesuk/submit-social-housing-lettings-and-sales-data
 
 defaults:
   run:
@@ -14,10 +16,8 @@ defaults:
 
 jobs:
   test:
-    name: Test
+    name: Tests
     runs-on: ubuntu-latest
-    outputs:
-      releasetag: ${{ steps.latestrelease.outputs.releasetag }}
 
     services:
       postgres:
@@ -36,6 +36,7 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+
     env:
       RAILS_ENV: test
       GEMFILE_RUBY_VERSION: 3.1.1
@@ -47,26 +48,15 @@ jobs:
       PARALLEL_TEST_PROCESSORS: 4
 
     steps:
-      - name: Get latest release with tag
-        id: latestrelease
-        run: |
-          echo "releasetag=$(curl -s https://api.github.com/repos/${REPO_URL}/releases/latest | jq '.tag_name' | sed 's/\"//g')" >> $GITHUB_OUTPUT
-
-      - name: Confirm release tag
-        run: |
-          echo ${{ steps.latestrelease.outputs.releasetag }}
-
-      - name: Checkout tag
+      - name: Checkout
         uses: actions/checkout@v3
-        with:
-          ref: ${{ steps.latestrelease.outputs.releasetag }}
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
 
-      - name: Set up node
+      - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           cache: yarn
@@ -76,7 +66,7 @@ jobs:
         run: |
           bundle exec rake parallel:setup
 
-      - name: Compile Assets
+      - name: Compile assets
         run: |
           bundle exec rake assets:precompile
 
@@ -86,7 +76,6 @@ jobs:
 
   feature_test:
     name: Feature Tests
-    if: '!github.event.pull_request.draft'
     runs-on: ubuntu-latest
 
     services:
@@ -148,47 +137,35 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Get latest release with tag
-        id: latestrelease
-        run: |
-          echo "::set-output name=releasetag::$(curl -s https://api.github.com/repos/${REPO_URL}/releases/latest | jq '.tag_name' | sed 's/\"//g')"
-
-      - name: Confirm release tag
-        run: |
-          echo ${{ steps.latestrelease.outputs.releasetag }}
-
-      - name: Checkout tag
+      - name: Checkout
         uses: actions/checkout@v3
-        with:
-          ref: ${{ steps.latestrelease.outputs.releasetag }}
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
 
-      - name: Rubocop
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          cache: yarn
+          node-version: 18
+
+      - name: Install packages and symlink local dependencies
         run: |
-          bundle exec rubocop
+          yarn install --immutable --immutable-cache --check-cache
+
+      - name: Lint
+        run: |
+          bundle exec rake lint
 
   audit:
     name: Audit dependencies
     runs-on: ubuntu-latest
 
     steps:
-      - name: Get latest release with tag
-        id: latestrelease
-        run: |
-          echo "::set-output name=releasetag::$(curl -s https://api.github.com/repos/${REPO_URL}/releases/latest | jq '.tag_name' | sed 's/\"//g')"
-
-      - name: Confirm release tag
-        run: |
-          echo ${{ steps.latestrelease.outputs.releasetag }}
-
-      - name: Checkout tag
+      - name: Checkout
         uses: actions/checkout@v3
-        with:
-          ref: ${{ steps.latestrelease.outputs.releasetag }}
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
@@ -201,25 +178,15 @@ jobs:
 
   deploy:
     name: Deploy
-    concurrency: "production"
+    concurrency: staging
     runs-on: ubuntu-latest
-    environment: "production"
+    environment: staging
+    if: github.ref == 'refs/heads/main'
     needs: [lint, test, feature_test, audit]
 
     steps:
-      - name: Get latest release with tag
-        id: latestrelease
-        run: |
-          echo "::set-output name=releasetag::$(curl -s https://api.github.com/repos/${REPO_URL}/releases/latest | jq '.tag_name' | sed 's/\"//g')"
-
-      - name: Confirm release tag
-        run: |
-          echo ${{ steps.latestrelease.outputs.releasetag }}
-
-      - name: Checkout tag
+      - name: Checkout code
         uses: actions/checkout@v3
-        with:
-          ref: ${{ steps.latestrelease.outputs.releasetag }}
 
       - name: Install Cloud Foundry CLI
         run: |
@@ -235,7 +202,9 @@ jobs:
           CF_API_ENDPOINT: ${{ secrets.CF_API_ENDPOINT }}
           CF_SPACE: ${{ secrets.CF_SPACE }}
           CF_ORG: ${{ secrets.CF_ORG }}
-          APP_NAME: dluhc-core-production
+          API_USER: ${{ secrets.API_USER }}
+          API_KEY: ${{ secrets.API_KEY }}
+          APP_NAME: dluhc-core-staging
           GOVUK_NOTIFY_API_KEY: ${{ secrets.GOVUK_NOTIFY_API_KEY }}
           APP_HOST: ${{ secrets.APP_HOST }}
           RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
@@ -249,6 +218,8 @@ jobs:
           cf api $CF_API_ENDPOINT
           cf auth
           cf target -o $CF_ORG -s $CF_SPACE
+          cf set-env $APP_NAME API_USER $API_USER
+          cf set-env $APP_NAME API_KEY $API_KEY
           cf set-env $APP_NAME GOVUK_NOTIFY_API_KEY $GOVUK_NOTIFY_API_KEY
           cf set-env $APP_NAME APP_HOST $APP_HOST
           cf set-env $APP_NAME RAILS_MASTER_KEY $RAILS_MASTER_KEY
@@ -258,4 +229,4 @@ jobs:
           cf set-env $APP_NAME S3_CONFIG $S3_CONFIG
           cf set-env $APP_NAME CSV_DOWNLOAD_PAAS_INSTANCE $CSV_DOWNLOAD_PAAS_INSTANCE
           cf set-env $APP_NAME SENTRY_DSN $SENTRY_DSN
-          cf push $APP_NAME --strategy rolling
+          cf push $APP_NAME --strategy rolling -t 180
