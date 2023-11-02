@@ -11,6 +11,10 @@ class Form::Sales::Pages::Uprn < ::Form::Page
     ]
   end
 
+  def routed_to?(_log, _current_user)
+    true
+  end
+
   def skip_text
     "Enter address instead"
   end
