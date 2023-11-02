@@ -39,6 +39,6 @@ class FeatureToggle
   end
 
   def self.maintenance_mode_enabled?
-    true
+    false
   end
 end
