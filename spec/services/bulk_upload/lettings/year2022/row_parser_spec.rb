@@ -1125,6 +1125,16 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
         end
       end
 
+      context "when email matches other than casing" do
+        let(:other_user) { create(:user, organisation: owning_org) }
+
+        let(:attributes) { { bulk_upload:, field_111: owning_org.old_visible_id, field_112: other_user.email.upcase!, field_113: managing_org.old_visible_id } }
+
+        it "is permitted" do
+          expect(parser.errors[:field_112]).to be_blank
+        end
+      end
+
       context "when an user part of managing org" do
         let(:other_user) { create(:user, organisation: managing_org) }
 

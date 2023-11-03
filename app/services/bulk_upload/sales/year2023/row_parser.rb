@@ -1112,7 +1112,7 @@ private
   end
 
   def created_by
-    @created_by ||= User.find_by(email: field_2)
+    @created_by ||= User.where("lower(email) = ?", field_2.downcase).first
   end
 
   def previous_la_known
