@@ -163,13 +163,15 @@ class Scheme < ApplicationRecord
 
   enum arrangement_type: ARRANGEMENT_TYPE, _suffix: true
 
-  def self.find_by_id_on_multiple_fields(id)
-    return if id.nil?
+  def self.find_by_id_on_multiple_fields(scheme_id, location_id)
+    return if scheme_id.nil?
 
-    if id.start_with?("S")
-      where(id: id[1..]).first
+    if scheme_id.start_with?("S")
+      where(id: scheme_id[1..]).first
+    elsif location_id.present?
+      joins(:locations).where("schemes.old_visible_id = ? AND locations.old_visible_id = ?", scheme_id.to_s, location_id.to_s).first || where(old_visible_id: scheme_id).first
     else
-      where(old_visible_id: id).first
+      where(old_visible_id: scheme_id).first
     end
   end
 
