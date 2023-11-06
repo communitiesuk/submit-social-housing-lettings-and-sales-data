@@ -10,7 +10,7 @@ RSpec.describe MaintenanceController, type: :request do
 
   describe "when maintenance mode is enabled" do
     before do
-      allow(FeatureToggle).to receive(:maintenance_mode_enabled?).and_return(true)
+      allow(FeatureToggle).to receive(:service_unavailable?).and_return(true)
     end
 
     context "when a user visits a page other than the maintenance page" do
@@ -48,7 +48,7 @@ RSpec.describe MaintenanceController, type: :request do
 
   describe "when maintenance mode is disabled" do
     before do
-      allow(FeatureToggle).to receive(:maintenance_mode_enabled?).and_return(false)
+      allow(FeatureToggle).to receive(:service_unavailable?).and_return(false)
     end
 
     context "when a user visits a page other than the maintenance page" do

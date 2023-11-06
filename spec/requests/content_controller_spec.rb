@@ -50,7 +50,7 @@ RSpec.describe ContentController, type: :request do
 
   describe "when maintenance mode is enabled" do
     before do
-      allow(FeatureToggle).to receive(:maintenance_mode_enabled?).and_return(true)
+      allow(FeatureToggle).to receive(:service_unavailable?).and_return(true)
     end
 
     describe "render privacy notice content page" do

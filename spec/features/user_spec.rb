@@ -141,7 +141,7 @@ RSpec.describe "User Features" do
     end
 
     it "does not show 'Sign in' link if maintenance mode is enabled" do
-      allow(FeatureToggle).to receive(:maintenance_mode_enabled?).and_return(true)
+      allow(FeatureToggle).to receive(:service_unavailable?).and_return(true)
       visit("/lettings-logs")
       expect(page).not_to have_link("Sign in")
     end
@@ -332,7 +332,7 @@ RSpec.describe "User Features" do
       end
 
       it "does not show 'Your account' or 'Sign out' links if maintenance mode is enabled" do
-        allow(FeatureToggle).to receive(:maintenance_mode_enabled?).and_return(true)
+        allow(FeatureToggle).to receive(:service_unavailable?).and_return(true)
         visit("/lettings-logs")
         expect(page).not_to have_link("Your account")
         expect(page).not_to have_link("Sign out")

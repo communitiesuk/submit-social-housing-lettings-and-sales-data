@@ -6,7 +6,7 @@ RSpec.describe MaintenanceController do
   describe "GET #service_unavailable" do
     context "when maintenance mode is enabled" do
       it "logs the user out" do
-        allow(FeatureToggle).to receive(:maintenance_mode_enabled?).and_return(true)
+        allow(FeatureToggle).to receive(:service_unavailable?).and_return(true)
         sign_in user
         expect(controller).to be_user_signed_in
         get :service_unavailable
@@ -16,7 +16,7 @@ RSpec.describe MaintenanceController do
 
     context "when maintenance mode is disabled" do
       it "doesn't log the user out" do
-        allow(FeatureToggle).to receive(:maintenance_mode_enabled?).and_return(false)
+        allow(FeatureToggle).to receive(:service_unavailable?).and_return(false)
         sign_in user
         expect(controller).to be_user_signed_in
         get :service_unavailable
