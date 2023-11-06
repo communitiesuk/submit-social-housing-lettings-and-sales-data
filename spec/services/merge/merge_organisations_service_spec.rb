@@ -141,7 +141,6 @@ RSpec.describe Merge::MergeOrganisationsService do
         let!(:owned_lettings_log_no_location) { create(:lettings_log, :sh, scheme:, startdate: Time.zone.tomorrow, owning_organisation: merging_organisation) }
 
         before do
-          create(:location, scheme:, name: "fake location", postcode: "A1 1AA")
           create(:location, scheme: deactivated_scheme)
           create(:scheme_deactivation_period, scheme: deactivated_scheme, deactivation_date: Time.zone.today - 1.month)
           create(:location_deactivation_period, location: deactivated_location, deactivation_date: Time.zone.today - 1.month)
@@ -162,7 +161,7 @@ RSpec.describe Merge::MergeOrganisationsService do
           expect(absorbing_organisation.owned_schemes.first.service_name).to eq(scheme.service_name)
           expect(absorbing_organisation.owned_schemes.first.old_id).to be_nil
           expect(absorbing_organisation.owned_schemes.first.old_visible_id).to be_nil
-          expect(absorbing_organisation.owned_schemes.first.locations.count).to eq(2)
+          expect(absorbing_organisation.owned_schemes.first.locations.count).to eq(1)
           expect(absorbing_organisation.owned_schemes.first.locations.first.postcode).to eq(location.postcode)
           expect(absorbing_organisation.owned_schemes.first.locations.first.old_id).to be_nil
           expect(absorbing_organisation.owned_schemes.first.locations.first.old_visible_id).to be_nil
@@ -312,7 +311,6 @@ RSpec.describe Merge::MergeOrganisationsService do
           let!(:owned_lettings_log_no_location) { create(:lettings_log, :sh, scheme:, startdate: Time.zone.tomorrow, owning_organisation: merging_organisation) }
 
           before do
-            create(:location, scheme:, name: "fake location", postcode: "A1 1AA")
             create(:location, scheme: deactivated_scheme)
             create(:scheme_deactivation_period, scheme: deactivated_scheme, deactivation_date: Time.zone.today - 1.month)
             create(:location_deactivation_period, location: deactivated_location, deactivation_date: Time.zone.today - 1.month)
@@ -331,7 +329,7 @@ RSpec.describe Merge::MergeOrganisationsService do
             absorbing_organisation.reload
             expect(absorbing_organisation.owned_schemes.count).to eq(1)
             expect(absorbing_organisation.owned_schemes.first.service_name).to eq(scheme.service_name)
-            expect(absorbing_organisation.owned_schemes.first.locations.count).to eq(2)
+            expect(absorbing_organisation.owned_schemes.first.locations.count).to eq(1)
             expect(absorbing_organisation.owned_schemes.first.locations.first.postcode).to eq(location.postcode)
             expect(scheme.scheme_deactivation_periods.count).to eq(1)
             expect(scheme.scheme_deactivation_periods.first.deactivation_date.to_date).to eq(Time.zone.yesterday)
@@ -652,7 +650,6 @@ RSpec.describe Merge::MergeOrganisationsService do
         let!(:owned_lettings_log_no_location) { create(:lettings_log, :sh, scheme:, startdate: Time.zone.tomorrow, owning_organisation: merging_organisation) }
 
         before do
-          create(:location, scheme:, name: "fake location", postcode: "A1 1AA")
           create(:location, scheme: deactivated_scheme)
           create(:scheme_deactivation_period, scheme: deactivated_scheme, deactivation_date: Time.zone.today - 1.month)
           create(:location_deactivation_period, location: deactivated_location, deactivation_date: Time.zone.today - 1.month)
@@ -673,7 +670,7 @@ RSpec.describe Merge::MergeOrganisationsService do
           expect(new_absorbing_organisation.owned_schemes.first.service_name).to eq(scheme.service_name)
           expect(new_absorbing_organisation.owned_schemes.first.old_id).to be_nil
           expect(new_absorbing_organisation.owned_schemes.first.old_visible_id).to be_nil
-          expect(new_absorbing_organisation.owned_schemes.first.locations.count).to eq(2)
+          expect(new_absorbing_organisation.owned_schemes.first.locations.count).to eq(1)
           expect(new_absorbing_organisation.owned_schemes.first.locations.first.postcode).to eq(location.postcode)
           expect(new_absorbing_organisation.owned_schemes.first.locations.first.old_id).to be_nil
           expect(new_absorbing_organisation.owned_schemes.first.locations.first.old_visible_id).to be_nil
@@ -823,7 +820,6 @@ RSpec.describe Merge::MergeOrganisationsService do
           let!(:owned_lettings_log_no_location) { create(:lettings_log, :sh, scheme:, startdate: Time.zone.tomorrow, owning_organisation: merging_organisation) }
 
           before do
-            create(:location, scheme:, name: "fake location", postcode: "A1 1AA")
             create(:location, scheme: deactivated_scheme)
             create(:scheme_deactivation_period, scheme: deactivated_scheme, deactivation_date: Time.zone.today - 1.month)
             create(:location_deactivation_period, location: deactivated_location, deactivation_date: Time.zone.today - 1.month)
@@ -842,7 +838,7 @@ RSpec.describe Merge::MergeOrganisationsService do
             new_absorbing_organisation.reload
             expect(new_absorbing_organisation.owned_schemes.count).to eq(1)
             expect(new_absorbing_organisation.owned_schemes.first.service_name).to eq(scheme.service_name)
-            expect(new_absorbing_organisation.owned_schemes.first.locations.count).to eq(2)
+            expect(new_absorbing_organisation.owned_schemes.first.locations.count).to eq(1)
             expect(new_absorbing_organisation.owned_schemes.first.locations.first.postcode).to eq(location.postcode)
             expect(scheme.scheme_deactivation_periods.count).to eq(1)
             expect(scheme.scheme_deactivation_periods.first.deactivation_date.to_date).to eq(Time.zone.yesterday)
