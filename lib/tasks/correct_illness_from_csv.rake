@@ -22,10 +22,10 @@ namespace :correct_illness do
     s3_service = Storage::S3Service.new(PlatformHelper.is_paas? ? Configuration::PaasConfigurationService.new : Configuration::EnvConfigurationService.new, ENV["IMPORT_PAAS_INSTANCE"])
     file_io = s3_service.get_file_io(file_name)
     file_io.set_encoding_by_bom
-    illness_csv = CSV.parse(file_io, headers: true)
+    illness_csv = CSV.parse(file_io, headers: false)
 
     illness_csv.each_with_index do |row, index|
-      next if index < 2
+      next if index < 3
 
       lettings_log_id = row[1]
 
