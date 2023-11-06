@@ -4,7 +4,7 @@ RSpec.describe MaintenanceController do
   let(:user) { FactoryBot.create(:user) }
 
   describe "GET #service_unavailable" do
-    context "when maintenance mode is enabled" do
+    context "when the service is unavailable" do
       it "logs the user out" do
         allow(FeatureToggle).to receive(:service_unavailable?).and_return(true)
         sign_in user
@@ -14,7 +14,7 @@ RSpec.describe MaintenanceController do
       end
     end
 
-    context "when maintenance mode is disabled" do
+    context "when the service is available" do
       it "doesn't log the user out" do
         allow(FeatureToggle).to receive(:service_unavailable?).and_return(false)
         sign_in user

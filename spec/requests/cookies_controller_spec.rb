@@ -4,7 +4,7 @@ RSpec.describe CookiesController, type: :request do
   let(:headers) { { "Accept" => "text/html" } }
   let(:page) { Capybara::Node::Simple.new(response.body) }
 
-  describe "when maintenance mode is disabled" do
+  describe "when the service is available" do
     describe "render cookies page" do
       before do
         get "/cookies", headers:, params: {}
@@ -20,7 +20,7 @@ RSpec.describe CookiesController, type: :request do
     end
   end
 
-  describe "when maintenance mode is enabled" do
+  describe "when the service is unavailable" do
     before do
       allow(FeatureToggle).to receive(:service_unavailable?).and_return(true)
     end

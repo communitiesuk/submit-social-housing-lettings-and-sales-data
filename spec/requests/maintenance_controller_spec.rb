@@ -8,17 +8,17 @@ RSpec.describe MaintenanceController, type: :request do
     sign_in user
   end
 
-  describe "when maintenance mode is enabled" do
+  describe "when the service is unavailable" do
     before do
       allow(FeatureToggle).to receive(:service_unavailable?).and_return(true)
     end
 
-    context "when a user visits a page other than the maintenance page" do
+    context "when a user visits a page other than the service unavailable page" do
       before do
         get "/lettings-logs"
       end
 
-      it "redirects the user to the maintenance page" do
+      it "redirects the user to the service unavailable page" do
         expect(response).to redirect_to(service_unavailable_path)
         follow_redirect!
         expect(page).to have_content("Sorry, the service is unavailable")
@@ -30,12 +30,12 @@ RSpec.describe MaintenanceController, type: :request do
       end
     end
 
-    context "when a user visits the maintenance page" do
+    context "when a user visits the service unavailable page" do
       before do
         get "/service-unavailable"
       end
 
-      it "keeps the user on the maintenance page" do
+      it "keeps the user on the service unavailable page" do
         expect(response).not_to redirect_to(service_unavailable_path)
         expect(page).to have_content("Sorry, the service is unavailable")
       end
@@ -46,17 +46,17 @@ RSpec.describe MaintenanceController, type: :request do
     end
   end
 
-  describe "when maintenance mode is disabled" do
+  describe "when the service is available" do
     before do
       allow(FeatureToggle).to receive(:service_unavailable?).and_return(false)
     end
 
-    context "when a user visits a page other than the maintenance page" do
+    context "when a user visits a page other than the service unavailable page" do
       before do
         get "/lettings-logs"
       end
 
-      it "doesn't redirect the user to the maintenance page" do
+      it "doesn't redirect the user to the service unavailable page" do
         expect(response).not_to redirect_to(service_unavailable_path)
         expect(page).to have_content("Create a new lettings log")
       end
@@ -66,7 +66,7 @@ RSpec.describe MaintenanceController, type: :request do
       end
     end
 
-    context "when a user visits the maintenance page" do
+    context "when a user visits the service unavailable page" do
       before do
         get "/service-unavailable"
       end
