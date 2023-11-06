@@ -5,9 +5,14 @@ RSpec.describe "correct_addresses" do
   describe ":send_missing_addresses_lettings_csv", type: :task do
     subject(:task) { Rake::Task["correct_addresses:send_missing_addresses_lettings_csv"] }
 
+    around do |example|
+      Timecop.freeze(Time.zone.local(2023, 10, 10)) do
+        Singleton.__init__(FormHandler)
+        example.run
+      end
+    end
+
     before do
-      Timecop.travel(Time.zone.local(2023, 10, 10))
-      Singleton.__init__(FormHandler)
       organisation.users.destroy_all
       Rake.application.rake_require("tasks/send_missing_addresses_csv")
       Rake::Task.define_task(:environment)
@@ -42,10 +47,6 @@ RSpec.describe "correct_addresses" do
 
       stub_request(:get, "https://api.os.uk/search/places/v1/uprn?key=OS_DATA_KEY&uprn=12")
       .to_return(status: 200, body: body_2, headers: {})
-    end
-
-    after do
-      Timecop.return
     end
 
     context "when the rake task is run" do
