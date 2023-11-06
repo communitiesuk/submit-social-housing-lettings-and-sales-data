@@ -513,7 +513,7 @@ private
   end
 
   def created_by
-    @created_by ||= User.where("lower(email) = ?", field_112.downcase).first
+    @created_by ||= User.where("lower(email) = ?", field_112&.downcase).first
   end
 
   def duplicate_check_fields
