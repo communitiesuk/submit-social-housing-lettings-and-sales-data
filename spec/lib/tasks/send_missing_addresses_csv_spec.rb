@@ -49,10 +49,6 @@ RSpec.describe "correct_addresses" do
       .to_return(status: 200, body: body_2, headers: {})
     end
 
-    after do
-      Timecop.return
-    end
-
     context "when the rake task is run" do
       let(:organisation) { create(:organisation, name: "test organisation") }
 
