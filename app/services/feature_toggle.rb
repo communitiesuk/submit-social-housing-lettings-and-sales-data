@@ -37,4 +37,8 @@ class FeatureToggle
   def self.duplicate_summary_enabled?
     !Rails.env.production?
   end
+
+  def self.maintenance_mode_enabled?
+    false
+  end
 end
