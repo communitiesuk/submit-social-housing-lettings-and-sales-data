@@ -20,7 +20,9 @@ namespace :correct_illness do
     raise "Usage: rake correct_illness:correct_illness_from_csv['csv_file_name']" if file_name.blank?
 
     s3_service = Storage::S3Service.new(PlatformHelper.is_paas? ? Configuration::PaasConfigurationService.new : Configuration::EnvConfigurationService.new, ENV["IMPORT_PAAS_INSTANCE"])
-    illness_csv = CSV.parse(s3_service.get_file_io(file_name), headers: false)
+    file_io = s3_service.get_file_io(file_name)
+    file_io.set_encoding_by_bom
+    illness_csv = CSV.parse(file_io, headers: false)
 
     illness_csv.each_with_index do |row, index|
       next if index < 3
