@@ -25,7 +25,7 @@ namespace :correct_illness do
     illness_csv = CSV.parse(file_io, headers: true)
 
     illness_csv.each_with_index do |row, index|
-      next if index < 3
+      next if index < 2
 
       lettings_log_id = row[1]
 

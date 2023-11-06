@@ -91,11 +91,11 @@ RSpec.describe "data_import" do
       before do
         allow(storage_service).to receive(:get_file_io)
         .with("addresses_reimport_123.csv")
-        .and_return(replace_entity_ids(lettings_log, lettings_logs[0], lettings_logs[1], lettings_logs[2], File.open("./spec/fixtures/files/addresses_reimport.csv").read))
+        .and_return(StringIO.new(replace_entity_ids(lettings_log, lettings_logs[0], lettings_logs[1], lettings_logs[2], File.open("./spec/fixtures/files/addresses_reimport.csv").read)))
 
         allow(storage_service).to receive(:get_file_io)
         .with("all_addresses_reimport_123.csv")
-        .and_return(replace_entity_ids(lettings_log, lettings_logs[0], lettings_logs[1], lettings_logs[2], File.open("./spec/fixtures/files/addresses_reimport_all_logs.csv").read))
+        .and_return(StringIO.new(replace_entity_ids(lettings_log, lettings_logs[0], lettings_logs[1], lettings_logs[2], File.open("./spec/fixtures/files/addresses_reimport_all_logs.csv").read)))
       end
 
       context "when the file contains issue type column" do
@@ -312,11 +312,11 @@ RSpec.describe "data_import" do
       before do
         allow(storage_service).to receive(:get_file_io)
         .with("addresses_reimport_123.csv")
-        .and_return(replace_entity_ids(sales_log, sales_logs[0], sales_logs[1], sales_logs[2], File.open("./spec/fixtures/files/sales_addresses_reimport.csv").read))
+        .and_return(StringIO.new(replace_entity_ids(sales_log, sales_logs[0], sales_logs[1], sales_logs[2], File.open("./spec/fixtures/files/sales_addresses_reimport.csv").read)))
 
         allow(storage_service).to receive(:get_file_io)
         .with("all_addresses_reimport_123.csv")
-        .and_return(replace_entity_ids(sales_log, sales_logs[0], sales_logs[1], sales_logs[2], File.open("./spec/fixtures/files/sales_addresses_reimport_all_logs.csv").read))
+        .and_return(StringIO.new(replace_entity_ids(sales_log, sales_logs[0], sales_logs[1], sales_logs[2], File.open("./spec/fixtures/files/sales_addresses_reimport_all_logs.csv").read)))
       end
 
       context "when the file contains issue type column" do

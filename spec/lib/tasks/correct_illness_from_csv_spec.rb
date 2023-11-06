@@ -96,7 +96,7 @@ RSpec.describe "correct_illness" do
       before do
         allow(storage_service).to receive(:get_file_io)
         .with("illness_123.csv")
-        .and_return(replace_entity_ids(lettings_log, second_lettings_log, third_lettings_log, File.open("./spec/fixtures/files/illness_update.csv").read))
+        .and_return(StringIO.new(replace_entity_ids(lettings_log, second_lettings_log, third_lettings_log, File.open("./spec/fixtures/files/illness_update.csv").read)))
       end
 
       it "sets illness to yes and sets correct illness type" do
