@@ -6,9 +6,7 @@ namespace :data_import do
     raise "Usage: rake data_import:import_lettings_addresses_from_csv['csv_file_name']" if file_name.blank?
 
     s3_service = Storage::S3Service.new(PlatformHelper.is_paas? ? Configuration::PaasConfigurationService.new : Configuration::EnvConfigurationService.new, ENV["IMPORT_PAAS_INSTANCE"])
-    file_io = s3_service.get_file_io(file_name)
-    file_io.set_encoding_by_bom
-    addresses_csv = CSV.parse(file_io, headers: true)
+    addresses_csv = CSV.parse(s3_service.get_file_io(file_name), headers: true)
     contains_issue_type = addresses_csv.headers.include?("Issue type")
 
     addresses_csv.each do |row|
@@ -67,9 +65,7 @@ namespace :data_import do
     raise "Usage: rake data_import:import_sales_addresses_from_csv['csv_file_name']" if file_name.blank?
 
     s3_service = Storage::S3Service.new(PlatformHelper.is_paas? ? Configuration::PaasConfigurationService.new : Configuration::EnvConfigurationService.new, ENV["IMPORT_PAAS_INSTANCE"])
-    file_io = s3_service.get_file_io(file_name)
-    file_io.set_encoding_by_bom
-    addresses_csv = CSV.parse(file_io, headers: true)
+    addresses_csv = CSV.parse(s3_service.get_file_io(file_name), headers: true)
     contains_issue_type = addresses_csv.headers.include?("Issue type")
 
     addresses_csv.each do |row|
