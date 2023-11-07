@@ -151,6 +151,13 @@ RSpec.describe "User Features" do
       visit("/lettings-logs")
       expect(page).not_to have_link("Sign in")
     end
+
+    it "does not show 'Sign in' link when both the service_moved? and service_unavailable? feature toggles are on" do
+      allow(FeatureToggle).to receive(:service_moved?).and_return(true)
+      allow(FeatureToggle).to receive(:service_unavailable?).and_return(true)
+      visit("/lettings-logs")
+      expect(page).not_to have_link("Sign in")
+    end
   end
 
   context "when the user is trying to log in with incorrect credentials" do
@@ -345,6 +352,14 @@ RSpec.describe "User Features" do
       end
 
       it "does not show 'Your account' or 'Sign out' links when the service is unavailable" do
+        allow(FeatureToggle).to receive(:service_unavailable?).and_return(true)
+        visit("/lettings-logs")
+        expect(page).not_to have_link("Your account")
+        expect(page).not_to have_link("Sign out")
+      end
+
+      it "does not show 'Your account' or 'Sign out' links when both the service_moved? and service_unavailable? feature toggles are on" do
+        allow(FeatureToggle).to receive(:service_moved?).and_return(true)
         allow(FeatureToggle).to receive(:service_unavailable?).and_return(true)
         visit("/lettings-logs")
         expect(page).not_to have_link("Your account")
