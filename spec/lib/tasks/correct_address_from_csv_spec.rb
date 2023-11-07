@@ -184,6 +184,14 @@ RSpec.describe "data_import" do
         it "raises an error when no path is given" do
           expect { task.invoke(nil) }.to raise_error(RuntimeError, "Usage: rake data_import:import_lettings_addresses_from_csv['csv_file_name']")
         end
+
+        it "logs an error if a validation fails" do
+          lettings_log.ppcodenk = 0
+          lettings_log.ppostcode_full = "invalid_format"
+          lettings_log.save!(validate: false)
+          expect(Rails.logger).to receive(:error).with(/Validation failed for lettings log with ID #{lettings_log.id}: Ppostcode full/)
+          task.invoke(addresses_csv_path)
+        end
       end
 
       context "when the file does not contain issue type column" do
@@ -271,6 +279,14 @@ RSpec.describe "data_import" do
 
         it "raises an error when no path is given" do
           expect { task.invoke(nil) }.to raise_error(RuntimeError, "Usage: rake data_import:import_lettings_addresses_from_csv['csv_file_name']")
+        end
+
+        it "logs an error if a validation fails" do
+          lettings_log.ppcodenk = 0
+          lettings_log.ppostcode_full = "invalid_format"
+          lettings_log.save!(validate: false)
+          expect(Rails.logger).to receive(:error).with(/Validation failed for lettings log with ID #{lettings_log.id}: Ppostcode full/)
+          task.invoke(addresses_csv_path)
         end
       end
     end
@@ -405,6 +421,14 @@ RSpec.describe "data_import" do
         it "raises an error when no path is given" do
           expect { task.invoke(nil) }.to raise_error(RuntimeError, "Usage: rake data_import:import_sales_addresses_from_csv['csv_file_name']")
         end
+
+        it "logs an error if a validation fails" do
+          sales_log.ppcodenk = 0
+          sales_log.ppostcode_full = "invalid_format"
+          sales_log.save!(validate: false)
+          expect(Rails.logger).to receive(:error).with(/Validation failed for sales log with ID #{sales_log.id}: Ppostcode full/)
+          task.invoke(addresses_csv_path)
+        end
       end
 
       context "when the file does not contain issue type column" do
@@ -492,6 +516,14 @@ RSpec.describe "data_import" do
 
         it "raises an error when no path is given" do
           expect { task.invoke(nil) }.to raise_error(RuntimeError, "Usage: rake data_import:import_sales_addresses_from_csv['csv_file_name']")
+        end
+
+        it "logs an error if a validation fails" do
+          sales_log.ppcodenk = 0
+          sales_log.ppostcode_full = "invalid_format"
+          sales_log.save!(validate: false)
+          expect(Rails.logger).to receive(:error).with(/Validation failed for sales log with ID #{sales_log.id}: Ppostcode full/)
+          task.invoke(addresses_csv_path)
         end
       end
     end

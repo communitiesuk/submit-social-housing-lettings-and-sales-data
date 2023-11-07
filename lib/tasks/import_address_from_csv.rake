@@ -122,7 +122,7 @@ namespace :data_import do
       if sales_log.save
         Rails.logger.info("Updated sales log #{sales_log_id}, with address: #{[sales_log.address_line1, sales_log.address_line2, sales_log.town_or_city, sales_log.county, sales_log.postcode_full].join(', ')}")
       else
-        Rails.logger.error("Validation failed for sales log with ID #{sales_log_id.id}: #{lettings_log.errors.full_messages.join(', ')}}")
+        Rails.logger.error("Validation failed for sales log with ID #{sales_log.id}: #{sales_log.errors.full_messages.join(', ')}}")
       end
     end
   end
