@@ -41,4 +41,8 @@ class FeatureToggle
   def self.service_unavailable?
     false
   end
+
+  def self.service_moved?
+    false
+  end
 end

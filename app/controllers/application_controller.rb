@@ -7,9 +7,15 @@ class ApplicationController < ActionController::Base
   before_action :set_paper_trail_whodunnit
 
   def check_maintenance_status
-    if FeatureToggle.service_unavailable? && !%w[service-unavailable accessibility-statement privacy-notice cookies].include?(request.fullpath.split("?")[0].delete("/"))
-      redirect_to service_unavailable_path
-    elsif !FeatureToggle.service_unavailable? && request.fullpath.split("?")[0].delete("/") == "service-unavailable"
+    if FeatureToggle.service_moved?
+      unless %w[service-moved accessibility-statement privacy-notice cookies].include?(request.fullpath.split("?")[0].delete("/"))
+        redirect_to service_moved_path
+      end
+    elsif FeatureToggle.service_unavailable?
+      unless %w[service-unavailable accessibility-statement privacy-notice cookies].include?(request.fullpath.split("?")[0].delete("/"))
+        redirect_to service_unavailable_path
+      end
+    elsif %w[service-moved service-unavailable].include?(request.fullpath.split("?")[0].delete("/"))
       redirect_back(fallback_location: root_path)
     end
   end
