@@ -21,7 +21,7 @@ RSpec.describe MaintenanceController, type: :request do
       it "redirects the user to the service moved page" do
         expect(response).to redirect_to(service_moved_path)
         follow_redirect!
-        expect(page).to have_content("The URL for this service has changed.")
+        expect(page).to have_content("The URL for this service has changed")
       end
 
       it "the cookie banner is visible" do
@@ -37,7 +37,7 @@ RSpec.describe MaintenanceController, type: :request do
 
       it "keeps the user on the service moved page" do
         expect(response).not_to redirect_to(service_moved_path)
-        expect(page).to have_content("The URL for this service has changed.")
+        expect(page).to have_content("The URL for this service has changed")
       end
 
       it "the cookie banner is visible" do
@@ -98,7 +98,7 @@ RSpec.describe MaintenanceController, type: :request do
       it "redirects the user to the service moved page" do
         expect(response).to redirect_to(service_moved_path)
         follow_redirect!
-        expect(page).to have_content("The URL for this service has changed.")
+        expect(page).to have_content("The URL for this service has changed")
       end
 
       it "the cookie banner is visible" do
@@ -114,7 +114,7 @@ RSpec.describe MaintenanceController, type: :request do
 
       it "keeps the user on the service moved page" do
         expect(response).not_to redirect_to(service_moved_path)
-        expect(page).to have_content("The URL for this service has changed.")
+        expect(page).to have_content("The URL for this service has changed")
       end
 
       it "the cookie banner is visible" do
