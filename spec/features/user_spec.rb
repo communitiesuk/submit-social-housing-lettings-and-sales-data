@@ -139,6 +139,12 @@ RSpec.describe "User Features" do
       visit("/users/#{user.id}")
       expect(page).to have_content("Sign in to your account to submit CORE data")
     end
+
+    it "does not show 'Sign in' link if maintenance mode is enabled" do
+      allow(FeatureToggle).to receive(:maintenance_mode_enabled?).and_return(true)
+      visit("/lettings-logs")
+      expect(page).not_to have_link("Sign in")
+    end
   end
 
   context "when the user is trying to log in with incorrect credentials" do
@@ -323,6 +329,13 @@ RSpec.describe "User Features" do
         visit("/account")
         expect(page).to have_selector('[data-qa="change-data-protection-officer"]')
         expect(page).to have_selector('[data-qa="change-key-contact"]')
+      end
+
+      it "does not show 'Your account' or 'Sign out' links if maintenance mode is enabled" do
+        allow(FeatureToggle).to receive(:maintenance_mode_enabled?).and_return(true)
+        visit("/lettings-logs")
+        expect(page).not_to have_link("Your account")
+        expect(page).not_to have_link("Sign out")
       end
     end
 

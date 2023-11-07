@@ -32,7 +32,10 @@ Redis.silence_deprecations = true
 
 Sidekiq.configure_server do |config|
   config.on(:startup) do
-    Sidekiq::Cron::Job.load_from_hash YAML.load_file("config/sidekiq_cron_schedule.yml")
+    Sidekiq::Cron::Job.all.each(&:destroy)
+    unless FeatureToggle.maintenance_mode_enabled?
+      Sidekiq::Cron::Job.load_from_hash YAML.load_file("config/sidekiq_cron_schedule.yml")
+    end
   end
 
   config.on(:shutdown) do
