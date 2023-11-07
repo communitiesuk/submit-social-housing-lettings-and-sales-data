@@ -540,7 +540,7 @@ private
   end
 
   def created_by
-    @created_by ||= User.find_by(email: field_3)
+    @created_by ||= User.where("lower(email) = ?", field_3&.downcase).first
   end
 
   def validate_uprn_exists_if_any_key_address_fields_are_blank
