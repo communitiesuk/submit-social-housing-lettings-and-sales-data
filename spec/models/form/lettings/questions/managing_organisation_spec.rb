@@ -163,7 +163,7 @@ RSpec.describe Form::Lettings::Questions::ManagingOrganisation, type: :model do
     end
 
     context "when organisation has merged" do
-      let(:absorbing_org) { create(:organisation, name: "Absorbing org", holds_own_stock: true, created_at: Time.zone.local(2023, 8, 3)) }
+      let(:absorbing_org) { create(:organisation, name: "Absorbing org", holds_own_stock: true) }
       let!(:merged_org) { create(:organisation, name: "Merged org", holds_own_stock: false) }
       let(:user) { create(:user, :data_coordinator, organisation: absorbing_org) }
 
@@ -173,6 +173,17 @@ RSpec.describe Form::Lettings::Questions::ManagingOrganisation, type: :model do
       end
 
       it "displays merged organisation on the list of choices" do
+        options = {
+          "" => "Select an option",
+          absorbing_org.id => "Absorbing org (Your organisation)",
+          merged_org.id => "Merged org (inactive as of 2 August 2023)",
+          merged_org.id => "Merged org (inactive as of 2 August 2023)",
+        }
+        expect(question.displayed_answer_options(log, user)).to eq(options)
+      end
+
+      it "displays active date for absorbing organisation if available from is given" do
+        absorbing_org.update!(available_from: Time.zone.local(2023, 8, 3))
         options = {
           "" => "Select an option",
           absorbing_org.id => "Absorbing org (Your organisation, active as of 3 August 2023)",
@@ -189,7 +200,7 @@ RSpec.describe Form::Lettings::Questions::ManagingOrganisation, type: :model do
         options = {
           "" => "Select an option",
           merged_org.id => "Merged org (inactive as of 2 August 2023)",
-          absorbing_org.id => "Absorbing org (Your organisation, active as of 3 August 2023)",
+          absorbing_org.id => "Absorbing org (Your organisation)",
           managing_agent.id => "Managing org 1",
         }
 
