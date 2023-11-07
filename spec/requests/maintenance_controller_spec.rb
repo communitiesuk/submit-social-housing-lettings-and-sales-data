@@ -8,6 +8,44 @@ RSpec.describe MaintenanceController, type: :request do
     sign_in user
   end
 
+  describe "when the service has moved" do
+    before do
+      allow(FeatureToggle).to receive(:service_moved?).and_return(true)
+    end
+
+    context "when a user visits a page other than the service moved page" do
+      before do
+        get "/service-unavailable"
+      end
+
+      it "redirects the user to the service moved page" do
+        expect(response).to redirect_to(service_moved_path)
+        follow_redirect!
+        expect(page).to have_content("The URL for this service has changed.")
+      end
+
+      it "the cookie banner is visible" do
+        follow_redirect!
+        expect(page).to have_content("We’d like to use analytics cookies so we can understand how you use the service and make improvements.")
+      end
+    end
+
+    context "when a user visits the service moved page" do
+      before do
+        get "/service-moved"
+      end
+
+      it "keeps the user on the service moved page" do
+        expect(response).not_to redirect_to(service_moved_path)
+        expect(page).to have_content("The URL for this service has changed.")
+      end
+
+      it "the cookie banner is visible" do
+        expect(page).to have_content("We’d like to use analytics cookies so we can understand how you use the service and make improvements.")
+      end
+    end
+  end
+
   describe "when the service is unavailable" do
     before do
       allow(FeatureToggle).to receive(:service_unavailable?).and_return(true)
