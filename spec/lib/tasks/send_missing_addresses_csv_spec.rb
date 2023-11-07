@@ -2,15 +2,15 @@ require "rails_helper"
 require "rake"
 
 RSpec.describe "correct_addresses" do
+  around do |example|
+    Timecop.freeze(Time.zone.local(2023, 10, 10)) do
+      Singleton.__init__(FormHandler)
+      example.run
+    end
+  end
+
   describe ":send_missing_addresses_lettings_csv", type: :task do
     subject(:task) { Rake::Task["correct_addresses:send_missing_addresses_lettings_csv"] }
-
-    around do |example|
-      Timecop.freeze(Time.zone.local(2023, 10, 10)) do
-        Singleton.__init__(FormHandler)
-        example.run
-      end
-    end
 
     before do
       organisation.users.destroy_all
