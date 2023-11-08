@@ -4,7 +4,7 @@ RSpec.describe ContentController, type: :request do
   let(:headers) { { "Accept" => "text/html" } }
   let(:page) { Capybara::Node::Simple.new(response.body) }
 
-  describe "when maintenance mode is disabled" do
+  describe "when the service is available" do
     describe "render privacy notice content page" do
       before do
         get "/privacy-notice", headers:, params: {}
@@ -48,9 +48,78 @@ RSpec.describe ContentController, type: :request do
     end
   end
 
-  describe "when maintenance mode is enabled" do
+  describe "when the service has moved" do
     before do
-      allow(FeatureToggle).to receive(:maintenance_mode_enabled?).and_return(true)
+      allow(FeatureToggle).to receive(:service_moved?).and_return(true)
+    end
+
+    describe "render privacy notice content page" do
+      before do
+        get "/privacy-notice", headers:, params: {}
+      end
+
+      it "returns a 200" do
+        expect(response).to have_http_status(:success)
+      end
+
+      it "returns the page" do
+        expect(page).to have_title("Privacy notice")
+      end
+    end
+
+    describe "render accessibility statement content page" do
+      before do
+        get "/accessibility-statement", headers:, params: {}
+      end
+
+      it "returns a 200" do
+        expect(response).to have_http_status(:success)
+      end
+
+      it "returns the page" do
+        expect(page).to have_title("Accessibility statement")
+      end
+    end
+  end
+
+  describe "when the service is unavailable" do
+    before do
+      allow(FeatureToggle).to receive(:service_unavailable?).and_return(true)
+    end
+
+    describe "render privacy notice content page" do
+      before do
+        get "/privacy-notice", headers:, params: {}
+      end
+
+      it "returns a 200" do
+        expect(response).to have_http_status(:success)
+      end
+
+      it "returns the page" do
+        expect(page).to have_title("Privacy notice")
+      end
+    end
+
+    describe "render accessibility statement content page" do
+      before do
+        get "/accessibility-statement", headers:, params: {}
+      end
+
+      it "returns a 200" do
+        expect(response).to have_http_status(:success)
+      end
+
+      it "returns the page" do
+        expect(page).to have_title("Accessibility statement")
+      end
+    end
+  end
+
+  describe "when both the service_moved? and service_unavailable? feature toggles are on" do
+    before do
+      allow(FeatureToggle).to receive(:service_moved?).and_return(true)
+      allow(FeatureToggle).to receive(:service_unavailable?).and_return(true)
     end
 
     describe "render privacy notice content page" do

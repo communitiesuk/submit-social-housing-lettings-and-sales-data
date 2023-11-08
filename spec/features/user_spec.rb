@@ -140,8 +140,21 @@ RSpec.describe "User Features" do
       expect(page).to have_content("Sign in to your account to submit CORE data")
     end
 
-    it "does not show 'Sign in' link if maintenance mode is enabled" do
-      allow(FeatureToggle).to receive(:maintenance_mode_enabled?).and_return(true)
+    it "does not show 'Sign in' link when the service has moved" do
+      allow(FeatureToggle).to receive(:service_moved?).and_return(true)
+      visit("/lettings-logs")
+      expect(page).not_to have_link("Sign in")
+    end
+
+    it "does not show 'Sign in' link when the service is unavailable" do
+      allow(FeatureToggle).to receive(:service_unavailable?).and_return(true)
+      visit("/lettings-logs")
+      expect(page).not_to have_link("Sign in")
+    end
+
+    it "does not show 'Sign in' link when both the service_moved? and service_unavailable? feature toggles are on" do
+      allow(FeatureToggle).to receive(:service_moved?).and_return(true)
+      allow(FeatureToggle).to receive(:service_unavailable?).and_return(true)
       visit("/lettings-logs")
       expect(page).not_to have_link("Sign in")
     end
@@ -331,8 +344,23 @@ RSpec.describe "User Features" do
         expect(page).to have_selector('[data-qa="change-key-contact"]')
       end
 
-      it "does not show 'Your account' or 'Sign out' links if maintenance mode is enabled" do
-        allow(FeatureToggle).to receive(:maintenance_mode_enabled?).and_return(true)
+      it "does not show 'Your account' or 'Sign out' links when the service has moved" do
+        allow(FeatureToggle).to receive(:service_moved?).and_return(true)
+        visit("/lettings-logs")
+        expect(page).not_to have_link("Your account")
+        expect(page).not_to have_link("Sign out")
+      end
+
+      it "does not show 'Your account' or 'Sign out' links when the service is unavailable" do
+        allow(FeatureToggle).to receive(:service_unavailable?).and_return(true)
+        visit("/lettings-logs")
+        expect(page).not_to have_link("Your account")
+        expect(page).not_to have_link("Sign out")
+      end
+
+      it "does not show 'Your account' or 'Sign out' links when both the service_moved? and service_unavailable? feature toggles are on" do
+        allow(FeatureToggle).to receive(:service_moved?).and_return(true)
+        allow(FeatureToggle).to receive(:service_unavailable?).and_return(true)
         visit("/lettings-logs")
         expect(page).not_to have_link("Your account")
         expect(page).not_to have_link("Sign out")

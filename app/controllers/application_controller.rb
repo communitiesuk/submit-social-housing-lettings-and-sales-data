@@ -3,13 +3,19 @@ class ApplicationController < ActionController::Base
 
   rescue_from Pundit::NotAuthorizedError, with: :render_not_authorized
 
-  before_action :check_maintenance
+  before_action :check_maintenance_status
   before_action :set_paper_trail_whodunnit
 
-  def check_maintenance
-    if FeatureToggle.maintenance_mode_enabled? && !%w[service-unavailable accessibility-statement privacy-notice cookies].include?(request.fullpath.split("?")[0].delete("/"))
-      redirect_to service_unavailable_path
-    elsif !FeatureToggle.maintenance_mode_enabled? && request.fullpath.split("?")[0].delete("/") == "service-unavailable"
+  def check_maintenance_status
+    if FeatureToggle.service_moved?
+      unless %w[service-moved accessibility-statement privacy-notice cookies].include?(request.fullpath.split("?")[0].delete("/"))
+        redirect_to service_moved_path
+      end
+    elsif FeatureToggle.service_unavailable?
+      unless %w[service-unavailable accessibility-statement privacy-notice cookies].include?(request.fullpath.split("?")[0].delete("/"))
+        redirect_to service_unavailable_path
+      end
+    elsif %w[service-moved service-unavailable].include?(request.fullpath.split("?")[0].delete("/"))
       redirect_back(fallback_location: root_path)
     end
   end

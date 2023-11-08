@@ -38,7 +38,11 @@ class FeatureToggle
     !Rails.env.production?
   end
 
-  def self.maintenance_mode_enabled?
+  def self.service_unavailable?
+    false
+  end
+
+  def self.service_moved?
     false
   end
 end
