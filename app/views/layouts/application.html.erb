@@ -87,7 +87,7 @@
 
     <%= govuk_header(
       classes: govuk_header_classes(current_user),
-      service_url: current_user.nil? ? "/" : "/logs",
+      service_url: current_user.nil? ? root_path : logs_path,
       navigation_classes: "govuk-header__navigation--end",
     ) do |component|
       component.product_name(name: t("service_name"))
