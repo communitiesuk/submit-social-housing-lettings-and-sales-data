@@ -6,7 +6,9 @@ namespace :data_import do
     raise "Usage: rake data_import:import_lettings_addresses_from_csv['csv_file_name']" if file_name.blank?
 
     s3_service = Storage::S3Service.new(PlatformHelper.is_paas? ? Configuration::PaasConfigurationService.new : Configuration::EnvConfigurationService.new, ENV["IMPORT_PAAS_INSTANCE"])
-    addresses_csv = CSV.parse(s3_service.get_file_io(file_name), headers: true)
+    file_io = s3_service.get_file_io(file_name)
+    file_io.set_encoding_by_bom
+    addresses_csv = CSV.parse(file_io, headers: true)
     contains_issue_type = addresses_csv.headers.include?("Issue type")
 
     addresses_csv.each do |row|
@@ -53,8 +55,11 @@ namespace :data_import do
       lettings_log.send("process_postcode_changes!")
       lettings_log.values_updated_at = Time.zone.now
 
-      lettings_log.save!
-      Rails.logger.info("Updated lettings log #{lettings_log_id}, with address: #{[lettings_log.address_line1, lettings_log.address_line2, lettings_log.town_or_city, lettings_log.county, lettings_log.postcode_full].join(', ')}")
+      if lettings_log.save
+        Rails.logger.info("Updated lettings log #{lettings_log_id}, with address: #{[lettings_log.address_line1, lettings_log.address_line2, lettings_log.town_or_city, lettings_log.county, lettings_log.postcode_full].join(', ')}")
+      else
+        Rails.logger.error("Validation failed for lettings log with ID #{lettings_log.id}: #{lettings_log.errors.full_messages.join(', ')}}")
+      end
     end
   end
 
@@ -65,7 +70,9 @@ namespace :data_import do
     raise "Usage: rake data_import:import_sales_addresses_from_csv['csv_file_name']" if file_name.blank?
 
     s3_service = Storage::S3Service.new(PlatformHelper.is_paas? ? Configuration::PaasConfigurationService.new : Configuration::EnvConfigurationService.new, ENV["IMPORT_PAAS_INSTANCE"])
-    addresses_csv = CSV.parse(s3_service.get_file_io(file_name), headers: true)
+    file_io = s3_service.get_file_io(file_name)
+    file_io.set_encoding_by_bom
+    addresses_csv = CSV.parse(file_io, headers: true)
     contains_issue_type = addresses_csv.headers.include?("Issue type")
 
     addresses_csv.each do |row|
@@ -112,8 +119,11 @@ namespace :data_import do
       sales_log.send("process_postcode_changes!")
       sales_log.values_updated_at = Time.zone.now
 
-      sales_log.save!
-      Rails.logger.info("Updated sales log #{sales_log_id}, with address: #{[sales_log.address_line1, sales_log.address_line2, sales_log.town_or_city, sales_log.county, sales_log.postcode_full].join(', ')}")
+      if sales_log.save
+        Rails.logger.info("Updated sales log #{sales_log_id}, with address: #{[sales_log.address_line1, sales_log.address_line2, sales_log.town_or_city, sales_log.county, sales_log.postcode_full].join(', ')}")
+      else
+        Rails.logger.error("Validation failed for sales log with ID #{sales_log.id}: #{sales_log.errors.full_messages.join(', ')}}")
+      end
     end
   end
 end

@@ -1,7 +1,11 @@
 <span class="govuk-!-margin-right-4">
-  <% if searched.present? %>
-    <strong><%= count %></strong> <%= item_label %> found matching ‘<%= searched %>’ of <strong><%= total_count %></strong> total <%= item %>. <%= govuk_link_to("Clear search", path) %>
+  <% if searched.present? && filters_count&.positive? %>
+    <strong><%= count %></strong> <%= item_label.pluralize(count) %> matching search and filters<br>
+  <% elsif searched.present? %>
+    <strong><%= count %></strong> <%= item_label.pluralize(count) %> matching search<br>
+  <% elsif filters_count&.positive? %>
+    <strong><%= count %></strong> <%= item_label.pluralize(count) %> matching filters<br>
   <% else %>
-    <strong><%= count %></strong> total <%= item %>
+    <strong><%= count %></strong> matching <%= item %>
   <% end %>
 </span>

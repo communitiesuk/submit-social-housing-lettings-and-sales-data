@@ -1,0 +1,34 @@
+<% if @organisation.recently_absorbed_organisations_grouped_by_merge_date.present? %>
+  <%= govuk_details(summary_text: "View all organisations that were merged into #{@organisation.name}") do %>
+    <% @organisation.recently_absorbed_organisations_grouped_by_merge_date.each do |merge_date, organisations| %>
+      <p><strong>Merge date:</strong> <%= merge_date&.to_formatted_s(:govuk_date) %></p>
+      <%= govuk_table do |table| %>
+        <%= table.head do |head| %>
+          <%= head.row do |row| %>
+            <% row.cell(header: true, text: "Organisation name", html_attributes: { scope: "col", class: "govuk-!-width-one-half" }) %>
+            <% row.cell(header: true, text: "Organisation ID", html_attributes: { scope: "col", class: "govuk-!-width-one-half" }) %>
+          <% end %>
+        <% end %>
+        <% organisations.each do |absorbed_org| %>
+          <%= table.body do |body| %>
+            <%= body.row do |row| %>
+              <% if current_user.support? %>
+                <% row.cell(text: simple_format(govuk_link_to(absorbed_org.name, organisation_path(absorbed_org)), { class: "govuk-!-font-weight-bold scheme-name-cell" }, wrapper_tag: "div")) %>
+              <% else %>
+                <% row.cell(text: absorbed_org.name) %>
+              <% end %>
+              <% row.cell(text: "ORG#{absorbed_org.id}") %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
+<% if @organisation.absorbing_organisation.present? %>
+  <% if current_user.support? %>
+    <p><%= @organisation.name %> was merged into <%= govuk_link_to(@organisation.absorbing_organisation.name, organisation_path(@organisation.absorbing_organisation)) %><%= @organisation.merge_date ? " on #{@organisation.merge_date.to_formatted_s(:govuk_date)}" : "" %>.</p>
+  <% else %>
+    <p><%= @organisation.name %> was merged into <%= @organisation.absorbing_organisation.name %><%= @organisation.merge_date ? " on #{@organisation.merge_date.to_formatted_s(:govuk_date)}" : "" %>.</p>
+  <% end %>
+<% end %>

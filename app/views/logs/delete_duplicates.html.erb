@@ -1,6 +1,6 @@
 <% content_for :before_content do %>
   <% content_for :title, "Are you sure you want to delete #{@duplicate_logs.count == 1 ? 'this duplicate log' : 'these duplicate logs'}?" %>
-  <%= govuk_back_link href: @log.lettings? ? lettings_log_duplicate_logs_path(@original_log, original_log_id: @original_log.id) : sales_log_duplicate_logs_path(@original_log, original_log_id: @original_log.id) %>
+  <%= govuk_back_link href: @log.lettings? ? lettings_log_duplicate_logs_path(@original_log, original_log_id: @original_log.id, referrer: params[:referrer], organisation_id: params[:organisation_id]) : sales_log_duplicate_logs_path(@original_log, original_log_id: @original_log.id, referrer: params[:referrer], organisation_id: params[:organisation_id]) %>
 <% end %>
 
 <div class="govuk-grid-row">
@@ -29,10 +29,10 @@
       <%= govuk_button_to @duplicate_logs.count == 1 ? "Delete this log" : "Delete these logs",
         send("delete_logs_#{@log.class.name.underscore}s_path"),
         method: "delete",
-        params: { ids: @duplicate_logs.map(&:id), original_log_id: @original_log.id, remaining_log_id: @log.id } %>
+        params: { ids: @duplicate_logs.map(&:id), original_log_id: @original_log.id, remaining_log_id: @log.id, referrer: params[:referrer], organisation_id: params[:organisation_id] } %>
       <%= govuk_button_link_to(
         "Cancel",
-        send("#{@log.class.name.underscore}_duplicate_logs_path", @original_log, original_log_id: @original_log.id),
+        send("#{@log.class.name.underscore}_duplicate_logs_path", @original_log, original_log_id: @original_log.id, referrer: params[:referrer], organisation_id: params[:organisation_id]),
         secondary: true,
       ) %>
     </div>

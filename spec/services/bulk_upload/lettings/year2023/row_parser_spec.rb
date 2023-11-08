@@ -753,6 +753,16 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
         end
       end
 
+      context "when email matches other than casing" do
+        let(:other_user) { create(:user, organisation: owning_org) }
+
+        let(:attributes) { { bulk_upload:, field_1: owning_org.old_visible_id, field_3: other_user.email.upcase!, field_2: managing_org.old_visible_id } }
+
+        it "is permitted" do
+          expect(parser.errors[:field_3]).to be_blank
+        end
+      end
+
       context "when an user part of managing org" do
         let(:other_user) { create(:user, organisation: managing_org) }
 
@@ -862,17 +872,17 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
         let(:location) { create(:location, :with_old_visible_id, scheme:) }
 
         context "when matching scheme cannot be found" do
-          let(:attributes) { { bulk_upload:, field_1: owning_org.old_visible_id, field_4: "2", field_5: "2", field_16: "S123", field_17: location.id } }
+          let(:attributes) { { bulk_upload:, field_1: owning_org.old_visible_id, field_2: owning_org.old_visible_id, field_4: "2", field_5: "2", field_16: "S123", field_17: location.id } }
 
           it "returns a setup error" do
             expect(parser.errors[:field_15]).to be_blank
-            expect(parser.errors.where(:field_16, category: :setup).map(&:message)).to eq(["The scheme code is not correct"])
+            expect(parser.errors.where(:field_16, category: :setup).map(&:message)).to eq(["This scheme code does not belong to the owning organisation or managing organisation"])
             expect(parser.errors[:field_17]).to be_blank
           end
         end
 
         context "when missing location" do
-          let(:attributes) { { bulk_upload:, field_1: owning_org.old_visible_id, field_4: "2", field_5: "2", field_16: "S#{scheme.id}", field_17: nil } }
+          let(:attributes) { { bulk_upload:, field_1: owning_org.old_visible_id, field_2: owning_org.old_visible_id, field_4: "2", field_5: "2", field_16: "S#{scheme.id}", field_17: nil } }
 
           it "returns a setup error" do
             expect(parser.errors[:field_15]).to be_blank
@@ -882,17 +892,17 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
         end
 
         context "when matching location cannot be found" do
-          let(:attributes) { { bulk_upload:, field_1: owning_org.old_visible_id, field_4: "2", field_5: "2", field_16: "S#{scheme.id}", field_17: "123" } }
+          let(:attributes) { { bulk_upload:, field_1: owning_org.old_visible_id, field_2: owning_org.old_visible_id, field_4: "2", field_5: "2", field_16: "S#{scheme.id}", field_17: "123" } }
 
           it "returns a setup error" do
             expect(parser.errors[:field_15]).to be_blank
             expect(parser.errors[:field_16]).to be_blank
-            expect(parser.errors.where(:field_17, category: :setup).map(&:message)).to eq(["Location could not be found with the provided scheme code"])
+            expect(parser.errors.where(:field_17, category: :setup).map(&:message)).to eq(["Location code must relate to a location that is owned by the owning organisation or managing organisation"])
           end
         end
 
         context "when matching location exists" do
-          let(:attributes) { { bulk_upload:, field_1: owning_org.old_visible_id, field_4: "2", field_5: "2", field_16: "S#{scheme.id}", field_17: location.id } }
+          let(:attributes) { { bulk_upload:, field_1: owning_org.old_visible_id, field_2: owning_org.old_visible_id, field_4: "2", field_5: "2", field_16: "S#{scheme.id}", field_17: location.id } }
 
           it "does not return an error" do
             expect(parser.errors[:field_15]).to be_blank
@@ -904,29 +914,29 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
         context "when location exists but not related" do
           let(:other_scheme) { create(:scheme, :with_old_visible_id) }
           let(:other_location) { create(:location, :with_old_visible_id, scheme: other_scheme) }
-          let(:attributes) { { bulk_upload:, field_1: owning_org.old_visible_id, field_4: "2", field_5: "2", field_16: "S#{scheme.id}", field_17: other_location.id } }
+          let(:attributes) { { bulk_upload:, field_1: owning_org.old_visible_id, field_2: owning_org.old_visible_id, field_4: "2", field_5: "2", field_16: "S#{scheme.id}", field_17: other_location.id } }
 
           it "returns a setup error" do
             expect(parser.errors[:field_15]).to be_blank
             expect(parser.errors[:field_16]).to be_blank
-            expect(parser.errors.where(:field_17, category: :setup).map(&:message)).to eq(["Location could not be found with the provided scheme code"])
+            expect(parser.errors.where(:field_17, category: :setup).map(&:message)).to eq(["Location code must relate to a location that is owned by the owning organisation or managing organisation"])
           end
         end
 
         context "when scheme belongs to someone else" do
           let(:other_scheme) { create(:scheme, :with_old_visible_id) }
           let(:other_location) { create(:location, :with_old_visible_id, scheme: other_scheme) }
-          let(:attributes) { { bulk_upload:, field_4: "2", field_5: "2", field_16: "S#{other_scheme.id}", field_17: other_location.id, field_1: owning_org.old_visible_id } }
+          let(:attributes) { { bulk_upload:, field_4: "2", field_5: "2", field_16: "S#{other_scheme.id}", field_17: other_location.id, field_1: owning_org.old_visible_id, field_2: owning_org.old_visible_id } }
 
           it "returns a setup error" do
             expect(parser.errors[:field_15]).to be_blank
-            expect(parser.errors.where(:field_16, category: :setup).map(&:message)).to eq(["This scheme code does not belong to your organisation, or any of your stock owners / managing agents"])
+            expect(parser.errors.where(:field_16, category: :setup).map(&:message)).to eq(["This scheme code does not belong to the owning organisation or managing organisation"])
             expect(parser.errors[:field_17]).to be_blank
           end
         end
 
         context "when scheme belongs to owning org" do
-          let(:attributes) { { bulk_upload:, field_4: "2", field_5: "2", field_16: "S#{scheme.id}", field_17: location.id, field_1: owning_org.old_visible_id } }
+          let(:attributes) { { bulk_upload:, field_4: "2", field_5: "2", field_16: "S#{scheme.id}", field_17: location.id, field_1: owning_org.old_visible_id, field_2: owning_org.old_visible_id } }
 
           it "does not return an error" do
             expect(parser.errors[:field_15]).to be_blank
@@ -953,17 +963,17 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
         let(:location) { create(:location, :with_old_visible_id, scheme:) }
 
         context "when matching scheme cannot be found" do
-          let(:attributes) { { bulk_upload:, field_1: owning_org.old_visible_id, field_4: "2", field_5: "2", field_15: "123", field_16: location.old_visible_id } }
+          let(:attributes) { { bulk_upload:, field_1: owning_org.old_visible_id, field_2: owning_org.old_visible_id, field_4: "2", field_5: "2", field_15: "123", field_16: location.old_visible_id } }
 
           it "returns a setup error" do
-            expect(parser.errors.where(:field_15, category: :setup).map(&:message)).to eq(["The management group code is not correct"])
+            expect(parser.errors.where(:field_15, category: :setup).map(&:message)).to eq(["This management group code does not belong to the owning organisation or managing organisation"])
             expect(parser.errors[:field_16]).to be_blank
             expect(parser.errors[:field_17]).to be_blank
           end
         end
 
         context "when missing location" do
-          let(:attributes) { { bulk_upload:, field_1: owning_org.old_visible_id, field_4: "2", field_5: "2", field_15: scheme.old_visible_id, field_16: nil } }
+          let(:attributes) { { bulk_upload:, field_1: owning_org.old_visible_id, field_2: owning_org.old_visible_id, field_4: "2", field_5: "2", field_15: scheme.old_visible_id, field_16: nil } }
 
           it "returns a setup error" do
             expect(parser.errors[:field_15]).to be_blank
@@ -973,17 +983,17 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
         end
 
         context "when matching location cannot be found" do
-          let(:attributes) { { bulk_upload:, field_1: owning_org.old_visible_id, field_4: "2", field_5: "2", field_15: scheme.old_visible_id, field_16: "123" } }
+          let(:attributes) { { bulk_upload:, field_1: owning_org.old_visible_id, field_2: owning_org.old_visible_id, field_4: "2", field_5: "2", field_15: scheme.old_visible_id, field_16: "123" } }
 
           it "returns a setup error" do
             expect(parser.errors[:field_15]).to be_blank
-            expect(parser.errors.where(:field_16, category: :setup).map(&:message)).to eq(["Scheme could not be found with the provided management group code"])
+            expect(parser.errors.where(:field_16, category: :setup).map(&:message)).to eq(["Scheme code must relate to a scheme that is owned by the owning organisation or managing organisation"])
             expect(parser.errors[:field_17]).to be_blank
           end
         end
 
         context "when matching location exists" do
-          let(:attributes) { { bulk_upload:, field_1: owning_org.old_visible_id, field_4: "2", field_5: "2", field_15: scheme.old_visible_id, field_16: location.old_visible_id } }
+          let(:attributes) { { bulk_upload:, field_1: owning_org.old_visible_id, field_2: owning_org.old_visible_id, field_4: "2", field_5: "2", field_15: scheme.old_visible_id, field_16: location.old_visible_id } }
 
           it "does not return an error" do
             expect(parser.errors[:field_15]).to be_blank
@@ -995,11 +1005,11 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
         context "when location exists but not related" do
           let(:other_scheme) { create(:scheme, :with_old_visible_id) }
           let(:other_location) { create(:location, :with_old_visible_id, scheme: other_scheme) }
-          let(:attributes) { { bulk_upload:, field_1: owning_org.old_visible_id, field_4: "2", field_5: "2", field_15: scheme.old_visible_id, field_16: other_location.old_visible_id } }
+          let(:attributes) { { bulk_upload:, field_1: owning_org.old_visible_id, field_2: owning_org.old_visible_id, field_4: "2", field_5: "2", field_15: scheme.old_visible_id, field_16: other_location.old_visible_id } }
 
           it "returns a setup error" do
             expect(parser.errors[:field_15]).to be_blank
-            expect(parser.errors.where(:field_16, category: :setup).map(&:message)).to eq(["Scheme could not be found with the provided management group code"])
+            expect(parser.errors.where(:field_16, category: :setup).map(&:message)).to eq(["Scheme code must relate to a scheme that is owned by the owning organisation or managing organisation"])
             expect(parser.errors[:field_17]).to be_blank
           end
         end
@@ -1007,17 +1017,17 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
         context "when scheme belongs to someone else" do
           let(:other_scheme) { create(:scheme, :with_old_visible_id) }
           let(:other_location) { create(:location, :with_old_visible_id, scheme: other_scheme) }
-          let(:attributes) { { bulk_upload:, field_4: "2", field_5: "2", field_15: other_scheme.old_visible_id, field_16: other_location.old_visible_id, field_1: owning_org.old_visible_id } }
+          let(:attributes) { { bulk_upload:, field_4: "2", field_5: "2", field_15: other_scheme.old_visible_id, field_16: other_location.old_visible_id, field_1: owning_org.old_visible_id, field_2: owning_org.old_visible_id } }
 
           it "returns a setup error" do
-            expect(parser.errors.where(:field_15, category: :setup).map(&:message)).to eq(["This management group code does not belong to your organisation, or any of your stock owners / managing agents"])
+            expect(parser.errors.where(:field_15, category: :setup).map(&:message)).to eq(["This management group code does not belong to the owning organisation or managing organisation"])
             expect(parser.errors[:field_16]).to be_blank
             expect(parser.errors[:field_17]).to be_blank
           end
         end
 
         context "when scheme belongs to owning org" do
-          let(:attributes) { { bulk_upload:, field_4: "2", field_5: "2", field_15: scheme.old_visible_id, field_16: location.old_visible_id, field_1: owning_org.old_visible_id } }
+          let(:attributes) { { bulk_upload:, field_4: "2", field_5: "2", field_15: scheme.old_visible_id, field_16: location.old_visible_id, field_1: owning_org.old_visible_id, field_2: owning_org.old_visible_id } }
 
           it "does not return an error" do
             expect(parser.errors[:field_15]).to be_blank
@@ -1204,7 +1214,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
     describe "#field_119" do # referral
       context "when 3 ie PRP nominated by LA and owning org is LA" do
-        let(:attributes) { { bulk_upload:, field_119: "3", field_1: owning_org.old_visible_id } }
+        let(:attributes) { { bulk_upload:, field_119: "3", field_1: owning_org.old_visible_id, field_2: owning_org.old_visible_id } }
 
         it "is not permitted" do
           expect(parser.errors[:field_119]).to be_present
@@ -1212,7 +1222,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
       end
 
       context "when 4 ie referred by LA and is general needs and owning org is LA" do
-        let(:attributes) { { bulk_upload:, field_119: "4", field_1: owning_org.old_visible_id.to_s, field_4: "1" } }
+        let(:attributes) { { bulk_upload:, field_119: "4", field_1: owning_org.old_visible_id, field_2: owning_org.old_visible_id, field_4: "1" } }
 
         it "is not permitted" do
           expect(parser.errors[:field_119]).to be_present
@@ -1222,7 +1232,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
       context "when 4 ie referred by LA and is general needs and owning org is PRP" do
         let(:owning_org) { create(:organisation, :prp, :with_old_visible_id) }
 
-        let(:attributes) { { bulk_upload:, field_119: "4", field_1: owning_org.old_visible_id.to_s } }
+        let(:attributes) { { bulk_upload:, field_119: "4", field_1: owning_org.old_visible_id, field_2: owning_org.old_visible_id } }
 
         it "is permitted" do
           expect(parser.errors[:field_119]).to be_blank
@@ -1327,7 +1337,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
       context "when org is not stock owning" do
         let(:owning_org) { create(:organisation, :with_old_visible_id, :does_not_own_stock) }
 
-        let(:attributes) { { bulk_upload:, field_1: owning_org.old_visible_id } }
+        let(:attributes) { { bulk_upload:, field_1: owning_org.old_visible_id, field_2: owning_org.old_visible_id } }
 
         it "is not permitted as setup error" do
           setup_errors = parser.errors.select { |e| e.options[:category] == :setup }
@@ -1415,7 +1425,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
     describe "#field_6" do # renewal
       context "when blank" do
-        let(:attributes) { { bulk_upload:, field_1: owning_org.old_visible_id, field_6: "" } }
+        let(:attributes) { { bulk_upload:, field_1: owning_org.old_visible_id, field_2: owning_org.old_visible_id, field_6: "" } }
 
         it "has setup errors on the field" do
           expect(parser.errors.where(:field_6, category: :setup).map(&:message)).to eql(["You must answer property renewal"])
@@ -1452,6 +1462,24 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
           expect(parser.errors[:field_18]).to eql(["You must answer UPRN"])
           expect(parser.errors[:field_19]).to eql(["You must answer address line 1"])
           expect(parser.errors[:field_21]).to eql(["You must answer town or city"])
+        end
+      end
+
+      context "when neither UPRN nor address fields are given for a supported housing record" do
+        let(:bulk_upload) { create(:bulk_upload, :lettings, user:, needstype: 2) }
+        let(:attributes) do
+          { bulk_upload:,
+            field_15: scheme.old_visible_id,
+            field_4: "2",
+            field_5: "2",
+            field_16: location.old_visible_id,
+            field_1: "1" }
+        end
+
+        it "does not add UPRN errors" do
+          expect(parser.errors[:field_18]).to be_empty
+          expect(parser.errors[:field_19]).to be_empty
+          expect(parser.errors[:field_21]).to be_empty
         end
       end
 
@@ -1692,7 +1720,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
     describe "#location" do
       context "when lookup is via new core id" do
-        let(:attributes) { { bulk_upload:, field_16: "S#{scheme.id}", field_17: location.id, field_1: owning_org } }
+        let(:attributes) { { bulk_upload:, field_16: "S#{scheme.id}", field_17: location.id, field_1: "ORG#{owning_org.id}", field_2: "ORG#{owning_org.id}" } }
 
         it "assigns the correct location" do
           expect(parser.log.location).to eql(location)
@@ -1700,17 +1728,43 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
       end
 
       context "when lookup is via old core id" do
-        let(:attributes) { { bulk_upload:, field_15: scheme.old_visible_id, field_16: location.old_visible_id, field_1: owning_org } }
+        let(:attributes) { { bulk_upload:, field_15: scheme.old_visible_id, field_16: location.old_visible_id, field_1: owning_org.old_visible_id, field_2: owning_org.old_visible_id } }
 
         it "assigns the correct location" do
           expect(parser.log.location).to eql(location)
+        end
+
+        context "when location had leading zeroes in its id in Old CORE" do
+          let(:attributes) { { bulk_upload:, field_15: scheme.old_visible_id, field_16: "123", field_1: owning_org.old_visible_id, field_2: owning_org.old_visible_id } }
+
+          before do
+            location.old_visible_id = "00123"
+            location.save!
+          end
+
+          it "assigns the correct location" do
+            expect(parser.log.location).to eql(location)
+          end
+        end
+
+        context "when the user provides an id with leading zeroes" do
+          let(:attributes) { { bulk_upload:, field_15: scheme.old_visible_id, field_16: "00123", field_1: owning_org.old_visible_id, field_2: owning_org.old_visible_id } }
+
+          before do
+            location.old_visible_id = "123"
+            location.save!
+          end
+
+          it "assigns the correct location" do
+            expect(parser.log.location).to eql(location)
+          end
         end
       end
     end
 
     describe "#scheme" do
       context "when lookup is via new core id" do
-        let(:attributes) { { bulk_upload:, field_16: "S#{scheme.id}", field_1: owning_org } }
+        let(:attributes) { { bulk_upload:, field_16: "S#{scheme.id}", field_1: "ORG#{owning_org.id}", field_2: "ORG#{owning_org.id}" } }
 
         it "assigns the correct scheme" do
           expect(parser.log.scheme).to eql(scheme)
@@ -1718,10 +1772,36 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
       end
 
       context "when lookup is via old core id" do
-        let(:attributes) { { bulk_upload:, field_15: scheme.old_visible_id, field_16: location.old_visible_id, field_1: owning_org } }
+        let(:attributes) { { bulk_upload:, field_15: scheme.old_visible_id, field_16: location.old_visible_id, field_1: owning_org.old_visible_id, field_2: owning_org.old_visible_id } }
 
         it "assigns the correct scheme" do
           expect(parser.log.scheme).to eql(scheme)
+        end
+
+        context "when scheme had leading zeroes in its id in Old CORE" do
+          let(:attributes) { { bulk_upload:, field_15: "10", field_16: location.old_visible_id, field_1: owning_org.old_visible_id, field_2: owning_org.old_visible_id } }
+
+          before do
+            scheme.old_visible_id = "010"
+            scheme.save!
+          end
+
+          it "assigns the correct scheme" do
+            expect(parser.log.scheme).to eql(scheme)
+          end
+        end
+
+        context "when the user provides an id with leading zeroes" do
+          let(:attributes) { { bulk_upload:, field_15: "010", field_16: location.old_visible_id, field_1: owning_org.old_visible_id, field_2: owning_org.old_visible_id } }
+
+          before do
+            scheme.old_visible_id = "10"
+            scheme.save!
+          end
+
+          it "assigns the correct scheme" do
+            expect(parser.log.scheme).to eql(scheme)
+          end
         end
       end
     end

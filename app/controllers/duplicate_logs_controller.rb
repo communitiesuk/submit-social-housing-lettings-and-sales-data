@@ -5,15 +5,12 @@ class DuplicateLogsController < ApplicationController
   before_action :find_resource_by_named_id
   before_action :find_duplicates_for_a_log
   before_action :find_original_log
+  before_action :find_organisation, only: [:index]
   before_action :find_all_duplicates, only: [:index]
 
   def show
     if @log
       @all_duplicates = [@log, *@duplicate_logs]
-      @duplicate_check_questions = duplicate_check_question_ids.map { |question_id|
-        question = @log.form.get_question(question_id, @log)
-        question if question.page.routed_to?(@log, current_user)
-      }.compact
     else
       render_not_found
     end
@@ -26,10 +23,8 @@ class DuplicateLogsController < ApplicationController
   end
 
   def index
-    render_not_found if @duplicates.blank?
-
     @duplicate_sets_count = @duplicates[:lettings].count + @duplicates[:sales].count
-    render_not_found if @duplicate_sets_count.zero?
+    render "duplicate_logs/no_more_duplicates" if @duplicate_sets_count.zero?
   end
 
 private
@@ -55,29 +50,9 @@ private
   def find_all_duplicates
     return @duplicates = duplicates_for_user(current_user) if current_user.data_provider?
 
-    organisation = current_user.support? ? Organisation.find(params[:organisation_id]) : current_user.organisation
-    return unless organisation
+    return unless @organisation
 
-    @duplicates = duplicates_for_organisation(organisation)
-  end
-
-  def duplicate_check_question_ids
-    if @log.lettings?
-      ["owning_organisation_id",
-       "startdate",
-       "tenancycode",
-       "postcode_full",
-       "scheme_id",
-       "location_id",
-       "age1",
-       "sex1",
-       "ecstat1",
-       @log.household_charge == 1 ? "household_charge" : nil,
-       "tcharge",
-       @log.is_carehome? ? "chcharge" : nil].compact
-    else
-      %w[owning_organisation_id saledate purchid age1 sex1 ecstat1 postcode_full]
-    end
+    @duplicates = duplicates_for_organisation(@organisation)
   end
 
   def find_original_log
@@ -88,5 +63,9 @@ private
                     else
                       current_user.lettings_logs.find_by(id: original_log_id)
                     end
+  end
+
+  def find_organisation
+    @organisation = current_user.support? ? Organisation.find(params[:organisation_id]) : current_user.organisation
   end
 end

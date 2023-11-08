@@ -75,7 +75,7 @@ class Scheme < ApplicationRecord
   validate :validate_confirmed
   validate :validate_owning_organisation
 
-  auto_strip_attributes :service_name
+  auto_strip_attributes :service_name, squish: true
 
   SENSITIVE = {
     No: 0,
@@ -109,6 +109,7 @@ class Scheme < ApplicationRecord
     "Medium level": 3,
     "High level": 4,
     "Nursing care in a care home": 5,
+    "Floating support": 6,
   }.freeze
 
   enum support_type: SUPPORT_TYPE, _suffix: true
@@ -162,13 +163,15 @@ class Scheme < ApplicationRecord
 
   enum arrangement_type: ARRANGEMENT_TYPE, _suffix: true
 
-  def self.find_by_id_on_multiple_fields(id)
-    return if id.nil?
+  def self.find_by_id_on_multiple_fields(scheme_id, location_id)
+    return if scheme_id.nil?
 
-    if id.start_with?("S")
-      where(id: id[1..]).first
+    if scheme_id.start_with?("S")
+      where(id: scheme_id[1..]).first
+    elsif location_id.present?
+      joins(:locations).where("ltrim(schemes.old_visible_id, '0') = ? AND ltrim(locations.old_visible_id, '0') = ?", scheme_id.to_i.to_s, location_id.to_i.to_s).first || where("ltrim(schemes.old_visible_id, '0') = ?", scheme_id.to_i.to_s).first
     else
-      where(old_visible_id: id).first
+      where("ltrim(old_visible_id, '0') = ?", scheme_id.to_i.to_s).first
     end
   end
 
@@ -225,7 +228,7 @@ class Scheme < ApplicationRecord
       "Medium level": "Staff on site daily or making frequent visits with some out-of-hours cover.",
       "High level": "Intensive level of staffing provided on a 24-hour basis.",
     }
-    Scheme.support_types.keys.excluding("Missing").map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize, description: hints[key.to_sym]) }
+    Scheme.support_types.keys.excluding("Missing").excluding("Floating support").map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize, description: hints[key.to_sym]) }
   end
 
   def intended_length_of_stay_options_with_hints
@@ -266,8 +269,8 @@ class Scheme < ApplicationRecord
     scheme_deactivation_periods.deactivations_without_reactivation.first
   end
 
-  def recent_deactivation
-    scheme_deactivation_periods.order("created_at").last
+  def last_deactivation_before(date)
+    scheme_deactivation_periods.where("deactivation_date <= ?", date).order("created_at").last
   end
 
   def status
@@ -278,7 +281,7 @@ class Scheme < ApplicationRecord
     return :incomplete unless confirmed && locations.confirmed.any?
     return :deactivated if open_deactivation&.deactivation_date.present? && date >= open_deactivation.deactivation_date
     return :deactivating_soon if open_deactivation&.deactivation_date.present? && date < open_deactivation.deactivation_date
-    return :reactivating_soon if recent_deactivation&.reactivation_date.present? && date < recent_deactivation.reactivation_date
+    return :reactivating_soon if last_deactivation_before(date)&.reactivation_date.present? && date < last_deactivation_before(date).reactivation_date
 
     :active
   end

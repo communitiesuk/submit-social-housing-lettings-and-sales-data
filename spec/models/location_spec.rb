@@ -930,6 +930,29 @@ RSpec.describe Location, type: :model do
     end
   end
 
+  describe "status_at" do
+    let(:location) { FactoryBot.build(:location, startdate: Time.zone.local(2022, 4, 1)) }
+
+    before do
+      Timecop.freeze(2022, 6, 7)
+    end
+
+    after do
+      Timecop.unfreeze
+    end
+
+    context "when there have been previous deactivations" do
+      before do
+        FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 5, 4), reactivation_date: Time.zone.local(2022, 6, 5), location:)
+        location.save!
+      end
+
+      it "returns active if the location has no relevant deactivation records" do
+        expect(location.status_at(Time.zone.local(2022, 4, 4))).to eq(:active)
+      end
+    end
+  end
+
   describe "filter by status" do
     let!(:incomplete_location) { FactoryBot.create(:location, :incomplete, startdate: Time.zone.local(2022, 4, 1)) }
     let!(:incomplete_location_with_nil_confirmed) { FactoryBot.create(:location, :incomplete, startdate: Time.zone.local(2022, 4, 1), confirmed: nil) }

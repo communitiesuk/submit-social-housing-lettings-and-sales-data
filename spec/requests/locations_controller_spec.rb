@@ -274,7 +274,7 @@ RSpec.describe LocationsController, type: :request do
         end
 
         it "updates the table caption" do
-          expect(page).to have_content("1 location found matching ‘#{search_param}’")
+          expect(page).to have_content("1 location matching search")
         end
 
         it "has search in the title" do
@@ -402,7 +402,7 @@ RSpec.describe LocationsController, type: :request do
         end
 
         it "updates the table caption" do
-          expect(page).to have_content("1 location found matching ‘#{search_param}’")
+          expect(page).to have_content("1 location matching search")
         end
 
         it "has search in the title" do

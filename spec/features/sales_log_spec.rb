@@ -108,7 +108,7 @@ RSpec.describe "Sales Log Features" do
       context "when no filters are selected" do
         it "displays the filters component with no clear button" do
           expect(page).to have_content("No filters applied")
-          expect(page).not_to have_content("Clear")
+          expect(page).not_to have_link("Clear", href: "/clear-filters?filter_type=sales_logs")
         end
       end
 
@@ -122,7 +122,7 @@ RSpec.describe "Sales Log Features" do
 
         it "displays the filters component with a correct count and clear button" do
           expect(page).to have_content("3 filters applied")
-          expect(page).to have_content("Clear")
+          expect(page).to have_link("Clear", href: "/clear-filters?filter_type=sales_logs")
         end
 
         context "when clearing the filters" do
@@ -132,7 +132,7 @@ RSpec.describe "Sales Log Features" do
 
           it "clears the filters and displays the filter component as before" do
             expect(page).to have_content("No filters applied")
-            expect(page).not_to have_content("Clear")
+            expect(page).not_to have_link("Clear", href: "/clear-filters?filter_type=sales_logs")
           end
         end
       end
@@ -206,7 +206,7 @@ RSpec.describe "Sales Log Features" do
       expect(duplicate_log.deleted?).to be true
       expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
       expect(page).to have_content("Log #{duplicate_log.id} has been deleted.")
-      expect(page).to have_current_path("/sales-logs/#{sales_log.id}/duplicate-logs?original_log_id=#{sales_log.id}")
+      expect(page).to have_current_path("/sales-logs/#{sales_log.id}/duplicate-logs?organisation_id=&original_log_id=#{sales_log.id}&referrer=")
       expect(page).not_to have_content("These logs are duplicates")
       expect(page).not_to have_link("Keep this log and delete duplicates")
       expect(page).to have_link("Back to Log #{sales_log.id}", href: "/sales-logs/#{sales_log.id}")
@@ -230,7 +230,7 @@ RSpec.describe "Sales Log Features" do
       expect(sales_log.status).to eq("deleted")
       expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
       expect(page).to have_content("Log #{sales_log.id} has been deleted.")
-      expect(page).to have_current_path("/sales-logs/#{duplicate_log.id}/duplicate-logs?original_log_id=#{sales_log.id}")
+      expect(page).to have_current_path("/sales-logs/#{duplicate_log.id}/duplicate-logs?organisation_id=&original_log_id=#{sales_log.id}&referrer=")
       expect(page).not_to have_content("These logs are duplicates")
       expect(page).not_to have_link("Keep this log and delete duplicates")
       expect(page).to have_link("Back to sales logs", href: "/sales-logs")
@@ -249,8 +249,8 @@ RSpec.describe "Sales Log Features" do
       expect(page).to have_current_path("/sales-logs/#{sales_log.id}/duplicate-logs?original_log_id=#{sales_log.id}")
       click_link("Change", href: "/sales-logs/#{duplicate_log.id}/purchaser-code?first_remaining_duplicate_id=#{sales_log.id}&original_log_id=#{sales_log.id}&referrer=duplicate_logs")
       fill_in("sales-log-purchid-field", with: "something else")
-      click_button("Save and continue")
-      expect(page).to have_current_path("/sales-logs/#{sales_log.id}/duplicate-logs?original_log_id=#{sales_log.id}")
+      click_button("Save changes")
+      expect(page).to have_current_path("/sales-logs/#{sales_log.id}/duplicate-logs?original_log_id=#{sales_log.id}&referrer=duplicate_logs")
       expect(page).to have_link("Back to Log #{sales_log.id}", href: "/sales-logs/#{sales_log.id}")
       expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
       expect(page).to have_content("Log #{duplicate_log.id} is no longer a duplicate and has been removed from the list")
@@ -260,8 +260,8 @@ RSpec.describe "Sales Log Features" do
     it "allows deduplicating logs by changing the answers on the original log" do
       click_link("Change", href: "/sales-logs/#{sales_log.id}/purchaser-code?first_remaining_duplicate_id=#{duplicate_log.id}&original_log_id=#{sales_log.id}&referrer=duplicate_logs")
       fill_in("sales-log-purchid-field", with: "something else")
-      click_button("Save and continue")
-      expect(page).to have_current_path("/sales-logs/#{duplicate_log.id}/duplicate-logs?original_log_id=#{sales_log.id}")
+      click_button("Save changes")
+      expect(page).to have_current_path("/sales-logs/#{duplicate_log.id}/duplicate-logs?original_log_id=#{sales_log.id}&referrer=duplicate_logs")
       expect(page).to have_link("Back to Log #{sales_log.id}", href: "/sales-logs/#{sales_log.id}")
       expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
       expect(page).to have_content("Log #{sales_log.id} is no longer a duplicate and has been removed from the list")

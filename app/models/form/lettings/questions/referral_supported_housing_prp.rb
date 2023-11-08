@@ -12,7 +12,7 @@ class Form::Lettings::Questions::ReferralSupportedHousingPrp < ::Form::Question
   end
 
   ANSWER_OPTIONS = {
-    "1" => { "value" => "Internal transfer" },
+    "1" => { "value" => "Internal transfer", "hint" => "Where the tenant has moved to another social property owned by the same landlord." },
     "2" => { "value" => "Tenant applied directly (no referral or nomination)" },
     "3" => { "value" => "Nominated by a local housing authority" },
     "4" => { "value" => "Referred by local authority housing department" },

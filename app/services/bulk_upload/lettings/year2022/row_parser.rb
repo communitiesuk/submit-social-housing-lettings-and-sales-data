@@ -354,12 +354,10 @@ class BulkUpload::Lettings::Year2022::RowParser
   validate :validate_managing_org_exists, on: :after_log
   validate :validate_managing_org_related, on: :after_log
 
-  validate :validate_scheme_related, on: :after_log
-  validate :validate_scheme_exists, on: :after_log
+  validate :validate_related_scheme_exists, on: :after_log
   validate :validate_scheme_data_given, on: :after_log
 
-  validate :validate_location_related, on: :after_log
-  validate :validate_location_exists, on: :after_log
+  validate :validate_related_location_exists, on: :after_log
   validate :validate_location_data_given, on: :after_log
 
   validate :validate_created_by_exists, on: :after_log
@@ -513,7 +511,7 @@ private
   end
 
   def created_by
-    @created_by ||= User.find_by(email: field_112)
+    @created_by ||= User.where("lower(email) = ?", field_112&.downcase).first
   end
 
   def duplicate_check_fields
@@ -530,53 +528,36 @@ private
     ].compact
   end
 
-  def validate_location_related
-    return if scheme.blank? || location.blank?
-
-    unless location.scheme == scheme
-      block_log_creation!
-      errors.add(:field_5, "Scheme code must relate to a location that is owned by owning organisation or managing organisation")
-    end
-  end
-
   def location
     return if scheme.nil?
 
     @location ||= scheme.locations.find_by_id_on_multiple_fields(field_5)
   end
 
-  def validate_location_exists
+  def validate_related_location_exists
     if scheme && field_5.present? && location.nil?
-      errors.add(:field_5, "Location could not be found with the provided scheme code", category: :setup)
+      block_log_creation!
+      errors.add(:field_5, "Scheme code must relate to a scheme that is owned by the owning organisation or managing organisation", category: :setup)
     end
   end
 
   def validate_location_data_given
     if bulk_upload.supported_housing? && field_5.blank?
+      block_log_creation!
       errors.add(:field_5, I18n.t("validations.not_answered", question: "scheme code"), category: :setup)
     end
   end
 
-  def validate_scheme_related
-    return unless field_4.present? && scheme.present?
-
-    owned_by_owning_org = owning_organisation && scheme.owning_organisation == owning_organisation
-    owned_by_managing_org = managing_organisation && scheme.owning_organisation == managing_organisation
-
-    unless owned_by_owning_org || owned_by_managing_org
+  def validate_related_scheme_exists
+    if field_4.present? && owning_organisation.present? && managing_organisation.present? && scheme.nil?
       block_log_creation!
-      errors.add(:field_4, "This management group code does not belong to your organisation, or any of your stock owners / managing agents", category: :setup)
-    end
-  end
-
-  def validate_scheme_exists
-    if field_4.present? && scheme.nil?
-      errors.add(:field_4, "The management group code is not correct", category: :setup)
+      errors.add(:field_4, "This management group code does not belong to the owning organisation or managing organisation", category: :setup)
     end
   end
 
   def validate_scheme_data_given
     if bulk_upload.supported_housing? && field_4.blank?
+      block_log_creation!
       errors.add(:field_4, I18n.t("validations.not_answered", question: "management group code"), category: :setup)
     end
   end
@@ -1488,6 +1469,8 @@ private
   end
 
   def scheme
-    @scheme ||= Scheme.find_by_id_on_multiple_fields(field_4)
+    return if field_4.nil? || owning_organisation.nil? || managing_organisation.nil?
+
+    @scheme ||= Scheme.where(id: (owning_organisation.owned_schemes + managing_organisation.owned_schemes).map(&:id)).find_by_id_on_multiple_fields(field_4, field_5)
   end
 end

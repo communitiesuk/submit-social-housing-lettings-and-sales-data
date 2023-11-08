@@ -16,7 +16,7 @@ class Location < ApplicationRecord
 
   before_validation :lookup_postcode!, if: :postcode_changed?
 
-  auto_strip_attributes :name
+  auto_strip_attributes :name, squish: true
 
   scope :search_by_postcode, ->(postcode) { where("REPLACE(postcode, ' ', '') ILIKE ?", "%#{postcode.delete(' ')}%") }
   scope :search_by_name, ->(name) { where("name ILIKE ?", "%#{name}%") }
@@ -110,7 +110,7 @@ class Location < ApplicationRecord
   def self.find_by_id_on_multiple_fields(id)
     return if id.nil?
 
-    where(id:).or(where(old_visible_id: id)).first
+    where(id:).or(where("ltrim(old_visible_id, '0') = ?", id.to_i.to_s)).first
   end
 
   def postcode=(postcode)
@@ -131,8 +131,8 @@ class Location < ApplicationRecord
     location_deactivation_periods.deactivations_without_reactivation.first
   end
 
-  def recent_deactivation
-    location_deactivation_periods.order("created_at").last
+  def last_deactivation_before(date)
+    location_deactivation_periods.where("deactivation_date <= ?", date).order("created_at").last
   end
 
   def status
@@ -143,7 +143,7 @@ class Location < ApplicationRecord
     return :incomplete unless confirmed
     return :deactivated if open_deactivation&.deactivation_date.present? && date >= open_deactivation.deactivation_date
     return :deactivating_soon if open_deactivation&.deactivation_date.present? && date < open_deactivation.deactivation_date
-    return :reactivating_soon if recent_deactivation&.reactivation_date.present? && date < recent_deactivation.reactivation_date
+    return :reactivating_soon if last_deactivation_before(date)&.reactivation_date.present? && date < last_deactivation_before(date).reactivation_date
     return :activating_soon if startdate.present? && date < startdate
 
     :active

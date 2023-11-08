@@ -4,45 +4,81 @@ RSpec.describe ContentController, type: :request do
   let(:headers) { { "Accept" => "text/html" } }
   let(:page) { Capybara::Node::Simple.new(response.body) }
 
-  describe "render privacy notice content page" do
-    before do
-      get "/privacy-notice", headers:, params: {}
+  describe "when maintenance mode is disabled" do
+    describe "render privacy notice content page" do
+      before do
+        get "/privacy-notice", headers:, params: {}
+      end
+
+      it "returns a 200" do
+        expect(response).to have_http_status(:success)
+      end
+
+      it "returns the page" do
+        expect(page).to have_title("Privacy notice")
+      end
     end
 
-    it "returns a 200" do
-      expect(response).to have_http_status(:success)
+    describe "render accessibility statement content page" do
+      before do
+        get "/accessibility-statement", headers:, params: {}
+      end
+
+      it "returns a 200" do
+        expect(response).to have_http_status(:success)
+      end
+
+      it "returns the page" do
+        expect(page).to have_title("Accessibility statement")
+      end
     end
 
-    it "returns the page" do
-      expect(page).to have_title("Privacy notice")
+    describe "render data sharing agreement" do
+      before do
+        get "/data-sharing-agreement", headers:, params: {}
+      end
+
+      it "returns a 200" do
+        expect(response).to have_http_status(:success)
+      end
+
+      it "returns the page" do
+        expect(page).to have_title("Data sharing agreement")
+      end
     end
   end
 
-  describe "render accessibility statement content page" do
+  describe "when maintenance mode is enabled" do
     before do
-      get "/accessibility-statement", headers:, params: {}
+      allow(FeatureToggle).to receive(:maintenance_mode_enabled?).and_return(true)
     end
 
-    it "returns a 200" do
-      expect(response).to have_http_status(:success)
+    describe "render privacy notice content page" do
+      before do
+        get "/privacy-notice", headers:, params: {}
+      end
+
+      it "returns a 200" do
+        expect(response).to have_http_status(:success)
+      end
+
+      it "returns the page" do
+        expect(page).to have_title("Privacy notice")
+      end
     end
 
-    it "returns the page" do
-      expect(page).to have_title("Accessibility statement")
-    end
-  end
+    describe "render accessibility statement content page" do
+      before do
+        get "/accessibility-statement", headers:, params: {}
+      end
 
-  describe "render data sharing agreement" do
-    before do
-      get "/data-sharing-agreement", headers:, params: {}
-    end
+      it "returns a 200" do
+        expect(response).to have_http_status(:success)
+      end
 
-    it "returns a 200" do
-      expect(response).to have_http_status(:success)
-    end
-
-    it "returns the page" do
-      expect(page).to have_title("Data sharing agreement")
+      it "returns the page" do
+        expect(page).to have_title("Accessibility statement")
+      end
     end
   end
 end

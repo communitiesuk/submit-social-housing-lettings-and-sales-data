@@ -139,6 +139,12 @@ RSpec.describe "User Features" do
       visit("/users/#{user.id}")
       expect(page).to have_content("Sign in to your account to submit CORE data")
     end
+
+    it "does not show 'Sign in' link if maintenance mode is enabled" do
+      allow(FeatureToggle).to receive(:maintenance_mode_enabled?).and_return(true)
+      visit("/lettings-logs")
+      expect(page).not_to have_link("Sign in")
+    end
   end
 
   context "when the user is trying to log in with incorrect credentials" do
@@ -233,7 +239,7 @@ RSpec.describe "User Features" do
         context "when no filters are selected" do
           it "displays the filters component with no clear button" do
             expect(page).to have_content("No filters applied")
-            expect(page).not_to have_content("Clear")
+            expect(page).not_to have_link("Clear", href: "/clear-filters?filter_type=users")
           end
         end
 
@@ -246,7 +252,7 @@ RSpec.describe "User Features" do
 
           it "displays the filters component with a correct count and clear button" do
             expect(page).to have_content("2 filters applied")
-            expect(page).to have_content("Clear")
+            expect(page).to have_link("Clear", href: "/clear-filters?filter_type=users")
           end
 
           context "when clearing the filters" do
@@ -256,7 +262,7 @@ RSpec.describe "User Features" do
 
             it "clears the filters and displays the filter component as before" do
               expect(page).to have_content("No filters applied")
-              expect(page).not_to have_content("Clear")
+              expect(page).not_to have_link("Clear", href: "/clear-filters?filter_type=users")
             end
           end
         end
@@ -323,6 +329,13 @@ RSpec.describe "User Features" do
         visit("/account")
         expect(page).to have_selector('[data-qa="change-data-protection-officer"]')
         expect(page).to have_selector('[data-qa="change-key-contact"]')
+      end
+
+      it "does not show 'Your account' or 'Sign out' links if maintenance mode is enabled" do
+        allow(FeatureToggle).to receive(:maintenance_mode_enabled?).and_return(true)
+        visit("/lettings-logs")
+        expect(page).not_to have_link("Your account")
+        expect(page).not_to have_link("Sign out")
       end
     end
 
@@ -756,10 +769,10 @@ RSpec.describe "User Features" do
           expect(page).to have_field("owning-organisation-field", with: "")
           find("#owning-organisation-field").click.native.send_keys("F", "i", "l", "t", :down, :enter)
           click_button("Apply filters")
-          expect(page).to have_current_path("/lettings-logs?%5Byears%5D%5B%5D=&%5Bstatus%5D%5B%5D=&assigned_to=all&owning_organisation_select=specific_org&owning_organisation=#{parent_organisation.id}&managing_organisation_select=all")
+          expect(page).to have_current_path("/lettings-logs?%5Byears%5D%5B%5D=&%5Bstatus%5D%5B%5D=&%5Bneedstypes%5D%5B%5D=&assigned_to=all&owning_organisation_select=specific_org&owning_organisation=#{parent_organisation.id}&managing_organisation_select=all")
           choose("owning-organisation-select-all-field", allow_label_click: true)
           click_button("Apply filters")
-          expect(page).to have_current_path("/lettings-logs?%5Byears%5D%5B%5D=&%5Bstatus%5D%5B%5D=&assigned_to=all&owning_organisation_select=all&managing_organisation_select=all")
+          expect(page).to have_current_path("/lettings-logs?%5Byears%5D%5B%5D=&%5Bstatus%5D%5B%5D=&%5Bneedstypes%5D%5B%5D=&assigned_to=all&owning_organisation_select=all&managing_organisation_select=all")
         end
       end
     end

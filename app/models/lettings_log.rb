@@ -43,6 +43,13 @@ class LettingsLog < Log
   scope :filter_by_tenant_code, ->(tenant_code) { where("tenancycode ILIKE ?", "%#{tenant_code}%") }
   scope :filter_by_propcode, ->(propcode) { where("propcode ILIKE ?", "%#{propcode}%") }
   scope :filter_by_location_postcode, ->(postcode_full) { left_joins(:location).where("REPLACE(locations.postcode, ' ', '') ILIKE ?", "%#{postcode_full.delete(' ')}%") }
+  scope :filter_by_needstype, ->(needstype) { where(needstype:) }
+  scope :filter_by_needstypes, lambda { |needstypes, _user = nil|
+    first_needstype = needstypes.shift
+    query = filter_by_needstype(first_needstype)
+    needstypes.each { |needstype| query = query.or(filter_by_needstype(needstype)) }
+    query.all
+  }
   scope :search_by, lambda { |param|
     filter_by_location_postcode(param)
       .or(filter_by_tenant_code(param))
@@ -592,6 +599,22 @@ class LettingsLog < Log
 
   def details_not_known_for_person?(person_index)
     public_send("details_known_#{person_index}") == 1
+  end
+
+  def duplicate_check_question_ids
+    ["owning_organisation_id",
+     "startdate",
+     "tenancycode",
+     form.start_date.year < 2023 || uprn.blank? ? "postcode_full" : nil,
+     form.start_date.year >= 2023 && uprn.present? ? "uprn" : nil,
+     "scheme_id",
+     "location_id",
+     "age1",
+     "sex1",
+     "ecstat1",
+     household_charge == 1 ? "household_charge" : nil,
+     "tcharge",
+     is_carehome? ? "chcharge" : nil].compact
   end
 
 private

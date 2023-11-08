@@ -68,7 +68,7 @@ RSpec.describe "Schemes scheme Features" do
           context "when no filters are selected" do
             it "displays the filters component with no clear button" do
               expect(page).to have_content("No filters applied")
-              expect(page).not_to have_content("Clear")
+              expect(page).not_to have_link("Clear", href: "/clear-filters?filter_type=schemes")
             end
           end
 
@@ -81,7 +81,7 @@ RSpec.describe "Schemes scheme Features" do
 
             it "displays the filters component with a correct count and clear button" do
               expect(page).to have_content("2 filters applied")
-              expect(page).to have_content("Clear")
+              expect(page).to have_link("Clear", href: "/clear-filters?filter_type=schemes")
             end
 
             context "when clearing the filters" do
@@ -91,7 +91,7 @@ RSpec.describe "Schemes scheme Features" do
 
               it "clears the filters and displays the filter component as before" do
                 expect(page).to have_content("No filters applied")
-                expect(page).not_to have_content("Clear")
+                expect(page).not_to have_link("Clear", href: "/clear-filters?filter_type=schemes")
               end
             end
           end
@@ -292,7 +292,7 @@ RSpec.describe "Schemes scheme Features" do
               context "when no filters are selected" do
                 it "displays the filters component with no clear button" do
                   expect(page).to have_content("No filters applied")
-                  expect(page).not_to have_content("Clear")
+                  expect(page).not_to have_link("Clear", href: /\/clear-filters\?filter_type=scheme_locations/)
                 end
               end
 
@@ -305,7 +305,7 @@ RSpec.describe "Schemes scheme Features" do
 
                 it "displays the filters component with a correct count and clear button" do
                   expect(page).to have_content("2 filters applied")
-                  expect(page).to have_content("Clear")
+                  expect(page).to have_link("Clear", href: /\/clear-filters\?filter_type=scheme_locations/)
                 end
 
                 context "when clearing the filters" do
@@ -315,7 +315,7 @@ RSpec.describe "Schemes scheme Features" do
 
                   it "clears the filters and displays the filter component as before" do
                     expect(page).to have_content("No filters applied")
-                    expect(page).not_to have_content("Clear")
+                    expect(page).not_to have_link("Clear", href: /\/clear-filters\?filter_type=scheme_locations/)
                   end
                 end
               end
@@ -572,7 +572,7 @@ RSpec.describe "Schemes scheme Features" do
 
           it "displays information about a single location" do
             expect(page).to have_content "Locations"
-            expect(page).to have_content "#{scheme.locations.count} total location"
+            expect(page).to have_content "#{scheme.locations.count} matching location"
           end
 
           it "displays information about the first created location" do
@@ -585,7 +585,7 @@ RSpec.describe "Schemes scheme Features" do
             fill_in_and_save_second_location
             click_button "Save and return to locations"
             expect(page).to have_content "Locations"
-            expect(page).to have_content "#{scheme.locations.count} total location"
+            expect(page).to have_content "#{scheme.locations.count} matching location"
           end
 
           it "displays information about newly created location" do

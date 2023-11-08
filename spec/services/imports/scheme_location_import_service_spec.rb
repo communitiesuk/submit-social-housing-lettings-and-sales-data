@@ -229,6 +229,15 @@ RSpec.describe Imports::SchemeLocationImportService do
       end
     end
 
+    context "and support_type is floating support" do
+      before { location_xml.at_xpath("//scheme:support-type").content = "6" }
+
+      it "correctly sets the support type" do
+        location = location_service.create_scheme_location(location_xml)
+        expect(location.scheme.support_type).to eq("Floating support")
+      end
+    end
+
     context "and postcode does not return a location code" do
       before { location_xml.at_xpath("//scheme:postcode").content = "A1 1AA" }
 

@@ -7,6 +7,7 @@ class Form::Lettings::Pages::Location < ::Form::Page
         "scheme_has_multiple_locations?" => true,
       },
     ]
+    @header = "Location"
     @next_unresolved_page_id = :check_answers
   end
 

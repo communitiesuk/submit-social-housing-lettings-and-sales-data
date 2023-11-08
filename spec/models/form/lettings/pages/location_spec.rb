@@ -26,7 +26,7 @@ RSpec.describe Form::Lettings::Pages::Location, type: :model do
   end
 
   it "has the correct header" do
-    expect(page.header).to be_nil
+    expect(page.header).to eq("Location")
   end
 
   it "has the correct description" do
