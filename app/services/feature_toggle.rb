@@ -43,6 +43,6 @@ class FeatureToggle
   end
 
   def self.service_moved?
-    true
+    false
   end
 end
