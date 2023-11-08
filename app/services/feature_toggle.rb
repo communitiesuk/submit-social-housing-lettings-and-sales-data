@@ -43,6 +43,6 @@ class FeatureToggle
   end
 
   def self.service_moved?
-    Rails.env.staging?
+    false
   end
 end
