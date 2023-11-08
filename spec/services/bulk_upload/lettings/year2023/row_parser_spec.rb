@@ -1746,6 +1746,20 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
             expect(parser.log.location).to eql(location)
           end
         end
+
+        context "when the user provides an id with leading zeroes" do
+          let(:attributes) { { bulk_upload:, field_15: scheme.old_visible_id, field_16: "00123", field_1: owning_org.old_visible_id, field_2: owning_org.old_visible_id } }
+
+          before do
+            location.old_visible_id = "123"
+            location.save!
+          end
+
+          it "assigns the correct location" do
+            expect(parser.log.location).to eql(location)
+          end
+        end
+
       end
     end
 
@@ -1770,6 +1784,19 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
           before do
             scheme.old_visible_id = "010"
+            scheme.save!
+          end
+
+          it "assigns the correct scheme" do
+            expect(parser.log.scheme).to eql(scheme)
+          end
+        end
+
+        context "when the user provides an id with leading zeroes" do
+          let(:attributes) { { bulk_upload:, field_15: "010", field_16: location.old_visible_id, field_1: owning_org.old_visible_id, field_2: owning_org.old_visible_id } }
+
+          before do
+            scheme.old_visible_id = "10"
             scheme.save!
           end
 

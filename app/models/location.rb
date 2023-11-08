@@ -110,7 +110,7 @@ class Location < ApplicationRecord
   def self.find_by_id_on_multiple_fields(id)
     return if id.nil?
 
-    where(id:).or(where("ltrim(old_visible_id, '0') = ?", id.to_s)).first
+    where(id:).or(where("ltrim(old_visible_id, '0') = ?", id.to_i.to_s)).first
   end
 
   def postcode=(postcode)

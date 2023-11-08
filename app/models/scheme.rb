@@ -169,9 +169,9 @@ class Scheme < ApplicationRecord
     if scheme_id.start_with?("S")
       where(id: scheme_id[1..]).first
     elsif location_id.present?
-      joins(:locations).where("ltrim(schemes.old_visible_id, '0') = ? AND ltrim(locations.old_visible_id, '0') = ?", scheme_id.to_s, location_id.to_s).first || where("ltrim(schemes.old_visible_id, '0') = ?", scheme_id.to_s).first
+      joins(:locations).where("ltrim(schemes.old_visible_id, '0') = ? AND ltrim(locations.old_visible_id, '0') = ?", scheme_id.to_i.to_s, location_id.to_i.to_s).first || where("ltrim(schemes.old_visible_id, '0') = ?", scheme_id.to_i.to_s).first
     else
-      where("ltrim(old_visible_id, '0') = ?", scheme_id.to_s).first
+      where("ltrim(old_visible_id, '0') = ?", scheme_id.to_i.to_s).first
     end
   end
 
