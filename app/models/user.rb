@@ -203,12 +203,22 @@ class User < ApplicationRecord
     super && active?
   end
 
-  def duplicate_lettings_logs_sets
-    lettings_logs.duplicate_sets(id).map { |array_str| array_str ? array_str.map(&:to_i) : [] }
+  def editable_duplicate_lettings_logs_sets
+    all_sets = lettings_logs.duplicate_sets(id).map { |array_str| array_str ? array_str.map(&:to_i) : [] }
+    editable_sets = []
+    all_sets.each do |set|
+      editable_sets << set if LettingsLog.find(set.first).collection_period_open_for_editing?
+    end
+    editable_sets
   end
 
-  def duplicate_sales_logs_sets
-    sales_logs.duplicate_sets(id).map { |array_str| array_str ? array_str.map(&:to_i) : [] }
+  def editable_duplicate_sales_logs_sets
+    all_sets = sales_logs.duplicate_sets(id).map { |array_str| array_str ? array_str.map(&:to_i) : [] }
+    editable_sets = []
+    all_sets.each do |set|
+      editable_sets << set if SalesLog.find(set.first).collection_period_open_for_editing?
+    end
+    editable_sets
   end
 
 protected
