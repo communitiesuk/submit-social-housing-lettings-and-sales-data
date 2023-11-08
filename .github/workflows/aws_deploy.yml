@@ -6,7 +6,10 @@ on:
       aws_account_id:
         required: true
         type: string
-      aws_resource_prefix:
+      aws_role_prefix:
+        required: true
+        type: string
+      aws_task_prefix:
         required: true
         type: string
       environment:
@@ -104,12 +107,12 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v3
         with:
           aws-region: ${{ env.aws_region }}
-          role-to-assume: arn:aws:iam::${{ inputs.aws_account_id }}:role/${{ inputs.aws_resource_prefix }}-deployment
+          role-to-assume: arn:aws:iam::${{ inputs.aws_account_id }}:role/${{ inputs.aws_role_prefix }}-deployment
           role-chaining: true
 
       - name: Download ad hoc task definition
         env:
-          ad_hoc_task_definition: ${{ inputs.aws_resource_prefix }}-ad-hoc
+          ad_hoc_task_definition: ${{ inputs.aws_task_prefix }}-ad-hoc
         run: |
           aws ecs describe-task-definition --task-definition $ad_hoc_task_definition --query taskDefinition > ad-hoc-task-definition.json
 
@@ -128,9 +131,9 @@ jobs:
 
       - name: Run migrations task
         env:
-          ad_hoc_task_definition: ${{ inputs.aws_resource_prefix }}-ad-hoc
-          cluster: ${{ inputs.aws_resource_prefix }}-app
-          service: ${{ inputs.aws_resource_prefix }}-app
+          ad_hoc_task_definition: ${{ inputs.aws_task_prefix }}-ad-hoc
+          cluster: ${{ inputs.aws_task_prefix }}-app
+          service: ${{ inputs.aws_task_prefix }}-app
         run: |
           network=$(aws ecs describe-services --cluster $cluster --services $service --query services[0].networkConfiguration)
           overrides='{ "containerOverrides" : [{ "name" : "app", "command" : ["bundle", "exec", "rake", "db:migrate"]}]}'
@@ -144,7 +147,7 @@ jobs:
 
       - name: Download app service task definition
         env:
-          app_task_definition: ${{ inputs.aws_resource_prefix }}-app
+          app_task_definition: ${{ inputs.aws_task_prefix }}-app
         run: |
           aws ecs describe-task-definition --task-definition $app_task_definition --query taskDefinition > app-task-definition.json
 
@@ -159,14 +162,14 @@ jobs:
       - name: Deploy updated application
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
-          cluster: ${{ inputs.aws_resource_prefix }}-app
-          service: ${{ inputs.aws_resource_prefix }}-app
+          cluster: ${{ inputs.aws_task_prefix }}-app
+          service: ${{ inputs.aws_task_prefix }}-app
           task-definition: ${{ steps.app-task-def.outputs.task-definition }}
           wait-for-service-stability: true
 
       - name: Download sidekiq service task definition
         env:
-          sidekiq_task_definition: ${{ inputs.aws_resource_prefix }}-sidekiq
+          sidekiq_task_definition: ${{ inputs.aws_task_prefix }}-sidekiq
         run: |
           aws ecs describe-task-definition --task-definition $sidekiq_task_definition --query taskDefinition > sidekiq-task-definition.json
 
@@ -181,7 +184,7 @@ jobs:
       - name: Deploy updated sidekiq
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
-          cluster: ${{ inputs.aws_resource_prefix }}-app
-          service: ${{ inputs.aws_resource_prefix }}-sidekiq
+          cluster: ${{ inputs.aws_task_prefix }}-app
+          service: ${{ inputs.aws_task_prefix }}-sidekiq
           task-definition: ${{ steps.sidekiq-task-def.outputs.task-definition }}
           wait-for-service-stability: true

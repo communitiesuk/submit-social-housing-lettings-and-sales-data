@@ -21,7 +21,8 @@ jobs:
     uses: ./.github/workflows/aws_deploy.yml
     with:
       aws_account_id: 837698168072
-      aws_resource_prefix: core-review-0
+      aws_role_prefix: core-dev
+      aws_task_prefix: core-review-0
       environment: review
     permissions:
       id-token: write
