@@ -39,7 +39,7 @@ class FeatureToggle
   end
 
   def self.service_unavailable?
-    false
+    Rails.env.staging?
   end
 
   def self.service_moved?
