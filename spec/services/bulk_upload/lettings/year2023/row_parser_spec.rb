@@ -1746,7 +1746,6 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
             expect(parser.log.location).to eql(location)
           end
         end
-
       end
     end
 
