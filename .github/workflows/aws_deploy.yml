@@ -129,6 +129,23 @@ jobs:
         with:
           task-definition: ${{ steps.ad-hoc-task-def.outputs.task-definition }}
 
+      - name: Setup Database
+        if: ${{ inputs.environment == 'review' }}
+        env:
+          ad_hoc_task_definition: ${{ inputs.aws_task_prefix }}-ad-hoc
+          cluster: ${{ inputs.aws_task_prefix }}-app
+          service: ${{ inputs.aws_task_prefix }}-app
+        run: |
+          network=$(aws ecs describe-services --cluster $cluster --services $service --query services[0].networkConfiguration)
+          overrides='{ "containerOverrides" : [{ "name" : "app", "command" : ["bundle", "exec", "rake", "db:prepare"]}]}'
+          arn=$(aws ecs run-task --cluster $cluster --task-definition $ad_hoc_task_definition --network-configuration "$network" --overrides "$overrides" --group migrations --launch-type FARGATE --query tasks[0].taskArn)
+          echo "Waiting for db prepare task to complete"
+          temp=${arn##*/}
+          id=${temp%*\"}
+          aws ecs wait tasks-stopped --cluster $cluster --tasks $id
+          succeeded=$(aws ecs describe-tasks --cluster $cluster --tasks $id --query "tasks[0].stopCode == 'EssentialContainerExited' && to_string(tasks[0].containers[0].exitCode) == '0'")
+          if [ $succeeded == true ]; then exit 0; else exit 1; fi
+
       - name: Run migrations task
         env:
           ad_hoc_task_definition: ${{ inputs.aws_task_prefix }}-ad-hoc
