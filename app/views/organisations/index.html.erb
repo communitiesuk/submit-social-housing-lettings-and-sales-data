@@ -3,7 +3,7 @@
 
 <% content_for :title, title %>
 
-<%= render partial: "organisations/headings", locals: request.path == "/organisations" ? { main: "Organisations", sub: nil } : { main: @organisation.name, sub: "Organisations" } %>
+<%= render partial: "organisations/headings", locals: request.path == organisations_path ? { main: "Organisations", sub: nil } : { main: @organisation.name, sub: "Organisations" } %>
 
 <% if current_user.support? %>
   <%= govuk_button_link_to "Create a new organisation", new_organisation_path, html: { method: :get } %>
