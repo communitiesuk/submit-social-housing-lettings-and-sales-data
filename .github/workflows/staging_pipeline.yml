@@ -20,8 +20,8 @@ jobs:
     if: github.ref == 'refs/heads/cldc-2812-run-app-from-relative-url'
     uses: ./.github/workflows/aws_deploy.yml
     with:
-      aws_account_id: 107155005276
-      aws_resource_prefix: core-staging
-      environment: staging
+      aws_account_id: 837698168072
+      aws_resource_prefix: core-review-0
+      environment: review
     permissions:
       id-token: write
