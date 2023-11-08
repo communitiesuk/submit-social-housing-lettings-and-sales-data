@@ -33,15 +33,15 @@ module DuplicateLogsHelper
 
   def duplicates_for_user(user)
     {
-      lettings: user.duplicate_lettings_logs_sets,
-      sales: user.duplicate_sales_logs_sets,
+      lettings: user.editable_duplicate_lettings_logs_sets,
+      sales: user.editable_duplicate_sales_logs_sets,
     }
   end
 
   def duplicates_for_organisation(organisation)
     {
-      lettings: organisation.duplicate_lettings_logs_sets,
-      sales: organisation.duplicate_sales_logs_sets,
+      lettings: organisation.editable_duplicate_lettings_logs_sets,
+      sales: organisation.editable_duplicate_sales_logs_sets,
     }
   end
 
