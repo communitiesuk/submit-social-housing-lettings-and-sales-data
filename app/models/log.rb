@@ -238,9 +238,7 @@ private
   def reset_invalidated_dependent_fields!
     return unless form
 
-    2.times do
-      form.reset_not_routed_questions_and_invalid_answers(self)
-    end
+    form.reset_not_routed_questions_and_invalid_answers(self)
     reset_created_by!
   end
 
