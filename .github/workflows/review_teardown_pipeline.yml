@@ -1,12 +1,9 @@
 name: Review app teardown pipeline
 
 concurrency:
-  group: review-0
+  group: review-${{ github.event.pull_request.number }}
 
 on:
-  push:
-    branches:
-      - AwsReviewApps
   pull_request:
     types:
       - closed
@@ -17,7 +14,7 @@ env:
   aws_account_id: 837698168072
   aws_region: eu-west-2
   aws_role_prefix: core-dev
-  aws_task_prefix: core-review-0
+  aws_task_prefix: core-review-${{ github.event.pull_request.number }}
 
 jobs:
   database:
@@ -59,8 +56,3 @@ jobs:
   infra:
     name: Teardown review app - TODO
     environment: review
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: TODO
-        run: echo TODO
