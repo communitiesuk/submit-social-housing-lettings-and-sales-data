@@ -9,11 +9,50 @@ on:
       - closed
   workflow_dispatch:
 
-defaults:
-  run:
-    shell: bash
+env:
+  app_repo_role: arn:aws:iam::815624722760:role/core-application-repo
+  aws_account_id: 837698168072
+  aws_region: eu-west-2
+  aws_role_prefix: core-dev
+  aws_task_prefix: core-review-${{ github.event.pull_request.number }}
 
 jobs:
+  database:
+    name: Drop database
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          aws-region: ${{ env.aws_region }}
+          role-to-assume: ${{ env.app_repo_role }}
+
+      - name: Configure AWS credentials for review environment
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          aws-region: ${{ env.aws_region }}
+          role-to-assume: arn:aws:iam::${{ env.aws_account_id }}:role/${{ env.aws_role_prefix }}-deployment
+          role-chaining: true
+
+      - name: Drop Database
+        env:
+          ad_hoc_task_definition: ${{ env.aws_task_prefix }}-ad-hoc
+          cluster: ${{ env.aws_task_prefix }}-app
+          service: ${{ env.aws_task_prefix }}-app
+        run: |
+          network=$(aws ecs describe-services --cluster $cluster --services $service --query services[0].networkConfiguration)
+          overrides='{ "containerOverrides" : [{ "name" : "app", "command" : ["bundle", "exec", "rake", "db:drop"]}]}'
+          arn=$(aws ecs run-task --cluster $cluster --task-definition $ad_hoc_task_definition --network-configuration "$network" --overrides "$overrides" --group migrations --launch-type FARGATE --query tasks[0].taskArn)
+          echo "Waiting for db prepare task to complete"
+          temp=${arn##*/}
+          id=${temp%*\"}
+          aws ecs wait tasks-stopped --cluster $cluster --tasks $id
+          succeeded=$(aws ecs describe-tasks --cluster $cluster --tasks $id --query "tasks[0].stopCode == 'EssentialContainerExited' && to_string(tasks[0].containers[0].exitCode) == '0'")
+          if [ $succeeded == true ]; then exit 0; else exit 1; fi
+
   infra:
     name: Teardown review app - TODO
     environment: review
