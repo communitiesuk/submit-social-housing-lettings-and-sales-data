@@ -206,7 +206,6 @@ class Form
     radio_questions_recalculated = routed_and_not_routed_questions_by_type(log, type: "radio")
     newly_not_routed_radio_questions = radio_questions_recalculated[:not_routed].reject { |question| radio_questions[:not_routed].include?(question) }
     radio_clearing_pass(log, radio_questions_recalculated[:routed], newly_not_routed_radio_questions)
-
   end
 
   def reset_free_user_input_questions_if_not_routed(log)
@@ -249,7 +248,6 @@ class Form
       clear_attribute(log, question_id) if log.public_send(question_id).present? && enabled_question_ids.exclude?(question_id)
     end
   end
-
 
   def routed_and_not_routed_questions_by_type(log, type: nil, current_user: nil)
     questions_by_type = if type
