@@ -55,4 +55,5 @@ jobs:
 
   infra:
     name: Teardown review app - TODO
+    needs: [database]
     environment: review
