@@ -889,20 +889,32 @@ RSpec.describe LettingsLogsController, type: :request do
         end
 
         context "and there are duplicate logs for this user" do
-          before do
-            FactoryBot.create_list(:lettings_log, 2, :duplicate, owning_organisation: user.organisation, created_by: user)
-          end
+          let!(:duplicate_logs) { FactoryBot.create_list(:lettings_log, 2, :duplicate, owning_organisation: user.organisation, created_by: user) }
 
           it "displays a notification banner with a link to review logs" do
             get lettings_logs_path
             expect(page).to have_content "duplicate logs"
-            expect(page).to have_link "Review logs" # add an href when routing done
+            expect(page).to have_link "Review logs", href: "/duplicate-logs?referrer=duplicate_logs_banner"
           end
 
           context "when there is one set of duplicates" do
             it "displays the correct copy in the banner" do
               get lettings_logs_path
               expect(page).to have_content "There is 1 set of duplicate logs"
+            end
+
+            context "when the set is not editable" do
+              before do
+                duplicate_logs.each do |log|
+                  log.startdate = Time.zone.now - 3.years
+                  log.save!(validate: false)
+                end
+              end
+
+              it "does not display the banner" do
+                get lettings_logs_path
+                expect(page).not_to have_content "duplicate logs"
+              end
             end
           end
 
@@ -914,6 +926,21 @@ RSpec.describe LettingsLogsController, type: :request do
             it "displays the correct copy in the banner" do
               get lettings_logs_path
               expect(page).to have_content "There are 2 sets of duplicate logs"
+              expect(page).to have_link "Review logs", href: "/duplicate-logs?referrer=duplicate_logs_banner"
+            end
+
+            context "when one set is not editable" do
+              before do
+                log = duplicate_logs.first
+                log.startdate = Time.zone.now - 3.years
+                log.save!(validate: false)
+              end
+
+              it "displays the correct copy in the banner" do
+                get lettings_logs_path
+                expect(page).to have_content "There is 1 set of duplicate logs"
+                expect(page).to have_link "Review logs", href: "/duplicate-logs?referrer=duplicate_logs_banner"
+              end
             end
           end
         end
