@@ -192,32 +192,32 @@ class Form
 
   def reset_checkbox_questions_if_not_routed(log)
     checkbox_questions = routed_and_not_routed_questions_by_type(log, type: "checkbox")
-    checkbox_clearing_pass(log, checkbox_questions[:routed], checkbox_questions[:not_routed])
+    clear_checkbox_attributes(log, checkbox_questions[:routed], checkbox_questions[:not_routed])
 
     checkbox_questions_recalculated = routed_and_not_routed_questions_by_type(log, type: "checkbox")
     newly_not_routed_checkbox_questions = checkbox_questions_recalculated[:not_routed].reject { |question| checkbox_questions[:not_routed].include?(question) }
-    checkbox_clearing_pass(log, checkbox_questions_recalculated[:routed], newly_not_routed_checkbox_questions)
+    clear_checkbox_attributes(log, checkbox_questions_recalculated[:routed], newly_not_routed_checkbox_questions)
   end
 
   def reset_radio_questions_if_not_routed_or_invalid_answers(log)
     radio_questions = routed_and_not_routed_questions_by_type(log, type: "radio")
-    radio_clearing_pass(log, radio_questions[:routed], radio_questions[:not_routed])
+    clear_radio_attributes(log, radio_questions[:routed], radio_questions[:not_routed])
 
     radio_questions_recalculated = routed_and_not_routed_questions_by_type(log, type: "radio")
     newly_not_routed_radio_questions = radio_questions_recalculated[:not_routed].reject { |question| radio_questions[:not_routed].include?(question) }
-    radio_clearing_pass(log, radio_questions_recalculated[:routed], newly_not_routed_radio_questions)
+    clear_radio_attributes(log, radio_questions_recalculated[:routed], newly_not_routed_radio_questions)
   end
 
   def reset_free_user_input_questions_if_not_routed(log)
-    non_radio_checkbox_questions = routed_and_not_routed_questions_by_type(log)
-    free_user_input_clearing_pass(log, non_radio_checkbox_questions[:routed], non_radio_checkbox_questions[:not_routed])
+    non_radio_or_checkbox_questions = routed_and_not_routed_questions_by_type(log)
+    clear_free_user_input_attributes(log, non_radio_or_checkbox_questions[:routed], non_radio_or_checkbox_questions[:not_routed])
 
-    non_radio_checkbox_questions_recalculated = routed_and_not_routed_questions_by_type(log)
-    newly_not_routed_non_radio_checkbox_questions = non_radio_checkbox_questions_recalculated[:not_routed].reject { |question| non_radio_checkbox_questions[:not_routed].include?(question) }
-    free_user_input_clearing_pass(log, non_radio_checkbox_questions_recalculated[:routed], newly_not_routed_non_radio_checkbox_questions)
+    non_radio_or_checkbox_questions_recalculated = routed_and_not_routed_questions_by_type(log)
+    newly_not_routed_non_radio_or_checkbox_questions = non_radio_or_checkbox_questions_recalculated[:not_routed].reject { |question| non_radio_or_checkbox_questions[:not_routed].include?(question) }
+    clear_free_user_input_attributes(log, non_radio_or_checkbox_questions_recalculated[:routed], newly_not_routed_non_radio_or_checkbox_questions)
   end
 
-  def checkbox_clearing_pass(log, routed_questions, not_routed_questions)
+  def clear_checkbox_attributes(log, routed_questions, not_routed_questions)
     not_routed_questions.each do |not_routed_question|
       valid_options = routed_questions
                         .select { |q| q.id == not_routed_question.id }
@@ -228,7 +228,7 @@ class Form
     end
   end
 
-  def radio_clearing_pass(log, routed_questions, not_routed_questions)
+  def clear_radio_attributes(log, routed_questions, not_routed_questions)
     valid_radio_options = routed_questions
                             .group_by(&:id)
                             .transform_values! { |q_array| q_array.flat_map { |q| q.answer_options.keys } }
@@ -241,7 +241,7 @@ class Form
     end
   end
 
-  def free_user_input_clearing_pass(log, routed_questions, not_routed_questions)
+  def clear_free_user_input_attributes(log, routed_questions, not_routed_questions)
     enabled_question_ids = routed_questions.map(&:id)
     not_routed_questions.each do |not_routed_question|
       question_id = not_routed_question.id
