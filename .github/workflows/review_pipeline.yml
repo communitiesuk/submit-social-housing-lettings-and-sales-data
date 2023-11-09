@@ -1,9 +1,12 @@
 name: Review app pipeline
 
 concurrency:
-  group: review-${{ github.event.pull_request.number }}
+  group: review-0
 
 on:
+  push:
+    branches:
+      - AwsReviewApps
   pull_request:
     types:
       - opened
@@ -18,6 +21,10 @@ defaults:
 jobs:
   infra:
     name: Deploy review app infrastructure - TODO
+    runs-on: ubuntu-latest
+    steps:
+      - name: TODO
+        run: echo TODO
 
   code:
     name: Deploy review app code
@@ -26,7 +33,7 @@ jobs:
     with:
       aws_account_id: 837698168072
       aws_role_prefix: core-dev
-      aws_task_prefix: core-review-${{ github.event.pull_request.number }}
+      aws_task_prefix: core-review-0
       environment: review
     permissions:
       id-token: write
@@ -41,6 +48,7 @@ jobs:
 
     steps:
       - name: Comment on PR with URL
+        if: false
         uses: unsplash/comment-on-pr@v1.3.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
