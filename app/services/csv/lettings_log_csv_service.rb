@@ -229,9 +229,9 @@ module Csv
       ordered_questions.reject! { |q| q.id.match?(/age\d_known|rent_value_check/) }
       attributes = ordered_questions.flat_map do |question|
         if question.type == "checkbox"
-          question.answer_options.keys.reject { |key| key == "divider" }.map do |key|
+          question.answer_options.keys.reject { |key| key == "divider" }.map { |key|
             ATTRIBUTE_MAPPINGS.fetch(key, key)
-          end.flatten
+          }.flatten
         else
           ATTRIBUTE_MAPPINGS.fetch(question.id, question.id)
         end
