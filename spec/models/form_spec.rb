@@ -328,6 +328,28 @@ RSpec.describe Form, type: :model do
       end
     end
 
+    context "when a value is changed such that a radio and free input questions are no longer routed to" do
+      let(:log) { FactoryBot.create(:lettings_log, :completed, startdate: now) }
+
+      it "all attributes relating to that checkbox question are cleared" do
+        expect(log.hhmemb).to be 2
+        expect(log.details_known_2).to be 0
+        expect(log.sex2).to eq("M")
+        expect(log.relat2).to eq("P")
+        expect(log.age2_known).to be 0
+        expect(log.age2).to be 32
+        expect(log.ecstat2).to be 6
+
+        log.update!(hhmemb: 1)
+        expect(log.details_known_2).to be nil
+        expect(log.sex2).to be nil
+        expect(log.relat2).to be nil
+        expect(log.age2_known).to be nil
+        expect(log.age2).to be nil
+        expect(log.ecstat2).to be nil
+      end
+    end
+
     context "when an attribute is derived, but no questions for that attribute are routed to" do
       let(:log) { FactoryBot.create(:sales_log, :outright_sale_setup_complete, value: 200_000) }
 

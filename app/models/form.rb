@@ -192,52 +192,60 @@ class Form
 
   def reset_checkbox_questions_if_not_routed(log)
     checkbox_questions = routed_and_not_routed_questions_by_type(log, type: "checkbox")
-    checkbox_questions[:not_routed].each do |not_routed_question|
-      valid_options = checkbox_questions[:routed]
-                                        .select { |q| q.id == not_routed_question.id }
-                                        .flat_map { |q| q.answer_options.keys }
-      not_routed_question.answer_options.each_key do |invalid_option|
-        if !log.respond_to?(invalid_option) || valid_options.include?(invalid_option) || log.public_send(invalid_option).nil?
-          next
-        else
-          clear_attribute(log, invalid_option)
-        end
-      end
-    end
+    clear_checkbox_attributes(log, checkbox_questions[:routed], checkbox_questions[:not_routed])
+
+    checkbox_questions_recalculated = routed_and_not_routed_questions_by_type(log, type: "checkbox")
+    newly_not_routed_checkbox_questions = checkbox_questions_recalculated[:not_routed].reject { |question| checkbox_questions[:not_routed].include?(question) }
+    clear_checkbox_attributes(log, checkbox_questions_recalculated[:routed], newly_not_routed_checkbox_questions)
   end
 
   def reset_radio_questions_if_not_routed_or_invalid_answers(log)
     radio_questions = routed_and_not_routed_questions_by_type(log, type: "radio")
-    valid_radio_options = radio_questions[:routed]
-                                         .group_by(&:id)
-                                         .transform_values! { |q_array| q_array.flat_map { |q| q.answer_options.keys } }
-    radio_questions[:not_routed].each do |not_routed_question|
-      question_id = not_routed_question.id
-      if !log.respond_to?(question_id) || log.public_send(question_id).nil? || valid_radio_options.key?(question_id)
-        next
-      else
-        clear_attribute(log, question_id)
-      end
-    end
-    valid_radio_options.each do |question_id, valid_options|
-      if !log.respond_to?(question_id) || valid_options.include?(log.public_send(question_id).to_s)
-        next
-      else
-        clear_attribute(log, question_id)
+    clear_radio_attributes(log, radio_questions[:routed], radio_questions[:not_routed])
+
+    radio_questions_recalculated = routed_and_not_routed_questions_by_type(log, type: "radio")
+    newly_not_routed_radio_questions = radio_questions_recalculated[:not_routed].reject { |question| radio_questions[:not_routed].include?(question) }
+    clear_radio_attributes(log, radio_questions_recalculated[:routed], newly_not_routed_radio_questions)
+  end
+
+  def reset_free_user_input_questions_if_not_routed(log)
+    non_radio_or_checkbox_questions = routed_and_not_routed_questions_by_type(log)
+    clear_free_user_input_attributes(log, non_radio_or_checkbox_questions[:routed], non_radio_or_checkbox_questions[:not_routed])
+
+    non_radio_or_checkbox_questions_recalculated = routed_and_not_routed_questions_by_type(log)
+    newly_not_routed_non_radio_or_checkbox_questions = non_radio_or_checkbox_questions_recalculated[:not_routed].reject { |question| non_radio_or_checkbox_questions[:not_routed].include?(question) }
+    clear_free_user_input_attributes(log, non_radio_or_checkbox_questions_recalculated[:routed], newly_not_routed_non_radio_or_checkbox_questions)
+  end
+
+  def clear_checkbox_attributes(log, routed_questions, not_routed_questions)
+    not_routed_questions.each do |not_routed_question|
+      valid_options = routed_questions
+                        .select { |q| q.id == not_routed_question.id }
+                        .flat_map { |q| q.answer_options.keys }
+      not_routed_question.answer_options.each_key do |invalid_option|
+        clear_attribute(log, invalid_option) if log.respond_to?(invalid_option) && valid_options.exclude?(invalid_option) && log.public_send(invalid_option).present?
       end
     end
   end
 
-  def reset_free_user_input_questions_if_not_routed(log)
-    non_radio_checkbox_questions = routed_and_not_routed_questions_by_type(log)
-    enabled_question_ids = non_radio_checkbox_questions[:routed].map(&:id)
-    non_radio_checkbox_questions[:not_routed].each do |not_routed_question|
+  def clear_radio_attributes(log, routed_questions, not_routed_questions)
+    valid_radio_options = routed_questions
+                            .group_by(&:id)
+                            .transform_values! { |q_array| q_array.flat_map { |q| q.answer_options.keys } }
+    not_routed_questions.each do |not_routed_question|
       question_id = not_routed_question.id
-      if log.public_send(question_id).nil? || enabled_question_ids.include?(question_id)
-        next
-      else
-        clear_attribute(log, question_id)
-      end
+      clear_attribute(log, question_id) if log.respond_to?(question_id) && log.public_send(question_id).present? && !valid_radio_options.key?(question_id)
+    end
+    valid_radio_options.each do |question_id, valid_options|
+      clear_attribute(log, question_id) if log.respond_to?(question_id) && valid_options.exclude?(log.public_send(question_id).to_s)
+    end
+  end
+
+  def clear_free_user_input_attributes(log, routed_questions, not_routed_questions)
+    enabled_question_ids = routed_questions.map(&:id)
+    not_routed_questions.each do |not_routed_question|
+      question_id = not_routed_question.id
+      clear_attribute(log, question_id) if log.public_send(question_id).present? && enabled_question_ids.exclude?(question_id)
     end
   end
 
