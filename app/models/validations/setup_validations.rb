@@ -65,6 +65,7 @@ module Validations::SetupValidations
     return unless record.startdate
 
     return unless FeatureToggle.merge_organisations_enabled?
+
     if owning_organisation.present?
       if owning_organisation&.merge_date.present? && owning_organisation.merge_date <= record.startdate
         record.errors.add :owning_organisation_id, I18n.t("validations.setup.owning_organisation.inactive_merged_organisation",
