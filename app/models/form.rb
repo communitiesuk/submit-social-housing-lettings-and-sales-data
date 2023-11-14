@@ -1,7 +1,8 @@
 class Form
   attr_reader :form_definition, :sections, :subsections, :pages, :questions,
-              :start_date, :new_logs_end_date, :submission_deadline, :type, :name, :setup_definition,
-              :setup_sections, :form_sections, :unresolved_log_redirect_page_id, :edit_end_date
+              :start_date, :submission_deadline, :type, :name, :setup_definition,
+              :setup_sections, :form_sections, :unresolved_log_redirect_page_id
+  attr_accessor :new_logs_end_date, :edit_end_date
 
   def initialize(form_path, start_year = "", sections_in_form = [], type = "lettings")
     if sales_or_start_year_after_2022?(type, start_year)
@@ -306,5 +307,13 @@ class Form
 
   def sales_or_start_year_after_2022?(type, start_year)
     type == "sales" || (start_year && start_year.to_i > 2022)
+  end
+
+  def update_edit_end_date(new_date)
+    @edit_end_date = new_date
+  end
+
+  def update_new_logs_end_date(new_date)
+    @new_logs_end_date = new_date
   end
 end
