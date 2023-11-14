@@ -30,7 +30,7 @@ RSpec.describe "blank_migrated_soctenant_values" do
         expect(sales_log.values_updated_at).not_to be_nil
       end
 
-      context "for 2022 logs" do
+      context "with 2022 logs" do
         around do |example|
           Timecop.freeze(Time.zone.local(2022, 5, 5)) do
             Singleton.__init__(FormHandler)
