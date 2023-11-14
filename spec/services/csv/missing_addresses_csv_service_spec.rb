@@ -38,6 +38,13 @@ RSpec.describe Csv::MissingAddressesCsvService do
     .to_return(status: 200, body: body_2, headers: {})
   end
 
+  around do |example|
+    Timecop.freeze(Time.zone.local(2023, 4, 5)) do
+      Singleton.__init__(FormHandler)
+      example.run
+    end
+  end
+
   def replace_entity_ids(lettings_log, export_template)
     export_template.sub!(/\{id\}/, lettings_log.id.to_s)
   end

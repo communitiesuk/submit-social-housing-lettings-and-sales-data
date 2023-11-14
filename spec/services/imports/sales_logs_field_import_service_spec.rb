@@ -27,6 +27,13 @@ RSpec.describe Imports::SalesLogsFieldImportService do
       .and_return(sales_log_file)
   end
 
+  around do |example|
+    Timecop.freeze(Time.zone.local(2023, 1, 17)) do
+      Singleton.__init__(FormHandler)
+      example.run
+    end
+  end
+
   context "when updating creation method" do
     let(:field) { "creation_method" }
     let(:sales_log) { SalesLog.find_by(old_id: sales_log_filename) }
