@@ -6,7 +6,7 @@ class Form
   def initialize(form_path, start_year = "", sections_in_form = [], type = "lettings")
     if sales_or_start_year_after_2022?(type, start_year)
       @start_date = Time.zone.local(start_year, 4, 1)
-      @new_logs_end_date = Time.zone.local(start_year + 1, 12, 31)  # this is to be manually updated each year when we want to stop users from creating new logs
+      @new_logs_end_date = Time.zone.local(start_year + 1, 11, 15)  # this is to be manually updated each year when we want to stop users from creating new logs
       @submission_deadline = if start_year && start_year.to_i > 2022
                                Time.zone.local(start_year + 1, 6, 7)
                              else
@@ -26,7 +26,7 @@ class Form
         "sections" => sections,
       }
       @unresolved_log_redirect_page_id = "tenancy_start_date" if type == "lettings"
-      @edit_end_date = Time.zone.local(start_year + 1, 12, 31) # this is to be manually updated each year when we want to stop users from editing logs
+      @edit_end_date = Time.zone.local(start_year + 1, 11, 15) # this is to be manually updated each year when we want to stop users from editing logs
     else
       raise "No form definition file exists for given year".freeze unless File.exist?(form_path)
 
