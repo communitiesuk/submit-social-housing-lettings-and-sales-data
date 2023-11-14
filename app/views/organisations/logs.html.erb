@@ -5,22 +5,22 @@
 
 <%= render partial: "organisations/headings", locals: { main: @organisation.name, sub: nil } %>
 
-<%= render DataProtectionConfirmationBannerComponent.new(
-  user: current_user,
-  organisation: @organisation,
-) %>
-
-<% if @duplicate_sets_count&.positive? %>
-  <%= govuk_notification_banner(title_text: "Important", text: govuk_link_to("Review logs", organisation_duplicates_path(@organisation, referrer: "duplicate_logs_banner"))) do |banner| %>
-    <% banner.with_heading(text: I18n.t("notification.duplicate_sets", count: @duplicate_sets_count)) %>
-  <% end %>
-<% end %>
-
 <% if current_user.support? %>
   <%= render SubNavigationComponent.new(
     items: secondary_items(request.path, @organisation.id),
   ) %>
   <h2 class="govuk-visually-hidden">Logs</h2>
+<% end %>
+
+<%= render DataProtectionConfirmationBannerComponent.new(
+  user: current_user,
+  organisation: @organisation,
+  ) %>
+
+<% if @duplicate_sets_count&.positive? %>
+  <%= govuk_notification_banner(title_text: "Important", text: govuk_link_to("Review logs", organisation_duplicates_path(@organisation, referrer: "duplicate_logs_banner"))) do |banner| %>
+    <% banner.with_heading(text: I18n.t("notification.duplicate_sets", count: @duplicate_sets_count)) %>
+  <% end %>
 <% end %>
 
 <div class="app-filter-layout" data-controller="filter-layout">

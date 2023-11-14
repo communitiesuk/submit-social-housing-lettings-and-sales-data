@@ -122,7 +122,6 @@ Rails.application.routes.draw do
   end
 
   resources :organisations do
-    resources :users
     get "duplicates", to: "duplicate_logs#index"
 
     member do
