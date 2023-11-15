@@ -39,10 +39,10 @@ class FeatureToggle
   end
 
   def self.service_unavailable?
-    Rails.env.production?
+    false
   end
 
   def self.service_moved?
-    false
+    Rails.env.production?
   end
 end
