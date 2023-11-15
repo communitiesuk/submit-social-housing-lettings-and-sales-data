@@ -52,6 +52,13 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
     example.run
   end
 
+  around do |example|
+    Timecop.freeze(Date.new(2023, 10, 1)) do
+      example.run
+    end
+    Timecop.return
+  end
+
   describe "#blank_row?" do
     context "when a new object" do
       it "returns true" do
