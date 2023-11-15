@@ -853,7 +853,7 @@ RSpec.describe SalesLogsController, type: :request do
           completed_sales_log.reload
 
           get "/sales-logs/#{completed_sales_log.id}", headers:, params: {}
-          expect(completed_sales_log.form.new_logs_end_date).to eq(Time.zone.local(2022, 11, 1))
+          expect(completed_sales_log.form.new_logs_end_date).to eq(Time.zone.local(2022, 12, 31))
           expect(completed_sales_log.status).to eq("completed")
           expect(page).to have_link("review and make changes to this log", href: "/sales-logs/#{completed_sales_log.id}/review?sales_log=true")
         end
@@ -891,7 +891,7 @@ RSpec.describe SalesLogsController, type: :request do
 
         it "displays a closed collection window message for previous collection year logs" do
           get "/sales-logs/#{completed_sales_log.id}", headers:, params: {}
-          expect(completed_sales_log.form.new_logs_end_date).to eq(Time.zone.local(2022, 11, 1))
+          expect(completed_sales_log.form.new_logs_end_date).to eq(Time.zone.local(2022, 12, 31))
           expect(completed_sales_log.status).to eq("completed")
           follow_redirect!
           expect(page).to have_content("This log is from the 2021/2022 collection window, which is now closed.")
