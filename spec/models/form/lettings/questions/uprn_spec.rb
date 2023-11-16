@@ -77,7 +77,7 @@ RSpec.describe Form::Lettings::Questions::Uprn, type: :model do
 
       context "when uprn known" do
         let(:uprn_known) { 1 }
-        let(:uprn) { 123456789 }
+        let(:uprn) { 123_456_789 }
 
         it "returns formatted value" do
           expect(question.get_extra_check_answer_value(log)).to eq(
