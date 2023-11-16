@@ -77,6 +77,8 @@ RSpec.describe Scheme, type: :model do
 
         it "returns case insensitive matching records" do
           expect(described_class.search_by(scheme_1.id.to_s).count).to eq(1)
+          expect(described_class.search_by("S#{scheme_1.id}").count).to eq(1)
+          expect(described_class.search_by("s#{scheme_1.id}").count).to eq(1)
           expect(described_class.search_by(scheme_1.id.to_s).first.id).to eq(scheme_1.id)
           expect(described_class.search_by(scheme_2.service_name.upcase).count).to eq(1)
           expect(described_class.search_by(scheme_2.service_name.downcase).count).to eq(1)
