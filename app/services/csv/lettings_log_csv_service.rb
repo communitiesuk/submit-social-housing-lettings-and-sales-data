@@ -12,7 +12,7 @@ module Csv
 
         logs.find_each do |log|
           csv << @attributes.map { |attribute| value(attribute, log) }
-        end
+        end 
       end
     end
 
