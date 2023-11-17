@@ -165,6 +165,8 @@ en:
             password:
               blank: Enter a password
               too_short: The password you entered is too short. Enter a password that is %{count} characters or longer.
+            reset_password_token:
+              invalid: "That link is invalid. Check you are using the correct link."
         merge_request:
           attributes:
             absorbing_organisation_id:
