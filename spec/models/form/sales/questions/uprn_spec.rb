@@ -56,18 +56,19 @@ RSpec.describe Form::Sales::Questions::Uprn, type: :model do
       let(:log) do
         create(
           :sales_log,
-          :completed,
           address_line1: "1, Test Street",
           town_or_city: "Test Town",
           county: "Test County",
           postcode_full: "AA1 1AA",
           la: "E09000003",
           uprn_known:,
+          uprn:,
         )
       end
 
       context "when uprn known nil" do
         let(:uprn_known) { nil }
+        let(:uprn) { nil }
 
         it "returns formatted value" do
           expect(question.get_extra_check_answer_value(log)).to be_nil
@@ -76,6 +77,7 @@ RSpec.describe Form::Sales::Questions::Uprn, type: :model do
 
       context "when uprn known" do
         let(:uprn_known) { 1 }
+        let(:uprn) { 123_456_789 }
 
         it "returns formatted value" do
           expect(question.get_extra_check_answer_value(log)).to eq(
@@ -86,6 +88,7 @@ RSpec.describe Form::Sales::Questions::Uprn, type: :model do
 
       context "when uprn not known" do
         let(:uprn_known) { 0 }
+        let(:uprn) { nil }
 
         it "returns formatted value" do
           expect(question.get_extra_check_answer_value(log)).to be_nil

@@ -313,7 +313,7 @@ private
   end
 
   def address_answered_without_uprn?
-    [address_line1, town_or_city].all?(&:present?) && uprn.nil?
+    [address_line1, town_or_city].all?(&:present?) && uprn.nil? && form.start_date.year >= 2023
   end
 
   def get_lar
