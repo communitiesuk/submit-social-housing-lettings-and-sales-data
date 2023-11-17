@@ -252,7 +252,7 @@ RSpec.describe "User Features" do
         context "when no filters are selected" do
           it "displays the filters component with no clear button" do
             expect(page).to have_content("No filters applied")
-            expect(page).not_to have_link("Clear", href: "/clear-filters?filter_type=users")
+            expect(page).not_to have_link("Clear", href: /clear-filters\?filter_type=users/)
           end
         end
 
@@ -265,7 +265,7 @@ RSpec.describe "User Features" do
 
           it "displays the filters component with a correct count and clear button" do
             expect(page).to have_content("2 filters applied")
-            expect(page).to have_link("Clear", href: "/clear-filters?filter_type=users")
+            expect(page).to have_link("Clear", href: /clear-filters\?filter_type=users/)
           end
 
           context "when clearing the filters" do

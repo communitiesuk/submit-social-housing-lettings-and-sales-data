@@ -139,6 +139,10 @@ module FiltersHelper
     request.path.include?("/lettings-logs")
   end
 
+  def specific_organisation_path?
+    request.path.include?("/organisations")
+  end
+
   def applied_filters_count(filter_type)
     filters_count(applied_filters(filter_type))
   end
