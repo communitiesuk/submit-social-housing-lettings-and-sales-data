@@ -266,6 +266,31 @@ RSpec.describe SchemesHelper do
         end
       end
     end
+
+    context "when scheme has no secondary client group" do
+      before do
+        scheme.update!(has_other_client_group: 0)
+      end
+
+      it "returns correct display attributes" do
+        attributes = [
+          { name: "Scheme code", value: "S#{scheme.id}" },
+          { name: "Name", value: "Test service_name", edit: true },
+          { name: "Status", value: status_tag(:incomplete) },
+          { name: "Confidential information", value: "No", edit: true },
+          { name: "Type of scheme", value: "Housing for older people" },
+          { name: "Registered under Care Standards Act 2000", value: "Yes – registered care home providing personal care" },
+          { name: "Housing stock owned by", value: "Acme LTD Owning", edit: true },
+          { name: "Support services provided by", value: "A registered charity or voluntary organisation" },
+          { name: "Primary client group", value: "Rough sleepers" },
+          { name: "Has another client group", value: "No" },
+          { name: "Level of support given", value: "High level" },
+          { name: "Intended length of stay", value: "Permanent" },
+          { name: "Availability", value: "Active from 1 April 2021" },
+        ]
+        expect(display_scheme_attributes(scheme)).to eq(attributes)
+      end
+    end
   end
 
   describe "edit_scheme_text" do
