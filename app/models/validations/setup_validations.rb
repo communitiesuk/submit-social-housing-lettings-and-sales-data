@@ -48,12 +48,23 @@ module Validations::SetupValidations
 
   def validate_organisation(record)
     created_by, managing_organisation, owning_organisation = record.values_at("created_by", "managing_organisation", "owning_organisation")
-    unless [created_by, managing_organisation, owning_organisation].any?(&:blank?) || ((created_by.organisation.absorbed_organisations + [created_by.organisation]) & [managing_organisation, owning_organisation]).present?
-      record.errors.add :created_by, I18n.t("validations.setup.created_by.invalid")
-      record.errors.add :owning_organisation_id, I18n.t("validations.setup.owning_organisation.invalid")
-      record.errors.add :managing_organisation_id, I18n.t("validations.setup.managing_organisation.invalid")
+    if FeatureToggle.merge_organisations_enabled?
+      unless [created_by, managing_organisation, owning_organisation].any?(&:blank?) || ((created_by.organisation.absorbed_organisations + [created_by.organisation]) & [managing_organisation, owning_organisation]).present?
+        record.errors.add :created_by, I18n.t("validations.setup.created_by.invalid")
+        record.errors.add :owning_organisation_id, I18n.t("validations.setup.owning_organisation.invalid")
+        record.errors.add :managing_organisation_id, I18n.t("validations.setup.managing_organisation.invalid")
+      end
+    else
+      unless [created_by, managing_organisation, owning_organisation].any?(&:blank?) || ([created_by.organisation] & [managing_organisation, owning_organisation]).present?
+        record.errors.add :created_by, I18n.t("validations.setup.created_by.invalid")
+        record.errors.add :owning_organisation_id, I18n.t("validations.setup.owning_organisation.invalid")
+        record.errors.add :managing_organisation_id, I18n.t("validations.setup.managing_organisation.invalid")
+      end
+
     end
     return unless record.startdate
+
+    return unless FeatureToggle.merge_organisations_enabled?
 
     if owning_organisation.present?
       if owning_organisation&.merge_date.present? && owning_organisation.merge_date <= record.startdate
@@ -134,6 +145,7 @@ private
   end
 
   def validate_merged_organisations_start_date(record)
+    return unless FeatureToggle.merge_organisations_enabled?
     return add_same_merge_organisation_error(record) if record.owning_organisation == record.managing_organisation
     return add_same_merge_error(record) if organisations_belong_to_same_merge?(record.owning_organisation, record.managing_organisation)
 
@@ -142,6 +154,8 @@ private
   end
 
   def add_same_merge_organisation_error(record)
+    return unless FeatureToggle.merge_organisations_enabled?
+
     if merged_owning_organisation_inactive?(record)
       record.errors.add :startdate, I18n.t("validations.setup.startdate.invalid_merged_organisations_start_date.same_organisation",
                                            owning_organisation: record.owning_organisation.name,
@@ -155,6 +169,8 @@ private
   end
 
   def add_same_merge_error(record)
+    return unless FeatureToggle.merge_organisations_enabled?
+
     if merged_owning_organisation_inactive?(record)
       record.errors.add :startdate, I18n.t("validations.setup.startdate.invalid_merged_organisations_start_date.same_merge",
                                            owning_organisation: record.owning_organisation.name,
@@ -165,6 +181,8 @@ private
   end
 
   def add_merged_organisations_errors(record)
+    return unless FeatureToggle.merge_organisations_enabled?
+
     if merged_owning_organisation_inactive?(record) && merged_managing_organisation_inactive?(record)
       record.errors.add :startdate, I18n.t("validations.setup.startdate.invalid_merged_organisations_start_date.different_merge",
                                            owning_organisation: record.owning_organisation.name,
@@ -191,6 +209,8 @@ private
   end
 
   def add_absorbing_organisations_errors(record)
+    return unless FeatureToggle.merge_organisations_enabled?
+
     if absorbing_owning_organisation_inactive?(record) && absorbing_managing_organisation_inactive?(record)
       record.errors.add :startdate, I18n.t("validations.setup.startdate.invalid_absorbing_organisations_start_date.different_organisations",
                                            owning_organisation: record.owning_organisation.name,
