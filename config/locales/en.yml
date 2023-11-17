@@ -164,7 +164,7 @@ en:
               blank: "Select role"
             password:
               blank: Enter a password
-              too_short: Password is too short (minimum is %{count} characters)
+              too_short: The password you entered is too short. Enter a password that is %{count} characters or longer.
         merge_request:
           attributes:
             absorbing_organisation_id:
