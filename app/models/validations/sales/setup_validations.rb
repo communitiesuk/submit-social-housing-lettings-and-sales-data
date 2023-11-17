@@ -25,7 +25,6 @@ module Validations::Sales::SetupValidations
   end
 
   def validate_merged_organisations_saledate(record)
-    return unless FeatureToggle.merge_organisations_enabled?
     return unless record.saledate && date_valid?("saledate", record)
 
     if merged_owning_organisation_inactive?(record)
@@ -43,7 +42,6 @@ module Validations::Sales::SetupValidations
   end
 
   def validate_organisation(record)
-    return unless FeatureToggle.merge_organisations_enabled?
     return unless record.saledate && record.owning_organisation
 
     if record.owning_organisation.present?
