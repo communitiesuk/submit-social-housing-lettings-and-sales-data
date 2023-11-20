@@ -115,7 +115,7 @@ class SalesLog < Log
     not_required << "mortlen" if mortlen_optional?
     not_required << "frombeds" if frombeds_optional?
 
-    not_required |= %w[address_line2 county postcode_full] if saledate && saledate.year >= 2023
+    not_required |= %w[address_line2 county postcode_full] if saledate && collection_start_year_for_date(saledate) >= 2023
 
     not_required
   end
@@ -393,7 +393,7 @@ class SalesLog < Log
   end
 
   def should_process_uprn_change?
-    uprn && saledate && (uprn_changed? || saledate_changed?) && saledate.year >= 2023
+    uprn && saledate && (uprn_changed? || saledate_changed?) && collection_start_year_for_date(saledate) >= 2023
   end
 
   def value_with_discount
