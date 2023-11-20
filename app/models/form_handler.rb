@@ -178,6 +178,22 @@ class FormHandler
     end
   end
 
+  def lettings_earliest_open_for_editing_collection_start_date(now: Time.zone.now)
+    if lettings_in_edit_crossover_period?(now:)
+      collection_start_date(now) - 1.year
+    else
+      collection_start_date(now)
+    end
+  end
+
+  def sales_earliest_open_for_editing_collection_start_date(now: Time.zone.now)
+    if sales_in_edit_crossover_period?(now:)
+      collection_start_date(now) - 1.year
+    else
+      collection_start_date(now)
+    end
+  end
+
 private
 
   def get_all_forms

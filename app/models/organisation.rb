@@ -134,13 +134,11 @@ class Organisation < ApplicationRecord
   end
 
   def editable_duplicate_lettings_logs_sets
-    lettings_logs.duplicate_sets.map { |array_str| array_str ? array_str.map(&:to_i) : [] }
-                 .select { |set| LettingsLog.find(set.first).collection_period_open_for_editing? }
+    lettings_logs.after_date(FormHandler.instance.lettings_earliest_open_for_editing_collection_start_date).duplicate_sets.map { |array_str| array_str ? array_str.map(&:to_i) : [] }
   end
 
   def editable_duplicate_sales_logs_sets
-    sales_logs.duplicate_sets.map { |array_str| array_str ? array_str.map(&:to_i) : [] }
-              .select { |set| SalesLog.find(set.first).collection_period_open_for_editing? }
+    sales_logs.after_date(FormHandler.instance.sales_earliest_open_for_editing_collection_start_date).duplicate_sets.map { |array_str| array_str ? array_str.map(&:to_i) : [] }
   end
 
   def recently_absorbed_organisations_grouped_by_merge_date
