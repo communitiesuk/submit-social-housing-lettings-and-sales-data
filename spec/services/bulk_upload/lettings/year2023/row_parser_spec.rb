@@ -47,13 +47,8 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
   end
 
   around do |example|
-    FormHandler.instance.use_real_forms!
-
-    example.run
-  end
-
-  around do |example|
     Timecop.freeze(Date.new(2023, 10, 1)) do
+      FormHandler.instance.use_real_forms!
       example.run
     end
     Timecop.return
