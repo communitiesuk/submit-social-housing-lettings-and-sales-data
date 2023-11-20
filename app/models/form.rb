@@ -39,9 +39,9 @@ class Form
       @pages = subsections.flat_map(&:pages)
       @questions = pages.flat_map(&:questions)
       @start_date = Time.iso8601(form_definition["start_date"])
-      @new_logs_end_date = Time.zone.local(@start_date.year + 1, 11, 1)
+      @new_logs_end_date = Time.zone.local(@start_date.year + 1, 12, 31)
       @submission_deadline = Time.zone.local(@start_date.year + 1, 6, 9)
-      @edit_end_date = Time.zone.local(@start_date.year + 1, 11, 1)
+      @edit_end_date = Time.zone.local(@start_date.year + 1, 12, 31)
       @unresolved_log_redirect_page_id = form_definition["unresolved_log_redirect_page_id"]
     end
     @name = "#{start_date.year}_#{new_logs_end_date.year}_#{type}"
