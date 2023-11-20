@@ -817,7 +817,7 @@ RSpec.describe "Schemes scheme Features" do
                   expect(page).to have_content(deactivated_location.units)
                   expect(page).to have_content(deactivated_location.type_of_unit)
                   expect(page).to have_content(deactivated_location.mobility_type)
-                  expect(page).to have_content(deactivated_location.location_code)
+                  expect(page).to have_content(deactivated_location.id)
                   expect(page).to have_content("Active from 4 April 2022 to 3 June 2022 Deactivated on 4 June 2022")
                   expect(page).to have_content("Deactivated")
                 end
@@ -856,7 +856,7 @@ RSpec.describe "Schemes scheme Features" do
                 expect(page).to have_content(location.units)
                 expect(page).to have_content(location.type_of_unit)
                 expect(page).to have_content(location.mobility_type)
-                expect(page).to have_content(location.location_code)
+                expect(page).to have_content(location.id)
                 expect(page).to have_content("Active from 4 April 2022")
                 expect(page).to have_content("Active")
               end
