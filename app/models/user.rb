@@ -15,8 +15,8 @@ class User < ApplicationRecord
   validates :email, uniqueness: { allow_blank: true, case_sensitive: true, if: :will_save_change_to_email? }
   validates :email, format: { with: Devise.email_regexp, allow_blank: true, if: :will_save_change_to_email? }
   validates :password, presence: { if: :password_required? }
-  validates :password, confirmation: { if: :password_required? }
   validates :password, length: { within: Devise.password_length, allow_blank: true }
+  validates :password, confirmation: { if: :password_required? }
 
   after_validation :send_data_protection_confirmation_reminder, if: :is_dpo_changed?
 

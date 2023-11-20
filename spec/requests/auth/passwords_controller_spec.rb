@@ -107,7 +107,7 @@ RSpec.describe Auth::PasswordsController, type: :request do
           put "/account/password", headers: headers, params: params
           expect(response).to have_http_status(:unprocessable_entity)
           expect(page).to have_css("h1", text: "Reset your password")
-          expect(page).to have_content("doesn’t match new password")
+          expect(page).to have_content("passwords you entered do not match")
         end
       end
 
