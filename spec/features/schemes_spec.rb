@@ -745,7 +745,9 @@ RSpec.describe "Schemes scheme Features" do
           let!(:deactivated_location) { FactoryBot.create(:location, startdate: Time.zone.local(2022, 4, 4), scheme:) }
 
           before do
+            Timecop.freeze(Time.zone.local(2023, 10, 10))
             FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 4), location: deactivated_location)
+            Timecop.unfreeze
             click_link(scheme.service_name)
           end
 

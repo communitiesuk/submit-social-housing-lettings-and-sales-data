@@ -375,7 +375,9 @@ RSpec.describe Validations::SetupValidations do
 
       before do
         create(:location, scheme:)
+        Timecop.freeze(Time.zone.local(2023, 11, 10))
         create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 4), scheme:)
+        Timecop.return
         scheme.reload
       end
 
@@ -403,7 +405,9 @@ RSpec.describe Validations::SetupValidations do
 
       before do
         create(:location, scheme:)
+        Timecop.freeze(Time.zone.local(2023, 11, 10))
         create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 4), reactivation_date: Time.zone.local(2022, 8, 4), scheme:)
+        Timecop.return
         scheme.reload
       end
 
@@ -431,9 +435,11 @@ RSpec.describe Validations::SetupValidations do
 
       before do
         create(:location, scheme:)
+        Timecop.freeze(Time.zone.local(2023, 11, 10))
+        create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 1), reactivation_date: Time.zone.local(2022, 9, 4), scheme:)
         create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 4), reactivation_date: Time.zone.local(2022, 8, 4), scheme:)
         create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 2), reactivation_date: Time.zone.local(2022, 8, 3), scheme:)
-        create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 1), reactivation_date: Time.zone.local(2022, 9, 4), scheme:)
+        Timecop.return
         scheme.reload
       end
 
@@ -461,7 +467,9 @@ RSpec.describe Validations::SetupValidations do
       let(:location) { create(:location, scheme:) }
 
       before do
+        Timecop.freeze(Time.zone.local(2023, 11, 10))
         create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 4), location:)
+        Timecop.return
         location.reload
       end
 
@@ -489,7 +497,9 @@ RSpec.describe Validations::SetupValidations do
       let(:location) { create(:location, scheme:) }
 
       before do
+        Timecop.freeze(Time.zone.local(2023, 11, 10))
         create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 4), reactivation_date: Time.zone.local(2022, 8, 4), location:)
+        Timecop.return
         location.reload
       end
 
@@ -517,9 +527,11 @@ RSpec.describe Validations::SetupValidations do
       let(:location) { create(:location, scheme:) }
 
       before do
+        Timecop.freeze(Time.zone.local(2023, 11, 10))
+        create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 1), reactivation_date: Time.zone.local(2022, 9, 4), location:)
         create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 4), reactivation_date: Time.zone.local(2022, 8, 4), location:)
         create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 2), reactivation_date: Time.zone.local(2022, 8, 3), location:)
-        create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 1), reactivation_date: Time.zone.local(2022, 9, 4), location:)
+        Timecop.return
         location.reload
       end
 
@@ -572,7 +584,9 @@ RSpec.describe Validations::SetupValidations do
       let(:location) { create(:location, scheme:) }
 
       before do
+        Timecop.freeze(Time.zone.local(2023, 11, 10))
         create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 4), location:)
+        Timecop.return
         location.reload
       end
 
@@ -600,7 +614,9 @@ RSpec.describe Validations::SetupValidations do
       let(:location) { create(:location, scheme:) }
 
       before do
+        Timecop.freeze(Time.zone.local(2023, 11, 10))
         create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 4), reactivation_date: Time.zone.local(2022, 8, 4), location:)
+        Timecop.return
         location.reload
       end
 
@@ -628,9 +644,11 @@ RSpec.describe Validations::SetupValidations do
       let(:location) { create(:location, scheme:) }
 
       before do
+        Timecop.freeze(Time.zone.local(2023, 11, 10))
+        create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 1), reactivation_date: Time.zone.local(2022, 9, 4), location:)
         create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 4), reactivation_date: Time.zone.local(2022, 8, 4), location:)
         create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 2), reactivation_date: Time.zone.local(2022, 8, 3), location:)
-        create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 1), reactivation_date: Time.zone.local(2022, 9, 4), location:)
+        Timecop.return
         location.reload
       end
 

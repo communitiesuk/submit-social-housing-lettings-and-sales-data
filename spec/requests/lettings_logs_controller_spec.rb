@@ -1036,7 +1036,7 @@ RSpec.describe LettingsLogsController, type: :request do
               completed_lettings_log.reload
 
               get "/lettings-logs/#{completed_lettings_log.id}", headers:, params: {}
-              expect(completed_lettings_log.form.new_logs_end_date).to eq(Time.zone.local(2022, 12, 31))
+              expect(completed_lettings_log.form.new_logs_end_date).to eq(Time.zone.local(2022, 11, 20))
               expect(completed_lettings_log.status).to eq("completed")
               expect(page).to have_link("review and make changes to this log", href: "/lettings-logs/#{completed_lettings_log.id}/review")
             end
@@ -1074,7 +1074,7 @@ RSpec.describe LettingsLogsController, type: :request do
 
             it "displays a closed collection window message for previous collection year logs" do
               get "/lettings-logs/#{completed_lettings_log.id}", headers:, params: {}
-              expect(completed_lettings_log.form.new_logs_end_date).to eq(Time.zone.local(2022, 12, 31))
+              expect(completed_lettings_log.form.new_logs_end_date).to eq(Time.zone.local(2022, 11, 20))
               expect(completed_lettings_log.status).to eq("completed")
               follow_redirect!
               expect(page).to have_content("This log is from the 2021/2022 collection window, which is now closed.")

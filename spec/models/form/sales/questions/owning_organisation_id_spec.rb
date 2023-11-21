@@ -106,6 +106,11 @@ RSpec.describe Form::Sales::Questions::OwningOrganisationId, type: :model do
 
         before do
           merged_organisation.update!(merge_date: Time.zone.local(2023, 2, 2), absorbing_organisation: user.organisation)
+          Timecop.freeze(Time.zone.local(2023, 11, 10))
+        end
+
+        after do
+          Timecop.return
         end
 
         it "shows merged organisation as an option" do
@@ -127,6 +132,11 @@ RSpec.describe Form::Sales::Questions::OwningOrganisationId, type: :model do
         before do
           merged_organisation.update!(merge_date: Time.zone.local(2023, 2, 2), absorbing_organisation: user.organisation)
           user.organisation.update!(available_from: Time.zone.local(2021, 2, 2))
+          Timecop.freeze(Time.zone.local(2023, 11, 10))
+        end
+
+        after do
+          Timecop.return
         end
 
         it "shows available from date if it is given" do
@@ -148,6 +158,11 @@ RSpec.describe Form::Sales::Questions::OwningOrganisationId, type: :model do
         before do
           org_rel.update!(child_organisation: merged_organisation)
           merged_organisation.update!(merge_date: Time.zone.local(2023, 2, 2), absorbing_organisation: user.organisation)
+          Timecop.freeze(Time.zone.local(2023, 11, 10))
+        end
+
+        after do
+          Timecop.return
         end
 
         it "does not show merged organisations stock owners as options" do
@@ -210,6 +225,11 @@ RSpec.describe Form::Sales::Questions::OwningOrganisationId, type: :model do
         before do
           merged_organisation.update!(merge_date: Time.zone.local(2023, 2, 2), absorbing_organisation: organisation_1)
           organisation_1.update!(created_at: Time.zone.local(2021, 2, 2))
+          Timecop.freeze(Time.zone.local(2023, 11, 10))
+        end
+
+        after do
+          Timecop.return
         end
 
         it "shows merged organisation as an option" do

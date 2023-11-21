@@ -2077,6 +2077,9 @@ RSpec.describe LettingsLog do
           Timecop.freeze(Time.zone.local(2022, 4, 2))
           Singleton.__init__(FormHandler)
           lettings_log.update!(startdate: Time.zone.local(2022, 4, 2), scheme:)
+        end
+
+        after do
           Timecop.unfreeze
         end
 

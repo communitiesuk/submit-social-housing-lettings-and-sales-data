@@ -168,9 +168,12 @@ RSpec.describe Csv::MissingAddressesCsvService do
 
     context "when the organisation only has logs with missing addresses or town or city from 2022" do
       before do
-        lettings_log.update!(startdate: Time.zone.local(2022, 4, 5))
-        lettings_log_missing_town.update!(startdate: Time.zone.local(2022, 4, 5))
-        lettings_log_wrong_uprn.update!(startdate: Time.zone.local(2022, 4, 5))
+        lettings_log.startdate = Time.zone.local(2022, 4, 5)
+        lettings_log.save!(validate: false)
+        lettings_log_missing_town.startdate = Time.zone.local(2022, 4, 5)
+        lettings_log_missing_town.save!(validate: false)
+        lettings_log_wrong_uprn.startdate = Time.zone.local(2022, 4, 5)
+        lettings_log_wrong_uprn.save!(validate: false)
       end
 
       it "returns nil" do
@@ -293,9 +296,12 @@ RSpec.describe Csv::MissingAddressesCsvService do
 
     context "when the organisation only has logs with missing addresses from 2022" do
       before do
-        sales_log.update!(saledate: Time.zone.local(2022, 4, 5))
-        sales_log_missing_town.update!(saledate: Time.zone.local(2022, 4, 5))
-        sales_log_wrong_uprn.update!(saledate: Time.zone.local(2022, 4, 5))
+        sales_log.saledate = Time.zone.local(2022, 4, 5)
+        sales_log.save!(validate: false)
+        sales_log_missing_town.saledate = Time.zone.local(2022, 4, 5)
+        sales_log_missing_town.save!(validate: false)
+        sales_log_wrong_uprn.saledate = Time.zone.local(2022, 4, 5)
+        sales_log_wrong_uprn.save!(validate: false)
       end
 
       it "returns nil" do
@@ -394,7 +400,9 @@ RSpec.describe Csv::MissingAddressesCsvService do
       end
 
       before do
-        create(:lettings_log, managing_organisation: organisation, old_id: "exists", startdate: Time.zone.local(2022, 4, 5))
+        lettings_log = create(:lettings_log, managing_organisation: organisation, old_id: "exists")
+        lettings_log.startdate = Time.zone.local(2022, 4, 5)
+        lettings_log.save!(validate: false)
       end
 
       it "returns a csv with relevant logs" do
@@ -410,7 +418,9 @@ RSpec.describe Csv::MissingAddressesCsvService do
 
     context "when the organisation does not have relevant lettings logs" do
       before do
-        create(:lettings_log, managing_organisation: organisation, startdate: Time.zone.local(2022, 4, 5))
+        lettings_log = create(:lettings_log, managing_organisation: organisation)
+        lettings_log.startdate = Time.zone.local(2022, 4, 5)
+        lettings_log.save!(validate: false)
       end
 
       it "returns only headers" do
@@ -491,7 +501,9 @@ RSpec.describe Csv::MissingAddressesCsvService do
       end
 
       before do
-        create(:sales_log, :completed, saledate: Time.zone.local(2022, 4, 5))
+        sales_log = create(:sales_log, :completed)
+        sales_log.saledate = Time.zone.local(2022, 4, 5)
+        sales_log.save!(validate: false)
       end
 
       it "returns a csv with relevant logs" do
@@ -507,7 +519,9 @@ RSpec.describe Csv::MissingAddressesCsvService do
 
     context "when the organisation does not have relevant sales logs" do
       before do
-        create(:sales_log, :completed, saledate: Time.zone.local(2022, 4, 5))
+        sales_log = create(:sales_log, :completed)
+        sales_log.saledate = Time.zone.local(2022, 4, 5)
+        sales_log.save!(validate: false)
       end
 
       it "returns only headers" do
