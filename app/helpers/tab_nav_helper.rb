@@ -3,8 +3,7 @@ module TabNavHelper
 
   def user_cell(user)
     link_text = user.name.presence || user.email
-    link = govuk_link_to(link_text, user)
-    [link, "<span class=\"govuk-visually-hidden\">User </span><span class=\"govuk-!-font-weight-regular app-!-colour-muted\">#{user.email}</span>"].join("\n")
+    [govuk_link_to(link_text, user), "<span class=\"govuk-visually-hidden\">User </span><span class=\"govuk-!-font-weight-regular app-!-colour-muted\">#{user.email}</span>"].join("\n")
   end
 
   def location_cell_postcode(location, link)
