@@ -1017,21 +1017,21 @@ private
   def rent_type
     case renttype
     when :social
-      Imports::LettingsLogsImportService::RENT_TYPE[:social_rent]
+      LettingsLog::RENT_TYPE[:social_rent]
     when :affordable
       if field_129 == 1
-        Imports::LettingsLogsImportService::RENT_TYPE[:london_affordable_rent]
+        LettingsLog::RENT_TYPE[:london_affordable_rent]
       else
-        Imports::LettingsLogsImportService::RENT_TYPE[:affordable_rent]
+        LettingsLog::RENT_TYPE[:affordable_rent]
       end
     when :intermediate
       case field_130
       when 1
-        Imports::LettingsLogsImportService::RENT_TYPE[:rent_to_buy]
+        LettingsLog::RENT_TYPE[:rent_to_buy]
       when 2
-        Imports::LettingsLogsImportService::RENT_TYPE[:london_living_rent]
+        LettingsLog::RENT_TYPE[:london_living_rent]
       when 3
-        Imports::LettingsLogsImportService::RENT_TYPE[:other_intermediate_rent_product]
+        LettingsLog::RENT_TYPE[:other_intermediate_rent_product]
       end
     end
   end
