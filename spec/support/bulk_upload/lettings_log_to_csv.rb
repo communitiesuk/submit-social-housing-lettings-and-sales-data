@@ -238,18 +238,18 @@ private
 
   def london_affordable_rent
     case log.renttype
-    when Imports::LettingsLogsImportService::RENT_TYPE[:london_affordable_rent]
+    when LettingsLog::RENT_TYPE[:london_affordable_rent]
       1
     end
   end
 
   def intermediate_rent_type
     case log.renttype
-    when Imports::LettingsLogsImportService::RENT_TYPE[:rent_to_buy]
+    when LettingsLog::RENT_TYPE[:rent_to_buy]
       1
-    when Imports::LettingsLogsImportService::RENT_TYPE[:london_living_rent]
+    when LettingsLog::RENT_TYPE[:london_living_rent]
       2
-    when Imports::LettingsLogsImportService::RENT_TYPE[:other_intermediate_rent_product]
+    when LettingsLog::RENT_TYPE[:other_intermediate_rent_product]
       3
     end
   end
