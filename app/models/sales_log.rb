@@ -33,6 +33,8 @@ class SalesLog < Log
   before_validation :set_derived_fields!
   before_validation :process_uprn_change!, if: :should_process_uprn_change?
 
+  belongs_to :managing_organisation, class_name: "Organisation", optional: true
+
   scope :filter_by_year, ->(year) { where(saledate: Time.zone.local(year.to_i, 4, 1)...Time.zone.local(year.to_i + 1, 4, 1)) }
   scope :filter_by_purchaser_code, ->(purchid) { where("purchid ILIKE ?", "%#{purchid}%") }
   scope :search_by, lambda { |param|
