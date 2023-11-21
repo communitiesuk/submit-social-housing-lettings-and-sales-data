@@ -203,12 +203,12 @@ class User < ApplicationRecord
     super && active?
   end
 
-  def duplicate_lettings_logs_sets
-    lettings_logs.duplicate_sets(id).map { |array_str| array_str ? array_str.map(&:to_i) : [] }
+  def editable_duplicate_lettings_logs_sets
+    lettings_logs.after_date(FormHandler.instance.lettings_earliest_open_for_editing_collection_start_date).duplicate_sets(id).map { |array_str| array_str ? array_str.map(&:to_i) : [] }
   end
 
-  def duplicate_sales_logs_sets
-    sales_logs.duplicate_sets(id).map { |array_str| array_str ? array_str.map(&:to_i) : [] }
+  def editable_duplicate_sales_logs_sets
+    sales_logs.after_date(FormHandler.instance.sales_earliest_open_for_editing_collection_start_date).duplicate_sets(id).map { |array_str| array_str ? array_str.map(&:to_i) : [] }
   end
 
 protected
