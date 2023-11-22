@@ -110,8 +110,8 @@ RSpec.describe Form::Sales::Pages::Organisation, type: :model do
             )
           end
 
-          it "is not shown" do
-            expect(page.routed_to?(log, user)).to eq(false)
+          it "is shown" do
+            expect(page.routed_to?(log, user)).to eq(true)
           end
         end
       end
@@ -133,8 +133,8 @@ RSpec.describe Form::Sales::Pages::Organisation, type: :model do
             create(:organisation_relationship, child_organisation: user.organisation)
           end
 
-          it "is not shown" do
-            expect(page.routed_to?(log, user)).to eq(false)
+          it "is shown" do
+            expect(page.routed_to?(log, user)).to eq(true)
           end
         end
 
