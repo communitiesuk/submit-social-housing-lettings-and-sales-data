@@ -93,7 +93,7 @@
           } %>
         <% end %>
 
-        <% if (current_user.support? || non_support_with_multiple_managing_orgs?) && user_or_org_lettings_path? %>
+        <% if (current_user.support? || non_support_with_multiple_managing_orgs?) && (user_or_org_lettings_path? || FeatureToggle.sales_managing_organisation_enabled?) %>
           <%= render partial: "filters/radio_filter", locals: {
             f:,
             options: {
@@ -102,13 +102,13 @@
                 label: "Specific managing organisation",
                 conditional_filter: {
                   type: "select",
-                  label: "Managed by",
+                  label: user_or_org_lettings_path? ? "Managed by" : "Reported by",
                   category: "managing_organisation",
                   options: managing_organisation_filter_options(current_user),
                 },
               },
             },
-            label: "Managed by",
+            label: user_or_org_lettings_path? ? "Managed by" : "Reported by",
             category: "managing_organisation_select",
           } %>
         <% end %>
