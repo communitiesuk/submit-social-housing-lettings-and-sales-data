@@ -16,6 +16,7 @@ RSpec.describe Form::Sales::Subsections::Setup, type: :model do
     expect(setup.pages.map(&:id)).to eq(
       %w[
         organisation
+        managing_organisation
         created_by
         completion_date
         purchaser_code
