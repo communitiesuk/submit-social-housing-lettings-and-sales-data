@@ -1122,6 +1122,14 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
         end
       end
     end
+
+    describe "#managing_organisation_id" do
+      let(:attributes) { setup_section_params }
+
+      it "is correctly set" do
+        expect(parser.log.managing_organisation_id).to be(owning_org.id)
+      end
+    end
   end
 
   describe "#spreadsheet_duplicate_hash" do
