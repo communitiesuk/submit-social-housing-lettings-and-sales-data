@@ -896,6 +896,7 @@ private
     attributes["othtype"] = field_11
 
     attributes["owning_organisation"] = owning_organisation
+    attributes["managing_organisation"] = owning_organisation
     attributes["created_by"] = created_by || bulk_upload.user
     attributes["hhregres"] = field_73
     attributes["hhregresstill"] = field_74
