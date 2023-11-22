@@ -4,7 +4,7 @@ class Form::Sales::Questions::CreatedById < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "created_by_id"
-    @check_answer_label = "User"
+    @check_answer_label = "Log owner"
     @header = "Which user are you creating this log for?"
     @type = "select"
   end
@@ -14,19 +14,19 @@ class Form::Sales::Questions::CreatedById < ::Form::Question
   end
 
   def displayed_answer_options(log, current_user = nil)
-    return ANSWER_OPTS unless log.owning_organisation
+    return ANSWER_OPTS unless log.managing_organisation
     return ANSWER_OPTS unless current_user
 
     users = []
     users += if current_user.support?
                [
                  (
-                   if log.owning_organisation
-                     log.owning_organisation.absorbing_organisation.present? ? log.owning_organisation&.absorbing_organisation&.users : log.owning_organisation&.users
+                   if log.managing_organisation
+                     log.managing_organisation.absorbing_organisation.present? ? log.managing_organisation&.absorbing_organisation&.users : log.managing_organisation.users
                    end),
                ].flatten
              else
-               current_user.organisation.users
+               log.managing_organisation.users
              end.uniq.compact
     users.each_with_object(ANSWER_OPTS.dup) do |user, hsh|
       hsh[user.id] = present_user(user)
@@ -58,6 +58,6 @@ private
   end
 
   def selected_answer_option_is_derived?(_log)
-    false
+    true
   end
 end
