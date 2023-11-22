@@ -29,6 +29,7 @@ RSpec.describe "locations/show.html.erb" do
     let(:location) do
       instance_double(
         Location,
+        id: 5,
         name: "some location",
         postcode: "EC1N 2TD",
         linked_local_authorities: [],

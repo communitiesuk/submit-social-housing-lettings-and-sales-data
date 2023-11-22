@@ -146,7 +146,7 @@ RSpec.describe LocationsHelper do
         { attribute: "units", name: "Number of units", value: location.units },
         { attribute: "type_of_unit", name: "Most common unit", value: location.type_of_unit },
         { attribute: "mobility_standards", name: "Mobility standards", value: location.mobility_type },
-        { attribute: "location_code", name: "Location code", value: location.location_code },
+        { attribute: "id", name: "Location code", value: location.id },
         { attribute: "availability", name: "Availability", value: "Active from 1 April 2022" },
       ]
 
@@ -168,7 +168,7 @@ RSpec.describe LocationsHelper do
           { attribute: "units", name: "Number of units", value: location.units },
           { attribute: "type_of_unit", name: "Most common unit", value: location.type_of_unit },
           { attribute: "mobility_standards", name: "Mobility standards", value: location.mobility_type },
-          { attribute: "location_code", name: "Location code", value: "E07000030 (until 31 March 2023)\nE06000063 (1 April 2023 - present)" },
+          { attribute: "id", name: "Location code", value: location.id },
           { attribute: "availability", name: "Availability", value: "Active from 1 April 2022" },
         ]
 
@@ -191,7 +191,7 @@ RSpec.describe LocationsHelper do
           { attribute: "units", name: "Number of units", value: location.units },
           { attribute: "type_of_unit", name: "Most common unit", value: location.type_of_unit },
           { attribute: "mobility_standards", name: "Mobility standards", value: location.mobility_type },
-          { attribute: "location_code", name: "Location code", value: "" },
+          { attribute: "id", name: "Location code", value: location.id },
           { attribute: "availability", name: "Availability", value: "Active from 1 April 2022" },
         ]
 
