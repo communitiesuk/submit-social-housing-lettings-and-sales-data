@@ -17,6 +17,15 @@ RSpec.describe BulkUpload::Lettings::LogCreator do
   end
 
   describe "#call" do
+    before do
+      Timecop.freeze(Time.zone.local(2023, 11, 10))
+      Singleton.__init__(FormHandler)
+    end
+
+    after do
+      Timecop.return
+    end
+
     context "when a valid csv with new log" do
       it "creates a new log" do
         expect { service.call }.to change(LettingsLog, :count)

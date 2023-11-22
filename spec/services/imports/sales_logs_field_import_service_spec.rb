@@ -25,6 +25,13 @@ RSpec.describe Imports::SalesLogsFieldImportService do
       .to receive(:get_file_io)
       .with("#{sales_log_filename}.xml")
       .and_return(sales_log_file)
+
+    Timecop.freeze(Time.zone.local(2023, 11, 10))
+    Singleton.__init__(FormHandler)
+  end
+
+  after do
+    Timecop.return
   end
 
   around do |example|

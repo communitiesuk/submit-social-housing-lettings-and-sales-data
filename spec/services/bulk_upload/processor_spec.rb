@@ -15,6 +15,15 @@ RSpec.describe BulkUpload::Processor do
   end
 
   describe "#call" do
+    before do
+      Timecop.freeze(Time.zone.local(2023, 11, 10))
+      Singleton.__init__(FormHandler)
+    end
+
+    after do
+      Timecop.return
+    end
+
     context "when errors exist from prior job run" do
       let!(:existing_error) { create(:bulk_upload_error, bulk_upload:) }
 
