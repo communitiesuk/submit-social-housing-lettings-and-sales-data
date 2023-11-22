@@ -59,21 +59,25 @@ RSpec.describe Form::Sales::Questions::OwningOrganisationId, type: :model do
 
       let(:owning_org_1) { create(:organisation, name: "Owning org 1") }
       let(:owning_org_2) { create(:organisation, name: "Owning org 2") }
-      let!(:org_rel) do
-        create(:organisation_relationship, child_organisation: user.organisation, parent_organisation: owning_org_2)
-      end
+      let(:non_stock_owner) { create(:organisation, name: "Non stock owner", holds_own_stock: false) }
       let(:log) { create(:lettings_log, owning_organisation: owning_org_1) }
 
       context "when user's org owns stock" do
+        before do
+          create(:organisation_relationship, child_organisation: user.organisation, parent_organisation: owning_org_2)
+          create(:organisation_relationship, child_organisation: user.organisation, parent_organisation: non_stock_owner)
+        end
+
         let(:options) do
           {
             "" => "Select an option",
             owning_org_1.id => "Owning org 1",
+            owning_org_2.id => "Owning org 2",
             user.organisation.id => "User org (Your organisation)",
           }
         end
 
-        it "does not show stock owner" do
+        it "shows user organisation, current owning organisation and the stock owners that hold their stock" do
           user.organisation.update!(holds_own_stock: true)
           expect(question.displayed_answer_options(log, user)).to eq(options)
         end
@@ -84,10 +88,16 @@ RSpec.describe Form::Sales::Questions::OwningOrganisationId, type: :model do
           {
             "" => "Select an option",
             owning_org_1.id => "Owning org 1",
+            owning_org_2.id => "Owning org 2",
           }
         end
 
-        it "shows current log owner" do
+        before do
+          create(:organisation_relationship, child_organisation: user.organisation, parent_organisation: owning_org_2)
+          create(:organisation_relationship, child_organisation: user.organisation, parent_organisation: non_stock_owner)
+        end
+
+        it "shows current owning organisation and the stock owners that hold their stock" do
           user.organisation.update!(holds_own_stock: false)
           expect(question.displayed_answer_options(log, user)).to eq(options)
         end
@@ -156,7 +166,7 @@ RSpec.describe Form::Sales::Questions::OwningOrganisationId, type: :model do
         end
 
         before do
-          org_rel.update!(child_organisation: merged_organisation)
+          create(:organisation_relationship, child_organisation: user.organisation, parent_organisation: merged_organisation)
           merged_organisation.update!(merge_date: Time.zone.local(2023, 2, 2), absorbing_organisation: user.organisation)
           Timecop.freeze(Time.zone.local(2023, 11, 10))
         end
@@ -176,13 +186,14 @@ RSpec.describe Form::Sales::Questions::OwningOrganisationId, type: :model do
           {
             "" => "Select an option",
             user.organisation.id => "User org (Your organisation)",
+            merged_organisation.id => "Merged org",
             owning_org_1.id => "Owning org 1",
           }
         end
 
         before do
           Timecop.freeze(Time.zone.local(2023, 4, 2))
-          org_rel.update!(child_organisation: merged_organisation)
+          create(:organisation_relationship, child_organisation: user.organisation, parent_organisation: merged_organisation)
           merged_organisation.update!(merge_date: Time.zone.local(2021, 6, 2), absorbing_organisation: user.organisation)
           user.organisation.update!(available_from: Time.zone.local(2021, 2, 2))
         end

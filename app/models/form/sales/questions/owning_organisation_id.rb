@@ -11,11 +11,24 @@ class Form::Sales::Questions::OwningOrganisationId < ::Form::Question
     answer_opts = { "" => "Select an option" }
 
     return answer_opts unless ActiveRecord::Base.connected?
+    return answer_opts unless user
+    return answer_opts unless log
+
+    if FeatureToggle.sales_managing_organisation_enabled? && !user.support?
+      if log.owning_organisation_id.present?
+        answer_opts[log.owning_organisation.id] = log.owning_organisation.name
+      end
+
+      if user.organisation.holds_own_stock?
+        answer_opts[user.organisation.id] = "#{user.organisation.name} (Your organisation)"
+      end
+
+      user.organisation.stock_owners.where(holds_own_stock: true).find_each do |org|
+        answer_opts[org.id] = org.name
+      end
+    end
 
     if FeatureToggle.merge_organisations_enabled?
-      return answer_opts unless user
-      return answer_opts unless log
-
       if log.owning_organisation_id.present?
         answer_opts[log.owning_organisation.id] = log.owning_organisation.name
       end
