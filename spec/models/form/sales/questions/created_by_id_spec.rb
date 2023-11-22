@@ -52,9 +52,9 @@ RSpec.describe Form::Sales::Questions::CreatedById, type: :model do
 
     describe "#displayed_answer_options" do
       let(:owning_org_user) { create(:user) }
-      let(:sales_log) { create(:sales_log, owning_organisation: owning_org_user.organisation) }
+      let(:sales_log) { create(:sales_log, owning_organisation: owning_org_user.organisation, managing_organisation: owning_org_user.organisation) }
 
-      it "only displays users that belong to the owning organisation" do
+      it "only displays users that belong to the managing organisation" do
         expect(question.displayed_answer_options(sales_log, support_user)).to eq(expected_option_for_users(owning_org_user.organisation.users))
       end
     end
@@ -69,14 +69,14 @@ RSpec.describe Form::Sales::Questions::CreatedById, type: :model do
 
     describe "#displayed_answer_options" do
       let(:owning_org_user) { create(:user) }
-      let(:sales_log) { create(:sales_log, owning_organisation: owning_org_user.organisation) }
+      let(:sales_log) { create(:sales_log, owning_organisation: owning_org_user.organisation, managing_organisation: owning_org_user.organisation) }
 
       before do
         create(:user, organisation: data_coordinator.organisation)
       end
 
-      it "only displays users that belong user's org" do
-        expect(question.displayed_answer_options(sales_log, data_coordinator)).to eq(expected_option_for_users(data_coordinator.organisation.users))
+      it "only displays users that belong to managing organisation" do
+        expect(question.displayed_answer_options(sales_log, data_coordinator)).to eq(expected_option_for_users(owning_org_user.organisation.users))
       end
     end
   end
