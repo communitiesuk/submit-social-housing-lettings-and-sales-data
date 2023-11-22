@@ -49,6 +49,9 @@ class Log < ApplicationRecord
   scope :has_old_form_id, -> { where.not(old_form_id: nil) }
   scope :imported_2023_with_old_form_id, -> { imported.filter_by_year(2023).has_old_form_id }
   scope :imported_2023, -> { imported.filter_by_year(2023) }
+  scope :filter_by_organisation, ->(org, _user = nil) { where(owning_organisation: org).or(where(managing_organisation: org)) }
+  scope :filter_by_owning_organisation, ->(owning_organisation, _user = nil) { where(owning_organisation:) }
+  scope :filter_by_managing_organisation, ->(managing_organisation, _user = nil) { where(managing_organisation:) }
 
   attr_accessor :skip_update_status, :skip_update_uprn_confirmed
 
