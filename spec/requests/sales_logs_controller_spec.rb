@@ -66,6 +66,7 @@ RSpec.describe SalesLogsController, type: :request do
         let(:params) do
           {
             "owning_organisation_id": owning_organisation.id,
+            "managing_organisation_id": owning_organisation.id,
             "created_by_id": user.id,
             "saledate": Time.zone.today,
             "purchid": "1",
@@ -153,10 +154,11 @@ RSpec.describe SalesLogsController, type: :request do
               post "/sales-logs", headers:
             end
 
-            it "sets the stock-owning org as user's org" do
+            it "sets the managing org as user's org" do
               created_id = response.location.match(/[0-9]+/)[0]
               sales_log = SalesLog.find_by(id: created_id)
-              expect(sales_log.owning_organisation.name).to eq("User org")
+              expect(sales_log.owning_organisation).to be_nil
+              expect(sales_log.managing_organisation.name).to eq("User org")
             end
           end
 
@@ -199,6 +201,7 @@ RSpec.describe SalesLogsController, type: :request do
         :sales_log,
         purchid: purchaser_code,
         owning_organisation: organisation,
+        managing_organisation: organisation,
       )
     end
     let!(:unauthorized_sales_log) do
@@ -223,6 +226,7 @@ RSpec.describe SalesLogsController, type: :request do
           get "/sales-logs", headers: headers, params: {}
           expect(page).to have_content("Owned by")
           expect(page).not_to have_content("Managed by")
+          expect(page).to have_content("Reported by")
         end
 
         it "shows sales logs for all organisations" do

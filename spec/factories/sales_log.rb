@@ -2,6 +2,7 @@ FactoryBot.define do
   factory :sales_log do
     created_by { FactoryBot.create(:user) }
     owning_organisation { created_by.organisation }
+    managing_organisation { created_by.organisation }
     created_at { Time.zone.now }
     updated_at { Time.zone.now }
     trait :in_progress do

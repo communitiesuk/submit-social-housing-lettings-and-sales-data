@@ -316,9 +316,9 @@ class SalesLog < Log
 
   def reset_created_by!
     return unless updated_by&.support?
-    return if owning_organisation.blank? || created_by.blank?
-    return if created_by&.organisation == owning_organisation
-    return if created_by&.organisation == owning_organisation.absorbing_organisation
+    return if owning_organisation.blank? || managing_organisation.blank? || created_by.blank?
+    return if created_by&.organisation == owning_organisation || created_by&.organisation == managing_organisation
+    return if created_by&.organisation == owning_organisation.absorbing_organisation || created_by&.organisation == managing_organisation.absorbing_organisation
 
     update!(created_by: nil)
   end
