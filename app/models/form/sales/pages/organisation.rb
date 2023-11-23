@@ -10,32 +10,38 @@ class Form::Sales::Pages::Organisation < ::Form::Page
     ]
   end
 
-  def routed_to?(_log, current_user)
+  def routed_to?(log, current_user)
     return false unless current_user
     return true if current_user.support?
+    return false unless FeatureToggle.sales_managing_organisation_enabled?
 
-    if FeatureToggle.sales_managing_organisation_enabled?
-      return true if stock_owners_with_own_stock_count(current_user) > 1
-      return true if current_user.organisation.holds_own_stock? && stock_owners_with_own_stock_count(current_user) >= 1
-    end
+    return true if stock_owners_with_own_stock_count(current_user) > 1
+    return true if current_user.organisation.holds_own_stock? && stock_owners_with_own_stock_count(current_user) >= 1
 
-    if FeatureToggle.merge_organisations_enabled?
-      absorbed_stock_owners = current_user.organisation.absorbed_organisations.where(holds_own_stock: true)
+    stock_owners = if FeatureToggle.merge_organisations_enabled?
+                     current_user.organisation.stock_owners.where(holds_own_stock: true) + current_user.organisation.absorbed_organisations.where(holds_own_stock: true)
+                   else
+                     current_user.organisation.stock_owners.where(holds_own_stock: true)
+                   end
 
-      if current_user.organisation.holds_own_stock?
-        return true if absorbed_stock_owners.count >= 1
-      else
-        return false if absorbed_stock_owners.count.zero?
-        return true if absorbed_stock_owners.count > 1
+    if current_user.organisation.holds_own_stock?
+      if FeatureToggle.merge_organisations_enabled? && current_user.organisation.absorbed_organisations.any?(&:holds_own_stock?)
+        return true
       end
+      return true if stock_owners.count >= 1
 
-      false
+      log.update!(owning_organisation: current_user.organisation)
     else
-      !current_user&.support?.nil?
+      return false if stock_owners.count.zero?
+      return true if stock_owners.count > 1
+
+      log.update!(owning_organisation: stock_owners.first)
     end
+
+    false
   end
 
-private
+  private
 
   def stock_owners_with_own_stock_count(user)
     user.organisation.stock_owners.where(holds_own_stock: true).count
