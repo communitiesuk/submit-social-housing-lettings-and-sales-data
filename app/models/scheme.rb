@@ -6,7 +6,7 @@ class Scheme < ApplicationRecord
 
   has_paper_trail
 
-  scope :filter_by_id, ->(id) { where(id: (id.start_with?("S") ? id[1..] : id)) }
+  scope :filter_by_id, ->(id) { where(id: (id.start_with?("S", "s") ? id[1..] : id)) }
   scope :search_by_service_name, ->(name) { where("service_name ILIKE ?", "%#{name}%") }
   scope :search_by_postcode, ->(postcode) { where("schemes.id IN (SELECT DISTINCT scheme_id FROM locations WHERE REPLACE(locations.postcode, ' ', '') ILIKE ?)", "%#{postcode.delete(' ')}%") }
   scope :search_by_location_name, ->(name) { where("schemes.id IN (SELECT DISTINCT scheme_id FROM locations WHERE locations.name ILIKE ?)", "%#{name}%") }

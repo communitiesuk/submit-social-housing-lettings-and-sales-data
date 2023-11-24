@@ -659,7 +659,7 @@ private
     not_required << "tshortfall" if tshortfall_unknown?
     not_required << "tenancylength" if tenancylength_optional?
 
-    not_required |= %w[address_line2 county postcode_full] if startdate && startdate.year >= 2023
+    not_required |= %w[address_line2 county postcode_full] if startdate && collection_start_year_for_date(startdate) >= 2023
 
     not_required
   end
@@ -780,6 +780,6 @@ private
   end
 
   def should_process_uprn_change?
-    uprn && startdate && (uprn_changed? || startdate_changed?) && startdate.year >= 2023
+    uprn && startdate && (uprn_changed? || startdate_changed?) && collection_start_year_for_date(startdate) >= 2023
   end
 end

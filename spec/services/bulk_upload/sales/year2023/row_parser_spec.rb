@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe BulkUpload::Sales::Year2023::RowParser do
   subject(:parser) { described_class.new(attributes) }
 
-  let(:now) { Time.zone.parse("01/03/2023") }
+  let(:now) { Time.zone.parse("01/05/2023") }
 
   let(:attributes) { { bulk_upload: } }
   let(:bulk_upload) { create(:bulk_upload, :sales, user:, year: 2023) }
@@ -760,7 +760,7 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
             let(:attributes) { setup_section_params.merge({ field_19: "3", data[:field] => nil }) }
 
             it "cannot be blank" do
-              expect(parser.errors[data[:field]]).not_to be_blank
+              expect(parser.errors[data[:field]]).to be_present
             end
           end
         end

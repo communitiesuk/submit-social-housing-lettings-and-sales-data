@@ -10,6 +10,13 @@ RSpec.describe BulkUpload::Lettings::Validator do
   let(:path) { file.path }
   let(:file) { Tempfile.new }
 
+  around do |example|
+    Timecop.freeze(Date.new(2023, 10, 1)) do
+      example.run
+    end
+    Timecop.return
+  end
+
   describe "validations" do
     context "when 2022" do
       let(:bulk_upload) { create(:bulk_upload, user:, year: 2022) }

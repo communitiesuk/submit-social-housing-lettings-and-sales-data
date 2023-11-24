@@ -153,11 +153,14 @@ RSpec.describe BulkUpload::Lettings::Year2022::RowParser do
   end
 
   around do |example|
-    FormHandler.instance.use_real_forms!
+    Timecop.freeze(Date.new(2023, 3, 1)) do
+      FormHandler.instance.use_real_forms!
 
-    example.run
+      example.run
 
-    FormHandler.instance.use_fake_forms!
+      FormHandler.instance.use_fake_forms!
+    end
+    Timecop.return
   end
 
   describe "#blank_row?" do

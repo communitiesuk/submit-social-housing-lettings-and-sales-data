@@ -30,21 +30,30 @@ RSpec.describe "blank_migrated_soctenant_values" do
         expect(sales_log.values_updated_at).not_to be_nil
       end
 
-      it "does not blank soctenant (and subsequent questions) values from 2022 logs" do
-        sales_log.old_id = "404"
-        sales_log.frombeds = nil
-        sales_log.fromprop = 0 # don't know
-        sales_log.socprevten = 10 # don't know
-        sales_log.soctenant = 0 # don't know
-        sales_log.saledate = Time.zone.local(2022, 5, 5)
-        sales_log.save!
-        task.invoke
-        sales_log.reload
-        expect(sales_log.soctenant).to eq(0)
-        expect(sales_log.frombeds).to eq(nil)
-        expect(sales_log.fromprop).to eq(0)
-        expect(sales_log.socprevten).to eq(10)
-        expect(sales_log.values_updated_at).to be_nil
+      context "with 2022 logs" do
+        around do |example|
+          Timecop.freeze(Time.zone.local(2022, 5, 5)) do
+            Singleton.__init__(FormHandler)
+            example.run
+          end
+        end
+
+        it "does not blank soctenant (and subsequent questions) values" do
+          sales_log.old_id = "404"
+          sales_log.frombeds = nil
+          sales_log.fromprop = 0 # don't know
+          sales_log.socprevten = 10 # don't know
+          sales_log.soctenant = 0 # don't know
+          sales_log.saledate = Time.zone.local(2022, 5, 5)
+          sales_log.save!
+          task.invoke
+          sales_log.reload
+          expect(sales_log.soctenant).to eq(0)
+          expect(sales_log.frombeds).to eq(nil)
+          expect(sales_log.fromprop).to eq(0)
+          expect(sales_log.socprevten).to eq(10)
+          expect(sales_log.values_updated_at).to be_nil
+        end
       end
 
       it "does not blank soctenant (and subsequent questions) values from non imported logs" do
