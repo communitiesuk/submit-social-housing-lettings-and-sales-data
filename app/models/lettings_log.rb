@@ -128,6 +128,14 @@ class LettingsLog < Log
   SUFFIX_FROM_PERIOD = { 2 => "every 2 weeks", 3 => "every 4 weeks", 4 => "every month" }.freeze
   RETIREMENT_AGES = { "M" => 67, "F" => 60, "X" => 67 }.freeze
   DUPLICATE_LOG_ATTRIBUTES = %w[owning_organisation_id tenancycode startdate age1_known age1 sex1 ecstat1 tcharge household_charge chcharge].freeze
+  RENT_TYPE = {
+    social_rent: 0,
+    affordable_rent: 1,
+    london_affordable_rent: 2,
+    rent_to_buy: 3,
+    london_living_rent: 4,
+    other_intermediate_rent_product: 5,
+  }.freeze
 
   def form
     FormHandler.instance.get_form(form_name) || FormHandler.instance.current_lettings_form
