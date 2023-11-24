@@ -54,6 +54,11 @@ jobs:
           if [ $succeeded == true ]; then exit 0; else exit 1; fi
 
   infra:
-    name: Teardown review app - TODO
+    name: Teardown review app
     needs: [database]
-    environment: review
+    uses: communitiesuk/submit-social-housing-lettings-and-sales-data-infrastructure/.github/workflows/destroy_review_app_infra.yml@dev
+    with:
+      key: ${{ github.event.pull_request.number }}
+      app_repo_role: arn:aws:iam::815624722760:role/core-application-repo
+    permissions:
+      id-token: write
