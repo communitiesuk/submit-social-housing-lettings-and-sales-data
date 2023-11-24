@@ -29,11 +29,11 @@ class FeatureToggle
   end
 
   def self.deduplication_flow_enabled?
-    !Rails.env.production?
+    true
   end
 
   def self.duplicate_summary_enabled?
-    !Rails.env.production?
+    true
   end
 
   def self.service_unavailable?
