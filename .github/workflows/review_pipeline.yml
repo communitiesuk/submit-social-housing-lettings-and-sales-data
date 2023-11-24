@@ -10,9 +10,6 @@ on:
       - synchronize
       - reopened
   workflow_dispatch:
-  push:
-    branches:
-      - AwsReviewApps
 
 defaults:
   run:
