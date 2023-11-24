@@ -30,14 +30,18 @@ jobs:
           repository: communitiesuk/submit-social-housing-lettings-and-sales-data-infrastructure
           ref: ReviewAppsDeploy
 
-      - name: Create review app infra
-        uses: communitiesuk/submit-social-housing-lettings-and-sales-data-infrastructure/.github/workflows/create_review_app_infra.yml@ReviewAppsDeploy
-        with:
-          key: ${{ github.event.pull_request.number }}
+  infra2:
+    name: Create review app infra
+    needs: [infra]
+    uses: communitiesuk/submit-social-housing-lettings-and-sales-data-infrastructure/.github/workflows/create_review_app_infra.yml@ReviewAppsDeploy
+    with:
+      key: ${{ github.event.pull_request.number }}
+    permissions:
+      id-token: write
 
   code:
     name: Deploy review app code
-    needs: [infra]
+    needs: [infra2]
     uses: ./.github/workflows/aws_deploy.yml
     with:
       aws_account_id: 837698168072
