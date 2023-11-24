@@ -22,7 +22,7 @@ RSpec.describe Form::Sales::Questions::CreatedById, type: :model do
   end
 
   it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("User")
+    expect(question.check_answer_label).to eq("Log owner")
   end
 
   it "has the correct type" do

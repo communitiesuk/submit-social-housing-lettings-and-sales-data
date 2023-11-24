@@ -41,7 +41,7 @@ class Form::Sales::Pages::Organisation < ::Form::Page
     false
   end
 
-  private
+private
 
   def stock_owners_with_own_stock_count(user)
     user.organisation.stock_owners.where(holds_own_stock: true).count

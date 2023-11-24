@@ -42,6 +42,10 @@ module Csv
         labels: %i[owning_organisation name],
         codes: %i[owning_organisation name],
       },
+      managing_organisation_name: {
+        labels: %i[managing_organisation name],
+        codes: %i[managing_organisation name],
+      },
       creation_method: {
         labels: %i[creation_method],
         codes: %i[creation_method_before_type_cast],
@@ -125,6 +129,7 @@ module Csv
       "prevloc" => %w[prevloc prevloc_label],
       "created_by_id" => %w[created_by],
       "owning_organisation_id" => %w[owning_organisation_name],
+      "managing_organisation_id" => %w[managing_organisation_name],
     }.freeze
 
     def sales_log_attributes
