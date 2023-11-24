@@ -88,8 +88,8 @@ RSpec.describe Form::Sales::Pages::Organisation, type: :model do
             expect(page.routed_to?(log, user)).to eq(false)
           end
 
-          it "does not update owning_organisation_id" do
-            expect { page.routed_to?(log, user) }.not_to change(log.reload, :owning_organisation)
+          it "updates owning_organisation_id" do
+            expect { page.routed_to?(log, user) }.to change(log.reload, :owning_organisation)
           end
         end
 
