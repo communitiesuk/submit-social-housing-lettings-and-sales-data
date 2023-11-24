@@ -21,27 +21,16 @@ defaults:
 jobs:
   infra:
     name: Deploy review app infrastructure
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout infrastructure code
-        uses: actions/checkout@v3
-        with:
-          repository: communitiesuk/submit-social-housing-lettings-and-sales-data-infrastructure
-          ref: ReviewAppsDeploy
-
-  infra2:
-    name: Create review app infra
-    needs: [infra]
     uses: communitiesuk/submit-social-housing-lettings-and-sales-data-infrastructure/.github/workflows/create_review_app_infra.yml@ReviewAppsDeploy
     with:
       key: ${{ github.event.pull_request.number }}
+      app_repo_role: arn:aws:iam::815624722760:role/core-application-repo
     permissions:
       id-token: write
 
   code:
     name: Deploy review app code
-    needs: [infra2]
+    needs: [infra]
     uses: ./.github/workflows/aws_deploy.yml
     with:
       aws_account_id: 837698168072
