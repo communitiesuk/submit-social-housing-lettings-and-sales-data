@@ -10,6 +10,9 @@ on:
       - synchronize
       - reopened
   workflow_dispatch:
+  push:
+    branches:
+      - AwsReviewApps
 
 defaults:
   run:
@@ -17,7 +20,20 @@ defaults:
 
 jobs:
   infra:
-    name: Deploy review app infrastructure - TODO
+    name: Deploy review app infrastructure
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout infrastructure code
+        uses: actions/checkout@v3
+        with:
+          repository: communitiesuk/submit-social-housing-lettings-and-sales-data-infrastructure
+          ref: ReviewAppsDeploy
+
+      - name: Create review app infra
+        uses: communitiesuk/submit-social-housing-lettings-and-sales-data-infrastructure/.github/workflows/create_review_app_infra.yml@ReviewAppsDeploy
+        with:
+          key: ${{ github.event.pull_request.number }}
 
   code:
     name: Deploy review app code
