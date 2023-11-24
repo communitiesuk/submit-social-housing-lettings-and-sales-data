@@ -809,6 +809,15 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
         end
       end
 
+      context "when intermediate rent and field_11 (Which type of Intermediate Rent) is not given" do
+        let(:attributes) { { bulk_upload:, field_5: "9", field_11: nil } }
+
+        it "adds error on field_11" do
+          expect(parser.errors[:field_5]).to be_present
+          expect(parser.errors[:field_11]).to eq(["You must answer intermediate rent type"])
+        end
+      end
+
       context "when bulk upload is for general needs" do
         context "when general needs option selected" do
           let(:attributes) { { bulk_upload:, field_5: "1", field_4: "1" } }

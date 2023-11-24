@@ -353,6 +353,14 @@ class BulkUpload::Lettings::Year2023::RowParser
             },
             on: :after_log
 
+  validates :field_11,
+            presence: {
+              if: proc { renttype == :intermediate },
+              message: I18n.t("validations.not_answered", question: "intermediate rent type"),
+              category: :setup,
+            },
+            on: :after_log
+
   validates :field_46, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 1 must be a number or the letter R" }, on: :after_log
   validates :field_52, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 2 must be a number or the letter R" }, allow_blank: true, on: :after_log
   validates :field_56, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 3 must be a number or the letter R" }, allow_blank: true, on: :after_log
