@@ -70,7 +70,10 @@ private
 
       new_scheme = Scheme.create!(scheme.attributes.except("id", "owning_organisation_id", "old_id", "old_visible_id").merge(owning_organisation: @absorbing_organisation))
       scheme.locations.each do |location|
-        new_scheme.locations << Location.new(location.attributes.except("id", "scheme_id", "old_id", "old_visible_id")) unless location.deactivated?
+        next if location.deactivated?
+
+        new_scheme.locations << Location.new(location.attributes.except("id", "scheme_id", "old_id", "old_visible_id"))
+        LocationDeactivationPeriod.create!(location:, deactivation_date: @merge_date)
       end
       @merged_schemes[merging_organisation.name] << { name: new_scheme.service_name, code: new_scheme.id }
       SchemeDeactivationPeriod.create!(scheme:, deactivation_date: @merge_date)
