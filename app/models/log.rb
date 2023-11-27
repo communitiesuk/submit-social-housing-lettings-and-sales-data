@@ -50,7 +50,7 @@ class Log < ApplicationRecord
   scope :imported_2023_with_old_form_id, -> { imported.filter_by_year(2023).has_old_form_id }
   scope :imported_2023, -> { imported.filter_by_year(2023) }
 
-  attr_accessor :skip_update_status, :skip_update_uprn_confirmed
+  attr_accessor :skip_update_status, :skip_update_uprn_confirmed, :skip_dpo_validation
 
   def process_uprn_change!
     if uprn.present?

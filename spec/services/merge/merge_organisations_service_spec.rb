@@ -160,11 +160,11 @@ RSpec.describe Merge::MergeOrganisationsService do
           expect(absorbing_organisation.owned_schemes.count).to eq(1)
           expect(absorbing_organisation.owned_schemes.first.service_name).to eq(scheme.service_name)
           expect(absorbing_organisation.owned_schemes.first.old_id).to be_nil
-          expect(absorbing_organisation.owned_schemes.first.old_visible_id).to be_nil
+          expect(absorbing_organisation.owned_schemes.first.old_visible_id).to eq(nil)
           expect(absorbing_organisation.owned_schemes.first.locations.count).to eq(1)
           expect(absorbing_organisation.owned_schemes.first.locations.first.postcode).to eq(location.postcode)
           expect(absorbing_organisation.owned_schemes.first.locations.first.old_id).to be_nil
-          expect(absorbing_organisation.owned_schemes.first.locations.first.old_visible_id).to be_nil
+          expect(absorbing_organisation.owned_schemes.first.locations.first.old_visible_id).to eq(nil)
           expect(scheme.scheme_deactivation_periods.count).to eq(1)
           expect(scheme.scheme_deactivation_periods.first.deactivation_date.to_date).to eq(Time.zone.today)
         end
@@ -179,7 +179,7 @@ RSpec.describe Merge::MergeOrganisationsService do
           expect(absorbing_organisation.owned_lettings_logs.find(owned_lettings_log.id).scheme).to eq(absorbing_organisation.owned_schemes.first)
           expect(absorbing_organisation.owned_lettings_logs.find(owned_lettings_log.id).location).to eq(absorbing_organisation.owned_schemes.first.locations.first)
           expect(absorbing_organisation.owned_lettings_logs.find(owned_lettings_log_no_location.id).scheme).to eq(absorbing_organisation.owned_schemes.first)
-          expect(absorbing_organisation.owned_lettings_logs.find(owned_lettings_log_no_location.id).location).to eq(nil)
+          expect(absorbing_organisation.owned_lettings_logs.find(owned_lettings_log_no_location.id).location).to eq(absorbing_organisation.owned_schemes.first.locations.first)
         end
 
         it "rolls back if there's an error" do
@@ -345,7 +345,7 @@ RSpec.describe Merge::MergeOrganisationsService do
             expect(absorbing_organisation.owned_lettings_logs.find(owned_lettings_log.id).scheme).to eq(absorbing_organisation.owned_schemes.first)
             expect(absorbing_organisation.owned_lettings_logs.find(owned_lettings_log.id).location).to eq(absorbing_organisation.owned_schemes.first.locations.first)
             expect(absorbing_organisation.owned_lettings_logs.find(owned_lettings_log_no_location.id).scheme).to eq(absorbing_organisation.owned_schemes.first)
-            expect(absorbing_organisation.owned_lettings_logs.find(owned_lettings_log_no_location.id).location).to eq(nil)
+            expect(absorbing_organisation.owned_lettings_logs.find(owned_lettings_log_no_location.id).location).to eq(absorbing_organisation.owned_schemes.first.locations.first)
           end
 
           it "rolls back if there's an error" do
@@ -728,7 +728,7 @@ RSpec.describe Merge::MergeOrganisationsService do
           expect(new_absorbing_organisation.owned_lettings_logs.find(owned_lettings_log.id).scheme).to eq(new_absorbing_organisation.owned_schemes.first)
           expect(new_absorbing_organisation.owned_lettings_logs.find(owned_lettings_log.id).location).to eq(new_absorbing_organisation.owned_schemes.first.locations.first)
           expect(new_absorbing_organisation.owned_lettings_logs.find(owned_lettings_log_no_location.id).scheme).to eq(new_absorbing_organisation.owned_schemes.first)
-          expect(new_absorbing_organisation.owned_lettings_logs.find(owned_lettings_log_no_location.id).location).to eq(nil)
+          expect(new_absorbing_organisation.owned_lettings_logs.find(owned_lettings_log_no_location.id).location).to eq(new_absorbing_organisation.owned_schemes.first.locations.first)
         end
 
         it "rolls back if there's an error" do
@@ -801,7 +801,7 @@ RSpec.describe Merge::MergeOrganisationsService do
             expect(SalesLog.filter_by_owning_organisation(new_absorbing_organisation).first).to eq(sales_log)
           end
 
-          fit "rolls back if there's an error" do
+          it "rolls back if there's an error" do
             allow(Organisation).to receive(:find).with([merging_organisation_ids]).and_return(Organisation.find(merging_organisation_ids))
             allow(Organisation).to receive(:find).with(new_absorbing_organisation.id).and_return(new_absorbing_organisation)
             allow(new_absorbing_organisation).to receive(:save!).and_raise(ActiveRecord::RecordInvalid)
@@ -889,12 +889,13 @@ RSpec.describe Merge::MergeOrganisationsService do
 
             new_absorbing_organisation.reload
             merging_organisation.reload
+            owned_lettings_log_no_location.reload
             expect(new_absorbing_organisation.owned_lettings_logs.count).to eq(2)
             expect(new_absorbing_organisation.managed_lettings_logs.count).to eq(1)
             expect(new_absorbing_organisation.owned_lettings_logs.find(owned_lettings_log.id).scheme).to eq(new_absorbing_organisation.owned_schemes.first)
             expect(new_absorbing_organisation.owned_lettings_logs.find(owned_lettings_log.id).location).to eq(new_absorbing_organisation.owned_schemes.first.locations.first)
             expect(new_absorbing_organisation.owned_lettings_logs.find(owned_lettings_log_no_location.id).scheme).to eq(new_absorbing_organisation.owned_schemes.first)
-            expect(new_absorbing_organisation.owned_lettings_logs.find(owned_lettings_log_no_location.id).location).to eq(nil)
+            expect(new_absorbing_organisation.owned_lettings_logs.find(owned_lettings_log_no_location.id).location).to eq(new_absorbing_organisation.owned_schemes.first.locations.first)
           end
 
           it "rolls back if there's an error" do

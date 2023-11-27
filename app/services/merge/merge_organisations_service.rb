@@ -88,18 +88,21 @@ private
         lettings_log.location = location_to_set if location_to_set.present?
       end
       lettings_log.owning_organisation = @absorbing_organisation
-      lettings_log.save!(validate: false)
+      lettings_log.skip_dpo_validation = true
+      lettings_log.save!
     end
     merging_organisation.managed_lettings_logs.after_date(@merge_date.to_time).each do |lettings_log|
       lettings_log.managing_organisation = @absorbing_organisation
-      lettings_log.save!(validate: false)
+      lettings_log.skip_dpo_validation = true
+      lettings_log.save!
     end
   end
 
   def merge_sales_logs(merging_organisation)
     merging_organisation.sales_logs.after_date(@merge_date.to_time).each do |sales_log|
       sales_log.owning_organisation = @absorbing_organisation
-      sales_log.save!(validate: false)
+      sales_log.skip_dpo_validation = true
+      sales_log.save!
     end
   end
 
