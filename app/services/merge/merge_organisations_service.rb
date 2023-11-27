@@ -85,6 +85,9 @@ private
 
   def merge_lettings_logs(merging_organisation)
     merging_organisation.owned_lettings_logs.after_date(@merge_date.to_time).each do |lettings_log|
+      if lettings_log.managing_organisation == merging_organisation
+        lettings_log.managing_organisation = @absorbing_organisation
+      end
       if lettings_log.scheme.present?
         scheme_to_set = @absorbing_organisation.owned_schemes.find_by(service_name: lettings_log.scheme.service_name)
         location_to_set = scheme_to_set.locations.find_by(name: lettings_log.location&.name, postcode: lettings_log.location&.postcode)
@@ -113,7 +116,10 @@ private
   end
 
   def merge_sales_logs(merging_organisation)
-    merging_organisation.sales_logs.after_date(@merge_date.to_time).each do |sales_log|
+    merging_organisation.owned_sales_logs.after_date(@merge_date.to_time).each do |sales_log|
+      if sales_log.managing_organisation == merging_organisation
+        sales_log.managing_organisation = @absorbing_organisation
+      end
       sales_log.owning_organisation = @absorbing_organisation
       if sales_log.collection_period_open?
         sales_log.skip_dpo_validation = true
@@ -121,6 +127,10 @@ private
       else
         sales_log.save!(validate: false)
       end
+    end
+    merging_organisation.managed_sales_logs.after_date(@merge_date.to_time).each do |sales_log|
+      sales_log.managing_organisation = @absorbing_organisation
+      sales_log.save!(validate: false)
     end
   end
 
