@@ -329,6 +329,14 @@ class BulkUpload::Lettings::Year2023::RowParser
             },
             on: :after_log
 
+  validates :field_11,
+            presence: {
+              if: proc { renttype == :intermediate },
+              message: I18n.t("validations.not_answered", question: "intermediate rent type"),
+              category: :setup,
+            },
+            on: :after_log
+
   validates :field_15,
             presence: {
               if: proc { supported_housing? && log_uses_old_scheme_id? },
@@ -349,14 +357,6 @@ class BulkUpload::Lettings::Year2023::RowParser
             presence: {
               if: proc { supported_housing? && log_uses_new_scheme_id? },
               message: I18n.t("validations.not_answered", question: "location code"),
-              category: :setup,
-            },
-            on: :after_log
-
-  validates :field_11,
-            presence: {
-              if: proc { renttype == :intermediate },
-              message: I18n.t("validations.not_answered", question: "intermediate rent type"),
               category: :setup,
             },
             on: :after_log
