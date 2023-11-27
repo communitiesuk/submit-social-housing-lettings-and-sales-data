@@ -95,6 +95,8 @@ module DerivedVariables::LettingsLogVariables
 
     set_housingneeds_fields if housingneeds?
 
+    self.uprn_known = 0 if address_answered_without_uprn?
+
     if uprn_known&.zero?
       self.uprn = nil
     end
@@ -308,6 +310,10 @@ private
     self.address_line2 = nil
     self.town_or_city = nil
     self.county = nil
+  end
+
+  def address_answered_without_uprn?
+    [address_line1, town_or_city].all?(&:present?) && uprn.nil? && form.start_date.year >= 2023
   end
 
   def get_lar
