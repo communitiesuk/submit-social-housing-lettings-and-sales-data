@@ -167,6 +167,8 @@ RSpec.describe Merge::MergeOrganisationsService do
           expect(absorbing_organisation.owned_schemes.first.locations.first.old_visible_id).to eq(nil)
           expect(scheme.scheme_deactivation_periods.count).to eq(1)
           expect(scheme.scheme_deactivation_periods.first.deactivation_date.to_date).to eq(Time.zone.today)
+          expect(scheme.locations.first.location_deactivation_periods.count).to eq(1)
+          expect(scheme.locations.first.location_deactivation_periods.first.deactivation_date.to_date).to eq(Time.zone.today)
         end
 
         it "moves relevant logs and assigns the new scheme" do
@@ -193,6 +195,7 @@ RSpec.describe Merge::MergeOrganisationsService do
           merging_organisation.reload
           expect(absorbing_organisation.owned_schemes.count).to eq(0)
           expect(scheme.scheme_deactivation_periods.count).to eq(0)
+          expect(scheme.locations.first.location_deactivation_periods.count).to eq(0)
           expect(owned_lettings_log.owning_organisation).to eq(merging_organisation)
           expect(owned_lettings_log_no_location.owning_organisation).to eq(merging_organisation)
         end
@@ -382,6 +385,8 @@ RSpec.describe Merge::MergeOrganisationsService do
               expect(absorbing_organisation.owned_schemes.first.locations.find_by(postcode: location_with_future_startdate.postcode).startdate).to eq(Time.zone.today + 2.months)
               expect(scheme.scheme_deactivation_periods.count).to eq(1)
               expect(scheme.scheme_deactivation_periods.first.deactivation_date.to_date).to eq(Time.zone.yesterday)
+              expect(scheme.locations.first.location_deactivation_periods.count).to eq(1)
+              expect(scheme.locations.first.location_deactivation_periods.first.deactivation_date.to_date).to eq(Time.zone.yesterday)
             end
           end
 
@@ -409,6 +414,7 @@ RSpec.describe Merge::MergeOrganisationsService do
             merging_organisation.reload
             expect(absorbing_organisation.owned_schemes.count).to eq(0)
             expect(scheme.scheme_deactivation_periods.count).to eq(0)
+            expect(scheme.locations.first.location_deactivation_periods.count).to eq(0)
             expect(owned_lettings_log.owning_organisation).to eq(merging_organisation)
             expect(owned_lettings_log_no_location.owning_organisation).to eq(merging_organisation)
           end
@@ -766,6 +772,8 @@ RSpec.describe Merge::MergeOrganisationsService do
           expect(new_absorbing_organisation.owned_schemes.first.locations.first.old_visible_id).to be_nil
           expect(scheme.scheme_deactivation_periods.count).to eq(1)
           expect(scheme.scheme_deactivation_periods.first.deactivation_date.to_date).to eq(Time.zone.today)
+          expect(scheme.locations.first.location_deactivation_periods.count).to eq(1)
+          expect(scheme.locations.first.location_deactivation_periods.first.deactivation_date.to_date).to eq(Time.zone.today)
         end
 
         it "moves relevant logs and assigns the new scheme" do
@@ -792,6 +800,7 @@ RSpec.describe Merge::MergeOrganisationsService do
           merging_organisation.reload
           expect(new_absorbing_organisation.owned_schemes.count).to eq(0)
           expect(scheme.scheme_deactivation_periods.count).to eq(0)
+          expect(scheme.locations.first.location_deactivation_periods.count).to eq(0)
           expect(owned_lettings_log.owning_organisation).to eq(merging_organisation)
           expect(owned_lettings_log_no_location.owning_organisation).to eq(merging_organisation)
         end
@@ -932,6 +941,8 @@ RSpec.describe Merge::MergeOrganisationsService do
             expect(new_absorbing_organisation.owned_schemes.first.locations.first.postcode).to eq(location.postcode)
             expect(scheme.scheme_deactivation_periods.count).to eq(1)
             expect(scheme.scheme_deactivation_periods.first.deactivation_date.to_date).to eq(Time.zone.yesterday)
+            expect(scheme.locations.first.location_deactivation_periods.count).to eq(1)
+            expect(scheme.locations.first.location_deactivation_periods.first.deactivation_date.to_date).to eq(Time.zone.yesterday)
           end
 
           it "moves relevant logs and assigns the new scheme" do
@@ -959,6 +970,7 @@ RSpec.describe Merge::MergeOrganisationsService do
             merging_organisation.reload
             expect(new_absorbing_organisation.owned_schemes.count).to eq(0)
             expect(scheme.scheme_deactivation_periods.count).to eq(0)
+            expect(scheme.locations.first.location_deactivation_periods.count).to eq(0)
             expect(owned_lettings_log.owning_organisation).to eq(merging_organisation)
             expect(owned_lettings_log_no_location.owning_organisation).to eq(merging_organisation)
           end
