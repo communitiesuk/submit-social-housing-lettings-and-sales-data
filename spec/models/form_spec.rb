@@ -388,7 +388,7 @@ RSpec.describe Form, type: :model do
       expect(form.subsections.count).to eq(1)
       expect(form.subsections.first.id).to eq("setup")
       expect(form.pages.count).to eq(13)
-      expect(form.pages.first.id).to eq("organisation")
+      expect(form.pages.first.id).to eq("owning_organisation")
       expect(form.questions.count).to eq(14)
       expect(form.questions.first.id).to eq("owning_organisation_id")
       expect(form.start_date).to eq(Time.zone.parse("2022-04-01"))
