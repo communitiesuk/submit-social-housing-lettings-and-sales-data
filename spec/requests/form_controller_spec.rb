@@ -169,7 +169,7 @@ RSpec.describe FormController, type: :request do
         {
           id: sales_log.id,
           sales_log: {
-            page: "organisation",
+            page: "owning_organisation",
             owning_organisation_id: managing_organisation.id,
           },
         }
