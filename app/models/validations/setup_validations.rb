@@ -18,34 +18,6 @@ module Validations::SetupValidations
     validate_merged_organisations_start_date(record)
   end
 
-  def validate_irproduct_other(record)
-    if intermediate_product_rent_type?(record) && record.irproduct_other.blank?
-      record.errors.add :irproduct_other, I18n.t("validations.setup.intermediate_rent_product_name.blank")
-    end
-  end
-
-  def validate_location(record)
-    location_during_startdate_validation(record)
-
-    if record.location&.status == :incomplete
-      record.errors.add :location_id, :incomplete, message: I18n.t("validations.setup.location.incomplete")
-      record.errors.add :scheme_id, :incomplete, message: I18n.t("validations.setup.location.incomplete")
-    end
-  end
-
-  def validate_scheme_has_confirmed_locations_validation(record)
-    return unless record.scheme
-
-    unless record.scheme.locations.confirmed.any?
-      record.errors.add :scheme_id, :no_completed_locations, message: I18n.t("validations.scheme.no_completed_locations")
-    end
-  end
-
-  def validate_scheme(record)
-    location_during_startdate_validation(record)
-    scheme_during_startdate_validation(record)
-  end
-
   def validate_organisation(record)
     created_by, managing_organisation, owning_organisation = record.values_at("created_by", "managing_organisation", "owning_organisation")
     unless [created_by, managing_organisation, owning_organisation].any?(&:blank?) || ((created_by.organisation.absorbed_organisations + [created_by.organisation]) & [managing_organisation, owning_organisation]).present?
@@ -80,6 +52,34 @@ module Validations::SetupValidations
                                                             managing_organisation_available_from: record.managing_organisation.available_from.to_formatted_s(:govuk_date))
       end
     end
+  end
+
+  def validate_irproduct_other(record)
+    if intermediate_product_rent_type?(record) && record.irproduct_other.blank?
+      record.errors.add :irproduct_other, I18n.t("validations.setup.intermediate_rent_product_name.blank")
+    end
+  end
+
+  def validate_location(record)
+    location_during_startdate_validation(record)
+
+    if record.location&.status == :incomplete
+      record.errors.add :location_id, :incomplete, message: I18n.t("validations.setup.location.incomplete")
+      record.errors.add :scheme_id, :incomplete, message: I18n.t("validations.setup.location.incomplete")
+    end
+  end
+
+  def validate_scheme_has_confirmed_locations_validation(record)
+    return unless record.scheme
+
+    unless record.scheme.locations.confirmed.any?
+      record.errors.add :scheme_id, :no_completed_locations, message: I18n.t("validations.scheme.no_completed_locations")
+    end
+  end
+
+  def validate_scheme(record)
+    location_during_startdate_validation(record)
+    scheme_during_startdate_validation(record)
   end
 
   def validate_managing_organisation_data_sharing_agremeent_signed(record)
