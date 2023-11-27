@@ -625,6 +625,10 @@ class LettingsLog < Log
      is_carehome? ? "chcharge" : nil].compact
   end
 
+  def letting_allocation_none
+    letting_allocation_unknown
+  end
+
 private
 
   def reset_invalid_unresolved_log_fields!
