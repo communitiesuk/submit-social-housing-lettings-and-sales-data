@@ -150,7 +150,7 @@ private
     elsif absorbing_owning_organisation_inactive?(record)
       record.errors.add :startdate, I18n.t("validations.setup.startdate.invalid_absorbing_organisations_start_date.same_organisation",
                                            owning_organisation: record.owning_organisation.name,
-                                           owning_organisation_available_from: record.owning_organisation.created_at.to_formatted_s(:govuk_date))
+                                           owning_organisation_available_from: record.owning_organisation.available_from.to_formatted_s(:govuk_date))
     end
   end
 
