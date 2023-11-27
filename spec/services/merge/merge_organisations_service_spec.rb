@@ -404,20 +404,6 @@ RSpec.describe Merge::MergeOrganisationsService do
         create_list(:user, 5, organisation: merging_organisation_too)
       end
 
-      it "moves the users from merging organisations to absorbing organisation" do
-        expect(Rails.logger).to receive(:info).with("Merged users from fake org:")
-        expect(Rails.logger).to receive(:info).with("\tDanny Rojas (#{merging_organisation.data_protection_officers.first.email})")
-        expect(Rails.logger).to receive(:info).with("\tfake name (fake@email.com)")
-        expect(Rails.logger).to receive(:info).with("Merged users from second org:")
-        expect(Rails.logger).to receive(:info).with(/\tDanny Rojas/).exactly(6).times
-        expect(Rails.logger).to receive(:info).with("New schemes from fake org:")
-        expect(Rails.logger).to receive(:info).with("New schemes from second org:")
-        merge_organisations_service.call
-
-        merging_organisation_user.reload
-        expect(merging_organisation_user.organisation).to eq(absorbing_organisation)
-      end
-
       it "sets merge date and absorbing organisation on merged organisations" do
         merge_organisations_service.call
 
@@ -449,6 +435,60 @@ RSpec.describe Merge::MergeOrganisationsService do
         expect(merging_organisation.merge_date).to eq(nil)
         expect(merging_organisation.absorbing_organisation_id).to eq(nil)
         expect(merging_organisation_user.organisation).to eq(merging_organisation)
+      end
+
+      context "and merging users" do
+        it "moves the users from merging organisations to absorbing organisation" do
+          expect(Rails.logger).to receive(:info).with("Merged users from fake org:")
+          expect(Rails.logger).to receive(:info).with("\tDanny Rojas (#{merging_organisation.data_protection_officers.first.email})")
+          expect(Rails.logger).to receive(:info).with("\tfake name (fake@email.com)")
+          expect(Rails.logger).to receive(:info).with("Merged users from second org:")
+          expect(Rails.logger).to receive(:info).with(/\tDanny Rojas/).exactly(6).times
+          expect(Rails.logger).to receive(:info).with("New schemes from fake org:")
+          expect(Rails.logger).to receive(:info).with("New schemes from second org:")
+          merge_organisations_service.call
+
+          merging_organisation_user.reload
+          expect(merging_organisation_user.organisation).to eq(absorbing_organisation)
+        end
+
+        it "replaces dpo users with fake users if they have signed the data sharing agreement" do
+          merging_organisation_user.update!(is_dpo: true)
+          merging_organisation.data_protection_confirmation.update!(data_protection_officer: merging_organisation_user)
+
+          merge_organisations_service.call
+
+          merging_organisation_user.reload
+          merging_organisation.reload
+          expect(merging_organisation_user.organisation).to eq(absorbing_organisation)
+          expect(merging_organisation.users.count).to eq(1)
+          expect(merging_organisation.users.first.name).to eq(merging_organisation_user.name)
+          expect(merging_organisation.users.first.email).not_to eq(merging_organisation_user.email)
+          expect(merging_organisation.data_protection_confirmation.data_protection_officer).to eq(merging_organisation.users.first)
+        end
+
+        it "does not move dpo users who have signed data sharing agreement if they have a fake email address" do
+          dpo = User.new(
+            name: merging_organisation.data_protection_confirmation.data_protection_officer.name,
+            organisation: merging_organisation,
+            is_dpo: true,
+            encrypted_password: SecureRandom.hex(10),
+            email: SecureRandom.uuid,
+            confirmed_at: Time.zone.now,
+            active: false,
+          )
+          dpo.save!(validate: false)
+          merging_organisation.data_protection_confirmation.update!(data_protection_officer: dpo)
+
+          merge_organisations_service.call
+
+          dpo.reload
+          merging_organisation.reload
+          expect(dpo.organisation).to eq(merging_organisation)
+          expect(merging_organisation.users.count).to eq(1)
+          expect(merging_organisation.users.first).to eq(dpo)
+          expect(merging_organisation.data_protection_confirmation.data_protection_officer).to eq(dpo)
+        end
       end
 
       context "and merging organisation relationships" do
@@ -761,7 +801,7 @@ RSpec.describe Merge::MergeOrganisationsService do
             expect(SalesLog.filter_by_owning_organisation(new_absorbing_organisation).first).to eq(sales_log)
           end
 
-          it "rolls back if there's an error" do
+          fit "rolls back if there's an error" do
             allow(Organisation).to receive(:find).with([merging_organisation_ids]).and_return(Organisation.find(merging_organisation_ids))
             allow(Organisation).to receive(:find).with(new_absorbing_organisation.id).and_return(new_absorbing_organisation)
             allow(new_absorbing_organisation).to receive(:save!).and_raise(ActiveRecord::RecordInvalid)
