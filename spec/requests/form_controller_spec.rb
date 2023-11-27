@@ -181,7 +181,7 @@ RSpec.describe FormController, type: :request do
       end
 
       it "correctly sets owning organisation" do
-        post "/sales-logs/#{sales_log.id}/organisation", params: params
+        post "/sales-logs/#{sales_log.id}/owning-organisation", params: params
         expect(response).to redirect_to("/sales-logs/#{sales_log.id}/created-by")
         follow_redirect!
         sales_log.reload

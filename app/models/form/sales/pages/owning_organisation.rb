@@ -1,7 +1,7 @@
-class Form::Sales::Pages::Organisation < ::Form::Page
+class Form::Sales::Pages::OwningOrganisation < ::Form::Page
   def initialize(id, hsh, subsection)
     super
-    @id = "organisation"
+    @id = "owning_organisation"
   end
 
   def questions
@@ -14,9 +14,7 @@ class Form::Sales::Pages::Organisation < ::Form::Page
     return false unless current_user
     return true if current_user.support?
     return false unless FeatureToggle.sales_managing_organisation_enabled?
-
-    return true if stock_owners_with_own_stock_count(current_user) > 1
-    return true if current_user.organisation.holds_own_stock? && stock_owners_with_own_stock_count(current_user) >= 1
+    return true if has_multiple_stock_owners_with_own_stock?(current_user)
 
     stock_owners = if FeatureToggle.merge_organisations_enabled?
                      current_user.organisation.stock_owners.where(holds_own_stock: true) + current_user.organisation.absorbed_organisations.where(holds_own_stock: true)
@@ -43,7 +41,7 @@ class Form::Sales::Pages::Organisation < ::Form::Page
 
 private
 
-  def stock_owners_with_own_stock_count(user)
-    user.organisation.stock_owners.where(holds_own_stock: true).count
+  def has_multiple_stock_owners_with_own_stock?(user)
+    user.organisation.stock_owners.where(holds_own_stock: true).count > 1 || user.organisation.holds_own_stock? && user.organisation.stock_owners.where(holds_own_stock: true).count >= 1
   end
 end
