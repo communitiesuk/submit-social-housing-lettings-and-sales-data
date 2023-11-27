@@ -122,9 +122,7 @@ class Location < ApplicationRecord
   end
 
   def available_from
-    return startdate if startdate.present?
-
-    FormHandler.instance.earliest_open_collection_start_date(now: created_at)
+    [merge_date, startdate].compact.max || FormHandler.instance.earliest_open_collection_start_date(now: created_at)
   end
 
   def open_deactivation

@@ -243,7 +243,7 @@ class Scheme < ApplicationRecord
   end
 
   def validate_confirmed
-    required_attributes = attribute_names - %w[id created_at updated_at old_id old_visible_id confirmed end_date sensitive secondary_client_group total_units deactivation_date deactivation_date_type]
+    required_attributes = attribute_names - %w[id created_at updated_at old_id old_visible_id confirmed end_date sensitive secondary_client_group total_units deactivation_date deactivation_date_type merge_date]
 
     if confirmed == true
       required_attributes.any? do |attribute|
@@ -262,7 +262,7 @@ class Scheme < ApplicationRecord
   end
 
   def available_from
-    FormHandler.instance.earliest_open_collection_start_date(now: created_at)
+    merge_date || FormHandler.instance.earliest_open_collection_start_date(now: created_at)
   end
 
   def open_deactivation
