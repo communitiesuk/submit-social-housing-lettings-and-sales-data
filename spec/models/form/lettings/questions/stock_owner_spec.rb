@@ -221,6 +221,33 @@ RSpec.describe Form::Lettings::Questions::StockOwner, type: :model do
         expect(question.displayed_answer_options(log, user)).to eq(expected_opts)
         expect(question.displayed_answer_options(log, user)).not_to include(non_stock_organisation.id)
       end
+
+      context "and org has recently absorbed other orgs and does not have available from date" do
+        let(:merged_organisation) { create(:organisation, name: "Merged org") }
+        let(:org) { create(:organisation, name: "User org") }
+        let(:options) do
+          {
+            "" => "Select an option",
+            org.id => "User org",
+            user.organisation.id => user.organisation.name,
+            log.owning_organisation.id => log.owning_organisation.name,
+            merged_organisation.id => "Merged org (inactive as of 2 February 2023)",
+          }
+        end
+
+        before do
+          merged_organisation.update!(merge_date: Time.zone.local(2023, 2, 2), absorbing_organisation: org)
+          Timecop.freeze(Time.zone.local(2023, 11, 10))
+        end
+
+        after do
+          Timecop.return
+        end
+
+        it "shows merged organisation as an option" do
+          expect(question.displayed_answer_options(log, user)).to eq(options)
+        end
+      end
     end
   end
 
