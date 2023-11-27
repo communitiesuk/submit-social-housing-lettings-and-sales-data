@@ -133,71 +133,351 @@ RSpec.describe Merge::MergeOrganisationsService do
       end
 
       context "and merging organisation schemes and locations" do
-        let!(:scheme) { create(:scheme, owning_organisation: merging_organisation, old_id: "scheme_old_id", old_visible_id: "scheme_old_visible_id") }
-        let!(:location) { create(:location, scheme:, old_id: "location_old_id", old_visible_id: "location_old_visible_id") }
-        let!(:deactivated_location) { create(:location, scheme:) }
-        let!(:deactivated_scheme) { create(:scheme, owning_organisation: merging_organisation) }
-        let!(:owned_lettings_log) { create(:lettings_log, :sh, scheme:, location:, startdate: Time.zone.tomorrow, owning_organisation: merging_organisation) }
-        let!(:owned_lettings_log_no_location) { create(:lettings_log, :sh, scheme:, startdate: Time.zone.tomorrow, owning_organisation: merging_organisation) }
+        context "when a scheme and location have no deactivations or startdates" do
+          let!(:scheme) { create(:scheme, owning_organisation: merging_organisation, old_id: "scheme_old_id", old_visible_id: "scheme_old_visible_id") }
+          let!(:location) { create(:location, scheme:, old_id: "location_old_id", old_visible_id: "location_old_visible_id") }
 
-        before do
-          create(:location, scheme: deactivated_scheme)
-          create(:scheme_deactivation_period, scheme: deactivated_scheme, deactivation_date: Time.zone.today - 1.month)
-          create(:location_deactivation_period, location: deactivated_location, deactivation_date: Time.zone.today - 1.month)
-          create(:lettings_log, scheme:, location:, startdate: Time.zone.yesterday)
-          create(:lettings_log, startdate: Time.zone.tomorrow, managing_organisation: merging_organisation)
+          it "copies the schemes and locations to absorbing organisation" do
+            merge_organisations_service.call
+
+            absorbing_organisation.reload
+            expect(absorbing_organisation.owned_schemes.count).to eq(1)
+
+            absorbed_scheme = absorbing_organisation.owned_schemes.first
+            expect(absorbed_scheme.locations.count).to eq(1)
+            absorbed_location = absorbed_scheme.locations.first
+
+            expect(absorbed_scheme.service_name).to eq(scheme.service_name)
+            expect(absorbed_scheme.old_id).to be_nil
+            expect(absorbed_scheme.old_visible_id).to be_nil
+            expect(absorbed_scheme.startdate).to eq(Time.zone.today)
+
+            expect(absorbed_location.postcode).to eq(location.postcode)
+            expect(absorbed_location.old_id).to be_nil
+            expect(absorbed_location.old_visible_id).to be_nil
+            expect(absorbed_location.startdate).to eq(Time.zone.today)
+
+            # deactivates schemes and locations on the merged organisation
+            expect(scheme.owning_organisation).to eq(merging_organisation)
+            expect(location.scheme).to eq(scheme)
+            expect(scheme.scheme_deactivation_periods.count).to eq(1)
+            expect(scheme.scheme_deactivation_periods.first.deactivation_date).to eq(Time.zone.today)
+            expect(location.location_deactivation_periods.count).to eq(1)
+            expect(location.location_deactivation_periods.first.deactivation_date).to eq(Time.zone.today)
+          end
         end
 
-        it "combines organisation schemes and locations" do
-          expect(Rails.logger).to receive(:info).with("Merged users from fake org:")
-          expect(Rails.logger).to receive(:info).with("\tDanny Rojas (#{merging_organisation.data_protection_officers.first.email})")
-          expect(Rails.logger).to receive(:info).with("\tfake name (fake@email.com)")
-          expect(Rails.logger).to receive(:info).with("New schemes from fake org:")
-          expect(Rails.logger).to receive(:info).with(/\t#{scheme.service_name} \(S/)
-          merge_organisations_service.call
+        context "when a scheme and location have a startdate but no deactivations" do
+          context "and the startdate is before the merge date" do
+            let!(:scheme) { create(:scheme, owning_organisation: merging_organisation, old_id: "scheme_old_id", old_visible_id: "scheme_old_visible_id", startdate: Time.zone.today - 1.month) }
+            let!(:location) { create(:location, scheme:, old_id: "location_old_id", old_visible_id: "location_old_visible_id", startdate: Time.zone.today - 1.month) }
 
-          absorbing_organisation.reload
-          expect(absorbing_organisation.owned_schemes.count).to eq(1)
-          expect(absorbing_organisation.owned_schemes.first.service_name).to eq(scheme.service_name)
-          expect(absorbing_organisation.owned_schemes.first.old_id).to be_nil
-          expect(absorbing_organisation.owned_schemes.first.old_visible_id).to eq(nil)
-          expect(absorbing_organisation.owned_schemes.first.locations.count).to eq(1)
-          expect(absorbing_organisation.owned_schemes.first.locations.first.postcode).to eq(location.postcode)
-          expect(absorbing_organisation.owned_schemes.first.locations.first.old_id).to be_nil
-          expect(absorbing_organisation.owned_schemes.first.locations.first.old_visible_id).to eq(nil)
-          expect(scheme.scheme_deactivation_periods.count).to eq(1)
-          expect(scheme.scheme_deactivation_periods.first.deactivation_date.to_date).to eq(Time.zone.today)
-          expect(scheme.locations.first.location_deactivation_periods.count).to eq(1)
-          expect(scheme.locations.first.location_deactivation_periods.first.deactivation_date.to_date).to eq(Time.zone.today)
+            it "sets the startdate to merge date for schemes and locations moved to absorbed organisation" do
+              merge_organisations_service.call
+
+              absorbing_organisation.reload
+              expect(absorbing_organisation.owned_schemes.count).to eq(1)
+
+              absorbed_scheme = absorbing_organisation.owned_schemes.first
+              expect(absorbed_scheme.locations.count).to eq(1)
+              absorbed_location = absorbed_scheme.locations.first
+
+              expect(absorbed_scheme.startdate).to eq(Time.zone.today)
+              expect(absorbed_location.startdate).to eq(Time.zone.today)
+
+              # deactivates schemes and locations on the merged organisation
+              expect(scheme.owning_organisation).to eq(merging_organisation)
+              expect(location.scheme).to eq(scheme)
+              expect(scheme.scheme_deactivation_periods.count).to eq(1)
+              expect(scheme.scheme_deactivation_periods.first.deactivation_date).to eq(Time.zone.today)
+              expect(location.location_deactivation_periods.count).to eq(1)
+              expect(location.location_deactivation_periods.first.deactivation_date).to eq(Time.zone.today)
+            end
+          end
+
+          context "and the startdate is after the merge date" do
+            let!(:scheme) { create(:scheme, owning_organisation: merging_organisation, old_id: "scheme_old_id", old_visible_id: "scheme_old_visible_id", startdate: Time.zone.today + 1.month) }
+            let!(:location) { create(:location, scheme:, old_id: "location_old_id", old_visible_id: "location_old_visible_id", startdate: Time.zone.today + 1.month) }
+
+            it "keeps the existing startdate for schemes and locations moved to absorbed organisation" do
+              merge_organisations_service.call
+
+              absorbing_organisation.reload
+              expect(absorbing_organisation.owned_schemes.count).to eq(1)
+
+              absorbed_scheme = absorbing_organisation.owned_schemes.first
+              expect(absorbed_scheme.locations.count).to eq(1)
+              absorbed_location = absorbed_scheme.locations.first
+
+              expect(absorbed_scheme.startdate).to eq(Time.zone.today + 1.month)
+              expect(absorbed_location.startdate).to eq(Time.zone.today + 1.month)
+
+              # deactivates schemes and locations on the merged organisation on the startdate
+              expect(scheme.owning_organisation).to eq(merging_organisation)
+              expect(location.scheme).to eq(scheme)
+              expect(scheme.scheme_deactivation_periods.count).to eq(1)
+              expect(scheme.scheme_deactivation_periods.first.deactivation_date).to eq(Time.zone.today + 1.month)
+              expect(location.location_deactivation_periods.count).to eq(1)
+              expect(location.location_deactivation_periods.first.deactivation_date).to eq(Time.zone.today + 1.month)
+            end
+          end
         end
 
-        it "moves relevant logs and assigns the new scheme" do
-          merge_organisations_service.call
+        context "when a scheme and location have a deactivations but no startdates" do
+          context "and deactivation is before the merge date" do
+            let!(:scheme) { create(:scheme, owning_organisation: merging_organisation, old_id: "scheme_old_id", old_visible_id: "scheme_old_visible_id", startdate: nil) }
+            let!(:location) { create(:location, scheme:, old_id: "location_old_id", old_visible_id: "location_old_visible_id", startdate: nil) }
 
-          absorbing_organisation.reload
-          merging_organisation.reload
-          expect(absorbing_organisation.owned_lettings_logs.count).to eq(2)
-          expect(absorbing_organisation.managed_lettings_logs.count).to eq(1)
-          expect(absorbing_organisation.owned_lettings_logs.find(owned_lettings_log.id).scheme).to eq(absorbing_organisation.owned_schemes.first)
-          expect(absorbing_organisation.owned_lettings_logs.find(owned_lettings_log.id).location).to eq(absorbing_organisation.owned_schemes.first.locations.first)
-          expect(absorbing_organisation.owned_lettings_logs.find(owned_lettings_log_no_location.id).scheme).to eq(absorbing_organisation.owned_schemes.first)
-          expect(absorbing_organisation.owned_lettings_logs.find(owned_lettings_log_no_location.id).location).to eq(absorbing_organisation.owned_schemes.first.locations.first)
+            before do
+              create(:scheme_deactivation_period, scheme:, deactivation_date: Time.zone.today - 2.months, reactivation_date: Time.zone.today - 1.month)
+              create(:location_deactivation_period, location:, deactivation_date: Time.zone.today - 2.months, reactivation_date: Time.zone.today - 1.month)
+            end
+
+            it "does not move the deactivation" do
+              merge_organisations_service.call
+
+              absorbing_organisation.reload
+              scheme.scheme_deactivation_periods.reload
+              location.location_deactivation_periods.reload
+              expect(absorbing_organisation.owned_schemes.count).to eq(1)
+
+              absorbed_scheme = absorbing_organisation.owned_schemes.first
+              expect(absorbed_scheme.locations.count).to eq(1)
+              absorbed_location = absorbed_scheme.locations.first
+
+              expect(absorbed_scheme.startdate).to eq(Time.zone.today)
+              expect(absorbed_scheme.scheme_deactivation_periods.count).to eq(0)
+
+              expect(absorbed_location.startdate).to eq(Time.zone.today)
+              expect(absorbed_location.location_deactivation_periods.count).to eq(0)
+
+              # deactivates schemes and locations on the merged organisation
+              expect(scheme.owning_organisation).to eq(merging_organisation)
+              expect(location.scheme).to eq(scheme)
+              expect(scheme.scheme_deactivation_periods.count).to eq(2)
+              expect(scheme.scheme_deactivation_periods.last.deactivation_date).to eq(Time.zone.today)
+              expect(location.location_deactivation_periods.count).to eq(2)
+              expect(location.location_deactivation_periods.last.deactivation_date).to eq(Time.zone.today)
+            end
+          end
+
+          context "and deactivation is after the merge date" do
+            let!(:scheme) { create(:scheme, owning_organisation: merging_organisation, old_id: "scheme_old_id", old_visible_id: "scheme_old_visible_id", startdate: nil) }
+            let!(:location) { create(:location, scheme:, old_id: "location_old_id", old_visible_id: "location_old_visible_id", startdate: nil) }
+
+            before do
+              create(:scheme_deactivation_period, scheme:, deactivation_date: Time.zone.today + 1.month, reactivation_date: Time.zone.today + 2.months)
+              create(:location_deactivation_period, location:, deactivation_date: Time.zone.today + 3.months)
+            end
+
+            it "moves the deactivations to absorbing organisation and removes them from merging organisations" do
+              merge_organisations_service.call
+
+              absorbing_organisation.reload
+              scheme.scheme_deactivation_periods.reload
+              location.location_deactivation_periods.reload
+              expect(absorbing_organisation.owned_schemes.count).to eq(1)
+
+              absorbed_scheme = absorbing_organisation.owned_schemes.first
+              expect(absorbed_scheme.locations.count).to eq(1)
+              absorbed_location = absorbed_scheme.locations.first
+
+              expect(absorbed_scheme.startdate).to eq(Time.zone.today)
+              expect(absorbed_scheme.scheme_deactivation_periods.count).to eq(1)
+
+              expect(absorbed_location.startdate).to eq(Time.zone.today)
+              expect(absorbed_location.location_deactivation_periods.count).to eq(1)
+
+              # deactivates schemes and locations on the merged organisation
+              expect(scheme.owning_organisation).to eq(merging_organisation)
+              expect(location.scheme).to eq(scheme)
+              expect(scheme.scheme_deactivation_periods.count).to eq(1)
+              expect(scheme.scheme_deactivation_periods.last.deactivation_date).to eq(Time.zone.today)
+              expect(location.location_deactivation_periods.count).to eq(1)
+              expect(location.location_deactivation_periods.last.deactivation_date).to eq(Time.zone.today)
+            end
+          end
+
+          context "and deactivation is during the merge date and it has a reactivation date" do
+            let!(:scheme) { create(:scheme, owning_organisation: merging_organisation, old_id: "scheme_old_id", old_visible_id: "scheme_old_visible_id", startdate: nil) }
+            let!(:location) { create(:location, scheme:, old_id: "location_old_id", old_visible_id: "location_old_visible_id", startdate: nil) }
+
+            before do
+              create(:scheme_deactivation_period, scheme:, deactivation_date: Time.zone.today - 1.month, reactivation_date: Time.zone.today + 1.month)
+              create(:location_deactivation_period, location:, deactivation_date: Time.zone.today - 3.months, reactivation_date: Time.zone.today + 1.month)
+            end
+
+            it "moves the deactivation to absorbing organisation with merge_date as deactivation_date and removes reactivation date on merged organisation scheme and location" do
+              merge_organisations_service.call
+
+              absorbing_organisation.reload
+              scheme.scheme_deactivation_periods.reload
+              location.location_deactivation_periods.reload
+              expect(absorbing_organisation.owned_schemes.count).to eq(1)
+
+              absorbed_scheme = absorbing_organisation.owned_schemes.first
+              expect(absorbed_scheme.locations.count).to eq(1)
+              absorbed_location = absorbed_scheme.locations.first
+
+              expect(absorbed_scheme.startdate).to eq(Time.zone.today)
+              expect(absorbed_scheme.scheme_deactivation_periods.count).to eq(1)
+              expect(absorbed_scheme.scheme_deactivation_periods.first.deactivation_date).to eq(Time.zone.today)
+              expect(absorbed_scheme.scheme_deactivation_periods.first.reactivation_date).to eq(Time.zone.today + 1.month)
+
+              expect(absorbed_location.startdate).to eq(Time.zone.today)
+              expect(absorbed_location.location_deactivation_periods.count).to eq(1)
+              expect(absorbed_location.location_deactivation_periods.first.deactivation_date).to eq(Time.zone.today)
+              expect(absorbed_location.location_deactivation_periods.first.reactivation_date).to eq(Time.zone.today + 1.month)
+
+              # deactivates schemes and locations on the merged organisation
+              expect(scheme.owning_organisation).to eq(merging_organisation)
+              expect(location.scheme).to eq(scheme)
+              expect(scheme.scheme_deactivation_periods.count).to eq(1)
+              expect(scheme.scheme_deactivation_periods.first.deactivation_date.to_date).to eq(Time.zone.today - 1.month)
+              expect(scheme.scheme_deactivation_periods.first.reactivation_date).to be_nil
+              expect(location.location_deactivation_periods.count).to eq(1)
+              expect(location.location_deactivation_periods.first.deactivation_date.to_date).to eq(Time.zone.today - 3.months)
+              expect(location.location_deactivation_periods.first.reactivation_date).to be_nil
+            end
+          end
+
+          context "and deactivation is during the merge date and it doesn't have a reactivation date" do
+            let!(:scheme) { create(:scheme, owning_organisation: merging_organisation, old_id: "scheme_old_id", old_visible_id: "scheme_old_visible_id", startdate: nil) }
+            let!(:location) { create(:location, scheme:, old_id: "location_old_id", old_visible_id: "location_old_visible_id", startdate: nil) }
+
+            before do
+              create(:scheme_deactivation_period, scheme:, deactivation_date: Time.zone.today - 1.month)
+              create(:location_deactivation_period, location:, deactivation_date: Time.zone.today - 3.months)
+            end
+
+            it "moves the deactivation to absorbing organisation with merge_date as deactivation_date and does not deactivate merged org schemes and locations again" do
+              merge_organisations_service.call
+
+              absorbing_organisation.reload
+              scheme.scheme_deactivation_periods.reload
+              location.location_deactivation_periods.reload
+              expect(absorbing_organisation.owned_schemes.count).to eq(1)
+
+              absorbed_scheme = absorbing_organisation.owned_schemes.first
+              expect(absorbed_scheme.locations.count).to eq(1)
+              absorbed_location = absorbed_scheme.locations.first
+
+              expect(absorbed_scheme.startdate).to eq(Time.zone.today)
+              expect(absorbed_scheme.scheme_deactivation_periods.count).to eq(1)
+              expect(absorbed_scheme.scheme_deactivation_periods.first.deactivation_date).to eq(Time.zone.today)
+              expect(absorbed_scheme.scheme_deactivation_periods.first.reactivation_date).to be_nil
+
+              expect(absorbed_location.startdate).to eq(Time.zone.today)
+              expect(absorbed_location.location_deactivation_periods.count).to eq(1)
+              expect(absorbed_location.location_deactivation_periods.first.deactivation_date).to eq(Time.zone.today)
+              expect(absorbed_location.location_deactivation_periods.first.reactivation_date).to be_nil
+
+              expect(scheme.owning_organisation).to eq(merging_organisation)
+              expect(location.scheme).to eq(scheme)
+              expect(scheme.scheme_deactivation_periods.count).to eq(1)
+              expect(scheme.scheme_deactivation_periods.first.deactivation_date.to_date).to eq(Time.zone.today - 1.month)
+              expect(scheme.scheme_deactivation_periods.first.reactivation_date).to be_nil
+              expect(location.location_deactivation_periods.count).to eq(1)
+              expect(location.location_deactivation_periods.first.deactivation_date.to_date).to eq(Time.zone.today - 3.months)
+              expect(location.location_deactivation_periods.first.reactivation_date).to be_nil
+            end
+          end
         end
 
-        it "rolls back if there's an error" do
-          allow(Organisation).to receive(:find).with([merging_organisation_ids]).and_return(Organisation.find(merging_organisation_ids))
-          allow(Organisation).to receive(:find).with(absorbing_organisation.id).and_return(absorbing_organisation)
-          allow(absorbing_organisation).to receive(:save!).and_raise(ActiveRecord::RecordInvalid)
-          expect(Rails.logger).to receive(:error).with("Organisation merge failed with: Record invalid")
-          merge_organisations_service.call
+        context "with multiple schemes and locations" do
+          let!(:scheme) { create(:scheme, owning_organisation: merging_organisation, old_id: "scheme_old_id", old_visible_id: "scheme_old_visible_id") }
+          let!(:location) { create(:location, scheme:, old_id: "location_old_id", old_visible_id: "location_old_visible_id") }
+          let!(:deactivated_location) { create(:location, scheme:) }
+          let!(:deactivated_scheme) { create(:scheme, owning_organisation: merging_organisation) }
+          let!(:owned_lettings_log) { create(:lettings_log, :sh, scheme:, location:, startdate: Time.zone.tomorrow, owning_organisation: merging_organisation) }
+          let!(:owned_lettings_log_no_location) { create(:lettings_log, :sh, scheme:, startdate: Time.zone.tomorrow, owning_organisation: merging_organisation) }
 
-          absorbing_organisation.reload
-          merging_organisation.reload
-          expect(absorbing_organisation.owned_schemes.count).to eq(0)
-          expect(scheme.scheme_deactivation_periods.count).to eq(0)
-          expect(scheme.locations.first.location_deactivation_periods.count).to eq(0)
-          expect(owned_lettings_log.owning_organisation).to eq(merging_organisation)
-          expect(owned_lettings_log_no_location.owning_organisation).to eq(merging_organisation)
+          before do
+            create(:location, scheme: deactivated_scheme)
+            create(:scheme_deactivation_period, scheme: deactivated_scheme, deactivation_date: Time.zone.today - 1.month)
+            create(:location_deactivation_period, location: deactivated_location, deactivation_date: Time.zone.today - 1.month)
+            create(:lettings_log, scheme:, location:, startdate: Time.zone.yesterday)
+            create(:lettings_log, startdate: Time.zone.tomorrow, managing_organisation: merging_organisation)
+          end
+
+          it "combines organisation schemes and locations" do
+            expect(Rails.logger).to receive(:info).with("Merged users from fake org:")
+            expect(Rails.logger).to receive(:info).with("\tDanny Rojas (#{merging_organisation.data_protection_officers.first.email})")
+            expect(Rails.logger).to receive(:info).with("\tfake name (fake@email.com)")
+            expect(Rails.logger).to receive(:info).with("New schemes from fake org:")
+            expect(Rails.logger).to receive(:info).with(/\t#{scheme.service_name} \(S/)
+            expect(Rails.logger).to receive(:info).with(/\t#{deactivated_scheme.service_name} \(S/)
+            merge_organisations_service.call
+
+            absorbing_organisation.reload
+            deactivated_scheme.reload
+            deactivated_location.reload
+            merging_organisation.reload
+            expect(absorbing_organisation.owned_schemes.count).to eq(2)
+
+            # moves active schemes and locations to absorbing organisation
+            absorbed_active_scheme = absorbing_organisation.owned_schemes.find_by(service_name: scheme.service_name)
+            absorbed_active_location = absorbed_active_scheme.locations.find_by(postcode: location.postcode)
+            expect(absorbed_active_scheme.service_name).to eq(scheme.service_name)
+            expect(absorbed_active_scheme.old_id).to be_nil
+            expect(absorbed_active_scheme.old_visible_id).to be_nil
+            expect(absorbed_active_scheme.locations.count).to eq(2)
+            expect(absorbed_active_location.postcode).to eq(location.postcode)
+            expect(absorbed_active_location.old_id).to be_nil
+            expect(absorbed_active_location.old_visible_id).to be_nil
+
+            # deactivates active schemes and locations on merging organisation
+            expect(scheme.scheme_deactivation_periods.count).to eq(1)
+            expect(scheme.scheme_deactivation_periods.first.deactivation_date.to_date).to eq(Time.zone.today)
+            expect(scheme.locations.find_by(postcode: location.postcode).location_deactivation_periods.count).to eq(1)
+            expect(scheme.locations.find_by(postcode: location.postcode).location_deactivation_periods.first.deactivation_date.to_date).to eq(Time.zone.today)
+
+            # does not deactivate inactive locations on merging organisation again
+            expect(scheme.locations.find_by(postcode: deactivated_location.postcode).location_deactivation_periods.count).to eq(1)
+
+            # moves inactive schemes and their locations to absorbing organisation
+            absorbed_inactive_scheme = absorbing_organisation.owned_schemes.find_by(service_name: deactivated_scheme.service_name)
+            expect(absorbed_inactive_scheme.scheme_deactivation_periods.count).to eq(1)
+            expect(absorbed_inactive_scheme.scheme_deactivation_periods.first.deactivation_date).to eq(merging_organisation.merge_date)
+            expect(absorbed_inactive_scheme.locations.count).to eq(1)
+            expect(absorbed_inactive_scheme.locations.first.location_deactivation_periods.count).to eq(0)
+            expect(deactivated_scheme.scheme_deactivation_periods.count).to eq(1)
+
+            # moves inactive locations of active schemes to absorbing organisation
+            absorbed_inactive_location = absorbed_active_scheme.locations.find_by(postcode: deactivated_location.postcode)
+            expect(absorbed_active_scheme.scheme_deactivation_periods.count).to eq(0)
+            expect(absorbed_inactive_location.location_deactivation_periods.count).to eq(1)
+            expect(absorbed_inactive_location.location_deactivation_periods.first.deactivation_date).to eq(merging_organisation.merge_date)
+          end
+
+          it "moves relevant logs and assigns the new scheme" do
+            merge_organisations_service.call
+
+            absorbing_organisation.reload
+            merging_organisation.reload
+            expect(absorbing_organisation.owned_lettings_logs.count).to eq(2)
+            expect(absorbing_organisation.managed_lettings_logs.count).to eq(1)
+            expect(absorbing_organisation.owned_lettings_logs.find(owned_lettings_log.id).scheme).to eq(absorbing_organisation.owned_schemes.first)
+            expect(absorbing_organisation.owned_lettings_logs.find(owned_lettings_log.id).location).to eq(absorbing_organisation.owned_schemes.first.locations.first)
+            expect(absorbing_organisation.owned_lettings_logs.find(owned_lettings_log_no_location.id).scheme).to eq(absorbing_organisation.owned_schemes.first)
+            expect(absorbing_organisation.owned_lettings_logs.find(owned_lettings_log_no_location.id).location).to eq(nil)
+          end
+
+          it "rolls back if there's an error" do
+            allow(Organisation).to receive(:find).with([merging_organisation_ids]).and_return(Organisation.find(merging_organisation_ids))
+            allow(Organisation).to receive(:find).with(absorbing_organisation.id).and_return(absorbing_organisation)
+            allow(absorbing_organisation).to receive(:save!).and_raise(ActiveRecord::RecordInvalid)
+            expect(Rails.logger).to receive(:error).with("Organisation merge failed with: Record invalid")
+            merge_organisations_service.call
+
+            absorbing_organisation.reload
+            merging_organisation.reload
+            expect(absorbing_organisation.owned_schemes.count).to eq(0)
+            expect(scheme.scheme_deactivation_periods.count).to eq(0)
+            expect(scheme.locations.first.location_deactivation_periods.count).to eq(0)
+            expect(owned_lettings_log.owning_organisation).to eq(merging_organisation)
+            expect(owned_lettings_log_no_location.owning_organisation).to eq(merging_organisation)
+          end
         end
       end
 
@@ -372,21 +652,52 @@ RSpec.describe Merge::MergeOrganisationsService do
               expect(Rails.logger).to receive(:info).with("\tfake name (fake@email.com)")
               expect(Rails.logger).to receive(:info).with("New schemes from fake org:")
               expect(Rails.logger).to receive(:info).with(/\t#{scheme.service_name} \(S/)
+              expect(Rails.logger).to receive(:info).with(/\t#{deactivated_scheme.service_name} \(S/)
               merge_organisations_service.call
 
               absorbing_organisation.reload
-              expect(absorbing_organisation.owned_schemes.count).to eq(1)
-              expect(absorbing_organisation.owned_schemes.first.service_name).to eq(scheme.service_name)
-              expect(absorbing_organisation.owned_schemes.first.startdate).to eq(Time.zone.yesterday)
-              expect(absorbing_organisation.owned_schemes.first.locations.count).to eq(4)
-              expect(absorbing_organisation.owned_schemes.first.locations.map(&:postcode)).to match_array([location, location_without_startdate, location_with_past_startdate, location_with_future_startdate].map(&:postcode))
+              deactivated_scheme.reload
+              deactivated_location.reload
+              merging_organisation.reload
+              expect(absorbing_organisation.owned_schemes.count).to eq(2)
+
+              # moves active schemes and locations to absorbing organisation
+              expect(absorbing_organisation.owned_schemes.first.locations.map(&:postcode)).to match_array([location, deactivated_location, location_without_startdate, location_with_past_startdate, location_with_future_startdate].map(&:postcode))
               expect(absorbing_organisation.owned_schemes.first.locations.find_by(postcode: location_without_startdate.postcode).startdate).to eq(Time.zone.yesterday)
               expect(absorbing_organisation.owned_schemes.first.locations.find_by(postcode: location_with_past_startdate.postcode).startdate).to eq(Time.zone.yesterday)
               expect(absorbing_organisation.owned_schemes.first.locations.find_by(postcode: location_with_future_startdate.postcode).startdate).to eq(Time.zone.today + 2.months)
+              absorbed_active_scheme = absorbing_organisation.owned_schemes.find_by(service_name: scheme.service_name)
+              absorbed_active_location = absorbed_active_scheme.locations.find_by(postcode: location.postcode)
+              expect(absorbed_active_scheme.service_name).to eq(scheme.service_name)
+              expect(absorbed_active_scheme.old_id).to be_nil
+              expect(absorbed_active_scheme.old_visible_id).to be_nil
+              expect(absorbed_active_scheme.locations.count).to eq(5)
+              expect(absorbed_active_location.postcode).to eq(location.postcode)
+              expect(absorbed_active_location.old_id).to be_nil
+              expect(absorbed_active_location.old_visible_id).to be_nil
+
+              # deactivates active schemes and locations on merging organisation
               expect(scheme.scheme_deactivation_periods.count).to eq(1)
               expect(scheme.scheme_deactivation_periods.first.deactivation_date.to_date).to eq(Time.zone.yesterday)
-              expect(scheme.locations.first.location_deactivation_periods.count).to eq(1)
-              expect(scheme.locations.first.location_deactivation_periods.first.deactivation_date.to_date).to eq(Time.zone.yesterday)
+              expect(scheme.locations.find_by(postcode: location.postcode).location_deactivation_periods.count).to eq(1)
+              expect(scheme.locations.find_by(postcode: location.postcode).location_deactivation_periods.first.deactivation_date.to_date).to eq(Time.zone.yesterday)
+
+              # does not deactivate inactive locations on merging organisation again
+              expect(scheme.locations.find_by(postcode: deactivated_location.postcode).location_deactivation_periods.count).to eq(1)
+
+              # moves inactive schemes and their locations to absorbing organisation
+              absorbed_inactive_scheme = absorbing_organisation.owned_schemes.find_by(service_name: deactivated_scheme.service_name)
+              expect(absorbed_inactive_scheme.scheme_deactivation_periods.count).to eq(1)
+              expect(absorbed_inactive_scheme.scheme_deactivation_periods.first.deactivation_date).to eq(merging_organisation.merge_date)
+              expect(absorbed_inactive_scheme.locations.count).to eq(1)
+              expect(absorbed_inactive_scheme.locations.first.location_deactivation_periods.count).to eq(0)
+              expect(deactivated_scheme.scheme_deactivation_periods.count).to eq(1)
+
+              # moves inactive locations of active schemes to absorbing organisation
+              absorbed_inactive_location = absorbed_active_scheme.locations.find_by(postcode: deactivated_location.postcode)
+              expect(absorbed_active_scheme.scheme_deactivation_periods.count).to eq(0)
+              expect(absorbed_inactive_location.location_deactivation_periods.count).to eq(1)
+              expect(absorbed_inactive_location.location_deactivation_periods.first.deactivation_date).to eq(merging_organisation.merge_date)
             end
           end
 
@@ -400,7 +711,7 @@ RSpec.describe Merge::MergeOrganisationsService do
             expect(absorbing_organisation.owned_lettings_logs.find(owned_lettings_log.id).scheme).to eq(absorbing_organisation.owned_schemes.first)
             expect(absorbing_organisation.owned_lettings_logs.find(owned_lettings_log.id).location).to eq(absorbing_organisation.owned_schemes.first.locations.first)
             expect(absorbing_organisation.owned_lettings_logs.find(owned_lettings_log_no_location.id).scheme).to eq(absorbing_organisation.owned_schemes.first)
-            expect(absorbing_organisation.owned_lettings_logs.find(owned_lettings_log_no_location.id).location).to eq(absorbing_organisation.owned_schemes.first.locations.first)
+            expect(absorbing_organisation.owned_lettings_logs.find(owned_lettings_log_no_location.id).location).to eq(nil)
           end
 
           it "rolls back if there's an error" do
@@ -759,21 +1070,48 @@ RSpec.describe Merge::MergeOrganisationsService do
           expect(Rails.logger).to receive(:info).with("\tfake name (fake@email.com)")
           expect(Rails.logger).to receive(:info).with("New schemes from fake org:")
           expect(Rails.logger).to receive(:info).with(/\t#{scheme.service_name} \(S/)
+          expect(Rails.logger).to receive(:info).with(/\t#{deactivated_scheme.service_name} \(S/)
           merge_organisations_service.call
 
           new_absorbing_organisation.reload
-          expect(new_absorbing_organisation.owned_schemes.count).to eq(1)
-          expect(new_absorbing_organisation.owned_schemes.first.service_name).to eq(scheme.service_name)
-          expect(new_absorbing_organisation.owned_schemes.first.old_id).to be_nil
-          expect(new_absorbing_organisation.owned_schemes.first.old_visible_id).to be_nil
-          expect(new_absorbing_organisation.owned_schemes.first.locations.count).to eq(1)
-          expect(new_absorbing_organisation.owned_schemes.first.locations.first.postcode).to eq(location.postcode)
-          expect(new_absorbing_organisation.owned_schemes.first.locations.first.old_id).to be_nil
-          expect(new_absorbing_organisation.owned_schemes.first.locations.first.old_visible_id).to be_nil
+          deactivated_scheme.reload
+          deactivated_location.reload
+          merging_organisation.reload
+          expect(new_absorbing_organisation.owned_schemes.count).to eq(2)
+
+          # moves active schemes and locations to absorbing organisation
+          absorbed_active_scheme = new_absorbing_organisation.owned_schemes.find_by(service_name: scheme.service_name)
+          absorbed_active_location = absorbed_active_scheme.locations.find_by(postcode: location.postcode)
+          expect(absorbed_active_scheme.service_name).to eq(scheme.service_name)
+          expect(absorbed_active_scheme.old_id).to be_nil
+          expect(absorbed_active_scheme.old_visible_id).to be_nil
+          expect(absorbed_active_scheme.locations.count).to eq(2)
+          expect(absorbed_active_location.postcode).to eq(location.postcode)
+          expect(absorbed_active_location.old_id).to be_nil
+          expect(absorbed_active_location.old_visible_id).to be_nil
+
+          # deactivates active schemes and locations on merging organisation
           expect(scheme.scheme_deactivation_periods.count).to eq(1)
           expect(scheme.scheme_deactivation_periods.first.deactivation_date.to_date).to eq(Time.zone.today)
-          expect(scheme.locations.first.location_deactivation_periods.count).to eq(1)
-          expect(scheme.locations.first.location_deactivation_periods.first.deactivation_date.to_date).to eq(Time.zone.today)
+          expect(scheme.locations.find_by(postcode: location.postcode).location_deactivation_periods.count).to eq(1)
+          expect(scheme.locations.find_by(postcode: location.postcode).location_deactivation_periods.first.deactivation_date.to_date).to eq(Time.zone.today)
+
+          # does not deactivate inactive locations on merging organisation again
+          expect(scheme.locations.find_by(postcode: deactivated_location.postcode).location_deactivation_periods.count).to eq(1)
+
+          # moves inactive schemes and their locations to absorbing organisation
+          absorbed_inactive_scheme = new_absorbing_organisation.owned_schemes.find_by(service_name: deactivated_scheme.service_name)
+          expect(absorbed_inactive_scheme.scheme_deactivation_periods.count).to eq(1)
+          expect(absorbed_inactive_scheme.scheme_deactivation_periods.first.deactivation_date).to eq(merging_organisation.merge_date)
+          expect(absorbed_inactive_scheme.locations.count).to eq(1)
+          expect(absorbed_inactive_scheme.locations.first.location_deactivation_periods.count).to eq(0)
+          expect(deactivated_scheme.scheme_deactivation_periods.count).to eq(1)
+
+          # moves inactive locations of active schemes to absorbing organisation
+          absorbed_inactive_location = absorbed_active_scheme.locations.find_by(postcode: deactivated_location.postcode)
+          expect(absorbed_active_scheme.scheme_deactivation_periods.count).to eq(0)
+          expect(absorbed_inactive_location.location_deactivation_periods.count).to eq(1)
+          expect(absorbed_inactive_location.location_deactivation_periods.first.deactivation_date).to eq(merging_organisation.merge_date)
         end
 
         it "moves relevant logs and assigns the new scheme" do
@@ -786,7 +1124,7 @@ RSpec.describe Merge::MergeOrganisationsService do
           expect(new_absorbing_organisation.owned_lettings_logs.find(owned_lettings_log.id).scheme).to eq(new_absorbing_organisation.owned_schemes.first)
           expect(new_absorbing_organisation.owned_lettings_logs.find(owned_lettings_log.id).location).to eq(new_absorbing_organisation.owned_schemes.first.locations.first)
           expect(new_absorbing_organisation.owned_lettings_logs.find(owned_lettings_log_no_location.id).scheme).to eq(new_absorbing_organisation.owned_schemes.first)
-          expect(new_absorbing_organisation.owned_lettings_logs.find(owned_lettings_log_no_location.id).location).to eq(new_absorbing_organisation.owned_schemes.first.locations.first)
+          expect(new_absorbing_organisation.owned_lettings_logs.find(owned_lettings_log_no_location.id).location).to eq(nil)
         end
 
         it "rolls back if there's an error" do
@@ -932,17 +1270,48 @@ RSpec.describe Merge::MergeOrganisationsService do
             expect(Rails.logger).to receive(:info).with("\tfake name (fake@email.com)")
             expect(Rails.logger).to receive(:info).with("New schemes from fake org:")
             expect(Rails.logger).to receive(:info).with(/\t#{scheme.service_name} \(S/)
+            expect(Rails.logger).to receive(:info).with(/\t#{deactivated_scheme.service_name} \(S/)
             merge_organisations_service.call
 
             new_absorbing_organisation.reload
-            expect(new_absorbing_organisation.owned_schemes.count).to eq(1)
-            expect(new_absorbing_organisation.owned_schemes.first.service_name).to eq(scheme.service_name)
-            expect(new_absorbing_organisation.owned_schemes.first.locations.count).to eq(1)
-            expect(new_absorbing_organisation.owned_schemes.first.locations.first.postcode).to eq(location.postcode)
+            deactivated_scheme.reload
+            deactivated_location.reload
+            merging_organisation.reload
+            expect(new_absorbing_organisation.owned_schemes.count).to eq(2)
+
+            # moves active schemes and locations to absorbing organisation
+            absorbed_active_scheme = new_absorbing_organisation.owned_schemes.find_by(service_name: scheme.service_name)
+            absorbed_active_location = absorbed_active_scheme.locations.find_by(postcode: location.postcode)
+            expect(absorbed_active_scheme.service_name).to eq(scheme.service_name)
+            expect(absorbed_active_scheme.old_id).to be_nil
+            expect(absorbed_active_scheme.old_visible_id).to be_nil
+            expect(absorbed_active_scheme.locations.count).to eq(2)
+            expect(absorbed_active_location.postcode).to eq(location.postcode)
+            expect(absorbed_active_location.old_id).to be_nil
+            expect(absorbed_active_location.old_visible_id).to be_nil
+
+            # deactivates active schemes and locations on merging organisation
             expect(scheme.scheme_deactivation_periods.count).to eq(1)
             expect(scheme.scheme_deactivation_periods.first.deactivation_date.to_date).to eq(Time.zone.yesterday)
-            expect(scheme.locations.first.location_deactivation_periods.count).to eq(1)
-            expect(scheme.locations.first.location_deactivation_periods.first.deactivation_date.to_date).to eq(Time.zone.yesterday)
+            expect(scheme.locations.find_by(postcode: location.postcode).location_deactivation_periods.count).to eq(1)
+            expect(scheme.locations.find_by(postcode: location.postcode).location_deactivation_periods.first.deactivation_date.to_date).to eq(Time.zone.yesterday)
+
+            # does not deactivate inactive locations on merging organisation again
+            expect(scheme.locations.find_by(postcode: deactivated_location.postcode).location_deactivation_periods.count).to eq(1)
+
+            # moves inactive schemes and their locations to absorbing organisation
+            absorbed_inactive_scheme = new_absorbing_organisation.owned_schemes.find_by(service_name: deactivated_scheme.service_name)
+            expect(absorbed_inactive_scheme.scheme_deactivation_periods.count).to eq(1)
+            expect(absorbed_inactive_scheme.scheme_deactivation_periods.first.deactivation_date).to eq(merging_organisation.merge_date)
+            expect(absorbed_inactive_scheme.locations.count).to eq(1)
+            expect(absorbed_inactive_scheme.locations.first.location_deactivation_periods.count).to eq(0)
+            expect(deactivated_scheme.scheme_deactivation_periods.count).to eq(1)
+
+            # moves inactive locations of active schemes to absorbing organisation
+            absorbed_inactive_location = absorbed_active_scheme.locations.find_by(postcode: deactivated_location.postcode)
+            expect(absorbed_active_scheme.scheme_deactivation_periods.count).to eq(0)
+            expect(absorbed_inactive_location.location_deactivation_periods.count).to eq(1)
+            expect(absorbed_inactive_location.location_deactivation_periods.first.deactivation_date).to eq(merging_organisation.merge_date)
           end
 
           it "moves relevant logs and assigns the new scheme" do
@@ -956,7 +1325,7 @@ RSpec.describe Merge::MergeOrganisationsService do
             expect(new_absorbing_organisation.owned_lettings_logs.find(owned_lettings_log.id).scheme).to eq(new_absorbing_organisation.owned_schemes.first)
             expect(new_absorbing_organisation.owned_lettings_logs.find(owned_lettings_log.id).location).to eq(new_absorbing_organisation.owned_schemes.first.locations.first)
             expect(new_absorbing_organisation.owned_lettings_logs.find(owned_lettings_log_no_location.id).scheme).to eq(new_absorbing_organisation.owned_schemes.first)
-            expect(new_absorbing_organisation.owned_lettings_logs.find(owned_lettings_log_no_location.id).location).to eq(new_absorbing_organisation.owned_schemes.first.locations.first)
+            expect(new_absorbing_organisation.owned_lettings_logs.find(owned_lettings_log_no_location.id).location).to eq(nil)
           end
 
           it "rolls back if there's an error" do
