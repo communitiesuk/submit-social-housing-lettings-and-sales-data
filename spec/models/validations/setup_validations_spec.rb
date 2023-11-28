@@ -137,7 +137,7 @@ RSpec.describe Validations::SetupValidations do
       end
 
       let(:absorbing_organisation) { create(:organisation, created_at: Time.zone.local(2023, 1, 30, 4, 5, 6), available_from: Time.zone.local(2023, 2, 1, 4, 5, 6), name: "Absorbing org") }
-      let(:absorbing_organisation_2) { create(:organisation, created_at: Time.zone.local(2023, 2, 1), available_from: Time.zone.local(2023, 2, 1), name: "Absorbing org 2") }
+      let(:absorbing_organisation_2) { create(:organisation, created_at: Time.zone.local(2023, 1, 30), available_from: Time.zone.local(2023, 2, 1), name: "Absorbing org 2") }
       let(:merged_organisation) { create(:organisation, name: "Merged org") }
       let(:merged_organisation_2) { create(:organisation, name: "Merged org 2") }
 
