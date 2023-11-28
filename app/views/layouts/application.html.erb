@@ -91,7 +91,6 @@
       navigation_classes: "govuk-header__navigation--end",
     ) do |component|
       component.product_name(name: t("service_name"))
-      component.service_url(root_path)
       unless FeatureToggle.maintenance_mode_enabled?
         if current_user.nil?
           component.navigation_item(text: "Sign in", href: user_session_path)
