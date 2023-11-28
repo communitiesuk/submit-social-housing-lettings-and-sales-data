@@ -1166,8 +1166,67 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
     describe "#managing_organisation_id" do
       let(:attributes) { setup_section_params }
 
-      it "is correctly set" do
-        expect(parser.log.managing_organisation_id).to be(owning_org.id)
+      context "when user is part of the owning organisation" do
+        it "sets managing organisation to the users organisation" do
+          parser.valid?
+          expect(parser.log.owning_organisation_id).to be(owning_org.id)
+          expect(parser.log.managing_organisation_id).to be(owning_org.id)
+        end
+      end
+
+      context "when user is part of an organisation affiliated with owning org" do
+        let(:managing_agent) { create(:organisation) }
+        let(:user) { create(:user, organisation: managing_agent) }
+        let(:attributes) { setup_section_params }
+
+        before do
+          create(:organisation_relationship, child_organisation: managing_agent, parent_organisation: owning_org)
+        end
+
+        it "is not permitted as setup error" do
+          parser.valid?
+          expect(parser.log.owning_organisation_id).to be(owning_org.id)
+          expect(parser.log.managing_organisation_id).to be(managing_agent.id)
+        end
+      end
+
+      context "when user is part of an organisation not affiliated with owning org" do
+        let(:unaffiliated_org) { create(:organisation) }
+        let(:user) { create(:user, organisation: unaffiliated_org) }
+        let(:attributes) { setup_section_params }
+
+        it "is not permitted as setup error" do
+          parser.valid?
+          setup_errors = parser.errors.select { |e| e.options[:category] == :setup }
+
+          expect(setup_errors.find { |e| e.attribute == :field_2 }.message).to eql("This user belongs to an organisation that does not have a relationship with the owning organisation")
+        end
+
+        it "blocks log creation" do
+          parser.valid?
+          expect(parser).to be_block_log_creation
+        end
+      end
+    end
+  end
+
+  describe "#owning_organisation_id" do
+    let(:attributes) { setup_section_params }
+
+    context "when owning organisation does not own stock" do
+      let(:owning_org) { create(:organisation, :with_old_visible_id, holds_own_stock: false) }
+      let(:attributes) { setup_section_params }
+
+      it "is not permitted as setup error" do
+        parser.valid?
+        setup_errors = parser.errors.select { |e| e.options[:category] == :setup }
+
+        expect(setup_errors.find { |e| e.attribute == :field_1 }.message).to eql("The owning organisation code provided is for an organisation that does not own stock")
+      end
+
+      it "blocks log creation" do
+        parser.valid?
+        expect(parser).to be_block_log_creation
       end
     end
   end
