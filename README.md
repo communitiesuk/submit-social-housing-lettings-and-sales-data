@@ -13,10 +13,6 @@ Ruby on Rails app that handles the submission of lettings and sales of social ho
 * [API browser](https://communitiesuk.github.io/submit-social-housing-lettings-and-sales-data/api) (using this [OpenAPI specification](docs/api/v1.json))
 * [Design history](https://core-design-history.herokuapp.com)
 
-## System architecture
-
-![View of system architecture](docs/images/architecture.drawio.png)
-
 ## User interface
 
 ![View of the logs list](docs/images/service.png)
