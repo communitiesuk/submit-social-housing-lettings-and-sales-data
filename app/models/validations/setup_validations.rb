@@ -78,7 +78,6 @@ module Validations::SetupValidations
   end
 
   def validate_scheme(record)
-    location_during_startdate_validation(record)
     scheme_during_startdate_validation(record)
   end
 
