@@ -119,6 +119,28 @@ RSpec.describe Form::Lettings::Questions::ManagingOrganisation, type: :model do
         end
       end
 
+      context "when org owns stock and has merged managing agents" do
+        let(:options) do
+          {
+            "" => "Select an option",
+            log.managing_organisation.id => "Managing org 1",
+            log_owning_org.id => "Owning org (Owning organisation)",
+            org_rel1.child_organisation.id => "Managing org 2 (inactive as of 2 August 2023)",
+            org_rel2.child_organisation.id => "Managing org 3 (inactive as of 2 August 2023)",
+          }
+        end
+
+        before do
+          org_rel1.child_organisation.update!(merge_date: Time.zone.local(2023, 8, 2), absorbing_organisation_id: log_owning_org.id)
+          org_rel2.child_organisation.update!(merge_date: Time.zone.local(2023, 8, 2), absorbing_organisation_id: log_owning_org.id)
+        end
+
+        it "shows current managing agent at top, followed by the current owning organisation (with hint), followed by the managing agents of the current owning organisation" do
+          log_owning_org.update!(holds_own_stock: true)
+          expect(question.displayed_answer_options(log, user)).to eq(options)
+        end
+      end
+
       context "when org does not own stock" do
         let(:options) do
           {
