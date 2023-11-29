@@ -189,6 +189,62 @@ RSpec.describe FormController, type: :request do
       end
     end
 
+    context "when submitting a sales log with valid owning organisation" do
+      let(:sales_log) { create(:sales_log) }
+      let(:created_by) { managing_organisation.users.first }
+      let(:params) do
+        {
+          id: sales_log.id,
+          sales_log: {
+            page: "organisation",
+            owning_organisation_id: managing_organisation.id,
+          },
+        }
+      end
+
+      before do
+        sales_log.update!(owning_organisation: managing_organisation, created_by:)
+        sales_log.reload
+      end
+
+      it "does not reset created by" do
+        post "/sales-logs/#{sales_log.id}/organisation", params: params
+        expect(response).to redirect_to("/sales-logs/#{sales_log.id}/created-by")
+        follow_redirect!
+        sales_log.reload
+        expect(sales_log.created_by).to eq(created_by)
+      end
+    end
+
+    context "when submitting a sales log with valid merged owning organisation" do
+      let(:sales_log) { create(:sales_log) }
+      let(:created_by) { managing_organisation.users.first }
+      let(:merged_organisation) { create(:organisation) }
+      let(:params) do
+        {
+          id: sales_log.id,
+          sales_log: {
+            page: "organisation",
+            owning_organisation_id: merged_organisation.id,
+          },
+        }
+      end
+
+      before do
+        merged_organisation.update!(merge_date: Time.zone.today, absorbing_organisation: managing_organisation)
+        sales_log.update!(owning_organisation: managing_organisation, created_by:)
+        sales_log.reload
+      end
+
+      it "does not reset created by" do
+        post "/sales-logs/#{sales_log.id}/organisation", params: params
+        expect(response).to redirect_to("/sales-logs/#{sales_log.id}/created-by")
+        follow_redirect!
+        sales_log.reload
+        expect(sales_log.created_by).to eq(created_by)
+      end
+    end
+
     context "with valid managing organisation" do
       let(:params) do
         {
