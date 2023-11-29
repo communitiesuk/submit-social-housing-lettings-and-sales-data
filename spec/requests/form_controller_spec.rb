@@ -214,6 +214,33 @@ RSpec.describe FormController, type: :request do
       end
     end
 
+    context "with valid absorbed managing organisation" do
+      let(:params) do
+        {
+          id: lettings_log.id,
+          lettings_log: {
+            page: "stock_owner",
+            owning_organisation_id: stock_owner.id,
+          },
+        }
+      end
+      let(:merged_org) { create(:organisation) }
+
+      before do
+        merged_org.update!(merge_date: Time.zone.today, absorbing_organisation: organisation)
+        lettings_log.update!(owning_organisation: merged_org, created_by: user, managing_organisation: merged_org)
+        lettings_log.reload
+      end
+
+      it "does not reset created by" do
+        post "/lettings-logs/#{lettings_log.id}/stock-owner", params: params
+        expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}/managing-organisation")
+        follow_redirect!
+        lettings_log.reload
+        expect(lettings_log.created_by).to eq(user)
+      end
+    end
+
     context "with only adding the stock owner" do
       let(:params) do
         {
