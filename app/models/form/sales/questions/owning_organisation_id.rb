@@ -33,8 +33,8 @@ class Form::Sales::Questions::OwningOrganisationId < ::Form::Question
         Organisation.where(holds_own_stock: true).find_each do |org|
           if org.merge_date.present?
             answer_opts[org.id] = "#{org.name} (inactive as of #{org.merge_date.to_fs(:govuk_date)})" if org.merge_date >= FormHandler.instance.start_date_of_earliest_open_for_editing_collection_period
-          elsif org.absorbed_organisations.merged_during_open_collection_period.exists?
-            answer_opts[org.id] = "#{org.name} (active as of #{org.created_at.to_fs(:govuk_date)})"
+          elsif org.absorbed_organisations.merged_during_open_collection_period.exists? && org.available_from.present?
+            answer_opts[org.id] = "#{org.name} (active as of #{org.available_from.to_fs(:govuk_date)})"
           else
             answer_opts[org.id] = org.name
           end
