@@ -14,7 +14,7 @@ module NavigationItemsHelper
       [
         NavigationItem.new("Lettings logs", lettings_logs_path, lettings_logs_current?(path)),
         NavigationItem.new("Sales logs", sales_logs_path, sales_logs_current?(path)),
-        (NavigationItem.new("Schemes", schemes_path, supported_housing_schemes_current?(path)) if current_user.organisation.holds_own_stock? || current_user.organisation.stock_owners.present?),
+        (NavigationItem.new("Schemes", schemes_path, non_support_supported_housing_schemes_current?(path)) if current_user.organisation.holds_own_stock? || current_user.organisation.stock_owners.present?),
         NavigationItem.new("Users", users_organisation_path(current_user.organisation), subnav_users_path?(path)),
         NavigationItem.new("About your organisation", organisation_path(current_user.organisation.id), subnav_details_path?(path)),
         NavigationItem.new("Stock owners", stock_owners_organisation_path(current_user.organisation), stock_owners_path?(path)),
@@ -57,7 +57,11 @@ private
   end
 
   def supported_housing_schemes_current?(path)
-    path == schemes_path || (path.include?("/organisations") && path.include?("/schemes")) || path.include?("/schemes/")
+    path == schemes_path || path.include?("/schemes/")
+  end
+
+  def non_support_supported_housing_schemes_current?(path)
+    path.starts_with?(organisations_path) && path.include?("/schemes") || path.include?("/schemes/")
   end
 
   def organisations_current?(path)
