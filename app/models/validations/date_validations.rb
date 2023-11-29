@@ -53,9 +53,6 @@ module Validations::DateValidations
     if record["mrcdate"].present? && record["startdate"].to_date - record["mrcdate"].to_date > 3650
       record.errors.add :startdate, I18n.t("validations.setup.startdate.ten_years_after_mrc_date")
     end
-
-    location_during_startdate_validation(record)
-    scheme_during_startdate_validation(record)
   end
 
 private
