@@ -82,6 +82,8 @@ module Validations::SetupValidations
   end
 
   def validate_managing_organisation_data_sharing_agremeent_signed(record)
+    return if record.skip_dpo_validation
+
     if record.managing_organisation_id_changed? && record.managing_organisation.present? && !record.managing_organisation.data_protection_confirmed?
       record.errors.add :managing_organisation_id, I18n.t("validations.setup.managing_organisation.data_sharing_agreement_not_signed")
     end
