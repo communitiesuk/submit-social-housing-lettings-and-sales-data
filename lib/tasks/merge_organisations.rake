@@ -1,3 +1,4 @@
+# empty
 namespace :merge do
   desc "Merge organisations into an existing organisation"
   task :merge_organisations, %i[absorbing_organisation_id merging_organisation_ids merge_date] => :environment do |_task, args|
