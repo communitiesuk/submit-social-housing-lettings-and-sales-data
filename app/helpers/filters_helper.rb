@@ -124,11 +124,11 @@ module FiltersHelper
   end
 
   def non_support_with_multiple_owning_orgs?
-    current_user.organisation.stock_owners.count > 1 && user_lettings_path?
+    current_user.organisation.stock_owners.count > 1 && user_lettings_path? || current_user.organisation.has_recent_absorbed_organisations?
   end
 
   def non_support_with_multiple_managing_orgs?
-    current_user.organisation.managing_agents.count > 1 && user_lettings_path?
+    current_user.organisation.managing_agents.count > 1 && user_lettings_path? || current_user.organisation.has_recent_absorbed_organisations?
   end
 
   def user_lettings_path?
