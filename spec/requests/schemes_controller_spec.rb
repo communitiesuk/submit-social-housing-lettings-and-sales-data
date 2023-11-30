@@ -2224,6 +2224,31 @@ RSpec.describe SchemesController, type: :request do
         end
       end
 
+      context "when there are no stock owners" do
+        before do
+          get "/schemes/#{scheme.id}/edit-name"
+        end
+
+        it "does not include the owning organisation question" do
+          expect(response).to have_http_status(:ok)
+          expect(page).not_to have_content("Which organisation owns the housing stock for this scheme?")
+        end
+
+        context "and there are absorbed organisations" do
+          let(:merged_organisation) { create(:organisation) }
+
+          before do
+            merged_organisation.update!(absorbing_organisation: user.organisation, merge_date: Time.zone.today)
+            get "/schemes/#{scheme.id}/edit-name"
+          end
+
+          it "includes the owning organisation question" do
+            expect(response).to have_http_status(:ok)
+            expect(page).to have_content("Which organisation owns the housing stock for this scheme?")
+          end
+        end
+      end
+
       context "when attempting to access secondary-client-group scheme page for another organisation" do
         before do
           get "/schemes/#{another_scheme.id}/edit-name"
