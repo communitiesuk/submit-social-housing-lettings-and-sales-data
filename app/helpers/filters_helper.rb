@@ -132,7 +132,7 @@ module FiltersHelper
   end
 
   def user_lettings_path?
-    request.path == "/lettings-logs"
+    request.path == lettings_logs_path
   end
 
   def user_or_org_lettings_path?

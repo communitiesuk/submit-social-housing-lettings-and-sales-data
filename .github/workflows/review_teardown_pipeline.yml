@@ -1,92 +1,64 @@
 name: Review app teardown pipeline
 
+concurrency:
+  group: review-${{ github.event.pull_request.number }}
+
 on:
   pull_request:
     types:
       - closed
   workflow_dispatch:
 
-defaults:
-  run:
-    shell: bash
+env:
+  app_repo_role: arn:aws:iam::815624722760:role/core-application-repo
+  aws_account_id: 837698168072
+  aws_region: eu-west-2
+  aws_role_prefix: core-dev
+  aws_task_prefix: core-review-${{ github.event.pull_request.number }}
 
 jobs:
-  app:
-    name: Teardown app
+  database:
+    name: Drop database
     runs-on: ubuntu-latest
-    environment: review
+    permissions:
+      id-token: write
 
     steps:
-      - name: Install Cloud Foundry CLI
-        run: |
-          wget --user-agent "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.3 Safari/605.1.15" -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | sudo apt-key add -
-          echo "deb https://packages.cloudfoundry.org/debian stable main" | sudo tee /etc/apt/sources.list.d/cloudfoundry-cli.list
-          sudo apt-get update
-          sudo apt-get install cf8-cli
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          aws-region: ${{ env.aws_region }}
+          role-to-assume: ${{ env.app_repo_role }}
 
-      - name: Teardown app
+      - name: Configure AWS credentials for review environment
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          aws-region: ${{ env.aws_region }}
+          role-to-assume: arn:aws:iam::${{ env.aws_account_id }}:role/${{ env.aws_role_prefix }}-deployment
+          role-chaining: true
+
+      - name: Drop Database
         env:
-          CF_USERNAME: ${{ secrets.CF_USERNAME }}
-          CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
-          CF_API_ENDPOINT: ${{ secrets.CF_API_ENDPOINT }}
-          CF_SPACE: dev
-          CF_ORG: ${{ secrets.CF_ORG }}
+          ad_hoc_task_definition: ${{ env.aws_task_prefix }}-ad-hoc
+          cluster: ${{ env.aws_task_prefix }}-app
+          service: ${{ env.aws_task_prefix }}-app
         run: |
-          cf api $CF_API_ENDPOINT
-          cf auth
-          cf target -o $CF_ORG -s $CF_SPACE
-          cf delete dluhc-core-review-${{ github.event.pull_request.number }} -f -r
+          network=$(aws ecs describe-services --cluster $cluster --services $service --query services[0].networkConfiguration)
+          overrides='{ "containerOverrides" : [{ "name" : "app", "command" : ["bundle", "exec", "rake", "db:drop"]}]}'
+          arn=$(aws ecs run-task --cluster $cluster --task-definition $ad_hoc_task_definition --network-configuration "$network" --overrides "$overrides" --group migrations --launch-type FARGATE --query tasks[0].taskArn)
+          echo "Waiting for db prepare task to complete"
+          temp=${arn##*/}
+          id=${temp%*\"}
+          aws ecs wait tasks-stopped --cluster $cluster --tasks $id
+          succeeded=$(aws ecs describe-tasks --cluster $cluster --tasks $id --query "tasks[0].stopCode == 'EssentialContainerExited' && to_string(tasks[0].containers[0].exitCode) == '0'")
+          if [ $succeeded == true ]; then exit 0; else exit 1; fi
 
-  postgres:
-    name: Teardown postgres
-    runs-on: ubuntu-latest
-    environment: review
-    needs: [app]
-
-    steps:
-      - name: Install Cloud Foundry CLI
-        run: |
-          wget --user-agent "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.3 Safari/605.1.15" -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | sudo apt-key add -
-          echo "deb https://packages.cloudfoundry.org/debian stable main" | sudo tee /etc/apt/sources.list.d/cloudfoundry-cli.list
-          sudo apt-get update
-          sudo apt-get install cf8-cli
-
-      - name: Teardown postgres
-        env:
-          CF_USERNAME: ${{ secrets.CF_USERNAME }}
-          CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
-          CF_API_ENDPOINT: ${{ secrets.CF_API_ENDPOINT }}
-          CF_SPACE: dev
-          CF_ORG: ${{ secrets.CF_ORG }}
-        run: |
-          cf api $CF_API_ENDPOINT
-          cf auth
-          cf target -o $CF_ORG -s $CF_SPACE
-          cf delete-service dluhc-core-review-${{ github.event.pull_request.number }}-postgres --wait -f
-
-  redis:
-    name: Teardown redis
-    runs-on: ubuntu-latest
-    environment: review
-    needs: [app]
-
-    steps:
-      - name: Install Cloud Foundry CLI
-        run: |
-          wget --user-agent "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.3 Safari/605.1.15" -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | sudo apt-key add -
-          echo "deb https://packages.cloudfoundry.org/debian stable main" | sudo tee /etc/apt/sources.list.d/cloudfoundry-cli.list
-          sudo apt-get update
-          sudo apt-get install cf8-cli
-
-      - name: Teardown redis
-        env:
-          CF_USERNAME: ${{ secrets.CF_USERNAME }}
-          CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
-          CF_API_ENDPOINT: ${{ secrets.CF_API_ENDPOINT }}
-          CF_SPACE: dev
-          CF_ORG: ${{ secrets.CF_ORG }}
-        run: |
-          cf api $CF_API_ENDPOINT
-          cf auth
-          cf target -o $CF_ORG -s $CF_SPACE
-          cf delete-service dluhc-core-review-${{ github.event.pull_request.number }}-redis --wait -f
+  infra:
+    name: Teardown review app
+    needs: [database]
+    uses: communitiesuk/submit-social-housing-lettings-and-sales-data-infrastructure/.github/workflows/destroy_review_app_infra.yml@main
+    with:
+      key: ${{ github.event.pull_request.number }}
+      app_repo_role: arn:aws:iam::815624722760:role/core-application-repo
+    permissions:
+      id-token: write

@@ -24,3 +24,4 @@ Sentry.init do |config|
 end
 
 Sentry.set_tags("app_host": ENV["APP_HOST"])
+Sentry.set_tags("url_root": ENV["RAILS_RELATIVE_URL_ROOT"])
