@@ -5,18 +5,18 @@ module NavigationItemsHelper
     if current_user.support?
       [
         NavigationItem.new("Organisations", organisations_path, organisations_current?(path)),
-        NavigationItem.new("Users", "/users", users_current?(path)),
+        NavigationItem.new("Users", users_path, users_current?(path)),
         NavigationItem.new("Lettings logs", lettings_logs_path, lettings_logs_current?(path)),
         NavigationItem.new("Sales logs", sales_logs_path, sales_logs_current?(path)),
-        NavigationItem.new("Schemes", "/schemes", supported_housing_schemes_current?(path)),
+        NavigationItem.new("Schemes", schemes_path, supported_housing_schemes_current?(path)),
       ].compact
     else
       [
         NavigationItem.new("Lettings logs", lettings_logs_path, lettings_logs_current?(path)),
         NavigationItem.new("Sales logs", sales_logs_path, sales_logs_current?(path)),
-        (NavigationItem.new("Schemes", "/schemes", supported_housing_schemes_current?(path)) if current_user.organisation.holds_own_stock? || current_user.organisation.stock_owners.present?),
+        (NavigationItem.new("Schemes", schemes_path, non_support_supported_housing_schemes_current?(path)) if current_user.organisation.holds_own_stock? || current_user.organisation.stock_owners.present?),
         NavigationItem.new("Users", users_organisation_path(current_user.organisation), subnav_users_path?(path)),
-        NavigationItem.new("About your organisation", "/organisations/#{current_user.organisation.id}", subnav_details_path?(path)),
+        NavigationItem.new("About your organisation", organisation_path(current_user.organisation.id), subnav_details_path?(path)),
         NavigationItem.new("Stock owners", stock_owners_organisation_path(current_user.organisation), stock_owners_path?(path)),
         NavigationItem.new("Managing agents", managing_agents_organisation_path(current_user.organisation), managing_agents_path?(path)),
       ].compact
@@ -25,11 +25,11 @@ module NavigationItemsHelper
 
   def secondary_items(path, current_organisation_id)
     [
-      NavigationItem.new("Lettings logs", "/organisations/#{current_organisation_id}/lettings-logs", subnav_lettings_logs_path?(path)),
-      NavigationItem.new("Sales logs", "/organisations/#{current_organisation_id}/sales-logs", subnav_sales_logs_path?(path)),
-      (NavigationItem.new("Schemes", "/organisations/#{current_organisation_id}/schemes", subnav_supported_housing_schemes_path?(path)) if current_user.organisation.holds_own_stock? || current_user.organisation.stock_owners.present?),
-      NavigationItem.new("Users", "/organisations/#{current_organisation_id}/users", subnav_users_path?(path)),
-      NavigationItem.new("About this organisation", "/organisations/#{current_organisation_id}", subnav_details_path?(path)),
+      NavigationItem.new("Lettings logs", lettings_logs_organisation_path(current_organisation_id), subnav_lettings_logs_path?(path)),
+      NavigationItem.new("Sales logs", sales_logs_organisation_path(current_organisation_id), subnav_sales_logs_path?(path)),
+      (NavigationItem.new("Schemes", schemes_organisation_path(current_organisation_id), subnav_supported_housing_schemes_path?(path)) if current_user.organisation.holds_own_stock? || current_user.organisation.stock_owners.present?),
+      NavigationItem.new("Users", users_organisation_path(current_organisation_id), subnav_users_path?(path)),
+      NavigationItem.new("About this organisation", organisation_path(current_organisation_id), subnav_details_path?(path)),
       NavigationItem.new("Stock owners", stock_owners_organisation_path(current_organisation_id), stock_owners_path?(path)),
       NavigationItem.new("Managing agents", managing_agents_organisation_path(current_organisation_id), managing_agents_path?(path)),
     ].compact
@@ -37,31 +37,35 @@ module NavigationItemsHelper
 
   def scheme_items(path, current_scheme_id, title)
     [
-      NavigationItem.new("Scheme", "/schemes/#{current_scheme_id}", !path.include?("locations")),
-      NavigationItem.new(title, "/schemes/#{current_scheme_id}/locations", path.include?("locations")),
+      NavigationItem.new("Scheme", scheme_path(current_scheme_id), !path.include?("locations")),
+      NavigationItem.new(title, scheme_locations_path(current_scheme_id), path.include?("locations")),
     ]
   end
 
 private
 
   def lettings_logs_current?(path)
-    path.starts_with?("/lettings-logs")
+    path.starts_with?(lettings_logs_path)
   end
 
   def sales_logs_current?(path)
-    path.starts_with?("/sales-logs")
+    path.starts_with?(sales_logs_path)
   end
 
   def users_current?(path)
-    path == "/users" || path.include?("/users/")
+    path == users_path || path.include?("/users/")
   end
 
   def supported_housing_schemes_current?(path)
-    path == "/schemes" || path.include?("/schemes/")
+    path == schemes_path || path.include?("/schemes/")
+  end
+
+  def non_support_supported_housing_schemes_current?(path)
+    path.starts_with?(organisations_path) && path.include?("/schemes") || path.include?("/schemes/")
   end
 
   def organisations_current?(path)
-    path == "/organisations" || path.include?("/organisations/")
+    path == organisations_path || path.include?("/organisations/")
   end
 
   def subnav_supported_housing_schemes_path?(path)

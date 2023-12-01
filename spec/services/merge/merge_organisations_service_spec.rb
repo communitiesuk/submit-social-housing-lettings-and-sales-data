@@ -160,11 +160,11 @@ RSpec.describe Merge::MergeOrganisationsService do
           expect(absorbing_organisation.owned_schemes.count).to eq(1)
           expect(absorbing_organisation.owned_schemes.first.service_name).to eq(scheme.service_name)
           expect(absorbing_organisation.owned_schemes.first.old_id).to be_nil
-          expect(absorbing_organisation.owned_schemes.first.old_visible_id).to be_nil
+          expect(absorbing_organisation.owned_schemes.first.old_visible_id).to eq(nil)
           expect(absorbing_organisation.owned_schemes.first.locations.count).to eq(1)
           expect(absorbing_organisation.owned_schemes.first.locations.first.postcode).to eq(location.postcode)
           expect(absorbing_organisation.owned_schemes.first.locations.first.old_id).to be_nil
-          expect(absorbing_organisation.owned_schemes.first.locations.first.old_visible_id).to be_nil
+          expect(absorbing_organisation.owned_schemes.first.locations.first.old_visible_id).to eq(nil)
           expect(scheme.scheme_deactivation_periods.count).to eq(1)
           expect(scheme.scheme_deactivation_periods.first.deactivation_date.to_date).to eq(Time.zone.today)
         end
@@ -179,7 +179,7 @@ RSpec.describe Merge::MergeOrganisationsService do
           expect(absorbing_organisation.owned_lettings_logs.find(owned_lettings_log.id).scheme).to eq(absorbing_organisation.owned_schemes.first)
           expect(absorbing_organisation.owned_lettings_logs.find(owned_lettings_log.id).location).to eq(absorbing_organisation.owned_schemes.first.locations.first)
           expect(absorbing_organisation.owned_lettings_logs.find(owned_lettings_log_no_location.id).scheme).to eq(absorbing_organisation.owned_schemes.first)
-          expect(absorbing_organisation.owned_lettings_logs.find(owned_lettings_log_no_location.id).location).to eq(nil)
+          expect(absorbing_organisation.owned_lettings_logs.find(owned_lettings_log_no_location.id).location).to eq(absorbing_organisation.owned_schemes.first.locations.first)
         end
 
         it "rolls back if there's an error" do
@@ -345,7 +345,7 @@ RSpec.describe Merge::MergeOrganisationsService do
             expect(absorbing_organisation.owned_lettings_logs.find(owned_lettings_log.id).scheme).to eq(absorbing_organisation.owned_schemes.first)
             expect(absorbing_organisation.owned_lettings_logs.find(owned_lettings_log.id).location).to eq(absorbing_organisation.owned_schemes.first.locations.first)
             expect(absorbing_organisation.owned_lettings_logs.find(owned_lettings_log_no_location.id).scheme).to eq(absorbing_organisation.owned_schemes.first)
-            expect(absorbing_organisation.owned_lettings_logs.find(owned_lettings_log_no_location.id).location).to eq(nil)
+            expect(absorbing_organisation.owned_lettings_logs.find(owned_lettings_log_no_location.id).location).to eq(absorbing_organisation.owned_schemes.first.locations.first)
           end
 
           it "rolls back if there's an error" do
@@ -404,20 +404,6 @@ RSpec.describe Merge::MergeOrganisationsService do
         create_list(:user, 5, organisation: merging_organisation_too)
       end
 
-      it "moves the users from merging organisations to absorbing organisation" do
-        expect(Rails.logger).to receive(:info).with("Merged users from fake org:")
-        expect(Rails.logger).to receive(:info).with("\tDanny Rojas (#{merging_organisation.data_protection_officers.first.email})")
-        expect(Rails.logger).to receive(:info).with("\tfake name (fake@email.com)")
-        expect(Rails.logger).to receive(:info).with("Merged users from second org:")
-        expect(Rails.logger).to receive(:info).with(/\tDanny Rojas/).exactly(6).times
-        expect(Rails.logger).to receive(:info).with("New schemes from fake org:")
-        expect(Rails.logger).to receive(:info).with("New schemes from second org:")
-        merge_organisations_service.call
-
-        merging_organisation_user.reload
-        expect(merging_organisation_user.organisation).to eq(absorbing_organisation)
-      end
-
       it "sets merge date and absorbing organisation on merged organisations" do
         merge_organisations_service.call
 
@@ -449,6 +435,60 @@ RSpec.describe Merge::MergeOrganisationsService do
         expect(merging_organisation.merge_date).to eq(nil)
         expect(merging_organisation.absorbing_organisation_id).to eq(nil)
         expect(merging_organisation_user.organisation).to eq(merging_organisation)
+      end
+
+      context "and merging users" do
+        it "moves the users from merging organisations to absorbing organisation" do
+          expect(Rails.logger).to receive(:info).with("Merged users from fake org:")
+          expect(Rails.logger).to receive(:info).with("\tDanny Rojas (#{merging_organisation.data_protection_officers.first.email})")
+          expect(Rails.logger).to receive(:info).with("\tfake name (fake@email.com)")
+          expect(Rails.logger).to receive(:info).with("Merged users from second org:")
+          expect(Rails.logger).to receive(:info).with(/\tDanny Rojas/).exactly(6).times
+          expect(Rails.logger).to receive(:info).with("New schemes from fake org:")
+          expect(Rails.logger).to receive(:info).with("New schemes from second org:")
+          merge_organisations_service.call
+
+          merging_organisation_user.reload
+          expect(merging_organisation_user.organisation).to eq(absorbing_organisation)
+        end
+
+        it "replaces dpo users with fake users if they have signed the data sharing agreement" do
+          merging_organisation_user.update!(is_dpo: true)
+          merging_organisation.data_protection_confirmation.update!(data_protection_officer: merging_organisation_user)
+
+          merge_organisations_service.call
+
+          merging_organisation_user.reload
+          merging_organisation.reload
+          expect(merging_organisation_user.organisation).to eq(absorbing_organisation)
+          expect(merging_organisation.users.count).to eq(1)
+          expect(merging_organisation.users.first.name).to eq(merging_organisation_user.name)
+          expect(merging_organisation.users.first.email).not_to eq(merging_organisation_user.email)
+          expect(merging_organisation.data_protection_confirmation.data_protection_officer).to eq(merging_organisation.users.first)
+        end
+
+        it "does not move dpo users who have signed data sharing agreement if they have a fake email address" do
+          dpo = User.new(
+            name: merging_organisation.data_protection_confirmation.data_protection_officer.name,
+            organisation: merging_organisation,
+            is_dpo: true,
+            encrypted_password: SecureRandom.hex(10),
+            email: SecureRandom.uuid,
+            confirmed_at: Time.zone.now,
+            active: false,
+          )
+          dpo.save!(validate: false)
+          merging_organisation.data_protection_confirmation.update!(data_protection_officer: dpo)
+
+          merge_organisations_service.call
+
+          dpo.reload
+          merging_organisation.reload
+          expect(dpo.organisation).to eq(merging_organisation)
+          expect(merging_organisation.users.count).to eq(1)
+          expect(merging_organisation.users.first).to eq(dpo)
+          expect(merging_organisation.data_protection_confirmation.data_protection_officer).to eq(dpo)
+        end
       end
 
       context "and merging organisation relationships" do
@@ -688,7 +728,7 @@ RSpec.describe Merge::MergeOrganisationsService do
           expect(new_absorbing_organisation.owned_lettings_logs.find(owned_lettings_log.id).scheme).to eq(new_absorbing_organisation.owned_schemes.first)
           expect(new_absorbing_organisation.owned_lettings_logs.find(owned_lettings_log.id).location).to eq(new_absorbing_organisation.owned_schemes.first.locations.first)
           expect(new_absorbing_organisation.owned_lettings_logs.find(owned_lettings_log_no_location.id).scheme).to eq(new_absorbing_organisation.owned_schemes.first)
-          expect(new_absorbing_organisation.owned_lettings_logs.find(owned_lettings_log_no_location.id).location).to eq(nil)
+          expect(new_absorbing_organisation.owned_lettings_logs.find(owned_lettings_log_no_location.id).location).to eq(new_absorbing_organisation.owned_schemes.first.locations.first)
         end
 
         it "rolls back if there's an error" do
@@ -849,12 +889,13 @@ RSpec.describe Merge::MergeOrganisationsService do
 
             new_absorbing_organisation.reload
             merging_organisation.reload
+            owned_lettings_log_no_location.reload
             expect(new_absorbing_organisation.owned_lettings_logs.count).to eq(2)
             expect(new_absorbing_organisation.managed_lettings_logs.count).to eq(1)
             expect(new_absorbing_organisation.owned_lettings_logs.find(owned_lettings_log.id).scheme).to eq(new_absorbing_organisation.owned_schemes.first)
             expect(new_absorbing_organisation.owned_lettings_logs.find(owned_lettings_log.id).location).to eq(new_absorbing_organisation.owned_schemes.first.locations.first)
             expect(new_absorbing_organisation.owned_lettings_logs.find(owned_lettings_log_no_location.id).scheme).to eq(new_absorbing_organisation.owned_schemes.first)
-            expect(new_absorbing_organisation.owned_lettings_logs.find(owned_lettings_log_no_location.id).location).to eq(nil)
+            expect(new_absorbing_organisation.owned_lettings_logs.find(owned_lettings_log_no_location.id).location).to eq(new_absorbing_organisation.owned_schemes.first.locations.first)
           end
 
           it "rolls back if there's an error" do

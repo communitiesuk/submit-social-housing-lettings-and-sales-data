@@ -2,5 +2,7 @@
 
 require_relative "config/environment"
 
-run Rails.application
-Rails.application.load_server
+map DataCollector::Application.config.relative_url_root || "/" do
+  run Rails.application
+  Rails.application.load_server
+end

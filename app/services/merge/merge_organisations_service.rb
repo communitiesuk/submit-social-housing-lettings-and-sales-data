@@ -59,8 +59,9 @@ private
   end
 
   def merge_users(merging_organisation)
-    @merged_users[merging_organisation.name] = merging_organisation.users.map { |user| { name: user.name, email: user.email } }
-    merging_organisation.users.update_all(organisation_id: @absorbing_organisation.id)
+    users_to_merge = users_to_merge(merging_organisation)
+    @merged_users[merging_organisation.name] = users_to_merge.map { |user| { name: user.name, email: user.email } }
+    users_to_merge.update_all(organisation_id: @absorbing_organisation.id)
   end
 
   def merge_schemes_and_locations(merging_organisation)
@@ -87,18 +88,21 @@ private
         lettings_log.location = location_to_set if location_to_set.present?
       end
       lettings_log.owning_organisation = @absorbing_organisation
-      lettings_log.save!(validate: false)
+      lettings_log.skip_dpo_validation = true
+      lettings_log.save!
     end
     merging_organisation.managed_lettings_logs.after_date(@merge_date.to_time).each do |lettings_log|
       lettings_log.managing_organisation = @absorbing_organisation
-      lettings_log.save!(validate: false)
+      lettings_log.skip_dpo_validation = true
+      lettings_log.save!
     end
   end
 
   def merge_sales_logs(merging_organisation)
     merging_organisation.sales_logs.after_date(@merge_date.to_time).each do |sales_log|
       sales_log.owning_organisation = @absorbing_organisation
-      sales_log.save!(validate: false)
+      sales_log.skip_dpo_validation = true
+      sales_log.save!
     end
   end
 
@@ -131,5 +135,26 @@ private
 
   def child_relationship_exists_on_absorbing_organisation?(child_organisation_relationship)
     child_organisation_relationship.child_organisation == @absorbing_organisation || @merging_organisations.include?(child_organisation_relationship.child_organisation) || @absorbing_organisation.child_organisation_relationships.where(child_organisation: child_organisation_relationship.child_organisation).exists?
+  end
+
+  def users_to_merge(merging_organisation)
+    return merging_organisation.users if merging_organisation.data_protection_confirmation.blank?
+    if merging_organisation.data_protection_confirmation.data_protection_officer.email.exclude?("@")
+      return merging_organisation.users.where.not(id: merging_organisation.data_protection_confirmation.data_protection_officer.id)
+    end
+
+    new_dpo = User.new(
+      name: merging_organisation.data_protection_confirmation.data_protection_officer.name,
+      organisation: merging_organisation,
+      is_dpo: true,
+      encrypted_password: SecureRandom.hex(10),
+      email: SecureRandom.uuid,
+      confirmed_at: Time.zone.now,
+      active: false,
+    )
+    new_dpo.save!(validate: false)
+    merging_organisation.data_protection_confirmation.update!(data_protection_officer: new_dpo)
+
+    merging_organisation.users.where.not(id: new_dpo.id)
   end
 end
