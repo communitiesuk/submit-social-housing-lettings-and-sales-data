@@ -307,7 +307,7 @@ RSpec.describe SchemesHelper do
     context "when scheme was merged from another organisation" do
       before do
         FactoryBot.create(:location, scheme:)
-        scheme.merge_date = Time.zone.local(2023, 1, 5)
+        scheme.startdate = Time.zone.local(2023, 1, 5)
       end
 
       it "returns correct availability" do

@@ -216,31 +216,11 @@ RSpec.describe LocationsHelper do
         end
 
         context "when location was merged" do
-          context "when there is no startdate" do
-            it "displays merge date as availability date" do
-              location.update!(merge_date: Time.zone.local(2022, 4, 16))
-              availability_attribute = display_location_attributes(location).find { |x| x[:name] == "Availability" }[:value]
+          it "displays merge date as availability date" do
+            location.update!(startdate: Time.zone.local(2022, 4, 16))
+            availability_attribute = display_location_attributes(location).find { |x| x[:name] == "Availability" }[:value]
 
-              expect(availability_attribute).to eq("Active from 16 April 2022")
-            end
-          end
-
-          context "when the startdate is before the merge date" do
-            it "displays merge date as availability date" do
-              location.update!(startdate: Time.zone.local(2022, 4, 3), merge_date: Time.zone.local(2022, 4, 16))
-              availability_attribute = display_location_attributes(location).find { |x| x[:name] == "Availability" }[:value]
-
-              expect(availability_attribute).to eq("Active from 16 April 2022")
-            end
-          end
-
-          context "when the startdate is after the merge date" do
-            it "displays startdate as availability date" do
-              location.update!(startdate: Time.zone.local(2022, 5, 3), merge_date: Time.zone.local(2022, 4, 16))
-              availability_attribute = display_location_attributes(location).find { |x| x[:name] == "Availability" }[:value]
-
-              expect(availability_attribute).to eq("Active from 3 May 2022")
-            end
+            expect(availability_attribute).to eq("Active from 16 April 2022")
           end
         end
       end
