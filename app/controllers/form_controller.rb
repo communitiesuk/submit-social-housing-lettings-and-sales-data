@@ -108,6 +108,8 @@ private
           result["managing_organisation_id"] = owning_organisation.id
         elsif owning_organisation&.absorbing_organisation == current_user.organisation
           result["managing_organisation_id"] = owning_organisation.id
+        elsif @log.managing_organisation&.absorbing_organisation == current_user.organisation && owning_organisation == current_user.organisation
+          result["managing_organisation_id"] = owning_organisation.id
         end
       end
 
