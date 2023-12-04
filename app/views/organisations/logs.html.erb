@@ -15,7 +15,7 @@
 <%= render DataProtectionConfirmationBannerComponent.new(
   user: current_user,
   organisation: @organisation,
-  ) %>
+) %>
 
 <% if @duplicate_sets_count&.positive? %>
   <%= govuk_notification_banner(title_text: "Important", text: govuk_link_to("Review logs", organisation_duplicates_path(@organisation, referrer: "duplicate_logs_banner"))) do |banner| %>
