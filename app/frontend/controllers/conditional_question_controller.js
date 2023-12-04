@@ -14,28 +14,28 @@ export default class extends Controller {
 
       Object.entries(conditionalFor).forEach(([targetQuestion, conditions]) => {
         if (!conditions.map(String).includes(String(selectedValue))) {
-          let textNumericInput = document.getElementById(`${type}-${targetQuestion.replaceAll('_', '-')}-field`)
-          if (textNumericInput == null) {
-            textNumericInput = document.getElementById(`${type}-${targetQuestion.replaceAll('_', '-')}-field-error`)
-          }
-          if (textNumericInput == null) {
-            const dateInputs = [1, 2, 3].map((idx) => {
-              return document.getElementById(`${type.replaceAll('-', '_')}_${targetQuestion}_${idx}i`)
-            })
-            this.clearDateInputs(dateInputs)
-          } else {
-            this.clearTextNumericInput(textNumericInput)
-          }
+          const textNumericInput = document.getElementById(`${type}-${targetQuestion.replaceAll('_', '-')}-field`)
+          const errorInput = document.getElementById(`${type}-${targetQuestion.replaceAll('_', '-')}-field-error`)
+          const dateInputs = [1, 2, 3].map((idx) => {
+            return document.getElementById(`lettings_log_mrcdate_${idx}i`)
+          })
+          this.clearTextInput(textNumericInput)
+          this.clearTextInput(errorInput)
+          this.clearDateInputs(dateInputs)
         }
       })
     }
   }
 
-  clearTextNumericInput (input) {
-    input.value = ''
+  clearTextInput (input) {
+    if (input != null) {
+      input.value = ''
+    }
   }
 
   clearDateInputs (inputs) {
-    inputs.forEach((input) => { input.value = '' })
+    inputs.forEach((input) => {
+      this.clearTextInput(input)
+    })
   }
 }
