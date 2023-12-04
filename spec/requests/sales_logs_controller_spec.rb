@@ -559,7 +559,7 @@ RSpec.describe SalesLogsController, type: :request do
           sign_in user
         end
 
-        it "does not have organisation values" do
+        it "does not show organisation labels" do
           get "/sales-logs", headers: headers, params: {}
           expect(page).not_to have_content("Owned by")
           expect(page).not_to have_content("Managed by")
@@ -572,7 +572,7 @@ RSpec.describe SalesLogsController, type: :request do
             merged_organisation.update!(absorbing_organisation: organisation, merge_date: Time.zone.yesterday)
           end
 
-          it "has organisation values" do
+          it "shows organisation labels" do
             get "/sales-logs", headers: headers, params: {}
             expect(page).to have_content("Owned by")
             expect(page).not_to have_content("Managed by")
