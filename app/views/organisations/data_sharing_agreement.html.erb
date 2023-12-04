@@ -1,5 +1,9 @@
 <%= content_for :title, "Data sharing agreement" %>
 
+<% content_for :before_content do %>
+  <%= govuk_back_link(href: :back) %>
+<% end %>
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
     <h2 id="data-provider-organisation-and-department-for-levelling-up-housing-and-communities" class="govuk-heading-l">
