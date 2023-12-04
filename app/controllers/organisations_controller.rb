@@ -239,7 +239,7 @@ private
   end
 
   def authenticate_scope!
-    if %w[create new lettings_logs sales_logs download_lettings_csv email_lettings_csv email_sales_csv download_sales_csv].include? action_name
+    if %w[create new download_lettings_csv email_lettings_csv email_sales_csv download_sales_csv].include? action_name
       head :unauthorized and return unless current_user.support?
     elsif current_user.organisation != @organisation && !current_user.support?
       render_not_found
