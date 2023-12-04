@@ -349,7 +349,7 @@ RSpec.describe NavigationItemsHelper do
 
         it "returns navigation items with Schemes item set as current" do
           expect(primary_items("/schemes/1", current_user)).to eq(expected_navigation_items)
-          expect(scheme_items("/schemes/1", 1, "Locations")).to eq(expected_scheme_items)
+          expect(scheme_items("/schemes/1", 1)).to eq(expected_scheme_items)
         end
       end
 
@@ -373,7 +373,7 @@ RSpec.describe NavigationItemsHelper do
 
         it "returns navigation items with Schemes item set as current" do
           expect(primary_items("/schemes/1/locations", current_user)).to eq(expected_navigation_items)
-          expect(scheme_items("/schemes/1/locations", 1, "Locations")).to eq(expected_scheme_items)
+          expect(scheme_items("/schemes/1/locations", 1)).to eq(expected_scheme_items)
         end
       end
 
