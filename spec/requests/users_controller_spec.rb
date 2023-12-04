@@ -67,7 +67,7 @@ RSpec.describe UsersController, type: :request do
           expect(response).to have_http_status(:unprocessable_entity)
           expect(page).to have_css("h1", class: "govuk-heading-l", text: "Change your password")
           expect(page).to have_selector("#error-summary-title")
-          expect(page).to have_content("Password confirmation doesn’t match new password")
+          expect(page).to have_content("passwords you entered do not match")
         end
       end
     end

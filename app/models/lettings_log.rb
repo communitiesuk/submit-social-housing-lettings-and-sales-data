@@ -128,6 +128,14 @@ class LettingsLog < Log
   SUFFIX_FROM_PERIOD = { 2 => "every 2 weeks", 3 => "every 4 weeks", 4 => "every month" }.freeze
   RETIREMENT_AGES = { "M" => 67, "F" => 60, "X" => 67 }.freeze
   DUPLICATE_LOG_ATTRIBUTES = %w[owning_organisation_id tenancycode startdate age1_known age1 sex1 ecstat1 tcharge household_charge chcharge].freeze
+  RENT_TYPE = {
+    social_rent: 0,
+    affordable_rent: 1,
+    london_affordable_rent: 2,
+    rent_to_buy: 3,
+    london_living_rent: 4,
+    other_intermediate_rent_product: 5,
+  }.freeze
 
   def form
     FormHandler.instance.get_form(form_name) || FormHandler.instance.current_lettings_form
@@ -617,6 +625,10 @@ class LettingsLog < Log
      is_carehome? ? "chcharge" : nil].compact
   end
 
+  def letting_allocation_none
+    letting_allocation_unknown
+  end
+
 private
 
   def reset_invalid_unresolved_log_fields!
@@ -659,7 +671,7 @@ private
     not_required << "tshortfall" if tshortfall_unknown?
     not_required << "tenancylength" if tenancylength_optional?
 
-    not_required |= %w[address_line2 county postcode_full] if startdate && startdate.year >= 2023
+    not_required |= %w[address_line2 county postcode_full] if startdate && collection_start_year_for_date(startdate) >= 2023
 
     not_required
   end
@@ -780,6 +792,6 @@ private
   end
 
   def should_process_uprn_change?
-    uprn && startdate && (uprn_changed? || startdate_changed?) && startdate.year >= 2023
+    uprn && startdate && (uprn_changed? || startdate_changed?) && collection_start_year_for_date(startdate) >= 2023
   end
 end

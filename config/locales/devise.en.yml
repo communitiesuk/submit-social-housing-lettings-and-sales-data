@@ -62,7 +62,7 @@ en:
     messages:
       already_confirmed: "Email has already been confirmed. Sign in."
       blank: "can’t be blank"
-      confirmation: "Password confirmation doesn’t match new password"
+      confirmation: "The passwords you entered do not match. Try again."
       confirmation_period_expired: "Email needs to be confirmed within %{period}. Request a new link below."
       expired: "Token has expired. Request a new token."
       not_found: "was not found"

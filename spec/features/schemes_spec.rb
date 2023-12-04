@@ -81,7 +81,7 @@ RSpec.describe "Schemes scheme Features" do
 
             it "displays the filters component with a correct count and clear button" do
               expect(page).to have_content("2 filters applied")
-              expect(page).to have_link("Clear", href: "/clear-filters?filter_type=schemes")
+              expect(page).to have_link("Clear", href: /clear-filters\?filter_type=schemes/)
             end
 
             context "when clearing the filters" do
@@ -745,7 +745,9 @@ RSpec.describe "Schemes scheme Features" do
           let!(:deactivated_location) { FactoryBot.create(:location, startdate: Time.zone.local(2022, 4, 4), scheme:) }
 
           before do
+            Timecop.freeze(Time.zone.local(2023, 10, 10))
             FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 4), location: deactivated_location)
+            Timecop.unfreeze
             click_link(scheme.service_name)
           end
 
@@ -817,7 +819,7 @@ RSpec.describe "Schemes scheme Features" do
                   expect(page).to have_content(deactivated_location.units)
                   expect(page).to have_content(deactivated_location.type_of_unit)
                   expect(page).to have_content(deactivated_location.mobility_type)
-                  expect(page).to have_content(deactivated_location.location_code)
+                  expect(page).to have_content(deactivated_location.id)
                   expect(page).to have_content("Active from 4 April 2022 to 3 June 2022 Deactivated on 4 June 2022")
                   expect(page).to have_content("Deactivated")
                 end
@@ -856,7 +858,7 @@ RSpec.describe "Schemes scheme Features" do
                 expect(page).to have_content(location.units)
                 expect(page).to have_content(location.type_of_unit)
                 expect(page).to have_content(location.mobility_type)
-                expect(page).to have_content(location.location_code)
+                expect(page).to have_content(location.id)
                 expect(page).to have_content("Active from 4 April 2022")
                 expect(page).to have_content("Active")
               end

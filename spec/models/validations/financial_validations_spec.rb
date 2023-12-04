@@ -203,6 +203,8 @@ RSpec.describe Validations::FinancialValidations do
         financial_validator.validate_net_income(record)
         expect(record.errors["earnings"])
           .to eq(["Net income cannot be greater than £1,230.00 per week given the tenant’s working situation"])
+        expect(record.errors["ecstat1"])
+          .to eq(["Net income of £5,000.00 weekly is too high given the tenant’s working situation"])
       end
     end
 

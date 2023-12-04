@@ -209,7 +209,7 @@ RSpec.describe Csv::LettingsLogCsvService do
     let(:user) { create(:user, email: "choreographer@owtluk.com") }
 
     it "does not include certain attributes in the headers" do
-      expect(headers).not_to include(*%w[rent_type_detail wrent wscharge wpschrge wsupchrg wtcharge])
+      expect(headers).not_to include(*%w[wrent wscharge wpschrge wsupchrg wtcharge])
     end
 
     context "and exporting with labels" do

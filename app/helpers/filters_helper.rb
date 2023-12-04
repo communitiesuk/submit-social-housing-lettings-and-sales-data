@@ -132,11 +132,15 @@ module FiltersHelper
   end
 
   def user_lettings_path?
-    request.path == "/lettings-logs"
+    request.path == lettings_logs_path
   end
 
   def user_or_org_lettings_path?
     request.path.include?("/lettings-logs")
+  end
+
+  def specific_organisation_path?
+    request.path.include?("/organisations")
   end
 
   def applied_filters_count(filter_type)

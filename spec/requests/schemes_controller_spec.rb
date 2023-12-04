@@ -126,7 +126,9 @@ RSpec.describe SchemesController, type: :request do
 
           before do
             create(:location, scheme: active_scheme)
+            Timecop.freeze(Time.zone.local(2023, 11, 10))
             create(:scheme_deactivation_period, scheme: deactivated_scheme, deactivation_date: Time.zone.local(2022, 4, 1))
+            Timecop.return
           end
 
           it "shows schemes for multiple selected statuses" do
@@ -371,7 +373,9 @@ RSpec.describe SchemesController, type: :request do
 
           before do
             create(:location, scheme: active_scheme)
+            Timecop.freeze(Time.zone.local(2023, 11, 10))
             create(:scheme_deactivation_period, scheme: deactivated_scheme, deactivation_date: Time.zone.local(2022, 4, 1))
+            Timecop.return
           end
 
           it "shows schemes for multiple selected statuses" do

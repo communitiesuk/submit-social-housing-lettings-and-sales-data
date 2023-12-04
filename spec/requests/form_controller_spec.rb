@@ -254,6 +254,15 @@ RSpec.describe FormController, type: :request do
     end
 
     describe "GET" do
+      around do |example|
+        Timecop.freeze(Time.zone.local(2022, 5, 1)) do
+          Singleton.__init__(FormHandler)
+          example.run
+        end
+        Timecop.return
+        Singleton.__init__(FormHandler)
+      end
+
       context "with form pages" do
         context "when forms exist" do
           let(:lettings_log) { create(:lettings_log, :setup_completed, startdate: Time.zone.local(2022, 5, 1), owning_organisation: organisation, created_by: user) }

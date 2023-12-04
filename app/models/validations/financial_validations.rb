@@ -27,6 +27,7 @@ module Validations::FinancialValidations
     if record.ecstat1 && record.weekly_net_income
       if record.weekly_net_income > record.applicable_income_range.hard_max
         hard_max = format_as_currency(record.applicable_income_range.hard_max)
+        frequency = record.form.get_question("incfreq", record).label_from_value(record.incfreq).downcase
         record.errors.add(
           :earnings,
           :over_hard_max,
@@ -35,7 +36,7 @@ module Validations::FinancialValidations
         record.errors.add(
           :ecstat1,
           :over_hard_max,
-          message: I18n.t("validations.financial.ecstat.over_hard_max", hard_max:),
+          message: I18n.t("validations.financial.ecstat.over_hard_max", earnings: format_as_currency(record.earnings), frequency:),
         )
       end
 

@@ -717,13 +717,13 @@ RSpec.describe DuplicateLogsController, type: :request do
 
       before do
         allow(Organisation).to receive(:find).with(user.organisation_id.to_s).and_return(user.organisation)
-        allow(user.organisation).to receive(:duplicate_lettings_logs_sets).and_return([[1, 2], [3, 4, 5]])
-        allow(user.organisation).to receive(:duplicate_sales_logs_sets).and_return([[11, 12]])
+        allow(user.organisation).to receive(:editable_duplicate_lettings_logs_sets).and_return([[1, 2], [3, 4, 5]])
+        allow(user.organisation).to receive(:editable_duplicate_sales_logs_sets).and_return([[11, 12]])
       end
 
       it "gets organisation duplicates" do
-        expect(user.organisation).to receive(:duplicate_lettings_logs_sets)
-        expect(user.organisation).to receive(:duplicate_sales_logs_sets)
+        expect(user.organisation).to receive(:editable_duplicate_lettings_logs_sets)
+        expect(user.organisation).to receive(:editable_duplicate_sales_logs_sets)
         get organisation_duplicates_path(organisation_id: user.organisation_id)
       end
 
@@ -759,8 +759,8 @@ RSpec.describe DuplicateLogsController, type: :request do
         context "when there are no duplicate logs" do
           before do
             allow(Organisation).to receive(:find).with(user.organisation_id.to_s).and_return(user.organisation)
-            allow(user.organisation).to receive(:duplicate_lettings_logs_sets).and_return([])
-            allow(user.organisation).to receive(:duplicate_sales_logs_sets).and_return([])
+            allow(user.organisation).to receive(:editable_duplicate_lettings_logs_sets).and_return([])
+            allow(user.organisation).to receive(:editable_duplicate_sales_logs_sets).and_return([])
             get organisation_duplicates_path(organisation_id: user.organisation_id)
           end
 
@@ -780,13 +780,13 @@ RSpec.describe DuplicateLogsController, type: :request do
       let(:user) { create(:user, :data_coordinator) }
 
       before do
-        allow(user.organisation).to receive(:duplicate_lettings_logs_sets).and_return([[1, 2], [3, 4, 5]])
-        allow(user.organisation).to receive(:duplicate_sales_logs_sets).and_return([[11, 12]])
+        allow(user.organisation).to receive(:editable_duplicate_lettings_logs_sets).and_return([[1, 2], [3, 4, 5]])
+        allow(user.organisation).to receive(:editable_duplicate_sales_logs_sets).and_return([[11, 12]])
       end
 
       it "gets organisation duplicates" do
-        expect(user.organisation).to receive(:duplicate_lettings_logs_sets)
-        expect(user.organisation).to receive(:duplicate_sales_logs_sets)
+        expect(user.organisation).to receive(:editable_duplicate_lettings_logs_sets)
+        expect(user.organisation).to receive(:editable_duplicate_sales_logs_sets)
         get duplicate_logs_path(organisation_id: user.organisation.id)
       end
     end
@@ -795,13 +795,13 @@ RSpec.describe DuplicateLogsController, type: :request do
       let(:user) { create(:user) }
 
       before do
-        allow(user).to receive(:duplicate_lettings_logs_sets).and_return([[1, 2], [3, 4, 5]])
-        allow(user).to receive(:duplicate_sales_logs_sets).and_return([[11, 12]])
+        allow(user).to receive(:editable_duplicate_lettings_logs_sets).and_return([[1, 2], [3, 4, 5]])
+        allow(user).to receive(:editable_duplicate_sales_logs_sets).and_return([[11, 12]])
       end
 
       it "calls the helper method to retrieve duplicates for the current user" do
-        expect(user).to receive(:duplicate_lettings_logs_sets)
-        expect(user).to receive(:duplicate_sales_logs_sets)
+        expect(user).to receive(:editable_duplicate_lettings_logs_sets)
+        expect(user).to receive(:editable_duplicate_sales_logs_sets)
         get duplicate_logs_path
       end
 
@@ -836,8 +836,8 @@ RSpec.describe DuplicateLogsController, type: :request do
 
         context "when there are no duplicate logs" do
           before do
-            allow(user).to receive(:duplicate_lettings_logs_sets).and_return([])
-            allow(user).to receive(:duplicate_sales_logs_sets).and_return([])
+            allow(user).to receive(:editable_duplicate_lettings_logs_sets).and_return([])
+            allow(user).to receive(:editable_duplicate_sales_logs_sets).and_return([])
             get duplicate_logs_path
           end
 

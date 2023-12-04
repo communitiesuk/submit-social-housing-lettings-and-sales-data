@@ -1576,7 +1576,7 @@ RSpec.describe LettingsLog do
         expect { lettings_log.update!(renewal: 1) }.to change(lettings_log, :underoccupation_benefitcap).to 2
         Timecop.return
         Singleton.__init__(FormHandler)
-        expect { lettings_log.update!(startdate: Time.zone.local(2023, 1, 1)) }.to change(lettings_log, :underoccupation_benefitcap).from(2).to nil
+        expect { lettings_log.update!(startdate: Time.zone.local(2023, 4, 1)) }.to change(lettings_log, :underoccupation_benefitcap).from(2).to nil
       end
 
       context "when the log is general needs" do
@@ -2077,6 +2077,9 @@ RSpec.describe LettingsLog do
           Timecop.freeze(Time.zone.local(2022, 4, 2))
           Singleton.__init__(FormHandler)
           lettings_log.update!(startdate: Time.zone.local(2022, 4, 2), scheme:)
+        end
+
+        after do
           Timecop.unfreeze
         end
 
@@ -2122,8 +2125,13 @@ RSpec.describe LettingsLog do
 
         context "and the location no local authorities associated with the location_code" do
           before do
+            Timecop.freeze(Time.zone.local(2022, 4, 2))
             location.update!(location_code: "E01231231")
             lettings_log.update!(location:)
+          end
+
+          after do
+            Timecop.return
           end
 
           it "returns the correct la" do
@@ -2334,7 +2342,7 @@ RSpec.describe LettingsLog do
       end
     end
 
-    context "when saledate is before 2023" do
+    context "when startdate is before 2023" do
       let(:lettings_log) { build(:lettings_log, startdate: Time.zone.parse("2022-07-01")) }
 
       it "returns optional fields" do
@@ -2347,7 +2355,7 @@ RSpec.describe LettingsLog do
       end
     end
 
-    context "when saledate is after 2023" do
+    context "when startdate is after 2023" do
       let(:lettings_log) { build(:lettings_log, startdate: Time.zone.parse("2023-07-01")) }
 
       it "returns optional fields" do

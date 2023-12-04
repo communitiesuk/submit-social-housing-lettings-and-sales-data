@@ -116,6 +116,11 @@ RSpec.describe Form::Lettings::Questions::StockOwner, type: :model do
         before do
           merged_organisation.update!(merge_date: Time.zone.local(2023, 2, 2), absorbing_organisation: user.organisation)
           user.organisation.update!(available_from: Time.zone.local(2021, 2, 2))
+          Timecop.freeze(Time.zone.local(2023, 11, 10))
+        end
+
+        after do
+          Timecop.return
         end
 
         it "shows merged organisation as an option" do
@@ -137,6 +142,11 @@ RSpec.describe Form::Lettings::Questions::StockOwner, type: :model do
 
         before do
           merged_organisation.update!(merge_date: Time.zone.local(2023, 2, 2), absorbing_organisation: user.organisation)
+          Timecop.freeze(Time.zone.local(2023, 11, 10))
+        end
+
+        after do
+          Timecop.return
         end
 
         it "shows merged organisation as an option" do
@@ -156,9 +166,14 @@ RSpec.describe Form::Lettings::Questions::StockOwner, type: :model do
         end
 
         before do
+          Timecop.freeze(Time.zone.local(2023, 11, 10))
           org_rel.update!(child_organisation: merged_organisation)
           merged_organisation.update!(merge_date: Time.zone.local(2023, 2, 2), absorbing_organisation: user.organisation)
           user.organisation.update!(available_from: Time.zone.local(2021, 2, 2))
+        end
+
+        after do
+          Timecop.return
         end
 
         it "does not show merged organisations stock owners as options" do
@@ -205,6 +220,33 @@ RSpec.describe Form::Lettings::Questions::StockOwner, type: :model do
       it "shows orgs where organisation holds own stock" do
         expect(question.displayed_answer_options(log, user)).to eq(expected_opts)
         expect(question.displayed_answer_options(log, user)).not_to include(non_stock_organisation.id)
+      end
+
+      context "and org has recently absorbed other orgs and does not have available from date" do
+        let(:merged_organisation) { create(:organisation, name: "Merged org") }
+        let(:org) { create(:organisation, name: "User org") }
+        let(:options) do
+          {
+            "" => "Select an option",
+            org.id => "User org",
+            user.organisation.id => user.organisation.name,
+            log.owning_organisation.id => log.owning_organisation.name,
+            merged_organisation.id => "Merged org (inactive as of 2 February 2023)",
+          }
+        end
+
+        before do
+          merged_organisation.update!(merge_date: Time.zone.local(2023, 2, 2), absorbing_organisation: org)
+          Timecop.freeze(Time.zone.local(2023, 11, 10))
+        end
+
+        after do
+          Timecop.return
+        end
+
+        it "shows merged organisation as an option" do
+          expect(question.displayed_answer_options(log, user)).to eq(options)
+        end
       end
     end
   end

@@ -146,7 +146,7 @@ RSpec.describe LocationsHelper do
         { attribute: "units", name: "Number of units", value: location.units },
         { attribute: "type_of_unit", name: "Most common unit", value: location.type_of_unit },
         { attribute: "mobility_standards", name: "Mobility standards", value: location.mobility_type },
-        { attribute: "location_code", name: "Location code", value: location.location_code },
+        { attribute: "id", name: "Location code", value: location.id },
         { attribute: "availability", name: "Availability", value: "Active from 1 April 2022" },
       ]
 
@@ -168,7 +168,7 @@ RSpec.describe LocationsHelper do
           { attribute: "units", name: "Number of units", value: location.units },
           { attribute: "type_of_unit", name: "Most common unit", value: location.type_of_unit },
           { attribute: "mobility_standards", name: "Mobility standards", value: location.mobility_type },
-          { attribute: "location_code", name: "Location code", value: "E07000030 (until 31 March 2023)\nE06000063 (1 April 2023 - present)" },
+          { attribute: "id", name: "Location code", value: location.id },
           { attribute: "availability", name: "Availability", value: "Active from 1 April 2022" },
         ]
 
@@ -191,7 +191,7 @@ RSpec.describe LocationsHelper do
           { attribute: "units", name: "Number of units", value: location.units },
           { attribute: "type_of_unit", name: "Most common unit", value: location.type_of_unit },
           { attribute: "mobility_standards", name: "Mobility standards", value: location.mobility_type },
-          { attribute: "location_code", name: "Location code", value: "" },
+          { attribute: "id", name: "Location code", value: location.id },
           { attribute: "availability", name: "Availability", value: "Active from 1 April 2022" },
         ]
 
@@ -219,8 +219,10 @@ RSpec.describe LocationsHelper do
       context "with previous deactivations" do
         context "and all reactivated deactivations" do
           before do
+            Timecop.freeze(Time.zone.local(2023, 11, 10))
             FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 8, 10), reactivation_date: Time.zone.local(2022, 9, 1), location:)
             FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 9, 15), reactivation_date: Time.zone.local(2022, 9, 28), location:)
+            Timecop.return
             location.reload
           end
 
@@ -233,8 +235,10 @@ RSpec.describe LocationsHelper do
 
         context "and non reactivated deactivation" do
           before do
+            Timecop.freeze(Time.zone.local(2023, 11, 10))
             FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 8, 10), reactivation_date: Time.zone.local(2022, 9, 1), location:)
             FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 9, 15), reactivation_date: nil, location:)
+            Timecop.return
             location.reload
           end
 
@@ -249,8 +253,10 @@ RSpec.describe LocationsHelper do
       context "with out of order deactivations" do
         context "and all reactivated deactivations" do
           before do
+            Timecop.freeze(Time.zone.local(2023, 11, 10))
             FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 9, 24), reactivation_date: Time.zone.local(2022, 9, 28), location:)
             FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 15), reactivation_date: Time.zone.local(2022, 6, 18), location:)
+            Timecop.return
             location.reload
           end
 
@@ -263,8 +269,10 @@ RSpec.describe LocationsHelper do
 
         context "and one non reactivated deactivation" do
           before do
+            Timecop.freeze(Time.zone.local(2023, 11, 10))
             FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 9, 24), reactivation_date: Time.zone.local(2022, 9, 28), location:)
             FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 15), reactivation_date: nil, location:)
+            Timecop.return
             location.reload
           end
 
@@ -279,9 +287,11 @@ RSpec.describe LocationsHelper do
       context "with multiple out of order deactivations" do
         context "and one non reactivated deactivation" do
           before do
+            Timecop.freeze(Time.zone.local(2023, 11, 10))
             FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 9, 24), reactivation_date: Time.zone.local(2022, 9, 28), location:)
             FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 10, 24), reactivation_date: Time.zone.local(2022, 10, 28), location:)
             FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 15), reactivation_date: nil, location:)
+            Timecop.return
             location.reload
           end
 
@@ -295,8 +305,10 @@ RSpec.describe LocationsHelper do
 
       context "with intersecting deactivations" do
         before do
+          Timecop.freeze(Time.zone.local(2023, 11, 10))
           FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 10, 10), reactivation_date: Time.zone.local(2022, 12, 1), location:)
           FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 11, 11), reactivation_date: Time.zone.local(2022, 12, 11), location:)
+          Timecop.return
           location.reload
         end
 

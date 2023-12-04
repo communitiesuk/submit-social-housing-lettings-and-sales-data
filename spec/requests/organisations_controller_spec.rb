@@ -1440,6 +1440,16 @@ RSpec.describe OrganisationsController, type: :request do
             }.to enqueue_job(EmailCsvJob).with(user, nil, {}, false, organisation, codes_only_export_type)
           end
         end
+
+        context "when filters are applied" do
+          before do
+            get lettings_logs_organisation_path(organisation, status: %w[completed])
+          end
+
+          it "has clear filters link" do
+            expect(page).to have_link("Clear", href: clear_filters_path(filter_type: "lettings_logs", path_params: { organisation_id: organisation.id }))
+          end
+        end
       end
 
       context "when they view the sales logs tab" do

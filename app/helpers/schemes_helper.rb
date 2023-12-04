@@ -11,11 +11,11 @@ module SchemesHelper
       { name: "Support services provided by", value: scheme.arrangement_type },
       { name: "Primary client group", value: scheme.primary_client_group },
       { name: "Has another client group", value: scheme.has_other_client_group },
-      { name: "Secondary client group", value: scheme.secondary_client_group },
+      scheme.has_other_client_group == "Yes" ? { name: "Secondary client group", value: scheme.secondary_client_group } : nil,
       { name: "Level of support given", value: scheme.support_type },
       { name: "Intended length of stay", value: scheme.intended_stay },
       { name: "Availability", value: scheme_availability(scheme) },
-    ]
+    ].compact
   end
 
   def scheme_availability(scheme)

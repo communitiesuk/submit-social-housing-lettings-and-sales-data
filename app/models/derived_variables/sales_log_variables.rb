@@ -24,6 +24,8 @@ module DerivedVariables::SalesLogVariables
     self.hhmemb = number_of_household_members
     self.hhtype = household_type
 
+    self.uprn_known = 0 if address_answered_without_uprn?
+
     if uprn_known&.zero?
       self.uprn = nil
     end
@@ -147,5 +149,9 @@ private
 
   def only_one_elder?
     total_elder == 1 && total_adult.zero? && totchild.zero?
+  end
+
+  def address_answered_without_uprn?
+    [address_line1, town_or_city].all?(&:present?) && uprn.nil? && form.start_date.year >= 2023
   end
 end

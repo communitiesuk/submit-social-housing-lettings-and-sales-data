@@ -60,7 +60,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           cache: yarn
-          node-version: 18
+          node-version: 20
 
       - name: Create database
         run: |
@@ -118,7 +118,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           cache: yarn
-          node-version: 18
+          node-version: 20
 
       - name: Create database
         run: |
@@ -149,7 +149,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           cache: yarn
-          node-version: 18
+          node-version: 20
 
       - name: Install packages and symlink local dependencies
         run: |
@@ -238,7 +238,8 @@ jobs:
     uses: ./.github/workflows/aws_deploy.yml
     with:
       aws_account_id: 107155005276
-      aws_resource_prefix: core-staging
+      aws_role_prefix: core-staging
+      aws_task_prefix: core-staging
       environment: staging
     permissions:
       id-token: write

@@ -7,7 +7,23 @@ RSpec.describe BulkUpload::Processor do
   let(:user) { create(:user, organisation: owning_org) }
   let(:owning_org) { create(:organisation, old_visible_id: 123) }
 
+  around do |example|
+    Timecop.freeze(Time.utc(2023, 1, 1)) do
+      Singleton.__init__(FormHandler)
+      example.run
+    end
+  end
+
   describe "#call" do
+    before do
+      Timecop.freeze(Time.zone.local(2023, 11, 10))
+      Singleton.__init__(FormHandler)
+    end
+
+    after do
+      Timecop.return
+    end
+
     context "when errors exist from prior job run" do
       let!(:existing_error) { create(:bulk_upload_error, bulk_upload:) }
 

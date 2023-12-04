@@ -15,8 +15,8 @@ class User < ApplicationRecord
   validates :email, uniqueness: { allow_blank: true, case_sensitive: true, if: :will_save_change_to_email? }
   validates :email, format: { with: Devise.email_regexp, allow_blank: true, if: :will_save_change_to_email? }
   validates :password, presence: { if: :password_required? }
-  validates :password, confirmation: { if: :password_required? }
   validates :password, length: { within: Devise.password_length, allow_blank: true }
+  validates :password, confirmation: { if: :password_required? }
 
   after_validation :send_data_protection_confirmation_reminder, if: :is_dpo_changed?
 
@@ -203,12 +203,12 @@ class User < ApplicationRecord
     super && active?
   end
 
-  def duplicate_lettings_logs_sets
-    lettings_logs.duplicate_sets(id).map { |array_str| array_str ? array_str.map(&:to_i) : [] }
+  def editable_duplicate_lettings_logs_sets
+    lettings_logs.after_date(FormHandler.instance.lettings_earliest_open_for_editing_collection_start_date).duplicate_sets(id).map { |array_str| array_str ? array_str.map(&:to_i) : [] }
   end
 
-  def duplicate_sales_logs_sets
-    sales_logs.duplicate_sets(id).map { |array_str| array_str ? array_str.map(&:to_i) : [] }
+  def editable_duplicate_sales_logs_sets
+    sales_logs.after_date(FormHandler.instance.sales_earliest_open_for_editing_collection_start_date).duplicate_sets(id).map { |array_str| array_str ? array_str.map(&:to_i) : [] }
   end
 
 protected

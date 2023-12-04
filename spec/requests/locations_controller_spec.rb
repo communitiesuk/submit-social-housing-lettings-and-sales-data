@@ -128,7 +128,9 @@ RSpec.describe LocationsController, type: :request do
           let!(:deactivated_location) { create(:location, scheme:, startdate: Time.zone.local(2022, 4, 1)) }
 
           before do
+            Timecop.freeze(Time.zone.local(2023, 11, 10))
             create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 4, 1), location: deactivated_location)
+            Timecop.return
           end
 
           it "shows locations for multiple selected statuses" do

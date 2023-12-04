@@ -177,8 +177,10 @@ RSpec.describe SchemesHelper do
         context "with previous deactivations" do
           context "and all reactivated deactivations" do
             before do
+              Timecop.freeze(Time.zone.local(2023, 11, 10))
               FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 8, 10), reactivation_date: Time.zone.local(2022, 9, 1), scheme:)
               FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 9, 15), reactivation_date: Time.zone.local(2022, 9, 28), scheme:)
+              Timecop.return
               scheme.reload
             end
 
@@ -191,8 +193,10 @@ RSpec.describe SchemesHelper do
 
           context "and non reactivated deactivation" do
             before do
+              Timecop.freeze(Time.zone.local(2023, 11, 10))
               FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 8, 10), reactivation_date: Time.zone.local(2022, 9, 1), scheme:)
               FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 9, 15), reactivation_date: nil, scheme:)
+              Timecop.return
               scheme.reload
             end
 
@@ -207,8 +211,10 @@ RSpec.describe SchemesHelper do
         context "with out of order deactivations" do
           context "and all reactivated deactivations" do
             before do
+              Timecop.freeze(Time.zone.local(2023, 11, 10))
               FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 9, 24), reactivation_date: Time.zone.local(2022, 9, 28), scheme:)
               FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 15), reactivation_date: Time.zone.local(2022, 6, 18), scheme:)
+              Timecop.return
               scheme.reload
             end
 
@@ -221,8 +227,10 @@ RSpec.describe SchemesHelper do
 
           context "and one non reactivated deactivation" do
             before do
+              Timecop.freeze(Time.zone.local(2023, 11, 10))
               FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 9, 24), reactivation_date: Time.zone.local(2022, 9, 28), scheme:)
               FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 15), reactivation_date: nil, scheme:)
+              Timecop.return
               scheme.reload
             end
 
@@ -237,9 +245,11 @@ RSpec.describe SchemesHelper do
         context "with multiple out of order deactivations" do
           context "and one non reactivated deactivation" do
             before do
+              Timecop.freeze(Time.zone.local(2023, 11, 10))
               FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 9, 24), reactivation_date: Time.zone.local(2022, 9, 28), scheme:)
               FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 10, 24), reactivation_date: Time.zone.local(2022, 10, 28), scheme:)
               FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 15), reactivation_date: nil, scheme:)
+              Timecop.return
               scheme.reload
             end
 
@@ -253,8 +263,10 @@ RSpec.describe SchemesHelper do
 
         context "with intersecting deactivations" do
           before do
+            Timecop.freeze(Time.zone.local(2023, 11, 10))
             FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 10, 10), reactivation_date: Time.zone.local(2022, 12, 1), scheme:)
             FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 11, 11), reactivation_date: Time.zone.local(2022, 12, 11), scheme:)
+            Timecop.return
             scheme.reload
           end
 
@@ -264,6 +276,31 @@ RSpec.describe SchemesHelper do
             expect(availability_attribute).to eq("Active from 1 April 2021 to 9 October 2022\nDeactivated on 10 October 2022\nActive from 11 December 2022")
           end
         end
+      end
+    end
+
+    context "when scheme has no secondary client group" do
+      before do
+        scheme.update!(has_other_client_group: 0)
+      end
+
+      it "returns correct display attributes" do
+        attributes = [
+          { name: "Scheme code", value: "S#{scheme.id}" },
+          { name: "Name", value: "Test service_name", edit: true },
+          { name: "Status", value: status_tag(:incomplete) },
+          { name: "Confidential information", value: "No", edit: true },
+          { name: "Type of scheme", value: "Housing for older people" },
+          { name: "Registered under Care Standards Act 2000", value: "Yes – registered care home providing personal care" },
+          { name: "Housing stock owned by", value: "Acme LTD Owning", edit: true },
+          { name: "Support services provided by", value: "A registered charity or voluntary organisation" },
+          { name: "Primary client group", value: "Rough sleepers" },
+          { name: "Has another client group", value: "No" },
+          { name: "Level of support given", value: "High level" },
+          { name: "Intended length of stay", value: "Permanent" },
+          { name: "Availability", value: "Active from 1 April 2021" },
+        ]
+        expect(display_scheme_attributes(scheme)).to eq(attributes)
       end
     end
   end
