@@ -318,6 +318,7 @@ class SalesLog < Log
     return unless updated_by&.support?
     return if owning_organisation.blank? || created_by.blank?
     return if created_by&.organisation == owning_organisation
+    return if created_by&.organisation == owning_organisation.absorbing_organisation
 
     update!(created_by: nil)
   end
