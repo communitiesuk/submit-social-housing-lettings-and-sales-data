@@ -2229,12 +2229,14 @@ RSpec.describe SchemesController, type: :request do
           get "/schemes/#{scheme.id}/edit-name"
         end
 
-        it "does not include the owning organisation question" do
-          expect(response).to have_http_status(:ok)
-          expect(page).not_to have_content("Which organisation owns the housing stock for this scheme?")
+        context "and there are no absorbed organisations" do
+          it "does not include the owning organisation question" do
+            expect(response).to have_http_status(:ok)
+            expect(page).not_to have_content("Which organisation owns the housing stock for this scheme?")
+          end
         end
 
-        context "and there are absorbed organisations" do
+        context "and there are organisations absorbed during an open collection period" do
           let(:merged_organisation) { create(:organisation) }
 
           before do
@@ -2245,6 +2247,20 @@ RSpec.describe SchemesController, type: :request do
           it "includes the owning organisation question" do
             expect(response).to have_http_status(:ok)
             expect(page).to have_content("Which organisation owns the housing stock for this scheme?")
+          end
+        end
+
+        context "and there are no recently absorbed organisations" do
+          let(:merged_organisation) { create(:organisation) }
+
+          before do
+            merged_organisation.update!(absorbing_organisation: user.organisation, merge_date: Time.zone.today - 2.years)
+            get "/schemes/#{scheme.id}/edit-name"
+          end
+
+          it "does not include the owning organisation question" do
+            expect(response).to have_http_status(:ok)
+            expect(page).not_to have_content("Which organisation owns the housing stock for this scheme?")
           end
         end
       end
