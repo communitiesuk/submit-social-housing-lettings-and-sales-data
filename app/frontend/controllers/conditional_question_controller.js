@@ -14,7 +14,10 @@ export default class extends Controller {
 
       Object.entries(conditionalFor).forEach(([targetQuestion, conditions]) => {
         if (!conditions.map(String).includes(String(selectedValue))) {
-          const textNumericInput = document.getElementById(`${type}-${targetQuestion.replaceAll('_', '-')}-field`)
+          let textNumericInput = document.getElementById(`${type}-${targetQuestion.replaceAll('_', '-')}-field`)
+          if (textNumericInput == null) {
+            textNumericInput = document.getElementById(`${type}-${targetQuestion.replaceAll('_', '-')}-field-error`)
+          }
           if (textNumericInput == null) {
             const dateInputs = [1, 2, 3].map((idx) => {
               return document.getElementById(`${type.replaceAll('-', '_')}_${targetQuestion}_${idx}i`)
