@@ -4,15 +4,6 @@ module LogsHelper
     when "LettingsLogsController" then "lettings"
     when "SalesLogsController" then "sales"
     else
-      raise "Log type not found for #{controller.class}"
-    end
-  end
-
-  def page_title
-    case controller.class.name
-    when "LettingsLogsController" then "Lettings logs"
-    when "SalesLogsController" then "Sales logs"
-    else
       case action_name
       when "lettings_logs" then "Lettings logs"
       when "sales_logs" then "Sales logs"

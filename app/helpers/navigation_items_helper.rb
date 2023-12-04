@@ -12,9 +12,9 @@ module NavigationItemsHelper
       ].compact
     else
       [
-        NavigationItem.new("Lettings logs", lettings_logs_organisation_path(current_user.organisation), lettings_logs_current?(path)),
-        NavigationItem.new("Sales logs", sales_logs_organisation_path(current_user.organisation), sales_logs_current?(path)),
-        (NavigationItem.new("Schemes", schemes_organisation_path(current_user.organisation), non_support_supported_housing_schemes_current?(path)) if current_user.organisation.holds_own_stock? || current_user.organisation.stock_owners.present?),
+        NavigationItem.new("Lettings logs", lettings_logs_path, lettings_logs_current?(path)),
+        NavigationItem.new("Sales logs", sales_logs_path, sales_logs_current?(path)),
+        (NavigationItem.new("Schemes", schemes_path, non_support_supported_housing_schemes_current?(path)) if current_user.organisation.holds_own_stock? || current_user.organisation.stock_owners.present?),
         NavigationItem.new("Users", users_organisation_path(current_user.organisation), subnav_users_path?(path)),
         NavigationItem.new("About your organisation", details_organisation_path(current_user.organisation.id), subnav_details_path?(path)),
         NavigationItem.new("Stock owners", stock_owners_organisation_path(current_user.organisation), stock_owners_path?(path)),

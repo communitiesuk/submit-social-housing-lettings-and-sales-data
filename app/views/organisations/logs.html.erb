@@ -1,5 +1,5 @@
 <% item_label = format_label(@pagy.count, "logs") %>
-<% title = format_title(@searched, page_title, current_user, item_label, @pagy.count, @organisation.name) %>
+<% title = format_title(@searched, "#{log_type_for_controller(controller).capitalize} logs", current_user, item_label, @pagy.count, @organisation.name) %>
 
 <% content_for :title, title %>
 
