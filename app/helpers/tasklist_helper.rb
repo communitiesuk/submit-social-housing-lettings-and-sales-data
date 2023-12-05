@@ -2,14 +2,18 @@ module TasklistHelper
   include GovukLinkHelper
   include CollectionTimeHelper
 
-  def breadcrumb_logs_title(log)
+  def breadcrumb_logs_title(log, current_user)
     log_type = log.lettings? ? "Lettings" : "Sales"
-    current_user.support? ? "#{log_type} logs (#{log.owning_organisation.name})" : "#{log_type} logs"
+    if current_user.support? && breadcrumb_organisation(log).present?
+      "#{log_type} logs (#{breadcrumb_organisation(log).name})"
+    else
+      "#{log_type} logs"
+    end
   end
 
-  def breadcrumb_logs_link(log)
-    if current_user.support?
-      log.lettings? ? lettings_logs_organisation_path(@log.owning_organisation) : sales_logs_organisation_path(@log.owning_organisation)
+  def breadcrumb_logs_link(log, current_user)
+    if current_user.support? && breadcrumb_organisation(log).present?
+      log.lettings? ? lettings_logs_organisation_path(breadcrumb_organisation(log)) : sales_logs_organisation_path(breadcrumb_organisation(log))
     else
       log.lettings? ? lettings_logs_path : sales_logs_path
     end
@@ -55,6 +59,10 @@ module TasklistHelper
   end
 
 private
+
+  def breadcrumb_organisation(log)
+    log.owning_organisation || (log.managing_organisation if log.respond_to?(:managing_organisation))
+  end
 
   def next_page_or_check_answers(subsection, log, current_user)
     path = if subsection.is_started?(log)
