@@ -1,5 +1,5 @@
 <% item_label = format_label(@pagy.count, "logs") %>
-<% title = format_title(@searched, "#{log_type_for_controller(controller).capitalize} logs", current_user, item_label, @pagy.count, @organisation.name) %>
+<% title = format_title(@searched, "#{log_type_for_action(action_name).capitalize} logs", current_user, item_label, @pagy.count, @organisation.name) %>
 
 <% content_for :title, title %>
 
@@ -28,7 +28,7 @@
 
   <%= render partial: "logs/log_filters" %>
   <div class="app-filter-layout__content">
-    <%= render SearchComponent.new(current_user:, search_label: "Search by log ID, tenant code, property reference or postcode", value: @searched) %>
+    <%= render SearchComponent.new(current_user:, search_label: search_label_for_action(action_name), value: @searched) %>
     <%= govuk_section_break(visible: true, size: "m") %>
     <%= render partial: "logs/log_list",
                locals: {

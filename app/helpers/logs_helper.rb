@@ -4,12 +4,16 @@ module LogsHelper
     when "LettingsLogsController" then "lettings"
     when "SalesLogsController" then "sales"
     else
-      case action_name
-      when "lettings_logs" then "Lettings logs"
-      when "sales_logs" then "Sales logs"
-      else
-        raise "Log type not found for #{controller.class}, #{action_name}"
-      end
+      raise "Log type not found for #{controller.class}"
+    end
+  end
+
+  def log_type_for_action(action_name)
+    case action_name
+    when "lettings_logs" then "lettings"
+    when "sales_logs" then "sales"
+    else
+      raise "Log type not found for #{action_name}"
     end
   end
 
@@ -20,6 +24,13 @@ module LogsHelper
 
   def search_label_for_controller(controller)
     case log_type_for_controller(controller)
+    when "lettings" then "Search by log ID, tenant code, property reference or postcode"
+    when "sales" then "Search by log ID, purchaser code or postcode"
+    end
+  end
+
+  def search_label_for_action(action_name)
+    case log_type_for_action(action_name)
     when "lettings" then "Search by log ID, tenant code, property reference or postcode"
     when "sales" then "Search by log ID, purchaser code or postcode"
     end
