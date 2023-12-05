@@ -2,6 +2,19 @@ module TasklistHelper
   include GovukLinkHelper
   include CollectionTimeHelper
 
+  def breadcrumb_logs_title(log)
+    log_type = log.lettings? ? "Lettings" : "Sales"
+    current_user.support? ? "#{log_type} logs (#{log.owning_organisation.name})" : "#{log_type} logs"
+  end
+
+  def breadcrumb_logs_link(log)
+    if current_user.support?
+      log.lettings? ? lettings_logs_organisation_path(@log.owning_organisation) : sales_logs_organisation_path(@log.owning_organisation)
+    else
+      log.lettings? ? lettings_logs_path : sales_logs_path
+    end
+  end
+
   def get_next_incomplete_section(log)
     log.form.subsections.find { |subsection| subsection.is_incomplete?(log) }
   end
