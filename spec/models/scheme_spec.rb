@@ -123,7 +123,7 @@ RSpec.describe Scheme, type: :model do
         let(:deactivated_scheme_2) { FactoryBot.create(:scheme) }
         let(:reactivating_soon_scheme) { FactoryBot.create(:scheme) }
         let(:reactivating_soon_scheme_2) { FactoryBot.create(:scheme) }
-        let(:activating_soon_scheme) { FactoryBot.create(:scheme, startdate: Time.zone.today + 1.week)}
+        let(:activating_soon_scheme) { FactoryBot.create(:scheme, startdate: Time.zone.today + 1.week) }
 
         before do
           scheme.destroy!
