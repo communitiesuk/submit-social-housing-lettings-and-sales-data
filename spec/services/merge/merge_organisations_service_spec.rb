@@ -305,6 +305,9 @@ RSpec.describe Merge::MergeOrganisationsService do
         context "and merging organisation schemes and locations" do
           let!(:scheme) { create(:scheme, owning_organisation: merging_organisation) }
           let!(:location) { create(:location, scheme:) }
+          let!(:location_without_startdate) { create(:location, scheme:, startdate: nil) }
+          let!(:location_with_past_startdate) { create(:location, scheme:, startdate: Time.zone.today - 2.months) }
+          let!(:location_with_future_startdate) { create(:location, scheme:, startdate: Time.zone.today + 2.months) }
           let!(:deactivated_location) { create(:location, scheme:) }
           let!(:deactivated_scheme) { create(:scheme, owning_organisation: merging_organisation) }
           let!(:owned_lettings_log) { create(:lettings_log, :sh, scheme:, location:, startdate: Time.zone.tomorrow, owning_organisation: merging_organisation) }
@@ -329,8 +332,12 @@ RSpec.describe Merge::MergeOrganisationsService do
             absorbing_organisation.reload
             expect(absorbing_organisation.owned_schemes.count).to eq(1)
             expect(absorbing_organisation.owned_schemes.first.service_name).to eq(scheme.service_name)
-            expect(absorbing_organisation.owned_schemes.first.locations.count).to eq(1)
-            expect(absorbing_organisation.owned_schemes.first.locations.first.postcode).to eq(location.postcode)
+            expect(absorbing_organisation.owned_schemes.first.startdate).to eq(Time.zone.yesterday)
+            expect(absorbing_organisation.owned_schemes.first.locations.count).to eq(4)
+            expect(absorbing_organisation.owned_schemes.first.locations.map(&:postcode)).to match_array([location, location_without_startdate, location_with_past_startdate, location_with_future_startdate].map(&:postcode))
+            expect(absorbing_organisation.owned_schemes.first.locations.find_by(postcode: location_without_startdate.postcode).startdate).to eq(Time.zone.yesterday)
+            expect(absorbing_organisation.owned_schemes.first.locations.find_by(postcode: location_with_past_startdate.postcode).startdate).to eq(Time.zone.yesterday)
+            expect(absorbing_organisation.owned_schemes.first.locations.find_by(postcode: location_with_future_startdate.postcode).startdate).to eq(Time.zone.today + 2.months)
             expect(scheme.scheme_deactivation_periods.count).to eq(1)
             expect(scheme.scheme_deactivation_periods.first.deactivation_date.to_date).to eq(Time.zone.yesterday)
           end
