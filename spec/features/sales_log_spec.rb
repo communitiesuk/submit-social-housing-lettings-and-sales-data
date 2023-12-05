@@ -22,7 +22,7 @@ RSpec.describe "Sales Log Features" do
       context "when returning to the list of logs via breadcrumbs link" do
         before do
           click_button("Create a new sales log")
-          click_link("Logs")
+          find("a.govuk-breadcrumbs__link", text: "Sales logs").click
         end
 
         it "navigates you to the sales logs page" do

@@ -173,6 +173,7 @@ RSpec.describe "Schemes scheme Features" do
 
     context "when viewing individual scheme" do
       let!(:schemes) { FactoryBot.create_list(:scheme, 5) }
+      let!(:same_organisation_schemes)  { FactoryBot.create_list(:scheme, 5, owning_organisation: user.organisation) }
 
       context "when I visit schemes page" do
         before do
@@ -180,7 +181,7 @@ RSpec.describe "Schemes scheme Features" do
         end
 
         context "when I click to see individual scheme" do
-          let(:scheme) { schemes.first }
+          let(:scheme) { same_organisation_schemes.first }
 
           before do
             click_link(scheme.service_name)
@@ -204,9 +205,9 @@ RSpec.describe "Schemes scheme Features" do
               click_link(scheme.service_name)
             end
 
-            it "shows list of links to schemes" do
-              click_on("Back")
-              schemes.each do |scheme|
+            it "shows list of links to the organisation's schemes" do
+              click_on("Schemes (DLUHC)")
+              same_organisation_schemes.each do |scheme|
                 expect(page).to have_link(scheme.service_name)
                 expect(page).to have_content(scheme.id_to_display)
                 expect(page).to have_content(scheme.locations&.count)

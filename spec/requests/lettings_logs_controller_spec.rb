@@ -345,7 +345,7 @@ RSpec.describe LettingsLogsController, type: :request do
 
           it "page has correct title" do
             get "/lettings-logs", headers:, params: {}
-            expect(page).to have_title("Logs - Submit social housing lettings and sales data (CORE) - GOV.UK")
+            expect(page).to have_title("Lettings logs - Submit social housing lettings and sales data (CORE) - GOV.UK")
           end
         end
 
@@ -652,7 +652,7 @@ RSpec.describe LettingsLogsController, type: :request do
 
           it "has search results in the title" do
             get "/lettings-logs?search=#{log_to_search.id}", headers:, params: {}
-            expect(page).to have_title("Logs (1 logs matching ‘#{log_to_search.id}’) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+            expect(page).to have_title("Lettings logs (1 logs matching ‘#{log_to_search.id}’) - Submit social housing lettings and sales data (CORE) - GOV.UK")
           end
 
           it "shows lettings logs matching the id" do
@@ -716,12 +716,12 @@ RSpec.describe LettingsLogsController, type: :request do
 
             it "has title with pagination details for page 1" do
               get "/lettings-logs?search=#{logs[0].postcode_full}", headers:, params: {}
-              expect(page).to have_title("Logs (#{logs.count} logs matching ‘#{postcode}’) (page 1 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+              expect(page).to have_title("Lettings logs (#{logs.count} logs matching ‘#{postcode}’) (page 1 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
             end
 
             it "has title with pagination details for page 2" do
               get "/lettings-logs?search=#{logs[0].postcode_full}&page=2", headers:, params: {}
-              expect(page).to have_title("Logs (#{logs.count} logs matching ‘#{postcode}’) (page 2 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+              expect(page).to have_title("Lettings logs (#{logs.count} logs matching ‘#{postcode}’) (page 2 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
             end
           end
 
@@ -801,7 +801,7 @@ RSpec.describe LettingsLogsController, type: :request do
           end
 
           it "does not have pagination in the title" do
-            expect(page).to have_title("Logs - Submit social housing lettings and sales data (CORE) - GOV.UK")
+            expect(page).to have_title("Lettings logs - Submit social housing lettings and sales data (CORE) - GOV.UK")
           end
 
           it "shows the CSV download link" do
@@ -872,7 +872,7 @@ RSpec.describe LettingsLogsController, type: :request do
             end
 
             it "has pagination in the title" do
-              expect(page).to have_title("Logs (page 1 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+              expect(page).to have_title("Lettings logs (page 1 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
             end
           end
 
@@ -897,7 +897,7 @@ RSpec.describe LettingsLogsController, type: :request do
             end
 
             it "has pagination in the title" do
-              expect(page).to have_title("Logs (page 2 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+              expect(page).to have_title("Lettings logs (page 2 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
             end
           end
         end

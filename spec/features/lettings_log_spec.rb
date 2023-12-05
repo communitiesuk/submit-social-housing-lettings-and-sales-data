@@ -439,7 +439,7 @@ RSpec.describe "Lettings Log Features" do
       before do
         visit("/lettings-logs")
         click_button("Create a new lettings log")
-        click_link("Logs")
+        find("a.govuk-breadcrumbs__link", text: "Lettings logs").click
       end
 
       it "navigates you to the lettings logs page" do
