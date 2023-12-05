@@ -299,7 +299,6 @@ RSpec.describe Scheme, type: :model do
       end
 
       it "returns activating soon if the scheme has a future startdate" do
-        Timecop.freeze(2022, 6, 4)
         scheme.startdate = Time.zone.local(2022, 7, 7)
         scheme.save!
         expect(scheme.status).to eq(:activating_soon)
