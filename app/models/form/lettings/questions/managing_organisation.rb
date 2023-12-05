@@ -35,13 +35,21 @@ class Form::Lettings::Questions::ManagingOrganisation < ::Form::Question
              user.organisation.managing_agents + log.owning_organisation.managing_agents
            else
              user.organisation.managing_agents
-           end.pluck(:id, :name).to_h
+           end
 
     user.organisation.absorbed_organisations.each do |absorbed_org|
       opts[absorbed_org.id] = "#{absorbed_org.name} (inactive as of #{absorbed_org.merge_date.to_fs(:govuk_date)})"
     end
 
-    opts.merge(orgs)
+    orgs.each do |org|
+      opts[org.id] = if org.merge_date.present?
+                       "#{org.name} (inactive as of #{org.merge_date.to_fs(:govuk_date)})"
+                     else
+                       org.name
+                     end
+    end
+
+    opts
   end
 
   def displayed_answer_options(log, user)

@@ -24,7 +24,7 @@
           Sale completed <time datetime="<%= log.saledate.iso8601 %>"><%= log.saledate.to_formatted_s(:govuk_date) %></time>
         <% end %>
       </p>
-      <% if current_user.support? || current_user.organisation.has_managing_agents? %>
+      <% if current_user.support? || current_user.organisation.has_managing_agents? || current_user.organisation.has_recent_absorbed_organisations? %>
         <dl class="app-metadata">
           <% if log.owning_organisation %>
             <div class="app-metadata__item">

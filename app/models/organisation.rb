@@ -146,4 +146,8 @@ class Organisation < ApplicationRecord
 
     absorbed_organisations.merged_during_open_collection_period.group_by(&:merge_date)
   end
+
+  def has_recent_absorbed_organisations?
+    absorbed_organisations&.merged_during_open_collection_period.present?
+  end
 end

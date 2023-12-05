@@ -277,6 +277,20 @@ RSpec.describe LettingsLogsController, type: :request do
             expect(page).not_to have_link "Delete logs"
           end
         end
+
+        context "and organisation has absorbed organisations" do
+          let(:merged_organisation) { FactoryBot.create(:organisation) }
+
+          before do
+            merged_organisation.update!(absorbing_organisation: organisation, merge_date: Time.zone.yesterday)
+          end
+
+          it "shows organisation labels" do
+            get "/lettings-logs", headers:, params: {}
+            expect(page).to have_content("Owned by")
+            expect(page).to have_content("Managed by")
+          end
+        end
       end
 
       context "when the user is a customer support user" do

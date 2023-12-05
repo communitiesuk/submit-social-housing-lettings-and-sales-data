@@ -559,6 +559,26 @@ RSpec.describe SalesLogsController, type: :request do
           sign_in user
         end
 
+        it "does not show organisation labels" do
+          get "/sales-logs", headers: headers, params: {}
+          expect(page).not_to have_content("Owned by")
+          expect(page).not_to have_content("Managed by")
+        end
+
+        context "and organisation has absorbed organisations" do
+          let(:merged_organisation) { FactoryBot.create(:organisation) }
+
+          before do
+            merged_organisation.update!(absorbing_organisation: organisation, merge_date: Time.zone.yesterday)
+          end
+
+          it "shows organisation labels" do
+            get "/sales-logs", headers: headers, params: {}
+            expect(page).to have_content("Owned by")
+            expect(page).not_to have_content("Managed by")
+          end
+        end
+
         it "does not have organisation columns" do
           get "/sales-logs", headers: headers, params: {}
           expect(page).not_to have_content("Owning organisation")
