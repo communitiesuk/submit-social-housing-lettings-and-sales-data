@@ -8,9 +8,7 @@
   }) %>
 <% else %>
   <% content_for :before_content do %>
-    <%= govuk_back_link(
-          href: schemes_path,
-          ) %>
+    <%= govuk_back_link(href: schemes_path) %>
   <% end %>
 <% end %>
 

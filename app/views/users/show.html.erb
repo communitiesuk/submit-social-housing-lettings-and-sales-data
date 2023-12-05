@@ -7,9 +7,7 @@
   }) %>
 <% else %>
   <% content_for :before_content do %>
-    <%= govuk_back_link(
-          href: users_path,
-          ) %>
+  <%= govuk_back_link(href: users_path) %>
   <% end %>
 <% end %>
 
