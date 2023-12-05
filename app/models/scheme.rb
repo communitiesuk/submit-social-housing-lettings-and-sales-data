@@ -65,6 +65,10 @@ class Scheme < ApplicationRecord
     .where("scheme_deactivation_periods.reactivation_date > ?", Time.zone.now)
   }
 
+  scope :activating_soon, lambda {
+    where("startdate > ?", Time.zone.now)
+  }
+
   scope :active_status, lambda {
     where.not(id: joins(:scheme_deactivation_periods).reactivating_soon.pluck(:id))
     .where.not(id: joins(:scheme_deactivation_periods).deactivated.pluck(:id))
