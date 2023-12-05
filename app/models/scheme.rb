@@ -74,6 +74,7 @@ class Scheme < ApplicationRecord
     .where.not(id: joins(:scheme_deactivation_periods).deactivated.pluck(:id))
     .where.not(id: incomplete.pluck(:id))
     .where.not(id: joins(:scheme_deactivation_periods).deactivating_soon.pluck(:id))
+    .where.not(id: activating_soon.pluck(:id))
   }
 
   validate :validate_confirmed
