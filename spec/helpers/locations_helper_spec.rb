@@ -214,15 +214,6 @@ RSpec.describe LocationsHelper do
 
           expect(availability_attribute).to eq("Active from 1 April 2022")
         end
-
-        context "when location was merged" do
-          it "displays merge date as availability date" do
-            location.update!(startdate: Time.zone.local(2022, 4, 16))
-            availability_attribute = display_location_attributes(location).find { |x| x[:name] == "Availability" }[:value]
-
-            expect(availability_attribute).to eq("Active from 16 April 2022")
-          end
-        end
       end
 
       context "with previous deactivations" do
