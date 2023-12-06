@@ -849,11 +849,11 @@ RSpec.describe Merge::MergeOrganisationsService do
       end
 
       it "sends a merge completion E-mail to the original absorbing organisation users" do
-        expect(MergeCompletionMailer).to receive(:send_absorbing_organisation_success_mail).with(absorbing_organisation.data_protection_officers.first.email, "fake org", "absorbing org", Time.zone.today).once
-        expect(MergeCompletionMailer).to receive(:send_absorbing_organisation_success_mail).with(absorbing_organisation_user.email, "fake org", "absorbing org", Time.zone.today).once
+        expect(MergeCompletionMailer).to receive(:send_absorbing_organisation_success_mail).with(absorbing_organisation.data_protection_officers.first.email, ["fake org"], "absorbing org", Time.zone.today).once
+        expect(MergeCompletionMailer).to receive(:send_absorbing_organisation_success_mail).with(absorbing_organisation_user.email, ["fake org"], "absorbing org", Time.zone.today).once
 
-        expect(MergeCompletionMailer).not_to receive(:send_absorbing_organisation_success_mail).with(merging_organisation_user.email, "fake org", "absorbing org", Time.zone.today)
-        expect(MergeCompletionMailer).not_to receive(:send_absorbing_organisation_success_mail).with(merging_organisation.data_protection_officers.first.email, "fake org", "absorbing org", Time.zone.today)
+        expect(MergeCompletionMailer).not_to receive(:send_absorbing_organisation_success_mail).with(merging_organisation_user.email, ["fake org"], "absorbing org", Time.zone.today)
+        expect(MergeCompletionMailer).not_to receive(:send_absorbing_organisation_success_mail).with(merging_organisation.data_protection_officers.first.email, ["fake org"], "absorbing org", Time.zone.today)
 
         merge_organisations_service.call
       end
@@ -976,14 +976,14 @@ RSpec.describe Merge::MergeOrganisationsService do
         end
 
         it "sends a merge completion E-mail to the original absorbing organisation users" do
-          expect(MergeCompletionMailer).to receive(:send_absorbing_organisation_success_mail).with(absorbing_organisation.data_protection_officers.first.email, "fake org, second org", "absorbing org", Time.zone.today).once
-          expect(MergeCompletionMailer).to receive(:send_absorbing_organisation_success_mail).with(absorbing_organisation_user.email, "fake org, second org", "absorbing org", Time.zone.today).once
+          expect(MergeCompletionMailer).to receive(:send_absorbing_organisation_success_mail).with(absorbing_organisation.data_protection_officers.first.email, ["fake org", "second org"], "absorbing org", Time.zone.today).once
+          expect(MergeCompletionMailer).to receive(:send_absorbing_organisation_success_mail).with(absorbing_organisation_user.email, ["fake org", "second org"], "absorbing org", Time.zone.today).once
 
-          expect(MergeCompletionMailer).not_to receive(:send_absorbing_organisation_success_mail).with(merging_organisation_user.email, "fake org, second org", "absorbing org", Time.zone.today)
-          expect(MergeCompletionMailer).not_to receive(:send_absorbing_organisation_success_mail).with(merging_organisation.data_protection_officers.first.email, "fake org, second org", "absorbing org", Time.zone.today)
+          expect(MergeCompletionMailer).not_to receive(:send_absorbing_organisation_success_mail).with(merging_organisation_user.email, ["fake org", "second org"], "absorbing org", Time.zone.today)
+          expect(MergeCompletionMailer).not_to receive(:send_absorbing_organisation_success_mail).with(merging_organisation.data_protection_officers.first.email, ["fake org", "second org"], "absorbing org", Time.zone.today)
 
           merging_organisation_too.users.each do |user|
-            expect(MergeCompletionMailer).not_to receive(:send_absorbing_organisation_success_mail).with(user.email, "second org", "absorbing org", Time.zone.today)
+            expect(MergeCompletionMailer).not_to receive(:send_absorbing_organisation_success_mail).with(user.email, ["fake org", "second org"], "absorbing org", Time.zone.today)
           end
 
           merge_organisations_service.call

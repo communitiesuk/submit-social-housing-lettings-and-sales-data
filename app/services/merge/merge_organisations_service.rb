@@ -158,7 +158,7 @@ private
       if merged_user.present?
         MergeCompletionMailer.send_merged_organisation_success_mail(merged_user[:email], merged_organisation, @absorbing_organisation.name, @merge_date).deliver_later
       else
-        MergeCompletionMailer.send_absorbing_organisation_success_mail(user.email, @merging_organisations.map(&:name).join(", "), @absorbing_organisation.name, @merge_date).deliver_later
+        MergeCompletionMailer.send_absorbing_organisation_success_mail(user.email, @merging_organisations.map(&:name), @absorbing_organisation.name, @merge_date).deliver_later
       end
     end
   end
