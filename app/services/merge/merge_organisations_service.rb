@@ -153,9 +153,12 @@ private
   end
 
   def send_success_emails
-    @merged_users.each do |organisation_name, users|
-      users.each do |user|
-        MergeCompletionMailer.send_merge_completion_mail(user[:email], organisation_name, @absorbing_organisation.name, @merge_date).deliver_later
+    @absorbing_organisation.users.each do |user|
+      merged_organisation, merged_user = find_merged_user_and_organization_by_email(user.email)
+      if merged_user.present?
+        MergeCompletionMailer.send_merged_organisation_success_mail(merged_user[:email], merged_organisation, @absorbing_organisation.name, @merge_date).deliver_later
+      else
+        MergeCompletionMailer.send_absorbing_organisation_success_mail(user.email, @merging_organisations.map(&:name).join(", "), @absorbing_organisation.name, @merge_date).deliver_later
       end
     end
   end
@@ -233,5 +236,13 @@ private
       new_deactivation_period.save!(validate: false)
       deactivation_period.destroy!
     end
+  end
+
+  def find_merged_user_and_organization_by_email(provided_email)
+    @merged_users.each do |org, users|
+      user = users.find { |u| u[:email] == provided_email }
+      return org, user if user
+    end
+    nil
   end
 end
