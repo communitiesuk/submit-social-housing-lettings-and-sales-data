@@ -10,7 +10,7 @@
   }) %>
 <% else %>
   <% content_for :before_content do %>
-    <%= govuk_back_link(href: "/schemes/#{@scheme.id}") %>
+    <%= govuk_back_link(href: scheme_path(@scheme)) %>
   <% end %>
 <% end %>
 
