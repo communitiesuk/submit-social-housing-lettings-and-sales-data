@@ -196,7 +196,7 @@ RSpec.describe FormController, type: :request do
         {
           id: sales_log.id,
           sales_log: {
-            page: "organisation",
+            page: "owning_organisation",
             owning_organisation_id: managing_organisation.id,
           },
         }
@@ -208,7 +208,7 @@ RSpec.describe FormController, type: :request do
       end
 
       it "does not reset created by" do
-        post "/sales-logs/#{sales_log.id}/organisation", params: params
+        post "/sales-logs/#{sales_log.id}/owning-organisation", params: params
         expect(response).to redirect_to("/sales-logs/#{sales_log.id}/created-by")
         follow_redirect!
         sales_log.reload
@@ -224,7 +224,7 @@ RSpec.describe FormController, type: :request do
         {
           id: sales_log.id,
           sales_log: {
-            page: "organisation",
+            page: "owning_organisation",
             owning_organisation_id: merged_organisation.id,
           },
         }
@@ -237,7 +237,7 @@ RSpec.describe FormController, type: :request do
       end
 
       it "does not reset created by" do
-        post "/sales-logs/#{sales_log.id}/organisation", params: params
+        post "/sales-logs/#{sales_log.id}/owning-organisation", params: params
         expect(response).to redirect_to("/sales-logs/#{sales_log.id}/created-by")
         follow_redirect!
         sales_log.reload
