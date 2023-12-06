@@ -2,10 +2,16 @@
 <% title = format_title(@searched, @scheme.service_name, current_user, item_label, @pagy.count, nil) %>
 <% content_for :title, title %>
 
-<% content_for :before_content do %>
-  <%= govuk_back_link(
-    href: "/schemes/#{@scheme.id}",
-  ) %>
+<% if current_user.support? %>
+  <% content_for :breadcrumbs, govuk_breadcrumbs(breadcrumbs: {
+    "Schemes (#{@scheme.owning_organisation.name})" => schemes_organisation_path(@scheme.owning_organisation),
+    content_for(:title) => scheme_path(@scheme),
+    "Locations" => "",
+  }) %>
+<% else %>
+  <% content_for :before_content do %>
+    <%= govuk_back_link(href: "/schemes/#{@scheme.id}") %>
+  <% end %>
 <% end %>
 
 <%= render partial: "organisations/headings", locals: { main: @scheme.service_name, sub: nil } %>
