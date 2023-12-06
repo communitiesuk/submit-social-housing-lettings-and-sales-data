@@ -2,10 +2,15 @@ require "rails_helper"
 
 RSpec.describe Merge::MergeOrganisationsService do
   describe "#call" do
+    before do
+      mail_double = instance_double("ActionMailer::MessageDelivery", deliver_later: nil)
+      allow(MergeCompletionMailer).to receive(:send_merge_completion_mail).and_return(mail_double)
+    end
+
     context "when merging a single organisation into an existing organisation" do
       subject(:merge_organisations_service) { described_class.new(absorbing_organisation_id: absorbing_organisation.id, merging_organisation_ids: [merging_organisation_ids], merge_date: nil) }
 
-      let(:absorbing_organisation) { create(:organisation, holds_own_stock: false) }
+      let(:absorbing_organisation) { create(:organisation, holds_own_stock: false, name: "absorbing org") }
       let(:absorbing_organisation_user) { create(:user, organisation: absorbing_organisation) }
 
       let(:merging_organisation) { create(:organisation, holds_own_stock: true, name: "fake org") }
@@ -830,6 +835,13 @@ RSpec.describe Merge::MergeOrganisationsService do
           absorbing_organisation.reload
           expect(absorbing_organisation.available_from.to_date).to eq(Time.zone.today)
         end
+      end
+
+      it "sends a merge completion E-mail to the merged organisation users" do
+        expect(MergeCompletionMailer).to receive(:send_merge_completion_mail).with(merging_organisation_user.email, "fake org", "absorbing org", Time.zone.today, merging_organisation_user.name).once
+        expect(MergeCompletionMailer).to receive(:send_merge_completion_mail).with(merging_organisation.data_protection_officers.first.email, "fake org", "absorbing org", Time.zone.today, merging_organisation.data_protection_officers.first.name).once
+
+        merge_organisations_service.call
       end
     end
 

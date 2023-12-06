@@ -22,6 +22,7 @@ class Merge::MergeOrganisationsService
       end
       @absorbing_organisation.available_from = @merge_date if @absorbing_organisation_active_from_merge_date
       @absorbing_organisation.save!
+      send_success_emails
       log_success_message
     rescue ActiveRecord::RecordInvalid => e
       Rails.logger.error("Organisation merge failed with: #{e.message}")
@@ -147,6 +148,14 @@ private
       Rails.logger.info("New schemes from #{organisation_name}:")
       schemes.each do |scheme|
         Rails.logger.info("\t#{scheme[:name]} (S#{scheme[:code]})")
+      end
+    end
+  end
+
+  def send_success_emails
+    @merged_users.each do |organisation_name, users|
+      users.each do |user|
+        MergeCompletionMailer.send_merge_completion_mail(user[:email], organisation_name, @absorbing_organisation.name, @merge_date, user[:name]).deliver_later
       end
     end
   end
