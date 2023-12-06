@@ -65,11 +65,16 @@ class Scheme < ApplicationRecord
     .where("scheme_deactivation_periods.reactivation_date > ?", Time.zone.now)
   }
 
+  scope :activating_soon, lambda {
+    where("startdate > ?", Time.zone.now)
+  }
+
   scope :active_status, lambda {
     where.not(id: joins(:scheme_deactivation_periods).reactivating_soon.pluck(:id))
     .where.not(id: joins(:scheme_deactivation_periods).deactivated.pluck(:id))
     .where.not(id: incomplete.pluck(:id))
     .where.not(id: joins(:scheme_deactivation_periods).deactivating_soon.pluck(:id))
+    .where.not(id: activating_soon.pluck(:id))
   }
 
   validate :validate_confirmed
@@ -243,7 +248,7 @@ class Scheme < ApplicationRecord
   end
 
   def validate_confirmed
-    required_attributes = attribute_names - %w[id created_at updated_at old_id old_visible_id confirmed end_date sensitive secondary_client_group total_units deactivation_date deactivation_date_type]
+    required_attributes = attribute_names - %w[id created_at updated_at old_id old_visible_id confirmed end_date sensitive secondary_client_group total_units deactivation_date deactivation_date_type startdate]
 
     if confirmed == true
       required_attributes.any? do |attribute|
@@ -262,7 +267,7 @@ class Scheme < ApplicationRecord
   end
 
   def available_from
-    FormHandler.instance.earliest_open_collection_start_date(now: created_at)
+    startdate || FormHandler.instance.earliest_open_collection_start_date(now: created_at)
   end
 
   def open_deactivation
@@ -282,6 +287,7 @@ class Scheme < ApplicationRecord
     return :deactivated if open_deactivation&.deactivation_date.present? && date >= open_deactivation.deactivation_date
     return :deactivating_soon if open_deactivation&.deactivation_date.present? && date < open_deactivation.deactivation_date
     return :reactivating_soon if last_deactivation_before(date)&.reactivation_date.present? && date < last_deactivation_before(date).reactivation_date
+    return :activating_soon if startdate.present? && date < startdate
 
     :active
   end

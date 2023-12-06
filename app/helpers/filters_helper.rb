@@ -52,6 +52,7 @@ module FiltersHelper
       "incomplete" => "Incomplete",
       "active" => "Active",
       "deactivating_soon" => "Deactivating soon",
+      "activating_soon" => "Activating soon",
       "reactivating_soon" => "Reactivating soon",
       "deactivated" => "Deactivated",
     }.freeze

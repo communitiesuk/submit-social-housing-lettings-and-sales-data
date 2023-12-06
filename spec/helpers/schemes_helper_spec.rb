@@ -303,6 +303,17 @@ RSpec.describe SchemesHelper do
         expect(display_scheme_attributes(scheme)).to eq(attributes)
       end
     end
+
+    context "when scheme was merged from another organisation" do
+      before do
+        FactoryBot.create(:location, scheme:)
+        scheme.startdate = Time.zone.local(2023, 1, 5)
+      end
+
+      it "returns correct availability" do
+        expect(display_scheme_attributes(scheme)).to include({ name: "Availability", value: "Active from 5 January 2023" })
+      end
+    end
   end
 
   describe "edit_scheme_text" do

@@ -17,12 +17,14 @@ RSpec.describe Validations::SetupValidations do
         it "cannot be before the first collection window start date" do
           record.startdate = Time.zone.local(2021, 1, 1)
           setup_validator.validate_startdate_setup(record)
+          setup_validator.validate_merged_organisations_start_date(record)
           expect(record.errors["startdate"]).to include(match "Enter a date within the 21/22 or 22/23 collection years, which is between 1st April 2021 and 31st March 2023")
         end
 
         it "cannot be after the second collection window end date" do
           record.startdate = Time.zone.local(2023, 7, 1, 6)
           setup_validator.validate_startdate_setup(record)
+          setup_validator.validate_merged_organisations_start_date(record)
           expect(record.errors["startdate"]).to include(match "Enter a date within the 21/22 or 22/23 collection years, which is between 1st April 2021 and 31st March 2023")
         end
       end
@@ -36,12 +38,14 @@ RSpec.describe Validations::SetupValidations do
         it "cannot be before the first collection window start date" do
           record.startdate = Time.zone.local(2022, 1, 1)
           setup_validator.validate_startdate_setup(record)
+          setup_validator.validate_merged_organisations_start_date(record)
           expect(record.errors["startdate"]).to include(match "Enter a date within the 22/23 collection year, which is between 1st April 2022 and 31st March 2023")
         end
 
         it "cannot be after the second collection window end date" do
           record.startdate = Time.zone.local(2023, 7, 1, 6)
           setup_validator.validate_startdate_setup(record)
+          setup_validator.validate_merged_organisations_start_date(record)
           expect(record.errors["startdate"]).to include(match "Enter a date within the 22/23 collection year, which is between 1st April 2022 and 31st March 2023")
         end
       end
@@ -57,12 +61,14 @@ RSpec.describe Validations::SetupValidations do
         it "cannot be before the first collection window start date" do
           record.startdate = Time.zone.local(2022, 1, 1)
           setup_validator.validate_startdate_setup(record)
+          setup_validator.validate_merged_organisations_start_date(record)
           expect(record.errors["startdate"]).to include(match "Enter a date within the 22/23 or 23/24 collection years, which is between 1st April 2022 and 31st March 2024")
         end
 
         it "cannot be after the second collection window end date" do
           record.startdate = Time.zone.local(2024, 7, 1, 6)
           setup_validator.validate_startdate_setup(record)
+          setup_validator.validate_merged_organisations_start_date(record)
           expect(record.errors["startdate"]).to include(match "Enter a date within the 22/23 or 23/24 collection years, which is between 1st April 2022 and 31st March 2024")
         end
       end
@@ -76,12 +82,14 @@ RSpec.describe Validations::SetupValidations do
         it "cannot be before the first collection window start date" do
           record.startdate = Time.zone.local(2023, 1, 1)
           setup_validator.validate_startdate_setup(record)
+          setup_validator.validate_merged_organisations_start_date(record)
           expect(record.errors["startdate"]).to include(match "Enter a date within the 23/24 collection year, which is between 1st April 2023 and 31st March 2024")
         end
 
         it "cannot be after the second collection window end date" do
           record.startdate = Time.zone.local(2024, 7, 1, 6)
           setup_validator.validate_startdate_setup(record)
+          setup_validator.validate_merged_organisations_start_date(record)
           expect(record.errors["startdate"]).to include(match "Enter a date within the 23/24 collection year, which is between 1st April 2023 and 31st March 2024")
         end
       end
@@ -95,6 +103,7 @@ RSpec.describe Validations::SetupValidations do
           record.update!(startdate: nil)
           record.startdate = Time.zone.local(2023, 1, 1)
           setup_validator.validate_startdate_setup(record)
+          setup_validator.validate_merged_organisations_start_date(record)
           expect(record.errors["startdate"]).to include(match "Enter a date within the 23/24 collection year, which is between 1st April 2023 and 31st March 2024")
         end
 
@@ -103,6 +112,7 @@ RSpec.describe Validations::SetupValidations do
           record.save!(validate: false)
           record.startdate = Time.zone.local(2023, 1, 1)
           setup_validator.validate_startdate_setup(record)
+          setup_validator.validate_merged_organisations_start_date(record)
           expect(record.errors["startdate"]).not_to include(match "Enter a date within the 23/24 collection year, which is between 1st April 2023 and 31st March 2024")
         end
       end
@@ -116,6 +126,7 @@ RSpec.describe Validations::SetupValidations do
           record.update!(startdate: nil)
           record.startdate = Time.zone.local(2023, 1, 1)
           setup_validator.validate_startdate_setup(record)
+          setup_validator.validate_merged_organisations_start_date(record)
           expect(record.errors["startdate"]).to include(match "Enter a date within the 23/24 collection year, which is between 1st April 2023 and 31st March 2024")
         end
 
@@ -124,6 +135,7 @@ RSpec.describe Validations::SetupValidations do
           record.save!(validate: false)
           record.startdate = Time.zone.local(2023, 1, 1)
           setup_validator.validate_startdate_setup(record)
+          setup_validator.validate_merged_organisations_start_date(record)
           expect(record.errors["startdate"]).to include(match "Enter a date within the 23/24 collection year, which is between 1st April 2023 and 31st March 2024")
         end
       end
@@ -151,6 +163,7 @@ RSpec.describe Validations::SetupValidations do
           record.startdate = Time.zone.local(2023, 3, 1)
           record.owning_organisation_id = merged_organisation.id
           setup_validator.validate_startdate_setup(record)
+          setup_validator.validate_merged_organisations_start_date(record)
           expect(record.errors["startdate"]).to include(match "Enter a date when the owning organisation was active. Merged org became inactive on 2 February 2023 and was replaced by Absorbing org.")
         end
 
@@ -158,6 +171,7 @@ RSpec.describe Validations::SetupValidations do
           record.startdate = Time.zone.local(2023, 1, 1)
           record.owning_organisation_id = merged_organisation.id
           setup_validator.validate_startdate_setup(record)
+          setup_validator.validate_merged_organisations_start_date(record)
           expect(record.errors["startdate"]).to be_empty
         end
       end
@@ -167,6 +181,7 @@ RSpec.describe Validations::SetupValidations do
           record.startdate = Time.zone.local(2023, 1, 1)
           record.owning_organisation_id = absorbing_organisation.id
           setup_validator.validate_startdate_setup(record)
+          setup_validator.validate_merged_organisations_start_date(record)
           expect(record.errors["startdate"]).to include(match "Enter a date when the owning organisation was active. Absorbing org became active on 1 February 2023.")
         end
 
@@ -174,6 +189,7 @@ RSpec.describe Validations::SetupValidations do
           record.startdate = Time.zone.local(2023, 2, 2)
           record.owning_organisation_id = absorbing_organisation.id
           setup_validator.validate_startdate_setup(record)
+          setup_validator.validate_merged_organisations_start_date(record)
           expect(record.errors["startdate"]).to be_empty
         end
 
@@ -182,6 +198,7 @@ RSpec.describe Validations::SetupValidations do
           absorbing_organisation.update!(available_from: nil)
           record.owning_organisation_id = absorbing_organisation.id
           setup_validator.validate_startdate_setup(record)
+          setup_validator.validate_merged_organisations_start_date(record)
           expect(record.errors["startdate"]).to be_empty
         end
       end
@@ -191,6 +208,7 @@ RSpec.describe Validations::SetupValidations do
           record.startdate = Time.zone.local(2023, 3, 1)
           record.managing_organisation_id = merged_organisation.id
           setup_validator.validate_startdate_setup(record)
+          setup_validator.validate_merged_organisations_start_date(record)
           expect(record.errors["startdate"]).to include(match "Enter a date when the managing organisation was active. Merged org became inactive on 2 February 2023 and was replaced by Absorbing org.")
         end
 
@@ -198,6 +216,7 @@ RSpec.describe Validations::SetupValidations do
           record.startdate = Time.zone.local(2023, 1, 1)
           record.managing_organisation_id = merged_organisation.id
           setup_validator.validate_startdate_setup(record)
+          setup_validator.validate_merged_organisations_start_date(record)
           expect(record.errors["startdate"]).to be_empty
         end
       end
@@ -207,6 +226,7 @@ RSpec.describe Validations::SetupValidations do
           record.startdate = Time.zone.local(2023, 1, 1)
           record.managing_organisation_id = absorbing_organisation.id
           setup_validator.validate_startdate_setup(record)
+          setup_validator.validate_merged_organisations_start_date(record)
           expect(record.errors["startdate"]).to include(match "Enter a date when the managing organisation was active. Absorbing org became active on 1 February 2023.")
         end
 
@@ -214,6 +234,7 @@ RSpec.describe Validations::SetupValidations do
           record.startdate = Time.zone.local(2023, 2, 2)
           record.managing_organisation_id = absorbing_organisation.id
           setup_validator.validate_startdate_setup(record)
+          setup_validator.validate_merged_organisations_start_date(record)
           expect(record.errors["startdate"]).to be_empty
         end
 
@@ -222,6 +243,7 @@ RSpec.describe Validations::SetupValidations do
           absorbing_organisation.update!(available_from: nil)
           record.managing_organisation_id = absorbing_organisation.id
           setup_validator.validate_startdate_setup(record)
+          setup_validator.validate_merged_organisations_start_date(record)
           expect(record.errors["startdate"]).to be_empty
         end
       end
@@ -232,6 +254,7 @@ RSpec.describe Validations::SetupValidations do
           record.managing_organisation_id = merged_organisation.id
           record.owning_organisation_id = merged_organisation.id
           setup_validator.validate_startdate_setup(record)
+          setup_validator.validate_merged_organisations_start_date(record)
           expect(record.errors["startdate"]).to include(match "Enter a date when the owning and managing organisation was active. Merged org became inactive on 2 February 2023 and was replaced by Absorbing org.")
         end
 
@@ -240,6 +263,7 @@ RSpec.describe Validations::SetupValidations do
           record.managing_organisation_id = merged_organisation.id
           record.owning_organisation_id = merged_organisation.id
           setup_validator.validate_startdate_setup(record)
+          setup_validator.validate_merged_organisations_start_date(record)
           expect(record.errors["startdate"]).to be_empty
         end
       end
@@ -250,6 +274,7 @@ RSpec.describe Validations::SetupValidations do
           record.managing_organisation_id = absorbing_organisation.id
           record.owning_organisation_id = absorbing_organisation.id
           setup_validator.validate_startdate_setup(record)
+          setup_validator.validate_merged_organisations_start_date(record)
           expect(record.errors["startdate"]).to include(match "Enter a date when the owning and managing organisation was active. Absorbing org became active on 1 February 2023.")
         end
 
@@ -258,6 +283,7 @@ RSpec.describe Validations::SetupValidations do
           record.managing_organisation_id = absorbing_organisation.id
           record.owning_organisation_id = absorbing_organisation.id
           setup_validator.validate_startdate_setup(record)
+          setup_validator.validate_merged_organisations_start_date(record)
           expect(record.errors["startdate"]).to be_empty
         end
 
@@ -267,6 +293,7 @@ RSpec.describe Validations::SetupValidations do
           record.managing_organisation_id = absorbing_organisation.id
           record.owning_organisation_id = absorbing_organisation.id
           setup_validator.validate_startdate_setup(record)
+          setup_validator.validate_merged_organisations_start_date(record)
           expect(record.errors["startdate"]).to be_empty
         end
       end
@@ -277,6 +304,7 @@ RSpec.describe Validations::SetupValidations do
           record.managing_organisation_id = merged_organisation.id
           record.owning_organisation_id = merged_organisation_2.id
           setup_validator.validate_startdate_setup(record)
+          setup_validator.validate_merged_organisations_start_date(record)
           expect(record.errors["startdate"]).to include(match "Enter a date when the owning and managing organisations were active. Merged org 2 and Merged org became inactive on 2 February 2023 and were replaced by Absorbing org.")
         end
 
@@ -285,6 +313,7 @@ RSpec.describe Validations::SetupValidations do
           record.managing_organisation_id = merged_organisation.id
           record.owning_organisation_id = merged_organisation_2.id
           setup_validator.validate_startdate_setup(record)
+          setup_validator.validate_merged_organisations_start_date(record)
           expect(record.errors["startdate"]).to be_empty
         end
       end
@@ -299,6 +328,7 @@ RSpec.describe Validations::SetupValidations do
           record.managing_organisation_id = merged_organisation.id
           record.owning_organisation_id = merged_organisation_2.id
           setup_validator.validate_startdate_setup(record)
+          setup_validator.validate_merged_organisations_start_date(record)
           expect(record.errors["startdate"]).to include(match "Enter a date when the owning and managing organisations were active. Merged org 2 became inactive on 2 February 2023 and was replaced by Absorbing org 2. Merged org became inactive on 2 February 2023 and was replaced by Absorbing org.")
         end
 
@@ -307,6 +337,7 @@ RSpec.describe Validations::SetupValidations do
           record.managing_organisation_id = merged_organisation.id
           record.owning_organisation_id = merged_organisation_2.id
           setup_validator.validate_startdate_setup(record)
+          setup_validator.validate_merged_organisations_start_date(record)
           expect(record.errors["startdate"]).to be_empty
         end
       end
@@ -321,6 +352,7 @@ RSpec.describe Validations::SetupValidations do
           record.managing_organisation_id = absorbing_organisation.id
           record.owning_organisation_id = absorbing_organisation_2.id
           setup_validator.validate_startdate_setup(record)
+          setup_validator.validate_merged_organisations_start_date(record)
           expect(record.errors["startdate"]).to include(match "Enter a date when the owning and managing organisations were active. Absorbing org 2 became active on 1 February 2023, and Absorbing org became active on 1 February 2023.")
         end
 
@@ -329,6 +361,7 @@ RSpec.describe Validations::SetupValidations do
           record.managing_organisation_id = absorbing_organisation.id
           record.owning_organisation_id = absorbing_organisation.id
           setup_validator.validate_startdate_setup(record)
+          setup_validator.validate_merged_organisations_start_date(record)
           expect(record.errors["startdate"]).to be_empty
         end
 
@@ -338,6 +371,7 @@ RSpec.describe Validations::SetupValidations do
           record.managing_organisation_id = absorbing_organisation.id
           record.owning_organisation_id = absorbing_organisation.id
           setup_validator.validate_startdate_setup(record)
+          setup_validator.validate_merged_organisations_start_date(record)
           expect(record.errors["startdate"]).to be_empty
         end
       end
