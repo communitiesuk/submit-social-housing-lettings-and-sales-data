@@ -154,6 +154,8 @@ private
 
   def send_success_emails
     @absorbing_organisation.users.each do |user|
+      next unless user.active?
+
       merged_organisation, merged_user = find_merged_user_and_organization_by_email(user.email)
       if merged_user.present?
         MergeCompletionMailer.send_merged_organisation_success_mail(merged_user[:email], merged_organisation, @absorbing_organisation.name, @merge_date).deliver_later
