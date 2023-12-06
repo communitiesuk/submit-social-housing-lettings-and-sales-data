@@ -1389,7 +1389,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
         let(:merged_org) { create(:organisation, :with_old_visible_id, holds_own_stock: true) }
         let(:merged_org_stock_owner) { create(:organisation, :with_old_visible_id, holds_own_stock: true) }
 
-        let(:attributes) { { bulk_upload:, field_1: merged_org_stock_owner.old_visible_id } }
+        let(:attributes) { { bulk_upload:, field_1: merged_org_stock_owner.old_visible_id, field_2: merged_org.old_visible_id, field_3: user.email } }
 
         before do
           create(:organisation_relationship, parent_organisation: merged_org_stock_owner, child_organisation: merged_org)
@@ -1399,8 +1399,11 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
         end
 
         it "is permitted" do
+          parser = described_class.new(attributes)
+
           parser.valid?
           expect(parser.errors.where(:field_1)).not_to be_present
+          expect(parser.errors.where(:field_3)).not_to be_present
         end
       end
     end
