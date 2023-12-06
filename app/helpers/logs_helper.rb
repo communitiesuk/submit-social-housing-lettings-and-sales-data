@@ -30,23 +30,23 @@ module LogsHelper
   end
 
   def search_label_for_action(action_name)
-    case log_type_for_action(action_name)
-    when "lettings" then "Search by log ID, tenant code, property reference or postcode"
-    when "sales" then "Search by log ID, purchaser code or postcode"
+    case action_name
+    when "lettings_logs" then "Search by log ID, tenant code, property reference or postcode"
+    when "sales_logs" then "Search by log ID, purchaser code or postcode"
     end
   end
 
   def csv_download_url_for_controller(controller:, search:, codes_only:)
-    case log_type_for_controller(controller)
-    when "lettings" then csv_download_lettings_logs_path(search:, codes_only:)
-    when "sales" then csv_download_sales_logs_path(search:, codes_only:)
+    case controller.class.name
+    when "LettingsLogsController" then csv_download_lettings_logs_path(search:, codes_only:)
+    when "SalesLogsController" then csv_download_sales_logs_path(search:, codes_only:)
     end
   end
 
   def logs_path_for_controller(controller)
-    case log_type_for_controller(controller)
-    when "lettings" then lettings_logs_path
-    when "sales" then sales_logs_path
+    case controller.class.name
+    when "LettingsLogsController" then lettings_logs_path
+    when "SalesLogsController" then sales_logs_path
     end
   end
 
