@@ -8,15 +8,6 @@ module LogsHelper
     end
   end
 
-  def log_type_for_action(action_name)
-    case action_name
-    when "lettings_logs" then "lettings"
-    when "sales_logs" then "sales"
-    else
-      raise "Log type not found for #{action_name}"
-    end
-  end
-
   def bulk_upload_options(bulk_upload)
     array = bulk_upload ? [bulk_upload.id] : []
     array.index_with { |_bulk_upload_id| "With logs from bulk upload" }
