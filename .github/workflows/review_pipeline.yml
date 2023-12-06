@@ -33,6 +33,7 @@ jobs:
       aws_account_id: 837698168072
       aws_role_prefix: core-dev
       aws_task_prefix: core-review-${{ github.event.pull_request.number }}
+      concurrency_tag: ${{ github.event.pull_request.number }}
       environment: review
     permissions:
       id-token: write
