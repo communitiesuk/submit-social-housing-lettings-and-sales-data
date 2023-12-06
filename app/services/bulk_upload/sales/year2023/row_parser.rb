@@ -1195,11 +1195,10 @@ private
 
   def validate_created_by_related
     return unless created_by
+    return if created_by.organisation == owning_organisation || created_by.organisation == owning_organisation&.absorbing_organisation
 
-    unless created_by.organisation == owning_organisation
-      block_log_creation!
-      errors.add(:field_2, "User must be related to owning organisation", category: :setup)
-    end
+    block_log_creation!
+    errors.add(:field_2, "User must be related to owning organisation", category: :setup)
   end
 
   def setup_question?(question)

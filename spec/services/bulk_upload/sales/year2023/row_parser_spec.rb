@@ -417,6 +417,46 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
           expect(parser).to be_block_log_creation
         end
       end
+
+      context "when user's org has absorbed owning organisation with stock owners" do
+        let(:merged_org) { create(:organisation, :with_old_visible_id, holds_own_stock: true) }
+        let(:merged_org_stock_owner) { create(:organisation, :with_old_visible_id, holds_own_stock: true) }
+
+        let(:attributes) { { bulk_upload:, field_1: merged_org_stock_owner.old_visible_id } }
+
+        before do
+          create(:organisation_relationship, parent_organisation: merged_org_stock_owner, child_organisation: merged_org)
+          merged_org.update!(absorbing_organisation: user.organisation, merge_date: Time.zone.today)
+          merged_org.reload
+          user.organisation.reload
+        end
+
+        it "is permitted" do
+          parser.valid?
+          expect(parser.errors.where(:field_1)).not_to be_present
+        end
+      end
+
+      context "when user's org has absorbed owning organisation" do
+        let(:merged_org) { create(:organisation, :with_old_visible_id, holds_own_stock: true) }
+
+        let(:attributes) { { bulk_upload:, field_1: merged_org.old_visible_id, field_2: user.email } }
+
+        before do
+          merged_org.update!(absorbing_organisation: user.organisation, merge_date: Time.zone.today)
+          merged_org.reload
+          user.organisation.reload
+          user.reload
+        end
+
+        it "is permitted" do
+          parser = described_class.new(attributes)
+
+          parser.valid?
+          expect(parser.errors.where(:field_1)).not_to be_present
+          expect(parser.errors.where(:field_2)).not_to be_present
+        end
+      end
     end
 
     describe "#field_2" do # username for created_by

@@ -25,6 +25,11 @@ class Organisation < ApplicationRecord
       ids << id
     end
 
+    absorbed_organisations.each do |organisation|
+      ids.concat(organisation.stock_owners.pluck(:id))
+      ids << organisation.id if organisation.holds_own_stock?
+    end
+
     ids.concat(stock_owners.pluck(:id))
 
     Organisation.where(id: ids)
