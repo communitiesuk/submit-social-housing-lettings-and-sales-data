@@ -9,18 +9,17 @@ RSpec.describe MergeCompletionMailer do
   end
 
   describe "#send_merge_completion_mail" do
-    let(:merge_date) { Time.zone.today }
+    let(:merge_date) { Time.zone.local(2023, 1, 1) }
 
     it "sends a merge completion E-mail via notify" do
       expect(notify_client).to receive(:send_email).with(hash_including({ personalisation: hash_including({
         merged_organisation_name: "merged organisation",
         absorbing_organisation_name: "absorbing organisation",
-        merge_date:,
+        merge_date: "1 January 2023",
         email: "user@example.com",
-        username: "user",
       }) }))
 
-      described_class.new.send_merge_completion_mail("user@example.com", "merged organisation", "absorbing organisation", merge_date, "user")
+      described_class.new.send_merge_completion_mail("user@example.com", "merged organisation", "absorbing organisation", merge_date)
     end
   end
 end

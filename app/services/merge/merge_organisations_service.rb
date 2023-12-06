@@ -155,7 +155,7 @@ private
   def send_success_emails
     @merged_users.each do |organisation_name, users|
       users.each do |user|
-        MergeCompletionMailer.send_merge_completion_mail(user[:email], organisation_name, @absorbing_organisation.name, @merge_date, user[:name]).deliver_later
+        MergeCompletionMailer.send_merge_completion_mail(user[:email], organisation_name, @absorbing_organisation.name, @merge_date).deliver_later
       end
     end
   end

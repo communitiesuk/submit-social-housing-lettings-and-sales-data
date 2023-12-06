@@ -838,8 +838,8 @@ RSpec.describe Merge::MergeOrganisationsService do
       end
 
       it "sends a merge completion E-mail to the merged organisation users" do
-        expect(MergeCompletionMailer).to receive(:send_merge_completion_mail).with(merging_organisation_user.email, "fake org", "absorbing org", Time.zone.today, merging_organisation_user.name).once
-        expect(MergeCompletionMailer).to receive(:send_merge_completion_mail).with(merging_organisation.data_protection_officers.first.email, "fake org", "absorbing org", Time.zone.today, merging_organisation.data_protection_officers.first.name).once
+        expect(MergeCompletionMailer).to receive(:send_merge_completion_mail).with(merging_organisation_user.email, "fake org", "absorbing org", Time.zone.today).once
+        expect(MergeCompletionMailer).to receive(:send_merge_completion_mail).with(merging_organisation.data_protection_officers.first.email, "fake org", "absorbing org", Time.zone.today).once
 
         merge_organisations_service.call
       end
