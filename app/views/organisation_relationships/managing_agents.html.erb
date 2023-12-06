@@ -23,5 +23,5 @@
 <% if @total_count != 0 %>
   <%= render SearchComponent.new(current_user:, search_label: "Search for a managing agent", value: @searched) %>
   <%= render partial: "organisation_relationships/managing_agent_list", locals: { index: @managing_agents, title: "Managing agents", pagy: @pagy, searched: @searched, item_label:, total_count: @total_count } %>
-  <%= render partial: "pagy/nav", locals: { pagy: @pagy, item_name: "Managing agents" } %>
+  <%= render partial: "pagy/nav", locals: { pagy: @pagy, item_name: "managing agents" } %>
 <% end %>
