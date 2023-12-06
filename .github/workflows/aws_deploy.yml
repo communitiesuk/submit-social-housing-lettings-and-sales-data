@@ -12,6 +12,10 @@ on:
       aws_task_prefix:
         required: true
         type: string
+      concurrency_tag:
+        required: false
+        type: string
+        default: ""
       environment:
         required: true
         type: string
@@ -20,7 +24,7 @@ on:
         type: string
 
 concurrency:
-  group: deploy-${{ inputs.environment }}
+  group: deploy-${{ inputs.environment }}${{ inputs.concurrency_tag }}
   cancel-in-progress: true
 
 env:
