@@ -6,6 +6,7 @@ const RemoveEmptyScriptsPlugin = require('webpack-remove-empty-scripts')
 const CopyPlugin = require('copy-webpack-plugin')
 
 const mode = process.env.NODE_ENV === 'development' ? 'development' : 'production'
+const publicPath = process.env.RAILS_RELATIVE_URL_ROOT ?? ''
 
 module.exports = {
   mode,
@@ -48,7 +49,7 @@ module.exports = {
     filename: '[name].js',
     // we must set publicPath to an empty value to override the default of
     // auto which doesn't work in IE11
-    publicPath: '',
+    publicPath: publicPath,
     path: path.resolve(__dirname, 'app/assets/builds')
   },
   plugins: [
