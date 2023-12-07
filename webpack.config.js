@@ -6,7 +6,7 @@ const RemoveEmptyScriptsPlugin = require('webpack-remove-empty-scripts')
 const CopyPlugin = require('copy-webpack-plugin')
 
 const mode = process.env.NODE_ENV === 'development' ? 'development' : 'production'
-const publicPath = process.env.RAILS_RELATIVE_URL_ROOT ?? ''
+const publicPath = '2082/' // process.env.RAILS_RELATIVE_URL_ROOT ?? ''
 
 module.exports = {
   mode,
