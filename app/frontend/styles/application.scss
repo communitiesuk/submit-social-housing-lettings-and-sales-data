@@ -6,6 +6,7 @@
   @return url("~assets/images/" + $filename);
 }
 
+$govuk-assets-path: "/2082/assets/";
 $govuk-font-url-function: frontend-font-url;
 $govuk-image-url-function: frontend-image-url;
 $govuk-global-styles: true;
