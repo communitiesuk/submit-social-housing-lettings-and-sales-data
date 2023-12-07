@@ -156,7 +156,7 @@ private
     @absorbing_organisation.users.each do |user|
       next unless user.active?
 
-      merged_organisation, merged_user = find_merged_user_and_organization_by_email(user.email)
+      merged_organisation, merged_user = find_merged_user_and_organisation_by_email(user.email)
       if merged_user.present?
         MergeCompletionMailer.send_merged_organisation_success_mail(merged_user[:email], merged_organisation, @absorbing_organisation.name, @merge_date).deliver_later
       else
@@ -240,7 +240,7 @@ private
     end
   end
 
-  def find_merged_user_and_organization_by_email(provided_email)
+  def find_merged_user_and_organisation_by_email(provided_email)
     @merged_users.each do |org, users|
       user = users.find { |u| u[:email] == provided_email }
       return org, user if user
