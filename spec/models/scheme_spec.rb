@@ -123,6 +123,7 @@ RSpec.describe Scheme, type: :model do
         let(:deactivated_scheme_2) { FactoryBot.create(:scheme) }
         let(:reactivating_soon_scheme) { FactoryBot.create(:scheme) }
         let(:reactivating_soon_scheme_2) { FactoryBot.create(:scheme) }
+        let(:activating_soon_scheme) { FactoryBot.create(:scheme, startdate: Time.zone.today + 1.week) }
 
         before do
           scheme.destroy!
@@ -242,10 +243,17 @@ RSpec.describe Scheme, type: :model do
         expect(scheme.status).to eq(:deactivated)
       end
 
-      it "returns reactivating soon if the location has a future reactivation date" do
+      it "returns reactivating soon if the scheme has a future reactivation date" do
         FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 7), reactivation_date: Time.zone.local(2022, 6, 8), scheme:)
         scheme.save!
         expect(scheme.status).to eq(:reactivating_soon)
+      end
+
+      it "returns activating soon if the scheme has a future startdate" do
+        Timecop.freeze(2022, 6, 4)
+        scheme.startdate = Time.zone.local(2022, 7, 7)
+        scheme.save!
+        expect(scheme.status).to eq(:activating_soon)
       end
     end
 
@@ -283,11 +291,17 @@ RSpec.describe Scheme, type: :model do
         expect(scheme.status).to eq(:reactivating_soon)
       end
 
-      it "returns if the scheme had a deactivation during another deactivation" do
+      it "returns reactivating soon if the scheme had a deactivation during another deactivation" do
         Timecop.freeze(2022, 6, 4)
         FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 5, 5), reactivation_date: Time.zone.local(2022, 6, 2), scheme:)
         scheme.save!
         expect(scheme.status).to eq(:reactivating_soon)
+      end
+
+      it "returns activating soon if the scheme has a future startdate" do
+        scheme.startdate = Time.zone.local(2022, 7, 7)
+        scheme.save!
+        expect(scheme.status).to eq(:activating_soon)
       end
     end
   end

@@ -318,21 +318,31 @@ RSpec.describe Merge::MergeOrganisationsService do
             create(:lettings_log, startdate: Time.zone.tomorrow, managing_organisation: merging_organisation)
           end
 
-          it "combines organisation schemes and locations" do
-            expect(Rails.logger).to receive(:info).with("Merged users from fake org:")
-            expect(Rails.logger).to receive(:info).with("\tDanny Rojas (#{merging_organisation.data_protection_officers.first.email})")
-            expect(Rails.logger).to receive(:info).with("\tfake name (fake@email.com)")
-            expect(Rails.logger).to receive(:info).with("New schemes from fake org:")
-            expect(Rails.logger).to receive(:info).with(/\t#{scheme.service_name} \(S/)
-            merge_organisations_service.call
+          context "with multiple locations" do
+            let!(:location_without_startdate) { create(:location, scheme:, startdate: nil) }
+            let!(:location_with_past_startdate) { create(:location, scheme:, startdate: Time.zone.today - 2.months) }
+            let!(:location_with_future_startdate) { create(:location, scheme:, startdate: Time.zone.today + 2.months) }
 
-            absorbing_organisation.reload
-            expect(absorbing_organisation.owned_schemes.count).to eq(1)
-            expect(absorbing_organisation.owned_schemes.first.service_name).to eq(scheme.service_name)
-            expect(absorbing_organisation.owned_schemes.first.locations.count).to eq(1)
-            expect(absorbing_organisation.owned_schemes.first.locations.first.postcode).to eq(location.postcode)
-            expect(scheme.scheme_deactivation_periods.count).to eq(1)
-            expect(scheme.scheme_deactivation_periods.first.deactivation_date.to_date).to eq(Time.zone.yesterday)
+            it "combines organisation schemes and locations" do
+              expect(Rails.logger).to receive(:info).with("Merged users from fake org:")
+              expect(Rails.logger).to receive(:info).with("\tDanny Rojas (#{merging_organisation.data_protection_officers.first.email})")
+              expect(Rails.logger).to receive(:info).with("\tfake name (fake@email.com)")
+              expect(Rails.logger).to receive(:info).with("New schemes from fake org:")
+              expect(Rails.logger).to receive(:info).with(/\t#{scheme.service_name} \(S/)
+              merge_organisations_service.call
+
+              absorbing_organisation.reload
+              expect(absorbing_organisation.owned_schemes.count).to eq(1)
+              expect(absorbing_organisation.owned_schemes.first.service_name).to eq(scheme.service_name)
+              expect(absorbing_organisation.owned_schemes.first.startdate).to eq(Time.zone.yesterday)
+              expect(absorbing_organisation.owned_schemes.first.locations.count).to eq(4)
+              expect(absorbing_organisation.owned_schemes.first.locations.map(&:postcode)).to match_array([location, location_without_startdate, location_with_past_startdate, location_with_future_startdate].map(&:postcode))
+              expect(absorbing_organisation.owned_schemes.first.locations.find_by(postcode: location_without_startdate.postcode).startdate).to eq(Time.zone.yesterday)
+              expect(absorbing_organisation.owned_schemes.first.locations.find_by(postcode: location_with_past_startdate.postcode).startdate).to eq(Time.zone.yesterday)
+              expect(absorbing_organisation.owned_schemes.first.locations.find_by(postcode: location_with_future_startdate.postcode).startdate).to eq(Time.zone.today + 2.months)
+              expect(scheme.scheme_deactivation_periods.count).to eq(1)
+              expect(scheme.scheme_deactivation_periods.first.deactivation_date.to_date).to eq(Time.zone.yesterday)
+            end
           end
 
           it "moves relevant logs and assigns the new scheme" do

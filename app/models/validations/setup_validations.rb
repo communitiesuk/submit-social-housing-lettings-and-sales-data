@@ -14,8 +14,6 @@ module Validations::SetupValidations
     unless record.startdate.between?(first_collection_start_date, current_collection_end_date)
       record.errors.add :startdate, startdate_validation_error_message
     end
-
-    validate_merged_organisations_start_date(record)
   end
 
   def validate_organisation(record)
@@ -52,6 +50,16 @@ module Validations::SetupValidations
                                                             managing_organisation_available_from: record.managing_organisation.available_from.to_formatted_s(:govuk_date))
       end
     end
+  end
+
+  def validate_merged_organisations_start_date(record)
+    return unless record.startdate && date_valid?("startdate", record)
+
+    return add_same_merge_organisation_error(record) if record.owning_organisation == record.managing_organisation
+    return add_same_merge_error(record) if organisations_belong_to_same_merge?(record.owning_organisation, record.managing_organisation)
+
+    add_merged_organisations_errors(record)
+    add_absorbing_organisations_errors(record)
   end
 
   def validate_irproduct_other(record)
@@ -132,14 +140,6 @@ private
 
   def intermediate_product_rent_type?(record)
     record.rent_type == 5
-  end
-
-  def validate_merged_organisations_start_date(record)
-    return add_same_merge_organisation_error(record) if record.owning_organisation == record.managing_organisation
-    return add_same_merge_error(record) if organisations_belong_to_same_merge?(record.owning_organisation, record.managing_organisation)
-
-    add_merged_organisations_errors(record)
-    add_absorbing_organisations_errors(record)
   end
 
   def add_same_merge_organisation_error(record)
