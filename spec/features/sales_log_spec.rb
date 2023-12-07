@@ -164,8 +164,8 @@ RSpec.describe "Sales Log Features" do
       it "has the correct breadcrumbs with the correct links" do
         visit sales_log_setup_check_answers_path(sales_log.id)
         breadcrumbs = page.find_all(".govuk-breadcrumbs__link")
-        expect(breadcrumbs.first.text).to eq "Logs"
-        expect(breadcrumbs.first[:href]).to eq sales_logs_path
+        expect(breadcrumbs.first.text).to eq "Sales logs (DLUHC)"
+        expect(breadcrumbs.first[:href]).to eq sales_logs_organisation_path(sales_log.owning_organisation)
         expect(breadcrumbs[1].text).to eq "Log #{sales_log.id}"
         expect(breadcrumbs[1][:href]).to eq sales_log_path(sales_log.id)
       end
@@ -175,8 +175,8 @@ RSpec.describe "Sales Log Features" do
       it "has the correct breadcrumbs with the correct links" do
         visit review_sales_log_path(sales_log.id, sales_log: true)
         breadcrumbs = page.find_all(".govuk-breadcrumbs__link")
-        expect(breadcrumbs.first.text).to eq "Logs"
-        expect(breadcrumbs.first[:href]).to eq sales_logs_path
+        expect(breadcrumbs.first.text).to eq "Sales logs (DLUHC)"
+        expect(breadcrumbs.first[:href]).to eq sales_logs_organisation_path(sales_log.owning_organisation)
         expect(breadcrumbs[1].text).to eq "Log #{sales_log.id}"
         expect(breadcrumbs[1][:href]).to eq sales_log_path(sales_log.id)
       end
