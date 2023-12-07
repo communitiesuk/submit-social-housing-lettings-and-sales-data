@@ -853,6 +853,34 @@ RSpec.describe FormController, type: :request do
           end
         end
 
+        context "when owning organisation changes from merged organisation to absorbing user organisation" do
+          let(:params) do
+            {
+              id: lettings_log.id,
+              lettings_log: {
+                page: "stock_owner",
+                owning_organisation_id: organisation.id,
+              },
+            }
+          end
+          let(:merged_org) { create(:organisation) }
+
+          before do
+            merged_org.update!(merge_date: Time.zone.today, absorbing_organisation: organisation)
+            organisation.reload
+            lettings_log.update!(owning_organisation: merged_org, managing_organisation: merged_org, created_by: user)
+            lettings_log.reload
+          end
+
+          it "sets managing organisation to owning organisation" do
+            post "/lettings-logs/#{lettings_log.id}/stock-owner", params: params
+            follow_redirect!
+            lettings_log.reload
+            expect(lettings_log.owning_organisation).to eq(organisation)
+            expect(lettings_log.managing_organisation).to eq(organisation)
+          end
+        end
+
         context "when the question was accessed from a duplicate logs screen" do
           let(:lettings_log) { create(:lettings_log, :duplicate, created_by: user) }
           let(:duplicate_log) { create(:lettings_log, :duplicate, created_by: user) }
