@@ -3,11 +3,11 @@ class SchemesController < ApplicationController
   include Modules::SearchFilter
 
   before_action :authenticate_user!
-  before_action :find_resource, except: %i[index create new changes]
+  before_action :find_resource, except: %i[index create new changes email_csv download_csv csv_confirmation]
   before_action :redirect_if_scheme_confirmed, only: %i[primary_client_group confirm_secondary_client_group secondary_client_group support details]
-  before_action :authorize_user
-  before_action :session_filters, if: :current_user, only: %i[index]
-  before_action -> { filter_manager.serialize_filters_to_session }, if: :current_user, only: %i[index]
+  before_action :authorize_user, except: %i[email_csv download_csv csv_confirmation]
+  before_action :session_filters, if: :current_user, only: %i[index email_csv download_csv]
+  before_action -> { filter_manager.serialize_filters_to_session }, if: :current_user, only: %i[index email_csv download_csv]
 
   rescue_from ActiveRecord::RecordNotFound, with: :render_not_found
 
@@ -204,6 +204,20 @@ class SchemesController < ApplicationController
   def changes
     render "schemes/changes"
   end
+
+  def download_csv
+    unpaginated_filtered_schemes = filter_manager.filtered_schemes(current_user.schemes, search_term, session_filters)
+
+    render "download_csv", locals: { search_term:, post_path: email_csv_schemes_path, download_type: params[:download_type], schemes: unpaginated_filtered_schemes }
+  end
+
+  def email_csv
+    all_orgs = params["organisation_select"] == "all"
+    SchemesEmailCsvJob.perform_later(current_user, search_term, session_filters, all_orgs, nil)
+    redirect_to csv_confirmation_schemes_path
+  end
+
+  def csv_confirmation; end
 
 private
 

@@ -1,10 +1,10 @@
 <span class="govuk-!-margin-right-4">
   <% if searched.present? && filters_count&.positive? %>
-    <strong><%= count %></strong> <%= item_label.pluralize(count) %> matching search and filters<br>
+    <strong><%= count %></strong> <%= item_label.pluralize(count) %> matching search and filters
   <% elsif searched.present? %>
-    <strong><%= count %></strong> <%= item_label.pluralize(count) %> matching search<br>
+    <strong><%= count %></strong> <%= item_label.pluralize(count) %> matching search
   <% elsif filters_count&.positive? %>
-    <strong><%= count %></strong> <%= item_label.pluralize(count) %> matching filters<br>
+    <strong><%= count %></strong> <%= item_label.pluralize(count) %> matching filters
   <% else %>
     <strong><%= count %></strong> matching <%= item %>
   <% end %>

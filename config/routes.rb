@@ -79,6 +79,12 @@ Rails.application.routes.draw do
     patch "deactivate", to: "schemes#deactivate"
     patch "reactivate", to: "schemes#reactivate"
 
+    collection do
+      get "csv-download", to: "schemes#download_csv"
+      post "email-csv", to: "schemes#email_csv"
+      get "csv-confirmation", to: "schemes#csv_confirmation"
+    end
+
     resources :locations do
       post "locations", to: "locations#create"
       get "new-deactivation", to: "locations#new_deactivation"
@@ -148,6 +154,9 @@ Rails.application.routes.draw do
       post "sales-logs/email-csv", to: "organisations#email_sales_csv"
       get "sales-logs/csv-confirmation", to: "sales_logs#csv_confirmation"
       get "schemes", to: "organisations#schemes"
+      get "schemes/csv-download", to: "organisations#download_schemes_csv"
+      post "schemes/email-csv", to: "organisations#email_schemes_csv"
+      get "schemes/csv-confirmation", to: "schemes#csv_confirmation"
       get "stock-owners", to: "organisation_relationships#stock_owners"
       get "stock-owners/add", to: "organisation_relationships#add_stock_owner"
       get "stock-owners/remove", to: "organisation_relationships#remove_stock_owner"

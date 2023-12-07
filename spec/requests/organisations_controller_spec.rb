@@ -59,6 +59,62 @@ RSpec.describe OrganisationsController, type: :request do
           expect(page).to have_field("search", type: "search")
         end
 
+        describe "scheme and location csv downloads" do
+          let!(:specific_organisation) { create(:organisation) }
+          let!(:specific_org_schemes) { create_list(:scheme, 5, owning_organisation: specific_organisation) }
+          let!(:specific_org_scheme) { create(:scheme, owning_organisation: specific_organisation) }
+          let!(:specific_org_locations) { create_list(:location, 3, scheme: specific_org_scheme) }
+
+          it "shows scheme and location download links" do
+            expect(page).to have_link("Download schemes (CSV)", href: csv_download_schemes_path(download_type: "schemes"))
+            expect(page).to have_link("Download locations (CSV)", href: csv_download_schemes_path(download_type: "locations"))
+            expect(page).to have_link("Download schemes and locations (CSV)", href: csv_download_schemes_path(download_type: "combined"))
+          end
+
+          context "when there are no schemes for this organisation" do
+            before do
+              specific_organisation.owned_schemes.destroy_all
+              get "/organisations/#{specific_organisation.id}/schemes", headers:, params: {}
+            end
+
+            it "does not display CSV download links" do
+              expect(page).not_to have_link("Download schemes (CSV)")
+              expect(page).not_to have_link("Download locations (CSV)")
+              expect(page).not_to have_link("Download schemes and locations (CSV)")
+            end
+          end
+
+          context "when downloading scheme data" do
+            before do
+              get csv_download_schemes_path(download_type: "schemes")
+            end
+
+            it "redirects to the correct download page" do
+              expect(page).to have_content("You've selected 6 schemes.")
+            end
+          end
+
+          context "when downloading location data" do
+            before do
+              get csv_download_schemes_path(download_type: "locations")
+            end
+
+            it "redirects to the correct download page" do
+              expect(page).to have_content("You've selected 3 locations from 6 schemes.")
+            end
+          end
+
+          context "when downloading scheme and location data" do
+            before do
+              get csv_download_schemes_path(download_type: "combined")
+            end
+
+            it "redirects to the correct download page" do
+              expect(page).to have_content("You've selected 6 schemes with 3 locations.")
+            end
+          end
+        end
+
         it "has hidden accessibility field with description" do
           expected_field = "<h2 class=\"govuk-visually-hidden\">Supported housing schemes</h2>"
           expect(CGI.unescape_html(response.body)).to include(expected_field)
@@ -114,6 +170,60 @@ RSpec.describe OrganisationsController, type: :request do
 
         it "shows a search bar" do
           expect(page).to have_field("search", type: "search")
+        end
+
+        describe "scheme and location csv downloads" do
+          let!(:same_org_schemes) { create_list(:scheme, 5, owning_organisation: user.organisation) }
+          let!(:same_org_locations) { create_list(:location, 3, scheme: same_org_scheme) }
+
+          it "shows scheme and location download links" do
+            expect(page).to have_link("Download schemes (CSV)", href: csv_download_schemes_path(download_type: "schemes"))
+            expect(page).to have_link("Download locations (CSV)", href: csv_download_schemes_path(download_type: "locations"))
+            expect(page).to have_link("Download schemes and locations (CSV)", href: csv_download_schemes_path(download_type: "combined"))
+          end
+
+          context "when there are no schemes for this organisation" do
+            before do
+              user.organisation.owned_schemes.destroy_all
+              get "/organisations/#{organisation.id}/schemes", headers:, params: {}
+            end
+
+            it "does not display CSV download links" do
+              expect(page).not_to have_link("Download schemes (CSV)")
+              expect(page).not_to have_link("Download locations (CSV)")
+              expect(page).not_to have_link("Download schemes and locations (CSV)")
+            end
+          end
+
+          context "when downloading scheme data" do
+            before do
+              get csv_download_schemes_path(download_type: "schemes")
+            end
+
+            it "redirects to the correct download page" do
+              expect(page).to have_content("You've selected 6 schemes.")
+            end
+          end
+
+          context "when downloading location data" do
+            before do
+              get csv_download_schemes_path(download_type: "locations")
+            end
+
+            it "redirects to the correct download page" do
+              expect(page).to have_content("You've selected 3 locations from 6 schemes.")
+            end
+          end
+
+          context "when downloading scheme and location data" do
+            before do
+              get csv_download_schemes_path(download_type: "combined")
+            end
+
+            it "redirects to the correct download page" do
+              expect(page).to have_content("You've selected 6 schemes with 3 locations.")
+            end
+          end
         end
 
         it "shows only schemes belonging to the same organisation" do

@@ -29,6 +29,18 @@ class OrganisationsController < ApplicationController
     @filter_type = "schemes"
   end
 
+  def download_schemes_csv
+    organisation_schemes = Scheme.where(owning_organisation_id: @organisation.id)
+    unpaginated_filtered_schemes = filter_manager.filtered_schemes(organisation_schemes, search_term, session_filters)
+
+    render "schemes/download_csv", locals: { search_term:, post_path: email_csv_schemes_path, download_type: params[:download_type], schemes: unpaginated_filtered_schemes }
+  end
+
+  def email_schemes_csv
+    SchemesEmailCsvJob.perform_later(current_user, search_term, session_filters, false, @organisation)
+    redirect_to schemes_csv_confirmation_organisation_path
+  end
+
   def show
     redirect_to details_organisation_path(@organisation)
   end

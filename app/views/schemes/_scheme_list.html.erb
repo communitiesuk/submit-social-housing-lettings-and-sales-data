@@ -1,8 +1,13 @@
 <section class="app-table-group" tabindex="0" aria-labelledby="<%= title.dasherize %>">
   <%= govuk_table do |table| %>
     <%= table.caption(classes: %w[govuk-!-font-size-19 govuk-!-font-weight-regular]) do |caption| %>
-    <%= render(SearchResultCaptionComponent.new(searched:, count: pagy.count, item_label:, total_count:, item: "schemes", filters_count: applied_filters_count(@filter_type))) %>
+      <%= render(SearchResultCaptionComponent.new(searched:, count: pagy.count, item_label:, total_count:, item: "schemes", filters_count: applied_filters_count(@filter_type))) %>
+      <% if @schemes&.any? %>
+        <%= govuk_link_to "Download schemes (CSV)", schemes_csv_download_url, type: "text/csv", class: "govuk-!-margin-right-4", style: "white-space: nowrap" %>
+        <%= govuk_link_to "Download locations (CSV)", locations_csv_download_url, type: "text/csv", class: "govuk-!-margin-right-4", style: "white-space: nowrap" %>
+        <%= govuk_link_to "Download schemes and locations (CSV)", combined_csv_download_url, type: "text/csv", class: "govuk-!-margin-right-4", style: "white-space: nowrap" %>
       <% end %>
+    <% end %>
     <%= table.head do |head| %>
       <%= head.row do |row| %>
         <% row.cell(header: true, text: "Scheme", html_attributes: { scope: "col", class: "govuk-!-width-one-quarter" }) %>

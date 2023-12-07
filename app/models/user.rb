@@ -99,6 +99,14 @@ class User < ApplicationRecord
     LettingsLog.filter_by_managing_organisation(organisation.absorbed_organisations + [organisation])
   end
 
+  def schemes
+    if support?
+      Scheme.all
+    else
+      Scheme.filter_by_owning_organisation(organisation.absorbed_organisations + [organisation])
+    end
+  end
+
   def is_key_contact?
     is_key_contact
   end
