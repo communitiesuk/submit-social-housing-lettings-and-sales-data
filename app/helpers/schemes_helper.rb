@@ -68,12 +68,12 @@ module SchemesHelper
     end
   end
 
-  def primary_schemes_csv_download_url(download_type)
-    csv_download_schemes_path(search: @searched, download_type:)
+  def primary_schemes_csv_download_url(search, download_type)
+    csv_download_schemes_path(search:, download_type:)
   end
 
-  def secondary_schemes_csv_download_url(download_type)
-    schemes_csv_download_organisation_path(@organisation, search: @searched, download_type:)
+  def secondary_schemes_csv_download_url(organisation, search, download_type)
+    schemes_csv_download_organisation_path(organisation, search:, download_type:)
   end
 
 private
