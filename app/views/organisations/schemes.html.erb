@@ -28,9 +28,9 @@
     <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--m">
 
     <% if current_user.support? %>
-      <%= render partial: "schemes/scheme_list", locals: { schemes: @schemes, title:, pagy: @pagy, searched: @searched, item_label:, total_count: @total_count, schemes_csv_download_url: schemes_csv_download_organisation_path(@organisation, search: @searched, download_type: "schemes"), locations_csv_download_url: schemes_csv_download_organisation_path(@organisation, search: @searched, download_type: "locations"), combined_csv_download_url: schemes_csv_download_organisation_path(@organisation, search: @searched, download_type: "combined") } %>
+      <%= render partial: "schemes/scheme_list", locals: { schemes: @schemes, title:, pagy: @pagy, searched: @searched, item_label:, total_count: @total_count, schemes_csv_download_url: secondary_schemes_csv_download_url("schemes"), locations_csv_download_url: secondary_schemes_csv_download_url("locations"), combined_csv_download_url: secondary_schemes_csv_download_url("combined") } %>
     <% else %>
-      <%= render partial: "schemes/scheme_list", locals: { schemes: @schemes, title:, pagy: @pagy, searched: @searched, item_label:, total_count: @total_count, schemes_csv_download_url: csv_download_schemes_path(search: @searched, download_type: "schemes"), locations_csv_download_url: csv_download_schemes_path(search: @searched, download_type: "locations"), combined_csv_download_url: csv_download_schemes_path(search: @searched, download_type: "combined") } %>
+      <%= render partial: "schemes/scheme_list", locals: { schemes: @schemes, title:, pagy: @pagy, searched: @searched, item_label:, total_count: @total_count, schemes_csv_download_url: primary_schemes_csv_download_url("schemes"), locations_csv_download_url: primary_schemes_csv_download_url("locations"), combined_csv_download_url: primary_schemes_csv_download_url("combined") } %>
     <% end %>
 
     <%== render partial: "pagy/nav", locals: { pagy: @pagy, item_name: "schemes" } %>
