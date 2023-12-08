@@ -65,10 +65,13 @@ RSpec.describe OrganisationsController, type: :request do
           let!(:specific_org_scheme) { create(:scheme, owning_organisation: specific_organisation) }
           let!(:specific_org_locations) { create_list(:location, 3, scheme: specific_org_scheme) }
 
+          before do
+            get "/organisations/#{specific_organisation.id}/schemes", headers:, params: {}
+          end
           it "shows scheme and location download links" do
-            expect(page).to have_link("Download schemes (CSV)", href: csv_download_schemes_path(download_type: "schemes"))
-            expect(page).to have_link("Download locations (CSV)", href: csv_download_schemes_path(download_type: "locations"))
-            expect(page).to have_link("Download schemes and locations (CSV)", href: csv_download_schemes_path(download_type: "combined"))
+            expect(page).to have_link("Download schemes (CSV)", href: schemes_csv_download_organisation_path(specific_organisation, download_type: "schemes"))
+            expect(page).to have_link("Download locations (CSV)", href: schemes_csv_download_organisation_path(specific_organisation, download_type: "locations"))
+            expect(page).to have_link("Download schemes and locations (CSV)", href: schemes_csv_download_organisation_path(specific_organisation, download_type: "combined"))
           end
 
           context "when there are no schemes for this organisation" do
@@ -86,7 +89,7 @@ RSpec.describe OrganisationsController, type: :request do
 
           context "when downloading scheme data" do
             before do
-              get csv_download_schemes_path(download_type: "schemes")
+              get schemes_csv_download_organisation_path(specific_organisation, download_type: "schemes")
             end
 
             it "redirects to the correct download page" do
@@ -96,7 +99,7 @@ RSpec.describe OrganisationsController, type: :request do
 
           context "when downloading location data" do
             before do
-              get csv_download_schemes_path(download_type: "locations")
+              get schemes_csv_download_organisation_path(specific_organisation, download_type: "locations")
             end
 
             it "redirects to the correct download page" do
@@ -106,7 +109,7 @@ RSpec.describe OrganisationsController, type: :request do
 
           context "when downloading scheme and location data" do
             before do
-              get csv_download_schemes_path(download_type: "combined")
+              get schemes_csv_download_organisation_path(specific_organisation, download_type: "combined")
             end
 
             it "redirects to the correct download page" do
