@@ -16,7 +16,7 @@
     <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--m">
 
     <%= render partial: "schemes/scheme_list", locals: { schemes: @schemes, title:, pagy: @pagy, searched: @searched, item_label:, total_count: @total_count, schemes_csv_download_url: csv_download_schemes_path(search: @searched, download_type: "schemes"), locations_csv_download_url: csv_download_schemes_path(search: @searched, download_type: "locations"), combined_csv_download_url: csv_download_schemes_path(search: @searched, download_type: "combined") } %>
-    
+
     <%== render partial: "pagy/nav", locals: { pagy: @pagy, item_name: "schemes" } %>
   </div>
 </div>
