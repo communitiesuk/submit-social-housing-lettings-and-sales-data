@@ -69,6 +69,9 @@ RSpec.describe OrganisationsController, type: :request do
             get "/organisations/#{specific_organisation.id}/schemes", headers:, params: {}
           end
 
+          before do
+            get "/organisations/#{specific_organisation.id}/schemes", headers:, params: {}
+          end
           it "shows scheme and location download links" do
             expect(page).to have_link("Download schemes (CSV)", href: schemes_csv_download_organisation_path(specific_organisation, download_type: "schemes"))
             expect(page).to have_link("Download locations (CSV)", href: schemes_csv_download_organisation_path(specific_organisation, download_type: "locations"))
