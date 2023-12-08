@@ -193,11 +193,14 @@ RSpec.describe SchemesController, type: :request do
 
       describe "scheme and location csv downloads" do
         let!(:same_org_scheme) { create(:scheme, owning_organisation: user.organisation) }
-        let(:same_org_location) { create(:location, scheme: same_org_scheme) }
         let!(:specific_organisation) { create(:organisation) }
-        let(:specific_org_schemes) { create_list(:scheme, 5, owning_organisation: specific_organisation) }
         let!(:specific_org_scheme) { create(:scheme, owning_organisation: specific_organisation) }
-        let(:specific_org_locations) { create_list(:location, 3, scheme: specific_org_scheme) }
+
+        before do
+          create(:location, scheme: same_org_scheme)
+          create_list(:scheme, 5, owning_organisation: specific_organisation)
+          create_list(:location, 3, scheme: specific_org_scheme)
+        end
 
         it "shows scheme and location download links" do
           expect(page).to have_link("Download schemes (CSV)", href: csv_download_schemes_path(download_type: "schemes"))
