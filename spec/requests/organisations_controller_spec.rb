@@ -61,13 +61,14 @@ RSpec.describe OrganisationsController, type: :request do
 
         describe "scheme and location csv downloads" do
           let!(:specific_organisation) { create(:organisation) }
-          let!(:specific_org_schemes) { create_list(:scheme, 5, owning_organisation: specific_organisation) }
+          let(:specific_org_schemes) { create_list(:scheme, 5, owning_organisation: specific_organisation) }
           let!(:specific_org_scheme) { create(:scheme, owning_organisation: specific_organisation) }
-          let!(:specific_org_locations) { create_list(:location, 3, scheme: specific_org_scheme) }
+          let(:specific_org_locations) { create_list(:location, 3, scheme: specific_org_scheme) }
 
           before do
             get "/organisations/#{specific_organisation.id}/schemes", headers:, params: {}
           end
+
           it "shows scheme and location download links" do
             expect(page).to have_link("Download schemes (CSV)", href: schemes_csv_download_organisation_path(specific_organisation, download_type: "schemes"))
             expect(page).to have_link("Download locations (CSV)", href: schemes_csv_download_organisation_path(specific_organisation, download_type: "locations"))
@@ -176,8 +177,8 @@ RSpec.describe OrganisationsController, type: :request do
         end
 
         describe "scheme and location csv downloads" do
-          let!(:same_org_schemes) { create_list(:scheme, 5, owning_organisation: user.organisation) }
-          let!(:same_org_locations) { create_list(:location, 3, scheme: same_org_scheme) }
+          let(:same_org_schemes) { create_list(:scheme, 5, owning_organisation: user.organisation) }
+          let(:same_org_locations) { create_list(:location, 3, scheme: same_org_scheme) }
 
           it "shows scheme and location download links" do
             expect(page).to have_link("Download schemes (CSV)", href: csv_download_schemes_path(download_type: "schemes"))
