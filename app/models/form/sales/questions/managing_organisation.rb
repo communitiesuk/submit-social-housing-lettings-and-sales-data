@@ -5,7 +5,6 @@ class Form::Sales::Questions::ManagingOrganisation < ::Form::Question
     @check_answer_label = "Reported by"
     @header = "Which organisation is reporting this sales log?"
     @type = "select"
-    @question_number = 2
   end
 
   def answer_options(log = nil, user = nil)
