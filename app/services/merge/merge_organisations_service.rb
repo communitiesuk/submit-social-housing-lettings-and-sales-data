@@ -189,7 +189,10 @@ private
 
     if deactivation_happenned_during_merge?(deactivation_period)
       SchemeDeactivationPeriod.create!(deactivation_period.attributes.except("id", "scheme_id", "deactivation_date").merge(scheme: new_scheme, deactivation_date: @merge_date))
-      deactivation_period.update!(reactivation_date: nil) if deactivation_period.reactivation_date.present?
+      if deactivation_period.reactivation_date.present?
+        deactivation_period.reactivation_date = nil
+        deactivation_period.save!(validate: false)
+      end
     else
       SchemeDeactivationPeriod.create!(deactivation_period.attributes.except("id", "scheme_id").merge(scheme: new_scheme))
       deactivation_period.destroy!
@@ -201,7 +204,10 @@ private
 
     if deactivation_happenned_during_merge?(deactivation_period)
       LocationDeactivationPeriod.create!(deactivation_period.attributes.except("id", "location_id", "deactivation_date").merge(location: new_location, deactivation_date: @merge_date))
-      deactivation_period.update!(reactivation_date: nil) if deactivation_period.reactivation_date.present?
+      if deactivation_period.reactivation_date.present?
+        deactivation_period.reactivation_date = nil
+        deactivation_period.save!(validate: false)
+      end
     else
       LocationDeactivationPeriod.create!(deactivation_period.attributes.except("id", "location_id").merge(location: new_location))
       deactivation_period.destroy!
