@@ -67,19 +67,27 @@ private
   def merge_schemes_and_locations(merging_organisation)
     @merged_schemes[merging_organisation.name] = []
     merging_organisation.owned_schemes.each do |scheme|
-      new_scheme = Scheme.create!(scheme.attributes.except("id", "owning_organisation_id", "old_id", "old_visible_id").merge(owning_organisation: @absorbing_organisation, startdate: [scheme&.startdate, @merge_date].compact.max))
+      new_scheme = Scheme.new(scheme.attributes.except("id", "owning_organisation_id", "old_id", "old_visible_id").merge(owning_organisation: @absorbing_organisation, startdate: [scheme&.startdate, @merge_date].compact.max))
+      new_scheme.save!(validate: false)
       scheme.scheme_deactivation_periods.each do |deactivation_period|
         split_scheme_deactivation_period_between_organisations(deactivation_period, new_scheme)
       end
       scheme.locations.each do |location|
-        new_location = Location.create!(location.attributes.except("id", "scheme_id", "old_id", "old_visible_id").merge(scheme: new_scheme, startdate: [location&.startdate, @merge_date].compact.max))
+        new_location = Location.new(location.attributes.except("id", "scheme_id", "old_id", "old_visible_id").merge(scheme: new_scheme, startdate: [location&.startdate, @merge_date].compact.max))
+        new_location.save!(validate: false)
         location.location_deactivation_periods.each do |deactivation_period|
           split_location_deactivation_period_between_organisations(deactivation_period, new_location)
         end
-        LocationDeactivationPeriod.create!(location:, deactivation_date: [location&.startdate, scheme&.startdate, @merge_date].compact.max) unless location.status_at(@merge_date) == :deactivated
+        unless location.status_at(@merge_date) == :deactivated
+          deactivation_period = LocationDeactivationPeriod.new(location:, deactivation_date: [location&.startdate, scheme&.startdate, @merge_date].compact.max)
+          deactivation_period.save!(validate: false)
+        end
       end
       @merged_schemes[merging_organisation.name] << { name: new_scheme.service_name, code: new_scheme.id }
-      SchemeDeactivationPeriod.create!(scheme:, deactivation_date: [scheme&.startdate, @merge_date].compact.max) unless scheme.status_at(@merge_date) == :deactivated
+      unless scheme.status_at(@merge_date) == :deactivated
+        deactivation_period = SchemeDeactivationPeriod.new(scheme:, deactivation_date: [scheme&.startdate, @merge_date].compact.max)
+        deactivation_period.save!(validate: false)
+      end
     end
   end
 
@@ -188,13 +196,15 @@ private
     return if deactivation_happenned_before_merge?(deactivation_period)
 
     if deactivation_happenned_during_merge?(deactivation_period)
-      SchemeDeactivationPeriod.create!(deactivation_period.attributes.except("id", "scheme_id", "deactivation_date").merge(scheme: new_scheme, deactivation_date: @merge_date))
+      new_deactivation_period = SchemeDeactivationPeriod.new(deactivation_period.attributes.except("id", "scheme_id", "deactivation_date").merge(scheme: new_scheme, deactivation_date: @merge_date))
+      new_deactivation_period.save!(validate: false)
       if deactivation_period.reactivation_date.present?
         deactivation_period.reactivation_date = nil
         deactivation_period.save!(validate: false)
       end
     else
-      SchemeDeactivationPeriod.create!(deactivation_period.attributes.except("id", "scheme_id").merge(scheme: new_scheme))
+      new_deactivation_period = SchemeDeactivationPeriod.new(deactivation_period.attributes.except("id", "scheme_id").merge(scheme: new_scheme))
+      new_deactivation_period.save!(validate: false)
       deactivation_period.destroy!
     end
   end
@@ -203,13 +213,15 @@ private
     return if deactivation_happenned_before_merge?(deactivation_period)
 
     if deactivation_happenned_during_merge?(deactivation_period)
-      LocationDeactivationPeriod.create!(deactivation_period.attributes.except("id", "location_id", "deactivation_date").merge(location: new_location, deactivation_date: @merge_date))
+      new_deactivation_period = LocationDeactivationPeriod.new(deactivation_period.attributes.except("id", "location_id", "deactivation_date").merge(location: new_location, deactivation_date: @merge_date))
+      new_deactivation_period.save!(validate: false)
       if deactivation_period.reactivation_date.present?
         deactivation_period.reactivation_date = nil
         deactivation_period.save!(validate: false)
       end
     else
-      LocationDeactivationPeriod.create!(deactivation_period.attributes.except("id", "location_id").merge(location: new_location))
+      new_deactivation_period = LocationDeactivationPeriod.new(deactivation_period.attributes.except("id", "location_id").merge(location: new_location))
+      new_deactivation_period.save!(validate: false)
       deactivation_period.destroy!
     end
   end
