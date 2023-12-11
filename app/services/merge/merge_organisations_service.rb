@@ -130,7 +130,12 @@ private
     end
     merging_organisation.managed_sales_logs.after_date(@merge_date.to_time).each do |sales_log|
       sales_log.managing_organisation = @absorbing_organisation
-      sales_log.save!(validate: false)
+      if sales_log.collection_period_open?
+        sales_log.skip_dpo_validation = true
+        sales_log.save!
+      else
+        sales_log.save!(validate: false)
+      end
     end
   end
 
