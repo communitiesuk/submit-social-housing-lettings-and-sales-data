@@ -21,7 +21,19 @@
     <h2 class="govuk-visually-hidden">Scheme</h2>
     <dl class="govuk-summary-list">
       <% @scheme.check_details_attributes.each do |attr| %>
-        <%= render partial: "scheme_summary_list_row", locals: { scheme: @scheme, attribute: attr, change_link: current_user.support? ? scheme_details_path(@scheme, check_answers: true) : scheme_edit_name_path(scheme_id: @scheme.id) } %>
+        <% if attr[:name] == "Status" %>
+          <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
+            <dt class="govuk-summary-list__key">Status</dt>
+            <dd class="govuk-summary-list__value">
+              <%= details_html({ name: "Status", value: status_tag_from_resource(@scheme), id: "status" }) %>
+              <% if @scheme.confirmed? && @scheme.locations.confirmed.none? && LocationPolicy.new(current_user, @scheme.locations.new).create? %>
+                <span class="app-!-colour-muted">Complete this scheme by adding a location using the <%= govuk_link_to("‘locations’ tab", scheme_locations_path(@scheme)) %>.</span>
+              <% end %>
+            </dd>
+          </div>
+        <% else %>
+          <%= render partial: "scheme_summary_list_row", locals: { scheme: @scheme, attribute: attr, change_link: current_user.support? ? scheme_details_path(@scheme, check_answers: true) : scheme_edit_name_path(scheme_id: @scheme.id) } %>
+        <% end %>
       <% end %>
 
       <% @scheme.check_primary_client_attributes.each do |attr| %>
@@ -41,6 +53,13 @@
       <% @scheme.check_support_attributes.each do |attr| %>
         <%= render partial: "scheme_summary_list_row", locals: { scheme: @scheme, attribute: attr, change_link: scheme_support_path(@scheme, check_answers: true) } %>
       <% end %>
+
+      <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
+        <dt class="govuk-summary-list__key">Availability</dt>
+        <dd class="govuk-summary-list__value">
+          <%= details_html({ name: "Availability", value: scheme_availability(@scheme), id: "availability" }) %>
+        </dd>
+      </div>
     </dl>
   </div>
 </div>

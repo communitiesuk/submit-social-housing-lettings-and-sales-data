@@ -377,9 +377,9 @@ RSpec.describe "Schemes scheme Features" do
                     expect(page).to have_content("has been added")
                   end
 
-                  it "does not let you edit the saved location" do
+                  it "lets you edit the saved location" do
                     click_link "AA1 2AA"
-                    expect(page).not_to have_link(nil, href: /postcode/)
+                    expect(page).to have_link("Change", href: /postcode/)
                   end
                 end
 
@@ -607,7 +607,7 @@ RSpec.describe "Schemes scheme Features" do
 
           it "displays changed location" do
             click_link "AA1 2AA"
-            click_link "Change"
+            click_link("Change", href: "/schemes/#{scheme.id}/locations/#{location.id}/name?referrer=details", match: :first)
             fill_in with: "new name"
             click_button "Save changes"
             expect(page).to have_content "AA1 2AA"
@@ -864,10 +864,10 @@ RSpec.describe "Schemes scheme Features" do
                 expect(page).to have_content("Active")
               end
 
-              it "only allows to edit the location name" do
-                assert_selector "a", text: "Change", count: 1
+              it "only allows to edit the location name, postcode, unit, unit type and mobility standards" do
+                assert_selector "a", text: "Change", count: 5
 
-                click_link("Change")
+                click_link("Change", href: "/schemes/#{scheme.id}/locations/#{location.id}/name?referrer=details", match: :first)
                 expect(page).to have_content "What is the name of this location?"
               end
 
@@ -889,7 +889,7 @@ RSpec.describe "Schemes scheme Features" do
 
               context "and I change the location name" do
                 before do
-                  click_link("Change")
+                  click_link("Change", href: "/schemes/#{scheme.id}/locations/#{location.id}/name?referrer=details", match: :first)
                 end
 
                 it "returns to locations check your answers page and shows the new name" do
@@ -1008,9 +1008,9 @@ RSpec.describe "Schemes scheme Features" do
                     expect(page).to have_content("has been added")
                   end
 
-                  it "does not let you edit the saved location" do
+                  it "lets you edit the saved location" do
                     click_link "AA1 2AA"
-                    expect(page).not_to have_link(nil, href: /postcode/)
+                    expect(page).to have_link("Change", href: /postcode/)
                   end
                 end
 

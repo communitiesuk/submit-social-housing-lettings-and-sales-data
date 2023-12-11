@@ -188,6 +188,7 @@ class Scheme < ApplicationRecord
     [
       { name: "Scheme code", value: id_to_display, id: "id" },
       { name: "Name", value: service_name, id: "service_name", edit: true },
+      { name: "Status", value: status, id: "status" },
       { name: "Confidential information", value: sensitive, id: "sensitive", edit: true },
       { name: "Type of scheme", value: scheme_type, id: "scheme_type", edit: true },
       { name: "Registered under Care Standards Act 2000", value: registered_under_care_act, id: "registered_under_care_act", edit: true },
