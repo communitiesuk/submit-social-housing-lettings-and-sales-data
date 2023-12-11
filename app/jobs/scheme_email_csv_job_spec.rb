@@ -11,7 +11,7 @@ describe SchemeEmailCsvJob do
   let(:mailer) { instance_double(CsvDownloadMailer) }
   let(:scheme_csv_service) { instance_double(Csv::SchemeCsvService) }
   let(:search_term) { "meaning" }
-  let(:filters) { { "user" => "you", "status" => %w[in_progress] } }
+  let(:filters) { { "owning_organisation" => organisation.id, "status" => %w[active] } }
   let(:all_orgs) { false }
   let(:organisation) { build(:organisation) }
   let(:download_type) { "combined" }
