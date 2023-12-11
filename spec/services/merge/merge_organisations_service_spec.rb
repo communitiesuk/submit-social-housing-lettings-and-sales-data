@@ -308,6 +308,47 @@ RSpec.describe Merge::MergeOrganisationsService do
             end
           end
 
+          context "and deactivation is after the merge date and before an open collection window" do
+            subject(:merge_organisations_service) { described_class.new(absorbing_organisation_id: absorbing_organisation.id, merging_organisation_ids: [merging_organisation_ids], merge_date: Time.zone.today - 6.years) }
+
+            let!(:scheme) { create(:scheme, owning_organisation: merging_organisation, old_id: "scheme_old_id", old_visible_id: "scheme_old_visible_id", startdate: nil) }
+            let!(:location) { create(:location, scheme:, old_id: "location_old_id", old_visible_id: "location_old_visible_id", startdate: nil) }
+
+            before do
+              scheme_deactivation_period = build(:scheme_deactivation_period, scheme:, deactivation_date: Time.zone.today - 3.years, reactivation_date: Time.zone.today - 3.months)
+              scheme_deactivation_period.save!(validate: false)
+              location_deactivation_period = build(:location_deactivation_period, location:, deactivation_date: Time.zone.today - 4.years)
+              location_deactivation_period.save!(validate: false)
+              merge_organisations_service.call
+              absorbing_organisation.reload
+              scheme.scheme_deactivation_periods.reload
+              location.location_deactivation_periods.reload
+            end
+
+            it "moves the deactivations to absorbing organisation and removes them from merging organisations" do
+              expect(absorbing_organisation.owned_schemes.count).to eq(1)
+
+              absorbed_scheme = absorbing_organisation.owned_schemes.first
+              expect(absorbed_scheme.locations.count).to eq(1)
+              absorbed_location = absorbed_scheme.locations.first
+
+              expect(absorbed_scheme.startdate).to eq(Time.zone.today - 6.years)
+              expect(absorbed_scheme.scheme_deactivation_periods.count).to eq(1)
+
+              expect(absorbed_location.startdate).to eq(Time.zone.today - 6.years)
+              expect(absorbed_location.location_deactivation_periods.count).to eq(1)
+            end
+
+            it "deactivates schemes and locations on the merged organisation" do
+              expect(scheme.owning_organisation).to eq(merging_organisation)
+              expect(location.scheme).to eq(scheme)
+              expect(scheme.scheme_deactivation_periods.count).to eq(1)
+              expect(scheme.scheme_deactivation_periods.last.deactivation_date).to eq(Time.zone.today - 6.years)
+              expect(location.location_deactivation_periods.count).to eq(1)
+              expect(location.location_deactivation_periods.last.deactivation_date).to eq(Time.zone.today - 6.years)
+            end
+          end
+
           context "and deactivation is during the merge date and it has a reactivation date" do
             let!(:scheme) { create(:scheme, owning_organisation: merging_organisation, old_id: "scheme_old_id", old_visible_id: "scheme_old_visible_id", startdate: nil) }
             let!(:location) { create(:location, scheme:, old_id: "location_old_id", old_visible_id: "location_old_visible_id", startdate: nil) }
