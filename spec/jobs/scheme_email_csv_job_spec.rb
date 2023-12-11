@@ -16,7 +16,7 @@ describe SchemeEmailCsvJob do
   let(:organisation) { build(:organisation) }
   let(:download_type) { "combined" }
   let(:schemes) { build_list(:scheme, 5, owning_organisation: organisation) }
-  let(:locations) { build_list(:locations, 5, scheme: schemes.first) }
+  let(:locations) { build_list(:location, 5, scheme: schemes.first) }
 
   before do
     allow(Storage::S3Service).to receive(:new).and_return(storage_service)
