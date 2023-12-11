@@ -125,11 +125,14 @@ module FiltersHelper
   end
 
   def non_support_with_multiple_owning_orgs?
-    current_user.organisation.stock_owners.count > 1 || current_user.organisation.has_recent_absorbed_organisations?
+    return true if current_user.organisation.stock_owners.count > 1
+    return true if current_user.organisation.stock_owners.count.positive? && current_user.organisation.holds_own_stock?
+
+    current_user.organisation.has_recent_absorbed_organisations?
   end
 
-  def non_support_with_multiple_managing_orgs?
-    current_user.organisation.managing_agents.count > 1 || current_user.organisation.has_recent_absorbed_organisations?
+  def non_support_with_managing_orgs?
+    current_user.organisation.managing_agents.count >= 1 || current_user.organisation.has_recent_absorbed_organisations?
   end
 
   def user_lettings_path?

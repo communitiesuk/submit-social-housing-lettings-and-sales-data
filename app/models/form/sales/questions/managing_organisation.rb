@@ -3,7 +3,7 @@ class Form::Sales::Questions::ManagingOrganisation < ::Form::Question
     super
     @id = "managing_organisation_id"
     @check_answer_label = "Reported by"
-    @header = "Which organisation is reporting this sales log?"
+    @header = "Which organisation is reporting this sale?"
     @type = "select"
   end
 

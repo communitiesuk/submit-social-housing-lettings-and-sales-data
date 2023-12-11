@@ -18,7 +18,7 @@ RSpec.describe Form::Sales::Questions::ManagingOrganisation, type: :model do
   end
 
   it "has the correct header" do
-    expect(question.header).to eq("Which organisation is reporting this sales log?")
+    expect(question.header).to eq("Which organisation is reporting this sale?")
   end
 
   it "has the correct check_answer_label" do
