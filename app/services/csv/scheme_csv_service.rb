@@ -45,7 +45,6 @@ module Csv
       "scheme_service_name" => %w[service_name],
       "scheme_status" => %w[status],
       "scheme_sensitive" => %w[sensitive],
-      "scheme_type" => [],
       "scheme_registered_under_care_act" => %w[registered_under_care_act],
       "scheme_support_services_provided_by" => %w[arrangement_type],
       "scheme_primary_client_group" => %w[primary_client_group],

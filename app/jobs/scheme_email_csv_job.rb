@@ -14,12 +14,10 @@ class SchemeEmailCsvJob < ApplicationJob
       csv_string = Csv::SchemeCsvService.new(user:).prepare_csv(filtered_schemes)
       filename = "#{['schemes', organisation&.name, Time.zone.now].compact.join('-')}.csv"
     when "locations"
-      filtered_locations = filtered_schemes.map(&:locations).flatten
-      csv_string = Csv::LocationCsvService.new(user:).prepare_csv(filtered_locations)
+      csv_string = Csv::LocationCsvService.new(user:).prepare_csv(filtered_schemes)
       filename = "#{['locations', organisation&.name, Time.zone.now].compact.join('-')}.csv"
     when "combined"
-      filtered_locations = filtered_schemes.map(&:locations).flatten
-      csv_string = Csv::SchemeAndLocationCsvService.new(user:).prepare_csv(filtered_locations)
+      csv_string = Csv::SchemeAndLocationCsvService.new(user:).prepare_csv(filtered_schemes)
       filename = "#{['schemes-and-locations', organisation&.name, Time.zone.now].compact.join('-')}.csv"
     end
 
