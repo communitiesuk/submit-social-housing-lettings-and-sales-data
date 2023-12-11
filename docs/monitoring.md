@@ -33,17 +33,23 @@ To do this, you will need to “exec” into the container.
 - AWS access
 
 #### Accessing the rails console
-1. Find the cluster name of the relevant cluster
-2. Find the task arn of a relevant task
-3. In a shell using suitable AWS credentials for the relevant account (e.g. the development, staging, or production account), run `aws ecs execute-command --cluster cluster-name --task task-arn --interactive --command "rails c"`
- 
-N.B. You can run other commands on the container similarly.
+In a shell using suitable AWS credentials for the relevant account (e.g. the development, staging, or production account), run `./exec.sh env command` 
+
+E.g. `./exec.sh staging "rails c"` - this will open the rails console on an app container in the staging environment, when authenticated for the staging aws account.
+
+You can use this for other commands, e.g. to get a bash shell.
+
+For production, use `prod` as the environment. For a review app, use `review-<PR-NUM>`
+
+Alternatively, if you care about which container you're accessing, you can view a table of container details with e.g.
 
 ```
 env=staging
 taskArns=$(aws ecs list-tasks --cluster "core-$env-app" --query "taskArns[*]")
 aws ecs describe-tasks --cluster "core-$env-app" --tasks "${taskArns[@]}" --query "tasks[*].{arn:taskArn, status:lastStatus, startedAt:startedAt, group:group, image:containers[0].image}" --output text
 ```
+You can then use `aws ecs execute-command --cluster "core-$env-app" --task <taskid> --interactive --command <command>` to run the relevant command on a specific task.
+
 
 ### Database
 In order to investigate or look more closely at the database, you can exec into a container as above, and use the rails console to query the database.
