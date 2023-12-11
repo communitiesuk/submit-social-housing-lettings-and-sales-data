@@ -199,7 +199,7 @@ RSpec.describe Merge::MergeOrganisationsService do
       end
 
       context "and merging sales logs" do
-        let!(:sales_log) { create(:sales_log, saledate: Time.zone.tomorrow, owning_organisation: merging_organisation) }
+        let!(:sales_log) { create(:sales_log, :completed, saledate: Time.zone.tomorrow, owning_organisation: merging_organisation) }
 
         before do
           create(:sales_log, saledate: Time.zone.yesterday, owning_organisation: merging_organisation)
@@ -223,6 +223,20 @@ RSpec.describe Merge::MergeOrganisationsService do
           absorbing_organisation.reload
           expect(absorbing_organisation.sales_logs.count).to eq(0)
           expect(sales_log.owning_organisation).to eq(merging_organisation)
+        end
+
+        context "with merge date in closed collection year" do
+          subject(:merge_organisations_service) { described_class.new(absorbing_organisation_id: absorbing_organisation.id, merging_organisation_ids: [merging_organisation_ids], merge_date: Time.zone.local(2021, 3, 3)) }
+
+          it "does not validate saledate for closed collection years" do
+            sales_log.saledate = Time.zone.local(2022, 5, 1)
+            sales_log.save!(validate: false)
+            merge_organisations_service.call
+
+            absorbing_organisation.reload
+            sales_log.reload
+            expect(sales_log.owning_organisation).to eq(absorbing_organisation)
+          end
         end
       end
 
@@ -267,7 +281,7 @@ RSpec.describe Merge::MergeOrganisationsService do
 
         context "and merging lettings logs" do
           let(:owning_organisation) { create(:organisation, holds_own_stock: true) }
-          let!(:owned_lettings_log) { create(:lettings_log, startdate: Time.zone.today, owning_organisation: merging_organisation, created_by: merging_organisation_user) }
+          let!(:owned_lettings_log) { create(:lettings_log, :completed, startdate: Time.zone.today, owning_organisation: merging_organisation, managing_organisation: merging_organisation, created_by: merging_organisation_user) }
           let!(:managed_lettings_log) { create(:lettings_log, startdate: Time.zone.today) }
 
           before do
@@ -299,6 +313,32 @@ RSpec.describe Merge::MergeOrganisationsService do
             expect(absorbing_organisation.lettings_logs.count).to eq(0)
             expect(owned_lettings_log.owning_organisation).to eq(merging_organisation)
             expect(managed_lettings_log.managing_organisation).to eq(merging_organisation)
+          end
+
+          it "does not clear any answers if the owning and managing organisation are the same" do
+            expect(owned_lettings_log.status).to eq("completed")
+            merge_organisations_service.call
+
+            absorbing_organisation.reload
+            owned_lettings_log.reload
+            expect(owned_lettings_log.status).to eq("completed")
+            expect(owned_lettings_log.owning_organisation).to eq(absorbing_organisation)
+            expect(owned_lettings_log.managing_organisation).to eq(absorbing_organisation)
+          end
+
+          context "with merge date in closed collection year" do
+            subject(:merge_organisations_service) { described_class.new(absorbing_organisation_id: absorbing_organisation.id, merging_organisation_ids: [merging_organisation_ids], merge_date: Time.zone.local(2021, 3, 3)) }
+
+            it "does not validate startdate for closed collection years" do
+              owned_lettings_log.startdate = Time.zone.local(2022, 4, 1)
+              owned_lettings_log.save!(validate: false)
+              merge_organisations_service.call
+
+              absorbing_organisation.reload
+              owned_lettings_log.reload
+              expect(owned_lettings_log.owning_organisation).to eq(absorbing_organisation)
+              expect(owned_lettings_log.managing_organisation).to eq(absorbing_organisation)
+            end
           end
         end
 
