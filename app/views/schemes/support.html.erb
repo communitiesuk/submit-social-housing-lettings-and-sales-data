@@ -37,7 +37,12 @@
 
       <%= f.hidden_field :page, value: "support" %>
 
-      <%= f.govuk_submit "Save and continue" %>
+      <% if request.query_parameters["check_answers"] == "true" %>
+        <%= f.hidden_field :check_answers, value: "true" %>
+        <%= f.govuk_submit "Save changes" %>
+      <% else %>
+        <%= f.govuk_submit "Save and continue" %>
+      <% end %>
     </div>
   </div>
 <% end %>

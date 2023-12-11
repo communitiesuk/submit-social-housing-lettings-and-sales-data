@@ -4,7 +4,7 @@ FactoryBot.define do
     sensitive { Faker::Number.within(range: 0..1) }
     registered_under_care_act { 1 }
     support_type { [0, 2, 3, 4, 5].sample }
-    scheme_type { 0 }
+    scheme_type { 4 }
     arrangement_type { "D" }
     intended_stay { %w[M P S V X].sample }
     primary_client_group { %w[O H M L A G F B D E I S N R Q P X].sample }
@@ -13,6 +13,7 @@ FactoryBot.define do
     owning_organisation { FactoryBot.create(:organisation) }
     confirmed { true }
     created_at { Time.zone.local(2021, 4, 1) }
+    total_units { 2 }
     trait :export do
       sensitive { 1 }
       registered_under_care_act { 1 }

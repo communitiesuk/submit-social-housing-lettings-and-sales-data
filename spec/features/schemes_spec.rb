@@ -390,7 +390,7 @@ RSpec.describe "Schemes scheme Features" do
                   end
 
                   it "does not let you change details other than the name, confidential information and housing stock owner" do
-                    assert_selector "a", text: "Change", count: 3
+                    assert_selector "a", text: "Change", count: 11
                   end
                 end
               end
@@ -621,7 +621,7 @@ RSpec.describe "Schemes scheme Features" do
           end
 
           it "displays change links" do
-            assert_selector "a", text: "Change", count: 11
+            assert_selector "a", text: "Change", count: 10
           end
 
           it "allows changing details questions" do
@@ -629,7 +629,7 @@ RSpec.describe "Schemes scheme Features" do
             expect(page).to have_current_path("/schemes/#{scheme.id}/details?check_answers=true")
 
             fill_in "Scheme name", with: "Example"
-            click_button "Save and continue"
+            click_button "Save changes"
 
             expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
             expect(page).to have_content "Example"
@@ -645,7 +645,7 @@ RSpec.describe "Schemes scheme Features" do
           it "indicates if the scheme is not complete" do
             click_link("Change", href: "/schemes/#{scheme.id}/confirm-secondary-client-group?check_answers=true", match: :first)
             choose "Yes"
-            click_button "Save and continue"
+            click_button "Save changes"
             visit("/schemes/#{scheme.id}/check-answers")
             expect(page).to have_content("You didn’t answer this question")
           end
@@ -687,7 +687,7 @@ RSpec.describe "Schemes scheme Features" do
             end
 
             it "displays change links" do
-              assert_selector "a", text: "Change", count: 12
+              assert_selector "a", text: "Change", count: 11
             end
 
             it "allows changing details questions" do
@@ -695,7 +695,7 @@ RSpec.describe "Schemes scheme Features" do
               expect(page).to have_current_path("/schemes/#{scheme.id}/details?check_answers=true")
 
               fill_in "Scheme name", with: "Example"
-              click_button "Save and continue"
+              click_button "Save changes"
 
               expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
               expect(page).to have_content "Example"
@@ -711,14 +711,14 @@ RSpec.describe "Schemes scheme Features" do
             it "keeps the provider answer when switching between other provider options" do
               click_link("Change", href: "/schemes/#{scheme.id}/confirm-secondary-client-group?check_answers=true", match: :first)
               choose "Yes"
-              click_button "Save and continue"
+              click_button "Save changes"
               expect(find_field("Offenders and people at risk of offending")).to be_checked
             end
 
             it "does not display the answer if it's changed to the same support provider" do
               click_link("Change", href: "/schemes/#{scheme.id}/details?check_answers=true", match: :first)
               choose "The same organisation that owns the housing stock"
-              click_button "Save and continue"
+              click_button "Save changes"
               expect(page).not_to have_content("Organisation providing support")
             end
           end
@@ -766,11 +766,11 @@ RSpec.describe "Schemes scheme Features" do
 
           context "when I click to change scheme name" do
             before do
-              click_link("Change", href: "/schemes/#{scheme.id}/edit-name", match: :first)
+              click_link("Change", href: "/schemes/#{scheme.id}/details?check_answers=true", match: :first)
             end
 
             it "shows available fields to edit" do
-              expect(page).to have_current_path("/schemes/#{scheme.id}/edit-name")
+              expect(page).to have_current_path("/schemes/#{scheme.id}/details?check_answers=true")
               expect(page).to have_content "Scheme details"
             end
 
@@ -784,7 +784,7 @@ RSpec.describe "Schemes scheme Features" do
               it "lets me see amended details on the check answers page" do
                 expect(page).to have_content "FooBar"
                 expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
-                assert_selector "a", text: "Change", count: 3
+                assert_selector "a", text: "Change", count: 11
               end
 
               it "lets me save the scheme" do
@@ -1021,7 +1021,7 @@ RSpec.describe "Schemes scheme Features" do
                   end
 
                   it "does not let you change details other than the name, confidential information and housing stock owner" do
-                    assert_selector "a", text: "Change", count: 3
+                    assert_selector "a", text: "Change", count: 11
                   end
                 end
               end

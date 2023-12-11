@@ -25,14 +25,16 @@
         legend: nil %>
 
       <%= f.hidden_field :page, value: "primary-client-group" %>
-      <% if request.query_parameters["check_answers"] == "true" %>
-        <%= f.hidden_field :check_answers, value: "true" %>
-      <% end %>
       <% if request.query_parameters["select_managing_org"] == "true" %>
         <%= f.hidden_field :check_answers, value: "true" %>
       <% end %>
 
-      <%= f.govuk_submit "Save and continue" %>
+      <% if request.query_parameters["check_answers"] == "true" %>
+        <%= f.hidden_field :check_answers, value: "true" %>
+        <%= f.govuk_submit "Save changes" %>
+      <% else %>
+        <%= f.govuk_submit "Save and continue" %>
+      <% end %>
     </div>
   </div>
 <% end %>

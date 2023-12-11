@@ -310,7 +310,7 @@ private
   end
 
   def redirect_if_scheme_confirmed
-    redirect_to @scheme if @scheme.confirmed?
+    redirect_to @scheme if @scheme.confirmed? && !current_user.support?
   end
 
   def deactivate_success_notice
