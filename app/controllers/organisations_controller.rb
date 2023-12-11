@@ -37,7 +37,7 @@ class OrganisationsController < ApplicationController
   end
 
   def email_schemes_csv
-    SchemesEmailCsvJob.perform_later(current_user, search_term, session_filters, false, @organisation)
+    SchemeEmailCsvJob.perform_later(current_user, search_term, session_filters, false, @organisation, params[:download_type])
     redirect_to schemes_csv_confirmation_organisation_path
   end
 

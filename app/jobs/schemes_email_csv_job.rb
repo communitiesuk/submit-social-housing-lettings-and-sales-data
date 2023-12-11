@@ -1,4 +1,4 @@
-class EmailSchemeCsvJob < ApplicationJob
+class SchemeEmailCsvJob < ApplicationJob
   queue_as :default
 
   BYTE_ORDER_MARK = "\uFEFF".freeze # Required to ensure Excel always reads CSV as UTF-8
@@ -6,7 +6,7 @@ class EmailSchemeCsvJob < ApplicationJob
   EXPIRATION_TIME = 24.hours.to_i
 
   def perform(user, search_term = nil, filters = {}, all_orgs = false, organisation = nil, download_type = "combined") # rubocop:disable Style/OptionalBooleanParameter - sidekiq can't serialise named params
-    unfiltered_schemes = organisation.present? && user.support? ? Scheme.where(owning_organisation_id: organisation.id) : user.schemes.visible
+    unfiltered_schemes = organisation.present? && user.support? ? Scheme.where(owning_organisation_id: organisation.id) : user.schemes
     filtered_schemes = FilterManager.filter_schemes(unfiltered_schemes, search_term, filters, all_orgs, user)
 
     case download_type

@@ -11,6 +11,6 @@
     <p class="govuk-body">We'll send a secure download link to your email address <strong><%= @current_user.email %></strong>.</p>
     <p class="govuk-body"><%= selected_schemes_and_locations_text(download_type, schemes) %></p>
 
-    <%= govuk_button_to "Send email", post_path, method: :post, params: { search: search_term } %>
+    <%= govuk_button_to "Send email", post_path, method: :post, params: { search: search_term, download_type: download_type } %>
   </div>
 </div>

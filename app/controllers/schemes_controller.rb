@@ -213,7 +213,7 @@ class SchemesController < ApplicationController
 
   def email_csv
     all_orgs = params["organisation_select"] == "all"
-    SchemesEmailCsvJob.perform_later(current_user, search_term, session_filters, all_orgs, nil)
+    SchemeEmailCsvJob.perform_later(current_user, search_term, session_filters, all_orgs, nil, params[:download_type])
     redirect_to csv_confirmation_schemes_path
   end
 
