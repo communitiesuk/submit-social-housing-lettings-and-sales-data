@@ -31,13 +31,11 @@ RSpec.describe MergeCompletionMailer do
 
     it "sends a merge completion E-mail via notify for a single merge" do
       expect(notify_client).to receive(:send_email).with(hash_including({
-        template_id: MergeCompletionMailer::MERGE_COMPLETION_ABSORBING_ORGANISATION_TEMPLATE_ID,
+        template_id: MergeCompletionMailer::ONE_ORG_MERGE_COMPLETION_ABSORBING_ORGANISATION_TEMPLATE_ID,
         personalisation: hash_including({
-          organisation_count: "1 organisation",
-          merged_organisations: "The organisation is merged organisation",
+          merged_organisation: "merged organisation",
           absorbing_organisation_name: "absorbing organisation",
           merge_date: "1 January 2023",
-          pluralised_organisation: "this organisation",
         }),
       }))
 
@@ -52,7 +50,6 @@ RSpec.describe MergeCompletionMailer do
           merged_organisations: "The organisations are merged organisation and other organisation",
           absorbing_organisation_name: "absorbing organisation",
           merge_date: "1 January 2023",
-          pluralised_organisation: "these organisations",
         }),
       }))
 
