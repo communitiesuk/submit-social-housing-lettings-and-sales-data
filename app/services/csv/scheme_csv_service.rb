@@ -3,8 +3,7 @@ module Csv
     include SchemesHelper
     include LocationsHelper
 
-    def initialize(user:, download_type:)
-      @user = user
+    def initialize(download_type:)
       @download_type = download_type
     end
 
