@@ -254,7 +254,7 @@ RSpec.describe SalesLogsController, type: :request do
 
           it "page has correct title" do
             get "/sales-logs", headers: headers, params: {}
-            expect(page).to have_title("Logs - Submit social housing lettings and sales data (CORE) - GOV.UK")
+            expect(page).to have_title("Sales logs - Submit social housing lettings and sales data (CORE) - GOV.UK")
           end
 
           it "does not show CSV download links" do
@@ -611,7 +611,7 @@ RSpec.describe SalesLogsController, type: :request do
 
           it "has search results in the title" do
             get "/sales-logs?search=#{log_to_search.id}", headers: headers, params: {}
-            expect(page).to have_title("Logs (1 logs matching ‘#{log_to_search.id}’) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+            expect(page).to have_title("Sales logs (1 logs matching ‘#{log_to_search.id}’) - Submit social housing lettings and sales data (CORE) - GOV.UK")
           end
 
           it "shows sales logs matching the id" do
@@ -706,7 +706,7 @@ RSpec.describe SalesLogsController, type: :request do
           end
 
           it "does not have pagination in the title" do
-            expect(page).to have_title("Logs - Submit social housing lettings and sales data (CORE) - GOV.UK")
+            expect(page).to have_title("Sales logs - Submit social housing lettings and sales data (CORE) - GOV.UK")
           end
 
           it "does not show the organisation filter" do
@@ -736,7 +736,7 @@ RSpec.describe SalesLogsController, type: :request do
             end
 
             it "has pagination in the title" do
-              expect(page).to have_title("Logs (page 1 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+              expect(page).to have_title("Sales logs (page 1 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
             end
           end
 
@@ -761,7 +761,7 @@ RSpec.describe SalesLogsController, type: :request do
             end
 
             it "has pagination in the title" do
-              expect(page).to have_title("Logs (page 2 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+              expect(page).to have_title("Sales logs (page 2 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
             end
           end
         end

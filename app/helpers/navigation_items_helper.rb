@@ -16,7 +16,7 @@ module NavigationItemsHelper
         NavigationItem.new("Sales logs", sales_logs_path, sales_logs_current?(path)),
         (NavigationItem.new("Schemes", schemes_path, non_support_supported_housing_schemes_current?(path)) if current_user.organisation.holds_own_stock? || current_user.organisation.stock_owners.present?),
         NavigationItem.new("Users", users_organisation_path(current_user.organisation), subnav_users_path?(path)),
-        NavigationItem.new("About your organisation", organisation_path(current_user.organisation.id), subnav_details_path?(path)),
+        NavigationItem.new("About your organisation", details_organisation_path(current_user.organisation.id), subnav_details_path?(path)),
         NavigationItem.new("Stock owners", stock_owners_organisation_path(current_user.organisation), stock_owners_path?(path)),
         NavigationItem.new("Managing agents", managing_agents_organisation_path(current_user.organisation), managing_agents_path?(path)),
       ].compact
@@ -29,16 +29,16 @@ module NavigationItemsHelper
       NavigationItem.new("Sales logs", sales_logs_organisation_path(current_organisation_id), subnav_sales_logs_path?(path)),
       (NavigationItem.new("Schemes", schemes_organisation_path(current_organisation_id), subnav_supported_housing_schemes_path?(path)) if current_user.organisation.holds_own_stock? || current_user.organisation.stock_owners.present?),
       NavigationItem.new("Users", users_organisation_path(current_organisation_id), subnav_users_path?(path)),
-      NavigationItem.new("About this organisation", organisation_path(current_organisation_id), subnav_details_path?(path)),
+      NavigationItem.new("About this organisation", details_organisation_path(current_organisation_id), subnav_details_path?(path)),
       NavigationItem.new("Stock owners", stock_owners_organisation_path(current_organisation_id), stock_owners_path?(path)),
       NavigationItem.new("Managing agents", managing_agents_organisation_path(current_organisation_id), managing_agents_path?(path)),
     ].compact
   end
 
-  def scheme_items(path, current_scheme_id, title)
+  def scheme_items(path, current_scheme_id)
     [
       NavigationItem.new("Scheme", scheme_path(current_scheme_id), !path.include?("locations")),
-      NavigationItem.new(title, scheme_locations_path(current_scheme_id), path.include?("locations")),
+      NavigationItem.new("Locations", scheme_locations_path(current_scheme_id), path.include?("locations")),
     ]
   end
 

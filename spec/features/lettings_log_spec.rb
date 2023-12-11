@@ -157,8 +157,8 @@ RSpec.describe "Lettings Log Features" do
       it "has the correct breadcrumbs with the correct links" do
         visit lettings_log_setup_check_answers_path(lettings_log)
         breadcrumbs = page.find_all(".govuk-breadcrumbs__link")
-        expect(breadcrumbs.first.text).to eq "Logs"
-        expect(breadcrumbs.first[:href]).to eq lettings_logs_path
+        expect(breadcrumbs.first.text).to eq "Lettings logs (DLUHC)"
+        expect(breadcrumbs.first[:href]).to eq lettings_logs_organisation_path(lettings_log.owning_organisation)
         expect(breadcrumbs[1].text).to eq "Log #{lettings_log.id}"
         expect(breadcrumbs[1][:href]).to eq lettings_log_path(lettings_log)
       end
@@ -170,8 +170,8 @@ RSpec.describe "Lettings Log Features" do
       it "has the correct breadcrumbs with the correct links" do
         visit review_lettings_log_path(lettings_log)
         breadcrumbs = page.find_all(".govuk-breadcrumbs__link")
-        expect(breadcrumbs.first.text).to eq "Logs"
-        expect(breadcrumbs.first[:href]).to eq lettings_logs_path
+        expect(breadcrumbs.first.text).to eq "Lettings logs (DLUHC)"
+        expect(breadcrumbs.first[:href]).to eq lettings_logs_organisation_path(lettings_log.owning_organisation)
         expect(breadcrumbs[1].text).to eq "Log #{lettings_log.id}"
         expect(breadcrumbs[1][:href]).to eq lettings_log_path(lettings_log)
       end
@@ -439,7 +439,7 @@ RSpec.describe "Lettings Log Features" do
       before do
         visit("/lettings-logs")
         click_button("Create a new lettings log")
-        click_link("Logs")
+        find("a.govuk-breadcrumbs__link", text: "Lettings logs").click
       end
 
       it "navigates you to the lettings logs page" do

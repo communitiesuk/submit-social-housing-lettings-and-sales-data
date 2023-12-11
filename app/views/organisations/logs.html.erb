@@ -1,9 +1,16 @@
 <% item_label = format_label(@pagy.count, "logs") %>
-<% title = format_title(@searched, "Logs", current_user, item_label, @pagy.count, @organisation.name) %>
+<% title = format_title(@searched, action_name.humanize, current_user, item_label, @pagy.count, @organisation.name) %>
 
 <% content_for :title, title %>
 
 <%= render partial: "organisations/headings", locals: { main: @organisation.name, sub: nil } %>
+
+<% if current_user.support? %>
+  <%= render SubNavigationComponent.new(
+    items: secondary_items(request.path, @organisation.id),
+  ) %>
+  <h2 class="govuk-visually-hidden">Logs</h2>
+<% end %>
 
 <%= render DataProtectionConfirmationBannerComponent.new(
   user: current_user,
@@ -16,19 +23,12 @@
   <% end %>
 <% end %>
 
-<% if current_user.support? %>
-  <%= render SubNavigationComponent.new(
-    items: secondary_items(request.path, @organisation.id),
-  ) %>
-  <h2 class="govuk-visually-hidden">Logs</h2>
-<% end %>
-
 <div class="app-filter-layout" data-controller="filter-layout">
   <%= render partial: "logs/create_for_org_actions" %>
 
   <%= render partial: "logs/log_filters" %>
   <div class="app-filter-layout__content">
-    <%= render SearchComponent.new(current_user:, search_label: "Search by log ID, tenant code, property reference or postcode", value: @searched) %>
+    <%= render SearchComponent.new(current_user:, search_label: search_label_for_action(action_name), value: @searched) %>
     <%= govuk_section_break(visible: true, size: "m") %>
     <%= render partial: "logs/log_list",
                locals: {
