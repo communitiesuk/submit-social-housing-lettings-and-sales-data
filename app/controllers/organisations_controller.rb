@@ -21,16 +21,16 @@ class OrganisationsController < ApplicationController
   end
 
   def schemes
-    all_schemes = Scheme.where(owning_organisation: [@organisation] + @organisation.parent_organisations)
+    organisation_schemes = Scheme.where(owning_organisation: [@organisation] + @organisation.parent_organisations)
 
-    @pagy, @schemes = pagy(filter_manager.filtered_schemes(all_schemes, search_term, session_filters).order_by_service_name)
+    @pagy, @schemes = pagy(filter_manager.filtered_schemes(organisation_schemes, search_term, session_filters).order_by_service_name)
     @searched = search_term.presence
-    @total_count = all_schemes.size
+    @total_count = organisation_schemes.size
     @filter_type = "schemes"
   end
 
   def download_schemes_csv
-    organisation_schemes = Scheme.where(owning_organisation_id: @organisation.id)
+    organisation_schemes = Scheme.where(owning_organisation: [@organisation] + @organisation.parent_organisations)
     unpaginated_filtered_schemes = filter_manager.filtered_schemes(organisation_schemes, search_term, session_filters)
 
     render "schemes/download_csv", locals: { search_term:, post_path: email_csv_schemes_path, download_type: params[:download_type], schemes: unpaginated_filtered_schemes }
