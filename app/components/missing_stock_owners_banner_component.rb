@@ -29,8 +29,8 @@ class MissingStockOwnersBannerComponent < ViewComponent::Base
     if user.data_coordinator?
       "If your organisation does own stock, #{contact_helpdesk_link} to update your details.".html_safe
     else
-      "If your organisation does own stock, #{contact_helpdesk_link} to update your details.</br>
-      Ask a data coordinator to add a stock owner. Find your data coordinators on the #{users_link}.".html_safe
+      "Ask a data coordinator to add a stock owner. Find your data coordinators on the #{users_link}.</br>
+      If your organisation does own stock, #{contact_helpdesk_link} to update your details.".html_safe
     end
   end
 
