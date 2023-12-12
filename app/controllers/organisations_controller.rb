@@ -122,7 +122,7 @@ class OrganisationsController < ApplicationController
   end
 
   def sales_logs
-    organisation_logs = SalesLog.visible.where(owning_organisation_id: @organisation.id)
+    organisation_logs = SalesLog.visible.filter_by_organisation(@organisation)
     unpaginated_filtered_logs = filter_manager.filtered_logs(organisation_logs, search_term, session_filters)
 
     respond_to do |format|

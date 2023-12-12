@@ -42,8 +42,6 @@ class SalesLog < Log
       .or(filter_by_postcode(param))
       .or(filter_by_id(param))
   }
-  scope :filter_by_organisation, ->(owning_organisation, _user = nil) { where(owning_organisation:) }
-  scope :filter_by_owning_organisation, ->(owning_organisation, _user = nil) { where(owning_organisation:) }
   scope :age1_answered, -> { where.not(age1: nil).or(where(age1_known: [1, 2])) }
   scope :duplicate_logs, lambda { |log|
     visible.where(log.slice(*DUPLICATE_LOG_ATTRIBUTES))
@@ -318,9 +316,9 @@ class SalesLog < Log
 
   def reset_created_by!
     return unless updated_by&.support?
-    return if owning_organisation.blank? || created_by.blank?
-    return if created_by&.organisation == owning_organisation
-    return if created_by&.organisation == owning_organisation.absorbing_organisation
+    return if owning_organisation.blank? || managing_organisation.blank? || created_by.blank?
+    return if created_by&.organisation == owning_organisation || created_by&.organisation == managing_organisation
+    return if created_by&.organisation == owning_organisation.absorbing_organisation || created_by&.organisation == managing_organisation.absorbing_organisation
 
     update!(created_by: nil)
   end

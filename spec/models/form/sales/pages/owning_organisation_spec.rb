@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Form::Sales::Pages::Organisation, type: :model do
+RSpec.describe Form::Sales::Pages::OwningOrganisation, type: :model do
   subject(:page) { described_class.new(page_id, page_definition, subsection) }
 
   let(:page_id) { nil }
@@ -17,7 +17,7 @@ RSpec.describe Form::Sales::Pages::Organisation, type: :model do
   end
 
   it "has the correct id" do
-    expect(page.id).to eq("organisation")
+    expect(page.id).to eq("owning_organisation")
   end
 
   it "has the correct header" do
@@ -88,8 +88,8 @@ RSpec.describe Form::Sales::Pages::Organisation, type: :model do
             expect(page.routed_to?(log, user)).to eq(false)
           end
 
-          it "does not update owning_organisation_id" do
-            expect { page.routed_to?(log, user) }.not_to change(log.reload, :owning_organisation)
+          it "updates owning_organisation_id" do
+            expect { page.routed_to?(log, user) }.to change(log.reload, :owning_organisation)
           end
         end
 
@@ -110,8 +110,8 @@ RSpec.describe Form::Sales::Pages::Organisation, type: :model do
             )
           end
 
-          it "is not shown" do
-            expect(page.routed_to?(log, user)).to eq(false)
+          it "is shown" do
+            expect(page.routed_to?(log, user)).to eq(true)
           end
         end
       end
@@ -133,8 +133,8 @@ RSpec.describe Form::Sales::Pages::Organisation, type: :model do
             create(:organisation_relationship, child_organisation: user.organisation)
           end
 
-          it "is not shown" do
-            expect(page.routed_to?(log, user)).to eq(false)
+          it "is shown" do
+            expect(page.routed_to?(log, user)).to eq(true)
           end
         end
 

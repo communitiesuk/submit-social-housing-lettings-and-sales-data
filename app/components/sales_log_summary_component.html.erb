@@ -32,6 +32,12 @@
               <dd class="app-metadata__definition"><%= log.owning_organisation&.name %></dd>
             </div>
           <% end %>
+          <% if log.managing_organisation && FeatureToggle.sales_managing_organisation_enabled? %>
+            <div class="app-metadata__item">
+              <dt class="app-metadata__term">Reported by</dt>
+              <dd class="app-metadata__definition"><%= log.managing_organisation&.name %></dd>
+            </div>
+          <% end %>
         </dl>
       <% end %>
     </div>

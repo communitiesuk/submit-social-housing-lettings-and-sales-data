@@ -66,6 +66,7 @@ RSpec.describe SalesLogsController, type: :request do
         let(:params) do
           {
             "owning_organisation_id": owning_organisation.id,
+            "managing_organisation_id": owning_organisation.id,
             "created_by_id": user.id,
             "saledate": Time.zone.today,
             "purchid": "1",
@@ -153,10 +154,11 @@ RSpec.describe SalesLogsController, type: :request do
               post "/sales-logs", headers:
             end
 
-            it "sets the stock-owning org as user's org" do
+            it "sets the managing org as user's org" do
               created_id = response.location.match(/[0-9]+/)[0]
               sales_log = SalesLog.find_by(id: created_id)
-              expect(sales_log.owning_organisation.name).to eq("User org")
+              expect(sales_log.owning_organisation).to be_nil
+              expect(sales_log.managing_organisation.name).to eq("User org")
             end
           end
 
@@ -171,10 +173,16 @@ RSpec.describe SalesLogsController, type: :request do
               post "/sales-logs", headers:
             end
 
-            it "sets the stock-owning org as user's org" do
+            it "does not set owning organisation" do
               created_id = response.location.match(/[0-9]+/)[0]
               sales_log = SalesLog.find_by(id: created_id)
-              expect(sales_log.owning_organisation.name).to eq("User org")
+              expect(sales_log.owning_organisation).to be_nil
+            end
+
+            it "sets managing organisation as the user organisation" do
+              created_id = response.location.match(/[0-9]+/)[0]
+              sales_log = SalesLog.find_by(id: created_id)
+              expect(sales_log.managing_organisation.name).to eq("User org")
             end
           end
         end
@@ -193,6 +201,7 @@ RSpec.describe SalesLogsController, type: :request do
         :sales_log,
         purchid: purchaser_code,
         owning_organisation: organisation,
+        managing_organisation: organisation,
       )
     end
     let!(:unauthorized_sales_log) do
@@ -217,6 +226,7 @@ RSpec.describe SalesLogsController, type: :request do
           get "/sales-logs", headers: headers, params: {}
           expect(page).to have_content("Owned by")
           expect(page).not_to have_content("Managed by")
+          expect(page).to have_content("Reported by")
         end
 
         it "shows sales logs for all organisations" do
@@ -876,6 +886,23 @@ RSpec.describe SalesLogsController, type: :request do
           expect(completed_sales_log.form.new_logs_end_date).to eq(Time.zone.local(2022, 12, 31))
           expect(completed_sales_log.status).to eq("completed")
           expect(page).to have_link("review and make changes to this log", href: "/sales-logs/#{completed_sales_log.id}/review?sales_log=true")
+        end
+      end
+
+      context "with sales logs that are managed by your organisation" do
+        before do
+          completed_sales_log.update!(managing_organisation_id: user.organisation.id, owning_organisation_id: nil)
+          get "/sales-logs/#{completed_sales_log.id}", headers:, params: {}
+        end
+
+        after do
+          Timecop.return
+          Singleton.__init__(FormHandler)
+        end
+
+        it "shows the tasklist for sales logs you have access to" do
+          expect(response.body).to match("Log")
+          expect(response.body).to match(completed_sales_log.id.to_s)
         end
       end
 

@@ -599,10 +599,16 @@ RSpec.describe Merge::MergeOrganisationsService do
         end
 
         context "and merging sales logs" do
-          let!(:sales_log) { create(:sales_log, saledate: Time.zone.today, owning_organisation: merging_organisation) }
+          let(:owning_organisation) { create(:organisation, holds_own_stock: true) }
+          let!(:sales_log) { create(:sales_log, saledate: Time.zone.today, owning_organisation: merging_organisation, purchid: "owned") }
+          let!(:managed_sales_log) { create(:sales_log, saledate: Time.zone.today, purchid: "managed") }
 
           before do
             create(:sales_log, saledate: Time.zone.today - 2.days, owning_organisation: merging_organisation)
+            create(:organisation_relationship) { create(:organisation_relationship, parent_organisation: owning_organisation, child_organisation: merging_organisation) }
+            managed_sales_log.update!(owning_organisation:, managing_organisation: merging_organisation, created_by: merging_organisation_user)
+            create(:sales_log, saledate: Time.zone.today - 2.days, owning_organisation: merging_organisation, created_by: merging_organisation_user, purchid: "ranom 1")
+            create(:sales_log, saledate: Time.zone.today - 2.days, owning_organisation:, managing_organisation: merging_organisation, created_by: merging_organisation_user, purchid: "ranom 2")
           end
 
           it "moves relevant logs" do
@@ -611,6 +617,9 @@ RSpec.describe Merge::MergeOrganisationsService do
             absorbing_organisation.reload
             expect(SalesLog.filter_by_owning_organisation(absorbing_organisation).count).to eq(1)
             expect(SalesLog.filter_by_owning_organisation(absorbing_organisation).first).to eq(sales_log)
+            expect(SalesLog.filter_by_managing_organisation(absorbing_organisation).count).to eq(2)
+            expect(SalesLog.filter_by_managing_organisation(absorbing_organisation)).to include(managed_sales_log)
+            expect(SalesLog.filter_by_managing_organisation(absorbing_organisation)).to include(sales_log)
           end
 
           it "rolls back if there's an error" do

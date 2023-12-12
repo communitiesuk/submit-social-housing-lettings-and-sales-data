@@ -74,7 +74,7 @@ class Organisation < ApplicationRecord
   end
 
   def sales_logs
-    SalesLog.filter_by_owning_organisation(absorbed_organisations + [self])
+    SalesLog.filter_by_organisation(absorbed_organisations + [self])
   end
 
   def owned_lettings_logs
@@ -82,11 +82,15 @@ class Organisation < ApplicationRecord
   end
 
   def owned_sales_logs
-    sales_logs
+    SalesLog.filter_by_owning_organisation(absorbed_organisations + [self])
   end
 
   def managed_lettings_logs
     LettingsLog.filter_by_managing_organisation(absorbed_organisations + [self])
+  end
+
+  def managed_sales_logs
+    SalesLog.filter_by_managing_organisation(absorbed_organisations + [self])
   end
 
   def address_string
