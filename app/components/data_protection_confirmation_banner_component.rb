@@ -3,8 +3,6 @@ class DataProtectionConfirmationBannerComponent < ViewComponent::Base
 
   attr_reader :user, :organisation
 
-  HELPDESK_URL = "https://dluhcdigital.atlassian.net/servicedesk/customer/portal/6/group/11".freeze
-
   def initialize(user:, organisation: nil)
     @user = user
     @organisation = organisation
@@ -58,7 +56,7 @@ private
   end
 
   def link_href
-    dpo_required? ? HELPDESK_URL : data_sharing_agreement_organisation_path(org_or_user_org)
+    dpo_required? ? GlobalConstants::HELPDESK_URL : data_sharing_agreement_organisation_path(org_or_user_org)
   end
 
   def dpo_required?

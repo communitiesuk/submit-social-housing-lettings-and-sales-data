@@ -3,8 +3,6 @@ class MissingStockOwnersBannerComponent < ViewComponent::Base
 
   attr_reader :user, :organisation
 
-  HELPDESK_URL = "https://dluhcdigital.atlassian.net/servicedesk/customer/portal/6/group/11".freeze
-
   def initialize(user:)
     @user = user
     @organisation = user.organisation
@@ -49,7 +47,7 @@ private
   def contact_helpdesk_link
     govuk_link_to(
       "contact the helpdesk",
-      HELPDESK_URL,
+      GlobalConstants::HELPDESK_URL,
       class: "govuk-notification-banner__link govuk-!-font-weight-bold",
     )
   end
