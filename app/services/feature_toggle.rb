@@ -45,6 +45,6 @@ class FeatureToggle
   end
 
   def self.sales_managing_organisation_enabled?
-    Rails.env.test? || Rails.env.review? || Rails.env.development?
+    true
   end
 end
