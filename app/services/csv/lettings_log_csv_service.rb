@@ -177,12 +177,16 @@ module Csv
           value
         when "labels"
           answer_label = get_label(value, attribute, log)
-          answer_label || label_if_boolean_value(value) || value
+          answer_label || label_if_boolean_value(value) || label_if_checkbox_value(value) || value
         end
       end
     end
 
     def get_label(value, attribute, log)
+      return LETTYPE_LABELS[value] if attribute == "lettype"
+      return IRPRODUCT_LABELS[value] if attribute == "irproduct"
+      return label_if_checkbox_value(value) if ILLNESS_TYPES.include?(attribute)
+
       log.form
          .get_question(attribute, log)
          &.label_from_value(value)
@@ -192,6 +196,34 @@ module Csv
       return "Yes" if value == true
       return "No" if value == false
     end
+
+    def label_if_checkbox_value(value)
+      return "Yes" if value == 1
+      return "No" if value.zero?
+    end
+
+    LETTYPE_LABELS = {
+      1 => "Social rent general needs private registered provider",
+      2 => "Social rent supported housing private registered provider",
+      3 => "Social rent general needs local authority",
+      4 => "Social rent supported housing local authority",
+      5 => "Affordable rent general needs private registered provider",
+      6 => "Affordable rent supported housing private registered provider",
+      7 => "Affordable rent general needs local authority",
+      8 => "Affordable rent supported housing local authority",
+      9 => "Intermediate rent general needs private registered provider",
+      10 => "Intermediate rent supported housing private registered provider",
+      11 => "Intermediate rent general needs local authority",
+      12 => "Intermediate rent supported housing local authority",
+    }.freeze
+
+    IRPRODUCT_LABELS = {
+      1 => "Rent to Buy",
+      2 => "London Living Rent",
+      3 => "Other intermediate rent product",
+    }.freeze
+
+    ILLNESS_TYPES = %w[illness_type_1 illness_type_2 illness_type_3 illness_type_4 illness_type_5 illness_type_6 illness_type_7 illness_type_8 illness_type_9 illness_type_10].freeze
 
     ATTRIBUTE_MAPPINGS = {
       "owning_organisation_id" => %w[owning_organisation_name],
