@@ -2,10 +2,16 @@ require "rails_helper"
 
 RSpec.describe Merge::MergeOrganisationsService do
   describe "#call" do
+    before do
+      mail_double = instance_double("ActionMailer::MessageDelivery", deliver_later: nil)
+      allow(MergeCompletionMailer).to receive(:send_merged_organisation_success_mail).and_return(mail_double)
+      allow(MergeCompletionMailer).to receive(:send_absorbing_organisation_success_mail).and_return(mail_double)
+    end
+
     context "when merging a single organisation into an existing organisation" do
       subject(:merge_organisations_service) { described_class.new(absorbing_organisation_id: absorbing_organisation.id, merging_organisation_ids: [merging_organisation_ids], merge_date: nil) }
 
-      let(:absorbing_organisation) { create(:organisation, holds_own_stock: false) }
+      let(:absorbing_organisation) { create(:organisation, holds_own_stock: false, name: "absorbing org") }
       let(:absorbing_organisation_user) { create(:user, organisation: absorbing_organisation) }
 
       let(:merging_organisation) { create(:organisation, holds_own_stock: true, name: "fake org") }
@@ -840,12 +846,56 @@ RSpec.describe Merge::MergeOrganisationsService do
           expect(absorbing_organisation.available_from.to_date).to eq(Time.zone.today)
         end
       end
+
+      it "sends a merge completion E-mail to the merged organisation users" do
+        expect(MergeCompletionMailer).to receive(:send_merged_organisation_success_mail).with(merging_organisation_user.email, "fake org", "absorbing org", Time.zone.today).once
+        expect(MergeCompletionMailer).to receive(:send_merged_organisation_success_mail).with(merging_organisation.data_protection_officers.first.email, "fake org", "absorbing org", Time.zone.today).once
+
+        expect(MergeCompletionMailer).not_to receive(:send_merged_organisation_success_mail).with(absorbing_organisation.data_protection_officers.first.email, "fake org", "absorbing org", Time.zone.today)
+        expect(MergeCompletionMailer).not_to receive(:send_merged_organisation_success_mail).with(absorbing_organisation_user.email, "fake org", "absorbing org", Time.zone.today)
+
+        merge_organisations_service.call
+      end
+
+      it "does not send a merge completion E-mail to deactivated merged organisation users" do
+        merging_organisation_user.update!(active: false)
+
+        expect(MergeCompletionMailer).to receive(:send_merged_organisation_success_mail).with(merging_organisation.data_protection_officers.first.email, "fake org", "absorbing org", Time.zone.today).once
+
+        expect(MergeCompletionMailer).not_to receive(:send_merged_organisation_success_mail).with(merging_organisation_user.email, "fake org", "absorbing org", Time.zone.today)
+        expect(MergeCompletionMailer).not_to receive(:send_merged_organisation_success_mail).with(absorbing_organisation.data_protection_officers.first.email, "fake org", "absorbing org", Time.zone.today)
+        expect(MergeCompletionMailer).not_to receive(:send_merged_organisation_success_mail).with(absorbing_organisation_user.email, "fake org", "absorbing org", Time.zone.today)
+
+        merge_organisations_service.call
+      end
+
+      it "sends a merge completion E-mail to the original absorbing organisation users" do
+        expect(MergeCompletionMailer).to receive(:send_absorbing_organisation_success_mail).with(absorbing_organisation.data_protection_officers.first.email, ["fake org"], "absorbing org", Time.zone.today).once
+        expect(MergeCompletionMailer).to receive(:send_absorbing_organisation_success_mail).with(absorbing_organisation_user.email, ["fake org"], "absorbing org", Time.zone.today).once
+
+        expect(MergeCompletionMailer).not_to receive(:send_absorbing_organisation_success_mail).with(merging_organisation_user.email, ["fake org"], "absorbing org", Time.zone.today)
+        expect(MergeCompletionMailer).not_to receive(:send_absorbing_organisation_success_mail).with(merging_organisation.data_protection_officers.first.email, ["fake org"], "absorbing org", Time.zone.today)
+
+        merge_organisations_service.call
+      end
+
+      it "does not send a merge completion E-mail to deactivated original absorbing organisation users" do
+        absorbing_organisation_user.update!(active: false)
+
+        expect(MergeCompletionMailer).to receive(:send_absorbing_organisation_success_mail).with(absorbing_organisation.data_protection_officers.first.email, ["fake org"], "absorbing org", Time.zone.today).once
+
+        expect(MergeCompletionMailer).not_to receive(:send_absorbing_organisation_success_mail).with(absorbing_organisation_user.email, ["fake org"], "absorbing org", Time.zone.today)
+        expect(MergeCompletionMailer).not_to receive(:send_absorbing_organisation_success_mail).with(merging_organisation_user.email, ["fake org"], "absorbing org", Time.zone.today)
+        expect(MergeCompletionMailer).not_to receive(:send_absorbing_organisation_success_mail).with(merging_organisation.data_protection_officers.first.email, ["fake org"], "absorbing org", Time.zone.today)
+
+        merge_organisations_service.call
+      end
     end
 
     context "when merging a multiple organisations into an existing organisation" do
       subject(:merge_organisations_service) { described_class.new(absorbing_organisation_id: absorbing_organisation.id, merging_organisation_ids: [merging_organisation_ids], merge_date: nil) }
 
-      let(:absorbing_organisation) { create(:organisation, holds_own_stock: false) }
+      let(:absorbing_organisation) { create(:organisation, holds_own_stock: false, name: "absorbing org") }
       let(:absorbing_organisation_user) { create(:user, organisation: absorbing_organisation) }
 
       let(:merging_organisation) { create(:organisation, holds_own_stock: true, name: "fake org") }
@@ -942,6 +992,34 @@ RSpec.describe Merge::MergeOrganisationsService do
           expect(merging_organisation.users.count).to eq(1)
           expect(merging_organisation.users.first).to eq(dpo)
           expect(merging_organisation.data_protection_confirmation.data_protection_officer).to eq(dpo)
+        end
+
+        it "sends a merge completion E-mail to the merged organisation users" do
+          expect(MergeCompletionMailer).to receive(:send_merged_organisation_success_mail).with(merging_organisation_user.email, "fake org", "absorbing org", Time.zone.today).once
+          expect(MergeCompletionMailer).to receive(:send_merged_organisation_success_mail).with(merging_organisation.data_protection_officers.first.email, "fake org", "absorbing org", Time.zone.today).once
+
+          expect(MergeCompletionMailer).not_to receive(:send_merged_organisation_success_mail).with(absorbing_organisation.data_protection_officers.first.email, "fake org", "absorbing org", Time.zone.today)
+          expect(MergeCompletionMailer).not_to receive(:send_merged_organisation_success_mail).with(absorbing_organisation_user.email, "fake org", "absorbing org", Time.zone.today)
+
+          merging_organisation_too.users.each do |user|
+            expect(MergeCompletionMailer).to receive(:send_merged_organisation_success_mail).with(user.email, "second org", "absorbing org", Time.zone.today).once
+          end
+
+          merge_organisations_service.call
+        end
+
+        it "sends a merge completion E-mail to the original absorbing organisation users" do
+          expect(MergeCompletionMailer).to receive(:send_absorbing_organisation_success_mail).with(absorbing_organisation.data_protection_officers.first.email, ["fake org", "second org"], "absorbing org", Time.zone.today).once
+          expect(MergeCompletionMailer).to receive(:send_absorbing_organisation_success_mail).with(absorbing_organisation_user.email, ["fake org", "second org"], "absorbing org", Time.zone.today).once
+
+          expect(MergeCompletionMailer).not_to receive(:send_absorbing_organisation_success_mail).with(merging_organisation_user.email, ["fake org", "second org"], "absorbing org", Time.zone.today)
+          expect(MergeCompletionMailer).not_to receive(:send_absorbing_organisation_success_mail).with(merging_organisation.data_protection_officers.first.email, ["fake org", "second org"], "absorbing org", Time.zone.today)
+
+          merging_organisation_too.users.each do |user|
+            expect(MergeCompletionMailer).not_to receive(:send_absorbing_organisation_success_mail).with(user.email, ["fake org", "second org"], "absorbing org", Time.zone.today)
+          end
+
+          merge_organisations_service.call
         end
       end
 
