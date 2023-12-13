@@ -704,7 +704,9 @@ Make sure these answers are correct."
     charges:
       informative_text: "This is higher than we would expect."
       hint_text: "Check the following:<ul class=\"govuk-body-l app-panel--interruption\"><li>the decimal point</li><li>the frequency, for example every week or every calendar month</li><li>the needs type</li></ul>"
-
+    deposit_and_mortgage:
+      title_text: "You told us the mortgage amount was %{mortgage}, the cash deposit was %{deposit} and the discount was %{discount}."
+      hint_text: "We would expect the mortgage amount and the deposit added together to be the same as the purchase price minus the discount."
 
   devise:
     email:
