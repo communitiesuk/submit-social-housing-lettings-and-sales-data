@@ -108,6 +108,9 @@ RSpec.describe Csv::SchemeCsvService do
 
   context "when download type is combined" do
     let(:combined_attributes) { %w[scheme_code scheme_service_name scheme_status scheme_sensitive scheme_type scheme_registered_under_care_act scheme_owning_organisation_name scheme_support_services_provided_by scheme_primary_client_group scheme_has_other_client_group scheme_secondary_client_group scheme_support_type scheme_intended_stay scheme_created_at scheme_active_dates location_code location_postcode location_name location_status location_local_authority location_units location_type_of_unit location_mobility_type location_active_dates] }
+    before do
+      scheme
+    end
 
     before do
       scheme
