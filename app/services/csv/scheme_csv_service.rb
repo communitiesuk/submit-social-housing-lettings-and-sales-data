@@ -66,7 +66,7 @@ module Csv
     def scheme_value(attribute, scheme)
       attribute = SCHEME_FIELD_FROM_ATTRIBUTE.fetch(attribute, attribute)
       if attribute == "scheme_active_dates"
-        scheme_availability(scheme).gsub("\n", ", ")
+        "#{scheme_availability(scheme).gsub("\n", ", ")}"
       elsif CUSTOM_CALL_CHAINS.key? attribute.to_sym
         call_chain = CUSTOM_CALL_CHAINS[attribute.to_sym]
         call_chain.reduce(scheme) { |object, next_call| object&.public_send(next_call) }
@@ -80,7 +80,7 @@ module Csv
     def location_value(attribute, location)
       attribute = LOCATION_FIELD_FROM_ATTRIBUTE.fetch(attribute, attribute)
       if attribute == "location_active_dates"
-        location_availability(location).gsub("\n", ", ")
+        "#{location_availability(location).gsub("\n", ", ")}"
       else
         location.public_send(attribute)
       end

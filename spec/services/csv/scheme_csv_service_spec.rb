@@ -4,6 +4,7 @@ RSpec.describe Csv::SchemeCsvService do
   let(:organisation) { create(:organisation) }
   let(:fixed_time) { Time.zone.local(2023, 6, 26) }
   let(:scheme) { create(:scheme, :export, owning_organisation: organisation, service_name: "Test name") }
+  let(:location) { create(:location, :export, scheme:) }
   let(:service) { described_class.new(download_type:) }
   let(:download_type) { "combined" }
   let(:csv) { CSV.parse(service.prepare_csv(Scheme.where(id: schemes.map(&:id)))) }
@@ -12,7 +13,8 @@ RSpec.describe Csv::SchemeCsvService do
 
   before do
     Timecop.freeze(fixed_time)
-    create(:location, :export, scheme:)
+    create(:scheme_deactivation_period, scheme:, deactivation_date: scheme.created_at + 1.year, reactivation_date: scheme.created_at + 2.years)
+    create(:location_deactivation_period, location:, deactivation_date: location.created_at + 6.months)
   end
 
   after do
@@ -106,6 +108,9 @@ RSpec.describe Csv::SchemeCsvService do
 
   context "when download type is combined" do
     let(:combined_attributes) { %w[scheme_code scheme_service_name scheme_status scheme_sensitive scheme_type scheme_registered_under_care_act scheme_owning_organisation_name scheme_support_services_provided_by scheme_primary_client_group scheme_has_other_client_group scheme_secondary_client_group scheme_support_type scheme_intended_stay scheme_created_at scheme_active_dates location_code location_postcode location_name location_status location_local_authority location_units location_type_of_unit location_mobility_type location_active_dates] }
+    before do
+      scheme
+    end
 
     it "has the correct headers" do
       expect(headers).to eq(combined_attributes)
