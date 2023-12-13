@@ -3,16 +3,18 @@
 
 <% content_for :title, title %>
 
-<%= render DataProtectionConfirmationBannerComponent.new(
+<% dpo_confirmation_banner = DataProtectionConfirmationBannerComponent.new(
   user: current_user,
   organisation: @organisation,
 ) %>
+<%= render dpo_confirmation_banner %>
 
-<%= render MissingStockOwnersBannerComponent.new(
+<% missing_stock_owner_banner = MissingStockOwnersBannerComponent.new(
   user: current_user,
 ) %>
+<%= render missing_stock_owner_banner %>
 
-<% if @duplicate_sets_count&.positive? %>
+<% if @duplicate_sets_count&.positive? && !dpo_confirmation_banner.display_banner? && !missing_stock_owner_banner.display_banner? %>
   <%= govuk_notification_banner(title_text: "Important", text: govuk_link_to("Review logs", duplicate_logs_path(referrer: "duplicate_logs_banner"))) do |banner| %>
     <% banner.with_heading(text: I18n.t("notification.duplicate_sets", count: @duplicate_sets_count)) %>
   <% end %>
