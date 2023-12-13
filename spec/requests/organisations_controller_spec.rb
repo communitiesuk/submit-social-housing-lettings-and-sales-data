@@ -531,7 +531,7 @@ RSpec.describe OrganisationsController, type: :request do
           end
 
           it "shows the pagination count" do
-            expect(page).to have_content("#{user.organisation.users.count} matching users")
+            expect(page).to have_content("#{user.organisation.users.count} total users")
           end
         end
 
@@ -915,7 +915,7 @@ RSpec.describe OrganisationsController, type: :request do
           total_number_of_orgs = Organisation.all.count
           expect(page).to have_link organisation.name, href: "organisations/#{organisation.id}/lettings-logs"
           expect(page).to have_link unauthorised_organisation.name, href: "organisations/#{unauthorised_organisation.id}/lettings-logs"
-          expect(page).to have_content("#{total_number_of_orgs} matching organisations")
+          expect(page).to have_content("#{total_number_of_orgs} total organisations")
         end
 
         it "shows a search bar" do
@@ -944,7 +944,7 @@ RSpec.describe OrganisationsController, type: :request do
           end
 
           it "only shows logs for that organisation" do
-            expect(page).to have_content("#{total_number_of_org1_logs} matching logs")
+            expect(page).to have_content("#{total_number_of_org1_logs} total logs")
 
             organisation.lettings_logs.visible.map(&:id).each do |lettings_log_id|
               expect(page).to have_link lettings_log_id.to_s, href: "/lettings-logs/#{lettings_log_id}"
@@ -1098,7 +1098,7 @@ RSpec.describe OrganisationsController, type: :request do
           end
 
           it "only shows logs for that organisation" do
-            expect(page).to have_content("#{number_of_org1_sales_logs} matching logs")
+            expect(page).to have_content("#{number_of_org1_sales_logs} total logs")
             organisation.sales_logs.map(&:id).each do |sales_log_id|
               expect(page).to have_link sales_log_id.to_s, href: "/sales-logs/#{sales_log_id}"
             end
@@ -1359,7 +1359,7 @@ RSpec.describe OrganisationsController, type: :request do
             end
 
             it "shows the total organisations count" do
-              expect(CGI.unescape_html(response.body)).to match("<strong>#{total_organisations_count}</strong> matching organisations")
+              expect(CGI.unescape_html(response.body)).to match("<strong>#{total_organisations_count}</strong> total organisations")
             end
 
             it "has pagination links" do

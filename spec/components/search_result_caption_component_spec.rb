@@ -36,7 +36,7 @@ RSpec.describe SearchResultCaptionComponent, type: :component do
     let(:filters_count) { nil }
 
     it "renders table caption with total count only" do
-      expect(result.to_html).to eq("<span>\n    <span class=\"govuk-!-margin-right-4\">\n      <strong>2</strong> matching schemes\n    </span>\n</span>\n")
+      expect(result.to_html).to eq("<span>\n    <span class=\"govuk-!-margin-right-4\">\n      <strong>2</strong> total schemes\n    </span>\n</span>\n")
     end
   end
 

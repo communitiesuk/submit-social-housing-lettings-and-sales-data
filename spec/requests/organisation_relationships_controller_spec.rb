@@ -47,7 +47,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
           end
 
           it "shows the pagination count" do
-            expect(page).to have_content("1 matching stock owners")
+            expect(page).to have_content("1 total stock owners")
           end
 
           context "when adding a stock owner" do
@@ -113,7 +113,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
           end
 
           it "shows the pagination count" do
-            expect(page).to have_content("1 matching agents")
+            expect(page).to have_content("1 total agents")
           end
         end
 
@@ -285,7 +285,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
           end
 
           it "shows the pagination count" do
-            expect(page).to have_content("1 matching stock owners")
+            expect(page).to have_content("1 total stock owners")
           end
         end
 
@@ -421,7 +421,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
           end
 
           it "shows the pagination count" do
-            expect(page).to have_content("1 matching agents")
+            expect(page).to have_content("1 total agents")
           end
         end
 
@@ -587,7 +587,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
         end
 
         it "shows the pagination count" do
-          expect(page).to have_content("1 matching stock owners")
+          expect(page).to have_content("1 total stock owners")
         end
 
         context "when adding a stock owner" do
@@ -637,7 +637,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
         end
 
         it "shows the pagination count" do
-          expect(page).to have_content("1 matching agents")
+          expect(page).to have_content("1 total agents")
         end
 
         it "shows remove link(s)" do

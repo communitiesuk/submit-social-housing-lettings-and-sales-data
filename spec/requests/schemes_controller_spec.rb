@@ -297,7 +297,7 @@ RSpec.describe SchemesController, type: :request do
       end
 
       it "shows the total organisations count" do
-        expect(CGI.unescape_html(response.body)).to match("<strong>#{schemes.count}</strong> matching schemes")
+        expect(CGI.unescape_html(response.body)).to match("<strong>#{schemes.count}</strong> total schemes")
       end
 
       context "when paginating over 20 results" do
@@ -313,7 +313,7 @@ RSpec.describe SchemesController, type: :request do
           end
 
           it "shows the total schemes count" do
-            expect(CGI.unescape_html(response.body)).to match("<strong>#{total_schemes_count}</strong> matching schemes")
+            expect(CGI.unescape_html(response.body)).to match("<strong>#{total_schemes_count}</strong> total schemes")
           end
 
           it "shows which schemes are being shown on the current page" do
@@ -338,7 +338,7 @@ RSpec.describe SchemesController, type: :request do
           end
 
           it "shows the total schemes count" do
-            expect(CGI.unescape_html(response.body)).to match("<strong>#{total_schemes_count}</strong> matching schemes")
+            expect(CGI.unescape_html(response.body)).to match("<strong>#{total_schemes_count}</strong> total schemes")
           end
 
           it "has pagination links" do

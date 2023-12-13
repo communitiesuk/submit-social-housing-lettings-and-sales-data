@@ -703,7 +703,7 @@ RSpec.describe SalesLogsController, type: :request do
           end
 
           it "shows the total log count" do
-            expect(CGI.unescape_html(response.body)).to match("<strong>1</strong> matching logs")
+            expect(CGI.unescape_html(response.body)).to match("<strong>1</strong> total logs")
           end
 
           it "does not show the pagination links" do
@@ -756,7 +756,7 @@ RSpec.describe SalesLogsController, type: :request do
             end
 
             it "shows the total log count" do
-              expect(CGI.unescape_html(response.body)).to match("<strong>26</strong> matching logs")
+              expect(CGI.unescape_html(response.body)).to match("<strong>26</strong> total logs")
             end
 
             it "has pagination links" do

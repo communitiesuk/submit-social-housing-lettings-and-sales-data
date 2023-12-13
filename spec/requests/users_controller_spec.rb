@@ -1194,7 +1194,7 @@ RSpec.describe UsersController, type: :request do
       end
 
       it "shows the pagination count" do
-        expect(page).to have_content("4 matching users")
+        expect(page).to have_content("4 total users")
       end
 
       it "shows the download csv link" do
