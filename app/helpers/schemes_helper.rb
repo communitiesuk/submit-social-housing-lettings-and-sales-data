@@ -57,6 +57,21 @@ module SchemesHelper
     schemes_csv_download_organisation_path(organisation, search:, download_type:)
   end
 
+  def change_answer_link(scheme, question_id, user)
+    case question_id
+    when "service_name", "sensitive", "scheme_type", "registered_under_care_act", "owning_organisation_id", "arrangement_type"
+      user.support? || !scheme.confirmed? ? scheme_details_path(scheme, check_answers: true) : scheme_edit_name_path(scheme)
+    when "primary_client_group"
+      scheme_primary_client_group_path(scheme, check_answers: true)
+    when "has_other_client_group"
+      scheme_confirm_secondary_client_group_path(scheme, check_answers: true)
+    when "secondary_client_group"
+      scheme_secondary_client_group_path(scheme, check_answers: true)
+    when "support_type", "intended_stay"
+      scheme_support_path(scheme, check_answers: true)
+    end
+  end
+
 private
 
   ActivePeriod = Struct.new(:from, :to)
