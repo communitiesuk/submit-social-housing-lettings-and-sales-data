@@ -12,6 +12,7 @@
       <%= f.govuk_error_summary %>
 
       <%= render partial: "organisations/headings", locals: { main: "What is the other client group?", sub: @scheme.service_name } %>
+      <%= govuk_inset_text(text: "Only update a scheme if you’re fixing an error. If the scheme is changing,  create a new scheme.") if @scheme.confirmed? %>
 
       <% secondary_client_group_selection = Scheme.secondary_client_groups.keys.excluding("Missing", @scheme.primary_client_group).map { |key, _| OpenStruct.new(id: key, name: key) } %>
       <%= f.govuk_collection_radio_buttons :secondary_client_group,

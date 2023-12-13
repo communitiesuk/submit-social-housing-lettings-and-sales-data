@@ -7,6 +7,7 @@
 <% end %>
 
 <%= render partial: "organisations/headings", locals: { main: "Does this scheme provide for another client group?", sub: @scheme.service_name } %>
+<%= govuk_inset_text(text: "Only update a scheme if you’re fixing an error. If the scheme is changing,  create a new scheme.") if @scheme.confirmed? %>
 
 <%= form_for(@scheme, method: :patch) do |f| %>
   <div class="govuk-grid-row">

@@ -14,6 +14,7 @@
       <% else %>
         <%= render partial: "organisations/headings", locals: { main: "Create a new supported housing scheme", sub: nil } %>
       <% end %>
+      <%= govuk_inset_text(text: "Only update a scheme if you’re fixing an error. If the scheme is changing,  create a new scheme.") if @scheme.confirmed? %>
 
       <%= f.govuk_text_field :service_name,
                              label: { text: "Scheme name", size: "m" },

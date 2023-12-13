@@ -12,6 +12,7 @@
       <%= f.govuk_error_summary %>
 
       <%= render partial: "organisations/headings", locals: { main: "What support does this scheme provide?", sub: @scheme.service_name } %>
+      <%= govuk_inset_text(text: "Only update a scheme if you’re fixing an error. If the scheme is changing,  create a new scheme.") if @scheme.confirmed? %>
 
       <% support_level_options_hints = { "Low level": "Staff visiting once a week, fortnightly or less.", "Medium level": "Staff on site daily or making frequent visits with some out-of-hours cover.", "High level": "Intensive level of staffing provided on a 24-hour basis." } %>
 
