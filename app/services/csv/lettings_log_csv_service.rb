@@ -177,7 +177,7 @@ module Csv
           value
         when "labels"
           answer_label = get_label(value, attribute, log)
-          answer_label || label_if_boolean_value(value) || YES_OR_BLANK_ATTRIBUTES.include?(attribute) ? yes_or_blank_label(value) : value
+          answer_label || label_if_boolean_value(value) || (YES_OR_BLANK_ATTRIBUTES.include?(attribute) && value != 1 ? nil : value)
         end
       end
     end
@@ -187,7 +187,9 @@ module Csv
       return IRPRODUCT_LABELS[value] if attribute == "irproduct"
       return LAR_LABELS[value] if attribute == "lar"
       return NEWPROP_LABELS[value] if attribute == "newprop"
+      return INCREF_LABELS[value] if attribute == "incref"
       return conventional_yes_no_label(value) if CONVENTIONAL_YES_NO_ATTRIBUTES.include?(attribute)
+      return "Yes" if YES_OR_BLANK_ATTRIBUTES.include?(attribute) && value == 1
 
       log.form
          .get_question(attribute, log)
@@ -241,9 +243,9 @@ module Csv
     }.freeze
 
     INCREF_LABELS = {
-      1 => "Yes",
-      0 => "No",
-      3 => "Don't know",
+      0 => "Yes",
+      2 => "No",
+      1 => "Prefers not to say",
     }.freeze
 
     CONVENTIONAL_YES_NO_ATTRIBUTES = %w[illness_type_1 illness_type_2 illness_type_3 illness_type_4 illness_type_5 illness_type_6 illness_type_7 illness_type_8 illness_type_9 illness_type_10 refused cbl cap chr letting_allocation_none housingneeds_a housingneeds_b housingneeds_c housingneeds_d housingneeds_e housingneeds_f housingneeds_g housingneeds_h has_benefits nocharge].freeze

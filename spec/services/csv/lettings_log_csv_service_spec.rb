@@ -26,6 +26,7 @@ RSpec.describe Csv::LettingsLogCsvService do
       ecstat4: 10,
       relat4: "R",
       age4_known: 1,
+      incref: 0,
     )
   end
   let(:user) { create(:user, :support, email: "s.port@jeemayle.com") }
@@ -38,6 +39,8 @@ RSpec.describe Csv::LettingsLogCsvService do
   before do
     Timecop.freeze(fixed_time)
     Singleton.__init__(FormHandler)
+    log.irproduct = 1
+    log.save!(validate: false)
   end
 
   after do
