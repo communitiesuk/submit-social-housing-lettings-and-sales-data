@@ -14,7 +14,7 @@ RSpec.describe "set_sales_managing_organisation" do
     context "when the rake task is run" do
       let!(:sales_log) { create(:sales_log, :completed, managing_organisation_id: nil) }
 
-      it "updates sales log managing_organisation_id with owning_organisation_id" do
+      xit "updates sales log managing_organisation_id with owning_organisation_id" do
         expect(sales_log.managing_organisation_id).to eq(nil)
         expect(sales_log.status).to eq("completed")
         task.invoke

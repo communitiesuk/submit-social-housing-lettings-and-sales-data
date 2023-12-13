@@ -123,12 +123,6 @@ private
     FilterManager.new(current_user:, session:, params:, filter_type: "lettings_logs")
   end
 
-  def org_params
-    super.merge(
-      { "managing_organisation_id" => current_user.organisation.id },
-    )
-  end
-
   def authenticate_scope!
     head :unauthorized and return if codes_only_export? && !current_user.support?
   end

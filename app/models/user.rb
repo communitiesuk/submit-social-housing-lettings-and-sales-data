@@ -87,7 +87,7 @@ class User < ApplicationRecord
     if support?
       SalesLog.all
     else
-      SalesLog.filter_by_owning_organisation(organisation.absorbed_organisations + [organisation])
+      SalesLog.filter_by_organisation(organisation.absorbed_organisations + [organisation])
     end
   end
 
@@ -97,6 +97,14 @@ class User < ApplicationRecord
 
   def managed_lettings_logs
     LettingsLog.filter_by_managing_organisation(organisation.absorbed_organisations + [organisation])
+  end
+
+  def owned_sales_logs
+    SalesLog.filter_by_owning_organisation(organisation.absorbed_organisations + [organisation])
+  end
+
+  def managed_sales_logs
+    SalesLog.filter_by_managing_organisation(organisation.absorbed_organisations + [organisation])
   end
 
   def schemes

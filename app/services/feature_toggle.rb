@@ -43,4 +43,8 @@ class FeatureToggle
   def self.service_moved?
     false
   end
+
+  def self.sales_managing_organisation_enabled?
+    true
+  end
 end

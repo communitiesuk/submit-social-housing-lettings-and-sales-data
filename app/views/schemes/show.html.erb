@@ -1,17 +1,22 @@
 <% title = @scheme.service_name %>
 <% content_for :title, title %>
 
-<% content_for :before_content do %>
-  <%= govuk_back_link(
-    href: "/schemes",
-  ) %>
+<% if current_user.support? %>
+  <% content_for :breadcrumbs, govuk_breadcrumbs(breadcrumbs: {
+    "Schemes (#{@scheme.owning_organisation.name})" => schemes_organisation_path(@scheme.owning_organisation),
+    content_for(:title) => "",
+  }) %>
+<% else %>
+  <% content_for :before_content do %>
+    <%= govuk_back_link(href: schemes_path) %>
+  <% end %>
 <% end %>
 
 <%= render partial: "organisations/headings", locals: { main: @scheme.service_name, sub: nil } %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
-    <%= render SubNavigationComponent.new(items: scheme_items(request.path, @scheme.id, "Locations")) %>
+    <%= render SubNavigationComponent.new(items: scheme_items(request.path, @scheme.id)) %>
 
     <h2 class="govuk-visually-hidden">Scheme</h2>
     <%= govuk_inset_text(text: edit_scheme_text(@scheme, current_user)) %>

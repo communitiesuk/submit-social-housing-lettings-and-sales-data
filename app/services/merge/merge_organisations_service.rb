@@ -22,6 +22,7 @@ class Merge::MergeOrganisationsService
       end
       @absorbing_organisation.available_from = @merge_date if @absorbing_organisation_active_from_merge_date
       @absorbing_organisation.save!
+      send_success_emails
       log_success_message
     rescue ActiveRecord::RecordInvalid => e
       Rails.logger.error("Organisation merge failed with: #{e.message}")
@@ -67,19 +68,35 @@ private
   def merge_schemes_and_locations(merging_organisation)
     @merged_schemes[merging_organisation.name] = []
     merging_organisation.owned_schemes.each do |scheme|
-      next if scheme.deactivated?
-
-      new_scheme = Scheme.create!(scheme.attributes.except("id", "owning_organisation_id", "old_id", "old_visible_id").merge(owning_organisation: @absorbing_organisation, startdate: @merge_date))
+      new_scheme = Scheme.new(scheme.attributes.except("id", "owning_organisation_id", "old_id", "old_visible_id").merge(owning_organisation: @absorbing_organisation, startdate: [scheme&.startdate, @merge_date].compact.max))
+      new_scheme.save!(validate: false)
+      scheme.scheme_deactivation_periods.each do |deactivation_period|
+        split_scheme_deactivation_period_between_organisations(deactivation_period, new_scheme)
+      end
       scheme.locations.each do |location|
-        new_scheme.locations << Location.new(location.attributes.except("id", "scheme_id", "old_id", "old_visible_id").merge(startdate: [location&.startdate, @merge_date].compact.max)) unless location.deactivated?
+        new_location = Location.new(location.attributes.except("id", "scheme_id", "old_id", "old_visible_id").merge(scheme: new_scheme, startdate: [location&.startdate, @merge_date].compact.max))
+        new_location.save!(validate: false)
+        location.location_deactivation_periods.each do |deactivation_period|
+          split_location_deactivation_period_between_organisations(deactivation_period, new_location)
+        end
+        unless location.status_at(@merge_date) == :deactivated
+          deactivation_period = LocationDeactivationPeriod.new(location:, deactivation_date: [location&.startdate, scheme&.startdate, @merge_date].compact.max)
+          deactivation_period.save!(validate: false)
+        end
       end
       @merged_schemes[merging_organisation.name] << { name: new_scheme.service_name, code: new_scheme.id }
-      SchemeDeactivationPeriod.create!(scheme:, deactivation_date: @merge_date)
+      unless scheme.status_at(@merge_date) == :deactivated
+        deactivation_period = SchemeDeactivationPeriod.new(scheme:, deactivation_date: [scheme&.startdate, @merge_date].compact.max)
+        deactivation_period.save!(validate: false)
+      end
     end
   end
 
   def merge_lettings_logs(merging_organisation)
     merging_organisation.owned_lettings_logs.after_date(@merge_date.to_time).each do |lettings_log|
+      if lettings_log.managing_organisation == merging_organisation
+        lettings_log.managing_organisation = @absorbing_organisation
+      end
       if lettings_log.scheme.present?
         scheme_to_set = @absorbing_organisation.owned_schemes.find_by(service_name: lettings_log.scheme.service_name)
         location_to_set = scheme_to_set.locations.find_by(name: lettings_log.location&.name, postcode: lettings_log.location&.postcode)
@@ -88,21 +105,46 @@ private
         lettings_log.location = location_to_set if location_to_set.present?
       end
       lettings_log.owning_organisation = @absorbing_organisation
-      lettings_log.skip_dpo_validation = true
-      lettings_log.save!
+      lettings_log.managing_organisation = @absorbing_organisation if lettings_log.managing_organisation == merging_organisation
+      if lettings_log.collection_period_open?
+        lettings_log.skip_dpo_validation = true
+        lettings_log.save!
+      else
+        lettings_log.save!(validate: false)
+      end
     end
     merging_organisation.managed_lettings_logs.after_date(@merge_date.to_time).each do |lettings_log|
       lettings_log.managing_organisation = @absorbing_organisation
-      lettings_log.skip_dpo_validation = true
-      lettings_log.save!
+      if lettings_log.collection_period_open?
+        lettings_log.skip_dpo_validation = true
+        lettings_log.save!
+      else
+        lettings_log.save!(validate: false)
+      end
     end
   end
 
   def merge_sales_logs(merging_organisation)
-    merging_organisation.sales_logs.after_date(@merge_date.to_time).each do |sales_log|
+    merging_organisation.owned_sales_logs.after_date(@merge_date.to_time).each do |sales_log|
+      if sales_log.managing_organisation == merging_organisation
+        sales_log.managing_organisation = @absorbing_organisation
+      end
       sales_log.owning_organisation = @absorbing_organisation
-      sales_log.skip_dpo_validation = true
-      sales_log.save!
+      if sales_log.collection_period_open?
+        sales_log.skip_dpo_validation = true
+        sales_log.save!
+      else
+        sales_log.save!(validate: false)
+      end
+    end
+    merging_organisation.managed_sales_logs.after_date(@merge_date.to_time).each do |sales_log|
+      sales_log.managing_organisation = @absorbing_organisation
+      if sales_log.collection_period_open?
+        sales_log.skip_dpo_validation = true
+        sales_log.save!
+      else
+        sales_log.save!(validate: false)
+      end
     end
   end
 
@@ -121,6 +163,19 @@ private
       Rails.logger.info("New schemes from #{organisation_name}:")
       schemes.each do |scheme|
         Rails.logger.info("\t#{scheme[:name]} (S#{scheme[:code]})")
+      end
+    end
+  end
+
+  def send_success_emails
+    @absorbing_organisation.users.each do |user|
+      next unless user.active?
+
+      merged_organisation, merged_user = find_merged_user_and_organisation_by_email(user.email)
+      if merged_user.present?
+        MergeCompletionMailer.send_merged_organisation_success_mail(merged_user[:email], merged_organisation, @absorbing_organisation.name, @merge_date).deliver_later
+      else
+        MergeCompletionMailer.send_absorbing_organisation_success_mail(user.email, @merging_organisations.map(&:name), @absorbing_organisation.name, @merge_date).deliver_later
       end
     end
   end
@@ -156,5 +211,55 @@ private
     merging_organisation.data_protection_confirmation.update!(data_protection_officer: new_dpo)
 
     merging_organisation.users.where.not(id: new_dpo.id)
+  end
+
+  def deactivation_happenned_before_merge?(deactivation_period)
+    deactivation_period.deactivation_date <= @merge_date && deactivation_period.reactivation_date.present? && deactivation_period.reactivation_date <= @merge_date
+  end
+
+  def deactivation_happenned_during_merge?(deactivation_period)
+    deactivation_period.deactivation_date <= @merge_date && (deactivation_period.reactivation_date.blank? || deactivation_period.reactivation_date.present? && deactivation_period.reactivation_date >= @merge_date)
+  end
+
+  def split_scheme_deactivation_period_between_organisations(deactivation_period, new_scheme)
+    return if deactivation_happenned_before_merge?(deactivation_period)
+
+    if deactivation_happenned_during_merge?(deactivation_period)
+      new_deactivation_period = SchemeDeactivationPeriod.new(deactivation_period.attributes.except("id", "scheme_id", "deactivation_date").merge(scheme: new_scheme, deactivation_date: @merge_date))
+      new_deactivation_period.save!(validate: false)
+      if deactivation_period.reactivation_date.present?
+        deactivation_period.reactivation_date = nil
+        deactivation_period.save!(validate: false)
+      end
+    else
+      new_deactivation_period = SchemeDeactivationPeriod.new(deactivation_period.attributes.except("id", "scheme_id").merge(scheme: new_scheme))
+      new_deactivation_period.save!(validate: false)
+      deactivation_period.destroy!
+    end
+  end
+
+  def split_location_deactivation_period_between_organisations(deactivation_period, new_location)
+    return if deactivation_happenned_before_merge?(deactivation_period)
+
+    if deactivation_happenned_during_merge?(deactivation_period)
+      new_deactivation_period = LocationDeactivationPeriod.new(deactivation_period.attributes.except("id", "location_id", "deactivation_date").merge(location: new_location, deactivation_date: @merge_date))
+      new_deactivation_period.save!(validate: false)
+      if deactivation_period.reactivation_date.present?
+        deactivation_period.reactivation_date = nil
+        deactivation_period.save!(validate: false)
+      end
+    else
+      new_deactivation_period = LocationDeactivationPeriod.new(deactivation_period.attributes.except("id", "location_id").merge(location: new_location))
+      new_deactivation_period.save!(validate: false)
+      deactivation_period.destroy!
+    end
+  end
+
+  def find_merged_user_and_organisation_by_email(provided_email)
+    @merged_users.each do |org, users|
+      user = users.find { |u| u[:email] == provided_email }
+      return org, user if user
+    end
+    nil
   end
 end

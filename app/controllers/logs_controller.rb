@@ -63,10 +63,11 @@ private
   end
 
   def org_params
-    owning_organisation_id = instance_of?(SalesLogsController) || current_user.organisation.holds_own_stock? ? current_user.organisation.id : nil
+    owning_organisation_id = current_user.organisation.holds_own_stock? ? current_user.organisation.id : nil
     {
       "owning_organisation_id" => owning_organisation_id,
       "created_by_id" => current_user.id,
+      "managing_organisation_id" => current_user.organisation.id,
     }
   end
 

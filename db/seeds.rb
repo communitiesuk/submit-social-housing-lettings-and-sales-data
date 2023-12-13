@@ -200,6 +200,7 @@ unless Rails.env.test?
     SalesLog.find_or_create_by!(
       created_by: support_user,
       owning_organisation: org,
+      managing_organisation: org,
       saledate: Date.new(2023, 4, 1),
       purchid: "1",
       ownershipsch: 1,
@@ -211,6 +212,7 @@ unless Rails.env.test?
     SalesLog.find_or_create_by!(
       created_by: support_user,
       owning_organisation: org,
+      managing_organisation: org,
       saledate: Date.new(2023, 4, 1),
       purchid: "1",
       ownershipsch: 2,
@@ -222,6 +224,7 @@ unless Rails.env.test?
     SalesLog.find_or_create_by!(
       created_by: support_user,
       owning_organisation: org,
+      managing_organisation: org,
       saledate: Date.new(2023, 4, 1),
       purchid: "1",
       ownershipsch: 3,

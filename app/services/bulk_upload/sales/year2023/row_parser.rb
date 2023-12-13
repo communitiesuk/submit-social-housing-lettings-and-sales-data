@@ -455,10 +455,12 @@ class BulkUpload::Sales::Year2023::RowParser
 
   validate :validate_owning_org_data_given, on: :after_log
   validate :validate_owning_org_exists, on: :after_log
+  validate :validate_owning_org_owns_stock, on: :after_log if FeatureToggle.sales_managing_organisation_enabled?
   validate :validate_owning_org_permitted, on: :after_log
 
   validate :validate_created_by_exists, on: :after_log
   validate :validate_created_by_related, on: :after_log
+  validate :validate_managing_org_related, on: :after_log if FeatureToggle.sales_managing_organisation_enabled?
   validate :validate_relevant_collection_window, on: :after_log
   validate :validate_incomplete_soft_validations, on: :after_log
 
@@ -896,6 +898,7 @@ private
     attributes["othtype"] = field_11
 
     attributes["owning_organisation"] = owning_organisation
+    attributes["managing_organisation"] = managing_organisation
     attributes["created_by"] = created_by || bulk_upload.user
     attributes["hhregres"] = field_73
     attributes["hhregresstill"] = field_74
@@ -1195,10 +1198,27 @@ private
 
   def validate_created_by_related
     return unless created_by
-    return if created_by.organisation == owning_organisation || created_by.organisation == owning_organisation&.absorbing_organisation
+    return if created_by.organisation == owning_organisation || created_by.organisation == managing_organisation
+    return if created_by.organisation == owning_organisation&.absorbing_organisation || created_by.organisation == managing_organisation&.absorbing_organisation
 
     block_log_creation!
-    errors.add(:field_2, "User must be related to owning organisation", category: :setup)
+    errors.add(:field_2, "User must be related to owning organisation or managing organisation", category: :setup)
+  end
+
+  def managing_organisation
+    return owning_organisation if created_by&.organisation&.absorbed_organisations&.include?(owning_organisation)
+
+    created_by&.organisation || bulk_upload.user.organisation
+  end
+
+  def validate_managing_org_related
+    if owning_organisation && managing_organisation && !owning_organisation.can_be_managed_by?(organisation: managing_organisation)
+      block_log_creation!
+
+      if errors[:field_2].blank?
+        errors.add(:field_2, "This user belongs to an organisation that does not have a relationship with the owning organisation", category: :setup)
+      end
+    end
   end
 
   def setup_question?(question)
