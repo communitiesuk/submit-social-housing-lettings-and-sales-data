@@ -22,6 +22,7 @@ class Merge::MergeOrganisationsService
       end
       @absorbing_organisation.available_from = @merge_date if @absorbing_organisation_active_from_merge_date
       @absorbing_organisation.save!
+      send_success_emails
       log_success_message
     rescue ActiveRecord::RecordInvalid => e
       Rails.logger.error("Organisation merge failed with: #{e.message}")
@@ -166,6 +167,19 @@ private
     end
   end
 
+  def send_success_emails
+    @absorbing_organisation.users.each do |user|
+      next unless user.active?
+
+      merged_organisation, merged_user = find_merged_user_and_organisation_by_email(user.email)
+      if merged_user.present?
+        MergeCompletionMailer.send_merged_organisation_success_mail(merged_user[:email], merged_organisation, @absorbing_organisation.name, @merge_date).deliver_later
+      else
+        MergeCompletionMailer.send_absorbing_organisation_success_mail(user.email, @merging_organisations.map(&:name), @absorbing_organisation.name, @merge_date).deliver_later
+      end
+    end
+  end
+
   def merge_boolean_organisation_attribute(attribute)
     @absorbing_organisation[attribute] ||= @merging_organisations.any? { |merging_organisation| merging_organisation[attribute] }
   end
@@ -239,5 +253,13 @@ private
       new_deactivation_period.save!(validate: false)
       deactivation_period.destroy!
     end
+  end
+
+  def find_merged_user_and_organisation_by_email(provided_email)
+    @merged_users.each do |org, users|
+      user = users.find { |u| u[:email] == provided_email }
+      return org, user if user
+    end
+    nil
   end
 end
