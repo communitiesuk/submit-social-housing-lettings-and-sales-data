@@ -177,7 +177,7 @@ module Csv
           value
         when "labels"
           answer_label = get_label(value, attribute, log)
-          answer_label || label_if_boolean_value(value) || label_if_checkbox_value(value) || value
+          answer_label || label_if_boolean_value(value) || YES_OR_BLANK_ATTRIBUTES.include?(attribute) ? yes_or_blank_label(value) : value
         end
       end
     end
@@ -185,7 +185,8 @@ module Csv
     def get_label(value, attribute, log)
       return LETTYPE_LABELS[value] if attribute == "lettype"
       return IRPRODUCT_LABELS[value] if attribute == "irproduct"
-      return label_if_checkbox_value(value) if ILLNESS_TYPES.include?(attribute)
+      return NEWPROP_LABELS[value] if attribute == "newprop"
+      return conventional_yes_no_label(value) if CONVENTIONAL_YES_NO_ATTRIBUTES.include?(attribute)
 
       log.form
          .get_question(attribute, log)
@@ -197,9 +198,13 @@ module Csv
       return "No" if value == false
     end
 
-    def label_if_checkbox_value(value)
+    def conventional_yes_no_label(value)
       return "Yes" if value == 1
       return "No" if value.zero?
+    end
+
+    def yes_or_blank_label(value)
+      value == 1 ? "Yes" : nil
     end
 
     LETTYPE_LABELS = {
@@ -223,7 +228,14 @@ module Csv
       3 => "Other intermediate rent product",
     }.freeze
 
-    ILLNESS_TYPES = %w[illness_type_1 illness_type_2 illness_type_3 illness_type_4 illness_type_5 illness_type_6 illness_type_7 illness_type_8 illness_type_9 illness_type_10].freeze
+    NEWPROP_LABELS = {
+      1 => "Yes",
+      2 => "No",
+    }.freeze
+
+    CONVENTIONAL_YES_NO_ATTRIBUTES = %w[illness_type_1 illness_type_2 illness_type_3 illness_type_4 illness_type_5 illness_type_6 illness_type_7 illness_type_8 illness_type_9 illness_type_10 refused cbl cap chr letting_allocation_none has_benefits nocharge].freeze
+
+    YES_OR_BLANK_ATTRIBUTES = %w[declaration rp_homeless rp_insan_unsat rp_medwel rp_hardship rp_dontknow]
 
     ATTRIBUTE_MAPPINGS = {
       "owning_organisation_id" => %w[owning_organisation_name],
