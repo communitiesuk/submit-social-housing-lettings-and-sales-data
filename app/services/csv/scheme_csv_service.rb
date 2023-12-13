@@ -49,11 +49,10 @@ module Csv
       "location_postcode" => "postcode",
       "location_name" => "name",
       "location_status" => "status",
-      "location_local_authority" => "location_code",
+      "location_local_authority" => "location_admin_district",
       "location_units" => "units",
       "location_type_of_unit" => "type_of_unit",
       "location_mobility_type" => "mobility_type",
-      "location_admin_district" => "location_admin_district",
     }.freeze
 
     CUSTOM_CALL_CHAINS = {
@@ -92,7 +91,7 @@ module Csv
     end
 
     def location_attributes
-      %w[location_code location_postcode location_name location_status location_local_authority location_units location_type_of_unit location_mobility_type location_admin_district location_active_dates]
+      %w[location_code location_postcode location_name location_status location_local_authority location_units location_type_of_unit location_mobility_type location_active_dates]
     end
 
     def attributes
