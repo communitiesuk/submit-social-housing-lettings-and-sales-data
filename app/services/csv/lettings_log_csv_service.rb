@@ -201,7 +201,7 @@ module Csv
 
     def conventional_yes_no_label(value)
       return "Yes" if value == 1
-      return "No" if value.zero?
+      return "No" if value == 0
     end
 
     def yes_or_blank_label(value)
