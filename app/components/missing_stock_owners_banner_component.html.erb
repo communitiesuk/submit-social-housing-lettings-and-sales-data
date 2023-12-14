@@ -1,0 +1,10 @@
+<% if display_banner? %>
+  <%= govuk_notification_banner(title_text: "Important") do %>
+    <p class="govuk-notification-banner__heading govuk-!-width-full" style="max-width: fit-content">
+      <%= header_text %>
+    <p>
+    <p style="max-width: fit-content">
+      <%= banner_text %>
+    </p>
+  <% end %>
+<% end %>

@@ -291,6 +291,60 @@ RSpec.describe LettingsLogsController, type: :request do
             expect(page).to have_content("Managed by")
           end
         end
+
+        context "and organisation does not own stock or have valid stock owners" do
+          before do
+            organisation.update!(holds_own_stock: false)
+          end
+
+          it "hides button to create a new log" do
+            get "/lettings-logs"
+            expect(page).not_to have_content("Create a new lettings log")
+          end
+
+          context "with coordinator user" do
+            let(:user) { FactoryBot.create(:user, :data_coordinator) }
+
+            it "displays a banner exlaining why create new logs button is missing" do
+              get "/lettings-logs", headers:, params: {}
+              expect(page).to have_css(".govuk-notification-banner")
+              expect(page).to have_content("Your organisation does not own stock.")
+              expect(page).to have_link("add a stock owner", href: /stock-owners\/add/)
+              expect(page).not_to have_link("users page", href: /users/)
+            end
+          end
+
+          context "with provider user" do
+            let(:user) { FactoryBot.create(:user, :data_provider) }
+
+            it "displays a banner exlaining why create new logs button is missing" do
+              get "/lettings-logs", headers:, params: {}
+              expect(page).to have_css(".govuk-notification-banner")
+              expect(page).to have_content("Your organisation does not own stock.")
+              expect(page).not_to have_link("add a stock owner", href: /stock-owners\/add/)
+              expect(page).to have_link("users page", href: /users/)
+            end
+          end
+        end
+
+        context "and organisation owns stock" do
+          before do
+            organisation.update!(holds_own_stock: true)
+          end
+
+          it "displays button to create a new log" do
+            get "/lettings-logs"
+            expect(page).to have_content("Create a new lettings log")
+          end
+
+          it "does not display the missing stock owners banner" do
+            get "/lettings-logs", headers:, params: {}
+            expect(page).not_to have_css(".govuk-notification-banner")
+            expect(page).not_to have_content("Your organisation does not own stock.")
+            expect(page).not_to have_link("add a stock owner", href: /stock-owners\/add/)
+            expect(page).not_to have_link("users page", href: /users/)
+          end
+        end
       end
 
       context "when the user is a customer support user" do

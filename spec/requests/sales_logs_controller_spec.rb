@@ -804,6 +804,30 @@ RSpec.describe SalesLogsController, type: :request do
                 expect(page).not_to have_content "duplicate logs"
               end
             end
+
+            context "and the data sharing agreement banner is shown" do
+              before do
+                user.organisation.data_protection_confirmation.destroy!
+                user.organisation.reload
+              end
+
+              it "displays the correct copy in the banner" do
+                get sales_logs_path
+                expect(page).not_to have_content "duplicate logs"
+              end
+            end
+
+            context "and the missing stock owner banner is shown" do
+              before do
+                user.organisation.update!(holds_own_stock: false)
+                user.organisation.reload
+              end
+
+              it "displays the correct copy in the banner" do
+                get sales_logs_path
+                expect(page).not_to have_content "duplicate logs"
+              end
+            end
           end
 
           context "when there are multiple sets of duplicates" do

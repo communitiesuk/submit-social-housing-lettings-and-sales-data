@@ -29,8 +29,6 @@ class CsvDownloadMailer < NotifyMailer
 
 private
 
-  HELPDESK_URL = "https://dluhcdigital.atlassian.net/servicedesk/customer/portal/6/group/11".freeze
-
   def issue_explanation(issue_types, log_type)
     [
       "We have found #{multiple_issue_types?(issue_types) ? 'these issues' : 'this issue'} in your logs imported to the new version of CORE:\n",
@@ -43,7 +41,7 @@ private
   def how_to_fix(issue_types, link, log_type)
     [
       "You need to:\n\n",
-      "- download [this spreadsheet for #{log_type} logs](#{link}). This link will expire in one week. To request another link, [contact the CORE helpdesk](#{HELPDESK_URL}).\n",
+      "- download [this spreadsheet for #{log_type} logs](#{link}). This link will expire in one week. To request another link, [contact the CORE helpdesk](#{GlobalConstants::HELPDESK_URL}).\n",
       issue_types.include?("missing_address") || issue_types.include?("missing_town") ? "- fill in the missing address data\n" : "",
       uprn_issues_only(issue_types) ? "- check that the address data is correct\n" : "- check that the existing address data is correct\n",
       has_uprn_issues(issue_types) ? "- correct any address errors\n" : "",
