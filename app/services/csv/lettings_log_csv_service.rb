@@ -243,8 +243,8 @@ module Csv
     }.freeze
 
     INCREF_LABELS = {
-      0 => "Yes",
-      2 => "No",
+      0 => "No",
+      2 => "Yes",
       1 => "Prefers not to say",
     }.freeze
 
