@@ -9,7 +9,7 @@ module Csv
       CSV.generate(headers: true) do |csv|
         csv << @attributes
 
-        logs.find_each do |log|
+        logs.each do |log|
           csv << @attributes.map { |attribute| value(attribute, log) }
         end
       end

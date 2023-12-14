@@ -10,17 +10,22 @@ module Csv
     def prepare_csv(schemes)
       CSV.generate(headers: true) do |csv|
         csv << attributes
-        schemes.find_each do |scheme|
-          if @download_type == "schemes"
+
+        case @download_type
+        when "schemes"
+          schemes.each do |scheme|
             csv << scheme_attributes.map { |attribute| scheme_value(attribute, scheme) }
-          else
+          end
+        when "locations"
+          schemes.each do |scheme|
             scheme.locations.each do |location|
-              case @download_type
-              when "locations"
-                csv << [scheme.id_to_display] + location_attributes.map { |attribute| location_value(attribute, location) }
-              when "combined"
-                csv << scheme_attributes.map { |attribute| scheme_value(attribute, scheme) } + location_attributes.map { |attribute| location_value(attribute, location) }
-              end
+              csv << [scheme.id_to_display] + location_attributes.map { |attribute| location_value(attribute, location) }
+            end
+          end
+        when "combined"
+          schemes.each do |scheme|
+            scheme.locations.each do |location|
+              csv << scheme_attributes.map { |attribute| scheme_value(attribute, scheme) } + location_attributes.map { |attribute| location_value(attribute, location) }
             end
           end
         end
