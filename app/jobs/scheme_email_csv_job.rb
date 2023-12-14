@@ -7,7 +7,7 @@ class SchemeEmailCsvJob < ApplicationJob
 
   def perform(user, search_term = nil, filters = {}, all_orgs = false, organisation = nil, download_type = "combined") # rubocop:disable Style/OptionalBooleanParameter - sidekiq can't serialise named params
     unfiltered_schemes = organisation.present? && user.support? ? Scheme.where(owning_organisation_id: organisation.id) : user.schemes
-    filtered_schemes = FilterManager.filter_schemes(unfiltered_schemes, search_term, filters, user, all_orgs)
+    filtered_schemes = FilterManager.filter_schemes(unfiltered_schemes, search_term, filters, all_orgs, user)
     csv_string = Csv::SchemeCsvService.new(download_type:).prepare_csv(filtered_schemes)
 
     case download_type
