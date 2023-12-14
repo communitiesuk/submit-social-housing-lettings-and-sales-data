@@ -125,7 +125,7 @@ class FilterManager
   def filtered_schemes(schemes, search_term, filters)
     all_orgs = params["owning_organisation_select"] == "all"
 
-    FilterManager.filter_schemes(schemes, search_term, filters, current_user, all_orgs)
+    FilterManager.filter_schemes(schemes, search_term, filters, all_orgs, current_user)
   end
 
   def filtered_locations(locations, search_term, filters)
