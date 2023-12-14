@@ -6,7 +6,30 @@ class Form::Sales::Pages::DepositAndMortgageValueCheck < ::Form::Page
         "mortgage_plus_deposit_less_than_discounted_value?" => true,
       },
     ]
-    @informative_text = {}
+    @title_text = {
+      "translation" => "soft_validations.deposit_and_mortgage.title_text",
+      "arguments" => [
+        {
+          "key" => "mortgage",
+          "label" => true,
+          "i18n_template" => "mortgage",
+        },
+        {
+          "key" => "deposit",
+          "label" => true,
+          "i18n_template" => "deposit",
+        },
+        {
+          "key" => "discount",
+          "label" => true,
+          "i18n_template" => "discount",
+        },
+      ],
+    }
+    @informative_text = {
+      "translation" => "soft_validations.deposit_and_mortgage.hint_text",
+      "arguments" => [],
+    }
   end
 
   def questions
