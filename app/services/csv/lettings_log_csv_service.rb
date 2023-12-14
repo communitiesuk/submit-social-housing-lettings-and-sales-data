@@ -183,11 +183,7 @@ module Csv
     end
 
     def get_label(value, attribute, log)
-      return LETTYPE_LABELS[value] if attribute == "lettype"
-      return IRPRODUCT_LABELS[value] if attribute == "irproduct"
-      return LAR_LABELS[value] if attribute == "lar"
-      return NEWPROP_LABELS[value] if attribute == "newprop"
-      return INCREF_LABELS[value] if attribute == "incref"
+      return LABELS[attribute][value] if LABELS.key?(attribute)
       return conventional_yes_no_label(value) if CONVENTIONAL_YES_NO_ATTRIBUTES.include?(attribute)
       return "Yes" if YES_OR_BLANK_ATTRIBUTES.include?(attribute) && value == 1
 
@@ -209,6 +205,14 @@ module Csv
     def yes_or_blank_label(value)
       value == 1 ? "Yes" : nil
     end
+
+    LABELS = {
+      "lettype": LETTYPE_LABELS,
+      "irproduct": IRPRODUCT_LABELS,
+      "lar": LAR_LABELS,
+      "newprop": NEWPROP_LABELS,
+      "incref": INCREF_LABELS,
+    }.freeze
 
     LETTYPE_LABELS = {
       1 => "Social rent general needs private registered provider",
