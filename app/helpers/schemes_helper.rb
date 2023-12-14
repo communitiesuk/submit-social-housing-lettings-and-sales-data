@@ -60,10 +60,10 @@ module SchemesHelper
     when "schemes"
       "You've selected #{pluralize(scheme_count, 'scheme')}."
     when "locations"
-      location_count = schemes.map(&:locations).flatten.count
+      location_count = Location.where(scheme: schemes).count
       "You've selected #{pluralize(location_count, 'location')} from #{pluralize(scheme_count, 'scheme')}."
     when "combined"
-      location_count = schemes.map(&:locations).flatten.count
+      location_count = Location.where(scheme: schemes).count
       "You've selected #{pluralize(scheme_count, 'scheme')} with #{pluralize(location_count, 'location')}. The CSV will have one location per row with scheme details listed for each location."
     end
   end
