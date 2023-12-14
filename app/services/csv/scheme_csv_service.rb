@@ -13,18 +13,18 @@ module Csv
 
         case @download_type
         when "schemes"
-          schemes.each do |scheme|
+          schemes.find_each do |scheme|
             csv << scheme_attributes.map { |attribute| scheme_value(attribute, scheme) }
           end
         when "locations"
-          schemes.each do |scheme|
-            scheme.locations.each do |location|
+          schemes.find_each do |scheme|
+            scheme.locations.find_each do |location|
               csv << [scheme.id_to_display] + location_attributes.map { |attribute| location_value(attribute, location) }
             end
           end
         when "combined"
-          schemes.each do |scheme|
-            scheme.locations.each do |location|
+          schemes.find_each do |scheme|
+            scheme.locations.find_each do |location|
               csv << scheme_attributes.map { |attribute| scheme_value(attribute, scheme) } + location_attributes.map { |attribute| location_value(attribute, location) }
             end
           end
