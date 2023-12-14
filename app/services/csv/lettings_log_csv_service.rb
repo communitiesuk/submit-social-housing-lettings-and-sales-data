@@ -206,14 +206,6 @@ module Csv
       value == 1 ? "Yes" : nil
     end
 
-    LABELS = {
-      "lettype": LETTYPE_LABELS,
-      "irproduct": IRPRODUCT_LABELS,
-      "lar": LAR_LABELS,
-      "newprop": NEWPROP_LABELS,
-      "incref": INCREF_LABELS,
-    }.freeze
-
     LETTYPE_LABELS = {
       1 => "Social rent general needs private registered provider",
       2 => "Social rent supported housing private registered provider",
@@ -250,6 +242,14 @@ module Csv
       0 => "No",
       2 => "Yes",
       1 => "Prefers not to say",
+    }.freeze
+
+    LABELS = {
+      "lettype": LETTYPE_LABELS,
+      "irproduct": IRPRODUCT_LABELS,
+      "lar": LAR_LABELS,
+      "newprop": NEWPROP_LABELS,
+      "incref": INCREF_LABELS,
     }.freeze
 
     CONVENTIONAL_YES_NO_ATTRIBUTES = %w[illness_type_1 illness_type_2 illness_type_3 illness_type_4 illness_type_5 illness_type_6 illness_type_7 illness_type_8 illness_type_9 illness_type_10 refused cbl cap chr letting_allocation_none housingneeds_a housingneeds_b housingneeds_c housingneeds_d housingneeds_e housingneeds_f housingneeds_g housingneeds_h has_benefits nocharge].freeze
