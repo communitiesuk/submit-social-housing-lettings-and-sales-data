@@ -7,9 +7,9 @@ class OrganisationsController < ApplicationController
   before_action :find_resource, except: %i[index new create]
   before_action :authenticate_scope!, except: [:index]
   before_action :session_filters, if: -> { current_user.support? || current_user.organisation.has_managing_agents? }, only: %i[lettings_logs sales_logs email_lettings_csv download_lettings_csv email_sales_csv download_sales_csv]
-  before_action :session_filters, only: %i[users schemes]
+  before_action :session_filters, only: %i[users schemes email_schemes_csv download_schemes_csv]
   before_action -> { filter_manager.serialize_filters_to_session }, if: -> { current_user.support? || current_user.organisation.has_managing_agents? }, only: %i[lettings_logs sales_logs email_lettings_csv download_lettings_csv email_sales_csv download_sales_csv]
-  before_action -> { filter_manager.serialize_filters_to_session }, only: %i[users schemes]
+  before_action -> { filter_manager.serialize_filters_to_session }, only: %i[users schemes email_schemes_csv download_schemes_csv]
 
   def index
     redirect_to organisation_path(current_user.organisation) unless current_user.support?
@@ -21,12 +21,24 @@ class OrganisationsController < ApplicationController
   end
 
   def schemes
-    all_schemes = Scheme.where(owning_organisation: [@organisation] + @organisation.parent_organisations)
+    organisation_schemes = Scheme.where(owning_organisation: [@organisation] + @organisation.parent_organisations)
 
-    @pagy, @schemes = pagy(filter_manager.filtered_schemes(all_schemes, search_term, session_filters).order_by_service_name)
+    @pagy, @schemes = pagy(filter_manager.filtered_schemes(organisation_schemes, search_term, session_filters))
     @searched = search_term.presence
-    @total_count = all_schemes.size
+    @total_count = organisation_schemes.size
     @filter_type = "schemes"
+  end
+
+  def download_schemes_csv
+    organisation_schemes = Scheme.where(owning_organisation: [@organisation] + @organisation.parent_organisations)
+    unpaginated_filtered_schemes = filter_manager.filtered_schemes(organisation_schemes, search_term, session_filters)
+
+    render "schemes/download_csv", locals: { search_term:, post_path: email_csv_schemes_path, download_type: params[:download_type], schemes: unpaginated_filtered_schemes }
+  end
+
+  def email_schemes_csv
+    SchemeEmailCsvJob.perform_later(current_user, search_term, session_filters, false, @organisation, params[:download_type])
+    redirect_to schemes_csv_confirmation_organisation_path
   end
 
   def show

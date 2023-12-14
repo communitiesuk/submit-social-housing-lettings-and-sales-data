@@ -191,6 +191,67 @@ RSpec.describe SchemesController, type: :request do
         expect(page).to have_content("Schemes")
       end
 
+      describe "scheme and location csv downloads" do
+        let!(:same_org_scheme) { create(:scheme, owning_organisation: user.organisation) }
+        let!(:specific_organisation) { create(:organisation) }
+        let!(:specific_org_scheme) { create(:scheme, owning_organisation: specific_organisation) }
+
+        before do
+          create(:location, scheme: same_org_scheme)
+          create_list(:scheme, 5, owning_organisation: specific_organisation)
+          create_list(:location, 3, scheme: specific_org_scheme)
+        end
+
+        it "shows scheme and location download links" do
+          expect(page).to have_link("Download schemes (CSV)", href: csv_download_schemes_path(download_type: "schemes"))
+          expect(page).to have_link("Download locations (CSV)", href: csv_download_schemes_path(download_type: "locations"))
+          expect(page).to have_link("Download schemes and locations (CSV)", href: csv_download_schemes_path(download_type: "combined"))
+        end
+
+        context "when there are no schemes for any organisation" do
+          before do
+            Scheme.destroy_all
+            get "/schemes"
+          end
+
+          it "does not display CSV download links" do
+            expect(page).not_to have_link("Download schemes (CSV)")
+            expect(page).not_to have_link("Download locations (CSV)")
+            expect(page).not_to have_link("Download schemes and locations (CSV)")
+          end
+        end
+
+        context "when downloading scheme data" do
+          before do
+            get csv_download_schemes_path(download_type: "schemes")
+          end
+
+          it "redirects to the correct download page" do
+            expect(page).to have_content("You've selected 12 schemes.")
+          end
+        end
+
+        context "when downloading location data" do
+          before do
+            get csv_download_schemes_path(download_type: "locations")
+          end
+
+          it "redirects to the correct download page" do
+            expect(page).to have_content("You've selected 9 locations from 12 schemes.")
+          end
+        end
+
+        context "when downloading scheme and location data" do
+          before do
+            get csv_download_schemes_path(download_type: "combined")
+          end
+
+          it "redirects to the correct download page" do
+            expect(page).to have_content("You've selected 12 schemes with 9 locations.")
+          end
+        end
+      end
+
       it "shows all schemes" do
         schemes.each do |scheme|
           expect(page).to have_content(scheme.id_to_display)
@@ -236,7 +297,7 @@ RSpec.describe SchemesController, type: :request do
       end
 
       it "shows the total organisations count" do
-        expect(CGI.unescape_html(response.body)).to match("<strong>#{schemes.count}</strong> matching schemes")
+        expect(CGI.unescape_html(response.body)).to match("<strong>#{schemes.count}</strong> total schemes")
       end
 
       context "when paginating over 20 results" do
@@ -252,7 +313,7 @@ RSpec.describe SchemesController, type: :request do
           end
 
           it "shows the total schemes count" do
-            expect(CGI.unescape_html(response.body)).to match("<strong>#{total_schemes_count}</strong> matching schemes")
+            expect(CGI.unescape_html(response.body)).to match("<strong>#{total_schemes_count}</strong> total schemes")
           end
 
           it "shows which schemes are being shown on the current page" do
@@ -277,7 +338,7 @@ RSpec.describe SchemesController, type: :request do
           end
 
           it "shows the total schemes count" do
-            expect(CGI.unescape_html(response.body)).to match("<strong>#{total_schemes_count}</strong> matching schemes")
+            expect(CGI.unescape_html(response.body)).to match("<strong>#{total_schemes_count}</strong> total schemes")
           end
 
           it "has pagination links" do

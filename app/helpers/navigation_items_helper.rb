@@ -57,7 +57,7 @@ private
   end
 
   def supported_housing_schemes_current?(path)
-    path == schemes_path || path.include?("/schemes/")
+    path.starts_with?(schemes_path)
   end
 
   def non_support_supported_housing_schemes_current?(path)

@@ -54,6 +54,28 @@ module SchemesHelper
     end
   end
 
+  def selected_schemes_and_locations_text(download_type, schemes)
+    scheme_count = schemes.count
+    case download_type
+    when "schemes"
+      "You've selected #{pluralize(scheme_count, 'scheme')}."
+    when "locations"
+      location_count = schemes.map(&:locations).flatten.count
+      "You've selected #{pluralize(location_count, 'location')} from #{pluralize(scheme_count, 'scheme')}."
+    when "combined"
+      location_count = schemes.map(&:locations).flatten.count
+      "You've selected #{pluralize(scheme_count, 'scheme')} with #{pluralize(location_count, 'location')}. The CSV will have one location per row with scheme details listed for each location."
+    end
+  end
+
+  def primary_schemes_csv_download_url(search, download_type)
+    csv_download_schemes_path(search:, download_type:)
+  end
+
+  def secondary_schemes_csv_download_url(organisation, search, download_type)
+    schemes_csv_download_organisation_path(organisation, search:, download_type:)
+  end
+
 private
 
   ActivePeriod = Struct.new(:from, :to)

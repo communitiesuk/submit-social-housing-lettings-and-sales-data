@@ -59,7 +59,7 @@ class FilterManager
 
       schemes = schemes.public_send("filter_by_#{category}", values, user)
     end
-    schemes
+    schemes.order_by_service_name
   end
 
   def self.filter_locations(locations, search_term, filters, user)

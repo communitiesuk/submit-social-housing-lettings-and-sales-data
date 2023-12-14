@@ -77,4 +77,21 @@ describe FilterManager do
       end
     end
   end
+
+  describe "filter_schemes" do
+    let(:schemes) { create_list(:scheme, 5) }
+    let(:alphabetical_order_schemes) { [schemes[4], schemes[2], schemes[0], schemes[1], schemes[3]] }
+
+    before do
+      schemes[4].update!(service_name: "a")
+      schemes[2].update!(service_name: "bB")
+      schemes[0].update!(service_name: "C")
+      schemes[1].update!(service_name: "Dd")
+      schemes[3].update!(service_name: "e")
+    end
+
+    it "returns schemes in alphabetical order by service name" do
+      expect(described_class.filter_schemes(Scheme.all, nil, {}, nil, nil)).to eq(alphabetical_order_schemes)
+    end
+  end
 end
