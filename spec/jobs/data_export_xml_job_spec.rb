@@ -2,12 +2,12 @@ require "rails_helper"
 
 describe DataExportXmlJob do
   let(:storage_service) { instance_double(Storage::S3Service) }
-  let(:paas_config_service) { instance_double(Configuration::PaasConfigurationService) }
+  let(:env_config_service) { instance_double(Configuration::EnvConfigurationService) }
   let(:export_service) { instance_double(Exports::LettingsLogExportService) }
 
   before do
     allow(Storage::S3Service).to receive(:new).and_return(storage_service)
-    allow(Configuration::PaasConfigurationService).to receive(:new).and_return(paas_config_service)
+    allow(Configuration::EnvConfigurationService).to receive(:new).and_return(env_config_service)
     allow(Exports::LettingsLogExportService).to receive(:new).and_return(export_service)
   end
 

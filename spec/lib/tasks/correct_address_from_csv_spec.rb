@@ -12,7 +12,6 @@ RSpec.describe "data_import" do
   before do
     allow(Storage::S3Service).to receive(:new).and_return(storage_service)
     allow(Configuration::EnvConfigurationService).to receive(:new).and_return(env_config_service)
-    allow(Configuration::PaasConfigurationService).to receive(:new).and_return(paas_config_service)
     allow(ENV).to receive(:[])
     allow(ENV).to receive(:[]).with("IMPORT_PAAS_INSTANCE").and_return(instance_name)
     allow(ENV).to receive(:[]).with("VCAP_SERVICES").and_return("dummy")
@@ -42,10 +41,9 @@ RSpec.describe "data_import" do
   describe ":import_lettings_addresses_from_csv", type: :task do
     subject(:task) { Rake::Task["data_import:import_lettings_addresses_from_csv"] }
 
-    let(:instance_name) { "paas_import_instance" }
+    let(:instance_name) { "import_instance" }
     let(:storage_service) { instance_double(Storage::S3Service) }
     let(:env_config_service) { instance_double(Configuration::EnvConfigurationService) }
-    let(:paas_config_service) { instance_double(Configuration::PaasConfigurationService) }
 
     before do
       Rake.application.rake_require("tasks/import_address_from_csv")
@@ -295,10 +293,9 @@ RSpec.describe "data_import" do
   describe ":import_sales_addresses_from_csv", type: :task do
     subject(:task) { Rake::Task["data_import:import_sales_addresses_from_csv"] }
 
-    let(:instance_name) { "paas_import_instance" }
+    let(:instance_name) { "import_instance" }
     let(:storage_service) { instance_double(Storage::S3Service) }
     let(:env_config_service) { instance_double(Configuration::EnvConfigurationService) }
-    let(:paas_config_service) { instance_double(Configuration::PaasConfigurationService) }
 
     before do
       Rake.application.rake_require("tasks/import_address_from_csv")
