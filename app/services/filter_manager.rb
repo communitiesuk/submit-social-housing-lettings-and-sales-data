@@ -50,7 +50,7 @@ class FilterManager
     users
   end
 
-  def self.filter_schemes(schemes, search_term, filters, user, all_orgs)
+  def self.filter_schemes(schemes, search_term, filters, all_orgs, user)
     schemes = filter_by_search(schemes, search_term)
 
     filters.each do |category, values|
