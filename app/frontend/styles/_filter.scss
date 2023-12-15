@@ -104,13 +104,12 @@
     background-color: govuk-colour("white");
   }
 
-  .autocomplete__wrapper {
-    @include govuk-media-query(wide) {
-      max-width: 20ex;
-    }
-  }
-
   .autocomplete__option {
     @include govuk-font(16);
+  }
+
+  .autocomplete__option__hint {
+    @include govuk-font(14);
+    word-break: break-all;
   }
 }
