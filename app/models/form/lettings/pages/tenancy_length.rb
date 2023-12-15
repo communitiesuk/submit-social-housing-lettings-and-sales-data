@@ -2,7 +2,7 @@ class Form::Lettings::Pages::TenancyLength < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "tenancy_length"
-    @depends_on = [{ "tenancy_type_fixed_term?" => true }]
+    @depends_on = [{ "tenancy_type_fixed_term?" => true, "needstype" => 2 }]
   end
 
   def questions
