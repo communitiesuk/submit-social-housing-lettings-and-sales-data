@@ -1,7 +1,10 @@
-<%= f.govuk_collection_select category.to_sym,
-    collection,
-    :id,
-    :name,
-    label: { hidden: secondary },
-    options: { disabled: [""], selected: selected_option(category, @filter_type) },
-    "data-controller": %w[accessible-autocomplete conditional-filter] %>
+<%= f.govuk_select(category.to_sym,
+  label: { text: label, hidden: secondary },
+  "data-controller": "accessible-autocomplete conditional-filter") do %>
+    <% collection.each do |answer| %>
+      <option value="<%= answer.id %>"
+        data-hint="<%= answer.hint %>"
+        <%= answer.id.to_s == selected_option(category, @filter_type).to_s ? "selected" : "" %>
+        <%= answer.id == "" ? "disabled" : "" %>><%= answer.name %></option>
+    <% end %>
+  <% end %>
