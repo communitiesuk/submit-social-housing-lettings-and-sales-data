@@ -136,19 +136,23 @@ class SchemesController < ApplicationController
 
     validation_errors scheme_params
     if @scheme.errors.empty? && @scheme.update(scheme_params)
+      @scheme.update!(secondary_client_group: nil) if @scheme.has_other_client_group == "No"
       if scheme_params[:confirmed] == "true" || @scheme.confirmed?
-        @scheme.locations.update!(confirmed: true)
-        flash[:notice] = if scheme_previously_confirmed
-                           "#{@scheme.service_name} has been updated."
-                         else
-                           "#{@scheme.service_name} has been created. It does not require helpdesk approval."
-                         end
-        redirect_to scheme_path(@scheme)
-      elsif check_answers
-        if confirm_secondary_page? page
+        if check_answers && confirm_secondary_page?(page)
           redirect_to scheme_secondary_client_group_path(@scheme, check_answers: "true")
         else
-          @scheme.update!(secondary_client_group: nil) if @scheme.has_other_client_group == "No"
+          @scheme.locations.update!(confirmed: true)
+          flash[:notice] = if scheme_previously_confirmed
+                             "#{@scheme.service_name} has been updated."
+                           else
+                             "#{@scheme.service_name} has been created. It does not require helpdesk approval."
+                           end
+          redirect_to scheme_path(@scheme)
+        end
+      elsif check_answers
+        if confirm_secondary_page?(page)
+          redirect_to scheme_secondary_client_group_path(@scheme, check_answers: "true")
+        else
           redirect_to scheme_check_answers_path(@scheme)
         end
       else
