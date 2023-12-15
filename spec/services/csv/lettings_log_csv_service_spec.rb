@@ -26,6 +26,7 @@ RSpec.describe Csv::LettingsLogCsvService do
       ecstat4: 10,
       relat4: "R",
       age4_known: 1,
+      incref: 0,
     )
   end
   let(:user) { create(:user, :support, email: "s.port@jeemayle.com") }
@@ -38,6 +39,8 @@ RSpec.describe Csv::LettingsLogCsvService do
   before do
     Timecop.freeze(fixed_time)
     Singleton.__init__(FormHandler)
+    log.irproduct = 1
+    log.save!(validate: false)
   end
 
   after do
@@ -116,7 +119,7 @@ RSpec.describe Csv::LettingsLogCsvService do
 
   it "adds attributes related to associated schemes and locations to the headers" do
     expect(headers).to include(*%w[scheme_service_name scheme_sensitive SCHTYPE scheme_registered_under_care_act])
-    expect(headers.last(5)).to eq %w[location_units location_type_of_unit location_mobility_type location_admin_district location_startdate]
+    expect(headers.last(5)).to eq %w[location_units location_type_of_unit location_mobility_type location_local_authority location_startdate]
   end
 
   context "when there are many logs" do

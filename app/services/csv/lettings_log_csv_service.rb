@@ -51,7 +51,7 @@ module Csv
         labels: %i[location mobility_type],
         codes: %i[location mobility_type_before_type_cast],
       },
-      location_admin_district: {
+      location_local_authority: {
         labels: %i[location location_admin_district],
         codes: %i[location location_admin_district],
       },
@@ -177,12 +177,16 @@ module Csv
           value
         when "labels"
           answer_label = get_label(value, attribute, log)
-          answer_label || label_if_boolean_value(value) || value
+          answer_label || label_if_boolean_value(value) || (YES_OR_BLANK_ATTRIBUTES.include?(attribute) && value != 1 ? nil : value)
         end
       end
     end
 
     def get_label(value, attribute, log)
+      return LABELS[attribute][value] if LABELS.key?(attribute)
+      return conventional_yes_no_label(value) if CONVENTIONAL_YES_NO_ATTRIBUTES.include?(attribute)
+      return "Yes" if YES_OR_BLANK_ATTRIBUTES.include?(attribute) && value == 1
+
       log.form
          .get_question(attribute, log)
          &.label_from_value(value)
@@ -192,6 +196,65 @@ module Csv
       return "Yes" if value == true
       return "No" if value == false
     end
+
+    def conventional_yes_no_label(value)
+      return "Yes" if value == 1
+      return "No" if value&.zero?
+    end
+
+    def yes_or_blank_label(value)
+      value == 1 ? "Yes" : nil
+    end
+
+    LETTYPE_LABELS = {
+      1 => "Social rent general needs private registered provider",
+      2 => "Social rent supported housing private registered provider",
+      3 => "Social rent general needs local authority",
+      4 => "Social rent supported housing local authority",
+      5 => "Affordable rent general needs private registered provider",
+      6 => "Affordable rent supported housing private registered provider",
+      7 => "Affordable rent general needs local authority",
+      8 => "Affordable rent supported housing local authority",
+      9 => "Intermediate rent general needs private registered provider",
+      10 => "Intermediate rent supported housing private registered provider",
+      11 => "Intermediate rent general needs local authority",
+      12 => "Intermediate rent supported housing local authority",
+    }.freeze
+
+    IRPRODUCT_LABELS = {
+      1 => "Rent to Buy",
+      2 => "London Living Rent",
+      3 => "Other intermediate rent product",
+    }.freeze
+
+    LAR_LABELS = {
+      1 => "Yes",
+      2 => "No",
+      3 => "Don't know",
+    }.freeze
+
+    NEWPROP_LABELS = {
+      1 => "Yes",
+      2 => "No",
+    }.freeze
+
+    INCREF_LABELS = {
+      0 => "No",
+      2 => "Yes",
+      1 => "Prefers not to say",
+    }.freeze
+
+    LABELS = {
+      "lettype" => LETTYPE_LABELS,
+      "irproduct" => IRPRODUCT_LABELS,
+      "lar" => LAR_LABELS,
+      "newprop" => NEWPROP_LABELS,
+      "incref" => INCREF_LABELS,
+    }.freeze
+
+    CONVENTIONAL_YES_NO_ATTRIBUTES = %w[illness_type_1 illness_type_2 illness_type_3 illness_type_4 illness_type_5 illness_type_6 illness_type_7 illness_type_8 illness_type_9 illness_type_10 refused cbl cap chr letting_allocation_none housingneeds_a housingneeds_b housingneeds_c housingneeds_d housingneeds_e housingneeds_f housingneeds_g housingneeds_h has_benefits nocharge].freeze
+
+    YES_OR_BLANK_ATTRIBUTES = %w[declaration rp_homeless rp_insan_unsat rp_medwel rp_hardship rp_dontknow].freeze
 
     ATTRIBUTE_MAPPINGS = {
       "owning_organisation_id" => %w[owning_organisation_name],
@@ -237,7 +300,7 @@ module Csv
         end
       end
       non_question_fields = %w[id status created_by is_dpo created_at updated_by updated_at creation_method old_id old_form_id collection_start_year]
-      scheme_and_location_attributes = %w[scheme_code scheme_service_name scheme_sensitive SCHTYPE scheme_registered_under_care_act scheme_owning_organisation_name scheme_primary_client_group scheme_has_other_client_group scheme_secondary_client_group scheme_support_type scheme_intended_stay scheme_created_at location_code location_postcode location_name location_units location_type_of_unit location_mobility_type location_admin_district location_startdate]
+      scheme_and_location_attributes = %w[scheme_code scheme_service_name scheme_sensitive SCHTYPE scheme_registered_under_care_act scheme_owning_organisation_name scheme_primary_client_group scheme_has_other_client_group scheme_secondary_client_group scheme_support_type scheme_intended_stay scheme_created_at location_code location_postcode location_name location_units location_type_of_unit location_mobility_type location_local_authority location_startdate]
       final_attributes = non_question_fields + attributes + scheme_and_location_attributes
       @user.support? ? final_attributes : final_attributes - SUPPORT_ONLY_ATTRIBUTES
     end
