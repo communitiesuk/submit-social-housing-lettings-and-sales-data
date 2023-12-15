@@ -40,14 +40,14 @@ unless Rails.env.test?
     provider_type: "LA",
   )
   managing_agent1 = Organisation.find_or_create_by!(
-    name: "Managing Agent 1",
+    name: "Managing Agent 1 (PRP)",
     address_line1: "2 Marsham Street",
     address_line2: "London",
     postcode: "SW1P 4DF",
     holds_own_stock: true,
     other_stock_owners: "None",
     managing_agents_label: "None",
-    provider_type: "LA",
+    provider_type: "PRP",
   )
   managing_agent2 = Organisation.find_or_create_by!(
     name: "Managing Agent 2",
@@ -89,6 +89,17 @@ unless Rails.env.test?
     provider_type: "LA",
   )
 
+  standalone_no_stock = Organisation.find_or_create_by!(
+    name: "Standalone No Stock 1 Ltd",
+    address_line1: "2 Marsham Street",
+    address_line2: "London",
+    postcode: "SW1P 4DF",
+    holds_own_stock: false,
+    other_stock_owners: "None",
+    managing_agents_label: "None",
+    provider_type: "LA",
+  )
+
   User.find_or_create_by!(
     name: "Provider Owns Stock",
     email: "provider.owner1@example.com",
@@ -111,17 +122,6 @@ unless Rails.env.test?
     create_data_protection_confirmation(user)
   end
 
-  standalone_no_stock = Organisation.find_or_create_by!(
-    name: "Standalone No Stock 1 Ltd",
-    address_line1: "2 Marsham Street",
-    address_line2: "London",
-    postcode: "SW1P 4DF",
-    holds_own_stock: false,
-    other_stock_owners: "None",
-    managing_agents_label: "None",
-    provider_type: "LA",
-  )
-
   User.find_or_create_by!(
     name: "Provider No Stock",
     email: "provider.nostock@example.com",
@@ -130,6 +130,7 @@ unless Rails.env.test?
   ) do |user|
     user.password = "password"
     user.confirmed_at = Time.zone.now
+    create_data_protection_confirmation(user)
   end
 
   User.find_or_create_by!(
@@ -140,6 +141,50 @@ unless Rails.env.test?
   ) do |user|
     user.password = "password"
     user.confirmed_at = Time.zone.now
+  end
+
+  User.find_or_create_by!(
+    name: "Stock owner 1",
+    email: "stock_owner1_dpo@example.com",
+    organisation: stock_owner1,
+    role: "data_coordinator",
+  ) do |user|
+    user.password = "password"
+    user.confirmed_at = Time.zone.now
+    create_data_protection_confirmation(user)
+  end
+
+  User.find_or_create_by!(
+    name: "Stock owner 2",
+    email: "stock_owner2_dpo@example.com",
+    organisation: stock_owner2,
+    role: "data_coordinator",
+  ) do |user|
+    user.password = "password"
+    user.confirmed_at = Time.zone.now
+    create_data_protection_confirmation(user)
+  end
+
+  User.find_or_create_by!(
+    name: "Managing agent 1",
+    email: "managing_agent1_dpo@example.com",
+    organisation: managing_agent1,
+    role: "data_coordinator",
+  ) do |user|
+    user.password = "password"
+    user.confirmed_at = Time.zone.now
+    create_data_protection_confirmation(user)
+  end
+
+  User.find_or_create_by!(
+    name: "Managing agent 2",
+    email: "managing_agent2_dpo@example.com",
+    organisation: managing_agent2,
+    role: "data_coordinator",
+  ) do |user|
+    user.password = "password"
+    user.confirmed_at = Time.zone.now
+    create_data_protection_confirmation(user)
   end
 
   OrganisationRelationship.find_or_create_by!(
@@ -248,6 +293,17 @@ unless Rails.env.test?
     )
 
     pp "Seeded dummy FooBar LTD organisation"
+
+    User.find_or_create_by!(
+      name: "Dummy user",
+      email: "dummy_org@example.com",
+      organisation: dummy_org,
+      role: "data_provider",
+    ) do |user|
+      user.password = "password"
+      user.confirmed_at = Time.zone.now
+      create_data_protection_confirmation(user)
+    end
   end
 
   if (Rails.env.development? || Rails.env.review?) && Scheme.count.zero?
