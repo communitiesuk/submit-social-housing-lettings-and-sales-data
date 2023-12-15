@@ -781,15 +781,10 @@ RSpec.describe "Schemes scheme Features" do
                 click_button "Save changes"
               end
 
-              it "lets me see amended details on the check answers page" do
+              it "lets me see amended details on the details page" do
                 expect(page).to have_content "FooBar"
-                expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
-                assert_selector "a", text: "Change", count: 11
-              end
-
-              it "lets me save the scheme" do
-                click_button "Save"
                 expect(page).to have_current_path("/schemes/#{scheme.id}")
+                assert_selector "a", text: "Change", count: 11
                 expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
                 expect(page).to have_content("has been updated")
               end
@@ -1069,9 +1064,9 @@ RSpec.describe "Schemes scheme Features" do
                 click_button "Save changes"
               end
 
-              it "lets me see amended details on the check answers page" do
+              it "lets me see amended details on the details page" do
                 expect(page).to have_content "FooBar"
-                expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
+                expect(page).to have_current_path("/schemes/#{scheme.id}")
                 expect(page).to have_link("Change", href:  /schemes\/#{scheme.id}\/edit-name/, count: 3)
               end
             end

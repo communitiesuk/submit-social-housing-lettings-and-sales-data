@@ -136,7 +136,7 @@ class SchemesController < ApplicationController
 
     validation_errors scheme_params
     if @scheme.errors.empty? && @scheme.update(scheme_params)
-      if scheme_params[:confirmed] == "true"
+      if scheme_params[:confirmed] == "true" || @scheme.confirmed?
         @scheme.locations.update!(confirmed: true)
         flash[:notice] = if scheme_previously_confirmed
                            "#{@scheme.service_name} has been updated."
