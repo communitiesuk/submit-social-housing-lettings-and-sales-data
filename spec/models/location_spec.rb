@@ -24,6 +24,7 @@ RSpec.describe Location, type: :model do
       location.postcode = "M1 1AE"
       location.save!
       expect(location.location_code).to eq("E08000003")
+      expect(location.is_la_inferred).to eq(true)
     end
 
     it "infers and returns the list of local authorities" do
@@ -31,6 +32,20 @@ RSpec.describe Location, type: :model do
       expect(location.linked_local_authorities.count).to eq(2)
       expect(location.linked_local_authorities.active(Time.zone.local(2022, 4, 1)).first.code).to eq("E07000030")
       expect(location.linked_local_authorities.active(Time.zone.local(2023, 4, 1)).first.code).to eq("E06000063")
+    end
+
+    context "when local authority cannot be inferred" do
+      before do
+        stub_request(:get, /api.postcodes.io\/postcodes\/CA101AA/)
+          .to_return(status: 200, body: '{"status":200}', headers: {})
+      end
+
+      it "does not set the local authority" do
+        location.update!(postcode: "CA10 1AA", location_code: nil, location_admin_district: nil)
+        expect(location.location_code).to eq(nil)
+        expect(location.linked_local_authorities.count).to eq(0)
+        expect(location.is_la_inferred).to eq(false)
+      end
     end
 
     context "when location_code is no in LocalAuthorities table" do
