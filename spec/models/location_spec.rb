@@ -36,7 +36,7 @@ RSpec.describe Location, type: :model do
 
     context "when local authority cannot be inferred" do
       before do
-        stub_request(:get, /api.postcodes.io\/postcodes\/CA101AA/)
+        stub_request(:get, /api\.postcodes\.io\/postcodes\/CA101AA/)
           .to_return(status: 200, body: '{"status":200}', headers: {})
       end
 
@@ -50,7 +50,7 @@ RSpec.describe Location, type: :model do
 
     context "when location_code is no in LocalAuthorities table" do
       before do
-        stub_request(:get, /api.postcodes.io\/postcodes\/CA101AA/)
+        stub_request(:get, /api\.postcodes\.io\/postcodes\/CA101AA/)
           .to_return(status: 200, body: '{"status":200,"result":{"admin_district":"Eden","codes":{"admin_district":"E01231231"}}}', headers: {})
       end
 
