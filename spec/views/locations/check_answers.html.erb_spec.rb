@@ -41,6 +41,7 @@ RSpec.describe "locations/check_answers.html.erb" do
         active?: true,
         scheme:,
         startdate: 1.day.ago,
+        is_la_inferred: nil,
       )
     end
 

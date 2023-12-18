@@ -218,7 +218,7 @@ RSpec.describe "Schemes scheme Features" do
           context "when there are locations that belong to the selected scheme" do
             let!(:schemes) { FactoryBot.create_list(:scheme, 5) }
             let(:scheme)     { schemes.first }
-            let!(:locations) { FactoryBot.create_list(:location, 3, scheme:, postcode: "AA11AA", startdate: Time.utc(2022, 1, 1)) }
+            let!(:locations) { FactoryBot.create_list(:location, 3, scheme:, postcode: "XX11XX", startdate: Time.utc(2022, 1, 1)) }
 
             before do
               visit("schemes")
@@ -336,7 +336,7 @@ RSpec.describe "Schemes scheme Features" do
                 let(:location_name) { "Area 42" }
 
                 before do
-                  fill_in with: "AA12AA"
+                  fill_in with: "XX12XX"
                   click_button "Save and continue"
                   select "Adur"
                   click_button "Save and continue"
@@ -378,7 +378,7 @@ RSpec.describe "Schemes scheme Features" do
                   end
 
                   it "lets you edit the saved location" do
-                    click_link "AA1 2AA"
+                    click_link "XX12XX"
                     expect(page).to have_link("Change", href: /postcode/)
                   end
                 end
@@ -577,7 +577,7 @@ RSpec.describe "Schemes scheme Features" do
           end
 
           it "displays information about the first created location" do
-            expect(page).to have_content "AA1 1AA"
+            expect(page).to have_content "XX11XX"
             expect(page).to have_content "Some name"
             expect(page).to have_content "Active"
           end
@@ -591,7 +591,7 @@ RSpec.describe "Schemes scheme Features" do
 
           it "displays information about newly created location" do
             fill_in_and_save_second_location
-            expect(page).to have_content "AA1 2AA"
+            expect(page).to have_content "XX12XX"
             expect(page).to have_content "Other name"
             expect(page).to have_content "Self-contained house"
           end
@@ -606,11 +606,11 @@ RSpec.describe "Schemes scheme Features" do
           end
 
           it "displays changed location" do
-            click_link "AA1 2AA"
+            click_link "XX12XX"
             click_link("Change", href: "/schemes/#{scheme.id}/locations/#{location.id}/name?referrer=details", match: :first)
             fill_in with: "new name"
             click_button "Save changes"
-            expect(page).to have_content "AA1 2AA"
+            expect(page).to have_content "XX12XX"
             expect(page).to have_content "new name"
           end
         end
@@ -962,7 +962,7 @@ RSpec.describe "Schemes scheme Features" do
                 let(:location_name) { "Area 42" }
 
                 before do
-                  fill_in with: "AA12AA"
+                  fill_in with: "XX12XX"
                   click_button "Save and continue"
                   select "Adur"
                   click_button "Save and continue"
@@ -1004,7 +1004,7 @@ RSpec.describe "Schemes scheme Features" do
                   end
 
                   it "lets you edit the saved location" do
-                    click_link "AA1 2AA"
+                    click_link "XX12XX"
                     expect(page).to have_link("Change", href: /postcode/)
                   end
                 end
