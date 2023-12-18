@@ -199,6 +199,7 @@ private
     unless location_admin_district_changed?
       self.location_admin_district = nil
       self.location_code = nil
+      self.is_la_inferred = false
     end
     if result
       self.location_code = result[:location_code]
