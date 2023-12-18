@@ -26,7 +26,7 @@ RSpec.describe Form::Lettings::Questions::TenancyLength, type: :model do
   end
 
   it "has the correct hint_text" do
-    expect(question.hint_text).to eq("Don’t include the starter or introductory period.")
+    expect(question.hint_text).to eq("Do not include the starter or introductory period.")
   end
 
   it "has the correct minimum and maximum" do

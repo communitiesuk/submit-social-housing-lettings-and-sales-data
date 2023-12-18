@@ -627,6 +627,10 @@ class LettingsLog < Log
     letting_allocation_unknown
   end
 
+  def affordable_or_social_rent?
+    renttype == 1 || renttype == 2
+  end
+
 private
 
   def reset_invalid_unresolved_log_fields!

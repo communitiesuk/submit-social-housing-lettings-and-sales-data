@@ -1,4 +1,4 @@
-class Form::Lettings::Questions::TenancyLength < ::Form::Question
+class Form::Lettings::Questions::TenancyLengthIntermediateRent < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "tenancylength"
@@ -9,7 +9,7 @@ class Form::Lettings::Questions::TenancyLength < ::Form::Question
     @check_answers_card_number = 0
     @max = 150
     @min = 0
-    @hint_text = "Do not include the starter or introductory period."
+    @hint_text = "Do not include the starter or introductory period.</br>The minimum period is 1 year for intermediate rent general needs logs and you do not need a log for shorter tenancies."
     @step = 1
     @question_number = 28
   end
