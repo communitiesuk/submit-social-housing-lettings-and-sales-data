@@ -187,37 +187,18 @@ class Scheme < ApplicationRecord
   def check_details_attributes
     [
       { name: "Scheme code", value: id_to_display, id: "id" },
-      { name: "Name", value: service_name, id: "service_name" },
-      { name: "Confidential information", value: sensitive, id: "sensitive" },
-      { name: "Type of scheme", value: scheme_type, id: "scheme_type" },
-      { name: "Registered under Care Standards Act 2000", value: registered_under_care_act, id: "registered_under_care_act" },
-      { name: "Housing stock owned by", value: owning_organisation.name, id: "owning_organisation_id" },
-      { name: "Support services provided by", value: arrangement_type, id: "arrangement_type" },
-    ]
-  end
-
-  def check_primary_client_attributes
-    [
-      { name: "Primary client group", value: primary_client_group, id: "primary_client_group" },
-    ]
-  end
-
-  def check_secondary_client_confirmation_attributes
-    [
-      { name: "Has another client group", value: has_other_client_group, id: "has_other_client_group" },
-    ]
-  end
-
-  def check_secondary_client_attributes
-    [
-      { name: "Secondary client group", value: secondary_client_group, id: "secondary_client_group" },
-    ]
-  end
-
-  def check_support_attributes
-    [
-      { name: "Level of support given", value: support_type, id: "support_type" },
-      { name: "Intended length of stay", value: intended_stay, id: "intended_stay" },
+      { name: "Name", value: service_name, id: "service_name", edit: true },
+      { name: "Status", value: status, id: "status" },
+      { name: "Confidential information", value: sensitive, id: "sensitive", edit: true },
+      { name: "Type of scheme", value: scheme_type, id: "scheme_type", edit: true },
+      { name: "Registered under Care Standards Act 2000", value: registered_under_care_act, id: "registered_under_care_act", edit: true },
+      { name: "Housing stock owned by", value: owning_organisation.name, id: "owning_organisation_id", edit: true },
+      { name: "Support services provided by", value: arrangement_type, id: "arrangement_type", edit: true },
+      { name: "Primary client group", value: primary_client_group, id: "primary_client_group", edit: true },
+      { name: "Has another client group", value: has_other_client_group, id: "has_other_client_group", edit: true },
+      { name: "Secondary client group", value: secondary_client_group, id: "secondary_client_group", edit: true },
+      { name: "Level of support given", value: support_type, id: "support_type", edit: true },
+      { name: "Intended length of stay", value: intended_stay, id: "intended_stay", edit: true },
     ]
   end
 

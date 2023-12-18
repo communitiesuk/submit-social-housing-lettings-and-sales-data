@@ -1832,12 +1832,9 @@ RSpec.describe SchemesController, type: :request do
           get "/schemes/#{scheme.id}/primary-client-group"
         end
 
-        it "redirects to a view scheme page" do
-          follow_redirect!
+        it "allows editing the primary client group" do
           expect(response).to have_http_status(:ok)
-          expect(path).to match("/schemes/#{scheme.id}")
-          expect(page).to have_content(scheme.service_name)
-          assert_select "a", text: /Change/, count: 3
+          expect(path).to match("/schemes/#{scheme.id}/primary-client-group")
         end
       end
     end
@@ -1912,12 +1909,9 @@ RSpec.describe SchemesController, type: :request do
           get "/schemes/#{scheme.id}/confirm-secondary-client-group"
         end
 
-        it "redirects to a view scheme page" do
-          follow_redirect!
+        it "allows updating secondary client group" do
           expect(response).to have_http_status(:ok)
-          expect(path).to match("/schemes/#{scheme.id}")
-          expect(page).to have_content(scheme.service_name)
-          assert_select "a", text: /Change/, count: 3
+          expect(path).to match("/schemes/#{scheme.id}/confirm-secondary-client-group")
         end
       end
     end
@@ -1992,12 +1986,9 @@ RSpec.describe SchemesController, type: :request do
           get "/schemes/#{scheme.id}/secondary-client-group"
         end
 
-        it "redirects to a view scheme page" do
-          follow_redirect!
+        it "allows editing secondary client group" do
           expect(response).to have_http_status(:ok)
-          expect(path).to match("/schemes/#{scheme.id}")
-          expect(page).to have_content(scheme.service_name)
-          assert_select "a", text: /Change/, count: 3
+          expect(path).to match("/schemes/#{scheme.id}/secondary-client-group")
         end
       end
 

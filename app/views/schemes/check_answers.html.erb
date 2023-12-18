@@ -9,25 +9,9 @@
       <h2 class="govuk-visually-hidden">Scheme</h2>
       <dl class="govuk-summary-list">
         <% @scheme.check_details_attributes.each do |attr| %>
-          <%= render partial: "scheme_summary_list_row", locals: { scheme: @scheme, attribute: attr, change_link: @scheme.confirmed? ? scheme_edit_name_path(@scheme) : scheme_details_path(@scheme, check_answers: true) } %>
-        <% end %>
-
-        <% @scheme.check_primary_client_attributes.each do |attr| %>
-          <%= render partial: "scheme_summary_list_row", locals: { scheme: @scheme, attribute: attr, change_link: scheme_primary_client_group_path(@scheme, check_answers: true) } %>
-        <% end %>
-
-        <% @scheme.check_secondary_client_confirmation_attributes.each do |attr| %>
-          <%= render partial: "scheme_summary_list_row", locals: { scheme: @scheme, attribute: attr, change_link: scheme_confirm_secondary_client_group_path(@scheme, check_answers: true) } %>
-        <% end %>
-
-        <% if @scheme.has_other_client_group == "Yes" %>
-          <% @scheme.check_secondary_client_attributes.each do |attr| %>
-            <%= render partial: "scheme_summary_list_row", locals: { scheme: @scheme, attribute: attr, change_link: scheme_secondary_client_group_path(@scheme, check_answers: true) } %>
+          <% if attr[:name] != "Status" && (attr[:id] != "secondary_client_group" || @scheme.has_other_client_group == "Yes") %>
+            <%= render partial: "scheme_summary_list_row", locals: { scheme: @scheme, attribute: attr, change_link: change_answer_link(@scheme, attr[:id], current_user) } %>
           <% end %>
-        <% end %>
-
-        <% @scheme.check_support_attributes.each do |attr| %>
-          <%= render partial: "scheme_summary_list_row", locals: { scheme: @scheme, attribute: attr, change_link: scheme_support_path(@scheme, check_answers: true) } %>
         <% end %>
       </dl>
     <% end %>

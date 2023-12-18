@@ -19,24 +19,30 @@
     <%= render SubNavigationComponent.new(items: scheme_items(request.path, @scheme.id)) %>
 
     <h2 class="govuk-visually-hidden">Scheme</h2>
-    <%= govuk_inset_text(text: edit_scheme_text(@scheme, current_user)) %>
-
-    <%= govuk_summary_list do |summary_list| %>
-      <% display_scheme_attributes(@scheme).each do |attr| %>
-        <%= summary_list.row do |row| %>
-          <% row.key { attr[:name] } %>
-          <% row.value do %>
-            <%= details_html(attr) %>
-            <% if attr[:name] == "Status" && @scheme.confirmed? && @scheme.locations.confirmed.none? && LocationPolicy.new(current_user, @scheme.locations.new).create? %>
-              <span class="app-!-colour-muted">Complete this scheme by adding a location using the <%= govuk_link_to("‘locations’ tab", scheme_locations_path(@scheme)) %>.</span>
-            <% end %>
-          <% end %>
-          <% if SchemePolicy.new(current_user, @scheme).update? %>
-            <% row.action(text: "Change", href: scheme_edit_name_path(scheme_id: @scheme.id)) if attr[:edit] %>
-          <% end %>
+    <dl class="govuk-summary-list">
+      <% @scheme.check_details_attributes.each do |attr| %>
+        <% if attr[:name] == "Status" %>
+          <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
+            <dt class="govuk-summary-list__key">Status</dt>
+            <dd class="govuk-summary-list__value">
+              <%= details_html({ name: "Status", value: status_tag_from_resource(@scheme), id: "status" }) %>
+              <% if @scheme.confirmed? && @scheme.locations.confirmed.none? && LocationPolicy.new(current_user, @scheme.locations.new).create? %>
+                <span class="app-!-colour-muted">Complete this scheme by adding a location using the <%= govuk_link_to("‘locations’ tab", scheme_locations_path(@scheme)) %>.</span>
+              <% end %>
+            </dd>
+          </div>
+        <% elsif  attr[:id] != "secondary_client_group" || @scheme.has_other_client_group == "Yes" %>
+          <%= render partial: "scheme_summary_list_row", locals: { scheme: @scheme, attribute: attr, change_link: change_answer_link(@scheme, attr[:id], current_user) } %>
         <% end %>
       <% end %>
-    <% end %>
+
+      <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
+        <dt class="govuk-summary-list__key">Availability</dt>
+        <dd class="govuk-summary-list__value">
+          <%= details_html({ name: "Availability", value: scheme_availability(@scheme), id: "availability" }) %>
+        </dd>
+      </div>
+    </dl>
   </div>
 </div>
 

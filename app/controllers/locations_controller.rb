@@ -40,6 +40,8 @@ class LocationsController < ApplicationController
         redirect_to scheme_location_local_authority_path(@scheme, @location, route: params[:route], referrer: params[:referrer])
       elsif return_to_check_your_answers?
         redirect_to scheme_location_check_answers_path(@scheme, @location, route: params[:route])
+      elsif params[:referrer] == "details"
+        redirect_to scheme_location_path(@scheme, @location)
       else
         redirect_to scheme_location_name_path(@scheme, @location, route: params[:route])
       end
@@ -88,6 +90,8 @@ class LocationsController < ApplicationController
     if @location.save(context: :units)
       if return_to_check_your_answers?
         redirect_to scheme_location_check_answers_path(@scheme, @location, route: params[:route])
+      elsif params[:referrer] == "details"
+        redirect_to scheme_location_path(@scheme, @location)
       else
         redirect_to scheme_location_type_of_unit_path(@scheme, @location, route: params[:route])
       end
@@ -103,6 +107,8 @@ class LocationsController < ApplicationController
     if @location.save(context: :type_of_unit)
       if return_to_check_your_answers?
         redirect_to scheme_location_check_answers_path(@scheme, @location, route: params[:route])
+      elsif params[:referrer] == "details"
+        redirect_to scheme_location_path(@scheme, @location)
       else
         redirect_to scheme_location_mobility_standards_path(@scheme, @location, route: params[:route])
       end
@@ -118,6 +124,8 @@ class LocationsController < ApplicationController
     if @location.save(context: :mobility_type)
       if return_to_check_your_answers?
         redirect_to scheme_location_check_answers_path(@scheme, @location, route: params[:route])
+      elsif params[:referrer] == "details"
+        redirect_to scheme_location_path(@scheme, @location)
       else
         redirect_to scheme_location_availability_path(@scheme, @location, route: params[:route])
       end
