@@ -7,6 +7,23 @@ RSpec.describe Form::Lettings::Questions::Uprn, type: :model do
   let(:question_definition) { nil }
   let(:page) { instance_double(Form::Page) }
 
+  before do
+    body = {
+      results: [
+        {
+          DPA: {
+            "POSTCODE": "AA1 1AA",
+            "POST_TOWN": "Test Town",
+            "ORGANISATION_NAME": "1, Test Street",
+          },
+        },
+      ],
+    }.to_json
+
+    stub_request(:get, "https://api.os.uk/search/places/v1/uprn?key=OS_DATA_KEY&uprn=1")
+    .to_return(status: 200, body:, headers: {})
+  end
+
   it "has correct page" do
     expect(question.page).to eq(page)
   end
@@ -56,6 +73,7 @@ RSpec.describe Form::Lettings::Questions::Uprn, type: :model do
       let(:log) do
         create(
           :lettings_log,
+          :completed,
           address_line1: "1, Test Street",
           town_or_city: "Test Town",
           county: "Test County",
@@ -77,11 +95,11 @@ RSpec.describe Form::Lettings::Questions::Uprn, type: :model do
 
       context "when uprn known" do
         let(:uprn_known) { 1 }
-        let(:uprn) { 123_456_789 }
+        let(:uprn) { 1 }
 
         it "returns formatted value" do
           expect(question.get_extra_check_answer_value(log)).to eq(
-            "\n\n1, Test Street\nTest Town\nTest County\nAA1 1AA\nWestminster",
+            "\n\n1, Test Street\nTest Town\nAA1 1AA\nWestminster",
           )
         end
       end

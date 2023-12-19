@@ -30,30 +30,4 @@ RSpec.describe Form::Lettings::Pages::UprnConfirmation, type: :model do
   it "has correct depends_on" do
     expect(page.depends_on).to be_nil
   end
-
-  describe "has correct routed_to?" do
-    context "when uprn present && uprn_known == 1 " do
-      let(:log) { create(:lettings_log, uprn_known: 1, uprn: "123456789") }
-
-      it "returns true" do
-        expect(page.routed_to?(log)).to eq(true)
-      end
-    end
-
-    context "when uprn = nil" do
-      let(:log) { create(:lettings_log, uprn_known: 1, uprn: nil) }
-
-      it "returns false" do
-        expect(page.routed_to?(log)).to eq(false)
-      end
-    end
-
-    context "when uprn_known == 0" do
-      let(:log) { create(:lettings_log, uprn_known: 0, uprn: "123456789") }
-
-      it "returns false" do
-        expect(page.routed_to?(log)).to eq(false)
-      end
-    end
-  end
 end

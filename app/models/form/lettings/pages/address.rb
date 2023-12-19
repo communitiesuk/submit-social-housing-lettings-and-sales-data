@@ -3,6 +3,11 @@ class Form::Lettings::Pages::Address < ::Form::Page
     super
     @id = "address"
     @header = "Q12 - What is the property's address?"
+    @depends_on = [
+      { "is_supported_housing?" => false, "uprn_known" => nil },
+      { "is_supported_housing?" => false, "uprn_known" => 0 },
+      { "is_supported_housing?" => false, "uprn_confirmed" => 0 },
+    ]
   end
 
   def questions
@@ -13,11 +18,5 @@ class Form::Lettings::Pages::Address < ::Form::Page
       Form::Lettings::Questions::County.new(nil, nil, self),
       Form::Lettings::Questions::PostcodeForFullAddress.new(nil, nil, self),
     ]
-  end
-
-  def routed_to?(log, _current_user = nil)
-    return false if log.is_supported_housing?
-
-    log.uprn_known.nil? || log.uprn_known.zero? || log.uprn_confirmed&.zero?
   end
 end

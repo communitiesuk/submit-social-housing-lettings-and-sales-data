@@ -7,6 +7,25 @@ RSpec.describe Form::Lettings::Questions::UprnConfirmation, type: :model do
   let(:question_definition) { nil }
   let(:page) { instance_double(Form::Page) }
 
+  before do
+    body = {
+      results: [
+        {
+          DPA: {
+            "POSTCODE": "AA1 1AA",
+            "POST_TOWN": "Test Town",
+            "ORGANISATION_NAME": "1, Test Street",
+          },
+        },
+      ],
+    }.to_json
+
+    stub_request(:get, "https://api.os.uk/search/places/v1/uprn?key=OS_DATA_KEY&uprn=1234")
+    .to_return(status: 200, body:, headers: {})
+    stub_request(:get, "https://api.os.uk/search/places/v1/uprn?key=OS_DATA_KEY&uprn=1")
+    .to_return(status: 200, body:, headers: {})
+  end
+
   it "has correct page" do
     expect(question.page).to eq(page)
   end
@@ -50,11 +69,11 @@ RSpec.describe Form::Lettings::Questions::UprnConfirmation, type: :model do
 
     context "when address is present" do
       it "returns formatted value" do
-        log = create(:lettings_log, address_line1: "1, Test Street", town_or_city: "Test Town", county: "Test County", postcode_full: "AA1 1AA", uprn: "1234", uprn_known: 1)
+        log = create(:lettings_log, :setup_completed, address_line1: "1, Test Street", town_or_city: "Test Town", postcode_full: "AA1 1AA", uprn: "1234", uprn_known: 1)
 
         expect(question.notification_banner(log)).to eq(
           {
-            heading: "1, Test Street\nAA1 1AA\nTest Town\nTest County",
+            heading: "1, Test Street\nAA1 1AA\nTest Town",
             title: "UPRN: 1234",
           },
         )
@@ -72,7 +91,7 @@ RSpec.describe Form::Lettings::Questions::UprnConfirmation, type: :model do
     end
 
     context "when uprn_known == 1 && uprn_confirmed == nil" do
-      let(:log) { create(:lettings_log, uprn_known: 1, uprn_confirmed: nil) }
+      let(:log) { create(:lettings_log, :completed, uprn_known: 1, uprn: 1, uprn_confirmed: nil) }
 
       it "returns false" do
         expect(question.hidden_in_check_answers?(log)).to eq(false)

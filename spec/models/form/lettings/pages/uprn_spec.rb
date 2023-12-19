@@ -28,29 +28,11 @@ RSpec.describe Form::Lettings::Pages::Uprn, type: :model do
   end
 
   it "has correct depends_on" do
-    expect(page.depends_on).to be_nil
+    expect(page.depends_on).to eq([{ "is_supported_housing?" => false }])
   end
 
   it "has correct skip_text" do
     expect(page.skip_text).to eq("Enter address instead")
-  end
-
-  describe "has correct routed_to?" do
-    context "when uprn_known == 1" do
-      let(:log) { create(:lettings_log, uprn_known: 1) }
-
-      it "returns true" do
-        expect(page.routed_to?(log)).to eq(true)
-      end
-    end
-
-    context "when needstype == 2" do
-      let(:log) { create(:lettings_log, uprn_known: 1, needstype: 2) }
-
-      it "returns true" do
-        expect(page.routed_to?(log)).to eq(false)
-      end
-    end
   end
 
   describe "has correct skip_href" do
