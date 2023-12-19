@@ -888,7 +888,11 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
       context "when using New CORE ids" do
         let(:scheme) { create(:scheme, :with_old_visible_id, owning_organisation: owning_org) }
-        let(:location) { create(:location, :with_old_visible_id, scheme:) }
+        let!(:location) { create(:location, :with_old_visible_id, scheme:) }
+
+        before do
+          parser.valid?
+        end
 
         context "when matching scheme cannot be found" do
           let(:attributes) { { bulk_upload:, field_1: owning_org.old_visible_id, field_2: owning_org.old_visible_id, field_4: "2", field_5: "2", field_16: "S123", field_17: location.id } }
@@ -969,17 +973,32 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
           let(:managing_org_location) { create(:location, :with_old_visible_id, scheme: managing_org_scheme) }
           let(:attributes) { { bulk_upload:, field_4: "2", field_5: "2", field_16: "S#{managing_org_scheme.id}", field_17: managing_org_location.id, field_2: managing_org.old_visible_id } }
 
-          it "does not return an error" do
+          it "clears the scheme answer" do
             expect(parser.errors[:field_15]).to be_blank
-            expect(parser.errors[:field_16]).to be_blank
+            expect(parser.errors[:field_16]).to include("You must answer scheme name")
             expect(parser.errors[:field_17]).to be_blank
+          end
+        end
+
+        context "when matching location exists but is incomplete" do
+          let(:incomplete_location) { create(:location, :with_old_visible_id, :incomplete, scheme:) }
+          let(:attributes) { { bulk_upload:, field_1: owning_org.old_visible_id, field_2: owning_org.old_visible_id, field_4: "2", field_5: "2", field_16: "S#{scheme.id}", field_17: incomplete_location.id } }
+
+          it "returns a setup error for scheme" do
+            expect(parser.errors[:field_15]).to be_blank
+            expect(parser.errors.where(:field_16).map(&:message)).to eq(["This location is incomplete. Select another location or update this one"])
+            expect(parser.errors.where(:field_17).map(&:message)).to eq(["This location is incomplete. Select another location or update this one"])
           end
         end
       end
 
       context "when using Old CORE ids" do
         let(:scheme) { create(:scheme, :with_old_visible_id, owning_organisation: owning_org) }
-        let(:location) { create(:location, :with_old_visible_id, scheme:) }
+        let!(:location) { create(:location, :with_old_visible_id, scheme:) }
+
+        before do
+          parser.valid?
+        end
 
         context "when matching scheme cannot be found" do
           let(:attributes) { { bulk_upload:, field_1: owning_org.old_visible_id, field_2: owning_org.old_visible_id, field_4: "2", field_5: "2", field_15: "123", field_16: location.old_visible_id } }
@@ -1060,8 +1079,8 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
           let(:managing_org_location) { create(:location, :with_old_visible_id, scheme: managing_org_scheme) }
           let(:attributes) { { bulk_upload:, field_4: "2", field_5: "2", field_15: managing_org_scheme.old_visible_id, field_16: managing_org_location.old_visible_id, field_2: managing_org.old_visible_id } }
 
-          it "does not return an error" do
-            expect(parser.errors[:field_15]).to be_blank
+          it "clears the scheme answer" do
+            expect(parser.errors[:field_15]).to include("You must answer scheme name")
             expect(parser.errors[:field_16]).to be_blank
             expect(parser.errors[:field_17]).to be_blank
           end
