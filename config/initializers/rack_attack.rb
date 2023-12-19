@@ -6,9 +6,6 @@ configuration_service = Configuration::EnvConfigurationService.new
 if Rails.env.development? || Rails.env.test?
   Rack::Attack.cache.store = ActiveSupport::Cache::MemoryStore.new
   Rack::Attack.enabled = false
-elsif Rails.env.review?
-  redis_url = configuration_service.redis_uris.to_a[0][1]
-  Rack::Attack.cache.store = ActiveSupport::Cache::RedisCacheStore.new(url: redis_url)
 else
   redis_url = configuration_service.redis_uris.to_a[0][1]
   Rack::Attack.cache.store = ActiveSupport::Cache::RedisCacheStore.new(url: redis_url)
