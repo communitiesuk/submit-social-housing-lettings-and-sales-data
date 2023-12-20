@@ -457,6 +457,29 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
           expect(parser.errors.where(:field_2)).not_to be_present
         end
       end
+
+      context "when user's org has absorbed owning organisation before the startdate" do
+        let(:merged_org) { create(:organisation, :with_old_visible_id, holds_own_stock: true) }
+
+        let(:attributes) { setup_section_params.merge({ field_1: merged_org.old_visible_id, field_2: user.email }) }
+
+        before do
+          merged_org.update!(absorbing_organisation: user.organisation, merge_date: Time.zone.today - 3.years)
+          merged_org.reload
+          user.organisation.reload
+          user.reload
+        end
+
+        it "is not permitted" do
+          parser = described_class.new(attributes)
+
+          parser.valid?
+          expect(parser.errors[:field_1]).to include(/The owning organisation must be active on the sale completion date/)
+          expect(parser.errors[:field_3]).to include(/Enter a date when the owning organisation was active/)
+          expect(parser.errors[:field_4]).to include(/Enter a date when the owning organisation was active/)
+          expect(parser.errors[:field_5]).to include(/Enter a date when the owning organisation was active/)
+        end
+      end
     end
 
     describe "#field_2" do # username for created_by

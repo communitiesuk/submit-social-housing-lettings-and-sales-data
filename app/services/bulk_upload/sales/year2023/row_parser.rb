@@ -510,7 +510,11 @@ class BulkUpload::Sales::Year2023::RowParser
 
       fields.each do |field|
         unless errors.include?(field)
-          errors.add(field, error.message)
+          if error.attribute == :owning_organisation_id || error.attribute == :managing_organisation_id || error.attribute == :saledate
+            errors.add(field, error.message, category: :setup)
+          else
+            errors.add(field, error.message)
+          end
         end
       end
     end
