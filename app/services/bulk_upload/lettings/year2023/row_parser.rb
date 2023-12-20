@@ -362,13 +362,13 @@ class BulkUpload::Lettings::Year2023::RowParser
             on: :after_log
 
   validates :field_46, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 1 must be a number or the letter R" }, on: :after_log
-  validates :field_52, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 2 must be a number or the letter R" }, allow_blank: true, on: :after_log
-  validates :field_56, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 3 must be a number or the letter R" }, allow_blank: true, on: :after_log
-  validates :field_60, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 4 must be a number or the letter R" }, allow_blank: true, on: :after_log
-  validates :field_64, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 5 must be a number or the letter R" }, allow_blank: true, on: :after_log
-  validates :field_68, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 6 must be a number or the letter R" }, allow_blank: true, on: :after_log
-  validates :field_72, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 7 must be a number or the letter R" }, allow_blank: true, on: :after_log
-  validates :field_76, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 8 must be a number or the letter R" }, allow_blank: true, on: :after_log
+  validates :field_52, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 2 must be a number or the letter R" }, on: :after_log, if: proc { details_known?(2).zero? }
+  validates :field_56, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 3 must be a number or the letter R" }, on: :after_log, if: proc { details_known?(3).zero? }
+  validates :field_60, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 4 must be a number or the letter R" }, on: :after_log, if: proc { details_known?(4).zero? }
+  validates :field_64, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 5 must be a number or the letter R" }, on: :after_log, if: proc { details_known?(5).zero? }
+  validates :field_68, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 6 must be a number or the letter R" }, on: :after_log, if: proc { details_known?(6).zero? }
+  validates :field_72, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 7 must be a number or the letter R" }, on: :after_log, if: proc { details_known?(7).zero? }
+  validates :field_76, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 8 must be a number or the letter R" }, on: :after_log, if: proc { details_known?(8).zero? }
 
   validate :validate_needs_type_present, on: :after_log
   validate :validate_data_types, on: :after_log
@@ -1068,28 +1068,28 @@ private
     attributes["declaration"] = field_45
 
     attributes["age1_known"] = age1_known?
-    attributes["age1"] = field_46 if attributes["age1_known"].zero? && field_46&.match(/\A\d{1,3}\z|\AR\z/)
+    attributes["age1"] = field_46 if attributes["age1_known"]&.zero? && field_46&.match(/\A\d{1,3}\z|\AR\z/)
 
     attributes["age2_known"] = age2_known?
-    attributes["age2"] = field_52 if attributes["age2_known"].zero? && field_52&.match(/\A\d{1,3}\z|\AR\z/)
+    attributes["age2"] = field_52 if attributes["age2_known"]&.zero? && field_52&.match(/\A\d{1,3}\z|\AR\z/)
 
     attributes["age3_known"] = age3_known?
-    attributes["age3"] = field_56 if attributes["age3_known"].zero? && field_56&.match(/\A\d{1,3}\z|\AR\z/)
+    attributes["age3"] = field_56 if attributes["age3_known"]&.zero? && field_56&.match(/\A\d{1,3}\z|\AR\z/)
 
     attributes["age4_known"] = age4_known?
-    attributes["age4"] = field_60 if attributes["age4_known"].zero? && field_60&.match(/\A\d{1,3}\z|\AR\z/)
+    attributes["age4"] = field_60 if attributes["age4_known"]&.zero? && field_60&.match(/\A\d{1,3}\z|\AR\z/)
 
     attributes["age5_known"] = age5_known?
-    attributes["age5"] = field_64 if attributes["age5_known"].zero? && field_64&.match(/\A\d{1,3}\z|\AR\z/)
+    attributes["age5"] = field_64 if attributes["age5_known"]&.zero? && field_64&.match(/\A\d{1,3}\z|\AR\z/)
 
     attributes["age6_known"] = age6_known?
-    attributes["age6"] = field_68 if attributes["age6_known"].zero? && field_68&.match(/\A\d{1,3}\z|\AR\z/)
+    attributes["age6"] = field_68 if attributes["age6_known"]&.zero? && field_68&.match(/\A\d{1,3}\z|\AR\z/)
 
     attributes["age7_known"] = age7_known?
-    attributes["age7"] = field_72 if attributes["age7_known"].zero? && field_72&.match(/\A\d{1,3}\z|\AR\z/)
+    attributes["age7"] = field_72 if attributes["age7_known"]&.zero? && field_72&.match(/\A\d{1,3}\z|\AR\z/)
 
     attributes["age8_known"] = age8_known?
-    attributes["age8"] = field_76 if attributes["age8_known"].zero? && field_76&.match(/\A\d{1,3}\z|\AR\z/)
+    attributes["age8"] = field_76 if attributes["age8_known"]&.zero? && field_76&.match(/\A\d{1,3}\z|\AR\z/)
 
     attributes["sex1"] = field_47
     attributes["sex2"] = field_53
@@ -1372,7 +1372,6 @@ private
 
   def age1_known?
     return 1 if field_46 == "R"
-    return 1 if field_46.blank?
 
     0
   end
@@ -1389,9 +1388,6 @@ private
     define_method("age#{hash[:person]}_known?") do
       return 1 if public_send(hash[:field]) == "R"
       return 0 if send("person_#{hash[:person]}_present?")
-      return 1 if public_send(hash[:field]).blank?
-
-      0
     end
   end
 
