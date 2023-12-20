@@ -51,7 +51,7 @@ RSpec.shared_examples "shared log examples" do |log_type|
   describe "#process_uprn_change!" do
     context "when UPRN set to a value" do
       let(:log) do
-        create(
+        log = build(
           log_type,
           uprn: "123456789",
           uprn_confirmed: 1,
@@ -59,6 +59,8 @@ RSpec.shared_examples "shared log examples" do |log_type|
           county: "county",
           postcode_full: nil,
         )
+        log.save!(validate: false)
+        log
       end
 
       it "updates log fields" do

@@ -29,24 +29,6 @@ RSpec.describe DuplicateLogsController, type: :request do
     end
 
     context "when user is signed in" do
-      before do
-        body = {
-          results: [
-            {
-              DPA: {
-                "POSTCODE": "LS16 6FT",
-                "POST_TOWN": "Westminster",
-                "PO_BOX_NUMBER": "321",
-                "DOUBLE_DEPENDENT_LOCALITY": "Double Dependent Locality",
-              },
-            },
-          ],
-        }.to_json
-
-        stub_request(:get, "https://api.os.uk/search/places/v1/uprn?key=OS_DATA_KEY&uprn=123")
-          .to_return(status: 200, body:, headers: {})
-      end
-
       context "when user is support" do
         let(:support_user_org) { create(:organisation) }
         let(:user) { create(:user, :support, organisation: support_user_org) }

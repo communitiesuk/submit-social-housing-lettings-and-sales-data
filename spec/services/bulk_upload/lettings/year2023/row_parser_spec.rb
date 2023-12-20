@@ -87,21 +87,6 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
       stub_request(:get, /api.postcodes.io/)
       .to_return(status: 200, body: "{\"status\":200,\"result\":{\"admin_district\":\"Manchester\", \"codes\":{\"admin_district\": \"E08000003\"}}}", headers: {})
 
-      body = {
-        results: [
-          {
-            DPA: {
-              "POSTCODE": "EC1N 2TD",
-              "POST_TOWN": "Newcastle",
-              "ORGANISATION_NAME": "Some place",
-            },
-          },
-        ],
-      }.to_json
-
-      stub_request(:get, "https://api.os.uk/search/places/v1/uprn?key=OS_DATA_KEY&uprn=100023336956")
-        .to_return(status: 200, body:, headers: {})
-
       parser.valid?
     end
 
@@ -244,7 +229,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
             field_4: "1",
 
-            field_18: "100023336956",
+            field_18: "12",
           }
         end
 
@@ -693,7 +678,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
       describe "#validate_nulls" do
         context "when non-setup questions are null" do
-          let(:attributes) { { bulk_upload:, field_1: "a", field_18: "", field_19: "", field_21: "" } }
+          let(:attributes) { setup_section_params.merge({ field_18: "", field_19: "", field_21: "" }) }
 
           it "fetches the question's check_answer_label if it exists, otherwise it gets the question's header" do
             parser.valid?
@@ -1484,20 +1469,15 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
     describe "#field_18" do # UPRN
       context "when over 12 characters" do
-        let(:attributes) { { bulk_upload:, field_18: "1234567890123" } }
+        let(:attributes) { setup_section_params.merge({ field_18: "1234567890123" }) }
 
         it "adds an appropriate error" do
-          expect(parser.errors[:field_18]).to eql(["UPRN must be 12 digits or less"])
+          expect(parser.errors[:field_18]).to eql(["UPRN is not recognised. Check the number, or enter the address"])
         end
       end
 
       context "when neither UPRN nor address fields are given" do
-        let(:attributes) do
-          {
-            bulk_upload:,
-            field_1: "1",
-          }
-        end
+        let(:attributes) { setup_section_params }
 
         it "adds appropriate errors" do
           expect(parser.errors[:field_18]).to eql(["You must answer UPRN"])
@@ -1652,16 +1632,16 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
     end
 
     describe "#uprn" do
-      let(:attributes) { { bulk_upload:, field_18: "100023336956" } }
+      let(:attributes) { { bulk_upload:, field_18: "12" } }
 
       it "sets to given value" do
-        expect(parser.log.uprn).to eql("100023336956")
+        expect(parser.log.uprn).to eql("12")
       end
     end
 
     describe "#uprn_known" do
       context "when uprn specified" do
-        let(:attributes) { { bulk_upload:, field_18: "100023336956" } }
+        let(:attributes) { { bulk_upload:, field_18: "12" } }
 
         it "sets to 1" do
           expect(parser.log.uprn_known).to be(1)

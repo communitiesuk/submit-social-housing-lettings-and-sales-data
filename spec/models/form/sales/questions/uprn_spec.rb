@@ -7,23 +7,6 @@ RSpec.describe Form::Sales::Questions::Uprn, type: :model do
   let(:question_definition) { nil }
   let(:page) { instance_double(Form::Page) }
 
-  before do
-    body = {
-      results: [
-        {
-          DPA: {
-            "POSTCODE": "AA1 1AA",
-            "POST_TOWN": "Test Town",
-            "ORGANISATION_NAME": "1, Test Street",
-          },
-        },
-      ],
-    }.to_json
-
-    stub_request(:get, "https://api.os.uk/search/places/v1/uprn?key=OS_DATA_KEY&uprn=1")
-    .to_return(status: 200, body:, headers: {})
-  end
-
   it "has correct page" do
     expect(question.page).to eq(page)
   end
