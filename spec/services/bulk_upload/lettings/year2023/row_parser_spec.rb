@@ -1223,8 +1223,8 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
         it "sets correct errors" do
           expect(parser.errors[:field_116]).to include("You must answer was the letting made under the Choice-Based Lettings (CBL)?")
-          expect(parser.errors[:field_117]).to include("You must answer was the letting made under the Common Housing Register (CHR)?")
-          expect(parser.errors[:field_118]).to include("You must answer was the letting made under the Common Allocation Policy (CAP)?")
+          expect(parser.errors[:field_117]).to include("You must answer was the letting made under the Common Allocation Policy (CAP)?")
+          expect(parser.errors[:field_118]).to include("You must answer was the letting made under the Common Housing Register (CHR)?")
         end
       end
     end

@@ -120,8 +120,8 @@ class BulkUpload::Lettings::Year2023::RowParser
     field_114: "Reasonable preference reason They needed to move to avoid hardship to themselves or others",
     field_115: "Reasonable preference reason Don't know",
     field_116: "Was the letting made under the Choice-Based Lettings (CBL)?",
-    field_117: "Was the letting made under the Common Housing Register (CHR)?",
-    field_118: "Was the letting made under the Common Allocation Policy (CAP)?",
+    field_117: "Was the letting made under the Common Allocation Policy (CAP)?",
+    field_118: "Was the letting made under the Common Housing Register (CHR)?",
     field_119: "What was the source of referral for this letting?",
     field_120: "Do you know the household's combined total income after tax?",
     field_121: "How often does the household receive income?",
@@ -673,8 +673,8 @@ private
   def validate_lettings_allocation
     if cbl.blank? && cap.blank? && chr.blank?
       errors.add(:field_116, I18n.t("validations.not_answered", question: "was the letting made under the Choice-Based Lettings (CBL)?"))
-      errors.add(:field_117, I18n.t("validations.not_answered", question: "was the letting made under the Common Housing Register (CHR)?"))
-      errors.add(:field_118, I18n.t("validations.not_answered", question: "was the letting made under the Common Allocation Policy (CAP)?"))
+      errors.add(:field_117, I18n.t("validations.not_answered", question: "was the letting made under the Common Allocation Policy (CAP)?"))
+      errors.add(:field_118, I18n.t("validations.not_answered", question: "was the letting made under the Common Housing Register (CHR)?"))
     end
   end
 
