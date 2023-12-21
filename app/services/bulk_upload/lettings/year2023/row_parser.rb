@@ -435,12 +435,14 @@ class BulkUpload::Lettings::Year2023::RowParser
       fields = field_mapping_for_errors[error.attribute] || []
 
       fields.each do |field|
-        unless errors.include?(field)
-          if error.attribute == :owning_organisation_id || error.attribute == :managing_organisation_id || error.attribute == :startdate
-            errors.add(field, error.message, category: :setup)
-          else
-            errors.add(field, error.message)
-          end
+        next if errors.include?(field)
+
+        question = log.form.get_question(error.attribute, log)
+
+        if question.present? && setup_question?(question)
+          errors.add(field, error.message, category: :setup)
+        else
+          errors.add(field, error.message)
         end
       end
     end
