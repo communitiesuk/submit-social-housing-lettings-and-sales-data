@@ -329,14 +329,6 @@ class BulkUpload::Lettings::Year2023::RowParser
             },
             on: :after_log
 
-  validates :field_11,
-            presence: {
-              if: proc { renttype == :intermediate },
-              message: I18n.t("validations.not_answered", question: "intermediate rent type"),
-              category: :setup,
-            },
-            on: :after_log
-
   validates :field_16,
             presence: {
               if: proc { supported_housing? },
@@ -396,6 +388,9 @@ class BulkUpload::Lettings::Year2023::RowParser
   validate :validate_uprn_exists_if_any_key_address_fields_are_blank, on: :after_log, unless: -> { supported_housing? }
 
   validate :validate_incomplete_soft_validations, on: :after_log
+
+  validate :validate_correct_intermediate_rent_type, on: :after_log, if: proc { renttype == :intermediate }
+  validate :validate_correct_affordable_rent_type, on: :after_log, if: proc { renttype == :affordable }
 
   def self.question_for_field(field)
     QUESTIONS[field]
@@ -838,6 +833,18 @@ private
       if errors[:field_1].blank?
         errors.add(:field_1, "You do not have permission to add logs for this owning organisation", category: :setup)
       end
+    end
+  end
+
+  def validate_correct_intermediate_rent_type
+    if field_11.blank? || ![1, 2, 3].include?(field_11.to_i)
+      errors.add(:field_11, I18n.t("validations.not_answered", question: "intermediate rent type"), category: :setup)
+    end
+  end
+
+  def validate_correct_affordable_rent_type
+    if field_10.blank? || ![1, 2, 3].include?(field_10.to_i)
+      errors.add(:field_10, I18n.t("validations.not_answered", question: "is this a London Affordable Rent letting"), category: :setup)
     end
   end
 
@@ -1327,9 +1334,10 @@ private
     when :social
       LettingsLog::RENT_TYPE[:social_rent]
     when :affordable
-      if field_10 == 1
+      case field_10
+      when 1
         LettingsLog::RENT_TYPE[:london_affordable_rent]
-      else
+      when 2, 3
         LettingsLog::RENT_TYPE[:affordable_rent]
       end
     when :intermediate
