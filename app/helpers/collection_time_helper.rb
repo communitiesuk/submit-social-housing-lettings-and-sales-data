@@ -13,7 +13,8 @@ module CollectionTimeHelper
   end
 
   def date_mid_collection_year_formatted(date)
-    example_date = date.nil? ? Time.zone.today : collection_start_date(date).to_date + 5.months
+    relevant_year = date.nil? ? current_collection_start_year : collection_start_year_for_date(date)
+    example_date = Date.new(relevant_year, 9, 13)
     example_date.to_formatted_s(:govuk_date_number_month)
   end
 
