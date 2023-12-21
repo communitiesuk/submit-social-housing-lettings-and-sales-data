@@ -907,6 +907,18 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
             expect(parser.errors[:field_15]).to be_blank
             expect(parser.errors[:field_16]).to be_blank
             expect(parser.errors.where(:field_17, category: :setup).map(&:message)).to eq(["You must answer location code"])
+            expect(parser.errors[:field_17].count).to eq(1)
+          end
+        end
+
+        context "when missing management group code" do
+          let(:attributes) { { bulk_upload:, field_1: owning_org.old_visible_id, field_2: owning_org.old_visible_id, field_4: "2", field_5: "2", field_16: scheme.old_visible_id.to_s, field_15: nil, field_17: nil } }
+
+          it "returns a setup error" do
+            expect(parser.errors[:field_16]).to be_blank
+            expect(parser.errors[:field_17]).to be_blank
+            expect(parser.errors.where(:field_15, category: :setup).map(&:message)).to eq(["You must answer management group code"])
+            expect(parser.errors[:field_15].count).to eq(1)
           end
         end
 
