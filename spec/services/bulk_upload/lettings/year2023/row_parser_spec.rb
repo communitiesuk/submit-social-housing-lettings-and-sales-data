@@ -831,6 +831,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
           let(:attributes) { { bulk_upload:, field_5: "1", field_4: "1" } }
 
           it "is permitted" do
+            expect(parser.errors[:field_4]).to be_blank
             expect(parser.errors[:field_5]).to be_blank
           end
         end
@@ -839,7 +840,8 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
           let(:attributes) { { bulk_upload:, field_5: "2", field_4: "1" } }
 
           it "is not permitted" do
-            expect(parser.errors[:field_5]).to include("Lettings type must be a general needs type because you selected general needs when uploading the file")
+            expect(parser.errors[:field_4]).to include("This letting type is supported housing, but the needs type is general needs. Change either the needs type or the letting type.")
+            expect(parser.errors[:field_5]).to include("This needs type is general needs, but the letting type is supported housing. Change either the needs type or the letting type.")
           end
         end
       end
@@ -851,7 +853,8 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
           let(:attributes) { { bulk_upload:, field_5: "1", field_4: "2" } }
 
           it "is not permitted" do
-            expect(parser.errors[:field_5]).to include("Lettings type must be a supported housing type because you selected supported housing when uploading the file")
+            expect(parser.errors[:field_4]).to include("This letting type is general needs, but the needs type is supported housing. Change either the needs type or the letting type.")
+            expect(parser.errors[:field_5]).to include("This needs type is supported housing, but the letting type is general needs. Change either the needs type or the letting type.")
           end
         end
 
@@ -859,6 +862,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
           let(:attributes) { { bulk_upload:, field_5: "2", field_4: "2" } }
 
           it "is permitted" do
+            expect(parser.errors[:field_4]).to be_blank
             expect(parser.errors[:field_5]).to be_blank
           end
         end

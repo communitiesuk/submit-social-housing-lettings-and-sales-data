@@ -675,11 +675,15 @@ private
 
   def validate_lettings_type_matches_bulk_upload
     if [1, 3, 5, 7, 9, 11].include?(field_5) && !general_needs?
-      errors.add(:field_5, I18n.t("validations.setup.lettype.supported_housing_mismatch"))
+      block_log_creation!
+      errors.add(:field_4, I18n.t("validations.setup.needstype.lettype_not_supported_housing"), category: :setup)
+      errors.add(:field_5, I18n.t("validations.setup.lettype.needstype_supported_housing"), category: :setup)
     end
 
     if [2, 4, 6, 8, 10, 12].include?(field_5) && !supported_housing?
-      errors.add(:field_5, I18n.t("validations.setup.lettype.general_needs_mismatch"))
+      block_log_creation!
+      errors.add(:field_4, I18n.t("validations.setup.needstype.lettype_not_general_needs"), category: :setup)
+      errors.add(:field_5, I18n.t("validations.setup.lettype.needstype_general_needs"), category: :setup)
     end
   end
 

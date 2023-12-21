@@ -307,6 +307,11 @@ en:
       lettype:
         general_needs_mismatch: Lettings type must be a general needs type because you selected general needs when uploading the file
         supported_housing_mismatch: Lettings type must be a supported housing type because you selected supported housing when uploading the file
+        needstype_general_needs: This needs type is general needs, but the letting type is supported housing. Change either the needs type or the letting type.
+        needstype_supported_housing: This needs type is supported housing, but the letting type is general needs. Change either the needs type or the letting type.
+      needstype:
+        lettype_not_general_needs: This letting type is supported housing, but the needs type is general needs. Change either the needs type or the letting type.
+        lettype_not_supported_housing: This letting type is general needs, but the needs type is supported housing. Change either the needs type or the letting type.
       location:
         incomplete: "This location is incomplete. Select another location or update this one"
 
