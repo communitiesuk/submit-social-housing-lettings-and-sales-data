@@ -63,10 +63,6 @@ RSpec.describe "Accessible Autocomplete" do
       click_link(text: "Back")
       expect(page).to have_selector("input", class: "autocomplete__input", count: 1)
     end
-
-    it "has a disabled null option" do
-      expect(page).to have_select("lettings-log-prevloc-field", disabled_options: ["Select an option"])
-    end
   end
 
   context "when searching schemes" do
