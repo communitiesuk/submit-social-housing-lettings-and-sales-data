@@ -14,7 +14,7 @@ class CheckAnswersSummaryListCardComponent < ViewComponent::Base
   end
 
   def get_answer_label(question)
-    question.answer_label(log, user).presence || unanswered_value
+    question.answer_label(log, user).presence || unanswered_value(question)
   end
 
   def get_question_label(question)
@@ -34,8 +34,8 @@ class CheckAnswersSummaryListCardComponent < ViewComponent::Base
 
 private
 
-  def unanswered_value
-    if log.creation_method_bulk_upload? && log.bulk_upload.present?
+  def unanswered_value(question)
+    if log.creation_method_bulk_upload? && log.bulk_upload.present? && !log.optional_fields.include?(question.id)
       "<span class=\"app-!-colour-red\">You still need to answer this question</span>".html_safe
     else
       "<span class=\"app-!-colour-muted\">You didn’t answer this question</span>".html_safe
