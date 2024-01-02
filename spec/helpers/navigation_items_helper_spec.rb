@@ -51,6 +51,7 @@ RSpec.describe NavigationItemsHelper do
           end
         end
       end
+
       context "when the user is on the home page" do
         let(:expected_navigation_items) do
           [
