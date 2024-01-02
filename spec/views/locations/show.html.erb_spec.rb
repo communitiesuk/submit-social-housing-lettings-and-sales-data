@@ -42,6 +42,7 @@ RSpec.describe "locations/show.html.erb" do
         active?: true,
         scheme:,
         deactivates_in_a_long_time?: false,
+        is_la_inferred: nil,
       )
     end
 

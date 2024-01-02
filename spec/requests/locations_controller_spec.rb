@@ -466,7 +466,7 @@ RSpec.describe LocationsController, type: :request do
 
         it "redirects correctly when postcodes.io does return a local authority" do
           follow_redirect!
-          expect(page).to have_content("What is the local authority")
+          expect(page).to have_content("What is the name of this location")
         end
       end
 
@@ -527,7 +527,7 @@ RSpec.describe LocationsController, type: :request do
 
         it "redirects correctly when postcodes.io does return a local authority" do
           follow_redirect!
-          expect(page).to have_content("What is the local authority")
+          expect(page).to have_content("What is the name of this location")
         end
       end
 
@@ -1342,6 +1342,38 @@ RSpec.describe LocationsController, type: :request do
             follow_redirect!
             expect(page).not_to have_content("Success")
             expect(page).not_to have_content("added to this scheme")
+          end
+        end
+
+        context "when local authority is inferred" do
+          let(:params) { { location: { postcode: "zz1 1zz" } } }
+
+          before do
+            patch "/schemes/#{scheme.id}/locations/#{location.id}/postcode?referrer=check_answers", params:
+          end
+
+          it "does not display local authority row" do
+            location.reload
+            follow_redirect!
+            expect(location.is_la_inferred).to eq(true)
+            expect(location.location_admin_district).to eq("Westminster")
+            expect(page).not_to have_content("Local authority")
+            expect(page).to have_content("Westminster")
+          end
+        end
+
+        context "when local authority is not inferred" do
+          let(:params) { { location: { postcode: "a1 1aa" } } }
+
+          before do
+            patch "/schemes/#{scheme.id}/locations/#{location.id}/postcode?referrer=check_answers", params:
+          end
+
+          it "displays local authority row" do
+            location.reload
+            get "/schemes/#{scheme.id}/locations/#{location.id}/check-answers"
+            expect(location.is_la_inferred).to eq(false)
+            expect(page).to have_content("Local authority")
           end
         end
       end

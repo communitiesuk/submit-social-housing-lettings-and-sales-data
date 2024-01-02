@@ -169,10 +169,6 @@ class Location < ApplicationRecord
       errors.add :postcode, error_message
     else
       self.postcode = PostcodeService.clean(postcode)
-      if postcode_changed?
-        self.location_admin_district = nil
-        self.location_code = nil
-      end
     end
   end
 
@@ -200,9 +196,17 @@ private
 
   def lookup_postcode!
     result = PIO.lookup(postcode)
+    unless location_admin_district_changed?
+      self.location_admin_district = nil
+      self.location_code = nil
+      self.is_la_inferred = false
+    end
     if result
       self.location_code = result[:location_code]
       self.location_admin_district = result[:location_admin_district]
+      self.is_la_inferred = true
+    else
+      self.is_la_inferred = false
     end
   end
 end

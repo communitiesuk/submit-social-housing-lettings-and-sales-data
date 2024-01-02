@@ -62,7 +62,7 @@ module SchemesHelpers
   def fill_in_and_save_location
     click_link "Locations"
     click_button "Add a location"
-    fill_in with: "AA11AA"
+    fill_in with: "XX11XX"
     click_button "Save and continue"
     select "Adur"
     click_button "Save and continue"
@@ -83,7 +83,7 @@ module SchemesHelpers
   def fill_in_and_save_second_location
     click_link "Locations"
     click_button "Add a location"
-    fill_in with: "AA12AA"
+    fill_in with: "XX12XX"
     click_button "Save and continue"
     select "Adur"
     click_button "Save and continue"
