@@ -119,9 +119,9 @@ class BulkUpload::Lettings::Year2023::RowParser
     field_113: "Reasonable preference reason They needed to move on medical and welfare reasons (including disability)",
     field_114: "Reasonable preference reason They needed to move to avoid hardship to themselves or others",
     field_115: "Reasonable preference reason Don't know",
-    field_116: "How was this letting allocated?",
-    field_117: "How was this letting allocated?",
-    field_118: "How was this letting allocated?",
+    field_116: "Was the letting made under the Choice-Based Lettings (CBL)?",
+    field_117: "Was the letting made under the Common Allocation Policy (CAP)?",
+    field_118: "Was the letting made under the Common Housing Register (CHR)?",
     field_119: "What was the source of referral for this letting?",
     field_120: "Do you know the household's combined total income after tax?",
     field_121: "How often does the household receive income?",
@@ -384,6 +384,7 @@ class BulkUpload::Lettings::Year2023::RowParser
   validate :validate_no_housing_needs_questions_answered, on: :after_log
   validate :validate_reasonable_preference_homeless, on: :after_log
   validate :validate_condition_effects, on: :after_log
+  validate :validate_lettings_allocation, on: :after_log
   validate :validate_if_log_already_exists, on: :after_log, if: -> { FeatureToggle.bulk_upload_duplicate_log_check_enabled? }
 
   validate :validate_owning_org_data_given, on: :after_log
@@ -666,6 +667,14 @@ private
       illness_option_fields.each do |field|
         errors.add(field, I18n.t("validations.not_answered", question: "how is person affected by condition or illness"))
       end
+    end
+  end
+
+  def validate_lettings_allocation
+    if cbl.blank? && cap.blank? && chr.blank?
+      errors.add(:field_116, I18n.t("validations.not_answered", question: "was the letting made under the Choice-Based Lettings (CBL)?"))
+      errors.add(:field_117, I18n.t("validations.not_answered", question: "was the letting made under the Common Allocation Policy (CAP)?"))
+      errors.add(:field_118, I18n.t("validations.not_answered", question: "was the letting made under the Common Housing Register (CHR)?"))
     end
   end
 

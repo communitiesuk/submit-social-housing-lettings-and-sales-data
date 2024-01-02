@@ -1217,6 +1217,18 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
       end
     end
 
+    describe "#field_116, 117, 118" do
+      context "when none of field_116, 117, 118 are given" do
+        let(:attributes) { { bulk_upload:, field_116: "", field_117: "", field_118: "", field_89: "1" } }
+
+        it "sets correct errors" do
+          expect(parser.errors[:field_116]).to include("You must answer was the letting made under the Choice-Based Lettings (CBL)?")
+          expect(parser.errors[:field_117]).to include("You must answer was the letting made under the Common Allocation Policy (CAP)?")
+          expect(parser.errors[:field_118]).to include("You must answer was the letting made under the Common Housing Register (CHR)?")
+        end
+      end
+    end
+
     describe "#field_105, field_110 - 15" do
       context "when there is a reasonable preference but none is given" do
         let(:attributes) { { bulk_upload:, field_110: "1", field_111: nil, field_112: nil, field_113: nil, field_114: nil, field_115: nil } }
