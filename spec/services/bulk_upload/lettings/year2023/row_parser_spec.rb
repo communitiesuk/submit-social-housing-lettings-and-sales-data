@@ -803,6 +803,33 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
         end
       end
 
+      context "when intermediate rent and field_11 (Which type of Intermediate Rent) is invalid/gets cleared" do
+        let(:attributes) { { bulk_upload:, field_5: "9", field_11: "Intermediate rent" } }
+
+        it "adds error on field_11" do
+          expect(parser.errors[:field_5]).to be_present
+          expect(parser.errors[:field_11]).to eq(["You must answer intermediate rent type"])
+        end
+      end
+
+      context "when affordable rent and field_10 (Is this a London Affordable Rent letting?) is not given" do
+        let(:attributes) { { bulk_upload:, field_5: "5", field_10: nil } }
+
+        it "adds error on field_10" do
+          expect(parser.errors[:field_5]).to be_present
+          expect(parser.errors[:field_10]).to eq(["You must answer is this a London Affordable Rent letting"])
+        end
+      end
+
+      context "when affordable rent and field_10 (Is this a London Affordable Rent letting?) is invalid/gets cleared" do
+        let(:attributes) { { bulk_upload:, field_5: "5", field_10: "Intermediate rent" } }
+
+        it "adds error on field_10" do
+          expect(parser.errors[:field_5]).to be_present
+          expect(parser.errors[:field_10]).to eq(["You must answer is this a London Affordable Rent letting"])
+        end
+      end
+
       context "when intermediate rent other and field_12 is not given" do
         let(:attributes) { { bulk_upload:, field_5: "9", field_11: "3", field_12: nil } }
 
