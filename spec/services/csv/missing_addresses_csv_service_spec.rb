@@ -6,38 +6,6 @@ RSpec.describe Csv::MissingAddressesCsvService do
   let(:service) { described_class.new(organisation, skip_uprn_issue_organisations) }
   let(:skip_uprn_issue_organisations) { [100, 200] }
 
-  before do
-    body_1 = {
-      results: [
-        {
-          DPA: {
-            "POSTCODE": "BS1 1AD",
-            "POST_TOWN": "Bristol",
-            "ORGANISATION_NAME": "Some place",
-          },
-        },
-      ],
-    }.to_json
-
-    body_2 = {
-      results: [
-        {
-          DPA: {
-            "POSTCODE": "EC1N 2TD",
-            "POST_TOWN": "Newcastle",
-            "ORGANISATION_NAME": "Some place",
-          },
-        },
-      ],
-    }.to_json
-
-    stub_request(:get, "https://api.os.uk/search/places/v1/uprn?key=OS_DATA_KEY&uprn=123")
-    .to_return(status: 200, body: body_1, headers: {})
-
-    stub_request(:get, "https://api.os.uk/search/places/v1/uprn?key=OS_DATA_KEY&uprn=12")
-    .to_return(status: 200, body: body_2, headers: {})
-  end
-
   around do |example|
     Timecop.freeze(Time.zone.local(2023, 4, 5)) do
       Singleton.__init__(FormHandler)
@@ -84,6 +52,7 @@ RSpec.describe Csv::MissingAddressesCsvService do
 
     let!(:lettings_log_wrong_uprn) do
       create(:lettings_log,
+             :completed,
              tenancycode: "tenancycode",
              propcode: "propcode",
              startdate: Time.zone.local(2023, 4, 5),
@@ -136,7 +105,7 @@ RSpec.describe Csv::MissingAddressesCsvService do
       before do
         lettings_log.update!(address_line1: "existing address", town_or_city: "towncity")
         lettings_log_missing_town.update!(town_or_city: "towncity")
-        lettings_log_wrong_uprn.update!(uprn: "12", propcode: "12")
+        lettings_log_wrong_uprn.update!(uprn_known: 1, uprn: "12", propcode: "12")
       end
 
       it "returns a csv with relevant logs" do
@@ -374,6 +343,7 @@ RSpec.describe Csv::MissingAddressesCsvService do
 
       let!(:lettings_log_wrong_uprn) do
         create(:lettings_log,
+               :completed,
                tenancycode: "tenancycode",
                propcode: "propcode",
                startdate: Time.zone.local(2023, 4, 5),
@@ -388,6 +358,7 @@ RSpec.describe Csv::MissingAddressesCsvService do
 
       let!(:lettings_log_not_imported) do
         create(:lettings_log,
+               :completed,
                tenancycode: "tenancycode",
                propcode: "propcode",
                startdate: Time.zone.local(2023, 4, 5),
@@ -400,7 +371,7 @@ RSpec.describe Csv::MissingAddressesCsvService do
       end
 
       before do
-        lettings_log = create(:lettings_log, managing_organisation: organisation, old_id: "exists")
+        lettings_log = create(:lettings_log, :completed, managing_organisation: organisation, old_id: "exists")
         lettings_log.startdate = Time.zone.local(2022, 4, 5)
         lettings_log.save!(validate: false)
       end

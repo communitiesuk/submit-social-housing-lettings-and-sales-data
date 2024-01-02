@@ -28,46 +28,6 @@ RSpec.describe Form::Lettings::Pages::Address, type: :model do
   end
 
   it "has correct depends_on" do
-    expect(page.depends_on).to be_nil
-  end
-
-  describe "has correct routed_to?" do
-    context "when uprn_known == nil" do
-      let(:log) { create(:lettings_log, uprn_known: nil) }
-
-      it "returns true" do
-        expect(page.routed_to?(log)).to eq(true)
-      end
-    end
-
-    context "when uprn_confirmed != 1" do
-      let(:log) do
-        create(:lettings_log, uprn_known: 1, uprn: "12345", uprn_confirmed: 0)
-      end
-
-      it "returns true" do
-        expect(page.routed_to?(log)).to eq(true)
-      end
-    end
-
-    context "when uprn_known == 0" do
-      let(:log) do
-        create(:lettings_log, uprn_known: 0, uprn_confirmed: 0)
-      end
-
-      it "returns true" do
-        expect(page.routed_to?(log)).to eq(true)
-      end
-    end
-
-    context "when uprn_confirmed == 1 && uprn_known != 0" do
-      let(:log) do
-        create(:lettings_log, uprn_known: 1, uprn: "12345", uprn_confirmed: 1)
-      end
-
-      it "returns false" do
-        expect(page.routed_to?(log)).to eq(false)
-      end
-    end
+    expect(page.depends_on).to eq([{ "is_supported_housing?" => false, "uprn_known" => nil }, { "is_supported_housing?" => false, "uprn_known" => 0 }, { "is_supported_housing?" => false, "uprn_confirmed" => 0 }])
   end
 end

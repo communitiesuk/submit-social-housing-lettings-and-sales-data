@@ -3,6 +3,11 @@ class Form::Sales::Pages::Address < ::Form::Page
     super
     @id = "address"
     @header = "Q15 - What is the property's address?"
+    @depends_on = [
+      { "uprn_known" => nil },
+      { "uprn_known" => 0 },
+      { "uprn_confirmed" => 0 },
+    ]
   end
 
   def questions
@@ -13,9 +18,5 @@ class Form::Sales::Pages::Address < ::Form::Page
       Form::Sales::Questions::County.new(nil, nil, self),
       Form::Sales::Questions::PostcodeForFullAddress.new(nil, nil, self),
     ]
-  end
-
-  def routed_to?(log, _current_user = nil)
-    log.uprn_known.nil? || log.uprn_known.zero? || log.uprn_confirmed&.zero?
   end
 end

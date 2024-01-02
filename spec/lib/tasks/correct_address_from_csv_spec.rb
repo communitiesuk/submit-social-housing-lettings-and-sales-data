@@ -21,22 +21,6 @@ RSpec.describe "data_import" do
       .to_return(status: 200, body: "{\"status\":404,\"error\":\"Postcode not found\"}", headers: {})
     WebMock.stub_request(:get, /api\.postcodes\.io\/postcodes\/B11BB/)
       .to_return(status: 200, body: '{"status":200,"result":{"admin_district":"Westminster","codes":{"admin_district":"E08000035"}}}', headers: {})
-
-    body = {
-      results: [
-        {
-          DPA: {
-            "POSTCODE": "LS16 6FT",
-            "POST_TOWN": "Westminster",
-            "PO_BOX_NUMBER": "Wrong Address Line1",
-            "DOUBLE_DEPENDENT_LOCALITY": "Double Dependent Locality",
-          },
-        },
-      ],
-    }.to_json
-
-    stub_request(:get, "https://api.os.uk/search/places/v1/uprn?key&uprn=1")
-     .to_return(status: 200, body:, headers: {})
   end
 
   describe ":import_lettings_addresses_from_csv", type: :task do
@@ -73,19 +57,22 @@ RSpec.describe "data_import" do
       end
 
       let!(:lettings_logs) do
-        create_list(:lettings_log,
-                    3,
-                    uprn_known: 1,
-                    uprn: "1",
-                    uprn_confirmed: nil,
-                    address_line1: "wrong address line1",
-                    address_line2: "wrong address 2",
-                    town_or_city: "wrong town",
-                    county: "wrong city",
-                    postcode_known: 1,
-                    postcode_full: "A1 1AA",
-                    la: "E06000064",
-                    is_la_inferred: true)
+        logs = build_list(:lettings_log,
+                          3,
+                          :setup_completed,
+                          uprn_known: 1,
+                          uprn: "121",
+                          uprn_confirmed: nil,
+                          address_line1: "wrong address line1",
+                          address_line2: "wrong address 2",
+                          town_or_city: "wrong town",
+                          county: "wrong city",
+                          postcode_known: 1,
+                          postcode_full: "A1 1AA",
+                          la: "E06000064",
+                          is_la_inferred: true)
+        logs.each { |log| log.save!(validate: false) }
+        logs
       end
 
       before do
@@ -135,7 +122,7 @@ RSpec.describe "data_import" do
           task.invoke(addresses_csv_path)
           lettings_logs[1].reload
           expect(lettings_logs[1].uprn_known).to eq(1)
-          expect(lettings_logs[1].uprn).to eq("1")
+          expect(lettings_logs[1].uprn).to eq("121")
           expect(lettings_logs[1].uprn_confirmed).to eq(nil)
           expect(lettings_logs[1].address_line1).to eq("wrong address line1")
           expect(lettings_logs[1].address_line2).to eq("wrong address 2")
@@ -150,7 +137,7 @@ RSpec.describe "data_import" do
           task.invoke(addresses_csv_path)
           lettings_logs[2].reload
           expect(lettings_logs[2].uprn_known).to eq(1)
-          expect(lettings_logs[2].uprn).to eq("1")
+          expect(lettings_logs[2].uprn).to eq("121")
           expect(lettings_logs[2].uprn_confirmed).to eq(nil)
           expect(lettings_logs[2].address_line1).to eq("wrong address line1")
           expect(lettings_logs[2].address_line2).to eq("wrong address 2")
@@ -231,7 +218,7 @@ RSpec.describe "data_import" do
           task.invoke(all_addresses_csv_path)
           lettings_logs[1].reload
           expect(lettings_logs[1].uprn_known).to eq(1)
-          expect(lettings_logs[1].uprn).to eq("1")
+          expect(lettings_logs[1].uprn).to eq("121")
           expect(lettings_logs[1].uprn_confirmed).to eq(nil)
           expect(lettings_logs[1].address_line1).to eq("wrong address line1")
           expect(lettings_logs[1].address_line2).to eq("wrong address 2")
@@ -246,7 +233,7 @@ RSpec.describe "data_import" do
           task.invoke(all_addresses_csv_path)
           lettings_logs[2].reload
           expect(lettings_logs[2].uprn_known).to eq(1)
-          expect(lettings_logs[2].uprn).to eq("1")
+          expect(lettings_logs[2].uprn).to eq("121")
           expect(lettings_logs[2].uprn_confirmed).to eq(nil)
           expect(lettings_logs[2].address_line1).to eq("wrong address line1")
           expect(lettings_logs[2].address_line2).to eq("wrong address 2")
@@ -323,7 +310,7 @@ RSpec.describe "data_import" do
                is_la_inferred: true)
       end
 
-      let!(:sales_logs) { create_list(:sales_log, 3, :completed, uprn_known: 1, uprn: "1", la: "E06000064", is_la_inferred: true) }
+      let!(:sales_logs) { create_list(:sales_log, 3, :completed, uprn_known: 1, uprn: "121", la: "E06000064", is_la_inferred: true) }
 
       before do
         allow(storage_service).to receive(:get_file_io)
@@ -372,7 +359,7 @@ RSpec.describe "data_import" do
           task.invoke(addresses_csv_path)
           sales_logs[1].reload
           expect(sales_logs[1].uprn_known).to eq(1)
-          expect(sales_logs[1].uprn).to eq("1")
+          expect(sales_logs[1].uprn).to eq("121")
           expect(sales_logs[1].uprn_confirmed).to eq(nil)
           expect(sales_logs[1].address_line1).to eq("Wrong Address Line1")
           expect(sales_logs[1].address_line2).to eq("Double Dependent Locality")
@@ -387,7 +374,7 @@ RSpec.describe "data_import" do
           task.invoke(addresses_csv_path)
           sales_logs[2].reload
           expect(sales_logs[2].uprn_known).to eq(1)
-          expect(sales_logs[2].uprn).to eq("1")
+          expect(sales_logs[2].uprn).to eq("121")
           expect(sales_logs[2].uprn_confirmed).to eq(nil)
           expect(sales_logs[2].address_line1).to eq("Wrong Address Line1")
           expect(sales_logs[2].address_line2).to eq("Double Dependent Locality")
@@ -468,7 +455,7 @@ RSpec.describe "data_import" do
           task.invoke(all_addresses_csv_path)
           sales_logs[1].reload
           expect(sales_logs[1].uprn_known).to eq(1)
-          expect(sales_logs[1].uprn).to eq("1")
+          expect(sales_logs[1].uprn).to eq("121")
           expect(sales_logs[1].uprn_confirmed).to eq(nil)
           expect(sales_logs[1].address_line1).to eq("Wrong Address Line1")
           expect(sales_logs[1].address_line2).to eq("Double Dependent Locality")
@@ -483,7 +470,7 @@ RSpec.describe "data_import" do
           task.invoke(all_addresses_csv_path)
           sales_logs[2].reload
           expect(sales_logs[2].uprn_known).to eq(1)
-          expect(sales_logs[2].uprn).to eq("1")
+          expect(sales_logs[2].uprn).to eq("121")
           expect(sales_logs[2].uprn_confirmed).to eq(nil)
           expect(sales_logs[2].address_line1).to eq("Wrong Address Line1")
           expect(sales_logs[2].address_line2).to eq("Double Dependent Locality")

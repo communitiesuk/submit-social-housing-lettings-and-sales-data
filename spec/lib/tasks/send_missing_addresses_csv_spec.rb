@@ -17,36 +17,6 @@ RSpec.describe "correct_addresses" do
       Rake.application.rake_require("tasks/send_missing_addresses_csv")
       Rake::Task.define_task(:environment)
       task.reenable
-
-      body_1 = {
-        results: [
-          {
-            DPA: {
-              "POSTCODE": "BS1 1AD",
-              "POST_TOWN": "Bristol",
-              "ORGANISATION_NAME": "Some place",
-            },
-          },
-        ],
-      }.to_json
-
-      body_2 = {
-        results: [
-          {
-            DPA: {
-              "POSTCODE": "EC1N 2TD",
-              "POST_TOWN": "Newcastle",
-              "ORGANISATION_NAME": "Some place",
-            },
-          },
-        ],
-      }.to_json
-
-      stub_request(:get, "https://api.os.uk/search/places/v1/uprn?key=OS_DATA_KEY&uprn=123")
-      .to_return(status: 200, body: body_1, headers: {})
-
-      stub_request(:get, "https://api.os.uk/search/places/v1/uprn?key=OS_DATA_KEY&uprn=12")
-      .to_return(status: 200, body: body_2, headers: {})
     end
 
     context "when the rake task is run" do
@@ -62,7 +32,7 @@ RSpec.describe "correct_addresses" do
 
         before do
           create(:user, :data_provider, organisation:, email: "data_provider1@example.com")
-          create_list(:lettings_log, 7, :imported, startdate: Time.zone.local(2023, 9, 9), address_line1: nil, town_or_city: nil, needstype: 1, old_form_id: "form_1", owning_organisation: organisation, managing_organisation: organisation, created_by: organisation.users.first)
+          create_list(:lettings_log, 7, :imported, startdate: Time.zone.local(2023, 9, 9), address_line1: nil, town_or_city: nil, needstype: 1, old_form_id: "form_1", owning_organisation: organisation, managing_organisation: organisation, created_by: data_coordinator)
         end
 
         it "enqueues the job with correct organisations" do
@@ -81,7 +51,7 @@ RSpec.describe "correct_addresses" do
         let!(:data_provider2) { create(:user, :data_provider, organisation:, email: "data_provider4@example.com") }
 
         before do
-          create_list(:lettings_log, 5, :imported, startdate: Time.zone.local(2023, 9, 9), address_line1: nil, town_or_city: nil, needstype: 1, old_form_id: "form_2", owning_organisation: organisation, managing_organisation: organisation, created_by: organisation.users.first)
+          create_list(:lettings_log, 5, :imported, startdate: Time.zone.local(2023, 9, 9), address_line1: nil, town_or_city: nil, needstype: 1, old_form_id: "form_2", owning_organisation: organisation, managing_organisation: organisation, created_by: data_provider)
         end
 
         it "enqueues the job with correct organisations" do
@@ -96,9 +66,11 @@ RSpec.describe "correct_addresses" do
       end
 
       context "when org has less than 5 missing addresses" do
+        let!(:data_provider) { create(:user, :data_provider, organisation:, email: "data_provider3@example.com") }
+
         before do
-          create_list(:lettings_log, 3, :imported, startdate: Time.zone.local(2023, 9, 9), address_line1: nil, town_or_city: nil, needstype: 1, old_form_id: "form_2", owning_organisation: organisation, managing_organisation: organisation, created_by: organisation.users.first)
-          create_list(:lettings_log, 2, :imported, startdate: Time.zone.local(2023, 9, 9), address_line1: nil, needstype: 1, owning_organisation: organisation, managing_organisation: organisation, created_by: organisation.users.first)
+          create_list(:lettings_log, 3, :imported, startdate: Time.zone.local(2023, 9, 9), address_line1: nil, town_or_city: nil, needstype: 1, old_form_id: "form_2", owning_organisation: organisation, managing_organisation: organisation, created_by: data_provider)
+          create_list(:lettings_log, 2, :imported, startdate: Time.zone.local(2023, 9, 9), address_line1: nil, needstype: 1, owning_organisation: organisation, managing_organisation: organisation, created_by: data_provider)
         end
 
         it "does not enqueue the job with organisations that is missing less addresses than threshold amount" do
@@ -112,7 +84,7 @@ RSpec.describe "correct_addresses" do
 
         before do
           create(:user, :data_provider, organisation:, email: "data_provider1@example.com")
-          create_list(:lettings_log, 7, :imported, startdate: Time.zone.local(2023, 9, 9), address_line1: "exists", town_or_city: nil, needstype: 1, old_form_id: "form_1", owning_organisation: organisation, managing_organisation: organisation, created_by: organisation.users.first)
+          create_list(:lettings_log, 7, :imported, startdate: Time.zone.local(2023, 9, 9), address_line1: "exists", town_or_city: nil, needstype: 1, old_form_id: "form_1", owning_organisation: organisation, managing_organisation: organisation, created_by: data_coordinator)
         end
 
         it "enqueues the job with correct organisations" do
@@ -131,7 +103,7 @@ RSpec.describe "correct_addresses" do
         let!(:data_provider2) { create(:user, :data_provider, organisation:, email: "data_provider4@example.com") }
 
         before do
-          create_list(:lettings_log, 5, :imported, startdate: Time.zone.local(2023, 9, 9), address_line1: "exists", town_or_city: nil, needstype: 1, old_form_id: "form_2", owning_organisation: organisation, managing_organisation: organisation, created_by: organisation.users.first)
+          create_list(:lettings_log, 5, :imported, startdate: Time.zone.local(2023, 9, 9), address_line1: "exists", town_or_city: nil, needstype: 1, old_form_id: "form_2", owning_organisation: organisation, managing_organisation: organisation, created_by: data_provider)
         end
 
         it "enqueues the job with correct organisations" do
@@ -146,9 +118,11 @@ RSpec.describe "correct_addresses" do
       end
 
       context "when org has less than 5 missing town or city" do
+        let!(:data_provider) { create(:user, :data_provider, organisation:, email: "data_provider3@example.com") }
+
         before do
-          create_list(:lettings_log, 3, :imported, startdate: Time.zone.local(2023, 9, 9), address_line1: "address", town_or_city: nil, needstype: 1, old_form_id: "form_2", owning_organisation: organisation, managing_organisation: organisation, created_by: organisation.users.first)
-          create_list(:lettings_log, 2, :imported, startdate: Time.zone.local(2023, 9, 9), address_line1: "address", needstype: 1, owning_organisation: organisation, managing_organisation: organisation, created_by: organisation.users.first)
+          create_list(:lettings_log, 3, :imported, startdate: Time.zone.local(2023, 9, 9), address_line1: "address", town_or_city: nil, needstype: 1, old_form_id: "form_2", owning_organisation: organisation, managing_organisation: organisation, created_by: data_provider)
+          create_list(:lettings_log, 2, :imported, startdate: Time.zone.local(2023, 9, 9), address_line1: "address", needstype: 1, owning_organisation: organisation, managing_organisation: organisation, created_by: data_provider)
         end
 
         it "does not enqueue the job with organisations that is missing less town or city data than threshold amount" do
@@ -162,7 +136,7 @@ RSpec.describe "correct_addresses" do
 
         before do
           create(:user, :data_provider, organisation:, email: "data_provider1@example.com")
-          create_list(:lettings_log, 7, :imported, startdate: Time.zone.local(2023, 9, 9), uprn: "123", town_or_city: "Bristol", needstype: 1, owning_organisation: organisation, managing_organisation: organisation, created_by: organisation.users.first)
+          create_list(:lettings_log, 7, :imported, :setup_completed, startdate: Time.zone.local(2023, 9, 9), uprn_known: 1, uprn: "123", town_or_city: "Bristol", needstype: 1, owning_organisation: organisation, managing_organisation: organisation, created_by: data_coordinator)
         end
 
         it "enqueues the job with correct organisations" do
@@ -181,7 +155,7 @@ RSpec.describe "correct_addresses" do
         let!(:data_provider2) { create(:user, :data_provider, organisation:, email: "data_provider4@example.com") }
 
         before do
-          create_list(:lettings_log, 5, :imported, startdate: Time.zone.local(2023, 9, 9), uprn: "12", propcode: "12", needstype: 1, owning_organisation: organisation, managing_organisation: organisation, created_by: organisation.users.first)
+          create_list(:lettings_log, 5, :imported, :setup_completed, startdate: Time.zone.local(2023, 9, 9), uprn: "12", propcode: "12", needstype: 1, owning_organisation: organisation, managing_organisation: organisation, created_by: data_provider)
         end
 
         it "enqueues the job with correct organisations" do
@@ -200,8 +174,8 @@ RSpec.describe "correct_addresses" do
         let!(:data_provider2) { create(:user, :data_provider, organisation:, email: "data_provider4@example.com") }
 
         before do
-          create_list(:lettings_log, 3, :imported, startdate: Time.zone.local(2023, 9, 9), uprn: "123", town_or_city: "Bristol", needstype: 1, owning_organisation: organisation, managing_organisation: organisation, created_by: organisation.users.first)
-          create_list(:lettings_log, 2, :imported, startdate: Time.zone.local(2023, 9, 9), uprn: "12", tenancycode: "12", needstype: 1, owning_organisation: organisation, managing_organisation: organisation, created_by: organisation.users.first)
+          create_list(:lettings_log, 3, :imported, :setup_completed, startdate: Time.zone.local(2023, 9, 9), uprn: "123", town_or_city: "Bristol", needstype: 1, owning_organisation: organisation, managing_organisation: organisation, created_by: data_provider)
+          create_list(:lettings_log, 2, :imported, :setup_completed, startdate: Time.zone.local(2023, 9, 9), uprn: "12", tenancycode: "12", needstype: 1, owning_organisation: organisation, managing_organisation: organisation, created_by: data_provider)
         end
 
         it "enqueues the job with correct organisations" do
@@ -216,8 +190,10 @@ RSpec.describe "correct_addresses" do
       end
 
       context "when org is included in skip_uprn_issue_organisations list" do
+        let!(:data_provider) { create(:user, :data_provider, organisation:, email: "data_provider3@example.com") }
+
         before do
-          create_list(:lettings_log, 5, :imported, startdate: Time.zone.local(2023, 9, 9), uprn: "12", propcode: "12", needstype: 1, owning_organisation: organisation, managing_organisation: organisation, created_by: organisation.users.first)
+          create_list(:lettings_log, 5, :imported, startdate: Time.zone.local(2023, 9, 9), uprn: "12", propcode: "12", needstype: 1, owning_organisation: organisation, managing_organisation: organisation, created_by: data_provider)
         end
 
         it "does not enqueue the job" do
@@ -230,8 +206,8 @@ RSpec.describe "correct_addresses" do
         let!(:data_provider2) { create(:user, :data_provider, organisation:, email: "data_provider4@example.com") }
 
         before do
-          create_list(:lettings_log, 5, :imported, startdate: Time.zone.local(2023, 9, 9), address_line1: nil, town_or_city: nil, needstype: 1, old_form_id: "form_2", owning_organisation: organisation, managing_organisation: organisation, created_by: organisation.users.first)
-          create_list(:lettings_log, 5, :imported, startdate: Time.zone.local(2023, 9, 9), uprn: "12", propcode: "12", needstype: 1, owning_organisation: organisation, managing_organisation: organisation, created_by: organisation.users.first)
+          create_list(:lettings_log, 5, :imported, startdate: Time.zone.local(2023, 9, 9), address_line1: nil, town_or_city: nil, needstype: 1, old_form_id: "form_2", owning_organisation: organisation, managing_organisation: organisation, created_by: data_provider)
+          create_list(:lettings_log, 5, :imported, startdate: Time.zone.local(2023, 9, 9), uprn: "12", propcode: "12", needstype: 1, owning_organisation: organisation, managing_organisation: organisation, created_by: data_provider)
         end
 
         it "does not enqueue the job" do
@@ -244,7 +220,7 @@ RSpec.describe "correct_addresses" do
         let!(:data_provider2) { create(:user, :data_provider, organisation:, email: "data_provider4@example.com") }
 
         before do
-          create_list(:lettings_log, 5, :imported, startdate: Time.zone.local(2023, 9, 9), uprn: "12", propcode: "12", needstype: 1, owning_organisation: organisation, managing_organisation: organisation, created_by: organisation.users.first)
+          create_list(:lettings_log, 5, :imported, :setup_completed, startdate: Time.zone.local(2023, 9, 9), uprn: "12", propcode: "12", needstype: 1, owning_organisation: organisation, managing_organisation: organisation, created_by: data_provider)
         end
 
         it "does enqueues the job with correct skip_uprn_issue_organisations" do
@@ -262,36 +238,6 @@ RSpec.describe "correct_addresses" do
       Rake.application.rake_require("tasks/send_missing_addresses_csv")
       Rake::Task.define_task(:environment)
       task.reenable
-
-      body_1 = {
-        results: [
-          {
-            DPA: {
-              "POSTCODE": "BS1 1AD",
-              "POST_TOWN": "Bristol",
-              "ORGANISATION_NAME": "Some place",
-            },
-          },
-        ],
-      }.to_json
-
-      body_2 = {
-        results: [
-          {
-            DPA: {
-              "POSTCODE": "EC1N 2TD",
-              "POST_TOWN": "Newcastle",
-              "ORGANISATION_NAME": "Some place",
-            },
-          },
-        ],
-      }.to_json
-
-      stub_request(:get, "https://api.os.uk/search/places/v1/uprn?key=OS_DATA_KEY&uprn=123")
-      .to_return(status: 200, body: body_1, headers: {})
-
-      stub_request(:get, "https://api.os.uk/search/places/v1/uprn?key=OS_DATA_KEY&uprn=12")
-      .to_return(status: 200, body: body_2, headers: {})
     end
 
     context "when the rake task is run" do
@@ -307,7 +253,7 @@ RSpec.describe "correct_addresses" do
 
         before do
           create(:user, :data_provider, organisation:, email: "data_provider1@example.com")
-          create_list(:sales_log, 7, :completed, :imported, saledate: Time.zone.local(2023, 9, 9), address_line1: nil, town_or_city: nil, old_form_id: "form_1", owning_organisation: organisation, created_by: organisation.users.first)
+          create_list(:sales_log, 7, :completed, :imported, saledate: Time.zone.local(2023, 9, 9), address_line1: nil, town_or_city: nil, old_form_id: "form_1", owning_organisation: organisation, created_by: data_coordinator)
         end
 
         it "enqueues the job with correct organisations" do
@@ -326,7 +272,7 @@ RSpec.describe "correct_addresses" do
         let!(:data_provider2) { create(:user, :data_provider, organisation:, email: "data_provider4@example.com") }
 
         before do
-          create_list(:sales_log, 5, :completed, :imported, saledate: Time.zone.local(2023, 9, 9), address_line1: nil, town_or_city: nil, old_form_id: "form_2", owning_organisation: organisation, created_by: organisation.users.first)
+          create_list(:sales_log, 5, :completed, :imported, saledate: Time.zone.local(2023, 9, 9), address_line1: nil, town_or_city: nil, old_form_id: "form_2", owning_organisation: organisation, created_by: data_provider)
         end
 
         it "enqueues the job with correct organisations" do
@@ -341,9 +287,11 @@ RSpec.describe "correct_addresses" do
       end
 
       context "when org has less than 5 missing addresses" do
+        let!(:data_provider) { create(:user, :data_provider, organisation:, email: "data_provider3@example.com") }
+
         before do
-          create_list(:sales_log, 3, :completed, :imported, saledate: Time.zone.local(2023, 9, 9), address_line1: nil, town_or_city: nil, old_form_id: "form_2", owning_organisation: organisation, created_by: organisation.users.first)
-          create_list(:sales_log, 2, :completed, :imported, saledate: Time.zone.local(2023, 9, 9), address_line1: nil, owning_organisation: organisation, created_by: organisation.users.first)
+          create_list(:sales_log, 3, :completed, :imported, saledate: Time.zone.local(2023, 9, 9), address_line1: nil, town_or_city: nil, old_form_id: "form_2", owning_organisation: organisation, created_by: data_provider)
+          create_list(:sales_log, 2, :completed, :imported, saledate: Time.zone.local(2023, 9, 9), address_line1: nil, owning_organisation: organisation, created_by: data_provider)
         end
 
         it "does not enqueue the job with organisations that is missing less addresses than threshold amount" do
@@ -357,7 +305,7 @@ RSpec.describe "correct_addresses" do
 
         before do
           create(:user, :data_provider, organisation:, email: "data_provider1@example.com")
-          create_list(:sales_log, 7, :completed, :imported, saledate: Time.zone.local(2023, 9, 9), address_line1: "exists", town_or_city: nil, old_form_id: "form_1", owning_organisation: organisation, created_by: organisation.users.first)
+          create_list(:sales_log, 7, :completed, :imported, saledate: Time.zone.local(2023, 9, 9), address_line1: "exists", town_or_city: nil, old_form_id: "form_1", owning_organisation: organisation, created_by: data_coordinator)
         end
 
         it "enqueues the job with correct organisations" do
@@ -376,7 +324,7 @@ RSpec.describe "correct_addresses" do
         let!(:data_provider2) { create(:user, :data_provider, organisation:, email: "data_provider4@example.com") }
 
         before do
-          create_list(:sales_log, 5, :completed, :imported, saledate: Time.zone.local(2023, 9, 9), address_line1: "exists", town_or_city: nil, old_form_id: "form_2", owning_organisation: organisation, created_by: organisation.users.first)
+          create_list(:sales_log, 5, :completed, :imported, saledate: Time.zone.local(2023, 9, 9), address_line1: "exists", town_or_city: nil, old_form_id: "form_2", owning_organisation: organisation, created_by: data_provider)
         end
 
         it "enqueues the job with correct organisations" do
@@ -391,9 +339,11 @@ RSpec.describe "correct_addresses" do
       end
 
       context "when org has less than 5 missing town or city" do
+        let!(:data_provider) { create(:user, :data_provider, organisation:, email: "data_provider3@example.com") }
+
         before do
-          create_list(:sales_log, 3, :completed, :imported, saledate: Time.zone.local(2023, 9, 9), address_line1: "address", town_or_city: nil, old_form_id: "form_2", owning_organisation: organisation, created_by: organisation.users.first)
-          create_list(:sales_log, 2, :completed, :imported, saledate: Time.zone.local(2023, 9, 9), address_line1: "address", owning_organisation: organisation, created_by: organisation.users.first)
+          create_list(:sales_log, 3, :completed, :imported, saledate: Time.zone.local(2023, 9, 9), address_line1: "address", town_or_city: nil, old_form_id: "form_2", owning_organisation: organisation, created_by: data_provider)
+          create_list(:sales_log, 2, :completed, :imported, saledate: Time.zone.local(2023, 9, 9), address_line1: "address", owning_organisation: organisation, created_by: data_provider)
         end
 
         it "does not enqueue the job with organisations that is missing less town or city data than threshold amount" do
@@ -407,7 +357,7 @@ RSpec.describe "correct_addresses" do
 
         before do
           create(:user, :data_provider, organisation:, email: "data_provider1@example.com")
-          create_list(:sales_log, 7, :completed, :imported, saledate: Time.zone.local(2023, 9, 9), uprn_known: 1, uprn: "123", town_or_city: "Bristol", owning_organisation: organisation, created_by: organisation.users.first)
+          create_list(:sales_log, 7, :completed, :imported, saledate: Time.zone.local(2023, 9, 9), uprn_known: 1, uprn: "123", town_or_city: "Bristol", owning_organisation: organisation, created_by: data_coordinator)
         end
 
         it "enqueues the job with correct organisations" do
@@ -426,7 +376,7 @@ RSpec.describe "correct_addresses" do
         let!(:data_provider2) { create(:user, :data_provider, organisation:, email: "data_provider4@example.com") }
 
         before do
-          create_list(:sales_log, 5, :completed, :imported, saledate: Time.zone.local(2023, 9, 9), uprn_known: 1, uprn: "12", purchid: "12", owning_organisation: organisation, created_by: organisation.users.first)
+          create_list(:sales_log, 5, :completed, :imported, saledate: Time.zone.local(2023, 9, 9), uprn_known: 1, uprn: "12", purchid: "12", owning_organisation: organisation, created_by: data_provider)
         end
 
         it "enqueues the job with correct organisations" do
@@ -445,8 +395,8 @@ RSpec.describe "correct_addresses" do
         let!(:data_provider2) { create(:user, :data_provider, organisation:, email: "data_provider4@example.com") }
 
         before do
-          create_list(:sales_log, 3, :completed, :imported, saledate: Time.zone.local(2023, 9, 9), uprn_known: 1, uprn: "123", town_or_city: "Bristol", owning_organisation: organisation, created_by: organisation.users.first)
-          create_list(:sales_log, 2, :completed, :imported, saledate: Time.zone.local(2023, 9, 9), uprn_known: 1, uprn: "12", purchid: "12", owning_organisation: organisation, created_by: organisation.users.first)
+          create_list(:sales_log, 3, :completed, :imported, saledate: Time.zone.local(2023, 9, 9), uprn_known: 1, uprn: "123", town_or_city: "Bristol", owning_organisation: organisation, created_by: data_provider)
+          create_list(:sales_log, 2, :completed, :imported, saledate: Time.zone.local(2023, 9, 9), uprn_known: 1, uprn: "12", purchid: "12", owning_organisation: organisation, created_by: data_provider)
         end
 
         it "enqueues the job with correct organisations" do
@@ -461,8 +411,10 @@ RSpec.describe "correct_addresses" do
       end
 
       context "when org is included in skip_uprn_issue_organisations list" do
+        let!(:data_provider) { create(:user, :data_provider, organisation:, email: "data_provider3@example.com") }
+
         before do
-          create_list(:sales_log, 5, :completed, :imported, saledate: Time.zone.local(2023, 9, 9), uprn_known: 1, uprn: "12", purchid: "12", owning_organisation: organisation, created_by: organisation.users.first)
+          create_list(:sales_log, 5, :completed, :imported, saledate: Time.zone.local(2023, 9, 9), uprn_known: 1, uprn: "12", purchid: "12", owning_organisation: organisation, created_by: data_provider)
         end
 
         it "does not enqueue the job" do
@@ -475,7 +427,7 @@ RSpec.describe "correct_addresses" do
         let!(:data_provider2) { create(:user, :data_provider, organisation:, email: "data_provider4@example.com") }
 
         before do
-          create_list(:sales_log, 5, :completed, :imported, saledate: Time.zone.local(2023, 9, 9), uprn_known: 1, uprn: "12", purchid: "12", owning_organisation: organisation, created_by: organisation.users.first)
+          create_list(:sales_log, 5, :completed, :imported, saledate: Time.zone.local(2023, 9, 9), uprn_known: 1, uprn: "12", purchid: "12", owning_organisation: organisation, created_by: data_provider)
         end
 
         it "does enqueues the job with correct skip_uprn_issue_organisations" do

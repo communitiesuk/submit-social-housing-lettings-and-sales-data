@@ -19,6 +19,70 @@ module RequestHelper
       .to_return(status: 200, body: "", headers: {})
     WebMock.stub_request(:post, /api.notifications.service.gov.uk\/v2\/notifications\/sms/)
       .to_return(status: 200, body: "", headers: {})
+
+    body = {
+      results: [
+        {
+          DPA: {
+            "POSTCODE": "AA1 1AA",
+            "POST_TOWN": "Test Town",
+            "ORGANISATION_NAME": "1, Test Street",
+          },
+        },
+      ],
+    }.to_json
+
+    WebMock.stub_request(:get, "https://api.os.uk/search/places/v1/uprn?key=OS_DATA_KEY&uprn=1")
+    .to_return(status: 200, body:, headers: {})
+
+    body = {
+      results: [
+        {
+          DPA: {
+            "POSTCODE": "LS16 6FT",
+            "POST_TOWN": "Westminster",
+            "PO_BOX_NUMBER": "Wrong Address Line1",
+            "DOUBLE_DEPENDENT_LOCALITY": "Double Dependent Locality",
+          },
+        },
+      ],
+    }.to_json
+
+    WebMock.stub_request(:get, "https://api.os.uk/search/places/v1/uprn?key&uprn=121")
+     .to_return(status: 200, body:, headers: {})
+
+    body = {
+      results: [
+        {
+          DPA: {
+            "POSTCODE": "BS1 1AD",
+            "POST_TOWN": "Bristol",
+            "ORGANISATION_NAME": "Some place",
+          },
+        },
+      ],
+    }.to_json
+
+    WebMock.stub_request(:get, "https://api.os.uk/search/places/v1/uprn?key=OS_DATA_KEY&uprn=123")
+    .to_return(status: 200, body:, headers: {})
+
+    body = {
+      results: [
+        {
+          DPA: {
+            "POSTCODE": "EC1N 2TD",
+            "POST_TOWN": "Newcastle",
+            "ORGANISATION_NAME": "Some place",
+          },
+        },
+      ],
+    }.to_json
+
+    WebMock.stub_request(:get, "https://api.os.uk/search/places/v1/uprn?key=OS_DATA_KEY&uprn=12")
+    .to_return(status: 200, body:, headers: {})
+
+    WebMock.stub_request(:get, "https://api.os.uk/search/places/v1/uprn?key=OS_DATA_KEY&uprn=1234567890123")
+    .to_return(status: 404, body: "", headers: {})
   end
 
   def self.real_http_requests

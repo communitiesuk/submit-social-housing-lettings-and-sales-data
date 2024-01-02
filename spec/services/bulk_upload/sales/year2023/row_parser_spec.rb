@@ -41,7 +41,7 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
       field_16: "2",
       field_17: "1",
       field_18: "1",
-      field_19: "100023336956",
+      field_19: "12",
       field_24: "CR0",
       field_25: "4BB",
       field_26: "E09000008",
@@ -186,43 +186,6 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
     before do
       stub_request(:get, /api.postcodes.io/)
       .to_return(status: 200, body: "{\"status\":200,\"result\":{\"admin_district\":\"Manchester\", \"codes\":{\"admin_district\": \"E08000003\"}}}", headers: {})
-
-      body = {
-        results: [
-          {
-            DPA: {
-              "POSTCODE": "EC1N 2TD",
-              "POST_TOWN": "Newcastle",
-              "ORGANISATION_NAME": "Some place",
-            },
-          },
-        ],
-      }.to_json
-
-      stub_request(:get, "https://api.os.uk/search/places/v1/uprn?key=OS_DATA_KEY&uprn=100023336956")
-        .to_return(status: 200, body:, headers: {})
-
-      body = {
-        header: {
-          uri: "https://api.os.uk/search/places/v1/uprn?uprn=2",
-          query: "uprn=2",
-          offset: 0,
-          totalresults: 0,
-          format: "JSON",
-          dataset: "DPA",
-          lr: "EN,CY",
-          maxresults: 100,
-          epoch: "101",
-          lastupdate: "2023-05-11",
-          output_srs: "EPSG:27700",
-        },
-      }.to_json
-
-      stub_request(:get, "https://api.os.uk/search/places/v1/uprn?key=OS_DATA_KEY&uprn=2")
-        .to_return(status: 200, body:, headers: {})
-
-      stub_request(:get, "https://api.os.uk/search/places/v1/uprn?key=OS_DATA_KEY&uprn=3")
-        .to_return(status: 404, body:, headers: {})
 
       parser.valid?
     end
@@ -744,14 +707,14 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
 
     describe "#field_19" do # UPRN
       context "when UPRN known and lookup found" do
-        let(:attributes) { setup_section_params.merge({ field_19: "100023336956" }) }
+        let(:attributes) { setup_section_params.merge({ field_19: "12" }) }
 
         it "is valid" do
           expect(parser.errors[:field_19]).to be_blank
         end
 
         it "sets UPRN and UPRN known" do
-          expect(parser.log.uprn).to eq("100023336956")
+          expect(parser.log.uprn).to eq("12")
           expect(parser.log.uprn_known).to eq(1)
           expect(parser.log.uprn_confirmed).to eq(1)
         end
@@ -774,7 +737,7 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
       end
 
       context "when UPRN entered but no lookup found" do
-        let(:attributes) { setup_section_params.merge({ field_19: "2" }) }
+        let(:attributes) { setup_section_params.merge({ field_19: "1234567890123" }) }
 
         it "is not valid" do
           expect(parser.errors[:field_19]).to be_present
@@ -789,7 +752,7 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
       describe "##{data[:field]} (#{data[:name]})" do
         context "when UPRN present" do
           context "when UPRN valid" do
-            let(:attributes) { setup_section_params.merge({ field_19: "100023336956", data[:field] => nil }) }
+            let(:attributes) { setup_section_params.merge({ field_19: "12", data[:field] => nil }) }
 
             it "can be blank" do
               expect(parser.errors[data[:field]]).to be_blank
@@ -797,7 +760,7 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
           end
 
           context "when UPRN invalid" do
-            let(:attributes) { setup_section_params.merge({ field_19: "3", data[:field] => nil }) }
+            let(:attributes) { setup_section_params.merge({ field_19: "1234567890123", data[:field] => nil }) }
 
             it "cannot be blank" do
               expect(parser.errors[data[:field]]).to be_present
@@ -949,16 +912,16 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
 
   describe "#log" do
     describe "#uprn" do
-      let(:attributes) { setup_section_params.merge({ field_19: "100023336956" }) }
+      let(:attributes) { setup_section_params.merge({ field_19: "12" }) }
 
       it "is correctly set" do
-        expect(parser.log.uprn).to eql("100023336956")
+        expect(parser.log.uprn).to eql("12")
       end
     end
 
     describe "#uprn_known" do
       context "when uprn known" do
-        let(:attributes) { setup_section_params.merge({ field_19: "100023336956" }) }
+        let(:attributes) { setup_section_params.merge({ field_19: "12" }) }
 
         it "is correctly set" do
           expect(parser.log.uprn_known).to be(1)

@@ -56,6 +56,7 @@ RSpec.describe Form::Lettings::Questions::Uprn, type: :model do
       let(:log) do
         create(
           :lettings_log,
+          :completed,
           address_line1: "1, Test Street",
           town_or_city: "Test Town",
           county: "Test County",
@@ -77,11 +78,11 @@ RSpec.describe Form::Lettings::Questions::Uprn, type: :model do
 
       context "when uprn known" do
         let(:uprn_known) { 1 }
-        let(:uprn) { 123_456_789 }
+        let(:uprn) { 1 }
 
         it "returns formatted value" do
           expect(question.get_extra_check_answer_value(log)).to eq(
-            "\n\n1, Test Street\nTest Town\nTest County\nAA1 1AA\nWestminster",
+            "\n\n1, Test Street\nTest Town\nAA1 1AA\nWestminster",
           )
         end
       end

@@ -50,12 +50,12 @@ RSpec.describe Form::Lettings::Questions::UprnConfirmation, type: :model do
 
     context "when address is present" do
       it "returns formatted value" do
-        log = create(:lettings_log, address_line1: "1, Test Street", town_or_city: "Test Town", county: "Test County", postcode_full: "AA1 1AA", uprn: "1234", uprn_known: 1)
+        log = create(:lettings_log, :setup_completed, address_line1: "1, Test Street", town_or_city: "Test Town", postcode_full: "AA1 1AA", uprn: "1", uprn_known: 1)
 
         expect(question.notification_banner(log)).to eq(
           {
-            heading: "1, Test Street\nAA1 1AA\nTest Town\nTest County",
-            title: "UPRN: 1234",
+            heading: "1, Test Street\nAA1 1AA\nTest Town",
+            title: "UPRN: 1",
           },
         )
       end
@@ -72,7 +72,7 @@ RSpec.describe Form::Lettings::Questions::UprnConfirmation, type: :model do
     end
 
     context "when uprn_known == 1 && uprn_confirmed == nil" do
-      let(:log) { create(:lettings_log, uprn_known: 1, uprn_confirmed: nil) }
+      let(:log) { create(:lettings_log, :completed, uprn_known: 1, uprn: 1, uprn_confirmed: nil) }
 
       it "returns false" do
         expect(question.hidden_in_check_answers?(log)).to eq(false)
