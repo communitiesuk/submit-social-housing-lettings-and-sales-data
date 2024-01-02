@@ -85,9 +85,9 @@ RSpec.describe CollectionTimeHelper do
     context "when called with nil" do
       let(:input) { nil }
 
-      it "returns the current date" do
-        today = Time.zone.today
-        expect(result).to eq("#{today.day} #{today.month} #{today.year}")
+      it "returns the 13th of September in the current collection year" do
+        year = current_collection_start_year
+        expect(result).to eq("13 9 #{year}")
       end
     end
 
@@ -95,8 +95,8 @@ RSpec.describe CollectionTimeHelper do
       calendar_year = 2030
       let(:input) { Date.new(calendar_year, 7, 7) }
 
-      it "returns the first of September from that year" do
-        expect(result).to eq("1 9 #{calendar_year}")
+      it "returns the 13th of September from that year" do
+        expect(result).to eq("13 9 #{calendar_year}")
       end
     end
 
@@ -104,8 +104,8 @@ RSpec.describe CollectionTimeHelper do
       calendar_year = 2040
       let(:input) { Date.new(calendar_year, 2, 7) }
 
-      it "returns the first of September from the previous year" do
-        expect(result).to eq("1 9 #{calendar_year - 1}")
+      it "returns the 13th of September from the previous year" do
+        expect(result).to eq("13 9 #{calendar_year - 1}")
       end
     end
   end
