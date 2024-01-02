@@ -12,7 +12,7 @@ RSpec.describe "Start Page Features" do
 
     it "takes you to logs" do
       visit("/")
-      expect(page).to have_current_path("/lettings-logs")
+      expect(page).to have_current_path("/")
     end
   end
 

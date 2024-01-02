@@ -1,7 +1,7 @@
 class StartController < ApplicationController
   def index
     if current_user
-      redirect_to(lettings_logs_path)
+      render "home/index"
     end
   end
 

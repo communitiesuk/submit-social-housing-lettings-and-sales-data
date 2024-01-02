@@ -12,6 +12,7 @@ RSpec.describe NavigationItemsHelper do
 
         let(:expected_navigation_items) do
           [
+            NavigationItemsHelper::NavigationItem.new("Home", "/", false),
             NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", true),
             NavigationItemsHelper::NavigationItem.new("Sales logs", "/sales-logs", false),
             NavigationItemsHelper::NavigationItem.new("Users", "/organisations/#{current_user.organisation.id}/users", false),
@@ -34,6 +35,7 @@ RSpec.describe NavigationItemsHelper do
           let(:stock_owner) { create(:organisation) }
           let(:expected_navigation_items) do
             [
+              NavigationItemsHelper::NavigationItem.new("Home", "/", false),
               NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", true),
               NavigationItemsHelper::NavigationItem.new("Sales logs", "/sales-logs", false),
               NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
@@ -53,6 +55,7 @@ RSpec.describe NavigationItemsHelper do
       context "when the user is on the lettings logs page" do
         let(:expected_navigation_items) do
           [
+            NavigationItemsHelper::NavigationItem.new("Home", "/", false),
             NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", true),
             NavigationItemsHelper::NavigationItem.new("Sales logs", "/sales-logs", false),
             NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
@@ -71,6 +74,7 @@ RSpec.describe NavigationItemsHelper do
       context "when the user is on the sales logs page" do
         let(:expected_navigation_items) do
           [
+            NavigationItemsHelper::NavigationItem.new("Home", "/", false),
             NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
             NavigationItemsHelper::NavigationItem.new("Sales logs", "/sales-logs", true),
             NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
@@ -89,6 +93,7 @@ RSpec.describe NavigationItemsHelper do
       context "when the user is on the users page" do
         let(:expected_navigation_items) do
           [
+            NavigationItemsHelper::NavigationItem.new("Home", "/", false),
             NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
             NavigationItemsHelper::NavigationItem.new("Sales logs", "/sales-logs", false),
             NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
@@ -107,6 +112,7 @@ RSpec.describe NavigationItemsHelper do
       context "when the user is on their organisation details page" do
         let(:expected_navigation_items) do
           [
+            NavigationItemsHelper::NavigationItem.new("Home", "/", false),
             NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
             NavigationItemsHelper::NavigationItem.new("Sales logs", "/sales-logs", false),
             NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
@@ -125,6 +131,7 @@ RSpec.describe NavigationItemsHelper do
       context "when the user is on the account page" do
         let(:expected_navigation_items) do
           [
+            NavigationItemsHelper::NavigationItem.new("Home", "/", false),
             NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
             NavigationItemsHelper::NavigationItem.new("Sales logs", "/sales-logs", false),
             NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
@@ -143,6 +150,7 @@ RSpec.describe NavigationItemsHelper do
       context "when the user is on the individual user's page" do
         let(:expected_navigation_items) do
           [
+            NavigationItemsHelper::NavigationItem.new("Home", "/", false),
             NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
             NavigationItemsHelper::NavigationItem.new("Sales logs", "/sales-logs", false),
             NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
@@ -161,6 +169,7 @@ RSpec.describe NavigationItemsHelper do
       context "when the user is on the individual scheme's page" do
         let(:expected_navigation_items) do
           [
+            NavigationItemsHelper::NavigationItem.new("Home", "/", false),
             NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
             NavigationItemsHelper::NavigationItem.new("Sales logs", "/sales-logs", false),
             NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", true),
@@ -191,6 +200,7 @@ RSpec.describe NavigationItemsHelper do
 
         let(:expected_navigation_items) do
           [
+            NavigationItemsHelper::NavigationItem.new("Home", "/", false),
             NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", true),
             NavigationItemsHelper::NavigationItem.new("Sales logs", "/sales-logs", false),
             NavigationItemsHelper::NavigationItem.new("Users", "/organisations/#{current_user.organisation.id}/users", false),
@@ -213,6 +223,7 @@ RSpec.describe NavigationItemsHelper do
           let(:stock_owner) { create(:organisation) }
           let(:expected_navigation_items) do
             [
+              NavigationItemsHelper::NavigationItem.new("Home", "/", false),
               NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", true),
               NavigationItemsHelper::NavigationItem.new("Sales logs", "/sales-logs", false),
               NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
@@ -236,6 +247,7 @@ RSpec.describe NavigationItemsHelper do
       context "when the user is on the lettings logs page" do
         let(:expected_navigation_items) do
           [
+            NavigationItemsHelper::NavigationItem.new("Home", "/", false),
             NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", false),
             NavigationItemsHelper::NavigationItem.new("Users", "/users", false),
             NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", true),
@@ -252,6 +264,7 @@ RSpec.describe NavigationItemsHelper do
       context "when the user is on the sales logs page" do
         let(:expected_navigation_items) do
           [
+            NavigationItemsHelper::NavigationItem.new("Home", "/", false),
             NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", false),
             NavigationItemsHelper::NavigationItem.new("Users", "/users", false),
             NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
@@ -268,6 +281,7 @@ RSpec.describe NavigationItemsHelper do
       context "when the user is on the users page" do
         let(:expected_navigation_items) do
           [
+            NavigationItemsHelper::NavigationItem.new("Home", "/", false),
             NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", false),
             NavigationItemsHelper::NavigationItem.new("Users", "/users", true),
             NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
@@ -284,6 +298,7 @@ RSpec.describe NavigationItemsHelper do
       context "when the user is on the account page" do
         let(:expected_navigation_items) do
           [
+            NavigationItemsHelper::NavigationItem.new("Home", "/", false),
             NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", false),
             NavigationItemsHelper::NavigationItem.new("Users", "/users", false),
             NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
@@ -300,6 +315,7 @@ RSpec.describe NavigationItemsHelper do
       context "when the user is on the Schemes page" do
         let(:expected_navigation_items) do
           [
+            NavigationItemsHelper::NavigationItem.new("Home", "/", false),
             NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", false),
             NavigationItemsHelper::NavigationItem.new("Users", "/users", false),
             NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
@@ -316,6 +332,7 @@ RSpec.describe NavigationItemsHelper do
       context "when the user is on the individual user's page" do
         let(:expected_navigation_items) do
           [
+            NavigationItemsHelper::NavigationItem.new("Home", "/", false),
             NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", false),
             NavigationItemsHelper::NavigationItem.new("Users", "/users", true),
             NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
@@ -332,6 +349,7 @@ RSpec.describe NavigationItemsHelper do
       context "when the user is on the individual scheme's page" do
         let(:expected_navigation_items) do
           [
+            NavigationItemsHelper::NavigationItem.new("Home", "/", false),
             NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", false),
             NavigationItemsHelper::NavigationItem.new("Users", "/users", false),
             NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
@@ -356,6 +374,7 @@ RSpec.describe NavigationItemsHelper do
       context "when the user is on the scheme locations page" do
         let(:expected_navigation_items) do
           [
+            NavigationItemsHelper::NavigationItem.new("Home", "/", false),
             NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", false),
             NavigationItemsHelper::NavigationItem.new("Users", "/users", false),
             NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
@@ -382,6 +401,7 @@ RSpec.describe NavigationItemsHelper do
           let(:required_sub_path) { "lettings-logs" }
           let(:expected_navigation_items) do
             [
+              NavigationItemsHelper::NavigationItem.new("Home", "/", false),
               NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", true),
               NavigationItemsHelper::NavigationItem.new("Users", "/users", false),
               NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
@@ -412,6 +432,7 @@ RSpec.describe NavigationItemsHelper do
           let(:required_sub_path) { "users" }
           let(:expected_navigation_items) do
             [
+              NavigationItemsHelper::NavigationItem.new("Home", "/", false),
               NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", true),
               NavigationItemsHelper::NavigationItem.new("Users", "/users", false),
               NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
@@ -442,6 +463,7 @@ RSpec.describe NavigationItemsHelper do
           let(:required_sub_path) { "schemes" }
           let(:expected_navigation_items) do
             [
+              NavigationItemsHelper::NavigationItem.new("Home", "/", false),
               NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", true),
               NavigationItemsHelper::NavigationItem.new("Users", "/users", false),
               NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
@@ -472,6 +494,7 @@ RSpec.describe NavigationItemsHelper do
           let(:required_sub_path) { "details" }
           let(:expected_navigation_items) do
             [
+              NavigationItemsHelper::NavigationItem.new("Home", "/", false),
               NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", true),
               NavigationItemsHelper::NavigationItem.new("Users", "/users", false),
               NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
