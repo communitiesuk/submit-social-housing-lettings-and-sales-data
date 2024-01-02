@@ -513,7 +513,7 @@ class BulkUpload::Sales::Year2023::RowParser
 
         question = log.form.get_question(error.attribute, log)
 
-        if setup_question?(question)
+        if question.present? && setup_question?(question)
           errors.add(field, error.message, category: :setup)
         else
           errors.add(field, error.message)
