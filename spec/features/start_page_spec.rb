@@ -10,21 +10,23 @@ RSpec.describe "Start Page Features" do
       sign_in user
     end
 
-    it "takes you to logs" do
+    it "takes you to the home page" do
       visit("/")
       expect(page).to have_current_path("/")
+      expect(page).to have_content("Welcome back")
     end
   end
 
   context "when the user is not signed in" do
-    it "takes you to sign in and then to logs" do
+    it "takes you to sign in and then to the home page" do
       visit("/")
       click_link("Start now")
       expect(page).to have_current_path("/account/sign-in?start=true")
       fill_in("user[email]", with: user.email)
       fill_in("user[password]", with: user.password)
       click_button("Sign in")
-      expect(page).to have_current_path("/lettings-logs")
+      expect(page).to have_current_path("/")
+      expect(page).to have_content("Welcome back")
     end
   end
 end
