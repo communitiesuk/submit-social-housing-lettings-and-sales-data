@@ -789,23 +789,42 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
     end
 
     [
-      %w[age1_known age1 field_30],
-      %w[age2_known age2 field_38],
-      %w[age3_known age3 field_47],
-      %w[age4_known age4 field_51],
-      %w[age5_known age5 field_55],
-      %w[age6_known age6 field_59],
-    ].each do |known, age, field|
+      %w[age1_known details_known_1 age1 field_30 field_37 field_39],
+      %w[age2_known details_known_2 age2 field_38 field_37 field_39],
+      %w[age3_known details_known_3 age3 field_47 field_46 field_48],
+      %w[age4_known details_known_4 age4 field_51 field_50 field_52],
+      %w[age5_known details_known_5 age5 field_55 field_54 field_56],
+      %w[age6_known details_known_6 age6 field_59 field_58 field_60],
+    ].each do |known, details_known, age, field, relationship, gender|
       describe "##{known} and ##{age}" do
         context "when #{field} is blank" do
-          let(:attributes) { { bulk_upload:, field.to_s => nil } }
+          context "and person details are blank" do
+            let(:attributes) { setup_section_params.merge({ field.to_s => nil, relationship.to_sym => nil, gender.to_sym => nil, field_29: "1", field_45: "5" }) }
 
-          it "sets ##{known} 1" do
-            expect(parser.log.public_send(known)).to be(1)
+            it "does not set ##{known}" do
+              unless known == "age1_known"
+                expect(parser.log.public_send(known)).to be_nil
+              end
+            end
+
+            it "sets ##{details_known} to no" do
+              unless details_known == "details_known_1"
+                expect(parser.log.public_send(details_known)).to eq(2)
+              end
+            end
+
+            it "sets ##{age} to nil" do
+              expect(parser.log.public_send(age)).to be_nil
+            end
           end
 
-          it "sets ##{age} to nil" do
-            expect(parser.log.public_send(age)).to be_nil
+          context "and person details are given" do
+            let(:attributes) { setup_section_params.merge({ field.to_sym => nil, relationship.to_sym => "C", gender.to_sym => "X", field_29: "1", field_45: "5" }) }
+
+            it "does not set ##{age}" do
+              parser.valid?
+              expect(parser.errors[field.to_sym]).to include(/You must answer/)
+            end
           end
         end
 

@@ -788,22 +788,22 @@ private
     attributes["noint"] = 2 if field_28 == 1
 
     attributes["age1_known"] = age1_known?
-    attributes["age1"] = field_30 if attributes["age1_known"].zero? && field_30&.match(/\A\d{1,3}\z|\AR\z/)
+    attributes["age1"] = field_30 if attributes["age1_known"]&.zero? && field_30&.match(/\A\d{1,3}\z|\AR\z/)
 
     attributes["age2_known"] = age2_known?
-    attributes["age2"] = field_38 if attributes["age2_known"].zero? && field_38&.match(/\A\d{1,3}\z|\AR\z/)
+    attributes["age2"] = field_38 if attributes["age2_known"]&.zero? && field_38&.match(/\A\d{1,3}\z|\AR\z/)
 
     attributes["age3_known"] = age3_known?
-    attributes["age3"] = field_47 if attributes["age3_known"].zero? && field_47&.match(/\A\d{1,3}\z|\AR\z/)
+    attributes["age3"] = field_47 if attributes["age3_known"]&.zero? && field_47&.match(/\A\d{1,3}\z|\AR\z/)
 
     attributes["age4_known"] = age4_known?
-    attributes["age4"] = field_51 if attributes["age4_known"].zero? && field_51&.match(/\A\d{1,3}\z|\AR\z/)
+    attributes["age4"] = field_51 if attributes["age4_known"]&.zero? && field_51&.match(/\A\d{1,3}\z|\AR\z/)
 
     attributes["age5_known"] = age5_known?
-    attributes["age5"] = field_55 if attributes["age5_known"].zero? && field_55&.match(/\A\d{1,3}\z|\AR\z/)
+    attributes["age5"] = field_55 if attributes["age5_known"]&.zero? && field_55&.match(/\A\d{1,3}\z|\AR\z/)
 
     attributes["age6_known"] = age6_known?
-    attributes["age6"] = field_59 if attributes["age6_known"].zero? && field_59&.match(/\A\d{1,3}\z|\AR\z/)
+    attributes["age6"] = field_59 if attributes["age6_known"]&.zero? && field_59&.match(/\A\d{1,3}\z|\AR\z/)
 
     attributes["sex1"] = field_31
     attributes["sex2"] = field_39
@@ -973,7 +973,6 @@ private
 
   def age1_known?
     return 1 if field_30 == "R"
-    return 1 if field_30.blank?
 
     0
   end
@@ -988,9 +987,6 @@ private
     define_method("age#{hash[:person]}_known?") do
       return 1 if public_send(hash[:field]) == "R"
       return 0 if send("person_#{hash[:person]}_present?")
-      return 1 if public_send(hash[:field]).blank?
-
-      0
     end
   end
 
