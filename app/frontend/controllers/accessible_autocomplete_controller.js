@@ -32,5 +32,12 @@ export default class extends Controller {
         if (selectedOption) selectedOption.selected = true
       }
     })
+
+    const parentElement = selectEl.parentElement
+    const inputElement = parentElement.querySelector('[role=combobox]')
+
+    inputElement.addEventListener('input', () => {
+      selectOptions.forEach((option) => { option.selected = false })
+    })
   }
 }
