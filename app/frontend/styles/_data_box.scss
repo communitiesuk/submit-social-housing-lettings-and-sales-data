@@ -1,0 +1,25 @@
+.app-data-box__pair {
+  @include govuk-font($size: 19);
+  font-weight: bold;
+}
+
+.app-data-box__upper {
+  @include govuk-responsive-margin(4, "right");
+  @include govuk-responsive-margin(2, "bottom");
+  @include govuk-responsive-padding(4);
+
+  background-color: govuk-colour("light-grey");
+  color: govuk-colour("blue");
+}
+
+.app-data-box__lower {
+  @include govuk-responsive-margin(4, "right");
+  @include govuk-responsive-padding(4);
+
+  background-color: govuk-colour("blue");
+}
+
+.app-data-box__count {
+  font-size: 48px;
+  color: govuk-colour("blue");
+}

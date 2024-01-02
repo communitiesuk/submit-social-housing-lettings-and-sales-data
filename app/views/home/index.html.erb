@@ -1,1 +1,28 @@
-<p class="govuk-body-l"><%= "Welcome back, #{@current_user.name}" %></p>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <div class="govuk-!-margin-bottom-7">
+      <span class="govuk-body-l"><%= "Welcome back, #{@current_user.name}" %></span>
+      <h1 class="govuk-heading-l"><%= heading_for_user_role(@current_user) %></h1>
+    </div>
+    <div class="govuk-grid-row">
+      <% if @current_user.support? %>
+        <div class="govuk-grid-column-one-third">
+          <span><%= render partial: "home/data_box", locals: {type: "lettings"} %></span>
+        </div>
+        <div class="govuk-grid-column-one-third">
+          <span><%= render partial: "home/data_box", locals: {type: "sales"} %></span>
+        </div>
+        <div class="govuk-grid-column-one-third">
+          <span><%= render partial: "home/data_box", locals: {type: "schemes"} %></span>
+        </div>
+      <% else %>
+        <div class="govuk-grid-column-one-half">
+          <span><%= render partial: "home/data_box", locals: {type: "lettings"} %></span>
+        </div>
+        <div class="govuk-grid-column-one-half">
+          <span><%= render partial: "home/data_box", locals: {type: "sales"} %></span>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
