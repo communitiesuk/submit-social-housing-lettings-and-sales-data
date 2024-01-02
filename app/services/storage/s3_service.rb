@@ -2,10 +2,10 @@ module Storage
   class S3Service < StorageService
     attr_reader :configuration
 
-    def initialize(config_service, paas_instance_name)
+    def initialize(config_service, instance_name)
       super()
       @config_service = config_service
-      @instance_name = (paas_instance_name || "").to_sym
+      @instance_name = (instance_name || "").to_sym
       @configuration = create_configuration
       @client = create_client
     end
@@ -43,7 +43,7 @@ module Storage
 
     def create_configuration
       unless @config_service.s3_config_present?
-        raise "No S3 bucket is present in the PaaS configuration"
+        raise "No S3 bucket is present in the configuration"
       end
       unless @config_service.s3_buckets.key?(@instance_name)
         raise "#{@instance_name} instance name could not be found"
@@ -54,14 +54,7 @@ module Storage
     end
 
     def create_client
-      credentials = if PlatformHelper.is_paas?
-                      Aws::Credentials.new(
-                        @configuration.access_key_id,
-                        @configuration.secret_access_key,
-                      )
-                    else
-                      Aws::ECSCredentials.new
-                    end
+      credentials = Aws::ECSCredentials.new
       Aws::S3::Client.new(
         region: @configuration.region,
         credentials:,

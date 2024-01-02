@@ -49,10 +49,7 @@ module Forms
 
       def storage_service
         @storage_service ||= if FeatureToggle.upload_enabled?
-                               Storage::S3Service.new(
-                                 PlatformHelper.is_paas? ? Configuration::PaasConfigurationService.new : Configuration::EnvConfigurationService.new,
-                                 ENV["CSV_DOWNLOAD_PAAS_INSTANCE"],
-                               )
+                               Storage::S3Service.new(Configuration::EnvConfigurationService.new, ENV["CSV_DOWNLOAD_PAAS_INSTANCE"])
                              else
                                Storage::LocalDiskService.new
                              end

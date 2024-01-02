@@ -3,41 +3,37 @@ require "rails_helper"
 RSpec.describe Storage::S3Service do
   let(:instance_name) { "instance_1" }
   let(:bucket_name) { "bucket_1" }
-  let(:vcap_services) do
-    <<-JSON
-        {"aws-s3-bucket": [
-          {
-            "instance_name": "#{instance_name}",
-            "credentials": {
-              "aws_access_key_id": "key_id",
-              "aws_region": "eu-west-2",
-              "aws_secret_access_key": "secret",
-              "bucket_name": "#{bucket_name}"
-            }
-          }
-        ]}
-    JSON
+  let(:env_config_service) { instance_double(Configuration::EnvConfigurationService) }
+  let(:aws_credentials) { instance_double(Aws::ECSCredentials) }
+
+  before do
+    allow(env_config_service).to receive(:s3_config_present?).and_return(true)
+    allow(Aws::ECSCredentials).to receive(:new).and_return(aws_credentials)
+    allow(env_config_service).to receive(:s3_buckets).and_return({ "instance_1": { "credentials": {
+      "aws_access_key_id": "key_id",
+      "aws_region": "eu-west-2",
+      "aws_secret_access_key": "secret",
+      "bucket_name": bucket_name.to_s,
+    } } })
   end
 
-  context "when we create a storage service with no PaaS Configuration present" do
-    subject(:storage_service) { described_class.new(Configuration::PaasConfigurationService.new, "random_instance") }
-
-    it "raises an exception" do
-      expect { storage_service }.to raise_error(RuntimeError, "No S3 bucket is present in the PaaS configuration")
-    end
-  end
-
-  context "when we create a storage service and the S3 instance name is not found in the PaaS configuration" do
-    subject(:storage_service) { described_class.new(Configuration::PaasConfigurationService.new, "random_instance") }
-
-    let(:vcap_services) do
-      <<-JSON
-        {"aws-s3-bucket": []}
-      JSON
-    end
+  context "when we create a storage service with no Configuration present" do
+    subject(:storage_service) { described_class.new(env_config_service, "random_instance") }
 
     before do
-      allow(ENV).to receive(:[]).with("VCAP_SERVICES").and_return(vcap_services)
+      allow(env_config_service).to receive(:s3_config_present?).and_return(false)
+    end
+
+    it "raises an exception" do
+      expect { storage_service }.to raise_error(RuntimeError, "No S3 bucket is present in the configuration")
+    end
+  end
+
+  context "when we create a storage service and the S3 instance name is not found in the env configuration" do
+    subject(:storage_service) { described_class.new(env_config_service, "random_instance") }
+
+    before do
+      allow(env_config_service).to receive(:s3_buckets).and_return({ "aws-s3-bucket": [] })
     end
 
     it "raises an exception" do
@@ -46,12 +42,7 @@ RSpec.describe Storage::S3Service do
   end
 
   context "when we create a storage service with a valid instance name" do
-    subject(:storage_service) { described_class.new(Configuration::PaasConfigurationService.new, instance_name) }
-
-    before do
-      allow(ENV).to receive(:[])
-      allow(ENV).to receive(:[]).with("VCAP_SERVICES").and_return(vcap_services)
-    end
+    subject(:storage_service) { described_class.new(env_config_service, instance_name) }
 
     it "creates a Storage Configuration" do
       expect(storage_service.configuration).to be_an(Storage::StorageConfiguration)
@@ -71,15 +62,13 @@ RSpec.describe Storage::S3Service do
   end
 
   context "when we create a storage service and write a stubbed object" do
-    subject(:storage_service) { described_class.new(Configuration::PaasConfigurationService.new, instance_name) }
+    subject(:storage_service) { described_class.new(env_config_service, instance_name) }
 
     let(:filename) { "my_file" }
     let(:content) { "content" }
     let(:s3_client_stub) { Aws::S3::Client.new(stub_responses: true) }
 
     before do
-      allow(ENV).to receive(:[])
-      allow(ENV).to receive(:[]).with("VCAP_SERVICES").and_return(vcap_services)
       allow(Aws::S3::Client).to receive(:new).and_return(s3_client_stub)
     end
 
@@ -106,13 +95,11 @@ RSpec.describe Storage::S3Service do
   end
 
   context "when we create a storage service" do
-    subject(:storage_service) { described_class.new(Configuration::PaasConfigurationService.new, instance_name) }
+    subject(:storage_service) { described_class.new(env_config_service, instance_name) }
 
     let(:s3_client_stub) { Aws::S3::Client.new(stub_responses: true) }
 
     before do
-      allow(ENV).to receive(:[])
-      allow(ENV).to receive(:[]).with("VCAP_SERVICES").and_return(vcap_services)
       allow(Aws::S3::Client).to receive(:new).and_return(s3_client_stub)
     end
 

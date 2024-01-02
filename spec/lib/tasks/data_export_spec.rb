@@ -2,9 +2,8 @@ require "rails_helper"
 require "rake"
 
 describe "rake core:data_export", type: task do
-  let(:paas_instance) { "paas_export_instance" }
+  let(:export_instance) { "export_instance" }
   let(:storage_service) { instance_double(Storage::S3Service) }
-  let(:paas_config_service) { instance_double(Configuration::PaasConfigurationService) }
   let(:export_service) { instance_double(Exports::LettingsLogExportService) }
 
   before do
@@ -13,10 +12,9 @@ describe "rake core:data_export", type: task do
     task.reenable
 
     allow(Storage::S3Service).to receive(:new).and_return(storage_service)
-    allow(Configuration::PaasConfigurationService).to receive(:new).and_return(paas_config_service)
     allow(Exports::LettingsLogExportService).to receive(:new).and_return(export_service)
     allow(ENV).to receive(:[])
-    allow(ENV).to receive(:[]).with("EXPORT_PAAS_INSTANCE").and_return(paas_instance)
+    allow(ENV).to receive(:[]).with("EXPORT_PAAS_INSTANCE").and_return(export_instance)
   end
 
   context "when exporting lettings logs with no parameters" do
