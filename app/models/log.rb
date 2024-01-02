@@ -106,11 +106,15 @@ class Log < ApplicationRecord
   end
 
   def collection_period_open?
-    return true
+    return false if older_than_previous_collection_year?
+
+    form.new_logs_end_date > Time.zone.today
   end
 
   def collection_period_open_for_editing?
-    return true
+    return false if older_than_previous_collection_year?
+
+    form.edit_end_date > Time.zone.today
   end
 
   def blank_invalid_non_setup_fields!
@@ -203,7 +207,9 @@ private
 
   # Handle logs that are older than previous collection start date
   def older_than_previous_collection_year?
-    return false
+    return false unless startdate
+
+    startdate < previous_collection_start_date
   end
 
   def plural_gender_for_person(person_num)

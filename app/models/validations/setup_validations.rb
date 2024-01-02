@@ -3,7 +3,17 @@ module Validations::SetupValidations
   include CollectionTimeHelper
 
   def validate_startdate_setup(record)
-    return
+    return unless record.startdate && date_valid?("startdate", record)
+
+    first_collection_start_date = if record.startdate_was.present?
+                                    editable_collection_start_date
+                                  else
+                                    active_collection_start_date
+                                  end
+
+    unless record.startdate.between?(first_collection_start_date, current_collection_end_date)
+      record.errors.add :startdate, startdate_validation_error_message
+    end
   end
 
   def validate_organisation(record)

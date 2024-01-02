@@ -39,10 +39,10 @@ module CollectionTimeHelper
   end
 
   def previous_collection_start_year
-    current_collection_start_year - 2
+    current_collection_start_year - 1
   end
 
   def previous_collection_start_date
-    current_collection_start_date - 2.year
+    current_collection_start_date - 1.year
   end
 end

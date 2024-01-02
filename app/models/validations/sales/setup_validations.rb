@@ -3,7 +3,17 @@ module Validations::Sales::SetupValidations
   include CollectionTimeHelper
 
   def validate_saledate_collection_year(record)
-    return
+    return unless record.saledate && date_valid?("saledate", record) && FeatureToggle.saledate_collection_window_validation_enabled?
+
+    first_collection_start_date = if record.saledate_was.present?
+                                    editable_collection_start_date
+                                  else
+                                    active_collection_start_date
+                                  end
+
+    unless record.saledate.between?(first_collection_start_date, current_collection_end_date)
+      record.errors.add :saledate, saledate_validation_error_message
+    end
   end
 
   def validate_saledate_two_weeks(record)
