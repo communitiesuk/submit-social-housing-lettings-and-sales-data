@@ -337,26 +337,10 @@ class BulkUpload::Lettings::Year2023::RowParser
             },
             on: :after_log
 
-  validates :field_15,
-            presence: {
-              if: proc { supported_housing? && log_uses_old_scheme_id? },
-              message: I18n.t("validations.not_answered", question: "management group code"),
-              category: :setup,
-            },
-            on: :after_log
-
   validates :field_16,
             presence: {
               if: proc { supported_housing? },
               message: I18n.t("validations.not_answered", question: "scheme code"),
-              category: :setup,
-            },
-            on: :after_log
-
-  validates :field_17,
-            presence: {
-              if: proc { supported_housing? && log_uses_new_scheme_id? },
-              message: I18n.t("validations.not_answered", question: "location code"),
               category: :setup,
             },
             on: :after_log
@@ -775,7 +759,7 @@ private
   def validate_location_data_given
     if supported_housing? && location_id.blank? && location_field.present?
       block_log_creation!
-      errors.add(location_field, I18n.t("validations.not_answered", question: "#{location_or_scheme} code"), category: "setup")
+      errors.add(location_field, I18n.t("validations.not_answered", question: "#{location_or_scheme} code"), category: :setup)
     end
   end
 
@@ -789,7 +773,7 @@ private
   def validate_scheme_data_given
     if supported_housing? && scheme_field.present? && scheme_id.blank?
       block_log_creation!
-      errors.add(scheme_field, I18n.t("validations.not_answered", question: "#{scheme_or_management_group} code"), category: "setup")
+      errors.add(scheme_field, I18n.t("validations.not_answered", question: "#{scheme_or_management_group} code"), category: :setup)
     end
   end
 
