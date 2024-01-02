@@ -747,7 +747,7 @@ private
         fields.each do |field|
           if errors.select { |e| fields.include?(e.attribute) }.none?
             question_text = question.error_display_label.presence || "this question"
-            errors.add(field, I18n.t("validations.not_answered", question: question_text.downcase), category: :setup)
+            errors.add(field, I18n.t("validations.not_answered", question: question_text.downcase), category: :setup) if field.present?
           end
         end
       else
@@ -892,7 +892,9 @@ private
       owning_organisation_id: [:field_1],
       managing_organisation_id: [:field_2],
       renewal: [:field_6],
+      scheme_id: [scheme_field],
       scheme: [scheme_field],
+      location_id: [location_field],
       location: [location_field],
       created_by: [:field_3],
       needstype: [:field_4],
