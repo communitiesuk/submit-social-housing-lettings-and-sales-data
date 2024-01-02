@@ -67,6 +67,19 @@ RSpec.describe CheckAnswersSummaryListCardComponent, type: :component do
           expect(rendered).to have_selector("span", class: "app-!-colour-muted", text: "You didn’t answer this question")
         end
       end
+
+      context "when log was created via a bulk upload and has an unanswered optional question" do
+        subject(:component) { described_class.new(questions:, log:, user:) }
+
+        let(:subsection_id) { "setup" }
+        let(:bulk_upload) { create(:bulk_upload) }
+        let(:log) { build(:lettings_log, :completed, creation_method: "bulk upload", tenancycode: nil, startdate: Time.zone.local(2021, 5, 1), bulk_upload:) }
+
+        it "displays tweaked copy in red" do
+          expect(rendered).to have_selector("span", class: "app-!-colour-muted", text: "You didn’t answer this question")
+          expect(rendered).not_to have_selector("span", class: "app-!-colour-red", text: "You still need to answer this question")
+        end
+      end
     end
   end
 
