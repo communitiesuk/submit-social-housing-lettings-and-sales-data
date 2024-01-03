@@ -2,22 +2,32 @@
   @include govuk-font($size: 19);
   font-weight: bold;
   white-space: nowrap;
-  width: 100%;
 }
-@media (min-width: 72.5em) {
-  .app-data-box-group {
+
+@media (min-width: 48.0625em) {
+  .app-data-box-group-one-third {
     display: flex;
     justify-content: space-between;
     column-gap: govuk-spacing(4);
+    width: 100%;
   }
 }
-@media (min-width: 72.5em) {
+@media (min-width: 66.25em) {
   .app-data-box-one-third {
     width: 33.3333333%;
     float: left;
   }
 }
-@media (min-width: 72.5em) {
+@media (min-width: 54.0625em) {
+  .app-data-box-group-one-half {
+    display: flex;
+    justify-content: space-between;
+    column-gap: govuk-spacing(4);
+    width: 100%;
+  }
+}
+
+@media (min-width: 54.0625em) {
   .app-data-box-one-half {
     width: 50%;
     float: left;
