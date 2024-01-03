@@ -1,28 +1,45 @@
 <div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
-    <div class="govuk-!-margin-bottom-7">
-      <span class="govuk-body-l"><%= "Welcome back, #{@current_user.name}" %></span>
-      <h1 class="govuk-heading-l"><%= heading_for_user_role(@current_user) %></h1>
-    </div>
-    <div class="govuk-grid-row">
-      <% if @current_user.support? %>
-        <div class="govuk-grid-column-one-third">
-          <span><%= render partial: "home/data_box", locals: {type: "lettings"} %></span>
-        </div>
-        <div class="govuk-grid-column-one-third">
-          <span><%= render partial: "home/data_box", locals: {type: "sales"} %></span>
-        </div>
-        <div class="govuk-grid-column-one-third">
-          <span><%= render partial: "home/data_box", locals: {type: "schemes"} %></span>
-        </div>
-      <% else %>
-        <div class="govuk-grid-column-one-half">
-          <span><%= render partial: "home/data_box", locals: {type: "lettings"} %></span>
-        </div>
-        <div class="govuk-grid-column-one-half">
-          <span><%= render partial: "home/data_box", locals: {type: "sales"} %></span>
-        </div>
-      <% end %>
+  <div class="govuk-width-container">
+    <div class="govuk-grid-column-two-thirds">
+      <div class="govuk-grid-row govuk-!-margin-bottom-7">
+        <span class="govuk-body-l"><%= "Welcome back, #{@current_user.name}" %></span>
+        <h1 class="govuk-heading-l"><%= heading_for_user_role(@current_user) %></h1>
+      </div>
+      <div class="govuk-grid-row">
+      <div class="app-data-box-group">
+        <% if @current_user.support? || (@current_user.data_coordinator? && @current_user.sales_logs.present?)%>
+          <div class="app-data-box-one-third app-data-box__margin_right">
+            <span><%= render partial: "home/data_box", locals: {type: "lettings"} %></span>
+          </div>
+          <div class="app-data-box-one-third app-data-box__margin_right">
+            <span><%= render partial: "home/data_box", locals: {type: "sales"} %></span>
+          </div>
+          <div class="app-data-box-one-third">
+            <span><%= render partial: "home/data_box", locals: {type: "schemes"} %></span>
+          </div>
+        <% else %>
+          <div class="app-data-box-one-half app-data-box__margin_right">
+            <span><%= render partial: "home/data_box", locals: {type: "lettings"} %></span>
+          </div>
+          <% if @current_user.data_coordinator? %>
+            <div class="app-data-box-one-half">
+              <span><%= render partial: "home/data_box", locals: {type: "schemes"} %></span>
+            </div>
+          <% elsif @current_user.sales_logs.present? %>
+            <div class="app-data-box-one-half">
+              <span><%= render partial: "home/data_box", locals: {type: "sales"} %></span>
+            </div>
+          <% else %>
+            <div class="app-data-box-one-half">
+              <span><%= render partial: "home/data_box", locals: {type: "misc"} %></span>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+      </div>
+      <div class="govuk-grid-row">
+        <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--m">
+      </div>
     </div>
   </div>
 </div>

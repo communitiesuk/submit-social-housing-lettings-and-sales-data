@@ -1,10 +1,29 @@
-.app-data-box__pair {
+.app-data-box-group {
   @include govuk-font($size: 19);
   font-weight: bold;
+  white-space: nowrap;
+  width: 100%;
 }
-
+@media (min-width: 72.5em) {
+  .app-data-box-group {
+    display: flex;
+    justify-content: space-between;
+    column-gap: govuk-spacing(4);
+  }
+}
+@media (min-width: 72.5em) {
+  .app-data-box-one-third {
+    width: 33.3333333%;
+    float: left;
+  }
+}
+@media (min-width: 72.5em) {
+  .app-data-box-one-half {
+    width: 50%;
+    float: left;
+  }
+}
 .app-data-box__upper {
-  @include govuk-responsive-margin(4, "right");
   @include govuk-responsive-margin(2, "bottom");
   @include govuk-responsive-padding(4);
 
@@ -13,7 +32,7 @@
 }
 
 .app-data-box__lower {
-  @include govuk-responsive-margin(4, "right");
+  @include govuk-responsive-margin(4, "bottom");
   @include govuk-responsive-padding(4);
 
   background-color: govuk-colour("blue");
