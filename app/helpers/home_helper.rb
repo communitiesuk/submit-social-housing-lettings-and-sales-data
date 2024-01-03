@@ -16,11 +16,7 @@ module HomeHelper
   end
 
   def heading_for_user_role(user)
-    case user.role
-    when "data_provider" then "Complete your logs"
-    when "data_coordinator" then "Manage your data"
-    when "support" then "Manage all data"
-    end
+    ROLE_HEADINGS[user.role]
   end
 
   def data_subheading(user, type)
@@ -66,4 +62,10 @@ module HomeHelper
       "View all #{type}"
     end
   end
+
+  ROLE_HEADINGS = {
+    "data_provider" => "Complete your logs",
+    "data_coordinator" => "Manage your data",
+    "support" => "Manage all data",
+  }.freeze
 end
