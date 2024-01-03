@@ -552,7 +552,7 @@ RSpec.describe LettingsLogsController, type: :request do
               let(:user) { create(:user, organisation:) }
               let(:bulk_upload) { create(:bulk_upload, :lettings, user:) }
 
-              let!(:included_log) { create(:lettings_log, :in_progress, bulk_upload:, owning_organisation: organisation) }
+              let!(:included_log) { create(:lettings_log, :completed, age1: nil, bulk_upload:, owning_organisation: organisation) }
               let!(:excluded_log) { create(:lettings_log, :in_progress, owning_organisation: organisation, tenancycode: "fake_code") }
 
               before do
@@ -600,6 +600,12 @@ RSpec.describe LettingsLogsController, type: :request do
               it "displays card with help info" do
                 get "/lettings-logs?bulk_upload_id[]=#{bulk_upload.id}"
                 expect(page).to have_content("You have uploaded 1 log. There are errors in 1 log, and 1 error in total. Select the log to fix the errors.")
+              end
+
+              it "displays dynamic error number" do
+                included_log.update!(age2: nil)
+                get "/lettings-logs?bulk_upload_id[]=#{bulk_upload.id}"
+                expect(page).to have_content("You have uploaded 1 log. There are errors in 1 log, and 2 errors in total. Select the log to fix the errors.")
               end
 
               it "displays meta info about the bulk upload" do

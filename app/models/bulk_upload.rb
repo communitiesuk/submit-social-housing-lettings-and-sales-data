@@ -116,6 +116,14 @@ class BulkUpload < ApplicationRecord
     bulk_upload_errors.distinct.count("row")
   end
 
+  def remaining_logs_with_errors_count
+    logs.filter_by_status("in_progress").count
+  end
+
+  def remaining_errors_count
+    logs.filter_by_status("in_progress").map(&:missing_answers_count).sum(0)
+  end
+
 private
 
   def generate_identifier

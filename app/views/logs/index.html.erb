@@ -48,7 +48,7 @@
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
         <p class="govuk-body-l">
-          You have uploaded <%= pluralize(@bulk_upload.logs.count, "log") %>. There are errors in <%= pluralize(@bulk_upload.logs_with_errors_count, "log") %>, and <%= pluralize(@bulk_upload.bulk_upload_errors.count, "error") %> in total. Select the log to fix the errors.
+          You have uploaded <%= pluralize(@bulk_upload.logs.count, "log") %>. There are errors in <%= pluralize(@bulk_upload.remaining_logs_with_errors_count, "log") %>, and <%= pluralize(@bulk_upload.remaining_errors_count, "error") %> in total. Select the log to fix the errors.
         </p>
 
         <p class="govuk-body">
