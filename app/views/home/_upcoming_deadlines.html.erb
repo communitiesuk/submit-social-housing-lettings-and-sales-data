@@ -1,0 +1,16 @@
+<h1 class="govuk-heading-l">Upcoming deadlines</h1>
+<% current_quarter = quarter_for_date(date: Time.zone.now) %>
+<% if current_quarter.present? %>
+  <p class="govuk-body govuk-body-m"><strong>12 January 2024</strong>: Quarterly cut off date for tenancies and sales starting between 1 October 2023 and 31 December 2023.</p>
+<% end %>
+
+<% current_lettings_form = FormHandler.instance.current_lettings_form %>
+<p class="govuk-body govuk-body-m"><strong><%= current_lettings_form.submission_deadline.to_formatted_s(:govuk_date) %></strong>: Deadline to submit logs for tenancies starting between <%= collection_start_date(Time.zone.now).to_formatted_s(:govuk_date) %> to <%= collection_end_date(Time.zone.now).to_formatted_s(:govuk_date) %></p>
+<%= govuk_details(summary_text: "Quarterly cut-off dates for 2024 to 2025") do %>
+  <ul class="govuk-list govuk-list--bullet">
+    <li><strong>12 July 2024</strong>: Quarterly cut off date for tenancies and sales starting between 1 April 2024 and 30 June 2024</li>
+    <li><strong>11 Oct 2024</strong>: Quarterly cut off date for tenancies and sales starting between 1 July 2024 and 30 Sept 2024</li>
+    <li><strong>10 Jan 2025</strong>: Quarterly cut off date for tenancies and sales starting between 1 Oct 2024 and 31 Dec 2024</li>
+    <li><strong>6 June 2025</strong>: Deadline to submit logs for tenancies starting between 1 April 2024 to 31 March 2025 </li>
+  </ul>
+<% end %>
