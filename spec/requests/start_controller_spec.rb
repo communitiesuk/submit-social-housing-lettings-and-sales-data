@@ -36,10 +36,9 @@ RSpec.describe StartController, type: :request do
 
   describe "guidance page" do
     context "when the user is not signed in" do
-      it "routes user to the start in page" do
-        get "/guidance", headers: headers, params: {}
-        expect(path).to include("/")
-        expect(page).to have_content("Start now")
+      it "routes user to the guidance page" do
+        get "/guidance", headers:, params: {}
+        expect(page).to have_content("Guidance for submitting social housing lettings and sales data")
       end
     end
 
