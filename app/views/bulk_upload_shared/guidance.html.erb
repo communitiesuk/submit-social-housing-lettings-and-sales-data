@@ -11,12 +11,12 @@
       <p class="govuk-body">You can upload one sales or lettings log at a time, or many at once (known as ‘bulk upload’) with a comma-separated values (CSV) spreadsheet file.</p>
       <p class="govuk-body">Bulk upload may be easier if your organisation deals with many logs, or if you can export CSV data from your Housing Management System (HMS).</p>
 
-      <p class="govuk-body">If your organisation only deals with a small amount of logs, or you cannot export CSV data, it’s probably easier to enter logs individually.</p>
+      <p class="govuk-body">If your organisation only deals with a small amount of logs, or you cannot export CSV data, it’s probably easier to create logs individually using the online form.</p>
     </div>
 
     <%= govuk_accordion do |accordion| %>
       <%= accordion.with_section(heading_text: "Exporting your data", expanded: true) do %>
-        <p class="govuk-body">Export CSV data directly from your current systems</p>
+        <p class="govuk-body">Export CSV data directly from your current systems.</p>
         <p class="govuk-body">You should export lettings and sales data separately, and data from different collection years separately.</p>
         <p class="govuk-body">The exported CSV file should have one row per log so that the data can fit into the bulk upload template.</p>
         <p class="govuk-body"><strong>If your organisation has an HMS</strong></p>
@@ -27,7 +27,7 @@
       <% end %>
 
       <%= accordion.with_section(heading_text: "Using the bulk upload template") do %>
-        <p class="govuk-body">For each collection year, we publish a bulk upload template and specification.s</p>
+        <p class="govuk-body">For each collection year, we publish a bulk upload template and specification.</p>
         <p class="govuk-body">The bulk upload templates contain 7 or 8 rows of ‘headers’ with information about how to fill in the template, including:</p>
 
         <ul class="govuk-list govuk-list--bullet">
@@ -47,11 +47,11 @@
         <p class="govuk-body"><%= govuk_link_to "Download the sales bulk upload template (2023 to 2024) – New question ordering", @form.sales_template_path %></p>
 
         <p class="govuk-body"><strong>Legacy template</strong>: In this template, the questions are in the same order as the 2022/23 template, with new questions added on to the end. Use this template if you have not updated your system to match the new template yet.</p>
-        <p class="govuk-body"><%= govuk_link_to "Download the lettings bulk upload template (2022 to 2023) - Legacy version", @form.lettings_legacy_template_path %></p>
-        <p class="govuk-body"><%= govuk_link_to "Download the sales bulk upload template (2022 to 2023) – Legacy version", @form.sales_legacy_template_path %></p>
+        <p class="govuk-body"><%= govuk_link_to "Download the lettings bulk upload template (2023 to 2024) - Legacy version", @form.lettings_legacy_template_path %></p>
+        <p class="govuk-body"><%= govuk_link_to "Download the sales bulk upload template (2023 to 2024) – Legacy version", @form.sales_legacy_template_path %></p>
       <% end %>
 
-      <%= accordion.with_section(heading_text: "Using the bulk upload template") do %>
+      <%= accordion.with_section(heading_text: "Using the bulk upload specification") do %>
         <p class="govuk-body">The bulk upload specification contains the same information as the template headers, as well as more details about the accepted responses for each question. For multiple-choice questions, we use number or letter codes to represent each option, and the specification shows what answer each code represents.</p>
         <p class="govuk-body">There is a separate specification for lettings and sales:</p>
         <p class="govuk-body"><%= govuk_link_to "Download the lettings bulk upload specification (2023 to 2024)", @form.lettings_specification_path, target: "_blank" %></p>
@@ -78,7 +78,7 @@
       <% end %>
 
       <%= accordion.with_section(heading_text: "Getting help") do %>
-        <p class="govuk-body">The bulk upload template and specification should contain all the information you need to format your data correctly and fix any errors found during processing. If you still need support with your bulk upload, contact the helpdesk.</p>
+        <p class="govuk-body">The bulk upload template and specification should contain all the information you need to format your data correctly and fix any errors found during processing. If you still need support with your bulk upload, <%= govuk_link_to "contact the helpdesk", GlobalConstants::HELPDESK_URL %>.</p>
       <% end %>
     <% end %>
   </div>
