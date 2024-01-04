@@ -6,6 +6,7 @@ module Validations::Sales::PropertyValidations
       record.errors.add :postcode_full, I18n.t("validations.property.postcode.must_match_previous")
       record.errors.add :ppostcode_full, I18n.t("validations.property.postcode.must_match_previous")
       record.errors.add :ownershipsch, I18n.t("validations.property.postcode.must_match_previous")
+      record.errors.add :uprn, I18n.t("validations.property.postcode.must_match_previous")
     end
   end
 
