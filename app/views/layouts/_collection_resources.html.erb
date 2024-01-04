@@ -1,5 +1,12 @@
 <h2 class="govuk-heading-m">Collection resources</h2>
-<p class="govuk-body-s">Use the 2023 to 2024 forms for lettings that start and sales that complete between 1 April 2023 and 31 March 2024.</p>
+<% if current_user %>
+  <p class="govuk-body"><strong>
+    <%= govuk_link_to guidance_path do %>
+      Guidance for submitting social housing lettings and sales data (CORE)
+    <% end %>
+  </strong></p>
+<% end %>
+<p class="govuk-body">Use the 2023 to 2024 forms for lettings that start and sales that complete between 1 April 2023 and 31 March 2024.</p>
 <%= govuk_tabs(title: "Monday’s child nursery rhyme") do |c| %>
   <% if FormHandler.instance.lettings_form_for_start_year(2023) && FormHandler.instance.lettings_form_for_start_year(2023).edit_end_date > Time.zone.today %>
     <% c.with_tab(label: "Lettings 2023/24") do %>
