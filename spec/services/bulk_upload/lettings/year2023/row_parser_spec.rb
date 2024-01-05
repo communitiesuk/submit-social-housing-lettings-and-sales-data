@@ -2241,7 +2241,6 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
         it "sets correct value from mapping" do
           expect(parser.log.household_charge).to eq(nil)
         end
-
       end
 
       context "when log is supported housing" do
