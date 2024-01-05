@@ -15,16 +15,28 @@ module Forms
         bulk_upload_lettings_log_path(id: "prepare-your-file", form: { year: })
       end
 
-      def legacy_template_path
+      def lettings_legacy_template_path
         Forms::BulkUploadLettings::PrepareYourFile.new.legacy_template_path
       end
 
-      def template_path
+      def lettings_template_path
         Forms::BulkUploadLettings::PrepareYourFile.new(year:).template_path
       end
 
-      def specification_path
+      def lettings_specification_path
         Forms::BulkUploadLettings::PrepareYourFile.new(year:).specification_path
+      end
+
+      def sales_legacy_template_path
+        Forms::BulkUploadSales::PrepareYourFile.new.legacy_template_path
+      end
+
+      def sales_template_path
+        Forms::BulkUploadSales::PrepareYourFile.new(year:).template_path
+      end
+
+      def sales_specification_path
+        Forms::BulkUploadSales::PrepareYourFile.new(year:).specification_path
       end
     end
   end

@@ -8,61 +8,78 @@
     <h1 class="govuk-heading-l">How to upload logs in bulk</h1>
 
     <div class="govuk-!-padding-bottom-4">
-      <h2 class="govuk-heading-s">Uploading sales and lettings logs</h2>
       <p class="govuk-body">You can upload one sales or lettings log at a time, or many at once (known as ‘bulk upload’) with a comma-separated values (CSV) spreadsheet file.</p>
-      <p class="govuk-body">Bulk upload may be easier if your organisation deals with many logs, or if you can export CSV data from your Housing Management System (HMS). If your organisation only deals with a small amount of logs, or you cannot export CSV data, it’s probably easier to enter logs individually.</p>
-      <%= govuk_warning_text text: "You cannot upload lettings and sales logs with the same template - you must export each data type separately, then upload them" %>
+      <p class="govuk-body">Bulk upload may be easier if your organisation deals with many logs, or if you can export CSV data from your Housing Management System (HMS).</p>
+
+      <p class="govuk-body">If your organisation only deals with a small amount of logs, or you cannot export CSV data, it’s probably easier to create logs individually using the online form.</p>
     </div>
 
-    <div class="govuk-!-padding-bottom-4">
-      <h2 class="govuk-heading-s">Creating your CSV files</h2>
-      <p class="govuk-body">To bulk upload successfully, all spreadsheets must be in the correct CSV format.</p>
-      <p class="govuk-body">In most programs, you must resave files as CSV - it’s not usually the default setting. CSV files are also unformatted, so any formatting added before saving (for example colours) will automatically disappear.</p>
-      <%= govuk_details(summary_text: "More about CSV") do %>
-        <p class="govuk-body">A CSV file is a basic spreadsheet with data values in plain text, and columns separated by commas. Each data row is a new text line.</p>
-        <p class="govuk-body">CSV data is easier to process than more common advanced spreadsheet formats, for example Excel. It means CSV is well suited to upload large, or multiple data sets.</p>
-      <% end %>
-    </div>
-
-    <div class="govuk-!-padding-bottom-4">
-      <h2 class="govuk-heading-s">Exporting CSV data</h2>
-
-      <p class="govuk-body">Export CSV data directly from your current systems, or export then adjust it to CSV.</p>
-      <p class="govuk-body">You can then upload it via a button at the top of the lettings and sales logs pages.</p>
-
-      <%= govuk_details(summary_text: "My organisation has a HMS") do %>
-        <p class="govuk-body">Some HMS providers sell an add-on "eCORE" module, which exports CSV data for you.</p>
-        <p class="govuk-!-font-weight-bold">It can take HMS providers a while to update these per new collection year, so you may have to wait for updates to export, or adjust your data manually post-export.</p>
+    <%= govuk_accordion do |accordion| %>
+      <%= accordion.with_section(heading_text: "Exporting your data", expanded: true) do %>
+        <p class="govuk-body">Export CSV data directly from your current systems.</p>
+        <p class="govuk-body">You should export lettings and sales data separately, and data from different collection years separately.</p>
+        <p class="govuk-body">The exported CSV file should have one row per log so that the data can fit into the bulk upload template.</p>
+        <p class="govuk-body"><strong>If your organisation has an HMS</strong></p>
+        <p class="govuk-body">Some HMS providers sell an add-on "eCORE" module, which exports CSV data in the format we require.</p>
+        <p class="govuk-body"><strong>If your organisation does not have an HMS</strong></p>
+        <p class="govuk-body">Your organisation’s IT team may be able to export CSV data for you, depending on how data is stored in your organisation.</p>
+        <p class="govuk-body">Review the bulk upload template and specification carefully to understand how we expect data to be mapped and formatted. The next 2 sections explain more about these documents.</p>
       <% end %>
 
-      <%= govuk_details(summary_text: "My organisation does not have a HMS") do %>
-        <p class="govuk-body">Your organisation’s IT team may be able to export CSV data for you - <%= govuk_link_to "find out more about data specification", @form.specification_path, target: "_blank" %>. This document outlines:</p>
+      <%= accordion.with_section(heading_text: "Using the bulk upload template") do %>
+        <p class="govuk-body">For each collection year, we publish a bulk upload template and specification.</p>
+        <p class="govuk-body">The bulk upload templates contain 7 or 8 rows of ‘headers’ with information about how to fill in the template, including:</p>
 
         <ul class="govuk-list govuk-list--bullet">
-          <li>required fields</li>
-          <li>each field's valid response</li>
+          <li>the CORE form questions and their field numbers</li>
+          <li>each field’s valid responses</li>
           <li>if/when certain fields can be left blank</li>
+          <li>which fields are used to check for duplicate logs</li>
         </ul>
 
-        <% if @form.year == 2022 %>
-          <p class="govuk-body">Fields must be in the same order as <%= govuk_link_to "the template", @form.template_path %>. Copy each column of your exported data one at a time and paste into the correct template column.</p>
-        <% else %>
-          <p class="govuk-body">Fields can appear in any order, as long as you include the <%= govuk_link_to "template document", @form.template_path %> headers, to easily identify what each column represents. You can rearrange data columns to match your system exports, copy-pasting multiple columns at once. For data stored in multiple systems, you can copy-paste all columns for one system next to each other, repeating this for subsequent system exports.</p>
-        <% end %>
-      <% end %>
-    </div>
+        <p class="govuk-body">You can paste your data below the headers or copy the headers and insert them above the data in your file. The bulk upload fields start at column B. Leave column A blank.</p>
+        <p class="govuk-body">Make sure that each column of data aligns with the corresponding question in the headers. We recommend ordering your data to match the headers, but you can also reorder the headers to match your data. When processing the file, we check what each column of data represents based on the headers above.</p>
+        <p class="govuk-body">For 2023/24 uploads, there are 2 templates to choose from, a new template and a legacy template. They outline suggested ways of ordering your data.</p>
+        <p class="govuk-body">You must include the headers in your file when you upload, unless your data matches the exact order of the legacy template. If you choose to remove the headers, you must also remove the blank column A.</p>
 
-    <div class="govuk-!-padding-bottom-4">
-      <h2 class="govuk-heading-s">Getting help</h2>
-      <p class="govuk-body">There is no step-by-step bulk upload guide like there is with single log upload. However, you can download <%= @form.year == 2022 ? govuk_link_to("our template", @form.template_path) : "one of our templates" %>, which you can copy-paste data into from your systems column-by-column. You can also view a post-upload report showing any data errors, and our <%= govuk_link_to "data specification", @form.specification_path, target: "_blank" %> can help fix these.</p>
-      <% if @form.year == 2023 %>
-        <%= govuk_details(summary_text: "How to choose the right template") do %>
-          <p class="govuk-body">Use one of these templates to upload logs for 2023/24:</p>
-          <p class="govuk-body"><%= govuk_link_to "New template", @form.template_path %>: In this template, the questions are in the same order as the 2023/24 paper form and web form. Use this template if your organisation is new to bulk upload or if your housing management system matches the new column ordering.</p>
-          <p class="govuk-body"><%= govuk_link_to "Legacy template", @form.legacy_template_path %>: In this template, the questions are in the same order as the 2022/23 template, with new questions added on to the end. Use this template if you have not updated your system to match the new template yet.</p>
-        <% end %>
+        <p class="govuk-body"><strong>New template</strong>: In this template, the questions are in the same order as the 2023/24 paper form and web form. Use this template if your organisation is new to bulk upload or if your housing management system matches the new column ordering.</p>
+        <p class="govuk-body"><%= govuk_link_to "Download the lettings bulk upload template (2023 to 2024) – New question ordering", @form.lettings_template_path %></p>
+        <p class="govuk-body"><%= govuk_link_to "Download the sales bulk upload template (2023 to 2024) – New question ordering", @form.sales_template_path %></p>
+
+        <p class="govuk-body"><strong>Legacy template</strong>: In this template, the questions are in the same order as the 2022/23 template, with new questions added on to the end. Use this template if you have not updated your system to match the new template yet.</p>
+        <p class="govuk-body"><%= govuk_link_to "Download the lettings bulk upload template (2023 to 2024) - Legacy version", @form.lettings_legacy_template_path %></p>
+        <p class="govuk-body"><%= govuk_link_to "Download the sales bulk upload template (2023 to 2024) – Legacy version", @form.sales_legacy_template_path %></p>
       <% end %>
-      <p class="govuk-body">If you still need support mapping data in the way we need, DLUHC’s helpdesk can help. If your data is across multiple systems, or is hard to export as a single file in the correct format, you could try different exports, or copy-pasting data by hand.</p>
-    </div>
+
+      <%= accordion.with_section(heading_text: "Using the bulk upload specification") do %>
+        <p class="govuk-body">The bulk upload specification contains the same information as the template headers, as well as more details about the accepted responses for each question. For multiple-choice questions, we use number or letter codes to represent each option, and the specification shows what answer each code represents.</p>
+        <p class="govuk-body">There is a separate specification for lettings and sales:</p>
+        <p class="govuk-body"><%= govuk_link_to "Download the lettings bulk upload specification (2023 to 2024)", @form.lettings_specification_path, target: "_blank" %></p>
+        <p class="govuk-body"><%= govuk_link_to "Download the sales bulk upload specification (2023 to 2024)", @form.sales_specification_path, target: "_blank" %></p>
+        <p class="govuk-body">If your upload fails because there are errors in the data, you can use the specification to help correct the errors. Having your file, the error report, and the specification open at the same time will make it easy to cross-reference field numbers and check accepted responses.</p>
+      <% end %>
+
+      <%= accordion.with_section(heading_text: "Saving your file as a CSV") do %>
+        <p class="govuk-body">To bulk upload successfully, all spreadsheets must be in the correct CSV format. </p>
+        <p class="govuk-body">If you’ve pasted your data into the template, you will need to resave the file as a CSV.</p>
+        <p class="govuk-body">CSV files are unformatted, so any formatting added before saving (for example colours) will automatically disappear.</p>
+        <p class="govuk-body"><strong>What is a CSV?</strong></p>
+        <p class="govuk-body">A CSV file is a basic spreadsheet with data values in plain text, and columns separated by commas. Each data row is a new text line.</p>
+        <p class="govuk-body">CSV data is easier to process than more common advanced spreadsheet formats, for example Excel. It means CSV is well suited to upload large data sets.</p>
+        <p class="govuk-body"></p>
+      <% end %>
+
+      <%= accordion.with_section(heading_text: "Next steps") do %>
+        <p class="govuk-body">Once you've saved your CSV file, you can upload it via a button at the top of the lettings and sales logs pages.</p>
+        <p class="govuk-body">When your file is done processing, you will receive an email explaining your next steps. If all your data is valid, your logs will be created. If some data is invalid, you’ll receive an email with instructions about how to resolve the errors.</p>
+        <p class="govuk-body">If your file has errors on fields 1 through 17, you must fix these in the CSV. This is because we need to know these answers to validate the rest of the data. Any errors in these fields will be featured in the error report’s summary tab.</p>
+        <p class="govuk-body">If none of your errors are in fields 1 through 17, you can choose how to fix the errors. You can either fix them in the CSV and reupload, or create partially complete logs and answer the remaining questions on the CORE site. Any errors that affect a significant number of logs will be featured in the error report’s summary tab to help you decide.</p>
+        <p class="govuk-body"></p>
+      <% end %>
+
+      <%= accordion.with_section(heading_text: "Getting help") do %>
+        <p class="govuk-body">The bulk upload template and specification should contain all the information you need to format your data correctly and fix any errors found during processing. If you still need support with your bulk upload, <%= govuk_link_to "contact the helpdesk", GlobalConstants::HELPDESK_URL %>.</p>
+      <% end %>
+    <% end %>
   </div>
 </div>
