@@ -272,6 +272,14 @@ class SalesLog < Log
     mortgage_amount + deposit_amount + cashdis_amount
   end
 
+  def mortgage_deposit_and_discount_error_fields
+    [
+      "mortgage",
+      "deposit",
+      cashdis.present? ? "discount" : nil,
+    ].compact.to_sentence
+  end
+
   def mortgage_and_deposit_total
     return unless mortgage && deposit
 
