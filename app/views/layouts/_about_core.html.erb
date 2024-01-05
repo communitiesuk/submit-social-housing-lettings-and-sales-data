@@ -1,0 +1,7 @@
+<% if current_user.present? %>
+  <h1 class="govuk-heading-l govuk-!-width-two-thirds">About CORE</h1>
+<% else %>
+  <h2 class="govuk-heading-m govuk-!-width-two-thirds">About CORE</h2>
+<% end %>
+<p class="govuk-body">CORE (COntinuous REcording of Lettings and Sales in Social Housing in England) is a service that collects information about every new social housing letting and sale in England. The data you submit is used to make decisions about funding, regulations, and policies.</p>
+<p class="govuk-body"><%= govuk_link_to "Learn more about statistics on social housing lettings (opens in a new tab)", "https://www.gov.uk/government/collections/rents-lettings-and-tenancies", target: "_blank" %></p>
