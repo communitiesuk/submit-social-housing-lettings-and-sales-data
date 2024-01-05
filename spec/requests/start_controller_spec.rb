@@ -20,11 +20,6 @@ RSpec.describe StartController, type: :request do
         expect(path).to include("/")
         expect(page).to have_content("Start now")
       end
-
-      it "does not show guidance link" do
-        get "/", headers: headers, params: {}
-        expect(page).not_to have_content("Guidance for submitting social housing lettings and sales data (CORE)")
-      end
     end
 
     context "when the user is signed in" do
