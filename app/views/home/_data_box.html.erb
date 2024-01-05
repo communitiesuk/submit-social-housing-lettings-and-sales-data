@@ -1,9 +1,9 @@
-<div class="app-data-box__upper">
+<div class="app-data-box app-data-box__upper">
   <div class="app-data-box__count">
     <a><%= govuk_link_to data_count(@current_user, type), data_path(@current_user, type), class: "govuk-link--no-visited-state govuk-link--no-underline" %></a>
   </div>
   <a><%= govuk_link_to data_subheading(@current_user, type), data_path(@current_user, type), class: "govuk-link--no-visited-state" %></a>
 </div>
-<div class="app-data-box__lower">
+<div class="app-data-box app-data-box__lower">
   <%= govuk_link_to view_all_text(type), view_all_path(type), class: "govuk-link--inverse" %>
 </div>
