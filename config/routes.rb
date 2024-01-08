@@ -128,6 +128,10 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :notifications do
+    get "dismiss", to: "notifications#dismiss"
+  end
+
   resources :organisations do
     get "duplicates", to: "duplicate_logs#index"
 

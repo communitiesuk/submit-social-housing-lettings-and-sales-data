@@ -1,0 +1,15 @@
+<div class="app-unread-notification">
+  <div class="govuk-width-container">
+    <br>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-three-quarters govuk-body">
+      <p class="govuk-!-font-weight-bold"><%= oldest_unread_notification.title %></p>
+      <%= govuk_link_to oldest_unread_notification.link_text, notification_path(oldest_unread_notification), class: "govuk-link--inverse govuk-!-font-weight-bold"%>
+      </div>
+      <p class="govuk-grid-column-one-quarter govuk-!-text-align-right ">
+        <%= govuk_link_to "Dismiss", notification_dismiss_path(oldest_unread_notification), class: "govuk-link--inverse"%>
+      </p>
+    </div>
+    <br>
+  </div>
+</div>
