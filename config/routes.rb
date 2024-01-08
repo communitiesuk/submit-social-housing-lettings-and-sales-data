@@ -30,6 +30,7 @@ Rails.application.routes.draw do
   resource :cookies, only: %i[show update]
 
   root to: "start#index"
+  get "/guidance", to: "start#guidance"
 
   get "/logs", to: redirect("lettings-logs")
   get "/accessibility-statement", to: "content#accessibility_statement"
