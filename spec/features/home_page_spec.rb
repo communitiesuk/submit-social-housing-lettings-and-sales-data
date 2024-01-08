@@ -107,7 +107,6 @@ RSpec.describe "Home Page Features" do
     let(:devise_notify_mailer) { DeviseNotifyMailer.new }
     let(:otp) { "999111" }
 
-
     before do
       create_list(:lettings_log, 2, :in_progress)
       create_list(:lettings_log, 1, :completed)
