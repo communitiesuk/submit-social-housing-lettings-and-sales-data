@@ -36,7 +36,6 @@ RSpec.describe "Home Page Features" do
         expect(data_boxes[0].all("a").map { |line| line["href"] }).to eq([lettings_logs_path(status: [:in_progress], assigned_to: "you"), lettings_logs_path(status: [:in_progress], assigned_to: "you"), clear_filters_path(filter_type: "lettings_logs")])
         expect(data_boxes[1].all("a").map(&:text)).to eq(["5", "Your sales in progress", "View all sales"])
         expect(data_boxes[1].all("a").map { |line| line["href"] }).to eq([sales_logs_path(status: [:in_progress], assigned_to: "you"), sales_logs_path(status: [:in_progress], assigned_to: "you"), clear_filters_path(filter_type: "sales_logs")])
-
       end
     end
 
@@ -52,7 +51,6 @@ RSpec.describe "Home Page Features" do
         expect(data_boxes[0].all("a").map { |line| line["href"] }).to eq([lettings_logs_path(status: [:in_progress], assigned_to: "you"), lettings_logs_path(status: [:in_progress], assigned_to: "you"), clear_filters_path(filter_type: "lettings_logs")])
         expect(data_boxes[1].all("a").map(&:text)).to eq(["4", "Your completed lettings", "View all schemes"])
         expect(data_boxes[1].all("a").map { |line| line["href"] }).to eq([sales_logs_path(status: [:completed], assigned_to: "you"), sales_logs_path(status: [:completed], assigned_to: "you"), clear_filters_path(filter_type: "schemes")])
-
       end
     end
   end
