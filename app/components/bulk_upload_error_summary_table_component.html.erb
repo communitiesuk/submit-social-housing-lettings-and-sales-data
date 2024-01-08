@@ -10,7 +10,7 @@
         <% row.with_cell(text: "Column #{error[0][0]}", header: true, numeric: true) %>
       <% end %>
 
-      <%= table.body do |body| %>
+      <%= table.with_body do |body| %>
         <% body.with_row do |row| %>
           <% row.with_cell(text: error[0][2]) %>
           <% row.with_cell(text: pluralize(error[1], "error"), numeric: true) %>
