@@ -52,10 +52,10 @@
         <%= table.with_body do |body| %>
           <%= body.with_row do |row| %>
             <% row.with_cell(text: simple_format(location_cell_postcode(location, if location.confirmed
-                                                                               scheme_location_path(@scheme, location)
-                                                                             else
-                                                                               location.postcode.present? ? scheme_location_check_answers_path(@scheme, location, route: "locations") : scheme_location_postcode_path(@scheme, location)
-                                                                             end), { class: "govuk-!-font-weight-bold" }, wrapper_tag: "div")) %>
+                                                                                    scheme_location_path(@scheme, location)
+                                                                                  else
+                                                                                    location.postcode.present? ? scheme_location_check_answers_path(@scheme, location, route: "locations") : scheme_location_postcode_path(@scheme, location)
+                                                                                  end), { class: "govuk-!-font-weight-bold" }, wrapper_tag: "div")) %>
             <% row.with_cell(text: location.name) %>
             <% row.with_cell(text: location.id) %>
             <% row.with_cell(text: status_tag_from_resource(location)) %>

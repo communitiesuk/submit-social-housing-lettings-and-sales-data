@@ -5,7 +5,7 @@
   <%= render partial: "organisations/headings", locals: { main: "Check your changes before creating this scheme", sub: @scheme.service_name } %>
 
   <%= govuk_tabs(title: "Check your answers before creating this scheme") do |component| %>
-    <% component.tab(label: "Scheme") do %>
+    <% component.with_tab(label: "Scheme") do %>
       <h2 class="govuk-visually-hidden">Scheme</h2>
       <dl class="govuk-summary-list">
         <% @scheme.check_details_attributes.each do |attr| %>
