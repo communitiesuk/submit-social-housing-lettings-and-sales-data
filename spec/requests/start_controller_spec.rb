@@ -15,9 +15,9 @@ RSpec.describe StartController, type: :request do
 
   describe "GET" do
     context "when the user is not signed in" do
-      it "routes user to the start in page" do
+      it "routes user to the start page" do
         get "/", headers: headers, params: {}
-        expect(path).to include("/")
+        expect(path).to eq("/")
         expect(page).to have_content("Start now")
       end
     end
