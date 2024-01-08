@@ -25,7 +25,9 @@ $govuk-breakpoints: (
 @import "accessible-autocomplete";
 @import "button";
 @import "card";
+@import "delete-logs-table";
 @import "document-list";
+@import "errors";
 @import "feedback";
 @import "filter";
 @import "filter-layout";
@@ -43,8 +45,7 @@ $govuk-breakpoints: (
 @import "primary-navigation";
 @import "search";
 @import "sub-navigation";
-@import "errors";
-@import "delete-logs-table";
+@import "unread-notification";
 
 // App utilities
 .app-\!-colour-muted {

@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  acts_as_reader
+
   # Include default devise modules. Others available are:
   # :omniauthable
   devise :database_authenticatable, :recoverable, :rememberable,

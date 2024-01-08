@@ -64,6 +64,7 @@ gem "auto_strip_attributes"
 # Use sidekiq for background processing
 gem "sidekiq"
 gem "sidekiq-cron"
+gem "unread"
 
 group :development, :test do
   # Check gems for known vulnerabilities

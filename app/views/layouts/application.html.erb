@@ -101,6 +101,11 @@
       end
     end %>
 
+    <% if current_user.present? && current_page?("/") && Notification.unread_by(current_user).present? %>
+      <%= render UnreadNotification.new(current_user:) %>
+    <% end %>
+
+
     <% feedback_link = govuk_link_to "giving us your feedback (opens in a new tab)", t("feedback_form"), rel: "noreferrer noopener", target: "_blank" %>
 
     <%= govuk_phase_banner(
@@ -109,7 +114,7 @@
       text: "This is a new service – help us improve it by #{feedback_link}".html_safe,
     ) %>
 
-    <% if !current_user.nil? %>
+    <% if current_user.present? %>
       <%= render PrimaryNavigationComponent.new(
         items: primary_items(request.path, current_user),
       ) %>
@@ -124,7 +129,7 @@
           <%= govuk_notification_banner(
             title_text: "Success",
             success: true, title_heading_level: 3,
-            title_id: "swanky-notifications"
+            title_id: "flash-notice"
           ) do |notification_banner|
             notification_banner.heading(text: flash.notice.html_safe)
             if flash[:notification_banner_body]
