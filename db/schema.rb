@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_12_18_105226) do
+ActiveRecord::Schema[7.0].define(version: 2024_01_08_145545) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -391,6 +391,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_18_105226) do
     t.string "new_organisation_address_line2"
     t.string "new_organisation_postcode"
     t.string "new_organisation_telephone_number"
+  end
+
+  create_table "notifications", force: :cascade do |t|
+    t.string "title"
+    t.string "link_text"
+    t.string "page_content"
+    t.datetime "start_date"
+    t.datetime "end_date"
+    t.boolean "show_on_unauthenticated_pages"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "organisation_relationships", force: :cascade do |t|
