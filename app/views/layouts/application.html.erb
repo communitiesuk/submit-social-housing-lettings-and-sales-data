@@ -87,7 +87,7 @@
 
     <%= govuk_header(
       classes: govuk_header_classes(current_user),
-      homepage_url: current_user.nil? ? root_path : logs_path,
+      homepage_url: root_path,
       navigation_classes: "govuk-header__navigation--end",
     ) do |component|
       component.with_product_name(name: t("service_name"))
@@ -126,7 +126,7 @@
             success: true, title_heading_level: 3,
             title_id: "swanky-notifications"
           ) do |notification_banner|
-            notification_banner.heading(text: flash.notice.html_safe)
+            notification_banner.with_heading(text: flash.notice.html_safe)
             if flash[:notification_banner_body]
               tag.p flash[:notification_banner_body]&.html_safe
             end

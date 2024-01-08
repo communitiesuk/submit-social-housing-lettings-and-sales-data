@@ -7,7 +7,7 @@ module DataSharingAgreementHelper
         text: "View agreement",
       )
 
-      row.value do
+      row.with_value do
         simple_format(
           data_sharing_agreement_first_line(organisation:, user:),
           wrapper_tag: "span",
