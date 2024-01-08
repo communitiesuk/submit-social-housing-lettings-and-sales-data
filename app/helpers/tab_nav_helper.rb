@@ -1,5 +1,6 @@
 module TabNavHelper
   include GovukLinkHelper
+  include GovukVisuallyHiddenHelper
 
   def user_cell(user)
     link_text = user.name.presence || user.email
