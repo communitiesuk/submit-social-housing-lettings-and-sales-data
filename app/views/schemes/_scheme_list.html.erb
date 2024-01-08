@@ -1,6 +1,6 @@
 <section class="app-table-group" tabindex="0" aria-labelledby="<%= title.dasherize %>">
   <%= govuk_table do |table| %>
-    <%= table.caption(classes: %w[govuk-!-font-size-19 govuk-!-font-weight-regular]) do |caption| %>
+    <%= table.with_caption(classes: %w[govuk-!-font-size-19 govuk-!-font-weight-regular]) do |caption| %>
     <span class="app-search__caption">
       <%= render(SearchResultCaptionComponent.new(searched:, count: pagy.count, item_label:, total_count:, item: "schemes", filters_count: applied_filters_count(@filter_type))) %>
       <% if @schemes&.any? %>
@@ -10,23 +10,23 @@
       <% end %>
     </span>
     <% end %>
-    <%= table.head do |head| %>
-      <%= head.row do |row| %>
-        <% row.cell(header: true, text: "Scheme", html_attributes: { scope: "col", class: "govuk-!-width-one-quarter" }) %>
-        <% row.cell(header: true, text: "Stock owner", html_attributes: { scope: "col" }) %>
-        <% row.cell(header: true, text: "Scheme code", html_attributes: { scope: "col" }) %>
-        <% row.cell(header: true, text: "Locations", html_attributes: { scope: "col" }) %>
-        <% row.cell(header: true, text: "Status", html_attributes: { scope: "col" }) %>
+    <%= table.with_head do |head| %>
+      <%= head.with_row do |row| %>
+        <% row.with_cell(header: true, text: "Scheme", html_attributes: { scope: "col", class: "govuk-!-width-one-quarter" }) %>
+        <% row.with_cell(header: true, text: "Stock owner", html_attributes: { scope: "col" }) %>
+        <% row.with_cell(header: true, text: "Scheme code", html_attributes: { scope: "col" }) %>
+        <% row.with_cell(header: true, text: "Locations", html_attributes: { scope: "col" }) %>
+        <% row.with_cell(header: true, text: "Status", html_attributes: { scope: "col" }) %>
       <% end %>
     <% end %>
     <% @schemes.each do |scheme| %>
-      <%= table.body do |body| %>
-        <%= body.row do |row| %>
-          <% row.cell(text: simple_format(scheme_cell(scheme), { class: "govuk-!-font-weight-bold scheme-name-cell" }, wrapper_tag: "div")) %>
-          <% row.cell(text: scheme.owning_organisation&.name) %>
-          <% row.cell(text: scheme.id_to_display) %>
-          <% row.cell(text: scheme.locations&.count) %>
-          <% row.cell(text: status_tag_from_resource(scheme)) %>
+      <%= table.with_body do |body| %>
+        <%= body.with_row do |row| %>
+          <% row.with_cell(text: simple_format(scheme_cell(scheme), { class: "govuk-!-font-weight-bold scheme-name-cell" }, wrapper_tag: "div")) %>
+          <% row.with_cell(text: scheme.owning_organisation&.name) %>
+          <% row.with_cell(text: scheme.id_to_display) %>
+          <% row.with_cell(text: scheme.locations&.count) %>
+          <% row.with_cell(text: status_tag_from_resource(scheme)) %>
         <% end %>
       <% end %>
     <% end %>

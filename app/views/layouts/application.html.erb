@@ -87,16 +87,16 @@
 
     <%= govuk_header(
       classes: govuk_header_classes(current_user),
-      service_url: current_user.nil? ? root_path : logs_path,
+      homepage_url: current_user.nil? ? root_path : logs_path,
       navigation_classes: "govuk-header__navigation--end",
     ) do |component|
-      component.product_name(name: t("service_name"))
+      component.with_product_name(name: t("service_name"))
       unless FeatureToggle.service_moved? || FeatureToggle.service_unavailable?
         if current_user.nil?
-          component.navigation_item(text: "Sign in", href: user_session_path)
+          component.with_navigation_item(text: "Sign in", href: user_session_path)
         else
-          component.navigation_item(text: "Your account", href: account_path)
-          component.navigation_item(text: "Sign out", href: destroy_user_session_path)
+          component.with_navigation_item(text: "Your account", href: account_path)
+          component.with_navigation_item(text: "Sign out", href: destroy_user_session_path)
         end
       end
     end %>
