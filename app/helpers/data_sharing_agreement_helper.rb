@@ -1,8 +1,8 @@
 module DataSharingAgreementHelper
   def data_sharing_agreement_row(user:, organisation:, summary_list:)
-    summary_list.row do |row|
-      row.key { "Data Sharing Agreement" }
-      row.action(
+    summary_list.with_row do |row|
+      row.with_key { "Data Sharing Agreement" }
+      row.with_action(
         href: data_sharing_agreement_organisation_path(organisation),
         text: "View agreement",
       )
