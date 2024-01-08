@@ -203,6 +203,12 @@ class Log < ApplicationRecord
     }.compact
   end
 
+  def missing_answers_count
+    form.questions.count do |question|
+      !optional_fields.include?(question.id) && question.displayed_to_user?(self) && question.unanswered?(self) && !question.is_derived_or_has_inferred_check_answers_value?(self)
+    end
+  end
+
 private
 
   # Handle logs that are older than previous collection start date
