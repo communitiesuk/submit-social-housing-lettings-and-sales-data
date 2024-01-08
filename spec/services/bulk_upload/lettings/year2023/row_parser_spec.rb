@@ -2258,10 +2258,20 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
     end
 
     describe "#household_charge" do
-      let(:attributes) { { bulk_upload:, field_125: "1" } }
+      context "when log is general needs" do
+        let(:attributes) { { bulk_upload:, field_4: 1, field_125: "1" } }
 
-      it "sets correct value from mapping" do
-        expect(parser.log.household_charge).to eq(1)
+        it "sets correct value from mapping" do
+          expect(parser.log.household_charge).to eq(nil)
+        end
+      end
+
+      context "when log is supported housing" do
+        let(:attributes) { { bulk_upload:, field_4: 2, field_125: "1" } }
+
+        it "sets correct value from mapping" do
+          expect(parser.log.household_charge).to eq(1)
+        end
       end
     end
 
