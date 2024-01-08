@@ -29,11 +29,14 @@ RSpec.describe "Home Page Features" do
         visit("/")
       end
 
-      it "displays correct data boxes and counts" do
+      it "displays correct data boxes, counts and links" do
         data_boxes = page.find_all(class: "app-data-box-one-half")
         expect(data_boxes.count).to eq(2)
-        expect(data_boxes[0].text.split("\n")).to eq(["6", "Your lettings in progress", "View all lettings"])
-        expect(data_boxes[1].text.split("\n")).to eq(["5", "Your sales in progress", "View all sales"])
+        expect(data_boxes[0].all("a").map(&:text)).to eq(["6", "Your lettings in progress", "View all lettings"])
+        expect(data_boxes[0].all("a").map { |line| line["href"] }).to eq([lettings_logs_path(status: [:in_progress], assigned_to: "you"), lettings_logs_path(status: [:in_progress], assigned_to: "you"), clear_filters_path(filter_type: "lettings_logs")])
+        expect(data_boxes[1].all("a").map(&:text)).to eq(["5", "Your sales in progress", "View all sales"])
+        expect(data_boxes[1].all("a").map { |line| line["href"] }).to eq([sales_logs_path(status: [:in_progress], assigned_to: "you"), sales_logs_path(status: [:in_progress], assigned_to: "you"), clear_filters_path(filter_type: "sales_logs")])
+
       end
     end
 
@@ -42,11 +45,14 @@ RSpec.describe "Home Page Features" do
         visit("/")
       end
 
-      it "displays correct data boxes and counts" do
+      it "displays correct data boxes, counts and links" do
         data_boxes = page.find_all(class: "app-data-box-one-half")
         expect(data_boxes.count).to eq(2)
-        expect(data_boxes[0].text.split("\n")).to eq(["6", "Your lettings in progress", "View all lettings"])
-        expect(data_boxes[1].text.split("\n")).to eq(["4", "Your completed lettings", "View all schemes"])
+        expect(data_boxes[0].all("a").map(&:text)).to eq(["6", "Your lettings in progress", "View all lettings"])
+        expect(data_boxes[0].all("a").map { |line| line["href"] }).to eq([lettings_logs_path(status: [:in_progress], assigned_to: "you"), lettings_logs_path(status: [:in_progress], assigned_to: "you"), clear_filters_path(filter_type: "lettings_logs")])
+        expect(data_boxes[1].all("a").map(&:text)).to eq(["4", "Your completed lettings", "View all schemes"])
+        expect(data_boxes[1].all("a").map { |line| line["href"] }).to eq([sales_logs_path(status: [:completed], assigned_to: "you"), sales_logs_path(status: [:completed], assigned_to: "you"), clear_filters_path(filter_type: "schemes")])
+
       end
     end
   end
@@ -77,12 +83,15 @@ RSpec.describe "Home Page Features" do
         visit("/")
       end
 
-      it "displays correct data boxes and counts" do
+      it "displays correct data boxes, counts and links" do
         data_boxes = page.find_all(class: "app-data-box-one-third")
         expect(data_boxes.count).to eq(3)
-        expect(data_boxes[0].text.split("\n")).to eq(["8", "Lettings in progress", "View all lettings"])
-        expect(data_boxes[1].text.split("\n")).to eq(["5", "Sales in progress", "View all sales"])
-        expect(data_boxes[2].text.split("\n")).to eq(["1", "Incomplete schemes", "View all schemes"])
+        expect(data_boxes[0].all("a").map(&:text)).to eq(["8", "Lettings in progress", "View all lettings"])
+        expect(data_boxes[0].all("a").map { |line| line["href"] }).to eq([lettings_logs_path(status: [:in_progress]), lettings_logs_path(status: [:in_progress]), clear_filters_path(filter_type: "lettings_logs")])
+        expect(data_boxes[1].all("a").map(&:text)).to eq(["5", "Sales in progress", "View all sales"])
+        expect(data_boxes[1].all("a").map { |line| line["href"] }).to eq([sales_logs_path(status: [:in_progress]), sales_logs_path(status: [:in_progress]), clear_filters_path(filter_type: "sales_logs")])
+        expect(data_boxes[2].all("a").map(&:text)).to eq(["1", "Incomplete schemes", "View all schemes"])
+        expect(data_boxes[2].all("a").map { |line| line["href"] }).to eq([schemes_path(status: [:incomplete]), schemes_path(status: [:incomplete]), clear_filters_path(filter_type: "schemes")])
       end
     end
 
@@ -91,11 +100,13 @@ RSpec.describe "Home Page Features" do
         visit("/")
       end
 
-      it "displays correct data boxes and counts" do
+      it "displays correct data boxes, counts and links" do
         data_boxes = page.find_all(class: "app-data-box-one-half")
         expect(data_boxes.count).to eq(2)
-        expect(data_boxes[0].text.split("\n")).to eq(["8", "Lettings in progress", "View all lettings"])
-        expect(data_boxes[1].text.split("\n")).to eq(["1", "Incomplete schemes", "View all schemes"])
+        expect(data_boxes[0].all("a").map(&:text)).to eq(["8", "Lettings in progress", "View all lettings"])
+        expect(data_boxes[0].all("a").map { |line| line["href"] }).to eq([lettings_logs_path(status: [:in_progress]), lettings_logs_path(status: [:in_progress]), clear_filters_path(filter_type: "lettings_logs")])
+        expect(data_boxes[1].all("a").map(&:text)).to eq(["1", "Incomplete schemes", "View all schemes"])
+        expect(data_boxes[1].all("a").map { |line| line["href"] }).to eq([schemes_path(status: [:incomplete]), schemes_path(status: [:incomplete]), clear_filters_path(filter_type: "schemes")])
       end
     end
   end
@@ -135,12 +146,15 @@ RSpec.describe "Home Page Features" do
       expect(page).to have_content("Manage all data")
     end
 
-    it "displays correct data boxes and counts" do
+    it "displays correct data boxes, counts and links" do
       data_boxes = page.find_all(class: "app-data-box-one-third")
       expect(data_boxes.count).to eq(3)
-      expect(data_boxes[0].text.split("\n")).to eq(["2", "Lettings in progress", "View all lettings"])
-      expect(data_boxes[1].text.split("\n")).to eq(["3", "Sales in progress", "View all sales"])
-      expect(data_boxes[2].text.split("\n")).to eq(["1", "Incomplete schemes", "View all schemes"])
+      expect(data_boxes[0].all("a").map(&:text)).to eq(["2", "Lettings in progress", "View all lettings"])
+      expect(data_boxes[0].all("a").map { |line| line["href"] }).to eq([lettings_logs_path(status: [:in_progress]), lettings_logs_path(status: [:in_progress]), clear_filters_path(filter_type: "lettings_logs")])
+      expect(data_boxes[1].all("a").map(&:text)).to eq(["3", "Sales in progress", "View all sales"])
+      expect(data_boxes[1].all("a").map { |line| line["href"] }).to eq([sales_logs_path(status: [:in_progress]), sales_logs_path(status: [:in_progress]), clear_filters_path(filter_type: "sales_logs")])
+      expect(data_boxes[2].all("a").map(&:text)).to eq(["1", "Incomplete schemes", "View all schemes"])
+      expect(data_boxes[2].all("a").map { |line| line["href"] }).to eq([schemes_path(status: [:incomplete]), schemes_path(status: [:incomplete]), clear_filters_path(filter_type: "schemes")])
     end
   end
 end
