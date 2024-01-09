@@ -31,6 +31,35 @@ RSpec.describe StartController, type: :request do
         get "/", headers:, params: {}
         expect(page).to have_content("Welcome back")
       end
+
+      context "and 2023 collection window is open for editing" do
+        before do
+          allow(Time).to receive(:now).and_return(Time.zone.local(2024, 1, 1))
+        end
+
+        it "displays correct resources for 2022/23 and 2023/24 collection years" do
+          get "/", headers: headers, params: {}
+          expect(page).to have_content("Lettings 2023/24")
+          expect(page).to have_content("Sales 2023/24")
+        end
+      end
+
+      context "and 2023 collection window is closed for editing" do
+        before do
+          allow(Time).to receive(:now).and_return(Time.zone.local(2025, 1, 1))
+        end
+
+        it "displays correct resources for 2022/23 and 2023/24 collection years" do
+          get "/", headers: headers, params: {}
+          expect(page).not_to have_content("Lettings 2023/24")
+          expect(page).not_to have_content("Sales 2023/24")
+        end
+      end
+
+      it "shows guidance link" do
+        get "/", headers: headers, params: {}
+        expect(page).to have_content("Guidance for submitting social housing lettings and sales data (CORE)")
+      end
     end
   end
 
