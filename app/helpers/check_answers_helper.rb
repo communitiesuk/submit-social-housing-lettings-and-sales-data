@@ -1,5 +1,6 @@
 module CheckAnswersHelper
   include GovukLinkHelper
+  include GovukVisuallyHiddenHelper
 
   def display_answered_questions_summary(subsection, lettings_log, current_user)
     total = total_count(subsection, lettings_log, current_user)

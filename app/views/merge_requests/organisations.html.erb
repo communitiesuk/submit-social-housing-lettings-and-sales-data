@@ -23,10 +23,10 @@
     <%= f.govuk_submit "Add organisation", classes: "govuk-button--secondary" %>
     <%= govuk_table do |table| %>
       <% @merge_request.merging_organisations.order(:name).each do |merging_organisation| %>
-        <%= table.body do |body| %>
-          <%= body.row do |row| %>
-            <% row.cell(text: merging_organisation.name) %>
-            <% row.cell(html_attributes: {
+        <%= table.with_body do |body| %>
+          <%= body.with_row do |row| %>
+            <% row.with_cell(text: merging_organisation.name) %>
+            <% row.with_cell(html_attributes: {
               scope: "row",
               class: "govuk-!-text-align-right",
             }) do %>

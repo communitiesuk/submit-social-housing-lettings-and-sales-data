@@ -55,7 +55,7 @@ RSpec.describe "validations" do
       it "shows validation for under 0" do
         visit("/lettings-logs/#{id}/person-1-age")
         fill_in_number_question(empty_lettings_log.id, "age1", -5, "person-1-age")
-        expect(page).to have_selector("#error-summary-title")
+        expect(page).to have_selector(".govuk-error-summary__title")
         expect(page).to have_selector("#lettings-log-age1-error")
         expect(page).to have_selector("#lettings-log-age1-field-error")
         expect(page).to have_title("Error")
@@ -64,7 +64,7 @@ RSpec.describe "validations" do
       it "shows validation for over 120" do
         visit("/lettings-logs/#{id}/person-1-age")
         fill_in_number_question(empty_lettings_log.id, "age1", 121, "person-1-age")
-        expect(page).to have_selector("#error-summary-title")
+        expect(page).to have_selector(".govuk-error-summary__title")
         expect(page).to have_selector("#lettings-log-age1-error")
         expect(page).to have_selector("#lettings-log-age1-field-error")
         expect(page).to have_title("Error")
