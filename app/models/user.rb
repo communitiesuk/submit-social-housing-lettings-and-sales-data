@@ -229,6 +229,14 @@ class User < ApplicationRecord
     sales_logs.after_date(FormHandler.instance.sales_earliest_open_for_editing_collection_start_date).duplicate_sets(id).map { |array_str| array_str ? array_str.map(&:to_i) : [] }
   end
 
+  def active_unread_notifications
+    Notification.unread_by(self)
+  end
+
+  def oldest_active_unread_notification
+    active_unread_notifications.first
+  end
+
 protected
 
   # Checks whether a password is needed or not. For validations only.

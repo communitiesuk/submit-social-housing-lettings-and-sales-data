@@ -12,6 +12,8 @@ module ApplicationHelper
   def govuk_header_classes(current_user)
     if current_user && current_user.support?
       "app-header app-header--orange"
+    elsif current_user && Notification.unread_by(current_user).present? && !current_page?(notifications_path)
+      "app-header app-header__no-border-bottom"
     else
       "app-header"
     end
