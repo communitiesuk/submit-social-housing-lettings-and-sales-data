@@ -101,8 +101,8 @@
       end
     end %>
 
-    <% if current_user.present? && current_page?("/") && Notification.unread_by(current_user).present? %>
-      <%= render UnreadNotification.new(current_user:) %>
+    <% if current_user.present? && Notification.unread_by(current_user).present? && !current_page?(notifications_path)%>
+      <%= render "notifications/notification_banner" %>
     <% end %>
 
 

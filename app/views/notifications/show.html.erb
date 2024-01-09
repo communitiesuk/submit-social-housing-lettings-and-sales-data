@@ -1,0 +1,15 @@
+<% content_for :title, "Notification" %>
+<% content_for :before_content do %>
+  <%= govuk_back_link(href: :back) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl"><%= @notification.title %></h1>
+    <%= @notification.page_content %>
+  </div>
+</div>
+<br>
+<div>
+  <%= govuk_button_link_to "Back to Home", root_path %>
+</div>

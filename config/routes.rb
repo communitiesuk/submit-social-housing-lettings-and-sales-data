@@ -128,7 +128,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :notifications do
+  resource :notifications do
     get "dismiss", to: "notifications#dismiss"
   end
 
