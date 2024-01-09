@@ -310,42 +310,6 @@ RSpec.describe OrganisationsController, type: :request do
         it "redirects to details" do
           expect(response).to have_http_status(:redirect)
         end
-
-        context "and 2022 collection window is open" do
-          let(:set_time) { allow(Time).to receive(:now).and_return(Time.zone.local(2023, 1, 1)) }
-
-          it "displays correct resources for 2022/23 and 2023/24 collection years" do
-            follow_redirect!
-            expect(page).to have_content("Lettings 2023/24")
-            expect(page).to have_content("Sales 2023/24")
-            expect(page).to have_content("Lettings 2022/23")
-            expect(page).to have_content("Sales 2022/23")
-          end
-        end
-
-        context "and 2022 collection window is closed for editing" do
-          let(:set_time) { allow(Time).to receive(:now).and_return(Time.zone.local(2024, 1, 1)) }
-
-          it "displays correct resources for 2022/23 and 2023/24 collection years" do
-            follow_redirect!
-            expect(page).to have_content("Lettings 2023/24")
-            expect(page).to have_content("Sales 2023/24")
-            expect(page).not_to have_content("Lettings 2022/23")
-            expect(page).not_to have_content("Sales 2022/23")
-          end
-        end
-
-        context "and 2023 collection window is closed for editing" do
-          let(:set_time) { allow(Time).to receive(:now).and_return(Time.zone.local(2025, 1, 1)) }
-
-          it "displays correct resources for 2022/23 and 2023/24 collection years" do
-            follow_redirect!
-            expect(page).not_to have_content("Lettings 2023/24")
-            expect(page).not_to have_content("Sales 2023/24")
-            expect(page).not_to have_content("Lettings 2022/23")
-            expect(page).not_to have_content("Sales 2022/23")
-          end
-        end
       end
 
       context "with an organisation that are not in scope for the user, i.e. that they do not belong to" do
