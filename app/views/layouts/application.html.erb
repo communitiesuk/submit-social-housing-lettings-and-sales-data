@@ -101,8 +101,12 @@
       end
     end %>
 
-    <% if current_user.present? && Notification.unread_by(current_user).present? && !current_page?(notifications_path)%>
-      <%= render "notifications/notification_banner" %>
+    <% unless current_page?(notifications_path) %>
+      <% if current_user&.active_unread_notifications.present? %>
+        <%= render "notifications/notification_banner", notification_count: current_user.active_unread_notifications.count, notification: current_user.newest_active_unread_notification %>
+      <% elsif !current_user.present? && Notification.unauthenticated.present? %>
+        <%= render "notifications/notification_banner", notification_count: Notification.unauthenticated.count, notification: Notification.newest_active_unauthenticated_notification %>
+      <% end %>
     <% end %>
 
 

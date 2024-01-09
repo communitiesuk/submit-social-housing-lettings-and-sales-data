@@ -10,9 +10,9 @@ module ApplicationHelper
   end
 
   def govuk_header_classes(current_user)
-    if current_user && current_user.support?
+    if current_user&.support?
       "app-header app-header--orange"
-    elsif current_user && Notification.unread_by(current_user).present? && !current_page?(notifications_path)
+    elsif (current_user.blank? || current_user.active_unread_notifications.present?) && !current_page?(notifications_path)
       "app-header app-header__no-border-bottom"
     else
       "app-header"
@@ -20,7 +20,7 @@ module ApplicationHelper
   end
 
   def govuk_phase_banner_tag(current_user)
-    if current_user && current_user.support?
+    if current_user&.support?
       { colour: "orange", text: "Support beta" }
     else
       { text: "Beta" }

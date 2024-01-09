@@ -233,8 +233,8 @@ class User < ApplicationRecord
     Notification.active.unread_by(self)
   end
 
-  def oldest_active_unread_notification
-    active_unread_notifications.first
+  def newest_active_unread_notification
+    active_unread_notifications.last
   end
 
 protected
