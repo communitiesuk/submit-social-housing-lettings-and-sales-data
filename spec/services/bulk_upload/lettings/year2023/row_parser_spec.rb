@@ -1465,6 +1465,29 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
           expect(parser.errors.where(:field_3)).not_to be_present
         end
       end
+
+      context "when user's org has absorbed owning organisation before the startdate" do
+        let(:merged_org) { create(:organisation, :with_old_visible_id, holds_own_stock: true) }
+
+        let(:attributes) { setup_section_params.merge({ field_1: merged_org.old_visible_id, field_2: merged_org.old_visible_id, field_3: user.email }) }
+
+        before do
+          merged_org.update!(absorbing_organisation: user.organisation, merge_date: Time.zone.today - 5.years)
+          merged_org.reload
+          user.organisation.reload
+        end
+
+        it "is not permitted" do
+          parser = described_class.new(attributes)
+
+          parser.valid?
+          expect(parser.errors[:field_1]).to include(/The owning organisation must be active on the tenancy start date/)
+          expect(parser.errors[:field_2]).to include(/The managing organisation must be active on the tenancy start date/)
+          expect(parser.errors[:field_7]).to include(/Enter a date when the owning and managing organisation was active/)
+          expect(parser.errors[:field_8]).to include(/Enter a date when the owning and managing organisation was active/)
+          expect(parser.errors[:field_9]).to include(/Enter a date when the owning and managing organisation was active/)
+        end
+      end
     end
 
     describe "#field_2" do # managing org
@@ -2235,10 +2258,20 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
     end
 
     describe "#household_charge" do
-      let(:attributes) { { bulk_upload:, field_125: "1" } }
+      context "when log is general needs" do
+        let(:attributes) { { bulk_upload:, field_4: 1, field_125: "1" } }
 
-      it "sets correct value from mapping" do
-        expect(parser.log.household_charge).to eq(1)
+        it "sets correct value from mapping" do
+          expect(parser.log.household_charge).to eq(nil)
+        end
+      end
+
+      context "when log is supported housing" do
+        let(:attributes) { { bulk_upload:, field_4: 2, field_125: "1" } }
+
+        it "sets correct value from mapping" do
+          expect(parser.log.household_charge).to eq(1)
+        end
       end
     end
 

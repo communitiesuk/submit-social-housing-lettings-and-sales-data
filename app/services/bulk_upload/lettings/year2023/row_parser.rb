@@ -415,7 +415,13 @@ class BulkUpload::Lettings::Year2023::RowParser
       fields = field_mapping_for_errors[error.attribute] || []
 
       fields.each do |field|
-        unless errors.include?(field)
+        next if errors.include?(field)
+
+        question = log.form.get_question(error.attribute, log)
+
+        if question.present? && setup_question?(question)
+          errors.add(field, error.message, category: :setup)
+        else
           errors.add(field, error.message)
         end
       end
@@ -1187,7 +1193,7 @@ private
     attributes["tcharge"] = field_132
     attributes["chcharge"] = field_127
     attributes["is_carehome"] = field_127.present? ? 1 : 0
-    attributes["household_charge"] = field_125
+    attributes["household_charge"] = supported_housing? ? field_125 : nil
     attributes["hbrentshortfall"] = field_133
     attributes["tshortfall_known"] = tshortfall_known
     attributes["tshortfall"] = field_134

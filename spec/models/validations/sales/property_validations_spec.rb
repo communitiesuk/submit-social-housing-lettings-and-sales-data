@@ -25,12 +25,16 @@ RSpec.describe Validations::Sales::PropertyValidations do
         record.postcode_full = "SW1A 1AA"
         property_validator.validate_postcodes_match_if_discounted_ownership(record)
         expect(record.errors["postcode_full"]).to be_empty
+        expect(record.errors["ppostcode_full"]).to be_empty
+        expect(record.errors["ownershipsch"]).to be_empty
       end
 
       it "when postcode_full is not present no error is added" do
         record.ppostcode_full = "SW1A 1AA"
         property_validator.validate_postcodes_match_if_discounted_ownership(record)
         expect(record.errors["postcode_full"]).to be_empty
+        expect(record.errors["ppostcode_full"]).to be_empty
+        expect(record.errors["ownershipsch"]).to be_empty
       end
 
       it "when postcodes match no error is added" do
@@ -38,6 +42,8 @@ RSpec.describe Validations::Sales::PropertyValidations do
         record.ppostcode_full = "SW1A 1AA"
         property_validator.validate_postcodes_match_if_discounted_ownership(record)
         expect(record.errors["postcode_full"]).to be_empty
+        expect(record.errors["ppostcode_full"]).to be_empty
+        expect(record.errors["ownershipsch"]).to be_empty
       end
 
       it "when postcodes do not match an error is added" do
@@ -45,6 +51,8 @@ RSpec.describe Validations::Sales::PropertyValidations do
         record.ppostcode_full = "SW1A 0AA"
         property_validator.validate_postcodes_match_if_discounted_ownership(record)
         expect(record.errors["postcode_full"]).to include(match I18n.t("validations.property.postcode.must_match_previous"))
+        expect(record.errors["ppostcode_full"]).to include(match I18n.t("validations.property.postcode.must_match_previous"))
+        expect(record.errors["ownershipsch"]).to include(match I18n.t("validations.property.postcode.must_match_previous"))
       end
     end
   end
