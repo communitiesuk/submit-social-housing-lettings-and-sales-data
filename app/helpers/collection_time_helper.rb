@@ -45,4 +45,24 @@ module CollectionTimeHelper
   def previous_collection_start_date
     current_collection_start_date - 1.year
   end
+
+  def quarter_for_date(date: Time.zone.now)
+    quarters = [
+      { quarter: "Q3", cutoff_date: Time.zone.local(2024, 1, 12), start_date: Time.zone.local(2023, 10, 1), end_date: Time.zone.local(2023, 12, 31) },
+      { quarter: "Q1", cutoff_date: Time.zone.local(2024, 7, 12), start_date: Time.zone.local(2024, 4, 1), end_date: Time.zone.local(2024, 6, 30) },
+      { quarter: "Q2", cutoff_date: Time.zone.local(2024, 10, 11), start_date: Time.zone.local(2024, 7, 1), end_date: Time.zone.local(2024, 9, 30) },
+      { quarter: "Q3", cutoff_date: Time.zone.local(2025, 1, 10), start_date: Time.zone.local(2024, 10, 1), end_date: Time.zone.local(2024, 12, 31) },
+    ]
+
+    quarter = quarters.find { |q| date.between?(q[:start_date], q[:cutoff_date] + 1.day) }
+
+    return unless quarter
+
+    OpenStruct.new(
+      quarter: quarter[:quarter],
+      cutoff_date: quarter[:cutoff_date],
+      quarter_start_date: quarter[:start_date],
+      quarter_end_date: quarter[:end_date],
+    )
+  end
 end
