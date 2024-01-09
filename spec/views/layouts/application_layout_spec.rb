@@ -56,7 +56,6 @@ RSpec.describe "layouts/application" do
   end
 
   context "with a notification present" do
-
     context "when notification is shown on unauthenticated pages" do
       before do
         create(:notification, title: "Old notification title", show_on_unauthenticated_pages: true)

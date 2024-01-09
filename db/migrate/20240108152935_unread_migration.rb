@@ -6,7 +6,7 @@ class UnreadMigration < ActiveRecord::Migration[6.0]
       t.datetime :timestamp, null: false
     end
 
-    add_index ReadMark, [:reader_id, :reader_type, :readable_type, :readable_id], name: 'read_marks_reader_readable_index', unique: true
+    add_index ReadMark, %i[reader_id reader_type readable_type readable_id], name: "read_marks_reader_readable_index", unique: true
   end
 
   def self.down
@@ -14,10 +14,10 @@ class UnreadMigration < ActiveRecord::Migration[6.0]
   end
 
   def self.create_options
-    options = ''
+    options = ""
     if defined?(ActiveRecord::ConnectionAdapters::Mysql2Adapter) \
       && ActiveRecord::Base.connection.instance_of?(ActiveRecord::ConnectionAdapters::Mysql2Adapter)
-      options = 'DEFAULT CHARSET=latin1'
+      options = "DEFAULT CHARSET=latin1"
     end
     options
   end
