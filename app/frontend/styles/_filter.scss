@@ -5,8 +5,6 @@
 
 .govuk-checkboxes__label,
 .govuk-radios__label {
-  @include govuk-font(16);
-
   &:before {
     background-color: govuk-colour("white");
   }
