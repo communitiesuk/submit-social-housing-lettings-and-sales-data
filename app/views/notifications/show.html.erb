@@ -6,7 +6,9 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-xl"><%= @notification.title %></h1>
-    <%= @notification.page_content %>
+    <p>
+    <%= sanitize @notification.page_content %>
+    </p>
   </div>
 </div>
 <br>
