@@ -4,16 +4,16 @@
 
 <% sorted_errors.each do |error| %>
   <%= govuk_table do |table| %>
-    <% table.head do |head| %>
-      <% head.row do |row| %>
-        <% row.cell(text: question_for_field(error[0][1].to_sym), header: true) %>
-        <% row.cell(text: "Column #{error[0][0]}", header: true, numeric: true) %>
+    <%= table.with_head do |head| %>
+      <% head.with_row do |row| %>
+        <% row.with_cell(text: question_for_field(error[0][1].to_sym), header: true) %>
+        <% row.with_cell(text: "Column #{error[0][0]}", header: true, numeric: true) %>
       <% end %>
 
-      <% table.body do |body| %>
-        <% body.row do |row| %>
-          <% row.cell(text: error[0][2]) %>
-          <% row.cell(text: pluralize(error[1], "error"), numeric: true) %>
+      <%= table.with_body do |body| %>
+        <% body.with_row do |row| %>
+          <% row.with_cell(text: error[0][2]) %>
+          <% row.with_cell(text: pluralize(error[1], "error"), numeric: true) %>
         <% end %>
       <% end %>
     <% end %>

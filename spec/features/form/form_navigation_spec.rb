@@ -137,7 +137,7 @@ RSpec.describe "Form Navigation" do
       it "shows a validation error on radio questions" do
         visit("/lettings-logs/#{id}/renewal")
         click_button("Save and continue")
-        expect(page).to have_selector("#error-summary-title")
+        expect(page).to have_selector(".govuk-error-summary__title")
         expect(page).to have_selector("#lettings-log-renewal-error")
         expect(page).to have_title("Error")
       end
@@ -145,7 +145,7 @@ RSpec.describe "Form Navigation" do
       it "shows a validation error on date questions" do
         visit("/lettings-logs/#{id}/tenancy-start-date")
         click_button("Save and continue")
-        expect(page).to have_selector("#error-summary-title")
+        expect(page).to have_selector(".govuk-error-summary__title")
         expect(page).to have_selector("#lettings-log-startdate-error")
         expect(page).to have_title("Error")
       end
@@ -156,7 +156,7 @@ RSpec.describe "Form Navigation" do
             visit("/lettings-logs/#{id}/armed-forces")
             choose("lettings-log-armedforces-1-field", allow_label_click: true)
             click_button("Save and continue")
-            expect(page).to have_selector("#error-summary-title")
+            expect(page).to have_selector(".govuk-error-summary__title")
             expect(page).to have_selector("#lettings-log-leftreg-error")
             expect(page).to have_title("Error")
           end
@@ -170,7 +170,7 @@ RSpec.describe "Form Navigation" do
       it "does not show a validation error" do
         visit("/lettings-logs/#{id}/tenant-code")
         click_button("Save and continue")
-        expect(page).not_to have_selector("#error-summary-title")
+        expect(page).not_to have_selector(".govuk-error-summary__title")
         expect(page).not_to have_title("Error")
         expect(page).to have_current_path("/lettings-logs/#{id}/property-reference")
       end

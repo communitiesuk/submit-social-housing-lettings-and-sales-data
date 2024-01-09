@@ -17,20 +17,20 @@
       <%= organisation_name_row(user: current_user, organisation: @organisation, summary_list:) %>
       <% display_organisation_attributes(@organisation).each do |attr| %>
         <% if can_edit_org?(current_user) && attr[:editable] %>
-          <%= summary_list.row do |row| %>
-            <% row.key { attr[:name] } %>
-            <% row.value { details_html(attr) } %>
-            <% row.action(
+          <%= summary_list.with_row do |row| %>
+            <% row.with_key { attr[:name] } %>
+            <% row.with_value { details_html(attr) } %>
+            <% row.with_action(
               visually_hidden_text: attr[:name].to_s.humanize.downcase,
               href: edit_organisation_path(@organisation),
               html_attributes: { "data-qa": "change-#{attr[:name].downcase}" },
             ) %>
           <% end %>
         <% else %>
-          <%= summary_list.row do |row| %>
-            <% row.key { attr[:name] } %>
-            <% row.value { details_html(attr) } %>
-            <% row.action %>
+          <%= summary_list.with_row do |row| %>
+            <% row.with_key { attr[:name] } %>
+            <% row.with_value { details_html(attr) } %>
+            <% row.with_action %>
           <% end %>
         <% end %>
       <% end %>

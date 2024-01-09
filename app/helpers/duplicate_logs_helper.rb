@@ -1,5 +1,6 @@
 module DuplicateLogsHelper
   include GovukLinkHelper
+  include GovukVisuallyHiddenHelper
 
   def duplicate_logs_continue_button(all_duplicates, duplicate_log, original_log)
     if all_duplicates.count > 1

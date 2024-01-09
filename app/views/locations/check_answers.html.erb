@@ -19,18 +19,18 @@
     <%= govuk_summary_list do |summary_list| %>
       <% display_location_attributes_for_check_answers(@location).each do |attr| %>
         <% unless attr[:attribute].eql?("local_authority") && @location.is_la_inferred %>
-          <%= summary_list.row do |row| %>
-            <% row.key { attr[:name] } %>
+          <%= summary_list.with_row do |row| %>
+            <% row.with_key { attr[:name] } %>
             <% if attr[:attribute].eql?("postcode") && @location.is_la_inferred %>
-                <% row.value do %>
+                <% row.with_value do %>
                 <%= details_html(attr) %>
                 <span class="govuk-!-font-weight-regular app-!-colour-muted"><%= formatted_local_authority_timeline(@location) %></span>
                 <% end %>
             <% else %>
-              <% row.value { details_html(attr) } %>
+              <% row.with_value { details_html(attr) } %>
             <% end %>
             <% if LocationPolicy.new(current_user, @location).update? %>
-              <% row.action(text: action_text_helper(attr, @location), href: location_edit_path(@location, attr[:attribute])) %>
+              <% row.with_action(text: action_text_helper(attr, @location), href: location_edit_path(@location, attr[:attribute])) %>
             <% end %>
           <% end %>
         <% end %>

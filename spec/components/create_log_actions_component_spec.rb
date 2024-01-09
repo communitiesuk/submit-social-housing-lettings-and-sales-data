@@ -3,6 +3,7 @@ require "rails_helper"
 RSpec.describe CreateLogActionsComponent, type: :component do
   include GovukComponentsHelper
   include GovukLinkHelper
+  include GovukVisuallyHiddenHelper
   let(:component) { described_class.new(user:, log_type:, bulk_upload:) }
   let(:render) { render_inline(component) }
 

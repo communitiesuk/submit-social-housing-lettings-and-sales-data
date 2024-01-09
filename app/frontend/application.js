@@ -18,7 +18,7 @@ import './controllers'
 import './cookie-banner'
 import './styles/application.scss'
 
-require.context('govuk-frontend/govuk/assets')
+require.context('govuk-frontend/dist/govuk/assets')
 
 GOVUKFrontend()
 GOVUKPrototypeComponents()

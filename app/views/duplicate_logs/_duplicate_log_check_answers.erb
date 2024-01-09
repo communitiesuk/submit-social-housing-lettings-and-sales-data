@@ -2,10 +2,10 @@
   <div class="x-govuk-summary-card__body">
     <%= govuk_summary_list do |summary_list| %>
       <% log.duplicate_check_questions(current_user).each do |question| %>
-        <% summary_list.row do |row| %>
-          <% row.key { duplicate_log_question_label(question) } %>
+        <% summary_list.with_row do |row| %>
+          <% row.with_key { duplicate_log_question_label(question) } %>
 
-          <% row.value do %>
+          <% row.with_value do %>
             <%= simple_format(
               duplicate_log_answer_label(question, log),
               wrapper_tag: "span",
@@ -25,13 +25,13 @@
             <% end %>
           <% end %>
           <% if @all_duplicates.many? %>
-            <% row.action(
+            <% row.with_action(
                 text: question.action_text(log),
                 href: change_duplicate_logs_action_href(log, question.page.id, @all_duplicates, @original_log.id),
                 visually_hidden_text: question.check_answer_label.to_s.downcase,
               ) %>
           <% else %>
-            <% row.action(
+            <% row.with_action(
               text: question.action_text(log),
               href: duplicate_logs_action_href(log, question.page.id, @original_log.id),
               visually_hidden_text: question.check_answer_label.to_s.downcase,

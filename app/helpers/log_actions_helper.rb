@@ -1,5 +1,6 @@
 module LogActionsHelper
   include GovukLinkHelper
+  include GovukVisuallyHiddenHelper
 
   def edit_actions_for_log(log)
     back = back_button_for(log)

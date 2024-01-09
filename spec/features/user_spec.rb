@@ -65,7 +65,7 @@ RSpec.describe "User Features" do
     it "is shown an error message if they submit without entering an email address" do
       visit("/account/password/new")
       click_button("Send email")
-      expect(page).to have_selector("#error-summary-title")
+      expect(page).to have_selector(".govuk-error-summary__title")
       expect(page).to have_selector("#user-email-field-error")
       expect(page).to have_title("Error")
     end
@@ -74,7 +74,7 @@ RSpec.describe "User Features" do
       visit("/account/password/new")
       fill_in("user[email]", with: "thisisn'tanemail")
       click_button("Send email")
-      expect(page).to have_selector("#error-summary-title")
+      expect(page).to have_selector(".govuk-error-summary__title")
       expect(page).to have_selector("#user-email-field-error")
       expect(page).to have_title("Error")
     end
@@ -166,7 +166,7 @@ RSpec.describe "User Features" do
       fill_in("user[email]", with: user.email)
       fill_in("user[password]", with: "nonsense")
       click_button("Sign in")
-      expect(page).to have_selector("#error-summary-title")
+      expect(page).to have_selector(".govuk-error-summary__title")
       expect(page).to have_no_css(".govuk-notification-banner.govuk-notification-banner--success")
       expect(page).to have_title("Error")
     end
@@ -174,7 +174,7 @@ RSpec.describe "User Features" do
     it "show specific field error messages if a field was omitted" do
       visit("/lettings-logs")
       click_button("Sign in")
-      expect(page).to have_selector("#error-summary-title")
+      expect(page).to have_selector(".govuk-error-summary__title")
       expect(page).to have_selector("#user-email-field-error")
       expect(page).to have_selector("#user-password-field-error")
       expect(page).to have_title("Error")
@@ -184,7 +184,7 @@ RSpec.describe "User Features" do
       visit("/lettings-logs")
       fill_in("user[email]", with: "thisisn'tanemail")
       click_button("Sign in")
-      expect(page).to have_selector("#error-summary-title")
+      expect(page).to have_selector(".govuk-error-summary__title")
       expect(page).to have_selector("#user-email-field-error")
       expect(page).to have_content(/Enter an email address in the correct format, like name@example.com/)
       expect(page).to have_title("Error")
@@ -201,7 +201,7 @@ RSpec.describe "User Features" do
       fill_in("user[email]", with: user.email)
       fill_in("user[password]", with: "pAssword1")
       click_button("Sign in")
-      expect(page).to have_selector("#error-summary-title")
+      expect(page).to have_selector(".govuk-error-summary__title")
       expect(page).to have_no_css(".govuk-notification-banner.govuk-notification-banner--success")
       expect(page).to have_title("Error")
     end
@@ -379,7 +379,7 @@ RSpec.describe "User Features" do
         visit("users/new")
         fill_in("user[name]", with: "New User")
         click_button("Continue")
-        expect(page).to have_selector("#error-summary-title")
+        expect(page).to have_selector(".govuk-error-summary__title")
         expect(page).to have_selector("#user-email-field-error")
         expect(page).to have_content(/Enter an email address/)
         expect(page).to have_title("Error")
@@ -390,7 +390,7 @@ RSpec.describe "User Features" do
         fill_in("user[name]", with: "New User")
         fill_in("user[email]", with: "thisis'tanemail")
         click_button("Continue")
-        expect(page).to have_selector("#error-summary-title")
+        expect(page).to have_selector(".govuk-error-summary__title")
         expect(page).to have_selector("#user-email-field-error")
         expect(page).to have_content(/Enter an email address in the correct format, like name@example.com/)
         expect(page).to have_title("Error")
@@ -676,7 +676,7 @@ RSpec.describe "User Features" do
           expect(page).to have_content("Check your email")
           expect(page).to have_http_status(:unprocessable_entity)
           expect(page).to have_title("Error")
-          expect(page).to have_selector("#error-summary-title")
+          expect(page).to have_selector(".govuk-error-summary__title")
         end
       end
     end
@@ -689,7 +689,7 @@ RSpec.describe "User Features" do
         expect(page).to have_content("Check your email")
         expect(page).to have_http_status(:unprocessable_entity)
         expect(page).to have_title("Error")
-        expect(page).to have_selector("#error-summary-title")
+        expect(page).to have_selector(".govuk-error-summary__title")
       end
     end
 
@@ -747,7 +747,7 @@ RSpec.describe "User Features" do
       it "is shown an error message if they submit without entering an email address" do
         visit("/account/password/new")
         click_button("Send email")
-        expect(page).to have_selector("#error-summary-title")
+        expect(page).to have_selector(".govuk-error-summary__title")
         expect(page).to have_selector("#user-email-field-error")
         expect(page).to have_title("Error")
       end

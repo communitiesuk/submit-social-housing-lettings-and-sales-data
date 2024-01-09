@@ -1,13 +1,13 @@
 module DataSharingAgreementHelper
   def data_sharing_agreement_row(user:, organisation:, summary_list:)
-    summary_list.row do |row|
-      row.key { "Data Sharing Agreement" }
-      row.action(
+    summary_list.with_row do |row|
+      row.with_key { "Data Sharing Agreement" }
+      row.with_action(
         href: data_sharing_agreement_organisation_path(organisation),
         text: "View agreement",
       )
 
-      row.value do
+      row.with_value do
         simple_format(
           data_sharing_agreement_first_line(organisation:, user:),
           wrapper_tag: "span",
