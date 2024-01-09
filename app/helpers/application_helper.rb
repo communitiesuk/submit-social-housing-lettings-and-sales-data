@@ -12,7 +12,7 @@ module ApplicationHelper
   def govuk_header_classes(current_user)
     if current_user&.support?
       "app-header app-header--orange"
-    elsif (current_user.blank? || current_user.active_unread_notifications.present?) && !current_page?(notifications_path)
+    elsif ((current_user.blank? && Notification.active_unauthenticated_notifications.present?) || current_user&.active_unread_notifications.present?) && !current_page?(notifications_path)
       "app-header app-header__no-border-bottom"
     else
       "app-header"

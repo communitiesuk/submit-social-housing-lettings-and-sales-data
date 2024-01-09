@@ -54,4 +54,36 @@ RSpec.describe "layouts/application" do
 
     include_examples "analytics cookie elements", banner: false, scripts: false
   end
+
+  context "with a notification present" do
+
+    context "when notification is shown on unauthenticated pages" do
+      before do
+        create(:notification, title: "Old notification title", show_on_unauthenticated_pages: true)
+        create(:notification, title: "New notification title", show_on_unauthenticated_pages: true)
+        render
+      end
+
+      it "shows the most recent notification without dismiss link or count" do
+        expect(rendered).to have_content("New notification title")
+        expect(rendered).to have_link("Link text")
+        expect(rendered).not_to have_link("Dismiss")
+        expect(rendered).not_to have_content("Notification 1 of")
+      end
+    end
+
+    context "when notification is not shown on unauthenticated pages" do
+      before do
+        create(:notification)
+        render
+      end
+
+      it "does not show the notification banner" do
+        expect(rendered).not_to have_content("Notification title")
+        expect(rendered).not_to have_link("Link text")
+        expect(rendered).not_to have_link("Dismiss")
+        expect(rendered).not_to have_content("Notification 1 of")
+      end
+    end
+  end
 end

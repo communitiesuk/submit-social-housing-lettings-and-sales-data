@@ -4,6 +4,124 @@ require_relative "form/helpers"
 RSpec.describe "Home Page Features" do
   include Helpers
 
+  context "when there are notifications" do
+    let!(:user) { FactoryBot.create(:user) }
+
+    context "when the notifications are currently active" do
+      before do
+        create(:notification, title: "Notification title 1")
+        create(:notification, title: "Notification title 2")
+        create(:notification, title: "Notification title 3")
+        sign_in user
+        visit(root_path)
+      end
+
+      it "shows the latest notification with count and dismiss link" do
+        expect(page).to have_content("Notification 1 of 3")
+        expect(page).to have_content("Notification title 3")
+        expect(page).to have_link("Dismiss")
+        expect(page).to have_link("Link text")
+      end
+
+      context "when the user clicks a notification link" do
+        before do
+          click_link("Link text")
+        end
+
+        it "takes them to the notification details page" do
+          expect(page).to have_current_path(notifications_path)
+          expect(page).to have_content("Notification title 3")
+          expect(page).to have_content("Some html content")
+          expect(page).to have_link("Back to Home")
+        end
+
+        context "when they return" do
+          before do
+            click_link("Back to Home")
+          end
+
+          it "the notification has not been dismissed" do
+            expect(page).to have_current_path(root_path)
+            expect(page).to have_content("Notification 1 of 3")
+            expect(page).to have_content("Notification title 3")
+            expect(page).to have_link("Dismiss")
+            expect(page).to have_link("Link text")
+          end
+        end
+      end
+
+      context "when the user clicks a dismiss link" do
+        before do
+          click_link("Dismiss")
+        end
+
+        it "dismisses the notification and takes them back" do
+          expect(page).to have_current_path(root_path)
+          expect(page).to have_content("Notification 1 of 2")
+          expect(page).to have_content("Notification title 2")
+          expect(page).to have_link("Dismiss")
+          expect(page).to have_link("Link text")
+        end
+
+        context "when the user dismisses the penultimate notification" do
+          before do
+            click_link("Dismiss")
+          end
+
+          it "no longer displays the count" do
+            expect(page).to have_current_path(root_path)
+            expect(page).not_to have_content("Notification 1 of")
+            expect(page).to have_content("Notification title 1")
+          end
+
+          context "when the user dismisses the final notification" do
+            before do
+              click_link("Dismiss")
+            end
+
+            it "no longer displays any notification" do
+              expect(page).to have_current_path(root_path)
+              expect(page).not_to have_content("Notification")
+              expect(page).not_to have_link("Dismiss")
+              expect(page).not_to have_link("Link_text")
+            end
+          end
+        end
+      end
+
+      context "when another user has dismissed all their notifications" do
+        before do
+          other_user = create(:user)
+          Notification.mark_as_read! :all, for: other_user
+          visit(root_path)
+        end
+
+        it "the first user can still see the notifications" do
+          expect(page).to have_content("Notification 1 of 3")
+          expect(page).to have_content("Notification title 3")
+          expect(page).to have_link("Dismiss")
+          expect(page).to have_link("Link text")
+        end
+      end
+    end
+
+    context "when the notifications are not currently active" do
+      before do
+        create(:notification, end_date: Time.zone.yesterday, title: "Notification title 1")
+        create(:notification, start_date: Time.zone.tomorrow, title: "Notification title 2")
+        sign_in user
+        visit(root_path)
+      end
+
+      it "does not show any notifications" do
+        expect(page).not_to have_content("Notification title")
+        expect(page).not_to have_content("Notification 1 of")
+        expect(page).not_to have_link("Dismiss")
+        expect(page).not_to have_link("Link text")
+      end
+    end
+  end
+
   context "when the user is a data provider" do
     let(:user) { FactoryBot.create(:user, name: "Provider") }
 
@@ -13,7 +131,7 @@ RSpec.describe "Home Page Features" do
       create_list(:lettings_log, 4, :completed, owning_organisation: user.organisation, created_by: user)
       create_list(:lettings_log, 2, :completed)
       sign_in user
-      visit("/")
+      visit(root_path)
     end
 
     it "displays the correct welcome text" do
@@ -26,7 +144,7 @@ RSpec.describe "Home Page Features" do
       before do
         create_list(:sales_log, 5, :in_progress, owning_organisation: user.organisation, created_by: user)
         create_list(:sales_log, 3, :completed, owning_organisation: user.organisation, created_by: user)
-        visit("/")
+        visit(root_path)
       end
 
       it "displays correct data boxes, counts and links" do
@@ -41,7 +159,7 @@ RSpec.describe "Home Page Features" do
 
     context "when their organisation has never submitted sales logs" do
       before do
-        visit("/")
+        visit(root_path)
       end
 
       it "displays correct data boxes, counts and links" do
@@ -63,7 +181,7 @@ RSpec.describe "Home Page Features" do
       create_list(:lettings_log, 2, :completed)
       create_list(:scheme, 1, :incomplete, owning_organisation: user.organisation)
       sign_in user
-      visit("/")
+      visit(root_path)
     end
 
     let(:user) { FactoryBot.create(:user, :data_coordinator, name: "Coordinator") }
@@ -78,7 +196,7 @@ RSpec.describe "Home Page Features" do
       before do
         create_list(:sales_log, 5, :in_progress, owning_organisation: user.organisation)
         create_list(:sales_log, 3, :completed, owning_organisation: user.organisation)
-        visit("/")
+        visit(root_path)
       end
 
       it "displays correct data boxes, counts and links" do
@@ -95,7 +213,7 @@ RSpec.describe "Home Page Features" do
 
     context "when their organisation has never submitted sales logs" do
       before do
-        visit("/")
+        visit(root_path)
       end
 
       it "displays correct data boxes, counts and links" do
@@ -135,7 +253,7 @@ RSpec.describe "Home Page Features" do
       click_button("Sign in")
       fill_in("code", with: otp)
       click_button("Submit")
-      visit("/")
+      visit(root_path)
     end
 
     it "displays the correct welcome text" do
