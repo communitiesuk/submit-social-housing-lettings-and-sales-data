@@ -1,9 +1,9 @@
 <%= govuk_summary_list do |summary_list| %>
   <% questions.each do |question| %>
-    <% summary_list.row do |row| %>
-      <% row.key { get_question_label(question) } %>
+    <% summary_list.with_row do |row| %>
+      <% row.with_key { get_question_label(question) } %>
 
-      <% row.value do %>
+      <% row.with_value do %>
         <%= simple_format(
           get_answer_label(question, @log),
           wrapper_tag: "span",
@@ -26,7 +26,7 @@
       <% end %>
 
       <% if @log.collection_period_open_for_editing? %>
-        <% row.action(
+        <% row.with_action(
           text: question.action_text(@log),
           href: action_href(@log, question.page.id, referrer),
           visually_hidden_text: question.check_answer_label.to_s.downcase,

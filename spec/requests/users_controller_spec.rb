@@ -66,7 +66,7 @@ RSpec.describe UsersController, type: :request do
         it "shows an error on the same page if passwords don't match" do
           expect(response).to have_http_status(:unprocessable_entity)
           expect(page).to have_css("h1", class: "govuk-heading-l", text: "Change your password")
-          expect(page).to have_selector("#error-summary-title")
+          expect(page).to have_selector(".govuk-error-summary__title")
           expect(page).to have_content("passwords you entered do not match")
         end
       end
@@ -351,7 +351,7 @@ RSpec.describe UsersController, type: :request do
 
         it "shows an error if passwords don't match" do
           expect(response).to have_http_status(:unprocessable_entity)
-          expect(page).to have_selector("#error-summary-title")
+          expect(page).to have_selector(".govuk-error-summary__title")
         end
       end
     end
@@ -776,7 +776,7 @@ RSpec.describe UsersController, type: :request do
 
           it "shows an error if passwords don't match" do
             expect(response).to have_http_status(:unprocessable_entity)
-            expect(page).to have_selector("#error-summary-title")
+            expect(page).to have_selector(".govuk-error-summary__title")
           end
         end
       end
@@ -1732,7 +1732,7 @@ RSpec.describe UsersController, type: :request do
 
           it "shows an error if passwords don't match" do
             expect(response).to have_http_status(:unprocessable_entity)
-            expect(page).to have_selector("#error-summary-title")
+            expect(page).to have_selector(".govuk-error-summary__title")
           end
         end
       end

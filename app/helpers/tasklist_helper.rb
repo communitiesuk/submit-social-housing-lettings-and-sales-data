@@ -1,5 +1,6 @@
 module TasklistHelper
   include GovukLinkHelper
+  include GovukVisuallyHiddenHelper
   include CollectionTimeHelper
 
   def breadcrumb_logs_title(log, current_user)

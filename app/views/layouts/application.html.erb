@@ -7,12 +7,10 @@
     <%= tag.meta name: "viewport", content: "width=device-width, initial-scale=1" %>
     <%= tag.meta property: "og:image", content: asset_path("images/govuk-opengraph-image.png") %>
     <%= tag.meta name: "theme-color", content: "#0b0c0c" %>
-    <%= favicon_link_tag asset_path("images/favicon.ico") %>
-    <%= favicon_link_tag asset_path("images/govuk-mask-icon.svg"), rel: "mask-icon", type: "image/svg", color: "#0b0c0c" %>
-    <%= favicon_link_tag asset_path("images/govuk-apple-touch-icon.png"), rel: "apple-touch-icon", type: "image/png" %>
-    <%= favicon_link_tag asset_path("images/govuk-apple-touch-icon-152x152.png"), rel: "apple-touch-icon", type: "image/png", size: "152x152" %>
-    <%= favicon_link_tag asset_path("images/govuk-apple-touch-icon-167x167.png"), rel: "apple-touch-icon", type: "image/png", size: "167x167" %>
-    <%= favicon_link_tag asset_path("images/govuk-apple-touch-icon-180x180.png"), rel: "apple-touch-icon", type: "image/png", size: "180x180" %>
+    <%= favicon_link_tag asset_path("images/favicon.ico"), type: nil, sizes: "48x48" %>
+    <%= favicon_link_tag asset_path("images/favicon.svg"), type: "image/svg+xml", sizes: "any" %>
+    <%= favicon_link_tag asset_path("images/govuk-icon-mask.svg"), rel: "mask-icon", color: "#0b0c0c", type: nil %>
+    <%= favicon_link_tag asset_path("images/govuk-icon-180.png"), rel: "apple-touch-icon", type: nil %>
     <%= stylesheet_link_tag "application" %>
     <%= javascript_include_tag "vendor/html5shiv.min.js" %>
     <script>
@@ -69,7 +67,7 @@
 
   <body class="govuk-template__body app-template--wide">
     <script>
-      document.body.className = ((document.body.className) ? document.body.className + " js-enabled" : "js-enabled");
+      document.body.className += " js-enabled" + ("noModule" in HTMLScriptElement.prototype ? " govuk-frontend-supported" : "");
     </script>
 
     <% if cookies[:accept_analytics_cookies] == "on" %>
@@ -87,16 +85,16 @@
 
     <%= govuk_header(
       classes: govuk_header_classes(current_user),
-      service_url: current_user.nil? ? root_path : logs_path,
+      homepage_url: root_path,
       navigation_classes: "govuk-header__navigation--end",
     ) do |component|
-      component.product_name(name: t("service_name"))
+      component.with_product_name(name: t("service_name"))
       unless FeatureToggle.service_moved? || FeatureToggle.service_unavailable?
         if current_user.nil?
-          component.navigation_item(text: "Sign in", href: user_session_path)
+          component.with_navigation_item(text: "Sign in", href: user_session_path)
         else
-          component.navigation_item(text: "Your account", href: account_path)
-          component.navigation_item(text: "Sign out", href: destroy_user_session_path)
+          component.with_navigation_item(text: "Your account", href: account_path)
+          component.with_navigation_item(text: "Sign out", href: destroy_user_session_path)
         end
       end
     end %>
@@ -126,7 +124,7 @@
             success: true, title_heading_level: 3,
             title_id: "swanky-notifications"
           ) do |notification_banner|
-            notification_banner.heading(text: flash.notice.html_safe)
+            notification_banner.with_heading(text: flash.notice.html_safe)
             if flash[:notification_banner_body]
               tag.p flash[:notification_banner_body]&.html_safe
             end

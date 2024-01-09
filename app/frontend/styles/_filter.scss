@@ -3,6 +3,13 @@
   margin-bottom: govuk-spacing(2);
 }
 
+.govuk-checkboxes__label,
+.govuk-radios__label {
+  &:before {
+    background-color: govuk-colour("white");
+  }
+}
+
 .app-filter__header {
   background-color: govuk-colour("light-grey");
   display: flex;
@@ -87,15 +94,6 @@
 
     &:last-child {
       margin-bottom: 0;
-    }
-  }
-
-  .govuk-checkboxes__label,
-  .govuk-radios__label {
-    @include govuk-font(16);
-
-    &:before {
-      background-color: govuk-colour("white");
     }
   }
 

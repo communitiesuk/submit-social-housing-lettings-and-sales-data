@@ -7,10 +7,11 @@ RSpec.describe "routes.rb" do
   let(:active_admin_routes_prefix) { "/admin" }
   let(:rails_routes_prefix) { "/rails" }
   let(:turbo_routes_pattern) { "_historical_location" }
+  let(:view_component_pattern) { "_system_test_entrypoint" }
   let(:project_routes) do
     all_routes.reject do |r|
       r.starts_with?(active_admin_routes_prefix) || r.starts_with?(rails_routes_prefix) ||
-        r.include?(turbo_routes_pattern)
+        r.include?(turbo_routes_pattern) || r.include?(view_component_pattern)
     end
   end
 

@@ -39,10 +39,10 @@ module.exports = {
   },
   resolve: {
     alias: {
-      'govuk-frontend-styles': path.resolve(__dirname, 'node_modules/govuk-frontend/govuk/all.scss'),
+      'govuk-frontend-styles': path.resolve(__dirname, 'node_modules/govuk-frontend/dist/govuk/all.scss'),
       'govuk-prototype-styles': path.resolve(__dirname, 'node_modules/@x-govuk/govuk-prototype-components/x-govuk/all.scss')
     },
-    modules: ['node_modules', 'node_modules/govuk-frontend/govuk']
+    modules: ['node_modules', 'node_modules/govuk-frontend/dist/govuk']
   },
   output: {
     filename: '[name].js',
@@ -57,8 +57,8 @@ module.exports = {
     new webpack.optimize.LimitChunkCountPlugin({ maxChunks: 1 }),
     new CopyPlugin({
       patterns: [
-        { from: 'node_modules/govuk-frontend/govuk/assets/images', to: 'images' },
-        { from: 'node_modules/govuk-frontend/govuk/assets/fonts', to: 'fonts' },
+        { from: 'node_modules/govuk-frontend/dist/govuk/assets/images', to: 'images' },
+        { from: 'node_modules/govuk-frontend/dist/govuk/assets/fonts', to: 'fonts' },
         { from: 'node_modules/html5shiv/dist/html5shiv.min.js', to: 'vendor' },
         { from: 'app/frontend/vendor/outerHTML.js', to: 'vendor' },
         { from: 'app/frontend/vendor/polyfill-output-value.js', to: 'vendor' }

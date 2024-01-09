@@ -81,7 +81,7 @@ RSpec.describe Auth::ConfirmationsController, type: :request do
 
     it "does not show an error message" do
       follow_redirect!
-      expect(page).not_to have_selector("#error-summary-title")
+      expect(page).not_to have_selector(".govuk-error-summary__title")
     end
   end
 end

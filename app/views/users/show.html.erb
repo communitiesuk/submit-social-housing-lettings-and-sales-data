@@ -21,95 +21,95 @@
       Personal details
     </h2>
     <%= govuk_summary_list do |summary_list| %>
-      <%= summary_list.row do |row|
-            row.key { "Name" }
-            row.value { @user.name }
+      <%= summary_list.with_row do |row|
+            row.with_key { "Name" }
+            row.with_value { @user.name }
             if UserPolicy.new(current_user, @user).edit_names?
-              row.action(visually_hidden_text: "name", href: aliased_user_edit(@user, current_user), html_attributes: { "data-qa": "change-name" })
+              row.with_action(visually_hidden_text: "name", href: aliased_user_edit(@user, current_user), html_attributes: { "data-qa": "change-name" })
             else
-              row.action
+              row.with_action
             end
           end %>
 
-      <%= summary_list.row do |row|
-            row.key { "Email address" }
-            row.value { @user.email }
+      <%= summary_list.with_row do |row|
+            row.with_key { "Email address" }
+            row.with_value { @user.email }
             if UserPolicy.new(current_user, @user).edit_emails?
-              row.action(visually_hidden_text: "email address", href: aliased_user_edit(@user, current_user), html_attributes: { "data-qa": "change-email-address" })
+              row.with_action(visually_hidden_text: "email address", href: aliased_user_edit(@user, current_user), html_attributes: { "data-qa": "change-email-address" })
             else
-              row.action
+              row.with_action
             end
           end %>
 
-      <%= summary_list.row do |row|
-            row.key { "Telephone number" }
-            row.value { @user.phone }
+      <%= summary_list.with_row do |row|
+            row.with_key { "Telephone number" }
+            row.with_value { @user.phone }
             if UserPolicy.new(current_user, @user).edit_telephone_numbers?
-              row.action(visually_hidden_text: "telephone number", href: aliased_user_edit(@user, current_user), html_attributes: { "data-qa": "change-telephone-number" })
+              row.with_action(visually_hidden_text: "telephone number", href: aliased_user_edit(@user, current_user), html_attributes: { "data-qa": "change-telephone-number" })
             else
-              row.action
+              row.with_action
             end
           end %>
 
-      <%= summary_list.row do |row|
-            row.key { "Password" }
-            row.value { "••••••••" }
+      <%= summary_list.with_row do |row|
+            row.with_key { "Password" }
+            row.with_value { "••••••••" }
             if UserPolicy.new(current_user, @user).edit_password?
-              row.action(
+              row.with_action(
                 visually_hidden_text: "password",
                 href: edit_password_account_path,
                 html_attributes: { "data-qa": "change-password" },
               )
             else
-              row.action
+              row.with_action
             end
           end %>
 
-      <%= summary_list.row do |row|
-            row.key { "Organisation" }
-            row.value { @user.organisation.name }
-            row.action
+      <%= summary_list.with_row do |row|
+            row.with_key { "Organisation" }
+            row.with_value { @user.organisation.name }
+            row.with_action
           end %>
 
-      <%= summary_list.row do |row|
-            row.key { "Role" }
-            row.value { @user.role&.humanize }
+      <%= summary_list.with_row do |row|
+            row.with_key { "Role" }
+            row.with_value { @user.role&.humanize }
             if UserPolicy.new(current_user, @user).edit_roles?
-              row.action(
+              row.with_action(
                 visually_hidden_text: "role",
                 href: aliased_user_edit(@user, current_user),
                 html_attributes: { "data-qa": "change-role" },
               )
             else
-              row.action
+              row.with_action
             end
           end %>
 
-      <%= summary_list.row do |row|
-            row.key { "Data protection officer" }
-            row.value { @user.is_data_protection_officer? ? "Yes" : "No" }
+      <%= summary_list.with_row do |row|
+            row.with_key { "Data protection officer" }
+            row.with_value { @user.is_data_protection_officer? ? "Yes" : "No" }
             if UserPolicy.new(current_user, @user).edit_dpo?
-              row.action(
+              row.with_action(
                 visually_hidden_text: "if data protection officer",
                 href: user_edit_dpo_path(@user),
                 html_attributes: { "data-qa": "change-data-protection-officer" },
               )
             else
-              row.action
+              row.with_action
             end
           end %>
 
-      <%= summary_list.row do |row|
-            row.key { "Key contact" }
-            row.value { @user.is_key_contact? ? "Yes" : "No" }
+      <%= summary_list.with_row do |row|
+            row.with_key { "Key contact" }
+            row.with_value { @user.is_key_contact? ? "Yes" : "No" }
             if UserPolicy.new(current_user, @user).edit_key_contact?
-              row.action(
+              row.with_action(
                 visually_hidden_text: "if a key contact",
                 href: user_edit_key_contact_path(@user),
                 html_attributes: { "data-qa": "change-key-contact" },
               )
             else
-              row.action
+              row.with_action
             end
           end %>
     <% end %>

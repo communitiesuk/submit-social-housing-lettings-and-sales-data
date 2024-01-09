@@ -6,7 +6,9 @@ RSpec.describe SearchComponent, type: :component do
   let(:value) { nil }
 
   before do
-    allow(request).to receive(:path).and_return("/users")
+    # rubocop:disable RSpec/AnyInstance
+    allow_any_instance_of(ActionDispatch::TestRequest).to receive(:path).and_return("/users")
+    # rubocop:enable RSpec/AnyInstance
     render_inline(described_class.new(current_user:, search_label:, value:))
   end
 
