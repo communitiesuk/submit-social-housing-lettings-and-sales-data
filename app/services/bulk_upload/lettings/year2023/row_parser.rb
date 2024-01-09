@@ -1193,7 +1193,7 @@ private
     attributes["tcharge"] = field_132
     attributes["chcharge"] = field_127
     attributes["is_carehome"] = field_127.present? ? 1 : 0
-    attributes["household_charge"] = field_125
+    attributes["household_charge"] = supported_housing? ? field_125 : nil
     attributes["hbrentshortfall"] = field_133
     attributes["tshortfall_known"] = tshortfall_known
     attributes["tshortfall"] = field_134
