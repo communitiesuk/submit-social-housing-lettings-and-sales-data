@@ -4,6 +4,7 @@ class UnreadMigration < ActiveRecord::Migration[6.0]
       t.references :readable, polymorphic: { null: false }
       t.references :reader,   polymorphic: { null: false }
       t.datetime :timestamp, null: false
+      t.timestamps
     end
 
     add_index ReadMark, %i[reader_id reader_type readable_type readable_id], name: "read_marks_reader_readable_index", unique: true
