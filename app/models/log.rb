@@ -210,6 +210,10 @@ class Log < ApplicationRecord
     end
   end
 
+  def duplicate_log_reference_id
+    duplicate_log_references.first&.duplicate_log_reference_id
+  end
+
 private
 
   # Handle logs that are older than previous collection start date
