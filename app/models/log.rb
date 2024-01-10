@@ -7,6 +7,7 @@ class Log < ApplicationRecord
   belongs_to :created_by, class_name: "User", optional: true
   belongs_to :updated_by, class_name: "User", optional: true
   belongs_to :bulk_upload, optional: true
+  has_many :duplicate_log_references, as: :log
 
   before_save :update_status!
 

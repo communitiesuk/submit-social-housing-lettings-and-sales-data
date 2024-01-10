@@ -645,6 +645,10 @@ class LettingsLog < Log
     renttype == 1 || renttype == 2
   end
 
+  def duplicates
+    LettingsLog.joins(:duplicate_log_references).where(duplicate_log_references: { duplicate_log_reference_id: duplicate_log_references&.first&.duplicate_log_reference_id }).where.not(id:)
+  end
+
 private
 
   def reset_invalid_unresolved_log_fields!
