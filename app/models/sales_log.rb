@@ -448,4 +448,8 @@ class SalesLog < Log
      form.start_date.year < 2023 || uprn.blank? ? "postcode_full" : nil,
      form.start_date.year >= 2023 && uprn.present? ? "uprn" : nil].compact
   end
+
+  def duplicates
+    SalesLog.joins(:duplicate_log_references).where(duplicate_log_references: { duplicate_log_reference_id: duplicate_log_references&.first&.duplicate_log_reference_id }).where.not(id:)
+  end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_12_18_105226) do
+ActiveRecord::Schema[7.0].define(version: 2024_01_10_101500) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -61,6 +61,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_18_105226) do
     t.string "data_protection_officer_name"
     t.index ["data_protection_officer_id"], name: "dpo_user_id"
     t.index ["organisation_id"], name: "index_data_protection_confirmations_on_organisation_id"
+  end
+
+  create_table "duplicate_log_references", force: :cascade do |t|
+    t.integer "duplicate_log_reference_id"
+    t.integer "log_id"
+    t.string "log_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "la_rent_ranges", force: :cascade do |t|
