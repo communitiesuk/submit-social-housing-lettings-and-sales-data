@@ -144,7 +144,7 @@ module Csv
           question.id
         end
       end
-      non_question_fields = %w[id status created_at updated_at old_form_id collection_start_year creation_method is_dpo]
+      non_question_fields = %w[id status duplicate_log_reference_id created_at updated_at old_form_id collection_start_year creation_method is_dpo]
       non_question_fields + attributes
     end
 
