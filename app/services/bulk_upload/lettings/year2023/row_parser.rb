@@ -412,11 +412,11 @@ class BulkUpload::Lettings::Year2023::RowParser
     errors.merge!(before_errors)
 
     log.errors.each do |error|
-      Rails.logger.debug(error)
+      Rails.logger.debug("log error: #{error.attribute} : #{error.message}")
       fields = field_mapping_for_errors[error.attribute] || []
 
       fields.each do |field|
-        Rails.logger.debug(field)
+        Rails.logger.debug("field: #{field}")
         next if errors.include?(field)
 
         question = log.form.get_question(error.attribute, log)
