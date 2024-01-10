@@ -171,8 +171,18 @@ private
         return correcting_duplicate_logs_redirect_path
       end
 
-      if @log.lettings? && current_user.lettings_logs.duplicate_logs(@log).count.positive?
-        return send("lettings_log_duplicate_logs_path", @log, original_log_id: @log.id)
+      if @log.lettings?
+        dynamic_duplicates = current_user.lettings_logs.duplicate_logs(@log)
+        if dynamic_duplicates.count.positive?
+          saved_duplicates = @log.duplicates
+          unless saved_duplicates == dynamic_duplicates
+            duplicate_log_reference = DuplicateLogReference.find_or_create_by!(log_id: @log.id, log_type: "LettingsLog")
+            dynamic_duplicates.each do |duplicate|
+              DuplicateLogReference.find_or_create_by!(log_id: duplicate.id, log_type: "LettingsLog", duplicate_log_reference_id: duplicate_log_reference.duplicate_log_reference_id)
+            end
+            return send("lettings_log_duplicate_logs_path", @log, original_log_id: @log.id)
+          end
+        end
       end
 
       if @log.sales? && current_user.sales_logs.duplicate_logs(@log).count.positive?
@@ -252,9 +262,13 @@ private
     original_log = current_user.send(class_name.pluralize).find_by(id: from_referrer_query("original_log_id"))
 
     if original_log.present? && current_user.send(class_name.pluralize).duplicate_logs(original_log).count.positive?
-      flash[:notice] = deduplication_success_banner unless current_user.send(class_name.pluralize).duplicate_logs(@log).count.positive?
+      unless current_user.send(class_name.pluralize).duplicate_logs(@log).count.positive?
+        remove_fixed_duplicate_log_references(@log)
+        flash[:notice] = deduplication_success_banner
+      end
       send("#{class_name}_duplicate_logs_path", original_log, original_log_id: original_log.id, referrer: params[:referrer], organisation_id: params[:organisation_id])
     else
+      remove_fixed_duplicate_log_references(original_log)
       flash[:notice] = deduplication_success_banner
       send("#{class_name}_duplicate_logs_path", "#{class_name}_id".to_sym => from_referrer_query("first_remaining_duplicate_id"), original_log_id: from_referrer_query("original_log_id"), referrer: params[:referrer], organisation_id: params[:organisation_id])
     end
@@ -274,5 +288,12 @@ private
     changed_question_label = changed_labels[@page.id.to_sym] || (@page.questions.first.check_answer_label.to_s.presence || @page.questions.first.header.to_s).downcase
 
     I18n.t("notification.duplicate_logs.deduplication_success_banner", log_link: deduplicated_log_link, changed_question_label:).html_safe
+  end
+
+  def remove_fixed_duplicate_log_references(log)
+    duplicate_log_reference = DuplicateLogReference.find_by(log_id: log.id, log_type: log.class.name)
+    duplicate_log_reference_id = duplicate_log_reference.duplicate_log_reference_id
+    duplicate_log_reference.destroy! if duplicate_log_reference.present?
+    DuplicateLogReference.find_by(duplicate_log_reference_id:).destroy! if DuplicateLogReference.where(duplicate_log_reference_id:).count == 1
   end
 end

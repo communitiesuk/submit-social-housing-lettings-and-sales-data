@@ -27,6 +27,11 @@ class DeleteLogsController < ApplicationController
     logs = LettingsLog.find(params.require(:ids))
     discard logs
     if request.referer&.include?("delete-duplicates")
+      logs.each do |log|
+        log.duplicate_log_references.destroy_all
+      end
+      LettingsLog.find(params["remaining_log_id"]).duplicate_log_references.destroy_all
+
       redirect_to lettings_log_duplicate_logs_path(lettings_log_id: params["remaining_log_id"], original_log_id: params["original_log_id"], referrer: params[:referrer], organisation_id: params[:organisation_id]), notice: I18n.t("notification.duplicate_logs_deleted", count: logs.count, log_ids: duplicate_log_ids(logs))
     else
       redirect_to lettings_logs_path, notice: I18n.t("notification.logs_deleted", count: logs.count)
