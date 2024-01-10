@@ -115,6 +115,10 @@ module Csv
         labels: %i[created_by is_dpo?],
         codes: %i[created_by is_dpo?],
       },
+      renttype_detail: {
+        labels: %i[renttype_detail],
+        codes: %i[renttype_detail_code],
+      },
     }.freeze
 
     PERSON_DETAILS = {}.tap { |hash|
@@ -262,7 +266,7 @@ module Csv
       "created_by_id" => [],
       "scheme_id" => [],
       "location_id" => [],
-      "rent_type" => %w[renttype rent_type_detail],
+      "rent_type" => %w[renttype renttype_detail],
       "hb" => %w[hb has_benefits],
       "age1" => %w[refused hhtype totchild totelder totadult age1],
       "housingneeds_type" => %w[housingneeds_type housingneeds_a housingneeds_b housingneeds_c housingneeds_f housingneeds_g housingneeds_h],
