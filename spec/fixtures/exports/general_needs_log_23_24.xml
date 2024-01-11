@@ -157,6 +157,7 @@
     <log_id>{log_id}</log_id>
     <created_by>test1@example.com</created_by>
     <amended_by/>
+    <duplicate_log_reference_id/>
     <providertype>1</providertype>
   </form>
 </forms>

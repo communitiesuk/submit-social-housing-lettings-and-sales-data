@@ -226,6 +226,7 @@ module Exports
         attribute_hash["relat#{index}"] = "R"
         attribute_hash["ecstat#{index}"] = 10
       end
+      attribute_hash["duplicate_log_reference_id"] = lettings_log.duplicate_log_reference_id
 
       attribute_hash
     end
