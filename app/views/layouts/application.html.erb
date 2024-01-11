@@ -100,7 +100,7 @@
     end %>
 
     <% if notifications_to_display? %>
-      <%= render "notifications/notification_banner", notification_count:, notification: %>
+      <%= render "notifications/notification_banner" %>
     <% end %>
 
     <% feedback_link = govuk_link_to "giving us your feedback (opens in a new tab)", t("feedback_form"), rel: "noreferrer noopener", target: "_blank" %>
