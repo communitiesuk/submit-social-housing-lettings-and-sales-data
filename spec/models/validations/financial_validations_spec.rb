@@ -187,7 +187,7 @@ RSpec.describe Validations::FinancialValidations do
   end
 
   describe "net income validations" do
-    it "validates that the net income is within the expected range for the tenant’s employment status" do
+    it "validates that the net income is within the expected range for the household’s employment status" do
       record.earnings = 200
       record.incfreq = 1
       record.ecstat1 = 1
@@ -202,9 +202,9 @@ RSpec.describe Validations::FinancialValidations do
         record.ecstat1 = 1
         financial_validator.validate_net_income(record)
         expect(record.errors["earnings"])
-          .to eq(["Net income cannot be greater than £1,230.00 per week given the tenant’s working situation"])
+          .to eq(["Net income cannot be greater than £1,230.00 per week given the household’s working situation"])
         expect(record.errors["ecstat1"])
-          .to eq(["Net income of £5,000.00 weekly is too high given the tenant’s working situation"])
+          .to eq(["Net household income of £5,000.00 weekly is too high given the household’s working situation"])
       end
     end
 
@@ -215,7 +215,31 @@ RSpec.describe Validations::FinancialValidations do
         record.ecstat1 = 1
         financial_validator.validate_net_income(record)
         expect(record.errors["earnings"])
-          .to eq(["Net income cannot be less than £90.00 per week given the tenant’s working situation"])
+          .to eq(["Net income cannot be less than £90.00 per week given the household’s working situation"])
+      end
+    end
+
+    context "when there is more than one household member" do
+      it "allows income levels based on all working situations combined" do
+        record.earnings = 5000
+        record.incfreq = 1
+        record.ecstat1 = 1
+        record.ecstat2 = 1
+        record.ecstat3 = 8
+        record.ecstat4 = 9
+        financial_validator.validate_net_income(record)
+        expect(record.errors["earnings"]).to be_empty
+      end
+
+      it "uses the combined value in error messages" do
+        record.earnings = 100
+        record.incfreq = 1
+        record.ecstat1 = 1
+        record.ecstat2 = 2
+        record.ecstat3 = 9
+        financial_validator.validate_net_income(record)
+        expect(record.errors["earnings"])
+          .to eq(["Net income cannot be less than £150.00 per week given the household’s working situation"])
       end
     end
   end

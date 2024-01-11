@@ -216,7 +216,20 @@ class LettingsLog < Log
   def applicable_income_range
     return unless ecstat1
 
-    ALLOWED_INCOME_RANGES[ecstat1]
+    range = ALLOWED_INCOME_RANGES[ecstat1].clone
+
+    (2..8).each do |person_index|
+      ecstat = self["ecstat#{person_index}"]
+      next unless ecstat
+
+      person_range = ALLOWED_INCOME_RANGES[ecstat]
+      range.soft_min += person_range.soft_min
+      range.hard_min += person_range.hard_min
+      range.soft_max += person_range.soft_max
+      range.hard_max += person_range.hard_max
+    end
+
+    range
   end
 
   def first_time_property_let_as_social_housing?
