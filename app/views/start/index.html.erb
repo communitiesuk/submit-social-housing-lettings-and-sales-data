@@ -24,13 +24,8 @@
     <p class="govuk-body">You can <%= govuk_mail_to("dluhc.digital-services@levellingup.gov.uk", "request an account", subject: "CORE: Request a new account") %> if your organisation doesn’t have one.</p>
     <p class="govuk-body"><strong><%= govuk_link_to guidance_path do %>Guidance for submitting social housing lettings and sales data (CORE)<% end %></strong><p>
     <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--m">
-    <%= render partial: "layouts/about_core" %>
-    <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--m">
-  </div>
-</div>
-
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
     <%= render partial: "layouts/collection_resources" %>
+    <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--m">
+    <%= render partial: "layouts/about_core" %>
   </div>
 </div>
