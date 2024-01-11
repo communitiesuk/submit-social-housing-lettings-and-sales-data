@@ -172,6 +172,7 @@
     <units>20</units>
     <location_code>{location_id}</location_code>
     <location_status>active</location_status>
+    <duplicate_log_reference_id/>
     <providertype>1</providertype>
   </form>
 </forms>
