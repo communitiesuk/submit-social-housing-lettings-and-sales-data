@@ -99,12 +99,8 @@
       end
     end %>
 
-    <% unless current_page?(notifications_path) %>
-      <% if current_user&.active_unread_notifications.present? %>
-        <%= render "notifications/notification_banner", notification_count: current_user.active_unread_notifications.count, notification: current_user.newest_active_unread_notification %>
-      <% elsif current_user.blank? && Notification.active_unauthenticated_notifications.present? %>
-        <%= render "notifications/notification_banner", notification_count: Notification.active_unauthenticated_notifications.count, notification: Notification.newest_active_unauthenticated_notification %>
-      <% end %>
+    <% if notifications_to_display? %>
+      <%= render "notifications/notification_banner", notification_count:, notification: %>
     <% end %>
 
     <% feedback_link = govuk_link_to "giving us your feedback (opens in a new tab)", t("feedback_form"), rel: "noreferrer noopener", target: "_blank" %>

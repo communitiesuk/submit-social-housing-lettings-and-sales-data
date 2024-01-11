@@ -1,7 +1,7 @@
 class Notification < ApplicationRecord
   acts_as_readable
 
-  scope :active, -> { where("start_date <= ?", Time.zone.now).where("end_date >= ?", Time.zone.now) }
+  scope :active, -> { where("start_date <= ? AND end_date >= ?", Time.zone.now, Time.zone.now) }
   scope :unauthenticated, -> { where(show_on_unauthenticated_pages: true) }
 
   def self.active_unauthenticated_notifications

@@ -27,6 +27,26 @@ module ApplicationHelper
     end
   end
 
+  def notifications_to_display?
+    !current_page?(notifications_path) && (authenticated_user_has_notifications? || unauthenticated_user_has_notifications?)
+  end
+
+  def notification_count
+    if current_user.present?
+      current_user.active_unread_notifications.count
+    else
+      Notification.active_unauthenticated_notifications.count
+    end
+  end
+
+  def notification
+    if current_user.present?
+      current_user.newest_active_unread_notification
+    else
+      Notification.newest_active_unauthenticated_notification
+    end
+  end
+
 private
 
   def paginated_title(title, pagy)
@@ -34,5 +54,13 @@ private
     return title unless pagy && pagy.pages > 1
 
     title + " (page #{pagy.page} of #{pagy.pages})"
+  end
+
+  def authenticated_user_has_notifications?
+    current_user&.active_unread_notifications.present?
+  end
+
+  def unauthenticated_user_has_notifications?
+    current_user.blank? && Notification.active_unauthenticated_notifications.present?
   end
 end
