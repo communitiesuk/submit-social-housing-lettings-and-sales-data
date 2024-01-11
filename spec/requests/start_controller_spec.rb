@@ -61,9 +61,9 @@ RSpec.describe StartController, type: :request do
         expect(page).to have_content("Guidance for submitting social housing lettings and sales data (CORE)")
       end
 
-      it "displays about core section" do
+      it "displays About this service section" do
         get "/", headers:, params: {}
-        expect(page).to have_content("About CORE")
+        expect(page).to have_content("About this service")
       end
     end
   end
