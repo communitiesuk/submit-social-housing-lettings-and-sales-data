@@ -617,6 +617,24 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
             end
           end
 
+          context "when the rent range validation is triggered but the log has no scheme or location id" do
+            let(:attributes) do
+              setup_section_params.merge({ field_15: nil,
+                                           field_16: nil,
+                                           field_17: nil,
+                                           field_128: 300,
+                                           field_126: 1,
+                                           field_32: 1,
+                                           field_4: 1,
+                                           field_5: "3",
+                                           field_25: "E09000008" })
+            end
+
+            it "is not a valid row" do
+              expect(parser).not_to be_valid
+            end
+          end
+
           context "when a hidden log already exists in db" do
             before do
               parser.log.status = "pending"
