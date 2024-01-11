@@ -408,6 +408,8 @@ GEM
       concurrent-ruby (~> 1.0)
     uk_postcode (2.1.8)
     unicode-display_width (2.4.2)
+    unread (0.13.0)
+      activerecord (>= 6.1)
     view_component (3.9.0)
       activesupport (>= 5.2.0, < 8.0)
       concurrent-ruby (~> 1.0)
@@ -493,6 +495,7 @@ DEPENDENCIES
   timecop (~> 0.9.4)
   tzinfo-data
   uk_postcode
+  unread
   view_component (~> 3.9)
   web-console (>= 4.1.0)
   webmock

@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  acts_as_reader
+
   # Include default devise modules. Others available are:
   # :omniauthable
   devise :database_authenticatable, :recoverable, :rememberable,
@@ -225,6 +227,14 @@ class User < ApplicationRecord
 
   def editable_duplicate_sales_logs_sets
     sales_logs.after_date(FormHandler.instance.sales_earliest_open_for_editing_collection_start_date).duplicate_sets(id).map { |array_str| array_str ? array_str.map(&:to_i) : [] }
+  end
+
+  def active_unread_notifications
+    Notification.active.unread_by(self)
+  end
+
+  def newest_active_unread_notification
+    active_unread_notifications.last
   end
 
 protected

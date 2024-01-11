@@ -11,7 +11,7 @@ RSpec.describe "Start Page Features" do
     end
 
     it "takes you to the home page" do
-      visit("/")
+      visit(root_path)
       expect(page).to have_current_path("/")
       expect(page).to have_content("Welcome back")
     end
@@ -19,7 +19,7 @@ RSpec.describe "Start Page Features" do
 
   context "when the user is not signed in" do
     it "takes you to sign in and then to the home page" do
-      visit("/")
+      visit(root_path)
       click_link("Start now")
       expect(page).to have_current_path("/account/sign-in?start=true")
       fill_in("user[email]", with: user.email)
@@ -27,6 +27,21 @@ RSpec.describe "Start Page Features" do
       click_button("Sign in")
       expect(page).to have_current_path("/")
       expect(page).to have_content("Welcome back")
+    end
+
+    context "when the unauthenticated user clicks a notification link" do
+      before do
+        create(:notification, show_on_unauthenticated_pages: true)
+        visit(root_path)
+        click_link("Link text")
+      end
+
+      it "takes them to the notification details page" do
+        expect(page).to have_current_path(notifications_path)
+        expect(page).to have_content("Notification title")
+        expect(page).to have_content("Some html content")
+        expect(page).to have_link("Back to Start")
+      end
     end
   end
 end

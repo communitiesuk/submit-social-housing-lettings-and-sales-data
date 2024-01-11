@@ -126,7 +126,7 @@ RSpec.describe "User Features" do
     end
 
     it "Can navigate and sign in page with sign in button" do
-      visit("/")
+      visit(root_path)
       expect(page).to have_link("Sign in")
       click_link("Sign in")
       fill_in("user[email]", with: user.email)
