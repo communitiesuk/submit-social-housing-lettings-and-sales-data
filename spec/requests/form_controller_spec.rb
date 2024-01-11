@@ -897,11 +897,14 @@ RSpec.describe FormController, type: :request do
           end
 
           before do
+            duplicate_log_reference_id = create(:duplicate_log_reference, log_id: lettings_log.id, log_type: "LettingsLog").duplicate_log_reference_id
+            create(:duplicate_log_reference, log_id: duplicate_log.id, log_type: "LettingsLog", duplicate_log_reference_id:)
             post "/lettings-logs/#{lettings_log.id}/lead-tenant-age", params:, headers: headers.merge({ "HTTP_REFERER" => referrer })
           end
 
           it "redirects back to the duplicates page for remaining duplicates" do
             expect(response).to redirect_to("/lettings-logs/#{duplicate_log.id}/duplicate-logs?original_log_id=#{lettings_log.id}")
+            expect(DuplicateLogReference.count).to eq(0)
           end
 
           context "and the answer didn't change" do
@@ -918,6 +921,7 @@ RSpec.describe FormController, type: :request do
 
             it "redirects back to the duplicates page for remaining duplicates" do
               expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}/duplicate-logs?original_log_id=#{lettings_log.id}")
+              expect(DuplicateLogReference.count).to eq(2)
             end
           end
         end
@@ -938,11 +942,14 @@ RSpec.describe FormController, type: :request do
           end
 
           before do
+            duplicate_log_reference_id = create(:duplicate_log_reference, log_id: sales_log.id, log_type: "SalesLog").duplicate_log_reference_id
+            create(:duplicate_log_reference, log_id: duplicate_log.id, log_type: "SalesLog", duplicate_log_reference_id:)
             post "/sales-logs/#{sales_log.id}/buyer-1-age", params:, headers: headers.merge({ "HTTP_REFERER" => referrer })
           end
 
           it "redirects back to the duplicates page for remaining duplicates" do
             expect(response).to redirect_to("/sales-logs/#{duplicate_log.id}/duplicate-logs?original_log_id=#{sales_log.id}")
+            expect(DuplicateLogReference.count).to eq(0)
           end
 
           context "and the answer didn't change" do
@@ -959,6 +966,7 @@ RSpec.describe FormController, type: :request do
 
             it "redirects back to the duplicates page for remaining duplicates" do
               expect(response).to redirect_to("/sales-logs/#{sales_log.id}/duplicate-logs?original_log_id=#{sales_log.id}")
+              expect(DuplicateLogReference.count).to eq(2)
             end
           end
         end

@@ -178,16 +178,28 @@ RSpec.describe "Form Navigation" do
   end
 
   describe "fixing duplicate logs" do
+    let(:lettings_log) { create(:lettings_log, :duplicate, created_by: user) }
+    let(:second_log) { create(:lettings_log, :duplicate, created_by: user) }
+
+    before do
+      create(:duplicate_log_reference, log_id: id, log_type: "LettingsLog")
+      create(:duplicate_log_reference, log_id: second_log.id, log_type: "LettingsLog")
+    end
+
     it "shows a correct cancel link" do
-      visit("lettings-logs/#{id}/tenant-code-test?first_remaining_duplicate_id=x&original_log_id=#{id}&referrer=duplicate_logs")
+      expect(DuplicateLogReference.count).to eq(2)
+      visit("lettings-logs/#{id}/tenant-code-test?first_remaining_duplicate_id=#{second_log.id}&original_log_id=#{id}&referrer=duplicate_logs")
       click_link(text: "Cancel")
       expect(page).to have_current_path("/lettings-logs/#{id}/duplicate-logs?original_log_id=#{id}")
+      expect(DuplicateLogReference.count).to eq(2)
     end
 
     it "shows a correct Save Changes buttons" do
+      expect(DuplicateLogReference.count).to eq(2)
       visit("lettings-logs/#{id}/tenant-code-test?first_remaining_duplicate_id=#{id}&original_log_id=#{id}&referrer=duplicate_logs")
       click_button(text: "Save changes")
       expect(page).to have_current_path("/lettings-logs/#{id}/duplicate-logs?original_log_id=#{id}&referrer=duplicate_logs")
+      expect(DuplicateLogReference.count).to eq(2)
     end
   end
 end

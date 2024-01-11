@@ -292,6 +292,8 @@ private
 
   def remove_fixed_duplicate_log_references(log)
     duplicate_log_reference = DuplicateLogReference.find_by(log_id: log.id, log_type: log.class.name)
+    return unless duplicate_log_reference
+
     duplicate_log_reference_id = duplicate_log_reference.duplicate_log_reference_id
     duplicate_log_reference.destroy! if duplicate_log_reference.present?
     DuplicateLogReference.find_by(duplicate_log_reference_id:).destroy! if DuplicateLogReference.where(duplicate_log_reference_id:).count == 1
