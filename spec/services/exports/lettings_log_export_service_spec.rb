@@ -418,16 +418,16 @@ RSpec.describe Exports::LettingsLogExportService do
       let!(:lettings_log) { FactoryBot.create(:lettings_log, :completed, created_by: user, propcode: "123", ppostcode_full: "SE2 6RT", postcode_full: "NW1 5TY", tenancycode: "BZ737", startdate: Time.zone.local(2022, 2, 2, 10, 36, 49), voiddate: Time.zone.local(2019, 11, 3), mrcdate: Time.zone.local(2020, 5, 5, 10, 36, 49), tenancylength: 5, underoccupation_benefitcap: 4) }
 
       before do
-        FactoryBot.create(:duplicate_log_reference, log_type: "LettingsLog", log_id: lettings_log.id, duplicate_log_reference_id: 123)
+        FactoryBot.create(:duplicate_log_reference, log_type: "LettingsLog", log_id: lettings_log.id, duplicate_set_id: 123)
       end
 
-      def replace_duplicate_log_reference_id(export_file)
-        export_file.sub!("<duplicate_log_reference_id/>", "<duplicate_log_reference_id>123</duplicate_log_reference_id>")
+      def replace_duplicate_set_id(export_file)
+        export_file.sub!("<duplicate_set_id/>", "<duplicate_set_id>123</duplicate_set_id>")
       end
 
       it "generates an XML export file with the expected content within the ZIP file" do
         expected_content = replace_entity_ids(lettings_log, xml_export_file.read)
-        expected_content = replace_duplicate_log_reference_id(expected_content)
+        expected_content = replace_duplicate_set_id(expected_content)
         expect(storage_service).to receive(:write_file).with(expected_zip_filename, any_args) do |_, content|
           entry = Zip::File.open_buffer(content).find_entry(expected_data_filename)
           expect(entry).not_to be_nil

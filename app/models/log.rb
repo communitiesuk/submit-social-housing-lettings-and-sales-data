@@ -210,8 +210,8 @@ class Log < ApplicationRecord
     end
   end
 
-  def duplicate_log_reference_id
-    duplicate_log_references.first&.duplicate_log_reference_id
+  def duplicate_set_id
+    duplicate_log_references.first&.duplicate_set_id
   end
 
 private

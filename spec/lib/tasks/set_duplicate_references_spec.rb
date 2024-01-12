@@ -46,8 +46,8 @@ RSpec.describe "set_duplicate_references" do
           expect(sales_log_without_duplicates.duplicates.count).to eq(0)
           expect(sales_log_without_duplicates.duplicate_log_references).to be_empty
           expect(sales_log.duplicate_log_references.count).to eq(1)
-          expect(sales_log.duplicate_log_reference_id).to eq(duplicate_sales_log.duplicate_log_reference_id)
-          expect(sales_log.duplicate_log_reference_id).to eq(second_duplicate_sales_log.duplicate_log_reference_id)
+          expect(sales_log.duplicate_set_id).to eq(duplicate_sales_log.duplicate_set_id)
+          expect(sales_log.duplicate_set_id).to eq(second_duplicate_sales_log.duplicate_set_id)
         end
 
         it "does not create the references twice" do
@@ -102,7 +102,7 @@ RSpec.describe "set_duplicate_references" do
           expect(duplicate_sales_log.duplicate_log_references.count).to eq(1)
           expect(sales_log_without_duplicates.duplicates.count).to eq(0)
           expect(sales_log_without_duplicates.duplicate_log_references).to be_empty
-          expect(sales_log.duplicate_log_reference_id).to eq(duplicate_sales_log.duplicate_log_reference_id)
+          expect(sales_log.duplicate_set_id).to eq(duplicate_sales_log.duplicate_set_id)
 
           expect(other_sales_log.duplicates.count).to eq(1)
           expect(other_sales_log.duplicate_log_references.count).to eq(1)
@@ -110,8 +110,8 @@ RSpec.describe "set_duplicate_references" do
           expect(other_duplicate_sales_log.duplicate_log_references.count).to eq(1)
           expect(other_sales_log_without_duplicates.duplicates.count).to eq(0)
           expect(other_sales_log_without_duplicates.duplicate_log_references).to be_empty
-          expect(other_sales_log.duplicate_log_reference_id).to eq(other_duplicate_sales_log.duplicate_log_reference_id)
-          expect(other_sales_log.duplicate_log_reference_id).not_to eq(sales_log.duplicate_log_reference_id)
+          expect(other_sales_log.duplicate_set_id).to eq(other_duplicate_sales_log.duplicate_set_id)
+          expect(other_sales_log.duplicate_set_id).not_to eq(sales_log.duplicate_set_id)
         end
       end
 
@@ -180,8 +180,8 @@ RSpec.describe "set_duplicate_references" do
           expect(lettings_log_without_duplicates.duplicates.count).to eq(0)
           expect(lettings_log_without_duplicates.duplicate_log_references).to be_empty
           expect(lettings_log.duplicate_log_references.count).to eq(1)
-          expect(lettings_log.duplicate_log_reference_id).to eq(duplicate_lettings_log.duplicate_log_reference_id)
-          expect(lettings_log.duplicate_log_reference_id).to eq(second_duplicate_lettings_log.duplicate_log_reference_id)
+          expect(lettings_log.duplicate_set_id).to eq(duplicate_lettings_log.duplicate_set_id)
+          expect(lettings_log.duplicate_set_id).to eq(second_duplicate_lettings_log.duplicate_set_id)
         end
 
         it "does not create the references twice" do
@@ -236,7 +236,7 @@ RSpec.describe "set_duplicate_references" do
           expect(duplicate_lettings_log.duplicate_log_references.count).to eq(1)
           expect(lettings_log_without_duplicates.duplicates.count).to eq(0)
           expect(lettings_log_without_duplicates.duplicate_log_references).to be_empty
-          expect(lettings_log.duplicate_log_reference_id).to eq(duplicate_lettings_log.duplicate_log_reference_id)
+          expect(lettings_log.duplicate_set_id).to eq(duplicate_lettings_log.duplicate_set_id)
 
           expect(other_lettings_log.duplicates.count).to eq(1)
           expect(other_lettings_log.duplicate_log_references.count).to eq(1)
@@ -244,8 +244,8 @@ RSpec.describe "set_duplicate_references" do
           expect(other_duplicate_lettings_log.duplicate_log_references.count).to eq(1)
           expect(other_lettings_log_without_duplicates.duplicates.count).to eq(0)
           expect(other_lettings_log_without_duplicates.duplicate_log_references).to be_empty
-          expect(other_lettings_log.duplicate_log_reference_id).to eq(other_duplicate_lettings_log.duplicate_log_reference_id)
-          expect(other_lettings_log.duplicate_log_reference_id).not_to eq(lettings_log.duplicate_log_reference_id)
+          expect(other_lettings_log.duplicate_set_id).to eq(other_duplicate_lettings_log.duplicate_set_id)
+          expect(other_lettings_log.duplicate_set_id).not_to eq(lettings_log.duplicate_set_id)
         end
       end
 

@@ -64,7 +64,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_10_101500) do
   end
 
   create_table "duplicate_log_references", force: :cascade do |t|
-    t.integer "duplicate_log_reference_id"
+    t.integer "duplicate_set_id"
     t.integer "log_id"
     t.string "log_type"
     t.datetime "created_at", null: false

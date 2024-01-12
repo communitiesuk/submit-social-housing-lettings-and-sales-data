@@ -137,7 +137,7 @@ module Exports::LettingsLogExportConstants
     "location_status",
     "created_by",
     "amended_by",
-    "duplicate_log_reference_id"
+    "duplicate_set_id"
   ]
 
   (1..8).each do |index|

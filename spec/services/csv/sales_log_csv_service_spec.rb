@@ -166,13 +166,13 @@ RSpec.describe Csv::SalesLogCsvService do
 
     context "when the log has a duplicate log reference" do
       before do
-        DuplicateLogReference.create!(log_id: log.id, log_type: "SalesLog", duplicate_log_reference_id: 12_312)
+        DuplicateLogReference.create!(log_id: log.id, log_type: "SalesLog", duplicate_set_id: 12_312)
       end
 
-      it "exports the id for under the heading 'duplicate_log_reference_id'" do
-        duplicate_log_reference_id_column_index = csv.first.index("duplicate_log_reference_id")
-        duplicate_log_reference_id_value = csv.second[duplicate_log_reference_id_column_index]
-        expect(duplicate_log_reference_id_value).to eq "12312"
+      it "exports the id for under the heading 'duplicate_set_id'" do
+        duplicate_set_id_column_index = csv.first.index("duplicate_set_id")
+        duplicate_set_id_value = csv.second[duplicate_set_id_column_index]
+        expect(duplicate_set_id_value).to eq "12312"
       end
     end
   end
@@ -226,13 +226,13 @@ RSpec.describe Csv::SalesLogCsvService do
 
     context "when the log has a duplicate log reference" do
       before do
-        DuplicateLogReference.create!(log_id: log.id, log_type: "SalesLog", duplicate_log_reference_id: 12_312)
+        DuplicateLogReference.create!(log_id: log.id, log_type: "SalesLog", duplicate_set_id: 12_312)
       end
 
-      it "exports the id for under the heading 'duplicate_log_reference_id'" do
-        duplicate_log_reference_id_column_index = csv.first.index("duplicate_log_reference_id")
-        duplicate_log_reference_id_value = csv.second[duplicate_log_reference_id_column_index]
-        expect(duplicate_log_reference_id_value).to eq "12312"
+      it "exports the id for under the heading 'duplicate_set_id'" do
+        duplicate_set_id_column_index = csv.first.index("duplicate_set_id")
+        duplicate_set_id_value = csv.second[duplicate_set_id_column_index]
+        expect(duplicate_set_id_value).to eq "12312"
       end
     end
   end

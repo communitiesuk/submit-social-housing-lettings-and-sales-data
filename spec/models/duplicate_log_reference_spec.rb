@@ -2,21 +2,21 @@ require "rails_helper"
 
 RSpec.describe DuplicateLogReference, type: :model do
   context "when adding a new duplicate log" do
-    context "and duplicate_log_reference_id is not given" do
+    context "and duplicate_set_id is not given" do
       let(:sales_log) { create(:sales_log) }
 
-      it "generates a new random duplicate_log_reference_id" do
+      it "generates a new random duplicate_set_id" do
         duplicate_log = described_class.create!(log_id: sales_log.id, log_type: "SalesLog")
-        expect(duplicate_log.duplicate_log_reference_id).to be_a(Integer)
+        expect(duplicate_log.duplicate_set_id).to be_a(Integer)
       end
     end
 
-    context "and duplicate_log_reference_id is given" do
+    context "and duplicate_set_id is given" do
       let(:sales_log) { create(:sales_log) }
 
-      it "adds correct duplicate_log_reference_id" do
-        duplicate_log = described_class.create!(log_id: sales_log.id, log_type: "SalesLog", duplicate_log_reference_id: 123_456)
-        expect(duplicate_log.duplicate_log_reference_id).to eq(123_456)
+      it "adds correct duplicate_set_id" do
+        duplicate_log = described_class.create!(log_id: sales_log.id, log_type: "SalesLog", duplicate_set_id: 123_456)
+        expect(duplicate_log.duplicate_set_id).to eq(123_456)
       end
     end
 
@@ -49,7 +49,7 @@ RSpec.describe DuplicateLogReference, type: :model do
 
       before do
         duplicate_log = described_class.create!(log_id: sales_log.id, log_type: "SalesLog")
-        described_class.create!(log_id: other_sales_log.id, log_type: "SalesLog", duplicate_log_reference_id: duplicate_log.duplicate_log_reference_id)
+        described_class.create!(log_id: other_sales_log.id, log_type: "SalesLog", duplicate_set_id: duplicate_log.duplicate_set_id)
         create(:sales_log)
         create(:sales_log)
       end
@@ -75,7 +75,7 @@ RSpec.describe DuplicateLogReference, type: :model do
 
       before do
         duplicate_log = described_class.create!(log_id: lettings_log.id, log_type: "LettingsLog")
-        described_class.create!(log_id: other_lettings_log.id, log_type: "LettingsLog", duplicate_log_reference_id: duplicate_log.duplicate_log_reference_id)
+        described_class.create!(log_id: other_lettings_log.id, log_type: "LettingsLog", duplicate_set_id: duplicate_log.duplicate_set_id)
         create(:lettings_log)
         create(:lettings_log)
       end

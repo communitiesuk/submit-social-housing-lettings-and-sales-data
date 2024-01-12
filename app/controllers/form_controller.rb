@@ -178,7 +178,7 @@ private
           unless saved_duplicates == dynamic_duplicates
             duplicate_log_reference = DuplicateLogReference.find_or_create_by!(log_id: @log.id, log_type: "LettingsLog")
             dynamic_duplicates.each do |duplicate|
-              DuplicateLogReference.find_or_create_by!(log_id: duplicate.id, log_type: "LettingsLog", duplicate_log_reference_id: duplicate_log_reference.duplicate_log_reference_id)
+              DuplicateLogReference.find_or_create_by!(log_id: duplicate.id, log_type: "LettingsLog", duplicate_set_id: duplicate_log_reference.duplicate_set_id)
             end
             return send("lettings_log_duplicate_logs_path", @log, original_log_id: @log.id)
           end
@@ -294,8 +294,8 @@ private
     duplicate_log_reference = DuplicateLogReference.find_by(log_id: log.id, log_type: log.class.name)
     return unless duplicate_log_reference
 
-    duplicate_log_reference_id = duplicate_log_reference.duplicate_log_reference_id
+    duplicate_set_id = duplicate_log_reference.duplicate_set_id
     duplicate_log_reference.destroy! if duplicate_log_reference.present?
-    DuplicateLogReference.find_by(duplicate_log_reference_id:).destroy! if DuplicateLogReference.where(duplicate_log_reference_id:).count == 1
+    DuplicateLogReference.find_by(duplicate_set_id:).destroy! if DuplicateLogReference.where(duplicate_set_id:).count == 1
   end
 end
