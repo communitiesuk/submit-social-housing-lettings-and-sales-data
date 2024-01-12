@@ -33,15 +33,15 @@ module HomeHelper
   def data_path(user, type)
     if user.data_provider?
       case type
-      when "lettings" then lettings_logs_path(status: [:in_progress], assigned_to: "you")
-      when "sales" then sales_logs_path(status: [:in_progress], assigned_to: "you")
-      when "misc" then lettings_logs_path(status: [:completed], assigned_to: "you")
+      when "lettings" then lettings_logs_path(status: [:in_progress], assigned_to: "you", years: [""], owning_organisation_select: "all", managing_organisation_select: "all")
+      when "sales" then sales_logs_path(status: [:in_progress], assigned_to: "you", years: [""], owning_organisation_select: "all", managing_organisation_select: "all")
+      when "misc" then lettings_logs_path(status: [:completed], assigned_to: "you", years: [""], owning_organisation_select: "all", managing_organisation_select: "all")
       end
     else
       case type
-      when "lettings" then lettings_logs_path(status: [:in_progress])
-      when "sales" then sales_logs_path(status: [:in_progress])
-      when "schemes" then schemes_path(status: [:incomplete])
+      when "lettings" then lettings_logs_path(status: [:in_progress], assigned_to: "all", years: [""], owning_organisation_select: "all", managing_organisation_select: "all")
+      when "sales" then sales_logs_path(status: [:in_progress], assigned_to: "all", years: [""], owning_organisation_select: "all", managing_organisation_select: "all")
+      when "schemes" then schemes_path(status: [:incomplete], owning_organisation_select: "all")
       end
     end
   end
