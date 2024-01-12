@@ -248,12 +248,19 @@ module Csv
       1 => "Prefers not to say",
     }.freeze
 
+    RENTTYPE_LABELS = {
+      1 => "Social Rent",
+      2 => "Affordable Rent",
+      3 => "Intermediate Rent",
+    }.freeze
+
     LABELS = {
       "lettype" => LETTYPE_LABELS,
       "irproduct" => IRPRODUCT_LABELS,
       "lar" => LAR_LABELS,
       "newprop" => NEWPROP_LABELS,
       "incref" => INCREF_LABELS,
+      "renttype" => RENTTYPE_LABELS,
     }.freeze
 
     CONVENTIONAL_YES_NO_ATTRIBUTES = %w[illness_type_1 illness_type_2 illness_type_3 illness_type_4 illness_type_5 illness_type_6 illness_type_7 illness_type_8 illness_type_9 illness_type_10 refused cbl cap chr letting_allocation_none housingneeds_a housingneeds_b housingneeds_c housingneeds_d housingneeds_e housingneeds_f housingneeds_g housingneeds_h has_benefits nocharge].freeze
