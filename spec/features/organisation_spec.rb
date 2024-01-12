@@ -28,7 +28,7 @@ RSpec.describe "User Features" do
     context "when viewing organisation page" do
       it "defaults to organisation details" do
         visit("/lettings-logs")
-        click_link("About your organisation")
+        click_link("Your organisation")
         expect(page).to have_content(user.organisation.name)
       end
 
@@ -36,7 +36,7 @@ RSpec.describe "User Features" do
         visit("/organisations/#{org_id}")
         click_link("Users")
         expect(page).to have_current_path("/organisations/#{org_id}/users")
-        click_link("About your organisation")
+        click_link("Your organisation")
         expect(page).to have_current_path("/organisations/#{org_id}/details")
       end
 
@@ -99,11 +99,11 @@ RSpec.describe "User Features" do
     context "when viewing organisation page" do
       it "can see the details tab and users tab" do
         visit("/lettings-logs")
-        click_link("About your organisation")
+        click_link("Your organisation")
         expect(page).to have_current_path("/organisations/#{org_id}/details")
         expect(page).to have_link("Lettings logs")
         expect(page).to have_link("Users")
-        expect(page).to have_link("About your organisation")
+        expect(page).to have_link("Your organisation")
       end
     end
   end

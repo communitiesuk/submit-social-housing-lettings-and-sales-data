@@ -244,7 +244,7 @@ RSpec.describe "User Features" do
 
       it "highlights the users navigation tab" do
         expect(page).to have_css('[aria-current="page"]', text: "Users")
-        expect(page).not_to have_css('[aria-current="page"]', text: "About your organisation")
+        expect(page).not_to have_css('[aria-current="page"]', text: "Your organisation")
         expect(page).not_to have_css('[aria-current="page"]', text: "Logs")
       end
 
@@ -288,11 +288,11 @@ RSpec.describe "User Features" do
         fill_in("user[email]", with: user.email)
         fill_in("user[password]", with: "pAssword1")
         click_button("Sign in")
-        click_link("About your organisation")
+        click_link("Your organisation")
       end
 
       it "highlights the users navigation tab" do
-        expect(page).to have_css('[aria-current="page"]', text: "About your organisation")
+        expect(page).to have_css('[aria-current="page"]', text: "Your organisation")
         expect(page).not_to have_css('[aria-current="page"]', text: "Users")
         expect(page).not_to have_css('[aria-current="page"]', text: "Logs")
       end
