@@ -16,7 +16,7 @@ module NavigationItemsHelper
         NavigationItem.new("Sales logs", sales_logs_path, sales_logs_current?(path)),
         (NavigationItem.new("Schemes", schemes_path, non_support_supported_housing_schemes_current?(path)) if current_user.organisation.holds_own_stock? || current_user.organisation.stock_owners.present?),
         NavigationItem.new("Users", users_organisation_path(current_user.organisation), subnav_users_path?(path)),
-        NavigationItem.new("About your organisation", details_organisation_path(current_user.organisation.id), subnav_details_path?(path)),
+        NavigationItem.new("Your organisation", details_organisation_path(current_user.organisation.id), subnav_details_path?(path)),
         NavigationItem.new("Stock owners", stock_owners_organisation_path(current_user.organisation), stock_owners_path?(path)),
         NavigationItem.new("Managing agents", managing_agents_organisation_path(current_user.organisation), managing_agents_path?(path)),
       ].compact

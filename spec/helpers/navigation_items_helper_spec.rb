@@ -15,7 +15,7 @@ RSpec.describe NavigationItemsHelper do
             NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", true),
             NavigationItemsHelper::NavigationItem.new("Sales logs", "/sales-logs", false),
             NavigationItemsHelper::NavigationItem.new("Users", "/organisations/#{current_user.organisation.id}/users", false),
-            NavigationItemsHelper::NavigationItem.new("About your organisation", "/organisations/#{current_user.organisation.id}/details", false),
+            NavigationItemsHelper::NavigationItem.new("Your organisation", "/organisations/#{current_user.organisation.id}/details", false),
             NavigationItemsHelper::NavigationItem.new("Stock owners", "/organisations/#{current_user.organisation.id}/stock-owners", false),
             NavigationItemsHelper::NavigationItem.new("Managing agents", "/organisations/#{current_user.organisation.id}/managing-agents", false),
           ]
@@ -38,7 +38,7 @@ RSpec.describe NavigationItemsHelper do
               NavigationItemsHelper::NavigationItem.new("Sales logs", "/sales-logs", false),
               NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
               NavigationItemsHelper::NavigationItem.new("Users", "/organisations/#{current_user.organisation.id}/users", false),
-              NavigationItemsHelper::NavigationItem.new("About your organisation", "/organisations/#{current_user.organisation.id}/details", false),
+              NavigationItemsHelper::NavigationItem.new("Your organisation", "/organisations/#{current_user.organisation.id}/details", false),
               NavigationItemsHelper::NavigationItem.new("Stock owners", "/organisations/#{current_user.organisation.id}/stock-owners", false),
               NavigationItemsHelper::NavigationItem.new("Managing agents", "/organisations/#{current_user.organisation.id}/managing-agents", false),
             ]
@@ -57,7 +57,7 @@ RSpec.describe NavigationItemsHelper do
             NavigationItemsHelper::NavigationItem.new("Sales logs", "/sales-logs", false),
             NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
             NavigationItemsHelper::NavigationItem.new("Users", "/organisations/#{current_user.organisation.id}/users", false),
-            NavigationItemsHelper::NavigationItem.new("About your organisation", "/organisations/#{current_user.organisation.id}/details", false),
+            NavigationItemsHelper::NavigationItem.new("Your organisation", "/organisations/#{current_user.organisation.id}/details", false),
             NavigationItemsHelper::NavigationItem.new("Stock owners", "/organisations/#{current_user.organisation.id}/stock-owners", false),
             NavigationItemsHelper::NavigationItem.new("Managing agents", "/organisations/#{current_user.organisation.id}/managing-agents", false),
           ]
@@ -75,7 +75,7 @@ RSpec.describe NavigationItemsHelper do
             NavigationItemsHelper::NavigationItem.new("Sales logs", "/sales-logs", true),
             NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
             NavigationItemsHelper::NavigationItem.new("Users", "/organisations/#{current_user.organisation.id}/users", false),
-            NavigationItemsHelper::NavigationItem.new("About your organisation", "/organisations/#{current_user.organisation.id}/details", false),
+            NavigationItemsHelper::NavigationItem.new("Your organisation", "/organisations/#{current_user.organisation.id}/details", false),
             NavigationItemsHelper::NavigationItem.new("Stock owners", "/organisations/#{current_user.organisation.id}/stock-owners", false),
             NavigationItemsHelper::NavigationItem.new("Managing agents", "/organisations/#{current_user.organisation.id}/managing-agents", false),
           ]
@@ -93,7 +93,7 @@ RSpec.describe NavigationItemsHelper do
             NavigationItemsHelper::NavigationItem.new("Sales logs", "/sales-logs", false),
             NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
             NavigationItemsHelper::NavigationItem.new("Users", "/organisations/#{current_user.organisation.id}/users", true),
-            NavigationItemsHelper::NavigationItem.new("About your organisation", "/organisations/#{current_user.organisation.id}/details", false),
+            NavigationItemsHelper::NavigationItem.new("Your organisation", "/organisations/#{current_user.organisation.id}/details", false),
             NavigationItemsHelper::NavigationItem.new("Stock owners", "/organisations/#{current_user.organisation.id}/stock-owners", false),
             NavigationItemsHelper::NavigationItem.new("Managing agents", "/organisations/#{current_user.organisation.id}/managing-agents", false),
           ]
@@ -111,7 +111,7 @@ RSpec.describe NavigationItemsHelper do
             NavigationItemsHelper::NavigationItem.new("Sales logs", "/sales-logs", false),
             NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
             NavigationItemsHelper::NavigationItem.new("Users", "/organisations/#{current_user.organisation.id}/users", false),
-            NavigationItemsHelper::NavigationItem.new("About your organisation", "/organisations/#{current_user.organisation.id}/details", true),
+            NavigationItemsHelper::NavigationItem.new("Your organisation", "/organisations/#{current_user.organisation.id}/details", true),
             NavigationItemsHelper::NavigationItem.new("Stock owners", "/organisations/#{current_user.organisation.id}/stock-owners", false),
             NavigationItemsHelper::NavigationItem.new("Managing agents", "/organisations/#{current_user.organisation.id}/managing-agents", false),
           ]
@@ -129,7 +129,7 @@ RSpec.describe NavigationItemsHelper do
             NavigationItemsHelper::NavigationItem.new("Sales logs", "/sales-logs", false),
             NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
             NavigationItemsHelper::NavigationItem.new("Users", "/organisations/#{current_user.organisation.id}/users", false),
-            NavigationItemsHelper::NavigationItem.new("About your organisation", "/organisations/#{current_user.organisation.id}/details", false),
+            NavigationItemsHelper::NavigationItem.new("Your organisation", "/organisations/#{current_user.organisation.id}/details", false),
             NavigationItemsHelper::NavigationItem.new("Stock owners", "/organisations/#{current_user.organisation.id}/stock-owners", false),
             NavigationItemsHelper::NavigationItem.new("Managing agents", "/organisations/#{current_user.organisation.id}/managing-agents", false),
           ]
@@ -147,7 +147,7 @@ RSpec.describe NavigationItemsHelper do
             NavigationItemsHelper::NavigationItem.new("Sales logs", "/sales-logs", false),
             NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
             NavigationItemsHelper::NavigationItem.new("Users", "/organisations/#{current_user.organisation.id}/users", true),
-            NavigationItemsHelper::NavigationItem.new("About your organisation", "/organisations/#{current_user.organisation.id}/details", false),
+            NavigationItemsHelper::NavigationItem.new("Your organisation", "/organisations/#{current_user.organisation.id}/details", false),
             NavigationItemsHelper::NavigationItem.new("Stock owners", "/organisations/#{current_user.organisation.id}/stock-owners", false),
             NavigationItemsHelper::NavigationItem.new("Managing agents", "/organisations/#{current_user.organisation.id}/managing-agents", false),
           ]
@@ -165,7 +165,7 @@ RSpec.describe NavigationItemsHelper do
             NavigationItemsHelper::NavigationItem.new("Sales logs", "/sales-logs", false),
             NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", true),
             NavigationItemsHelper::NavigationItem.new("Users", "/organisations/#{current_user.organisation.id}/users", false),
-            NavigationItemsHelper::NavigationItem.new("About your organisation", "/organisations/#{current_user.organisation.id}/details", false),
+            NavigationItemsHelper::NavigationItem.new("Your organisation", "/organisations/#{current_user.organisation.id}/details", false),
             NavigationItemsHelper::NavigationItem.new("Stock owners", "/organisations/#{current_user.organisation.id}/stock-owners", false),
             NavigationItemsHelper::NavigationItem.new("Managing agents", "/organisations/#{current_user.organisation.id}/managing-agents", false),
           ]
@@ -194,7 +194,7 @@ RSpec.describe NavigationItemsHelper do
             NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", true),
             NavigationItemsHelper::NavigationItem.new("Sales logs", "/sales-logs", false),
             NavigationItemsHelper::NavigationItem.new("Users", "/organisations/#{current_user.organisation.id}/users", false),
-            NavigationItemsHelper::NavigationItem.new("About your organisation", "/organisations/#{current_user.organisation.id}/details", false),
+            NavigationItemsHelper::NavigationItem.new("Your organisation", "/organisations/#{current_user.organisation.id}/details", false),
             NavigationItemsHelper::NavigationItem.new("Stock owners", "/organisations/#{current_user.organisation.id}/stock-owners", false),
             NavigationItemsHelper::NavigationItem.new("Managing agents", "/organisations/#{current_user.organisation.id}/managing-agents", false),
           ]
@@ -217,7 +217,7 @@ RSpec.describe NavigationItemsHelper do
               NavigationItemsHelper::NavigationItem.new("Sales logs", "/sales-logs", false),
               NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
               NavigationItemsHelper::NavigationItem.new("Users", "/organisations/#{current_user.organisation.id}/users", false),
-              NavigationItemsHelper::NavigationItem.new("About your organisation", "/organisations/#{current_user.organisation.id}/details", false),
+              NavigationItemsHelper::NavigationItem.new("Your organisation", "/organisations/#{current_user.organisation.id}/details", false),
               NavigationItemsHelper::NavigationItem.new("Stock owners", "/organisations/#{current_user.organisation.id}/stock-owners", false),
               NavigationItemsHelper::NavigationItem.new("Managing agents", "/organisations/#{current_user.organisation.id}/managing-agents", false),
             ]
