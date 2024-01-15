@@ -1,7 +1,7 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <span class="govuk-caption-l">Bulk upload for lettings (<%= @bulk_upload.year_combo %>)</span>
-    <h1 class="govuk-heading-l"><%= @bulk_upload.bulk_upload_errors.uniq { |e| e.field }.count == 1 ? "This" : "These" %> <%= pluralize(@bulk_upload.bulk_upload_errors.uniq { |e| e.field }.count, "answer") %> will be deleted if you upload the <%= "log".pluralize(@bulk_upload.logs.count) %></h1>
+    <h1 class="govuk-heading-l"><%= @bulk_upload.bulk_upload_errors.uniq(&:field).count == 1 ? "This" : "These" %> <%= pluralize(@bulk_upload.bulk_upload_errors.uniq(&:field).count, "answer") %> will be deleted if you upload the <%= "log".pluralize(@bulk_upload.logs.count) %></h1>
 
     <p>The following cells contain data this is incorrect.</p>
     <p>If you upload the logs, these answers will be deleted. You will have to re-enter the data on the site and resolve these errors.</p>

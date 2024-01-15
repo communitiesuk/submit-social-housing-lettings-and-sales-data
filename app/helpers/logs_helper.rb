@@ -66,10 +66,10 @@ module LogsHelper
   end
 
   def deleted_errors_warning_text(bulk_upload)
-    unique_field_count = bulk_upload.bulk_upload_errors.uniq { |e| e.field }.count
+    unique_field_count = bulk_upload.bulk_upload_errors.uniq(&:field).count
     this_or_these = unique_field_count == 1 ? "this" : "these"
     it_is_or_they_are = unique_field_count == 1 ? "it is" : "they are"
 
-    "#{pluralize(unique_field_count, "answer")} will be deleted because #{it_is_or_they_are} invalid. You will have to answer #{this_or_these} #{"question".pluralize(unique_field_count)} again on the site."
+    "#{pluralize(unique_field_count, 'answer')} will be deleted because #{it_is_or_they_are} invalid. You will have to answer #{this_or_these} #{'question'.pluralize(unique_field_count)} again on the site."
   end
 end
