@@ -18,6 +18,10 @@
         <%= @form.recommendation %>
       </div>
 
+      <div class="govuk-body">
+        <%= govuk_link_to "View the error report", deletion_report_bulk_upload_lettings_result_path %>
+      </div>
+
       <%= govuk_details(summary_text: "How to choose between fixing errors on the CORE site or in the CSV") do %>
         <p class="govuk-body govuk-!-margin-bottom-2">You may find it easier to fix the errors in the CSV file if:</p>
         <ul class="govuk-list govuk-list--bullet">

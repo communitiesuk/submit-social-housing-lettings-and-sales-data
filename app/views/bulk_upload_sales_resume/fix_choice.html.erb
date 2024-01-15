@@ -39,7 +39,7 @@
             :name,
             legend: { hidden: true } %>
 
-           <div class="govuk-button-group">
+      <div class="govuk-button-group">
         <%= f.govuk_submit %>
         <% if @soft_errors_only %>
           <%= govuk_button_link_to "Cancel", bulk_upload_sales_soft_validations_check_url(@bulk_upload, page: "confirm-soft-errors"), secondary: true %>
