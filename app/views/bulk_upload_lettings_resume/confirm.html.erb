@@ -13,7 +13,10 @@
     </p>
 
 
-    <%= govuk_warning_text text: deleted_errors_warning_text(@bulk_upload) %>
+    <%= govuk_warning_text do %>
+      <%= deleted_errors_warning_text(@bulk_upload) %>
+      <%= govuk_link_to "See which answers will be deleted", deletion_report_bulk_upload_lettings_result_path %>
+    <% end %>
 
     <%= form_with model: @form, scope: :form, url: page_bulk_upload_lettings_resume_path(@bulk_upload, page: "confirm"), method: :patch do |f| %>
       <%= f.govuk_submit "Confirm" %>
