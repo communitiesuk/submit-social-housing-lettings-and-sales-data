@@ -12,6 +12,7 @@ RSpec.describe NavigationItemsHelper do
 
         let(:expected_navigation_items) do
           [
+            NavigationItemsHelper::NavigationItem.new("Home", "/", false),
             NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", true),
             NavigationItemsHelper::NavigationItem.new("Sales logs", "/sales-logs", false),
             NavigationItemsHelper::NavigationItem.new("Users", "/organisations/#{current_user.organisation.id}/users", false),
@@ -21,7 +22,7 @@ RSpec.describe NavigationItemsHelper do
           ]
         end
 
-        it "returns navigation items with the users item set as current" do
+        it "returns navigation items with the lettings logs item set as current" do
           expect(primary_items("/lettings-logs", current_user)).to eq(expected_navigation_items)
         end
 
@@ -34,6 +35,7 @@ RSpec.describe NavigationItemsHelper do
           let(:stock_owner) { create(:organisation) }
           let(:expected_navigation_items) do
             [
+              NavigationItemsHelper::NavigationItem.new("Home", "/", false),
               NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", true),
               NavigationItemsHelper::NavigationItem.new("Sales logs", "/sales-logs", false),
               NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
@@ -44,15 +46,35 @@ RSpec.describe NavigationItemsHelper do
             ]
           end
 
-          it "returns navigation items with the users item set as current" do
+          it "returns navigation items with the lettings logs item set as current" do
             expect(primary_items("/lettings-logs", current_user)).to eq(expected_navigation_items)
           end
+        end
+      end
+
+      context "when the user is on the home page" do
+        let(:expected_navigation_items) do
+          [
+            NavigationItemsHelper::NavigationItem.new("Home", "/", true),
+            NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
+            NavigationItemsHelper::NavigationItem.new("Sales logs", "/sales-logs", false),
+            NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
+            NavigationItemsHelper::NavigationItem.new("Users", "/organisations/#{current_user.organisation.id}/users", false),
+            NavigationItemsHelper::NavigationItem.new("About your organisation", "/organisations/#{current_user.organisation.id}/details", false),
+            NavigationItemsHelper::NavigationItem.new("Stock owners", "/organisations/#{current_user.organisation.id}/stock-owners", false),
+            NavigationItemsHelper::NavigationItem.new("Managing agents", "/organisations/#{current_user.organisation.id}/managing-agents", false),
+          ]
+        end
+
+        it "returns navigation items with the home item set as current" do
+          expect(primary_items("/", current_user)).to eq(expected_navigation_items)
         end
       end
 
       context "when the user is on the lettings logs page" do
         let(:expected_navigation_items) do
           [
+            NavigationItemsHelper::NavigationItem.new("Home", "/", false),
             NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", true),
             NavigationItemsHelper::NavigationItem.new("Sales logs", "/sales-logs", false),
             NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
@@ -63,7 +85,7 @@ RSpec.describe NavigationItemsHelper do
           ]
         end
 
-        it "returns navigation items with the users item set as current" do
+        it "returns navigation items with the lettings logs item set as current" do
           expect(primary_items("/lettings-logs", current_user)).to eq(expected_navigation_items)
         end
       end
@@ -71,6 +93,7 @@ RSpec.describe NavigationItemsHelper do
       context "when the user is on the sales logs page" do
         let(:expected_navigation_items) do
           [
+            NavigationItemsHelper::NavigationItem.new("Home", "/", false),
             NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
             NavigationItemsHelper::NavigationItem.new("Sales logs", "/sales-logs", true),
             NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
@@ -81,7 +104,7 @@ RSpec.describe NavigationItemsHelper do
           ]
         end
 
-        it "returns navigation items with the users item set as current" do
+        it "returns navigation items with the sales logs item set as current" do
           expect(primary_items("/sales-logs", current_user)).to eq(expected_navigation_items)
         end
       end
@@ -89,6 +112,7 @@ RSpec.describe NavigationItemsHelper do
       context "when the user is on the users page" do
         let(:expected_navigation_items) do
           [
+            NavigationItemsHelper::NavigationItem.new("Home", "/", false),
             NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
             NavigationItemsHelper::NavigationItem.new("Sales logs", "/sales-logs", false),
             NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
@@ -107,6 +131,7 @@ RSpec.describe NavigationItemsHelper do
       context "when the user is on their organisation details page" do
         let(:expected_navigation_items) do
           [
+            NavigationItemsHelper::NavigationItem.new("Home", "/", false),
             NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
             NavigationItemsHelper::NavigationItem.new("Sales logs", "/sales-logs", false),
             NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
@@ -117,7 +142,7 @@ RSpec.describe NavigationItemsHelper do
           ]
         end
 
-        it "returns navigation items with the users item set as current" do
+        it "returns navigation items with the organisation item set as current" do
           expect(primary_items("/organisations/#{current_user.organisation.id}/details", current_user)).to eq(expected_navigation_items)
         end
       end
@@ -125,6 +150,7 @@ RSpec.describe NavigationItemsHelper do
       context "when the user is on the account page" do
         let(:expected_navigation_items) do
           [
+            NavigationItemsHelper::NavigationItem.new("Home", "/", false),
             NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
             NavigationItemsHelper::NavigationItem.new("Sales logs", "/sales-logs", false),
             NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
@@ -135,7 +161,7 @@ RSpec.describe NavigationItemsHelper do
           ]
         end
 
-        it "returns navigation items with the users item set as current" do
+        it "returns navigation items with no items set as current" do
           expect(primary_items("/account", current_user)).to eq(expected_navigation_items)
         end
       end
@@ -143,6 +169,7 @@ RSpec.describe NavigationItemsHelper do
       context "when the user is on the individual user's page" do
         let(:expected_navigation_items) do
           [
+            NavigationItemsHelper::NavigationItem.new("Home", "/", false),
             NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
             NavigationItemsHelper::NavigationItem.new("Sales logs", "/sales-logs", false),
             NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
@@ -161,6 +188,7 @@ RSpec.describe NavigationItemsHelper do
       context "when the user is on the individual scheme's page" do
         let(:expected_navigation_items) do
           [
+            NavigationItemsHelper::NavigationItem.new("Home", "/", false),
             NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
             NavigationItemsHelper::NavigationItem.new("Sales logs", "/sales-logs", false),
             NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", true),
@@ -171,7 +199,7 @@ RSpec.describe NavigationItemsHelper do
           ]
         end
 
-        it "returns navigation items with Schemes item set as current" do
+        it "returns navigation items with schemes item set as current" do
           expect(primary_items("/schemes/1", current_user)).to eq(expected_navigation_items)
         end
       end
@@ -191,6 +219,7 @@ RSpec.describe NavigationItemsHelper do
 
         let(:expected_navigation_items) do
           [
+            NavigationItemsHelper::NavigationItem.new("Home", "/", false),
             NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", true),
             NavigationItemsHelper::NavigationItem.new("Sales logs", "/sales-logs", false),
             NavigationItemsHelper::NavigationItem.new("Users", "/organisations/#{current_user.organisation.id}/users", false),
@@ -200,7 +229,7 @@ RSpec.describe NavigationItemsHelper do
           ]
         end
 
-        it "returns navigation items with the users item set as current" do
+        it "returns navigation items with the lettings logs item set as current" do
           expect(primary_items("/lettings-logs", current_user)).to eq(expected_navigation_items)
         end
 
@@ -213,6 +242,7 @@ RSpec.describe NavigationItemsHelper do
           let(:stock_owner) { create(:organisation) }
           let(:expected_navigation_items) do
             [
+              NavigationItemsHelper::NavigationItem.new("Home", "/", false),
               NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", true),
               NavigationItemsHelper::NavigationItem.new("Sales logs", "/sales-logs", false),
               NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
@@ -223,7 +253,7 @@ RSpec.describe NavigationItemsHelper do
             ]
           end
 
-          it "returns navigation items with the users item set as current" do
+          it "returns navigation items with the lettings logs item set as current" do
             expect(primary_items("/lettings-logs", current_user)).to eq(expected_navigation_items)
           end
         end
@@ -233,9 +263,27 @@ RSpec.describe NavigationItemsHelper do
     context "when the user is a support user" do
       let(:current_user) { create(:user, :support) }
 
+      context "when the user is on the home page" do
+        let(:expected_navigation_items) do
+          [
+            NavigationItemsHelper::NavigationItem.new("Home", "/", true),
+            NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", false),
+            NavigationItemsHelper::NavigationItem.new("Users", "/users", false),
+            NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
+            NavigationItemsHelper::NavigationItem.new("Sales logs", "/sales-logs", false),
+            NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
+          ]
+        end
+
+        it "returns navigation items with the home item set as current" do
+          expect(primary_items("/", current_user)).to eq(expected_navigation_items)
+        end
+      end
+
       context "when the user is on the lettings logs page" do
         let(:expected_navigation_items) do
           [
+            NavigationItemsHelper::NavigationItem.new("Home", "/", false),
             NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", false),
             NavigationItemsHelper::NavigationItem.new("Users", "/users", false),
             NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", true),
@@ -244,7 +292,7 @@ RSpec.describe NavigationItemsHelper do
           ]
         end
 
-        it "returns navigation items with the users item set as current" do
+        it "returns navigation items with the lettings logs item set as current" do
           expect(primary_items("/lettings-logs", current_user)).to eq(expected_navigation_items)
         end
       end
@@ -252,6 +300,7 @@ RSpec.describe NavigationItemsHelper do
       context "when the user is on the sales logs page" do
         let(:expected_navigation_items) do
           [
+            NavigationItemsHelper::NavigationItem.new("Home", "/", false),
             NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", false),
             NavigationItemsHelper::NavigationItem.new("Users", "/users", false),
             NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
@@ -260,7 +309,7 @@ RSpec.describe NavigationItemsHelper do
           ]
         end
 
-        it "returns navigation items with the users item set as current" do
+        it "returns navigation items with the sales logs item set as current" do
           expect(primary_items("/sales-logs", current_user)).to eq(expected_navigation_items)
         end
       end
@@ -268,6 +317,7 @@ RSpec.describe NavigationItemsHelper do
       context "when the user is on the users page" do
         let(:expected_navigation_items) do
           [
+            NavigationItemsHelper::NavigationItem.new("Home", "/", false),
             NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", false),
             NavigationItemsHelper::NavigationItem.new("Users", "/users", true),
             NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
@@ -284,6 +334,7 @@ RSpec.describe NavigationItemsHelper do
       context "when the user is on the account page" do
         let(:expected_navigation_items) do
           [
+            NavigationItemsHelper::NavigationItem.new("Home", "/", false),
             NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", false),
             NavigationItemsHelper::NavigationItem.new("Users", "/users", false),
             NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
@@ -292,7 +343,7 @@ RSpec.describe NavigationItemsHelper do
           ]
         end
 
-        it "returns navigation items with the users item set as current" do
+        it "returns navigation items with the no items set as current" do
           expect(primary_items("/account", current_user)).to eq(expected_navigation_items)
         end
       end
@@ -300,6 +351,7 @@ RSpec.describe NavigationItemsHelper do
       context "when the user is on the Schemes page" do
         let(:expected_navigation_items) do
           [
+            NavigationItemsHelper::NavigationItem.new("Home", "/", false),
             NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", false),
             NavigationItemsHelper::NavigationItem.new("Users", "/users", false),
             NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
@@ -308,7 +360,7 @@ RSpec.describe NavigationItemsHelper do
           ]
         end
 
-        it "returns navigation items with the users item set as current" do
+        it "returns navigation items with the schemes item set as current" do
           expect(primary_items("/schemes", current_user)).to eq(expected_navigation_items)
         end
       end
@@ -316,6 +368,7 @@ RSpec.describe NavigationItemsHelper do
       context "when the user is on the individual user's page" do
         let(:expected_navigation_items) do
           [
+            NavigationItemsHelper::NavigationItem.new("Home", "/", false),
             NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", false),
             NavigationItemsHelper::NavigationItem.new("Users", "/users", true),
             NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
@@ -332,6 +385,7 @@ RSpec.describe NavigationItemsHelper do
       context "when the user is on the individual scheme's page" do
         let(:expected_navigation_items) do
           [
+            NavigationItemsHelper::NavigationItem.new("Home", "/", false),
             NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", false),
             NavigationItemsHelper::NavigationItem.new("Users", "/users", false),
             NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
@@ -347,7 +401,7 @@ RSpec.describe NavigationItemsHelper do
           ]
         end
 
-        it "returns navigation items with Schemes item set as current" do
+        it "returns navigation items with schemes item set as current" do
           expect(primary_items("/schemes/1", current_user)).to eq(expected_navigation_items)
           expect(scheme_items("/schemes/1", 1)).to eq(expected_scheme_items)
         end
@@ -356,6 +410,7 @@ RSpec.describe NavigationItemsHelper do
       context "when the user is on the scheme locations page" do
         let(:expected_navigation_items) do
           [
+            NavigationItemsHelper::NavigationItem.new("Home", "/", false),
             NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", false),
             NavigationItemsHelper::NavigationItem.new("Users", "/users", false),
             NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
@@ -371,7 +426,7 @@ RSpec.describe NavigationItemsHelper do
           ]
         end
 
-        it "returns navigation items with Schemes item set as current" do
+        it "returns navigation items with schemes item set as current" do
           expect(primary_items("/schemes/1/locations", current_user)).to eq(expected_navigation_items)
           expect(scheme_items("/schemes/1/locations", 1)).to eq(expected_scheme_items)
         end
@@ -382,6 +437,7 @@ RSpec.describe NavigationItemsHelper do
           let(:required_sub_path) { "lettings-logs" }
           let(:expected_navigation_items) do
             [
+              NavigationItemsHelper::NavigationItem.new("Home", "/", false),
               NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", true),
               NavigationItemsHelper::NavigationItem.new("Users", "/users", false),
               NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
@@ -402,7 +458,7 @@ RSpec.describe NavigationItemsHelper do
             ]
           end
 
-          it "returns navigation items with the logs item set as current" do
+          it "returns navigation items with the lettings logs item set as current" do
             expect(primary_items("/organisations/#{current_user.organisation.id}/#{required_sub_path}", current_user)).to eq(expected_navigation_items)
             expect(secondary_items("/organisations/#{current_user.organisation.id}/#{required_sub_path}", current_user.organisation.id)).to eq(expected_secondary_navigation_items)
           end
@@ -412,6 +468,7 @@ RSpec.describe NavigationItemsHelper do
           let(:required_sub_path) { "users" }
           let(:expected_navigation_items) do
             [
+              NavigationItemsHelper::NavigationItem.new("Home", "/", false),
               NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", true),
               NavigationItemsHelper::NavigationItem.new("Users", "/users", false),
               NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
@@ -432,7 +489,7 @@ RSpec.describe NavigationItemsHelper do
             ]
           end
 
-          it "returns navigation items with the logs item set as current" do
+          it "returns navigation items with the users item set as current" do
             expect(primary_items("/organisations/#{current_user.organisation.id}/#{required_sub_path}", current_user)).to eq(expected_navigation_items)
             expect(secondary_items("/organisations/#{current_user.organisation.id}/#{required_sub_path}", current_user.organisation.id)).to eq(expected_secondary_navigation_items)
           end
@@ -442,6 +499,7 @@ RSpec.describe NavigationItemsHelper do
           let(:required_sub_path) { "schemes" }
           let(:expected_navigation_items) do
             [
+              NavigationItemsHelper::NavigationItem.new("Home", "/", false),
               NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", true),
               NavigationItemsHelper::NavigationItem.new("Users", "/users", false),
               NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
@@ -472,6 +530,7 @@ RSpec.describe NavigationItemsHelper do
           let(:required_sub_path) { "details" }
           let(:expected_navigation_items) do
             [
+              NavigationItemsHelper::NavigationItem.new("Home", "/", false),
               NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", true),
               NavigationItemsHelper::NavigationItem.new("Users", "/users", false),
               NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
@@ -492,7 +551,7 @@ RSpec.describe NavigationItemsHelper do
             ]
           end
 
-          it "returns navigation items with the logs item set as current" do
+          it "returns navigation items with the organisation item set as current" do
             expect(primary_items("/organisations/#{current_user.organisation.id}/#{required_sub_path}", current_user)).to eq(expected_navigation_items)
             expect(secondary_items("/organisations/#{current_user.organisation.id}/#{required_sub_path}", current_user.organisation.id)).to eq(expected_secondary_navigation_items)
           end

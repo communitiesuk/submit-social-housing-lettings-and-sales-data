@@ -1,0 +1,23 @@
+<div class="app-unread-notification">
+  <div class="govuk-width-container">
+    <br>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-three-quarters">
+        <% if notification_count > 1  && current_user.present? %>
+          <p>Notification 1 of <%= notification_count %></p>
+        <% end %>
+      <p class="govuk-!-font-weight-bold"><%= notification.title %></p>
+        <% if notification.page_content.present? %>
+          <div class="govuk-body">
+            <%= govuk_link_to notification.link_text, notifications_path, class: "govuk-link--inverse govuk-!-font-weight-bold" %>
+          </div>
+        <% end %>
+      </div>
+      <% if current_user.present? %>
+        <p class="govuk-grid-column-one-quarter govuk-!-text-align-right ">
+          <%= govuk_link_to "Dismiss", dismiss_notifications_path, class: "govuk-link--inverse" %>
+        </p>
+      <% end %>
+    </div>
+  </div>
+</div>

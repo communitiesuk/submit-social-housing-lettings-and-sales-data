@@ -4,6 +4,7 @@ module NavigationItemsHelper
   def primary_items(path, current_user)
     if current_user.support?
       [
+        NavigationItem.new("Home", root_path, home_current?(path)),
         NavigationItem.new("Organisations", organisations_path, organisations_current?(path)),
         NavigationItem.new("Users", users_path, users_current?(path)),
         NavigationItem.new("Lettings logs", lettings_logs_path, lettings_logs_current?(path)),
@@ -12,6 +13,7 @@ module NavigationItemsHelper
       ].compact
     else
       [
+        NavigationItem.new("Home", root_path, home_current?(path)),
         NavigationItem.new("Lettings logs", lettings_logs_path, lettings_logs_current?(path)),
         NavigationItem.new("Sales logs", sales_logs_path, sales_logs_current?(path)),
         (NavigationItem.new("Schemes", schemes_path, non_support_supported_housing_schemes_current?(path)) if current_user.organisation.holds_own_stock? || current_user.organisation.stock_owners.present?),
@@ -43,6 +45,10 @@ module NavigationItemsHelper
   end
 
 private
+
+  def home_current?(path)
+    path == root_path || path == notifications_path
+  end
 
   def lettings_logs_current?(path)
     path.starts_with?(lettings_logs_path)

@@ -26,3 +26,7 @@
 .app-header--orange .govuk-header__container {
   border-bottom-color: govuk-colour("orange");
 }
+
+.app-header__no-border-bottom {
+  border-bottom: 0;
+}

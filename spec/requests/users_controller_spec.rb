@@ -73,11 +73,11 @@ RSpec.describe UsersController, type: :request do
     end
 
     describe "title link" do
-      it "routes user to the /logs page" do
+      it "routes user to the home page" do
         sign_in user
         get "/", headers:, params: {}
-        follow_redirect!
-        expect(path).to include("/lettings-logs")
+        expect(path).to eq("/")
+        expect(page).to have_content("Welcome back")
         expected_link = "<a class=\"govuk-header__link govuk-header__link--homepage\" href=\"/\">"
         expect(CGI.unescape_html(response.body)).to include(expected_link)
       end
@@ -2025,10 +2025,10 @@ RSpec.describe UsersController, type: :request do
       sign_in user
     end
 
-    it "routes user to the /logs page" do
+    it "routes user to the home page" do
       get "/", headers:, params: {}
-      follow_redirect!
-      expect(path).to include("/lettings-logs")
+      expect(path).to eq("/")
+      expect(page).to have_content("Welcome back")
       expected_link = "<a class=\"govuk-header__link govuk-header__link--homepage\" href=\"/\">"
       expect(CGI.unescape_html(response.body)).to include(expected_link)
     end
