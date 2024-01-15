@@ -155,6 +155,9 @@ RSpec.describe "bulk_update" do
         expect(Rails.logger).to receive(:info).with("Cannot update scheme S#{schemes[0].id} with status as it it not a permitted field")
         expect(Rails.logger).to receive(:info).with("Cannot update scheme S#{schemes[0].id} with created_at as it it not a permitted field")
         expect(Rails.logger).to receive(:info).with("Cannot update scheme S#{schemes[0].id} with active_dates as it it not a permitted field")
+        expect(Rails.logger).to receive(:info).with("Saved scheme S#{schemes[0].id}.")
+
+        expect(Rails.logger).to receive(:info).with("Saved scheme S#{schemes[1].id}.")
 
         expect(Rails.logger).to receive(:info).with("Cannot update scheme S#{schemes[2].id} with sensitive: Yse. 'Yse' is not a valid sensitive")
         expect(Rails.logger).to receive(:info).with("Cannot update scheme S#{schemes[2].id} with scheme_type: Direct access Hostel. 'Direct access Hostel' is not a valid scheme_type")
@@ -165,6 +168,8 @@ RSpec.describe "bulk_update" do
         expect(Rails.logger).to receive(:info).with("Cannot update scheme S#{schemes[2].id} with secondary_client_group: lder people with support needs. 'lder people with support needs' is not a valid secondary_client_group")
         expect(Rails.logger).to receive(:info).with("Cannot update scheme S#{schemes[2].id} with support_type: high. 'high' is not a valid support_type")
         expect(Rails.logger).to receive(:info).with("Cannot update scheme S#{schemes[2].id} with intended_stay: Permanent . 'Permanent ' is not a valid intended_stay")
+
+        expect(Rails.logger).to receive(:info).with("Saved scheme S#{schemes[2].id}.")
 
         expect(Rails.logger).to receive(:info).with("Scheme with id Wrong_id is not in the original scheme csv")
         expect(Rails.logger).to receive(:info).with("Scheme with id SWrong_id is not in the database")
@@ -182,6 +187,44 @@ RSpec.describe "bulk_update" do
 
       it "raises an error when no updated path is given" do
         expect { task.invoke(original_schemes_csv_path, nil) }.to raise_error(RuntimeError, "Usage: rake bulk_update:update_schemes_from_csv['original_file_name','updated_file_name']")
+      end
+
+      it "logs an error if a validation fails and processes the rest of the rows" do
+        schemes[1].support_type = nil
+        schemes[1].save!(validate: false)
+        expect(Rails.logger).to receive(:info).with("Updating scheme S#{schemes[0].id}, with service_name: Updated test name")
+        expect(Rails.logger).to receive(:info).with("Updating scheme S#{schemes[0].id}, with sensitive: No")
+        expect(Rails.logger).to receive(:info).with("Updating scheme S#{schemes[0].id}, with scheme_type: Direct Access Hostel")
+        expect(Rails.logger).to receive(:info).with("Updating scheme S#{schemes[0].id}, with arrangement_type: Another registered stock owner")
+        expect(Rails.logger).to receive(:info).with("Updating scheme S#{schemes[0].id}, with primary_client_group: People with drug problems")
+        expect(Rails.logger).to receive(:info).with("Updating scheme S#{schemes[0].id}, with has_other_client_group: No")
+        expect(Rails.logger).to receive(:info).with("Updating scheme S#{schemes[0].id}, with support_type: Low level")
+        expect(Rails.logger).to receive(:info).with("Updating scheme S#{schemes[0].id}, with intended_stay: Permanent")
+        expect(Rails.logger).to receive(:info).with("Updating scheme S#{schemes[0].id}, with registered_under_care_act: No")
+        # expect(Rails.logger).to receive(:info).with("Updating scheme S#{schemes[0].id}, with secondary_client_group: nil")
+        expect(Rails.logger).to receive(:info).with("Updating scheme S#{schemes[0].id}, with owning_organisation: Different organisation")
+        expect(Rails.logger).to receive(:info).with("Cannot update scheme S#{schemes[0].id} with status as it it not a permitted field")
+        expect(Rails.logger).to receive(:info).with("Cannot update scheme S#{schemes[0].id} with created_at as it it not a permitted field")
+        expect(Rails.logger).to receive(:info).with("Cannot update scheme S#{schemes[0].id} with active_dates as it it not a permitted field")
+        expect(Rails.logger).to receive(:info).with("Saved scheme S#{schemes[0].id}.")
+
+        expect(Rails.logger).to receive(:error).with("Cannot update scheme S#{schemes[1].id}. Validation failed: Support type Select the level of support provided by this scheme")
+
+        expect(Rails.logger).to receive(:info).with("Cannot update scheme S#{schemes[2].id} with sensitive: Yse. 'Yse' is not a valid sensitive")
+        expect(Rails.logger).to receive(:info).with("Cannot update scheme S#{schemes[2].id} with scheme_type: Direct access Hostel. 'Direct access Hostel' is not a valid scheme_type")
+        expect(Rails.logger).to receive(:info).with("Cannot update scheme S#{schemes[2].id} with owning_organisation_name: non existing org. Organisation with name non existing org is not in the database")
+        expect(Rails.logger).to receive(:info).with("Cannot update scheme S#{schemes[2].id} with arrangement_type: wrong answer. 'wrong answer' is not a valid arrangement_type")
+        expect(Rails.logger).to receive(:info).with("Cannot update scheme S#{schemes[2].id} with primary_client_group: FD. 'FD' is not a valid primary_client_group")
+        expect(Rails.logger).to receive(:info).with("Cannot update scheme S#{schemes[2].id} with has_other_client_group: no. 'no' is not a valid has_other_client_group")
+        expect(Rails.logger).to receive(:info).with("Cannot update scheme S#{schemes[2].id} with secondary_client_group: lder people with support needs. 'lder people with support needs' is not a valid secondary_client_group")
+        expect(Rails.logger).to receive(:info).with("Cannot update scheme S#{schemes[2].id} with support_type: high. 'high' is not a valid support_type")
+        expect(Rails.logger).to receive(:info).with("Cannot update scheme S#{schemes[2].id} with intended_stay: Permanent . 'Permanent ' is not a valid intended_stay")
+        expect(Rails.logger).to receive(:info).with("Saved scheme S#{schemes[2].id}.")
+
+        expect(Rails.logger).to receive(:info).with("Scheme with id Wrong_id is not in the original scheme csv")
+        expect(Rails.logger).to receive(:info).with("Scheme with id SWrong_id is not in the database")
+
+        task.invoke(original_schemes_csv_path, updated_schemes_csv_path)
       end
     end
   end

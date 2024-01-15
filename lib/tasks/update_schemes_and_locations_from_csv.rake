@@ -86,7 +86,12 @@ namespace :bulk_update do
           Rails.logger.info("Cannot update scheme #{original_attributes['scheme_code']} with #{key} as it it not a permitted field")
         end
       end
-      scheme.save!
+      begin
+        scheme.save!
+        Rails.logger.info("Saved scheme #{original_attributes['scheme_code']}.")
+      rescue ActiveRecord::RecordInvalid => e
+        Rails.logger.error("Cannot update scheme #{original_attributes['scheme_code']}. #{e.message}")
+      end
     end
   end
 end
