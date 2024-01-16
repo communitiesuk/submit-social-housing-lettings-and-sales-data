@@ -361,8 +361,8 @@ en:
       benefits:
         part_or_full_time: "Answer cannot be ‘all’ for income from Universal Credit, state pensions or benefits if the tenant or their partner works part-time or full-time"
       earnings:
-        over_hard_max: "Net income cannot be greater than %{hard_max} per week given the household’s working situation"
-        under_hard_min: "Net income cannot be less than %{hard_min} per week given the household’s working situation"
+        over_hard_max: "The household's income cannot be greater than %{hard_max} per week given the household’s working situation"
+        under_hard_min: "The household's income cannot be less than %{hard_min} per week given the household’s working situation"
         freq_missing: "Select how often the household receives income"
         earnings_missing: "Enter how much income the household has in total"
       income:
@@ -376,7 +376,7 @@ en:
         less_than_shortfall: "Enter an amount that is more than the shortfall in basic rent"
         out_of_range: "Enter a value for the %{charge_name} between £0 and %{maximum_per_period} paid %{frequency}. %{maximum_per_period} is the max limit for rent and charges paid %{frequency} for %{letting_type} lettings owned by a %{provider_type}."
       ecstat:
-        over_hard_max: "Net household income of %{earnings} %{frequency} is too high given the household’s working situation"
+        over_hard_max: "The household's income of %{earnings} %{frequency} is too high given the household’s working situation"
       brent:
         below_hard_min: "Rent is below the absolute minimum expected for a property of this type. Please check the rent, rent period, local authority and (if general needs) number of bedrooms"
         above_hard_max: "Rent is higher than the absolute maximum expected for a property of this type. Please check the rent, rent period, local authority and (if general needs) number of bedrooms"
@@ -610,7 +610,7 @@ en:
 
   soft_validations:
     net_income:
-      title_text: "You told us that household income is %{earnings} %{incfreq}."
+      title_text: "You told us that the household's income is %{earnings} %{incfreq}."
       hint_text: "This is %{net_income_higher_or_lower_text} than we would expect for their working situation."
       in_soft_min_range:
         message: "Net income is lower than expected based on the household's working situation. Are you sure this is correct?"
