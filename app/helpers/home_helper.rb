@@ -2,14 +2,14 @@ module HomeHelper
   def data_count(user, type)
     if user.data_provider?
       case type
-      when "lettings" then user.lettings_logs.in_progress.where(created_by: user).count
-      when "sales" then user.sales_logs.in_progress.where(created_by: user).count
+      when "lettings" then user.lettings_logs.where(created_by: user).where(status: %i[not_started in_progress]).count
+      when "sales" then user.sales_logs.where(created_by: user).where(status: %i[not_started in_progress]).count
       when "misc" then user.lettings_logs.completed.where(created_by: user).count
       end
     else
       case type
-      when "lettings" then user.lettings_logs.in_progress.count
-      when "sales" then user.sales_logs.in_progress.count
+      when "lettings" then user.lettings_logs.where(status: %i[not_started in_progress]).count
+      when "sales" then user.sales_logs.where(status: %i[not_started in_progress]).count
       when "schemes" then user.schemes.incomplete.count
       end
     end
@@ -33,14 +33,14 @@ module HomeHelper
   def data_path(user, type)
     if user.data_provider?
       case type
-      when "lettings" then lettings_logs_path(status: [:in_progress], assigned_to: "you", years: [""], owning_organisation_select: "all", managing_organisation_select: "all")
-      when "sales" then sales_logs_path(status: [:in_progress], assigned_to: "you", years: [""], owning_organisation_select: "all", managing_organisation_select: "all")
+      when "lettings" then lettings_logs_path(status: %i[not_started in_progress], assigned_to: "you", years: [""], owning_organisation_select: "all", managing_organisation_select: "all")
+      when "sales" then sales_logs_path(status: %i[not_started in_progress], assigned_to: "you", years: [""], owning_organisation_select: "all", managing_organisation_select: "all")
       when "misc" then lettings_logs_path(status: [:completed], assigned_to: "you", years: [""], owning_organisation_select: "all", managing_organisation_select: "all")
       end
     else
       case type
-      when "lettings" then lettings_logs_path(status: [:in_progress], assigned_to: "all", years: [""], owning_organisation_select: "all", managing_organisation_select: "all")
-      when "sales" then sales_logs_path(status: [:in_progress], assigned_to: "all", years: [""], owning_organisation_select: "all", managing_organisation_select: "all")
+      when "lettings" then lettings_logs_path(status: %i[not_started in_progress], assigned_to: "all", years: [""], owning_organisation_select: "all", managing_organisation_select: "all")
+      when "sales" then sales_logs_path(status: %i[not_started in_progress], assigned_to: "all", years: [""], owning_organisation_select: "all", managing_organisation_select: "all")
       when "schemes" then schemes_path(status: [:incomplete], owning_organisation_select: "all")
       end
     end
