@@ -539,7 +539,7 @@ private
 
   def validate_uprn_exists_if_any_key_address_fields_are_blank
     if field_18.blank? && (field_19.blank? || field_21.blank?)
-      errors.add(:field_18, I18n.t("validations.not_answered", question: "UPRN"))
+      errors.add(:field_18, I18n.t("validations.not_answered", question: "UPRN"), category: :not_answered)
     end
   end
 
@@ -623,10 +623,10 @@ private
 
   def validate_no_housing_needs_questions_answered
     if [field_83, field_84, field_85, field_86, field_87, field_88].all?(&:blank?)
-      errors.add(:field_87, I18n.t("validations.not_answered", question: "anybody with disabled access needs"))
-      errors.add(:field_86, I18n.t("validations.not_answered", question: "other access needs"))
+      errors.add(:field_87, I18n.t("validations.not_answered", question: "anybody with disabled access needs"), category: :not_answered)
+      errors.add(:field_86, I18n.t("validations.not_answered", question: "other access needs"), category: :not_answered)
       %i[field_83 field_84 field_85].each do |field|
-        errors.add(field, I18n.t("validations.not_answered", question: "disabled access needs type"))
+        errors.add(field, I18n.t("validations.not_answered", question: "disabled access needs type"), category: :not_answered)
       end
     end
   end
@@ -635,7 +635,7 @@ private
     reason_fields = %i[field_111 field_112 field_113 field_114 field_115]
     if field_110 == 1 && reason_fields.all? { |field| attributes[field.to_s].blank? }
       reason_fields.each do |field|
-        errors.add(field, I18n.t("validations.not_answered", question: "reason for reasonable preference"))
+        errors.add(field, I18n.t("validations.not_answered", question: "reason for reasonable preference"), category: :not_answered)
       end
     end
   end
@@ -650,16 +650,16 @@ private
       end
     elsif illness_option_fields.all? { |field| attributes[field.to_s].blank? }
       illness_option_fields.each do |field|
-        errors.add(field, I18n.t("validations.not_answered", question: "how is person affected by condition or illness"))
+        errors.add(field, I18n.t("validations.not_answered", question: "how is person affected by condition or illness"), category: :not_answered)
       end
     end
   end
 
   def validate_lettings_allocation
     if cbl.blank? && cap.blank? && chr.blank?
-      errors.add(:field_116, I18n.t("validations.not_answered", question: "was the letting made under the Choice-Based Lettings (CBL)?"))
-      errors.add(:field_117, I18n.t("validations.not_answered", question: "was the letting made under the Common Allocation Policy (CAP)?"))
-      errors.add(:field_118, I18n.t("validations.not_answered", question: "was the letting made under the Common Housing Register (CHR)?"))
+      errors.add(:field_116, I18n.t("validations.not_answered", question: "was the letting made under the Choice-Based Lettings (CBL)?"), category: :not_answered)
+      errors.add(:field_117, I18n.t("validations.not_answered", question: "was the letting made under the Common Allocation Policy (CAP)?"), category: :not_answered)
+      errors.add(:field_118, I18n.t("validations.not_answered", question: "was the letting made under the Common Housing Register (CHR)?"), category: :not_answered)
     end
   end
 
@@ -743,7 +743,7 @@ private
         fields.each do |field|
           unless errors.any? { |e| fields.include?(e.attribute) }
             question_text = question.error_display_label.presence || "this question"
-            errors.add(field, I18n.t("validations.not_answered", question: question_text.downcase))
+            errors.add(field, I18n.t("validations.not_answered", question: question_text.downcase), category: :not_answered)
           end
         end
       end

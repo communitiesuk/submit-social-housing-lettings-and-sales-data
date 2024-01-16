@@ -50,9 +50,9 @@ module LogsHelper
 
   def logs_and_errors_warning(bulk_upload)
     is_or_are = bulk_upload.total_logs_count == 1 ? "is" : "are"
-    need_or_needs = bulk_upload.bulk_upload_errors.count == 1 ? "needs" : "need"
+    needs_or_need = bulk_upload.bulk_upload_errors.count == 1 ? "needs" : "need"
 
-    "There #{is_or_are} #{pluralize(bulk_upload.total_logs_count, 'log')} in this bulk upload with #{pluralize(bulk_upload.bulk_upload_errors.count, 'error')} that still #{need_or_needs} to be fixed after upload."
+    "There #{is_or_are} #{pluralize(bulk_upload.total_logs_count, 'log')} in this bulk upload with #{pluralize(bulk_upload.bulk_upload_errors.count, 'error')} that still #{needs_or_need} to be fixed after upload."
   end
 
   def logs_and_soft_validations_warning(bulk_upload)

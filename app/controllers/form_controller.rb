@@ -15,7 +15,7 @@ class FormController < ApplicationController
         redirect_to(successful_redirect_path)
       else
         mandatory_questions_with_no_response.map do |question|
-          @log.errors.add question.id.to_sym, question.unanswered_error_message
+          @log.errors.add question.id.to_sym, question.unanswered_error_message, category: :not_answered
         end
         Rails.logger.info "User triggered validation(s) on: #{@log.errors.map(&:attribute).join(', ')}"
         @subsection = form.subsection_for_page(@page)

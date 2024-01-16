@@ -17,10 +17,11 @@
       <%= govuk_link_to "See which answers will be deleted", deletion_report_bulk_upload_lettings_result_path %>
     <% end %>
 
-    <%= form_with model: @form, scope: :form, url: page_bulk_upload_lettings_resume_path(@bulk_upload, page: "confirm"), method: :patch do |f| %>
-      <%= f.govuk_submit "Confirm" %>
-
-      <%= govuk_button_link_to "Cancel", @form.back_path, secondary: true %>
-    <% end %>
+    <div class="govuk-button-group">
+      <%= form_with model: @form, scope: :form, url: page_bulk_upload_lettings_resume_path(@bulk_upload, page: "confirm"), method: :patch do |f| %>
+        <%= f.govuk_submit "Confirm" %>
+        <%= govuk_button_link_to "Cancel", @form.back_path, secondary: true %>
+      <% end %>
+    </div>
   </div>
 </div>
