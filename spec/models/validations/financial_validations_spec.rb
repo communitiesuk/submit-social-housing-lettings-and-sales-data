@@ -244,18 +244,23 @@ RSpec.describe Validations::FinancialValidations do
           .to eq(["The household's income cannot be less than £150.00 per week given the household’s working situation"])
       end
 
-      it "adds errors to all tenant ecstat fields when income is too high" do
+      it "adds errors to relevant fields for each tenant when income is too high" do
         record.earnings = 5000
         record.incfreq = 1
         record.hhmemb = 3
         record.ecstat1 = 1
         record.ecstat2 = 2
+        record.age3 = 12
         record.ecstat3 = 9
         financial_validator.validate_net_income(record)
-        (1..8).each do |n|
+        (1..record.hhmemb).each do |n|
           expect(record.errors["ecstat#{n}"])
             .to eq(["The household's income of £5,000.00 weekly is too high given the household’s working situation"])
         end
+        expect(record.errors["age1"]).to be_empty
+        expect(record.errors["age2"]).to be_empty
+        expect(record.errors["age3"])
+          .to eq(["The household's income of £5,000.00 weekly is too high given the household’s characteristics and working situation"])
       end
     end
   end

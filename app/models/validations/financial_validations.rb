@@ -41,6 +41,15 @@ module Validations::FinancialValidations
             message: I18n.t("validations.financial.ecstat.over_hard_max", earnings: format_as_currency(record.earnings), frequency:),
           )
         end
+        (2..8).each do |n|
+          next unless record["ecstat#{n}"] == 9
+
+          record.errors.add(
+            "age#{n}",
+            :over_hard_max,
+            message: I18n.t("validations.financial.ecstat.inferred_child.over_hard_max", earnings: format_as_currency(record.earnings), frequency:),
+          )
+        end
       end
 
       if record.weekly_net_income < record.applicable_income_range.hard_min
