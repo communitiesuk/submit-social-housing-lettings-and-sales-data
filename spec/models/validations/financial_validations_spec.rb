@@ -215,7 +215,7 @@ RSpec.describe Validations::FinancialValidations do
         record.ecstat1 = 1
         financial_validator.validate_net_income(record)
         expect(record.errors["earnings"])
-          .to eq(["The income's cannot be less than £90.00 per week given the household’s working situation"])
+          .to eq(["The household's income cannot be less than £90.00 per week given the household’s working situation"])
       end
     end
 
