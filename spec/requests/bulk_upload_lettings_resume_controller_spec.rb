@@ -42,6 +42,7 @@ RSpec.describe BulkUploadLettingsResumeController, type: :request do
 
       expect(response.body).to include("Bulk upload for lettings")
       expect(response.body).to include("2022/23")
+      expect(response.body).to include("View the error report")
       expect(response.body).to include("How would you like to fix the errors?")
       expect(response.body).to include(bulk_upload.filename)
       expect(response.body).not_to include("Cancel")
@@ -124,6 +125,9 @@ RSpec.describe BulkUploadLettingsResumeController, type: :request do
       expect(response).to be_successful
 
       expect(response.body).to include("Are you sure you want to upload all logs from this bulk upload?")
+      expect(response.body).to include("View the error report")
+      expect(response.body).to include("2 answers will be deleted because they are invalid.")
+      expect(response.body).to include("See which answers will be deleted")
     end
 
     it "sets no cache headers" do
