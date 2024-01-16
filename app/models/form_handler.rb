@@ -28,6 +28,10 @@ class FormHandler
     forms["current_lettings"]
   end
 
+  def previous_lettings_form
+    forms["previous_lettings"]
+  end
+
   def current_sales_form
     forms["current_sales"]
   end

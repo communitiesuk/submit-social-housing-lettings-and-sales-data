@@ -30,6 +30,7 @@ Rails.application.routes.draw do
   resource :cookies, only: %i[show update]
 
   root to: "start#index"
+  get "/guidance", to: "start#guidance"
 
   get "/logs", to: redirect("lettings-logs")
   get "/accessibility-statement", to: "content#accessibility_statement"
@@ -125,6 +126,10 @@ Rails.application.routes.draw do
       get "reactivate", to: "users#reactivate"
       post "resend-invite", to: "users#resend_invite"
     end
+  end
+
+  resource :notifications do
+    get "dismiss", to: "notifications#dismiss"
   end
 
   resources :organisations do

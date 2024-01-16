@@ -154,7 +154,6 @@ RSpec.describe MaintenanceController, type: :request do
 
       it "the cookie banner is visible" do
         follow_redirect!
-        follow_redirect!
         expect(page).to have_content("We’d like to use analytics cookies so we can understand how you use the service and make improvements.")
       end
     end

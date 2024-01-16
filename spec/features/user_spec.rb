@@ -126,13 +126,14 @@ RSpec.describe "User Features" do
     end
 
     it "Can navigate and sign in page with sign in button" do
-      visit("/")
+      visit(root_path)
       expect(page).to have_link("Sign in")
       click_link("Sign in")
       fill_in("user[email]", with: user.email)
       fill_in("user[password]", with: "pAssword1")
       click_button("Sign in")
-      expect(page).to have_current_path("/lettings-logs")
+      expect(page).to have_current_path("/")
+      expect(page).to have_content("Welcome back")
     end
 
     it "tries to access account page, redirects to log in page" do
@@ -244,7 +245,7 @@ RSpec.describe "User Features" do
 
       it "highlights the users navigation tab" do
         expect(page).to have_css('[aria-current="page"]', text: "Users")
-        expect(page).not_to have_css('[aria-current="page"]', text: "About your organisation")
+        expect(page).not_to have_css('[aria-current="page"]', text: "Your organisation")
         expect(page).not_to have_css('[aria-current="page"]', text: "Logs")
       end
 
@@ -288,11 +289,11 @@ RSpec.describe "User Features" do
         fill_in("user[email]", with: user.email)
         fill_in("user[password]", with: "pAssword1")
         click_button("Sign in")
-        click_link("About your organisation")
+        click_link("Your organisation")
       end
 
       it "highlights the users navigation tab" do
-        expect(page).to have_css('[aria-current="page"]', text: "About your organisation")
+        expect(page).to have_css('[aria-current="page"]', text: "Your organisation")
         expect(page).not_to have_css('[aria-current="page"]', text: "Users")
         expect(page).not_to have_css('[aria-current="page"]', text: "Logs")
       end

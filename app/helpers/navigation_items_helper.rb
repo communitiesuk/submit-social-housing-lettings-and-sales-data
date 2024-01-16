@@ -4,6 +4,7 @@ module NavigationItemsHelper
   def primary_items(path, current_user)
     if current_user.support?
       [
+        NavigationItem.new("Home", root_path, home_current?(path)),
         NavigationItem.new("Organisations", organisations_path, organisations_current?(path)),
         NavigationItem.new("Users", users_path, users_current?(path)),
         NavigationItem.new("Lettings logs", lettings_logs_path, lettings_logs_current?(path)),
@@ -12,11 +13,12 @@ module NavigationItemsHelper
       ].compact
     else
       [
+        NavigationItem.new("Home", root_path, home_current?(path)),
         NavigationItem.new("Lettings logs", lettings_logs_path, lettings_logs_current?(path)),
         NavigationItem.new("Sales logs", sales_logs_path, sales_logs_current?(path)),
         (NavigationItem.new("Schemes", schemes_path, non_support_supported_housing_schemes_current?(path)) if current_user.organisation.holds_own_stock? || current_user.organisation.stock_owners.present?),
         NavigationItem.new("Users", users_organisation_path(current_user.organisation), subnav_users_path?(path)),
-        NavigationItem.new("About your organisation", details_organisation_path(current_user.organisation.id), subnav_details_path?(path)),
+        NavigationItem.new("Your organisation", details_organisation_path(current_user.organisation.id), subnav_details_path?(path)),
         NavigationItem.new("Stock owners", stock_owners_organisation_path(current_user.organisation), stock_owners_path?(path)),
         NavigationItem.new("Managing agents", managing_agents_organisation_path(current_user.organisation), managing_agents_path?(path)),
       ].compact
@@ -43,6 +45,10 @@ module NavigationItemsHelper
   end
 
 private
+
+  def home_current?(path)
+    path == root_path || path == notifications_path
+  end
 
   def lettings_logs_current?(path)
     path.starts_with?(lettings_logs_path)
