@@ -101,6 +101,17 @@ RSpec.describe "bulk_update" do
         expect(schemes[0].total_units).to eq(2)
       end
 
+      it "updates the lettings log if scheme has changes owning organisation" do
+        create(:organisation_relationship, parent_organisation: schemes[0].owning_organisation, child_organisation: different_organisation)
+
+        task.invoke(original_schemes_csv_path, updated_schemes_csv_path)
+
+        lettings_log.reload
+        expect(lettings_log.scheme).to be_nil
+        expect(lettings_log.location).to be_nil
+        expect(lettings_log.unresolved).to eq(true)
+      end
+
       it "does not update the scheme if it hasn't changed" do
         task.invoke(original_schemes_csv_path, updated_schemes_csv_path)
         schemes[1].reload
@@ -141,6 +152,15 @@ RSpec.describe "bulk_update" do
         task.invoke(original_schemes_csv_path, updated_schemes_csv_path)
         schemes[0].reload
         expect(schemes[0].owning_organisation).not_to eq(different_organisation)
+      end
+
+      it "does not update the lettings log if scheme owning organisation didn't change" do
+        task.invoke(original_schemes_csv_path, updated_schemes_csv_path)
+
+        lettings_log.reload
+        expect(lettings_log.scheme).not_to be_nil
+        expect(lettings_log.location).not_to be_nil
+        expect(lettings_log.unresolved).to be_falsey
       end
 
       it "only re-exports the logs for the schemes that have been updated" do

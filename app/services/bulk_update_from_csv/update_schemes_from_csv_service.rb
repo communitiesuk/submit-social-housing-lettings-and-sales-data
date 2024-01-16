@@ -89,6 +89,7 @@ private
     if organisation.present? && (organisation.child_organisations.include?(current_organisation) || organisation.parent_organisations.include?(current_organisation))
       scheme["owning_organisation_id"] = organisation.id
       Rails.logger.info("Updating scheme #{original_attributes['scheme_code']} with owning_organisation: #{organisation.name}")
+      LettingsLog.where(scheme_id: scheme.id).update!(location: nil, scheme: nil, unresolved: true)
     else
       Rails.logger.info("Cannot update scheme #{original_attributes['scheme_code']} with owning_organisation: #{value}. Organisation with name #{value} is not in the database or is not related to current organisation")
     end
