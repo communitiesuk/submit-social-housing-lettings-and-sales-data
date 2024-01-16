@@ -94,4 +94,106 @@ namespace :bulk_update do
       end
     end
   end
+
+  desc "Bulk update location data from a csv file"
+  task :update_locations_from_csv, %i[original_file_name updated_file_name] => :environment do |_task, args|
+    original_file_name = args[:original_file_name]
+    updated_file_name = args[:updated_file_name]
+
+    raise "Usage: rake bulk_update:update_locations_from_csv['original_file_name','updated_file_name']" if original_file_name.blank? || updated_file_name.blank?
+
+    s3_service = Storage::S3Service.new(Configuration::EnvConfigurationService.new, ENV["CSV_DOWNLOAD_PAAS_INSTANCE"])
+    original_file_io = s3_service.get_file_io(original_file_name)
+    original_file_io.set_encoding_by_bom
+    original_locations_csv = CSV.parse(original_file_io, headers: true)
+
+    updated_file_io = s3_service.get_file_io(updated_file_name)
+    updated_file_io.set_encoding_by_bom
+    updated_locations_csv = CSV.parse(updated_file_io, headers: true)
+
+    updated_locations_csv.each do |row|
+      original_attributes = {}
+      updated_attributes = {}
+
+      updated_attributes["scheme_code"] = row[0]
+      updated_attributes["location_code"] = row[1]
+      updated_attributes["postcode"] = row[2]
+      updated_attributes["name"] = row[3]
+      updated_attributes["status"] = row[4]
+      updated_attributes["location_admin_district"] = row[5]
+      updated_attributes["units"] = row[6]
+      updated_attributes["type_of_unit"] = row[7]
+      updated_attributes["mobility_type"] = row[8]
+      updated_attributes["active_dates"] = row[9]
+
+      original_row = original_locations_csv.find { |original_locations_row| original_locations_row[1] == updated_attributes["location_code"] }
+      if original_row.blank? || original_row["location_code"].nil?
+        Rails.logger.info("Location with id #{updated_attributes['location_code']} is not in the original location csv")
+        next
+      end
+
+      original_attributes["scheme_code"] = original_row[0]
+      original_attributes["location_code"] = original_row[1]
+      original_attributes["postcode"] = original_row[2]
+      original_attributes["name"] = original_row[3]
+      original_attributes["status"] = original_row[4]
+      original_attributes["location_admin_district"] = original_row[5]
+      original_attributes["units"] = original_row[6]
+      original_attributes["type_of_unit"] = original_row[7]
+      original_attributes["mobility_type"] = original_row[8]
+      original_attributes["active_dates"] = original_row[9]
+
+      location = Location.find_by(id: original_attributes["location_code"])
+      if location.blank?
+        Rails.logger.info("Location with id #{original_attributes['location_code']} is not in the database")
+        next
+      end
+
+      updated_attributes.each do |key, value|
+        next unless value != original_attributes[key] && value.present?
+
+        case key
+        when "location_admin_district"
+          location_code = Location.local_authorities_for_current_year.key(value)
+          if location_code.present?
+            location.location_code = location_code
+            location.location_admin_district = value
+            Rails.logger.info("Updating location #{original_attributes['location_code']}, with location_code: #{location_code}")
+          else
+            Rails.logger.info("Cannot update location #{original_attributes['location_code']} with #{key}: #{value}. Location admin distrint #{value} is not a valid option")
+          end
+        when "postcode"
+          if !value&.match(POSTCODE_REGEXP)
+            Rails.logger.info("Cannot update location #{original_attributes['location_code']} with #{key}: #{value}. #{I18n.t('validations.postcode')}")
+          else
+            location.postcode = PostcodeService.clean(value)
+            Rails.logger.info("Updating location #{original_attributes['location_code']}, with postcode: #{value}")
+          end
+        when "name", "units", "type_of_unit", "mobility_type"
+          begin
+            location[key] = value
+            Rails.logger.info("Updating location #{original_attributes['location_code']}, with #{key}: #{value}")
+          rescue ArgumentError => e
+            Rails.logger.info("Cannot update location #{original_attributes['location_code']} with #{key}: #{value}. #{e.message}")
+          end
+        when "scheme_code"
+          scheme = Scheme.find_by(id: value.delete("S"))
+          if scheme.present?
+            location["scheme_id"] = scheme.id
+            Rails.logger.info("Updating location #{original_attributes['location_code']}, with scheme: S#{scheme.id}")
+          else
+            Rails.logger.info("Cannot update location #{original_attributes['location_code']} with #{key}: #{value}. Scheme with id #{value} is not in the database")
+          end
+        when "location_code", "status", "active_dates"
+          Rails.logger.info("Cannot update location #{original_attributes['location_code']} with #{key} as it it not a permitted field")
+        end
+      end
+      begin
+        location.save!
+        Rails.logger.info("Saved location #{original_attributes['location_code']}.")
+      rescue ActiveRecord::RecordInvalid => e
+        Rails.logger.error("Cannot update location #{original_attributes['location_code']}. #{e.message}")
+      end
+    end
+  end
 end
