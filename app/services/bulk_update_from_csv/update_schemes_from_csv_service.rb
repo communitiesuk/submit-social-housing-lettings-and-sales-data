@@ -84,12 +84,13 @@ private
   end
 
   def update_owning_organisation(scheme, original_attributes, value)
+    current_organisation = scheme.owning_organisation
     organisation = Organisation.find_by(name: value)
-    if organisation.present?
+    if organisation.present? && (organisation.child_organisations.include?(current_organisation) || organisation.parent_organisations.include?(current_organisation))
       scheme["owning_organisation_id"] = organisation.id
       Rails.logger.info("Updating scheme #{original_attributes['scheme_code']} with owning_organisation: #{organisation.name}")
     else
-      Rails.logger.info("Cannot update scheme #{original_attributes['scheme_code']} with owning_organisation: #{value}. Organisation with name #{value} is not in the database")
+      Rails.logger.info("Cannot update scheme #{original_attributes['scheme_code']} with owning_organisation: #{value}. Organisation with name #{value} is not in the database or is not related to current organisation")
     end
   end
 

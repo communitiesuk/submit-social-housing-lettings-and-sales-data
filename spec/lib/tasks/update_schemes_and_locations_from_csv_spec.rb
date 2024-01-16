@@ -83,6 +83,8 @@ RSpec.describe "bulk_update" do
       end
 
       it "updates the allowed scheme fields if they have changed and doesn't update other fields" do
+        create(:organisation_relationship, parent_organisation: schemes[0].owning_organisation, child_organisation: different_organisation)
+
         task.invoke(original_schemes_csv_path, updated_schemes_csv_path)
         schemes[0].reload
         expect(schemes[0].service_name).to eq("Updated test name")
@@ -135,6 +137,12 @@ RSpec.describe "bulk_update" do
         expect(schemes[2].total_units).to eq(2)
       end
 
+      it "does not update the owning organisation if the new organisation is not related to current organisation" do
+        task.invoke(original_schemes_csv_path, updated_schemes_csv_path)
+        schemes[0].reload
+        expect(schemes[0].owning_organisation).not_to eq(different_organisation)
+      end
+
       it "only re-exports the logs for the schemes that have been updated" do
         task.invoke(original_schemes_csv_path, updated_schemes_csv_path)
 
@@ -149,6 +157,8 @@ RSpec.describe "bulk_update" do
       end
 
       it "logs the progress of the update" do
+        create(:organisation_relationship, parent_organisation: schemes[0].owning_organisation, child_organisation: different_organisation)
+
         expect(Rails.logger).to receive(:info).with("Updating scheme S#{schemes[0].id} with service_name: Updated test name")
         expect(Rails.logger).to receive(:info).with("Updating scheme S#{schemes[0].id} with sensitive: No")
         expect(Rails.logger).to receive(:info).with("Updating scheme S#{schemes[0].id} with scheme_type: Direct Access Hostel")
@@ -168,7 +178,7 @@ RSpec.describe "bulk_update" do
 
         expect(Rails.logger).to receive(:info).with("Cannot update scheme S#{schemes[2].id} with sensitive: Yse. 'Yse' is not a valid sensitive")
         expect(Rails.logger).to receive(:info).with("Cannot update scheme S#{schemes[2].id} with scheme_type: Direct access Hostel. 'Direct access Hostel' is not a valid scheme_type")
-        expect(Rails.logger).to receive(:info).with("Cannot update scheme S#{schemes[2].id} with owning_organisation: non existing org. Organisation with name non existing org is not in the database")
+        expect(Rails.logger).to receive(:info).with("Cannot update scheme S#{schemes[2].id} with owning_organisation: non existing org. Organisation with name non existing org is not in the database or is not related to current organisation")
         expect(Rails.logger).to receive(:info).with("Cannot update scheme S#{schemes[2].id} with arrangement_type: wrong answer. 'wrong answer' is not a valid arrangement_type")
         expect(Rails.logger).to receive(:info).with("Cannot update scheme S#{schemes[2].id} with primary_client_group: FD. 'FD' is not a valid primary_client_group")
         expect(Rails.logger).to receive(:info).with("Cannot update scheme S#{schemes[2].id} with has_other_client_group: no. 'no' is not a valid has_other_client_group")
@@ -197,6 +207,8 @@ RSpec.describe "bulk_update" do
       end
 
       it "logs an error if a validation fails and processes the rest of the rows" do
+        create(:organisation_relationship, parent_organisation: schemes[0].owning_organisation, child_organisation: different_organisation)
+
         schemes[1].support_type = nil
         schemes[1].save!(validate: false)
         expect(Rails.logger).to receive(:info).with("Updating scheme S#{schemes[0].id} with service_name: Updated test name")
@@ -218,7 +230,7 @@ RSpec.describe "bulk_update" do
 
         expect(Rails.logger).to receive(:info).with("Cannot update scheme S#{schemes[2].id} with sensitive: Yse. 'Yse' is not a valid sensitive")
         expect(Rails.logger).to receive(:info).with("Cannot update scheme S#{schemes[2].id} with scheme_type: Direct access Hostel. 'Direct access Hostel' is not a valid scheme_type")
-        expect(Rails.logger).to receive(:info).with("Cannot update scheme S#{schemes[2].id} with owning_organisation: non existing org. Organisation with name non existing org is not in the database")
+        expect(Rails.logger).to receive(:info).with("Cannot update scheme S#{schemes[2].id} with owning_organisation: non existing org. Organisation with name non existing org is not in the database or is not related to current organisation")
         expect(Rails.logger).to receive(:info).with("Cannot update scheme S#{schemes[2].id} with arrangement_type: wrong answer. 'wrong answer' is not a valid arrangement_type")
         expect(Rails.logger).to receive(:info).with("Cannot update scheme S#{schemes[2].id} with primary_client_group: FD. 'FD' is not a valid primary_client_group")
         expect(Rails.logger).to receive(:info).with("Cannot update scheme S#{schemes[2].id} with has_other_client_group: no. 'no' is not a valid has_other_client_group")
