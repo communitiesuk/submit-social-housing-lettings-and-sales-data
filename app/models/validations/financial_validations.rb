@@ -24,7 +24,7 @@ module Validations::FinancialValidations
   end
 
   def validate_net_income(record)
-    if record.ecstat1 && record.weekly_net_income
+    if record.all_relevant_ecstat_provided && record.weekly_net_income
       if record.weekly_net_income > record.applicable_income_range.hard_max
         hard_max = format_as_currency(record.applicable_income_range.hard_max)
         frequency = record.form.get_question("incfreq", record).label_from_value(record.incfreq).downcase
@@ -33,11 +33,14 @@ module Validations::FinancialValidations
           :over_hard_max,
           message: I18n.t("validations.financial.earnings.over_hard_max", hard_max:),
         )
-        record.errors.add(
-          :ecstat1,
-          :over_hard_max,
-          message: I18n.t("validations.financial.ecstat.over_hard_max", earnings: format_as_currency(record.earnings), frequency:),
-        )
+        ecstat_fields = %i[ecstat1 ecstat2 ecstat3 ecstat4 ecstat5 ecstat6 ecstat7 ecstat8]
+        ecstat_fields.each do |field|
+          record.errors.add(
+            field,
+            :over_hard_max,
+            message: I18n.t("validations.financial.ecstat.over_hard_max", earnings: format_as_currency(record.earnings), frequency:),
+          )
+        end
       end
 
       if record.weekly_net_income < record.applicable_income_range.hard_min

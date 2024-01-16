@@ -213,20 +213,35 @@ class LettingsLog < Log
     format_as_currency((field_value * 52) / num_of_weeks)
   end
 
+  def all_relevant_ecstat_provided
+    return false unless ecstat1
+
+    if hhmemb && hhmemb > 1
+      (2..hhmemb).each do |person_index|
+        next if details_not_known_for_person?(person_index)
+
+        return false unless self["ecstat#{person_index}"]
+      end
+    end
+
+    true
+  end
+
   def applicable_income_range
-    return unless ecstat1
+    return unless all_relevant_ecstat_provided
 
     range = ALLOWED_INCOME_RANGES[ecstat1].clone
 
-    (2..8).each do |person_index|
-      ecstat = self["ecstat#{person_index}"]
-      next unless ecstat
+    if hhmemb && hhmemb > 1
+      (2..hhmemb).each do |person_index|
+        ecstat = details_not_known_for_person?(person_index) ? 10 : self["ecstat#{person_index}"]
 
-      person_range = ALLOWED_INCOME_RANGES[ecstat]
-      range.soft_min += person_range.soft_min
-      range.hard_min += person_range.hard_min
-      range.soft_max += person_range.soft_max
-      range.hard_max += person_range.hard_max
+        person_range = ALLOWED_INCOME_RANGES[ecstat]
+        range.soft_min += person_range.soft_min
+        range.hard_min += person_range.hard_min
+        range.soft_max += person_range.soft_max
+        range.hard_max += person_range.hard_max
+      end
     end
 
     range

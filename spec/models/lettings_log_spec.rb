@@ -3411,5 +3411,34 @@ RSpec.describe LettingsLog do
       end
     end
   end
+
+  describe "#all_relevant_ecstat_provided" do
+    context "when details for a non-lead tenant are not known" do
+      let(:lettings_log) { build(:lettings_log, hhmemb: 2, ecstat1: 1, details_known_2: 1) }
+
+      it "returns true" do
+        expect(lettings_log.all_relevant_ecstat_provided).to be(true)
+      end
+    end
+
+    context "when details for a non-lead tenant are known" do
+      context "and that person's ecstat is provided" do
+        let(:lettings_log) { build(:lettings_log, hhmemb: 2, ecstat1: 1, details_known_2: 0, ecstat2: 2) }
+
+        it "returns true" do
+          expect(lettings_log.all_relevant_ecstat_provided).to be(true)
+        end
+      end
+
+      context "and that person's ecstat is not provided" do
+        let(:lettings_log) { build(:lettings_log, hhmemb: 2, ecstat1: 1, details_known_2: 0) }
+
+        it "returns true" do
+          expect(lettings_log.all_relevant_ecstat_provided).to be(false)
+        end
+      end
+    end
+
+  end
 end
 # rubocop:enable RSpec/MessageChain

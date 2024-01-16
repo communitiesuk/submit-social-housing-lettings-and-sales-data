@@ -223,6 +223,7 @@ RSpec.describe Validations::FinancialValidations do
       it "allows income levels based on all working situations combined" do
         record.earnings = 5000
         record.incfreq = 1
+        record.hhmemb = 4
         record.ecstat1 = 1
         record.ecstat2 = 1
         record.ecstat3 = 8
@@ -234,12 +235,27 @@ RSpec.describe Validations::FinancialValidations do
       it "uses the combined value in error messages" do
         record.earnings = 100
         record.incfreq = 1
+        record.hhmemb = 3
         record.ecstat1 = 1
         record.ecstat2 = 2
         record.ecstat3 = 9
         financial_validator.validate_net_income(record)
         expect(record.errors["earnings"])
           .to eq(["Net income cannot be less than £150.00 per week given the household’s working situation"])
+      end
+
+      it "adds errors to all tenant ecstat fields when income is too high" do
+        record.earnings = 5000
+        record.incfreq = 1
+        record.hhmemb = 3
+        record.ecstat1 = 1
+        record.ecstat2 = 2
+        record.ecstat3 = 9
+        financial_validator.validate_net_income(record)
+        (1..8).each do |n|
+          expect(record.errors["ecstat#{n}"])
+            .to eq(["Net household income of £5,000.00 weekly is too high given the household’s working situation"])
+        end
       end
     end
   end
