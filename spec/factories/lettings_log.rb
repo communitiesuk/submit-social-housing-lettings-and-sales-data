@@ -92,7 +92,7 @@ FactoryBot.define do
       voiddate { 2.days.ago }
       offered { 2 }
       wchair { 1 }
-      earnings { 168 }
+      earnings { 268 }
       incfreq { 1 }
       benefits { 1 }
       period { 2 }
