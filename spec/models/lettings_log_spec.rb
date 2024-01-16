@@ -3438,7 +3438,6 @@ RSpec.describe LettingsLog do
         end
       end
     end
-
   end
 end
 # rubocop:enable RSpec/MessageChain
