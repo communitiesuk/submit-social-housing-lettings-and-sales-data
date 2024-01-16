@@ -34,7 +34,7 @@ RSpec.describe DuplicateLogsHelper do
 
       it "returns the ids of the duplicates in a hash under the lettings key" do
         expect(result).to be_a Hash
-        expect(result[:lettings]).to match_array [[lettings_log.id, duplicate_lettings_log.id]]
+        expect(result[:lettings].map(&:sort)).to match_array [[lettings_log.id, duplicate_lettings_log.id]].map(&:sort)
       end
     end
 
@@ -43,7 +43,7 @@ RSpec.describe DuplicateLogsHelper do
 
       it "returns the ids of the duplicates in a hash under the sales key" do
         expect(result).to be_a Hash
-        expect(result[:sales]).to match_array [[sales_log.id, duplicate_sales_log.id]]
+        expect(result[:sales].map(&:sort)).to match_array [[sales_log.id, duplicate_sales_log.id]].map(&:sort)
       end
     end
 
@@ -81,8 +81,8 @@ RSpec.describe DuplicateLogsHelper do
           [further_sales_log.id, *further_duplicate_sales_logs.map(&:id)],
         ]
 
-        expect(result[:lettings]).to match_array [[lettings_log.id, duplicate_lettings_log.id]]
-        expect(result[:sales]).to match_array expected_sales_duplicates_result
+        expect(result[:lettings].map(&:sort)).to match_array [[lettings_log.id, duplicate_lettings_log.id]].map(&:sort)
+        expect(result[:sales].map(&:sort)).to match_array expected_sales_duplicates_result.map(&:sort)
       end
     end
   end
@@ -124,11 +124,11 @@ RSpec.describe DuplicateLogsHelper do
           duplicate_lettings_logs_3.map(&:id),
         ]
 
-        expect(duplicates_for_organisation(organisation)[:lettings]).to match_array(
-          expected_lettings_duplicates_result.map { |nested_array| match_array(nested_array) },
+        expect(duplicates_for_organisation(organisation)[:lettings].map(&:sort)).to match_array(
+          expected_lettings_duplicates_result.map(&:sort).map { |nested_array| match_array(nested_array) },
         )
-        expect(duplicates_for_organisation(organisation)[:sales]).to match_array(
-          expected_sales_duplicates_result.map { |nested_array| match_array(nested_array) },
+        expect(duplicates_for_organisation(organisation)[:sales].map(&:sort)).to match_array(
+          expected_sales_duplicates_result.map(&:sort).map { |nested_array| match_array(nested_array) },
         )
       end
     end
