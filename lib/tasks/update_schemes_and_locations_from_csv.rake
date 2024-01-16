@@ -86,9 +86,16 @@ namespace :bulk_update do
           Rails.logger.info("Cannot update scheme #{original_attributes['scheme_code']} with #{key} as it it not a permitted field")
         end
       end
+
+      unless scheme.changed?
+        Rails.logger.info("No changes to scheme #{original_attributes['scheme_code']}.")
+        next
+      end
+
       begin
         scheme.save!
         Rails.logger.info("Saved scheme #{original_attributes['scheme_code']}.")
+        LettingsLog.where(scheme_id: scheme.id).update_all(values_updated_at: Time.zone.now)
       rescue ActiveRecord::RecordInvalid => e
         Rails.logger.error("Cannot update scheme #{original_attributes['scheme_code']}. #{e.message}")
       end
@@ -188,9 +195,16 @@ namespace :bulk_update do
           Rails.logger.info("Cannot update location #{original_attributes['location_code']} with #{key} as it it not a permitted field")
         end
       end
+
+      unless location.changed?
+        Rails.logger.info("No changes to location #{original_attributes['location_code']}.")
+        next
+      end
+
       begin
         location.save!
         Rails.logger.info("Saved location #{original_attributes['location_code']}.")
+        LettingsLog.where(location_id: location.id).update_all(values_updated_at: Time.zone.now)
       rescue ActiveRecord::RecordInvalid => e
         Rails.logger.error("Cannot update location #{original_attributes['location_code']}. #{e.message}")
       end

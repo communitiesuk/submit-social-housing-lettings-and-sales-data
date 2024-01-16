@@ -65,6 +65,12 @@ RSpec.describe "bulk_update" do
                     created_at: Time.zone.local(2021, 4, 1),
                     total_units: 2)
       end
+      let(:location) { FactoryBot.create(:location, scheme: schemes[0]) }
+      let(:location_2) { FactoryBot.create(:location, scheme: schemes[1]) }
+      let(:location_3) { FactoryBot.create(:location, scheme: schemes[2]) }
+      let!(:lettings_log) { FactoryBot.create(:lettings_log, :sh, scheme: schemes[0], location:, values_updated_at: nil, owning_organisation: schemes[0].owning_organisation) }
+      let!(:lettings_log_2) { FactoryBot.create(:lettings_log, :sh, scheme: schemes[1], location: location_2, values_updated_at: nil, owning_organisation: schemes[1].owning_organisation) }
+      let!(:lettings_log_3) { FactoryBot.create(:lettings_log, :sh, scheme: schemes[2], location: location_3, values_updated_at: nil, owning_organisation: schemes[2].owning_organisation) }
 
       before do
         allow(storage_service).to receive(:get_file_io)
@@ -87,7 +93,6 @@ RSpec.describe "bulk_update" do
         expect(schemes[0].arrangement_type).to eq("Another registered stock owner")
         expect(schemes[0].intended_stay).to eq("Permanent")
         expect(schemes[0].primary_client_group).to eq("People with drug problems")
-        # expect(schemes[0].secondary_client_group).to eq(nil)
         expect(schemes[0].has_other_client_group).to eq("No")
         expect(schemes[0].owning_organisation).to eq(different_organisation)
         expect(schemes[0].created_at).to eq(Time.zone.local(2021, 4, 1))
@@ -130,6 +135,19 @@ RSpec.describe "bulk_update" do
         expect(schemes[2].total_units).to eq(2)
       end
 
+      it "only re-exports the logs for the schemes that have been updated" do
+        task.invoke(original_schemes_csv_path, updated_schemes_csv_path)
+
+        lettings_log.reload
+        expect(lettings_log.values_updated_at).not_to eq(nil)
+
+        lettings_log_2.reload
+        expect(lettings_log_2.values_updated_at).to eq(nil)
+
+        lettings_log_3.reload
+        expect(lettings_log_3.values_updated_at).to eq(nil)
+      end
+
       it "logs the progress of the update" do
         expect(Rails.logger).to receive(:info).with("Updating scheme S#{schemes[0].id}, with service_name: Updated test name")
         expect(Rails.logger).to receive(:info).with("Updating scheme S#{schemes[0].id}, with sensitive: No")
@@ -147,7 +165,7 @@ RSpec.describe "bulk_update" do
         expect(Rails.logger).to receive(:info).with("Cannot update scheme S#{schemes[0].id} with active_dates as it it not a permitted field")
         expect(Rails.logger).to receive(:info).with("Saved scheme S#{schemes[0].id}.")
 
-        expect(Rails.logger).to receive(:info).with("Saved scheme S#{schemes[1].id}.")
+        expect(Rails.logger).to receive(:info).with("No changes to scheme S#{schemes[1].id}.")
 
         expect(Rails.logger).to receive(:info).with("Cannot update scheme S#{schemes[2].id} with sensitive: Yse. 'Yse' is not a valid sensitive")
         expect(Rails.logger).to receive(:info).with("Cannot update scheme S#{schemes[2].id} with scheme_type: Direct access Hostel. 'Direct access Hostel' is not a valid scheme_type")
@@ -159,7 +177,7 @@ RSpec.describe "bulk_update" do
         expect(Rails.logger).to receive(:info).with("Cannot update scheme S#{schemes[2].id} with support_type: high. 'high' is not a valid support_type")
         expect(Rails.logger).to receive(:info).with("Cannot update scheme S#{schemes[2].id} with intended_stay: Permanent . 'Permanent ' is not a valid intended_stay")
 
-        expect(Rails.logger).to receive(:info).with("Saved scheme S#{schemes[2].id}.")
+        expect(Rails.logger).to receive(:info).with("No changes to scheme S#{schemes[2].id}.")
 
         expect(Rails.logger).to receive(:info).with("Scheme with id Wrong_id is not in the original scheme csv")
         expect(Rails.logger).to receive(:info).with("Scheme with id SWrong_id is not in the database")
@@ -198,7 +216,7 @@ RSpec.describe "bulk_update" do
         expect(Rails.logger).to receive(:info).with("Cannot update scheme S#{schemes[0].id} with active_dates as it it not a permitted field")
         expect(Rails.logger).to receive(:info).with("Saved scheme S#{schemes[0].id}.")
 
-        expect(Rails.logger).to receive(:error).with("Cannot update scheme S#{schemes[1].id}. Validation failed: Support type Select the level of support provided by this scheme")
+        expect(Rails.logger).to receive(:info).with("No changes to scheme S#{schemes[1].id}.")
 
         expect(Rails.logger).to receive(:info).with("Cannot update scheme S#{schemes[2].id} with sensitive: Yse. 'Yse' is not a valid sensitive")
         expect(Rails.logger).to receive(:info).with("Cannot update scheme S#{schemes[2].id} with scheme_type: Direct access Hostel. 'Direct access Hostel' is not a valid scheme_type")
@@ -209,7 +227,7 @@ RSpec.describe "bulk_update" do
         expect(Rails.logger).to receive(:info).with("Cannot update scheme S#{schemes[2].id} with secondary_client_group: lder people with support needs. 'lder people with support needs' is not a valid secondary_client_group")
         expect(Rails.logger).to receive(:info).with("Cannot update scheme S#{schemes[2].id} with support_type: high. 'high' is not a valid support_type")
         expect(Rails.logger).to receive(:info).with("Cannot update scheme S#{schemes[2].id} with intended_stay: Permanent . 'Permanent ' is not a valid intended_stay")
-        expect(Rails.logger).to receive(:info).with("Saved scheme S#{schemes[2].id}.")
+        expect(Rails.logger).to receive(:info).with("No changes to scheme S#{schemes[2].id}.")
 
         expect(Rails.logger).to receive(:info).with("Scheme with id Wrong_id is not in the original scheme csv")
         expect(Rails.logger).to receive(:info).with("Scheme with id SWrong_id is not in the database")
@@ -251,8 +269,12 @@ RSpec.describe "bulk_update" do
                     location_admin_district: "Westminster",
                     startdate: Time.zone.local(2022, 4, 1),
                     confirmed: true,
+                    updated_at: Time.zone.local(2022, 3, 1),
                     scheme:)
       end
+      let!(:lettings_log) { FactoryBot.create(:lettings_log, :sh, location: locations[0], scheme:, values_updated_at: nil) }
+      let!(:lettings_log_2) { FactoryBot.create(:lettings_log, :sh, location: locations[1], scheme:, values_updated_at: nil) }
+      let!(:lettings_log_3) { FactoryBot.create(:lettings_log, :sh, location: locations[2], scheme:, values_updated_at: nil) }
 
       before do
         allow(storage_service).to receive(:get_file_io)
@@ -303,6 +325,19 @@ RSpec.describe "bulk_update" do
         expect(locations[2].scheme).to eq(scheme)
       end
 
+      it "only re-exports the logs for the locations that have been updated" do
+        task.invoke(original_locations_csv_path, updated_locations_csv_path)
+
+        lettings_log.reload
+        expect(lettings_log.values_updated_at).not_to eq(nil)
+
+        lettings_log_2.reload
+        expect(lettings_log_2.values_updated_at).to eq(nil)
+
+        lettings_log_3.reload
+        expect(lettings_log_3.values_updated_at).to eq(nil)
+      end
+
       it "logs the progress of the update" do
         expect(Rails.logger).to receive(:info).with("Updating location #{locations[0].id}, with postcode: B11BB")
         expect(Rails.logger).to receive(:info).with("Updating location #{locations[0].id}, with name: Updated name")
@@ -314,7 +349,7 @@ RSpec.describe "bulk_update" do
         expect(Rails.logger).to receive(:info).with("Cannot update location #{locations[0].id} with active_dates as it it not a permitted field")
         expect(Rails.logger).to receive(:info).with("Saved location #{locations[0].id}.")
 
-        expect(Rails.logger).to receive(:info).with("Saved location #{locations[1].id}.")
+        expect(Rails.logger).to receive(:info).with("No changes to location #{locations[1].id}.")
 
         expect(Rails.logger).to receive(:info).with("Cannot update location #{locations[2].id} with postcode: SWAAA. Enter a postcode in the correct format, for example AA1 1AA")
         expect(Rails.logger).to receive(:info).with("Cannot update location #{locations[2].id} with scheme_code: S. Scheme with id S is not in the database")
@@ -323,7 +358,7 @@ RSpec.describe "bulk_update" do
         expect(Rails.logger).to receive(:info).with("Cannot update location #{locations[2].id} with mobility_type: 55. '55' is not a valid mobility_type")
         expect(Rails.logger).to receive(:info).with("Cannot update location #{locations[2].id} with status as it it not a permitted field")
 
-        expect(Rails.logger).to receive(:info).with("Saved location #{locations[2].id}.")
+        expect(Rails.logger).to receive(:info).with("No changes to location #{locations[2].id}.")
 
         expect(Rails.logger).to receive(:info).with("Location with id Wrong_id is not in the original location csv")
         expect(Rails.logger).to receive(:info).with("Location with id SWrong_id is not in the database")
