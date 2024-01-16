@@ -123,7 +123,7 @@ RSpec.describe BulkUploadLettingsResumeController, type: :request do
 
       expect(response).to be_successful
 
-      expect(response.body).to include("You have chosen to upload all logs from this bulk upload.")
+      expect(response.body).to include("Are you sure you want to upload all logs from this bulk upload?")
     end
 
     it "sets no cache headers" do
