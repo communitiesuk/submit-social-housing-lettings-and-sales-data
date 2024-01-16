@@ -11,6 +11,10 @@ class Form::Sales::Pages::SharedOwnershipDepositValueCheck < ::Form::Page
       "translation" => "soft_validations.shared_ownership_deposit.title_text",
       "arguments" => [
         {
+          "key" => "mortgage_deposit_and_discount_error_fields",
+          "i18n_template" => "mortgage_deposit_and_discount_error_fields",
+        },
+        {
           "key" => "field_formatted_as_currency",
           "arguments_for_key" => "mortgage_deposit_and_discount_total",
           "i18n_template" => "mortgage_deposit_and_discount_total",
