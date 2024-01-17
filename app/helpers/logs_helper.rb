@@ -74,6 +74,6 @@ module LogsHelper
   end
 
   def unique_answers_to_be_cleared(bulk_upload)
-    bulk_upload.bulk_upload_errors.reject { |e| e.category == :not_answered }.uniq(&:field)
+    bulk_upload.bulk_upload_errors.reject { |e| e.category == "not_answered" }.uniq(&:field)
   end
 end
