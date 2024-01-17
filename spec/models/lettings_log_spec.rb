@@ -3412,30 +3412,34 @@ RSpec.describe LettingsLog do
     end
   end
 
-  describe "#all_relevant_ecstat_provided" do
-    context "when details for a non-lead tenant are not known" do
-      let(:lettings_log) { build(:lettings_log, hhmemb: 2, ecstat1: 1, details_known_2: 1) }
+  describe "#applicable_income_range" do
+    context "when ecstat for a non-lead tenant is not set" do
+      let(:lettings_log) { build(:lettings_log, hhmemb: 2, ecstat1: 1) }
 
-      it "returns true" do
-        expect(lettings_log.all_relevant_ecstat_provided).to be(true)
+      it "uses the prefers-not-to-say values for that tenant to calculate the range" do
+        range = lettings_log.applicable_income_range
+        expected_range = OpenStruct.new(
+          soft_min: 143 + 47,
+          soft_max: 730 + 730,
+          hard_min: 90 + 10,
+          hard_max: 1230 + 2000,
+        )
+        expect(range).to eq(expected_range)
       end
     end
 
-    context "when details for a non-lead tenant are known" do
-      context "and that person's ecstat is provided" do
-        let(:lettings_log) { build(:lettings_log, hhmemb: 2, ecstat1: 1, details_known_2: 0, ecstat2: 2) }
+    context "when ecstat for a non-lead tenant is set" do
+      let(:lettings_log) { build(:lettings_log, hhmemb: 2, ecstat1: 1, ecstat2: 2) }
 
-        it "returns true" do
-          expect(lettings_log.all_relevant_ecstat_provided).to be(true)
-        end
-      end
-
-      context "and that person's ecstat is not provided" do
-        let(:lettings_log) { build(:lettings_log, hhmemb: 2, ecstat1: 1, details_known_2: 0) }
-
-        it "returns true" do
-          expect(lettings_log.all_relevant_ecstat_provided).to be(false)
-        end
+      it "uses the relevant income range values for that tenant to calculate the range" do
+        range = lettings_log.applicable_income_range
+        expected_range = OpenStruct.new(
+          soft_min: 143 + 67,
+          soft_max: 730 + 620,
+          hard_min: 90 + 50,
+          hard_max: 1230 + 950,
+        )
+        expect(range).to eq(expected_range)
       end
     end
   end

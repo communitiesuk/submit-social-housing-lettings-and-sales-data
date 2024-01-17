@@ -131,6 +131,7 @@ RSpec.describe "validations" do
         FactoryBot.create(
           :lettings_log,
           :in_progress,
+          hhmemb: 1,
           ecstat1: 1,
           created_by: user,
         )

@@ -377,8 +377,13 @@ en:
         out_of_range: "Enter a value for the %{charge_name} between £0 and %{maximum_per_period} paid %{frequency}. %{maximum_per_period} is the max limit for rent and charges paid %{frequency} for %{letting_type} lettings owned by a %{provider_type}."
       ecstat:
         over_hard_max: "The household's income of %{earnings} %{frequency} is too high given the household’s working situation"
-        inferred_child:
-          over_hard_max: "The household's income of %{earnings} %{frequency} is too high given the household’s characteristics and working situation"
+        under_hard_min: "The household's income of %{earnings} %{frequency} is too low given the household’s working situation"
+      age:
+        earnings_over_hard_max: "The household's income of %{earnings} %{frequency} is too high for the number of adults. Change either the household income or the age of the tenants."
+      hhmemb:
+        earnings:
+          over_hard_max: "The household's income of %{earnings} %{frequency} is too high for this number of tenants. Change either the household income or number of tenants."
+          under_hard_min: "The household's income of %{earnings} %{frequency} is too low for this number of tenants. Change either the household income or number of tenants."
       brent:
         below_hard_min: "Rent is below the absolute minimum expected for a property of this type. Please check the rent, rent period, local authority and (if general needs) number of bedrooms"
         above_hard_max: "Rent is higher than the absolute maximum expected for a property of this type. Please check the rent, rent period, local authority and (if general needs) number of bedrooms"
