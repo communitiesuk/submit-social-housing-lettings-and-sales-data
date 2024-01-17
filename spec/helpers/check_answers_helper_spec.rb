@@ -17,7 +17,7 @@ RSpec.describe CheckAnswersHelper do
     context "when a section hasn't been completed yet" do
       it "returns that you have unanswered questions" do
         expect(display_answered_questions_summary(subsection, lettings_log, current_user))
-          .to match(/You have answered 2 of 7 questions./)
+          .to match(/You have answered 4 of 10 questions./)
       end
     end
 
