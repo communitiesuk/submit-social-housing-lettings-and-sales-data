@@ -9,6 +9,7 @@ RSpec.describe InterruptionScreenHelper do
     create(
       :lettings_log,
       :in_progress,
+      hhmemb: 1,
       ecstat1: 1,
       earnings: 750,
       incfreq: 1,

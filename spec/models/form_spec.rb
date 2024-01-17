@@ -26,6 +26,7 @@ RSpec.describe Form, type: :model do
 
     context "when the current page is a value check page" do
       before do
+        lettings_log.hhmemb = 1
         lettings_log.incfreq = 1
         lettings_log.earnings = 140
         lettings_log.ecstat1 = 1
