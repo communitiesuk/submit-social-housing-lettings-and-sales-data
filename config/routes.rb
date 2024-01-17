@@ -197,9 +197,6 @@ Rails.application.routes.draw do
     get "delete-duplicates", to: "duplicate_logs#delete_duplicates"
 
     collection do
-      post "bulk-upload", to: "bulk_upload#bulk_upload"
-      get "bulk-upload", to: "bulk_upload#show"
-
       get "csv-download", to: "lettings_logs#download_csv"
       post "email-csv", to: "lettings_logs#email_csv"
       get "csv-confirmation", to: "lettings_logs#csv_confirmation"
