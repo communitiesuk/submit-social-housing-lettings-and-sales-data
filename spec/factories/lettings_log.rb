@@ -16,6 +16,7 @@ FactoryBot.define do
       tenancycode { Faker::Name.initials(number: 10) }
       postcode_full { Faker::Address.postcode }
       ppostcode_full { Faker::Address.postcode }
+      hhmemb { 2 }
       age1 { 17 }
       age2 { 19 }
       renewal { 1 }
@@ -24,6 +25,7 @@ FactoryBot.define do
     end
     trait :soft_validations_triggered do
       status { 1 }
+      hhmemb { 1 }
       ecstat1 { 1 }
       earnings { 750 }
       incfreq { 1 }
@@ -47,6 +49,7 @@ FactoryBot.define do
       age1_known { 0 }
       age1 { 18 }
       sex1 { "M" }
+      hhmemb { 1} 
       ecstat1 { 0 }
       period { 2 }
       brent { 200 }
