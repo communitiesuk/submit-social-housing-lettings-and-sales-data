@@ -41,6 +41,7 @@ class FormHandler
       "current_sales" => Form.new(nil, current_collection_start_year, SALES_SECTIONS, "sales"),
       "previous_sales" => Form.new(nil, previous_collection_start_year, SALES_SECTIONS, "sales"),
       "next_sales" => Form.new(nil, next_collection_start_year, SALES_SECTIONS, "sales"),
+      "archived_sales" => Form.new(nil, previous_collection_start_year - 1, SALES_SECTIONS, "sales"),
     }
   end
 
@@ -115,7 +116,7 @@ class FormHandler
   end
 
   def form_name_from_start_year(year, type)
-    form_mappings = { 0 => "current_#{type}", 1 => "previous_#{type}", -1 => "next_#{type}" }
+    form_mappings = { 0 => "current_#{type}", 1 => "previous_#{type}", -1 => "next_#{type}", 2 => "archived_#{type}" }
     form_mappings[current_collection_start_year - year]
   end
 
