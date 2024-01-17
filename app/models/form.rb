@@ -323,4 +323,8 @@ class Form
   def sales_or_start_year_after_2022?(type, start_year)
     type == "sales" || (start_year && start_year.to_i > 2022)
   end
+
+  def start_year_after_2024?
+    start_date && start_date.year >= 2024
+  end
 end
