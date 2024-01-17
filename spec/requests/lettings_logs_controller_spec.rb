@@ -546,6 +546,16 @@ RSpec.describe LettingsLogsController, type: :request do
           end
 
           context "with bulk_upload_id filter" do
+            before do
+              Timecop.freeze(2023, 4, 1)
+              Singleton.__init__(FormHandler)
+            end
+
+            after do
+              Timecop.unfreeze
+              Singleton.__init__(FormHandler)
+            end
+
             context "with bulk upload that belongs to current user" do
               let(:organisation) { create(:organisation) }
 
