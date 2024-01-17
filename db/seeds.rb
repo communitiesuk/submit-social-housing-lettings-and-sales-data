@@ -108,14 +108,17 @@ unless Rails.env.test?
     parent_organisation: absorbing_organisation,
     child_organisation: absorbing_organisation_managing_agent,
   )
+
   OrganisationRelationship.find_or_create_by!(
     parent_organisation: absorbing_organisation_stock_owner,
     child_organisation: absorbing_organisation,
   )
+
   OrganisationRelationship.find_or_create_by!(
     parent_organisation: merging_organisation1_stock_owner,
     child_organisation: merging_organisation1,
   )
+  
   OrganisationRelationship.find_or_create_by!(
     parent_organisation: merging_organisation2,
     child_organisation: merging_organisation2_managing_agent,
