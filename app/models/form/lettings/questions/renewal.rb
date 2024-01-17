@@ -17,7 +17,7 @@ class Form::Lettings::Questions::Renewal < ::Form::Question
   .freeze
 
   def header_text
-    if form.start_date && form.start_date.year >= 2024
+    if form.start_year_after_2024?
       "Is this letting a renewal of social housing to the same tenant in the same property?"
     else
       "Is this letting a renewal?"
@@ -25,7 +25,7 @@ class Form::Lettings::Questions::Renewal < ::Form::Question
   end
 
   def hint_text
-    if form.start_date && form.start_date.year >= 2024
+    if form.start_year_after_2024?
       "If the property was previously being used as temporary accommodation, then answer 'no'"
     else
       "A renewal is a letting to the same tenant in the same property. If the property was previously being used as temporary accommodation, then answer 'no'"

@@ -10,7 +10,7 @@ RSpec.describe Form::Lettings::Questions::Renewal, type: :model do
   let(:form) { instance_double(Form) }
 
   before do
-    allow(form).to receive(:start_date).and_return(Time.zone.local(2023, 4, 1))
+    allow(form).to receive(:start_year_after_2024?).and_return(false)
     allow(page).to receive(:subsection).and_return(subsection)
     allow(subsection).to receive(:form).and_return(form)
   end
@@ -52,7 +52,7 @@ RSpec.describe Form::Lettings::Questions::Renewal, type: :model do
 
   context "with collection year on or after 2024" do
     before do
-      allow(form).to receive(:start_date).and_return(Time.zone.local(2024, 4, 1))
+      allow(form).to receive(:start_year_after_2024?).and_return(true)
     end
 
     it "has the correct header" do
