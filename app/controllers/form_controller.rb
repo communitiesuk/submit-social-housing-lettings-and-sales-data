@@ -171,22 +171,16 @@ private
         return correcting_duplicate_logs_redirect_path
       end
 
-      if @log.lettings?
-        dynamic_duplicates = current_user.lettings_logs.duplicate_logs(@log)
-        if dynamic_duplicates.count.positive?
-          saved_duplicates = @log.duplicates
-          unless saved_duplicates == dynamic_duplicates
-            duplicate_log_reference = DuplicateLogReference.find_or_create_by!(log_id: @log.id, log_type: "LettingsLog")
-            dynamic_duplicates.each do |duplicate|
-              DuplicateLogReference.find_or_create_by!(log_id: duplicate.id, log_type: "LettingsLog", duplicate_set_id: duplicate_log_reference.duplicate_set_id)
-            end
-            return send("lettings_log_duplicate_logs_path", @log, original_log_id: @log.id)
+      dynamic_duplicates = @log.lettings? ? current_user.lettings_logs.duplicate_logs(@log) : current_user.sales_logs.duplicate_logs(@log)
+      if dynamic_duplicates.count.positive?
+        saved_duplicates = @log.duplicates
+        unless saved_duplicates == dynamic_duplicates
+          duplicate_log_reference = DuplicateLogReference.find_or_create_by!(log_id: @log.id, log_type: @log.class.name)
+          dynamic_duplicates.each do |duplicate|
+            DuplicateLogReference.find_or_create_by!(log_id: duplicate.id, log_type: @log.class.name, duplicate_set_id: duplicate_log_reference.duplicate_set_id)
           end
+          return send("#{@log.class.name.underscore}_duplicate_logs_path", @log, original_log_id: @log.id)
         end
-      end
-
-      if @log.sales? && current_user.sales_logs.duplicate_logs(@log).count.positive?
-        return send("sales_log_duplicate_logs_path", @log, original_log_id: @log.id)
       end
     end
 
