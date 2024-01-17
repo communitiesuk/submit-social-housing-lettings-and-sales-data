@@ -284,6 +284,7 @@ Rails.application.routes.draw do
         member do
           get :resume
           get :summary
+          get "deletion-report"
         end
       end
 

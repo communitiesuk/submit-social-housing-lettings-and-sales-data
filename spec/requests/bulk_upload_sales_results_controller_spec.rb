@@ -9,6 +9,58 @@ RSpec.describe BulkUploadSalesResultsController, type: :request do
     sign_in user
   end
 
+  describe "GET /sales-logs/bulk-upload-results/:ID/deletion-report" do
+    it "renders year combo" do
+      get "/sales-logs/bulk-upload-results/#{bulk_upload.id}/deletion-report"
+
+      expect(response).to be_successful
+      expect(response.body).to include("Bulk upload for sales (2022/23)")
+    end
+
+    it "renders the bulk upload filename" do
+      get "/sales-logs/bulk-upload-results/#{bulk_upload.id}/deletion-report"
+
+      expect(response.body).to include(bulk_upload.filename)
+    end
+
+    context "when viewed by support user" do
+      before do
+        allow(support_user).to receive(:need_two_factor_authentication?).and_return(false)
+      end
+
+      let(:viewing_user) { support_user }
+
+      it "is accessible" do
+        get "/sales-logs/bulk-upload-results/#{bulk_upload.id}/deletion-report"
+
+        expect(response).to be_successful
+        expect(response.body).to include(bulk_upload.filename)
+      end
+    end
+
+    context "when viewed by some other random user" do
+      let(:other_user) { create(:user) }
+      let(:viewing_user) { other_user }
+
+      it "is not accessible" do
+        get "/sales-logs/bulk-upload-results/#{bulk_upload.id}/deletion-report"
+        expect(response).to be_unauthorized
+      end
+    end
+
+    context "when viewed by another user in the same org" do
+      let(:other_user) { create(:user, organisation: user.organisation) }
+      let(:viewing_user) { other_user }
+
+      it "is accessible" do
+        get "/sales-logs/bulk-upload-results/#{bulk_upload.id}/deletion-report"
+
+        expect(response).to be_successful
+        expect(response.body).to include(bulk_upload.filename)
+      end
+    end
+  end
+
   describe "GET /sales-logs/bulk-upload-results/:ID" do
     it "renders correct year" do
       get "/sales-logs/bulk-upload-results/#{bulk_upload.id}"
