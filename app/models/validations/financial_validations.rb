@@ -25,8 +25,8 @@ module Validations::FinancialValidations
 
   def validate_net_income(record)
     if record.ecstat1 && record.hhmemb && record.weekly_net_income
-      frequency = record.form.get_question("incfreq", record).label_from_value(record.incfreq).downcase
       if record.weekly_net_income > record.applicable_income_range.hard_max
+        frequency = record.form.get_question("incfreq", record).label_from_value(record.incfreq).downcase
         hard_max = format_as_currency(record.applicable_income_range.hard_max)
         record.errors.add(
           :earnings,
@@ -59,6 +59,7 @@ module Validations::FinancialValidations
 
       if record.weekly_net_income < record.applicable_income_range.hard_min
         hard_min = format_as_currency(record.applicable_income_range.hard_min)
+        frequency = record.form.get_question("incfreq", record).label_from_value(record.incfreq).downcase
         record.errors.add(
           :earnings,
           :under_hard_min,
