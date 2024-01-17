@@ -118,7 +118,7 @@ unless Rails.env.test?
     parent_organisation: merging_organisation1_stock_owner,
     child_organisation: merging_organisation1,
   )
-  
+
   OrganisationRelationship.find_or_create_by!(
     parent_organisation: merging_organisation2,
     child_organisation: merging_organisation2_managing_agent,
@@ -129,7 +129,7 @@ unless Rails.env.test?
   User.find_or_create_by!(
     name: "Absorbing organisation Provider",
     email: "provider@example.com",
-    organisation: org,
+    organisation: absorbing_organisation,
     role: "data_provider",
   ) do |user|
     user.password = "password"
@@ -139,7 +139,7 @@ unless Rails.env.test?
   User.find_or_create_by!(
     name: "Absorbing organisation Coordinator",
     email: "coordinator@example.com",
-    organisation: org,
+    organisation: absorbing_organisation,
     role: "data_coordinator",
     is_dpo: true,
   ) do |user|
@@ -152,7 +152,7 @@ unless Rails.env.test?
   User.find_or_create_by!(
     name: "Absorbing organisation Support",
     email: "support@example.com",
-    organisation: org,
+    organisation: absorbing_organisation,
     role: "support",
     is_dpo: true,
   ) do |user|
@@ -164,7 +164,7 @@ unless Rails.env.test?
   merging_organisation1_provider = User.find_or_create_by!(
     name: "Merging organisation 1 Provider",
     email: "merging_organisation1_provider@example.com",
-    organisation: org,
+    organisation: merging_organisation1,
     role: "data_provider",
   ) do |user|
     user.password = "password"
@@ -174,7 +174,7 @@ unless Rails.env.test?
   User.find_or_create_by!(
     name: "Merging organisation 1 Coordinator",
     email: "merging_organisation1_coordinator@example.com",
-    organisation: org,
+    organisation: merging_organisation1,
     role: "data_coordinator",
     is_dpo: true,
   ) do |user|
@@ -187,7 +187,7 @@ unless Rails.env.test?
   User.find_or_create_by!(
     name: "Merging organisation 2 Provider",
     email: "merging_organisation2_provider@example.com",
-    organisation: org,
+    organisation: merging_organisation2,
     role: "data_provider",
   ) do |user|
     user.password = "password"
@@ -197,7 +197,7 @@ unless Rails.env.test?
   User.find_or_create_by!(
     name: "Merging organisation 2 Coordinator",
     email: "merging_organisation2_coordinator@example.com",
-    organisation: org,
+    organisation: merging_organisation2,
     role: "data_coordinator",
     is_dpo: true,
   ) do |user|
