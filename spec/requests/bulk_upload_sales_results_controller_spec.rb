@@ -2,11 +2,13 @@ require "rails_helper"
 
 RSpec.describe BulkUploadSalesResultsController, type: :request do
   let(:user) { create(:user) }
+  let(:support_user) { create(:user, :support) }
   let(:bulk_upload) { create(:bulk_upload, :sales, user:, bulk_upload_errors:) }
   let(:bulk_upload_errors) { create_list(:bulk_upload_error, 2) }
+  let(:viewing_user) { user }
 
   before do
-    sign_in user
+    sign_in viewing_user
   end
 
   describe "GET /sales-logs/bulk-upload-results/:ID/deletion-report" do
