@@ -28,7 +28,7 @@ class BulkUploadSalesResultsController < ApplicationController
   end
 
   def deletion_report
-    @bulk_upload = BulkUpload.lettings.find(params[:id])
+    @bulk_upload = BulkUpload.sales.find(params[:id])
 
     authorize @bulk_upload
   end
