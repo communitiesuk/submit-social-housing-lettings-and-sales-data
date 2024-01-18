@@ -5,7 +5,7 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <span class="govuk-caption-l">Bulk upload for lettings (<%= @bulk_upload.year_combo %>)</span>
-    <h1 class="govuk-heading-l"><%= pluralize(unique_answers_to_be_cleared(@bulk_upload).count, "answer") %> will be deleted if you upload the <%= "log".pluralize(@bulk_upload.logs.count) %></h1>
+    <h1 class="govuk-heading-l"><%= answers_to_be_deleted_title_text(@bulk_upload) %></h1>
 
     <p>The following cells contain data this is incorrect.</p>
     <p>If you upload the logs, these answers will be deleted. You will have to re-enter the data on the site and resolve these errors.</p>
@@ -18,7 +18,7 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
     <% @bulk_upload.bulk_upload_errors.order_by_row.order_by_cell.group_by(&:row).each do |_row, errors_for_row| %>
-      <%= render BulkUploadErrorRowComponent.new(bulk_upload_errors: errors_for_row.reject { |e| e.category == :not_answered }) %>
+      <%= render BulkUploadErrorRowComponent.new(bulk_upload_errors: errors_for_row.reject { |e| e.category == "not_answered" }) %>
     <% end %>
   </div>
 </div>
