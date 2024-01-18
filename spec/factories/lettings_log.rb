@@ -49,7 +49,7 @@ FactoryBot.define do
       age1_known { 0 }
       age1 { 18 }
       sex1 { "M" }
-      hhmemb { 1} 
+      hhmemb { 1 }
       ecstat1 { 0 }
       period { 2 }
       brent { 200 }
