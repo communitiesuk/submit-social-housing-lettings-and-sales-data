@@ -415,11 +415,7 @@ RSpec.describe Exports::LettingsLogExportService do
     end
 
     context "and one lettings log with duplicate reference is available for export" do
-      let!(:lettings_log) { FactoryBot.create(:lettings_log, :completed, created_by: user, propcode: "123", ppostcode_full: "SE2 6RT", postcode_full: "NW1 5TY", tenancycode: "BZ737", startdate: Time.zone.local(2022, 2, 2, 10, 36, 49), voiddate: Time.zone.local(2019, 11, 3), mrcdate: Time.zone.local(2020, 5, 5, 10, 36, 49), tenancylength: 5, underoccupation_benefitcap: 4) }
-
-      before do
-        FactoryBot.create(:duplicate_log_reference, log_type: "LettingsLog", log_id: lettings_log.id, duplicate_set_id: 123)
-      end
+      let!(:lettings_log) { FactoryBot.create(:lettings_log, :completed, created_by: user, propcode: "123", ppostcode_full: "SE2 6RT", postcode_full: "NW1 5TY", tenancycode: "BZ737", startdate: Time.zone.local(2022, 2, 2, 10, 36, 49), voiddate: Time.zone.local(2019, 11, 3), mrcdate: Time.zone.local(2020, 5, 5, 10, 36, 49), tenancylength: 5, underoccupation_benefitcap: 4, duplicate_set_id: 123) }
 
       def replace_duplicate_set_id(export_file)
         export_file.sub!("<duplicate_set_id/>", "<duplicate_set_id>123</duplicate_set_id>")

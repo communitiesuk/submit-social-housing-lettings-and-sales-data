@@ -175,12 +175,12 @@ private
       if dynamic_duplicates.count.positive?
         saved_duplicates = @log.duplicates
         unless saved_duplicates == dynamic_duplicates
-          duplicate_log_reference = DuplicateLogReference.find_or_create_by!(log_id: @log.id, log_type: @log.class.name)
+          @log.update!(duplicate_set_id: new_duplicate_set_id) if @log.duplicate_set_id.blank?
           dynamic_duplicates.each do |duplicate|
-            DuplicateLogReference.find_or_create_by!(log_id: duplicate.id, log_type: @log.class.name, duplicate_set_id: duplicate_log_reference.duplicate_set_id)
+            duplicate.update!(duplicate_set_id: @log.duplicate_set_id) if duplicate.duplicate_set_id != @log.duplicate_set_id
           end
-          return send("#{@log.class.name.underscore}_duplicate_logs_path", @log, original_log_id: @log.id)
         end
+        return send("#{@log.class.name.underscore}_duplicate_logs_path", @log, original_log_id: @log.id)
       end
     end
 
@@ -257,12 +257,12 @@ private
 
     if original_log.present? && current_user.send(class_name.pluralize).duplicate_logs(original_log).count.positive?
       unless current_user.send(class_name.pluralize).duplicate_logs(@log).count.positive?
-        remove_fixed_duplicate_log_references(@log)
+        remove_fixed_duplicate_set_ids(@log)
         flash[:notice] = deduplication_success_banner
       end
       send("#{class_name}_duplicate_logs_path", original_log, original_log_id: original_log.id, referrer: params[:referrer], organisation_id: params[:organisation_id])
     else
-      remove_fixed_duplicate_log_references(original_log)
+      remove_fixed_duplicate_set_ids(original_log)
       flash[:notice] = deduplication_success_banner
       send("#{class_name}_duplicate_logs_path", "#{class_name}_id".to_sym => from_referrer_query("first_remaining_duplicate_id"), original_log_id: from_referrer_query("original_log_id"), referrer: params[:referrer], organisation_id: params[:organisation_id])
     end
@@ -284,12 +284,19 @@ private
     I18n.t("notification.duplicate_logs.deduplication_success_banner", log_link: deduplicated_log_link, changed_question_label:).html_safe
   end
 
-  def remove_fixed_duplicate_log_references(log)
-    duplicate_log_reference = DuplicateLogReference.find_by(log_id: log.id, log_type: log.class.name)
-    return unless duplicate_log_reference
+  def remove_fixed_duplicate_set_ids(log)
+    duplicate_set_id = log.duplicate_set_id
+    return unless duplicate_set_id
 
-    duplicate_set_id = duplicate_log_reference.duplicate_set_id
-    duplicate_log_reference.destroy! if duplicate_log_reference.present?
-    DuplicateLogReference.find_by(duplicate_set_id:).destroy! if DuplicateLogReference.where(duplicate_set_id:).count == 1
+    log.update!(duplicate_set_id: nil)
+    LettingsLog.find_by(duplicate_set_id:)&.update!(duplicate_set_id: nil) if log.lettings? && LettingsLog.where(duplicate_set_id:).count == 1
+    SalesLog.find_by(duplicate_set_id:)&.update!(duplicate_set_id: nil) if log.sales? && SalesLog.where(duplicate_set_id:).count == 1
+  end
+
+  def new_duplicate_set_id
+    loop do
+      duplicate_set_id = SecureRandom.random_number(1_000_000)
+      return duplicate_set_id unless LettingsLog.exists?(duplicate_set_id:)
+    end
   end
 end

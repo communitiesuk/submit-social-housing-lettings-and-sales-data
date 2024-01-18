@@ -7,7 +7,6 @@ class Log < ApplicationRecord
   belongs_to :created_by, class_name: "User", optional: true
   belongs_to :updated_by, class_name: "User", optional: true
   belongs_to :bulk_upload, optional: true
-  has_many :duplicate_log_references, as: :log
 
   before_save :update_status!
 
@@ -208,10 +207,6 @@ class Log < ApplicationRecord
     form.questions.count do |question|
       !optional_fields.include?(question.id) && question.displayed_to_user?(self) && question.unanswered?(self) && !question.is_derived_or_has_inferred_check_answers_value?(self)
     end
-  end
-
-  def duplicate_set_id
-    duplicate_log_references.first&.duplicate_set_id
   end
 
 private

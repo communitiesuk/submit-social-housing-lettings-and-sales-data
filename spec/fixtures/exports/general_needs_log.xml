@@ -144,6 +144,7 @@
     <county/>
     <discarded_at/>
     <creation_method>1</creation_method>
+    <duplicate_set_id/>
     <formid>{id}</formid>
     <owningorgid>{owning_org_id}</owningorgid>
     <owningorgname>DLUHC</owningorgname>
@@ -156,7 +157,6 @@
     <log_id>{log_id}</log_id>
     <created_by>test1@example.com</created_by>
     <amended_by/>
-    <duplicate_set_id/>
     <providertype>1</providertype>
   </form>
 </forms>

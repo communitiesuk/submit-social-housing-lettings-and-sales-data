@@ -171,7 +171,7 @@ RSpec.describe Csv::LettingsLogCsvService do
 
     context "when the log has a duplicate log reference" do
       before do
-        DuplicateLogReference.create!(log_id: log.id, log_type: "LettingsLog", duplicate_set_id: 12_312)
+        log.update!(duplicate_set_id: 12_312)
       end
 
       it "exports the id for under the heading 'duplicate_set_id'" do
@@ -256,7 +256,7 @@ RSpec.describe Csv::LettingsLogCsvService do
 
       context "when the log has a duplicate log reference" do
         before do
-          DuplicateLogReference.create!(log_id: log.id, log_type: "LettingsLog", duplicate_set_id: 12_312)
+          log.update!(duplicate_set_id: 12_312)
         end
 
         it "exports the id for under the heading 'duplicate_set_id'" do

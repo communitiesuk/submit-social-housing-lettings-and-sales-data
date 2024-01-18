@@ -458,6 +458,6 @@ class SalesLog < Log
   end
 
   def duplicates
-    SalesLog.joins(:duplicate_log_references).where(duplicate_log_references: { duplicate_set_id: duplicate_log_references&.first&.duplicate_set_id }).where.not(id:)
+    SalesLog.where.not(duplicate_set_id: nil).where(duplicate_set_id:).where.not(id:)
   end
 end

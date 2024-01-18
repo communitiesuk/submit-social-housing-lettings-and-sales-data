@@ -646,7 +646,7 @@ class LettingsLog < Log
   end
 
   def duplicates
-    LettingsLog.joins(:duplicate_log_references).where(duplicate_log_references: { duplicate_set_id: duplicate_log_references&.first&.duplicate_set_id }).where.not(id:)
+    LettingsLog.where.not(duplicate_set_id: nil).where(duplicate_set_id:).where.not(id:)
   end
 
 private
