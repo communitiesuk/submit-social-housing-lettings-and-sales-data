@@ -36,6 +36,6 @@ class Form::Lettings::Pages::NetIncomeValueCheck < ::Form::Page
   end
 
   def interruption_screen_question_ids
-    %w[incfreq earnings hhmemb ecstat1 ecstat2 ecstat3 ecstat4 ecstat5 ecstat6 ecstat7 ecstat8]
+    %w[incfreq earnings hhmemb ecstat1 age2 ecstat2 age3 ecstat3 age4 ecstat4 age5 ecstat5 age6 ecstat6 age7 ecstat7 age8 ecstat8]
   end
 end
