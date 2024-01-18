@@ -84,7 +84,7 @@ RSpec.describe Form::Subsection, type: :model do
     end
 
     it "has question helpers for the number of applicable questions" do
-      expected_questions = %w[tenancycode age1 sex1 ecstat1 hhmemb ecstat2 propcode]
+      expected_questions = %w[tenancycode age1 sex1 ecstat1 hhmemb relat2 age2 sex2 ecstat2 propcode]
       expect(subsection.applicable_questions(lettings_log).map(&:id)).to eq(expected_questions)
     end
   end
