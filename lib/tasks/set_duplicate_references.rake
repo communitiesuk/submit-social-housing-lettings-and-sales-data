@@ -5,7 +5,9 @@ task set_duplicate_references: :environment do
     next if duplicate_set.any? { |_log_id| SalesLog.exists?(duplicate_set_id:) }
 
     duplicate_set.each do |log_id|
-      SalesLog.find(log_id).update!(duplicate_set_id:)
+      log = SalesLog.find(log_id)
+      log.duplicate_set_id = duplicate_set_id
+      log.save!(touch: false, validate: false)
     end
   end
 
@@ -14,7 +16,9 @@ task set_duplicate_references: :environment do
     next if duplicate_set.any? { |_log_id| LettingsLog.exists?(duplicate_set_id:) }
 
     duplicate_set.each do |log_id|
-      LettingsLog.find(log_id).update!(duplicate_set_id:)
+      log = LettingsLog.find(log_id)
+      log.duplicate_set_id = duplicate_set_id
+      log.save!(touch: false, validate: false)
     end
   end
 end

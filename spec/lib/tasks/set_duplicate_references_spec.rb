@@ -20,6 +20,7 @@ RSpec.describe "set_duplicate_references" do
         let!(:sales_log_without_duplicates) { create(:sales_log, created_by: user) }
 
         it "creates duplicate references for sales logs" do
+          initial_sales_log_updated_at = sales_log.updated_at
           expect(sales_log.duplicates.count).to eq(0)
           expect(sales_log.duplicate_set_id).to be_nil
           expect(duplicate_sales_log.duplicates.count).to eq(0)
@@ -41,6 +42,7 @@ RSpec.describe "set_duplicate_references" do
           expect(sales_log_without_duplicates.duplicates.count).to eq(0)
           expect(sales_log.duplicate_set_id).to eq(duplicate_sales_log.duplicate_set_id)
           expect(sales_log.duplicate_set_id).to eq(second_duplicate_sales_log.duplicate_set_id)
+          expect(sales_log.updated_at).to eq(initial_sales_log_updated_at)
         end
       end
 
@@ -126,6 +128,7 @@ RSpec.describe "set_duplicate_references" do
         let!(:lettings_log_without_duplicates) { create(:lettings_log, created_by: user) }
 
         it "creates duplicate references for lettings logs" do
+          initial_lettings_log_updated_at = lettings_log.updated_at
           expect(lettings_log.duplicates.count).to eq(0)
           expect(lettings_log.duplicate_set_id).to be_nil
           expect(duplicate_lettings_log.duplicates.count).to eq(0)
@@ -148,6 +151,7 @@ RSpec.describe "set_duplicate_references" do
           expect(lettings_log_without_duplicates.duplicate_set_id).to be_nil
           expect(lettings_log.duplicate_set_id).to eq(duplicate_lettings_log.duplicate_set_id)
           expect(lettings_log.duplicate_set_id).to eq(second_duplicate_lettings_log.duplicate_set_id)
+          expect(lettings_log.updated_at).to eq(initial_lettings_log_updated_at)
         end
       end
 
