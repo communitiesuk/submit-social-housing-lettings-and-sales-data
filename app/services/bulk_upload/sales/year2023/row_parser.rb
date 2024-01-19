@@ -243,9 +243,9 @@ class BulkUpload::Sales::Year2023::RowParser
   attribute :field_75, :integer
   attribute :field_76, :integer
   attribute :field_77, :integer
-  attribute :field_78, :integer
+  attribute :field_78, :string
   attribute :field_79, :integer
-  attribute :field_80, :integer
+  attribute :field_80, :string
 
   attribute :field_81, :integer
   attribute :field_82, :integer
@@ -841,11 +841,11 @@ private
     attributes["ethnic"] = field_32
     attributes["national"] = field_33
 
-    attributes["income1nk"] = field_78.present? ? 0 : 1
-    attributes["income1"] = field_78
+    attributes["income1nk"] = field_78 == "R" ? 1 : 0
+    attributes["income1"] = field_78.to_i if attributes["income1nk"]&.zero? && field_78&.match(/\A\d{1,5}\z/)
 
-    attributes["income2nk"] = field_80.present? ? 0 : 1
-    attributes["income2"] = field_80
+    attributes["income2nk"] = field_80 == "R" ? 1 : 0
+    attributes["income2"] = field_80.to_i if attributes["income2nk"]&.zero? && field_80&.match(/\A\d{1,5}\z/)
 
     attributes["inc1mort"] = field_79
     attributes["inc2mort"] = field_81
