@@ -43,6 +43,10 @@ class FormHandler
       "next_sales" => Form.new(nil, next_collection_start_year, SALES_SECTIONS, "sales"),
       "archived_sales" => Form.new(nil, previous_collection_start_year - 1, SALES_SECTIONS, "sales"),
     }
+    if @sales_forms.count { |_name, form| Time.zone.now.between?(form.start_date, form.edit_end_date) } == 1
+      @sales_forms.delete("archived_sales")
+    end
+    @sales_forms
   end
 
   def ordered_sales_questions_for_all_years
@@ -99,6 +103,10 @@ class FormHandler
     end
     forms["current_lettings"] = Form.new(nil, current_collection_start_year, LETTINGS_SECTIONS, "lettings") if forms["current_lettings"].blank?
     forms["next_lettings"] = Form.new(nil, next_collection_start_year, LETTINGS_SECTIONS, "lettings") if forms["next_lettings"].blank?
+
+    if forms.count { |_name, form| Time.zone.now.between?(form.start_date, form.edit_end_date) } == 1
+      forms.delete("archived_lettings")
+    end
 
     if Rails.env.test?
       forms.merge({ fake_lettings_2021: Form.new("spec/fixtures/forms/2021_2022.json"), real_lettings_2021: Form.new("config/forms/2021_2022.json") })
