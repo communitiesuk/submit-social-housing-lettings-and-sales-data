@@ -249,7 +249,7 @@ class BulkUpload::Sales::Year2023::RowParser
 
   attribute :field_81, :integer
   attribute :field_82, :integer
-  attribute :field_83, :integer
+  attribute :field_83, :string
   attribute :field_84, :integer
   attribute :field_85, :integer
   attribute :field_86, :integer
@@ -850,8 +850,8 @@ private
     attributes["inc1mort"] = field_79
     attributes["inc2mort"] = field_81
 
-    attributes["savingsnk"] = field_83.present? ? 0 : 1
-    attributes["savings"] = field_83
+    attributes["savingsnk"] = field_83 == "R" ? 1 : 0
+    attributes["savings"] = field_83.to_i if attributes["savingsnk"]&.zero? && field_83&.match(/\A\d{1,6}\z/)
     attributes["prevown"] = field_84
 
     attributes["prevten"] = field_62
