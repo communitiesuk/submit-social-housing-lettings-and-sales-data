@@ -38,15 +38,12 @@ module Validations::FinancialValidations
           :over_hard_max,
           message: I18n.t("validations.financial.hhmemb.earnings.over_hard_max", earnings: format_as_currency(record.earnings), frequency:),
         )
-        ecstat_fields = %i[ecstat1 ecstat2 ecstat3 ecstat4 ecstat5 ecstat6 ecstat7 ecstat8]
-        ecstat_fields.each do |field|
+        (1..record.hhmemb).each do |n|
           record.errors.add(
-            field,
+            "ecstat#{n}",
             :over_hard_max,
             message: I18n.t("validations.financial.ecstat.over_hard_max", earnings: format_as_currency(record.earnings), frequency:),
           )
-        end
-        (2..8).each do |n|
           next unless record["ecstat#{n}"] == 9
 
           record.errors.add(
@@ -70,15 +67,14 @@ module Validations::FinancialValidations
           :under_hard_min,
           message: I18n.t("validations.financial.hhmemb.earnings.under_hard_min", earnings: format_as_currency(record.earnings), frequency:),
         )
-        ecstat_fields = %i[ecstat1 ecstat2 ecstat3 ecstat4 ecstat5 ecstat6 ecstat7 ecstat8]
-        ecstat_fields.each do |field|
+        (1..record.hhmemb).each do |n|
           record.errors.add(
-            field,
+            "ecstat#{n}",
             :under_hard_min,
             message: I18n.t("validations.financial.ecstat.under_hard_min", earnings: format_as_currency(record.earnings), frequency:),
           )
+          # N.B. It is not possible for a change to an age field to increase the hard min
         end
-        # N.B. It is not possible for a change to an age field to increase the hard min
       end
     end
 

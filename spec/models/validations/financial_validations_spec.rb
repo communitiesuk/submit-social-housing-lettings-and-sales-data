@@ -270,6 +270,10 @@ RSpec.describe Validations::FinancialValidations do
         expect(record.errors["age2"]).to be_empty
         expect(record.errors["age3"])
           .to eq(["The household's income of £5,000.00 weekly is too high for the number of adults. Change either the household income or the age of the tenants."])
+        (record.hhmemb+1..8).each do |n|
+          expect(record.errors["ecstat#{n}"]).to be_empty
+          expect(record.errors["age#{n}"]).to be_empty
+        end
       end
 
       it "adds errors to relevant fields for each tenant when income is too low" do
@@ -284,6 +288,9 @@ RSpec.describe Validations::FinancialValidations do
         (1..record.hhmemb).each do |n|
           expect(record.errors["ecstat#{n}"])
             .to eq(["The household's income of £50.00 weekly is too low given the household’s working situation"])
+        end
+        ((record.hhmemb+1)..8).each do |n|
+          expect(record.errors["ecstat#{n}"]).to be_empty
         end
       end
     end
