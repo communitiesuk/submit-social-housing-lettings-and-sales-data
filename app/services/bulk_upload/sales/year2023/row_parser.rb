@@ -842,16 +842,16 @@ private
     attributes["national"] = field_33
 
     attributes["income1nk"] = field_78 == "R" ? 1 : 0
-    attributes["income1"] = field_78.to_i if attributes["income1nk"]&.zero? && field_78&.match(/\A\d{1,5}\z/)
+    attributes["income1"] = field_78.to_i if attributes["income1nk"]&.zero? && field_78&.match(/\A\d+\z/)
 
     attributes["income2nk"] = field_80 == "R" ? 1 : 0
-    attributes["income2"] = field_80.to_i if attributes["income2nk"]&.zero? && field_80&.match(/\A\d{1,5}\z/)
+    attributes["income2"] = field_80.to_i if attributes["income2nk"]&.zero? && field_80&.match(/\A\d+\z/)
 
     attributes["inc1mort"] = field_79
     attributes["inc2mort"] = field_81
 
     attributes["savingsnk"] = field_83 == "R" ? 1 : 0
-    attributes["savings"] = field_83.to_i if attributes["savingsnk"]&.zero? && field_83&.match(/\A\d{1,6}\z/)
+    attributes["savings"] = field_83.to_i if attributes["savingsnk"]&.zero? && field_83&.match(/\A\d+\z/)
     attributes["prevown"] = field_84
 
     attributes["prevten"] = field_62
