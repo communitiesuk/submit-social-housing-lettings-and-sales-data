@@ -204,11 +204,11 @@ RSpec.describe Validations::FinancialValidations do
         record.ecstat1 = 1
         financial_validator.validate_net_income(record)
         expect(record.errors["earnings"])
-          .to eq(["The household's income cannot be greater than £1,230.00 per week given the household’s working situation"])
+          .to eq(["The household’s income cannot be greater than £1,230.00 per week given the household’s working situation"])
         expect(record.errors["ecstat1"])
-          .to eq(["The household's income of £5,000.00 weekly is too high given the household’s working situation"])
+          .to eq(["The household’s income of £5,000.00 weekly is too high given the household’s working situation"])
         expect(record.errors["hhmemb"])
-          .to eq(["The household's income of £5,000.00 weekly is too high for this number of tenants. Change either the household income or number of tenants."])
+          .to eq(["The household’s income of £5,000.00 weekly is too high for this number of tenants. Change either the household income or number of tenants."])
       end
     end
 
@@ -220,11 +220,11 @@ RSpec.describe Validations::FinancialValidations do
         record.ecstat1 = 1
         financial_validator.validate_net_income(record)
         expect(record.errors["earnings"])
-          .to eq(["The household's income cannot be less than £90.00 per week given the household’s working situation"])
+          .to eq(["The household’s income cannot be less than £90.00 per week given the household’s working situation"])
         expect(record.errors["ecstat1"])
-          .to eq(["The household's income of £50.00 weekly is too low given the household’s working situation"])
+          .to eq(["The household’s income of £50.00 weekly is too low given the household’s working situation"])
         expect(record.errors["hhmemb"])
-          .to eq(["The household's income of £50.00 weekly is too low for this number of tenants. Change either the household income or number of tenants."])
+          .to eq(["The household’s income of £50.00 weekly is too low for this number of tenants. Change either the household income or number of tenants."])
       end
     end
 
@@ -250,7 +250,7 @@ RSpec.describe Validations::FinancialValidations do
         record.ecstat3 = 9
         financial_validator.validate_net_income(record)
         expect(record.errors["earnings"])
-          .to eq(["The household's income cannot be less than £150.00 per week given the household’s working situation"])
+          .to eq(["The household’s income cannot be less than £150.00 per week given the household’s working situation"])
       end
 
       it "adds errors to relevant fields for each tenant when income is too high" do
@@ -264,12 +264,12 @@ RSpec.describe Validations::FinancialValidations do
         financial_validator.validate_net_income(record)
         (1..record.hhmemb).each do |n|
           expect(record.errors["ecstat#{n}"])
-            .to eq(["The household's income of £5,000.00 weekly is too high given the household’s working situation"])
+            .to eq(["The household’s income of £5,000.00 weekly is too high given the household’s working situation"])
         end
         expect(record.errors["age1"]).to be_empty
         expect(record.errors["age2"]).to be_empty
         expect(record.errors["age3"])
-          .to eq(["The household's income of £5,000.00 weekly is too high for the number of adults. Change either the household income or the age of the tenants."])
+          .to eq(["The household’s income of £5,000.00 weekly is too high for the number of adults. Change either the household income or the age of the tenants."])
         (record.hhmemb+1..8).each do |n|
           expect(record.errors["ecstat#{n}"]).to be_empty
           expect(record.errors["age#{n}"]).to be_empty
@@ -287,7 +287,7 @@ RSpec.describe Validations::FinancialValidations do
         financial_validator.validate_net_income(record)
         (1..record.hhmemb).each do |n|
           expect(record.errors["ecstat#{n}"])
-            .to eq(["The household's income of £50.00 weekly is too low given the household’s working situation"])
+            .to eq(["The household’s income of £50.00 weekly is too low given the household’s working situation"])
         end
         ((record.hhmemb+1)..8).each do |n|
           expect(record.errors["ecstat#{n}"]).to be_empty
