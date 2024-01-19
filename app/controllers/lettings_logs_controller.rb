@@ -13,7 +13,7 @@ class LettingsLogsController < LogsController
   before_action :redirect_if_bulk_upload_resolved, only: [:index]
 
   def index
-    all_logs = current_user.lettings_logs.visible
+    all_logs = current_user.lettings_logs.visible.filter_by_years_or_nil(FormHandler.instance.years_of_available_lettings_forms)
     unpaginated_filtered_logs = filter_manager.filtered_logs(all_logs, search_term, session_filters)
 
     @delete_logs_path = delete_logs_lettings_logs_path(search: search_term)

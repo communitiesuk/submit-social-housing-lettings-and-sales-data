@@ -207,6 +207,22 @@ class FormHandler
     end
   end
 
+  def years_of_available_lettings_forms
+    years = []
+    lettings_forms.each_value do |form|
+      years << form.start_date.year
+    end
+    years
+  end
+
+  def years_of_available_sales_forms
+    years = []
+    sales_forms.each_value do |form|
+      years << form.start_date.year
+    end
+    years
+  end
+
 private
 
   def get_all_forms

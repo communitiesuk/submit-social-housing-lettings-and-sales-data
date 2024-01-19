@@ -40,6 +40,13 @@ class LettingsLog < Log
   belongs_to :managing_organisation, class_name: "Organisation", optional: true
 
   scope :filter_by_year, ->(year) { where(startdate: Time.zone.local(year.to_i, 4, 1)...Time.zone.local(year.to_i + 1, 4, 1)) }
+  scope :filter_by_years_or_nil, lambda { |years, _user = nil|
+    first_year = years.shift
+    query = filter_by_year(first_year)
+    years.each { |year| query = query.or(filter_by_year(year)) }
+    query = query.or(where(startdate: nil))
+    query.all
+  }
   scope :filter_by_tenant_code, ->(tenant_code) { where("tenancycode ILIKE ?", "%#{tenant_code}%") }
   scope :filter_by_propcode, ->(propcode) { where("propcode ILIKE ?", "%#{propcode}%") }
   scope :filter_by_location_postcode, ->(postcode_full) { left_joins(:location).where("REPLACE(locations.postcode, ' ', '') ILIKE ?", "%#{postcode_full.delete(' ')}%") }

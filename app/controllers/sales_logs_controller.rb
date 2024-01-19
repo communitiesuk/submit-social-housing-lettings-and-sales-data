@@ -15,7 +15,7 @@ class SalesLogsController < LogsController
   end
 
   def index
-    all_logs = current_user.sales_logs.visible
+    all_logs = current_user.sales_logs.visible.filter_by_years_or_nil(FormHandler.instance.years_of_available_sales_forms)
     unpaginated_filtered_logs = filter_manager.filtered_logs(all_logs, search_term, session_filters)
 
     @delete_logs_path = delete_logs_sales_logs_path(search: search_term)
