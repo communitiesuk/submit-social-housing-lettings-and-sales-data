@@ -81,6 +81,6 @@ module LogsHelper
     unique_answers_to_be_cleared_count = unique_answers_to_be_cleared(bulk_upload).count
     this_or_these = unique_answers_to_be_cleared_count == 1 ? "This" : "These"
 
-    "#{this_or_these} #{pluralize(unique_answers_to_be_cleared(@bulk_upload).count, "answer")} will be deleted if you upload the #{"log".pluralize(@bulk_upload.logs.count)}"
+    "#{this_or_these} #{pluralize(unique_answers_to_be_cleared(bulk_upload).count, 'answer')} will be deleted if you upload the #{'log'.pluralize(bulk_upload.logs.count)}"
   end
 end
