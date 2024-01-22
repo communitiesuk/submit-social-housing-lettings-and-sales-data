@@ -21,6 +21,10 @@ RSpec.describe "Bulk upload sales log" do
 
   # rubocop:disable RSpec/AnyInstance
   context "when during crossover period" do
+    before do
+      allow(FeatureToggle).to receive(:force_crossover?).and_return(true)
+    end
+
     it "shows journey with year option" do
       Timecop.freeze(2023, 5, 1) do
         visit("/sales-logs")
@@ -31,15 +35,15 @@ RSpec.describe "Bulk upload sales log" do
         click_button("Continue")
 
         expect(page).to have_content("You must select a collection period to upload for")
-        choose("2022/2023")
+        choose("2023/2024")
         click_button("Continue")
 
         click_link("Back")
 
-        expect(page.find_field("form-year-2022-field")).to be_checked
+        expect(page.find_field("form-year-2023-field")).to be_checked
         click_button("Continue")
 
-        expect(page).to have_content("Upload sales logs in bulk (2022/23)")
+        expect(page).to have_content("Upload sales logs in bulk (2023/24)")
         click_button("Continue")
 
         expect(page).to have_content("Upload your file")
@@ -48,7 +52,7 @@ RSpec.describe "Bulk upload sales log" do
         allow_any_instance_of(Forms::BulkUploadSales::UploadYourFile).to receive(:`).and_return("not a csv")
 
         expect(page).to have_content("Select which file to upload")
-        attach_file "file", file_fixture("2021_22_lettings_bulk_upload.xlsx")
+        attach_file "file", file_fixture("2023_24_lettings_bulk_upload.xlsx")
         click_button("Upload")
 
         allow_any_instance_of(Forms::BulkUploadSales::UploadYourFile).to receive(:`).and_return("text/csv")
