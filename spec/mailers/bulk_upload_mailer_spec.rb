@@ -46,7 +46,7 @@ RSpec.describe BulkUploadMailer do
           filename: bulk_upload.filename,
           log_type: "lettings",
           upload_timestamp: bulk_upload.created_at.to_fs(:govuk_date_and_time),
-          success_description: "The lettings 2022/23 data you uploaded has been checked. The 0 logs you uploaded are now complete.",
+          success_description: "The lettings 2023/24 data you uploaded has been checked. The 0 logs you uploaded are now complete.",
           logs_link: clear_filters_url(filter_type: "lettings_logs"),
         },
       )
@@ -113,7 +113,7 @@ RSpec.describe BulkUploadMailer do
           title: "Check your file data",
           filename: bulk_upload.filename,
           upload_timestamp: bulk_upload.created_at.to_fs(:govuk_date_and_time),
-          description: "Some of your 2022/23 lettings data might not be right. Click the link below to review the potential errors, and check your file to see if the data is correct.",
+          description: "Some of your 2023/24 lettings data might not be right. Click the link below to review the potential errors, and check your file to see if the data is correct.",
           cta_link: bulk_upload_lettings_soft_validations_check_url(bulk_upload, page: "confirm-soft-errors"),
         },
       )

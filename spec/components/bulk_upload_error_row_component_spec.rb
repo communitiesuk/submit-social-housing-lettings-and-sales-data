@@ -46,7 +46,7 @@ RSpec.describe BulkUploadErrorRowComponent, type: :component do
     end
 
     it "renders the question for lettings" do
-      expected = "Is this letting a renewal?"
+      expected = "What do you expect the outstanding amount to be?"
       result = render_inline(described_class.new(bulk_upload_errors:))
       expect(result).to have_content(expected)
     end
@@ -83,7 +83,7 @@ RSpec.describe BulkUploadErrorRowComponent, type: :component do
       let(:field) { :field_87 }
 
       it "renders the question for sales" do
-        expected = "What is the full purchase price?"
+        expected = "Is this a staircasing transaction?"
         result = render_inline(described_class.new(bulk_upload_errors:))
         expect(result).to have_content(expected)
       end
