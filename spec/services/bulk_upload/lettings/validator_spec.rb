@@ -10,134 +10,7 @@ RSpec.describe BulkUpload::Lettings::Validator do
   let(:path) { file.path }
   let(:file) { Tempfile.new }
 
-  around do |example|
-    Timecop.freeze(Date.new(2023, 10, 1)) do
-      example.run
-    end
-    Timecop.return
-  end
-
   describe "validations" do
-    context "when 2022" do
-      let(:bulk_upload) { create(:bulk_upload, user:, year: 2022) }
-
-      context "when file has no headers" do
-        context "and too many columns" do
-          before do
-            file.write(("a" * 136).chars.join(","))
-            file.write("\n")
-            file.rewind
-          end
-
-          it "is not valid" do
-            expect(validator).not_to be_valid
-            expect(validator.errors["base"]).to eql(["Too many columns, please ensure you have used the correct template"])
-          end
-        end
-
-        context "and is empty" do
-          it "is not valid" do
-            expect(validator).not_to be_valid
-            expect(validator.errors["base"]).to eql(["Template is blank - The template must be filled in for us to create the logs and check if data is correct."])
-          end
-        end
-
-        context "and has a new line in it (empty)" do
-          before do
-            file.write("\n")
-            file.rewind
-          end
-
-          it "is not valid" do
-            expect(validator).not_to be_valid
-            expect(validator.errors["base"]).to eql(["Template is blank - The template must be filled in for us to create the logs and check if data is correct."])
-          end
-        end
-
-        context "and doesn't have too many columns" do
-          before do
-            file.write(("a" * 95).chars.join(","))
-            file.write(",1,10,22,")
-            file.write(("a" * 37).chars.join(","))
-            file.write("\n")
-            file.rewind
-          end
-
-          it "is valid" do
-            expect(validator).to be_valid
-          end
-        end
-      end
-
-      context "when file has headers" do
-        context "and file has extra invalid headers" do
-          let(:seed) { rand }
-          let(:log_to_csv) { BulkUpload::LettingsLogToCsv.new(log:) }
-          let(:field_numbers) { log_to_csv.default_2022_field_numbers + %w[invalid_field_number] }
-          let(:field_values) { log_to_csv.to_2022_row + %w[value_for_invalid_field_number] }
-
-          before do
-            file.write(log_to_csv.custom_field_numbers_row(seed:, field_numbers:))
-            file.write(log_to_csv.to_custom_csv_row(seed:, field_values:))
-            file.rewind
-          end
-
-          it "is valid" do
-            expect(validator).to be_valid
-          end
-
-          it "returns correct total logs count" do
-            expect(validator.total_logs_count).to be(1)
-          end
-        end
-
-        context "and is empty" do
-          it "is not valid" do
-            expect(validator).not_to be_valid
-            expect(validator.errors["base"]).to eql(["Template is blank - The template must be filled in for us to create the logs and check if data is correct."])
-          end
-        end
-
-        context "and file has too few valid headers" do
-          let(:seed) { rand }
-          let(:log_to_csv) { BulkUpload::LettingsLogToCsv.new(log:) }
-          let(:field_numbers) { log_to_csv.default_2022_field_numbers }
-          let(:field_values) { log_to_csv.to_2022_row }
-
-          before do
-            field_numbers.delete_at(20)
-            field_values.delete_at(20)
-            file.write(log_to_csv.custom_field_numbers_row(seed:, field_numbers:))
-            file.write(log_to_csv.to_custom_csv_row(seed:, field_values:))
-            file.rewind
-          end
-
-          it "is not valid" do
-            expect(validator).not_to be_valid
-            expect(validator.errors["base"]).to eql(["Incorrect number of fields, please ensure you have used the correct template"])
-          end
-        end
-
-        context "and file has too many valid headers" do
-          let(:seed) { rand }
-          let(:log_to_csv) { BulkUpload::LettingsLogToCsv.new(log:) }
-          let(:field_numbers) { log_to_csv.default_2022_field_numbers + %w[23] }
-          let(:field_values) { log_to_csv.to_2022_row + %w[value] }
-
-          before do
-            file.write(log_to_csv.custom_field_numbers_row(seed:, field_numbers:))
-            file.write(log_to_csv.to_custom_csv_row(seed:, field_values:))
-            file.rewind
-          end
-
-          it "is not valid" do
-            expect(validator).not_to be_valid
-            expect(validator.errors["base"]).to eql(["Incorrect number of fields, please ensure you have used the correct template"])
-          end
-        end
-      end
-    end
-
     context "when 2023" do
       let(:bulk_upload) { create(:bulk_upload, user:, year: 2023) }
 
@@ -245,7 +118,7 @@ RSpec.describe BulkUpload::Lettings::Validator do
 
         context "with no headers" do
           before do
-            file.write(BulkUpload::LettingsLogToCsv.new(log:, line_ending: "\r\n", col_offset: 0).to_2022_csv_row)
+            file.write(BulkUpload::LettingsLogToCsv.new(log:, line_ending: "\r\n", col_offset: 0).to_2023_csv_row)
             file.close
           end
 
@@ -276,7 +149,7 @@ RSpec.describe BulkUpload::Lettings::Validator do
 
   describe "#call" do
     context "when a valid csv" do
-      let(:path) { file_fixture("2022_23_lettings_bulk_upload.csv") }
+      let(:path) { file_fixture("2023_24_lettings_bulk_upload_invalid.csv") }
 
       it "creates validation errors" do
         expect { validator.call }.to change(BulkUploadError, :count)
@@ -285,15 +158,15 @@ RSpec.describe BulkUpload::Lettings::Validator do
       it "create validation error with correct values" do
         validator.call
 
-        error = BulkUploadError.find_by(row: "7", field: "field_96", category: "setup")
+        error = BulkUploadError.find_by(row: "9", field: "field_7", category: "setup")
 
-        expect(error.field).to eql("field_96")
+        expect(error.field).to eql("field_7")
         expect(error.error).to eql("You must answer tenancy start date (day)")
         expect(error.tenant_code).to eql("123")
         expect(error.property_ref).to be_nil
-        expect(error.row).to eql("7")
-        expect(error.cell).to eql("CS7")
-        expect(error.col).to eql("CS")
+        expect(error.row).to eql("9")
+        expect(error.cell).to eql("H9")
+        expect(error.col).to eql("H")
       end
     end
 
@@ -350,12 +223,12 @@ RSpec.describe BulkUpload::Lettings::Validator do
       end
 
       it "creates errors" do
-        expect { validator.call }.to change(BulkUploadError.where(category: :setup, error: "This is a duplicate of a log in your file"), :count).by(20)
+        expect { validator.call }.to change(BulkUploadError.where(category: :setup, error: "This is a duplicate of a log in your file"), :count).by(22)
       end
     end
 
     context "with unix line endings" do
-      let(:fixture_path) { file_fixture("2022_23_lettings_bulk_upload.csv") }
+      let(:fixture_path) { file_fixture("2023_24_lettings_bulk_upload.csv") }
       let(:file) { Tempfile.new }
       let(:path) { file.path }
 
@@ -377,7 +250,7 @@ RSpec.describe BulkUpload::Lettings::Validator do
       let(:path) { file.path }
 
       before do
-        file.write(BulkUpload::LettingsLogToCsv.new(log:, line_ending: "\r\n", col_offset: 0).to_2022_csv_row)
+        file.write(BulkUpload::LettingsLogToCsv.new(log:, line_ending: "\r\n", col_offset: 0).to_2023_csv_row)
         file.close
       end
 
@@ -389,16 +262,7 @@ RSpec.describe BulkUpload::Lettings::Validator do
 
   describe "#create_logs?" do
     context "when all logs are valid" do
-      let(:target_path) { file_fixture("2022_23_lettings_bulk_upload.csv") }
-
-      before do
-        allow(FormHandler.instance).to receive(:lettings_in_crossover_period?).and_return(true)
-        target_array = File.open(target_path).readlines
-        target_array[0..71].each do |line|
-          file.write line
-        end
-        file.rewind
-      end
+      let(:target_path) { file_fixture("2023_24_lettings_bulk_upload.csv") }
 
       it "returns truthy" do
         validator.call
@@ -407,7 +271,7 @@ RSpec.describe BulkUpload::Lettings::Validator do
     end
 
     context "when there is an invalid log" do
-      let(:path) { file_fixture("2022_23_lettings_bulk_upload.csv") }
+      let(:path) { file_fixture("2023_24_lettings_bulk_upload_invalid.csv") }
 
       it "returns falsey" do
         validator.call
@@ -420,8 +284,8 @@ RSpec.describe BulkUpload::Lettings::Validator do
       let(:log_2) { build(:lettings_log, :completed, created_by: user) }
 
       before do
-        file.write(BulkUpload::LettingsLogToCsv.new(log: log_1, line_ending: "\r\n", col_offset: 0).to_2022_csv_row)
-        file.write(BulkUpload::LettingsLogToCsv.new(log: log_2, line_ending: "\r\n", col_offset: 0, overrides: { illness: 100 }).to_2022_csv_row)
+        file.write(BulkUpload::LettingsLogToCsv.new(log: log_1, line_ending: "\r\n", col_offset: 0).to_2023_csv_row)
+        file.write(BulkUpload::LettingsLogToCsv.new(log: log_2, line_ending: "\r\n", col_offset: 0, overrides: { illness: 100 }).to_2023_csv_row)
         file.close
       end
 
@@ -435,16 +299,9 @@ RSpec.describe BulkUpload::Lettings::Validator do
       let(:log_1) { build(:lettings_log, :completed, renttype: 1, created_by: user) }
       let(:log_2) { build(:lettings_log, :completed, renttype: 1, created_by: user) }
 
-      around do |example|
-        Timecop.freeze(Time.zone.local(2023, 2, 22)) do
-          example.run
-        end
-        Timecop.return
-      end
-
       before do
-        file.write(BulkUpload::LettingsLogToCsv.new(log: log_1, line_ending: "\r\n", col_offset: 0).to_2022_csv_row)
-        file.write(BulkUpload::LettingsLogToCsv.new(log: log_2, line_ending: "\r\n", col_offset: 0).to_2022_csv_row)
+        file.write(BulkUpload::LettingsLogToCsv.new(log: log_1, line_ending: "\r\n", col_offset: 0).to_2023_csv_row)
+        file.write(BulkUpload::LettingsLogToCsv.new(log: log_2, line_ending: "\r\n", col_offset: 0).to_2023_csv_row)
         file.close
       end
 
@@ -460,7 +317,7 @@ RSpec.describe BulkUpload::Lettings::Validator do
       let(:log_1) { build(:lettings_log, :completed, renttype: 1, created_by: user, owning_organisation: unaffiliated_org) }
 
       before do
-        file.write(BulkUpload::LettingsLogToCsv.new(log: log_1, line_ending: "\r\n", col_offset: 0).to_2022_csv_row)
+        file.write(BulkUpload::LettingsLogToCsv.new(log: log_1, line_ending: "\r\n", col_offset: 0).to_2023_csv_row)
         file.close
       end
 
@@ -474,7 +331,7 @@ RSpec.describe BulkUpload::Lettings::Validator do
       let(:log) { build(:lettings_log, :in_progress, created_by: user, startdate: Time.zone.local(2022, 5, 1)) }
 
       before do
-        file.write(BulkUpload::LettingsLogToCsv.new(log:, line_ending: "\r\n", col_offset: 0).to_2022_csv_row)
+        file.write(BulkUpload::LettingsLogToCsv.new(log:, line_ending: "\r\n", col_offset: 0).to_2023_csv_row)
         file.close
       end
 

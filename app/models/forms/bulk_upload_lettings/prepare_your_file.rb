@@ -10,9 +10,7 @@ module Forms
 
       def view_path
         case year
-        when 2022
-          "bulk_upload_lettings_logs/forms/prepare_your_file_2022"
-        else
+        when 2023
           "bulk_upload_lettings_logs/forms/prepare_your_file_2023"
         end
       end
@@ -32,27 +30,21 @@ module Forms
 
       def legacy_template_path
         case year
-        when 2022
-          "/files/bulk-upload-lettings-template-2022-23.xlsx"
-        else
+        when 2023
           "/files/bulk-upload-lettings-legacy-template-2023-24.xlsx"
         end
       end
 
       def template_path
         case year
-        when 2022
-          "/files/bulk-upload-lettings-template-2022-23.xlsx"
-        else
+        when 2023
           "/files/bulk-upload-lettings-template-2023-24.xlsx"
         end
       end
 
       def specification_path
         case year
-        when 2022
-          "/files/bulk-upload-lettings-specification-2022-23.xlsx"
-        else
+        when 2023
           "/files/bulk-upload-lettings-specification-2023-24.xlsx"
         end
       end
