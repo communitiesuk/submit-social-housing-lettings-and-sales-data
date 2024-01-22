@@ -5,7 +5,47 @@
   <h2 class="govuk-heading-m">Collection resources</h2>
 <% end %>
 <p class="govuk-body">Use the 2023 to 2024 forms for lettings that start and sales that complete between 1 April 2023 and 31 March 2024.</p>
-<%= govuk_tabs(title: "Collection resources") do |c| %>
+<%= govuk_tabs(title: "Collection resources", classes: ["app-document-list__tab"]) do |c| %>
+  <% if FormHandler.instance.lettings_form_for_start_year(2024) && FormHandler.instance.lettings_form_for_start_year(2024).edit_end_date > Time.zone.today %>
+    <% c.with_tab(label: "Lettings 2024/25") do %>
+      <%= render DocumentListComponent.new(items: [
+        {
+          name: "Download the lettings log for tenants (2024 to 2025)",
+          href: download_24_25_lettings_form_path,
+          metadata: file_type_size_and_pages("2024_25_lettings_paper_form.pdf", number_of_pages: 8),
+        },
+        {
+          name: "Download the lettings bulk upload template (2024 to 2025) – New question ordering",
+          href: download_24_25_lettings_bulk_upload_template_path,
+          metadata: file_type_size_and_pages("bulk-upload-lettings-template-2024-25.xlsx"),
+        },
+        {
+          name: "Download the lettings bulk upload specification (2024 to 2025)",
+          href: download_24_25_lettings_bulk_upload_specification_path,
+          metadata: file_type_size_and_pages("bulk-upload-lettings-specification-2024-25.xlsx"),
+        },
+      ]) %>
+    <% end %>
+    <% c.with_tab(label: "Sales 2024/25") do %>
+      <%= render DocumentListComponent.new(items: [
+        {
+          name: "Download the sales log for buyers (2024 to 2025)",
+          href: download_24_25_sales_form_path,
+          metadata: file_type_size_and_pages("2024_25_sales_paper_form.pdf", number_of_pages: 8),
+        },
+        {
+          name: "Download the sales bulk upload template (2024 to 2025) – New question ordering",
+          href: download_24_25_sales_bulk_upload_template_path,
+          metadata: file_type_size_and_pages("bulk-upload-sales-template-2024-25.xlsx"),
+        },
+        {
+          name: "Download the sales bulk upload specification (2024 to 2025)",
+          href: download_24_25_sales_bulk_upload_specification_path,
+          metadata: file_type_size_and_pages("bulk-upload-sales-specification-2024-25.xlsx"),
+        },
+      ]) %>
+    <% end %>
+  <% end %>
   <% if FormHandler.instance.lettings_form_for_start_year(2023) && FormHandler.instance.lettings_form_for_start_year(2023).edit_end_date > Time.zone.today %>
     <% c.with_tab(label: "Lettings 2023/24") do %>
       <%= render DocumentListComponent.new(items: [
