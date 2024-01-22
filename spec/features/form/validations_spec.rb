@@ -148,7 +148,7 @@ RSpec.describe "validations" do
 
       it "prompts the user to confirm the value is correct with an interruption screen" do
         expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/net-income-value-check")
-        expect(page).to have_content("You told us that the household’s income is £750.00 weekly.")
+        expect(page).to have_content("You told us that the household’s income is £750.00 weekly")
         expect(page).to have_content("This is higher than we would expect for their working situation.")
         expect(page).not_to have_button("Save changes")
         click_button("Confirm and continue")
@@ -166,7 +166,7 @@ RSpec.describe "validations" do
         choose("lettings-log-incfreq-1-field", allow_label_click: true)
         click_button("Save and continue")
         expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/net-income-value-check")
-        expect(page).not_to have_content("You told us that the household’s income is £750.00 weekly.")
+        expect(page).not_to have_content("You told us that the household’s income is £750.00 weekly")
         expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
       end
 
