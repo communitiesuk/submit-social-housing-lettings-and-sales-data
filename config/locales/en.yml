@@ -617,8 +617,8 @@ en:
 
   soft_validations:
     net_income:
-      title_text: "You told us that the household’s income is %{earnings} %{incfreq}."
-      hint_text: "This is %{net_income_higher_or_lower_text} than we would expect for their working situation."
+      title_text: "You told us that the household’s income is %{earnings} %{incfreq}"
+      hint_text: "This is %{net_income_higher_or_lower_text} than we would expect for the household’s working situation."
       in_soft_min_range:
         message: "Net income is lower than expected based on the household’s working situation. Are you sure this is correct?"
       in_soft_max_range:
