@@ -25,6 +25,15 @@ class BulkUpload::SalesLogToCsv
     end
   end
 
+  def to_2024_csv_row(seed: nil)
+    if seed
+      row = to_2024_row.shuffle(random: Random.new(seed))
+      (row_prefix + row).flatten.join(",") + line_ending
+    else
+      (row_prefix + to_2024_row).flatten.join(",") + line_ending
+    end
+  end
+
   def default_2022_field_numbers
     (1..125).to_a
   end
@@ -42,6 +51,14 @@ class BulkUpload::SalesLogToCsv
       ["Bulk upload field number"] + default_2023_field_numbers.shuffle(random: Random.new(seed))
     else
       ["Bulk upload field number"] + default_2023_field_numbers
+    end.flatten.join(",") + line_ending
+  end
+
+  def default_2024_field_numbers_row(seed: nil)
+    if seed
+      ["Bulk upload field number"] + default_2024_field_numbers.shuffle(random: Random.new(seed))
+    else
+      ["Bulk upload field number"] + default_2024_field_numbers
     end.flatten.join(",") + line_ending
   end
 
@@ -212,6 +229,154 @@ class BulkUpload::SalesLogToCsv
     ]
   end
 
+  def to_2024_row
+    [
+      overrides[:organisation_id] || log.owning_organisation&.old_visible_id,
+      log.managing_organisation,
+      log.created_by&.email,
+      log.saledate&.day,
+      log.saledate&.month,
+      log.saledate&.strftime("%y"),
+      log.purchid,
+      log.ownershipsch,
+      log.type, # field_9: "What is the type of shared ownership sale?",
+      log.type, # field_10: "What is the type of discounted ownership sale?",
+
+      log.type, # field_11: "What is the type of outright sale?",
+      log.othtype,
+      log.companybuy,
+      log.buylivein,
+      log.jointpur,
+      log.jointmore,
+      log.noint,
+      log.privacynotice,
+      log.beds,
+      log.proptype, # 20
+
+      log.builtype,
+      log.uprn,
+      log.address_line1,
+      log.address_line2,
+      log.town_or_city,
+      log.county,
+      ((log.postcode_full || "").split(" ") || [""]).first,
+      ((log.postcode_full || "").split(" ") || [""]).last,
+      log.la,
+      log.wchair, # 30
+
+      log.age1,
+      log.sex1,
+      log.ethnic,
+      log.national,
+      log.ecstat1,
+      log.buy1livein,
+      log.relat2,
+      log.age2,
+      log.sex2,
+      log.ethnic_group2, # 40
+
+      log.nationalbuy2,
+      log.ecstat2,
+      log.buy2livein,
+      log.hholdcount,
+      log.relat3,
+      log.age3,
+      log.sex3,
+      log.ecstat3,
+      log.relat4,
+      log.age4, # 50
+
+      log.sex4,
+      log.ecstat4,
+      log.relat5,
+      log.age5,
+      log.sex5,
+      log.ecstat5,
+      log.relat6,
+      log.age6,
+      log.sex6,
+      log.ecstat6, # 60
+
+      log.prevten,
+      log.ppcodenk,
+      ((log.ppostcode_full || "").split(" ") || [""]).first,
+      ((log.ppostcode_full || "").split(" ") || [""]).last,
+      log.prevloc,
+      log.pregyrha,
+      log.pregother,
+      log.pregla,
+      log.pregghb,
+      log.buy2living, # 70
+
+      log.prevtenbuy2,
+      hhregres,
+      log.hhregresstill,
+      log.armedforcesspouse,
+      log.disabled,
+      log.wheel,
+      log.income1,
+      log.inc1mort,
+      log.income2,
+      log.inc2mort, # 80
+
+      log.hb,
+      log.savings,
+      log.prevown,
+      log.prevshared,
+      log.proplen,
+      log.staircase,
+      log.stairbought,
+      log.stairowned,
+      log.staircasesale,
+      log.resale, # 90
+
+      log.exdate&.day,
+      log.exdate&.month,
+      log.exdate&.strftime("%y"),
+      log.hodate&.day,
+      log.hodate&.month, # 60
+      log.hodate&.strftime("%y"),
+      log.lanomagr,
+      log.frombeds,
+      log.fromprop,
+      log.socprevten, # 100
+
+      log.value,
+      log.equity,
+      log.mortgageused,
+      log.mortgage,
+      log.mortgagelender,
+      log.mortgagelenderother,
+      log.mortlen,
+      log.extrabor,
+      log.deposit,
+      log.cashdis, # 110
+
+      log.mrent,
+      log.mscharge,
+      log.proplen,
+      log.value,
+      log.grant,
+      log.discount,
+      log.mortgageused,
+      log.mortgage,
+      log.mortgagelender,
+      log.mortgagelenderother, # 120
+
+      log.mortlen,
+      log.extrabor,
+      log.deposit,
+      log.mscharge,
+      log.value,
+      log.mortgageused,
+      log.mortgage,
+      log.mortlen,
+      log.extrabor,
+      log.deposit, # 130
+      log.mscharge,
+    ]
+  end
+
 private
 
   def default_2023_field_numbers
@@ -224,5 +389,9 @@ private
     else
       log.hhregres
     end
+  end
+
+  def default_2024_field_numbers
+    (1..131).to_a
   end
 end

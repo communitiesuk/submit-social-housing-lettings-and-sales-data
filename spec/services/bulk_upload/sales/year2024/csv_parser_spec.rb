@@ -26,7 +26,7 @@ RSpec.describe BulkUpload::Sales::Year2024::CsvParser do
     end
 
     it "parses csv correctly" do
-      expect(service.row_parsers[0].field_19).to eql(log.uprn)
+      expect(service.row_parsers[0].field_22).to eql(log.uprn)
     end
   end
 
@@ -51,7 +51,7 @@ RSpec.describe BulkUpload::Sales::Year2024::CsvParser do
     end
 
     it "parses csv correctly" do
-      expect(service.row_parsers[0].field_19).to eql(log.uprn)
+      expect(service.row_parsers[0].field_22).to eql(log.uprn)
     end
   end
 
@@ -71,7 +71,7 @@ RSpec.describe BulkUpload::Sales::Year2024::CsvParser do
     end
 
     it "parses csv correctly" do
-      expect(service.row_parsers[0].field_19).to eql(log.uprn)
+      expect(service.row_parsers[0].field_22).to eql(log.uprn)
     end
   end
 
@@ -88,7 +88,7 @@ RSpec.describe BulkUpload::Sales::Year2024::CsvParser do
     end
 
     it "parses csv correctly" do
-      expect(service.row_parsers[0].field_19).to eql(log.uprn)
+      expect(service.row_parsers[0].field_22).to eql(log.uprn)
     end
   end
 
@@ -105,7 +105,7 @@ RSpec.describe BulkUpload::Sales::Year2024::CsvParser do
     end
 
     it "parses csv correctly" do
-      expect(service.row_parsers[0].field_19).to eql(log.uprn)
+      expect(service.row_parsers[0].field_22).to eql(log.uprn)
     end
   end
 
@@ -124,24 +124,8 @@ RSpec.describe BulkUpload::Sales::Year2024::CsvParser do
       end
 
       it "returns correct column" do
-        expect(service.column_for_field("field_1")).to eql("CO")
-        expect(service.column_for_field("field_99")).to eql("EK")
-      end
-    end
-
-    context "when no headers" do
-      let(:file) { Tempfile.new }
-      let(:path) { file.path }
-      let(:log) { build(:sales_log, :completed, :with_uprn) }
-
-      before do
-        file.write(BulkUpload::SalesLogToCsv.new(log:, col_offset: 0).to_2024_csv_row)
-        file.rewind
-      end
-
-      it "returns correct column" do
-        expect(service.column_for_field("field_1")).to eql("CN")
-        expect(service.column_for_field("field_99")).to eql("EJ")
+        expect(service.column_for_field("field_1")).to eql("B")
+        expect(service.column_for_field("field_99")).to eql("CV")
       end
     end
   end
@@ -160,7 +144,7 @@ RSpec.describe BulkUpload::Sales::Year2024::CsvParser do
     end
 
     it "parses csv correctly" do
-      expect(service.row_parsers[0].field_19).to eql(log.uprn)
+      expect(service.row_parsers[0].field_22).to eql(log.uprn)
     end
   end
 end

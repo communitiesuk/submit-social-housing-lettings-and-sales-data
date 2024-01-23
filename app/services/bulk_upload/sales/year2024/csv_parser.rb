@@ -3,7 +3,7 @@ require "csv"
 class BulkUpload::Sales::Year2024::CsvParser
   include CollectionTimeHelper
 
-  MAX_COLUMNS = 142
+  MAX_COLUMNS = 132
   FORM_YEAR = 2024
 
   attr_reader :path
@@ -58,7 +58,7 @@ class BulkUpload::Sales::Year2024::CsvParser
 private
 
   def default_field_numbers
-    [6, 3, 4, 5, nil, 28, 30, 38, 47, 51, 55, 59, 31, 39, 48, 52, 56, 60, 37, 46, 50, 54, 58, 35, 43, 49, 53, 57, 61, 32, 33, 78, 80, 79, 81, 83, 84, nil, 62, 66, 64, 65, 63, 67, 69, 70, 68, 76, 77, 16, 17, 18, 26, 24, 25, 27, 8, 91, 95, 96, 97, 92, 93, 94, 98, 100, 101, 103, 104, 106, 110, 111, 112, 113, 114, 9, 116, 117, 118, 120, 124, 125, 126, 10, 11, nil, 127, 129, 133, 134, 135, 1, 2, nil, 73, nil, 75, 107, 108, 121, 122, 130, 131, 82, 109, 123, 132, 115, 15, 86, 87, 29, 7, 12, 13, 14, 36, 44, 45, 88, 89, 102, 105, 119, 128, 19, 20, 21, 22, 23, 34, 40, 41, 42, 71, 72, 74, 85, 90, 99].map do |number|
+    (1..131).map do |number|
       if number.to_s.match?(/^[0-9]+$/)
         "field_#{number}"
       else
