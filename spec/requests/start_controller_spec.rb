@@ -39,8 +39,8 @@ RSpec.describe StartController, type: :request do
 
         it "displays correct resources for 2022/23 and 2023/24 collection years" do
           get "/", headers: headers, params: {}
-          expect(page).to have_content("Lettings 2023/24")
-          expect(page).to have_content("Sales 2023/24")
+          expect(page).to have_content("Lettings 23/24")
+          expect(page).to have_content("Sales 23/24")
         end
       end
 
@@ -51,8 +51,8 @@ RSpec.describe StartController, type: :request do
 
         it "displays correct resources for 2022/23 and 2023/24 collection years" do
           get "/", headers: headers, params: {}
-          expect(page).not_to have_content("Lettings 2023/24")
-          expect(page).not_to have_content("Sales 2023/24")
+          expect(page).not_to have_content("Lettings 23/24")
+          expect(page).not_to have_content("Sales 23/24")
         end
       end
 
