@@ -1,0 +1,9 @@
+.app-tab__small-headers {
+  @include govuk-font(16);
+}
+
+@media (min-width: 35.375em) {
+  .app-tab__list-view {
+    min-width: 35.375em;
+  }
+}
