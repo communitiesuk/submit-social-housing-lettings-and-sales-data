@@ -3,7 +3,7 @@ require "csv"
 class BulkUpload::Sales::Year2024::CsvParser
   include CollectionTimeHelper
 
-  MAX_COLUMNS = 132
+  MAX_COLUMNS = 142
   FORM_YEAR = 2024
 
   attr_reader :path
