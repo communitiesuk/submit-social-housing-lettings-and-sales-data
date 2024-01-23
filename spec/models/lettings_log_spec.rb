@@ -3411,5 +3411,37 @@ RSpec.describe LettingsLog do
       end
     end
   end
+
+  describe "#applicable_income_range" do
+    context "when ecstat for a non-lead tenant is not set" do
+      let(:lettings_log) { build(:lettings_log, hhmemb: 2, ecstat1: 1) }
+
+      it "uses the prefers-not-to-say values for that tenant to calculate the range" do
+        range = lettings_log.applicable_income_range
+        expected_range = OpenStruct.new(
+          soft_min: 143 + 47,
+          soft_max: 730 + 730,
+          hard_min: 90 + 10,
+          hard_max: 1230 + 2000,
+        )
+        expect(range).to eq(expected_range)
+      end
+    end
+
+    context "when ecstat for a non-lead tenant is set" do
+      let(:lettings_log) { build(:lettings_log, hhmemb: 2, ecstat1: 1, ecstat2: 2) }
+
+      it "uses the relevant income range values for that tenant to calculate the range" do
+        range = lettings_log.applicable_income_range
+        expected_range = OpenStruct.new(
+          soft_min: 143 + 67,
+          soft_max: 730 + 620,
+          hard_min: 90 + 50,
+          hard_max: 1230 + 950,
+        )
+        expect(range).to eq(expected_range)
+      end
+    end
+  end
 end
 # rubocop:enable RSpec/MessageChain

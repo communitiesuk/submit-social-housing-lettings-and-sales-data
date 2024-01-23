@@ -244,6 +244,7 @@ RSpec.describe "Lettings Log Check Answers Page" do
           created_by: user,
           needstype: 1,
           tenancycode: nil,
+          hhmemb: nil,
           age1: nil,
           layear: 2,
           waityear: 1,

@@ -24,29 +24,57 @@ module Validations::FinancialValidations
   end
 
   def validate_net_income(record)
-    if record.ecstat1 && record.weekly_net_income
+    if record.ecstat1 && record.hhmemb && record.weekly_net_income
       if record.weekly_net_income > record.applicable_income_range.hard_max
-        hard_max = format_as_currency(record.applicable_income_range.hard_max)
         frequency = record.form.get_question("incfreq", record).label_from_value(record.incfreq).downcase
+        hard_max = format_as_currency(record.applicable_income_range.hard_max)
         record.errors.add(
           :earnings,
           :over_hard_max,
           message: I18n.t("validations.financial.earnings.over_hard_max", hard_max:),
         )
         record.errors.add(
-          :ecstat1,
+          :hhmemb,
           :over_hard_max,
-          message: I18n.t("validations.financial.ecstat.over_hard_max", earnings: format_as_currency(record.earnings), frequency:),
+          message: I18n.t("validations.financial.hhmemb.earnings.over_hard_max", earnings: format_as_currency(record.earnings), frequency:),
         )
+        (1..record.hhmemb).each do |n|
+          record.errors.add(
+            "ecstat#{n}",
+            :over_hard_max,
+            message: I18n.t("validations.financial.ecstat.over_hard_max", earnings: format_as_currency(record.earnings), frequency:),
+          )
+          next unless record["ecstat#{n}"] == 9
+
+          record.errors.add(
+            "age#{n}",
+            :over_hard_max,
+            message: I18n.t("validations.financial.age.earnings_over_hard_max", earnings: format_as_currency(record.earnings), frequency:),
+          )
+        end
       end
 
       if record.weekly_net_income < record.applicable_income_range.hard_min
         hard_min = format_as_currency(record.applicable_income_range.hard_min)
+        frequency = record.form.get_question("incfreq", record).label_from_value(record.incfreq).downcase
         record.errors.add(
           :earnings,
           :under_hard_min,
           message: I18n.t("validations.financial.earnings.under_hard_min", hard_min:),
         )
+        record.errors.add(
+          :hhmemb,
+          :under_hard_min,
+          message: I18n.t("validations.financial.hhmemb.earnings.under_hard_min", earnings: format_as_currency(record.earnings), frequency:),
+        )
+        (1..record.hhmemb).each do |n|
+          record.errors.add(
+            "ecstat#{n}",
+            :under_hard_min,
+            message: I18n.t("validations.financial.ecstat.under_hard_min", earnings: format_as_currency(record.earnings), frequency:),
+          )
+          # N.B. It is not possible for a change to an age field to increase the hard min
+        end
       end
     end
 

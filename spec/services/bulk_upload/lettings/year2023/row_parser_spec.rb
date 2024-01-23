@@ -207,7 +207,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
             field_119: "2",
 
             field_120: "1",
-            field_122: "2000",
+            field_122: "2300",
             field_121: "2",
             field_123: "1",
             field_124: "1",
