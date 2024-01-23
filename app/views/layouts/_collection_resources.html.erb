@@ -6,7 +6,7 @@
 <% end %>
 <p class="govuk-body">Use the 2023 to 2024 forms for lettings that start and sales that complete between 1 April 2023 and 31 March 2024.</p>
 <div class="app-tab__list-view">
-<%= govuk_tabs(title: "Collection resources", classes: ["app-tab__small-headers"]) do |c| %>
+<%= govuk_tabs(title: "Collection resources", classes: %w[app-tab__small-headers]) do |c| %>
   <% if FormHandler.instance.lettings_form_for_start_year(2024) && FormHandler.instance.lettings_form_for_start_year(2024).edit_end_date > Time.zone.today %>
     <% c.with_tab(label: "Lettings 24/25") do %>
       <%= render DocumentListComponent.new(
@@ -27,7 +27,7 @@
             metadata: file_type_size_and_pages("bulk-upload-lettings-specification-2024-25.xlsx"),
           },
         ],
-        label: "Lettings 24/25"
+        label: "Lettings 24/25",
       ) %>
     <% end %>
     <% c.with_tab(label: "Sales 24/25") do %>
@@ -49,7 +49,7 @@
             metadata: file_type_size_and_pages("bulk-upload-sales-specification-2024-25.xlsx"),
           },
         ],
-        label: "Sales 24/25"
+        label: "Sales 24/25",
       ) %>
     <% end %>
   <% end %>
@@ -78,7 +78,7 @@
             metadata: file_type_size_and_pages("bulk-upload-lettings-specification-2023-24.xlsx"),
           },
         ],
-        label: "Lettings 23/24"
+        label: "Lettings 23/24",
       ) %>
     <% end %>
     <% c.with_tab(label: "Sales 23/24") do %>
@@ -105,7 +105,7 @@
             metadata: file_type_size_and_pages("bulk-upload-sales-specification-2023-24.xlsx"),
           },
         ],
-        label: "Sales 23/24"
+        label: "Sales 23/24",
       ) %>
     <% end %>
   <% end %>
