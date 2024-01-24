@@ -7,7 +7,6 @@ class Form::Lettings::Questions::FirstTimePropertyLetAsSocialHousing < ::Form::Q
     @type = "radio"
     @check_answers_card_number = 0
     @hint_text = ""
-    @answer_options = answer_options
     @question_number = 14
   end
 
