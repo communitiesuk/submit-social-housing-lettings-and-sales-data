@@ -175,7 +175,7 @@ private
       if dynamic_duplicates.count.positive?
         saved_duplicates = @log.duplicates
         unless saved_duplicates == dynamic_duplicates
-          @log.update!(duplicate_set_id: new_duplicate_set_id) if @log.duplicate_set_id.blank?
+          @log.update!(duplicate_set_id: new_duplicate_set_id(@log)) if @log.duplicate_set_id.blank?
           dynamic_duplicates.each do |duplicate|
             duplicate.update!(duplicate_set_id: @log.duplicate_set_id) if duplicate.duplicate_set_id != @log.duplicate_set_id
           end
@@ -293,10 +293,11 @@ private
     SalesLog.find_by(duplicate_set_id:)&.update!(duplicate_set_id: nil) if log.sales? && SalesLog.where(duplicate_set_id:).count == 1
   end
 
-  def new_duplicate_set_id
-    loop do
-      duplicate_set_id = SecureRandom.random_number(1_000_000)
-      return duplicate_set_id unless LettingsLog.exists?(duplicate_set_id:)
+  def new_duplicate_set_id(log)
+    if log.lettings?
+      LettingsLog.maximum(:duplicate_set_id).to_i + 1
+    else
+      SalesLog.maximum(:duplicate_set_id).to_i + 1
     end
   end
 end
