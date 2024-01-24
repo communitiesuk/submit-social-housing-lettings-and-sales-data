@@ -37,10 +37,16 @@ RSpec.describe StartController, type: :request do
           allow(Time).to receive(:now).and_return(Time.zone.local(2024, 1, 1))
         end
 
-        it "displays correct resources for 2022/23 and 2023/24 collection years" do
+        it "displays correct resources for 2023/24 and 2024/25 collection years" do
           get "/", headers: headers, params: {}
-          expect(page).to have_content("Lettings 2023/24")
-          expect(page).to have_content("Sales 2023/24")
+          expect(page).to have_content("Lettings 24/25")
+          expect(page).to have_content("Lettings 23/24")
+          expect(page).to have_content("Lettings 2024 to 2025")
+          expect(page).to have_content("Lettings 2023 to 2024")
+          expect(page).to have_content("Sales 24/25")
+          expect(page).to have_content("Sales 23/24")
+          expect(page).to have_content("Sales 2024 to 2025")
+          expect(page).to have_content("Sales 2023 to 2024")
         end
       end
 
@@ -49,10 +55,16 @@ RSpec.describe StartController, type: :request do
           allow(Time).to receive(:now).and_return(Time.zone.local(2025, 1, 1))
         end
 
-        it "displays correct resources for 2022/23 and 2023/24 collection years" do
+        it "displays correct resources for 2023/24 and 2024/25 collection years" do
           get "/", headers: headers, params: {}
-          expect(page).not_to have_content("Lettings 2023/24")
-          expect(page).not_to have_content("Sales 2023/24")
+          expect(page).to have_content("Lettings 24/25")
+          expect(page).not_to have_content("Lettings 23/24")
+          expect(page).to have_content("Lettings 2024 to 2025")
+          expect(page).not_to have_content("Lettings 2023 to 2024")
+          expect(page).to have_content("Sales 24/25")
+          expect(page).not_to have_content("Sales 23/24")
+          expect(page).to have_content("Sales 2024 to 2025")
+          expect(page).not_to have_content("Sales 2023 to 2024")
         end
       end
 

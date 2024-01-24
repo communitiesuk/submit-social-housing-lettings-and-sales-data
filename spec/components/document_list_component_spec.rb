@@ -8,8 +8,9 @@ RSpec.describe DocumentListComponent, type: :component do
 
   context "when rendering tabs" do
     it "all of the nav tabs specified in the items hash are passed to it" do
-      result = render_inline(described_class.new(items:))
+      result = render_inline(described_class.new(items:, label: "Label"))
 
+      expect(result.text).to include("Label")
       expect(result.text).to include("PDF Form")
       expect(result.text).to include("An important form")
       expect(result.text).to include("4 pages")

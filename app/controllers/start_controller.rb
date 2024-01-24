@@ -5,6 +5,14 @@ class StartController < ApplicationController
     end
   end
 
+  def download_24_25_sales_form
+    send_file(
+      Rails.root.join("public/files/2024_25_sales_paper_form.pdf"),
+      filename: "2024-25 Sales paper form.pdf",
+      type: "application/pdf",
+    )
+  end
+
   def download_23_24_sales_form
     send_file(
       Rails.root.join("public/files/2023_24_sales_paper_form.pdf"),
@@ -17,6 +25,14 @@ class StartController < ApplicationController
     send_file(
       Rails.root.join("public/files/2022_23_sales_paper_form.pdf"),
       filename: "2022-23 Sales paper form.pdf",
+      type: "application/pdf",
+    )
+  end
+
+  def download_24_25_lettings_form
+    send_file(
+      Rails.root.join("public/files/2024_25_lettings_paper_form.pdf"),
+      filename: "2024-25 Lettings paper form.pdf",
       type: "application/pdf",
     )
   end
@@ -34,6 +50,38 @@ class StartController < ApplicationController
       Rails.root.join("public/files/2022_23_lettings_paper_form.pdf"),
       filename: "2022-23 Lettings paper form.pdf",
       type: "application/pdf",
+    )
+  end
+
+  def download_24_25_lettings_bulk_upload_template
+    send_file(
+      Rails.root.join("public/files/bulk-upload-lettings-template-2024-25.xlsx"),
+      filename: "2024-25-lettings-bulk-upload-template.xlsx",
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    )
+  end
+
+  def download_24_25_lettings_bulk_upload_specification
+    send_file(
+      Rails.root.join("public/files/bulk-upload-lettings-specification-2024-25.xlsx"),
+      filename: "2024-25-lettings-bulk-upload-specification.xlsx",
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    )
+  end
+
+  def download_24_25_sales_bulk_upload_template
+    send_file(
+      Rails.root.join("public/files/bulk-upload-sales-template-2024-25.xlsx"),
+      filename: "2024-25-sales-bulk-upload-template.xlsx",
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    )
+  end
+
+  def download_24_25_sales_bulk_upload_specification
+    send_file(
+      Rails.root.join("public/files/bulk-upload-sales-specification-2024-25.xlsx"),
+      filename: "2024-25-sales-bulk-upload-specification.xlsx",
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     )
   end
 
