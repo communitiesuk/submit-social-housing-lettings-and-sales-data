@@ -42,6 +42,7 @@ RSpec.describe BulkUploadLettingsResumeController, type: :request do
 
       expect(response.body).to include("Bulk upload for lettings")
       expect(response.body).to include("2022/23")
+      expect(response.body).to include("View the error report")
       expect(response.body).to include("How would you like to fix the errors?")
       expect(response.body).to include(bulk_upload.filename)
       expect(response.body).not_to include("Cancel")
@@ -123,7 +124,10 @@ RSpec.describe BulkUploadLettingsResumeController, type: :request do
 
       expect(response).to be_successful
 
-      expect(response.body).to include("You have chosen to upload all logs from this bulk upload.")
+      expect(response.body).to include("Are you sure you want to upload all logs from this bulk upload?")
+      expect(response.body).to include("View the error report")
+      expect(response.body).to include("2 answers will be deleted because they are invalid.")
+      expect(response.body).to include("See which answers will be deleted")
     end
 
     it "sets no cache headers" do
@@ -166,6 +170,46 @@ RSpec.describe BulkUploadLettingsResumeController, type: :request do
       expect(bulk_upload.reload.choice).to eql("create-fix-inline")
 
       expect(response).to redirect_to("/lettings-logs/bulk-upload-results/#{bulk_upload.id}/resume")
+    end
+  end
+
+  describe "GET /lettings-logs/bulk-upload-resume/:ID/deletion-report" do
+    it "renders the page correctly" do
+      get "/lettings-logs/bulk-upload-resume/#{bulk_upload.id}/deletion-report"
+
+      expect(response).to be_successful
+
+      expect(response.body).to include("Bulk upload for lettings")
+      expect(response.body).to include("2022/23")
+      expect(response.body).to include("These 2 answers will be deleted if you upload the log")
+      expect(response.body).to include(bulk_upload.filename)
+      expect(response.body).to include("Clear this data and upload the logs")
+    end
+
+    it "sets no cache headers" do
+      get "/lettings-logs/bulk-upload-resume/#{bulk_upload.id}/deletion-report"
+
+      expect(response.headers["Cache-Control"]).to eql("no-store")
+    end
+
+    context "and previously told us to fix inline" do
+      let(:bulk_upload) { create(:bulk_upload, :lettings, user:, bulk_upload_errors:, choice: "create-fix-inline") }
+
+      it "redirects to chosen" do
+        get "/lettings-logs/bulk-upload-resume/#{bulk_upload.id}/deletion-report"
+
+        expect(response).to redirect_to("/lettings-logs/bulk-upload-resume/#{bulk_upload.id}/chosen")
+      end
+    end
+
+    context "and previously told us to bulk confirm soft validations" do
+      let(:bulk_upload) { create(:bulk_upload, :lettings, user:, bulk_upload_errors:, choice: "bulk-confirm-soft-validations") }
+
+      it "redirects to soft validations check chosen" do
+        get "/lettings-logs/bulk-upload-resume/#{bulk_upload.id}/deletion-report"
+
+        expect(response).to redirect_to("/lettings-logs/bulk-upload-soft-validations-check/#{bulk_upload.id}/chosen")
+      end
     end
   end
 end

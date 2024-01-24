@@ -18,6 +18,10 @@ class BulkUploadPolicy
     owner? || same_org? || user.support?
   end
 
+  def deletion_report?
+    owner? || same_org? || user.support?
+  end
+
 private
 
   def owner?

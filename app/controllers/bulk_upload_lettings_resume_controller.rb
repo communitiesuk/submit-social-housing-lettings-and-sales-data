@@ -31,6 +31,12 @@ class BulkUploadLettingsResumeController < ApplicationController
     end
   end
 
+  def deletion_report
+    @bulk_upload = BulkUpload.lettings.find(params[:id])
+
+    authorize @bulk_upload
+  end
+
 private
 
   def form
@@ -41,6 +47,8 @@ private
                 Forms::BulkUploadLettingsResume::Chosen.new(form_params.merge(bulk_upload: @bulk_upload))
               when "confirm"
                 Forms::BulkUploadLettingsResume::Confirm.new(form_params.merge(bulk_upload: @bulk_upload))
+              when "deletion-report"
+                Forms::BulkUploadLettingsResume::DeletionReport.new(form_params.merge(bulk_upload: @bulk_upload))
               else
                 raise "invalid form"
               end

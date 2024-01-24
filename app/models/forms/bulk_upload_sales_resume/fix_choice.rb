@@ -27,13 +27,17 @@ module Forms
         when "create-fix-inline"
           page_bulk_upload_sales_resume_path(bulk_upload, page: "confirm")
         when "upload-again"
-          if BulkUploadErrorSummaryTableComponent.new(bulk_upload:).errors?
-            summary_bulk_upload_sales_result_path(bulk_upload)
-          else
-            bulk_upload_sales_result_path(bulk_upload)
-          end
+          error_report_path
         else
           raise "invalid choice"
+        end
+      end
+
+      def error_report_path
+        if BulkUploadErrorSummaryTableComponent.new(bulk_upload:).errors?
+          summary_bulk_upload_sales_result_path(bulk_upload)
+        else
+          bulk_upload_sales_result_path(bulk_upload)
         end
       end
 

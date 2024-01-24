@@ -5,14 +5,25 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <span class="govuk-caption-l">Bulk upload for lettings (<%= @bulk_upload.year_combo %>)</span>
-    <h1 class="govuk-heading-l">You have chosen to upload all logs from this bulk upload.</h1>
+    <h1 class="govuk-heading-l">Are you sure you want to upload all logs from this bulk upload?</h1>
 
-    <p class="govuk-body"><%= logs_and_errors_warning(@bulk_upload) %></p>
+    <p class="govuk-body">
+      <%= logs_and_errors_warning(@bulk_upload) %>
+      <%= govuk_link_to "View the error report", @form.error_report_path %>
+    </p>
 
-    <%= form_with model: @form, scope: :form, url: page_bulk_upload_lettings_resume_path(@bulk_upload, page: "confirm"), method: :patch do |f| %>
-      <%= f.govuk_submit "Confirm" %>
-
-      <%= govuk_button_link_to "Cancel", @form.back_path, secondary: true %>
+    <% if unique_answers_to_be_cleared(@bulk_upload).present? %>
+      <%= govuk_warning_text do %>
+        <%= deleted_errors_warning_text(@bulk_upload) %>
+        <%= govuk_link_to "See which answers will be deleted", deletion_report_bulk_upload_lettings_resume_path %>
+      <% end %>
     <% end %>
+
+    <div class="govuk-button-group">
+      <%= form_with model: @form, scope: :form, url: page_bulk_upload_lettings_resume_path(@bulk_upload, page: "confirm"), method: :patch do |f| %>
+        <%= f.govuk_submit "Confirm" %>
+        <%= govuk_button_link_to "Cancel", @form.back_path, secondary: true %>
+      <% end %>
+    </div>
   </div>
 </div>

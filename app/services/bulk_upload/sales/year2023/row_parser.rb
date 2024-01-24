@@ -575,7 +575,7 @@ private
     organisations_fields = %i[field_67 field_68 field_69 field_70]
     if organisations_fields.all? { |field| attributes[field.to_s].blank? }
       organisations_fields.each do |field|
-        errors.add(field, "At least one option must be selected of these four")
+        errors.add(field, "At least one option must be selected of these four", category: :not_answered)
       end
     end
   end
@@ -608,18 +608,18 @@ private
 
   def validate_uprn_exists_if_any_key_address_fields_are_blank
     if field_19.blank? && (field_20.blank? || field_22.blank?)
-      errors.add(:field_19, I18n.t("validations.not_answered", question: "UPRN"))
+      errors.add(:field_19, I18n.t("validations.not_answered", question: "UPRN"), category: :not_answered)
     end
   end
 
   def validate_address_fields
     if field_19.blank? || log.errors.attribute_names.include?(:uprn)
       if field_20.blank?
-        errors.add(:field_20, I18n.t("validations.not_answered", question: "address line 1"))
+        errors.add(:field_20, I18n.t("validations.not_answered", question: "address line 1"), category: :not_answered)
       end
 
       if field_22.blank?
-        errors.add(:field_22, I18n.t("validations.not_answered", question: "town or city"))
+        errors.add(:field_22, I18n.t("validations.not_answered", question: "town or city"), category: :not_answered)
       end
     end
   end
@@ -1245,7 +1245,7 @@ private
       else
         fields.each do |field|
           unless errors.any? { |e| fields.include?(e.attribute) }
-            errors.add(field, I18n.t("validations.not_answered", question: question.error_display_label&.downcase))
+            errors.add(field, I18n.t("validations.not_answered", question: question.error_display_label&.downcase), category: :not_answered)
           end
         end
       end

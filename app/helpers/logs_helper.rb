@@ -49,9 +49,10 @@ module LogsHelper
   end
 
   def logs_and_errors_warning(bulk_upload)
-    this_or_these_errors = bulk_upload.bulk_upload_errors.count == 1 ? "This error" : "These errors"
+    is_or_are = bulk_upload.total_logs_count == 1 ? "is" : "are"
+    needs_or_need = bulk_upload.bulk_upload_errors.count == 1 ? "needs" : "need"
 
-    "You will upload #{pluralize(bulk_upload.total_logs_count, 'log')}. There are errors in #{pluralize(bulk_upload.logs_with_errors_count, 'log')}, and #{pluralize(bulk_upload.bulk_upload_errors.count, 'error')} in total. #{this_or_these_errors} will need to be fixed on the CORE site."
+    "There #{is_or_are} #{pluralize(bulk_upload.total_logs_count, 'log')} in this bulk upload with #{pluralize(bulk_upload.bulk_upload_errors.count, 'error')} that still #{needs_or_need} to be fixed after upload."
   end
 
   def logs_and_soft_validations_warning(bulk_upload)
@@ -62,5 +63,28 @@ module LogsHelper
 
   def bulk_upload_error_summary(bulk_upload)
     "You have tried to upload #{bulk_upload.total_logs_count ? pluralize(bulk_upload.total_logs_count, 'log') : 'logs'}. There are errors in #{pluralize(bulk_upload.logs_with_errors_count, 'log')}, and #{pluralize(bulk_upload.bulk_upload_errors.count, 'error')} in total."
+  end
+
+  def deleted_errors_warning_text(bulk_upload)
+    unique_answers_to_be_cleared_count = unique_answers_to_be_cleared(bulk_upload).count
+    this_or_these = unique_answers_to_be_cleared_count == 1 ? "this" : "these"
+    it_is_or_they_are = unique_answers_to_be_cleared_count == 1 ? "it is" : "they are"
+
+    "#{pluralize(unique_answers_to_be_cleared_count, 'answer')} will be deleted because #{it_is_or_they_are} invalid. You will have to answer #{this_or_these} #{'question'.pluralize(unique_answers_to_be_cleared_count)} again on the site."
+  end
+
+  def all_answers_to_be_cleared(bulk_upload_errors)
+    bulk_upload_errors.reject { |e| %w[not_answered soft_validation].include?(e.category) }
+  end
+
+  def unique_answers_to_be_cleared(bulk_upload)
+    all_answers_to_be_cleared(bulk_upload.bulk_upload_errors).uniq { |error| [error.field, error.row] }
+  end
+
+  def answers_to_be_deleted_title_text(bulk_upload)
+    unique_answers_to_be_cleared_count = unique_answers_to_be_cleared(bulk_upload).count
+    this_or_these = unique_answers_to_be_cleared_count == 1 ? "This" : "These"
+
+    "#{this_or_these} #{pluralize(unique_answers_to_be_cleared(bulk_upload).count, 'answer')} will be deleted if you upload the #{'log'.pluralize(bulk_upload.logs.count)}"
   end
 end

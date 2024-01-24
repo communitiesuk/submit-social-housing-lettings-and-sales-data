@@ -19,6 +19,14 @@ module Forms
         resume_bulk_upload_sales_result_path(bulk_upload)
       end
 
+      def error_report_path
+        if BulkUploadErrorSummaryTableComponent.new(bulk_upload:).errors?
+          summary_bulk_upload_sales_result_path(bulk_upload)
+        else
+          bulk_upload_sales_result_path(bulk_upload)
+        end
+      end
+
       def save!
         ApplicationRecord.transaction do
           processor = BulkUpload::Processor.new(bulk_upload:)

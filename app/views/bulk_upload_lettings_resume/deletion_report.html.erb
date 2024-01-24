@@ -1,0 +1,31 @@
+<% content_for :before_content do %>
+  <%= govuk_back_link(href: :back) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <span class="govuk-caption-l">Bulk upload for lettings (<%= @bulk_upload.year_combo %>)</span>
+    <h1 class="govuk-heading-l"><%= answers_to_be_deleted_title_text(@bulk_upload) %></h1>
+
+    <p>The following cells contain data this is incorrect.</p>
+    <p>If you upload the logs, these answers will be deleted. You will have to re-enter the data on the site and resolve these errors.</p>
+    <p>If you do not want these answers to be deleted, correct the data in the CSV and upload the file again.</p>
+
+    <h2 class="govuk-heading-m">File: <%= @bulk_upload.filename %></h2>
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <% @bulk_upload.bulk_upload_errors.order_by_row.order_by_cell.group_by(&:row).each do |_row, errors_for_row| %>
+      <%= render BulkUploadErrorRowComponent.new(bulk_upload_errors: all_answers_to_be_cleared(errors_for_row)) %>
+    <% end %>
+  </div>
+</div>
+
+<div class="govuk-button-group">
+  <%= form_with model: @form, scope: :form, url: page_bulk_upload_lettings_resume_path(@bulk_upload, "confirm"), method: :patch do |f| %>
+    <%= f.govuk_submit "Clear this data and upload the logs" %>
+    <%= govuk_button_link_to "I have fixed these errors and I want to reupload the file", start_bulk_upload_lettings_logs_path, secondary: true %>
+  <% end %>
+</div>

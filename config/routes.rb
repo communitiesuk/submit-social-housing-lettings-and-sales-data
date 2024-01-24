@@ -205,9 +205,6 @@ Rails.application.routes.draw do
     get "delete-duplicates", to: "duplicate_logs#delete_duplicates"
 
     collection do
-      post "bulk-upload", to: "bulk_upload#bulk_upload"
-      get "bulk-upload", to: "bulk_upload#show"
-
       get "csv-download", to: "lettings_logs#download_csv"
       post "email-csv", to: "lettings_logs#email_csv"
       get "csv-confirmation", to: "lettings_logs#csv_confirmation"
@@ -236,6 +233,7 @@ Rails.application.routes.draw do
 
           get "*page", to: "bulk_upload_lettings_resume#show", as: "page"
           patch "*page", to: "bulk_upload_lettings_resume#update"
+          get "deletion-report"
         end
       end
 
@@ -297,6 +295,7 @@ Rails.application.routes.draw do
       resources :bulk_upload_sales_resume, path: "bulk-upload-resume", only: %i[show update] do
         member do
           get :start
+          get "deletion-report"
 
           get "*page", to: "bulk_upload_sales_resume#show", as: "page"
           patch "*page", to: "bulk_upload_sales_resume#update"
