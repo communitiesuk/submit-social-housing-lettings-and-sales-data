@@ -829,6 +829,10 @@ private
       errors.add(:field_46, error_message) # ecstat1
       errors.add(:field_124, error_message) if log.chcharge.present? # chcharge
       errors.add(:field_122, error_message) unless general_needs? # household_charge
+      errors.add(:field_125, error_message) # brent
+      errors.add(:field_126, error_message) # scharge
+      errors.add(:field_127, error_message) # pscharge
+      errors.add(:field_128, error_message) # chcharge
     end
   end
 

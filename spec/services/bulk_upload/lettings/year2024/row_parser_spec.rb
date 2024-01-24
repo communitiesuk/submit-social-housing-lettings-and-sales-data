@@ -251,7 +251,17 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
           end
 
           context "when a general needs log already exists in the db" do
-            let(:attributes) { { bulk_upload:, field_4: "1" } }
+            let(:attributes) do
+              valid_attributes.merge({ field_4: "1",
+                                       field_11: "0",
+                                       field_1: owning_org.old_visible_id,
+                                       field_123: 1,
+                                       field_125: 250,
+                                       field_126: 50,
+                                       field_127: 50,
+                                       field_128: 50,
+                                       field_13: "tenant_code" })
+            end
 
             before do
               parser.log.save!
@@ -279,11 +289,66 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
                 :field_42, # age1
                 :field_43, # sex1
                 :field_46, # ecstat1
+                :field_125, # brent
+                :field_126, # scharge
+                :field_127, # pscharge
+                :field_128, # supcharg
               ].each do |field|
                 expect(parser.errors[field]).to include(error_message)
               end
 
               expect(parser.errors[:field_6]).not_to include(error_message)
+            end
+          end
+
+          context "when a general needs log already exists in the db but has a different tcharge" do
+            let(:attributes) do
+              valid_attributes.merge({ field_4: "1",
+                                       field_11: "0",
+                                       field_1: owning_org.old_visible_id,
+                                       field_123: 1,
+                                       field_125: 250,
+                                       field_126: 50,
+                                       field_127: 50,
+                                       field_128: 50,
+                                       field_13: "tenant_code" })
+            end
+
+            before do
+              parser.log.save!
+              saved_log = LettingsLog.find_by(tenancycode: "tenant_code")
+              saved_log.update!(brent: saved_log.brent + 5)
+              parser.instance_variable_set(:@valid, nil)
+            end
+
+            it "is not a valid row" do
+              expect(parser).not_to be_valid
+            end
+
+            it "adds an error to all (and only) the fields used to determine duplicates" do
+              parser.valid?
+
+              error_message = "This is a duplicate log"
+
+              [
+                :field_1, # owning_organisation
+                :field_8, # startdate
+                :field_9, # startdate
+                :field_10, # startdate
+                :field_13, # tenancycode
+                :field_21, # postcode_full
+                :field_22, # postcode_full
+                :field_23, # postcode_full
+                :field_42, # age1
+                :field_43, # sex1
+                :field_46, # ecstat1
+                :field_125, # brent
+                :field_126, # scharge
+                :field_127, # pscharge
+                :field_128, # supcharg
+              ].each do |field|
+                expect(parser.errors[field]).not_to include(error_message)
+              end
             end
           end
 
@@ -314,6 +379,10 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
                 :field_42, # age1
                 :field_43, # sex1
                 :field_46, # ecstat1
+                :field_125, # brent
+                :field_126, # scharge
+                :field_127, # pscharge
+                :field_128, # supcharg
               ].each do |field|
                 expect(parser.errors[field]).to include(error_message)
               end
@@ -352,6 +421,10 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
                   :field_42, # age1
                   :field_43, # sex1
                   :field_46, # ecstat1
+                  :field_125, # brent
+                  :field_126, # scharge
+                  :field_127, # pscharge
+                  :field_128, # supcharg
                 ].each do |field|
                   expect(parser.errors[field]).to include(error_message)
                 end
@@ -601,6 +674,10 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
                   :field_42, # age1
                   :field_43, # sex1
                   :field_46, # ecstat1
+                  :field_125, # brent
+                  :field_126, # scharge
+                  :field_127, # pscharge
+                  :field_128, # supcharg
                 ].each do |field|
                   expect(parser_too.errors[field]).not_to include(error_message)
                 end
