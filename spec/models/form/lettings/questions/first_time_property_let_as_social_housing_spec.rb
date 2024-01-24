@@ -2,6 +2,7 @@ require "rails_helper"
 
 RSpec.describe Form::Lettings::Questions::FirstTimePropertyLetAsSocialHousing, type: :model do
   subject(:question) { described_class.new(question_id, question_definition, page) }
+
   let(:question_id) { nil }
   let(:question_definition) { nil }
   let(:page) { instance_double(Form::Page) }
@@ -38,9 +39,9 @@ RSpec.describe Form::Lettings::Questions::FirstTimePropertyLetAsSocialHousing, t
 
     it "has the correct answer_options" do
       expect(question.answer_options).to eq({
-                                              "1" => { "value" => "Yes", "hint" => "This property was previously used for other purposes or is a new-build." },
-                                              "0" => { "value" => "No", "hint" => "This is a re-let of existing social housing stock." },
-                                            })
+        "1" => { "value" => "Yes", "hint" => "This property was previously used for other purposes or is a new-build." },
+        "0" => { "value" => "No", "hint" => "This is a re-let of existing social housing stock." },
+      })
     end
   end
 end
