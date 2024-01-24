@@ -91,7 +91,7 @@ RSpec.describe LogsHelper, type: :helper do
               cell: "test",
               col: "test",
               category: error.category,
-              )
+            )
           end
         end
 
@@ -125,7 +125,7 @@ RSpec.describe LogsHelper, type: :helper do
               cell: "test",
               col: "test",
               category: error.category,
-              )
+            )
           end
         end
 
