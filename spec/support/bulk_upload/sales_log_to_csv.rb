@@ -232,7 +232,7 @@ class BulkUpload::SalesLogToCsv
   def to_2024_row
     [
       overrides[:organisation_id] || log.owning_organisation&.old_visible_id,
-      log.managing_organisation,
+      overrides[:managing_organisation_id] || log.managing_organisation&.old_visible_id,
       log.created_by&.email,
       log.saledate&.day,
       log.saledate&.month,
