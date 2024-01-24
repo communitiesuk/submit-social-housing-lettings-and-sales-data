@@ -15,7 +15,7 @@
     <% if unique_answers_to_be_cleared(@bulk_upload).present? %>
       <%= govuk_warning_text do %>
         <%= deleted_errors_warning_text(@bulk_upload) %>
-        <%= govuk_link_to "See which answers will be deleted", deletion_report_bulk_upload_lettings_result_path %>
+        <%= govuk_link_to "See which answers will be deleted", deletion_report_bulk_upload_lettings_resume_path %>
       <% end %>
     <% end %>
 

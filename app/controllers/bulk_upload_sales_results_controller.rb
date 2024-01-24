@@ -27,12 +27,6 @@ class BulkUploadSalesResultsController < ApplicationController
     authorize @bulk_upload
   end
 
-  def deletion_report
-    @bulk_upload = BulkUpload.sales.find(params[:id])
-
-    authorize @bulk_upload
-  end
-
 private
 
   def reset_logs_filters

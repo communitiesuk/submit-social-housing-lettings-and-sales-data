@@ -216,7 +216,6 @@ Rails.application.routes.draw do
         member do
           get :resume
           get :summary
-          get "deletion-report"
         end
       end
 
@@ -226,6 +225,7 @@ Rails.application.routes.draw do
 
           get "*page", to: "bulk_upload_lettings_resume#show", as: "page"
           patch "*page", to: "bulk_upload_lettings_resume#update"
+          get "deletion-report"
         end
       end
 
@@ -281,13 +281,13 @@ Rails.application.routes.draw do
         member do
           get :resume
           get :summary
-          get "deletion-report"
         end
       end
 
       resources :bulk_upload_sales_resume, path: "bulk-upload-resume", only: %i[show update] do
         member do
           get :start
+          get "deletion-report"
 
           get "*page", to: "bulk_upload_sales_resume#show", as: "page"
           patch "*page", to: "bulk_upload_sales_resume#update"
