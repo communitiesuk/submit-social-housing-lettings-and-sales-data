@@ -47,7 +47,6 @@ RSpec.describe StartController, type: :request do
           expect(page).to have_content("Sales 23/24")
           expect(page).to have_content("Sales 2024 to 2025")
           expect(page).to have_content("Sales 2023 to 2024")
-
         end
       end
 
