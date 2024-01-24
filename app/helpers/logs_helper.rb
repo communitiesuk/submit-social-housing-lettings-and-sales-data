@@ -73,8 +73,12 @@ module LogsHelper
     "#{pluralize(unique_answers_to_be_cleared_count, 'answer')} will be deleted because #{it_is_or_they_are} invalid. You will have to answer #{this_or_these} #{'question'.pluralize(unique_answers_to_be_cleared_count)} again on the site."
   end
 
+  def all_answers_to_be_cleared(bulk_upload_errors)
+    bulk_upload_errors.reject { |e| %w[not_answered soft_validation].include?(e.category) }
+  end
+
   def unique_answers_to_be_cleared(bulk_upload)
-    bulk_upload.bulk_upload_errors.reject { |e| e.category == "not_answered" }.uniq(&:field)
+    all_answers_to_be_cleared(bulk_upload.bulk_upload_errors).uniq(&:field)
   end
 
   def answers_to_be_deleted_title_text(bulk_upload)
