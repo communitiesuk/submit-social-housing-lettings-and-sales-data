@@ -183,8 +183,8 @@ RSpec.describe BulkUpload::Lettings::Year2024::CsvParser do
       end
 
       it "returns correct column" do
-        expect(service.column_for_field("field_5")).to eql("B")
-        expect(service.column_for_field("field_22")).to eql("EL")
+        expect(service.column_for_field("field_5")).to eql("F")
+        expect(service.column_for_field("field_22")).to eql("W")
       end
     end
 
@@ -195,8 +195,8 @@ RSpec.describe BulkUpload::Lettings::Year2024::CsvParser do
       end
 
       it "returns correct column" do
-        expect(service.column_for_field("field_5")).to eql("A")
-        expect(service.column_for_field("field_22")).to eql("EK")
+        expect(service.column_for_field("field_5")).to eql("E")
+        expect(service.column_for_field("field_22")).to eql("V")
       end
     end
 
@@ -216,10 +216,10 @@ RSpec.describe BulkUpload::Lettings::Year2024::CsvParser do
       end
 
       it "returns correct column" do
-        expect(service.column_for_field("field_5")).to eql("N")
-        expect(service.column_for_field("field_22")).to eql("O")
-        expect(service.column_for_field("field_26")).to eql("B")
-        expect(service.column_for_field("field_25")).to eql("EF")
+        expect(service.column_for_field("field_5")).to eql("B")
+        expect(service.column_for_field("field_22")).to eql("AS")
+        expect(service.column_for_field("field_26")).to eql("DH")
+        expect(service.column_for_field("field_25")).to eql("I")
       end
     end
   end
