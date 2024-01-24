@@ -472,12 +472,18 @@ class BulkUpload::Lettings::Year2024::RowParser
       "field_42",  # age1
       "field_43",  # sex1
       "field_46",  # ecstat1
-    )
+    ).merge({ "tcharge" => [field_125, field_126, field_127, field_128].sum })
   end
 
   def add_duplicate_found_in_spreadsheet_errors
     spreadsheet_duplicate_hash.each_key do |field|
-      errors.add(field, :spreadsheet_dupe, category: :setup)
+      if field == "tcharge"
+        %w[field_125 field_126 field_127 field_128].each do |sub_field|
+          errors.add(sub_field, :spreadsheet_dupe, category: :setup)
+        end
+      else
+        errors.add(field, :spreadsheet_dupe, category: :setup)
+      end
     end
   end
 
