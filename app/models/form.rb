@@ -16,7 +16,7 @@ class Form
       submission_deadline: Time.zone.local(2025, 6, 6),
     },
     :default => {
-      submission_deadline: ->(start_year) { Time.zone.local(start_year + 1, 6, 30) },
+      submission_deadline: ->(start_year) { Time.zone.local(start_year + 1, 6, 1) },
       new_logs_end_date: ->(start_year) { Time.zone.local(start_year + 1, 12, 31) },
       edit_end_date: ->(start_year) { Time.zone.local(start_year + 1, 12, 31) },
     },
