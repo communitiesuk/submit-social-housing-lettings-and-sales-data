@@ -78,7 +78,7 @@ module LogsHelper
   end
 
   def unique_answers_to_be_cleared(bulk_upload)
-    all_answers_to_be_cleared(bulk_upload.bulk_upload_errors).uniq(&:field)
+    all_answers_to_be_cleared(bulk_upload.bulk_upload_errors).uniq { |error| [error.field, error.row] }
   end
 
   def answers_to_be_deleted_title_text(bulk_upload)
