@@ -460,7 +460,7 @@ class BulkUpload::Lettings::Year2024::RowParser
   end
 
   def spreadsheet_duplicate_hash
-    attributes.slice(
+    hash = attributes.slice(
       "field_1",   # owning org
       "field_8",   # startdate
       "field_9",   # startdate
@@ -472,7 +472,12 @@ class BulkUpload::Lettings::Year2024::RowParser
       "field_42",  # age1
       "field_43",  # sex1
       "field_46",  # ecstat1
-    ).merge({ "tcharge" => [field_125, field_126, field_127, field_128].sum })
+    )
+    if [field_125, field_126, field_127, field_128].all?(&:present?)
+      hash.merge({ "tcharge" => [field_125, field_126, field_127, field_128].sum })
+    else
+      hash
+    end
   end
 
   def add_duplicate_found_in_spreadsheet_errors
