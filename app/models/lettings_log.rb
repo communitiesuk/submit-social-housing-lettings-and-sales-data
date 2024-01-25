@@ -370,7 +370,7 @@ class LettingsLog < Log
   def previous_tenancy_was_temporary?
     # 4: Tied housing or renting with job
     # 6: Supported housing
-    # 8: Sheltered accomodation (<= 21/22)
+    # 8: Sheltered accommodation (<= 21/22)
     # 24: Housed by National Asylum Support Service (prev Home Office)
     # 25: Other
     # 34: Specialist retirement housing
