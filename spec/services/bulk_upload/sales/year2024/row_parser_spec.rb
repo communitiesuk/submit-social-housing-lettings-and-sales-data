@@ -185,9 +185,57 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
     end
   end
 
+  describe "income and savings fields" do
+    context "when set to R" do
+      let(:attributes) do
+        {
+          bulk_upload:,
+          field_77: "R", # income 1
+          field_79: "R", # income 2
+          field_82: "R", # savings
+        }
+      end
+
+      it "sets the not known field as not known" do
+        expect(parser.log.income1nk).to be(1)
+        expect(parser.log.income2nk).to be(1)
+        expect(parser.log.savingsnk).to be(1)
+      end
+
+      it "leaves the value field nil" do
+        expect(parser.log.income1).to be_nil
+        expect(parser.log.income2).to be_nil
+        expect(parser.log.savings).to be_nil
+      end
+    end
+
+    context "when set to a number" do
+      let(:attributes) do
+        {
+          bulk_upload:,
+          field_77: "30000", # income 1
+          field_79: "0", # income 2
+          field_82: "12420", # savings
+        }
+      end
+
+      it "sets the not known field as known" do
+        expect(parser.log.income1nk).to be(0)
+        expect(parser.log.income2nk).to be(0)
+        expect(parser.log.savingsnk).to be(0)
+      end
+
+      it "sets the values" do
+        expect(parser.log.income1).to be(30_000)
+        expect(parser.log.income2).to be(0)
+        expect(parser.log.savings).to be(12_420)
+      end
+    end
+  end
+
   describe "validations" do
     before do
-      stub_request(:get, /api.postcodes.io/)
+      stub_request(:get, /api\.postcodes\.io/)
       .to_return(status: 200, body: "{\"status\":200,\"result\":{\"admin_district\":\"Manchester\", \"codes\":{\"admin_district\": \"E08000003\"}}}", headers: {})
 
       parser.valid?

@@ -238,13 +238,13 @@ class BulkUpload::Sales::Year2024::RowParser
   attribute :field_74, :integer
   attribute :field_75, :integer
   attribute :field_76, :integer
-  attribute :field_77, :integer
+  attribute :field_77, :string
   attribute :field_78, :integer
-  attribute :field_79, :integer
+  attribute :field_79, :string
 
   attribute :field_80, :integer
   attribute :field_81, :integer
-  attribute :field_82, :integer
+  attribute :field_82, :string
   attribute :field_83, :integer
   attribute :field_84, :integer
   attribute :field_85, :integer
@@ -833,17 +833,17 @@ private
     attributes["ethnic"] = field_33
     attributes["national"] = field_34
 
-    attributes["income1nk"] = field_77.present? ? 0 : 1
-    attributes["income1"] = field_77
+    attributes["income1nk"] = field_77 == "R" ? 1 : 0
+    attributes["income1"] = field_77.to_i if attributes["income1nk"]&.zero? && field_77&.match(/\A\d+\z/)
 
-    attributes["income2nk"] = field_79.present? ? 0 : 1
-    attributes["income2"] = field_79
+    attributes["income2nk"] = field_79 == "R" ? 1 : 0
+    attributes["income2"] = field_79.to_i if attributes["income2nk"]&.zero? && field_79&.match(/\A\d+\z/)
 
     attributes["inc1mort"] = field_78
     attributes["inc2mort"] = field_80
 
-    attributes["savingsnk"] = field_82.present? ? 0 : 1
-    attributes["savings"] = field_82
+    attributes["savingsnk"] = field_82 == "R" ? 1 : 0
+    attributes["savings"] = field_82.to_i if attributes["savingsnk"]&.zero? && field_82&.match(/\A\d+\z/)
     attributes["prevown"] = field_83
 
     attributes["prevten"] = field_61
