@@ -3,19 +3,30 @@ class Form
               :start_date, :new_logs_end_date, :submission_deadline, :type, :name, :setup_definition,
               :setup_sections, :form_sections, :unresolved_log_redirect_page_id, :edit_end_date
 
+  DEADLINES = {
+    2022 => {
+      submission_deadline: Time.zone.local(2023, 6, 9),
+      new_logs_end_date: Time.zone.local(2023, 11, 20),
+      edit_end_date: Time.zone.local(2023, 11, 20),
+    },
+    2023 => {
+      submission_deadline: Time.zone.local(2024, 6, 7),
+    },
+    2024 => {
+      submission_deadline: Time.zone.local(2025, 6, 6),
+    },
+    :default => {
+      submission_deadline: ->(start_year) { Time.zone.local(start_year + 1, 6, 1) },
+      new_logs_end_date: ->(start_year) { Time.zone.local(start_year + 1, 12, 31) },
+      edit_end_date: ->(start_year) { Time.zone.local(start_year + 1, 12, 31) },
+    },
+  }.freeze
+
   def initialize(form_path, start_year = "", sections_in_form = [], type = "lettings")
     if sales_or_start_year_after_2022?(type, start_year)
       @start_date = Time.zone.local(start_year, 4, 1)
-      @new_logs_end_date = if start_year && start_year.to_i == 2022
-                             Time.zone.local(start_year + 1, 11, 20)
-                           else
-                             Time.zone.local(start_year + 1, 12, 31)
-                           end
-      @submission_deadline = if start_year && start_year.to_i > 2022
-                               Time.zone.local(start_year + 1, 6, 7)
-                             else
-                               Time.zone.local(start_year + 1, 6, 9)
-                             end
+      @new_logs_end_date = DEADLINES.dig(start_year, :new_logs_end_date) || DEADLINES[:default][:new_logs_end_date].call(start_year)
+      @submission_deadline = DEADLINES.dig(start_year, :submission_deadline) || DEADLINES[:default][:submission_deadline].call(start_year)
       @setup_sections = type == "sales" ? [Form::Sales::Sections::Setup.new(nil, nil, self)] : [Form::Lettings::Sections::Setup.new(nil, nil, self)]
       @form_sections = sections_in_form.map { |sec| sec.new(nil, nil, self) }
       @type = type
@@ -30,11 +41,7 @@ class Form
         "sections" => sections,
       }
       @unresolved_log_redirect_page_id = "tenancy_start_date" if type == "lettings"
-      @edit_end_date = if start_year && start_year.to_i == 2022
-                         Time.zone.local(start_year + 1, 11, 20)
-                       else
-                         Time.zone.local(start_year + 1, 12, 31)
-                       end
+      @edit_end_date = DEADLINES.dig(start_year, :edit_end_date) || DEADLINES[:default][:edit_end_date].call(start_year)
     else
       raise "No form definition file exists for given year".freeze unless File.exist?(form_path)
 
