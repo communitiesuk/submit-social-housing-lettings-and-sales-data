@@ -13,7 +13,7 @@ class Form::Lettings::Questions::Layear < ::Form::Question
   def answer_options
     if form.start_year_after_2024?
       {
-        "1" => { "value" =>  "Just moved to local authority area with this new let" },
+        "1" => { "value" => "Just moved to local authority area with this new let" },
         "2" => { "value" => "Less than 1 year" },
         "7" => { "value" => "1 year but under 2 years" },
         "8" => { "value" => "2 years but under 3 years" },
