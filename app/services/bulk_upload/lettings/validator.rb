@@ -98,8 +98,6 @@ private
 
   def csv_parser
     @csv_parser ||= case bulk_upload.year
-                    when 2022
-                      BulkUpload::Lettings::Year2022::CsvParser.new(path:)
                     when 2023
                       BulkUpload::Lettings::Year2023::CsvParser.new(path:)
                     else

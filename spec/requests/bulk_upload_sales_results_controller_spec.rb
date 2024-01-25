@@ -16,7 +16,7 @@ RSpec.describe BulkUploadSalesResultsController, type: :request do
       get "/sales-logs/bulk-upload-results/#{bulk_upload.id}"
 
       expect(response).to be_successful
-      expect(response.body).to include("Bulk Upload for sales (2022/23)")
+      expect(response.body).to include("Bulk Upload for sales (2023/24)")
     end
 
     it "renders correct number of errors" do

@@ -31,7 +31,7 @@ RSpec.describe BulkUpload::Sales::Validator do
 
     context "when file has too many columns" do
       before do
-        file.write((%w[a] * 127).join(","))
+        file.write((%w[a] * (BulkUpload::Sales::Year2023::CsvParser::MAX_COLUMNS + 1)).join(","))
         file.rewind
       end
 
@@ -74,7 +74,7 @@ RSpec.describe BulkUpload::Sales::Validator do
         let(:path) { file.path }
 
         before do
-          Timecop.freeze(Time.utc(2022, 6, 3))
+          Timecop.freeze(Time.utc(2022, 10, 3))
           file.write(BulkUpload::SalesLogToCsv.new(log:, line_ending: "\r\n", col_offset: 0).to_2022_csv_row)
           file.close
         end
@@ -92,7 +92,7 @@ RSpec.describe BulkUpload::Sales::Validator do
 
   describe "#call" do
     context "when a valid csv" do
-      let(:path) { file_fixture("2022_23_sales_bulk_upload.csv") }
+      let(:path) { file_fixture("2023_24_sales_bulk_upload_invalid.csv") }
 
       it "creates validation errors" do
         expect { validator.call }.to change(BulkUploadError, :count)
@@ -101,19 +101,19 @@ RSpec.describe BulkUpload::Sales::Validator do
       it "create validation error with correct values" do
         validator.call
 
-        error = BulkUploadError.find_by(row: "6", field: "field_92", category: "setup")
+        error = BulkUploadError.find_by(row: "9", field: "field_1", category: "setup")
 
-        expect(error.field).to eql("field_92")
+        expect(error.field).to eql("field_1")
         expect(error.error).to eql("You must answer owning organisation")
-        expect(error.purchaser_code).to eql("22 test BU")
-        expect(error.row).to eql("6")
-        expect(error.cell).to eql("CO6")
-        expect(error.col).to eql("CO")
+        expect(error.purchaser_code).to eql("23 test BU")
+        expect(error.row).to eql("9")
+        expect(error.cell).to eql("B9")
+        expect(error.col).to eql("B")
       end
     end
 
     context "with unix line endings" do
-      let(:fixture_path) { file_fixture("2022_23_sales_bulk_upload.csv") }
+      let(:fixture_path) { file_fixture("2023_24_sales_bulk_upload.csv") }
       let(:file) { Tempfile.new }
       let(:path) { file.path }
 
@@ -135,7 +135,7 @@ RSpec.describe BulkUpload::Sales::Validator do
       let(:path) { file.path }
 
       before do
-        file.write(BulkUpload::SalesLogToCsv.new(log:, line_ending: "\r\n", col_offset: 0).to_2022_csv_row)
+        file.write(BulkUpload::SalesLogToCsv.new(log:, line_ending: "\r\n", col_offset: 0).to_2023_csv_row)
         file.close
       end
 
@@ -150,8 +150,8 @@ RSpec.describe BulkUpload::Sales::Validator do
       let(:log) { build(:sales_log, :completed) }
 
       before do
-        file.write(BulkUpload::SalesLogToCsv.new(log:, col_offset: 0).to_2022_csv_row)
-        file.write(BulkUpload::SalesLogToCsv.new(log:, col_offset: 0).to_2022_csv_row)
+        file.write(BulkUpload::SalesLogToCsv.new(log:, col_offset: 0).to_2023_csv_row)
+        file.write(BulkUpload::SalesLogToCsv.new(log:, col_offset: 0).to_2023_csv_row)
         file.close
       end
 
@@ -163,7 +163,7 @@ RSpec.describe BulkUpload::Sales::Validator do
 
   describe "#create_logs?" do
     around do |example|
-      Timecop.freeze(Time.zone.local(2023, 2, 22)) do
+      Timecop.freeze(Time.zone.local(2023, 10, 22)) do
         Singleton.__init__(FormHandler)
         example.run
       end
@@ -172,15 +172,7 @@ RSpec.describe BulkUpload::Sales::Validator do
     end
 
     context "when all logs are valid" do
-      let(:target_path) { file_fixture("completed_2022_23_sales_bulk_upload.csv") }
-
-      before do
-        target_array = File.open(target_path).readlines
-        target_array[0..118].each do |line|
-          file.write line
-        end
-        file.rewind
-      end
+      let(:target_path) { file_fixture("2023_24_sales_bulk_upload.csv") }
 
       it "returns truthy" do
         validator.call
@@ -189,7 +181,7 @@ RSpec.describe BulkUpload::Sales::Validator do
     end
 
     context "when there is an invalid log" do
-      let(:path) { file_fixture("2022_23_sales_bulk_upload.csv") }
+      let(:path) { file_fixture("2023_24_sales_bulk_upload_invalid.csv") }
 
       it "returns falsey" do
         validator.call
@@ -202,8 +194,8 @@ RSpec.describe BulkUpload::Sales::Validator do
       let(:log_2) { build(:sales_log, :completed, created_by: user) }
 
       before do
-        file.write(BulkUpload::SalesLogToCsv.new(log: log_1, line_ending: "\r\n", col_offset: 0).to_2022_csv_row)
-        file.write(BulkUpload::SalesLogToCsv.new(log: log_2, line_ending: "\r\n", col_offset: 0, overrides: { organisation_id: "random" }).to_2022_csv_row)
+        file.write(BulkUpload::SalesLogToCsv.new(log: log_1, line_ending: "\r\n", col_offset: 0).to_2023_csv_row)
+        file.write(BulkUpload::SalesLogToCsv.new(log: log_2, line_ending: "\r\n", col_offset: 0, overrides: { organisation_id: "random" }).to_2023_csv_row)
         file.close
       end
 
@@ -214,14 +206,7 @@ RSpec.describe BulkUpload::Sales::Validator do
     end
 
     context "when all logs valid?" do
-      let(:log_1) { build(:sales_log, :completed, created_by: user) }
-      let(:log_2) { build(:sales_log, :completed, created_by: user) }
-
-      before do
-        file.write(BulkUpload::SalesLogToCsv.new(log: log_1, line_ending: "\r\n", col_offset: 0).to_2022_csv_row)
-        file.write(BulkUpload::SalesLogToCsv.new(log: log_2, line_ending: "\r\n", col_offset: 0).to_2022_csv_row)
-        file.close
-      end
+      let(:path) { file_fixture("2023_24_sales_bulk_upload.csv") }
 
       it "returns true" do
         validator.call
@@ -235,7 +220,7 @@ RSpec.describe BulkUpload::Sales::Validator do
       let(:log_1) { build(:sales_log, :completed, created_by: user, owning_organisation: unaffiliated_org) }
 
       before do
-        file.write(BulkUpload::SalesLogToCsv.new(log: log_1, line_ending: "\r\n", col_offset: 0).to_2022_csv_row)
+        file.write(BulkUpload::SalesLogToCsv.new(log: log_1, line_ending: "\r\n", col_offset: 0).to_2023_csv_row)
         file.close
       end
 
@@ -249,7 +234,7 @@ RSpec.describe BulkUpload::Sales::Validator do
       let(:log) { build(:sales_log, created_by: user, saledate: Time.zone.local(2022, 5, 1)) }
 
       before do
-        file.write(BulkUpload::SalesLogToCsv.new(log:, line_ending: "\r\n", col_offset: 0).to_2022_csv_row)
+        file.write(BulkUpload::SalesLogToCsv.new(log:, line_ending: "\r\n", col_offset: 0).to_2023_csv_row)
         file.close
       end
 
@@ -262,7 +247,7 @@ RSpec.describe BulkUpload::Sales::Validator do
 
   describe "#total_logs_count?" do
     around do |example|
-      Timecop.freeze(Time.zone.local(2023, 2, 22)) do
+      Timecop.freeze(Time.zone.local(2023, 10, 22)) do
         Singleton.__init__(FormHandler)
         example.run
       end
@@ -271,7 +256,7 @@ RSpec.describe BulkUpload::Sales::Validator do
     end
 
     context "when all logs are valid" do
-      let(:target_path) { file_fixture("completed_2022_23_sales_bulk_upload.csv") }
+      let(:target_path) { file_fixture("2023_24_sales_bulk_upload.csv") }
 
       before do
         target_array = File.open(target_path).readlines

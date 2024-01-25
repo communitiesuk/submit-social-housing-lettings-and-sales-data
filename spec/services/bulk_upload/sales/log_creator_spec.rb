@@ -1,17 +1,28 @@
 require "rails_helper"
 
 RSpec.describe BulkUpload::Sales::LogCreator do
-  subject(:service) { described_class.new(bulk_upload:, path:) }
+  subject(:service) { described_class.new(bulk_upload:, path: "") }
 
   let(:owning_org) { create(:organisation, old_visible_id: 123) }
   let(:user) { create(:user, organisation: owning_org) }
 
   let(:bulk_upload) { create(:bulk_upload, :sales, user:) }
-  let(:path) { file_fixture("completed_2022_23_sales_bulk_upload.csv") }
+  let(:csv_parser) { instance_double(BulkUpload::Sales::Year2023::CsvParser) }
+  let(:row_parser) { instance_double(BulkUpload::Sales::Year2023::RowParser) }
+  let(:log) { build(:sales_log, :completed, created_by: user, owning_organisation: owning_org, managing_organisation: owning_org) }
+
+  before do
+    allow(BulkUpload::Sales::Year2023::CsvParser).to receive(:new).and_return(csv_parser)
+    allow(csv_parser).to receive(:row_parsers).and_return([row_parser])
+    allow(row_parser).to receive(:log).and_return(log)
+    allow(row_parser).to receive(:bulk_upload=).and_return(true)
+    allow(row_parser).to receive(:valid?).and_return(true)
+    allow(row_parser).to receive(:blank_row?).and_return(false)
+  end
 
   describe "#call" do
     around do |example|
-      Timecop.freeze(Time.zone.local(2023, 2, 22)) do
+      Timecop.freeze(Time.zone.local(2023, 4, 22)) do
         Singleton.__init__(FormHandler)
         example.run
       end
@@ -43,15 +54,8 @@ RSpec.describe BulkUpload::Sales::LogCreator do
     end
 
     context "when a valid csv with several blank rows" do
-      let(:file) { Tempfile.new }
-      let(:path) { file.path }
-      let(:log) { SalesLog.new }
-
       before do
-        file.write(BulkUpload::SalesLogToCsv.new(log:, col_offset: 0).to_2022_csv_row)
-        file.write(BulkUpload::SalesLogToCsv.new(log:, col_offset: 0).to_2022_csv_row)
-        file.write(BulkUpload::SalesLogToCsv.new(log:, col_offset: 0).to_2022_csv_row)
-        file.rewind
+        allow(row_parser).to receive(:blank_row?).and_return(true)
       end
 
       it "ignores them and does not create the logs" do
@@ -60,20 +64,15 @@ RSpec.describe BulkUpload::Sales::LogCreator do
     end
 
     context "when a valid csv with row with one invalid non setup field" do
-      let(:file) { Tempfile.new }
-      let(:path) { file.path }
       let(:log) do
         build(
           :sales_log,
           :completed,
           age1: 5,
           owning_organisation: owning_org,
+          created_by: user,
+          managing_organisation: owning_org,
         )
-      end
-
-      before do
-        file.write(BulkUpload::SalesLogToCsv.new(log:, col_offset: 0).to_2022_csv_row)
-        file.rewind
       end
 
       it "creates the log" do
@@ -89,8 +88,6 @@ RSpec.describe BulkUpload::Sales::LogCreator do
     end
 
     context "when a valid csv with row with compound errors on non setup field" do
-      let(:file) { Tempfile.new }
-      let(:path) { file.path }
       let(:log) do
         build(
           :sales_log,
@@ -100,12 +97,10 @@ RSpec.describe BulkUpload::Sales::LogCreator do
           ppcodenk: 0,
           postcode_full: "AA11AA",
           ppostcode_full: "BB22BB",
+          owning_organisation: owning_org,
+          created_by: user,
+          managing_organisation: owning_org,
         )
-      end
-
-      before do
-        file.write(BulkUpload::SalesLogToCsv.new(log:, col_offset: 0).to_2022_csv_row)
-        file.rewind
       end
 
       it "creates the log" do
@@ -124,8 +119,6 @@ RSpec.describe BulkUpload::Sales::LogCreator do
     end
 
     context "when pre-creating logs" do
-      subject(:service) { described_class.new(bulk_upload:, path:) }
-
       it "creates a new log" do
         expect { service.call }.to change(SalesLog, :count)
       end
@@ -145,8 +138,6 @@ RSpec.describe BulkUpload::Sales::LogCreator do
     end
 
     context "with a valid csv and soft validations" do
-      let(:file) { Tempfile.new }
-      let(:path) { file.path }
       let(:log) do
         build(
           :sales_log,
@@ -156,12 +147,8 @@ RSpec.describe BulkUpload::Sales::LogCreator do
           ecstat1: 5,
           owning_organisation: owning_org,
           created_by: user,
+          managing_organisation: owning_org,
         )
-      end
-
-      before do
-        file.write(BulkUpload::SalesLogToCsv.new(log:, col_offset: 0).to_2022_csv_row)
-        file.rewind
       end
 
       it "creates a new log" do

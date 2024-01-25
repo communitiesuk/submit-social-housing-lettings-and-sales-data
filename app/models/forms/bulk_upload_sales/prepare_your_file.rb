@@ -9,9 +9,7 @@ module Forms
 
       def view_path
         case year
-        when 2022
-          "bulk_upload_sales_logs/forms/prepare_your_file_2022"
-        else
+        when 2023
           "bulk_upload_sales_logs/forms/prepare_your_file_2023"
         end
       end
@@ -30,17 +28,13 @@ module Forms
 
       def legacy_template_path
         case year
-        when 2022
-          "/files/bulk-upload-sales-template-2022-23.xlsx"
-        else
+        when 2023
           "/files/bulk-upload-sales-legacy-template-2023-24.xlsx"
         end
       end
 
       def template_path
         case year
-        when 2022
-          "/files/bulk-upload-sales-template-2022-23.xlsx"
         when 2023
           "/files/bulk-upload-sales-template-2023-24.xlsx"
         end
@@ -48,8 +42,7 @@ module Forms
 
       def specification_path
         case year
-        when 2022
-          "/files/bulk-upload-sales-specification-2022-23.xlsx"
+
         when 2023
           "/files/bulk-upload-sales-specification-2023-24.xlsx"
         end
@@ -66,6 +59,8 @@ module Forms
     private
 
       def in_crossover_period?
+        return true if FeatureToggle.force_crossover?
+
         FormHandler.instance.sales_in_crossover_period?
       end
     end

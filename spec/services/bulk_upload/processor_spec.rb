@@ -6,12 +6,15 @@ RSpec.describe BulkUpload::Processor do
   let(:bulk_upload) { create(:bulk_upload, :lettings, user:) }
   let(:user) { create(:user, organisation: owning_org) }
   let(:owning_org) { create(:organisation, old_visible_id: 123) }
-
-  around do |example|
-    Timecop.freeze(Time.utc(2023, 1, 1)) do
-      Singleton.__init__(FormHandler)
-      example.run
-    end
+  let(:mock_validator) do
+    instance_double(
+      BulkUpload::Lettings::Validator,
+      invalid?: false,
+      call: nil,
+      total_logs_count: 1,
+      any_setup_errors?: false,
+      create_logs?: false,
+    )
   end
 
   describe "#call" do
@@ -39,7 +42,7 @@ RSpec.describe BulkUpload::Processor do
         instance_double(
           BulkUpload::Downloader,
           call: nil,
-          path: file_fixture("2022_23_lettings_bulk_upload.csv"),
+          path: file_fixture("2023_24_lettings_bulk_upload.csv"),
           delete_local_file!: nil,
         )
       end
@@ -89,7 +92,7 @@ RSpec.describe BulkUpload::Processor do
         instance_double(
           BulkUpload::Downloader,
           call: nil,
-          path: file_fixture("2022_23_lettings_bulk_upload.csv"),
+          path: file_fixture("2023_24_lettings_bulk_upload.csv"),
           delete_local_file!: nil,
         )
       end
@@ -134,7 +137,7 @@ RSpec.describe BulkUpload::Processor do
         instance_double(
           BulkUpload::Downloader,
           call: nil,
-          path: file_fixture("2022_23_lettings_bulk_upload.csv"),
+          path: file_fixture("2023_24_lettings_bulk_upload.csv"),
           delete_local_file!: nil,
         )
       end
@@ -183,25 +186,16 @@ RSpec.describe BulkUpload::Processor do
         build(
           :lettings_log,
           :completed,
-          renttype: 3,
-          age1: 20,
           owning_organisation: owning_org,
           managing_organisation: owning_org,
-          created_by: nil,
-          national: 18,
-          waityear: 9,
-          joint: 2,
-          tenancy: 9,
-          ppcodenk: 1,
-          voiddate: nil,
-          mrcdate: nil,
-          startdate: Date.new(2022, 10, 1),
-          tenancylength: nil,
+          created_by: user,
+          renttype: 1,
+          leftreg: 3,
         )
       end
 
       before do
-        file.write(BulkUpload::LettingsLogToCsv.new(log:, col_offset: 0).to_2022_csv_row)
+        file.write(BulkUpload::LettingsLogToCsv.new(log:, col_offset: 0).to_2023_csv_row)
         file.rewind
 
         allow(BulkUpload::Downloader).to receive(:new).with(bulk_upload:).and_return(mock_downloader)
@@ -255,37 +249,6 @@ RSpec.describe BulkUpload::Processor do
       end
     end
 
-    context "when processing an empty file with headers" do
-      context "when 2022-23" do
-        let(:mock_downloader) do
-          instance_double(
-            BulkUpload::Downloader,
-            call: nil,
-            path: file_fixture("2022_23_lettings_bulk_upload_empty_with_headers.csv"),
-            delete_local_file!: nil,
-          )
-        end
-
-        before do
-          allow(BulkUpload::Downloader).to receive(:new).with(bulk_upload:).and_return(mock_downloader)
-        end
-
-        it "sends failure email" do
-          mail_double = instance_double("ActionMailer::MessageDelivery", deliver_later: nil)
-
-          allow(BulkUploadMailer).to receive(:send_bulk_upload_failed_service_error_mail).and_return(mail_double)
-
-          processor.call
-
-          expect(BulkUploadMailer).to have_received(:send_bulk_upload_failed_service_error_mail).with(
-            bulk_upload:,
-            errors: ["Template is blank - The template must be filled in for us to create the logs and check if data is correct."],
-          )
-          expect(mail_double).to have_received(:deliver_later)
-        end
-      end
-    end
-
     context "when 2023-24" do
       let(:mock_downloader) do
         instance_double(
@@ -334,17 +297,20 @@ RSpec.describe BulkUpload::Processor do
           renttype: 3,
           owning_organisation: owning_org,
           managing_organisation: owning_org,
-          startdate: Time.zone.local(2022, 10, 1),
+          startdate: Time.zone.local(2023, 10, 1),
           renewal: 2,
           declaration: 1,
         )
       end
 
       before do
-        file.write(BulkUpload::LettingsLogToCsv.new(log:, col_offset: 0).to_2022_csv_row)
+        file.write(BulkUpload::LettingsLogToCsv.new(log:, col_offset: 0).to_2023_csv_row)
         file.rewind
 
         allow(BulkUpload::Downloader).to receive(:new).with(bulk_upload:).and_return(mock_downloader)
+        allow(BulkUpload::Lettings::Validator).to receive(:new).and_return(mock_validator)
+        allow(mock_validator).to receive(:create_logs?).and_return(true)
+        allow(mock_validator).to receive(:soft_validation_errors_only?).and_return(false)
         allow(FeatureToggle).to receive(:bulk_upload_duplicate_log_check_enabled?).and_return(true)
       end
 
@@ -406,17 +372,20 @@ RSpec.describe BulkUpload::Processor do
           reason: 40,
           leftreg: 3,
           mrcdate: nil,
-          startdate: Date.new(2022, 10, 1),
+          startdate: Date.new(2023, 10, 1),
           tenancylength: nil,
         )
       end
 
       before do
         FormHandler.instance.use_real_forms!
-        file.write(BulkUpload::LettingsLogToCsv.new(log:, col_offset: 0).to_2022_csv_row)
+        file.write(BulkUpload::LettingsLogToCsv.new(log:, col_offset: 0).to_2023_csv_row)
         file.rewind
 
         allow(BulkUpload::Downloader).to receive(:new).with(bulk_upload:).and_return(mock_downloader)
+        allow(BulkUpload::Lettings::Validator).to receive(:new).and_return(mock_validator)
+        allow(mock_validator).to receive(:create_logs?).and_return(true)
+        allow(mock_validator).to receive(:soft_validation_errors_only?).and_return(true)
         allow(FeatureToggle).to receive(:bulk_upload_duplicate_log_check_enabled?).and_return(true)
       end
 
@@ -473,7 +442,7 @@ RSpec.describe BulkUpload::Processor do
           renttype: 3,
           owning_organisation: owning_org,
           managing_organisation: owning_org,
-          startdate: Time.zone.local(2022, 10, 1),
+          startdate: Time.zone.local(2023, 10, 1),
           renewal: 2,
           created_by: other_user, # unaffiliated user
           declaration: 1,
@@ -481,7 +450,8 @@ RSpec.describe BulkUpload::Processor do
       end
 
       before do
-        file.write(BulkUpload::LettingsLogToCsv.new(log:, col_offset: 0).to_2022_csv_row)
+        allow(BulkUpload::Lettings::Validator).to receive(:new).and_return(mock_validator)
+        file.write(BulkUpload::LettingsLogToCsv.new(log:, col_offset: 0).to_2023_csv_row)
         file.rewind
 
         allow(BulkUpload::Downloader).to receive(:new).with(bulk_upload:).and_return(mock_downloader)
