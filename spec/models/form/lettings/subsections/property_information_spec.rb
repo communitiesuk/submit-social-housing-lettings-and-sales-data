@@ -73,6 +73,37 @@ RSpec.describe Form::Lettings::Subsections::PropertyInformation, type: :model do
         )
       end
     end
+
+    context "when 2024" do
+      let(:start_date) { Time.utc(2024, 2, 8) }
+
+      it "has correct pages" do
+        expect(property_information.pages.map(&:id)).to eq(
+          %w[
+            uprn
+            uprn_confirmation
+            address
+            property_local_authority
+            local_authority_min_rent_value_check
+            local_authority_max_rent_value_check
+            first_time_property_let_as_social_housing
+            property_vacancy_reason_not_first_let
+            property_vacancy_reason_first_let
+            property_number_of_times_relet
+            property_unit_type
+            property_building_type
+            property_wheelchair_accessible
+            property_number_of_bedrooms
+            beds_min_rent_value_check
+            beds_max_rent_value_check
+            void_date
+            void_date_value_check
+            property_major_repairs
+            property_major_repairs_value_check
+          ],
+        )
+      end
+    end
   end
 
   it "has the correct id" do
