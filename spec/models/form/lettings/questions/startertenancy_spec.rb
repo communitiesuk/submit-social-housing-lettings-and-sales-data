@@ -34,5 +34,4 @@ RSpec.describe Form::Lettings::Questions::Startertenancy, type: :model do
        You should submit a CORE log at the beginning of the starter tenancy or introductory period, with the best information you have at the time. You do not need to submit a log when a tenant later rolls onto the main tenancy.")
     end
   end
-
 end
