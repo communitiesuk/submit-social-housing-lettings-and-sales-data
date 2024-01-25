@@ -6,7 +6,7 @@ class Form::Lettings::Questions::Joint < ::Form::Question
     @header = "Is this a joint tenancy?"
     @type = "radio"
     @check_answers_card_number = 0
-    @hint_text = ""
+    @hint_text = form.start_year_after_2024? ? "This is where two or more people are named on the tenancy agreement" : ""
     @answer_options = ANSWER_OPTIONS
     @question_number = 25
   end
