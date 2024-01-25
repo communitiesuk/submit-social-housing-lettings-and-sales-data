@@ -44,7 +44,7 @@ RSpec.describe Form::Lettings::Questions::Rsnvac, type: :model do
       expect(question.answer_options).to eq({
         "13" => {
           "value" => "Internal transfer",
-          "hint" => "Excluding renewals of a fixed-term tenancy",
+          "hint" => "Where a tenant moved from one social housing property to another property. Their landlord may be the same or may have changed.",
         },
         "5" => {
           "value" => "Previous tenant died with no succession",
@@ -54,6 +54,7 @@ RSpec.describe Form::Lettings::Questions::Rsnvac, type: :model do
         },
         "14" => {
           "value" => "Renewal of fixed-term tenancy",
+          "hint" => "To the same tenant in the same property, except if was previously used as temporary accommodation.",
         },
         "19" => {
           "value" => "Tenant involved in a succession downsize",
