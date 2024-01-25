@@ -10,7 +10,12 @@ RSpec.describe Form::Lettings::Subsections::PropertyInformation, type: :model do
   end
 
   describe "pages" do
-    let(:section) { instance_double(Form::Sales::Sections::Household, form: instance_double(Form, start_date:)) }
+    let(:section) { instance_double(Form::Sales::Sections::Household, form:) }
+    let(:form) { instance_double(Form, start_date:) }
+
+    before do
+      allow(form).to receive(:start_year_after_2024?).and_return(false)
+    end
 
     context "when 2022" do
       let(:start_date) { Time.utc(2022, 2, 8) }
@@ -59,6 +64,41 @@ RSpec.describe Form::Lettings::Subsections::PropertyInformation, type: :model do
             property_vacancy_reason_not_first_let
             property_vacancy_reason_first_let
             property_number_of_times_relet
+            property_unit_type
+            property_building_type
+            property_wheelchair_accessible
+            property_number_of_bedrooms
+            beds_min_rent_value_check
+            beds_max_rent_value_check
+            void_date
+            void_date_value_check
+            property_major_repairs
+            property_major_repairs_value_check
+          ],
+        )
+      end
+    end
+
+    context "when 2024" do
+      let(:start_date) { Time.utc(2024, 2, 8) }
+
+      before do
+        allow(form).to receive(:start_year_after_2024?).and_return(true)
+      end
+
+      it "has correct pages" do
+        expect(property_information.pages.map(&:id)).to eq(
+          %w[
+            uprn
+            uprn_confirmation
+            address
+            property_local_authority
+            local_authority_min_rent_value_check
+            local_authority_max_rent_value_check
+            first_time_property_let_as_social_housing
+            property_let_type
+            property_vacancy_reason_not_first_let
+            property_vacancy_reason_first_let
             property_unit_type
             property_building_type
             property_wheelchair_accessible
