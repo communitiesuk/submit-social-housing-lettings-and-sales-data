@@ -63,6 +63,32 @@ RSpec.describe Form::Sales::Subsections::PropertyInformation, type: :model do
         )
       end
     end
+
+    context "when 2024" do
+      let(:start_date) { Time.utc(2024, 2, 8) }
+
+      it "has correct pages" do
+        expect(property_information.pages.map(&:id)).to eq(
+          %w[
+            uprn
+            uprn_confirmation
+            address
+            property_local_authority
+            local_authority_buyer_1_income_max_value_check
+            local_authority_buyer_2_income_max_value_check
+            local_authority_combined_income_max_value_check
+            about_price_la_value_check
+            property_number_of_bedrooms
+            about_price_bedrooms_value_check
+            property_unit_type
+            monthly_charges_property_type_value_check
+            percentage_discount_proptype_value_check
+            property_building_type
+            property_wheelchair_accessible
+          ],
+        )
+      end
+    end
   end
 
   it "has the correct id" do

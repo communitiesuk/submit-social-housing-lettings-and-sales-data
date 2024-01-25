@@ -48,8 +48,9 @@ RSpec.describe Form::Lettings::Questions::UprnKnown, type: :model do
 
   it "has the correct hint" do
     expect(question.hint_text).to eq(
-      "The Unique Property Reference Number (UPRN) is a unique number system created by Ordnance Survey and used by housing providers and sectors UK-wide. For example 10010457355.<br><br>
-    You can continue without the UPRN, but it means we will need you to enter the address of the property.",
+      "The Unique Property Reference Number (UPRN) is a unique number system created by Ordnance Survey and used by housing providers and various industries across the UK. An example UPRN is 10010457355.<br><br>
+      The UPRN may not be the same as the property reference assigned by your organisation.<br><br>
+      If you don’t know the UPRN you can enter the address of the property instead on the next screen.",
     )
   end
 
