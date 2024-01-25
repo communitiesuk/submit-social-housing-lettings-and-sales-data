@@ -14,7 +14,6 @@ RSpec.describe Form::Lettings::Questions::Age1Known, type: :model do
     allow(subsection).to receive(:form).and_return(form)
   end
 
-
   it "has correct page" do
     expect(question.page).to eq(page)
   end
