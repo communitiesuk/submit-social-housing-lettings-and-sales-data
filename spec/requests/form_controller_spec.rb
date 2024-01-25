@@ -896,14 +896,30 @@ RSpec.describe FormController, type: :request do
             }
           end
 
-          before do
-            post "/lettings-logs/#{lettings_log.id}/lead-tenant-age", params:, headers: headers.merge({ "HTTP_REFERER" => referrer })
+          context "and the answer changes" do
+            before do
+              post "/lettings-logs/#{lettings_log.id}/lead-tenant-age", params:, headers: headers.merge({ "HTTP_REFERER" => referrer })
+            end
+
+            it "redirects back to the duplicates page for remaining duplicates" do
+              expect(response).to redirect_to("/lettings-logs/#{duplicate_log.id}/duplicate-logs?original_log_id=#{lettings_log.id}")
+              expect(lettings_log.duplicates.count).to eq(0)
+              expect(duplicate_log.duplicates.count).to eq(0)
+            end
           end
 
-          it "redirects back to the duplicates page for remaining duplicates" do
-            expect(response).to redirect_to("/lettings-logs/#{duplicate_log.id}/duplicate-logs?original_log_id=#{lettings_log.id}")
-            expect(lettings_log.duplicates.count).to eq(0)
-            expect(duplicate_log.duplicates.count).to eq(0)
+          context "and updating the answer creates a different set of duplicates" do
+            let!(:another_duplicate_log) { create(:lettings_log, :duplicate, created_by: user, age1_known: 1, age1: 20) }
+
+            before do
+              post "/lettings-logs/#{lettings_log.id}/lead-tenant-age", params:, headers: headers.merge({ "HTTP_REFERER" => referrer })
+            end
+
+            it "correctly assigs duplicate set IDs" do
+              expect(lettings_log.reload.duplicates.count).to eq(1)
+              expect(lettings_log.duplicate_set_id).to eq(another_duplicate_log.reload.duplicate_set_id)
+              expect(duplicate_log.reload.duplicates.count).to eq(0)
+            end
           end
 
           context "and the answer didn't change" do
@@ -916,6 +932,10 @@ RSpec.describe FormController, type: :request do
                   age1_known: lettings_log.age1_known,
                 },
               }
+            end
+
+            before do
+              post "/lettings-logs/#{lettings_log.id}/lead-tenant-age", params:, headers: headers.merge({ "HTTP_REFERER" => referrer })
             end
 
             it "redirects back to the duplicates page for remaining duplicates" do

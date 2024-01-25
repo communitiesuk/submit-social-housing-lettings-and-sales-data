@@ -172,9 +172,9 @@ private
       end
 
       dynamic_duplicates = @log.lettings? ? current_user.lettings_logs.duplicate_logs(@log) : current_user.sales_logs.duplicate_logs(@log)
-      if dynamic_duplicates.count.positive?
+      if dynamic_duplicates.any?
         saved_duplicates = @log.duplicates
-        unless saved_duplicates == dynamic_duplicates
+        if saved_duplicates.none? || duplicates_changed?(dynamic_duplicates, saved_duplicates)
           @log.update!(duplicate_set_id: new_duplicate_set_id(@log)) if @log.duplicate_set_id.blank?
           dynamic_duplicates.each do |duplicate|
             duplicate.update!(duplicate_set_id: @log.duplicate_set_id) if duplicate.duplicate_set_id != @log.duplicate_set_id
@@ -254,10 +254,21 @@ private
     class_name = @log.class.name.underscore
 
     original_log = current_user.send(class_name.pluralize).find_by(id: from_referrer_query("original_log_id"))
+    dynamic_duplicates = current_user.send(class_name.pluralize).duplicate_logs(@log)
 
-    if original_log.present? && current_user.send(class_name.pluralize).duplicate_logs(original_log).count.positive?
-      unless current_user.send(class_name.pluralize).duplicate_logs(@log).count.positive?
-        remove_fixed_duplicate_set_ids(@log)
+    if dynamic_duplicates.any?
+      saved_duplicates = @log.duplicates
+      if duplicates_changed?(dynamic_duplicates, saved_duplicates)
+        duplicate_set_id = dynamic_duplicates.first.duplicate_set_id || new_duplicate_set_id(@log)
+        update_logs_with_duplicate_set_id(@log, dynamic_duplicates, duplicate_set_id)
+        saved_duplicates.first.update!(duplicate_set_id: nil) if saved_duplicates.count == 1
+      end
+    else
+      remove_fixed_duplicate_set_ids(@log)
+    end
+
+    if original_log.present? && current_user.send(class_name.pluralize).duplicate_logs(original_log).any?
+      if dynamic_duplicates.none?
         flash[:notice] = deduplication_success_banner
       end
       send("#{class_name}_duplicate_logs_path", original_log, original_log_id: original_log.id, referrer: params[:referrer], organisation_id: params[:organisation_id])
@@ -298,6 +309,17 @@ private
       LettingsLog.maximum(:duplicate_set_id).to_i + 1
     else
       SalesLog.maximum(:duplicate_set_id).to_i + 1
+    end
+  end
+
+  def duplicates_changed?(dynamic_duplicates, saved_duplicates)
+    dynamic_duplicates.present? && saved_duplicates.present? && dynamic_duplicates.order(:id).pluck(:id) != saved_duplicates.order(:id).pluck(:id)
+  end
+
+  def update_logs_with_duplicate_set_id(log, dynamic_duplicates, duplicate_set_id)
+    log.update!(duplicate_set_id:)
+    dynamic_duplicates.each do |duplicate|
+      duplicate.update!(duplicate_set_id: log.duplicate_set_id) if duplicate.duplicate_set_id != log.duplicate_set_id
     end
   end
 end
