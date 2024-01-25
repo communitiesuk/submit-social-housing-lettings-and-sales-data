@@ -16,7 +16,7 @@ class Form::Lettings::Subsections::PropertyInformation < ::Form::Subsection
       Form::Lettings::Pages::PropertyLetType.new(nil, nil, self),
       Form::Lettings::Pages::PropertyVacancyReasonNotFirstLet.new(nil, nil, self),
       Form::Lettings::Pages::PropertyVacancyReasonFirstLet.new(nil, nil, self),
-      Form::Lettings::Pages::PropertyNumberOfTimesRelet.new(nil, nil, self),
+      number_of_times_relet,
       Form::Lettings::Pages::PropertyUnitType.new(nil, nil, self),
       Form::Lettings::Pages::PropertyBuildingType.new(nil, nil, self),
       Form::Lettings::Pages::PropertyWheelchairAccessible.new(nil, nil, self),
@@ -42,6 +42,10 @@ class Form::Lettings::Subsections::PropertyInformation < ::Form::Subsection
         Form::Lettings::Pages::PropertyPostcode.new(nil, nil, self),
       ]
     end
+  end
+
+  def number_of_times_relet
+    Form::Lettings::Pages::PropertyNumberOfTimesRelet.new(nil, nil, self) unless form.start_year_after_2024?
   end
 
   def displayed_in_tasklist?(log)
