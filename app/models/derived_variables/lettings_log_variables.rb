@@ -82,6 +82,9 @@ module DerivedVariables::LettingsLogVariables
         self.prevten = 30 if owning_organisation&.provider_type == "LA"
       end
     end
+    if is_bedsit? && form.start_year_after_2024?
+      self.beds = 1
+    end
 
     child_under_16_constraints!
 
@@ -167,6 +170,9 @@ private
     if needstype_changed? && needstype_was == 2
       self.wchair = nil
       self.location_id = nil
+    end
+    if unittype_gn_changed? && unittype_gn_was == 2 && form.start_year_after_2024?
+      self.beds = nil
     end
   end
 
