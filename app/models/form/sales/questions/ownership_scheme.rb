@@ -5,13 +5,22 @@ class Form::Sales::Questions::OwnershipScheme < ::Form::Question
     @check_answer_label = "Purchase made under ownership scheme"
     @header = "Was this purchase made through an ownership scheme?"
     @type = "radio"
-    @answer_options = ANSWER_OPTIONS
     @question_number = 3
   end
 
-  ANSWER_OPTIONS = {
-    "1" => { "value" => "Yes - a shared ownership scheme" },
-    "2" => { "value" => "Yes - a discounted ownership scheme" },
-    "3" => { "value" => "No - this is an outright or other sale" },
-  }.freeze
+  def answer_options
+    if form.start_year_after_2024?
+      {
+        "1" => { "value" => "Yes - a shared ownership scheme", "hint" => "When the purchaser buys an initial share of up to 75% of the property value and pays rent to the Private Registered Provider (PRP) on the remaining portion, or a subsequent staircasing transaction" },
+        "2" => { "value" => "Yes - a discounted ownership scheme" },
+        "3" => { "value" => "No - this is an outright or other sale" },
+      }.freeze
+    else
+      {
+        "1" => { "value" => "Yes - a shared ownership scheme" },
+        "2" => { "value" => "Yes - a discounted ownership scheme" },
+        "3" => { "value" => "No - this is an outright or other sale" },
+      }.freeze
+    end
+  end
 end
