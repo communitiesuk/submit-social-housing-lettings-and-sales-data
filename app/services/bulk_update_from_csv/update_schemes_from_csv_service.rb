@@ -89,7 +89,9 @@ private
     if organisation.present? && (organisation.child_organisations.include?(current_organisation) || organisation.parent_organisations.include?(current_organisation))
       scheme["owning_organisation_id"] = organisation.id
       Rails.logger.info("Updating scheme #{original_attributes['scheme_code']} with owning_organisation: #{organisation.name}")
-      LettingsLog.where(scheme_id: scheme.id).update!(location: nil, scheme: nil, unresolved: true)
+      editable_from_date = FormHandler.instance.earliest_open_for_editing_collection_start_date
+      LettingsLog.where(scheme_id: scheme.id).after_date(editable_from_date).update!(location: nil, scheme: nil, unresolved: true)
+      LettingsLog.where(scheme_id: scheme.id).where(startdate: nil).update!(location: nil, scheme: nil, unresolved: true)
     else
       Rails.logger.info("Cannot update scheme #{original_attributes['scheme_code']} with owning_organisation: #{value}. Organisation with name #{value} is not in the database or is not related to current organisation")
     end
@@ -98,7 +100,11 @@ private
   def save_scheme(scheme, original_attributes)
     scheme.save!
     Rails.logger.info("Saved scheme #{original_attributes['scheme_code']}.")
-    LettingsLog.where(scheme_id: scheme.id).update_all(values_updated_at: Time.zone.now)
+    exportable_from_date = FormHandler.instance.previous_collection_start_date
+    LettingsLog.where(scheme_id: scheme.id).after_date(exportable_from_date).update_all(values_updated_at: Time.zone.now)
+    LettingsLog.where(scheme_id: scheme.id).where(startdate: nil).update_all(values_updated_at: Time.zone.now)
+    logs_not_to_export = LettingsLog.where(scheme_id: scheme.id).before_date(exportable_from_date)
+    Rails.logger.info("Will not export log #{logs_not_to_export.map(&:id).join(',')} as it is before the exportable date") if logs_not_to_export.any?
   rescue ActiveRecord::RecordInvalid => e
     Rails.logger.error("Cannot update scheme #{original_attributes['scheme_code']}. #{e.message}")
   end
