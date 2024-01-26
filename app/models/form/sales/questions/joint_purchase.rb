@@ -13,4 +13,10 @@ class Form::Sales::Questions::JointPurchase < ::Form::Question
     "1" => { "value" => "Yes" },
     "2" => { "value" => "No" },
   }.freeze
+
+  def hint_text
+    if form.start_year_after_2024?
+      "This is where two or more people are named as legal owners of the property after the purchase"
+    end
+  end
 end
