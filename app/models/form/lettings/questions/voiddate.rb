@@ -7,6 +7,6 @@ class Form::Lettings::Questions::Voiddate < ::Form::Question
     @type = "date"
     @check_answers_card_number = 0
     @question_number = 23
-    @bottom_guidance_partial = "void_date"
+    @top_guidance_partial = "void_date"
   end
 end

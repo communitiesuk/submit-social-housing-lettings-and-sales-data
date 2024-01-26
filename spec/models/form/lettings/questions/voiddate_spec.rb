@@ -31,8 +31,8 @@ RSpec.describe Form::Lettings::Questions::Voiddate, type: :model do
     expect(question.question_number).to eq(23)
   end
 
-  it "has the correct bottom_guidance_partial" do
-    expect(question.bottom_guidance_partial).to eq("void_date")
+  it "has the correct top_guidance_partial" do
+    expect(question.top_guidance_partial).to eq("void_date")
   end
 
   it "has the correct type" do
