@@ -971,6 +971,7 @@ private
       pscharge: %i[field_127],
       supcharg: %i[field_128],
       chcharge: %i[field_124],
+      tcharge: %i[field_125 field_126 field_127 field_128],
       household_charge: %i[field_122],
       hbrentshortfall: %i[field_129],
       tshortfall: %i[field_130],

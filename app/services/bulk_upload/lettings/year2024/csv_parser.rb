@@ -73,7 +73,7 @@ class BulkUpload::Lettings::Year2024::CsvParser
 private
 
   def default_field_numbers
-    (1..130).map { |h| h.present? && h.to_s.match?(/^[0-9]+$/) ? "field_#{h}" : "field_blank" }
+    (1..FIELDS).map { |h| h.present? && h.to_s.match?(/^[0-9]+$/) ? "field_#{h}" : "field_blank" }
   end
 
   def field_numbers
