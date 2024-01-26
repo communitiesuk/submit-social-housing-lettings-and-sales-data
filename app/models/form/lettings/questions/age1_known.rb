@@ -6,7 +6,6 @@ class Form::Lettings::Questions::Age1Known < ::Form::Question
     @header = "Do you know the lead tenant’s age?"
     @type = "radio"
     @check_answers_card_number = 1
-    @hint_text = "The ’lead’ or ’main’ tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest."
     @answer_options = ANSWER_OPTIONS
     @conditional_for = { "age1" => [0] }
     @hidden_in_check_answers = { "depends_on" => [{ "age1_known" => 0 }, { "age1_known" => 1 }] }
@@ -14,4 +13,12 @@ class Form::Lettings::Questions::Age1Known < ::Form::Question
   end
 
   ANSWER_OPTIONS = { "0" => { "value" => "Yes" }, "1" => { "value" => "No" } }.freeze
+
+  def hint_text
+    if form.start_year_after_2024?
+      "The ’lead’ or ’main’ tenant is the person in the household who does the most paid work. If several people do the same amount of paid work, the lead tenant is whoever is the oldest."
+    else
+      "The ’lead’ or ’main’ tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest."
+    end
+  end
 end
