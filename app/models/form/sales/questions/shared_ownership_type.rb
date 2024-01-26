@@ -4,11 +4,18 @@ class Form::Sales::Questions::SharedOwnershipType < ::Form::Question
     @id = "type"
     @check_answer_label = "Type of shared ownership sale"
     @header = "What is the type of shared ownership sale?"
-    @hint_text = "A shared ownership sale is when the purchaser buys up to 75% of the property value and pays rent to the Private Registered Provider (PRP) on the remaining portion"
     @top_guidance_partial = guidance_partial
     @type = "radio"
     @answer_options = answer_options
     @question_number = 4
+  end
+
+  def hint_text
+    if form.start_year_after_2024?
+      "When the purchaser buys an initial share of up to 75% of the property value and pays rent to the Private Registered Provider (PRP) on the remaining portion, or a subsequent staircasing transaction"
+    else
+      "A shared ownership sale is when the purchaser buys up to 75% of the property value and pays rent to the Private Registered Provider (PRP) on the remaining portion"
+    end
   end
 
   def answer_options
@@ -37,6 +44,10 @@ class Form::Sales::Questions::SharedOwnershipType < ::Form::Question
   end
 
   def guidance_partial
-    "shared_ownership_type_definitions" if form.start_date.year >= 2023
+    if form.start_year_after_2024?
+      "shared_ownership_type_definitions_2024"
+    elsif form.start_date.year >= 2023
+      "shared_ownership_type_definitions"
+    end
   end
 end

@@ -5,7 +5,7 @@ RSpec.describe Form::Sales::Pages::SharedOwnershipType, type: :model do
 
   let(:page_id) { nil }
   let(:page_definition) { nil }
-  let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date:)) }
+  let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date:, start_year_after_2024?: false)) }
   let(:start_date) { Time.utc(2022, 4, 1) }
 
   describe "headers" do
