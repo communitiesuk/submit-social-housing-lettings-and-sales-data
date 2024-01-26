@@ -6,6 +6,14 @@ RSpec.describe Form::Sales::Questions::OwnershipScheme, type: :model do
   let(:question_id) { nil }
   let(:question_definition) { nil }
   let(:page) { instance_double(Form::Page) }
+  let(:subsection) { instance_double(Form::Subsection) }
+  let(:form) { instance_double(Form) }
+
+  before do
+    allow(form).to receive(:start_year_after_2024?).and_return(false)
+    allow(page).to receive(:subsection).and_return(subsection)
+    allow(subsection).to receive(:form).and_return(form)
+  end
 
   it "has correct page" do
     expect(question.page).to eq(page)
@@ -37,5 +45,19 @@ RSpec.describe Form::Sales::Questions::OwnershipScheme, type: :model do
       "2" => { "value" => "Yes - a discounted ownership scheme" },
       "3" => { "value" => "No - this is an outright or other sale" },
     })
+  end
+
+  context "with collection year on or after 2024" do
+    before do
+      allow(form).to receive(:start_year_after_2024?).and_return(true)
+    end
+
+    it "has the correct answer_options" do
+      expect(question.answer_options).to eq({
+        "1" => { "value" => "Yes - a shared ownership scheme", "hint" => "When the purchaser buys an initial share of up to 75% of the property value and pays rent to the Private Registered Provider (PRP) on the remaining portion, or a subsequent staircasing transaction" },
+        "2" => { "value" => "Yes - a discounted ownership scheme" },
+        "3" => { "value" => "No - this is an outright or other sale" },
+      })
+    end
   end
 end
