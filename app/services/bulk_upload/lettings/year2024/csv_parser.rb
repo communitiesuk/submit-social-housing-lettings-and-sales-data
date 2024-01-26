@@ -4,7 +4,7 @@ class BulkUpload::Lettings::Year2024::CsvParser
   include CollectionTimeHelper
 
   FIELDS = 130
-  MAX_COLUMNS = 142
+  MAX_COLUMNS = 131
   FORM_YEAR = 2024
 
   attr_reader :path
@@ -26,7 +26,7 @@ class BulkUpload::Lettings::Year2024::CsvParser
   end
 
   def cols
-    @cols ||= ("A".."EL").to_a
+    @cols ||= ("A".."EA").to_a
   end
 
   def row_parsers
