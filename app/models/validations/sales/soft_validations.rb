@@ -84,6 +84,7 @@ module Validations::Sales::SoftValidations
   end
 
   def shared_ownership_deposit_invalid?
+    return unless saledate && collection_start_year <= 2023
     return unless mortgage || mortgageused == 2 || mortgageused == 3
     return unless cashdis || !is_type_discount?
     return unless deposit && value && equity
