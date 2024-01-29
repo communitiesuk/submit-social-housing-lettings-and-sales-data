@@ -36,5 +36,4 @@ class Form::Lettings::Questions::Waityear < ::Form::Question
       }.freeze
     end
   end
-
 end
