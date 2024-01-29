@@ -175,10 +175,9 @@ private
       if dynamic_duplicates.any?
         saved_duplicates = @log.duplicates
         if saved_duplicates.none? || duplicates_changed?(dynamic_duplicates, saved_duplicates)
-          @log.update!(duplicate_set_id: new_duplicate_set_id(@log)) if @log.duplicate_set_id.blank?
-          dynamic_duplicates.each do |duplicate|
-            duplicate.update!(duplicate_set_id: @log.duplicate_set_id) if duplicate.duplicate_set_id != @log.duplicate_set_id
-          end
+          duplicate_set_id = dynamic_duplicates.first.duplicate_set_id || new_duplicate_set_id(@log)
+          update_logs_with_duplicate_set_id(@log, dynamic_duplicates, duplicate_set_id)
+          saved_duplicates.first.update!(duplicate_set_id: nil) if saved_duplicates.count == 1
         end
         return send("#{@log.class.name.underscore}_duplicate_logs_path", @log, original_log_id: @log.id)
       end
