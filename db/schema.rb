@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_01_08_152935) do
+ActiveRecord::Schema[7.0].define(version: 2024_01_18_183843) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -302,6 +302,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_08_152935) do
     t.integer "supcharg_value_check"
     t.integer "scharge_value_check"
     t.integer "pscharge_value_check"
+    t.integer "duplicate_set_id"
     t.index ["bulk_upload_id"], name: "index_lettings_logs_on_bulk_upload_id"
     t.index ["created_by_id"], name: "index_lettings_logs_on_created_by_id"
     t.index ["location_id"], name: "index_lettings_logs_on_location_id"
@@ -463,6 +464,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_08_152935) do
     t.string "reader_type", null: false
     t.bigint "reader_id"
     t.datetime "timestamp", precision: nil, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["readable_type", "readable_id"], name: "index_read_marks_on_readable_type_and_readable_id"
     t.index ["reader_id", "reader_type", "readable_type", "readable_id"], name: "read_marks_reader_readable_index", unique: true
     t.index ["reader_type", "reader_id"], name: "index_read_marks_on_reader_type_and_reader_id"
@@ -648,6 +651,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_08_152935) do
     t.integer "old_form_id"
     t.datetime "values_updated_at"
     t.bigint "managing_organisation_id"
+    t.integer "duplicate_set_id"
     t.index ["bulk_upload_id"], name: "index_sales_logs_on_bulk_upload_id"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
     t.index ["managing_organisation_id"], name: "index_sales_logs_on_managing_organisation_id"
