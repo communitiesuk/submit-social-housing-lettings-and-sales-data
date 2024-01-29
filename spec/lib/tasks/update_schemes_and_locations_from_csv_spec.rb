@@ -334,8 +334,14 @@ RSpec.describe "bulk_update" do
       let!(:lettings_log) { FactoryBot.create(:lettings_log, :sh, location: locations[0], scheme:, values_updated_at: nil) }
       let!(:lettings_log_2) { FactoryBot.create(:lettings_log, :sh, location: locations[1], scheme:, values_updated_at: nil) }
       let!(:lettings_log_3) { FactoryBot.create(:lettings_log, :sh, location: locations[2], scheme:, values_updated_at: nil) }
+      let!(:closed_collection_lettings_log) { FactoryBot.create(:lettings_log, :sh, location: locations[0], scheme:, values_updated_at: nil) }
+      let!(:archived_closed_collection_lettings_log) { FactoryBot.create(:lettings_log, :sh, location: locations[0], scheme:, values_updated_at: nil) }
 
       before do
+        closed_collection_lettings_log.startdate = Time.zone.local(2022, 4, 1)
+        closed_collection_lettings_log.save!(validate: false)
+        archived_closed_collection_lettings_log.startdate = Time.zone.local(2021, 4, 1)
+        archived_closed_collection_lettings_log.save!(validate: false)
         allow(storage_service).to receive(:get_file_io)
         .with("original_locations.csv")
         .and_return(StringIO.new(replace_entity_ids_for_locations(locations[0], locations[1], locations[2], scheme, scheme, scheme, File.open("./spec/fixtures/files/original_locations.csv").read)))
@@ -395,6 +401,12 @@ RSpec.describe "bulk_update" do
 
         lettings_log_3.reload
         expect(lettings_log_3.values_updated_at).to eq(nil)
+
+        closed_collection_lettings_log.reload
+        expect(closed_collection_lettings_log.values_updated_at).not_to eq(nil)
+
+        archived_closed_collection_lettings_log.reload
+        expect(archived_closed_collection_lettings_log.values_updated_at).to eq(nil)
       end
 
       it "logs the progress of the update" do
@@ -408,6 +420,7 @@ RSpec.describe "bulk_update" do
         expect(Rails.logger).to receive(:info).with("Cannot update location #{locations[0].id} with active_dates as it it not a permitted field")
         expect(Rails.logger).to receive(:info).with("Saved location #{locations[0].id}.")
 
+        expect(Rails.logger).to receive(:info).with("Will not export log #{archived_closed_collection_lettings_log.id} as it is before the exportable date")
         expect(Rails.logger).to receive(:info).with("No changes to location #{locations[1].id}.")
 
         expect(Rails.logger).to receive(:info).with("Cannot update location #{locations[2].id} with postcode: SWAAA. Enter a postcode in the correct format, for example AA1 1AA")

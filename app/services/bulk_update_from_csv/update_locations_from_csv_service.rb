@@ -114,7 +114,11 @@ private
   def save_location(location, original_attributes)
     location.save!
     Rails.logger.info("Saved location #{original_attributes['location_code']}.")
-    LettingsLog.where(location_id: location.id).update_all(values_updated_at: Time.zone.now)
+    exportable_from_date = FormHandler.instance.previous_collection_start_date
+    LettingsLog.where(location_id: location.id).after_date(exportable_from_date).update_all(values_updated_at: Time.zone.now)
+    LettingsLog.where(location_id: location.id).where(startdate: nil).update_all(values_updated_at: Time.zone.now)
+    logs_not_to_export = LettingsLog.where(location_id: location.id).before_date(exportable_from_date)
+    Rails.logger.info("Will not export log #{logs_not_to_export.map(&:id).join(',')} as it is before the exportable date") if logs_not_to_export.any?
   rescue ActiveRecord::RecordInvalid => e
     Rails.logger.error("Cannot update location #{original_attributes['location_code']}. #{e.message}")
   end
