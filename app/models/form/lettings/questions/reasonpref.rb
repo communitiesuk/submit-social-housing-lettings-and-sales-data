@@ -6,7 +6,7 @@ class Form::Lettings::Questions::Reasonpref < ::Form::Question
     @header = "Was the household given ‘reasonable preference’ by the local authority?"
     @type = "radio"
     @check_answers_card_number = 0
-    @hint_text = "Households may be given ‘reasonable preference’ for social housing, also known as ‘priority need’, by the local authority."
+    @hint_text = form.start_year_after_2024? ? "Households may be given ‘reasonable preference’ for social housing under one or more specific category by the local authority. This is also known as ‘priority need’." : "Households may be given ‘reasonable preference’ for social housing, also known as ‘priority need’, by the local authority."
     @answer_options = ANSWER_OPTIONS
     @question_number = 82
   end
