@@ -814,6 +814,10 @@ private
     housingneeds_other == 1
   end
 
+  def no_or_unknown_other_housing_needs?
+    housingneeds_other&.zero? || housing_needs_other == 2
+  end
+
   def has_housingneeds?
     housingneeds == 1
   end
@@ -824,6 +828,10 @@ private
 
   def unknown_housingneeds?
     housingneeds == 3
+  end
+
+  def housingneeds_type_not_listed?
+    housingneeds_type == 3
   end
 
   def should_process_uprn_change?
