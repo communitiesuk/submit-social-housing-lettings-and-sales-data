@@ -90,6 +90,8 @@ RSpec.describe "bulk_update" do
 
       it "updates the allowed scheme fields if they have changed and doesn't update other fields" do
         create(:organisation_relationship, parent_organisation: schemes[0].owning_organisation, child_organisation: different_organisation)
+        closed_collection_lettings_log.update!(startdate: Time.zone.now)
+        archived_closed_collection_lettings_log.update!(startdate: Time.zone.now)
 
         task.invoke(original_schemes_csv_path, updated_schemes_csv_path)
         schemes[0].reload
@@ -107,8 +109,10 @@ RSpec.describe "bulk_update" do
         expect(schemes[0].total_units).to eq(2)
       end
 
-      it "updates the lettings log if scheme has changes owning organisation" do
+      it "updates the lettings log if scheme has changed owning organisation" do
         create(:organisation_relationship, parent_organisation: schemes[0].owning_organisation, child_organisation: different_organisation)
+        closed_collection_lettings_log.update!(startdate: Time.zone.now)
+        archived_closed_collection_lettings_log.update!(startdate: Time.zone.now)
 
         task.invoke(original_schemes_csv_path, updated_schemes_csv_path)
 
@@ -156,6 +160,16 @@ RSpec.describe "bulk_update" do
 
       it "does not update the owning organisation if the new organisation is not related to current organisation" do
         task.invoke(original_schemes_csv_path, updated_schemes_csv_path)
+        closed_collection_lettings_log.update!(startdate: Time.zone.now)
+        archived_closed_collection_lettings_log.update!(startdate: Time.zone.now)
+        schemes[0].reload
+        expect(schemes[0].owning_organisation).not_to eq(different_organisation)
+      end
+
+      it "does not update the owning organisation if there are logs from closed collection periods" do
+        create(:organisation_relationship, parent_organisation: schemes[0].owning_organisation, child_organisation: different_organisation)
+        task.invoke(original_schemes_csv_path, updated_schemes_csv_path)
+
         schemes[0].reload
         expect(schemes[0].owning_organisation).not_to eq(different_organisation)
       end
@@ -190,6 +204,8 @@ RSpec.describe "bulk_update" do
 
       it "logs the progress of the update" do
         create(:organisation_relationship, parent_organisation: schemes[0].owning_organisation, child_organisation: different_organisation)
+        closed_collection_lettings_log.update!(startdate: Time.zone.now)
+        archived_closed_collection_lettings_log.update!(startdate: Time.zone.now)
 
         expect(Rails.logger).to receive(:info).with("Updating scheme S#{schemes[0].id} with service_name: Updated test name")
         expect(Rails.logger).to receive(:info).with("Updating scheme S#{schemes[0].id} with sensitive: No")
@@ -205,7 +221,6 @@ RSpec.describe "bulk_update" do
         expect(Rails.logger).to receive(:info).with("Cannot update scheme S#{schemes[0].id} with created_at as it it not a permitted field")
         expect(Rails.logger).to receive(:info).with("Cannot update scheme S#{schemes[0].id} with active_dates as it it not a permitted field")
         expect(Rails.logger).to receive(:info).with("Saved scheme S#{schemes[0].id}.")
-        expect(Rails.logger).to receive(:info).with("Will not export log #{archived_closed_collection_lettings_log.id} as it is before the exportable date")
 
         expect(Rails.logger).to receive(:info).with("No changes to scheme S#{schemes[1].id}.")
 
@@ -253,10 +268,10 @@ RSpec.describe "bulk_update" do
         expect(Rails.logger).to receive(:info).with("Updating scheme S#{schemes[0].id} with support_type: Low level")
         expect(Rails.logger).to receive(:info).with("Updating scheme S#{schemes[0].id} with intended_stay: Permanent")
         expect(Rails.logger).to receive(:info).with("Updating scheme S#{schemes[0].id} with registered_under_care_act: No")
-        expect(Rails.logger).to receive(:info).with("Updating scheme S#{schemes[0].id} with owning_organisation: Different organisation")
         expect(Rails.logger).to receive(:info).with("Cannot update scheme S#{schemes[0].id} with status as it it not a permitted field")
         expect(Rails.logger).to receive(:info).with("Cannot update scheme S#{schemes[0].id} with created_at as it it not a permitted field")
         expect(Rails.logger).to receive(:info).with("Cannot update scheme S#{schemes[0].id} with active_dates as it it not a permitted field")
+        expect(Rails.logger).to receive(:info).with("Cannot update scheme S#{schemes[0].id} with owning_organisation: Different organisation. There are lettings logs from closed collection period using this scheme")
         expect(Rails.logger).to receive(:info).with("Saved scheme S#{schemes[0].id}.")
         expect(Rails.logger).to receive(:info).with("Will not export log #{archived_closed_collection_lettings_log.id} as it is before the exportable date")
 

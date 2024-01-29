@@ -87,11 +87,15 @@ private
     current_organisation = scheme.owning_organisation
     organisation = Organisation.find_by(name: value)
     if organisation.present? && (organisation.child_organisations.include?(current_organisation) || organisation.parent_organisations.include?(current_organisation))
-      scheme["owning_organisation_id"] = organisation.id
-      Rails.logger.info("Updating scheme #{original_attributes['scheme_code']} with owning_organisation: #{organisation.name}")
-      editable_from_date = FormHandler.instance.earliest_open_for_editing_collection_start_date
-      LettingsLog.where(scheme_id: scheme.id).after_date(editable_from_date).update!(location: nil, scheme: nil, unresolved: true)
-      LettingsLog.where(scheme_id: scheme.id).where(startdate: nil).update!(location: nil, scheme: nil, unresolved: true)
+      if LettingsLog.where(scheme_id: scheme.id).before_date(FormHandler.instance.lettings_earliest_open_for_editing_collection_start_date).any?
+        Rails.logger.info("Cannot update scheme #{original_attributes['scheme_code']} with owning_organisation: #{value}. There are lettings logs from closed collection period using this scheme")
+      else
+        scheme["owning_organisation_id"] = organisation.id
+        Rails.logger.info("Updating scheme #{original_attributes['scheme_code']} with owning_organisation: #{organisation.name}")
+        editable_from_date = FormHandler.instance.earliest_open_for_editing_collection_start_date
+        LettingsLog.where(scheme_id: scheme.id).after_date(editable_from_date).update!(location: nil, scheme: nil, unresolved: true)
+        LettingsLog.where(scheme_id: scheme.id).where(startdate: nil).update!(location: nil, scheme: nil, unresolved: true)
+      end
     else
       Rails.logger.info("Cannot update scheme #{original_attributes['scheme_code']} with owning_organisation: #{value}. Organisation with name #{value} is not in the database or is not related to current organisation")
     end
