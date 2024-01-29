@@ -305,6 +305,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_30_084707) do
     t.integer "duplicate_set_id"
     t.integer "nationality_all"
     t.integer "nationality_all_group"
+    t.integer "accessible_register"
     t.index ["bulk_upload_id"], name: "index_lettings_logs_on_bulk_upload_id"
     t.index ["created_by_id"], name: "index_lettings_logs_on_created_by_id"
     t.index ["location_id"], name: "index_lettings_logs_on_location_id"
@@ -466,8 +467,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_30_084707) do
     t.string "reader_type", null: false
     t.bigint "reader_id"
     t.datetime "timestamp", precision: nil, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.index ["readable_type", "readable_id"], name: "index_read_marks_on_readable_type_and_readable_id"
     t.index ["reader_id", "reader_type", "readable_type", "readable_id"], name: "read_marks_reader_readable_index", unique: true
     t.index ["reader_type", "reader_id"], name: "index_read_marks_on_reader_type_and_reader_id"
