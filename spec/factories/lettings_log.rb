@@ -112,6 +112,7 @@ FactoryBot.define do
       cbl { 0 }
       chr { 1 }
       cap { 0 }
+      accessible_register { 0 }
       reasonother { nil }
       housingneeds { 1 }
       housingneeds_type { 0 }
