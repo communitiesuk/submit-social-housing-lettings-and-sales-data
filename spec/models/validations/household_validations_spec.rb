@@ -693,7 +693,6 @@ RSpec.describe Validations::HouseholdValidations do
           expect(record.errors["housingneeds"]).to eq(error_message)
           expect(record.errors["housingneeds_type"]).to eq(error_message)
           expect(record.errors["housingneeds_other"]).to eq(error_message)
-
         end
       end
 
@@ -710,7 +709,6 @@ RSpec.describe Validations::HouseholdValidations do
           expect(record.errors["housingneeds"]).to eq(error_message)
           expect(record.errors["housingneeds_type"]).to eq(error_message)
           expect(record.errors["housingneeds_other"]).to eq(error_message)
-
         end
       end
     end
