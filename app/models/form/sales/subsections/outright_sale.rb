@@ -14,15 +14,15 @@ class Form::Sales::Subsections::OutrightSale < ::Form::Subsection
       Form::Sales::Pages::MortgageValueCheck.new("outright_sale_mortgage_used_mortgage_value_check", nil, self),
       Form::Sales::Pages::MortgageAmount.new("mortgage_amount_outright_sale", nil, self, ownershipsch: 3),
       Form::Sales::Pages::MortgageValueCheck.new("outright_sale_mortgage_amount_mortgage_value_check", nil, self),
-      Form::Sales::Pages::MortgageLender.new("mortgage_lender_outright_sale", nil, self, ownershipsch: 3),
-      Form::Sales::Pages::MortgageLenderOther.new("mortgage_lender_other_outright_sale", nil, self, ownershipsch: 3),
+      (Form::Sales::Pages::MortgageLender.new("mortgage_lender_outright_sale", nil, self, ownershipsch: 3) unless form.start_year_after_2024?),
+      (Form::Sales::Pages::MortgageLenderOther.new("mortgage_lender_other_outright_sale", nil, self, ownershipsch: 3) unless form.start_year_after_2024?),
       Form::Sales::Pages::MortgageLength.new("mortgage_length_outright_sale", nil, self, ownershipsch: 3),
       Form::Sales::Pages::ExtraBorrowing.new("extra_borrowing_outright_sale", nil, self, ownershipsch: 3),
       Form::Sales::Pages::AboutDepositWithoutDiscount.new("about_deposit_outright_sale", nil, self, ownershipsch: 3),
       Form::Sales::Pages::DepositValueCheck.new("outright_sale_deposit_value_check", nil, self),
       leasehold_charge_pages,
       Form::Sales::Pages::MonthlyChargesValueCheck.new("monthly_charges_outright_sale_value_check", nil, self),
-    ].compact
+    ].flatten.compact
   end
 
   def displayed_in_tasklist?(log)
