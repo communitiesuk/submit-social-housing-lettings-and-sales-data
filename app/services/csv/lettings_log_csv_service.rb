@@ -115,6 +115,10 @@ module Csv
         labels: %i[created_by is_dpo?],
         codes: %i[created_by is_dpo?],
       },
+      renttype_detail: {
+        labels: %i[renttype_detail],
+        codes: %i[renttype_detail_code],
+      },
     }.freeze
 
     PERSON_DETAILS = {}.tap { |hash|
@@ -244,12 +248,19 @@ module Csv
       1 => "Prefers not to say",
     }.freeze
 
+    RENTTYPE_LABELS = {
+      1 => "Social Rent",
+      2 => "Affordable Rent",
+      3 => "Intermediate Rent",
+    }.freeze
+
     LABELS = {
       "lettype" => LETTYPE_LABELS,
       "irproduct" => IRPRODUCT_LABELS,
       "lar" => LAR_LABELS,
       "newprop" => NEWPROP_LABELS,
       "incref" => INCREF_LABELS,
+      "renttype" => RENTTYPE_LABELS,
     }.freeze
 
     CONVENTIONAL_YES_NO_ATTRIBUTES = %w[illness_type_1 illness_type_2 illness_type_3 illness_type_4 illness_type_5 illness_type_6 illness_type_7 illness_type_8 illness_type_9 illness_type_10 refused cbl cap chr letting_allocation_none housingneeds_a housingneeds_b housingneeds_c housingneeds_d housingneeds_e housingneeds_f housingneeds_g housingneeds_h has_benefits nocharge].freeze
@@ -262,7 +273,7 @@ module Csv
       "created_by_id" => [],
       "scheme_id" => [],
       "location_id" => [],
-      "rent_type" => %w[renttype rent_type_detail],
+      "rent_type" => %w[renttype renttype_detail],
       "hb" => %w[hb has_benefits],
       "age1" => %w[refused hhtype totchild totelder totadult age1],
       "housingneeds_type" => %w[housingneeds_type housingneeds_a housingneeds_b housingneeds_c housingneeds_f housingneeds_g housingneeds_h],

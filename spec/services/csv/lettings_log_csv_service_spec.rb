@@ -89,7 +89,8 @@ RSpec.describe Csv::LettingsLogCsvService do
 
       it "removes some log attributes related to questions from the headers and replaces them with their derived values in the correct order" do
         expect(headers).not_to include "rent_type"
-        expect(headers).to include(*%w[wrent renttype rent_type_detail])
+        expect(headers).to include(*%w[wrent renttype renttype_detail])
+        expect(headers).not_to include("rent_type_detail")
       end
     end
 
