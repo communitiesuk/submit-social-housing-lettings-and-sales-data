@@ -228,6 +228,4 @@ class Form::Lettings::Questions::Reason < ::Form::Question
       }.freeze
     end
   end
-
-
 end
