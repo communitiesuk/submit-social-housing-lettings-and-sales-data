@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_01_18_183843) do
+ActiveRecord::Schema[7.0].define(version: 2024_01_30_084707) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -303,6 +303,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_18_183843) do
     t.integer "scharge_value_check"
     t.integer "pscharge_value_check"
     t.integer "duplicate_set_id"
+    t.integer "nationality_all"
+    t.integer "nationality_all_group"
     t.index ["bulk_upload_id"], name: "index_lettings_logs_on_bulk_upload_id"
     t.index ["created_by_id"], name: "index_lettings_logs_on_created_by_id"
     t.index ["location_id"], name: "index_lettings_logs_on_location_id"
@@ -652,6 +654,10 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_18_183843) do
     t.datetime "values_updated_at"
     t.bigint "managing_organisation_id"
     t.integer "duplicate_set_id"
+    t.integer "nationality_all"
+    t.integer "nationality_all_group"
+    t.integer "nationality_all_buyer2"
+    t.integer "nationality_all_buyer2_group"
     t.index ["bulk_upload_id"], name: "index_sales_logs_on_bulk_upload_id"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
     t.index ["managing_organisation_id"], name: "index_sales_logs_on_managing_organisation_id"
