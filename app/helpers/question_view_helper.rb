@@ -14,9 +14,13 @@ module QuestionViewHelper
   end
 
   def answer_option_synonyms(resource)
-    return unless resource.instance_of?(Scheme)
+    return unless resource.instance_of?(Scheme) || resource.is_a?(Hash)
 
-    resource.locations.map(&:postcode).join(",")
+    if resource.instance_of?(Scheme)
+      resource.locations.map(&:postcode).join(",")
+    else
+      resource["synonyms"]
+    end
   end
 
   def answer_option_append(resource)
@@ -31,6 +35,11 @@ module QuestionViewHelper
     return unless resource.instance_of?(Scheme)
 
     [resource.primary_client_group, resource.secondary_client_group].compact.join(", ")
+  end
+
+  def select_option_name(value)
+    return value.service_name if value.respond_to?(:service_name)
+    return value["name"] if value["name"].present?
   end
 
 private
