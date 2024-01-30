@@ -56,19 +56,10 @@ RSpec.describe Form::Lettings::Questions::ReasonRenewal, type: :model do
       expect(question.answer_options).to eq({
         "40" => { "value" => "End of assured shorthold tenancy (no fault)" },
         "42" => { "value" => "End of fixed term tenancy (no fault)" },
-        "20" => {
-          "value" => "Other",
-        },
-        "47" => {
-          "value" => "Tenant prefers not to say",
-        },
-        "divider" => {
-          "value" => true,
-        },
-        "28" => {
-          "value" => "Don’t know",
-        },
-
+        "20" => { "value" => "Other" },
+        "47" => { "value" => "Tenant prefers not to say" },
+        "divider" => { "value" => true },
+        "28" => { "value" => "Don’t know" },
       })
     end
   end
@@ -80,31 +71,14 @@ RSpec.describe Form::Lettings::Questions::ReasonRenewal, type: :model do
 
     it "has the correct answer_options" do
       expect(question.answer_options).to eq({
-        "50" => {
-          "value" => "End of social housing tenancy - no fault",
-        },
-        "51" => {
-          "value" => "End of social housing tenancy - evicted due to anti-social behaviour (ASB)",
-        },
-        "52" => {
-          "value" => "End of social housing tenancy - evicted due to rent arrears",
-        },
-        "53" => {
-          "value" => "End of social housing tenancy - evicted for any other reason",
-        },
-        "20" => {
-          "value" => "Other",
-        },
-        "47" => {
-          "value" => "Tenant prefers not to say",
-        },
-        "divider" => {
-          "value" => true,
-        },
-        "28" => {
-          "value" => "Don’t know",
-        },
-
+        "50" => { "value" => "End of social housing tenancy - no fault" },
+        "51" => { "value" => "End of social housing tenancy - evicted due to anti-social behaviour (ASB)" },
+        "52" => { "value" => "End of social housing tenancy - evicted due to rent arrears" },
+        "53" => { "value" => "End of social housing tenancy - evicted for any other reason" },
+        "20" => { "value" => "Other"        },
+        "47" => { "value" => "Tenant prefers not to say" },
+        "divider" => { "value" => true },
+        "28" => { "value" => "Don’t know" },
       })
     end
   end
