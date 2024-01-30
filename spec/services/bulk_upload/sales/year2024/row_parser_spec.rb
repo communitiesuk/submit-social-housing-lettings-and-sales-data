@@ -287,7 +287,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
       it "has errors on correct setup fields" do
         errors = parser.errors.select { |e| e.options[:category] == :setup }.map(&:attribute).sort
 
-        expect(errors).to eql(%i[field_1 field_18 field_4 field_5 field_6 field_8])
+        expect(errors).to eql(%i[field_1 field_17 field_18 field_4 field_5 field_6 field_8])
       end
     end
 
@@ -303,7 +303,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
       it "has errors on correct setup fields" do
         errors = parser.errors.select { |e| e.options[:category] == :setup }.map(&:attribute).sort
 
-        expect(errors).to eql(%i[field_1 field_15 field_18 field_4 field_5 field_6 field_9])
+        expect(errors).to eql(%i[field_1 field_15 field_17 field_18 field_4 field_5 field_6 field_9])
       end
     end
 
@@ -321,7 +321,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
       it "has errors on correct setup fields" do
         errors = parser.errors.select { |e| e.options[:category] == :setup }.map(&:attribute).sort
 
-        expect(errors).to eql(%i[field_1 field_16 field_18 field_4 field_5 field_6])
+        expect(errors).to eql(%i[field_1 field_16 field_17 field_18 field_4 field_5 field_6])
       end
     end
 
@@ -338,11 +338,11 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
       it "has errors on correct setup fields" do
         errors = parser.errors.select { |e| e.options[:category] == :setup }.map(&:attribute).sort
 
-        expect(errors).to eql(%i[field_1 field_10 field_15 field_18 field_4 field_5 field_6])
+        expect(errors).to eql(%i[field_1 field_10 field_15 field_17 field_18 field_4 field_5 field_6])
       end
     end
 
-    context "when setup section not complete it's discounted ownership joint purchase" do
+    context "when setup section not complete and it's discounted ownership joint purchase" do
       let(:attributes) do
         {
           bulk_upload:,
@@ -356,7 +356,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
       it "has errors on correct setup fields" do
         errors = parser.errors.select { |e| e.options[:category] == :setup }.map(&:attribute).sort
 
-        expect(errors).to eql(%i[field_1 field_18 field_4 field_5 field_6 field_8])
+        expect(errors).to eql(%i[field_1 field_17 field_18 field_4 field_5 field_6 field_8])
       end
     end
 
@@ -372,7 +372,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
       it "has errors on correct setup fields" do
         errors = parser.errors.select { |e| e.options[:category] == :setup }.map(&:attribute).sort
 
-        expect(errors).to eql(%i[field_1 field_11 field_13 field_14 field_18 field_4 field_5 field_6])
+        expect(errors).to eql(%i[field_1 field_11 field_13 field_14 field_17 field_18 field_4 field_5 field_6])
       end
     end
 
@@ -390,7 +390,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
       it "has errors on correct setup fields" do
         errors = parser.errors.select { |e| e.options[:category] == :setup }.map(&:attribute).sort
 
-        expect(errors).to eql(%i[field_1 field_12 field_14 field_15 field_18 field_4 field_5 field_6])
+        expect(errors).to eql(%i[field_1 field_12 field_14 field_15 field_17 field_18 field_4 field_5 field_6])
       end
     end
 
