@@ -71,7 +71,7 @@ RSpec.describe Form::Lettings::Questions::Reasonpref, type: :model do
     end
 
     it "has the correct hint" do
-      expect(question.hint_text).to eq("Households may be given ‘reasonable preference’ for social housing under one or more specific category by the local authority. This is also known as ‘priority need’.")
+      expect(question.hint_text).to eq("Households may be given ‘reasonable preference’ for social housing under one or more specific categories by the local authority. This is also known as ‘priority need’.")
     end
   end
 end
