@@ -2330,6 +2330,43 @@ RSpec.describe LettingsLog do
         expect(record_from_db["irproduct"]).to eq(nil)
       end
     end
+
+    context "when updating nationality_all_group" do
+      let!(:lettings_log) do
+        described_class.create({
+          managing_organisation: owning_organisation,
+          owning_organisation:,
+          created_by: created_by_user,
+          startdate: Time.zone.local(2024, 4, 10),
+          needstype: 1,
+          renewal: 1,
+          rent_type: 1,
+        })
+      end
+
+      before do
+        Timecop.freeze(Time.zone.local(2024, 4, 10))
+        Singleton.__init__(FormHandler)
+      end
+
+      after do
+        Timecop.return
+        Singleton.__init__(FormHandler)
+      end
+
+      it "correctly derives nationality_all when it's UK" do
+        expect { lettings_log.update!(nationality_all_group: 826, declaration: 1) }.to change(lettings_log, :nationality_all).to 826
+      end
+
+      it "correctly derives nationality_all when it's prefers not to say" do
+        expect { lettings_log.update!(nationality_all_group: 13, declaration: 1) }.to change(lettings_log, :nationality_all).to 13
+      end
+
+      it "does not derive nationality_all when it's other or not given" do
+        expect { lettings_log.update!(nationality_all_group: 12, declaration: 1) }.not_to change(lettings_log, :nationality_all)
+        expect { lettings_log.update!(nationality_all_group: nil, declaration: 1) }.not_to change(lettings_log, :nationality_all)
+      end
+    end
   end
 
   describe "optional fields" do
