@@ -100,6 +100,8 @@ private
     @csv_parser ||= case bulk_upload.year
                     when 2023
                       BulkUpload::Lettings::Year2023::CsvParser.new(path:)
+                    when 2024
+                      BulkUpload::Lettings::Year2024::CsvParser.new(path:)
                     else
                       raise "csv parser not found"
                     end

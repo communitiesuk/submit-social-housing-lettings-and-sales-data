@@ -42,6 +42,15 @@ class BulkUpload::LettingsLogToCsv
     end
   end
 
+  def to_2024_csv_row(seed: nil)
+    if seed
+      row = to_2024_row.shuffle(random: Random.new(seed))
+      (row_prefix + row).flatten.join(",") + line_ending
+    else
+      (row_prefix + to_2024_row).flatten.join(",") + line_ending
+    end
+  end
+
   def to_2023_row
     to_2022_row + [
       log.needstype,
@@ -62,8 +71,167 @@ class BulkUpload::LettingsLogToCsv
     end.flatten.join(",") + line_ending
   end
 
+  def default_2024_field_numbers_row(seed: nil)
+    if seed
+      ["Bulk upload field number"] + default_2024_field_numbers.shuffle(random: Random.new(seed))
+    else
+      ["Bulk upload field number"] + default_2024_field_numbers
+    end.flatten.join(",") + line_ending
+  end
+
   def default_2023_field_numbers
     [5, nil, nil, 15, 16, nil, 13, 40, 41, 42, 43, 46, 52, 56, 60, 64, 68, 72, 76, 47, 53, 57, 61, 65, 69, 73, 77, 51, 55, 59, 63, 67, 71, 75, 50, 54, 58, 62, 66, 70, 74, 78, 48, 49, 79, 81, 82, 123, 124, 122, 120, 102, 103, nil, 83, 84, 85, 86, 87, 88, 104, 109, 107, 108, 106, 100, 101, 105, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 126, 128, 129, 130, 131, 132, 127, 125, 133, 134, 33, 34, 35, 36, 37, 38, nil, 7, 8, 9, 28, 14, 32, 29, 30, 31, 26, 27, 25, 23, 24, nil, 1, 3, 2, 80, nil, 121, 44, 89, 98, 92, 95, 90, 91, 93, 94, 97, 96, 99, 10, 11, 12, 45, 39, 6, 4, 17, 18, 19, 20, 21, 22]
+  end
+
+  def default_2024_field_numbers
+    (1..130).to_a
+  end
+
+  def to_2024_row
+    [
+      log.owning_organisation&.old_visible_id, # 1
+      log.managing_organisation&.old_visible_id,
+      log.created_by&.email,
+      log.needstype,
+      "S#{log.scheme&.id}",
+      log.location&.id,
+      renewal,
+      log.startdate&.day,
+      log.startdate&.month,
+      log.startdate&.strftime("%y"), # 10
+
+      london_affordable_rent,
+      log.irproduct_other,
+      log.tenancycode,
+      log.propcode,
+      log.declaration,
+      log.uprn,
+      log.address_line1,
+      log.address_line2,
+      log.town_or_city,
+      log.county, # 20
+
+      ((log.postcode_full || "").split(" ") || [""]).first,
+      ((log.postcode_full || "").split(" ") || [""]).last,
+      log.la,
+      log.rsnvac,
+      log.unitletas,
+      log.unittype_gn,
+      log.builtype,
+      log.wchair,
+      log.beds,
+      log.voiddate&.day, # 30
+
+      log.voiddate&.month,
+      log.voiddate&.strftime("%y"),
+      log.mrcdate&.day,
+      log.mrcdate&.month,
+      log.mrcdate&.strftime("%y"),
+      log.joint,
+      log.startertenancy,
+      log.tenancy,
+      log.tenancyother,
+      log.tenancylength, # 40
+
+      log.sheltered,
+      log.age1 || overrides[:age1],
+      log.sex1,
+      log.ethnic,
+      log.national,
+      log.ecstat1,
+      log.relat2,
+      log.age2 || overrides[:age2],
+      log.sex2,
+      log.ecstat2, # 50
+
+      log.relat3,
+      log.age3 || overrides[:age3],
+      log.sex3,
+      log.ecstat3,
+      log.relat4,
+      log.age4 || overrides[:age4],
+      log.sex4,
+      log.ecstat4,
+      log.relat5,
+      log.age5 || overrides[:age5], # 60
+
+      log.sex5,
+      log.ecstat5,
+      log.relat6,
+      log.age6 || overrides[:age6],
+      log.sex6,
+      log.ecstat6,
+      log.relat7,
+      log.age7 || overrides[:age7],
+      log.sex7,
+      log.ecstat7, # 70
+
+      log.relat8,
+      log.age8 || overrides[:age8],
+      log.sex8,
+      log.ecstat8,
+      log.armedforces,
+      log.leftreg,
+      log.reservist,
+      log.preg_occ,
+      log.housingneeds_a,
+      log.housingneeds_b, # 80
+
+      log.housingneeds_c,
+      log.housingneeds_f,
+      log.housingneeds_g,
+      log.housingneeds_h,
+      overrides[:illness] || log.illness,
+      log.illness_type_1,
+      log.illness_type_2,
+      log.illness_type_3,
+      log.illness_type_4,
+      log.illness_type_5, # 90
+
+      log.illness_type_6,
+      log.illness_type_7,
+      log.illness_type_8,
+      log.illness_type_9,
+      log.illness_type_10,
+      log.layear,
+      log.waityear,
+      log.reason,
+      log.reasonother,
+      log.prevten, # 100
+
+      homeless,
+      previous_postcode_known,
+      ((log.ppostcode_full || "").split(" ") || [""]).first,
+      ((log.ppostcode_full || "").split(" ") || [""]).last,
+      log.prevloc,
+      log.reasonpref,
+      log.rp_homeless,
+      log.rp_insan_unsat,
+      log.rp_medwel,
+      log.rp_hardship, # 110
+
+      log.rp_dontknow,
+      cbl,
+      chr,
+      cap,
+      nil, # accessible register
+      log.referral,
+      net_income_known,
+      log.earnings,
+      log.incfreq,
+      log.hb, # 120
+
+      log.benefits,
+      log.household_charge,
+      log.period,
+      log.chcharge,
+      log.brent,
+      log.scharge,
+      log.pscharge,
+      log.supcharg,
+      log.hbrentshortfall,
+      log.tshortfall, # 130
+    ]
   end
 
   def to_2022_row

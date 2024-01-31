@@ -1,11 +1,11 @@
 require "csv"
 
-class BulkUpload::Lettings::Year2023::CsvParser
+class BulkUpload::Lettings::Year2024::CsvParser
   include CollectionTimeHelper
 
-  FIELDS = 134
-  MAX_COLUMNS = 142
-  FORM_YEAR = 2023
+  FIELDS = 130
+  MAX_COLUMNS = 131
+  FORM_YEAR = 2024
 
   attr_reader :path
 
@@ -26,7 +26,7 @@ class BulkUpload::Lettings::Year2023::CsvParser
   end
 
   def cols
-    @cols ||= ("A".."EL").to_a
+    @cols ||= ("A".."EA").to_a
   end
 
   def row_parsers
@@ -34,7 +34,7 @@ class BulkUpload::Lettings::Year2023::CsvParser
       stripped_row = row[col_offset..]
       hash = Hash[field_numbers.zip(stripped_row)]
 
-      BulkUpload::Lettings::Year2023::RowParser.new(hash)
+      BulkUpload::Lettings::Year2024::RowParser.new(hash)
     end
   end
 
@@ -73,7 +73,7 @@ class BulkUpload::Lettings::Year2023::CsvParser
 private
 
   def default_field_numbers
-    [5, nil, nil, 15, 16, nil, 13, 40, 41, 42, 43, 46, 52, 56, 60, 64, 68, 72, 76, 47, 53, 57, 61, 65, 69, 73, 77, 51, 55, 59, 63, 67, 71, 75, 50, 54, 58, 62, 66, 70, 74, 78, 48, 49, 79, 81, 82, 123, 124, 122, 120, 102, 103, nil, 83, 84, 85, 86, 87, 88, 104, 109, 107, 108, 106, 100, 101, 105, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 126, 128, 129, 130, 131, 132, 127, 125, 133, 134, 33, 34, 35, 36, 37, 38, nil, 7, 8, 9, 28, 14, 32, 29, 30, 31, 26, 27, 25, 23, 24, nil, 1, 3, 2, 80, nil, 121, 44, 89, 98, 92, 95, 90, 91, 93, 94, 97, 96, 99, 10, 11, 12, 45, 39, 6, 4, 17, 18, 19, 20, 21, 22].map { |h| h.present? && h.to_s.match?(/^[0-9]+$/) ? "field_#{h}" : "field_blank" }
+    (1..FIELDS).map { |h| h.present? && h.to_s.match?(/^[0-9]+$/) ? "field_#{h}" : "field_blank" }
   end
 
   def field_numbers
@@ -105,9 +105,9 @@ private
 
   def first_record_start_date
     if with_headers?
-      Date.new(row_parsers.first.field_9.to_i + 2000, row_parsers.first.field_8.to_i, row_parsers.first.field_7.to_i)
+      Date.new(row_parsers.first.field_10.to_i + 2000, row_parsers.first.field_9.to_i, row_parsers.first.field_8.to_i)
     else
-      Date.new(rows.first[8].to_i + 2000, rows.first[7].to_i, rows.first[6].to_i)
+      Date.new(rows.first[9].to_i + 2000, rows.first[8].to_i, rows.first[7].to_i)
     end
   end
 end
