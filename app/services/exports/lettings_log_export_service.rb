@@ -227,8 +227,6 @@ module Exports
         attribute_hash["ecstat#{index}"] = 10
       end
 
-      attribute_hash["renttype_detail"] = LettingsLog::RENTTYPE_DETAIL_MAPPING[lettings_log.rent_type] if lettings_log.rent_type.present?
-
       attribute_hash
     end
 
