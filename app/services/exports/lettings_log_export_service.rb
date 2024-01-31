@@ -258,12 +258,14 @@ module Exports
       attributes.reject! { |attribute| is_omitted_field?(attribute) }
     end
 
-    def is_omitted_field?(field_name)
+    def is_omitted_field?(field_name, lettings_log = nil)
       pattern_age = /age\d_known/
       details_known_prefix = "details_known_"
       field_name.starts_with?(details_known_prefix) ||
         pattern_age.match(field_name) ||
-        !EXPORT_FIELDS.include?(field_name)
+        !EXPORT_FIELDS.include?(field_name) ||
+        (lettings_log.form.start_year_after_2024? && field_name == "national") ||
+        (!lettings_log.form.start_year_after_2024? && field_name == "nationality_all")
     end
 
     def build_export_xml(lettings_logs)
@@ -274,7 +276,7 @@ module Exports
         form = doc.create_element("form")
         doc.at("forms") << form
         attribute_hash.each do |key, value|
-          if is_omitted_field?(key)
+          if is_omitted_field?(key, lettings_log)
             next
           else
             form << doc.create_element(key, value)

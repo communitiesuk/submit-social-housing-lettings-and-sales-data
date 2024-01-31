@@ -54,6 +54,7 @@ module Exports::LettingsLogExportConstants
     "mobstand",
     "mrcdate",
     "national",
+    "nationality_all",
     "needstype",
     "new_old",
     "newprop",
