@@ -33,7 +33,7 @@ RSpec.describe Form::Lettings::Questions::NationalityAllGroup, type: :model do
     expect(question.answer_options).to eq({
       "826" => { "value" => "United Kingdom" },
       "12" => { "value" => "Other" },
-      "13" => { "value" => "Tenant prefers not to say" },
+      "0" => { "value" => "Tenant prefers not to say" },
     })
   end
 end

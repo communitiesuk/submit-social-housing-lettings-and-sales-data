@@ -23,7 +23,7 @@ RSpec.describe Form::Sales::Questions::NationalityAllGroup, type: :model do
     expect(question.answer_options).to eq({
       "826" => { "value" => "United Kingdom" },
       "12" => { "value" => "Other" },
-      "13" => { "value" => "Buyer prefers not to say" },
+      "0" => { "value" => "Buyer prefers not to say" },
     })
   end
 
