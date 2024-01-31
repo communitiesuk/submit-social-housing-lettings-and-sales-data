@@ -214,4 +214,8 @@ class Form::Sales::Questions::NationalityAll < ::Form::Question
     "894" => { "name" => "Zambia", "synonyms" => "ZM" },
     "716" => { "name" => "Zimbabwe", "synonyms" => "ZW" },
   }.freeze
+
+  def answer_label(log, _current_user = nil)
+    ANSWER_OPTIONS[log.send(id).to_s]["name"]
+  end
 end
