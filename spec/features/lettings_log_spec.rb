@@ -459,13 +459,6 @@ RSpec.describe "Lettings Log Features" do
       end
 
       it "allows keeping the original log and deleting duplicates" do
-        lettings_log.reload
-        duplicate_log.reload
-        expect(lettings_log.duplicates.count).to eq(1)
-        expect(lettings_log.duplicate_set_id).not_to be_nil
-        expect(duplicate_log.duplicate_set_id).not_to be_nil
-        expect(lettings_log.duplicates).to include(duplicate_log)
-
         expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/duplicate-logs?original_log_id=#{lettings_log.id}")
         click_link("Keep this log and delete duplicates", href: "/lettings-logs/#{lettings_log.id}/delete-duplicates?original_log_id=#{lettings_log.id}")
         expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/delete-duplicates?original_log_id=#{lettings_log.id}")
@@ -478,14 +471,6 @@ RSpec.describe "Lettings Log Features" do
         expect(page).not_to have_content("These logs are duplicates")
         expect(page).not_to have_link("Keep this log and delete duplicates")
         expect(page).to have_link("Back to Log #{lettings_log.id}", href: "/lettings-logs/#{lettings_log.id}")
-
-        lettings_log.reload
-        duplicate_log.reload
-
-        expect(lettings_log.duplicates.count).to eq(0)
-        expect(duplicate_log.duplicates.count).to eq(0)
-        expect(lettings_log.duplicate_set_id).to be_nil
-        expect(duplicate_log.duplicate_set_id).to be_nil
       end
 
       it "allows changing answers on remaining original log" do
@@ -498,13 +483,6 @@ RSpec.describe "Lettings Log Features" do
       end
 
       it "allows keeping the duplicate log and deleting the original one" do
-        lettings_log.reload
-        duplicate_log.reload
-        expect(lettings_log.duplicates.count).to eq(1)
-        expect(lettings_log.duplicate_set_id).not_to be_nil
-        expect(duplicate_log.duplicate_set_id).not_to be_nil
-        expect(duplicate_log.duplicates).to include(lettings_log)
-
         expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/duplicate-logs?original_log_id=#{lettings_log.id}")
         click_link("Keep this log and delete duplicates", href: "/lettings-logs/#{duplicate_log.id}/delete-duplicates?original_log_id=#{lettings_log.id}")
         expect(page).to have_current_path("/lettings-logs/#{duplicate_log.id}/delete-duplicates?original_log_id=#{lettings_log.id}")
@@ -517,14 +495,6 @@ RSpec.describe "Lettings Log Features" do
         expect(page).not_to have_content("These logs are duplicates")
         expect(page).not_to have_link("Keep this log and delete duplicates")
         expect(page).to have_link("Back to lettings logs", href: "/lettings-logs")
-
-        lettings_log.reload
-        duplicate_log.reload
-
-        expect(lettings_log.duplicates.count).to eq(0)
-        expect(duplicate_log.duplicates.count).to eq(0)
-        expect(lettings_log.duplicate_set_id).to be_nil
-        expect(duplicate_log.duplicate_set_id).to be_nil
       end
 
       it "allows changing answers to remaining duplicate log" do
@@ -537,13 +507,6 @@ RSpec.describe "Lettings Log Features" do
       end
 
       it "allows deduplicating logs by changing the answers on the duplicate log" do
-        lettings_log.reload
-        duplicate_log.reload
-        expect(lettings_log.duplicates.count).to eq(1)
-        expect(lettings_log.duplicate_set_id).not_to be_nil
-        expect(duplicate_log.duplicate_set_id).not_to be_nil
-        expect(lettings_log.duplicates).to include(duplicate_log)
-
         expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/duplicate-logs?original_log_id=#{lettings_log.id}")
         click_link("Change", href: "/lettings-logs/#{duplicate_log.id}/tenant-code?first_remaining_duplicate_id=#{lettings_log.id}&original_log_id=#{lettings_log.id}&referrer=duplicate_logs")
         fill_in("lettings-log-tenancycode-field", with: "something else")
@@ -553,14 +516,6 @@ RSpec.describe "Lettings Log Features" do
         expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
         expect(page).to have_content("Log #{duplicate_log.id} is no longer a duplicate and has been removed from the list")
         expect(page).to have_content("You changed the tenant code.")
-
-        lettings_log.reload
-        duplicate_log.reload
-
-        expect(lettings_log.duplicates.count).to eq(0)
-        expect(duplicate_log.duplicates.count).to eq(0)
-        expect(lettings_log.duplicate_set_id).to be_nil
-        expect(duplicate_log.duplicate_set_id).to be_nil
       end
 
       it "allows deduplicating logs by changing the answers on the original log" do
@@ -572,8 +527,6 @@ RSpec.describe "Lettings Log Features" do
         expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
         expect(page).to have_content("Log #{lettings_log.id} is no longer a duplicate and has been removed from the list")
         expect(page).to have_content("You changed the tenant code.")
-        expect(duplicate_log.duplicates.count).to eq(0)
-        expect(duplicate_log.duplicate_set_id).to be_nil
       end
     end
   end

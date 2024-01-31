@@ -145,7 +145,6 @@
     <county/>
     <discarded_at/>
     <creation_method>1</creation_method>
-    <duplicate_set_id/>
     <formid>{id}</formid>
     <owningorgid>{owning_org_id}</owningorgid>
     <owningorgname>DLUHC</owningorgname>
