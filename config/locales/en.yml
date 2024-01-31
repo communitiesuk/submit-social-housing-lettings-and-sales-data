@@ -452,7 +452,7 @@ en:
         retired_over_70: "Answer cannot be over 70 as person %{person_num} has economic status that is not ‘retired’"
         child_under_16_relat_lettings: "Answer cannot be under 16 as person %{person_num}'s relationship to the lead tenant is not ‘child’, ‘other’ or ‘prefers not to say’"
         child_under_16_relat_sales: "Answer cannot be under 16 as person %{person_num}'s relationship to buyer 1 is not ‘child’, ‘other’ or ‘prefers not to say’"
-        child_under_16_ecstat: "Answer cannot be under 16 as person’s %{person_num} working situation is not ‘child under 16’, ‘other’ or ‘prefers not to say’"
+        child_under_16_ecstat: "Answer cannot be under 16 as person %{person_num}’s working situation is not ‘child under 16’, ‘other’ or ‘prefers not to say’"
         child_over_16: "Answer cannot be over 16 as person’s %{person_num} working situation is ‘child under 16‘"
         child_over_20: "Answer cannot be 20 or over as the relationship is ‘child’"
         child_12_years_younger: "A child must be at least 12 years younger than their parent"

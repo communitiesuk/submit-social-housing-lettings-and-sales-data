@@ -38,8 +38,8 @@ private
     return unless age && relationship
 
     if age < 16 && !relationship_is_child_other_or_refused?(relationship)
-      record.errors.add "age#{person_num}", I18n.t("validations.household.age.child_under_16_relat_sales")
-      record.errors.add "relat#{person_num}", I18n.t("validations.household.relat.child_under_16_sales")
+      record.errors.add "age#{person_num}", I18n.t("validations.household.age.child_under_16_relat_sales", person_num:)
+      record.errors.add "relat#{person_num}", I18n.t("validations.household.relat.child_under_16_sales", person_num:)
     elsif age >= 20 && person_is_child?(relationship)
       record.errors.add "age#{person_num}", I18n.t("validations.household.age.child_over_20")
       record.errors.add "relat#{person_num}", I18n.t("validations.household.relat.child_over_20")
