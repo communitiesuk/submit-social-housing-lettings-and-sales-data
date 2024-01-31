@@ -300,7 +300,7 @@ module Csv
 
     def lettings_log_attributes
       ordered_questions = FormHandler.instance.ordered_lettings_questions_for_all_years
-      ordered_questions.reject! { |q| q.id.match?(/age\d_known|rent_value_check/) }
+      ordered_questions.reject! { |q| q.id.match?(/age\d_known|rent_value_check|nationality_all_group/) }
       attributes = ordered_questions.flat_map do |question|
         if question.type == "checkbox"
           question.answer_options.keys.reject { |key| key == "divider" }.map { |key|
