@@ -550,12 +550,8 @@ class LettingsLog < Log
     location.type_of_unit_before_type_cast if location
   end
 
-  def renttype_detail
+  def rent_type_detail
     form.get_question("rent_type", self)&.label_from_value(rent_type)
-  end
-
-  def renttype_detail_code
-    RENTTYPE_DETAIL_MAPPING[rent_type] if rent_type.present?
   end
 
   def non_location_setup_questions_completed?
