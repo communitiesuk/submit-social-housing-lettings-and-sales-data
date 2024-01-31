@@ -7,10 +7,21 @@ class Form::Lettings::Questions::IsCarehome < ::Form::Question
     @type = "radio"
     @check_answers_card_number = 0
     @hint_text = ""
-    @answer_options = ANSWER_OPTIONS
     @conditional_for = { "chcharge" => [1] }
     @question_number = 93
   end
 
-  ANSWER_OPTIONS = { "0" => { "value" => "No" }, "1" => { "value" => "Yes" } }.freeze
+  def answer_options
+    if form.start_year_after_2024?
+      {
+        "1" => { "value" => "Yes" },
+        "0" => { "value" => "No" },
+      }.freeze
+    else
+      {
+        "0" => { "value" => "No" },
+        "1" => { "value" => "Yes" },
+      }.freeze
+    end
+  end
 end
