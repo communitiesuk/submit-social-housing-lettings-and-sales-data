@@ -25,14 +25,8 @@ class DeleteLogsController < ApplicationController
 
   def discard_lettings_logs
     logs = LettingsLog.find(params.require(:ids))
-    remove_lettings_duplicate_set_ids(logs)
     discard logs
     if request.referer&.include?("delete-duplicates")
-      logs.each do |log|
-        log.update!(duplicate_set_id: nil)
-      end
-      LettingsLog.find(params["remaining_log_id"]).update!(duplicate_set_id: nil)
-
       redirect_to lettings_log_duplicate_logs_path(lettings_log_id: params["remaining_log_id"], original_log_id: params["original_log_id"], referrer: params[:referrer], organisation_id: params[:organisation_id]), notice: I18n.t("notification.duplicate_logs_deleted", count: logs.count, log_ids: duplicate_log_ids(logs))
     else
       redirect_to lettings_logs_path, notice: I18n.t("notification.logs_deleted", count: logs.count)
@@ -60,14 +54,8 @@ class DeleteLogsController < ApplicationController
 
   def discard_sales_logs
     logs = SalesLog.find(params.require(:ids))
-    remove_sales_duplicate_set_ids(logs)
     discard logs
     if request.referer&.include?("delete-duplicates")
-      logs.each do |log|
-        log.update!(duplicate_set_id: nil)
-      end
-      SalesLog.find(params["remaining_log_id"]).update!(duplicate_set_id: nil)
-
       redirect_to sales_log_duplicate_logs_path(sales_log_id: params["remaining_log_id"], original_log_id: params["original_log_id"], referrer: params[:referrer], organisation_id: params[:organisation_id]), notice: I18n.t("notification.duplicate_logs_deleted", count: logs.count, log_ids: duplicate_log_ids(logs))
     else
       redirect_to sales_logs_path, notice: I18n.t("notification.logs_deleted", count: logs.count)
@@ -214,31 +202,5 @@ private
 
   def duplicate_log_ids(logs)
     logs.map { |log| "Log #{log.id}" }.to_sentence(last_word_connector: " and ")
-  end
-
-  def remove_lettings_duplicate_set_ids(logs)
-    duplicate_set_ids = []
-    logs.each do |log|
-      if log.duplicate_set_id.present?
-        duplicate_set_ids << log.duplicate_set_id
-        log.update!(duplicate_set_id: nil)
-      end
-    end
-    duplicate_set_ids.uniq.each do |duplicate_set_id|
-      LettingsLog.where(duplicate_set_id:).update!(duplicate_set_id: nil) if LettingsLog.where(duplicate_set_id:).count == 1
-    end
-  end
-
-  def remove_sales_duplicate_set_ids(logs)
-    duplicate_set_ids = []
-    logs.each do |log|
-      if log.duplicate_set_id.present?
-        duplicate_set_ids << log.duplicate_set_id
-        log.update!(duplicate_set_id: nil)
-      end
-    end
-    duplicate_set_ids.uniq.each do |duplicate_set_id|
-      SalesLog.where(duplicate_set_id:).update!(duplicate_set_id: nil) if SalesLog.where(duplicate_set_id:).count == 1
-    end
   end
 end

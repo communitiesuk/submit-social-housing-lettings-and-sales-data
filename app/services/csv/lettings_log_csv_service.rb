@@ -299,7 +299,7 @@ module Csv
           ATTRIBUTE_MAPPINGS.fetch(question.id, question.id)
         end
       end
-      non_question_fields = %w[id status duplicate_set_id created_by is_dpo created_at updated_by updated_at creation_method old_id old_form_id collection_start_year]
+      non_question_fields = %w[id status created_by is_dpo created_at updated_by updated_at creation_method old_id old_form_id collection_start_year]
       scheme_and_location_attributes = %w[scheme_code scheme_service_name scheme_sensitive SCHTYPE scheme_registered_under_care_act scheme_owning_organisation_name scheme_primary_client_group scheme_has_other_client_group scheme_secondary_client_group scheme_support_type scheme_intended_stay scheme_created_at location_code location_postcode location_name location_units location_type_of_unit location_mobility_type location_local_authority location_startdate]
       final_attributes = non_question_fields + attributes + scheme_and_location_attributes
       @user.support? ? final_attributes : final_attributes - SUPPORT_ONLY_ATTRIBUTES

@@ -171,15 +171,12 @@ private
         return correcting_duplicate_logs_redirect_path
       end
 
-      dynamic_duplicates = @log.lettings? ? current_user.lettings_logs.duplicate_logs(@log) : current_user.sales_logs.duplicate_logs(@log)
-      if dynamic_duplicates.any?
-        saved_duplicates = @log.duplicates
-        if saved_duplicates.none? || duplicates_changed?(dynamic_duplicates, saved_duplicates)
-          duplicate_set_id = dynamic_duplicates.first.duplicate_set_id || new_duplicate_set_id(@log)
-          update_logs_with_duplicate_set_id(@log, dynamic_duplicates, duplicate_set_id)
-          saved_duplicates.first.update!(duplicate_set_id: nil) if saved_duplicates.count == 1
-        end
-        return send("#{@log.class.name.underscore}_duplicate_logs_path", @log, original_log_id: @log.id)
+      if @log.lettings? && current_user.lettings_logs.duplicate_logs(@log).count.positive?
+        return send("lettings_log_duplicate_logs_path", @log, original_log_id: @log.id)
+      end
+
+      if @log.sales? && current_user.sales_logs.duplicate_logs(@log).count.positive?
+        return send("sales_log_duplicate_logs_path", @log, original_log_id: @log.id)
       end
     end
 
@@ -253,26 +250,11 @@ private
     class_name = @log.class.name.underscore
 
     original_log = current_user.send(class_name.pluralize).find_by(id: from_referrer_query("original_log_id"))
-    dynamic_duplicates = current_user.send(class_name.pluralize).duplicate_logs(@log)
 
-    if dynamic_duplicates.any?
-      saved_duplicates = @log.duplicates
-      if duplicates_changed?(dynamic_duplicates, saved_duplicates)
-        duplicate_set_id = dynamic_duplicates.first.duplicate_set_id || new_duplicate_set_id(@log)
-        update_logs_with_duplicate_set_id(@log, dynamic_duplicates, duplicate_set_id)
-        saved_duplicates.first.update!(duplicate_set_id: nil) if saved_duplicates.count == 1
-      end
-    else
-      remove_fixed_duplicate_set_ids(@log)
-    end
-
-    if original_log.present? && current_user.send(class_name.pluralize).duplicate_logs(original_log).any?
-      if dynamic_duplicates.none?
-        flash[:notice] = deduplication_success_banner
-      end
+    if original_log.present? && current_user.send(class_name.pluralize).duplicate_logs(original_log).count.positive?
+      flash[:notice] = deduplication_success_banner unless current_user.send(class_name.pluralize).duplicate_logs(@log).count.positive?
       send("#{class_name}_duplicate_logs_path", original_log, original_log_id: original_log.id, referrer: params[:referrer], organisation_id: params[:organisation_id])
     else
-      remove_fixed_duplicate_set_ids(original_log)
       flash[:notice] = deduplication_success_banner
       send("#{class_name}_duplicate_logs_path", "#{class_name}_id".to_sym => from_referrer_query("first_remaining_duplicate_id"), original_log_id: from_referrer_query("original_log_id"), referrer: params[:referrer], organisation_id: params[:organisation_id])
     end
@@ -292,33 +274,5 @@ private
     changed_question_label = changed_labels[@page.id.to_sym] || (@page.questions.first.check_answer_label.to_s.presence || @page.questions.first.header.to_s).downcase
 
     I18n.t("notification.duplicate_logs.deduplication_success_banner", log_link: deduplicated_log_link, changed_question_label:).html_safe
-  end
-
-  def remove_fixed_duplicate_set_ids(log)
-    duplicate_set_id = log.duplicate_set_id
-    return unless duplicate_set_id
-
-    log.update!(duplicate_set_id: nil)
-    LettingsLog.find_by(duplicate_set_id:)&.update!(duplicate_set_id: nil) if log.lettings? && LettingsLog.where(duplicate_set_id:).count == 1
-    SalesLog.find_by(duplicate_set_id:)&.update!(duplicate_set_id: nil) if log.sales? && SalesLog.where(duplicate_set_id:).count == 1
-  end
-
-  def new_duplicate_set_id(log)
-    if log.lettings?
-      LettingsLog.maximum(:duplicate_set_id).to_i + 1
-    else
-      SalesLog.maximum(:duplicate_set_id).to_i + 1
-    end
-  end
-
-  def duplicates_changed?(dynamic_duplicates, saved_duplicates)
-    dynamic_duplicates.present? && saved_duplicates.present? && dynamic_duplicates.order(:id).pluck(:id) != saved_duplicates.order(:id).pluck(:id)
-  end
-
-  def update_logs_with_duplicate_set_id(log, dynamic_duplicates, duplicate_set_id)
-    log.update!(duplicate_set_id:)
-    dynamic_duplicates.each do |duplicate|
-      duplicate.update!(duplicate_set_id: log.duplicate_set_id) if duplicate.duplicate_set_id != log.duplicate_set_id
-    end
   end
 end
