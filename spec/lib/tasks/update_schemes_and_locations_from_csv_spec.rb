@@ -71,14 +71,10 @@ RSpec.describe "bulk_update" do
       let!(:lettings_log) { FactoryBot.create(:lettings_log, :sh, scheme: schemes[0], location:, values_updated_at: nil, owning_organisation: schemes[0].owning_organisation) }
       let!(:lettings_log_2) { FactoryBot.create(:lettings_log, :sh, scheme: schemes[1], location: location_2, values_updated_at: nil, owning_organisation: schemes[1].owning_organisation) }
       let!(:lettings_log_3) { FactoryBot.create(:lettings_log, :sh, scheme: schemes[2], location: location_3, values_updated_at: nil, owning_organisation: schemes[2].owning_organisation) }
-      let!(:closed_collection_lettings_log) { FactoryBot.create(:lettings_log, :sh, scheme: schemes[0], location:, values_updated_at: nil, owning_organisation: schemes[0].owning_organisation) }
-      let!(:archived_closed_collection_lettings_log) { FactoryBot.create(:lettings_log, :sh, scheme: schemes[0], location:, values_updated_at: nil, owning_organisation: schemes[0].owning_organisation) }
+      let!(:lettings_log_4) { FactoryBot.create(:lettings_log, :sh, scheme: schemes[0], location:, values_updated_at: nil, owning_organisation: schemes[0].owning_organisation) }
+      let!(:lettings_log_5) { FactoryBot.create(:lettings_log, :sh, scheme: schemes[0], location:, values_updated_at: nil, owning_organisation: schemes[0].owning_organisation) }
 
       before do
-        closed_collection_lettings_log.startdate = Time.zone.local(2022, 4, 1)
-        closed_collection_lettings_log.save!(validate: false)
-        archived_closed_collection_lettings_log.startdate = Time.zone.local(2021, 4, 1)
-        archived_closed_collection_lettings_log.save!(validate: false)
         allow(storage_service).to receive(:get_file_io)
         .with("original_schemes.csv")
         .and_return(StringIO.new(replace_entity_ids(schemes[0], schemes[1], schemes[2], File.open("./spec/fixtures/files/original_schemes.csv").read)))
@@ -90,8 +86,6 @@ RSpec.describe "bulk_update" do
 
       it "updates the allowed scheme fields if they have changed and doesn't update other fields" do
         create(:organisation_relationship, parent_organisation: schemes[0].owning_organisation, child_organisation: different_organisation)
-        closed_collection_lettings_log.update!(startdate: Time.zone.now)
-        archived_closed_collection_lettings_log.update!(startdate: Time.zone.now)
 
         task.invoke(original_schemes_csv_path, updated_schemes_csv_path)
         schemes[0].reload
@@ -111,8 +105,6 @@ RSpec.describe "bulk_update" do
 
       it "updates the lettings log if scheme has changed owning organisation" do
         create(:organisation_relationship, parent_organisation: schemes[0].owning_organisation, child_organisation: different_organisation)
-        closed_collection_lettings_log.update!(startdate: Time.zone.now)
-        archived_closed_collection_lettings_log.update!(startdate: Time.zone.now)
 
         task.invoke(original_schemes_csv_path, updated_schemes_csv_path)
 
@@ -160,14 +152,16 @@ RSpec.describe "bulk_update" do
 
       it "does not update the owning organisation if the new organisation is not related to current organisation" do
         task.invoke(original_schemes_csv_path, updated_schemes_csv_path)
-        closed_collection_lettings_log.update!(startdate: Time.zone.now)
-        archived_closed_collection_lettings_log.update!(startdate: Time.zone.now)
         schemes[0].reload
         expect(schemes[0].owning_organisation).not_to eq(different_organisation)
       end
 
       it "does not update the owning organisation if there are logs from closed collection periods" do
         create(:organisation_relationship, parent_organisation: schemes[0].owning_organisation, child_organisation: different_organisation)
+        lettings_log_4.startdate = Time.zone.local(2022, 4, 1)
+        lettings_log_4.save!(validate: false)
+        lettings_log_5.startdate = Time.zone.local(2021, 4, 1)
+        lettings_log_5.save!(validate: false)
         task.invoke(original_schemes_csv_path, updated_schemes_csv_path)
 
         schemes[0].reload
@@ -184,6 +178,10 @@ RSpec.describe "bulk_update" do
       end
 
       it "only re-exports the logs for the schemes that have been updated" do
+        lettings_log_4.startdate = Time.zone.local(2022, 4, 1)
+        lettings_log_4.save!(validate: false)
+        lettings_log_5.startdate = Time.zone.local(2021, 4, 1)
+        lettings_log_5.save!(validate: false)
         task.invoke(original_schemes_csv_path, updated_schemes_csv_path)
 
         lettings_log.reload
@@ -195,17 +193,15 @@ RSpec.describe "bulk_update" do
         lettings_log_3.reload
         expect(lettings_log_3.values_updated_at).to eq(nil)
 
-        closed_collection_lettings_log.reload
-        expect(closed_collection_lettings_log.values_updated_at).not_to eq(nil)
+        lettings_log_4.reload
+        expect(lettings_log_4.values_updated_at).not_to eq(nil)
 
-        archived_closed_collection_lettings_log.reload
-        expect(archived_closed_collection_lettings_log.values_updated_at).to eq(nil)
+        lettings_log_5.reload
+        expect(lettings_log_5.values_updated_at).to eq(nil)
       end
 
       it "logs the progress of the update" do
         create(:organisation_relationship, parent_organisation: schemes[0].owning_organisation, child_organisation: different_organisation)
-        closed_collection_lettings_log.update!(startdate: Time.zone.now)
-        archived_closed_collection_lettings_log.update!(startdate: Time.zone.now)
 
         expect(Rails.logger).to receive(:info).with("Updating scheme S#{schemes[0].id} with service_name: Updated test name")
         expect(Rails.logger).to receive(:info).with("Updating scheme S#{schemes[0].id} with sensitive: No")
@@ -256,6 +252,10 @@ RSpec.describe "bulk_update" do
 
       it "logs an error if a validation fails and processes the rest of the rows" do
         create(:organisation_relationship, parent_organisation: schemes[0].owning_organisation, child_organisation: different_organisation)
+        lettings_log_4.startdate = Time.zone.local(2022, 4, 1)
+        lettings_log_4.save!(validate: false)
+        lettings_log_5.startdate = Time.zone.local(2021, 4, 1)
+        lettings_log_5.save!(validate: false)
 
         schemes[1].support_type = nil
         schemes[1].save!(validate: false)
@@ -273,7 +273,7 @@ RSpec.describe "bulk_update" do
         expect(Rails.logger).to receive(:info).with("Cannot update scheme S#{schemes[0].id} with active_dates as it it not a permitted field")
         expect(Rails.logger).to receive(:info).with("Cannot update scheme S#{schemes[0].id} with owning_organisation: Different organisation. There are lettings logs from closed collection period using this scheme")
         expect(Rails.logger).to receive(:info).with("Saved scheme S#{schemes[0].id}.")
-        expect(Rails.logger).to receive(:info).with("Will not export log #{archived_closed_collection_lettings_log.id} as it is before the exportable date")
+        expect(Rails.logger).to receive(:info).with("Will not export log #{lettings_log_5.id} as it is before the exportable date")
 
         expect(Rails.logger).to receive(:info).with("No changes to scheme S#{schemes[1].id}.")
 
@@ -334,14 +334,10 @@ RSpec.describe "bulk_update" do
       let!(:lettings_log) { FactoryBot.create(:lettings_log, :sh, location: locations[0], scheme:, values_updated_at: nil) }
       let!(:lettings_log_2) { FactoryBot.create(:lettings_log, :sh, location: locations[1], scheme:, values_updated_at: nil) }
       let!(:lettings_log_3) { FactoryBot.create(:lettings_log, :sh, location: locations[2], scheme:, values_updated_at: nil) }
-      let!(:closed_collection_lettings_log) { FactoryBot.create(:lettings_log, :sh, location: locations[0], scheme:, values_updated_at: nil) }
-      let!(:archived_closed_collection_lettings_log) { FactoryBot.create(:lettings_log, :sh, location: locations[0], scheme:, values_updated_at: nil) }
+      let!(:lettings_log_4) { FactoryBot.create(:lettings_log, :sh, location: locations[0], scheme:, values_updated_at: nil) }
+      let!(:lettings_log_5) { FactoryBot.create(:lettings_log, :sh, location: locations[0], scheme:, values_updated_at: nil) }
 
       before do
-        closed_collection_lettings_log.startdate = Time.zone.local(2022, 4, 1)
-        closed_collection_lettings_log.save!(validate: false)
-        archived_closed_collection_lettings_log.startdate = Time.zone.local(2021, 4, 1)
-        archived_closed_collection_lettings_log.save!(validate: false)
         allow(storage_service).to receive(:get_file_io)
         .with("original_locations.csv")
         .and_return(StringIO.new(replace_entity_ids_for_locations(locations[0], locations[1], locations[2], scheme, scheme, scheme, File.open("./spec/fixtures/files/original_locations.csv").read)))
@@ -391,6 +387,11 @@ RSpec.describe "bulk_update" do
       end
 
       it "only re-exports the logs for the locations that have been updated" do
+        lettings_log_4.startdate = Time.zone.local(2022, 4, 1)
+        lettings_log_4.save!(validate: false)
+        lettings_log_5.startdate = Time.zone.local(2021, 4, 1)
+        lettings_log_5.save!(validate: false)
+
         task.invoke(original_locations_csv_path, updated_locations_csv_path)
 
         lettings_log.reload
@@ -402,14 +403,19 @@ RSpec.describe "bulk_update" do
         lettings_log_3.reload
         expect(lettings_log_3.values_updated_at).to eq(nil)
 
-        closed_collection_lettings_log.reload
-        expect(closed_collection_lettings_log.values_updated_at).not_to eq(nil)
+        lettings_log_4.reload
+        expect(lettings_log_4.values_updated_at).not_to eq(nil)
 
-        archived_closed_collection_lettings_log.reload
-        expect(archived_closed_collection_lettings_log.values_updated_at).to eq(nil)
+        lettings_log_5.reload
+        expect(lettings_log_5.values_updated_at).to eq(nil)
       end
 
       it "logs the progress of the update" do
+        lettings_log_4.startdate = Time.zone.local(2022, 4, 1)
+        lettings_log_4.save!(validate: false)
+        lettings_log_5.startdate = Time.zone.local(2021, 4, 1)
+        lettings_log_5.save!(validate: false)
+
         expect(Rails.logger).to receive(:info).with("Updating location #{locations[0].id} with postcode: B11BB")
         expect(Rails.logger).to receive(:info).with("Updating location #{locations[0].id} with name: Updated name")
         expect(Rails.logger).to receive(:info).with("Updating location #{locations[0].id} with type_of_unit: Bungalow")
@@ -420,7 +426,7 @@ RSpec.describe "bulk_update" do
         expect(Rails.logger).to receive(:info).with("Cannot update location #{locations[0].id} with active_dates as it it not a permitted field")
         expect(Rails.logger).to receive(:info).with("Saved location #{locations[0].id}.")
 
-        expect(Rails.logger).to receive(:info).with("Will not export log #{archived_closed_collection_lettings_log.id} as it is before the exportable date")
+        expect(Rails.logger).to receive(:info).with("Will not export log #{lettings_log_5.id} as it is before the exportable date")
         expect(Rails.logger).to receive(:info).with("No changes to location #{locations[1].id}.")
 
         expect(Rails.logger).to receive(:info).with("Cannot update location #{locations[2].id} with postcode: SWAAA. Enter a postcode in the correct format, for example AA1 1AA")
