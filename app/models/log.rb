@@ -210,7 +210,7 @@ class Log < ApplicationRecord
   end
 
   def nationality_uk_or_prefers_not_to_say?
-    nationality_all_group == 0 || nationality_all_group == 826
+    nationality_all_group&.zero? || nationality_all_group == 826
   end
 
 private

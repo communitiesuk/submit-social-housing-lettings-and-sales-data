@@ -1067,11 +1067,151 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
       end
     end
 
-    describe "#nationalbuy2" do
-      let(:attributes) { setup_section_params.merge({ field_41: "18" }) }
+    describe "#nationality_all" do
+      context "when field_34 is a 3 digit nationality code" do
+        let(:attributes) { setup_section_params.merge({ field_34: "036" }) }
 
-      it "is correctly set" do
-        expect(parser.log.nationalbuy2).to be(18)
+        it "is correctly set" do
+          expect(parser.log.nationality_all).to be(36)
+          expect(parser.log.nationality_all_group).to be(12)
+        end
+      end
+
+      context "when field_34 is a nationality code without the trailing 0s" do
+        let(:attributes) { setup_section_params.merge({ field_34: "36" }) }
+
+        it "is correctly set" do
+          expect(parser.log.nationality_all).to be(36)
+          expect(parser.log.nationality_all_group).to be(12)
+        end
+      end
+
+      context "when field_34 is a nationality code with trailing 0s" do
+        let(:attributes) { setup_section_params.merge({ field_34: "0036" }) }
+
+        it "is correctly set" do
+          expect(parser.log.nationality_all).to be(36)
+          expect(parser.log.nationality_all_group).to be(12)
+        end
+      end
+
+      context "when field_34 is 0" do
+        let(:attributes) { setup_section_params.merge({ field_34: "0" }) }
+
+        it "is correctly set" do
+          expect(parser.log.nationality_all).to be(0)
+          expect(parser.log.nationality_all_group).to be(0)
+        end
+      end
+
+      context "when field_34 is 000" do
+        let(:attributes) { setup_section_params.merge({ field_34: "000" }) }
+
+        it "is correctly set" do
+          expect(parser.log.nationality_all).to be(0)
+          expect(parser.log.nationality_all_group).to be(0)
+        end
+      end
+
+      context "when field_34 is 0000" do
+        let(:attributes) { setup_section_params.merge({ field_34: "0000" }) }
+
+        it "is correctly set" do
+          expect(parser.log.nationality_all).to be(0)
+          expect(parser.log.nationality_all_group).to be(0)
+        end
+      end
+
+      context "when field_34 is 826" do
+        let(:attributes) { setup_section_params.merge({ field_34: "826" }) }
+
+        it "is correctly set" do
+          expect(parser.log.nationality_all).to be(826)
+          expect(parser.log.nationality_all_group).to be(826)
+        end
+      end
+
+      context "when field_34 is 826 with trailing 0s" do
+        let(:attributes) { setup_section_params.merge({ field_34: "0826" }) }
+
+        it "is correctly set" do
+          expect(parser.log.nationality_all).to be(826)
+          expect(parser.log.nationality_all_group).to be(826)
+        end
+      end
+    end
+
+    describe "#nationality_all_buyer2" do
+      context "when field_41 is a 3 digit nationality code" do
+        let(:attributes) { setup_section_params.merge({ field_41: "036" }) }
+
+        it "is correctly set" do
+          expect(parser.log.nationality_all_buyer2).to be(36)
+          expect(parser.log.nationality_all_buyer2_group).to be(12)
+        end
+      end
+
+      context "when field_41 is a nationality code without the trailing 0s" do
+        let(:attributes) { setup_section_params.merge({ field_41: "36" }) }
+
+        it "is correctly set" do
+          expect(parser.log.nationality_all_buyer2).to be(36)
+          expect(parser.log.nationality_all_buyer2_group).to be(12)
+        end
+      end
+
+      context "when field_41 is a nationality code with trailing 0s" do
+        let(:attributes) { setup_section_params.merge({ field_41: "0036" }) }
+
+        it "is correctly set" do
+          expect(parser.log.nationality_all_buyer2).to be(36)
+          expect(parser.log.nationality_all_buyer2_group).to be(12)
+        end
+      end
+
+      context "when field_41 is 0" do
+        let(:attributes) { setup_section_params.merge({ field_41: "0" }) }
+
+        it "is correctly set" do
+          expect(parser.log.nationality_all_buyer2).to be(0)
+          expect(parser.log.nationality_all_buyer2_group).to be(0)
+        end
+      end
+
+      context "when field_41 is 000" do
+        let(:attributes) { setup_section_params.merge({ field_41: "000" }) }
+
+        it "is correctly set" do
+          expect(parser.log.nationality_all_buyer2).to be(0)
+          expect(parser.log.nationality_all_buyer2_group).to be(0)
+        end
+      end
+
+      context "when field_41 is 0000" do
+        let(:attributes) { setup_section_params.merge({ field_41: "0000" }) }
+
+        it "is correctly set" do
+          expect(parser.log.nationality_all_buyer2).to be(0)
+          expect(parser.log.nationality_all_buyer2_group).to be(0)
+        end
+      end
+
+      context "when field_41 is 826" do
+        let(:attributes) { setup_section_params.merge({ field_41: "826" }) }
+
+        it "is correctly set" do
+          expect(parser.log.nationality_all_buyer2).to be(826)
+          expect(parser.log.nationality_all_buyer2_group).to be(826)
+        end
+      end
+
+      context "when field_41 is 826 with trailing 0s" do
+        let(:attributes) { setup_section_params.merge({ field_41: "0826" }) }
+
+        it "is correctly set" do
+          expect(parser.log.nationality_all_buyer2).to be(826)
+          expect(parser.log.nationality_all_buyer2_group).to be(826)
+        end
       end
     end
 

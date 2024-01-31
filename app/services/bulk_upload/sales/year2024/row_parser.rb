@@ -675,7 +675,8 @@ private
       ecstat6: %i[field_60],
       ethnic_group: %i[field_33],
       ethnic: %i[field_33],
-      national: %i[field_34],
+      nationality_all: %i[field_34],
+      nationality_all_group: %i[field_34],
       income1nk: %i[field_77],
       income1: %i[field_77],
       income2nk: %i[field_79],
@@ -767,7 +768,8 @@ private
 
       ethnic_group2: %i[field_40],
       ethnicbuy2: %i[field_40],
-      nationalbuy2: %i[field_41],
+      nationality_all_buyer2: %i[field_41],
+      nationality_all_buyer2_group: %i[field_41],
 
       buy2living: %i[field_70],
       prevtenbuy2: %i[field_71],
@@ -831,7 +833,8 @@ private
 
     attributes["ethnic_group"] = ethnic_group_from_ethnic
     attributes["ethnic"] = field_33
-    attributes["national"] = field_34
+    attributes["nationality_all"] = field_34
+    attributes["nationality_all_group"] = nationality_group(attributes["nationality_all"])
 
     attributes["income1nk"] = field_77 == "R" ? 1 : 0
     attributes["income1"] = field_77.to_i if attributes["income1nk"]&.zero? && field_77&.match(/\A\d+\z/)
@@ -938,7 +941,8 @@ private
 
     attributes["ethnic_group2"] = infer_buyer2_ethnic_group_from_ethnic
     attributes["ethnicbuy2"] = field_40
-    attributes["nationalbuy2"] = field_41
+    attributes["nationality_all_buyer2"] = field_41
+    attributes["nationality_all_buyer2_group"] = nationality_group(attributes["nationality_all_buyer2"])
 
     attributes["buy2living"] = field_70
     attributes["prevtenbuy2"] = prevtenbuy2
@@ -1200,6 +1204,14 @@ private
     return owning_organisation if created_by&.organisation&.absorbed_organisations&.include?(owning_organisation)
 
     created_by&.organisation || bulk_upload.user.organisation
+  end
+
+  def nationality_group(nationality_value)
+    return unless nationality_value
+    return 0 if nationality_value.zero?
+    return 826 if nationality_value == 826
+
+    12
   end
 
   def validate_managing_org_related
