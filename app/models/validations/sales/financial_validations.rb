@@ -52,6 +52,16 @@ module Validations::Sales::FinancialValidations
     end
   end
 
+  def validate_percentage_bought_not_equal_percentage_owned(record)
+    return unless record.stairbought && record.stairowned
+    return unless record.saledate && record.form.start_year_after_2024?
+
+    if record.stairbought == record.stairowned
+      record.errors.add :stairbought, I18n.t("validations.financial.staircasing.percentage_bought_equal_percentage_owned", stairbought: record.field_formatted_as_currency("stairbought"), stairowned: record.field_formatted_as_currency("stairowned"))
+      record.errors.add :stairowned, I18n.t("validations.financial.staircasing.percentage_bought_equal_percentage_owned", stairbought: record.field_formatted_as_currency("stairbought"), stairowned: record.field_formatted_as_currency("stairowned"))
+    end
+  end
+
   def validate_percentage_bought_at_least_threshold(record)
     return unless record.stairbought && record.type
 
