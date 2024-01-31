@@ -6,15 +6,26 @@ class Form::Lettings::Questions::EthnicWhite < ::Form::Question
     @header = "Which of the following best describes the lead tenant’s White background?"
     @type = "radio"
     @check_answers_card_number = 1
-    @hint_text = "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest."
-    @answer_options = ANSWER_OPTIONS
+    @hint_text = form.start_year_after_2024? ? "" : "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest."
     @question_number = 35
   end
 
-  ANSWER_OPTIONS = {
-    "1" => { "value" => "English, Welsh, Northern Irish, Scottish or British" },
-    "2" => { "value" => "Irish" },
-    "18" => { "value" => "Gypsy or Irish Traveller" },
-    "3" => { "value" => "Any other White background" },
-  }.freeze
+  def answer_options
+    if form.start_year_after_2024?
+      {
+        "1" => { "value" => "English, Welsh, Northern Irish, Scottish or British" },
+        "2" => { "value" => "Irish" },
+        "18" => { "value" => "Gypsy or Irish Traveller" },
+        "20" => { "value" => "Roma" },
+        "3" => { "value" => "Any other White background" },
+      }.freeze
+    else
+      {
+        "1" => { "value" => "English, Welsh, Northern Irish, Scottish or British" },
+        "2" => { "value" => "Irish" },
+        "18" => { "value" => "Gypsy or Irish Traveller" },
+        "3" => { "value" => "Any other White background" },
+      }.freeze
+    end
+  end
 end

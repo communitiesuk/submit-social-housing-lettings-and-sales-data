@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Form::Sales::Questions::Buyer1EthnicBackgroundWhite, type: :model do
+RSpec.describe Form::Lettings::Questions::EthnicWhite, type: :model do
   subject(:question) { described_class.new(question_id, question_definition, page) }
 
   let(:question_id) { nil }
@@ -24,11 +24,11 @@ RSpec.describe Form::Sales::Questions::Buyer1EthnicBackgroundWhite, type: :model
   end
 
   it "has the correct header" do
-    expect(question.header).to eq("Which of the following best describes buyer 1’s White background?")
+    expect(question.header).to eq("Which of the following best describes the lead tenant’s White background?")
   end
 
   it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Buyer 1’s ethnic background")
+    expect(question.check_answer_label).to eq("Lead tenant’s ethnic background")
   end
 
   it "has the correct type" do
@@ -50,7 +50,7 @@ RSpec.describe Form::Sales::Questions::Buyer1EthnicBackgroundWhite, type: :model
     end
 
     it "has the correct hint_text" do
-      expect(question.hint_text).to eq("Buyer 1 is the person in the household who does the most paid work. If it’s a joint purchase and the buyers do the same amount of paid work, buyer 1 is whoever is the oldest.")
+      expect(question.hint_text).to eq("The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest.")
     end
   end
 
