@@ -16,6 +16,6 @@ class Form::Lettings::Questions::NationalityAllGroup < ::Form::Question
   ANSWER_OPTIONS = {
     "826" => { "value" => "United Kingdom" },
     "12" => { "value" => "Other" },
-    "13" => { "value" => "Tenant prefers not to say" },
+    "0" => { "value" => "Tenant prefers not to say" },
   }.freeze
 end

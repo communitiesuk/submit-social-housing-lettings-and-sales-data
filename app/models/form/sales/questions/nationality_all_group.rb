@@ -15,6 +15,6 @@ class Form::Sales::Questions::NationalityAllGroup < ::Form::Question
   ANSWER_OPTIONS = {
     "826" => { "value" => "United Kingdom" },
     "12" => { "value" => "Other" },
-    "13" => { "value" => "Buyer prefers not to say" },
+    "0" => { "value" => "Buyer prefers not to say" },
   }.freeze
 end

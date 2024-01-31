@@ -2359,7 +2359,7 @@ RSpec.describe LettingsLog do
       end
 
       it "correctly derives nationality_all when it's prefers not to say" do
-        expect { lettings_log.update!(nationality_all_group: 13, declaration: 1) }.to change(lettings_log, :nationality_all).to 13
+        expect { lettings_log.update!(nationality_all_group: 0, declaration: 1) }.to change(lettings_log, :nationality_all).to 0
       end
 
       it "does not derive nationality_all when it's other or not given" do

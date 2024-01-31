@@ -585,8 +585,8 @@ RSpec.describe SalesLog, type: :model do
       end
 
       it "correctly derives nationality_all/nationality_all_buyer2 when buyer prefers not to say" do
-        expect { sales_log.update!(nationality_all_group: 13) }.to change(sales_log, :nationality_all).to 13
-        expect { sales_log.update!(nationality_all_buyer2_group: 13) }.to change(sales_log, :nationality_all_buyer2).to 13
+        expect { sales_log.update!(nationality_all_group: 0) }.to change(sales_log, :nationality_all).to 0
+        expect { sales_log.update!(nationality_all_buyer2_group: 0) }.to change(sales_log, :nationality_all_buyer2).to 0
       end
 
       it "does not derive nationality_all/nationality_all_buyer2 when it is other or not given" do
