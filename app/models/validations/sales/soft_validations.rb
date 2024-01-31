@@ -60,7 +60,7 @@ module Validations::Sales::SoftValidations
   end
 
   def deposit_over_soft_max?
-    return unless savings && deposit
+    return unless savings && deposit && mortgage_used?
 
     deposit > savings * 4 / 3
   end

@@ -359,6 +359,7 @@ RSpec.describe Validations::Sales::SoftValidations do
   describe "deposit amount validations" do
     context "when validating soft max" do
       it "returns false if no savings is given" do
+        record.mortgageused = 1
         record.savings = nil
         record.deposit = 8_001
         expect(record)
@@ -366,6 +367,7 @@ RSpec.describe Validations::Sales::SoftValidations do
       end
 
       it "returns false if no deposit is given" do
+        record.mortgageused = 1
         record.deposit = nil
         record.savings = 6_000
         expect(record)
@@ -373,6 +375,7 @@ RSpec.describe Validations::Sales::SoftValidations do
       end
 
       it "returns true if deposit is more than 4/3 of savings" do
+        record.mortgageused = 1
         record.deposit = 8_001
         record.savings = 6_000
         expect(record)
@@ -380,6 +383,15 @@ RSpec.describe Validations::Sales::SoftValidations do
       end
 
       it "returns false if deposit is less than 4/3 of savings" do
+        record.mortgageused = 1
+        record.deposit = 7_999
+        record.savings = 6_000
+        expect(record)
+          .not_to be_deposit_over_soft_max
+      end
+
+      it "returns false if mortgage is not used" do
+        record.mortgageused = 2
         record.deposit = 7_999
         record.savings = 6_000
         expect(record)
