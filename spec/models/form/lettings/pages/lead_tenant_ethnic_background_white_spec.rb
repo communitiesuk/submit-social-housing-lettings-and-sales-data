@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Form::Sales::Pages::Buyer1EthnicBackgroundWhite, type: :model do
+RSpec.describe Form::Lettings::Pages::LeadTenantEthnicBackgroundWhite, type: :model do
   subject(:page) { described_class.new(page_id, page_definition, subsection) }
 
   let(:page_id) { nil }
@@ -22,7 +22,7 @@ RSpec.describe Form::Sales::Pages::Buyer1EthnicBackgroundWhite, type: :model do
   end
 
   it "has the correct id" do
-    expect(page.id).to eq("buyer_1_ethnic_background_white")
+    expect(page.id).to eq("lead_tenant_ethnic_background_white")
   end
 
   it "has the correct header" do
