@@ -716,7 +716,6 @@ private
       lanomagr: %i[field_97],
       frombeds: %i[field_98],
       fromprop: %i[field_99],
-      soctenant: %i[field_98 field_99 field_100],
       value: %i[field_101 field_114 field_125],
       equity: %i[field_102],
       mortgage: %i[field_104 field_118 field_127],
@@ -924,7 +923,7 @@ private
     attributes["stairbought"] = field_87
     attributes["stairowned"] = field_88
     attributes["socprevten"] = field_100
-    attributes["soctenant"] = [attributes["socprevten"], attributes["frombeds"], attributes["fromprop"]].any?(&:present?) ? 1 : 0
+    attributes["soctenant"] = infer_soctenant_from_prevten_and_prevtenbuy2
     attributes["mortgageused"] = mortgageused
 
     attributes["uprn"] = field_22
@@ -1117,6 +1116,14 @@ private
     return 1 if field_62 == 2
 
     0 if field_62 == 1
+  end
+
+  def infer_soctenant_from_prevten_and_prevtenbuy2
+    if [1, 2].include?(field_61) || [1, 2].include?(field_71.to_i)
+      1
+    else
+      2
+    end
   end
 
   def block_log_creation!

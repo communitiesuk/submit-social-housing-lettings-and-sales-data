@@ -456,4 +456,8 @@ class SalesLog < Log
      form.start_date.year < 2023 || uprn.blank? ? "postcode_full" : nil,
      form.start_date.year >= 2023 && uprn.present? ? "uprn" : nil].compact
   end
+
+  def soctenant_is_inferred?
+    form.start_year_after_2024?
+  end
 end

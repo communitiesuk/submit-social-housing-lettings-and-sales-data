@@ -24,6 +24,10 @@ module DerivedVariables::SalesLogVariables
     self.hhmemb = number_of_household_members
     self.hhtype = household_type
 
+    if form.start_year_after_2024?
+      self.soctenant = prevten_was_social_housing? ? 1 : 2
+    end
+
     self.uprn_known = 0 if address_answered_without_uprn?
 
     if uprn_known&.zero?
@@ -153,5 +157,9 @@ private
 
   def address_answered_without_uprn?
     [address_line1, town_or_city].all?(&:present?) && uprn.nil? && form.start_date.year >= 2023
+  end
+
+  def prevten_was_social_housing?
+    [1, 2].include?(prevten) || [1, 2].include?(prevtenbuy2)
   end
 end

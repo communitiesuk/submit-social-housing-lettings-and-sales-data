@@ -21,4 +21,8 @@ class Form::Sales::Questions::BuyerPrevious < ::Form::Question
       "2" => { "value" => "No" },
     }
   end
+
+  def derived?
+    form.start_year_after_2024?
+  end
 end
