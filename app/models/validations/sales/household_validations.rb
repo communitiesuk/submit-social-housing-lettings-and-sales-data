@@ -37,9 +37,9 @@ private
     relationship = record.public_send("relat#{person_num}")
     return unless age && relationship
 
-    if age < 16 && person_is_partner?(relationship)
-      record.errors.add "age#{person_num}", I18n.t("validations.household.age.partner_under_16")
-      record.errors.add "relat#{person_num}", I18n.t("validations.household.relat.partner_under_16")
+    if age < 16 && !relationship_is_child_other_or_refused?(relationship)
+      record.errors.add "age#{person_num}", I18n.t("validations.household.age.child_under_16_relat_sales", person_num:)
+      record.errors.add "relat#{person_num}", I18n.t("validations.household.relat.child_under_16_sales", person_num:)
     elsif age >= 20 && person_is_child?(relationship)
       record.errors.add "age#{person_num}", I18n.t("validations.household.age.child_over_20")
       record.errors.add "relat#{person_num}", I18n.t("validations.household.relat.child_over_20")
@@ -75,9 +75,9 @@ private
     economic_status = record.public_send("ecstat#{person_num}")
     return unless age && economic_status
 
-    if age < 16 && !person_is_economic_child?(economic_status)
+    if age < 16 && !economic_status_is_child_other_or_refused?(economic_status)
       record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.child_under_16", person_num:)
-      record.errors.add "age#{person_num}", I18n.t("validations.household.age.child_under_16", person_num:)
+      record.errors.add "age#{person_num}", I18n.t("validations.household.age.child_under_16_ecstat", person_num:)
     end
     if person_is_economic_child?(economic_status) && age > 16
       record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.child_over_16", person_num:)
@@ -98,16 +98,8 @@ private
     end
   end
 
-  def person_is_partner?(relationship)
-    relationship == "P"
-  end
-
   def person_is_fulltime_student?(economic_status)
     economic_status == 7
-  end
-
-  def person_is_child?(relationship)
-    relationship == "C"
   end
 
   def person_is_economic_child?(economic_status)
@@ -116,5 +108,21 @@ private
 
   def person_economic_status_refused?(economic_status)
     economic_status == 10
+  end
+
+  def economic_status_is_child_other_or_refused?(economic_status)
+    [9, 0, 10].include?(economic_status)
+  end
+
+  def person_is_partner?(relationship)
+    relationship == "P"
+  end
+
+  def person_is_child?(relationship)
+    relationship == "C"
+  end
+
+  def relationship_is_child_other_or_refused?(relationship)
+    %w[C X R].include?(relationship)
   end
 end

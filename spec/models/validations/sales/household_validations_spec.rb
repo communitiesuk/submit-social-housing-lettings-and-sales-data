@@ -40,9 +40,9 @@ RSpec.describe Validations::Sales::HouseholdValidations do
         record.relat2 = "P"
         household_validator.validate_household_number_of_other_members(record)
         expect(record.errors["relat2"])
-          .to include(match I18n.t("validations.household.relat.partner_under_16"))
+          .to include(match I18n.t("validations.household.relat.child_under_16_sales", person_num: 2))
         expect(record.errors["age2"])
-          .to include(match I18n.t("validations.household.age.partner_under_16"))
+          .to include(match I18n.t("validations.household.age.child_under_16_relat_sales", person_num: 2))
       end
 
       it "validates that person's economic status must be Child" do
@@ -52,7 +52,7 @@ RSpec.describe Validations::Sales::HouseholdValidations do
         expect(record.errors["ecstat2"])
           .to include(match I18n.t("validations.household.ecstat.child_under_16", person_num: 2))
         expect(record.errors["age2"])
-          .to include(match I18n.t("validations.household.age.child_under_16", person_num: 2))
+          .to include(match I18n.t("validations.household.age.child_under_16_ecstat", person_num: 2))
       end
 
       it "expects that person's economic status is Child" do
