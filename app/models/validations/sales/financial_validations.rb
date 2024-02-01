@@ -101,7 +101,10 @@ module Validations::Sales::FinancialValidations
 
     if mortgage_value + record.deposit + record.cashdis != record.value * record.equity / 100
       %i[mortgage value deposit ownershipsch cashdis equity].each do |field|
-        record.errors.add field, I18n.t("validations.financial.shared_ownership_deposit", mortgage_deposit_and_discount_error_fields: record.mortgage_deposit_and_discount_error_fields, mortgage_deposit_and_discount_total: record.field_formatted_as_currency("mortgage_deposit_and_discount_total"))
+        record.errors.add field, I18n.t("validations.financial.shared_ownership_deposit",
+                                        mortgage_deposit_and_discount_error_fields: record.mortgage_deposit_and_discount_error_fields,
+                                        mortgage_deposit_and_discount_total: record.field_formatted_as_currency("mortgage_deposit_and_discount_total"),
+                                        value_times_equity: record.field_formatted_as_currency("value_times_equity"))
       end
     end
   end

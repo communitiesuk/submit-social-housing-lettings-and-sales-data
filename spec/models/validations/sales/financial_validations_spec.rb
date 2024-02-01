@@ -393,11 +393,11 @@ RSpec.describe Validations::Sales::FinancialValidations do
         record.equity = 100
 
         financial_validator.validate_shared_ownership_deposit(record)
-        expect(record.errors["mortgage"]).to include("You told us that the mortgage, deposit, and discount add up to £2,000.00")
-        expect(record.errors["deposit"]).to include("You told us that the mortgage, deposit, and discount add up to £2,000.00")
-        expect(record.errors["cashdis"]).to include("You told us that the mortgage, deposit, and discount add up to £2,000.00")
-        expect(record.errors["value"]).to include("You told us that the mortgage, deposit, and discount add up to £2,000.00")
-        expect(record.errors["equity"]).to include("You told us that the mortgage, deposit, and discount add up to £2,000.00")
+        expect(record.errors["mortgage"]).to include("The mortgage, deposit, and cash discount added together is £2,000.00. The value times the equity percentage is £3,000.00. These figures should be the same")
+        expect(record.errors["deposit"]).to include("The mortgage, deposit, and cash discount added together is £2,000.00. The value times the equity percentage is £3,000.00. These figures should be the same")
+        expect(record.errors["cashdis"]).to include("The mortgage, deposit, and cash discount added together is £2,000.00. The value times the equity percentage is £3,000.00. These figures should be the same")
+        expect(record.errors["value"]).to include("The mortgage, deposit, and cash discount added together is £2,000.00. The value times the equity percentage is £3,000.00. These figures should be the same")
+        expect(record.errors["equity"]).to include("The mortgage, deposit, and cash discount added together is £2,000.00. The value times the equity percentage is £3,000.00. These figures should be the same")
       end
 
       it "does not add an error if no deposit is given" do
@@ -487,11 +487,11 @@ RSpec.describe Validations::Sales::FinancialValidations do
         record.equity = 100
 
         financial_validator.validate_shared_ownership_deposit(record)
-        expect(record.errors["mortgage"]).to include("You told us that the mortgage, deposit, and discount add up to £3,000.00")
-        expect(record.errors["deposit"]).to include("You told us that the mortgage, deposit, and discount add up to £3,000.00")
-        expect(record.errors["cashdis"]).to include("You told us that the mortgage, deposit, and discount add up to £3,000.00")
-        expect(record.errors["value"]).to include("You told us that the mortgage, deposit, and discount add up to £3,000.00")
-        expect(record.errors["equity"]).to include("You told us that the mortgage, deposit, and discount add up to £3,000.00")
+        expect(record.errors["mortgage"]).to include("The mortgage, deposit, and cash discount added together is £3,000.00. The value times the equity percentage is £4,323.00. These figures should be the same")
+        expect(record.errors["deposit"]).to include("The mortgage, deposit, and cash discount added together is £3,000.00. The value times the equity percentage is £4,323.00. These figures should be the same")
+        expect(record.errors["cashdis"]).to include("The mortgage, deposit, and cash discount added together is £3,000.00. The value times the equity percentage is £4,323.00. These figures should be the same")
+        expect(record.errors["value"]).to include("The mortgage, deposit, and cash discount added together is £3,000.00. The value times the equity percentage is £4,323.00. These figures should be the same")
+        expect(record.errors["equity"]).to include("The mortgage, deposit, and cash discount added together is £3,000.00. The value times the equity percentage is £4,323.00. These figures should be the same")
       end
     end
 
