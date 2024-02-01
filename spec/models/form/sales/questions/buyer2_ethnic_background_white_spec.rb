@@ -58,15 +58,15 @@ RSpec.describe Form::Sales::Questions::Buyer2EthnicBackgroundWhite, type: :model
     before do
       allow(form).to receive(:start_year_after_2024?).and_return(true)
     end
-  end
 
-  it "has the correct answer_options" do
-    expect(question.answer_options).to eq({
-      "1" => { "value" => "English, Welsh, Northern Irish, Scottish or British" },
-      "2" => { "value" => "Irish" },
-      "18" => { "value" => "Gypsy or Irish Traveller" },
-      "20" => { "value" => "Roma" },
-      "3" => { "value" => "Any other White background" },
-    })
+    it "has the correct answer_options" do
+      expect(question.answer_options).to eq({
+        "1" => { "value" => "English, Welsh, Northern Irish, Scottish or British" },
+        "2" => { "value" => "Irish" },
+        "18" => { "value" => "Gypsy or Irish Traveller" },
+        "20" => { "value" => "Roma" },
+        "3" => { "value" => "Any other White background" },
+      })
+    end
   end
 end
