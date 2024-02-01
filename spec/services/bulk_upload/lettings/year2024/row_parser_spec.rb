@@ -1510,6 +1510,80 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
       end
     end
 
+    describe "#field_45" do
+      context "when field_45 is a 3 digit nationality code" do
+        let(:attributes) { setup_section_params.merge({ field_45: "036" }) }
+
+        it "is correctly set" do
+          expect(parser.log.nationality_all).to be(36)
+          expect(parser.log.nationality_all_group).to be(12)
+        end
+      end
+
+      context "when field_45 is a nationality code without the trailing 0s" do
+        let(:attributes) { setup_section_params.merge({ field_45: "36" }) }
+
+        it "is correctly set" do
+          expect(parser.log.nationality_all).to be(36)
+          expect(parser.log.nationality_all_group).to be(12)
+        end
+      end
+
+      context "when field_45 is a nationality code with trailing 0s" do
+        let(:attributes) { setup_section_params.merge({ field_45: "0036" }) }
+
+        it "is correctly set" do
+          expect(parser.log.nationality_all).to be(36)
+          expect(parser.log.nationality_all_group).to be(12)
+        end
+      end
+
+      context "when field_45 is 0" do
+        let(:attributes) { setup_section_params.merge({ field_45: "0" }) }
+
+        it "is correctly set" do
+          expect(parser.log.nationality_all).to be(0)
+          expect(parser.log.nationality_all_group).to be(0)
+        end
+      end
+
+      context "when field_45 is 000" do
+        let(:attributes) { setup_section_params.merge({ field_45: "000" }) }
+
+        it "is correctly set" do
+          expect(parser.log.nationality_all).to be(0)
+          expect(parser.log.nationality_all_group).to be(0)
+        end
+      end
+
+      context "when field_45 is 0000" do
+        let(:attributes) { setup_section_params.merge({ field_45: "0000" }) }
+
+        it "is correctly set" do
+          expect(parser.log.nationality_all).to be(0)
+          expect(parser.log.nationality_all_group).to be(0)
+        end
+      end
+
+      context "when field_45 is 826" do
+        let(:attributes) { setup_section_params.merge({ field_45: "826" }) }
+
+        it "is correctly set" do
+          expect(parser.log.nationality_all).to be(826)
+          expect(parser.log.nationality_all_group).to be(826)
+        end
+      end
+
+      context "when field_45 is 826 with trailing 0s" do
+        let(:attributes) { setup_section_params.merge({ field_45: "0826" }) }
+
+        it "is correctly set" do
+          expect(parser.log.nationality_all).to be(826)
+          expect(parser.log.nationality_all_group).to be(826)
+        end
+      end
+    end
+
     describe "soft validations" do
       context "when soft validation is triggered" do
         let(:attributes) { setup_section_params.merge({ field_42: 22, field_46: 5 }) }
