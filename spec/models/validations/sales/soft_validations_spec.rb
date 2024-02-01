@@ -400,6 +400,10 @@ RSpec.describe Validations::Sales::SoftValidations do
     end
 
     context "when validating shared ownership deposit" do
+      before do
+        record.saledate = Time.zone.local(2023, 4, 3)
+      end
+
       it "returns false if MORTGAGE + DEPOSIT + CASHDIS are equal VALUE * EQUITY/100" do
         record.mortgage = 1000
         record.deposit = 1000
@@ -500,6 +504,18 @@ RSpec.describe Validations::Sales::SoftValidations do
 
         expect(record)
           .to be_shared_ownership_deposit_invalid
+      end
+
+      it "returns false if startyear is after 2024" do
+        record.saledate = Time.zone.local(2025, 1, 1)
+        record.mortgage = 1000
+        record.deposit = 1000
+        record.cashdis = 1000
+        record.value = 4323
+        record.equity = 100
+
+        expect(record)
+          .not_to be_shared_ownership_deposit_invalid
       end
     end
   end

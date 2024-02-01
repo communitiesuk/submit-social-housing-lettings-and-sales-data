@@ -279,11 +279,17 @@ class SalesLog < Log
     mortgage_amount + deposit_amount + cashdis_amount
   end
 
+  def value_times_equity
+    return unless value && equity
+
+    value * equity / 100
+  end
+
   def mortgage_deposit_and_discount_error_fields
     [
       "mortgage",
       "deposit",
-      cashdis.present? ? "discount" : nil,
+      cashdis.present? ? "cash discount" : nil,
     ].compact.to_sentence
   end
 
