@@ -186,7 +186,7 @@ RSpec.describe BulkUploadSalesResumeController, type: :request do
       let(:bulk_upload) { create(:bulk_upload, :sales, user:, bulk_upload_errors:, choice: "create-fix-inline") }
 
       it "redirects to chosen" do
-        get "/sales-logs/bulk-upload-resume/#{bulk_upload.id}/fix-choice"
+        get "/sales-logs/bulk-upload-resume/#{bulk_upload.id}/deletion-report"
 
         expect(response).to redirect_to("/sales-logs/bulk-upload-resume/#{bulk_upload.id}/chosen")
       end
@@ -196,7 +196,7 @@ RSpec.describe BulkUploadSalesResumeController, type: :request do
       let(:bulk_upload) { create(:bulk_upload, :sales, user:, bulk_upload_errors:, choice: "bulk-confirm-soft-validations") }
 
       it "redirects to soft validations check chosen" do
-        get "/sales-logs/bulk-upload-resume/#{bulk_upload.id}/fix-choice"
+        get "/sales-logs/bulk-upload-resume/#{bulk_upload.id}/deletion-report"
 
         expect(response).to redirect_to("/sales-logs/bulk-upload-soft-validations-check/#{bulk_upload.id}/chosen")
       end
