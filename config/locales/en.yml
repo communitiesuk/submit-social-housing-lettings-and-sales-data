@@ -427,7 +427,7 @@ en:
       staircasing:
         percentage_bought_must_be_greater_than_percentage_owned: "Total percentage buyer now owns must be more than percentage bought in this transaction"
         percentage_bought_must_be_at_least_threshold: "The minimum increase in equity while staircasing is %{threshold}%"
-        percentage_bought_equal_percentage_owned: "The percentage bought is %{stairbought} and the percentage owned in total is %{stairowned}. These figures cannot be the same."
+        percentage_bought_equal_percentage_owned: "The percentage bought is %{stairbought}% and the percentage owned in total is %{stairowned}%. These figures cannot be the same."
       monthly_leasehold_charges:
         not_zero: "Monthly leasehold charges cannot be £0 if the property has monthly charges"
       equity:

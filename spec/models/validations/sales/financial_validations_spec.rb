@@ -176,8 +176,8 @@ RSpec.describe Validations::Sales::FinancialValidations do
         record.stairbought = 30
         record.stairowned = 30
         financial_validator.validate_percentage_bought_not_equal_percentage_owned(record)
-        expect(record.errors["stairowned"]).to include("The percentage bought is £30.00 and the percentage owned in total is £30.00. These figures cannot be the same.")
-        expect(record.errors["stairbought"]).to include("The percentage bought is £30.00 and the percentage owned in total is £30.00. These figures cannot be the same.")
+        expect(record.errors["stairowned"]).to include("The percentage bought is 30% and the percentage owned in total is 30%. These figures cannot be the same.")
+        expect(record.errors["stairbought"]).to include("The percentage bought is 30% and the percentage owned in total is 30%. These figures cannot be the same.")
       end
 
       it "does not add an error to stairowned and not stairbought if the percentage bought is more than the percentage owned" do
