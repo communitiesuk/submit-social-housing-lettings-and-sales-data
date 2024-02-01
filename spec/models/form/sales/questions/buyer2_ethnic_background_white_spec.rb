@@ -44,8 +44,13 @@ RSpec.describe Form::Sales::Questions::Buyer2EthnicBackgroundWhite, type: :model
   end
 
   context "with 2023/24 form" do
-    it "has the correct header" do
-      expect(question.header).to eq("Will the buyers live in the property?")
+    it "has the correct answer_options" do
+      expect(question.answer_options).to eq({
+        "1" => { "value" => "English, Welsh, Northern Irish, Scottish or British" },
+        "2" => { "value" => "Irish" },
+        "18" => { "value" => "Gypsy or Irish Traveller" },
+        "3" => { "value" => "Any other White background" },
+      })
     end
   end
 
@@ -53,13 +58,15 @@ RSpec.describe Form::Sales::Questions::Buyer2EthnicBackgroundWhite, type: :model
     before do
       allow(form).to receive(:start_year_after_2024?).and_return(true)
     end
-
-    it "has the correct header" do
-      expect(question.header).to eq("Will any buyers live in the property?")
-    end
   end
 
-  it "has the correct check_answers_card_number" do
-    expect(question.check_answers_card_number).to eq(2)
+  it "has the correct answer_options" do
+    expect(question.answer_options).to eq({
+      "1" => { "value" => "English, Welsh, Northern Irish, Scottish or British" },
+      "2" => { "value" => "Irish" },
+      "18" => { "value" => "Gypsy or Irish Traveller" },
+      "20" => { "value" => "Roma" },
+      "3" => { "value" => "Any other White background" },
+    })
   end
 end
