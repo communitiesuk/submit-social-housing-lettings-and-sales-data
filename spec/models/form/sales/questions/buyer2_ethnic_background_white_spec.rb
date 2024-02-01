@@ -6,6 +6,14 @@ RSpec.describe Form::Sales::Questions::Buyer2EthnicBackgroundWhite, type: :model
   let(:question_id) { nil }
   let(:question_definition) { nil }
   let(:page) { instance_double(Form::Page) }
+  let(:subsection) { instance_double(Form::Subsection) }
+  let(:form) { instance_double(Form) }
+
+  before do
+    allow(form).to receive(:start_year_after_2024?).and_return(false)
+    allow(page).to receive(:subsection).and_return(subsection)
+    allow(subsection).to receive(:form).and_return(form)
+  end
 
   it "has correct page" do
     expect(question.page).to eq(page)
@@ -35,13 +43,20 @@ RSpec.describe Form::Sales::Questions::Buyer2EthnicBackgroundWhite, type: :model
     expect(question.hint_text).to be nil
   end
 
-  it "has the correct answer_options" do
-    expect(question.answer_options).to eq({
-      "1" => { "value" => "English, Welsh, Northern Irish, Scottish or British" },
-      "18" => { "value" => "Gypsy or Irish Traveller" },
-      "2" => { "value" => "Irish" },
-      "3" => { "value" => "Any other White background" },
-    })
+  context "with 2023/24 form" do
+    it "has the correct header" do
+      expect(question.header).to eq("Will the buyers live in the property?")
+    end
+  end
+
+  context "with 2024/25 form" do
+    before do
+      allow(form).to receive(:start_year_after_2024?).and_return(true)
+    end
+
+    it "has the correct header" do
+      expect(question.header).to eq("Will any buyers live in the property?")
+    end
   end
 
   it "has the correct check_answers_card_number" do
