@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Form::Sales::Questions::Nationality1, type: :model do
+RSpec.describe Form::Sales::Questions::Buyer1Nationality, type: :model do
   subject(:question) { described_class.new(nil, nil, page) }
 
   let(:page) { instance_double(Form::Page) }

@@ -1,4 +1,4 @@
-class Form::Sales::Pages::Nationality1 < ::Form::Page
+class Form::Sales::Pages::Buyer1Nationality < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "buyer_1_nationality"
@@ -19,7 +19,7 @@ class Form::Sales::Pages::Nationality1 < ::Form::Page
                        Form::Sales::Questions::NationalityAll.new("nationality_all", nil, self, 1),
                      ]
                    else
-                     [Form::Sales::Questions::Nationality1.new(nil, nil, self)]
+                     [Form::Sales::Questions::Buyer1Nationality.new(nil, nil, self)]
                    end
   end
 end

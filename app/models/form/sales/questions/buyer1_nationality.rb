@@ -1,4 +1,4 @@
-class Form::Sales::Questions::Nationality1 < ::Form::Question
+class Form::Sales::Questions::Buyer1Nationality < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "national"
