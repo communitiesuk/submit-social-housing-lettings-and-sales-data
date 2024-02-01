@@ -119,6 +119,18 @@ module Validations::Sales::FinancialValidations
     end
   end
 
+  def validate_equity_less_than_staircase_difference(record)
+    return unless record.equity && record.stairbought && record.stairowned
+    return unless record.saledate && record.form.start_year_after_2024?
+
+    if record.equity > record.stairowned - record.stairbought
+      formatted_equity = sprintf("%g", record.equity)
+      record.errors.add :equity, I18n.t("validations.financial.equity.over_stairowned_minus_stairbought", equity: formatted_equity, staircase_difference: record.stairowned - record.stairbought)
+      record.errors.add :stairowned, I18n.t("validations.financial.equity.over_stairowned_minus_stairbought", equity: formatted_equity, staircase_difference: record.stairowned - record.stairbought)
+      record.errors.add :stairbought, I18n.t("validations.financial.equity.over_stairowned_minus_stairbought", equity: formatted_equity, staircase_difference: record.stairowned - record.stairbought)
+    end
+  end
+
 private
 
   def is_relationship_child?(relationship)
