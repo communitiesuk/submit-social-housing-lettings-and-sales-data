@@ -36,6 +36,13 @@ class SalesLog < Log
   belongs_to :managing_organisation, class_name: "Organisation", optional: true
 
   scope :filter_by_year, ->(year) { where(saledate: Time.zone.local(year.to_i, 4, 1)...Time.zone.local(year.to_i + 1, 4, 1)) }
+  scope :filter_by_years_or_nil, lambda { |years, _user = nil|
+    first_year = years.shift
+    query = filter_by_year(first_year)
+    years.each { |year| query = query.or(filter_by_year(year)) }
+    query = query.or(where(saledate: nil))
+    query.all
+  }
   scope :filter_by_purchaser_code, ->(purchid) { where("purchid ILIKE ?", "%#{purchid}%") }
   scope :search_by, lambda { |param|
     filter_by_purchaser_code(param)

@@ -160,6 +160,33 @@ RSpec.describe SalesLog, type: :model do
     end
   end
 
+  context "when filtering by year or nil" do
+    before do
+      Timecop.freeze(Time.utc(2021, 5, 3))
+      create(:sales_log, :in_progress, saledate: nil)
+      create(:sales_log, :in_progress, saledate: Time.zone.local(2021, 4, 1))
+      sales_log_3 = create(:sales_log, :in_progress)
+      sales_log_3.saledate = Time.zone.local(2022, 5, 1)
+      sales_log_3.save!(validate: false)
+    end
+
+    after do
+      Timecop.unfreeze
+    end
+
+    it "allows filtering on a single year or nil" do
+      expect(described_class.filter_by_years_or_nil(%w[2021]).count).to eq(2)
+    end
+
+    it "allows filtering by multiple years or nil using OR" do
+      expect(described_class.filter_by_years_or_nil(%w[2021 2022]).count).to eq(3)
+    end
+
+    it "can filter by year(s) AND status" do
+      expect(described_class.filter_by_years_or_nil(%w[2021 2022]).filter_by_status("in_progress").count).to eq(3)
+    end
+  end
+
   context "when filtering duplicate logs" do
     let(:organisation) { create(:organisation) }
     let(:log) { create(:sales_log, :duplicate, owning_organisation: organisation) }

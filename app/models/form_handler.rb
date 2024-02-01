@@ -41,7 +41,12 @@ class FormHandler
       "current_sales" => Form.new(nil, current_collection_start_year, SALES_SECTIONS, "sales"),
       "previous_sales" => Form.new(nil, previous_collection_start_year, SALES_SECTIONS, "sales"),
       "next_sales" => Form.new(nil, next_collection_start_year, SALES_SECTIONS, "sales"),
+      "archived_sales" => Form.new(nil, previous_collection_start_year - 1, SALES_SECTIONS, "sales"),
     }
+    if @sales_forms.count { |_name, form| Time.zone.now.between?(form.start_date, form.edit_end_date) } == 1
+      @sales_forms.delete("archived_sales")
+    end
+    @sales_forms
   end
 
   def ordered_sales_questions_for_all_years
@@ -96,8 +101,15 @@ class FormHandler
     if forms["previous_lettings"].blank? && current_collection_start_year >= 2022
       forms["previous_lettings"] = Form.new(nil, previous_collection_start_year, LETTINGS_SECTIONS, "lettings")
     end
+    if forms["archived_lettings"].blank? && current_collection_start_year >= 2025
+      forms["archived_lettings"] = Form.new(nil, previous_collection_start_year - 1, LETTINGS_SECTIONS, "lettings")
+    end
     forms["current_lettings"] = Form.new(nil, current_collection_start_year, LETTINGS_SECTIONS, "lettings") if forms["current_lettings"].blank?
     forms["next_lettings"] = Form.new(nil, next_collection_start_year, LETTINGS_SECTIONS, "lettings") if forms["next_lettings"].blank?
+
+    if forms.count { |_name, form| Time.zone.now.between?(form.start_date, form.edit_end_date) } == 1
+      forms.delete("archived_lettings")
+    end
 
     if Rails.env.test?
       forms.merge({ fake_lettings_2021: Form.new("spec/fixtures/forms/2021_2022.json"), real_lettings_2021: Form.new("config/forms/2021_2022.json") })
@@ -115,7 +127,7 @@ class FormHandler
   end
 
   def form_name_from_start_year(year, type)
-    form_mappings = { 0 => "current_#{type}", 1 => "previous_#{type}", -1 => "next_#{type}" }
+    form_mappings = { 0 => "current_#{type}", 1 => "previous_#{type}", -1 => "next_#{type}", 2 => "archived_#{type}" }
     form_mappings[current_collection_start_year - year]
   end
 
@@ -196,6 +208,22 @@ class FormHandler
     else
       collection_start_date(now)
     end
+  end
+
+  def years_of_available_lettings_forms
+    years = []
+    lettings_forms.each_value do |form|
+      years << form.start_date.year
+    end
+    years
+  end
+
+  def years_of_available_sales_forms
+    years = []
+    sales_forms.each_value do |form|
+      years << form.start_date.year
+    end
+    years
   end
 
 private

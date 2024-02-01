@@ -2849,6 +2849,34 @@ RSpec.describe LettingsLog do
       end
     end
 
+    context "when filtering by year or nil" do
+      before do
+        Timecop.freeze(Time.utc(2021, 5, 3))
+      end
+
+      after do
+        Timecop.unfreeze
+      end
+
+      it "allows filtering on a single year or nil" do
+        lettings_log_1.startdate = nil
+        lettings_log_1.save!(validate: false)
+        expect(described_class.filter_by_years_or_nil(%w[2021]).count).to eq(2)
+      end
+
+      it "allows filtering by multiple years or nil using OR" do
+        lettings_log_1.startdate = nil
+        lettings_log_1.save!(validate: false)
+        expect(described_class.filter_by_years_or_nil(%w[2021 2022]).count).to eq(3)
+      end
+
+      it "can filter by year(s) AND status" do
+        lettings_log_2.startdate = nil
+        lettings_log_2.save!(validate: false)
+        expect(described_class.filter_by_years_or_nil(%w[2021 2022]).filter_by_status("in_progress").count).to eq(3)
+      end
+    end
+
     context "when filtering by organisation" do
       let(:organisation_1) { create(:organisation) }
       let(:organisation_2) { create(:organisation) }

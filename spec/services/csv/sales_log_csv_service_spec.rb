@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe Csv::SalesLogCsvService do
   let(:form_handler_mock) { instance_double(FormHandler) }
   let(:organisation) { create(:organisation) }
-  let(:fixed_time) { Time.zone.local(2023, 2, 8) }
+  let(:fixed_time) { Time.zone.local(2023, 12, 8) }
   let(:user) { create(:user, email: "billyboy@eyeKLAUD.com") }
   let(:log) do
     create(
