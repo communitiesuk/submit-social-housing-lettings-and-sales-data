@@ -100,7 +100,7 @@ module Validations::Sales::FinancialValidations
 
     if record.mortgage_deposit_and_grant_total != record.value_with_discount && record.discounted_ownership_sale?
       %i[mortgageused mortgage value deposit ownershipsch discount grant].each do |field|
-        record.errors.add field, I18n.t("validations.financial.discounted_sale_value", value_with_discount: record.field_formatted_as_currency("value_with_discount"))
+        record.errors.add field, I18n.t("validations.financial.discounted_sale_value", mortgage_deposit_and_grant_total: record.field_formatted_as_currency("mortgage_deposit_and_grant_total"), value_with_discount: record.field_formatted_as_currency("value_with_discount"))
       end
     end
   end

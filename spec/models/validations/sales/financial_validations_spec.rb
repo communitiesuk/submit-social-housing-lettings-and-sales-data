@@ -375,13 +375,13 @@ RSpec.describe Validations::Sales::FinancialValidations do
           it "returns true if mortgage, deposit and grant total does not equal market value" do
             record.grant = 3_000
             financial_validator.validate_discounted_ownership_value(record)
-            expect(record.errors["mortgageused"]).to include("Mortgage, deposit, and grant total must equal £30,000.00")
-            expect(record.errors["mortgage"]).to include("Mortgage, deposit, and grant total must equal £30,000.00")
-            expect(record.errors["value"]).to include("Mortgage, deposit, and grant total must equal £30,000.00")
-            expect(record.errors["deposit"]).to include("Mortgage, deposit, and grant total must equal £30,000.00")
-            expect(record.errors["ownershipsch"]).to include("Mortgage, deposit, and grant total must equal £30,000.00")
-            expect(record.errors["discount"]).to include("Mortgage, deposit, and grant total must equal £30,000.00")
-            expect(record.errors["grant"]).to include("Mortgage, deposit, and grant total must equal £30,000.00")
+            expect(record.errors["mortgageused"]).to include("The mortgage, deposit, and grant when added together is £18,000.00, and the purchase purchase price times by the discount is £30,000.00. These figures should be the same")
+            expect(record.errors["mortgage"]).to include("The mortgage, deposit, and grant when added together is £18,000.00, and the purchase purchase price times by the discount is £30,000.00. These figures should be the same")
+            expect(record.errors["value"]).to include("The mortgage, deposit, and grant when added together is £18,000.00, and the purchase purchase price times by the discount is £30,000.00. These figures should be the same")
+            expect(record.errors["deposit"]).to include("The mortgage, deposit, and grant when added together is £18,000.00, and the purchase purchase price times by the discount is £30,000.00. These figures should be the same")
+            expect(record.errors["ownershipsch"]).to include("The mortgage, deposit, and grant when added together is £18,000.00, and the purchase purchase price times by the discount is £30,000.00. These figures should be the same")
+            expect(record.errors["discount"]).to include("The mortgage, deposit, and grant when added together is £18,000.00, and the purchase purchase price times by the discount is £30,000.00. These figures should be the same")
+            expect(record.errors["grant"]).to include("The mortgage, deposit, and grant when added together is £18,000.00, and the purchase purchase price times by the discount is £30,000.00. These figures should be the same")
           end
 
           it "returns false if mortgage, deposit and grant total equals market value" do
@@ -422,13 +422,13 @@ RSpec.describe Validations::Sales::FinancialValidations do
           it "returns true if mortgage and deposit total does not equal market value - discount" do
             record.discount = 10
             financial_validator.validate_discounted_ownership_value(record)
-            expect(record.errors["mortgageused"]).to include("Mortgage, deposit, and grant total must equal £27,000.00")
-            expect(record.errors["mortgage"]).to include("Mortgage, deposit, and grant total must equal £27,000.00")
-            expect(record.errors["value"]).to include("Mortgage, deposit, and grant total must equal £27,000.00")
-            expect(record.errors["deposit"]).to include("Mortgage, deposit, and grant total must equal £27,000.00")
-            expect(record.errors["ownershipsch"]).to include("Mortgage, deposit, and grant total must equal £27,000.00")
-            expect(record.errors["discount"]).to include("Mortgage, deposit, and grant total must equal £27,000.00")
-            expect(record.errors["grant"]).to include("Mortgage, deposit, and grant total must equal £27,000.00")
+            expect(record.errors["mortgageused"]).to include("The mortgage, deposit, and grant when added together is £15,000.00, and the purchase purchase price times by the discount is £27,000.00. These figures should be the same")
+            expect(record.errors["mortgage"]).to include("The mortgage, deposit, and grant when added together is £15,000.00, and the purchase purchase price times by the discount is £27,000.00. These figures should be the same")
+            expect(record.errors["value"]).to include("The mortgage, deposit, and grant when added together is £15,000.00, and the purchase purchase price times by the discount is £27,000.00. These figures should be the same")
+            expect(record.errors["deposit"]).to include("The mortgage, deposit, and grant when added together is £15,000.00, and the purchase purchase price times by the discount is £27,000.00. These figures should be the same")
+            expect(record.errors["ownershipsch"]).to include("The mortgage, deposit, and grant when added together is £15,000.00, and the purchase purchase price times by the discount is £27,000.00. These figures should be the same")
+            expect(record.errors["discount"]).to include("The mortgage, deposit, and grant when added together is £15,000.00, and the purchase purchase price times by the discount is £27,000.00. These figures should be the same")
+            expect(record.errors["grant"]).to include("The mortgage, deposit, and grant when added together is £15,000.00, and the purchase purchase price times by the discount is £27,000.00. These figures should be the same")
           end
 
           it "returns false if mortgage and deposit total equals market value - discount" do
@@ -451,13 +451,13 @@ RSpec.describe Validations::Sales::FinancialValidations do
         it "returns true if mortgage and deposit total does not equal market value" do
           record.deposit = 2_000
           financial_validator.validate_discounted_ownership_value(record)
-          expect(record.errors["mortgageused"]).to include("Mortgage, deposit, and grant total must equal £30,000.00")
-          expect(record.errors["mortgage"]).to include("Mortgage, deposit, and grant total must equal £30,000.00")
-          expect(record.errors["value"]).to include("Mortgage, deposit, and grant total must equal £30,000.00")
-          expect(record.errors["deposit"]).to include("Mortgage, deposit, and grant total must equal £30,000.00")
-          expect(record.errors["ownershipsch"]).to include("Mortgage, deposit, and grant total must equal £30,000.00")
-          expect(record.errors["discount"]).to include("Mortgage, deposit, and grant total must equal £30,000.00")
-          expect(record.errors["grant"]).to include("Mortgage, deposit, and grant total must equal £30,000.00")
+          expect(record.errors["mortgageused"]).to include("The mortgage, deposit, and grant when added together is £12,000.00, and the purchase purchase price times by the discount is £30,000.00. These figures should be the same")
+          expect(record.errors["mortgage"]).to include("The mortgage, deposit, and grant when added together is £12,000.00, and the purchase purchase price times by the discount is £30,000.00. These figures should be the same")
+          expect(record.errors["value"]).to include("The mortgage, deposit, and grant when added together is £12,000.00, and the purchase purchase price times by the discount is £30,000.00. These figures should be the same")
+          expect(record.errors["deposit"]).to include("The mortgage, deposit, and grant when added together is £12,000.00, and the purchase purchase price times by the discount is £30,000.00. These figures should be the same")
+          expect(record.errors["ownershipsch"]).to include("The mortgage, deposit, and grant when added together is £12,000.00, and the purchase purchase price times by the discount is £30,000.00. These figures should be the same")
+          expect(record.errors["discount"]).to include("The mortgage, deposit, and grant when added together is £12,000.00, and the purchase purchase price times by the discount is £30,000.00. These figures should be the same")
+          expect(record.errors["grant"]).to include("The mortgage, deposit, and grant when added together is £12,000.00, and the purchase purchase price times by the discount is £30,000.00. These figures should be the same")
         end
 
         it "returns false if mortgage and deposit total equals market value" do
@@ -497,13 +497,13 @@ RSpec.describe Validations::Sales::FinancialValidations do
           it "returns true if mortgage, grant and deposit total does not equal market value - discount" do
             record.mortgage = 10
             financial_validator.validate_discounted_ownership_value(record)
-            expect(record.errors["mortgageused"]).to include("Mortgage, deposit, and grant total must equal £18,000.00")
-            expect(record.errors["mortgage"]).to include("Mortgage, deposit, and grant total must equal £18,000.00")
-            expect(record.errors["value"]).to include("Mortgage, deposit, and grant total must equal £18,000.00")
-            expect(record.errors["deposit"]).to include("Mortgage, deposit, and grant total must equal £18,000.00")
-            expect(record.errors["ownershipsch"]).to include("Mortgage, deposit, and grant total must equal £18,000.00")
-            expect(record.errors["discount"]).to include("Mortgage, deposit, and grant total must equal £18,000.00")
-            expect(record.errors["grant"]).to include("Mortgage, deposit, and grant total must equal £18,000.00")
+            expect(record.errors["mortgageused"]).to include("The mortgage, deposit, and grant when added together is £8,010.00, and the purchase purchase price times by the discount is £18,000.00. These figures should be the same")
+            expect(record.errors["mortgage"]).to include("The mortgage, deposit, and grant when added together is £8,010.00, and the purchase purchase price times by the discount is £18,000.00. These figures should be the same")
+            expect(record.errors["value"]).to include("The mortgage, deposit, and grant when added together is £8,010.00, and the purchase purchase price times by the discount is £18,000.00. These figures should be the same")
+            expect(record.errors["deposit"]).to include("The mortgage, deposit, and grant when added together is £8,010.00, and the purchase purchase price times by the discount is £18,000.00. These figures should be the same")
+            expect(record.errors["ownershipsch"]).to include("The mortgage, deposit, and grant when added together is £8,010.00, and the purchase purchase price times by the discount is £18,000.00. These figures should be the same")
+            expect(record.errors["discount"]).to include("The mortgage, deposit, and grant when added together is £8,010.00, and the purchase purchase price times by the discount is £18,000.00. These figures should be the same")
+            expect(record.errors["grant"]).to include("The mortgage, deposit, and grant when added together is £8,010.00, and the purchase purchase price times by the discount is £18,000.00. These figures should be the same")
           end
 
           it "returns false if mortgage, grant and deposit total equals market value - discount" do
@@ -525,13 +525,13 @@ RSpec.describe Validations::Sales::FinancialValidations do
 
         it "returns true if grant and deposit total does not equal market value - discount" do
           financial_validator.validate_discounted_ownership_value(record)
-          expect(record.errors["mortgageused"]).to include("Mortgage, deposit, and grant total must equal £18,000.00")
-          expect(record.errors["mortgage"]).to include("Mortgage, deposit, and grant total must equal £18,000.00")
-          expect(record.errors["value"]).to include("Mortgage, deposit, and grant total must equal £18,000.00")
-          expect(record.errors["deposit"]).to include("Mortgage, deposit, and grant total must equal £18,000.00")
-          expect(record.errors["ownershipsch"]).to include("Mortgage, deposit, and grant total must equal £18,000.00")
-          expect(record.errors["discount"]).to include("Mortgage, deposit, and grant total must equal £18,000.00")
-          expect(record.errors["grant"]).to include("Mortgage, deposit, and grant total must equal £18,000.00")
+          expect(record.errors["mortgageused"]).to include("The mortgage, deposit, and grant when added together is £8,000.00, and the purchase purchase price times by the discount is £18,000.00. These figures should be the same")
+          expect(record.errors["mortgage"]).to include("The mortgage, deposit, and grant when added together is £8,000.00, and the purchase purchase price times by the discount is £18,000.00. These figures should be the same")
+          expect(record.errors["value"]).to include("The mortgage, deposit, and grant when added together is £8,000.00, and the purchase purchase price times by the discount is £18,000.00. These figures should be the same")
+          expect(record.errors["deposit"]).to include("The mortgage, deposit, and grant when added together is £8,000.00, and the purchase purchase price times by the discount is £18,000.00. These figures should be the same")
+          expect(record.errors["ownershipsch"]).to include("The mortgage, deposit, and grant when added together is £8,000.00, and the purchase purchase price times by the discount is £18,000.00. These figures should be the same")
+          expect(record.errors["discount"]).to include("The mortgage, deposit, and grant when added together is £8,000.00, and the purchase purchase price times by the discount is £18,000.00. These figures should be the same")
+          expect(record.errors["grant"]).to include("The mortgage, deposit, and grant when added together is £8,000.00, and the purchase purchase price times by the discount is £18,000.00. These figures should be the same")
         end
 
         it "returns false if mortgage, grant and deposit total equals market value - discount" do
