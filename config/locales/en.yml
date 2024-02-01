@@ -433,7 +433,6 @@ en:
         under_min: "The minimum initial equity stake for this type of shared ownership sale is %{min_equity}%"
         over_max: "The maximum initial equity stake is %{max_equity}%"
       mortgage: "Mortgage value cannot be £0 if a mortgage was used for the purchase of this property"
-      discounted_sale_value: "The mortgage, deposit, and grant when added together is %{mortgage_deposit_and_grant_total}, and the purchase purchase price times by the discount is %{value_with_discount}. These figures should be the same"
 
     household:
       reasonable_preference_reason:
@@ -609,7 +608,7 @@ en:
         must_be_after_hodate: "Sale completion date must be after practical completion or handover date"
       previous_property_type:
         property_type_bedsit: "A bedsit cannot have more than 1 bedroom"
-      discounted_ownership_value: "Mortgage, deposit, and grant total must equal %{value_with_discount}"
+      discounted_ownership_value: "The mortgage, deposit, and grant when added together is %{mortgage_deposit_and_grant_total}, and the purchase purchase price times by the discount is %{value_with_discount}. These figures should be the same"
       monthly_rent:
         higher_than_expected: "Basic monthly rent must be between £0.00 and £9,999.00"
     merge_request:
