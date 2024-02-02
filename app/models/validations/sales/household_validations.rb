@@ -30,6 +30,16 @@ module Validations::Sales::HouseholdValidations
     end
   end
 
+  def validate_buyer1_previous_tenure(record)
+    return unless record.saledate && record.form.start_year_after_2024?
+    return unless record.discounted_ownership_sale? && record.prevten
+
+    if [3, 4, 5, 6, 7, 9, 0].include?(record.prevten)
+      record.errors.add :prevten, I18n.t("validations.household.prevten.invalid_for_discounted_sale")
+      record.errors.add :ownershipsch, I18n.t("validations.household.prevten.invalid_for_discounted_sale")
+    end
+  end
+
 private
 
   def validate_person_age_matches_relationship(record, person_num)

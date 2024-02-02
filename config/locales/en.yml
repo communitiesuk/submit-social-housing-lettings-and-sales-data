@@ -503,6 +503,7 @@ en:
         internal_transfer: "Answer cannot be %{prevten} as this tenancy is an internal transfer"
         la_general_needs:
           internal_transfer: "Answer cannot be a fixed-term or lifetime local authority general needs tenancy as it’s an internal transfer and a private registered provider is on the tenancy agreement"
+        invalid_for_discounted_sale: "Buyer 1’s previous tenure should be “local authority tenant” or “private registered provider or housing association tenant” for discounted sales"
       referral:
         secure_tenancy: "Answer must be internal transfer as this is a secure tenancy"
         rsnvac_non_temp: "Answer cannot be this source of referral as this is a re-let to tenant who occupied the same property as temporary accommodation"

@@ -268,4 +268,79 @@ RSpec.describe Validations::Sales::HouseholdValidations do
       end
     end
   end
+
+  describe "#validate_buyer1_previous_tenure" do
+    let(:record) { build(:sales_log) }
+
+    let(:now) { Time.zone.local(2024, 4, 4) }
+
+    before do
+      Timecop.freeze(now)
+      Singleton.__init__(FormHandler)
+      record.ownershipsch = 2
+      record.saledate = now
+    end
+
+    after do
+      Timecop.return
+      Singleton.__init__(FormHandler)
+    end
+
+    it "adds an error when previuos tenure is not valid" do
+      [3, 4, 5, 6, 7, 9, 0].each do |prevten|
+        record.prevten = prevten
+        household_validator.validate_buyer1_previous_tenure(record)
+        expect(record.errors["prevten"]).to include("Buyer 1’s previous tenure should be “local authority tenant” or “private registered provider or housing association tenant” for discounted sales")
+        expect(record.errors["ownershipsch"]).to include("Buyer 1’s previous tenure should be “local authority tenant” or “private registered provider or housing association tenant” for discounted sales")
+      end
+    end
+
+    it "does not add an error when previous tenure is allowed" do
+      [1, 2].each do |prevten|
+        record.prevten = prevten
+        household_validator.validate_buyer1_previous_tenure(record)
+        expect(record.errors).to be_empty
+      end
+    end
+
+    it "does not add an error if previous tenure is not given" do
+      record.prevten = nil
+      household_validator.validate_buyer1_previous_tenure(record)
+      expect(record.errors).to be_empty
+    end
+
+    it "does not add an error for shared ownership sale" do
+      record.ownershipsch = 1
+
+      [1, 2, 3, 4, 5, 6, 7, 9, 0].each do |prevten|
+        record.prevten = prevten
+        household_validator.validate_buyer1_previous_tenure(record)
+        expect(record.errors).to be_empty
+      end
+    end
+
+    it "does not add an error for outright sale" do
+      record.ownershipsch = 3
+
+      [1, 2, 3, 4, 5, 6, 7, 9, 0].each do |prevten|
+        record.prevten = prevten
+        household_validator.validate_buyer1_previous_tenure(record)
+        expect(record.errors).to be_empty
+      end
+    end
+
+    context "with 23/24 logs" do
+      let(:now) { Time.zone.local(2023, 4, 4) }
+
+      it "does not add an error for outright sale" do
+        record.ownershipsch = 2
+
+        [1, 2, 3, 4, 5, 6, 7, 9, 0].each do |prevten|
+          record.prevten = prevten
+          household_validator.validate_buyer1_previous_tenure(record)
+          expect(record.errors).to be_empty
+        end
+      end
+    end
+  end
 end
