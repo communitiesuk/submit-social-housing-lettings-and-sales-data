@@ -657,7 +657,7 @@ RSpec.describe SalesLog, type: :model do
       end
 
       before do
-        WebMock.stub_request(:get, /api.postcodes.io\/postcodes\/CA101AA/)
+        WebMock.stub_request(:get, /api\.postcodes\.io\/postcodes\/CA101AA/)
                .to_return(status: 200, body: '{"status":200,"result":{"admin_district":"Cumberland","codes":{"admin_district":"E06000064"}}}', headers: {})
 
         Timecop.freeze(2023, 5, 1)
@@ -687,7 +687,7 @@ RSpec.describe SalesLog, type: :model do
       end
 
       before do
-        WebMock.stub_request(:get, /api.postcodes.io\/postcodes\/CA101AA/)
+        WebMock.stub_request(:get, /api\.postcodes\.io\/postcodes\/CA101AA/)
         .to_return(status: 200, body: '{"status":200,"result":{"admin_district":"Eden","codes":{"admin_district":"E07000030"}}}', headers: {})
 
         Timecop.freeze(2023, 5, 2)
@@ -724,7 +724,7 @@ RSpec.describe SalesLog, type: :model do
       end
 
       before do
-        WebMock.stub_request(:get, /api.postcodes.io\/postcodes\/CA101AA/)
+        WebMock.stub_request(:get, /api\.postcodes\.io\/postcodes\/CA101AA/)
         .to_return(status: 200, body: '{"status":200,"result":{"admin_district":"Eden","codes":{"admin_district":"E07000030"}}}', headers: {})
 
         Timecop.freeze(2024, 5, 2)
