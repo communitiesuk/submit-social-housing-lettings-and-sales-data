@@ -12,8 +12,8 @@ class Form::Lettings::Questions::Sheltered < ::Form::Question
 
   def answer_options
     if form.start_year_after_2024?
-      { "2" => { "value" => "Yes – extra care housing" },
-        "1" => { "value" => "Yes – specialist retirement housing" },
+      { "1" => { "value" => "Yes – specialist retirement housing" },
+        "2" => { "value" => "Yes – extra care housing" },
         "5" => { "value" => "Yes – sheltered housing for adults aged under 55 years" },
         "6" => { "value" => "Yes – sheltered housing for adults aged 55 years and over who are not retired" },
         "3" => { "value" => "No" },
