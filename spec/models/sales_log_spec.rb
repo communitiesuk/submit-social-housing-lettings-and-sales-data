@@ -703,6 +703,51 @@ RSpec.describe SalesLog, type: :model do
         expect(address_sales_log_23_24.la).to eq("E06000064")
         expect(record_from_db["la"]).to eq("E06000064")
       end
+
+      it "does not set previous postcode for discounted sale" do
+        address_sales_log_23_24.update!(ownershipsch: 2, ppostcode_full: nil)
+        record_from_db = described_class.find(address_sales_log_23_24.id)
+        expect(address_sales_log_23_24.ppostcode_full).to eq(nil)
+        expect(record_from_db["ppostcode_full"]).to eq(nil)
+      end
+    end
+
+    context "with 24/25 logs" do
+      let(:address_sales_log_24_25) do
+        described_class.create({
+          owning_organisation:,
+          created_by: created_by_user,
+          ppcodenk: 1,
+          postcode_full: "CA10 1AA",
+          saledate: Time.zone.local(2024, 5, 2),
+        })
+      end
+
+      before do
+        WebMock.stub_request(:get, /api.postcodes.io\/postcodes\/CA101AA/)
+        .to_return(status: 200, body: '{"status":200,"result":{"admin_district":"Eden","codes":{"admin_district":"E07000030"}}}', headers: {})
+
+        Timecop.freeze(2024, 5, 2)
+        Singleton.__init__(FormHandler)
+      end
+
+      after do
+        Timecop.unfreeze
+      end
+
+      it "sets previous postcode for discounted sale" do
+        address_sales_log_24_25.update!(ownershipsch: 2, ppostcode_full: nil)
+        record_from_db = described_class.find(address_sales_log_24_25.id)
+        expect(address_sales_log_24_25.ppostcode_full).to eq("CA10 1AA")
+        expect(record_from_db["ppostcode_full"]).to eq("CA10 1AA")
+      end
+
+      it "does not set previous postcode for non discounted sale" do
+        address_sales_log_24_25.update!(ownershipsch: 1, ppostcode_full: nil)
+        record_from_db = described_class.find(address_sales_log_24_25.id)
+        expect(address_sales_log_24_25.ppostcode_full).to eq(nil)
+        expect(record_from_db["ppostcode_full"]).to eq(nil)
+      end
     end
 
     it "errors if the property postcode is emptied" do
