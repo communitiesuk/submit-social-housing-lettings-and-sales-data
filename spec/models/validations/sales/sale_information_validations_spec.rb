@@ -539,4 +539,293 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
       end
     end
   end
+
+  describe "#validate_stairbought" do
+    let(:now) { Time.zone.local(2024, 4, 4) }
+
+    before do
+      Timecop.freeze(now)
+      Singleton.__init__(FormHandler)
+    end
+
+    after do
+      Timecop.return
+      Singleton.__init__(FormHandler)
+    end
+
+    context "when ownership type is Shared Ownership (new model lease)" do
+      let(:record) { build(:sales_log, ownershipsch: 1, type: 30, saledate: now) }
+
+      it "does not add an error if stairbought is under 90%" do
+        record.stairbought = 89
+        sale_information_validator.validate_stairbought(record)
+
+        expect(record.errors).to be_empty
+      end
+
+      it "does not add an error if stairbought is 90%" do
+        record.stairbought = 90
+        sale_information_validator.validate_stairbought(record)
+
+        expect(record.errors).to be_empty
+      end
+
+      it "does not add an error if stairbought is not given" do
+        record.stairbought = nil
+        sale_information_validator.validate_stairbought(record)
+
+        expect(record.errors).to be_empty
+      end
+
+      it "adds an error if stairbought is over 90%" do
+        record.stairbought = 92
+        sale_information_validator.validate_stairbought(record)
+
+        expect(record.errors[:stairbought]).to include("The percentage bought in this staircasing transaction cannot be higher than 90% for Shared Ownership (new model lease) sales.")
+        expect(record.errors[:type]).to include("The percentage bought in this staircasing transaction cannot be higher than 90% for Shared Ownership (new model lease) sales.")
+      end
+    end
+
+    context "when ownership type is Home ownership for people with Long-Term Disabilities (HOLD)" do
+      let(:record) { build(:sales_log, ownershipsch: 1, type: 16, saledate: now) }
+
+      it "does not add an error if stairbought is under 90%" do
+        record.stairbought = 89
+        sale_information_validator.validate_stairbought(record)
+
+        expect(record.errors).to be_empty
+      end
+
+      it "does not add an error if stairbought is 90%" do
+        record.stairbought = 90
+        sale_information_validator.validate_stairbought(record)
+
+        expect(record.errors).to be_empty
+      end
+
+      it "does not add an error if stairbought is not given" do
+        record.stairbought = nil
+        sale_information_validator.validate_stairbought(record)
+
+        expect(record.errors).to be_empty
+      end
+
+      it "adds an error if stairbought is over 90%" do
+        record.stairbought = 92
+        sale_information_validator.validate_stairbought(record)
+
+        expect(record.errors[:stairbought]).to include("The percentage bought in this staircasing transaction cannot be higher than 90% for Home Ownership for people with Long-Term Disabilities (HOLD) sales.")
+        expect(record.errors[:type]).to include("The percentage bought in this staircasing transaction cannot be higher than 90% for Home Ownership for people with Long-Term Disabilities (HOLD) sales.")
+      end
+    end
+
+    context "when ownership type is Rent to Buy – shared ownership" do
+      let(:record) { build(:sales_log, ownershipsch: 1, type: 28, saledate: now) }
+
+      it "does not add an error if stairbought is under 90%" do
+        record.stairbought = 89
+        sale_information_validator.validate_stairbought(record)
+
+        expect(record.errors).to be_empty
+      end
+
+      it "does not add an error if stairbought is 90%" do
+        record.stairbought = 90
+        sale_information_validator.validate_stairbought(record)
+
+        expect(record.errors).to be_empty
+      end
+
+      it "does not add an error if stairbought is not given" do
+        record.stairbought = nil
+        sale_information_validator.validate_stairbought(record)
+
+        expect(record.errors).to be_empty
+      end
+
+      it "adds an error if stairbought is over 90%" do
+        record.stairbought = 92
+        sale_information_validator.validate_stairbought(record)
+
+        expect(record.errors[:stairbought]).to include("The percentage bought in this staircasing transaction cannot be higher than 90% for Rent to Buy — Shared Ownership sales.")
+        expect(record.errors[:type]).to include("The percentage bought in this staircasing transaction cannot be higher than 90% for Rent to Buy — Shared Ownership sales.")
+      end
+    end
+
+    context "when ownership type is Right to Shared Ownership" do
+      let(:record) { build(:sales_log, ownershipsch: 1, type: 31, saledate: now) }
+
+      it "does not add an error if stairbought is under 90%" do
+        record.stairbought = 89
+        sale_information_validator.validate_stairbought(record)
+
+        expect(record.errors).to be_empty
+      end
+
+      it "does not add an error if stairbought is 90%" do
+        record.stairbought = 90
+        sale_information_validator.validate_stairbought(record)
+
+        expect(record.errors).to be_empty
+      end
+
+      it "does not add an error if stairbought is not given" do
+        record.stairbought = nil
+        sale_information_validator.validate_stairbought(record)
+
+        expect(record.errors).to be_empty
+      end
+
+      it "adds an error if stairbought is over 90%" do
+        record.stairbought = 92
+        sale_information_validator.validate_stairbought(record)
+
+        expect(record.errors[:stairbought]).to include("The percentage bought in this staircasing transaction cannot be higher than 90% for Right to Shared Ownership (RtSO) sales.")
+        expect(record.errors[:type]).to include("The percentage bought in this staircasing transaction cannot be higher than 90% for Right to Shared Ownership (RtSO) sales.")
+      end
+    end
+
+    context "when ownership type is London Living Rent – shared ownership" do
+      let(:record) { build(:sales_log, ownershipsch: 1, type: 32, saledate: now) }
+
+      it "does not add an error if stairbought is under 90%" do
+        record.stairbought = 89
+        sale_information_validator.validate_stairbought(record)
+
+        expect(record.errors).to be_empty
+      end
+
+      it "does not add an error if stairbought is 90%" do
+        record.stairbought = 90
+        sale_information_validator.validate_stairbought(record)
+
+        expect(record.errors).to be_empty
+      end
+
+      it "does not add an error if stairbought is not given" do
+        record.stairbought = nil
+        sale_information_validator.validate_stairbought(record)
+
+        expect(record.errors).to be_empty
+      end
+
+      it "adds an error if stairbought is over 90%" do
+        record.stairbought = 92
+        sale_information_validator.validate_stairbought(record)
+
+        expect(record.errors[:stairbought]).to include("The percentage bought in this staircasing transaction cannot be higher than 90% for London Living Rent — Shared Ownership sales.")
+        expect(record.errors[:type]).to include("The percentage bought in this staircasing transaction cannot be higher than 90% for London Living Rent — Shared Ownership sales.")
+      end
+    end
+
+    context "when ownership type is Shared Ownership (old model lease)" do
+      let(:record) { build(:sales_log, ownershipsch: 1, type: 2, saledate: now) }
+
+      it "does not add an error if stairbought is under 75%" do
+        record.stairbought = 60
+        sale_information_validator.validate_stairbought(record)
+
+        expect(record.errors).to be_empty
+      end
+
+      it "does not add an error if stairbought is 75%" do
+        record.stairbought = 75
+        sale_information_validator.validate_stairbought(record)
+
+        expect(record.errors).to be_empty
+      end
+
+      it "does not add an error if stairbought is not given" do
+        record.stairbought = nil
+        sale_information_validator.validate_stairbought(record)
+
+        expect(record.errors).to be_empty
+      end
+
+      it "adds an error if stairbought is over 75%" do
+        record.stairbought = 76
+        sale_information_validator.validate_stairbought(record)
+
+        expect(record.errors[:stairbought]).to include("The percentage bought in this staircasing transaction cannot be higher than 75% for Shared Ownership (old model lease) sales.")
+        expect(record.errors[:type]).to include("The percentage bought in this staircasing transaction cannot be higher than 75% for Shared Ownership (old model lease) sales.")
+      end
+    end
+
+    context "when ownership type is Social Homebuy – shared ownership" do
+      let(:record) { build(:sales_log, ownershipsch: 1, type: 18, saledate: now) }
+
+      it "does not add an error if stairbought is under 75%" do
+        record.stairbought = 60
+        sale_information_validator.validate_stairbought(record)
+
+        expect(record.errors).to be_empty
+      end
+
+      it "does not add an error if stairbought is 75%" do
+        record.stairbought = 75
+        sale_information_validator.validate_stairbought(record)
+
+        expect(record.errors).to be_empty
+      end
+
+      it "does not add an error if stairbought is not given" do
+        record.stairbought = nil
+        sale_information_validator.validate_stairbought(record)
+
+        expect(record.errors).to be_empty
+      end
+
+      it "adds an error if stairbought is over 75%" do
+        record.stairbought = 76
+        sale_information_validator.validate_stairbought(record)
+
+        expect(record.errors[:stairbought]).to include("The percentage bought in this staircasing transaction cannot be higher than 75% for Social HomeBuy — shared ownership purchase sales.")
+        expect(record.errors[:type]).to include("The percentage bought in this staircasing transaction cannot be higher than 75% for Social HomeBuy — shared ownership purchase sales.")
+      end
+    end
+
+    context "when ownership type is Older Persons shared ownership (OPSO)" do
+      let(:record) { build(:sales_log, ownershipsch: 1, type: 24, saledate: now) }
+
+      it "does not add an error if stairbought is under 50%" do
+        record.stairbought = 33
+        sale_information_validator.validate_stairbought(record)
+
+        expect(record.errors).to be_empty
+      end
+
+      it "does not add an error if stairbought is 50%" do
+        record.stairbought = 50
+        sale_information_validator.validate_stairbought(record)
+
+        expect(record.errors).to be_empty
+      end
+
+      it "does not add an error if stairbought is not given" do
+        record.stairbought = nil
+        sale_information_validator.validate_stairbought(record)
+
+        expect(record.errors).to be_empty
+      end
+
+      it "adds an error if stairbought is over 50%" do
+        record.stairbought = 55
+        sale_information_validator.validate_stairbought(record)
+
+        expect(record.errors[:stairbought]).to include("The percentage bought in this staircasing transaction cannot be higher than 50% for Older Persons Shared Ownership sales.")
+        expect(record.errors[:type]).to include("The percentage bought in this staircasing transaction cannot be higher than 50% for Older Persons Shared Ownership sales.")
+      end
+    end
+
+    context "when the collection year is before 2024" do
+      let(:record) { build(:sales_log, ownershipsch: 1, type: 24, saledate: now, stairbought: 90) }
+      let(:now) { Time.zone.local(2023, 4, 4) }
+
+      it "does not add an error" do
+        sale_information_validator.validate_stairbought(record)
+
+        expect(record.errors).to be_empty
+      end
+    end
+  end
 end
