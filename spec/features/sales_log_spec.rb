@@ -198,6 +198,14 @@ RSpec.describe "Sales Log Features" do
     end
 
     it "allows keeping the original log and deleting duplicates" do
+      sales_log.reload
+      duplicate_log.reload
+      expect(sales_log.duplicates.count).to eq(1)
+      expect(duplicate_log.duplicates.count).to eq(1)
+      expect(sales_log.duplicate_set_id).not_to be_nil
+      expect(duplicate_log.duplicate_set_id).not_to be_nil
+      expect(sales_log.duplicates).to include(duplicate_log)
+
       expect(page).to have_current_path("/sales-logs/#{sales_log.id}/duplicate-logs?original_log_id=#{sales_log.id}")
       click_link("Keep this log and delete duplicates", href: "/sales-logs/#{sales_log.id}/delete-duplicates?original_log_id=#{sales_log.id}")
       expect(page).to have_current_path("/sales-logs/#{sales_log.id}/delete-duplicates?original_log_id=#{sales_log.id}")
@@ -210,6 +218,14 @@ RSpec.describe "Sales Log Features" do
       expect(page).not_to have_content("These logs are duplicates")
       expect(page).not_to have_link("Keep this log and delete duplicates")
       expect(page).to have_link("Back to Log #{sales_log.id}", href: "/sales-logs/#{sales_log.id}")
+
+      sales_log.reload
+      duplicate_log.reload
+
+      expect(sales_log.duplicates.count).to eq(0)
+      expect(duplicate_log.duplicates.count).to eq(0)
+      expect(sales_log.duplicate_set_id).to be_nil
+      expect(duplicate_log.duplicate_set_id).to be_nil
     end
 
     it "allows changing answer on remaining original log" do
@@ -222,6 +238,14 @@ RSpec.describe "Sales Log Features" do
     end
 
     it "allows keeping the duplicate log and deleting the original one" do
+      sales_log.reload
+      duplicate_log.reload
+      expect(sales_log.duplicates.count).to eq(1)
+      expect(duplicate_log.duplicates.count).to eq(1)
+      expect(sales_log.duplicate_set_id).not_to be_nil
+      expect(duplicate_log.duplicate_set_id).not_to be_nil
+      expect(duplicate_log.duplicates).to include(sales_log)
+
       expect(page).to have_current_path("/sales-logs/#{sales_log.id}/duplicate-logs?original_log_id=#{sales_log.id}")
       click_link("Keep this log and delete duplicates", href: "/sales-logs/#{duplicate_log.id}/delete-duplicates?original_log_id=#{sales_log.id}")
       expect(page).to have_current_path("/sales-logs/#{duplicate_log.id}/delete-duplicates?original_log_id=#{sales_log.id}")
@@ -234,6 +258,14 @@ RSpec.describe "Sales Log Features" do
       expect(page).not_to have_content("These logs are duplicates")
       expect(page).not_to have_link("Keep this log and delete duplicates")
       expect(page).to have_link("Back to sales logs", href: "/sales-logs")
+
+      sales_log.reload
+      duplicate_log.reload
+
+      expect(sales_log.duplicates.count).to eq(0)
+      expect(duplicate_log.duplicates.count).to eq(0)
+      expect(sales_log.duplicate_set_id).to be_nil
+      expect(duplicate_log.duplicate_set_id).to be_nil
     end
 
     it "allows changing answers on remaining duplicate log" do
@@ -246,6 +278,14 @@ RSpec.describe "Sales Log Features" do
     end
 
     it "allows deduplicating logs by changing the answers on the duplicate log" do
+      sales_log.reload
+      duplicate_log.reload
+      expect(sales_log.duplicates.count).to eq(1)
+      expect(duplicate_log.duplicates.count).to eq(1)
+      expect(sales_log.duplicate_set_id).not_to be_nil
+      expect(duplicate_log.duplicate_set_id).not_to be_nil
+      expect(sales_log.duplicates).to include(duplicate_log)
+
       expect(page).to have_current_path("/sales-logs/#{sales_log.id}/duplicate-logs?original_log_id=#{sales_log.id}")
       click_link("Change", href: "/sales-logs/#{duplicate_log.id}/purchaser-code?first_remaining_duplicate_id=#{sales_log.id}&original_log_id=#{sales_log.id}&referrer=duplicate_logs")
       fill_in("sales-log-purchid-field", with: "something else")
@@ -255,6 +295,14 @@ RSpec.describe "Sales Log Features" do
       expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
       expect(page).to have_content("Log #{duplicate_log.id} is no longer a duplicate and has been removed from the list")
       expect(page).to have_content("You changed the purchaser code.")
+
+      sales_log.reload
+      duplicate_log.reload
+
+      expect(sales_log.duplicates.count).to eq(0)
+      expect(duplicate_log.duplicates.count).to eq(0)
+      expect(sales_log.duplicate_set_id).to be_nil
+      expect(duplicate_log.duplicate_set_id).to be_nil
     end
 
     it "allows deduplicating logs by changing the answers on the original log" do
@@ -266,6 +314,11 @@ RSpec.describe "Sales Log Features" do
       expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
       expect(page).to have_content("Log #{sales_log.id} is no longer a duplicate and has been removed from the list")
       expect(page).to have_content("You changed the purchaser code.")
+
+      expect(sales_log.duplicates.count).to eq(0)
+      expect(duplicate_log.duplicates.count).to eq(0)
+      expect(sales_log.duplicate_set_id).to be_nil
+      expect(duplicate_log.duplicate_set_id).to be_nil
     end
   end
 end
