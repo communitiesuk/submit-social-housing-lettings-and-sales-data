@@ -1,11 +1,19 @@
 require "rails_helper"
 
-RSpec.describe Form::Lettings::Questions::PropertyNumberOfBedrooms, type: :model do
+RSpec.describe Form::Lettings::Questions::Beds, type: :model do
   subject(:question) { described_class.new(question_id, question_definition, page) }
 
   let(:question_id) { nil }
   let(:question_definition) { nil }
   let(:page) { instance_double(Form::Page) }
+  let(:subsection) { instance_double(Form::Subsection) }
+  let(:form) { instance_double(Form) }
+
+  before do
+    allow(form).to receive(:start_year_after_2024?).and_return(false)
+    allow(page).to receive(:subsection).and_return(subsection)
+    allow(subsection).to receive(:form).and_return(form)
+  end
 
   it "has correct page" do
     expect(question.page).to eq(page)
@@ -36,7 +44,7 @@ RSpec.describe Form::Lettings::Questions::PropertyNumberOfBedrooms, type: :model
   end
 
   it "has the correct max" do
-    expect(question.max).to eq(9)
+    expect(question.max).to eq(12)
   end
 
   context "with 2023/24 form" do
