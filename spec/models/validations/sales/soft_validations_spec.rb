@@ -940,6 +940,15 @@ RSpec.describe Validations::Sales::SoftValidations do
         expect(record).not_to be_discounted_ownership_value_invalid
       end
     end
+
+    context "when it is a 2024 log" do
+      let(:record) { FactoryBot.build(:sales_log, mortgageused: 1, deposit: 5_000, grant: 3_000, value: 20_000, discount: 10, ownershipsch: 2, saledate: Time.zone.local(2024, 4, 3)) }
+
+      it "returns true if mortgage, grant and deposit total does not equal market value - discount" do
+        record.mortgage = 10
+        expect(record).not_to be_discounted_ownership_value_invalid
+      end
+    end
   end
 
   describe "#buyer1_livein_wrong_for_ownership_type?" do
