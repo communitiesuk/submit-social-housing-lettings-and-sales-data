@@ -1036,7 +1036,7 @@ private
     attributes["unittype_gn"] = field_26
     attributes["builtype"] = field_27
     attributes["wchair"] = field_28
-    attributes["beds"] = field_29
+    attributes["beds"] = field_26 == 2 ? 1 : field_29
     attributes["joint"] = field_36
     attributes["startertenancy"] = field_37
     attributes["tenancy"] = field_38

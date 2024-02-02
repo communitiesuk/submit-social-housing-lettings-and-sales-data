@@ -1742,6 +1742,24 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
       end
     end
 
+    describe "#beds" do
+      context "when property is a bedsit" do
+        let(:attributes) { setup_section_params.merge({ field_26: 2, field_29: 2 }) }
+
+        it "sets value to 1 even if field_29 contradicts this" do
+          expect(parser.log.beds).to be(1)
+        end
+      end
+
+      context "when property is not a bedsit" do
+        let(:attributes) { setup_section_params.merge({ field_26: 1, field_29: 2 }) }
+
+        it "sets value to field_29" do
+          expect(parser.log.beds).to be(2)
+        end
+      end
+    end
+
     describe "#cbl" do
       context "when field_112 is yes ie 1" do
         let(:attributes) { { bulk_upload:, field_112: 1 } }
