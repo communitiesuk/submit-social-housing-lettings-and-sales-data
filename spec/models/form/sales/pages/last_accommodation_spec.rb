@@ -3,9 +3,23 @@ require "rails_helper"
 RSpec.describe Form::Sales::Pages::LastAccommodation, type: :model do
   subject(:page) { described_class.new(page_id, page_definition, subsection) }
 
+  let(:log) { create(:sales_log, :completed, saledate: now) }
+  let(:now) { Time.zone.local(2023, 4, 4) }
+
   let(:page_id) { nil }
   let(:page_definition) { nil }
   let(:subsection) { instance_double(Form::Subsection) }
+
+  before do
+    Timecop.freeze(now)
+    Singleton.__init__(FormHandler)
+    allow(subsection).to receive(:depends_on).and_return(nil)
+  end
+
+  after do
+    Timecop.return
+    Singleton.__init__(FormHandler)
+  end
 
   it "has correct subsection" do
     expect(page.subsection).to eq(subsection)
@@ -29,5 +43,24 @@ RSpec.describe Form::Sales::Pages::LastAccommodation, type: :model do
 
   it "has correct depends_on" do
     expect(page.depends_on).to be_nil
+  end
+
+  it "is routed to" do
+    log.ownershipsch = 2
+    expect(page).to be_routed_to(log, nil)
+  end
+
+  context "with 2024 form" do
+    let(:now) { Time.zone.local(2024, 4, 4) }
+
+    it "is routed to for 2024 non discounted sale logs" do
+      log.update!(ownershipsch: 1)
+      expect(page).to be_routed_to(log, nil)
+    end
+
+    it "is not routed to for 2024 discounted sale logs" do
+      log.update!(ownershipsch: 2)
+      expect(page).not_to be_routed_to(log, nil)
+    end
   end
 end
