@@ -156,6 +156,53 @@ RSpec.describe Validations::Sales::FinancialValidations do
     end
   end
 
+  describe "#validate_percentage_bought_not_equal_percentage_owned" do
+    let(:record) { FactoryBot.create(:sales_log) }
+
+    context "with 24/25 logs" do
+      before do
+        record.saledate = Time.zone.local(2024, 4, 3)
+        record.save!(validate: false)
+      end
+
+      it "does not add an error if the percentage bought is less than the percentage owned" do
+        record.stairbought = 20
+        record.stairowned = 40
+        financial_validator.validate_percentage_bought_not_equal_percentage_owned(record)
+        expect(record.errors).to be_empty
+      end
+
+      it "adds an error if the percentage bought is equal to the percentage owned" do
+        record.stairbought = 30
+        record.stairowned = 30
+        financial_validator.validate_percentage_bought_not_equal_percentage_owned(record)
+        expect(record.errors["stairowned"]).to include("The percentage bought is 30% and the percentage owned in total is 30%. These figures cannot be the same.")
+        expect(record.errors["stairbought"]).to include("The percentage bought is 30% and the percentage owned in total is 30%. These figures cannot be the same.")
+      end
+
+      it "does not add an error to stairowned and not stairbought if the percentage bought is more than the percentage owned" do
+        record.stairbought = 50
+        record.stairowned = 40
+        financial_validator.validate_percentage_bought_not_equal_percentage_owned(record)
+        expect(record.errors).to be_empty
+      end
+    end
+
+    context "with 23/24 logs" do
+      before do
+        record.saledate = Time.zone.local(2023, 4, 3)
+        record.save!(validate: false)
+      end
+
+      it "does not add an error if the percentage bought is equal to the percentage owned" do
+        record.stairbought = 30
+        record.stairowned = 30
+        financial_validator.validate_percentage_bought_not_equal_percentage_owned(record)
+        expect(record.errors).to be_empty
+      end
+    end
+  end
+
   describe "#validate_monthly_leasehold_charges" do
     let(:record) { FactoryBot.create(:sales_log) }
 

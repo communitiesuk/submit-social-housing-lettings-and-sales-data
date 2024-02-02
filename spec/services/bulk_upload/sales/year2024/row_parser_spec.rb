@@ -88,7 +88,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
       field_85: "5",
       field_86: "1",
       field_87: "10",
-      field_88: "10",
+      field_88: "11",
       field_89: "1",
       field_91: "30",
       field_92: "3",
