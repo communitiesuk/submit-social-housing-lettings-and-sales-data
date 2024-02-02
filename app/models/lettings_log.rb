@@ -652,6 +652,10 @@ class LettingsLog < Log
     renttype == 1 || renttype == 2
   end
 
+  def duplicates
+    LettingsLog.where.not(duplicate_set_id: nil).where(duplicate_set_id:).where.not(id:)
+  end
+
 private
 
   def reset_invalid_unresolved_log_fields!
