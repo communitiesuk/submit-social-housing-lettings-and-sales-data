@@ -946,8 +946,9 @@ private
       rp_dontknow: %i[field_111],
 
       cbl: %i[field_112],
-      chr: %i[field_114],
       cap: %i[field_113],
+      chr: %i[field_114],
+      accessible_register: %i[field_115],
       letting_allocation: %i[field_112 field_113 field_114 field_115],
 
       referral: %i[field_116],
@@ -1134,6 +1135,7 @@ private
     attributes["cbl"] = cbl
     attributes["chr"] = chr
     attributes["cap"] = cap
+    attributes["accessible_register"] = accessible_register
     attributes["letting_allocation_unknown"] = letting_allocation_unknown
 
     attributes["referral"] = field_116
@@ -1383,6 +1385,15 @@ private
     end
   end
 
+  def cap
+    case field_113
+    when 2
+      0
+    when 1
+      1
+    end
+  end
+
   def chr
     case field_114
     when 2
@@ -1392,8 +1403,8 @@ private
     end
   end
 
-  def cap
-    case field_113
+  def accessible_register
+    case field_115
     when 2
       0
     when 1
