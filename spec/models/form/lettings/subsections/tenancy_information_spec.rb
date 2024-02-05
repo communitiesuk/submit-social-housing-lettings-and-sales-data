@@ -13,7 +13,7 @@ RSpec.describe Form::Lettings::Subsections::TenancyInformation, type: :model do
 
   it "has correct pages" do
     expect(tenancy_information.pages.map(&:id)).to eq(
-      %w[joint starter_tenancy tenancy_type starter_tenancy_type tenancy_length tenancy_length_affordable_rent tenancy_length_intermediate_rent sheltered_accommodation],
+      %w[joint starter_tenancy tenancy_type starter_tenancy_type tenancy_length tenancy_length_affordable_rent tenancy_length_intermediate_rent tenancy_length_periodic sheltered_accommodation],
     )
   end
 

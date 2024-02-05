@@ -286,6 +286,10 @@ class LettingsLog < Log
     [4, 6].include? tenancy
   end
 
+  def tenancy_type_periodic?
+    tenancy == 8
+  end
+
   def is_general_needs?
     # 1: General Needs
     needstype == 1
