@@ -93,7 +93,11 @@ module FiltersHelper
   end
 
   def collection_year_options
-    { "2023": "2023/24", "2022": "2022/23", "2021": "2021/22" }
+    if FeatureToggle.collection_2024_2025_year_enabled?
+      { "2024": "2024/25", "2023": "2023/24", "2022": "2022/23" }
+    else
+      { "2023": "2023/24", "2022": "2022/23", "2021": "2021/22" }
+    end
   end
 
   def filters_applied_text(filter_type)
@@ -173,5 +177,9 @@ private
         0
       end
     end
+  end
+
+  def year_combo(year)
+    "#{year}/#{year - 2000 + 1}"
   end
 end

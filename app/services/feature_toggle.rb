@@ -1,4 +1,8 @@
 class FeatureToggle
+  def self.collection_2024_2025_year_enabled?
+    !Rails.env.production?
+  end
+
   # Disable check on preview apps to allow for testing of future forms
   def self.saledate_collection_window_validation_enabled?
     Rails.env.production? || Rails.env.test? || Rails.env.staging?
