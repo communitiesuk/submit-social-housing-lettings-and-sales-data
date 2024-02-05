@@ -29,6 +29,15 @@ module DerivedVariables::LettingsLogVariables
     5 => 8, # "Other intermediate rent product"  => "Another Intermediate Rent basis"
   }.freeze
 
+  RENTTYPE_DETAIL_MAPPING = {
+    0 => 1,
+    1 => 2,
+    2 => 3,
+    3 => 4,
+    4 => 5,
+    5 => 6,
+  }.freeze
+
   def scheme_has_multiple_locations?
     return false unless scheme
 

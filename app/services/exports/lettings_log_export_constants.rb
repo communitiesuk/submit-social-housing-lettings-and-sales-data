@@ -85,6 +85,7 @@ module Exports::LettingsLogExportConstants
     "refused",
     "reghome",
     "renttype",
+    "renttype_detail",
     "renewal",
     "reservist",
     "rp_dontknow",
