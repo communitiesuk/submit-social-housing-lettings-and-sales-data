@@ -79,7 +79,7 @@ private
       derived_values: {
         mortgage: 0,
       },
-    }
+    },
   ].freeze
 
   def number_of_household_members
