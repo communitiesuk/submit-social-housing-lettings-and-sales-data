@@ -473,4 +473,8 @@ class SalesLog < Log
   def duplicates
     SalesLog.where.not(duplicate_set_id: nil).where(duplicate_set_id:).where.not(id:)
   end
+
+  def nationality2_uk_or_prefers_not_to_say?
+    nationality_all_buyer2_group&.zero? || nationality_all_buyer2_group == 826
+  end
 end

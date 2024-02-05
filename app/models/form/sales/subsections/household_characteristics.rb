@@ -21,7 +21,7 @@ class Form::Sales::Subsections::HouseholdCharacteristics < ::Form::Subsection
       Form::Sales::Pages::Buyer1EthnicBackgroundArab.new(nil, nil, self),
       Form::Sales::Pages::Buyer1EthnicBackgroundMixed.new(nil, nil, self),
       Form::Sales::Pages::Buyer1EthnicBackgroundWhite.new(nil, nil, self),
-      Form::Sales::Pages::Nationality1.new(nil, nil, self),
+      Form::Sales::Pages::Buyer1Nationality.new(nil, nil, self),
       Form::Sales::Pages::Buyer1WorkingSituation.new(nil, nil, self),
       Form::Sales::Pages::RetirementValueCheck.new("working_situation_1_retirement_value_check", nil, self, person_index: 1),
       Form::Sales::Pages::Buyer1IncomeMinValueCheck.new("working_situation_buyer_1_income_min_value_check", nil, self),

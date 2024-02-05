@@ -577,6 +577,25 @@ RSpec.describe SalesLog, type: :model do
         end
       end
     end
+
+    context "when deriving nationality variables" do
+      it "correctly derives nationality_all/nationality_all_buyer2 when it's UK" do
+        expect { sales_log.update!(nationality_all_group: 826) }.to change(sales_log, :nationality_all).to 826
+        expect { sales_log.update!(nationality_all_buyer2_group: 826) }.to change(sales_log, :nationality_all_buyer2).to 826
+      end
+
+      it "correctly derives nationality_all/nationality_all_buyer2 when buyer prefers not to say" do
+        expect { sales_log.update!(nationality_all_group: 0) }.to change(sales_log, :nationality_all).to 0
+        expect { sales_log.update!(nationality_all_buyer2_group: 0) }.to change(sales_log, :nationality_all_buyer2).to 0
+      end
+
+      it "does not derive nationality_all/nationality_all_buyer2 when it is other or not given" do
+        expect { sales_log.update!(nationality_all_group: 12) }.not_to change(sales_log, :nationality_all)
+        expect { sales_log.update!(nationality_all_buyer2_group: 12) }.not_to change(sales_log, :nationality_all_buyer2)
+        expect { sales_log.update!(nationality_all_group: nil) }.not_to change(sales_log, :nationality_all)
+        expect { sales_log.update!(nationality_all_buyer2_group: nil) }.not_to change(sales_log, :nationality_all_buyer2)
+      end
+    end
   end
 
   context "when saving addresses" do

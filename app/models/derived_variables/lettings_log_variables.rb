@@ -115,6 +115,8 @@ module DerivedVariables::LettingsLogVariables
       self.uprn_known = 0
     end
 
+    self.nationality_all = nationality_all_group if nationality_uk_or_prefers_not_to_say?
+
     reset_address_fields! if is_supported_housing?
   end
 

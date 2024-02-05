@@ -4,6 +4,12 @@ RSpec.describe Form::Sales::Pages::Buyer2Nationality, type: :model do
   subject(:page) { described_class.new(nil, nil, subsection) }
 
   let(:subsection) { instance_double(Form::Subsection) }
+  let(:form) { instance_double(Form) }
+
+  before do
+    allow(subsection).to receive(:form).and_return(form)
+    allow(form).to receive(:start_year_after_2024?).and_return(false)
+  end
 
   it "has correct subsection" do
     expect(page.subsection).to be subsection
@@ -36,5 +42,15 @@ RSpec.describe Form::Sales::Pages::Buyer2Nationality, type: :model do
         "buyer_not_interviewed?" => true,
       },
     ]
+  end
+
+  context "with year 2024" do
+    before do
+      allow(form).to receive(:start_year_after_2024?).and_return(true)
+    end
+
+    it "has correct questions" do
+      expect(page.questions.map(&:id)).to eq %w[nationality_all_buyer2_group nationality_all_buyer2]
+    end
   end
 end

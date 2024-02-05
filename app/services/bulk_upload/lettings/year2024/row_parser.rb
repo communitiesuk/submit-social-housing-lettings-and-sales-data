@@ -906,7 +906,7 @@ private
 
       ethnic_group: %i[field_44],
       ethnic: %i[field_44],
-      national: %i[field_45],
+      nationality_all: %i[field_45],
 
       relat2: %i[field_47],
       relat3: %i[field_51],
@@ -1079,7 +1079,8 @@ private
 
     attributes["ethnic_group"] = ethnic_group_from_ethnic
     attributes["ethnic"] = field_44
-    attributes["national"] = field_45
+    attributes["nationality_all"] = field_45
+    attributes["nationality_all_group"] = nationality_group(attributes["nationality_all"])
 
     attributes["relat2"] = field_47
     attributes["relat3"] = field_51
@@ -1465,5 +1466,13 @@ private
     else
       0
     end
+  end
+
+  def nationality_group(nationality_value)
+    return unless nationality_value
+    return 0 if nationality_value.zero?
+    return 826 if nationality_value == 826
+
+    12
   end
 end

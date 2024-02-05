@@ -15,6 +15,13 @@ class Form::Sales::Pages::Buyer2Nationality < ::Form::Page
   end
 
   def questions
-    @questions ||= [Form::Sales::Questions::Buyer2Nationality.new(nil, nil, self)]
+    @questions ||= if form.start_year_after_2024?
+                     [
+                       Form::Sales::Questions::NationalityAllGroup.new("nationality_all_buyer2_group", nil, self, 2),
+                       Form::Sales::Questions::NationalityAll.new("nationality_all_buyer2", nil, self, 2),
+                     ]
+                   else
+                     [Form::Sales::Questions::Buyer2Nationality.new(nil, nil, self)]
+                   end
   end
 end
