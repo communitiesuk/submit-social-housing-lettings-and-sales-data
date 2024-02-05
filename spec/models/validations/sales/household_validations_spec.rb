@@ -286,7 +286,7 @@ RSpec.describe Validations::Sales::HouseholdValidations do
       Singleton.__init__(FormHandler)
     end
 
-    it "adds an error when previuos tenure is not valid" do
+    it "adds an error when previous tenure is not valid" do
       [3, 4, 5, 6, 7, 9, 0].each do |prevten|
         record.prevten = prevten
         household_validator.validate_buyer1_previous_tenure(record)
