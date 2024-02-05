@@ -121,6 +121,7 @@ class SalesLog < Log
     not_required << "proplen" if proplen_optional?
     not_required << "mortlen" if mortlen_optional?
     not_required << "frombeds" if frombeds_optional?
+    not_required << "deposit" if form.start_year_after_2024? && stairowned_100?
 
     not_required |= %w[address_line2 county postcode_full] if saledate && collection_start_year_for_date(saledate) >= 2023
 
