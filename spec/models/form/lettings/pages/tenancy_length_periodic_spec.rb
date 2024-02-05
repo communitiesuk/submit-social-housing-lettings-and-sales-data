@@ -14,7 +14,7 @@ RSpec.describe Form::Lettings::Pages::TenancyLengthPeriodic, type: :model do
   end
 
   it "has the correct id" do
-    expect(page.id).to eq "tenancy_length"
+    expect(page.id).to eq "tenancy_length_periodic"
   end
 
   it "has the correct header" do
@@ -26,6 +26,6 @@ RSpec.describe Form::Lettings::Pages::TenancyLengthPeriodic, type: :model do
   end
 
   it "has the correct depends_on" do
-    expect(page.depends_on).to eq [{ "tenancy_type_fixed_term?" => true, "needstype" => 2 }]
+    expect(page.depends_on).to eq [{ "tenancy_type_periodic?" => true }]
   end
 end
