@@ -674,7 +674,7 @@ RSpec.describe Validations::HouseholdValidations do
   end
 
   describe "housing needs validations" do
-    context "with housingneeds == 2 (yes) && housingneeds_type == 3" do
+    context "with housingneeds == 1 (yes) && housingneeds_type == 3" do
       before do
         record.housingneeds = 1
         record.housingneeds_type = 3
