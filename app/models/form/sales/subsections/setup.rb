@@ -20,7 +20,6 @@ class Form::Sales::Subsections::Setup < ::Form::Subsection
       Form::Sales::Pages::BuyerLive.new(nil, nil, self),
       Form::Sales::Pages::JointPurchase.new(nil, nil, self),
       Form::Sales::Pages::NumberJointBuyers.new(nil, nil, self),
-      (Form::Sales::Pages::BuyerInterview.new(nil, nil, self) if form.start_year_after_2024?),
-    ].flatten.compact
+    ]
   end
 end
