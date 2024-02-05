@@ -46,6 +46,10 @@ module CollectionTimeHelper
     current_collection_start_date - 1.year
   end
 
+  def twice_previous_collection_start_year
+    current_collection_start_year - 2
+  end
+
   def quarter_for_date(date: Time.zone.now)
     quarters = [
       { quarter: "Q3", cutoff_date: Time.zone.local(2024, 1, 12), start_date: Time.zone.local(2023, 10, 1), end_date: Time.zone.local(2023, 12, 31) },
