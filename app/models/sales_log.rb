@@ -495,4 +495,8 @@ class SalesLog < Log
   def is_not_staircasing?
     staircase == 2 || staircase == 3
   end
+  
+  def stairowned_100?
+    stairowned == 100
+  end
 end
