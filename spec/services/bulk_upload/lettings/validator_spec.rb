@@ -114,7 +114,7 @@ RSpec.describe BulkUpload::Lettings::Validator do
 
       context "when uploading a 2022 template for 2023 bulk upload" do
         let(:bulk_upload) { create(:bulk_upload, user:, year: 2023) }
-        let(:log) { build(:lettings_log, :completed, startdate: Time.zone.local(2022, 5, 6)) }
+        let(:log) { build(:lettings_log, :completed, startdate: Time.zone.local(2022, 5, 6), tenancycode: "5") }
 
         context "with no headers" do
           before do

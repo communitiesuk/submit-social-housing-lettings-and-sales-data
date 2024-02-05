@@ -247,6 +247,53 @@ RSpec.describe "DeleteLogs", type: :request do
         expect(log_2.discarded_at).to be nil
       end
     end
+
+    context "when an authorized user deletes a log that had duplicates" do
+      context "and only 1 log remains in the duplicate set" do
+        let!(:log_1) { create(:lettings_log, :duplicate, duplicate_set_id: 5, created_by: user) }
+        let!(:log_2) { create(:lettings_log, :duplicate, duplicate_set_id: 5, created_by: user) }
+        let!(:log_3) { create(:lettings_log, :duplicate, duplicate_set_id: 5, created_by: user) }
+
+        it "deletes the log and marks related logs deduplicated" do
+          delete delete_logs_lettings_logs_path, params: params
+          log_1.reload
+          expect(log_1.status).to eq "deleted"
+          expect(log_1.discarded_at).not_to be nil
+          expect(log_1.duplicates.count).to eq(0)
+          expect(log_1.duplicate_set_id).to be nil
+          log_2.reload
+          expect(log_2.status).to eq "deleted"
+          expect(log_2.discarded_at).not_to be nil
+          expect(log_2.duplicates.count).to eq(0)
+          expect(log_2.duplicate_set_id).to be nil
+          log_3.reload
+          expect(log_3.duplicates.count).to eq(0)
+          expect(log_3.duplicate_set_id).to be nil
+        end
+      end
+
+      context "and multiple logs remains in the duplicate set" do
+        let!(:log_1) { create(:lettings_log, :duplicate, duplicate_set_id: 5, created_by: user) }
+        let!(:log_2) { create(:lettings_log, :duplicate, duplicate_set_id: 5, created_by: user) }
+        let!(:log_3) { create(:lettings_log, :duplicate, duplicate_set_id: 5, created_by: user) }
+        let(:params) { { ids: [log_1.id] } }
+
+        it "deletes the log and marks related logs deduplicated" do
+          delete delete_logs_lettings_logs_path, params: params
+          log_1.reload
+          expect(log_1.status).to eq "deleted"
+          expect(log_1.discarded_at).not_to be nil
+          expect(log_1.duplicates.count).to eq(0)
+          expect(log_1.duplicate_set_id).to be nil
+          log_2.reload
+          log_3.reload
+          expect(log_2.duplicates.count).to eq(1)
+          expect(log_3.duplicates.count).to eq(1)
+          expect(log_3.duplicate_set_id).not_to be nil
+          expect(log_3.duplicate_set_id).to eq(log_2.duplicate_set_id)
+        end
+      end
+    end
   end
 
   describe "GET sales-logs/delete-logs" do
@@ -485,6 +532,53 @@ RSpec.describe "DeleteLogs", type: :request do
         expect(log_1.discarded_at).not_to be nil
         log_2.reload
         expect(log_2.discarded_at).to be nil
+      end
+    end
+
+    context "when an authorized user deletes a log that had duplicates" do
+      context "and only 1 log remains in the duplicate set" do
+        let!(:log_1) { create(:sales_log, :duplicate, duplicate_set_id: 5, created_by: user) }
+        let!(:log_2) { create(:sales_log, :duplicate, duplicate_set_id: 5, created_by: user) }
+        let!(:log_3) { create(:sales_log, :duplicate, duplicate_set_id: 5, created_by: user) }
+
+        it "deletes the log and marks related logs deduplicated" do
+          delete delete_logs_sales_logs_path, params: params
+          log_1.reload
+          expect(log_1.status).to eq "deleted"
+          expect(log_1.discarded_at).not_to be nil
+          expect(log_1.duplicates.count).to eq(0)
+          expect(log_1.duplicate_set_id).to be nil
+          log_2.reload
+          expect(log_2.status).to eq "deleted"
+          expect(log_2.discarded_at).not_to be nil
+          expect(log_2.duplicates.count).to eq(0)
+          expect(log_2.duplicate_set_id).to be nil
+          log_3.reload
+          expect(log_3.duplicates.count).to eq(0)
+          expect(log_3.duplicate_set_id).to be nil
+        end
+      end
+
+      context "and multiple logs remains in the duplicate set" do
+        let!(:log_1) { create(:sales_log, :duplicate, duplicate_set_id: 5, created_by: user) }
+        let!(:log_2) { create(:sales_log, :duplicate, duplicate_set_id: 5, created_by: user) }
+        let!(:log_3) { create(:sales_log, :duplicate, duplicate_set_id: 5, created_by: user) }
+        let(:params) { { ids: [log_1.id] } }
+
+        it "deletes the log and marks related logs deduplicated" do
+          delete delete_logs_sales_logs_path, params: params
+          log_1.reload
+          expect(log_1.status).to eq "deleted"
+          expect(log_1.discarded_at).not_to be nil
+          expect(log_1.duplicates.count).to eq(0)
+          expect(log_1.duplicate_set_id).to be nil
+          log_2.reload
+          log_3.reload
+          expect(log_2.duplicates.count).to eq(1)
+          expect(log_3.duplicates.count).to eq(1)
+          expect(log_3.duplicate_set_id).not_to be nil
+          expect(log_3.duplicate_set_id).to eq(log_2.duplicate_set_id)
+        end
       end
     end
   end

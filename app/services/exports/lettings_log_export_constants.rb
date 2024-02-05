@@ -85,6 +85,7 @@ module Exports::LettingsLogExportConstants
     "refused",
     "reghome",
     "renttype",
+    "renttype_detail",
     "renewal",
     "reservist",
     "rp_dontknow",
@@ -136,7 +137,8 @@ module Exports::LettingsLogExportConstants
     "scheme_status",
     "location_status",
     "created_by",
-    "amended_by"
+    "amended_by",
+    "duplicate_set_id"
   ]
 
   (1..8).each do |index|

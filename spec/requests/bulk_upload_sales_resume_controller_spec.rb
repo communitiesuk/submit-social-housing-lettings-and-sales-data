@@ -9,6 +9,31 @@ RSpec.describe BulkUploadSalesResumeController, type: :request do
     sign_in user
   end
 
+  describe "GET /sales-logs/bulk-upload-resume/:ID/start" do
+    context "when a choice has not been made" do
+      it "redirects to choice page" do
+        get "/sales-logs/bulk-upload-resume/#{bulk_upload.id}/start"
+
+        expect(response).to redirect_to("/sales-logs/bulk-upload-resume/#{bulk_upload.id}/fix-choice")
+      end
+    end
+
+    context "when a choice has been made and then the logs have been completed" do
+      let(:sales_log) { create_list(:sales_log, 2, :completed, bulk_upload:) }
+
+      it "redirects to the complete page if the bulk uploads are completed" do
+        bulk_upload.update!(choice: "create-fix-inline")
+
+        get "/sales-logs/bulk-upload-resume/#{bulk_upload.id}/start"
+        follow_redirect!
+        expect(response).to redirect_to("/sales-logs/bulk-upload-resume/#{bulk_upload.id}/chosen")
+
+        follow_redirect!
+        expect(response.body).to include("You have created logs from your bulk upload, and the logs are complete. Return to sales logs to view them.")
+      end
+    end
+  end
+
   describe "GET /sales-logs/bulk-upload-resume/:ID/fix-choice" do
     it "renders the page correctly" do
       get "/sales-logs/bulk-upload-resume/#{bulk_upload.id}/fix-choice"
@@ -111,6 +136,16 @@ RSpec.describe BulkUploadSalesResumeController, type: :request do
       expect(response.headers["Cache-Control"]).to eql("no-store")
     end
 
+    context "and previously told us to fix inline" do
+      let(:bulk_upload) { create(:bulk_upload, :sales, user:, bulk_upload_errors:, choice: "create-fix-inline") }
+
+      it "redirects to chosen" do
+        get "/sales-logs/bulk-upload-resume/#{bulk_upload.id}/confirm"
+
+        expect(response).to redirect_to("/sales-logs/bulk-upload-resume/#{bulk_upload.id}/chosen")
+      end
+    end
+
     context "and previously told us to bulk confirm soft validations" do
       let(:bulk_upload) { create(:bulk_upload, :sales, user:, bulk_upload_errors:, choice: "bulk-confirm-soft-validations") }
 
@@ -138,31 +173,6 @@ RSpec.describe BulkUploadSalesResumeController, type: :request do
     end
   end
 
-  describe "GET /sales-logs/bulk-upload-resume/:ID/start" do
-    context "when a choice has not been made" do
-      it "redirects to choice page" do
-        get "/sales-logs/bulk-upload-resume/#{bulk_upload.id}/start"
-
-        expect(response).to redirect_to("/sales-logs/bulk-upload-resume/#{bulk_upload.id}/fix-choice")
-      end
-    end
-
-    context "when a choice has been made and then the logs have been completed" do
-      let(:sales_log) { create_list(:sales_log, 2, :completed, bulk_upload:) }
-
-      it "redirects to the complete page if the bulk uploads are completed" do
-        bulk_upload.update!(choice: "create-fix-inline")
-
-        get "/sales-logs/bulk-upload-resume/#{bulk_upload.id}/start"
-        follow_redirect!
-        expect(response).to redirect_to("/sales-logs/bulk-upload-resume/#{bulk_upload.id}/chosen")
-
-        follow_redirect!
-        expect(response.body).to include("You have created logs from your bulk upload, and the logs are complete. Return to sales logs to view them.")
-      end
-    end
-  end
-
   describe "GET /sales-logs/bulk-upload-resume/:ID/deletion-report" do
     it "renders the page correctly" do
       get "/sales-logs/bulk-upload-resume/#{bulk_upload.id}/deletion-report"
@@ -186,7 +196,7 @@ RSpec.describe BulkUploadSalesResumeController, type: :request do
       let(:bulk_upload) { create(:bulk_upload, :sales, user:, bulk_upload_errors:, choice: "create-fix-inline") }
 
       it "redirects to chosen" do
-        get "/sales-logs/bulk-upload-resume/#{bulk_upload.id}/fix-choice"
+        get "/sales-logs/bulk-upload-resume/#{bulk_upload.id}/deletion-report"
 
         expect(response).to redirect_to("/sales-logs/bulk-upload-resume/#{bulk_upload.id}/chosen")
       end
@@ -196,7 +206,7 @@ RSpec.describe BulkUploadSalesResumeController, type: :request do
       let(:bulk_upload) { create(:bulk_upload, :sales, user:, bulk_upload_errors:, choice: "bulk-confirm-soft-validations") }
 
       it "redirects to soft validations check chosen" do
-        get "/sales-logs/bulk-upload-resume/#{bulk_upload.id}/fix-choice"
+        get "/sales-logs/bulk-upload-resume/#{bulk_upload.id}/deletion-report"
 
         expect(response).to redirect_to("/sales-logs/bulk-upload-soft-validations-check/#{bulk_upload.id}/chosen")
       end

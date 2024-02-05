@@ -143,6 +143,7 @@
     <county/>
     <discarded_at/>
     <creation_method>1</creation_method>
+    <duplicate_set_id/>
     <formid>{id}</formid>
     <owningorgid>{owning_org_id}</owningorgid>
     <owningorgname>DLUHC</owningorgname>
@@ -172,6 +173,7 @@
     <units>20</units>
     <location_code>{location_id}</location_code>
     <location_status>active</location_status>
+    <renttype_detail>2</renttype_detail>
     <providertype>1</providertype>
   </form>
 </forms>

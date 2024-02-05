@@ -52,6 +52,16 @@ module Validations::Sales::FinancialValidations
     end
   end
 
+  def validate_percentage_bought_not_equal_percentage_owned(record)
+    return unless record.stairbought && record.stairowned
+    return unless record.saledate && record.form.start_year_after_2024?
+
+    if record.stairbought == record.stairowned
+      record.errors.add :stairbought, I18n.t("validations.financial.staircasing.percentage_bought_equal_percentage_owned", stairbought: sprintf("%g", record.stairbought), stairowned: sprintf("%g", record.stairowned))
+      record.errors.add :stairowned, I18n.t("validations.financial.staircasing.percentage_bought_equal_percentage_owned", stairbought: sprintf("%g", record.stairbought), stairowned: sprintf("%g", record.stairowned))
+    end
+  end
+
   def validate_percentage_bought_at_least_threshold(record)
     return unless record.stairbought && record.type
 
@@ -89,6 +99,23 @@ module Validations::Sales::FinancialValidations
     elsif record.equity > range.max
       record.errors.add :type, I18n.t("validations.financial.equity.over_max", max_equity: range.max)
       record.errors.add :equity, :over_max, message: I18n.t("validations.financial.equity.over_max", max_equity: range.max)
+    end
+  end
+
+  def validate_shared_ownership_deposit(record)
+    return unless record.saledate && record.form.start_year_after_2024?
+    return unless record.mortgage || record.mortgageused == 2 || record.mortgageused == 3
+    return unless record.cashdis && record.deposit && record.value && record.equity
+
+    mortgage_value = record.mortgage || 0
+
+    if mortgage_value + record.deposit + record.cashdis != record.value * record.equity / 100
+      %i[mortgage value deposit ownershipsch cashdis equity].each do |field|
+        record.errors.add field, I18n.t("validations.financial.shared_ownership_deposit",
+                                        mortgage_deposit_and_discount_error_fields: record.mortgage_deposit_and_discount_error_fields,
+                                        mortgage_deposit_and_discount_total: record.field_formatted_as_currency("mortgage_deposit_and_discount_total"),
+                                        value_times_equity: record.field_formatted_as_currency("value_times_equity"))
+      end
     end
   end
 

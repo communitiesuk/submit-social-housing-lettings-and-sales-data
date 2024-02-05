@@ -156,6 +156,53 @@ RSpec.describe Validations::Sales::FinancialValidations do
     end
   end
 
+  describe "#validate_percentage_bought_not_equal_percentage_owned" do
+    let(:record) { FactoryBot.create(:sales_log) }
+
+    context "with 24/25 logs" do
+      before do
+        record.saledate = Time.zone.local(2024, 4, 3)
+        record.save!(validate: false)
+      end
+
+      it "does not add an error if the percentage bought is less than the percentage owned" do
+        record.stairbought = 20
+        record.stairowned = 40
+        financial_validator.validate_percentage_bought_not_equal_percentage_owned(record)
+        expect(record.errors).to be_empty
+      end
+
+      it "adds an error if the percentage bought is equal to the percentage owned" do
+        record.stairbought = 30
+        record.stairowned = 30
+        financial_validator.validate_percentage_bought_not_equal_percentage_owned(record)
+        expect(record.errors["stairowned"]).to include("The percentage bought is 30% and the percentage owned in total is 30%. These figures cannot be the same.")
+        expect(record.errors["stairbought"]).to include("The percentage bought is 30% and the percentage owned in total is 30%. These figures cannot be the same.")
+      end
+
+      it "does not add an error to stairowned and not stairbought if the percentage bought is more than the percentage owned" do
+        record.stairbought = 50
+        record.stairowned = 40
+        financial_validator.validate_percentage_bought_not_equal_percentage_owned(record)
+        expect(record.errors).to be_empty
+      end
+    end
+
+    context "with 23/24 logs" do
+      before do
+        record.saledate = Time.zone.local(2023, 4, 3)
+        record.save!(validate: false)
+      end
+
+      it "does not add an error if the percentage bought is equal to the percentage owned" do
+        record.stairbought = 30
+        record.stairowned = 30
+        financial_validator.validate_percentage_bought_not_equal_percentage_owned(record)
+        expect(record.errors).to be_empty
+      end
+    end
+  end
+
   describe "#validate_monthly_leasehold_charges" do
     let(:record) { FactoryBot.create(:sales_log) }
 
@@ -336,6 +383,181 @@ RSpec.describe Validations::Sales::FinancialValidations do
         financial_validator.validate_equity_in_range_for_year_and_type(record)
         expect(record.errors["equity"]).to include(match I18n.t("validations.financial.equity.over_max", max_equity: 75))
         expect(record.errors["type"]).to include(match I18n.t("validations.financial.equity.over_max", max_equity: 75))
+      end
+    end
+  end
+
+  describe "#validate_shared_ownership_deposit" do
+    let(:record) { FactoryBot.create(:sales_log, saledate: now) }
+
+    around do |example|
+      Timecop.freeze(now) do
+        Singleton.__init__(FormHandler)
+        example.run
+      end
+      Timecop.return
+    end
+
+    context "with a log in the 24/25 collection year" do
+      let(:now) { Time.zone.local(2024, 4, 2) }
+
+      it "does not add an error if MORTGAGE + DEPOSIT + CASHDIS are equal VALUE * EQUITY/100" do
+        record.mortgage = 1000
+        record.deposit = 1000
+        record.cashdis = 1000
+        record.value = 3000
+        record.equity = 100
+
+        financial_validator.validate_shared_ownership_deposit(record)
+        expect(record.errors["mortgage"]).to be_empty
+        expect(record.errors["deposit"]).to be_empty
+        expect(record.errors["cashdis"]).to be_empty
+        expect(record.errors["value"]).to be_empty
+        expect(record.errors["equity"]).to be_empty
+      end
+
+      it "does not add an error if mortgage is used and no mortgage is given" do
+        record.mortgage = nil
+        record.deposit = 1000
+        record.cashdis = 1000
+        record.value = 3000
+        record.equity = 100
+
+        financial_validator.validate_shared_ownership_deposit(record)
+        expect(record.errors["mortgage"]).to be_empty
+        expect(record.errors["deposit"]).to be_empty
+        expect(record.errors["cashdis"]).to be_empty
+        expect(record.errors["value"]).to be_empty
+        expect(record.errors["equity"]).to be_empty
+      end
+
+      it "adds an error if mortgage is not used and no mortgage is given" do
+        record.mortgage = nil
+        record.mortgageused = 2
+        record.deposit = 1000
+        record.cashdis = 1000
+        record.value = 3000
+        record.equity = 100
+
+        financial_validator.validate_shared_ownership_deposit(record)
+        expect(record.errors["mortgage"]).to include("The mortgage, deposit, and cash discount added together is £2,000.00. The value times the equity percentage is £3,000.00. These figures should be the same")
+        expect(record.errors["deposit"]).to include("The mortgage, deposit, and cash discount added together is £2,000.00. The value times the equity percentage is £3,000.00. These figures should be the same")
+        expect(record.errors["cashdis"]).to include("The mortgage, deposit, and cash discount added together is £2,000.00. The value times the equity percentage is £3,000.00. These figures should be the same")
+        expect(record.errors["value"]).to include("The mortgage, deposit, and cash discount added together is £2,000.00. The value times the equity percentage is £3,000.00. These figures should be the same")
+        expect(record.errors["equity"]).to include("The mortgage, deposit, and cash discount added together is £2,000.00. The value times the equity percentage is £3,000.00. These figures should be the same")
+      end
+
+      it "does not add an error if no deposit is given" do
+        record.mortgage = 1000
+        record.deposit = nil
+        record.cashdis = 1000
+        record.value = 3000
+        record.equity = 100
+
+        financial_validator.validate_shared_ownership_deposit(record)
+        expect(record.errors["mortgage"]).to be_empty
+        expect(record.errors["deposit"]).to be_empty
+        expect(record.errors["cashdis"]).to be_empty
+        expect(record.errors["value"]).to be_empty
+        expect(record.errors["equity"]).to be_empty
+      end
+
+      it "does not add an error if no cashdis is given and cashdis is routed to" do
+        record.mortgage = 1000
+        record.deposit = 1000
+        record.type = 18
+        record.cashdis = nil
+        record.value = 3000
+        record.equity = 100
+
+        financial_validator.validate_shared_ownership_deposit(record)
+        expect(record.errors["mortgage"]).to be_empty
+        expect(record.errors["deposit"]).to be_empty
+        expect(record.errors["cashdis"]).to be_empty
+        expect(record.errors["value"]).to be_empty
+        expect(record.errors["equity"]).to be_empty
+      end
+
+      it "does not add an error if no cashdis is given and cashdis is not routed to" do
+        record.mortgageused = 1
+        record.mortgage = 1000
+        record.deposit = 1000
+        record.type = 2
+        record.cashdis = nil
+        record.value = 3000
+        record.equity = 100
+
+        financial_validator.validate_shared_ownership_deposit(record)
+        expect(record.errors["mortgage"]).to be_empty
+        expect(record.errors["deposit"]).to be_empty
+        expect(record.errors["cashdis"]).to be_empty
+        expect(record.errors["value"]).to be_empty
+        expect(record.errors["equity"]).to be_empty
+      end
+
+      it "does not add an error if no value is given" do
+        record.mortgage = 1000
+        record.deposit = 1000
+        record.cashdis = 1000
+        record.value = nil
+        record.equity = 100
+
+        financial_validator.validate_shared_ownership_deposit(record)
+        expect(record.errors["mortgage"]).to be_empty
+        expect(record.errors["deposit"]).to be_empty
+        expect(record.errors["cashdis"]).to be_empty
+        expect(record.errors["value"]).to be_empty
+        expect(record.errors["equity"]).to be_empty
+      end
+
+      it "does not add an error if no equity is given" do
+        record.mortgage = 1000
+        record.deposit = 1000
+        record.cashdis = 1000
+        record.value = 3000
+        record.equity = nil
+
+        financial_validator.validate_shared_ownership_deposit(record)
+        expect(record.errors["mortgage"]).to be_empty
+        expect(record.errors["deposit"]).to be_empty
+        expect(record.errors["cashdis"]).to be_empty
+        expect(record.errors["value"]).to be_empty
+        expect(record.errors["equity"]).to be_empty
+      end
+
+      it "adds an error if MORTGAGE + DEPOSIT + CASHDIS are not equal VALUE * EQUITY/100" do
+        record.mortgageused = 1
+        record.mortgage = 1000
+        record.deposit = 1000
+        record.cashdis = 1000
+        record.value = 4323
+        record.equity = 100
+
+        financial_validator.validate_shared_ownership_deposit(record)
+        expect(record.errors["mortgage"]).to include("The mortgage, deposit, and cash discount added together is £3,000.00. The value times the equity percentage is £4,323.00. These figures should be the same")
+        expect(record.errors["deposit"]).to include("The mortgage, deposit, and cash discount added together is £3,000.00. The value times the equity percentage is £4,323.00. These figures should be the same")
+        expect(record.errors["cashdis"]).to include("The mortgage, deposit, and cash discount added together is £3,000.00. The value times the equity percentage is £4,323.00. These figures should be the same")
+        expect(record.errors["value"]).to include("The mortgage, deposit, and cash discount added together is £3,000.00. The value times the equity percentage is £4,323.00. These figures should be the same")
+        expect(record.errors["equity"]).to include("The mortgage, deposit, and cash discount added together is £3,000.00. The value times the equity percentage is £4,323.00. These figures should be the same")
+      end
+    end
+
+    context "with a log in 23/24 collection year" do
+      let(:now) { Time.zone.local(2024, 1, 1) }
+
+      it "does not add an error if MORTGAGE + DEPOSIT + CASHDIS are not equal VALUE * EQUITY/100" do
+        record.mortgage = 1000
+        record.deposit = 1000
+        record.cashdis = 1000
+        record.value = 4323
+        record.equity = 100
+
+        financial_validator.validate_shared_ownership_deposit(record)
+        expect(record.errors["mortgage"]).to be_empty
+        expect(record.errors["deposit"]).to be_empty
+        expect(record.errors["cashdis"]).to be_empty
+        expect(record.errors["value"]).to be_empty
+        expect(record.errors["equity"]).to be_empty
       end
     end
   end

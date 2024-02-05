@@ -40,6 +40,13 @@ class LettingsLog < Log
   belongs_to :managing_organisation, class_name: "Organisation", optional: true
 
   scope :filter_by_year, ->(year) { where(startdate: Time.zone.local(year.to_i, 4, 1)...Time.zone.local(year.to_i + 1, 4, 1)) }
+  scope :filter_by_years_or_nil, lambda { |years, _user = nil|
+    first_year = years.shift
+    query = filter_by_year(first_year)
+    years.each { |year| query = query.or(filter_by_year(year)) }
+    query = query.or(where(startdate: nil))
+    query.all
+  }
   scope :filter_by_tenant_code, ->(tenant_code) { where("tenancycode ILIKE ?", "%#{tenant_code}%") }
   scope :filter_by_propcode, ->(propcode) { where("propcode ILIKE ?", "%#{propcode}%") }
   scope :filter_by_location_postcode, ->(postcode_full) { left_joins(:location).where("REPLACE(locations.postcode, ' ', '') ILIKE ?", "%#{postcode_full.delete(' ')}%") }
@@ -370,7 +377,7 @@ class LettingsLog < Log
   def previous_tenancy_was_temporary?
     # 4: Tied housing or renting with job
     # 6: Supported housing
-    # 8: Sheltered accomodation (<= 21/22)
+    # 8: Sheltered accommodation (<= 21/22)
     # 24: Housed by National Asylum Support Service (prev Home Office)
     # 25: Other
     # 34: Specialist retirement housing
@@ -550,8 +557,12 @@ class LettingsLog < Log
     location.type_of_unit_before_type_cast if location
   end
 
-  def rent_type_detail
+  def renttype_detail
     form.get_question("rent_type", self)&.label_from_value(rent_type)
+  end
+
+  def renttype_detail_code
+    RENTTYPE_DETAIL_MAPPING[rent_type] if rent_type.present?
   end
 
   def non_location_setup_questions_completed?
@@ -643,6 +654,10 @@ class LettingsLog < Log
 
   def affordable_or_social_rent?
     renttype == 1 || renttype == 2
+  end
+
+  def duplicates
+    LettingsLog.where.not(duplicate_set_id: nil).where(duplicate_set_id:).where.not(id:)
   end
 
 private

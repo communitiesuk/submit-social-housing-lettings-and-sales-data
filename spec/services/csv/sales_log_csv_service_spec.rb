@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe Csv::SalesLogCsvService do
   let(:form_handler_mock) { instance_double(FormHandler) }
   let(:organisation) { create(:organisation) }
-  let(:fixed_time) { Time.zone.local(2023, 2, 8) }
+  let(:fixed_time) { Time.zone.local(2023, 12, 8) }
   let(:user) { create(:user, email: "billyboy@eyeKLAUD.com") }
   let(:log) do
     create(
@@ -163,6 +163,18 @@ RSpec.describe Csv::SalesLogCsvService do
       end
       expect(csv).to eq expected_content
     end
+
+    context "when the log has a duplicate log reference" do
+      before do
+        log.update!(duplicate_set_id: 12_312)
+      end
+
+      it "exports the id for under the heading 'duplicate_set_id'" do
+        duplicate_set_id_column_index = csv.first.index("duplicate_set_id")
+        duplicate_set_id_value = csv.second[duplicate_set_id_column_index]
+        expect(duplicate_set_id_value).to eq "12312"
+      end
+    end
   end
 
   context "when exporting values as codes" do
@@ -210,6 +222,18 @@ RSpec.describe Csv::SalesLogCsvService do
         csv.second[index] = nil
       end
       expect(csv).to eq expected_content
+    end
+
+    context "when the log has a duplicate log reference" do
+      before do
+        log.update!(duplicate_set_id: 12_312)
+      end
+
+      it "exports the id for under the heading 'duplicate_set_id'" do
+        duplicate_set_id_column_index = csv.first.index("duplicate_set_id")
+        duplicate_set_id_value = csv.second[duplicate_set_id_column_index]
+        expect(duplicate_set_id_value).to eq "12312"
+      end
     end
   end
 end

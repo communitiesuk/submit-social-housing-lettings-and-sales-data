@@ -115,6 +115,10 @@ module Csv
         labels: %i[created_by is_dpo?],
         codes: %i[created_by is_dpo?],
       },
+      renttype_detail: {
+        labels: %i[renttype_detail],
+        codes: %i[renttype_detail_code],
+      },
     }.freeze
 
     PERSON_DETAILS = {}.tap { |hash|
@@ -244,15 +248,22 @@ module Csv
       1 => "Prefers not to say",
     }.freeze
 
+    RENTTYPE_LABELS = {
+      1 => "Social Rent",
+      2 => "Affordable Rent",
+      3 => "Intermediate Rent",
+    }.freeze
+
     LABELS = {
       "lettype" => LETTYPE_LABELS,
       "irproduct" => IRPRODUCT_LABELS,
       "lar" => LAR_LABELS,
       "newprop" => NEWPROP_LABELS,
       "incref" => INCREF_LABELS,
+      "renttype" => RENTTYPE_LABELS,
     }.freeze
 
-    CONVENTIONAL_YES_NO_ATTRIBUTES = %w[illness_type_1 illness_type_2 illness_type_3 illness_type_4 illness_type_5 illness_type_6 illness_type_7 illness_type_8 illness_type_9 illness_type_10 refused cbl cap chr letting_allocation_none housingneeds_a housingneeds_b housingneeds_c housingneeds_d housingneeds_e housingneeds_f housingneeds_g housingneeds_h has_benefits nocharge].freeze
+    CONVENTIONAL_YES_NO_ATTRIBUTES = %w[illness_type_1 illness_type_2 illness_type_3 illness_type_4 illness_type_5 illness_type_6 illness_type_7 illness_type_8 illness_type_9 illness_type_10 refused cbl cap chr letting_allocation_none housingneeds_a housingneeds_b housingneeds_c housingneeds_d housingneeds_e housingneeds_f housingneeds_g housingneeds_h has_benefits nocharge postcode_known].freeze
 
     YES_OR_BLANK_ATTRIBUTES = %w[declaration rp_homeless rp_insan_unsat rp_medwel rp_hardship rp_dontknow].freeze
 
@@ -262,7 +273,7 @@ module Csv
       "created_by_id" => [],
       "scheme_id" => [],
       "location_id" => [],
-      "rent_type" => %w[renttype rent_type_detail],
+      "rent_type" => %w[renttype renttype_detail],
       "hb" => %w[hb has_benefits],
       "age1" => %w[refused hhtype totchild totelder totadult age1],
       "housingneeds_type" => %w[housingneeds_type housingneeds_a housingneeds_b housingneeds_c housingneeds_f housingneeds_g housingneeds_h],
@@ -299,7 +310,7 @@ module Csv
           ATTRIBUTE_MAPPINGS.fetch(question.id, question.id)
         end
       end
-      non_question_fields = %w[id status created_by is_dpo created_at updated_by updated_at creation_method old_id old_form_id collection_start_year]
+      non_question_fields = %w[id status duplicate_set_id created_by is_dpo created_at updated_by updated_at creation_method old_id old_form_id collection_start_year]
       scheme_and_location_attributes = %w[scheme_code scheme_service_name scheme_sensitive SCHTYPE scheme_registered_under_care_act scheme_owning_organisation_name scheme_primary_client_group scheme_has_other_client_group scheme_secondary_client_group scheme_support_type scheme_intended_stay scheme_created_at location_code location_postcode location_name location_units location_type_of_unit location_mobility_type location_local_authority location_startdate]
       final_attributes = non_question_fields + attributes + scheme_and_location_attributes
       @user.support? ? final_attributes : final_attributes - SUPPORT_ONLY_ATTRIBUTES
