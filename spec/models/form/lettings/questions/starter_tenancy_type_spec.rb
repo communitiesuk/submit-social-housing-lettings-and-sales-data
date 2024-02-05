@@ -14,9 +14,13 @@ RSpec.describe Form::Lettings::Questions::StarterTenancyType, type: :model do
     allow(subsection).to receive(:form).and_return(form)
   end
 
-  context "with collection year before 2024" do
+  context "with 2023/24 form" do
     before do
       allow(form).to receive(:start_year_after_2024?).and_return(false)
+    end
+
+    it "has the correct check answer label" do
+      expect(question.check_answer_label).to eq("Type of main tenancy after the starter period has ended?")
     end
 
     it "has the correct hint_text" do
@@ -52,9 +56,13 @@ RSpec.describe Form::Lettings::Questions::StarterTenancyType, type: :model do
     end
   end
 
-  context "with collection year >= 2024" do
+  context "with 2024/25 form" do
     before do
       allow(form).to receive(:start_year_after_2024?).and_return(true)
+    end
+
+    it "has the correct check answer label" do
+      expect(question.check_answer_label).to eq("What is the type of tenancy after the starter or introductory period has ended")
     end
 
     it "has the correct updated hint_text" do
