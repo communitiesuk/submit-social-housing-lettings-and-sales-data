@@ -42,7 +42,6 @@ RSpec.describe Form::Sales::Questions::BuyerLive, type: :model do
     })
   end
 
-
   context "with 2023/24 form" do
     it "has the correct header" do
       expect(question.header).to eq("Will the buyers live in the property?")
