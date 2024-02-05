@@ -6,6 +6,12 @@ RSpec.describe Form::Sales::Questions::Discount, type: :model do
   let(:question_id) { nil }
   let(:question_definition) { nil }
   let(:page) { instance_double(Form::Page) }
+  let(:subsection) { instance_double(Form::Subsection) }
+
+  before do
+    allow(page).to receive(:subsection).and_return(subsection)
+    allow(subsection).to receive(:form).and_return(instance_double(Form, start_year_after_2024?: false))
+  end
 
   it "has correct page" do
     expect(question.page).to eq(page)
@@ -51,5 +57,15 @@ RSpec.describe Form::Sales::Questions::Discount, type: :model do
 
   it "has correct max" do
     expect(question.max).to eq(100)
+  end
+
+  context "with form start year after 2024" do
+    before do
+      allow(subsection).to receive(:form).and_return(instance_double(Form, start_year_after_2024?: true))
+    end
+
+    it "has correct max" do
+      expect(question.max).to eq(70)
+    end
   end
 end

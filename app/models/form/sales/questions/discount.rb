@@ -6,7 +6,7 @@ class Form::Sales::Questions::Discount < ::Form::Question
     @header = "What was the percentage discount?"
     @type = "numeric"
     @min = 0
-    @max = 100
+    @max = form.start_year_after_2024? ? 70 : 100
     @step = 1
     @width = 5
     @suffix = "%"
