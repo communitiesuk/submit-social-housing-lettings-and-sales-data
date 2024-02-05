@@ -8,7 +8,6 @@ module Exports::LettingsLogExportConstants
   }.freeze
 
   EXPORT_FIELDS = Set[
-    "accessible_register",
     "armedforces",
     "beds",
     "benefits",
