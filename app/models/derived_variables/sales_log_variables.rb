@@ -24,8 +24,8 @@ module DerivedVariables::SalesLogVariables
     self.hhmemb = number_of_household_members
     self.hhtype = household_type
 
-    if form.start_year_after_2024?
-      self.soctenant = prevten_was_social_housing? ? 1 : 2
+    if saledate && form.start_year_after_2024?
+      self.soctenant = soctenant_from_prevten_values
     end
 
     self.uprn_known = 0 if address_answered_without_uprn?
@@ -79,7 +79,7 @@ private
       derived_values: {
         mortgage: 0,
       },
-    },
+    }
   ].freeze
 
   def number_of_household_members
@@ -157,6 +157,12 @@ private
 
   def address_answered_without_uprn?
     [address_line1, town_or_city].all?(&:present?) && uprn.nil? && form.start_date.year >= 2023
+  end
+
+  def soctenant_from_prevten_values
+    return unless prevten && shared_ownership_scheme?
+
+    prevten_was_social_housing? ? 1 : 2
   end
 
   def prevten_was_social_housing?
