@@ -1,6 +1,5 @@
 require "rails_helper"
 require "timecop"
-include CollectionTimeHelper
 
 RSpec.describe FiltersHelper do
   describe "#filter_selected?" do
@@ -249,6 +248,7 @@ RSpec.describe FiltersHelper do
         end
         Timecop.return
       end
+
       it "has the correct options" do
         expect(collection_year_options).to eq(
           {
