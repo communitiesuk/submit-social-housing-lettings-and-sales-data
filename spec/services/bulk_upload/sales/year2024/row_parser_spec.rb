@@ -1136,36 +1136,54 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
     end
 
     describe "#soctenant" do
-      context "when prevten is a social housing type" do
-        let(:attributes) { valid_attributes.merge({ field_61: "1" }) }
+      context "when discounted ownership" do
+        let(:attributes) { valid_attributes.merge({ field_8: "2" }) }
 
-        it "is set to yes" do
-          expect(parser.log.soctenant).to be(1)
+        it "is set to nil" do
+          expect(parser.log.soctenant).to be_nil
         end
       end
 
-      context "when prevten is not a social housing type" do
-        context "and prevtenbuy2 is a social housing type" do
-          let(:attributes) { valid_attributes.merge({ field_61: "3", field_71: "2" }) }
+      context "when outright sale" do
+        let(:attributes) { valid_attributes.merge({ field_8: "3" }) }
+
+        it "is set to nil" do
+          expect(parser.log.soctenant).to be_nil
+        end
+      end
+
+      context "when shared ownership" do
+        context "when prevten is a social housing type" do
+          let(:attributes) { valid_attributes.merge({ field_8: "1", field_61: "1" }) }
 
           it "is set to yes" do
             expect(parser.log.soctenant).to be(1)
           end
         end
 
-        context "and prevtenbuy2 is not a social housing type" do
-          let(:attributes) { valid_attributes.merge({ field_61: "3", field_71: "4" }) }
+        context "when prevten is not a social housing type" do
+          context "and prevtenbuy2 is a social housing type" do
+            let(:attributes) { valid_attributes.merge({ field_8: "1", field_61: "3", field_71: "2" }) }
 
-          it "is set to no" do
-            expect(parser.log.soctenant).to be(2)
+            it "is set to yes" do
+              expect(parser.log.soctenant).to be(1)
+            end
           end
-        end
 
-        context "and prevtenbuy2 is blank" do
-          let(:attributes) { valid_attributes.merge({ field_61: "3", field_71: nil }) }
+          context "and prevtenbuy2 is not a social housing type" do
+            let(:attributes) { valid_attributes.merge({ field_8: "1", field_61: "3", field_71: "4" }) }
 
-          it "is set to no" do
-            expect(parser.log.soctenant).to be(2)
+            it "is set to no" do
+              expect(parser.log.soctenant).to be(2)
+            end
+          end
+
+          context "and prevtenbuy2 is blank" do
+            let(:attributes) { valid_attributes.merge({ field_8: "1", field_61: "3", field_71: nil }) }
+
+            it "is set to no" do
+              expect(parser.log.soctenant).to be(2)
+            end
           end
         end
       end

@@ -1119,6 +1119,8 @@ private
   end
 
   def infer_soctenant_from_prevten_and_prevtenbuy2
+    return unless shared_ownership?
+
     if [1, 2].include?(field_61) || [1, 2].include?(field_71.to_i)
       1
     else
