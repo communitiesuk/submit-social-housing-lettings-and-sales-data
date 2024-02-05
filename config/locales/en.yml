@@ -433,6 +433,7 @@ en:
       equity:
         under_min: "The minimum initial equity stake for this type of shared ownership sale is %{min_equity}%"
         over_max: "The maximum initial equity stake is %{max_equity}%"
+        over_stairowned_minus_stairbought: "The initial equity stake is %{equity}% and the percentage owned in total minus the percentage bought is %{staircase_difference}%. In a staircasing transaction, the equity stake purchased cannot be larger than the percentage the buyer owns minus the percentage bought."
       mortgage: "Mortgage value cannot be £0 if a mortgage was used for the purchase of this property"
       shared_ownership_deposit: "The %{mortgage_deposit_and_discount_error_fields} added together is %{mortgage_deposit_and_discount_total}. The value times the equity percentage is %{value_times_equity}. These figures should be the same"
 
@@ -503,6 +504,7 @@ en:
         internal_transfer: "Answer cannot be %{prevten} as this tenancy is an internal transfer"
         la_general_needs:
           internal_transfer: "Answer cannot be a fixed-term or lifetime local authority general needs tenancy as it’s an internal transfer and a private registered provider is on the tenancy agreement"
+        invalid_for_discounted_sale: "Buyer 1’s previous tenure should be “local authority tenant” or “private registered provider or housing association tenant” for discounted sales"
       referral:
         secure_tenancy: "Answer must be internal transfer as this is a secure tenancy"
         rsnvac_non_temp: "Answer cannot be this source of referral as this is a re-let to tenant who occupied the same property as temporary accommodation"

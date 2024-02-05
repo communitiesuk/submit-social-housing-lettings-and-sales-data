@@ -561,4 +561,83 @@ RSpec.describe Validations::Sales::FinancialValidations do
       end
     end
   end
+
+  describe "#validate_equity_less_than_staircase_difference" do
+    let(:record) { FactoryBot.create(:sales_log, saledate: now) }
+
+    around do |example|
+      Timecop.freeze(now) do
+        Singleton.__init__(FormHandler)
+        example.run
+      end
+      Timecop.return
+      Singleton.__init__(FormHandler)
+    end
+
+    context "with a log in the 23/24 collection year" do
+      let(:now) { Time.zone.local(2023, 4, 1) }
+
+      it "does not add an error" do
+        record.stairbought = 2
+        record.stairowned = 3
+        record.equity = 2
+        financial_validator.validate_equity_less_than_staircase_difference(record)
+        expect(record.errors).to be_empty
+      end
+    end
+
+    context "with a log in 24/25 collection year" do
+      let(:now) { Time.zone.local(2024, 4, 1) }
+
+      it "adds errors if equity is more than stairowned - stairbought" do
+        record.stairbought = 2
+        record.stairowned = 3
+        record.equity = 2
+        financial_validator.validate_equity_less_than_staircase_difference(record)
+        expect(record.errors["equity"]).to include("The initial equity stake is 2% and the percentage owned in total minus the percentage bought is 1%. In a staircasing transaction, the equity stake purchased cannot be larger than the percentage the buyer owns minus the percentage bought.")
+        expect(record.errors["stairowned"]).to include("The initial equity stake is 2% and the percentage owned in total minus the percentage bought is 1%. In a staircasing transaction, the equity stake purchased cannot be larger than the percentage the buyer owns minus the percentage bought.")
+        expect(record.errors["stairbought"]).to include("The initial equity stake is 2% and the percentage owned in total minus the percentage bought is 1%. In a staircasing transaction, the equity stake purchased cannot be larger than the percentage the buyer owns minus the percentage bought.")
+      end
+
+      it "does not add errors if equity is less than stairowned - stairbought" do
+        record.stairbought = 2
+        record.stairowned = 10
+        record.equity = 2
+        financial_validator.validate_equity_less_than_staircase_difference(record)
+        expect(record.errors).to be_empty
+      end
+
+      it "does not add errors if equity is equal stairowned - stairbought" do
+        record.stairbought = 2
+        record.stairowned = 10
+        record.equity = 8
+        financial_validator.validate_equity_less_than_staircase_difference(record)
+        expect(record.errors).to be_empty
+      end
+
+      it "does not add errors if stairbought is not given" do
+        record.stairbought = nil
+        record.stairowned = 10
+        record.equity = 2
+        financial_validator.validate_equity_less_than_staircase_difference(record)
+        expect(record.errors).to be_empty
+      end
+
+      it "does not add errors if stairowned is not given" do
+        record.stairbought = 2
+        record.stairowned = nil
+        record.equity = 2
+        financial_validator.validate_equity_less_than_staircase_difference(record)
+        expect(record.errors).to be_empty
+      end
+
+      it "does not add errors if equity is not given" do
+        record.stairbought = 2
+        record.stairowned = 10
+        record.equity = 0
+        financial_validator.validate_equity_less_than_staircase_difference(record)
+        expect(record.errors).to be_empty
+      end
+    end
+  end
 end
