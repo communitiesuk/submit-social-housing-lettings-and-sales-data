@@ -7,6 +7,13 @@ RSpec.describe Form::Sales::Questions::PersonGenderIdentity, type: :model do
   let(:question_definition) { nil }
   let(:page) { instance_double(Form::Page) }
   let(:person_index) { 2 }
+  let(:subsection) { instance_double(Form::Subsection) }
+  let(:form) { instance_double(Form) }
+
+  before do
+    allow(page).to receive(:subsection).and_return(subsection)
+    allow(subsection).to receive(:form).and_return(form)
+  end
 
   it "has correct page" do
     expect(question.page).to eq(page)
@@ -27,6 +34,26 @@ RSpec.describe Form::Sales::Questions::PersonGenderIdentity, type: :model do
       "X" => { "value" => "Non-binary" },
       "R" => { "value" => "Person prefers not to say" },
     })
+  end
+
+  context "when form year is before 2024" do
+    before do
+      allow(form).to receive(:start_year_after_2024?).and_return(false)
+    end
+
+    it "has the correct hint" do
+      expect(question.hint_text).to be_nil
+    end
+  end
+
+  context "when form year is >= 2024" do
+    before do
+      allow(form).to receive(:start_year_after_2024?).and_return(true)
+    end
+
+    it "has the correct hint" do
+      expect(question.hint_text).to eq("This should be however they personally choose to identify from the options below. This may or may not be the same as their biological sex or the sex they were assigned at birth.")
+    end
   end
 
   context "when person 2" do
