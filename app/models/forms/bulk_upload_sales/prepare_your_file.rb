@@ -32,6 +32,8 @@ module Forms
         case year
         when 2023
           "/files/bulk-upload-sales-legacy-template-2023-24.xlsx"
+        when 2024
+          "/files/bulk-upload-sales-legacy-template-2024-25.xlsx"
         end
       end
 
@@ -39,14 +41,17 @@ module Forms
         case year
         when 2023
           "/files/bulk-upload-sales-template-2023-24.xlsx"
+        when 2024
+          "/files/bulk-upload-sales-template-2024-25.xlsx"
         end
       end
 
       def specification_path
         case year
-
         when 2023
           "/files/bulk-upload-sales-specification-2023-24.xlsx"
+        when 2024
+          "/files/bulk-upload-sales-specification-2024-25.xlsx"
         end
       end
 
