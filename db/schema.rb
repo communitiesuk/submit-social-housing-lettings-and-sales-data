@@ -303,7 +303,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_30_084707) do
     t.integer "scharge_value_check"
     t.integer "pscharge_value_check"
     t.integer "duplicate_set_id"
-    t.integer "accessible_register"
     t.integer "nationality_all"
     t.integer "nationality_all_group"
     t.index ["bulk_upload_id"], name: "index_lettings_logs_on_bulk_upload_id"

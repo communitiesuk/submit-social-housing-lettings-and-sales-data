@@ -1,5 +1,4 @@
 require "rails_helper"
-require "timecop"
 
 RSpec.describe FiltersHelper do
   describe "#filter_selected?" do

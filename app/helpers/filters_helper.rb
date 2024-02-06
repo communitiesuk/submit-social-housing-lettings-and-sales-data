@@ -1,4 +1,6 @@
 module FiltersHelper
+  include CollectionTimeHelper
+
   def filter_selected?(filter, value, filter_type)
     return false unless session[session_name_for(filter_type)]
 
@@ -96,7 +98,7 @@ module FiltersHelper
     {
       current_collection_start_year.to_s => year_combo(current_collection_start_year),
       previous_collection_start_year.to_s => year_combo(previous_collection_start_year),
-      twice_previous_collection_start_year.to_s => year_combo(twice_previous_collection_start_year),
+      archived_collection_start_year.to_s => year_combo(archived_collection_start_year),
     }
   end
 

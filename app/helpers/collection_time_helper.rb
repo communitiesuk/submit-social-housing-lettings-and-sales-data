@@ -46,7 +46,7 @@ module CollectionTimeHelper
     current_collection_start_date - 1.year
   end
 
-  def twice_previous_collection_start_year
+  def archived_collection_start_year
     current_collection_start_year - 2
   end
 
