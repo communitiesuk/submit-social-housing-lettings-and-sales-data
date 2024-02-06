@@ -1,16 +1,10 @@
 class ApplicationController < ActionController::Base
-  require 'timecop'
   include Pundit::Authorization
 
   rescue_from Pundit::NotAuthorizedError, with: :render_not_authorized
 
   before_action :check_maintenance_status
   before_action :set_paper_trail_whodunnit
-  before_action :time_travel_for_po
-
-  def time_travel_for_po
-    Timecop.travel(Time.zone.local(2024,4,1))
-  end
 
   def check_maintenance_status
     if FeatureToggle.service_moved?
