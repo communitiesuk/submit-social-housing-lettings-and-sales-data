@@ -196,9 +196,9 @@ RSpec.describe "User Features" do
       end
 
       it "can filter lettings logs by year" do
-        check("years-2021-field")
+        check("years-2022-field")
         click_button("Apply filters")
-        expect(page).to have_current_path("/organisations/#{org_id}/lettings-logs?years[]=&years[]=2021&status[]=&needstypes[]=&assigned_to=all&user=&owning_organisation_select=all&owning_organisation=&managing_organisation_select=all&managing_organisation=")
+        expect(page).to have_current_path("/organisations/#{org_id}/lettings-logs?years[]=&years[]=2022&status[]=&needstypes[]=&assigned_to=all&user=&owning_organisation_select=all&owning_organisation=&managing_organisation_select=all&managing_organisation=")
         expect(page).not_to have_link first_log.id.to_s, href: "/lettings-logs/#{first_log.id}"
       end
 
@@ -241,9 +241,9 @@ RSpec.describe "User Features" do
         organisation.sales_logs.map(&:id).each do |sales_log_id|
           expect(page).to have_link sales_log_id.to_s, href: "/sales-logs/#{sales_log_id}"
         end
-        check("years-2021-field")
+        check("years-2022-field")
         click_button("Apply filters")
-        expect(page).to have_current_path("/organisations/#{org_id}/sales-logs?years[]=&years[]=2021&status[]=&assigned_to=all&user=&owning_organisation_select=all&owning_organisation=&managing_organisation_select=all&managing_organisation=")
+        expect(page).to have_current_path("/organisations/#{org_id}/sales-logs?years[]=&years[]=2022&status[]=&assigned_to=all&user=&owning_organisation_select=all&owning_organisation=&managing_organisation_select=all&managing_organisation=")
         expect(page).not_to have_link first_log.id.to_s, href: "/sales-logs/#{first_log.id}"
       end
     end
