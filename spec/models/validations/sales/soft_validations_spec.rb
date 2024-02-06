@@ -682,28 +682,28 @@ RSpec.describe Validations::Sales::SoftValidations do
       expect(record).not_to be_grant_outside_common_range
     end
 
-    it "returns true for logs after 2024 with RTA" do
+    it "returns false for logs after 2024 with RTA" do
       record.grant = 100_000
       record.type = 8
       record.saledate = Time.zone.local(2025, 1, 1)
 
-      expect(record).to be_grant_outside_common_range
+      expect(record).not_to be_grant_outside_common_range
     end
 
-    it "returns true for logs after 2024 with socialBuy" do
+    it "returns false for logs after 2024 with socialBuy" do
       record.grant = 100_000
       record.type = 21
       record.saledate = Time.zone.local(2025, 1, 1)
 
-      expect(record).to be_grant_outside_common_range
+      expect(record).not_to be_grant_outside_common_range
     end
 
-    it "returns false for logs after 2024 with other type" do
+    it "returns true for logs after 2024 with other type" do
       record.grant = 100_000
       record.type = 9
       record.saledate = Time.zone.local(2025, 1, 1)
 
-      expect(record).not_to be_grant_outside_common_range
+      expect(record).to be_grant_outside_common_range
     end
   end
 
