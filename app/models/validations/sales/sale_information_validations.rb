@@ -57,8 +57,8 @@ module Validations::Sales::SaleInformationValidations
   end
 
   def validate_grant_amount(record)
-    return unless record.grant
     return unless record.saledate && record.form.start_year_after_2024?
+    return unless record.grant && (record.type == 8 || record.type == 21)
 
     unless record.grant.between?(9_000, 16_000)
       record.errors.add :grant, I18n.t("validations.sale_information.grant.out_of_range")

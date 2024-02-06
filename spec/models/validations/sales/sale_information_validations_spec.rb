@@ -480,7 +480,7 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
     end
 
     context "when over the max" do
-      let(:record) { build(:sales_log, grant: 17_000, saledate: Time.zone.local(2024, 4, 5)) }
+      let(:record) { build(:sales_log, type: 8, grant: 17_000, saledate: Time.zone.local(2024, 4, 5)) }
 
       it "adds an error" do
         sale_information_validator.validate_grant_amount(record)
@@ -490,7 +490,7 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
     end
 
     context "when under the min" do
-      let(:record) { build(:sales_log, grant: 3, saledate: Time.zone.local(2024, 4, 5)) }
+      let(:record) { build(:sales_log, type: 21, grant: 3, saledate: Time.zone.local(2024, 4, 5)) }
 
       it "adds an error" do
         sale_information_validator.validate_grant_amount(record)
@@ -500,7 +500,7 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
     end
 
     context "when grant is blank" do
-      let(:record) { build(:sales_log, grant: nil, saledate: Time.zone.local(2024, 4, 5)) }
+      let(:record) { build(:sales_log, type: 21, grant: nil, saledate: Time.zone.local(2024, 4, 5)) }
 
       it "does not add an error" do
         sale_information_validator.validate_grant_amount(record)
@@ -509,8 +509,28 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
       end
     end
 
+    context "when over the max and type is not RTA of social homebuy" do
+      let(:record) { build(:sales_log, type: 9, grant: 17_000, saledate: Time.zone.local(2024, 4, 5)) }
+
+      it "does not add an error" do
+        sale_information_validator.validate_grant_amount(record)
+
+        expect(record.errors).not_to be_present
+      end
+    end
+
+    context "when under the min and type is not RTA of social homebuy" do
+      let(:record) { build(:sales_log, type: 9, grant: 17_000, saledate: Time.zone.local(2024, 4, 5)) }
+
+      it "does not add error" do
+        sale_information_validator.validate_grant_amount(record)
+
+        expect(record.errors).not_to be_present
+      end
+    end
+
     context "with log before 2024/25 collection" do
-      let(:record) { build(:sales_log, grant: 3, saledate: Time.zone.local(2023, 4, 5)) }
+      let(:record) { build(:sales_log, type: 8, grant: 3, saledate: Time.zone.local(2023, 4, 5)) }
 
       it "does not add an error" do
         sale_information_validator.validate_grant_amount(record)

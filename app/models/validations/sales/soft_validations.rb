@@ -117,7 +117,8 @@ module Validations::Sales::SoftValidations
 
   def grant_outside_common_range?
     return unless grant
-    return unless saledate && !form.start_year_after_2024?
+    return unless type && saledate
+    return unless !form.start_year_after_2024? || type == 21 || type == 8
 
     !grant.between?(9_000, 16_000)
   end
