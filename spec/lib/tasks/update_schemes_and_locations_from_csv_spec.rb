@@ -26,7 +26,7 @@ RSpec.describe "bulk_update" do
     WebMock.stub_request(:get, /api\.postcodes\.io/)
       .to_return(status: 200, body: "{\"status\":404,\"error\":\"Postcode not found\"}", headers: {})
     WebMock.stub_request(:get, /api\.postcodes\.io\/postcodes\/B11BB/)
-      .to_return(status: 200, body: '{"status":200,"result":{"admin_district":"Westminster","codes":{"admin_district":"E08000035"}}}', headers: {})
+      .to_return(status: 200, body: '{"status":200,"result":{"admin_district":"Westminster","codes":{"admin_district":"E09000033"}}}', headers: {})
   end
 
   describe ":update_schemes_from_csv", type: :task do
@@ -324,18 +324,18 @@ RSpec.describe "bulk_update" do
                     type_of_unit: "Self-contained house",
                     units: 20,
                     mobility_type: "Fitted with equipment and adaptations",
-                    location_code: "E09000033",
-                    location_admin_district: "Westminster",
+                    location_code: "E08000010",
+                    location_admin_district: "Wigan",
                     startdate: Time.zone.local(2022, 4, 1),
                     confirmed: true,
                     updated_at: Time.zone.local(2022, 3, 1),
                     scheme:)
       end
-      let!(:lettings_log) { FactoryBot.create(:lettings_log, :sh, location: locations[0], scheme:, values_updated_at: nil) }
-      let!(:lettings_log_2) { FactoryBot.create(:lettings_log, :sh, location: locations[1], scheme:, values_updated_at: nil) }
-      let!(:lettings_log_3) { FactoryBot.create(:lettings_log, :sh, location: locations[2], scheme:, values_updated_at: nil) }
-      let!(:lettings_log_4) { FactoryBot.create(:lettings_log, :sh, location: locations[0], scheme:, values_updated_at: nil) }
-      let!(:lettings_log_5) { FactoryBot.create(:lettings_log, :sh, location: locations[0], scheme:, values_updated_at: nil) }
+      let!(:lettings_log) { FactoryBot.create(:lettings_log, :sh, location: locations[0], scheme:, values_updated_at: nil, startdate: Time.zone.local(2023, 4, 4)) }
+      let!(:lettings_log_2) { FactoryBot.create(:lettings_log, :sh, location: locations[1], scheme:, values_updated_at: nil, startdate: Time.zone.local(2023, 4, 4)) }
+      let!(:lettings_log_3) { FactoryBot.create(:lettings_log, :sh, location: locations[2], scheme:, values_updated_at: nil, startdate: Time.zone.local(2023, 4, 4)) }
+      let!(:lettings_log_4) { FactoryBot.create(:lettings_log, :sh, location: locations[0], scheme:, values_updated_at: nil, startdate: Time.zone.local(2023, 4, 4)) }
+      let!(:lettings_log_5) { FactoryBot.create(:lettings_log, :sh, location: locations[0], scheme:, values_updated_at: nil, startdate: Time.zone.local(2023, 4, 4)) }
 
       before do
         allow(storage_service).to receive(:get_file_io)
@@ -355,7 +355,7 @@ RSpec.describe "bulk_update" do
         expect(locations[0].type_of_unit).to eq("Bungalow")
         expect(locations[0].units).to eq(10)
         expect(locations[0].mobility_type).to eq("Wheelchair-user standard")
-        expect(locations[0].location_code).to eq("E08000035")
+        expect(locations[0].location_code).to eq("E09000033")
         expect(locations[0].location_admin_district).to eq("Westminster")
         expect(locations[0].scheme).to eq(different_scheme)
       end
@@ -368,8 +368,8 @@ RSpec.describe "bulk_update" do
         expect(locations[1].type_of_unit).to eq("Self-contained house")
         expect(locations[1].units).to eq(20)
         expect(locations[1].mobility_type).to eq("Fitted with equipment and adaptations")
-        expect(locations[1].location_code).to eq("E09000033")
-        expect(locations[1].location_admin_district).to eq("Westminster")
+        expect(locations[1].location_code).to eq("E08000010")
+        expect(locations[1].location_admin_district).to eq("Wigan")
         expect(locations[1].scheme).to eq(scheme)
       end
 
@@ -381,8 +381,8 @@ RSpec.describe "bulk_update" do
         expect(locations[2].type_of_unit).to eq("Self-contained house")
         expect(locations[2].units).to eq(20)
         expect(locations[2].mobility_type).to eq("Fitted with equipment and adaptations")
-        expect(locations[2].location_code).to eq("E09000033")
-        expect(locations[2].location_admin_district).to eq("Westminster")
+        expect(locations[2].location_code).to eq("E08000010")
+        expect(locations[2].location_admin_district).to eq("Wigan")
         expect(locations[2].scheme).to eq(scheme)
       end
 
@@ -418,6 +418,7 @@ RSpec.describe "bulk_update" do
 
         expect(Rails.logger).to receive(:info).with("Updating location #{locations[0].id} with postcode: B11BB")
         expect(Rails.logger).to receive(:info).with("Updating location #{locations[0].id} with name: Updated name")
+        expect(Rails.logger).to receive(:info).with("Updating location #{locations[0].id} with location_code: E09000033")
         expect(Rails.logger).to receive(:info).with("Updating location #{locations[0].id} with type_of_unit: Bungalow")
         expect(Rails.logger).to receive(:info).with("Updating location #{locations[0].id} with units: 10")
         expect(Rails.logger).to receive(:info).with("Updating location #{locations[0].id} with mobility_type: Wheelchair-user standard")
@@ -454,6 +455,112 @@ RSpec.describe "bulk_update" do
 
       it "raises an error when no updated path is given" do
         expect { task.invoke(original_locations_csv_path, nil) }.to raise_error(RuntimeError, "Usage: rake bulk_update:update_locations_from_csv['original_file_name','updated_file_name']")
+      end
+
+      context "when updating LA" do
+        before do
+          LaRentRange.create!(
+            ranges_rent_id: "1",
+            la: "E09000033",
+            beds: 0,
+            lettype: 8,
+            soft_min: 12.41,
+            soft_max: 89.54,
+            hard_min: 9.87,
+            hard_max: 100.99,
+            start_year: 2023,
+          )
+        end
+
+        context "when new LA does not trigger hard rent ranges validations" do
+          let!(:lettings_log) do
+            FactoryBot.create(:lettings_log,
+                              :completed,
+                              :sh,
+                              location: locations[0],
+                              scheme:,
+                              values_updated_at: nil,
+                              owning_organisation: scheme.owning_organisation,
+                              brent: 80,
+                              scharge: 50,
+                              pscharge: 50,
+                              supcharg: 50,
+                              beds: 4,
+                              lettype: 1,
+                              period: 1)
+          end
+
+          it "does not clear the charges values" do
+            expect(lettings_log.status).to eq("completed")
+            task.invoke(original_locations_csv_path, updated_locations_csv_path)
+            lettings_log.reload
+            expect(lettings_log.status).to eq("completed")
+            expect(lettings_log.brent).to eq(80)
+            expect(lettings_log.scharge).to eq(50)
+            expect(lettings_log.pscharge).to eq(50)
+            expect(lettings_log.supcharg).to eq(50)
+          end
+        end
+
+        context "when new LA triggers hard rent ranges validation" do
+          let!(:lettings_log) do
+            FactoryBot.create(:lettings_log,
+                              :completed,
+                              :sh,
+                              location: locations[0],
+                              scheme:,
+                              values_updated_at: nil,
+                              owning_organisation: scheme.owning_organisation,
+                              brent: 200,
+                              scharge: 50,
+                              pscharge: 50,
+                              supcharg: 50,
+                              beds: 4,
+                              lettype: 1,
+                              period: 1)
+          end
+
+          it "clears the charges values" do
+            expect(lettings_log.status).to eq("completed")
+            task.invoke(original_locations_csv_path, updated_locations_csv_path)
+            lettings_log.reload
+            expect(lettings_log.status).to eq("in_progress")
+            expect(lettings_log.brent).to be_nil
+            expect(lettings_log.scharge).to be_nil
+            expect(lettings_log.pscharge).to be_nil
+            expect(lettings_log.supcharg).to be_nil
+          end
+        end
+
+        context "when new LA triggers soft rent ranges validations" do
+          let!(:lettings_log) do
+            FactoryBot.create(:lettings_log,
+                              :completed,
+                              :sh,
+                              location: locations[0],
+                              scheme:,
+                              values_updated_at: nil,
+                              owning_organisation: scheme.owning_organisation,
+                              brent: 100,
+                              scharge: 50,
+                              pscharge: 50,
+                              supcharg: 50,
+                              beds: 4,
+                              lettype: 1,
+                              period: 1)
+          end
+
+          it "does not clear the charges values and marks the log in progress" do
+            expect(lettings_log.status).to eq("completed")
+            task.invoke(original_locations_csv_path, updated_locations_csv_path)
+            lettings_log.reload
+            expect(lettings_log.status).to eq("in_progress")
+            expect(lettings_log.brent).to eq(100)
+            expect(lettings_log.scharge).to eq(50)
+            expect(lettings_log.pscharge).to eq(50)
+            expect(lettings_log.supcharg).to eq(50)
+          end
+        end
       end
     end
   end
