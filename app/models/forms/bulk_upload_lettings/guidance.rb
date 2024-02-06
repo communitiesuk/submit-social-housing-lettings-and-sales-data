@@ -39,8 +39,8 @@ module Forms
         Forms::BulkUploadSales::PrepareYourFile.new(year:).specification_path
       end
 
-      def download_text(lettings_or_sales, file, new_or_legacy=nil)
-        "Download the #{lettings_or_sales} bulk upload #{file} (#{year_combo_full})#{new_or_legacy_text(new_or_legacy) if year == 2023 and new_or_legacy.present?}"
+      def download_text(lettings_or_sales, file, new_or_legacy = nil)
+        "Download the #{lettings_or_sales} bulk upload #{file} (#{year_combo_full})#{new_or_legacy_text(new_or_legacy) if (year == 2023) && new_or_legacy.present?}"
       end
 
       def year_combo
