@@ -704,11 +704,12 @@ RSpec.describe SalesLog, type: :model do
         expect(record_from_db["la"]).to eq("E06000064")
       end
 
-      it "does not set previous postcode for discounted sale" do
-        address_sales_log_23_24.update!(ownershipsch: 2, ppostcode_full: nil)
+      it "does not set previous postcode or previous la for discounted sale" do
+        address_sales_log_23_24.update!(ownershipsch: 2, ppostcode_full: nil, prevloc: nil)
         record_from_db = described_class.find(address_sales_log_23_24.id)
         expect(address_sales_log_23_24.ppostcode_full).to eq(nil)
         expect(record_from_db["ppostcode_full"]).to eq(nil)
+        expect(record_from_db["prevloc"]).to eq(nil)
       end
     end
 
@@ -719,6 +720,8 @@ RSpec.describe SalesLog, type: :model do
           created_by: created_by_user,
           ppcodenk: 1,
           postcode_full: "CA10 1AA",
+          ppostcode_full: nil,
+          prevloc: nil,
           saledate: Time.zone.local(2024, 5, 2),
         })
       end
@@ -740,6 +743,7 @@ RSpec.describe SalesLog, type: :model do
         record_from_db = described_class.find(address_sales_log_24_25.id)
         expect(address_sales_log_24_25.ppostcode_full).to eq("CA10 1AA")
         expect(record_from_db["ppostcode_full"]).to eq("CA10 1AA")
+        expect(record_from_db["prevloc"]).to eq("E06000064")
       end
 
       it "does not set previous postcode for non discounted sale" do
@@ -747,6 +751,7 @@ RSpec.describe SalesLog, type: :model do
         record_from_db = described_class.find(address_sales_log_24_25.id)
         expect(address_sales_log_24_25.ppostcode_full).to eq(nil)
         expect(record_from_db["ppostcode_full"]).to eq(nil)
+        expect(record_from_db["prevloc"]).to eq(nil)
       end
     end
 
