@@ -22,4 +22,10 @@ class Form::Sales::Questions::GenderIdentity2 < ::Form::Question
     "X" => { "value" => "Non-binary" },
     "R" => { "value" => "Buyer prefers not to say" },
   }.freeze
+
+  def hint_text
+    return unless form.start_year_after_2024?
+
+    "This should be however they personally choose to identify from the options below. This may or may not be the same as their biological sex or the sex they were assigned at birth."
+  end
 end
