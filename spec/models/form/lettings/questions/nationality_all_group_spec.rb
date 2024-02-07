@@ -26,7 +26,7 @@ RSpec.describe Form::Lettings::Questions::NationalityAllGroup, type: :model do
   end
 
   it "has the correct hint_text" do
-    expect(question.hint_text).to eq("The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest.")
+    expect(question.hint_text).to eq("The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest. If the lead tenant is a dual national of the United Kingdom and another country, enter United Kingdom. If they are a dual national of two other countries, the tenant should decide which country to enter.")
   end
 
   it "has the correct answer_options" do
