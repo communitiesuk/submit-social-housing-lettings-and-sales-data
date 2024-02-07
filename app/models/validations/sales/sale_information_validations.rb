@@ -89,11 +89,11 @@ module Validations::Sales::SaleInformationValidations
     return unless record.discount && record.value && record.la
 
     if record.london_property? && record.discount_value > 136_400
-      %i[discount value la postcode uprn].each do |field|
+      %i[discount value la postcode_full uprn].each do |field|
         record.errors.add field, I18n.t("validations.sale_information.value.over_discounted_london_max", discount_value: record.field_formatted_as_currency("discount_value"))
       end
     elsif record.property_not_in_london? && record.discount_value > 102_400
-      %i[discount value la postcode uprn].each do |field|
+      %i[discount value la postcode_full uprn].each do |field|
         record.errors.add field, I18n.t("validations.sale_information.value.over_discounted_max", discount_value: record.field_formatted_as_currency("discount_value"))
       end
     end

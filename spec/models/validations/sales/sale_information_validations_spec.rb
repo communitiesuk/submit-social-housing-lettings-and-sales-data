@@ -632,7 +632,7 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
           expect(record.errors["value"]).to include("The percentage discount multiplied by the purchase price is £160,000.00. This figure should not be more than £136,400 for properties in London.")
           expect(record.errors["discount"]).to include("The percentage discount multiplied by the purchase price is £160,000.00. This figure should not be more than £136,400 for properties in London.")
           expect(record.errors["la"]).to include("The percentage discount multiplied by the purchase price is £160,000.00. This figure should not be more than £136,400 for properties in London.")
-          expect(record.errors["postcode"]).to include("The percentage discount multiplied by the purchase price is £160,000.00. This figure should not be more than £136,400 for properties in London.")
+          expect(record.errors["postcode_full"]).to include("The percentage discount multiplied by the purchase price is £160,000.00. This figure should not be more than £136,400 for properties in London.")
           expect(record.errors["uprn"]).to include("The percentage discount multiplied by the purchase price is £160,000.00. This figure should not be more than £136,400 for properties in London.")
         end
 
@@ -641,7 +641,7 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
           expect(record.errors["value"]).to be_empty
           expect(record.errors["discount"]).to be_empty
           expect(record.errors["la"]).to be_empty
-          expect(record.errors["postcode"]).to be_empty
+          expect(record.errors["postcode_full"]).to be_empty
           expect(record.errors["uprn"]).to be_empty
         end
       end
@@ -657,7 +657,7 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
           expect(record.errors["value"]).to include("The percentage discount multiplied by the purchase price is £104,000.00. This figure should not be more than £102,400 for properties outside of London.")
           expect(record.errors["discount"]).to include("The percentage discount multiplied by the purchase price is £104,000.00. This figure should not be more than £102,400 for properties outside of London.")
           expect(record.errors["la"]).to include("The percentage discount multiplied by the purchase price is £104,000.00. This figure should not be more than £102,400 for properties outside of London.")
-          expect(record.errors["postcode"]).to include("The percentage discount multiplied by the purchase price is £104,000.00. This figure should not be more than £102,400 for properties outside of London.")
+          expect(record.errors["postcode_full"]).to include("The percentage discount multiplied by the purchase price is £104,000.00. This figure should not be more than £102,400 for properties outside of London.")
           expect(record.errors["uprn"]).to include("The percentage discount multiplied by the purchase price is £104,000.00. This figure should not be more than £102,400 for properties outside of London.")
         end
 
@@ -666,7 +666,7 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
           expect(record.errors["value"]).to be_empty
           expect(record.errors["discount"]).to be_empty
           expect(record.errors["la"]).to be_empty
-          expect(record.errors["postcode"]).to be_empty
+          expect(record.errors["postcode_full"]).to be_empty
           expect(record.errors["uprn"]).to be_empty
         end
       end
@@ -680,7 +680,7 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
         expect(record.errors["value"]).to be_empty
         expect(record.errors["discount"]).to be_empty
         expect(record.errors["la"]).to be_empty
-        expect(record.errors["postcode"]).to be_empty
+        expect(record.errors["postcode_full"]).to be_empty
         expect(record.errors["uprn"]).to be_empty
       end
     end
