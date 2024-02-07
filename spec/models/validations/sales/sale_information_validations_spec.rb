@@ -596,7 +596,6 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
         end
       end
     end
-
     context "when the collection year is before 2024" do
       let(:record) { build(:sales_log, ownershipsch: 1, type: 24, saledate: now, stairbought: 90) }
       let(:now) { Time.zone.local(2023, 4, 4) }
@@ -682,6 +681,78 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
         expect(record.errors["la"]).to be_empty
         expect(record.errors["postcode_full"]).to be_empty
         expect(record.errors["uprn"]).to be_empty
+      end
+    end
+  end
+
+  describe "#validate_non_staircasing_mortgage" do
+    let(:record) { FactoryBot.build(:sales_log, mortgage: 10_000, deposit: 5_000, value: 30_000, equity: 28, ownershipsch: 1, type: 30, saledate: now) }
+
+    around do |example|
+      Timecop.freeze(now) do
+        Singleton.__init__(FormHandler)
+        example.run
+      end
+      Timecop.return
+      Singleton.__init__(FormHandler)
+    end
+
+    context "with a log in the 24/25 collection year" do
+      let(:now) { Time.zone.local(2024, 4, 4) }
+
+      context "when MORTGAGE + DEPOSIT does not equal VALUE * EQUITY/100 " do
+        context "and it is not a staircase transaction" do
+          before do
+            record.staircase = 2
+          end
+
+          it "adds an error" do
+            sale_information_validator.validate_non_staircasing_mortgage(record)
+            expect(record.errors["mortgage"]).to include("The mortgage and deposit added together is £15,000.00 and the purchase price times by the equity is £8,400.00. These figures should be the same.")
+            expect(record.errors["value"]).to include("The mortgage and deposit added together is £15,000.00 and the purchase price times by the equity is £8,400.00. These figures should be the same.")
+            expect(record.errors["deposit"]).to include("The mortgage and deposit added together is £15,000.00 and the purchase price times by the equity is £8,400.00. These figures should be the same.")
+            expect(record.errors["equity"]).to include("The mortgage and deposit added together is £15,000.00 and the purchase price times by the equity is £8,400.00. These figures should be the same.")
+          end
+        end
+
+        context "and it is a staircase transaction" do
+          before do
+            record.staircase = 1
+          end
+
+          it "does not add an error" do
+            sale_information_validator.validate_non_staircasing_mortgage(record)
+            expect(record.errors["mortgage"]).to be_empty
+            expect(record.errors["value"]).to be_empty
+            expect(record.errors["deposit"]).to be_empty
+            expect(record.errors["equity"]).to be_empty
+          end
+        end
+      end
+
+      context "when MORTGAGE + DEPOSIT equals VALUE * EQUITY/100" do
+        let(:record) { FactoryBot.build(:sales_log, mortgage: 10_000, staircase: 2, deposit: 5_000, value: 30_000, equity: 50, ownershipsch: 1, type: 30, saledate: now) }
+
+        it "does not add an error" do
+          sale_information_validator.validate_non_staircasing_mortgage(record)
+          expect(record.errors["mortgage"]).to be_empty
+          expect(record.errors["value"]).to be_empty
+          expect(record.errors["deposit"]).to be_empty
+          expect(record.errors["equity"]).to be_empty
+        end
+      end
+    end
+
+    context "when it is a 2023 log" do
+      let(:now) { Time.zone.local(2023, 4, 1) }
+      let(:record) { FactoryBot.build(:sales_log, mortgage: 10_000, staircase: 2, deposit: 5_000, value: 30_000, equity: 28, ownershipsch: 1, type: 30, saledate: now) }
+
+      it "does not add an error" do
+        sale_information_validator.validate_non_staircasing_mortgage(record)
+        expect(record.errors["mortgage"]).to be_empty
+        expect(record.errors["value"]).to be_empty
+        expect(record.errors["deposit"]).to be_empty
+        expect(record.errors["equity"]).to be_empty
       end
     end
   end
