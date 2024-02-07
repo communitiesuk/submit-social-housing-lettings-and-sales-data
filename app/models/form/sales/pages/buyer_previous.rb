@@ -10,4 +10,10 @@ class Form::Sales::Pages::BuyerPrevious < ::Form::Page
       Form::Sales::Questions::BuyerPrevious.new(nil, nil, self, joint_purchase: @joint_purchase),
     ]
   end
+
+  def routed_to?(log, _current_user)
+    return false if log.is_staircase? && log.form.start_year_after_2024?
+
+    super
+  end
 end
