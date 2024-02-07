@@ -42,13 +42,13 @@ RSpec.describe Form::Sales::Pages::BuyerPrevious, type: :model do
     let(:joint_purchase) { true }
 
     it "has the correct depends on" do
-      expect(page.depends_on).to eq([{ "joint_purchase?" => true }])
+      expect(page.depends_on).to eq([{ "joint_purchase?" => true, "soctenant_is_inferred?" => false }])
     end
   end
 
   context "when sales is not a joint purchase" do
     it "has the correct depends on" do
-      expect(page.depends_on).to eq([{ "joint_purchase?" => false }])
+      expect(page.depends_on).to eq([{ "joint_purchase?" => false, "soctenant_is_inferred?" => false }])
     end
   end
 
