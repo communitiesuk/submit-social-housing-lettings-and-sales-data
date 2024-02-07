@@ -615,6 +615,8 @@ en:
       discounted_ownership_value: "The mortgage, deposit, and grant when added together is %{mortgage_deposit_and_grant_total}, and the purchase purchase price times by the discount is %{value_with_discount}. These figures should be the same"
       monthly_rent:
         higher_than_expected: "Basic monthly rent must be between £0.00 and £9,999.00"
+      grant:
+        out_of_range: "Loan, grants or subsidies must be between £9,000 and £16,000"
     merge_request:
       organisation_part_of_another_merge: "This organisation is part of another merge - select a different one"
       organisation_not_selected: "Select an organisation from the search list"
