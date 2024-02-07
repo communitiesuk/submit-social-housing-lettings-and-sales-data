@@ -9,7 +9,7 @@ class Form::Sales::Subsections::HouseholdCharacteristics < ::Form::Subsection
   def pages
     @pages ||= [
       (Form::Sales::Pages::BuyerInterview.new(nil, nil, self) unless form.start_year_after_2024?),
-      Form::Sales::Pages::PrivacyNotice.new(nil, nil, self),
+      (Form::Sales::Pages::PrivacyNotice.new(nil, nil, self) unless form.start_year_after_2024?),
       Form::Sales::Pages::Age1.new(nil, nil, self),
       Form::Sales::Pages::RetirementValueCheck.new("age_1_retirement_value_check", nil, self, person_index: 1),
       Form::Sales::Pages::OldPersonsSharedOwnershipValueCheck.new("age_1_old_persons_shared_ownership_value_check", nil, self),
