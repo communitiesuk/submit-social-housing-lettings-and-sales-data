@@ -68,6 +68,7 @@ RSpec.describe Form::Sales::Subsections::Setup, type: :model do
           joint_purchase
           number_joint_buyers
           buyer_interview
+          privacy_notice
         ],
       )
     end

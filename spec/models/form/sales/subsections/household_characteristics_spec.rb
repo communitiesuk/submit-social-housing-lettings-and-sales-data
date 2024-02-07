@@ -240,7 +240,6 @@ RSpec.describe Form::Sales::Subsections::HouseholdCharacteristics, type: :model 
     it "has correct pages" do
       expect(household_characteristics.pages.map(&:id)).to eq(
         %w[
-          privacy_notice
           buyer_1_age
           age_1_retirement_value_check
           age_1_old_persons_shared_ownership_value_check
