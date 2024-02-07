@@ -13,4 +13,10 @@ class Form::Sales::Pages::LastAccommodationLa < ::Form::Page
       Form::Sales::Questions::Prevloc.new(nil, nil, self),
     ]
   end
+
+  def routed_to?(log, _user)
+    return false if log.form.start_year_after_2024? && log.discounted_ownership_sale?
+
+    super
+  end
 end
