@@ -64,4 +64,23 @@ module Validations::Sales::SaleInformationValidations
       record.errors.add :grant, I18n.t("validations.sale_information.grant.out_of_range")
     end
   end
+
+  def validate_stairbought(record)
+    return unless record.stairbought && record.type
+    return unless record.saledate && record.form.start_year_after_2024?
+
+    max_stairbought = case record.type
+                      when 30, 16, 28, 31, 32
+                        90
+                      when 2, 18
+                        75
+                      when 24
+                        50
+                      end
+
+    if max_stairbought && record.stairbought > max_stairbought
+      record.errors.add :stairbought, I18n.t("validations.sale_information.stairbought.over_max", max_stairbought:, type: record.form.get_question("type", record).answer_label(record))
+      record.errors.add :type, I18n.t("validations.sale_information.stairbought.over_max", max_stairbought:, type: record.form.get_question("type", record).answer_label(record))
+    end
+  end
 end

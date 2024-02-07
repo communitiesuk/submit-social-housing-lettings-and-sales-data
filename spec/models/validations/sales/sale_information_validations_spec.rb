@@ -539,4 +539,73 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
       end
     end
   end
+
+  describe "#validate_stairbought" do
+    let(:now) { Time.zone.local(2024, 4, 4) }
+
+    before do
+      Timecop.freeze(now)
+      Singleton.__init__(FormHandler)
+    end
+
+    after do
+      Timecop.return
+      Singleton.__init__(FormHandler)
+    end
+
+    [
+      ["Shared Ownership (new model lease)", 30, 90],
+      ["Home Ownership for people with Long-Term Disabilities (HOLD)", 16, 90],
+      ["Rent to Buy — Shared Ownership", 28, 90],
+      ["Right to Shared Ownership (RtSO)", 31, 90],
+      ["London Living Rent — Shared Ownership", 32, 90],
+      ["Shared Ownership (old model lease)", 2, 75],
+      ["Social HomeBuy — shared ownership purchase", 18, 75],
+      ["Older Persons Shared Ownership", 24, 50],
+    ].each do |label, type, max|
+      context "when ownership type is #{label}" do
+        let(:record) { build(:sales_log, ownershipsch: 1, type:, saledate: now) }
+
+        it "does not add an error if stairbought is under #{max}%" do
+          record.stairbought = max - 1
+          sale_information_validator.validate_stairbought(record)
+
+          expect(record.errors).to be_empty
+        end
+
+        it "does not add an error if stairbought is #{max}%" do
+          record.stairbought = max
+          sale_information_validator.validate_stairbought(record)
+
+          expect(record.errors).to be_empty
+        end
+
+        it "does not add an error if stairbought is not given" do
+          record.stairbought = nil
+          sale_information_validator.validate_stairbought(record)
+
+          expect(record.errors).to be_empty
+        end
+
+        it "adds an error if stairbought is over #{max}%" do
+          record.stairbought = max + 2
+          sale_information_validator.validate_stairbought(record)
+
+          expect(record.errors[:stairbought]).to include("The percentage bought in this staircasing transaction cannot be higher than #{max}% for #{label} sales.")
+          expect(record.errors[:type]).to include("The percentage bought in this staircasing transaction cannot be higher than #{max}% for #{label} sales.")
+        end
+      end
+    end
+
+    context "when the collection year is before 2024" do
+      let(:record) { build(:sales_log, ownershipsch: 1, type: 24, saledate: now, stairbought: 90) }
+      let(:now) { Time.zone.local(2023, 4, 4) }
+
+      it "does not add an error" do
+        sale_information_validator.validate_stairbought(record)
+
+        expect(record.errors).to be_empty
+      end
+    end
+  end
 end
