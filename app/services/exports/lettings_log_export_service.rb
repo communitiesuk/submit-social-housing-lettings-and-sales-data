@@ -193,6 +193,7 @@ module Exports
       attribute_hash["cbl"] = 2 if attribute_hash["cbl"]&.zero?
       attribute_hash["cap"] = 2 if attribute_hash["cap"]&.zero?
       attribute_hash["chr"] = 2 if attribute_hash["chr"]&.zero?
+      attribute_hash["accessible_register"] = 2 if attribute_hash["accessible_register"]&.zero?
 
       # Age refused
       (1..8).each do |index|
@@ -258,12 +259,14 @@ module Exports
       attributes.reject! { |attribute| is_omitted_field?(attribute) }
     end
 
-    def is_omitted_field?(field_name)
+    def is_omitted_field?(field_name, lettings_log = nil)
       pattern_age = /age\d_known/
       details_known_prefix = "details_known_"
       field_name.starts_with?(details_known_prefix) ||
         pattern_age.match(field_name) ||
-        !EXPORT_FIELDS.include?(field_name)
+        !EXPORT_FIELDS.include?(field_name) ||
+        (lettings_log.form.start_year_after_2024? && PRE_2024_EXPORT_FIELDS.include?(field_name)) ||
+        (!lettings_log.form.start_year_after_2024? && POST_2024_EXPORT_FIELDS.include?(field_name))
     end
 
     def build_export_xml(lettings_logs)
@@ -274,7 +277,7 @@ module Exports
         form = doc.create_element("form")
         doc.at("forms") << form
         attribute_hash.each do |key, value|
-          if is_omitted_field?(key)
+          if is_omitted_field?(key, lettings_log)
             next
           else
             form << doc.create_element(key, value)
