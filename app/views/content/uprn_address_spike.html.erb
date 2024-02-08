@@ -1,0 +1,39 @@
+<form id="uprnForm">
+  <label for="textInput">Enter UPRN:</label>
+  <input type="text" name="uprn">
+  <button type="submit">Submit</button>
+</form>
+
+<form id="addressForm">
+  <label for="textInput">Or enter address:</label>
+  <input type="text" name="address">
+  <button type="submit">Submit</button>
+</form>
+
+<% if params[:uprn] %>
+  <h1>UPRN given:</h1>
+  <p><%= params[:uprn] %></p>
+  <% if @error.present? %>
+    <%= @error %>
+  <% elsif @address_returned.present? %>
+    <h1>Output:</h1>
+    <p><%= @address_returned.address_line1 %></p>
+    <p><%= @address_returned.address_line2 %></p>
+    <p><%= @address_returned.town_or_city %></p>
+    <p><%= @address_returned.postcode %></p>
+  <% end %>
+<% elsif params[:address] %>
+  <h1>Address given:</h1>
+  <p><%= params[:address] %></p>
+  <% if @error.present? %>
+    <%= @error %>
+  <% elsif @addresses_returned.present? %>
+    <h1>Output:</h1>
+    <% @addresses_returned.each do |address_returned| %>
+      <p>Address: <%= address_returned.address %></p>
+      <p>UPRN: <%= address_returned.uprn %></p>
+      <p>Confidence: <%= address_returned.match%> (<%= address_returned.match_description %>)</p>
+      <br>
+    <% end %>
+  <% end %>
+<% end %>
