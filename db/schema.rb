@@ -467,8 +467,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_30_084707) do
     t.string "reader_type", null: false
     t.bigint "reader_id"
     t.datetime "timestamp", precision: nil, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.index ["readable_type", "readable_id"], name: "index_read_marks_on_readable_type_and_readable_id"
     t.index ["reader_id", "reader_type", "readable_type", "readable_id"], name: "read_marks_reader_readable_index", unique: true
     t.index ["reader_type", "reader_id"], name: "index_read_marks_on_reader_type_and_reader_id"
