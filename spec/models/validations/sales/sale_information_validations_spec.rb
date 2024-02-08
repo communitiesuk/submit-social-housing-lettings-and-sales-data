@@ -608,4 +608,81 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
       end
     end
   end
+
+  describe "#validate_discount_and_value" do
+    let(:record) { FactoryBot.build(:sales_log, value: 200_000, discount: 50, ownershipsch: 2, type: 9, saledate: now) }
+    let(:now) { Time.zone.local(2024, 4, 1) }
+
+    around do |example|
+      Timecop.freeze(now) do
+        example.run
+      end
+      Timecop.return
+    end
+
+    context "with a log in the 24/25 collection year" do
+      context "when in London" do
+        before do
+          record.la = "E09000001"
+        end
+
+        it "adds an error if value * discount is more than 136,400" do
+          record.discount = 80
+          sale_information_validator.validate_discount_and_value(record)
+          expect(record.errors["value"]).to include("The percentage discount multiplied by the purchase price is £160,000.00. This figure should not be more than £136,400 for properties in London.")
+          expect(record.errors["discount"]).to include("The percentage discount multiplied by the purchase price is £160,000.00. This figure should not be more than £136,400 for properties in London.")
+          expect(record.errors["la"]).to include("The percentage discount multiplied by the purchase price is £160,000.00. This figure should not be more than £136,400 for properties in London.")
+          expect(record.errors["postcode_full"]).to include("The percentage discount multiplied by the purchase price is £160,000.00. This figure should not be more than £136,400 for properties in London.")
+          expect(record.errors["uprn"]).to include("The percentage discount multiplied by the purchase price is £160,000.00. This figure should not be more than £136,400 for properties in London.")
+        end
+
+        it "does not add an error value * discount is less than 136,400" do
+          sale_information_validator.validate_discount_and_value(record)
+          expect(record.errors["value"]).to be_empty
+          expect(record.errors["discount"]).to be_empty
+          expect(record.errors["la"]).to be_empty
+          expect(record.errors["postcode_full"]).to be_empty
+          expect(record.errors["uprn"]).to be_empty
+        end
+      end
+
+      context "when in outside of London" do
+        before do
+          record.la = "E06000015"
+        end
+
+        it "adds an error if value * discount is more than 136,400" do
+          record.discount = 52
+          sale_information_validator.validate_discount_and_value(record)
+          expect(record.errors["value"]).to include("The percentage discount multiplied by the purchase price is £104,000.00. This figure should not be more than £102,400 for properties outside of London.")
+          expect(record.errors["discount"]).to include("The percentage discount multiplied by the purchase price is £104,000.00. This figure should not be more than £102,400 for properties outside of London.")
+          expect(record.errors["la"]).to include("The percentage discount multiplied by the purchase price is £104,000.00. This figure should not be more than £102,400 for properties outside of London.")
+          expect(record.errors["postcode_full"]).to include("The percentage discount multiplied by the purchase price is £104,000.00. This figure should not be more than £102,400 for properties outside of London.")
+          expect(record.errors["uprn"]).to include("The percentage discount multiplied by the purchase price is £104,000.00. This figure should not be more than £102,400 for properties outside of London.")
+        end
+
+        it "does not add an error value * discount is less than 136,400" do
+          sale_information_validator.validate_discount_and_value(record)
+          expect(record.errors["value"]).to be_empty
+          expect(record.errors["discount"]).to be_empty
+          expect(record.errors["la"]).to be_empty
+          expect(record.errors["postcode_full"]).to be_empty
+          expect(record.errors["uprn"]).to be_empty
+        end
+      end
+    end
+
+    context "when it is a 2023 log" do
+      let(:record) { FactoryBot.build(:sales_log, value: 200_000, discount: 80, ownershipsch: 2, type: 9, saledate: Time.zone.local(2023, 4, 1), la: "E06000015") }
+
+      it "does not add an error" do
+        sale_information_validator.validate_discount_and_value(record)
+        expect(record.errors["value"]).to be_empty
+        expect(record.errors["discount"]).to be_empty
+        expect(record.errors["la"]).to be_empty
+        expect(record.errors["postcode_full"]).to be_empty
+        expect(record.errors["uprn"]).to be_empty
+      end
+    end
+  end
 end

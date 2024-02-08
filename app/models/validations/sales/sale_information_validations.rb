@@ -83,4 +83,19 @@ module Validations::Sales::SaleInformationValidations
       record.errors.add :type, I18n.t("validations.sale_information.stairbought.over_max", max_stairbought:, type: record.form.get_question("type", record).answer_label(record))
     end
   end
+
+  def validate_discount_and_value(record)
+    return unless record.saledate && record.form.start_year_after_2024?
+    return unless record.discount && record.value && record.la
+
+    if record.london_property? && record.discount_value > 136_400
+      %i[discount value la postcode_full uprn].each do |field|
+        record.errors.add field, I18n.t("validations.sale_information.value.over_discounted_london_max", discount_value: record.field_formatted_as_currency("discount_value"))
+      end
+    elsif record.property_not_in_london? && record.discount_value > 102_400
+      %i[discount value la postcode_full uprn].each do |field|
+        record.errors.add field, I18n.t("validations.sale_information.value.over_discounted_max", discount_value: record.field_formatted_as_currency("discount_value"))
+      end
+    end
+  end
 end

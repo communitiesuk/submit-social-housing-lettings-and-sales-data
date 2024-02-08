@@ -485,4 +485,10 @@ class SalesLog < Log
   def is_staircase?
     staircase == 1
   end
+
+  def discount_value
+    return unless discount && value
+
+    value * discount / 100
+  end
 end
