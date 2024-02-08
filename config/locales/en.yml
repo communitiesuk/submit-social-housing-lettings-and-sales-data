@@ -59,6 +59,7 @@ en:
               wrong_field_numbers_count: "Incorrect number of fields, please ensure you have used the correct template"
               over_max_column_count: "Too many columns, please ensure you have used the correct template"
               wrong_template: "Incorrect start dates, please ensure you have used the correct template"
+              no_headers: "Your file does not contain the required header rows. Add or check the header rows and upload your file again. [Read more about using the template headers](%{guidance_link})."
         bulk_upload/sales/validator:
           attributes:
             base:
@@ -66,6 +67,7 @@ en:
               wrong_field_numbers_count: "Incorrect number of fields, please ensure you have used the correct template"
               over_max_column_count: "Too many columns, please ensure you have used the correct template"
               wrong_template: "Incorrect sale dates, please ensure you have used the correct template"
+              no_headers: "Your file does not contain the required header rows. Add or check the header rows and upload your file again. [Read more about using the template headers](%{guidance_link})."
         forms/bulk_upload_lettings/year:
           attributes:
             year:

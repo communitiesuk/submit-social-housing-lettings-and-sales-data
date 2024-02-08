@@ -70,6 +70,10 @@ class BulkUpload::Lettings::Year2023::CsvParser
     false
   end
 
+  def missing_required_headers?
+    false
+  end
+
 private
 
   def default_field_numbers
