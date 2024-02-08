@@ -731,6 +731,7 @@ private
       discount: %i[field_116],
       othtype: %i[field_12],
       owning_organisation_id: %i[field_1],
+      managing_organisation_id: [:field_2],
       created_by: %i[field_3],
       hhregres: %i[field_72],
       hhregresstill: %i[field_73],
@@ -1210,9 +1211,7 @@ private
   end
 
   def managing_organisation
-    return owning_organisation if created_by&.organisation&.absorbed_organisations&.include?(owning_organisation)
-
-    created_by&.organisation || bulk_upload.user.organisation
+    Organisation.find_by_id_on_multiple_fields(field_2)
   end
 
   def nationality_group(nationality_value)
@@ -1227,8 +1226,8 @@ private
     if owning_organisation && managing_organisation && !owning_organisation.can_be_managed_by?(organisation: managing_organisation)
       block_log_creation!
 
-      if errors[:field_3].blank?
-        errors.add(:field_3, "This user belongs to an organisation that does not have a relationship with the owning organisation", category: :setup)
+      if errors[:field_2].blank?
+        errors.add(:field_2, "This organisation does not have a relationship with the owning organisation", category: :setup)
       end
     end
   end
