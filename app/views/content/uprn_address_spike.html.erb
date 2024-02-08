@@ -32,7 +32,7 @@
     <% @addresses_returned.each do |address_returned| %>
       <p>Address: <%= address_returned.address %></p>
       <p>UPRN: <%= address_returned.uprn %></p>
-      <p>Confidence: <%= address_returned.match%> (<%= address_returned.match_description %>)</p>
+      <p>Confidence: <span style="color:<%= match_colour(address_returned.match) %>"><%= address_returned.match%> (<%= address_returned.match_description %>)</span></p>
       <br>
     <% end %>
   <% end %>
