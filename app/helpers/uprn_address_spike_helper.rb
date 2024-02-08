@@ -2,7 +2,9 @@
 
 module UprnAddressSpikeHelper
   def match_colour(match)
-    if match >= 0.8
+    if match == 1
+      "purple"
+    elsif match >= 0.8
       "green"
     elsif match >= 0.7
       "orange"
