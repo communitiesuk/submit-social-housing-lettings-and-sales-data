@@ -491,4 +491,8 @@ class SalesLog < Log
 
     value * discount / 100
   end
+
+  def is_not_staircasing?
+    staircase == 2 || staircase == 3
+  end
 end

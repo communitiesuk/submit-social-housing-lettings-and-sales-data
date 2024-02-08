@@ -98,4 +98,16 @@ module Validations::Sales::SaleInformationValidations
       end
     end
   end
+
+  def validate_non_staircasing_mortgage(record)
+    return unless record.mortgage && record.value && record.deposit && record.equity
+    return unless record.is_not_staircasing?
+    return unless record.saledate && record.form.start_year_after_2024?
+
+    if record.mortgage_and_deposit_total != record.expected_shared_ownership_deposit_value
+      %i[mortgage value deposit equity].each do |field|
+        record.errors.add field, I18n.t("validations.sale_information.non_staircasing_mortgage", mortgage_and_deposit_total: record.field_formatted_as_currency("mortgage_and_deposit_total"), expected_shared_ownership_deposit_value: record.field_formatted_as_currency("expected_shared_ownership_deposit_value"))
+      end
+    end
+  end
 end
