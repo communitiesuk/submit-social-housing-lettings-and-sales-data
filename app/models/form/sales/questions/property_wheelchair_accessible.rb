@@ -7,6 +7,7 @@ class Form::Sales::Questions::PropertyWheelchairAccessible < ::Form::Question
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @question_number = 17
+    @hint_text = form.start_year_after_2024? ? "This is whether someone who uses a wheelchair is able to make full use of all of the property’s rooms and facilities, including use of both inside and outside space, and entering and exiting the property." : nil
   end
 
   ANSWER_OPTIONS = {

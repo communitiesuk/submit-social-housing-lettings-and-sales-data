@@ -5,6 +5,10 @@ RSpec.describe Form::Lettings::Pages::PropertyWheelchairAccessible, type: :model
 
   let(:subsection) { instance_double(Form::Subsection) }
 
+  before do
+    allow(subsection).to receive(:form).and_return(instance_double(Form, start_year_after_2024?: false))
+  end
+
   it "has correct subsection" do
     expect(page.subsection).to be(subsection)
   end
