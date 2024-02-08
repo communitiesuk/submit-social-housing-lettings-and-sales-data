@@ -2,21 +2,21 @@ class UprnAddressSpikeController < ApplicationController
   def show
     if params[:uprn] || params[:address]
 
-      if params[:uprn]
+      if params[:uprn].present?
         uprn = params[:uprn]
         service = UprnClient.new(uprn)
         service.call
         if service.error.present?
-          @error = "no match"
+          @error = "No match"
         else
           @address_returned = UprnDataPresenter.new(service.result)
         end
-      elsif params[:address]
-        address = params[:address]
-        service = AddressClient.new(address)
+      elsif params.values_at(:address_line1, :address_line2, :town_or_city, :postcode).any?(&:present?)
+        @address_given = params.values_at(:address_line1, :address_line2, :town_or_city, :postcode).reject { |item| item == "" }.join(", ")
+        service = AddressClient.new(@address_given)
         service.call
         if service.error.present?
-          @error = "no match"
+          @error = "No matches"
         else
           @addresses_returned = service.result&.map { |r| AddressDataPresenter.new(r) }
         end

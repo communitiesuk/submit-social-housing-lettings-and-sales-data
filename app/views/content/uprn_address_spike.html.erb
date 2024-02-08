@@ -1,39 +1,65 @@
-<form id="uprnForm">
-  <label for="textInput">Enter UPRN:</label>
-  <input type="text" name="uprn">
-  <button type="submit">Submit</button>
-</form>
-
-<form id="addressForm">
-  <label for="textInput">Or enter address:</label>
-  <input type="text" name="address">
-  <button type="submit">Submit</button>
-</form>
-
-<% if params[:uprn] %>
-  <h1>UPRN given:</h1>
-  <p><%= params[:uprn] %></p>
-  <% if @error.present? %>
-    <%= @error %>
-  <% elsif @address_returned.present? %>
-    <h1>Output:</h1>
-    <p><%= @address_returned.address_line1 %></p>
-    <p><%= @address_returned.address_line2 %></p>
-    <p><%= @address_returned.town_or_city %></p>
-    <p><%= @address_returned.postcode %></p>
-  <% end %>
-<% elsif params[:address] %>
-  <h1>Address given:</h1>
-  <p><%= params[:address] %></p>
-  <% if @error.present? %>
-    <%= @error %>
-  <% elsif @addresses_returned.present? %>
-    <h1>Output:</h1>
-    <% @addresses_returned.each do |address_returned| %>
-      <p>Address: <%= address_returned.address %></p>
-      <p>UPRN: <%= address_returned.uprn %></p>
-      <p>Confidence: <span style="color:<%= match_colour(address_returned.match) %>"><%= address_returned.match%> (<%= address_returned.match_description %>)</span></p>
-      <br>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-one-half">
+  <div class="govuk-grid-column-three-quarters">
+    <h1 class="govuk-heading-l">User input</h1>
+    <%= form_with(url: uprn_address_spike_path, method: 'get', local: true) do |form| %>
+      <div class="govuk-form-group">
+        <%= form.label :uprn, "Enter a UPRN", class: "govuk-label" %>
+        <%= form.text_field :uprn, class: "govuk-input", placeholder: "e.g. 100023336956" %>
+      </div>
+      <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--m">
+      <p>OR enter an address</p>
+      <div class="govuk-form-group">
+        <%= form.label :address_line1, "Address line 1", class: "govuk-label" %>
+        <%= form.text_field :address_line1, class: "govuk-input", placeholder: "e.g. HOME OFFICE" %>
+      </div>
+      <div class="govuk-form-group">
+        <%= form.label :address_line2, "Address line 2", class: "govuk-label" %>
+        <%= form.text_field :address_line2, class: "govuk-input", placeholder: "e.g. 2, MARSHAM STREET" %>
+      </div>
+      <div class="govuk-form-group">
+        <%= form.label :town_or_city, "Town or city", class: "govuk-label" %>
+        <%= form.text_field :town_or_city, class: "govuk-input", placeholder: "e.g. LONDON" %>
+      </div>
+      <div class="govuk-form-group">
+        <%= form.label :postcode, "Postcode", class: "govuk-label" %>
+        <%= form.text_field :postcode, class: "govuk-input", placeholder: "e.g. SW1P 4DF" %>
+      </div>
+      <%= form.submit "Submit", class: "govuk-button" %>
     <% end %>
-  <% end %>
-<% end %>
+  </div>
+  </div>
+  <div class="govuk-grid-column-one-half">
+    <%if params[:uprn].present? || @address_given.present? %>
+      <h1 class="govuk-heading-l">OS Places API output</h1>
+    <%end %>
+    <% if params[:uprn].present? %>
+      <h1 class="govuk-heading-m">UPRN given:</h1>
+      <p><%= params[:uprn] %></p>
+      <% if @error.present? %>
+        <h1 class="govuk-heading-m"><%= @error %></h1>
+      <% elsif @address_returned.present? %>
+        <h1 class="govuk-heading-m">Match:</h1>
+        <p><%= @address_returned.address_line1 %></p>
+        <p><%= @address_returned.address_line2 %></p>
+        <p><%= @address_returned.town_or_city %></p>
+        <p><%= @address_returned.postcode %></p>
+      <% end %>
+    <% elsif @address_given.present? %>
+      <h1 class="govuk-heading-m">Address given:</h1>
+      <p><%= @address_given %></p>
+      <% if @error.present? %>
+        <h1 class="govuk-heading-m"><%= @error %></h1>
+      <% elsif @addresses_returned.present? %>
+        <h1 class="govuk-heading-m">Matches:</h1>
+        <% @addresses_returned.each do |address_returned| %>
+          <p>Address: <%= address_returned.address %></p>
+          <p>UPRN: <%= address_returned.uprn %></p>
+          <p>Confidence: <span style="color:<%= match_colour(address_returned.match) %>"><%= address_returned.match%> (<%= address_returned.match_description %>)</span></p>
+          <br>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+</div>
+
