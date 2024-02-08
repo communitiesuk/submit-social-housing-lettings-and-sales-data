@@ -15,16 +15,10 @@ class Form::Sales::Pages::OwningOrganisation < ::Form::Page
     return true if current_user.support?
     return true if has_multiple_stock_owners_with_own_stock?(current_user)
 
-    stock_owners = if FeatureToggle.merge_organisations_enabled?
-                     current_user.organisation.stock_owners.where(holds_own_stock: true) + current_user.organisation.absorbed_organisations.where(holds_own_stock: true)
-                   else
-                     current_user.organisation.stock_owners.where(holds_own_stock: true)
-                   end
+    stock_owners = current_user.organisation.stock_owners.where(holds_own_stock: true) + current_user.organisation.absorbed_organisations.where(holds_own_stock: true)
 
     if current_user.organisation.holds_own_stock?
-      if FeatureToggle.merge_organisations_enabled? && current_user.organisation.absorbed_organisations.any?(&:holds_own_stock?)
-        return true
-      end
+      return true if current_user.organisation.absorbed_organisations.any?(&:holds_own_stock?)
       return true if stock_owners.count >= 1
 
       log.update!(owning_organisation: current_user.organisation)

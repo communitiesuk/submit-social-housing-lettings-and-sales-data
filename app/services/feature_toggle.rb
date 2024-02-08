@@ -28,10 +28,6 @@ class FeatureToggle
     false
   end
 
-  def self.merge_organisations_enabled?
-    true
-  end
-
   def self.deduplication_flow_enabled?
     true
   end
