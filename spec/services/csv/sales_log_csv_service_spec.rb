@@ -4,6 +4,7 @@ RSpec.describe Csv::SalesLogCsvService do
   let(:form_handler_mock) { instance_double(FormHandler) }
   let(:organisation) { create(:organisation) }
   let(:fixed_time) { Time.zone.local(2023, 12, 8) }
+  let(:now) { Time.zone.now }
   let(:user) { create(:user, email: "billyboy@eyeKLAUD.com") }
   let(:log) do
     create(
@@ -12,7 +13,7 @@ RSpec.describe Csv::SalesLogCsvService do
       created_by: user,
       saledate: fixed_time,
       created_at: fixed_time,
-      updated_at: fixed_time,
+      updated_at: now,
       owning_organisation: organisation,
       purchid: nil,
       hholdcount: 3,
@@ -29,9 +30,13 @@ RSpec.describe Csv::SalesLogCsvService do
   let(:csv) { CSV.parse(service.prepare_csv(SalesLog.all)) }
 
   before do
-    allow(Time).to receive(:now).and_return(fixed_time)
+    Timecop.freeze(now)
     Singleton.__init__(FormHandler)
     log
+  end
+
+  after do
+    Timecop.return
   end
 
   it "calls the form handler to get all questions in order when initialized" do
@@ -154,14 +159,32 @@ RSpec.describe Csv::SalesLogCsvService do
       expect(la_label_value).to eq "Barnet"
     end
 
-    it "exports the CSV with all values correct" do
-      expected_content = CSV.read("spec/fixtures/files/sales_logs_csv_export_labels.csv")
-      values_to_delete = %w[id]
-      values_to_delete.each do |attribute|
-        index = csv.first.index(attribute)
-        csv.second[index] = nil
+    context "when the current form is 2024" do
+      let(:now) { Time.zone.local(2024, 5, 1) }
+
+      it "exports the CSV with the 2024 ordering and all values correct" do
+        expected_content = CSV.read("spec/fixtures/files/sales_logs_csv_export_labels_24.csv")
+        values_to_delete = %w[id]
+        values_to_delete.each do |attribute|
+          index = csv.first.index(attribute)
+          csv.second[index] = nil
+        end
+        expect(csv).to eq expected_content
       end
-      expect(csv).to eq expected_content
+    end
+
+    context "when the current form is 2023" do
+      let(:now) { Time.zone.local(2024, 1, 1) }
+
+      it "exports the CSV with the 2023 ordering and all values correct" do
+        expected_content = CSV.read("spec/fixtures/files/sales_logs_csv_export_labels_23.csv")
+        values_to_delete = %w[id]
+        values_to_delete.each do |attribute|
+          index = csv.first.index(attribute)
+          csv.second[index] = nil
+        end
+        expect(csv).to eq expected_content
+      end
     end
 
     context "when the log has a duplicate log reference" do
@@ -214,14 +237,32 @@ RSpec.describe Csv::SalesLogCsvService do
       expect(la_label_value).to eq "Barnet"
     end
 
-    it "exports the CSV with all values correct" do
-      expected_content = CSV.read("spec/fixtures/files/sales_logs_csv_export_codes.csv")
-      values_to_delete = %w[id]
-      values_to_delete.each do |attribute|
-        index = csv.first.index(attribute)
-        csv.second[index] = nil
+    context "when the current form is 2024" do
+      let(:now) { Time.zone.local(2024, 5, 1) }
+
+      it "exports the CSV with all values correct" do
+        expected_content = CSV.read("spec/fixtures/files/sales_logs_csv_export_codes_24.csv")
+        values_to_delete = %w[id]
+        values_to_delete.each do |attribute|
+          index = csv.first.index(attribute)
+          csv.second[index] = nil
+        end
+        expect(csv).to eq expected_content
       end
-      expect(csv).to eq expected_content
+    end
+
+    context "when the current form is 2023" do
+      let(:now) { Time.zone.local(2024, 1, 1) }
+
+      it "exports the CSV with all values correct" do
+        expected_content = CSV.read("spec/fixtures/files/sales_logs_csv_export_codes_23.csv")
+        values_to_delete = %w[id]
+        values_to_delete.each do |attribute|
+          index = csv.first.index(attribute)
+          csv.second[index] = nil
+        end
+        expect(csv).to eq expected_content
+      end
     end
 
     context "when the log has a duplicate log reference" do
