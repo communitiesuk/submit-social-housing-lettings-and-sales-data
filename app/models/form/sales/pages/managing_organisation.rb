@@ -13,7 +13,6 @@ class Form::Sales::Pages::ManagingOrganisation < ::Form::Page
   def routed_to?(log, current_user)
     return false unless current_user
     return false unless current_user.support?
-    return false unless FeatureToggle.sales_managing_organisation_enabled?
     return false unless log.owning_organisation
 
     log.owning_organisation.managing_agents.count >= 1

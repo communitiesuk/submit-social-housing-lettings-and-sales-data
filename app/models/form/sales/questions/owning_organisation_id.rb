@@ -14,7 +14,7 @@ class Form::Sales::Questions::OwningOrganisationId < ::Form::Question
     return answer_opts unless user
     return answer_opts unless log
 
-    if FeatureToggle.sales_managing_organisation_enabled? && !user.support?
+    unless user.support?
       if log.owning_organisation_id.present?
         answer_opts[log.owning_organisation.id] = log.owning_organisation.name
       end

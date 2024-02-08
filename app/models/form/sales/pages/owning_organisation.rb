@@ -13,7 +13,6 @@ class Form::Sales::Pages::OwningOrganisation < ::Form::Page
   def routed_to?(log, current_user)
     return false unless current_user
     return true if current_user.support?
-    return false unless FeatureToggle.sales_managing_organisation_enabled?
     return true if has_multiple_stock_owners_with_own_stock?(current_user)
 
     stock_owners = if FeatureToggle.merge_organisations_enabled?
