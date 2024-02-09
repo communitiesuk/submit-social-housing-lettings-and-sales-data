@@ -5,9 +5,9 @@ class BulkUpload::Lettings::Validator
 
   validate :validate_file_not_empty
   validate :validate_field_numbers_count
+  validate :validate_missing_required_headers
   validate :validate_max_columns_count_if_no_headers
   validate :validate_correct_template
-  validate :validate_missing_required_headers
 
   def initialize(bulk_upload:, path:)
     @bulk_upload = bulk_upload
@@ -179,7 +179,10 @@ private
   def validate_missing_required_headers
     return if halt_validations?
 
-    errors.add :base, I18n.t("activemodel.errors.models.bulk_upload/lettings/validator.attributes.base.no_headers", guidance_link: Forms::BulkUploadLettings::Guidance.new(year: bulk_upload.year).view_path) if csv_parser.missing_required_headers?
+    if csv_parser.missing_required_headers?
+      errors.add :base, I18n.t("activemodel.errors.models.bulk_upload/lettings/validator.attributes.base.no_headers", guidance_link: "https://#{ENV['APP_HOST']}/lettings-logs/bulk-upload-logs/guidance?form%5Byear%5D=#{bulk_upload.year}")
+      halt_validations!
+    end
   end
 
   def halt_validations!
