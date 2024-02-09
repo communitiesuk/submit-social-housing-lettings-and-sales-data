@@ -179,7 +179,7 @@ private
   def validate_missing_required_headers
     return if halt_validations?
 
-    errors.add :base, I18n.t("bulk_upload.lettings.validator.attributes.base.no_headers", guidance_link: Forms::BulkUploadLettings::Guidance.new(year: bulk_upload.year).view_path) if csv_parser.missing_required_headers?
+    errors.add :base, I18n.t("activemodel.errors.models.bulk_upload/lettings/validator.attributes.base.no_headers", guidance_link: Forms::BulkUploadLettings::Guidance.new(year: bulk_upload.year).view_path) if csv_parser.missing_required_headers?
   end
 
   def halt_validations!
