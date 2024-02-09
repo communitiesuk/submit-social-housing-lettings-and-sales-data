@@ -180,7 +180,7 @@ private
     return if halt_validations?
 
     if csv_parser.missing_required_headers?
-      errors.add :base, I18n.t("activemodel.errors.models.bulk_upload/lettings/validator.attributes.base.no_headers", guidance_link: "https://#{ENV['APP_HOST']}/lettings-logs/bulk-upload-logs/guidance?form%5Byear%5D=#{bulk_upload.year}")
+      errors.add :base, I18n.t("activemodel.errors.models.bulk_upload/lettings/validator.attributes.base.no_headers", guidance_link: "https://#{ENV['APP_HOST']}/lettings-logs/bulk-upload-logs/guidance?form%5Byear%5D=#{bulk_upload.year}#using-the-bulk-upload-template")
       halt_validations!
     end
   end
