@@ -731,6 +731,8 @@ Make sure these answers are correct."
     deposit_and_mortgage:
       title_text: "You told us the mortgage amount was %{mortgage}, the cash deposit was %{deposit} and the discount was %{discount}."
       hint_text: "We would expect the mortgage amount and the deposit added together to be the same as the purchase price minus the discount."
+    reasonother:
+      title_text: "You told us that the tenant’s main reason for leaving their last settled home was %{reasonother}"
 
   devise:
     email:

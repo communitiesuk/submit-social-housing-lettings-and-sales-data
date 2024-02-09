@@ -6,34 +6,77 @@ RSpec.describe Form::Lettings::Subsections::HouseholdSituation, type: :model do
   let(:subsection_id) { nil }
   let(:subsection_definition) { nil }
   let(:section) { instance_double(Form::Lettings::Sections::Household) }
+  let(:form) { instance_double(Form) }
+
+  before do
+    allow(section).to receive(:form).and_return(form)
+  end
 
   it "has correct section" do
     expect(household_situation.section).to eq(section)
   end
 
-  it "has correct pages" do
-    expect(household_situation.pages.map(&:id)).to eq(
-      %w[
-        time_lived_in_local_authority
-        time_on_waiting_list
-        reason_for_leaving_last_settled_home
-        reason_for_leaving_last_settled_home_renewal
-        previous_housing_situation
-        previous_housing_situation_renewal
-        homelessness
-        previous_postcode
-        previous_local_authority
-        reasonable_preference
-        reasonable_preference_reason
-        allocation_system
-        referral
-        referral_prp
-        referral_supported_housing
-        referral_supported_housing_prp
-        referral_value_check
-      ],
-    )
+  context "with form year before 2024" do
+    before do
+      allow(form).to receive(:start_year_after_2024?).and_return(false)
+    end
+
+    it "has correct pages" do
+      expect(household_situation.pages.map(&:id)).to eq(
+        %w[
+          time_lived_in_local_authority
+          time_on_waiting_list
+          reason_for_leaving_last_settled_home
+          reason_for_leaving_last_settled_home_renewal
+          previous_housing_situation
+          previous_housing_situation_renewal
+          homelessness
+          previous_postcode
+          previous_local_authority
+          reasonable_preference
+          reasonable_preference_reason
+          allocation_system
+          referral
+          referral_prp
+          referral_supported_housing
+          referral_supported_housing_prp
+          referral_value_check
+        ],
+      )
+    end
   end
+
+  context "with form year >= 2024" do
+    before do
+      allow(form).to receive(:start_year_after_2024?).and_return(true)
+    end
+
+    it "has correct pages" do
+      expect(household_situation.pages.map(&:id)).to eq(
+        %w[
+          time_lived_in_local_authority
+          time_on_waiting_list
+          reason_for_leaving_last_settled_home
+          reason_for_leaving_last_settled_home_renewal
+          reasonother_value_check
+          previous_housing_situation
+          previous_housing_situation_renewal
+          homelessness
+          previous_postcode
+          previous_local_authority
+          reasonable_preference
+          reasonable_preference_reason
+          allocation_system
+          referral
+          referral_prp
+          referral_supported_housing
+          referral_supported_housing_prp
+          referral_value_check
+        ],
+      )
+    end
+  end
+
 
   it "has the correct id" do
     expect(household_situation.id).to eq("household_situation")
