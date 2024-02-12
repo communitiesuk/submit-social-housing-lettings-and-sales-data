@@ -110,4 +110,14 @@ module Validations::Sales::SaleInformationValidations
       end
     end
   end
+
+  def validate_mortgage_used_and_stairbought(record)
+    return unless record.stairowned && record.mortgageused
+    return unless record.saledate && record.form.start_year_after_2024?
+
+    if !record.stairowned_100? && record.mortgageused == 3
+      record.errors.add :stairowned, I18n.t("validations.sale_information.stairowned.mortgageused_dont_know")
+      record.errors.add :mortgageused, I18n.t("validations.sale_information.stairowned.mortgageused_dont_know")
+    end
+  end
 end

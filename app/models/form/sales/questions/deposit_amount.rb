@@ -1,5 +1,5 @@
 class Form::Sales::Questions::DepositAmount < ::Form::Question
-  def initialize(id, hsh, subsection, ownershipsch:)
+  def initialize(id, hsh, subsection, ownershipsch:, optional:)
     super(id, hsh, subsection)
     @id = "deposit"
     @check_answer_label = "Cash deposit"
@@ -10,10 +10,10 @@ class Form::Sales::Questions::DepositAmount < ::Form::Question
     @step = 1
     @width = 5
     @prefix = "£"
-    @hint_text = "Enter the total cash sum paid by the buyer towards the property that was not funded by the mortgage"
     @derived = true
     @ownershipsch = ownershipsch
     @question_number = question_number
+    @optional = optional
   end
 
   def selected_answer_option_is_derived?(_log)
@@ -28,6 +28,14 @@ class Form::Sales::Questions::DepositAmount < ::Form::Question
       108
     when 3
       116
+    end
+  end
+
+  def hint_text
+    if @optional
+      "Enter the total cash sum paid by the buyer towards the property that was not funded by the mortgage. As this is a fully staircased sale this question is optional. If you do not have the information available click save and continue"
+    else
+      "Enter the total cash sum paid by the buyer towards the property that was not funded by the mortgage"
     end
   end
 end

@@ -7,6 +7,10 @@ RSpec.describe Form::Sales::Subsections::SharedOwnershipScheme, type: :model do
   let(:subsection_definition) { nil }
   let(:section) { instance_double(Form::Sales::Sections::SaleInformation) }
 
+  before do
+    allow(section).to receive(:form).and_return(instance_double(Form, start_year_after_2024?: false))
+  end
+
   it "has correct section" do
     expect(shared_ownership_scheme.section).to eq(section)
   end

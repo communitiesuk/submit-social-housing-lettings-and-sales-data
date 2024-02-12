@@ -756,4 +756,48 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
       end
     end
   end
+
+  describe "#validate_mortgage_used_and_stairbought" do
+    let(:now) { Time.zone.local(2024, 4, 4) }
+
+    before do
+      Timecop.freeze(now)
+      Singleton.__init__(FormHandler)
+    end
+
+    after do
+      Timecop.return
+      Singleton.__init__(FormHandler)
+    end
+
+    context "when mortgageused don't know" do
+      let(:record) { build(:sales_log, ownershipsch: 1, type: 9, saledate: now, mortgageused: 3) }
+
+      it "does not add an error if stairowned 100" do
+        record.stairowned = 100
+        sale_information_validator.validate_mortgage_used_and_stairbought(record)
+
+        expect(record.errors).to be_empty
+      end
+
+      it "adds an error if stairowned is not 100" do
+        record.stairowned = 90
+        sale_information_validator.validate_mortgage_used_and_stairbought(record)
+
+        expect(record.errors[:stairowned]).to include("The percentage owned has to be 100% if the mortgage used is 'Don’t know'")
+        expect(record.errors[:mortgageused]).to include("The percentage owned has to be 100% if the mortgage used is 'Don’t know'")
+      end
+    end
+
+    context "when the collection year is before 2024" do
+      let(:record) { build(:sales_log, ownershipsch: 1, type: 9, saledate: now, mortgageused: 3, stairowned: 90) }
+      let(:now) { Time.zone.local(2023, 4, 4) }
+
+      it "does not add an error" do
+        sale_information_validator.validate_mortgage_used_and_stairbought(record)
+
+        expect(record.errors).to be_empty
+      end
+    end
+  end
 end

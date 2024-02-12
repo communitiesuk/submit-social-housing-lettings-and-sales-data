@@ -356,6 +356,10 @@ class LettingsLog < Log
     unittype_gn == 2
   end
 
+  def is_beds_inferred?
+    form.start_year_after_2024? && is_bedsit?
+  end
+
   def is_shared_housing?
     # 4: Shared flat or maisonette
     # 9: Shared house
