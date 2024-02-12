@@ -341,6 +341,14 @@ class BulkUpload::Sales::Year2024::RowParser
             },
             on: :before_log
 
+  validates :field_103,
+            inclusion: {
+              in: [1, 2],
+              if: proc { field_88 != 100 },
+              question: QUESTIONS[:field_103],
+            },
+            on: :before_log
+
   validates :field_9,
             presence: {
               message: I18n.t("validations.not_answered", question: "type of shared ownership sale"),
