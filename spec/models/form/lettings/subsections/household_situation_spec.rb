@@ -76,8 +76,7 @@ RSpec.describe Form::Lettings::Subsections::HouseholdSituation, type: :model do
       )
     end
   end
-
-
+  
   it "has the correct id" do
     expect(household_situation.id).to eq("household_situation")
   end
