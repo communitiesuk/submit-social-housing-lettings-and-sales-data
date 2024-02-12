@@ -4,11 +4,15 @@ RSpec.describe Validations::HouseholdValidations do
   subject(:household_validator) { validator_class.new }
 
   let(:validator_class) { Class.new { include Validations::HouseholdValidations } }
-  let(:record) { FactoryBot.create(:lettings_log) }
-  let(:fake_2021_2022_form) { Form.new("spec/fixtures/forms/2021_2022.json") }
+  let(:log_date) { Time.zone.now }
+  let(:record) { FactoryBot.create(:lettings_log, :setup_completed, startdate: log_date) }
 
   before do
-    allow(FormHandler.instance).to receive(:current_lettings_form).and_return(fake_2021_2022_form)
+   Timecop.freeze(log_date + 1)
+  end
+
+  after do
+   Timecop.return
   end
 
   describe "reasonable preference validations" do
@@ -54,10 +58,19 @@ RSpec.describe Validations::HouseholdValidations do
         expect(record.errors["reasonother"]).to be_empty
       end
 
-      context "when form year is >= 2024" do
-        before do
-          record.startdate = Time.zone.local(2024, 4, 1)
+      context "when form year is before 2024" do
+        let(:log_date) { Time.zone.local(2024, 1, 1) }
+
+        it "does not validate the content of reasonother for phrases indicating homelessness" do
+          record.reason = 20
+          record.reasonother = "Temp accommodation"
+          household_validator.validate_reason_for_leaving_last_settled_home(record)
+          expect(record.errors["reason"]).to be_empty
         end
+      end
+
+      context "when form year is >= 2024" do
+        let(:log_date) { Time.zone.local(2024, 4, 1) }
 
         context "when checking the content of reasonother" do
           it "validates that the reason doesn't match phrase indicating homelessness" do
@@ -76,7 +89,7 @@ RSpec.describe Validations::HouseholdValidations do
 
           it "ignores surrounding non-alphabet characters and casing when determining a match" do
             record.reason = 20
-            record.reasonother = "  0homelessness!"
+            record.reasonother = "  0homelessness ! "
             household_validator.validate_reason_for_leaving_last_settled_home(record)
             expect(record.errors["reason"]).to include(I18n.t("validations.household.reason.other_not_settled"))
           end
@@ -260,6 +273,28 @@ RSpec.describe Validations::HouseholdValidations do
   end
 
   describe "household member validations" do
+    it "validates that the number of household members cannot be less than 1" do
+      record.hhmemb = 0
+      household_validator.validate_numeric_min_max(record)
+      expect(record.errors["hhmemb"])
+        .to include(match I18n.t("validations.numeric.within_range", field: "Number of household members", min: 1, max: 8))
+    end
+
+    it "validates that the number of household members cannot be more than 8" do
+      record.hhmemb = 9
+      s = record.non_location_setup_questions_completed?
+      d = record.declaration
+      household_validator.validate_numeric_min_max(record)
+      expect(record.errors["hhmemb"])
+        .to include(match I18n.t("validations.numeric.within_range", field: "Number of household members", min: 1, max: 8))
+    end
+
+    it "expects that the number of other household members is between the min and max" do
+      record.hhmemb = 5
+      household_validator.validate_numeric_min_max(record)
+      expect(record.errors["hhmemb"]).to be_empty
+    end
+
     it "validates that only 1 partner exists" do
       record.relat2 = "P"
       record.relat3 = "P"
@@ -422,26 +457,6 @@ RSpec.describe Validations::HouseholdValidations do
         expect(record.errors["ecstat2"]).to be_empty
         expect(record.errors["sex2"]).to be_empty
         expect(record.errors["age2"]).to be_empty
-      end
-
-      it "validates that the number of household members cannot be less than 0" do
-        record.hhmemb = -1
-        household_validator.validate_numeric_min_max(record)
-        expect(record.errors["hhmemb"])
-          .to include(match I18n.t("validations.numeric.within_range", field: "Number of Household Members", min: 0, max: 8))
-      end
-
-      it "validates that the number of household members cannot be more than 8" do
-        record.hhmemb = 9
-        household_validator.validate_numeric_min_max(record)
-        expect(record.errors["hhmemb"])
-          .to include(match I18n.t("validations.numeric.within_range", field: "Number of Household Members", min: 0, max: 8))
-      end
-
-      it "expects that the number of other household members is between the min and max" do
-        record.hhmemb = 5
-        household_validator.validate_numeric_min_max(record)
-        expect(record.errors["hhmemb"]).to be_empty
       end
     end
 
@@ -680,24 +695,30 @@ RSpec.describe Validations::HouseholdValidations do
           .to be_empty
       end
 
-      it "prevten cannot be 3" do
-        record.referral = 1
-        record.prevten = 3
-        household_validator.validate_previous_housing_situation(record)
-        expect(record.errors["prevten"])
-          .to include(match I18n.t("validations.household.prevten.internal_transfer", prevten: ""))
-        expect(record.errors["referral"])
-          .to include(match I18n.t("validations.household.referral.prevten_invalid", prevten: ""))
-      end
-
-      it "prevten cannot be 4, 10, 13, 19, 23, 24, 25, 26, 28, 29" do
-        record.referral = 1
-        record.prevten = 4
-        household_validator.validate_previous_housing_situation(record)
-        expect(record.errors["prevten"])
-          .to include(match I18n.t("validations.household.prevten.internal_transfer", prevten: ""))
-        expect(record.errors["referral"])
-          .to include(match I18n.t("validations.household.referral.prevten_invalid", prevten: ""))
+      [
+        { code: 3, label: "Private sector tenancy" },
+        { code: 4, label: "Tied housing or rented with job" },
+        { code: 7, label: "Direct access hostel" },
+        { code: 10, label: "Hospital" },
+        { code: 13, label: "Children’s home or foster care" },
+        { code: 14, label: "Bed and breakfast" },
+        { code: 19, label: "Rough sleeping" },
+        { code: 23, label: "Mobile home or caravan" },
+        { code: 24, label: "Home Office Asylum Support" },
+        { code: 25, label: "Any other accommodation" },
+        { code: 26, label: "Owner occupation (private)" },
+        { code: 28, label: "Living with friends or family" },
+        { code: 29, label: "Prison or approved probation hostel" },
+      ].each do |prevten|
+        it "prevten cannot be #{prevten[:code]}" do
+          record.referral = 1
+          record.prevten = prevten[:code]
+          household_validator.validate_previous_housing_situation(record)
+          expect(record.errors["prevten"])
+            .to include(match I18n.t("validations.household.prevten.internal_transfer", prevten: prevten[:label]))
+          expect(record.errors["referral"])
+            .to include(match I18n.t("validations.household.referral.prevten_invalid", prevten: ""))
+        end
       end
     end
   end
