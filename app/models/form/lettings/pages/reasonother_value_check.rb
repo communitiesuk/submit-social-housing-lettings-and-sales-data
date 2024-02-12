@@ -7,9 +7,9 @@ class Form::Lettings::Pages::ReasonotherValueCheck < ::Form::Page
       "translation" => "soft_validations.reasonother.title_text",
       "arguments" => [{ "key" => "reasonother", "i18n_template" => "reasonother" }],
     }
-    @informative_text = "The reason you have entered looks very similar to one of the existing response categories.
-                         Please check the categories and select the appropriate one.
-                         If the existing categories are not suitable, please confirm here to move onto the next question."
+    @informative_text = {
+      "translation" => "soft_validations.reasonother.informative_text",
+    }
   end
 
   def questions

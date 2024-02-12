@@ -734,6 +734,9 @@ Make sure these answers are correct."
       hint_text: "We would expect the mortgage amount and the deposit added together to be the same as the purchase price minus the discount."
     reasonother:
       title_text: "You told us that the tenant’s main reason for leaving their last settled home was %{reasonother}"
+      informative_text: "The reason you have entered looks very similar to one of the existing response categories.
+                         Please check the categories and select the appropriate one.
+                         If the existing categories are not suitable, please confirm here to move onto the next question."
 
   devise:
     email:
