@@ -53,6 +53,35 @@ RSpec.describe Validations::HouseholdValidations do
         household_validator.validate_reason_for_leaving_last_settled_home(record)
         expect(record.errors["reasonother"]).to be_empty
       end
+
+      context "when form year is >= 2024" do
+        before do
+          record.startdate = Time.zone.local(2024, 4, 1)
+        end
+
+        context "when checking the content of reasonother" do
+          it "validates that the reason doesn't match phrase indicating homelessness" do
+            record.reason = 20
+            record.reasonother = "Temp accommodation"
+            household_validator.validate_reason_for_leaving_last_settled_home(record)
+            expect(record.errors["reason"]).to include(I18n.t("validations.household.reason.other_not_settled"))
+          end
+
+          it "allows reasons that don't exactly match a phrase indicating homelessness" do
+            record.reason = 20
+            record.reasonother = "Not quite homeless but some other reason"
+            household_validator.validate_reason_for_leaving_last_settled_home(record)
+            expect(record.errors["reason"]).to be_empty
+          end
+
+          it "ignores surrounding non-alphabet characters and casing when determining a match" do
+            record.reason = 20
+            record.reasonother = "  0homelessness!"
+            household_validator.validate_reason_for_leaving_last_settled_home(record)
+            expect(record.errors["reason"]).to include(I18n.t("validations.household.reason.other_not_settled"))
+          end
+        end
+      end
     end
 
     context "when reason is not other" do
