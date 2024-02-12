@@ -467,4 +467,293 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
       end
     end
   end
+
+  describe "#validate_grant_amount" do
+    context "when within permitted bounds" do
+      let(:record) { build(:sales_log, grant: 10_000, saledate: Time.zone.local(2024, 4, 5)) }
+
+      it "does not add an error" do
+        sale_information_validator.validate_grant_amount(record)
+
+        expect(record.errors).not_to be_present
+      end
+    end
+
+    context "when over the max" do
+      let(:record) { build(:sales_log, type: 8, grant: 17_000, saledate: Time.zone.local(2024, 4, 5)) }
+
+      it "adds an error" do
+        sale_information_validator.validate_grant_amount(record)
+
+        expect(record.errors[:grant]).to include("Loan, grants or subsidies must be between £9,000 and £16,000")
+      end
+    end
+
+    context "when under the min" do
+      let(:record) { build(:sales_log, type: 21, grant: 3, saledate: Time.zone.local(2024, 4, 5)) }
+
+      it "adds an error" do
+        sale_information_validator.validate_grant_amount(record)
+
+        expect(record.errors[:grant]).to include("Loan, grants or subsidies must be between £9,000 and £16,000")
+      end
+    end
+
+    context "when grant is blank" do
+      let(:record) { build(:sales_log, type: 21, grant: nil, saledate: Time.zone.local(2024, 4, 5)) }
+
+      it "does not add an error" do
+        sale_information_validator.validate_grant_amount(record)
+
+        expect(record.errors).not_to be_present
+      end
+    end
+
+    context "when over the max and type is not RTA of social homebuy" do
+      let(:record) { build(:sales_log, type: 9, grant: 17_000, saledate: Time.zone.local(2024, 4, 5)) }
+
+      it "does not add an error" do
+        sale_information_validator.validate_grant_amount(record)
+
+        expect(record.errors).not_to be_present
+      end
+    end
+
+    context "when under the min and type is not RTA of social homebuy" do
+      let(:record) { build(:sales_log, type: 9, grant: 17_000, saledate: Time.zone.local(2024, 4, 5)) }
+
+      it "does not add error" do
+        sale_information_validator.validate_grant_amount(record)
+
+        expect(record.errors).not_to be_present
+      end
+    end
+
+    context "with log before 2024/25 collection" do
+      let(:record) { build(:sales_log, type: 8, grant: 3, saledate: Time.zone.local(2023, 4, 5)) }
+
+      it "does not add an error" do
+        sale_information_validator.validate_grant_amount(record)
+
+        expect(record.errors).not_to be_present
+      end
+    end
+  end
+
+  describe "#validate_stairbought" do
+    let(:now) { Time.zone.local(2024, 4, 4) }
+
+    before do
+      Timecop.freeze(now)
+      Singleton.__init__(FormHandler)
+    end
+
+    after do
+      Timecop.return
+      Singleton.__init__(FormHandler)
+    end
+
+    [
+      ["Shared Ownership (new model lease)", 30, 90],
+      ["Home Ownership for people with Long-Term Disabilities (HOLD)", 16, 90],
+      ["Rent to Buy — Shared Ownership", 28, 90],
+      ["Right to Shared Ownership (RtSO)", 31, 90],
+      ["London Living Rent — Shared Ownership", 32, 90],
+      ["Shared Ownership (old model lease)", 2, 75],
+      ["Social HomeBuy — shared ownership purchase", 18, 75],
+      ["Older Persons Shared Ownership", 24, 50],
+    ].each do |label, type, max|
+      context "when ownership type is #{label}" do
+        let(:record) { build(:sales_log, ownershipsch: 1, type:, saledate: now) }
+
+        it "does not add an error if stairbought is under #{max}%" do
+          record.stairbought = max - 1
+          sale_information_validator.validate_stairbought(record)
+
+          expect(record.errors).to be_empty
+        end
+
+        it "does not add an error if stairbought is #{max}%" do
+          record.stairbought = max
+          sale_information_validator.validate_stairbought(record)
+
+          expect(record.errors).to be_empty
+        end
+
+        it "does not add an error if stairbought is not given" do
+          record.stairbought = nil
+          sale_information_validator.validate_stairbought(record)
+
+          expect(record.errors).to be_empty
+        end
+
+        it "adds an error if stairbought is over #{max}%" do
+          record.stairbought = max + 2
+          sale_information_validator.validate_stairbought(record)
+
+          expect(record.errors[:stairbought]).to include("The percentage bought in this staircasing transaction cannot be higher than #{max}% for #{label} sales.")
+          expect(record.errors[:type]).to include("The percentage bought in this staircasing transaction cannot be higher than #{max}% for #{label} sales.")
+        end
+      end
+    end
+    context "when the collection year is before 2024" do
+      let(:record) { build(:sales_log, ownershipsch: 1, type: 24, saledate: now, stairbought: 90) }
+      let(:now) { Time.zone.local(2023, 4, 4) }
+
+      it "does not add an error" do
+        sale_information_validator.validate_stairbought(record)
+
+        expect(record.errors).to be_empty
+      end
+    end
+  end
+
+  describe "#validate_discount_and_value" do
+    let(:record) { FactoryBot.build(:sales_log, value: 200_000, discount: 50, ownershipsch: 2, type: 9, saledate: now) }
+    let(:now) { Time.zone.local(2024, 4, 1) }
+
+    around do |example|
+      Timecop.freeze(now) do
+        example.run
+      end
+      Timecop.return
+    end
+
+    context "with a log in the 24/25 collection year" do
+      context "when in London" do
+        before do
+          record.la = "E09000001"
+        end
+
+        it "adds an error if value * discount is more than 136,400" do
+          record.discount = 80
+          sale_information_validator.validate_discount_and_value(record)
+          expect(record.errors["value"]).to include("The percentage discount multiplied by the purchase price is £160,000.00. This figure should not be more than £136,400 for properties in London.")
+          expect(record.errors["discount"]).to include("The percentage discount multiplied by the purchase price is £160,000.00. This figure should not be more than £136,400 for properties in London.")
+          expect(record.errors["la"]).to include("The percentage discount multiplied by the purchase price is £160,000.00. This figure should not be more than £136,400 for properties in London.")
+          expect(record.errors["postcode_full"]).to include("The percentage discount multiplied by the purchase price is £160,000.00. This figure should not be more than £136,400 for properties in London.")
+          expect(record.errors["uprn"]).to include("The percentage discount multiplied by the purchase price is £160,000.00. This figure should not be more than £136,400 for properties in London.")
+        end
+
+        it "does not add an error value * discount is less than 136,400" do
+          sale_information_validator.validate_discount_and_value(record)
+          expect(record.errors["value"]).to be_empty
+          expect(record.errors["discount"]).to be_empty
+          expect(record.errors["la"]).to be_empty
+          expect(record.errors["postcode_full"]).to be_empty
+          expect(record.errors["uprn"]).to be_empty
+        end
+      end
+
+      context "when in outside of London" do
+        before do
+          record.la = "E06000015"
+        end
+
+        it "adds an error if value * discount is more than 136,400" do
+          record.discount = 52
+          sale_information_validator.validate_discount_and_value(record)
+          expect(record.errors["value"]).to include("The percentage discount multiplied by the purchase price is £104,000.00. This figure should not be more than £102,400 for properties outside of London.")
+          expect(record.errors["discount"]).to include("The percentage discount multiplied by the purchase price is £104,000.00. This figure should not be more than £102,400 for properties outside of London.")
+          expect(record.errors["la"]).to include("The percentage discount multiplied by the purchase price is £104,000.00. This figure should not be more than £102,400 for properties outside of London.")
+          expect(record.errors["postcode_full"]).to include("The percentage discount multiplied by the purchase price is £104,000.00. This figure should not be more than £102,400 for properties outside of London.")
+          expect(record.errors["uprn"]).to include("The percentage discount multiplied by the purchase price is £104,000.00. This figure should not be more than £102,400 for properties outside of London.")
+        end
+
+        it "does not add an error value * discount is less than 136,400" do
+          sale_information_validator.validate_discount_and_value(record)
+          expect(record.errors["value"]).to be_empty
+          expect(record.errors["discount"]).to be_empty
+          expect(record.errors["la"]).to be_empty
+          expect(record.errors["postcode_full"]).to be_empty
+          expect(record.errors["uprn"]).to be_empty
+        end
+      end
+    end
+
+    context "when it is a 2023 log" do
+      let(:record) { FactoryBot.build(:sales_log, value: 200_000, discount: 80, ownershipsch: 2, type: 9, saledate: Time.zone.local(2023, 4, 1), la: "E06000015") }
+
+      it "does not add an error" do
+        sale_information_validator.validate_discount_and_value(record)
+        expect(record.errors["value"]).to be_empty
+        expect(record.errors["discount"]).to be_empty
+        expect(record.errors["la"]).to be_empty
+        expect(record.errors["postcode_full"]).to be_empty
+        expect(record.errors["uprn"]).to be_empty
+      end
+    end
+  end
+
+  describe "#validate_non_staircasing_mortgage" do
+    let(:record) { FactoryBot.build(:sales_log, mortgage: 10_000, deposit: 5_000, value: 30_000, equity: 28, ownershipsch: 1, type: 30, saledate: now) }
+
+    around do |example|
+      Timecop.freeze(now) do
+        Singleton.__init__(FormHandler)
+        example.run
+      end
+      Timecop.return
+      Singleton.__init__(FormHandler)
+    end
+
+    context "with a log in the 24/25 collection year" do
+      let(:now) { Time.zone.local(2024, 4, 4) }
+
+      context "when MORTGAGE + DEPOSIT does not equal VALUE * EQUITY/100 " do
+        context "and it is not a staircase transaction" do
+          before do
+            record.staircase = 2
+          end
+
+          it "adds an error" do
+            sale_information_validator.validate_non_staircasing_mortgage(record)
+            expect(record.errors["mortgage"]).to include("The mortgage and deposit added together is £15,000.00 and the purchase price times by the equity is £8,400.00. These figures should be the same.")
+            expect(record.errors["value"]).to include("The mortgage and deposit added together is £15,000.00 and the purchase price times by the equity is £8,400.00. These figures should be the same.")
+            expect(record.errors["deposit"]).to include("The mortgage and deposit added together is £15,000.00 and the purchase price times by the equity is £8,400.00. These figures should be the same.")
+            expect(record.errors["equity"]).to include("The mortgage and deposit added together is £15,000.00 and the purchase price times by the equity is £8,400.00. These figures should be the same.")
+          end
+        end
+
+        context "and it is a staircase transaction" do
+          before do
+            record.staircase = 1
+          end
+
+          it "does not add an error" do
+            sale_information_validator.validate_non_staircasing_mortgage(record)
+            expect(record.errors["mortgage"]).to be_empty
+            expect(record.errors["value"]).to be_empty
+            expect(record.errors["deposit"]).to be_empty
+            expect(record.errors["equity"]).to be_empty
+          end
+        end
+      end
+
+      context "when MORTGAGE + DEPOSIT equals VALUE * EQUITY/100" do
+        let(:record) { FactoryBot.build(:sales_log, mortgage: 10_000, staircase: 2, deposit: 5_000, value: 30_000, equity: 50, ownershipsch: 1, type: 30, saledate: now) }
+
+        it "does not add an error" do
+          sale_information_validator.validate_non_staircasing_mortgage(record)
+          expect(record.errors["mortgage"]).to be_empty
+          expect(record.errors["value"]).to be_empty
+          expect(record.errors["deposit"]).to be_empty
+          expect(record.errors["equity"]).to be_empty
+        end
+      end
+    end
+
+    context "when it is a 2023 log" do
+      let(:now) { Time.zone.local(2023, 4, 1) }
+      let(:record) { FactoryBot.build(:sales_log, mortgage: 10_000, staircase: 2, deposit: 5_000, value: 30_000, equity: 28, ownershipsch: 1, type: 30, saledate: now) }
+
+      it "does not add an error" do
+        sale_information_validator.validate_non_staircasing_mortgage(record)
+        expect(record.errors["mortgage"]).to be_empty
+        expect(record.errors["value"]).to be_empty
+        expect(record.errors["deposit"]).to be_empty
+        expect(record.errors["equity"]).to be_empty
+      end
+    end
+  end
 end

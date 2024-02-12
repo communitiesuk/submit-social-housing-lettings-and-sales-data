@@ -34,7 +34,7 @@ module Validations::PropertyValidations
 
   def validate_shared_housing_rooms(record)
     unless record.unittype_gn.nil?
-      if record.is_bedsit? && record.beds != 1 && record.beds.present?
+      if record.is_bedsit? && record.beds != 1 && record.beds.present? && !record.form.start_year_after_2024?
         record.errors.add :unittype_gn, I18n.t("validations.property.unittype_gn.one_bedroom_bedsit")
         record.errors.add :beds, I18n.t("validations.property.unittype_gn.one_bedroom_bedsit")
       end

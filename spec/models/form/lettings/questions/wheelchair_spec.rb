@@ -4,6 +4,12 @@ RSpec.describe Form::Lettings::Questions::Wheelchair, type: :model do
   subject(:question) { described_class.new(nil, nil, page) }
 
   let(:page) { instance_double(Form::Page) }
+  let(:subsection) { instance_double(Form::Subsection) }
+
+  before do
+    allow(page).to receive(:subsection).and_return(subsection)
+    allow(subsection).to receive(:form).and_return(instance_double(Form, start_year_after_2024?: false))
+  end
 
   it "has correct page" do
     expect(question.page).to eq(page)
@@ -38,5 +44,15 @@ RSpec.describe Form::Lettings::Questions::Wheelchair, type: :model do
 
   it "is not marked as derived" do
     expect(question.derived?).to be false
+  end
+
+  context "with 2024 form" do
+    before do
+      allow(subsection).to receive(:form).and_return(instance_double(Form, start_year_after_2024?: true))
+    end
+
+    it "has the correct hint_text" do
+      expect(question.hint_text).to eq "This is whether someone who uses a wheelchair is able to make full use of all of the property’s rooms and facilities, including use of both inside and outside space, and entering and exiting the property."
+    end
   end
 end

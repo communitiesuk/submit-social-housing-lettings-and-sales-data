@@ -470,11 +470,29 @@ class SalesLog < Log
      form.start_date.year >= 2023 && uprn.present? ? "uprn" : nil].compact
   end
 
+  def soctenant_is_inferred?
+    form.start_year_after_2024?
+  end
+
   def duplicates
     SalesLog.where.not(duplicate_set_id: nil).where(duplicate_set_id:).where.not(id:)
   end
 
   def nationality2_uk_or_prefers_not_to_say?
     nationality_all_buyer2_group&.zero? || nationality_all_buyer2_group == 826
+  end
+
+  def is_staircase?
+    staircase == 1
+  end
+
+  def discount_value
+    return unless discount && value
+
+    value * discount / 100
+  end
+
+  def is_not_staircasing?
+    staircase == 2 || staircase == 3
   end
 end

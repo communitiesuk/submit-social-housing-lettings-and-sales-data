@@ -7,7 +7,6 @@ class Form::Lettings::Questions::ReasonRenewal < ::Form::Question
     @type = "radio"
     @check_answers_card_number = 0
     @hint_text = "You told us this letting is a renewal. We have removed some options because of this."
-    @answer_options = ANSWER_OPTIONS
     @question_number = 77
     @conditional_for = {
       "reasonother" => [
@@ -16,20 +15,27 @@ class Form::Lettings::Questions::ReasonRenewal < ::Form::Question
     }
   end
 
-  ANSWER_OPTIONS = {
-    "40" => { "value" => "End of assured shorthold tenancy (no fault)" },
-    "42" => { "value" => "End of fixed term tenancy (no fault)" },
-    "20" => {
-      "value" => "Other",
-    },
-    "47" => {
-      "value" => "Tenant prefers not to say",
-    },
-    "divider" => {
-      "value" => true,
-    },
-    "28" => {
-      "value" => "Don’t know",
-    },
-  }.freeze
+  def answer_options
+    if form.start_year_after_2024?
+      {
+        "50" => { "value" => "End of social housing tenancy - no fault" },
+        "51" => { "value" => "End of social housing tenancy - evicted due to anti-social behaviour (ASB)" },
+        "52" => { "value" => "End of social housing tenancy - evicted due to rent arrears" },
+        "53" => { "value" => "End of social housing tenancy - evicted for any other reason" },
+        "20" => { "value" => "Other"        },
+        "47" => { "value" => "Tenant prefers not to say" },
+        "divider" => { "value" => true },
+        "28" => { "value" => "Don’t know" },
+      }.freeze
+    else
+      {
+        "40" => { "value" => "End of assured shorthold tenancy (no fault)" },
+        "42" => { "value" => "End of fixed term tenancy (no fault)" },
+        "20" => { "value" => "Other" },
+        "47" => { "value" => "Tenant prefers not to say" },
+        "divider" => { "value" => true },
+        "28" => { "value" => "Don’t know" },
+      }.freeze
+    end
+  end
 end
