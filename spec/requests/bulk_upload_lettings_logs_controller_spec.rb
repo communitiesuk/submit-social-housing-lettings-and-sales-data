@@ -45,7 +45,6 @@ RSpec.describe BulkUploadLettingsLogsController, type: :request do
 
   describe "GET /lettings-logs/bulk-upload-logs/guidance" do
     context "when not in crossover period" do
-      let(:expected_year) { FormHandler.instance.forms["current_lettings"].start_date.year }
 
       it "shows guidance page with correct title" do
         Timecop.freeze(2022, 1, 1) do
