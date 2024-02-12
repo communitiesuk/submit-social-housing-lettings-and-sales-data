@@ -164,7 +164,7 @@ module Validations::SoftValidations
   ].freeze
 
   def reasonother_might_be_existing_category?
-    Regexp.union(PHRASES_LIKELY_TO_INDICATE_EXISTING_REASON_CATEGORY.map { |phrase| Regexp.new("\\b#{phrase}\\b", Regexp::IGNORECASE) }).match?(reasonother)
+    Regexp.union(PHRASES_LIKELY_TO_INDICATE_EXISTING_REASON_CATEGORY.map { |phrase| Regexp.new("\\b[^[:alpha]]*#{phrase}[^[:alpha:]]*\\b", Regexp::IGNORECASE) }).match?(reasonother)
   end
 
 private

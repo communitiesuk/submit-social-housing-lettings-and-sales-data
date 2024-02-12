@@ -1048,5 +1048,11 @@ RSpec.describe Validations::SoftValidations do
 
       expect(record).not_to be_reasonother_might_be_existing_category
     end
+
+    it "ignores neighbouring non-alphabet for matching" do
+      record.reasonother = "1Domestic abuse."
+
+      expect(record).to be_reasonother_might_be_existing_category
+    end
   end
 end
