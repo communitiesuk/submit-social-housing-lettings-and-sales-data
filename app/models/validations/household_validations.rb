@@ -33,7 +33,7 @@ module Validations::HouseholdValidations
 
     return unless record.form.start_year_after_2024?
 
-    if record.reason == 20 && Regexp.union(PHRASES_INDICATING_HOMELESSNESS.map { |phrase| Regexp.new("\\A\\s*#{phrase}\\s*\\Z", Regexp::IGNORECASE) }).match?(record.reasonother)
+    if record.reason == 20 && Regexp.union(PHRASES_INDICATING_HOMELESSNESS.map { |phrase| Regexp.new("\\A[^[:alpha:]]*#{phrase}[^[:alpha:]]*\\Z", Regexp::IGNORECASE) }).match?(record.reasonother)
       record.errors.add :reason, I18n.t("validations.household.reason.other_not_settled")
     end
   end
