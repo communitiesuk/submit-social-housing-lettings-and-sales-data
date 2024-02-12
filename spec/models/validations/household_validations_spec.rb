@@ -8,11 +8,11 @@ RSpec.describe Validations::HouseholdValidations do
   let(:record) { FactoryBot.create(:lettings_log, :setup_completed, startdate: log_date) }
 
   before do
-   Timecop.freeze(log_date + 1)
+    Timecop.freeze(log_date + 1)
   end
 
   after do
-   Timecop.return
+    Timecop.return
   end
 
   describe "reasonable preference validations" do
@@ -282,8 +282,6 @@ RSpec.describe Validations::HouseholdValidations do
 
     it "validates that the number of household members cannot be more than 8" do
       record.hhmemb = 9
-      s = record.non_location_setup_questions_completed?
-      d = record.declaration
       household_validator.validate_numeric_min_max(record)
       expect(record.errors["hhmemb"])
         .to include(match I18n.t("validations.numeric.within_range", field: "Number of household members", min: 1, max: 8))
