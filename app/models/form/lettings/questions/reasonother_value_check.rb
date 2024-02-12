@@ -5,6 +5,7 @@ class Form::Lettings::Questions::ReasonotherValueCheck < ::Form::Question
     @check_answer_label = "Reason other confirmation"
     @header = "Are you sure this doesn’t fit an existing category?"
     @type = "interruption_screen"
+    @check_answers_card_number = 0
     @answer_options = ANSWER_OPTIONS
     @hidden_in_check_answers = { "depends_on" => [{ "reasonother_value_check" => 0 }, { "reasonother_value_check" => 1 }] }
   end
