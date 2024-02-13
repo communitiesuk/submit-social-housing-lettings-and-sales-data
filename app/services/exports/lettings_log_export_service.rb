@@ -12,9 +12,9 @@ module Exports
       start_time = Time.zone.now
       daily_run_number = get_daily_run_number
       archives_for_manifest = {}
-      base_number = LogsExport.where(empty_export: false).maximum(:base_number) || 1
       recent_export = LogsExport.order("started_at").last
       collection_years_to_export(collection_year).each do |collection|
+        base_number = LogsExport.where(empty_export: false, collection:).maximum(:base_number) || 1
         export = build_export_run(collection, start_time, base_number, full_update)
         archives = write_export_archive(export, collection, start_time, recent_export, full_update)
 
