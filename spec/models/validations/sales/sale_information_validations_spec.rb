@@ -805,6 +805,143 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
     end
   end
 
+  describe "#validate_staircasing_mortgage" do
+    let(:record) { FactoryBot.build(:sales_log, mortgageused: 1, mortgage: 10_000, deposit: 5_000, value: 30_000, stairbought: 28, ownershipsch: 1, type: 30, saledate: now) }
+
+    around do |example|
+      Timecop.freeze(now) do
+        Singleton.__init__(FormHandler)
+        example.run
+      end
+      Timecop.return
+      Singleton.__init__(FormHandler)
+    end
+
+    context "with a log in the 24/25 collection year" do
+      let(:now) { Time.zone.local(2024, 4, 4) }
+
+      context "when MORTGAGE + DEPOSIT does not equal STAIRBOUGHT/100 * VALUE" do
+        context "and it is a staircase transaction" do
+          before do
+            record.staircase = 1
+          end
+
+          it "adds an error" do
+            sale_information_validator.validate_staircasing_mortgage(record)
+            expect(record.errors["mortgage"]).to include("The mortgage and deposit added together is £15,000.00 and the percentage bought times the purchase price is £8,400.00. These figures should be the same.")
+            expect(record.errors["value"]).to include("The mortgage and deposit added together is £15,000.00 and the percentage bought times the purchase price is £8,400.00. These figures should be the same.")
+            expect(record.errors["deposit"]).to include("The mortgage and deposit added together is £15,000.00 and the percentage bought times the purchase price is £8,400.00. These figures should be the same.")
+            expect(record.errors["stairbought"]).to include("The mortgage and deposit added together is £15,000.00 and the percentage bought times the purchase price is £8,400.00. These figures should be the same.")
+          end
+        end
+
+        context "and it is not a staircase transaction" do
+          before do
+            record.staircase = 2
+          end
+
+          it "does not add an error" do
+            sale_information_validator.validate_staircasing_mortgage(record)
+            expect(record.errors["mortgage"]).to be_empty
+            expect(record.errors["value"]).to be_empty
+            expect(record.errors["deposit"]).to be_empty
+            expect(record.errors["stairbought"]).to be_empty
+          end
+        end
+      end
+
+      context "when MORTGAGE + DEPOSIT equals STAIRBOUGHT/100 * VALUE" do
+        let(:record) { FactoryBot.build(:sales_log, mortgage: 10_000, staircase: 1, deposit: 5_000, value: 30_000, stairbought: 50, ownershipsch: 1, type: 30, saledate: now) }
+
+        it "does not add an error" do
+          sale_information_validator.validate_staircasing_mortgage(record)
+          expect(record.errors["mortgage"]).to be_empty
+          expect(record.errors["value"]).to be_empty
+          expect(record.errors["deposit"]).to be_empty
+          expect(record.errors["stairbought"]).to be_empty
+        end
+      end
+    end
+
+    context "when it is a 2023 log" do
+      let(:now) { Time.zone.local(2023, 4, 1) }
+      let(:record) { FactoryBot.build(:sales_log, mortgage: 10_000, staircase: 1, deposit: 5_000, value: 30_000, stairbought: 28, ownershipsch: 1, type: 30, saledate: now) }
+
+      it "does not add an error" do
+        sale_information_validator.validate_staircasing_mortgage(record)
+        expect(record.errors["mortgage"]).to be_empty
+        expect(record.errors["value"]).to be_empty
+        expect(record.errors["deposit"]).to be_empty
+        expect(record.errors["stairbought"]).to be_empty
+      end
+    end
+
+    context "when mortgage is not used" do
+      context "with a log in the 24/25 collection year" do
+        let(:now) { Time.zone.local(2024, 4, 4) }
+
+        before do
+          record.mortgageused = 2
+        end
+
+        context "when DEPOSIT does not equal STAIRBOUGHT/100 * VALUE" do
+          context "and it is a staircase transaction" do
+            before do
+              record.staircase = 1
+            end
+
+            it "adds an error" do
+              sale_information_validator.validate_staircasing_mortgage(record)
+              expect(record.errors["mortgageused"]).to include("The deposit is £5,000.00 and the percentage bought times the purchase price is £8,400.00. As no mortgage was used, these figures should be the same.")
+              expect(record.errors["value"]).to include("The deposit is £5,000.00 and the percentage bought times the purchase price is £8,400.00. As no mortgage was used, these figures should be the same.")
+              expect(record.errors["deposit"]).to include("The deposit is £5,000.00 and the percentage bought times the purchase price is £8,400.00. As no mortgage was used, these figures should be the same.")
+              expect(record.errors["stairbought"]).to include("The deposit is £5,000.00 and the percentage bought times the purchase price is £8,400.00. As no mortgage was used, these figures should be the same.")
+            end
+          end
+
+          context "and it is not a staircase transaction" do
+            before do
+              record.staircase = 2
+            end
+
+            it "does not add an error" do
+              sale_information_validator.validate_staircasing_mortgage(record)
+              expect(record.errors["mortgageused"]).to be_empty
+              expect(record.errors["value"]).to be_empty
+              expect(record.errors["deposit"]).to be_empty
+              expect(record.errors["stairbought"]).to be_empty
+            end
+          end
+        end
+
+        context "when DEPOSIT equals STAIRBOUGHT/100 * VALUE" do
+          let(:record) { FactoryBot.build(:sales_log, mortgageused: 2, staircase: 1, deposit: 15_000, value: 30_000, stairbought: 50, ownershipsch: 1, type: 30, saledate: now) }
+
+          it "does not add an error" do
+            sale_information_validator.validate_staircasing_mortgage(record)
+            expect(record.errors["mortgageused"]).to be_empty
+            expect(record.errors["value"]).to be_empty
+            expect(record.errors["deposit"]).to be_empty
+            expect(record.errors["stairbought"]).to be_empty
+          end
+        end
+      end
+
+      context "when it is a 2023 log" do
+        let(:now) { Time.zone.local(2023, 4, 1) }
+        let(:record) { FactoryBot.build(:sales_log, mortgageused: 2, staircase: 1, deposit: 5_000, value: 30_000, stairbought: 28, ownershipsch: 1, type: 30, saledate: now) }
+
+        it "does not add an error" do
+          sale_information_validator.validate_staircasing_mortgage(record)
+          expect(record.errors["mortgageused"]).to be_empty
+          expect(record.errors["value"]).to be_empty
+          expect(record.errors["deposit"]).to be_empty
+          expect(record.errors["stairbought"]).to be_empty
+        end
+      end
+    end
+  end
+
   describe "#validate_mortgage_used_and_stairbought" do
     let(:now) { Time.zone.local(2024, 4, 4) }
 
