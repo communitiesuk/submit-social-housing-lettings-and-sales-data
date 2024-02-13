@@ -11,15 +11,6 @@ module Validations::Sales::HouseholdValidations
     shared_validate_partner_count(record, 6)
   end
 
-  def validate_previous_postcode(record)
-    return unless record.postcode_full && record.ppostcode_full && record.discounted_ownership_sale?
-
-    unless record.postcode_full == record.ppostcode_full
-      record.errors.add :postcode_full, :postcodes_not_matching, message: I18n.t("validations.household.postcode.discounted_ownership")
-      record.errors.add :ppostcode_full, :postcodes_not_matching, message: I18n.t("validations.household.postcode.discounted_ownership")
-    end
-  end
-
   def validate_buyers_living_in_property(record)
     return unless record.form.start_date.year >= 2023
 

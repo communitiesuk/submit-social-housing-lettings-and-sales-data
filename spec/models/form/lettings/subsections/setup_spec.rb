@@ -6,38 +6,21 @@ RSpec.describe Form::Lettings::Subsections::Setup, type: :model do
   let(:subsection_id) { nil }
   let(:subsection_definition) { nil }
   let(:section) { instance_double(Form::Lettings::Sections::Setup) }
+  let(:form) { instance_double(Form) }
+
+  before do
+    allow(section).to receive(:form).and_return(form)
+  end
 
   it "has correct section" do
     expect(setup.section).to eq(section)
   end
 
-  it "has correct pages" do
-    expect(setup.pages.map(&:id)).to eq(
-      %w[
-        stock_owner
-        managing_organisation
-        created_by
-        needs_type
-        scheme
-        location
-        renewal
-        tenancy_start_date
-        rent_type
-        tenant_code
-        property_reference
-      ],
-    )
-  end
+  context "with start year before 2024" do
+    before do
+      allow(form).to receive(:start_year_after_2024?).and_return(false)
+    end
 
-  it "has the correct id" do
-    expect(setup.id).to eq("setup")
-  end
-
-  it "has the correct label" do
-    expect(setup.label).to eq("Set up this lettings log")
-  end
-
-  context "when not production" do
     it "has correct pages" do
       expect(setup.pages.map(&:id)).to eq(
         %w[
@@ -55,5 +38,38 @@ RSpec.describe Form::Lettings::Subsections::Setup, type: :model do
         ],
       )
     end
+  end
+
+  context "with start year >= 2024" do
+    before do
+      allow(form).to receive(:start_year_after_2024?).and_return(true)
+    end
+
+    it "has correct pages" do
+      expect(setup.pages.map(&:id)).to eq(
+        %w[
+          stock_owner
+          managing_organisation
+          created_by
+          needs_type
+          scheme
+          location
+          renewal
+          tenancy_start_date
+          rent_type
+          tenant_code
+          property_reference
+          declaration
+        ],
+      )
+    end
+  end
+
+  it "has the correct id" do
+    expect(setup.id).to eq("setup")
+  end
+
+  it "has the correct label" do
+    expect(setup.label).to eq("Set up this lettings log")
   end
 end

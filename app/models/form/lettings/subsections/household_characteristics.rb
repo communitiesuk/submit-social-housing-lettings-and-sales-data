@@ -8,7 +8,7 @@ class Form::Lettings::Subsections::HouseholdCharacteristics < ::Form::Subsection
 
   def pages
     @pages ||= [
-      Form::Lettings::Pages::Declaration.new(nil, nil, self),
+      (Form::Lettings::Pages::Declaration.new(nil, nil, self) unless form.start_year_after_2024?),
       Form::Lettings::Pages::HouseholdMembers.new(nil, nil, self),
       Form::Lettings::Pages::NoFemalesPregnantHouseholdLeadHhmembValueCheck.new(nil, nil, self),
       Form::Lettings::Pages::FemalesInSoftAgeRangeInPregnantHouseholdLeadHhmembValueCheck.new(nil, nil, self),

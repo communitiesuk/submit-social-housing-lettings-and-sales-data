@@ -468,7 +468,6 @@ class BulkUpload::Sales::Year2024::RowParser
   validate :validate_address_fields, on: :after_log
   validate :validate_if_log_already_exists, on: :after_log, if: -> { FeatureToggle.bulk_upload_duplicate_log_check_enabled? }
 
-  validate :validate_data_protection_answered, on: :after_log
   validate :validate_buyers_organisations, on: :after_log
 
   def self.question_for_field(field)
@@ -564,12 +563,6 @@ class BulkUpload::Sales::Year2024::RowParser
   end
 
 private
-
-  def validate_data_protection_answered
-    unless field_18 == 1
-      errors.add(:field_18, I18n.t("validations.not_answered", question: QUESTIONS[:field_18].downcase), category: :setup)
-    end
-  end
 
   def validate_buyers_organisations
     organisations_fields = %i[field_66 field_67 field_68 field_69]

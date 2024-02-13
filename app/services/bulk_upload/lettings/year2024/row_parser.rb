@@ -377,8 +377,6 @@ class BulkUpload::Lettings::Year2024::RowParser
   validate :validate_created_by_exists, on: :after_log
   validate :validate_created_by_related, on: :after_log
 
-  validate :validate_declaration_acceptance, on: :after_log
-
   validate :validate_nulls, on: :after_log
 
   validate :validate_uprn_exists_if_any_key_address_fields_are_blank, on: :after_log, unless: -> { supported_housing? }
@@ -493,12 +491,6 @@ class BulkUpload::Lettings::Year2024::RowParser
   end
 
 private
-
-  def validate_declaration_acceptance
-    unless field_15 == 1
-      errors.add(:field_15, I18n.t("validations.declaration.missing"), category: :setup)
-    end
-  end
 
   def validate_valid_radio_option
     log.attributes.each do |question_id, _v|

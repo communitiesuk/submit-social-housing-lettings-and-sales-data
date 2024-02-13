@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Form::Sales::Questions::PrivacyNotice, type: :model do
+RSpec.describe Form::Lettings::Questions::Declaration, type: :model do
   subject(:question) { described_class.new(question_id, question_definition, page) }
 
   let(:question_id) { nil }
@@ -20,7 +20,7 @@ RSpec.describe Form::Sales::Questions::PrivacyNotice, type: :model do
   end
 
   it "has the correct id" do
-    expect(question.id).to eq("privacynotice")
+    expect(question.id).to eq("declaration")
   end
 
   it "has the correct header" do
@@ -28,7 +28,7 @@ RSpec.describe Form::Sales::Questions::PrivacyNotice, type: :model do
   end
 
   it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Buyer has seen the privacy notice?")
+    expect(question.check_answer_label).to eq("Tenant has seen the privacy notice")
   end
 
   it "has the correct type" do
@@ -50,12 +50,12 @@ RSpec.describe Form::Sales::Questions::PrivacyNotice, type: :model do
 
     it "has the correct answer_options" do
       expect(question.answer_options).to eq({
-        "privacynotice" => { "value" => "The buyer has seen the DLUHC privacy notice" },
+        "declaration" => { "value" => "The tenant has seen the DLUHC privacy notice" },
       })
     end
 
     it "uses the expected top guidance partial" do
-      expect(question.top_guidance_partial).to eq("privacy_notice_buyer")
+      expect(question.top_guidance_partial).to eq("privacy_notice_tenant")
     end
   end
 
@@ -66,16 +66,16 @@ RSpec.describe Form::Sales::Questions::PrivacyNotice, type: :model do
 
     it "has the correct answer_options" do
       expect(question.answer_options).to eq({
-        "privacynotice" => { "value" => "The buyer has seen or been given access to the DLUHC privacy notice" },
+        "declaration" => { "value" => "The tenant has seen or been given access to the DLUHC privacy notice" },
       })
     end
 
     it "uses the expected top guidance partial" do
-      expect(question.top_guidance_partial).to eq("privacy_notice_buyer_2024")
+      expect(question.top_guidance_partial).to eq("privacy_notice_tenant_2024")
     end
   end
 
   it "returns correct unanswered_error_message" do
-    expect(question.unanswered_error_message).to eq("You must show the DLUHC privacy notice to the buyer before you can submit this log.")
+    expect(question.unanswered_error_message).to eq("You must show the DLUHC privacy notice to the tenant before you can submit this log.")
   end
 end

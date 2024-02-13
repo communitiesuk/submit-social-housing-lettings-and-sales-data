@@ -17,6 +17,15 @@ module DerivedVariables::SalesLogVariables
       self.hoyear = hodate.year
     end
     self.deposit = value if outright_sale? && mortgage_not_used?
+
+    if saledate && form.start_year_after_2024? && discounted_ownership_sale?
+      self.ppostcode_full = postcode_full
+      self.ppcodenk = 0 if postcode_full.present?
+      self.prevloc = la
+      self.is_previous_la_inferred = is_la_inferred
+      self.previous_la_known = la_known
+    end
+
     self.pcode1, self.pcode2 = postcode_full.split if postcode_full.present?
     self.ppostc1, self.ppostc2 = ppostcode_full.split if ppostcode_full.present?
     self.totchild = total_child
