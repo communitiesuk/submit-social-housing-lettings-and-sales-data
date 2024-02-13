@@ -327,6 +327,19 @@ RSpec.describe "User Features" do
       end
     end
 
+    context "when viewing schemes for specific organisation" do
+      before do
+        create(:scheme, owning_organisation: organisation)
+        visit("/organisations/#{org_id}/schemes")
+      end
+
+      it "allows downloading schemes csv for the specific org" do
+        click_link("Download schemes (CSV)")
+        click_button("Send email")
+        expect(page).to have_current_path("/organisations/#{org_id}/schemes/csv-confirmation")
+      end
+    end
+
     context "and the organisation does not hold housing stock" do
       before do
         organisation.update!(holds_own_stock: false)
