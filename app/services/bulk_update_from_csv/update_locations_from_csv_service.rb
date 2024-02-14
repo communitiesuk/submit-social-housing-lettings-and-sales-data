@@ -132,6 +132,7 @@ private
     logs.each do |log|
       log.validate
       if log.errors["brent"].any?
+        Rails.logger.info("Log #{log.id} went from completed to in progress.") if log.status == "completed"
         log.brent = nil
         log.scharge = nil
         log.pscharge = nil
