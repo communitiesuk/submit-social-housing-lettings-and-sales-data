@@ -89,9 +89,11 @@ module Validations::Sales::SoftValidations
     return unless cashdis || !is_type_discount?
     return unless deposit && value && equity
 
-    cash_discount = cashdis || 0
-    mortgage_value = mortgage || 0
-    mortgage_value + deposit + cash_discount != value * equity / 100
+    !within_tolerance?(mortgage_deposit_and_discount_total, value * equity / 100, 1)
+  end
+
+  def within_tolerance?(expected, actual, tolerance)
+    (expected - actual).abs <= tolerance
   end
 
   def mortgage_plus_deposit_less_than_discounted_value?
