@@ -55,7 +55,6 @@
     <cbl>2</cbl>
     <chr>1</chr>
     <cap>2</cap>
-    <accessible_register>1</accessible_register>
     <reasonother/>
     <housingneeds_a>1</housingneeds_a>
     <housingneeds_b>0</housingneeds_b>
@@ -146,6 +145,7 @@
     <creation_method>1</creation_method>
     <duplicate_set_id/>
     <nationality_all/>
+    <accessible_register>2</accessible_register>
     <formid>{id}</formid>
     <owningorgid>{owning_org_id}</owningorgid>
     <owningorgname>DLUHC</owningorgname>
