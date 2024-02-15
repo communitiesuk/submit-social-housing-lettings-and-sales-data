@@ -6,6 +6,14 @@ RSpec.describe Form::Sales::Questions::PrivacyNotice, type: :model do
   let(:question_id) { nil }
   let(:question_definition) { nil }
   let(:page) { instance_double(Form::Page) }
+  let(:subsection) { instance_double(Form::Subsection) }
+  let(:form) { instance_double(Form) }
+
+  before do
+    allow(form).to receive(:start_year_after_2024?)
+    allow(page).to receive(:subsection).and_return(subsection)
+    allow(subsection).to receive(:form).and_return(form)
+  end
 
   it "has correct page" do
     expect(question.page).to eq(page)
@@ -35,10 +43,36 @@ RSpec.describe Form::Sales::Questions::PrivacyNotice, type: :model do
     expect(question.hint_text).to be_nil
   end
 
-  it "has the correct answer_options" do
-    expect(question.answer_options).to eq({
-      "privacynotice" => { "value" => "The buyer has seen the DLUHC privacy notice" },
-    })
+  context "when the form year is before 2024" do
+    before do
+      allow(form).to receive(:start_year_after_2024?).and_return(false)
+    end
+
+    it "has the correct answer_options" do
+      expect(question.answer_options).to eq({
+        "privacynotice" => { "value" => "The buyer has seen the DLUHC privacy notice" },
+      })
+    end
+
+    it "uses the expected top guidance partial" do
+      expect(question.top_guidance_partial).to eq("privacy_notice_buyer")
+    end
+  end
+
+  context "when the form year is >= 2024" do
+    before do
+      allow(form).to receive(:start_year_after_2024?).and_return(true)
+    end
+
+    it "has the correct answer_options" do
+      expect(question.answer_options).to eq({
+        "privacynotice" => { "value" => "The buyer has seen or been given access to the DLUHC privacy notice" },
+      })
+    end
+
+    it "uses the expected top guidance partial" do
+      expect(question.top_guidance_partial).to eq("privacy_notice_buyer_2024")
+    end
   end
 
   it "returns correct unanswered_error_message" do

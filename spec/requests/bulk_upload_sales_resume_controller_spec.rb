@@ -211,5 +211,22 @@ RSpec.describe BulkUploadSalesResumeController, type: :request do
         expect(response).to redirect_to("/sales-logs/bulk-upload-soft-validations-check/#{bulk_upload.id}/chosen")
       end
     end
+
+    context "and has a row with all non-cleared errors" do
+      let(:bulk_upload_errors) { [create(:bulk_upload_error, row: 1), create(:bulk_upload_error, row: 2, category: :not_answered), create(:bulk_upload_error, row: 3, category: :soft_validation), create(:bulk_upload_error, row: 4)] }
+      let(:bulk_upload) { create(:bulk_upload, :sales, user:, bulk_upload_errors:) }
+
+      it "renders the page correctly" do
+        get "/sales-logs/bulk-upload-resume/#{bulk_upload.id}/deletion-report"
+
+        expect(response).to be_successful
+
+        expect(response.body).to include("Bulk upload for sales")
+        expect(response.body).to include("2023/24")
+        expect(response.body).to include("These 2 answers will be deleted if you upload the log")
+        expect(response.body).to include(bulk_upload.filename)
+        expect(response.body).to include("Clear this data and upload the logs")
+      end
+    end
   end
 end

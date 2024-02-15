@@ -975,6 +975,36 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
       end
     end
 
+    describe "#field_103" do # shared ownership mortgageused
+      context "when invalid value" do
+        let(:attributes) { setup_section_params.merge(field_103: "4") }
+
+        it "returns correct errors" do
+          expect(parser.errors[:field_103]).to include("Enter a valid value for Was a mortgage used for the purchase of this property? - Shared ownership")
+        end
+      end
+
+      context "when value is 3 and stairowned is not 100" do
+        let(:attributes) { setup_section_params.merge(field_103: "3", field_86: "1", field_87: "50", field_88: "99", field_109: nil) }
+
+        it "returns correct errors" do
+          expect(parser.errors[:field_103]).to include("Enter a valid value for Was a mortgage used for the purchase of this property? - Shared ownership")
+        end
+      end
+
+      context "when value is 3 and stairowned is 100" do
+        let(:attributes) { setup_section_params.merge(field_103: "3", field_86: "1", field_87: "50", field_88: "100", field_109: nil) }
+
+        it "does not add errors and sets mortgage used to 3" do
+          expect(parser.log.mortgageused).to be(3)
+          expect(parser.log.stairowned).to be(100)
+          expect(parser.log.deposit).to be(nil)
+          expect(parser.errors[:field_103]).to be_empty
+          expect(parser.errors[:field_109]).to be_empty
+        end
+      end
+    end
+
     describe "soft validations" do
       context "when soft validation is triggered" do
         let(:attributes) { valid_attributes.merge({ field_31: 22, field_35: 5 }) }

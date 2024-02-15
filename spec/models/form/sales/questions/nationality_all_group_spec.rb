@@ -47,7 +47,7 @@ RSpec.describe Form::Sales::Questions::NationalityAllGroup, type: :model do
     end
 
     it "has the correct hint" do
-      expect(question.hint_text).to eq "Buyer 1 is the person in the household who does the most paid work. If it’s a joint purchase and the buyers do the same amount of paid work, buyer 1 is whoever is the oldest."
+      expect(question.hint_text).to eq "Buyer 1 is the person in the household who does the most paid work. If it’s a joint purchase and the buyers do the same amount of paid work, buyer 1 is whoever is the oldest. If buyer 1 is a dual national of the United Kingdom and another country, enter United Kingdom. If they are a dual national of two other countries, the buyer should decide which country to enter."
     end
 
     it "has the correct header" do
@@ -75,7 +75,7 @@ RSpec.describe Form::Sales::Questions::NationalityAllGroup, type: :model do
     end
 
     it "has the correct hint" do
-      expect(question.hint_text).to eq("")
+      expect(question.hint_text).to eq "If buyer 2 is a dual national of the United Kingdom and another country, enter United Kingdom. If they are a dual national of two other countries, the buyer should decide which country to enter."
     end
 
     it "has the correct header" do

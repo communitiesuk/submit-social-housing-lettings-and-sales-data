@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe Csv::LettingsLogCsvService do
   before do
-    Timecop.freeze(fixed_time)
+    Timecop.freeze(now)
     Singleton.__init__(FormHandler)
     FormHandler.instance.use_real_forms!
     log.irproduct = 1
@@ -17,13 +17,14 @@ RSpec.describe Csv::LettingsLogCsvService do
     let(:form_handler_mock) { instance_double(FormHandler) }
     let(:organisation) { create(:organisation) }
     let(:fixed_time) { Time.zone.local(2023, 11, 26) }
+    let(:now) { Time.zone.now }
     let(:log) do
       create(
         :lettings_log,
         :completed,
         startdate: fixed_time,
         created_at: fixed_time,
-        updated_at: fixed_time,
+        updated_at: now,
         mrcdate: fixed_time - 1.day,
         voiddate: fixed_time - 2.days,
         propcode: "ABCDEFG",
@@ -100,7 +101,7 @@ RSpec.describe Csv::LettingsLogCsvService do
         let(:questions) do
           [
             build(:question, id: "condition_effects", type: "checkbox", answer_options: { "illness_type_1" => {}, "illness_type_2" => {}, "illness_type_3" => {} }),
-            build(:question, id: "letting_allocation", type: "checkbox", answer_options: { "cbl" => {}, "cap" => {}, "chr" => {} }),
+            build(:question, id: "letting_allocation", type: "checkbox", answer_options: { "cbl" => {}, "cap" => {}, "chr" => {}, "accessible_register" => {} }),
           ]
         end
 
@@ -162,14 +163,32 @@ RSpec.describe Csv::LettingsLogCsvService do
         expect(la_label_value).to eq "Barnet"
       end
 
-      it "exports the CSV with all values correct" do
-        expected_content = CSV.read("spec/fixtures/files/lettings_log_csv_export_labels.csv")
-        values_to_delete = %w[id vacdays]
-        values_to_delete.each do |attribute|
-          index = csv.first.index(attribute)
-          csv.second[index] = nil
+      context "when the current form is 2024" do
+        let(:now) { Time.zone.local(2024, 4, 1) }
+
+        it "exports the CSV with 2024 ordering and all values correct" do
+          expected_content = CSV.read("spec/fixtures/files/lettings_log_csv_export_labels_24.csv")
+          values_to_delete = %w[id vacdays]
+          values_to_delete.each do |attribute|
+            index = csv.first.index(attribute)
+            csv.second[index] = nil
+          end
+          expect(csv).to eq expected_content
         end
-        expect(csv).to eq expected_content
+      end
+
+      context "when the current form is 2023" do
+        let(:now) { Time.zone.local(2023, 11, 26) }
+
+        it "exports the CSV with 2023 ordering and all values correct" do
+          expected_content = CSV.read("spec/fixtures/files/lettings_log_csv_export_labels_23.csv")
+          values_to_delete = %w[id vacdays]
+          values_to_delete.each do |attribute|
+            index = csv.first.index(attribute)
+            csv.second[index] = nil
+          end
+          expect(csv).to eq expected_content
+        end
       end
 
       context "when the log has a duplicate log reference" do
@@ -212,14 +231,32 @@ RSpec.describe Csv::LettingsLogCsvService do
         expect(la_label_value).to eq "Barnet"
       end
 
-      it "exports the CSV with all values correct" do
-        expected_content = CSV.read("spec/fixtures/files/lettings_log_csv_export_codes.csv")
-        values_to_delete = %w[id vacdays]
-        values_to_delete.each do |attribute|
-          index = csv.first.index(attribute)
-          csv.second[index] = nil
+      context "when the current form is 2024" do
+        let(:now) { Time.zone.local(2024, 4, 1) }
+
+        it "exports the CSV with all values correct" do
+          expected_content = CSV.read("spec/fixtures/files/lettings_log_csv_export_codes_24.csv")
+          values_to_delete = %w[id vacdays]
+          values_to_delete.each do |attribute|
+            index = csv.first.index(attribute)
+            csv.second[index] = nil
+          end
+          expect(csv).to eq expected_content
         end
-        expect(csv).to eq expected_content
+      end
+
+      context "when the current form is 2023" do
+        let(:now) { Time.zone.local(2023, 11, 26) }
+
+        it "exports the CSV with all values correct" do
+          expected_content = CSV.read("spec/fixtures/files/lettings_log_csv_export_codes_23.csv")
+          values_to_delete = %w[id vacdays]
+          values_to_delete.each do |attribute|
+            index = csv.first.index(attribute)
+            csv.second[index] = nil
+          end
+          expect(csv).to eq expected_content
+        end
       end
 
       context "when the log has a duplicate log reference" do
@@ -242,31 +279,67 @@ RSpec.describe Csv::LettingsLogCsvService do
         expect(headers).not_to include(*%w[wrent wscharge wpschrge wsupchrg wtcharge])
       end
 
-      context "and exporting with labels" do
-        let(:export_type) { "labels" }
+      context "and the current form is 2024" do
+        let(:now) { Time.zone.local(2024, 4, 1) }
 
-        it "exports the CSV with all values correct" do
-          expected_content = CSV.read("spec/fixtures/files/lettings_log_csv_export_non_support_labels.csv")
-          values_to_delete = %w[id]
-          values_to_delete.each do |attribute|
-            index = csv.first.index(attribute)
-            csv.second[index] = nil
+        context "and exporting with labels" do
+          let(:export_type) { "labels" }
+
+          it "exports the CSV with all values correct" do
+            expected_content = CSV.read("spec/fixtures/files/lettings_log_csv_export_non_support_labels_24.csv")
+            values_to_delete = %w[id]
+            values_to_delete.each do |attribute|
+              index = csv.first.index(attribute)
+              csv.second[index] = nil
+            end
+            expect(csv).to eq expected_content
           end
-          expect(csv).to eq expected_content
+        end
+
+        context "and exporting values as codes" do
+          let(:export_type) { "codes" }
+
+          it "exports the CSV with all values correct" do
+            expected_content = CSV.read("spec/fixtures/files/lettings_log_csv_export_non_support_codes_24.csv")
+            values_to_delete = %w[id]
+            values_to_delete.each do |attribute|
+              index = csv.first.index(attribute)
+              csv.second[index] = nil
+            end
+            expect(csv).to eq expected_content
+          end
         end
       end
 
-      context "and exporting values as codes" do
-        let(:export_type) { "codes" }
+      context "and the current form is 2023" do
+        let(:now) { Time.zone.local(2023, 11, 26) }
 
-        it "exports the CSV with all values correct" do
-          expected_content = CSV.read("spec/fixtures/files/lettings_log_csv_export_non_support_codes.csv")
-          values_to_delete = %w[id]
-          values_to_delete.each do |attribute|
-            index = csv.first.index(attribute)
-            csv.second[index] = nil
+        context "and exporting with labels" do
+          let(:export_type) { "labels" }
+
+          it "exports the CSV with all values correct" do
+            expected_content = CSV.read("spec/fixtures/files/lettings_log_csv_export_non_support_labels_23.csv")
+            values_to_delete = %w[id]
+            values_to_delete.each do |attribute|
+              index = csv.first.index(attribute)
+              csv.second[index] = nil
+            end
+            expect(csv).to eq expected_content
           end
-          expect(csv).to eq expected_content
+        end
+
+        context "and exporting values as codes" do
+          let(:export_type) { "codes" }
+
+          it "exports the CSV with all values correct" do
+            expected_content = CSV.read("spec/fixtures/files/lettings_log_csv_export_non_support_codes_23.csv")
+            values_to_delete = %w[id]
+            values_to_delete.each do |attribute|
+              index = csv.first.index(attribute)
+              csv.second[index] = nil
+            end
+            expect(csv).to eq expected_content
+          end
         end
       end
     end

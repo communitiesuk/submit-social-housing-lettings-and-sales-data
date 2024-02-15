@@ -5,8 +5,22 @@ RSpec.describe Form::Sales::Pages::LastAccommodationLa, type: :model do
 
   let(:page_id) { nil }
   let(:page_definition) { nil }
-  let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date:)) }
+  let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, depends_on_met: true)) }
   let(:start_date) { Time.utc(2022, 4, 1) }
+  let(:log) { create(:sales_log, :completed, saledate: now) }
+  let(:now) { Time.zone.local(2023, 4, 4) }
+
+  before do
+    Timecop.freeze(now)
+    Singleton.__init__(FormHandler)
+    allow(subsection).to receive(:depends_on).and_return(nil)
+    allow(subsection).to receive(:enabled?).and_return(true)
+  end
+
+  after do
+    Timecop.return
+    Singleton.__init__(FormHandler)
+  end
 
   it "has correct subsection" do
     expect(page.subsection).to eq(subsection)
@@ -32,5 +46,24 @@ RSpec.describe Form::Sales::Pages::LastAccommodationLa, type: :model do
     expect(page.depends_on).to eq([{
       "is_previous_la_inferred" => false,
     }])
+  end
+
+  it "is routed to" do
+    log.ownershipsch = 2
+    expect(page).to be_routed_to(log, nil)
+  end
+
+  context "with 2024 form" do
+    let(:now) { Time.zone.local(2024, 4, 4) }
+
+    it "is routed to for 2024 non discounted sale logs" do
+      log.update!(ownershipsch: 1)
+      expect(page).to be_routed_to(log, nil)
+    end
+
+    it "is not routed to for 2024 discounted sale logs" do
+      log.update!(ownershipsch: 2)
+      expect(page).not_to be_routed_to(log, nil)
+    end
   end
 end
