@@ -188,6 +188,7 @@ RSpec.describe Validations::FinancialValidations do
 
   describe "net income validations" do
     it "validates that the net income is within the expected range for the household’s employment status" do
+      record.startdate = Time.zone.local(2023, 5, 1)
       record.earnings = 200
       record.incfreq = 1
       record.hhmemb = 1
@@ -198,6 +199,7 @@ RSpec.describe Validations::FinancialValidations do
 
     context "when the net income is higher than the hard max for their employment status" do
       it "adds an error" do
+        record.startdate = Time.zone.local(2023, 5, 1)
         record.earnings = 5000
         record.incfreq = 1
         record.hhmemb = 1
@@ -214,6 +216,7 @@ RSpec.describe Validations::FinancialValidations do
 
     context "when the net income is lower than the hard min for their employment status" do
       it "adds an error" do
+        record.startdate = Time.zone.local(2023, 5, 1)
         record.earnings = 50
         record.incfreq = 1
         record.hhmemb = 1
@@ -230,6 +233,7 @@ RSpec.describe Validations::FinancialValidations do
 
     context "when there is more than one household member" do
       it "allows income levels based on all working situations combined" do
+        record.startdate = Time.zone.local(2023, 5, 1)
         record.earnings = 5000
         record.incfreq = 1
         record.hhmemb = 4
@@ -242,6 +246,7 @@ RSpec.describe Validations::FinancialValidations do
       end
 
       it "uses the combined value in error messages" do
+        record.startdate = Time.zone.local(2023, 5, 1)
         record.earnings = 100
         record.incfreq = 1
         record.hhmemb = 3
@@ -254,6 +259,7 @@ RSpec.describe Validations::FinancialValidations do
       end
 
       it "adds errors to relevant fields for each tenant when income is too high" do
+        record.startdate = Time.zone.local(2023, 5, 1)
         record.earnings = 5000
         record.incfreq = 1
         record.hhmemb = 3
@@ -277,6 +283,7 @@ RSpec.describe Validations::FinancialValidations do
       end
 
       it "adds errors to relevant fields for each tenant when income is too low" do
+        record.startdate = Time.zone.local(2023, 5, 1)
         record.earnings = 50
         record.incfreq = 1
         record.hhmemb = 3
@@ -291,6 +298,20 @@ RSpec.describe Validations::FinancialValidations do
         end
         (record.hhmemb + 1..8).each do |n|
           expect(record.errors["ecstat#{n}"]).to be_empty
+        end
+      end
+
+      context "when the net income is lower than the hard min for their employment status for 22/23 collection" do
+        it "does not add an error" do
+          record.startdate = Time.zone.local(2022, 5, 1)
+          record.earnings = 50
+          record.incfreq = 1
+          record.hhmemb = 1
+          record.ecstat1 = 1
+          financial_validator.validate_net_income(record)
+          expect(record.errors["earnings"]).to be_empty
+          expect(record.errors["ecstat1"]).to be_empty
+          expect(record.errors["hhmemb"]).to be_empty
         end
       end
     end
