@@ -32,7 +32,7 @@ RSpec.describe "clear_invalidated_earnings" do
           expect(lettings_log.earnings).to eq(20)
           expect(lettings_log.hhmemb).to eq(1)
           expect(lettings_log.ecstat1).to eq(1)
-          expect(Rails.logger).to receive(:info).with("Clearing earnings for lettings log #{lettings_log.id}, owning_organisation_id: #{lettings_log.owning_organisation_id}, managing_organisation_id: #{lettings_log.managing_organisation_id}, startdate: 2023-04-04, tenancy reference: 123, property reference: 321, created_by: #{user.email}(#{user.id})")
+          expect(Rails.logger).to receive(:info).with("Clearing earnings for lettings log #{lettings_log.id}, owning_organisation_id: #{lettings_log.owning_organisation_id}, managing_organisation_id: #{lettings_log.managing_organisation_id}, startdate: 2023-04-04, tenancy reference: 123, property reference: 321, created_by: #{user.email}(#{user.id}), earnings: 20, incfreq: 1")
 
           task.invoke
           lettings_log.reload
