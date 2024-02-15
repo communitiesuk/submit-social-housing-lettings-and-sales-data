@@ -2380,6 +2380,10 @@ RSpec.describe LettingsLog do
         let(:now) { Time.zone.local(2024, 1, 1) }
         let!(:lettings_log) { create(:lettings_log, :setup_completed, startdate: now, preg_occ: nil, declaration: 1, hhmemb: 3) }
 
+        it "does not infer pregnancy as default" do
+          expect(lettings_log.preg_occ).to be_nil
+        end
+
         it "does not infer pregnancy for all male households" do
           lettings_log.update!(sex1: "M", sex2: "M", sex3: "M")
           expect(lettings_log.preg_occ).to be_nil
@@ -2394,6 +2398,10 @@ RSpec.describe LettingsLog do
       context "when in 2024/25" do
         let(:now) { Time.zone.local(2024, 5, 1) }
         let!(:lettings_log) { create(:lettings_log, :setup_completed, startdate: now, preg_occ: nil, declaration: 1, hhmemb: 3) }
+
+        it "does not infer pregnancy as default" do
+          expect(lettings_log.preg_occ).to be_nil
+        end
 
         it "infers no pregnancy for all male households" do
           lettings_log.update!(sex1: "M", sex2: "M", sex3: "M")
