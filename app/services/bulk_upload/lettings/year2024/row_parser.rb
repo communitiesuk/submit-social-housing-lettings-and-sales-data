@@ -651,10 +651,11 @@ private
   end
 
   def validate_lettings_allocation
-    if cbl.blank? && cap.blank? && chr.blank?
+    if cbl.blank? && cap.blank? && chr.blank? && accessible_register.blank?
       errors.add(:field_112, I18n.t("validations.not_answered", question: "was the letting made under the Choice-Based Lettings (CBL)?"))
       errors.add(:field_113, I18n.t("validations.not_answered", question: "was the letting made under the Common Allocation Policy (CAP)?"))
       errors.add(:field_114, I18n.t("validations.not_answered", question: "was the letting made under the Common Housing Register (CHR)?"))
+      errors.add(:field_115, I18n.t("validations.not_answered", question: "was the letting made under the Accessible Register?"))
     end
   end
 
@@ -945,9 +946,10 @@ private
       rp_dontknow: %i[field_111],
 
       cbl: %i[field_112],
-      chr: %i[field_114],
       cap: %i[field_113],
-      letting_allocation: %i[field_112 field_113 field_114],
+      chr: %i[field_114],
+      accessible_register: %i[field_115],
+      letting_allocation: %i[field_112 field_113 field_114 field_115],
 
       referral: %i[field_116],
 
@@ -1133,6 +1135,7 @@ private
     attributes["cbl"] = cbl
     attributes["chr"] = chr
     attributes["cap"] = cap
+    attributes["accessible_register"] = accessible_register
     attributes["letting_allocation_unknown"] = letting_allocation_unknown
 
     attributes["referral"] = field_116
@@ -1382,15 +1385,6 @@ private
     end
   end
 
-  def chr
-    case field_114
-    when 2
-      0
-    when 1
-      1
-    end
-  end
-
   def cap
     case field_113
     when 2
@@ -1400,8 +1394,26 @@ private
     end
   end
 
+  def chr
+    case field_114
+    when 2
+      0
+    when 1
+      1
+    end
+  end
+
+  def accessible_register
+    case field_115
+    when 2
+      0
+    when 1
+      1
+    end
+  end
+
   def letting_allocation_unknown
-    [cbl, chr, cap].all?(0) ? 1 : 0
+    [cbl, chr, cap, accessible_register].all?(0) ? 1 : 0
   end
 
   def net_income_known
