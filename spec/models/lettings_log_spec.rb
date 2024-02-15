@@ -2367,6 +2367,57 @@ RSpec.describe LettingsLog do
         expect { lettings_log.update!(nationality_all_group: nil, declaration: 1) }.not_to change(lettings_log, :nationality_all)
       end
     end
+
+    context "when inferring pregnancy" do
+      around do |example|
+        Timecop.freeze(now) do
+          Singleton.__init__(FormHandler)
+          example.run
+        end
+      end
+
+      context "when before 2024/25" do
+        let(:now) { Time.zone.local(2024, 1, 1) }
+        let!(:lettings_log) { create(:lettings_log, :setup_completed, startdate: now, preg_occ: nil, declaration: 1, hhmemb: 3) }
+
+        it "does not infer pregnancy for all male households" do
+          lettings_log.update!(sex1: "M", sex2: "M", sex3: "M")
+          expect(lettings_log.preg_occ).to be_nil
+        end
+
+        it "does not infer pregnancy when no woman or non-binary person in the household is 11 to 60" do
+          lettings_log.update!(sex1: "F", sex2: "X", sex3: "M", age1: 61, age2: 10, age3: 55)
+          expect(lettings_log.preg_occ).to be_nil
+        end
+      end
+
+      context "when in 2024/25" do
+        let(:now) { Time.zone.local(2024, 5, 1) }
+        let!(:lettings_log) { create(:lettings_log, :setup_completed, startdate: now, preg_occ: nil, declaration: 1, hhmemb: 3) }
+
+        it "infers no pregnancy for all male households" do
+          lettings_log.update!(sex1: "M", sex2: "M", sex3: "M")
+          expect(lettings_log.preg_occ).to eq(2)
+        end
+
+        it "infers no pregnancy when no woman or non-binary person in the household is 11 to 60" do
+          lettings_log.update!(sex1: "F", sex2: "X", sex3: "M", age1: 61, age2: 10, age3: 55)
+          expect(lettings_log.preg_occ).to eq(2)
+        end
+
+        it "does not override user entered data when household is all male" do
+          lettings_log.update!(preg_occ: 1)
+          lettings_log.update!(sex1: "M", sex2: "M", sex3: "M")
+          expect(lettings_log.preg_occ).to eq(1)
+        end
+
+        it "does not override user entered data when no woman or non-binary person in the household is 11 to 60" do
+          lettings_log.update!(preg_occ: 1)
+          lettings_log.update!(sex1: "F", sex2: "X", sex3: "M", age1: 61, age2: 10, age3: 55)
+          expect(lettings_log.preg_occ).to eq(1)
+        end
+      end
+    end
   end
 
   describe "optional fields" do

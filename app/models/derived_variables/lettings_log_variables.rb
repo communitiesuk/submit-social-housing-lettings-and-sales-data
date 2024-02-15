@@ -91,8 +91,9 @@ module DerivedVariables::LettingsLogVariables
         self.prevten = 30 if owning_organisation&.provider_type == "LA"
       end
     end
-    if form.start_year_after_2024? && is_bedsit?
-      self.beds = 1
+    if form.start_year_after_2024?
+      self.beds = 1 if is_bedsit?
+      self.preg_occ = 2 if preg_occ.nil? && hhmemb.present? && (all_male_household? || no_women_or_non_binary_between_11_and_60?)
     end
 
     child_under_16_constraints!

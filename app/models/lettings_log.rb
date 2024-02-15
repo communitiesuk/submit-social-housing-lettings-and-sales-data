@@ -664,6 +664,21 @@ class LettingsLog < Log
     LettingsLog.where.not(duplicate_set_id: nil).where(duplicate_set_id:).where.not(id:)
   end
 
+  def all_male_household?
+    (1..hhmemb).all? do |n|
+      public_send("sex#{n}") == "M"
+    end
+  end
+
+  def no_women_or_non_binary_between_11_and_60?
+    (1..hhmemb).none? do |n|
+      sex = public_send("sex#{n}")
+      age = public_send("age#{n}")
+
+      %w[F X].include?(sex) && age.present? && age.between?(11, 60)
+    end
+  end
+
 private
 
   def reset_invalid_unresolved_log_fields!
