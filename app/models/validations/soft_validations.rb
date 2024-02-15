@@ -163,8 +163,12 @@ module Validations::SoftValidations
     "Hospital",
   ].freeze
 
+  PHRASES_LIKELY_TO_INDICATE_EXISTING_REASON_CATEGORY_REGEX = Regexp.union(
+    PHRASES_LIKELY_TO_INDICATE_EXISTING_REASON_CATEGORY.map { |phrase| Regexp.new("\\b[^[:alpha]]*#{phrase}[^[:alpha:]]*\\b", Regexp::IGNORECASE) },
+  )
+
   def reasonother_might_be_existing_category?
-    Regexp.union(PHRASES_LIKELY_TO_INDICATE_EXISTING_REASON_CATEGORY.map { |phrase| Regexp.new("\\b[^[:alpha]]*#{phrase}[^[:alpha:]]*\\b", Regexp::IGNORECASE) }).match?(reasonother)
+    PHRASES_LIKELY_TO_INDICATE_EXISTING_REASON_CATEGORY_REGEX.match?(reasonother)
   end
 
 private
