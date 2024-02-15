@@ -15,7 +15,7 @@ RSpec.describe "clear_invalidated_earnings" do
     context "when the rake task is run" do
       context "and there are 2023 logs with invalid earnings" do
         let(:user) { create(:user) }
-        let!(:lettings_log) { create(:lettings_log, created_by: user) }
+        let!(:lettings_log) { create(:lettings_log, :completed, created_by: user, voiddate: nil, mrcdate: nil) }
 
         before do
           lettings_log.startdate = Time.zone.local(2023, 4, 4)
@@ -44,9 +44,40 @@ RSpec.describe "clear_invalidated_earnings" do
         end
       end
 
-      context "and there are 2022 logs with invalid earnings" do
+      context "and there are valid 2023 logs" do
         let(:user) { create(:user) }
-        let!(:lettings_log) { create(:lettings_log, created_by: user) }
+        let!(:lettings_log) { create(:lettings_log, :completed, created_by: user, voiddate: nil, mrcdate: nil) }
+
+        before do
+          lettings_log.startdate = Time.zone.local(2023, 4, 4)
+          lettings_log.incfreq = 1
+          lettings_log.earnings = 95
+          lettings_log.hhmemb = 1
+          lettings_log.ecstat1 = 1
+          lettings_log.save!
+        end
+
+        it "does not update the logs" do
+          initial_updated_at = lettings_log.updated_at
+          expect(lettings_log.incfreq).to eq(1)
+          expect(lettings_log.earnings).to eq(95)
+          expect(lettings_log.hhmemb).to eq(1)
+          expect(lettings_log.ecstat1).to eq(1)
+
+          task.invoke
+          lettings_log.reload
+
+          expect(lettings_log.incfreq).to eq(1)
+          expect(lettings_log.earnings).to eq(95)
+          expect(lettings_log.hhmemb).to eq(1)
+          expect(lettings_log.ecstat1).to eq(1)
+          expect(lettings_log.updated_at).to eq(initial_updated_at)
+        end
+      end
+
+      context "and there are 2022 logs" do
+        let(:user) { create(:user) }
+        let!(:lettings_log) { create(:lettings_log, :completed, created_by: user, voiddate: nil, mrcdate: nil) }
 
         before do
           lettings_log.startdate = Time.zone.local(2022, 4, 4)
@@ -57,7 +88,7 @@ RSpec.describe "clear_invalidated_earnings" do
           lettings_log.save!(validate: false)
         end
 
-        it "does not export the log" do
+        it "does not update the logs" do
           initial_updated_at = lettings_log.updated_at
           expect(lettings_log.incfreq).to eq(1)
           expect(lettings_log.earnings).to eq(20)
@@ -67,8 +98,8 @@ RSpec.describe "clear_invalidated_earnings" do
           task.invoke
           lettings_log.reload
 
-          expect(lettings_log.incfreq).to eq(nil)
-          expect(lettings_log.earnings).to eq(nil)
+          expect(lettings_log.incfreq).to eq(1)
+          expect(lettings_log.earnings).to eq(20)
           expect(lettings_log.hhmemb).to eq(1)
           expect(lettings_log.ecstat1).to eq(1)
           expect(lettings_log.updated_at).to eq(initial_updated_at)
