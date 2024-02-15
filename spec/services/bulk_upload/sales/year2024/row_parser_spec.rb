@@ -1023,6 +1023,24 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
   end
 
   describe "#log" do
+    describe "#noint" do
+      context "when field is set to 1" do
+        let(:attributes) { valid_attributes.merge({ field_17: 1 }) }
+
+        it "is correctly set" do
+          expect(parser.log.noint).to be(1)
+        end
+      end
+
+      context "when field is set to 2" do
+        let(:attributes) { valid_attributes.merge({ field_17: 2 }) }
+
+        it "is correctly set" do
+          expect(parser.log.noint).to be(2)
+        end
+      end
+    end
+
     describe "#uprn" do
       let(:attributes) { setup_section_params.merge({ field_22: "12" }) }
 
