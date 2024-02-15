@@ -32,8 +32,6 @@ module Forms
         case year
         when 2023
           "/files/bulk-upload-sales-legacy-template-2023-24.xlsx"
-        when 2024
-          "/files/bulk-upload-sales-legacy-template-2024-25.xlsx"
         end
       end
 

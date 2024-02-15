@@ -48,23 +48,23 @@
           <p class="govuk-body">You must include the headers in your file when you upload, unless your data matches the exact order of the legacy template. If you choose to remove the headers, you must also remove the blank column A.</p>
 
           <p class="govuk-body"><strong>New template</strong>: In this template, the questions are in the same order as the 2023/24 paper form and web form. Use this template if your organisation is new to bulk upload or if your housing management system matches the new column ordering.</p>
-          <p class="govuk-body"><%= govuk_link_to @form.download_text("lettings", "template", "new"), @form.lettings_template_path %></p>
-          <p class="govuk-body"><%= govuk_link_to @form.download_text("sales", "template", "new"), @form.sales_template_path %></p>
+          <p class="govuk-body"><%= govuk_link_to "Download the lettings bulk upload template (2023 to 2024) – New question ordering", @form.lettings_template_path %></p>
+          <p class="govuk-body"><%= govuk_link_to "Download the sales bulk upload template (2023 to 2024) – New question ordering", @form.sales_template_path %></p>
 
           <p class="govuk-body"><strong>Legacy template</strong>: In this template, the questions are in the same order as the 2022/23 template, with new questions added on to the end. Use this template if you have not updated your system to match the new template yet.</p>
-          <p class="govuk-body"><%= govuk_link_to @form.download_text("lettings", "template", "legacy"), @form.lettings_legacy_template_path %></p>
-          <p class="govuk-body"><%= govuk_link_to @form.download_text("sales", "template", "legacy"), @form.sales_legacy_template_path %></p>
+          <p class="govuk-body"><%= govuk_link_to "Download the lettings bulk upload template (2023 to 2024) - Legacy version", @form.lettings_legacy_template_path %></p>
+          <p class="govuk-body"><%= govuk_link_to "Download the sales bulk upload template (2023 to 2024) – Legacy version", @form.sales_legacy_template_path %></p>
         <% else %>
-          <p class="govuk-body"><%= govuk_link_to @form.download_text("lettings", "template"), @form.lettings_template_path %></p>
-          <p class="govuk-body"><%= govuk_link_to @form.download_text("sales", "template"), @form.sales_template_path %></p>
+          <p class="govuk-body"><%= govuk_link_to "Download the lettings bulk upload template (2024 to 2025)", @form.lettings_template_path %></p>
+          <p class="govuk-body"><%= govuk_link_to "Download the sales bulk upload template (2024 to 2025)", @form.sales_template_path %></p>
         <% end %>
       <% end %>
 
       <%= accordion.with_section(heading_text: "Using the bulk upload specification") do %>
         <p class="govuk-body">The bulk upload specification contains the same information as the template headers, as well as more details about the accepted responses for each question. For multiple-choice questions, we use number or letter codes to represent each option, and the specification shows what answer each code represents.</p>
         <p class="govuk-body">There is a separate specification for lettings and sales:</p>
-        <p class="govuk-body"><%= govuk_link_to @form.download_text("lettings", "specification"), @form.lettings_specification_path, target: "_blank" %></p>
-        <p class="govuk-body"><%= govuk_link_to @form.download_text("sales", "specification"), @form.sales_specification_path, target: "_blank" %></p>
+        <p class="govuk-body"><%= govuk_link_to "Download the lettings bulk upload specification (#{@form.year} to #{@form.year + 1})", @form.lettings_specification_path, target: "_blank" %></p>
+        <p class="govuk-body"><%= govuk_link_to "Download the sales bulk upload specification (#{@form.year} to #{@form.year + 1})", @form.sales_specification_path, target: "_blank" %></p>
         <p class="govuk-body">If your upload fails because there are errors in the data, you can use the specification to help correct the errors. Having your file, the error report, and the specification open at the same time will make it easy to cross-reference field numbers and check accepted responses.</p>
       <% end %>
 
