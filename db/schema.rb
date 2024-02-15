@@ -192,14 +192,14 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_09_153215) do
     t.integer "hb"
     t.integer "hbrentshortfall"
     t.integer "property_relet"
-    t.datetime "mrcdate", precision: nil
+    t.datetime "mrcdate"
     t.integer "incref"
-    t.datetime "startdate", precision: nil
+    t.datetime "startdate"
     t.integer "armedforces"
     t.integer "first_time_property_let_as_social_housing"
     t.integer "unitletas"
     t.integer "builtype"
-    t.datetime "voiddate", precision: nil
+    t.datetime "voiddate"
     t.bigint "owning_organisation_id"
     t.bigint "managing_organisation_id"
     t.integer "renttype"
@@ -306,6 +306,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_09_153215) do
     t.integer "nationality_all"
     t.integer "nationality_all_group"
     t.integer "reasonother_value_check"
+    t.integer "accessible_register"
     t.index ["bulk_upload_id"], name: "index_lettings_logs_on_bulk_upload_id"
     t.index ["created_by_id"], name: "index_lettings_logs_on_created_by_id"
     t.index ["location_id"], name: "index_lettings_logs_on_location_id"
@@ -356,7 +357,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_09_153215) do
     t.string "old_id"
     t.string "old_visible_id"
     t.string "mobility_type"
-    t.datetime "startdate", precision: nil
+    t.datetime "startdate"
     t.string "location_admin_district"
     t.boolean "confirmed"
     t.boolean "is_la_inferred"
@@ -556,7 +557,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_09_153215) do
     t.integer "stairbought"
     t.integer "stairowned"
     t.decimal "mrent", precision: 10, scale: 2
-    t.datetime "exdate", precision: nil
+    t.datetime "exdate"
     t.integer "exday"
     t.integer "exmonth"
     t.integer "exyear"
@@ -592,7 +593,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_09_153215) do
     t.integer "wchair"
     t.integer "income2_value_check"
     t.integer "armedforcesspouse"
-    t.datetime "hodate", precision: nil
+    t.datetime "hodate"
     t.integer "hoday"
     t.integer "homonth"
     t.integer "hoyear"
@@ -710,8 +711,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_09_153215) do
     t.string "name"
     t.bigint "organisation_id"
     t.integer "sign_in_count", default: 0, null: false
-    t.datetime "current_sign_in_at", precision: nil
-    t.datetime "last_sign_in_at", precision: nil
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
     t.string "current_sign_in_ip"
     t.string "last_sign_in_ip"
     t.integer "role"
@@ -719,7 +720,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_09_153215) do
     t.string "phone"
     t.integer "failed_attempts", default: 0
     t.string "unlock_token"
-    t.datetime "locked_at", precision: nil
+    t.datetime "locked_at"
     t.boolean "is_dpo", default: false
     t.boolean "is_key_contact", default: false
     t.integer "second_factor_attempts_count", default: 0
@@ -727,12 +728,12 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_09_153215) do
     t.string "encrypted_otp_secret_key_iv"
     t.string "encrypted_otp_secret_key_salt"
     t.string "direct_otp"
-    t.datetime "direct_otp_sent_at", precision: nil
+    t.datetime "direct_otp_sent_at"
     t.datetime "totp_timestamp", precision: nil
     t.boolean "active", default: true
     t.string "confirmation_token"
-    t.datetime "confirmed_at", precision: nil
-    t.datetime "confirmation_sent_at", precision: nil
+    t.datetime "confirmed_at"
+    t.datetime "confirmation_sent_at"
     t.string "unconfirmed_email"
     t.boolean "initial_confirmation_sent"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true

@@ -101,7 +101,7 @@ RSpec.describe Csv::LettingsLogCsvService do
         let(:questions) do
           [
             build(:question, id: "condition_effects", type: "checkbox", answer_options: { "illness_type_1" => {}, "illness_type_2" => {}, "illness_type_3" => {} }),
-            build(:question, id: "letting_allocation", type: "checkbox", answer_options: { "cbl" => {}, "cap" => {}, "chr" => {} }),
+            build(:question, id: "letting_allocation", type: "checkbox", answer_options: { "cbl" => {}, "cap" => {}, "chr" => {}, "accessible_register" => {} }),
           ]
         end
 

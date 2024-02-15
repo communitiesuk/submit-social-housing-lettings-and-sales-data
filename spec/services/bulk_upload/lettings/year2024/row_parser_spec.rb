@@ -1119,6 +1119,7 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
           expect(parser.errors[:field_112]).to include("You must answer was the letting made under the Choice-Based Lettings (CBL)?")
           expect(parser.errors[:field_113]).to include("You must answer was the letting made under the Common Allocation Policy (CAP)?")
           expect(parser.errors[:field_114]).to include("You must answer was the letting made under the Common Housing Register (CHR)?")
+          expect(parser.errors[:field_115]).to include("You must answer was the letting made under the Accessible Register?")
         end
       end
     end
@@ -1889,16 +1890,16 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
     end
 
     describe "#letting_allocation_unknown" do
-      context "when field_112, 117, 118 are no ie 2" do
-        let(:attributes) { { bulk_upload:, field_112: 2, field_113: 2, field_114: 2 } }
+      context "when field_112, 113, 114, 115 are no ie 2" do
+        let(:attributes) { { bulk_upload:, field_112: 2, field_113: 2, field_114: 2, field_115: 2 } }
 
         it "sets value to 1" do
           expect(parser.log.letting_allocation_unknown).to be(1)
         end
       end
 
-      context "when any one of field_112, 117, 118 is yes ie 1" do
-        let(:attributes) { { bulk_upload:, field_112: 1 } }
+      context "when any one of field_112, 113, 114, 115 is yes ie 1" do
+        let(:attributes) { { bulk_upload:, field_115: 1 } }
 
         it "sets value to 0" do
           expect(parser.log.letting_allocation_unknown).to be(0)

@@ -6,7 +6,7 @@
         <% if notification_count > 1  && current_user.present? %>
           <p>Notification 1 of <%= notification_count %></p>
         <% end %>
-      <p class="govuk-!-font-weight-bold"><%= notification.title %></p>
+      <p class="govuk-!-font-weight-bold"><%= notification.title.html_safe %></p>
         <% if notification.page_content.present? %>
           <div class="govuk-body">
             <%= govuk_link_to notification.link_text, notifications_path, class: "govuk-link--inverse govuk-!-font-weight-bold" %>
