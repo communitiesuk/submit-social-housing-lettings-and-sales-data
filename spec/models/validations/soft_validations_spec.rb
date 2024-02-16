@@ -376,7 +376,7 @@ RSpec.describe Validations::SoftValidations do
     end
   end
 
-  describe "scharge_over_soft_max?" do
+  describe "scharge_in_soft_max_range?" do
     context "and organisation is PRP" do
       before do
         record.owning_organisation.update(provider_type: "PRP")
@@ -590,7 +590,7 @@ RSpec.describe Validations::SoftValidations do
     end
   end
 
-  describe "pscharge_over_soft_max?" do
+  describe "pscharge_in_soft_max_range?" do
     context "and organisation is PRP" do
       before do
         record.owning_organisation.update(provider_type: "PRP")
@@ -804,7 +804,7 @@ RSpec.describe Validations::SoftValidations do
     end
   end
 
-  describe "supcharg_over_soft_max?" do
+  describe "supcharg_in_soft_max_range?" do
     context "and organisation is PRP" do
       before do
         record.owning_organisation.update(provider_type: "PRP")

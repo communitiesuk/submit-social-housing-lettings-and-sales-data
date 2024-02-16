@@ -1,4 +1,6 @@
 module Validations::SoftValidations
+  include ChargesHelper
+
   ALLOWED_INCOME_RANGES = {
     1 => OpenStruct.new(soft_min: 143, soft_max: 730, hard_min: 90, hard_max: 1230),
     2 => OpenStruct.new(soft_min: 67, soft_max: 620, hard_min: 50, hard_max: 950),
@@ -97,40 +99,52 @@ module Validations::SoftValidations
     net_income_in_soft_max_range? ? "higher" : "lower"
   end
 
-  def scharge_over_soft_max?
-    return unless scharge && period && needstype
+  def scharge_in_soft_max_range?
+    return unless scharge && period && needstype && owning_organisation
     return if weekly_value(scharge).blank?
 
-    max = if needstype == 1
-            owning_organisation.provider_type == "LA" ? 25 : 35
-          else
-            owning_organisation.provider_type == "LA" ? 100 : 200
-          end
-    weekly_value(scharge) > max
+    soft_max = if needstype == 1
+                 owning_organisation.provider_type == "LA" ? 25 : 35
+               else
+                 owning_organisation.provider_type == "LA" ? 100 : 200
+               end
+
+    provider_type = owning_organisation.provider_type_before_type_cast
+    hard_max = CHARGE_MAXIMA_PER_WEEK.dig(:scharge, PROVIDER_TYPE[provider_type], NEEDSTYPE_VALUES[needstype])
+
+    weekly_value(scharge).between?(soft_max, hard_max)
   end
 
-  def pscharge_over_soft_max?
-    return unless pscharge && period && needstype
+  def pscharge_in_soft_max_range?
+    return unless pscharge && period && needstype && owning_organisation
     return if weekly_value(pscharge).blank?
 
-    max = if needstype == 1
-            owning_organisation.provider_type == "LA" ? 25 : 35
-          else
-            owning_organisation.provider_type == "LA" ? 75 : 100
-          end
-    weekly_value(pscharge) > max
+    soft_max = if needstype == 1
+                 owning_organisation.provider_type == "LA" ? 25 : 35
+               else
+                 owning_organisation.provider_type == "LA" ? 75 : 100
+               end
+
+    provider_type = owning_organisation.provider_type_before_type_cast
+    hard_max = CHARGE_MAXIMA_PER_WEEK.dig(:pscharge, PROVIDER_TYPE[provider_type], NEEDSTYPE_VALUES[needstype])
+
+    weekly_value(pscharge).between?(soft_max, hard_max)
   end
 
-  def supcharg_over_soft_max?
-    return unless supcharg && period && needstype
+  def supcharg_in_soft_max_range?
+    return unless supcharg && period && needstype && owning_organisation
     return if weekly_value(supcharg).blank?
 
-    max = if needstype == 1
-            owning_organisation.provider_type == "LA" ? 25 : 35
-          else
-            owning_organisation.provider_type == "LA" ? 75 : 85
-          end
-    weekly_value(supcharg) > max
+    soft_max = if needstype == 1
+                 owning_organisation.provider_type == "LA" ? 25 : 35
+               else
+                 owning_organisation.provider_type == "LA" ? 75 : 85
+               end
+
+    provider_type = owning_organisation.provider_type_before_type_cast
+    hard_max = CHARGE_MAXIMA_PER_WEEK.dig(:supcharg, PROVIDER_TYPE[provider_type], NEEDSTYPE_VALUES[needstype])
+
+    weekly_value(supcharg).between?(soft_max, hard_max)
   end
 
 private
