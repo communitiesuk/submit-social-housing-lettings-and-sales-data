@@ -24,7 +24,7 @@ module Validations::TenancyValidations
     ]
     rent_type_independent_conditions = [
       {
-        condition: !(record.is_secure_tenancy? || record.is_assured_shorthold_tenancy?) && is_present,
+        condition: !(record.is_secure_tenancy? || record.is_assured_shorthold_tenancy? || record.is_periodic_tenancy?) && is_present,
         error: I18n.t("validations.tenancy.length.fixed_term_not_required"),
       },
     ]

@@ -345,6 +345,11 @@ class LettingsLog < Log
     tenancy == 4
   end
 
+  def is_periodic_tenancy?
+    # 8: Periodic
+    tenancy == 8
+  end
+
   def is_internal_transfer?
     # 1: Internal Transfer
     referral == 1
