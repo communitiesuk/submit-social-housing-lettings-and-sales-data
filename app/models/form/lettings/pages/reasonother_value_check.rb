@@ -9,6 +9,7 @@ class Form::Lettings::Pages::ReasonotherValueCheck < ::Form::Page
     }
     @informative_text = {
       "translation" => "soft_validations.reasonother.informative_text",
+      "arguments" => [],
     }
   end
 
