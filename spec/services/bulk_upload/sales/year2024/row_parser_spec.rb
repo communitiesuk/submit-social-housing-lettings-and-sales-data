@@ -1063,11 +1063,29 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
       end
     end
 
+    describe "#ethnic_group" do
+      context "when field_33 is 20" do
+        let(:attributes) { setup_section_params.merge({ field_33: "20" }) }
+
+        it "is correctly set" do
+          expect(parser.log.ethnic_group).to be(0)
+        end
+      end
+    end
+
     describe "#ethnic_group2" do
       let(:attributes) { setup_section_params.merge({ field_40: "1" }) }
 
       it "is correctly set" do
         expect(parser.log.ethnic_group2).to be(0)
+      end
+
+      context "when field_40 is 20" do
+        let(:attributes) { setup_section_params.merge({ field_40: "20" }) }
+
+        it "is correctly set" do
+          expect(parser.log.ethnic_group2).to be(0)
+        end
       end
     end
 

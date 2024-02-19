@@ -1260,7 +1260,7 @@ private
     return nil if field_44.blank?
 
     case field_44
-    when 1, 2, 3, 18
+    when 1, 2, 3, 18, 20
       0
     when 4, 5, 6, 7
       1

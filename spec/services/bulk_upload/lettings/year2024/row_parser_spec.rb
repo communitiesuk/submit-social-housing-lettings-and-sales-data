@@ -758,6 +758,17 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
             expect(parser).not_to be_valid
           end
         end
+
+        context "with a valid ethnic value" do
+          context "when field_44 is 20" do
+            let(:attributes) { valid_attributes.merge({ field_44: "20" }) }
+
+            it "is correctly sets ethnic and ethnic group" do
+              expect(parser.log.ethnic).to eq(20)
+              expect(parser.log.ethnic_group).to eq(0)
+            end
+          end
+        end
       end
 
       describe "#validate_nulls" do
