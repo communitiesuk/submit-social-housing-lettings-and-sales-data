@@ -1,6 +1,5 @@
 module FiltersHelper
   include CollectionTimeHelper
-  require "timecop"
 
   def filter_selected?(filter, value, filter_type)
     return false unless session[session_name_for(filter_type)]
@@ -96,9 +95,6 @@ module FiltersHelper
   end
 
   def collection_year_options
-    current_collection_start_year = 2024
-    previous_collection_start_year = 2023
-    archived_collection_start_year = 2022
     {
       current_collection_start_year.to_s => year_combo(current_collection_start_year),
       previous_collection_start_year.to_s => year_combo(previous_collection_start_year),

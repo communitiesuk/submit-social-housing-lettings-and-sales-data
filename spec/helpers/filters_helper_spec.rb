@@ -251,8 +251,7 @@ RSpec.describe FiltersHelper do
       it "has the correct options" do
         expect(collection_year_options).to eq(
           {
-            # "2023" => "2023/24", "2022" => "2022/23", "2021" => "2021/22" revert to this after PO
-            "2024" => "2024/25", "2023" => "2023/24", "2022" => "2022/23"
+            "2023" => "2023/24", "2022" => "2022/23", "2021" => "2021/22"
           },
         )
       end
