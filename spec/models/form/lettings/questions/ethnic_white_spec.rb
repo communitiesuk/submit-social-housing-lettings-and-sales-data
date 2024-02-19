@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Form::Sales::Questions::Buyer2EthnicBackgroundWhite, type: :model do
+RSpec.describe Form::Lettings::Questions::EthnicWhite, type: :model do
   subject(:question) { described_class.new(question_id, question_definition, page) }
 
   let(:question_id) { nil }
@@ -20,15 +20,15 @@ RSpec.describe Form::Sales::Questions::Buyer2EthnicBackgroundWhite, type: :model
   end
 
   it "has the correct id" do
-    expect(question.id).to eq("ethnicbuy2")
+    expect(question.id).to eq("ethnic")
   end
 
   it "has the correct header" do
-    expect(question.header).to eq("Which of the following best describes buyer 2’s White background?")
+    expect(question.header).to eq("Which of the following best describes the lead tenant’s White background?")
   end
 
   it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Buyer 2’s ethnic background")
+    expect(question.check_answer_label).to eq("Lead tenant’s ethnic background")
   end
 
   it "has the correct type" do
@@ -39,10 +39,6 @@ RSpec.describe Form::Sales::Questions::Buyer2EthnicBackgroundWhite, type: :model
     expect(question.derived?).to be false
   end
 
-  it "has the correct hint_text" do
-    expect(question.hint_text).to be nil
-  end
-
   context "with 2023/24 form" do
     it "has the correct answer_options" do
       expect(question.answer_options).to eq({
@@ -51,6 +47,10 @@ RSpec.describe Form::Sales::Questions::Buyer2EthnicBackgroundWhite, type: :model
         "18" => { "value" => "Gypsy or Irish Traveller" },
         "3" => { "value" => "Any other White background" },
       })
+    end
+
+    it "has the correct hint_text" do
+      expect(question.hint_text).to eq("The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest.")
     end
   end
 
@@ -68,5 +68,13 @@ RSpec.describe Form::Sales::Questions::Buyer2EthnicBackgroundWhite, type: :model
         "3" => { "value" => "Any other White background" },
       })
     end
+
+    it "has the correct hint_text" do
+      expect(question.hint_text).to eq("")
+    end
+  end
+
+  it "has the correct check_answers_card_number" do
+    expect(question.check_answers_card_number).to eq(1)
   end
 end
