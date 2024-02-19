@@ -138,7 +138,9 @@ module Exports::LettingsLogExportConstants
     "location_status",
     "created_by",
     "amended_by",
-    "duplicate_set_id"
+    "duplicate_set_id",
+    "accessible_register",
+    "nationality_all"
   ]
 
   (1..8).each do |index|
@@ -155,4 +157,14 @@ module Exports::LettingsLogExportConstants
   %w[a b c d e f g h].each do |letter|
     EXPORT_FIELDS << "housingneeds_#{letter}"
   end
+
+  POST_2024_EXPORT_FIELDS = Set[
+    "accessible_register",
+    "nationality_all"
+  ]
+
+  PRE_2024_EXPORT_FIELDS = Set[
+    "national",
+    "offered"
+  ]
 end
