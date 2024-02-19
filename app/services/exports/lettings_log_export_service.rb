@@ -259,7 +259,7 @@ module Exports
       attributes.reject! { |attribute| is_omitted_field?(attribute) }
     end
 
-    def is_omitted_field?(field_name, lettings_log = nil)
+    def is_omitted_field?(field_name, lettings_log)
       pattern_age = /age\d_known/
       details_known_prefix = "details_known_"
       field_name.starts_with?(details_known_prefix) ||
