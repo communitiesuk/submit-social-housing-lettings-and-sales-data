@@ -232,6 +232,53 @@ RSpec.describe Validations::TenancyValidations do
             end
           end
         end
+
+        context "when type of tenancy is periodic" do
+          let(:expected_error) do
+            I18n.t(
+              "validations.tenancy.length.secure",
+              min_tenancy_length: 1,
+            )
+          end
+
+          before { record.tenancy = 8 }
+
+          context "when tenancy length is less than 1" do
+            it "adds an error" do
+              record.tenancylength = 0
+              tenancy_validator.validate_fixed_term_tenancy(record)
+              expect(record.errors["needstype"]).to include(match(expected_error))
+              expect(record.errors["tenancylength"]).to include(match(expected_error))
+              expect(record.errors["tenancy"]).to include(match(expected_error))
+            end
+          end
+
+          context "when tenancy length is greater than 99" do
+            it "adds an error" do
+              record.tenancylength = 100
+              tenancy_validator.validate_fixed_term_tenancy(record)
+              expect(record.errors["needstype"]).to include(match(expected_error))
+              expect(record.errors["tenancylength"]).to include(match(expected_error))
+              expect(record.errors["tenancy"]).to include(match(expected_error))
+            end
+          end
+
+          context "when tenancy length is between 2-99" do
+            it "does not add an error" do
+              record.tenancylength = 3
+              tenancy_validator.validate_fixed_term_tenancy(record)
+              expect(record.errors).to be_empty
+            end
+          end
+
+          context "when tenancy length has not been answered" do
+            it "does not add an error" do
+              record.tenancylength = nil
+              tenancy_validator.validate_fixed_term_tenancy(record)
+              expect(record.errors).to be_empty
+            end
+          end
+        end
       end
     end
   end
