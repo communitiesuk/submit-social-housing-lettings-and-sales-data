@@ -669,6 +669,18 @@ class LettingsLog < Log
     renttype == 1 || renttype == 2
   end
 
+  def no_or_unknown_other_housing_needs?
+    housingneeds_other&.zero? || housingneeds_other == 2
+  end
+
+  def has_housingneeds?
+    housingneeds == 1
+  end
+
+  def housingneeds_type_not_listed?
+    housingneeds_type == 3
+  end
+
   def duplicates
     LettingsLog.where.not(duplicate_set_id: nil).where(duplicate_set_id:).where.not(id:)
   end
@@ -821,10 +833,6 @@ private
 
   def other_housingneeds?
     housingneeds_other == 1
-  end
-
-  def has_housingneeds?
-    housingneeds == 1
   end
 
   def no_housingneeds?

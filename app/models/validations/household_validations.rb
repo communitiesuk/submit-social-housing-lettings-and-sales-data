@@ -129,7 +129,7 @@ module Validations::HouseholdValidations
   end
 
   def validate_combination_of_housing_needs_responses(record)
-    if record.housingneeds == 1 && record.housingneeds_type == 3 && record.housingneeds_other&.zero?
+    if record.has_housingneeds? && record.housingneeds_type_not_listed? && record.no_or_unknown_other_housing_needs?
       record.errors.add :housingneeds, I18n.t("validations.household.housingneeds.invalid")
       record.errors.add :housingneeds_type, I18n.t("validations.household.housingneeds.invalid")
       record.errors.add :housingneeds_other, I18n.t("validations.household.housingneeds.invalid")
