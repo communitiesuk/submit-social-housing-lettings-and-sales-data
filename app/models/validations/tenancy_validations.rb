@@ -21,10 +21,17 @@ module Validations::TenancyValidations
           min_tenancy_length: min_tenancy_length(record),
         ),
       },
+      {
+        condition: (record.is_periodic_tenancy? && !is_in_range) && is_present,
+        error: I18n.t(
+          "validations.tenancy.length.secure",
+          min_tenancy_length: min_tenancy_length(record),
+        ),
+      },
     ]
     rent_type_independent_conditions = [
       {
-        condition: !(record.is_secure_tenancy? || record.is_assured_shorthold_tenancy?) && is_present,
+        condition: !(record.is_secure_tenancy? || record.is_assured_shorthold_tenancy? || record.is_periodic_tenancy?) && is_present,
         error: I18n.t("validations.tenancy.length.fixed_term_not_required"),
       },
     ]
@@ -54,6 +61,6 @@ module Validations::TenancyValidations
   end
 
   def min_tenancy_length(record)
-    record.is_supported_housing? || record.renttype == 3 ? 1 : 2
+    record.is_supported_housing? || record.renttype == 3 || record.is_periodic_tenancy? ? 1 : 2
   end
 end
