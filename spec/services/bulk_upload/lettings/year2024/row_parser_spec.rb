@@ -2148,10 +2148,23 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
     end
 
     describe "#chcharge" do
-      let(:attributes) { { bulk_upload:, field_124: "123.45" } }
+      let(:attributes) { { bulk_upload:, field_124: "123.45", field_125: "123.45", field_126: "123.45", field_127: "123.45", field_128: "123.45" } }
 
       it "sets value given" do
         expect(parser.log.chcharge).to eq(123.45)
+      end
+
+      it "sets is care home to yes" do
+        expect(parser.log.is_carehome).to eq(1)
+      end
+
+      it "clears any other given charges" do
+        parser.log.save!
+        expect(parser.log.tcharge).to be_nil
+        expect(parser.log.brent).to be_nil
+        expect(parser.log.supcharg).to be_nil
+        expect(parser.log.pscharge).to be_nil
+        expect(parser.log.scharge).to be_nil
       end
     end
 
@@ -2160,6 +2173,50 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
 
       it "sets value given" do
         expect(parser.log.supcharg).to eq(123.45)
+      end
+
+      context "when other charges are not given" do
+        context "and it is carehome" do
+          let(:attributes) { { bulk_upload:, field_128: "123.45", field_124: "123.45", field_125: nil, field_126: nil, field_127: nil } }
+
+          it "does not set charges values" do
+            parser.log.save!
+            expect(parser.log.tcharge).to be_nil
+            expect(parser.log.brent).to be_nil
+            expect(parser.log.supcharg).to be_nil
+            expect(parser.log.pscharge).to be_nil
+            expect(parser.log.scharge).to be_nil
+          end
+
+          it "does not add errors to missing charges" do
+            parser.valid?
+            expect(parser.errors[:field_125]).to be_empty
+            expect(parser.errors[:field_126]).to be_empty
+            expect(parser.errors[:field_127]).to be_empty
+            expect(parser.errors[:field_128]).to be_empty
+          end
+        end
+
+        context "and it is not carehome" do
+          let(:attributes) { { bulk_upload:, field_128: "123.45", field_124: nil, field_125: nil, field_126: nil, field_127: nil } }
+
+          it "does not set charges values" do
+            parser.log.save!
+            expect(parser.log.tcharge).to be_nil
+            expect(parser.log.brent).to be_nil
+            expect(parser.log.supcharg).to be_nil
+            expect(parser.log.pscharge).to be_nil
+            expect(parser.log.scharge).to be_nil
+          end
+
+          it "adds an error to all missing charges" do
+            parser.valid?
+            expect(parser.errors[:field_125]).to eql(["Please enter the basic rent. If there is no basic rent, please enter '0'."])
+            expect(parser.errors[:field_126]).to eql(["Please enter the service charge. If there is no service charge, please enter '0'."])
+            expect(parser.errors[:field_127]).to eql(["Please enter the personal service charge. If there is no personal service charge, please enter '0'."])
+            expect(parser.errors[:field_128]).to be_empty
+          end
+        end
       end
     end
 

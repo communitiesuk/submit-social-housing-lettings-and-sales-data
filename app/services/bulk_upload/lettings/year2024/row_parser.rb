@@ -382,6 +382,7 @@ class BulkUpload::Lettings::Year2024::RowParser
   validate :validate_uprn_exists_if_any_key_address_fields_are_blank, on: :after_log, unless: -> { supported_housing? }
 
   validate :validate_incomplete_soft_validations, on: :after_log
+  validate :validate_all_charges_given, on: :after_log, if: proc { is_carehome.zero? }
 
   def self.question_for_field(field)
     QUESTIONS[field]
@@ -810,6 +811,19 @@ private
     end
   end
 
+  def validate_all_charges_given
+    return if supported_housing? && field_125 == 1
+
+    { field_125: "basic rent",
+      field_126: "service charge",
+      field_127: "personal service charge",
+      field_128: "support charge" }.each do |field, charge|
+      if public_send(field.to_sym).blank?
+        errors.add(field, I18n.t("validations.financial.charges.missing_charges", question: charge))
+      end
+    end
+  end
+
   def setup_question?(question)
     log.form.setup_sections[0].subsections[0].questions.include?(question)
   end
@@ -1152,7 +1166,7 @@ private
     attributes["pscharge"] = field_127
     attributes["supcharg"] = field_128
     attributes["chcharge"] = field_124
-    attributes["is_carehome"] = field_124.present? ? 1 : 0
+    attributes["is_carehome"] = is_carehome
     attributes["household_charge"] = supported_housing? ? field_122 : nil
     attributes["hbrentshortfall"] = field_129
     attributes["tshortfall_known"] = tshortfall_known
@@ -1478,5 +1492,9 @@ private
     return 826 if nationality_value == 826
 
     12
+  end
+
+  def is_carehome
+    field_124.present? ? 1 : 0
   end
 end
