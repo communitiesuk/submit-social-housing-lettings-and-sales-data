@@ -25,6 +25,7 @@ class BulkUpload::Sales::LogCreator
         Sentry.capture_exception(e)
       end
     end
+    @bulk_upload.update!(used_fixed_noint: true)
   end
 
 private

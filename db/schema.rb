@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_01_30_084707) do
+ActiveRecord::Schema[7.0].define(version: 2024_02_16_163519) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -41,6 +41,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_30_084707) do
     t.integer "needstype"
     t.text "choice"
     t.integer "total_logs_count"
+    t.string "noint_fix_status", default: "not_applied"
     t.index ["identifier"], name: "index_bulk_uploads_on_identifier", unique: true
     t.index ["user_id"], name: "index_bulk_uploads_on_user_id"
   end
