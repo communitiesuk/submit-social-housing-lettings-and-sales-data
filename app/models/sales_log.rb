@@ -272,6 +272,12 @@ class SalesLog < Log
     value * equity / 100
   end
 
+  def stairbought_part_of_value
+    return unless value && stairbought
+
+    value * stairbought / 100
+  end
+
   def mortgage_deposit_and_discount_total
     mortgage_amount = mortgage || 0
     deposit_amount = deposit || 0

@@ -121,6 +121,26 @@ module Validations::Sales::SaleInformationValidations
     end
   end
 
+  def validate_staircasing_mortgage(record)
+    return unless record.mortgageused && record.value && record.deposit && record.stairbought
+    return unless record.is_staircase?
+    return unless record.saledate && record.form.start_year_after_2024?
+
+    if record.mortgage_used?
+      return unless record.mortgage
+
+      if record.mortgage_and_deposit_total != record.stairbought_part_of_value
+        %i[mortgage value deposit stairbought].each do |field|
+          record.errors.add field, I18n.t("validations.sale_information.staircasing_mortgage.mortgage_used", mortgage_and_deposit_total: record.field_formatted_as_currency("mortgage_and_deposit_total"), stairbought_part_of_value: record.field_formatted_as_currency("stairbought_part_of_value"))
+        end
+      end
+    elsif record.deposit != record.stairbought_part_of_value
+      %i[mortgageused value deposit stairbought].each do |field|
+        record.errors.add field, I18n.t("validations.sale_information.staircasing_mortgage.mortgage_not_used", deposit: record.field_formatted_as_currency("deposit"), stairbought_part_of_value: record.field_formatted_as_currency("stairbought_part_of_value"))
+      end
+    end
+  end
+
   def validate_mortgage_used_and_stairbought(record)
     return unless record.stairowned && record.mortgageused
     return unless record.saledate && record.form.start_year_after_2024?

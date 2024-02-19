@@ -103,7 +103,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
       field_101: "250000",
       field_102: "25",
       field_103: "1",
-      field_104: "42500",
+      field_104: "5000",
       field_105: "1",
       field_107: "20",
       field_108: "3",

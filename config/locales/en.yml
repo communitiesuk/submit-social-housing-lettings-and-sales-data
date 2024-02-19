@@ -625,6 +625,9 @@ en:
       non_staircasing_mortgage: 
         mortgage_used: "The mortgage and deposit added together is %{mortgage_and_deposit_total} and the purchase price times by the equity is %{expected_shared_ownership_deposit_value}. These figures should be the same."
         mortgage_not_used: "The deposit is %{deposit} and the purchase price times by the equity is %{expected_shared_ownership_deposit_value}. As no mortgage was used, these figures should be the same."
+      staircasing_mortgage:
+        mortgage_used: "The mortgage and deposit added together is %{mortgage_and_deposit_total} and the percentage bought times the purchase price is %{stairbought_part_of_value}. These figures should be the same."
+        mortgage_not_used: "The deposit is %{deposit} and the percentage bought times the purchase price is %{stairbought_part_of_value}. As no mortgage was used, these figures should be the same."
       stairowned:
         mortgageused_dont_know: "The percentage owned has to be 100% if the mortgage used is 'Don’t know'"
     merge_request:
