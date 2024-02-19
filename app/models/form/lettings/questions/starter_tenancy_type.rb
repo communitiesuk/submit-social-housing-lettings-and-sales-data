@@ -2,8 +2,8 @@ class Form::Lettings::Questions::StarterTenancyType < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "tenancy"
-    @check_answer_label = form.start_year_after_2024? ? "What is the type of tenancy after the starter or introductory period has ended" : "Type of main tenancy after the starter period has ended?"
-    @header = "What is the type of tenancy after the starter period has ended?"
+    @check_answer_label = form.start_year_after_2024? ? "Type of main tenancy after the starter or introductory period has ended" : "Type of main tenancy after the starter period has ended"
+    @header = form.start_year_after_2024? ? "What is the type of tenancy after the starter or introductory period has ended?" : "What is the type of tenancy after the starter period has ended?"
     @type = "radio"
     @check_answers_card_number = 0
     @hint_text = form.start_year_after_2024? ? "" : "This is also known as an ‘introductory period’."

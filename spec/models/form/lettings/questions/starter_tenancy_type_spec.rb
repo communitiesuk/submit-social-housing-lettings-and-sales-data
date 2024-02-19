@@ -20,11 +20,15 @@ RSpec.describe Form::Lettings::Questions::StarterTenancyType, type: :model do
     end
 
     it "has the correct check answer label" do
-      expect(question.check_answer_label).to eq("Type of main tenancy after the starter period has ended?")
+      expect(question.check_answer_label).to eq("Type of main tenancy after the starter period has ended")
     end
 
     it "has the correct hint_text" do
       expect(question.hint_text).to eq("This is also known as an ‘introductory period’.")
+    end
+
+    it "has the correct header" do
+      expect(question.header).to eq("What is the type of tenancy after the starter period has ended?")
     end
 
     it "has the correct answer options" do
@@ -62,11 +66,15 @@ RSpec.describe Form::Lettings::Questions::StarterTenancyType, type: :model do
     end
 
     it "has the correct check answer label" do
-      expect(question.check_answer_label).to eq("What is the type of tenancy after the starter or introductory period has ended")
+      expect(question.check_answer_label).to eq("Type of main tenancy after the starter or introductory period has ended")
     end
 
     it "has the correct updated hint_text" do
       expect(question.hint_text).to eq("")
+    end
+
+    it "has the correct header" do
+      expect(question.header).to eq("What is the type of tenancy after the starter or introductory period has ended?")
     end
 
     it "has the correct answer options" do
