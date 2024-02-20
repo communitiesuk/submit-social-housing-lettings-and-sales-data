@@ -346,7 +346,6 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
       let(:attributes) do
         {
           bulk_upload:,
-          field_17: "test id",
           field_31: "2",
           field_46: "8",
           field_39: "1",
