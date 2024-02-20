@@ -7,6 +7,7 @@ class BulkUpload::Sales::LogCreator
   end
 
   def call
+    @bulk_upload.update!(noint_fix_status: BulkUpload.noint_fix_statuses[:not_needed])
     row_parsers.each do |row_parser|
       row_parser.valid?
 
@@ -25,7 +26,6 @@ class BulkUpload::Sales::LogCreator
         Sentry.capture_exception(e)
       end
     end
-    @bulk_upload.update!(noint_fix_status: BulkUpload.noint_fix_statuses[:not_needed])
   end
 
 private
