@@ -12,7 +12,7 @@ class Form::Sales::Questions::PersonWorkingSituation < ::Form::Question
       },
       "value" => "Prefers not to say",
     }]
-    @question_number = 31 + (4 * person_index)
+    @person_index = person_index
   end
 
   ANSWER_OPTIONS = {
@@ -28,4 +28,13 @@ class Form::Sales::Questions::PersonWorkingSituation < ::Form::Question
     "7" => { "value" => "Full-time student" },
     "9" => { "value" => "Child under 16" },
   }.freeze
+
+  def question_number
+    case form.start_date.year
+    when 2023
+      31 + (4 * @person_index)
+    else
+      33 + (4 * @person_index)
+    end
+  end
 end

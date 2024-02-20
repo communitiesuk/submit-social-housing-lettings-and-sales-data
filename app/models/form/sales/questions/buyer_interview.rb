@@ -7,11 +7,13 @@ class Form::Sales::Questions::BuyerInterview < ::Form::Question
     @type = "radio"
     @hint_text = "You should still try to answer all questions even if the #{joint_purchase ? 'buyers weren’t' : 'buyer wasn’t'} interviewed in person"
     @answer_options = ANSWER_OPTIONS
-    @question_number = 18
+    @question_number = QUESION_NUMBER_FROM_YEAR[form.start_date.year]
   end
 
   ANSWER_OPTIONS = {
     "2" => { "value" => "Yes" },
     "1" => { "value" => "No" },
   }.freeze
+
+  QUESION_NUMBER_FROM_YEAR = { 2023 => 18, 2024 => 13 }.freeze
 end

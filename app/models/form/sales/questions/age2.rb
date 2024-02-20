@@ -14,6 +14,8 @@ class Form::Sales::Questions::Age2 < ::Form::Question
     @max = 110
     @min = 0
     @step = 1
-    @question_number = 28
+    @question_number = QUESION_NUMBER_FROM_YEAR[form.start_date.year]
   end
+
+  QUESION_NUMBER_FROM_YEAR = { 2023 => 28, 2024 => 30 }.freeze
 end

@@ -5,6 +5,7 @@ class Form::Sales::Questions::ManagingOrganisation < ::Form::Question
     @check_answer_label = "Reported by"
     @header = "Which organisation is reporting this sale?"
     @type = "select"
+    @question_number = QUESION_NUMBER_FROM_YEAR[form.start_date.year]
   end
 
   def answer_options(log = nil, user = nil)
@@ -74,4 +75,6 @@ private
   def selected_answer_option_is_derived?(_log)
     true
   end
+
+  QUESION_NUMBER_FROM_YEAR = { 2024 => 2 }.freeze
 end

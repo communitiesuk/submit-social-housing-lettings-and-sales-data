@@ -6,11 +6,13 @@ class Form::Sales::Questions::PropertyBuildingType < ::Form::Question
     @header = "What type of building is the property?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
-    @question_number = 13
+    @question_number = QUESION_NUMBER_FROM_YEAR[form.start_date.year]
   end
 
   ANSWER_OPTIONS = {
     "1" => { "value" => "Purpose built" },
     "2" => { "value" => "Converted from previous residential or non-residential property" },
   }.freeze
+
+  QUESION_NUMBER_FROM_YEAR = { 2023 => 13, 2024 => 17 }.freeze
 end

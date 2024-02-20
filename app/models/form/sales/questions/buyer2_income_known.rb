@@ -10,7 +10,7 @@ class Form::Sales::Questions::Buyer2IncomeKnown < ::Form::Question
       "income2" => [0],
     }
     @check_answers_card_number = 2
-    @question_number = 69
+    @question_number = QUESION_NUMBER_FROM_YEAR[form.start_date.year]
     @hidden_in_check_answers = {
       "depends_on" => [
         {
@@ -24,4 +24,6 @@ class Form::Sales::Questions::Buyer2IncomeKnown < ::Form::Question
     "0" => { "value" => "Yes" },
     "1" => { "value" => "No" },
   }.freeze
+
+  QUESION_NUMBER_FROM_YEAR = { 2023 => 69, 2024 => 71 }.freeze
 end

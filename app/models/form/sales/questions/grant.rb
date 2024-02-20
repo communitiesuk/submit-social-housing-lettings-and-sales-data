@@ -11,6 +11,8 @@ class Form::Sales::Questions::Grant < ::Form::Question
     @width = 5
     @prefix = "£"
     @hint_text = "For all schemes except Right to Buy (RTB), Preserved Right to Buy (PRTB), Voluntary Right to Buy (VRTB) and Rent to Buy"
-    @question_number = 101
+    @question_number = QUESION_NUMBER_FROM_YEAR[form.start_date.year]
   end
+
+  QUESION_NUMBER_FROM_YEAR = { 2023 => 101, 2024 => 103 }.freeze
 end

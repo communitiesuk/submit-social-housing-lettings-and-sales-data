@@ -7,11 +7,13 @@ class Form::Sales::Questions::Buyer2LiveInProperty < ::Form::Question
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @check_answers_card_number = 2
-    @question_number = 34
+    @question_number = QUESION_NUMBER_FROM_YEAR[form.start_date.year]
   end
 
   ANSWER_OPTIONS = {
     "1" => { "value" => "Yes" },
     "2" => { "value" => "No" },
   }.freeze
+
+  QUESION_NUMBER_FROM_YEAR = { 2023 => 34, 2024 => 36 }.freeze
 end

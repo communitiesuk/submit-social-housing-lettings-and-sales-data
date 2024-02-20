@@ -12,7 +12,7 @@ class Form::Sales::Questions::DepositAmount < ::Form::Question
     @prefix = "£"
     @derived = true
     @ownershipsch = ownershipsch
-    @question_number = question_number
+    @question_number = QUESION_NUMBER_FROM_YEAR_AND_OWNERSHIP[form.start_date.year][ownershipsch] if QUESION_NUMBER_FROM_YEAR_AND_OWNERSHIP[form.start_date.year].present?
     @optional = optional
   end
 
@@ -20,16 +20,10 @@ class Form::Sales::Questions::DepositAmount < ::Form::Question
     true
   end
 
-  def question_number
-    case @ownershipsch
-    when 1
-      95
-    when 2
-      108
-    when 3
-      116
-    end
-  end
+  QUESION_NUMBER_FROM_YEAR_AND_OWNERSHIP = {
+    2023 => { 1 => 95, 2 => 108, 3 => 116 },
+    2024 => { 1 => 97, 2 => 110, 3 => 117 },
+  }.freeze
 
   def hint_text
     if @optional

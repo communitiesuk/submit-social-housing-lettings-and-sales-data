@@ -30,16 +30,12 @@ class Form::Sales::Questions::LivingBeforePurchaseYears < ::Form::Question
     end
   end
 
-  def question_number
-    case @ownershipsch
-    when 1
-      75
-    when 2
-      99
-    end
-  end
-
   def suffix_label(log)
     " #{'year'.pluralize(log[id])}"
   end
+
+  QUESION_NUMBER_FROM_YEAR_AND_OWNERSHIP = {
+    2023 => { 1 => 75, 2 => 99 },
+    2024 => { 1 => 77, 2 => 101 },
+  }.freeze
 end

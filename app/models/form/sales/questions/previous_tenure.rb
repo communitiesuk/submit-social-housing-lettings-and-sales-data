@@ -8,7 +8,7 @@ class Form::Sales::Questions::PreviousTenure < ::Form::Question
     @hint_text = ""
     @page = page
     @answer_options = ANSWER_OPTIONS
-    @question_number = 87
+    @question_number = QUESION_NUMBER_FROM_YEAR[form.start_date.year]
   end
 
   ANSWER_OPTIONS = {
@@ -18,4 +18,6 @@ class Form::Sales::Questions::PreviousTenure < ::Form::Question
     "9" => { "value" => "Other" },
     "10" => { "value" => "Don’t know" },
   }.freeze
+
+  QUESION_NUMBER_FROM_YEAR = { 2023 => 87, 2024 => 89 }.freeze
 end

@@ -10,6 +10,8 @@ class Form::Sales::Questions::PreviousBedrooms < ::Form::Question
     @max = 6
     @step = 1
     @hint_text = "For bedsits enter 1"
-    @question_number = 85
+    @question_number = QUESION_NUMBER_FROM_YEAR[form.start_date.year]
   end
+
+  QUESION_NUMBER_FROM_YEAR = { 2023 => 85, 2024 => 87 }.freeze
 end

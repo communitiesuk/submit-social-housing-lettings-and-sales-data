@@ -12,6 +12,8 @@ class Form::Sales::Questions::Buyer2Income < ::Form::Question
     @width = 5
     @prefix = "£"
     @check_answers_card_number = 2
-    @question_number = 69
+    @question_number = QUESION_NUMBER_FROM_YEAR[form.start_date.year]
   end
+
+  QUESION_NUMBER_FROM_YEAR = { 2023 => 69, 2024 => 71 }.freeze
 end

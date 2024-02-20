@@ -8,7 +8,7 @@ class Form::Sales::Questions::AddressLine1 < ::Form::Question
     @plain_label = true
     @check_answer_label = "Address lines 1 and 2"
     @disable_clearing_if_not_routed_or_dynamic_answer_options = true
-    @question_number = 15
+    @question_number = QUESION_NUMBER_FROM_YEAR[form.start_date.year]
     @hide_question_number_on_page = true
   end
 
@@ -18,4 +18,6 @@ class Form::Sales::Questions::AddressLine1 < ::Form::Question
       log.address_line2,
     ].select(&:present?).join("\n")
   end
+
+  QUESION_NUMBER_FROM_YEAR = { 2023 => 15, 2024 => 19 }.freeze
 end

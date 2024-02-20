@@ -6,7 +6,7 @@ class Form::Sales::Questions::JointPurchase < ::Form::Question
     @header = "Is this a joint purchase?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
-    @question_number = 9
+    @question_number = QUESION_NUMBER_FROM_YEAR[form.start_date.year]
   end
 
   ANSWER_OPTIONS = {
@@ -19,4 +19,6 @@ class Form::Sales::Questions::JointPurchase < ::Form::Question
       "This is where two or more people are named as legal owners of the property after the purchase"
     end
   end
+
+  QUESION_NUMBER_FROM_YEAR = { 2023 => 9, 2024 => 11 }.freeze
 end

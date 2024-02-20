@@ -6,7 +6,7 @@ class Form::Sales::Questions::BuyerPrevious < ::Form::Question
     @header = I18n.t("questions.soctenant", count: joint_purchase ? 2 : 1)
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
-    @question_number = 84
+    @question_number = QUESION_NUMBER_FROM_YEAR[form.start_date.year]
   end
 
   ANSWER_OPTIONS = {
@@ -25,4 +25,6 @@ class Form::Sales::Questions::BuyerPrevious < ::Form::Question
   def derived?
     form.start_year_after_2024?
   end
+
+  QUESION_NUMBER_FROM_YEAR = { 2023 => 84, 2024 => 86 }.freeze
 end

@@ -19,11 +19,20 @@ class Form::Sales::Questions::PersonAgeKnown < ::Form::Question
       ],
     }
     @check_answers_card_number = person_index
-    @question_number = 29 + (4 * person_index)
+    @person_index = person_index
   end
 
   ANSWER_OPTIONS = {
     "0" => { "value" => "Yes" },
     "1" => { "value" => "No" },
   }.freeze
+
+  def question_number
+    case form.start_date.year
+    when 2023
+      29 + (4 * @person_index)
+    else
+      31 + (4 * @person_index)
+    end
+  end
 end

@@ -10,17 +10,11 @@ class Form::Sales::Questions::LeaseholdCharges < ::Form::Question
     @width = 5
     @prefix = "£"
     @ownershipsch = ownershipsch
-    @question_number = question_number
+    @question_number = QUESION_NUMBER_FROM_YEAR_AND_OWNERSHIP[form.start_date.year][ownershipsch] if QUESION_NUMBER_FROM_YEAR_AND_OWNERSHIP[form.start_date.year].present?
   end
 
-  def question_number
-    case @ownershipsch
-    when 1
-      98
-    when 2
-      109
-    when 3
-      117
-    end
-  end
+  QUESION_NUMBER_FROM_YEAR_AND_OWNERSHIP = {
+    2023 => { 1 => 98, 2 => 109, 3 => 117 },
+    2024 => { 1 => 100, 2 => 111, 3 => 118 },
+  }.freeze
 end

@@ -13,7 +13,7 @@ class Form::Sales::Questions::Buyer2RelationshipToBuyer1 < ::Form::Question
       },
       "value" => "Prefers not to say",
     }]
-    @question_number = 27
+    @question_number = QUESION_NUMBER_FROM_YEAR[form.start_date.year]
   end
 
   ANSWER_OPTIONS = {
@@ -22,4 +22,6 @@ class Form::Sales::Questions::Buyer2RelationshipToBuyer1 < ::Form::Question
     "X" => { "value" => "Other" },
     "R" => { "value" => "Buyer prefers not to say" },
   }.freeze
+
+  QUESION_NUMBER_FROM_YEAR = { 2023 => 27, 2024 => 29 }.freeze
 end

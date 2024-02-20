@@ -11,17 +11,13 @@ class Form::Sales::Questions::PurchasePrice < ::Form::Question
     @prefix = "£"
     @hint_text = hint_text
     @ownership_sch = ownershipsch
-    @question_number = question_number
+    @question_number = QUESION_NUMBER_FROM_YEAR_AND_OWNERSHIP[form.start_date.year][ownershipsch] if QUESION_NUMBER_FROM_YEAR_AND_OWNERSHIP[form.start_date.year].present?
   end
 
-  def question_number
-    case @ownership_sch
-    when 2 # discounted ownership scheme
-      100
-    when 3 # outright sale
-      110
-    end
-  end
+  QUESION_NUMBER_FROM_YEAR_AND_OWNERSHIP = {
+    2023 => { 2 => 100, 3 => 110 },
+    2024 => { 2 => 102, 3 => 112 },
+  }.freeze
 
   def hint_text
     return if @ownership_sch == 3 # outright sale

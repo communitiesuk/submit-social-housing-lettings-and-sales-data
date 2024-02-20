@@ -11,11 +11,13 @@ class Form::Sales::Questions::Prevloc < ::Form::Question
       },
       "value" => "Not known",
     }]
-    @question_number = 58
+    @question_number = QUESION_NUMBER_FROM_YEAR[form.start_date.year]
     @disable_clearing_if_not_routed_or_dynamic_answer_options = true
   end
 
   def answer_options
     { "" => "Select an option" }.merge(LocalAuthority.active(form.start_date).map { |la| [la.code, la.name] }.to_h)
   end
+
+  QUESION_NUMBER_FROM_YEAR = { 2023 => 58, 2024 => 60 }.freeze
 end

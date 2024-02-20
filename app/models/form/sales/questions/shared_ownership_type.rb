@@ -7,7 +7,7 @@ class Form::Sales::Questions::SharedOwnershipType < ::Form::Question
     @top_guidance_partial = guidance_partial
     @type = "radio"
     @answer_options = answer_options
-    @question_number = 4
+    @question_number = QUESION_NUMBER_FROM_YEAR[form.start_date.year]
   end
 
   def hint_text
@@ -50,4 +50,6 @@ class Form::Sales::Questions::SharedOwnershipType < ::Form::Question
       "shared_ownership_type_definitions"
     end
   end
+
+  QUESION_NUMBER_FROM_YEAR = { 2023 => 4, 2024 => 6 }.freeze
 end

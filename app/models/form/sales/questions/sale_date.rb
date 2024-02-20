@@ -5,6 +5,8 @@ class Form::Sales::Questions::SaleDate < ::Form::Question
     @check_answer_label = "Sale completion date"
     @header = "What is the sale completion date?"
     @type = "date"
-    @question_number = 1
+    @question_number = QUESION_NUMBER_FROM_YEAR[form.start_date.year]
   end
+
+  QUESION_NUMBER_FROM_YEAR = { 2023 => 1, 2024 => 3 }.freeze
 end

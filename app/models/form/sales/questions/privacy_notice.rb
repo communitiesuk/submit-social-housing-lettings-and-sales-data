@@ -5,7 +5,7 @@ class Form::Sales::Questions::PrivacyNotice < ::Form::Question
     @check_answer_label = "#{joint_purchase ? 'Buyers have' : 'Buyer has'} seen the privacy notice?"
     @header = "Declaration"
     @type = "checkbox"
-    @question_number = 19
+    @question_number = QUESION_NUMBER_FROM_YEAR[form.start_date.year]
     @joint_purchase = joint_purchase
     @top_guidance_partial = guidance
   end
@@ -27,4 +27,6 @@ class Form::Sales::Questions::PrivacyNotice < ::Form::Question
       @joint_purchase ? "privacy_notice_buyer_joint_purchase" : "privacy_notice_buyer"
     end
   end
+  
+  QUESION_NUMBER_FROM_YEAR = { 2023 => 19, 2024 => 14 }.freeze
 end

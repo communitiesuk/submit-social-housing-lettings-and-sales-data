@@ -7,7 +7,7 @@ class Form::Sales::Questions::Prevshared < ::Form::Question
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @hint_text = "For any buyer"
-    @question_number = 74
+    @question_number = QUESION_NUMBER_FROM_YEAR[form.start_date.year]
   end
 
   ANSWER_OPTIONS = {
@@ -15,4 +15,6 @@ class Form::Sales::Questions::Prevshared < ::Form::Question
     "2" => { "value" => "No" },
     "3" => { "value" => "Don’t know" },
   }.freeze
+
+  QUESION_NUMBER_FROM_YEAR = { 2023 => 74, 2024 => 76 }.freeze
 end

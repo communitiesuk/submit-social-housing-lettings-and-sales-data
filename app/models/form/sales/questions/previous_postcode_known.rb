@@ -20,7 +20,7 @@ class Form::Sales::Questions::PreviousPostcodeKnown < ::Form::Question
         },
       ],
     }
-    @question_number = 57
+    @question_number = QUESION_NUMBER_FROM_YEAR[form.start_date.year]
     @disable_clearing_if_not_routed_or_dynamic_answer_options = true
   end
 
@@ -28,4 +28,6 @@ class Form::Sales::Questions::PreviousPostcodeKnown < ::Form::Question
     "0" => { "value" => "Yes" },
     "1" => { "value" => "No" },
   }.freeze
+
+  QUESION_NUMBER_FROM_YEAR = { 2023 => 57, 2024 => 59 }.freeze
 end

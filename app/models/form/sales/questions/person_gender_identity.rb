@@ -12,7 +12,7 @@ class Form::Sales::Questions::PersonGenderIdentity < ::Form::Question
       },
       "value" => "Prefers not to say",
     }]
-    @question_number = 30 + (4 * person_index)
+    @person_index = person_index
   end
 
   ANSWER_OPTIONS = {
@@ -26,5 +26,14 @@ class Form::Sales::Questions::PersonGenderIdentity < ::Form::Question
     return unless form.start_year_after_2024?
 
     "This should be however they personally choose to identify from the options below. This may or may not be the same as their biological sex or the sex they were assigned at birth."
+  end
+
+  def question_number
+    case form.start_date.year
+    when 2023
+      30 + (4 * @person_index)
+    else
+      32 + (4 * @person_index)
+    end
   end
 end

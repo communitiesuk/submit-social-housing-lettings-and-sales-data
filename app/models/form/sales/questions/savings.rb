@@ -9,6 +9,8 @@ class Form::Sales::Questions::Savings < ::Form::Question
     @prefix = "£"
     @step = 10
     @min = 0
-    @question_number = 72
+    @question_number = QUESION_NUMBER_FROM_YEAR[form.start_date.year]
   end
+
+  QUESION_NUMBER_FROM_YEAR = { 2023 => 72, 2024 => 74 }.freeze
 end

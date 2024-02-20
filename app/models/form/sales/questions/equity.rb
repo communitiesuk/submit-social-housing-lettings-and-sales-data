@@ -11,6 +11,8 @@ class Form::Sales::Questions::Equity < ::Form::Question
     @width = 5
     @suffix = "%"
     @hint_text = "Enter the amount of initial equity held by the purchaser (for example, 25% or 50%)"
-    @question_number = 89
+    @question_number = QUESION_NUMBER_FROM_YEAR[form.start_date.year]
   end
+
+  QUESION_NUMBER_FROM_YEAR = { 2023 => 89, 2024 => 91 }.freeze
 end

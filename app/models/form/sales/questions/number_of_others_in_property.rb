@@ -10,7 +10,7 @@ class Form::Sales::Questions::NumberOfOthersInProperty < ::Form::Question
     @min = 0
     @max = 15
     @step = 1
-    @question_number = 35
+    @question_number = QUESION_NUMBER_FROM_YEAR[form.start_date.year]
   end
 
 private
@@ -22,4 +22,6 @@ private
       "You can provide details for a maximum of 5 other people if there is only one buyer."
     end
   end
+
+  QUESION_NUMBER_FROM_YEAR = { 2023 => 35, 2024 => 37 }.freeze
 end

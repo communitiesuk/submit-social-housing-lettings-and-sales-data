@@ -7,7 +7,7 @@ class Form::Sales::Questions::ArmedForces < ::Form::Question
     @type = "radio"
     @hint_text = "A regular is somebody who has served in the Royal Navy, the Royal Marines, the Royal Airforce or Army full time and does not include reserve forces"
     @answer_options = ANSWER_OPTIONS
-    @question_number = 62
+    @question_number = QUESION_NUMBER_FROM_YEAR[form.start_date.year]
   end
 
   ANSWER_OPTIONS = {
@@ -16,4 +16,6 @@ class Form::Sales::Questions::ArmedForces < ::Form::Question
     "3" => { "value" => "Buyer prefers not to say" },
     "8" => { "value" => "Don't know" },
   }.freeze
+
+  QUESION_NUMBER_FROM_YEAR = { 2023 => 62, 2024 => 64 }.freeze
 end

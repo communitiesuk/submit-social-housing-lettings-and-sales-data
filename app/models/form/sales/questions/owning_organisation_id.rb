@@ -5,6 +5,7 @@ class Form::Sales::Questions::OwningOrganisationId < ::Form::Question
     @check_answer_label = "Owning organisation"
     @header = "Which organisation owns this log?"
     @type = "select"
+    @question_number = QUESION_NUMBER_FROM_YEAR[form.start_date.year]
   end
 
   def answer_options(log = nil, user = nil)
@@ -99,4 +100,6 @@ private
   def merged_organisation_label(name, merge_date)
     "#{name} (inactive as of #{merge_date.to_fs(:govuk_date)})"
   end
+
+  QUESION_NUMBER_FROM_YEAR = { 2024 => 1 }.freeze
 end

@@ -18,7 +18,7 @@ class Form::Sales::Questions::LivingBeforePurchase < ::Form::Question
       ],
     }
     @ownershipsch = ownershipsch
-    @question_number = question_number
+    @question_number = QUESION_NUMBER_FROM_YEAR_AND_OWNERSHIP[form.start_date.year][ownershipsch]
   end
 
   ANSWER_OPTIONS = {
@@ -26,12 +26,8 @@ class Form::Sales::Questions::LivingBeforePurchase < ::Form::Question
     "1" => { "value" => "No" },
   }.freeze
 
-  def question_number
-    case @ownershipsch
-    when 1
-      75
-    when 2
-      99
-    end
-  end
+  QUESION_NUMBER_FROM_YEAR_AND_OWNERSHIP = {
+    2023 => { 1 => 75, 2 => 99 },
+    2024 => { 1 => 77, 2 => 101 },
+  }.freeze
 end

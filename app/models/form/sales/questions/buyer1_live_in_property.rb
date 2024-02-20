@@ -8,11 +8,13 @@ class Form::Sales::Questions::Buyer1LiveInProperty < ::Form::Question
     @answer_options = ANSWER_OPTIONS
     @hint_text = "Buyer 1 is the person in the household who does the most paid work. If it’s a joint purchase and the buyers do the same amount of paid work, buyer 1 is whoever is the oldest."
     @check_answers_card_number = 1
-    @question_number = 26
+    @question_number = QUESION_NUMBER_FROM_YEAR[form.start_date.year]
   end
 
   ANSWER_OPTIONS = {
     "1" => { "value" => "Yes" },
     "2" => { "value" => "No" },
   }.freeze
+
+  QUESION_NUMBER_FROM_YEAR = { 2023 => 26, 2024 => 28 }.freeze
 end

@@ -7,7 +7,7 @@ class Form::Sales::Questions::Buyer2Mortgage < ::Form::Question
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @check_answers_card_number = 2
-    @question_number = 70
+    @question_number = QUESION_NUMBER_FROM_YEAR[form.start_date.year]
   end
 
   ANSWER_OPTIONS = {
@@ -22,4 +22,6 @@ class Form::Sales::Questions::Buyer2Mortgage < ::Form::Question
       "2" => { "value" => "No" },
     }
   end
+
+  QUESION_NUMBER_FROM_YEAR = { 2023 => 70, 2024 => 72 }.freeze
 end

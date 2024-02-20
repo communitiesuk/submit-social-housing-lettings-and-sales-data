@@ -7,7 +7,7 @@ class Form::Sales::Questions::Buyer2LivingIn < ::Form::Question
     @type = "radio"
     @hint_text = ""
     @answer_options = ANSWER_OPTIONS
-    @question_number = 60
+    @question_number = QUESION_NUMBER_FROM_YEAR[form.start_date.year]
   end
 
   ANSWER_OPTIONS = {
@@ -15,4 +15,6 @@ class Form::Sales::Questions::Buyer2LivingIn < ::Form::Question
     "2" => { "value" => "No" },
     "3" => { "value" => "Don't know" },
   }.freeze
+
+  QUESION_NUMBER_FROM_YEAR = { 2023 => 60, 2024 => 62 }.freeze
 end

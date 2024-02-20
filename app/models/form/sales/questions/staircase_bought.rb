@@ -10,6 +10,8 @@ class Form::Sales::Questions::StaircaseBought < ::Form::Question
     @max = 100
     @step = 1
     @suffix = "%"
-    @question_number = 77
+    @question_number = QUESION_NUMBER_FROM_YEAR[form.start_date.year]
   end
+
+  QUESION_NUMBER_FROM_YEAR = { 2023 => 77, 2024 => 79 }.freeze
 end

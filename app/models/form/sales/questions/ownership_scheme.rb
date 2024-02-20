@@ -5,7 +5,7 @@ class Form::Sales::Questions::OwnershipScheme < ::Form::Question
     @check_answer_label = "Purchase made under ownership scheme"
     @header = "Was this purchase made through an ownership scheme?"
     @type = "radio"
-    @question_number = 3
+    @question_number = QUESION_NUMBER_FROM_YEAR[form.start_date.year]
   end
 
   def answer_options
@@ -23,4 +23,6 @@ class Form::Sales::Questions::OwnershipScheme < ::Form::Question
       }.freeze
     end
   end
+
+  QUESION_NUMBER_FROM_YEAR = { 2023 => 3, 2024 => 5 }.freeze
 end

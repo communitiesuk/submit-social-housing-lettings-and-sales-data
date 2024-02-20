@@ -7,7 +7,7 @@ class Form::Sales::Questions::Staircase < ::Form::Question
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @hint_text = "A staircasing transaction is when the household purchases more shares in their property, increasing the proportion they own and decreasing the proportion the housing association owns. Once the household purchases 100% of the shares, they own the property"
-    @question_number = 76
+    @question_number = QUESION_NUMBER_FROM_YEAR[form.start_date.year]
   end
 
   ANSWER_OPTIONS = {
@@ -15,4 +15,6 @@ class Form::Sales::Questions::Staircase < ::Form::Question
     "2" => { "value" => "No" },
     "3" => { "value" => "Don’t know" },
   }.freeze
+
+  QUESION_NUMBER_FROM_YEAR = { 2023 => 76, 2024 => 78 }.freeze
 end

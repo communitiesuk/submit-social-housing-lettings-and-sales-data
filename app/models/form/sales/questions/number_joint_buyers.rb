@@ -6,7 +6,7 @@ class Form::Sales::Questions::NumberJointBuyers < ::Form::Question
     @header = "Are there more than 2 joint buyers of this property?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
-    @question_number = 10
+    @question_number = QUESION_NUMBER_FROM_YEAR[form.start_date.year]
   end
 
   ANSWER_OPTIONS = {
@@ -22,4 +22,6 @@ class Form::Sales::Questions::NumberJointBuyers < ::Form::Question
       "You should still try to answer all questions even if the buyers weren’t interviewed in person"
     end
   end
+
+  QUESION_NUMBER_FROM_YEAR = { 2023 => 10, 2024 => 12 }.freeze
 end

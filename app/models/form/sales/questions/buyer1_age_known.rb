@@ -24,7 +24,7 @@ class Form::Sales::Questions::Buyer1AgeKnown < ::Form::Question
       ],
     }
     @check_answers_card_number = 1
-    @question_number = 20
+    @question_number = QUESION_NUMBER_FROM_YEAR[form.start_date.year]
   end
 
   ANSWER_OPTIONS = {
@@ -32,4 +32,6 @@ class Form::Sales::Questions::Buyer1AgeKnown < ::Form::Question
     "1" => { "value" => "No" },
     "2" => { "value" => "Buyer prefers not to say" },
   }.freeze
+
+  QUESION_NUMBER_FROM_YEAR = { 2023 => 20, 2024 => 22 }.freeze
 end

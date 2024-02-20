@@ -6,7 +6,7 @@ class Form::Sales::Questions::PropertyUnitType < ::Form::Question
     @header = "What type of unit is the property?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
-    @question_number = 12
+    @question_number = QUESION_NUMBER_FROM_YEAR[form.start_date.year]
   end
 
   ANSWER_OPTIONS = {
@@ -16,4 +16,6 @@ class Form::Sales::Questions::PropertyUnitType < ::Form::Question
     "4" => { "value" => "Bungalow" },
     "9" => { "value" => "Other" },
   }.freeze
+
+  QUESION_NUMBER_FROM_YEAR = { 2023 => 12, 2024 => 16 }.freeze
 end
