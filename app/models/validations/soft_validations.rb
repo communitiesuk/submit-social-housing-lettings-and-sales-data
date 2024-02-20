@@ -112,7 +112,8 @@ module Validations::SoftValidations
     provider_type = owning_organisation.provider_type_before_type_cast
     hard_max = CHARGE_MAXIMA_PER_WEEK.dig(:scharge, PROVIDER_TYPE[provider_type], NEEDSTYPE_VALUES[needstype])
 
-    weekly_value(scharge).between?(soft_max, hard_max)
+    weekly_scharge = weekly_value(scharge)
+    weekly_scharge > soft_max && weekly_scharge <= hard_max
   end
 
   def pscharge_in_soft_max_range?
@@ -128,7 +129,8 @@ module Validations::SoftValidations
     provider_type = owning_organisation.provider_type_before_type_cast
     hard_max = CHARGE_MAXIMA_PER_WEEK.dig(:pscharge, PROVIDER_TYPE[provider_type], NEEDSTYPE_VALUES[needstype])
 
-    weekly_value(pscharge).between?(soft_max, hard_max)
+    weekly_pscharge = weekly_value(pscharge)
+    weekly_pscharge > soft_max && weekly_pscharge <= hard_max
   end
 
   def supcharg_in_soft_max_range?
@@ -144,7 +146,8 @@ module Validations::SoftValidations
     provider_type = owning_organisation.provider_type_before_type_cast
     hard_max = CHARGE_MAXIMA_PER_WEEK.dig(:supcharg, PROVIDER_TYPE[provider_type], NEEDSTYPE_VALUES[needstype])
 
-    weekly_value(supcharg).between?(soft_max, hard_max)
+    weekly_supcharg = weekly_value(supcharg)
+    weekly_supcharg > soft_max && weekly_supcharg <= hard_max
   end
 
 private
