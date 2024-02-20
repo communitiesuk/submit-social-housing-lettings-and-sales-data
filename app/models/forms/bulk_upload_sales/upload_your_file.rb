@@ -36,7 +36,6 @@ module Forms
           log_type: BulkUpload.log_types[:sales],
           year:,
           filename: file.original_filename,
-          noint_fix_status: BulkUpload.noint_fix_statuses[:not_needed],
         )
 
         storage_service.write_file(bulk_upload.identifier, File.read(file.path))
