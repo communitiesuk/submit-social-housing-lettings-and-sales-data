@@ -88,6 +88,22 @@ RSpec.describe BulkUpload::Sales::Validator do
         end
       end
     end
+
+    context "when file is missing required headers" do
+      let(:bulk_upload) { create(:bulk_upload, user:, year: 2024) }
+      let(:log) { build(:sales_log, :completed, saledate: Time.zone.local(2024, 5, 5)) }
+      let(:file) { Tempfile.new }
+      let(:path) { file.path }
+
+      before do
+        file.write(BulkUpload::SalesLogToCsv.new(log:, line_ending: "\r\n", col_offset: 0).to_2024_csv_row)
+        file.close
+      end
+
+      it "is not valid" do
+        expect(validator).not_to be_valid
+      end
+    end
   end
 
   describe "#call" do
