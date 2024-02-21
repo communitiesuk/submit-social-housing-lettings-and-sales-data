@@ -5,6 +5,8 @@ class Form::Lettings::Questions::IrproductOther < ::Form::Question
     @check_answer_label = "Product name"
     @header = "Name of rent product"
     @type = "text"
-    @question_number = 6
+    @question_number = QUESION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last) if form.start_date.present?
   end
+
+  QUESION_NUMBER_FROM_YEAR = { 2023 => 6 }.freeze
 end

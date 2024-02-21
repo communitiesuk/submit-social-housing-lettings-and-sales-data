@@ -8,7 +8,7 @@ class Form::Lettings::Questions::EthnicMixed < ::Form::Question
     @check_answers_card_number = 1
     @hint_text = "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest."
     @answer_options = ANSWER_OPTIONS
-    @question_number = 35
+    @question_number = QUESION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
   end
 
   ANSWER_OPTIONS = {
@@ -25,4 +25,6 @@ class Form::Lettings::Questions::EthnicMixed < ::Form::Question
       "value" => "Any other Mixed or Multiple ethnic background",
     },
   }.freeze
+
+  QUESION_NUMBER_FROM_YEAR = { 2023 => 35, 2024 => 34 }.freeze
 end

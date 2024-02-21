@@ -15,8 +15,12 @@ class Form::Lettings::Questions::AgeKnown < ::Form::Question
         { "age#{person_index}_known" => 1 },
       ],
     }
-    @question_number = 31 + (4 * person_index)
+    @person_index = person_index
   end
 
   ANSWER_OPTIONS = { "0" => { "value" => "Yes" }, "1" => { "value" => "No" } }.freeze
+
+  def question_number
+    31 + (4 * @person_index)
+  end
 end

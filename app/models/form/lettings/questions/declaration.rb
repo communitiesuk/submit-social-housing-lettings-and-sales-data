@@ -7,7 +7,7 @@ class Form::Lettings::Questions::Declaration < ::Form::Question
     @type = "checkbox"
     @check_answers_card_number = 0 unless form.start_year_after_2024?
     @top_guidance_partial = form.start_year_after_2024? ? "privacy_notice_tenant_2024" : "privacy_notice_tenant"
-    @question_number = 30
+    @question_number = QUESION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
   end
 
   def answer_options
@@ -19,4 +19,6 @@ class Form::Lettings::Questions::Declaration < ::Form::Question
 
     { "declaration" => { "value" => declaration_text } }.freeze
   end
+
+  QUESION_NUMBER_FROM_YEAR = { 2023 => 30, 2024 => 11 }.freeze
 end

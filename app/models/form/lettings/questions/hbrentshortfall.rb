@@ -8,7 +8,7 @@ class Form::Lettings::Questions::Hbrentshortfall < ::Form::Question
     @check_answers_card_number = 0
     @hint_text = "Also known as the ‘outstanding amount’."
     @answer_options = ANSWER_OPTIONS
-    @question_number = 99
+    @question_number = QUESION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
   end
 
   ANSWER_OPTIONS = {
@@ -16,4 +16,6 @@ class Form::Lettings::Questions::Hbrentshortfall < ::Form::Question
     "2" => { "value" => "No" },
     "3" => { "value" => "Don’t know" },
   }.freeze
+
+  QUESION_NUMBER_FROM_YEAR = { 2023 => 99, 2024 => 98 }.freeze
 end

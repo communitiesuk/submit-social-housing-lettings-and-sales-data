@@ -11,6 +11,8 @@ class Form::Lettings::Questions::Chcharge4Weekly < ::Form::Question
     @step = 0.01
     @prefix = "£"
     @suffix = " every 4 weeks"
-    @question_number = 94
+    @question_number = QUESION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
   end
+
+  QUESION_NUMBER_FROM_YEAR = { 2023 => 94, 2024 => 93 }.freeze
 end

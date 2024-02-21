@@ -5,7 +5,7 @@ class Form::Lettings::Questions::ManagingOrganisation < ::Form::Question
     @check_answer_label = "Managing agent"
     @header = "Which organisation manages this letting?"
     @type = "select"
-    @question_number = 2
+    @question_number = QUESION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last) if form.start_date.present?
   end
 
   def answer_options(log = nil, user = nil)
@@ -83,4 +83,6 @@ private
   def selected_answer_option_is_derived?(_log)
     true
   end
+
+  QUESION_NUMBER_FROM_YEAR = { 2023 => 2 }.freeze
 end

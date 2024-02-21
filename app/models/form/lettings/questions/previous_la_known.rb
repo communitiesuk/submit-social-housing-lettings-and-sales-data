@@ -10,9 +10,11 @@ class Form::Lettings::Questions::PreviousLaKnown < ::Form::Question
     @answer_options = ANSWER_OPTIONS
     @conditional_for = { "prevloc" => [1] }
     @hidden_in_check_answers = { "depends_on" => [{ "previous_la_known" => 0 }, { "previous_la_known" => 1 }] }
-    @question_number = 81
+    @question_number = QUESION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
     @disable_clearing_if_not_routed_or_dynamic_answer_options = true
   end
 
   ANSWER_OPTIONS = { "1" => { "value" => "Yes" }, "0" => { "value" => "No" } }.freeze
+
+  QUESION_NUMBER_FROM_YEAR = { 2023 => 81, 2024 => 80 }.freeze
 end

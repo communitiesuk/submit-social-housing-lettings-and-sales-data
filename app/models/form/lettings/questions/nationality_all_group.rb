@@ -8,7 +8,7 @@ class Form::Lettings::Questions::NationalityAllGroup < ::Form::Question
     @check_answers_card_number = 1
     @hint_text = "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest. If the lead tenant is a dual national of the United Kingdom and another country, enter United Kingdom. If they are a dual national of two other countries, the tenant should decide which country to enter."
     @answer_options = ANSWER_OPTIONS
-    @question_number = 36
+    @question_number = QUESION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
     @conditional_for = { "nationality_all" => [12] }
     @hidden_in_check_answers = { "depends_on" => [{ "nationality_all_group" => 12 }] }
   end
@@ -18,4 +18,6 @@ class Form::Lettings::Questions::NationalityAllGroup < ::Form::Question
     "12" => { "value" => "Other" },
     "0" => { "value" => "Tenant prefers not to say" },
   }.freeze
+
+  QUESION_NUMBER_FROM_YEAR = { 2023 => 36, 2024 => 35 }.freeze
 end

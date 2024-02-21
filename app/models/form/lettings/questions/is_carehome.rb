@@ -8,7 +8,7 @@ class Form::Lettings::Questions::IsCarehome < ::Form::Question
     @check_answers_card_number = 0
     @hint_text = ""
     @conditional_for = { "chcharge" => [1] }
-    @question_number = 93
+    @question_number = QUESION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
   end
 
   def answer_options
@@ -24,4 +24,6 @@ class Form::Lettings::Questions::IsCarehome < ::Form::Question
       }.freeze
     end
   end
+
+  QUESION_NUMBER_FROM_YEAR = { 2023 => 93, 2024 => 92 }.freeze
 end

@@ -7,7 +7,7 @@ class Form::Lettings::Questions::FirstTimePropertyLetAsSocialHousing < ::Form::Q
     @type = "radio"
     @check_answers_card_number = 0
     @hint_text = ""
-    @question_number = 14
+    @question_number = QUESION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
   end
 
   def answer_options
@@ -24,4 +24,6 @@ class Form::Lettings::Questions::FirstTimePropertyLetAsSocialHousing < ::Form::Q
   def no_hint
     form.start_year_after_2024? ? "This is a re-let of existing social housing stock." : "This is a re-let of existing social housing."
   end
+
+  QUESION_NUMBER_FROM_YEAR = { 2023 => 14, 2024 => 15 }.freeze
 end

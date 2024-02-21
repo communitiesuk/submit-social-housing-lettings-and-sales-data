@@ -8,7 +8,7 @@ class Form::Lettings::Questions::PersonWorkingSituation < ::Form::Question
     @check_answers_card_number = person_index
     @hint_text = ""
     @answer_options = ANSWER_OPTIONS
-    @question_number = 33 + (4 * person_index)
+    @person_index = person_index
   end
 
   ANSWER_OPTIONS = {
@@ -31,4 +31,12 @@ class Form::Lettings::Questions::PersonWorkingSituation < ::Form::Question
     "divider" => { "value" => true },
     "10" => { "value" => "Person prefers not to say" },
   }.freeze
+
+  def question_number
+    if form.start_date.year == 2023
+      33 + (4 * @person_index)
+    else
+      32 + (4 * @person_index)
+    end
+  end
 end

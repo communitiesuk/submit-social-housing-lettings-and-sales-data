@@ -7,7 +7,7 @@ class Form::Lettings::Questions::Renewal < ::Form::Question
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @hint_text = hint_text
-    @question_number = 4
+    @question_number = QUESION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last) if form.start_date.present?
   end
 
   ANSWER_OPTIONS = {
@@ -31,4 +31,6 @@ class Form::Lettings::Questions::Renewal < ::Form::Question
       "A renewal is a letting to the same tenant in the same property. If the property was previously being used as temporary accommodation, then answer 'no'"
     end
   end
+
+  QUESION_NUMBER_FROM_YEAR = { 2023 => 4, 2024 => 6 }.freeze
 end

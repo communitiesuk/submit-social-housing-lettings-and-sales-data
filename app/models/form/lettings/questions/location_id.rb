@@ -11,7 +11,7 @@ class Form::Lettings::Questions::LocationId < ::Form::Question
         "needstype": 2,
       },
     }
-    @question_number = 10
+    @question_number = QUESION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last) if form.start_date.present?
     @disable_clearing_if_not_routed_or_dynamic_answer_options = true
     @top_guidance_partial = "finding_location"
   end
@@ -58,4 +58,6 @@ private
       "Which location is this log for?"
     end
   end
+
+  QUESION_NUMBER_FROM_YEAR = { 2023 => 10, 2024 => 5 }.freeze
 end

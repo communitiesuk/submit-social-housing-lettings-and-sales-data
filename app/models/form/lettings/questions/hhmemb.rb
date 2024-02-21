@@ -11,6 +11,8 @@ class Form::Lettings::Questions::Hhmemb < ::Form::Question
     @min = 1
     @hint_text = "You can provide details for a maximum of 8 people."
     @step = 1
-    @question_number = 31
+    @question_number = QUESION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
   end
+
+  QUESION_NUMBER_FROM_YEAR = { 2023 => 31, 2024 => 30 }.freeze
 end

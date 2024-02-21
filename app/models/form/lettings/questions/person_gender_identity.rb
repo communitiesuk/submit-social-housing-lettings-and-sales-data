@@ -7,7 +7,7 @@ class Form::Lettings::Questions::PersonGenderIdentity < ::Form::Question
     @type = "radio"
     @check_answers_card_number = person_index
     @answer_options = ANSWER_OPTIONS
-    @question_number = 32 + (4 * person_index)
+    @person_index = person_index
   end
 
   ANSWER_OPTIONS = {
@@ -23,6 +23,14 @@ class Form::Lettings::Questions::PersonGenderIdentity < ::Form::Question
       "This should be however they personally choose to identify from the options below. This may or may not be the same as their biological sex or the sex they were assigned at birth."
     else
       ""
+    end
+  end
+
+  def question_number
+    if form.start_date.year == 2023
+      32 + (4 * @person_index)
+    else
+      31 + (4 * @person_index)
     end
   end
 end

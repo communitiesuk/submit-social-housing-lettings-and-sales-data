@@ -5,7 +5,7 @@ class Form::Lettings::Questions::StockOwner < ::Form::Question
     @check_answer_label = "Stock owner"
     @header = "Which organisation owns this property?"
     @type = "select"
-    @question_number = 1
+    @question_number = QUESION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last) if form.start_date.present?
   end
 
   def answer_options(log = nil, user = nil)
@@ -89,4 +89,6 @@ private
   def merged_organisation_label(name, merge_date)
     "#{name} (inactive as of #{merge_date.to_fs(:govuk_date)})"
   end
+
+  QUESION_NUMBER_FROM_YEAR = { 2023 => 1 }.freeze
 end

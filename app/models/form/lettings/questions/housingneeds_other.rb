@@ -7,7 +7,7 @@ class Form::Lettings::Questions::HousingneedsOther < ::Form::Question
     @type = "radio"
     @check_answers_card_number = 0
     @hint_text = ""
-    @question_number = 72
+    @question_number = QUESION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
   end
 
   def answer_options
@@ -24,4 +24,6 @@ class Form::Lettings::Questions::HousingneedsOther < ::Form::Question
       }.freeze
     end
   end
+
+  QUESION_NUMBER_FROM_YEAR = { 2023 => 72, 2024 => 71 }.freeze
 end

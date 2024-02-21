@@ -6,7 +6,7 @@ class Form::Lettings::Questions::Uprn < ::Form::Question
     @header = "What is the property's UPRN?"
     @type = "text"
     @width = 10
-    @question_number = 11
+    @question_number = QUESION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
     @inferred_check_answers_value = [
       {
         "condition" => { "uprn_known" => 0 },
@@ -35,4 +35,6 @@ class Form::Lettings::Questions::Uprn < ::Form::Question
 
     "\n\n#{value.join("\n")}"
   end
+
+  QUESION_NUMBER_FROM_YEAR = { 2023 => 11, 2024 => 12 }.freeze
 end

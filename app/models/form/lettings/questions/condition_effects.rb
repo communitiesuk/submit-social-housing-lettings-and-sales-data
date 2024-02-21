@@ -8,7 +8,7 @@ class Form::Lettings::Questions::ConditionEffects < ::Form::Question
     @check_answers_card_number = 0
     @hint_text = "Select all that apply."
     @answer_options = ANSWER_OPTIONS
-    @question_number = 74
+    @question_number = QUESION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
   end
 
   ANSWER_OPTIONS = {
@@ -29,4 +29,6 @@ class Form::Lettings::Questions::ConditionEffects < ::Form::Question
     "illness_type_1" => { "value" => "Vision", "hint" => "For example, blindness or partial sight." },
     "illness_type_10" => { "value" => "Other" },
   }.freeze
+
+  QUESION_NUMBER_FROM_YEAR = { 2023 => 74, 2024 => 73 }.freeze
 end
