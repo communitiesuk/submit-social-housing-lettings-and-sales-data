@@ -6,7 +6,7 @@ class Form::Sales::Questions::Buyer2EthnicBackgroundWhite < ::Form::Question
     @header = "Which of the following best describes buyer 2’s White background?"
     @type = "radio"
     @check_answers_card_number = 2
-    @question_number = QUESION_NUMBER_FROM_YEAR[form.start_date.year]
+    @question_number = QUESION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
   end
 
   def answer_options

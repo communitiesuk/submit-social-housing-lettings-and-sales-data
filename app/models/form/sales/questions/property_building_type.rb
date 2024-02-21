@@ -6,7 +6,7 @@ class Form::Sales::Questions::PropertyBuildingType < ::Form::Question
     @header = "What type of building is the property?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
-    @question_number = QUESION_NUMBER_FROM_YEAR[form.start_date.year]
+    @question_number = QUESION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
   end
 
   ANSWER_OPTIONS = {

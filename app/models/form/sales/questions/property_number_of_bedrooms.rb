@@ -10,7 +10,7 @@ class Form::Sales::Questions::PropertyNumberOfBedrooms < ::Form::Question
     @min = 1
     @max = 9
     @step = 1
-    @question_number = QUESION_NUMBER_FROM_YEAR[form.start_date.year]
+    @question_number = QUESION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
   end
 
   QUESION_NUMBER_FROM_YEAR = { 2023 => 11, 2024 => 15 }.freeze

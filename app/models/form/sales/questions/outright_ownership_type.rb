@@ -10,7 +10,7 @@ class Form::Sales::Questions::OutrightOwnershipType < ::Form::Question
     @conditional_for = {
       "othtype" => [12],
     }
-    @question_number = QUESION_NUMBER_FROM_YEAR[form.start_date.year]
+    @question_number = QUESION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
   end
 
   ANSWER_OPTIONS = {

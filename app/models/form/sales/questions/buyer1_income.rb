@@ -12,7 +12,7 @@ class Form::Sales::Questions::Buyer1Income < ::Form::Question
     @width = 5
     @prefix = "£"
     @check_answers_card_number = 1
-    @question_number = QUESION_NUMBER_FROM_YEAR[form.start_date.year]
+    @question_number = QUESION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
   end
 
   QUESION_NUMBER_FROM_YEAR = { 2023 => 67, 2024 => 69 }.freeze

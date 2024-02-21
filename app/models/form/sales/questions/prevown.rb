@@ -6,7 +6,7 @@ class Form::Sales::Questions::Prevown < ::Form::Question
     @header = I18n.t("questions.prevown", count: joint_purchase ? 2 : 1)
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
-    @question_number = QUESION_NUMBER_FROM_YEAR[form.start_date.year]
+    @question_number = QUESION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
   end
 
   ANSWER_OPTIONS = {

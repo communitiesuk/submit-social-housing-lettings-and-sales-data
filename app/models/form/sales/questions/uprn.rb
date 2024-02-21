@@ -6,7 +6,7 @@ class Form::Sales::Questions::Uprn < ::Form::Question
     @header = "What is the property's UPRN?"
     @type = "text"
     @width = 10
-    @question_number = QUESION_NUMBER_FROM_YEAR[form.start_date.year]
+    @question_number = QUESION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
     @inferred_check_answers_value = [
       {
         "condition" => { "uprn_known" => 0 },

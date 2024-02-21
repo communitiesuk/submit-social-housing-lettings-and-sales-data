@@ -9,7 +9,7 @@ class Form::Sales::Questions::MortgageLender < ::Form::Question
     @page = page
     @bottom_guidance_partial = "mortgage_lender"
     @ownershipsch = ownershipsch
-    @question_number = QUESION_NUMBER_FROM_YEAR_AND_OWNERSHIP[form.start_date.year][ownershipsch] if QUESION_NUMBER_FROM_YEAR_AND_OWNERSHIP[form.start_date.year].present?
+    @question_number = QUESION_NUMBER_FROM_YEAR_AND_OWNERSHIP.fetch(form.start_date.year, QUESION_NUMBER_FROM_YEAR_AND_OWNERSHIP.max_by { |k, _v| k }.last)[ownershipsch]
   end
 
   ANSWER_OPTIONS = {

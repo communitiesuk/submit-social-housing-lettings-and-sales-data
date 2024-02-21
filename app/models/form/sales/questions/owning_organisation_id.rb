@@ -5,7 +5,7 @@ class Form::Sales::Questions::OwningOrganisationId < ::Form::Question
     @check_answer_label = "Owning organisation"
     @header = "Which organisation owns this log?"
     @type = "select"
-    @question_number = QUESION_NUMBER_FROM_YEAR[form.start_date.year]
+    @question_number = QUESION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
   end
 
   def answer_options(log = nil, user = nil)
@@ -101,5 +101,5 @@ private
     "#{name} (inactive as of #{merge_date.to_fs(:govuk_date)})"
   end
 
-  QUESION_NUMBER_FROM_YEAR = { 2024 => 1 }.freeze
+  QUESION_NUMBER_FROM_YEAR = { 2023 => nil, 2024 => 1 }.freeze
 end

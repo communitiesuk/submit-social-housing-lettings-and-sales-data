@@ -20,7 +20,7 @@ class Form::Sales::Questions::Age1 < ::Form::Question
     @min = 16
     @max = 110
     @step = 1
-    @question_number = QUESION_NUMBER_FROM_YEAR[form.start_date.year]
+    @question_number = QUESION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
   end
 
   QUESION_NUMBER_FROM_YEAR = { 2023 => 20, 2024 => 22 }.freeze

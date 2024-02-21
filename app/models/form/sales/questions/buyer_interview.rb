@@ -7,7 +7,7 @@ class Form::Sales::Questions::BuyerInterview < ::Form::Question
     @type = "radio"
     @hint_text = "You should still try to answer all questions even if the #{joint_purchase ? 'buyers weren’t' : 'buyer wasn’t'} interviewed in person"
     @answer_options = ANSWER_OPTIONS
-    @question_number = QUESION_NUMBER_FROM_YEAR[form.start_date.year]
+    @question_number = QUESION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
   end
 
   ANSWER_OPTIONS = {

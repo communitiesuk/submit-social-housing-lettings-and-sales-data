@@ -7,7 +7,7 @@ class Form::Sales::Questions::Buyer2Nationality < ::Form::Question
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @check_answers_card_number = 2
-    @question_number = QUESION_NUMBER_FROM_YEAR[form.start_date.year]
+    @question_number = QUESION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
     @inferred_check_answers_value = [{
       "condition" => {
         "national" => 13,
