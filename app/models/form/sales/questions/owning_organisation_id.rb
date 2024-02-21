@@ -14,7 +14,7 @@ class Form::Sales::Questions::OwningOrganisationId < ::Form::Question
     return answer_opts unless user
     return answer_opts unless log
 
-    if FeatureToggle.sales_managing_organisation_enabled? && !user.support?
+    unless user.support?
       if log.owning_organisation_id.present?
         answer_opts[log.owning_organisation.id] = log.owning_organisation.name
       end
@@ -28,43 +28,36 @@ class Form::Sales::Questions::OwningOrganisationId < ::Form::Question
       end
     end
 
-    if FeatureToggle.merge_organisations_enabled?
-      if log.owning_organisation_id.present?
-        answer_opts[log.owning_organisation.id] = log.owning_organisation.name
-      end
+    if log.owning_organisation_id.present?
+      answer_opts[log.owning_organisation.id] = log.owning_organisation.name
+    end
 
-      recently_absorbed_organisations = user.organisation.absorbed_organisations.merged_during_open_collection_period
-      if !user.support? && user.organisation.holds_own_stock?
-        answer_opts[user.organisation.id] = if recently_absorbed_organisations.exists? && user.organisation.available_from.present?
-                                              "#{user.organisation.name} (Your organisation, active as of #{user.organisation.available_from.to_fs(:govuk_date)})"
-                                            else
-                                              "#{user.organisation.name} (Your organisation)"
-                                            end
-      end
+    recently_absorbed_organisations = user.organisation.absorbed_organisations.merged_during_open_collection_period
+    if !user.support? && user.organisation.holds_own_stock?
+      answer_opts[user.organisation.id] = if recently_absorbed_organisations.exists? && user.organisation.available_from.present?
+                                            "#{user.organisation.name} (Your organisation, active as of #{user.organisation.available_from.to_fs(:govuk_date)})"
+                                          else
+                                            "#{user.organisation.name} (Your organisation)"
+                                          end
+    end
 
-      if user.support?
-        Organisation.where(holds_own_stock: true).find_each do |org|
-          if org.merge_date.present?
-            answer_opts[org.id] = "#{org.name} (inactive as of #{org.merge_date.to_fs(:govuk_date)})" if org.merge_date >= FormHandler.instance.start_date_of_earliest_open_for_editing_collection_period
-          elsif org.absorbed_organisations.merged_during_open_collection_period.exists? && org.available_from.present?
-            answer_opts[org.id] = "#{org.name} (active as of #{org.available_from.to_fs(:govuk_date)})"
-          else
-            answer_opts[org.id] = org.name
-          end
-        end
-      else
-        recently_absorbed_organisations.each do |absorbed_org|
-          answer_opts[absorbed_org.id] = merged_organisation_label(absorbed_org.name, absorbed_org.merge_date) if absorbed_org.holds_own_stock?
+    if user.support?
+      Organisation.where(holds_own_stock: true).find_each do |org|
+        if org.merge_date.present?
+          answer_opts[org.id] = "#{org.name} (inactive as of #{org.merge_date.to_fs(:govuk_date)})" if org.merge_date >= FormHandler.instance.start_date_of_earliest_open_for_editing_collection_period
+        elsif org.absorbed_organisations.merged_during_open_collection_period.exists? && org.available_from.present?
+          answer_opts[org.id] = "#{org.name} (active as of #{org.available_from.to_fs(:govuk_date)})"
+        else
+          answer_opts[org.id] = org.name
         end
       end
-
-      answer_opts
     else
-      Organisation.select(:id, :name).each_with_object(answer_opts) do |organisation, hsh|
-        hsh[organisation.id] = organisation.name
-        hsh
+      recently_absorbed_organisations.each do |absorbed_org|
+        answer_opts[absorbed_org.id] = merged_organisation_label(absorbed_org.name, absorbed_org.merge_date) if absorbed_org.holds_own_stock?
       end
     end
+
+    answer_opts
   end
 
   def displayed_answer_options(log, user = nil)
@@ -82,18 +75,14 @@ class Form::Sales::Questions::OwningOrganisationId < ::Form::Question
   end
 
   def hidden_in_check_answers?(_log, user = nil)
-    if FeatureToggle.merge_organisations_enabled?
-      return false if user.support?
+    return false if user.support?
 
-      stock_owners = user.organisation.stock_owners + user.organisation.absorbed_organisations.where(holds_own_stock: true)
+    stock_owners = user.organisation.stock_owners + user.organisation.absorbed_organisations.where(holds_own_stock: true)
 
-      if user.organisation.holds_own_stock?
-        stock_owners.count.zero?
-      else
-        stock_owners.count <= 1
-      end
+    if user.organisation.holds_own_stock?
+      stock_owners.count.zero?
     else
-      !current_user.support?
+      stock_owners.count <= 1
     end
   end
 
@@ -104,11 +93,7 @@ class Form::Sales::Questions::OwningOrganisationId < ::Form::Question
 private
 
   def selected_answer_option_is_derived?(_log)
-    if FeatureToggle.merge_organisations_enabled?
-      true
-    else
-      false
-    end
+    true
   end
 
   def merged_organisation_label(name, merge_date)

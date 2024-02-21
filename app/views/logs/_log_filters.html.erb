@@ -93,7 +93,7 @@
           } %>
         <% end %>
 
-        <% if (current_user.support? || non_support_with_managing_orgs?) && (user_or_org_lettings_path? || FeatureToggle.sales_managing_organisation_enabled?) %>
+        <% if current_user.support? || non_support_with_managing_orgs? %>
           <%= render partial: "filters/radio_filter", locals: {
             f:,
             options: {

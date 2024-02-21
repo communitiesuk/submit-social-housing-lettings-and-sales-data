@@ -9,11 +9,13 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
   let(:bulk_upload) { create(:bulk_upload, :sales, user:, year: 2024) }
   let(:user) { create(:user, organisation: owning_org) }
   let(:owning_org) { create(:organisation, :with_old_visible_id) }
+  let(:managing_org) { create(:organisation, :with_old_visible_id) }
+
   let(:setup_section_params) do
     {
       bulk_upload:,
       field_1: owning_org.old_visible_id, # organisation
-      field_2: owning_org.old_visible_id, # organisation
+      field_2: managing_org.old_visible_id, # organisation
       field_3: user.email, # user
       field_4: now.day.to_s, # sale day
       field_5: now.month.to_s, # sale month
@@ -31,7 +33,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
     {
       bulk_upload:,
       field_1: owning_org.old_visible_id,
-      field_2: owning_org.old_visible_id,
+      field_2: managing_org.old_visible_id,
 
       field_4: "12",
       field_5: "5",
@@ -114,6 +116,8 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
   end
 
   around do |example|
+    create(:organisation_relationship, parent_organisation: owning_org, child_organisation: managing_org)
+
     Timecop.freeze(Time.zone.local(2025, 2, 22)) do
       Singleton.__init__(FormHandler)
       example.run
@@ -287,7 +291,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
       it "has errors on correct setup fields" do
         errors = parser.errors.select { |e| e.options[:category] == :setup }.map(&:attribute).sort
 
-        expect(errors).to eql(%i[field_1 field_17 field_18 field_4 field_5 field_6 field_8])
+        expect(errors).to eql(%i[field_1 field_17 field_18 field_2 field_4 field_5 field_6 field_8])
       end
     end
 
@@ -303,7 +307,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
       it "has errors on correct setup fields" do
         errors = parser.errors.select { |e| e.options[:category] == :setup }.map(&:attribute).sort
 
-        expect(errors).to eql(%i[field_1 field_15 field_17 field_18 field_4 field_5 field_6 field_9])
+        expect(errors).to eql(%i[field_1 field_15 field_17 field_18 field_2 field_4 field_5 field_6 field_9])
       end
     end
 
@@ -321,7 +325,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
       it "has errors on correct setup fields" do
         errors = parser.errors.select { |e| e.options[:category] == :setup }.map(&:attribute).sort
 
-        expect(errors).to eql(%i[field_1 field_16 field_17 field_18 field_4 field_5 field_6])
+        expect(errors).to eql(%i[field_1 field_16 field_17 field_18 field_2 field_4 field_5 field_6])
       end
     end
 
@@ -338,7 +342,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
       it "has errors on correct setup fields" do
         errors = parser.errors.select { |e| e.options[:category] == :setup }.map(&:attribute).sort
 
-        expect(errors).to eql(%i[field_1 field_10 field_15 field_17 field_18 field_4 field_5 field_6])
+        expect(errors).to eql(%i[field_1 field_10 field_15 field_17 field_18 field_2 field_4 field_5 field_6])
       end
     end
 
@@ -356,7 +360,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
       it "has errors on correct setup fields" do
         errors = parser.errors.select { |e| e.options[:category] == :setup }.map(&:attribute).sort
 
-        expect(errors).to eql(%i[field_1 field_17 field_18 field_4 field_5 field_6 field_8])
+        expect(errors).to eql(%i[field_1 field_17 field_18 field_2 field_4 field_5 field_6 field_8])
       end
     end
 
@@ -372,7 +376,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
       it "has errors on correct setup fields" do
         errors = parser.errors.select { |e| e.options[:category] == :setup }.map(&:attribute).sort
 
-        expect(errors).to eql(%i[field_1 field_11 field_13 field_14 field_17 field_18 field_4 field_5 field_6])
+        expect(errors).to eql(%i[field_1 field_11 field_13 field_14 field_17 field_18 field_2 field_4 field_5 field_6])
       end
     end
 
@@ -390,7 +394,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
       it "has errors on correct setup fields" do
         errors = parser.errors.select { |e| e.options[:category] == :setup }.map(&:attribute).sort
 
-        expect(errors).to eql(%i[field_1 field_12 field_14 field_15 field_17 field_18 field_4 field_5 field_6])
+        expect(errors).to eql(%i[field_1 field_12 field_14 field_15 field_17 field_18 field_2 field_4 field_5 field_6])
       end
     end
 
@@ -1446,39 +1450,55 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
       let(:attributes) { setup_section_params }
 
       context "when user is part of the owning organisation" do
-        it "sets managing organisation to the users organisation" do
+        it "sets managing organisation to the correct organisation" do
           parser.valid?
           expect(parser.log.owning_organisation_id).to be(owning_org.id)
-          expect(parser.log.managing_organisation_id).to be(owning_org.id)
+          expect(parser.log.managing_organisation_id).to be(managing_org.id)
         end
       end
 
-      context "when user is part of an organisation affiliated with owning org" do
-        let(:managing_agent) { create(:organisation) }
-        let(:user) { create(:user, organisation: managing_agent) }
-        let(:attributes) { setup_section_params }
-
-        before do
-          create(:organisation_relationship, child_organisation: managing_agent, parent_organisation: owning_org)
-        end
-
-        it "is not permitted as setup error" do
-          parser.valid?
-          expect(parser.log.owning_organisation_id).to be(owning_org.id)
-          expect(parser.log.managing_organisation_id).to be(managing_agent.id)
-        end
-      end
-
-      context "when user is part of an organisation not affiliated with owning org" do
-        let(:unaffiliated_org) { create(:organisation) }
-        let(:user) { create(:user, organisation: unaffiliated_org) }
-        let(:attributes) { setup_section_params }
+      context "when blank" do
+        let(:attributes) { { bulk_upload:, field_2: "" } }
 
         it "is not permitted as setup error" do
           parser.valid?
           setup_errors = parser.errors.select { |e| e.options[:category] == :setup }
 
-          expect(setup_errors.find { |e| e.attribute == :field_3 }.message).to eql("This user belongs to an organisation that does not have a relationship with the owning organisation")
+          expect(setup_errors.find { |e| e.attribute == :field_2 }.message).to eql("You must answer reported by")
+        end
+
+        it "blocks log creation" do
+          parser.valid?
+          expect(parser).to be_block_log_creation
+        end
+      end
+
+      context "when cannot find managing org" do
+        let(:attributes) { { bulk_upload:, field_2: "donotexist" } }
+
+        it "is not permitted as setup error" do
+          parser.valid?
+          setup_errors = parser.errors.select { |e| e.options[:category] == :setup }
+
+          expect(setup_errors.find { |e| e.attribute == :field_2 }.message).to eql("You must answer reported by")
+        end
+
+        it "blocks log creation" do
+          parser.valid?
+          expect(parser).to be_block_log_creation
+        end
+      end
+
+      context "when not affiliated with managing org" do
+        let(:unaffiliated_org) { create(:organisation, :with_old_visible_id) }
+
+        let(:attributes) { { bulk_upload:, field_1: owning_org.old_visible_id, field_2: unaffiliated_org.old_visible_id } }
+
+        it "is not permitted as setup error" do
+          parser.valid?
+          setup_errors = parser.errors.select { |e| e.options[:category] == :setup }
+
+          expect(setup_errors.find { |e| e.attribute == :field_2 }.message).to eql("This organisation does not have a relationship with the owning organisation")
         end
 
         it "blocks log creation" do
