@@ -334,6 +334,29 @@ RSpec.describe Validations::HouseholdValidations do
         expect(record.errors["age2"]).to be_empty
       end
     end
+
+    context "with 2024 logs" do
+      before do
+        Timecop.freeze(Time.zone.local(2024, 4, 1))
+        Singleton.__init__(FormHandler)
+        record.update!(startdate: Time.zone.local(2024, 4, 1))
+      end
+
+      after do
+        Timecop.return
+        Singleton.__init__(FormHandler)
+      end
+
+      it "does not run the validation" do
+        record.age2 = 14
+        record.relat2 = "P"
+        household_validator.validate_person_age_matches_relationship(record)
+        expect(record.errors["relat2"])
+          .not_to include(match I18n.t("validations.household.relat.child_under_16_lettings", person_num: 2))
+        expect(record.errors["age2"])
+          .not_to include(match I18n.t("validations.household.age.child_under_16_relat_lettings", person_num: 2))
+      end
+    end
   end
 
   describe "#validate_person_age_matches_economic_status" do
@@ -365,6 +388,29 @@ RSpec.describe Validations::HouseholdValidations do
           .to include(match I18n.t("validations.household.ecstat.child_over_16", person_num: 2))
         expect(record.errors["age2"])
           .to include(match I18n.t("validations.household.age.child_over_16", person_num: 2))
+      end
+    end
+
+    context "with 2024 logs" do
+      before do
+        Timecop.freeze(Time.zone.local(2024, 4, 1))
+        Singleton.__init__(FormHandler)
+        record.update!(startdate: Time.zone.local(2024, 4, 1))
+      end
+
+      after do
+        Timecop.return
+        Singleton.__init__(FormHandler)
+      end
+
+      it "does not run the validation" do
+        record.age2 = 14
+        record.ecstat2 = 1
+        household_validator.validate_person_age_matches_economic_status(record)
+        expect(record.errors["ecstat2"])
+          .not_to include(match I18n.t("validations.household.ecstat.child_under_16", person_num: 2))
+        expect(record.errors["age2"])
+          .not_to include(match I18n.t("validations.household.age.child_under_16_ecstat", person_num: 2))
       end
     end
   end
@@ -436,6 +482,32 @@ RSpec.describe Validations::HouseholdValidations do
         .to include(match I18n.t("validations.household.age.student_16_19.must_be_16_19"))
       expect(record.errors["ecstat2"])
         .to include(match I18n.t("validations.household.ecstat.student_16_19.cannot_be_student.child_not_16_19"))
+    end
+
+    context "with 2024 logs" do
+      before do
+        Timecop.freeze(Time.zone.local(2024, 4, 1))
+        Singleton.__init__(FormHandler)
+        record.update!(startdate: Time.zone.local(2024, 4, 1))
+      end
+
+      after do
+        Timecop.return
+        Singleton.__init__(FormHandler)
+      end
+
+      it "does not run the validation" do
+        record.age2 = 17
+        record.relat2 = "C"
+        record.ecstat2 = 1
+        household_validator.validate_person_age_and_relationship_matches_economic_status(record)
+        expect(record.errors["ecstat2"])
+          .not_to include(match I18n.t("validations.household.ecstat.student_16_19.must_be_student", person_num: 2))
+        expect(record.errors["age2"])
+          .not_to include(match I18n.t("validations.household.age.student_16_19.cannot_be_16_19.child_not_student", person_num: 2))
+        expect(record.errors["relat2"])
+          .not_to include(match I18n.t("validations.household.relat.student_16_19.cannot_be_child.16_19_not_student", person_num: 2))
+      end
     end
   end
 

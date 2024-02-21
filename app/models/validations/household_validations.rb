@@ -56,7 +56,7 @@ module Validations::HouseholdValidations
   end
 
   def validate_person_1_economic(record)
-    return unless record.age1 && record.ecstat1
+    return unless record.age1 && record.ecstat1 && !record.form.start_year_after_2024?
 
     if record.age1 < 16 && !economic_status_is_child_other_or_refused?(record.ecstat1)
       record.errors.add "ecstat1", I18n.t("validations.household.ecstat.child_under_16", person_num: 1)
@@ -69,6 +69,8 @@ module Validations::HouseholdValidations
   end
 
   def validate_person_age_matches_economic_status(record)
+    return if record.form.start_year_after_2024?
+
     (2..8).each do |person_num|
       age = record.public_send("age#{person_num}")
       economic_status = record.public_send("ecstat#{person_num}")
@@ -86,6 +88,8 @@ module Validations::HouseholdValidations
   end
 
   def validate_person_age_matches_relationship(record)
+    return if record.form.start_year_after_2024?
+
     (2..8).each do |person_num|
       age = record.public_send("age#{person_num}")
       relationship = record.public_send("relat#{person_num}")
@@ -99,6 +103,8 @@ module Validations::HouseholdValidations
   end
 
   def validate_person_age_and_relationship_matches_economic_status(record)
+    return if record.form.start_year_after_2024?
+
     (2..8).each do |person_num|
       age = record.public_send("age#{person_num}")
       economic_status = record.public_send("ecstat#{person_num}")
