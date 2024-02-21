@@ -9,7 +9,7 @@ class SchemeEmailCsvJob < ApplicationJob
     unfiltered_schemes = if organisation.present? && user.support?
                            Scheme.where(owning_organisation: [organisation] + organisation.parent_organisations)
                          else
-                           Scheme.where(owning_organisation: [user.organisation] + user.organisation.parent_organisations)
+                           user.schemes
                          end
     filtered_schemes = FilterManager.filter_schemes(unfiltered_schemes, search_term, filters, all_orgs, user)
     csv_string = Csv::SchemeCsvService.new(download_type:).prepare_csv(filtered_schemes)
