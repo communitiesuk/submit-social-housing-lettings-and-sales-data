@@ -5,7 +5,7 @@ RSpec.describe Form::Lettings::Questions::Sheltered, type: :model do
 
   let(:page) { instance_double(Form::Page) }
   let(:subsection) { instance_double(Form::Subsection) }
-  let(:form) { instance_double(Form) }
+  let(:form) { instance_double(Form, start_date: Time.zone.local(2023, 4, 1)) }
 
   before do
     allow(form).to receive(:start_year_after_2024?).and_return(false)
