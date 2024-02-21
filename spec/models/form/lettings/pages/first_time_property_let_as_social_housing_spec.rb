@@ -6,7 +6,7 @@ RSpec.describe Form::Lettings::Pages::FirstTimePropertyLetAsSocialHousing, type:
   let(:page_id) { nil }
   let(:page_definition) { nil }
   let(:subsection) { instance_double(Form::Subsection) }
-  let(:form) { instance_double(Form) }
+  let(:form) { instance_double(Form, start_date: Time.zone.local(2024, 4, 1)) }
 
   before do
     allow(form).to receive(:start_year_after_2024?).and_return(false)
