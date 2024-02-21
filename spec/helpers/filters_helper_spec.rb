@@ -240,12 +240,38 @@ RSpec.describe FiltersHelper do
   end
 
   describe "#collection_year_options" do
-    it "includes 2023/2024 option" do
-      expect(collection_year_options).to eq(
-        {
-          "2021": "2021/22", "2022": "2022/23", "2023": "2023/24"
-        },
-      )
+    context "with 23/24 as the current collection year" do
+      around do |example|
+        Timecop.freeze(Time.zone.local(2023, 5, 1)) do
+          example.run
+        end
+        Timecop.return
+      end
+
+      it "has the correct options" do
+        expect(collection_year_options).to eq(
+          {
+            "2023" => "2023/24", "2022" => "2022/23", "2021" => "2021/22"
+          },
+        )
+      end
+    end
+
+    context "with 24/25 as the current collection year" do
+      around do |example|
+        Timecop.freeze(Time.zone.local(2024, 5, 1)) do
+          example.run
+        end
+        Timecop.return
+      end
+
+      it "has the correct options" do
+        expect(collection_year_options).to eq(
+          {
+            "2024" => "2024/25", "2023" => "2023/24", "2022" => "2022/23"
+          },
+        )
+      end
     end
   end
 
