@@ -816,6 +816,31 @@ RSpec.describe SalesLog, type: :model do
         expect(record_from_db["ppostcode_full"]).to eq(nil)
         expect(record_from_db["prevloc"]).to eq(nil)
       end
+
+      context "when validating household members derived vars" do
+        let!(:household_sales_log) do
+          create(
+            :sales_log,
+            :completed,
+            managing_organisation: owning_organisation,
+            owning_organisation:,
+            created_by: created_by_user,
+            age6: 14,
+            saledate: Time.zone.local(2024, 5, 2),
+          )
+        end
+
+        it "correctly derives economic status for tenants under 16" do
+          record_from_db = described_class.find(household_sales_log.id)
+          expect(record_from_db["ecstat6"]).to eq(9)
+        end
+
+        it "correctly resets economic status when age changes from under 16" do
+          household_sales_log.update!(age6_known: 0, age6: 17)
+          record_from_db = described_class.find(household_sales_log.id)
+          expect(record_from_db["ecstat6"]).to eq(nil)
+        end
+      end
     end
 
     it "errors if the property postcode is emptied" do

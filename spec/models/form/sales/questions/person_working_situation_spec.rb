@@ -32,7 +32,11 @@ RSpec.describe Form::Sales::Questions::PersonWorkingSituation, type: :model do
       "0" => { "value" => "Other" },
       "10" => { "value" => "Person prefers not to say" },
       "7" => { "value" => "Full-time student" },
-      "9" => { "value" => "Child under 16" },
+      "9" => { "value" => "Child under 16",
+               "depends_on" =>
+        [{ "saledate" => { "operator" => "<", "operand" => Time.zone.local(2024, 4, 1) } },
+         { "age2_known" => 1 },
+         { "age2" => { "operator" => "<", "operand" => 16 } }] },
     })
   end
 
