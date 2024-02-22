@@ -786,7 +786,7 @@ private
 
     attributes["purchid"] = purchaser_code
     attributes["saledate"] = saledate
-    attributes["noint"] = 2 if field_17 == 1
+    attributes["noint"] = field_17
 
     attributes["age1_known"] = age1_known?
     attributes["age1"] = field_31 if attributes["age1_known"]&.zero? && field_31&.match(/\A\d{1,3}\z|\AR\z/)
