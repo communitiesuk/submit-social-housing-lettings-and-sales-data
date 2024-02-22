@@ -314,7 +314,7 @@ RSpec.describe "bulk_update" do
       let(:updated_locations_csv_path) { "updated_locations.csv" }
       let(:wrong_file_path) { "/test/no_csv_here.csv" }
       let!(:scheme) { FactoryBot.create(:scheme, service_name: "Scheme 1") }
-      let!(:different_scheme) { FactoryBot.create(:scheme, service_name: "Different scheme") }
+      let!(:different_scheme) { FactoryBot.create(:scheme, service_name: "Different scheme", owning_organisation: scheme.owning_organisation) }
 
       let(:locations) do
         create_list(:location,

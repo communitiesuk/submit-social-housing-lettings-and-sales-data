@@ -104,8 +104,13 @@ private
   def update_scheme(location, original_attributes, value)
     scheme = Scheme.find_by(id: value.delete("S"))
     if scheme.present?
-      location["scheme_id"] = scheme.id
-      Rails.logger.info("Updating location #{original_attributes['location_code']} with scheme: S#{scheme.id}")
+      original_scheme = Scheme.find_by(id: original_attributes["scheme_code"].delete("S"))
+      if original_scheme.nil? || !([original_scheme.owning_organisation] + original_scheme.owning_organisation.parent_organisations + original_scheme.owning_organisation.child_organisations).include?(scheme.owning_organisation)
+        Rails.logger.info("Cannot update location #{original_attributes['location_code']} with scheme_code: #{value}. Scheme with id #{value} is not in organisation that does not have relationship with the original organisation")
+      else
+        location["scheme_id"] = scheme.id
+        Rails.logger.info("Updating location #{original_attributes['location_code']} with scheme: S#{scheme.id}")
+      end
     else
       Rails.logger.info("Cannot update location #{original_attributes['location_code']} with scheme_code: #{value}. Scheme with id #{value} is not in the database")
     end
