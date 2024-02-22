@@ -111,7 +111,6 @@ RSpec.describe "bulk_update" do
         lettings_log.reload
         expect(lettings_log.scheme).to be_nil
         expect(lettings_log.location).to be_nil
-        expect(lettings_log.unresolved).to eq(true)
       end
 
       it "does not update the scheme if it hasn't changed" do
@@ -174,7 +173,6 @@ RSpec.describe "bulk_update" do
         lettings_log.reload
         expect(lettings_log.scheme).not_to be_nil
         expect(lettings_log.location).not_to be_nil
-        expect(lettings_log.unresolved).to be_falsey
       end
 
       it "only re-exports the logs for the schemes that have been updated" do
@@ -206,6 +204,8 @@ RSpec.describe "bulk_update" do
         expect(Rails.logger).to receive(:info).with("Updating scheme S#{schemes[0].id} with service_name: Updated test name")
         expect(Rails.logger).to receive(:info).with("Updating scheme S#{schemes[0].id} with sensitive: No")
         expect(Rails.logger).to receive(:info).with("Updating scheme S#{schemes[0].id} with scheme_type: Direct Access Hostel")
+        expect(Rails.logger).to receive(:info).with("Updated logs with startdate for scheme S#{schemes[0].id}. Log IDs: ")
+        expect(Rails.logger).to receive(:info).with("Updated logs without startdate for scheme S#{schemes[0].id}. Log IDs: #{lettings_log.id}, #{lettings_log_4.id}, #{lettings_log_5.id}")
         expect(Rails.logger).to receive(:info).with("Updating scheme S#{schemes[0].id} with arrangement_type: Another registered stock owner")
         expect(Rails.logger).to receive(:info).with("Updating scheme S#{schemes[0].id} with primary_client_group: People with drug problems")
         expect(Rails.logger).to receive(:info).with("Updating scheme S#{schemes[0].id} with has_other_client_group: No")
