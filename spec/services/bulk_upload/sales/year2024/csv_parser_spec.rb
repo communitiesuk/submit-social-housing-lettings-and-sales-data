@@ -28,6 +28,10 @@ RSpec.describe BulkUpload::Sales::Year2024::CsvParser do
     it "parses csv correctly" do
       expect(service.row_parsers[0].field_22).to eql(log.uprn)
     end
+
+    it "counts the number of valid field numbers correctly" do
+      expect(service).to be_correct_field_count
+    end
   end
 
   context "when parsing csv with headers in arbitrary order" do

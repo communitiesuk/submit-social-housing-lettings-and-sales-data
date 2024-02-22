@@ -306,6 +306,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_16_163519) do
     t.integer "duplicate_set_id"
     t.integer "nationality_all"
     t.integer "nationality_all_group"
+    t.integer "reasonother_value_check"
     t.integer "accessible_register"
     t.index ["bulk_upload_id"], name: "index_lettings_logs_on_bulk_upload_id"
     t.index ["created_by_id"], name: "index_lettings_logs_on_created_by_id"

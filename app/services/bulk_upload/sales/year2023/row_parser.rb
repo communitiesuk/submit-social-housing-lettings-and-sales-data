@@ -455,12 +455,12 @@ class BulkUpload::Sales::Year2023::RowParser
 
   validate :validate_owning_org_data_given, on: :after_log
   validate :validate_owning_org_exists, on: :after_log
-  validate :validate_owning_org_owns_stock, on: :after_log if FeatureToggle.sales_managing_organisation_enabled?
+  validate :validate_owning_org_owns_stock, on: :after_log
   validate :validate_owning_org_permitted, on: :after_log
 
   validate :validate_created_by_exists, on: :after_log
   validate :validate_created_by_related, on: :after_log
-  validate :validate_managing_org_related, on: :after_log if FeatureToggle.sales_managing_organisation_enabled?
+  validate :validate_managing_org_related, on: :after_log
   validate :validate_relevant_collection_window, on: :after_log
   validate :validate_incomplete_soft_validations, on: :after_log
 

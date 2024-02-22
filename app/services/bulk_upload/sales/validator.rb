@@ -5,6 +5,7 @@ class BulkUpload::Sales::Validator
   attr_reader :bulk_upload, :path
 
   validate :validate_file_not_empty
+  validate :validate_field_numbers_count
   validate :validate_max_columns
   validate :validate_missing_required_headers
   validate :validate_correct_template
@@ -166,6 +167,14 @@ private
 
     if csv_parser.missing_required_headers?
       errors.add :base, I18n.t("activemodel.errors.models.bulk_upload/sales/validator.attributes.base.no_headers", guidance_link: bulk_upload_sales_log_url(id: "guidance", form: { year: bulk_upload.year }, host: ENV["APP_HOST"], anchor: "using-the-bulk-upload-template"))
+    end
+  end
+
+  def validate_field_numbers_count
+    return if halt_validations?
+
+    unless csv_parser.correct_field_count?
+      errors.add(:base, :wrong_field_numbers_count)
       halt_validations!
     end
   end
