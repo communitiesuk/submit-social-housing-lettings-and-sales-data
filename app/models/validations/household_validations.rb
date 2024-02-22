@@ -100,7 +100,7 @@ module Validations::HouseholdValidations
 
       if record.form.start_year_after_2024? && (age > 19 && tenant_is_child?(relationship))
         record.errors.add "relat#{person_num}", I18n.t("validations.household.relat.child_over_19", person_num:)
-        record.errors.add "age#{person_num}", I18n.t("validations.household.age.child_over_19_relat", person_num:)
+        record.errors.add "age#{person_num}", I18n.t("validations.household.age.child_over_19_relat", person_num:, person: "lead tenant")
       end
     end
   end
@@ -119,7 +119,7 @@ module Validations::HouseholdValidations
 
       if age_between_16_19 && !(student || economic_status_refused) && child
         if record.form.start_year_after_2024?
-          record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.student_16_19.must_be_student_2024", person_num:)
+          record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.student_16_19.must_be_student_2024", person_num:, person: "lead tenant")
         else
           record.errors.add "age#{person_num}", I18n.t("validations.household.age.student_16_19.cannot_be_16_19.child_not_student")
           record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.student_16_19.must_be_student") # 1
@@ -129,7 +129,7 @@ module Validations::HouseholdValidations
 
       if !age_between_16_19 && student && child
         if record.form.start_year_after_2024?
-          record.errors.add "age#{person_num}", I18n.t("validations.household.age.student_16_19.must_be_16_19_2024", person_num:)
+          record.errors.add "age#{person_num}", I18n.t("validations.household.age.student_16_19.must_be_16_19_2024", person_num:, person: "lead tenant")
         else
           record.errors.add "age#{person_num}", I18n.t("validations.household.age.student_16_19.must_be_16_19") # 2
           record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.student_16_19.cannot_be_student.child_not_16_19")
@@ -138,7 +138,7 @@ module Validations::HouseholdValidations
       end
 
       if student && age_between_16_19 && !child && record.form.start_year_after_2024?
-        record.errors.add "relat#{person_num}", I18n.t("validations.household.relat.student_16_19.must_be_child_2024", person_num:)
+        record.errors.add "relat#{person_num}", I18n.t("validations.household.relat.student_16_19.must_be_child_2024", person_num:, person: "lead tenant")
       end
     end
   end
@@ -153,9 +153,9 @@ module Validations::HouseholdValidations
 
       next unless age > record.age1 - 12 && tenant_is_child?(relationship)
 
-      record.errors.add "age1", I18n.t("validations.household.age.age1_child_12_years_younger_2024", person_num:)
-      record.errors.add "age#{person_num}", I18n.t("validations.household.age.child_12_years_younger_2024", person_num:)
-      record.errors.add "relat#{person_num}", I18n.t("validations.household.relat.child_12_years_younger_2024", person_num:)
+      record.errors.add "age1", I18n.t("validations.household.age.age1_child_12_years_younger_2024", person_num:, person: "lead tenant")
+      record.errors.add "age#{person_num}", I18n.t("validations.household.age.child_12_years_younger_2024", person_num:, person: "lead tenant")
+      record.errors.add "relat#{person_num}", I18n.t("validations.household.relat.child_12_years_younger_2024", person_num:, person: "lead tenant")
     end
   end
 
