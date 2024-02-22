@@ -113,7 +113,7 @@ class User < ApplicationRecord
     if support?
       Scheme.all
     else
-      Scheme.filter_by_owning_organisation(organisation.absorbed_organisations + [organisation])
+      Scheme.filter_by_owning_organisation(organisation.absorbed_organisations + [organisation] + organisation.parent_organisations)
     end
   end
 
