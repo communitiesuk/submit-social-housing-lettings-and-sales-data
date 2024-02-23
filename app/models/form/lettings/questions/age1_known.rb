@@ -9,7 +9,7 @@ class Form::Lettings::Questions::Age1Known < ::Form::Question
     @answer_options = ANSWER_OPTIONS
     @conditional_for = { "age1" => [0] }
     @hidden_in_check_answers = { "depends_on" => [{ "age1_known" => 0 }, { "age1_known" => 1 }] }
-    @question_number = QUESION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
+    @question_number = QUESTION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
   end
 
   ANSWER_OPTIONS = { "0" => { "value" => "Yes" }, "1" => { "value" => "No" } }.freeze
@@ -22,5 +22,5 @@ class Form::Lettings::Questions::Age1Known < ::Form::Question
     end
   end
 
-  QUESION_NUMBER_FROM_YEAR = { 2023 => 32, 2024 => 31 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 32, 2024 => 31 }.freeze
 end

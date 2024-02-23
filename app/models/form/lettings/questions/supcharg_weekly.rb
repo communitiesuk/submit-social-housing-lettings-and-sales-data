@@ -14,8 +14,8 @@ class Form::Lettings::Questions::SupchargWeekly < ::Form::Question
     @result_field = "tcharge"
     @prefix = "£"
     @suffix = " every week"
-    @question_number = QUESION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
+    @question_number = QUESTION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
   end
 
-  QUESION_NUMBER_FROM_YEAR = { 2023 => 98, 2024 => 97 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 98, 2024 => 97 }.freeze
 end

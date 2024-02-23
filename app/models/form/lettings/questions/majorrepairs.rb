@@ -9,10 +9,10 @@ class Form::Lettings::Questions::Majorrepairs < ::Form::Question
     @hint_text = "Major repairs are works that could not be reasonably carried out with a tenant living at the property. For example, structural repairs."
     @answer_options = ANSWER_OPTIONS
     @conditional_for = { "mrcdate" => [1] }
-    @question_number = QUESION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
+    @question_number = QUESTION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
   end
 
   ANSWER_OPTIONS = { "1" => { "value" => "Yes" }, "0" => { "value" => "No" } }.freeze
 
-  QUESION_NUMBER_FROM_YEAR = { 2023 => 24 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 24 }.freeze
 end

@@ -8,7 +8,7 @@ class Form::Lettings::Questions::PreviousLetType < ::Form::Question
     @check_answers_card_number = 0
     @hint_text = form.start_year_after_2024? ? "This is the rent type of the previous tenancy in this property." : ""
     @answer_options = form.start_year_after_2024? ? ANSWER_OPTIONS_AFTER_2024 : ANSWER_OPTIONS
-    @question_number = QUESION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
+    @question_number = QUESTION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
   end
 
   ANSWER_OPTIONS = {
@@ -33,5 +33,5 @@ class Form::Lettings::Questions::PreviousLetType < ::Form::Question
     "3" => { "value" => "Don’t know" },
   }.freeze
 
-  QUESION_NUMBER_FROM_YEAR = { 2023 => 16, 2024 => 17 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 16, 2024 => 17 }.freeze
 end

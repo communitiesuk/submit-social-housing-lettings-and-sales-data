@@ -8,7 +8,7 @@ class Form::Lettings::Questions::SchemeId < ::Form::Question
     @answer_options = answer_options
     @top_guidance_partial = "finding_scheme"
     @bottom_guidance_partial = "scheme_selection"
-    @question_number = QUESION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last) if form.start_date.present?
+    @question_number = QUESTION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last) if form.start_date.present?
     @inferred_answers = {
       "location.name": {
         "scheme_has_multiple_locations?": false,
@@ -59,5 +59,5 @@ private
     false
   end
 
-  QUESION_NUMBER_FROM_YEAR = { 2023 => 9, 2024 => 4 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 9, 2024 => 4 }.freeze
 end

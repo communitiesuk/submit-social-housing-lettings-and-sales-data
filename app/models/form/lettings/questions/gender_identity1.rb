@@ -7,7 +7,7 @@ class Form::Lettings::Questions::GenderIdentity1 < ::Form::Question
     @type = "radio"
     @check_answers_card_number = 1
     @answer_options = ANSWER_OPTIONS
-    @question_number = QUESION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
+    @question_number = QUESTION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
   end
 
   ANSWER_OPTIONS = {
@@ -26,5 +26,5 @@ class Form::Lettings::Questions::GenderIdentity1 < ::Form::Question
     end
   end
 
-  QUESION_NUMBER_FROM_YEAR = { 2023 => 33, 2024 => 32 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 33, 2024 => 32 }.freeze
 end

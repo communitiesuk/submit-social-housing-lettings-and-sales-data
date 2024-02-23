@@ -7,7 +7,7 @@ class Form::Lettings::Questions::Startertenancy < ::Form::Question
     @type = "radio"
     @check_answers_card_number = 0
     @answer_options = ANSWER_OPTIONS
-    @question_number = QUESION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
+    @question_number = QUESTION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
   end
 
   ANSWER_OPTIONS = { "1" => { "value" => "Yes" }, "2" => { "value" => "No" } }.freeze
@@ -21,5 +21,5 @@ class Form::Lettings::Questions::Startertenancy < ::Form::Question
     end
   end
 
-  QUESION_NUMBER_FROM_YEAR = { 2023 => 26 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 26 }.freeze
 end

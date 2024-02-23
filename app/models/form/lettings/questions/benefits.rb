@@ -8,7 +8,7 @@ class Form::Lettings::Questions::Benefits < ::Form::Question
     @check_answers_card_number = 0
     @hint_text = "This excludes child and housing benefit, council tax support and tax credits."
     @answer_options = ANSWER_OPTIONS
-    @question_number = QUESION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
+    @question_number = QUESTION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
   end
 
   ANSWER_OPTIONS = {
@@ -19,5 +19,5 @@ class Form::Lettings::Questions::Benefits < ::Form::Question
     "4" => { "value" => "Don’t know" },
   }.freeze
 
-  QUESION_NUMBER_FROM_YEAR = { 2023 => 90, 2024 => 89 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 90, 2024 => 89 }.freeze
 end

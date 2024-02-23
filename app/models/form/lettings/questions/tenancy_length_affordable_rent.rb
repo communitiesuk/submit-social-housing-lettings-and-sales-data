@@ -10,7 +10,7 @@ class Form::Lettings::Questions::TenancyLengthAffordableRent < ::Form::Question
     @max = 150
     @min = 0
     @step = 1
-    @question_number = QUESION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
+    @question_number = QUESTION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
   end
 
   def hint_text
@@ -21,5 +21,5 @@ class Form::Lettings::Questions::TenancyLengthAffordableRent < ::Form::Question
     end
   end
 
-  QUESION_NUMBER_FROM_YEAR = { 2023 => 28 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 28 }.freeze
 end

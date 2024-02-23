@@ -8,7 +8,7 @@ class Form::Lettings::Questions::WorkingSituation1 < ::Form::Question
     @check_answers_card_number = 1
     @hint_text = "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest."
     @answer_options = ANSWER_OPTIONS
-    @question_number = QUESION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
+    @question_number = QUESTION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
   end
 
   ANSWER_OPTIONS = {
@@ -25,5 +25,5 @@ class Form::Lettings::Questions::WorkingSituation1 < ::Form::Question
     "10" => { "value" => "Tenant prefers not to say" },
   }.freeze
 
-  QUESION_NUMBER_FROM_YEAR = { 2023 => 37, 2024 => 36 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 37, 2024 => 36 }.freeze
 end

@@ -7,8 +7,8 @@ class Form::Lettings::Questions::PropertyReference < ::Form::Question
     @hint_text = "This is how you usually refer to this property on your own systems."
     @type = "text"
     @width = 10
-    @question_number = QUESION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last) if form.start_date.present?
+    @question_number = QUESTION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last) if form.start_date.present?
   end
 
-  QUESION_NUMBER_FROM_YEAR = { 2023 => 8, 2024 => 10 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 8, 2024 => 10 }.freeze
 end

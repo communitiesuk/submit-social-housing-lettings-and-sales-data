@@ -8,7 +8,7 @@ class Form::Lettings::Questions::Homeless < ::Form::Question
     @check_answers_card_number = 0
     @hint_text = ""
     @answer_options = ANSWER_OPTIONS
-    @question_number = QUESION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
+    @question_number = QUESTION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
   end
 
   ANSWER_OPTIONS = {
@@ -16,5 +16,5 @@ class Form::Lettings::Questions::Homeless < ::Form::Question
     "1" => { "value" => "No" },
   }.freeze
 
-  QUESION_NUMBER_FROM_YEAR = { 2023 => 79, 2024 => 78 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 79, 2024 => 78 }.freeze
 end

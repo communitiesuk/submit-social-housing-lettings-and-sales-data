@@ -8,7 +8,7 @@ class Form::Lettings::Questions::Period < ::Form::Question
     @check_answers_card_number = 0
     @hint_text = "Select how often the household is charged. This may be different to how often they pay."
     @answer_options = ANSWER_OPTIONS
-    @question_number = QUESION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
+    @question_number = QUESTION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
   end
 
   ANSWER_OPTIONS = {
@@ -24,5 +24,5 @@ class Form::Lettings::Questions::Period < ::Form::Question
     "10" => { "value" => "Weekly for 53 weeks" },
   }.freeze
 
-  QUESION_NUMBER_FROM_YEAR = { 2023 => 92, 2024 => 91 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 92, 2024 => 91 }.freeze
 end

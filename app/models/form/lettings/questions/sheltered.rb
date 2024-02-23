@@ -7,7 +7,7 @@ class Form::Lettings::Questions::Sheltered < ::Form::Question
     @type = "radio"
     @check_answers_card_number = 0
     @hint_text = "Sheltered housing and special retirement housing are for tenants with low-level care and support needs. This typically provides some limited support to enable independent living, such as alarm-based assistance or a scheme manager.</br></br>Extra care housing is for tenants with medium to high care and support needs, often with 24 hour access to support staff provided by an agency registered with the Care Quality Commission."
-    @question_number = QUESION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
+    @question_number = QUESTION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
   end
 
   def answer_options
@@ -29,5 +29,5 @@ class Form::Lettings::Questions::Sheltered < ::Form::Question
     end
   end
 
-  QUESION_NUMBER_FROM_YEAR = { 2023 => 29 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 29 }.freeze
 end

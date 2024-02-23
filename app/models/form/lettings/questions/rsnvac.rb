@@ -7,7 +7,7 @@ class Form::Lettings::Questions::Rsnvac < ::Form::Question
     @type = "radio"
     @check_answers_card_number = 0
     @hint_text = ""
-    @question_number = QUESION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
+    @question_number = QUESTION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
   end
 
   def answer_options
@@ -102,5 +102,5 @@ class Form::Lettings::Questions::Rsnvac < ::Form::Question
     end
   end
 
-  QUESION_NUMBER_FROM_YEAR = { 2023 => 17, 2024 => 18 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 17, 2024 => 18 }.freeze
 end

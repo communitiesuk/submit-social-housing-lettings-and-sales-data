@@ -9,7 +9,7 @@ class Form::Lettings::Questions::NetIncomeKnown < ::Form::Question
     @top_guidance_partial = "what_counts_as_income"
     @hint_text = ""
     @answer_options = ANSWER_OPTIONS
-    @question_number = QUESION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
+    @question_number = QUESTION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
   end
 
   ANSWER_OPTIONS = {
@@ -19,5 +19,5 @@ class Form::Lettings::Questions::NetIncomeKnown < ::Form::Question
     "2" => { "value" => "Tenant prefers not to say" },
   }.freeze
 
-  QUESION_NUMBER_FROM_YEAR = { 2023 => 86, 2024 => 85 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 86, 2024 => 85 }.freeze
 end
