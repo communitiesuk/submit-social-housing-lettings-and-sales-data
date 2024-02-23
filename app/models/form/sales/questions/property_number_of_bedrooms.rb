@@ -6,7 +6,7 @@ class Form::Sales::Questions::PropertyNumberOfBedrooms < ::Form::Question
     @header = "How many bedrooms does the property have?"
     @hint_text = "A bedsit has 1 bedroom"
     @type = "numeric"
-    @width = 10
+    @width = 2
     @min = 1
     @max = 9
     @step = 1
