@@ -22,11 +22,11 @@ RSpec.describe Form::Sales::Questions::PropertyWheelchairAccessible, type: :mode
   end
 
   it "has the correct header" do
-    expect(question.header).to eq("Is the property build or adapted to wheelchair-user standards?")
+    expect(question.header).to eq("Is the property built or adapted to wheelchair-user standards?")
   end
 
   it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Property build or adapted to wheelchair-user standards")
+    expect(question.check_answer_label).to eq("Property built or adapted to wheelchair-user standards")
   end
 
   it "has the correct type" do
