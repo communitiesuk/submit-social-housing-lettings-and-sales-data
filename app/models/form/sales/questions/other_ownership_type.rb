@@ -6,8 +6,8 @@ class Form::Sales::Questions::OtherOwnershipType < ::Form::Question
     @header = "What type of sale is it?"
     @type = "text"
     @width = 10
-    @question_number = QUESION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
+    @question_number = QUESTION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
   end
 
-  QUESION_NUMBER_FROM_YEAR = { 2023 => 6, 2024 => 8 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 6, 2024 => 8 }.freeze
 end

@@ -6,7 +6,7 @@ class Form::Sales::Questions::Buyer1PreviousTenure < ::Form::Question
     @header = "What was buyer 1’s previous tenure?"
     @type = "radio"
     @answer_options = answer_options
-    @question_number = QUESION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
+    @question_number = QUESTION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
   end
 
   def answer_options
@@ -23,5 +23,5 @@ class Form::Sales::Questions::Buyer1PreviousTenure < ::Form::Question
     }
   end
 
-  QUESION_NUMBER_FROM_YEAR = { 2023 => 56, 2024 => 58 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 56, 2024 => 58 }.freeze
 end

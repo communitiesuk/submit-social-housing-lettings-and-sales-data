@@ -9,8 +9,8 @@ class Form::Sales::Questions::Savings < ::Form::Question
     @prefix = "£"
     @step = 10
     @min = 0
-    @question_number = QUESION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
+    @question_number = QUESTION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
   end
 
-  QUESION_NUMBER_FROM_YEAR = { 2023 => 72, 2024 => 74 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 72, 2024 => 74 }.freeze
 end

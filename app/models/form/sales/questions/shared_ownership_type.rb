@@ -7,7 +7,7 @@ class Form::Sales::Questions::SharedOwnershipType < ::Form::Question
     @top_guidance_partial = guidance_partial
     @type = "radio"
     @answer_options = answer_options
-    @question_number = QUESION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
+    @question_number = QUESTION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
   end
 
   def hint_text
@@ -51,5 +51,5 @@ class Form::Sales::Questions::SharedOwnershipType < ::Form::Question
     end
   end
 
-  QUESION_NUMBER_FROM_YEAR = { 2023 => 4, 2024 => 6 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 4, 2024 => 6 }.freeze
 end

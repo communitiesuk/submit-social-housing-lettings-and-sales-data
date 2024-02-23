@@ -7,7 +7,7 @@ class Form::Sales::Questions::Buyer2LivingIn < ::Form::Question
     @type = "radio"
     @hint_text = ""
     @answer_options = ANSWER_OPTIONS
-    @question_number = QUESION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
+    @question_number = QUESTION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
   end
 
   ANSWER_OPTIONS = {
@@ -16,5 +16,5 @@ class Form::Sales::Questions::Buyer2LivingIn < ::Form::Question
     "3" => { "value" => "Don't know" },
   }.freeze
 
-  QUESION_NUMBER_FROM_YEAR = { 2023 => 60, 2024 => 62 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 60, 2024 => 62 }.freeze
 end

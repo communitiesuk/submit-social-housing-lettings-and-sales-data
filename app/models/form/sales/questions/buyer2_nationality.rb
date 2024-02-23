@@ -7,7 +7,7 @@ class Form::Sales::Questions::Buyer2Nationality < ::Form::Question
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @check_answers_card_number = 2
-    @question_number = QUESION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
+    @question_number = QUESTION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
     @inferred_check_answers_value = [{
       "condition" => {
         "national" => 13,
@@ -24,5 +24,5 @@ class Form::Sales::Questions::Buyer2Nationality < ::Form::Question
     "13" => { "value" => "Buyer prefers not to say" },
   }.freeze
 
-  QUESION_NUMBER_FROM_YEAR = { 2023 => 32, 2024 => 34 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 32, 2024 => 34 }.freeze
 end

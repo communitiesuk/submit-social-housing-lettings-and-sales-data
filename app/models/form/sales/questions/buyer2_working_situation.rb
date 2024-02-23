@@ -13,7 +13,7 @@ class Form::Sales::Questions::Buyer2WorkingSituation < ::Form::Question
       },
       "value" => "Prefers not to say",
     }]
-    @question_number = QUESION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
+    @question_number = QUESTION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
   end
 
   ANSWER_OPTIONS = {
@@ -30,5 +30,5 @@ class Form::Sales::Questions::Buyer2WorkingSituation < ::Form::Question
     "9" => { "value" => "Child under 16" },
   }.freeze
 
-  QUESION_NUMBER_FROM_YEAR = { 2023 => 33, 2024 => 35 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 33, 2024 => 35 }.freeze
 end

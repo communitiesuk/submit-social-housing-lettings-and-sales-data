@@ -7,7 +7,7 @@ class Form::Sales::Questions::Buyer2EthnicGroup < ::Form::Question
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @check_answers_card_number = 2
-    @question_number = QUESION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
+    @question_number = QUESTION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
   end
 
   ANSWER_OPTIONS = {
@@ -20,5 +20,5 @@ class Form::Sales::Questions::Buyer2EthnicGroup < ::Form::Question
     "17" => { "value" => "Buyer prefers not to say" },
   }.freeze
 
-  QUESION_NUMBER_FROM_YEAR = { 2023 => 30, 2024 => 32 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 30, 2024 => 32 }.freeze
 end

@@ -12,7 +12,7 @@ class Form::Sales::Questions::DepositAmount < ::Form::Question
     @prefix = "£"
     @derived = true
     @ownershipsch = ownershipsch
-    @question_number = QUESION_NUMBER_FROM_YEAR_AND_OWNERSHIP.fetch(form.start_date.year, QUESION_NUMBER_FROM_YEAR_AND_OWNERSHIP.max_by { |k, _v| k }.last)[ownershipsch]
+    @question_number = QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP.max_by { |k, _v| k }.last)[ownershipsch]
     @optional = optional
   end
 
@@ -20,7 +20,7 @@ class Form::Sales::Questions::DepositAmount < ::Form::Question
     true
   end
 
-  QUESION_NUMBER_FROM_YEAR_AND_OWNERSHIP = {
+  QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP = {
     2023 => { 1 => 95, 2 => 108, 3 => 116 },
     2024 => { 1 => 97, 2 => 110, 3 => 117 },
   }.freeze

@@ -10,8 +10,8 @@ class Form::Sales::Questions::MonthlyRent < ::Form::Question
     @width = 5
     @prefix = "£"
     @hint_text = "Amount paid before any charges"
-    @question_number = QUESION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
+    @question_number = QUESTION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
   end
 
-  QUESION_NUMBER_FROM_YEAR = { 2023 => 97, 2024 => 99 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 97, 2024 => 99 }.freeze
 end

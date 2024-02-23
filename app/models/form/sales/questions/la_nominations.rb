@@ -7,7 +7,7 @@ class Form::Sales::Questions::LaNominations < ::Form::Question
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @hint_text = "A local authority nominations agreement is a written agreement between a local authority and private registered provider (PRP) that some or all of its sales vacancies are offered to local authorities for rehousing"
-    @question_number = QUESION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
+    @question_number = QUESTION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
   end
 
   ANSWER_OPTIONS = {
@@ -16,5 +16,5 @@ class Form::Sales::Questions::LaNominations < ::Form::Question
     "3" => { "value" => "Don’t know" },
   }.freeze
 
-  QUESION_NUMBER_FROM_YEAR = { 2023 => 83, 2024 => 85 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 83, 2024 => 85 }.freeze
 end

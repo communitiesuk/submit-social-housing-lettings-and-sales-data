@@ -6,7 +6,7 @@ class Form::Sales::Questions::BuyerLive < ::Form::Question
     @header = form.start_year_after_2024? ? "Will any buyers live in the property?" : "Will the buyers live in the property?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
-    @question_number = QUESION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
+    @question_number = QUESTION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
   end
 
   ANSWER_OPTIONS = {
@@ -14,5 +14,5 @@ class Form::Sales::Questions::BuyerLive < ::Form::Question
     "2" => { "value" => "No" },
   }.freeze
 
-  QUESION_NUMBER_FROM_YEAR = { 2023 => 8, 2024 => 10 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 8, 2024 => 10 }.freeze
 end

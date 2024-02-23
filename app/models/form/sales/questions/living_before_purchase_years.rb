@@ -34,7 +34,7 @@ class Form::Sales::Questions::LivingBeforePurchaseYears < ::Form::Question
     " #{'year'.pluralize(log[id])}"
   end
 
-  QUESION_NUMBER_FROM_YEAR_AND_OWNERSHIP = {
+  QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP = {
     2023 => { 1 => 75, 2 => 99 },
     2024 => { 1 => 77, 2 => 101 },
   }.freeze

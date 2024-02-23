@@ -7,7 +7,7 @@ class Form::Sales::Questions::Buyer1EthnicBackgroundWhite < ::Form::Question
     @type = "radio"
     @hint_text = form.start_year_after_2024? ? "" : "Buyer 1 is the person in the household who does the most paid work. If it’s a joint purchase and the buyers do the same amount of paid work, buyer 1 is whoever is the oldest."
     @check_answers_card_number = 1
-    @question_number = QUESION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
+    @question_number = QUESTION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
   end
 
   def answer_options
@@ -29,5 +29,5 @@ class Form::Sales::Questions::Buyer1EthnicBackgroundWhite < ::Form::Question
     end
   end
 
-  QUESION_NUMBER_FROM_YEAR = { 2023 => 23, 2024 => 25 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 23, 2024 => 25 }.freeze
 end

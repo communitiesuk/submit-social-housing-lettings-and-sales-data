@@ -6,7 +6,7 @@ class Form::Sales::Questions::PropertyBuildingType < ::Form::Question
     @header = "What type of building is the property?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
-    @question_number = QUESION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
+    @question_number = QUESTION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
   end
 
   ANSWER_OPTIONS = {
@@ -14,5 +14,5 @@ class Form::Sales::Questions::PropertyBuildingType < ::Form::Question
     "2" => { "value" => "Converted from previous residential or non-residential property" },
   }.freeze
 
-  QUESION_NUMBER_FROM_YEAR = { 2023 => 13, 2024 => 17 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 13, 2024 => 17 }.freeze
 end

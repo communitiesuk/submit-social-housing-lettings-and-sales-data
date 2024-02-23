@@ -7,7 +7,7 @@ class Form::Sales::Questions::HouseholdDisability < ::Form::Question
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @hint_text = "This includes any long-term health condition that has an impact on the person's day-to-day life"
-    @question_number = QUESION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
+    @question_number = QUESTION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
   end
 
   ANSWER_OPTIONS = {
@@ -16,5 +16,5 @@ class Form::Sales::Questions::HouseholdDisability < ::Form::Question
     "3" => { "value" => "Don't know" },
   }.freeze
 
-  QUESION_NUMBER_FROM_YEAR = { 2023 => 65, 2024 => 67 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 65, 2024 => 67 }.freeze
 end

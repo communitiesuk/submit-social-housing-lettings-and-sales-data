@@ -7,7 +7,7 @@ class Form::Sales::Questions::DiscountedOwnershipType < ::Form::Question
     @type = "radio"
     @top_guidance_partial = guidance_partial
     @answer_options = ANSWER_OPTIONS
-    @question_number = QUESION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
+    @question_number = QUESTION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
   end
 
   ANSWER_OPTIONS = {
@@ -24,5 +24,5 @@ class Form::Sales::Questions::DiscountedOwnershipType < ::Form::Question
     "discounted_ownership_type_definitions" if form.start_date.year >= 2023
   end
 
-  QUESION_NUMBER_FROM_YEAR = { 2023 => 5, 2024 => 7 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 5, 2024 => 7 }.freeze
 end

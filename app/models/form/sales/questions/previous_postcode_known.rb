@@ -20,7 +20,7 @@ class Form::Sales::Questions::PreviousPostcodeKnown < ::Form::Question
         },
       ],
     }
-    @question_number = QUESION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
+    @question_number = QUESTION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
     @disable_clearing_if_not_routed_or_dynamic_answer_options = true
   end
 
@@ -29,5 +29,5 @@ class Form::Sales::Questions::PreviousPostcodeKnown < ::Form::Question
     "1" => { "value" => "No" },
   }.freeze
 
-  QUESION_NUMBER_FROM_YEAR = { 2023 => 57, 2024 => 59 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 57, 2024 => 59 }.freeze
 end

@@ -6,7 +6,7 @@ class Form::Sales::Questions::JointPurchase < ::Form::Question
     @header = "Is this a joint purchase?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
-    @question_number = QUESION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
+    @question_number = QUESTION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
   end
 
   ANSWER_OPTIONS = {
@@ -20,5 +20,5 @@ class Form::Sales::Questions::JointPurchase < ::Form::Question
     end
   end
 
-  QUESION_NUMBER_FROM_YEAR = { 2023 => 9, 2024 => 11 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 9, 2024 => 11 }.freeze
 end

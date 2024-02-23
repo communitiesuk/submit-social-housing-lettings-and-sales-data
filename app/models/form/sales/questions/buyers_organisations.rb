@@ -7,7 +7,7 @@ class Form::Sales::Questions::BuyersOrganisations < ::Form::Question
     @type = "checkbox"
     @hint_text = "Select all that apply. This question is optional. If no options are applicable, leave the options blank, and select save and continue."
     @answer_options = ANSWER_OPTIONS
-    @question_number = QUESION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
+    @question_number = QUESTION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
   end
 
   ANSWER_OPTIONS = {
@@ -31,5 +31,5 @@ class Form::Sales::Questions::BuyersOrganisations < ::Form::Question
     "At least one option must be selected of these four"
   end
 
-  QUESION_NUMBER_FROM_YEAR = { 2023 => 59, 2024 => 61 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 59, 2024 => 61 }.freeze
 end

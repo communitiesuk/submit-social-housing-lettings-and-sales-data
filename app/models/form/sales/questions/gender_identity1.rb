@@ -7,7 +7,7 @@ class Form::Sales::Questions::GenderIdentity1 < ::Form::Question
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @check_answers_card_number = 1
-    @question_number = QUESION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
+    @question_number = QUESTION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
   end
 
   ANSWER_OPTIONS = {
@@ -25,5 +25,5 @@ class Form::Sales::Questions::GenderIdentity1 < ::Form::Question
     end
   end
 
-  QUESION_NUMBER_FROM_YEAR = { 2023 => 21, 2024 => 23 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 21, 2024 => 23 }.freeze
 end

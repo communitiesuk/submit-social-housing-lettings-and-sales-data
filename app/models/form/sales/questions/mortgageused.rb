@@ -7,7 +7,7 @@ class Form::Sales::Questions::Mortgageused < ::Form::Question
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @ownershipsch = ownershipsch
-    @question_number = QUESION_NUMBER_FROM_YEAR_AND_OWNERSHIP.fetch(form.start_date.year, QUESION_NUMBER_FROM_YEAR_AND_OWNERSHIP.max_by { |k, _v| k }.last)[ownershipsch]
+    @question_number = QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP.max_by { |k, _v| k }.last)[ownershipsch]
   end
 
   ANSWER_OPTIONS = {
@@ -27,7 +27,7 @@ class Form::Sales::Questions::Mortgageused < ::Form::Question
     end
   end
 
-  QUESION_NUMBER_FROM_YEAR_AND_OWNERSHIP = {
+  QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP = {
     2023 => { 1 => 90, 2 => 103, 3 => 111 },
     2024 => { 1 => 92, 2 => 105, 3 => 113 },
   }.freeze
