@@ -103,8 +103,24 @@ RSpec.describe LettingsLog do
       expect(validator).to receive(:validate_irproduct_other)
     end
 
-    it "validates other household member details" do
-      expect(validator).to receive(:validate_household_number_of_other_members)
+    it "validates partner count" do
+      expect(validator).to receive(:validate_partner_count)
+    end
+
+    it "validates person age matches economic status" do
+      expect(validator).to receive(:validate_person_age_matches_economic_status)
+    end
+
+    it "validates person age matches relationship" do
+      expect(validator).to receive(:validate_person_age_matches_relationship)
+    end
+
+    it "validates person age and relationship matches economic status" do
+      expect(validator).to receive(:validate_person_age_and_relationship_matches_economic_status)
+    end
+
+    it "validates child is over 12 years younger than lead tenant" do
+      expect(validator).to receive(:validate_child_12_years_younger)
     end
 
     it "validates bedroom number" do
