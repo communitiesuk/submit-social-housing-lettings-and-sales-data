@@ -29,11 +29,13 @@ class Form::Sales::Questions::PersonGenderIdentity < ::Form::Question
   end
 
   def question_number
-    case form.start_date.year
-    when 2023
-      30 + (4 * @person_index)
-    else
-      32 + (4 * @person_index)
-    end
+    base_question_number = case form.start_date.year
+                           when 2023
+                             30
+                           else
+                             32
+                           end
+
+    base_question_number + (4 * @person_index)
   end
 end

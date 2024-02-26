@@ -23,11 +23,13 @@ class Form::Sales::Questions::PersonRelationshipToBuyer1 < ::Form::Question
   }.freeze
 
   def question_number
-    case form.start_date.year
-    when 2023
-      28 + (4 * @person_index)
-    when 2024
-      30 + (4 * @person_index)
-    end
+    base_question_number = case form.start_date.year
+                           when 2023
+                             28
+                           else
+                             30
+                           end
+
+    base_question_number + (4 * @person_index)
   end
 end
