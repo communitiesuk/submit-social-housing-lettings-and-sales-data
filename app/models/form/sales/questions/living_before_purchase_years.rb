@@ -40,6 +40,6 @@ class Form::Sales::Questions::LivingBeforePurchaseYears < ::Form::Question
   end
 
   def suffix_label(log)
-    log[id] == 1 ? " year" : " years"
+    " #{'year'.pluralize(log[id])}"
   end
 end
