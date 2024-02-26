@@ -11,7 +11,7 @@ class Form::Sales::Questions::DepositDiscount < ::Form::Question
     @width = 5
     @prefix = "£"
     @hint_text = "Enter the total cash discount given on the property being purchased through the Social HomeBuy scheme"
-    @question_number = QUESTION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
+    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
   end
 
   QUESTION_NUMBER_FROM_YEAR = { 2023 => 96, 2024 => 98 }.freeze

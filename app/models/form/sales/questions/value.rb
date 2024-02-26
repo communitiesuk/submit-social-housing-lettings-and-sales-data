@@ -10,7 +10,7 @@ class Form::Sales::Questions::Value < ::Form::Question
     @width = 5
     @prefix = "£"
     @hint_text = "Enter the full purchase price of the property before any discounts are applied. For shared ownership, enter the full purchase price paid for 100% equity (this is equal to the value of the share owned by the PRP plus the value bought by the purchaser)"
-    @question_number = QUESTION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
+    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
   end
 
   QUESTION_NUMBER_FROM_YEAR = { 2023 => 88, 2024 => 90 }.freeze

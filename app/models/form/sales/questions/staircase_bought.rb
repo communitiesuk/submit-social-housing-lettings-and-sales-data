@@ -10,7 +10,7 @@ class Form::Sales::Questions::StaircaseBought < ::Form::Question
     @max = 100
     @step = 1
     @suffix = "%"
-    @question_number = QUESTION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
+    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
   end
 
   QUESTION_NUMBER_FROM_YEAR = { 2023 => 77, 2024 => 79 }.freeze

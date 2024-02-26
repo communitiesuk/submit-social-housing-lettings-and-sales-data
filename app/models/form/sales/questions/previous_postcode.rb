@@ -17,7 +17,7 @@ class Form::Sales::Questions::PreviousPostcode < ::Form::Question
         "is_previous_la_inferred" => true,
       },
     }
-    @question_number = QUESTION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
+    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
     @disable_clearing_if_not_routed_or_dynamic_answer_options = true
   end
 
