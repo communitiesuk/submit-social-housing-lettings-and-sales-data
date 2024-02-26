@@ -16,10 +16,13 @@ class Form::Lettings::Questions::Age < ::Form::Question
   end
 
   def question_number
-    if form.start_date.year == 2023
-      31 + (4 * @person_index)
-    else
-      30 + (4 * @person_index)
-    end
+    base_question_number = case form.start_date.year
+                           when 2023
+                             31
+                           else
+                             30
+                           end
+
+    base_question_number + (4 * @person_index)
   end
 end

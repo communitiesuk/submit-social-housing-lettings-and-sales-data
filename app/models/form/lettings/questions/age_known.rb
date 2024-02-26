@@ -21,6 +21,13 @@ class Form::Lettings::Questions::AgeKnown < ::Form::Question
   ANSWER_OPTIONS = { "0" => { "value" => "Yes" }, "1" => { "value" => "No" } }.freeze
 
   def question_number
-    31 + (4 * @person_index)
+    base_question_number = case form.start_date.year
+                           when 2023
+                             31
+                           else
+                             30
+                           end
+
+    base_question_number + (4 * @person_index)
   end
 end
