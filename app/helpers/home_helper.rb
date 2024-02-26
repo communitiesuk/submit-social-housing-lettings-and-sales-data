@@ -1,17 +1,18 @@
 module HomeHelper
   def data_count(user, type)
-    years = FormHandler.instance.lettings_in_crossover_period? ? [current_collection_start_year, previous_collection_start_year] : [current_collection_start_year]
+    lettings_years = FormHandler.instance.lettings_in_crossover_period? ? [current_collection_start_year, previous_collection_start_year] : [current_collection_start_year]
+    sales_years = FormHandler.instance.sales_in_crossover_period? ? [current_collection_start_year, previous_collection_start_year] : [current_collection_start_year]
 
     if user.data_provider?
       case type
-      when "lettings" then user.lettings_logs.where(created_by: user).where(status: %i[in_progress]).filter_by_years(years).count
-      when "sales" then user.sales_logs.where(created_by: user).where(status: %i[in_progress]).filter_by_years(years).count
+      when "lettings" then user.lettings_logs.where(created_by: user).where(status: %i[in_progress]).filter_by_years(lettings_years).count
+      when "sales" then user.sales_logs.where(created_by: user).where(status: %i[in_progress]).filter_by_years(sales_years).count
       when "misc" then user.lettings_logs.completed.where(created_by: user).count
       end
     else
       case type
-      when "lettings" then user.lettings_logs.where(status: %i[in_progress]).filter_by_years(years).count
-      when "sales" then user.sales_logs.where(status: %i[in_progress]).filter_by_years(years).count
+      when "lettings" then user.lettings_logs.where(status: %i[in_progress]).filter_by_years(lettings_years).count
+      when "sales" then user.sales_logs.where(status: %i[in_progress]).filter_by_years(sales_years).count
       when "schemes" then user.schemes.incomplete.count
       end
     end
@@ -33,17 +34,18 @@ module HomeHelper
   end
 
   def data_path(user, type)
-    years = FormHandler.instance.lettings_in_crossover_period? ? [current_collection_start_year, previous_collection_start_year] : [current_collection_start_year]
+    lettings_years = FormHandler.instance.lettings_in_crossover_period? ? [current_collection_start_year, previous_collection_start_year] : [current_collection_start_year]
+    sales_years = FormHandler.instance.sales_in_crossover_period? ? [current_collection_start_year, previous_collection_start_year] : [current_collection_start_year]
     if user.data_provider?
       case type
-      when "lettings" then lettings_logs_path(status: %i[in_progress], assigned_to: "you", years:, owning_organisation_select: "all", managing_organisation_select: "all")
-      when "sales" then sales_logs_path(status: %i[in_progress], assigned_to: "you", years:, owning_organisation_select: "all", managing_organisation_select: "all")
+      when "lettings" then lettings_logs_path(status: %i[in_progress], assigned_to: "you", years: lettings_years, owning_organisation_select: "all", managing_organisation_select: "all")
+      when "sales" then sales_logs_path(status: %i[in_progress], assigned_to: "you", years: sales_years, owning_organisation_select: "all", managing_organisation_select: "all")
       when "misc" then lettings_logs_path(status: [:completed], assigned_to: "you", years: [""], owning_organisation_select: "all", managing_organisation_select: "all")
       end
     else
       case type
-      when "lettings" then lettings_logs_path(status: %i[in_progress], assigned_to: "all", years:, owning_organisation_select: "all", managing_organisation_select: "all")
-      when "sales" then sales_logs_path(status: %i[in_progress], assigned_to: "all", years:, owning_organisation_select: "all", managing_organisation_select: "all")
+      when "lettings" then lettings_logs_path(status: %i[in_progress], assigned_to: "all", years: lettings_years, owning_organisation_select: "all", managing_organisation_select: "all")
+      when "sales" then sales_logs_path(status: %i[in_progress], assigned_to: "all", years: sales_years, owning_organisation_select: "all", managing_organisation_select: "all")
       when "schemes" then schemes_path(status: [:incomplete], owning_organisation_select: "all")
       end
     end
