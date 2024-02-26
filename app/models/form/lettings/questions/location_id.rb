@@ -11,7 +11,7 @@ class Form::Lettings::Questions::LocationId < ::Form::Question
         "needstype": 2,
       },
     }
-    @question_number = QUESTION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last) if form.start_date.present?
+    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max] if form.start_date.present?
     @disable_clearing_if_not_routed_or_dynamic_answer_options = true
     @top_guidance_partial = "finding_location"
   end

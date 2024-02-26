@@ -11,7 +11,7 @@ class Form::Lettings::Questions::TenancyLength < ::Form::Question
     @min = 0
     @hint_text = "Do not include the starter or introductory period."
     @step = 1
-    @question_number = QUESTION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
+    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
   end
 
   QUESTION_NUMBER_FROM_YEAR = { 2023 => 28 }.freeze

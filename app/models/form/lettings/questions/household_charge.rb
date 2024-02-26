@@ -8,7 +8,7 @@ class Form::Lettings::Questions::HouseholdCharge < ::Form::Question
     @check_answers_card_number = 0
     @hint_text = "If rent is charged on the property then answer Yes to this question, even if the tenants do not pay it themselves."
     @answer_options = ANSWER_OPTIONS
-    @question_number = QUESTION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
+    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
   end
 
   ANSWER_OPTIONS = { "0" => { "value" => "Yes" }, "1" => { "value" => "No" } }.freeze

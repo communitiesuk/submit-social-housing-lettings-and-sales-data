@@ -8,7 +8,7 @@ class Form::Lettings::Questions::RentType < ::Form::Question
     @top_guidance_partial = "rent_type_definitions"
     @answer_options = ANSWER_OPTIONS
     @conditional_for = { "irproduct_other" => [5] }
-    @question_number = QUESTION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last) if form.start_date.present?
+    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max] if form.start_date.present?
   end
 
   ANSWER_OPTIONS = {

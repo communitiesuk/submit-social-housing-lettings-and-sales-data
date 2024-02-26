@@ -8,7 +8,7 @@ class Form::Lettings::Questions::AddressLine1 < ::Form::Question
     @plain_label = true
     @check_answer_label = "Address lines 1 and 2"
     @disable_clearing_if_not_routed_or_dynamic_answer_options = true
-    @question_number = QUESTION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
+    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
     @hide_question_number_on_page = true
   end
 

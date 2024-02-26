@@ -7,7 +7,7 @@ class Form::Lettings::Questions::ReasonRenewal < ::Form::Question
     @type = "radio"
     @check_answers_card_number = 0
     @hint_text = "You told us this letting is a renewal. We have removed some options because of this."
-    @question_number = QUESTION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
+    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
     @conditional_for = {
       "reasonother" => [
         20,

@@ -10,7 +10,7 @@ class Form::Lettings::Questions::TenancyLengthPeriodic < ::Form::Question
     @max = 150
     @min = 0
     @step = 1
-    @question_number = QUESTION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
+    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
     @hint_text = "As this is a periodic tenancy, this question is optional. If you do not have the information available click save and continue"
   end
 

@@ -7,7 +7,7 @@ class Form::Lettings::Questions::Reasonother < ::Form::Question
     @type = "text"
     @check_answers_card_number = 0
     @hint_text = ""
-    @question_number = QUESTION_NUMBER_FROM_YEAR.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR.max_by { |k, _v| k }.last)
+    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
   end
 
   QUESTION_NUMBER_FROM_YEAR = { 2023 => 77, 2024 => 76 }.freeze
