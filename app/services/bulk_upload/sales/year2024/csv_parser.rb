@@ -3,6 +3,7 @@ require "csv"
 class BulkUpload::Sales::Year2024::CsvParser
   include CollectionTimeHelper
 
+  FIELDS = 131
   MAX_COLUMNS = 142
   FORM_YEAR = 2024
 
@@ -53,6 +54,16 @@ class BulkUpload::Sales::Year2024::CsvParser
     collection_start_year_for_date(first_record_start_date) != FORM_YEAR
   rescue Date::Error
     false
+  end
+
+  def missing_required_headers?
+    !with_headers?
+  end
+
+  def correct_field_count?
+    valid_field_numbers_count = field_numbers.count { |f| f != "field_blank" }
+
+    valid_field_numbers_count == FIELDS
   end
 
 private

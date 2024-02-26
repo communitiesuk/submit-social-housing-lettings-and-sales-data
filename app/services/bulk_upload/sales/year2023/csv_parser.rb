@@ -4,6 +4,7 @@ class BulkUpload::Sales::Year2023::CsvParser
   include CollectionTimeHelper
 
   MAX_COLUMNS = 142
+  FIELDS = 135
   FORM_YEAR = 2023
 
   attr_reader :path
@@ -53,6 +54,16 @@ class BulkUpload::Sales::Year2023::CsvParser
     collection_start_year_for_date(first_record_start_date) != FORM_YEAR
   rescue Date::Error
     false
+  end
+
+  def missing_required_headers?
+    false
+  end
+
+  def correct_field_count?
+    valid_field_numbers_count = field_numbers.count { |f| f != "field_blank" }
+
+    valid_field_numbers_count == FIELDS
   end
 
 private

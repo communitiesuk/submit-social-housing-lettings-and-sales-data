@@ -1,10 +1,12 @@
 class BulkUpload::Lettings::Validator
   include ActiveModel::Validations
+  include Rails.application.routes.url_helpers
 
   attr_reader :bulk_upload, :path
 
   validate :validate_file_not_empty
   validate :validate_field_numbers_count
+  validate :validate_missing_required_headers
   validate :validate_max_columns_count_if_no_headers
   validate :validate_correct_template
 
@@ -173,6 +175,15 @@ private
     return if halt_validations?
 
     errors.add(:base, :wrong_template) if csv_parser.wrong_template_for_year?
+  end
+
+  def validate_missing_required_headers
+    return if halt_validations?
+
+    if csv_parser.missing_required_headers?
+      errors.add :base, I18n.t("activemodel.errors.models.bulk_upload/lettings/validator.attributes.base.no_headers", guidance_link: bulk_upload_lettings_log_url(id: "guidance", form: { year: bulk_upload.year }, host: ENV["APP_HOST"], anchor: "using-the-bulk-upload-template"))
+      halt_validations!
+    end
   end
 
   def halt_validations!

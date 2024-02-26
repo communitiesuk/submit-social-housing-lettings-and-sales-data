@@ -36,9 +36,7 @@
       <% end %>
       <%= data_sharing_agreement_row(organisation: @organisation, user: current_user, summary_list:) %>
     <% end %>
-    <% if FeatureToggle.merge_organisations_enabled? %>
-      <p>To report a merge or update your organisation details, <%= govuk_link_to "contact the helpdesk", GlobalConstants::HELPDESK_URL %>.</p>
-    <% end %>
+    <p>To report a merge or update your organisation details, <%= govuk_link_to "contact the helpdesk", GlobalConstants::HELPDESK_URL %>.</p>
     <%= render partial: "organisations/merged_organisation_details" %>
   </div>
 </div>

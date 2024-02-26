@@ -171,10 +171,10 @@ GEM
       raabro (~> 1.4)
     globalid (1.1.0)
       activesupport (>= 5.0)
-    govuk-components (5.0.2)
+    govuk-components (5.1.0)
       html-attributes-utils (~> 1.0.0, >= 1.0.0)
       pagy (~> 6.0)
-      view_component (>= 3.9, < 3.10)
+      view_component (>= 3.9, < 3.11)
     govuk_design_system_formbuilder (5.0.0)
       actionview (>= 6.1)
       activemodel (>= 6.1)
@@ -237,7 +237,7 @@ GEM
       childprocess (>= 0.6.3, < 5)
       iniparse (~> 1.4)
       rexml (~> 3.2)
-    pagy (6.2.0)
+    pagy (6.5.0)
     paper_trail (14.0.0)
       activerecord (>= 6.0)
       request_store (~> 1.4)
@@ -458,7 +458,7 @@ DEPENDENCIES
   erb_lint
   factory_bot_rails
   faker
-  govuk-components (~> 5.0)
+  govuk-components (~> 5.1)
   govuk_design_system_formbuilder (~> 5.0)
   govuk_markdown
   jsbundling-rails

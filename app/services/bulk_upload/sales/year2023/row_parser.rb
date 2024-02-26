@@ -455,12 +455,12 @@ class BulkUpload::Sales::Year2023::RowParser
 
   validate :validate_owning_org_data_given, on: :after_log
   validate :validate_owning_org_exists, on: :after_log
-  validate :validate_owning_org_owns_stock, on: :after_log if FeatureToggle.sales_managing_organisation_enabled?
+  validate :validate_owning_org_owns_stock, on: :after_log
   validate :validate_owning_org_permitted, on: :after_log
 
   validate :validate_created_by_exists, on: :after_log
   validate :validate_created_by_related, on: :after_log
-  validate :validate_managing_org_related, on: :after_log if FeatureToggle.sales_managing_organisation_enabled?
+  validate :validate_managing_org_related, on: :after_log
   validate :validate_relevant_collection_window, on: :after_log
   validate :validate_incomplete_soft_validations, on: :after_log
 
@@ -791,7 +791,7 @@ private
 
     attributes["purchid"] = purchaser_code
     attributes["saledate"] = saledate
-    attributes["noint"] = 2 if field_28 == 1
+    attributes["noint"] = field_28
 
     attributes["age1_known"] = age1_known?
     attributes["age1"] = field_30 if attributes["age1_known"]&.zero? && field_30&.match(/\A\d{1,3}\z|\AR\z/)
