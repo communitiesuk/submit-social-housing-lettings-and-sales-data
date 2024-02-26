@@ -284,19 +284,6 @@ RSpec.describe Validations::Sales::HouseholdValidations do
     context "with 2024 logs" do
       let(:log_date) { Time.zone.local(2024, 4, 1) }
 
-      it "does not add 2023 errors" do
-        record.age2 = 17
-        record.relat2 = "C"
-        record.ecstat2 = 1
-        household_validator.validate_person_age_and_relationship_matches_economic_status(record)
-        expect(record.errors["ecstat2"])
-          .not_to include(match I18n.t("validations.household.ecstat.student_16_19.must_be_student", person_num: 2))
-        expect(record.errors["age2"])
-          .not_to include(match I18n.t("validations.household.age.student_16_19.cannot_be_16_19.child_not_student", person_num: 2))
-        expect(record.errors["relat2"])
-          .not_to include(match I18n.t("validations.household.relat.student_16_19.cannot_be_child.16_19_not_student", person_num: 2))
-      end
-
       context "when the household contains a tenant’s child between the ages of 16 and 19" do
         it "validates that person's economic status must be full time student or refused" do
           record.age2 = 17
@@ -306,9 +293,9 @@ RSpec.describe Validations::Sales::HouseholdValidations do
           expect(record.errors["ecstat2"])
             .to include("Person 2's working situation must be student or prefers not to say, as their age is 16-19 and their relationship to the buyer is child")
           expect(record.errors["age2"])
-            .to be_empty
+            .to include("Person cannot be aged 16-19 if they have relationship ‘child’ but are not a student")
           expect(record.errors["relat2"])
-            .to be_empty
+            .to include("Answer cannot be ‘child’ if the person is aged 16-19 but not a student")
         end
 
         it "expects that person can be a full time student" do
@@ -348,11 +335,11 @@ RSpec.describe Validations::Sales::HouseholdValidations do
         record.relat2 = "C"
         household_validator.validate_person_age_and_relationship_matches_economic_status(record)
         expect(record.errors["relat2"])
-          .to be_empty
+          .to include("Answer cannot be ‘child’ if the person is a student but not aged 16-19")
         expect(record.errors["age2"])
           .to include("Person 2's age must be 16-19 as their working situation is student and their relationship to the buyer is child")
         expect(record.errors["ecstat2"])
-          .to be_empty
+          .to include("Person cannot be a student if they are not aged 16-19 but have relationship ‘child’")
       end
 
       it "adds errors for a person who is a student and aged 16-19 but not child" do
@@ -363,9 +350,9 @@ RSpec.describe Validations::Sales::HouseholdValidations do
         expect(record.errors["relat2"])
           .to include("Person 2's relationship to the buyer must be child as their working situation is student and their age is 16-19")
         expect(record.errors["age2"])
-          .to be_empty
+          .to include("Person cannot be aged 16-19 if they are a student but not a child")
         expect(record.errors["ecstat2"])
-          .to be_empty
+          .to include("Person cannot be a student if they are aged 16-19 but are not a child")
       end
     end
   end
