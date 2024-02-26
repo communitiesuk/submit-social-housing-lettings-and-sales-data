@@ -52,5 +52,8 @@ module DataCollector
     end
 
     config.relative_url_root = ENV["RAILS_RELATIVE_URL_ROOT"]
+    
+    # default is false starting 7.1, should really be updated to false
+    config.add_autoload_paths_to_load_path = true
   end
 end
