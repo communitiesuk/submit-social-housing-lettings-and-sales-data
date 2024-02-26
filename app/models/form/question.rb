@@ -1,6 +1,6 @@
 class Form::Question
   attr_accessor :id, :header, :hint_text, :description, :questions, :disable_clearing_if_not_routed_or_dynamic_answer_options,
-                :type, :min, :max, :step, :width, :fields_to_add, :result_field,
+                :type, :min, :max, :step, :width, :fields_to_add, :result_field, :default_answer,
                 :conditional_for, :readonly, :answer_options, :page, :check_answer_label,
                 :inferred_answers, :hidden_in_check_answers, :inferred_check_answers_value,
                 :top_guidance_partial, :bottom_guidance_partial, :prefix, :suffix, :requires_js, :fields_added, :derived,
@@ -40,6 +40,7 @@ class Form::Question
       @plain_label = hsh["plain_label"]
       @error_label = hsh["error_label"]
       @disable_clearing_if_not_routed_or_dynamic_answer_options = hsh["disable_clearing_if_not_routed_or_dynamic_answer_options"]
+      @default_answer = hsh["default_answer"]
     end
   end
 

@@ -969,11 +969,8 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
       context "when all nil" do
         let(:attributes) { setup_section_params.merge(field_66: nil, field_67: nil, field_68: nil, field_69: nil) }
 
-        it "returns correct errors" do
-          expect(parser.errors[:field_66]).to be_present
-          expect(parser.errors[:field_67]).to be_present
-          expect(parser.errors[:field_68]).to be_present
-          expect(parser.errors[:field_69]).to be_present
+        it "sets pregblank field" do
+          expect(parser.log.pregblank).to be(1)
         end
       end
     end

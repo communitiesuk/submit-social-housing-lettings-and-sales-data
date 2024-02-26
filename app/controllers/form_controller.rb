@@ -92,6 +92,7 @@ private
                                 Date.new(0, 1, 1)
                               end
       end
+
       next unless question_params
 
       if %w[checkbox validation_override].include?(question.type)
@@ -100,6 +101,12 @@ private
         end
       else
         result[question.id] = question_params
+      end
+
+      if %w[checkbox].include?(question.type) &&
+          !question.default_answer.nil? &&
+          question.answer_keys_without_dividers.all? { |answer_key| result[answer_key] != 1 }
+        result[question.default_answer] = 1
       end
 
       if question.id == "owning_organisation_id"
@@ -229,6 +236,8 @@ private
   end
 
   def question_missing_response?(responses_for_page, question)
+    return unless question.default_answer.nil?
+
     if %w[checkbox validation_override].include?(question.type)
       answered = question.answer_keys_without_dividers.map do |option|
         session["fields"][option] = @log[option] = params[@log.model_name.param_key][question.id].include?(option) ? 1 : 0

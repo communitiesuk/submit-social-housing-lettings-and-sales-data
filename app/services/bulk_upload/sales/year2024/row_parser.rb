@@ -468,8 +468,6 @@ class BulkUpload::Sales::Year2024::RowParser
   validate :validate_address_fields, on: :after_log
   validate :validate_if_log_already_exists, on: :after_log, if: -> { FeatureToggle.bulk_upload_duplicate_log_check_enabled? }
 
-  validate :validate_buyers_organisations, on: :after_log
-
   def self.question_for_field(field)
     QUESTIONS[field]
   end
@@ -563,15 +561,6 @@ class BulkUpload::Sales::Year2024::RowParser
   end
 
 private
-
-  def validate_buyers_organisations
-    organisations_fields = %i[field_66 field_67 field_68 field_69]
-    if organisations_fields.all? { |field| attributes[field.to_s].blank? }
-      organisations_fields.each do |field|
-        errors.add(field, "At least one option must be selected of these four")
-      end
-    end
-  end
 
   def prevtenbuy2
     case field_71
@@ -860,6 +849,8 @@ private
     attributes["pregla"] = field_68
     attributes["pregghb"] = field_69
     attributes["pregother"] = field_67
+    organisations_fields = %i[field_67 field_68 field_69 field_70]
+    attributes["pregblank"] = organisations_fields.all? { |field| attributes[field.to_s].blank? }
 
     attributes["disabled"] = field_75
     attributes["wheel"] = field_76

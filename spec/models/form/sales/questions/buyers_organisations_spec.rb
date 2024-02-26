@@ -32,11 +32,11 @@ RSpec.describe Form::Sales::Questions::BuyersOrganisations, type: :model do
   end
 
   it "has the correct hint" do
-    expect(question.hint_text).to eq("Select all that apply")
+    expect(question.hint_text).to eq("Select all that apply. This question is optional. If no options are applicable, leave the options blank, and select save and continue.")
   end
 
-  it "has the correct unanswered_error_message" do
-    expect(question.unanswered_error_message).to eq("At least one option must be selected of these four")
+  it "has the correct default answer" do
+    expect(question.default_answer).to eq("pregblank")
   end
 
   it "has the correct answer_options" do
@@ -46,7 +46,7 @@ RSpec.describe Form::Sales::Questions::BuyersOrganisations, type: :model do
         "pregother" => { "value" => "Other private registered provider (PRP) - housing association" },
         "pregla" => { "value" => "Local Authority" },
         "pregghb" => { "value" => "Help to Buy Agent" },
-        "pregblank" => { "value" => "None of the above" },
+        "pregblank" => { "value" => "None selected" },
       },
     )
   end
