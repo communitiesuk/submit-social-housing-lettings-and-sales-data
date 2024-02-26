@@ -1495,7 +1495,7 @@ private
   end
 
   def valid_nationality_options
-    %w[0 826] + GlobalConstants::COUNTRIES_ANSWER_OPTIONS.keys
+    %w[0] + GlobalConstants::COUNTRIES_ANSWER_OPTIONS.keys # 0 is "Prefers not to say"
   end
 
   def nationality_group(nationality_value)
