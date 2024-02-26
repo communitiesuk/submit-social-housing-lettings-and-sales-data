@@ -79,8 +79,9 @@ class Location < ApplicationRecord
     .where.not(id: activating_soon.pluck(:id))
   }
 
-  LOCAL_AUTHORITIES = LocalAuthority.all.map { |la| [la.name, la.code] }.to_h
+  LOCAL_AUTHORITIES = LocalAuthority.all.map { |la| [la.name, la.code] }.to_h.freeze
 
+  attribute :local_authorities, :string
   enum local_authorities: LOCAL_AUTHORITIES
   def self.local_authorities_for_current_year
     LocalAuthority.all.active(Time.zone.today).england.map { |la| [la.code, la.name] }.to_h
