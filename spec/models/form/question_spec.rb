@@ -357,8 +357,8 @@ RSpec.describe Form::Question, type: :model do
       end
 
       context "when Sales form" do
-        let(:sales_log) { FactoryBot.create(:sales_log, :completed, ethnic_group: 17, saledate: Time.zone.local(2022, 1, 1)) }
-        let(:question) { sales_log.form.get_question("ethnic_group", sales_log) }
+        let(:sales_log) { FactoryBot.create(:sales_log, :completed, national: 13, saledate: Time.zone.local(2022, 1, 1)) }
+        let(:question) { sales_log.form.get_question("national", sales_log) }
 
         it "returns the inferred label value" do
           expect(question.answer_label(sales_log)).to eq("Prefers not to say")
