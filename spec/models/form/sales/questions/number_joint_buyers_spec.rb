@@ -6,6 +6,12 @@ RSpec.describe Form::Sales::Questions::NumberJointBuyers, type: :model do
   let(:question_id) { nil }
   let(:question_definition) { nil }
   let(:page) { instance_double(Form::Page) }
+  let(:subsection) { instance_double(Form::Subsection) }
+
+  before do
+    allow(page).to receive(:subsection).and_return(subsection)
+    allow(subsection).to receive(:form).and_return(instance_double(Form, start_year_after_2024?: false))
+  end
 
   it "has correct page" do
     expect(question.page).to eq(page)
@@ -41,5 +47,15 @@ RSpec.describe Form::Sales::Questions::NumberJointBuyers, type: :model do
       "2" => { "value" => "No" },
       "3" => { "value" => "Don’t know" },
     })
+  end
+
+  context "with 2024 form" do
+    before do
+      allow(subsection).to receive(:form).and_return(instance_double(Form, start_year_after_2024?: true))
+    end
+
+    it "has no hint_text" do
+      expect(question.hint_text).to be_nil
+    end
   end
 end
