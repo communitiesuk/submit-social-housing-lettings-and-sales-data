@@ -1,4 +1,6 @@
 module FiltersHelper
+  include CollectionTimeHelper
+
   def filter_selected?(filter, value, filter_type)
     return false unless session[session_name_for(filter_type)]
 
@@ -93,7 +95,11 @@ module FiltersHelper
   end
 
   def collection_year_options
-    { "2023": "2023/24", "2022": "2022/23", "2021": "2021/22" }
+    {
+      current_collection_start_year.to_s => year_combo(current_collection_start_year),
+      previous_collection_start_year.to_s => year_combo(previous_collection_start_year),
+      archived_collection_start_year.to_s => year_combo(archived_collection_start_year),
+    }
   end
 
   def filters_applied_text(filter_type)
@@ -173,5 +179,9 @@ private
         0
       end
     end
+  end
+
+  def year_combo(year)
+    "#{year}/#{year - 2000 + 1}"
   end
 end

@@ -418,6 +418,7 @@ en:
           above_hard_max: "Rent is higher than the absolute maximum expected for a property of this type based on this period"
       charges:
         complete_1_of_3: "Answer either the ‘household rent and charges’ question or ‘is this accommodation a care home‘, or select ‘no’ for ‘does the household pay rent or charges for the accommodation?’"
+        missing_charges: "Please enter the %{question}. If there is no %{question}, please enter '0'."
       tcharge:
         under_10: "Enter a total charge that is at least £10.00 per week"
       rent_period:
@@ -543,6 +544,7 @@ en:
       reason:
         not_internal_transfer: "Answer cannot be ‘permanently decanted from another property owned by this landlord’ as you told us the source of referral for this tenancy was not an internal transfer"
         renewal_reason_needed: 'The reason for leaving must be "End of assured shorthold tenancy - no fault" or "End of fixed term tenancy - no fault" if the letting is a renewal'
+        other_not_settled: "Please give the reason for the tenant leaving their last settled home. This is where they were living before they became homeless, were living in temporary accommodation or sleeping rough"
       condition_effects:
         no_choices: "You cannot answer this question as you told us nobody in the household has a physical or mental health condition (or other illness) expected to last 12 months or more"
       postcode:
@@ -740,6 +742,11 @@ Make sure these answers are correct."
     deposit_and_mortgage:
       title_text: "You told us the mortgage amount was %{mortgage}, the cash deposit was %{deposit} and the discount was %{discount}."
       hint_text: "We would expect the mortgage amount and the deposit added together to be the same as the purchase price minus the discount."
+    reasonother:
+      title_text: "You told us that the tenant’s main reason for leaving their last settled home was %{reasonother}"
+      informative_text: "The reason you have entered looks very similar to one of the existing response categories.
+                         Please check the categories and select the appropriate one.
+                         If the existing categories are not suitable, please confirm here to move onto the next question."
 
   devise:
     email:

@@ -1233,4 +1233,42 @@ RSpec.describe Validations::SoftValidations do
       end
     end
   end
+
+  describe "reasonother_might_be_existing_category?" do
+    it "returns true if reasonother is exactly in the 'likely existing category' list" do
+      record.reasonother = "Domestic Abuse"
+
+      expect(record).to be_reasonother_might_be_existing_category
+    end
+
+    it "returns true if any word of reasonother is exactly in the 'likely existing category' list" do
+      record.reasonother = "Was decanted from somewhere"
+
+      expect(record).to be_reasonother_might_be_existing_category
+    end
+
+    it "is not case sensitive when matching" do
+      record.reasonother = "domestic abuse"
+
+      expect(record).to be_reasonother_might_be_existing_category
+    end
+
+    it "returns false if no part of reasonother is in the 'likely existing category' list" do
+      record.reasonother = "other"
+
+      expect(record).not_to be_reasonother_might_be_existing_category
+    end
+
+    it "returns false if match to the 'likely existing category' list is only part of a word" do
+      record.reasonother = "wasdecanted"
+
+      expect(record).not_to be_reasonother_might_be_existing_category
+    end
+
+    it "ignores neighbouring non-alphabet for matching" do
+      record.reasonother = "1Domestic abuse."
+
+      expect(record).to be_reasonother_might_be_existing_category
+    end
+  end
 end

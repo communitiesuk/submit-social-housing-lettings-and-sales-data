@@ -28,10 +28,6 @@ class FeatureToggle
     false
   end
 
-  def self.merge_organisations_enabled?
-    true
-  end
-
   def self.deduplication_flow_enabled?
     true
   end
@@ -46,9 +42,5 @@ class FeatureToggle
 
   def self.service_moved?
     false
-  end
-
-  def self.sales_managing_organisation_enabled?
-    true
   end
 end

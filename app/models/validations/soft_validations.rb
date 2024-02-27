@@ -150,6 +150,44 @@ module Validations::SoftValidations
     weekly_supcharg > soft_max && weekly_supcharg <= hard_max
   end
 
+  PHRASES_LIKELY_TO_INDICATE_EXISTING_REASON_CATEGORY = [
+    "Decant",
+    "Decanted",
+    "Refugee",
+    "Asylum",
+    "Ukraine",
+    "Ukrainian",
+    "Army",
+    "Military",
+    "Domestic Abuse",
+    "Domestic Violence",
+    "DA",
+    "DV",
+    "Relationship breakdown",
+    "Overcrowding",
+    "Overcrowded",
+    "Too small",
+    "More space",
+    "Bigger property",
+    "Damp",
+    "Mould",
+    "Fire",
+    "Repossession",
+    "Death",
+    "Deceased",
+    "Passed away",
+    "Prison",
+    "Hospital",
+  ].freeze
+
+  PHRASES_LIKELY_TO_INDICATE_EXISTING_REASON_CATEGORY_REGEX = Regexp.union(
+    PHRASES_LIKELY_TO_INDICATE_EXISTING_REASON_CATEGORY.map { |phrase| Regexp.new("\\b[^[:alpha]]*#{phrase}[^[:alpha:]]*\\b", Regexp::IGNORECASE) },
+  )
+
+  def reasonother_might_be_existing_category?
+    PHRASES_LIKELY_TO_INDICATE_EXISTING_REASON_CATEGORY_REGEX.match?(reasonother)
+  end
+
 private
 
   def details_known_or_lead_tenant?(tenant_number)

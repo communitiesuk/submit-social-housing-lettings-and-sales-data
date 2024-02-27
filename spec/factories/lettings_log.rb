@@ -10,6 +10,7 @@ FactoryBot.define do
       renewal { 0 }
       needstype { 1 }
       rent_type { 1 }
+      declaration { 1 }
     end
     trait :in_progress do
       status { 1 }

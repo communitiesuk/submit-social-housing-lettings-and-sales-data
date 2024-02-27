@@ -126,5 +126,5 @@ Rails.application.configure do
   # config.active_record.database_resolver_context = ActiveRecord::Middleware::DatabaseSelector::Resolver::Session
 
   # see https://discuss.rubyonrails.org/t/cve-2022-32224-possible-rce-escalation-bug-with-serialized-columns-in-active-record/81017
-  config.active_record.yaml_column_permitted_classes = [Time]
+  config.active_record.yaml_column_permitted_classes = [Time, BigDecimal]
 end

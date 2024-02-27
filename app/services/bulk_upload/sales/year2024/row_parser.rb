@@ -455,12 +455,12 @@ class BulkUpload::Sales::Year2024::RowParser
 
   validate :validate_owning_org_data_given, on: :after_log
   validate :validate_owning_org_exists, on: :after_log
-  validate :validate_owning_org_owns_stock, on: :after_log if FeatureToggle.sales_managing_organisation_enabled?
+  validate :validate_owning_org_owns_stock, on: :after_log
   validate :validate_owning_org_permitted, on: :after_log
 
   validate :validate_created_by_exists, on: :after_log
   validate :validate_created_by_related, on: :after_log
-  validate :validate_managing_org_related, on: :after_log if FeatureToggle.sales_managing_organisation_enabled?
+  validate :validate_managing_org_related, on: :after_log
   validate :validate_relevant_collection_window, on: :after_log
   validate :validate_incomplete_soft_validations, on: :after_log
 
@@ -732,6 +732,7 @@ private
       discount: %i[field_116],
       othtype: %i[field_12],
       owning_organisation_id: %i[field_1],
+      managing_organisation_id: [:field_2],
       created_by: %i[field_3],
       hhregres: %i[field_72],
       hhregresstill: %i[field_73],
@@ -785,7 +786,7 @@ private
 
     attributes["purchid"] = purchaser_code
     attributes["saledate"] = saledate
-    attributes["noint"] = 2 if field_17 == 1
+    attributes["noint"] = field_17
 
     attributes["age1_known"] = age1_known?
     attributes["age1"] = field_31 if attributes["age1_known"]&.zero? && field_31&.match(/\A\d{1,3}\z|\AR\z/)
@@ -1211,9 +1212,7 @@ private
   end
 
   def managing_organisation
-    return owning_organisation if created_by&.organisation&.absorbed_organisations&.include?(owning_organisation)
-
-    created_by&.organisation || bulk_upload.user.organisation
+    Organisation.find_by_id_on_multiple_fields(field_2)
   end
 
   def nationality_group(nationality_value)
@@ -1228,8 +1227,8 @@ private
     if owning_organisation && managing_organisation && !owning_organisation.can_be_managed_by?(organisation: managing_organisation)
       block_log_creation!
 
-      if errors[:field_3].blank?
-        errors.add(:field_3, "This user belongs to an organisation that does not have a relationship with the owning organisation", category: :setup)
+      if errors[:field_2].blank?
+        errors.add(:field_2, "This organisation does not have a relationship with the owning organisation", category: :setup)
       end
     end
   end

@@ -9,6 +9,20 @@ module Validations::HouseholdValidations
     end
   end
 
+  PHRASES_INDICATING_HOMELESSNESS = [
+    "Homeless",
+    "Homelessness",
+    "Temporary accommodation",
+    "Temp accommodation",
+    "TA",
+    "Sleeping rough",
+    "Rough sleeping",
+  ].freeze
+
+  PHRASES_INDICATING_HOMELESSNESS_REGEX = Regexp.union(
+    PHRASES_INDICATING_HOMELESSNESS.map { |phrase| Regexp.new("\\A[^[:alpha:]]*#{phrase}[^[:alpha:]]*\\Z", Regexp::IGNORECASE) },
+  )
+
   def validate_reason_for_leaving_last_settled_home(record)
     if record.reason == 32 && record.underoccupation_benefitcap != 4
       record.errors.add :underoccupation_benefitcap, I18n.t("validations.household.underoccupation_benefitcap.dont_know_required")
@@ -19,6 +33,12 @@ module Validations::HouseholdValidations
     if record.is_reason_permanently_decanted? && record.referral.present? && !record.is_internal_transfer?
       record.errors.add :referral, I18n.t("validations.household.referral.reason_permanently_decanted")
       record.errors.add :reason, I18n.t("validations.household.reason.not_internal_transfer")
+    end
+
+    return unless record.form.start_year_after_2024?
+
+    if record.reason == 20 && PHRASES_INDICATING_HOMELESSNESS_REGEX.match?(record.reasonother)
+      record.errors.add :reason, I18n.t("validations.household.reason.other_not_settled")
     end
   end
 

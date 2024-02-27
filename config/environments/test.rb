@@ -64,7 +64,7 @@ Rails.application.configure do
   Faker::Config.locale = "en-GB"
 
   # see https://discuss.rubyonrails.org/t/cve-2022-32224-possible-rce-escalation-bug-with-serialized-columns-in-active-record/81017
-  config.active_record.yaml_column_permitted_classes = [Time]
+  config.active_record.yaml_column_permitted_classes = [Time, BigDecimal]
 
   config.active_job.queue_adapter = :test
 end

@@ -415,6 +415,17 @@ RSpec.describe Validations::Sales::SoftValidations do
           .not_to be_shared_ownership_deposit_invalid
       end
 
+      it "returns false if MORTGAGE + DEPOSIT + CASHDIS are within 1£ of VALUE * EQUITY/100" do
+        record.mortgage = 500
+        record.deposit = 500
+        record.cashdis = 500
+        record.value = 3001
+        record.equity = 50
+
+        expect(record)
+          .not_to be_shared_ownership_deposit_invalid
+      end
+
       it "returns false if mortgage is used and no mortgage is given" do
         record.mortgage = nil
         record.deposit = 1000
@@ -471,6 +482,18 @@ RSpec.describe Validations::Sales::SoftValidations do
 
         expect(record)
           .to be_shared_ownership_deposit_invalid
+      end
+
+      it "returns false if no cashdis not routed to and MORTGAGE + DEPOSIT are within 1£ of VALUE * EQUITY/100" do
+        record.mortgage = 500
+        record.deposit = 500
+        record.type = 2
+        record.cashdis = nil
+        record.value = 1999
+        record.equity = 50
+
+        expect(record)
+          .not_to be_shared_ownership_deposit_invalid
       end
 
       it "returns false if no value is given" do
