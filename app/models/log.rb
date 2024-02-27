@@ -179,6 +179,7 @@ class Log < ApplicationRecord
 
   def blank_compound_invalid_non_setup_fields!
     self.ppcodenk = nil if errors.attribute_names.include? :ppostcode_full
+    self.previous_la_known = nil if errors.attribute_names.include? :prevloc
 
     if errors.of_kind?(:uprn, :uprn_error)
       self.uprn_known = nil

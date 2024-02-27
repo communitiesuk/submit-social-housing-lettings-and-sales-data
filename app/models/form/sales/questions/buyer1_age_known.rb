@@ -2,7 +2,7 @@ class Form::Sales::Questions::Buyer1AgeKnown < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "age1_known"
-    @check_answer_label = "Lead buyer’s age"
+    @check_answer_label = "Buyer 1’s age"
     @header = "Do you know buyer 1’s age?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
