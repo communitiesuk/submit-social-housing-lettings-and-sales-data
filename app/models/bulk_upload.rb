@@ -88,6 +88,10 @@ class BulkUpload < ApplicationRecord
         log.rent_value_check = 0
         log.net_income_value_check = 0
         log.carehome_charges_value_check = 0
+        log.referral_value_check = 0
+        log.supcharg_value_check = 0
+        log.scharge_value_check = 0
+        log.pscharge_value_check = 0
       elsif log.sales?
         log.mortgage_value_check = 0
         log.shared_ownership_deposit_value_check = 0
@@ -106,6 +110,8 @@ class BulkUpload < ApplicationRecord
         log.student_not_child_value_check = 0
         log.discounted_sale_value_check = 0
         log.buyer_livein_value_check = 0
+        log.combined_income_value_check = 0
+        log.stairowned_value_check = 0
         log.percentage_discount_value_check = 0
       end
       log.save!
