@@ -84,18 +84,12 @@ class BulkUpload < ApplicationRecord
 
   def unpend_and_confirm_soft_validations
     logs.find_each do |log|
-      SHARED_VALUE_CHECKS.each do |field|
-        log[field] = 0
-      end
-      if log.lettings?
-        LETTINGS_VALUE_CHECKS.each do |field|
-          log[field] = 0
-        end
-      elsif log.sales?
-        SALES_VALUE_CHECKS.each do |field|
-          log[field] = 0
-        end
-      end
+      fields_to_confirm = SHARED_VALUE_CHECKS + (if log.lettings?
+                                                   LETTINGS_VALUE_CHECKS
+                                                 elsif log.sales?
+                                                   SALES_VALUE_CHECKS
+                                                 end)
+      fields_to_confirm.each { |field| log[field] = 0 }
       log.save!
     end
   end
