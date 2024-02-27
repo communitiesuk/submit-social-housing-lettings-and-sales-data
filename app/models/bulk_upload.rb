@@ -78,42 +78,23 @@ class BulkUpload < ApplicationRecord
     end
   end
 
+  SHARED_VALUE_CHECKS = %w[retirement_value_check].freeze
+  LETTINGS_VALUE_CHECKS = %w[pregnancy_value_check major_repairs_date_value_check void_date_value_check rent_value_check net_income_value_check carehome_charges_value_check referral_value_check supcharg_value_check scharge_value_check pscharge_value_check reasonother_value_check].freeze
+  SALES_VALUE_CHECKS = %w[mortgage_value_check shared_ownership_deposit_value_check value_value_check savings_value_check income1_value_check deposit_value_check wheel_value_check extrabor_value_check grant_value_check staircase_bought_value_check deposit_and_mortgage_value_check old_persons_shared_ownership_value_check percentage_discount_value_check stairowned_value_check combined_income_value_check discounted_sale_value_check monthly_charges_value_check income2_value_check student_not_child_value_check buyer_livein_value_check].freeze
+
   def unpend_and_confirm_soft_validations
     logs.find_each do |log|
-      log.retirement_value_check = 0
-
+      SHARED_VALUE_CHECKS.each do |field|
+        log[field] = 0
+      end
       if log.lettings?
-        log.pregnancy_value_check = 0
-        log.major_repairs_date_value_check = 0
-        log.void_date_value_check = 0
-        log.rent_value_check = 0
-        log.net_income_value_check = 0
-        log.carehome_charges_value_check = 0
-        log.referral_value_check = 0
-        log.supcharg_value_check = 0
-        log.scharge_value_check = 0
-        log.pscharge_value_check = 0
+        LETTINGS_VALUE_CHECKS.each do |field|
+          log[field] = 0
+        end
       elsif log.sales?
-        log.mortgage_value_check = 0
-        log.shared_ownership_deposit_value_check = 0
-        log.value_value_check = 0
-        log.savings_value_check = 0
-        log.income1_value_check = 0
-        log.deposit_value_check = 0
-        log.wheel_value_check = 0
-        log.extrabor_value_check = 0
-        log.grant_value_check = 0
-        log.staircase_bought_value_check = 0
-        log.deposit_and_mortgage_value_check = 0
-        log.old_persons_shared_ownership_value_check = 0
-        log.income2_value_check = 0
-        log.monthly_charges_value_check = 0
-        log.student_not_child_value_check = 0
-        log.discounted_sale_value_check = 0
-        log.buyer_livein_value_check = 0
-        log.combined_income_value_check = 0
-        log.stairowned_value_check = 0
-        log.percentage_discount_value_check = 0
+        SALES_VALUE_CHECKS.each do |field|
+          log[field] = 0
+        end
       end
       log.save!
     end

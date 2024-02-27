@@ -18,4 +18,22 @@ RSpec.describe BulkUpload, type: :model do
       end
     end
   end
+
+  describe "value check clearing" do
+    context "with a lettings log bulk upload" do
+      let(:value_check_fields) { LettingsLog.columns_hash.keys.select { |column| column.end_with?("_value_check") } }
+
+      it "has the correct number of value checks to be set as confirmed" do
+        expect(value_check_fields.count).to eq(BulkUpload::SHARED_VALUE_CHECKS.count + BulkUpload::LETTINGS_VALUE_CHECKS.count)
+      end
+    end
+
+    context "with a sales log bulk upload" do
+      let(:value_check_fields) { SalesLog.columns_hash.keys.select { |column| column.end_with?("_value_check") } }
+
+      it "has the correct number of value checks to be set as confirmed" do
+        expect(value_check_fields.count).to eq(BulkUpload::SHARED_VALUE_CHECKS.count + BulkUpload::SALES_VALUE_CHECKS.count)
+      end
+    end
+  end
 end
