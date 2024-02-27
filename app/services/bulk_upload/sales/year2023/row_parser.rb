@@ -854,8 +854,7 @@ private
     attributes["pregla"] = field_69
     attributes["pregghb"] = field_70
     attributes["pregother"] = field_68
-    organisations_fields = %i[field_67 field_68 field_69 field_70]
-    attributes["pregblank"] = organisations_fields.all? { |field| attributes[field.to_s].blank? }
+    attributes["pregblank"] = no_buyer_organisation
 
     attributes["disabled"] = field_76
     attributes["wheel"] = field_77
@@ -1120,6 +1119,10 @@ private
     return 1 if field_63 == 2
 
     0 if field_63 == 1
+  end
+
+  def no_buyer_organisation
+    [field_67, field_68, field_69, field_70].all?(&:blank?) ? 1 : nil?
   end
 
   def block_log_creation!

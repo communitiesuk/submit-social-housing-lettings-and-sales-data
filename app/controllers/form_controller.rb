@@ -92,7 +92,6 @@ private
                                 Date.new(0, 1, 1)
                               end
       end
-
       next unless question_params
 
       if %w[checkbox validation_override].include?(question.type)

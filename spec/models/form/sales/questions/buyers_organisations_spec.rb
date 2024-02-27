@@ -35,7 +35,7 @@ RSpec.describe Form::Sales::Questions::BuyersOrganisations, type: :model do
     expect(question.hint_text).to eq("Select all that apply. This question is optional. If no options are applicable, leave the options blank, and select save and continue.")
   end
 
-  it "has the correct default answer" do
+  it "has the correct default" do
     expect(question.default_answer).to eq("pregblank")
   end
 
@@ -46,18 +46,18 @@ RSpec.describe Form::Sales::Questions::BuyersOrganisations, type: :model do
         "pregother" => { "value" => "Other private registered provider (PRP) - housing association" },
         "pregla" => { "value" => "Local Authority" },
         "pregghb" => { "value" => "Help to Buy Agent" },
-        "pregblank" => { "value" => "None selected" },
+        "pregblank" => { "value" => "None of the above" },
       },
     )
   end
 
-  it "has the correct displayed_answer_options" do
-    expect(question.displayed_answer_options(FactoryBot.create(:sales_log))).to eq(
+  it "has the correct displayed answer_options" do
+    expect(question.answer_options).to eq(
       {
         "pregyrha" => { "value" => "Their private registered provider (PRP) - housing association" },
         "pregother" => { "value" => "Other private registered provider (PRP) - housing association" },
         "pregla" => { "value" => "Local Authority" },
-        "pregghb" => { "value" => "Help to Buy Agent" },
+        "pregghb" => { "value" => "Help to Buy Agent" }
       },
     )
   end
