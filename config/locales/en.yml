@@ -418,6 +418,7 @@ en:
           above_hard_max: "Rent is higher than the absolute maximum expected for a property of this type based on this period"
       charges:
         complete_1_of_3: "Answer either the ‘household rent and charges’ question or ‘is this accommodation a care home‘, or select ‘no’ for ‘does the household pay rent or charges for the accommodation?’"
+        missing_charges: "Please enter the %{question}. If there is no %{question}, please enter '0'."
       tcharge:
         under_10: "Enter a total charge that is at least £10.00 per week"
       rent_period:
