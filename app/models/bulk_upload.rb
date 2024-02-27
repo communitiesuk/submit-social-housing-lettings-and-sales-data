@@ -78,18 +78,13 @@ class BulkUpload < ApplicationRecord
     end
   end
 
-  SHARED_VALUE_CHECKS = %w[retirement_value_check].freeze
-  LETTINGS_VALUE_CHECKS = %w[pregnancy_value_check major_repairs_date_value_check void_date_value_check rent_value_check net_income_value_check carehome_charges_value_check referral_value_check supcharg_value_check scharge_value_check pscharge_value_check reasonother_value_check].freeze
-  SALES_VALUE_CHECKS = %w[mortgage_value_check shared_ownership_deposit_value_check value_value_check savings_value_check income1_value_check deposit_value_check wheel_value_check extrabor_value_check grant_value_check staircase_bought_value_check deposit_and_mortgage_value_check old_persons_shared_ownership_value_check percentage_discount_value_check stairowned_value_check combined_income_value_check discounted_sale_value_check monthly_charges_value_check income2_value_check student_not_child_value_check buyer_livein_value_check].freeze
+  def fields_to_confirm(log)
+    log.form.questions.select { |q| q.type == "interruption_screen" }.uniq(&:id).map(&:id)
+  end
 
   def unpend_and_confirm_soft_validations
     logs.find_each do |log|
-      fields_to_confirm = SHARED_VALUE_CHECKS + (if log.lettings?
-                                                   LETTINGS_VALUE_CHECKS
-                                                 elsif log.sales?
-                                                   SALES_VALUE_CHECKS
-                                                 end)
-      fields_to_confirm.each { |field| log[field] = 0 }
+      fields_to_confirm(log).each { |field| log[field] = 0 }
       log.save!
     end
   end

@@ -21,18 +21,18 @@ RSpec.describe BulkUpload, type: :model do
 
   describe "value check clearing" do
     context "with a lettings log bulk upload" do
-      let(:value_check_fields) { LettingsLog.columns_hash.keys.select { |column| column.end_with?("_value_check") } }
+      let(:log) { create(:lettings_log, bulk_upload:) }
 
       it "has the correct number of value checks to be set as confirmed" do
-        expect(value_check_fields.count).to eq(BulkUpload::SHARED_VALUE_CHECKS.count + BulkUpload::LETTINGS_VALUE_CHECKS.count)
+        expect(bulk_upload.fields_to_confirm(log).sort).to eq(%w[rent_value_check void_date_value_check major_repairs_date_value_check pregnancy_value_check retirement_value_check referral_value_check net_income_value_check carehome_charges_value_check scharge_value_check pscharge_value_check supcharg_value_check].sort)
       end
     end
 
     context "with a sales log bulk upload" do
-      let(:value_check_fields) { SalesLog.columns_hash.keys.select { |column| column.end_with?("_value_check") } }
+      let(:log) { create(:sales_log, bulk_upload:) }
 
       it "has the correct number of value checks to be set as confirmed" do
-        expect(value_check_fields.count).to eq(BulkUpload::SHARED_VALUE_CHECKS.count + BulkUpload::SALES_VALUE_CHECKS.count)
+        expect(bulk_upload.fields_to_confirm(log).sort).to eq(%w[value_value_check monthly_charges_value_check percentage_discount_value_check income1_value_check income2_value_check combined_income_value_check retirement_value_check old_persons_shared_ownership_value_check buyer_livein_value_check student_not_child_value_check wheel_value_check mortgage_value_check savings_value_check deposit_value_check staircase_bought_value_check stairowned_value_check hodate_check shared_ownership_deposit_value_check extrabor_value_check grant_value_check discounted_sale_value_check deposit_and_mortgage_value_check].sort)
       end
     end
   end
