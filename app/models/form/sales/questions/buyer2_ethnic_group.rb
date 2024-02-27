@@ -6,12 +6,6 @@ class Form::Sales::Questions::Buyer2EthnicGroup < ::Form::Question
     @header = "What is buyer 2’s ethnic group?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
-    @inferred_check_answers_value = [{
-      "condition" => {
-        "ethnic_group2" => 17,
-      },
-      "value" => "Prefers not to say",
-    }]
     @check_answers_card_number = 2
     @question_number = 30
   end
