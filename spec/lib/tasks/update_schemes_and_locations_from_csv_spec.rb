@@ -204,8 +204,8 @@ RSpec.describe "bulk_update" do
         expect(Rails.logger).to receive(:info).with("Updating scheme S#{schemes[0].id} with service_name: Updated test name")
         expect(Rails.logger).to receive(:info).with("Updating scheme S#{schemes[0].id} with sensitive: No")
         expect(Rails.logger).to receive(:info).with("Updating scheme S#{schemes[0].id} with scheme_type: Direct Access Hostel")
-        expect(Rails.logger).to receive(:info).with("Updated logs with startdate for scheme S#{schemes[0].id}. Log IDs: ")
-        expect(Rails.logger).to receive(:info).with("Updated logs without startdate for scheme S#{schemes[0].id}. Log IDs: #{lettings_log.id}, #{lettings_log_4.id}, #{lettings_log_5.id}")
+        expect(Rails.logger).to receive(:info).with("Cleared location and scheme for logs with startdate and scheme S#{schemes[0].id}. Log IDs: ")
+        expect(Rails.logger).to receive(:info).with("Cleared location and scheme for logs without startdate and scheme S#{schemes[0].id}. Log IDs: #{lettings_log.id}, #{lettings_log_4.id}, #{lettings_log_5.id}")
         expect(Rails.logger).to receive(:info).with("Updating scheme S#{schemes[0].id} with arrangement_type: Another registered stock owner")
         expect(Rails.logger).to receive(:info).with("Updating scheme S#{schemes[0].id} with primary_client_group: People with drug problems")
         expect(Rails.logger).to receive(:info).with("Updating scheme S#{schemes[0].id} with has_other_client_group: No")
@@ -386,6 +386,13 @@ RSpec.describe "bulk_update" do
         expect(locations[2].scheme).to eq(scheme)
       end
 
+      it "does not update the scheme id if the new scheme is not in the same or related organisation as the old scheme" do
+        different_scheme.update!(owning_organisation: FactoryBot.create(:organisation))
+        task.invoke(original_locations_csv_path, updated_locations_csv_path)
+        locations[0].reload
+        expect(locations[0].scheme).not_to eq(different_scheme)
+      end
+
       it "only re-exports the logs for the locations that have been updated" do
         lettings_log_4.startdate = Time.zone.local(2022, 4, 1)
         lettings_log_4.save!(validate: false)
@@ -416,6 +423,8 @@ RSpec.describe "bulk_update" do
         lettings_log_5.startdate = Time.zone.local(2021, 4, 1)
         lettings_log_5.save!(validate: false)
 
+        expect(Rails.logger).to receive(:info).with("Cleared location and scheme for logs with startdate and location #{locations[0].id}. Log IDs: #{lettings_log.id}")
+        expect(Rails.logger).to receive(:info).with("Cleared location and scheme for logs without startdate and location #{locations[0].id}. Log IDs: ")
         expect(Rails.logger).to receive(:info).with("Updating location #{locations[0].id} with postcode: B11BB")
         expect(Rails.logger).to receive(:info).with("Updating location #{locations[0].id} with name: Updated name")
         expect(Rails.logger).to receive(:info).with("Updating location #{locations[0].id} with location_code: E09000033")
@@ -490,6 +499,12 @@ RSpec.describe "bulk_update" do
                               period: 1)
           end
 
+          before do
+            allow(storage_service).to receive(:get_file_io)
+            .with("updated_locations.csv")
+            .and_return(StringIO.new(replace_entity_ids_for_locations(locations[0], locations[1], locations[2], scheme, scheme, { id: "non existent scheme id" }, File.open("./spec/fixtures/files/updated_locations.csv").read)))
+          end
+
           it "does not clear the charges values" do
             expect(lettings_log.status).to eq("completed")
             task.invoke(original_locations_csv_path, updated_locations_csv_path)
@@ -518,6 +533,12 @@ RSpec.describe "bulk_update" do
                               beds: 4,
                               lettype: 1,
                               period: 1)
+          end
+
+          before do
+            allow(storage_service).to receive(:get_file_io)
+            .with("updated_locations.csv")
+            .and_return(StringIO.new(replace_entity_ids_for_locations(locations[0], locations[1], locations[2], scheme, scheme, { id: "non existent scheme id" }, File.open("./spec/fixtures/files/updated_locations.csv").read)))
           end
 
           it "clears the charges values" do
