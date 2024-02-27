@@ -854,8 +854,8 @@ private
     attributes["pregla"] = field_69
     attributes["pregghb"] = field_70
     attributes["pregother"] = field_68
-    organisations_fields = %i[field_67 field_68 field_69 field_70]
-    attributes["pregblank"] = organisations_fields.all? { |field| attributes[field.to_s].blank? }
+    organisations_fields = [field_67, field_68, field_69, field_70]
+    attributes["pregblank"] = organisations_fields.all?(&:blank?) ? 1 : 0
 
     attributes["disabled"] = field_76
     attributes["wheel"] = field_77
