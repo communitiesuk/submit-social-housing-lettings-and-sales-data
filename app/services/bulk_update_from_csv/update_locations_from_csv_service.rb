@@ -144,16 +144,36 @@ private
 
   def clear_invalid_rent_fields(logs)
     logs.each do |log|
-      log.validate
-      if log.errors["brent"].any?
-        Rails.logger.info("Log #{log.id} went from completed to in progress.") if log.status == "completed"
-        log.brent = nil
-        log.scharge = nil
-        log.pscharge = nil
-        log.supcharg = nil
+      if log.rent_in_soft_min_range? || log.rent_in_soft_max_range?
+        complete_or_log_soft_invalidated_log(log)
+      else
+        log.validate
+        if log.errors["brent"].any?
+          Rails.logger.info("Log #{log.id} went from completed to in progress.") if log.status == "completed"
+          log.brent = nil
+          log.scharge = nil
+          log.pscharge = nil
+          log.supcharg = nil
+        end
+        log.values_updated_at = Time.zone.now
+        log.save!(validate: false)
       end
-      log.values_updated_at = Time.zone.now
-      log.save!(validate: false)
     end
+  end
+
+  def complete_or_log_soft_invalidated_log(log)
+    return if log.rent_value_check.present?
+
+    editable_from_date = FormHandler.instance.earliest_open_for_editing_collection_start_date
+    if log.startdate < editable_from_date
+      log.rent_value_check = 0
+      Rails.logger.info("Confirmed rent value check for log #{log.id}.")
+    elsif log.status == "completed"
+      Rails.logger.info("Log #{log.id} went from completed to in progress.")
+    else
+      Rails.logger.info("Log #{log.id} stayed in progress, triggering soft rent value check.")
+    end
+    log.values_updated_at = Time.zone.now
+    log.save!(validate: false)
   end
 end

@@ -571,11 +571,73 @@ RSpec.describe "bulk_update" do
                               period: 1)
           end
 
+          before do
+            allow(storage_service).to receive(:get_file_io)
+            .with("updated_locations.csv")
+            .and_return(StringIO.new(replace_entity_ids_for_locations(locations[0], locations[1], locations[2], scheme, scheme, { id: "non existent scheme id" }, File.open("./spec/fixtures/files/updated_locations.csv").read)))
+          end
+
           it "does not clear the charges values and marks the log in progress" do
             expect(lettings_log.status).to eq("completed")
             task.invoke(original_locations_csv_path, updated_locations_csv_path)
             lettings_log.reload
             expect(lettings_log.status).to eq("in_progress")
+            expect(lettings_log.rent_value_check).to eq(nil)
+            expect(lettings_log.brent).to eq(100)
+            expect(lettings_log.scharge).to eq(50)
+            expect(lettings_log.pscharge).to eq(50)
+            expect(lettings_log.supcharg).to eq(50)
+          end
+        end
+
+        context "when new LA triggers soft rent ranges validations for closed collection period" do
+          let!(:lettings_log) do
+            FactoryBot.create(:lettings_log,
+                              :completed,
+                              :sh,
+                              location: locations[0],
+                              scheme:,
+                              values_updated_at: nil,
+                              owning_organisation: scheme.owning_organisation,
+                              brent: 100,
+                              scharge: 50,
+                              pscharge: 50,
+                              supcharg: 50,
+                              beds: 4,
+                              lettype: 1,
+                              voiddate: Time.zone.local(2020, 4, 1),
+                              mrcdate: Time.zone.local(2020, 4, 1),
+                              period: 1)
+          end
+
+          before do
+            LaRentRange.create!(
+              ranges_rent_id: "1",
+              la: "E09000033",
+              beds: 0,
+              lettype: 8,
+              soft_min: 12.41,
+              soft_max: 89.54,
+              hard_min: 9.87,
+              hard_max: 100.99,
+              start_year: 2022,
+            )
+
+            allow(storage_service).to receive(:get_file_io)
+            .with("updated_locations.csv")
+            .and_return(StringIO.new(replace_entity_ids_for_locations(locations[0], locations[1], locations[2], scheme, scheme, { id: "non existent scheme id" }, File.open("./spec/fixtures/files/updated_locations.csv").read)))
+
+            lettings_log.startdate = Time.zone.local(2022, 4, 1)
+            lettings_log.owning_organisation = scheme.owning_organisation
+            lettings_log.save!(validate: false)
+          end
+
+          it "does not clear the charges values and confirms the rent value check" do
+            expect(lettings_log.status).to eq("completed")
+            task.invoke(original_locations_csv_path, updated_locations_csv_path)
+            lettings_log.reload
+            expect(lettings_log.status).to eq("completed")
+            expect(lettings_log.rent_value_check).to eq(0)
             expect(lettings_log.brent).to eq(100)
             expect(lettings_log.scharge).to eq(50)
             expect(lettings_log.pscharge).to eq(50)
