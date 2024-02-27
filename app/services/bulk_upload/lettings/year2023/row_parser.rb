@@ -391,6 +391,7 @@ class BulkUpload::Lettings::Year2023::RowParser
 
   validate :validate_correct_intermediate_rent_type, on: :after_log, if: proc { renttype == :intermediate }
   validate :validate_correct_affordable_rent_type, on: :after_log, if: proc { renttype == :affordable }
+  validate :validate_all_charges_given, on: :after_log, if: proc { is_carehome.zero? }
 
   def self.question_for_field(field)
     QUESTIONS[field]
@@ -854,6 +855,20 @@ private
     end
   end
 
+  def validate_all_charges_given
+    return if supported_housing? && field_125 == 1
+
+    { field_128: "basic rent",
+      field_129: "service charge",
+      field_130: "personal service charge",
+      field_131: "support charge",
+      field_132: "total charge" }.each do |field, charge|
+      if public_send(field.to_sym).blank?
+        errors.add(field, I18n.t("validations.financial.charges.missing_charges", question: charge))
+      end
+    end
+  end
+
   def setup_question?(question)
     log.form.setup_sections[0].subsections[0].questions.include?(question)
   end
@@ -1192,7 +1207,7 @@ private
     attributes["supcharg"] = field_131
     attributes["tcharge"] = field_132
     attributes["chcharge"] = field_127
-    attributes["is_carehome"] = field_127.present? ? 1 : 0
+    attributes["is_carehome"] = is_carehome
     attributes["household_charge"] = supported_housing? ? field_125 : nil
     attributes["hbrentshortfall"] = field_133
     attributes["tshortfall_known"] = tshortfall_known
@@ -1573,5 +1588,9 @@ private
     else
       0
     end
+  end
+
+  def is_carehome
+    field_127.present? ? 1 : 0
   end
 end
