@@ -95,12 +95,12 @@ private
         editable_from_date = FormHandler.instance.earliest_open_for_editing_collection_start_date
 
         editable_logs_with_startdate = LettingsLog.where(scheme_id: scheme.id).after_date(editable_from_date)
+        Rails.logger.info("Clearing location and scheme for logs with startdate and scheme S#{scheme.id}. Log IDs: #{editable_logs_with_startdate.map(&:id).join(', ')}")
         editable_logs_with_startdate.update!(location: nil, scheme: nil)
-        Rails.logger.info("Cleared location and scheme for logs with startdate and scheme S#{scheme.id}. Log IDs: #{editable_logs_with_startdate.map(&:id).join(', ')}")
 
         logs_without_start_date = LettingsLog.where(scheme_id: scheme.id).where(startdate: nil)
+        Rails.logger.info("Clearing location and scheme for logs without startdate and scheme S#{scheme.id}. Log IDs: #{logs_without_start_date.map(&:id).join(', ')}")
         logs_without_start_date.update!(location: nil, scheme: nil)
-        Rails.logger.info("Cleared location and scheme for logs without startdate and scheme S#{scheme.id}. Log IDs: #{logs_without_start_date.map(&:id).join(', ')}")
       end
     else
       Rails.logger.info("Cannot update scheme #{original_attributes['scheme_code']} with owning_organisation: #{value}. Organisation with name #{value} is not in the database or is not related to current organisation")

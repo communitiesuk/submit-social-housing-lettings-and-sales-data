@@ -112,17 +112,17 @@ private
         Rails.logger.info("Updating location #{original_attributes['location_code']} with scheme: S#{scheme.id}")
         editable_from_date = FormHandler.instance.earliest_open_for_editing_collection_start_date
         editable_logs = LettingsLog.where(location_id: location.id).after_date(editable_from_date)
+        Rails.logger.info("Clearing location and scheme for logs with startdate and location #{location.id}. Log IDs: #{editable_logs.map(&:id).join(', ')}")
         editable_logs.update!(location: nil, scheme: nil, values_updated_at: Time.zone.now)
-        Rails.logger.info("Cleared location and scheme for logs with startdate and location #{location.id}. Log IDs: #{editable_logs.map(&:id).join(', ')}")
 
         logs_without_start_date = LettingsLog.where(scheme_id: scheme.id).where(startdate: nil)
+        Rails.logger.info("Clearing location and scheme for logs without startdate and location #{location.id}. Log IDs: #{logs_without_start_date.map(&:id).join(', ')}")
         logs_without_start_date.update!(location: nil, scheme: nil, values_updated_at: Time.zone.now)
-        Rails.logger.info("Cleared location and scheme for logs without startdate and location #{location.id}. Log IDs: #{logs_without_start_date.map(&:id).join(', ')}")
 
         exportable_from_date = FormHandler.instance.previous_collection_start_date
         remaining_logs_to_export = LettingsLog.where(location_id: location.id).after_date(exportable_from_date)
+        Rails.logger.info("Clearing location and scheme for non editable logs with location #{location.id}. Log IDs: #{remaining_logs_to_export.map(&:id).join(', ')}")
         remaining_logs_to_export.update_all(location_id: nil, scheme_id: nil, values_updated_at: Time.zone.now)
-        Rails.logger.info("Cleared location and scheme for non editable logs with location #{location.id}. Log IDs: #{remaining_logs_to_export.map(&:id).join(', ')}")
       end
     else
       Rails.logger.info("Cannot update location #{original_attributes['location_code']} with scheme_code: #{value}. Scheme with id #{value} is not in the database")
