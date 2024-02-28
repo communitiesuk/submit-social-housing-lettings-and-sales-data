@@ -19,7 +19,7 @@ class Form::Sales::Questions::NumberJointBuyers < ::Form::Question
     if form.start_year_after_2024?
       nil
     else
-      "You should still try to answer all questions even if the buyer wasn't interviewed in person"
+      "You should still try to answer all questions even if the buyers weren't interviewed in person"
     end
   end
 end

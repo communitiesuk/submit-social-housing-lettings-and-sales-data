@@ -38,7 +38,7 @@ RSpec.describe Form::Sales::Questions::NumberJointBuyers, type: :model do
   end
 
   it "has the correct hint_text" do
-    expect(question.hint_text).to eq("You should still try to answer all questions even if the buyer wasn't interviewed in person")
+    expect(question.hint_text).to eq("You should still try to answer all questions even if the buyers weren't interviewed in person")
   end
 
   it "has the correct answer_options" do
