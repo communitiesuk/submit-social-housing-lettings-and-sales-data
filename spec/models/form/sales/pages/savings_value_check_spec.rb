@@ -27,6 +27,8 @@ RSpec.describe Form::Sales::Pages::SavingsValueCheck, type: :model do
     expect(page.depends_on).to eq([
       { "not_joint_purchase?" => true,
         "savings_over_soft_max?" => true },
+      { "jointpur" => nil,
+        "savings_over_soft_max?" => true },
     ])
   end
 

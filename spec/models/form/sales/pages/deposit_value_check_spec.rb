@@ -29,6 +29,10 @@ RSpec.describe Form::Sales::Pages::DepositValueCheck, type: :model do
         "deposit_over_soft_max?" => true,
         "not_joint_purchase?" => true,
       },
+      {
+        "deposit_over_soft_max?" => true,
+        "jointpur" => nil,
+      },
     ])
   end
 

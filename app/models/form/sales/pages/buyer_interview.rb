@@ -14,7 +14,7 @@ class Form::Sales::Pages::BuyerInterview < ::Form::Page
     if @joint_purchase
       [{ "joint_purchase?" => true }]
     else
-      [{ "not_joint_purchase?" => true }]
+      [{ "not_joint_purchase?" => true }, { "jointpur" => nil }]
     end
   end
 end

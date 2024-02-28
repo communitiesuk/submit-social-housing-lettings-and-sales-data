@@ -26,7 +26,8 @@ class Form::Sales::Pages::OldPersonsSharedOwnershipValueCheck < ::Form::Page
     if @joint_purchase
       [{ "joint_purchase?" => true, "buyers_age_for_old_persons_shared_ownership_invalid?" => true }]
     else
-      [{ "not_joint_purchase?" => true, "buyers_age_for_old_persons_shared_ownership_invalid?" => true }]
+      [{ "not_joint_purchase?" => true, "buyers_age_for_old_persons_shared_ownership_invalid?" => true },
+       { "jointpur" => nil, "buyers_age_for_old_persons_shared_ownership_invalid?" => true }]
     end
   end
 end

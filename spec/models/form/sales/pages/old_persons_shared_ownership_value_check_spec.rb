@@ -29,6 +29,10 @@ RSpec.describe Form::Sales::Pages::OldPersonsSharedOwnershipValueCheck, type: :m
         "buyers_age_for_old_persons_shared_ownership_invalid?" => true,
         "not_joint_purchase?" => true,
       },
+      {
+        "buyers_age_for_old_persons_shared_ownership_invalid?" => true,
+        "jointpur" => nil,
+      },
     ])
   end
 

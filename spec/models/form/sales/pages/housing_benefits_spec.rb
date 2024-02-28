@@ -30,7 +30,7 @@ RSpec.describe Form::Sales::Pages::HousingBenefits, type: :model do
 
   context "when joint_purchase is false" do
     it "has correct depends_on" do
-      expect(page.depends_on).to eq([{ "not_joint_purchase?" => true }])
+      expect(page.depends_on).to eq([{ "not_joint_purchase?" => true }, { "jointpur" => nil }])
     end
   end
 

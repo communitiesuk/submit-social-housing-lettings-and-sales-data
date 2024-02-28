@@ -32,7 +32,8 @@ class Form::Sales::Pages::SavingsValueCheck < ::Form::Page
     if @joint_purchase
       [{ "joint_purchase?" => true, "savings_over_soft_max?" => true }]
     else
-      [{ "not_joint_purchase?" => true, "savings_over_soft_max?" => true }]
+      [{ "not_joint_purchase?" => true, "savings_over_soft_max?" => true },
+       { "jointpur" => nil, "savings_over_soft_max?" => true }]
     end
   end
 end

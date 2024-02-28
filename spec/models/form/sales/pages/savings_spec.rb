@@ -28,7 +28,7 @@ RSpec.describe Form::Sales::Pages::Savings, type: :model do
   end
 
   it "has correct depends_on" do
-    expect(page.depends_on).to eq([{ "not_joint_purchase?" => true }])
+    expect(page.depends_on).to eq([{ "not_joint_purchase?" => true }, { "jointpur" => nil }])
   end
 
   context "with joint purchase" do
