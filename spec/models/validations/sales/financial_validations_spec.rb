@@ -17,31 +17,49 @@ RSpec.describe Validations::Sales::FinancialValidations do
       it "adds errors if buyer 1 has income over 80,000" do
         record.income1 = 85_000
         financial_validator.validate_income1(record)
-        expect(record.errors["income1"]).to include(match I18n.t("validations.financial.income.over_hard_max_for_outside_london"))
-        expect(record.errors["ownershipsch"]).to include(match I18n.t("validations.financial.income.over_hard_max_for_outside_london"))
-        expect(record.errors["la"]).to include(match I18n.t("validations.financial.income.over_hard_max_for_outside_london"))
-        expect(record.errors["postcode_full"]).to include(match I18n.t("validations.financial.income.over_hard_max_for_outside_london"))
+        expect(record.errors["income1"]).to include(match I18n.t("validations.financial.income.outside_non_london_income_range"))
+        expect(record.errors["ownershipsch"]).to include(match I18n.t("validations.financial.income.outside_non_london_income_range"))
+        expect(record.errors["la"]).to include(match I18n.t("validations.financial.income.outside_non_london_income_range"))
+        expect(record.errors["postcode_full"]).to include(match I18n.t("validations.financial.income.outside_non_london_income_range"))
       end
 
       it "adds errors if buyer 2 has income over 80,000" do
         record.income2 = 85_000
         financial_validator.validate_income2(record)
-        expect(record.errors["income2"]).to include(match I18n.t("validations.financial.income.over_hard_max_for_outside_london"))
-        expect(record.errors["ownershipsch"]).to include(match I18n.t("validations.financial.income.over_hard_max_for_outside_london"))
-        expect(record.errors["la"]).to include(match I18n.t("validations.financial.income.over_hard_max_for_outside_london"))
-        expect(record.errors["postcode_full"]).to include(match I18n.t("validations.financial.income.over_hard_max_for_outside_london"))
+        expect(record.errors["income2"]).to include(match I18n.t("validations.financial.income.outside_non_london_income_range"))
+        expect(record.errors["ownershipsch"]).to include(match I18n.t("validations.financial.income.outside_non_london_income_range"))
+        expect(record.errors["la"]).to include(match I18n.t("validations.financial.income.outside_non_london_income_range"))
+        expect(record.errors["postcode_full"]).to include(match I18n.t("validations.financial.income.outside_non_london_income_range"))
       end
 
-      it "does not add errors if buyer 1 has income below 80_000" do
+      it "does not add errors if buyer 1 has income above 0 and below 80_000" do
         record.income1 = 75_000
         financial_validator.validate_income1(record)
         expect(record.errors).to be_empty
       end
 
-      it "does not add errors if buyer 2 has income below 80_000" do
+      it "does not add errors if buyer 2 has income above 0 and below 80_000" do
         record.income2 = 75_000
         financial_validator.validate_income2(record)
         expect(record.errors).to be_empty
+      end
+
+      it "adds errors if buyer 1 has income below 0" do
+        record.income1 = -500
+        financial_validator.validate_income1(record)
+        expect(record.errors["income1"]).to include(match I18n.t("validations.financial.income.outside_non_london_income_range"))
+        expect(record.errors["ownershipsch"]).to include(match I18n.t("validations.financial.income.outside_non_london_income_range"))
+        expect(record.errors["la"]).to include(match I18n.t("validations.financial.income.outside_non_london_income_range"))
+        expect(record.errors["postcode_full"]).to include(match I18n.t("validations.financial.income.outside_non_london_income_range"))
+      end
+
+      it "adds errors if buyer 2 has income below 0" do
+        record.income2 = -5
+        financial_validator.validate_income2(record)
+        expect(record.errors["income2"]).to include(match I18n.t("validations.financial.income.outside_non_london_income_range"))
+        expect(record.errors["ownershipsch"]).to include(match I18n.t("validations.financial.income.outside_non_london_income_range"))
+        expect(record.errors["la"]).to include(match I18n.t("validations.financial.income.outside_non_london_income_range"))
+        expect(record.errors["postcode_full"]).to include(match I18n.t("validations.financial.income.outside_non_london_income_range"))
       end
 
       it "adds errors when combined income is over 80_000" do
@@ -69,31 +87,49 @@ RSpec.describe Validations::Sales::FinancialValidations do
       it "adds errors if buyer 1 has income over 90,000" do
         record.income1 = 95_000
         financial_validator.validate_income1(record)
-        expect(record.errors["income1"]).to include(match I18n.t("validations.financial.income.over_hard_max_for_london"))
-        expect(record.errors["ownershipsch"]).to include(match I18n.t("validations.financial.income.over_hard_max_for_london"))
-        expect(record.errors["la"]).to include(match I18n.t("validations.financial.income.over_hard_max_for_london"))
-        expect(record.errors["postcode_full"]).to include(match I18n.t("validations.financial.income.over_hard_max_for_london"))
+        expect(record.errors["income1"]).to include(match I18n.t("validations.financial.income.outside_london_income_range"))
+        expect(record.errors["ownershipsch"]).to include(match I18n.t("validations.financial.income.outside_london_income_range"))
+        expect(record.errors["la"]).to include(match I18n.t("validations.financial.income.outside_london_income_range"))
+        expect(record.errors["postcode_full"]).to include(match I18n.t("validations.financial.income.outside_london_income_range"))
       end
 
       it "adds errors if buyer 2 has income over 90,000" do
         record.income2 = 95_000
         financial_validator.validate_income2(record)
-        expect(record.errors["income2"]).to include(match I18n.t("validations.financial.income.over_hard_max_for_london"))
-        expect(record.errors["ownershipsch"]).to include(match I18n.t("validations.financial.income.over_hard_max_for_london"))
-        expect(record.errors["la"]).to include(match I18n.t("validations.financial.income.over_hard_max_for_london"))
-        expect(record.errors["postcode_full"]).to include(match I18n.t("validations.financial.income.over_hard_max_for_london"))
+        expect(record.errors["income2"]).to include(match I18n.t("validations.financial.income.outside_london_income_range"))
+        expect(record.errors["ownershipsch"]).to include(match I18n.t("validations.financial.income.outside_london_income_range"))
+        expect(record.errors["la"]).to include(match I18n.t("validations.financial.income.outside_london_income_range"))
+        expect(record.errors["postcode_full"]).to include(match I18n.t("validations.financial.income.outside_london_income_range"))
       end
 
-      it "does not add errors if buyer 1 has income below 90_000" do
+      it "does not add errors if buyer 1 has income above 0 and below 90_000" do
         record.income1 = 75_000
         financial_validator.validate_income1(record)
         expect(record.errors).to be_empty
       end
 
-      it "does not add errors if buyer 2 has income below 90_000" do
+      it "does not add errors if buyer 2 has income above 0 and below 90_000" do
         record.income2 = 75_000
         financial_validator.validate_income2(record)
         expect(record.errors).to be_empty
+      end
+
+      it "adds errors if buyer 1 has income below 0" do
+        record.income1 = -500
+        financial_validator.validate_income1(record)
+        expect(record.errors["income1"]).to include(match I18n.t("validations.financial.income.outside_london_income_range"))
+        expect(record.errors["ownershipsch"]).to include(match I18n.t("validations.financial.income.outside_london_income_range"))
+        expect(record.errors["la"]).to include(match I18n.t("validations.financial.income.outside_london_income_range"))
+        expect(record.errors["postcode_full"]).to include(match I18n.t("validations.financial.income.outside_london_income_range"))
+      end
+
+      it "adds errors if buyer 2 has income below 0" do
+        record.income2 = -2
+        financial_validator.validate_income2(record)
+        expect(record.errors["income2"]).to include(match I18n.t("validations.financial.income.outside_london_income_range"))
+        expect(record.errors["ownershipsch"]).to include(match I18n.t("validations.financial.income.outside_london_income_range"))
+        expect(record.errors["la"]).to include(match I18n.t("validations.financial.income.outside_london_income_range"))
+        expect(record.errors["postcode_full"]).to include(match I18n.t("validations.financial.income.outside_london_income_range"))
       end
 
       it "adds errors when combined income is over 90_000" do
