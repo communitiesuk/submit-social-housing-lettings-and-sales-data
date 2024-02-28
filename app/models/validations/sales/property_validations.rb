@@ -4,10 +4,10 @@ module Validations::Sales::PropertyValidations
     return unless record.ppostcode_full.present? && record.postcode_full.present?
 
     if record.discounted_ownership_sale? && record.ppostcode_full != record.postcode_full
-      record.errors.add :postcode_full, I18n.t("validations.property.postcode.must_match_previous")
-      record.errors.add :ppostcode_full, I18n.t("validations.property.postcode.must_match_previous")
-      record.errors.add :ownershipsch, I18n.t("validations.property.postcode.must_match_previous")
-      record.errors.add :uprn, I18n.t("validations.property.postcode.must_match_previous")
+      record.errors.add :postcode_full, I18n.t("validations.property.postcode.must_match_previous", persons: record.joint_purchase? ? "Buyers‘" : "Buyer‘s")
+      record.errors.add :ppostcode_full, I18n.t("validations.property.postcode.must_match_previous", persons: record.joint_purchase? ? "Buyers‘" : "Buyer‘s")
+      record.errors.add :ownershipsch, I18n.t("validations.property.postcode.must_match_previous", persons: record.joint_purchase? ? "Buyers‘" : "Buyer‘s")
+      record.errors.add :uprn, I18n.t("validations.property.postcode.must_match_previous", persons: record.joint_purchase? ? "Buyers‘" : "Buyer‘s")
     end
   end
 
