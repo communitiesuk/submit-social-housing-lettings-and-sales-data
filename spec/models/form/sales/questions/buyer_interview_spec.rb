@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Form::Sales::Questions::BuyerInterview, type: :model do
-  subject(:question) { described_class.new(question_id, question_definition, page) }
+  subject(:question) { described_class.new(question_id, question_definition, page, joint_purchase: false) }
 
   let(:question_id) { nil }
   let(:question_definition) { nil }
@@ -40,5 +40,21 @@ RSpec.describe Form::Sales::Questions::BuyerInterview, type: :model do
       "2" => { "value" => "Yes" },
       "1" => { "value" => "No" },
     })
+  end
+
+  context "with joint purchase" do
+    subject(:question) { described_class.new(question_id, question_definition, page, joint_purchase: true) }
+
+    it "has the correct header" do
+      expect(question.header).to eq("Were the buyers interviewed for any of the answers you will provide on this log?")
+    end
+
+    it "has the correct hint_text" do
+      expect(question.hint_text).to eq("You should still try to answer all questions even if the buyers weren't interviewed in person")
+    end
+
+    it "has the correct check_answer_label" do
+      expect(question.check_answer_label).to eq("Buyers interviewed in person?")
+    end
   end
 end
