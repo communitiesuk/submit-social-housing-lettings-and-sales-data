@@ -1,9 +1,9 @@
 require "rails_helper"
 
 RSpec.describe Form::Sales::Pages::Savings, type: :model do
-  subject(:page) { described_class.new(page_id, page_definition, subsection) }
+  subject(:page) { described_class.new(page_id, page_definition, subsection, joint_purchase: false) }
 
-  let(:page_id) { nil }
+  let(:page_id) { "savings" }
   let(:page_definition) { nil }
   let(:subsection) { instance_double(Form::Subsection) }
 
@@ -28,6 +28,14 @@ RSpec.describe Form::Sales::Pages::Savings, type: :model do
   end
 
   it "has correct depends_on" do
-    expect(page.depends_on).to be_nil
+    expect(page.depends_on).to eq([{ "not_joint_purchase?" => true }])
+  end
+
+  context "with joint purchase" do
+    subject(:page) { described_class.new(page_id, page_definition, subsection, joint_purchase: true) }
+
+    it "has correct depends_on" do
+      expect(page.depends_on).to eq([{ "joint_purchase?" => true }])
+    end
   end
 end

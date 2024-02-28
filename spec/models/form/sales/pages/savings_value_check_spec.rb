@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Form::Sales::Pages::SavingsValueCheck, type: :model do
-  subject(:page) { described_class.new(page_id, page_definition, subsection) }
+  subject(:page) { described_class.new(page_id, page_definition, subsection, joint_purchase: false) }
 
   let(:page_id) { "savings_value_check" }
   let(:page_definition) { nil }
@@ -25,9 +25,8 @@ RSpec.describe Form::Sales::Pages::SavingsValueCheck, type: :model do
 
   it "has correct depends_on" do
     expect(page.depends_on).to eq([
-      {
-        "savings_over_soft_max?" => true,
-      },
+      { "not_joint_purchase?" => true,
+        "savings_over_soft_max?" => true },
     ])
   end
 
@@ -37,5 +36,16 @@ RSpec.describe Form::Sales::Pages::SavingsValueCheck, type: :model do
 
   it "has the correct interruption_screen_question_ids" do
     expect(page.interruption_screen_question_ids).to eq(%w[savings])
+  end
+
+  context "with joint purchase" do
+    subject(:page) { described_class.new(page_id, page_definition, subsection, joint_purchase: true) }
+
+    it "has correct depends_on" do
+      expect(page.depends_on).to eq([
+        { "joint_purchase?" => true,
+          "savings_over_soft_max?" => true },
+      ])
+    end
   end
 end
