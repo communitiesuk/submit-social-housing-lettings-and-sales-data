@@ -48,7 +48,7 @@ module Validations::Sales::FinancialValidations
     return unless record.stairbought && record.stairowned
 
     if record.stairbought > record.stairowned
-      record.errors.add :stairowned, I18n.t("validations.financial.staircasing.percentage_bought_must_be_greater_than_percentage_owned", persons: record.joint_purchase? ? "buyers" : "buyer")
+      record.errors.add :stairowned, I18n.t("validations.financial.staircasing.percentage_bought_must_be_greater_than_percentage_owned", buyer_possessive: record.joint_purchase? ? "buyers" : "buyer")
     end
   end
 
@@ -125,9 +125,9 @@ module Validations::Sales::FinancialValidations
 
     if record.equity > record.stairowned - record.stairbought
       formatted_equity = sprintf("%g", record.equity)
-      record.errors.add :equity, I18n.t("validations.financial.equity.over_stairowned_minus_stairbought", equity: formatted_equity, staircase_difference: record.stairowned - record.stairbought, person_owns: record.joint_purchase? ? "buyers own" : "buyer owns")
-      record.errors.add :stairowned, I18n.t("validations.financial.equity.over_stairowned_minus_stairbought", equity: formatted_equity, staircase_difference: record.stairowned - record.stairbought, person_owns: record.joint_purchase? ? "buyers own" : "buyer owns")
-      record.errors.add :stairbought, I18n.t("validations.financial.equity.over_stairowned_minus_stairbought", equity: formatted_equity, staircase_difference: record.stairowned - record.stairbought, person_owns: record.joint_purchase? ? "buyers own" : "buyer owns")
+      record.errors.add :equity, I18n.t("validations.financial.equity.over_stairowned_minus_stairbought", equity: formatted_equity, staircase_difference: record.stairowned - record.stairbought, buyer_owns: record.joint_purchase? ? "buyers own" : "buyer owns")
+      record.errors.add :stairowned, I18n.t("validations.financial.equity.over_stairowned_minus_stairbought", equity: formatted_equity, staircase_difference: record.stairowned - record.stairbought, buyer_owns: record.joint_purchase? ? "buyers own" : "buyer owns")
+      record.errors.add :stairbought, I18n.t("validations.financial.equity.over_stairowned_minus_stairbought", equity: formatted_equity, staircase_difference: record.stairowned - record.stairbought, buyer_owns: record.joint_purchase? ? "buyers own" : "buyer owns")
     end
   end
 
