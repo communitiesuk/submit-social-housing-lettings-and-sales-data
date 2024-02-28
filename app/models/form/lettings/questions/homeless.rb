@@ -12,7 +12,7 @@ class Form::Lettings::Questions::Homeless < ::Form::Question
   end
 
   ANSWER_OPTIONS = {
-    "11" => { "value" => "Assessed by a local authority as homeless" },
+    "11" => { "value" => "Yes - assessed by a local authority as homeless" },
     "1" => { "value" => "No" },
   }.freeze
 end
