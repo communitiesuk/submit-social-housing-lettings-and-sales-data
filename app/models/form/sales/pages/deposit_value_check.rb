@@ -1,17 +1,12 @@
 class Form::Sales::Pages::DepositValueCheck < ::Form::Page
-  def initialize(id, hsh, subsection)
-    super
-    @depends_on = [
-      {
-        "deposit_over_soft_max?" => true,
-      },
-    ]
+  def initialize(id, hsh, subsection, joint_purchase:)
+    super(id, hsh, subsection)
     @informative_text = {
       "translation" => "soft_validations.deposit.hint_text",
       "arguments" => [],
     }
     @title_text = {
-      "translation" => "soft_validations.deposit.title_text",
+      "translation" => "soft_validations.deposit.title_text.#{joint_purchase ? 'two' : 'one'}",
       "arguments" => [
         {
           "key" => "field_formatted_as_currency",
@@ -25,6 +20,7 @@ class Form::Sales::Pages::DepositValueCheck < ::Form::Page
         },
       ],
     }
+    @joint_purchase = joint_purchase
   end
 
   def questions
@@ -35,5 +31,13 @@ class Form::Sales::Pages::DepositValueCheck < ::Form::Page
 
   def interruption_screen_question_ids
     %w[savings deposit]
+  end
+
+  def depends_on
+    if @joint_purchase
+      [{ "joint_purchase?" => true, "deposit_over_soft_max?" => true }]
+    else
+      [{ "not_joint_purchase?" => true, "deposit_over_soft_max?" => true }]
+    end
   end
 end

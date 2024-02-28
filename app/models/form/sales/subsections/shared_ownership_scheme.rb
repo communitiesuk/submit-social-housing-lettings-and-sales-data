@@ -8,7 +8,8 @@ class Form::Sales::Subsections::SharedOwnershipScheme < ::Form::Subsection
 
   def pages
     @pages ||= [
-      Form::Sales::Pages::LivingBeforePurchase.new("living_before_purchase_shared_ownership", nil, self, ownershipsch: 1),
+      Form::Sales::Pages::LivingBeforePurchase.new("living_before_purchase_shared_ownership_joint_purchase", nil, self, ownershipsch: 1, joint_purchase: true),
+      Form::Sales::Pages::LivingBeforePurchase.new("living_before_purchase_shared_ownership", nil, self, ownershipsch: 1, joint_purchase: false),
       Form::Sales::Pages::Staircase.new(nil, nil, self),
       Form::Sales::Pages::AboutStaircase.new("about_staircasing_joint_purchase", nil, self, joint_purchase: true),
       Form::Sales::Pages::AboutStaircase.new("about_staircasing_not_joint_purchase", nil, self, joint_purchase: false),
@@ -41,7 +42,8 @@ class Form::Sales::Subsections::SharedOwnershipScheme < ::Form::Subsection
       (Form::Sales::Pages::AboutDepositWithDiscount.new("about_deposit_with_discount_optional", nil, self, optional: true) if form.start_year_after_2024?),
       Form::Sales::Pages::AboutDepositWithoutDiscount.new("about_deposit_shared_ownership", nil, self, ownershipsch: 1, optional: false),
       (Form::Sales::Pages::AboutDepositWithoutDiscount.new("about_deposit_shared_ownership_optional", nil, self, ownershipsch: 1, optional: true) if form.start_year_after_2024?),
-      Form::Sales::Pages::DepositValueCheck.new("deposit_value_check", nil, self),
+      Form::Sales::Pages::DepositValueCheck.new("deposit_joint_purchase_value_check", nil, self, joint_purchase: true),
+      Form::Sales::Pages::DepositValueCheck.new("deposit_value_check", nil, self, joint_purchase: false),
       Form::Sales::Pages::SharedOwnershipDepositValueCheck.new("shared_ownership_deposit_value_check", nil, self),
       Form::Sales::Pages::MonthlyRent.new(nil, nil, self),
       Form::Sales::Pages::LeaseholdCharges.new("leasehold_charges_shared_ownership", nil, self, ownershipsch: 1),

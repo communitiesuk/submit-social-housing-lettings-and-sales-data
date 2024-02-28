@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Form::Sales::Pages::LivingBeforePurchase, type: :model do
-  subject(:page) { described_class.new(page_id, page_definition, subsection, ownershipsch: 1) }
+  subject(:page) { described_class.new(page_id, page_definition, subsection, ownershipsch: 1, joint_purchase: false) }
 
   let(:page_id) { nil }
   let(:page_definition) { nil }
@@ -44,6 +44,14 @@ RSpec.describe Form::Sales::Pages::LivingBeforePurchase, type: :model do
   end
 
   it "has correct depends_on" do
-    expect(page.depends_on).to be_nil
+    expect(page.depends_on).to eq([{ "not_joint_purchase?" => true }])
+  end
+
+  context "with joint purchase" do
+    subject(:page) { described_class.new(page_id, page_definition, subsection, ownershipsch: 1, joint_purchase: true) }
+
+    it "has correct depends_on" do
+      expect(page.depends_on).to eq([{ "joint_purchase?" => true }])
+    end
   end
 end
