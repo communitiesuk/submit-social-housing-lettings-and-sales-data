@@ -3,7 +3,7 @@ class Form::Sales::Questions::Prevshared < ::Form::Question
     super
     @id = "prevshared"
     @check_answer_label = "Previous property shared ownership?"
-    @header = "Was the previous property a shared ownership property?"
+    @header = "Was the previous property under shared ownership?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @hint = "For any buyer"

@@ -33,9 +33,9 @@ class Form::Sales::Questions::DepositAmount < ::Form::Question
 
   def hint_text
     if @optional
-      "Enter the total cash sum paid by the buyer towards the property that was not funded by the mortgage. As this is a fully staircased sale this question is optional. If you do not have the information available click save and continue"
+      "Enter the total cash sum paid by the buyer towards the property that was not funded by the mortgage. This excludes any grant or loan. As this is a fully staircased sale this question is optional. If you do not have the information available click save and continue"
     else
-      "Enter the total cash sum paid by the buyer towards the property that was not funded by the mortgage"
+      "Enter the total cash sum paid by the buyer towards the property that was not funded by the mortgage. This excludes any grant or loan"
     end
   end
 end
