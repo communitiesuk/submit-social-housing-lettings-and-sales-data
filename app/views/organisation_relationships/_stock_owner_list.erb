@@ -3,10 +3,24 @@
     <%= table.with_caption(classes: %w[govuk-!-font-size-19 govuk-!-font-weight-regular]) do |caption| %>
       <%= render(SearchResultCaptionComponent.new(searched:, count: pagy.count, item_label:, total_count:, item: "stock owners", filters_count: 0)) %>
     <% end %>
-    <% @stock_owners.each do |stock_owner| %>
-      <%= table.with_body do |body| %>
+    <%= table.with_head do |head| %>
+      <%= head.with_row do |row| %>
+        <% row.with_cell(header: true, text: "Organisation name", html_attributes: { scope: "col", class: "govuk-!-width-one-half" }) %>
+        <% row.with_cell(header: true, text: "Organisation ID", html_attributes: { scope: "col", class: "govuk-!-width-one-half" }) %>
+        <% if current_user.data_coordinator? || current_user.support? %>
+          <% row.with_cell %>
+        <% end %>
+      <% end %>
+    <% end %>
+    <%= table.with_body do |body| %>
+      <% @stock_owners.each do |stock_owner| %>
         <%= body.with_row do |row| %>
-          <% row.with_cell(text: stock_owner.name) %>
+          <% if current_user.support? %>
+            <% row.with_cell(text: simple_format(govuk_link_to(stock_owner.name, organisation_path(stock_owner)), { class: "govuk-!-font-weight-bold" }, wrapper_tag: "div")) %>
+          <% else %>
+            <% row.with_cell(text: stock_owner.name) %>
+          <% end %>
+          <% row.with_cell(text: "ORG#{stock_owner.id}") %>
           <% if current_user.data_coordinator? || current_user.support? %>
             <% row.with_cell(html_attributes: {
               scope: "row",
