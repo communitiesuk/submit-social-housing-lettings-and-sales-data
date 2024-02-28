@@ -14,9 +14,8 @@ class CreateLogActionsComponent < ViewComponent::Base
   def display_actions?
     return false if bulk_upload.present?
     return true if user.support?
-    return false if !user.organisation.holds_own_stock? && user.organisation.stock_owners.empty? && user.organisation.absorbed_organisations.empty?
 
-    user.organisation.data_protection_confirmed?
+    organisation_or_stock_owner_signed_dsa_and_holds_own_stock?(user.organisation)
   end
 
   def create_button_href
@@ -53,5 +52,13 @@ class CreateLogActionsComponent < ViewComponent::Base
     when "sales"
       bulk_upload_sales_log_path(id: "start")
     end
+  end
+
+  def organisation_or_stock_owner_signed_dsa_and_holds_own_stock?(organisation)
+    return true if organisation.data_protection_confirmed? && organisation.holds_own_stock?
+    return true if organisation.stock_owners.any? { |stock_owner| stock_owner.data_protection_confirmed? && stock_owner.holds_own_stock? }
+    return true if organisation.absorbed_organisations.any? { |stock_owner| stock_owner.data_protection_confirmed? && stock_owner.holds_own_stock? }
+
+    false
   end
 end
