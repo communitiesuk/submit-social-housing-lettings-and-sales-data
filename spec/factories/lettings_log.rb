@@ -178,7 +178,7 @@ FactoryBot.define do
     end
     trait :sh do
       needstype { 2 }
-      sheltered { 0 }
+      sheltered { 3 }
       household_charge { 0 }
     end
     trait :sheltered_housing do
