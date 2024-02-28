@@ -376,7 +376,7 @@ RSpec.describe Validations::SoftValidations do
     end
   end
 
-  describe "scharge_over_soft_max?" do
+  describe "scharge_in_soft_max_range?" do
     context "and organisation is PRP" do
       before do
         record.owning_organisation.update(provider_type: "PRP")
@@ -387,7 +387,7 @@ RSpec.describe Validations::SoftValidations do
         record.needstype = 1
         record.period = 1
 
-        expect(record).not_to be_scharge_over_soft_max
+        expect(record).not_to be_scharge_in_soft_max_range
       end
 
       it "returns false if period is not given" do
@@ -395,48 +395,84 @@ RSpec.describe Validations::SoftValidations do
         record.needstype = 1
         record.period = nil
 
-        expect(record).not_to be_scharge_over_soft_max
+        expect(record).not_to be_scharge_in_soft_max_range
       end
 
       [{
         period: { label: "weekly", value: 1 },
         scharge: 34,
+        description: "under soft max (35)",
       },
        {
          period: { label: "monthly", value: 4 },
          scharge: 100,
+         description: "under soft max (35)",
        },
        {
          period: { label: "every 2 weeks", value: 2 },
          scharge: 69,
+         description: "under soft max (35)",
+       },
+       {
+         period: { label: "weekly", value: 1 },
+         scharge: 801,
+         description: "over hard max (800)",
+       },
+       {
+         period: { label: "monthly", value: 4 },
+         scharge: 3471,
+         description: "over hard max (800)",
+       },
+       {
+         period: { label: "every 2 weeks", value: 2 },
+         scharge: 1601,
+         description: "over hard max (800)",
        }].each do |test_case|
-        it "returns false if scharge is under soft max for general needs #{test_case[:period][:label]}(35)" do
+        it "returns false if scharge is #{test_case[:description]} for general needs #{test_case[:period][:label]}" do
           record.scharge = test_case[:scharge]
           record.needstype = 1
           record.period = test_case[:period][:value]
 
-          expect(record).not_to be_scharge_over_soft_max
+          expect(record).not_to be_scharge_in_soft_max_range
         end
       end
 
       [{
         period: { label: "weekly", value: 1 },
         scharge: 199,
+        description: "under soft max (200)",
       },
        {
          period: { label: "monthly", value: 4 },
          scharge: 400,
+         description: "under soft max (200)",
        },
        {
          period: { label: "every 2 weeks", value: 2 },
          scharge: 399,
+         description: "under soft max (200)",
+       },
+       {
+         period: { label: "weekly", value: 1 },
+         scharge: 801,
+         description: "over hard max (800)",
+       },
+       {
+         period: { label: "monthly", value: 4 },
+         scharge: 3471,
+         description: "over hard max (800)",
+       },
+       {
+         period: { label: "every 2 weeks", value: 2 },
+         scharge: 1601,
+         description: "over hard max (800)",
        }].each do |test_case|
-        it "returns false if scharge is under soft max for supported housing #{test_case[:period][:label]} (200)" do
+        it "returns false if scharge is #{test_case[:description]} for supported housing #{test_case[:period][:label]}" do
           record.scharge = test_case[:scharge]
           record.needstype = 2
           record.period = test_case[:period][:value]
 
-          expect(record).not_to be_scharge_over_soft_max
+          expect(record).not_to be_scharge_in_soft_max_range
         end
       end
 
@@ -457,7 +493,7 @@ RSpec.describe Validations::SoftValidations do
           record.needstype = 1
           record.period = test_case[:period][:value]
 
-          expect(record).to be_scharge_over_soft_max
+          expect(record).to be_scharge_in_soft_max_range
         end
       end
 
@@ -478,7 +514,7 @@ RSpec.describe Validations::SoftValidations do
           record.needstype = 2
           record.period = test_case[:period][:value]
 
-          expect(record).to be_scharge_over_soft_max
+          expect(record).to be_scharge_in_soft_max_range
         end
       end
     end
@@ -493,7 +529,7 @@ RSpec.describe Validations::SoftValidations do
         record.needstype = 1
         record.period = 1
 
-        expect(record).not_to be_scharge_over_soft_max
+        expect(record).not_to be_scharge_in_soft_max_range
       end
 
       it "returns false if period is not given" do
@@ -501,48 +537,84 @@ RSpec.describe Validations::SoftValidations do
         record.needstype = 1
         record.period = nil
 
-        expect(record).not_to be_scharge_over_soft_max
+        expect(record).not_to be_scharge_in_soft_max_range
       end
 
       [{
         period: { label: "weekly", value: 1 },
         scharge: 24,
+        description: "under soft max (25)",
       },
        {
          period: { label: "monthly", value: 4 },
          scharge: 88,
+         description: "under soft max (25)",
        },
        {
          period: { label: "every 2 weeks", value: 2 },
          scharge: 49,
+         description: "under soft max (25)",
+       },
+       {
+         period: { label: "weekly", value: 1 },
+         scharge: 501,
+         description: "over hard max (500)",
+       },
+       {
+         period: { label: "monthly", value: 4 },
+         scharge: 2167,
+         description: "over hard max (500)",
+       },
+       {
+         period: { label: "every 2 weeks", value: 2 },
+         scharge: 1001,
+         description: "over hard max (500)",
        }].each do |test_case|
-        it "returns false if scharge is under soft max for general needs #{test_case[:period][:label]}(25)" do
+        it "returns false if scharge is #{test_case[:description]} for general needs #{test_case[:period][:label]}" do
           record.scharge = test_case[:scharge]
           record.needstype = 1
           record.period = test_case[:period][:value]
 
-          expect(record).not_to be_scharge_over_soft_max
+          expect(record).not_to be_scharge_in_soft_max_range
         end
       end
 
       [{
         period: { label: "weekly", value: 1 },
         scharge: 99,
+        description: "under soft max (100)",
       },
        {
          period: { label: "monthly", value: 4 },
          scharge: 400,
+         description: "under soft max (100)",
        },
        {
          period: { label: "every 2 weeks", value: 2 },
          scharge: 199,
+         description: "under soft max (100)",
+       },
+       {
+         period: { label: "weekly", value: 1 },
+         scharge: 501,
+         description: "over hard max (500)",
+       },
+       {
+         period: { label: "monthly", value: 4 },
+         scharge: 2167,
+         description: "over hard max (500)",
+       },
+       {
+         period: { label: "every 2 weeks", value: 2 },
+         scharge: 1001,
+         description: "over hard max (500)",
        }].each do |test_case|
-        it "returns false if scharge is under soft max for supported housing #{test_case[:period][:label]} (100)" do
+        it "returns false if scharge is #{test_case[:description]} for supported housing #{test_case[:period][:label]}" do
           record.scharge = test_case[:scharge]
           record.needstype = 2
           record.period = test_case[:period][:value]
 
-          expect(record).not_to be_scharge_over_soft_max
+          expect(record).not_to be_scharge_in_soft_max_range
         end
       end
 
@@ -563,7 +635,7 @@ RSpec.describe Validations::SoftValidations do
           record.needstype = 1
           record.period = test_case[:period][:value]
 
-          expect(record).to be_scharge_over_soft_max
+          expect(record).to be_scharge_in_soft_max_range
         end
       end
 
@@ -584,13 +656,13 @@ RSpec.describe Validations::SoftValidations do
           record.needstype = 2
           record.period = test_case[:period][:value]
 
-          expect(record).to be_scharge_over_soft_max
+          expect(record).to be_scharge_in_soft_max_range
         end
       end
     end
   end
 
-  describe "pscharge_over_soft_max?" do
+  describe "pscharge_in_soft_max_range?" do
     context "and organisation is PRP" do
       before do
         record.owning_organisation.update(provider_type: "PRP")
@@ -601,7 +673,7 @@ RSpec.describe Validations::SoftValidations do
         record.needstype = 1
         record.period = 1
 
-        expect(record).not_to be_pscharge_over_soft_max
+        expect(record).not_to be_pscharge_in_soft_max_range
       end
 
       it "returns false if period is not given" do
@@ -609,48 +681,84 @@ RSpec.describe Validations::SoftValidations do
         record.needstype = 1
         record.period = nil
 
-        expect(record).not_to be_pscharge_over_soft_max
+        expect(record).not_to be_pscharge_in_soft_max_range
       end
 
       [{
         period: { label: "weekly", value: 1 },
         pscharge: 34,
+        description: "under soft max (35)",
       },
        {
          period: { label: "monthly", value: 4 },
          pscharge: 100,
+         description: "under soft max (35)",
        },
        {
          period: { label: "every 2 weeks", value: 2 },
          pscharge: 69,
+         description: "under soft max (35)",
+       },
+       {
+         period: { label: "weekly", value: 1 },
+         pscharge: 701,
+         description: "over hard max (700)",
+       },
+       {
+         period: { label: "monthly", value: 4 },
+         pscharge: 3034,
+         description: "over hard max (700)",
+       },
+       {
+         period: { label: "every 2 weeks", value: 2 },
+         pscharge: 1401,
+         description: "over hard max (700)",
        }].each do |test_case|
-        it "returns false if pscharge is under soft max for general needs #{test_case[:period][:label]}(35)" do
+        it "returns false if pscharge is #{test_case[:description]} for general needs #{test_case[:period][:label]}" do
           record.pscharge = test_case[:pscharge]
           record.needstype = 1
           record.period = test_case[:period][:value]
 
-          expect(record).not_to be_pscharge_over_soft_max
+          expect(record).not_to be_pscharge_in_soft_max_range
         end
       end
 
       [{
         period: { label: "weekly", value: 1 },
         pscharge: 99,
+        description: "under soft max (100)",
       },
        {
          period: { label: "monthly", value: 4 },
          pscharge: 400,
+         description: "under soft max (100)",
        },
        {
          period: { label: "every 2 weeks", value: 2 },
          pscharge: 199,
+         description: "under soft max (100)",
+       },
+       {
+         period: { label: "weekly", value: 1 },
+         pscharge: 701,
+         description: "over hard max (700)",
+       },
+       {
+         period: { label: "monthly", value: 4 },
+         pscharge: 3034,
+         description: "over hard max (700)",
+       },
+       {
+         period: { label: "every 2 weeks", value: 2 },
+         pscharge: 1401,
+         description: "over hard max (700)",
        }].each do |test_case|
-        it "returns false if pscharge is under soft max for supported housing #{test_case[:period][:label]} (100)" do
+        it "returns false if pscharge is #{test_case[:description]} for supported housing #{test_case[:period][:label]}" do
           record.pscharge = test_case[:pscharge]
           record.needstype = 2
           record.period = test_case[:period][:value]
 
-          expect(record).not_to be_pscharge_over_soft_max
+          expect(record).not_to be_pscharge_in_soft_max_range
         end
       end
 
@@ -671,7 +779,7 @@ RSpec.describe Validations::SoftValidations do
           record.needstype = 1
           record.period = test_case[:period][:value]
 
-          expect(record).to be_pscharge_over_soft_max
+          expect(record).to be_pscharge_in_soft_max_range
         end
       end
 
@@ -692,7 +800,7 @@ RSpec.describe Validations::SoftValidations do
           record.needstype = 2
           record.period = test_case[:period][:value]
 
-          expect(record).to be_pscharge_over_soft_max
+          expect(record).to be_pscharge_in_soft_max_range
         end
       end
     end
@@ -707,7 +815,7 @@ RSpec.describe Validations::SoftValidations do
         record.needstype = 1
         record.period = 1
 
-        expect(record).not_to be_pscharge_over_soft_max
+        expect(record).not_to be_pscharge_in_soft_max_range
       end
 
       it "returns false if period is not given" do
@@ -715,48 +823,84 @@ RSpec.describe Validations::SoftValidations do
         record.needstype = 1
         record.period = nil
 
-        expect(record).not_to be_pscharge_over_soft_max
+        expect(record).not_to be_pscharge_in_soft_max_range
       end
 
       [{
         period: { label: "weekly", value: 1 },
         pscharge: 24,
+        description: "under soft max (25)",
       },
        {
          period: { label: "monthly", value: 4 },
          pscharge: 88,
+         description: "under soft max (25)",
        },
        {
          period: { label: "every 2 weeks", value: 2 },
          pscharge: 49,
+         description: "under soft max (25)",
+       },
+       {
+         period: { label: "weekly", value: 1 },
+         pscharge: 201,
+         description: "over hard max (200)",
+       },
+       {
+         period: { label: "monthly", value: 4 },
+         pscharge: 867,
+         description: "over hard max (200)",
+       },
+       {
+         period: { label: "every 2 weeks", value: 2 },
+         pscharge: 401,
+         description: "over hard max (200)",
        }].each do |test_case|
-        it "returns false if pscharge is under soft max for general needs #{test_case[:period][:label]}(25)" do
+        it "returns false if pscharge is #{test_case[:description]} for general needs #{test_case[:period][:label]}" do
           record.pscharge = test_case[:pscharge]
           record.needstype = 1
           record.period = test_case[:period][:value]
 
-          expect(record).not_to be_pscharge_over_soft_max
+          expect(record).not_to be_pscharge_in_soft_max_range
         end
       end
 
       [{
         period: { label: "weekly", value: 1 },
         pscharge: 74,
+        description: "under soft max (75)",
       },
        {
          period: { label: "monthly", value: 4 },
          pscharge: 250,
+         description: "under soft max (75)",
        },
        {
          period: { label: "every 2 weeks", value: 2 },
          pscharge: 149,
+         description: "under soft max (75)",
+       },
+       {
+         period: { label: "weekly", value: 1 },
+         pscharge: 201,
+         description: "over hard max (200)",
+       },
+       {
+         period: { label: "monthly", value: 4 },
+         pscharge: 867,
+         description: "over hard max (200)",
+       },
+       {
+         period: { label: "every 2 weeks", value: 2 },
+         pscharge: 401,
+         description: "over hard max (200)",
        }].each do |test_case|
-        it "returns false if pscharge is under soft max for supported housing #{test_case[:period][:label]} (75)" do
+        it "returns false if pscharge is #{test_case[:description]} for supported housing #{test_case[:period][:label]}" do
           record.pscharge = test_case[:pscharge]
           record.needstype = 2
           record.period = test_case[:period][:value]
 
-          expect(record).not_to be_pscharge_over_soft_max
+          expect(record).not_to be_pscharge_in_soft_max_range
         end
       end
 
@@ -777,7 +921,7 @@ RSpec.describe Validations::SoftValidations do
           record.needstype = 1
           record.period = test_case[:period][:value]
 
-          expect(record).to be_pscharge_over_soft_max
+          expect(record).to be_pscharge_in_soft_max_range
         end
       end
 
@@ -798,13 +942,13 @@ RSpec.describe Validations::SoftValidations do
           record.needstype = 2
           record.period = test_case[:period][:value]
 
-          expect(record).to be_pscharge_over_soft_max
+          expect(record).to be_pscharge_in_soft_max_range
         end
       end
     end
   end
 
-  describe "supcharg_over_soft_max?" do
+  describe "supcharg_in_soft_max_range?" do
     context "and organisation is PRP" do
       before do
         record.owning_organisation.update(provider_type: "PRP")
@@ -815,7 +959,7 @@ RSpec.describe Validations::SoftValidations do
         record.needstype = 1
         record.period = 1
 
-        expect(record).not_to be_supcharg_over_soft_max
+        expect(record).not_to be_supcharg_in_soft_max_range
       end
 
       it "returns false if period is not given" do
@@ -823,48 +967,84 @@ RSpec.describe Validations::SoftValidations do
         record.needstype = 1
         record.period = nil
 
-        expect(record).not_to be_supcharg_over_soft_max
+        expect(record).not_to be_supcharg_in_soft_max_range
       end
 
       [{
         period: { label: "weekly", value: 1 },
         supcharg: 34,
+        description: "under soft max (35)",
       },
        {
          period: { label: "monthly", value: 4 },
          supcharg: 100,
+         description: "under soft max (35)",
        },
        {
          period: { label: "every 2 weeks", value: 2 },
          supcharg: 69,
+         description: "under soft max (35)",
+       },
+       {
+         period: { label: "weekly", value: 1 },
+         supcharg: 801,
+         description: "over hard max (800)",
+       },
+       {
+         period: { label: "monthly", value: 4 },
+         supcharg: 3467,
+         description: "over hard max (800)",
+       },
+       {
+         period: { label: "every 2 weeks", value: 2 },
+         supcharg: 1601,
+         description: "over hard max (800)",
        }].each do |test_case|
-        it "returns false if supcharg is under soft max for general needs #{test_case[:period][:label]}(35)" do
+        it "returns false if supcharg is #{test_case[:description]} for general needs #{test_case[:period][:label]}" do
           record.supcharg = test_case[:supcharg]
           record.needstype = 1
           record.period = test_case[:period][:value]
 
-          expect(record).not_to be_supcharg_over_soft_max
+          expect(record).not_to be_supcharg_in_soft_max_range
         end
       end
 
       [{
         period: { label: "weekly", value: 1 },
         supcharg: 84,
+        description: "under soft max (85)",
       },
        {
          period: { label: "monthly", value: 4 },
          supcharg: 320,
+         description: "under soft max (85)",
        },
        {
          period: { label: "every 2 weeks", value: 2 },
          supcharg: 169,
+         description: "under soft max (85)",
+       },
+       {
+         period: { label: "weekly", value: 1 },
+         supcharg: 801,
+         description: "over hard max (800)",
+       },
+       {
+         period: { label: "monthly", value: 4 },
+         supcharg: 3467,
+         description: "over hard max (800)",
+       },
+       {
+         period: { label: "every 2 weeks", value: 2 },
+         supcharg: 1601,
+         description: "over hard max (800)",
        }].each do |test_case|
-        it "returns false if supcharg is under soft max for supported housing #{test_case[:period][:label]} (85)" do
+        it "returns false if supcharg is #{test_case[:description]} for supported housing #{test_case[:period][:label]}" do
           record.supcharg = test_case[:supcharg]
           record.needstype = 2
           record.period = test_case[:period][:value]
 
-          expect(record).not_to be_supcharg_over_soft_max
+          expect(record).not_to be_supcharg_in_soft_max_range
         end
       end
 
@@ -885,7 +1065,7 @@ RSpec.describe Validations::SoftValidations do
           record.needstype = 1
           record.period = test_case[:period][:value]
 
-          expect(record).to be_supcharg_over_soft_max
+          expect(record).to be_supcharg_in_soft_max_range
         end
       end
 
@@ -906,7 +1086,7 @@ RSpec.describe Validations::SoftValidations do
           record.needstype = 2
           record.period = test_case[:period][:value]
 
-          expect(record).to be_supcharg_over_soft_max
+          expect(record).to be_supcharg_in_soft_max_range
         end
       end
     end
@@ -921,7 +1101,7 @@ RSpec.describe Validations::SoftValidations do
         record.needstype = 1
         record.period = 1
 
-        expect(record).not_to be_supcharg_over_soft_max
+        expect(record).not_to be_supcharg_in_soft_max_range
       end
 
       it "returns false if period is not given" do
@@ -929,48 +1109,84 @@ RSpec.describe Validations::SoftValidations do
         record.needstype = 1
         record.period = nil
 
-        expect(record).not_to be_supcharg_over_soft_max
+        expect(record).not_to be_supcharg_in_soft_max_range
       end
 
       [{
         period: { label: "weekly", value: 1 },
         supcharg: 24,
+        description: "under soft max (25)",
       },
        {
          period: { label: "monthly", value: 4 },
          supcharg: 88,
+         description: "under soft max (25)",
        },
        {
          period: { label: "every 2 weeks", value: 2 },
          supcharg: 49,
+         description: "under soft max (25)",
+       },
+       {
+         period: { label: "weekly", value: 1 },
+         supcharg: 201,
+         description: "over hard max (200)",
+       },
+       {
+         period: { label: "monthly", value: 4 },
+         supcharg: 867,
+         description: "over hard max (200)",
+       },
+       {
+         period: { label: "every 2 weeks", value: 2 },
+         supcharg: 401,
+         description: "over hard max (200)",
        }].each do |test_case|
-        it "returns false if supcharg is under soft max for general needs #{test_case[:period][:label]}(25)" do
+        it "returns false if supcharg is #{test_case[:description]} for general needs #{test_case[:period][:label]}" do
           record.supcharg = test_case[:supcharg]
           record.needstype = 1
           record.period = test_case[:period][:value]
 
-          expect(record).not_to be_supcharg_over_soft_max
+          expect(record).not_to be_supcharg_in_soft_max_range
         end
       end
 
       [{
         period: { label: "weekly", value: 1 },
         supcharg: 74,
+        description: "under soft max (75)",
       },
        {
          period: { label: "monthly", value: 4 },
          supcharg: 250,
+         description: "under soft max (75)",
        },
        {
          period: { label: "every 2 weeks", value: 2 },
          supcharg: 149,
+         description: "under soft max (75)",
+       },
+       {
+         period: { label: "weekly", value: 1 },
+         supcharg: 201,
+         description: "over hard max (200)",
+       },
+       {
+         period: { label: "monthly", value: 4 },
+         supcharg: 867,
+         description: "over hard max (200)",
+       },
+       {
+         period: { label: "every 2 weeks", value: 2 },
+         supcharg: 401,
+         description: "over hard max (200)",
        }].each do |test_case|
-        it "returns false if supcharg is under soft max for supported housing #{test_case[:period][:label]} (75)" do
+        it "returns false if supcharg is #{test_case[:description]} for supported housing #{test_case[:period][:label]}" do
           record.supcharg = test_case[:supcharg]
           record.needstype = 2
           record.period = test_case[:period][:value]
 
-          expect(record).not_to be_supcharg_over_soft_max
+          expect(record).not_to be_supcharg_in_soft_max_range
         end
       end
 
@@ -991,7 +1207,7 @@ RSpec.describe Validations::SoftValidations do
           record.needstype = 1
           record.period = test_case[:period][:value]
 
-          expect(record).to be_supcharg_over_soft_max
+          expect(record).to be_supcharg_in_soft_max_range
         end
       end
 
@@ -1012,7 +1228,7 @@ RSpec.describe Validations::SoftValidations do
           record.needstype = 2
           record.period = test_case[:period][:value]
 
-          expect(record).to be_supcharg_over_soft_max
+          expect(record).to be_supcharg_in_soft_max_range
         end
       end
     end

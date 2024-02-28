@@ -2,7 +2,7 @@ class Form::Lettings::Pages::SchargeValueCheck < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "scharge_value_check"
-    @depends_on = [{ "scharge_over_soft_max?" => true }]
+    @depends_on = [{ "scharge_in_soft_max_range?" => true }]
     @title_text = {
       "translation" => "soft_validations.scharge.over_soft_max_title",
       "arguments" => [{
