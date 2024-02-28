@@ -8370,7 +8370,7 @@
             "scharge_value_check": {
               "depends_on": [
                 {
-                  "scharge_over_soft_max?": true
+                  "scharge_in_soft_max_range?": true
                 }
               ],
               "title_text": {
@@ -8415,7 +8415,7 @@
             "pscharge_value_check": {
               "depends_on": [
                 {
-                  "pscharge_over_soft_max?": true
+                  "pscharge_in_soft_max_range?": true
                 }
               ],
               "title_text": {
@@ -8460,7 +8460,7 @@
             "supcharg_value_check": {
               "depends_on": [
                 {
-                  "supcharg_over_soft_max?": true
+                  "supcharg_in_soft_max_range?": true
                 }
               ],
               "title_text": {

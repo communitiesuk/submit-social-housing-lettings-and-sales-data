@@ -2,7 +2,7 @@ class Form::Lettings::Pages::SupchargValueCheck < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "supcharg_value_check"
-    @depends_on = [{ "supcharg_over_soft_max?" => true }]
+    @depends_on = [{ "supcharg_in_soft_max_range?" => true }]
     @title_text = {
       "translation" => "soft_validations.supcharg.over_soft_max_title",
       "arguments" => [{
