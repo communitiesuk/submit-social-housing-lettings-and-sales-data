@@ -185,22 +185,6 @@ RSpec.describe Form::Sales::Questions::ManagingOrganisation, type: :model do
       allow(page).to receive(:routed_to?).and_return(true)
     end
 
-    context "when user is non support" do
-      let(:user) { create(:user) }
-
-      it "is hidden in check answers" do
-        expect(question.hidden_in_check_answers?(nil, user)).to be true
-      end
-    end
-
-    context "when user is support" do
-      let(:user) { create(:user, :support) }
-
-      it "is not hidden in check answers" do
-        expect(question.hidden_in_check_answers?(nil, user)).to be false
-      end
-    end
-
     context "when user not provided" do
       it "is hidden in check answers" do
         expect(question.hidden_in_check_answers?(nil)).to be true

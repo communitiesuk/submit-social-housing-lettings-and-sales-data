@@ -59,7 +59,7 @@ class Form::Sales::Questions::ManagingOrganisation < ::Form::Question
   end
 
   def hidden_in_check_answers?(log, user = nil)
-    user.nil? || !user.support? || !@page.routed_to?(log, user)
+    user.nil? || !@page.routed_to?(log, user)
   end
 
   def enabled
