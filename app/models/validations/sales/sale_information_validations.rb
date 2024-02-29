@@ -1,13 +1,20 @@
 module Validations::Sales::SaleInformationValidations
+  include Validations::SharedValidations
   include CollectionTimeHelper
   include MoneyFormattingHelper
 
-  def validate_practical_completion_date_before_saledate(record)
-    return if record.saledate.blank? || record.hodate.blank?
+  def validate_practical_completion_date(record)
+    return unless !record.hodate.blank? && date_valid?("hodate", record)
+    return if record.saledate.blank?
 
     if record.hodate > record.saledate
       record.errors.add :hodate, I18n.t("validations.sale_information.hodate.must_be_before_saledate")
       record.errors.add :saledate, I18n.t("validations.sale_information.saledate.must_be_after_hodate")
+    end
+
+    if record.saledate - record.hodate >= 3.years && record.form.start_year_after_2024?
+      record.errors.add :hodate, :over_a_year_from_saledate, message: I18n.t("validations.sale_information.hodate.must_be_less_than_3_years_from_saledate")
+      record.errors.add :saledate, I18n.t("validations.sale_information.saledate.must_be_less_than_3_years_from_hodate")
     end
   end
 

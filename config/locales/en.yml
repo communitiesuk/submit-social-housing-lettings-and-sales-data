@@ -605,14 +605,16 @@ en:
         rent_to_buy: "Rent to Buy buyers should not have lived here before"
       hodate:
         must_be_before_saledate: "Practical completion or handover date must be before sale completion date"
-        must_be_less_than_3_years_from_saledate: "You told us practical completion or handover date is more than 3 years before sale completion date"
+        must_be_less_than_3_years_from_saledate_soft: "You told us practical completion or handover date is more than 3 years before sale completion date"
+        must_be_less_than_3_years_from_saledate: "Practical completion or handover date must be less than 3 years before sale completion date"
       exdate:
         must_be_before_saledate: "Contract exchange date must be before sale completion date"
         must_be_less_than_1_year_from_saledate: "Contract exchange date must be less than 1 year before sale completion date"
       saledate:
         must_be_after_exdate: "Sale completion date must be after contract exchange date"
         must_be_less_than_1_year_from_exdate: "Sale completion date must be less than 1 year after contract exchange date"
-        must_be_less_than_3_years_from_hodate: "You told us sale completion date is more than 3 years after practical completion or handover date"
+        must_be_less_than_3_years_from_hodate: "Sale completion date must be less than 3 years after practical completion or handover date"
+        must_be_less_than_3_years_from_hodate_soft: "You told us sale completion date is more than 3 years after practical completion or handover date"
         must_be_after_hodate: "Sale completion date must be after practical completion or handover date"
       previous_property_type:
         property_type_bedsit: "A bedsit cannot have more than 1 bedroom"
@@ -626,7 +628,7 @@ en:
       value:
         over_discounted_london_max: "The percentage discount multiplied by the purchase price is %{discount_value}. This figure should not be more than £136,400 for properties in London."
         over_discounted_max: "The percentage discount multiplied by the purchase price is %{discount_value}. This figure should not be more than £102,400 for properties outside of London."
-      non_staircasing_mortgage: 
+      non_staircasing_mortgage:
         mortgage_used: "The mortgage and deposit added together is %{mortgage_and_deposit_total} and the purchase price times by the equity is %{expected_shared_ownership_deposit_value}. These figures should be the same."
         mortgage_not_used: "The deposit is %{deposit} and the purchase price times by the equity is %{expected_shared_ownership_deposit_value}. As no mortgage was used, these figures should be the same."
       staircasing_mortgage:

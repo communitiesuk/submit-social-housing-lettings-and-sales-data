@@ -5,12 +5,12 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
 
   let(:validator_class) { Class.new { include Validations::Sales::SaleInformationValidations } }
 
-  describe "#validate_practical_completion_date_before_saledate" do
+  describe "#validate_practical_completion_date" do
     context "when hodate blank" do
       let(:record) { build(:sales_log, hodate: nil) }
 
       it "does not add an error" do
-        sale_information_validator.validate_practical_completion_date_before_saledate(record)
+        sale_information_validator.validate_practical_completion_date(record)
 
         expect(record.errors).not_to be_present
       end
@@ -20,7 +20,7 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
       let(:record) { build(:sales_log, saledate: nil) }
 
       it "does not add an error" do
-        sale_information_validator.validate_practical_completion_date_before_saledate(record)
+        sale_information_validator.validate_practical_completion_date(record)
 
         expect(record.errors).not_to be_present
       end
@@ -30,27 +30,59 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
       let(:record) { build(:sales_log, hodate: nil, saledate: nil) }
 
       it "does not add an error" do
-        sale_information_validator.validate_practical_completion_date_before_saledate(record)
+        sale_information_validator.validate_practical_completion_date(record)
 
         expect(record.errors).not_to be_present
       end
     end
 
-    context "when hodate before saledate" do
-      let(:record) { build(:sales_log, hodate: 2.months.ago, saledate: 1.month.ago) }
+    context "when hodate invalid" do
+      let(:record) { build(:sales_log, hodate: Date.new(0, 1, 1)) }
 
-      it "does not add the error" do
-        sale_information_validator.validate_practical_completion_date_before_saledate(record)
+      it "adds an error" do
+        sale_information_validator.validate_practical_completion_date(record)
+
+        expect(record.errors[:hodate]).to be_present
+      end
+    end
+
+    context "when hodate less than 3 years before saledate" do
+      let(:record) { build(:sales_log, hodate: Date.new(2021, 12, 2), saledate: Date.new(2024, 12, 1)) }
+
+      it "does not add an error" do
+        sale_information_validator.validate_practical_completion_date(record)
 
         expect(record.errors).not_to be_present
+      end
+    end
+
+    context "when hodate 3 or more years before saledate" do
+      context "and form year is 2023 or earlier" do
+        let(:record) { build(:sales_log, hodate: Date.new(2020, 12, 1), saledate: Date.new(2023, 12, 1)) }
+
+        it "does not add an error" do
+          sale_information_validator.validate_practical_completion_date(record)
+
+          expect(record.errors).not_to be_present
+        end
+      end
+
+      context "and form year is 2024 or later" do
+        let(:record) { build(:sales_log, hodate: Date.new(2021, 12, 1), saledate: Date.new(2024, 12, 1)) }
+
+        it "adds an error" do
+          sale_information_validator.validate_practical_completion_date(record)
+
+          expect(record.errors[:hodate]).to be_present
+        end
       end
     end
 
     context "when hodate after saledate" do
       let(:record) { build(:sales_log, hodate: 1.month.ago, saledate: 2.months.ago) }
 
-      it "adds error" do
-        sale_information_validator.validate_practical_completion_date_before_saledate(record)
+      it "adds an error" do
+        sale_information_validator.validate_practical_completion_date(record)
 
         expect(record.errors[:hodate]).to be_present
       end
@@ -60,7 +92,7 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
       let(:record) { build(:sales_log, hodate: Time.zone.parse("2023-07-01"), saledate: Time.zone.parse("2023-07-01")) }
 
       it "does not add an error" do
-        sale_information_validator.validate_practical_completion_date_before_saledate(record)
+        sale_information_validator.validate_practical_completion_date(record)
 
         expect(record.errors[:hodate]).not_to be_present
       end
