@@ -68,6 +68,40 @@ RSpec.describe DataProtectionConfirmationBannerComponent, type: :component do
         expect(component.display_banner?).to eq(false)
         expect(render.content).to be_empty
       end
+
+      context "and doesn't own stock" do
+        before do
+          organisation.update!(holds_own_stock: false)
+        end
+
+        context "and has a parent organisation that owns stock and has signed DSA" do
+          before do
+            parent_organisation = create(:organisation, holds_own_stock: true)
+            create(:organisation_relationship, child_organisation: organisation, parent_organisation:)
+          end
+
+          it "does not display banner" do
+            expect(component.display_banner?).to eq(false)
+            expect(render.content).to be_empty
+          end
+        end
+
+        context "and has a parent organisation that hasn't signed DSA" do
+          before do
+            parent_organisation = create(:organisation, :without_dpc, holds_own_stock: true)
+            create(:organisation_relationship, child_organisation: organisation, parent_organisation:)
+          end
+
+          it "displays the banner and asks to create stock owners" do
+            expect(component.display_banner?).to eq(true)
+            expect(render).to have_link(
+              "View or add stock owners",
+              href: "/organisations/#{organisation.id}/stock-owners",
+            )
+            expect(render).to have_selector("p", text: "Your organisation does not own stock. To create logs your stock owner(s) must accept the Data Sharing Agreement on CORE.")
+          end
+        end
+      end
     end
 
     context "when org does not have a DPO" do
