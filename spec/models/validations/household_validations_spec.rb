@@ -385,34 +385,48 @@ RSpec.describe Validations::HouseholdValidations do
   end
 
   describe "#validate_person_age_matches_economic_status" do
-    context "when the household contains a person under 16" do
-      it "validates that person's economic status must be Child" do
-        record.age2 = 14
-        record.ecstat2 = 1
-        household_validator.validate_person_age_matches_economic_status(record)
-        expect(record.errors["ecstat2"])
-          .to include(match I18n.t("validations.household.ecstat.child_under_16", person_num: 2))
-        expect(record.errors["age2"])
-          .to include(match I18n.t("validations.household.age.child_under_16_ecstat", person_num: 2))
+    context "with 2023 logs" do
+      let(:log_date) { Time.zone.local(2023, 4, 1) }
+
+      before do
+        Timecop.freeze(log_date)
+        Singleton.__init__(FormHandler)
       end
 
-      it "expects that person's economic status is Child" do
-        record.age2 = 14
-        record.ecstat2 = 9
-        household_validator.validate_person_age_matches_economic_status(record)
-        expect(record.errors["ecstat2"]).to be_empty
-        expect(record.errors["age2"]).to be_empty
+      after do
+        Timecop.return
+        Singleton.__init__(FormHandler)
       end
 
-      it "validates that a person with economic status 'child' must be under 16" do
-        record.age2 = 21
-        record.relat2 = "C"
-        record.ecstat2 = 9
-        household_validator.validate_person_age_matches_economic_status(record)
-        expect(record.errors["ecstat2"])
-          .to include(match I18n.t("validations.household.ecstat.child_over_16", person_num: 2))
-        expect(record.errors["age2"])
-          .to include(match I18n.t("validations.household.age.child_over_16", person_num: 2))
+      context "when the household contains a person under 16" do
+        it "validates that person's economic status must be Child" do
+          record.age2 = 14
+          record.ecstat2 = 1
+          household_validator.validate_person_age_matches_economic_status(record)
+          expect(record.errors["ecstat2"])
+            .to include(match I18n.t("validations.household.ecstat.child_under_16", person_num: 2))
+          expect(record.errors["age2"])
+            .to include(match I18n.t("validations.household.age.child_under_16_ecstat", person_num: 2))
+        end
+
+        it "expects that person's economic status is Child" do
+          record.age2 = 14
+          record.ecstat2 = 9
+          household_validator.validate_person_age_matches_economic_status(record)
+          expect(record.errors["ecstat2"]).to be_empty
+          expect(record.errors["age2"]).to be_empty
+        end
+
+        it "validates that a person with economic status 'child' must be under 16" do
+          record.age2 = 21
+          record.relat2 = "C"
+          record.ecstat2 = 9
+          household_validator.validate_person_age_matches_economic_status(record)
+          expect(record.errors["ecstat2"])
+            .to include(match I18n.t("validations.household.ecstat.child_over_16", person_num: 2))
+          expect(record.errors["age2"])
+            .to include(match I18n.t("validations.household.age.child_over_16", person_num: 2))
+        end
       end
     end
 
