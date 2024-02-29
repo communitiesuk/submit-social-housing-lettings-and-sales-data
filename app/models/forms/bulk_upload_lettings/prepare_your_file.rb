@@ -63,7 +63,7 @@ module Forms
         true
       end
 
-      private
+    private
 
       def have_choice_of_year?
         return true if FeatureToggle.allow_future_form_use?
