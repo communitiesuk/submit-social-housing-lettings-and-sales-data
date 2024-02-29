@@ -2,7 +2,7 @@ class Form::Lettings::Pages::PschargeValueCheck < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "pscharge_value_check"
-    @depends_on = [{ "pscharge_over_soft_max?" => true }]
+    @depends_on = [{ "pscharge_in_soft_max_range?" => true }]
     @title_text = {
       "translation" => "soft_validations.pscharge.over_soft_max_title",
       "arguments" => [{

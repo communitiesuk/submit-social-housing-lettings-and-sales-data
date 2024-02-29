@@ -24,13 +24,6 @@ FactoryBot.define do
       rent_type { 1 }
       startdate { Time.zone.today }
     end
-    trait :soft_validations_triggered do
-      status { 1 }
-      hhmemb { 1 }
-      ecstat1 { 1 }
-      earnings { 750 }
-      incfreq { 1 }
-    end
     trait :conditional_section_complete do
       tenancycode { Faker::Name.initials(number: 10) }
       age1 { 34 }
@@ -185,7 +178,7 @@ FactoryBot.define do
     end
     trait :sh do
       needstype { 2 }
-      sheltered { 0 }
+      sheltered { 3 }
       household_charge { 0 }
     end
     trait :sheltered_housing do

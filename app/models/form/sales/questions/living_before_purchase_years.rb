@@ -10,7 +10,6 @@ class Form::Sales::Questions::LivingBeforePurchaseYears < ::Form::Question
     @max = 80
     @step = 1
     @width = 5
-    @suffix = " years"
     @ownershipsch = ownershipsch
     @question_number = question_number
   end
@@ -38,5 +37,9 @@ class Form::Sales::Questions::LivingBeforePurchaseYears < ::Form::Question
     when 2
       99
     end
+  end
+
+  def suffix_label(log)
+    " #{'year'.pluralize(log[id])}"
   end
 end

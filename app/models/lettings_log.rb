@@ -65,6 +65,7 @@ class LettingsLog < Log
       .or(filter_by_id(param))
   }
   scope :after_date, ->(date) { where("lettings_logs.startdate >= ?", date) }
+  scope :before_date, ->(date) { where("lettings_logs.startdate < ?", date) }
   scope :unresolved, -> { where(unresolved: true) }
   scope :age1_answered, -> { where.not(age1: nil).or(where(age1_known: 1)) }
   scope :tcharge_answered, -> { where.not(tcharge: nil).or(where(household_charge: 1)).or(where(is_carehome: 1)) }

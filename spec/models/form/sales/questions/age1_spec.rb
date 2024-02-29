@@ -20,7 +20,7 @@ RSpec.describe Form::Sales::Questions::Age1, type: :model do
   end
 
   it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Lead buyer’s age")
+    expect(question.check_answer_label).to eq("Buyer 1’s age")
   end
 
   it "has the correct type" do
