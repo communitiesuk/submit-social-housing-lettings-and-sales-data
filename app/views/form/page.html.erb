@@ -61,6 +61,7 @@
       <%= f.hidden_field :page, value: @page.id %>
       <%= f.hidden_field :interruption_page_id, value: @interruption_page_id %>
       <%= f.hidden_field :interruption_page_referrer_type, value: @interruption_page_referrer_type %>
+      <%#= f.hidden_field :address_answer_options, value: @log.address_options %>
 
       <div class="govuk-button-group">
       <% if !@page.interruption_screen? %>
