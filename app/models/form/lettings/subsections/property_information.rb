@@ -37,7 +37,7 @@ class Form::Lettings::Subsections::PropertyInformation < ::Form::Subsection
         Form::Lettings::Pages::UprnConfirmation.new(nil, nil, self),
         Form::Lettings::Pages::AddressMatcher.new(nil, nil, self),
         Form::Lettings::Pages::AddressSelection.new(nil, nil, self),
-        Form::Lettings::Pages::Address.new(nil, nil, self),
+        Form::Lettings::Pages::AddressFallback.new(nil, nil, self),
       ]
     elsif form.start_date.year == 2023
       [
