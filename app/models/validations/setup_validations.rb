@@ -3,7 +3,7 @@ module Validations::SetupValidations
   include CollectionTimeHelper
 
   def validate_startdate_setup(record)
-    return unless record.startdate && date_valid?("startdate", record) && FeatureToggle.startdate_collection_window_validation_enabled?
+    return unless record.startdate && date_valid?("startdate", record) && !FeatureToggle.allow_future_form_use?
 
     first_collection_start_date = if record.startdate_was.present?
                                     editable_collection_start_date
