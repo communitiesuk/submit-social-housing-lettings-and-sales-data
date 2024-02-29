@@ -30,7 +30,7 @@
     item_label:,
     search_item: "agents",
     total_count: @total_count,
-    remove_path: ->(org_id) { managing_agents_remove_organisation_path(target_organisation_id: org_id) }
+    remove_path: ->(org_id) { managing_agents_remove_organisation_path(target_organisation_id: org_id) },
   } %>
   <%= render partial: "pagy/nav", locals: { pagy: @pagy, item_name: "managing agents" } %>
 <% end %>
