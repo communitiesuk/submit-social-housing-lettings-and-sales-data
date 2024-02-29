@@ -121,8 +121,8 @@ class BulkUpload::Lettings::Year2024::RowParser
     field_115: "Was the letting made under the Accessible Register?",
     field_116: "What was the source of referral for this letting?",
     field_117: "Do you know the household's combined total income after tax?",
-    field_119: "How often does the household receive income?",
-    field_118: "How much income does the household have in total?",
+    field_118: "How often does the household receive income?",
+    field_119: "How much income does the household have in total?",
     field_120: "Is the tenant likely to be receiving any of these housing-related benefits?",
     field_121: "How much of the household's income is from Universal Credit, state pensions or benefits?",
     field_122: "Does the household pay rent or other charges for the accommodation?",
@@ -258,8 +258,8 @@ class BulkUpload::Lettings::Year2024::RowParser
   attribute :field_115, :integer
   attribute :field_116, :integer
   attribute :field_117, :integer
-  attribute :field_119, :integer
-  attribute :field_118, :decimal
+  attribute :field_118, :integer
+  attribute :field_119, :decimal
   attribute :field_120, :integer
   attribute :field_121, :integer
   attribute :field_122, :integer
@@ -968,8 +968,8 @@ private
       referral: %i[field_116],
 
       net_income_known: %i[field_117],
-      earnings: %i[field_118],
-      incfreq: %i[field_119],
+      incfreq: %i[field_118],
+      earnings: %i[field_119],
       hb: %i[field_120],
       benefits: %i[field_121],
 
@@ -1156,7 +1156,7 @@ private
 
     attributes["net_income_known"] = net_income_known
     attributes["earnings"] = earnings
-    attributes["incfreq"] = field_119
+    attributes["incfreq"] = field_118
     attributes["hb"] = field_120
     attributes["benefits"] = field_121
 
@@ -1442,7 +1442,7 @@ private
   end
 
   def earnings
-    field_118.round if field_118.present?
+    field_119.round if field_119.present?
   end
 
   def tshortfall_known
