@@ -5,6 +5,7 @@ RSpec.describe Form::Sales::Questions::LivingBeforePurchaseYears, type: :model d
 
   let(:question_id) { nil }
   let(:question_definition) { nil }
+  let(:start_date) { Time.utc(2024, 2, 8) }
   let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date:)) }
   let(:page) { instance_double(Form::Page, subsection:) }
 
@@ -45,10 +46,6 @@ RSpec.describe Form::Sales::Questions::LivingBeforePurchaseYears, type: :model d
 
     it "has correct step" do
       expect(question.step).to eq(1)
-    end
-
-    it "has correct suffix" do
-      expect(question.suffix).to eq(" years")
     end
 
     it "has correct min" do
@@ -99,16 +96,28 @@ RSpec.describe Form::Sales::Questions::LivingBeforePurchaseYears, type: :model d
       expect(question.step).to eq(1)
     end
 
-    it "has correct suffix" do
-      expect(question.suffix).to eq(" years")
-    end
-
     it "has correct min" do
       expect(question.min).to eq(0)
     end
 
     it "has correct max" do
       expect(question.max).to eq(80)
+    end
+  end
+
+  context "when 1 year" do
+    let(:sales_log) { FactoryBot.build(:sales_log, proplen: 1) }
+
+    it "has correct suffix" do
+      expect(question.suffix_label(sales_log)).to eq(" year")
+    end
+  end
+
+  context "when multiple years" do
+    let(:sales_log) { FactoryBot.build(:sales_log, proplen: 5) }
+
+    it "has correct suffix" do
+      expect(question.suffix_label(sales_log)).to eq(" years")
     end
   end
 end

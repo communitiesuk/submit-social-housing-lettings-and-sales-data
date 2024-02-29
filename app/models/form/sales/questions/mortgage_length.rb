@@ -9,7 +9,6 @@ class Form::Sales::Questions::MortgageLength < ::Form::Question
     @max = 60
     @step = 1
     @width = 5
-    @suffix = " years"
     @hint_text = "You should round up to the nearest year. Value should not exceed 60 years."
     @ownershipsch = ownershipsch
     @question_number = question_number
@@ -24,5 +23,9 @@ class Form::Sales::Questions::MortgageLength < ::Form::Question
     when 3
       114
     end
+  end
+
+  def suffix_label(log)
+    " #{'year'.pluralize(log[id])}"
   end
 end
