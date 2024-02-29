@@ -12,7 +12,7 @@ class Form::Lettings::Pages::AddressSelection < ::Form::Page
   end
 
   def routed_to?(log, _current_user = nil)
-    log.uprn_known == 0 && log.address_line1.present? && log.postcode_full.present?
+    log.uprn_known.zero? && log.address_line1.present? && log.postcode_full.present?
   end
 
   def skip_text
@@ -21,6 +21,7 @@ class Form::Lettings::Pages::AddressSelection < ::Form::Page
 
   def skip_href(log = nil)
     return unless log
+
     "/#{log.model_name.param_key.dasherize}s/#{log.id}/address-matcher"
   end
 end

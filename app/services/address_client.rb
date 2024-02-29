@@ -23,7 +23,7 @@ class AddressClient
     @result ||= JSON.parse(response.body)["results"]&.map { |address| address["DPA"] }
   end
 
-  private
+private
 
   def http_client
     client = Net::HTTP.new(ADDRESS, 443)
