@@ -53,7 +53,7 @@ class Log < ApplicationRecord
   scope :filter_by_owning_organisation, ->(owning_organisation, _user = nil) { where(owning_organisation:) }
   scope :filter_by_managing_organisation, ->(managing_organisation, _user = nil) { where(managing_organisation:) }
 
-  attr_accessor :skip_update_status, :skip_update_uprn_confirmed, :skip_dpo_validation
+  attr_accessor :skip_update_status, :skip_update_uprn_confirmed, :skip_update_address_selection, :skip_dpo_validation
 
   def process_uprn_change!
     if uprn.present?
@@ -66,12 +66,54 @@ class Log < ApplicationRecord
 
       self.uprn_known = 1
       self.uprn_confirmed = nil unless skip_update_uprn_confirmed
+      self.address_selection = nil
       self.address_line1 = presenter.address_line1
       self.address_line2 = presenter.address_line2
       self.town_or_city = presenter.town_or_city
       self.postcode_full = presenter.postcode
       self.county = nil
       process_postcode_changes!
+    end
+  end
+
+  def process_address_change!
+    if [address_selection, address_line1, postcode_full].all?(&:present?)
+      address_string = "#{address_line1}, , , #{postcode_full}"
+      service = AddressClient.new(address_string)
+      service.call
+
+      return errors.add(:address_line1, :address_error, message: service.error) if service.error.present?
+
+      presenter = AddressDataPresenter.new(service.result[address_selection])
+
+      self.uprn_known = 1
+      self.uprn_confirmed = 1
+      self.address_selection = nil # unless skip_update_address_confirmed
+      self.uprn = presenter.uprn #skip process uprn change?
+      self.address_line1 = presenter.address_line1
+      self.address_line2 = presenter.address_line2
+      self.town_or_city = presenter.town_or_city
+      self.postcode_full = presenter.postcode
+      self.county = nil
+      process_postcode_changes!
+    end
+  end
+
+  def address_options
+    if [address_line1, postcode_full].all?(&:present?)
+      address_string = "#{address_line1}, , , #{postcode_full}"
+      service = AddressClient.new(address_string)
+      service.call
+
+      return errors.add(:address_line1, :address_error, message: service.error) if service.error.present?
+
+      address_options = []
+      service.result.first(10).each do |result|
+        presenter = AddressDataPresenter.new(result)
+        address_options.append(presenter.address)
+      end
+
+      @address_options = address_options
     end
   end
 
