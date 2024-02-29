@@ -30,12 +30,4 @@ class AddressDataPresenter
   def address
     data["ADDRESS"]
   end
-
-  # def match
-  #   data["MATCH"]
-  # end
-  #
-  # def match_description
-  #   data["MATCH_DESCRIPTION"]
-  # end
 end
