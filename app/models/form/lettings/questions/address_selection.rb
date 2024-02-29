@@ -8,7 +8,7 @@ class Form::Lettings::Questions::AddressSelection < ::Form::Question
     @disable_clearing_if_not_routed_or_dynamic_answer_options = true
   end
 
-  def answer_options(log = nil, user = nil)
+  def answer_options(log = nil, _user = nil)
     answer_opts = { "10" => { "value" => "The address is not listed" } }
     return answer_opts unless ActiveRecord::Base.connected?
     return answer_opts unless log
