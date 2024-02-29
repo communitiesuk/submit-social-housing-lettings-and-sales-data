@@ -84,18 +84,27 @@ class Log < ApplicationRecord
 
       return errors.add(:address_line1, :address_error, message: service.error) if service.error.present?
 
-      presenter = AddressDataPresenter.new(service.result[address_selection])
+      if address_selection.between?(0, 9)
+        presenter = AddressDataPresenter.new(service.result[address_selection])
 
-      self.uprn_known = 1
-      self.uprn_confirmed = 1
-      self.address_selection = nil # unless skip_update_address_confirmed
-      self.uprn = presenter.uprn #skip process uprn change?
-      self.address_line1 = presenter.address_line1
-      self.address_line2 = presenter.address_line2
-      self.town_or_city = presenter.town_or_city
-      self.postcode_full = presenter.postcode
-      self.county = nil
-      process_postcode_changes!
+        self.uprn_known = 1
+        self.uprn_confirmed = 1
+        self.address_selection = nil # unless skip_update_address_confirmed
+        self.uprn = presenter.uprn # skip process uprn change?
+        self.address_line1 = presenter.address_line1
+        self.address_line2 = presenter.address_line2
+        self.town_or_city = presenter.town_or_city
+        self.postcode_full = presenter.postcode
+        self.county = nil
+        process_postcode_changes!
+      elsif address_selection == 10
+        self.uprn_known = 0
+        self.uprn_confirmed = nil
+        self.uprn = nil
+        self.address_line2 = nil
+        self.town_or_city = nil
+        self.county = nil
+      end
     end
   end
 

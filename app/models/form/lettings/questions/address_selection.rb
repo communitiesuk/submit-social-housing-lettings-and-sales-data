@@ -5,22 +5,11 @@ class Form::Lettings::Questions::AddressSelection < ::Form::Question
     @header = "Select the correct address"
     @type = "radio"
     @check_answer_label = "Select the correct address"
-    @disable_clearing_if_not_routed_or_dynamic_answer_options = true # have just added this, check if it works!
+    @disable_clearing_if_not_routed_or_dynamic_answer_options = true
   end
 
   def answer_options(log = nil, user = nil)
-    answer_opts = {
-      # "0" => { "value" => "address 0" },
-      # "1" => { "value" => "address 1" },
-      # "2" => { "value" => "address 2" },
-      # "3" => { "value" => "address 3" },
-      # "4" => { "value" => "address 4" },
-      # "5" => { "value" => "address 5" },
-      # "6" => { "value" => "address 6" },
-      # "7" => { "value" => "address 7" },
-      # "8" => { "value" => "address 8" },
-      # "9" => { "value" => "address 9" },
-    }
+    answer_opts = { "10" => { "value" => "The address is not listed" } }
     return answer_opts unless ActiveRecord::Base.connected?
     return answer_opts unless log
     return answer_opts unless log.address_options
@@ -41,6 +30,8 @@ class Form::Lettings::Questions::AddressSelection < ::Form::Question
       "7" => { "value" => values[7] },
       "8" => { "value" => values[8] },
       "9" => { "value" => values[9] },
+      "divider" => { "value" => true },
+      "10" => { "value" => "The address is not listed, I want to enter the address manually" },
     }.freeze
   end
 
@@ -49,12 +40,6 @@ class Form::Lettings::Questions::AddressSelection < ::Form::Question
   end
 
   def hidden_in_check_answers?(log, _current_user = nil)
-    log.uprn_known == 1 || log.uprn_confirmed == 1
-  end
-
-private
-
-  def selected_answer_option_is_derived?(_log)
-    true
+    (log.uprn_known == 1 || log.uprn_confirmed == 1)
   end
 end

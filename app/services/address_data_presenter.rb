@@ -12,7 +12,7 @@ class AddressDataPresenter
   end
 
   def address_line1
-    [data["BUILDING_NUMBER"], data["BUILDING_NAME"], data["THOROUGHFARE_NAME"]].compact.join(", ")
+    [data["SUB_BUILDING_NAME"], data["BUILDING_NUMBER"], data["BUILDING_NAME"], data["THOROUGHFARE_NAME"]].compact.join(", ")
   end
 
   def address_line2
