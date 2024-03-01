@@ -57,14 +57,14 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
       field_31: "32",
       field_32: "M",
       field_33: "12",
-      field_34: "18",
+      field_34: "28",
       field_35: "1",
       field_36: "1",
       field_37: "R",
       field_38: "32",
       field_39: "F",
       field_40: "17",
-      field_41: "13",
+      field_41: "28",
       field_42: "2",
       field_43: "1",
       field_44: "0",
@@ -1208,6 +1208,17 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
           expect(parser.log.nationality_all_group).to be(826)
         end
       end
+
+      context "when field_34 is not a valid option" do
+        let(:attributes) { setup_section_params.merge({ field_34: "123123" }) }
+
+        it "is correctly set" do
+          parser.valid?
+          expect(parser.log.nationality_all).to be(nil)
+          expect(parser.log.nationality_all_group).to be(nil)
+          expect(parser.errors["field_34"]).to include("Select a valid nationality")
+        end
+      end
     end
 
     describe "#nationality_all_buyer2" do
@@ -1280,6 +1291,17 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
         it "is correctly set" do
           expect(parser.log.nationality_all_buyer2).to be(826)
           expect(parser.log.nationality_all_buyer2_group).to be(826)
+        end
+      end
+
+      context "when field_41 is not a valid option" do
+        let(:attributes) { setup_section_params.merge({ field_41: "123123" }) }
+
+        it "is correctly set" do
+          parser.valid?
+          expect(parser.log.nationality_all_buyer2).to be(nil)
+          expect(parser.log.nationality_all_buyer2_group).to be(nil)
+          expect(parser.errors["field_41"]).to include("Select a valid nationality")
         end
       end
     end
