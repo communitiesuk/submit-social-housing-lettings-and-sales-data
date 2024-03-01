@@ -80,6 +80,18 @@ RSpec.describe Form::Lettings::Questions::LocationId, type: :model do
         end
       end
 
+      context "and all the locations are deleted" do
+        before do
+          FactoryBot.create(:location, scheme:, discarded_at: Time.utc(2022, 5, 12))
+          FactoryBot.create(:location, scheme:, discarded_at: Time.utc(2022, 5, 12))
+          lettings_log.update!(scheme:)
+        end
+
+        it "the displayed_answer_options is an empty hash" do
+          expect(question.displayed_answer_options(lettings_log)).to eq({})
+        end
+      end
+
       context "and all but one of the locations have a startdate more than 2 weeks in the future" do
         before do
           FactoryBot.create(:location, scheme:, startdate: Time.utc(2022, 5, 13))
