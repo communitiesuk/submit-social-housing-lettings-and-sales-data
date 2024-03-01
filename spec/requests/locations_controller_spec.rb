@@ -1405,6 +1405,23 @@ RSpec.describe LocationsController, type: :request do
         expect(page).to have_content("Check your answers")
       end
 
+      context "with an active location" do
+        it "does not render delete this location" do
+          expect(location.status).to eq(:active)
+          expect(page).not_to have_link("Delete this location", href: "/schemes/#{scheme.id}/locations/#{location.id}/delete-confirmation")
+        end
+      end
+
+      context "with an incomplete location" do
+        it "renders delete this location" do
+          location.update!(units: nil)
+          get "/schemes/#{scheme.id}/locations/#{location.id}/check-answers"
+
+          expect(location.reload.status).to eq(:incomplete)
+          expect(page).to have_link("Delete this location", href: "/schemes/#{scheme.id}/locations/#{location.id}/delete-confirmation")
+        end
+      end
+
       context "when location is confirmed" do
         let(:params) { { location: { confirmed: true } } }
 
