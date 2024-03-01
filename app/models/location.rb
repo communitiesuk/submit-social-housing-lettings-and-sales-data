@@ -79,6 +79,8 @@ class Location < ApplicationRecord
     .where.not(id: activating_soon.pluck(:id))
   }
 
+  scope :visible, -> { where(discarded_at: nil) }
+
   LOCAL_AUTHORITIES = LocalAuthority.all.map { |la| [la.name, la.code] }.to_h
 
   enum local_authorities: LOCAL_AUTHORITIES
@@ -138,6 +140,7 @@ class Location < ApplicationRecord
   end
 
   def status_at(date)
+    return :deleted if discarded_at.present?
     return :incomplete unless confirmed
     return :deactivated if open_deactivation&.deactivation_date.present? && date >= open_deactivation.deactivation_date
     return :deactivating_soon if open_deactivation&.deactivation_date.present? && date < open_deactivation.deactivation_date
@@ -188,6 +191,10 @@ class Location < ApplicationRecord
     return LocalAuthority.none unless la
 
     LocalAuthority.where(id: [la.id] + la.linked_local_authority_ids)
+  end
+
+  def discard!
+    update!(discarded_at: Time.zone.now)
   end
 
 private

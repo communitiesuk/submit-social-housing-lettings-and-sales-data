@@ -2110,4 +2110,66 @@ RSpec.describe LocationsController, type: :request do
       end
     end
   end
+
+  describe "#delete" do
+    let(:scheme) { create(:scheme, owning_organisation: user.organisation) }
+    let(:location) { create(:location, scheme:, name: "Location to delete", created_at: Time.zone.local(2022, 4, 1)) }
+
+    before do
+      delete "/schemes/#{scheme.id}/locations/#{location.id}/delete"
+    end
+
+    context "when not signed in" do
+      it "redirects to the sign in page" do
+        expect(response).to redirect_to("/account/sign-in")
+      end
+    end
+
+    context "when signed in" do
+      before do
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in user
+        delete "/schemes/#{scheme.id}/locations/#{location.id}/delete"
+      end
+
+      context "with a data provider user" do
+        let(:user) { create(:user) }
+
+        it "returns 401 unauthorized" do
+          expect(response).to have_http_status(:unauthorized)
+        end
+      end
+
+      context "with a data coordinator user" do
+        let(:user) { create(:user, :data_coordinator) }
+
+        it "returns 401 unauthorized" do
+          expect(response).to have_http_status(:unauthorized)
+        end
+      end
+
+      context "with a support user user" do
+        let(:user) { create(:user, :support) }
+
+        it "deletes the location" do
+          location.reload
+          expect(location.status).to eq(:deleted)
+          expect(location.discarded_at).not_to be nil
+        end
+
+        it "redirects to the scheme locations list and displays a notice that the location has been deleted" do
+          expect(response).to redirect_to scheme_locations_path(scheme)
+          follow_redirect!
+          expect(page).to have_selector(".govuk-notification-banner--success")
+          expect(page).to have_selector(".govuk-notification-banner--success", text: "has been deleted.")
+        end
+
+        it "does not display the deleted location" do
+          expect(response).to redirect_to scheme_locations_path(scheme)
+          follow_redirect!
+          expect(page).not_to have_content("Location to delete")
+        end
+      end
+    end
+  end
 end
