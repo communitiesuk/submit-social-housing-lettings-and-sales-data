@@ -221,8 +221,8 @@ RSpec.describe Merge::MergeOrganisationsService do
               expect(absorbed_scheme.locations.count).to eq(1)
               absorbed_location = absorbed_scheme.locations.first
 
-              expect(absorbed_scheme.startdate).to eq(Time.zone.today + 1.month)
-              expect(absorbed_location.startdate).to eq(Time.zone.today + 1.month)
+              expect(absorbed_scheme.startdate.to_date).to eq(Time.zone.today + 1.month)
+              expect(absorbed_location.startdate.to_date).to eq(Time.zone.today + 1.month)
             end
 
             it "deactivates schemes and locations on the merged organisation on the startdate" do
@@ -231,9 +231,9 @@ RSpec.describe Merge::MergeOrganisationsService do
               expect(scheme.owning_organisation).to eq(merging_organisation)
               expect(location.scheme).to eq(scheme)
               expect(scheme.scheme_deactivation_periods.count).to eq(1)
-              expect(scheme.scheme_deactivation_periods.first.deactivation_date).to eq(Time.zone.today + 1.month)
+              expect(scheme.scheme_deactivation_periods.first.deactivation_date.to_date).to eq(Time.zone.today + 1.month)
               expect(location.location_deactivation_periods.count).to eq(1)
-              expect(location.location_deactivation_periods.first.deactivation_date).to eq(Time.zone.today + 1.month)
+              expect(location.location_deactivation_periods.first.deactivation_date.to_date).to eq(Time.zone.today + 1.month)
             end
           end
         end
@@ -378,13 +378,13 @@ RSpec.describe Merge::MergeOrganisationsService do
 
               expect(absorbed_scheme.startdate).to eq(Time.zone.today)
               expect(absorbed_scheme.scheme_deactivation_periods.count).to eq(1)
-              expect(absorbed_scheme.scheme_deactivation_periods.first.deactivation_date).to eq(Time.zone.today)
-              expect(absorbed_scheme.scheme_deactivation_periods.first.reactivation_date).to eq(Time.zone.today + 1.month)
+              expect(absorbed_scheme.scheme_deactivation_periods.first.deactivation_date.to_date).to eq(Time.zone.today)
+              expect(absorbed_scheme.scheme_deactivation_periods.first.reactivation_date.to_date).to eq(Time.zone.today + 1.month)
 
               expect(absorbed_location.startdate).to eq(Time.zone.today)
               expect(absorbed_location.location_deactivation_periods.count).to eq(1)
-              expect(absorbed_location.location_deactivation_periods.first.deactivation_date).to eq(Time.zone.today)
-              expect(absorbed_location.location_deactivation_periods.first.reactivation_date).to eq(Time.zone.today + 1.month)
+              expect(absorbed_location.location_deactivation_periods.first.deactivation_date.to_date).to eq(Time.zone.today)
+              expect(absorbed_location.location_deactivation_periods.first.reactivation_date.to_date).to eq(Time.zone.today + 1.month)
             end
 
             it "deactivates schemes and locations on the merged organisation" do
