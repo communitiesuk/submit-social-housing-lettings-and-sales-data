@@ -27,11 +27,11 @@ class LocationPolicy
   end
 
   def delete_confirmation?
-    user.support?
+    delete?
   end
 
   def delete?
-    user.support?
+    user.support? && (location.status == :incomplete || location.status == :deactivated)
   end
 
   %w[
