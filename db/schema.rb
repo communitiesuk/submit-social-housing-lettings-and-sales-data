@@ -374,6 +374,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_19_122706) do
     t.string "location_admin_district"
     t.boolean "confirmed"
     t.boolean "is_la_inferred"
+    t.datetime "discarded_at"
     t.index ["old_id"], name: "index_locations_on_old_id", unique: true
     t.index ["scheme_id"], name: "index_locations_on_scheme_id"
   end
