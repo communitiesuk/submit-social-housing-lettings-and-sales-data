@@ -4,7 +4,7 @@ module Validations::Sales::SaleInformationValidations
   include MoneyFormattingHelper
 
   def validate_practical_completion_date(record)
-    return unless !record.hodate.blank? && date_valid?("hodate", record)
+    return unless record.hodate.present? && date_valid?("hodate", record)
     return if record.saledate.blank?
 
     if record.hodate > record.saledate

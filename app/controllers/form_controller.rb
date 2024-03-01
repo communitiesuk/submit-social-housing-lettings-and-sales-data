@@ -86,7 +86,7 @@ private
         year = params[@log.model_name.param_key]["#{question.id}(1i)"]
         next unless [day, month, year].any?(&:present?)
 
-        result[question.id] = if Date.valid_date?(year.to_i, month.to_i, day.to_i) && year.to_i > 0
+        result[question.id] = if Date.valid_date?(year.to_i, month.to_i, day.to_i) && year.to_i.positive?
                                 Date.new(year.to_i, month.to_i, day.to_i)
                               else
                                 Date.new(0, 1, 1)
