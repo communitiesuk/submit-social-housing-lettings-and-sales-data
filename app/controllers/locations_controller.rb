@@ -230,6 +230,8 @@ class LocationsController < ApplicationController
     end
   end
 
+  def delete; end
+
 private
 
   def authorize_user
