@@ -26,6 +26,14 @@ class LocationPolicy
     user.data_coordinator? && scheme_owned_by_user_org_or_stock_owner
   end
 
+  def delete_confirmation?
+    user.support?
+  end
+
+  def delete?
+    user.support?
+  end
+
   %w[
     update_postcode?
     update_local_authority?
