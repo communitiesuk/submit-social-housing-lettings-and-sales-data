@@ -73,6 +73,10 @@ module LocationsHelper
     return govuk_button_link_to "Reactivate this location", scheme_location_new_reactivation_path(location.scheme, location) if location.deactivated?
   end
 
+  def delete_location_link(location)
+    govuk_button_link_to "Delete this location", scheme_location_delete_confirmation_path(location.scheme, location), warning: true
+  end
+
   def location_creation_success_notice(location)
     if location.confirmed
       "#{location.postcode} #{location.startdate.blank? || location.startdate.before?(Time.zone.now) ? 'has been' : 'will be'} added to this scheme"

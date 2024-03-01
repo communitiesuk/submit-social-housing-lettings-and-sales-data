@@ -45,3 +45,7 @@
 <% if LocationPolicy.new(current_user, @location).deactivate? %>
   <%= toggle_location_link(@location) %>
 <% end %>
+
+<% if LocationPolicy.new(current_user, @location).delete? %>
+  <%= delete_location_link(@location) %>
+<% end %>
