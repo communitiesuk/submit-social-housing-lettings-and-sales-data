@@ -41,15 +41,27 @@ RSpec.describe Form::Sales::Questions::MortgageLength, type: :model do
     expect(question.width).to eq(5)
   end
 
-  it "has correct suffix" do
-    expect(question.suffix).to eq(" years")
-  end
-
   it "has correct min" do
     expect(question.min).to eq(0)
   end
 
   it "has correct max" do
     expect(question.max).to eq(60)
+  end
+
+  context "when 1 year" do
+    let(:sales_log) { FactoryBot.build(:sales_log, mortlen: 1) }
+
+    it "has correct suffix" do
+      expect(question.suffix_label(sales_log)).to eq(" year")
+    end
+  end
+
+  context "when multiple years" do
+    let(:sales_log) { FactoryBot.build(:sales_log, mortlen: 5) }
+
+    it "has correct suffix" do
+      expect(question.suffix_label(sales_log)).to eq(" years")
+    end
   end
 end

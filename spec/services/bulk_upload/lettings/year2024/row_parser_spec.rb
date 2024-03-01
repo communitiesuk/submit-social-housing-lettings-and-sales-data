@@ -206,8 +206,8 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
             field_116: "2",
 
             field_117: "1",
-            field_118: "2300",
-            field_119: "2",
+            field_118: "2",
+            field_119: "2300",
             field_120: "1",
             field_121: "1",
 
@@ -1122,8 +1122,8 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
       end
     end
 
-    describe "#field_112, 117, 118" do
-      context "when none of field_112, 117, 118 are given" do
+    describe "#field_112, 117, 119" do
+      context "when none of field_112, 117, 119 are given" do
         let(:attributes) { { bulk_upload:, field_112: "", field_113: "", field_114: "", field_85: "1" } }
 
         it "sets correct errors" do
@@ -2117,7 +2117,7 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
     end
 
     describe "#earnings" do
-      let(:attributes) { { bulk_upload:, field_118: "104.50" } }
+      let(:attributes) { { bulk_upload:, field_119: "104.50" } }
 
       it "rounds to the nearest whole pound" do
         expect(parser.log.earnings).to eq(105)
