@@ -8,6 +8,7 @@ class Form::Lettings::Questions::PersonGenderIdentity < ::Form::Question
     @check_answers_card_number = person_index
     @answer_options = ANSWER_OPTIONS
     @person_index = person_index
+    @question_number = question_number
   end
 
   ANSWER_OPTIONS = {

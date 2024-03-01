@@ -16,6 +16,7 @@ class Form::Lettings::Questions::AgeKnown < ::Form::Question
       ],
     }
     @person_index = person_index
+    @question_number = question_number
   end
 
   ANSWER_OPTIONS = { "0" => { "value" => "Yes" }, "1" => { "value" => "No" } }.freeze
