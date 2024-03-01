@@ -469,6 +469,8 @@ class BulkUpload::Sales::Year2024::RowParser
   validate :validate_if_log_already_exists, on: :after_log, if: -> { FeatureToggle.bulk_upload_duplicate_log_check_enabled? }
 
   validate :validate_buyers_organisations, on: :after_log
+  validate :validate_nationality, on: :after_log
+  validate :validate_buyer_2_nationality, on: :after_log
 
   def self.question_for_field(field)
     QUESTIONS[field]
@@ -834,7 +836,7 @@ private
 
     attributes["ethnic_group"] = ethnic_group_from_ethnic
     attributes["ethnic"] = field_33
-    attributes["nationality_all"] = field_34
+    attributes["nationality_all"] = field_34 if field_34.present? && valid_nationality_options.include?(field_34.to_s)
     attributes["nationality_all_group"] = nationality_group(attributes["nationality_all"])
 
     attributes["income1nk"] = field_77 == "R" ? 1 : 0
@@ -942,7 +944,7 @@ private
 
     attributes["ethnic_group2"] = infer_buyer2_ethnic_group_from_ethnic
     attributes["ethnicbuy2"] = field_40
-    attributes["nationality_all_buyer2"] = field_41
+    attributes["nationality_all_buyer2"] = field_41 if field_41.present? && valid_nationality_options.include?(field_41.to_s)
     attributes["nationality_all_buyer2_group"] = nationality_group(attributes["nationality_all_buyer2"])
 
     attributes["buy2living"] = field_70
@@ -1340,5 +1342,21 @@ private
     if field_35 == 9
       errors.add(:field_35, "Buyer 1 cannot be a child under 16")
     end
+  end
+
+  def validate_nationality
+    if field_34.present? && !valid_nationality_options.include?(field_34.to_s)
+      errors.add(:field_34, I18n.t("validations.household.nationality"))
+    end
+  end
+
+  def validate_buyer_2_nationality
+    if field_41.present? && !valid_nationality_options.include?(field_41.to_s)
+      errors.add(:field_41, I18n.t("validations.household.nationality"))
+    end
+  end
+
+  def valid_nationality_options
+    %w[0] + GlobalConstants::COUNTRIES_ANSWER_OPTIONS.keys # 0 is "Prefers not to say"
   end
 end
