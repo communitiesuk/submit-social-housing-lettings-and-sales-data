@@ -383,6 +383,7 @@ class BulkUpload::Lettings::Year2024::RowParser
 
   validate :validate_incomplete_soft_validations, on: :after_log
   validate :validate_all_charges_given, on: :after_log, if: proc { is_carehome.zero? }
+  validate :validate_nationality, on: :after_log
 
   def self.question_for_field(field)
     QUESTIONS[field]
@@ -554,6 +555,12 @@ private
           end
         end
       end
+    end
+  end
+
+  def validate_nationality
+    if field_45.present? && !valid_nationality_options.include?(field_45.to_s)
+      errors.add(:field_45, I18n.t("validations.household.nationality"))
     end
   end
 
@@ -914,6 +921,7 @@ private
       ethnic_group: %i[field_44],
       ethnic: %i[field_44],
       nationality_all: %i[field_45],
+      nationality_all_group: %i[field_45],
 
       relat2: %i[field_47],
       relat3: %i[field_51],
@@ -1087,7 +1095,7 @@ private
 
     attributes["ethnic_group"] = ethnic_group_from_ethnic
     attributes["ethnic"] = field_44
-    attributes["nationality_all"] = field_45
+    attributes["nationality_all"] = field_45 if field_45.present? && valid_nationality_options.include?(field_45.to_s)
     attributes["nationality_all_group"] = nationality_group(attributes["nationality_all"])
 
     attributes["relat2"] = field_47
@@ -1484,6 +1492,10 @@ private
     else
       0
     end
+  end
+
+  def valid_nationality_options
+    %w[0] + GlobalConstants::COUNTRIES_ANSWER_OPTIONS.keys # 0 is "Prefers not to say"
   end
 
   def nationality_group(nationality_value)

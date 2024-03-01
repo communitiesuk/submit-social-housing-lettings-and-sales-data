@@ -149,7 +149,7 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
             field_73: "M",
 
             field_44: "17",
-            field_45: "18",
+            field_45: "826",
 
             field_47: "P",
             field_51: "C",
@@ -1592,6 +1592,17 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
         it "is correctly set" do
           expect(parser.log.nationality_all).to be(826)
           expect(parser.log.nationality_all_group).to be(826)
+        end
+      end
+
+      context "when field_45 is not a valid option" do
+        let(:attributes) { setup_section_params.merge({ field_45: "123123" }) }
+
+        it "is correctly set" do
+          parser.log.save!
+          expect(parser.log.nationality_all).to be(nil)
+          expect(parser.log.nationality_all_group).to be(nil)
+          expect(parser.errors["field_45"]).to include("Select a valid nationality")
         end
       end
     end

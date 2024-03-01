@@ -552,6 +552,7 @@ en:
       buylivein:
         buyers_will_live_in_property_values_inconsistent_setup: "You have already told us that both buyer 1 and buyer 2 will not live in the property"
         buyers_will_live_in_property_values_inconsistent: "You have already told us that the buyers will live in the property. Either buyer 1 or buyer 2 must live in the property"
+      nationality: "Select a valid nationality"
 
     tenancy:
       length:
