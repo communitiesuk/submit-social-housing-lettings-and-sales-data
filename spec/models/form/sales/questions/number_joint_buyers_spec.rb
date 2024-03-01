@@ -51,7 +51,7 @@ RSpec.describe Form::Sales::Questions::NumberJointBuyers, type: :model do
 
   context "with 2024 form" do
     before do
-      allow(subsection).to receive(:form).and_return(instance_double(Form, start_year_after_2024?: true))
+      allow(subsection).to receive(:form).and_return(instance_double(Form, start_year_after_2024?: true, start_date: Time.zone.local(2024, 4, 1)))
     end
 
     it "has no hint_text" do
