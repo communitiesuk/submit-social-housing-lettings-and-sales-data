@@ -39,7 +39,6 @@ private
     params = {
       query: address,
       key: ENV["OS_DATA_KEY"],
-      matchprecision: 3,
       maxresults: 10,
     }
     uri.query = URI.encode_www_form(params)
