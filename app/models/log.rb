@@ -114,7 +114,7 @@ class Log < ApplicationRecord
       service = AddressClient.new(address_string)
       service.call
 
-      return errors.add(:address_line1_input, :address_error, message: service.error) if service.error.present?
+      return errors.add(:address_selection, :address_error, message: service.error) if service.error.present?
 
       address_options = []
       service.result.first(10).each do |result|
@@ -122,7 +122,7 @@ class Log < ApplicationRecord
         address_options.append(presenter.address)
       end
 
-      @address_options = address_options
+      address_options
     end
   end
 
