@@ -3,7 +3,7 @@ module Validations::SetupValidations
   include CollectionTimeHelper
 
   def validate_startdate_setup(record)
-    return unless record.startdate && date_valid?("startdate", record) && FeatureToggle.startdate_collection_window_validation_enabled?
+    return unless record.startdate && date_valid?("startdate", record) && !FeatureToggle.allow_future_form_use?
 
     first_collection_start_date = if record.startdate_was.present?
                                     editable_collection_start_date
@@ -13,6 +13,10 @@ module Validations::SetupValidations
 
     unless record.startdate.between?(first_collection_start_date, current_collection_end_date)
       record.errors.add :startdate, startdate_validation_error_message
+    end
+
+    if record.startdate > Time.zone.today + 14.days
+      record.errors.add :startdate, I18n.t("validations.setup.startdate.later_than_14_days_after")
     end
   end
 

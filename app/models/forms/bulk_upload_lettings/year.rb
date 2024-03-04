@@ -36,8 +36,9 @@ module Forms
       def possible_years
         [
           FormHandler.instance.lettings_forms["current_lettings"].start_date.year,
-          FormHandler.instance.lettings_forms["previous_lettings"].start_date.year,
-        ]
+          (FormHandler.instance.previous_lettings_form.start_date.year if FormHandler.instance.lettings_in_crossover_period?),
+          (FormHandler.instance.next_lettings_form.start_date.year if FeatureToggle.allow_future_form_use?),
+        ].compact
       end
     end
   end

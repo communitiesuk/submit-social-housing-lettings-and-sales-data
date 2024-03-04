@@ -34,7 +34,11 @@ module Forms
     private
 
       def possible_years
-        [FormHandler.instance.sales_forms["current_sales"].start_date.year, FormHandler.instance.sales_forms["previous_sales"].start_date.year]
+        [
+          FormHandler.instance.current_sales_form.start_date.year,
+          (FormHandler.instance.previous_sales_form.start_date.year if FormHandler.instance.sales_in_crossover_period?),
+          (FormHandler.instance.next_sales_form.start_date.year if FeatureToggle.allow_future_form_use?),
+        ].compact
       end
     end
   end

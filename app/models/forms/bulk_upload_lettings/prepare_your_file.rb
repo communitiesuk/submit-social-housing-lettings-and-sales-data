@@ -18,7 +18,7 @@ module Forms
       end
 
       def back_path
-        if in_crossover_period?
+        if have_choice_of_year?
           Rails.application.routes.url_helpers.bulk_upload_lettings_log_path(id: "year", form: { year: })
         else
           Rails.application.routes.url_helpers.lettings_logs_path
@@ -65,8 +65,8 @@ module Forms
 
     private
 
-      def in_crossover_period?
-        return true if FeatureToggle.force_crossover?
+      def have_choice_of_year?
+        return true if FeatureToggle.allow_future_form_use?
 
         FormHandler.instance.lettings_in_crossover_period?
       end
