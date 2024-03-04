@@ -6,6 +6,12 @@ RSpec.describe Form::Lettings::Pages::Uprn, type: :model do
   let(:page_id) { nil }
   let(:page_definition) { nil }
   let(:subsection) { instance_double(Form::Subsection) }
+  let(:form) { instance_double(Form) }
+
+  before do
+    allow(form).to receive(:start_year_after_2024?).and_return(false)
+    allow(subsection).to receive(:form).and_return(form)
+  end
 
   it "has correct subsection" do
     expect(page.subsection).to eq(subsection)
@@ -31,10 +37,6 @@ RSpec.describe Form::Lettings::Pages::Uprn, type: :model do
     expect(page.depends_on).to eq([{ "is_supported_housing?" => false }])
   end
 
-  it "has correct skip_text" do
-    expect(page.skip_text).to eq("Enter address instead")
-  end
-
   describe "has correct skip_href" do
     context "when log is nil" do
       it "is nil" do
@@ -45,10 +47,32 @@ RSpec.describe Form::Lettings::Pages::Uprn, type: :model do
     context "when log is present" do
       let(:log) { create(:lettings_log) }
 
-      it "points to address page" do
-        expect(page.skip_href(log)).to eq(
-          "/lettings-logs/#{log.id}/address",
-        )
+      context "with 2023/24 form" do
+        it "points to address page" do
+          expect(page.skip_href(log)).to eq(
+            "/lettings-logs/#{log.id}/address",
+          )
+        end
+
+        it "has correct skip_text" do
+          expect(page.skip_text).to eq("Enter address instead")
+        end
+      end
+
+      context "with 2024/25 form" do
+        before do
+          allow(form).to receive(:start_year_after_2024?).and_return(true)
+        end
+
+        it "points to address search page" do
+          expect(page.skip_href(log)).to eq(
+            "/lettings-logs/#{log.id}/address-matcher",
+          )
+        end
+
+        it "has correct skip_text" do
+          expect(page.skip_text).to eq("Search for address instead")
+        end
       end
     end
   end
