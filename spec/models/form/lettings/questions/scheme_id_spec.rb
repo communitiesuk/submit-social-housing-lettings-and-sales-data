@@ -122,6 +122,19 @@ RSpec.describe Form::Lettings::Questions::SchemeId, type: :model do
           expect(question.displayed_answer_options(lettings_log)).to eq(expected_answer)
         end
       end
+
+      context "when the scheme is deleted" do
+        let(:scheme) { FactoryBot.create(:scheme, owning_organisation: organisation, discarded_at: Time.zone.yesterday) }
+
+        before do
+          FactoryBot.create(:location, startdate: Time.zone.tomorrow, scheme:)
+        end
+
+        it "has the correct answer_options based on the schemes the user's organisation owns or manages" do
+          expected_answer = { "" => "Select an option" }
+          expect(question.displayed_answer_options(lettings_log)).to eq(expected_answer)
+        end
+      end
     end
 
     context "when there are no schemes with locations" do

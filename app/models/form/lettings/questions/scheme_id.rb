@@ -20,8 +20,8 @@ class Form::Lettings::Questions::SchemeId < ::Form::Question
     answer_opts = { "" => "Select an option" }
     return answer_opts unless ActiveRecord::Base.connected?
 
-    Scheme.select(:id, :service_name, :primary_client_group,
-                  :secondary_client_group).each_with_object(answer_opts) do |scheme, hsh|
+    Scheme.visible.select(:id, :service_name, :primary_client_group,
+                          :secondary_client_group).each_with_object(answer_opts) do |scheme, hsh|
       hsh[scheme.id.to_s] = scheme
       hsh
     end
@@ -30,10 +30,10 @@ class Form::Lettings::Questions::SchemeId < ::Form::Question
   def displayed_answer_options(lettings_log, _user = nil)
     organisation = lettings_log.owning_organisation || lettings_log.created_by&.organisation
     schemes = if organisation
-                Scheme.includes(:locations).select(:id).where(owning_organisation_id: organisation.id,
-                                                              confirmed: true)
+                Scheme.visible.includes(:locations).select(:id).where(owning_organisation_id: organisation.id,
+                                                                      confirmed: true)
               else
-                Scheme.includes(:locations).select(:id).where(confirmed: true)
+                Scheme.visible.includes(:locations).select(:id).where(confirmed: true)
               end
     filtered_scheme_ids = schemes.joins(:locations).merge(Location.started_in_2_weeks).map(&:id)
     answer_options.select do |k, _v|
