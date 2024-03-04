@@ -13,8 +13,8 @@ class Form::Lettings::Questions::AddressLine1ForAddressMatcher < ::Form::Questio
 
   def answer_label(log, _current_user = nil)
     [
-      log.address_line1,
-      log.postcode_full,
+      log.address_line1_input,
+      log.postcode_full_input,
     ].select(&:present?).join("\n")
   end
 end
