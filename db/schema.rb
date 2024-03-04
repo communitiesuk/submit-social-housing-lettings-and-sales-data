@@ -193,14 +193,14 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_04_103216) do
     t.integer "hb"
     t.integer "hbrentshortfall"
     t.integer "property_relet"
-    t.datetime "mrcdate", precision: nil
+    t.datetime "mrcdate"
     t.integer "incref"
-    t.datetime "startdate", precision: nil
+    t.datetime "startdate"
     t.integer "armedforces"
     t.integer "first_time_property_let_as_social_housing"
     t.integer "unitletas"
     t.integer "builtype"
-    t.datetime "voiddate", precision: nil
+    t.datetime "voiddate"
     t.bigint "owning_organisation_id"
     t.bigint "managing_organisation_id"
     t.integer "renttype"
@@ -715,8 +715,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_04_103216) do
     t.string "name"
     t.bigint "organisation_id"
     t.integer "sign_in_count", default: 0, null: false
-    t.datetime "current_sign_in_at", precision: nil
-    t.datetime "last_sign_in_at", precision: nil
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
     t.string "current_sign_in_ip"
     t.string "last_sign_in_ip"
     t.integer "role"
