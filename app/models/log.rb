@@ -77,12 +77,12 @@ class Log < ApplicationRecord
   end
 
   def process_address_change!
-    if [address_selection, address_line1, postcode_full].all?(&:present?)
-      address_string = "#{address_line1}, , , #{postcode_full}"
+    if [address_selection, address_line1_input, postcode_full_input].all?(&:present?)
+      address_string = "#{address_line1_input}, , , #{postcode_full_input}"
       service = AddressClient.new(address_string)
       service.call
 
-      return errors.add(:address_line1, :address_error, message: service.error) if service.error.present?
+      return errors.add(:address_line1_input, :address_error, message: service.error) if service.error.present?
 
       if address_selection.between?(0, 9)
         presenter = AddressDataPresenter.new(service.result[address_selection])
@@ -109,12 +109,12 @@ class Log < ApplicationRecord
   end
 
   def address_options
-    if [address_line1, postcode_full].all?(&:present?)
-      address_string = "#{address_line1}, , , #{postcode_full}"
+    if [address_line1_input, postcode_full_input].all?(&:present?)
+      address_string = "#{address_line1_input}, , , #{postcode_full_input}"
       service = AddressClient.new(address_string)
       service.call
 
-      return errors.add(:address_line1, :address_error, message: service.error) if service.error.present?
+      return errors.add(:address_line1_input, :address_error, message: service.error) if service.error.present?
 
       address_options = []
       service.result.first(10).each do |result|

@@ -1,7 +1,7 @@
 class Form::Lettings::Questions::PostcodeForAddressMatcher < ::Form::Question
   def initialize(id, hsh, page)
     super
-    @id = "postcode_full"
+    @id = "postcode_full_input"
     @header = "Postcode"
     @type = "text"
     @width = 5
