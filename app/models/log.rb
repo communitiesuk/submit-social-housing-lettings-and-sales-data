@@ -97,7 +97,7 @@ class Log < ApplicationRecord
         self.postcode_full = presenter.postcode
         self.county = nil
         process_postcode_changes!
-      elsif address_selection == 10
+      elsif address_selection == -1
         self.uprn_known = 0
         self.uprn_confirmed = nil
         self.uprn = nil
