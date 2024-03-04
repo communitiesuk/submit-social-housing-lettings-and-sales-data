@@ -31,7 +31,7 @@ class Form::Lettings::Questions::AddressSelection < ::Form::Question
       "8" => { "value" => values[8] },
       "9" => { "value" => values[9] },
       "divider" => { "value" => true },
-      "10" => { "value" => "The address is not listed, I want to enter the address manually" },
+      "-1" => { "value" => "The address is not listed, I want to enter the address manually" },
     }.freeze
   end
 
