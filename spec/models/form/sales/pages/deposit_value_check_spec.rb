@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Form::Sales::Pages::DepositValueCheck, type: :model do
-  subject(:page) { described_class.new(page_id, page_definition, subsection) }
+  subject(:page) { described_class.new(page_id, page_definition, subsection, joint_purchase: false) }
 
   let(:page_id) { "deposit_value_check" }
   let(:page_definition) { nil }
@@ -27,6 +27,11 @@ RSpec.describe Form::Sales::Pages::DepositValueCheck, type: :model do
     expect(page.depends_on).to eq([
       {
         "deposit_over_soft_max?" => true,
+        "not_joint_purchase?" => true,
+      },
+      {
+        "deposit_over_soft_max?" => true,
+        "jointpur" => nil,
       },
     ])
   end

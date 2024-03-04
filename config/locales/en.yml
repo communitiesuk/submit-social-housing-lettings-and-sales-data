@@ -350,7 +350,7 @@ en:
       proptype:
         bedsits_have_max_one_bedroom: "Answer cannot be 'Bedsit' if the property has 2 or more bedrooms"
       postcode:
-        must_match_previous: "Buyer's last accommodation and discounted ownership postcodes must match"
+        must_match_previous: "%{buyer_possessive} last accommodation and discounted ownership postcodes must match"
 
     financial:
       tshortfall:
@@ -428,7 +428,7 @@ en:
         not_provided: "Enter how much rent and other charges the household pays %{period}"
       cash_discount_invalid: "Cash discount must be £0 - £999,999"
       staircasing:
-        percentage_bought_must_be_greater_than_percentage_owned: "Total percentage buyer now owns must be more than percentage bought in this transaction"
+        percentage_bought_must_be_greater_than_percentage_owned: "Total percentage %{buyer_now_owns} must be more than percentage bought in this transaction"
         percentage_bought_must_be_at_least_threshold: "The minimum increase in equity while staircasing is %{threshold}%"
         percentage_bought_equal_percentage_owned: "The percentage bought is %{stairbought}% and the percentage owned in total is %{stairowned}%. These figures cannot be the same."
       monthly_leasehold_charges:
@@ -436,7 +436,7 @@ en:
       equity:
         under_min: "The minimum initial equity stake for this type of shared ownership sale is %{min_equity}%"
         over_max: "The maximum initial equity stake is %{max_equity}%"
-        over_stairowned_minus_stairbought: "The initial equity stake is %{equity}% and the percentage owned in total minus the percentage bought is %{staircase_difference}%. In a staircasing transaction, the equity stake purchased cannot be larger than the percentage the buyer owns minus the percentage bought."
+        over_stairowned_minus_stairbought: "The initial equity stake is %{equity}% and the percentage owned in total minus the percentage bought is %{staircase_difference}%. In a staircasing transaction, the equity stake purchased cannot be larger than the percentage the %{buyer_owns} minus the percentage bought."
       mortgage: "Mortgage value cannot be £0 if a mortgage was used for the purchase of this property"
       shared_ownership_deposit: "The %{mortgage_deposit_and_discount_error_fields} added together is %{mortgage_deposit_and_discount_total}. The value times the equity percentage is %{value_times_equity}. These figures should be the same"
 
@@ -690,7 +690,9 @@ Make sure these answers are correct."
     shared_ownership_deposit:
       title_text: "You told us that the %{mortgage_deposit_and_discount_error_fields} add up to %{mortgage_deposit_and_discount_total}"
     old_persons_shared_ownership:
-      title_text: "You told us the buyer is using the Older Persons Shared Ownership scheme."
+      title_text: 
+        one: "You told us the buyer is using the Older Persons Shared Ownership scheme."
+        two: "You told us the buyers are using the Older Persons Shared Ownership scheme."
       hint_text: "At least one buyer must be aged 65 years and over to use this scheme."
     staircase_bought_seems_high:
       title_text: "You told us that %{percentage}% was bought in this staircasing transaction."
@@ -715,10 +717,14 @@ Make sure these answers are correct."
       title_text: "You told us that the percentage discount is %{discount}."
       hint_text: "This is higher than we would expect."
     savings:
-      title_text: "You told us the buyer’s savings were %{savings}."
+      title_text: 
+        one: "You told us the buyer’s savings were %{savings}."
+        two: "You told us the buyers’ savings were %{savings}."
       hint_text: "This is higher than we would expect."
     deposit:
-      title_text: "You told us the buyer’s deposit was %{deposit} and their savings were %{savings}."
+      title_text: 
+        one: "You told us the buyer’s deposit was %{deposit} and their savings were %{savings}."
+        two: "You told us the buyers’ deposit was %{deposit} and their savings were %{savings}."
       hint_text: "The deposit amount is higher than we would expect for the amount of savings they have."
     grant:
       title_text: "You told us that the grant amount is %{grant}"

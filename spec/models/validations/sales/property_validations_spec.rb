@@ -46,13 +46,24 @@ RSpec.describe Validations::Sales::PropertyValidations do
         expect(record.errors["ownershipsch"]).to be_empty
       end
 
-      it "when postcodes do not match an error is added" do
+      it "when postcodes do not match an error is added for joint purchase" do
         record.postcode_full = "SW1A 1AA"
         record.ppostcode_full = "SW1A 0AA"
+        record.jointpur = 1
         property_validator.validate_postcodes_match_if_discounted_ownership(record)
-        expect(record.errors["postcode_full"]).to include(match I18n.t("validations.property.postcode.must_match_previous"))
-        expect(record.errors["ppostcode_full"]).to include(match I18n.t("validations.property.postcode.must_match_previous"))
-        expect(record.errors["ownershipsch"]).to include(match I18n.t("validations.property.postcode.must_match_previous"))
+        expect(record.errors["postcode_full"]).to include("Buyers’ last accommodation and discounted ownership postcodes must match")
+        expect(record.errors["ppostcode_full"]).to include("Buyers’ last accommodation and discounted ownership postcodes must match")
+        expect(record.errors["ownershipsch"]).to include("Buyers’ last accommodation and discounted ownership postcodes must match")
+      end
+
+      it "when postcodes do not match an error is added for non joint purchase" do
+        record.postcode_full = "SW1A 1AA"
+        record.ppostcode_full = "SW1A 0AA"
+        record.jointpur = 2
+        property_validator.validate_postcodes_match_if_discounted_ownership(record)
+        expect(record.errors["postcode_full"]).to include("Buyer’s last accommodation and discounted ownership postcodes must match")
+        expect(record.errors["ppostcode_full"]).to include("Buyer’s last accommodation and discounted ownership postcodes must match")
+        expect(record.errors["ownershipsch"]).to include("Buyer’s last accommodation and discounted ownership postcodes must match")
       end
 
       it "does not add error for 2024 log" do
