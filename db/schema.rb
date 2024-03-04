@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_03_01_125651) do
+ActiveRecord::Schema[7.0].define(version: 2024_03_04_100017) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -699,6 +699,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_01_125651) do
     t.integer "total_units"
     t.boolean "confirmed"
     t.datetime "startdate"
+    t.datetime "discarded_at"
     t.index ["owning_organisation_id"], name: "index_schemes_on_owning_organisation_id"
   end
 

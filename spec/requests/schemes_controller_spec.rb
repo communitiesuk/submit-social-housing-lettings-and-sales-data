@@ -2710,4 +2710,74 @@ RSpec.describe SchemesController, type: :request do
       end
     end
   end
+
+  describe "#delete" do
+    let(:scheme) { create(:scheme, service_name: "Scheme to delete", owning_organisation: user.organisation) }
+    let!(:locations) { create_list(:location, 2, scheme:, created_at: Time.zone.local(2022, 4, 1)) }
+
+    before do
+      delete "/schemes/#{scheme.id}/delete"
+    end
+
+    context "when not signed in" do
+      it "redirects to the sign in page" do
+        expect(response).to redirect_to("/account/sign-in")
+      end
+    end
+
+    context "when signed in" do
+      before do
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in user
+        delete "/schemes/#{scheme.id}/delete"
+      end
+
+      context "with a data provider user" do
+        let(:user) { create(:user) }
+
+        it "returns 401 unauthorized" do
+          expect(response).to have_http_status(:unauthorized)
+        end
+      end
+
+      context "with a data coordinator user" do
+        let(:user) { create(:user, :data_coordinator) }
+
+        it "returns 401 unauthorized" do
+          expect(response).to have_http_status(:unauthorized)
+        end
+      end
+
+      context "with a support user user" do
+        let(:user) { create(:user, :support) }
+
+        it "deletes the scheme" do
+          scheme.reload
+          expect(scheme.status).to eq(:deleted)
+          expect(scheme.discarded_at).not_to be nil
+        end
+
+        it "deletes associated locations" do
+          locations.each do |location|
+            location.reload
+            expect(location.status).to eq(:deleted)
+            expect(location.discarded_at).not_to be nil
+          end
+        end
+
+        it "redirects to the schemes list and displays a notice that the scheme has been deleted" do
+          expect(response).to redirect_to schemes_organisation_path(scheme.owning_organisation)
+          follow_redirect!
+          expect(page).to have_selector(".govuk-notification-banner--success")
+          expect(page).to have_selector(".govuk-notification-banner--success", text: "Scheme to delete has been deleted.")
+        end
+
+        it "does not display the deleted scheme" do
+          expect(response).to redirect_to schemes_organisation_path(scheme.owning_organisation)
+          follow_redirect!
+          expect(page).not_to have_link("Scheme to delete")
+        end
+      end
+    end
+  end
 end

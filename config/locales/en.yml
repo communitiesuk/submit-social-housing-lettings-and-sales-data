@@ -197,6 +197,7 @@ en:
       one: "There is %{count} set of duplicate logs"
       other: "There are %{count} sets of duplicate logs"
     location_deleted: "%{postcode} has been deleted."
+    scheme_deleted: "%{service_name} has been deleted."
 
   validations:
     organisation:

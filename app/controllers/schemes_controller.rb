@@ -13,11 +13,11 @@ class SchemesController < ApplicationController
 
   def index
     redirect_to schemes_organisation_path(current_user.organisation) unless current_user.support?
-    all_schemes = Scheme.all
+    all_visible_schemes = Scheme.all.visible
 
-    @pagy, @schemes = pagy(filter_manager.filtered_schemes(all_schemes, search_term, session_filters))
+    @pagy, @schemes = pagy(filter_manager.filtered_schemes(all_visible_schemes, search_term, session_filters))
     @searched = search_term.presence
-    @total_count = all_schemes.size
+    @total_count = all_visible_schemes.size
     @filter_type = "schemes"
   end
 
@@ -222,6 +222,11 @@ class SchemesController < ApplicationController
   end
 
   def csv_confirmation; end
+
+  def delete
+    @scheme.discard!
+    redirect_to schemes_organisation_path(@scheme.owning_organisation), notice: I18n.t("notification.scheme_deleted", service_name: @scheme.service_name)
+  end
 
 private
 
