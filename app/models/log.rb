@@ -82,7 +82,7 @@ class Log < ApplicationRecord
       service = AddressClient.new(address_string)
       service.call
 
-      return errors.add(:address_line1_input, :address_error, message: service.error) if service.error.present?
+      return errors.add(:address_selection, :address_error, message: service.error) if service.error.present?
 
       if address_selection.between?(0, 9)
         presenter = AddressDataPresenter.new(service.result[address_selection])
