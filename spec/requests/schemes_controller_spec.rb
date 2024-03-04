@@ -577,6 +577,11 @@ RSpec.describe SchemesController, type: :request do
             expect(response).to have_http_status(:ok)
             expect(page).to have_link("Reactivate this scheme", href: "/schemes/#{scheme.id}/new-reactivation")
           end
+
+          it "does not render delete this scheme" do
+            expect(response).to have_http_status(:ok)
+            expect(page).not_to have_link("Delete this scheme", href: "/schemes/#{scheme.id}/delete-confirmation")
+          end
         end
 
         context "with scheme that's deactivating soon" do
@@ -711,6 +716,70 @@ RSpec.describe SchemesController, type: :request do
         expect(page).to have_content(specific_scheme.secondary_client_group)
         expect(page).to have_content(specific_scheme.support_type)
         expect(page).to have_content(specific_scheme.intended_stay)
+      end
+
+      context "when looking at scheme details" do
+        let!(:scheme) { create(:scheme, owning_organisation: user.organisation) }
+        let(:add_deactivations) { scheme.scheme_deactivation_periods << scheme_deactivation_period }
+
+        before do
+          create(:location, scheme:)
+          Timecop.freeze(Time.utc(2022, 10, 10))
+          sign_in user
+          add_deactivations
+          scheme.save!
+          get "/schemes/#{scheme.id}"
+        end
+
+        after do
+          Timecop.unfreeze
+        end
+
+        context "with active scheme" do
+          let(:add_deactivations) {}
+
+          it "does not render delete this scheme" do
+            expect(response).to have_http_status(:ok)
+            expect(page).not_to have_link("Delete this scheme", href: "/schemes/#{scheme.id}/delete-confirmation")
+          end
+        end
+
+        context "with deactivated scheme" do
+          let(:scheme_deactivation_period) { create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 10, 9), scheme:) }
+
+          it "renders delete this scheme" do
+            expect(response).to have_http_status(:ok)
+            expect(page).to have_link("Delete this scheme", href: "/schemes/#{scheme.id}/delete-confirmation")
+          end
+        end
+
+        context "with scheme that's deactivating soon" do
+          let(:scheme_deactivation_period) { create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 10, 12), scheme:) }
+
+          it "does not render delete this scheme" do
+            expect(response).to have_http_status(:ok)
+            expect(page).not_to have_link("Delete this scheme", href: "/schemes/#{scheme.id}/delete-confirmation")
+          end
+        end
+
+        context "with scheme that's deactivating in more than 6 months" do
+          let(:scheme_deactivation_period) { create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2023, 5, 12), scheme:) }
+
+          it "does not render delete this scheme" do
+            expect(response).to have_http_status(:ok)
+            expect(page).not_to have_link("Delete this scheme", href: "/schemes/#{scheme.id}/delete-confirmation")
+          end
+        end
+
+        context "with incomplete scheme" do
+          let(:add_deactivations) {}
+          let!(:scheme) { create(:scheme, :incomplete, owning_organisation: user.organisation) }
+
+          it "renders delete this scheme" do
+            expect(response).to have_http_status(:ok)
+            expect(page).to have_link("Delete this scheme", href: "/schemes/#{scheme.id}/delete-confirmation")
+          end
+        end
       end
     end
   end
@@ -2646,7 +2715,14 @@ RSpec.describe SchemesController, type: :request do
     let(:scheme) { create(:scheme, owning_organisation: user.organisation) }
 
     before do
+      Timecop.freeze(Time.utc(2022, 10, 10))
+      scheme.scheme_deactivation_periods << create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 10, 9), scheme:)
+      scheme.save!
       get "/schemes/#{scheme.id}/delete-confirmation"
+    end
+
+    after do
+      Timecop.unfreeze
     end
 
     context "when not signed in" do
@@ -2727,9 +2803,16 @@ RSpec.describe SchemesController, type: :request do
 
     context "when signed in" do
       before do
+        Timecop.freeze(Time.utc(2022, 10, 10))
+        scheme.scheme_deactivation_periods << create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 10, 9), scheme:)
+        scheme.save!
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
         sign_in user
         delete "/schemes/#{scheme.id}/delete"
+      end
+
+      after do
+        Timecop.unfreeze
       end
 
       context "with a data provider user" do

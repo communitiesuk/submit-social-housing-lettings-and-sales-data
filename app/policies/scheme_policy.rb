@@ -66,11 +66,11 @@ class SchemePolicy
   end
 
   def delete_confirmation?
-    user.support?
+    delete?
   end
 
   def delete?
-    user.support?
+    user.support? && (scheme.status == :incomplete || scheme.status == :deactivated)
   end
 
 private

@@ -49,3 +49,7 @@
 <% if SchemePolicy.new(current_user, @scheme).deactivate? %>
   <%= toggle_scheme_link(@scheme) %>
 <% end %>
+
+<% if SchemePolicy.new(current_user, @scheme).delete? %>
+  <%= delete_scheme_link(@scheme) %>
+<% end %>
