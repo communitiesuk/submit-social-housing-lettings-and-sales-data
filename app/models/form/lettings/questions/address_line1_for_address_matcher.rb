@@ -1,7 +1,7 @@
 class Form::Lettings::Questions::AddressLine1ForAddressMatcher < ::Form::Question
   def initialize(id, hsh, page)
     super
-    @id = "address_line1"
+    @id = "address_line1_input"
     @header = "Address line 1"
     @error_label = "Address line 1"
     @type = "text"
