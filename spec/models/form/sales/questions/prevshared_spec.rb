@@ -44,6 +44,6 @@ RSpec.describe Form::Sales::Questions::Prevshared, type: :model do
   end
 
   it "has the correct hint" do
-    expect(question.hint_text).to be_nil
+    expect(question.hint_text).to eq("For any buyer")
   end
 end

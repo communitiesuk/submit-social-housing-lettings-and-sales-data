@@ -6,7 +6,7 @@ class Form::Sales::Questions::Prevshared < ::Form::Question
     @header = "Was the previous property under shared ownership?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
-    @hint = "For any buyer"
+    @hint_text = "For any buyer"
     @question_number = 74
   end
 
