@@ -742,6 +742,11 @@ RSpec.describe SchemesController, type: :request do
             expect(response).to have_http_status(:ok)
             expect(page).not_to have_link("Delete this scheme", href: "/schemes/#{scheme.id}/delete-confirmation")
           end
+
+          it "does not render informative text about deleting the scheme" do
+            expect(response).to have_http_status(:ok)
+            expect(page).not_to have_content("This scheme was active in an open or editable collection year, and cannot be deleted.")
+          end
         end
 
         context "with deactivated scheme" do
@@ -750,6 +755,23 @@ RSpec.describe SchemesController, type: :request do
           it "renders delete this scheme" do
             expect(response).to have_http_status(:ok)
             expect(page).to have_link("Delete this scheme", href: "/schemes/#{scheme.id}/delete-confirmation")
+          end
+
+          context "and associated logs in editable collection period" do
+            before do
+              create(:lettings_log, :sh, scheme:, startdate: Time.zone.local(2022, 9, 9), owning_organisation: user.organisation)
+              get "/schemes/#{scheme.id}"
+            end
+
+            it "does not render delete this scheme" do
+              expect(response).to have_http_status(:ok)
+              expect(page).not_to have_link("Delete this scheme", href: "/schemes/#{scheme.id}/delete-confirmation")
+            end
+
+            it "adds informative text about deleting the scheme" do
+              expect(response).to have_http_status(:ok)
+              expect(page).to have_content("This scheme was active in an open or editable collection year, and cannot be deleted.")
+            end
           end
         end
 

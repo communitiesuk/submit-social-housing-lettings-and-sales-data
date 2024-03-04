@@ -29,6 +29,9 @@
               <% if @scheme.confirmed? && @scheme.locations.confirmed.none? && LocationPolicy.new(current_user, @scheme.locations.new).create? %>
                 <span class="app-!-colour-muted">Complete this scheme by adding a location using the <%= govuk_link_to("‘locations’ tab", scheme_locations_path(@scheme)) %>.</span>
               <% end %>
+              <% if @scheme.deactivated? && current_user.support? && !SchemePolicy.new(current_user, @scheme).delete? %>
+                  <span class="app-!-colour-muted">This scheme was active in an open or editable collection year, and cannot be deleted.</span>
+              <% end %>
             </dd>
           </div>
         <% elsif attr[:id] != "secondary_client_group" || @scheme.has_other_client_group == "Yes" %>
