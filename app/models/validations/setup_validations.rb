@@ -14,6 +14,10 @@ module Validations::SetupValidations
     unless record.startdate.between?(first_collection_start_date, current_collection_end_date)
       record.errors.add :startdate, startdate_validation_error_message
     end
+
+    if record.startdate > Time.zone.today + 14.days
+      record.errors.add :startdate, I18n.t("validations.setup.startdate.later_than_14_days_after")
+    end
   end
 
   def validate_organisation(record)

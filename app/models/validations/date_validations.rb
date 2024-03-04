@@ -34,10 +34,6 @@ module Validations::DateValidations
   def validate_startdate(record)
     return unless record.startdate && date_valid?("startdate", record)
 
-    if !FeatureToggle.allow_future_form_use? && record.startdate > Time.zone.today + 14.days
-      record.errors.add :startdate, I18n.t("validations.setup.startdate.later_than_14_days_after")
-    end
-
     if record["voiddate"].present? && record.startdate < record["voiddate"]
       record.errors.add :startdate, I18n.t("validations.setup.startdate.after_void_date")
     end
