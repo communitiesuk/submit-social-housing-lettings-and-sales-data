@@ -2641,4 +2641,73 @@ RSpec.describe SchemesController, type: :request do
       end
     end
   end
+
+  describe "#delete-confirmation" do
+    let(:scheme) { create(:scheme, owning_organisation: user.organisation) }
+
+    before do
+      get "/schemes/#{scheme.id}/delete-confirmation"
+    end
+
+    context "when not signed in" do
+      it "redirects to the sign in page" do
+        expect(response).to redirect_to("/account/sign-in")
+      end
+    end
+
+    context "when signed in" do
+      before do
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in user
+        get "/schemes/#{scheme.id}/delete-confirmation"
+      end
+
+      context "with a data provider user" do
+        let(:user) { create(:user) }
+
+        it "returns 401 unauthorized" do
+          expect(response).to have_http_status(:unauthorized)
+        end
+      end
+
+      context "with a data coordinator user" do
+        let(:user) { create(:user, :data_coordinator) }
+
+        it "returns 401 unauthorized" do
+          expect(response).to have_http_status(:unauthorized)
+        end
+      end
+
+      context "with a support user user" do
+        let(:user) { create(:user, :support) }
+
+        it "shows the correct title" do
+          expect(page.find("h1").text).to include "Are you sure you want to delete this scheme?"
+        end
+
+        it "shows a warning to the user" do
+          expect(page).to have_selector(".govuk-warning-text", text: "You will not be able to undo this action")
+        end
+
+        it "shows a button to delete the selected scheme" do
+          expect(page).to have_selector("form.button_to button", text: "Delete this scheme")
+        end
+
+        it "the delete scheme button submits the correct data to the correct path" do
+          form_containing_button = page.find("form.button_to")
+
+          expect(form_containing_button[:action]).to eq scheme_delete_path(scheme)
+          expect(form_containing_button).to have_field "_method", type: :hidden, with: "delete"
+        end
+
+        it "shows a cancel link with the correct style" do
+          expect(page).to have_selector("a.govuk-button--secondary", text: "Cancel")
+        end
+
+        it "shows cancel link that links back to the scheme page" do
+          expect(page).to have_link(text: "Cancel", href: scheme_path(scheme))
+        end
+      end
+    end
+  end
 end

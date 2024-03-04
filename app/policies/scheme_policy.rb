@@ -65,6 +65,14 @@ class SchemePolicy
     end
   end
 
+  def delete_confirmation?
+    user.support?
+  end
+
+  def delete?
+    user.support?
+  end
+
 private
 
   def scheme_owned_by_user_org_or_stock_owner
