@@ -2201,6 +2201,7 @@ RSpec.describe SchemesController, type: :request do
       let!(:scheme) { create(:scheme) }
 
       before do
+        create(:location, scheme:)
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
         sign_in user
         get "/schemes/#{scheme.id}/check-answers"
@@ -2209,6 +2210,22 @@ RSpec.describe SchemesController, type: :request do
       it "returns a template for a support" do
         expect(response).to have_http_status(:ok)
         expect(page).to have_content("Check your changes before creating this scheme")
+      end
+
+      context "with an active scheme" do
+        it "does not render delete this scheme" do
+          expect(scheme.status).to eq(:active)
+          expect(page).not_to have_link("Delete this scheme", href: "/schemes/#{scheme.id}/delete-confirmation")
+        end
+      end
+
+      context "with an incomplete scheme" do
+        let(:scheme) { create(:scheme, :incomplete) }
+
+        it "renders delete this scheme" do
+          expect(scheme.reload.status).to eq(:incomplete)
+          expect(page).to have_link("Delete this scheme", href: "/schemes/#{scheme.id}/delete-confirmation")
+        end
       end
     end
   end
