@@ -428,7 +428,7 @@ en:
         not_provided: "Enter how much rent and other charges the household pays %{period}"
       cash_discount_invalid: "Cash discount must be £0 - £999,999"
       staircasing:
-        percentage_bought_must_be_greater_than_percentage_owned: "Total percentage %{buyer_possessive} now owns must be more than percentage bought in this transaction"
+        percentage_bought_must_be_greater_than_percentage_owned: "Total percentage %{buyer_now_owns} must be more than percentage bought in this transaction"
         percentage_bought_must_be_at_least_threshold: "The minimum increase in equity while staircasing is %{threshold}%"
         percentage_bought_equal_percentage_owned: "The percentage bought is %{stairbought}% and the percentage owned in total is %{stairowned}%. These figures cannot be the same."
       monthly_leasehold_charges:

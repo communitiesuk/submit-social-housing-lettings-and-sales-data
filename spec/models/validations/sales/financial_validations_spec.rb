@@ -153,7 +153,7 @@ RSpec.describe Validations::Sales::FinancialValidations do
       record.stairowned = 40
       record.jointpur = 1
       financial_validator.validate_percentage_bought_not_greater_than_percentage_owned(record)
-      expect(record.errors["stairowned"]).to include("Total percentage buyers now owns must be more than percentage bought in this transaction")
+      expect(record.errors["stairowned"]).to include("Total percentage buyers now own must be more than percentage bought in this transaction")
     end
 
     it "adds an error to stairowned and not stairbought if the percentage bought is more than the percentage owned for non joint purchase" do
