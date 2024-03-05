@@ -29,6 +29,6 @@ class Form::Lettings::Questions::AddressSelection < ::Form::Question
   end
 
   def hidden_in_check_answers?(log, _current_user = nil)
-    (log.uprn_known == 1 || log.uprn_confirmed == 1) || !(1..10).cover?(log.address_options.count)
+    (log.uprn_known == 1 || log.uprn_confirmed == 1) || !(1..10).cover?(log.address_options&.count)
   end
 end
