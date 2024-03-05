@@ -1,5 +1,16 @@
 <% content_for :title, @page.header.presence || @page.questions.first.header.html_safe %>
-<% form_page_breadcrumbs(current_user, @log, @subsection, request.query_parameters) %>
+<% if accessed_from_duplicate_logs?(request.query_parameters["referrer"]) %>
+  <% content_for :before_content do %>
+    <%= govuk_back_link(href: duplicate_log_set_path(@log, request.query_parameters["original_log_id"])) %>
+  <% end %>
+<% else %>
+  <% content_for :breadcrumbs, govuk_breadcrumbs(breadcrumbs: {
+    "Home" => root_path,
+    breadcrumb_logs_title(@log, current_user) => breadcrumb_logs_link(@log, current_user),
+    "Log #{@log.id}" => url_for(@log),
+    @subsection.label => relevant_check_answers_path(@log, @subsection),
+  }) %>
+<% end %>
 
 <div data-controller="govukfrontend"></div>
 <%= form_with model: @log, url: request.original_url, method: "post", local: true do |f| %>
@@ -63,7 +74,7 @@
       <% if !@page.interruption_screen? %>
         <% if accessed_from_duplicate_logs?(request.query_parameters["referrer"]) %>
           <%= f.govuk_submit "Save changes" %>
-          <%= govuk_link_to "Cancel", send("#{@log.class.name.underscore}_duplicate_logs_path", @log, original_log_id: request.query_parameters["original_log_id"]) %>
+          <%= govuk_link_to "Cancel", duplicate_log_set_path(@log, request.query_parameters["original_log_id"]) %>
         <% elsif returning_to_question_page?(@page, request.query_parameters["referrer"]) %>
           <%= f.govuk_submit "Save changes" %>
           <%= govuk_link_to "Cancel", send(@log.form.cancel_path(@page, @log), @log) %>
