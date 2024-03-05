@@ -76,6 +76,7 @@ class User < ApplicationRecord
   scope :not_signed_in, -> { where(last_sign_in_at: nil, active: true) }
   scope :deactivated, -> { where(active: false) }
   scope :active_status, -> { where(active: true).where.not(last_sign_in_at: nil) }
+  scope :visible, -> { where(discarded_at: nil) }
 
   def lettings_logs
     if support?
@@ -240,9 +241,13 @@ class User < ApplicationRecord
   def status
     return :deleted if discarded_at.present?
     return :deactivated unless active
-    return :unconfirmed if !confirmed?
+    return :unconfirmed unless confirmed?
 
     :active
+  end
+
+  def discard!
+    update!(discarded_at: Time.zone.now)
   end
 
 protected
