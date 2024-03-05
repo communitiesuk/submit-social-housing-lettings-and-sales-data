@@ -129,6 +129,8 @@ Rails.application.routes.draw do
       get "deactivate", to: "users#deactivate"
       get "reactivate", to: "users#reactivate"
       post "resend-invite", to: "users#resend_invite"
+      get "delete-confirmation", to: "users#delete_confirmation"
+      delete "delete", to: "users#delete"
     end
   end
 

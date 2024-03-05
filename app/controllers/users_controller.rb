@@ -122,6 +122,14 @@ class UsersController < ApplicationController
     end
   end
 
+  def delete_confirmation
+    authorize @user
+  end
+
+  def delete
+    authorize @user
+  end
+
 private
 
   def validate_attributes
