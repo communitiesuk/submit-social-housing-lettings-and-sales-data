@@ -13,7 +13,7 @@ module Validations::Sales::SaleInformationValidations
     end
 
     if record.saledate - record.hodate >= 3.years && record.form.start_year_after_2024?
-      record.errors.add :hodate, :over_a_year_from_saledate, message: I18n.t("validations.sale_information.hodate.must_be_less_than_3_years_from_saledate")
+      record.errors.add :hodate, message: I18n.t("validations.sale_information.hodate.must_be_less_than_3_years_from_saledate")
       record.errors.add :saledate, I18n.t("validations.sale_information.saledate.must_be_less_than_3_years_from_hodate")
     end
   end

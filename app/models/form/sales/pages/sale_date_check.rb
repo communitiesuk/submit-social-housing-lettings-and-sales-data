@@ -6,7 +6,7 @@ class Form::Sales::Pages::SaleDateCheck < ::Form::Page
                    { "hodate_check" => 1, "hodate_3_years_or_more_saledate?" => true }]
     @informative_text = {}
     @title_text = {
-      "translation" => "validations.sale_information.saledate.must_be_less_than_3_years_from_hodate_soft",
+      "translation" => "soft_validations.saledate.must_be_less_than_3_years_from_hodate",
       "arguments" => [],
     }
   end
