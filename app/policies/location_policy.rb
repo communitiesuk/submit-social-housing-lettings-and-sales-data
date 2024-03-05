@@ -89,8 +89,7 @@ private
 
   def has_any_logs_in_editable_collection_period
     editable_from_date = FormHandler.instance.earliest_open_for_editing_collection_start_date
-    editable_logs = LettingsLog.where(location_id: location.id).after_date(editable_from_date)
 
-    LettingsLog.where(location_id: location.id, startdate: nil).any? || editable_logs.any?
+    LettingsLog.where(location_id: location.id).after_date(editable_from_date).or(LettingsLog.where(startdate: nil, location_id: location.id)).any?
   end
 end
