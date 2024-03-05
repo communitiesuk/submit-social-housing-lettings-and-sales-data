@@ -118,7 +118,7 @@ class Log < ApplicationRecord
       service = AddressClient.new(address_string)
       service.call
 
-      return errors.add(:address_selection, :address_error, message: service.error) if service.error.present?
+      return nil if service.error.present?
 
       address_opts = []
       service.result.first(10).each do |result|
