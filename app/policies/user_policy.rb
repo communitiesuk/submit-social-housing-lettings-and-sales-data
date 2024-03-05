@@ -33,4 +33,12 @@ class UserPolicy
       (@current_user == @user || @current_user.data_coordinator? || @current_user.support?) && @user.active?
     end
   end
+
+  def delete_confirmation?
+    current_user.support?
+  end
+
+  def delete?
+    current_user.support?
+  end
 end

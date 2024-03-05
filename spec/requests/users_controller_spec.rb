@@ -103,6 +103,13 @@ RSpec.describe UsersController, type: :request do
         expect(response).to redirect_to(new_user_session_path)
       end
     end
+
+    describe "#delete-confirmation" do
+      it "redirects to the sign in page" do
+        get "/users/#{user.id}/delete-confirmation"
+        expect(response).to redirect_to("/account/sign-in")
+      end
+    end
   end
 
   context "when user is signed in as a data provider" do
@@ -378,6 +385,18 @@ RSpec.describe UsersController, type: :request do
 
       it "returns 401 unauthorized" do
         request
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    describe "#delete-confirmation" do
+      before do
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in user
+        get "/users/#{user.id}/delete-confirmation"
+      end
+
+      it "returns 401 unauthorized" do
         expect(response).to have_http_status(:unauthorized)
       end
     end
@@ -1160,6 +1179,18 @@ RSpec.describe UsersController, type: :request do
           expect(page).to have_button("I’m sure – reactivate this user")
           expect(page).to have_link("No – I’ve changed my mind", href: "/users/#{other_user.id}")
         end
+      end
+    end
+
+    describe "#delete-confirmation" do
+      before do
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in user
+        get "/users/#{user.id}/delete-confirmation"
+      end
+
+      it "returns 401 unauthorized" do
+        expect(response).to have_http_status(:unauthorized)
       end
     end
   end
@@ -2016,6 +2047,41 @@ RSpec.describe UsersController, type: :request do
             expect(page).to have_select("user-organisation-id-field", options: [user.organisation.name])
           end
         end
+      end
+    end
+
+    describe "#delete-confirmation" do
+      before do
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in user
+        get "/users/#{other_user.id}/delete-confirmation"
+      end
+
+      it "shows the correct title" do
+        expect(page.find("h1").text).to include "Are you sure you want to delete this user?"
+      end
+
+      it "shows a warning to the user" do
+        expect(page).to have_selector(".govuk-warning-text", text: "You will not be able to undo this action")
+      end
+
+      it "shows a button to delete the selected user" do
+        expect(page).to have_selector("form.button_to button", text: "Delete this user")
+      end
+
+      it "the delete user button submits the correct data to the correct path" do
+        form_containing_button = page.find("form.button_to")
+
+        expect(form_containing_button[:action]).to eq delete_user_path(other_user)
+        expect(form_containing_button).to have_field "_method", type: :hidden, with: "delete"
+      end
+
+      it "shows a cancel link with the correct style" do
+        expect(page).to have_selector("a.govuk-button--secondary", text: "Cancel")
+      end
+
+      it "shows cancel link that links back to the user page" do
+        expect(page).to have_link(text: "Cancel", href: user_path(other_user))
       end
     end
   end
