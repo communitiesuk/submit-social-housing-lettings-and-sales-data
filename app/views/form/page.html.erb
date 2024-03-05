@@ -1,8 +1,5 @@
 <% content_for :title, @page.header.presence || @page.questions.first.header.html_safe %>
-
-<% content_for :before_content do %>
-  <%= govuk_back_link(href: send(@log.form.previous_page_redirect_path(@page, @log, current_user, params[:referrer]), @log)) %>
-<% end %>
+<% form_page_breadcrumbs(current_user, @log, @subsection, request.query_parameters) %>
 
 <div data-controller="govukfrontend"></div>
 <%= form_with model: @log, url: request.original_url, method: "post", local: true do |f| %>
