@@ -238,13 +238,11 @@ class User < ApplicationRecord
   end
 
   def status
-    if active == false
-      :deactivated
-    elsif confirmed? == false
-      :unconfirmed
-    else
-      :active
-    end
+    return :deleted if discarded_at.present?
+    return :deactivated unless active
+    return :unconfirmed if !confirmed?
+
+    :active
   end
 
 protected
