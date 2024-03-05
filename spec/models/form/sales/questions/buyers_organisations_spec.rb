@@ -35,10 +35,6 @@ RSpec.describe Form::Sales::Questions::BuyersOrganisations, type: :model do
     expect(question.hint_text).to eq("Select all that apply. This question is optional. If no options are applicable, leave the options blank, and select save and continue.")
   end
 
-  it "has the correct default" do
-    expect(question.default_answer).to eq("pregblank")
-  end
-
   it "has the correct answer_options" do
     expect(question.answer_options).to eq(
       {

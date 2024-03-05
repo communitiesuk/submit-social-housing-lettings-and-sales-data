@@ -102,12 +102,6 @@ private
         result[question.id] = question_params
       end
 
-      if %w[checkbox].include?(question.type) &&
-          !question.default_answer.nil? &&
-          question.answer_keys_without_dividers.all? { |answer_key| result[answer_key] != 1 }
-        result[question.default_answer] = 1
-      end
-
       if question.id == "owning_organisation_id"
         owning_organisation = result["owning_organisation_id"].present? ? Organisation.find(result["owning_organisation_id"]) : nil
         if current_user.support? && @log.managing_organisation.blank? && owning_organisation&.managing_agents&.empty?
@@ -235,8 +229,6 @@ private
   end
 
   def question_missing_response?(responses_for_page, question)
-    return unless question.default_answer.nil?
-
     if %w[checkbox validation_override].include?(question.type)
       answered = question.answer_keys_without_dividers.map do |option|
         session["fields"][option] = @log[option] = params[@log.model_name.param_key][question.id].include?(option) ? 1 : 0

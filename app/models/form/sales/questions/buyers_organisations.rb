@@ -7,7 +7,6 @@ class Form::Sales::Questions::BuyersOrganisations < ::Form::Question
     @type = "checkbox"
     @hint_text = "Select all that apply. This question is optional. If no options are applicable, leave the options blank, and select save and continue."
     @answer_options = ANSWER_OPTIONS
-    @default_answer = "pregblank"
     @question_number = 59
   end
 

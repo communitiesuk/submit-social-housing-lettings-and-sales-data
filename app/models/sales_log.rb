@@ -78,7 +78,7 @@ class SalesLog < Log
     scope.pluck("ARRAY_AGG(id)")
   }
 
-  OPTIONAL_FIELDS = %w[purchid othtype].freeze
+  OPTIONAL_FIELDS = %w[purchid othtype buyers_organisations].freeze
   RETIREMENT_AGES = { "M" => 65, "F" => 60, "X" => 65 }.freeze
   DUPLICATE_LOG_ATTRIBUTES = %w[owning_organisation_id purchid saledate age1_known age1 sex1 ecstat1 postcode_full].freeze
 
@@ -392,6 +392,13 @@ class SalesLog < Log
 
   def no_monthly_leasehold_charges?
     has_mscharge&.zero?
+  end
+
+  def no_buyer_organisation?
+    pregyrha&.zero? &&
+      pregla&.zero? &&
+      pregghb&.zero? &&
+      pregother&.zero?
   end
 
   def buyers_age_for_old_persons_shared_ownership_invalid?
