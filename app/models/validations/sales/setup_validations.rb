@@ -3,7 +3,7 @@ module Validations::Sales::SetupValidations
   include CollectionTimeHelper
 
   def validate_saledate_collection_year(record)
-    return unless record.saledate && date_valid?("saledate", record) && FeatureToggle.saledate_collection_window_validation_enabled?
+    return unless record.saledate && date_valid?("saledate", record) && !FeatureToggle.allow_future_form_use?
 
     first_collection_start_date = if record.saledate_was.present?
                                     editable_collection_start_date
@@ -17,7 +17,7 @@ module Validations::Sales::SetupValidations
   end
 
   def validate_saledate_two_weeks(record)
-    return unless record.saledate && date_valid?("saledate", record) && FeatureToggle.saledate_two_week_validation_enabled?
+    return unless record.saledate && date_valid?("saledate", record) && !FeatureToggle.allow_future_form_use?
 
     if record.saledate > Time.zone.today + 14.days
       record.errors.add :saledate, I18n.t("validations.setup.saledate.later_than_14_days_after")

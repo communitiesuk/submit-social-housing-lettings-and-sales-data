@@ -18,6 +18,7 @@ RSpec.describe Form::Sales::Subsections::SharedOwnershipScheme, type: :model do
   it "has correct pages" do
     expect(shared_ownership_scheme.pages.map(&:id)).to eq(
       %w[
+        living_before_purchase_shared_ownership_joint_purchase
         living_before_purchase_shared_ownership
         staircasing
         about_staircasing_joint_purchase
@@ -49,6 +50,7 @@ RSpec.describe Form::Sales::Subsections::SharedOwnershipScheme, type: :model do
         extra_borrowing_shared_ownership
         about_deposit_with_discount
         about_deposit_shared_ownership
+        deposit_joint_purchase_value_check
         deposit_value_check
         shared_ownership_deposit_value_check
         monthly_rent

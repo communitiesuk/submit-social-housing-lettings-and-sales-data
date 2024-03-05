@@ -1,9 +1,9 @@
 class Form::Sales::Questions::SavingsNk < ::Form::Question
-  def initialize(id, hsh, page)
-    super
+  def initialize(id, hsh, page, joint_purchase:)
+    super(id, hsh, page)
     @id = "savingsnk"
-    @check_answer_label = "Buyer’s total savings known?"
-    @header = "Do you know how much the buyer had in savings before they paid any deposit for the property?"
+    @check_answer_label = "#{joint_purchase ? 'Buyers’' : 'Buyer’s'} total savings known?"
+    @header = "Do you know how much the #{joint_purchase ? 'buyers' : 'buyer'} had in savings before they paid any deposit for the property?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @conditional_for = {

@@ -6,10 +6,10 @@ module Validations::Sales::FinancialValidations
     return unless record.income1 && record.la && record.shared_ownership_scheme?
 
     relevant_fields = %i[income1 ownershipsch uprn la postcode_full]
-    if record.london_property? && record.income1 > 90_000
-      relevant_fields.each { |field| record.errors.add field, :over_hard_max_for_london, message: I18n.t("validations.financial.income.over_hard_max_for_london") }
-    elsif record.property_not_in_london? && record.income1 > 80_000
-      relevant_fields.each { |field| record.errors.add field, :over_hard_max_for_outside_london, message: I18n.t("validations.financial.income.over_hard_max_for_outside_london") }
+    if record.london_property? && !record.income1.between?(0, 90_000)
+      relevant_fields.each { |field| record.errors.add field, :outside_london_income_range, message: I18n.t("validations.financial.income.outside_london_income_range") }
+    elsif record.property_not_in_london? && !record.income1.between?(0, 80_000)
+      relevant_fields.each { |field| record.errors.add field, :outside_non_london_income_range, message: I18n.t("validations.financial.income.outside_non_london_income_range") }
     end
   end
 
@@ -17,10 +17,10 @@ module Validations::Sales::FinancialValidations
     return unless record.income2 && record.la && record.shared_ownership_scheme?
 
     relevant_fields = %i[income2 ownershipsch uprn la postcode_full]
-    if record.london_property? && record.income2 > 90_000
-      relevant_fields.each { |field| record.errors.add field, :over_hard_max_for_london, message: I18n.t("validations.financial.income.over_hard_max_for_london") }
-    elsif record.property_not_in_london? && record.income2 > 80_000
-      relevant_fields.each { |field| record.errors.add field, :over_hard_max_for_outside_london, message: I18n.t("validations.financial.income.over_hard_max_for_outside_london") }
+    if record.london_property? && !record.income2.between?(0, 90_000)
+      relevant_fields.each { |field| record.errors.add field, :outside_london_income_range, message: I18n.t("validations.financial.income.outside_london_income_range") }
+    elsif record.property_not_in_london? && !record.income2.between?(0, 80_000)
+      relevant_fields.each { |field| record.errors.add field, :outside_non_london_income_range, message: I18n.t("validations.financial.income.outside_non_london_income_range") }
     end
   end
 
@@ -48,7 +48,7 @@ module Validations::Sales::FinancialValidations
     return unless record.stairbought && record.stairowned
 
     if record.stairbought > record.stairowned
-      record.errors.add :stairowned, I18n.t("validations.financial.staircasing.percentage_bought_must_be_greater_than_percentage_owned")
+      record.errors.add :stairowned, I18n.t("validations.financial.staircasing.percentage_bought_must_be_greater_than_percentage_owned", buyer_now_owns: record.joint_purchase? ? "buyers now own" : "buyer now owns")
     end
   end
 
@@ -125,9 +125,9 @@ module Validations::Sales::FinancialValidations
 
     if record.equity > record.stairowned - record.stairbought
       formatted_equity = sprintf("%g", record.equity)
-      record.errors.add :equity, I18n.t("validations.financial.equity.over_stairowned_minus_stairbought", equity: formatted_equity, staircase_difference: record.stairowned - record.stairbought)
-      record.errors.add :stairowned, I18n.t("validations.financial.equity.over_stairowned_minus_stairbought", equity: formatted_equity, staircase_difference: record.stairowned - record.stairbought)
-      record.errors.add :stairbought, I18n.t("validations.financial.equity.over_stairowned_minus_stairbought", equity: formatted_equity, staircase_difference: record.stairowned - record.stairbought)
+      record.errors.add :equity, I18n.t("validations.financial.equity.over_stairowned_minus_stairbought", equity: formatted_equity, staircase_difference: record.stairowned - record.stairbought, buyer_owns: record.joint_purchase? ? "buyers own" : "buyer owns")
+      record.errors.add :stairowned, I18n.t("validations.financial.equity.over_stairowned_minus_stairbought", equity: formatted_equity, staircase_difference: record.stairowned - record.stairbought, buyer_owns: record.joint_purchase? ? "buyers own" : "buyer owns")
+      record.errors.add :stairbought, I18n.t("validations.financial.equity.over_stairowned_minus_stairbought", equity: formatted_equity, staircase_difference: record.stairowned - record.stairbought, buyer_owns: record.joint_purchase? ? "buyers own" : "buyer owns")
     end
   end
 

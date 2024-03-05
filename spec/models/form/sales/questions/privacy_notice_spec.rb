@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Form::Sales::Questions::PrivacyNotice, type: :model do
-  subject(:question) { described_class.new(question_id, question_definition, page) }
+  subject(:question) { described_class.new(question_id, question_definition, page, joint_purchase: false) }
 
   let(:question_id) { nil }
   let(:question_definition) { nil }

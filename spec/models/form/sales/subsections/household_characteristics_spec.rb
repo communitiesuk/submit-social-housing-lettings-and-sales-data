@@ -25,10 +25,13 @@ RSpec.describe Form::Sales::Subsections::HouseholdCharacteristics, type: :model 
     it "has correct pages" do
       expect(household_characteristics.pages.map(&:id)).to eq(
         %w[
+          buyer_interview_joint_purchase
           buyer_interview
+          privacy_notice_joint_purchase
           privacy_notice
           buyer_1_age
           age_1_retirement_value_check
+          age_1_old_persons_shared_ownership_joint_purchase_value_check
           age_1_old_persons_shared_ownership_value_check
           buyer_1_gender_identity
           gender_1_retirement_value_check
@@ -47,6 +50,7 @@ RSpec.describe Form::Sales::Subsections::HouseholdCharacteristics, type: :model 
           buyer_2_relationship_to_buyer_1
           buyer_2_relationship_student_not_child_value_check
           buyer_2_age
+          age_2_old_persons_shared_ownership_joint_purchase_value_check
           age_2_old_persons_shared_ownership_value_check
           age_2_buyer_retirement_value_check
           buyer_2_age_student_not_child_value_check
@@ -129,10 +133,13 @@ RSpec.describe Form::Sales::Subsections::HouseholdCharacteristics, type: :model 
     it "has correct pages" do
       expect(household_characteristics.pages.map(&:id)).to eq(
         %w[
+          buyer_interview_joint_purchase
           buyer_interview
+          privacy_notice_joint_purchase
           privacy_notice
           buyer_1_age
           age_1_retirement_value_check
+          age_1_old_persons_shared_ownership_joint_purchase_value_check
           age_1_old_persons_shared_ownership_value_check
           buyer_1_gender_identity
           gender_1_retirement_value_check
@@ -151,6 +158,7 @@ RSpec.describe Form::Sales::Subsections::HouseholdCharacteristics, type: :model 
           buyer_2_relationship_to_buyer_1
           buyer_2_relationship_student_not_child_value_check
           buyer_2_age
+          age_2_old_persons_shared_ownership_joint_purchase_value_check
           age_2_old_persons_shared_ownership_value_check
           age_2_buyer_retirement_value_check
           buyer_2_age_student_not_child_value_check
@@ -242,6 +250,7 @@ RSpec.describe Form::Sales::Subsections::HouseholdCharacteristics, type: :model 
         %w[
           buyer_1_age
           age_1_retirement_value_check
+          age_1_old_persons_shared_ownership_joint_purchase_value_check
           age_1_old_persons_shared_ownership_value_check
           buyer_1_gender_identity
           gender_1_retirement_value_check
@@ -260,6 +269,7 @@ RSpec.describe Form::Sales::Subsections::HouseholdCharacteristics, type: :model 
           buyer_2_relationship_to_buyer_1
           buyer_2_relationship_student_not_child_value_check
           buyer_2_age
+          age_2_old_persons_shared_ownership_joint_purchase_value_check
           age_2_old_persons_shared_ownership_value_check
           age_2_buyer_retirement_value_check
           buyer_2_age_student_not_child_value_check

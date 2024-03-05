@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Form::Sales::Questions::LivingBeforePurchase, type: :model do
-  subject(:question) { described_class.new(question_id, question_definition, page, ownershipsch: 1) }
+  subject(:question) { described_class.new(question_id, question_definition, page, ownershipsch: 1, joint_purchase: false) }
 
   let(:question_id) { nil }
   let(:question_definition) { nil }

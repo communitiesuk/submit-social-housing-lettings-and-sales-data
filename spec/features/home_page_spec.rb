@@ -130,6 +130,7 @@ RSpec.describe "Home Page Features" do
       create_list(:lettings_log, 2, :in_progress, owning_organisation: user.organisation)
       create_list(:lettings_log, 4, :completed, owning_organisation: user.organisation, created_by: user)
       create_list(:lettings_log, 2, :completed)
+      create_list(:lettings_log, 2, :not_started)
       sign_in user
       visit(root_path)
     end
@@ -144,16 +145,58 @@ RSpec.describe "Home Page Features" do
       before do
         create_list(:sales_log, 5, :in_progress, owning_organisation: user.organisation, created_by: user)
         create_list(:sales_log, 3, :completed, owning_organisation: user.organisation, created_by: user)
+        create_list(:sales_log, 2, :not_started)
         visit(root_path)
       end
 
-      it "displays correct data boxes, counts and links" do
-        data_boxes = page.find_all(class: "app-data-box-one-half")
-        expect(data_boxes.count).to eq(2)
-        expect(data_boxes[0].all("a").map(&:text)).to eq(["6", "Your lettings in progress", "View all lettings"])
-        expect(data_boxes[0].all("a").map { |line| line["href"] }).to eq([lettings_logs_path(status: %i[not_started in_progress], assigned_to: "you", years: [""], owning_organisation_select: "all", managing_organisation_select: "all"), lettings_logs_path(status: %i[not_started in_progress], assigned_to: "you", years: [""], owning_organisation_select: "all", managing_organisation_select: "all"), clear_filters_path(filter_type: "lettings_logs")])
-        expect(data_boxes[1].all("a").map(&:text)).to eq(["5", "Your sales in progress", "View all sales"])
-        expect(data_boxes[1].all("a").map { |line| line["href"] }).to eq([sales_logs_path(status: %i[not_started in_progress], assigned_to: "you", years: [""], owning_organisation_select: "all", managing_organisation_select: "all"), sales_logs_path(status: %i[not_started in_progress], assigned_to: "you", years: [""], owning_organisation_select: "all", managing_organisation_select: "all"), clear_filters_path(filter_type: "sales_logs")])
+      context "and it is not a crossover" do
+        before do
+          Timecop.freeze(Time.zone.local(2024, 1, 1))
+          Singleton.__init__(FormHandler)
+          closed_period_in_progress_log = build(:lettings_log, :in_progress, owning_organisation: user.organisation, created_by: user, startdate: Time.zone.local(2022, 4, 1))
+          closed_period_in_progress_log.save!(validate: false)
+          visit(root_path)
+        end
+
+        after do
+          Timecop.return
+          Singleton.__init__(FormHandler)
+        end
+
+        it "displays correct data boxes, counts and links" do
+          data_boxes = page.find_all(class: "app-data-box-one-half")
+          expect(data_boxes.count).to eq(2)
+          expect(data_boxes[0].all("a").map(&:text)).to eq(["6", "Your lettings in progress", "View all lettings"])
+          expect(data_boxes[0].all("a").map { |line| line["href"] }).to eq([lettings_logs_path(status: %i[in_progress], assigned_to: "you", years: %w[2023], owning_organisation_select: "all", managing_organisation_select: "all"), lettings_logs_path(status: %i[in_progress], assigned_to: "you", years: %w[2023], owning_organisation_select: "all", managing_organisation_select: "all"), clear_filters_path(filter_type: "lettings_logs")])
+          expect(data_boxes[1].all("a").map(&:text)).to eq(["5", "Your sales in progress", "View all sales"])
+          expect(data_boxes[1].all("a").map { |line| line["href"] }).to eq([sales_logs_path(status: %i[in_progress], assigned_to: "you", years: %w[2023], owning_organisation_select: "all", managing_organisation_select: "all"), sales_logs_path(status: %i[in_progress], assigned_to: "you", years: %w[2023], owning_organisation_select: "all", managing_organisation_select: "all"), clear_filters_path(filter_type: "sales_logs")])
+        end
+      end
+
+      context "and it is a crossover" do
+        before do
+          Timecop.freeze(Time.zone.local(2024, 4, 1))
+          Singleton.__init__(FormHandler)
+          closed_period_in_progress_log = build(:lettings_log, :in_progress, owning_organisation: user.organisation, created_by: user, startdate: Time.zone.local(2022, 4, 1))
+          closed_period_in_progress_log.save!(validate: false)
+          sign_in user
+          visit(root_path)
+        end
+
+        after do
+          Timecop.return
+          Singleton.__init__(FormHandler)
+        end
+
+        it "displays correct data boxes, counts and links" do
+          data_boxes = page.find_all(class: "app-data-box-one-half")
+
+          expect(data_boxes.count).to eq(2)
+          expect(data_boxes[0].all("a").map(&:text)).to eq(["6", "Your lettings in progress", "View all lettings"])
+          expect(data_boxes[0].all("a").map { |line| line["href"] }).to eq([lettings_logs_path(status: %i[in_progress], assigned_to: "you", years: %w[2024 2023], owning_organisation_select: "all", managing_organisation_select: "all"), lettings_logs_path(status: %i[in_progress], assigned_to: "you", years: %w[2024 2023], owning_organisation_select: "all", managing_organisation_select: "all"), clear_filters_path(filter_type: "lettings_logs")])
+          expect(data_boxes[1].all("a").map(&:text)).to eq(["5", "Your sales in progress", "View all sales"])
+          expect(data_boxes[1].all("a").map { |line| line["href"] }).to eq([sales_logs_path(status: %i[in_progress], assigned_to: "you", years: %w[2024 2023], owning_organisation_select: "all", managing_organisation_select: "all"), sales_logs_path(status: %i[in_progress], assigned_to: "you", years: %w[2024 2023], owning_organisation_select: "all", managing_organisation_select: "all"), clear_filters_path(filter_type: "sales_logs")])
+        end
       end
     end
 
@@ -166,7 +209,7 @@ RSpec.describe "Home Page Features" do
         data_boxes = page.find_all(class: "app-data-box-one-half")
         expect(data_boxes.count).to eq(2)
         expect(data_boxes[0].all("a").map(&:text)).to eq(["6", "Your lettings in progress", "View all lettings"])
-        expect(data_boxes[0].all("a").map { |line| line["href"] }).to eq([lettings_logs_path(status: %i[not_started in_progress], assigned_to: "you", years: [""], owning_organisation_select: "all", managing_organisation_select: "all"), lettings_logs_path(status: %i[not_started in_progress], assigned_to: "you", years: [""], owning_organisation_select: "all", managing_organisation_select: "all"), clear_filters_path(filter_type: "lettings_logs")])
+        expect(data_boxes[0].all("a").map { |line| line["href"] }).to eq([lettings_logs_path(status: %i[in_progress], assigned_to: "you", years: %w[2023], owning_organisation_select: "all", managing_organisation_select: "all"), lettings_logs_path(status: %i[in_progress], assigned_to: "you", years: %w[2023], owning_organisation_select: "all", managing_organisation_select: "all"), clear_filters_path(filter_type: "lettings_logs")])
         expect(data_boxes[1].all("a").map(&:text)).to eq(["4", "Your completed lettings", "View all schemes"])
         expect(data_boxes[1].all("a").map { |line| line["href"] }).to eq([lettings_logs_path(status: [:completed], assigned_to: "you", years: [""], owning_organisation_select: "all", managing_organisation_select: "all"), lettings_logs_path(status: [:completed], assigned_to: "you", years: [""], owning_organisation_select: "all", managing_organisation_select: "all"), clear_filters_path(filter_type: "schemes")])
       end
@@ -179,6 +222,7 @@ RSpec.describe "Home Page Features" do
       create_list(:lettings_log, 2, :in_progress, owning_organisation: user.organisation, created_by: user)
       create_list(:lettings_log, 4, :completed, owning_organisation: user.organisation)
       create_list(:lettings_log, 2, :completed)
+      create_list(:lettings_log, 2, :not_started)
       create_list(:scheme, 1, :incomplete, owning_organisation: user.organisation)
       sign_in user
       visit(root_path)
@@ -196,6 +240,7 @@ RSpec.describe "Home Page Features" do
       before do
         create_list(:sales_log, 5, :in_progress, owning_organisation: user.organisation)
         create_list(:sales_log, 3, :completed, owning_organisation: user.organisation)
+        create_list(:sales_log, 2, :not_started)
         visit(root_path)
       end
 
@@ -203,9 +248,9 @@ RSpec.describe "Home Page Features" do
         data_boxes = page.find_all(class: "app-data-box-one-third")
         expect(data_boxes.count).to eq(3)
         expect(data_boxes[0].all("a").map(&:text)).to eq(["8", "Lettings in progress", "View all lettings"])
-        expect(data_boxes[0].all("a").map { |line| line["href"] }).to eq([lettings_logs_path(status: %i[not_started in_progress], assigned_to: "all", years: [""], owning_organisation_select: "all", managing_organisation_select: "all"), lettings_logs_path(status: %i[not_started in_progress], assigned_to: "all", years: [""], owning_organisation_select: "all", managing_organisation_select: "all"), clear_filters_path(filter_type: "lettings_logs")])
+        expect(data_boxes[0].all("a").map { |line| line["href"] }).to eq([lettings_logs_path(status: %i[in_progress], assigned_to: "all", years: %w[2023], owning_organisation_select: "all", managing_organisation_select: "all"), lettings_logs_path(status: %i[in_progress], assigned_to: "all", years: %w[2023], owning_organisation_select: "all", managing_organisation_select: "all"), clear_filters_path(filter_type: "lettings_logs")])
         expect(data_boxes[1].all("a").map(&:text)).to eq(["5", "Sales in progress", "View all sales"])
-        expect(data_boxes[1].all("a").map { |line| line["href"] }).to eq([sales_logs_path(status: %i[not_started in_progress], assigned_to: "all", years: [""], owning_organisation_select: "all", managing_organisation_select: "all"), sales_logs_path(status: %i[not_started in_progress], assigned_to: "all", years: [""], owning_organisation_select: "all", managing_organisation_select: "all"), clear_filters_path(filter_type: "sales_logs")])
+        expect(data_boxes[1].all("a").map { |line| line["href"] }).to eq([sales_logs_path(status: %i[in_progress], assigned_to: "all", years: %w[2023], owning_organisation_select: "all", managing_organisation_select: "all"), sales_logs_path(status: %i[in_progress], assigned_to: "all", years: %w[2023], owning_organisation_select: "all", managing_organisation_select: "all"), clear_filters_path(filter_type: "sales_logs")])
         expect(data_boxes[2].all("a").map(&:text)).to eq(["1", "Incomplete schemes", "View all schemes"])
         expect(data_boxes[2].all("a").map { |line| line["href"] }).to eq([schemes_path(status: [:incomplete], owning_organisation_select: "all"), schemes_path(status: [:incomplete], owning_organisation_select: "all"), clear_filters_path(filter_type: "schemes")])
       end
@@ -220,7 +265,7 @@ RSpec.describe "Home Page Features" do
         data_boxes = page.find_all(class: "app-data-box-one-half")
         expect(data_boxes.count).to eq(2)
         expect(data_boxes[0].all("a").map(&:text)).to eq(["8", "Lettings in progress", "View all lettings"])
-        expect(data_boxes[0].all("a").map { |line| line["href"] }).to eq([lettings_logs_path(status: %i[not_started in_progress], assigned_to: "all", years: [""], owning_organisation_select: "all", managing_organisation_select: "all"), lettings_logs_path(status: %i[not_started in_progress], assigned_to: "all", years: [""], owning_organisation_select: "all", managing_organisation_select: "all"), clear_filters_path(filter_type: "lettings_logs")])
+        expect(data_boxes[0].all("a").map { |line| line["href"] }).to eq([lettings_logs_path(status: %i[in_progress], assigned_to: "all", years: %w[2023], owning_organisation_select: "all", managing_organisation_select: "all"), lettings_logs_path(status: %i[in_progress], assigned_to: "all", years: %w[2023], owning_organisation_select: "all", managing_organisation_select: "all"), clear_filters_path(filter_type: "lettings_logs")])
         expect(data_boxes[1].all("a").map(&:text)).to eq(["1", "Incomplete schemes", "View all schemes"])
         expect(data_boxes[1].all("a").map { |line| line["href"] }).to eq([schemes_path(status: [:incomplete], owning_organisation_select: "all"), schemes_path(status: [:incomplete], owning_organisation_select: "all"), clear_filters_path(filter_type: "schemes")])
       end
@@ -237,8 +282,10 @@ RSpec.describe "Home Page Features" do
     before do
       create_list(:lettings_log, 2, :in_progress)
       create_list(:lettings_log, 1, :completed)
+      create_list(:lettings_log, 2, :not_started)
       create_list(:sales_log, 3, :in_progress)
       create_list(:sales_log, 1, :completed)
+      create_list(:sales_log, 2, :not_started)
       create_list(:scheme, 1, :incomplete)
       completed_scheme = create(:scheme)
       create(:location, scheme: completed_scheme)
@@ -266,9 +313,9 @@ RSpec.describe "Home Page Features" do
       data_boxes = page.find_all(class: "app-data-box-one-third")
       expect(data_boxes.count).to eq(3)
       expect(data_boxes[0].all("a").map(&:text)).to eq(["2", "Lettings in progress", "View all lettings"])
-      expect(data_boxes[0].all("a").map { |line| line["href"] }).to eq([lettings_logs_path(status: %i[not_started in_progress], assigned_to: "all", years: [""], owning_organisation_select: "all", managing_organisation_select: "all"), lettings_logs_path(status: %i[not_started in_progress], assigned_to: "all", years: [""], owning_organisation_select: "all", managing_organisation_select: "all"), clear_filters_path(filter_type: "lettings_logs")])
+      expect(data_boxes[0].all("a").map { |line| line["href"] }).to eq([lettings_logs_path(status: %i[in_progress], assigned_to: "all", years: %w[2023], owning_organisation_select: "all", managing_organisation_select: "all"), lettings_logs_path(status: %i[in_progress], assigned_to: "all", years: %w[2023], owning_organisation_select: "all", managing_organisation_select: "all"), clear_filters_path(filter_type: "lettings_logs")])
       expect(data_boxes[1].all("a").map(&:text)).to eq(["3", "Sales in progress", "View all sales"])
-      expect(data_boxes[1].all("a").map { |line| line["href"] }).to eq([sales_logs_path(status: %i[not_started in_progress], assigned_to: "all", years: [""], owning_organisation_select: "all", managing_organisation_select: "all"), sales_logs_path(status: %i[not_started in_progress], assigned_to: "all", years: [""], owning_organisation_select: "all", managing_organisation_select: "all"), clear_filters_path(filter_type: "sales_logs")])
+      expect(data_boxes[1].all("a").map { |line| line["href"] }).to eq([sales_logs_path(status: %i[in_progress], assigned_to: "all", years: %w[2023], owning_organisation_select: "all", managing_organisation_select: "all"), sales_logs_path(status: %i[in_progress], assigned_to: "all", years: %w[2023], owning_organisation_select: "all", managing_organisation_select: "all"), clear_filters_path(filter_type: "sales_logs")])
       expect(data_boxes[2].all("a").map(&:text)).to eq(["1", "Incomplete schemes", "View all schemes"])
       expect(data_boxes[2].all("a").map { |line| line["href"] }).to eq([schemes_path(status: [:incomplete], owning_organisation_select: "all"), schemes_path(status: [:incomplete], owning_organisation_select: "all"), clear_filters_path(filter_type: "schemes")])
     end
