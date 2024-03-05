@@ -13,10 +13,12 @@ module ReviewHelper
   def review_breadcrumbs(log)
     if log.collection_closed_for_editing?
       content_for :breadcrumbs, govuk_breadcrumbs(breadcrumbs: {
+        "Home" => root_path,
         breadcrumb_logs_title(log, current_user) => breadcrumb_logs_link(log, current_user),
       })
     else
       content_for :breadcrumbs, govuk_breadcrumbs(breadcrumbs: {
+        "Home" => root_path,
         breadcrumb_logs_title(log, current_user) => breadcrumb_logs_link(log, current_user),
         "Log #{log.id}" => url_for(log),
       })

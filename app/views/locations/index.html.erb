@@ -4,6 +4,7 @@
 
 <% if current_user.support? %>
   <% content_for :breadcrumbs, govuk_breadcrumbs(breadcrumbs: {
+    "Home" => root_path,
     "Schemes (#{@scheme.owning_organisation.name})" => schemes_organisation_path(@scheme.owning_organisation),
     content_for(:title) => scheme_path(@scheme),
   }) %>
