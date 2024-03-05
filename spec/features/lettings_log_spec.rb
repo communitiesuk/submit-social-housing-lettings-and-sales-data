@@ -157,10 +157,13 @@ RSpec.describe "Lettings Log Features" do
       it "has the correct breadcrumbs with the correct links" do
         visit lettings_log_setup_check_answers_path(lettings_log)
         breadcrumbs = page.find_all(".govuk-breadcrumbs__link")
-        expect(breadcrumbs.first.text).to eq "Lettings logs (DLUHC)"
-        expect(breadcrumbs.first[:href]).to eq lettings_logs_organisation_path(lettings_log.owning_organisation)
-        expect(breadcrumbs[1].text).to eq "Log #{lettings_log.id}"
-        expect(breadcrumbs[1][:href]).to eq lettings_log_path(lettings_log)
+        expect(breadcrumbs.length).to eq 3
+        expect(breadcrumbs[0].text).to eq "Home"
+        expect(breadcrumbs[0][:href]).to eq root_path
+        expect(breadcrumbs[1].text).to eq "Lettings logs (DLUHC)"
+        expect(breadcrumbs[1][:href]).to eq lettings_logs_organisation_path(lettings_log.owning_organisation)
+        expect(breadcrumbs[2].text).to eq "Log #{lettings_log.id}"
+        expect(breadcrumbs[2][:href]).to eq lettings_log_path(lettings_log)
       end
     end
 
@@ -170,10 +173,13 @@ RSpec.describe "Lettings Log Features" do
       it "has the correct breadcrumbs with the correct links" do
         visit review_lettings_log_path(lettings_log)
         breadcrumbs = page.find_all(".govuk-breadcrumbs__link")
-        expect(breadcrumbs.first.text).to eq "Lettings logs (DLUHC)"
-        expect(breadcrumbs.first[:href]).to eq lettings_logs_organisation_path(lettings_log.owning_organisation)
-        expect(breadcrumbs[1].text).to eq "Log #{lettings_log.id}"
-        expect(breadcrumbs[1][:href]).to eq lettings_log_path(lettings_log)
+        expect(breadcrumbs.length).to eq 3
+        expect(breadcrumbs[0].text).to eq "Home"
+        expect(breadcrumbs[0][:href]).to eq root_path
+        expect(breadcrumbs[1].text).to eq "Lettings logs (DLUHC)"
+        expect(breadcrumbs[1][:href]).to eq lettings_logs_organisation_path(lettings_log.owning_organisation)
+        expect(breadcrumbs[2].text).to eq "Log #{lettings_log.id}"
+        expect(breadcrumbs[2][:href]).to eq lettings_log_path(lettings_log)
       end
     end
 

@@ -2,7 +2,7 @@
 <% content_for :breadcrumbs, govuk_breadcrumbs(breadcrumbs: {
   "Home" => root_path,
   breadcrumb_logs_title(@log, current_user) => breadcrumb_logs_link(@log, current_user),
-  "Log #{@log.id}" => url_for(@log)
+  "Log #{@log.id}" => url_for(@log),
 }) %>
 
 <div class="govuk-grid-row">
