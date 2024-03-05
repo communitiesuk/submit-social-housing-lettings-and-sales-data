@@ -965,15 +965,25 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
       end
     end
 
-    describe "#field_66 - 70" do # buyers organisations
-      context "when all nil" do
-        let(:attributes) { setup_section_params.merge(field_66: nil, field_67: nil, field_68: nil, field_69: nil) }
+    describe "#field_66 - 69" do # buyers organisations
+      let(:empty_organisation_params) { setup_section_params.merge(field_66: nil, field_67: nil, field_68: nil, field_69: nil) }
 
-        it "returns correct errors" do
-          expect(parser.errors[:field_66]).to be_present
-          expect(parser.errors[:field_67]).to be_present
-          expect(parser.errors[:field_68]).to be_present
-          expect(parser.errors[:field_69]).to be_present
+      context "when all empty" do
+        let(:attributes) { empty_organisation_params }
+
+        it "sets pregblank field" do
+          expect(parser.log.pregblank).to be(1)
+        end
+      end
+
+      %i[field_66 field_67 field_68 field_69].each do |field_number|
+        context "when #{field_number} present" do
+          let(:attributes) { empty_organisation_params.merge({ field_number => 1 }) }
+
+          it "does not set pregblank field" do
+            attributes[:field_number] = 1
+            expect(parser.log.pregblank).to be(0)
+          end
         end
       end
     end

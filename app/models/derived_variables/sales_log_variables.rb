@@ -4,6 +4,7 @@ module DerivedVariables::SalesLogVariables
   def set_derived_fields!
     reset_invalidated_derived_values!(DEPENDENCIES)
 
+    self.pregblank = 1 if no_buyer_organisation?
     self.ethnic = 17 if ethnic_refused?
     self.mscharge = nil if no_monthly_leasehold_charges?
     if exdate.present?

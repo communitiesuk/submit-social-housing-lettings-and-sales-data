@@ -69,6 +69,7 @@ RSpec.describe SalesLog, type: :model do
         expect(sales_log.optional_fields).to eq(%w[
           purchid
           othtype
+          buyers_organisations
           proplen
           mortlen
           frombeds
@@ -83,6 +84,7 @@ RSpec.describe SalesLog, type: :model do
         expect(sales_log.optional_fields).to eq(%w[
           purchid
           othtype
+          buyers_organisations
           address_line2
           county
           postcode_full
@@ -594,6 +596,23 @@ RSpec.describe SalesLog, type: :model do
         expect { sales_log.update!(nationality_all_buyer2_group: 12) }.not_to change(sales_log, :nationality_all_buyer2)
         expect { sales_log.update!(nationality_all_group: nil) }.not_to change(sales_log, :nationality_all)
         expect { sales_log.update!(nationality_all_buyer2_group: nil) }.not_to change(sales_log, :nationality_all_buyer2)
+      end
+    end
+
+    it "sets pregblank field when no buyer organisation is selected" do
+      expect {
+        sales_log.update!(pregyrha: 0,
+                          pregla: 0,
+                          pregghb: 0,
+                          pregother: 0)
+      }.to change(sales_log, :pregblank).to 1
+    end
+
+    %i[pregyrha pregla pregghb pregother].each do |field|
+      it "does not set pregblank field when #{field} is selected" do
+        expect {
+          sales_log.update!({ field => 1 })
+        }.not_to change(sales_log, :pregblank)
       end
     end
   end
