@@ -69,6 +69,7 @@ RSpec.describe SalesLog, type: :model do
         expect(sales_log.optional_fields).to eq(%w[
           purchid
           othtype
+          buyers_organisations
           proplen
           mortlen
           frombeds
@@ -83,6 +84,7 @@ RSpec.describe SalesLog, type: :model do
         expect(sales_log.optional_fields).to eq(%w[
           purchid
           othtype
+          buyers_organisations
           address_line2
           county
           postcode_full
