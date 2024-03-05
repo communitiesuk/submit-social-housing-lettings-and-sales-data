@@ -517,5 +517,14 @@ RSpec.describe User, type: :model do
 
       expect(user.status).to eq(:active)
     end
+
+    context "when the user is deleted" do
+      let(:user) { create(:user, discarded_at: Time.zone.yesterday) }
+
+      it "returns the status of the user" do
+        user.destroy!
+        expect(user.status).to eq(:deleted)
+      end
+    end
   end
 end
