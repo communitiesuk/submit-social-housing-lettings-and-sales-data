@@ -68,7 +68,7 @@ class Log < ApplicationRecord
 
       self.uprn_known = 1
       self.uprn_confirmed = nil unless skip_update_uprn_confirmed
-      self.address_selection = nil
+      self.address_selection = nil # unless skip_update_address_confirmed
       self.address_line1 = presenter.address_line1
       self.address_line2 = presenter.address_line2
       self.town_or_city = presenter.town_or_city
@@ -90,7 +90,7 @@ class Log < ApplicationRecord
         presenter = AddressDataPresenter.new(service.result[address_selection])
 
         self.uprn_known = 1
-        self.uprn_confirmed = 1
+        self.uprn_confirmed = nil # unless skip_update_uprn_confirmed
         self.address_selection = nil # unless skip_update_address_confirmed
         self.uprn = presenter.uprn # skip process uprn change?
         self.address_line1 = presenter.address_line1
