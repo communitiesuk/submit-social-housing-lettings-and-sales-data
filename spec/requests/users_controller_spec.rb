@@ -600,6 +600,10 @@ RSpec.describe UsersController, type: :request do
           it "does not allow resending invitation emails" do
             expect(page).not_to have_button("Resend invite link")
           end
+
+          it "does not allow deleting the the user" do
+            expect(page).not_to have_link("Delete this user", href: "/users/#{user.id}/delete-confirmation")
+          end
         end
       end
 
@@ -1432,6 +1436,10 @@ RSpec.describe UsersController, type: :request do
             expect(page).to have_link("Deactivate user", href: "/users/#{other_user.id}/deactivate")
           end
 
+          it "does not alow deleting the the user" do
+            expect(page).not_to have_link("Delete this user", href: "/users/#{other_user.id}/delete-confirmation")
+          end
+
           context "when user never logged in" do
             before do
               other_user.update!(last_sign_in_at: nil)
@@ -1463,6 +1471,10 @@ RSpec.describe UsersController, type: :request do
             it "allows you to resend invitation emails" do
               expect(page).to have_button("Resend invite link")
             end
+
+            it "does not allow deleting the the user" do
+              expect(page).not_to have_link("Delete this user", href: "/users/#{other_user.id}/delete-confirmation")
+            end
           end
 
           context "when user is deactivated" do
@@ -1477,6 +1489,10 @@ RSpec.describe UsersController, type: :request do
 
             it "allows reactivating the user" do
               expect(page).to have_link("Reactivate user", href: "/users/#{other_user.id}/reactivate")
+            end
+
+            it "allows deleting the the user" do
+              expect(page).to have_link("Delete this user", href: "/users/#{other_user.id}/delete-confirmation")
             end
           end
         end
@@ -2032,7 +2048,7 @@ RSpec.describe UsersController, type: :request do
     end
 
     describe "#delete" do
-      let(:other_user) { create(:user, name: "User to be deleted") }
+      let(:other_user) { create(:user, name: "User to be deleted", active: false) }
 
       before do
         delete "/users/#{other_user.id}/delete"

@@ -39,6 +39,6 @@ class UserPolicy
   end
 
   def delete?
-    current_user.support?
+    current_user.support? && user.status == :deactivated
   end
 end
