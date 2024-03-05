@@ -3,7 +3,6 @@
 <% if current_user.support? %>
   <% content_for :breadcrumbs, govuk_breadcrumbs(breadcrumbs: {
     "Users (#{@user.organisation.name})" => users_organisation_path(@user.organisation),
-    content_for(:title) => "",
   }) %>
 <% else %>
   <% content_for :before_content do %>

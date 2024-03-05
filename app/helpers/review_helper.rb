@@ -11,17 +11,14 @@ module ReviewHelper
   end
 
   def review_breadcrumbs(log)
-    class_name = log.class.model_name.human.downcase
     if log.collection_closed_for_editing?
       content_for :breadcrumbs, govuk_breadcrumbs(breadcrumbs: {
         breadcrumb_logs_title(log, current_user) => breadcrumb_logs_link(log, current_user),
-        "Log #{log.id}" => "",
       })
     else
       content_for :breadcrumbs, govuk_breadcrumbs(breadcrumbs: {
         breadcrumb_logs_title(log, current_user) => breadcrumb_logs_link(log, current_user),
         "Log #{log.id}" => url_for(log),
-        "Review #{class_name}" => "",
       })
     end
   end

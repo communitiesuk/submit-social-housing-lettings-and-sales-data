@@ -1,7 +1,6 @@
 <% content_for :title, "Log #{@log.id}" %>
 <% content_for :breadcrumbs, govuk_breadcrumbs(breadcrumbs: {
-  breadcrumb_logs_title(@log, current_user) => breadcrumb_logs_link(@log, current_user),
-  content_for(:title) => "",
+  breadcrumb_logs_title(@log, current_user) => breadcrumb_logs_link(@log, current_user)
 }) %>
 
 <div class="govuk-grid-row">
