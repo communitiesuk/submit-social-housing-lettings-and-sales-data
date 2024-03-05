@@ -60,6 +60,17 @@ RSpec.describe Form::Lettings::Questions::CreatedById, type: :model do
       it "only displays users that belong to owning and managing organisations" do
         expect(question.displayed_answer_options(lettings_log, support_user)).to eq(expected_option_for_users(managing_org_user.organisation.users + owning_org_user.organisation.users))
       end
+
+      context "when organisation has deleted users" do
+        before do
+          create(:user, name: "Deleted user", discarded_at: Time.zone.yesterday, organisation: owning_org_user.organisation)
+          create(:user, name: "Deleted managing user", discarded_at: Time.zone.yesterday, organisation: managing_org_user.organisation)
+        end
+
+        it "does not display deleted users" do
+          expect(question.displayed_answer_options(lettings_log, support_user)).to eq(expected_option_for_users(managing_org_user.organisation.users.visible + owning_org_user.organisation.users.visible))
+        end
+      end
     end
   end
 
@@ -76,6 +87,16 @@ RSpec.describe Form::Lettings::Questions::CreatedById, type: :model do
 
       it "only displays users that belong user's org" do
         expect(question.displayed_answer_options(lettings_log, data_coordinator)).to eq(expected_option_for_users(data_coordinator.organisation.users))
+      end
+
+      context "when organisation has deleted users" do
+        before do
+          create(:user, name: "Deleted user", discarded_at: Time.zone.yesterday, organisation: data_coordinator.organisation)
+        end
+
+        it "does not display deleted users" do
+          expect(question.displayed_answer_options(lettings_log, data_coordinator)).to eq(expected_option_for_users(data_coordinator.organisation.users.visible))
+        end
       end
     end
   end

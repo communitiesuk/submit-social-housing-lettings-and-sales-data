@@ -57,6 +57,16 @@ RSpec.describe Form::Sales::Questions::CreatedById, type: :model do
       it "only displays users that belong to the managing organisation" do
         expect(question.displayed_answer_options(sales_log, support_user)).to eq(expected_option_for_users(owning_org_user.organisation.users))
       end
+
+      context "when organisation has deleted users" do
+        before do
+          create(:user, name: "Deleted user", discarded_at: Time.zone.yesterday, organisation: owning_org_user.organisation)
+        end
+
+        it "does not display deleted users" do
+          expect(question.displayed_answer_options(sales_log, support_user)).to eq(expected_option_for_users(owning_org_user.organisation.users.visible))
+        end
+      end
     end
   end
 
@@ -77,6 +87,16 @@ RSpec.describe Form::Sales::Questions::CreatedById, type: :model do
 
       it "only displays users that belong to managing organisation" do
         expect(question.displayed_answer_options(sales_log, data_coordinator)).to eq(expected_option_for_users(owning_org_user.organisation.users))
+      end
+
+      context "when organisation has deleted users" do
+        before do
+          create(:user, name: "Deleted user", discarded_at: Time.zone.yesterday, organisation: owning_org_user.organisation)
+        end
+
+        it "does not display deleted users" do
+          expect(question.displayed_answer_options(sales_log, data_coordinator)).to eq(expected_option_for_users(owning_org_user.organisation.users.visible))
+        end
       end
     end
   end
