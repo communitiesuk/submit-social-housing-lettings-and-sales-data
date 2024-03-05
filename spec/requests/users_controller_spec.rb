@@ -110,6 +110,13 @@ RSpec.describe UsersController, type: :request do
         expect(response).to redirect_to("/account/sign-in")
       end
     end
+
+    describe "#delete" do
+      it "redirects to the sign in page" do
+        delete "/users/#{user.id}/delete"
+        expect(response).to redirect_to("/account/sign-in")
+      end
+    end
   end
 
   context "when user is signed in as a data provider" do
@@ -394,6 +401,18 @@ RSpec.describe UsersController, type: :request do
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
         sign_in user
         get "/users/#{user.id}/delete-confirmation"
+      end
+
+      it "returns 401 unauthorized" do
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    describe "#delete" do
+      before do
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in user
+        delete "/users/#{user.id}/delete"
       end
 
       it "returns 401 unauthorized" do
@@ -1187,6 +1206,18 @@ RSpec.describe UsersController, type: :request do
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
         sign_in user
         get "/users/#{user.id}/delete-confirmation"
+      end
+
+      it "returns 401 unauthorized" do
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    describe "#delete" do
+      before do
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in user
+        delete "/users/#{user.id}/delete"
       end
 
       it "returns 401 unauthorized" do
@@ -2082,6 +2113,35 @@ RSpec.describe UsersController, type: :request do
 
       it "shows cancel link that links back to the user page" do
         expect(page).to have_link(text: "Cancel", href: user_path(other_user))
+      end
+    end
+
+    describe "#delete" do
+      let(:other_user) { create(:user, name: "User to be deleted") }
+
+      before do
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in user
+        delete "/users/#{other_user.id}/delete"
+      end
+
+      it "deletes the user" do
+        other_user.reload
+        expect(other_user.status).to eq(:deleted)
+        expect(other_user.discarded_at).not_to be nil
+      end
+
+      it "redirects to the users list and displays a notice that the user has been deleted" do
+        expect(response).to redirect_to users_organisation_path(other_user.organisation)
+        follow_redirect!
+        expect(page).to have_selector(".govuk-notification-banner--success")
+        expect(page).to have_selector(".govuk-notification-banner--success", text: "User to be deleted has been deleted.")
+      end
+
+      it "does not display the deleted user" do
+        expect(response).to redirect_to users_organisation_path(other_user.organisation)
+        follow_redirect!
+        expect(page).not_to have_link("User to be deleted")
       end
     end
   end

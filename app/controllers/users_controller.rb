@@ -13,7 +13,7 @@ class UsersController < ApplicationController
   def index
     redirect_to users_organisation_path(current_user.organisation) unless current_user.support?
 
-    all_users = User.sorted_by_organisation_and_role
+    all_users = User.visible.sorted_by_organisation_and_role
     filtered_users = filter_manager.filtered_users(all_users, search_term, session_filters)
     @pagy, @users = pagy(filtered_users)
     @searched = search_term.presence
@@ -128,6 +128,8 @@ class UsersController < ApplicationController
 
   def delete
     authorize @user
+    @user.discard!
+    redirect_to users_organisation_path(@user.organisation), notice: I18n.t("notification.user_deleted", name: @user.name)
   end
 
 private
