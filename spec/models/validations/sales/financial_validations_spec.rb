@@ -184,11 +184,20 @@ RSpec.describe Validations::Sales::FinancialValidations do
       expect(record.errors).to be_empty
     end
 
-    it "adds an error to stairowned and not stairbought if the percentage bought is more than the percentage owned" do
+    it "adds an error to stairowned and not stairbought if the percentage bought is more than the percentage owned for joint purchase" do
       record.stairbought = 50
       record.stairowned = 40
+      record.jointpur = 1
       financial_validator.validate_percentage_bought_not_greater_than_percentage_owned(record)
-      expect(record.errors["stairowned"]).to include(match I18n.t("validations.financial.staircasing.percentage_bought_must_be_greater_than_percentage_owned"))
+      expect(record.errors["stairowned"]).to include("Total percentage buyers now own must be more than percentage bought in this transaction")
+    end
+
+    it "adds an error to stairowned and not stairbought if the percentage bought is more than the percentage owned for non joint purchase" do
+      record.stairbought = 50
+      record.stairowned = 40
+      record.jointpur = 2
+      financial_validator.validate_percentage_bought_not_greater_than_percentage_owned(record)
+      expect(record.errors["stairowned"]).to include("Total percentage buyer now owns must be more than percentage bought in this transaction")
     end
   end
 
@@ -625,10 +634,22 @@ RSpec.describe Validations::Sales::FinancialValidations do
     context "with a log in 24/25 collection year" do
       let(:now) { Time.zone.local(2024, 4, 1) }
 
-      it "adds errors if equity is more than stairowned - stairbought" do
+      it "adds errors if equity is more than stairowned - stairbought for joint purchase" do
         record.stairbought = 2
         record.stairowned = 3
         record.equity = 2
+        record.jointpur = 1
+        financial_validator.validate_equity_less_than_staircase_difference(record)
+        expect(record.errors["equity"]).to include("The initial equity stake is 2% and the percentage owned in total minus the percentage bought is 1%. In a staircasing transaction, the equity stake purchased cannot be larger than the percentage the buyers own minus the percentage bought.")
+        expect(record.errors["stairowned"]).to include("The initial equity stake is 2% and the percentage owned in total minus the percentage bought is 1%. In a staircasing transaction, the equity stake purchased cannot be larger than the percentage the buyers own minus the percentage bought.")
+        expect(record.errors["stairbought"]).to include("The initial equity stake is 2% and the percentage owned in total minus the percentage bought is 1%. In a staircasing transaction, the equity stake purchased cannot be larger than the percentage the buyers own minus the percentage bought.")
+      end
+
+      it "adds errors if equity is more than stairowned - stairbought for non joint purchase" do
+        record.stairbought = 2
+        record.stairowned = 3
+        record.equity = 2
+        record.jointpur = 2
         financial_validator.validate_equity_less_than_staircase_difference(record)
         expect(record.errors["equity"]).to include("The initial equity stake is 2% and the percentage owned in total minus the percentage bought is 1%. In a staircasing transaction, the equity stake purchased cannot be larger than the percentage the buyer owns minus the percentage bought.")
         expect(record.errors["stairowned"]).to include("The initial equity stake is 2% and the percentage owned in total minus the percentage bought is 1%. In a staircasing transaction, the equity stake purchased cannot be larger than the percentage the buyer owns minus the percentage bought.")

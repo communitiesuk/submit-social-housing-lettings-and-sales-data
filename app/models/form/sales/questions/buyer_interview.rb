@@ -1,11 +1,11 @@
 class Form::Sales::Questions::BuyerInterview < ::Form::Question
-  def initialize(id, hsh, page)
-    super
+  def initialize(id, hsh, page, joint_purchase:)
+    super(id, hsh, page)
     @id = "noint"
-    @check_answer_label = "Buyer interviewed in person?"
-    @header = "Was the buyer interviewed for any of the answers you will provide on this log?"
+    @check_answer_label = "#{joint_purchase ? 'Buyers' : 'Buyer'} interviewed in person?"
+    @header = "#{joint_purchase ? 'Were the buyers' : 'Was the buyer'} interviewed for any of the answers you will provide on this log?"
     @type = "radio"
-    @hint_text = "You should still try to answer all questions even if the buyer wasn't interviewed in person"
+    @hint_text = "You should still try to answer all questions even if the #{joint_purchase ? 'buyers weren’t' : 'buyer wasn’t'} interviewed in person"
     @answer_options = ANSWER_OPTIONS
     @question_number = 18
   end

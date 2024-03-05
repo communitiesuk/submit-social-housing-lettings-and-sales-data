@@ -1,9 +1,9 @@
 require "rails_helper"
 
 RSpec.describe Form::Sales::Pages::BuyerInterview, type: :model do
-  subject(:page) { described_class.new(page_id, page_definition, subsection) }
+  subject(:page) { described_class.new(page_id, page_definition, subsection, joint_purchase: false) }
 
-  let(:page_id) { nil }
+  let(:page_id) { "buyer_interview" }
   let(:page_definition) { nil }
   let(:subsection) { instance_double(Form::Subsection) }
 

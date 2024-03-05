@@ -8,7 +8,8 @@ class Form::Sales::Subsections::DiscountedOwnershipScheme < ::Form::Subsection
 
   def pages
     @pages ||= [
-      Form::Sales::Pages::LivingBeforePurchase.new("living_before_purchase_discounted_ownership", nil, self, ownershipsch: 2),
+      Form::Sales::Pages::LivingBeforePurchase.new("living_before_purchase_discounted_ownership_joint_purchase", nil, self, ownershipsch: 2, joint_purchase: true),
+      Form::Sales::Pages::LivingBeforePurchase.new("living_before_purchase_discounted_ownership", nil, self, ownershipsch: 2, joint_purchase: false),
       Form::Sales::Pages::AboutPriceRtb.new(nil, nil, self),
       Form::Sales::Pages::ExtraBorrowingValueCheck.new("extra_borrowing_price_value_check", nil, self),
       Form::Sales::Pages::PercentageDiscountValueCheck.new("percentage_discount_value_check", nil, self),
@@ -33,7 +34,8 @@ class Form::Sales::Subsections::DiscountedOwnershipScheme < ::Form::Subsection
       Form::Sales::Pages::ExtraBorrowingValueCheck.new("extra_borrowing_value_check", nil, self),
       Form::Sales::Pages::AboutDepositWithoutDiscount.new("about_deposit_discounted_ownership", nil, self, ownershipsch: 2, optional: false),
       Form::Sales::Pages::ExtraBorrowingValueCheck.new("extra_borrowing_deposit_value_check", nil, self),
-      Form::Sales::Pages::DepositValueCheck.new("discounted_ownership_deposit_value_check", nil, self),
+      Form::Sales::Pages::DepositValueCheck.new("discounted_ownership_deposit_joint_purchase_value_check", nil, self, joint_purchase: true),
+      Form::Sales::Pages::DepositValueCheck.new("discounted_ownership_deposit_value_check", nil, self, joint_purchase: false),
       Form::Sales::Pages::DepositAndMortgageValueCheck.new("discounted_ownership_deposit_and_mortgage_value_check_after_deposit", nil, self),
       Form::Sales::Pages::DiscountedSaleValueCheck.new("discounted_sale_deposit_value_check", nil, self),
       Form::Sales::Pages::LeaseholdCharges.new("leasehold_charges_discounted_ownership", nil, self, ownershipsch: 2),
