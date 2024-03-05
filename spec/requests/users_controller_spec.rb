@@ -2015,6 +2015,8 @@ RSpec.describe UsersController, type: :request do
     end
 
     describe "#delete-confirmation" do
+      let(:other_user) { create(:user, active: false) }
+
       before do
         get "/users/#{other_user.id}/delete-confirmation"
       end
