@@ -1,0 +1,25 @@
+<% title = "#{action.humanize} #{@organisation.name}" %>
+<% content_for :title, title %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link(
+        href: organisation_path(@organisation),
+      ) %>
+<% end %>
+
+<%= form_for(@organisation, as: :organisation, html: { method: :patch }) do |f| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l"><%= @organisation.name %></span>
+        Are you sure you want to <%= action %> this organisation?
+      </h1>
+      <%= govuk_warning_text text: I18n.t("warnings.organisation.#{action}") %>
+
+      <% active_value = action != "deactivate" %>
+      <%= f.hidden_field :active, value: active_value %>
+
+      <%= f.govuk_submit "#{action.capitalize} this organisation" %>
+    </div>
+  </div>
+<% end %>

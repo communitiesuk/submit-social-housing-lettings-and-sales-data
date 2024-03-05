@@ -31,7 +31,7 @@
 
       <% if current_user.support? %>
         <% null_option = [OpenStruct.new(id: "", name: "Select an option")] %>
-        <% organisations = Organisation.all.map { |org| OpenStruct.new(id: org.id, name: org.name) } %>
+        <% organisations = Organisation.filter_by_active.map { |org| OpenStruct.new(id: org.id, name: org.name) } %>
         <% answer_options = null_option + organisations %>
 
         <% if @organisation_id %>

@@ -14,7 +14,7 @@ class OrganisationRelationshipsController < ApplicationController
   ]
 
   def stock_owners
-    stock_owners = organisation.stock_owners
+    stock_owners = organisation.stock_owners.filter_by_active
     unpaginated_filtered_stock_owners = filtered_collection(stock_owners, search_term)
 
     @pagy, @stock_owners = pagy(unpaginated_filtered_stock_owners)
@@ -23,7 +23,7 @@ class OrganisationRelationshipsController < ApplicationController
   end
 
   def managing_agents
-    managing_agents = organisation.managing_agents
+    managing_agents = organisation.managing_agents.filter_by_active
     unpaginated_filtered_managing_agents = filtered_collection(managing_agents, search_term)
 
     @pagy, @managing_agents = pagy(unpaginated_filtered_managing_agents)
@@ -48,7 +48,7 @@ class OrganisationRelationshipsController < ApplicationController
       flash[:notice] = "#{@organisation_relationship.parent_organisation.name} is now one of #{current_user.data_coordinator? ? 'your' : "this organisation's"} stock owners"
       redirect_to stock_owners_organisation_path
     else
-      @organisations = Organisation.where.not(id: organisation.id).pluck(:id, :name)
+      @organisations = Organisation.filter_by_active.where.not(id: organisation.id).pluck(:id, :name)
       render "organisation_relationships/add_stock_owner", status: :unprocessable_entity
     end
   end
@@ -60,7 +60,7 @@ class OrganisationRelationshipsController < ApplicationController
       flash[:notice] = "#{@organisation_relationship.child_organisation.name} is now one of #{current_user.data_coordinator? ? 'your' : "this organisation's"} managing agents"
       redirect_to managing_agents_organisation_path
     else
-      @organisations = Organisation.where.not(id: organisation.id).pluck(:id, :name)
+      @organisations = Organisation.filter_by_active.where.not(id: organisation.id).pluck(:id, :name)
       render "organisation_relationships/add_managing_agent", status: :unprocessable_entity
     end
   end
@@ -110,7 +110,7 @@ private
   end
 
   def organisations
-    @organisations ||= Organisation.where.not(id: organisation.id).pluck(:id, :name)
+    @organisations ||= Organisation.filter_by_active.where.not(id: organisation.id).pluck(:id, :name)
   end
 
   def parent_organisation
