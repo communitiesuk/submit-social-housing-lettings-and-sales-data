@@ -55,6 +55,8 @@ class Log < ApplicationRecord
 
   attr_accessor :skip_update_status, :skip_update_uprn_confirmed, :skip_update_address_selection, :skip_dpo_validation
 
+  delegate :present?, to: :address_options, prefix: true
+
   def process_uprn_change!
     if uprn.present?
       service = UprnClient.new(uprn)
@@ -109,6 +111,8 @@ class Log < ApplicationRecord
   end
 
   def address_options
+    return @address_options if @address_options
+
     if [address_line1_input, postcode_full_input].all?(&:present?)
       address_string = "#{address_line1_input}, , , #{postcode_full_input}"
       service = AddressClient.new(address_string)
@@ -116,13 +120,13 @@ class Log < ApplicationRecord
 
       return errors.add(:address_selection, :address_error, message: service.error) if service.error.present?
 
-      address_options = []
+      address_opts = []
       service.result.first(10).each do |result|
         presenter = AddressDataPresenter.new(result)
-        address_options.append(presenter.address)
+        address_opts.append(presenter.address)
       end
 
-      address_options
+      @address_options = address_opts
     end
   end
 
