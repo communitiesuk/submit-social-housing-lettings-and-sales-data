@@ -142,7 +142,8 @@ class Location < ApplicationRecord
   def status_at(date)
     return :deleted if discarded_at.present?
     return :incomplete unless confirmed
-    return :deactivated if open_deactivation&.deactivation_date.present? && date >= open_deactivation.deactivation_date
+    return :deactivated if scheme.owning_organisation.status_at(date) == :deactivated ||
+      open_deactivation&.deactivation_date.present? && date >= open_deactivation.deactivation_date
     return :deactivating_soon if open_deactivation&.deactivation_date.present? && date < open_deactivation.deactivation_date
     return :reactivating_soon if last_deactivation_before(date)&.reactivation_date.present? && date < last_deactivation_before(date).reactivation_date
     return :activating_soon if startdate.present? && date < startdate

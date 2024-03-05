@@ -31,11 +31,11 @@ class Form::Sales::Questions::ManagingOrganisation < ::Form::Question
     end
 
     orgs = if user.support?
-             log.owning_organisation.managing_agents
+             log.owning_organisation.managing_agents.filter_by_active
            elsif user.organisation.absorbed_organisations.include?(log.owning_organisation)
-             user.organisation.managing_agents + log.owning_organisation.managing_agents
+             user.organisation.managing_agents.filter_by_active + log.owning_organisation.managing_agents.filter_by_active
            else
-             user.organisation.managing_agents
+             user.organisation.managing_agents.filter_by_active
            end.pluck(:id, :name).to_h
 
     user.organisation.absorbed_organisations.each do |absorbed_org|

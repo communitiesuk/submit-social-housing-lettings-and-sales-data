@@ -94,10 +94,40 @@ class OrganisationsController < ApplicationController
     end
   end
 
+  def deactivate
+    authorize @organisation
+
+    render "toggle_active", locals: { action: "deactivate" }
+  end
+
+  def reactivate
+    authorize @organisation
+
+    render "toggle_active", locals: { action: "reactivate" }
+  end
+
   def update
-    if current_user.data_coordinator? || current_user.support?
+    if (current_user.data_coordinator? && org_params[:active].nil?) || current_user.support?
       if @organisation.update(org_params)
-        flash[:notice] = I18n.t("organisation.updated")
+        if org_params[:active] == "false"
+          @organisation.users.filter_by_active
+                       .update_all(
+                         active: false,
+                         confirmed_at: nil,
+                         sign_in_count: 0,
+                         initial_confirmation_sent: false,
+                         reactivate_with_organisation: true)
+          flash[:notice] = I18n.t("organisation.deactivated", organisation: @organisation.name)
+        elsif org_params[:active] == "true"
+          users_to_reactivate = @organisation.users.where(reactivate_with_organisation: true)
+          users_to_reactivate.each do |user|
+            user.update(active: true, reactivate_with_organisation: false)
+            user.send_confirmation_instructions
+          end
+          flash[:notice] = I18n.t("organisation.reactivated", organisation: @organisation.name)
+        else
+          flash[:notice] = I18n.t("organisation.updated")
+        end
         redirect_to details_organisation_path(@organisation)
       end
     else
@@ -239,7 +269,7 @@ private
   end
 
   def org_params
-    params.require(:organisation).permit(:name, :address_line1, :address_line2, :postcode, :phone, :holds_own_stock, :provider_type, :housing_registration_no)
+    params.require(:organisation).permit(:name, :address_line1, :address_line2, :postcode, :phone, :holds_own_stock, :provider_type, :housing_registration_no, :active)
   end
 
   def codes_only_export?
