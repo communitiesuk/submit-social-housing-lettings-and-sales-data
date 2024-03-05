@@ -90,7 +90,7 @@ class Log < ApplicationRecord
         presenter = AddressDataPresenter.new(service.result[address_selection])
 
         self.uprn_known = 1
-        self.uprn_confirmed = nil # unless skip_update_uprn_confirmed
+        self.uprn_confirmed = 1 # unless skip_update_uprn_confirmed
         self.address_selection = nil # unless skip_update_address_confirmed
         self.uprn = presenter.uprn # skip process uprn change?
         self.address_line1 = presenter.address_line1
@@ -118,7 +118,7 @@ class Log < ApplicationRecord
       service = AddressClient.new(address_string)
       service.call
 
-      return nil if service.error.present?
+      return nil if service.result.blank? || service.error.present?
 
       address_opts = []
       service.result.first(10).each do |result|
