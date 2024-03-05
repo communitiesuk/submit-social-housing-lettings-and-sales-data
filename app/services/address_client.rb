@@ -40,6 +40,7 @@ private
       query: address,
       key: ENV["OS_DATA_KEY"],
       maxresults: 10,
+      minmatch: 0.6,
     }
     uri.query = URI.encode_www_form(params)
     uri.to_s

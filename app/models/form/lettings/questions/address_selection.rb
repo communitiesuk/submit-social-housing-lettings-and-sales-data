@@ -12,7 +12,6 @@ class Form::Lettings::Questions::AddressSelection < ::Form::Question
     answer_opts = { "-1" => { "value" => "The address is not listed, I want to enter the address manually" } }
     return answer_opts unless ActiveRecord::Base.connected?
     return answer_opts unless log&.address_options
-    return answer_opts if log.errors.of_kind?(:address_selection, :address_error)
 
     answer_opts = {}
 

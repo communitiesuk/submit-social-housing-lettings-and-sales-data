@@ -13,7 +13,7 @@ class Form::Lettings::Pages::AddressSelection < ::Form::Page
   end
 
   def routed_to?(log, _current_user = nil)
-    log.uprn_known.present? && log.uprn_known.zero? && log.address_line1_input.present? && log.postcode_full_input.present? && (1..10).cover?(log.address_options.count)
+    log.uprn_known.present? && log.uprn_known.zero? && log.address_line1_input.present? && log.postcode_full_input.present? && (1..10).cover?(log.address_options&.count)
   end
 
   def skip_text
