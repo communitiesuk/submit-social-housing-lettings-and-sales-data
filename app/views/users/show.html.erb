@@ -133,6 +133,9 @@
           </span>
         <% end %>
       <% end %>
+      <% if UserPolicy.new(current_user, @user).delete? %>
+        <%= delete_user_link(@user) %>
+      <% end %>
     </div>
   </div>
 </div>
