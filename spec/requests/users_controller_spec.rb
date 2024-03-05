@@ -646,7 +646,7 @@ RSpec.describe UsersController, type: :request do
             end
 
             it "shows if user is not active" do
-              expect(page).to have_content("Deactivated")
+              assert_select ".govuk-tag", text: /Deactivated/, count: 1
             end
 
             it "allows reactivating the user" do
@@ -1187,7 +1187,7 @@ RSpec.describe UsersController, type: :request do
 
     describe "#index" do
       let!(:other_user) { create(:user, organisation: user.organisation, name: "User 2", email: "other@example.com") }
-      let!(:inactive_user) { create(:user, organisation: user.organisation, active: false, name: "User 3", email: "inactive@example.com") }
+      let!(:inactive_user) { create(:user, organisation: user.organisation, active: false, name: "User 3", email: "inactive@example.com", last_sign_in_at: Time.zone.local(2022, 10, 10)) }
       let!(:other_org_user) { create(:user, name: "User 4", email: "otherorg@otherexample.com", organisation: create(:organisation, :without_dpc)) }
 
       before do
@@ -1201,7 +1201,11 @@ RSpec.describe UsersController, type: :request do
         expect(page).to have_content(other_org_user.name)
       end
 
-      it "shows last logged in as deactivated for inactive users" do
+      it "shows last logged in date for all users" do
+        expect(page).to have_content("10 October 2022")
+      end
+
+      it "shows status tag as deactivated for inactive users" do
         expect(page).to have_content("Deactivated")
       end
 
@@ -1484,7 +1488,7 @@ RSpec.describe UsersController, type: :request do
             end
 
             it "shows if user is not active" do
-              expect(page).to have_content("Deactivated")
+              assert_select ".govuk-tag", text: /Deactivated/, count: 1
             end
 
             it "allows reactivating the user" do
@@ -1493,6 +1497,29 @@ RSpec.describe UsersController, type: :request do
 
             it "allows deleting the the user" do
               expect(page).to have_link("Delete this user", href: "/users/#{other_user.id}/delete-confirmation")
+            end
+
+            it "does not render informative text about deleting the user" do
+              expect(response).to have_http_status(:ok)
+              expect(page).not_to have_content("This user was active in an open or editable collection year, and cannot be deleted.")
+            end
+
+            context "and has associated logs in editable collection period" do
+              before do
+                create(:data_protection_confirmation, organisation: other_user.organisation, confirmed: true)
+                create(:lettings_log, owning_organisation: other_user.organisation, created_by: other_user)
+                get "/users/#{other_user.id}"
+              end
+
+              it "does not render delete this user" do
+                expect(response).to have_http_status(:ok)
+                expect(page).not_to have_link("Delete this user", href: "/users/#{user.id}/delete-confirmation")
+              end
+
+              it "adds informative text about deleting the user" do
+                expect(response).to have_http_status(:ok)
+                expect(page).to have_content("This user was active in an open or editable collection year, and cannot be deleted.")
+              end
             end
           end
         end

@@ -112,11 +112,18 @@
               row.with_action
             end
           end %>
-
+      <%= summary_list.with_row do |row| %>
+          <% row.with_key { "Status" } %>
+          <% row.with_value do %>
+           <%= details_html({ name: "Status", value: status_tag(@user.status), id: "status" }) %>
+            <% if @user.status == :deactivated && current_user.support? && !UserPolicy.new(current_user, @user).delete? %>
+              <span class="app-!-colour-muted">This user was active in an open or editable collection year, and cannot be deleted.</span>
+          <% end %>
+          <% end %>
+        <% end %>
       <%= summary_list.with_row do |row|
-            row.with_key { "Status" }
-            row.with_value { status_tag(@user.status) }
-            row.with_action
+            row.with_key { "Last logged in" }
+            row.with_value { @user.last_sign_in_at&.to_formatted_s(:govuk_date) }
           end %>
     <% end %>
 
