@@ -9,30 +9,20 @@ class Form::Lettings::Questions::AddressSelection < ::Form::Question
   end
 
   def answer_options(log = nil, _user = nil)
-    answer_opts = { "10" => { "value" => "The address is not listed" } }
+    answer_opts = { "-1" => { "value" => "The address is not listed, I want to enter the address manually" } }
     return answer_opts unless ActiveRecord::Base.connected?
-    return answer_opts unless log
-    return answer_opts unless log.address_options
+    return answer_opts unless log&.address_options
+    return answer_opts if log.errors.of_kind?(:address_selection, :address_error)
 
-    values = []
-    log.address_options.each do |option|
-      values.append(option)
+    answer_opts = {}
+
+    (0...[log.address_options.count, 10].min).each do |i|
+      answer_opts[i.to_s] = { "value" => log.address_options[i] }
     end
 
-    {
-      "0" => { "value" => values[0] },
-      "1" => { "value" => values[1] },
-      "2" => { "value" => values[2] },
-      "3" => { "value" => values[3] },
-      "4" => { "value" => values[4] },
-      "5" => { "value" => values[5] },
-      "6" => { "value" => values[6] },
-      "7" => { "value" => values[7] },
-      "8" => { "value" => values[8] },
-      "9" => { "value" => values[9] },
-      "divider" => { "value" => true },
-      "-1" => { "value" => "The address is not listed, I want to enter the address manually" },
-    }.freeze
+    answer_opts["divider"] = { "value" => true }
+    answer_opts["-1"] = { "value" => "The address is not listed, I want to enter the address manually" }
+    answer_opts
   end
 
   def displayed_answer_options(log, user = nil)
@@ -40,6 +30,6 @@ class Form::Lettings::Questions::AddressSelection < ::Form::Question
   end
 
   def hidden_in_check_answers?(log, _current_user = nil)
-    (log.uprn_known == 1 || log.uprn_confirmed == 1)
+    (log.uprn_known == 1 || log.uprn_confirmed == 1) || !(1..10).cover?(log.address_options.count)
   end
 end
