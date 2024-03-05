@@ -600,18 +600,19 @@ RSpec.describe SalesLog, type: :model do
     end
 
     it "sets pregblank field when no buyer organisation is selected" do
-      expect { sales_log.update!(
-        pregyrha: 0,
-        pregla: 0,
-        pregghb: 0,
-        pregother: 0) }
-        .to change(sales_log, :pregblank).to 1
+      expect {
+        sales_log.update!(pregyrha: 0,
+                          pregla: 0,
+                          pregghb: 0,
+                          pregother: 0)
+      }.to change(sales_log, :pregblank).to 1
     end
 
     %i[pregyrha pregla pregghb pregother].each do |field|
       it "does not set pregblank field when #{field} is selected" do
-        expect { sales_log.update!({ field => 1, })}
-          .not_to change(sales_log, :pregblank)
+        expect {
+          sales_log.update!({ field => 1 })
+        }.not_to change(sales_log, :pregblank)
       end
     end
   end
