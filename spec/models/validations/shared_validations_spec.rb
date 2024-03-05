@@ -89,8 +89,9 @@ RSpec.describe Validations::SharedValidations do
 
     it "adds the correct validation text when a question has a min but not a max" do
       sales_log.savings = -10
+      sales_log.jointpur = 1
       shared_validator.validate_numeric_min_max(sales_log)
-      expect(sales_log.errors["savings"]).to include(match I18n.t("validations.numeric.above_min", field: "Buyer’s total savings before any deposit paid", min: "£0"))
+      expect(sales_log.errors["savings"]).to include(match I18n.t("validations.numeric.above_min", field: "Buyers’ total savings before any deposit paid", min: "£0"))
     end
 
     context "when validating percent" do
@@ -138,14 +139,16 @@ RSpec.describe Validations::SharedValidations do
     context "when validating a question with a step of 10" do
       it "adds an error if input is not a multiple of ten" do
         sales_log.savings = 30_005
+        sales_log.jointpur = 1
         shared_validator.validate_numeric_step(sales_log)
-        expect(sales_log.errors[:savings]).to include I18n.t("validations.numeric.nearest_ten", field: "Buyer’s total savings before any deposit paid")
+        expect(sales_log.errors[:savings]).to include I18n.t("validations.numeric.nearest_ten", field: "Buyers’ total savings before any deposit paid")
       end
 
       it "adds an error if the user attempts to input a number in exponent format" do
         sales_log.savings = "3e5"
+        sales_log.jointpur = 1
         shared_validator.validate_numeric_step(sales_log)
-        expect(sales_log.errors[:savings]).to include I18n.t("validations.numeric.nearest_ten", field: "Buyer’s total savings before any deposit paid")
+        expect(sales_log.errors[:savings]).to include I18n.t("validations.numeric.nearest_ten", field: "Buyers’ total savings before any deposit paid")
       end
 
       it "does not add an error if input is a multiple of ten" do

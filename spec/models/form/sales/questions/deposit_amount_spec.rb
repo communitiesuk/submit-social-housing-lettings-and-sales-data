@@ -32,7 +32,7 @@ RSpec.describe Form::Sales::Questions::DepositAmount, type: :model do
   end
 
   it "has the correct hint" do
-    expect(question.hint_text).to eq("Enter the total cash sum paid by the buyer towards the property that was not funded by the mortgage")
+    expect(question.hint_text).to eq("Enter the total cash sum paid by the buyer towards the property that was not funded by the mortgage. This excludes any grant or loan")
   end
 
   it "has correct width" do
@@ -55,7 +55,7 @@ RSpec.describe Form::Sales::Questions::DepositAmount, type: :model do
     subject(:question) { described_class.new(question_id, question_definition, page, ownershipsch: 1, optional: true) }
 
     it "has a correct hint_text" do
-      expect(question.hint_text).to eq("Enter the total cash sum paid by the buyer towards the property that was not funded by the mortgage. As this is a fully staircased sale this question is optional. If you do not have the information available click save and continue")
+      expect(question.hint_text).to eq("Enter the total cash sum paid by the buyer towards the property that was not funded by the mortgage. This excludes any grant or loan. As this is a fully staircased sale this question is optional. If you do not have the information available click save and continue")
     end
   end
 end

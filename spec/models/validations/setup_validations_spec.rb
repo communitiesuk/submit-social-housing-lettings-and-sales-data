@@ -141,6 +141,28 @@ RSpec.describe Validations::SetupValidations do
       end
     end
 
+    context "when attempted startdate is more than 14 days from the current date" do
+      before do
+        Timecop.freeze(2024, 3, 1)
+      end
+
+      it "adds an error to startdate" do
+        record.startdate = Time.zone.local(2024, 3, 31)
+        setup_validator.validate_startdate_setup(record)
+        expect(record.errors["startdate"]).to include(match I18n.t("validations.setup.startdate.later_than_14_days_after"))
+      end
+
+      context "and the attempted startdate is in a future collection year" do
+        it "adds both errors to startdate, with the collection year error first" do
+          record.startdate = Time.zone.local(2024, 4, 1)
+          setup_validator.validate_startdate_setup(record)
+          expect(record.errors["startdate"].length).to be >= 2
+          expect(record.errors["startdate"][0]).to eq("Enter a date within the 23/24 collection year, which is between 1st April 2023 and 31st March 2024")
+          expect(record.errors["startdate"][1]).to eq(I18n.t("validations.setup.startdate.later_than_14_days_after"))
+        end
+      end
+    end
+
     context "when organisations were merged" do
       around do |example|
         Timecop.freeze(Time.zone.local(2023, 5, 1))

@@ -3,7 +3,7 @@ class BulkUploadLettingsLogsController < ApplicationController
   before_action :validate_data_protection_agrement_signed!
 
   def start
-    if in_crossover_period?
+    if have_choice_of_year?
       redirect_to bulk_upload_lettings_log_path(id: "year")
     else
       redirect_to bulk_upload_lettings_log_path(id: "prepare-your-file", form: { year: current_year })
@@ -34,8 +34,8 @@ private
     FormHandler.instance.current_collection_start_year
   end
 
-  def in_crossover_period?
-    return true if FeatureToggle.force_crossover?
+  def have_choice_of_year?
+    return true if FeatureToggle.allow_future_form_use?
 
     FormHandler.instance.lettings_in_crossover_period?
   end

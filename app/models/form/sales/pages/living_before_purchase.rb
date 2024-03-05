@@ -1,7 +1,8 @@
 class Form::Sales::Pages::LivingBeforePurchase < ::Form::Page
-  def initialize(id, hsh, subsection, ownershipsch:)
+  def initialize(id, hsh, subsection, ownershipsch:, joint_purchase:)
     super(id, hsh, subsection)
     @ownershipsch = ownershipsch
+    @joint_purchase = joint_purchase
   end
 
   def questions
@@ -13,7 +14,15 @@ class Form::Sales::Pages::LivingBeforePurchase < ::Form::Page
 
   def living_before_purchase
     if form.start_date.year >= 2023
-      Form::Sales::Questions::LivingBeforePurchase.new(nil, nil, self, ownershipsch: @ownershipsch)
+      Form::Sales::Questions::LivingBeforePurchase.new(nil, nil, self, ownershipsch: @ownershipsch, joint_purchase: @joint_purchase)
+    end
+  end
+
+  def depends_on
+    if @joint_purchase
+      [{ "joint_purchase?" => true }]
+    else
+      [{ "not_joint_purchase?" => true }, { "jointpur" => nil }]
     end
   end
 end

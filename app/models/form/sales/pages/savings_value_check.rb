@@ -1,13 +1,8 @@
 class Form::Sales::Pages::SavingsValueCheck < ::Form::Page
-  def initialize(id, hsh, subsection)
-    super
-    @depends_on = [
-      {
-        "savings_over_soft_max?" => true,
-      },
-    ]
+  def initialize(id, hsh, subsection, joint_purchase:)
+    super(id, hsh, subsection)
     @title_text = {
-      "translation" => "soft_validations.savings.title_text",
+      "translation" => "soft_validations.savings.title_text.#{joint_purchase ? 'two' : 'one'}",
       "arguments" => [
         {
           "key" => "field_formatted_as_currency",
@@ -20,6 +15,7 @@ class Form::Sales::Pages::SavingsValueCheck < ::Form::Page
       "translation" => "soft_validations.savings.hint_text",
       "arguments" => [],
     }
+    @joint_purchase = joint_purchase
   end
 
   def questions
@@ -30,5 +26,14 @@ class Form::Sales::Pages::SavingsValueCheck < ::Form::Page
 
   def interruption_screen_question_ids
     %w[savings]
+  end
+
+  def depends_on
+    if @joint_purchase
+      [{ "joint_purchase?" => true, "savings_over_soft_max?" => true }]
+    else
+      [{ "not_joint_purchase?" => true, "savings_over_soft_max?" => true },
+       { "jointpur" => nil, "savings_over_soft_max?" => true }]
+    end
   end
 end

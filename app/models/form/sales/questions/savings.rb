@@ -1,8 +1,8 @@
 class Form::Sales::Questions::Savings < ::Form::Question
-  def initialize(id, hsh, page)
-    super
+  def initialize(id, hsh, page, joint_purchase:)
+    super(id, hsh, page)
     @id = "savings"
-    @check_answer_label = "Buyer’s total savings before any deposit paid"
+    @check_answer_label = "#{joint_purchase ? 'Buyers’' : 'Buyer’s'} total savings before any deposit paid"
     @header = "Enter their total savings to the nearest £10"
     @type = "numeric"
     @width = 5

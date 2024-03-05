@@ -14,6 +14,7 @@ RSpec.describe Form::Sales::Subsections::DiscountedOwnershipScheme, type: :model
   it "has correct pages" do
     expect(discounted_ownership_scheme.pages.map(&:id)).to eq(
       %w[
+        living_before_purchase_discounted_ownership_joint_purchase
         living_before_purchase_discounted_ownership
         about_price_rtb
         extra_borrowing_price_value_check
@@ -39,6 +40,7 @@ RSpec.describe Form::Sales::Subsections::DiscountedOwnershipScheme, type: :model
         extra_borrowing_value_check
         about_deposit_discounted_ownership
         extra_borrowing_deposit_value_check
+        discounted_ownership_deposit_joint_purchase_value_check
         discounted_ownership_deposit_value_check
         discounted_ownership_deposit_and_mortgage_value_check_after_deposit
         discounted_sale_deposit_value_check

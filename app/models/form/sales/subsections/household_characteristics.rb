@@ -8,11 +8,14 @@ class Form::Sales::Subsections::HouseholdCharacteristics < ::Form::Subsection
 
   def pages
     @pages ||= [
-      (Form::Sales::Pages::BuyerInterview.new(nil, nil, self) unless form.start_year_after_2024?),
-      (Form::Sales::Pages::PrivacyNotice.new(nil, nil, self) unless form.start_year_after_2024?),
+      (Form::Sales::Pages::BuyerInterview.new("buyer_interview_joint_purchase", nil, self, joint_purchase: true) unless form.start_year_after_2024?),
+      (Form::Sales::Pages::BuyerInterview.new("buyer_interview", nil, self, joint_purchase: false) unless form.start_year_after_2024?),
+      (Form::Sales::Pages::PrivacyNotice.new("privacy_notice_joint_purchase", nil, self, joint_purchase: true) unless form.start_year_after_2024?),
+      (Form::Sales::Pages::PrivacyNotice.new("privacy_notice", nil, self, joint_purchase: false) unless form.start_year_after_2024?),
       Form::Sales::Pages::Age1.new(nil, nil, self),
       Form::Sales::Pages::RetirementValueCheck.new("age_1_retirement_value_check", nil, self, person_index: 1),
-      Form::Sales::Pages::OldPersonsSharedOwnershipValueCheck.new("age_1_old_persons_shared_ownership_value_check", nil, self),
+      Form::Sales::Pages::OldPersonsSharedOwnershipValueCheck.new("age_1_old_persons_shared_ownership_joint_purchase_value_check", nil, self, joint_purchase: true),
+      Form::Sales::Pages::OldPersonsSharedOwnershipValueCheck.new("age_1_old_persons_shared_ownership_value_check", nil, self, joint_purchase: false),
       Form::Sales::Pages::GenderIdentity1.new(nil, nil, self),
       Form::Sales::Pages::RetirementValueCheck.new("gender_1_retirement_value_check", nil, self, person_index: 1),
       Form::Sales::Pages::Buyer1EthnicGroup.new(nil, nil, self),
@@ -30,7 +33,8 @@ class Form::Sales::Subsections::HouseholdCharacteristics < ::Form::Subsection
       Form::Sales::Pages::Buyer2RelationshipToBuyer1.new(nil, nil, self),
       Form::Sales::Pages::PersonStudentNotChildValueCheck.new("buyer_2_relationship_student_not_child_value_check", nil, self, person_index: 2),
       Form::Sales::Pages::Age2.new(nil, nil, self),
-      Form::Sales::Pages::OldPersonsSharedOwnershipValueCheck.new("age_2_old_persons_shared_ownership_value_check", nil, self),
+      Form::Sales::Pages::OldPersonsSharedOwnershipValueCheck.new("age_2_old_persons_shared_ownership_joint_purchase_value_check", nil, self, joint_purchase: true),
+      Form::Sales::Pages::OldPersonsSharedOwnershipValueCheck.new("age_2_old_persons_shared_ownership_value_check", nil, self, joint_purchase: false),
       Form::Sales::Pages::RetirementValueCheck.new("age_2_buyer_retirement_value_check", nil, self, person_index: 2),
       Form::Sales::Pages::PersonStudentNotChildValueCheck.new("buyer_2_age_student_not_child_value_check", nil, self, person_index: 2),
       Form::Sales::Pages::GenderIdentity2.new(nil, nil, self),

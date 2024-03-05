@@ -1,19 +1,6 @@
 class FeatureToggle
-  # Disable check on preview apps to allow for testing of future forms
-  def self.saledate_collection_window_validation_enabled?
-    Rails.env.production? || Rails.env.test? || Rails.env.staging?
-  end
-
-  def self.startdate_collection_window_validation_enabled?
-    Rails.env.production? || Rails.env.test? || Rails.env.staging?
-  end
-
-  def self.startdate_two_week_validation_enabled?
-    Rails.env.production? || Rails.env.test? || Rails.env.staging?
-  end
-
-  def self.saledate_two_week_validation_enabled?
-    Rails.env.production? || Rails.env.test? || Rails.env.staging?
+  def self.allow_future_form_use?
+    Rails.env.development? || Rails.env.review? || Rails.env.staging?
   end
 
   def self.bulk_upload_duplicate_log_check_enabled?
@@ -22,10 +9,6 @@ class FeatureToggle
 
   def self.upload_enabled?
     !Rails.env.development?
-  end
-
-  def self.force_crossover?
-    false
   end
 
   def self.deduplication_flow_enabled?

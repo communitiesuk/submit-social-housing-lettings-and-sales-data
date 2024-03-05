@@ -113,7 +113,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
           end
 
           it "shows the pagination count" do
-            expect(page).to have_content("1 total agents")
+            expect(page).to have_content("1 total managing agents")
           end
         end
 
@@ -421,7 +421,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
           end
 
           it "shows the pagination count" do
-            expect(page).to have_content("1 total agents")
+            expect(page).to have_content("1 total managing agents")
           end
         end
 
@@ -637,7 +637,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
         end
 
         it "shows the pagination count" do
-          expect(page).to have_content("1 total agents")
+          expect(page).to have_content("1 total managing agents")
         end
 
         it "shows remove link(s)" do
