@@ -9,7 +9,7 @@ class Form::Lettings::Questions::AddressSelection < ::Form::Question
   end
 
   def answer_options(log = nil, _user = nil)
-    answer_opts = { "-1" => { "value" => "The address is not listed, I want to enter the address manually" } }
+    answer_opts = { "100" => { "value" => "The address is not listed, I want to enter the address manually" } }
     return answer_opts unless ActiveRecord::Base.connected?
     return answer_opts unless log&.address_options
 
@@ -20,7 +20,7 @@ class Form::Lettings::Questions::AddressSelection < ::Form::Question
     end
 
     answer_opts["divider"] = { "value" => true }
-    answer_opts["-1"] = { "value" => "The address is not listed, I want to enter the address manually" }
+    answer_opts["100"] = { "value" => "The address is not listed, I want to enter the address manually" }
     answer_opts
   end
 

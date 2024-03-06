@@ -36,6 +36,7 @@ class Form::Lettings::Subsections::PropertyInformation < ::Form::Subsection
         Form::Lettings::Pages::Uprn.new(nil, nil, self),
         Form::Lettings::Pages::UprnConfirmation.new(nil, nil, self),
         Form::Lettings::Pages::AddressMatcher.new(nil, nil, self),
+        Form::Lettings::Pages::NoAddressFound.new(nil, nil, self),
         Form::Lettings::Pages::AddressSelection.new(nil, nil, self),
         Form::Lettings::Pages::AddressFallback.new(nil, nil, self),
       ]

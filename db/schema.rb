@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_03_04_115940) do
+ActiveRecord::Schema[7.0].define(version: 2024_03_06_091659) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -193,14 +193,14 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_04_115940) do
     t.integer "hb"
     t.integer "hbrentshortfall"
     t.integer "property_relet"
-    t.datetime "mrcdate"
+    t.datetime "mrcdate", precision: nil
     t.integer "incref"
-    t.datetime "startdate"
+    t.datetime "startdate", precision: nil
     t.integer "armedforces"
     t.integer "first_time_property_let_as_social_housing"
     t.integer "unitletas"
     t.integer "builtype"
-    t.datetime "voiddate"
+    t.datetime "voiddate", precision: nil
     t.bigint "owning_organisation_id"
     t.bigint "managing_organisation_id"
     t.integer "renttype"
@@ -304,13 +304,14 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_04_115940) do
     t.integer "scharge_value_check"
     t.integer "pscharge_value_check"
     t.integer "duplicate_set_id"
+    t.integer "accessible_register"
     t.integer "nationality_all"
     t.integer "nationality_all_group"
     t.integer "reasonother_value_check"
-    t.integer "accessible_register"
     t.integer "address_selection"
     t.string "address_line1_input"
     t.string "postcode_full_input"
+    t.integer "address_search_value_check"
     t.index ["bulk_upload_id"], name: "index_lettings_logs_on_bulk_upload_id"
     t.index ["created_by_id"], name: "index_lettings_logs_on_created_by_id"
     t.index ["location_id"], name: "index_lettings_logs_on_location_id"
@@ -718,8 +719,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_04_115940) do
     t.string "name"
     t.bigint "organisation_id"
     t.integer "sign_in_count", default: 0, null: false
-    t.datetime "current_sign_in_at"
-    t.datetime "last_sign_in_at"
+    t.datetime "current_sign_in_at", precision: nil
+    t.datetime "last_sign_in_at", precision: nil
     t.string "current_sign_in_ip"
     t.string "last_sign_in_ip"
     t.integer "role"
