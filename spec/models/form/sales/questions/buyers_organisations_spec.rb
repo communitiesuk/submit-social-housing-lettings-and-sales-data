@@ -32,11 +32,7 @@ RSpec.describe Form::Sales::Questions::BuyersOrganisations, type: :model do
   end
 
   it "has the correct hint" do
-    expect(question.hint_text).to eq("Select all that apply")
-  end
-
-  it "has the correct unanswered_error_message" do
-    expect(question.unanswered_error_message).to eq("At least one option must be selected of these four")
+    expect(question.hint_text).to eq("Select all that apply. This question is optional. If no options are applicable, leave the options blank, and select save and continue.")
   end
 
   it "has the correct answer_options" do
@@ -51,7 +47,7 @@ RSpec.describe Form::Sales::Questions::BuyersOrganisations, type: :model do
     )
   end
 
-  it "has the correct displayed_answer_options" do
+  it "has the correct displayed answer_options" do
     expect(question.displayed_answer_options(FactoryBot.create(:sales_log))).to eq(
       {
         "pregyrha" => { "value" => "Their private registered provider (PRP) - housing association" },
