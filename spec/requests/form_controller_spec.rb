@@ -321,6 +321,34 @@ RSpec.describe FormController, type: :request do
         expect(lettings_log.created_by).to eq(user)
       end
     end
+
+    context "when the sale date changes from 2024 to 2023" do
+      let(:sales_log) { create(:sales_log, owning_organisation: organisation, managing_organisation:, created_by: user) }
+      let(:params) do
+        {
+          id: sales_log.id,
+          sales_log: {
+            page: "completion_date",
+            "saledate(3i)" => 30,
+            "saledate(2i)" => 6,
+            "saledate(1i)" => 2023,
+          },
+        }
+      end
+
+      before do
+        sales_log.saledate = Time.zone.local(2024, 12, 1)
+        sales_log.save!(validate: false)
+        sales_log.reload
+      end
+
+      it "does not set managing organisation to created by organisation" do
+        post "/sales-logs/#{sales_log.id}/completion-date", params: params
+        sales_log.reload
+        expect(sales_log.owning_organisation).to eq(organisation)
+        expect(sales_log.managing_organisation).to eq(managing_organisation)
+      end
+    end
   end
 
   context "when a user is signed in" do
@@ -878,6 +906,74 @@ RSpec.describe FormController, type: :request do
             lettings_log.reload
             expect(lettings_log.owning_organisation).to eq(organisation)
             expect(lettings_log.managing_organisation).to eq(organisation)
+          end
+        end
+
+        context "when the sale date changes from 2024 to 2023" do
+          let(:sales_log) { create(:sales_log, owning_organisation: organisation, managing_organisation:, created_by: user) }
+          let(:params) do
+            {
+              id: sales_log.id,
+              sales_log: {
+                page: "completion_date",
+                "saledate(3i)" => 30,
+                "saledate(2i)" => 6,
+                "saledate(1i)" => 2023,
+              },
+            }
+          end
+          let(:managing_organisation) { create(:organisation) }
+
+          before do
+            organisation.managing_agents << managing_organisation
+            organisation.reload
+            sales_log.saledate = Time.zone.local(2024, 12, 1)
+            sales_log.save!(validate: false)
+            sales_log.reload
+          end
+
+          it "sets managing organisation to created by organisation" do
+            post "/sales-logs/#{sales_log.id}/completion-date", params: params
+            sales_log.reload
+            expect(sales_log.owning_organisation).to eq(organisation)
+            expect(sales_log.managing_organisation).to eq(organisation)
+          end
+        end
+
+        context "when the sale date changes from 2024 to a different date in 2024" do
+          let(:sales_log) { create(:sales_log, owning_organisation: organisation, managing_organisation:, created_by: user) }
+          let(:params) do
+            {
+              id: sales_log.id,
+              sales_log: {
+                page: "completion_date",
+                "saledate(3i)" => 30,
+                "saledate(2i)" => 6,
+                "saledate(1i)" => 2024,
+              },
+            }
+          end
+          let(:managing_organisation) { create(:organisation) }
+
+          before do
+            Timecop.freeze(Time.zone.local(2024, 12, 1))
+            Singleton.__init__(FormHandler)
+            organisation.managing_agents << managing_organisation
+            organisation.reload
+            sales_log.update!(saledate: Time.zone.local(2024, 12, 1))
+            sales_log.reload
+          end
+
+          after do
+            Timecop.return
+            Singleton.__init__(FormHandler)
+          end
+
+          it "does not set managing organisation to created by organisation" do
+            post "/sales-logs/#{sales_log.id}/completion-date", params: params
+            sales_log.reload
+            expect(sales_log.owning_organisation).to eq(organisation)
+            expect(sales_log.managing_organisation).to eq(managing_organisation)
           end
         end
 
