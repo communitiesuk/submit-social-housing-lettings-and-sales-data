@@ -144,8 +144,8 @@
     <discarded_at/>
     <creation_method>1</creation_method>
     <duplicate_set_id/>
-    <nationality_all/>
     <accessible_register>2</accessible_register>
+    <nationality_all/>
     <formid>{id}</formid>
     <owningorgid>{owning_org_id}</owningorgid>
     <owningorgname>DLUHC</owningorgname>
