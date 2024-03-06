@@ -2136,10 +2136,20 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
     end
 
     describe "#reasonother" do
-      let(:attributes) { { bulk_upload:, field_99: "some other reason" } }
+      context "when reason is 'other'" do
+        let(:attributes) { { bulk_upload:, field_98: "20", field_99: "some other reason" } }
 
-      it "sets value to given free text string" do
-        expect(parser.log.reasonother).to eql("some other reason")
+        it "is set to given free text string" do
+          expect(parser.log.reasonother).to eql("some other reason")
+        end
+      end
+
+      context "when reason is not 'other'" do
+        let(:attributes) { { bulk_upload:, field_98: "50", field_99: "some other reason" } }
+
+        it "is set to nil" do
+          expect(parser.log.reasonother).to be_nil
+        end
       end
     end
 

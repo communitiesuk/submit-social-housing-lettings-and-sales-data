@@ -1138,7 +1138,7 @@ private
     attributes["layear"] = field_96
     attributes["waityear"] = field_97
     attributes["reason"] = field_98
-    attributes["reasonother"] = field_99
+    attributes["reasonother"] = field_99 if reason_is_other?
     attributes["prevten"] = field_100
     attributes["homeless"] = field_101
 
@@ -1508,5 +1508,9 @@ private
 
   def is_carehome
     field_124.present? ? 1 : 0
+  end
+
+  def reason_is_other?
+    field_98 == 20
   end
 end
