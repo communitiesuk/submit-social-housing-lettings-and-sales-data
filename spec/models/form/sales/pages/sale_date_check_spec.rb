@@ -25,7 +25,7 @@ RSpec.describe Form::Sales::Pages::SaleDateCheck, type: :model do
 
   it "has the correct title_text" do
     expect(page.title_text).to eq({
-      "translation" => "validations.sale_information.saledate.must_be_less_than_3_years_from_hodate",
+      "translation" => "soft_validations.saledate.must_be_less_than_3_years_from_hodate",
       "arguments" => [],
     })
   end
