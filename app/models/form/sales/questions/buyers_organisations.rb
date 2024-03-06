@@ -5,7 +5,7 @@ class Form::Sales::Questions::BuyersOrganisations < ::Form::Question
     @check_answer_label = "Organisations buyers were registered with"
     @header = "What organisations were the buyers registered with?"
     @type = "checkbox"
-    @hint_text = "Select all that apply"
+    @hint_text = "Select all that apply. This question is optional. If no options are applicable, leave the options blank, and select save and continue."
     @answer_options = ANSWER_OPTIONS
     @question_number = 59
   end
@@ -25,9 +25,5 @@ class Form::Sales::Questions::BuyersOrganisations < ::Form::Question
       "pregla" => { "value" => "Local Authority" },
       "pregghb" => { "value" => "Help to Buy Agent" },
     }
-  end
-
-  def unanswered_error_message
-    "At least one option must be selected of these four"
   end
 end
