@@ -56,6 +56,19 @@ RSpec.describe SchemesController, type: :request do
         end
       end
 
+      context "when there are deleted schemes" do
+        let!(:deleted_scheme) { create(:scheme, service_name: "deleted", discarded_at: Time.zone.yesterday, owning_organisation: user.organisation) }
+
+        before do
+          get "/schemes"
+        end
+
+        it "does not show deleted schemes" do
+          follow_redirect!
+          expect(page).not_to have_content(deleted_scheme.id_to_display)
+        end
+      end
+
       context "when parent organisation has schemes" do
         let(:parent_organisation) { create(:organisation) }
         let!(:parent_schemes) { create_list(:scheme, 5, owning_organisation: parent_organisation) }
@@ -189,6 +202,18 @@ RSpec.describe SchemesController, type: :request do
 
       it "has page heading" do
         expect(page).to have_content("Schemes")
+      end
+
+      context "when there are deleted schemes" do
+        let!(:deleted_scheme) { create(:scheme, service_name: "deleted", discarded_at: Time.zone.yesterday, owning_organisation: user.organisation) }
+
+        before do
+          get "/schemes"
+        end
+
+        it "does not show deleted schemes" do
+          expect(page).not_to have_content(deleted_scheme.id_to_display)
+        end
       end
 
       describe "scheme and location csv downloads" do
@@ -577,6 +602,11 @@ RSpec.describe SchemesController, type: :request do
             expect(response).to have_http_status(:ok)
             expect(page).to have_link("Reactivate this scheme", href: "/schemes/#{scheme.id}/new-reactivation")
           end
+
+          it "does not render delete this scheme" do
+            expect(response).to have_http_status(:ok)
+            expect(page).not_to have_link("Delete this scheme", href: "/schemes/#{scheme.id}/delete-confirmation")
+          end
         end
 
         context "with scheme that's deactivating soon" do
@@ -711,6 +741,92 @@ RSpec.describe SchemesController, type: :request do
         expect(page).to have_content(specific_scheme.secondary_client_group)
         expect(page).to have_content(specific_scheme.support_type)
         expect(page).to have_content(specific_scheme.intended_stay)
+      end
+
+      context "when looking at scheme details" do
+        let!(:scheme) { create(:scheme, owning_organisation: user.organisation) }
+        let(:add_deactivations) { scheme.scheme_deactivation_periods << scheme_deactivation_period }
+
+        before do
+          create(:location, scheme:)
+          Timecop.freeze(Time.utc(2022, 10, 10))
+          sign_in user
+          add_deactivations
+          scheme.save!
+          get "/schemes/#{scheme.id}"
+        end
+
+        after do
+          Timecop.unfreeze
+        end
+
+        context "with active scheme" do
+          let(:add_deactivations) {}
+
+          it "does not render delete this scheme" do
+            expect(response).to have_http_status(:ok)
+            expect(page).not_to have_link("Delete this scheme", href: "/schemes/#{scheme.id}/delete-confirmation")
+          end
+
+          it "does not render informative text about deleting the scheme" do
+            expect(response).to have_http_status(:ok)
+            expect(page).not_to have_content("This scheme was active in an open or editable collection year, and cannot be deleted.")
+          end
+        end
+
+        context "with deactivated scheme" do
+          let(:scheme_deactivation_period) { create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 10, 9), scheme:) }
+
+          it "renders delete this scheme" do
+            expect(response).to have_http_status(:ok)
+            expect(page).to have_link("Delete this scheme", href: "/schemes/#{scheme.id}/delete-confirmation")
+          end
+
+          context "and associated logs in editable collection period" do
+            before do
+              create(:lettings_log, :sh, scheme:, startdate: Time.zone.local(2022, 9, 9), owning_organisation: user.organisation)
+              get "/schemes/#{scheme.id}"
+            end
+
+            it "does not render delete this scheme" do
+              expect(response).to have_http_status(:ok)
+              expect(page).not_to have_link("Delete this scheme", href: "/schemes/#{scheme.id}/delete-confirmation")
+            end
+
+            it "adds informative text about deleting the scheme" do
+              expect(response).to have_http_status(:ok)
+              expect(page).to have_content("This scheme was active in an open or editable collection year, and cannot be deleted.")
+            end
+          end
+        end
+
+        context "with scheme that's deactivating soon" do
+          let(:scheme_deactivation_period) { create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 10, 12), scheme:) }
+
+          it "does not render delete this scheme" do
+            expect(response).to have_http_status(:ok)
+            expect(page).not_to have_link("Delete this scheme", href: "/schemes/#{scheme.id}/delete-confirmation")
+          end
+        end
+
+        context "with scheme that's deactivating in more than 6 months" do
+          let(:scheme_deactivation_period) { create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2023, 5, 12), scheme:) }
+
+          it "does not render delete this scheme" do
+            expect(response).to have_http_status(:ok)
+            expect(page).not_to have_link("Delete this scheme", href: "/schemes/#{scheme.id}/delete-confirmation")
+          end
+        end
+
+        context "with incomplete scheme" do
+          let(:add_deactivations) {}
+          let!(:scheme) { create(:scheme, :incomplete, owning_organisation: user.organisation) }
+
+          it "renders delete this scheme" do
+            expect(response).to have_http_status(:ok)
+            expect(page).to have_link("Delete this scheme", href: "/schemes/#{scheme.id}/delete-confirmation")
+          end
+        end
       end
     end
   end
@@ -2132,6 +2248,7 @@ RSpec.describe SchemesController, type: :request do
       let!(:scheme) { create(:scheme) }
 
       before do
+        create(:location, scheme:)
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
         sign_in user
         get "/schemes/#{scheme.id}/check-answers"
@@ -2140,6 +2257,22 @@ RSpec.describe SchemesController, type: :request do
       it "returns a template for a support" do
         expect(response).to have_http_status(:ok)
         expect(page).to have_content("Check your changes before creating this scheme")
+      end
+
+      context "with an active scheme" do
+        it "does not render delete this scheme" do
+          expect(scheme.status).to eq(:active)
+          expect(page).not_to have_link("Delete this scheme", href: "/schemes/#{scheme.id}/delete-confirmation")
+        end
+      end
+
+      context "with an incomplete scheme" do
+        let(:scheme) { create(:scheme, :incomplete) }
+
+        it "renders delete this scheme" do
+          expect(scheme.reload.status).to eq(:incomplete)
+          expect(page).to have_link("Delete this scheme", href: "/schemes/#{scheme.id}/delete-confirmation")
+        end
       end
     end
   end
@@ -2637,6 +2770,159 @@ RSpec.describe SchemesController, type: :request do
           follow_redirect!
           expect(response).to have_http_status(:ok)
           expect(page).to have_content("This change will affect 1 logs")
+        end
+      end
+    end
+  end
+
+  describe "#delete-confirmation" do
+    let(:scheme) { create(:scheme, owning_organisation: user.organisation) }
+
+    before do
+      Timecop.freeze(Time.utc(2022, 10, 10))
+      scheme.scheme_deactivation_periods << create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 10, 9), scheme:)
+      scheme.save!
+      get "/schemes/#{scheme.id}/delete-confirmation"
+    end
+
+    after do
+      Timecop.unfreeze
+    end
+
+    context "when not signed in" do
+      it "redirects to the sign in page" do
+        expect(response).to redirect_to("/account/sign-in")
+      end
+    end
+
+    context "when signed in" do
+      before do
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in user
+        get "/schemes/#{scheme.id}/delete-confirmation"
+      end
+
+      context "with a data provider user" do
+        let(:user) { create(:user) }
+
+        it "returns 401 unauthorized" do
+          expect(response).to have_http_status(:unauthorized)
+        end
+      end
+
+      context "with a data coordinator user" do
+        let(:user) { create(:user, :data_coordinator) }
+
+        it "returns 401 unauthorized" do
+          expect(response).to have_http_status(:unauthorized)
+        end
+      end
+
+      context "with a support user user" do
+        let(:user) { create(:user, :support) }
+
+        it "shows the correct title" do
+          expect(page.find("h1").text).to include "Are you sure you want to delete this scheme?"
+        end
+
+        it "shows a warning to the user" do
+          expect(page).to have_selector(".govuk-warning-text", text: "You will not be able to undo this action")
+        end
+
+        it "shows a button to delete the selected scheme" do
+          expect(page).to have_selector("form.button_to button", text: "Delete this scheme")
+        end
+
+        it "the delete scheme button submits the correct data to the correct path" do
+          form_containing_button = page.find("form.button_to")
+
+          expect(form_containing_button[:action]).to eq scheme_delete_path(scheme)
+          expect(form_containing_button).to have_field "_method", type: :hidden, with: "delete"
+        end
+
+        it "shows a cancel link with the correct style" do
+          expect(page).to have_selector("a.govuk-button--secondary", text: "Cancel")
+        end
+
+        it "shows cancel link that links back to the scheme page" do
+          expect(page).to have_link(text: "Cancel", href: scheme_path(scheme))
+        end
+      end
+    end
+  end
+
+  describe "#delete" do
+    let(:scheme) { create(:scheme, service_name: "Scheme to delete", owning_organisation: user.organisation) }
+    let!(:locations) { create_list(:location, 2, scheme:, created_at: Time.zone.local(2022, 4, 1)) }
+
+    before do
+      delete "/schemes/#{scheme.id}/delete"
+    end
+
+    context "when not signed in" do
+      it "redirects to the sign in page" do
+        expect(response).to redirect_to("/account/sign-in")
+      end
+    end
+
+    context "when signed in" do
+      before do
+        Timecop.freeze(Time.utc(2022, 10, 10))
+        scheme.scheme_deactivation_periods << create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 10, 9), scheme:)
+        scheme.save!
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in user
+        delete "/schemes/#{scheme.id}/delete"
+      end
+
+      after do
+        Timecop.unfreeze
+      end
+
+      context "with a data provider user" do
+        let(:user) { create(:user) }
+
+        it "returns 401 unauthorized" do
+          expect(response).to have_http_status(:unauthorized)
+        end
+      end
+
+      context "with a data coordinator user" do
+        let(:user) { create(:user, :data_coordinator) }
+
+        it "returns 401 unauthorized" do
+          expect(response).to have_http_status(:unauthorized)
+        end
+      end
+
+      context "with a support user user" do
+        let(:user) { create(:user, :support) }
+
+        it "deletes the scheme" do
+          scheme.reload
+          expect(scheme.status).to eq(:deleted)
+          expect(scheme.discarded_at).not_to be nil
+        end
+
+        it "deletes associated locations" do
+          locations.each do |location|
+            location.reload
+            expect(location.status).to eq(:deleted)
+            expect(location.discarded_at).not_to be nil
+          end
+        end
+
+        it "redirects to the schemes list and displays a notice that the scheme has been deleted" do
+          expect(response).to redirect_to schemes_organisation_path(scheme.owning_organisation)
+          follow_redirect!
+          expect(page).to have_selector(".govuk-notification-banner--success")
+          expect(page).to have_selector(".govuk-notification-banner--success", text: "Scheme to delete has been deleted.")
+        end
+
+        it "does not display the deleted scheme" do
+          expect(response).to redirect_to schemes_organisation_path(scheme.owning_organisation)
+          follow_redirect!
+          expect(page).not_to have_link("Scheme to delete")
         end
       end
     end

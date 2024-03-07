@@ -304,6 +304,14 @@ RSpec.describe Scheme, type: :model do
         expect(scheme.status).to eq(:activating_soon)
       end
     end
+
+    context "when scheme has discarded_at value" do
+      let(:scheme) { FactoryBot.create(:scheme, discarded_at: Time.zone.now) }
+
+      it "returns deleted" do
+        expect(scheme.status).to eq(:deleted)
+      end
+    end
   end
 
   describe "status_at" do

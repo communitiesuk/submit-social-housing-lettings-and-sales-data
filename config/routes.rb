@@ -79,6 +79,8 @@ Rails.application.routes.draw do
     patch "new-deactivation", to: "schemes#new_deactivation"
     patch "deactivate", to: "schemes#deactivate"
     patch "reactivate", to: "schemes#reactivate"
+    get "delete-confirmation", to: "schemes#delete_confirmation"
+    delete "delete", to: "schemes#delete"
 
     collection do
       get "csv-download", to: "schemes#download_csv"

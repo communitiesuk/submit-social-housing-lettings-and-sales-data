@@ -65,9 +65,26 @@ class SchemePolicy
     end
   end
 
+  def delete_confirmation?
+    delete?
+  end
+
+  def delete?
+    return false unless user.support?
+    return false unless scheme.status == :incomplete || scheme.status == :deactivated
+
+    !has_any_logs_in_editable_collection_period
+  end
+
 private
 
   def scheme_owned_by_user_org_or_stock_owner
     scheme&.owning_organisation == user.organisation || user.organisation.stock_owners.exists?(scheme&.owning_organisation_id)
+  end
+
+  def has_any_logs_in_editable_collection_period
+    editable_from_date = FormHandler.instance.earliest_open_for_editing_collection_start_date
+
+    LettingsLog.where(scheme_id: scheme.id).after_date(editable_from_date).or(LettingsLog.where(startdate: nil, scheme_id: scheme.id)).any?
   end
 end
