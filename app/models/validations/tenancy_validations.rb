@@ -12,7 +12,7 @@ module Validations::TenancyValidations
     min_tenancy_length = 1
     return if record.tenancylength.to_i.between?(min_tenancy_length, 99)
 
-    message = record.is_assured_shorthold_tenancy? ? I18n.t("validations.tenancy.length.shorthold", min_tenancy_length:) : I18n.t("validations.tenancy.length.secure", min_tenancy_length:)
+    message = I18n.t("validations.tenancy.length.invalid_fixed", min_tenancy_length:)
     record.errors.add :needstype, message
     record.errors.add :rent_type, message
     record.errors.add :tenancylength, :tenancylength_invalid, message: message
@@ -26,7 +26,7 @@ module Validations::TenancyValidations
     min_tenancy_length = 2
     return if record.tenancylength.to_i.between?(min_tenancy_length, 99)
 
-    message = record.is_assured_shorthold_tenancy? ? I18n.t("validations.tenancy.length.shorthold", min_tenancy_length:) : I18n.t("validations.tenancy.length.secure", min_tenancy_length:)
+    message = I18n.t("validations.tenancy.length.invalid_fixed", min_tenancy_length:)
     record.errors.add :needstype, message
     record.errors.add :rent_type, message
     record.errors.add :tenancylength, :tenancylength_invalid, message: message
@@ -40,7 +40,7 @@ module Validations::TenancyValidations
     min_tenancy_length = 1
     return if record.tenancylength.to_i.between?(min_tenancy_length, 99)
 
-    message = record.is_assured_shorthold_tenancy? ? I18n.t("validations.tenancy.length.shorthold", min_tenancy_length:) : I18n.t("validations.tenancy.length.secure", min_tenancy_length:)
+    message = I18n.t("validations.tenancy.length.invalid_fixed", min_tenancy_length:)
     record.errors.add :needstype, message
     record.errors.add :rent_type, message
     record.errors.add :tenancylength, :tenancylength_invalid, message: message
@@ -53,7 +53,7 @@ module Validations::TenancyValidations
     min_tenancy_length = 1
     return if record.tenancylength.to_i.between?(min_tenancy_length, 99)
 
-    message = I18n.t("validations.tenancy.length.secure", min_tenancy_length:)
+    message = I18n.t("validations.tenancy.length.invalid_periodic", min_tenancy_length:)
     record.errors.add :tenancylength, :tenancylength_invalid, message: message
     record.errors.add :tenancy, message
   end

@@ -557,8 +557,8 @@ en:
     tenancy:
       length:
         fixed_term_not_required: "You must only answer the length of the tenancy if it's fixed-term"
-        shorthold: "Enter a tenancy length between %{min_tenancy_length} and 99 years for a tenancy of this type"
-        secure: "Enter a tenancy length between %{min_tenancy_length} and 99 years (or don't specify the length) for a tenancy of this type"
+        invalid_fixed: "Enter a tenancy length between %{min_tenancy_length} and 99 years for a tenancy of this type"
+        invalid_periodic: "Enter a tenancy length between %{min_tenancy_length} and 99 years (or don't specify the length) for a tenancy of this type"
       internal_transfer: "Answer must be secure tenancy as this tenancy is an internal transfer"
       cannot_be_internal_transfer: "Answer cannot be internal transfer as this is not a secure tenancy"
       not_joint: "This cannot be a joint tenancy as you've told us there's only one person in the household"
@@ -690,7 +690,7 @@ Make sure these answers are correct."
     shared_ownership_deposit:
       title_text: "You told us that the %{mortgage_deposit_and_discount_error_fields} add up to %{mortgage_deposit_and_discount_total}"
     old_persons_shared_ownership:
-      title_text: 
+      title_text:
         one: "You told us the buyer is using the Older Persons Shared Ownership scheme."
         two: "You told us the buyers are using the Older Persons Shared Ownership scheme."
       hint_text: "At least one buyer must be aged 65 years and over to use this scheme."
@@ -717,12 +717,12 @@ Make sure these answers are correct."
       title_text: "You told us that the percentage discount is %{discount}."
       hint_text: "This is higher than we would expect."
     savings:
-      title_text: 
+      title_text:
         one: "You told us the buyer’s savings were %{savings}."
         two: "You told us the buyers’ savings were %{savings}."
       hint_text: "This is higher than we would expect."
     deposit:
-      title_text: 
+      title_text:
         one: "You told us the buyer’s deposit was %{deposit} and their savings were %{savings}."
         two: "You told us the buyers’ deposit was %{deposit} and their savings were %{savings}."
       hint_text: "The deposit amount is higher than we would expect for the amount of savings they have."

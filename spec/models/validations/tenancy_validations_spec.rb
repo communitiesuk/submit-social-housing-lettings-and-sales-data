@@ -76,13 +76,13 @@ RSpec.describe Validations::TenancyValidations do
       {
         name: "assured shorthold",
         code: 4,
-        expected_error: ->(min_tenancy_length) { I18n.t("validations.tenancy.length.shorthold", min_tenancy_length:) },
+        expected_error: ->(min_tenancy_length) { I18n.t("validations.tenancy.length.invalid_fixed", min_tenancy_length:) },
         error_fields: %w[needstype rent_type tenancylength tenancy],
       },
       {
         name: "secure fixed term",
         code: 6,
-        expected_error: ->(min_tenancy_length) { I18n.t("validations.tenancy.length.secure", min_tenancy_length:) },
+        expected_error: ->(min_tenancy_length) { I18n.t("validations.tenancy.length.invalid_fixed", min_tenancy_length:) },
         error_fields: %w[needstype rent_type tenancylength tenancy],
       },
     ]
@@ -210,7 +210,7 @@ RSpec.describe Validations::TenancyValidations do
       periodic_tenancy_case = {
         name: "periodic",
         code: 8,
-        expected_error: ->(min_tenancy_length) { I18n.t("validations.tenancy.length.secure", min_tenancy_length:) },
+        expected_error: ->(min_tenancy_length) { I18n.t("validations.tenancy.length.invalid_periodic", min_tenancy_length:) },
         error_fields: %w[tenancylength tenancy],
       }
       include_examples "adds expected errors based on the tenancy length", periodic_tenancy_case, 1
