@@ -15,13 +15,13 @@ class DataProtectionConfirmationBannerComponent < ViewComponent::Base
     return true if org_without_dpo?
     return false if !org_or_user_org.holds_own_stock? && org_or_user_org.stock_owners.empty? && org_or_user_org.absorbed_organisations.empty?
 
-    !org_or_user_org.organisation_or_stock_owner_signed_dsa_and_holds_own_stock?
+    !org_or_user_org.data_protection_confirmed? || !org_or_user_org.organisation_or_stock_owner_signed_dsa_and_holds_own_stock?
   end
 
   def header_text
     if org_without_dpo?
       "To create logs your organisation must state a data protection officer. They must sign the Data Sharing Agreement."
-    elsif !org_or_user_org.holds_own_stock?
+    elsif !org_or_user_org.holds_own_stock? && org_or_user_org.data_protection_confirmed?
       "Your organisation does not own stock. To create logs your stock owner(s) must accept the Data Sharing Agreement on CORE."
     elsif user.is_dpo?
       "Your organisation must accept the Data Sharing Agreement before you can create any logs."
@@ -53,7 +53,7 @@ private
   def link_text
     if dpo_required?
       "Contact helpdesk to assign a data protection officer"
-    elsif !org_or_user_org.holds_own_stock?
+    elsif !org_or_user_org.holds_own_stock? && org_or_user_org.data_protection_confirmed?
       "View or add stock owners"
     else
       "Read the Data Sharing Agreement"
@@ -63,7 +63,7 @@ private
   def link_href
     if dpo_required?
       GlobalConstants::HELPDESK_URL
-    elsif !org_or_user_org.holds_own_stock?
+    elsif !org_or_user_org.holds_own_stock? && org_or_user_org.data_protection_confirmed?
       stock_owners_organisation_path(org_or_user_org)
     else
       data_sharing_agreement_organisation_path(org_or_user_org)

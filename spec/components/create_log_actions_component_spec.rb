@@ -120,7 +120,7 @@ RSpec.describe CreateLogActionsComponent, type: :component do
             user.organisation.update!(holds_own_stock: false)
           end
 
-          context "and stock owners that have signed data sharing agreement" do
+          context "and has signed DSA and stock owners have signed DSA" do
             before do
               parent_organisation = create(:organisation)
               create(:organisation_relationship, child_organisation: user.organisation, parent_organisation:)
@@ -128,6 +128,18 @@ RSpec.describe CreateLogActionsComponent, type: :component do
 
             it "renders actions" do
               expect(component.display_actions?).to eq(true)
+            end
+          end
+
+          context "and hasn't signed DSA and and stock owners have signed DSA" do
+            before do
+              user.organisation.data_protection_confirmation.update!(confirmed: false)
+              parent_organisation = create(:organisation)
+              create(:organisation_relationship, child_organisation: user.organisation, parent_organisation:)
+            end
+
+            it "renders actions" do
+              expect(component.display_actions?).to eq(false)
             end
           end
 
