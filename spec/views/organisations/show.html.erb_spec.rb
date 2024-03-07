@@ -113,6 +113,20 @@ RSpec.describe "organisations/show.html.erb" do
         expect(fragment).to have_link(text: "View agreement", href: "/organisations/#{organisation_with_dsa.id}/data-sharing-agreement")
       end
     end
+
+    it "shows deactivate button when organisation is active" do
+      user.organisation.active = true
+      render
+      expect(fragment).to have_content("Deactivate this organisation")
+      expect(fragment).not_to have_content("Reactivate this organisation")
+    end
+
+    it "shows reactivate button when organisation is inactive" do
+      user.organisation.active = false
+      render
+      expect(fragment).not_to have_content("Deactivate this organisation")
+      expect(fragment).to have_content("Reactivate this organisation")
+    end
   end
 
   context "when not dpo" do

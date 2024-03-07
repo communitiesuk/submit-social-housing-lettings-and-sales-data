@@ -40,7 +40,7 @@ class Form::Lettings::Questions::StockOwner < ::Form::Question
         end
       end
     else
-      user.organisation.stock_owners.each do |stock_owner|
+      user.organisation.stock_owners.filter_by_active.each do |stock_owner|
         answer_opts[stock_owner.id] = stock_owner.name
       end
       recently_absorbed_organisations.each do |absorbed_org|

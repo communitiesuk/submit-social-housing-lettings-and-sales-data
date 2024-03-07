@@ -109,19 +109,21 @@ class OrganisationsController < ApplicationController
   def update
     if (current_user.data_coordinator? && org_params[:active].nil?) || current_user.support?
       if @organisation.update(org_params)
-        if org_params[:active] == "false"
+        case org_params[:active]
+        when "false"
           @organisation.users.filter_by_active
                        .update_all(
                          active: false,
                          confirmed_at: nil,
                          sign_in_count: 0,
                          initial_confirmation_sent: false,
-                         reactivate_with_organisation: true)
+                         reactivate_with_organisation: true,
+                       )
           flash[:notice] = I18n.t("organisation.deactivated", organisation: @organisation.name)
-        elsif org_params[:active] == "true"
+        when "true"
           users_to_reactivate = @organisation.users.where(reactivate_with_organisation: true)
           users_to_reactivate.each do |user|
-            user.update(active: true, reactivate_with_organisation: false)
+            user.update!(active: true, reactivate_with_organisation: false)
             user.send_confirmation_instructions
           end
           flash[:notice] = I18n.t("organisation.reactivated", organisation: @organisation.name)
