@@ -8,7 +8,7 @@ RSpec.describe Validations::TenancyValidations do
   describe "tenancy length validations" do
     let(:record) { FactoryBot.create(:lettings_log, :setup_completed) }
 
-    shared_examples "adds expected errors based on the tenancy length" do |tenancy_type_case, min_tenancy_length|
+    shared_examples "adds expected errors based on the tenancy length" do |tenancy_type_case, error_fields, min_tenancy_length|
       context "and tenancy type is #{tenancy_type_case[:name]}" do
         let(:expected_error) { tenancy_type_case[:expected_error].call(min_tenancy_length) }
 
@@ -17,24 +17,24 @@ RSpec.describe Validations::TenancyValidations do
         context "and tenancy length is less than #{min_tenancy_length}" do
           before { record.tenancylength = min_tenancy_length - 1 }
 
-          it "adds errors to #{tenancy_type_case[:error_fields].join(', ')}" do
+          it "adds errors to #{error_fields.join(', ')}" do
             validation.call(record)
-            tenancy_type_case[:error_fields].each do |field|
+            error_fields.each do |field|
               expect(record.errors[field]).to include(match(expected_error))
             end
-            expect(record.errors.size).to be(tenancy_type_case[:error_fields].length)
+            expect(record.errors.size).to be(error_fields.length)
           end
         end
 
         context "and tenancy length is more than 99" do
           before { record.tenancylength = 100 }
 
-          it "adds errors to #{tenancy_type_case[:error_fields].join(', ')}" do
+          it "adds errors to #{error_fields.join(', ')}" do
             validation.call(record)
-            tenancy_type_case[:error_fields].each do |field|
+            error_fields.each do |field|
               expect(record.errors[field]).to include(match(expected_error))
             end
-            expect(record.errors.size).to be(tenancy_type_case[:error_fields].length)
+            expect(record.errors.size).to be(error_fields.length)
           end
         end
 
@@ -77,13 +77,11 @@ RSpec.describe Validations::TenancyValidations do
         name: "assured shorthold",
         code: 4,
         expected_error: ->(min_tenancy_length) { I18n.t("validations.tenancy.length.invalid_fixed", min_tenancy_length:) },
-        error_fields: %w[needstype rent_type tenancylength tenancy],
       },
       {
         name: "secure fixed term",
         code: 6,
         expected_error: ->(min_tenancy_length) { I18n.t("validations.tenancy.length.invalid_fixed", min_tenancy_length:) },
-        error_fields: %w[needstype rent_type tenancylength tenancy],
       },
     ]
 
@@ -93,8 +91,9 @@ RSpec.describe Validations::TenancyValidations do
       context "when needs type is supported housing" do
         before { record.needstype = 2 }
 
+        error_fields = %w[needstype tenancylength tenancy]
         fixed_term_tenancy_type_cases.each do |tenancy_type_case|
-          include_examples "adds expected errors based on the tenancy length", tenancy_type_case, 1
+          include_examples "adds expected errors based on the tenancy length", tenancy_type_case, error_fields, 1
         end
 
         include_examples "does not add errors when tenancy type is not fixed term"
@@ -123,8 +122,9 @@ RSpec.describe Validations::TenancyValidations do
         context "and rent type is affordable or social rent" do
           before { record.renttype = 1 }
 
+          error_fields = %w[needstype rent_type tenancylength tenancy]
           fixed_term_tenancy_type_cases.each do |tenancy_type_case|
-            include_examples "adds expected errors based on the tenancy length", tenancy_type_case, 2
+            include_examples "adds expected errors based on the tenancy length", tenancy_type_case, error_fields, 2
           end
 
           include_examples "does not add errors when tenancy type is not fixed term"
@@ -168,8 +168,9 @@ RSpec.describe Validations::TenancyValidations do
         context "and rent type is intermediate rent" do
           before { record.renttype = 3 }
 
+          error_fields = %w[needstype rent_type tenancylength tenancy]
           fixed_term_tenancy_type_cases.each do |tenancy_type_case|
-            include_examples "adds expected errors based on the tenancy length", tenancy_type_case, 1
+            include_examples "adds expected errors based on the tenancy length", tenancy_type_case, error_fields, 1
           end
 
           include_examples "does not add errors when tenancy type is not fixed term"
@@ -211,9 +212,9 @@ RSpec.describe Validations::TenancyValidations do
         name: "periodic",
         code: 8,
         expected_error: ->(min_tenancy_length) { I18n.t("validations.tenancy.length.invalid_periodic", min_tenancy_length:) },
-        error_fields: %w[tenancylength tenancy],
       }
-      include_examples "adds expected errors based on the tenancy length", periodic_tenancy_case, 1
+      error_fields = %w[tenancylength tenancy]
+      include_examples "adds expected errors based on the tenancy length", periodic_tenancy_case, error_fields, 1
 
       context "when tenancy type is not periodic" do
         before do

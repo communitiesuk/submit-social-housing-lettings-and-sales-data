@@ -14,7 +14,6 @@ module Validations::TenancyValidations
 
     message = I18n.t("validations.tenancy.length.invalid_fixed", min_tenancy_length:)
     record.errors.add :needstype, message
-    record.errors.add :rent_type, message
     record.errors.add :tenancylength, :tenancylength_invalid, message: message
     record.errors.add :tenancy, message
   end
