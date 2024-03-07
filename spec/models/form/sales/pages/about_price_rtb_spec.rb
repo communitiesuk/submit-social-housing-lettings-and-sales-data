@@ -8,7 +8,7 @@ RSpec.describe Form::Sales::Pages::AboutPriceRtb, type: :model do
   let(:subsection) { instance_double(Form::Subsection) }
 
   before do
-    allow(subsection).to receive(:form).and_return(instance_double(Form, start_year_after_2024?: false))
+    allow(subsection).to receive(:form).and_return(instance_double(Form, start_year_after_2024?: false, start_date: Time.zone.local(2023, 4, 1)))
   end
 
   it "has correct subsection" do

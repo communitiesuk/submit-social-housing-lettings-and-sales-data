@@ -12,7 +12,7 @@ class Form::Sales::Questions::DepositAmount < ::Form::Question
     @prefix = "£"
     @derived = true
     @ownershipsch = ownershipsch
-    @question_number = question_number
+    @question_number = QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP.max_by { |k, _v| k }.last)[ownershipsch]
     @optional = optional
   end
 
@@ -20,16 +20,10 @@ class Form::Sales::Questions::DepositAmount < ::Form::Question
     true
   end
 
-  def question_number
-    case @ownershipsch
-    when 1
-      95
-    when 2
-      108
-    when 3
-      116
-    end
-  end
+  QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP = {
+    2023 => { 1 => 95, 2 => 108, 3 => 116 },
+    2024 => { 1 => 96, 2 => 109, 3 => 116 },
+  }.freeze
 
   def hint_text
     if @optional

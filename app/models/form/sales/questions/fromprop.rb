@@ -8,7 +8,7 @@ class Form::Sales::Questions::Fromprop < ::Form::Question
     @hint_text = ""
     @page = page
     @answer_options = ANSWER_OPTIONS
-    @question_number = 86
+    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
   end
 
   ANSWER_OPTIONS = {
@@ -29,4 +29,6 @@ class Form::Sales::Questions::Fromprop < ::Form::Question
       "9" => { "value" => "Other" },
     }
   end
+
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 86, 2024 => 87 }.freeze
 end

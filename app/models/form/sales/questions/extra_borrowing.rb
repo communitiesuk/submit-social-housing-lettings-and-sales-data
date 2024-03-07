@@ -9,7 +9,7 @@ class Form::Sales::Questions::ExtraBorrowing < ::Form::Question
     @page = page
     @hint_text = ""
     @ownershipsch = ownershipsch
-    @question_number = question_number
+    @question_number = QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP.max_by { |k, _v| k }.last)[ownershipsch]
   end
 
   ANSWER_OPTIONS = {
@@ -18,14 +18,8 @@ class Form::Sales::Questions::ExtraBorrowing < ::Form::Question
     "3" => { "value" => "Don't know" },
   }.freeze
 
-  def question_number
-    case @ownershipsch
-    when 1
-      94
-    when 2
-      107
-    when 3
-      115
-    end
-  end
+  QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP = {
+    2023 => { 1 => 94, 2 => 107, 3 => 115 },
+    2024 => { 1 => 95, 2 => 108, 3 => 115 },
+  }.freeze
 end

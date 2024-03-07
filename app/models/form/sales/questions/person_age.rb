@@ -13,6 +13,18 @@ class Form::Sales::Questions::PersonAge < ::Form::Question
     @min = 0
     @max = 110
     @step = 1
-    @question_number = 29 + (4 * person_index)
+    @person_index = person_index
+    @question_number = question_number
+  end
+
+  def question_number
+    base_question_number = case form.start_date.year
+                           when 2023
+                             29
+                           else
+                             31
+                           end
+
+    base_question_number + (4 * @person_index)
   end
 end

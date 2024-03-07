@@ -5,7 +5,7 @@ RSpec.describe Form::Sales::Pages::PersonAge, type: :model do
 
   let(:page_id) { "person_1_age" }
   let(:page_definition) { nil }
-  let(:subsection) { instance_double(Form::Subsection) }
+  let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2023, 4, 1))) }
   let(:person_index) { 1 }
 
   it "has correct subsection" do

@@ -9,7 +9,7 @@ class Form::Sales::Questions::MortgageLender < ::Form::Question
     @page = page
     @bottom_guidance_partial = "mortgage_lender"
     @ownershipsch = ownershipsch
-    @question_number = question_number
+    @question_number = QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP.max_by { |k, _v| k }.last)[ownershipsch]
   end
 
   ANSWER_OPTIONS = {
@@ -73,14 +73,8 @@ class Form::Sales::Questions::MortgageLender < ::Form::Question
     answer_options.reject { |k, _v| OPTIONS_NOT_DISPLAYED.include?(k) }
   end
 
-  def question_number
-    case @ownershipsch
-    when 1
-      92
-    when 2
-      105
-    when 3
-      113
-    end
-  end
+  QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP = {
+    2023 => { 1 => 92, 2 => 105, 3 => 113 },
+    2024 => { 1 => 93, 2 => 106 },
+  }.freeze
 end
