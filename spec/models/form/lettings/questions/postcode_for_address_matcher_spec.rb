@@ -21,7 +21,7 @@ RSpec.describe Form::Lettings::Questions::PostcodeForAddressMatcher, type: :mode
   end
 
   it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Postcode")
+    expect(question.check_answer_label).to eq(nil)
   end
 
   it "has the correct question_number" do

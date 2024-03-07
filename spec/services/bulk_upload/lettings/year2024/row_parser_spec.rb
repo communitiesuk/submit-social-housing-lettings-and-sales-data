@@ -773,12 +773,11 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
 
       describe "#validate_nulls" do
         context "when non-setup questions are null" do
-          let(:attributes) { setup_section_params.merge({ field_16: "", field_17: "", field_19: "" }) }
+          let(:attributes) { setup_section_params.merge({ field_43: "" }) }
 
           it "fetches the question's check_answer_label if it exists, otherwise it gets the question's header" do
             parser.valid?
-            expect(parser.errors[:field_17]).to eql(["You must answer address line 1"])
-            expect(parser.errors[:field_19]).to eql(["You must answer town or city"])
+            expect(parser.errors[:field_43]).to eql(["You must answer lead tenant’s gender identity"])
           end
         end
       end

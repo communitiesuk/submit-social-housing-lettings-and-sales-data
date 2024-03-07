@@ -8,7 +8,7 @@ describe AddressClient do
   end
 
   def stub_api_request(body:, status: 200)
-    stub_request(:get, "https://api.os.uk/search/places/v1/find?key=OS_DATA_KEY&maxresults=10&query=123")
+    stub_request(:get, "https://api.os.uk/search/places/v1/find?key=OS_DATA_KEY&maxresults=10&minmatch=0.4&query=123")
     .to_return(status:, body:, headers: {})
   end
 

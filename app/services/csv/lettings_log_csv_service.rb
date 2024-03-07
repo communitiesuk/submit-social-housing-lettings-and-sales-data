@@ -296,7 +296,7 @@ module Csv
       "letting_allocation_unknown" => %w[letting_allocation_none],
     }.freeze
 
-    SUPPORT_ONLY_ATTRIBUTES = %w[net_income_value_check first_time_property_let_as_social_housing postcode_known is_la_inferred totchild totelder totadult net_income_known previous_la_known is_previous_la_inferred age1_known age2_known age3_known age4_known age5_known age6_known age7_known age8_known details_known_2 details_known_3 details_known_4 details_known_5 details_known_6 details_known_7 details_known_8 wrent wscharge wpschrge wsupchrg wtcharge wtshortfall rent_value_check old_form_id old_id retirement_value_check tshortfall_known pregnancy_value_check hhtype new_old la prevloc updated_by_id bulk_upload_id uprn_confirmed reasonother_value_check].freeze
+    SUPPORT_ONLY_ATTRIBUTES = %w[net_income_value_check first_time_property_let_as_social_housing postcode_known is_la_inferred totchild totelder totadult net_income_known previous_la_known is_previous_la_inferred age1_known age2_known age3_known age4_known age5_known age6_known age7_known age8_known details_known_2 details_known_3 details_known_4 details_known_5 details_known_6 details_known_7 details_known_8 wrent wscharge wpschrge wsupchrg wtcharge wtshortfall rent_value_check old_form_id old_id retirement_value_check tshortfall_known pregnancy_value_check hhtype new_old la prevloc updated_by_id bulk_upload_id uprn_confirmed address_line1_input postcode_full_input address_search_value_check address_selection reasonother_value_check].freeze
 
     def lettings_log_attributes
       ordered_questions = FormHandler.instance.ordered_lettings_questions_for_all_years
