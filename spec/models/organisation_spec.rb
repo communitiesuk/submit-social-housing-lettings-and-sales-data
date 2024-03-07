@@ -231,7 +231,7 @@ RSpec.describe Organisation, type: :model do
     end
 
     context "when searching by active" do
-      it "returns case active records" do
+      it "returns only active records" do
         results = described_class.filter_by_active
         expect(results.count).to eq(1)
         expect(results[0].name).to eq("Tom Smith")
