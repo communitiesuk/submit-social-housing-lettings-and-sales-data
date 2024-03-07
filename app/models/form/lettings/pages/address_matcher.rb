@@ -4,6 +4,7 @@ class Form::Lettings::Pages::AddressMatcher < ::Form::Page
     @id = "address_matcher"
     @header = "Find an address"
     @depends_on = [
+      { "is_supported_housing?" => false, "uprn_known" => nil },
       { "is_supported_housing?" => false, "uprn_known" => 0 },
       { "is_supported_housing?" => false, "uprn_confirmed" => 0 },
     ]
