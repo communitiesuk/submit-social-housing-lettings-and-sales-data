@@ -8,7 +8,7 @@ RSpec.describe Form::Sales::Questions::PersonGenderIdentity, type: :model do
   let(:page) { instance_double(Form::Page) }
   let(:person_index) { 2 }
   let(:subsection) { instance_double(Form::Subsection) }
-  let(:form) { instance_double(Form) }
+  let(:form) { instance_double(Form, start_date: Time.zone.local(2023, 4, 1)) }
 
   before do
     allow(page).to receive(:subsection).and_return(subsection)

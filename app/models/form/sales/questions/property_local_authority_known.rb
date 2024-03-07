@@ -22,5 +22,5 @@ class Form::Sales::Questions::PropertyLocalAuthorityKnown < ::Form::Question
     "0" => { "value" => "No" },
   }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 16, 2024 => 20 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 16, 2024 => 17 }.freeze
 end

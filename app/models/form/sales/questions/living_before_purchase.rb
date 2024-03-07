@@ -28,6 +28,6 @@ class Form::Sales::Questions::LivingBeforePurchase < ::Form::Question
 
   QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP = {
     2023 => { 1 => 75, 2 => 99 },
-    2024 => { 1 => 77, 2 => 101 },
+    2024 => { 1 => 77, 2 => 100 },
   }.freeze
 end

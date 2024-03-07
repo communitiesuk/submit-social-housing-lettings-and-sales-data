@@ -17,5 +17,5 @@ class Form::Sales::Questions::PropertyUnitType < ::Form::Question
     "9" => { "value" => "Other" },
   }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 12, 2024 => 16 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 12, 2024 => 19 }.freeze
 end

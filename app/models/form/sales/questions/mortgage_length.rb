@@ -20,6 +20,6 @@ class Form::Sales::Questions::MortgageLength < ::Form::Question
 
   QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP = {
     2023 => { 1 => 93, 2 => 106, 3 => 114 },
-    2024 => { 1 => 95, 2 => 108, 3 => 115 },
+    2024 => { 1 => 94, 2 => 107, 3 => 114 },
   }.freeze
 end

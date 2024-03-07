@@ -16,7 +16,7 @@ class Form::Sales::Questions::PurchasePrice < ::Form::Question
 
   QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP = {
     2023 => { 2 => 100, 3 => 110 },
-    2024 => { 2 => 102, 3 => 112 },
+    2024 => { 2 => 101, 3 => 111 },
   }.freeze
 
   def hint_text

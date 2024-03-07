@@ -13,6 +13,7 @@ class Form::Sales::Questions::PersonWorkingSituation < ::Form::Question
       "value" => "Prefers not to say",
     }]
     @person_index = person_index
+    @question_number = question_number
   end
 
   ANSWER_OPTIONS = {

@@ -22,7 +22,7 @@ class Form::Sales::Questions::DepositAmount < ::Form::Question
 
   QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP = {
     2023 => { 1 => 95, 2 => 108, 3 => 116 },
-    2024 => { 1 => 97, 2 => 110, 3 => 117 },
+    2024 => { 1 => 96, 2 => 109, 3 => 116 },
   }.freeze
 
   def hint_text

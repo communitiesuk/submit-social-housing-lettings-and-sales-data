@@ -75,6 +75,6 @@ class Form::Sales::Questions::MortgageLender < ::Form::Question
 
   QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP = {
     2023 => { 1 => 92, 2 => 105, 3 => 113 },
-    2024 => { 1 => 94, 2 => 107 },
+    2024 => { 1 => 93, 2 => 106 },
   }.freeze
 end

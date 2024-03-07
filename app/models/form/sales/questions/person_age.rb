@@ -14,6 +14,7 @@ class Form::Sales::Questions::PersonAge < ::Form::Question
     @max = 110
     @step = 1
     @person_index = person_index
+    @question_number = question_number
   end
 
   def question_number

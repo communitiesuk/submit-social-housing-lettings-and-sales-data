@@ -36,5 +36,5 @@ class Form::Sales::Questions::Uprn < ::Form::Question
     "\n\n#{value.join("\n")}"
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 14, 2024 => 18 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 14, 2024 => 15 }.freeze
 end
