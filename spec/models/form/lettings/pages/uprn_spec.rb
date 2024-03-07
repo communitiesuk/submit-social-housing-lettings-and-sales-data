@@ -5,13 +5,7 @@ RSpec.describe Form::Lettings::Pages::Uprn, type: :model do
 
   let(:page_id) { nil }
   let(:page_definition) { nil }
-  let(:subsection) { instance_double(Form::Subsection) }
-  let(:form) { instance_double(Form) }
-
-  before do
-    allow(form).to receive(:start_year_after_2024?).and_return(false)
-    allow(subsection).to receive(:form).and_return(form)
-  end
+  let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2024, 4, 1))) }
 
   it "has correct subsection" do
     expect(page.subsection).to eq(subsection)

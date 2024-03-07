@@ -8,7 +8,7 @@ class Form::Lettings::Questions::ReasonablePreferenceReason < ::Form::Question
     @check_answers_card_number = 0
     @hint_text = "Select all that apply."
     @answer_options = ANSWER_OPTIONS
-    @question_number = 83
+    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
   end
 
   ANSWER_OPTIONS = {
@@ -19,4 +19,6 @@ class Form::Lettings::Questions::ReasonablePreferenceReason < ::Form::Question
     "divider" => { "value" => true },
     "rp_dontknow" => { "value" => "Don’t know" },
   }.freeze
+
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 83, 2024 => 82 }.freeze
 end

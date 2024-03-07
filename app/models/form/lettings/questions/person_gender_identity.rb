@@ -7,7 +7,8 @@ class Form::Lettings::Questions::PersonGenderIdentity < ::Form::Question
     @type = "radio"
     @check_answers_card_number = person_index
     @answer_options = ANSWER_OPTIONS
-    @question_number = 32 + (4 * person_index)
+    @person_index = person_index
+    @question_number = question_number
   end
 
   ANSWER_OPTIONS = {
@@ -24,5 +25,16 @@ class Form::Lettings::Questions::PersonGenderIdentity < ::Form::Question
     else
       ""
     end
+  end
+
+  def question_number
+    base_question_number = case form.start_date.year
+                           when 2023
+                             32
+                           else
+                             31
+                           end
+
+    base_question_number + (4 * @person_index)
   end
 end

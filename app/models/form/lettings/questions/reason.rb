@@ -12,7 +12,7 @@ class Form::Lettings::Questions::Reason < ::Form::Question
         20,
       ],
     }
-    @question_number = 77
+    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
   end
 
   def answer_options
@@ -92,4 +92,6 @@ class Form::Lettings::Questions::Reason < ::Form::Question
       }.freeze
     end
   end
+
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 77, 2024 => 76 }.freeze
 end

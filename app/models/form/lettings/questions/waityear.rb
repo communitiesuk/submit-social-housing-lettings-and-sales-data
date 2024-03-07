@@ -7,7 +7,7 @@ class Form::Lettings::Questions::Waityear < ::Form::Question
     @type = "radio"
     @check_answers_card_number = 0
     @hint_text = ""
-    @question_number = 76
+    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
   end
 
   def answer_options
@@ -36,4 +36,6 @@ class Form::Lettings::Questions::Waityear < ::Form::Question
       }.freeze
     end
   end
+
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 76, 2024 => 75 }.freeze
 end

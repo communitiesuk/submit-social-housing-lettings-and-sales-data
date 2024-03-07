@@ -1,7 +1,9 @@
 require "rails_helper"
 
 RSpec.describe Form::Lettings::Questions::NetIncomeKnown do
-  subject(:question) { described_class.new(nil, {}, nil) }
+  subject(:question) { described_class.new(nil, {}, page) }
+
+  let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2023, 4, 1)))) }
 
   describe "#id" do
     it "is net_income_known" do

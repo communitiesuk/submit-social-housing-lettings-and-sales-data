@@ -7,7 +7,7 @@ class Form::Lettings::Questions::LettingAllocation < ::Form::Question
     @type = "checkbox"
     @check_answers_card_number = 0
     @hint_text = "Select all that apply."
-    @question_number = 84
+    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
   end
 
   def answer_options
@@ -30,4 +30,6 @@ class Form::Lettings::Questions::LettingAllocation < ::Form::Question
       }.freeze
     end
   end
+
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 84, 2024 => 83 }.freeze
 end

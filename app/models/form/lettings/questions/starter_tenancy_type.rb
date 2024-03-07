@@ -8,7 +8,7 @@ class Form::Lettings::Questions::StarterTenancyType < ::Form::Question
     @check_answers_card_number = 0
     @hint_text = form.start_year_after_2024? ? "" : "This is also known as an ‘introductory period’."
     @conditional_for = { "tenancyother" => [3] }
-    @question_number = 27
+    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
   end
 
   def answer_options
@@ -66,4 +66,6 @@ class Form::Lettings::Questions::StarterTenancyType < ::Form::Question
       }.freeze
     end
   end
+
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 27 }.freeze
 end

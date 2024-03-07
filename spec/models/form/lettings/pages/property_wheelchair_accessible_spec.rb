@@ -3,10 +3,10 @@ require "rails_helper"
 RSpec.describe Form::Lettings::Pages::PropertyWheelchairAccessible, type: :model do
   subject(:page) { described_class.new(nil, nil, subsection) }
 
-  let(:subsection) { instance_double(Form::Subsection) }
+  let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2024, 4, 1))) }
 
   before do
-    allow(subsection).to receive(:form).and_return(instance_double(Form, start_year_after_2024?: false))
+    allow(subsection).to receive(:form).and_return(instance_double(Form, start_year_after_2024?: false, start_date: Time.zone.local(2023, 4, 1)))
   end
 
   it "has correct subsection" do
