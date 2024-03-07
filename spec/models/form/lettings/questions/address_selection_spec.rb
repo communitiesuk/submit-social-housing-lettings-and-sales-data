@@ -7,10 +7,12 @@ RSpec.describe Form::Lettings::Questions::AddressSelection, type: :model do
   let(:question_definition) { nil }
   let(:page) { instance_double(Form::Page) }
   let(:log) { create(:lettings_log, :in_progress, address_line1_input: "Address line 1", postcode_full_input: "AA1 1AA") }
+  let(:address_client_instance) { AddressClient.new(log.address_string) }
 
   before do
-    allow_any_instance_of(AddressClient).to receive(:call)
-    allow_any_instance_of(AddressClient).to receive(:result).and_return([{
+    allow(AddressClient).to receive(:new).and_return(address_client_instance)
+    allow(address_client_instance).to receive(:call)
+    allow(address_client_instance).to receive(:result).and_return([{
       "UPRN" => "UPRN",
       "UDPRN" => "UDPRN",
       "ADDRESS" => "full address",
@@ -87,7 +89,7 @@ RSpec.describe Form::Lettings::Questions::AddressSelection, type: :model do
 
   context "when the log does not have address options" do
     before do
-      allow_any_instance_of(AddressClient).to receive(:result).and_return(nil)
+      allow(address_client_instance).to receive(:result).and_return(nil)
     end
 
     it "has the correct hidden_in_check_answers?" do

@@ -80,7 +80,6 @@ class Log < ApplicationRecord
 
   def process_address_change!
     if [address_line1_input, postcode_full_input].all?(&:present?) && (address_selection.present? || select_best_address_match.present?)
-      address_string = "#{address_line1_input}, , , #{postcode_full_input}"
       service = AddressClient.new(address_string)
       service.call
 
@@ -118,6 +117,10 @@ class Log < ApplicationRecord
         self.county = nil
       end
     end
+  end
+
+  def address_string
+    "#{address_line1_input}, , , #{postcode_full_input}"
   end
 
   def address_options

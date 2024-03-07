@@ -28,6 +28,6 @@ RSpec.describe Form::Lettings::Pages::AddressMatcher, type: :model do
   end
 
   it "has correct depends_on" do
-    expect(page.depends_on).to eq([{"is_supported_housing?"=>false, "uprn_known"=>nil}, {"is_supported_housing?"=>false, "uprn_known"=>0}, {"is_supported_housing?"=>false, "uprn_confirmed"=>0}])
+    expect(page.depends_on).to eq([{ "is_supported_housing?" => false, "uprn_known" => nil }, { "is_supported_housing?" => false, "uprn_known" => 0 }, { "is_supported_housing?" => false, "uprn_confirmed" => 0 }])
   end
 end
