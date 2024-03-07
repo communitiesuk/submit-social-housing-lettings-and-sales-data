@@ -3,48 +3,68 @@ module Validations::TenancyValidations
   # or 'validate_' to run on submit as well
   include Validations::SharedValidations
 
-  def validate_fixed_term_tenancy(record)
-    is_present = record.tenancylength.present?
-    is_in_range = record.tenancylength.to_i.between?(min_tenancy_length(record), 99)
-    rent_type_dependent_conditions = [
-      {
-        condition: (record.is_assured_shorthold_tenancy? && !is_in_range) && is_present,
-        error: I18n.t(
-          "validations.tenancy.length.shorthold",
-          min_tenancy_length: min_tenancy_length(record),
-        ),
-      },
-      {
-        condition: (record.is_secure_tenancy? && !is_in_range) && is_present,
-        error: I18n.t(
-          "validations.tenancy.length.secure",
-          min_tenancy_length: min_tenancy_length(record),
-        ),
-      },
-      {
-        condition: (record.is_periodic_tenancy? && !is_in_range) && is_present,
-        error: I18n.t(
-          "validations.tenancy.length.secure",
-          min_tenancy_length: min_tenancy_length(record),
-        ),
-      },
-    ]
-    rent_type_independent_conditions = [
-      {
-        condition: !(record.is_secure_tenancy? || record.is_assured_shorthold_tenancy? || record.is_periodic_tenancy?) && is_present,
-        error: I18n.t("validations.tenancy.length.fixed_term_not_required"),
-      },
-    ]
-    conditions = rent_type_dependent_conditions + rent_type_independent_conditions
+  # N.B. To match the page split and naming, this is the supported housing case
+  # General needs cases are in the other validations below
+  def validate_tenancy_length(record)
+    return unless record.tenancy_type_fixed_term? && record.is_supported_housing?
+    return if record.tenancylength.blank?
 
-    conditions.each do |condition|
-      next unless condition[:condition]
+    min_tenancy_length = 1
+    return if record.tenancylength.to_i.between?(min_tenancy_length, 99)
 
-      record.errors.add :needstype, condition[:error]
-      record.errors.add :rent_type, condition[:error] if rent_type_dependent_conditions.include?(condition)
-      record.errors.add :tenancylength, :tenancylength_invalid, message: condition[:error]
-      record.errors.add :tenancy, condition[:error]
-    end
+    message = record.is_assured_shorthold_tenancy? ? I18n.t("validations.tenancy.length.shorthold", min_tenancy_length:) : I18n.t("validations.tenancy.length.secure", min_tenancy_length:)
+    record.errors.add :needstype, message
+    record.errors.add :rent_type, message
+    record.errors.add :tenancylength, :tenancylength_invalid, message: message
+    record.errors.add :tenancy, message
+  end
+
+  def validate_tenancy_length_affordable_rent(record)
+    return unless record.tenancy_type_fixed_term? && record.affordable_or_social_rent? && record.is_general_needs?
+    return if record.tenancylength.blank?
+
+    min_tenancy_length = 2
+    return if record.tenancylength.to_i.between?(min_tenancy_length, 99)
+
+    message = record.is_assured_shorthold_tenancy? ? I18n.t("validations.tenancy.length.shorthold", min_tenancy_length:) : I18n.t("validations.tenancy.length.secure", min_tenancy_length:)
+    record.errors.add :needstype, message
+    record.errors.add :rent_type, message
+    record.errors.add :tenancylength, :tenancylength_invalid, message: message
+    record.errors.add :tenancy, message
+  end
+
+  def validate_tenancy_length_intermediate_rent(record)
+    return unless record.tenancy_type_fixed_term? && !record.affordable_or_social_rent? && record.is_general_needs?
+    return if record.tenancylength.blank?
+
+    min_tenancy_length = 1
+    return if record.tenancylength.to_i.between?(min_tenancy_length, 99)
+
+    message = record.is_assured_shorthold_tenancy? ? I18n.t("validations.tenancy.length.shorthold", min_tenancy_length:) : I18n.t("validations.tenancy.length.secure", min_tenancy_length:)
+    record.errors.add :needstype, message
+    record.errors.add :rent_type, message
+    record.errors.add :tenancylength, :tenancylength_invalid, message: message
+    record.errors.add :tenancy, message
+  end
+
+  def validate_tenancy_length_periodic(record)
+    return unless record.is_periodic_tenancy? && record.tenancylength.present?
+
+    min_tenancy_length = 1
+    return if record.tenancylength.to_i.between?(min_tenancy_length, 99)
+
+    message = I18n.t("validations.tenancy.length.secure", min_tenancy_length:)
+    record.errors.add :tenancylength, :tenancylength_invalid, message: message
+    record.errors.add :tenancy, message
+  end
+
+  def validate_tenancy_length_blank_when_not_required(record)
+    return if record.tenancylength.blank?
+    return if record.tenancy_type_fixed_term? || record.is_periodic_tenancy?
+
+    message = I18n.t("validations.tenancy.length.fixed_term_not_required")
+    record.errors.add :tenancylength, :tenancylength_invalid, message: message
+    record.errors.add :tenancy, message
   end
 
   def validate_other_tenancy_type(record)
@@ -58,9 +78,5 @@ module Validations::TenancyValidations
       record.errors.add :joint, :not_joint_tenancy, message: I18n.t("validations.tenancy.not_joint")
       record.errors.add :hhmemb, I18n.t("validations.tenancy.joint_more_than_one_member")
     end
-  end
-
-  def min_tenancy_length(record)
-    record.is_supported_housing? || record.renttype == 3 || record.is_periodic_tenancy? ? 1 : 2
   end
 end

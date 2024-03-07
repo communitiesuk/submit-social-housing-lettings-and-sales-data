@@ -112,8 +112,15 @@ RSpec.describe LettingsLog do
     end
 
     it "validates tenancy type" do
-      expect(validator).to receive(:validate_fixed_term_tenancy)
       expect(validator).to receive(:validate_other_tenancy_type)
+    end
+
+    it "validates tenancy length" do
+      expect(validator).to receive(:validate_tenancy_length)
+      expect(validator).to receive(:validate_tenancy_length_affordable_rent)
+      expect(validator).to receive(:validate_tenancy_length_intermediate_rent)
+      expect(validator).to receive(:validate_tenancy_length_periodic)
+      expect(validator).to receive(:validate_tenancy_length_blank_when_not_required)
     end
 
     it "validates the previous postcode" do
