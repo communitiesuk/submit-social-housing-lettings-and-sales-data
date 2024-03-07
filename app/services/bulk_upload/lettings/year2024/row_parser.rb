@@ -543,7 +543,7 @@ private
 
   def validate_address_option_found
     if log.address_selection.nil? && field_16.blank? && (field_17.present? || field_19.present?)
-      %i[field_17 field_18 field_19 field_21 field_22].each do |field|
+      %i[field_17 field_18 field_19 field_20 field_21 field_22].each do |field|
         errors.add(field, I18n.t("validations.no_address_found"))
       end
     end
@@ -1235,7 +1235,7 @@ private
   end
 
   def address_line1_input
-    [field_17, field_18, field_19, field_20].compact.join(", ")
+    [field_17, field_18, field_19].compact.join(", ")
   end
 
   def postcode_known

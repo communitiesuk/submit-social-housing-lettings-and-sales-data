@@ -450,6 +450,7 @@ class BulkUpload::Sales::Year2024::RowParser
             on: :after_log
 
   validate :validate_buyer1_economic_status, on: :before_log
+  validate :validate_address_option_found, on: :after_log
   validate :validate_nulls, on: :after_log
   validate :validate_valid_radio_option, on: :before_log
 
@@ -594,6 +595,14 @@ private
   def validate_uprn_exists_if_any_key_address_fields_are_blank
     if field_22.blank? && (field_23.blank? || field_25.blank?)
       errors.add(:field_22, I18n.t("validations.not_answered", question: "UPRN"))
+    end
+  end
+
+  def validate_address_option_found
+    if log.address_selection.nil? && field_22.blank? && (field_23.present? || field_25.present?)
+      %i[field_23 field_24 field_25 field_26 field_27 field_28].each do |field|
+        errors.add(field, I18n.t("validations.no_address_found"))
+      end
     end
   end
 
@@ -758,6 +767,7 @@ private
       address_line2: %i[field_24],
       town_or_city: %i[field_25],
       county: %i[field_26],
+      address_selection: [:field_23],
 
       ethnic_group2: %i[field_40],
       ethnicbuy2: %i[field_40],
@@ -932,6 +942,9 @@ private
     attributes["address_line2"] = field_24
     attributes["town_or_city"] = field_25
     attributes["county"] = field_26
+    attributes["address_line1_input"] = address_line1_input
+    attributes["postcode_full_input"] = postcode_full
+    attributes["select_best_address_match"] = true
 
     attributes["ethnic_group2"] = infer_buyer2_ethnic_group_from_ethnic
     attributes["ethnicbuy2"] = field_40
@@ -946,6 +959,10 @@ private
     attributes["staircasesale"] = field_89
 
     attributes
+  end
+
+  def address_line1_input
+    [field_23, field_24, field_25].compact.join(", ")
   end
 
   def saledate

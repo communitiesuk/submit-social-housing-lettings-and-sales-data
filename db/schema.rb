@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_03_06_091659) do
+ActiveRecord::Schema[7.0].define(version: 2024_03_07_161802) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -668,6 +668,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_06_091659) do
     t.integer "address_selection"
     t.string "address_line1_input"
     t.string "postcode_full_input"
+    t.integer "address_search_value_check"
     t.index ["bulk_upload_id"], name: "index_sales_logs_on_bulk_upload_id"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
     t.index ["managing_organisation_id"], name: "index_sales_logs_on_managing_organisation_id"
