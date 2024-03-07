@@ -46,4 +46,8 @@ class AddressDataPresenter
   def address
     data["ADDRESS"]
   end
+
+  def match
+    data["MATCH"]
+  end
 end

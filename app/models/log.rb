@@ -53,7 +53,7 @@ class Log < ApplicationRecord
   scope :filter_by_owning_organisation, ->(owning_organisation, _user = nil) { where(owning_organisation:) }
   scope :filter_by_managing_organisation, ->(managing_organisation, _user = nil) { where(managing_organisation:) }
 
-  attr_accessor :skip_update_status, :skip_update_uprn_confirmed, :skip_update_address_selection, :skip_dpo_validation
+  attr_accessor :skip_update_status, :skip_update_uprn_confirmed, :select_best_address_match, :skip_dpo_validation
 
   delegate :present?, to: :address_options, prefix: true
 
@@ -68,7 +68,7 @@ class Log < ApplicationRecord
 
       self.uprn_known = 1
       self.uprn_confirmed = nil unless skip_update_uprn_confirmed
-      self.address_selection = nil # unless skip_update_address_confirmed
+      self.address_selection = nil
       self.address_line1 = presenter.address_line1
       self.address_line2 = presenter.address_line2
       self.town_or_city = presenter.town_or_city
@@ -79,27 +79,37 @@ class Log < ApplicationRecord
   end
 
   def process_address_change!
-    if [address_selection, address_line1_input, postcode_full_input].all?(&:present?)
+    if [address_line1_input, postcode_full_input].all?(&:present?) && (address_selection.present? || select_best_address_match.present?)
       address_string = "#{address_line1_input}, , , #{postcode_full_input}"
       service = AddressClient.new(address_string)
       service.call
 
       return errors.add(:address_selection, :address_error, message: service.error) if service.error.present?
 
+      if select_best_address_match
+        presenter = AddressDataPresenter.new(service.result.first)
+        os_good_match_threshold = 0.8
+        if presenter.match >= os_good_match_threshold
+          self.address_selection = 0
+        else
+          return nil
+        end
+      end
+
       if address_selection.between?(0, 9)
         presenter = AddressDataPresenter.new(service.result[address_selection])
 
         self.uprn_known = 1
-        self.uprn_confirmed = 1 # unless skip_update_uprn_confirmed
-        self.address_selection = nil # unless skip_update_address_confirmed
-        self.uprn = presenter.uprn # skip process uprn change?
+        self.uprn_confirmed = 1
+        self.address_selection = nil
+        self.uprn = presenter.uprn
         self.address_line1 = presenter.address_line1
         self.address_line2 = presenter.address_line2
         self.town_or_city = presenter.town_or_city
         self.postcode_full = presenter.postcode
         self.county = nil
         process_postcode_changes!
-      elsif address_selection == -1
+      elsif address_selection == 100
         self.uprn_known = 0
         self.uprn_confirmed = nil
         self.uprn = nil

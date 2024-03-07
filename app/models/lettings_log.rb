@@ -850,6 +850,6 @@ private
   end
 
   def should_process_address_change?
-    address_selection && startdate && (address_selection_changed? || startdate_changed?) && form.start_year_after_2024?
+    (address_selection || select_best_address_match) && startdate && ((address_selection_changed? || select_best_address_match) || startdate_changed?) && form.start_year_after_2024?
   end
 end
