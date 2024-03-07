@@ -56,6 +56,19 @@ RSpec.describe SchemesController, type: :request do
         end
       end
 
+      context "when there are deleted schemes" do
+        let!(:deleted_scheme) { create(:scheme, service_name: "deleted", discarded_at: Time.zone.yesterday, owning_organisation: user.organisation) }
+
+        before do
+          get "/schemes"
+        end
+
+        it "does not show deleted schemes" do
+          follow_redirect!
+          expect(page).not_to have_content(deleted_scheme.id_to_display)
+        end
+      end
+
       context "when parent organisation has schemes" do
         let(:parent_organisation) { create(:organisation) }
         let!(:parent_schemes) { create_list(:scheme, 5, owning_organisation: parent_organisation) }
@@ -189,6 +202,18 @@ RSpec.describe SchemesController, type: :request do
 
       it "has page heading" do
         expect(page).to have_content("Schemes")
+      end
+
+      context "when there are deleted schemes" do
+        let!(:deleted_scheme) { create(:scheme, service_name: "deleted", discarded_at: Time.zone.yesterday, owning_organisation: user.organisation) }
+
+        before do
+          get "/schemes"
+        end
+
+        it "does not show deleted schemes" do
+          expect(page).not_to have_content(deleted_scheme.id_to_display)
+        end
       end
 
       describe "scheme and location csv downloads" do

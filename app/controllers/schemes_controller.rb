@@ -13,7 +13,7 @@ class SchemesController < ApplicationController
 
   def index
     redirect_to schemes_organisation_path(current_user.organisation) unless current_user.support?
-    all_visible_schemes = Scheme.all.visible
+    all_visible_schemes = Scheme.visible
 
     @pagy, @schemes = pagy(filter_manager.filtered_schemes(all_visible_schemes, search_term, session_filters))
     @searched = search_term.presence
