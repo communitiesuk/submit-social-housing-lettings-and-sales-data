@@ -5,7 +5,7 @@ RSpec.describe Form::Lettings::Pages::Address, type: :model do
 
   let(:page_id) { nil }
   let(:page_definition) { nil }
-  let(:subsection) { instance_double(Form::Subsection) }
+  let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2024, 4, 1))) }
 
   it "has correct subsection" do
     expect(page.subsection).to eq(subsection)
@@ -20,7 +20,7 @@ RSpec.describe Form::Lettings::Pages::Address, type: :model do
   end
 
   it "has the correct header" do
-    expect(page.header).to eq("Q12 - What is the property's address?")
+    expect(page.header).to eq("Q13 - What is the property's address?")
   end
 
   it "has the correct description" do

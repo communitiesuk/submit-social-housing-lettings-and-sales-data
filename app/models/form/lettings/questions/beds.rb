@@ -10,10 +10,12 @@ class Form::Lettings::Questions::Beds < ::Form::Question
     @max = 12
     @min = 1
     @step = 1
-    @question_number = 22
+    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
   end
 
   def hint_text
     form.start_year_after_2024? ? "If shared accommodation, enter the number of bedrooms occupied by this household." : "If shared accommodation, enter the number of bedrooms occupied by this household. A bedsit has 1 bedroom."
   end
+
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 22 }.freeze
 end

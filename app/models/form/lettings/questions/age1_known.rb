@@ -9,7 +9,7 @@ class Form::Lettings::Questions::Age1Known < ::Form::Question
     @answer_options = ANSWER_OPTIONS
     @conditional_for = { "age1" => [0] }
     @hidden_in_check_answers = { "depends_on" => [{ "age1_known" => 0 }, { "age1_known" => 1 }] }
-    @question_number = 32
+    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
   end
 
   ANSWER_OPTIONS = { "0" => { "value" => "Yes" }, "1" => { "value" => "No" } }.freeze
@@ -21,4 +21,6 @@ class Form::Lettings::Questions::Age1Known < ::Form::Question
       "The ’lead’ or ’main’ tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest."
     end
   end
+
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 32, 2024 => 31 }.freeze
 end

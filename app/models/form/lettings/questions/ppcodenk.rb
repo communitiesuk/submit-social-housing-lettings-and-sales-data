@@ -10,7 +10,7 @@ class Form::Lettings::Questions::Ppcodenk < ::Form::Question
     @answer_options = ANSWER_OPTIONS
     @conditional_for = { "ppostcode_full" => [0] }
     @hidden_in_check_answers = { "depends_on" => [{ "ppcodenk" => 0 }, { "ppcodenk" => 1 }] }
-    @question_number = 80
+    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
     @disable_clearing_if_not_routed_or_dynamic_answer_options = true
   end
 
@@ -18,4 +18,6 @@ class Form::Lettings::Questions::Ppcodenk < ::Form::Question
     "0" => { "value" => "Yes" },
     "1" => { "value" => "No" },
   }.freeze
+
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 80, 2024 => 79 }.freeze
 end

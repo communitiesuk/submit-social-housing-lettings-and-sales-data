@@ -8,7 +8,7 @@ class Form::Lettings::Questions::EthnicGroup < ::Form::Question
     @check_answers_card_number = 1
     @hint_text = "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest."
     @answer_options = ANSWER_OPTIONS
-    @question_number = 34
+    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
   end
 
   ANSWER_OPTIONS = {
@@ -20,4 +20,6 @@ class Form::Lettings::Questions::EthnicGroup < ::Form::Question
     "divider" => { "value" => true },
     "17" => { "value" => "Tenant prefers not to say" },
   }.freeze
+
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 34, 2024 => 33 }.freeze
 end

@@ -22,6 +22,7 @@ class Form::Lettings::Questions::UprnKnown < ::Form::Question
         { "uprn_known" => 1 },
       ],
     }
+    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
   end
 
   ANSWER_OPTIONS = {
@@ -32,4 +33,6 @@ class Form::Lettings::Questions::UprnKnown < ::Form::Question
   def unanswered_error_message
     I18n.t("validations.property.uprn_known.invalid")
   end
+
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 11, 2024 => 12 }.freeze
 end

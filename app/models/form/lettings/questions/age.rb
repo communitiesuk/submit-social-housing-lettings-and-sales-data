@@ -12,6 +12,18 @@ class Form::Lettings::Questions::Age < ::Form::Question
     @min = 1
     @step = 1
     @hint_text = "For a child under 1, enter 1" if person_type == "child"
-    @question_number = 31 + (4 * person_index)
+    @person_index = person_index
+    @question_number = question_number
+  end
+
+  def question_number
+    base_question_number = case form.start_date.year
+                           when 2023
+                             31
+                           else
+                             30
+                           end
+
+    base_question_number + (4 * @person_index)
   end
 end
