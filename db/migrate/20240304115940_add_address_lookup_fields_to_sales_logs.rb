@@ -1,7 +1,9 @@
 class AddAddressLookupFieldsToSalesLogs < ActiveRecord::Migration[7.0]
   def change
-    add_column :sales_logs, :address_selection, :integer
-    add_column :sales_logs, :address_line1_input, :string
-    add_column :sales_logs, :postcode_full_input, :string
+    change_table :sales_logs, bulk: true do |t|
+      t.integer :address_selection
+      t.string :address_line1_input
+      t.string :postcode_full_input
+    end
   end
 end
