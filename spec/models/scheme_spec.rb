@@ -231,6 +231,11 @@ RSpec.describe Scheme, type: :model do
         expect(scheme.status).to eq(:deactivating_soon)
       end
 
+      it "returns deactivated if the owning organisation is deactivated" do
+        scheme.owning_organisation.active = false
+        expect(scheme.status).to eq(:deactivated)
+      end
+
       it "returns deactivated if deactivation_date is in the past" do
         FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 6), scheme:)
         scheme.reload

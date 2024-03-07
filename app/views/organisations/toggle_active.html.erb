@@ -20,6 +20,10 @@
       <%= f.hidden_field :active, value: active_value %>
 
       <%= f.govuk_submit "#{action.capitalize} this organisation" %>
+
+      <p class="govuk-body">
+        <%= govuk_link_to("Cancel", organisation_path(@organisation)) %>
+      </p>
     </div>
   </div>
 <% end %>
