@@ -337,6 +337,38 @@ class BulkUpload::Lettings::Year2024::RowParser
             },
             on: :after_log
 
+  validates :field_112,
+            inclusion: {
+              in: [1, 2],
+              message: I18n.t("validations.invalid_option", question: "was the letting made under the Choice-Based Lettings (CBL)"),
+              if: -> { field_112.present? },
+            },
+            on: :after_log
+
+  validates :field_113,
+            inclusion: {
+              in: [1, 2],
+              message: I18n.t("validations.invalid_option", question: "was the letting made under the Common Allocation Policy (CAP)"),
+              if: -> { field_113.present? },
+            },
+            on: :after_log
+
+  validates :field_114,
+            inclusion: {
+              in: [1, 2],
+              message: I18n.t("validations.invalid_option", question: "was the letting made under the Common Housing Register (CHR)"),
+              if: -> { field_114.present? },
+            },
+            on: :after_log
+
+  validates :field_115,
+            inclusion: {
+              in: [1, 2],
+              message: I18n.t("validations.invalid_option", question: "was the letting made under the Accessible Register"),
+              if: -> { field_115.present? },
+            },
+            on: :after_log
+
   validates :field_42, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 1 must be a number or the letter R" }, on: :after_log
   validates :field_48, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 2 must be a number or the letter R" }, on: :after_log, if: proc { details_known?(2).zero? }
   validates :field_52, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 3 must be a number or the letter R" }, on: :after_log, if: proc { details_known?(3).zero? }

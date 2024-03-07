@@ -1873,6 +1873,15 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
           expect(parser.log.cbl).to be(0)
         end
       end
+
+      context "when field_112 is not a permitted value" do
+        let(:attributes) { { bulk_upload:, field_112: 3 } }
+
+        it "adds an error" do
+          parser.valid?
+          expect(parser.errors[:field_112]).to include("Enter a valid value for was the letting made under the Choice-Based Lettings (CBL)")
+        end
+      end
     end
 
     describe "#chr" do
@@ -1891,6 +1900,15 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
           expect(parser.log.chr).to be(0)
         end
       end
+
+      context "when field_114 is not a permitted value" do
+        let(:attributes) { { bulk_upload:, field_114: 3 } }
+
+        it "adds an error" do
+          parser.valid?
+          expect(parser.errors[:field_114]).to include("Enter a valid value for was the letting made under the Common Housing Register (CHR)")
+        end
+      end
     end
 
     describe "#cap" do
@@ -1907,6 +1925,42 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
 
         it "sets value to 0" do
           expect(parser.log.cap).to be(0)
+        end
+      end
+
+      context "when field_113 is not a permitted value" do
+        let(:attributes) { { bulk_upload:, field_113: 3 } }
+
+        it "adds an error" do
+          parser.valid?
+          expect(parser.errors[:field_113]).to include("Enter a valid value for was the letting made under the Common Allocation Policy (CAP)")
+        end
+      end
+    end
+
+    describe "#accessible_register" do
+      context "when field_115 is yes ie 1" do
+        let(:attributes) { { bulk_upload:, field_115: 1 } }
+
+        it "sets value to 1" do
+          expect(parser.log.accessible_register).to be(1)
+        end
+      end
+
+      context "when field_115 is no ie 2" do
+        let(:attributes) { { bulk_upload:, field_115: 2 } }
+
+        it "sets value to 0" do
+          expect(parser.log.accessible_register).to be(0)
+        end
+      end
+
+      context "when field_115 is not a permitted value" do
+        let(:attributes) { { bulk_upload:, field_115: 3 } }
+
+        it "adds an error" do
+          parser.valid?
+          expect(parser.errors[:field_115]).to include("Enter a valid value for was the letting made under the Accessible Register")
         end
       end
     end
