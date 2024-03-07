@@ -1,10 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Form::Sales::Subsections::PropertyInformation, type: :model do
-  subject(:property_information) { described_class.new(subsection_id, subsection_definition, section) }
+  subject(:property_information) { described_class.new(nil, nil, section) }
 
-  let(:subsection_id) { nil }
-  let(:subsection_definition) { nil }
   let(:section) { instance_double(Form::Sales::Sections::PropertyInformation) }
 
   it "has correct section" do
@@ -12,7 +10,12 @@ RSpec.describe Form::Sales::Subsections::PropertyInformation, type: :model do
   end
 
   describe "pages" do
-    let(:section) { instance_double(Form::Sales::Sections::Household, form: instance_double(Form, start_date:)) }
+    let(:section) { instance_double(Form::Sales::Sections::Household, form:) }
+    let(:form) { instance_double(Form, start_date:) }
+
+    before do
+      allow(form).to receive(:start_year_after_2024?).and_return(false)
+    end
 
     context "when 2022" do
       let(:start_date) { Time.utc(2022, 2, 8) }
@@ -67,11 +70,18 @@ RSpec.describe Form::Sales::Subsections::PropertyInformation, type: :model do
     context "when 2024" do
       let(:start_date) { Time.utc(2024, 2, 8) }
 
+      before do
+        allow(form).to receive(:start_year_after_2024?).and_return(true)
+      end
+
       it "has correct pages" do
         expect(property_information.pages.map(&:id)).to eq(
           %w[
             uprn
             uprn_confirmation
+            address_matcher
+            no_address_found
+            address_selection
             address
             property_local_authority
             local_authority_buyer_1_income_max_value_check
