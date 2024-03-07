@@ -11,21 +11,15 @@ class Form::Sales::Questions::MortgageLength < ::Form::Question
     @width = 5
     @hint_text = "You should round up to the nearest year. Value should not exceed 60 years."
     @ownershipsch = ownershipsch
-    @question_number = question_number
-  end
-
-  def question_number
-    case @ownershipsch
-    when 1
-      93
-    when 2
-      106
-    when 3
-      114
-    end
+    @question_number = QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP.max_by { |k, _v| k }.last)[ownershipsch]
   end
 
   def suffix_label(log)
     " #{'year'.pluralize(log[id])}"
   end
+
+  QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP = {
+    2023 => { 1 => 93, 2 => 106, 3 => 114 },
+    2024 => { 1 => 94, 2 => 107, 3 => 114 },
+  }.freeze
 end

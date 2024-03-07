@@ -6,11 +6,7 @@ RSpec.describe Form::Sales::Pages::ManagingOrganisation, type: :model do
   let(:page_id) { nil }
   let(:page_definition) { nil }
   let(:subsection) { instance_double(Form::Subsection, form:) }
-  let(:form) { instance_double(Form) }
-
-  before do
-    allow(form).to receive(:start_year_after_2024?).and_return(false)
-  end
+  let(:form) { instance_double(Form, start_date: Time.zone.local(2023, 4, 1), start_year_after_2024?: false) }
 
   it "has correct subsection" do
     expect(page.subsection).to eq(subsection)
@@ -111,10 +107,7 @@ RSpec.describe Form::Sales::Pages::ManagingOrganisation, type: :model do
   describe "#routed_to? with 2024 logs" do
     let(:log) { create(:sales_log) }
     let(:organisation) { create(:organisation) }
-
-    before do
-      allow(form).to receive(:start_year_after_2024?).and_return(true)
-    end
+    let(:form) { instance_double(Form, start_date: Time.zone.local(2024, 4, 1), start_year_after_2024?: true) }
 
     context "when user nil" do
       it "is not shown" do

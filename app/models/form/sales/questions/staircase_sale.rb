@@ -6,7 +6,7 @@ class Form::Sales::Questions::StaircaseSale < ::Form::Question
     @header = "Is this transaction part of a back-to-back staircasing transaction to facilitate sale of the home on the open market?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
-    @question_number = 79
+    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
   end
 
   ANSWER_OPTIONS = {
@@ -14,4 +14,6 @@ class Form::Sales::Questions::StaircaseSale < ::Form::Question
     "2" => { "value" => "No" },
     "3" => { "value" => "Don't know" },
   }.freeze
+
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 79, 2024 => 81 }.freeze
 end

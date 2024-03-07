@@ -7,7 +7,7 @@ RSpec.describe Form::Sales::Questions::MortgageLender, type: :model do
   let(:question_definition) { nil }
   let(:page) { instance_double(Form::Page) }
   let(:subsection) { instance_double(Form::Subsection) }
-  let(:form) { instance_double(Form) }
+  let(:form) { instance_double(Form, start_date: Time.zone.local(2023, 4, 1)) }
 
   before do
     allow(form).to receive(:start_year_after_2024?)

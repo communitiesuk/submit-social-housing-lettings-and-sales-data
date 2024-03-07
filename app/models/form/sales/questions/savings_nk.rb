@@ -16,11 +16,13 @@ class Form::Sales::Questions::SavingsNk < ::Form::Question
         },
       ],
     }
-    @question_number = 72
+    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
   end
 
   ANSWER_OPTIONS = {
     "0" => { "value" => "Yes" },
     "1" => { "value" => "No" },
   }.freeze
+
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 72, 2024 => 74 }.freeze
 end

@@ -10,17 +10,11 @@ class Form::Sales::Questions::LeaseholdCharges < ::Form::Question
     @width = 5
     @prefix = "£"
     @ownershipsch = ownershipsch
-    @question_number = question_number
+    @question_number = QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP.max_by { |k, _v| k }.last)[ownershipsch]
   end
 
-  def question_number
-    case @ownershipsch
-    when 1
-      98
-    when 2
-      109
-    when 3
-      117
-    end
-  end
+  QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP = {
+    2023 => { 1 => 98, 2 => 109, 3 => 117 },
+    2024 => { 1 => 99, 2 => 110, 3 => 117 },
+  }.freeze
 end

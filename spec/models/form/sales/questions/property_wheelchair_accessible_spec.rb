@@ -10,7 +10,7 @@ RSpec.describe Form::Sales::Questions::PropertyWheelchairAccessible, type: :mode
 
   before do
     allow(page).to receive(:subsection).and_return(subsection)
-    allow(subsection).to receive(:form).and_return(instance_double(Form, start_year_after_2024?: false))
+    allow(subsection).to receive(:form).and_return(instance_double(Form, start_year_after_2024?: false, start_date: Time.zone.local(2023, 4, 1)))
   end
 
   it "has correct page" do
@@ -47,7 +47,7 @@ RSpec.describe Form::Sales::Questions::PropertyWheelchairAccessible, type: :mode
 
   context "with 2024 form" do
     before do
-      allow(subsection).to receive(:form).and_return(instance_double(Form, start_year_after_2024?: true))
+      allow(subsection).to receive(:form).and_return(instance_double(Form, start_year_after_2024?: true, start_date: Time.zone.local(2024, 4, 1)))
     end
 
     it "has the correct hint_text" do

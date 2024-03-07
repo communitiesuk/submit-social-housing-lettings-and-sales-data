@@ -5,6 +5,7 @@ class Form::Sales::Questions::ManagingOrganisation < ::Form::Question
     @check_answer_label = "Reported by"
     @header = "Which organisation is reporting this sale?"
     @type = "select"
+    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
   end
 
   def answer_options(log = nil, user = nil)
@@ -58,7 +59,7 @@ class Form::Sales::Questions::ManagingOrganisation < ::Form::Question
   end
 
   def hidden_in_check_answers?(log, user = nil)
-    user.nil? || !user.support? || !@page.routed_to?(log, user)
+    user.nil? || !@page.routed_to?(log, user)
   end
 
   def enabled
@@ -74,4 +75,6 @@ private
   def selected_answer_option_is_derived?(_log)
     true
   end
+
+  QUESTION_NUMBER_FROM_YEAR = { 2024 => 2 }.freeze
 end
