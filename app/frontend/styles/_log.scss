@@ -10,6 +10,7 @@
 
 .app-log-summary__title {
   margin: 0 govuk-spacing(3) govuk-spacing(2) 0;
+  white-space: nowrap;
 }
 
 @include govuk-media-query(tablet) {
