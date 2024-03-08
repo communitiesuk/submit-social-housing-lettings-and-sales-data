@@ -976,27 +976,43 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
 
     describe "#field_98" do # leaving reason
       context "when field_7 is 1 meaning it is a renewal" do
-        context "when field_98 is 40" do
-          let(:attributes) { { bulk_upload:, field_98: "40", field_7: "1" } }
+        context "when field_98 is 50" do
+          let(:attributes) { { bulk_upload:, field_98: "50", field_7: "1" } }
 
           it "is permitted" do
             expect(parser.errors[:field_98]).to be_blank
           end
         end
 
-        context "when field_98 is 42" do
-          let(:attributes) { { bulk_upload:, field_98: "42", field_7: "1" } }
+        context "when field_98 is 51" do
+          let(:attributes) { { bulk_upload:, field_98: "51", field_7: "1" } }
 
           it "is permitted" do
             expect(parser.errors[:field_98]).to be_blank
           end
         end
 
-        context "when field_98 is not 40 or 42" do
+        context "when field_98 is 52" do
+          let(:attributes) { { bulk_upload:, field_98: "52", field_7: "1" } }
+
+          it "is permitted" do
+            expect(parser.errors[:field_98]).to be_blank
+          end
+        end
+
+        context "when field_98 is 53" do
+          let(:attributes) { { bulk_upload:, field_98: "53", field_7: "1" } }
+
+          it "is permitted" do
+            expect(parser.errors[:field_98]).to be_blank
+          end
+        end
+
+        context "when field_98 is not 50, 51, 52 or 53" do
           let(:attributes) { { bulk_upload:, field_98: "1", field_7: "1" } }
 
           it "is not permitted" do
-            expect(parser.errors[:field_98]).to be_present
+            expect(parser.errors[:field_98]).to include('The reason for leaving must be "End of social housing tenancy - no fault", "End of social housing tenancy - evicted due to anti-social behaviour (ASB)", "End of social housing tenancy - evicted due to rent arrears" or "End of social housing tenancy - evicted for any other reason"')
           end
         end
       end

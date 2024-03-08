@@ -672,8 +672,8 @@ private
   end
 
   def validate_leaving_reason_for_renewal
-    if field_7 == 1 && ![40, 42].include?(field_98)
-      errors.add(:field_98, I18n.t("validations.household.reason.renewal_reason_needed"))
+    if field_7 == 1 && ![50, 51, 52, 53].include?(field_98)
+      errors.add(:field_98, I18n.t("validations.household.reason.renewal_reason_needed_2024"))
     end
   end
 
