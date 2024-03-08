@@ -6,7 +6,7 @@ class Form::Sales::Questions::Prevown < ::Form::Question
     @header = I18n.t("questions.prevown", count: joint_purchase ? 2 : 1)
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
-    @question_number = 73
+    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
   end
 
   ANSWER_OPTIONS = {
@@ -14,4 +14,6 @@ class Form::Sales::Questions::Prevown < ::Form::Question
     "2" => { "value" => "No" },
     "3" => { "value" => "Don’t know" },
   }.freeze
+
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 73, 2024 => 75 }.freeze
 end

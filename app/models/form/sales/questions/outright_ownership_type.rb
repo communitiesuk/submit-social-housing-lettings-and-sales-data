@@ -10,7 +10,7 @@ class Form::Sales::Questions::OutrightOwnershipType < ::Form::Question
     @conditional_for = {
       "othtype" => [12],
     }
-    @question_number = 6
+    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
   end
 
   ANSWER_OPTIONS = {
@@ -21,4 +21,6 @@ class Form::Sales::Questions::OutrightOwnershipType < ::Form::Question
   def guidance_partial
     "outright_sale_type_definitions" if form.start_date.year >= 2023
   end
+
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 6, 2024 => 8 }.freeze
 end

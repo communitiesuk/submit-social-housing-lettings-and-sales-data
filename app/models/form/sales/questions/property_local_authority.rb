@@ -5,7 +5,7 @@ class Form::Sales::Questions::PropertyLocalAuthority < ::Form::Question
     @check_answer_label = "Local authority"
     @header = "What is the property’s local authority?"
     @type = "select"
-    @question_number = 16
+    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
     @disable_clearing_if_not_routed_or_dynamic_answer_options = true
   end
 
@@ -16,4 +16,6 @@ class Form::Sales::Questions::PropertyLocalAuthority < ::Form::Question
   def hidden_in_check_answers?(log, _current_user = nil)
     log.saledate && log.saledate.year >= 2023 && log.is_la_inferred?
   end
+
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 16, 2024 => 17 }.freeze
 end

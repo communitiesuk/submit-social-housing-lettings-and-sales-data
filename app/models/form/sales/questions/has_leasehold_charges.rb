@@ -29,9 +29,9 @@ class Form::Sales::Questions::HasLeaseholdCharges < ::Form::Question
   def question_number
     case @ownershipsch
     when 1
-      98
+      99
     when 2
-      109
+      110
     when 3
       117
     end

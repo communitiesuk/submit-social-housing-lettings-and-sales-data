@@ -10,7 +10,7 @@ class Form::Lettings::Questions::TenancyLengthIntermediateRent < ::Form::Questio
     @max = 150
     @min = 0
     @step = 1
-    @question_number = 28
+    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
   end
 
   def hint_text
@@ -20,4 +20,6 @@ class Form::Lettings::Questions::TenancyLengthIntermediateRent < ::Form::Questio
       "Do not include the starter or introductory period.</br>The minimum period is 1 year for intermediate rent general needs logs and you do not need a log for shorter tenancies."
     end
   end
+
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 28 }.freeze
 end

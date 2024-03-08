@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe Form::Lettings::Questions::Nationality, type: :model do
   subject(:question) { described_class.new(nil, nil, page) }
 
-  let(:page) { instance_double(Form::Page) }
+  let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2023, 4, 1)))) }
 
   it "has correct page" do
     expect(question.page).to eq(page)

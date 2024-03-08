@@ -7,7 +7,7 @@ class Form::Sales::Questions::BuyersOrganisations < ::Form::Question
     @type = "checkbox"
     @hint_text = "Select all that apply. This question is optional. If no options are applicable, leave the options blank, and select save and continue."
     @answer_options = ANSWER_OPTIONS
-    @question_number = 59
+    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
   end
 
   ANSWER_OPTIONS = {
@@ -26,4 +26,10 @@ class Form::Sales::Questions::BuyersOrganisations < ::Form::Question
       "pregghb" => { "value" => "Help to Buy Agent" },
     }
   end
+
+  def unanswered_error_message
+    "At least one option must be selected of these four"
+  end
+
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 59, 2024 => 61 }.freeze
 end

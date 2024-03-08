@@ -7,7 +7,7 @@ class Form::Lettings::Questions::ReasonRenewal < ::Form::Question
     @type = "radio"
     @check_answers_card_number = 0
     @hint_text = "You told us this letting is a renewal. We have removed some options because of this."
-    @question_number = 77
+    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
     @conditional_for = {
       "reasonother" => [
         20,
@@ -38,4 +38,6 @@ class Form::Lettings::Questions::ReasonRenewal < ::Form::Question
       }.freeze
     end
   end
+
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 77, 2024 => 76 }.freeze
 end

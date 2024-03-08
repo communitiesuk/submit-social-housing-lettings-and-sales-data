@@ -14,6 +14,8 @@ class Form::Lettings::Questions::Brent4Weekly < ::Form::Question
     @result_field = "tcharge"
     @prefix = "£"
     @suffix = " every 4 weeks"
-    @question_number = 95
+    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
   end
+
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 95, 2024 => 94 }.freeze
 end

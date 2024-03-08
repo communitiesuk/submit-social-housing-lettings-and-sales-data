@@ -8,7 +8,7 @@ class Form::Lettings::Questions::Illness < ::Form::Question
     @check_answers_card_number = 0
     @hint_text = ""
     @answer_options = ANSWER_OPTIONS
-    @question_number = 73
+    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
   end
 
   ANSWER_OPTIONS = {
@@ -17,4 +17,6 @@ class Form::Lettings::Questions::Illness < ::Form::Question
     "divider" => { "value" => true },
     "3" => { "value" => "Tenant prefers not to say" },
   }.freeze
+
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 73, 2024 => 72 }.freeze
 end

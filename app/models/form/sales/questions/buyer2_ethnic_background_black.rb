@@ -7,7 +7,7 @@ class Form::Sales::Questions::Buyer2EthnicBackgroundBlack < ::Form::Question
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @check_answers_card_number = 2
-    @question_number = 31
+    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
   end
 
   ANSWER_OPTIONS = {
@@ -15,4 +15,6 @@ class Form::Sales::Questions::Buyer2EthnicBackgroundBlack < ::Form::Question
     "12" => { "value" => "Caribbean" },
     "14" => { "value" => "Any other Black, African, Caribbean or Black British background" },
   }.freeze
+
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 31, 2024 => 33 }.freeze
 end

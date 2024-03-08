@@ -7,7 +7,7 @@ class Form::Sales::Questions::GenderIdentity1 < ::Form::Question
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @check_answers_card_number = 1
-    @question_number = 21
+    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
   end
 
   ANSWER_OPTIONS = {
@@ -24,4 +24,6 @@ class Form::Sales::Questions::GenderIdentity1 < ::Form::Question
       "Buyer 1 is the person in the household who does the most paid work. If it’s a joint purchase and the buyers do the same amount of paid work, buyer 1 is whoever is the oldest."
     end
   end
+
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 21, 2024 => 23 }.freeze
 end

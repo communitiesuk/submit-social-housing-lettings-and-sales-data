@@ -4,7 +4,7 @@ RSpec.describe Form::Lettings::Pages::PersonAge, type: :model do
   subject(:page) { described_class.new(nil, page_definition, subsection, person_index:, person_type:) }
 
   let(:page_definition) { nil }
-  let(:subsection) { instance_double(Form::Subsection) }
+  let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2024, 4, 1))) }
   let(:person_index) { 2 }
   let(:person_type) { "non_child" }
 

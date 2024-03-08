@@ -6,7 +6,7 @@ RSpec.describe Form::Sales::Pages::PrivacyNotice, type: :model do
   let(:page_id) { "privacy_notice" }
   let(:page_definition) { nil }
   let(:subsection) { instance_double(Form::Subsection) }
-  let(:form) { instance_double(Form) }
+  let(:form) { instance_double(Form, start_date: Time.zone.local(2023, 4, 1)) }
 
   before do
     allow(subsection).to receive(:form).and_return(form)
