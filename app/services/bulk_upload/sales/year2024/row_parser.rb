@@ -599,7 +599,7 @@ private
   end
 
   def validate_address_option_found
-    if log.address_selection.nil? && field_22.blank? && (field_23.present? || field_25.present?)
+    if !log.address_options_present? && field_22.blank? && (field_23.present? || field_25.present?)
       %i[field_23 field_24 field_25 field_26 field_27 field_28].each do |field|
         errors.add(field, I18n.t("validations.no_address_found"))
       end

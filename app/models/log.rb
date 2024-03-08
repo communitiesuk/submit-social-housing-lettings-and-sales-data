@@ -87,7 +87,7 @@ class Log < ApplicationRecord
 
       if select_best_address_match
         presenter = AddressDataPresenter.new(service.result.first)
-        os_good_match_threshold = 0.8
+        os_good_match_threshold = 0.7
         if presenter.match >= os_good_match_threshold
           self.address_selection = 0
         else
@@ -120,7 +120,7 @@ class Log < ApplicationRecord
   end
 
   def address_string
-    "#{address_line1_input}, , , #{postcode_full_input}"
+    "#{address_line1_input}, #{postcode_full_input}"
   end
 
   def address_options
