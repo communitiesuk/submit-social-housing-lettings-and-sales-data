@@ -162,6 +162,44 @@ RSpec.describe SalesLog, type: :model do
     end
   end
 
+  describe "#search_by" do
+    let!(:sales_log_to_search) { create(:sales_log, :completed) }
+
+    it "allows searching using ID" do
+      result = described_class.search_by(sales_log_to_search.id.to_s)
+      expect(result.count).to eq(1)
+      expect(result.first.id).to eq sales_log_to_search.id
+    end
+
+    it "allows searching using purchaser code" do
+      result = described_class.search_by(sales_log_to_search.purchaser_code)
+      expect(result.count).to eq(1)
+      expect(result.first.id).to eq sales_log_to_search.id
+    end
+
+    it "allows searching by a Property Postcode" do
+      result = described_class.search_by(sales_log_to_search.postcode_full)
+      expect(result.count).to eq(1)
+      expect(result.first.id).to eq sales_log_to_search.id
+    end
+
+    it "allows searching by id including the word log" do
+      result = described_class.search_by("log#{sales_log_to_search.id}")
+      expect(result.count).to eq(1)
+      expect(result.first.id).to eq sales_log_to_search.id
+    end
+
+    context "when postcode has spaces and lower case letters" do
+      let(:matching_postcode_lower_case_with_spaces) { sales_log_to_search.postcode_full.downcase.chars.insert(3, " ").join }
+
+      it "allows searching by a Property Postcode" do
+        result = described_class.search_by(matching_postcode_lower_case_with_spaces)
+        expect(result.count).to eq(1)
+        expect(result.first.id).to eq sales_log_to_search.id
+      end
+    end
+  end
+
   context "when filtering by year or nil" do
     before do
       Timecop.freeze(Time.utc(2021, 5, 3))

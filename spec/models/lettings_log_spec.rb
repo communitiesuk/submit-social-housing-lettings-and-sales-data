@@ -2828,6 +2828,12 @@ RSpec.describe LettingsLog do
           expect(result.first.id).to eq lettings_log_to_search.id
         end
 
+        it "allows searching by id including the word log" do
+          result = described_class.search_by("log#{lettings_log_to_search.id}")
+          expect(result.count).to eq(1)
+          expect(result.first.id).to eq lettings_log_to_search.id
+        end
+
         context "when lettings log is supported housing" do
           let(:location) { create(:location, postcode: "W6 0ST") }
 
