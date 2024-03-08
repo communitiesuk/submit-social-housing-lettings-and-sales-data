@@ -50,6 +50,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
       field_20: "1",
       field_21: "1",
       field_22: "12",
+      field_23: "Address line 1",
       field_27: "CR0",
       field_28: "4BB",
       field_29: "E09000008",
@@ -242,7 +243,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
       stub_request(:get, /api\.postcodes\.io/)
       .to_return(status: 200, body: "{\"status\":200,\"result\":{\"admin_district\":\"Manchester\", \"codes\":{\"admin_district\": \"E08000003\"}}}", headers: {})
 
-      stub_request(:get, "https://api.os.uk/search/places/v1/find?key=OS_DATA_KEY&maxresults=10&minmatch=0.4&query=some%20street,%20some%20town,%20,%20,%20EC1N%202TD")
+      stub_request(:get, /api.os.uk/)
         .to_return(status: 200, body: { results: [{ DPA: { MATCH: 0.9, BUILDING_NAME: "result address line 1", POST_TOWN: "result town or city", POSTCODE: "AA1 1AA", UPRN: "12345" } }] }.to_json, headers: {})
 
       parser.valid?
@@ -272,7 +273,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
           expect(parser).to be_valid
         end
 
-        xit "instantiates a log with everything completed", aggregate_failures: true do
+        it "instantiates a log with everything completed", aggregate_failures: true do
           questions = parser.send(:questions).reject do |q|
             parser.send(:log).optional_fields.include?(q.id) || q.completed?(parser.send(:log))
           end
