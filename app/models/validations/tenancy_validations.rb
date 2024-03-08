@@ -3,9 +3,7 @@ module Validations::TenancyValidations
   # or 'validate_' to run on submit as well
   include Validations::SharedValidations
 
-  # N.B. To match the page split and naming, this is the supported housing case
-  # General needs cases are in the other validations below
-  def validate_tenancy_length(record)
+  def validate_supported_housing_fixed_tenancy_length(record)
     return unless record.tenancy_type_fixed_term? && record.is_supported_housing?
     return if record.tenancylength.blank?
 
@@ -18,7 +16,7 @@ module Validations::TenancyValidations
     record.errors.add :tenancy, message
   end
 
-  def validate_tenancy_length_affordable_rent(record)
+  def validate_general_needs_fixed_tenancy_length_affordable_social_rent(record)
     return unless record.tenancy_type_fixed_term? && record.affordable_or_social_rent? && record.is_general_needs?
     return if record.tenancylength.blank?
 
@@ -32,7 +30,7 @@ module Validations::TenancyValidations
     record.errors.add :tenancy, message
   end
 
-  def validate_tenancy_length_intermediate_rent(record)
+  def validate_general_needs_fixed_tenancy_length_intermediate_rent(record)
     return unless record.tenancy_type_fixed_term? && !record.affordable_or_social_rent? && record.is_general_needs?
     return if record.tenancylength.blank?
 
@@ -46,7 +44,7 @@ module Validations::TenancyValidations
     record.errors.add :tenancy, message
   end
 
-  def validate_tenancy_length_periodic(record)
+  def validate_periodic_tenancy_length(record)
     return unless record.is_periodic_tenancy? && record.tenancylength.present?
 
     min_tenancy_length = 1

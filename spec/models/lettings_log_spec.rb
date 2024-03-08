@@ -116,10 +116,10 @@ RSpec.describe LettingsLog do
     end
 
     it "validates tenancy length" do
-      expect(validator).to receive(:validate_tenancy_length)
-      expect(validator).to receive(:validate_tenancy_length_affordable_rent)
-      expect(validator).to receive(:validate_tenancy_length_intermediate_rent)
-      expect(validator).to receive(:validate_tenancy_length_periodic)
+      expect(validator).to receive(:validate_supported_housing_fixed_tenancy_length)
+      expect(validator).to receive(:validate_general_needs_fixed_tenancy_length_affordable_social_rent)
+      expect(validator).to receive(:validate_general_needs_fixed_tenancy_length_intermediate_rent)
+      expect(validator).to receive(:validate_periodic_tenancy_length)
       expect(validator).to receive(:validate_tenancy_length_blank_when_not_required)
     end
 

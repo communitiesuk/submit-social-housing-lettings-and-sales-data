@@ -85,8 +85,8 @@ RSpec.describe Validations::TenancyValidations do
       },
     ]
 
-    describe "#validate_tenancy_length" do
-      subject(:validation) { ->(record) { tenancy_validator.validate_tenancy_length(record) } }
+    describe "#validate_supported_housing_fixed_tenancy_length" do
+      subject(:validation) { ->(record) { tenancy_validator.validate_supported_housing_fixed_tenancy_length(record) } }
 
       context "when needs type is supported housing" do
         before { record.needstype = 2 }
@@ -113,8 +113,8 @@ RSpec.describe Validations::TenancyValidations do
       end
     end
 
-    describe "#validate_tenancy_length_affordable_rent" do
-      subject(:validation) { ->(record) { tenancy_validator.validate_tenancy_length_affordable_rent(record) } }
+    describe "#validate_general_needs_fixed_tenancy_length_affordable_social_rent" do
+      subject(:validation) { ->(record) { tenancy_validator.validate_general_needs_fixed_tenancy_length_affordable_social_rent(record) } }
 
       context "when needs type is general needs" do
         before { record.needstype = 1 }
@@ -159,8 +159,8 @@ RSpec.describe Validations::TenancyValidations do
       end
     end
 
-    describe "#validate_tenancy_length_intermediate_rent" do
-      subject(:validation) { ->(record) { tenancy_validator.validate_tenancy_length_intermediate_rent(record) } }
+    describe "#validate_general_needs_fixed_tenancy_length_intermediate_rent" do
+      subject(:validation) { ->(record) { tenancy_validator.validate_general_needs_fixed_tenancy_length_intermediate_rent(record) } }
 
       context "when needs type is general needs" do
         before { record.needstype = 1 }
@@ -205,8 +205,8 @@ RSpec.describe Validations::TenancyValidations do
       end
     end
 
-    describe "#validate_tenancy_length_periodic" do
-      subject(:validation) { ->(record) { tenancy_validator.validate_tenancy_length_periodic(record) } }
+    describe "#validate_periodic_tenancy_length" do
+      subject(:validation) { ->(record) { tenancy_validator.validate_periodic_tenancy_length(record) } }
 
       periodic_tenancy_case = {
         name: "periodic",
