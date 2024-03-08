@@ -430,11 +430,19 @@ class SalesLog < Log
   end
 
   def should_process_uprn_change?
-    uprn && saledate && (uprn_changed? || saledate_changed?) && collection_start_year_for_date(saledate) >= 2023
+    return unless uprn
+    return unless saledate
+    return unless collection_start_year_for_date(saledate) >= 2023
+
+    uprn_changed? || saledate_changed?
   end
 
   def should_process_address_change?
-    (address_selection || select_best_address_match) && saledate && ((address_selection_changed? || select_best_address_match) || saledate_changed?) && form.start_year_after_2024?
+    return unless address_selection || select_best_address_match
+    return unless saledate
+    return unless form.start_year_after_2024?
+
+    address_selection_changed? || select_best_address_match || saledate_changed?
   end
 
   def value_with_discount

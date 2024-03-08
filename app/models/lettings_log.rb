@@ -846,10 +846,18 @@ private
   end
 
   def should_process_uprn_change?
-    uprn && startdate && (uprn_changed? || startdate_changed?) && collection_start_year_for_date(startdate) >= 2023
+    return unless uprn
+    return unless startdate
+    return unless collection_start_year_for_date(startdate) >= 2023
+
+    uprn_changed? || startdate_changed?
   end
 
   def should_process_address_change?
-    (address_selection || select_best_address_match) && startdate && ((address_selection_changed? || select_best_address_match) || startdate_changed?) && form.start_year_after_2024?
+    return unless address_selection || select_best_address_match
+    return unless startdate
+    return unless form.start_year_after_2024?
+
+    address_selection_changed? || select_best_address_match || startdate_changed?
   end
 end

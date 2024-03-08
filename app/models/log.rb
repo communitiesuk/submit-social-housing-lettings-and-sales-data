@@ -87,8 +87,8 @@ class Log < ApplicationRecord
 
       if select_best_address_match
         presenter = AddressDataPresenter.new(service.result.first)
-        os_good_match_threshold = 0.7
-        if presenter.match >= os_good_match_threshold
+        os_match_threshold_for_bulk_upload = 0.7
+        if presenter.match >= os_match_threshold_for_bulk_upload
           self.address_selection = 0
         else
           return nil
@@ -127,7 +127,6 @@ class Log < ApplicationRecord
     return @address_options if @address_options
 
     if [address_line1_input, postcode_full_input].all?(&:present?)
-      address_string = "#{address_line1_input}, , , #{postcode_full_input}"
       service = AddressClient.new(address_string)
       service.call
 
