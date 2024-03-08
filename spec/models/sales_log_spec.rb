@@ -189,6 +189,12 @@ RSpec.describe SalesLog, type: :model do
       expect(result.first.id).to eq sales_log_to_search.id
     end
 
+    it "allows searching by id including the capitalised word Log" do
+      result = described_class.search_by("Log#{sales_log_to_search.id}")
+      expect(result.count).to eq(1)
+      expect(result.first.id).to eq sales_log_to_search.id
+    end
+
     context "when postcode has spaces and lower case letters" do
       let(:matching_postcode_lower_case_with_spaces) { sales_log_to_search.postcode_full.downcase.chars.insert(3, " ").join }
 
