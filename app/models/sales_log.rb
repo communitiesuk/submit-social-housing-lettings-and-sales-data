@@ -46,9 +46,14 @@ class SalesLog < Log
   }
   scope :filter_by_purchaser_code, ->(purchid) { where("purchid ILIKE ?", "%#{purchid}%") }
   scope :search_by, lambda { |param|
+    by_id = Arel.sql("case when id = #{param.to_i} then 0 else 1 end")
+    by_purchaser_code = Arel.sql("case when purchid = '#{param}' then 0 when purchid ILIKE '%#{param}%' then 1 else 2 end")
+    by_postcode = Arel.sql("case when REPLACE(postcode_full, ' ', '') = '#{param.delete(' ')}' then 0 when REPLACE(postcode_full, ' ', '') ILIKE '%#{param.delete(' ')}%' then 1 else 2 end")
+
     filter_by_purchaser_code(param)
       .or(filter_by_postcode(param))
       .or(filter_by_id(param.gsub(/log/i, "")))
+      .order(by_id, by_purchaser_code, by_postcode)
   }
   scope :age1_answered, -> { where.not(age1: nil).or(where(age1_known: [1, 2])) }
   scope :duplicate_logs, lambda { |log|
