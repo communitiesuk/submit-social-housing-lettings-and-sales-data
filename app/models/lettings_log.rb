@@ -59,12 +59,18 @@ class LettingsLog < Log
     query.all
   }
   scope :search_by, lambda { |param|
-    filter_by_location_postcode(param)
-      .or(filter_by_tenant_code(param))
-      .or(filter_by_propcode(param))
-      .or(filter_by_postcode(param))
-      .or(filter_by_id(param.gsub(/log/i, "")))
-  }
+                      by_id = Arel.sql("case when lettings_logs.id = #{param.to_i} then 0 else 1 end")
+                      by_tenant_code = Arel.sql("case when tenancycode = '#{param}' then 0 when tenancycode ILIKE '%#{param}%' then 1 else 2 end")
+                      by_propcode = Arel.sql("case when propcode = '#{param}' then 0 when propcode ILIKE '%#{param}%' then 1 else 2 end")
+                      by_postcode = Arel.sql("case when REPLACE(postcode_full, ' ', '') = '#{param.delete(' ')}' then 0 when REPLACE(postcode_full, ' ', '') ILIKE '%#{param.delete(' ')}%' then 1 else 2 end")
+
+                      filter_by_location_postcode(param)
+                        .or(filter_by_tenant_code(param))
+                        .or(filter_by_propcode(param))
+                        .or(filter_by_postcode(param))
+                        .or(filter_by_id(param.gsub(/log/i, "")))
+                        .order(by_id).order(by_tenant_code, by_propcode, by_postcode)
+                    }
   scope :after_date, ->(date) { where("lettings_logs.startdate >= ?", date) }
   scope :before_date, ->(date) { where("lettings_logs.startdate < ?", date) }
   scope :unresolved, -> { where(unresolved: true) }
