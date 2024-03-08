@@ -62,7 +62,7 @@ class LettingsLog < Log
       .or(filter_by_tenant_code(param))
       .or(filter_by_propcode(param))
       .or(filter_by_postcode(param))
-      .or(filter_by_id(param.gsub(/log/i, '')))
+      .or(filter_by_id(param.gsub(/log/i, "")))
   }
   scope :after_date, ->(date) { where("lettings_logs.startdate >= ?", date) }
   scope :before_date, ->(date) { where("lettings_logs.startdate < ?", date) }
