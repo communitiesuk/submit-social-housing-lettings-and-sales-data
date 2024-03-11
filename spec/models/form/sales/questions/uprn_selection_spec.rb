@@ -57,14 +57,14 @@ RSpec.describe Form::Sales::Questions::UprnSelection, type: :model do
   end
 
   it "has the correct answer options" do
-    stub_request(:get, /api.os.uk/)
+    stub_request(:get, /api\.os\.uk/)
       .to_return(status: 200, body: "", headers: {})
 
     expect(question.answer_options(log)).to eq({ "uprn_not_listed" => { "value" => "The address is not listed, I want to enter the address manually" }, "UPRN" => { "value" => "full address" }, "divider" => { "value" => true } })
   end
 
   it "has the correct displayed answer options" do
-    stub_request(:get, /api.os.uk/)
+    stub_request(:get, /api\.os\.uk/)
       .to_return(status: 200, body: "", headers: {})
 
     expect(question.displayed_answer_options(log)).to eq({ "uprn_not_listed" => { "value" => "The address is not listed, I want to enter the address manually" }, "UPRN" => { "value" => "full address" }, "divider" => { "value" => true } })
@@ -80,7 +80,7 @@ RSpec.describe Form::Sales::Questions::UprnSelection, type: :model do
 
   context "when the log has address options" do
     it "has the correct hidden_in_check_answers?" do
-      stub_request(:get, /api.os.uk/)
+      stub_request(:get, /api\.os\.uk/)
         .to_return(status: 200, body: '{"results": {"0": "address_0", "1": "address_1", "2": "address_2"}}', headers: {})
 
       expect(question.hidden_in_check_answers?(log)).to eq(false)
@@ -93,7 +93,7 @@ RSpec.describe Form::Sales::Questions::UprnSelection, type: :model do
     end
 
     it "has the correct hidden_in_check_answers?" do
-      stub_request(:get, /api.os.uk/)
+      stub_request(:get, /api\.os\.uk/)
         .to_return(status: 200, body: "", headers: {})
 
       expect(question.hidden_in_check_answers?(log)).to eq(true)

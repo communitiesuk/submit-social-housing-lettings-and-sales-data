@@ -243,7 +243,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
       stub_request(:get, /api\.postcodes\.io/)
       .to_return(status: 200, body: "{\"status\":200,\"result\":{\"admin_district\":\"Manchester\", \"codes\":{\"admin_district\": \"E08000003\"}}}", headers: {})
 
-      stub_request(:get, /api.os.uk/)
+      stub_request(:get, /api\.os\.uk/)
         .to_return(status: 200, body: { results: [{ DPA: { MATCH: 0.9, BUILDING_NAME: "result address line 1", POST_TOWN: "result town or city", POSTCODE: "AA1 1AA", UPRN: "12345" } }] }.to_json, headers: {})
 
       parser.valid?
