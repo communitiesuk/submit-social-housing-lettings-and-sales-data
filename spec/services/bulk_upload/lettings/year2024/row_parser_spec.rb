@@ -1445,7 +1445,7 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
         let(:attributes) { setup_section_params.merge({ field_16: "1234567890123" }) }
 
         it "adds an appropriate error" do
-          expect(parser.errors[:field_16]).to eql(["UPRN is not recognised. Check the number, or enter the address"])
+          expect(parser.errors[:field_16]).to eql(["UPRN must be 12 digits or less"])
         end
       end
 

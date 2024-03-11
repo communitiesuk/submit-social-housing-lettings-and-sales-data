@@ -442,7 +442,11 @@ class SalesLog < Log
     return unless saledate
     return unless form.start_year_after_2024?
 
-    uprn_selection_changed? || select_best_address_match || saledate_changed?
+    if select_best_address_match
+      address_line1_input.present? && postcode_full_input.present?
+    else
+      uprn_selection_changed? || saledate_changed?
+    end
   end
 
   def value_with_discount

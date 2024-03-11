@@ -858,6 +858,10 @@ private
     return unless startdate
     return unless form.start_year_after_2024?
 
-    uprn_selection_changed? || select_best_address_match || startdate_changed?
+    if select_best_address_match
+      address_line1_input.present? && postcode_full_input.present?
+    else
+      uprn_selection_changed? || startdate_changed?
+    end
   end
 end
