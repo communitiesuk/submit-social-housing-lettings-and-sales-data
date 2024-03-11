@@ -103,6 +103,7 @@ RSpec.shared_examples "shared log examples" do |log_type|
         allow_any_instance_of(UprnClient).to receive(:error).and_return(error_message)
 
         expect { log.process_uprn_change! }.to change { log.errors[:uprn] }.from([]).to([error_message])
+                                                                           .and change { log.errors[:uprn_selection] }.from([]).to([error_message])
       end
     end
   end
@@ -176,18 +177,10 @@ RSpec.shared_examples "shared log examples" do |log_type|
         allow_any_instance_of(AddressClient).to receive(:call)
         allow_any_instance_of(AddressClient).to receive(:error).and_return(error_message)
         allow_any_instance_of(UprnClient).to receive(:call)
-        allow_any_instance_of(UprnClient).to receive(:result).and_return({
-          "UPRN" => "UPRN",
-          "UDPRN" => "UDPRN",
-          "ADDRESS" => "full address",
-          "SUB_BUILDING_NAME" => "0",
-          "BUILDING_NAME" => "building name",
-          "THOROUGHFARE_NAME" => "thoroughfare",
-          "POST_TOWN" => "posttown",
-          "POSTCODE" => "postcode",
-        })
+        allow_any_instance_of(UprnClient).to receive(:error).and_return(error_message)
 
         expect { log.process_address_change! }.to change { log.errors[:uprn_selection] }.from([]).to([error_message])
+                                                    .and change { log.errors[:uprn_selection] }.from([]).to([error_message])
       end
     end
   end
