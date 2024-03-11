@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_03_11_094307) do
+ActiveRecord::Schema[7.0].define(version: 2024_03_11_102706) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -308,7 +308,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_11_094307) do
     t.integer "nationality_all"
     t.integer "nationality_all_group"
     t.integer "reasonother_value_check"
-    t.integer "address_selection"
     t.string "address_line1_input"
     t.string "postcode_full_input"
     t.integer "address_search_value_check"
@@ -666,10 +665,10 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_11_094307) do
     t.integer "nationality_all_group"
     t.integer "nationality_all_buyer2"
     t.integer "nationality_all_buyer2_group"
-    t.integer "address_selection"
     t.string "address_line1_input"
     t.string "postcode_full_input"
     t.integer "address_search_value_check"
+    t.string "uprn_selection"
     t.index ["bulk_upload_id"], name: "index_sales_logs_on_bulk_upload_id"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
     t.index ["managing_organisation_id"], name: "index_sales_logs_on_managing_organisation_id"
