@@ -27,7 +27,7 @@ class FilterManager
 
       logs = logs.public_send("filter_by_#{category}", values, user)
     end
-    logs = logs.order(created_at: :desc)
+    logs = logs.order(id: :desc)
     if user.support?
       if logs.first&.lettings?
         logs.all.includes(:owning_organisation, :managing_organisation)
