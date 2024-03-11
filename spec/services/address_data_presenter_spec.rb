@@ -23,50 +23,29 @@ describe AddressDataPresenter do
         "ENTRY_DATE": "30/01/2015",
         "BLPU_STATE_DATE": "30/01/2015",
         "LANGUAGE": "EN",
-        "MATCH_DESCRIPTION": "EXACT"
+        "MATCH_DESCRIPTION": "EXACT",
+        "MATCH": "1.0"
       }',
     )
   end
 
   let(:presenter) { described_class.new(data) }
 
-  describe "#postcode" do
-    it "returns postcode" do
-      expect(presenter.postcode).to eq("postcode")
+  describe "#uprn" do
+    it "returns uprn" do
+      expect(presenter.uprn).to eq("UPRN")
     end
   end
 
-  describe "#address_line1" do
-    it "returns address_line1" do
-      expect(presenter.address_line1).to eq("0, Building Name, Thoroughfare")
-    end
-  end
-
-  describe "#address_line2" do
-    it "returns address_line2" do
-      expect(presenter.address_line2).to eq("Double Dependent Locality, Dependent Locality")
-    end
-  end
-
-  describe "#town_or_city" do
-    it "returns town_or_city" do
-      expect(presenter.town_or_city).to eq("Posttown")
+  describe "#match" do
+    it "returns match" do
+      expect(presenter.match).to eq("1.0")
     end
   end
 
   describe "#address" do
     it "returns address" do
       expect(presenter.address).to eq("full address")
-    end
-  end
-
-  context "when address_line2 fields are missing" do
-    let(:data) { {} }
-
-    describe "#address_line2" do
-      it "returns nil" do
-        expect(presenter.address_line2).to be_nil
-      end
     end
   end
 end
