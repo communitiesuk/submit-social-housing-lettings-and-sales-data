@@ -63,6 +63,10 @@ RSpec.describe "Accessible Autocomplete" do
       click_link(text: "Back")
       expect(page).to have_selector("input", class: "autocomplete__input", count: 1)
     end
+
+    it "displays the placeholder text", js: true do
+      expect(find("#lettings-log-prevloc-field")["placeholder"]).to eq("Start typing to search")
+    end
   end
 
   context "when searching schemes" do
