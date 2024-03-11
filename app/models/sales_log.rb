@@ -47,7 +47,7 @@ class SalesLog < Log
   scope :search_by, lambda { |param|
     filter_by_purchaser_code(param)
       .or(filter_by_postcode(param))
-      .or(filter_by_id(param))
+      .or(filter_by_id(param.gsub(/log/i, "")))
   }
   scope :age1_answered, -> { where.not(age1: nil).or(where(age1_known: [1, 2])) }
   scope :duplicate_logs, lambda { |log|
