@@ -767,7 +767,7 @@ private
       address_line2: %i[field_24],
       town_or_city: %i[field_25],
       county: %i[field_26],
-      address_selection: [:field_23],
+      uprn_selection: [:field_23],
 
       ethnic_group2: %i[field_40],
       ethnicbuy2: %i[field_40],

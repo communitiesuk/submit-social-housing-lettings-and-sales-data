@@ -93,7 +93,7 @@ RSpec.describe Form::Lettings::Subsections::PropertyInformation, type: :model do
             uprn_confirmation
             address_matcher
             no_address_found
-            address_selection
+            uprn_selection
             address
             property_local_authority
             local_authority_min_rent_value_check

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Form::Sales::Questions::AddressSelection, type: :model do
+RSpec.describe Form::Sales::Questions::UprnSelection, type: :model do
   subject(:question) { described_class.new(question_id, question_definition, page) }
 
   let(:question_id) { nil }
@@ -29,7 +29,7 @@ RSpec.describe Form::Sales::Questions::AddressSelection, type: :model do
   end
 
   it "has the correct id" do
-    expect(question.id).to eq("address_selection")
+    expect(question.id).to eq("uprn_selection")
   end
 
   it "has the correct header" do

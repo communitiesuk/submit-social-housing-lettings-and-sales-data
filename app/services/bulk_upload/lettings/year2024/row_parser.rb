@@ -1030,7 +1030,7 @@ private
       address_line2: [:field_18],
       town_or_city: [:field_19],
       county: [:field_20],
-      address_selection: [:field_17],
+      uprn_selection: [:field_17],
     }.compact
   end
 

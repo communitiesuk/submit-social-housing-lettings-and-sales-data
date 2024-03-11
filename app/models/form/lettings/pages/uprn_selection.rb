@@ -1,14 +1,14 @@
-class Form::Lettings::Pages::AddressSelection < ::Form::Page
+class Form::Lettings::Pages::UprnSelection < ::Form::Page
   def initialize(id, hsh, subsection)
     super
-    @id = "address_selection"
+    @id = "uprn_selection"
     @header = "We found some addresses that might be this property"
     @depends_on = [{ "address_options_present?" => true }]
   end
 
   def questions
     @questions ||= [
-      Form::Lettings::Questions::AddressSelection.new(nil, nil, self),
+      Form::Lettings::Questions::UprnSelection.new(nil, nil, self),
     ]
   end
 

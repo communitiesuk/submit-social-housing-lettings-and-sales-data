@@ -81,7 +81,7 @@ RSpec.describe Form::Sales::Subsections::PropertyInformation, type: :model do
             uprn_confirmation
             address_matcher
             no_address_found
-            address_selection
+            uprn_selection
             address
             property_local_authority
             local_authority_buyer_1_income_max_value_check

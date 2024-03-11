@@ -28,7 +28,7 @@ class Form::Sales::Subsections::PropertyInformation < ::Form::Subsection
         Form::Sales::Pages::UprnConfirmation.new(nil, nil, self),
         Form::Sales::Pages::AddressMatcher.new(nil, nil, self),
         Form::Sales::Pages::NoAddressFound.new(nil, nil, self),
-        Form::Sales::Pages::AddressSelection.new(nil, nil, self),
+        Form::Sales::Pages::UprnSelection.new(nil, nil, self),
         Form::Sales::Pages::AddressFallback.new(nil, nil, self),
         Form::Sales::Pages::PropertyLocalAuthority.new(nil, nil, self),
         Form::Sales::Pages::Buyer1IncomeMaxValueCheck.new("local_authority_buyer_1_income_max_value_check", nil, self, check_answers_card_number: nil),

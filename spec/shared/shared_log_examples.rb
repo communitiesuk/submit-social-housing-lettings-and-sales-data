@@ -112,7 +112,7 @@ RSpec.shared_examples "shared log examples" do |log_type|
       let(:log) do
         log = build(
           log_type,
-          address_selection: 0,
+          uprn_selection: 0,
           address_line1: "Address line 1",
           postcode_full: "AA1 1AA",
           county: "county",
@@ -143,13 +143,13 @@ RSpec.shared_examples "shared log examples" do |log_type|
                                               .and change(log, :uprn_confirmed).from(nil).to(1)
                                               .and change(log, :uprn).from(nil).to("UPRN")
                                               .and change(log, :uprn_known).from(nil).to(1)
-                                              .and change(log, :address_selection).from(0).to(nil)
+                                              .and change(log, :uprn_selection).from(0).to(nil)
                                               .and change(log, :county).from("county").to(nil)
       end
     end
 
     context "when address inputs are nil" do
-      let(:log) { create(log_type, address_selection: nil, address_line1_input: nil, postcode_full_input: nil) }
+      let(:log) { create(log_type, uprn_selection: nil, address_line1_input: nil, postcode_full_input: nil) }
 
       it "does not update log" do
         expect { log.process_address_change! }.not_to change(log, :attributes)
@@ -157,14 +157,14 @@ RSpec.shared_examples "shared log examples" do |log_type|
     end
 
     context "when service errors" do
-      let(:log) { build(log_type, :in_progress, address_selection: 0, address_line1_input: "123", postcode_full_input: "AA1 1AA") }
+      let(:log) { build(log_type, :in_progress, uprn_selection: 0, address_line1_input: "123", postcode_full_input: "AA1 1AA") }
       let(:error_message) { "error" }
 
       it "adds error to log" do
         allow_any_instance_of(AddressClient).to receive(:call)
         allow_any_instance_of(AddressClient).to receive(:error).and_return(error_message)
 
-        expect { log.process_address_change! }.to change { log.errors[:address_selection] }.from([]).to([error_message])
+        expect { log.process_address_change! }.to change { log.errors[:uprn_selection] }.from([]).to([error_message])
       end
     end
   end

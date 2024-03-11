@@ -438,11 +438,11 @@ class SalesLog < Log
   end
 
   def should_process_address_change?
-    return unless address_selection || select_best_address_match
+    return unless uprn_selection || select_best_address_match
     return unless saledate
     return unless form.start_year_after_2024?
 
-    address_selection_changed? || select_best_address_match || saledate_changed?
+    uprn_selection_changed? || select_best_address_match || saledate_changed?
   end
 
   def value_with_discount

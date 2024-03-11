@@ -4,9 +4,9 @@ class Form::Lettings::Pages::AddressFallback < ::Form::Page
     @id = "address"
     @header = "Q12 - What is the property's address?"
     @depends_on = [
-      { "is_supported_housing?" => false, "uprn_known" => nil, "address_selection" => 100 },
-      { "is_supported_housing?" => false, "uprn_known" => 0, "address_selection" => 100 },
-      { "is_supported_housing?" => false, "uprn_confirmed" => 0, "address_selection" => 100 },
+      { "is_supported_housing?" => false, "uprn_known" => nil, "uprn_selection" => "uprn_not_listed" },
+      { "is_supported_housing?" => false, "uprn_known" => 0, "uprn_selection" => "uprn_not_listed" },
+      { "is_supported_housing?" => false, "uprn_confirmed" => 0, "uprn_selection" => "uprn_not_listed" },
       { "is_supported_housing?" => false, "uprn_known" => nil, "address_options_present?" => false },
       { "is_supported_housing?" => false, "uprn_known" => 0, "address_options_present?" => false },
       { "is_supported_housing?" => false, "uprn_confirmed" => 0, "address_options_present?" => false },

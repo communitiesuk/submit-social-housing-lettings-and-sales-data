@@ -68,7 +68,7 @@ class Log < ApplicationRecord
 
       self.uprn_known = 1
       self.uprn_confirmed = nil unless skip_update_uprn_confirmed
-      self.address_selection = nil
+      self.uprn_selection = nil
       self.address_line1 = presenter.address_line1
       self.address_line2 = presenter.address_line2
       self.town_or_city = presenter.town_or_city
@@ -79,42 +79,35 @@ class Log < ApplicationRecord
   end
 
   def process_address_change!
-    if [address_line1_input, postcode_full_input].all?(&:present?) && (address_selection.present? || select_best_address_match.present?)
-      service = AddressClient.new(address_string)
-      service.call
-
-      return errors.add(:address_selection, :address_error, message: service.error) if service.error.present?
-
+    if uprn_selection.present? || select_best_address_match.present?
       if select_best_address_match
+        service = AddressClient.new(address_string)
+        service.call
+        return nil if service.result.blank? || service.error.present?
+
         presenter = AddressDataPresenter.new(service.result.first)
         os_match_threshold_for_bulk_upload = 0.7
         if presenter.match >= os_match_threshold_for_bulk_upload
-          self.address_selection = 0
+          self.uprn_selection = presenter.uprn
         else
           return nil
         end
       end
 
-      if address_selection.between?(0, 9)
-        presenter = AddressDataPresenter.new(service.result[address_selection])
-
-        self.uprn_known = 1
-        self.uprn_confirmed = 1
-        self.address_selection = nil
-        self.uprn = presenter.uprn
-        self.address_line1 = presenter.address_line1
-        self.address_line2 = presenter.address_line2
-        self.town_or_city = presenter.town_or_city
-        self.postcode_full = presenter.postcode
-        self.county = nil
-        process_postcode_changes!
-      elsif address_selection == 100
+      if uprn_selection == "uprn_not_listed"
         self.uprn_known = 0
         self.uprn_confirmed = nil
         self.uprn = nil
+        self.address_line1 = address_line1_input
         self.address_line2 = nil
         self.town_or_city = nil
         self.county = nil
+        self.postcode_full = postcode_full_input
+      else
+        self.uprn = uprn_selection
+        self.uprn_confirmed = 1
+        self.skip_update_uprn_confirmed = true
+        process_uprn_change!
       end
     end
   end
@@ -135,7 +128,7 @@ class Log < ApplicationRecord
       address_opts = []
       service.result.first(10).each do |result|
         presenter = AddressDataPresenter.new(result)
-        address_opts.append(presenter.address)
+        address_opts.append({ address: presenter.address, uprn: presenter.uprn })
       end
 
       @address_options = address_opts

@@ -1,7 +1,7 @@
-class Form::Lettings::Questions::AddressSelection < ::Form::Question
+class Form::Lettings::Questions::UprnSelection < ::Form::Question
   def initialize(id, hsh, page)
     super
-    @id = "address_selection"
+    @id = "uprn_selection"
     @header = "Select the correct address"
     @type = "radio"
     @check_answer_label = "Select the correct address"
@@ -9,18 +9,18 @@ class Form::Lettings::Questions::AddressSelection < ::Form::Question
   end
 
   def answer_options(log = nil, _user = nil)
-    answer_opts = { "100" => { "value" => "The address is not listed, I want to enter the address manually" } }
+    answer_opts = { "uprn_not_listed" => { "value" => "The address is not listed, I want to enter the address manually" } }
     return answer_opts unless ActiveRecord::Base.connected?
     return answer_opts unless log&.address_options
 
     answer_opts = {}
 
     (0...[log.address_options.count, 10].min).each do |i|
-      answer_opts[i.to_s] = { "value" => log.address_options[i] }
+      answer_opts[log.address_options[i][:uprn]] = { "value" => log.address_options[i][:address] }
     end
 
     answer_opts["divider"] = { "value" => true }
-    answer_opts["100"] = { "value" => "The address is not listed, I want to enter the address manually" }
+    answer_opts["uprn_not_listed"] = { "value" => "The address is not listed, I want to enter the address manually" }
     answer_opts
   end
 
