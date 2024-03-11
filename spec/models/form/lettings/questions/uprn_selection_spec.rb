@@ -60,14 +60,14 @@ RSpec.describe Form::Lettings::Questions::UprnSelection, type: :model do
     stub_request(:get, /api.os.uk/)
       .to_return(status: 200, body: "", headers: {})
 
-    expect(question.answer_options(log)).to eq({ "100" => { "value" => "The address is not listed, I want to enter the address manually" }, "0" => { "value" => "full address" }, "divider" => { "value" => true } })
+    expect(question.answer_options(log)).to eq({ "uprn_not_listed" => { "value" => "The address is not listed, I want to enter the address manually" }, "UPRN" => { "value" => "full address" }, "divider" => { "value" => true } })
   end
 
   it "has the correct displayed answer options" do
     stub_request(:get, /api.os.uk/)
       .to_return(status: 200, body: "", headers: {})
 
-    expect(question.displayed_answer_options(log)).to eq({ "100" => { "value" => "The address is not listed, I want to enter the address manually" }, "0" => { "value" => "full address" }, "divider" => { "value" => true } })
+    expect(question.displayed_answer_options(log)).to eq({ "uprn_not_listed" => { "value" => "The address is not listed, I want to enter the address manually" }, "UPRN" => { "value" => "full address" }, "divider" => { "value" => true } })
   end
 
   it "has the correct inferred check answers value" do
