@@ -62,7 +62,11 @@ class Log < ApplicationRecord
       service = UprnClient.new(uprn)
       service.call
 
-      return errors.add(:uprn, :uprn_error, message: service.error) if service.error.present?
+      if service.result.blank? || service.error.present?
+        errors.add(:uprn, :uprn_error, message: service.error)
+        errors.add(:uprn_selection, :uprn_error, message: service.error)
+        return
+      end
 
       presenter = UprnDataPresenter.new(service.result)
 
@@ -122,7 +126,6 @@ class Log < ApplicationRecord
     if [address_line1_input, postcode_full_input].all?(&:present?)
       service = AddressClient.new(address_string)
       service.call
-
       return nil if service.result.blank? || service.error.present?
 
       address_opts = []

@@ -112,7 +112,7 @@ RSpec.shared_examples "shared log examples" do |log_type|
       let(:log) do
         log = build(
           log_type,
-          uprn_selection: 0,
+          uprn_selection: "UPRN",
           address_line1: "Address line 1",
           postcode_full: "AA1 1AA",
           county: "county",
@@ -137,13 +137,25 @@ RSpec.shared_examples "shared log examples" do |log_type|
           "POSTCODE" => "postcode",
         }])
 
+        allow_any_instance_of(UprnClient).to receive(:call)
+        allow_any_instance_of(UprnClient).to receive(:result).and_return({
+          "UPRN" => "UPRN",
+          "UDPRN" => "UDPRN",
+          "ADDRESS" => "full address",
+          "SUB_BUILDING_NAME" => "0",
+          "BUILDING_NAME" => "building name",
+          "THOROUGHFARE_NAME" => "thoroughfare",
+          "POST_TOWN" => "posttown",
+          "POSTCODE" => "postcode",
+        })
+
         expect { log.process_address_change! }.to change(log, :address_line1).from("Address line 1").to("0, Building Name, Thoroughfare")
                                               .and change(log, :town_or_city).from(nil).to("Posttown")
                                               .and change(log, :postcode_full).from("AA1 1AA").to("POSTCODE")
                                               .and change(log, :uprn_confirmed).from(nil).to(1)
                                               .and change(log, :uprn).from(nil).to("UPRN")
                                               .and change(log, :uprn_known).from(nil).to(1)
-                                              .and change(log, :uprn_selection).from(0).to(nil)
+                                              .and change(log, :uprn_selection).from("UPRN").to(nil)
                                               .and change(log, :county).from("county").to(nil)
       end
     end
@@ -157,12 +169,23 @@ RSpec.shared_examples "shared log examples" do |log_type|
     end
 
     context "when service errors" do
-      let(:log) { build(log_type, :in_progress, uprn_selection: 0, address_line1_input: "123", postcode_full_input: "AA1 1AA") }
+      let(:log) { build(log_type, :in_progress, uprn_selection: "UPRN", address_line1_input: "123", postcode_full_input: "AA1 1AA") }
       let(:error_message) { "error" }
 
       it "adds error to log" do
         allow_any_instance_of(AddressClient).to receive(:call)
         allow_any_instance_of(AddressClient).to receive(:error).and_return(error_message)
+        allow_any_instance_of(UprnClient).to receive(:call)
+        allow_any_instance_of(UprnClient).to receive(:result).and_return({
+          "UPRN" => "UPRN",
+          "UDPRN" => "UDPRN",
+          "ADDRESS" => "full address",
+          "SUB_BUILDING_NAME" => "0",
+          "BUILDING_NAME" => "building name",
+          "THOROUGHFARE_NAME" => "thoroughfare",
+          "POST_TOWN" => "posttown",
+          "POSTCODE" => "postcode",
+        })
 
         expect { log.process_address_change! }.to change { log.errors[:uprn_selection] }.from([]).to([error_message])
       end
