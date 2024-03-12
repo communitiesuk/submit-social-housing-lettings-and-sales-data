@@ -8,12 +8,12 @@
           <% end %>
         </h2>
         <% if log.tenancycode? or log.propcode? %>
-          <div class="app-metadata app-log-summary__details">
+          <div class="app-metadata">
             <% if log.tenancycode? %>
-                <div>Tenant <%= log.tenancycode %></div>
+              <div class = "app-log-summary__details">Tenant <%= log.tenancycode %></div>
             <% end %>
             <% if log.propcode? %>
-                <div>Property <%= log.propcode %></div>
+              <div class = "app-log-summary__details">Property <%= log.propcode %></div>
             <% end %>
           </div>
         <% end %>

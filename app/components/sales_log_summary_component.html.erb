@@ -1,20 +1,17 @@
 <article class="app-log-summary">
   <div class="govuk-grid-row">
-    <div class="govuk-grid-column-one-half">
+    <div class="govuk-grid-column-two-thirds">
       <header class="app-log-summary__header">
         <h2 class="app-log-summary__title">
           <%= govuk_link_to sales_log_path(log) do %>
             Log <%= log.id %>
           <% end %>
         </h2>
-          <dl class="app-metadata app-metadata--inline">
-            <% if log.purchaser_code %>
-              <div class="app-metadata__item">
-                <dt class="app-metadata__term">Purchaser</dt>
-                <dd class="app-metadata__definition"><%= log.purchaser_code %></dd>
-              </div>
-            <% end %>
-          </dl>
+          <% if log.purchaser_code %>
+            <div class="app-metadata">
+              <div class = "app-log-summary__details">Purchaser <%= log.purchaser_code %></div>
+            </div>
+          <% end %>
       </header>
       <p class="govuk-body govuk-!-margin-bottom-2">
         <% if log.ownership_scheme %>
@@ -41,7 +38,7 @@
         </dl>
       <% end %>
     </div>
-    <footer class="govuk-grid-column-one-half app-log-summary__footer">
+    <footer class="govuk-grid-column-one-third app-log-summary__footer">
       <p class="govuk-body govuk-!-margin-bottom-2">
         <%= log_status %>
       </p>
