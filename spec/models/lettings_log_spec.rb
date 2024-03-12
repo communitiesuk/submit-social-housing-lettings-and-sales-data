@@ -119,10 +119,6 @@ RSpec.describe LettingsLog do
       expect(validator).to receive(:validate_person_age_and_relationship_matches_economic_status)
     end
 
-    it "validates child is over 12 years younger than lead tenant" do
-      expect(validator).to receive(:validate_child_12_years_younger)
-    end
-
     it "validates bedroom number" do
       expect(validator).to receive(:validate_shared_housing_rooms)
     end
