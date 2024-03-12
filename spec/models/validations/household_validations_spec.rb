@@ -362,7 +362,7 @@ RSpec.describe Validations::HouseholdValidations do
         Singleton.__init__(FormHandler)
       end
 
-      it "validates person under 16 is not partner" do
+      it "does not add an error is person under 16 is a partner" do
         record.age2 = 14
         record.relat2 = "P"
         household_validator.validate_person_age_matches_relationship(record)
@@ -370,7 +370,7 @@ RSpec.describe Validations::HouseholdValidations do
         expect(record.errors["age2"]).to be_empty
       end
 
-      it "validates person over 19 is not child" do
+      it "does not add an error if person over 19 is child" do
         record.age2 = 20
         record.relat2 = "C"
         household_validator.validate_person_age_matches_relationship(record)

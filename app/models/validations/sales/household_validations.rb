@@ -107,14 +107,6 @@ module Validations::Sales::HouseholdValidations
     end
   end
 
-  def validate_buyer_2_not_child(record)
-    return unless record.form.start_year_after_2024?
-
-    if record.joint_purchase? && person_is_child?(record.relat2)
-      record.errors.add "relat2", I18n.t("validations.household.relat.buyer_is_a_child")
-    end
-  end
-
 private
 
   def person_is_fulltime_student?(economic_status)

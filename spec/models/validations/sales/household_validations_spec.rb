@@ -75,7 +75,7 @@ RSpec.describe Validations::Sales::HouseholdValidations do
     context "with 2024 logs" do
       let(:log_date) { Time.zone.local(2024, 4, 1) }
 
-      it "validates person under 16 is not partner" do
+      it "does not add error if person under 16 is a partner" do
         record.age2 = 14
         record.relat2 = "P"
         household_validator.validate_person_age_matches_relationship(record)
@@ -83,7 +83,7 @@ RSpec.describe Validations::Sales::HouseholdValidations do
         expect(record.errors["age2"]).to be_empty
       end
 
-      it "validates person over 19 is not child" do
+      it "does not add error if person over 19 is a child" do
         record.age2 = 20
         record.relat2 = "C"
         household_validator.validate_person_age_matches_relationship(record)
@@ -192,21 +192,12 @@ RSpec.describe Validations::Sales::HouseholdValidations do
     context "with 2024 logs" do
       let(:log_date) { Time.zone.local(2024, 4, 1) }
 
-      it "validates that child is at least 12 year younger than buyer" do
+      it "does not validate that child is at least 12 year younger than buyer" do
         record.age1 = 20
         record.age2 = 17
         record.relat2 = "C"
         household_validator.validate_child_12_years_younger(record)
         expect(record.errors["age1"]).to be_empty
-        expect(record.errors["age2"]).to be_empty
-        expect(record.errors["relat2"]).to be_empty
-      end
-
-      it "expects that child is at least 12 years younger than buyer" do
-        record.age1 = 30
-        record.age2 = 17
-        record.relat2 = "C"
-        household_validator.validate_child_12_years_younger(record)
         expect(record.errors["age2"]).to be_empty
         expect(record.errors["relat2"]).to be_empty
       end
@@ -320,41 +311,6 @@ RSpec.describe Validations::Sales::HouseholdValidations do
         expect(record.errors["relat2"]).to be_empty
         expect(record.errors["ecstat2"]).to be_empty
         expect(record.errors["age2"]).to be_empty
-      end
-    end
-  end
-
-  describe "#validate_buyer_2_not_child" do
-    before do
-      Timecop.freeze(log_date)
-      Singleton.__init__(FormHandler)
-    end
-
-    after do
-      Timecop.return
-      Singleton.__init__(FormHandler)
-    end
-
-    context "with 2023 logs" do
-      let(:log_date) { Time.zone.local(2023, 4, 1) }
-
-      it "does not add an error if buyer 2 is a child" do
-        record.jointpur = 1
-        record.relat2 = "C"
-        household_validator.validate_buyer_2_not_child(record)
-        expect(record.errors["relat2"]).to be_empty
-      end
-    end
-
-    context "with 2024 logs" do
-      let(:log_date) { Time.zone.local(2024, 4, 1) }
-
-      it "validates buyer 2 isn't a child" do
-        record.jointpur = 1
-        record.relat2 = "C"
-        household_validator.validate_buyer_2_not_child(record)
-        expect(record.errors["relat2"])
-          .to include("Relationship cannot be child, as this person is a buyer")
       end
     end
   end

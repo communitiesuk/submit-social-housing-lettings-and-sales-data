@@ -496,7 +496,6 @@ en:
             student_not_16_19: "Answer cannot be ‘child’ if the person is a student but not aged 16-19"
             16_19_not_student:  "Answer cannot be ‘child’ if the person is aged 16-19 but not a student"
         child_over_19: "Answer cannot be child as you told us person %{person_num} is over 19"
-        buyer_is_a_child: "Relationship cannot be child, as this person is a buyer"
       housingneeds_a:
         one_or_two_choices: "You can only select one option or ‘other disabled access needs’ plus ‘wheelchair-accessible housing’, ‘wheelchair access to essential rooms’ or ‘level access housing’"
       housingneeds_type:
