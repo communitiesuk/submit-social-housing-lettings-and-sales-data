@@ -88,6 +88,8 @@ module Validations::HouseholdValidations
   end
 
   def validate_person_age_matches_relationship(record)
+    return unless record.startdate && !record.form.start_year_after_2024?
+
     (2..8).each do |person_num|
       age = record.public_send("age#{person_num}")
       relationship = record.public_send("relat#{person_num}")
@@ -97,15 +99,12 @@ module Validations::HouseholdValidations
         record.errors.add "relat#{person_num}", I18n.t("validations.household.relat.child_under_16_lettings", person_num:)
         record.errors.add "age#{person_num}", I18n.t("validations.household.age.child_under_16_relat_lettings", person_num:)
       end
-
-      if record.form.start_year_after_2024? && (age > 19 && tenant_is_child?(relationship))
-        record.errors.add "relat#{person_num}", I18n.t("validations.household.relat.child_over_19", person_num:)
-        record.errors.add "age#{person_num}", I18n.t("validations.household.age.child_over_19_relat", person_num:, person: "lead tenant")
-      end
     end
   end
 
   def validate_person_age_and_relationship_matches_economic_status(record)
+    return unless record.startdate && !record.form.start_year_after_2024?
+
     (2..8).each do |person_num|
       age = record.public_send("age#{person_num}")
       economic_status = record.public_send("ecstat#{person_num}")
@@ -118,46 +117,16 @@ module Validations::HouseholdValidations
       child = tenant_is_child?(relationship)
 
       if age_between_16_19 && !(student || economic_status_refused) && child
-        if record.form.start_year_after_2024?
-          record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.student_16_19.must_be_student_2024", person_num:, person: "lead tenant")
-        else
-          record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.student_16_19.must_be_student")
-        end
+        record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.student_16_19.must_be_student")
         record.errors.add "age#{person_num}", I18n.t("validations.household.age.student_16_19.cannot_be_16_19.child_not_student")
         record.errors.add "relat#{person_num}", I18n.t("validations.household.relat.student_16_19.cannot_be_child.16_19_not_student")
       end
 
-      if !age_between_16_19 && student && child
-        if record.form.start_year_after_2024?
-          record.errors.add "age#{person_num}", I18n.t("validations.household.age.student_16_19.must_be_16_19_2024", person_num:, person: "lead tenant")
-        else
-          record.errors.add "age#{person_num}", I18n.t("validations.household.age.student_16_19.must_be_16_19")
-        end
-        record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.student_16_19.cannot_be_student.child_not_16_19")
-        record.errors.add "relat#{person_num}", I18n.t("validations.household.relat.student_16_19.cannot_be_child.student_not_16_19")
-      end
+      next unless !age_between_16_19 && student && child
 
-      next unless student && age_between_16_19 && !child && record.form.start_year_after_2024?
-
-      record.errors.add "relat#{person_num}", I18n.t("validations.household.relat.student_16_19.must_be_child_2024", person_num:, person: "lead tenant")
-      record.errors.add "age#{person_num}", I18n.t("validations.household.age.student_not_child.cannot_be_16_19")
-      record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.not_child_16_19.cannot_be_student")
-    end
-  end
-
-  def validate_child_12_years_younger(record)
-    return unless record.form.start_year_after_2024?
-
-    (2..8).each do |person_num|
-      age = record.public_send("age#{person_num}")
-      relationship = record.public_send("relat#{person_num}")
-      next unless age && record.age1 && relationship
-
-      next unless age > record.age1 - 12 && tenant_is_child?(relationship)
-
-      record.errors.add "age1", I18n.t("validations.household.age.age1_child_12_years_younger_2024", person_num:, person: "lead tenant")
-      record.errors.add "age#{person_num}", I18n.t("validations.household.age.child_12_years_younger_2024", person_num:, person: "lead tenant")
-      record.errors.add "relat#{person_num}", I18n.t("validations.household.relat.child_12_years_younger_2024", person_num:, person: "lead tenant")
+      record.errors.add "age#{person_num}", I18n.t("validations.household.age.student_16_19.must_be_16_19")
+      record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.student_16_19.cannot_be_student.child_not_16_19")
+      record.errors.add "relat#{person_num}", I18n.t("validations.household.relat.student_16_19.cannot_be_child.student_not_16_19")
     end
   end
 

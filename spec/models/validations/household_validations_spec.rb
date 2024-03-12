@@ -366,20 +366,16 @@ RSpec.describe Validations::HouseholdValidations do
         record.age2 = 14
         record.relat2 = "P"
         household_validator.validate_person_age_matches_relationship(record)
-        expect(record.errors["relat2"])
-          .to include("Answer cannot be ‘partner’ as you told us person 2's age is under 16")
-        expect(record.errors["age2"])
-          .not_to include("Age cannot be under 16 as you told us person 2's relationship to the lead tenant is partner.")
+        expect(record.errors["relat2"]).to be_empty
+        expect(record.errors["age2"]).to be_empty
       end
 
       it "validates person over 19 is not child" do
         record.age2 = 20
         record.relat2 = "C"
         household_validator.validate_person_age_matches_relationship(record)
-        expect(record.errors["age2"])
-          .to include("Age must be 19 or under as you told us person 2's relationship to the lead tenant is child")
-        expect(record.errors["relat2"])
-          .not_to include("Answer cannot be child, as you told us person 2 is over 19")
+        expect(record.errors["age2"]).to be_empty
+        expect(record.errors["relat2"]).to be_empty
       end
     end
   end
@@ -535,15 +531,6 @@ RSpec.describe Validations::HouseholdValidations do
         expect(record.errors["ecstat2"])
           .to include(match I18n.t("validations.household.ecstat.student_16_19.cannot_be_student.child_not_16_19"))
       end
-
-      it "does not set 2024 errors" do
-        record.age2 = 17
-        record.relat2 = "C"
-        record.ecstat2 = 1
-        household_validator.validate_person_age_and_relationship_matches_economic_status(record)
-        expect(record.errors["ecstat2"])
-            .not_to include("Person 2's working situation must be student or prefers not to say, as their age is 16-19 and their relationship to the lead tenant is child")
-      end
     end
 
     context "with 2024 logs" do
@@ -560,37 +547,17 @@ RSpec.describe Validations::HouseholdValidations do
       end
 
       context "when the household contains a tenant’s child between the ages of 16 and 19" do
-        it "validates that person's economic status must be full time student or refused" do
+        it "does not add an error" do
           record.age2 = 17
           record.relat2 = "C"
           record.ecstat2 = 1
           household_validator.validate_person_age_and_relationship_matches_economic_status(record)
           expect(record.errors["ecstat2"])
-            .to include("Person 2's working situation must be student or prefers not to say, as their age is 16-19 and their relationship to the lead tenant is child")
+            .to be_empty
           expect(record.errors["age2"])
-            .to include("Person cannot be aged 16-19 if they have relationship ‘child’ but are not a student")
+            .to be_empty
           expect(record.errors["relat2"])
-            .to include("Answer cannot be ‘child’ if the person is aged 16-19 but not a student")
-        end
-
-        it "expects that person can be a full time student" do
-          record.age2 = 17
-          record.relat2 = "C"
-          record.ecstat2 = 7
-          household_validator.validate_person_age_and_relationship_matches_economic_status(record)
-          expect(record.errors["ecstat2"]).to be_empty
-          expect(record.errors["age2"]).to be_empty
-          expect(record.errors["relat2"]).to be_empty
-        end
-
-        it "expects that person can refuse to share their work status" do
-          record.age2 = 17
-          record.relat2 = "C"
-          record.ecstat2 = 10
-          household_validator.validate_person_age_and_relationship_matches_economic_status(record)
-          expect(record.errors["ecstat2"]).to be_empty
-          expect(record.errors["age2"]).to be_empty
-          expect(record.errors["relat2"]).to be_empty
+            .to be_empty
         end
       end
 
@@ -604,91 +571,24 @@ RSpec.describe Validations::HouseholdValidations do
         expect(record.errors["age2"]).to be_empty
       end
 
-      it "adds errors for a person who is a child of the lead tenant and a student but not aged 16-19" do
+      it "does not add errors for a person who is a child of the lead tenant and a student but not aged 16-19" do
         record.age2 = 14
         record.ecstat2 = "7"
         record.relat2 = "C"
         household_validator.validate_person_age_and_relationship_matches_economic_status(record)
-        expect(record.errors["relat2"])
-          .to include("Answer cannot be ‘child’ if the person is a student but not aged 16-19")
-        expect(record.errors["age2"])
-          .to include("Person 2's age must be 16-19 as their working situation is student and their relationship to the lead tenant is child")
-        expect(record.errors["ecstat2"])
-          .to include("Person cannot be a student if they are not aged 16-19 but have relationship ‘child’")
+        expect(record.errors["relat2"]).to be_empty
+        expect(record.errors["ecstat2"]).to be_empty
+        expect(record.errors["age2"]).to be_empty
       end
 
-      it "adds errors for a person who is a student and aged 16-19 but not child" do
+      it "does not add for a person who is a student and aged 16-19 but not child" do
         record.age2 = 17
         record.ecstat2 = "7"
         record.relat2 = "X"
         household_validator.validate_person_age_and_relationship_matches_economic_status(record)
-        expect(record.errors["relat2"])
-          .to include("Person 2's relationship to the lead tenant must be child as their working situation is student and their age is 16-19")
-        expect(record.errors["age2"])
-          .to include("Person cannot be aged 16-19 if they are a student but not a child")
-        expect(record.errors["ecstat2"])
-          .to include("Person cannot be a student if they are aged 16-19 but are not a child")
-      end
-    end
-  end
-
-  describe "#validate_child_12_years_younger" do
-    context "with 2023 logs" do
-      let(:log_date) { Time.zone.local(2023, 4, 1) }
-
-      before do
-        Timecop.freeze(log_date)
-        Singleton.__init__(FormHandler)
-      end
-
-      after do
-        Timecop.return
-        Singleton.__init__(FormHandler)
-      end
-
-      it "does not run the validation" do
-        record.age1 = 20
-        record.age2 = 17
-        record.relat2 = "C"
-        household_validator.validate_child_12_years_younger(record)
-        expect(record.errors["age2"]).to be_empty
         expect(record.errors["relat2"]).to be_empty
-      end
-    end
-
-    context "with 2024 logs" do
-      let(:log_date) { Time.zone.local(2024, 4, 1) }
-
-      before do
-        Timecop.freeze(log_date)
-        Singleton.__init__(FormHandler)
-      end
-
-      after do
-        Timecop.return
-        Singleton.__init__(FormHandler)
-      end
-
-      it "validates that child is at least 12 year younger than lead tenant" do
-        record.age1 = 20
-        record.age2 = 17
-        record.relat2 = "C"
-        household_validator.validate_child_12_years_younger(record)
-        expect(record.errors["age1"])
-          .to include("Age must be at least 12 years older than person 2's age as person 2's relationship to lead tenant is child.")
-        expect(record.errors["age2"])
-          .to include("Age must be at least 12 years younger than the lead tenant as person 2's relationship to lead tenant is child.")
-        expect(record.errors["relat2"])
-          .to include("Relationship cannot be child, as person 2 is less than 12 years younger than the lead tenant")
-      end
-
-      it "expects that child is at least 12 years younger than lead tenant" do
-        record.age1 = 30
-        record.age2 = 17
-        record.relat2 = "C"
-        household_validator.validate_child_12_years_younger(record)
+        expect(record.errors["ecstat2"]).to be_empty
         expect(record.errors["age2"]).to be_empty
-        expect(record.errors["relat2"]).to be_empty
       end
     end
   end

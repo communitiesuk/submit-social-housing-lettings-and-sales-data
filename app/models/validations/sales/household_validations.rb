@@ -26,6 +26,8 @@ module Validations::Sales::HouseholdValidations
   end
 
   def validate_person_age_matches_relationship(record)
+    return unless record.saledate && !record.form.start_year_after_2024?
+
     (2..6).each do |person_num|
       age = record.public_send("age#{person_num}")
       relationship = record.public_send("relat#{person_num}")
@@ -35,18 +37,15 @@ module Validations::Sales::HouseholdValidations
         record.errors.add "age#{person_num}", I18n.t("validations.household.age.child_under_16_relat_sales", person_num:)
         record.errors.add "relat#{person_num}", I18n.t("validations.household.relat.child_under_16_sales", person_num:)
       elsif age >= 20 && person_is_child?(relationship)
-        if record.form.start_year_after_2024?
-          record.errors.add "relat#{person_num}", I18n.t("validations.household.relat.child_over_19", person_num:)
-          record.errors.add "age#{person_num}", I18n.t("validations.household.age.child_over_19_relat", person_num:, person: "buyer")
-        else
-          record.errors.add "age#{person_num}", I18n.t("validations.household.age.child_over_20")
-          record.errors.add "relat#{person_num}", I18n.t("validations.household.relat.child_over_20")
-        end
+        record.errors.add "age#{person_num}", I18n.t("validations.household.age.child_over_20")
+        record.errors.add "relat#{person_num}", I18n.t("validations.household.relat.child_over_20")
       end
     end
   end
 
   def validate_person_age_and_relationship_matches_economic_status(record)
+    return unless record.saledate && !record.form.start_year_after_2024?
+
     (2..6).each do |person_num|
       age = record.public_send("age#{person_num}")
       economic_status = record.public_send("ecstat#{person_num}")
@@ -59,30 +58,16 @@ module Validations::Sales::HouseholdValidations
       child = person_is_child?(relationship)
 
       if age_between_16_19 && !(student || economic_status_refused) && child
-        if record.form.start_year_after_2024?
-          record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.student_16_19.must_be_student_2024", person_num:, person: "buyer")
-        else
-          record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.student_16_19.must_be_student")
-        end
+        record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.student_16_19.must_be_student")
         record.errors.add "age#{person_num}", I18n.t("validations.household.age.student_16_19.cannot_be_16_19.child_not_student")
         record.errors.add "relat#{person_num}", I18n.t("validations.household.relat.student_16_19.cannot_be_child.16_19_not_student")
       end
 
-      if !age_between_16_19 && student && child
-        if record.form.start_year_after_2024?
-          record.errors.add "age#{person_num}", I18n.t("validations.household.age.student_16_19.must_be_16_19_2024", person_num:, person: "buyer")
-        else
-          record.errors.add "age#{person_num}", I18n.t("validations.household.age.student_16_19.must_be_16_19")
-        end
-        record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.student_16_19.cannot_be_student.child_not_16_19")
-        record.errors.add "relat#{person_num}", I18n.t("validations.household.relat.student_16_19.cannot_be_child.student_not_16_19")
-      end
+      next unless !age_between_16_19 && student && child
 
-      next unless student && age_between_16_19 && !child && record.form.start_year_after_2024?
-
-      record.errors.add "relat#{person_num}", I18n.t("validations.household.relat.student_16_19.must_be_child_2024", person_num:, person: "buyer")
-      record.errors.add "age#{person_num}", I18n.t("validations.household.age.student_not_child.cannot_be_16_19")
-      record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.not_child_16_19.cannot_be_student")
+      record.errors.add "age#{person_num}", I18n.t("validations.household.age.student_16_19.must_be_16_19")
+      record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.student_16_19.cannot_be_student.child_not_16_19")
+      record.errors.add "relat#{person_num}", I18n.t("validations.household.relat.student_16_19.cannot_be_child.student_not_16_19")
     end
   end
 
@@ -106,6 +91,8 @@ module Validations::Sales::HouseholdValidations
   end
 
   def validate_child_12_years_younger(record)
+    return unless record.saledate && !record.form.start_year_after_2024?
+
     (2..6).each do |person_num|
       buyer_1_age = record.public_send("age1")
       person_age = record.public_send("age#{person_num}")
@@ -114,15 +101,9 @@ module Validations::Sales::HouseholdValidations
 
       next unless person_age > buyer_1_age - 12 && person_is_child?(relationship)
 
-      if record.form.start_year_after_2024?
-        record.errors.add "age1", I18n.t("validations.household.age.age1_child_12_years_younger_2024", person_num:, person: "buyer")
-        record.errors.add "age#{person_num}", I18n.t("validations.household.age.child_12_years_younger_2024", person_num:, person: "buyer")
-        record.errors.add "relat#{person_num}", I18n.t("validations.household.relat.child_12_years_younger_2024", person_num:, person: "buyer")
-      else
-        record.errors.add "age1", I18n.t("validations.household.age.child_12_years_younger")
-        record.errors.add "age#{person_num}", I18n.t("validations.household.age.child_12_years_younger")
-        record.errors.add "relat#{person_num}", I18n.t("validations.household.age.child_12_years_younger")
-      end
+      record.errors.add "age1", I18n.t("validations.household.age.child_12_years_younger")
+      record.errors.add "age#{person_num}", I18n.t("validations.household.age.child_12_years_younger")
+      record.errors.add "relat#{person_num}", I18n.t("validations.household.age.child_12_years_younger")
     end
   end
 
