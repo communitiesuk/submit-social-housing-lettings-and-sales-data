@@ -52,7 +52,8 @@ class Scheme < ApplicationRecord
 
   scope :deactivated, lambda {
     merge(SchemeDeactivationPeriod.deactivations_without_reactivation)
-    .where("scheme_deactivation_periods.deactivation_date <= ?", Time.zone.now)
+      .where("scheme_deactivation_periods.deactivation_date <= ?", Time.zone.now)
+      .or("scheme.organisation.active", false)
   }
 
   scope :deactivating_soon, lambda {

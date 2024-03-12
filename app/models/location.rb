@@ -54,7 +54,8 @@ class Location < ApplicationRecord
 
   scope :deactivated, lambda {
     merge(LocationDeactivationPeriod.deactivations_without_reactivation)
-    .where("location_deactivation_periods.deactivation_date <= ?", Time.zone.now)
+      .where("location_deactivation_periods.deactivation_date <= ?", Time.zone.now)
+      .or("location.organisation.active", false)
   }
 
   scope :deactivating_soon, lambda {

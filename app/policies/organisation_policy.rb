@@ -6,12 +6,11 @@ class OrganisationPolicy
     @organisation = organisation
   end
 
-  %w[
-    deactivate?
-    reactivate?
-  ].each do |method_name|
-    define_method method_name do
-      user.support?
-    end
+  def deactivate?
+    user.support? && organisation.status == :active
+  end
+
+  def reactivate?
+    user.support? && organisation.status == :deactivated
   end
 end

@@ -1512,16 +1512,18 @@ RSpec.describe OrganisationsController, type: :request do
       end
 
       describe "#reactivate" do
+        let(:inactive_organisation) { create(:organisation, name: "Inactive org", active: false) }
+
         before do
-          get "/organisations/#{organisation.id}/reactivate", headers:, params: {}
+          get "/organisations/#{inactive_organisation.id}/reactivate", headers:, params: {}
         end
 
         it "shows reactivation page with reactivate and cancel buttons for the organisation" do
-          expect(path).to include("/organisations/#{organisation.id}/reactivate")
-          expect(page).to have_content(organisation.name)
+          expect(path).to include("/organisations/#{inactive_organisation.id}/reactivate")
+          expect(page).to have_content(inactive_organisation.name)
           expect(page).to have_content("Are you sure you want to reactivate this organisation?")
           expect(page).to have_button("Reactivate this organisation")
-          expect(page).to have_link("Cancel", href: "/organisations/#{organisation.id}")
+          expect(page).to have_link("Cancel", href: "/organisations/#{inactive_organisation.id}")
         end
       end
 
