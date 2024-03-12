@@ -8,20 +8,14 @@
           <% end %>
         </h2>
         <% if log.tenancycode? or log.propcode? %>
-          <dl class="app-metadata app-metadata--inline">
+          <div class="app-metadata app-log-summary__details">
             <% if log.tenancycode? %>
-              <div class="app-metadata__item">
-                <dt class="app-metadata__term">Tenant</dt>
-                <dd class="app-metadata__definition"><%= log.tenancycode %></dd>
-              </div>
+                <div>Tenant <%= log.tenancycode %></div>
             <% end %>
             <% if log.propcode? %>
-              <div class="app-metadata__item">
-                <dt class="app-metadata__term">Property</dt>
-                <dd class="app-metadata__definition"><%= log.propcode %></dd>
-              </div>
+                <div>Property <%= log.propcode %></div>
             <% end %>
-          </dl>
+          </div>
         <% end %>
       </header>
       <% if log.needstype? or log.startdate? %>
