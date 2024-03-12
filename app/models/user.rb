@@ -237,6 +237,16 @@ class User < ApplicationRecord
     active_unread_notifications.last
   end
 
+  def status
+    if active == false
+      :deactivated
+    elsif confirmed? == false
+      :unconfirmed
+    else
+      :active
+    end
+  end
+
 protected
 
   # Checks whether a password is needed or not. For validations only.

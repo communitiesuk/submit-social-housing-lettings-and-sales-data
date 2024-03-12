@@ -14,6 +14,7 @@ module TagHelper
     deactivated: "Deactivated",
     deleted: "Deleted",
     merged: "Merged",
+    unconfirmed: "Unconfirmed",
   }.freeze
 
   COLOUR = {
@@ -29,6 +30,7 @@ module TagHelper
     deactivated: "grey",
     deleted: "red",
     merged: "orange",
+    unconfirmed: "red",
   }.freeze
 
   def status_tag(status, classes = [])

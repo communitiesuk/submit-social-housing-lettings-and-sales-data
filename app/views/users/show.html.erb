@@ -115,7 +115,7 @@
 
       <%= summary_list.with_row do |row|
           row.with_key { "Status" }
-          row.with_value { status_tag(@user.active? ? :active : :deactivated) }
+          row.with_value { status_tag(@user.status) }
           row.with_action
         end %>
     <% end %>
