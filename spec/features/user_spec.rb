@@ -487,7 +487,7 @@ RSpec.describe "User Features" do
       it "allows to deactivate the user" do
         click_button("I’m sure – deactivate this user")
         expect(page).to have_current_path("/users/#{other_user.id}")
-        expect(page).to have_content("This user has been deactivated.")
+        expect(page).to have_content("Deactivated")
         expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
       end
     end
@@ -517,7 +517,7 @@ RSpec.describe "User Features" do
       it "allows to cancel user reactivation" do
         click_link("No – I’ve changed my mind")
         expect(page).to have_current_path("/users/#{other_user.id}")
-        expect(page).to have_content("This user has been deactivated.")
+        expect(page).to have_content("Deactivated")
         expect(page).to have_no_css(".govuk-notification-banner.govuk-notification-banner--success")
       end
 

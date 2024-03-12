@@ -622,7 +622,7 @@ RSpec.describe UsersController, type: :request do
             end
 
             it "shows if user is not active" do
-              expect(page).to have_content("This user has been deactivated.")
+              expect(page).to have_content("Deactivated")
             end
 
             it "allows reactivating the user" do
@@ -1467,7 +1467,7 @@ RSpec.describe UsersController, type: :request do
             end
 
             it "shows if user is not active" do
-              expect(page).to have_content("This user has been deactivated.")
+              expect(page).to have_content("Deactivated")
             end
 
             it "allows reactivating the user" do
