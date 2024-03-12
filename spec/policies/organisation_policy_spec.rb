@@ -1,5 +1,4 @@
 require "rails_helper"
-# rubocop:disable RSpec/RepeatedExample
 
 RSpec.describe OrganisationPolicy do
   subject(:policy) { described_class }
@@ -11,30 +10,57 @@ RSpec.describe OrganisationPolicy do
 
   permissions :deactivate? do
     it "does not permit data providers to deactivate an organisation" do
+      organisation.active = true
       expect(policy).not_to permit(data_provider, organisation)
     end
 
     it "does not permit data coordinators to deactivate an organisation" do
-      expect(policy).not_to permit(data_coordinator, data_provider)
+      organisation.active = true
+      expect(policy).not_to permit(data_coordinator, organisation)
     end
 
-    it "permits support users to deactivate an organisation" do
-      expect(policy).to permit(support, data_provider)
+    it "permits support users to deactivate an active organisation" do
+      organisation.active = true
+      expect(policy).to permit(support, organisation)
+    end
+
+    it "does not permit support users to deactivate an inactive organisation" do
+      organisation.active = false
+      expect(policy).not_to permit(support, organisation)
+    end
+
+    it "does not permit support users to deactivate a merged organisation" do
+      organisation.active = true
+      organisation.merge_date = Time.zone.local(2023, 8, 2)
+      expect(policy).not_to permit(support, organisation)
     end
   end
 
   permissions :reactivate? do
     it "does not permit data providers to reactivate an organisation" do
+      organisation.active = false
       expect(policy).not_to permit(data_provider, organisation)
     end
 
     it "does not permit data coordinators to reactivate an organisation" do
-      expect(policy).not_to permit(data_coordinator, data_provider)
+      organisation.active = false
+      expect(policy).not_to permit(data_coordinator, organisation)
     end
 
-    it "permits support users to reactivate an organisation" do
-      expect(policy).to permit(support, data_provider)
+    it "permits support users to reactivate an inactive organisation" do
+      organisation.active = false
+      expect(policy).to permit(support, organisation)
+    end
+
+    it "does not permit support users to reactivate an active organisation" do
+      organisation.active = true
+      expect(policy).not_to permit(support, organisation)
+    end
+
+    it "does not permit support users to reactivate a merged organisation" do
+      organisation.active = false
+      organisation.merge_date = Time.zone.local(2023, 8, 2)
+      expect(policy).not_to permit(support, organisation)
     end
   end
 end
-# rubocop:enable RSpec/RepeatedExample

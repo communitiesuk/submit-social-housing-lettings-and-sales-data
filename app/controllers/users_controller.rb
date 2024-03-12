@@ -62,9 +62,10 @@ class UsersController < ApplicationController
       else
         user_name = @user.name&.possessive || @user.email.possessive
         if user_params[:active] == "false"
-          @user.update!(confirmed_at: nil, sign_in_count: 0, initial_confirmation_sent: false)
+          @user.deactivate!
           flash[:notice] = I18n.t("devise.activation.deactivated", user_name:)
         elsif user_params[:active] == "true"
+          @user.reactivate!
           @user.send_confirmation_instructions
           flash[:notice] = I18n.t("devise.activation.reactivated", user_name:)
         elsif user_params.key?("email")
