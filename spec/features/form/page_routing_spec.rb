@@ -36,7 +36,7 @@ RSpec.describe "Form Page Routing" do
       choose("lettings-log-preg-occ-1-field", allow_label_click: true)
       click_button("Save and continue")
       expect(page).to have_current_path("/lettings-logs/#{id}/conditional-question-yes-page")
-      click_link(text: "Back")
+      page.go_back
       expect(page).to have_current_path("/lettings-logs/#{id}/conditional-question")
       choose("lettings-log-preg-occ-2-field", allow_label_click: true)
       click_button("Save and continue")

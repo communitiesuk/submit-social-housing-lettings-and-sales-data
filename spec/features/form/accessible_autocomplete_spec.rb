@@ -60,7 +60,7 @@ RSpec.describe "Accessible Autocomplete" do
     it "maintains enhancement state across back navigation", js: true do
       find("#lettings-log-prevloc-field").click.native.send_keys("T", "h", "a", "n", :down, :enter)
       click_button("Save and continue")
-      click_link(text: "Back")
+      page.go_back
       expect(page).to have_selector("input", class: "autocomplete__input", count: 1)
     end
   end

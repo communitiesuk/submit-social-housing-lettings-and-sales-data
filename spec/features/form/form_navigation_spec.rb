@@ -86,41 +86,18 @@ RSpec.describe "Form Navigation" do
       expect(page).to have_current_path("/lettings-logs/#{empty_lettings_log.id}/household-characteristics/check-answers")
     end
 
-    describe "Back link directs correctly", js: true do
-      it "go back to tasklist page from tenant code" do
-        visit("/lettings-logs/#{id}")
-        visit("/lettings-logs/#{id}/tenant-code-test")
-        click_link(text: "Back")
-        expect(page).to have_content("Log #{id}")
-      end
-
-      it "go back to tenant code page from tenant age page", js: true do
-        visit("/lettings-logs/#{id}/tenant-code-test")
-        click_button("Save and continue")
-        visit("/lettings-logs/#{id}/person-1-age")
-        click_link(text: "Back")
-        expect(page).to have_field("lettings-log-tenancycode-field")
-      end
-
-      it "doesn't get stuck in infinite loops", js: true do
-        visit("/lettings-logs")
-        visit("/lettings-logs/#{id}/net-income")
-        fill_in("lettings-log-earnings-field", with: 740)
-        choose("lettings-log-incfreq-1-field", allow_label_click: true)
-        click_button("Save and continue")
-        click_link(text: "Back")
-        click_link(text: "Back")
-        expect(page).to have_current_path("/lettings-logs/#{id}")
-      end
-
-      context "when changing an answer from the check answers page", js: true do
-        it "the back button routes correctly" do
-          visit("/lettings-logs/#{id}/household-characteristics/check-answers")
-          first("a", text: /Answer/).click
-          click_link("Back")
-          expect(page).to have_current_path("/lettings-logs/#{id}/household-characteristics/check-answers")
-        end
-      end
+    it "has correct breadcrumbs" do
+      visit("/lettings-logs/#{id}/armed-forces")
+      breadcrumbs = page.find_all(".govuk-breadcrumbs__link")
+      expect(breadcrumbs.length).to eq 4
+      expect(breadcrumbs[0].text).to eq "Home"
+      expect(breadcrumbs[0][:href]).to eq root_path
+      expect(breadcrumbs[1].text).to eq "Lettings logs"
+      expect(breadcrumbs[1][:href]).to eq lettings_logs_path
+      expect(breadcrumbs[2].text).to eq "Log #{lettings_log.id}"
+      expect(breadcrumbs[2][:href]).to eq lettings_log_path(lettings_log)
+      expect(breadcrumbs[3].text).to eq "Household needs"
+      expect(breadcrumbs[3][:href]).to eq lettings_log_household_needs_check_answers_path(lettings_log)
     end
   end
 
@@ -197,6 +174,15 @@ RSpec.describe "Form Navigation" do
       expect(page).to have_current_path("/lettings-logs/#{id}/duplicate-logs?original_log_id=#{id}&referrer=duplicate_logs")
       lettings_log.reload
       expect(lettings_log.duplicates.count).to eq(1)
+    end
+
+    it "shows back link to duplicate logs page instead of log breadcrumbs" do
+      expect(lettings_log.duplicates.count).to eq(1)
+      visit("lettings-logs/#{id}/tenant-code-test?first_remaining_duplicate_id=#{id}&original_log_id=#{id}&referrer=duplicate_logs")
+      breadcrumbs = page.find_all(".govuk-breadcrumbs__link")
+      expect(breadcrumbs.length).to eq 0
+      click_link(text: "Back")
+      expect(page).to have_current_path("/lettings-logs/#{id}/duplicate-logs?original_log_id=#{id}")
     end
   end
 end
