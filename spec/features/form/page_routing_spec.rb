@@ -209,7 +209,6 @@ RSpec.describe "Form Page Routing" do
       expect(lettings_log.form.depends_on_met(depends_on, lettings_log)).to eq(true)
     end
 
-
     context "with operator-based depends_ons" do
       it "returns true if an operator-based depends_on is met" do
         depends_on = [
