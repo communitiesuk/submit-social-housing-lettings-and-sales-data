@@ -112,8 +112,15 @@ RSpec.describe LettingsLog do
     end
 
     it "validates tenancy type" do
-      expect(validator).to receive(:validate_fixed_term_tenancy)
       expect(validator).to receive(:validate_other_tenancy_type)
+    end
+
+    it "validates tenancy length" do
+      expect(validator).to receive(:validate_supported_housing_fixed_tenancy_length)
+      expect(validator).to receive(:validate_general_needs_fixed_tenancy_length_affordable_social_rent)
+      expect(validator).to receive(:validate_general_needs_fixed_tenancy_length_intermediate_rent)
+      expect(validator).to receive(:validate_periodic_tenancy_length)
+      expect(validator).to receive(:validate_tenancy_length_blank_when_not_required)
     end
 
     it "validates the previous postcode" do
@@ -2824,6 +2831,18 @@ RSpec.describe LettingsLog do
 
         it "allows searching by a Property Postcode" do
           result = described_class.search_by(lettings_log_to_search.postcode_full)
+          expect(result.count).to eq(1)
+          expect(result.first.id).to eq lettings_log_to_search.id
+        end
+
+        it "allows searching by id including the word log" do
+          result = described_class.search_by("log#{lettings_log_to_search.id}")
+          expect(result.count).to eq(1)
+          expect(result.first.id).to eq lettings_log_to_search.id
+        end
+
+        it "allows searching by id including the capitalised word Log" do
+          result = described_class.search_by("Log#{lettings_log_to_search.id}")
           expect(result.count).to eq(1)
           expect(result.first.id).to eq lettings_log_to_search.id
         end

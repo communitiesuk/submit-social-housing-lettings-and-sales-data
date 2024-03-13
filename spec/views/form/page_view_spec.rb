@@ -25,6 +25,7 @@ RSpec.describe "form/page" do
   end
 
   before do
+    sign_in create(:user)
     assign(:log, lettings_log)
     assign(:page, page)
     assign(:subsection, subsection)

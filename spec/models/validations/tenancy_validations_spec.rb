@@ -3,280 +3,272 @@ require "rails_helper"
 RSpec.describe Validations::TenancyValidations do
   subject(:tenancy_validator) { validator_class.new }
 
-  before do
-    Timecop.freeze(Time.zone.local(2021, 5, 1))
-  end
-
-  after do
-    Timecop.unfreeze
-  end
-
   let(:validator_class) { Class.new { include Validations::TenancyValidations } }
-  let(:record) { FactoryBot.create(:lettings_log, startdate: Time.zone.local(2021, 5, 1), needstype: 1, rent_type: 1) }
 
-  describe "fixed term tenancy validations" do
-    context "when fixed term tenancy" do
-      context "when type of tenancy is not assured or assured shorthold" do
-        let(:expected_error) { I18n.t("validations.tenancy.length.fixed_term_not_required") }
+  describe "tenancy length validations" do
+    let(:record) { FactoryBot.create(:lettings_log, :setup_completed) }
 
-        it "tenancy length should not be present" do
-          record.tenancy = 3
-          record.tenancylength = 10
-          tenancy_validator.validate_fixed_term_tenancy(record)
-          expect(record.errors["needstype"]).to include(match(expected_error))
-          expect(record.errors["rent_type"]).not_to include(match(expected_error))
-          expect(record.errors["tenancylength"]).to include(match(expected_error))
-          expect(record.errors["tenancy"]).to include(match(expected_error))
-        end
-      end
+    shared_examples "adds expected errors based on the tenancy length" do |tenancy_type_case, error_fields, min_tenancy_length|
+      context "and tenancy type is #{tenancy_type_case[:name]}" do
+        let(:expected_error) { tenancy_type_case[:expected_error].call(min_tenancy_length) }
 
-      context "when type of tenancy is assured shorthold" do
-        let(:expected_error) do
-          I18n.t(
-            "validations.tenancy.length.shorthold",
-            min_tenancy_length: 2,
-          )
-        end
+        before { record.tenancy = tenancy_type_case[:code] }
 
-        before { record.tenancy = 4 }
+        context "and tenancy length is less than #{min_tenancy_length}" do
+          before { record.tenancylength = min_tenancy_length - 1 }
 
-        context "when tenancy length is less than 2" do
-          it "adds an error" do
-            record.tenancylength = 1
-            tenancy_validator.validate_fixed_term_tenancy(record)
-            expect(record.errors["needstype"]).to include(match(expected_error))
-            expect(record.errors["rent_type"]).to include(match(expected_error))
-            expect(record.errors["tenancylength"]).to include(match(expected_error))
-            expect(record.errors["tenancy"]).to include(match(expected_error))
+          it "adds errors to #{error_fields.join(', ')}" do
+            validation.call(record)
+            error_fields.each do |field|
+              expect(record.errors[field]).to include(match(expected_error))
+            end
+            expect(record.errors.size).to be(error_fields.length)
           end
         end
 
-        context "when tenancy length is greater than 99" do
-          it "adds an error" do
-            record.tenancylength = 100
-            tenancy_validator.validate_fixed_term_tenancy(record)
-            expect(record.errors["needstype"]).to include(match(expected_error))
-            expect(record.errors["rent_type"]).to include(match(expected_error))
-            expect(record.errors["tenancylength"]).to include(match(expected_error))
-            expect(record.errors["tenancy"]).to include(match(expected_error))
+        context "and tenancy length is more than 99" do
+          before { record.tenancylength = 100 }
+
+          it "adds errors to #{error_fields.join(', ')}" do
+            validation.call(record)
+            error_fields.each do |field|
+              expect(record.errors[field]).to include(match(expected_error))
+            end
+            expect(record.errors.size).to be(error_fields.length)
           end
         end
 
-        context "when tenancy length is between 2-99" do
-          it "does not add an error" do
-            record.tenancylength = 3
-            tenancy_validator.validate_fixed_term_tenancy(record)
+        context "and tenancy length is between #{min_tenancy_length} and 99" do
+          before { record.tenancylength = min_tenancy_length }
+
+          it "does not add errors" do
+            validation.call(record)
             expect(record.errors).to be_empty
           end
         end
 
-        context "when tenancy length has not been answered" do
-          it "does not add an error" do
-            record.tenancylength = nil
-            tenancy_validator.validate_fixed_term_tenancy(record)
+        context "and tenancy length is not set" do
+          before { record.tenancylength = nil }
+
+          it "does not add errors" do
+            validation.call(record)
             expect(record.errors).to be_empty
           end
         end
       end
+    end
 
-      context "when the collection start year is before 2022" do
-        context "when type of tenancy is secure" do
-          let(:expected_error) do
-            I18n.t(
-              "validations.tenancy.length.secure",
-              min_tenancy_length: 2,
-            )
-          end
-
-          before { record.tenancy = 1 }
-
-          context "when tenancy length is less than 2" do
-            it "adds an error" do
-              record.tenancylength = 1
-              tenancy_validator.validate_fixed_term_tenancy(record)
-              expect(record.errors["needstype"]).to include(match(expected_error))
-              expect(record.errors["tenancylength"]).to include(match(expected_error))
-              expect(record.errors["tenancy"]).to include(match(expected_error))
-            end
-          end
-
-          context "when tenancy length is greater than 99" do
-            it "adds an error" do
-              record.tenancylength = 100
-              tenancy_validator.validate_fixed_term_tenancy(record)
-              expect(record.errors["needstype"]).to include(match(expected_error))
-              expect(record.errors["tenancylength"]).to include(match(expected_error))
-              expect(record.errors["tenancy"]).to include(match(expected_error))
-            end
-          end
-
-          context "when tenancy length is between 2-99" do
-            it "does not add an error" do
-              record.tenancylength = 3
-              tenancy_validator.validate_fixed_term_tenancy(record)
-              expect(record.errors).to be_empty
-            end
-          end
-
-          context "when tenancy length has not been answered" do
-            it "does not add an error" do
-              record.tenancylength = nil
-              tenancy_validator.validate_fixed_term_tenancy(record)
-              expect(record.errors).to be_empty
-            end
-          end
-        end
-      end
-
-      context "when the collection start year is 2022 or later" do
+    shared_examples "does not add errors when tenancy type is not fixed term" do
+      context "and tenancy type is not fixed term" do
         before do
-          Timecop.freeze(2022, 5, 1)
+          record.tenancy = 8
+          record.tenancylength = 0
         end
 
-        after do
-          Timecop.unfreeze
+        it "does not add errors" do
+          validation.call(record)
+          expect(record.errors).to be_empty
+        end
+      end
+    end
+
+    fixed_term_tenancy_type_cases = [
+      {
+        name: "assured shorthold",
+        code: 4,
+        expected_error: ->(min_tenancy_length) { I18n.t("validations.tenancy.length.invalid_fixed", min_tenancy_length:) },
+      },
+      {
+        name: "secure fixed term",
+        code: 6,
+        expected_error: ->(min_tenancy_length) { I18n.t("validations.tenancy.length.invalid_fixed", min_tenancy_length:) },
+      },
+    ]
+
+    describe "#validate_supported_housing_fixed_tenancy_length" do
+      subject(:validation) { ->(record) { tenancy_validator.validate_supported_housing_fixed_tenancy_length(record) } }
+
+      context "when needs type is supported housing" do
+        before { record.needstype = 2 }
+
+        error_fields = %w[needstype tenancylength tenancy]
+        fixed_term_tenancy_type_cases.each do |tenancy_type_case|
+          include_examples "adds expected errors based on the tenancy length", tenancy_type_case, error_fields, 1
         end
 
-        let(:record) { FactoryBot.create(:lettings_log, startdate: Time.zone.local(2022, 5, 1), needstype: 1, rent_type: 1) }
+        include_examples "does not add errors when tenancy type is not fixed term"
+      end
 
-        context "when type of tenancy is Secure - fixed term" do
-          let(:expected_error) do
-            I18n.t(
-              "validations.tenancy.length.secure",
-              min_tenancy_length: 2,
-            )
+      context "when needs type is general needs" do
+        before do
+          record.needstype = 1
+          record.tenancy = 4
+          record.tenancylength = 0
+        end
+
+        it "does not add errors" do
+          validation.call(record)
+          expect(record.errors).to be_empty
+        end
+      end
+    end
+
+    describe "#validate_general_needs_fixed_tenancy_length_affordable_social_rent" do
+      subject(:validation) { ->(record) { tenancy_validator.validate_general_needs_fixed_tenancy_length_affordable_social_rent(record) } }
+
+      context "when needs type is general needs" do
+        before { record.needstype = 1 }
+
+        context "and rent type is affordable or social rent" do
+          before { record.renttype = 1 }
+
+          error_fields = %w[needstype rent_type tenancylength tenancy]
+          fixed_term_tenancy_type_cases.each do |tenancy_type_case|
+            include_examples "adds expected errors based on the tenancy length", tenancy_type_case, error_fields, 2
           end
 
-          before { record.tenancy = 6 }
+          include_examples "does not add errors when tenancy type is not fixed term"
+        end
 
-          context "when tenancy length is less than 2" do
-            it "adds an error" do
-              record.tenancylength = 1
-              tenancy_validator.validate_fixed_term_tenancy(record)
-              expect(record.errors["needstype"]).to include(match(expected_error))
-              expect(record.errors["tenancylength"]).to include(match(expected_error))
-              expect(record.errors["tenancy"]).to include(match(expected_error))
+        context "and rent type is intermediate rent" do
+          before do
+            record.renttype = 3
+            record.tenancy = 4
+            record.tenancylength = 0
+          end
+
+          it "does not add errors" do
+            validation.call(record)
+            expect(record.errors).to be_empty
+          end
+        end
+      end
+
+      context "when needs type is supported housing" do
+        before do
+          record.needstype = 2
+          record.renttype = 1
+          record.tenancy = 4
+          record.tenancylength = 0
+        end
+
+        it "does not add errors" do
+          validation.call(record)
+          expect(record.errors).to be_empty
+        end
+      end
+    end
+
+    describe "#validate_general_needs_fixed_tenancy_length_intermediate_rent" do
+      subject(:validation) { ->(record) { tenancy_validator.validate_general_needs_fixed_tenancy_length_intermediate_rent(record) } }
+
+      context "when needs type is general needs" do
+        before { record.needstype = 1 }
+
+        context "and rent type is intermediate rent" do
+          before { record.renttype = 3 }
+
+          error_fields = %w[needstype rent_type tenancylength tenancy]
+          fixed_term_tenancy_type_cases.each do |tenancy_type_case|
+            include_examples "adds expected errors based on the tenancy length", tenancy_type_case, error_fields, 1
+          end
+
+          include_examples "does not add errors when tenancy type is not fixed term"
+        end
+
+        context "and rent type is not intermediate rent" do
+          before do
+            record.renttype = 2
+            record.tenancy = 4
+            record.tenancylength = 0
+          end
+
+          it "does not add errors" do
+            validation.call(record)
+            expect(record.errors).to be_empty
+          end
+        end
+      end
+
+      context "when needs type is supported housing" do
+        before do
+          record.needstype = 2
+          record.renttype = 3
+          record.tenancy = 4
+          record.tenancylength = 0
+        end
+
+        it "does not add errors" do
+          validation.call(record)
+          expect(record.errors).to be_empty
+        end
+      end
+    end
+
+    describe "#validate_periodic_tenancy_length" do
+      subject(:validation) { ->(record) { tenancy_validator.validate_periodic_tenancy_length(record) } }
+
+      periodic_tenancy_case = {
+        name: "periodic",
+        code: 8,
+        expected_error: ->(min_tenancy_length) { I18n.t("validations.tenancy.length.invalid_periodic", min_tenancy_length:) },
+      }
+      error_fields = %w[tenancylength tenancy]
+      include_examples "adds expected errors based on the tenancy length", periodic_tenancy_case, error_fields, 1
+
+      context "when tenancy type is not periodic" do
+        before do
+          record.tenancy = 6
+          record.tenancylength = 0
+        end
+
+        it "does not add errors" do
+          validation.call(record)
+          expect(record.errors).to be_empty
+        end
+      end
+
+      describe "#validate_tenancy_length_blank_when_not_required" do
+        context "when a tenancy length is provided" do
+          before { record.tenancylength = 10 }
+
+          context "and tenancy type is not fixed term or periodic" do
+            before { record.tenancy = 5 }
+
+            it "adds errors to tenancylength and tenancy" do
+              tenancy_validator.validate_tenancy_length_blank_when_not_required(record)
+              expected_error = I18n.t("validations.tenancy.length.fixed_term_not_required")
+              expect(record.errors["tenancylength"]).to include(expected_error)
+              expect(record.errors["tenancy"]).to include(expected_error)
             end
           end
 
-          context "when tenancy length is greater than 99" do
-            it "adds an error" do
-              record.tenancylength = 100
-              tenancy_validator.validate_fixed_term_tenancy(record)
-              expect(record.errors["needstype"]).to include(match(expected_error))
-              expect(record.errors["tenancylength"]).to include(match(expected_error))
-              expect(record.errors["tenancy"]).to include(match(expected_error))
-            end
-          end
+          tenancy_types_with_length = [
+            { name: "assured shorthold", code: 4 },
+            { name: "secure fixed term", code: 6 },
+            { name: "periodic", code: 8 },
+          ]
+          tenancy_types_with_length.each do |type|
+            context "and tenancy type is #{type[:name]}" do
+              before { record.tenancy = type[:code] }
 
-          context "when tenancy length is between 2-99" do
-            it "does not add an error" do
-              record.tenancylength = 3
-              tenancy_validator.validate_fixed_term_tenancy(record)
-              expect(record.errors).to be_empty
-            end
-          end
-
-          context "when tenancy length has not been answered" do
-            it "does not add an error" do
-              record.tenancylength = nil
-              tenancy_validator.validate_fixed_term_tenancy(record)
-              expect(record.errors).to be_empty
+              it "does not add errors" do
+                tenancy_validator.validate_tenancy_length_blank_when_not_required(record)
+                expect(record.errors).to be_empty
+              end
             end
           end
         end
 
-        context "when type of tenancy is Secure - lifetime" do
-          let(:expected_error) do
-            I18n.t(
-              "validations.tenancy.length.secure",
-              min_tenancy_length: 2,
-            )
+        context "when tenancy length is not provided" do
+          before do
+            record.tenancylength = nil
+            record.tenancy = 5
           end
 
-          before { record.tenancy = 7 }
-
-          context "when tenancy length is less than 2" do
-            it "adds an error" do
-              record.tenancylength = 1
-              tenancy_validator.validate_fixed_term_tenancy(record)
-              expect(record.errors["needstype"]).to include(match(expected_error))
-              expect(record.errors["tenancylength"]).to include(match(expected_error))
-              expect(record.errors["tenancy"]).to include(match(expected_error))
-            end
-          end
-
-          context "when tenancy length is greater than 99" do
-            it "adds an error" do
-              record.tenancylength = 100
-              tenancy_validator.validate_fixed_term_tenancy(record)
-              expect(record.errors["needstype"]).to include(match(expected_error))
-              expect(record.errors["tenancylength"]).to include(match(expected_error))
-              expect(record.errors["tenancy"]).to include(match(expected_error))
-            end
-          end
-
-          context "when tenancy length is between 2-99" do
-            it "does not add an error" do
-              record.tenancylength = 3
-              tenancy_validator.validate_fixed_term_tenancy(record)
-              expect(record.errors).to be_empty
-            end
-          end
-
-          context "when tenancy length has not been answered" do
-            it "does not add an error" do
-              record.tenancylength = nil
-              tenancy_validator.validate_fixed_term_tenancy(record)
-              expect(record.errors).to be_empty
-            end
-          end
-        end
-
-        context "when type of tenancy is periodic" do
-          let(:expected_error) do
-            I18n.t(
-              "validations.tenancy.length.secure",
-              min_tenancy_length: 1,
-            )
-          end
-
-          before { record.tenancy = 8 }
-
-          context "when tenancy length is less than 1" do
-            it "adds an error" do
-              record.tenancylength = 0
-              tenancy_validator.validate_fixed_term_tenancy(record)
-              expect(record.errors["needstype"]).to include(match(expected_error))
-              expect(record.errors["tenancylength"]).to include(match(expected_error))
-              expect(record.errors["tenancy"]).to include(match(expected_error))
-            end
-          end
-
-          context "when tenancy length is greater than 99" do
-            it "adds an error" do
-              record.tenancylength = 100
-              tenancy_validator.validate_fixed_term_tenancy(record)
-              expect(record.errors["needstype"]).to include(match(expected_error))
-              expect(record.errors["tenancylength"]).to include(match(expected_error))
-              expect(record.errors["tenancy"]).to include(match(expected_error))
-            end
-          end
-
-          context "when tenancy length is between 2-99" do
-            it "does not add an error" do
-              record.tenancylength = 3
-              tenancy_validator.validate_fixed_term_tenancy(record)
-              expect(record.errors).to be_empty
-            end
-          end
-
-          context "when tenancy length has not been answered" do
-            it "does not add an error" do
-              record.tenancylength = nil
-              tenancy_validator.validate_fixed_term_tenancy(record)
-              expect(record.errors).to be_empty
-            end
+          it "does not add errors" do
+            tenancy_validator.validate_tenancy_length_blank_when_not_required(record)
+            expect(record.errors).to be_empty
           end
         end
       end
@@ -284,6 +276,7 @@ RSpec.describe Validations::TenancyValidations do
   end
 
   describe "tenancy type validations" do
+    let(:record) { FactoryBot.create(:lettings_log, :setup_completed) }
     let(:field) { "validations.other_field_missing" }
     let(:main_field_label) { "tenancy type" }
     let(:other_field) { "tenancyother" }
@@ -327,20 +320,11 @@ RSpec.describe Validations::TenancyValidations do
 
   describe "joint tenancy validation" do
     context "when the data inputter has said that there is only one member in the household" do
-      before do
-        Timecop.freeze(2022, 5, 1)
-      end
-
-      after do
-        Timecop.unfreeze
-      end
-
-      let(:record) { FactoryBot.create(:lettings_log, startdate: Time.zone.local(2022, 5, 1)) }
+      let(:record) { FactoryBot.create(:lettings_log, :setup_completed, hhmemb: 1) }
       let(:expected_error) { I18n.t("validations.tenancy.not_joint") }
       let(:hhmemb_expected_error) { I18n.t("validations.tenancy.joint_more_than_one_member") }
 
       it "displays an error if the data inputter says the letting is a joint tenancy" do
-        record.hhmemb = 1
         record.joint = 1
         tenancy_validator.validate_joint_tenancy(record)
         expect(record.errors["joint"]).to include(match(expected_error))
@@ -348,7 +332,6 @@ RSpec.describe Validations::TenancyValidations do
       end
 
       it "does not display an error if the data inputter says the letting is not a joint tenancy" do
-        record.hhmemb = 1
         record.joint = 2
         tenancy_validator.validate_joint_tenancy(record)
         expect(record.errors["joint"]).to be_empty
@@ -356,7 +339,6 @@ RSpec.describe Validations::TenancyValidations do
       end
 
       it "does not display an error if the data inputter has given the household members but not input if it is a joint tenancy" do
-        record.hhmemb = 1
         record.joint = nil
         tenancy_validator.validate_joint_tenancy(record)
         expect(record.errors["joint"]).to be_empty
@@ -364,7 +346,6 @@ RSpec.describe Validations::TenancyValidations do
       end
 
       it "does not error when don't know answer to joint" do
-        record.hhmemb = 1
         record.joint = 3
 
         tenancy_validator.validate_joint_tenancy(record)

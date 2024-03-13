@@ -344,7 +344,7 @@ class BulkUpload::Sales::Year2024::RowParser
   validates :field_103,
             inclusion: {
               in: [1, 2],
-              if: proc { field_88 != 100 },
+              if: proc { field_88.present? && field_88 != 100 && shared_ownership? },
               question: QUESTIONS[:field_103],
             },
             on: :before_log
