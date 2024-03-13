@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_02_16_163519) do
+ActiveRecord::Schema[7.0].define(version: 2024_03_05_112507) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -440,7 +440,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_16_163519) do
     t.string "managing_agents_label"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.boolean "active"
+    t.boolean "active", default: true
     t.integer "old_association_type"
     t.string "software_supplier_id"
     t.string "housing_management_system"
@@ -737,6 +737,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_16_163519) do
     t.datetime "confirmation_sent_at"
     t.string "unconfirmed_email"
     t.boolean "initial_confirmation_sent"
+    t.boolean "reactivate_with_organisation"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["encrypted_otp_secret_key"], name: "index_users_on_encrypted_otp_secret_key", unique: true

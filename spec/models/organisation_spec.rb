@@ -212,8 +212,8 @@ RSpec.describe Organisation, type: :model do
 
   describe "scopes" do
     before do
-      create(:organisation, name: "Joe Bloggs")
-      create(:organisation, name: "Tom Smith")
+      create(:organisation, name: "Joe Bloggs", active: false)
+      create(:organisation, name: "Tom Smith", active: true)
     end
 
     context "when searching by name" do
@@ -228,6 +228,43 @@ RSpec.describe Organisation, type: :model do
         expect(described_class.search_by("Joe").count).to eq(1)
         expect(described_class.search_by("joe").count).to eq(1)
       end
+    end
+
+    context "when searching by active" do
+      it "returns only active records" do
+        results = described_class.filter_by_active
+        expect(results.count).to eq(1)
+        expect(results[0].name).to eq("Tom Smith")
+      end
+    end
+  end
+
+  describe "status" do
+    let!(:organisation) { create(:organisation) }
+
+    it "returns inactive when organisation inactive" do
+      organisation.active = false
+
+      expect(organisation.status).to be(:deactivated)
+    end
+
+    it "returns active when organisation active" do
+      organisation.active = true
+
+      expect(organisation.status).to be(:active)
+    end
+
+    it "returns merged when organisation merged in the past" do
+      organisation.merge_date = 1.month.ago
+
+      expect(organisation.status).to be(:merged)
+    end
+
+    it "does not return merged when organisation merges in the future" do
+      organisation.active = true
+      organisation.merge_date = Time.zone.now + 1.month
+
+      expect(organisation.status).to be(:active)
     end
   end
 end

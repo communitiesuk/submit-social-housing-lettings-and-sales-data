@@ -40,3 +40,12 @@
     <%= render partial: "organisations/merged_organisation_details" %>
   </div>
 </div>
+
+<% if OrganisationPolicy.new(current_user, @organisation).deactivate? %>
+  <%= govuk_button_link_to "Deactivate this organisation", deactivate_organisation_path(@organisation), warning: true %>
+<% end %>
+<% if OrganisationPolicy.new(current_user, @organisation).reactivate? %>
+  <span class="app-!-colour-muted govuk-!-margin-right-2">
+      <%= govuk_button_link_to "Reactivate this organisation", reactivate_organisation_path(@organisation) %>
+    </span>
+<% end %>
