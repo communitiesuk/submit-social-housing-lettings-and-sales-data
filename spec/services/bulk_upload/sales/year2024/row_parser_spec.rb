@@ -1005,6 +1005,22 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
         end
       end
 
+      context "when value is 3 and stairowned is not answered" do
+        let(:attributes) { setup_section_params.merge(field_103: "3", field_86: "1", field_87: "50", field_88: nil, field_109: nil) }
+
+        it "does not add errors" do
+          expect(parser.errors[:field_103]).not_to include("Enter a valid value for Was a mortgage used for the purchase of this property? - Shared ownership")
+        end
+      end
+
+      context "when it's not shared ownership" do
+        let(:attributes) { setup_section_params.merge(field_8: "2", field_103: "3", field_86: "1", field_87: "50", field_88: "99", field_109: nil) }
+
+        it "does not add errors" do
+          expect(parser.errors[:field_103]).not_to include("Enter a valid value for Was a mortgage used for the purchase of this property? - Shared ownership")
+        end
+      end
+
       context "when value is 3 and stairowned is 100" do
         let(:attributes) { setup_section_params.merge(field_103: "3", field_86: "1", field_87: "50", field_88: "100", field_109: nil) }
 
