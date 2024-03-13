@@ -425,6 +425,14 @@ class BulkUpload::Sales::Year2023::RowParser
             },
             on: :before_log
 
+  validates :field_105,
+            inclusion: {
+              in: [1, 2],
+              if: proc { field_89.present? && field_89 != 100 && shared_ownership? },
+              question: QUESTIONS[:field_105],
+            },
+            on: :before_log
+
   validates :field_13,
             presence: {
               message: I18n.t("validations.not_answered", question: "buyers living in property"),
@@ -1336,7 +1344,6 @@ private
 
   def validate_mortgageused
     if mortgageused.present? && mortgageused.to_i != 1 && mortgageused.to_i != 2
-      errors.add(:field_105, I18n.t("validations.invalid_option", question: "Was a mortgage used for the purchase of this property? - Shared ownership")) if shared_ownership?
       errors.add(:field_119, I18n.t("validations.invalid_option", question: "Was a mortgage used for the purchase of this property? - Discounted ownership")) if discounted_ownership?
       errors.add(:field_128, I18n.t("validations.invalid_option", question: "Was a mortgage used for the purchase of this property? - Outright sale")) if outright_sale?
     end

@@ -1029,6 +1029,30 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
         expect(parser.errors[:field_119]).to be_empty
         expect(parser.errors[:field_128]).to be_empty
       end
+
+      context "when invalid value" do
+        let(:attributes) { setup_section_params.merge(field_105: "4") }
+
+        it "returns correct errors" do
+          expect(parser.errors[:field_105]).to include("Enter a valid value for Was a mortgage used for the purchase of this property? - Shared ownership")
+        end
+      end
+
+      context "when value is 3 and stairowned is not 100" do
+        let(:attributes) { setup_section_params.merge(field_105: "3", field_87: "1", field_88: "50", field_89: "99", field_111: nil) }
+
+        it "returns correct errors" do
+          expect(parser.errors[:field_105]).to include("Enter a valid value for Was a mortgage used for the purchase of this property? - Shared ownership")
+        end
+      end
+
+      context "when value is 3 and stairowned is not answered" do
+        let(:attributes) { setup_section_params.merge(field_105: "3", field_87: "1", field_88: "50", field_89: nil, field_111: nil) }
+
+        it "does not add errors" do
+          expect(parser.errors[:field_105]).not_to include("Enter a valid value for Was a mortgage used for the purchase of this property? - Shared ownership")
+        end
+      end
     end
 
     describe "#field_119" do
