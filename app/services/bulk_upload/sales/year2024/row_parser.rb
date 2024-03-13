@@ -760,7 +760,7 @@ private
       stairbought: %i[field_87],
       stairowned: %i[field_88],
       socprevten: %i[field_100],
-      mortgageused: %i[field_103 field_117 field_126],
+      mortgageused: [mortgageused_field],
 
       uprn: %i[field_22],
       address_line1: %i[field_23],
@@ -1114,6 +1114,12 @@ private
     return field_103 if shared_ownership?
     return field_117 if discounted_ownership?
     return field_126 if outright_sale?
+  end
+
+  def mortgageused_field
+    return :field_103 if shared_ownership?
+    return :field_117 if discounted_ownership?
+    return :field_126 if outright_sale?
   end
 
   def owning_organisation
