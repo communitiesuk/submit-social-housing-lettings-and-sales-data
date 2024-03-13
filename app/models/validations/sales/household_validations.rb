@@ -107,6 +107,13 @@ module Validations::Sales::HouseholdValidations
     end
   end
 
+  def validate_buyer_not_child(record)
+    return unless record.saledate && record.form.start_year_after_2024?
+
+    record.errors.add "ecstat1", I18n.t("validations.household.ecstat.buyer_cannot_be_child", buyer_index: "1") if person_is_economic_child?(record.ecstat1)
+    record.errors.add "ecstat2", I18n.t("validations.household.ecstat.buyer_cannot_be_child", buyer_index: "2") if person_is_economic_child?(record.ecstat2) && record.joint_purchase?
+  end
+
 private
 
   def person_is_fulltime_student?(economic_status)

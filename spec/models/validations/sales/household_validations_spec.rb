@@ -446,4 +446,55 @@ RSpec.describe Validations::Sales::HouseholdValidations do
       end
     end
   end
+
+  describe "#validate_buyer_not_child" do
+    before do
+      Timecop.freeze(log_date)
+      Singleton.__init__(FormHandler)
+    end
+
+    after do
+      Timecop.return
+      Singleton.__init__(FormHandler)
+    end
+
+    context "with 2023 logs" do
+      let(:log_date) { Time.zone.local(2023, 4, 1) }
+
+      it "does not add an error if either buyer is a child" do
+        record.jointpur = 1
+        record.ecstat1 = 9
+        record.ecstat2 = 9
+        household_validator.validate_buyer_not_child(record)
+        expect(record.errors["ecstat1"]).to be_empty
+        expect(record.errors["ecstat2"]).to be_empty
+      end
+    end
+
+    context "with 2024 logs" do
+      let(:log_date) { Time.zone.local(2024, 4, 1) }
+
+      it "validates buyer 1 isn't a child" do
+        record.ecstat1 = 9
+        household_validator.validate_buyer_not_child(record)
+        expect(record.errors["ecstat1"])
+          .to include("Buyer 1 cannot have a working situation of child under 16")
+      end
+
+      it "validates buyer 2 isn't a child" do
+        record.jointpur = 1
+        record.ecstat2 = 9
+        household_validator.validate_buyer_not_child(record)
+        expect(record.errors["ecstat2"])
+          .to include("Buyer 2 cannot have a working situation of child under 16")
+      end
+
+      it "allows person 2 to be a child" do
+        record.jointpur = 2
+        record.ecstat2 = 9
+        household_validator.validate_buyer_not_child(record)
+        expect(record.errors["ecstat2"]).to be_empty
+      end
+    end
+  end
 end
