@@ -22,6 +22,7 @@ export default class extends Controller {
         }
       },
       autoselect: true,
+      placeholder: 'Start typing to search',
       templates: { suggestion: (value) => suggestion(value, options) },
       name: rawFieldName,
       onConfirm: (val) => {
