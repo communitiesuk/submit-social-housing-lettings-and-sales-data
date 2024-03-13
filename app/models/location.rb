@@ -40,6 +40,7 @@ class Location < ApplicationRecord
     if scopes.any?
       filtered_records = filtered_records
       .left_outer_joins(:location_deactivation_periods)
+      .joins(scheme: [:owning_organisation])
       .order("location_deactivation_periods.created_at DESC")
       .merge(scopes.reduce(&:or))
     end
@@ -53,28 +54,39 @@ class Location < ApplicationRecord
   }
 
   scope :deactivated, lambda {
+    deactivated_by_organisation
+      .or(deactivated_directly)
+  }
+
+  scope :deactivated_by_organisation, lambda {
+    merge(Organisation.filter_by_inactive)
+  }
+
+  scope :deactivated_directly, lambda {
     merge(LocationDeactivationPeriod.deactivations_without_reactivation)
       .where("location_deactivation_periods.deactivation_date <= ?", Time.zone.now)
-      .or("location.organisation.active", false)
   }
 
   scope :deactivating_soon, lambda {
     merge(LocationDeactivationPeriod.deactivations_without_reactivation)
     .where("location_deactivation_periods.deactivation_date > ?", Time.zone.now)
+    .where.not(id: joins(scheme: [:owning_organisation]).deactivated_by_organisation.pluck(:id))
   }
 
   scope :reactivating_soon, lambda {
     where.not("location_deactivation_periods.reactivation_date IS NULL")
     .where("location_deactivation_periods.reactivation_date > ?", Time.zone.now)
+    .where.not(id: joins(scheme: [:owning_organisation]).deactivated_by_organisation.pluck(:id))
   }
 
   scope :activating_soon, lambda {
-    where("startdate > ?", Time.zone.now)
+    where("locations.startdate > ?", Time.zone.now)
   }
 
   scope :active_status, lambda {
     where.not(id: joins(:location_deactivation_periods).reactivating_soon.pluck(:id))
-    .where.not(id: joins(:location_deactivation_periods).deactivated.pluck(:id))
+    .where.not(id: joins(scheme: [:owning_organisation]).deactivated_by_organisation.pluck(:id))
+    .where.not(id: joins(:location_deactivation_periods).deactivated_directly.pluck(:id))
     .where.not(id: incomplete.pluck(:id))
     .where.not(id: joins(:location_deactivation_periods).deactivating_soon.pluck(:id))
     .where.not(id: activating_soon.pluck(:id))
