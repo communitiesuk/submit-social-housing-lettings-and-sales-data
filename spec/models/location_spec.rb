@@ -974,6 +974,9 @@ RSpec.describe Location, type: :model do
   end
 
   describe "filter by status" do
+    let!(:deactivated_organisation) { FactoryBot.create(:organisation, active: false) }
+    let!(:deactivated_by_organisation_scheme) { FactoryBot.create(:scheme, owning_organisation: deactivated_organisation) }
+    let!(:deactivated_by_organisation_location) { FactoryBot.create(:location, scheme: deactivated_by_organisation_scheme) }
     let!(:incomplete_location) { FactoryBot.create(:location, :incomplete, startdate: Time.zone.local(2022, 4, 1)) }
     let!(:incomplete_location_with_nil_confirmed) { FactoryBot.create(:location, :incomplete, startdate: Time.zone.local(2022, 4, 1), confirmed: nil) }
     let!(:active_location) { FactoryBot.create(:location, startdate: Time.zone.local(2022, 4, 1)) }
@@ -1020,8 +1023,9 @@ RSpec.describe Location, type: :model do
 
     context "when filtering by deactivated status" do
       it "returns only deactivated locations" do
-        expect(described_class.filter_by_status(%w[deactivated]).count).to eq(1)
-        expect(described_class.filter_by_status(%w[deactivated]).first).to eq(deactivated_location)
+        expect(described_class.filter_by_status(%w[deactivated]).count).to eq(2)
+        expect(described_class.filter_by_status(%w[deactivated])).to include(deactivated_location)
+        expect(described_class.filter_by_status(%w[deactivated])).to include(deactivated_by_organisation_location)
       end
     end
 
