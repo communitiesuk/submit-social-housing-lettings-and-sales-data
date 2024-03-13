@@ -155,4 +155,111 @@ RSpec.describe "Form Page Routing" do
       end
     end
   end
+
+  describe "#depends_on_met" do
+    it "returns true if there is no depends_on" do
+      depends_on = nil
+
+      expect(lettings_log.form.depends_on_met(depends_on, lettings_log)).to eq(true)
+    end
+
+    it "returns true if the depends_on is met" do
+      depends_on = [{ "armedforces" => 1 }]
+      lettings_log.armedforces = 1
+
+      expect(lettings_log.form.depends_on_met(depends_on, lettings_log)).to eq(true)
+    end
+
+    it "returns false if the depends_on is not met" do
+      depends_on = [{ "armedforces" => 1 }]
+      lettings_log.armedforces = 0
+
+      expect(lettings_log.form.depends_on_met(depends_on, lettings_log)).to eq(false)
+    end
+
+    it "returns true if a complex depends_on is met" do
+      depends_on = [{ "is_la_inferred" => false, "is_general_needs?" => true }]
+      lettings_log.is_la_inferred = false
+      lettings_log.needstype = 1
+
+      expect(lettings_log.form.depends_on_met(depends_on, lettings_log)).to eq(true)
+    end
+
+    it "returns false if any part of a complex depends_on is not met" do
+      depends_on = [{ "is_la_inferred" => false, "is_general_needs?" => true }]
+      lettings_log.is_la_inferred = false
+      lettings_log.needstype = 2
+
+      expect(lettings_log.form.depends_on_met(depends_on, lettings_log)).to eq(false)
+    end
+
+    it "returns true if the first of multiple depends_ons are met" do
+      depends_on = [{ "is_la_inferred" => false }, { "is_general_needs?" => true }]
+      lettings_log.is_la_inferred = false
+      lettings_log.needstype = 2
+
+      expect(lettings_log.form.depends_on_met(depends_on, lettings_log)).to eq(true)
+    end
+
+    it "returns true if the last of multiple depends_ons are met" do
+      depends_on = [{ "is_la_inferred" => false }, { "is_general_needs?" => true }]
+      lettings_log.is_la_inferred = true
+      lettings_log.needstype = 1
+
+      expect(lettings_log.form.depends_on_met(depends_on, lettings_log)).to eq(true)
+    end
+
+    context "with operator-based depends_ons" do
+      it "returns true if an operator-based depends_on is met" do
+        depends_on = [
+          {
+            "details_known_2" => 0,
+            "age2" => {
+              "operator" => ">",
+              "operand" => 15,
+            },
+          },
+          { "details_known_2" => 0, "age2" => nil },
+        ]
+        lettings_log.details_known_2 = 0
+        lettings_log.age2 = 16
+
+        expect(lettings_log.form.depends_on_met(depends_on, lettings_log)).to eq(true)
+      end
+
+      it "returns false if an operator-based depends_on is not met" do
+        depends_on = [
+          {
+            "details_known_2" => 0,
+            "age2" => {
+              "operator" => ">",
+              "operand" => 15,
+            },
+          },
+          { "details_known_2" => 0, "age2" => nil },
+        ]
+        lettings_log.details_known_2 = 0
+        lettings_log.age2 = 15
+
+        expect(lettings_log.form.depends_on_met(depends_on, lettings_log)).to eq(false)
+      end
+
+      it "returns true if an operator-based depends_on is met on an inequality threshold" do
+        depends_on = [
+          {
+            "details_known_2" => 0,
+            "age2" => {
+              "operator" => ">=",
+              "operand" => 15,
+            },
+          },
+          { "details_known_2" => 0, "age2" => nil },
+        ]
+        lettings_log.details_known_2 = 0
+        lettings_log.age2 = 15
+
+        expect(lettings_log.form.depends_on_met(depends_on, lettings_log)).to eq(true)
+      end
+    end
+  end
 end
