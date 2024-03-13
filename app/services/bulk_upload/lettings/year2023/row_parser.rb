@@ -415,7 +415,6 @@ class BulkUpload::Lettings::Year2023::RowParser
 
   validate :validate_correct_intermediate_rent_type, on: :after_log, if: proc { renttype == :intermediate }
   validate :validate_correct_affordable_rent_type, on: :after_log, if: proc { renttype == :affordable }
-  validate :validate_all_charges_given, on: :after_log, if: proc { is_carehome.zero? }
 
   def self.question_for_field(field)
     QUESTIONS[field]
@@ -876,20 +875,6 @@ private
   def validate_correct_affordable_rent_type
     if field_10.blank? || ![1, 2, 3].include?(field_10.to_i)
       errors.add(:field_10, I18n.t("validations.not_answered", question: "is this a London Affordable Rent letting"), category: :setup)
-    end
-  end
-
-  def validate_all_charges_given
-    return if supported_housing? && field_125 == 1
-
-    { field_128: "basic rent",
-      field_129: "service charge",
-      field_130: "personal service charge",
-      field_131: "support charge",
-      field_132: "total charge" }.each do |field, charge|
-      if public_send(field.to_sym).blank?
-        errors.add(field, I18n.t("validations.financial.charges.missing_charges", question: charge))
-      end
     end
   end
 
