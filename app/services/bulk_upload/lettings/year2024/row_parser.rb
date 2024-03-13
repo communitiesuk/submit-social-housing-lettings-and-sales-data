@@ -409,6 +409,7 @@ class BulkUpload::Lettings::Year2024::RowParser
   validate :validate_created_by_exists, on: :after_log
   validate :validate_created_by_related, on: :after_log
   validate :validate_all_charges_given, on: :after_log, if: proc { is_carehome.zero? }
+  validate :validate_address_option_found, on: :after_log
 
   validate :validate_nulls, on: :after_log
 
@@ -569,6 +570,14 @@ private
   def validate_uprn_exists_if_any_key_address_fields_are_blank
     if field_16.blank? && (field_17.blank? || field_19.blank?)
       errors.add(:field_16, I18n.t("validations.not_answered", question: "UPRN"))
+    end
+  end
+
+  def validate_address_option_found
+    if !log.address_options_present? && field_16.blank? && (field_17.present? || field_19.present?)
+      %i[field_17 field_18 field_19 field_20 field_21 field_22].each do |field|
+        errors.add(field, I18n.t("validations.no_address_found"))
+      end
     end
   end
 
@@ -1065,6 +1074,7 @@ private
       address_line2: [:field_18],
       town_or_city: [:field_19],
       county: [:field_20],
+      uprn_selection: [:field_17],
     }.compact
   end
 
@@ -1261,8 +1271,15 @@ private
     attributes["address_line2"] = field_18
     attributes["town_or_city"] = field_19
     attributes["county"] = field_20
+    attributes["address_line1_input"] = address_line1_input
+    attributes["postcode_full_input"] = postcode_full
+    attributes["select_best_address_match"] = true if field_16.blank?
 
     attributes
+  end
+
+  def address_line1_input
+    [field_17, field_18, field_19].compact.join(", ")
   end
 
   def postcode_known
