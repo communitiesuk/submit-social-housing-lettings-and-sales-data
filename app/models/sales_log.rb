@@ -46,9 +46,9 @@ class SalesLog < Log
   }
   scope :filter_by_purchaser_code, ->(purchid) { where("purchid ILIKE ?", "%#{purchid}%") }
   scope :search_by, lambda { |param|
-    by_id = Arel.sql("case when id = #{param.to_i} then 0 else 1 end")
-    by_purchaser_code = Arel.sql("case when purchid = '#{param}' then 0 when purchid ILIKE '%#{param}%' then 1 else 2 end")
-    by_postcode = Arel.sql("case when REPLACE(postcode_full, ' ', '') = '#{param.delete(' ')}' then 0 when REPLACE(postcode_full, ' ', '') ILIKE '%#{param.delete(' ')}%' then 1 else 2 end")
+    by_id = Arel.sql("CASE WHEN id = #{param.to_i} THEN 0 ELSE 1 END")
+    by_purchaser_code = Arel.sql("CASE WHEN purchid = '#{param}' THEN 0 WHEN purchid ILIKE '%#{param}%' THEN 1 ELSE 2 END")
+    by_postcode = Arel.sql("CASE WHEN REPLACE(postcode_full, ' ', '') = '#{param.delete(' ')}' THEN 0 WHEN REPLACE(postcode_full, ' ', '') ILIKE '%#{param.delete(' ')}%' THEN 1 ELSE 2 END")
 
     filter_by_purchaser_code(param)
       .or(filter_by_postcode(param))
