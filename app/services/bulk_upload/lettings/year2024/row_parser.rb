@@ -376,13 +376,13 @@ class BulkUpload::Lettings::Year2024::RowParser
 
   validate :validate_created_by_exists, on: :after_log
   validate :validate_created_by_related, on: :after_log
+  validate :validate_all_charges_given, on: :after_log, if: proc { is_carehome.zero? }
 
   validate :validate_nulls, on: :after_log
 
   validate :validate_uprn_exists_if_any_key_address_fields_are_blank, on: :after_log, unless: -> { supported_housing? }
 
   validate :validate_incomplete_soft_validations, on: :after_log
-  validate :validate_all_charges_given, on: :after_log, if: proc { is_carehome.zero? }
   validate :validate_nationality, on: :after_log
 
   def self.question_for_field(field)
@@ -821,14 +821,26 @@ private
   def validate_all_charges_given
     return if supported_housing? && field_125 == 1
 
-    { field_125: "basic rent",
+    blank_charge_fields, other_charge_fields = {
+      field_125: "basic rent",
       field_126: "service charge",
       field_127: "personal service charge",
-      field_128: "support charge" }.each do |field, charge|
-      if public_send(field.to_sym).blank?
-        errors.add(field, I18n.t("validations.financial.charges.missing_charges", question: charge))
+      field_128: "support charge",
+    }.partition { |field, _| public_send(field).blank? }.map(&:to_h)
+
+    blank_charge_fields.each do |field, charge|
+      errors.add(field, I18n.t("validations.financial.charges.missing_charges", question: charge))
+    end
+
+    other_charge_fields.each do |field, _charge|
+      blank_charge_fields.each do |_blank_field, blank_charge|
+        errors.add(field, I18n.t("validations.financial.charges.missing_charges", question: blank_charge))
       end
     end
+  end
+
+  def all_charges_given?
+    field_125.present? && field_126.present? && field_127.present? && field_128.present?
   end
 
   def setup_question?(question)
@@ -1169,10 +1181,10 @@ private
     attributes["benefits"] = field_121
 
     attributes["period"] = field_123
-    attributes["brent"] = field_125
-    attributes["scharge"] = field_126
-    attributes["pscharge"] = field_127
-    attributes["supcharg"] = field_128
+    attributes["brent"] = field_125 if all_charges_given?
+    attributes["scharge"] = field_126 if all_charges_given?
+    attributes["pscharge"] = field_127 if all_charges_given?
+    attributes["supcharg"] = field_128 if all_charges_given?
     attributes["chcharge"] = field_124
     attributes["is_carehome"] = is_carehome
     attributes["household_charge"] = supported_housing? ? field_122 : nil

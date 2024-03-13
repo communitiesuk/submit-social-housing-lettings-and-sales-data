@@ -1637,7 +1637,7 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
       end
 
       context "when soft validation is triggered and not required" do
-        let(:attributes) { setup_section_params.merge({ field_125: 120, field_123: 1, field_29: 1, field_4: 1, field_11: "1", field_23: "E09000008" }) }
+        let(:attributes) { setup_section_params.merge({ field_125: 120, field_126: 120, field_127: 120, field_128: 120, field_123: 1, field_29: 1, field_4: 1, field_11: "1", field_23: "E09000008" }) }
 
         it "adds an error to the relevant fields" do
           expect(parser.errors.where(:field_125, category: :soft_validation)).to be_present
@@ -2170,7 +2170,7 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
     end
 
     describe "#chcharge" do
-      let(:attributes) { { bulk_upload:, field_124: "123.45", field_125: "123.45", field_126: "123.45", field_127: "123.45", field_128: "123.45" } }
+      let(:attributes) { setup_section_params.merge({ field_124: "123.45", field_125: "123.45", field_126: "123.45", field_127: "123.45", field_128: "123.45" }) }
 
       it "sets value given" do
         expect(parser.log.chcharge).to eq(123.45)
@@ -2191,7 +2191,7 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
     end
 
     describe "#supcharg" do
-      let(:attributes) { { bulk_upload:, field_128: "123.45" } }
+      let(:attributes) { setup_section_params.merge({ field_125: "330", field_126: "0", field_127: "0", field_128: "123.45" }) }
 
       it "sets value given" do
         expect(parser.log.supcharg).to eq(123.45)
@@ -2199,7 +2199,7 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
 
       context "when other charges are not given" do
         context "and it is carehome" do
-          let(:attributes) { { bulk_upload:, field_128: "123.45", field_124: "123.45", field_125: nil, field_126: nil, field_127: nil } }
+          let(:attributes) { setup_section_params.merge({ field_128: "123.45", field_124: "123.45", field_125: nil, field_126: nil, field_127: nil }) }
 
           it "does not set charges values" do
             parser.log.save!
@@ -2220,7 +2220,7 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
         end
 
         context "and it is not carehome" do
-          let(:attributes) { { bulk_upload:, field_128: "123.45", field_124: nil, field_125: nil, field_126: nil, field_127: nil } }
+          let(:attributes) { setup_section_params.merge({ field_128: "123.45", field_124: nil, field_125: nil, field_126: nil, field_127: nil }) }
 
           it "does not set charges values" do
             parser.log.save!
@@ -2236,14 +2236,38 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
             expect(parser.errors[:field_125]).to eql(["Please enter the basic rent. If there is no basic rent, please enter '0'."])
             expect(parser.errors[:field_126]).to eql(["Please enter the service charge. If there is no service charge, please enter '0'."])
             expect(parser.errors[:field_127]).to eql(["Please enter the personal service charge. If there is no personal service charge, please enter '0'."])
-            expect(parser.errors[:field_128]).to be_empty
+            expect(parser.errors[:field_128]).to eql(["Please enter the basic rent. If there is no basic rent, please enter '0'.", "Please enter the service charge. If there is no service charge, please enter '0'.", "Please enter the personal service charge. If there is no personal service charge, please enter '0'."])
+          end
+        end
+      end
+
+      context "when supscharg is not given" do
+        context "and it is not carehome" do
+          let(:attributes) { setup_section_params.merge({ field_123: 1, field_124: nil, field_125: "350.45", field_126: "0", field_127: "0", field_128: nil }) }
+
+          it "does not set charges values" do
+            parser.log.save!
+            expect(parser.log.period).not_to be_nil
+            expect(parser.log.tcharge).to be_nil
+            expect(parser.log.brent).to be_nil
+            expect(parser.log.supcharg).to be_nil
+            expect(parser.log.pscharge).to be_nil
+            expect(parser.log.scharge).to be_nil
+          end
+
+          it "adds an error to all charges" do
+            parser.valid?
+            expect(parser.errors[:field_125]).to eql(["Please enter the support charge. If there is no support charge, please enter '0'."])
+            expect(parser.errors[:field_126]).to eql(["Please enter the support charge. If there is no support charge, please enter '0'."])
+            expect(parser.errors[:field_127]).to eql(["Please enter the support charge. If there is no support charge, please enter '0'."])
+            expect(parser.errors[:field_128]).to eql(["Please enter the support charge. If there is no support charge, please enter '0'."])
           end
         end
       end
     end
 
     describe "#pscharge" do
-      let(:attributes) { { bulk_upload:, field_127: "123.45" } }
+      let(:attributes) { { bulk_upload:, field_125: "111.45", field_126: "0", field_127: "123.45", field_128: "0" } }
 
       it "sets value given" do
         expect(parser.log.pscharge).to eq(123.45)
@@ -2251,7 +2275,7 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
     end
 
     describe "#scharge" do
-      let(:attributes) { { bulk_upload:, field_126: "123.45" } }
+      let(:attributes) { { bulk_upload:, field_125: "111.45", field_126: "123.45", field_127: "0", field_128: "0" } }
 
       it "sets value given" do
         expect(parser.log.scharge).to eq(123.45)
