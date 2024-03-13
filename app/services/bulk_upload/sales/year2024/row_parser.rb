@@ -451,6 +451,7 @@ class BulkUpload::Sales::Year2024::RowParser
 
   validate :validate_buyer1_economic_status, on: :before_log
   validate :validate_address_option_found, on: :after_log
+  validate :validate_mortgageused, on: :before_log
   validate :validate_nulls, on: :after_log
   validate :validate_valid_radio_option, on: :before_log
 
@@ -1376,5 +1377,11 @@ private
 
   def valid_nationality_options
     %w[0] + GlobalConstants::COUNTRIES_ANSWER_OPTIONS.keys # 0 is "Prefers not to say"
+  end
+
+  def validate_mortgageused
+    if discounted_ownership? && mortgageused.present? && mortgageused.to_i != 1 && mortgageused.to_i != 2
+      errors.add(:field_117, I18n.t("validations.invalid_option", question: "Was a mortgage used for the purchase of this property? - Discounted ownership"))
+    end
   end
 end
