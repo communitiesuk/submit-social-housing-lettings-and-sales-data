@@ -1997,6 +1997,15 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
           expect(parser.log.cbl).to be(0)
         end
       end
+
+      context "when field_116 is not a permitted value" do
+        let(:attributes) { { bulk_upload:, field_116: 3 } }
+
+        it "adds an error" do
+          parser.valid?
+          expect(parser.errors[:field_116]).to include("Enter a valid value for was the letting made under the Choice-Based Lettings (CBL)")
+        end
+      end
     end
 
     describe "#chr" do
@@ -2015,6 +2024,15 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
           expect(parser.log.chr).to be(0)
         end
       end
+
+      context "when field_118 is not a permitted value" do
+        let(:attributes) { { bulk_upload:, field_118: 3 } }
+
+        it "adds an error" do
+          parser.valid?
+          expect(parser.errors[:field_118]).to include("Enter a valid value for was the letting made under the Common Housing Register (CHR)")
+        end
+      end
     end
 
     describe "#cap" do
@@ -2031,6 +2049,15 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
         it "sets value to 0" do
           expect(parser.log.cap).to be(0)
+        end
+      end
+
+      context "when field_117 is not a permitted value" do
+        let(:attributes) { { bulk_upload:, field_117: 3 } }
+
+        it "adds an error" do
+          parser.valid?
+          expect(parser.errors[:field_117]).to include("Enter a valid value for was the letting made under the Common Allocation Policy (CAP)")
         end
       end
     end
