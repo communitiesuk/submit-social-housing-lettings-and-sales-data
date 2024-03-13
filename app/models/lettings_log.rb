@@ -59,10 +59,10 @@ class LettingsLog < Log
     query.all
   }
   scope :search_by, lambda { |param|
-    by_id = Arel.sql("case when lettings_logs.id = #{param.to_i} then 0 else 1 end")
-    by_tenant_code = Arel.sql("case when tenancycode = '#{param}' then 0 when tenancycode ILIKE '%#{param}%' then 1 else 2 end")
-    by_propcode = Arel.sql("case when propcode = '#{param}' then 0 when propcode ILIKE '%#{param}%' then 1 else 2 end")
-    by_postcode = Arel.sql("case when REPLACE(postcode_full, ' ', '') = '#{param.delete(' ')}' then 0 when REPLACE(postcode_full, ' ', '') ILIKE '%#{param.delete(' ')}%' then 1 else 2 end")
+    by_id = Arel.sql("CASE WHEN lettings_logs.id = #{param.to_i} THEN 0 ELSE 1 END")
+    by_tenant_code = Arel.sql("CASE WHEN tenancycode = '#{param}' THEN 0 WHEN tenancycode ILIKE '%#{param}%' THEN 1 ELSE 2 END")
+    by_propcode = Arel.sql("CASE WHEN propcode = '#{param}' THEN 0 WHEN propcode ILIKE '%#{param}%' THEN 1 ELSE 2 END")
+    by_postcode = Arel.sql("CASE WHEN REPLACE(postcode_full, ' ', '') = '#{param.delete(' ')}' THEN 0 when REPLACE(postcode_full, ' ', '') ILIKE '%#{param.delete(' ')}%' then 1 ELSE 2 END")
 
     filter_by_location_postcode(param)
       .or(filter_by_tenant_code(param))
