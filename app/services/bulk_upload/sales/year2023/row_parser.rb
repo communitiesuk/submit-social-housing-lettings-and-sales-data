@@ -450,6 +450,7 @@ class BulkUpload::Sales::Year2023::RowParser
             on: :after_log
 
   validate :validate_buyer1_economic_status, on: :before_log
+  validate :validate_mortgageused, on: :before_log
   validate :validate_nulls, on: :after_log
   validate :validate_valid_radio_option, on: :before_log
 
@@ -1330,6 +1331,14 @@ private
   def validate_buyer1_economic_status
     if field_35 == 9
       errors.add(:field_35, "Buyer 1 cannot be a child under 16")
+    end
+  end
+
+  def validate_mortgageused
+    if mortgageused.present? && mortgageused.to_i != 1 && mortgageused.to_i != 2
+      errors.add(:field_105, I18n.t("validations.invalid_option", question: "Was a mortgage used for the purchase of this property? - Shared ownership")) if shared_ownership?
+      errors.add(:field_119, I18n.t("validations.invalid_option", question: "Was a mortgage used for the purchase of this property? - Discounted ownership")) if discounted_ownership?
+      errors.add(:field_128, I18n.t("validations.invalid_option", question: "Was a mortgage used for the purchase of this property? - Outright sale")) if outright_sale?
     end
   end
 end
