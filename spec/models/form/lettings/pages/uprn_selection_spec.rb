@@ -39,6 +39,14 @@ RSpec.describe Form::Lettings::Pages::UprnSelection, type: :model do
   end
 
   it "has correct depends_on" do
-    expect(page.depends_on).to eq([{ "address_options_present?" => true }])
+    expect(page.depends_on).to eq([{ "address_options_present?" => true,
+                                     "is_supported_housing?" => false,
+                                     "uprn_known" => nil },
+                                   { "address_options_present?" => true,
+                                     "is_supported_housing?" => false,
+                                     "uprn_known" => 0 },
+                                   { "address_options_present?" => true,
+                                     "is_supported_housing?" => false,
+                                     "uprn_confirmed" => 0 }])
   end
 end

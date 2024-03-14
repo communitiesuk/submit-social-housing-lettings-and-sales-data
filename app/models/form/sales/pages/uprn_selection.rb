@@ -7,7 +7,8 @@ class Form::Sales::Pages::UprnSelection < ::Form::Page
       { "uprn_known" => nil, "address_options_present?" => true },
       { "uprn_known" => 0, "address_options_present?" => true },
       { "uprn_confirmed" => 0, "address_options_present?" => true },
-    ]  end
+    ]
+  end
 
   def questions
     @questions ||= [
