@@ -800,7 +800,21 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
       end
 
       context "when MORTGAGE + DEPOSIT equals VALUE * EQUITY/100" do
-        let(:record) { FactoryBot.build(:sales_log, mortgage: 10_000, staircase: 2, deposit: 5_000, value: 30_000, equity: 50, ownershipsch: 1, type: 30, saledate: now) }
+        let(:record) { FactoryBot.build(:sales_log, mortgageused: 1, mortgage: 10_000, staircase: 2, deposit: 5_000, value: 30_000, equity: 50, ownershipsch: 1, type: 30, saledate: now) }
+
+        it "does not add an error" do
+          sale_information_validator.validate_non_staircasing_mortgage(record)
+          expect(record.errors["mortgage"]).to be_empty
+          expect(record.errors["value"]).to be_empty
+          expect(record.errors["deposit"]).to be_empty
+          expect(record.errors["equity"]).to be_empty
+          expect(record.errors["cashdis"]).to be_empty
+          expect(record.errors["type"]).to be_empty
+        end
+      end
+
+      context "when MORTGAGE + DEPOSIT is within 1£ tolerance of VALUE * EQUITY/100" do
+        let(:record) { FactoryBot.build(:sales_log, mortgageused: 1, mortgage: 10_000, staircase: 2, deposit: 50_000, value: 120_001, equity: 50, ownershipsch: 1, type: 30, saledate: now) }
 
         it "does not add an error" do
           sale_information_validator.validate_non_staircasing_mortgage(record)
@@ -887,6 +901,20 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
 
         context "when DEPOSIT equals VALUE * EQUITY/100" do
           let(:record) { FactoryBot.build(:sales_log, mortgageused: 2, staircase: 2, deposit: 15_000, value: 30_000, equity: 50, ownershipsch: 1, type: 30, saledate: now) }
+
+          it "does not add an error" do
+            sale_information_validator.validate_non_staircasing_mortgage(record)
+            expect(record.errors["mortgageused"]).to be_empty
+            expect(record.errors["value"]).to be_empty
+            expect(record.errors["deposit"]).to be_empty
+            expect(record.errors["equity"]).to be_empty
+            expect(record.errors["cashdis"]).to be_empty
+            expect(record.errors["type"]).to be_empty
+          end
+        end
+
+        context "when DEPOSIT is within 1£ tolerance of VALUE * EQUITY/100" do
+          let(:record) { FactoryBot.build(:sales_log, mortgageused: 2, staircase: 2, deposit: 15_000, value: 30_001, equity: 50, ownershipsch: 1, type: 30, saledate: now) }
 
           it "does not add an error" do
             sale_information_validator.validate_non_staircasing_mortgage(record)
@@ -1000,7 +1028,21 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
       end
 
       context "when MORTGAGE + DEPOSIT equals STAIRBOUGHT/100 * VALUE" do
-        let(:record) { FactoryBot.build(:sales_log, mortgage: 10_000, staircase: 1, deposit: 5_000, value: 30_000, stairbought: 50, ownershipsch: 1, type: 30, saledate: now) }
+        let(:record) { FactoryBot.build(:sales_log, mortgageused: 1, mortgage: 10_000, staircase: 1, deposit: 5_000, value: 30_000, stairbought: 50, ownershipsch: 1, type: 30, saledate: now) }
+
+        it "does not add an error" do
+          sale_information_validator.validate_staircasing_mortgage(record)
+          expect(record.errors["mortgage"]).to be_empty
+          expect(record.errors["value"]).to be_empty
+          expect(record.errors["deposit"]).to be_empty
+          expect(record.errors["stairbought"]).to be_empty
+          expect(record.errors["cashdis"]).to be_empty
+          expect(record.errors["type"]).to be_empty
+        end
+      end
+
+      context "when MORTGAGE + DEPOSIT is within 1£ tolerance of STAIRBOUGHT/100 * VALUE" do
+        let(:record) { FactoryBot.build(:sales_log, mortgageused: 1, mortgage: 10_000, staircase: 1, deposit: 5_000, value: 30_001, stairbought: 50, ownershipsch: 1, type: 30, saledate: now) }
 
         it "does not add an error" do
           sale_information_validator.validate_staircasing_mortgage(record)
@@ -1106,6 +1148,20 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
 
         context "when DEPOSIT equals STAIRBOUGHT/100 * VALUE" do
           let(:record) { FactoryBot.build(:sales_log, mortgageused: 2, staircase: 1, deposit: 15_000, value: 30_000, stairbought: 50, ownershipsch: 1, type: 30, saledate: now) }
+
+          it "does not add an error" do
+            sale_information_validator.validate_staircasing_mortgage(record)
+            expect(record.errors["mortgageused"]).to be_empty
+            expect(record.errors["value"]).to be_empty
+            expect(record.errors["deposit"]).to be_empty
+            expect(record.errors["stairbought"]).to be_empty
+            expect(record.errors["cashdis"]).to be_empty
+            expect(record.errors["type"]).to be_empty
+          end
+        end
+
+        context "when DEPOSIT is within 1£ tolerance of STAIRBOUGHT/100 * VALUE" do
+          let(:record) { FactoryBot.build(:sales_log, mortgageused: 2, staircase: 1, deposit: 15_000, value: 30_001, stairbought: 50, ownershipsch: 1, type: 30, saledate: now) }
 
           it "does not add an error" do
             sale_information_validator.validate_staircasing_mortgage(record)
