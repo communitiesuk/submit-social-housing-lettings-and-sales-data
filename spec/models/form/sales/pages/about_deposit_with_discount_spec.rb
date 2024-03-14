@@ -33,7 +33,7 @@ RSpec.describe Form::Sales::Pages::AboutDepositWithDiscount, type: :model do
 
   it "has correct depends_on" do
     expect(page.depends_on).to eq(
-      [{ "is_type_discount?" => true }],
+      [{ "social_homebuy?" => true }],
     )
   end
 
@@ -42,7 +42,7 @@ RSpec.describe Form::Sales::Pages::AboutDepositWithDiscount, type: :model do
 
     it "has correct depends_on" do
       expect(page.depends_on).to eq(
-        [{ "is_type_discount?" => true }],
+        [{ "social_homebuy?" => true }],
       )
     end
   end
@@ -54,7 +54,7 @@ RSpec.describe Form::Sales::Pages::AboutDepositWithDiscount, type: :model do
 
     it "has correct depends_on" do
       expect(page.depends_on).to eq(
-        [{ "is_type_discount?" => true, "stairowned_100?" => false }],
+        [{ "social_homebuy?" => true, "stairowned_100?" => false }],
       )
     end
 
@@ -63,7 +63,7 @@ RSpec.describe Form::Sales::Pages::AboutDepositWithDiscount, type: :model do
 
       it "has correct depends_on" do
         expect(page.depends_on).to eq(
-          [{ "is_type_discount?" => true, "stairowned_100?" => true }],
+          [{ "social_homebuy?" => true, "stairowned_100?" => true }],
         )
       end
     end

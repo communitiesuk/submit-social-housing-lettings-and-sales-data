@@ -239,7 +239,7 @@ class SalesLog < Log
     ownershipsch == 3 || (ownershipsch == 2 && rent_to_buy_full_ownership?)
   end
 
-  def is_type_discount?
+  def social_homebuy?
     type == 18
   end
 

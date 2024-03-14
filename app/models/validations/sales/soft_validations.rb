@@ -86,7 +86,7 @@ module Validations::Sales::SoftValidations
   def shared_ownership_deposit_invalid?
     return unless saledate && collection_start_year <= 2023
     return unless mortgage || mortgageused == 2 || mortgageused == 3
-    return unless cashdis || !is_type_discount?
+    return unless cashdis || !social_homebuy?
     return unless deposit && value && equity
 
     !within_tolerance?(mortgage_deposit_and_discount_total, value * equity / 100, 1)
