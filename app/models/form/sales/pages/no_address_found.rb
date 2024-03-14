@@ -11,7 +11,12 @@ class Form::Sales::Pages::NoAddressFound < ::Form::Page
       "translation" => "soft_validations.no_address_found.informative_text",
       "arguments" => [],
     }
-    @depends_on = [{ "address_options_present?" => false }]
+    @depends_on = [
+      { "uprn_known" => nil, "address_options_present?" => false },
+      { "uprn_known" => 0, "address_options_present?" => false },
+      { "uprn_confirmed" => 0, "address_options_present?" => false },
+
+    ]
   end
 
   def questions

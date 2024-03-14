@@ -3,7 +3,11 @@ class Form::Lettings::Pages::UprnSelection < ::Form::Page
     super
     @id = "uprn_selection"
     @header = "We found some addresses that might be this property"
-    @depends_on = [{ "address_options_present?" => true }]
+    @depends_on = [
+      { "is_supported_housing?" => false, "uprn_known" => nil, "address_options_present?" => true },
+      { "is_supported_housing?" => false, "uprn_known" => 0, "address_options_present?" => true },
+      { "is_supported_housing?" => false, "uprn_confirmed" => 0, "address_options_present?" => true },
+    ]
   end
 
   def questions

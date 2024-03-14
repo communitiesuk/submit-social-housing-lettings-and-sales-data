@@ -530,4 +530,8 @@ class SalesLog < Log
   def stairowned_100?
     stairowned == 100
   end
+
+  def address_search_given?
+    address_line1_input.present? && postcode_full.present?
+  end
 end
