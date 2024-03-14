@@ -27,18 +27,6 @@ RSpec.describe "validations" do
       created_by: user,
     )
   end
-  let(:completed_without_declaration) do
-    FactoryBot.create(
-      :lettings_log,
-      :completed,
-      created_by: user,
-      status: 1,
-      declaration: nil,
-      startdate: Time.zone.local(2021, 5, 1),
-      voiddate: Time.zone.local(2021, 5, 1),
-      mrcdate: Time.zone.local(2021, 5, 1),
-    )
-  end
   let(:id) { lettings_log.id }
 
   before do
