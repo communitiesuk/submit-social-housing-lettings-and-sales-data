@@ -48,14 +48,38 @@ RSpec.describe Form::Sales::Questions::PrivacyNotice, type: :model do
       allow(form).to receive(:start_year_after_2024?).and_return(false)
     end
 
-    it "has the correct answer_options" do
-      expect(question.answer_options).to eq({
-        "privacynotice" => { "value" => "The buyer has seen the DLUHC privacy notice" },
-      })
+    context "and there is a single buyer" do
+      it "has the correct answer_options" do
+        expect(question.answer_options).to eq({
+          "privacynotice" => { "value" => "The buyer has seen the DLUHC privacy notice" },
+        })
+      end
+
+      it "uses the expected top guidance partial" do
+        expect(question.top_guidance_partial).to eq("privacy_notice_buyer")
+      end
+
+      it "returns correct unanswered_error_message" do
+        expect(question.unanswered_error_message).to eq("You must show the DLUHC privacy notice to the buyer before you can submit this log.")
+      end
     end
 
-    it "uses the expected top guidance partial" do
-      expect(question.top_guidance_partial).to eq("privacy_notice_buyer")
+    context "and there are joint buyers" do
+      subject(:question) { described_class.new(question_id, question_definition, page, joint_purchase: true) }
+
+      it "has the correct answer_options" do
+        expect(question.answer_options).to eq({
+          "privacynotice" => { "value" => "The buyers have seen the DLUHC privacy notice" },
+        })
+      end
+
+      it "uses the expected top guidance partial" do
+        expect(question.top_guidance_partial).to eq("privacy_notice_buyer_joint_purchase")
+      end
+
+      it "returns correct unanswered_error_message" do
+        expect(question.unanswered_error_message).to eq("You must show the DLUHC privacy notice to the buyers before you can submit this log.")
+      end
     end
   end
 
@@ -64,18 +88,38 @@ RSpec.describe Form::Sales::Questions::PrivacyNotice, type: :model do
       allow(form).to receive(:start_year_after_2024?).and_return(true)
     end
 
-    it "has the correct answer_options" do
-      expect(question.answer_options).to eq({
-        "privacynotice" => { "value" => "The buyer has seen or been given access to the DLUHC privacy notice" },
-      })
+    context "and there is a single buyer" do
+      it "has the correct answer_options" do
+        expect(question.answer_options).to eq({
+          "privacynotice" => { "value" => "The buyer has seen or been given access to the DLUHC privacy notice" },
+        })
+      end
+
+      it "uses the expected top guidance partial" do
+        expect(question.top_guidance_partial).to eq("privacy_notice_buyer_2024")
+      end
+
+      it "returns correct unanswered_error_message" do
+        expect(question.unanswered_error_message).to eq("You must show or give access to the DLUHC privacy notice to the buyer before you can submit this log.")
+      end
     end
 
-    it "uses the expected top guidance partial" do
-      expect(question.top_guidance_partial).to eq("privacy_notice_buyer_2024")
-    end
-  end
+    context "and there are joint buyers" do
+      subject(:question) { described_class.new(question_id, question_definition, page, joint_purchase: true) }
 
-  it "returns correct unanswered_error_message" do
-    expect(question.unanswered_error_message).to eq("You must show the DLUHC privacy notice to the buyer before you can submit this log.")
+      it "has the correct answer_options" do
+        expect(question.answer_options).to eq({
+          "privacynotice" => { "value" => "The buyers have seen or been given access to the DLUHC privacy notice" },
+        })
+      end
+
+      it "uses the expected top guidance partial" do
+        expect(question.top_guidance_partial).to eq("privacy_notice_buyer_2024_joint_purchase")
+      end
+
+      it "returns correct unanswered_error_message" do
+        expect(question.unanswered_error_message).to eq("You must show or give access to the DLUHC privacy notice to the buyers before you can submit this log.")
+      end
+    end
   end
 end

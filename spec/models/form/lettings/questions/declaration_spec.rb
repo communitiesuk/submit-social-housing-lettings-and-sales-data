@@ -61,6 +61,10 @@ RSpec.describe Form::Lettings::Questions::Declaration, type: :model do
     it "has check_answers_card_number = 0" do
       expect(question.check_answers_card_number).to eq(0)
     end
+
+    it "returns correct unanswered_error_message" do
+      expect(question.unanswered_error_message).to eq("You must show the DLUHC privacy notice to the tenant before you can submit this log.")
+    end
   end
 
   context "when the form year is >= 2024" do
@@ -81,9 +85,9 @@ RSpec.describe Form::Lettings::Questions::Declaration, type: :model do
     it "has check_answers_card_number nil" do
       expect(question.check_answers_card_number).to be_nil
     end
-  end
 
-  it "returns correct unanswered_error_message" do
-    expect(question.unanswered_error_message).to eq("You must show the DLUHC privacy notice to the tenant before you can submit this log.")
+    it "returns correct unanswered_error_message" do
+      expect(question.unanswered_error_message).to eq("You must show or give access to the DLUHC privacy notice to the tenant before you can submit this log.")
+    end
   end
 end
