@@ -3507,5 +3507,45 @@ RSpec.describe LettingsLog do
       end
     end
   end
+
+  describe "#non_location_setup_questions_completed" do
+    before do
+      Timecop.return
+      allow(FormHandler.instance).to receive(:current_lettings_form).and_call_original
+      Singleton.__init__(FormHandler)
+    end
+
+    context "when setup section has been completed" do
+      let(:lettings_log) { build(:lettings_log, :setup_completed) }
+
+      it "returns true" do
+        expect(lettings_log).to be_non_location_setup_questions_completed
+      end
+    end
+
+    context "when the declaration has not been completed for a 2024 log" do
+      let(:lettings_log) { build(:lettings_log, :setup_completed, startdate: Time.utc(2024, 10, 1), declaration: nil) }
+
+      it "returns false" do
+        expect(lettings_log).not_to be_non_location_setup_questions_completed
+      end
+    end
+
+    context "when an optional question has not been completed" do
+      let(:lettings_log) { build(:lettings_log, :setup_completed, propcode: nil) }
+
+      it "returns true" do
+        expect(lettings_log).to be_non_location_setup_questions_completed
+      end
+    end
+
+    context "when scheme and location have not been completed" do
+      let(:lettings_log) { build(:lettings_log, :setup_completed, :sh, scheme_id: nil, location: nil) }
+
+      it "returns true" do
+        expect(lettings_log).to be_non_location_setup_questions_completed
+      end
+    end
+  end
 end
 # rubocop:enable RSpec/MessageChain
