@@ -107,10 +107,59 @@ module Validations::Sales::SaleInformationValidations
   end
 
   def validate_non_staircasing_mortgage(record)
-    return unless record.value && record.deposit && record.equity
-    return unless record.is_not_staircasing?
     return unless record.saledate && record.form.start_year_after_2024?
+    return unless record.value && record.deposit && record.equity
+    return unless record.ownershipsch == 1 && record.type && record.mortgageused && record.is_not_staircasing?
 
+    if record.social_homebuy?
+      add_non_staircasing_socialhomebuy_mortgage_errors(record)
+    else
+      add_non_staircasing_non_socialhomebuy_mortgage_errors(record)
+    end
+  end
+
+  def validate_staircasing_mortgage(record)
+    return unless record.saledate && record.form.start_year_after_2024?
+    return unless record.value && record.deposit && record.stairbought
+    return unless record.is_staircase? && record.ownershipsch == 1 && record.type && record.mortgageused
+
+    if record.social_homebuy?
+      add_staircasing_socialhomebuy_mortgage_errors(record)
+    else
+      add_staircasing_non_socialhomebuy_mortgage_errors(record)
+    end
+  end
+
+  def validate_mortgage_used_and_stairbought(record)
+    return unless record.stairowned && record.mortgageused
+
+    if !record.stairowned_100? && record.mortgageused == 3
+      record.errors.add :stairowned, I18n.t("validations.sale_information.stairowned.mortgageused_dont_know")
+      record.errors.add :mortgageused, I18n.t("validations.sale_information.stairowned.mortgageused_dont_know")
+    end
+  end
+
+  def add_non_staircasing_socialhomebuy_mortgage_errors(record)
+    return unless record.cashdis
+
+    if record.mortgage_used?
+      return unless record.mortgage
+
+      if record.mortgage_deposit_and_discount_total != record.expected_shared_ownership_deposit_value
+        %i[mortgage value deposit cashdis equity].each do |field|
+          record.errors.add field, I18n.t("validations.sale_information.non_staircasing_mortgage.mortgage_used_socialhomebuy", mortgage_deposit_and_discount_total: record.field_formatted_as_currency("mortgage_deposit_and_discount_total"), expected_shared_ownership_deposit_value: record.field_formatted_as_currency("expected_shared_ownership_deposit_value"))
+        end
+      end
+    elsif record.mortgage_not_used?
+      if record.deposit_and_discount_total != record.expected_shared_ownership_deposit_value
+        %i[mortgageused value deposit cashdis equity].each do |field|
+          record.errors.add field, I18n.t("validations.sale_information.non_staircasing_mortgage.mortgage_not_used_socialhomebuy", deposit_and_discount_total: record.field_formatted_as_currency("deposit_and_discount_total"), expected_shared_ownership_deposit_value: record.field_formatted_as_currency("expected_shared_ownership_deposit_value"))
+        end
+      end
+    end
+  end
+
+  def add_non_staircasing_non_socialhomebuy_mortgage_errors(record)
     if record.mortgage_used?
       return unless record.mortgage
 
@@ -128,11 +177,25 @@ module Validations::Sales::SaleInformationValidations
     end
   end
 
-  def validate_staircasing_mortgage(record)
-    return unless record.mortgageused && record.value && record.deposit && record.stairbought
-    return unless record.is_staircase?
-    return unless record.saledate && record.form.start_year_after_2024?
+  def add_staircasing_socialhomebuy_mortgage_errors(record)
+    return unless record.cashdis
 
+    if record.mortgage_used?
+      return unless record.mortgage
+
+      if record.mortgage_deposit_and_discount_total != record.stairbought_part_of_value
+        %i[mortgage value deposit cashdis stairbought].each do |field|
+          record.errors.add field, I18n.t("validations.sale_information.staircasing_mortgage.mortgage_used_socialhomebuy", mortgage_deposit_and_discount_total: record.field_formatted_as_currency("mortgage_deposit_and_discount_total"), stairbought_part_of_value: record.field_formatted_as_currency("stairbought_part_of_value"))
+        end
+      end
+    elsif record.deposit_and_discount_total != record.stairbought_part_of_value
+      %i[mortgageused value deposit cashdis stairbought].each do |field|
+        record.errors.add field, I18n.t("validations.sale_information.staircasing_mortgage.mortgage_not_used_socialhomebuy", deposit_and_discount_total: record.field_formatted_as_currency("deposit_and_discount_total"), stairbought_part_of_value: record.field_formatted_as_currency("stairbought_part_of_value"))
+      end
+    end
+  end
+
+  def add_staircasing_non_socialhomebuy_mortgage_errors(record)
     if record.mortgage_used?
       return unless record.mortgage
 
@@ -145,15 +208,6 @@ module Validations::Sales::SaleInformationValidations
       %i[mortgageused value deposit stairbought].each do |field|
         record.errors.add field, I18n.t("validations.sale_information.staircasing_mortgage.mortgage_not_used", deposit: record.field_formatted_as_currency("deposit"), stairbought_part_of_value: record.field_formatted_as_currency("stairbought_part_of_value"))
       end
-    end
-  end
-
-  def validate_mortgage_used_and_stairbought(record)
-    return unless record.stairowned && record.mortgageused
-
-    if !record.stairowned_100? && record.mortgageused == 3
-      record.errors.add :stairowned, I18n.t("validations.sale_information.stairowned.mortgageused_dont_know")
-      record.errors.add :mortgageused, I18n.t("validations.sale_information.stairowned.mortgageused_dont_know")
     end
   end
 

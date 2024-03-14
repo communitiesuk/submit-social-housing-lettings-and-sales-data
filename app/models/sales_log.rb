@@ -287,6 +287,13 @@ class SalesLog < Log
     mortgage_amount + deposit_amount + cashdis_amount
   end
 
+  def deposit_and_discount_total
+    deposit_amount = deposit || 0
+    cashdis_amount = cashdis || 0
+
+    deposit_amount + cashdis_amount
+  end
+
   def value_times_equity
     return unless value && equity
 
