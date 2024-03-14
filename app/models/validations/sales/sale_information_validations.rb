@@ -109,7 +109,7 @@ module Validations::Sales::SaleInformationValidations
   def validate_non_staircasing_mortgage(record)
     return unless record.saledate && record.form.start_year_after_2024?
     return unless record.value && record.deposit && record.equity
-    return unless record.ownershipsch == 1 && record.type && record.mortgageused && record.is_not_staircasing?
+    return unless record.shared_ownership_scheme? && record.type && record.mortgageused && record.is_not_staircasing?
 
     if record.social_homebuy?
       add_non_staircasing_socialhomebuy_mortgage_errors(record)
@@ -121,7 +121,7 @@ module Validations::Sales::SaleInformationValidations
   def validate_staircasing_mortgage(record)
     return unless record.saledate && record.form.start_year_after_2024?
     return unless record.value && record.deposit && record.stairbought
-    return unless record.is_staircase? && record.ownershipsch == 1 && record.type && record.mortgageused
+    return unless record.shared_ownership_scheme? && record.type && record.mortgageused && record.is_staircase?
 
     if record.social_homebuy?
       add_staircasing_socialhomebuy_mortgage_errors(record)
@@ -146,13 +146,13 @@ module Validations::Sales::SaleInformationValidations
       return unless record.mortgage
 
       if record.mortgage_deposit_and_discount_total != record.expected_shared_ownership_deposit_value
-        %i[mortgage value deposit cashdis equity].each do |field|
+        %i[mortgage value deposit cashdis equity type].each do |field|
           record.errors.add field, I18n.t("validations.sale_information.non_staircasing_mortgage.mortgage_used_socialhomebuy", mortgage_deposit_and_discount_total: record.field_formatted_as_currency("mortgage_deposit_and_discount_total"), expected_shared_ownership_deposit_value: record.field_formatted_as_currency("expected_shared_ownership_deposit_value"))
         end
       end
     elsif record.mortgage_not_used?
       if record.deposit_and_discount_total != record.expected_shared_ownership_deposit_value
-        %i[mortgageused value deposit cashdis equity].each do |field|
+        %i[mortgageused value deposit cashdis equity type].each do |field|
           record.errors.add field, I18n.t("validations.sale_information.non_staircasing_mortgage.mortgage_not_used_socialhomebuy", deposit_and_discount_total: record.field_formatted_as_currency("deposit_and_discount_total"), expected_shared_ownership_deposit_value: record.field_formatted_as_currency("expected_shared_ownership_deposit_value"))
         end
       end
@@ -164,13 +164,13 @@ module Validations::Sales::SaleInformationValidations
       return unless record.mortgage
 
       if record.mortgage_and_deposit_total != record.expected_shared_ownership_deposit_value
-        %i[mortgage value deposit equity].each do |field|
+        %i[mortgage value deposit equity type].each do |field|
           record.errors.add field, I18n.t("validations.sale_information.non_staircasing_mortgage.mortgage_used", mortgage_and_deposit_total: record.field_formatted_as_currency("mortgage_and_deposit_total"), expected_shared_ownership_deposit_value: record.field_formatted_as_currency("expected_shared_ownership_deposit_value"))
         end
       end
     elsif record.mortgage_not_used?
       if record.deposit != record.expected_shared_ownership_deposit_value
-        %i[mortgageused value deposit equity].each do |field|
+        %i[mortgageused value deposit equity type].each do |field|
           record.errors.add field, I18n.t("validations.sale_information.non_staircasing_mortgage.mortgage_not_used", deposit: record.field_formatted_as_currency("deposit"), expected_shared_ownership_deposit_value: record.field_formatted_as_currency("expected_shared_ownership_deposit_value"))
         end
       end
@@ -184,12 +184,12 @@ module Validations::Sales::SaleInformationValidations
       return unless record.mortgage
 
       if record.mortgage_deposit_and_discount_total != record.stairbought_part_of_value
-        %i[mortgage value deposit cashdis stairbought].each do |field|
+        %i[mortgage value deposit cashdis stairbought type].each do |field|
           record.errors.add field, I18n.t("validations.sale_information.staircasing_mortgage.mortgage_used_socialhomebuy", mortgage_deposit_and_discount_total: record.field_formatted_as_currency("mortgage_deposit_and_discount_total"), stairbought_part_of_value: record.field_formatted_as_currency("stairbought_part_of_value"))
         end
       end
     elsif record.deposit_and_discount_total != record.stairbought_part_of_value
-      %i[mortgageused value deposit cashdis stairbought].each do |field|
+      %i[mortgageused value deposit cashdis stairbought type].each do |field|
         record.errors.add field, I18n.t("validations.sale_information.staircasing_mortgage.mortgage_not_used_socialhomebuy", deposit_and_discount_total: record.field_formatted_as_currency("deposit_and_discount_total"), stairbought_part_of_value: record.field_formatted_as_currency("stairbought_part_of_value"))
       end
     end
@@ -200,12 +200,12 @@ module Validations::Sales::SaleInformationValidations
       return unless record.mortgage
 
       if record.mortgage_and_deposit_total != record.stairbought_part_of_value
-        %i[mortgage value deposit stairbought].each do |field|
+        %i[mortgage value deposit stairbought type].each do |field|
           record.errors.add field, I18n.t("validations.sale_information.staircasing_mortgage.mortgage_used", mortgage_and_deposit_total: record.field_formatted_as_currency("mortgage_and_deposit_total"), stairbought_part_of_value: record.field_formatted_as_currency("stairbought_part_of_value"))
         end
       end
     elsif record.deposit != record.stairbought_part_of_value
-      %i[mortgageused value deposit stairbought].each do |field|
+      %i[mortgageused value deposit stairbought type].each do |field|
         record.errors.add field, I18n.t("validations.sale_information.staircasing_mortgage.mortgage_not_used", deposit: record.field_formatted_as_currency("deposit"), stairbought_part_of_value: record.field_formatted_as_currency("stairbought_part_of_value"))
       end
     end
