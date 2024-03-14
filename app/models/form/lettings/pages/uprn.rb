@@ -13,12 +13,20 @@ class Form::Lettings::Pages::Uprn < ::Form::Page
   end
 
   def skip_text
-    "Enter address instead"
+    if form.start_year_after_2024?
+      "Search for address instead"
+    else
+      "Enter address instead"
+    end
   end
 
   def skip_href(log = nil)
     return unless log
 
-    "/#{log.model_name.param_key.dasherize}s/#{log.id}/address"
+    if form.start_year_after_2024?
+      "/#{log.model_name.param_key.dasherize}s/#{log.id}/address-matcher"
+    else
+      "/#{log.model_name.param_key.dasherize}s/#{log.id}/address"
+    end
   end
 end

@@ -4,14 +4,22 @@ class Form::Lettings::Questions::UprnConfirmation < ::Form::Question
     @id = "uprn_confirmed"
     @header = "Is this the property address?"
     @type = "radio"
-    @answer_options = ANSWER_OPTIONS
     @check_answer_label = "Is this the right address?"
   end
 
-  ANSWER_OPTIONS = {
-    "1" => { "value" => "Yes" },
-    "0" => { "value" => "No, I want to enter the address manually" },
-  }.freeze
+  def answer_options
+    if form.start_year_after_2024?
+      {
+        "1" => { "value" => "Yes" },
+        "0" => { "value" => "No, I want to search for the address instead" },
+      }.freeze
+    else
+      {
+        "1" => { "value" => "Yes" },
+        "0" => { "value" => "No, I want to enter the address manually" },
+      }.freeze
+    end
+  end
 
   def notification_banner(log = nil)
     return unless log&.uprn

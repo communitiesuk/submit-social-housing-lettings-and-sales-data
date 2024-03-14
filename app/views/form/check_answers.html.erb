@@ -1,8 +1,8 @@
 <% content_for :title, "#{subsection.id.humanize} - Check your answers" %>
 <% content_for :breadcrumbs, govuk_breadcrumbs(breadcrumbs: {
+  "Home" => root_path,
   breadcrumb_logs_title(@log, current_user) => breadcrumb_logs_link(@log, current_user),
   "Log #{@log.id}" => url_for(@log),
-  subsection.label => "",
 }) %>
 
 <div class="govuk-grid-row">

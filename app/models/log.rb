@@ -53,25 +53,88 @@ class Log < ApplicationRecord
   scope :filter_by_owning_organisation, ->(owning_organisation, _user = nil) { where(owning_organisation:) }
   scope :filter_by_managing_organisation, ->(managing_organisation, _user = nil) { where(managing_organisation:) }
 
-  attr_accessor :skip_update_status, :skip_update_uprn_confirmed, :skip_dpo_validation
+  attr_accessor :skip_update_status, :skip_update_uprn_confirmed, :select_best_address_match, :skip_dpo_validation
+
+  delegate :present?, to: :address_options, prefix: true
 
   def process_uprn_change!
     if uprn.present?
       service = UprnClient.new(uprn)
       service.call
 
-      return errors.add(:uprn, :uprn_error, message: service.error) if service.error.present?
+      if service.error.present?
+        errors.add(:uprn, :uprn_error, message: service.error)
+        errors.add(:uprn_selection, :uprn_error, message: service.error)
+        return
+      end
 
       presenter = UprnDataPresenter.new(service.result)
 
       self.uprn_known = 1
       self.uprn_confirmed = nil unless skip_update_uprn_confirmed
+      self.uprn_selection = nil
       self.address_line1 = presenter.address_line1
       self.address_line2 = presenter.address_line2
       self.town_or_city = presenter.town_or_city
       self.postcode_full = presenter.postcode
       self.county = nil
       process_postcode_changes!
+    end
+  end
+
+  def process_address_change!
+    if uprn_selection.present? || select_best_address_match.present?
+      if select_best_address_match
+        service = AddressClient.new(address_string)
+        service.call
+        return nil if service.result.blank? || service.error.present?
+
+        presenter = AddressDataPresenter.new(service.result.first)
+        os_match_threshold_for_bulk_upload = 0.7
+        if presenter.match >= os_match_threshold_for_bulk_upload
+          self.uprn_selection = presenter.uprn
+        else
+          return nil
+        end
+      end
+
+      if uprn_selection == "uprn_not_listed"
+        self.uprn_known = 0
+        self.uprn_confirmed = nil
+        self.uprn = nil
+        self.address_line1 = address_line1_input
+        self.address_line2 = nil
+        self.town_or_city = nil
+        self.county = nil
+        self.postcode_full = postcode_full_input
+      else
+        self.uprn = uprn_selection
+        self.uprn_confirmed = 1
+        self.skip_update_uprn_confirmed = true
+        process_uprn_change!
+      end
+    end
+  end
+
+  def address_string
+    "#{address_line1_input}, #{postcode_full_input}"
+  end
+
+  def address_options
+    return @address_options if @address_options
+
+    if [address_line1_input, postcode_full_input].all?(&:present?)
+      service = AddressClient.new(address_string)
+      service.call
+      return nil if service.result.blank? || service.error.present?
+
+      address_opts = []
+      service.result.first(10).each do |result|
+        presenter = AddressDataPresenter.new(result)
+        address_opts.append({ address: presenter.address, uprn: presenter.uprn })
+      end
+
+      @address_options = address_opts
     end
   end
 

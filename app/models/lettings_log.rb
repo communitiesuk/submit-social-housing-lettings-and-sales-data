@@ -34,6 +34,7 @@ class LettingsLog < Log
   before_validation :reset_previous_location_fields!, unless: :previous_postcode_known?
   before_validation :set_derived_fields!
   before_validation :process_uprn_change!, if: :should_process_uprn_change?
+  before_validation :process_address_change!, if: :should_process_address_change?
 
   belongs_to :scheme, optional: true
   belongs_to :location, optional: true
@@ -845,6 +846,22 @@ private
   end
 
   def should_process_uprn_change?
-    uprn && startdate && (uprn_changed? || startdate_changed?) && collection_start_year_for_date(startdate) >= 2023
+    return unless uprn
+    return unless startdate
+    return unless collection_start_year_for_date(startdate) >= 2023
+
+    uprn_changed? || startdate_changed?
+  end
+
+  def should_process_address_change?
+    return unless uprn_selection || select_best_address_match
+    return unless startdate
+    return unless form.start_year_after_2024?
+
+    if select_best_address_match
+      address_line1_input.present? && postcode_full_input.present?
+    else
+      uprn_selection_changed? || startdate_changed?
+    end
   end
 end

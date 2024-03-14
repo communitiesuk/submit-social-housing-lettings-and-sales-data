@@ -31,7 +31,16 @@ class Form::Lettings::Subsections::PropertyInformation < ::Form::Subsection
   end
 
   def uprn_questions
-    if form.start_date.year >= 2023
+    if form.start_year_after_2024?
+      [
+        Form::Lettings::Pages::Uprn.new(nil, nil, self),
+        Form::Lettings::Pages::UprnConfirmation.new(nil, nil, self),
+        Form::Lettings::Pages::AddressMatcher.new(nil, nil, self),
+        Form::Lettings::Pages::NoAddressFound.new(nil, nil, self),
+        Form::Lettings::Pages::UprnSelection.new(nil, nil, self),
+        Form::Lettings::Pages::AddressFallback.new(nil, nil, self),
+      ]
+    elsif form.start_date.year == 2023
       [
         Form::Lettings::Pages::Uprn.new(nil, nil, self),
         Form::Lettings::Pages::UprnConfirmation.new(nil, nil, self),

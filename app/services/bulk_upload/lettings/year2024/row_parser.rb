@@ -337,6 +337,38 @@ class BulkUpload::Lettings::Year2024::RowParser
             },
             on: :after_log
 
+  validates :field_112,
+            inclusion: {
+              in: [1, 2],
+              message: I18n.t("validations.invalid_option", question: "was the letting made under the Choice-Based Lettings (CBL)"),
+              if: -> { field_112.present? },
+            },
+            on: :after_log
+
+  validates :field_113,
+            inclusion: {
+              in: [1, 2],
+              message: I18n.t("validations.invalid_option", question: "was the letting made under the Common Allocation Policy (CAP)"),
+              if: -> { field_113.present? },
+            },
+            on: :after_log
+
+  validates :field_114,
+            inclusion: {
+              in: [1, 2],
+              message: I18n.t("validations.invalid_option", question: "was the letting made under the Common Housing Register (CHR)"),
+              if: -> { field_114.present? },
+            },
+            on: :after_log
+
+  validates :field_115,
+            inclusion: {
+              in: [1, 2],
+              message: I18n.t("validations.invalid_option", question: "was the letting made under the Accessible Register"),
+              if: -> { field_115.present? },
+            },
+            on: :after_log
+
   validates :field_42, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 1 must be a number or the letter R" }, on: :after_log
   validates :field_48, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 2 must be a number or the letter R" }, on: :after_log, if: proc { details_known?(2).zero? }
   validates :field_52, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 3 must be a number or the letter R" }, on: :after_log, if: proc { details_known?(3).zero? }
@@ -376,13 +408,14 @@ class BulkUpload::Lettings::Year2024::RowParser
 
   validate :validate_created_by_exists, on: :after_log
   validate :validate_created_by_related, on: :after_log
+  validate :validate_all_charges_given, on: :after_log, if: proc { is_carehome.zero? }
+  validate :validate_address_option_found, on: :after_log
 
   validate :validate_nulls, on: :after_log
 
   validate :validate_uprn_exists_if_any_key_address_fields_are_blank, on: :after_log, unless: -> { supported_housing? }
 
   validate :validate_incomplete_soft_validations, on: :after_log
-  validate :validate_all_charges_given, on: :after_log, if: proc { is_carehome.zero? }
   validate :validate_nationality, on: :after_log
 
   def self.question_for_field(field)
@@ -540,6 +573,14 @@ private
     end
   end
 
+  def validate_address_option_found
+    if !log.address_options_present? && field_16.blank? && (field_17.present? || field_19.present?)
+      %i[field_17 field_18 field_19 field_20 field_21 field_22].each do |field|
+        errors.add(field, I18n.t("validations.no_address_found"))
+      end
+    end
+  end
+
   def validate_incomplete_soft_validations
     routed_to_soft_validation_questions = log.form.questions.filter { |q| q.type == "interruption_screen" && q.page.routed_to?(log, nil) }.compact
     routed_to_soft_validation_questions.each do |question|
@@ -672,8 +713,8 @@ private
   end
 
   def validate_leaving_reason_for_renewal
-    if field_7 == 1 && ![40, 42].include?(field_98)
-      errors.add(:field_98, I18n.t("validations.household.reason.renewal_reason_needed"))
+    if field_7 == 1 && ![50, 51, 52, 53].include?(field_98)
+      errors.add(:field_98, I18n.t("validations.household.reason.renewal_reason_needed_2024"))
     end
   end
 
@@ -821,14 +862,26 @@ private
   def validate_all_charges_given
     return if supported_housing? && field_125 == 1
 
-    { field_125: "basic rent",
+    blank_charge_fields, other_charge_fields = {
+      field_125: "basic rent",
       field_126: "service charge",
       field_127: "personal service charge",
-      field_128: "support charge" }.each do |field, charge|
-      if public_send(field.to_sym).blank?
-        errors.add(field, I18n.t("validations.financial.charges.missing_charges", question: charge))
+      field_128: "support charge",
+    }.partition { |field, _| public_send(field).blank? }.map(&:to_h)
+
+    blank_charge_fields.each do |field, charge|
+      errors.add(field, I18n.t("validations.financial.charges.missing_charges", question: charge))
+    end
+
+    other_charge_fields.each do |field, _charge|
+      blank_charge_fields.each do |_blank_field, blank_charge|
+        errors.add(field, I18n.t("validations.financial.charges.missing_charges", question: blank_charge))
       end
     end
+  end
+
+  def all_charges_given?
+    field_125.present? && field_126.present? && field_127.present? && field_128.present?
   end
 
   def setup_question?(question)
@@ -1021,6 +1074,7 @@ private
       address_line2: [:field_18],
       town_or_city: [:field_19],
       county: [:field_20],
+      uprn_selection: [:field_17],
     }.compact
   end
 
@@ -1169,10 +1223,10 @@ private
     attributes["benefits"] = field_121
 
     attributes["period"] = field_123
-    attributes["brent"] = field_125
-    attributes["scharge"] = field_126
-    attributes["pscharge"] = field_127
-    attributes["supcharg"] = field_128
+    attributes["brent"] = field_125 if all_charges_given?
+    attributes["scharge"] = field_126 if all_charges_given?
+    attributes["pscharge"] = field_127 if all_charges_given?
+    attributes["supcharg"] = field_128 if all_charges_given?
     attributes["chcharge"] = field_124
     attributes["is_carehome"] = is_carehome
     attributes["household_charge"] = supported_housing? ? field_122 : nil
@@ -1217,8 +1271,15 @@ private
     attributes["address_line2"] = field_18
     attributes["town_or_city"] = field_19
     attributes["county"] = field_20
+    attributes["address_line1_input"] = address_line1_input
+    attributes["postcode_full_input"] = postcode_full
+    attributes["select_best_address_match"] = true if field_16.blank?
 
     attributes
+  end
+
+  def address_line1_input
+    [field_17, field_18, field_19].compact.join(", ")
   end
 
   def postcode_known

@@ -10,7 +10,7 @@ RSpec.describe Form::Lettings::Subsections::PropertyInformation, type: :model do
   end
 
   describe "pages" do
-    let(:section) { instance_double(Form::Sales::Sections::Household, form:) }
+    let(:section) { instance_double(Form::Lettings::Sections::Household, form:) }
     let(:form) { instance_double(Form, start_date:) }
 
     before do
@@ -91,6 +91,9 @@ RSpec.describe Form::Lettings::Subsections::PropertyInformation, type: :model do
           %w[
             uprn
             uprn_confirmation
+            address_matcher
+            no_address_found
+            uprn_selection
             address
             property_local_authority
             local_authority_min_rent_value_check

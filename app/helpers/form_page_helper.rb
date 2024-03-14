@@ -10,4 +10,12 @@ module FormPageHelper
   def accessed_from_duplicate_logs?(referrer)
     %w[duplicate_logs duplicate_logs_banner].include?(referrer)
   end
+
+  def duplicate_log_set_path(log, original_log_id)
+    send("#{log.class.name.underscore}_duplicate_logs_path", log, original_log_id:)
+  end
+
+  def relevant_check_answers_path(log, subsection)
+    send("#{log.class.name.underscore}_#{subsection.id}_check_answers_path", log)
+  end
 end

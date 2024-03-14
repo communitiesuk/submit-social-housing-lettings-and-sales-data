@@ -32,6 +32,7 @@ class SalesLog < Log
   before_validation :reset_previous_location_fields!, unless: :previous_postcode_known?
   before_validation :set_derived_fields!
   before_validation :process_uprn_change!, if: :should_process_uprn_change?
+  before_validation :process_address_change!, if: :should_process_address_change?
 
   belongs_to :managing_organisation, class_name: "Organisation", optional: true
 
@@ -429,7 +430,23 @@ class SalesLog < Log
   end
 
   def should_process_uprn_change?
-    uprn && saledate && (uprn_changed? || saledate_changed?) && collection_start_year_for_date(saledate) >= 2023
+    return unless uprn
+    return unless saledate
+    return unless collection_start_year_for_date(saledate) >= 2023
+
+    uprn_changed? || saledate_changed?
+  end
+
+  def should_process_address_change?
+    return unless uprn_selection || select_best_address_match
+    return unless saledate
+    return unless form.start_year_after_2024?
+
+    if select_best_address_match
+      address_line1_input.present? && postcode_full_input.present?
+    else
+      uprn_selection_changed? || saledate_changed?
+    end
   end
 
   def value_with_discount
