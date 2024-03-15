@@ -61,12 +61,64 @@ RSpec.describe DataProtectionConfirmationBannerComponent, type: :component do
           expect(render).to have_selector("p", text: "Your organisation must accept the Data Sharing Agreement before you can create any logs.")
         end
       end
+
+      context "and org doesn't own stock and has a parent organisation that hasn't signed DSA" do
+        before do
+          organisation.data_protection_confirmation.update!(confirmed: false)
+          organisation.update!(holds_own_stock: false)
+          parent_organisation = create(:organisation, :without_dpc, holds_own_stock: true)
+          create(:organisation_relationship, child_organisation: organisation, parent_organisation:)
+        end
+
+        it "displays the banner and asks to sign" do
+          expect(component.display_banner?).to eq(true)
+          expect(render).to have_link(
+            "Read the Data Sharing Agreement",
+            href: "/organisations/#{organisation.id}/data-sharing-agreement",
+          )
+          expect(render).to have_selector("p", text: "Your data protection officer must accept the Data Sharing Agreement on CORE before you can create any logs.")
+        end
+      end
     end
 
     context "when org has a signed data sharing agremeent" do
       it "does not display banner" do
         expect(component.display_banner?).to eq(false)
         expect(render.content).to be_empty
+      end
+
+      context "and doesn't own stock" do
+        before do
+          organisation.update!(holds_own_stock: false)
+        end
+
+        context "and has a parent organisation that owns stock and has signed DSA" do
+          before do
+            parent_organisation = create(:organisation, holds_own_stock: true)
+            create(:organisation_relationship, child_organisation: organisation, parent_organisation:)
+          end
+
+          it "does not display banner" do
+            expect(component.display_banner?).to eq(false)
+            expect(render.content).to be_empty
+          end
+        end
+
+        context "and has a parent organisation that hasn't signed DSA" do
+          before do
+            parent_organisation = create(:organisation, :without_dpc, holds_own_stock: true)
+            create(:organisation_relationship, child_organisation: organisation, parent_organisation:)
+          end
+
+          it "displays the banner and asks to create stock owners" do
+            expect(component.display_banner?).to eq(true)
+            expect(render).to have_link(
+              "View or add stock owners",
+              href: "/organisations/#{organisation.id}/stock-owners",
+            )
+            expect(render).to have_selector("p", text: "Your organisation does not own stock. To create logs your stock owner(s) must accept the Data Sharing Agreement on CORE.")
+          end
+        end
       end
     end
 
@@ -98,6 +150,20 @@ RSpec.describe DataProtectionConfirmationBannerComponent, type: :component do
             expect(render).to have_selector("p", text: "Your data protection officer must accept the Data Sharing Agreement on CORE before you can create any logs.")
             expect(render).to have_selector("p", text: "You can ask: #{dpo.name}")
           end
+
+          context "and has a parent organisation that owns stock and has signed DSA" do
+            before do
+              parent_organisation = create(:organisation, holds_own_stock: true)
+              create(:organisation_relationship, child_organisation: organisation, parent_organisation:)
+            end
+
+            it "displays the banner and shows DPOs" do
+              expect(component.display_banner?).to eq(true)
+              expect(render.css("a")).to be_empty
+              expect(render).to have_selector("p", text: "Your data protection officer must accept the Data Sharing Agreement on CORE before you can create any logs.")
+              expect(render).to have_selector("p", text: "You can ask: #{dpo.name}")
+            end
+          end
         end
 
         context "when user is a DPO" do
@@ -111,6 +177,22 @@ RSpec.describe DataProtectionConfirmationBannerComponent, type: :component do
               href: "/organisations/#{organisation.id}/data-sharing-agreement",
             )
             expect(render).to have_selector("p", text: "Your organisation must accept the Data Sharing Agreement before you can create any logs.")
+          end
+
+          context "and has a parent organisation that owns stock and has signed DSA" do
+            before do
+              parent_organisation = create(:organisation, holds_own_stock: true)
+              create(:organisation_relationship, child_organisation: organisation, parent_organisation:)
+            end
+
+            it "displays the banner and asks to sign" do
+              expect(component.display_banner?).to eq(true)
+              expect(render).to have_link(
+                "Read the Data Sharing Agreement",
+                href: "/organisations/#{organisation.id}/data-sharing-agreement",
+              )
+              expect(render).to have_selector("p", text: "Your organisation must accept the Data Sharing Agreement before you can create any logs.")
+            end
           end
         end
       end
