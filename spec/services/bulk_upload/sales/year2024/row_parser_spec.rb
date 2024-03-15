@@ -725,6 +725,24 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
       end
     end
 
+    describe "#field_116" do # percentage discount
+      context "when percentage discount over 70" do
+        let(:attributes) { valid_attributes.merge({ field_8: "2", field_116: "71" }) }
+
+        it "returns correct error" do
+          expect(parser.errors.where(:field_116).map(&:message)).to include("Percentage discount should be between 0% and 70%")
+        end
+      end
+
+      context "when percentage discount not over 70" do
+        let(:attributes) { valid_attributes.merge({ field_8: "2", field_116: "70" }) }
+
+        it "does not return error" do
+          expect(parser.errors.where(:field_116)).not_to be_present
+        end
+      end
+    end
+
     describe "#field_11" do # type for outright sale
       context "when an invalid option" do
         let(:attributes) { setup_section_params.merge({ field_11: "100" }) }

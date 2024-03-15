@@ -211,6 +211,7 @@ en:
         already_added: "You have already added this managing agent"
       merged: "That organisation has already been merged. Select a different organisation."
     not_answered: "You must answer %{question}"
+    range: "%{question} should be between %{min} and %{max}"
     invalid_option: "Enter a valid value for %{question}"
     invalid_number: "Enter a number for %{question}"
     no_address_found: "We could not find this address. Edit the address data or fix this error on the CORE site."
