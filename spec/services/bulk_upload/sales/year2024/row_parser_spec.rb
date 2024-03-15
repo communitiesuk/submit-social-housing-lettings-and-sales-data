@@ -730,7 +730,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
         let(:attributes) { valid_attributes.merge({ field_8: "2", field_116: "71" }) }
 
         it "returns correct error" do
-          expect(parser.errors.where(:field_116).map(&:message)).to include("Percentage discount should be between 0% and 70%")
+          expect(parser.errors.where(:field_116).map(&:message)).to include("Percentage discount must be between 0% and 70%")
         end
       end
 
@@ -739,6 +739,14 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
 
         it "does not return error" do
           expect(parser.errors.where(:field_116)).not_to be_present
+        end
+      end
+
+      context "when percentage less than 0" do
+        let(:attributes) { valid_attributes.merge({ field_8: "2", field_116: "-1" }) }
+
+        it "returns correct error" do
+          expect(parser.errors.where(:field_116).map(&:message)).to include("Percentage discount must be between 0% and 70%")
         end
       end
     end
