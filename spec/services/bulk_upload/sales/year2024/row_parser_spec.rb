@@ -1064,8 +1064,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
         let(:attributes) { setup_section_params.merge(field_9: "30", field_103: "1", field_104: "10000", field_109: "5000", field_101: "30000", field_102: "28", field_86: "2") }
 
         it "does not add a BU error on type (because it's a setup field and would block log creation)" do
-          setup_errors = parser.errors.select { |e| e.options[:category] == :setup }
-          expect(setup_errors).to be_empty
+          expect(parser.errors[:field_9]).to be_empty
         end
 
         it "includes errors on other related fields" do
