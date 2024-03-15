@@ -1068,10 +1068,10 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
         end
 
         it "includes errors on other related fields" do
-          expect(parser.errors[:field_104]).to include("The mortgage and deposit added together is £15,000.00 and the purchase price times by the equity is £8,400.00. These figures should be the same.")
-          expect(parser.errors[:field_109]).to include("The mortgage and deposit added together is £15,000.00 and the purchase price times by the equity is £8,400.00. These figures should be the same.")
-          expect(parser.errors[:field_101]).to include("The mortgage and deposit added together is £15,000.00 and the purchase price times by the equity is £8,400.00. These figures should be the same.")
-          expect(parser.errors[:field_102]).to include("The mortgage and deposit added together is £15,000.00 and the purchase price times by the equity is £8,400.00. These figures should be the same.")
+          expect(parser.errors[:field_104]).to include("The mortgage and deposit added together is £15,000.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+          expect(parser.errors[:field_109]).to include("The mortgage and deposit added together is £15,000.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+          expect(parser.errors[:field_101]).to include("The mortgage and deposit added together is £15,000.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+          expect(parser.errors[:field_102]).to include("The mortgage and deposit added together is £15,000.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
         end
 
         it "does not add errors to other ownership type fields" do

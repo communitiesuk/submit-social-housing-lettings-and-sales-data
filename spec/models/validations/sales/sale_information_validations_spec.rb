@@ -740,12 +740,12 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
 
           it "adds an error" do
             sale_information_validator.validate_non_staircasing_mortgage(record)
-            expect(record.errors["mortgage"]).to include("The mortgage and deposit added together is £15,000.00 and the purchase price times by the equity is £8,400.00. These figures should be the same.")
-            expect(record.errors["value"]).to include("The mortgage and deposit added together is £15,000.00 and the purchase price times by the equity is £8,400.00. These figures should be the same.")
-            expect(record.errors["deposit"]).to include("The mortgage and deposit added together is £15,000.00 and the purchase price times by the equity is £8,400.00. These figures should be the same.")
-            expect(record.errors["equity"]).to include("The mortgage and deposit added together is £15,000.00 and the purchase price times by the equity is £8,400.00. These figures should be the same.")
-            expect(record.errors["type"]).to include("The mortgage and deposit added together is £15,000.00 and the purchase price times by the equity is £8,400.00. These figures should be the same.")
-            expect(record.errors["cashdis"]).not_to include("The mortgage and deposit added together is £15,000.00 and the purchase price times by the equity is £8,400.00. These figures should be the same.")
+            expect(record.errors["mortgage"]).to include("The mortgage and deposit added together is £15,000.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+            expect(record.errors["value"]).to include("The mortgage and deposit added together is £15,000.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+            expect(record.errors["deposit"]).to include("The mortgage and deposit added together is £15,000.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+            expect(record.errors["equity"]).to include("The mortgage and deposit added together is £15,000.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+            expect(record.errors["type"]).to include("The mortgage and deposit added together is £15,000.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+            expect(record.errors["cashdis"]).not_to include("The mortgage and deposit added together is £15,000.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
           end
 
           context "and it is a social homebuy" do
@@ -756,12 +756,12 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
 
             it "adds an error" do
               sale_information_validator.validate_non_staircasing_mortgage(record)
-              expect(record.errors["mortgage"]).to include("The mortgage, deposit and cash discount added together is £15,200.00 and the purchase price times by the equity is £8,400.00. These figures should be the same.")
-              expect(record.errors["value"]).to include("The mortgage, deposit and cash discount added together is £15,200.00 and the purchase price times by the equity is £8,400.00. These figures should be the same.")
-              expect(record.errors["deposit"]).to include("The mortgage, deposit and cash discount added together is £15,200.00 and the purchase price times by the equity is £8,400.00. These figures should be the same.")
-              expect(record.errors["equity"]).to include("The mortgage, deposit and cash discount added together is £15,200.00 and the purchase price times by the equity is £8,400.00. These figures should be the same.")
-              expect(record.errors["cashdis"]).to include("The mortgage, deposit and cash discount added together is £15,200.00 and the purchase price times by the equity is £8,400.00. These figures should be the same.")
-              expect(record.errors["type"]).to include("The mortgage, deposit and cash discount added together is £15,200.00 and the purchase price times by the equity is £8,400.00. These figures should be the same.")
+              expect(record.errors["mortgage"]).to include("The mortgage, deposit, and cash discount added together is £15,200.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+              expect(record.errors["value"]).to include("The mortgage, deposit, and cash discount added together is £15,200.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+              expect(record.errors["deposit"]).to include("The mortgage, deposit, and cash discount added together is £15,200.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+              expect(record.errors["equity"]).to include("The mortgage, deposit, and cash discount added together is £15,200.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+              expect(record.errors["cashdis"]).to include("The mortgage, deposit, and cash discount added together is £15,200.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+              expect(record.errors["type"]).to include("The mortgage, deposit, and cash discount added together is £15,200.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
             end
           end
 
@@ -840,12 +840,12 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
 
             it "adds an error" do
               sale_information_validator.validate_non_staircasing_mortgage(record)
-              expect(record.errors["mortgageused"]).to include("The deposit is £5,000.00 and the purchase price times by the equity is £8,400.00. As no mortgage was used, these figures should be the same.")
-              expect(record.errors["value"]).to include("The deposit is £5,000.00 and the purchase price times by the equity is £8,400.00. As no mortgage was used, these figures should be the same.")
-              expect(record.errors["deposit"]).to include("The deposit is £5,000.00 and the purchase price times by the equity is £8,400.00. As no mortgage was used, these figures should be the same.")
-              expect(record.errors["equity"]).to include("The deposit is £5,000.00 and the purchase price times by the equity is £8,400.00. As no mortgage was used, these figures should be the same.")
-              expect(record.errors["type"]).to include("The deposit is £5,000.00 and the purchase price times by the equity is £8,400.00. As no mortgage was used, these figures should be the same.")
-              expect(record.errors["cashdis"]).not_to include("The deposit is £5,000.00 and the purchase price times by the equity is £8,400.00. As no mortgage was used, these figures should be the same.")
+              expect(record.errors["mortgageused"]).to include("The deposit is £5,000.00 and the value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+              expect(record.errors["value"]).to include("The deposit is £5,000.00 and the value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+              expect(record.errors["deposit"]).to include("The deposit is £5,000.00 and the value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+              expect(record.errors["equity"]).to include("The deposit is £5,000.00 and the value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+              expect(record.errors["type"]).to include("The deposit is £5,000.00 and the value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+              expect(record.errors["cashdis"]).not_to include("The deposit is £5,000.00 and the value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
             end
 
             context "and it is a social homebuy" do
@@ -856,12 +856,12 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
 
               it "adds an error" do
                 sale_information_validator.validate_non_staircasing_mortgage(record)
-                expect(record.errors["mortgageused"]).to include("The deposit and cash discount added together is £5,200.00 and the purchase price times by the equity is £8,400.00. As no mortgage was used, these figures should be the same.")
-                expect(record.errors["value"]).to include("The deposit and cash discount added together is £5,200.00 and the purchase price times by the equity is £8,400.00. As no mortgage was used, these figures should be the same.")
-                expect(record.errors["deposit"]).to include("The deposit and cash discount added together is £5,200.00 and the purchase price times by the equity is £8,400.00. As no mortgage was used, these figures should be the same.")
-                expect(record.errors["equity"]).to include("The deposit and cash discount added together is £5,200.00 and the purchase price times by the equity is £8,400.00. As no mortgage was used, these figures should be the same.")
-                expect(record.errors["cashdis"]).to include("The deposit and cash discount added together is £5,200.00 and the purchase price times by the equity is £8,400.00. As no mortgage was used, these figures should be the same.")
-                expect(record.errors["type"]).to include("The deposit and cash discount added together is £5,200.00 and the purchase price times by the equity is £8,400.00. As no mortgage was used, these figures should be the same.")
+                expect(record.errors["mortgageused"]).to include("The deposit and cash discount added together is £5,200.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+                expect(record.errors["value"]).to include("The deposit and cash discount added together is £5,200.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+                expect(record.errors["deposit"]).to include("The deposit and cash discount added together is £5,200.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+                expect(record.errors["equity"]).to include("The deposit and cash discount added together is £5,200.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+                expect(record.errors["cashdis"]).to include("The deposit and cash discount added together is £5,200.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+                expect(record.errors["type"]).to include("The deposit and cash discount added together is £5,200.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
               end
             end
 
@@ -968,12 +968,12 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
 
           it "adds an error" do
             sale_information_validator.validate_staircasing_mortgage(record)
-            expect(record.errors["mortgage"]).to include("The mortgage and deposit added together is £15,000.00 and the percentage bought times the purchase price is £8,400.00. These figures should be the same.")
-            expect(record.errors["value"]).to include("The mortgage and deposit added together is £15,000.00 and the percentage bought times the purchase price is £8,400.00. These figures should be the same.")
-            expect(record.errors["deposit"]).to include("The mortgage and deposit added together is £15,000.00 and the percentage bought times the purchase price is £8,400.00. These figures should be the same.")
-            expect(record.errors["stairbought"]).to include("The mortgage and deposit added together is £15,000.00 and the percentage bought times the purchase price is £8,400.00. These figures should be the same.")
-            expect(record.errors["type"]).to include("The mortgage and deposit added together is £15,000.00 and the percentage bought times the purchase price is £8,400.00. These figures should be the same.")
-            expect(record.errors["cashdis"]).not_to include("The mortgage and deposit added together is £15,000.00 and the percentage bought times the purchase price is £8,400.00. These figures should be the same.")
+            expect(record.errors["mortgage"]).to include("The mortgage and deposit added together is £15,000.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+            expect(record.errors["value"]).to include("The mortgage and deposit added together is £15,000.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+            expect(record.errors["deposit"]).to include("The mortgage and deposit added together is £15,000.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+            expect(record.errors["stairbought"]).to include("The mortgage and deposit added together is £15,000.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+            expect(record.errors["type"]).to include("The mortgage and deposit added together is £15,000.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+            expect(record.errors["cashdis"]).not_to include("The mortgage and deposit added together is £15,000.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
           end
 
           context "and it is a social homebuy" do
@@ -984,12 +984,12 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
 
             it "adds an error" do
               sale_information_validator.validate_staircasing_mortgage(record)
-              expect(record.errors["mortgage"]).to include("The mortgage, deposit and cash discount added together is £15,200.00 and the percentage bought times the purchase price is £8,400.00. These figures should be the same.")
-              expect(record.errors["value"]).to include("The mortgage, deposit and cash discount added together is £15,200.00 and the percentage bought times the purchase price is £8,400.00. These figures should be the same.")
-              expect(record.errors["deposit"]).to include("The mortgage, deposit and cash discount added together is £15,200.00 and the percentage bought times the purchase price is £8,400.00. These figures should be the same.")
-              expect(record.errors["stairbought"]).to include("The mortgage, deposit and cash discount added together is £15,200.00 and the percentage bought times the purchase price is £8,400.00. These figures should be the same.")
-              expect(record.errors["cashdis"]).to include("The mortgage, deposit and cash discount added together is £15,200.00 and the percentage bought times the purchase price is £8,400.00. These figures should be the same.")
-              expect(record.errors["type"]).to include("The mortgage, deposit and cash discount added together is £15,200.00 and the percentage bought times the purchase price is £8,400.00. These figures should be the same.")
+              expect(record.errors["mortgage"]).to include("The mortgage, deposit, and cash discount added together is £15,200.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+              expect(record.errors["value"]).to include("The mortgage, deposit, and cash discount added together is £15,200.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+              expect(record.errors["deposit"]).to include("The mortgage, deposit, and cash discount added together is £15,200.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+              expect(record.errors["stairbought"]).to include("The mortgage, deposit, and cash discount added together is £15,200.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+              expect(record.errors["cashdis"]).to include("The mortgage, deposit, and cash discount added together is £15,200.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+              expect(record.errors["type"]).to include("The mortgage, deposit, and cash discount added together is £15,200.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
             end
           end
 
@@ -1087,12 +1087,12 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
 
             it "adds an error" do
               sale_information_validator.validate_staircasing_mortgage(record)
-              expect(record.errors["mortgageused"]).to include("The deposit is £5,000.00 and the percentage bought times the purchase price is £8,400.00. As no mortgage was used, these figures should be the same.")
-              expect(record.errors["value"]).to include("The deposit is £5,000.00 and the percentage bought times the purchase price is £8,400.00. As no mortgage was used, these figures should be the same.")
-              expect(record.errors["deposit"]).to include("The deposit is £5,000.00 and the percentage bought times the purchase price is £8,400.00. As no mortgage was used, these figures should be the same.")
-              expect(record.errors["stairbought"]).to include("The deposit is £5,000.00 and the percentage bought times the purchase price is £8,400.00. As no mortgage was used, these figures should be the same.")
-              expect(record.errors["type"]).to include("The deposit is £5,000.00 and the percentage bought times the purchase price is £8,400.00. As no mortgage was used, these figures should be the same.")
-              expect(record.errors["cashdis"]).not_to include("The deposit is £5,000.00 and the percentage bought times the purchase price is £8,400.00. As no mortgage was used, these figures should be the same.")
+              expect(record.errors["mortgageused"]).to include("The deposit is £5,000.00 and the value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+              expect(record.errors["value"]).to include("The deposit is £5,000.00 and the value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+              expect(record.errors["deposit"]).to include("The deposit is £5,000.00 and the value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+              expect(record.errors["stairbought"]).to include("The deposit is £5,000.00 and the value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+              expect(record.errors["type"]).to include("The deposit is £5,000.00 and the value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+              expect(record.errors["cashdis"]).not_to include("The deposit is £5,000.00 and the value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
             end
 
             context "and it is a social homebuy" do
@@ -1103,12 +1103,12 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
 
               it "adds an error" do
                 sale_information_validator.validate_staircasing_mortgage(record)
-                expect(record.errors["mortgageused"]).to include("The deposit and cash discount added together is £5,200.00 and the percentage bought times the purchase price is £8,400.00. As no mortgage was used, these figures should be the same.")
-                expect(record.errors["value"]).to include("The deposit and cash discount added together is £5,200.00 and the percentage bought times the purchase price is £8,400.00. As no mortgage was used, these figures should be the same.")
-                expect(record.errors["deposit"]).to include("The deposit and cash discount added together is £5,200.00 and the percentage bought times the purchase price is £8,400.00. As no mortgage was used, these figures should be the same.")
-                expect(record.errors["stairbought"]).to include("The deposit and cash discount added together is £5,200.00 and the percentage bought times the purchase price is £8,400.00. As no mortgage was used, these figures should be the same.")
-                expect(record.errors["cashdis"]).to include("The deposit and cash discount added together is £5,200.00 and the percentage bought times the purchase price is £8,400.00. As no mortgage was used, these figures should be the same.")
-                expect(record.errors["type"]).to include("The deposit and cash discount added together is £5,200.00 and the percentage bought times the purchase price is £8,400.00. As no mortgage was used, these figures should be the same.")
+                expect(record.errors["mortgageused"]).to include("The deposit and cash discount added together is £5,200.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+                expect(record.errors["value"]).to include("The deposit and cash discount added together is £5,200.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+                expect(record.errors["deposit"]).to include("The deposit and cash discount added together is £5,200.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+                expect(record.errors["stairbought"]).to include("The deposit and cash discount added together is £5,200.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+                expect(record.errors["cashdis"]).to include("The deposit and cash discount added together is £5,200.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+                expect(record.errors["type"]).to include("The deposit and cash discount added together is £5,200.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
               end
             end
 
