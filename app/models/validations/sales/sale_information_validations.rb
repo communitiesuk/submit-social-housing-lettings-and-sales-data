@@ -112,9 +112,9 @@ module Validations::Sales::SaleInformationValidations
     return unless record.shared_ownership_scheme? && record.type && record.mortgageused && record.is_not_staircasing?
 
     if record.social_homebuy?
-      add_non_staircasing_socialhomebuy_mortgage_errors(record)
+      check_non_staircasing_socialhomebuy_mortgage(record)
     else
-      add_non_staircasing_non_socialhomebuy_mortgage_errors(record)
+      check_non_staircasing_non_socialhomebuy_mortgage(record)
     end
   end
 
@@ -124,9 +124,9 @@ module Validations::Sales::SaleInformationValidations
     return unless record.shared_ownership_scheme? && record.type && record.mortgageused && record.is_staircase?
 
     if record.social_homebuy?
-      add_staircasing_socialhomebuy_mortgage_errors(record)
+      check_staircasing_socialhomebuy_mortgage(record)
     else
-      add_staircasing_non_socialhomebuy_mortgage_errors(record)
+      check_staircasing_non_socialhomebuy_mortgage(record)
     end
   end
 
@@ -139,7 +139,7 @@ module Validations::Sales::SaleInformationValidations
     end
   end
 
-  def add_non_staircasing_socialhomebuy_mortgage_errors(record)
+  def check_non_staircasing_socialhomebuy_mortgage(record)
     return unless record.cashdis
 
     if record.mortgage_used?
@@ -159,7 +159,7 @@ module Validations::Sales::SaleInformationValidations
     end
   end
 
-  def add_non_staircasing_non_socialhomebuy_mortgage_errors(record)
+  def check_non_staircasing_non_socialhomebuy_mortgage(record)
     if record.mortgage_used?
       return unless record.mortgage
 
@@ -177,7 +177,7 @@ module Validations::Sales::SaleInformationValidations
     end
   end
 
-  def add_staircasing_socialhomebuy_mortgage_errors(record)
+  def check_staircasing_socialhomebuy_mortgage(record)
     return unless record.cashdis
 
     if record.mortgage_used?
@@ -195,7 +195,7 @@ module Validations::Sales::SaleInformationValidations
     end
   end
 
-  def add_staircasing_non_socialhomebuy_mortgage_errors(record)
+  def check_staircasing_non_socialhomebuy_mortgage(record)
     if record.mortgage_used?
       return unless record.mortgage
 
