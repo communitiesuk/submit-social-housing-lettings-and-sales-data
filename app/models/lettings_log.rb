@@ -581,7 +581,14 @@ class LettingsLog < Log
   end
 
   def non_location_setup_questions_completed?
-    [needstype, renewal, rent_type, startdate, owning_organisation_id, created_by_id].all?(&:present?)
+    form.setup_sections.all? do |section|
+      section.subsections.all? do |subsection|
+        relevant_qs = subsection.applicable_questions(self).reject { |q| optional_fields.include?(q.id) || %w[scheme_id location].include?(q.id) }
+        relevant_qs.all? do |question|
+          question.completed?(self)
+        end
+      end
+    end
   end
 
   def resolve!
