@@ -4,12 +4,14 @@
 }
 
 .app-log-summary__header {
-  align-items: baseline;
   display: flex;
+  margin-bottom: govuk-spacing(2);
+  align-items: center;
 }
 
 .app-log-summary__title {
-  margin: 0 govuk-spacing(3) govuk-spacing(2) 0;
+  margin: auto govuk-spacing(3) auto 0;
+  white-space: nowrap;
 }
 
 @include govuk-media-query(tablet) {
@@ -19,5 +21,11 @@
 
   .app-log-summary__footer--actor {
     display: block;
+  }
+
+  .app-log-summary__details {
+    word-break: break-all;
+    margin-top: auto;
+    margin-bottom: auto;
   }
 }

@@ -1,6 +1,6 @@
 <article class="app-log-summary">
   <div class="govuk-grid-row">
-    <div class="govuk-grid-column-one-half">
+    <div class="govuk-grid-column-two-thirds">
       <header class="app-log-summary__header">
         <h2 class="app-log-summary__title">
           <%= govuk_link_to lettings_log_path(log) do %>
@@ -8,20 +8,14 @@
           <% end %>
         </h2>
         <% if log.tenancycode? or log.propcode? %>
-          <dl class="app-metadata app-metadata--inline">
+          <div class="app-metadata">
             <% if log.tenancycode? %>
-              <div class="app-metadata__item">
-                <dt class="app-metadata__term">Tenant</dt>
-                <dd class="app-metadata__definition"><%= log.tenancycode %></dd>
-              </div>
+              <div class="app-log-summary__details">Tenant <%= log.tenancycode %></div>
             <% end %>
             <% if log.propcode? %>
-              <div class="app-metadata__item">
-                <dt class="app-metadata__term">Property</dt>
-                <dd class="app-metadata__definition"><%= log.propcode %></dd>
-              </div>
+              <div class="app-log-summary__details">Property <%= log.propcode %></div>
             <% end %>
-          </dl>
+          </div>
         <% end %>
       </header>
       <% if log.needstype? or log.startdate? %>
@@ -51,7 +45,7 @@
         </dl>
       <% end %>
     </div>
-    <footer class="govuk-grid-column-one-half app-log-summary__footer">
+    <footer class="govuk-grid-column-one-third app-log-summary__footer">
       <p class="govuk-body govuk-!-margin-bottom-2">
         <%= log_status %>
       </p>
