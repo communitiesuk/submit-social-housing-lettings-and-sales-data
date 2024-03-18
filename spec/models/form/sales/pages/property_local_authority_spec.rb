@@ -52,8 +52,6 @@ RSpec.describe Form::Sales::Pages::PropertyLocalAuthority, type: :model do
   end
 
   it "has the correct depends_on" do
-    expect(page.depends_on).to eq([{
-      "is_la_inferred" => false,
-    }])
+    expect(page.depends_on).to eq([{ "address_search_given?" => true, "is_la_inferred" => false }])
   end
 end

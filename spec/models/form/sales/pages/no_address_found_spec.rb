@@ -25,7 +25,9 @@ RSpec.describe Form::Sales::Pages::NoAddressFound, type: :model do
   end
 
   it "has correct depends_on" do
-    expect(page.depends_on).to eq([{ "address_options_present?" => false }])
+    expect(page.depends_on).to eq([{ "address_options_present?" => false, "uprn_known" => nil },
+                                   { "address_options_present?" => false, "uprn_known" => 0 },
+                                   { "address_options_present?" => false, "uprn_confirmed" => 0 }])
   end
 
   it "is interruption screen page" do

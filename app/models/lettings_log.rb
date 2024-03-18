@@ -694,6 +694,10 @@ class LettingsLog < Log
     LettingsLog.where.not(duplicate_set_id: nil).where(duplicate_set_id:).where.not(id:)
   end
 
+  def address_search_given?
+    address_line1_input.present? && postcode_full.present?
+  end
+
 private
 
   def reset_invalid_unresolved_log_fields!
