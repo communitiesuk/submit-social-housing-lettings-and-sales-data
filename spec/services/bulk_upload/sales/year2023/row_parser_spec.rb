@@ -981,18 +981,6 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
       end
     end
 
-    describe "#field_119" do
-      context "when validate_discounted_ownership_value is triggered" do
-        let(:attributes) { setup_section_params.merge(field_116: 100, field_125: 100, field_7: 2, field_9: 9, field_119: 2, field_118: 10) }
-
-        it "only adds errors to the discounted ownership field" do
-          expect(parser.errors[:field_105]).to be_empty
-          expect(parser.errors[:field_119]).to include("Mortgage, deposit, and grant total must equal £90.00. Your given mortgage, deposit and grant total is £100.00")
-          expect(parser.errors[:field_128]).to be_empty
-        end
-      end
-    end
-
     describe "soft validations" do
       context "when soft validation is triggered" do
         let(:attributes) { valid_attributes.merge({ field_30: 22, field_35: 5 }) }
@@ -1099,6 +1087,16 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
         parser.log.blank_invalid_non_setup_fields!
         parser.log.save!
         expect(parser.log.mortgageused).to be_nil
+      end
+
+      context "when validate_discounted_ownership_value is triggered" do
+        let(:attributes) { setup_section_params.merge(field_116: 100, field_125: 100, field_7: 2, field_9: 9, field_119: 2, field_118: 10) }
+
+        it "only adds errors to the discounted ownership field" do
+          expect(parser.errors[:field_105]).to be_empty
+          expect(parser.errors[:field_119]).to include("Mortgage, deposit, and grant total must equal £90.00. Your given mortgage, deposit and grant total is £100.00")
+          expect(parser.errors[:field_128]).to be_empty
+        end
       end
     end
 
