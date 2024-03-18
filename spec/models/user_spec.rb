@@ -510,6 +510,7 @@ RSpec.describe User, type: :model do
 
       expect(user.status).to eq(:unconfirmed)
     end
+
     it "returns :active for a user with active status and confirmation date" do
       user.active = true
       user.confirmed_at = Time.zone.yesterday
