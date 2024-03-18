@@ -998,6 +998,9 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
 
         it "returns correct errors" do
           expect(parser.errors[:field_103]).to include("Enter a valid value for Was a mortgage used for the purchase of this property? - Shared ownership")
+          parser.log.blank_invalid_non_setup_fields!
+          parser.log.save!
+          expect(parser.log.mortgageused).to be_nil
         end
       end
 
@@ -1005,7 +1008,10 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
         let(:attributes) { setup_section_params.merge(field_103: "3", field_86: "1", field_87: "50", field_88: "99", field_109: nil) }
 
         it "returns correct errors" do
-          expect(parser.errors[:field_103]).to include("Enter a valid value for Was a mortgage used for the purchase of this property? - Shared ownership")
+          expect(parser.errors[:field_103]).to include("The percentage owned has to be 100% if the mortgage used is 'Don’t know'")
+          parser.log.blank_invalid_non_setup_fields!
+          parser.log.save!
+          expect(parser.log.mortgageused).to be_nil
         end
       end
 
@@ -1013,15 +1019,32 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
         let(:attributes) { setup_section_params.merge(field_103: "3", field_86: "1", field_87: "50", field_88: nil, field_109: nil) }
 
         it "does not add errors" do
-          expect(parser.errors[:field_103]).not_to include("Enter a valid value for Was a mortgage used for the purchase of this property? - Shared ownership")
+          expect(parser.errors[:field_103]).not_to include("The percentage owned has to be 100% if the mortgage used is 'Don’t know'")
+          expect(parser.errors[:field_103]).not_to include("Enter a valid value for Was a mortgage used for the purchase of this property?")
         end
       end
 
-      context "when it's not shared ownership" do
-        let(:attributes) { setup_section_params.merge(field_8: "2", field_103: "3", field_86: "1", field_87: "50", field_88: "99", field_109: nil) }
+      context "when it is not a staircasing transaction" do
+        context "when value is 3 and stairowned is not answered" do
+          let(:attributes) { setup_section_params.merge(field_103: "3", field_86: "2", field_87: "50", field_88: nil, field_109: nil) }
 
-        it "does not add errors" do
-          expect(parser.errors[:field_103]).not_to include("Enter a valid value for Was a mortgage used for the purchase of this property? - Shared ownership")
+          it "returns correct errors" do
+            expect(parser.errors[:field_103]).to include("Enter a valid value for Was a mortgage used for the purchase of this property?")
+            parser.log.blank_invalid_non_setup_fields!
+            parser.log.save!
+            expect(parser.log.mortgageused).to be_nil
+          end
+        end
+
+        context "when value is 3 and stairowned is 100" do
+          let(:attributes) { setup_section_params.merge(field_103: "3", field_86: "2", field_87: "50", field_88: "100", field_109: nil) }
+
+          it "returns correct errors" do
+            expect(parser.errors[:field_103]).to include("Enter a valid value for Was a mortgage used for the purchase of this property?")
+            parser.log.blank_invalid_non_setup_fields!
+            parser.log.save!
+            expect(parser.log.mortgageused).to be_nil
+          end
         end
       end
 
@@ -1039,6 +1062,15 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
     end
 
     describe "#field_117" do
+      let(:attributes) { valid_attributes.merge({ field_8: "2", field_10: "9", field_117: "3" }) }
+
+      it "does not allow 3 (don't know) as an option for discounted ownership" do
+        expect(parser.errors[:field_117]).to include("Enter a valid value for Was a mortgage used for the purchase of this property?")
+        parser.log.blank_invalid_non_setup_fields!
+        parser.log.save!
+        expect(parser.log.mortgageused).to be_nil
+      end
+
       context "when validate_discounted_ownership_value is triggered" do
         let(:attributes) { setup_section_params.merge(field_114: 100, field_123: 100, field_8: 2, field_10: 9, field_117: 2, field_116: 10) }
 
@@ -1047,6 +1079,19 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
           expect(parser.errors[:field_117]).to include("The mortgage, deposit, and grant when added together is £100.00, and the purchase purchase price times by the discount is £90.00. These figures should be the same")
           expect(parser.errors[:field_126]).to be_empty
         end
+      end
+    end
+
+    describe "#field_126" do
+      let(:attributes) { valid_attributes.merge({ field_8: "3", field_11: "10", field_126: "3", field_13: "2" }) }
+
+      it "allows 3 (don't know) as an option for outright sale" do
+        expect(parser.errors[:field_126]).to be_empty
+        expect(parser.errors[:field_103]).to be_empty
+        expect(parser.errors[:field_117]).to be_empty
+        parser.log.blank_invalid_non_setup_fields!
+        parser.log.save!
+        expect(parser.log.mortgageused).to eq(3)
       end
     end
 
@@ -1061,7 +1106,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
 
         it "populates with correct error message" do
           expect(parser.errors.where(:field_31, category: :soft_validation).first.message).to eql("You told us this person is aged 22 years and retired.")
-          expect(parser.errors.where(:field_31, category: :soft_validation).first.message).to eql("You told us this person is aged 22 years and retired.")
+          expect(parser.errors.where(:field_35, category: :soft_validation).first.message).to eql("You told us this person is aged 22 years and retired.")
         end
       end
     end

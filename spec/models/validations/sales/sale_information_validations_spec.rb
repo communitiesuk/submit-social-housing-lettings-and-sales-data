@@ -1010,10 +1010,11 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
       let(:record) { build(:sales_log, ownershipsch: 1, type: 9, saledate: now, mortgageused: 3, stairowned: 90) }
       let(:now) { Time.zone.local(2023, 4, 4) }
 
-      it "does not add an error" do
+      it "adds an error" do
         sale_information_validator.validate_mortgage_used_and_stairbought(record)
 
-        expect(record.errors).to be_empty
+        expect(record.errors[:stairowned]).to include("The percentage owned has to be 100% if the mortgage used is 'Don’t know'")
+        expect(record.errors[:mortgageused]).to include("The percentage owned has to be 100% if the mortgage used is 'Don’t know'")
       end
     end
   end

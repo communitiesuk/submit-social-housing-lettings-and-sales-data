@@ -150,11 +150,24 @@ module Validations::Sales::SaleInformationValidations
 
   def validate_mortgage_used_and_stairbought(record)
     return unless record.stairowned && record.mortgageused
-    return unless record.saledate && record.form.start_year_after_2024?
 
     if !record.stairowned_100? && record.mortgageused == 3
       record.errors.add :stairowned, I18n.t("validations.sale_information.stairowned.mortgageused_dont_know")
       record.errors.add :mortgageused, I18n.t("validations.sale_information.stairowned.mortgageused_dont_know")
+    end
+  end
+
+  def validate_mortgage_used_dont_know(record)
+    return unless record.mortgageused == 3
+
+    if record.discounted_ownership_sale?
+      record.errors.add(:mortgageused, I18n.t("validations.invalid_option", question: "Was a mortgage used for the purchase of this property?"))
+    end
+    if record.outright_sale? && record.saledate && !record.form.start_year_after_2024?
+      record.errors.add(:mortgageused, I18n.t("validations.invalid_option", question: "Was a mortgage used for the purchase of this property?"))
+    end
+    if record.shared_ownership_scheme? && record.staircase && record.staircase != 1
+      record.errors.add(:mortgageused, I18n.t("validations.invalid_option", question: "Was a mortgage used for the purchase of this property?"))
     end
   end
 end
