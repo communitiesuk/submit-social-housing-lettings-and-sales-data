@@ -481,4 +481,41 @@ RSpec.describe User, type: :model do
       end
     end
   end
+
+  describe "#status" do
+    let(:user) { create(:user) }
+
+    it "returns :deactivated for deactivated users" do
+      user.active = false
+
+      expect(user.status).to eq(:deactivated)
+    end
+
+    it "returns :unconfirmed for a user with no confirmed_at" do
+      user.confirmed_at = nil
+
+      expect(user.status).to eq(:unconfirmed)
+    end
+
+    it "returns :deactivated for a user with no confirmed_at and active false" do
+      user.confirmed_at = nil
+      user.active = false
+
+      expect(user.status).to eq(:deactivated)
+    end
+
+    it "returns :unconfirmed for a user with no confirmed_at and active true" do
+      user.confirmed_at = nil
+      user.active = true
+
+      expect(user.status).to eq(:unconfirmed)
+    end
+
+    it "returns :active for a user with active status and confirmation date" do
+      user.active = true
+      user.confirmed_at = Time.zone.yesterday
+
+      expect(user.status).to eq(:active)
+    end
+  end
 end
