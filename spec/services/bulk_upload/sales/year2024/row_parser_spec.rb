@@ -1024,6 +1024,30 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
         end
       end
 
+      context "when it is not a staircasing transaction" do
+        context "when value is 3 and stairowned is not answered" do
+          let(:attributes) { setup_section_params.merge(field_103: "3", field_86: "2", field_87: "50", field_88: nil, field_109: nil) }
+
+          it "returns correct errors" do
+            expect(parser.errors[:field_103]).to include("Enter a valid value for Was a mortgage used for the purchase of this property?")
+            parser.log.blank_invalid_non_setup_fields!
+            parser.log.save!
+            expect(parser.log.mortgageused).to be_nil
+          end
+        end
+
+        context "when value is 3 and stairowned is 100" do
+          let(:attributes) { setup_section_params.merge(field_103: "3", field_86: "2", field_87: "50", field_88: "100", field_109: nil) }
+
+          it "returns correct errors" do
+            expect(parser.errors[:field_103]).to include("Enter a valid value for Was a mortgage used for the purchase of this property?")
+            parser.log.blank_invalid_non_setup_fields!
+            parser.log.save!
+            expect(parser.log.mortgageused).to be_nil
+          end
+        end
+      end
+
       context "when value is 3 and stairowned is 100" do
         let(:attributes) { setup_section_params.merge(field_103: "3", field_86: "1", field_87: "50", field_88: "100", field_109: nil) }
 
@@ -1059,7 +1083,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
     end
 
     describe "#field_126" do
-      let(:attributes) { valid_attributes.merge({ field_8: "3", field_10: "10", field_126: "3", field_13: "2" }) }
+      let(:attributes) { valid_attributes.merge({ field_8: "3", field_11: "10", field_126: "3", field_13: "2" }) }
 
       it "allows 3 (don't know) as an option for outright sale" do
         expect(parser.errors[:field_126]).to be_empty
@@ -1067,7 +1091,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
         expect(parser.errors[:field_117]).to be_empty
         parser.log.blank_invalid_non_setup_fields!
         parser.log.save!
-        expect(parser.log.mortgageused).to be_nil
+        expect(parser.log.mortgageused).to eq(3)
       end
     end
 

@@ -1065,6 +1065,30 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
           expect(parser.log.mortgageused).to eq(3)
         end
       end
+
+      context "when it is not a staircasing transaction" do
+        context "when value is 3 and stairowned is not answered" do
+          let(:attributes) { setup_section_params.merge(field_105: "3", field_87: "2", field_88: "50", field_89: nil, field_111: nil) }
+
+          it "returns correct errors" do
+            expect(parser.errors[:field_105]).to include("Enter a valid value for Was a mortgage used for the purchase of this property?")
+            parser.log.blank_invalid_non_setup_fields!
+            parser.log.save!
+            expect(parser.log.mortgageused).to be_nil
+          end
+        end
+
+        context "when value is 3 and stairowned is 100" do
+          let(:attributes) { setup_section_params.merge(field_105: "3", field_87: "2", field_88: "50", field_89: "100", field_111: nil) }
+
+          it "returns correct errors" do
+            expect(parser.errors[:field_105]).to include("Enter a valid value for Was a mortgage used for the purchase of this property?")
+            parser.log.blank_invalid_non_setup_fields!
+            parser.log.save!
+            expect(parser.log.mortgageused).to be_nil
+          end
+        end
+      end
     end
 
     describe "#field_119" do
