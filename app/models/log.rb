@@ -277,7 +277,7 @@ class Log < ApplicationRecord
     nationality_all_group&.zero? || nationality_all_group == 826
   end
 
-  private
+private
 
   # Handle logs that are older than previous collection start date
   def older_than_previous_collection_year?
