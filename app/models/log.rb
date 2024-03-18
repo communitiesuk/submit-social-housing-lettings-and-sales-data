@@ -59,16 +59,8 @@ class Log < ApplicationRecord
 
   def process_uprn_change!
     if uprn.present?
-      service = UprnClient.new(uprn)
-      service.call
-
-      if service.error.present?
-        errors.add(:uprn, :uprn_error, message: service.error)
-        errors.add(:uprn_selection, :uprn_error, message: service.error)
-        return
-      end
-
-      presenter = UprnDataPresenter.new(service.result)
+      presenter = uprn_presenter
+      return if presenter.nil?
 
       self.uprn_known = 1
       self.uprn_confirmed = nil unless skip_update_uprn_confirmed
@@ -82,14 +74,28 @@ class Log < ApplicationRecord
     end
   end
 
+  def uprn_presenter
+    @uprn_presenter ||= begin
+      service = UprnClient.new(uprn)
+      service.call
+      return if service.result.blank?
+
+      if service.error.present?
+        errors.add(:uprn, :uprn_error, message: service.error)
+        errors.add(:uprn_selection, :uprn_error, message: service.error)
+        return
+      end
+
+      UprnDataPresenter.new(service.result)
+    end
+  end
+
   def process_address_change!
     if uprn_selection.present? || select_best_address_match.present?
       if select_best_address_match
-        service = AddressClient.new(address_string)
-        service.call
-        return nil if service.result.blank? || service.error.present?
+        presenter = address_presenter
+        return nil if presenter.nil?
 
-        presenter = AddressDataPresenter.new(service.result.first)
         os_match_threshold_for_bulk_upload = 0.7
         if presenter.match >= os_match_threshold_for_bulk_upload
           self.uprn_selection = presenter.uprn
@@ -113,6 +119,21 @@ class Log < ApplicationRecord
         self.skip_update_uprn_confirmed = true
         process_uprn_change!
       end
+    end
+  end
+
+  def address_presenter
+    @address_presenter ||= begin
+      service = AddressClient.new(address_string)
+      service.call
+      return nil if service.result.blank?
+
+      if service.error.present?
+        errors.add(:address_line1_input, :address_error, message: service.error)
+        errors.add(:postcode_full_input, :address_error, message: service.error)
+        return
+      end
+      AddressDataPresenter.new(service.result.first)
     end
   end
 
