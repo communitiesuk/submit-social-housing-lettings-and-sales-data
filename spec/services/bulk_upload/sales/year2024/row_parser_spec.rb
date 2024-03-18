@@ -1038,6 +1038,18 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
       end
     end
 
+    describe "#field_117" do
+      context "when validate_discounted_ownership_value is triggered" do
+        let(:attributes) { setup_section_params.merge(field_114: 100, field_123: 100, field_8: 2, field_10: 9, field_117: 2, field_116: 10) }
+
+        it "only adds errors to the discounted ownership field" do
+          expect(parser.errors[:field_103]).to be_empty
+          expect(parser.errors[:field_117]).to include("The mortgage, deposit, and grant when added together is £100.00, and the purchase purchase price times by the discount is £90.00. These figures should be the same")
+          expect(parser.errors[:field_126]).to be_empty
+        end
+      end
+    end
+
     describe "soft validations" do
       context "when soft validation is triggered" do
         let(:attributes) { valid_attributes.merge({ field_31: 22, field_35: 5 }) }
