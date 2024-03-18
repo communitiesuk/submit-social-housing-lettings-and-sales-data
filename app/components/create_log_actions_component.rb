@@ -14,9 +14,8 @@ class CreateLogActionsComponent < ViewComponent::Base
   def display_actions?
     return false if bulk_upload.present?
     return true if user.support?
-    return false if !user.organisation.holds_own_stock? && user.organisation.stock_owners.empty? && user.organisation.absorbed_organisations.empty?
 
-    user.organisation.data_protection_confirmed?
+    user.organisation.data_protection_confirmed? && user.organisation.organisation_or_stock_owner_signed_dsa_and_holds_own_stock?
   end
 
   def create_button_href
