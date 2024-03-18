@@ -74,7 +74,7 @@ RSpec.describe CreateLogActionsComponent, type: :component do
       end
 
       context "when has data sharing agremeent" do
-        let(:user) { create(:user, :support) }
+        let(:user) { create(:user) }
 
         it "renders actions" do
           expect(component.display_actions?).to eq(true)
@@ -112,6 +112,46 @@ RSpec.describe CreateLogActionsComponent, type: :component do
           it "returns create button href" do
             render
             expect(component.create_button_href).to eq("/sales-logs")
+          end
+        end
+
+        context "when organisation doesn't own stock" do
+          before do
+            user.organisation.update!(holds_own_stock: false)
+          end
+
+          context "and has signed DSA and stock owners have signed DSA" do
+            before do
+              parent_organisation = create(:organisation)
+              create(:organisation_relationship, child_organisation: user.organisation, parent_organisation:)
+            end
+
+            it "renders actions" do
+              expect(component.display_actions?).to eq(true)
+            end
+          end
+
+          context "and hasn't signed DSA and and stock owners have signed DSA" do
+            before do
+              user.organisation.data_protection_confirmation.update!(confirmed: false)
+              parent_organisation = create(:organisation)
+              create(:organisation_relationship, child_organisation: user.organisation, parent_organisation:)
+            end
+
+            it "renders actions" do
+              expect(component.display_actions?).to eq(false)
+            end
+          end
+
+          context "and no stock owners have signed data sharing agreement" do
+            before do
+              parent_organisation = create(:organisation, :without_dpc)
+              create(:organisation_relationship, child_organisation: user.organisation, parent_organisation:)
+            end
+
+            it "does not render actions" do
+              expect(component.display_actions?).to eq(false)
+            end
           end
         end
       end

@@ -159,4 +159,12 @@ class Organisation < ApplicationRecord
   def has_recent_absorbed_organisations?
     absorbed_organisations&.merged_during_open_collection_period.present?
   end
+
+  def organisation_or_stock_owner_signed_dsa_and_holds_own_stock?
+    return true if data_protection_confirmed? && holds_own_stock?
+    return true if stock_owners.any? { |stock_owner| stock_owner.data_protection_confirmed? && stock_owner.holds_own_stock? }
+    return true if absorbed_organisations.any? { |stock_owner| stock_owner.data_protection_confirmed? && stock_owner.holds_own_stock? }
+
+    false
+  end
 end

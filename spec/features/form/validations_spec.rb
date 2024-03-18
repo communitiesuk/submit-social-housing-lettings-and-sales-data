@@ -27,18 +27,6 @@ RSpec.describe "validations" do
       created_by: user,
     )
   end
-  let(:completed_without_declaration) do
-    FactoryBot.create(
-      :lettings_log,
-      :completed,
-      created_by: user,
-      status: 1,
-      declaration: nil,
-      startdate: Time.zone.local(2021, 5, 1),
-      voiddate: Time.zone.local(2021, 5, 1),
-      mrcdate: Time.zone.local(2021, 5, 1),
-    )
-  end
   let(:id) { lettings_log.id }
 
   before do
@@ -196,16 +184,6 @@ RSpec.describe "validations" do
         expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/net-income-value-check?referrer=check_answers")
         click_button("Confirm and continue")
         expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/income-and-benefits/check-answers")
-      end
-    end
-  end
-
-  describe "Submission validation" do
-    context "when tenant has not seen the privacy notice" do
-      it "shows a warning" do
-        visit("/lettings-logs/#{completed_without_declaration.id}/declaration")
-        click_button("Save and continue")
-        expect(page).to have_content("You must show the DLUHC privacy notice to the tenant")
       end
     end
   end

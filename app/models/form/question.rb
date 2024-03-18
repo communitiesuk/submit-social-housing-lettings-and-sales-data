@@ -198,9 +198,6 @@ class Form::Question
   end
 
   def unanswered_error_message
-    return I18n.t("validations.declaration.missing") if id == "declaration"
-    return I18n.t("validations.privacynotice.missing") if id == "privacynotice"
-
     I18n.t("validations.not_answered", question: error_display_label.downcase)
   end
 

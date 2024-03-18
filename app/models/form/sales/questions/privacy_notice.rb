@@ -20,6 +20,15 @@ class Form::Sales::Questions::PrivacyNotice < ::Form::Question
     { "privacynotice" => { "value" => declaration_text } }.freeze
   end
 
+  def unanswered_error_message
+    buyer_or_buyers = @joint_purchase ? "buyers" : "buyer"
+    if form.start_year_after_2024?
+      I18n.t("validations.privacynotice.missing.post_2024", buyer_or_buyers:)
+    else
+      I18n.t("validations.privacynotice.missing.pre_2024", buyer_or_buyers:)
+    end
+  end
+
   def guidance
     if form.start_year_after_2024?
       @joint_purchase ? "privacy_notice_buyer_2024_joint_purchase" : "privacy_notice_buyer_2024"
