@@ -140,7 +140,8 @@ module Exports::LettingsLogExportConstants
     "amended_by",
     "duplicate_set_id",
     "accessible_register",
-    "nationality_all"
+    "nationality_all",
+    "bulk_upload_id",
   ]
 
   (1..8).each do |index|
@@ -160,7 +161,8 @@ module Exports::LettingsLogExportConstants
 
   POST_2024_EXPORT_FIELDS = Set[
     "accessible_register",
-    "nationality_all"
+    "nationality_all",
+    "bulk_upload_id",
   ]
 
   PRE_2024_EXPORT_FIELDS = Set[
