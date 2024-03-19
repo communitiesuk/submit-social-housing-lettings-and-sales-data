@@ -1586,6 +1586,15 @@ RSpec.describe LettingsLog do
         expect { lettings_log.update!(startdate: Time.zone.local(2023, 4, 1)) }.to change(lettings_log, :underoccupation_benefitcap).from(2).to nil
       end
 
+      it "derives ppostcode_full as postcode_full if log is renewal" do
+        lettings_log.update!(renewal: 0, postcode_full: "M1 1AE", postcode_known: 1, ppostcode_full: "M1 1AD")
+        lettings_log.update!(renewal: 1)
+        lettings_log.reload
+        expect(lettings_log.ppostcode_full).to eq("M1 1AE")
+        expect(lettings_log.ppcodenk).to eq(0)
+        expect(lettings_log.prevloc).to eq(lettings_log.la)
+      end
+
       context "when the log is general needs" do
         context "and the managing organisation is a private registered provider" do
           before do
