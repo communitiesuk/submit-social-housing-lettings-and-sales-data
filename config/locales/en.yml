@@ -774,6 +774,8 @@ Make sure these answers are correct."
     no_address_found:
       title_text: "No address found"
       informative_text: "We could not find an address that matches your search. You can search again or continue to enter the address manually."
+    partner_under_16:
+      title: "You told us this person is aged %{age} years and has 'Partner' relationship to the lead tenant."
 
   devise:
     email:
