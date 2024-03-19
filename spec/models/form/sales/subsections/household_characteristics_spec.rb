@@ -293,6 +293,7 @@ RSpec.describe Form::Sales::Subsections::HouseholdCharacteristics, type: :model 
           person_2_known
           person_2_relationship_to_buyer_1
           relationship_2_partner_under_16_value_check
+          relationship_2_multiple_partners_value_check
           relationship_2_student_not_child_value_check
           person_2_age
           age_2_retirement_value_check
@@ -306,6 +307,7 @@ RSpec.describe Form::Sales::Subsections::HouseholdCharacteristics, type: :model 
           person_3_known
           person_3_relationship_to_buyer_1
           relationship_3_partner_under_16_value_check
+          relationship_3_multiple_partners_value_check
           relationship_3_student_not_child_value_check
           person_3_age
           age_3_retirement_value_check
@@ -319,6 +321,7 @@ RSpec.describe Form::Sales::Subsections::HouseholdCharacteristics, type: :model 
           person_4_known
           person_4_relationship_to_buyer_1
           relationship_4_partner_under_16_value_check
+          relationship_4_multiple_partners_value_check
           relationship_4_student_not_child_value_check
           person_4_age
           age_4_retirement_value_check
@@ -332,6 +335,7 @@ RSpec.describe Form::Sales::Subsections::HouseholdCharacteristics, type: :model 
           person_5_known
           person_5_relationship_to_buyer_1
           relationship_5_partner_under_16_value_check
+          relationship_5_multiple_partners_value_check
           relationship_5_student_not_child_value_check
           person_5_age
           age_5_retirement_value_check
@@ -345,6 +349,7 @@ RSpec.describe Form::Sales::Subsections::HouseholdCharacteristics, type: :model 
           person_6_known
           person_6_relationship_to_buyer_1
           relationship_6_partner_under_16_value_check
+          relationship_6_multiple_partners_value_check
           relationship_6_student_not_child_value_check
           person_6_age
           age_6_retirement_value_check

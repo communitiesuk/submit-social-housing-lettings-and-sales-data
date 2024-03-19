@@ -191,6 +191,10 @@ module Validations::SoftValidations
     PHRASES_LIKELY_TO_INDICATE_EXISTING_REASON_CATEGORY_REGEX.match?(reasonother)
   end
 
+  def multiple_partners?
+    (2..hhmemb).count { |n| public_send("relat#{n}") == "P" } > 1
+  end
+
 private
 
   def details_known_or_lead_tenant?(tenant_number)
