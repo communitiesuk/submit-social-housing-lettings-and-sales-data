@@ -25,6 +25,7 @@ class Form::Lettings::Questions::PersonWorkingSituation < ::Form::Question
         "value" => "Child under 16",
         "depends_on" => [
           { "age#{@person_index}_known" => 1 },
+          { "age#{@person_index}_known" => nil },
           { "age#{@person_index}" => { "operator" => "<", "operand" => 16 } },
         ],
       },
