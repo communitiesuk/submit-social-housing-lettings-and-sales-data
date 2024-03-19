@@ -133,7 +133,7 @@ module Csv
       "managing_organisation_id" => %w[managing_organisation_name],
     }.freeze
 
-    def SUPPORT_ONLY_ATTRIBITES = %w[address_line1_as_entered address_line2_as_entered town_or_city_as_entered county_as_entered postcode_full_as_entered la_as_entered]
+    SUPPORT_ONLY_ATTRIBITES = %w[address_line1_as_entered address_line2_as_entered town_or_city_as_entered county_as_entered postcode_full_as_entered la_as_entered].freeze
 
     def sales_log_attributes
       ordered_questions = FormHandler.instance.ordered_sales_questions_for_all_years
