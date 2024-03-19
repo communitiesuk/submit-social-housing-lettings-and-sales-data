@@ -147,7 +147,7 @@ module Csv
           question.id
         end
       end
-      non_question_fields = %w[id status duplicate_set_id created_at updated_at old_form_id collection_start_year creation_method is_dpo]
+      non_question_fields = %w[id status duplicate_set_id created_at updated_at old_form_id collection_start_year creation_method is_dpo address_line1_as_entered address_line2_as_entered town_or_city_as_entered county_as_entered postcode_full_as_entered la_as_entered]
       final_attributes = non_question_fields + attributes
       @user.support? ? final_attributes : final_attributes - SUPPORT_ONLY_ATTRIBUTES
     end
