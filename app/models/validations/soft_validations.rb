@@ -192,6 +192,8 @@ module Validations::SoftValidations
   end
 
   def multiple_partners?
+    return unless hhmemb
+
     (2..hhmemb).count { |n| public_send("relat#{n}") == "P" } > 1
   end
 
