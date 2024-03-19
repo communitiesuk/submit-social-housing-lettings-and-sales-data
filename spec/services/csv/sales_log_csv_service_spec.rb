@@ -5,7 +5,7 @@ RSpec.describe Csv::SalesLogCsvService do
   let(:organisation) { create(:organisation) }
   let(:fixed_time) { Time.zone.local(2023, 12, 8) }
   let(:now) { Time.zone.now }
-  let(:user) { create(:user, email: "billyboy@eyeKLAUD.com") }
+  let(:user) { create(:user, :support, email: "billyboy@eyeKLAUD.com") }
   let(:log) do
     create(
       :sales_log,
@@ -24,6 +24,12 @@ RSpec.describe Csv::SalesLogCsvService do
       ecstat6: nil,
       relat6: nil,
       sex6: nil,
+      address_line1_as_entered: "address line 1 as entered",
+      address_line2_as_entered: "address line 2 as entered",
+      town_or_city_as_entered: "town or city as entered",
+      county_as_entered: "county as entered",
+      postcode_full_as_entered: "AB1 2CD",
+      la_as_entered: "la as entered",
     )
   end
   let(:service) { described_class.new(user:, export_type: "labels") }
