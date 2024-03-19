@@ -33,6 +33,7 @@ class Form::Sales::Questions::PersonWorkingSituation < ::Form::Question
         "depends_on" => [
           { "saledate" => { "operator" => "<", "operand" => Time.zone.local(2024, 4, 1) } },
           { "age#{@person_index}_known" => 1 },
+          { "age#{@person_index}_known" => nil },
           { "age#{@person_index}" => { "operator" => "<", "operand" => 16 } },
         ],
       },

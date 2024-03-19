@@ -72,14 +72,12 @@ module Validations::Sales::HouseholdValidations
   end
 
   def validate_person_age_matches_economic_status(record)
-    return if record.form.start_year_after_2024?
-
     (2..6).each do |person_num|
       age = record.public_send("age#{person_num}")
       economic_status = record.public_send("ecstat#{person_num}")
       next unless age && economic_status
 
-      if age < 16 && !economic_status_is_child_other_or_refused?(economic_status)
+      if age < 16 && !economic_status_is_child_other_or_refused?(economic_status) && !record.form.start_year_after_2024?
         record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.child_under_16", person_num:)
         record.errors.add "age#{person_num}", I18n.t("validations.household.age.child_under_16_ecstat", person_num:)
       end
