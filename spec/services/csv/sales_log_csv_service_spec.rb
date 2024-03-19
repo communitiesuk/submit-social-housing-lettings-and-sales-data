@@ -26,7 +26,7 @@ RSpec.describe Csv::SalesLogCsvService do
       sex6: nil,
     )
   end
-  let(:service) { described_class.new(export_type: "labels") }
+  let(:service) { described_class.new(user:, export_type: "labels") }
   let(:csv) { CSV.parse(service.prepare_csv(SalesLog.all)) }
 
   before do
@@ -201,7 +201,7 @@ RSpec.describe Csv::SalesLogCsvService do
   end
 
   context "when exporting values as codes" do
-    let(:service) { described_class.new(export_type: "codes") }
+    let(:service) { described_class.new(user:, export_type: "codes") }
 
     it "gives answers to radio questions as their codes" do
       national_column_index = csv.first.index("national")
