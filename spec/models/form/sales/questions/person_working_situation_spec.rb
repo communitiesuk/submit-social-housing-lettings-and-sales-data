@@ -36,6 +36,7 @@ RSpec.describe Form::Sales::Questions::PersonWorkingSituation, type: :model do
                "depends_on" =>
         [{ "saledate" => { "operator" => "<", "operand" => Time.zone.local(2024, 4, 1) } },
          { "age2_known" => 1 },
+         { "age2_known" => nil },
          { "age2" => { "operator" => "<", "operand" => 16 } }] },
     })
   end
