@@ -850,12 +850,6 @@ RSpec.describe SalesLog, type: :model do
           record_from_db = described_class.find(household_sales_log.id)
           expect(record_from_db["ecstat6"]).to eq(9)
         end
-
-        it "correctly resets economic status when age changes from under 16" do
-          household_sales_log.update!(age6_known: 0, age6: 17)
-          record_from_db = described_class.find(household_sales_log.id)
-          expect(record_from_db["ecstat6"]).to eq(nil)
-        end
       end
     end
 

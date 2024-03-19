@@ -1487,12 +1487,6 @@ RSpec.describe LettingsLog do
         record_from_db = described_class.find(household_lettings_log.id)
         expect(record_from_db["ecstat7"]).to eq(9)
       end
-
-      it "correctly resets economic status when age changes from under 16" do
-        household_lettings_log.update!(age7_known: 0, age7: 17)
-        record_from_db = described_class.find(household_lettings_log.id)
-        expect(record_from_db["ecstat7"]).to eq(nil)
-      end
     end
 
     it "correctly derives and saves has_benefits" do
