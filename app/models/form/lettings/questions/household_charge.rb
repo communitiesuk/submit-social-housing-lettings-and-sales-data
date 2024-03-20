@@ -1,6 +1,6 @@
 class Form::Lettings::Questions::HouseholdCharge < ::Form::Question
   def initialize(id, hsh, page)
-    super
+    super(id, hsh, page)
     @id = "household_charge"
     @check_answer_label = "Does the household pay rent or charges?"
     @header = "Does the household pay rent or other charges for the accommodation?"
