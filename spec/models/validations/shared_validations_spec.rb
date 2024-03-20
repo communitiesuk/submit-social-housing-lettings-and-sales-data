@@ -82,7 +82,7 @@ RSpec.describe Validations::SharedValidations do
           sales_log.jointpur = 1
           sales_log.age2 = 130
           shared_validator.validate_numeric_min_max(sales_log)
-          expect(sales_log.errors["age2"].first).to eq("Buyer 2’s age must be between 0 and 110")
+          expect(sales_log.errors["age2"].first).to eq("Buyer 2’s age must be between 16 and 110")
         end
       end
     end

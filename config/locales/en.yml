@@ -470,6 +470,8 @@ en:
           must_be_16_19: "Person must be aged 16-19 if they are a student and have relationship ‘child’"
         lead:
           over_25: "The lead tenant must be under 26 as you told us their housing situation immediately before this letting was a children’s home or foster care"
+        student_not_child:
+          cannot_be_16_19: "Person cannot be aged 16-19 if they are a student but not a child"
       ecstat:
         retired_over_70: "Person %{person_num} must be retired if over 70"
         child_under_16: "Person %{person_num}’s working situation must be ‘child under 16’, ‘other’ or ‘prefers not to say’ as you told us they’re under 16"
@@ -481,6 +483,10 @@ en:
           must_be_student: "Person must be a student if they are aged 16-19 and have relationship ‘child’"
         retired_male: "Answer cannot be ‘retired’ as the male tenant is under 65"
         retired_female: "Answer cannot be ‘retired’ as the female tenant is under 60"
+        not_child_16_19:
+          cannot_be_student: "Person cannot be a student if they are aged 16-19 but are not a child"
+        buyer_cannot_be_child: "Buyer %{buyer_index} cannot have a working situation of child under 16"
+        buyer_cannot_be_over_16_and_child: "Buyer %{buyer_index}'s age cannot be 16 or over if their working situation is child under 16"
       relat:
         child_under_16_sales: "Answer cannot be ‘partner’ as you told us person %{person_num}'s age is under 16"
         child_under_16_lettings: "Answer cannot be ‘partner’ as you told us person %{person_num}'s age is under 16"
@@ -491,6 +497,7 @@ en:
           cannot_be_child:
             student_not_16_19: "Answer cannot be ‘child’ if the person is a student but not aged 16-19"
             16_19_not_student:  "Answer cannot be ‘child’ if the person is aged 16-19 but not a student"
+        child_over_19: "Answer cannot be child as you told us person %{person_num} is over 19"
       housingneeds_a:
         one_or_two_choices: "You can only select one option or ‘other disabled access needs’ plus ‘wheelchair-accessible housing’, ‘wheelchair access to essential rooms’ or ‘level access housing’"
       housingneeds_type:
@@ -767,6 +774,14 @@ Make sure these answers are correct."
     no_address_found:
       title_text: "No address found"
       informative_text: "We could not find an address that matches your search. You can search again or continue to enter the address manually."
+    partner_under_16_lettings:
+      title: "You told us this person is aged %{age} years and has 'Partner' relationship to the lead tenant."
+    partner_under_16_sales:
+      title: "You told us this person is aged %{age} years and has 'Partner' relationship to buyer 1."
+    multiple_partners_lettings:
+      title: "You told us there are more than 1 persons with 'Partner' relationship to the lead tenant."
+    multiple_partners_sales:
+      title: "You told us there are more than 1 persons with 'Partner' relationship to buyer 1."
 
   devise:
     email:
