@@ -1134,6 +1134,32 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
           expect(parser.errors[:field_109]).to be_empty
         end
       end
+
+      context "with non staircasing mortgage error" do
+        let(:attributes) { setup_section_params.merge(field_9: "30", field_103: "1", field_104: "10000", field_109: "5000", field_101: "30000", field_102: "28", field_86: "2") }
+
+        it "does not add a BU error on type (because it's a setup field and would block log creation)" do
+          expect(parser.errors[:field_9]).to be_empty
+        end
+
+        it "includes errors on other related fields" do
+          expect(parser.errors[:field_104]).to include("The mortgage and deposit added together is £15,000.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+          expect(parser.errors[:field_109]).to include("The mortgage and deposit added together is £15,000.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+          expect(parser.errors[:field_101]).to include("The mortgage and deposit added together is £15,000.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+          expect(parser.errors[:field_102]).to include("The mortgage and deposit added together is £15,000.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+        end
+
+        it "does not add errors to other ownership type fields" do
+          expect(parser.errors[:field_117]).to be_empty
+          expect(parser.errors[:field_126]).to be_empty
+          expect(parser.errors[:field_118]).to be_empty
+          expect(parser.errors[:field_127]).to be_empty
+          expect(parser.errors[:field_123]).to be_empty
+          expect(parser.errors[:field_130]).to be_empty
+          expect(parser.errors[:field_114]).to be_empty
+          expect(parser.errors[:field_125]).to be_empty
+        end
+      end
     end
 
     describe "#field_117" do

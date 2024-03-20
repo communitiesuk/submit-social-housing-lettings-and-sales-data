@@ -513,6 +513,7 @@ class BulkUpload::Sales::Year2024::RowParser
 
       fields.each do |field|
         next if errors.include?(field)
+        next if error.type == :skip_bu_error
 
         question = log.form.get_question(error.attribute, log)
 
@@ -721,16 +722,16 @@ private
       lanomagr: %i[field_97],
       frombeds: %i[field_98],
       fromprop: %i[field_99],
-      value: %i[field_101 field_114 field_125],
+      value: value_fields,
       equity: %i[field_102],
-      mortgage: %i[field_104 field_118 field_127],
-      extrabor: %i[field_108 field_122 field_129],
-      deposit: %i[field_109 field_123 field_130],
+      mortgage: mortgage_fields,
+      extrabor: extrabor_fields,
+      deposit: deposit_fields,
       cashdis: %i[field_110],
       mrent: %i[field_111],
 
-      has_mscharge: %i[field_112 field_124 field_131],
-      mscharge: %i[field_112 field_124 field_131],
+      has_mscharge: mscharge_fields,
+      mscharge: mscharge_fields,
       grant: %i[field_115],
       discount: %i[field_116],
       othtype: %i[field_12],
@@ -741,12 +742,12 @@ private
       hhregresstill: %i[field_73],
       armedforcesspouse: %i[field_74],
 
-      mortgagelender: %i[field_105 field_119],
-      mortgagelenderother: %i[field_106 field_120],
+      mortgagelender: mortgagelender_fields,
+      mortgagelenderother: mortgagelenderother_fields,
 
       hb: %i[field_81],
-      mortlen: %i[field_107 field_121 field_128],
-      proplen: %i[field_113 field_85],
+      mortlen: mortlen_fields,
+      proplen: proplen_fields,
 
       jointmore: %i[field_16],
       staircase: %i[field_86],
@@ -762,7 +763,7 @@ private
       stairbought: %i[field_87],
       stairowned: %i[field_88],
       socprevten: %i[field_100],
-      mortgageused: [mortgageused_field],
+      mortgageused: mortgageused_fields,
 
       uprn: %i[field_22],
       address_line1: %i[field_23],
@@ -1118,10 +1119,81 @@ private
     return field_126 if outright_sale?
   end
 
-  def mortgageused_field
-    return :field_103 if shared_ownership?
-    return :field_117 if discounted_ownership?
-    return :field_126 if outright_sale?
+  def value_fields
+    return [:field_101] if shared_ownership?
+    return [:field_114] if discounted_ownership?
+    return [:field_125] if outright_sale?
+
+    %i[field_101 field_114 field_125]
+  end
+
+  def mortgage_fields
+    return [:field_104] if shared_ownership?
+    return [:field_118] if discounted_ownership?
+    return [:field_127] if outright_sale?
+
+    %i[field_104 field_118 field_127]
+  end
+
+  def extrabor_fields
+    return [:field_108] if shared_ownership?
+    return [:field_122] if discounted_ownership?
+    return [:field_129] if outright_sale?
+
+    %i[field_108 field_122 field_129]
+  end
+
+  def deposit_fields
+    return [:field_109] if shared_ownership?
+    return [:field_123] if discounted_ownership?
+    return [:field_130] if outright_sale?
+
+    %i[field_109 field_123 field_130]
+  end
+
+  def mscharge_fields
+    return [:field_112] if shared_ownership?
+    return [:field_124] if discounted_ownership?
+    return [:field_131] if outright_sale?
+
+    %i[field_112 field_124 field_131]
+  end
+
+  def mortgagelender_fields
+    return [:field_105] if shared_ownership?
+    return [:field_119] if discounted_ownership?
+
+    %i[field_105 field_119]
+  end
+
+  def mortgagelenderother_fields
+    return [:field_106] if shared_ownership?
+    return [:field_120] if discounted_ownership?
+
+    %i[field_106 field_120]
+  end
+
+  def mortlen_fields
+    return [:field_107] if shared_ownership?
+    return [:field_121] if discounted_ownership?
+    return [:field_128] if outright_sale?
+
+    %i[field_107 field_121 field_128]
+  end
+
+  def proplen_fields
+    return [:field_85] if shared_ownership?
+    return [:field_113] if discounted_ownership?
+
+    %i[field_85 field_113]
+  end
+
+  def mortgageused_fields
+    return [:field_103] if shared_ownership?
+    return [:field_117] if discounted_ownership?
+    return [:field_126] if outright_sale?
+
+    %i[field_103 field_117 field_126]
   end
 
   def owning_organisation
