@@ -21,4 +21,10 @@ class Form::Sales::Questions::NationalityAll < ::Form::Question
       @buyer_index == 1 ? 26 : 34
     end
   end
+
+  def label_from_value(value)
+    return unless value
+
+    answer_options[value.to_s]["name"]
+  end
 end

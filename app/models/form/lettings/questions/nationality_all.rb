@@ -15,4 +15,10 @@ class Form::Lettings::Questions::NationalityAll < ::Form::Question
   end
 
   QUESTION_NUMBER_FROM_YEAR = { 2023 => 36, 2024 => 35 }.freeze
+
+  def label_from_value(value)
+    return unless value
+
+    answer_options[value.to_s]["name"]
+  end
 end

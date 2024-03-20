@@ -171,6 +171,7 @@ RSpec.describe Csv::LettingsLogCsvService do
 
       context "when the current form is 2024" do
         let(:now) { Time.zone.local(2024, 4, 1) }
+        let(:fixed_time) { Time.zone.local(2024, 4, 1) }
 
         it "exports the CSV with 2024 ordering and all values correct" do
           expected_content = CSV.read("spec/fixtures/files/lettings_log_csv_export_labels_24.csv")
@@ -180,6 +181,19 @@ RSpec.describe Csv::LettingsLogCsvService do
             csv.second[index] = nil
           end
           expect(csv).to eq expected_content
+        end
+
+        context "when the log has nationality_all" do
+          before do
+            log.update!(nationality_all: 36)
+          end
+
+          it "exports the id for under the heading 'nationality_all'" do
+            expect(log.nationality_all).to eq 36
+            nationality_all_column_index = csv.first.index("nationality_all")
+            nationality_all_value = csv.second[nationality_all_column_index]
+            expect(nationality_all_value).to eq "Australia"
+          end
         end
       end
 
