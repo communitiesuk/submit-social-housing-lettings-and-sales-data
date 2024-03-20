@@ -141,6 +141,7 @@ module Exports::LettingsLogExportConstants
     "duplicate_set_id",
     "accessible_register",
     "nationality_all",
+    "bulk_upload_id",
     "address_line1_as_entered",
     "address_line2_as_entered",
     "town_or_city_as_entered",
@@ -167,6 +168,7 @@ module Exports::LettingsLogExportConstants
   POST_2024_EXPORT_FIELDS = Set[
     "accessible_register",
     "nationality_all",
+    "bulk_upload_id",
     "address_line1_as_entered",
     "address_line2_as_entered",
     "town_or_city_as_entered",
