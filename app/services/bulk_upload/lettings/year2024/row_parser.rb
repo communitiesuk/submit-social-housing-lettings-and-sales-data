@@ -1092,6 +1092,7 @@ private
     attributes["lettype"] = nil # should get this from rent_type
     attributes["tenancycode"] = field_13
     attributes["la"] = field_23
+    attributes["la_as_entered"] = field_23
     attributes["postcode_known"] = postcode_known
     attributes["postcode_full"] = postcode_full
     attributes["owning_organisation"] = owning_organisation
@@ -1268,11 +1269,16 @@ private
     attributes["skip_update_uprn_confirmed"] = true
     attributes["uprn"] = field_16
     attributes["address_line1"] = field_17
+    attributes["address_line1_as_entered"] = field_17
     attributes["address_line2"] = field_18
+    attributes["address_line2_as_entered"] = field_18
     attributes["town_or_city"] = field_19
+    attributes["town_or_city_as_entered"] = field_19
     attributes["county"] = field_20
+    attributes["county_as_entered"] = field_20
     attributes["address_line1_input"] = address_line1_input
     attributes["postcode_full_input"] = postcode_full
+    attributes["postcode_full_as_entered"] = postcode_full
     attributes["select_best_address_match"] = true if field_16.blank?
 
     attributes

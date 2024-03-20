@@ -366,6 +366,15 @@ class BulkUpload::Sales::Year2024::RowParser
             },
             on: :after_log
 
+  validates :field_116,
+            numericality: {
+              message: I18n.t("validations.numeric.within_range", field: "Percentage discount", min: "0%", max: "70%"),
+              greater_than_or_equal_to: 0,
+              less_than_or_equal_to: 70,
+              if: :discounted_ownership?,
+            },
+            on: :before_log
+
   validates :field_11,
             inclusion: {
               in: [10, 12],
@@ -443,6 +452,7 @@ class BulkUpload::Sales::Year2024::RowParser
 
   validate :validate_buyer1_economic_status, on: :before_log
   validate :validate_address_option_found, on: :after_log
+  validate :validate_buyer2_economic_status, on: :before_log
   validate :validate_nulls, on: :after_log
   validate :validate_valid_radio_option, on: :before_log
 
@@ -864,9 +874,11 @@ private
     attributes["builtype"] = field_21
     attributes["la_known"] = field_29.present? ? 1 : 0
     attributes["la"] = field_29
+    attributes["la_as_entered"] = field_29
     attributes["is_la_inferred"] = false
     attributes["pcodenk"] = 0 if postcode_full.present?
     attributes["postcode_full"] = postcode_full
+    attributes["postcode_full_as_entered"] = postcode_full
     attributes["wchair"] = field_30
 
     attributes["type"] = sale_type
@@ -932,9 +944,13 @@ private
     attributes["uprn_confirmed"] = 1 if field_22.present?
     attributes["skip_update_uprn_confirmed"] = true
     attributes["address_line1"] = field_23
+    attributes["address_line1_as_entered"] = field_23
     attributes["address_line2"] = field_24
+    attributes["address_line2_as_entered"] = field_24
     attributes["town_or_city"] = field_25
+    attributes["town_or_city_as_entered"] = field_25
     attributes["county"] = field_26
+    attributes["county_as_entered"] = field_26
     attributes["address_line1_input"] = address_line1_input
     attributes["postcode_full_input"] = postcode_full
     attributes["select_best_address_match"] = true if field_22.blank?
@@ -1422,7 +1438,23 @@ private
 
   def validate_buyer1_economic_status
     if field_35 == 9
-      errors.add(:field_35, "Buyer 1 cannot be a child under 16")
+      if field_31.present? && field_31.to_i >= 16
+        errors.add(:field_35, I18n.t("validations.household.ecstat.buyer_cannot_be_over_16_and_child", buyer_index: "1"))
+        errors.add(:field_31, I18n.t("validations.household.ecstat.buyer_cannot_be_over_16_and_child", buyer_index: "1"))
+      else
+        errors.add(:field_35, I18n.t("validations.household.ecstat.buyer_cannot_be_child", buyer_index: "1"))
+      end
+    end
+  end
+
+  def validate_buyer2_economic_status
+    if field_42 == 9
+      if field_38.present? && field_38.to_i >= 16
+        errors.add(:field_42, I18n.t("validations.household.ecstat.buyer_cannot_be_over_16_and_child", buyer_index: "2"))
+        errors.add(:field_38, I18n.t("validations.household.ecstat.buyer_cannot_be_over_16_and_child", buyer_index: "2"))
+      else
+        errors.add(:field_42, I18n.t("validations.household.ecstat.buyer_cannot_be_child", buyer_index: "2"))
+      end
     end
   end
 

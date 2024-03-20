@@ -150,7 +150,7 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
 
             field_42: "42",
             field_48: "41",
-            field_52: "20",
+            field_52: "17",
             field_56: "18",
             field_60: "16",
             field_64: "14",
@@ -171,7 +171,7 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
 
             field_47: "P",
             field_51: "C",
-            field_55: "X",
+            field_55: "C",
             field_59: "R",
             field_63: "C",
             field_67: "C",
@@ -179,7 +179,7 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
 
             field_46: "1",
             field_50: "2",
-            field_54: "6",
+            field_54: "7",
             field_58: "7",
             field_62: "8",
             field_66: "9",

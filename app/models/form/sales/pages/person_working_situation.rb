@@ -1,7 +1,16 @@
 class Form::Sales::Pages::PersonWorkingSituation < Form::Sales::Pages::Person
   def initialize(id, hsh, subsection, person_index:)
     super
-    @depends_on = [{ "details_known_#{person_index}" => 1 }]
+    @depends_on = [
+      {
+        "details_known_#{person_index}" => 1,
+        "age#{person_index}" => {
+          "operator" => ">",
+          "operand" => 15,
+        },
+      },
+      { "details_known_#{person_index}" => 1, "age#{person_index}" => nil },
+    ]
   end
 
   def questions
