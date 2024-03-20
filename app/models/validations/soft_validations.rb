@@ -194,7 +194,8 @@ module Validations::SoftValidations
   def multiple_partners?
     return unless hhmemb
 
-    (2..hhmemb).many? { |n| public_send("relat#{n}") == "P" }
+    max_person = sales? ? [hhmemb, 6].min : [hhmemb, 8].min
+    (2..max_person).many? { |n| public_send("relat#{n}") == "P" }
   end
 
 private
