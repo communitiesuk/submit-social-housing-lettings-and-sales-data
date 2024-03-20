@@ -165,6 +165,7 @@
     <created_by>test1@example.com</created_by>
     <amended_by/>
     <renttype_detail>2</renttype_detail>
+    <assigned_to/>
     <providertype>1</providertype>
   </form>
 </forms>
