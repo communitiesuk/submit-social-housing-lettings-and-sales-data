@@ -76,13 +76,17 @@ module Validations::SoftValidations
   end
 
   def all_tenants_age_and_gender_information_completed?
-    (1..hhmemb).all? do |n|
+    person_count = hhmemb || 8
+
+    (1..person_count).all? do |n|
       public_send("sex#{n}").present? && public_send("age#{n}").present? && details_known_or_lead_tenant?(n) && public_send("age#{n}_known").present? && public_send("age#{n}_known").zero?
     end
   end
 
   def all_tenants_gender_information_completed?
-    (1..hhmemb).all? do |n|
+    person_count = hhmemb || 8
+
+    (1..person_count).all? do |n|
       public_send("sex#{n}").present? && details_known_or_lead_tenant?(n)
     end
   end
@@ -207,13 +211,17 @@ private
   end
 
   def females_in_age_range(min, max)
-    (1..hhmemb).any? do |n|
+    person_count = hhmemb || 8
+
+    (1..person_count).any? do |n|
       public_send("sex#{n}") == "F" && public_send("age#{n}").present? && public_send("age#{n}").between?(min, max)
     end
   end
 
   def females_in_the_household?
-    (1..hhmemb).any? do |n|
+    person_count = hhmemb || 8
+
+    (1..person_count).any? do |n|
       public_send("sex#{n}") == "F" || public_send("sex#{n}").nil?
     end
   end

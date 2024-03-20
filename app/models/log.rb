@@ -182,12 +182,13 @@ class Log < ApplicationRecord
 
   def blank_invalid_non_setup_fields!
     setup_ids = form.setup_sections.flat_map(&:subsections).flat_map(&:questions).map(&:id)
+    fields_to_keep = setup_ids + %w[hhmemb]
 
     2.times do
       next if valid?
 
       errors.each do |error|
-        next if setup_ids.include?(error.attribute.to_s)
+        next if fields_to_keep.include?(error.attribute.to_s)
 
         question = form.questions.find { |q| q.id == error.attribute.to_s }
         if question&.type == "checkbox"
