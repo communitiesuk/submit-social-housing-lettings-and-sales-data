@@ -34,7 +34,7 @@ RSpec.describe Form::Sales::Pages::PersonWorkingSituation, type: :model do
     end
 
     it "has correct depends_on" do
-      expect(page.depends_on).to eq([{ "details_known_2" => 1 }])
+      expect(page.depends_on).to eq([{ "age2" => { "operand" => 15, "operator" => ">" }, "details_known_2" => 1 }, { "age2" => nil, "details_known_2" => 1 }])
     end
   end
 
@@ -51,7 +51,7 @@ RSpec.describe Form::Sales::Pages::PersonWorkingSituation, type: :model do
     end
 
     it "has correct depends_on" do
-      expect(page.depends_on).to eq([{ "details_known_3" => 1 }])
+      expect(page.depends_on).to eq([{ "age3" => { "operand" => 15, "operator" => ">" }, "details_known_3" => 1 }, { "age3" => nil, "details_known_3" => 1 }])
     end
   end
 
@@ -68,7 +68,7 @@ RSpec.describe Form::Sales::Pages::PersonWorkingSituation, type: :model do
     end
 
     it "has correct depends_on" do
-      expect(page.depends_on).to eq([{ "details_known_4" => 1 }])
+      expect(page.depends_on).to eq([{ "age4" => { "operand" => 15, "operator" => ">" }, "details_known_4" => 1 }, { "age4" => nil, "details_known_4" => 1 }])
     end
   end
 
@@ -85,7 +85,7 @@ RSpec.describe Form::Sales::Pages::PersonWorkingSituation, type: :model do
     end
 
     it "has correct depends_on" do
-      expect(page.depends_on).to eq([{ "details_known_5" => 1 }])
+      expect(page.depends_on).to eq([{ "age5" => { "operand" => 15, "operator" => ">" }, "details_known_5" => 1 }, { "age5" => nil, "details_known_5" => 1 }])
     end
   end
 end

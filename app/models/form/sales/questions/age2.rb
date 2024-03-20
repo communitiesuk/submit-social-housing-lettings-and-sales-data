@@ -12,7 +12,7 @@ class Form::Sales::Questions::Age2 < ::Form::Question
     }]
     @check_answers_card_number = 2
     @max = 110
-    @min = 0
+    @min = 16
     @step = 1
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
   end

@@ -62,6 +62,9 @@ module Validations::SoftValidations
     define_method("person_#{person_num}_not_retired_over_soft_max_age?") do
       not_retired_over_soft_max_age?(person_num)
     end
+    define_method("person_#{person_num}_partner_under_16?") do
+      partner_under_16?(person_num)
+    end
   end
 
   def no_females_in_a_pregnant_household?
@@ -188,6 +191,13 @@ module Validations::SoftValidations
     PHRASES_LIKELY_TO_INDICATE_EXISTING_REASON_CATEGORY_REGEX.match?(reasonother)
   end
 
+  def multiple_partners?
+    return unless hhmemb
+
+    max_person_with_details = sales? ? [hhmemb, 6].min : [hhmemb, 8].min
+    (2..max_person_with_details).many? { |n| public_send("relat#{n}") == "P" }
+  end
+
 private
 
   def details_known_or_lead_tenant?(tenant_number)
@@ -233,5 +243,13 @@ private
 
     %w[M X].include?(gender) && !tenant_retired_or_prefers_not_say && age > retirement_age_for_person(person_num) ||
       gender == "F" && !tenant_retired_or_prefers_not_say && age > 60
+  end
+
+  def partner_under_16?(person_num)
+    age = public_send("age#{person_num}")
+    relationship = public_send("relat#{person_num}")
+    return unless age && relationship
+
+    age < 16 && relationship == "P"
   end
 end

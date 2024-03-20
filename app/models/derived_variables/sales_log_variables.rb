@@ -36,6 +36,7 @@ module DerivedVariables::SalesLogVariables
 
     if saledate && form.start_year_after_2024?
       self.soctenant = soctenant_from_prevten_values
+      child_under_16_constraints!
     end
 
     self.uprn_known = 0 if address_answered_without_uprn?
@@ -129,6 +130,15 @@ private
       age = public_send("age#{i}")
       relat = public_send("relat#{i}")
       age.present? && (age.between?(20, 59) || age.between?(18, 19) && relat != "C")
+    end
+  end
+
+  def child_under_16_constraints!
+    start_index = joint_purchase? ? 3 : 2
+    (start_index..6).each do |idx|
+      if age_under_16?(idx)
+        self["ecstat#{idx}"] = 9
+      end
     end
   end
 
