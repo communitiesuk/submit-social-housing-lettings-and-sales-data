@@ -30,7 +30,7 @@ RSpec.describe Form::Lettings::Questions::PreviousTenure, type: :model do
   end
 
   it "has the correct hint" do
-    expect(question.hint_text).to eq("This is where the household was the night before they moved.")
+    expect(question.hint_text).to eq("This is where the household was the night before they moved into this new let.")
   end
 
   it "has the correct answer_options" do
