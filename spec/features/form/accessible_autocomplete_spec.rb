@@ -17,6 +17,7 @@ RSpec.describe "Accessible Autocomplete" do
     FactoryBot.create(
       :lettings_log,
       :in_progress,
+      renewal: 0,
       previous_la_known: 1,
       prevloc: "E09000033",
       illness: 1,
