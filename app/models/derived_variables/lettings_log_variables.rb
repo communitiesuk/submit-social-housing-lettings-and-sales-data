@@ -216,8 +216,6 @@ private
     (2..8).each do |idx|
       if age_under_16?(idx)
         self["ecstat#{idx}"] = 9
-      elsif public_send("ecstat#{idx}") == 9 && age_known?(idx)
-        self["ecstat#{idx}"] = nil
       end
     end
   end

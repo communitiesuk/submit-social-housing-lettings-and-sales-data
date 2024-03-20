@@ -27,7 +27,6 @@ class Form::Sales::Questions::Buyer2WorkingSituation < ::Form::Question
     "0" => { "value" => "Other" },
     "10" => { "value" => "Buyer prefers not to say" },
     "7" => { "value" => "Full-time student" },
-    "9" => { "value" => "Child under 16" },
   }.freeze
 
   QUESTION_NUMBER_FROM_YEAR = { 2023 => 33, 2024 => 35 }.freeze
