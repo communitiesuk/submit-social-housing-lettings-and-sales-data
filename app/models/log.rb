@@ -277,6 +277,16 @@ class Log < ApplicationRecord
     nationality_all_group&.zero? || nationality_all_group == 826
   end
 
+  def age_under_16?(person_num)
+    public_send("age#{person_num}") && public_send("age#{person_num}") < 16
+  end
+
+  def age_known?(person_num)
+    return false unless person_num.is_a?(Integer)
+
+    !!public_send("age#{person_num}_known")&.zero?
+  end
+
 private
 
   # Handle logs that are older than previous collection start date

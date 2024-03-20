@@ -142,6 +142,12 @@ module Exports::LettingsLogExportConstants
     "accessible_register",
     "nationality_all",
     "bulk_upload_id",
+    "address_line1_as_entered",
+    "address_line2_as_entered",
+    "town_or_city_as_entered",
+    "county_as_entered",
+    "postcode_full_as_entered",
+    "la_as_entered",
   ]
 
   (1..8).each do |index|
@@ -163,6 +169,12 @@ module Exports::LettingsLogExportConstants
     "accessible_register",
     "nationality_all",
     "bulk_upload_id",
+    "address_line1_as_entered",
+    "address_line2_as_entered",
+    "town_or_city_as_entered",
+    "county_as_entered",
+    "postcode_full_as_entered",
+    "la_as_entered",
   ]
 
   PRE_2024_EXPORT_FIELDS = Set[

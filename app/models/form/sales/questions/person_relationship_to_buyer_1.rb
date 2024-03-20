@@ -4,7 +4,7 @@ class Form::Sales::Questions::PersonRelationshipToBuyer1 < ::Form::Question
     @check_answer_label = "Person #{person_index}’s relationship to Buyer 1"
     @header = "What is Person #{person_index}’s relationship to Buyer 1?"
     @type = "radio"
-    @answer_options = ANSWER_OPTIONS
+    @answer_options = answer_options
     @check_answers_card_number = person_index
     @inferred_check_answers_value = [{
       "condition" => {
@@ -16,12 +16,23 @@ class Form::Sales::Questions::PersonRelationshipToBuyer1 < ::Form::Question
     @question_number = question_number
   end
 
-  ANSWER_OPTIONS = {
-    "P" => { "value" => "Partner" },
-    "C" => { "value" => "Child", "hint" => "Must be eligible for child benefit, aged under 16 or under 20 if still in full-time education." },
-    "X" => { "value" => "Other" },
-    "R" => { "value" => "Person prefers not to say" },
-  }.freeze
+  def answer_options
+    if form.start_year_after_2024?
+      {
+        "P" => { "value" => "Partner" },
+        "C" => { "value" => "Child" },
+        "X" => { "value" => "Other" },
+        "R" => { "value" => "Person prefers not to say" },
+      }
+    else
+      {
+        "P" => { "value" => "Partner" },
+        "C" => { "value" => "Child", "hint" => "Must be eligible for child benefit, aged under 16 or under 20 if still in full-time education." },
+        "X" => { "value" => "Other" },
+        "R" => { "value" => "Person prefers not to say" },
+      }
+    end
+  end
 
   def question_number
     base_question_number = case form.start_date.year

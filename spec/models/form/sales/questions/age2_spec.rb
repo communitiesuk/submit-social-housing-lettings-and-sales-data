@@ -53,7 +53,7 @@ RSpec.describe Form::Sales::Questions::Age2, type: :model do
   end
 
   it "has the correct min" do
-    expect(question.min).to eq(0)
+    expect(question.min).to eq(16)
   end
 
   it "has the correct max" do

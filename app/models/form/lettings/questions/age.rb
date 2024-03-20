@@ -11,9 +11,10 @@ class Form::Lettings::Questions::Age < ::Form::Question
     @max = 120
     @min = 1
     @step = 1
-    @hint_text = "For a child under 1, enter 1" if person_type == "child"
     @person_index = person_index
     @question_number = question_number
+    @person_type = person_type
+    @hint_text = hint_text
   end
 
   def question_number
@@ -25,5 +26,13 @@ class Form::Lettings::Questions::Age < ::Form::Question
                            end
 
     base_question_number + (4 * @person_index)
+  end
+
+  def hint_text
+    if form.start_year_after_2024?
+      "Answer 1 for children aged under 1 year old"
+    elsif @person_type == "child"
+      "For a child under 1, enter 1"
+    end
   end
 end

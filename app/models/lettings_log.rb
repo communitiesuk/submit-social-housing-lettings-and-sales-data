@@ -556,12 +556,6 @@ class LettingsLog < Log
     RETIREMENT_AGES[gender]
   end
 
-  def age_known?(person_num)
-    return false unless person_num.is_a?(Integer)
-
-    !!public_send("age#{person_num}_known")&.zero?
-  end
-
   def age_unknown?(person_num)
     return false unless person_num.is_a?(Integer)
 
@@ -750,10 +744,6 @@ private
     return true if collection_start_year < 2022
 
     collection_start_year >= 2022 && !is_fixed_term_tenancy?
-  end
-
-  def age_under_16?(person_num)
-    public_send("age#{person_num}") && public_send("age#{person_num}") < 16
   end
 
   def process_postcode_changes!
