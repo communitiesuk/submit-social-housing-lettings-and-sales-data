@@ -7,31 +7,32 @@ class Form::Lettings::Questions::PersonWorkingSituation < ::Form::Question
     @type = "radio"
     @check_answers_card_number = person_index
     @hint_text = ""
-    @answer_options = ANSWER_OPTIONS
     @person_index = person_index
     @question_number = question_number
+    @answer_options = answer_options
   end
 
-  ANSWER_OPTIONS = {
-    "1" => { "value" => "Full-time – 30 hours or more" },
-    "2" => { "value" => "Part-time – Less than 30 hours" },
-    "7" => { "value" => "Full-time student" },
-    "3" => { "value" => "In government training into work, such as New Deal" },
-    "4" => { "value" => "Jobseeker" },
-    "6" => { "value" => "Not seeking work" },
-    "8" => { "value" => "Unable to work because of long term sick or disability" },
-    "5" => { "value" => "Retired" },
-    "9" => {
-      "value" => "Child under 16",
-      "depends_on" => [
-        { "age2_known" => 1 },
-        { "age2" => { "operator" => "<", "operand" => 16 } },
-      ],
-    },
-    "0" => { "value" => "Other" },
-    "divider" => { "value" => true },
-    "10" => { "value" => "Person prefers not to say" },
-  }.freeze
+  def answer_options
+    { "1" => { "value" => "Full-time – 30 hours or more" },
+      "2" => { "value" => "Part-time – Less than 30 hours" },
+      "7" => { "value" => "Full-time student" },
+      "3" => { "value" => "In government training into work, such as New Deal" },
+      "4" => { "value" => "Jobseeker" },
+      "6" => { "value" => "Not seeking work" },
+      "8" => { "value" => "Unable to work because of long term sick or disability" },
+      "5" => { "value" => "Retired" },
+      "9" => {
+        "value" => "Child under 16",
+        "depends_on" => [
+          { "age#{@person_index}_known" => 1 },
+          { "age#{@person_index}_known" => nil },
+          { "age#{@person_index}" => { "operator" => "<", "operand" => 16 } },
+        ],
+      },
+      "0" => { "value" => "Other" },
+      "divider" => { "value" => true },
+      "10" => { "value" => "Person prefers not to say" } }
+  end
 
   def question_number
     base_question_number = case form.start_date.year

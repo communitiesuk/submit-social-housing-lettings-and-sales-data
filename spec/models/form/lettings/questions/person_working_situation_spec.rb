@@ -33,6 +33,7 @@ RSpec.describe Form::Lettings::Questions::PersonWorkingSituation, type: :model d
                                           "9" => {
                                             "depends_on" => [
                                               { "age2_known" => 1 },
+                                              { "age2_known" => nil },
                                               { "age2" => { "operand" => 16, "operator" => "<" } },
                                             ],
                                             "value" => "Child under 16",

@@ -974,13 +974,62 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
       end
     end
 
-    describe "field_35" do # ecstat1
-      context "when buyer 1 is marked as a child" do
-        let(:attributes) { valid_attributes.merge({ field_35: "9" }) }
+    describe "field_42" do # ecstat1
+      context "when buyer 2 has no age but has ecstat as child" do
+        let(:attributes) { valid_attributes.merge({ field_38: nil, field_42: "9" }) }
 
         it "a custom validation is applied" do
-          validation_message = "Buyer 1 cannot be a child under 16"
+          validation_message = "Buyer 2 cannot have a working situation of child under 16"
+          expect(parser.errors[:field_42]).to include validation_message
+        end
+      end
+
+      context "when buyer 2 is under 16" do
+        let(:attributes) { valid_attributes.merge({ field_38: "9" }) }
+
+        it "a custom validation is applied" do
+          validation_message = "Buyer 2’s age must be between 16 and 110"
+          expect(parser.errors[:field_38]).to include validation_message
+        end
+      end
+
+      context "when buyer 2 is over 16 but has ecstat as child" do
+        let(:attributes) { valid_attributes.merge({ field_38: "17", field_42: "9" }) }
+
+        it "a custom validation is applied" do
+          validation_message = "Buyer 2's age cannot be 16 or over if their working situation is child under 16"
+          expect(parser.errors[:field_42]).to include validation_message
+          expect(parser.errors[:field_38]).to include validation_message
+        end
+      end
+    end
+
+    describe "field_35" do # ecstat1
+      context "when buyer 1 has no age but has ecstat as child" do
+        let(:attributes) { valid_attributes.merge({ field_31: nil, field_35: "9" }) }
+
+        it "a custom validation is applied" do
+          validation_message = "Buyer 1 cannot have a working situation of child under 16"
           expect(parser.errors[:field_35]).to include validation_message
+        end
+      end
+
+      context "when buyer 1 is under 16" do
+        let(:attributes) { valid_attributes.merge({ field_31: "9" }) }
+
+        it "a custom validation is applied" do
+          validation_message = "Buyer 1’s age must be between 16 and 110"
+          expect(parser.errors[:field_31]).to include validation_message
+        end
+      end
+
+      context "when buyer 1 is over 16 but has ecstat as child" do
+        let(:attributes) { valid_attributes.merge({ field_31: "17", field_35: "9" }) }
+
+        it "a custom validation is applied" do
+          validation_message = "Buyer 1's age cannot be 16 or over if their working situation is child under 16"
+          expect(parser.errors[:field_35]).to include validation_message
+          expect(parser.errors[:field_31]).to include validation_message
         end
       end
     end
