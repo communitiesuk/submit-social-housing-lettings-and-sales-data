@@ -53,7 +53,7 @@ module DerivedVariables::SalesLogVariables
       self.address_line2 = nil
       self.town_or_city = nil
       self.county = nil
-      self.postcode_known = nil
+      self.pcodenk = nil
       self.postcode_full = nil
       self.la = nil
     end
