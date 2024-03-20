@@ -14,9 +14,9 @@ class Form::Sales::Pages::AboutDepositWithDiscount < ::Form::Page
 
   def depends_on
     if form.start_year_after_2024?
-      [{ "is_type_discount?" => true, "stairowned_100?" => @optional }]
+      [{ "social_homebuy?" => true, "stairowned_100?" => @optional }]
     else
-      [{ "is_type_discount?" => true }]
+      [{ "social_homebuy?" => true }]
     end
   end
 end
