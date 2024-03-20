@@ -213,7 +213,7 @@ en:
     not_answered: "You must answer %{question}"
     invalid_option: "Enter a valid value for %{question}"
     invalid_number: "Enter a number for %{question}"
-    no_address_found: "We could not find this address. Edit the address data or fix this error on the CORE site."
+    no_address_found: "We could not find this address. Check the address data in your CSV file is correct and complete, or select the correct address on the CORE site."
 
     other_field_missing: "If %{main_field_label} is other then %{other_field_label} must be provided"
     other_field_not_required: "%{other_field_label} must not be provided if %{main_field_label} was not other"
