@@ -234,6 +234,6 @@ module Validations::Sales::SaleInformationValidations
   end
 
   def over_tolerance?(expected, actual, tolerance)
-    (expected - actual).abs > tolerance
+    (expected - actual).abs >= tolerance
   end
 end
