@@ -886,6 +886,23 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
       end
     end
 
+    describe "address fields" do
+      context "when no address can be found" do
+        before do
+          stub_request(:get, /api\.os\.uk\/search\/places\/v1\/find/)
+            .to_return(status: 200, body: nil, headers: {})
+        end
+
+        let(:attributes) { setup_section_params.merge({ field_22: nil, field_23: "address line 1", field_25: "town or city" }) }
+
+        it "adds an appropriate error" do
+          %i[field_23 field_24 field_25 field_26 field_27 field_28].each do |field|
+            expect(parser.errors[field]).to eql(["We could not find this address. Check the address data in your CSV file is correct and complete, or select the correct address using the CORE site."])
+          end
+        end
+      end
+    end
+
     describe "#field_18" do # data protection
       let(:attributes) { setup_section_params.merge({ field_18: nil }) }
 
