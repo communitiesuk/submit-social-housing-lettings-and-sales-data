@@ -2,16 +2,7 @@ require "rails_helper"
 require_relative "helpers"
 
 RSpec.describe "Form Navigation" do
-  around do |example|
-    Timecop.travel(Time.zone.local(2022, 1, 1)) do
-      Singleton.__init__(FormHandler)
-      example.run
-    end
-    Timecop.return
-    Singleton.__init__(FormHandler)
-  end
-
-  include Helpers
+  let(:now) { Time.zone.local(2022, 1, 1) }
   let(:user) { FactoryBot.create(:user) }
   let(:lettings_log) do
     FactoryBot.create(
@@ -30,7 +21,6 @@ RSpec.describe "Form Navigation" do
       created_by: user,
     )
   end
-
   let(:id) { lettings_log.id }
   let(:question_answers) do
     {
@@ -42,6 +32,17 @@ RSpec.describe "Form Navigation" do
     }
   end
   let(:fake_2021_2022_form) { Form.new("spec/fixtures/forms/2021_2022.json") }
+
+  around do |example|
+    Timecop.travel(now) do
+      Singleton.__init__(FormHandler)
+      example.run
+    end
+    Timecop.return
+    Singleton.__init__(FormHandler)
+  end
+
+  include Helpers
 
   before do
     allow(lettings_log.form).to receive(:new_logs_end_date).and_return(Time.zone.today + 1.day)
@@ -183,6 +184,66 @@ RSpec.describe "Form Navigation" do
       expect(breadcrumbs.length).to eq 0
       click_link(text: "Back")
       expect(page).to have_current_path("/lettings-logs/#{id}/duplicate-logs?original_log_id=#{id}")
+    end
+  end
+
+  describe "searching for an address" do
+    let(:now) { Time.zone.local(2024, 5, 1) }
+
+    context "with a lettings log" do
+      let(:lettings_log) { create(:lettings_log, :completed, startdate: Time.zone.local(2024, 5, 5), created_by: user) }
+
+      before do
+        stub_request(:get, /api\.os\.uk/)
+        .to_return(status: 200, body: { results: [{ DPA: { MATCH: 0.9, BUILDING_NAME: "result address line 1", POST_TOWN: "result town or city", POSTCODE: "AA1 1AA", UPRN: "12345" } }] }.to_json, headers: {})
+      end
+
+      it "allows searching for an address" do
+        visit("lettings-logs/#{id}/address-matcher")
+        fill_in("lettings-log-address-line1-input-field", with: "address")
+        fill_in("lettings-log-postcode-full-input-field", with: "A1 1AA")
+        click_button(text: "Search")
+        expect(page).to have_current_path("/lettings-logs/#{id}/uprn-selection")
+      end
+
+      it "allows searching for an address from check your answers page" do
+        visit("lettings-logs/#{id}/address-matcher?referrer=check_answers")
+        fill_in("lettings-log-address-line1-input-field", with: "address")
+        fill_in("lettings-log-postcode-full-input-field", with: "A1 1AA")
+        click_button(text: "Search")
+        expect(page).to have_current_path("/lettings-logs/#{id}/uprn-selection?referrer=check_answers")
+        choose("lettings-log-uprn-selection-12345-field", allow_label_click: true)
+        click_button(text: "Save changes")
+        expect(page).to have_current_path("/lettings-logs/#{id}/property-information/check-answers")
+      end
+    end
+
+    context "with a sales log" do
+      let(:sales_log) { create(:sales_log, :completed, saledate: Time.zone.local(2024, 5, 5), created_by: user) }
+
+      before do
+        stub_request(:get, /api\.os\.uk/)
+        .to_return(status: 200, body: { results: [{ DPA: { MATCH: 0.9, BUILDING_NAME: "result address line 1", POST_TOWN: "result town or city", POSTCODE: "AA1 1AA", UPRN: "12345" } }] }.to_json, headers: {})
+      end
+
+      it "allows searching for an address" do
+        visit("sales-logs/#{sales_log.id}/address-matcher")
+        fill_in("sales-log-address-line1-input-field", with: "address")
+        fill_in("sales-log-postcode-full-input-field", with: "A1 1AA")
+        click_button(text: "Search")
+        expect(page).to have_current_path("/sales-logs/#{sales_log.id}/uprn-selection")
+      end
+
+      it "allows searching for an address from check your answers page" do
+        visit("sales-logs/#{sales_log.id}/address-matcher?referrer=check_answers")
+        fill_in("sales-log-address-line1-input-field", with: "address")
+        fill_in("sales-log-postcode-full-input-field", with: "A1 1AA")
+        click_button(text: "Search")
+        expect(page).to have_current_path("/sales-logs/#{sales_log.id}/uprn-selection?referrer=check_answers")
+        choose("sales-log-uprn-selection-12345-field", allow_label_click: true)
+        click_button(text: "Save changes")
+        expect(page).to have_current_path("/sales-logs/#{sales_log.id}/property-information/check-answers")
+      end
     end
   end
 end

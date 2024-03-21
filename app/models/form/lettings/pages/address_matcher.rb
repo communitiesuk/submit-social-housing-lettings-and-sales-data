@@ -16,4 +16,8 @@ class Form::Lettings::Pages::AddressMatcher < ::Form::Page
       Form::Lettings::Questions::PostcodeForAddressMatcher.new(nil, nil, self),
     ]
   end
+
+  def submit_text
+    "Search"
+  end
 end

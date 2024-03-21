@@ -20,6 +20,8 @@ module FormPageHelper
   end
 
   def submit_button_text(page, referrer)
+    return page.submit_text if page.submit_text.present?
+
     if accessed_from_duplicate_logs?(referrer) || returning_to_question_page?(page, referrer)
       "Save changes"
     else
