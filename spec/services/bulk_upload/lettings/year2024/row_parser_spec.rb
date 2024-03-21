@@ -1495,10 +1495,10 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
             field_1: "1" }
         end
 
-        it "does not add UPRN errors" do
+        it "does not add UPRN errors (but still adds missing address errors)" do
           expect(parser.errors[:field_16]).to be_empty
-          expect(parser.errors[:field_17]).to be_empty
-          expect(parser.errors[:field_19]).to be_empty
+          expect(parser.errors[:field_17]).to eql(["You must answer address line 1"])
+          expect(parser.errors[:field_19]).to eql(["You must answer town or city"])
         end
       end
 
