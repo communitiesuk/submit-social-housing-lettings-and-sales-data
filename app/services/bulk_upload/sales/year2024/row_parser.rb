@@ -1260,7 +1260,7 @@ private
       block_log_creation!
 
       if errors[:field_1].blank?
-        errors.add(:field_1, "The owning organisation code is incorrect", category: :setup)
+        errors.add(:field_1, I18n.t("validations.not_answered", question: "owning organisation"), category: :setup)
       end
     end
   end
@@ -1269,7 +1269,7 @@ private
     if owning_organisation.nil?
       block_log_creation!
 
-      if errors[:field_1].blank?
+      if field_1.present? && errors[:field_1].blank?
         errors.add(:field_1, "The owning organisation code is incorrect", category: :setup)
       end
     end

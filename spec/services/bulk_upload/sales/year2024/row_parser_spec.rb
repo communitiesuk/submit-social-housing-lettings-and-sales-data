@@ -438,7 +438,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
         let(:attributes) { { bulk_upload:, field_1: "donotexist" } }
 
         it "is not permitted as a setup error" do
-          expect(parser.errors.where(:field_1, category: :setup).map(&:message)).to eql(["You must answer owning organisation"])
+          expect(parser.errors.where(:field_1, category: :setup).map(&:message)).to eql(["The owning organisation code is incorrect"])
         end
 
         it "blocks log creation" do

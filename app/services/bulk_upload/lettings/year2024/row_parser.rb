@@ -809,7 +809,7 @@ private
     if managing_organisation.nil?
       block_log_creation!
 
-      if errors[:field_2].blank?
+      if field_2.present? && errors[:field_2].blank?
         errors.add(:field_2, "The managing organisation code is incorrect", category: :setup)
       end
     end
@@ -818,7 +818,7 @@ private
   def validate_managing_org_data_given
     if field_2.blank?
       block_log_creation!
-      errors.add(:field_2, "The managing organisation code is incorrect", category: :setup)
+      errors.add(:field_2, I18n.t("validations.not_answered", question: "managing organisation"), category: :setup)
     end
   end
 
@@ -836,7 +836,7 @@ private
     if owning_organisation.nil?
       block_log_creation!
 
-      if errors[:field_1].blank?
+      if field_1.present? && errors[:field_1].blank?
         errors.add(:field_1, "The owning organisation code is incorrect", category: :setup)
       end
     end
