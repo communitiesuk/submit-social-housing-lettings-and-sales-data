@@ -76,5 +76,16 @@ RSpec.describe Log, type: :model do
         expect(model.previous_la_known).to be_nil
       end
     end
+
+    context "when hhmemb is invalid for a lettings log" do
+      subject(:model) { build(:lettings_log, :setup_completed, hhmemb: 1, joint: 1) }
+
+      it "does not blank it" do
+        model.valid?
+        model.blank_invalid_non_setup_fields!
+        expect(model.hhmemb).to be(1)
+        expect(model.joint).to be_nil
+      end
+    end
   end
 end

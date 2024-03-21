@@ -41,6 +41,12 @@ RSpec.describe Csv::LettingsLogCsvService do
         relat4: "R",
         age4_known: 1,
         incref: 0,
+        address_line1_as_entered: "address line 1 as entered",
+        address_line2_as_entered: "address line 2 as entered",
+        town_or_city_as_entered: "town or city as entered",
+        county_as_entered: "county as entered",
+        postcode_full_as_entered: "AB1 2CD",
+        la_as_entered: "la as entered",
       )
     end
     let(:user) { create(:user, :support, email: "s.port@jeemayle.com") }

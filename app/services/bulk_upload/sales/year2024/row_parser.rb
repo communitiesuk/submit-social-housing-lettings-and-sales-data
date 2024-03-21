@@ -602,7 +602,7 @@ private
   end
 
   def validate_address_option_found
-    if !log.address_options_present? && field_22.blank? && (field_23.present? || field_25.present?)
+    if log.uprn_selection.nil? && field_22.blank? && (field_23.present? || field_25.present?)
       %i[field_23 field_24 field_25 field_26 field_27 field_28].each do |field|
         errors.add(field, I18n.t("validations.no_address_found"))
       end
@@ -874,9 +874,11 @@ private
     attributes["builtype"] = field_21
     attributes["la_known"] = field_29.present? ? 1 : 0
     attributes["la"] = field_29
+    attributes["la_as_entered"] = field_29
     attributes["is_la_inferred"] = false
     attributes["pcodenk"] = 0 if postcode_full.present?
     attributes["postcode_full"] = postcode_full
+    attributes["postcode_full_as_entered"] = postcode_full
     attributes["wchair"] = field_30
 
     attributes["type"] = sale_type
@@ -942,9 +944,13 @@ private
     attributes["uprn_confirmed"] = 1 if field_22.present?
     attributes["skip_update_uprn_confirmed"] = true
     attributes["address_line1"] = field_23
+    attributes["address_line1_as_entered"] = field_23
     attributes["address_line2"] = field_24
+    attributes["address_line2_as_entered"] = field_24
     attributes["town_or_city"] = field_25
+    attributes["town_or_city_as_entered"] = field_25
     attributes["county"] = field_26
+    attributes["county_as_entered"] = field_26
     attributes["address_line1_input"] = address_line1_input
     attributes["postcode_full_input"] = postcode_full
     attributes["select_best_address_match"] = true if field_22.blank?

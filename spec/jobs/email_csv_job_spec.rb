@@ -90,10 +90,10 @@ describe EmailCsvJob do
     end
 
     it "creates a SalesLogCsvService with the correct export type" do
-      expect(Csv::SalesLogCsvService).to receive(:new).with(export_type: "labels")
+      expect(Csv::SalesLogCsvService).to receive(:new).with(user:, export_type: "labels")
       codes_only = false
       job.perform(user, nil, {}, nil, nil, codes_only, "sales")
-      expect(Csv::SalesLogCsvService).to receive(:new).with(export_type: "codes")
+      expect(Csv::SalesLogCsvService).to receive(:new).with(user:, export_type: "codes")
       codes_only = true
       job.perform(user, nil, {}, nil, nil, codes_only, "sales")
     end
