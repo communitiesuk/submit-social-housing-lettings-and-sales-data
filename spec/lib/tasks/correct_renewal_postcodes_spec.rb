@@ -182,7 +182,8 @@ RSpec.describe "correct_renewal_postcodes" do
         end
 
         it "updates the previous la and reexports the log" do
-          expect(log.ppostcode_full).to eq("E07000223")
+          expect(log.ppostcode_full).to eq(nil)
+          expect(log.prevloc).to eq("E07000223")
 
           task.invoke
           log.reload

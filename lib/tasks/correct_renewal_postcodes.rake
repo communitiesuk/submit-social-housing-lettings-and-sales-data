@@ -16,7 +16,7 @@ task correct_renewal_postcodes: :environment do
                      0
                    end
     log.is_previous_la_inferred = log.is_la_inferred
-    log.previous_la_known = 1 if log.la.present?
+    log.previous_la_known = log.la.present? ? 1 : 0
     log.prevloc = log.la
     log.values_updated_at = Time.zone.now
     log.save!
