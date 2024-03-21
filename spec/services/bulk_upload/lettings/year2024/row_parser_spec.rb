@@ -793,7 +793,7 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
         context "when non-setup questions are null" do
           let(:attributes) { setup_section_params.merge({ field_43: "" }) }
 
-          it "fetches the question's check_answer_label if it exists, otherwise it gets the question's header" do
+          it "fetches the question's check_answer_label if it exists" do
             parser.valid?
             expect(parser.errors[:field_43]).to eql(["You must answer lead tenant’s gender identity"])
           end
@@ -1398,7 +1398,7 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
         it "is not permitted as setup error" do
           setup_errors = parser.errors.select { |e| e.options[:category] == :setup }
 
-          expect(setup_errors.find { |e| e.attribute == :field_2 }.message).to eql("The managing organisation code is incorrect")
+          expect(setup_errors.find { |e| e.attribute == :field_2 }.message).to eql("You must answer managing organisation")
         end
 
         it "blocks log creation" do
