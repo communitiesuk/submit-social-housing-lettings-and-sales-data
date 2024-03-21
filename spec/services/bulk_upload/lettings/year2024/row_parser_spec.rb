@@ -798,6 +798,15 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
             expect(parser.errors[:field_43]).to eql(["You must answer lead tenant’s gender identity"])
           end
         end
+
+        context "when other null error is added" do
+          let(:attributes) { setup_section_params.merge({ field_112: nil }) }
+
+          it "only has one error added to the field" do
+            parser.valid?
+            expect(parser.errors[:field_112]).to eql(["You must answer was the letting made under the Choice-Based Lettings (CBL)?"])
+          end
+        end
       end
     end
 

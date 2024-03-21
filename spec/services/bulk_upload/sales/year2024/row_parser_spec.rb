@@ -282,6 +282,26 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
           expect(questions.map(&:id)).to eql([])
         end
       end
+
+      describe "#validate_nulls" do
+        context "when non-setup questions are null" do
+          let(:attributes) { setup_section_params.merge({ field_32: "" }) }
+
+          it "fetches the question's check_answer_label if it exists, otherwise it gets the question's header" do
+            parser.valid?
+            expect(parser.errors[:field_32]).to eql(["You must answer buyer 1’s gender identity"])
+          end
+        end
+
+        context "when other null error is added" do
+          let(:attributes) { setup_section_params.merge({ field_23: nil }) }
+
+          it "only has one error added to the field" do
+            parser.valid?
+            expect(parser.errors[:field_23]).to eql(["You must answer address line 1"])
+          end
+        end
+      end
     end
 
     context "when setup section not complete and type is not given" do
