@@ -235,21 +235,83 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
         end
 
         context "and is provided" do
-          it "returns true if mortgage, deposit and grant total does not equal market value" do
-            record.grant = 3_000
+          it "adds an error if mortgage, deposit and grant at least 1 greater than discounted value" do
+            record.mortgage = 30_000
+            record.deposit = 5_000
+            record.grant = 15_000
+            record.value = 99_998
+            record.discount = 50
             sale_information_validator.validate_discounted_ownership_value(record)
-            expect(record.errors["mortgageused"]).to include("The mortgage, deposit, and grant when added together is £18,000.00, and the purchase purchase price times by the discount is £30,000.00. These figures should be the same")
-            expect(record.errors["mortgage"]).to include("The mortgage, deposit, and grant when added together is £18,000.00, and the purchase purchase price times by the discount is £30,000.00. These figures should be the same")
-            expect(record.errors["value"]).to include("The mortgage, deposit, and grant when added together is £18,000.00, and the purchase purchase price times by the discount is £30,000.00. These figures should be the same")
-            expect(record.errors["deposit"]).to include("The mortgage, deposit, and grant when added together is £18,000.00, and the purchase purchase price times by the discount is £30,000.00. These figures should be the same")
-            expect(record.errors["ownershipsch"]).to include("The mortgage, deposit, and grant when added together is £18,000.00, and the purchase purchase price times by the discount is £30,000.00. These figures should be the same")
-            expect(record.errors["discount"]).to include("The mortgage, deposit, and grant when added together is £18,000.00, and the purchase purchase price times by the discount is £30,000.00. These figures should be the same")
-            expect(record.errors["grant"]).to include("The mortgage, deposit, and grant when added together is £18,000.00, and the purchase purchase price times by the discount is £30,000.00. These figures should be the same")
+            expect(record.errors["mortgageused"]).to include("The mortgage, deposit, and grant when added together is £50,000.00, and the purchase purchase price times by the discount is £49,999.00. These figures should be the same")
+            expect(record.errors["mortgage"]).to include("The mortgage, deposit, and grant when added together is £50,000.00, and the purchase purchase price times by the discount is £49,999.00. These figures should be the same")
+            expect(record.errors["value"]).to include("The mortgage, deposit, and grant when added together is £50,000.00, and the purchase purchase price times by the discount is £49,999.00. These figures should be the same")
+            expect(record.errors["deposit"]).to include("The mortgage, deposit, and grant when added together is £50,000.00, and the purchase purchase price times by the discount is £49,999.00. These figures should be the same")
+            expect(record.errors["ownershipsch"]).to include("The mortgage, deposit, and grant when added together is £50,000.00, and the purchase purchase price times by the discount is £49,999.00. These figures should be the same")
+            expect(record.errors["discount"]).to include("The mortgage, deposit, and grant when added together is £50,000.00, and the purchase purchase price times by the discount is £49,999.00. These figures should be the same")
+            expect(record.errors["grant"]).to include("The mortgage, deposit, and grant when added together is £50,000.00, and the purchase purchase price times by the discount is £49,999.00. These figures should be the same")
           end
 
-          it "returns false if mortgage, deposit and grant total equals market value" do
+          it "adds an error if mortgage, deposit and grant at least 1 less than discounted value" do
+            record.mortgage = 30_000
+            record.deposit = 5_000
             record.grant = 15_000
+            record.value = 100_002
+            record.discount = 50
             sale_information_validator.validate_discounted_ownership_value(record)
+            expect(record.errors["mortgageused"]).to include("The mortgage, deposit, and grant when added together is £50,000.00, and the purchase purchase price times by the discount is £50,001.00. These figures should be the same")
+            expect(record.errors["mortgage"]).to include("The mortgage, deposit, and grant when added together is £50,000.00, and the purchase purchase price times by the discount is £50,001.00. These figures should be the same")
+            expect(record.errors["value"]).to include("The mortgage, deposit, and grant when added together is £50,000.00, and the purchase purchase price times by the discount is £50,001.00. These figures should be the same")
+            expect(record.errors["deposit"]).to include("The mortgage, deposit, and grant when added together is £50,000.00, and the purchase purchase price times by the discount is £50,001.00. These figures should be the same")
+            expect(record.errors["ownershipsch"]).to include("The mortgage, deposit, and grant when added together is £50,000.00, and the purchase purchase price times by the discount is £50,001.00. These figures should be the same")
+            expect(record.errors["discount"]).to include("The mortgage, deposit, and grant when added together is £50,000.00, and the purchase purchase price times by the discount is £50,001.00. These figures should be the same")
+            expect(record.errors["grant"]).to include("The mortgage, deposit, and grant when added together is £50,000.00, and the purchase purchase price times by the discount is £50,001.00. These figures should be the same")
+          end
+
+          it "does not add an error if mortgage, deposit and grant less than 1 greater than discounted value" do
+            record.mortgage = 30_000
+            record.deposit = 5_000
+            record.grant = 15_000
+            record.value = 99_999
+            record.discount = 50
+
+            sale_information_validator.validate_discounted_ownership_value(record)
+
+            expect(record.errors["mortgageused"]).to be_empty
+            expect(record.errors["mortgage"]).to be_empty
+            expect(record.errors["value"]).to be_empty
+            expect(record.errors["deposit"]).to be_empty
+            expect(record.errors["ownershipsch"]).to be_empty
+            expect(record.errors["discount"]).to be_empty
+            expect(record.errors["grant"]).to be_empty
+          end
+
+          it "does not add an error if mortgage, deposit and grant less than 1 less than discounted value" do
+            record.mortgage = 30_000
+            record.deposit = 5_000
+            record.grant = 15_000
+            record.value = 100_001
+            record.discount = 50
+
+            sale_information_validator.validate_discounted_ownership_value(record)
+
+            expect(record.errors["mortgageused"]).to be_empty
+            expect(record.errors["mortgage"]).to be_empty
+            expect(record.errors["value"]).to be_empty
+            expect(record.errors["deposit"]).to be_empty
+            expect(record.errors["ownershipsch"]).to be_empty
+            expect(record.errors["discount"]).to be_empty
+            expect(record.errors["grant"]).to be_empty
+          end
+
+          it "does not add an error if mortgage, deposit and grant total equals discounted value" do
+            record.mortgage = 30_000
+            record.deposit = 5_000
+            record.grant = 15_000
+            record.value = 100_000
+            record.discount = 50
+
+            sale_information_validator.validate_discounted_ownership_value(record)
+
             expect(record.errors["mortgageused"]).to be_empty
             expect(record.errors["mortgage"]).to be_empty
             expect(record.errors["value"]).to be_empty
