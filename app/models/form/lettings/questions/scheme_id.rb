@@ -3,7 +3,6 @@ class Form::Lettings::Questions::SchemeId < ::Form::Question
     super("scheme_id", hsh, page)
     @check_answer_label = "Scheme name"
     @header = "What scheme is this log for?"
-    @hint_text = "Enter postcode or scheme name"
     @type = "select"
     @answer_options = answer_options
     @top_guidance_partial = "finding_scheme"
@@ -47,6 +46,15 @@ class Form::Lettings::Questions::SchemeId < ::Form::Question
 
   def get_extra_check_answer_value(lettings_log)
     lettings_log.form.get_question("postcode_full", nil).label_from_value(lettings_log.postcode_full) unless lettings_log.scheme_has_multiple_locations?
+  end
+
+  def hint_text
+    if form.start_year_after_2024?
+      "Enter postcode or scheme name.<br><br>
+        A supported housing scheme provides shared or self-contained housing for a particular client group, for example younger or vulnerable people."
+    else
+      "Enter postcode or scheme name"
+    end
   end
 
 private
