@@ -453,7 +453,6 @@ class BulkUpload::Sales::Year2024::RowParser
   validate :validate_buyer1_economic_status, on: :before_log
   validate :validate_address_option_found, on: :after_log
   validate :validate_buyer2_economic_status, on: :before_log
-  validate :validate_nulls, on: :after_log
   validate :validate_valid_radio_option, on: :before_log
 
   validate :validate_owning_org_data_given, on: :after_log
@@ -473,6 +472,8 @@ class BulkUpload::Sales::Year2024::RowParser
 
   validate :validate_nationality, on: :after_log
   validate :validate_buyer_2_nationality, on: :after_log
+
+  validate :validate_nulls, on: :after_log
 
   def self.question_for_field(field)
     QUESTIONS[field]

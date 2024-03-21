@@ -411,12 +411,12 @@ class BulkUpload::Lettings::Year2024::RowParser
   validate :validate_all_charges_given, on: :after_log, if: proc { is_carehome.zero? }
   validate :validate_address_option_found, on: :after_log
 
-  validate :validate_nulls, on: :after_log
-
   validate :validate_uprn_exists_if_any_key_address_fields_are_blank, on: :after_log, unless: -> { supported_housing? }
 
   validate :validate_incomplete_soft_validations, on: :after_log
   validate :validate_nationality, on: :after_log
+
+  validate :validate_nulls, on: :after_log
 
   def self.question_for_field(field)
     QUESTIONS[field]
