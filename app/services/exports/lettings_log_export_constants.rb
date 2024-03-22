@@ -148,6 +148,12 @@ module Exports::LettingsLogExportConstants
     "county_as_entered",
     "postcode_full_as_entered",
     "la_as_entered",
+    "net_income_value_check",
+    "rent_value_check",
+    "scharge_value_check",
+    "pscharge_value_check",
+    "supcharg_value_check",
+    "carehome_charges_value_check",
   ]
 
   (1..8).each do |index|
@@ -175,6 +181,12 @@ module Exports::LettingsLogExportConstants
     "county_as_entered",
     "postcode_full_as_entered",
     "la_as_entered",
+    "net_income_value_check",
+    "rent_value_check",
+    "scharge_value_check",
+    "pscharge_value_check",
+    "supcharg_value_check",
+    "carehome_charges_value_check",
   ]
 
   PRE_2024_EXPORT_FIELDS = Set[
