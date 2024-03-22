@@ -760,25 +760,27 @@ RSpec.describe FormController, type: :request do
             {
               id: lettings_log.id,
               lettings_log: {
-                page: page_id,
+                page: "lead_tenant_age",
                 age1: 20,
-                interruption_page_id: "retirement_value_check",
+                interruption_page_id: "age_lead_tenant_over_retirement_value_check",
               },
             }
           end
 
           before do
+            lettings_log.update!(startdate: Time.zone.local(2023, 4, 1))
             post "/lettings-logs/#{lettings_log.id}/lead-tenant-age?referrer=interruption_screen", params:
           end
 
           it "redirects back to the soft validation page" do
-            expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}/retirement-value-check")
+            expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}/age-lead-tenant-over-retirement-value-check")
           end
 
           it "displays a success banner" do
             follow_redirect!
             follow_redirect!
-            expect(response.body).to include("You have successfully updated lead tenant’s age")
+
+            expect(response.body).to include("You have successfully updated Q32: lead tenant’s age")
           end
         end
 
