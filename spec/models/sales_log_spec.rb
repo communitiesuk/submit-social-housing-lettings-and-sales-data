@@ -44,8 +44,24 @@ RSpec.describe SalesLog, type: :model do
       sales_log.update(age1: 25)
     end
 
-    it "validates other household member details" do
-      expect(validator).to receive(:validate_household_number_of_other_members)
+    it "validates partner count" do
+      expect(validator).to receive(:validate_partner_count)
+    end
+
+    it "validates person age matches economic status" do
+      expect(validator).to receive(:validate_person_age_matches_economic_status)
+    end
+
+    it "validates person age matches relationship" do
+      expect(validator).to receive(:validate_person_age_matches_relationship)
+    end
+
+    it "validates person age and relationship matches economic status" do
+      expect(validator).to receive(:validate_person_age_and_relationship_matches_economic_status)
+    end
+
+    it "validates child is over 12 years younger than lead tenant" do
+      expect(validator).to receive(:validate_child_12_years_younger)
     end
 
     it "calls the form to clear any invalid answers" do
@@ -816,6 +832,25 @@ RSpec.describe SalesLog, type: :model do
         expect(record_from_db["ppostcode_full"]).to eq(nil)
         expect(record_from_db["prevloc"]).to eq(nil)
       end
+
+      context "when validating household members derived vars" do
+        let!(:household_sales_log) do
+          create(
+            :sales_log,
+            :completed,
+            managing_organisation: owning_organisation,
+            owning_organisation:,
+            created_by: created_by_user,
+            age6: 14,
+            saledate: Time.zone.local(2024, 5, 2),
+          )
+        end
+
+        it "correctly derives economic status for tenants under 16" do
+          record_from_db = described_class.find(household_sales_log.id)
+          expect(record_from_db["ecstat6"]).to eq(9)
+        end
+      end
     end
 
     it "errors if the property postcode is emptied" do
@@ -883,11 +918,11 @@ RSpec.describe SalesLog, type: :model do
         relat5: "X",
         relat6: "P",
         income2: 0,
-        ecstat2: 9,
-        ecstat3: 7,
+        ecstat2: 7,
+        ecstat3: 9,
         age1: 47,
-        age2: 14,
-        age3: 17,
+        age2: 17,
+        age3: 14,
         age4: 88,
         age5: 19,
         age6: 46,

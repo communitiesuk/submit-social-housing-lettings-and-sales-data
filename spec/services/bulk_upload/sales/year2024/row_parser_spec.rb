@@ -886,6 +886,23 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
       end
     end
 
+    describe "address fields" do
+      context "when no address can be found" do
+        before do
+          stub_request(:get, /api\.os\.uk\/search\/places\/v1\/find/)
+            .to_return(status: 200, body: nil, headers: {})
+        end
+
+        let(:attributes) { setup_section_params.merge({ field_22: nil, field_23: "address line 1", field_25: "town or city" }) }
+
+        it "adds an appropriate error" do
+          %i[field_23 field_24 field_25 field_26 field_27 field_28].each do |field|
+            expect(parser.errors[field]).to eql(["We could not find this address. Check the address data in your CSV file is correct and complete, or select the correct address using the CORE site."])
+          end
+        end
+      end
+    end
+
     describe "#field_18" do # data protection
       let(:attributes) { setup_section_params.merge({ field_18: nil }) }
 
@@ -974,13 +991,62 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
       end
     end
 
-    describe "field_35" do # ecstat1
-      context "when buyer 1 is marked as a child" do
-        let(:attributes) { valid_attributes.merge({ field_35: "9" }) }
+    describe "field_42" do # ecstat1
+      context "when buyer 2 has no age but has ecstat as child" do
+        let(:attributes) { valid_attributes.merge({ field_38: nil, field_42: "9" }) }
 
         it "a custom validation is applied" do
-          validation_message = "Buyer 1 cannot be a child under 16"
+          validation_message = "Buyer 2 cannot have a working situation of child under 16"
+          expect(parser.errors[:field_42]).to include validation_message
+        end
+      end
+
+      context "when buyer 2 is under 16" do
+        let(:attributes) { valid_attributes.merge({ field_38: "9" }) }
+
+        it "a custom validation is applied" do
+          validation_message = "Buyer 2’s age must be between 16 and 110"
+          expect(parser.errors[:field_38]).to include validation_message
+        end
+      end
+
+      context "when buyer 2 is over 16 but has ecstat as child" do
+        let(:attributes) { valid_attributes.merge({ field_38: "17", field_42: "9" }) }
+
+        it "a custom validation is applied" do
+          validation_message = "Buyer 2's age cannot be 16 or over if their working situation is child under 16"
+          expect(parser.errors[:field_42]).to include validation_message
+          expect(parser.errors[:field_38]).to include validation_message
+        end
+      end
+    end
+
+    describe "field_35" do # ecstat1
+      context "when buyer 1 has no age but has ecstat as child" do
+        let(:attributes) { valid_attributes.merge({ field_31: nil, field_35: "9" }) }
+
+        it "a custom validation is applied" do
+          validation_message = "Buyer 1 cannot have a working situation of child under 16"
           expect(parser.errors[:field_35]).to include validation_message
+        end
+      end
+
+      context "when buyer 1 is under 16" do
+        let(:attributes) { valid_attributes.merge({ field_31: "9" }) }
+
+        it "a custom validation is applied" do
+          validation_message = "Buyer 1’s age must be between 16 and 110"
+          expect(parser.errors[:field_31]).to include validation_message
+        end
+      end
+
+      context "when buyer 1 is over 16 but has ecstat as child" do
+        let(:attributes) { valid_attributes.merge({ field_31: "17", field_35: "9" }) }
+
+        it "a custom validation is applied" do
+          validation_message = "Buyer 1's age cannot be 16 or over if their working situation is child under 16"
+          expect(parser.errors[:field_35]).to include validation_message
+          expect(parser.errors[:field_31]).to include validation_message
         end
       end
     end
@@ -1083,6 +1149,32 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
           expect(parser.log.deposit).to be(nil)
           expect(parser.errors[:field_103]).to be_empty
           expect(parser.errors[:field_109]).to be_empty
+        end
+      end
+
+      context "with non staircasing mortgage error" do
+        let(:attributes) { setup_section_params.merge(field_9: "30", field_103: "1", field_104: "10000", field_109: "5000", field_101: "30000", field_102: "28", field_86: "2") }
+
+        it "does not add a BU error on type (because it's a setup field and would block log creation)" do
+          expect(parser.errors[:field_9]).to be_empty
+        end
+
+        it "includes errors on other related fields" do
+          expect(parser.errors[:field_104]).to include("The mortgage and deposit added together is £15,000.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+          expect(parser.errors[:field_109]).to include("The mortgage and deposit added together is £15,000.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+          expect(parser.errors[:field_101]).to include("The mortgage and deposit added together is £15,000.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+          expect(parser.errors[:field_102]).to include("The mortgage and deposit added together is £15,000.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+        end
+
+        it "does not add errors to other ownership type fields" do
+          expect(parser.errors[:field_117]).to be_empty
+          expect(parser.errors[:field_126]).to be_empty
+          expect(parser.errors[:field_118]).to be_empty
+          expect(parser.errors[:field_127]).to be_empty
+          expect(parser.errors[:field_123]).to be_empty
+          expect(parser.errors[:field_130]).to be_empty
+          expect(parser.errors[:field_114]).to be_empty
+          expect(parser.errors[:field_125]).to be_empty
         end
       end
     end

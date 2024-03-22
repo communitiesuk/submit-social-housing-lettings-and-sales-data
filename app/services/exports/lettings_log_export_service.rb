@@ -258,10 +258,6 @@ module Exports
       attribute_hash["location_status"] = location.status_at(attribute_hash["startdate"])
     end
 
-    def filter_keys!(attributes)
-      attributes.reject! { |attribute| is_omitted_field?(attribute) }
-    end
-
     def is_omitted_field?(field_name, lettings_log)
       pattern_age = /age\d_known/
       details_known_prefix = "details_known_"

@@ -1324,4 +1324,42 @@ RSpec.describe Validations::Sales::SoftValidations do
       end
     end
   end
+
+  describe "#multiple_partners?" do
+    let(:record) { FactoryBot.create(:sales_log, :completed, ownershipsch: 1, jointpur: 1) }
+
+    context "when there are multiple partners" do
+      before do
+        record.hhmemb = 3
+        record.relat2 = "P"
+        record.relat3 = "P"
+      end
+
+      it "returns true" do
+        expect(record).to be_multiple_partners
+      end
+    end
+
+    context "when there are not multiple partners" do
+      before do
+        record.hhmemb = 2
+        record.relat2 = "P"
+      end
+
+      it "returns false" do
+        expect(record).not_to be_multiple_partners
+      end
+    end
+
+    context "when hhmemb is more than the number of person details we require for joint purchase" do
+      before do
+        record.hhmemb = 14
+        record.relat2 = "P"
+      end
+
+      it "correctly runs the method" do
+        expect(record).not_to be_multiple_partners
+      end
+    end
+  end
 end

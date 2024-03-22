@@ -5,7 +5,15 @@ RSpec.describe Form::Lettings::Questions::SchemeId, type: :model do
 
   let(:question_id) { nil }
   let(:question_definition) { nil }
-  let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2023, 4, 1)))) }
+  let(:page) { instance_double(Form::Page) }
+  let(:subsection) { instance_double(Form::Subsection) }
+  let(:form) { instance_double(Form, start_date: Time.zone.local(2023, 4, 1)) }
+
+  before do
+    allow(page).to receive(:subsection).and_return(subsection)
+    allow(subsection).to receive(:form).and_return(form)
+    allow(form).to receive(:start_year_after_2024?).and_return(false)
+  end
 
   it "has correct page" do
     expect(question.page).to eq(page)
@@ -27,8 +35,25 @@ RSpec.describe Form::Lettings::Questions::SchemeId, type: :model do
     expect(question.type).to eq("select")
   end
 
-  it "has the correct hint_text" do
-    expect(question.hint_text).to eq("Enter postcode or scheme name")
+  context "when 2023" do
+    before do
+      allow(form).to receive(:start_year_after_2024?).and_return(false)
+    end
+
+    it "has the correct hint_text" do
+      expect(question.hint_text).to eq("Enter postcode or scheme name")
+    end
+  end
+
+  context "when 2024" do
+    before do
+      allow(form).to receive(:start_year_after_2024?).and_return(true)
+    end
+
+    it "has the correct hint_text" do
+      expect(question.hint_text).to eq("Enter postcode or scheme name.<br><br>
+        A supported housing scheme provides shared or self-contained housing for a particular client group, for example younger or vulnerable people.")
+    end
   end
 
   it "has the correct conditional_for" do

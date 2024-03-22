@@ -136,6 +136,7 @@
     <hhtype>4</hhtype>
     <new_old>2</new_old>
     <vacdays>698</vacdays>
+    <bulk_upload_id>1</bulk_upload_id>
     <uprn/>
     <uprn_known>0</uprn_known>
     <uprn_confirmed/>
@@ -145,13 +146,19 @@
     <county/>
     <carehome_charges_value_check/>
     <discarded_at/>
-    <creation_method>1</creation_method>
+    <creation_method>2</creation_method>
     <supcharg_value_check/>
     <scharge_value_check/>
     <pscharge_value_check/>
     <duplicate_set_id/>
     <accessible_register>2</accessible_register>
     <nationality_all/>
+    <address_line1_as_entered>address line 1 as entered</address_line1_as_entered>
+    <address_line2_as_entered>address line 2 as entered</address_line2_as_entered>
+    <town_or_city_as_entered>town or city as entered</town_or_city_as_entered>
+    <county_as_entered>county as entered</county_as_entered>
+    <postcode_full_as_entered>AB1 2CD</postcode_full_as_entered>
+    <la_as_entered>la as entered</la_as_entered>
     <formid>{id}</formid>
     <owningorgid>{owning_org_id}</owningorgid>
     <owningorgname>DLUHC</owningorgname>

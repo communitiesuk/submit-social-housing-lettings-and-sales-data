@@ -76,7 +76,7 @@ FactoryBot.define do
       buy2livein { "1" }
       ecstat1 { "1" }
       ecstat2 { "1" }
-      hholdcount { "6" }
+      hholdcount { "4" }
       wheel { 1 }
       details_known_3 { 1 }
       age3_known { 0 }

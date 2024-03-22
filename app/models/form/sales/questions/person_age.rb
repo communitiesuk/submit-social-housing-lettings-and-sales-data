@@ -27,4 +27,10 @@ class Form::Sales::Questions::PersonAge < ::Form::Question
 
     base_question_number + (4 * @person_index)
   end
+
+  def hint_text
+    if form.start_year_after_2024?
+      "Answer 1 for children aged under 1 year old"
+    end
+  end
 end

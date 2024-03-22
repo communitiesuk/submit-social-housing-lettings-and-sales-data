@@ -36,6 +36,7 @@ module DerivedVariables::SalesLogVariables
 
     if saledate && form.start_year_after_2024?
       self.soctenant = soctenant_from_prevten_values
+      child_under_16_constraints!
     end
 
     self.uprn_known = 0 if address_answered_without_uprn?
@@ -44,9 +45,17 @@ module DerivedVariables::SalesLogVariables
       self.uprn = nil
     end
 
-    if uprn_confirmed&.zero?
+    if uprn_known == 1 && uprn_confirmed&.zero?
       self.uprn = nil
       self.uprn_known = 0
+      self.uprn_confirmed = nil
+      self.address_line1 = nil
+      self.address_line2 = nil
+      self.town_or_city = nil
+      self.county = nil
+      self.pcodenk = nil
+      self.postcode_full = nil
+      self.la = nil
     end
 
     self.nationality_all = nationality_all_group if nationality_uk_or_prefers_not_to_say?
@@ -121,6 +130,15 @@ private
       age = public_send("age#{i}")
       relat = public_send("relat#{i}")
       age.present? && (age.between?(20, 59) || age.between?(18, 19) && relat != "C")
+    end
+  end
+
+  def child_under_16_constraints!
+    start_index = joint_purchase? ? 3 : 2
+    (start_index..6).each do |idx|
+      if age_under_16?(idx)
+        self["ecstat#{idx}"] = 9
+      end
     end
   end
 

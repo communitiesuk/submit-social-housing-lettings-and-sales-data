@@ -150,7 +150,7 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
 
             field_42: "42",
             field_48: "41",
-            field_52: "20",
+            field_52: "17",
             field_56: "18",
             field_60: "16",
             field_64: "14",
@@ -171,7 +171,7 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
 
             field_47: "P",
             field_51: "C",
-            field_55: "X",
+            field_55: "C",
             field_59: "R",
             field_63: "C",
             field_67: "C",
@@ -179,7 +179,7 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
 
             field_46: "1",
             field_50: "2",
-            field_54: "6",
+            field_54: "7",
             field_58: "7",
             field_62: "8",
             field_66: "9",
@@ -1517,6 +1517,23 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
 
         it "doesn't add an error" do
           expect(parser.errors[:field_16]).to be_empty
+        end
+      end
+    end
+
+    describe "address fields" do
+      context "when no address can be found" do
+        before do
+          stub_request(:get, /api\.os\.uk\/search\/places\/v1\/find/)
+            .to_return(status: 200, body: nil, headers: {})
+        end
+
+        let(:attributes) { setup_section_params.merge({ field_16: nil, field_17: "address line 1", field_19: "town or city" }) }
+
+        it "adds an appropriate error" do
+          %i[field_17 field_18 field_19 field_20 field_21 field_22].each do |field|
+            expect(parser.errors[field]).to eql(["We could not find this address. Check the address data in your CSV file is correct and complete, or select the correct address using the CORE site."])
+          end
         end
       end
     end
