@@ -213,6 +213,29 @@ RSpec.describe "correct_renewal_postcodes" do
           expect(log.values_updated_at).to eq(nil)
         end
       end
+
+      context "and there there is a different validation error" do
+        let(:log) { create(:lettings_log, :completed, postcode_full: "SW1A 1AA", ppostcode_full: "AA1 1AA") }
+        let(:not_related_user) { create(:user) }
+
+        before do
+          log.renewal = 1
+          log.values_updated_at = nil
+          log.created_by = not_related_user
+          log.save!(validate: false)
+        end
+
+        it "does not updaate the log and logs the errors" do
+          expect(log.ppostcode_full).to eq("AA1 1AA")
+          expect(Rails.logger).to receive(:info).with(/Failed to save log #{log.id}:/)
+
+          task.invoke
+          log.reload
+
+          expect(log.ppostcode_full).to eq("AA1 1AA")
+          expect(log.values_updated_at).to eq(nil)
+        end
+      end
     end
   end
 end

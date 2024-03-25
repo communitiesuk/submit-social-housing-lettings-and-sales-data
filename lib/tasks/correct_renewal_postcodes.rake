@@ -19,6 +19,8 @@ task correct_renewal_postcodes: :environment do
     log.previous_la_known = log.la.present? ? 1 : 0
     log.prevloc = log.la
     log.values_updated_at = Time.zone.now
-    log.save!
+    unless log.save
+      Rails.logger.info("Failed to save log #{log.id}: #{log.errors.full_messages}")
+    end
   end
 end
