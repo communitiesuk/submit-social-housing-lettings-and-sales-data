@@ -168,14 +168,35 @@ RSpec.describe Csv::SalesLogCsvService do
     context "when the current form is 2024" do
       let(:now) { Time.zone.local(2024, 5, 1) }
 
-      it "exports the CSV with the 2024 ordering and all values correct" do
-        expected_content = CSV.read("spec/fixtures/files/sales_logs_csv_export_labels_24.csv")
-        values_to_delete = %w[id]
-        values_to_delete.each do |attribute|
-          index = csv.first.index(attribute)
-          csv.second[index] = nil
+      context "and the log is for 2024 collection period" do
+        let(:fixed_time) { Time.zone.local(2024, 5, 1) }
+
+        before do
+          log.update!(national: nil)
+          log.update!(nationality_all: 36)
         end
-        expect(csv).to eq expected_content
+
+        it "exports the CSV with the 2024 ordering and all values correct" do
+          expected_content = CSV.read("spec/fixtures/files/sales_logs_csv_export_labels_24.csv")
+          values_to_delete = %w[id]
+          values_to_delete.each do |attribute|
+            index = csv.first.index(attribute)
+            csv.second[index] = nil
+          end
+          expect(csv).to eq expected_content
+        end
+      end
+
+      context "and the log is for 2023 collection period" do
+        it "exports the CSV with the 2024 ordering and all values correct" do
+          expected_content = CSV.read("spec/fixtures/files/sales_logs_csv_export_labels_23_during_24_period.csv")
+          values_to_delete = %w[id]
+          values_to_delete.each do |attribute|
+            index = csv.first.index(attribute)
+            csv.second[index] = nil
+          end
+          expect(csv).to eq expected_content
+        end
       end
     end
 
