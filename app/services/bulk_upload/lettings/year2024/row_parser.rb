@@ -411,12 +411,13 @@ class BulkUpload::Lettings::Year2024::RowParser
   validate :validate_all_charges_given, on: :after_log, if: proc { is_carehome.zero? }
   validate :validate_address_option_found, on: :after_log
 
-  validate :validate_nulls, on: :after_log
-
   validate :validate_uprn_exists_if_any_key_address_fields_are_blank, on: :after_log, unless: -> { supported_housing? }
+  validate :validate_address_fields, on: :after_log
 
   validate :validate_incomplete_soft_validations, on: :after_log
   validate :validate_nationality, on: :after_log
+
+  validate :validate_nulls, on: :after_log
 
   def self.question_for_field(field)
     QUESTIONS[field]
@@ -574,9 +575,21 @@ private
   end
 
   def validate_address_option_found
-    if !log.address_options_present? && field_16.blank? && (field_17.present? || field_19.present?)
+    if log.uprn_selection.nil? && field_16.blank? && (field_17.present? || field_19.present?)
       %i[field_17 field_18 field_19 field_20 field_21 field_22].each do |field|
         errors.add(field, I18n.t("validations.no_address_found"))
+      end
+    end
+  end
+
+  def validate_address_fields
+    if field_16.blank? || log.errors.attribute_names.include?(:uprn)
+      if field_17.blank?
+        errors.add(:field_17, I18n.t("validations.not_answered", question: "address line 1"))
+      end
+
+      if field_19.blank?
+        errors.add(:field_19, I18n.t("validations.not_answered", question: "town or city"))
       end
     end
   end
@@ -809,7 +822,7 @@ private
     if managing_organisation.nil?
       block_log_creation!
 
-      if errors[:field_2].blank?
+      if field_2.present? && errors[:field_2].blank?
         errors.add(:field_2, "The managing organisation code is incorrect", category: :setup)
       end
     end
@@ -818,7 +831,7 @@ private
   def validate_managing_org_data_given
     if field_2.blank?
       block_log_creation!
-      errors.add(:field_2, "The managing organisation code is incorrect", category: :setup)
+      errors.add(:field_2, I18n.t("validations.not_answered", question: "managing organisation"), category: :setup)
     end
   end
 
@@ -836,7 +849,7 @@ private
     if owning_organisation.nil?
       block_log_creation!
 
-      if errors[:field_1].blank?
+      if field_1.present? && errors[:field_1].blank?
         errors.add(:field_1, "The owning organisation code is incorrect", category: :setup)
       end
     end

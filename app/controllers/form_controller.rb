@@ -249,7 +249,7 @@ private
     redirect_to lettings_log_path(@log) unless @log.collection_period_open_for_editing?
   end
 
-  CONFIRMATION_PAGE_IDS = %w[uprn_confirmation].freeze
+  CONFIRMATION_PAGE_IDS = %w[uprn_confirmation uprn_selection].freeze
 
   def correcting_duplicate_logs_redirect_path
     class_name = @log.class.name.underscore

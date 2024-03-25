@@ -230,6 +230,9 @@ module Exports
 
       attribute_hash["renttype_detail"] = LettingsLog::RENTTYPE_DETAIL_MAPPING[lettings_log.rent_type] if lettings_log.rent_type.present?
 
+      # field to be added in future
+      attribute_hash["assigned_to"] = nil
+
       attribute_hash
     end
 

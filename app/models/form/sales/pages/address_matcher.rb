@@ -17,6 +17,10 @@ class Form::Sales::Pages::AddressMatcher < ::Form::Page
     ]
   end
 
+  def submit_text
+    "Search"
+  end
+
   def skip_href(log = nil)
     return unless log
 
