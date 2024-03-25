@@ -505,6 +505,94 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
     end
   end
 
+  describe "#validate_outright_sale_value_matches_mortgage_plus_deposit" do
+    context "with a 2024 outright sale log" do
+      let(:record) { FactoryBot.build(:sales_log, value: 300_000, ownershipsch: 3, saledate: Time.zone.local(2024, 5, 1)) }
+
+      context "when a mortgage is used" do
+        before do
+          record.mortgageused = 1
+        end
+
+        context "and the mortgage plus deposit match the value" do
+          before do
+            record.mortgage = 200_000
+            record.deposit = 100_000
+          end
+
+          it "does not add errors" do
+            sale_information_validator.validate_outright_sale_value_matches_mortgage_plus_deposit(record)
+            expect(record.errors).to be_empty
+          end
+        end
+
+        context "and the mortgage plus deposit don't match the value" do
+          before do
+            record.mortgage = 100_000
+            record.deposit = 100_000
+          end
+
+          it "adds errors" do
+            sale_information_validator.validate_outright_sale_value_matches_mortgage_plus_deposit(record)
+            expect(record.errors["mortgageused"]).to include("The mortgage and deposit when added together is £200,000.00, and the purchase price is £300,000.00. These figures should be the same.")
+            expect(record.errors["mortgage"]).to include("The mortgage and deposit when added together is £200,000.00, and the purchase price is £300,000.00. These figures should be the same.")
+            expect(record.errors["deposit"]).to include("The mortgage and deposit when added together is £200,000.00, and the purchase price is £300,000.00. These figures should be the same.")
+            expect(record.errors["value"]).to include("The mortgage and deposit when added together is £200,000.00, and the purchase price is £300,000.00. These figures should be the same.")
+            expect(record.errors["ownershipsch"]).to include("The mortgage and deposit when added together is £200,000.00, and the purchase price is £300,000.00. These figures should be the same.")
+          end
+        end
+
+        context "and deposit is not provided" do
+          before do
+            record.mortgage = 100_000
+            record.deposit = nil
+          end
+
+          it "does not add errors" do
+            sale_information_validator.validate_outright_sale_value_matches_mortgage_plus_deposit(record)
+            expect(record.errors).to be_empty
+          end
+        end
+
+        context "and mortgage is not provided" do
+          before do
+            record.mortgage = nil
+            record.deposit = 100_000
+          end
+
+          it "does not add errors" do
+            sale_information_validator.validate_outright_sale_value_matches_mortgage_plus_deposit(record)
+            expect(record.errors).to be_empty
+          end
+        end
+      end
+    end
+
+    context "with a 2024 log that is not an outright sale" do
+      let(:record) { FactoryBot.build(:sales_log, value: 300_000, ownershipsch: 2, saledate: Time.zone.local(2024, 5, 1)) }
+
+      it "does not add errors" do
+        record.mortgageused = 1
+        record.mortgage = 100_000
+        record.deposit = 100_000
+        sale_information_validator.validate_outright_sale_value_matches_mortgage_plus_deposit(record)
+        expect(record.errors).to be_empty
+      end
+    end
+
+    context "with a 2023 outright sale log" do
+      let(:record) { FactoryBot.build(:sales_log, value: 300_000, ownershipsch: 3, saledate: Time.zone.local(2023, 5, 1)) }
+
+      it "does not add errors" do
+        record.mortgageused = 1
+        record.mortgage = 100_000
+        record.deposit = 100_000
+        sale_information_validator.validate_outright_sale_value_matches_mortgage_plus_deposit(record)
+        expect(record.errors).to be_empty
+      end
+    end
+  end
+
   describe "#validate_basic_monthly_rent" do
     context "when within permitted bounds" do
       let(:record) { build(:sales_log, mrent: 9998, ownershipsch: 1, type: 2) }
