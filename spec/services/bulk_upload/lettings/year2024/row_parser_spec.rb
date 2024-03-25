@@ -793,9 +793,18 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
         context "when non-setup questions are null" do
           let(:attributes) { setup_section_params.merge({ field_43: "" }) }
 
-          it "fetches the question's check_answer_label if it exists, otherwise it gets the question's header" do
+          it "fetches the question's check_answer_label if it exists" do
             parser.valid?
             expect(parser.errors[:field_43]).to eql(["You must answer lead tenant’s gender identity"])
+          end
+        end
+
+        context "when other null error is added" do
+          let(:attributes) { setup_section_params.merge({ field_112: nil }) }
+
+          it "only has one error added to the field" do
+            parser.valid?
+            expect(parser.errors[:field_112]).to eql(["You must answer was the letting made under the Choice-Based Lettings (CBL)?"])
           end
         end
       end
@@ -1389,7 +1398,7 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
         it "is not permitted as setup error" do
           setup_errors = parser.errors.select { |e| e.options[:category] == :setup }
 
-          expect(setup_errors.find { |e| e.attribute == :field_2 }.message).to eql("The managing organisation code is incorrect")
+          expect(setup_errors.find { |e| e.attribute == :field_2 }.message).to eql("You must answer managing organisation")
         end
 
         it "blocks log creation" do
@@ -1486,10 +1495,10 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
             field_1: "1" }
         end
 
-        it "does not add UPRN errors" do
+        it "does not add UPRN errors (but still adds missing address errors)" do
           expect(parser.errors[:field_16]).to be_empty
-          expect(parser.errors[:field_17]).to be_empty
-          expect(parser.errors[:field_19]).to be_empty
+          expect(parser.errors[:field_17]).to eql(["You must answer address line 1"])
+          expect(parser.errors[:field_19]).to eql(["You must answer town or city"])
         end
       end
 
