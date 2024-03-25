@@ -6,6 +6,7 @@ RSpec.describe Form::Sales::Pages::AddressMatcher, type: :model do
   let(:page_id) { nil }
   let(:page_definition) { nil }
   let(:subsection) { instance_double(Form::Subsection) }
+  let(:log) { create(:sales_log) }
 
   it "has correct subsection" do
     expect(page.subsection).to eq(subsection)
@@ -29,5 +30,11 @@ RSpec.describe Form::Sales::Pages::AddressMatcher, type: :model do
 
   it "has correct depends_on" do
     expect(page.depends_on).to eq([{ "uprn_known" => nil }, { "uprn_known" => 0 }, { "uprn_confirmed" => 0 }])
+  end
+
+  it "has the correct skip_href" do
+    expect(page.skip_href(log)).to eq(
+      "/sales-logs/#{log.id}/property-number-of-bedrooms",
+    )
   end
 end

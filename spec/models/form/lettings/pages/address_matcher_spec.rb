@@ -6,6 +6,7 @@ RSpec.describe Form::Lettings::Pages::AddressMatcher, type: :model do
   let(:page_id) { nil }
   let(:page_definition) { nil }
   let(:subsection) { instance_double(Form::Subsection) }
+  let(:log) { create(:lettings_log) }
 
   it "has correct subsection" do
     expect(page.subsection).to eq(subsection)
@@ -29,5 +30,11 @@ RSpec.describe Form::Lettings::Pages::AddressMatcher, type: :model do
 
   it "has correct depends_on" do
     expect(page.depends_on).to eq([{ "is_supported_housing?" => false, "uprn_known" => nil }, { "is_supported_housing?" => false, "uprn_known" => 0 }, { "is_supported_housing?" => false, "uprn_confirmed" => 0 }])
+  end
+
+  it "has the correct skip_href" do
+    expect(page.skip_href(log)).to eq(
+      "/lettings-logs/#{log.id}/property-unit-type",
+    )
   end
 end
