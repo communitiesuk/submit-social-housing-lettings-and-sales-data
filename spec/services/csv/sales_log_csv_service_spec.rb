@@ -166,29 +166,36 @@ RSpec.describe Csv::SalesLogCsvService do
     end
 
     context "when the current form is 2024" do
-      let(:fixed_time) { Time.zone.local(2024, 5, 1) }
       let(:now) { Time.zone.local(2024, 5, 1) }
 
-      it "exports the CSV with the 2024 ordering and all values correct" do
-        expected_content = CSV.read("spec/fixtures/files/sales_logs_csv_export_labels_24.csv")
-        values_to_delete = %w[id]
-        values_to_delete.each do |attribute|
-          index = csv.first.index(attribute)
-          csv.second[index] = nil
-        end
-        expect(csv).to eq expected_content
-      end
+      context "and the log is for 2024 collection period" do
+        let(:fixed_time) { Time.zone.local(2024, 5, 1) }
 
-      context "when the log has nationality_all" do
         before do
+          log.update!(national: nil)
           log.update!(nationality_all: 36)
         end
 
-        it "exports the id for under the heading 'nationality_all'" do
-          expect(log.nationality_all).to eq 36
-          nationality_all_column_index = csv.first.index("nationality_all")
-          nationality_all_value = csv.second[nationality_all_column_index]
-          expect(nationality_all_value).to eq "Australia"
+        it "exports the CSV with the 2024 ordering and all values correct" do
+          expected_content = CSV.read("spec/fixtures/files/sales_logs_csv_export_labels_24.csv")
+          values_to_delete = %w[id]
+          values_to_delete.each do |attribute|
+            index = csv.first.index(attribute)
+            csv.second[index] = nil
+          end
+          expect(csv).to eq expected_content
+        end
+      end
+
+      context "and the log is for 2023 collection period" do
+        it "exports the CSV with the 2024 ordering and all values correct" do
+          expected_content = CSV.read("spec/fixtures/files/sales_logs_csv_export_labels_23_during_24_period.csv")
+          values_to_delete = %w[id]
+          values_to_delete.each do |attribute|
+            index = csv.first.index(attribute)
+            csv.second[index] = nil
+          end
+          expect(csv).to eq expected_content
         end
       end
     end
