@@ -26,4 +26,12 @@ class FeatureToggle
   def self.service_moved?
     false
   end
+
+  def self.delete_scheme_enabled?
+    !Rails.env.production?
+  end
+
+  def self.delete_location_enabled?
+    !Rails.env.production?
+  end
 end

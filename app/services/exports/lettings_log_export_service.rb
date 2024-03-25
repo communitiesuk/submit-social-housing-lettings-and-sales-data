@@ -230,6 +230,9 @@ module Exports
 
       attribute_hash["renttype_detail"] = LettingsLog::RENTTYPE_DETAIL_MAPPING[lettings_log.rent_type] if lettings_log.rent_type.present?
 
+      # field to be added in future
+      attribute_hash["assigned_to"] = nil
+
       attribute_hash
     end
 
@@ -253,10 +256,6 @@ module Exports
       attribute_hash["units"] = location.units
       attribute_hash["location_code"] = location.id
       attribute_hash["location_status"] = location.status_at(attribute_hash["startdate"])
-    end
-
-    def filter_keys!(attributes)
-      attributes.reject! { |attribute| is_omitted_field?(attribute) }
     end
 
     def is_omitted_field?(field_name, lettings_log)

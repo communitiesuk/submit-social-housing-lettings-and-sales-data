@@ -1,4 +1,6 @@
 module Validations::Sales::SoftValidations
+  include Validations::Sales::SaleInformationValidations
+
   ALLOWED_INCOME_RANGES_SALES = {
     1 => OpenStruct.new(soft_min: 5000),
     2 => OpenStruct.new(soft_min: 1500),
@@ -86,14 +88,10 @@ module Validations::Sales::SoftValidations
   def shared_ownership_deposit_invalid?
     return unless saledate && collection_start_year <= 2023
     return unless mortgage || mortgageused == 2 || mortgageused == 3
-    return unless cashdis || !is_type_discount?
+    return unless cashdis || !social_homebuy?
     return unless deposit && value && equity
 
-    !within_tolerance?(mortgage_deposit_and_discount_total, value * equity / 100, 1)
-  end
-
-  def within_tolerance?(expected, actual, tolerance)
-    (expected - actual).abs <= tolerance
+    over_tolerance?(mortgage_deposit_and_discount_total, value * equity / 100, 1)
   end
 
   def mortgage_plus_deposit_less_than_discounted_value?

@@ -77,6 +77,8 @@ class Scheme < ApplicationRecord
     .where.not(id: activating_soon.pluck(:id))
   }
 
+  scope :visible, -> { where(discarded_at: nil) }
+
   validate :validate_confirmed
   validate :validate_owning_organisation
 
@@ -229,7 +231,7 @@ class Scheme < ApplicationRecord
   end
 
   def validate_confirmed
-    required_attributes = attribute_names - %w[id created_at updated_at old_id old_visible_id confirmed end_date sensitive secondary_client_group total_units deactivation_date deactivation_date_type startdate]
+    required_attributes = attribute_names - %w[id created_at updated_at old_id old_visible_id confirmed end_date sensitive secondary_client_group total_units deactivation_date deactivation_date_type startdate discarded_at]
 
     if confirmed == true
       required_attributes.any? do |attribute|
@@ -264,6 +266,7 @@ class Scheme < ApplicationRecord
   end
 
   def status_at(date)
+    return :deleted if discarded_at.present?
     return :incomplete unless confirmed && locations.confirmed.any?
     return :deactivated if open_deactivation&.deactivation_date.present? && date >= open_deactivation.deactivation_date
     return :deactivating_soon if open_deactivation&.deactivation_date.present? && date < open_deactivation.deactivation_date
@@ -287,5 +290,10 @@ class Scheme < ApplicationRecord
 
   def deactivates_in_a_long_time?
     status_at(6.months.from_now) == :deactivating_soon
+  end
+
+  def discard!
+    update!(discarded_at: Time.zone.now)
+    locations.each(&:discard!)
   end
 end

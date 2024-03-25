@@ -5,7 +5,7 @@ RSpec.describe Csv::SalesLogCsvService do
   let(:organisation) { create(:organisation) }
   let(:fixed_time) { Time.zone.local(2023, 12, 8) }
   let(:now) { Time.zone.now }
-  let(:user) { create(:user, email: "billyboy@eyeKLAUD.com") }
+  let(:user) { create(:user, :support, email: "billyboy@eyeKLAUD.com") }
   let(:log) do
     create(
       :sales_log,
@@ -24,9 +24,15 @@ RSpec.describe Csv::SalesLogCsvService do
       ecstat6: nil,
       relat6: nil,
       sex6: nil,
+      address_line1_as_entered: "address line 1 as entered",
+      address_line2_as_entered: "address line 2 as entered",
+      town_or_city_as_entered: "town or city as entered",
+      county_as_entered: "county as entered",
+      postcode_full_as_entered: "AB1 2CD",
+      la_as_entered: "la as entered",
     )
   end
-  let(:service) { described_class.new(export_type: "labels") }
+  let(:service) { described_class.new(user:, export_type: "labels") }
   let(:csv) { CSV.parse(service.prepare_csv(SalesLog.all)) }
 
   before do
@@ -162,14 +168,35 @@ RSpec.describe Csv::SalesLogCsvService do
     context "when the current form is 2024" do
       let(:now) { Time.zone.local(2024, 5, 1) }
 
-      it "exports the CSV with the 2024 ordering and all values correct" do
-        expected_content = CSV.read("spec/fixtures/files/sales_logs_csv_export_labels_24.csv")
-        values_to_delete = %w[id]
-        values_to_delete.each do |attribute|
-          index = csv.first.index(attribute)
-          csv.second[index] = nil
+      context "and the log is for 2024 collection period" do
+        let(:fixed_time) { Time.zone.local(2024, 5, 1) }
+
+        before do
+          log.update!(national: nil)
+          log.update!(nationality_all: 36)
         end
-        expect(csv).to eq expected_content
+
+        it "exports the CSV with the 2024 ordering and all values correct" do
+          expected_content = CSV.read("spec/fixtures/files/sales_logs_csv_export_labels_24.csv")
+          values_to_delete = %w[id]
+          values_to_delete.each do |attribute|
+            index = csv.first.index(attribute)
+            csv.second[index] = nil
+          end
+          expect(csv).to eq expected_content
+        end
+      end
+
+      context "and the log is for 2023 collection period" do
+        it "exports the CSV with the 2024 ordering and all values correct" do
+          expected_content = CSV.read("spec/fixtures/files/sales_logs_csv_export_labels_23_during_24_period.csv")
+          values_to_delete = %w[id]
+          values_to_delete.each do |attribute|
+            index = csv.first.index(attribute)
+            csv.second[index] = nil
+          end
+          expect(csv).to eq expected_content
+        end
       end
     end
 
@@ -201,7 +228,7 @@ RSpec.describe Csv::SalesLogCsvService do
   end
 
   context "when exporting values as codes" do
-    let(:service) { described_class.new(export_type: "codes") }
+    let(:service) { described_class.new(user:, export_type: "codes") }
 
     it "gives answers to radio questions as their codes" do
       national_column_index = csv.first.index("national")

@@ -196,6 +196,8 @@ en:
     duplicate_sets:
       one: "There is %{count} set of duplicate logs"
       other: "There are %{count} sets of duplicate logs"
+    location_deleted: "%{postcode} has been deleted."
+    scheme_deleted: "%{service_name} has been deleted."
 
   validations:
     organisation:
@@ -213,7 +215,7 @@ en:
     not_answered: "You must answer %{question}"
     invalid_option: "Enter a valid value for %{question}"
     invalid_number: "Enter a number for %{question}"
-    no_address_found: "We could not find this address. Edit the address data or fix this error on the CORE site."
+    no_address_found: "We could not find this address. Check the address data in your CSV file is correct and complete, or select the correct address using the CORE site."
 
     other_field_missing: "If %{main_field_label} is other then %{other_field_label} must be provided"
     other_field_not_required: "%{other_field_label} must not be provided if %{main_field_label} was not other"
@@ -641,11 +643,15 @@ en:
         over_discounted_london_max: "The percentage discount multiplied by the purchase price is %{discount_value}. This figure should not be more than £136,400 for properties in London."
         over_discounted_max: "The percentage discount multiplied by the purchase price is %{discount_value}. This figure should not be more than £102,400 for properties outside of London."
       non_staircasing_mortgage:
-        mortgage_used: "The mortgage and deposit added together is %{mortgage_and_deposit_total} and the purchase price times by the equity is %{expected_shared_ownership_deposit_value}. These figures should be the same."
-        mortgage_not_used: "The deposit is %{deposit} and the purchase price times by the equity is %{expected_shared_ownership_deposit_value}. As no mortgage was used, these figures should be the same."
+        mortgage_used: "The mortgage and deposit added together is %{mortgage_and_deposit_total}. The value multiplied by the percentage bought is %{expected_shared_ownership_deposit_value}. These figures should be the same."
+        mortgage_not_used: "The deposit is %{deposit} and the value multiplied by the percentage bought is %{expected_shared_ownership_deposit_value}. These figures should be the same."
+        mortgage_used_socialhomebuy: "The mortgage, deposit, and cash discount added together is %{mortgage_deposit_and_discount_total}. The value multiplied by the percentage bought is %{expected_shared_ownership_deposit_value}. These figures should be the same."
+        mortgage_not_used_socialhomebuy: "The deposit and cash discount added together is %{deposit_and_discount_total}. The value multiplied by the percentage bought is %{expected_shared_ownership_deposit_value}. These figures should be the same."
       staircasing_mortgage:
-        mortgage_used: "The mortgage and deposit added together is %{mortgage_and_deposit_total} and the percentage bought times the purchase price is %{stairbought_part_of_value}. These figures should be the same."
-        mortgage_not_used: "The deposit is %{deposit} and the percentage bought times the purchase price is %{stairbought_part_of_value}. As no mortgage was used, these figures should be the same."
+        mortgage_used: "The mortgage and deposit added together is %{mortgage_and_deposit_total}. The value multiplied by the percentage bought is %{stairbought_part_of_value}. These figures should be the same."
+        mortgage_not_used: "The deposit is %{deposit} and the value multiplied by the percentage bought is %{stairbought_part_of_value}. These figures should be the same."
+        mortgage_used_socialhomebuy: "The mortgage, deposit, and cash discount added together is %{mortgage_deposit_and_discount_total}. The value multiplied by the percentage bought is %{stairbought_part_of_value}. These figures should be the same."
+        mortgage_not_used_socialhomebuy: "The deposit and cash discount added together is %{deposit_and_discount_total}. The value multiplied by the percentage bought is %{stairbought_part_of_value}. These figures should be the same."
       stairowned:
         mortgageused_dont_know: "The percentage owned has to be 100% if the mortgage used is 'Don’t know'"
     merge_request:

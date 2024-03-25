@@ -14,11 +14,11 @@ class Form::Sales::Pages::AboutDepositWithoutDiscount < ::Form::Page
 
   def depends_on
     if form.start_year_after_2024?
-      [{ "is_type_discount?" => false, "ownershipsch" => 1, "stairowned_100?" => @optional },
+      [{ "social_homebuy?" => false, "ownershipsch" => 1, "stairowned_100?" => @optional },
        { "ownershipsch" => 2 },
        { "ownershipsch" => 3, "mortgageused" => 1 }]
     else
-      [{ "is_type_discount?" => false, "ownershipsch" => 1 },
+      [{ "social_homebuy?" => false, "ownershipsch" => 1 },
        { "ownershipsch" => 2 },
        { "ownershipsch" => 3, "mortgageused" => 1 }]
     end

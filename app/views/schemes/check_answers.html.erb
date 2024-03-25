@@ -23,4 +23,8 @@
   <% if SchemePolicy.new(current_user, @scheme).create? %>
     <%= f.govuk_submit button_label %>
   <% end %>
+
+  <% if SchemePolicy.new(current_user, @scheme).delete? && FeatureToggle.delete_scheme_enabled? %>
+    <%= delete_scheme_link(@scheme) %>
+  <% end %>
 <% end %>

@@ -16,4 +16,14 @@ class Form::Lettings::Pages::AddressMatcher < ::Form::Page
       Form::Lettings::Questions::PostcodeForAddressMatcher.new(nil, nil, self),
     ]
   end
+
+  def submit_text
+    "Search"
+  end
+
+  def skip_href(log = nil)
+    return unless log
+
+    "/#{log.model_name.param_key.dasherize}s/#{log.id}/property-unit-type"
+  end
 end
