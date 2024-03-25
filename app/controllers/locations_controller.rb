@@ -14,8 +14,8 @@ class LocationsController < ApplicationController
   def index
     authorize @scheme
 
-    @pagy, @locations = pagy(filter_manager.filtered_locations(@scheme.locations, search_term, session_filters))
-    @total_count = @scheme.locations.size
+    @pagy, @locations = pagy(filter_manager.filtered_locations(@scheme.locations.visible, search_term, session_filters))
+    @total_count = @scheme.locations.visible.size
     @searched = search_term.presence
     @filter_type = "scheme_locations"
   end
@@ -228,6 +228,11 @@ class LocationsController < ApplicationController
     else
       render "toggle_active", locals: { action: "reactivate" }, status: :unprocessable_entity
     end
+  end
+
+  def delete
+    @location.discard!
+    redirect_to scheme_locations_path(@scheme), notice: I18n.t("notification.location_deleted", postcode: @location.postcode)
   end
 
 private

@@ -51,6 +51,7 @@ RSpec.describe "locations/show.html.erb" do
       assign(:location, location)
 
       allow(view).to receive(:current_user).and_return(user)
+      allow(location).to receive(:deactivated?).and_return(false)
 
       render
 
@@ -62,6 +63,7 @@ RSpec.describe "locations/show.html.erb" do
       assign(:location, location)
 
       allow(view).to receive(:current_user).and_return(user)
+      allow(location).to receive(:deactivated?).and_return(false)
 
       render
 

@@ -44,6 +44,7 @@ RSpec.describe OrganisationsController, type: :request do
         let(:user) { create(:user, :support) }
         let!(:schemes) { create_list(:scheme, 5) }
         let!(:same_org_scheme) { create(:scheme, owning_organisation: user.organisation) }
+        let!(:deleted_scheme) { create(:scheme, owning_organisation: user.organisation, discarded_at: Time.zone.yesterday) }
 
         before do
           allow(user).to receive(:need_two_factor_authentication?).and_return(false)
@@ -129,6 +130,10 @@ RSpec.describe OrganisationsController, type: :request do
           schemes.each do |scheme|
             expect(page).not_to have_content(scheme.id_to_display)
           end
+        end
+
+        it "does not show deleted schemes" do
+          expect(page).not_to have_content(deleted_scheme.id_to_display)
         end
 
         context "when searching" do

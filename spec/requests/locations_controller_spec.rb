@@ -1405,6 +1405,23 @@ RSpec.describe LocationsController, type: :request do
         expect(page).to have_content("Check your answers")
       end
 
+      context "with an active location" do
+        it "does not render delete this location" do
+          expect(location.status).to eq(:active)
+          expect(page).not_to have_link("Delete this location", href: "/schemes/#{scheme.id}/locations/#{location.id}/delete-confirmation")
+        end
+      end
+
+      context "with an incomplete location" do
+        it "renders delete this location" do
+          location.update!(units: nil)
+          get "/schemes/#{scheme.id}/locations/#{location.id}/check-answers"
+
+          expect(location.reload.status).to eq(:incomplete)
+          expect(page).to have_link("Delete this location", href: "/schemes/#{scheme.id}/locations/#{location.id}/delete-confirmation")
+        end
+      end
+
       context "when location is confirmed" do
         let(:params) { { location: { confirmed: true } } }
 
@@ -1825,6 +1842,11 @@ RSpec.describe LocationsController, type: :request do
           expect(response).to have_http_status(:ok)
           expect(page).to have_link("Reactivate this location", href: "/schemes/#{scheme.id}/locations/#{location.id}/new-reactivation")
         end
+
+        it "does not render delete this location" do
+          expect(response).to have_http_status(:ok)
+          expect(page).not_to have_link("Delete this location", href: "/schemes/#{scheme.id}/locations/#{location.id}/delete-confirmation")
+        end
       end
 
       context "with location that's deactivating soon" do
@@ -1880,6 +1902,108 @@ RSpec.describe LocationsController, type: :request do
         it "does not allow editing the location" do
           expect(page).not_to have_link("Change")
           expect(page).not_to have_link("Deactivate this location", href: "/schemes/#{scheme.id}/locations/#{location.id}/new-deactivation")
+        end
+      end
+    end
+
+    context "when signed in as a support user" do
+      let(:user) { create(:user, :support) }
+      let(:scheme) { create(:scheme) }
+      let(:location) { create(:location, scheme:) }
+      let(:add_deactivations) { location.location_deactivation_periods << location_deactivation_period }
+
+      before do
+        Timecop.freeze(Time.utc(2022, 10, 10))
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in user
+        add_deactivations
+        location.save!
+        get "/schemes/#{scheme.id}/locations/#{location.id}"
+      end
+
+      after do
+        Timecop.unfreeze
+      end
+
+      context "with active location" do
+        let(:add_deactivations) {}
+
+        it "does not render delete this location" do
+          expect(response).to have_http_status(:ok)
+          expect(page).not_to have_link("Delete this location", href: "/schemes/#{scheme.id}/locations/#{location.id}/delete-confirmation")
+        end
+
+        it "does not render informative text about deleting the location" do
+          expect(response).to have_http_status(:ok)
+          expect(page).not_to have_content("This location was active in an open or editable collection year, and cannot be deleted.")
+        end
+      end
+
+      context "with deactivated location" do
+        let(:location_deactivation_period) { create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 10, 9), location:) }
+
+        it "renders delete this location" do
+          expect(response).to have_http_status(:ok)
+          expect(page).to have_link("Delete this location", href: "/schemes/#{scheme.id}/locations/#{location.id}/delete-confirmation")
+        end
+
+        context "and associated logs in editable collection period" do
+          before do
+            create(:lettings_log, :sh, location:, scheme:, startdate: Time.zone.local(2022, 9, 9), owning_organisation: user.organisation)
+            get "/schemes/#{scheme.id}/locations/#{location.id}"
+          end
+
+          it "does not render delete this location" do
+            expect(response).to have_http_status(:ok)
+            expect(page).not_to have_link("Delete this location", href: "/schemes/#{scheme.id}/locations/#{location.id}/delete-confirmation")
+          end
+
+          it "adds informative text about deleting the location" do
+            expect(response).to have_http_status(:ok)
+            expect(page).to have_content("This location was active in an open or editable collection year, and cannot be deleted.")
+          end
+        end
+      end
+
+      context "with incomplete location" do
+        let(:add_deactivations) {}
+
+        before do
+          location.update!(units: nil)
+          get "/schemes/#{scheme.id}/locations/#{location.id}"
+        end
+
+        it "renders delete this location" do
+          expect(location.reload.status).to eq(:incomplete)
+          expect(response).to have_http_status(:ok)
+          expect(page).to have_link("Delete this location", href: "/schemes/#{scheme.id}/locations/#{location.id}/delete-confirmation")
+        end
+      end
+
+      context "with location that's deactivating soon" do
+        let(:location_deactivation_period) { create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 10, 12), location:) }
+
+        it "does not render delete this location" do
+          expect(response).to have_http_status(:ok)
+          expect(page).not_to have_link("Delete this location", href: "/schemes/#{scheme.id}/locations/#{location.id}/delete-confirmation")
+        end
+      end
+
+      context "with location that's deactivating in more than 6 months" do
+        let(:location_deactivation_period) { create(:location_deactivation_period, deactivation_date: Time.zone.local(2023, 6, 12), location:) }
+
+        it "does not render delete this location" do
+          expect(response).to have_http_status(:ok)
+          expect(page).not_to have_link("Delete this location", href: "/schemes/#{scheme.id}/locations/#{location.id}/delete-confirmation")
+        end
+      end
+
+      context "with location that's reactivating soon" do
+        let(:location_deactivation_period) { create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 4, 12), reactivation_date: Time.zone.local(2022, 10, 12), location:) }
+
+        it "does not render delete this location" do
+          expect(response).to have_http_status(:ok)
+          expect(page).not_to have_link("Delete this location", href: "/schemes/#{scheme.id}/locations/#{location.id}/delete-confirmation")
         end
       end
     end
@@ -2036,6 +2160,152 @@ RSpec.describe LocationsController, type: :request do
         it "displays page with an error message" do
           expect(response).to have_http_status(:unprocessable_entity)
           expect(page).to have_content(I18n.t("validations.location.reactivation.before_deactivation", date: "10 October 2022"))
+        end
+      end
+    end
+  end
+
+  describe "#delete-confirmation" do
+    let(:scheme) { create(:scheme, owning_organisation: user.organisation) }
+    let(:location) { create(:location, scheme:, created_at: Time.zone.local(2022, 4, 1)) }
+
+    before do
+      get "/schemes/#{scheme.id}/locations/#{location.id}/delete-confirmation"
+    end
+
+    context "when not signed in" do
+      it "redirects to the sign in page" do
+        expect(response).to redirect_to("/account/sign-in")
+      end
+    end
+
+    context "when signed in" do
+      before do
+        Timecop.freeze(Time.utc(2022, 10, 10))
+        location.location_deactivation_periods << create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 10, 9), location:)
+        location.save!
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in user
+        get "/schemes/#{scheme.id}/locations/#{location.id}/delete-confirmation"
+      end
+
+      after do
+        Timecop.unfreeze
+      end
+
+      context "with a data provider user" do
+        let(:user) { create(:user) }
+
+        it "returns 401 unauthorized" do
+          expect(response).to have_http_status(:unauthorized)
+        end
+      end
+
+      context "with a data coordinator user" do
+        let(:user) { create(:user, :data_coordinator) }
+
+        it "returns 401 unauthorized" do
+          expect(response).to have_http_status(:unauthorized)
+        end
+      end
+
+      context "with a support user user" do
+        let(:user) { create(:user, :support) }
+
+        it "shows the correct title" do
+          expect(page.find("h1").text).to include "Are you sure you want to delete this location?"
+        end
+
+        it "shows a warning to the user" do
+          expect(page).to have_selector(".govuk-warning-text", text: "You will not be able to undo this action")
+        end
+
+        it "shows a button to delete the selected location" do
+          expect(page).to have_selector("form.button_to button", text: "Delete this location")
+        end
+
+        it "the delete location button submits the correct data to the correct path" do
+          form_containing_button = page.find("form.button_to")
+
+          expect(form_containing_button[:action]).to eq scheme_location_delete_path(scheme, location)
+          expect(form_containing_button).to have_field "_method", type: :hidden, with: "delete"
+        end
+
+        it "shows a cancel link with the correct style" do
+          expect(page).to have_selector("a.govuk-button--secondary", text: "Cancel")
+        end
+
+        it "shows cancel link that links back to the location page" do
+          expect(page).to have_link(text: "Cancel", href: scheme_location_path(scheme, location))
+        end
+      end
+    end
+  end
+
+  describe "#delete" do
+    let(:scheme) { create(:scheme, owning_organisation: user.organisation) }
+    let(:location) { create(:location, scheme:, name: "Location to delete", created_at: Time.zone.local(2022, 4, 1)) }
+
+    before do
+      Timecop.freeze(Time.utc(2022, 10, 10))
+      location.location_deactivation_periods << create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 10, 9), location:)
+      location.save!
+      delete "/schemes/#{scheme.id}/locations/#{location.id}/delete"
+    end
+
+    after do
+      Timecop.unfreeze
+    end
+
+    context "when not signed in" do
+      it "redirects to the sign in page" do
+        expect(response).to redirect_to("/account/sign-in")
+      end
+    end
+
+    context "when signed in" do
+      before do
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in user
+        delete "/schemes/#{scheme.id}/locations/#{location.id}/delete"
+      end
+
+      context "with a data provider user" do
+        let(:user) { create(:user) }
+
+        it "returns 401 unauthorized" do
+          expect(response).to have_http_status(:unauthorized)
+        end
+      end
+
+      context "with a data coordinator user" do
+        let(:user) { create(:user, :data_coordinator) }
+
+        it "returns 401 unauthorized" do
+          expect(response).to have_http_status(:unauthorized)
+        end
+      end
+
+      context "with a support user user" do
+        let(:user) { create(:user, :support) }
+
+        it "deletes the location" do
+          location.reload
+          expect(location.status).to eq(:deleted)
+          expect(location.discarded_at).not_to be nil
+        end
+
+        it "redirects to the scheme locations list and displays a notice that the location has been deleted" do
+          expect(response).to redirect_to scheme_locations_path(scheme)
+          follow_redirect!
+          expect(page).to have_selector(".govuk-notification-banner--success")
+          expect(page).to have_selector(".govuk-notification-banner--success", text: "has been deleted.")
+        end
+
+        it "does not display the deleted location" do
+          expect(response).to redirect_to scheme_locations_path(scheme)
+          follow_redirect!
+          expect(page).not_to have_content("Location to delete")
         end
       end
     end
