@@ -140,7 +140,7 @@
           </span>
         <% end %>
       <% end %>
-      <% if UserPolicy.new(current_user, @user).delete? %>
+      <% if UserPolicy.new(current_user, @user).delete? && FeatureToggle.delete_user_enabled? %>
         <%= delete_user_link(@user) %>
       <% end %>
     </div>
