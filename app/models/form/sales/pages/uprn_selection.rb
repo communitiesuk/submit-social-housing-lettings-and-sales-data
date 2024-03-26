@@ -27,6 +27,6 @@ class Form::Sales::Pages::UprnSelection < ::Form::Page
   def skip_href(log = nil)
     return unless log
 
-    "/#{log.model_name.param_key.dasherize}s/#{log.id}/address-matcher"
+    "address-matcher"
   end
 end

@@ -50,7 +50,7 @@ RSpec.describe Form::Lettings::Pages::Uprn, type: :model do
       context "with 2023/24 form" do
         it "points to address page" do
           expect(page.skip_href(log)).to eq(
-            "/lettings-logs/#{log.id}/address",
+            "address",
           )
         end
 
@@ -66,7 +66,7 @@ RSpec.describe Form::Lettings::Pages::Uprn, type: :model do
 
         it "points to address search page" do
           expect(page.skip_href(log)).to eq(
-            "/lettings-logs/#{log.id}/address-matcher",
+            "address-matcher",
           )
         end
 
