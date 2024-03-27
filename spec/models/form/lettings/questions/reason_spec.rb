@@ -105,10 +105,10 @@ RSpec.describe Form::Lettings::Questions::Reason, type: :model do
 
     it "has the correct answer_options" do
       expect(question.answer_options).to eq({
-        "50" => { "value" => "End of social housing tenancy - no fault" },
-        "51" => { "value" => "End of social housing tenancy - evicted due to anti-social behaviour (ASB)" },
-        "52" => { "value" => "End of social housing tenancy - evicted due to rent arrears" },
-        "53" => { "value" => "End of social housing tenancy - evicted for any other reason" },
+        "50" => { "value" => "End of social or private sector tenancy - no fault" },
+        "51" => { "value" => "End of social or private sector tenancy - evicted due to anti-social behaviour (ASB)" },
+        "52" => { "value" => "End of social or private sector tenancy - evicted due to rent arrears" },
+        "53" => { "value" => "End of social or private sector tenancy - evicted for any other reason" },
         "1" => { "value" => "Permanently decanted from another property owned by this landlord" },
         "2" => { "value" => "Left home country as a refugee" },
         "45" => { "value" => "Discharged from prison" },
