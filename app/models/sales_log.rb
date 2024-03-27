@@ -330,6 +330,10 @@ class SalesLog < Log
     mortgageused == 2
   end
 
+  def mortgage_use_unknown?
+    mortgageused == 3
+  end
+
   def process_postcode_changes!
     self.postcode_full = upcase_and_remove_whitespace(postcode_full)
     return if postcode_full.blank?

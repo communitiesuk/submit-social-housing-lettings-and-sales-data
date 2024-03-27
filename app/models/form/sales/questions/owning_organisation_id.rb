@@ -4,6 +4,7 @@ class Form::Sales::Questions::OwningOrganisationId < ::Form::Question
     @id = "owning_organisation_id"
     @check_answer_label = "Owning organisation"
     @header = "Which organisation owns this log?"
+    @derived = true
     @type = "select"
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
   end
@@ -69,10 +70,6 @@ class Form::Sales::Questions::OwningOrganisationId < ::Form::Question
     return unless value
 
     answer_options(log, user)[value]
-  end
-
-  def derived?
-    true
   end
 
   def hidden_in_check_answers?(_log, user = nil)

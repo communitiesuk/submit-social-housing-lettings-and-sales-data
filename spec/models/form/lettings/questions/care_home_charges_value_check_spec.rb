@@ -27,7 +27,7 @@ RSpec.describe Form::Lettings::Questions::CareHomeChargesValueCheck, type: :mode
   end
 
   it "is not marked as derived" do
-    expect(question.derived?).to be false
+    expect(question.derived?(nil)).to be false
   end
 
   it "has the correct hint" do

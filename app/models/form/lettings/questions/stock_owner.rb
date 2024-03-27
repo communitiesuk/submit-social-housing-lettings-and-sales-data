@@ -4,6 +4,7 @@ class Form::Lettings::Questions::StockOwner < ::Form::Question
     @id = "owning_organisation_id"
     @check_answer_label = "Stock owner"
     @header = "Which organisation owns this property?"
+    @derived = true
     @type = "select"
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max] if form.start_date.present?
   end
@@ -58,10 +59,6 @@ class Form::Lettings::Questions::StockOwner < ::Form::Question
     return unless value
 
     answer_options(log, user)[value]
-  end
-
-  def derived?
-    true
   end
 
   def hidden_in_check_answers?(_log, user = nil)

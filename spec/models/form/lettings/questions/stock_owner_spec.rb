@@ -250,7 +250,7 @@ RSpec.describe Form::Lettings::Questions::StockOwner, type: :model do
   end
 
   it "is marked as derived" do
-    expect(question.derived?).to be true
+    expect(question.derived?(nil)).to be true
   end
 
   describe "#hidden_in_check_answers?" do

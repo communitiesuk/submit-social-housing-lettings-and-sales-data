@@ -78,7 +78,7 @@ RSpec.describe Form::Sales::Questions::BuyerPrevious, type: :model do
     end
 
     it "is not marked as derived" do
-      expect(question.derived?).to be false
+      expect(question.derived?(nil)).to be false
     end
   end
 
@@ -88,7 +88,7 @@ RSpec.describe Form::Sales::Questions::BuyerPrevious, type: :model do
     end
 
     it "is marked as derived" do
-      expect(question.derived?).to be true
+      expect(question.derived?(nil)).to be true
     end
   end
 end

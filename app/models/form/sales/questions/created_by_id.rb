@@ -6,6 +6,7 @@ class Form::Sales::Questions::CreatedById < ::Form::Question
     @id = "created_by_id"
     @check_answer_label = "Log owner"
     @header = "Which user are you creating this log for?"
+    @derived = true
     @type = "select"
   end
 
@@ -44,10 +45,6 @@ class Form::Sales::Questions::CreatedById < ::Form::Question
     return false if current_user.support?
     return false if current_user.data_coordinator?
 
-    true
-  end
-
-  def derived?
     true
   end
 

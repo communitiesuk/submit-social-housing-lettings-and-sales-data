@@ -99,7 +99,7 @@ class Form::Question
     page.routed_to?(log, nil) && enabled?(log)
   end
 
-  def derived?
+  def derived?(_log)
     !!derived
   end
 

@@ -4,6 +4,7 @@ class Form::Lettings::Questions::ManagingOrganisation < ::Form::Question
     @id = "managing_organisation_id"
     @check_answer_label = "Managing agent"
     @header = "Which organisation manages this letting?"
+    @derived = true
     @type = "select"
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max] if form.start_date.present?
   end
@@ -60,10 +61,6 @@ class Form::Lettings::Questions::ManagingOrganisation < ::Form::Question
     return unless value
 
     answer_options[value]
-  end
-
-  def derived?
-    true
   end
 
   def hidden_in_check_answers?(log, user = nil)

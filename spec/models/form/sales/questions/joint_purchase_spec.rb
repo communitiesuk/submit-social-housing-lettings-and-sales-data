@@ -35,7 +35,7 @@ RSpec.describe Form::Sales::Questions::JointPurchase, type: :model do
   end
 
   it "is not marked as derived" do
-    expect(question.derived?).to be false
+    expect(question.derived?(nil)).to be false
   end
 
   it "has the correct answer_options" do

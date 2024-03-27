@@ -6,6 +6,7 @@ class Form::Lettings::Questions::CreatedById < ::Form::Question
     @id = "created_by_id"
     @check_answer_label = "Log owner"
     @header = "Which user are you creating this log for?"
+    @derived = true
     @type = "select"
   end
 
@@ -42,10 +43,6 @@ class Form::Lettings::Questions::CreatedById < ::Form::Question
     return unless value
 
     present_user(User.find(value))
-  end
-
-  def derived?
-    true
   end
 
 private

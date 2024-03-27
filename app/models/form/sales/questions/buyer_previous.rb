@@ -22,7 +22,7 @@ class Form::Sales::Questions::BuyerPrevious < ::Form::Question
     }
   end
 
-  def derived?
+  def derived?(_log)
     form.start_year_after_2024?
   end
 
