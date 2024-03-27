@@ -44,7 +44,7 @@ RSpec.describe Form::Lettings::Questions::Reason, type: :model do
   end
 
   it "is not marked as derived" do
-    expect(question).not_to be_derived
+    expect(question).not_to be_derived(nil)
   end
 
   context "with 2023/24 form" do

@@ -36,7 +36,7 @@ RSpec.describe Form::Lettings::Questions::LocationId, type: :model do
   end
 
   it "is marked as derived" do
-    expect(question).not_to be_derived
+    expect(question).not_to be_derived(nil)
   end
 
   context "when there are no locations" do
