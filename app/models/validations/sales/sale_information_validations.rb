@@ -54,6 +54,20 @@ module Validations::Sales::SaleInformationValidations
     end
   end
 
+  def validate_outright_sale_value_matches_mortgage_plus_deposit(record)
+    return unless record.saledate && record.form.start_year_after_2024?
+    return unless record.outright_sale?
+    return unless record.mortgage_used? && record.mortgage
+    return unless record.deposit && record.value
+
+    if over_tolerance?(record.mortgage_and_deposit_total, record.value, 1)
+      %i[mortgageused mortgage value deposit].each do |field|
+        record.errors.add field, I18n.t("validations.sale_information.outright_sale_value", mortgage_and_deposit_total: record.field_formatted_as_currency("mortgage_and_deposit_total"), value: record.field_formatted_as_currency("value"))
+      end
+      record.errors.add :ownershipsch, :skip_bu_error, message: I18n.t("validations.sale_information.outright_sale_value", mortgage_and_deposit_total: record.field_formatted_as_currency("mortgage_and_deposit_total"), value: record.field_formatted_as_currency("value"))
+    end
+  end
+
   def validate_basic_monthly_rent(record)
     return unless record.mrent && record.ownershipsch && record.type
 
