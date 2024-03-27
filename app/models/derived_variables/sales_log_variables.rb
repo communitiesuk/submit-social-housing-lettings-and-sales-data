@@ -20,15 +20,8 @@ module DerivedVariables::SalesLogVariables
 
     if outright_sale? && mortgage_not_used?
       self.deposit = value
-    elsif outright_sale? && mortgage_use_unknown?
-      self.deposit = nil
-    elsif outright_sale? && mortgageused_changed? && !deposit_changed?
-      # Clear when switching to mortgage used
-      self.deposit = nil
-    elsif ownershipsch_changed?(from: 3) &&
-        ((mortgage_not_used? && !mortgageused_changed?) || mortgageused_changed?(from: 2)) &&
-        !deposit_changed?
-      # Clear when switching to to different ownership type
+    elsif outright_sale? && mortgageused_changed?(from: 2, to: 1)
+      # Clear when switching mortgage used from no to yes
       self.deposit = nil
     end
 

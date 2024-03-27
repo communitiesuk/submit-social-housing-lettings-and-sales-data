@@ -270,7 +270,7 @@ class Form
                         else
                           questions.reject { |q| %w[radio checkbox].include?(q.type) || q.disable_clearing_if_not_routed_or_dynamic_answer_options }
                         end
-    routed, not_routed = questions_by_type.partition { |q| q.page.routed_to?(log, current_user) || q.derived? }
+    routed, not_routed = questions_by_type.partition { |q| q.page.routed_to?(log, current_user) || q.derived?(log) }
     { routed:, not_routed: }
   end
 
