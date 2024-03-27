@@ -18,10 +18,10 @@ class Form::Lettings::Questions::ReasonRenewal < ::Form::Question
   def answer_options
     if form.start_year_after_2024?
       {
-        "50" => { "value" => "End of social housing tenancy - no fault" },
-        "51" => { "value" => "End of social housing tenancy - evicted due to anti-social behaviour (ASB)" },
-        "52" => { "value" => "End of social housing tenancy - evicted due to rent arrears" },
-        "53" => { "value" => "End of social housing tenancy - evicted for any other reason" },
+        "50" => { "value" => "End of social or private sector tenancy - no fault" },
+        "51" => { "value" => "End of social or private sector tenancy - evicted due to anti-social behaviour (ASB)" },
+        "52" => { "value" => "End of social or private sector tenancy - evicted due to rent arrears" },
+        "53" => { "value" => "End of social or private sector tenancy - evicted for any other reason" },
         "20" => { "value" => "Other" },
         "47" => { "value" => "Tenant prefers not to say" },
         "divider" => { "value" => true },
