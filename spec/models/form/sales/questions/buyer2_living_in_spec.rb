@@ -26,7 +26,7 @@ RSpec.describe Form::Sales::Questions::Buyer2LivingIn, type: :model do
   end
 
   it "is not marked as derived" do
-    expect(question.derived?).to be false
+    expect(question.derived?(nil)).to be false
   end
 
   it "has the correct hint_text" do

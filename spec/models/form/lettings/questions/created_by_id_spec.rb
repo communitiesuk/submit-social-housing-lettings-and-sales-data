@@ -38,7 +38,7 @@ RSpec.describe Form::Lettings::Questions::CreatedById, type: :model do
   end
 
   it "is marked as derived" do
-    expect(question.derived?).to be true
+    expect(question.derived?(nil)).to be true
   end
 
   def expected_option_for_users(users)
