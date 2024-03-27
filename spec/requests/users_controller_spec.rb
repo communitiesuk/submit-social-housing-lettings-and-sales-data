@@ -103,13 +103,30 @@ RSpec.describe UsersController, type: :request do
         expect(response).to redirect_to(new_user_session_path)
       end
     end
+
+    describe "#delete-confirmation" do
+      it "redirects to the sign in page" do
+        get "/users/#{user.id}/delete-confirmation"
+        expect(response).to redirect_to("/account/sign-in")
+      end
+    end
+
+    describe "#delete" do
+      it "redirects to the sign in page" do
+        delete "/users/#{user.id}/delete"
+        expect(response).to redirect_to("/account/sign-in")
+      end
+    end
   end
 
   context "when user is signed in as a data provider" do
+    before do
+      sign_in user
+    end
+
     describe "#show" do
       context "when the current user matches the user ID" do
         before do
-          sign_in user
           get "/users/#{user.id}", headers:, params: {}
         end
 
@@ -155,7 +172,6 @@ RSpec.describe UsersController, type: :request do
         let(:user) { create(:user, role: nil) }
 
         before do
-          sign_in user
           get "/users/#{user.id}", headers:, params: {}
         end
 
@@ -166,7 +182,6 @@ RSpec.describe UsersController, type: :request do
 
       context "when the current user does not match the user ID" do
         before do
-          sign_in user
           get "/users/#{other_user.id}", headers:, params: {}
         end
 
@@ -223,7 +238,6 @@ RSpec.describe UsersController, type: :request do
     describe "#edit" do
       context "when the current user matches the user ID" do
         before do
-          sign_in user
           get "/users/#{user.id}/edit", headers:, params: {}
         end
 
@@ -242,7 +256,6 @@ RSpec.describe UsersController, type: :request do
 
       context "when the current user does not match the user ID" do
         before do
-          sign_in user
           get "/users/#{other_user.id}/edit", headers:, params: {}
         end
 
@@ -255,7 +268,6 @@ RSpec.describe UsersController, type: :request do
     describe "#edit_password" do
       context "when the current user matches the user ID" do
         before do
-          sign_in user
           get "/account/edit/password", headers:, params: {}
         end
 
@@ -270,7 +282,6 @@ RSpec.describe UsersController, type: :request do
 
       context "when the current user does not match the user ID" do
         before do
-          sign_in user
           get "/users/#{other_user.id}/edit", headers:, params: {}
         end
 
@@ -283,7 +294,6 @@ RSpec.describe UsersController, type: :request do
     describe "#update" do
       context "when the current user matches the user ID" do
         before do
-          sign_in user
           patch "/users/#{user.id}", headers:, params:
         end
 
@@ -313,7 +323,6 @@ RSpec.describe UsersController, type: :request do
 
       context "when the update fails to persist" do
         before do
-          sign_in user
           allow(User).to receive(:find_by).and_return(user)
           allow(user).to receive(:update).and_return(false)
           patch "/users/#{user.id}", headers:, params:
@@ -328,7 +337,6 @@ RSpec.describe UsersController, type: :request do
         let(:params) { { id: other_user.id, user: { name: new_name } } }
 
         before do
-          sign_in user
           patch "/users/#{other_user.id}", headers:, params:
         end
 
@@ -345,7 +353,6 @@ RSpec.describe UsersController, type: :request do
         end
 
         before do
-          sign_in user
           patch "/users/#{user.id}", headers:, params:
         end
 
@@ -368,10 +375,6 @@ RSpec.describe UsersController, type: :request do
       end
       let(:request) { post "/users/", headers:, params: }
 
-      before do
-        sign_in user
-      end
-
       it "does not invite a new user" do
         expect { request }.not_to change(User, :count)
       end
@@ -381,17 +384,37 @@ RSpec.describe UsersController, type: :request do
         expect(response).to have_http_status(:unauthorized)
       end
     end
+
+    describe "#delete-confirmation" do
+      before do
+        get "/users/#{user.id}/delete-confirmation"
+      end
+
+      it "returns 401 unauthorized" do
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    describe "#delete" do
+      before do
+        delete "/users/#{user.id}/delete"
+      end
+
+      it "returns 401 unauthorized" do
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
   end
 
   context "when user is signed in as a data coordinator" do
     let(:user) { create(:user, :data_coordinator, email: "coordinator@example.com", organisation: create(:organisation, :without_dpc)) }
     let!(:other_user) { create(:user, organisation: user.organisation, name: "filter name", email: "filter@example.com") }
 
-    describe "#index" do
-      before do
-        sign_in user
-      end
+    before do
+      sign_in user
+    end
 
+    describe "#index" do
       context "when there are no url params" do
         before do
           get "/users", headers:, params: {}
@@ -532,7 +555,6 @@ RSpec.describe UsersController, type: :request do
       let(:user) { create(:user) }
 
       before do
-        sign_in user
         get "/users", headers:, params: {}
       end
 
@@ -544,7 +566,6 @@ RSpec.describe UsersController, type: :request do
     describe "#show" do
       context "when the current user matches the user ID" do
         before do
-          sign_in user
           get "/users/#{user.id}", headers:, params: {}
         end
 
@@ -579,12 +600,15 @@ RSpec.describe UsersController, type: :request do
           it "does not allow resending invitation emails" do
             expect(page).not_to have_button("Resend invite link")
           end
+
+          it "does not allow deleting the the user" do
+            expect(page).not_to have_link("Delete this user", href: "/users/#{user.id}/delete-confirmation")
+          end
         end
       end
 
       context "when the current user does not match the user ID" do
         before do
-          sign_in user
           get "/users/#{other_user.id}", headers:, params: {}
         end
 
@@ -622,7 +646,7 @@ RSpec.describe UsersController, type: :request do
             end
 
             it "shows if user is not active" do
-              expect(page).to have_content("Deactivated")
+              assert_select ".govuk-tag", text: /Deactivated/, count: 1
             end
 
             it "allows reactivating the user" do
@@ -652,7 +676,6 @@ RSpec.describe UsersController, type: :request do
     describe "#edit" do
       context "when the current user matches the user ID" do
         before do
-          sign_in user
           get "/users/#{user.id}/edit", headers:, params: {}
         end
 
@@ -673,7 +696,6 @@ RSpec.describe UsersController, type: :request do
 
       context "when the current user does not match the user ID" do
         before do
-          sign_in user
           get "/users/#{other_user.id}/edit", headers:, params: {}
         end
 
@@ -706,7 +728,6 @@ RSpec.describe UsersController, type: :request do
     describe "#edit_password" do
       context "when the current user matches the user ID" do
         before do
-          sign_in user
           get "/account/edit/password", headers:, params: {}
         end
 
@@ -720,10 +741,6 @@ RSpec.describe UsersController, type: :request do
       end
 
       context "when the current user does not match the user ID" do
-        before do
-          sign_in user
-        end
-
         it "there is no route" do
           expect {
             get "/users/#{other_user.id}/password/edit", headers:, params: {}
@@ -735,7 +752,6 @@ RSpec.describe UsersController, type: :request do
     describe "#update" do
       context "when the current user matches the user ID" do
         before do
-          sign_in user
           patch "/users/#{user.id}", headers:, params:
         end
 
@@ -770,7 +786,6 @@ RSpec.describe UsersController, type: :request do
           end
 
           before do
-            sign_in user
             patch "/users/#{user.id}", headers:, params:
           end
 
@@ -782,10 +797,6 @@ RSpec.describe UsersController, type: :request do
       end
 
       context "when the current user does not match the user ID" do
-        before do
-          sign_in user
-        end
-
         context "when the user is part of the same organisation as the current user" do
           it "updates the user" do
             expect { patch "/users/#{other_user.id}", headers:, params: }
@@ -871,7 +882,6 @@ RSpec.describe UsersController, type: :request do
             let(:params) { { id: other_user.id, user: { name: new_name } } }
 
             before do
-              sign_in user
               patch "/users/#{other_user.id}", headers:, params:
             end
 
@@ -884,7 +894,6 @@ RSpec.describe UsersController, type: :request do
 
       context "when the update fails to persist" do
         before do
-          sign_in user
           allow(User).to receive(:find_by).and_return(user)
           allow(user).to receive(:update).and_return(false)
           patch "/users/#{user.id}", headers:, params:
@@ -905,7 +914,6 @@ RSpec.describe UsersController, type: :request do
         end
 
         before do
-          sign_in user
           patch "/users/#{user.id}", headers:, params:
         end
 
@@ -976,10 +984,6 @@ RSpec.describe UsersController, type: :request do
         }
       end
       let(:request) { post "/users/", headers:, params: }
-
-      before do
-        sign_in user
-      end
 
       it "invites a new user" do
         expect { request }.to change(User, :count).by(1)
@@ -1102,10 +1106,6 @@ RSpec.describe UsersController, type: :request do
     end
 
     describe "#new" do
-      before do
-        sign_in user
-      end
-
       it "cannot assign support role to the new user" do
         get "/users/new"
         expect(page).not_to have_field("user-role-support-field")
@@ -1113,10 +1113,6 @@ RSpec.describe UsersController, type: :request do
     end
 
     describe "#deactivate" do
-      before do
-        sign_in user
-      end
-
       context "when the current user matches the user ID" do
         before do
           get "/users/#{user.id}/deactivate", headers:, params: {}
@@ -1143,10 +1139,6 @@ RSpec.describe UsersController, type: :request do
     end
 
     describe "#reactivate" do
-      before do
-        sign_in user
-      end
-
       context "when the current user does not match the user ID" do
         before do
           other_user.update!(active: false)
@@ -1162,6 +1154,26 @@ RSpec.describe UsersController, type: :request do
         end
       end
     end
+
+    describe "#delete-confirmation" do
+      before do
+        get "/users/#{user.id}/delete-confirmation"
+      end
+
+      it "returns 401 unauthorized" do
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    describe "#delete" do
+      before do
+        delete "/users/#{user.id}/delete"
+      end
+
+      it "returns 401 unauthorized" do
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
   end
 
   context "when user is signed in as a support user" do
@@ -1170,15 +1182,15 @@ RSpec.describe UsersController, type: :request do
 
     before do
       allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+      sign_in user
     end
 
     describe "#index" do
       let!(:other_user) { create(:user, organisation: user.organisation, name: "User 2", email: "other@example.com") }
-      let!(:inactive_user) { create(:user, organisation: user.organisation, active: false, name: "User 3", email: "inactive@example.com") }
+      let!(:inactive_user) { create(:user, organisation: user.organisation, active: false, name: "User 3", email: "inactive@example.com", last_sign_in_at: Time.zone.local(2022, 10, 10)) }
       let!(:other_org_user) { create(:user, name: "User 4", email: "otherorg@otherexample.com", organisation: create(:organisation, :without_dpc)) }
 
       before do
-        sign_in user
         get "/users", headers:, params: {}
       end
 
@@ -1189,7 +1201,11 @@ RSpec.describe UsersController, type: :request do
         expect(page).to have_content(other_org_user.name)
       end
 
-      it "shows last logged in as deactivated for inactive users" do
+      it "shows last logged in date for all users" do
+        expect(page).to have_content("10 October 2022")
+      end
+
+      it "shows status tag as deactivated for inactive users" do
         expect(page).to have_content("Deactivated")
       end
 
@@ -1326,7 +1342,6 @@ RSpec.describe UsersController, type: :request do
 
       before do
         create_list(:user, 25)
-        sign_in user
       end
 
       context "when there is no search param" do
@@ -1371,7 +1386,6 @@ RSpec.describe UsersController, type: :request do
     describe "#show" do
       context "when the current user matches the user ID" do
         before do
-          sign_in user
           get "/users/#{user.id}", headers:, params: {}
         end
 
@@ -1396,7 +1410,6 @@ RSpec.describe UsersController, type: :request do
 
       context "when the current user does not match the user ID" do
         before do
-          sign_in user
           get "/users/#{other_user.id}", headers:, params: {}
         end
 
@@ -1425,6 +1438,10 @@ RSpec.describe UsersController, type: :request do
 
           it "allows deactivating the user" do
             expect(page).to have_link("Deactivate user", href: "/users/#{other_user.id}/deactivate")
+          end
+
+          it "does not alow deleting the the user" do
+            expect(page).not_to have_link("Delete this user", href: "/users/#{other_user.id}/delete-confirmation")
           end
 
           context "when user never logged in" do
@@ -1458,6 +1475,10 @@ RSpec.describe UsersController, type: :request do
             it "allows you to resend invitation emails" do
               expect(page).to have_button("Resend invite link")
             end
+
+            it "does not allow deleting the the user" do
+              expect(page).not_to have_link("Delete this user", href: "/users/#{other_user.id}/delete-confirmation")
+            end
           end
 
           context "when user is deactivated" do
@@ -1467,11 +1488,38 @@ RSpec.describe UsersController, type: :request do
             end
 
             it "shows if user is not active" do
-              expect(page).to have_content("Deactivated")
+              assert_select ".govuk-tag", text: /Deactivated/, count: 1
             end
 
             it "allows reactivating the user" do
               expect(page).to have_link("Reactivate user", href: "/users/#{other_user.id}/reactivate")
+            end
+
+            it "allows deleting the the user" do
+              expect(page).to have_link("Delete this user", href: "/users/#{other_user.id}/delete-confirmation")
+            end
+
+            it "does not render informative text about deleting the user" do
+              expect(response).to have_http_status(:ok)
+              expect(page).not_to have_content("This user was active in an open or editable collection year, and cannot be deleted.")
+            end
+
+            context "and has associated logs in editable collection period" do
+              before do
+                create(:data_protection_confirmation, organisation: other_user.organisation, confirmed: true)
+                create(:lettings_log, owning_organisation: other_user.organisation, created_by: other_user)
+                get "/users/#{other_user.id}"
+              end
+
+              it "does not render delete this user" do
+                expect(response).to have_http_status(:ok)
+                expect(page).not_to have_link("Delete this user", href: "/users/#{user.id}/delete-confirmation")
+              end
+
+              it "adds informative text about deleting the user" do
+                expect(response).to have_http_status(:ok)
+                expect(page).to have_content("This user was active in an open or editable collection year, and cannot be deleted.")
+              end
             end
           end
         end
@@ -1503,7 +1551,6 @@ RSpec.describe UsersController, type: :request do
     describe "#edit" do
       context "when the current user matches the user ID" do
         before do
-          sign_in user
           get "/users/#{user.id}/edit", headers:, params: {}
         end
 
@@ -1525,7 +1572,6 @@ RSpec.describe UsersController, type: :request do
 
       context "when the current user does not match the user ID" do
         before do
-          sign_in user
           get "/users/#{other_user.id}/edit", headers:, params: {}
         end
 
@@ -1581,7 +1627,6 @@ RSpec.describe UsersController, type: :request do
     describe "#edit_password" do
       context "when the current user matches the user ID" do
         before do
-          sign_in user
           get "/account/edit/password", headers:, params: {}
         end
 
@@ -1595,10 +1640,6 @@ RSpec.describe UsersController, type: :request do
       end
 
       context "when the current user does not match the user ID" do
-        before do
-          sign_in user
-        end
-
         it "there is no route" do
           expect {
             get "/users/#{other_user.id}/password/edit", headers:, params: {}
@@ -1610,10 +1651,6 @@ RSpec.describe UsersController, type: :request do
     describe "#update" do
       context "when the current user matches the user ID" do
         let(:request) { patch "/users/#{user.id}", headers:, params: }
-
-        before do
-          sign_in user
-        end
 
         it "updates the user" do
           request
@@ -1726,7 +1763,6 @@ RSpec.describe UsersController, type: :request do
           end
 
           before do
-            sign_in user
             patch "/users/#{user.id}", headers:, params:
           end
 
@@ -1738,10 +1774,6 @@ RSpec.describe UsersController, type: :request do
       end
 
       context "when the current user does not match the user ID" do
-        before do
-          sign_in user
-        end
-
         context "when the user is part of the same organisation as the current user" do
           it "updates the user" do
             expect { patch "/users/#{other_user.id}", headers:, params: }
@@ -1795,10 +1827,6 @@ RSpec.describe UsersController, type: :request do
           context "when the user is not part of the same organisation as the current user" do
             let(:other_user) { create(:user) }
             let(:params) { { id: other_user.id, user: { name: new_name } } }
-
-            before do
-              sign_in user
-            end
 
             it "updates the user" do
               expect { patch "/users/#{other_user.id}", headers:, params: }
@@ -1886,7 +1914,6 @@ RSpec.describe UsersController, type: :request do
 
       context "when the update fails to persist" do
         before do
-          sign_in user
           allow(User).to receive(:find_by).and_return(user)
           allow(user).to receive(:update).and_return(false)
           patch "/users/#{user.id}", headers:, params:
@@ -1913,10 +1940,6 @@ RSpec.describe UsersController, type: :request do
         }
       end
       let(:request) { post "/users/", headers:, params: }
-
-      before do
-        sign_in user
-      end
 
       it "invites a new user" do
         expect { request }.to change(User, :count).by(1)
@@ -1990,7 +2013,6 @@ RSpec.describe UsersController, type: :request do
 
     describe "#new" do
       before do
-        sign_in user
         create(:organisation, name: "other org")
       end
 
@@ -2016,6 +2038,68 @@ RSpec.describe UsersController, type: :request do
             expect(page).to have_select("user-organisation-id-field", options: [user.organisation.name])
           end
         end
+      end
+    end
+
+    describe "#delete-confirmation" do
+      let(:other_user) { create(:user, active: false) }
+
+      before do
+        get "/users/#{other_user.id}/delete-confirmation"
+      end
+
+      it "shows the correct title" do
+        expect(page.find("h1").text).to include "Are you sure you want to delete this user?"
+      end
+
+      it "shows a warning to the user" do
+        expect(page).to have_selector(".govuk-warning-text", text: "You will not be able to undo this action")
+      end
+
+      it "shows a button to delete the selected user" do
+        expect(page).to have_selector("form.button_to button", text: "Delete this user")
+      end
+
+      it "the delete user button submits the correct data to the correct path" do
+        form_containing_button = page.find("form.button_to")
+
+        expect(form_containing_button[:action]).to eq delete_user_path(other_user)
+        expect(form_containing_button).to have_field "_method", type: :hidden, with: "delete"
+      end
+
+      it "shows a cancel link with the correct style" do
+        expect(page).to have_selector("a.govuk-button--secondary", text: "Cancel")
+      end
+
+      it "shows cancel link that links back to the user page" do
+        expect(page).to have_link(text: "Cancel", href: user_path(other_user))
+      end
+    end
+
+    describe "#delete" do
+      let(:other_user) { create(:user, name: "User to be deleted", active: false) }
+
+      before do
+        delete "/users/#{other_user.id}/delete"
+      end
+
+      it "deletes the user" do
+        other_user.reload
+        expect(other_user.status).to eq(:deleted)
+        expect(other_user.discarded_at).not_to be nil
+      end
+
+      it "redirects to the users list and displays a notice that the user has been deleted" do
+        expect(response).to redirect_to users_organisation_path(other_user.organisation)
+        follow_redirect!
+        expect(page).to have_selector(".govuk-notification-banner--success")
+        expect(page).to have_selector(".govuk-notification-banner--success", text: "User to be deleted has been deleted.")
+      end
+
+      it "does not display the deleted user" do
+        expect(response).to redirect_to users_organisation_path(other_user.organisation)
+        follow_redirect!
+        expect(page).not_to have_link("User to be deleted")
       end
     end
   end

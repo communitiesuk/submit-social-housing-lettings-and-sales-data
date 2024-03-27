@@ -33,4 +33,29 @@ class UserPolicy
       (@current_user == @user || @current_user.data_coordinator? || @current_user.support?) && @user.active?
     end
   end
+
+  def delete_confirmation?
+    delete?
+  end
+
+  def delete?
+    return false unless current_user.support?
+    return false unless user.status == :deactivated
+
+    !has_any_logs_in_editable_collection_period && !has_signed_data_protection_agreement?
+  end
+
+private
+
+  def has_any_logs_in_editable_collection_period
+    editable_from_date = FormHandler.instance.earliest_open_for_editing_collection_start_date
+
+    LettingsLog.where(created_by_id: user.id).after_date(editable_from_date).or(LettingsLog.where(startdate: nil, created_by_id: user.id)).any?
+  end
+
+  def has_signed_data_protection_agreement?
+    return false unless user.is_dpo? && user.organisation.data_protection_confirmed?
+
+    user.organisation.data_protection_confirmation.data_protection_officer == user
+  end
 end

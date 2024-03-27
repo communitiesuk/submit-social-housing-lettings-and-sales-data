@@ -13,7 +13,7 @@ class UsersController < ApplicationController
   def index
     redirect_to users_organisation_path(current_user.organisation) unless current_user.support?
 
-    all_users = User.sorted_by_organisation_and_role
+    all_users = User.visible.sorted_by_organisation_and_role
     filtered_users = filter_manager.filtered_users(all_users, search_term, session_filters)
     @pagy, @users = pagy(filtered_users)
     @searched = search_term.presence
@@ -122,6 +122,16 @@ class UsersController < ApplicationController
     end
   end
 
+  def delete_confirmation
+    authorize @user
+  end
+
+  def delete
+    authorize @user
+    @user.discard!
+    redirect_to users_organisation_path(@user.organisation), notice: I18n.t("notification.user_deleted", name: @user.name)
+  end
+
 private
 
   def validate_attributes
@@ -197,6 +207,7 @@ private
     if action_name == "create"
       head :unauthorized and return unless current_user.data_coordinator? || current_user.support?
     else
+      render_not_found and return if @user.status == :deleted
       render_not_found and return unless (current_user.organisation == @user.organisation) || current_user.support?
       render_not_found and return if action_name == "edit_password" && current_user != @user
       render_not_found and return unless action_name == "show" ||
