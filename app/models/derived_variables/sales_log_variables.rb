@@ -120,7 +120,7 @@ private
         mortgageused: 3,
       },
       derived_values: {
-        mortgage: 0,
+        mortgage: nil,
       },
     },
   ].freeze
