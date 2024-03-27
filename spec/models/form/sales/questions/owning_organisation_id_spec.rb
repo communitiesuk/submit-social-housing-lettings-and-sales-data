@@ -296,7 +296,7 @@ RSpec.describe Form::Sales::Questions::OwningOrganisationId, type: :model do
   end
 
   it "is marked as derived" do
-    expect(question.derived?).to be true
+    expect(question.derived?(nil)).to be true
   end
 
   context "when the current user is support" do

@@ -177,7 +177,7 @@ RSpec.describe Form::Sales::Questions::ManagingOrganisation, type: :model do
   end
 
   it "is marked as derived" do
-    expect(question.derived?).to be true
+    expect(question.derived?(nil)).to be true
   end
 
   describe "#hidden_in_check_answers?" do

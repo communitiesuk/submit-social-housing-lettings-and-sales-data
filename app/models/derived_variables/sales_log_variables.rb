@@ -108,14 +108,6 @@ private
         mortgage: 0,
       },
     },
-    {
-      conditions: {
-        mortgageused: 3,
-      },
-      derived_values: {
-        mortgage: nil,
-      },
-    },
   ].freeze
 
   def number_of_household_members
