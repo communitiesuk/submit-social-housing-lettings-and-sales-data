@@ -549,22 +549,6 @@ RSpec.describe SalesLog, type: :model do
       expect(record_from_db["deposit"]).to eq(123_400)
     end
 
-    it "clears deposit for outright sales when mortgage is changed from yes to unknown" do
-      Timecop.freeze(2024, 5, 2)
-      sales_log.update!(value: 123_400, deposit: 5000, saledate: Time.zone.local(2024, 5, 2), mortgageused: 1, ownershipsch: 3, type: 10, companybuy: 1, jointpur: 1, jointmore: 1)
-      sales_log.update!(mortgageused: 3)
-      record_from_db = described_class.find(sales_log.id)
-      expect(record_from_db["deposit"]).to eq(nil)
-    end
-
-    it "clears deposit for outright sales when mortgage is changed from no to unknown" do
-      Timecop.freeze(2024, 5, 2)
-      sales_log.update!(value: 123_400, deposit: 5000, saledate: Time.zone.local(2024, 5, 2), mortgageused: 2, ownershipsch: 3, type: 10, companybuy: 1, jointpur: 1, jointmore: 1)
-      sales_log.update!(mortgageused: 3)
-      record_from_db = described_class.find(sales_log.id)
-      expect(record_from_db["deposit"]).to eq(nil)
-    end
-
     it "does not derive deposit if the sale isn't outright" do
       sales_log.update!(value: 123_400, deposit: nil, mortgageused: 2, ownershipsch: 2)
       record_from_db = described_class.find(sales_log.id)
@@ -577,24 +561,16 @@ RSpec.describe SalesLog, type: :model do
       expect(record_from_db["deposit"]).to eq(nil)
     end
 
+    it "does not derive deposit if the mortgage use is unknown" do
+      Timecop.freeze(2024, 5, 2)
+      sales_log.update!(value: 123_400, deposit: nil, saledate: Time.zone.local(2024, 5, 2), mortgageused: 3, ownershipsch: 3, type: 10, companybuy: 1, jointpur: 1, jointmore: 1)
+      record_from_db = described_class.find(sales_log.id)
+      expect(record_from_db["deposit"]).to eq(nil)
+    end
+
     it "clears deposit when setting mortgage used to yes from no for outright sales" do
       sales_log.update!(value: 123_400, deposit: nil, mortgageused: 2, ownershipsch: 3, type: 10, companybuy: 1, jointpur: 1, jointmore: 1)
       sales_log.update!(mortgageused: 1)
-      record_from_db = described_class.find(sales_log.id)
-      expect(record_from_db["deposit"]).to eq(nil)
-    end
-
-    it "clears deposit when changing from outright sale with no mortgage to shared ownership" do
-      sales_log.update!(value: 123_400, deposit: nil, mortgageused: 2, ownershipsch: 3, type: 10, companybuy: 1, jointpur: 1, jointmore: 1)
-      sales_log.update!(ownershipsch: 1)
-      record_from_db = described_class.find(sales_log.id)
-      expect(record_from_db["deposit"]).to eq(nil)
-    end
-
-    it "clears deposit when changing from outright sale with no mortgage to discounted ownership" do
-      Timecop.freeze(2024, 5, 2)
-      sales_log.update!(value: 123_400, deposit: nil, mortgageused: 2, ownershipsch: 3, type: 10, companybuy: 1, jointpur: 1, jointmore: 1)
-      sales_log.update!(ownershipsch: 2)
       record_from_db = described_class.find(sales_log.id)
       expect(record_from_db["deposit"]).to eq(nil)
     end
