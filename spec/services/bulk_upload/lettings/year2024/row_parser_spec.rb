@@ -793,9 +793,18 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
         context "when non-setup questions are null" do
           let(:attributes) { setup_section_params.merge({ field_43: "" }) }
 
-          it "fetches the question's check_answer_label if it exists, otherwise it gets the question's header" do
+          it "fetches the question's check_answer_label if it exists" do
             parser.valid?
             expect(parser.errors[:field_43]).to eql(["You must answer lead tenant’s gender identity"])
+          end
+        end
+
+        context "when other null error is added" do
+          let(:attributes) { setup_section_params.merge({ field_112: nil }) }
+
+          it "only has one error added to the field" do
+            parser.valid?
+            expect(parser.errors[:field_112]).to eql(["You must answer was the letting made under the Choice-Based Lettings (CBL)?"])
           end
         end
       end
@@ -1029,7 +1038,7 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
           let(:attributes) { { bulk_upload:, field_98: "1", field_7: "1" } }
 
           it "is not permitted" do
-            expect(parser.errors[:field_98]).to include('The reason for leaving must be "End of social housing tenancy - no fault", "End of social housing tenancy - evicted due to anti-social behaviour (ASB)", "End of social housing tenancy - evicted due to rent arrears" or "End of social housing tenancy - evicted for any other reason"')
+            expect(parser.errors[:field_98]).to include('The reason for leaving must be "End of social or private sector tenancy - no fault", "End of social or private sector tenancy - evicted due to anti-social behaviour (ASB)", "End of social or private sector tenancy - evicted due to rent arrears" or "End of social or private sector tenancy - evicted for any other reason"')
           end
         end
       end
@@ -1389,7 +1398,7 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
         it "is not permitted as setup error" do
           setup_errors = parser.errors.select { |e| e.options[:category] == :setup }
 
-          expect(setup_errors.find { |e| e.attribute == :field_2 }.message).to eql("The managing organisation code is incorrect")
+          expect(setup_errors.find { |e| e.attribute == :field_2 }.message).to eql("You must answer managing organisation")
         end
 
         it "blocks log creation" do
@@ -1486,10 +1495,10 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
             field_1: "1" }
         end
 
-        it "does not add UPRN errors" do
+        it "does not add UPRN errors (but still adds missing address errors)" do
           expect(parser.errors[:field_16]).to be_empty
-          expect(parser.errors[:field_17]).to be_empty
-          expect(parser.errors[:field_19]).to be_empty
+          expect(parser.errors[:field_17]).to eql(["You must answer address line 1"])
+          expect(parser.errors[:field_19]).to eql(["You must answer town or city"])
         end
       end
 
@@ -1517,6 +1526,23 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
 
         it "doesn't add an error" do
           expect(parser.errors[:field_16]).to be_empty
+        end
+      end
+    end
+
+    describe "address fields" do
+      context "when no address can be found" do
+        before do
+          stub_request(:get, /api\.os\.uk\/search\/places\/v1\/find/)
+            .to_return(status: 200, body: nil, headers: {})
+        end
+
+        let(:attributes) { setup_section_params.merge({ field_16: nil, field_17: "address line 1", field_19: "town or city" }) }
+
+        it "adds an appropriate error" do
+          %i[field_17 field_18 field_19 field_20 field_21 field_22].each do |field|
+            expect(parser.errors[field]).to eql(["We could not find this address. Check the address data in your CSV file is correct and complete, or select the correct address using the CORE site."])
+          end
         end
       end
     end

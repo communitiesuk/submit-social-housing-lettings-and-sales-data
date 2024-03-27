@@ -41,6 +41,12 @@ RSpec.describe Csv::LettingsLogCsvService do
         relat4: "R",
         age4_known: 1,
         incref: 0,
+        address_line1_as_entered: "address line 1 as entered",
+        address_line2_as_entered: "address line 2 as entered",
+        town_or_city_as_entered: "town or city as entered",
+        county_as_entered: "county as entered",
+        postcode_full_as_entered: "AB1 2CD",
+        la_as_entered: "la as entered",
       )
     end
     let(:user) { create(:user, :support, email: "s.port@jeemayle.com") }
@@ -166,14 +172,35 @@ RSpec.describe Csv::LettingsLogCsvService do
       context "when the current form is 2024" do
         let(:now) { Time.zone.local(2024, 4, 1) }
 
-        it "exports the CSV with 2024 ordering and all values correct" do
-          expected_content = CSV.read("spec/fixtures/files/lettings_log_csv_export_labels_24.csv")
-          values_to_delete = %w[id vacdays]
-          values_to_delete.each do |attribute|
-            index = csv.first.index(attribute)
-            csv.second[index] = nil
+        context "and the log is for 2024 collection period" do
+          let(:fixed_time) { Time.zone.local(2024, 4, 1) }
+
+          before do
+            log.update!(national: nil)
+            log.update!(nationality_all: 36)
           end
-          expect(csv).to eq expected_content
+
+          it "exports the CSV with 2024 ordering and all values correct" do
+            expected_content = CSV.read("spec/fixtures/files/lettings_log_csv_export_labels_24.csv")
+            values_to_delete = %w[id vacdays]
+            values_to_delete.each do |attribute|
+              index = csv.first.index(attribute)
+              csv.second[index] = nil
+            end
+            expect(csv).to eq expected_content
+          end
+        end
+
+        context "and the log is for 2023 collection period" do
+          it "exports the CSV with 2024 ordering and all values correct" do
+            expected_content = CSV.read("spec/fixtures/files/lettings_log_csv_export_labels_23_during_24_period.csv")
+            values_to_delete = %w[id vacdays]
+            values_to_delete.each do |attribute|
+              index = csv.first.index(attribute)
+              csv.second[index] = nil
+            end
+            expect(csv).to eq expected_content
+          end
         end
       end
 

@@ -235,21 +235,83 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
         end
 
         context "and is provided" do
-          it "returns true if mortgage, deposit and grant total does not equal market value" do
-            record.grant = 3_000
+          it "adds an error if mortgage, deposit and grant at least 1 greater than discounted value" do
+            record.mortgage = 30_000
+            record.deposit = 5_000
+            record.grant = 15_000
+            record.value = 99_998
+            record.discount = 50
             sale_information_validator.validate_discounted_ownership_value(record)
-            expect(record.errors["mortgageused"]).to include("The mortgage, deposit, and grant when added together is £18,000.00, and the purchase purchase price times by the discount is £30,000.00. These figures should be the same")
-            expect(record.errors["mortgage"]).to include("The mortgage, deposit, and grant when added together is £18,000.00, and the purchase purchase price times by the discount is £30,000.00. These figures should be the same")
-            expect(record.errors["value"]).to include("The mortgage, deposit, and grant when added together is £18,000.00, and the purchase purchase price times by the discount is £30,000.00. These figures should be the same")
-            expect(record.errors["deposit"]).to include("The mortgage, deposit, and grant when added together is £18,000.00, and the purchase purchase price times by the discount is £30,000.00. These figures should be the same")
-            expect(record.errors["ownershipsch"]).to include("The mortgage, deposit, and grant when added together is £18,000.00, and the purchase purchase price times by the discount is £30,000.00. These figures should be the same")
-            expect(record.errors["discount"]).to include("The mortgage, deposit, and grant when added together is £18,000.00, and the purchase purchase price times by the discount is £30,000.00. These figures should be the same")
-            expect(record.errors["grant"]).to include("The mortgage, deposit, and grant when added together is £18,000.00, and the purchase purchase price times by the discount is £30,000.00. These figures should be the same")
+            expect(record.errors["mortgageused"]).to include("The mortgage, deposit, and grant when added together is £50,000.00, and the purchase purchase price times by the discount is £49,999.00. These figures should be the same")
+            expect(record.errors["mortgage"]).to include("The mortgage, deposit, and grant when added together is £50,000.00, and the purchase purchase price times by the discount is £49,999.00. These figures should be the same")
+            expect(record.errors["value"]).to include("The mortgage, deposit, and grant when added together is £50,000.00, and the purchase purchase price times by the discount is £49,999.00. These figures should be the same")
+            expect(record.errors["deposit"]).to include("The mortgage, deposit, and grant when added together is £50,000.00, and the purchase purchase price times by the discount is £49,999.00. These figures should be the same")
+            expect(record.errors["ownershipsch"]).to include("The mortgage, deposit, and grant when added together is £50,000.00, and the purchase purchase price times by the discount is £49,999.00. These figures should be the same")
+            expect(record.errors["discount"]).to include("The mortgage, deposit, and grant when added together is £50,000.00, and the purchase purchase price times by the discount is £49,999.00. These figures should be the same")
+            expect(record.errors["grant"]).to include("The mortgage, deposit, and grant when added together is £50,000.00, and the purchase purchase price times by the discount is £49,999.00. These figures should be the same")
           end
 
-          it "returns false if mortgage, deposit and grant total equals market value" do
+          it "adds an error if mortgage, deposit and grant at least 1 less than discounted value" do
+            record.mortgage = 30_000
+            record.deposit = 5_000
             record.grant = 15_000
+            record.value = 100_002
+            record.discount = 50
             sale_information_validator.validate_discounted_ownership_value(record)
+            expect(record.errors["mortgageused"]).to include("The mortgage, deposit, and grant when added together is £50,000.00, and the purchase purchase price times by the discount is £50,001.00. These figures should be the same")
+            expect(record.errors["mortgage"]).to include("The mortgage, deposit, and grant when added together is £50,000.00, and the purchase purchase price times by the discount is £50,001.00. These figures should be the same")
+            expect(record.errors["value"]).to include("The mortgage, deposit, and grant when added together is £50,000.00, and the purchase purchase price times by the discount is £50,001.00. These figures should be the same")
+            expect(record.errors["deposit"]).to include("The mortgage, deposit, and grant when added together is £50,000.00, and the purchase purchase price times by the discount is £50,001.00. These figures should be the same")
+            expect(record.errors["ownershipsch"]).to include("The mortgage, deposit, and grant when added together is £50,000.00, and the purchase purchase price times by the discount is £50,001.00. These figures should be the same")
+            expect(record.errors["discount"]).to include("The mortgage, deposit, and grant when added together is £50,000.00, and the purchase purchase price times by the discount is £50,001.00. These figures should be the same")
+            expect(record.errors["grant"]).to include("The mortgage, deposit, and grant when added together is £50,000.00, and the purchase purchase price times by the discount is £50,001.00. These figures should be the same")
+          end
+
+          it "does not add an error if mortgage, deposit and grant less than 1 greater than discounted value" do
+            record.mortgage = 30_000
+            record.deposit = 5_000
+            record.grant = 15_000
+            record.value = 99_999
+            record.discount = 50
+
+            sale_information_validator.validate_discounted_ownership_value(record)
+
+            expect(record.errors["mortgageused"]).to be_empty
+            expect(record.errors["mortgage"]).to be_empty
+            expect(record.errors["value"]).to be_empty
+            expect(record.errors["deposit"]).to be_empty
+            expect(record.errors["ownershipsch"]).to be_empty
+            expect(record.errors["discount"]).to be_empty
+            expect(record.errors["grant"]).to be_empty
+          end
+
+          it "does not add an error if mortgage, deposit and grant less than 1 less than discounted value" do
+            record.mortgage = 30_000
+            record.deposit = 5_000
+            record.grant = 15_000
+            record.value = 100_001
+            record.discount = 50
+
+            sale_information_validator.validate_discounted_ownership_value(record)
+
+            expect(record.errors["mortgageused"]).to be_empty
+            expect(record.errors["mortgage"]).to be_empty
+            expect(record.errors["value"]).to be_empty
+            expect(record.errors["deposit"]).to be_empty
+            expect(record.errors["ownershipsch"]).to be_empty
+            expect(record.errors["discount"]).to be_empty
+            expect(record.errors["grant"]).to be_empty
+          end
+
+          it "does not add an error if mortgage, deposit and grant total equals discounted value" do
+            record.mortgage = 30_000
+            record.deposit = 5_000
+            record.grant = 15_000
+            record.value = 100_000
+            record.discount = 50
+
+            sale_information_validator.validate_discounted_ownership_value(record)
+
             expect(record.errors["mortgageused"]).to be_empty
             expect(record.errors["mortgage"]).to be_empty
             expect(record.errors["value"]).to be_empty
@@ -439,6 +501,94 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
           expect(record.errors["discount"]).to be_empty
           expect(record.errors["grant"]).to be_empty
         end
+      end
+    end
+  end
+
+  describe "#validate_outright_sale_value_matches_mortgage_plus_deposit" do
+    context "with a 2024 outright sale log" do
+      let(:record) { FactoryBot.build(:sales_log, value: 300_000, ownershipsch: 3, saledate: Time.zone.local(2024, 5, 1)) }
+
+      context "when a mortgage is used" do
+        before do
+          record.mortgageused = 1
+        end
+
+        context "and the mortgage plus deposit match the value" do
+          before do
+            record.mortgage = 200_000
+            record.deposit = 100_000
+          end
+
+          it "does not add errors" do
+            sale_information_validator.validate_outright_sale_value_matches_mortgage_plus_deposit(record)
+            expect(record.errors).to be_empty
+          end
+        end
+
+        context "and the mortgage plus deposit don't match the value" do
+          before do
+            record.mortgage = 100_000
+            record.deposit = 100_000
+          end
+
+          it "adds errors" do
+            sale_information_validator.validate_outright_sale_value_matches_mortgage_plus_deposit(record)
+            expect(record.errors["mortgageused"]).to include("The mortgage and deposit when added together is £200,000.00, and the purchase price is £300,000.00. These figures should be the same.")
+            expect(record.errors["mortgage"]).to include("The mortgage and deposit when added together is £200,000.00, and the purchase price is £300,000.00. These figures should be the same.")
+            expect(record.errors["deposit"]).to include("The mortgage and deposit when added together is £200,000.00, and the purchase price is £300,000.00. These figures should be the same.")
+            expect(record.errors["value"]).to include("The mortgage and deposit when added together is £200,000.00, and the purchase price is £300,000.00. These figures should be the same.")
+            expect(record.errors["ownershipsch"]).to include("The mortgage and deposit when added together is £200,000.00, and the purchase price is £300,000.00. These figures should be the same.")
+          end
+        end
+
+        context "and deposit is not provided" do
+          before do
+            record.mortgage = 100_000
+            record.deposit = nil
+          end
+
+          it "does not add errors" do
+            sale_information_validator.validate_outright_sale_value_matches_mortgage_plus_deposit(record)
+            expect(record.errors).to be_empty
+          end
+        end
+
+        context "and mortgage is not provided" do
+          before do
+            record.mortgage = nil
+            record.deposit = 100_000
+          end
+
+          it "does not add errors" do
+            sale_information_validator.validate_outright_sale_value_matches_mortgage_plus_deposit(record)
+            expect(record.errors).to be_empty
+          end
+        end
+      end
+    end
+
+    context "with a 2024 log that is not an outright sale" do
+      let(:record) { FactoryBot.build(:sales_log, value: 300_000, ownershipsch: 2, saledate: Time.zone.local(2024, 5, 1)) }
+
+      it "does not add errors" do
+        record.mortgageused = 1
+        record.mortgage = 100_000
+        record.deposit = 100_000
+        sale_information_validator.validate_outright_sale_value_matches_mortgage_plus_deposit(record)
+        expect(record.errors).to be_empty
+      end
+    end
+
+    context "with a 2023 outright sale log" do
+      let(:record) { FactoryBot.build(:sales_log, value: 300_000, ownershipsch: 3, saledate: Time.zone.local(2023, 5, 1)) }
+
+      it "does not add errors" do
+        record.mortgageused = 1
+        record.mortgage = 100_000
+        record.deposit = 100_000
+        sale_information_validator.validate_outright_sale_value_matches_mortgage_plus_deposit(record)
+        expect(record.errors).to be_empty
       end
     end
   end
@@ -740,10 +890,45 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
 
           it "adds an error" do
             sale_information_validator.validate_non_staircasing_mortgage(record)
-            expect(record.errors["mortgage"]).to include("The mortgage and deposit added together is £15,000.00 and the purchase price times by the equity is £8,400.00. These figures should be the same.")
-            expect(record.errors["value"]).to include("The mortgage and deposit added together is £15,000.00 and the purchase price times by the equity is £8,400.00. These figures should be the same.")
-            expect(record.errors["deposit"]).to include("The mortgage and deposit added together is £15,000.00 and the purchase price times by the equity is £8,400.00. These figures should be the same.")
-            expect(record.errors["equity"]).to include("The mortgage and deposit added together is £15,000.00 and the purchase price times by the equity is £8,400.00. These figures should be the same.")
+            expect(record.errors["mortgage"]).to include("The mortgage and deposit added together is £15,000.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+            expect(record.errors["value"]).to include("The mortgage and deposit added together is £15,000.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+            expect(record.errors["deposit"]).to include("The mortgage and deposit added together is £15,000.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+            expect(record.errors["equity"]).to include("The mortgage and deposit added together is £15,000.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+            expect(record.errors["type"]).to include("The mortgage and deposit added together is £15,000.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+            expect(record.errors["cashdis"]).not_to include("The mortgage and deposit added together is £15,000.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+          end
+
+          context "and it is a social homebuy" do
+            before do
+              record.type = 18
+              record.cashdis = "200"
+            end
+
+            it "adds an error" do
+              sale_information_validator.validate_non_staircasing_mortgage(record)
+              expect(record.errors["mortgage"]).to include("The mortgage, deposit, and cash discount added together is £15,200.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+              expect(record.errors["value"]).to include("The mortgage, deposit, and cash discount added together is £15,200.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+              expect(record.errors["deposit"]).to include("The mortgage, deposit, and cash discount added together is £15,200.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+              expect(record.errors["equity"]).to include("The mortgage, deposit, and cash discount added together is £15,200.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+              expect(record.errors["cashdis"]).to include("The mortgage, deposit, and cash discount added together is £15,200.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+              expect(record.errors["type"]).to include("The mortgage, deposit, and cash discount added together is £15,200.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+            end
+          end
+
+          context "and it is not a shared ownership transaction" do
+            before do
+              record.ownershipsch = 2
+            end
+
+            it "does not add an error" do
+              sale_information_validator.validate_non_staircasing_mortgage(record)
+              expect(record.errors["mortgage"]).to be_empty
+              expect(record.errors["value"]).to be_empty
+              expect(record.errors["deposit"]).to be_empty
+              expect(record.errors["equity"]).to be_empty
+              expect(record.errors["cashdis"]).to be_empty
+              expect(record.errors["type"]).to be_empty
+            end
           end
         end
 
@@ -758,12 +943,14 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
             expect(record.errors["value"]).to be_empty
             expect(record.errors["deposit"]).to be_empty
             expect(record.errors["equity"]).to be_empty
+            expect(record.errors["cashdis"]).to be_empty
+            expect(record.errors["type"]).to be_empty
           end
         end
       end
 
       context "when MORTGAGE + DEPOSIT equals VALUE * EQUITY/100" do
-        let(:record) { FactoryBot.build(:sales_log, mortgage: 10_000, staircase: 2, deposit: 5_000, value: 30_000, equity: 50, ownershipsch: 1, type: 30, saledate: now) }
+        let(:record) { FactoryBot.build(:sales_log, mortgageused: 1, mortgage: 10_000, staircase: 2, deposit: 5_000, value: 30_000, equity: 50, ownershipsch: 1, type: 30, saledate: now) }
 
         it "does not add an error" do
           sale_information_validator.validate_non_staircasing_mortgage(record)
@@ -771,6 +958,22 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
           expect(record.errors["value"]).to be_empty
           expect(record.errors["deposit"]).to be_empty
           expect(record.errors["equity"]).to be_empty
+          expect(record.errors["cashdis"]).to be_empty
+          expect(record.errors["type"]).to be_empty
+        end
+      end
+
+      context "when MORTGAGE + DEPOSIT is within 1£ tolerance of VALUE * EQUITY/100" do
+        let(:record) { FactoryBot.build(:sales_log, mortgageused: 1, mortgage: 10_000, staircase: 2, deposit: 50_000, value: 120_001, equity: 50, ownershipsch: 1, type: 30, saledate: now) }
+
+        it "does not add an error" do
+          sale_information_validator.validate_non_staircasing_mortgage(record)
+          expect(record.errors["mortgage"]).to be_empty
+          expect(record.errors["value"]).to be_empty
+          expect(record.errors["deposit"]).to be_empty
+          expect(record.errors["equity"]).to be_empty
+          expect(record.errors["cashdis"]).to be_empty
+          expect(record.errors["type"]).to be_empty
         end
       end
 
@@ -787,10 +990,45 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
 
             it "adds an error" do
               sale_information_validator.validate_non_staircasing_mortgage(record)
-              expect(record.errors["mortgageused"]).to include("The deposit is £5,000.00 and the purchase price times by the equity is £8,400.00. As no mortgage was used, these figures should be the same.")
-              expect(record.errors["value"]).to include("The deposit is £5,000.00 and the purchase price times by the equity is £8,400.00. As no mortgage was used, these figures should be the same.")
-              expect(record.errors["deposit"]).to include("The deposit is £5,000.00 and the purchase price times by the equity is £8,400.00. As no mortgage was used, these figures should be the same.")
-              expect(record.errors["equity"]).to include("The deposit is £5,000.00 and the purchase price times by the equity is £8,400.00. As no mortgage was used, these figures should be the same.")
+              expect(record.errors["mortgageused"]).to include("The deposit is £5,000.00 and the value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+              expect(record.errors["value"]).to include("The deposit is £5,000.00 and the value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+              expect(record.errors["deposit"]).to include("The deposit is £5,000.00 and the value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+              expect(record.errors["equity"]).to include("The deposit is £5,000.00 and the value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+              expect(record.errors["type"]).to include("The deposit is £5,000.00 and the value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+              expect(record.errors["cashdis"]).not_to include("The deposit is £5,000.00 and the value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+            end
+
+            context "and it is a social homebuy" do
+              before do
+                record.type = 18
+                record.cashdis = "200"
+              end
+
+              it "adds an error" do
+                sale_information_validator.validate_non_staircasing_mortgage(record)
+                expect(record.errors["mortgageused"]).to include("The deposit and cash discount added together is £5,200.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+                expect(record.errors["value"]).to include("The deposit and cash discount added together is £5,200.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+                expect(record.errors["deposit"]).to include("The deposit and cash discount added together is £5,200.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+                expect(record.errors["equity"]).to include("The deposit and cash discount added together is £5,200.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+                expect(record.errors["cashdis"]).to include("The deposit and cash discount added together is £5,200.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+                expect(record.errors["type"]).to include("The deposit and cash discount added together is £5,200.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+              end
+            end
+
+            context "and it is not a shared ownership transaction" do
+              before do
+                record.ownershipsch = 2
+              end
+
+              it "does not add an error" do
+                sale_information_validator.validate_non_staircasing_mortgage(record)
+                expect(record.errors["mortgageused"]).to be_empty
+                expect(record.errors["value"]).to be_empty
+                expect(record.errors["deposit"]).to be_empty
+                expect(record.errors["equity"]).to be_empty
+                expect(record.errors["cashdis"]).to be_empty
+                expect(record.errors["type"]).to be_empty
+              end
             end
           end
 
@@ -805,6 +1043,8 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
               expect(record.errors["value"]).to be_empty
               expect(record.errors["deposit"]).to be_empty
               expect(record.errors["equity"]).to be_empty
+              expect(record.errors["cashdis"]).to be_empty
+              expect(record.errors["type"]).to be_empty
             end
           end
         end
@@ -818,6 +1058,22 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
             expect(record.errors["value"]).to be_empty
             expect(record.errors["deposit"]).to be_empty
             expect(record.errors["equity"]).to be_empty
+            expect(record.errors["cashdis"]).to be_empty
+            expect(record.errors["type"]).to be_empty
+          end
+        end
+
+        context "when DEPOSIT is within 1£ tolerance of VALUE * EQUITY/100" do
+          let(:record) { FactoryBot.build(:sales_log, mortgageused: 2, staircase: 2, deposit: 15_000, value: 30_001, equity: 50, ownershipsch: 1, type: 30, saledate: now) }
+
+          it "does not add an error" do
+            sale_information_validator.validate_non_staircasing_mortgage(record)
+            expect(record.errors["mortgageused"]).to be_empty
+            expect(record.errors["value"]).to be_empty
+            expect(record.errors["deposit"]).to be_empty
+            expect(record.errors["equity"]).to be_empty
+            expect(record.errors["cashdis"]).to be_empty
+            expect(record.errors["type"]).to be_empty
           end
         end
       end
@@ -833,6 +1089,8 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
         expect(record.errors["value"]).to be_empty
         expect(record.errors["deposit"]).to be_empty
         expect(record.errors["equity"]).to be_empty
+        expect(record.errors["cashdis"]).to be_empty
+        expect(record.errors["type"]).to be_empty
       end
     end
   end
@@ -860,10 +1118,45 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
 
           it "adds an error" do
             sale_information_validator.validate_staircasing_mortgage(record)
-            expect(record.errors["mortgage"]).to include("The mortgage and deposit added together is £15,000.00 and the percentage bought times the purchase price is £8,400.00. These figures should be the same.")
-            expect(record.errors["value"]).to include("The mortgage and deposit added together is £15,000.00 and the percentage bought times the purchase price is £8,400.00. These figures should be the same.")
-            expect(record.errors["deposit"]).to include("The mortgage and deposit added together is £15,000.00 and the percentage bought times the purchase price is £8,400.00. These figures should be the same.")
-            expect(record.errors["stairbought"]).to include("The mortgage and deposit added together is £15,000.00 and the percentage bought times the purchase price is £8,400.00. These figures should be the same.")
+            expect(record.errors["mortgage"]).to include("The mortgage and deposit added together is £15,000.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+            expect(record.errors["value"]).to include("The mortgage and deposit added together is £15,000.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+            expect(record.errors["deposit"]).to include("The mortgage and deposit added together is £15,000.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+            expect(record.errors["stairbought"]).to include("The mortgage and deposit added together is £15,000.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+            expect(record.errors["type"]).to include("The mortgage and deposit added together is £15,000.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+            expect(record.errors["cashdis"]).not_to include("The mortgage and deposit added together is £15,000.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+          end
+
+          context "and it is a social homebuy" do
+            before do
+              record.type = 18
+              record.cashdis = "200"
+            end
+
+            it "adds an error" do
+              sale_information_validator.validate_staircasing_mortgage(record)
+              expect(record.errors["mortgage"]).to include("The mortgage, deposit, and cash discount added together is £15,200.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+              expect(record.errors["value"]).to include("The mortgage, deposit, and cash discount added together is £15,200.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+              expect(record.errors["deposit"]).to include("The mortgage, deposit, and cash discount added together is £15,200.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+              expect(record.errors["stairbought"]).to include("The mortgage, deposit, and cash discount added together is £15,200.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+              expect(record.errors["cashdis"]).to include("The mortgage, deposit, and cash discount added together is £15,200.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+              expect(record.errors["type"]).to include("The mortgage, deposit, and cash discount added together is £15,200.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+            end
+          end
+
+          context "and it is not a shared ownership transaction" do
+            before do
+              record.ownershipsch = 2
+            end
+
+            it "does not add an error" do
+              sale_information_validator.validate_non_staircasing_mortgage(record)
+              expect(record.errors["mortgage"]).to be_empty
+              expect(record.errors["value"]).to be_empty
+              expect(record.errors["deposit"]).to be_empty
+              expect(record.errors["stairbought"]).to be_empty
+              expect(record.errors["cashdis"]).to be_empty
+              expect(record.errors["type"]).to be_empty
+            end
           end
         end
 
@@ -878,12 +1171,14 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
             expect(record.errors["value"]).to be_empty
             expect(record.errors["deposit"]).to be_empty
             expect(record.errors["stairbought"]).to be_empty
+            expect(record.errors["cashdis"]).to be_empty
+            expect(record.errors["type"]).to be_empty
           end
         end
       end
 
       context "when MORTGAGE + DEPOSIT equals STAIRBOUGHT/100 * VALUE" do
-        let(:record) { FactoryBot.build(:sales_log, mortgage: 10_000, staircase: 1, deposit: 5_000, value: 30_000, stairbought: 50, ownershipsch: 1, type: 30, saledate: now) }
+        let(:record) { FactoryBot.build(:sales_log, mortgageused: 1, mortgage: 10_000, staircase: 1, deposit: 5_000, value: 30_000, stairbought: 50, ownershipsch: 1, type: 30, saledate: now) }
 
         it "does not add an error" do
           sale_information_validator.validate_staircasing_mortgage(record)
@@ -891,6 +1186,22 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
           expect(record.errors["value"]).to be_empty
           expect(record.errors["deposit"]).to be_empty
           expect(record.errors["stairbought"]).to be_empty
+          expect(record.errors["cashdis"]).to be_empty
+          expect(record.errors["type"]).to be_empty
+        end
+      end
+
+      context "when MORTGAGE + DEPOSIT is within 1£ tolerance of STAIRBOUGHT/100 * VALUE" do
+        let(:record) { FactoryBot.build(:sales_log, mortgageused: 1, mortgage: 10_000, staircase: 1, deposit: 5_000, value: 30_001, stairbought: 50, ownershipsch: 1, type: 30, saledate: now) }
+
+        it "does not add an error" do
+          sale_information_validator.validate_staircasing_mortgage(record)
+          expect(record.errors["mortgage"]).to be_empty
+          expect(record.errors["value"]).to be_empty
+          expect(record.errors["deposit"]).to be_empty
+          expect(record.errors["stairbought"]).to be_empty
+          expect(record.errors["cashdis"]).to be_empty
+          expect(record.errors["type"]).to be_empty
         end
       end
     end
@@ -905,6 +1216,8 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
         expect(record.errors["value"]).to be_empty
         expect(record.errors["deposit"]).to be_empty
         expect(record.errors["stairbought"]).to be_empty
+        expect(record.errors["cashdis"]).to be_empty
+        expect(record.errors["type"]).to be_empty
       end
     end
 
@@ -924,10 +1237,45 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
 
             it "adds an error" do
               sale_information_validator.validate_staircasing_mortgage(record)
-              expect(record.errors["mortgageused"]).to include("The deposit is £5,000.00 and the percentage bought times the purchase price is £8,400.00. As no mortgage was used, these figures should be the same.")
-              expect(record.errors["value"]).to include("The deposit is £5,000.00 and the percentage bought times the purchase price is £8,400.00. As no mortgage was used, these figures should be the same.")
-              expect(record.errors["deposit"]).to include("The deposit is £5,000.00 and the percentage bought times the purchase price is £8,400.00. As no mortgage was used, these figures should be the same.")
-              expect(record.errors["stairbought"]).to include("The deposit is £5,000.00 and the percentage bought times the purchase price is £8,400.00. As no mortgage was used, these figures should be the same.")
+              expect(record.errors["mortgageused"]).to include("The deposit is £5,000.00 and the value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+              expect(record.errors["value"]).to include("The deposit is £5,000.00 and the value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+              expect(record.errors["deposit"]).to include("The deposit is £5,000.00 and the value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+              expect(record.errors["stairbought"]).to include("The deposit is £5,000.00 and the value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+              expect(record.errors["type"]).to include("The deposit is £5,000.00 and the value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+              expect(record.errors["cashdis"]).not_to include("The deposit is £5,000.00 and the value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+            end
+
+            context "and it is a social homebuy" do
+              before do
+                record.type = 18
+                record.cashdis = "200"
+              end
+
+              it "adds an error" do
+                sale_information_validator.validate_staircasing_mortgage(record)
+                expect(record.errors["mortgageused"]).to include("The deposit and cash discount added together is £5,200.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+                expect(record.errors["value"]).to include("The deposit and cash discount added together is £5,200.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+                expect(record.errors["deposit"]).to include("The deposit and cash discount added together is £5,200.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+                expect(record.errors["stairbought"]).to include("The deposit and cash discount added together is £5,200.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+                expect(record.errors["cashdis"]).to include("The deposit and cash discount added together is £5,200.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+                expect(record.errors["type"]).to include("The deposit and cash discount added together is £5,200.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+              end
+            end
+
+            context "and it is not a shared ownership transaction" do
+              before do
+                record.ownershipsch = 2
+              end
+
+              it "does not add an error" do
+                sale_information_validator.validate_non_staircasing_mortgage(record)
+                expect(record.errors["mortgageused"]).to be_empty
+                expect(record.errors["value"]).to be_empty
+                expect(record.errors["deposit"]).to be_empty
+                expect(record.errors["stairbought"]).to be_empty
+                expect(record.errors["cashdis"]).to be_empty
+                expect(record.errors["type"]).to be_empty
+              end
             end
           end
 
@@ -942,6 +1290,8 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
               expect(record.errors["value"]).to be_empty
               expect(record.errors["deposit"]).to be_empty
               expect(record.errors["stairbought"]).to be_empty
+              expect(record.errors["cashdis"]).to be_empty
+              expect(record.errors["type"]).to be_empty
             end
           end
         end
@@ -955,6 +1305,22 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
             expect(record.errors["value"]).to be_empty
             expect(record.errors["deposit"]).to be_empty
             expect(record.errors["stairbought"]).to be_empty
+            expect(record.errors["cashdis"]).to be_empty
+            expect(record.errors["type"]).to be_empty
+          end
+        end
+
+        context "when DEPOSIT is within 1£ tolerance of STAIRBOUGHT/100 * VALUE" do
+          let(:record) { FactoryBot.build(:sales_log, mortgageused: 2, staircase: 1, deposit: 15_000, value: 30_001, stairbought: 50, ownershipsch: 1, type: 30, saledate: now) }
+
+          it "does not add an error" do
+            sale_information_validator.validate_staircasing_mortgage(record)
+            expect(record.errors["mortgageused"]).to be_empty
+            expect(record.errors["value"]).to be_empty
+            expect(record.errors["deposit"]).to be_empty
+            expect(record.errors["stairbought"]).to be_empty
+            expect(record.errors["cashdis"]).to be_empty
+            expect(record.errors["type"]).to be_empty
           end
         end
       end
@@ -969,6 +1335,8 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
           expect(record.errors["value"]).to be_empty
           expect(record.errors["deposit"]).to be_empty
           expect(record.errors["stairbought"]).to be_empty
+          expect(record.errors["cashdis"]).to be_empty
+          expect(record.errors["type"]).to be_empty
         end
       end
     end

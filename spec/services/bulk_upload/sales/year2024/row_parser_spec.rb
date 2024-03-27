@@ -282,6 +282,26 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
           expect(questions.map(&:id)).to eql([])
         end
       end
+
+      describe "#validate_nulls" do
+        context "when non-setup questions are null" do
+          let(:attributes) { setup_section_params.merge({ field_32: "" }) }
+
+          it "fetches the question's check_answer_label if it exists" do
+            parser.valid?
+            expect(parser.errors[:field_32]).to eql(["You must answer buyer 1’s gender identity"])
+          end
+        end
+
+        context "when other null error is added" do
+          let(:attributes) { setup_section_params.merge({ field_23: nil }) }
+
+          it "only has one error added to the field" do
+            parser.valid?
+            expect(parser.errors[:field_23]).to eql(["You must answer address line 1"])
+          end
+        end
+      end
     end
 
     context "when setup section not complete and type is not given" do
@@ -418,7 +438,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
         let(:attributes) { { bulk_upload:, field_1: "donotexist" } }
 
         it "is not permitted as a setup error" do
-          expect(parser.errors.where(:field_1, category: :setup).map(&:message)).to eql(["You must answer owning organisation"])
+          expect(parser.errors.where(:field_1, category: :setup).map(&:message)).to eql(["The owning organisation code is incorrect"])
         end
 
         it "blocks log creation" do
@@ -886,6 +906,23 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
       end
     end
 
+    describe "address fields" do
+      context "when no address can be found" do
+        before do
+          stub_request(:get, /api\.os\.uk\/search\/places\/v1\/find/)
+            .to_return(status: 200, body: nil, headers: {})
+        end
+
+        let(:attributes) { setup_section_params.merge({ field_22: nil, field_23: "address line 1", field_25: "town or city" }) }
+
+        it "adds an appropriate error" do
+          %i[field_23 field_24 field_25 field_26 field_27 field_28].each do |field|
+            expect(parser.errors[field]).to eql(["We could not find this address. Check the address data in your CSV file is correct and complete, or select the correct address using the CORE site."])
+          end
+        end
+      end
+    end
+
     describe "#field_18" do # data protection
       let(:attributes) { setup_section_params.merge({ field_18: nil }) }
 
@@ -1132,6 +1169,32 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
           expect(parser.log.deposit).to be(nil)
           expect(parser.errors[:field_103]).to be_empty
           expect(parser.errors[:field_109]).to be_empty
+        end
+      end
+
+      context "with non staircasing mortgage error" do
+        let(:attributes) { setup_section_params.merge(field_9: "30", field_103: "1", field_104: "10000", field_109: "5000", field_101: "30000", field_102: "28", field_86: "2") }
+
+        it "does not add a BU error on type (because it's a setup field and would block log creation)" do
+          expect(parser.errors[:field_9]).to be_empty
+        end
+
+        it "includes errors on other related fields" do
+          expect(parser.errors[:field_104]).to include("The mortgage and deposit added together is £15,000.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+          expect(parser.errors[:field_109]).to include("The mortgage and deposit added together is £15,000.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+          expect(parser.errors[:field_101]).to include("The mortgage and deposit added together is £15,000.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+          expect(parser.errors[:field_102]).to include("The mortgage and deposit added together is £15,000.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+        end
+
+        it "does not add errors to other ownership type fields" do
+          expect(parser.errors[:field_117]).to be_empty
+          expect(parser.errors[:field_126]).to be_empty
+          expect(parser.errors[:field_118]).to be_empty
+          expect(parser.errors[:field_127]).to be_empty
+          expect(parser.errors[:field_123]).to be_empty
+          expect(parser.errors[:field_130]).to be_empty
+          expect(parser.errors[:field_114]).to be_empty
+          expect(parser.errors[:field_125]).to be_empty
         end
       end
     end

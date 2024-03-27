@@ -312,6 +312,12 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_19_122706) do
     t.string "postcode_full_input"
     t.integer "address_search_value_check"
     t.string "uprn_selection"
+    t.string "address_line1_as_entered"
+    t.string "address_line2_as_entered"
+    t.string "town_or_city_as_entered"
+    t.string "county_as_entered"
+    t.string "postcode_full_as_entered"
+    t.string "la_as_entered"
     t.integer "partner_under_16_value_check"
     t.integer "multiple_partners_value_check"
     t.index ["bulk_upload_id"], name: "index_lettings_logs_on_bulk_upload_id"
@@ -368,6 +374,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_19_122706) do
     t.string "location_admin_district"
     t.boolean "confirmed"
     t.boolean "is_la_inferred"
+    t.datetime "discarded_at"
     t.index ["old_id"], name: "index_locations_on_old_id", unique: true
     t.index ["scheme_id"], name: "index_locations_on_scheme_id"
   end
@@ -671,6 +678,12 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_19_122706) do
     t.string "postcode_full_input"
     t.integer "address_search_value_check"
     t.string "uprn_selection"
+    t.string "address_line1_as_entered"
+    t.string "address_line2_as_entered"
+    t.string "town_or_city_as_entered"
+    t.string "county_as_entered"
+    t.string "postcode_full_as_entered"
+    t.string "la_as_entered"
     t.integer "partner_under_16_value_check"
     t.integer "multiple_partners_value_check"
     t.index ["bulk_upload_id"], name: "index_sales_logs_on_bulk_upload_id"
@@ -710,6 +723,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_19_122706) do
     t.integer "total_units"
     t.boolean "confirmed"
     t.datetime "startdate"
+    t.datetime "discarded_at"
     t.index ["owning_organisation_id"], name: "index_schemes_on_owning_organisation_id"
   end
 

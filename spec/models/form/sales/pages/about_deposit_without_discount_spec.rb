@@ -33,7 +33,7 @@ RSpec.describe Form::Sales::Pages::AboutDepositWithoutDiscount, type: :model do
 
   it "has correct depends_on" do
     expect(page.depends_on).to eq(
-      [{ "is_type_discount?" => false, "ownershipsch" => 1 },
+      [{ "social_homebuy?" => false, "ownershipsch" => 1 },
        { "ownershipsch" => 2 },
        { "ownershipsch" => 3, "mortgageused" => 1 }],
     )
@@ -44,7 +44,7 @@ RSpec.describe Form::Sales::Pages::AboutDepositWithoutDiscount, type: :model do
 
     it "has correct depends_on" do
       expect(page.depends_on).to eq(
-        [{ "is_type_discount?" => false, "ownershipsch" => 1 },
+        [{ "social_homebuy?" => false, "ownershipsch" => 1 },
          { "ownershipsch" => 2 },
          { "ownershipsch" => 3, "mortgageused" => 1 }],
       )
@@ -58,7 +58,7 @@ RSpec.describe Form::Sales::Pages::AboutDepositWithoutDiscount, type: :model do
 
     it "has correct depends_on" do
       expect(page.depends_on).to eq(
-        [{ "is_type_discount?" => false, "ownershipsch" => 1, "stairowned_100?" => false },
+        [{ "social_homebuy?" => false, "ownershipsch" => 1, "stairowned_100?" => false },
          { "ownershipsch" => 2 },
          { "ownershipsch" => 3, "mortgageused" => 1 }],
       )
@@ -69,7 +69,7 @@ RSpec.describe Form::Sales::Pages::AboutDepositWithoutDiscount, type: :model do
 
       it "has correct depends_on" do
         expect(page.depends_on).to eq(
-          [{ "is_type_discount?" => false, "ownershipsch" => 1, "stairowned_100?" => true },
+          [{ "social_homebuy?" => false, "ownershipsch" => 1, "stairowned_100?" => true },
            { "ownershipsch" => 2 },
            { "ownershipsch" => 3, "mortgageused" => 1 }],
         )

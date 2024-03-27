@@ -321,12 +321,46 @@ RSpec.describe FormController, type: :request do
         expect(lettings_log.created_by).to eq(user)
       end
     end
+
+    context "when the sale date changes from 2024 to 2023" do
+      let(:sales_log) { create(:sales_log, owning_organisation: organisation, managing_organisation:, created_by: user) }
+      let(:params) do
+        {
+          id: sales_log.id,
+          sales_log: {
+            page: "completion_date",
+            "saledate(3i)" => 30,
+            "saledate(2i)" => 6,
+            "saledate(1i)" => 2023,
+          },
+        }
+      end
+
+      before do
+        sales_log.saledate = Time.zone.local(2024, 12, 1)
+        sales_log.save!(validate: false)
+        sales_log.reload
+      end
+
+      it "does not set managing organisation to created by organisation" do
+        post "/sales-logs/#{sales_log.id}/completion-date", params: params
+        sales_log.reload
+        expect(sales_log.owning_organisation).to eq(organisation)
+        expect(sales_log.managing_organisation).to eq(managing_organisation)
+      end
+    end
   end
 
   context "when a user is signed in" do
     let!(:lettings_log) do
       create(
         :lettings_log,
+        created_by: user,
+      )
+    end
+    let!(:sales_log) do
+      create(
+        :sales_log,
         created_by: user,
       )
     end
@@ -584,6 +618,104 @@ RSpec.describe FormController, type: :request do
               expect(page).to have_content("There is a problem")
             end
           end
+
+          context "when allow_future_form_use? is enabled" do
+            before do
+              allow(FeatureToggle).to receive(:allow_future_form_use?).and_return(true)
+            end
+
+            context "when the tenancy start date is out of the editable collection year" do
+              let(:page_id) { "tenancy_start_date" }
+              let(:params) do
+                {
+                  id: lettings_log.id,
+                  lettings_log: {
+                    page: page_id,
+                    "startdate(3i)" => 1,
+                    "startdate(2i)" => 1,
+                    "startdate(1i)" => 1,
+                  },
+                }
+              end
+
+              it "redirects to the review page for the log" do
+                post "/lettings-logs/#{lettings_log.id}/#{page_id.dasherize}", params: params
+                follow_redirect!
+                follow_redirect!
+                follow_redirect!
+                expect(page).to have_content("Review lettings log")
+              end
+            end
+
+            context "when the sale date is out of the editable collection year" do
+              let(:page_id) { "completion_date" }
+              let(:params) do
+                {
+                  id: sales_log.id,
+                  sales_log: {
+                    page: page_id,
+                    "saledate(3i)" => 1,
+                    "saledate(2i)" => 1,
+                    "saledate(1i)" => 1,
+                  },
+                }
+              end
+
+              it "redirects to the review page for the log" do
+                post "/sales-logs/#{sales_log.id}/#{page_id.dasherize}", params: params
+                follow_redirect!
+                follow_redirect!
+                follow_redirect!
+                expect(page).to have_content("Review sales log")
+              end
+            end
+          end
+
+          context "when allow_future_form_use? is disabled" do
+            before do
+              allow(FeatureToggle).to receive(:allow_future_form_use?).and_return(false)
+            end
+
+            context "when the tenancy start date is out of the editable collection year" do
+              let(:page_id) { "tenancy_start_date" }
+              let(:params) do
+                {
+                  id: lettings_log.id,
+                  lettings_log: {
+                    page: page_id,
+                    "startdate(3i)" => 1,
+                    "startdate(2i)" => 1,
+                    "startdate(1i)" => 1,
+                  },
+                }
+              end
+
+              it "validates the date correctly" do
+                post "/lettings-logs/#{lettings_log.id}/#{page_id.dasherize}", params: params
+                expect(page).to have_content("There is a problem")
+              end
+            end
+
+            context "when the sale date is out of the editable collection year" do
+              let(:page_id) { "completion_date" }
+              let(:params) do
+                {
+                  id: sales_log.id,
+                  sales_log: {
+                    page: page_id,
+                    "saledate(3i)" => 1,
+                    "saledate(2i)" => 1,
+                    "saledate(1i)" => 1,
+                  },
+                }
+              end
+
+              it "validates the date correctly" do
+                post "/sales-logs/#{sales_log.id}/#{page_id.dasherize}", params: params
+                expect(page).to have_content("There is a problem")
+              end
+            end
+          end
         end
 
         context "with invalid organisation answers" do
@@ -732,25 +864,27 @@ RSpec.describe FormController, type: :request do
             {
               id: lettings_log.id,
               lettings_log: {
-                page: page_id,
+                page: "lead_tenant_age",
                 age1: 20,
-                interruption_page_id: "retirement_value_check",
+                interruption_page_id: "age_lead_tenant_over_retirement_value_check",
               },
             }
           end
 
           before do
+            lettings_log.update!(startdate: Time.zone.local(2023, 4, 1))
             post "/lettings-logs/#{lettings_log.id}/lead-tenant-age?referrer=interruption_screen", params:
           end
 
           it "redirects back to the soft validation page" do
-            expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}/retirement-value-check")
+            expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}/age-lead-tenant-over-retirement-value-check")
           end
 
           it "displays a success banner" do
             follow_redirect!
             follow_redirect!
-            expect(response.body).to include("You have successfully updated lead tenant’s age")
+
+            expect(response.body).to include("You have successfully updated Q32: lead tenant’s age")
           end
         end
 
@@ -878,6 +1012,74 @@ RSpec.describe FormController, type: :request do
             lettings_log.reload
             expect(lettings_log.owning_organisation).to eq(organisation)
             expect(lettings_log.managing_organisation).to eq(organisation)
+          end
+        end
+
+        context "when the sale date changes from 2024 to 2023" do
+          let(:sales_log) { create(:sales_log, owning_organisation: organisation, managing_organisation:, created_by: user) }
+          let(:params) do
+            {
+              id: sales_log.id,
+              sales_log: {
+                page: "completion_date",
+                "saledate(3i)" => 30,
+                "saledate(2i)" => 6,
+                "saledate(1i)" => 2023,
+              },
+            }
+          end
+          let(:managing_organisation) { create(:organisation) }
+
+          before do
+            organisation.managing_agents << managing_organisation
+            organisation.reload
+            sales_log.saledate = Time.zone.local(2024, 12, 1)
+            sales_log.save!(validate: false)
+            sales_log.reload
+          end
+
+          it "sets managing organisation to created by organisation" do
+            post "/sales-logs/#{sales_log.id}/completion-date", params: params
+            sales_log.reload
+            expect(sales_log.owning_organisation).to eq(organisation)
+            expect(sales_log.managing_organisation).to eq(organisation)
+          end
+        end
+
+        context "when the sale date changes from 2024 to a different date in 2024" do
+          let(:sales_log) { create(:sales_log, owning_organisation: organisation, managing_organisation:, created_by: user) }
+          let(:params) do
+            {
+              id: sales_log.id,
+              sales_log: {
+                page: "completion_date",
+                "saledate(3i)" => 30,
+                "saledate(2i)" => 6,
+                "saledate(1i)" => 2024,
+              },
+            }
+          end
+          let(:managing_organisation) { create(:organisation) }
+
+          before do
+            Timecop.freeze(Time.zone.local(2024, 12, 1))
+            Singleton.__init__(FormHandler)
+            organisation.managing_agents << managing_organisation
+            organisation.reload
+            sales_log.update!(saledate: Time.zone.local(2024, 12, 1))
+            sales_log.reload
+          end
+
+          after do
+            Timecop.return
+            Singleton.__init__(FormHandler)
+          end
+
+          it "does not set managing organisation to created by organisation" do
+            post "/sales-logs/#{sales_log.id}/completion-date", params: params
+            sales_log.reload
+            expect(sales_log.owning_organisation).to eq(organisation)
+            expect(sales_log.managing_organisation).to eq(managing_organisation)
           end
         end
 

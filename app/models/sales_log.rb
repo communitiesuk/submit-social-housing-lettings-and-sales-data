@@ -239,7 +239,7 @@ class SalesLog < Log
     ownershipsch == 3 || (ownershipsch == 2 && rent_to_buy_full_ownership?)
   end
 
-  def is_type_discount?
+  def social_homebuy?
     type == 18
   end
 
@@ -285,6 +285,13 @@ class SalesLog < Log
     cashdis_amount = cashdis || 0
 
     mortgage_amount + deposit_amount + cashdis_amount
+  end
+
+  def deposit_and_discount_total
+    deposit_amount = deposit || 0
+    cashdis_amount = cashdis || 0
+
+    deposit_amount + cashdis_amount
   end
 
   def value_times_equity

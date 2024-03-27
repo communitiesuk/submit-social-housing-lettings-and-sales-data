@@ -18,4 +18,32 @@ module FormPageHelper
   def relevant_check_answers_path(log, subsection)
     send("#{log.class.name.underscore}_#{subsection.id}_check_answers_path", log)
   end
+
+  def submit_button_text(page, referrer)
+    return page.submit_text if page.submit_text.present?
+
+    if accessed_from_duplicate_logs?(referrer) || returning_to_question_page?(page, referrer)
+      "Save changes"
+    else
+      "Save and continue"
+    end
+  end
+
+  def cancel_button_text(page, referrer)
+    if accessed_from_duplicate_logs?(referrer) || returning_to_question_page?(page, referrer)
+      "Cancel"
+    else
+      page.skip_text || "Skip for now"
+    end
+  end
+
+  def cancel_button_link(page, referrer, original_log_id, log)
+    if accessed_from_duplicate_logs?(referrer)
+      duplicate_log_set_path(log, original_log_id)
+    elsif returning_to_question_page?(page, referrer)
+      send(log.form.cancel_path(page, log), log)
+    else
+      page.skip_href(log) || send(log.form.next_page_redirect_path(page, log, current_user), log)
+    end
+  end
 end

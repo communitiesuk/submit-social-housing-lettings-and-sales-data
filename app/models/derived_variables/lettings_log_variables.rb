@@ -90,6 +90,16 @@ module DerivedVariables::LettingsLogVariables
         self.prevten = 32 if owning_organisation&.provider_type == "PRP"
         self.prevten = 30 if owning_organisation&.provider_type == "LA"
       end
+      self.ppostcode_full = postcode_full
+      self.ppcodenk = case postcode_known
+                      when 0
+                        1
+                      when 1
+                        0
+                      end
+      self.is_previous_la_inferred = is_la_inferred
+      self.previous_la_known = 1 if la.present?
+      self.prevloc = la
     end
     if form.start_year_after_2024? && is_bedsit?
       self.beds = 1
@@ -113,9 +123,17 @@ module DerivedVariables::LettingsLogVariables
       self.uprn = nil
     end
 
-    if uprn_confirmed&.zero?
+    if uprn_known == 1 && uprn_confirmed&.zero?
       self.uprn = nil
       self.uprn_known = 0
+      self.uprn_confirmed = nil
+      self.address_line1 = nil
+      self.address_line2 = nil
+      self.town_or_city = nil
+      self.county = nil
+      self.postcode_known = nil
+      self.postcode_full = nil
+      self.la = nil
     end
 
     self.nationality_all = nationality_all_group if nationality_uk_or_prefers_not_to_say?

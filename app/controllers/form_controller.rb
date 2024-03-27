@@ -1,4 +1,6 @@
 class FormController < ApplicationController
+  include CollectionTimeHelper
+
   before_action :authenticate_user!
   before_action :find_resource, only: %i[review]
   before_action :find_resource_by_named_id, except: %i[review]
@@ -11,7 +13,11 @@ class FormController < ApplicationController
       mandatory_questions_with_no_response = mandatory_questions_with_no_response(responses_for_page)
 
       if mandatory_questions_with_no_response.empty? && @log.update(responses_for_page.merge(updated_by: current_user))
-        flash[:notice] = "You have successfully updated #{@page.questions.map(&:check_answer_label).reject { |label| label.to_s.empty? }.first&.downcase}" if previous_interruption_screen_page_id.present?
+        if previous_interruption_screen_page_id.present?
+          updated_question = @page.questions.reject { |question| question.check_answer_label.blank? }.first
+          updated_question_string = [updated_question&.question_number_string, updated_question&.check_answer_label.to_s.downcase].compact.join(": ")
+          flash[:notice] = "You have successfully updated #{updated_question_string}"
+        end
         redirect_to(successful_redirect_path)
       else
         mandatory_questions_with_no_response.map do |question|
@@ -92,6 +98,11 @@ private
                                 Date.new(0, 1, 1)
                               end
       end
+
+      if question.id == "saledate" && set_managing_organisation_to_created_by_organisation?(result["saledate"])
+        result["managing_organisation_id"] = @log.created_by.organisation_id
+      end
+
       next unless question_params
 
       if %w[checkbox validation_override].include?(question.type)
@@ -104,13 +115,8 @@ private
 
       if question.id == "owning_organisation_id"
         owning_organisation = result["owning_organisation_id"].present? ? Organisation.find(result["owning_organisation_id"]) : nil
-        if current_user.support? && @log.managing_organisation.blank? && owning_organisation&.managing_agents&.empty?
-          result["managing_organisation_id"] = owning_organisation.id
-        elsif owning_organisation&.absorbing_organisation == current_user.organisation
-          result["managing_organisation_id"] = owning_organisation.id
-        elsif @log.managing_organisation&.absorbing_organisation == current_user.organisation && owning_organisation == current_user.organisation
-          result["managing_organisation_id"] = owning_organisation.id
-        end
+
+        result["managing_organisation_id"] = owning_organisation.id if set_managing_organisation_to_owning_organisation?(owning_organisation)
       end
 
       result
@@ -244,10 +250,12 @@ private
   def check_collection_period
     return unless @log
 
-    redirect_to lettings_log_path(@log) unless @log.collection_period_open_for_editing?
+    unless @log.collection_period_open_for_editing?
+      redirect_to @log.lettings? ? lettings_log_path(@log) : sales_log_path(@log)
+    end
   end
 
-  CONFIRMATION_PAGE_IDS = %w[uprn_confirmation].freeze
+  CONFIRMATION_PAGE_IDS = %w[uprn_confirmation uprn_selection].freeze
 
   def correcting_duplicate_logs_redirect_path
     class_name = @log.class.name.underscore
@@ -320,5 +328,20 @@ private
     dynamic_duplicates.each do |duplicate|
       duplicate.update!(duplicate_set_id: log.duplicate_set_id) if duplicate.duplicate_set_id != log.duplicate_set_id
     end
+  end
+
+  def set_managing_organisation_to_owning_organisation?(owning_organisation)
+    return true if current_user.support? && @log.managing_organisation.blank? && owning_organisation&.managing_agents&.empty?
+    return true if owning_organisation&.absorbing_organisation == current_user.organisation
+    return true if @log.managing_organisation&.absorbing_organisation == current_user.organisation && owning_organisation == current_user.organisation
+
+    false
+  end
+
+  def set_managing_organisation_to_created_by_organisation?(saledate)
+    return false if current_user.support?
+    return false if collection_start_year_for_date(saledate) >= 2024
+
+    true
   end
 end

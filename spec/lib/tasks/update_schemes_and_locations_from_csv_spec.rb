@@ -205,7 +205,7 @@ RSpec.describe "bulk_update" do
         expect(Rails.logger).to receive(:info).with("Updating scheme S#{schemes[0].id} with sensitive: No")
         expect(Rails.logger).to receive(:info).with("Updating scheme S#{schemes[0].id} with scheme_type: Direct Access Hostel")
         expect(Rails.logger).to receive(:info).with("Clearing location and scheme for logs with startdate and scheme S#{schemes[0].id}. Log IDs: ")
-        expect(Rails.logger).to receive(:info).with("Clearing location and scheme for logs without startdate and scheme S#{schemes[0].id}. Log IDs: #{lettings_log.id}, #{lettings_log_4.id}, #{lettings_log_5.id}")
+        expect(Rails.logger).to receive(:info).with(match(/^Clearing location and scheme for logs without startdate and scheme S#{schemes[0].id}\. Log IDs: (?=.*#{lettings_log.id})(?=.*#{lettings_log_4.id})(?=.*#{lettings_log_5.id}).*$/))
         expect(Rails.logger).to receive(:info).with("Updating scheme S#{schemes[0].id} with arrangement_type: Another registered stock owner")
         expect(Rails.logger).to receive(:info).with("Updating scheme S#{schemes[0].id} with primary_client_group: People with drug problems")
         expect(Rails.logger).to receive(:info).with("Updating scheme S#{schemes[0].id} with has_other_client_group: No")

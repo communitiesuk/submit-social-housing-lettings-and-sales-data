@@ -3,7 +3,6 @@ class Form::Lettings::Questions::SchemeId < ::Form::Question
     super("scheme_id", hsh, page)
     @check_answer_label = "Scheme name"
     @header = "What scheme is this log for?"
-    @hint_text = "Enter postcode or scheme name"
     @type = "select"
     @answer_options = answer_options
     @top_guidance_partial = "finding_scheme"
@@ -20,8 +19,8 @@ class Form::Lettings::Questions::SchemeId < ::Form::Question
     answer_opts = { "" => "Select an option" }
     return answer_opts unless ActiveRecord::Base.connected?
 
-    Scheme.select(:id, :service_name, :primary_client_group,
-                  :secondary_client_group).each_with_object(answer_opts) do |scheme, hsh|
+    Scheme.visible.select(:id, :service_name, :primary_client_group,
+                          :secondary_client_group).each_with_object(answer_opts) do |scheme, hsh|
       hsh[scheme.id.to_s] = scheme
       hsh
     end
@@ -30,10 +29,10 @@ class Form::Lettings::Questions::SchemeId < ::Form::Question
   def displayed_answer_options(lettings_log, _user = nil)
     organisation = lettings_log.owning_organisation || lettings_log.created_by&.organisation
     schemes = if organisation
-                Scheme.includes(:locations).select(:id).where(owning_organisation_id: organisation.id,
-                                                              confirmed: true)
+                Scheme.visible.includes(:locations).select(:id).where(owning_organisation_id: organisation.id,
+                                                                      confirmed: true)
               else
-                Scheme.includes(:locations).select(:id).where(confirmed: true)
+                Scheme.visible.includes(:locations).select(:id).where(confirmed: true)
               end
     filtered_scheme_ids = schemes.joins(:locations).merge(Location.started_in_2_weeks).map(&:id)
     answer_options.select do |k, _v|
@@ -47,6 +46,15 @@ class Form::Lettings::Questions::SchemeId < ::Form::Question
 
   def get_extra_check_answer_value(lettings_log)
     lettings_log.form.get_question("postcode_full", nil).label_from_value(lettings_log.postcode_full) unless lettings_log.scheme_has_multiple_locations?
+  end
+
+  def hint_text
+    if form.start_year_after_2024?
+      "Enter postcode or scheme name.<br><br>
+        A supported housing scheme provides shared or self-contained housing for a particular client group, for example younger or vulnerable people."
+    else
+      "Enter postcode or scheme name"
+    end
   end
 
 private

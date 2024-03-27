@@ -26,6 +26,17 @@ class LocationPolicy
     user.data_coordinator? && scheme_owned_by_user_org_or_stock_owner
   end
 
+  def delete_confirmation?
+    delete?
+  end
+
+  def delete?
+    return false unless user.support?
+    return false unless location.status == :incomplete || location.status == :deactivated
+
+    !has_any_logs_in_editable_collection_period
+  end
+
   %w[
     update_postcode?
     update_local_authority?
@@ -74,5 +85,11 @@ private
 
   def scheme_owned_by_user_org_or_stock_owner
     scheme&.owning_organisation == user.organisation || user.organisation.stock_owners.exists?(scheme&.owning_organisation_id)
+  end
+
+  def has_any_logs_in_editable_collection_period
+    editable_from_date = FormHandler.instance.earliest_open_for_editing_collection_start_date
+
+    LettingsLog.where(location_id: location.id).after_date(editable_from_date).or(LettingsLog.where(startdate: nil, location_id: location.id)).any?
   end
 end

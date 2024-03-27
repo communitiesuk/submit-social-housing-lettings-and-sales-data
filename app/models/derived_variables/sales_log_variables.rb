@@ -45,9 +45,17 @@ module DerivedVariables::SalesLogVariables
       self.uprn = nil
     end
 
-    if uprn_confirmed&.zero?
+    if uprn_known == 1 && uprn_confirmed&.zero?
       self.uprn = nil
       self.uprn_known = 0
+      self.uprn_confirmed = nil
+      self.address_line1 = nil
+      self.address_line2 = nil
+      self.town_or_city = nil
+      self.county = nil
+      self.pcodenk = nil
+      self.postcode_full = nil
+      self.la = nil
     end
 
     self.nationality_all = nationality_all_group if nationality_uk_or_prefers_not_to_say?

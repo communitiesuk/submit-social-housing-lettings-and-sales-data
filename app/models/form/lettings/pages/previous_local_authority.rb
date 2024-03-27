@@ -2,7 +2,7 @@ class Form::Lettings::Pages::PreviousLocalAuthority < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "previous_local_authority"
-    @depends_on = [{ "is_previous_la_inferred" => false }]
+    @depends_on = [{ "is_previous_la_inferred" => false, "renewal" => 0 }]
   end
 
   def questions

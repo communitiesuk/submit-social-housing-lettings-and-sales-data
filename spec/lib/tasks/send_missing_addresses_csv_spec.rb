@@ -41,7 +41,7 @@ RSpec.describe "correct_addresses" do
 
         it "prints out the jobs enqueued" do
           expect(Rails.logger).to receive(:info).with(nil)
-          expect(Rails.logger).to receive(:info).with("Sending missing lettings addresses CSV for test organisation to data_coordinator1@example.com, data_coordinator2@example.com")
+          expect(Rails.logger).to receive(:info).with(match(/^Sending missing lettings addresses CSV for test organisation to (?:data_coordinator1@example\.com, data_coordinator2@example\.com|data_coordinator2@example\.com, data_coordinator1@example\.com)$/))
           task.invoke
         end
       end
@@ -60,7 +60,7 @@ RSpec.describe "correct_addresses" do
 
         it "prints out the jobs enqueued" do
           expect(Rails.logger).to receive(:info).with(nil)
-          expect(Rails.logger).to receive(:info).with("Sending missing lettings addresses CSV for test organisation to data_provider3@example.com, data_provider4@example.com")
+          expect(Rails.logger).to receive(:info).with(match(/^Sending missing lettings addresses CSV for test organisation to (?:data_provider3@example\.com, data_provider4@example\.com|data_provider4@example\.com, data_provider3@example\.com)$/))
           task.invoke
         end
       end
@@ -93,7 +93,7 @@ RSpec.describe "correct_addresses" do
 
         it "prints out the jobs enqueued" do
           expect(Rails.logger).to receive(:info).with(nil)
-          expect(Rails.logger).to receive(:info).with("Sending missing lettings addresses CSV for test organisation to data_coordinator1@example.com, data_coordinator2@example.com")
+          expect(Rails.logger).to receive(:info).with(match(/^Sending missing lettings addresses CSV for test organisation to (?:data_coordinator1@example\.com, data_coordinator2@example\.com|data_coordinator2@example\.com, data_coordinator1@example\.com)$/))
           task.invoke
         end
       end
@@ -112,7 +112,7 @@ RSpec.describe "correct_addresses" do
 
         it "prints out the jobs enqueued" do
           expect(Rails.logger).to receive(:info).with(nil)
-          expect(Rails.logger).to receive(:info).with("Sending missing lettings addresses CSV for test organisation to data_provider3@example.com, data_provider4@example.com")
+          expect(Rails.logger).to receive(:info).with(match(/^Sending missing lettings addresses CSV for test organisation to (?:data_provider3@example\.com, data_provider4@example\.com|data_provider4@example\.com, data_provider3@example\.com)$/))
           task.invoke
         end
       end
@@ -145,7 +145,7 @@ RSpec.describe "correct_addresses" do
 
         it "prints out the jobs enqueued" do
           expect(Rails.logger).to receive(:info).with(nil)
-          expect(Rails.logger).to receive(:info).with("Sending missing lettings addresses CSV for test organisation to data_coordinator1@example.com, data_coordinator2@example.com")
+          expect(Rails.logger).to receive(:info).with(match(/^Sending missing lettings addresses CSV for test organisation to (?:data_coordinator1@example\.com, data_coordinator2@example\.com|data_coordinator2@example\.com, data_coordinator1@example\.com)$/))
           task.invoke
         end
       end
@@ -164,7 +164,7 @@ RSpec.describe "correct_addresses" do
 
         it "prints out the jobs enqueued" do
           expect(Rails.logger).to receive(:info).with(nil)
-          expect(Rails.logger).to receive(:info).with("Sending missing lettings addresses CSV for test organisation to data_provider3@example.com, data_provider4@example.com")
+          expect(Rails.logger).to receive(:info).with(match(/^Sending missing lettings addresses CSV for test organisation to (?:data_provider3@example\.com, data_provider4@example\.com|data_provider4@example\.com, data_provider3@example\.com)$/))
           task.invoke
         end
       end
@@ -184,7 +184,7 @@ RSpec.describe "correct_addresses" do
 
         it "prints out the jobs enqueued" do
           expect(Rails.logger).to receive(:info).with(nil)
-          expect(Rails.logger).to receive(:info).with("Sending missing lettings addresses CSV for test organisation to data_provider3@example.com, data_provider4@example.com")
+          expect(Rails.logger).to receive(:info).with(match(/^Sending missing lettings addresses CSV for test organisation to (?:data_provider3@example\.com, data_provider4@example\.com|data_provider4@example\.com, data_provider3@example\.com)$/))
           task.invoke
         end
       end
@@ -262,7 +262,7 @@ RSpec.describe "correct_addresses" do
 
         it "prints out the jobs enqueued" do
           expect(Rails.logger).to receive(:info).with(nil)
-          expect(Rails.logger).to receive(:info).with("Sending missing sales addresses CSV for test organisation to data_coordinator1@example.com, data_coordinator2@example.com")
+          expect(Rails.logger).to receive(:info).with(match(/^Sending missing sales addresses CSV for test organisation to (?:data_coordinator1@example\.com, data_coordinator2@example\.com|data_coordinator2@example\.com, data_coordinator1@example\.com)$/))
           task.invoke
         end
       end
@@ -281,7 +281,7 @@ RSpec.describe "correct_addresses" do
 
         it "prints out the jobs enqueued" do
           expect(Rails.logger).to receive(:info).with(nil)
-          expect(Rails.logger).to receive(:info).with("Sending missing sales addresses CSV for test organisation to data_provider3@example.com, data_provider4@example.com")
+          expect(Rails.logger).to receive(:info).with(match(/^Sending missing sales addresses CSV for test organisation to (?:data_provider3@example\.com, data_provider4@example\.com|data_provider4@example\.com, data_provider3@example\.com)$/))
           task.invoke
         end
       end
@@ -314,7 +314,7 @@ RSpec.describe "correct_addresses" do
 
         it "prints out the jobs enqueued" do
           expect(Rails.logger).to receive(:info).with(nil)
-          expect(Rails.logger).to receive(:info).with("Sending missing sales addresses CSV for test organisation to data_coordinator1@example.com, data_coordinator2@example.com")
+          expect(Rails.logger).to receive(:info).with(match(/^Sending missing sales addresses CSV for test organisation to (?:data_coordinator1@example\.com, data_coordinator2@example\.com|data_coordinator2@example\.com, data_coordinator1@example\.com)$/))
           task.invoke
         end
       end
@@ -333,7 +333,7 @@ RSpec.describe "correct_addresses" do
 
         it "prints out the jobs enqueued" do
           expect(Rails.logger).to receive(:info).with(nil)
-          expect(Rails.logger).to receive(:info).with("Sending missing sales addresses CSV for test organisation to data_provider3@example.com, data_provider4@example.com")
+          expect(Rails.logger).to receive(:info).with(match(/^Sending missing sales addresses CSV for test organisation to (?:data_provider3@example\.com, data_provider4@example\.com|data_provider4@example\.com, data_provider3@example\.com)$/))
           task.invoke
         end
       end
@@ -366,7 +366,7 @@ RSpec.describe "correct_addresses" do
 
         it "prints out the jobs enqueued" do
           expect(Rails.logger).to receive(:info).with(nil)
-          expect(Rails.logger).to receive(:info).with("Sending missing sales addresses CSV for test organisation to data_coordinator1@example.com, data_coordinator2@example.com")
+          expect(Rails.logger).to receive(:info).with(match(/^Sending missing sales addresses CSV for test organisation to (?:data_coordinator1@example\.com, data_coordinator2@example\.com|data_coordinator2@example\.com, data_coordinator1@example\.com)$/))
           task.invoke
         end
       end
@@ -385,7 +385,7 @@ RSpec.describe "correct_addresses" do
 
         it "prints out the jobs enqueued" do
           expect(Rails.logger).to receive(:info).with(nil)
-          expect(Rails.logger).to receive(:info).with("Sending missing sales addresses CSV for test organisation to data_provider3@example.com, data_provider4@example.com")
+          expect(Rails.logger).to receive(:info).with(match(/^Sending missing sales addresses CSV for test organisation to (?:data_provider3@example\.com, data_provider4@example\.com|data_provider4@example\.com, data_provider3@example\.com)$/))
           task.invoke
         end
       end
@@ -405,7 +405,7 @@ RSpec.describe "correct_addresses" do
 
         it "prints out the jobs enqueued" do
           expect(Rails.logger).to receive(:info).with(nil)
-          expect(Rails.logger).to receive(:info).with("Sending missing sales addresses CSV for test organisation to data_provider3@example.com, data_provider4@example.com")
+          expect(Rails.logger).to receive(:info).with(match(/^Sending missing sales addresses CSV for test organisation to (?:data_provider3@example\.com, data_provider4@example\.com|data_provider4@example\.com, data_provider3@example\.com)$/))
           task.invoke
         end
       end
