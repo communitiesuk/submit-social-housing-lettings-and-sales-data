@@ -20,7 +20,6 @@ class Organisation < ApplicationRecord
 
   def affiliated_stock_owners
     ids = []
-
     if holds_own_stock? && persisted?
       ids << id
     end
