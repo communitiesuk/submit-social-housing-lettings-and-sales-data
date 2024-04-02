@@ -190,141 +190,153 @@ RSpec.describe "Sales Log Features" do
   end
 
   context "when a log becomes a duplicate" do
-    let(:user) { create(:user, :data_coordinator) }
-    let(:sales_log) { create(:sales_log, :duplicate, created_by: user) }
-    let!(:duplicate_log) { create(:sales_log, :duplicate, created_by: user) }
-
     before do
-      allow(user).to receive(:need_two_factor_authentication?).and_return(false)
-      sign_in user
-      sales_log.update!(purchid: "different")
-      visit("/sales-logs/#{sales_log.id}/purchaser-code")
-      fill_in("sales-log-purchid-field", with: duplicate_log.purchid)
-      click_button("Save and continue")
+      Timecop.freeze(Time.zone.local(2024, 3, 3))
+      Singleton.__init__(FormHandler)
     end
 
-    it "allows keeping the original log and deleting duplicates" do
-      sales_log.reload
-      duplicate_log.reload
-      expect(sales_log.duplicates.count).to eq(1)
-      expect(duplicate_log.duplicates.count).to eq(1)
-      expect(sales_log.duplicate_set_id).not_to be_nil
-      expect(duplicate_log.duplicate_set_id).not_to be_nil
-      expect(sales_log.duplicates).to include(duplicate_log)
-
-      expect(page).to have_current_path("/sales-logs/#{sales_log.id}/duplicate-logs?original_log_id=#{sales_log.id}")
-      click_link("Keep this log and delete duplicates", href: "/sales-logs/#{sales_log.id}/delete-duplicates?original_log_id=#{sales_log.id}")
-      expect(page).to have_current_path("/sales-logs/#{sales_log.id}/delete-duplicates?original_log_id=#{sales_log.id}")
-      click_button "Delete this log"
-      duplicate_log.reload
-      expect(duplicate_log.deleted?).to be true
-      expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
-      expect(page).to have_content("Log #{duplicate_log.id} has been deleted.")
-      expect(page).to have_current_path("/sales-logs/#{sales_log.id}/duplicate-logs?organisation_id=&original_log_id=#{sales_log.id}&referrer=")
-      expect(page).not_to have_content("These logs are duplicates")
-      expect(page).not_to have_link("Keep this log and delete duplicates")
-      expect(page).to have_link("Back to Log #{sales_log.id}", href: "/sales-logs/#{sales_log.id}")
-
-      sales_log.reload
-      duplicate_log.reload
-
-      expect(sales_log.duplicates.count).to eq(0)
-      expect(duplicate_log.duplicates.count).to eq(0)
-      expect(sales_log.duplicate_set_id).to be_nil
-      expect(duplicate_log.duplicate_set_id).to be_nil
+    after do
+      Timecop.return
+      Singleton.__init__(FormHandler)
     end
 
-    it "allows changing answer on remaining original log" do
-      click_link("Keep this log and delete duplicates", href: "/sales-logs/#{sales_log.id}/delete-duplicates?original_log_id=#{sales_log.id}")
-      click_button "Delete this log"
-      click_link("Change", href: "/sales-logs/#{sales_log.id}/purchaser-code?original_log_id=#{sales_log.id}&referrer=interruption_screen")
-      click_button("Save and continue")
-      expect(page).to have_current_path("/sales-logs/#{sales_log.id}/duplicate-logs?original_log_id=#{sales_log.id}")
-      expect(page).to have_link("Back to Log #{sales_log.id}", href: "/sales-logs/#{sales_log.id}")
-    end
+    context "and updating duplicate log" do
+      let(:user) { create(:user, :data_coordinator) }
+      let(:sales_log) { create(:sales_log, :duplicate, created_by: user) }
+      let!(:duplicate_log) { create(:sales_log, :duplicate, created_by: user) }
 
-    it "allows keeping the duplicate log and deleting the original one" do
-      sales_log.reload
-      duplicate_log.reload
-      expect(sales_log.duplicates.count).to eq(1)
-      expect(duplicate_log.duplicates.count).to eq(1)
-      expect(sales_log.duplicate_set_id).not_to be_nil
-      expect(duplicate_log.duplicate_set_id).not_to be_nil
-      expect(duplicate_log.duplicates).to include(sales_log)
+      before do
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in user
+        sales_log.update!(purchid: "different")
+        visit("/sales-logs/#{sales_log.id}/purchaser-code")
+        fill_in("sales-log-purchid-field", with: duplicate_log.purchid)
+        click_button("Save and continue")
+      end
 
-      expect(page).to have_current_path("/sales-logs/#{sales_log.id}/duplicate-logs?original_log_id=#{sales_log.id}")
-      click_link("Keep this log and delete duplicates", href: "/sales-logs/#{duplicate_log.id}/delete-duplicates?original_log_id=#{sales_log.id}")
-      expect(page).to have_current_path("/sales-logs/#{duplicate_log.id}/delete-duplicates?original_log_id=#{sales_log.id}")
-      click_button "Delete this log"
-      sales_log.reload
-      expect(sales_log.status).to eq("deleted")
-      expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
-      expect(page).to have_content("Log #{sales_log.id} has been deleted.")
-      expect(page).to have_current_path("/sales-logs/#{duplicate_log.id}/duplicate-logs?organisation_id=&original_log_id=#{sales_log.id}&referrer=")
-      expect(page).not_to have_content("These logs are duplicates")
-      expect(page).not_to have_link("Keep this log and delete duplicates")
-      expect(page).to have_link("Back to sales logs", href: "/sales-logs")
+      it "allows keeping the original log and deleting duplicates" do
+        sales_log.reload
+        duplicate_log.reload
+        expect(sales_log.duplicates.count).to eq(1)
+        expect(duplicate_log.duplicates.count).to eq(1)
+        expect(sales_log.duplicate_set_id).not_to be_nil
+        expect(duplicate_log.duplicate_set_id).not_to be_nil
+        expect(sales_log.duplicates).to include(duplicate_log)
 
-      sales_log.reload
-      duplicate_log.reload
+        expect(page).to have_current_path("/sales-logs/#{sales_log.id}/duplicate-logs?original_log_id=#{sales_log.id}")
+        click_link("Keep this log and delete duplicates", href: "/sales-logs/#{sales_log.id}/delete-duplicates?original_log_id=#{sales_log.id}")
+        expect(page).to have_current_path("/sales-logs/#{sales_log.id}/delete-duplicates?original_log_id=#{sales_log.id}")
+        click_button "Delete this log"
+        duplicate_log.reload
+        expect(duplicate_log.deleted?).to be true
+        expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
+        expect(page).to have_content("Log #{duplicate_log.id} has been deleted.")
+        expect(page).to have_current_path("/sales-logs/#{sales_log.id}/duplicate-logs?organisation_id=&original_log_id=#{sales_log.id}&referrer=")
+        expect(page).not_to have_content("These logs are duplicates")
+        expect(page).not_to have_link("Keep this log and delete duplicates")
+        expect(page).to have_link("Back to Log #{sales_log.id}", href: "/sales-logs/#{sales_log.id}")
 
-      expect(sales_log.duplicates.count).to eq(0)
-      expect(duplicate_log.duplicates.count).to eq(0)
-      expect(sales_log.duplicate_set_id).to be_nil
-      expect(duplicate_log.duplicate_set_id).to be_nil
-    end
+        sales_log.reload
+        duplicate_log.reload
 
-    it "allows changing answers on remaining duplicate log" do
-      click_link("Keep this log and delete duplicates", href: "/sales-logs/#{duplicate_log.id}/delete-duplicates?original_log_id=#{sales_log.id}")
-      click_button "Delete this log"
-      click_link("Change", href: "/sales-logs/#{duplicate_log.id}/purchaser-code?original_log_id=#{sales_log.id}&referrer=interruption_screen")
-      click_button("Save and continue")
-      expect(page).to have_current_path("/sales-logs/#{duplicate_log.id}/duplicate-logs?original_log_id=#{sales_log.id}")
-      expect(page).to have_link("Back to sales logs", href: "/sales-logs")
-    end
+        expect(sales_log.duplicates.count).to eq(0)
+        expect(duplicate_log.duplicates.count).to eq(0)
+        expect(sales_log.duplicate_set_id).to be_nil
+        expect(duplicate_log.duplicate_set_id).to be_nil
+      end
 
-    it "allows deduplicating logs by changing the answers on the duplicate log" do
-      sales_log.reload
-      duplicate_log.reload
-      expect(sales_log.duplicates.count).to eq(1)
-      expect(duplicate_log.duplicates.count).to eq(1)
-      expect(sales_log.duplicate_set_id).not_to be_nil
-      expect(duplicate_log.duplicate_set_id).not_to be_nil
-      expect(sales_log.duplicates).to include(duplicate_log)
+      it "allows changing answer on remaining original log" do
+        click_link("Keep this log and delete duplicates", href: "/sales-logs/#{sales_log.id}/delete-duplicates?original_log_id=#{sales_log.id}")
+        click_button "Delete this log"
+        click_link("Change", href: "/sales-logs/#{sales_log.id}/purchaser-code?original_log_id=#{sales_log.id}&referrer=interruption_screen")
+        click_button("Save and continue")
+        expect(page).to have_current_path("/sales-logs/#{sales_log.id}/duplicate-logs?original_log_id=#{sales_log.id}")
+        expect(page).to have_link("Back to Log #{sales_log.id}", href: "/sales-logs/#{sales_log.id}")
+      end
 
-      expect(page).to have_current_path("/sales-logs/#{sales_log.id}/duplicate-logs?original_log_id=#{sales_log.id}")
-      click_link("Change", href: "/sales-logs/#{duplicate_log.id}/purchaser-code?first_remaining_duplicate_id=#{sales_log.id}&original_log_id=#{sales_log.id}&referrer=duplicate_logs")
-      fill_in("sales-log-purchid-field", with: "something else")
-      click_button("Save changes")
-      expect(page).to have_current_path("/sales-logs/#{sales_log.id}/duplicate-logs?original_log_id=#{sales_log.id}&referrer=duplicate_logs")
-      expect(page).to have_link("Back to Log #{sales_log.id}", href: "/sales-logs/#{sales_log.id}")
-      expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
-      expect(page).to have_content("Log #{duplicate_log.id} is no longer a duplicate and has been removed from the list")
-      expect(page).to have_content("You changed the purchaser code.")
+      it "allows keeping the duplicate log and deleting the original one" do
+        sales_log.reload
+        duplicate_log.reload
+        expect(sales_log.duplicates.count).to eq(1)
+        expect(duplicate_log.duplicates.count).to eq(1)
+        expect(sales_log.duplicate_set_id).not_to be_nil
+        expect(duplicate_log.duplicate_set_id).not_to be_nil
+        expect(duplicate_log.duplicates).to include(sales_log)
 
-      sales_log.reload
-      duplicate_log.reload
+        expect(page).to have_current_path("/sales-logs/#{sales_log.id}/duplicate-logs?original_log_id=#{sales_log.id}")
+        click_link("Keep this log and delete duplicates", href: "/sales-logs/#{duplicate_log.id}/delete-duplicates?original_log_id=#{sales_log.id}")
+        expect(page).to have_current_path("/sales-logs/#{duplicate_log.id}/delete-duplicates?original_log_id=#{sales_log.id}")
+        click_button "Delete this log"
+        sales_log.reload
+        expect(sales_log.status).to eq("deleted")
+        expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
+        expect(page).to have_content("Log #{sales_log.id} has been deleted.")
+        expect(page).to have_current_path("/sales-logs/#{duplicate_log.id}/duplicate-logs?organisation_id=&original_log_id=#{sales_log.id}&referrer=")
+        expect(page).not_to have_content("These logs are duplicates")
+        expect(page).not_to have_link("Keep this log and delete duplicates")
+        expect(page).to have_link("Back to sales logs", href: "/sales-logs")
 
-      expect(sales_log.duplicates.count).to eq(0)
-      expect(duplicate_log.duplicates.count).to eq(0)
-      expect(sales_log.duplicate_set_id).to be_nil
-      expect(duplicate_log.duplicate_set_id).to be_nil
-    end
+        sales_log.reload
+        duplicate_log.reload
 
-    it "allows deduplicating logs by changing the answers on the original log" do
-      click_link("Change", href: "/sales-logs/#{sales_log.id}/purchaser-code?first_remaining_duplicate_id=#{duplicate_log.id}&original_log_id=#{sales_log.id}&referrer=duplicate_logs")
-      fill_in("sales-log-purchid-field", with: "something else")
-      click_button("Save changes")
-      expect(page).to have_current_path("/sales-logs/#{duplicate_log.id}/duplicate-logs?original_log_id=#{sales_log.id}&referrer=duplicate_logs")
-      expect(page).to have_link("Back to Log #{sales_log.id}", href: "/sales-logs/#{sales_log.id}")
-      expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
-      expect(page).to have_content("Log #{sales_log.id} is no longer a duplicate and has been removed from the list")
-      expect(page).to have_content("You changed the purchaser code.")
+        expect(sales_log.duplicates.count).to eq(0)
+        expect(duplicate_log.duplicates.count).to eq(0)
+        expect(sales_log.duplicate_set_id).to be_nil
+        expect(duplicate_log.duplicate_set_id).to be_nil
+      end
 
-      expect(sales_log.duplicates.count).to eq(0)
-      expect(duplicate_log.duplicates.count).to eq(0)
-      expect(sales_log.duplicate_set_id).to be_nil
-      expect(duplicate_log.duplicate_set_id).to be_nil
+      it "allows changing answers on remaining duplicate log" do
+        click_link("Keep this log and delete duplicates", href: "/sales-logs/#{duplicate_log.id}/delete-duplicates?original_log_id=#{sales_log.id}")
+        click_button "Delete this log"
+        click_link("Change", href: "/sales-logs/#{duplicate_log.id}/purchaser-code?original_log_id=#{sales_log.id}&referrer=interruption_screen")
+        click_button("Save and continue")
+        expect(page).to have_current_path("/sales-logs/#{duplicate_log.id}/duplicate-logs?original_log_id=#{sales_log.id}")
+        expect(page).to have_link("Back to sales logs", href: "/sales-logs")
+      end
+
+      it "allows deduplicating logs by changing the answers on the duplicate log" do
+        sales_log.reload
+        duplicate_log.reload
+        expect(sales_log.duplicates.count).to eq(1)
+        expect(duplicate_log.duplicates.count).to eq(1)
+        expect(sales_log.duplicate_set_id).not_to be_nil
+        expect(duplicate_log.duplicate_set_id).not_to be_nil
+        expect(sales_log.duplicates).to include(duplicate_log)
+
+        expect(page).to have_current_path("/sales-logs/#{sales_log.id}/duplicate-logs?original_log_id=#{sales_log.id}")
+        click_link("Change", href: "/sales-logs/#{duplicate_log.id}/purchaser-code?first_remaining_duplicate_id=#{sales_log.id}&original_log_id=#{sales_log.id}&referrer=duplicate_logs")
+        fill_in("sales-log-purchid-field", with: "something else")
+        click_button("Save changes")
+        expect(page).to have_current_path("/sales-logs/#{sales_log.id}/duplicate-logs?original_log_id=#{sales_log.id}&referrer=duplicate_logs")
+        expect(page).to have_link("Back to Log #{sales_log.id}", href: "/sales-logs/#{sales_log.id}")
+        expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
+        expect(page).to have_content("Log #{duplicate_log.id} is no longer a duplicate and has been removed from the list")
+        expect(page).to have_content("You changed the purchaser code.")
+
+        sales_log.reload
+        duplicate_log.reload
+
+        expect(sales_log.duplicates.count).to eq(0)
+        expect(duplicate_log.duplicates.count).to eq(0)
+        expect(sales_log.duplicate_set_id).to be_nil
+        expect(duplicate_log.duplicate_set_id).to be_nil
+      end
+
+      it "allows deduplicating logs by changing the answers on the original log" do
+        click_link("Change", href: "/sales-logs/#{sales_log.id}/purchaser-code?first_remaining_duplicate_id=#{duplicate_log.id}&original_log_id=#{sales_log.id}&referrer=duplicate_logs")
+        fill_in("sales-log-purchid-field", with: "something else")
+        click_button("Save changes")
+        expect(page).to have_current_path("/sales-logs/#{duplicate_log.id}/duplicate-logs?original_log_id=#{sales_log.id}&referrer=duplicate_logs")
+        expect(page).to have_link("Back to Log #{sales_log.id}", href: "/sales-logs/#{sales_log.id}")
+        expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
+        expect(page).to have_content("Log #{sales_log.id} is no longer a duplicate and has been removed from the list")
+        expect(page).to have_content("You changed the purchaser code.")
+
+        expect(sales_log.duplicates.count).to eq(0)
+        expect(duplicate_log.duplicates.count).to eq(0)
+        expect(sales_log.duplicate_set_id).to be_nil
+        expect(duplicate_log.duplicate_set_id).to be_nil
+      end
     end
   end
 end
