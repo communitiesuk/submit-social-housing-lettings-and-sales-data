@@ -119,7 +119,12 @@ RSpec.describe UserPolicy do
     end
 
     context "with unconfirmed user" do
-      let(:user) { create(:user, last_sign_in_at: nil) }
+      let(:user) { create(:user) }
+
+      before do
+        user.confirmed_at = nil
+        user.save!(validate: false)
+      end
 
       it "does not allow deleting a user as a provider" do
         expect(user.status).to eq(:unconfirmed)
