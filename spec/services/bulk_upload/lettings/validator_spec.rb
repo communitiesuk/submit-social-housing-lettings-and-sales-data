@@ -5,7 +5,7 @@ RSpec.describe BulkUpload::Lettings::Validator do
 
   let(:organisation) { create(:organisation, old_visible_id: "3") }
   let(:user) { create(:user, organisation:) }
-  let(:log) { build(:lettings_log, :completed) }
+  let(:log) { build(:lettings_log, :completed, startdate: Time.zone.local(2024, 3, 3)) }
   let(:bulk_upload) { create(:bulk_upload, user:) }
   let(:path) { file.path }
   let(:file) { Tempfile.new }

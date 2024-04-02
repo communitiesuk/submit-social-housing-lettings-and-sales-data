@@ -7,6 +7,16 @@ RSpec.describe SalesLog, type: :model do
   let(:owning_organisation) { create(:organisation) }
   let(:created_by_user) { create(:user) }
 
+  before do
+    Timecop.freeze(Time.zone.local(2024, 3, 1))
+    Singleton.__init__(FormHandler)
+  end
+
+  after do
+    Timecop.return
+    Singleton.__init__(FormHandler)
+  end
+
   include_examples "shared examples for derived fields", :sales_log
   include_examples "shared log examples", :sales_log
 
@@ -528,19 +538,12 @@ RSpec.describe SalesLog, type: :model do
   describe "derived variables" do
     let(:sales_log) { create(:sales_log, :completed) }
 
-    around do |example|
-      Timecop.freeze(Time.zone.local(2022, 7, 4)) do
-        example.run
-      end
-      Timecop.return
-    end
-
     it "correctly derives and saves exday, exmonth and exyear" do
-      sales_log.update!(exdate: Time.gm(2022, 5, 4), saledate: Time.gm(2022, 7, 4), ownershipsch: 1, type: 18, staircase: 2, resale: 2, proplen: 0)
+      sales_log.update!(exdate: Time.gm(2023, 5, 4), saledate: Time.gm(2023, 7, 4), ownershipsch: 1, type: 18, staircase: 2, resale: 2, proplen: 0)
       record_from_db = described_class.find(sales_log.id)
       expect(record_from_db["exday"]).to eq(4)
       expect(record_from_db["exmonth"]).to eq(5)
-      expect(record_from_db["exyear"]).to eq(2022)
+      expect(record_from_db["exyear"]).to eq(2023)
     end
 
     it "correctly derives and saves deposit for outright sales when no mortgage is used" do

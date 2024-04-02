@@ -18,6 +18,7 @@ RSpec.describe "bulk_update" do
   end
 
   before do
+    Timecop.freeze(Time.zone.local(2024, 3, 1))
     allow(Storage::S3Service).to receive(:new).and_return(storage_service)
     allow(Configuration::EnvConfigurationService).to receive(:new).and_return(env_config_service)
     allow(ENV).to receive(:[])
@@ -27,6 +28,10 @@ RSpec.describe "bulk_update" do
       .to_return(status: 200, body: "{\"status\":404,\"error\":\"Postcode not found\"}", headers: {})
     WebMock.stub_request(:get, /api\.postcodes\.io\/postcodes\/B11BB/)
       .to_return(status: 200, body: '{"status":200,"result":{"admin_district":"Westminster","codes":{"admin_district":"E09000033"}}}', headers: {})
+  end
+
+  after do
+    Timecop.return
   end
 
   describe ":update_schemes_from_csv", type: :task do

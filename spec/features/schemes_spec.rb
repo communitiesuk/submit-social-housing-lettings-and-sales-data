@@ -10,10 +10,15 @@ RSpec.describe "Schemes scheme Features" do
       let!(:scheme_to_search) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
 
       before do
+        Timecop.freeze(Time.zone.local(2024, 3, 1))
         visit("/lettings-logs")
         fill_in("user[email]", with: user.email)
         fill_in("user[password]", with: user.password)
         click_button("Sign in")
+      end
+
+      after do
+        Timecop.return
       end
 
       it "displays the link to the schemes" do

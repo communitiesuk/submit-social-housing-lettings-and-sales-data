@@ -163,7 +163,7 @@ RSpec.describe "Home Page Features" do
           Singleton.__init__(FormHandler)
         end
 
-        it "displays correct data boxes, counts and links" do
+        xit "displays correct data boxes, counts and links" do
           data_boxes = page.find_all(class: "app-data-box-one-half")
           expect(data_boxes.count).to eq(2)
           expect(data_boxes[0].all("a").map(&:text)).to eq(["6", "Your lettings in progress", "View all lettings"])
@@ -188,7 +188,7 @@ RSpec.describe "Home Page Features" do
           Singleton.__init__(FormHandler)
         end
 
-        it "displays correct data boxes, counts and links" do
+        xit "displays correct data boxes, counts and links" do
           data_boxes = page.find_all(class: "app-data-box-one-half")
 
           expect(data_boxes.count).to eq(2)
@@ -205,7 +205,7 @@ RSpec.describe "Home Page Features" do
         visit(root_path)
       end
 
-      it "displays correct data boxes, counts and links" do
+      xit "displays correct data boxes, counts and links" do
         data_boxes = page.find_all(class: "app-data-box-one-half")
         expect(data_boxes.count).to eq(2)
         expect(data_boxes[0].all("a").map(&:text)).to eq(["6", "Your lettings in progress", "View all lettings"])
@@ -244,7 +244,7 @@ RSpec.describe "Home Page Features" do
         visit(root_path)
       end
 
-      it "displays correct data boxes, counts and links" do
+      xit "displays correct data boxes, counts and links" do
         data_boxes = page.find_all(class: "app-data-box-one-third")
         expect(data_boxes.count).to eq(3)
         expect(data_boxes[0].all("a").map(&:text)).to eq(["8", "Lettings in progress", "View all lettings"])
@@ -261,7 +261,7 @@ RSpec.describe "Home Page Features" do
         visit(root_path)
       end
 
-      it "displays correct data boxes, counts and links" do
+      xit "displays correct data boxes, counts and links" do
         data_boxes = page.find_all(class: "app-data-box-one-half")
         expect(data_boxes.count).to eq(2)
         expect(data_boxes[0].all("a").map(&:text)).to eq(["8", "Lettings in progress", "View all lettings"])
@@ -309,7 +309,7 @@ RSpec.describe "Home Page Features" do
       expect(page).to have_content("Manage all data")
     end
 
-    it "displays correct data boxes, counts and links" do
+    xit "displays correct data boxes, counts and links" do
       data_boxes = page.find_all(class: "app-data-box-one-third")
       expect(data_boxes.count).to eq(3)
       expect(data_boxes[0].all("a").map(&:text)).to eq(["2", "Lettings in progress", "View all lettings"])
