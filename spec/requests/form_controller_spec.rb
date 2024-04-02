@@ -1149,8 +1149,8 @@ RSpec.describe FormController, type: :request do
         end
 
         context "when the sales question was accessed from a duplicate logs screen" do
-          let!(:sales_log) { create(:sales_log, :duplicate, created_by: user, duplicate_set_id: 1) }
-          let!(:duplicate_log) { create(:sales_log, :duplicate, created_by: user, duplicate_set_id: 1) }
+          let!(:sales_log) { create(:sales_log, :duplicate, created_by: user, duplicate_set_id: 1, saledate: Time.zone.local(2024, 3, 3)) }
+          let!(:duplicate_log) { create(:sales_log, :duplicate, created_by: user, duplicate_set_id: 1, saledate: Time.zone.local(2024, 3, 3)) }
           let(:referrer) { "/sales-logs/#{sales_log.id}/buyer-1-age?referrer=duplicate_logs&first_remaining_duplicate_id=#{duplicate_log.id}&original_log_id=#{sales_log.id}&referrer=duplicate_logs" }
           let(:params) do
             {
