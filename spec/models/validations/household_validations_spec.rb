@@ -298,6 +298,7 @@ RSpec.describe Validations::HouseholdValidations do
     it "validates that only 1 partner exists" do
       record.relat2 = "P"
       record.relat3 = "P"
+      record.startdate = Time.zone.local(2023, 4, 1)
       household_validator.validate_partner_count(record)
       expect(record.errors["relat2"])
         .to include(match I18n.t("validations.household.relat.one_partner"))

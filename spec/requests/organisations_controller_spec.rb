@@ -9,6 +9,16 @@ RSpec.describe OrganisationsController, type: :request do
   let(:new_value) { "Test Name 35" }
   let(:params) { { id: organisation.id, organisation: { name: new_value } } }
 
+  before do
+    Timecop.freeze(Time.zone.local(2024, 3, 1))
+    Singleton.__init__(FormHandler)
+  end
+
+  after do
+    Timecop.return
+    Singleton.__init__(FormHandler)
+  end
+
   context "when user is not signed in" do
     describe "#show" do
       it "does not let you see organisation details from org route" do

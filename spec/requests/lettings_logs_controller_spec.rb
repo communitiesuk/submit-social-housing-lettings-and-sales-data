@@ -1004,7 +1004,14 @@ RSpec.describe LettingsLogsController, type: :request do
 
           context "when there are multiple sets of duplicates" do
             before do
+              Timecop.freeze(Time.zone.local(2024, 3, 1))
+              Singleton.__init__(FormHandler)
               FactoryBot.create_list(:sales_log, 2, :duplicate, owning_organisation: user.organisation, created_by: user)
+            end
+
+            after do
+              Timecop.return
+              Singleton.__init__(FormHandler)
             end
 
             it "displays the correct copy in the banner" do
