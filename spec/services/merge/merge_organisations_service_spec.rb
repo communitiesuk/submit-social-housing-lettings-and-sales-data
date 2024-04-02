@@ -3,9 +3,16 @@ require "rails_helper"
 RSpec.describe Merge::MergeOrganisationsService do
   describe "#call" do
     before do
+      Timecop.freeze(Time.zone.local(2024, 3, 1))
+      Singleton.__init__(FormHandler)
       mail_double = instance_double("ActionMailer::MessageDelivery", deliver_later: nil)
       allow(MergeCompletionMailer).to receive(:send_merged_organisation_success_mail).and_return(mail_double)
       allow(MergeCompletionMailer).to receive(:send_absorbing_organisation_success_mail).and_return(mail_double)
+    end
+
+    after do
+      Timecop.return
+      Singleton.__init__(FormHandler)
     end
 
     context "when merging a single organisation into an existing organisation" do

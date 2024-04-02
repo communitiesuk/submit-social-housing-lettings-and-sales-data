@@ -76,7 +76,7 @@ module SchemesHelpers
     click_button "Save and continue"
     fill_in "Day", with: 2
     fill_in "Month", with: 5
-    fill_in "Year", with: 2022
+    fill_in "Year", with: 2023
     click_button "Save and continue"
   end
 
@@ -97,7 +97,7 @@ module SchemesHelpers
     click_button "Save and continue"
     fill_in "Day", with: 2
     fill_in "Month", with: 5
-    fill_in "Year", with: 2022
+    fill_in "Year", with: 2023
     click_button "Save and continue"
   end
 

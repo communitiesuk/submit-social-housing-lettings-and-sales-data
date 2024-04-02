@@ -10,10 +10,15 @@ RSpec.describe "Schemes scheme Features" do
       let!(:scheme_to_search) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
 
       before do
+        Timecop.freeze(Time.zone.local(2024, 3, 1))
         visit("/lettings-logs")
         fill_in("user[email]", with: user.email)
         fill_in("user[password]", with: user.password)
         click_button("Sign in")
+      end
+
+      after do
+        Timecop.return
       end
 
       it "displays the link to the schemes" do
@@ -532,7 +537,6 @@ RSpec.describe "Schemes scheme Features" do
 
         context "when adding a location" do
           before do
-            Timecop.freeze(Time.zone.local(2023, 3, 3))
             create_and_save_a_scheme
             click_button "Create scheme"
           end
@@ -600,15 +604,10 @@ RSpec.describe "Schemes scheme Features" do
 
         context "when changing location details" do
           before do
-            Timecop.freeze(Time.zone.local(2024, 3, 1))
             create_and_save_a_scheme
             click_button "Create scheme"
             fill_in_and_save_second_location
             click_button "Save and return to locations"
-          end
-
-          after do
-            Timecop.return
           end
 
           it "displays changed location" do
@@ -623,12 +622,7 @@ RSpec.describe "Schemes scheme Features" do
 
         context "when changing scheme answers" do
           before do
-            Timecop.freeze(Time.zone.local(2024, 3, 1))
             create_and_save_a_scheme_no_secondary_client_group
-          end
-
-          after do
-            Timecop.return
           end
 
           it "displays change links" do

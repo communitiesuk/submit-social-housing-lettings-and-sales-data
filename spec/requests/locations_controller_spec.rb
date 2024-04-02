@@ -7,7 +7,14 @@ RSpec.describe LocationsController, type: :request do
   let(:fake_2021_2022_form) { Form.new("spec/fixtures/forms/2021_2022.json") }
 
   before do
+    Timecop.freeze(Time.zone.local(2024, 3, 1))
+    Singleton.__init__(FormHandler)
     allow(FormHandler.instance).to receive(:current_lettings_form).and_return(fake_2021_2022_form)
+  end
+
+  after do
+    Timecop.return
+    Singleton.__init__(FormHandler)
   end
 
   describe "#create" do
@@ -130,7 +137,7 @@ RSpec.describe LocationsController, type: :request do
           before do
             Timecop.freeze(Time.zone.local(2023, 11, 10))
             create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 4, 1), location: deactivated_location)
-            Timecop.return
+            Timecop.freeze(2023, 3, 3)
           end
 
           it "shows locations for multiple selected statuses" do
