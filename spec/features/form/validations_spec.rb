@@ -174,8 +174,8 @@ RSpec.describe "validations" do
       it "returns the user back to the check_your_answers after fixing a validation from check_your_anwers" do
         lettings_log.update!(earnings: income_over_soft_limit, incfreq: 1)
         visit("/lettings-logs/#{lettings_log.id}/income-and-benefits/check-answers")
-        click_link("Answer", href: "/lettings-logs/#{lettings_log.id}/net-income-value-check?referrer=check_answers")
-        expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/net-income-value-check?referrer=check_answers")
+        click_link("Answer", href: "/lettings-logs/#{lettings_log.id}/net-income-value-check")
+        expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/net-income-value-check")
         click_link("Change", href: "/lettings-logs/#{lettings_log.id}/net-income?referrer=interruption_screen", match: :first)
         expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/net-income?referrer=interruption_screen")
         fill_in("lettings-log-earnings-field", with: income_under_soft_limit)
