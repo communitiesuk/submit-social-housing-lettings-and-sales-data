@@ -812,7 +812,7 @@ RSpec.describe LettingsLogsController, type: :request do
               expect(page).to have_title("Lettings logs (#{logs.count} logs matching ‘#{postcode}’) (page 1 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
             end
 
-            xit "has title with pagination details for page 2" do
+            it "has title with pagination details for page 2" do
               get "/lettings-logs?search=#{logs[0].postcode_full}&page=2", headers:, params: {}
               expect(page).to have_title("Lettings logs (#{logs.count} logs matching ‘#{postcode}’) (page 2 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
             end
@@ -969,7 +969,7 @@ RSpec.describe LettingsLogsController, type: :request do
             end
           end
 
-          xcontext "when on the second page" do
+          context "when on the second page" do
             before do
               get "/lettings-logs?page=2", headers:, params: {}
             end
@@ -1641,7 +1641,7 @@ RSpec.describe LettingsLogsController, type: :request do
         expect(page).to have_content("Log #{id} has been deleted.")
       end
 
-      xit "marks the log as deleted" do
+      it "marks the log as deleted" do
         expect { delete_request }.to change { lettings_log.reload.status }.from("completed").to("deleted")
       end
     end
