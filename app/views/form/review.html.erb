@@ -19,7 +19,12 @@
               <h3 class="govuk-summary-card__title"><%= subsection.label %></h3>
             </div>
             <div class="govuk-summary-card__content">
-              <%= render partial: "form/check_answers_summary_list", locals: { subsection:, questions: total_applicable_questions(subsection, @log, current_user), referrer: "check_answers" } %>
+              <%= render partial: "form/check_answers_summary_list", locals: {
+                subsection:,
+                questions: total_applicable_questions(subsection, @log, current_user),
+                referrer: "check_answers",
+                refer_unanswered: false,
+              } %>
             </div>
           </div>
         <% end %>

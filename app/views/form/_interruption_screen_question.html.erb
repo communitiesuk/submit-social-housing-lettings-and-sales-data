@@ -10,6 +10,7 @@
         lettings_log:,
         questions: soft_validation_affected_questions(question, @log).filter { |q| q.page.routed_to?(@log, current_user) },
         referrer: "interruption_screen",
+        refer_unanswered: true,
     } %>
   </div>
 </div>

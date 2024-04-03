@@ -1,9 +1,4 @@
 module FormPageHelper
-  def check_answers_href(question, log)
-    referrer = question.displayed_as_answered?(log) ? "check_answers" : nil
-    action_href(log, question.page.id, referrer)
-  end
-
   def action_href(log, page_id, referrer)
     send("#{log.model_name.param_key}_#{page_id}_path", log, referrer:)
   end
