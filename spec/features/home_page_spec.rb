@@ -126,6 +126,8 @@ RSpec.describe "Home Page Features" do
     let(:user) { FactoryBot.create(:user, name: "Provider") }
 
     before do
+      Timecop.freeze(Time.zone.local(2024, 1, 1))
+      Singleton.__init__(FormHandler)
       create_list(:lettings_log, 6, :in_progress, owning_organisation: user.organisation, created_by: user)
       create_list(:lettings_log, 2, :in_progress, owning_organisation: user.organisation)
       create_list(:lettings_log, 4, :completed, owning_organisation: user.organisation, created_by: user)
@@ -133,6 +135,11 @@ RSpec.describe "Home Page Features" do
       create_list(:lettings_log, 2, :not_started)
       sign_in user
       visit(root_path)
+    end
+
+    after do
+      Timecop.return
+      Singleton.__init__(FormHandler)
     end
 
     it "displays the correct welcome text" do
@@ -151,16 +158,9 @@ RSpec.describe "Home Page Features" do
 
       context "and it is not a crossover" do
         before do
-          Timecop.freeze(Time.zone.local(2024, 1, 1))
-          Singleton.__init__(FormHandler)
           closed_period_in_progress_log = build(:lettings_log, :in_progress, owning_organisation: user.organisation, created_by: user, startdate: Time.zone.local(2022, 4, 1))
           closed_period_in_progress_log.save!(validate: false)
           visit(root_path)
-        end
-
-        after do
-          Timecop.return
-          Singleton.__init__(FormHandler)
         end
 
         it "displays correct data boxes, counts and links" do
@@ -181,11 +181,6 @@ RSpec.describe "Home Page Features" do
           closed_period_in_progress_log.save!(validate: false)
           sign_in user
           visit(root_path)
-        end
-
-        after do
-          Timecop.return
-          Singleton.__init__(FormHandler)
         end
 
         it "displays correct data boxes, counts and links" do
@@ -218,6 +213,8 @@ RSpec.describe "Home Page Features" do
 
   context "when the user is a data coordinator" do
     before do
+      Timecop.freeze(Time.zone.local(2024, 3, 1))
+      Singleton.__init__(FormHandler)
       create_list(:lettings_log, 6, :in_progress, owning_organisation: user.organisation)
       create_list(:lettings_log, 2, :in_progress, owning_organisation: user.organisation, created_by: user)
       create_list(:lettings_log, 4, :completed, owning_organisation: user.organisation)
@@ -226,6 +223,11 @@ RSpec.describe "Home Page Features" do
       create_list(:scheme, 1, :incomplete, owning_organisation: user.organisation)
       sign_in user
       visit(root_path)
+    end
+
+    after do
+      Timecop.return
+      Singleton.__init__(FormHandler)
     end
 
     let(:user) { FactoryBot.create(:user, :data_coordinator, name: "Coordinator") }
@@ -280,6 +282,8 @@ RSpec.describe "Home Page Features" do
     let(:otp) { "999111" }
 
     before do
+      Timecop.freeze(Time.zone.local(2024, 3, 1))
+      Singleton.__init__(FormHandler)
       create_list(:lettings_log, 2, :in_progress)
       create_list(:lettings_log, 1, :completed)
       create_list(:lettings_log, 2, :not_started)
@@ -301,6 +305,11 @@ RSpec.describe "Home Page Features" do
       fill_in("code", with: otp)
       click_button("Submit")
       visit(root_path)
+    end
+
+    after do
+      Timecop.return
+      Singleton.__init__(FormHandler)
     end
 
     it "displays the correct welcome text" do

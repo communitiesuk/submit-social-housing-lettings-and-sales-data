@@ -1622,18 +1622,24 @@ RSpec.describe LettingsLogsController, type: :request do
     let(:headers) { { "Accept" => "text/html" } }
     let(:page) { Capybara::Node::Simple.new(response.body) }
     let(:user) { create(:user, :support) }
-    let!(:lettings_log) do
-      create(:lettings_log, :completed)
-    end
     let(:id) { lettings_log.id }
     let(:delete_request) { delete "/lettings-logs/#{id}", headers: }
 
     before do
+      Timecop.freeze(2024, 3, 1)
+      Singleton.__init__(FormHandler)
       allow(user).to receive(:need_two_factor_authentication?).and_return(false)
       sign_in user
     end
 
+    after do
+      Timecop.return
+      Singleton.__init__(FormHandler)
+    end
+
     context "when delete permitted" do
+      let!(:lettings_log) { create(:lettings_log, :completed) }
+
       it "redirects to lettings logs and shows message" do
         delete_request
         expect(response).to redirect_to(lettings_logs_path)
@@ -1649,6 +1655,10 @@ RSpec.describe LettingsLogsController, type: :request do
     context "when log does not exist" do
       let(:id) { -1 }
 
+      before do
+        create(:lettings_log, :completed)
+      end
+
       it "returns 404" do
         delete_request
         expect(response).to have_http_status(:not_found)
@@ -1657,6 +1667,7 @@ RSpec.describe LettingsLogsController, type: :request do
 
     context "when user not authorised" do
       let(:user) { create(:user) }
+      let(:lettings_log) { create(:lettings_log, :completed) }
 
       it "returns 401" do
         delete_request
