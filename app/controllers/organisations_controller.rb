@@ -46,14 +46,14 @@ class OrganisationsController < ApplicationController
   end
 
   def users
-    organisation_users = @organisation.users.sorted_by_organisation_and_role
+    organisation_users = @organisation.users.visible.sorted_by_organisation_and_role
     unpaginated_filtered_users = filter_manager.filtered_users(organisation_users, search_term, session_filters)
 
     respond_to do |format|
       format.html do
         @pagy, @users = pagy(unpaginated_filtered_users)
         @searched = search_term.presence
-        @total_count = @organisation.users.size
+        @total_count = @organisation.users.visible.size
         @filter_type = "users"
 
         if current_user.support?

@@ -30,7 +30,7 @@ module TagHelper
     deactivated: "grey",
     deleted: "red",
     merged: "orange",
-    unconfirmed: "red",
+    unconfirmed: "blue",
   }.freeze
 
   def status_tag(status, classes = [])

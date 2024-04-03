@@ -99,5 +99,129 @@ RSpec.describe UserPolicy do
       expect(policy).to permit(support, data_provider)
     end
   end
+
+  permissions :delete? do
+    context "with active user" do
+      let(:user) { create(:user, last_sign_in_at: Time.zone.yesterday) }
+
+      it "does not allow deleting a user as a provider" do
+        expect(user.status).to eq(:active)
+        expect(policy).not_to permit(data_provider, user)
+      end
+
+      it "does not allow allows deleting a user as a coordinator" do
+        expect(policy).not_to permit(data_coordinator, user)
+      end
+
+      it "does not allow deleting a user as a support user" do
+        expect(policy).not_to permit(support, user)
+      end
+    end
+
+    context "with unconfirmed user" do
+      let(:user) { create(:user) }
+
+      before do
+        user.confirmed_at = nil
+        user.save!(validate: false)
+      end
+
+      it "does not allow deleting a user as a provider" do
+        expect(user.status).to eq(:unconfirmed)
+        expect(policy).not_to permit(data_provider, user)
+      end
+
+      it "does not allow allows deleting a user as a coordinator" do
+        expect(policy).not_to permit(data_coordinator, user)
+      end
+
+      it "does not allow deleting a user as a support user" do
+        expect(policy).not_to permit(support, user)
+      end
+    end
+
+    context "with deactivated user" do
+      let(:user) { create(:user, active: false) }
+
+      before do
+        Timecop.freeze(Time.utc(2024, 4, 10))
+        log = create(:lettings_log, owning_organisation: user.organisation, created_by: user)
+        log.startdate = Time.zone.local(2022, 10, 10)
+        log.save!(validate: false)
+      end
+
+      after do
+        Timecop.unfreeze
+      end
+
+      context "and associated logs in editable collection period" do
+        before do
+          create(:lettings_log, :sh, owning_organisation: user.organisation, created_by: user, startdate: Time.zone.local(2024, 4, 9))
+        end
+
+        it "does not allow deleting a user as a provider" do
+          expect(policy).not_to permit(data_provider, user)
+        end
+
+        it "does not allow allows deleting a user as a coordinator" do
+          expect(policy).not_to permit(data_coordinator, user)
+        end
+
+        it "does not allow deleting a user as a support user" do
+          expect(policy).not_to permit(support, user)
+        end
+      end
+
+      context "and no associated logs in editable collection period" do
+        it "does not allow deleting a user as a provider" do
+          expect(policy).not_to permit(data_provider, user)
+        end
+
+        it "does not allow allows deleting a user as a coordinator" do
+          expect(policy).not_to permit(data_coordinator, user)
+        end
+
+        it "allows deleting a user as a support user" do
+          expect(policy).to permit(support, user)
+        end
+      end
+
+      context "and user is the DPO that has signed the agreement" do
+        let(:user) { create(:user, active: false, is_dpo: true) }
+
+        before do
+          user.organisation.data_protection_confirmation.update!(data_protection_officer: user)
+        end
+
+        it "does not allow deleting a user as a provider" do
+          expect(policy).not_to permit(data_provider, user)
+        end
+
+        it "does not allow allows deleting a user as a coordinator" do
+          expect(policy).not_to permit(data_coordinator, user)
+        end
+
+        it "does not allow deleting a user as a support user" do
+          expect(policy).not_to permit(support, user)
+        end
+      end
+
+      context "and user is the DPO that hasn't signed the agreement" do
+        let(:user) { create(:user, active: false, is_dpo: true) }
+
+        it "does not allow deleting a user as a provider" do
+          expect(policy).not_to permit(data_provider, user)
+        end
+
+        it "does not allow allows deleting a user as a coordinator" do
+          expect(policy).not_to permit(data_coordinator, user)
+        end
+
+        it "allows deleting a user as a support user" do
+          expect(policy).to permit(support, user)
+        end
+      end
+    end
+  end
 end
 # rubocop:enable RSpec/RepeatedExample
