@@ -89,11 +89,11 @@ RSpec.describe "Lettings Log Check Answers Page" do
 
     # Regex explanation: match the string "Answer" but not if it's follow by "the missing questions"
     # This way only the links in the table will get picked up
-    it "has an answer link for questions missing an answer" do
+    it "has an answer link without a referrer for questions missing an answer" do
       visit("/lettings-logs/#{empty_lettings_log.id}/#{subsection}/check-answers?referrer=check_answers")
       assert_selector "a", text: /Answer (?!the missing questions)/, count: 4
       assert_selector "a", text: "Change", count: 0
-      expect(page).to have_link("Answer", href: "/lettings-logs/#{empty_lettings_log.id}/person-1-age?referrer=check_answers")
+      expect(page).to have_link("Answer", href: "/lettings-logs/#{empty_lettings_log.id}/person-1-age")
     end
 
     it "has a change link for answered questions" do
