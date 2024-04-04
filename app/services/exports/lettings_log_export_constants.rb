@@ -188,7 +188,6 @@ module Exports::LettingsLogExportConstants
     "pscharge_value_check",
     "supcharg_value_check",
     "carehome_charges_value_check",
-    "assigned_to",
   ]
 
   PRE_2024_EXPORT_FIELDS = Set[
