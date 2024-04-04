@@ -171,11 +171,15 @@ RSpec.describe "validations" do
         expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
       end
 
-      it "returns the user back to the check_your_answers after fixing a validation from check_your_anwers" do
-        lettings_log.update!(earnings: income_over_soft_limit, incfreq: 1)
+      it "returns the user back to the check_your_answers after fixing a validation from check_your_answers" do
+        lettings_log.update!(earnings: income_under_soft_limit, incfreq: 1, net_income_value_check: 1)
         visit("/lettings-logs/#{lettings_log.id}/income-and-benefits/check-answers")
-        click_link("Answer", href: "/lettings-logs/#{lettings_log.id}/net-income-value-check")
-        expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/net-income-value-check")
+        click_link("Change", href: "/lettings-logs/#{lettings_log.id}/income-amount?referrer=check_answers")
+        expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/income-amount?referrer=check_answers")
+        fill_in("lettings-log-earnings-field", with: income_over_soft_limit)
+        choose("lettings-log-incfreq-1-field", allow_label_click: true)
+        click_button("Confirm")
+        expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/net-income-value-check?referrer=check_answers")
         click_link("Change", href: "/lettings-logs/#{lettings_log.id}/net-income?referrer=interruption_screen", match: :first)
         expect(page).to have_current_path("/lettings-logs/#{lettings_log.id}/net-income?referrer=interruption_screen")
         fill_in("lettings-log-earnings-field", with: income_under_soft_limit)
