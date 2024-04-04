@@ -51,8 +51,8 @@
       </p>
       <p class="govuk-body">
         Created <time datetime="<%= log.created_at.iso8601 %>"><%= log.created_at.to_formatted_s(:govuk_date) %></time>
-        <% if log.created_by %>
-          <span class="app-log-summary__footer--actor">Assigned to <%= log.created_by.name || log.created_by.email %></span>
+        <% if log.assigned_to %>
+          <span class="app-log-summary__footer--actor">Assigned to <%= log.assigned_to.name || log.assigned_to.email %></span>
         <% end %>
       </p>
     </footer>

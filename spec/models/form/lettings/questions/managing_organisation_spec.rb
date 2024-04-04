@@ -91,7 +91,7 @@ RSpec.describe Form::Lettings::Questions::ManagingOrganisation, type: :model do
 
       let(:log) do
         create(:lettings_log, owning_organisation: log_owning_org, managing_organisation: managing_org1,
-                              created_by: nil)
+                              assigned_to: nil)
       end
       let!(:org_rel1) do
         create(:organisation_relationship, parent_organisation: log_owning_org, child_organisation: managing_org2)
@@ -165,7 +165,7 @@ RSpec.describe Form::Lettings::Questions::ManagingOrganisation, type: :model do
         create(:organisation_relationship, parent_organisation: owning_org, child_organisation: managing_org)
       end
       let(:log) do
-        create(:lettings_log, owning_organisation: owning_org, managing_organisation: managing_org, created_by: nil)
+        create(:lettings_log, owning_organisation: owning_org, managing_organisation: managing_org, assigned_to: nil)
       end
 
       let(:options) do

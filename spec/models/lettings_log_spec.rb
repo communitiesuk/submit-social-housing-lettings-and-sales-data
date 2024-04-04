@@ -5,8 +5,8 @@ require "shared/shared_log_examples"
 # rubocop:disable RSpec/MessageChain
 RSpec.describe LettingsLog do
   let(:different_managing_organisation) { create(:organisation) }
-  let(:created_by_user) { create(:user) }
-  let(:owning_organisation) { created_by_user.organisation }
+  let(:assigned_to_user) { create(:user) }
+  let(:owning_organisation) { assigned_to_user.organisation }
   let(:fake_2021_2022_form) { Form.new("spec/fixtures/forms/2021_2022.json") }
 
   around do |example|
@@ -29,19 +29,19 @@ RSpec.describe LettingsLog do
   end
 
   it "is a not a sales log" do
-    lettings_log = build(:lettings_log, created_by: created_by_user)
+    lettings_log = build(:lettings_log, assigned_to: assigned_to_user)
     expect(lettings_log.sales?).to be false
   end
 
   it "is a lettings log" do
-    lettings_log = build(:lettings_log, created_by: created_by_user)
+    lettings_log = build(:lettings_log, assigned_to: assigned_to_user)
     expect(lettings_log).to be_lettings
   end
 
   describe "#form" do
-    let(:lettings_log) { build(:lettings_log, created_by: created_by_user) }
-    let(:lettings_log_2) { build(:lettings_log, startdate: Time.zone.local(2022, 1, 1), created_by: created_by_user) }
-    let(:lettings_log_year_2) { build(:lettings_log, startdate: Time.zone.local(2023, 5, 1), created_by: created_by_user) }
+    let(:lettings_log) { build(:lettings_log, assigned_to: assigned_to_user) }
+    let(:lettings_log_2) { build(:lettings_log, startdate: Time.zone.local(2022, 1, 1), assigned_to: assigned_to_user) }
+    let(:lettings_log_year_2) { build(:lettings_log, startdate: Time.zone.local(2023, 5, 1), assigned_to: assigned_to_user) }
 
     before do
       Timecop.freeze(2023, 1, 1)
@@ -61,7 +61,7 @@ RSpec.describe LettingsLog do
     end
 
     context "when a date outside the collection window is passed" do
-      let(:lettings_log) { build(:lettings_log, startdate: Time.zone.local(2015, 1, 1), created_by: created_by_user) }
+      let(:lettings_log) { build(:lettings_log, startdate: Time.zone.local(2015, 1, 1), assigned_to: assigned_to_user) }
 
       it "returns the first form" do
         expect(lettings_log.form).to be_a(Form)
@@ -76,7 +76,7 @@ RSpec.describe LettingsLog do
         described_class.create(
           owning_organisation:,
           managing_organisation: owning_organisation,
-          created_by: created_by_user,
+          assigned_to: assigned_to_user,
         )
       end
 
@@ -88,7 +88,7 @@ RSpec.describe LettingsLog do
   end
 
   describe "#update" do
-    let(:lettings_log) { create(:lettings_log, created_by: created_by_user) }
+    let(:lettings_log) { create(:lettings_log, assigned_to: assigned_to_user) }
     let(:validator) { lettings_log._validators[nil].first }
 
     after do
@@ -244,7 +244,7 @@ RSpec.describe LettingsLog do
       described_class.create({
         managing_organisation: owning_organisation,
         owning_organisation:,
-        created_by: created_by_user,
+        assigned_to: assigned_to_user,
         postcode_full: "M1 1AE",
         ppostcode_full: "M2 2AE",
         startdate: Time.gm(2021, 10, 10),
@@ -1259,7 +1259,7 @@ RSpec.describe LettingsLog do
         described_class.create({
           managing_organisation: owning_organisation,
           owning_organisation:,
-          created_by: created_by_user,
+          assigned_to: assigned_to_user,
           postcode_known: 1,
           postcode_full: "M1 1AE",
         })
@@ -1347,7 +1347,7 @@ RSpec.describe LettingsLog do
         described_class.create({
           managing_organisation: owning_organisation,
           owning_organisation:,
-          created_by: created_by_user,
+          assigned_to: assigned_to_user,
           ppcodenk: 0,
           ppostcode_full: "M1 1AE",
         })
@@ -1432,7 +1432,7 @@ RSpec.describe LettingsLog do
         described_class.create({
           managing_organisation: owning_organisation,
           owning_organisation:,
-          created_by: created_by_user,
+          assigned_to: assigned_to_user,
           brent: 5.77,
           scharge: 10.01,
           pscharge: 3,
@@ -1451,7 +1451,7 @@ RSpec.describe LettingsLog do
         described_class.create!({
           managing_organisation: owning_organisation,
           owning_organisation:,
-          created_by: created_by_user,
+          assigned_to: assigned_to_user,
           hhmemb: 3,
           relat2: "X",
           relat3: "C",
@@ -1535,7 +1535,7 @@ RSpec.describe LettingsLog do
         described_class.create({
           managing_organisation: owning_organisation,
           owning_organisation:,
-          created_by: created_by_user,
+          assigned_to: assigned_to_user,
           startdate: Time.zone.local(2021, 4, 10),
           created_at: Time.utc(2022, 2, 8, 16, 52, 15),
         })
@@ -1837,7 +1837,7 @@ RSpec.describe LettingsLog do
           described_class.create({
             managing_organisation: owning_organisation,
             owning_organisation:,
-            created_by: created_by_user,
+            assigned_to: assigned_to_user,
             age1_known: 1,
             sex1: "R",
             relat2: "R",
@@ -1857,7 +1857,7 @@ RSpec.describe LettingsLog do
           described_class.create({
             managing_organisation: owning_organisation,
             owning_organisation:,
-            created_by: created_by_user,
+            assigned_to: assigned_to_user,
             details_known_2: 1,
           })
         end
@@ -1875,7 +1875,7 @@ RSpec.describe LettingsLog do
         described_class.create({
           managing_organisation: owning_organisation,
           owning_organisation:,
-          created_by: created_by_user,
+          assigned_to: assigned_to_user,
           needstype: 2,
         })
       end
@@ -2030,7 +2030,7 @@ RSpec.describe LettingsLog do
         described_class.create({
           managing_organisation: owning_organisation,
           owning_organisation:,
-          created_by: created_by_user,
+          assigned_to: assigned_to_user,
           first_time_property_let_as_social_housing: 1,
         })
       end
@@ -2039,7 +2039,7 @@ RSpec.describe LettingsLog do
         described_class.create({
           managing_organisation: owning_organisation,
           owning_organisation:,
-          created_by: created_by_user,
+          assigned_to: assigned_to_user,
           first_time_property_let_as_social_housing: 0,
         })
       end
@@ -2172,7 +2172,7 @@ RSpec.describe LettingsLog do
           described_class.create!({
             managing_organisation: owning_organisation,
             owning_organisation:,
-            created_by: created_by_user,
+            assigned_to: assigned_to_user,
             needstype: 2,
             scheme_id: scheme.id,
             location_id: location.id,
@@ -2358,7 +2358,7 @@ RSpec.describe LettingsLog do
         described_class.create({
           managing_organisation: owning_organisation,
           owning_organisation:,
-          created_by: created_by_user,
+          assigned_to: assigned_to_user,
           startdate: Time.zone.local(2024, 4, 10),
           needstype: 1,
           renewal: 1,
@@ -2432,7 +2432,7 @@ RSpec.describe LettingsLog do
   end
 
   describe "resetting invalidated fields" do
-    let(:scheme) { create(:scheme, owning_organisation: created_by_user.organisation) }
+    let(:scheme) { create(:scheme, owning_organisation: assigned_to_user.organisation) }
     let!(:location) { create(:location, location_code: "E07000223", scheme:) }
     let(:lettings_log) do
       create(
@@ -2451,7 +2451,7 @@ RSpec.describe LettingsLog do
         scharge: 1,
         pscharge: 1,
         supcharg: 1,
-        created_by: created_by_user,
+        assigned_to: assigned_to_user,
       )
     end
 
@@ -2542,11 +2542,11 @@ RSpec.describe LettingsLog do
     end
 
     context "when a support user changes the owning organisation of the log" do
-      let(:lettings_log) { create(:lettings_log, created_by: created_by_user) }
+      let(:lettings_log) { create(:lettings_log, assigned_to: assigned_to_user) }
       let(:organisation_2) { create(:organisation) }
 
       context "when the organisation selected doesn't match the scheme set" do
-        let(:scheme) { create(:scheme, owning_organisation: created_by_user.organisation) }
+        let(:scheme) { create(:scheme, owning_organisation: assigned_to_user.organisation) }
         let(:location) { create(:location, scheme:) }
         let(:lettings_log) { create(:lettings_log, owning_organisation: nil, needstype: 2, scheme_id: scheme.id) }
 
@@ -2740,8 +2740,8 @@ RSpec.describe LettingsLog do
   end
 
   describe "scopes" do
-    let!(:lettings_log_1) { create(:lettings_log, :in_progress, startdate: Time.utc(2021, 5, 3), mrcdate: Time.utc(2021, 5, 3), voiddate: Time.utc(2021, 5, 3), created_by: created_by_user) }
-    let!(:lettings_log_2) { create(:lettings_log, :completed, startdate: Time.utc(2021, 5, 3), mrcdate: Time.utc(2021, 5, 3), voiddate: Time.utc(2021, 5, 3), created_by: created_by_user) }
+    let!(:lettings_log_1) { create(:lettings_log, :in_progress, startdate: Time.utc(2021, 5, 3), mrcdate: Time.utc(2021, 5, 3), voiddate: Time.utc(2021, 5, 3), assigned_to: assigned_to_user) }
+    let!(:lettings_log_2) { create(:lettings_log, :completed, startdate: Time.utc(2021, 5, 3), mrcdate: Time.utc(2021, 5, 3), voiddate: Time.utc(2021, 5, 3), assigned_to: assigned_to_user) }
 
     before do
       Timecop.freeze(Time.utc(2022, 6, 3))
@@ -2954,10 +2954,10 @@ RSpec.describe LettingsLog do
       let(:organisation_3) { create(:organisation) }
 
       before do
-        create(:lettings_log, :in_progress, owning_organisation: organisation_1, managing_organisation: organisation_1, created_by: nil)
-        create(:lettings_log, :completed, owning_organisation: organisation_1, managing_organisation: organisation_2, created_by: nil)
-        create(:lettings_log, :completed, owning_organisation: organisation_2, managing_organisation: organisation_1, created_by: nil)
-        create(:lettings_log, :completed, owning_organisation: organisation_2, managing_organisation: organisation_2, created_by: nil)
+        create(:lettings_log, :in_progress, owning_organisation: organisation_1, managing_organisation: organisation_1, assigned_to: nil)
+        create(:lettings_log, :completed, owning_organisation: organisation_1, managing_organisation: organisation_2, assigned_to: nil)
+        create(:lettings_log, :completed, owning_organisation: organisation_2, managing_organisation: organisation_1, assigned_to: nil)
+        create(:lettings_log, :completed, owning_organisation: organisation_2, managing_organisation: organisation_2, assigned_to: nil)
       end
 
       it "filters by given organisation" do
@@ -2973,10 +2973,10 @@ RSpec.describe LettingsLog do
       let(:organisation_3) { create(:organisation) }
 
       before do
-        create(:lettings_log, :in_progress, owning_organisation: organisation_1, managing_organisation: organisation_1, created_by: nil)
-        create(:lettings_log, :completed, owning_organisation: organisation_1, managing_organisation: organisation_2, created_by: nil)
-        create(:lettings_log, :completed, owning_organisation: organisation_2, managing_organisation: organisation_1, created_by: nil)
-        create(:lettings_log, :completed, owning_organisation: organisation_2, managing_organisation: organisation_2, created_by: nil)
+        create(:lettings_log, :in_progress, owning_organisation: organisation_1, managing_organisation: organisation_1, assigned_to: nil)
+        create(:lettings_log, :completed, owning_organisation: organisation_1, managing_organisation: organisation_2, assigned_to: nil)
+        create(:lettings_log, :completed, owning_organisation: organisation_2, managing_organisation: organisation_1, assigned_to: nil)
+        create(:lettings_log, :completed, owning_organisation: organisation_2, managing_organisation: organisation_2, assigned_to: nil)
       end
 
       it "filters by given owning organisation" do
@@ -3017,12 +3017,12 @@ RSpec.describe LettingsLog do
 
     context "when filtering by user" do
       before do
-        PaperTrail::Version.find_by(item_id: lettings_log_1.id, event: "create").update!(whodunnit: created_by_user.to_global_id.uri.to_s)
-        PaperTrail::Version.find_by(item_id: lettings_log_2.id, event: "create").update!(whodunnit: created_by_user.to_global_id.uri.to_s)
+        PaperTrail::Version.find_by(item_id: lettings_log_1.id, event: "create").update!(whodunnit: assigned_to_user.to_global_id.uri.to_s)
+        PaperTrail::Version.find_by(item_id: lettings_log_2.id, event: "create").update!(whodunnit: assigned_to_user.to_global_id.uri.to_s)
       end
 
       it "allows filtering on current user" do
-        expect(described_class.filter_by_user(created_by_user.id.to_s).count).to eq(2)
+        expect(described_class.filter_by_user(assigned_to_user.id.to_s).count).to eq(2)
       end
 
       it "returns all logs when all logs selected" do
@@ -3333,7 +3333,7 @@ RSpec.describe LettingsLog do
 
         it "does not return logs not associated with the user if user is given" do
           user = create(:user)
-          supported_housing_log.update!(created_by: user, owning_organisation: user.organisation)
+          supported_housing_log.update!(assigned_to: user, owning_organisation: user.organisation)
           duplicate_supported_housing_log.update!(owning_organisation: user.organisation)
           duplicate_sets = described_class.duplicate_sets(user.id)
           expect(duplicate_sets.count).to eq(1)

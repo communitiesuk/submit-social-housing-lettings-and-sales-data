@@ -272,8 +272,8 @@ RSpec.describe "Lettings Log Features" do
 
     it "is possible to delete multiple logs" do
       postcode = "SW1A 1AA"
-      lettings_log_1 = create(:lettings_log, :setup_completed, created_by: support_user, postcode_full: postcode)
-      lettings_log_2 = create(:lettings_log, :in_progress, created_by: support_user, postcode_full: postcode)
+      lettings_log_1 = create(:lettings_log, :setup_completed, assigned_to: support_user, postcode_full: postcode)
+      lettings_log_2 = create(:lettings_log, :in_progress, assigned_to: support_user, postcode_full: postcode)
       create_list(:lettings_log, 5, :in_progress)
 
       visit lettings_logs_path
@@ -464,8 +464,8 @@ RSpec.describe "Lettings Log Features" do
     end
 
     context "when a log becomes a duplicate" do
-      let(:lettings_log) { create(:lettings_log, :duplicate, owning_organisation: user.organisation, created_by: user) }
-      let!(:duplicate_log) { create(:lettings_log, :duplicate, owning_organisation: user.organisation, created_by: user) }
+      let(:lettings_log) { create(:lettings_log, :duplicate, owning_organisation: user.organisation, assigned_to: user) }
+      let!(:duplicate_log) { create(:lettings_log, :duplicate, owning_organisation: user.organisation, assigned_to: user) }
 
       before do
         lettings_log.update!(tenancycode: "different")

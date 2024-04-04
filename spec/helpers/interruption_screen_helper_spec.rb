@@ -13,7 +13,7 @@ RSpec.describe InterruptionScreenHelper do
       ecstat1: 1,
       earnings: 750,
       incfreq: 1,
-      created_by: user,
+      assigned_to: user,
       sex1: "F",
       brent: 12_345,
     )

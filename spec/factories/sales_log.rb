@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :sales_log do
-    created_by { FactoryBot.create(:user) }
-    owning_organisation { created_by.organisation }
+    assigned_to { FactoryBot.create(:user) }
+    owning_organisation { assigned_to.organisation }
     managing_organisation { owning_organisation }
     created_at { Time.zone.now }
     updated_at { Time.zone.now }

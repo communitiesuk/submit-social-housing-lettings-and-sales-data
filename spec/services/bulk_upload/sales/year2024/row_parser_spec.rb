@@ -524,7 +524,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
       end
     end
 
-    describe "#field_3" do # username for created_by
+    describe "#field_3" do # username for assigned_to
       context "when blank" do
         let(:attributes) { setup_section_params.merge(bulk_upload:, field_3: nil) }
 
