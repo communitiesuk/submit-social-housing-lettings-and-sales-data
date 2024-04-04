@@ -105,7 +105,7 @@ RSpec.describe FormController, type: :request do
 
       it "resets created by and renders the next page" do
         post "/lettings-logs/#{lettings_log.id}/net-income", params: params
-        expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}/created-by")
+        expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}/assigned-to")
         follow_redirect!
         lettings_log.reload
         expect(lettings_log.assigned_to).to eq(nil)
@@ -130,7 +130,7 @@ RSpec.describe FormController, type: :request do
 
       it "does not reset created by" do
         post "/lettings-logs/#{lettings_log.id}/net-income", params: params
-        expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}/created-by")
+        expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}/assigned-to")
         follow_redirect!
         lettings_log.reload
         expect(lettings_log.assigned_to).to eq(user)
@@ -155,7 +155,7 @@ RSpec.describe FormController, type: :request do
 
       it "sets managing organisation to owning organisation" do
         post "/lettings-logs/#{lettings_log.id}/stock-owner", params: params
-        expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}/created-by")
+        expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}/assigned-to")
         follow_redirect!
         lettings_log.reload
         expect(lettings_log.owning_organisation).to eq(managing_organisation)
@@ -182,7 +182,7 @@ RSpec.describe FormController, type: :request do
 
       it "correctly sets owning organisation" do
         post "/sales-logs/#{sales_log.id}/owning-organisation", params: params
-        expect(response).to redirect_to("/sales-logs/#{sales_log.id}/created-by")
+        expect(response).to redirect_to("/sales-logs/#{sales_log.id}/assigned-to")
         follow_redirect!
         sales_log.reload
         expect(sales_log.owning_organisation).to eq(managing_organisation)
@@ -209,7 +209,7 @@ RSpec.describe FormController, type: :request do
 
       it "does not reset created by" do
         post "/sales-logs/#{sales_log.id}/owning-organisation", params: params
-        expect(response).to redirect_to("/sales-logs/#{sales_log.id}/created-by")
+        expect(response).to redirect_to("/sales-logs/#{sales_log.id}/assigned-to")
         follow_redirect!
         sales_log.reload
         expect(sales_log.assigned_to).to eq(assigned_to)
@@ -238,7 +238,7 @@ RSpec.describe FormController, type: :request do
 
       it "does not reset created by" do
         post "/sales-logs/#{sales_log.id}/owning-organisation", params: params
-        expect(response).to redirect_to("/sales-logs/#{sales_log.id}/created-by")
+        expect(response).to redirect_to("/sales-logs/#{sales_log.id}/assigned-to")
         follow_redirect!
         sales_log.reload
         expect(sales_log.assigned_to).to eq(assigned_to)
@@ -527,14 +527,14 @@ RSpec.describe FormController, type: :request do
           let(:user) { create(:user, :support) }
 
           it "routes to the page" do
-            get "/lettings-logs/#{lettings_log.id}/created-by"
+            get "/lettings-logs/#{lettings_log.id}/assigned-to"
             expect(response).to have_http_status(:ok)
           end
         end
 
         context "when the dependency is not met" do
           it "redirects to the tasklist page" do
-            get "/lettings-logs/#{lettings_log.id}/created-by"
+            get "/lettings-logs/#{lettings_log.id}/assigned-to"
             expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}")
           end
         end
