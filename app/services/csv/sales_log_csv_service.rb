@@ -35,6 +35,10 @@ module Csv
         labels: %i[assigned_to is_dpo],
         codes: %i[assigned_to is_dpo],
       },
+      created_by: {
+        labels: %i[created_by email],
+        codes: %i[created_by email],
+      },
       assigned_to: {
         labels: %i[assigned_to email],
         codes: %i[assigned_to email],
@@ -78,10 +82,6 @@ module Csv
       updated_at
     ].freeze
 
-    NOT_IMPLEMENTED_FIELDS = %w[
-      assigned_to
-    ].freeze
-
     def value(attribute, log)
       if CUSTOM_CALL_CHAINS.key? attribute.to_sym
         call_chain = CUSTOM_CALL_CHAINS[attribute.to_sym][@export_type.to_sym]
@@ -101,8 +101,6 @@ module Csv
         when "labels"
           PERSON_DETAILS.find { |key, _value| key == attribute }[1]["refused_label"]
         end
-      elsif NOT_IMPLEMENTED_FIELDS.include? attribute
-        nil
       else
         value = log.public_send(attribute)
         case @export_type
@@ -134,12 +132,13 @@ module Csv
       "ppostcode_full" => %w[ppostc1 ppostc2],
       "la" => %w[la la_label],
       "prevloc" => %w[prevloc prevloc_label],
+      "created_by_id" => %w[created_by],
       "assigned_to_id" => %w[assigned_to],
       "owning_organisation_id" => %w[owning_organisation_name],
       "managing_organisation_id" => %w[managing_organisation_name],
     }.freeze
 
-    SUPPORT_ONLY_ATTRIBUTES = %w[address_line1_as_entered address_line2_as_entered town_or_city_as_entered county_as_entered postcode_full_as_entered la_as_entered assigned_to].freeze
+    SUPPORT_ONLY_ATTRIBUTES = %w[address_line1_as_entered address_line2_as_entered town_or_city_as_entered county_as_entered postcode_full_as_entered la_as_entered].freeze
 
     def sales_log_attributes
       ordered_questions = FormHandler.instance.ordered_sales_questions_for_all_years
@@ -153,7 +152,7 @@ module Csv
           question.id
         end
       end
-      non_question_fields = %w[id status duplicate_set_id created_at updated_at old_form_id collection_start_year creation_method is_dpo address_line1_as_entered address_line2_as_entered town_or_city_as_entered county_as_entered postcode_full_as_entered la_as_entered assigned_to]
+      non_question_fields = %w[id status duplicate_set_id created_at updated_at old_form_id collection_start_year creation_method is_dpo address_line1_as_entered address_line2_as_entered town_or_city_as_entered county_as_entered postcode_full_as_entered la_as_entered created_by]
       final_attributes = non_question_fields + attributes
       @user.support? ? final_attributes : final_attributes - SUPPORT_ONLY_ATTRIBUTES
     end

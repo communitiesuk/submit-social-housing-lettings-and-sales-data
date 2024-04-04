@@ -4,6 +4,7 @@ class Log < ApplicationRecord
   self.abstract_class = true
 
   belongs_to :owning_organisation, class_name: "Organisation", optional: true
+  belongs_to :created_by, class_name: "User", optional: true
   belongs_to :assigned_to, class_name: "User", optional: true
   belongs_to :updated_by, class_name: "User", optional: true
   belongs_to :bulk_upload, optional: true
