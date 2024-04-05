@@ -18,7 +18,7 @@ class Form::Lettings::Questions::ReferralPrp < ::Form::Question
           "hint" => "Where the tenant has moved to another social property owned by the same landlord.",
         },
         "2" => {
-          "value" => "Tenant applied directly (no nomination)",
+          "value" => "Tenant applied directly (no referral or nomination)",
         },
         "3" => {
           "value" => "Nominated by a local housing authority",
@@ -64,7 +64,7 @@ class Form::Lettings::Questions::ReferralPrp < ::Form::Question
           "hint" => "Where the tenant has moved to another social property owned by the same landlord.",
         },
         "2" => {
-          "value" => "Tenant applied directly (no nomination)",
+          "value" => "Tenant applied directly (no referral or nomination)",
         },
         "3" => {
           "value" => "Nominated by a local housing authority",
