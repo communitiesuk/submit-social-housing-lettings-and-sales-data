@@ -29,7 +29,7 @@ class CheckAnswersSummaryListCardComponent < ViewComponent::Base
   end
 
   def action_href(question, log)
-    referrer = question.displayed_as_answered?(log) ? "check_answers" : nil
+    referrer = question.displayed_as_answered?(log) ? "check_answers" : "check_answers_new_answer"
     send("#{log.model_name.param_key}_#{question.page.id}_path", log, referrer:)
   end
 

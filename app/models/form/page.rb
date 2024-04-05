@@ -37,7 +37,7 @@ class Form::Page
   end
 
   def has_unanswered_questions?(log)
-    questions.any? { |question| log[question.id].nil? }
+    questions.any? { |question| question.unanswered?(log) }
   end
 
   def interruption_screen?

@@ -213,8 +213,11 @@ private
       return send("#{@log.class.name.underscore}_#{previous_interruption_screen_page_id}_path", @log, { referrer: previous_interruption_screen_referrer, original_log_id: original_duplicate_log_id_from_query }.compact)
     end
 
-    redirect_path = form.next_page_redirect_path(@page, @log, current_user)
-    send(redirect_path, @log)
+    is_new_answer_from_check_answers = is_referrer_type?("check_answers_new_answer")
+    redirect_path = form.next_page_redirect_path(@page, @log, current_user, is_new_answer_from_check_answers)
+    referrer = is_new_answer_from_check_answers ? "check_answers_new_answer" : nil
+
+    send(redirect_path, @log, { referrer: referrer})
   end
 
   def redirect_path_to_question(page_to_show, unanswered_pages)
