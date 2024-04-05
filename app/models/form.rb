@@ -80,7 +80,7 @@ class Form
     subsections.find { |s| s.pages.find { |p| p.id == page.id } }
   end
 
-  def next_page_id(page, log, current_user, ignore_answered = false)
+  def next_page_id(page, log, current_user, ignore_answered: false)
     return page.next_unresolved_page_id || :check_answers if log.unresolved
 
     page_ids = subsection_for_page(page).pages.map(&:id)
@@ -94,14 +94,13 @@ class Form
 
     return :check_answers if next_page.nil?
     return next_page.id if next_page.routed_to?(log, current_user) &&
-                          (!ignore_answered || next_page.has_unanswered_questions?(log))
+      (!ignore_answered || next_page.has_unanswered_questions?(log))
 
-    next_page_id(next_page, log, current_user, ignore_answered)
+    next_page_id(next_page, log, current_user, ignore_answered:)
   end
 
-  def next_page_redirect_path(page, log, current_user, ignore_answered = false)
-    puts ignore_answered
-    next_page_id = next_page_id(page, log, current_user, ignore_answered)
+  def next_page_redirect_path(page, log, current_user, ignore_answered: false)
+    next_page_id = next_page_id(page, log, current_user, ignore_answered:)
     if next_page_id == :check_answers
       "#{type}_log_#{subsection_for_page(page).id}_check_answers_path"
     else

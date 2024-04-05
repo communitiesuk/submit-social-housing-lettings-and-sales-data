@@ -31,7 +31,7 @@
           href: action_href(
             @log,
             question.page.id,
-            question.displayed_as_answered?(@log) || referrer_unanswered.nil? ? referrer : referrer_unanswered
+            question.displayed_as_answered?(@log) || !defined?(referrer_unanswered) ? referrer : referrer_unanswered,
           ),
           visually_hidden_text: question.check_answer_label.to_s.downcase,
         ) %>

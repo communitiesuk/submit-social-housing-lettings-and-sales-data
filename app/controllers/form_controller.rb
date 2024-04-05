@@ -214,10 +214,10 @@ private
     end
 
     is_new_answer_from_check_answers = is_referrer_type?("check_answers_new_answer")
-    redirect_path = form.next_page_redirect_path(@page, @log, current_user, is_new_answer_from_check_answers)
+    redirect_path = form.next_page_redirect_path(@page, @log, current_user, ignore_answered: is_new_answer_from_check_answers)
     referrer = is_new_answer_from_check_answers ? "check_answers_new_answer" : nil
 
-    send(redirect_path, @log, { referrer: referrer})
+    send(redirect_path, @log, { referrer: })
   end
 
   def redirect_path_to_question(page_to_show, unanswered_pages)
