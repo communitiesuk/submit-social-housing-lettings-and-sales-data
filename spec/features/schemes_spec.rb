@@ -1085,7 +1085,7 @@ RSpec.describe "Schemes scheme Features" do
     let!(:user) { FactoryBot.create(:user, :data_coordinator, last_sign_in_at: Time.zone.now) }
     let!(:schemes) { FactoryBot.create_list(:scheme, 5, owning_organisation: user.organisation, arrangement_type: "The same organisation that owns the housing stock") }
     let(:location) { FactoryBot.create(:location, scheme: schemes[2]) }
-    let!(:lettings_log) { FactoryBot.create(:lettings_log, created_by: user, needstype: 2) }
+    let!(:lettings_log) { FactoryBot.create(:lettings_log, assigned_to: user, needstype: 2) }
 
     before do
       Timecop.freeze(Time.utc(2022, 6, 3))

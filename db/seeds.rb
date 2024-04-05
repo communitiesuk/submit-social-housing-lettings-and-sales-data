@@ -252,7 +252,7 @@ unless Rails.env.test?
 
   if (Rails.env.development? || Rails.env.review?) && SalesLog.count.zero?
     SalesLog.find_or_create_by!(
-      created_by: support_user,
+      assigned_to: support_user,
       owning_organisation: org,
       managing_organisation: org,
       saledate: Date.new(2023, 4, 1),
@@ -264,7 +264,7 @@ unless Rails.env.test?
     )
 
     SalesLog.find_or_create_by!(
-      created_by: support_user,
+      assigned_to: support_user,
       owning_organisation: org,
       managing_organisation: org,
       saledate: Date.new(2023, 4, 1),
@@ -276,7 +276,7 @@ unless Rails.env.test?
     )
 
     SalesLog.find_or_create_by!(
-      created_by: support_user,
+      assigned_to: support_user,
       owning_organisation: org,
       managing_organisation: org,
       saledate: Date.new(2023, 4, 1),
