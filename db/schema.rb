@@ -763,6 +763,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_19_122706) do
     t.datetime "confirmation_sent_at"
     t.string "unconfirmed_email"
     t.boolean "initial_confirmation_sent"
+    t.datetime "discarded_at"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["encrypted_otp_secret_key"], name: "index_users_on_encrypted_otp_secret_key", unique: true

@@ -22,15 +22,15 @@ class Form::Lettings::Questions::CreatedById < ::Form::Question
                [
                  (
                    if log.owning_organisation
-                     log.owning_organisation.absorbing_organisation.present? ? log.owning_organisation&.absorbing_organisation&.users : log.owning_organisation&.users
+                     log.owning_organisation.absorbing_organisation.present? ? log.owning_organisation&.absorbing_organisation&.users&.visible : log.owning_organisation&.users&.visible
                    end),
                  (
                    if log.managing_organisation
-                     log.managing_organisation.absorbing_organisation.present? ? log.managing_organisation&.absorbing_organisation&.users : log.managing_organisation.users
+                     log.managing_organisation.absorbing_organisation.present? ? log.managing_organisation&.absorbing_organisation&.users&.visible : log.managing_organisation.users&.visible
                    end),
                ].flatten
              else
-               current_user.organisation.users
+               current_user.organisation.users.visible
              end.uniq.compact
 
     users.each_with_object(ANSWER_OPTS.dup) do |user, hsh|

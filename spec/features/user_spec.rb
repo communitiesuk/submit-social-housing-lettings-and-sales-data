@@ -480,14 +480,14 @@ RSpec.describe "User Features" do
       it "allows to cancel user deactivation" do
         click_link("No – I’ve changed my mind")
         expect(page).to have_current_path("/users/#{other_user.id}")
-        expect(page).to have_no_content("This user has been deactivated.")
+        assert_selector ".govuk-tag", text: /Deactivated/, count: 0
         expect(page).to have_no_css(".govuk-notification-banner.govuk-notification-banner--success")
       end
 
       it "allows to deactivate the user" do
         click_button("I’m sure – deactivate this user")
         expect(page).to have_current_path("/users/#{other_user.id}")
-        expect(page).to have_content("Deactivated")
+        assert_selector ".govuk-tag", text: /Deactivated/, count: 1
         expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
       end
     end
@@ -517,7 +517,7 @@ RSpec.describe "User Features" do
       it "allows to cancel user reactivation" do
         click_link("No – I’ve changed my mind")
         expect(page).to have_current_path("/users/#{other_user.id}")
-        expect(page).to have_content("Deactivated")
+        assert_selector ".govuk-tag", text: /Deactivated/, count: 1
         expect(page).to have_no_css(".govuk-notification-banner.govuk-notification-banner--success")
       end
 
@@ -525,7 +525,7 @@ RSpec.describe "User Features" do
         expect(notify_client).to receive(:send_email).with(email_address: other_user.email, template_id: User::USER_REACTIVATED_TEMPLATE_ID, personalisation:).once
         click_button("I’m sure – reactivate this user")
         expect(page).to have_current_path("/users/#{other_user.id}")
-        expect(page).to have_no_content("This user has been deactivated.")
+        assert_selector ".govuk-tag", text: /Deactivated/, count: 0
         expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
       end
     end
