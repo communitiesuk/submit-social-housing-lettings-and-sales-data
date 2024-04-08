@@ -169,10 +169,9 @@
     <createddate>2024-04-03T00:00:00+01:00</createddate>
     <uploaddate>2024-04-03T00:00:00+01:00</uploaddate>
     <log_id>{log_id}</log_id>
-    <created_by>test1@example.com</created_by>
+    <assigned_to>test1@example.com</assigned_to>
     <amended_by/>
     <renttype_detail>2</renttype_detail>
-    <assigned_to/>
     <providertype>1</providertype>
   </form>
 </forms>

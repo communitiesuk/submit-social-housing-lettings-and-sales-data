@@ -156,7 +156,7 @@
     <createddate>2023-04-03T00:00:00+01:00</createddate>
     <uploaddate>2023-04-03T00:00:00+01:00</uploaddate>
     <log_id>{log_id}</log_id>
-    <created_by>test1@example.com</created_by>
+    <assigned_to>test1@example.com</assigned_to>
     <amended_by/>
     <renttype_detail>2</renttype_detail>
     <providertype>1</providertype>
