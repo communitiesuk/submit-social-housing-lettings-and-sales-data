@@ -103,7 +103,7 @@ RSpec.describe FormController, type: :request do
         lettings_log.reload
       end
 
-      it "resets created by and renders the next page" do
+      it "resets assigned to and renders the next page" do
         post "/lettings-logs/#{lettings_log.id}/net-income", params: params
         expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}/assigned-to")
         follow_redirect!
@@ -128,7 +128,7 @@ RSpec.describe FormController, type: :request do
         lettings_log.reload
       end
 
-      it "does not reset created by" do
+      it "does not reset assigned to" do
         post "/lettings-logs/#{lettings_log.id}/net-income", params: params
         expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}/assigned-to")
         follow_redirect!
@@ -207,7 +207,7 @@ RSpec.describe FormController, type: :request do
         sales_log.reload
       end
 
-      it "does not reset created by" do
+      it "does not reset assigned to" do
         post "/sales-logs/#{sales_log.id}/owning-organisation", params: params
         expect(response).to redirect_to("/sales-logs/#{sales_log.id}/assigned-to")
         follow_redirect!
@@ -236,7 +236,7 @@ RSpec.describe FormController, type: :request do
         sales_log.reload
       end
 
-      it "does not reset created by" do
+      it "does not reset assigned to" do
         post "/sales-logs/#{sales_log.id}/owning-organisation", params: params
         expect(response).to redirect_to("/sales-logs/#{sales_log.id}/assigned-to")
         follow_redirect!
@@ -261,7 +261,7 @@ RSpec.describe FormController, type: :request do
         lettings_log.reload
       end
 
-      it "does not reset created by" do
+      it "does not reset assigned to" do
         post "/lettings-logs/#{lettings_log.id}/stock-owner", params: params
         expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}/managing-organisation")
         follow_redirect!
@@ -288,7 +288,7 @@ RSpec.describe FormController, type: :request do
         lettings_log.reload
       end
 
-      it "does not reset created by" do
+      it "does not reset assigned to" do
         post "/lettings-logs/#{lettings_log.id}/stock-owner", params: params
         expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}/managing-organisation")
         follow_redirect!
@@ -313,7 +313,7 @@ RSpec.describe FormController, type: :request do
         lettings_log.reload
       end
 
-      it "does not reset created by" do
+      it "does not reset assigned to" do
         post "/lettings-logs/#{lettings_log.id}/stock-owner", params: params
         expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}/managing-organisation")
         follow_redirect!
@@ -342,7 +342,7 @@ RSpec.describe FormController, type: :request do
         sales_log.reload
       end
 
-      it "does not set managing organisation to created by organisation" do
+      it "does not set managing organisation to assigned to organisation" do
         post "/sales-logs/#{sales_log.id}/completion-date", params: params
         sales_log.reload
         expect(sales_log.owning_organisation).to eq(organisation)
@@ -1038,7 +1038,7 @@ RSpec.describe FormController, type: :request do
             sales_log.reload
           end
 
-          it "sets managing organisation to created by organisation" do
+          it "sets managing organisation to assigned to organisation" do
             post "/sales-logs/#{sales_log.id}/completion-date", params: params
             sales_log.reload
             expect(sales_log.owning_organisation).to eq(organisation)
@@ -1075,7 +1075,7 @@ RSpec.describe FormController, type: :request do
             Singleton.__init__(FormHandler)
           end
 
-          it "does not set managing organisation to created by organisation" do
+          it "does not set managing organisation to assigned to organisation" do
             post "/sales-logs/#{sales_log.id}/completion-date", params: params
             sales_log.reload
             expect(sales_log.owning_organisation).to eq(organisation)

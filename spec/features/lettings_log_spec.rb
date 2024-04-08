@@ -146,7 +146,7 @@ RSpec.describe "Lettings Log Features" do
         Singleton.__init__(FormHandler)
       end
 
-      it "includes the owning organisation and created by questions" do
+      it "includes the owning organisation and assigned to questions" do
         visit("/lettings-logs")
         click_button("Create a new lettings log")
         click_link("Set up this lettings log")
@@ -329,7 +329,7 @@ RSpec.describe "Lettings Log Features" do
 
     context "when completing the setup log section" do
       context "and there is at most 1 potential stock owner" do
-        it "does not include the owning organisation and includes the created by questions" do
+        it "does not include the owning organisation and includes the assigned to questions" do
           visit("/lettings-logs")
           click_button("Create a new lettings log")
           click_link("Set up this lettings log")
