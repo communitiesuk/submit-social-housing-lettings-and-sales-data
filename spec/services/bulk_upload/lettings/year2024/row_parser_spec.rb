@@ -827,6 +827,14 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
         it "is permitted" do
           expect(parser.errors[:field_3]).to be_blank
         end
+
+        it "sets assigned to to bulk upload user" do
+          expect(parser.log.assigned_to).to eq(bulk_upload.user)
+        end
+
+        it "sets created by to bulk upload user" do
+          expect(parser.log.created_by).to eq(bulk_upload.user)
+        end
       end
 
       context "when user could not be found" do
@@ -851,13 +859,21 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
         end
       end
 
-      context "when an user part of owning org" do
+      context "when a user part of owning org" do
         let(:other_user) { create(:user, organisation: owning_org) }
 
         let(:attributes) { { bulk_upload:, field_1: owning_org.old_visible_id, field_3: other_user.email, field_2: managing_org.old_visible_id } }
 
         it "is permitted" do
           expect(parser.errors[:field_3]).to be_blank
+        end
+
+        it "sets assigned to to the user" do
+          expect(parser.log.assigned_to).to eq(other_user)
+        end
+
+        it "sets created by to bulk upload user" do
+          expect(parser.log.created_by).to eq(bulk_upload.user)
         end
       end
 
