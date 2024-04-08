@@ -136,7 +136,6 @@ module Exports::LettingsLogExportConstants
     "log_id",
     "scheme_status",
     "location_status",
-    "created_by",
     "amended_by",
     "duplicate_set_id",
     "accessible_register",

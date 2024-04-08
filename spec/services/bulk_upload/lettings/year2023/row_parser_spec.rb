@@ -717,7 +717,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
       end
     end
 
-    describe "#field_3" do # created_by
+    describe "#field_3" do # assigned_to
       context "when blank" do
         let(:attributes) { { bulk_upload:, field_3: "", field_4: 1 } }
 
@@ -1726,12 +1726,12 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
   end
 
   describe "#log" do
-    describe "#created_by" do
+    describe "#assigned_to" do
       context "when blank" do
         let(:attributes) { setup_section_params }
 
         it "takes the user that is uploading" do
-          expect(parser.log.created_by).to eql(bulk_upload.user)
+          expect(parser.log.assigned_to).to eql(bulk_upload.user)
         end
       end
 
@@ -1741,7 +1741,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
         let(:attributes) { setup_section_params.merge(field_3: other_user.email) }
 
         it "sets to user with specified email" do
-          expect(parser.log.created_by).to eql(other_user)
+          expect(parser.log.assigned_to).to eql(other_user)
         end
       end
     end

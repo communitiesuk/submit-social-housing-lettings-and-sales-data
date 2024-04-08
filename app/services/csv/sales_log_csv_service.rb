@@ -32,12 +32,12 @@ module Csv
         codes: %i[saledate year],
       },
       is_dpo: {
-        labels: %i[created_by is_dpo],
-        codes: %i[created_by is_dpo],
+        labels: %i[assigned_to is_dpo],
+        codes: %i[assigned_to is_dpo],
       },
-      created_by: {
-        labels: %i[created_by email],
-        codes: %i[created_by email],
+      assigned_to: {
+        labels: %i[assigned_to email],
+        codes: %i[assigned_to email],
       },
       owning_organisation_name: {
         labels: %i[owning_organisation name],
@@ -134,7 +134,7 @@ module Csv
       "ppostcode_full" => %w[ppostc1 ppostc2],
       "la" => %w[la la_label],
       "prevloc" => %w[prevloc prevloc_label],
-      "created_by_id" => %w[created_by],
+      "assigned_to_id" => %w[assigned_to],
       "owning_organisation_id" => %w[owning_organisation_name],
       "managing_organisation_id" => %w[managing_organisation_name],
     }.freeze

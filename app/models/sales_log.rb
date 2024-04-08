@@ -67,7 +67,7 @@ class SalesLog < Log
   }
   scope :after_date, ->(date) { where("saledate >= ?", date) }
 
-  scope :duplicate_sets, lambda { |created_by_id = nil|
+  scope :duplicate_sets, lambda { |assigned_to_id = nil|
     scope = visible
     .group(*DUPLICATE_LOG_ATTRIBUTES)
     .where.not(saledate: nil)
@@ -77,8 +77,8 @@ class SalesLog < Log
     .age1_answered
     .having("COUNT(*) > 1")
 
-    if created_by_id
-      scope = scope.having("MAX(CASE WHEN created_by_id = ? THEN 1 ELSE 0 END) >= 1", created_by_id)
+    if assigned_to_id
+      scope = scope.having("MAX(CASE WHEN assigned_to_id = ? THEN 1 ELSE 0 END) >= 1", assigned_to_id)
     end
 
     scope.pluck("ARRAY_AGG(id)")
@@ -359,13 +359,13 @@ class SalesLog < Log
     self.prevloc = inferred_la if inferred_la.present?
   end
 
-  def reset_created_by!
+  def reset_assigned_to!
     return unless updated_by&.support?
-    return if owning_organisation.blank? || managing_organisation.blank? || created_by.blank?
-    return if created_by&.organisation == owning_organisation || created_by&.organisation == managing_organisation
-    return if created_by&.organisation == owning_organisation.absorbing_organisation || created_by&.organisation == managing_organisation.absorbing_organisation
+    return if owning_organisation.blank? || managing_organisation.blank? || assigned_to.blank?
+    return if assigned_to&.organisation == owning_organisation || assigned_to&.organisation == managing_organisation
+    return if assigned_to&.organisation == owning_organisation.absorbing_organisation || assigned_to&.organisation == managing_organisation.absorbing_organisation
 
-    update!(created_by: nil)
+    update!(assigned_to: nil)
   end
 
   def retirement_age_for_person(person_num)

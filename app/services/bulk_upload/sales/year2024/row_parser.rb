@@ -460,8 +460,8 @@ class BulkUpload::Sales::Year2024::RowParser
   validate :validate_owning_org_owns_stock, on: :after_log
   validate :validate_owning_org_permitted, on: :after_log
 
-  validate :validate_created_by_exists, on: :after_log
-  validate :validate_created_by_related, on: :after_log
+  validate :validate_assigned_to_exists, on: :after_log
+  validate :validate_assigned_to_related, on: :after_log
   validate :validate_managing_org_related, on: :after_log
   validate :validate_relevant_collection_window, on: :after_log
   validate :validate_incomplete_soft_validations, on: :after_log
@@ -738,7 +738,7 @@ private
       othtype: %i[field_12],
       owning_organisation_id: %i[field_1],
       managing_organisation_id: [:field_2],
-      created_by: %i[field_3],
+      assigned_to: %i[field_3],
       hhregres: %i[field_72],
       hhregresstill: %i[field_73],
       armedforcesspouse: %i[field_74],
@@ -910,7 +910,7 @@ private
 
     attributes["owning_organisation"] = owning_organisation
     attributes["managing_organisation"] = managing_organisation
-    attributes["created_by"] = created_by || bulk_upload.user
+    attributes["assigned_to"] = assigned_to || bulk_upload.user
     attributes["hhregres"] = field_72
     attributes["hhregresstill"] = field_73
     attributes["armedforcesspouse"] = field_74
@@ -1207,8 +1207,8 @@ private
     @owning_organisation ||= Organisation.find_by_id_on_multiple_fields(field_1)
   end
 
-  def created_by
-    @created_by ||= User.where("lower(email) = ?", field_3&.downcase).first
+  def assigned_to
+    @assigned_to ||= User.where("lower(email) = ?", field_3&.downcase).first
   end
 
   def previous_la_known
@@ -1295,18 +1295,18 @@ private
     end
   end
 
-  def validate_created_by_exists
+  def validate_assigned_to_exists
     return if field_3.blank?
 
-    unless created_by
+    unless assigned_to
       errors.add(:field_3, "User with the specified email could not be found")
     end
   end
 
-  def validate_created_by_related
-    return unless created_by
-    return if created_by.organisation == owning_organisation || created_by.organisation == managing_organisation
-    return if created_by.organisation == owning_organisation&.absorbing_organisation || created_by.organisation == managing_organisation&.absorbing_organisation
+  def validate_assigned_to_related
+    return unless assigned_to
+    return if assigned_to.organisation == owning_organisation || assigned_to.organisation == managing_organisation
+    return if assigned_to.organisation == owning_organisation&.absorbing_organisation || assigned_to.organisation == managing_organisation&.absorbing_organisation
 
     block_log_creation!
     errors.add(:field_3, "User must be related to owning organisation or managing organisation", category: :setup)

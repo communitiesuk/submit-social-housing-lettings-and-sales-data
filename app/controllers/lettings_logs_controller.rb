@@ -20,7 +20,7 @@ class LettingsLogsController < LogsController
     @pagy, @logs = pagy(unpaginated_filtered_logs)
     @searched = search_term.presence
     @total_count = all_logs.size
-    @unresolved_count = all_logs.unresolved.created_by(current_user).count
+    @unresolved_count = all_logs.unresolved.assigned_to(current_user).count
     @filter_type = "lettings_logs"
     @duplicate_sets_count = FeatureToggle.duplicate_summary_enabled? && !current_user.support? ? duplicate_sets_count(current_user, current_user.organisation) : 0
     render "logs/index"
@@ -104,7 +104,7 @@ class LettingsLogsController < LogsController
   def update_logs
     respond_to do |format|
       format.html do
-        impacted_logs = current_user.lettings_logs.unresolved.created_by(current_user)
+        impacted_logs = current_user.lettings_logs.unresolved.assigned_to(current_user)
 
         @pagy, @logs = pagy(impacted_logs)
         @total_count = impacted_logs.size
@@ -151,7 +151,7 @@ private
 
   def resolve_logs!
     if @log&.unresolved && @log.location.present? && @log.scheme.present? && @log&.resolve!
-      unresolved_logs_count_for_user = current_user.lettings_logs.unresolved.created_by(current_user).count
+      unresolved_logs_count_for_user = current_user.lettings_logs.unresolved.assigned_to(current_user).count
       flash.now[:notice] = helpers.flash_notice_for_resolved_logs(unresolved_logs_count_for_user)
     end
   end

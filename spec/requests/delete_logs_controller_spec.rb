@@ -10,8 +10,8 @@ RSpec.describe "DeleteLogs", type: :request do
   end
 
   describe "GET lettings-logs/delete-logs" do
-    let!(:log_1) { create(:lettings_log, :in_progress, created_by: user) }
-    let!(:log_2) { create(:lettings_log, :completed, created_by: user) }
+    let!(:log_1) { create(:lettings_log, :in_progress, assigned_to: user) }
+    let!(:log_2) { create(:lettings_log, :completed, assigned_to: user) }
 
     before do
       allow(FilterManager).to receive(:filter_logs).and_return LettingsLog.all
@@ -54,8 +54,8 @@ RSpec.describe "DeleteLogs", type: :request do
   end
 
   describe "POST lettings-logs/delete-logs" do
-    let!(:log_1) { create(:lettings_log, :in_progress, created_by: user) }
-    let!(:log_2) { create(:lettings_log, :completed, created_by: user) }
+    let!(:log_1) { create(:lettings_log, :in_progress, assigned_to: user) }
+    let!(:log_2) { create(:lettings_log, :completed, assigned_to: user) }
     let(:selected_ids) { log_1.id }
 
     before do
@@ -209,11 +209,11 @@ RSpec.describe "DeleteLogs", type: :request do
   end
 
   describe "DELETE lettings-logs/delete-logs" do
-    let(:log_1) { create(:lettings_log, :in_progress, created_by: user) }
+    let(:log_1) { create(:lettings_log, :in_progress, assigned_to: user) }
     let(:params) { { ids: [log_1.id, log_2.id] } }
 
     context "when the user is authorized to delete the logs provided" do
-      let(:log_2) { create(:lettings_log, :completed, created_by: user) }
+      let(:log_2) { create(:lettings_log, :completed, assigned_to: user) }
 
       it "deletes the logs provided" do
         delete delete_logs_lettings_logs_path, params: params
@@ -250,9 +250,9 @@ RSpec.describe "DeleteLogs", type: :request do
 
     context "when an authorized user deletes a log that had duplicates" do
       context "and only 1 log remains in the duplicate set" do
-        let!(:log_1) { create(:lettings_log, :duplicate, duplicate_set_id: 5, created_by: user) }
-        let!(:log_2) { create(:lettings_log, :duplicate, duplicate_set_id: 5, created_by: user) }
-        let!(:log_3) { create(:lettings_log, :duplicate, duplicate_set_id: 5, created_by: user) }
+        let!(:log_1) { create(:lettings_log, :duplicate, duplicate_set_id: 5, assigned_to: user) }
+        let!(:log_2) { create(:lettings_log, :duplicate, duplicate_set_id: 5, assigned_to: user) }
+        let!(:log_3) { create(:lettings_log, :duplicate, duplicate_set_id: 5, assigned_to: user) }
 
         it "deletes the log and marks related logs deduplicated" do
           delete delete_logs_lettings_logs_path, params: params
@@ -273,9 +273,9 @@ RSpec.describe "DeleteLogs", type: :request do
       end
 
       context "and multiple logs remains in the duplicate set" do
-        let!(:log_1) { create(:lettings_log, :duplicate, duplicate_set_id: 5, created_by: user) }
-        let!(:log_2) { create(:lettings_log, :duplicate, duplicate_set_id: 5, created_by: user) }
-        let!(:log_3) { create(:lettings_log, :duplicate, duplicate_set_id: 5, created_by: user) }
+        let!(:log_1) { create(:lettings_log, :duplicate, duplicate_set_id: 5, assigned_to: user) }
+        let!(:log_2) { create(:lettings_log, :duplicate, duplicate_set_id: 5, assigned_to: user) }
+        let!(:log_3) { create(:lettings_log, :duplicate, duplicate_set_id: 5, assigned_to: user) }
         let(:params) { { ids: [log_1.id] } }
 
         it "deletes the log and marks related logs deduplicated" do
@@ -297,8 +297,8 @@ RSpec.describe "DeleteLogs", type: :request do
   end
 
   describe "GET sales-logs/delete-logs" do
-    let!(:log_1) { create(:sales_log, :in_progress, created_by: user) }
-    let!(:log_2) { create(:sales_log, :completed, created_by: user) }
+    let!(:log_1) { create(:sales_log, :in_progress, assigned_to: user) }
+    let!(:log_2) { create(:sales_log, :completed, assigned_to: user) }
 
     before do
       allow(FilterManager).to receive(:filter_logs).and_return SalesLog.all
@@ -341,8 +341,8 @@ RSpec.describe "DeleteLogs", type: :request do
   end
 
   describe "POST sales-logs/delete-logs" do
-    let!(:log_1) { create(:sales_log, :in_progress, created_by: user) }
-    let!(:log_2) { create(:sales_log, :completed, created_by: user) }
+    let!(:log_1) { create(:sales_log, :in_progress, assigned_to: user) }
+    let!(:log_2) { create(:sales_log, :completed, assigned_to: user) }
     let(:selected_ids) { log_1.id }
 
     before do
@@ -496,11 +496,11 @@ RSpec.describe "DeleteLogs", type: :request do
   end
 
   describe "DELETE sales-logs/delete-logs" do
-    let(:log_1) { create(:sales_log, :in_progress, created_by: user) }
+    let(:log_1) { create(:sales_log, :in_progress, assigned_to: user) }
     let(:params) { { ids: [log_1.id, log_2.id] } }
 
     context "when the user is authorized to delete the logs provided" do
-      let(:log_2) { create(:sales_log, :completed, created_by: user) }
+      let(:log_2) { create(:sales_log, :completed, assigned_to: user) }
 
       it "deletes the logs provided" do
         delete delete_logs_sales_logs_path, params: params
@@ -537,9 +537,9 @@ RSpec.describe "DeleteLogs", type: :request do
 
     context "when an authorized user deletes a log that had duplicates" do
       context "and only 1 log remains in the duplicate set" do
-        let!(:log_1) { create(:sales_log, :duplicate, duplicate_set_id: 5, created_by: user) }
-        let!(:log_2) { create(:sales_log, :duplicate, duplicate_set_id: 5, created_by: user) }
-        let!(:log_3) { create(:sales_log, :duplicate, duplicate_set_id: 5, created_by: user) }
+        let!(:log_1) { create(:sales_log, :duplicate, duplicate_set_id: 5, assigned_to: user) }
+        let!(:log_2) { create(:sales_log, :duplicate, duplicate_set_id: 5, assigned_to: user) }
+        let!(:log_3) { create(:sales_log, :duplicate, duplicate_set_id: 5, assigned_to: user) }
 
         it "deletes the log and marks related logs deduplicated" do
           delete delete_logs_sales_logs_path, params: params
@@ -560,9 +560,9 @@ RSpec.describe "DeleteLogs", type: :request do
       end
 
       context "and multiple logs remains in the duplicate set" do
-        let!(:log_1) { create(:sales_log, :duplicate, duplicate_set_id: 5, created_by: user) }
-        let!(:log_2) { create(:sales_log, :duplicate, duplicate_set_id: 5, created_by: user) }
-        let!(:log_3) { create(:sales_log, :duplicate, duplicate_set_id: 5, created_by: user) }
+        let!(:log_1) { create(:sales_log, :duplicate, duplicate_set_id: 5, assigned_to: user) }
+        let!(:log_2) { create(:sales_log, :duplicate, duplicate_set_id: 5, assigned_to: user) }
+        let!(:log_3) { create(:sales_log, :duplicate, duplicate_set_id: 5, assigned_to: user) }
         let(:params) { { ids: [log_1.id] } }
 
         it "deletes the log and marks related logs deduplicated" do

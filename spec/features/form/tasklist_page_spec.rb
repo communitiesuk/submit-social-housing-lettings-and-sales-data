@@ -10,7 +10,7 @@ RSpec.describe "Task List" do
       :in_progress,
       owning_organisation: user.organisation,
       managing_organisation: user.organisation,
-      created_by: user,
+      assigned_to: user,
     )
   end
   let(:completed_lettings_log) do
@@ -19,7 +19,7 @@ RSpec.describe "Task List" do
       :completed,
       owning_organisation: user.organisation,
       managing_organisation: user.organisation,
-      created_by: user,
+      assigned_to: user,
     )
   end
   let(:empty_lettings_log) do
@@ -27,7 +27,7 @@ RSpec.describe "Task List" do
       :lettings_log,
       owning_organisation: user.organisation,
       managing_organisation: user.organisation,
-      created_by: user,
+      assigned_to: user,
     )
   end
   let(:setup_completed_log) do
@@ -36,7 +36,7 @@ RSpec.describe "Task List" do
       :setup_completed,
       owning_organisation: user.organisation,
       managing_organisation: user.organisation,
-      created_by: user,
+      assigned_to: user,
     )
   end
   let(:id) { lettings_log.id }

@@ -5,9 +5,9 @@ module HomeHelper
 
     if user.data_provider?
       case type
-      when "lettings" then user.lettings_logs.where(created_by: user).where(status: %i[in_progress]).filter_by_years(lettings_years).count
-      when "sales" then user.sales_logs.where(created_by: user).where(status: %i[in_progress]).filter_by_years(sales_years).count
-      when "misc" then user.lettings_logs.completed.where(created_by: user).count
+      when "lettings" then user.lettings_logs.where(assigned_to: user).where(status: %i[in_progress]).filter_by_years(lettings_years).count
+      when "sales" then user.sales_logs.where(assigned_to: user).where(status: %i[in_progress]).filter_by_years(sales_years).count
+      when "misc" then user.lettings_logs.completed.where(assigned_to: user).count
       end
     else
       case type

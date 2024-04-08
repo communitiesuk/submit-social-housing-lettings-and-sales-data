@@ -17,14 +17,14 @@ RSpec.describe "Form Conditional Questions" do
     FactoryBot.create(
       :lettings_log,
       :in_progress,
-      created_by: user,
+      assigned_to: user,
     )
   end
   let(:sales_log) do
     FactoryBot.create(
       :sales_log,
       :completed,
-      created_by: user,
+      assigned_to: user,
       saledate: Time.zone.local(2022, 1, 1),
     )
   end
@@ -88,7 +88,7 @@ RSpec.describe "Form Conditional Questions" do
       FactoryBot.create(
         :lettings_log,
         :completed,
-        created_by: user,
+        assigned_to: user,
       )
     end
 

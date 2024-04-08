@@ -41,7 +41,7 @@ RSpec.describe LettingsLogsController, type: :request do
         {
           "owning_organisation_id": owning_organisation.id,
           "managing_organisation_id": managing_organisation.id,
-          "created_by_id": user.id,
+          "assigned_to_id": user.id,
           "tenancycode": tenant_code,
           "age1": age1,
           "postcode_full": postcode_full,
@@ -99,7 +99,7 @@ RSpec.describe LettingsLogsController, type: :request do
             "lettings_log" => {
               "owning_organisation_id" => owning_organisation.id,
               "managing_organisation_id" => managing_organisation.id,
-              "created_by_id" => user.id,
+              "assigned_to_id" => user.id,
             },
           }
         end
@@ -213,21 +213,21 @@ RSpec.describe LettingsLogsController, type: :request do
     let!(:lettings_log) do
       FactoryBot.create(
         :lettings_log,
-        created_by: user,
+        assigned_to: user,
         tenancycode: "LC783",
       )
     end
     let!(:unauthorized_lettings_log) do
       FactoryBot.create(
         :lettings_log,
-        created_by: other_user,
+        assigned_to: other_user,
         tenancycode: "UA984",
       )
     end
     let!(:pending_lettings_log) do
       FactoryBot.create(
         :lettings_log,
-        created_by: user,
+        assigned_to: user,
         tenancycode: "LC999",
         status: "pending",
         skip_update_status: true,
@@ -376,7 +376,7 @@ RSpec.describe LettingsLogsController, type: :request do
 
         context "when there are duplicate logs for this user" do
           before do
-            FactoryBot.create_list(:lettings_log, 2, :duplicate, owning_organisation: user.organisation, created_by: user)
+            FactoryBot.create_list(:lettings_log, 2, :duplicate, owning_organisation: user.organisation, assigned_to: user)
           end
 
           it "does not show a notification banner even if there are duplicate logs for this user" do
@@ -421,13 +421,13 @@ RSpec.describe LettingsLogsController, type: :request do
               FactoryBot.create(:lettings_log, :in_progress,
                                 owning_organisation: organisation,
                                 managing_organisation: organisation,
-                                created_by: user)
+                                assigned_to: user)
             end
             let!(:completed_lettings_log) do
               FactoryBot.create(:lettings_log, :completed,
                                 owning_organisation: organisation_2,
                                 managing_organisation: organisation,
-                                created_by: user_2)
+                                assigned_to: user_2)
             end
 
             it "shows lettings logs for multiple selected statuses" do
@@ -474,7 +474,7 @@ RSpec.describe LettingsLogsController, type: :request do
 
             let!(:lettings_log_2021) do
               lettings_log = FactoryBot.build(:lettings_log, :in_progress,
-                                              created_by: user,
+                                              assigned_to: user,
                                               startdate: Time.zone.local(2022, 3, 1))
               lettings_log.save!(validate: false)
               lettings_log
@@ -520,7 +520,7 @@ RSpec.describe LettingsLogsController, type: :request do
               FactoryBot.create(:lettings_log, :in_progress,
                                 owning_organisation: organisation,
                                 managing_organisation: organisation,
-                                created_by: user)
+                                assigned_to: user)
             end
             let!(:lettings_log_2022) do
               FactoryBot.create(:lettings_log, :completed,
@@ -530,7 +530,7 @@ RSpec.describe LettingsLogsController, type: :request do
                                 voiddate: Time.zone.local(2022, 2, 1),
                                 tenancy: 6,
                                 managing_organisation: organisation,
-                                created_by: user)
+                                assigned_to: user)
             end
             let!(:lettings_log_2022_in_progress) do
               FactoryBot.build(:lettings_log, :in_progress,
@@ -540,7 +540,7 @@ RSpec.describe LettingsLogsController, type: :request do
                                tenancy: 6,
                                managing_organisation: organisation,
                                tenancycode: nil,
-                               created_by: user)
+                               assigned_to: user)
             end
 
             it "shows lettings logs for multiple selected statuses and years" do
@@ -729,8 +729,8 @@ RSpec.describe LettingsLogsController, type: :request do
         end
 
         context "when using a search query" do
-          let(:logs) { FactoryBot.create_list(:lettings_log, 3, :completed, owning_organisation: user.organisation, created_by: user) }
-          let(:log_to_search) { FactoryBot.create(:lettings_log, :completed, owning_organisation: user.organisation, created_by: user) }
+          let(:logs) { FactoryBot.create_list(:lettings_log, 3, :completed, owning_organisation: user.organisation, assigned_to: user) }
+          let(:log_to_search) { FactoryBot.create(:lettings_log, :completed, owning_organisation: user.organisation, assigned_to: user) }
           let(:log_total_count) { LettingsLog.where(owning_organisation: user.organisation).count }
 
           before do
@@ -782,7 +782,7 @@ RSpec.describe LettingsLogsController, type: :request do
 
           it "includes the search on the CSV links" do
             search_term = "foo"
-            FactoryBot.create(:lettings_log, created_by: user, owning_organisation: user.organisation, tenancycode: "foo")
+            FactoryBot.create(:lettings_log, assigned_to: user, owning_organisation: user.organisation, tenancycode: "foo")
             get "/lettings-logs?search=#{search_term}", headers:, params: {}
             download_link = page.find_link("Download (CSV)")
             download_link_params = CGI.parse(URI.parse(download_link[:href]).query)
@@ -804,7 +804,7 @@ RSpec.describe LettingsLogsController, type: :request do
 
           context "when there are more than 1 page of search results" do
             let(:postcode) { "XX11YY" }
-            let(:logs) { FactoryBot.create_list(:lettings_log, 30, :completed, owning_organisation: user.organisation, postcode_full: postcode, created_by: user) }
+            let(:logs) { FactoryBot.create_list(:lettings_log, 30, :completed, owning_organisation: user.organisation, postcode_full: postcode, assigned_to: user) }
             let(:log_total_count) { LettingsLog.where(owning_organisation: user.organisation).count }
 
             it "has title with pagination details for page 1" do
@@ -841,7 +841,7 @@ RSpec.describe LettingsLogsController, type: :request do
           context "when search and filter is present" do
             let(:matching_postcode) { log_to_search.postcode_full }
             let(:matching_status) { "in_progress" }
-            let!(:log_matching_filter_and_search) { FactoryBot.create(:lettings_log, :in_progress, owning_organisation: user.organisation, postcode_full: matching_postcode, created_by: user) }
+            let!(:log_matching_filter_and_search) { FactoryBot.create(:lettings_log, :in_progress, owning_organisation: user.organisation, postcode_full: matching_postcode, assigned_to: user) }
 
             it "shows only logs matching both search and filters" do
               get "/lettings-logs?search=#{matching_postcode}&status[]=#{matching_status}", headers:, params: {}
@@ -914,7 +914,7 @@ RSpec.describe LettingsLogsController, type: :request do
           let(:tenant_code_2) { "TC8745" }
 
           before do
-            FactoryBot.create(:lettings_log, :in_progress, owning_organisation: org_1, tenancycode: tenant_code_1, created_by: user)
+            FactoryBot.create(:lettings_log, :in_progress, owning_organisation: org_1, tenancycode: tenant_code_1, assigned_to: user)
             FactoryBot.create(:lettings_log, :in_progress, owning_organisation: org_2, tenancycode: tenant_code_2)
             allow(user).to receive(:need_two_factor_authentication?).and_return(false)
             sign_in user
@@ -945,7 +945,7 @@ RSpec.describe LettingsLogsController, type: :request do
 
         context "when there are more than 20 logs" do
           before do
-            FactoryBot.create_list(:lettings_log, 25, created_by: user)
+            FactoryBot.create_list(:lettings_log, 25, assigned_to: user)
           end
 
           context "when on the first page" do
@@ -996,7 +996,7 @@ RSpec.describe LettingsLogsController, type: :request do
         end
 
         context "and there are duplicate logs for this user" do
-          let!(:duplicate_logs) { FactoryBot.create_list(:lettings_log, 2, :duplicate, owning_organisation: user.organisation, created_by: user) }
+          let!(:duplicate_logs) { FactoryBot.create_list(:lettings_log, 2, :duplicate, owning_organisation: user.organisation, assigned_to: user) }
 
           it "displays a notification banner with a link to review logs" do
             get lettings_logs_path
@@ -1029,7 +1029,7 @@ RSpec.describe LettingsLogsController, type: :request do
             before do
               Timecop.freeze(Time.zone.local(2024, 3, 1))
               Singleton.__init__(FormHandler)
-              FactoryBot.create_list(:sales_log, 2, :duplicate, owning_organisation: user.organisation, created_by: user)
+              FactoryBot.create_list(:sales_log, 2, :duplicate, owning_organisation: user.organisation, assigned_to: user)
             end
 
             after do
@@ -1062,7 +1062,7 @@ RSpec.describe LettingsLogsController, type: :request do
     end
 
     context "when requesting a specific lettings log" do
-      let!(:completed_lettings_log) { FactoryBot.create(:lettings_log, :completed, owning_organisation: user.organisation, managing_organisation: user.organisation, created_by: user) }
+      let!(:completed_lettings_log) { FactoryBot.create(:lettings_log, :completed, owning_organisation: user.organisation, managing_organisation: user.organisation, assigned_to: user) }
       let(:id) { completed_lettings_log.id }
 
       before do
@@ -1093,7 +1093,7 @@ RSpec.describe LettingsLogsController, type: :request do
             :completed,
             owning_organisation: user.organisation,
             managing_organisation: user.organisation,
-            created_by: user,
+            assigned_to: user,
             status: "pending",
             skip_update_status: true,
           )
@@ -1201,7 +1201,7 @@ RSpec.describe LettingsLogsController, type: :request do
                 :lettings_log,
                 owning_organisation: user.organisation,
                 managing_organisation: user.organisation,
-                created_by: user,
+                assigned_to: user,
                 startdate: Time.zone.now,
                 renewal: 1,
                 needstype: 2,
@@ -1232,7 +1232,7 @@ RSpec.describe LettingsLogsController, type: :request do
               FactoryBot.create(
                 :lettings_log,
                 :conditional_section_complete,
-                created_by: user,
+                assigned_to: user,
               )
             end
 
@@ -1273,7 +1273,7 @@ RSpec.describe LettingsLogsController, type: :request do
             before do
               Timecop.freeze(2021, 4, 1)
               Singleton.__init__(FormHandler)
-              FactoryBot.create_list(:lettings_log, 3, unresolved: true, created_by: user)
+              FactoryBot.create_list(:lettings_log, 3, unresolved: true, assigned_to: user)
               lettings_log.update!(needstype: 2, scheme:, location:, unresolved: true)
               sign_in user
               get "/lettings-logs/#{lettings_log.id}", headers:, params: {}
@@ -1312,15 +1312,15 @@ RSpec.describe LettingsLogsController, type: :request do
 
       let(:postcode_lettings_log) do
         FactoryBot.create(:lettings_log,
-                          created_by: user,
+                          assigned_to: user,
                           postcode_known: "No")
       end
       let(:id) { postcode_lettings_log.id }
-      let(:completed_lettings_log) { FactoryBot.create(:lettings_log, :completed, owning_organisation: user.organisation, managing_organisation: user.organisation, created_by: user) }
+      let(:completed_lettings_log) { FactoryBot.create(:lettings_log, :completed, owning_organisation: user.organisation, managing_organisation: user.organisation, assigned_to: user) }
 
       it "shows the inferred la" do
         lettings_log = FactoryBot.create(:lettings_log,
-                                         created_by: user,
+                                         assigned_to: user,
                                          postcode_known: 1,
                                          postcode_full: "PO5 3TE")
         id = lettings_log.id
@@ -1421,9 +1421,9 @@ RSpec.describe LettingsLogsController, type: :request do
     end
 
     context "when viewing a collection of logs affected by deactivated location" do
-      let!(:affected_lettings_logs) { FactoryBot.create_list(:lettings_log, 3, unresolved: true, created_by: user) }
+      let!(:affected_lettings_logs) { FactoryBot.create_list(:lettings_log, 3, unresolved: true, assigned_to: user) }
       let!(:other_user_affected_lettings_log) { FactoryBot.create(:lettings_log, unresolved: true) }
-      let!(:non_affected_lettings_logs) { FactoryBot.create_list(:lettings_log, 4, created_by: user) }
+      let!(:non_affected_lettings_logs) { FactoryBot.create_list(:lettings_log, 4, assigned_to: user) }
       let(:other_user) { FactoryBot.create(:user, organisation: user.organisation) }
       let(:headers) { { "Accept" => "text/html" } }
 
@@ -1452,7 +1452,7 @@ RSpec.describe LettingsLogsController, type: :request do
         expect(page).not_to have_link("Update now", href: "/lettings-logs/#{non_affected_lettings_logs.first.id}/tenancy-start-date")
       end
 
-      it "only displays the logs created by the user" do
+      it "only displays the logs assigned to the user" do
         get "/lettings-logs/update-logs", headers:, params: {}
         expect(page).to have_link("Update now", href: "/lettings-logs/#{affected_lettings_logs.second.id}/tenancy-start-date")
         expect(page).not_to have_link("Update now", href: "/lettings-logs/#{other_user_affected_lettings_log.id}/tenancy-start-date")
@@ -1476,7 +1476,7 @@ RSpec.describe LettingsLogsController, type: :request do
     end
 
     context "when viewing a specific log affected by deactivated location" do
-      let!(:affected_lettings_log) { FactoryBot.create(:lettings_log, unresolved: true, created_by: user, needstype: 2) }
+      let!(:affected_lettings_log) { FactoryBot.create(:lettings_log, unresolved: true, assigned_to: user, needstype: 2) }
       let(:headers) { { "Accept" => "text/html" } }
 
       before do
@@ -1800,7 +1800,7 @@ RSpec.describe LettingsLogsController, type: :request do
       let!(:lettings_log) do
         FactoryBot.create(
           :lettings_log,
-          created_by: user,
+          assigned_to: user,
           ecstat1: 1,
         )
       end
@@ -1813,7 +1813,7 @@ RSpec.describe LettingsLogsController, type: :request do
                           :completed,
                           owning_organisation:,
                           managing_organisation: owning_organisation,
-                          created_by: user)
+                          assigned_to: user)
       end
 
       it "creates an E-mail job" do

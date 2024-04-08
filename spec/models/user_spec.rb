@@ -15,7 +15,7 @@ RSpec.describe User, type: :model do
           :lettings_log,
           :completed,
           managing_organisation: other_organisation,
-          created_by: user,
+          assigned_to: user,
         )
       end
 
@@ -28,7 +28,7 @@ RSpec.describe User, type: :model do
       let!(:managed_lettings_log) do
         create(
           :lettings_log,
-          created_by: user,
+          assigned_to: user,
           owning_organisation: other_organisation,
         )
       end
@@ -44,13 +44,13 @@ RSpec.describe User, type: :model do
           :lettings_log,
           :completed,
           managing_organisation: other_organisation,
-          created_by: user,
+          assigned_to: user,
         )
       end
       let!(:owned_lettings_log) do
         create(
           :lettings_log,
-          created_by: user,
+          assigned_to: user,
           owning_organisation: other_organisation,
         )
       end
@@ -186,13 +186,13 @@ RSpec.describe User, type: :model do
           :lettings_log,
           :completed,
           managing_organisation: other_organisation,
-          created_by: user,
+          assigned_to: user,
         )
       end
       let!(:managed_lettings_log) do
         create(
           :lettings_log,
-          created_by: user,
+          assigned_to: user,
           owning_organisation: other_organisation,
         )
       end
@@ -416,13 +416,13 @@ RSpec.describe User, type: :model do
         :completed,
         owning_organisation: user.organisation,
         managing_organisation: user.organisation,
-        created_by: user,
+        assigned_to: user,
       )
 
       create(
         :sales_log,
         owning_organisation: user.organisation,
-        created_by: user,
+        assigned_to: user,
       )
     end
 

@@ -402,8 +402,8 @@ class BulkUpload::Lettings::Year2023::RowParser
   validate :validate_related_location_exists, on: :after_log
   validate :validate_location_data_given, on: :after_log
 
-  validate :validate_created_by_exists, on: :after_log
-  validate :validate_created_by_related, on: :after_log
+  validate :validate_assigned_to_exists, on: :after_log
+  validate :validate_assigned_to_related, on: :after_log
 
   validate :validate_declaration_acceptance, on: :after_log
 
@@ -540,25 +540,25 @@ private
     end
   end
 
-  def validate_created_by_exists
+  def validate_assigned_to_exists
     return if field_3.blank?
 
-    unless created_by
+    unless assigned_to
       errors.add(:field_3, "User with the specified email could not be found")
     end
   end
 
-  def validate_created_by_related
-    return unless created_by
-    return if created_by.organisation == owning_organisation || created_by.organisation == managing_organisation
-    return if created_by.organisation == owning_organisation&.absorbing_organisation || created_by.organisation == managing_organisation&.absorbing_organisation
+  def validate_assigned_to_related
+    return unless assigned_to
+    return if assigned_to.organisation == owning_organisation || assigned_to.organisation == managing_organisation
+    return if assigned_to.organisation == owning_organisation&.absorbing_organisation || assigned_to.organisation == managing_organisation&.absorbing_organisation
 
     block_log_creation!
     errors.add(:field_3, "User must be related to owning organisation or managing organisation")
   end
 
-  def created_by
-    @created_by ||= User.where("lower(email) = ?", field_3&.downcase).first
+  def assigned_to
+    @assigned_to ||= User.where("lower(email) = ?", field_3&.downcase).first
   end
 
   def validate_uprn_exists_if_any_key_address_fields_are_blank
@@ -921,7 +921,7 @@ private
       scheme: (scheme_field.present? ? [scheme_field] : nil),
       location_id: (location_field.present? ? [location_field] : nil),
       location: (location_field.present? ? [location_field] : nil),
-      created_by: [:field_3],
+      assigned_to: [:field_3],
       needstype: [:field_4],
       rent_type: %i[field_5 field_10 field_11],
       startdate: %i[field_7 field_8 field_9],
@@ -1088,7 +1088,7 @@ private
     attributes["renewal"] = renewal
     attributes["scheme"] = scheme
     attributes["location"] = location
-    attributes["created_by"] = created_by || bulk_upload.user
+    attributes["assigned_to"] = assigned_to || bulk_upload.user
     attributes["needstype"] = field_4
     attributes["rent_type"] = rent_type
     attributes["startdate"] = startdate

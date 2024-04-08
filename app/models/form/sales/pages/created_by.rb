@@ -1,7 +1,7 @@
 class Form::Sales::Pages::CreatedBy < ::Form::Page
   def initialize(id, hsh, subsection)
     super
-    @id = "created_by"
+    @id = "assigned_to"
   end
 
   def questions

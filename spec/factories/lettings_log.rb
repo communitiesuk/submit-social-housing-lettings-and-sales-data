@@ -1,8 +1,8 @@
 FactoryBot.define do
   factory :lettings_log do
-    created_by { FactoryBot.create(:user) }
-    owning_organisation { created_by.organisation }
-    managing_organisation { created_by.organisation }
+    assigned_to { FactoryBot.create(:user) }
+    owning_organisation { assigned_to.organisation }
+    managing_organisation { assigned_to.organisation }
     created_at { Time.zone.today }
     updated_at { Time.zone.today }
     trait :setup_completed do

@@ -191,7 +191,7 @@ class BulkUpload::SalesLogToCsv
       log.mscharge,
 
       overrides[:organisation_id] || log.owning_organisation&.old_visible_id,
-      log.created_by&.email,
+      log.assigned_to&.email,
       nil,
       hhregres,
       nil,
@@ -233,7 +233,7 @@ class BulkUpload::SalesLogToCsv
     [
       overrides[:organisation_id] || log.owning_organisation&.old_visible_id,
       overrides[:managing_organisation_id] || log.managing_organisation&.old_visible_id,
-      log.created_by&.email,
+      log.assigned_to&.email,
       log.saledate&.day,
       log.saledate&.month,
       log.saledate&.strftime("%y"),

@@ -27,7 +27,7 @@ class Form::Lettings::Questions::SchemeId < ::Form::Question
   end
 
   def displayed_answer_options(lettings_log, _user = nil)
-    organisation = lettings_log.owning_organisation || lettings_log.created_by&.organisation
+    organisation = lettings_log.owning_organisation || lettings_log.assigned_to&.organisation
     schemes = if organisation
                 Scheme.visible.includes(:locations).select(:id).where(owning_organisation_id: organisation.id,
                                                                       confirmed: true)

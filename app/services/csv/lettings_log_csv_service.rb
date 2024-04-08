@@ -19,9 +19,9 @@ module Csv
   private
 
     CUSTOM_CALL_CHAINS = {
-      created_by: {
-        labels: %i[created_by email],
-        codes: %i[created_by email],
+      assigned_to: {
+        labels: %i[assigned_to email],
+        codes: %i[assigned_to email],
       },
       updated_by: {
         labels: %i[updated_by email],
@@ -112,8 +112,8 @@ module Csv
         codes: %i[creation_method_before_type_cast],
       },
       is_dpo: {
-        labels: %i[created_by is_dpo?],
-        codes: %i[created_by is_dpo?],
+        labels: %i[assigned_to is_dpo?],
+        codes: %i[assigned_to is_dpo?],
       },
       renttype_detail: {
         labels: %i[renttype_detail],
@@ -276,7 +276,7 @@ module Csv
     ATTRIBUTE_MAPPINGS = {
       "owning_organisation_id" => %w[owning_organisation_name],
       "managing_organisation_id" => %w[managing_organisation_name],
-      "created_by_id" => [],
+      "assigned_to_id" => [],
       "scheme_id" => [],
       "location_id" => [],
       "rent_type" => %w[renttype renttype_detail],
@@ -316,7 +316,7 @@ module Csv
           ATTRIBUTE_MAPPINGS.fetch(question.id, question.id)
         end
       end
-      non_question_fields = %w[id status duplicate_set_id created_by is_dpo created_at updated_by updated_at creation_method old_id old_form_id collection_start_year address_line1_as_entered address_line2_as_entered town_or_city_as_entered county_as_entered postcode_full_as_entered la_as_entered assigned_to]
+      non_question_fields = %w[id status duplicate_set_id assigned_to is_dpo created_at updated_by updated_at creation_method old_id old_form_id collection_start_year address_line1_as_entered address_line2_as_entered town_or_city_as_entered county_as_entered postcode_full_as_entered la_as_entered assigned_to]
       scheme_and_location_attributes = %w[scheme_code scheme_service_name scheme_sensitive SCHTYPE scheme_registered_under_care_act scheme_owning_organisation_name scheme_primary_client_group scheme_has_other_client_group scheme_secondary_client_group scheme_support_type scheme_intended_stay scheme_created_at location_code location_postcode location_name location_units location_type_of_unit location_mobility_type location_local_authority location_startdate]
       final_attributes = non_question_fields + attributes + scheme_and_location_attributes
       @user.support? ? final_attributes : final_attributes - SUPPORT_ONLY_ATTRIBUTES

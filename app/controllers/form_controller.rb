@@ -99,8 +99,8 @@ private
                               end
       end
 
-      if question.id == "saledate" && set_managing_organisation_to_created_by_organisation?(result["saledate"])
-        result["managing_organisation_id"] = @log.created_by.organisation_id
+      if question.id == "saledate" && set_managing_organisation_to_assigned_to_organisation?(result["saledate"])
+        result["managing_organisation_id"] = @log.assigned_to.organisation_id
       end
 
       next unless question_params
@@ -338,7 +338,7 @@ private
     false
   end
 
-  def set_managing_organisation_to_created_by_organisation?(saledate)
+  def set_managing_organisation_to_assigned_to_organisation?(saledate)
     return false if current_user.support?
     return false if collection_start_year_for_date(saledate) >= 2024
 
