@@ -47,9 +47,9 @@ private
 
   def log_params
     if current_user && !current_user.support?
-      org_params.merge(api_log_params)
+      org_params.merge(api_log_params).merge(created_by_params)
     else
-      api_log_params
+      api_log_params.merge(created_by_params)
     end
   end
 
@@ -69,6 +69,12 @@ private
       "assigned_to_id" => current_user.id,
       "managing_organisation_id" => current_user.organisation.id,
     }
+  end
+
+  def created_by_params
+    return {} unless current_user
+
+    { "created_by_id" => current_user.id }
   end
 
   def search_term
