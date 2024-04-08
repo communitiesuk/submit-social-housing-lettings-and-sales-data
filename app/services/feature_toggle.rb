@@ -1,6 +1,6 @@
 class FeatureToggle
   def self.allow_future_form_use?
-    Rails.env.development? || Rails.env.review? || Rails.env.staging?
+    false
   end
 
   def self.bulk_upload_duplicate_log_check_enabled?
@@ -32,6 +32,10 @@ class FeatureToggle
   end
 
   def self.delete_location_enabled?
+    !Rails.env.production?
+  end
+
+  def self.delete_user_enabled?
     !Rails.env.production?
   end
 end
