@@ -2885,6 +2885,30 @@ RSpec.describe LettingsLog do
             expect(result.first.id).to eq lettings_log_to_search.id
           end
         end
+
+        context "when matching multiple records on different fields" do
+          let!(:lettings_log_with_propcode) { create(:lettings_log, propcode: lettings_log_to_search.id) }
+          let!(:lettings_log_with_tenancycode) { create(:lettings_log, tenancycode: lettings_log_to_search.id) }
+          let!(:lettings_log_with_postcode) { create(:lettings_log, postcode_full: "C1 1AC") }
+          let!(:lettings_log_with_postcode_tenancycode) { create(:lettings_log, tenancycode: "C1 1AC") }
+          let!(:lettings_log_with_postcode_propcode) { create(:lettings_log, propcode: "C1 1AC") }
+
+          it "returns all matching records in correct order with matching IDs" do
+            result = described_class.search_by(lettings_log_to_search.id.to_s)
+            expect(result.count).to eq(3)
+            expect(result.first.id).to eq lettings_log_to_search.id
+            expect(result.second.id).to eq lettings_log_with_tenancycode.id
+            expect(result.third.id).to eq lettings_log_with_propcode.id
+          end
+
+          it "returns all matching records in correct order with matching postcode" do
+            result = described_class.search_by("C1 1AC")
+            expect(result.count).to eq(3)
+            expect(result.first.id).to eq lettings_log_with_postcode_tenancycode.id
+            expect(result.second.id).to eq lettings_log_with_postcode_propcode.id
+            expect(result.third.id).to eq lettings_log_with_postcode.id
+          end
+        end
       end
     end
 
