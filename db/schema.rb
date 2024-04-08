@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_03_19_122706) do
+ActiveRecord::Schema[7.0].define(version: 2024_04_08_101139) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -270,7 +270,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_19_122706) do
     t.integer "irproduct"
     t.string "old_id"
     t.integer "joint"
-    t.bigint "created_by_id"
     t.integer "retirement_value_check"
     t.integer "tshortfall_known"
     t.integer "sheltered"
@@ -320,8 +319,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_19_122706) do
     t.string "la_as_entered"
     t.integer "partner_under_16_value_check"
     t.integer "multiple_partners_value_check"
+    t.bigint "assigned_to_id"
+    t.index ["assigned_to_id"], name: "index_lettings_logs_on_assigned_to_id"
     t.index ["bulk_upload_id"], name: "index_lettings_logs_on_bulk_upload_id"
-    t.index ["created_by_id"], name: "index_lettings_logs_on_created_by_id"
     t.index ["location_id"], name: "index_lettings_logs_on_location_id"
     t.index ["managing_organisation_id"], name: "index_lettings_logs_on_managing_organisation_id"
     t.index ["old_id"], name: "index_lettings_logs_on_old_id", unique: true
@@ -495,7 +495,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_19_122706) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "owning_organisation_id"
-    t.bigint "created_by_id"
     t.string "purchid"
     t.integer "type"
     t.integer "ownershipsch"
@@ -686,8 +685,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_19_122706) do
     t.string "la_as_entered"
     t.integer "partner_under_16_value_check"
     t.integer "multiple_partners_value_check"
+    t.bigint "assigned_to_id"
+    t.index ["assigned_to_id"], name: "index_sales_logs_on_assigned_to_id"
     t.index ["bulk_upload_id"], name: "index_sales_logs_on_bulk_upload_id"
-    t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
     t.index ["managing_organisation_id"], name: "index_sales_logs_on_managing_organisation_id"
     t.index ["old_id"], name: "index_sales_logs_on_old_id", unique: true
     t.index ["owning_organisation_id"], name: "index_sales_logs_on_owning_organisation_id"
