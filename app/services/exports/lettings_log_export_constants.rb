@@ -154,6 +154,7 @@ module Exports::LettingsLogExportConstants
     "supcharg_value_check",
     "carehome_charges_value_check",
     "assigned_to",
+    "created_by",
   ]
 
   (1..8).each do |index|

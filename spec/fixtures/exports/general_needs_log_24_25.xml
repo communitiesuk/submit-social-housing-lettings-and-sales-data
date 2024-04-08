@@ -170,6 +170,7 @@
     <uploaddate>2024-04-03T00:00:00+01:00</uploaddate>
     <log_id>{log_id}</log_id>
     <assigned_to>test1@example.com</assigned_to>
+    <created_by>test1@example.com</created_by>
     <amended_by/>
     <renttype_detail>2</renttype_detail>
     <providertype>1</providertype>
