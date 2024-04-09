@@ -17,7 +17,7 @@ RSpec.describe Form::Sales::Questions::PersonRelationshipToBuyer1, type: :model 
   end
 
   it "is not marked as derived" do
-    expect(question.derived?).to be false
+    expect(question.derived?(nil)).to be false
   end
 
   it "has expected check answers card number" do

@@ -28,7 +28,7 @@ RSpec.describe Form::Lettings::Questions::NeedsType, type: :model do
   end
 
   it "is not marked as derived" do
-    expect(question).not_to be_derived
+    expect(question).not_to be_derived(nil)
   end
 
   it "has the correct answer_options" do

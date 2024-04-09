@@ -36,7 +36,7 @@ RSpec.describe Form::Sales::Questions::Buyer1EthnicBackgroundWhite, type: :model
   end
 
   it "is not marked as derived" do
-    expect(question.derived?).to be false
+    expect(question.derived?(nil)).to be false
   end
 
   context "with 2023/24 form" do

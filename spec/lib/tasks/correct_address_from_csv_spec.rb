@@ -10,6 +10,8 @@ RSpec.describe "data_import" do
   end
 
   before do
+    Timecop.freeze(Time.zone.local(2024, 3, 1))
+    Singleton.__init__(FormHandler)
     allow(Storage::S3Service).to receive(:new).and_return(storage_service)
     allow(Configuration::EnvConfigurationService).to receive(:new).and_return(env_config_service)
     allow(ENV).to receive(:[])
@@ -20,6 +22,11 @@ RSpec.describe "data_import" do
       .to_return(status: 200, body: "{\"status\":404,\"error\":\"Postcode not found\"}", headers: {})
     WebMock.stub_request(:get, /api\.postcodes\.io\/postcodes\/B11BB/)
       .to_return(status: 200, body: '{"status":200,"result":{"admin_district":"Westminster","codes":{"admin_district":"E08000035"}}}', headers: {})
+  end
+
+  after do
+    Timecop.return
+    Singleton.__init__(FormHandler)
   end
 
   describe ":import_lettings_addresses_from_csv", type: :task do

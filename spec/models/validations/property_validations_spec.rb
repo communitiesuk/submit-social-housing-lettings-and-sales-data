@@ -4,7 +4,7 @@ RSpec.describe Validations::PropertyValidations do
   subject(:property_validator) { property_validator_class.new }
 
   let(:property_validator_class) { Class.new { include Validations::PropertyValidations } }
-  let(:record) { FactoryBot.create(:lettings_log) }
+  let(:record) { FactoryBot.create(:lettings_log, startdate: Time.zone.local(2024, 3, 3)) }
 
   describe "#validate_shared_housing_rooms" do
     context "when number of bedrooms has not been answered" do

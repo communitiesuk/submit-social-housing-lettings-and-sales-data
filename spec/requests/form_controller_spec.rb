@@ -358,6 +358,12 @@ RSpec.describe FormController, type: :request do
         created_by: user,
       )
     end
+    let!(:sales_log) do
+      create(
+        :sales_log,
+        created_by: user,
+      )
+    end
 
     before do
       allow(user).to receive(:need_two_factor_authentication?).and_return(false)
@@ -610,6 +616,104 @@ RSpec.describe FormController, type: :request do
             it "validates the date correctly" do
               post "/lettings-logs/#{lettings_log.id}/#{page_id.dasherize}", params: params
               expect(page).to have_content("There is a problem")
+            end
+          end
+
+          context "when allow_future_form_use? is enabled" do
+            before do
+              allow(FeatureToggle).to receive(:allow_future_form_use?).and_return(true)
+            end
+
+            context "when the tenancy start date is out of the editable collection year" do
+              let(:page_id) { "tenancy_start_date" }
+              let(:params) do
+                {
+                  id: lettings_log.id,
+                  lettings_log: {
+                    page: page_id,
+                    "startdate(3i)" => 1,
+                    "startdate(2i)" => 1,
+                    "startdate(1i)" => 1,
+                  },
+                }
+              end
+
+              it "redirects to the review page for the log" do
+                post "/lettings-logs/#{lettings_log.id}/#{page_id.dasherize}", params: params
+                follow_redirect!
+                follow_redirect!
+                follow_redirect!
+                expect(page).to have_content("Review lettings log")
+              end
+            end
+
+            context "when the sale date is out of the editable collection year" do
+              let(:page_id) { "completion_date" }
+              let(:params) do
+                {
+                  id: sales_log.id,
+                  sales_log: {
+                    page: page_id,
+                    "saledate(3i)" => 1,
+                    "saledate(2i)" => 1,
+                    "saledate(1i)" => 1,
+                  },
+                }
+              end
+
+              it "redirects to the review page for the log" do
+                post "/sales-logs/#{sales_log.id}/#{page_id.dasherize}", params: params
+                follow_redirect!
+                follow_redirect!
+                follow_redirect!
+                expect(page).to have_content("Review sales log")
+              end
+            end
+          end
+
+          context "when allow_future_form_use? is disabled" do
+            before do
+              allow(FeatureToggle).to receive(:allow_future_form_use?).and_return(false)
+            end
+
+            context "when the tenancy start date is out of the editable collection year" do
+              let(:page_id) { "tenancy_start_date" }
+              let(:params) do
+                {
+                  id: lettings_log.id,
+                  lettings_log: {
+                    page: page_id,
+                    "startdate(3i)" => 1,
+                    "startdate(2i)" => 1,
+                    "startdate(1i)" => 1,
+                  },
+                }
+              end
+
+              it "validates the date correctly" do
+                post "/lettings-logs/#{lettings_log.id}/#{page_id.dasherize}", params: params
+                expect(page).to have_content("There is a problem")
+              end
+            end
+
+            context "when the sale date is out of the editable collection year" do
+              let(:page_id) { "completion_date" }
+              let(:params) do
+                {
+                  id: sales_log.id,
+                  sales_log: {
+                    page: page_id,
+                    "saledate(3i)" => 1,
+                    "saledate(2i)" => 1,
+                    "saledate(1i)" => 1,
+                  },
+                }
+              end
+
+              it "validates the date correctly" do
+                post "/sales-logs/#{sales_log.id}/#{page_id.dasherize}", params: params
+                expect(page).to have_content("There is a problem")
+              end
             end
           end
         end
@@ -1045,8 +1149,8 @@ RSpec.describe FormController, type: :request do
         end
 
         context "when the sales question was accessed from a duplicate logs screen" do
-          let!(:sales_log) { create(:sales_log, :duplicate, created_by: user, duplicate_set_id: 1) }
-          let!(:duplicate_log) { create(:sales_log, :duplicate, created_by: user, duplicate_set_id: 1) }
+          let!(:sales_log) { create(:sales_log, :duplicate, created_by: user, duplicate_set_id: 1, saledate: Time.zone.local(2024, 3, 3)) }
+          let!(:duplicate_log) { create(:sales_log, :duplicate, created_by: user, duplicate_set_id: 1, saledate: Time.zone.local(2024, 3, 3)) }
           let(:referrer) { "/sales-logs/#{sales_log.id}/buyer-1-age?referrer=duplicate_logs&first_remaining_duplicate_id=#{duplicate_log.id}&original_log_id=#{sales_log.id}&referrer=duplicate_logs" }
           let(:params) do
             {

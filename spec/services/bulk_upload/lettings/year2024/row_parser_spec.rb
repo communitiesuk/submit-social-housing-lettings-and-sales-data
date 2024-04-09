@@ -1038,7 +1038,7 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
           let(:attributes) { { bulk_upload:, field_98: "1", field_7: "1" } }
 
           it "is not permitted" do
-            expect(parser.errors[:field_98]).to include('The reason for leaving must be "End of social housing tenancy - no fault", "End of social housing tenancy - evicted due to anti-social behaviour (ASB)", "End of social housing tenancy - evicted due to rent arrears" or "End of social housing tenancy - evicted for any other reason"')
+            expect(parser.errors[:field_98]).to include('The reason for leaving must be "End of social or private sector tenancy - no fault", "End of social or private sector tenancy - evicted due to anti-social behaviour (ASB)", "End of social or private sector tenancy - evicted due to rent arrears" or "End of social or private sector tenancy - evicted for any other reason"')
           end
         end
       end

@@ -18,6 +18,9 @@
         <% row.with_cell(header: true, text: "Last logged in", html_attributes: {
           scope: "col",
         }) %>
+        <% row.with_cell(header: true, text: "Status", html_attributes: {
+          scope: "col",
+        }) %>
       <% end %>
     <% end %>
     <% users.each do |user| %>
@@ -50,7 +53,8 @@
             <% end %>
           <% end %>
           <% row.with_cell(text: simple_format(org_cell(user), {}, wrapper_tag: "div")) %>
-          <% row.with_cell(text: user.active? ? user.last_sign_in_at&.to_formatted_s(:govuk_date) : status_tag(user.status)) %>
+          <% row.with_cell(text: user.last_sign_in_at&.to_formatted_s(:govuk_date)) %>
+          <% row.with_cell(text: status_tag(user.status)) %>
           <%= govuk_link_to users_path(user) do %>
             <span class="govuk-visually-hidden">User </span><%= user.id %>
           <% end %>

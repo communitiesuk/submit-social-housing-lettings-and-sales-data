@@ -6,6 +6,7 @@ class Form::Sales::Questions::CreatedById < ::Form::Question
     @id = "created_by_id"
     @check_answer_label = "Log owner"
     @header = "Which user are you creating this log for?"
+    @derived = true
     @type = "select"
   end
 
@@ -22,11 +23,11 @@ class Form::Sales::Questions::CreatedById < ::Form::Question
                [
                  (
                    if log.managing_organisation
-                     log.managing_organisation.absorbing_organisation.present? ? log.managing_organisation&.absorbing_organisation&.users : log.managing_organisation.users
+                     log.managing_organisation.absorbing_organisation.present? ? log.managing_organisation&.absorbing_organisation&.users&.visible : log.managing_organisation.users.visible
                    end),
                ].flatten
              else
-               log.managing_organisation.users
+               log.managing_organisation.users.visible
              end.uniq.compact
     users.each_with_object(ANSWER_OPTS.dup) do |user, hsh|
       hsh[user.id] = present_user(user)
@@ -44,10 +45,6 @@ class Form::Sales::Questions::CreatedById < ::Form::Question
     return false if current_user.support?
     return false if current_user.data_coordinator?
 
-    true
-  end
-
-  def derived?
     true
   end
 

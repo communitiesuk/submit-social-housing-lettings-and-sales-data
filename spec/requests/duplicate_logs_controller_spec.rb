@@ -7,6 +7,16 @@ RSpec.describe DuplicateLogsController, type: :request do
   let(:sales_log) { create(:sales_log, :duplicate, created_by: user) }
 
   describe "GET show" do
+    before do
+      Timecop.freeze(Time.zone.local(2024, 3, 1))
+      Singleton.__init__(FormHandler)
+    end
+
+    after do
+      Timecop.return
+      Singleton.__init__(FormHandler)
+    end
+
     context "when user is not signed in" do
       it "redirects to sign in page" do
         get "/lettings-logs/#{lettings_log.id}/duplicate-logs"
@@ -591,6 +601,16 @@ RSpec.describe DuplicateLogsController, type: :request do
     context "when accessed from the duplicate logs banner flow" do
       let(:request) { get "/sales-logs/#{id}/delete-duplicates?original_log_id=#{id}&referrer=duplicate_logs_banner" }
 
+      before do
+        Timecop.freeze(Time.zone.local(2024, 3, 1))
+        Singleton.__init__(FormHandler)
+      end
+
+      after do
+        Timecop.return
+        Singleton.__init__(FormHandler)
+      end
+
       context "when there is 1 duplicate log being deleted" do
         let!(:duplicate_log) { create(:sales_log, :duplicate, created_by: user) }
 
@@ -628,6 +648,16 @@ RSpec.describe DuplicateLogsController, type: :request do
     end
 
     context "when accessed from the single log submission flow" do
+      before do
+        Timecop.freeze(Time.zone.local(2024, 3, 1))
+        Singleton.__init__(FormHandler)
+      end
+
+      after do
+        Timecop.return
+        Singleton.__init__(FormHandler)
+      end
+
       context "when there is 1 duplicate log being deleted" do
         let!(:duplicate_log) { create(:sales_log, :duplicate, created_by: user) }
 

@@ -7,6 +7,16 @@ RSpec.describe SalesLog, type: :model do
   let(:owning_organisation) { create(:organisation) }
   let(:created_by_user) { create(:user) }
 
+  before do
+    Timecop.freeze(Time.zone.local(2024, 3, 1))
+    Singleton.__init__(FormHandler)
+  end
+
+  after do
+    Timecop.return
+    Singleton.__init__(FormHandler)
+  end
+
   include_examples "shared examples for derived fields", :sales_log
   include_examples "shared log examples", :sales_log
 
@@ -470,7 +480,7 @@ RSpec.describe SalesLog, type: :model do
     context "when there is a log with nil values for purchid" do
       let!(:purchid_not_given) { create(:sales_log, :duplicate, purchid: nil, owning_organisation: organisation) }
 
-      it "returns the log as a duplicate if tenancy code is nil" do
+      it "returns the log as a duplicate if purchaser code is nil" do
         log.update!(purchid: nil)
         expect(duplicate_sets.count).to eq(1)
         expect(duplicate_sets.first).to contain_exactly(log.id, purchid_not_given.id)
@@ -528,19 +538,12 @@ RSpec.describe SalesLog, type: :model do
   describe "derived variables" do
     let(:sales_log) { create(:sales_log, :completed) }
 
-    around do |example|
-      Timecop.freeze(Time.zone.local(2022, 7, 4)) do
-        example.run
-      end
-      Timecop.return
-    end
-
     it "correctly derives and saves exday, exmonth and exyear" do
-      sales_log.update!(exdate: Time.gm(2022, 5, 4), saledate: Time.gm(2022, 7, 4), ownershipsch: 1, type: 18, staircase: 2, resale: 2, proplen: 0)
+      sales_log.update!(exdate: Time.gm(2023, 5, 4), saledate: Time.gm(2023, 7, 4), ownershipsch: 1, type: 18, staircase: 2, resale: 2, proplen: 0)
       record_from_db = described_class.find(sales_log.id)
       expect(record_from_db["exday"]).to eq(4)
       expect(record_from_db["exmonth"]).to eq(5)
-      expect(record_from_db["exyear"]).to eq(2022)
+      expect(record_from_db["exyear"]).to eq(2023)
     end
 
     it "correctly derives and saves deposit for outright sales when no mortgage is used" do
@@ -557,6 +560,20 @@ RSpec.describe SalesLog, type: :model do
 
     it "does not derive deposit if the mortgage is used" do
       sales_log.update!(value: 123_400, deposit: nil, mortgageused: 1, ownershipsch: 3, type: 10, companybuy: 1, jointpur: 1, jointmore: 1)
+      record_from_db = described_class.find(sales_log.id)
+      expect(record_from_db["deposit"]).to eq(nil)
+    end
+
+    it "does not derive deposit if the mortgage use is unknown" do
+      Timecop.freeze(2024, 5, 2)
+      sales_log.update!(value: 123_400, deposit: nil, saledate: Time.zone.local(2024, 5, 2), mortgageused: 3, ownershipsch: 3, type: 10, companybuy: 1, jointpur: 1, jointmore: 1)
+      record_from_db = described_class.find(sales_log.id)
+      expect(record_from_db["deposit"]).to eq(nil)
+    end
+
+    it "clears deposit when setting mortgage used to yes from no for outright sales" do
+      sales_log.update!(value: 123_400, deposit: nil, mortgageused: 2, ownershipsch: 3, type: 10, companybuy: 1, jointpur: 1, jointmore: 1)
+      sales_log.update!(mortgageused: 1)
       record_from_db = described_class.find(sales_log.id)
       expect(record_from_db["deposit"]).to eq(nil)
     end
@@ -1122,6 +1139,98 @@ RSpec.describe SalesLog, type: :model do
 
       it "returns false" do
         expect(log.collection_period_open?).to eq(false)
+      end
+    end
+  end
+
+  context "when searching logs" do
+    let!(:sales_log_to_search) { create(:sales_log, :completed, purchid: "to search", postcode_full: "ME0 0WW") }
+
+    before do
+      create_list(:sales_log, 5, :completed)
+    end
+
+    describe "#filter_by_id" do
+      it "allows searching by a log ID" do
+        result = described_class.filter_by_id(sales_log_to_search.id.to_s)
+        expect(result.count).to eq(1)
+        expect(result.first.id).to eq sales_log_to_search.id
+      end
+    end
+
+    describe "#filter_by_purchaser_code" do
+      it "allows searching by a purchaser_code" do
+        result = described_class.filter_by_purchaser_code(sales_log_to_search.purchid)
+        expect(result.count).to eq(1)
+        expect(result.first.id).to eq sales_log_to_search.id
+      end
+
+      context "when purchaser_code has lower case letters" do
+        let(:matching_purchaser_code_lower_case) { sales_log_to_search.purchid.downcase }
+
+        it "allows searching by a purchaser_code" do
+          result = described_class.filter_by_purchaser_code(matching_purchaser_code_lower_case)
+          expect(result.count).to eq(1)
+          expect(result.first.id).to eq sales_log_to_search.id
+        end
+      end
+    end
+
+    describe "#filter_by_postcode" do
+      it "allows searching by a Property Postcode" do
+        result = described_class.filter_by_postcode(sales_log_to_search.postcode_full)
+        expect(result.count).to eq(1)
+        expect(result.first.id).to eq sales_log_to_search.id
+      end
+    end
+
+    describe "#search_by" do
+      it "allows searching using ID" do
+        result = described_class.search_by(sales_log_to_search.id.to_s)
+        expect(result.count).to eq(1)
+        expect(result.first.id).to eq sales_log_to_search.id
+      end
+
+      it "allows searching using purchaser code" do
+        result = described_class.search_by(sales_log_to_search.purchid)
+        expect(result.count).to eq(1)
+        expect(result.first.id).to eq sales_log_to_search.id
+      end
+
+      it "allows searching by a Property Postcode" do
+        result = described_class.search_by(sales_log_to_search.postcode_full)
+        expect(result.count).to eq(1)
+        expect(result.first.id).to eq sales_log_to_search.id
+      end
+
+      context "when postcode has spaces and lower case letters" do
+        let(:matching_postcode_lower_case_with_spaces) { sales_log_to_search.postcode_full.downcase.chars.insert(3, " ").join }
+
+        it "allows searching by a Property Postcode" do
+          result = described_class.search_by(matching_postcode_lower_case_with_spaces)
+          expect(result.count).to eq(1)
+          expect(result.first.id).to eq sales_log_to_search.id
+        end
+      end
+
+      context "when matching multiple records on different fields" do
+        let!(:sales_log_with_purchid) { create(:sales_log, purchid: sales_log_to_search.id) }
+        let!(:sales_log_with_postcode) { create(:sales_log, postcode_full: "C1 1AC") }
+        let!(:sales_log_with_postcode_purchid) { create(:sales_log, purchid: "C1 1AC") }
+
+        it "returns all matching records in correct order with matching IDs" do
+          result = described_class.search_by(sales_log_to_search.id.to_s)
+          expect(result.count).to eq(2)
+          expect(result.first.id).to eq sales_log_to_search.id
+          expect(result.second.id).to eq sales_log_with_purchid.id
+        end
+
+        it "returns all matching records in correct order with matching postcode" do
+          result = described_class.search_by("C1 1AC")
+          expect(result.count).to eq(2)
+          expect(result.first.id).to eq sales_log_with_postcode_purchid.id
+          expect(result.second.id).to eq sales_log_with_postcode.id
+        end
       end
     end
   end
