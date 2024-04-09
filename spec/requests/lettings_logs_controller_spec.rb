@@ -139,9 +139,11 @@ RSpec.describe LettingsLogsController, type: :request do
 
       it "tracks who created the record" do
         created_id = response.location.match(/[0-9]+/)[0]
-        whodunnit_actor = LettingsLog.find_by(id: created_id).versions.last.actor
+        log = LettingsLog.find(created_id)
+        whodunnit_actor = log.versions.last.actor
         expect(whodunnit_actor).to be_a(User)
         expect(whodunnit_actor.id).to eq(user.id)
+        expect(log.reload.created_by).to eq(user)
       end
 
       context "when creating a new log" do
@@ -161,6 +163,12 @@ RSpec.describe LettingsLogsController, type: :request do
             expect(lettings_log.owning_organisation).to eq(nil)
             expect(lettings_log.managing_organisation).to eq(nil)
           end
+
+          it "sets created_by to current user" do
+            created_id = response.location.match(/[0-9]+/)[0]
+            lettings_log = LettingsLog.find(created_id)
+            expect(lettings_log.created_by).to eq(support_user)
+          end
         end
 
         context "when the user is not support" do
@@ -179,6 +187,12 @@ RSpec.describe LettingsLogsController, type: :request do
               lettings_log = LettingsLog.find_by(id: created_id)
               expect(lettings_log.owning_organisation.name).to eq("User org")
               expect(lettings_log.managing_organisation.name).to eq("User org")
+            end
+
+            it "sets created_by to current user" do
+              created_id = response.location.match(/[0-9]+/)[0]
+              lettings_log = LettingsLog.find(created_id)
+              expect(lettings_log.created_by).to eq(user)
             end
           end
 

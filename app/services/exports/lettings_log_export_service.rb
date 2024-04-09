@@ -202,6 +202,7 @@ module Exports
 
       attribute_hash["log_id"] = lettings_log.id
       attribute_hash["assigned_to"] = lettings_log.assigned_to&.email
+      attribute_hash["created_by"] = lettings_log.created_by&.email
       attribute_hash["amended_by"] = lettings_log.updated_by&.email
 
       attribute_hash["la"] = lettings_log.la

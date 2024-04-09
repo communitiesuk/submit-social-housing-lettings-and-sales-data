@@ -1089,6 +1089,7 @@ private
     attributes["scheme"] = scheme
     attributes["location"] = location
     attributes["assigned_to"] = assigned_to || bulk_upload.user
+    attributes["created_by"] = bulk_upload.user
     attributes["needstype"] = field_4
     attributes["rent_type"] = rent_type
     attributes["startdate"] = startdate
