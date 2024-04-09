@@ -5,7 +5,7 @@ RSpec.describe Form::Lettings::Questions::UprnSelection, type: :model do
 
   let(:question_id) { nil }
   let(:question_definition) { nil }
-  let(:page) { instance_double(Form::Page) }
+  let(:page) { instance_double(Form::Page, skip_href: "skip_href") }
   let(:log) { create(:lettings_log, :in_progress, address_line1_input: "Address line 1", postcode_full_input: "AA1 1AA") }
   let(:address_client_instance) { AddressClient.new(log.address_string) }
 
@@ -97,6 +97,42 @@ RSpec.describe Form::Lettings::Questions::UprnSelection, type: :model do
         .to_return(status: 200, body: "", headers: {})
 
       expect(question.hidden_in_check_answers?(log)).to eq(true)
+    end
+  end
+
+  context "when the log has address line 1 input only" do
+    before do
+      log.address_line1_input = "Address line 1"
+      log.postcode_full_input = nil
+      log.save!(valudate: false)
+    end
+
+    it "has the correct input_playback" do
+      expect(question.input_playback(log)).to eq("0 addresses found for <strong>Address line 1</strong>. <a href=\"skip_href\">Search again</a>")
+    end
+  end
+
+  context "when the log has postcode input only" do
+    before do
+      log.address_line1_input = nil
+      log.postcode_full_input = "A1 1AA"
+      log.save!(valudate: false)
+    end
+
+    it "has the correct input_playback" do
+      expect(question.input_playback(log)).to eq("0 addresses found for <strong>A1 1AA</strong>. <a href=\"skip_href\">Search again</a>")
+    end
+  end
+
+  context "when the log has address line 1 and postcode inputs" do
+    before do
+      log.address_line1_input = "Address line 1"
+      log.postcode_full_input = "A1 1AA"
+      log.save!(valudate: false)
+    end
+
+    it "has the correct input_playback" do
+      expect(question.input_playback(log)).to eq("1 address found for <strong>Address line 1</strong> and <strong>A1 1AA</strong>. <a href=\"skip_href\">Search again</a>")
     end
   end
 end
