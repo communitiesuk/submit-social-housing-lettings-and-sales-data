@@ -6,7 +6,7 @@ class Form::Lettings::Questions::WorkingSituation1 < ::Form::Question
     @header = "Which of these best describes the lead tenant’s working situation?"
     @type = "radio"
     @check_answers_card_number = 1
-    @hint_text = "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest."
+    @hint_text = form.start_year_after_2024? ? "" : "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest."
     @answer_options = ANSWER_OPTIONS
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
   end
