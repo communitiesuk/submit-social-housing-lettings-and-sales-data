@@ -15,7 +15,7 @@ class Form::Lettings::Questions::WorkingSituation1 < ::Form::Question
     "1" => { "value" => "Full-time – 30 hours or more" },
     "2" => { "value" => "Part-time – Less than 30 hours" },
     "7" => { "value" => "Full-time student" },
-    "3" => { "value" => "In government training into work, such as New Deal" },
+    "3" => { "value" => "In government training into work" },
     "4" => { "value" => "Jobseeker" },
     "6" => { "value" => "Not seeking work" },
     "8" => { "value" => "Unable to work because of long term sick or disability" },

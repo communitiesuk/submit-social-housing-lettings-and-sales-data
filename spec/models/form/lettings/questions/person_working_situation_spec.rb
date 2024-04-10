@@ -24,7 +24,7 @@ RSpec.describe Form::Lettings::Questions::PersonWorkingSituation, type: :model d
                                           "1" => { "value" => "Full-time – 30 hours or more" },
                                           "10" => { "value" => "Person prefers not to say" },
                                           "2" => { "value" => "Part-time – Less than 30 hours" },
-                                          "3" => { "value" => "In government training into work, such as New Deal" },
+                                          "3" => { "value" => "In government training into work" },
                                           "4" => { "value" => "Jobseeker" },
                                           "5" => { "value" => "Retired" },
                                           "6" => { "value" => "Not seeking work" },
