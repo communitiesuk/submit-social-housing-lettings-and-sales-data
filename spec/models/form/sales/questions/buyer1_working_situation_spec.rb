@@ -35,7 +35,7 @@ RSpec.describe Form::Sales::Questions::Buyer1WorkingSituation, type: :model do
     expect(question.answer_options).to eq({
       "1" => { "value" => "Full-time - 30 hours or more" },
       "2" => { "value" => "Part-time - Less than 30 hours" },
-      "3" => { "value" => "In government training into work, such as New Deal" },
+      "3" => { "value" => "In government training into work" },
       "4" => { "value" => "Jobseeker" },
       "6" => { "value" => "Not seeking work" },
       "8" => { "value" => "Unable to work due to long term sick or disability" },
