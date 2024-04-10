@@ -37,7 +37,7 @@ private
   end
 
   def s3_storage_service
-    Storage::S3Service.new(Configuration::EnvConfigurationService.new, ENV["BULK_UPLOAD_INSTANCE"])
+    Storage::S3Service.new(Configuration::EnvConfigurationService.new, ENV["BULK_UPLOAD_BUCKET"])
   end
 
   def local_disk_storage_service

@@ -2,7 +2,7 @@ require "rails_helper"
 require "rake"
 
 describe "rake core:data_export", type: task do
-  let(:export_instance) { "export_instance" }
+  let(:EXPORT_BUCKET) { "EXPORT_BUCKET" }
   let(:storage_service) { instance_double(Storage::S3Service) }
   let(:export_service) { instance_double(Exports::LettingsLogExportService) }
 
@@ -14,7 +14,7 @@ describe "rake core:data_export", type: task do
     allow(Storage::S3Service).to receive(:new).and_return(storage_service)
     allow(Exports::LettingsLogExportService).to receive(:new).and_return(export_service)
     allow(ENV).to receive(:[])
-    allow(ENV).to receive(:[]).with("EXPORT_INSTANCE").and_return(export_instance)
+    allow(ENV).to receive(:[]).with("EXPORT_BUCKET").and_return(EXPORT_BUCKET)
   end
 
   context "when exporting lettings logs with no parameters" do

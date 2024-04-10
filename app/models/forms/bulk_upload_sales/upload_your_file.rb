@@ -49,7 +49,7 @@ module Forms
 
       def storage_service
         @storage_service ||= if FeatureToggle.upload_enabled?
-                               Storage::S3Service.new(Configuration::EnvConfigurationService.new, ENV["BULK_UPLOAD_INSTANCE"])
+                               Storage::S3Service.new(Configuration::EnvConfigurationService.new, ENV["BULK_UPLOAD_BUCKET"])
                              else
                                Storage::LocalDiskService.new
                              end

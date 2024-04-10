@@ -5,7 +5,7 @@ class BulkUpdateFromCsv::UpdateLocationsFromCsvService
   end
 
   def call
-    s3_service = Storage::S3Service.new(Configuration::EnvConfigurationService.new, ENV["BULK_UPLOAD_INSTANCE"])
+    s3_service = Storage::S3Service.new(Configuration::EnvConfigurationService.new, ENV["BULK_UPLOAD_BUCKET"])
 
     original_locations_csv = csv_from_path(@original_file_name, s3_service)
     updated_locations_csv = csv_from_path(@updated_file_name, s3_service)
