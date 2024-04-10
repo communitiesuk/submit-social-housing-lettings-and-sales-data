@@ -2,7 +2,7 @@ require "rails_helper"
 require "rake"
 
 describe "rake core:data_export", type: task do
-  let(:EXPORT_BUCKET) { "EXPORT_BUCKET" }
+  let(:export_bucket) { "EXPORT_BUCKET" }
   let(:storage_service) { instance_double(Storage::S3Service) }
   let(:export_service) { instance_double(Exports::LettingsLogExportService) }
 
