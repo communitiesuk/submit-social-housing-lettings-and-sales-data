@@ -5,19 +5,35 @@
   <%= render SubNavigationComponent.new(
     items: secondary_items(request.path, @organisation.id),
   ) %>
+  <% if !@organisation.active? %>
+    <%= govuk_notification_banner(title_text: "Important") do %>
+      <p class="govuk-notification-banner__heading govuk-!-width-full" style="max-width: fit-content">
+        This organisation is deactivated.
+      <p>
+      You cannot add any new managing agents.
+    <% end %>
+  <% end %>
   <h2 class="govuk-visually-hidden">Managing Agents</h2>
   <p class="govuk-body">A managing agent can submit logs for this organisation.</p>
   <% if @total_count == 0 %>
     <p class="govuk-body">This organisation does not currently have any managing agents.</p>
   <% end %>
 <% else %>
+  <% if !@organisation.active? %>
+    <%= govuk_notification_banner(title_text: "Important") do %>
+      <p class="govuk-notification-banner__heading govuk-!-width-full" style="max-width: fit-content">
+        This organisation is deactivated.
+      <p>
+      You cannot add any new managing agents.
+    <% end %>
+  <% end %>
   <%= render partial: "organisations/headings", locals: { main: "Your managing agents", sub: current_user.organisation.name } %>
   <p class="govuk-body">A managing agent can submit logs for this organisation.</p>
   <% if @total_count == 0 %>
     <p class="govuk-body">This organisation does not currently have any managing agents.</p>
   <% end %>
 <% end %>
-<% if current_user.support? || current_user.data_coordinator? %>
+<% if (current_user.support? || current_user.data_coordinator?) && @organisation.active? %>
   <%= govuk_button_link_to "Add a managing agent", managing_agents_add_organisation_path, html: { method: :get } %>
 <% end %>
 <% if @total_count != 0 %>

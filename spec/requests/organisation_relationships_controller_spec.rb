@@ -81,6 +81,22 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
               expect(response.body).not_to include(inactive_organisation.name)
             end
           end
+
+          context "and current organisation is deactivated" do
+            before do
+              organisation.update!(active: false)
+              get "/organisations/#{organisation.id}/stock-owners", headers:, params: {}
+            end
+
+            it "does not show the add stock owner button" do
+              expect(page).not_to have_link("Add a stock owner")
+            end
+
+            it "shows a banner" do
+              expect(page).to have_content("This organisation is deactivated.")
+              expect(page).to have_content("You cannot add any new stock owners.")
+            end
+          end
         end
 
         context "with an organisation that are not in scope for the user, i.e. that they do not belong to" do
@@ -134,6 +150,22 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
 
           it "shows the pagination count" do
             expect(page).to have_content("1 total managing agents")
+          end
+
+          context "and current organisation is deactivated" do
+            before do
+              organisation.update!(active: false)
+              get "/organisations/#{organisation.id}/managing-agents", headers:, params: {}
+            end
+
+            it "does not show the add managing agent button" do
+              expect(page).not_to have_link("Add a managing agent")
+            end
+
+            it "shows a banner" do
+              expect(page).to have_content("This organisation is deactivated.")
+              expect(page).to have_content("You cannot add any new managing agents.")
+            end
           end
         end
 
