@@ -22,7 +22,7 @@ RSpec.describe "bulk_update" do
     allow(Storage::S3Service).to receive(:new).and_return(storage_service)
     allow(Configuration::EnvConfigurationService).to receive(:new).and_return(env_config_service)
     allow(ENV).to receive(:[])
-    allow(ENV).to receive(:[]).with("CSV_DOWNLOAD_PAAS_INSTANCE").and_return(instance_name)
+    allow(ENV).to receive(:[]).with("BULK_UPLOAD_INSTANCE").and_return(instance_name)
 
     WebMock.stub_request(:get, /api\.postcodes\.io/)
       .to_return(status: 200, body: "{\"status\":404,\"error\":\"Postcode not found\"}", headers: {})

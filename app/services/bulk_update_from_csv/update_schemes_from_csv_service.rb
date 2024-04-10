@@ -5,7 +5,7 @@ class BulkUpdateFromCsv::UpdateSchemesFromCsvService
   end
 
   def call
-    s3_service = Storage::S3Service.new(Configuration::EnvConfigurationService.new, ENV["CSV_DOWNLOAD_PAAS_INSTANCE"])
+    s3_service = Storage::S3Service.new(Configuration::EnvConfigurationService.new, ENV["BULK_UPLOAD_INSTANCE"])
 
     original_schemes_csv = csv_from_path(@original_file_name, s3_service)
     updated_schemes_csv = csv_from_path(@updated_file_name, s3_service)

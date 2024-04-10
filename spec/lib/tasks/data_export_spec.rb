@@ -14,7 +14,7 @@ describe "rake core:data_export", type: task do
     allow(Storage::S3Service).to receive(:new).and_return(storage_service)
     allow(Exports::LettingsLogExportService).to receive(:new).and_return(export_service)
     allow(ENV).to receive(:[])
-    allow(ENV).to receive(:[]).with("EXPORT_PAAS_INSTANCE").and_return(export_instance)
+    allow(ENV).to receive(:[]).with("EXPORT_INSTANCE").and_return(export_instance)
   end
 
   context "when exporting lettings logs with no parameters" do
