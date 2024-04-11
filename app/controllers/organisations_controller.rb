@@ -94,10 +94,37 @@ class OrganisationsController < ApplicationController
     end
   end
 
+  def deactivate
+    authorize @organisation
+
+    render "toggle_active", locals: { action: "deactivate" }
+  end
+
+  def reactivate
+    authorize @organisation
+
+    render "toggle_active", locals: { action: "reactivate" }
+  end
+
   def update
-    if current_user.data_coordinator? || current_user.support?
+    if (current_user.data_coordinator? && org_params[:active].nil?) || current_user.support?
       if @organisation.update(org_params)
-        flash[:notice] = I18n.t("organisation.updated")
+        case org_params[:active]
+        when "false"
+          @organisation.users.filter_by_active.each do |user|
+            user.deactivate!(reactivate_with_organisation: true)
+          end
+          flash[:notice] = I18n.t("organisation.deactivated", organisation: @organisation.name)
+        when "true"
+          users_to_reactivate = @organisation.users.where(reactivate_with_organisation: true)
+          users_to_reactivate.each do |user|
+            user.reactivate!
+            user.send_confirmation_instructions
+          end
+          flash[:notice] = I18n.t("organisation.reactivated", organisation: @organisation.name)
+        else
+          flash[:notice] = I18n.t("organisation.updated")
+        end
         redirect_to details_organisation_path(@organisation)
       end
     else
@@ -239,7 +266,7 @@ private
   end
 
   def org_params
-    params.require(:organisation).permit(:name, :address_line1, :address_line2, :postcode, :phone, :holds_own_stock, :provider_type, :housing_registration_no)
+    params.require(:organisation).permit(:name, :address_line1, :address_line2, :postcode, :phone, :holds_own_stock, :provider_type, :housing_registration_no, :active)
   end
 
   def codes_only_export?

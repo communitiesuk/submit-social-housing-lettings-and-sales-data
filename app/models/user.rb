@@ -134,6 +134,23 @@ class User < ApplicationRecord
     update!(is_dpo: true)
   end
 
+  def deactivate!(reactivate_with_organisation: false)
+    update!(
+      active: false,
+      confirmed_at: nil,
+      sign_in_count: 0,
+      initial_confirmation_sent: false,
+      reactivate_with_organisation:,
+    )
+  end
+
+  def reactivate!
+    update!(
+      active: true,
+      reactivate_with_organisation: false,
+    )
+  end
+
   MFA_TEMPLATE_ID = "6bdf5ee1-8e01-4be1-b1f9-747061d8a24c".freeze
   RESET_PASSWORD_TEMPLATE_ID = "2c410c19-80a7-481c-a531-2bcb3264f8e6".freeze
   CONFIRMABLE_TEMPLATE_ID = "3fc2e3a7-0835-4b84-ab7a-ce51629eb614".freeze
