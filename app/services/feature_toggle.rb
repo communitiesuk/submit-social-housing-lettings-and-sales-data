@@ -28,14 +28,14 @@ class FeatureToggle
   end
 
   def self.delete_scheme_enabled?
-    !Rails.env.production?
+    true
   end
 
   def self.delete_location_enabled?
-    !Rails.env.production?
+    true
   end
 
   def self.delete_user_enabled?
-    !Rails.env.production?
+    true
   end
 end
