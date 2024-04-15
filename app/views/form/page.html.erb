@@ -73,7 +73,7 @@
       <div class="govuk-button-group">
       <% if !@page.interruption_screen? %>
         <%= f.govuk_submit submit_button_text(@page, request.query_parameters["referrer"]) %>
-        <%= govuk_link_to cancel_button_text(@page, request.query_parameters["referrer"]), cancel_button_link(@page, request.query_parameters["referrer"], request.query_parameters["original_log_id"], @log) %>
+        <%= govuk_link_to cancel_button_text(@page, request.query_parameters["referrer"]), cancel_button_link(@page, request.query_parameters["referrer"], request.query_parameters["original_log_id"], @log, ignore_answered: request.query_parameters["referrer"] == "check_answers_new_answer") %>
       <% end %>
       </div>
     </div>
