@@ -1268,7 +1268,7 @@ RSpec.describe FormController, type: :request do
                     "housingneeds_g" => "No disability requirements",
                     "divider_a" => true,
                     "housingneeds_h" => "Don’t know" },
-                }, nil
+                }, page
               ),
               Form::Question.new("tenancycode", { "type" => "text" }, nil),
             ]
