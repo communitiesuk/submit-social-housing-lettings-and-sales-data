@@ -27,8 +27,39 @@ RSpec.describe Form::Sales::Questions::DepositAmount, type: :model do
     expect(question.type).to eq("numeric")
   end
 
-  it "is marked as derived" do
-    expect(question.derived?).to be true
+  context "when the ownership type is shared" do
+    let(:log) { create(:sales_log, :completed, ownershipsch: 1, mortgageused: 2) }
+
+    it "is not marked as derived" do
+      expect(question.derived?(log)).to be false
+    end
+  end
+
+  context "when the ownership type is discounted for 2023" do
+    let(:log) { create(:sales_log, :completed, ownershipsch: 2, mortgageused: 2, saledate: Time.zone.local(2024, 3, 1)) }
+
+    it "is not marked as derived" do
+      expect(question.derived?(log)).to be false
+    end
+  end
+
+  context "when the ownership type is outright" do
+    let(:log) { create(:sales_log, :completed, ownershipsch: 3, mortgageused: 2) }
+
+    it "is not marked as derived when a mortgage is used" do
+      log.mortgageused = 1
+      expect(question.derived?(log)).to be false
+    end
+
+    it "is marked as derived when a mortgage is not used" do
+      log.mortgageused = 2
+      expect(question.derived?(log)).to be true
+    end
+
+    it "is not marked as derived when the mortgage use is unknown" do
+      log.mortgageused = 3
+      expect(question.derived?(log)).to be false
+    end
   end
 
   it "has the correct hint" do

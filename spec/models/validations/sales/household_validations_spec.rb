@@ -316,7 +316,7 @@ RSpec.describe Validations::Sales::HouseholdValidations do
   end
 
   describe "validating fields about buyers living in the property" do
-    let(:sales_log) { FactoryBot.create(:sales_log, :outright_sale_setup_complete, noint: 1, companybuy: 2, buylivein:, jointpur:, jointmore:, buy1livein:) }
+    let(:sales_log) { FactoryBot.create(:sales_log, :outright_sale_setup_complete, saledate: log_date, noint: 1, companybuy: 2, buylivein:, jointpur:, jointmore:, buy1livein:) }
 
     context "when buyers will live in the property and the sale is a joint purchase" do
       let(:buylivein) { 1 }
@@ -348,12 +348,16 @@ RSpec.describe Validations::Sales::HouseholdValidations do
           expect(sales_log.errors).to be_empty
         end
 
-        it "triggers a validation if buyer two will also not live in the property" do
-          sales_log.buy2livein = 2
-          household_validator.validate_buyers_living_in_property(sales_log)
-          expect(sales_log.errors[:buylivein]).to include I18n.t("validations.household.buylivein.buyers_will_live_in_property_values_inconsistent_setup")
-          expect(sales_log.errors[:buy2livein]).to include I18n.t("validations.household.buylivein.buyers_will_live_in_property_values_inconsistent")
-          expect(sales_log.errors[:buy1livein]).to include I18n.t("validations.household.buylivein.buyers_will_live_in_property_values_inconsistent")
+        context "with 2023 logs" do
+          let(:log_date) { Time.zone.local(2023, 4, 1) }
+
+          it "triggers a validation if buyer two will also not live in the property" do
+            sales_log.buy2livein = 2
+            household_validator.validate_buyers_living_in_property(sales_log)
+            expect(sales_log.errors[:buylivein]).to include I18n.t("validations.household.buylivein.buyers_will_live_in_property_values_inconsistent_setup")
+            expect(sales_log.errors[:buy2livein]).to include I18n.t("validations.household.buylivein.buyers_will_live_in_property_values_inconsistent")
+            expect(sales_log.errors[:buy1livein]).to include I18n.t("validations.household.buylivein.buyers_will_live_in_property_values_inconsistent")
+          end
         end
       end
 

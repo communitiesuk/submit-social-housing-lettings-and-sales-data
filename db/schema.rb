@@ -453,7 +453,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_19_122706) do
     t.string "managing_agents_label"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.boolean "active"
+    t.boolean "active", default: true
     t.integer "old_association_type"
     t.string "software_supplier_id"
     t.string "housing_management_system"
@@ -763,6 +763,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_19_122706) do
     t.datetime "confirmation_sent_at"
     t.string "unconfirmed_email"
     t.boolean "initial_confirmation_sent"
+    t.datetime "discarded_at"
+    t.boolean "reactivate_with_organisation"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["encrypted_otp_secret_key"], name: "index_users_on_encrypted_otp_secret_key", unique: true

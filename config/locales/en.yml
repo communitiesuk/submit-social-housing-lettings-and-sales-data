@@ -34,6 +34,8 @@ en:
   feedback_form: "https://forms.office.com/Pages/ResponsePage.aspx?id=EGg0v32c3kOociSi7zmVqC4YDsCJ3llAvEZelBFBLUBURFVUTzFDTUJPQlM4M0laTE5DTlNFSjJBQi4u"
   organisation:
     updated: "Organisation details updated"
+    reactivated: "%{organisation} has been reactivated."
+    deactivated: "%{organisation} has been deactivated."
   user:
     create_password: "Create a password to finish setting up your account"
     reset_password: "Reset your password"
@@ -198,6 +200,7 @@ en:
       other: "There are %{count} sets of duplicate logs"
     location_deleted: "%{postcode} has been deleted."
     scheme_deleted: "%{service_name} has been deleted."
+    user_deleted: "%{name} has been deleted."
 
   validations:
     organisation:
@@ -554,7 +557,7 @@ en:
       reason:
         not_internal_transfer: "Answer cannot be ‘permanently decanted from another property owned by this landlord’ as you told us the source of referral for this tenancy was not an internal transfer"
         renewal_reason_needed: 'The reason for leaving must be "End of assured shorthold tenancy - no fault" or "End of fixed term tenancy - no fault" if the letting is a renewal'
-        renewal_reason_needed_2024: 'The reason for leaving must be "End of social housing tenancy - no fault", "End of social housing tenancy - evicted due to anti-social behaviour (ASB)", "End of social housing tenancy - evicted due to rent arrears" or "End of social housing tenancy - evicted for any other reason"'
+        renewal_reason_needed_2024: 'The reason for leaving must be "End of social or private sector tenancy - no fault", "End of social or private sector tenancy - evicted due to anti-social behaviour (ASB)", "End of social or private sector tenancy - evicted due to rent arrears" or "End of social or private sector tenancy - evicted for any other reason"'
         other_not_settled: "Please give the reason for the tenant leaving their last settled home. This is where they were living before they became homeless, were living in temporary accommodation or sleeping rough"
       condition_effects:
         no_choices: "You cannot answer this question as you told us nobody in the household has a physical or mental health condition (or other illness) expected to last 12 months or more"
@@ -633,6 +636,7 @@ en:
       previous_property_type:
         property_type_bedsit: "A bedsit cannot have more than 1 bedroom"
       discounted_ownership_value: "The mortgage, deposit, and grant when added together is %{mortgage_deposit_and_grant_total}, and the purchase purchase price times by the discount is %{value_with_discount}. These figures should be the same"
+      outright_sale_value: "The mortgage and deposit when added together is %{mortgage_and_deposit_total}, and the purchase price is %{value}. These figures should be the same."
       monthly_rent:
         higher_than_expected: "Basic monthly rent must be between £0.00 and £9,999.00"
       grant:
@@ -858,6 +862,9 @@ Make sure these answers are correct."
     offered: "Times previously offered since becoming available"
 
   warnings:
+    organisation:
+      deactivate: "All schemes and users at this organisation will be deactivated. All the organisation's relationships will be removed. It will no longer be possible to create logs for this organisation."
+      reactivate: "All schemes, users, and relationships that were active when this organisation was deactivated will be reactivated."
     location:
       deactivate:
         existing_logs: "It will not be possible to add logs with this location if their tenancy start date is on or after the date you enter. Any existing logs may be affected."

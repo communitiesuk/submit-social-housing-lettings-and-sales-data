@@ -18,11 +18,13 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
         context "with an organisation that the user belongs to" do
           let!(:stock_owner) { FactoryBot.create(:organisation) }
           let!(:other_org_stock_owner) { FactoryBot.create(:organisation, name: "Foobar LTD") }
+          let!(:inactive_stock_owner) { FactoryBot.create(:organisation, name: "Inactive LTD", active: false) }
           let!(:other_organisation) { FactoryBot.create(:organisation, name: "Foobar LTD 2") }
 
           before do
             FactoryBot.create(:organisation_relationship, child_organisation: organisation, parent_organisation: stock_owner)
             FactoryBot.create(:organisation_relationship, child_organisation: other_organisation, parent_organisation: other_org_stock_owner)
+            FactoryBot.create(:organisation_relationship, child_organisation: organisation, parent_organisation: inactive_stock_owner)
             get "/organisations/#{organisation.id}/stock-owners", headers:, params: {}
           end
 
@@ -46,11 +48,18 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
             expect(page).not_to have_content(other_org_stock_owner.name)
           end
 
+          it "does not show inactive stock owners" do
+            expect(page).not_to have_content(inactive_stock_owner.name)
+          end
+
           it "shows the pagination count" do
             expect(page).to have_content("1 total stock owners")
           end
 
           context "when adding a stock owner" do
+            let!(:active_organisation) { FactoryBot.create(:organisation, name: "Active Org", active: true) }
+            let!(:inactive_organisation) { FactoryBot.create(:organisation, name: "Inactive LTD", active: false) }
+
             before do
               get "/organisations/#{organisation.id}/stock-owners/add", headers:, params: {}
             end
@@ -65,6 +74,27 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
 
             it "shows a cancel button" do
               expect(page).to have_link("Cancel", href: "/organisations/#{organisation.id}/stock-owners")
+            end
+
+            it "includes only active organisations as options" do
+              expect(response.body).to include(active_organisation.name)
+              expect(response.body).not_to include(inactive_organisation.name)
+            end
+          end
+
+          context "and current organisation is deactivated" do
+            before do
+              organisation.update!(active: false)
+              get "/organisations/#{organisation.id}/stock-owners", headers:, params: {}
+            end
+
+            it "does not show the add stock owner button" do
+              expect(page).not_to have_link("Add a stock owner")
+            end
+
+            it "shows a banner" do
+              expect(page).to have_content("This organisation is deactivated.")
+              expect(page).to have_content("You cannot add any new stock owners.")
             end
           end
         end
@@ -84,11 +114,13 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
         context "with an organisation that the user belongs to" do
           let!(:managing_agent) { FactoryBot.create(:organisation) }
           let!(:other_org_managing_agent) { FactoryBot.create(:organisation, name: "Foobar LTD") }
+          let!(:inactive_managing_agent) { FactoryBot.create(:organisation, name: "Inactive LTD", active: false) }
           let!(:other_organisation) { FactoryBot.create(:organisation, name: "Foobar LTD") }
 
           before do
             FactoryBot.create(:organisation_relationship, parent_organisation: organisation, child_organisation: managing_agent)
             FactoryBot.create(:organisation_relationship, parent_organisation: other_organisation, child_organisation: other_org_managing_agent)
+            FactoryBot.create(:organisation_relationship, parent_organisation: organisation, child_organisation: inactive_managing_agent)
             get "/organisations/#{organisation.id}/managing-agents", headers:, params: {}
           end
 
@@ -112,18 +144,46 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
             expect(page).not_to have_content(other_org_managing_agent.name)
           end
 
+          it "does not show inactive managing-agents" do
+            expect(page).not_to have_content(inactive_managing_agent.name)
+          end
+
           it "shows the pagination count" do
             expect(page).to have_content("1 total managing agents")
+          end
+
+          context "and current organisation is deactivated" do
+            before do
+              organisation.update!(active: false)
+              get "/organisations/#{organisation.id}/managing-agents", headers:, params: {}
+            end
+
+            it "does not show the add managing agent button" do
+              expect(page).not_to have_link("Add a managing agent")
+            end
+
+            it "shows a banner" do
+              expect(page).to have_content("This organisation is deactivated.")
+              expect(page).to have_content("You cannot add any new managing agents.")
+            end
           end
         end
 
         context "when adding a managing agent" do
+          let!(:active_organisation) { FactoryBot.create(:organisation, name: "Active Org", active: true) }
+          let!(:inactive_organisation) { FactoryBot.create(:organisation, name: "Inactive LTD", active: false) }
+
           before do
             get "/organisations/#{organisation.id}/managing-agents/add", headers:, params: {}
           end
 
           it "has the correct header" do
             expect(response.body).to include("What is the name of your managing agent?")
+          end
+
+          it "includes only active organisations as options" do
+            expect(response.body).to include(active_organisation.name)
+            expect(response.body).not_to include(inactive_organisation.name)
           end
         end
 

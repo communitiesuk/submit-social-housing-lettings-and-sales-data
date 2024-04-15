@@ -76,6 +76,7 @@ class User < ApplicationRecord
   scope :not_signed_in, -> { where(last_sign_in_at: nil, active: true) }
   scope :deactivated, -> { where(active: false) }
   scope :active_status, -> { where(active: true).where.not(last_sign_in_at: nil) }
+  scope :visible, -> { where(discarded_at: nil) }
 
   def lettings_logs
     if support?
@@ -131,6 +132,23 @@ class User < ApplicationRecord
 
   def is_data_protection_officer!
     update!(is_dpo: true)
+  end
+
+  def deactivate!(reactivate_with_organisation: false)
+    update!(
+      active: false,
+      confirmed_at: nil,
+      sign_in_count: 0,
+      initial_confirmation_sent: false,
+      reactivate_with_organisation:,
+    )
+  end
+
+  def reactivate!
+    update!(
+      active: true,
+      reactivate_with_organisation: false,
+    )
   end
 
   MFA_TEMPLATE_ID = "6bdf5ee1-8e01-4be1-b1f9-747061d8a24c".freeze
@@ -238,13 +256,15 @@ class User < ApplicationRecord
   end
 
   def status
-    if active == false
-      :deactivated
-    elsif confirmed? == false
-      :unconfirmed
-    else
-      :active
-    end
+    return :deleted if discarded_at.present?
+    return :deactivated unless active
+    return :unconfirmed unless confirmed?
+
+    :active
+  end
+
+  def discard!
+    update!(discarded_at: Time.zone.now)
   end
 
 protected

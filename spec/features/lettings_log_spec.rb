@@ -136,6 +136,16 @@ RSpec.describe "Lettings Log Features" do
     end
 
     context "when completing the setup lettings log section", :aggregate_failure do
+      before do
+        Timecop.freeze(Time.zone.local(2023, 3, 3))
+        Singleton.__init__(FormHandler)
+      end
+
+      after do
+        Timecop.return
+        Singleton.__init__(FormHandler)
+      end
+
       it "includes the owning organisation and created by questions" do
         visit("/lettings-logs")
         click_button("Create a new lettings log")

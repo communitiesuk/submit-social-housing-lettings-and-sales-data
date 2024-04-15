@@ -3,9 +3,16 @@ require "rails_helper"
 RSpec.describe Merge::MergeOrganisationsService do
   describe "#call" do
     before do
+      Timecop.freeze(Time.zone.local(2024, 3, 1))
+      Singleton.__init__(FormHandler)
       mail_double = instance_double("ActionMailer::MessageDelivery", deliver_later: nil)
       allow(MergeCompletionMailer).to receive(:send_merged_organisation_success_mail).and_return(mail_double)
       allow(MergeCompletionMailer).to receive(:send_absorbing_organisation_success_mail).and_return(mail_double)
+    end
+
+    after do
+      Timecop.return
+      Singleton.__init__(FormHandler)
     end
 
     context "when merging a single organisation into an existing organisation" do
@@ -334,26 +341,30 @@ RSpec.describe Merge::MergeOrganisationsService do
             end
 
             it "moves the deactivations to absorbing organisation and removes them from merging organisations" do
+              expected_startdate = (Time.zone.today - 6.years).in_time_zone
+
               expect(absorbing_organisation.owned_schemes.count).to eq(1)
 
               absorbed_scheme = absorbing_organisation.owned_schemes.first
               expect(absorbed_scheme.locations.count).to eq(1)
               absorbed_location = absorbed_scheme.locations.first
 
-              expect(absorbed_scheme.startdate).to eq(Time.zone.today - 6.years)
+              expect(absorbed_scheme.startdate).to eq(expected_startdate)
               expect(absorbed_scheme.scheme_deactivation_periods.count).to eq(1)
 
-              expect(absorbed_location.startdate).to eq(Time.zone.today - 6.years)
+              expect(absorbed_location.startdate).to eq(expected_startdate)
               expect(absorbed_location.location_deactivation_periods.count).to eq(1)
             end
 
             it "deactivates schemes and locations on the merged organisation" do
+              expected_deactivation_date = (Time.zone.today - 6.years).in_time_zone
+
               expect(scheme.owning_organisation).to eq(merging_organisation)
               expect(location.scheme).to eq(scheme)
               expect(scheme.scheme_deactivation_periods.count).to eq(1)
-              expect(scheme.scheme_deactivation_periods.last.deactivation_date).to eq(Time.zone.today - 6.years)
+              expect(scheme.scheme_deactivation_periods.last.deactivation_date).to eq(expected_deactivation_date)
               expect(location.location_deactivation_periods.count).to eq(1)
-              expect(location.location_deactivation_periods.last.deactivation_date).to eq(Time.zone.today - 6.years)
+              expect(location.location_deactivation_periods.last.deactivation_date).to eq(expected_deactivation_date)
             end
           end
 

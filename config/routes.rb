@@ -129,6 +129,8 @@ Rails.application.routes.draw do
       get "deactivate", to: "users#deactivate"
       get "reactivate", to: "users#reactivate"
       post "resend-invite", to: "users#resend_invite"
+      get "delete-confirmation", to: "users#delete_confirmation"
+      delete "delete", to: "users#delete"
     end
   end
 
@@ -177,6 +179,8 @@ Rails.application.routes.draw do
       post "managing-agents", to: "organisation_relationships#create_managing_agent"
       delete "managing-agents", to: "organisation_relationships#delete_managing_agent"
       get "merge-request", to: "organisations#merge_request"
+      get "deactivate", to: "organisations#deactivate"
+      get "reactivate", to: "organisations#reactivate"
     end
   end
 

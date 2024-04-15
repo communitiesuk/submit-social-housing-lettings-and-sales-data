@@ -26,9 +26,16 @@ RSpec.describe SalesLogsController, type: :request do
   end
 
   before do
+    Timecop.freeze(Time.zone.local(2024, 3, 1))
+    Singleton.__init__(FormHandler)
     allow(ENV).to receive(:[])
     allow(ENV).to receive(:[]).with("API_USER").and_return(api_username)
     allow(ENV).to receive(:[]).with("API_KEY").and_return(api_password)
+  end
+
+  after do
+    Timecop.return
+    Singleton.__init__(FormHandler)
   end
 
   describe "POST #create" do

@@ -112,11 +112,13 @@ RSpec.describe Scheme, type: :model do
       end
 
       context "when filtering by status" do
+        let!(:deactivated_organisation) { FactoryBot.create(:organisation, active: false) }
         let!(:incomplete_scheme) { FactoryBot.create(:scheme, :incomplete, service_name: "name") }
         let!(:incomplete_scheme_2) { FactoryBot.create(:scheme, :incomplete, service_name: "name") }
         let!(:incomplete_scheme_with_nil_confirmed) { FactoryBot.create(:scheme, :incomplete, service_name: "name", confirmed: nil) }
         let(:active_scheme) { FactoryBot.create(:scheme) }
         let(:active_scheme_2) { FactoryBot.create(:scheme) }
+        let!(:deactivated_by_organisation_scheme) { FactoryBot.create(:scheme, owning_organisation: deactivated_organisation) }
         let(:deactivating_soon_scheme) { FactoryBot.create(:scheme) }
         let(:deactivating_soon_scheme_2) { FactoryBot.create(:scheme) }
         let(:deactivated_scheme) { FactoryBot.create(:scheme) }
@@ -181,9 +183,10 @@ RSpec.describe Scheme, type: :model do
 
         context "when filtering by deactivated status" do
           it "returns only deactivated schemes" do
-            expect(described_class.filter_by_status(%w[deactivated]).count).to eq(2)
+            expect(described_class.filter_by_status(%w[deactivated]).count).to eq(3)
             expect(described_class.filter_by_status(%w[deactivated])).to include(deactivated_scheme)
             expect(described_class.filter_by_status(%w[deactivated])).to include(deactivated_scheme_2)
+            expect(described_class.filter_by_status(%w[deactivated])).to include(deactivated_by_organisation_scheme)
           end
         end
 
@@ -229,6 +232,11 @@ RSpec.describe Scheme, type: :model do
         FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 8, 8), scheme:)
         scheme.reload
         expect(scheme.status).to eq(:deactivating_soon)
+      end
+
+      it "returns deactivated if the owning organisation is deactivated" do
+        scheme.owning_organisation.active = false
+        expect(scheme.status).to eq(:deactivated)
       end
 
       it "returns deactivated if deactivation_date is in the past" do

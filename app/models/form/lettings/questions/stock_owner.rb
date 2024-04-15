@@ -4,6 +4,7 @@ class Form::Lettings::Questions::StockOwner < ::Form::Question
     @id = "owning_organisation_id"
     @check_answer_label = "Stock owner"
     @header = "Which organisation owns this property?"
+    @derived = true
     @type = "select"
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max] if form.start_date.present?
   end
@@ -29,7 +30,7 @@ class Form::Lettings::Questions::StockOwner < ::Form::Question
     end
 
     if user.support?
-      Organisation.where(holds_own_stock: true).find_each do |org|
+      Organisation.filter_by_active.where(holds_own_stock: true).find_each do |org|
         if org.merge_date.present?
           answer_opts[org.id] = "#{org.name} (inactive as of #{org.merge_date.to_fs(:govuk_date)})" if org.merge_date >= FormHandler.instance.start_date_of_earliest_open_for_editing_collection_period
         elsif org.absorbed_organisations.merged_during_open_collection_period.exists? && org.available_from.present?
@@ -39,7 +40,7 @@ class Form::Lettings::Questions::StockOwner < ::Form::Question
         end
       end
     else
-      user.organisation.stock_owners.each do |stock_owner|
+      user.organisation.stock_owners.filter_by_active.each do |stock_owner|
         answer_opts[stock_owner.id] = stock_owner.name
       end
       recently_absorbed_organisations.each do |absorbed_org|
@@ -58,10 +59,6 @@ class Form::Lettings::Questions::StockOwner < ::Form::Question
     return unless value
 
     answer_options(log, user)[value]
-  end
-
-  def derived?
-    true
   end
 
   def hidden_in_check_answers?(_log, user = nil)

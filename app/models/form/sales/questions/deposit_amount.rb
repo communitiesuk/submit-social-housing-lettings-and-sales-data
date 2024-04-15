@@ -10,10 +10,13 @@ class Form::Sales::Questions::DepositAmount < ::Form::Question
     @step = 1
     @width = 5
     @prefix = "£"
-    @derived = true
     @ownershipsch = ownershipsch
     @question_number = QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP.max_by { |k, _v| k }.last)[ownershipsch]
     @optional = optional
+  end
+
+  def derived?(log)
+    log.outright_sale? && log.mortgage_not_used?
   end
 
   def selected_answer_option_is_derived?(_log)

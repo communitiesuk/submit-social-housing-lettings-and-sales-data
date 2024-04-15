@@ -23,7 +23,7 @@ RSpec.describe Form::Lettings::Questions::PersonGenderIdentity, type: :model do
   end
 
   it "is not marked as derived" do
-    expect(question.derived?).to be false
+    expect(question.derived?(nil)).to be false
   end
 
   context "with form year before 2024" do

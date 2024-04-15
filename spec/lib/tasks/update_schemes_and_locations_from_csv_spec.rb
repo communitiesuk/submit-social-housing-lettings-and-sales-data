@@ -18,6 +18,7 @@ RSpec.describe "bulk_update" do
   end
 
   before do
+    Timecop.freeze(Time.zone.local(2024, 3, 1))
     allow(Storage::S3Service).to receive(:new).and_return(storage_service)
     allow(Configuration::EnvConfigurationService).to receive(:new).and_return(env_config_service)
     allow(ENV).to receive(:[])
@@ -27,6 +28,10 @@ RSpec.describe "bulk_update" do
       .to_return(status: 200, body: "{\"status\":404,\"error\":\"Postcode not found\"}", headers: {})
     WebMock.stub_request(:get, /api\.postcodes\.io\/postcodes\/B11BB/)
       .to_return(status: 200, body: '{"status":200,"result":{"admin_district":"Westminster","codes":{"admin_district":"E09000033"}}}', headers: {})
+  end
+
+  after do
+    Timecop.return
   end
 
   describe ":update_schemes_from_csv", type: :task do
@@ -205,7 +210,7 @@ RSpec.describe "bulk_update" do
         expect(Rails.logger).to receive(:info).with("Updating scheme S#{schemes[0].id} with sensitive: No")
         expect(Rails.logger).to receive(:info).with("Updating scheme S#{schemes[0].id} with scheme_type: Direct Access Hostel")
         expect(Rails.logger).to receive(:info).with("Clearing location and scheme for logs with startdate and scheme S#{schemes[0].id}. Log IDs: ")
-        expect(Rails.logger).to receive(:info).with("Clearing location and scheme for logs without startdate and scheme S#{schemes[0].id}. Log IDs: #{lettings_log.id}, #{lettings_log_4.id}, #{lettings_log_5.id}")
+        expect(Rails.logger).to receive(:info).with(match(/^Clearing location and scheme for logs without startdate and scheme S#{schemes[0].id}\. Log IDs: (?=.*#{lettings_log.id})(?=.*#{lettings_log_4.id})(?=.*#{lettings_log_5.id}).*$/))
         expect(Rails.logger).to receive(:info).with("Updating scheme S#{schemes[0].id} with arrangement_type: Another registered stock owner")
         expect(Rails.logger).to receive(:info).with("Updating scheme S#{schemes[0].id} with primary_client_group: People with drug problems")
         expect(Rails.logger).to receive(:info).with("Updating scheme S#{schemes[0].id} with has_other_client_group: No")

@@ -57,6 +57,7 @@ RSpec.describe Form::Lettings::Questions::ManagingOrganisation, type: :model do
       let(:managing_org1) { create(:organisation, name: "Managing org 1") }
       let(:managing_org2) { create(:organisation, name: "Managing org 2") }
       let(:managing_org3) { create(:organisation, name: "Managing org 3") }
+      let(:inactive_managing_org) { create(:organisation, name: "Inactive managing org", active: false) }
 
       let(:log) { create(:lettings_log, managing_organisation: managing_org1) }
       let!(:org_rel1) do
@@ -76,7 +77,9 @@ RSpec.describe Form::Lettings::Questions::ManagingOrganisation, type: :model do
         }
       end
 
-      it "shows current managing agent at top, followed by user's org (with hint), followed by the managing agents of the user's org" do
+      it "shows current managing agent at top, followed by user's org (with hint), followed by the active managing agents of the user's org" do
+        create(:organisation_relationship, parent_organisation: user.organisation, child_organisation: inactive_managing_org)
+
         expect(question.displayed_answer_options(log, user)).to eq(options)
       end
     end
@@ -100,6 +103,10 @@ RSpec.describe Form::Lettings::Questions::ManagingOrganisation, type: :model do
         create(:organisation_relationship, parent_organisation: log_owning_org, child_organisation: managing_org3)
       end
 
+      before do
+        create(:organisation, name: "Inactive managing org", active: false)
+      end
+
       context "when org owns stock" do
         let(:options) do
           {
@@ -111,7 +118,7 @@ RSpec.describe Form::Lettings::Questions::ManagingOrganisation, type: :model do
           }
         end
 
-        it "shows current managing agent at top, followed by the current owning organisation (with hint), followed by the managing agents of the current owning organisation" do
+        it "shows current managing agent at top, followed by the current owning organisation (with hint), followed by the active managing agents of the current owning organisation" do
           log_owning_org.update!(holds_own_stock: true)
           expect(question.displayed_answer_options(log, user)).to eq(options)
         end
@@ -133,7 +140,7 @@ RSpec.describe Form::Lettings::Questions::ManagingOrganisation, type: :model do
           org_rel2.child_organisation.update!(merge_date: Time.zone.local(2023, 8, 2), absorbing_organisation_id: log_owning_org.id)
         end
 
-        it "shows current managing agent at top, followed by the current owning organisation (with hint), followed by the managing agents of the current owning organisation" do
+        it "shows current managing agent at top, followed by the current owning organisation (with hint), followed by the active managing agents of the current owning organisation" do
           log_owning_org.update!(holds_own_stock: true)
           expect(question.displayed_answer_options(log, user)).to eq(options)
         end
@@ -149,7 +156,7 @@ RSpec.describe Form::Lettings::Questions::ManagingOrganisation, type: :model do
           }
         end
 
-        it "shows current managing agent at top, followed by the managing agents of the current owning organisation" do
+        it "shows current managing agent at top, followed by the active managing agents of the current owning organisation" do
           log_owning_org.update!(holds_own_stock: false)
           expect(question.displayed_answer_options(log, user)).to eq(options)
         end
@@ -231,7 +238,7 @@ RSpec.describe Form::Lettings::Questions::ManagingOrganisation, type: :model do
   end
 
   it "is marked as derived" do
-    expect(question.derived?).to be true
+    expect(question.derived?(nil)).to be true
   end
 
   describe "#hidden_in_check_answers?" do

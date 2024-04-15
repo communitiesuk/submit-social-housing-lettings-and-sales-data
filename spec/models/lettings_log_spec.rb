@@ -1592,6 +1592,15 @@ RSpec.describe LettingsLog do
         expect { lettings_log.update!(startdate: Time.zone.local(2023, 4, 1)) }.to change(lettings_log, :underoccupation_benefitcap).from(2).to nil
       end
 
+      it "derives ppostcode_full as postcode_full if log is renewal" do
+        lettings_log.update!(renewal: 0, postcode_full: "M1 1AE", postcode_known: 1, ppostcode_full: "M1 1AD")
+        lettings_log.update!(renewal: 1)
+        lettings_log.reload
+        expect(lettings_log.ppostcode_full).to eq("M1 1AE")
+        expect(lettings_log.ppcodenk).to eq(0)
+        expect(lettings_log.prevloc).to eq(lettings_log.la)
+      end
+
       context "when the log is general needs" do
         context "and the managing organisation is a private registered provider" do
           before do
@@ -2874,6 +2883,30 @@ RSpec.describe LettingsLog do
             result = described_class.search_by(matching_postcode_lower_case_with_spaces)
             expect(result.count).to eq(1)
             expect(result.first.id).to eq lettings_log_to_search.id
+          end
+        end
+
+        context "when matching multiple records on different fields" do
+          let!(:lettings_log_with_propcode) { create(:lettings_log, propcode: lettings_log_to_search.id) }
+          let!(:lettings_log_with_tenancycode) { create(:lettings_log, tenancycode: lettings_log_to_search.id) }
+          let!(:lettings_log_with_postcode) { create(:lettings_log, postcode_full: "C1 1AC") }
+          let!(:lettings_log_with_postcode_tenancycode) { create(:lettings_log, tenancycode: "C1 1AC") }
+          let!(:lettings_log_with_postcode_propcode) { create(:lettings_log, propcode: "C1 1AC") }
+
+          it "returns all matching records in correct order with matching IDs" do
+            result = described_class.search_by(lettings_log_to_search.id.to_s)
+            expect(result.count).to eq(3)
+            expect(result.first.id).to eq lettings_log_to_search.id
+            expect(result.second.id).to eq lettings_log_with_tenancycode.id
+            expect(result.third.id).to eq lettings_log_with_propcode.id
+          end
+
+          it "returns all matching records in correct order with matching postcode" do
+            result = described_class.search_by("C1 1AC")
+            expect(result.count).to eq(3)
+            expect(result.first.id).to eq lettings_log_with_postcode_tenancycode.id
+            expect(result.second.id).to eq lettings_log_with_postcode_propcode.id
+            expect(result.third.id).to eq lettings_log_with_postcode.id
           end
         end
       end

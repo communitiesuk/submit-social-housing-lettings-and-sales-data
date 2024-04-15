@@ -4,6 +4,7 @@ class Form::Sales::Questions::OwningOrganisationId < ::Form::Question
     @id = "owning_organisation_id"
     @check_answer_label = "Owning organisation"
     @header = "Which organisation owns this log?"
+    @derived = true
     @type = "select"
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
   end
@@ -24,7 +25,7 @@ class Form::Sales::Questions::OwningOrganisationId < ::Form::Question
         answer_opts[user.organisation.id] = "#{user.organisation.name} (Your organisation)"
       end
 
-      user.organisation.stock_owners.where(holds_own_stock: true).find_each do |org|
+      user.organisation.stock_owners.filter_by_active.where(holds_own_stock: true).find_each do |org|
         answer_opts[org.id] = org.name
       end
     end
@@ -43,7 +44,7 @@ class Form::Sales::Questions::OwningOrganisationId < ::Form::Question
     end
 
     if user.support?
-      Organisation.where(holds_own_stock: true).find_each do |org|
+      Organisation.filter_by_active.where(holds_own_stock: true).find_each do |org|
         if org.merge_date.present?
           answer_opts[org.id] = "#{org.name} (inactive as of #{org.merge_date.to_fs(:govuk_date)})" if org.merge_date >= FormHandler.instance.start_date_of_earliest_open_for_editing_collection_period
         elsif org.absorbed_organisations.merged_during_open_collection_period.exists? && org.available_from.present?
@@ -69,10 +70,6 @@ class Form::Sales::Questions::OwningOrganisationId < ::Form::Question
     return unless value
 
     answer_options(log, user)[value]
-  end
-
-  def derived?
-    true
   end
 
   def hidden_in_check_answers?(_log, user = nil)

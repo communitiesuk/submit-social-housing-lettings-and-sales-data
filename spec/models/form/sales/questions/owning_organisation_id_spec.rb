@@ -57,6 +57,7 @@ RSpec.describe Form::Sales::Questions::OwningOrganisationId, type: :model do
 
       let(:owning_org_1) { create(:organisation, name: "Owning org 1") }
       let(:owning_org_2) { create(:organisation, name: "Owning org 2") }
+      let(:inactive_owning_org) { create(:organisation, name: "Inactive owning org", active: false) }
       let(:non_stock_owner) { create(:organisation, name: "Non stock owner", holds_own_stock: false) }
       let(:log) { create(:lettings_log, owning_organisation: owning_org_1) }
 
@@ -75,7 +76,8 @@ RSpec.describe Form::Sales::Questions::OwningOrganisationId, type: :model do
           }
         end
 
-        it "shows user organisation, current owning organisation and the stock owners that hold their stock" do
+        it "shows user organisation, current owning organisation and the activestock owners that hold their stock" do
+          create(:organisation_relationship, child_organisation: user.organisation, parent_organisation: inactive_owning_org)
           user.organisation.update!(holds_own_stock: true)
           expect(question.displayed_answer_options(log, user)).to eq(options)
         end
@@ -95,7 +97,8 @@ RSpec.describe Form::Sales::Questions::OwningOrganisationId, type: :model do
           create(:organisation_relationship, child_organisation: user.organisation, parent_organisation: non_stock_owner)
         end
 
-        it "shows current owning organisation and the stock owners that hold their stock" do
+        it "shows current owning organisation and the active stock owners that hold their stock" do
+          create(:organisation_relationship, child_organisation: user.organisation, parent_organisation: inactive_owning_org)
           user.organisation.update!(holds_own_stock: false)
           expect(question.displayed_answer_options(log, user)).to eq(options)
         end
@@ -204,20 +207,21 @@ RSpec.describe Form::Sales::Questions::OwningOrganisationId, type: :model do
 
     context "when user is support" do
       let(:user) { create(:user, :support, organisation: organisation_1) }
-
       let(:log) { create(:lettings_log, created_by: user) }
 
-      let(:non_stock_organisation) { create(:organisation, holds_own_stock: false) }
-      let(:expected_opts) do
-        Organisation.where(holds_own_stock: true).each_with_object(options) do |organisation, hsh|
+      it "shows active orgs where organisation holds own stock" do
+        non_stock_organisation = create(:organisation, holds_own_stock: false)
+        inactive_org = create(:organisation, active: false)
+
+        expected_opts = Organisation.filter_by_active.where(holds_own_stock: true).each_with_object(options) do |organisation, hsh|
           hsh[organisation.id] = organisation.name
           hsh
         end
-      end
 
-      it "shows orgs where organisation holds own stock" do
         expect(question.displayed_answer_options(log, user)).to eq(expected_opts)
         expect(question.displayed_answer_options(log, user)).not_to include(non_stock_organisation.id)
+        expect(question.displayed_answer_options(log, user)).not_to include(inactive_org.id)
+        expect(question.displayed_answer_options(log, user)).to include(organisation_1.id)
       end
 
       context "when an org has recently absorbed other orgs" do
@@ -296,7 +300,7 @@ RSpec.describe Form::Sales::Questions::OwningOrganisationId, type: :model do
   end
 
   it "is marked as derived" do
-    expect(question.derived?).to be true
+    expect(question.derived?(nil)).to be true
   end
 
   context "when the current user is support" do

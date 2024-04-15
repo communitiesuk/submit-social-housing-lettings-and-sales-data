@@ -57,6 +57,7 @@ RSpec.describe Form::Sales::Questions::ManagingOrganisation, type: :model do
       let(:managing_org1) { create(:organisation, name: "Managing org 1") }
       let(:managing_org2) { create(:organisation, name: "Managing org 2") }
       let(:managing_org3) { create(:organisation, name: "Managing org 3") }
+      let(:inactive_org) { create(:organisation, name: "Inactive org", active: false) }
 
       let(:log) do
         create(:lettings_log, owning_organisation: log_owning_org, managing_organisation: managing_org1,
@@ -80,7 +81,8 @@ RSpec.describe Form::Sales::Questions::ManagingOrganisation, type: :model do
           }
         end
 
-        it "shows current managing agent at top, followed by the current owning organisation (with hint), followed by the managing agents of the current owning organisation" do
+        it "shows current managing agent at top, followed by the current owning organisation (with hint), followed by the active managing agents of the current owning organisation" do
+          create(:organisation_relationship, parent_organisation: log_owning_org, child_organisation: inactive_org)
           log_owning_org.update!(holds_own_stock: true)
           expect(question.displayed_answer_options(log, user)).to eq(options)
         end
@@ -96,7 +98,8 @@ RSpec.describe Form::Sales::Questions::ManagingOrganisation, type: :model do
           }
         end
 
-        it "shows current managing agent at top, followed by the managing agents of the current owning organisation" do
+        it "shows current managing agent at top, followed by the active managing agents of the current owning organisation" do
+          create(:organisation_relationship, parent_organisation: log_owning_org, child_organisation: inactive_org)
           log_owning_org.update!(holds_own_stock: false)
           expect(question.displayed_answer_options(log, user)).to eq(options)
         end
@@ -177,7 +180,7 @@ RSpec.describe Form::Sales::Questions::ManagingOrganisation, type: :model do
   end
 
   it "is marked as derived" do
-    expect(question.derived?).to be true
+    expect(question.derived?(nil)).to be true
   end
 
   describe "#hidden_in_check_answers?" do

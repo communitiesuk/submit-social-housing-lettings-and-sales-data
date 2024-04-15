@@ -13,7 +13,11 @@ class FormController < ApplicationController
       mandatory_questions_with_no_response = mandatory_questions_with_no_response(responses_for_page)
 
       if mandatory_questions_with_no_response.empty? && @log.update(responses_for_page.merge(updated_by: current_user))
-        flash[:notice] = "You have successfully updated #{@page.questions.map(&:check_answer_label).reject { |label| label.to_s.empty? }.first&.downcase}" if previous_interruption_screen_page_id.present?
+        if previous_interruption_screen_page_id.present?
+          updated_question = @page.questions.reject { |question| question.check_answer_label.blank? }.first
+          updated_question_string = [updated_question&.question_number_string, updated_question&.check_answer_label.to_s.downcase].compact.join(": ")
+          flash[:notice] = "You have successfully updated #{updated_question_string}"
+        end
         redirect_to(successful_redirect_path)
       else
         mandatory_questions_with_no_response.map do |question|
@@ -246,7 +250,9 @@ private
   def check_collection_period
     return unless @log
 
-    redirect_to lettings_log_path(@log) unless @log.collection_period_open_for_editing?
+    unless @log.collection_period_open_for_editing?
+      redirect_to @log.lettings? ? lettings_log_path(@log) : sales_log_path(@log)
+    end
   end
 
   CONFIRMATION_PAGE_IDS = %w[uprn_confirmation uprn_selection].freeze

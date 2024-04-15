@@ -43,7 +43,7 @@ RSpec.describe Form::Lettings::Questions::Wheelchair, type: :model do
   end
 
   it "is not marked as derived" do
-    expect(question.derived?).to be false
+    expect(question.derived?(nil)).to be false
   end
 
   context "with 2024 form" do

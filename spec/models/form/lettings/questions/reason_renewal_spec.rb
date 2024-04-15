@@ -48,7 +48,7 @@ RSpec.describe Form::Lettings::Questions::ReasonRenewal, type: :model do
   end
 
   it "is not marked as derived" do
-    expect(question).not_to be_derived
+    expect(question).not_to be_derived(nil)
   end
 
   context "with 2023/24 form" do
@@ -71,10 +71,10 @@ RSpec.describe Form::Lettings::Questions::ReasonRenewal, type: :model do
 
     it "has the correct answer_options" do
       expect(question.answer_options).to eq({
-        "50" => { "value" => "End of social housing tenancy - no fault" },
-        "51" => { "value" => "End of social housing tenancy - evicted due to anti-social behaviour (ASB)" },
-        "52" => { "value" => "End of social housing tenancy - evicted due to rent arrears" },
-        "53" => { "value" => "End of social housing tenancy - evicted for any other reason" },
+        "50" => { "value" => "End of social or private sector tenancy - no fault" },
+        "51" => { "value" => "End of social or private sector tenancy - evicted due to anti-social behaviour (ASB)" },
+        "52" => { "value" => "End of social or private sector tenancy - evicted due to rent arrears" },
+        "53" => { "value" => "End of social or private sector tenancy - evicted for any other reason" },
         "20" => { "value" => "Other" },
         "47" => { "value" => "Tenant prefers not to say" },
         "divider" => { "value" => true },

@@ -13,7 +13,7 @@ class UsersController < ApplicationController
   def index
     redirect_to users_organisation_path(current_user.organisation) unless current_user.support?
 
-    all_users = User.sorted_by_organisation_and_role
+    all_users = User.visible.sorted_by_organisation_and_role
     filtered_users = filter_manager.filtered_users(all_users, search_term, session_filters)
     @pagy, @users = pagy(filtered_users)
     @searched = search_term.presence
@@ -62,9 +62,10 @@ class UsersController < ApplicationController
       else
         user_name = @user.name&.possessive || @user.email.possessive
         if user_params[:active] == "false"
-          @user.update!(confirmed_at: nil, sign_in_count: 0, initial_confirmation_sent: false)
+          @user.deactivate!
           flash[:notice] = I18n.t("devise.activation.deactivated", user_name:)
         elsif user_params[:active] == "true"
+          @user.reactivate!
           @user.send_confirmation_instructions
           flash[:notice] = I18n.t("devise.activation.reactivated", user_name:)
         elsif user_params.key?("email")
@@ -120,6 +121,16 @@ class UsersController < ApplicationController
     else
       redirect_to user_path(@user)
     end
+  end
+
+  def delete_confirmation
+    authorize @user
+  end
+
+  def delete
+    authorize @user
+    @user.discard!
+    redirect_to users_organisation_path(@user.organisation), notice: I18n.t("notification.user_deleted", name: @user.name)
   end
 
 private
@@ -197,6 +208,7 @@ private
     if action_name == "create"
       head :unauthorized and return unless current_user.data_coordinator? || current_user.support?
     else
+      render_not_found and return if @user.status == :deleted
       render_not_found and return unless (current_user.organisation == @user.organisation) || current_user.support?
       render_not_found and return if action_name == "edit_password" && current_user != @user
       render_not_found and return unless action_name == "show" ||
