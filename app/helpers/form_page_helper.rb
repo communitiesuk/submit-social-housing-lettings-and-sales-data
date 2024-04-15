@@ -37,13 +37,13 @@ module FormPageHelper
     end
   end
 
-  def cancel_button_link(page, referrer, original_log_id, log)
+  def cancel_button_link(page, referrer, original_log_id, log, ignore_answered)
     if accessed_from_duplicate_logs?(referrer)
       duplicate_log_set_path(log, original_log_id)
     elsif returning_to_question_page?(page, referrer)
       send(log.form.cancel_path(page, log), log)
     else
-      page.skip_href(log) || send(log.form.next_page_redirect_path(page, log, current_user), log)
+      page.skip_href(log) || send(log.form.next_page_redirect_path(page, log, current_user, ignore_answered:), log)
     end
   end
 end
