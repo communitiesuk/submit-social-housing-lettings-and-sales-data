@@ -429,10 +429,11 @@ RSpec.describe Validations::HouseholdValidations do
     end
 
     context "with 2024 logs" do
+      let(:log_date) { Time.zone.local(2024, 4, 1) }
+
       before do
-        Timecop.freeze(Time.zone.local(2024, 4, 1))
+        Timecop.freeze(log_date)
         Singleton.__init__(FormHandler)
-        record.update!(startdate: Time.zone.local(2024, 4, 1))
       end
 
       after do
