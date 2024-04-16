@@ -110,12 +110,16 @@ class Form::Question
   end
 
   def action_text(log)
+    displayed_as_answered?(log) ? "Change" : "Answer"
+  end
+
+  def displayed_as_answered?(log)
     if is_derived_or_has_inferred_check_answers_value?(log)
-      "Change"
+      true
     elsif type == "checkbox"
-      answer_options.keys.any? { |key| value_is_yes?(log[key]) } ? "Change" : "Answer"
+      answer_options.keys.any? { |key| value_is_yes?(log[key]) }
     else
-      log[id].blank? ? "Answer" : "Change"
+      log[id].present?
     end
   end
 

@@ -19,6 +19,6 @@
   <%= f.govuk_submit "Confirm and continue" %>
   <%= govuk_link_to(
     (@page.skip_text || "Skip for now"),
-    (@page.skip_href(@log) || send(@log.form.next_page_redirect_path(@page, @log, current_user), @log)),
+    (@page.skip_href(@log) || send(@log.form.next_page_redirect_path(@page, @log, current_user, ignore_answered: true), @log)),
   ) %>
 </div>

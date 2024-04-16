@@ -9,6 +9,11 @@ class FormController < ApplicationController
   def submit_form
     if @log
       @page = form.get_page(params[@log.model_name.param_key][:page])
+      shown_page_ids_with_unanswered_questions_before_update = @page.subsection.pages
+                                                      .select { |page| page.routed_to?(@log, current_user) }
+                                                      .select { |page| page.has_unanswered_questions?(@log) }
+                                                      .map(&:id)
+
       responses_for_page = responses_for_page(@page)
       mandatory_questions_with_no_response = mandatory_questions_with_no_response(responses_for_page)
 
@@ -18,7 +23,9 @@ class FormController < ApplicationController
           updated_question_string = [updated_question&.question_number_string, updated_question&.check_answer_label.to_s.downcase].compact.join(": ")
           flash[:notice] = "You have successfully updated #{updated_question_string}"
         end
-        redirect_to(successful_redirect_path)
+
+        pages_requiring_update = pages_requiring_update(shown_page_ids_with_unanswered_questions_before_update)
+        redirect_to(successful_redirect_path(pages_requiring_update))
       else
         mandatory_questions_with_no_response.map do |question|
           @log.errors.add question.id.to_sym, question.unanswered_error_message, category: :not_answered
@@ -171,7 +178,7 @@ private
     params[@log.model_name.param_key]["interruption_page_referrer_type"].presence
   end
 
-  def successful_redirect_path
+  def successful_redirect_path(pages_to_check)
     if FeatureToggle.deduplication_flow_enabled?
       if is_referrer_type?("duplicate_logs") || is_referrer_type?("duplicate_logs_banner")
         return correcting_duplicate_logs_redirect_path
@@ -195,7 +202,9 @@ private
       previous_page = form.previous_page_id(@page, @log, current_user)
 
       if next_page&.interruption_screen? || next_page_id == previous_page || CONFIRMATION_PAGE_IDS.include?(next_page_id)
-        return send("#{@log.class.name.underscore}_#{next_page_id}_path", @log, { referrer: "check_answers" })
+        return redirect_path_to_question(next_page, pages_to_check)
+      elsif pages_to_check.any?
+        return redirect_path_to_question(pages_to_check[0], pages_to_check)
       else
         return send("#{@log.model_name.param_key}_#{form.subsection_for_page(@page).id}_check_answers_path", @log)
       end
@@ -204,8 +213,29 @@ private
       return send("#{@log.class.name.underscore}_#{previous_interruption_screen_page_id}_path", @log, { referrer: previous_interruption_screen_referrer, original_log_id: original_duplicate_log_id_from_query }.compact)
     end
 
-    redirect_path = form.next_page_redirect_path(@page, @log, current_user)
-    send(redirect_path, @log)
+    is_new_answer_from_check_answers = is_referrer_type?("check_answers_new_answer")
+    redirect_path = form.next_page_redirect_path(@page, @log, current_user, ignore_answered: is_new_answer_from_check_answers)
+    referrer = is_new_answer_from_check_answers ? "check_answers_new_answer" : nil
+
+    send(redirect_path, @log, { referrer: })
+  end
+
+  def redirect_path_to_question(page_to_show, unanswered_pages)
+    remaining_pages = unanswered_pages.excluding(page_to_show)
+    remaining_page_ids = remaining_pages.any? ? remaining_pages.map(&:id).join(",") : nil
+    send("#{@log.class.name.underscore}_#{page_to_show.id}_path", @log, { referrer: "check_answers", unanswered_pages: remaining_page_ids })
+  end
+
+  def pages_requiring_update(previously_visible_empty_page_ids)
+    return [] unless is_referrer_type?("check_answers")
+
+    currently_shown_pages = @page.subsection.pages
+                                    .select { |page| page.routed_to?(@log, current_user) }
+
+    existing_unanswered_pages = request.params["unanswered_pages"].nil? ? [] : request.params["unanswered_pages"].split(",")
+    currently_shown_pages
+                       .reject { |page| previously_visible_empty_page_ids.include?(page.id) && !existing_unanswered_pages.include?(page.id) }
+                       .select { |page| page.has_unanswered_questions?(@log) }
   end
 
   def form
