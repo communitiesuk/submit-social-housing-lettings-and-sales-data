@@ -777,18 +777,6 @@ RSpec.describe Validations::HouseholdValidations do
       end
     end
 
-    context "when the lead tenant is male" do
-      it "cannot be refuge" do
-        record.prevten = 21
-        record.sex1 = "M"
-        household_validator.validate_previous_housing_situation(record)
-        expect(record.errors["prevten"])
-          .to include(match I18n.t("validations.household.prevten.male_refuge"))
-        expect(record.errors["sex1"])
-          .to include(match I18n.t("validations.household.gender.male_refuge"))
-      end
-    end
-
     context "when the referral is internal transfer" do
       it "prevten can be 9" do
         record.referral = 1
