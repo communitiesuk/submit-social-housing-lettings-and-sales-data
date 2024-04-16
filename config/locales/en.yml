@@ -516,7 +516,6 @@ en:
       prevten:
         non_temp_accommodation: "Answer cannot be non-temporary accommodation as this is a re-let to a tenant who occupied the same property as temporary accommodation"
         over_25_foster_care: "Answer cannot be a children’s home or foster care as the lead tenant is 26 or older"
-        male_refuge: "Answer cannot be a refuge as the lead tenant identifies as male"
         internal_transfer: "Answer cannot be %{prevten} as this tenancy is an internal transfer"
         la_general_needs:
           internal_transfer: "Answer cannot be a fixed-term or lifetime local authority general needs tenancy as it’s an internal transfer and a private registered provider is on the tenancy agreement"
@@ -551,7 +550,6 @@ en:
       gender:
         retired_male: "Answer cannot be ‘male’ as tenant is under 65 and retired"
         retired_female: "Answer cannot be ‘female’ as tenant is under 60 and retired"
-        male_refuge: "Answer cannot be ‘male’ as you told us their housing situation immediately before this letting was a refuge"
       reason:
         not_internal_transfer: "Answer cannot be ‘permanently decanted from another property owned by this landlord’ as you told us the source of referral for this tenancy was not an internal transfer"
         renewal_reason_needed: 'The reason for leaving must be "End of assured shorthold tenancy - no fault" or "End of fixed term tenancy - no fault" if the letting is a renewal'
