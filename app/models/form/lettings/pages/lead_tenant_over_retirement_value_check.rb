@@ -14,14 +14,6 @@ class Form::Lettings::Pages::LeadTenantOverRetirementValueCheck < ::Form::Page
     }
     @informative_text = {
       "translation" => "soft_validations.retirement.max.hint_text",
-      "arguments" => [
-        { "key" => "plural_gender_for_person_1", "label" => false, "i18n_template" => "gender" },
-        {
-          "key" => "retirement_age_for_person_1",
-          "label" => false,
-          "i18n_template" => "age",
-        },
-      ],
     }
   end
 
