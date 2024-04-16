@@ -24,9 +24,9 @@ class Form::Lettings::Pages::Uprn < ::Form::Page
     return unless log
 
     if form.start_year_after_2024?
-      "/#{log.model_name.param_key.dasherize}s/#{log.id}/address-matcher"
+      "address-matcher"
     else
-      "/#{log.model_name.param_key.dasherize}s/#{log.id}/address"
+      "address"
     end
   end
 end
