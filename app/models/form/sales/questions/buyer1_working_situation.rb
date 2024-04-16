@@ -6,7 +6,7 @@ class Form::Sales::Questions::Buyer1WorkingSituation < ::Form::Question
     @header = "Which of these best describes buyer 1's working situation?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
-    @hint_text = "Buyer 1 is the person in the household who does the most paid work. If it's a joint purchase and the buyers do the same amount of paid work, buyer 1 is whoever is the oldest."
+    @hint_text = form.start_year_after_2024? ? "" : "Buyer 1 is the person in the household who does the most paid work. If it’s a joint purchase and the buyers do the same amount of paid work, buyer 1 is whoever is the oldest."
     @check_answers_card_number = 1
     @inferred_check_answers_value = [{
       "condition" => {
@@ -20,7 +20,7 @@ class Form::Sales::Questions::Buyer1WorkingSituation < ::Form::Question
   ANSWER_OPTIONS = {
     "1" => { "value" => "Full-time - 30 hours or more" },
     "2" => { "value" => "Part-time - Less than 30 hours" },
-    "3" => { "value" => "In government training into work, such as New Deal" },
+    "3" => { "value" => "In government training into work" },
     "4" => { "value" => "Jobseeker" },
     "6" => { "value" => "Not seeking work" },
     "8" => { "value" => "Unable to work due to long term sick or disability" },

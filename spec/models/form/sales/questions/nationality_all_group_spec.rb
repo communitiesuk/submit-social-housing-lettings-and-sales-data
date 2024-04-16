@@ -5,7 +5,7 @@ RSpec.describe Form::Sales::Questions::NationalityAllGroup, type: :model do
 
   let(:buyer_index) { 1 }
 
-  let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2023, 4, 1)))) }
+  let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2023, 4, 1), start_year_after_2024?: false))) }
 
   it "has correct page" do
     expect(question.page).to be page
@@ -47,7 +47,7 @@ RSpec.describe Form::Sales::Questions::NationalityAllGroup, type: :model do
     end
 
     it "has the correct hint" do
-      expect(question.hint_text).to eq "Buyer 1 is the person in the household who does the most paid work. If it’s a joint purchase and the buyers do the same amount of paid work, buyer 1 is whoever is the oldest. If buyer 1 is a dual national of the United Kingdom and another country, enter United Kingdom. If they are a dual national of two other countries, the buyer should decide which country to enter."
+      expect(question.hint_text).to eq "If buyer 1 is a dual national of the United Kingdom and another country, enter United Kingdom. If they are a dual national of two other countries, the buyer should decide which country to enter."
     end
 
     it "has the correct header" do
