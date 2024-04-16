@@ -787,6 +787,14 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
             end
           end
         end
+
+        context "when the privacy notice is not accepted" do
+          let(:attributes) { valid_attributes.merge({ field_15: nil }) }
+
+          it "cannot be nulled" do
+            expect(parser.errors[:field_15]).to eq(["You must answer tenant has seen the privacy notice"])
+          end
+        end
       end
 
       describe "#validate_nulls" do

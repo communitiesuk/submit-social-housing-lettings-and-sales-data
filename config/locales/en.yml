@@ -34,6 +34,8 @@ en:
   feedback_form: "https://forms.office.com/Pages/ResponsePage.aspx?id=EGg0v32c3kOociSi7zmVqC4YDsCJ3llAvEZelBFBLUBURFVUTzFDTUJPQlM4M0laTE5DTlNFSjJBQi4u"
   organisation:
     updated: "Organisation details updated"
+    reactivated: "%{organisation} has been reactivated."
+    deactivated: "%{organisation} has been deactivated."
   user:
     create_password: "Create a password to finish setting up your account"
     reset_password: "Reset your password"
@@ -531,8 +533,6 @@ en:
         la_general_needs:
           internal_transfer: "Answer cannot be internal transfer as it’s the same landlord on the tenancy agreement and the household had either a fixed-term or lifetime local authority general needs tenancy immediately before this letting"
           prp_referred_by_la: "The source of the referral cannot be referred by local authority housing department for a general needs log"
-        prp:
-          local_housing_referral: "Answer cannot be ‘nominated by a local housing authority’ as a local authority is on the tenancy agreement"
       homeless:
         assessed:
           internal_transfer: "Answer cannot be 'assessed as homeless' as this tenancy is an internal transfer"
@@ -860,6 +860,9 @@ Make sure these answers are correct."
     offered: "Times previously offered since becoming available"
 
   warnings:
+    organisation:
+      deactivate: "All schemes and users at this organisation will be deactivated. All the organisation's relationships will be removed. It will no longer be possible to create logs for this organisation."
+      reactivate: "All schemes, users, and relationships that were active when this organisation was deactivated will be reactivated."
     location:
       deactivate:
         existing_logs: "It will not be possible to add logs with this location if their tenancy start date is on or after the date you enter. Any existing logs may be affected."
