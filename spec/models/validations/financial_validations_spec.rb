@@ -107,19 +107,33 @@ RSpec.describe Validations::FinancialValidations do
           .to include(match I18n.t("validations.financial.tshortfall.must_be_positive"))
       end
 
-      it "validates that basic rent is no less than the shortfall" do
+      it "validates that total charge is no less than the shortfall" do
         record.hb = 6
         record.hbrentshortfall = 1
         record.tshortfall_known = 0
         record.tshortfall = 299.50
         record.brent = 198
+        record.scharge = 50
         record.period = 2
         record.set_derived_fields!
         financial_validator.validate_rent_amount(record)
-        expect(record.errors["brent"])
-          .to include(match I18n.t("validations.financial.rent.less_than_shortfall"))
+        expect(record.errors["tcharge"])
+          .to include(match I18n.t("validations.financial.tcharge.less_than_shortfall"))
         expect(record.errors["tshortfall"])
-          .to include(match I18n.t("validations.financial.tshortfall.more_than_rent"))
+          .to include(match I18n.t("validations.financial.tshortfall.more_than_total_charge"))
+      end
+
+      it "expects that rent can be less than the shortfall if total charge is higher" do
+        record.hb = 6
+        record.hbrentshortfall = 1
+        record.tshortfall_known = 0
+        record.tshortfall = 299.50
+        record.brent = 198
+        record.scharge = 102
+        record.period = 2
+        record.set_derived_fields!
+        financial_validator.validate_rent_amount(record)
+        expect(record.errors).to be_empty
       end
     end
   end
