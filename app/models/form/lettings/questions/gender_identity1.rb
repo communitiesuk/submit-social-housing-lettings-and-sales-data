@@ -2,29 +2,21 @@ class Form::Lettings::Questions::GenderIdentity1 < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "sex1"
-    @check_answer_label = "Lead tenant’s gender identity"
-    @header = "Which of these best describes the lead tenant’s gender identity?"
+    @check_answer_label = I18n.t("forms.questions.#{form.start_date.year}.sex1.check_answer_label")
+    @header = I18n.t("forms.questions.#{form.start_date.year}.sex1.header")
     @type = "radio"
     @check_answers_card_number = 1
-    @answer_options = ANSWER_OPTIONS
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
+    @question_number = I18n.t("forms.questions.#{form.start_date.year}.sex1.question_number")
+    @hint_text = I18n.t("forms.questions.#{form.start_date.year}.sex1.hint_text")
   end
 
-  ANSWER_OPTIONS = {
-    "F" => { "value" => "Female" },
-    "M" => { "value" => "Male" },
-    "X" => { "value" => "Non-binary" },
-    "divider" => { "value" => true },
-    "R" => { "value" => "Tenant prefers not to say" },
-  }.freeze
-
-  def hint_text
-    if form.start_year_after_2024?
-      "This should be however they personally choose to identify from the options below. This may or may not be the same as their biological sex or the sex they were assigned at birth."
-    else
-      "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest."
-    end
+  def answer_options
+    {
+      "F" => { "value" => I18n.t("forms.questions.#{form.start_date.year}.sex1.options.F") },
+      "M" => { "value" => I18n.t("forms.questions.#{form.start_date.year}.sex1.options.M") },
+      "X" => { "value" => I18n.t("forms.questions.#{form.start_date.year}.sex1.options.X") },
+      "divider" => { "value" => true },
+      "R" => { "value" => I18n.t("forms.questions.#{form.start_date.year}.sex1.options.R") },
+    }
   end
-
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 33, 2024 => 32 }.freeze
 end

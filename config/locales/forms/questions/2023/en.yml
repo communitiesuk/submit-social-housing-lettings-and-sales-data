@@ -1,0 +1,14 @@
+en:
+  forms:
+    questions:
+      2023:
+        sex1:
+          header: "Which of these best describes the lead tenant’s gender identity?"
+          check_answer_label: "Lead tenant’s gender identity"
+          hint_text: "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest."
+          question_number: 33
+          options:
+            F: "Female"
+            M: "Male"
+            X: "Non-binary"
+            R: "Tenant prefers not to say"
