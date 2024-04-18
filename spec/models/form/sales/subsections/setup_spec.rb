@@ -30,7 +30,7 @@ RSpec.describe Form::Sales::Subsections::Setup, type: :model do
         %w[
           owning_organisation
           managing_organisation
-          created_by
+          assigned_to
           completion_date
           purchaser_code
           ownership_scheme
@@ -56,7 +56,7 @@ RSpec.describe Form::Sales::Subsections::Setup, type: :model do
         %w[
           owning_organisation
           managing_organisation
-          created_by
+          assigned_to
           completion_date
           purchaser_code
           ownership_scheme

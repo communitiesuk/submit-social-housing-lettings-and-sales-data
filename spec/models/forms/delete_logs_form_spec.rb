@@ -30,7 +30,7 @@ RSpec.describe Forms::DeleteLogsForm do
   let(:back_to_logs_path) { "/lettings-logs?search=meaning" }
   let(:delete_path) { "/lettings-logs/delete-logs" }
 
-  let(:visible_logs) { create_list(:lettings_log, 3, created_by: current_user) }
+  let(:visible_logs) { create_list(:lettings_log, 3, assigned_to: current_user) }
 
   before do
     allow(FilterManager).to receive(:filter_logs).and_return visible_logs

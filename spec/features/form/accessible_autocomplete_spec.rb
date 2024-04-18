@@ -24,7 +24,7 @@ RSpec.describe "Accessible Autocomplete" do
       is_la_inferred: false,
       owning_organisation: user.organisation,
       managing_organisation: user.organisation,
-      created_by: user,
+      assigned_to: user,
     )
   end
 
@@ -71,7 +71,7 @@ RSpec.describe "Accessible Autocomplete" do
   end
 
   context "when searching schemes" do
-    let(:scheme) { FactoryBot.create(:scheme, owning_organisation_id: lettings_log.created_by.organisation_id, primary_client_group: "Q", secondary_client_group: "P") }
+    let(:scheme) { FactoryBot.create(:scheme, owning_organisation_id: lettings_log.assigned_to.organisation_id, primary_client_group: "Q", secondary_client_group: "P") }
 
     before do
       FactoryBot.create(:location, scheme:, postcode: "W6 0ST", startdate: Time.zone.local(2022, 1, 1))

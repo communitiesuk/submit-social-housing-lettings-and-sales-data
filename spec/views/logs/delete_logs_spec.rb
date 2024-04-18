@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe "logs/delete_logs.html.erb" do
   let(:user) { create(:user, :support, name: "Dirk Gently") }
-  let(:lettings_log_1) { create(:lettings_log, tenancycode: "Holistic", propcode: "Detective Agency", created_by: user) }
+  let(:lettings_log_1) { create(:lettings_log, tenancycode: "Holistic", propcode: "Detective Agency", assigned_to: user) }
   let(:lettings_logs) { [lettings_log_1] }
   let(:paths) do
     {
@@ -77,7 +77,7 @@ RSpec.describe "logs/delete_logs.html.erb" do
   end
 
   context "when the table contains sales logs" do
-    let(:sales_log) { create(:sales_log, purchid: "Interconnectedness", saledate: Time.zone.today, created_by: user) }
+    let(:sales_log) { create(:sales_log, purchid: "Interconnectedness", saledate: Time.zone.today, assigned_to: user) }
     let(:sales_logs) { [sales_log] }
     let(:delete_logs_form_sales) { Forms::DeleteLogsForm.new(log_type: :sales, current_user: user, **paths) }
 

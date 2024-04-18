@@ -126,9 +126,9 @@ RSpec.describe "Home Page Features" do
     let(:user) { FactoryBot.create(:user, name: "Provider") }
 
     before do
-      create_list(:lettings_log, 6, :in_progress, owning_organisation: user.organisation, created_by: user)
+      create_list(:lettings_log, 6, :in_progress, owning_organisation: user.organisation, assigned_to: user)
       create_list(:lettings_log, 2, :in_progress, owning_organisation: user.organisation)
-      create_list(:lettings_log, 4, :completed, owning_organisation: user.organisation, created_by: user)
+      create_list(:lettings_log, 4, :completed, owning_organisation: user.organisation, assigned_to: user)
       create_list(:lettings_log, 2, :completed)
       create_list(:lettings_log, 2, :not_started)
       sign_in user
@@ -143,8 +143,8 @@ RSpec.describe "Home Page Features" do
 
     context "when their organisation has submitted sales logs" do
       before do
-        create_list(:sales_log, 5, :in_progress, owning_organisation: user.organisation, created_by: user)
-        create_list(:sales_log, 3, :completed, owning_organisation: user.organisation, created_by: user)
+        create_list(:sales_log, 5, :in_progress, owning_organisation: user.organisation, assigned_to: user)
+        create_list(:sales_log, 3, :completed, owning_organisation: user.organisation, assigned_to: user)
         create_list(:sales_log, 2, :not_started)
         visit(root_path)
       end
@@ -153,7 +153,7 @@ RSpec.describe "Home Page Features" do
         before do
           Timecop.freeze(Time.zone.local(2024, 1, 1))
           Singleton.__init__(FormHandler)
-          closed_period_in_progress_log = build(:lettings_log, :in_progress, owning_organisation: user.organisation, created_by: user, startdate: Time.zone.local(2022, 4, 1))
+          closed_period_in_progress_log = build(:lettings_log, :in_progress, owning_organisation: user.organisation, assigned_to: user, startdate: Time.zone.local(2022, 4, 1))
           closed_period_in_progress_log.save!(validate: false)
           visit(root_path)
         end
@@ -177,7 +177,7 @@ RSpec.describe "Home Page Features" do
         before do
           Timecop.freeze(Time.zone.local(2024, 4, 1))
           Singleton.__init__(FormHandler)
-          closed_period_in_progress_log = build(:lettings_log, :in_progress, owning_organisation: user.organisation, created_by: user, startdate: Time.zone.local(2022, 4, 1))
+          closed_period_in_progress_log = build(:lettings_log, :in_progress, owning_organisation: user.organisation, assigned_to: user, startdate: Time.zone.local(2022, 4, 1))
           closed_period_in_progress_log.save!(validate: false)
           sign_in user
           visit(root_path)
@@ -219,7 +219,7 @@ RSpec.describe "Home Page Features" do
   context "when the user is a data coordinator" do
     before do
       create_list(:lettings_log, 6, :in_progress, owning_organisation: user.organisation)
-      create_list(:lettings_log, 2, :in_progress, owning_organisation: user.organisation, created_by: user)
+      create_list(:lettings_log, 2, :in_progress, owning_organisation: user.organisation, assigned_to: user)
       create_list(:lettings_log, 4, :completed, owning_organisation: user.organisation)
       create_list(:lettings_log, 2, :completed)
       create_list(:lettings_log, 2, :not_started)

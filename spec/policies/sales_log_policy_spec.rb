@@ -92,7 +92,7 @@ RSpec.describe SalesLogPolicy do
             end
 
             context "when the log is assigned to the user" do
-              let(:log) { create(:sales_log, :in_progress, created_by: user) }
+              let(:log) { create(:sales_log, :in_progress, assigned_to: user) }
 
               it "does allow deletion of log" do
                 expect(policy).to permit(user, log)

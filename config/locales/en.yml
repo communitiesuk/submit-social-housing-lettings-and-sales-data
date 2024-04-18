@@ -310,7 +310,7 @@ en:
         data_sharing_agreement_not_signed: "The organisation must accept the Data Sharing Agreement before it can be selected as the managing organisation."
         inactive_merged_organisation: "The managing organisation must be active on the tenancy start date. %{managing_organisation} became inactive on %{managing_organisation_merge_date} and was replaced by %{managing_absorbing_organisation}."
         inactive_absorbing_organisation: "The managing organisation must be active on the tenancy start date. %{managing_organisation} became active on %{managing_organisation_available_from}."
-      created_by:
+      assigned_to:
         invalid: "Please select the owning organisation or managing organisation that you belong to"
       lettype:
         general_needs_mismatch: Lettings type must be a general needs type because you selected general needs when uploading the file

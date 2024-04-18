@@ -280,8 +280,8 @@ RSpec.describe BulkUpload::Lettings::Validator do
     end
 
     context "when a log is not valid?" do
-      let(:log_1) { build(:lettings_log, :completed, created_by: user) }
-      let(:log_2) { build(:lettings_log, :completed, created_by: user) }
+      let(:log_1) { build(:lettings_log, :completed, assigned_to: user) }
+      let(:log_2) { build(:lettings_log, :completed, assigned_to: user) }
 
       before do
         file.write(BulkUpload::LettingsLogToCsv.new(log: log_1, line_ending: "\r\n", col_offset: 0).to_2023_csv_row)
@@ -296,8 +296,8 @@ RSpec.describe BulkUpload::Lettings::Validator do
     end
 
     context "when all logs valid?" do
-      let(:log_1) { build(:lettings_log, :completed, renttype: 1, created_by: user) }
-      let(:log_2) { build(:lettings_log, :completed, renttype: 1, created_by: user) }
+      let(:log_1) { build(:lettings_log, :completed, renttype: 1, assigned_to: user) }
+      let(:log_2) { build(:lettings_log, :completed, renttype: 1, assigned_to: user) }
 
       before do
         file.write(BulkUpload::LettingsLogToCsv.new(log: log_1, line_ending: "\r\n", col_offset: 0).to_2023_csv_row)
@@ -314,7 +314,7 @@ RSpec.describe BulkUpload::Lettings::Validator do
     context "when a single log wants to block log creation" do
       let(:unaffiliated_org) { create(:organisation) }
 
-      let(:log_1) { build(:lettings_log, :completed, renttype: 1, created_by: user, owning_organisation: unaffiliated_org) }
+      let(:log_1) { build(:lettings_log, :completed, renttype: 1, assigned_to: user, owning_organisation: unaffiliated_org) }
 
       before do
         file.write(BulkUpload::LettingsLogToCsv.new(log: log_1, line_ending: "\r\n", col_offset: 0).to_2023_csv_row)
@@ -328,7 +328,7 @@ RSpec.describe BulkUpload::Lettings::Validator do
     end
 
     context "when a log has incomplete setup section" do
-      let(:log) { build(:lettings_log, :in_progress, created_by: user, startdate: Time.zone.local(2022, 5, 1)) }
+      let(:log) { build(:lettings_log, :in_progress, assigned_to: user, startdate: Time.zone.local(2022, 5, 1)) }
 
       before do
         file.write(BulkUpload::LettingsLogToCsv.new(log:, line_ending: "\r\n", col_offset: 0).to_2023_csv_row)

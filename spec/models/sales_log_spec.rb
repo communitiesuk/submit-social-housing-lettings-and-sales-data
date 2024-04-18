@@ -5,7 +5,7 @@ require "shared/shared_log_examples"
 # rubocop:disable RSpec/MessageChain
 RSpec.describe SalesLog, type: :model do
   let(:owning_organisation) { create(:organisation) }
-  let(:created_by_user) { create(:user) }
+  let(:assigned_to_user) { create(:user) }
 
   before do
     Timecop.freeze(Time.zone.local(2024, 3, 1))
@@ -26,12 +26,12 @@ RSpec.describe SalesLog, type: :model do
   end
 
   it "is a not a lettings log" do
-    sales_log = build(:sales_log, created_by: created_by_user)
+    sales_log = build(:sales_log, assigned_to: assigned_to_user)
     expect(sales_log.lettings?).to be false
   end
 
   it "is a sales log" do
-    sales_log = build(:sales_log, created_by: created_by_user)
+    sales_log = build(:sales_log, assigned_to: assigned_to_user)
     expect(sales_log.sales?).to be true
   end
 
@@ -47,7 +47,7 @@ RSpec.describe SalesLog, type: :model do
   end
 
   describe "#update" do
-    let(:sales_log) { create(:sales_log, created_by: created_by_user) }
+    let(:sales_log) { create(:sales_log, assigned_to: assigned_to_user) }
     let(:validator) { sales_log._validators[nil].first }
 
     after do
@@ -120,8 +120,8 @@ RSpec.describe SalesLog, type: :model do
   end
 
   describe "#form" do
-    let(:sales_log) { build(:sales_log, created_by: created_by_user) }
-    let(:sales_log_2) { build(:sales_log, saledate: Time.zone.local(2022, 5, 1), created_by: created_by_user) }
+    let(:sales_log) { build(:sales_log, assigned_to: assigned_to_user) }
+    let(:sales_log_2) { build(:sales_log, saledate: Time.zone.local(2022, 5, 1), assigned_to: assigned_to_user) }
 
     before do
       Timecop.freeze(Time.zone.local(2023, 1, 10))
@@ -523,7 +523,7 @@ RSpec.describe SalesLog, type: :model do
 
       before do
         create_list(:sales_log, 2, :duplicate, purchid: "other duplicates")
-        log.update!(created_by: user, owning_organisation: user.organisation)
+        log.update!(assigned_to: user, owning_organisation: user.organisation)
       end
 
       it "does not return logs not associated with the given user" do
@@ -711,7 +711,7 @@ RSpec.describe SalesLog, type: :model do
         :sales_log,
         :completed,
         owning_organisation:,
-        created_by: created_by_user,
+        assigned_to: assigned_to_user,
         pcodenk: 0,
         postcode_full: "M1 1AE",
       )
@@ -745,7 +745,7 @@ RSpec.describe SalesLog, type: :model do
       let(:address_sales_log_22_23) do
         described_class.create({
           owning_organisation:,
-          created_by: created_by_user,
+          assigned_to: assigned_to_user,
           ppcodenk: 1,
           postcode_full: "CA10 1AA",
           saledate: Time.zone.local(2022, 5, 2),
@@ -775,7 +775,7 @@ RSpec.describe SalesLog, type: :model do
       let(:address_sales_log_23_24) do
         described_class.create({
           owning_organisation:,
-          created_by: created_by_user,
+          assigned_to: assigned_to_user,
           ppcodenk: 1,
           postcode_full: "CA10 1AA",
           saledate: Time.zone.local(2023, 5, 2),
@@ -813,7 +813,7 @@ RSpec.describe SalesLog, type: :model do
       let(:address_sales_log_24_25) do
         described_class.create({
           owning_organisation:,
-          created_by: created_by_user,
+          assigned_to: assigned_to_user,
           ppcodenk: 1,
           postcode_full: "CA10 1AA",
           ppostcode_full: nil,
@@ -857,7 +857,7 @@ RSpec.describe SalesLog, type: :model do
             :completed,
             managing_organisation: owning_organisation,
             owning_organisation:,
-            created_by: created_by_user,
+            assigned_to: assigned_to_user,
             age6: 14,
             saledate: Time.zone.local(2024, 5, 2),
           )
@@ -988,7 +988,7 @@ RSpec.describe SalesLog, type: :model do
     let!(:address_sales_log) do
       described_class.create({
         owning_organisation:,
-        created_by: created_by_user,
+        assigned_to: assigned_to_user,
         ppcodenk: 1,
         ppostcode_full: "M1 1AE",
       })

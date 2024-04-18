@@ -196,7 +196,7 @@ class LocationsController < ApplicationController
 
       flash[:notice] = deactivate_success_notice
 
-      logs.group_by(&:created_by).transform_values(&:count).each do |user, count|
+      logs.group_by(&:assigned_to).transform_values(&:count).each do |user, count|
         next unless user
 
         LocationOrSchemeDeactivationMailer.send_deactivation_mail(
