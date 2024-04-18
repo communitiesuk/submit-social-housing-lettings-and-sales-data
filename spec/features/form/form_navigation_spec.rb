@@ -66,12 +66,12 @@ RSpec.describe "Form Navigation" do
       expect(page).to have_field("lettings-log-age1-field")
     end
 
-    it "a question page leads to the next question defined in the form definition" do
+    it "a question page leads to the next unanswered question defined in the form definition" do
       pages = question_answers.map { |_key, val| val[:path] }
       pages[0..-2].each_with_index do |val, index|
-        visit("/lettings-logs/#{id}/#{val}")
+        visit("/lettings-logs/#{empty_lettings_log.id}/#{val}")
         click_link("Skip for now")
-        expect(page).to have_current_path("/lettings-logs/#{id}/#{pages[index + 1]}")
+        expect(page).to have_current_path("/lettings-logs/#{empty_lettings_log.id}/#{pages[index + 1]}")
       end
     end
 

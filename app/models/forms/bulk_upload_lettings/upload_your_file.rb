@@ -56,7 +56,7 @@ module Forms
 
       def storage_service
         @storage_service ||= if upload_enabled?
-                               Storage::S3Service.new(Configuration::EnvConfigurationService.new, ENV["CSV_DOWNLOAD_PAAS_INSTANCE"])
+                               Storage::S3Service.new(Configuration::EnvConfigurationService.new, ENV["BULK_UPLOAD_BUCKET"])
                              else
                                Storage::LocalDiskService.new
                              end

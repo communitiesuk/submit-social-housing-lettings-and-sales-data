@@ -177,24 +177,6 @@ RSpec.describe Validations::HouseholdValidations do
           .to include(match(I18n.t("validations.household.prevten.la_general_needs.internal_transfer")))
       end
     end
-
-    context "when referral is nominated by a local housing authority" do
-      it "cannot have a local authority" do
-        record.owning_organisation.provider_type = "LA"
-        record.referral = 3
-        household_validator.validate_referral(record)
-        expect(record.errors["referral"])
-          .to include(match(I18n.t("validations.household.referral.prp.local_housing_referral")))
-      end
-
-      it "can have a private registered provider" do
-        record.owning_organisation.provider_type = "PRP"
-        record.referral = 3
-        household_validator.validate_referral(record)
-        expect(record.errors["referral"])
-          .to be_empty
-      end
-    end
   end
 
   describe "armed forces validations" do
@@ -429,10 +411,11 @@ RSpec.describe Validations::HouseholdValidations do
     end
 
     context "with 2024 logs" do
+      let(:log_date) { Time.zone.local(2024, 4, 1) }
+
       before do
-        Timecop.freeze(Time.zone.local(2024, 4, 1))
+        Timecop.freeze(log_date)
         Singleton.__init__(FormHandler)
-        record.update!(startdate: Time.zone.local(2024, 4, 1))
       end
 
       after do

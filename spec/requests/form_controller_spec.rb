@@ -1036,6 +1036,13 @@ RSpec.describe FormController, type: :request do
             sales_log.saledate = Time.zone.local(2024, 12, 1)
             sales_log.save!(validate: false)
             sales_log.reload
+            Timecop.freeze(Time.zone.local(2024, 12, 1))
+            Singleton.__init__(FormHandler)
+          end
+
+          after do
+            Timecop.unfreeze
+            Singleton.__init__(FormHandler)
           end
 
           it "sets managing organisation to assigned to organisation" do
@@ -1261,7 +1268,7 @@ RSpec.describe FormController, type: :request do
                     "housingneeds_g" => "No disability requirements",
                     "divider_a" => true,
                     "housingneeds_h" => "Don’t know" },
-                }, nil
+                }, page
               ),
               Form::Question.new("tenancycode", { "type" => "text" }, nil),
             ]
@@ -1326,6 +1333,57 @@ RSpec.describe FormController, type: :request do
       end
 
       context "when coming from check answers page" do
+        let(:sales_log) { create(:sales_log, ownershipsch: 3, created_by: user) }
+        let(:lettings_log_referrer) { "/lettings-logs/#{lettings_log.id}/needs-type?referrer=check_answers" }
+        let(:sales_log_referrer) { "/sales-logs/#{sales_log.id}/ownership-scheme?referrer=check_answers" }
+
+        let(:sales_log_form_ownership_params) do
+          {
+            id: sales_log.id,
+            sales_log: {
+              page: "ownership_scheme",
+              ownershipsch: 1,
+            },
+          }
+        end
+        let(:sales_log_form_shared_ownership_type_params) do
+          {
+            id: sales_log.id,
+            unanswered_pages: "joint_purchase",
+            sales_log: {
+              page: "shared_ownership_type",
+              type: 2,
+            },
+          }
+        end
+        let(:lettings_log_form_needs_type_params) do
+          {
+            id: lettings_log.id,
+            lettings_log: {
+              page: "needs_type",
+              needstype: 2,
+            },
+          }
+        end
+
+        context "and changing an answer" do
+          it "navigates to follow-up questions when required" do
+            post "/lettings-logs/#{lettings_log.id}/needs-type", params: lettings_log_form_needs_type_params, headers: headers.merge({ "HTTP_REFERER" => lettings_log_referrer })
+            expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}/scheme?referrer=check_answers")
+          end
+
+          it "queues up additional follow-up questions if needed" do
+            post "/sales-logs/#{sales_log.id}/shared-ownership-type", params: sales_log_form_ownership_params, headers: headers.merge({ "HTTP_REFERER" => sales_log_referrer })
+            expect(response).to redirect_to("/sales-logs/#{sales_log.id}/shared-ownership-type?referrer=check_answers&unanswered_pages=joint_purchase")
+          end
+
+          it "moves to a queued up follow-up questions if one was provided" do
+            post "/sales-logs/#{sales_log.id}/shared-ownership-type", params: sales_log_form_ownership_params, headers: headers.merge({ "HTTP_REFERER" => sales_log_referrer })
+            post "/sales-logs/#{sales_log.id}/ownership-scheme", params: sales_log_form_shared_ownership_type_params, headers: headers.merge({ "HTTP_REFERER" => sales_log_referrer })
+            expect(response).to redirect_to("/sales-logs/#{sales_log.id}/joint-purchase?referrer=check_answers")
+          end
+        end
+
         context "and navigating to an interruption screen" do
           let(:interrupt_params) do
             {

@@ -5,7 +5,7 @@ namespace :data_import do
 
     raise "Usage: rake data_import:import_lettings_addresses_from_csv['csv_file_name']" if file_name.blank?
 
-    s3_service = Storage::S3Service.new(Configuration::EnvConfigurationService.new, ENV["CSV_DOWNLOAD_PAAS_INSTANCE"])
+    s3_service = Storage::S3Service.new(Configuration::EnvConfigurationService.new, ENV["BULK_UPLOAD_BUCKET"])
     file_io = s3_service.get_file_io(file_name)
     file_io.set_encoding_by_bom
     addresses_csv = CSV.parse(file_io, headers: true)
@@ -69,7 +69,7 @@ namespace :data_import do
 
     raise "Usage: rake data_import:import_sales_addresses_from_csv['csv_file_name']" if file_name.blank?
 
-    s3_service = Storage::S3Service.new(Configuration::EnvConfigurationService.new, ENV["CSV_DOWNLOAD_PAAS_INSTANCE"])
+    s3_service = Storage::S3Service.new(Configuration::EnvConfigurationService.new, ENV["BULK_UPLOAD_BUCKET"])
     file_io = s3_service.get_file_io(file_name)
     file_io.set_encoding_by_bom
     addresses_csv = CSV.parse(file_io, headers: true)
