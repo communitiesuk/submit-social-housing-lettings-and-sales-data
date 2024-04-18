@@ -361,7 +361,7 @@ en:
     financial:
       tshortfall:
         outstanding_amount_not_expected: "You cannot answer the outstanding amount question if you don’t have outstanding rent or charges"
-        more_than_rent: "Enter a value less than the basic rent amount"
+        more_than_total_charge: "Enter a value less than the total charge"
         must_be_positive: "Enter a value over £0.01 as you told us there is an outstanding amount"
       hbrentshortfall:
         outstanding_amount_not_expected: "Answer must be ‘yes’ as you have answered the outstanding amount question"
@@ -381,7 +381,6 @@ en:
         child_has_income: "Child's income must be £0"
       negative_currency: "Enter an amount above 0"
       rent:
-        less_than_shortfall: "Enter an amount that is more than the shortfall in basic rent"
         out_of_range: "Enter a value for the %{charge_name} between £0 and %{maximum_per_period} paid %{frequency}. %{maximum_per_period} is the max limit for rent and charges paid %{frequency} for %{letting_type} lettings owned by a %{provider_type}."
       ecstat:
         over_hard_max: "The household’s income of %{earnings} %{frequency} is too high given the household’s working situation"
@@ -427,6 +426,7 @@ en:
         missing_charges: "Please enter the %{question}. If there is no %{question}, please enter '0'."
       tcharge:
         under_10: "Enter a total charge that is at least £10.00 per week"
+        less_than_shortfall: "The total charge must be more than the outstanding amount"
       rent_period:
         invalid_for_org: "%{org_name} does not charge rent %{rent_period}"
       carehome:
