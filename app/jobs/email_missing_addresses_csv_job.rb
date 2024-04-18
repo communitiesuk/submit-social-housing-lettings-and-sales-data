@@ -18,7 +18,7 @@ class EmailMissingAddressesCsvJob < ApplicationJob
       email_method = :send_missing_sales_addresses_csv_download_mail
     end
 
-    storage_service = Storage::S3Service.new(Configuration::EnvConfigurationService.new, ENV["CSV_DOWNLOAD_PAAS_INSTANCE"])
+    storage_service = Storage::S3Service.new(Configuration::EnvConfigurationService.new, ENV["BULK_UPLOAD_BUCKET"])
     storage_service.write_file(filename, BYTE_ORDER_MARK + csv_string)
 
     url = storage_service.get_presigned_url(filename, EXPIRATION_TIME)

@@ -20,6 +20,7 @@ class Form::Lettings::Questions::Period < ::Form::Question
     "7" => { "value" => "Weekly for 48 weeks" },
     "6" => { "value" => "Weekly for 49 weeks" },
     "5" => { "value" => "Weekly for 50 weeks" },
+    "11" => { "value" => "Weekly for 51 weeks" },
     "1" => { "value" => "Weekly for 52 weeks" },
     "10" => { "value" => "Weekly for 53 weeks" },
   }.freeze

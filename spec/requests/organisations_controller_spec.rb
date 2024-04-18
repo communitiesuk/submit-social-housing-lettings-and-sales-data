@@ -579,6 +579,32 @@ RSpec.describe OrganisationsController, type: :request do
             expect(whodunnit_actor).to be_a(User)
             expect(whodunnit_actor.id).to eq(user.id)
           end
+
+          context "with active parameter true" do
+            let(:params) do
+              {
+                id: organisation.id,
+                organisation: { active: "true" },
+              }
+            end
+
+            it "redirects" do
+              expect(response).to have_http_status(:unauthorized)
+            end
+          end
+
+          context "with active parameter false" do
+            let(:params) do
+              {
+                id: organisation.id,
+                organisation: { active: "false" },
+              }
+            end
+
+            it "redirects" do
+              expect(response).to have_http_status(:unauthorized)
+            end
+          end
         end
 
         context "with an organisation that the user does not belong to" do
@@ -1404,6 +1430,100 @@ RSpec.describe OrganisationsController, type: :request do
               end
             end
           end
+        end
+      end
+
+      describe "#update" do
+        context "with active parameter false" do
+          let(:params) { { id: organisation.id, organisation: { active: "false" } } }
+
+          user_to_update = nil
+
+          before do
+            user_to_update = create(:user, :data_coordinator, organisation:)
+            patch "/organisations/#{organisation.id}", headers:, params:
+          end
+
+          it "deactivates associated users" do
+            user_to_update.reload
+            expect(user_to_update.active).to eq(false)
+            expect(user_to_update.reactivate_with_organisation).to eq(true)
+          end
+        end
+
+        context "with active parameter true" do
+          user_to_reactivate = nil
+          user_not_to_reactivate = nil
+
+          let(:params) do
+            {
+              id: organisation.id,
+              organisation: { active: "true" },
+            }
+          end
+          let(:notify_client) { instance_double(Notifications::Client) }
+          let(:devise_notify_mailer) { DeviseNotifyMailer.new }
+
+          let(:expected_personalisation) do
+            {
+              name: user_to_reactivate.name,
+              email: user_to_reactivate.email,
+              organisation: organisation.name,
+              link: include("/account/confirmation?confirmation_token="),
+            }
+          end
+
+          before do
+            allow(DeviseNotifyMailer).to receive(:new).and_return(devise_notify_mailer)
+            allow(devise_notify_mailer).to receive(:notify_client).and_return(notify_client)
+            allow(notify_client).to receive(:send_email).and_return(true)
+
+            user_to_reactivate = create(:user, :data_coordinator, organisation:, active: false, reactivate_with_organisation: true)
+            user_not_to_reactivate = create(:user, :data_coordinator, organisation:, active: false, reactivate_with_organisation: false)
+            patch "/organisations/#{organisation.id}", headers:, params:
+          end
+
+          it "reactivates users deactivated with organisation" do
+            user_to_reactivate.reload
+            user_not_to_reactivate.reload
+            expect(user_to_reactivate.active).to eq(true)
+            expect(user_to_reactivate.reactivate_with_organisation).to eq(false)
+            expect(user_not_to_reactivate.active).to eq(false)
+          end
+
+          it "sends invitation emails" do
+            expect(notify_client).to have_received(:send_email).with(email_address: user_to_reactivate.email, template_id: User::BETA_ONBOARDING_TEMPLATE_ID, personalisation: expected_personalisation).once
+          end
+        end
+      end
+
+      describe "#deactivate" do
+        before do
+          get "/organisations/#{organisation.id}/deactivate", headers:, params: {}
+        end
+
+        it "shows deactivation page with deactivate and cancel buttons for the organisation" do
+          expect(path).to include("/organisations/#{organisation.id}/deactivate")
+          expect(page).to have_content(organisation.name)
+          expect(page).to have_content("Are you sure you want to deactivate this organisation?")
+          expect(page).to have_button("Deactivate this organisation")
+          expect(page).to have_link("Cancel", href: "/organisations/#{organisation.id}")
+        end
+      end
+
+      describe "#reactivate" do
+        let(:inactive_organisation) { create(:organisation, name: "Inactive org", active: false) }
+
+        before do
+          get "/organisations/#{inactive_organisation.id}/reactivate", headers:, params: {}
+        end
+
+        it "shows reactivation page with reactivate and cancel buttons for the organisation" do
+          expect(path).to include("/organisations/#{inactive_organisation.id}/reactivate")
+          expect(page).to have_content(inactive_organisation.name)
+          expect(page).to have_content("Are you sure you want to reactivate this organisation?")
+          expect(page).to have_button("Reactivate this organisation")
+          expect(page).to have_link("Cancel", href: "/organisations/#{inactive_organisation.id}")
         end
       end
 

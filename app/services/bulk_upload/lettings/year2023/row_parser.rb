@@ -517,7 +517,7 @@ private
 
   def validate_declaration_acceptance
     unless field_45 == 1
-      errors.add(:field_45, I18n.t("validations.declaration.missing"), category: :setup)
+      errors.add(:field_45, I18n.t("validations.declaration.missing.pre_2024"), category: :setup)
     end
   end
 

@@ -36,6 +36,10 @@ class Form::Page
     end
   end
 
+  def has_unanswered_questions?(log)
+    questions.any? { |question| question.displayed_to_user?(log) && question.unanswered?(log) }
+  end
+
   def interruption_screen?
     questions.all? { |question| question.type == "interruption_screen" }
   end

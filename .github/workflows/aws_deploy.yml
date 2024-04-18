@@ -59,13 +59,17 @@ jobs:
         run: |
           echo "image-exists=$(if aws ecr list-images --repository-name=$repository --query "imageIds[*].imageTag" | grep -q ${{ github.sha }}; then echo true; else echo false; fi)" >> $GITHUB_ENV
 
-      - name: Build, tag, and push docker image to ECR
+      - name: Build, tag, and push docker image to ECR if there is no image, failing for releases
         id: build-image
         if: ${{ env.image-exists == 'false' }}
         env:
           registry: ${{ steps.ecr-login.outputs.registry }}
           commit_tag: ${{ github.sha }}
         run: |
+          if [[ ${{ inputs.environment }} == 'production' ]]; then
+            echo "Error: Deployment to production environment is not allowed as there is no docker image (i.e. the AWS deploy on staging was unsuccessful for this commit)."
+            exit 1
+          fi
           docker build -t $registry/$repository:$commit_tag . --target=production
           docker push $registry/$repository:$commit_tag
 

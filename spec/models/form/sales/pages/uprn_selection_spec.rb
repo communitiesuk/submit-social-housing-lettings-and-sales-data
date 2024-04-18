@@ -34,7 +34,7 @@ RSpec.describe Form::Sales::Pages::UprnSelection, type: :model do
 
   it "has the correct skip_href" do
     expect(page.skip_href(log)).to eq(
-      "/sales-logs/#{log.id}/address-matcher",
+      "address-matcher",
     )
   end
 

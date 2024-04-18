@@ -6,7 +6,7 @@ class Form::Lettings::Questions::NationalityAllGroup < ::Form::Question
     @header = "What is the nationality of the lead tenant?"
     @type = "radio"
     @check_answers_card_number = 1
-    @hint_text = "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest. If the lead tenant is a dual national of the United Kingdom and another country, enter United Kingdom. If they are a dual national of two other countries, the tenant should decide which country to enter."
+    @hint_text = "If the lead tenant is a dual national of the United Kingdom and another country, enter United Kingdom. If they are a dual national of two other countries, the tenant should decide which country to enter."
     @answer_options = ANSWER_OPTIONS
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
     @conditional_for = { "nationality_all" => [12] }
