@@ -10,7 +10,7 @@ RSpec.describe Csv::SalesLogCsvService do
     create(
       :sales_log,
       :completed,
-      created_by: user,
+      assigned_to: user,
       saledate: fixed_time,
       created_at: fixed_time,
       updated_at: now,

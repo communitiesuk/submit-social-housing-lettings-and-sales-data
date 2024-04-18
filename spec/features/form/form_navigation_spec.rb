@@ -10,7 +10,7 @@ RSpec.describe "Form Navigation" do
       :in_progress,
       owning_organisation: user.organisation,
       managing_organisation: user.organisation,
-      created_by: user,
+      assigned_to: user,
     )
   end
   let(:empty_lettings_log) do
@@ -18,7 +18,7 @@ RSpec.describe "Form Navigation" do
       :lettings_log,
       owning_organisation: user.organisation,
       managing_organisation: user.organisation,
-      created_by: user,
+      assigned_to: user,
     )
   end
   let(:id) { lettings_log.id }
@@ -156,8 +156,8 @@ RSpec.describe "Form Navigation" do
   end
 
   describe "fixing duplicate logs" do
-    let!(:lettings_log) { create(:lettings_log, :duplicate, created_by: user, duplicate_set_id: 1) }
-    let!(:second_log) { create(:lettings_log, :duplicate, created_by: user, duplicate_set_id: 1) }
+    let!(:lettings_log) { create(:lettings_log, :duplicate, assigned_to: user, duplicate_set_id: 1) }
+    let!(:second_log) { create(:lettings_log, :duplicate, assigned_to: user, duplicate_set_id: 1) }
 
     it "shows a correct cancel link" do
       expect(lettings_log.duplicates.count).to eq(1)
@@ -191,7 +191,7 @@ RSpec.describe "Form Navigation" do
     let(:now) { Time.zone.local(2024, 5, 1) }
 
     context "with a lettings log" do
-      let(:lettings_log) { create(:lettings_log, :completed, startdate: Time.zone.local(2024, 5, 5), created_by: user) }
+      let(:lettings_log) { create(:lettings_log, :completed, startdate: Time.zone.local(2024, 5, 5), assigned_to: user) }
 
       before do
         stub_request(:get, /api\.os\.uk/)
@@ -219,7 +219,7 @@ RSpec.describe "Form Navigation" do
     end
 
     context "with a sales log" do
-      let(:sales_log) { create(:sales_log, :completed, saledate: Time.zone.local(2024, 5, 5), created_by: user) }
+      let(:sales_log) { create(:sales_log, :completed, saledate: Time.zone.local(2024, 5, 5), assigned_to: user) }
 
       before do
         stub_request(:get, /api\.os\.uk/)

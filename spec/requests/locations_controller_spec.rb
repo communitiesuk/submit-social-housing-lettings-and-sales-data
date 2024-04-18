@@ -1582,8 +1582,8 @@ RSpec.describe LocationsController, type: :request do
         before do
           allow(LocationOrSchemeDeactivationMailer).to receive(:send_deactivation_mail).and_call_original
 
-          create(:lettings_log, :sh, location:, scheme:, startdate:, created_by: user_a)
-          create_list(:lettings_log, 3, :sh, location:, scheme:, startdate:, created_by: user_b)
+          create(:lettings_log, :sh, location:, scheme:, startdate:, assigned_to: user_a)
+          create_list(:lettings_log, 3, :sh, location:, scheme:, startdate:, assigned_to: user_b)
 
           Timecop.freeze(Time.utc(2022, 10, 10))
           sign_in user

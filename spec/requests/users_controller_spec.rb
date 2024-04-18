@@ -1507,7 +1507,7 @@ RSpec.describe UsersController, type: :request do
             context "and has associated logs in editable collection period" do
               before do
                 create(:data_protection_confirmation, organisation: other_user.organisation, confirmed: true)
-                create(:lettings_log, owning_organisation: other_user.organisation, created_by: other_user)
+                create(:lettings_log, owning_organisation: other_user.organisation, assigned_to: other_user)
                 get "/users/#{other_user.id}"
               end
 

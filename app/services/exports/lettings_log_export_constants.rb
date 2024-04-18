@@ -136,7 +136,6 @@ module Exports::LettingsLogExportConstants
     "log_id",
     "scheme_status",
     "location_status",
-    "created_by",
     "amended_by",
     "duplicate_set_id",
     "accessible_register",
@@ -155,6 +154,7 @@ module Exports::LettingsLogExportConstants
     "supcharg_value_check",
     "carehome_charges_value_check",
     "assigned_to",
+    "created_by",
   ]
 
   (1..8).each do |index|
@@ -188,7 +188,6 @@ module Exports::LettingsLogExportConstants
     "pscharge_value_check",
     "supcharg_value_check",
     "carehome_charges_value_check",
-    "assigned_to",
   ]
 
   PRE_2024_EXPORT_FIELDS = Set[

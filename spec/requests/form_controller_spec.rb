@@ -9,7 +9,7 @@ RSpec.describe FormController, type: :request do
   let!(:unauthorized_lettings_log) do
     create(
       :lettings_log,
-      created_by: other_user,
+      assigned_to: other_user,
     )
   end
   let(:setup_complete_lettings_log) do
@@ -17,14 +17,14 @@ RSpec.describe FormController, type: :request do
       :lettings_log,
       :setup_completed,
       status: 1,
-      created_by: user,
+      assigned_to: user,
     )
   end
   let(:completed_lettings_log) do
     create(
       :lettings_log,
       :completed,
-      created_by: user,
+      assigned_to: user,
     )
   end
   let(:headers) { { "Accept" => "text/html" } }
@@ -41,7 +41,7 @@ RSpec.describe FormController, type: :request do
     let!(:lettings_log) do
       create(
         :lettings_log,
-        created_by: user,
+        assigned_to: user,
       )
     end
 
@@ -69,7 +69,7 @@ RSpec.describe FormController, type: :request do
     let!(:lettings_log) do
       create(
         :lettings_log,
-        created_by: user,
+        assigned_to: user,
       )
     end
     let(:page) { Capybara::Node::Simple.new(response.body) }
@@ -99,16 +99,16 @@ RSpec.describe FormController, type: :request do
       end
 
       before do
-        lettings_log.update!(owning_organisation: stock_owner, created_by: user, managing_organisation: organisation)
+        lettings_log.update!(owning_organisation: stock_owner, assigned_to: user, managing_organisation: organisation)
         lettings_log.reload
       end
 
-      it "resets created by and renders the next page" do
+      it "resets assigned to and renders the next page" do
         post "/lettings-logs/#{lettings_log.id}/net-income", params: params
-        expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}/created-by")
+        expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}/assigned-to")
         follow_redirect!
         lettings_log.reload
-        expect(lettings_log.created_by).to eq(nil)
+        expect(lettings_log.assigned_to).to eq(nil)
       end
     end
 
@@ -124,16 +124,16 @@ RSpec.describe FormController, type: :request do
       end
 
       before do
-        lettings_log.update!(owning_organisation: organisation, created_by: user, managing_organisation: organisation)
+        lettings_log.update!(owning_organisation: organisation, assigned_to: user, managing_organisation: organisation)
         lettings_log.reload
       end
 
-      it "does not reset created by" do
+      it "does not reset assigned to" do
         post "/lettings-logs/#{lettings_log.id}/net-income", params: params
-        expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}/created-by")
+        expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}/assigned-to")
         follow_redirect!
         lettings_log.reload
-        expect(lettings_log.created_by).to eq(user)
+        expect(lettings_log.assigned_to).to eq(user)
       end
     end
 
@@ -149,13 +149,13 @@ RSpec.describe FormController, type: :request do
       end
 
       before do
-        lettings_log.update!(owning_organisation: nil, created_by: nil, managing_organisation: nil)
+        lettings_log.update!(owning_organisation: nil, assigned_to: nil, managing_organisation: nil)
         lettings_log.reload
       end
 
       it "sets managing organisation to owning organisation" do
         post "/lettings-logs/#{lettings_log.id}/stock-owner", params: params
-        expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}/created-by")
+        expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}/assigned-to")
         follow_redirect!
         lettings_log.reload
         expect(lettings_log.owning_organisation).to eq(managing_organisation)
@@ -176,13 +176,13 @@ RSpec.describe FormController, type: :request do
       end
 
       before do
-        sales_log.update!(owning_organisation: nil, created_by: nil)
+        sales_log.update!(owning_organisation: nil, assigned_to: nil)
         sales_log.reload
       end
 
       it "correctly sets owning organisation" do
         post "/sales-logs/#{sales_log.id}/owning-organisation", params: params
-        expect(response).to redirect_to("/sales-logs/#{sales_log.id}/created-by")
+        expect(response).to redirect_to("/sales-logs/#{sales_log.id}/assigned-to")
         follow_redirect!
         sales_log.reload
         expect(sales_log.owning_organisation).to eq(managing_organisation)
@@ -191,7 +191,7 @@ RSpec.describe FormController, type: :request do
 
     context "when submitting a sales log with valid owning organisation" do
       let(:sales_log) { create(:sales_log) }
-      let(:created_by) { managing_organisation.users.first }
+      let(:assigned_to) { managing_organisation.users.first }
       let(:params) do
         {
           id: sales_log.id,
@@ -203,22 +203,22 @@ RSpec.describe FormController, type: :request do
       end
 
       before do
-        sales_log.update!(owning_organisation: managing_organisation, created_by:)
+        sales_log.update!(owning_organisation: managing_organisation, assigned_to:)
         sales_log.reload
       end
 
-      it "does not reset created by" do
+      it "does not reset assigned to" do
         post "/sales-logs/#{sales_log.id}/owning-organisation", params: params
-        expect(response).to redirect_to("/sales-logs/#{sales_log.id}/created-by")
+        expect(response).to redirect_to("/sales-logs/#{sales_log.id}/assigned-to")
         follow_redirect!
         sales_log.reload
-        expect(sales_log.created_by).to eq(created_by)
+        expect(sales_log.assigned_to).to eq(assigned_to)
       end
     end
 
     context "when submitting a sales log with valid merged owning organisation" do
       let(:sales_log) { create(:sales_log) }
-      let(:created_by) { managing_organisation.users.first }
+      let(:assigned_to) { managing_organisation.users.first }
       let(:merged_organisation) { create(:organisation) }
       let(:params) do
         {
@@ -232,16 +232,16 @@ RSpec.describe FormController, type: :request do
 
       before do
         merged_organisation.update!(merge_date: Time.zone.today, absorbing_organisation: managing_organisation)
-        sales_log.update!(owning_organisation: managing_organisation, created_by:)
+        sales_log.update!(owning_organisation: managing_organisation, assigned_to:)
         sales_log.reload
       end
 
-      it "does not reset created by" do
+      it "does not reset assigned to" do
         post "/sales-logs/#{sales_log.id}/owning-organisation", params: params
-        expect(response).to redirect_to("/sales-logs/#{sales_log.id}/created-by")
+        expect(response).to redirect_to("/sales-logs/#{sales_log.id}/assigned-to")
         follow_redirect!
         sales_log.reload
-        expect(sales_log.created_by).to eq(created_by)
+        expect(sales_log.assigned_to).to eq(assigned_to)
       end
     end
 
@@ -257,16 +257,16 @@ RSpec.describe FormController, type: :request do
       end
 
       before do
-        lettings_log.update!(owning_organisation: organisation, created_by: user, managing_organisation: organisation)
+        lettings_log.update!(owning_organisation: organisation, assigned_to: user, managing_organisation: organisation)
         lettings_log.reload
       end
 
-      it "does not reset created by" do
+      it "does not reset assigned to" do
         post "/lettings-logs/#{lettings_log.id}/stock-owner", params: params
         expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}/managing-organisation")
         follow_redirect!
         lettings_log.reload
-        expect(lettings_log.created_by).to eq(user)
+        expect(lettings_log.assigned_to).to eq(user)
       end
     end
 
@@ -284,16 +284,16 @@ RSpec.describe FormController, type: :request do
 
       before do
         merged_org.update!(merge_date: Time.zone.today, absorbing_organisation: organisation)
-        lettings_log.update!(owning_organisation: merged_org, created_by: user, managing_organisation: merged_org)
+        lettings_log.update!(owning_organisation: merged_org, assigned_to: user, managing_organisation: merged_org)
         lettings_log.reload
       end
 
-      it "does not reset created by" do
+      it "does not reset assigned to" do
         post "/lettings-logs/#{lettings_log.id}/stock-owner", params: params
         expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}/managing-organisation")
         follow_redirect!
         lettings_log.reload
-        expect(lettings_log.created_by).to eq(user)
+        expect(lettings_log.assigned_to).to eq(user)
       end
     end
 
@@ -309,21 +309,21 @@ RSpec.describe FormController, type: :request do
       end
 
       before do
-        lettings_log.update!(owning_organisation: nil, created_by: user, managing_organisation: nil)
+        lettings_log.update!(owning_organisation: nil, assigned_to: user, managing_organisation: nil)
         lettings_log.reload
       end
 
-      it "does not reset created by" do
+      it "does not reset assigned to" do
         post "/lettings-logs/#{lettings_log.id}/stock-owner", params: params
         expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}/managing-organisation")
         follow_redirect!
         lettings_log.reload
-        expect(lettings_log.created_by).to eq(user)
+        expect(lettings_log.assigned_to).to eq(user)
       end
     end
 
     context "when the sale date changes from 2024 to 2023" do
-      let(:sales_log) { create(:sales_log, owning_organisation: organisation, managing_organisation:, created_by: user) }
+      let(:sales_log) { create(:sales_log, owning_organisation: organisation, managing_organisation:, assigned_to: user) }
       let(:params) do
         {
           id: sales_log.id,
@@ -342,7 +342,7 @@ RSpec.describe FormController, type: :request do
         sales_log.reload
       end
 
-      it "does not set managing organisation to created by organisation" do
+      it "does not set managing organisation to assigned to organisation" do
         post "/sales-logs/#{sales_log.id}/completion-date", params: params
         sales_log.reload
         expect(sales_log.owning_organisation).to eq(organisation)
@@ -355,13 +355,13 @@ RSpec.describe FormController, type: :request do
     let!(:lettings_log) do
       create(
         :lettings_log,
-        created_by: user,
+        assigned_to: user,
       )
     end
     let!(:sales_log) do
       create(
         :sales_log,
-        created_by: user,
+        assigned_to: user,
       )
     end
 
@@ -382,7 +382,7 @@ RSpec.describe FormController, type: :request do
 
       context "with form pages" do
         context "when forms exist" do
-          let(:lettings_log) { create(:lettings_log, :setup_completed, startdate: Time.zone.local(2022, 5, 1), owning_organisation: organisation, created_by: user) }
+          let(:lettings_log) { create(:lettings_log, :setup_completed, startdate: Time.zone.local(2022, 5, 1), owning_organisation: organisation, assigned_to: user) }
 
           it "displays the question details" do
             get "/lettings-logs/#{lettings_log.id}/tenant-code-test", headers: headers, params: {}
@@ -393,7 +393,7 @@ RSpec.describe FormController, type: :request do
         end
 
         context "when question not routed to" do
-          let(:lettings_log) { create(:lettings_log, :setup_completed, startdate: Time.zone.local(2022, 5, 1), owning_organisation: organisation, created_by: user) }
+          let(:lettings_log) { create(:lettings_log, :setup_completed, startdate: Time.zone.local(2022, 5, 1), owning_organisation: organisation, assigned_to: user) }
 
           it "redirects to log" do
             get "/lettings-logs/#{lettings_log.id}/scheme", headers: headers, params: {}
@@ -426,7 +426,7 @@ RSpec.describe FormController, type: :request do
                   :lettings_log,
                   owning_organisation: nil,
                   managing_organisation: nil,
-                  created_by: nil,
+                  assigned_to: nil,
                   needstype: 2,
                 )
               end
@@ -458,7 +458,7 @@ RSpec.describe FormController, type: :request do
             create(
               :lettings_log,
               startdate: Time.zone.local(2022, 12, 1),
-              created_by: user,
+              assigned_to: user,
             )
           end
           let(:headers) { { "Accept" => "text/html" } }
@@ -499,7 +499,7 @@ RSpec.describe FormController, type: :request do
         end
 
         it "renders the review page for the sales log" do
-          log = create(:sales_log, :completed, created_by: user)
+          log = create(:sales_log, :completed, assigned_to: user)
           get "/sales-logs/#{log.id}/review", headers: headers, params: { sales_log: true }
           expect(response.body).to match("Review sales log")
         end
@@ -509,7 +509,7 @@ RSpec.describe FormController, type: :request do
             create(
               :lettings_log,
               owning_organisation: organisation,
-              created_by: user,
+              assigned_to: user,
               status: "pending",
               skip_update_status: true,
             )
@@ -527,14 +527,14 @@ RSpec.describe FormController, type: :request do
           let(:user) { create(:user, :support) }
 
           it "routes to the page" do
-            get "/lettings-logs/#{lettings_log.id}/created-by"
+            get "/lettings-logs/#{lettings_log.id}/assigned-to"
             expect(response).to have_http_status(:ok)
           end
         end
 
         context "when the dependency is not met" do
           it "redirects to the tasklist page" do
-            get "/lettings-logs/#{lettings_log.id}/created-by"
+            get "/lettings-logs/#{lettings_log.id}/assigned-to"
             expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}")
           end
         end
@@ -549,7 +549,7 @@ RSpec.describe FormController, type: :request do
         let(:lettings_log) do
           create(
             :lettings_log,
-            created_by: user,
+            assigned_to: user,
           )
         end
         let(:page_id) { "person_1_age" }
@@ -738,7 +738,7 @@ RSpec.describe FormController, type: :request do
             organisation.managing_agents << managing_organisation
             organisation.managing_agents << managing_organisation_too
             organisation.reload
-            lettings_log.update!(owning_organisation: stock_owner, created_by: user, managing_organisation: organisation)
+            lettings_log.update!(owning_organisation: stock_owner, assigned_to: user, managing_organisation: organisation)
             lettings_log.reload
           end
 
@@ -803,7 +803,7 @@ RSpec.describe FormController, type: :request do
           let(:sales_log) do
             create(
               :sales_log,
-              created_by: user,
+              assigned_to: user,
             )
           end
           let(:params) do
@@ -1002,7 +1002,7 @@ RSpec.describe FormController, type: :request do
           before do
             merged_org.update!(merge_date: Time.zone.today, absorbing_organisation: organisation)
             organisation.reload
-            lettings_log.update!(owning_organisation: merged_org, managing_organisation: merged_org, created_by: user)
+            lettings_log.update!(owning_organisation: merged_org, managing_organisation: merged_org, assigned_to: user)
             lettings_log.reload
           end
 
@@ -1016,7 +1016,7 @@ RSpec.describe FormController, type: :request do
         end
 
         context "when the sale date changes from 2024 to 2023" do
-          let(:sales_log) { create(:sales_log, owning_organisation: organisation, managing_organisation:, created_by: user) }
+          let(:sales_log) { create(:sales_log, owning_organisation: organisation, managing_organisation:, assigned_to: user) }
           let(:params) do
             {
               id: sales_log.id,
@@ -1045,7 +1045,7 @@ RSpec.describe FormController, type: :request do
             Singleton.__init__(FormHandler)
           end
 
-          it "sets managing organisation to created by organisation" do
+          it "sets managing organisation to assigned to organisation" do
             post "/sales-logs/#{sales_log.id}/completion-date", params: params
             sales_log.reload
             expect(sales_log.owning_organisation).to eq(organisation)
@@ -1054,7 +1054,7 @@ RSpec.describe FormController, type: :request do
         end
 
         context "when the sale date changes from 2024 to a different date in 2024" do
-          let(:sales_log) { create(:sales_log, owning_organisation: organisation, managing_organisation:, created_by: user) }
+          let(:sales_log) { create(:sales_log, owning_organisation: organisation, managing_organisation:, assigned_to: user) }
           let(:params) do
             {
               id: sales_log.id,
@@ -1082,7 +1082,7 @@ RSpec.describe FormController, type: :request do
             Singleton.__init__(FormHandler)
           end
 
-          it "does not set managing organisation to created by organisation" do
+          it "does not set managing organisation to assigned to organisation" do
             post "/sales-logs/#{sales_log.id}/completion-date", params: params
             sales_log.reload
             expect(sales_log.owning_organisation).to eq(organisation)
@@ -1091,8 +1091,8 @@ RSpec.describe FormController, type: :request do
         end
 
         context "when the question was accessed from a duplicate logs screen" do
-          let(:lettings_log) { create(:lettings_log, :duplicate, created_by: user, duplicate_set_id: 1) }
-          let(:duplicate_log) { create(:lettings_log, :duplicate, created_by: user, duplicate_set_id: 1) }
+          let(:lettings_log) { create(:lettings_log, :duplicate, assigned_to: user, duplicate_set_id: 1) }
+          let(:duplicate_log) { create(:lettings_log, :duplicate, assigned_to: user, duplicate_set_id: 1) }
           let(:referrer) { "/lettings-logs/#{lettings_log.id}/lead-tenant-age?referrer=duplicate_logs&first_remaining_duplicate_id=#{duplicate_log.id}&original_log_id=#{lettings_log.id}" }
           let(:params) do
             {
@@ -1118,7 +1118,7 @@ RSpec.describe FormController, type: :request do
           end
 
           context "and updating the answer creates a different set of duplicates" do
-            let!(:another_duplicate_log) { create(:lettings_log, :duplicate, created_by: user, age1_known: 1, age1: 20) }
+            let!(:another_duplicate_log) { create(:lettings_log, :duplicate, assigned_to: user, age1_known: 1, age1: 20) }
 
             before do
               post "/lettings-logs/#{lettings_log.id}/lead-tenant-age", params:, headers: headers.merge({ "HTTP_REFERER" => referrer })
@@ -1156,8 +1156,8 @@ RSpec.describe FormController, type: :request do
         end
 
         context "when the sales question was accessed from a duplicate logs screen" do
-          let!(:sales_log) { create(:sales_log, :duplicate, created_by: user, duplicate_set_id: 1, saledate: Time.zone.local(2024, 3, 3)) }
-          let!(:duplicate_log) { create(:sales_log, :duplicate, created_by: user, duplicate_set_id: 1, saledate: Time.zone.local(2024, 3, 3)) }
+          let!(:sales_log) { create(:sales_log, :duplicate, assigned_to: user, duplicate_set_id: 1, saledate: Time.zone.local(2024, 3, 3)) }
+          let!(:duplicate_log) { create(:sales_log, :duplicate, assigned_to: user, duplicate_set_id: 1, saledate: Time.zone.local(2024, 3, 3)) }
           let(:referrer) { "/sales-logs/#{sales_log.id}/buyer-1-age?referrer=duplicate_logs&first_remaining_duplicate_id=#{duplicate_log.id}&original_log_id=#{sales_log.id}&referrer=duplicate_logs" }
           let(:params) do
             {
@@ -1437,7 +1437,7 @@ RSpec.describe FormController, type: :request do
         let(:unauthorized_lettings_log) do
           create(
             :lettings_log,
-            created_by: other_user,
+            assigned_to: other_user,
           )
         end
 

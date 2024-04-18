@@ -144,13 +144,13 @@ RSpec.describe Organisation, type: :model do
           :lettings_log,
           :completed,
           managing_organisation: other_organisation,
-          created_by: user,
+          assigned_to: user,
         )
       end
       let!(:managed_lettings_log) do
         create(
           :lettings_log,
-          created_by: user,
+          assigned_to: user,
         )
       end
 

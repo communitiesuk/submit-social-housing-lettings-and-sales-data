@@ -165,7 +165,7 @@
     "irproduct": null,
     "old_id": null,
     "joint": null,
-    "created_by_id": 2,
+    "assigned_to_id": 2,
     "retirement_value_check": null,
     "tshortfall_known": null,
     "sheltered": null,

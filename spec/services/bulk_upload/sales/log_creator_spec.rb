@@ -9,7 +9,7 @@ RSpec.describe BulkUpload::Sales::LogCreator do
   let(:bulk_upload) { create(:bulk_upload, :sales, user:) }
   let(:csv_parser) { instance_double(BulkUpload::Sales::Year2023::CsvParser) }
   let(:row_parser) { instance_double(BulkUpload::Sales::Year2023::RowParser) }
-  let(:log) { build(:sales_log, :completed, created_by: user, owning_organisation: owning_org, managing_organisation: owning_org) }
+  let(:log) { build(:sales_log, :completed, assigned_to: user, owning_organisation: owning_org, managing_organisation: owning_org) }
 
   before do
     allow(BulkUpload::Sales::Year2023::CsvParser).to receive(:new).and_return(csv_parser)
@@ -70,7 +70,7 @@ RSpec.describe BulkUpload::Sales::LogCreator do
           :completed,
           age1: 5,
           owning_organisation: owning_org,
-          created_by: user,
+          assigned_to: user,
           managing_organisation: owning_org,
         )
       end
@@ -98,7 +98,7 @@ RSpec.describe BulkUpload::Sales::LogCreator do
           postcode_full: "AA11AA",
           ppostcode_full: "BB22BB",
           owning_organisation: owning_org,
-          created_by: user,
+          assigned_to: user,
           managing_organisation: owning_org,
         )
       end
@@ -146,7 +146,7 @@ RSpec.describe BulkUpload::Sales::LogCreator do
           age1_known: 0,
           ecstat1: 5,
           owning_organisation: owning_org,
-          created_by: user,
+          assigned_to: user,
           managing_organisation: owning_org,
         )
       end

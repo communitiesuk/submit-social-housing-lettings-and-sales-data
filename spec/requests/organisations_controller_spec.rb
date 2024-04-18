@@ -939,11 +939,11 @@ RSpec.describe OrganisationsController, type: :request do
           before do
             create(:organisation_relationship, child_organisation: organisation, parent_organisation:)
             create(:organisation_relationship, child_organisation:, parent_organisation: organisation)
-            create_list(:lettings_log, number_of_owned_org1_lettings_logs, created_by: user, owning_organisation: organisation, managing_organisation: child_organisation)
-            create_list(:lettings_log, number_of_managed_org1_lettings_logs, created_by: user, owning_organisation: parent_organisation, managing_organisation: organisation)
-            create_list(:lettings_log, number_of_owned_and_managed_org1_lettings_logs, created_by: user, owning_organisation: organisation, managing_organisation: organisation)
-            create(:lettings_log, created_by: user, status: "pending", skip_update_status: true)
-            create_list(:lettings_log, number_of_org2_lettings_logs, created_by: nil, owning_organisation_id: unauthorised_organisation.id, managing_organisation_id: unauthorised_organisation.id)
+            create_list(:lettings_log, number_of_owned_org1_lettings_logs, assigned_to: user, owning_organisation: organisation, managing_organisation: child_organisation)
+            create_list(:lettings_log, number_of_managed_org1_lettings_logs, assigned_to: user, owning_organisation: parent_organisation, managing_organisation: organisation)
+            create_list(:lettings_log, number_of_owned_and_managed_org1_lettings_logs, assigned_to: user, owning_organisation: organisation, managing_organisation: organisation)
+            create(:lettings_log, assigned_to: user, status: "pending", skip_update_status: true)
+            create_list(:lettings_log, number_of_org2_lettings_logs, assigned_to: nil, owning_organisation_id: unauthorised_organisation.id, managing_organisation_id: unauthorised_organisation.id)
 
             get "/organisations/#{organisation.id}/lettings-logs", headers:, params: {}
           end
@@ -979,8 +979,8 @@ RSpec.describe OrganisationsController, type: :request do
           end
 
           context "when using a search query" do
-            let(:logs) { create_list(:lettings_log, 3, :completed, owning_organisation: user.organisation, created_by: user) }
-            let(:log_to_search) { create(:lettings_log, :completed, owning_organisation: user.organisation, created_by: user) }
+            let(:logs) { create_list(:lettings_log, 3, :completed, owning_organisation: user.organisation, assigned_to: user) }
+            let(:log_to_search) { create(:lettings_log, :completed, owning_organisation: user.organisation, assigned_to: user) }
             let(:log_total_count) { LettingsLog.where(owning_organisation: user.organisation).count }
 
             it "has search results in the title" do
@@ -1077,7 +1077,7 @@ RSpec.describe OrganisationsController, type: :request do
             context "when search and filter is present" do
               let(:matching_postcode) { log_to_search.postcode_full }
               let(:matching_status) { "in_progress" }
-              let!(:log_matching_filter_and_search) { create(:lettings_log, :in_progress, owning_organisation: user.organisation, postcode_full: matching_postcode, created_by: user) }
+              let!(:log_matching_filter_and_search) { create(:lettings_log, :in_progress, owning_organisation: user.organisation, postcode_full: matching_postcode, assigned_to: user) }
 
               it "shows only logs matching both search and filters" do
                 get "/organisations/#{organisation.id}/lettings-logs?search=#{matching_postcode}&status[]=#{matching_status}", headers: headers, params: {}
@@ -1128,8 +1128,8 @@ RSpec.describe OrganisationsController, type: :request do
           end
 
           context "when using a search query" do
-            let(:logs) { create_list(:sales_log, 3, :completed, owning_organisation: user.organisation, created_by: user) }
-            let(:log_to_search) { create(:sales_log, :completed, owning_organisation: user.organisation, created_by: user) }
+            let(:logs) { create_list(:sales_log, 3, :completed, owning_organisation: user.organisation, assigned_to: user) }
+            let(:log_to_search) { create(:sales_log, :completed, owning_organisation: user.organisation, assigned_to: user) }
             let(:log_total_count) { LettingsLog.where(owning_organisation: user.organisation).count }
 
             it "has search results in the title" do
@@ -1167,7 +1167,7 @@ RSpec.describe OrganisationsController, type: :request do
 
             context "when search and filter is present" do
               let(:matching_status) { "completed" }
-              let!(:log_matching_filter_and_search) { create(:sales_log, :completed, owning_organisation: user.organisation, created_by: user) }
+              let!(:log_matching_filter_and_search) { create(:sales_log, :completed, owning_organisation: user.organisation, assigned_to: user) }
               let(:matching_id) { log_matching_filter_and_search.id }
 
               it "shows only logs matching both search and filters" do

@@ -626,9 +626,9 @@ RSpec.describe Merge::MergeOrganisationsService do
           before do
             create(:sales_log, saledate: Time.zone.today - 2.days, owning_organisation: merging_organisation)
             create(:organisation_relationship) { create(:organisation_relationship, parent_organisation: owning_organisation, child_organisation: merging_organisation) }
-            managed_sales_log.update!(owning_organisation:, managing_organisation: merging_organisation, created_by: merging_organisation_user)
-            create(:sales_log, saledate: Time.zone.today - 2.days, owning_organisation: merging_organisation, created_by: merging_organisation_user, purchid: "ranom 1")
-            create(:sales_log, saledate: Time.zone.today - 2.days, owning_organisation:, managing_organisation: merging_organisation, created_by: merging_organisation_user, purchid: "ranom 2")
+            managed_sales_log.update!(owning_organisation:, managing_organisation: merging_organisation, assigned_to: merging_organisation_user)
+            create(:sales_log, saledate: Time.zone.today - 2.days, owning_organisation: merging_organisation, assigned_to: merging_organisation_user, purchid: "ranom 1")
+            create(:sales_log, saledate: Time.zone.today - 2.days, owning_organisation:, managing_organisation: merging_organisation, assigned_to: merging_organisation_user, purchid: "ranom 2")
           end
 
           it "moves relevant logs" do
@@ -657,14 +657,14 @@ RSpec.describe Merge::MergeOrganisationsService do
 
         context "and merging lettings logs" do
           let(:owning_organisation) { create(:organisation, holds_own_stock: true) }
-          let!(:owned_lettings_log) { create(:lettings_log, :completed, startdate: Time.zone.today, owning_organisation: merging_organisation, managing_organisation: merging_organisation, created_by: merging_organisation_user) }
+          let!(:owned_lettings_log) { create(:lettings_log, :completed, startdate: Time.zone.today, owning_organisation: merging_organisation, managing_organisation: merging_organisation, assigned_to: merging_organisation_user) }
           let!(:managed_lettings_log) { create(:lettings_log, startdate: Time.zone.today) }
 
           before do
             create(:organisation_relationship) { create(:organisation_relationship, parent_organisation: owning_organisation, child_organisation: merging_organisation) }
-            managed_lettings_log.update!(owning_organisation:, managing_organisation: merging_organisation, created_by: merging_organisation_user)
-            create(:lettings_log, startdate: Time.zone.today - 2.days, owning_organisation: merging_organisation, created_by: merging_organisation_user)
-            create(:lettings_log, startdate: Time.zone.today - 2.days, owning_organisation:, managing_organisation: merging_organisation, created_by: merging_organisation_user)
+            managed_lettings_log.update!(owning_organisation:, managing_organisation: merging_organisation, assigned_to: merging_organisation_user)
+            create(:lettings_log, startdate: Time.zone.today - 2.days, owning_organisation: merging_organisation, assigned_to: merging_organisation_user)
+            create(:lettings_log, startdate: Time.zone.today - 2.days, owning_organisation:, managing_organisation: merging_organisation, assigned_to: merging_organisation_user)
           end
 
           it "moves relevant logs" do
@@ -1403,14 +1403,14 @@ RSpec.describe Merge::MergeOrganisationsService do
 
         context "and merging lettings logs" do
           let(:owning_organisation) { create(:organisation, holds_own_stock: true) }
-          let!(:owned_lettings_log) { create(:lettings_log, startdate: Time.zone.today, owning_organisation: merging_organisation, created_by: merging_organisation_user) }
+          let!(:owned_lettings_log) { create(:lettings_log, startdate: Time.zone.today, owning_organisation: merging_organisation, assigned_to: merging_organisation_user) }
           let!(:managed_lettings_log) { create(:lettings_log, startdate: Time.zone.today) }
 
           before do
             create(:organisation_relationship) { create(:organisation_relationship, parent_organisation: owning_organisation, child_organisation: merging_organisation) }
-            managed_lettings_log.update!(owning_organisation:, managing_organisation: merging_organisation, created_by: merging_organisation_user)
-            create(:lettings_log, startdate: Time.zone.today - 2.days, owning_organisation: merging_organisation, created_by: merging_organisation_user)
-            create(:lettings_log, startdate: Time.zone.today - 2.days, owning_organisation:, managing_organisation: merging_organisation, created_by: merging_organisation_user)
+            managed_lettings_log.update!(owning_organisation:, managing_organisation: merging_organisation, assigned_to: merging_organisation_user)
+            create(:lettings_log, startdate: Time.zone.today - 2.days, owning_organisation: merging_organisation, assigned_to: merging_organisation_user)
+            create(:lettings_log, startdate: Time.zone.today - 2.days, owning_organisation:, managing_organisation: merging_organisation, assigned_to: merging_organisation_user)
           end
 
           it "moves relevant logs" do
