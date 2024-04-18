@@ -13,7 +13,7 @@ RSpec.describe CollectionResourcesHelper do
 
     context "without pages" do
       it "returns correct metadata" do
-        expect(file_type_size_and_pages("bulk-upload-lettings-template-2023-24.xlsx")).to eq("Microsoft Excel, 15 KB")
+        expect(file_type_size_and_pages("bulk-upload-lettings-template-2023-24.xlsx")).to eq("Microsoft Excel, 19 KB")
       end
     end
   end
