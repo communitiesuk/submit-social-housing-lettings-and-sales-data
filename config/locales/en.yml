@@ -693,7 +693,7 @@ Make sure these answers are correct."
         title: "You told us this person is aged %{age} years and retired."
         hint_text: "The minimum expected retirement age in England is 66."
       max:
-        title: "You told us this person is %{age} or over and not retired"
+        title: "You told us this person is over 66 and not retired"
         hint_text: "The minimum expected retirement age in England is 66."
     extra_borrowing:
       title_text: "You told us that the mortgage and deposit total is %{mortgage_and_deposit_total}"

@@ -85,7 +85,6 @@ class SalesLog < Log
   }
 
   OPTIONAL_FIELDS = %w[purchid othtype buyers_organisations].freeze
-  RETIREMENT_AGES = { "M" => 65, "F" => 60, "X" => 65 }.freeze
   DUPLICATE_LOG_ATTRIBUTES = %w[owning_organisation_id purchid saledate age1_known age1 sex1 ecstat1 postcode_full].freeze
 
   def lettings?
@@ -366,13 +365,6 @@ class SalesLog < Log
     return if created_by&.organisation == owning_organisation.absorbing_organisation || created_by&.organisation == managing_organisation.absorbing_organisation
 
     update!(created_by: nil)
-  end
-
-  def retirement_age_for_person(person_num)
-    gender = public_send("sex#{person_num}".to_sym)
-    return unless gender
-
-    RETIREMENT_AGES[gender]
   end
 
   def joint_purchase?

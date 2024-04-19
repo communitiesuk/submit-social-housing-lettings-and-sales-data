@@ -138,7 +138,6 @@ class LettingsLog < Log
   HAS_BENEFITS_OPTIONS = [1, 6, 8, 7].freeze
   NUM_OF_WEEKS_FROM_PERIOD = { 2 => 26, 3 => 13, 4 => 12, 5 => 50, 6 => 49, 7 => 48, 8 => 47, 9 => 46, 1 => 52, 10 => 53 }.freeze
   SUFFIX_FROM_PERIOD = { 2 => "every 2 weeks", 3 => "every 4 weeks", 4 => "every month" }.freeze
-  RETIREMENT_AGES = { "M" => 67, "F" => 60, "X" => 67 }.freeze
   DUPLICATE_LOG_ATTRIBUTES = %w[owning_organisation_id tenancycode startdate age1_known age1 sex1 ecstat1 tcharge household_charge chcharge].freeze
   RENT_TYPE = {
     social_rent: 0,
@@ -553,13 +552,6 @@ class LettingsLog < Log
 
   def optional_fields
     OPTIONAL_FIELDS + dynamically_not_required
-  end
-
-  def retirement_age_for_person(person_num)
-    gender = public_send("sex#{person_num}".to_sym)
-    return unless gender
-
-    RETIREMENT_AGES[gender]
   end
 
   def age_unknown?(person_num)

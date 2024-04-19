@@ -4,13 +4,6 @@ class Form::Lettings::Pages::PersonOverRetirementValueCheck < ::Form::Page
     @depends_on = [{ "person_#{person_index}_not_retired_over_soft_max_age?" => true }]
     @title_text = {
       "translation" => "soft_validations.retirement.max.title",
-      "arguments" => [
-        {
-          "key" => "retirement_age_for_person_#{person_index}",
-          "label" => false,
-          "i18n_template" => "age",
-        },
-      ],
     }
     @informative_text = {
       "translation" => "soft_validations.retirement.max.hint_text",
@@ -23,6 +16,6 @@ class Form::Lettings::Pages::PersonOverRetirementValueCheck < ::Form::Page
   end
 
   def interruption_screen_question_ids
-    ["ecstat#{@person_index}", "sex#{@person_index}", "age#{@person_index}"]
+    ["ecstat#{@person_index}", "age#{@person_index}"]
   end
 end

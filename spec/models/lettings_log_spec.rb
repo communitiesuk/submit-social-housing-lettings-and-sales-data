@@ -3382,61 +3382,11 @@ RSpec.describe LettingsLog do
     end
   end
 
-  describe "#retirement_age_for_person" do
-    context "when a person gender is Male" do
-      let(:lettings_log) { build(:lettings_log, sex1: "M") }
+  context "when a postcode contains unicode characters" do
+    let(:lettings_log) { build(:lettings_log, postcode_full: "SR81LS\u00A0") }
 
-      it "returns the expected retirement age" do
-        expect(lettings_log.retirement_age_for_person_1).to eq(67)
-      end
-
-      it "returns the expected plural" do
-        expect(lettings_log.plural_gender_for_person_1).to eq("male and non-binary people")
-      end
-    end
-
-    context "when a person gender is Female" do
-      let(:lettings_log) { build(:lettings_log, sex2: "F") }
-
-      it "returns the expected retirement age" do
-        expect(lettings_log.retirement_age_for_person_2).to eq(60)
-      end
-
-      it "returns the expected plural" do
-        expect(lettings_log.plural_gender_for_person_2).to eq("females")
-      end
-    end
-
-    context "when a person gender is Non-Binary" do
-      let(:lettings_log) { build(:lettings_log, sex3: "X") }
-
-      it "returns the expected retirement age" do
-        expect(lettings_log.retirement_age_for_person_3).to eq(67)
-      end
-
-      it "returns the expected plural" do
-        expect(lettings_log.plural_gender_for_person_3).to eq("male and non-binary people")
-      end
-    end
-
-    context "when the person gender is not set" do
-      let(:lettings_log) { build(:lettings_log) }
-
-      it "returns nil" do
-        expect(lettings_log.retirement_age_for_person_3).to be_nil
-      end
-
-      it "returns the expected plural" do
-        expect(lettings_log.plural_gender_for_person_3).to be_nil
-      end
-    end
-
-    context "when a postcode contains unicode characters" do
-      let(:lettings_log) { build(:lettings_log, postcode_full: "SR81LS\u00A0") }
-
-      it "triggers a validation error" do
-        expect { lettings_log.save! }.to raise_error(ActiveRecord::RecordInvalid, /Enter a postcode in the correct format/)
-      end
+    it "triggers a validation error" do
+      expect { lettings_log.save! }.to raise_error(ActiveRecord::RecordInvalid, /Enter a postcode in the correct format/)
     end
   end
 
