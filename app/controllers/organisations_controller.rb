@@ -74,14 +74,20 @@ class OrganisationsController < ApplicationController
 
   def new
     @resource = Organisation.new
+    @rent_periods = helpers.rent_periods_with_checked_attr
     render "new", layout: "application"
   end
 
   def create
+    selected_rent_periods = params.require(:organisation).permit(rent_periods: [])[:rent_periods].compact_blank
     @resource = Organisation.new(org_params)
     if @resource.save
+      OrganisationRentPeriod.transaction do
+        selected_rent_periods.each { |period| OrganisationRentPeriod.create!(organisation: @resource, rent_period: period) }
+      end
       redirect_to organisations_path
     else
+      @rent_periods = helpers.rent_periods_with_checked_attr(checked_periods: selected_rent_periods)
       render :new, status: :unprocessable_entity
     end
   end

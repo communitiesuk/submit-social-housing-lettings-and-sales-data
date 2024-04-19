@@ -56,6 +56,17 @@
         :name,
         legend: { text: "Does the organisation hold its own stock?", size: "m" } %>
 
+      <%= f.govuk_check_boxes_fieldset :rent_periods,
+        legend: { text: "What are the rent periods for the organisation?" } do %>
+        <% @rent_periods.map do |key, period| %>
+          <%= f.govuk_check_box :rent_periods,
+            key,
+            label: { text: period["value"] },
+            checked: period[:checked]
+            %>
+        <% end %>
+      <% end %>
+
       <%= f.govuk_submit "Create organisation" %>
     </div>
   </div>
