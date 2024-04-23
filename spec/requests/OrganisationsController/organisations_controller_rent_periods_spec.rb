@@ -80,4 +80,40 @@ RSpec.describe OrganisationsController, type: :request do
       expect(expected_not_checked_checkbox[:checked]).to be false
     end
   end
+
+  describe "#update" do
+    let(:organisation) { create(:organisation) }
+    let(:initially_checked_rent_period_id) { "1" }
+    let(:initially_unchecked_rent_period_id) { "2" }
+    let(:fake_rent_periods) do
+      {
+        initially_checked_rent_period_id => { "value" => "Every minute" },
+        initially_unchecked_rent_period_id => { "value" => "Every decade" },
+      }
+    end
+    let(:params) do
+      {
+        "organisation": {
+          name: organisation.name,
+          rent_periods: [initially_unchecked_rent_period_id],
+        },
+      }
+    end
+
+    before do
+      create(:organisation_rent_period, organisation:, rent_period: initially_checked_rent_period_id)
+    end
+
+    it "creates and destroys organisation rent periods as appropriate" do
+      rent_periods = OrganisationRentPeriod.all
+      expect(rent_periods.count).to be 1
+      expect(rent_periods.first.rent_period.to_s).to eq initially_checked_rent_period_id
+
+      patch organisation_path(organisation, headers:, params:)
+
+      rent_periods = OrganisationRentPeriod.all
+      expect(rent_periods.count).to be 1
+      expect(rent_periods.first.rent_period.to_s).to eq initially_unchecked_rent_period_id
+    end
+  end
 end

@@ -115,6 +115,7 @@ class OrganisationsController < ApplicationController
   end
 
   def update
+    selected_rent_periods = params.require(:organisation).permit(rent_periods: [])[:rent_periods].compact_blank
     if (current_user.data_coordinator? && org_params[:active].nil?) || current_user.support?
       if @organisation.update(org_params)
         case org_params[:active]
@@ -133,7 +134,17 @@ class OrganisationsController < ApplicationController
         else
           flash[:notice] = I18n.t("organisation.updated")
         end
+        existing_rent_periods = @organisation.organisation_rent_periods.map(&:rent_period)
+        rent_periods_to_create = selected_rent_periods.map(&:to_i) - existing_rent_periods
+        rent_periods_to_delete = existing_rent_periods - selected_rent_periods.map(&:to_i)
+        OrganisationRentPeriod.transaction do
+          rent_periods_to_create.each { |period| OrganisationRentPeriod.create!(organisation: @organisation, rent_period: period) }
+          OrganisationRentPeriod.where(organisation: @organisation, rent_period: rent_periods_to_delete).destroy_all
+        end
         redirect_to details_organisation_path(@organisation)
+      else
+        @rent_periods = helpers.rent_periods_with_checked_attr(checked_periods: selected_rent_periods)
+        render :edit, status: :unprocessable_entity
       end
     else
       head :unauthorized
