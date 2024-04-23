@@ -1,0 +1,1243 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  Module: Validations::HouseholdValidations
+  
+    &mdash; Documentation by YARD 0.9.36
+  
+</title>
+
+  <link rel="stylesheet" href="../css/style.css" type="text/css" />
+
+  <link rel="stylesheet" href="../css/common.css" type="text/css" />
+
+<script type="text/javascript">
+  pathId = "Validations::HouseholdValidations";
+  relpath = '../';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="../class_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="../_index.html">Index (H)</a> &raquo;
+    <span class='title'>Validations</span>
+     &raquo; 
+    <span class="title">HouseholdValidations</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="../class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><h1>Module: Validations::HouseholdValidations
+  
+  
+  
+</h1>
+<div class="box_info">
+  
+
+  
+  
+  
+  
+  <dl>
+      <dt>Includes:</dt>
+      <dd>SharedValidations</dd>
+  </dl>
+  
+  
+
+  
+
+  
+  <dl>
+    <dt>Defined in:</dt>
+    <dd>household_validations.rb</dd>
+  </dl>
+  
+</div>
+
+
+  
+    <h2>
+      Constant Summary
+      <small><a href="#" class="constants_summary_toggle">collapse</a></small>
+    </h2>
+
+    <dl class="constants">
+      
+        <dt id="PHRASES_INDICATING_HOMELESSNESS-constant" class="">PHRASES_INDICATING_HOMELESSNESS =
+          
+        </dt>
+        <dd><pre class="code"><span class='lbracket'>[</span>
+  <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Homeless</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+  <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Homelessness</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+  <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Temporary accommodation</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+  <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Temp accommodation</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+  <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>TA</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+  <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Sleeping rough</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+  <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Rough sleeping</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+<span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
+      
+        <dt id="PHRASES_INDICATING_HOMELESSNESS_REGEX-constant" class="">PHRASES_INDICATING_HOMELESSNESS_REGEX =
+          
+        </dt>
+        <dd><pre class="code"><span class='const'>Regexp</span><span class='period'>.</span><span class='id identifier rubyid_union'>union</span><span class='lparen'>(</span>
+  <span class='const'><span class='object_link'><a href="#PHRASES_INDICATING_HOMELESSNESS-constant" title="Validations::HouseholdValidations::PHRASES_INDICATING_HOMELESSNESS (constant)">PHRASES_INDICATING_HOMELESSNESS</a></span></span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_phrase'>phrase</span><span class='op'>|</span> <span class='const'>Regexp</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\\A[^[:alpha:]]*</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_phrase'>phrase</span><span class='embexpr_end'>}</span><span class='tstring_content'>[^[:alpha:]]*\\Z</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='const'>Regexp</span><span class='op'>::</span><span class='const'>IGNORECASE</span><span class='rparen'>)</span> <span class='rbrace'>}</span><span class='comma'>,</span>
+<span class='rparen'>)</span></pre></dd>
+      
+    </dl>
+  
+
+
+
+
+
+
+
+  
+    <h2>
+      Instance Method Summary
+      <small><a href="#" class="summary_toggle">collapse</a></small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#validate_armed_forces-instance_method" title="#validate_armed_forces (instance method)">#<strong>validate_armed_forces</strong>(record)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#validate_combination_of_housing_needs_responses-instance_method" title="#validate_combination_of_housing_needs_responses (instance method)">#<strong>validate_combination_of_housing_needs_responses</strong>(record)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#validate_condition_effects-instance_method" title="#validate_condition_effects (instance method)">#<strong>validate_condition_effects</strong>(record)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#validate_layear-instance_method" title="#validate_layear (instance method)">#<strong>validate_layear</strong>(record)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#validate_layear_and_prevloc-instance_method" title="#validate_layear_and_prevloc (instance method)">#<strong>validate_layear_and_prevloc</strong>(record)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#validate_partner_count-instance_method" title="#validate_partner_count (instance method)">#<strong>validate_partner_count</strong>(record)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#validate_person_1_economic-instance_method" title="#validate_person_1_economic (instance method)">#<strong>validate_person_1_economic</strong>(record)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#validate_person_age_and_relationship_matches_economic_status-instance_method" title="#validate_person_age_and_relationship_matches_economic_status (instance method)">#<strong>validate_person_age_and_relationship_matches_economic_status</strong>(record)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#validate_person_age_matches_economic_status-instance_method" title="#validate_person_age_matches_economic_status (instance method)">#<strong>validate_person_age_matches_economic_status</strong>(record)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#validate_person_age_matches_relationship-instance_method" title="#validate_person_age_matches_relationship (instance method)">#<strong>validate_person_age_matches_relationship</strong>(record)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#validate_previous_housing_situation-instance_method" title="#validate_previous_housing_situation (instance method)">#<strong>validate_previous_housing_situation</strong>(record)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#validate_prevloc-instance_method" title="#validate_prevloc (instance method)">#<strong>validate_prevloc</strong>(record)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#validate_reason_for_leaving_last_settled_home-instance_method" title="#validate_reason_for_leaving_last_settled_home (instance method)">#<strong>validate_reason_for_leaving_last_settled_home</strong>(record)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>describe everything this does here.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#validate_reasonable_preference-instance_method" title="#validate_reasonable_preference (instance method)">#<strong>validate_reasonable_preference</strong>(record)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Validations methods need to be called ‘validate_&lt;page_name&gt;’ to run on model save or ‘validate_’ to run on submit as well.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#validate_referral-instance_method" title="#validate_referral (instance method)">#<strong>validate_referral</strong>(record)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+  
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="validate_armed_forces-instance_method">
+  
+    #<strong>validate_armed_forces</strong>(record)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+46
+47
+48
+49
+50
+51
+52
+53</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'household_validations.rb', line 46</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_validate_armed_forces'>validate_armed_forces</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_armed_forces_no?'>armed_forces_no?</span> <span class='op'>||</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_armed_forces_refused?'>armed_forces_refused?</span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_reservist'>reservist</span><span class='period'>.</span><span class='id identifier rubyid_present?'>present?</span>
+    <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:reservist</span><span class='comma'>,</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.household.reservist.injury_not_required</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+  <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_armed_forces_regular?'>armed_forces_regular?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_leftreg'>leftreg</span><span class='period'>.</span><span class='id identifier rubyid_present?'>present?</span>
+    <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:leftreg</span><span class='comma'>,</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.household.leftreg.question_not_required</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="validate_combination_of_housing_needs_responses-instance_method">
+  
+    #<strong>validate_combination_of_housing_needs_responses</strong>(record)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+212
+213
+214
+215
+216
+217
+218</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'household_validations.rb', line 212</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_validate_combination_of_housing_needs_responses'>validate_combination_of_housing_needs_responses</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_has_housingneeds?'>has_housingneeds?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_housingneeds_type_not_listed?'>housingneeds_type_not_listed?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_no_or_unknown_other_housing_needs?'>no_or_unknown_other_housing_needs?</span>
+    <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:housingneeds</span><span class='comma'>,</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.household.housingneeds.invalid</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:housingneeds_type</span><span class='comma'>,</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.household.housingneeds.invalid</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:housingneeds_other</span><span class='comma'>,</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.household.housingneeds.invalid</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="validate_condition_effects-instance_method">
+  
+    #<strong>validate_condition_effects</strong>(record)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+132
+133
+134
+135
+136
+137</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'household_validations.rb', line 132</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_validate_condition_effects'>validate_condition_effects</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_all_options'>all_options</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_illness_type_1'>illness_type_1</span><span class='comma'>,</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_illness_type_2'>illness_type_2</span><span class='comma'>,</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_illness_type_3'>illness_type_3</span><span class='comma'>,</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_illness_type_4'>illness_type_4</span><span class='comma'>,</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_illness_type_5'>illness_type_5</span><span class='comma'>,</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_illness_type_6'>illness_type_6</span><span class='comma'>,</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_illness_type_7'>illness_type_7</span><span class='comma'>,</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_illness_type_8'>illness_type_8</span><span class='comma'>,</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_illness_type_9'>illness_type_9</span><span class='comma'>,</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_illness_type_10'>illness_type_10</span><span class='rbracket'>]</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_all_options'>all_options</span><span class='period'>.</span><span class='id identifier rubyid_count'>count</span><span class='lparen'>(</span><span class='int'>1</span><span class='rparen'>)</span> <span class='op'>&gt;=</span> <span class='int'>1</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_household_no_illness?'>household_no_illness?</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:condition_effects</span><span class='comma'>,</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.household.condition_effects.no_choices</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="validate_layear-instance_method">
+  
+    #<strong>validate_layear</strong>(record)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+190
+191
+192
+193
+194
+195
+196
+197</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'household_validations.rb', line 190</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_validate_layear'>validate_layear</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='rparen'>)</span>
+  <span class='kw'>return</span> <span class='kw'>unless</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_layear'>layear</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_renewal'>renewal</span>
+
+  <span class='kw'>if</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_is_renewal?'>is_renewal?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_layear'>layear</span> <span class='op'>==</span> <span class='int'>1</span>
+    <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:layear</span><span class='comma'>,</span> <span class='symbol'>:renewal_just_moved</span><span class='comma'>,</span> <span class='label'>message:</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.household.renewal_just_moved_to_area.layear</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:renewal</span><span class='comma'>,</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.household.renewal_just_moved_to_area.renewal</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="validate_layear_and_prevloc-instance_method">
+  
+    #<strong>validate_layear_and_prevloc</strong>(record)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'household_validations.rb', line 199</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_validate_layear_and_prevloc'>validate_layear_and_prevloc</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='rparen'>)</span>
+  <span class='kw'>return</span> <span class='kw'>unless</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_layear'>layear</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_la'>la</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_prevloc'>prevloc</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_collection_start_year'>collection_start_year</span>
+
+  <span class='kw'>if</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_la'>la</span> <span class='op'>==</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_prevloc'>prevloc</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_layear'>layear</span> <span class='op'>==</span> <span class='int'>1</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_collection_start_year'>collection_start_year</span> <span class='op'>&gt;=</span> <span class='int'>2023</span>
+    <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:layear</span><span class='comma'>,</span> <span class='symbol'>:renewal_just_moved</span><span class='comma'>,</span> <span class='label'>message:</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.household.same_la_just_moved_to_area.layear</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:la</span><span class='comma'>,</span> <span class='symbol'>:renewal_just_moved</span><span class='comma'>,</span> <span class='label'>message:</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.household.same_la_just_moved_to_area.current_la</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:postcode_full</span><span class='comma'>,</span> <span class='symbol'>:renewal_just_moved</span><span class='comma'>,</span> <span class='label'>message:</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.household.same_la_just_moved_to_area.current_la</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:uprn</span><span class='comma'>,</span> <span class='symbol'>:renewal_just_moved</span><span class='comma'>,</span> <span class='label'>message:</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.household.same_la_just_moved_to_area.current_la</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:ppostcode_full</span><span class='comma'>,</span> <span class='symbol'>:renewal_just_moved</span><span class='comma'>,</span> <span class='label'>message:</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.household.same_la_just_moved_to_area.previous_la</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:prevloc</span><span class='comma'>,</span> <span class='symbol'>:renewal_just_moved</span><span class='comma'>,</span> <span class='label'>message:</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.household.same_la_just_moved_to_area.previous_la</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="validate_partner_count-instance_method">
+  
+    #<strong>validate_partner_count</strong>(record)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+55
+56
+57</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'household_validations.rb', line 55</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_validate_partner_count'>validate_partner_count</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_shared_validate_partner_count'>shared_validate_partner_count</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='comma'>,</span> <span class='int'>8</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="validate_person_1_economic-instance_method">
+  
+    #<strong>validate_person_1_economic</strong>(record)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'household_validations.rb', line 59</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_validate_person_1_economic'>validate_person_1_economic</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='rparen'>)</span>
+  <span class='kw'>return</span> <span class='kw'>unless</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_age1'>age1</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_ecstat1'>ecstat1</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_form'>form</span><span class='period'>.</span><span class='id identifier rubyid_start_year_after_2024?'>start_year_after_2024?</span>
+
+  <span class='kw'>if</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_age1'>age1</span> <span class='op'>&lt;</span> <span class='int'>16</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_economic_status_is_child_other_or_refused?'>economic_status_is_child_other_or_refused?</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_ecstat1'>ecstat1</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>ecstat1</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.household.ecstat.child_under_16</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>person_num:</span> <span class='int'>1</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>age1</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.household.age.child_under_16_ecstat</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>person_num:</span> <span class='int'>1</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_tenant_is_economic_child?'>tenant_is_economic_child?</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_ecstat1'>ecstat1</span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_age1'>age1</span> <span class='op'>&gt;</span> <span class='int'>16</span>
+    <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>ecstat1</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.household.ecstat.child_over_16</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>person_num:</span> <span class='int'>1</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>age1</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.household.age.child_over_16</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>person_num:</span> <span class='int'>1</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="validate_person_age_and_relationship_matches_economic_status-instance_method">
+  
+    #<strong>validate_person_age_and_relationship_matches_economic_status</strong>(record)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'household_validations.rb', line 104</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_validate_person_age_and_relationship_matches_economic_status'>validate_person_age_and_relationship_matches_economic_status</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='rparen'>)</span>
+  <span class='kw'>return</span> <span class='kw'>unless</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_startdate'>startdate</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_form'>form</span><span class='period'>.</span><span class='id identifier rubyid_start_year_after_2024?'>start_year_after_2024?</span>
+
+  <span class='lparen'>(</span><span class='int'>2</span><span class='op'>..</span><span class='int'>8</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_person_num'>person_num</span><span class='op'>|</span>
+    <span class='id identifier rubyid_age'>age</span> <span class='op'>=</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_public_send'>public_send</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>age</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_person_num'>person_num</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_economic_status'>economic_status</span> <span class='op'>=</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_public_send'>public_send</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>ecstat</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_person_num'>person_num</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_relationship'>relationship</span> <span class='op'>=</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_public_send'>public_send</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>relat</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_person_num'>person_num</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+    <span class='kw'>next</span> <span class='kw'>unless</span> <span class='id identifier rubyid_age'>age</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_economic_status'>economic_status</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_relationship'>relationship</span>
+
+    <span class='id identifier rubyid_age_between_16_19'>age_between_16_19</span> <span class='op'>=</span> <span class='id identifier rubyid_age'>age</span><span class='period'>.</span><span class='id identifier rubyid_between?'>between?</span><span class='lparen'>(</span><span class='int'>16</span><span class='comma'>,</span> <span class='int'>19</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_student'>student</span> <span class='op'>=</span> <span class='id identifier rubyid_tenant_is_fulltime_student?'>tenant_is_fulltime_student?</span><span class='lparen'>(</span><span class='id identifier rubyid_economic_status'>economic_status</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_economic_status_refused'>economic_status_refused</span> <span class='op'>=</span> <span class='id identifier rubyid_tenant_economic_status_refused?'>tenant_economic_status_refused?</span><span class='lparen'>(</span><span class='id identifier rubyid_economic_status'>economic_status</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_child'>child</span> <span class='op'>=</span> <span class='id identifier rubyid_tenant_is_child?'>tenant_is_child?</span><span class='lparen'>(</span><span class='id identifier rubyid_relationship'>relationship</span><span class='rparen'>)</span>
+
+    <span class='kw'>if</span> <span class='id identifier rubyid_age_between_16_19'>age_between_16_19</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='lparen'>(</span><span class='id identifier rubyid_student'>student</span> <span class='op'>||</span> <span class='id identifier rubyid_economic_status_refused'>economic_status_refused</span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_child'>child</span>
+      <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>ecstat</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_person_num'>person_num</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.household.ecstat.student_16_19.must_be_student</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>age</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_person_num'>person_num</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.household.age.student_16_19.cannot_be_16_19.child_not_student</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>relat</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_person_num'>person_num</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.household.relat.student_16_19.cannot_be_child.16_19_not_student</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+    <span class='kw'>end</span>
+
+    <span class='kw'>next</span> <span class='kw'>unless</span> <span class='op'>!</span><span class='id identifier rubyid_age_between_16_19'>age_between_16_19</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_student'>student</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_child'>child</span>
+
+    <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>age</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_person_num'>person_num</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.household.age.student_16_19.must_be_16_19</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>ecstat</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_person_num'>person_num</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.household.ecstat.student_16_19.cannot_be_student.child_not_16_19</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>relat</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_person_num'>person_num</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.household.relat.student_16_19.cannot_be_child.student_not_16_19</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="validate_person_age_matches_economic_status-instance_method">
+  
+    #<strong>validate_person_age_matches_economic_status</strong>(record)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'household_validations.rb', line 72</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_validate_person_age_matches_economic_status'>validate_person_age_matches_economic_status</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='rparen'>)</span>
+  <span class='lparen'>(</span><span class='int'>2</span><span class='op'>..</span><span class='int'>8</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_person_num'>person_num</span><span class='op'>|</span>
+    <span class='id identifier rubyid_age'>age</span> <span class='op'>=</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_public_send'>public_send</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>age</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_person_num'>person_num</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_economic_status'>economic_status</span> <span class='op'>=</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_public_send'>public_send</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>ecstat</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_person_num'>person_num</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+    <span class='kw'>next</span> <span class='kw'>unless</span> <span class='id identifier rubyid_age'>age</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_economic_status'>economic_status</span>
+
+    <span class='kw'>if</span> <span class='id identifier rubyid_age'>age</span> <span class='op'>&lt;</span> <span class='int'>16</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_economic_status_is_child_other_or_refused?'>economic_status_is_child_other_or_refused?</span><span class='lparen'>(</span><span class='id identifier rubyid_economic_status'>economic_status</span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_form'>form</span><span class='period'>.</span><span class='id identifier rubyid_start_year_after_2024?'>start_year_after_2024?</span>
+      <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>ecstat</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_person_num'>person_num</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.household.ecstat.child_under_16</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>person_num:</span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>age</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_person_num'>person_num</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.household.age.child_under_16_ecstat</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>person_num:</span><span class='rparen'>)</span>
+    <span class='kw'>end</span>
+    <span class='kw'>if</span> <span class='id identifier rubyid_tenant_is_economic_child?'>tenant_is_economic_child?</span><span class='lparen'>(</span><span class='id identifier rubyid_economic_status'>economic_status</span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_age'>age</span> <span class='op'>&gt;</span> <span class='int'>16</span>
+      <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>ecstat</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_person_num'>person_num</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.household.ecstat.child_over_16</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>person_num:</span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>age</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_person_num'>person_num</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.household.age.child_over_16</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>person_num:</span><span class='rparen'>)</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="validate_person_age_matches_relationship-instance_method">
+  
+    #<strong>validate_person_age_matches_relationship</strong>(record)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'household_validations.rb', line 89</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_validate_person_age_matches_relationship'>validate_person_age_matches_relationship</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='rparen'>)</span>
+  <span class='kw'>return</span> <span class='kw'>unless</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_startdate'>startdate</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_form'>form</span><span class='period'>.</span><span class='id identifier rubyid_start_year_after_2024?'>start_year_after_2024?</span>
+
+  <span class='lparen'>(</span><span class='int'>2</span><span class='op'>..</span><span class='int'>8</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_person_num'>person_num</span><span class='op'>|</span>
+    <span class='id identifier rubyid_age'>age</span> <span class='op'>=</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_public_send'>public_send</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>age</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_person_num'>person_num</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_relationship'>relationship</span> <span class='op'>=</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_public_send'>public_send</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>relat</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_person_num'>person_num</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+    <span class='kw'>next</span> <span class='kw'>unless</span> <span class='id identifier rubyid_age'>age</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_relationship'>relationship</span>
+
+    <span class='kw'>if</span> <span class='id identifier rubyid_age'>age</span> <span class='op'>&lt;</span> <span class='int'>16</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_relationship_is_child_other_or_refused?'>relationship_is_child_other_or_refused?</span><span class='lparen'>(</span><span class='id identifier rubyid_relationship'>relationship</span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>relat</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_person_num'>person_num</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.household.relat.child_under_16_lettings</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>person_num:</span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>age</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_person_num'>person_num</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.household.age.child_under_16_relat_lettings</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>person_num:</span><span class='rparen'>)</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="validate_previous_housing_situation-instance_method">
+  
+    #<strong>validate_previous_housing_situation</strong>(record)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'household_validations.rb', line 139</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_validate_previous_housing_situation'>validate_previous_housing_situation</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_is_relet_to_temp_tenant?'>is_relet_to_temp_tenant?</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_previous_tenancy_was_temporary?'>previous_tenancy_was_temporary?</span>
+    <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:prevten</span><span class='comma'>,</span> <span class='symbol'>:non_temp_accommodation</span><span class='comma'>,</span> <span class='label'>message:</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.household.prevten.non_temp_accommodation</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+
+  <span class='kw'>if</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_age1'>age1</span><span class='period'>.</span><span class='id identifier rubyid_present?'>present?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_age1'>age1</span> <span class='op'>&gt;</span> <span class='int'>25</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_previous_tenancy_was_foster_care?'>previous_tenancy_was_foster_care?</span>
+    <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:prevten</span><span class='comma'>,</span> <span class='symbol'>:over_25_foster_care</span><span class='comma'>,</span> <span class='label'>message:</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.household.prevten.over_25_foster_care</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:age1</span><span class='comma'>,</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.household.age.lead.over_25</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+
+  <span class='kw'>if</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_sex1'>sex1</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>M</span><span class='tstring_end'>&quot;</span></span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_previous_tenancy_was_refuge?'>previous_tenancy_was_refuge?</span>
+    <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:prevten</span><span class='comma'>,</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.household.prevten.male_refuge</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:sex1</span><span class='comma'>,</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.household.gender.male_refuge</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+
+  <span class='comment'># 3  Private Sector Tenancy
+</span>  <span class='comment'># 4  Tied housing or rented with job
+</span>  <span class='comment'># 7  Direct access hostel
+</span>  <span class='comment'># 10 Hospital
+</span>  <span class='comment'># 13 Children&#39;s home / Foster Care
+</span>  <span class='comment'># 14 Bed and breakfast
+</span>  <span class='comment'># 19 Rough Sleeping
+</span>  <span class='comment'># 23 Mobile home / Caravan
+</span>  <span class='comment'># 24 Home Office Asylum Support
+</span>  <span class='comment'># 25 Other
+</span>  <span class='comment'># 26 Owner Occupation
+</span>  <span class='comment'># 27 Owner occupation (low-cost home ownership)
+</span>  <span class='comment'># 28 Living with Friends or Family
+</span>  <span class='comment'># 29 Prison / Approved Probation Hostel
+</span>  <span class='kw'>if</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_is_internal_transfer?'>is_internal_transfer?</span> <span class='op'>&amp;&amp;</span> <span class='lbracket'>[</span><span class='int'>3</span><span class='comma'>,</span> <span class='int'>4</span><span class='comma'>,</span> <span class='int'>7</span><span class='comma'>,</span> <span class='int'>10</span><span class='comma'>,</span> <span class='int'>13</span><span class='comma'>,</span> <span class='int'>14</span><span class='comma'>,</span> <span class='int'>19</span><span class='comma'>,</span> <span class='int'>23</span><span class='comma'>,</span> <span class='int'>24</span><span class='comma'>,</span> <span class='int'>25</span><span class='comma'>,</span> <span class='int'>26</span><span class='comma'>,</span> <span class='int'>27</span><span class='comma'>,</span> <span class='int'>28</span><span class='comma'>,</span> <span class='int'>29</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_include?'>include?</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_prevten'>prevten</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_label'>label</span> <span class='op'>=</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_form'>form</span><span class='period'>.</span><span class='id identifier rubyid_get_question'>get_question</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>prevten</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_record'>record</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_present?'>present?</span> <span class='op'>?</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_form'>form</span><span class='period'>.</span><span class='id identifier rubyid_get_question'>get_question</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>prevten</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_record'>record</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_label_from_value'>label_from_value</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_prevten'>prevten</span><span class='rparen'>)</span> <span class='op'>:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_end'>&quot;</span></span>
+    <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:prevten</span><span class='comma'>,</span> <span class='symbol'>:internal_transfer_non_social_housing</span><span class='comma'>,</span> <span class='label'>message:</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.household.prevten.internal_transfer</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>prevten:</span> <span class='id identifier rubyid_label'>label</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:referral</span><span class='comma'>,</span> <span class='symbol'>:internal_transfer_non_social_housing</span><span class='comma'>,</span> <span class='label'>message:</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.household.referral.prevten_invalid</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>prevten:</span> <span class='id identifier rubyid_label'>label</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="validate_prevloc-instance_method">
+  
+    #<strong>validate_prevloc</strong>(record)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+184
+185
+186
+187
+188</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'household_validations.rb', line 184</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_validate_prevloc'>validate_prevloc</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_previous_la_known?'>previous_la_known?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_prevloc'>prevloc</span><span class='period'>.</span><span class='id identifier rubyid_blank?'>blank?</span>
+    <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:prevloc</span><span class='comma'>,</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.household.previous_la_known</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="validate_reason_for_leaving_last_settled_home-instance_method">
+  
+    #<strong>validate_reason_for_leaving_last_settled_home</strong>(record)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>describe everything this does here</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'household_validations.rb', line 27</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_validate_reason_for_leaving_last_settled_home'>validate_reason_for_leaving_last_settled_home</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_reason'>reason</span> <span class='op'>==</span> <span class='int'>32</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_underoccupation_benefitcap'>underoccupation_benefitcap</span> <span class='op'>!=</span> <span class='int'>4</span>
+    <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:underoccupation_benefitcap</span><span class='comma'>,</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.household.underoccupation_benefitcap.dont_know_required</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:reason</span><span class='comma'>,</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.household.underoccupation_benefitcap.dont_know_required</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+  <span class='id identifier rubyid_validate_other_field'>validate_other_field</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='comma'>,</span> <span class='int'>20</span><span class='comma'>,</span> <span class='symbol'>:reason</span><span class='comma'>,</span> <span class='symbol'>:reasonother</span><span class='rparen'>)</span>
+
+  <span class='kw'>if</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_is_reason_permanently_decanted?'>is_reason_permanently_decanted?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_referral'>referral</span><span class='period'>.</span><span class='id identifier rubyid_present?'>present?</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_is_internal_transfer?'>is_internal_transfer?</span>
+    <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:referral</span><span class='comma'>,</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.household.referral.reason_permanently_decanted</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:reason</span><span class='comma'>,</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.household.reason.not_internal_transfer</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+
+  <span class='kw'>return</span> <span class='kw'>unless</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_form'>form</span><span class='period'>.</span><span class='id identifier rubyid_start_year_after_2024?'>start_year_after_2024?</span>
+
+  <span class='kw'>if</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_reason'>reason</span> <span class='op'>==</span> <span class='int'>20</span> <span class='op'>&amp;&amp;</span> <span class='const'><span class='object_link'><a href="#PHRASES_INDICATING_HOMELESSNESS_REGEX-constant" title="Validations::HouseholdValidations::PHRASES_INDICATING_HOMELESSNESS_REGEX (constant)">PHRASES_INDICATING_HOMELESSNESS_REGEX</a></span></span><span class='period'>.</span><span class='id identifier rubyid_match?'>match?</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_reasonother'>reasonother</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:reason</span><span class='comma'>,</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.household.reason.other_not_settled</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="validate_reasonable_preference-instance_method">
+  
+    #<strong>validate_reasonable_preference</strong>(record)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Validations methods need to be called ‘validate_&lt;page_name&gt;’ to run on model save or ‘validate_’ to run on submit as well</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+6
+7
+8
+9
+10</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'household_validations.rb', line 6</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_validate_reasonable_preference'>validate_reasonable_preference</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_given_reasonable_preference?'>given_reasonable_preference?</span> <span class='op'>&amp;&amp;</span> <span class='lbracket'>[</span><span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_rp_homeless'>rp_homeless</span><span class='comma'>,</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_rp_insan_unsat'>rp_insan_unsat</span><span class='comma'>,</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_rp_medwel'>rp_medwel</span><span class='comma'>,</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_rp_hardship'>rp_hardship</span><span class='comma'>,</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_rp_dontknow'>rp_dontknow</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_any?'>any?</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_a'>a</span><span class='op'>|</span> <span class='id identifier rubyid_a'>a</span> <span class='op'>==</span> <span class='int'>1</span> <span class='rbrace'>}</span>
+    <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:reasonable_preference_reason</span><span class='comma'>,</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.household.reasonable_preference_reason.reason_not_required</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="validate_referral-instance_method">
+  
+    #<strong>validate_referral</strong>(record)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+175
+176
+177
+178
+179
+180
+181
+182</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'household_validations.rb', line 175</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_validate_referral'>validate_referral</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='rparen'>)</span>
+  <span class='kw'>return</span> <span class='kw'>unless</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_owning_organisation'>owning_organisation</span>
+
+  <span class='kw'>if</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_is_internal_transfer?'>is_internal_transfer?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_owning_organisation'>owning_organisation</span><span class='period'>.</span><span class='id identifier rubyid_provider_type'>provider_type</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>PRP</span><span class='tstring_end'>&quot;</span></span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_is_prevten_la_general_needs?'>is_prevten_la_general_needs?</span>
+    <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:prevten</span><span class='comma'>,</span> <span class='symbol'>:internal_transfer_fixed_or_lifetime</span><span class='comma'>,</span> <span class='label'>message:</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.household.prevten.la_general_needs.internal_transfer</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:referral</span><span class='comma'>,</span> <span class='symbol'>:internal_transfer_fixed_or_lifetime</span><span class='comma'>,</span> <span class='label'>message:</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.household.referral.la_general_needs.internal_transfer</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+
+      <div id="footer">
+  Generated on Thu Apr 18 11:36:47 2024 by
+  <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.36 (ruby-3.1.4).
+</div>
+
+    </div>
+  </body>
+</html>

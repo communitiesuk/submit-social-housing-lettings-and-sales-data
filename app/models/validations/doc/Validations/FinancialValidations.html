@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  Module: Validations::FinancialValidations
+  
+    &mdash; Documentation by YARD 0.9.36
+  
+</title>
+
+  <link rel="stylesheet" href="../css/style.css" type="text/css" />
+
+  <link rel="stylesheet" href="../css/common.css" type="text/css" />
+
+<script type="text/javascript">
+  pathId = "Validations::FinancialValidations";
+  relpath = '../';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="../class_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="../_index.html">Index (F)</a> &raquo;
+    <span class='title'>Validations</span>
+     &raquo; 
+    <span class="title">FinancialValidations</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="../class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><h1>Module: Validations::FinancialValidations
+  
+  
+  
+</h1>
+<div class="box_info">
+  
+
+  
+  
+  
+  
+  <dl>
+      <dt>Includes:</dt>
+      <dd>ChargesHelper, MoneyFormattingHelper, SharedValidations</dd>
+  </dl>
+  
+  
+
+  
+
+  
+  <dl>
+    <dt>Defined in:</dt>
+    <dd>financial_validations.rb</dd>
+  </dl>
+  
+</div>
+
+
+  
+    <h2>
+      Constant Summary
+      <small><a href="#" class="constants_summary_toggle">collapse</a></small>
+    </h2>
+
+    <dl class="constants">
+      
+        <dt id="EMPLOYED_STATUSES-constant" class="">EMPLOYED_STATUSES =
+          
+        </dt>
+        <dd><pre class="code"><span class='lbracket'>[</span><span class='int'>1</span><span class='comma'>,</span> <span class='int'>0</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
+      
+    </dl>
+  
+
+
+
+
+
+
+
+  
+    <h2>
+      Instance Method Summary
+      <small><a href="#" class="summary_toggle">collapse</a></small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#no_known_benefits%3F-instance_method" title="#no_known_benefits? (instance method)">#<strong>no_known_benefits?</strong>(record)  &#x21d2; Boolean </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#validate_care_home_charges-instance_method" title="#validate_care_home_charges (instance method)">#<strong>validate_care_home_charges</strong>(record)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#validate_negative_currency-instance_method" title="#validate_negative_currency (instance method)">#<strong>validate_negative_currency</strong>(record)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#validate_net_income-instance_method" title="#validate_net_income (instance method)">#<strong>validate_net_income</strong>(record)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#validate_net_income_uc_proportion-instance_method" title="#validate_net_income_uc_proportion (instance method)">#<strong>validate_net_income_uc_proportion</strong>(record)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#validate_outstanding_rent_amount-instance_method" title="#validate_outstanding_rent_amount (instance method)">#<strong>validate_outstanding_rent_amount</strong>(record)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Validations methods need to be called ‘validate_&lt;page_name&gt;’ to run on model save or ‘validate_’ to run on submit as well.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#validate_rent_amount-instance_method" title="#validate_rent_amount (instance method)">#<strong>validate_rent_amount</strong>(record)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#validate_rent_period-instance_method" title="#validate_rent_period (instance method)">#<strong>validate_rent_period</strong>(record)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#validate_tshortfall-instance_method" title="#validate_tshortfall (instance method)">#<strong>validate_tshortfall</strong>(record)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+  
+  
+  
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="no_known_benefits?-instance_method">
+  
+    #<strong>no_known_benefits?</strong>(record)  &#x21d2; <tt>Boolean</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'financial_validations.rb', line 108</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_no_known_benefits?'>no_known_benefits?</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='rparen'>)</span>
+  <span class='kw'>return</span> <span class='kw'>true</span> <span class='kw'>unless</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_collection_start_year'>collection_start_year</span>
+
+  <span class='kw'>if</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_collection_start_year'>collection_start_year</span> <span class='op'>&lt;=</span> <span class='int'>2021</span>
+    <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_benefits_unknown?'>benefits_unknown?</span> <span class='op'>||</span>
+      <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_receives_no_benefits?'>receives_no_benefits?</span> <span class='op'>||</span>
+      <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_receives_universal_credit_but_no_housing_benefit?'>receives_universal_credit_but_no_housing_benefit?</span>
+  <span class='kw'>else</span>
+    <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_benefits_unknown?'>benefits_unknown?</span> <span class='op'>||</span>
+      <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_receives_no_benefits?'>receives_no_benefits?</span> <span class='op'>||</span>
+      <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_tenant_refuses_to_say_benefits?'>tenant_refuses_to_say_benefits?</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="validate_care_home_charges-instance_method">
+  
+    #<strong>validate_care_home_charges</strong>(record)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'financial_validations.rb', line 158</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_validate_care_home_charges'>validate_care_home_charges</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_is_carehome?'>is_carehome?</span>
+    <span class='id identifier rubyid_period'>period</span> <span class='op'>=</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_form'>form</span><span class='period'>.</span><span class='id identifier rubyid_get_question'>get_question</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>period</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_record'>record</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_label_from_value'>label_from_value</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_period'>period</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_downcase'>downcase</span>
+    <span class='comment'># NOTE: This is a temporary change to allow `ccharge` values despite `is_carehome` being true. This value
+</span>    <span class='comment'># is going to be moved to a soft validation in CLDC-2074, so we can safely do this.
+</span>    <span class='kw'>if</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_chcharge'>chcharge</span><span class='period'>.</span><span class='id identifier rubyid_blank?'>blank?</span>
+      <span class='comment'># record.errors.add :is_carehome, I18n.t(&quot;validations.financial.carehome.not_provided&quot;, period:)
+</span>      <span class='comment'># record.errors.add :chcharge, I18n.t(&quot;validations.financial.carehome.not_provided&quot;, period:)
+</span>    <span class='kw'>elsif</span> <span class='op'>!</span><span class='id identifier rubyid_weekly_value_in_range'>weekly_value_in_range</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>chcharge</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='int'>10</span><span class='comma'>,</span> <span class='int'>5000</span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_max_chcharge'>max_chcharge</span> <span class='op'>=</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_weekly_to_value_per_period'>weekly_to_value_per_period</span><span class='lparen'>(</span><span class='int'>5000</span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_min_chcharge'>min_chcharge</span> <span class='op'>=</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_weekly_to_value_per_period'>weekly_to_value_per_period</span><span class='lparen'>(</span><span class='int'>10</span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_message'>message</span> <span class='op'>=</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.financial.carehome.out_of_range</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>period:</span><span class='comma'>,</span> <span class='label'>min_chcharge:</span><span class='comma'>,</span> <span class='label'>max_chcharge:</span><span class='rparen'>)</span>
+
+      <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:period</span><span class='comma'>,</span> <span class='id identifier rubyid_message'>message</span>
+      <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:chcharge</span><span class='comma'>,</span> <span class='symbol'>:out_of_range</span><span class='comma'>,</span> <span class='label'>message:</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="validate_negative_currency-instance_method">
+  
+    #<strong>validate_negative_currency</strong>(record)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+93
+94
+95
+96
+97
+98
+99
+100</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'financial_validations.rb', line 93</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_validate_negative_currency'>validate_negative_currency</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_t'>t</span> <span class='op'>=</span> <span class='qwords_beg'>%w[</span><span class='tstring_content'>earnings</span><span class='words_sep'> </span><span class='tstring_content'>brent</span><span class='words_sep'> </span><span class='tstring_content'>scharge</span><span class='words_sep'> </span><span class='tstring_content'>pscharge</span><span class='words_sep'> </span><span class='tstring_content'>supcharg</span><span class='tstring_end'>]</span></span>
+  <span class='id identifier rubyid_t'>t</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_x'>x</span><span class='op'>|</span>
+    <span class='kw'>if</span> <span class='id identifier rubyid_record'>record</span><span class='lbracket'>[</span><span class='id identifier rubyid_x'>x</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_present?'>present?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_record'>record</span><span class='lbracket'>[</span><span class='id identifier rubyid_x'>x</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_negative?'>negative?</span>
+      <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='id identifier rubyid_x'>x</span><span class='period'>.</span><span class='id identifier rubyid_to_sym'>to_sym</span><span class='comma'>,</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.financial.negative_currency</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="validate_net_income-instance_method">
+  
+    #<strong>validate_net_income</strong>(record)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'financial_validations.rb', line 27</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_validate_net_income'>validate_net_income</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_ecstat1'>ecstat1</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_hhmemb'>hhmemb</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_weekly_net_income'>weekly_net_income</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_startdate'>startdate</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_form'>form</span><span class='period'>.</span><span class='id identifier rubyid_start_date'>start_date</span><span class='period'>.</span><span class='id identifier rubyid_year'>year</span> <span class='op'>&gt;=</span> <span class='int'>2023</span>
+    <span class='kw'>if</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_weekly_net_income'>weekly_net_income</span> <span class='op'>&gt;</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_applicable_income_range'>applicable_income_range</span><span class='period'>.</span><span class='id identifier rubyid_hard_max'>hard_max</span>
+      <span class='id identifier rubyid_frequency'>frequency</span> <span class='op'>=</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_form'>form</span><span class='period'>.</span><span class='id identifier rubyid_get_question'>get_question</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>incfreq</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_record'>record</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_label_from_value'>label_from_value</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_incfreq'>incfreq</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_downcase'>downcase</span>
+      <span class='id identifier rubyid_hard_max'>hard_max</span> <span class='op'>=</span> <span class='id identifier rubyid_format_as_currency'>format_as_currency</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_applicable_income_range'>applicable_income_range</span><span class='period'>.</span><span class='id identifier rubyid_hard_max'>hard_max</span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span><span class='lparen'>(</span>
+        <span class='symbol'>:earnings</span><span class='comma'>,</span>
+        <span class='symbol'>:over_hard_max</span><span class='comma'>,</span>
+        <span class='label'>message:</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.financial.earnings.over_hard_max</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>hard_max:</span><span class='rparen'>)</span><span class='comma'>,</span>
+      <span class='rparen'>)</span>
+      <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span><span class='lparen'>(</span>
+        <span class='symbol'>:hhmemb</span><span class='comma'>,</span>
+        <span class='symbol'>:over_hard_max</span><span class='comma'>,</span>
+        <span class='label'>message:</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.financial.hhmemb.earnings.over_hard_max</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>earnings:</span> <span class='id identifier rubyid_format_as_currency'>format_as_currency</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_earnings'>earnings</span><span class='rparen'>)</span><span class='comma'>,</span> <span class='label'>frequency:</span><span class='rparen'>)</span><span class='comma'>,</span>
+      <span class='rparen'>)</span>
+      <span class='lparen'>(</span><span class='int'>1</span><span class='op'>..</span><span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_hhmemb'>hhmemb</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_n'>n</span><span class='op'>|</span>
+        <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span><span class='lparen'>(</span>
+          <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>ecstat</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_n'>n</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+          <span class='symbol'>:over_hard_max</span><span class='comma'>,</span>
+          <span class='label'>message:</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.financial.ecstat.over_hard_max</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>earnings:</span> <span class='id identifier rubyid_format_as_currency'>format_as_currency</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_earnings'>earnings</span><span class='rparen'>)</span><span class='comma'>,</span> <span class='label'>frequency:</span><span class='rparen'>)</span><span class='comma'>,</span>
+        <span class='rparen'>)</span>
+        <span class='kw'>next</span> <span class='kw'>unless</span> <span class='id identifier rubyid_record'>record</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>ecstat</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_n'>n</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span> <span class='op'>==</span> <span class='int'>9</span>
+
+        <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span><span class='lparen'>(</span>
+          <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>age</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_n'>n</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+          <span class='symbol'>:over_hard_max</span><span class='comma'>,</span>
+          <span class='label'>message:</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.financial.age.earnings_over_hard_max</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>earnings:</span> <span class='id identifier rubyid_format_as_currency'>format_as_currency</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_earnings'>earnings</span><span class='rparen'>)</span><span class='comma'>,</span> <span class='label'>frequency:</span><span class='rparen'>)</span><span class='comma'>,</span>
+        <span class='rparen'>)</span>
+      <span class='kw'>end</span>
+    <span class='kw'>end</span>
+
+    <span class='kw'>if</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_weekly_net_income'>weekly_net_income</span> <span class='op'>&lt;</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_applicable_income_range'>applicable_income_range</span><span class='period'>.</span><span class='id identifier rubyid_hard_min'>hard_min</span>
+      <span class='id identifier rubyid_hard_min'>hard_min</span> <span class='op'>=</span> <span class='id identifier rubyid_format_as_currency'>format_as_currency</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_applicable_income_range'>applicable_income_range</span><span class='period'>.</span><span class='id identifier rubyid_hard_min'>hard_min</span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_frequency'>frequency</span> <span class='op'>=</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_form'>form</span><span class='period'>.</span><span class='id identifier rubyid_get_question'>get_question</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>incfreq</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_record'>record</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_label_from_value'>label_from_value</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_incfreq'>incfreq</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_downcase'>downcase</span>
+      <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span><span class='lparen'>(</span>
+        <span class='symbol'>:earnings</span><span class='comma'>,</span>
+        <span class='symbol'>:under_hard_min</span><span class='comma'>,</span>
+        <span class='label'>message:</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.financial.earnings.under_hard_min</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>hard_min:</span><span class='rparen'>)</span><span class='comma'>,</span>
+      <span class='rparen'>)</span>
+      <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span><span class='lparen'>(</span>
+        <span class='symbol'>:hhmemb</span><span class='comma'>,</span>
+        <span class='symbol'>:under_hard_min</span><span class='comma'>,</span>
+        <span class='label'>message:</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.financial.hhmemb.earnings.under_hard_min</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>earnings:</span> <span class='id identifier rubyid_format_as_currency'>format_as_currency</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_earnings'>earnings</span><span class='rparen'>)</span><span class='comma'>,</span> <span class='label'>frequency:</span><span class='rparen'>)</span><span class='comma'>,</span>
+      <span class='rparen'>)</span>
+      <span class='lparen'>(</span><span class='int'>1</span><span class='op'>..</span><span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_hhmemb'>hhmemb</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_n'>n</span><span class='op'>|</span>
+        <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span><span class='lparen'>(</span>
+          <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>ecstat</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_n'>n</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+          <span class='symbol'>:under_hard_min</span><span class='comma'>,</span>
+          <span class='label'>message:</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.financial.ecstat.under_hard_min</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>earnings:</span> <span class='id identifier rubyid_format_as_currency'>format_as_currency</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_earnings'>earnings</span><span class='rparen'>)</span><span class='comma'>,</span> <span class='label'>frequency:</span><span class='rparen'>)</span><span class='comma'>,</span>
+        <span class='rparen'>)</span>
+        <span class='comment'># N.B. It is not possible for a change to an age field to increase the hard min
+</span>      <span class='kw'>end</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+
+  <span class='kw'>if</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_earnings'>earnings</span><span class='period'>.</span><span class='id identifier rubyid_present?'>present?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_incfreq'>incfreq</span><span class='period'>.</span><span class='id identifier rubyid_blank?'>blank?</span>
+    <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:incfreq</span><span class='comma'>,</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.financial.earnings.freq_missing</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:earnings</span><span class='comma'>,</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.financial.earnings.freq_missing</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+
+  <span class='kw'>if</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_incfreq'>incfreq</span><span class='period'>.</span><span class='id identifier rubyid_present?'>present?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_earnings'>earnings</span><span class='period'>.</span><span class='id identifier rubyid_blank?'>blank?</span>
+    <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:earnings</span><span class='comma'>,</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.financial.earnings.earnings_missing</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:incfreq</span><span class='comma'>,</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.financial.earnings.earnings_missing</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="validate_net_income_uc_proportion-instance_method">
+  
+    #<strong>validate_net_income_uc_proportion</strong>(record)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'financial_validations.rb', line 15</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_validate_net_income_uc_proportion'>validate_net_income_uc_proportion</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='rparen'>)</span>
+  <span class='lparen'>(</span><span class='int'>1</span><span class='op'>..</span><span class='int'>8</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_any?'>any?</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_n'>n</span><span class='op'>|</span>
+    <span class='id identifier rubyid_economic_status'>economic_status</span> <span class='op'>=</span> <span class='id identifier rubyid_record'>record</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>ecstat</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_n'>n</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span>
+    <span class='id identifier rubyid_is_employed'>is_employed</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="#EMPLOYED_STATUSES-constant" title="Validations::FinancialValidations::EMPLOYED_STATUSES (constant)">EMPLOYED_STATUSES</a></span></span><span class='period'>.</span><span class='id identifier rubyid_include?'>include?</span><span class='lparen'>(</span><span class='id identifier rubyid_economic_status'>economic_status</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_relationship'>relationship</span> <span class='op'>=</span> <span class='id identifier rubyid_record'>record</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>relat</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_n'>n</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span>
+    <span class='id identifier rubyid_is_partner_or_main'>is_partner_or_main</span> <span class='op'>=</span> <span class='id identifier rubyid_relationship'>relationship</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>P</span><span class='tstring_end'>&quot;</span></span> <span class='op'>||</span> <span class='lparen'>(</span><span class='id identifier rubyid_relationship'>relationship</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_economic_status'>economic_status</span><span class='period'>.</span><span class='id identifier rubyid_present?'>present?</span><span class='rparen'>)</span>
+    <span class='kw'>if</span> <span class='id identifier rubyid_is_employed'>is_employed</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_is_partner_or_main'>is_partner_or_main</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_benefits'>benefits</span><span class='op'>&amp;.</span><span class='id identifier rubyid_zero?'>zero?</span>
+      <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:benefits</span><span class='comma'>,</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.financial.benefits.part_or_full_time</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="validate_outstanding_rent_amount-instance_method">
+  
+    #<strong>validate_outstanding_rent_amount</strong>(record)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Validations methods need to be called ‘validate_&lt;page_name&gt;’ to run on model save or ‘validate_’ to run on submit as well</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+7
+8
+9
+10
+11
+12</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'financial_validations.rb', line 7</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_validate_outstanding_rent_amount'>validate_outstanding_rent_amount</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_has_housing_benefit_rent_shortfall?'>has_housing_benefit_rent_shortfall?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_tshortfall'>tshortfall</span><span class='period'>.</span><span class='id identifier rubyid_present?'>present?</span>
+    <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:tshortfall</span><span class='comma'>,</span> <span class='symbol'>:no_outstanding_charges</span><span class='comma'>,</span> <span class='label'>message:</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.financial.tshortfall.outstanding_amount_not_expected</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:hbrentshortfall</span><span class='comma'>,</span> <span class='symbol'>:no_outstanding_charges</span><span class='comma'>,</span> <span class='label'>message:</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.financial.hbrentshortfall.outstanding_amount_not_expected</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="validate_rent_amount-instance_method">
+  
+    #<strong>validate_rent_amount</strong>(record)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'financial_validations.rb', line 122</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_validate_rent_amount'>validate_rent_amount</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_wtshortfall'>wtshortfall</span>
+    <span class='kw'>if</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_wrent'>wrent</span> <span class='op'>&amp;&amp;</span> <span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_wtshortfall'>wtshortfall</span> <span class='op'>&gt;</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_wrent'>wrent</span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:tshortfall</span><span class='comma'>,</span> <span class='symbol'>:more_than_rent</span><span class='comma'>,</span> <span class='label'>message:</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.financial.tshortfall.more_than_rent</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:brent</span><span class='comma'>,</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.financial.rent.less_than_shortfall</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+    <span class='kw'>elsif</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_wtshortfall'>wtshortfall</span> <span class='op'>&lt;</span> <span class='float'>0.01</span>
+      <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:tshortfall</span><span class='comma'>,</span> <span class='symbol'>:must_be_positive</span><span class='comma'>,</span> <span class='label'>message:</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.financial.tshortfall.must_be_positive</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+
+  <span class='kw'>if</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_tcharge'>tcharge</span><span class='period'>.</span><span class='id identifier rubyid_present?'>present?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_weekly_value_in_range'>weekly_value_in_range</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>tcharge</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='int'>0</span><span class='comma'>,</span> <span class='float'>9.99</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:tcharge</span><span class='comma'>,</span> <span class='symbol'>:under_10</span><span class='comma'>,</span> <span class='label'>message:</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.financial.tcharge.under_10</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+
+  <span class='id identifier rubyid_answered_questions'>answered_questions</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_tcharge'>tcharge</span><span class='comma'>,</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_chcharge'>chcharge</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_concat'>concat</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_household_charge'>household_charge</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_household_charge'>household_charge</span> <span class='op'>==</span> <span class='int'>1</span> <span class='op'>?</span> <span class='lbracket'>[</span><span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_household_charge'>household_charge</span><span class='rbracket'>]</span> <span class='op'>:</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_answered_questions'>answered_questions</span><span class='period'>.</span><span class='id identifier rubyid_count'>count</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:present?</span><span class='rparen'>)</span> <span class='op'>&gt;</span> <span class='int'>1</span>
+    <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:tcharge</span><span class='comma'>,</span> <span class='symbol'>:complete_1_of_3</span><span class='comma'>,</span> <span class='label'>message:</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.financial.charges.complete_1_of_3</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_tcharge'>tcharge</span><span class='period'>.</span><span class='id identifier rubyid_present?'>present?</span>
+    <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:chcharge</span><span class='comma'>,</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.financial.charges.complete_1_of_3</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_chcharge'>chcharge</span><span class='period'>.</span><span class='id identifier rubyid_present?'>present?</span>
+    <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:household_charge</span><span class='comma'>,</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.financial.charges.complete_1_of_3</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_household_charge'>household_charge</span><span class='period'>.</span><span class='id identifier rubyid_present?'>present?</span>
+  <span class='kw'>end</span>
+
+  <span class='id identifier rubyid_validate_charges'>validate_charges</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_validate_rent_range'>validate_rent_range</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="validate_rent_period-instance_method">
+  
+    #<strong>validate_rent_period</strong>(record)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'financial_validations.rb', line 147</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_validate_rent_period'>validate_rent_period</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_managing_organisation'>managing_organisation</span><span class='period'>.</span><span class='id identifier rubyid_present?'>present?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_managing_organisation'>managing_organisation</span><span class='period'>.</span><span class='id identifier rubyid_rent_periods'>rent_periods</span><span class='period'>.</span><span class='id identifier rubyid_present?'>present?</span> <span class='op'>&amp;&amp;</span>
+      <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_period'>period</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_managing_organisation'>managing_organisation</span><span class='period'>.</span><span class='id identifier rubyid_rent_periods'>rent_periods</span><span class='period'>.</span><span class='id identifier rubyid_include?'>include?</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_period'>period</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:period</span><span class='comma'>,</span> <span class='symbol'>:wrong_rent_period</span><span class='comma'>,</span> <span class='label'>message:</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span>
+      <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.financial.rent_period.invalid_for_org</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+      <span class='label'>org_name:</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_managing_organisation'>managing_organisation</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span>
+      <span class='label'>rent_period:</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_form'>form</span><span class='period'>.</span><span class='id identifier rubyid_get_question'>get_question</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>period</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_record'>record</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_label_from_value'>label_from_value</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_period'>period</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_downcase'>downcase</span><span class='comma'>,</span>
+    <span class='rparen'>)</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="validate_tshortfall-instance_method">
+  
+    #<strong>validate_tshortfall</strong>(record)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+102
+103
+104
+105
+106</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'financial_validations.rb', line 102</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_validate_tshortfall'>validate_tshortfall</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_has_housing_benefit_rent_shortfall?'>has_housing_benefit_rent_shortfall?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_no_known_benefits?'>no_known_benefits?</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:tshortfall</span><span class='comma'>,</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.financial.hbrentshortfall.outstanding_no_benefits</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+
+      <div id="footer">
+  Generated on Thu Apr 18 11:36:47 2024 by
+  <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.36 (ruby-3.1.4).
+</div>
+
+    </div>
+  </body>
+</html>

@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  Module: Validations::SetupValidations
+  
+    &mdash; Documentation by YARD 0.9.36
+  
+</title>
+
+  <link rel="stylesheet" href="../css/style.css" type="text/css" />
+
+  <link rel="stylesheet" href="../css/common.css" type="text/css" />
+
+<script type="text/javascript">
+  pathId = "Validations::SetupValidations";
+  relpath = '../';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="../class_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="../_index.html">Index (S)</a> &raquo;
+    <span class='title'>Validations</span>
+     &raquo; 
+    <span class="title">SetupValidations</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="../class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><h1>Module: Validations::SetupValidations
+  
+  
+  
+</h1>
+<div class="box_info">
+  
+
+  
+  
+  
+  
+  <dl>
+      <dt>Includes:</dt>
+      <dd>CollectionTimeHelper, SharedValidations</dd>
+  </dl>
+  
+  
+
+  
+
+  
+  <dl>
+    <dt>Defined in:</dt>
+    <dd>setup_validations.rb</dd>
+  </dl>
+  
+</div>
+
+
+
+
+
+
+
+
+  
+    <h2>
+      Instance Method Summary
+      <small><a href="#" class="summary_toggle">collapse</a></small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#validate_irproduct_other-instance_method" title="#validate_irproduct_other (instance method)">#<strong>validate_irproduct_other</strong>(record)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#validate_location-instance_method" title="#validate_location (instance method)">#<strong>validate_location</strong>(record)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#validate_managing_organisation_data_sharing_agremeent_signed-instance_method" title="#validate_managing_organisation_data_sharing_agremeent_signed (instance method)">#<strong>validate_managing_organisation_data_sharing_agremeent_signed</strong>(record)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#validate_merged_organisations_start_date-instance_method" title="#validate_merged_organisations_start_date (instance method)">#<strong>validate_merged_organisations_start_date</strong>(record)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#validate_organisation-instance_method" title="#validate_organisation (instance method)">#<strong>validate_organisation</strong>(record)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#validate_scheme-instance_method" title="#validate_scheme (instance method)">#<strong>validate_scheme</strong>(record)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#validate_scheme_has_confirmed_locations_validation-instance_method" title="#validate_scheme_has_confirmed_locations_validation (instance method)">#<strong>validate_scheme_has_confirmed_locations_validation</strong>(record)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#validate_startdate_setup-instance_method" title="#validate_startdate_setup (instance method)">#<strong>validate_startdate_setup</strong>(record)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+  
+  
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="validate_irproduct_other-instance_method">
+  
+    #<strong>validate_irproduct_other</strong>(record)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+69
+70
+71
+72
+73</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'setup_validations.rb', line 69</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_validate_irproduct_other'>validate_irproduct_other</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_intermediate_product_rent_type?'>intermediate_product_rent_type?</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_irproduct_other'>irproduct_other</span><span class='period'>.</span><span class='id identifier rubyid_blank?'>blank?</span>
+    <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:irproduct_other</span><span class='comma'>,</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.setup.intermediate_rent_product_name.blank</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="validate_location-instance_method">
+  
+    #<strong>validate_location</strong>(record)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+75
+76
+77
+78
+79
+80
+81
+82</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'setup_validations.rb', line 75</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_validate_location'>validate_location</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_location_during_startdate_validation'>location_during_startdate_validation</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='rparen'>)</span>
+
+  <span class='kw'>if</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_location'>location</span><span class='op'>&amp;.</span><span class='id identifier rubyid_status'>status</span> <span class='op'>==</span> <span class='symbol'>:incomplete</span>
+    <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:location_id</span><span class='comma'>,</span> <span class='symbol'>:incomplete</span><span class='comma'>,</span> <span class='label'>message:</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.setup.location.incomplete</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:scheme_id</span><span class='comma'>,</span> <span class='symbol'>:incomplete</span><span class='comma'>,</span> <span class='label'>message:</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.setup.location.incomplete</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="validate_managing_organisation_data_sharing_agremeent_signed-instance_method">
+  
+    #<strong>validate_managing_organisation_data_sharing_agremeent_signed</strong>(record)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+96
+97
+98
+99
+100
+101
+102</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'setup_validations.rb', line 96</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_validate_managing_organisation_data_sharing_agremeent_signed'>validate_managing_organisation_data_sharing_agremeent_signed</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='rparen'>)</span>
+  <span class='kw'>return</span> <span class='kw'>if</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_skip_dpo_validation'>skip_dpo_validation</span>
+
+  <span class='kw'>if</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_managing_organisation_id_changed?'>managing_organisation_id_changed?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_managing_organisation'>managing_organisation</span><span class='period'>.</span><span class='id identifier rubyid_present?'>present?</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_managing_organisation'>managing_organisation</span><span class='period'>.</span><span class='id identifier rubyid_data_protection_confirmed?'>data_protection_confirmed?</span>
+    <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:managing_organisation_id</span><span class='comma'>,</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.setup.managing_organisation.data_sharing_agreement_not_signed</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="validate_merged_organisations_start_date-instance_method">
+  
+    #<strong>validate_merged_organisations_start_date</strong>(record)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+59
+60
+61
+62
+63
+64
+65
+66
+67</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'setup_validations.rb', line 59</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_validate_merged_organisations_start_date'>validate_merged_organisations_start_date</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='rparen'>)</span>
+  <span class='kw'>return</span> <span class='kw'>unless</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_startdate'>startdate</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_date_valid?'>date_valid?</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>startdate</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_record'>record</span><span class='rparen'>)</span>
+
+  <span class='kw'>return</span> <span class='id identifier rubyid_add_same_merge_organisation_error'>add_same_merge_organisation_error</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_owning_organisation'>owning_organisation</span> <span class='op'>==</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_managing_organisation'>managing_organisation</span>
+  <span class='kw'>return</span> <span class='id identifier rubyid_add_same_merge_error'>add_same_merge_error</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_organisations_belong_to_same_merge?'>organisations_belong_to_same_merge?</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_owning_organisation'>owning_organisation</span><span class='comma'>,</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_managing_organisation'>managing_organisation</span><span class='rparen'>)</span>
+
+  <span class='id identifier rubyid_add_merged_organisations_errors'>add_merged_organisations_errors</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_add_absorbing_organisations_errors'>add_absorbing_organisations_errors</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="validate_organisation-instance_method">
+  
+    #<strong>validate_organisation</strong>(record)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'setup_validations.rb', line 23</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_validate_organisation'>validate_organisation</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_created_by'>created_by</span><span class='comma'>,</span> <span class='id identifier rubyid_managing_organisation'>managing_organisation</span><span class='comma'>,</span> <span class='id identifier rubyid_owning_organisation'>owning_organisation</span> <span class='op'>=</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_values_at'>values_at</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>created_by</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>managing_organisation</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>owning_organisation</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+  <span class='kw'>unless</span> <span class='lbracket'>[</span><span class='id identifier rubyid_created_by'>created_by</span><span class='comma'>,</span> <span class='id identifier rubyid_managing_organisation'>managing_organisation</span><span class='comma'>,</span> <span class='id identifier rubyid_owning_organisation'>owning_organisation</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_any?'>any?</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:blank?</span><span class='rparen'>)</span> <span class='op'>||</span> <span class='lparen'>(</span><span class='lparen'>(</span><span class='id identifier rubyid_created_by'>created_by</span><span class='period'>.</span><span class='id identifier rubyid_organisation'>organisation</span><span class='period'>.</span><span class='id identifier rubyid_absorbed_organisations'>absorbed_organisations</span> <span class='op'>+</span> <span class='lbracket'>[</span><span class='id identifier rubyid_created_by'>created_by</span><span class='period'>.</span><span class='id identifier rubyid_organisation'>organisation</span><span class='rbracket'>]</span><span class='rparen'>)</span> <span class='op'>&amp;</span> <span class='lbracket'>[</span><span class='id identifier rubyid_managing_organisation'>managing_organisation</span><span class='comma'>,</span> <span class='id identifier rubyid_owning_organisation'>owning_organisation</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_present?'>present?</span>
+    <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:created_by</span><span class='comma'>,</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.setup.created_by.invalid</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:owning_organisation_id</span><span class='comma'>,</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.setup.owning_organisation.invalid</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:managing_organisation_id</span><span class='comma'>,</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.setup.managing_organisation.invalid</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+  <span class='kw'>return</span> <span class='kw'>unless</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_startdate'>startdate</span>
+
+  <span class='kw'>if</span> <span class='id identifier rubyid_owning_organisation'>owning_organisation</span><span class='period'>.</span><span class='id identifier rubyid_present?'>present?</span>
+    <span class='kw'>if</span> <span class='id identifier rubyid_owning_organisation'>owning_organisation</span><span class='op'>&amp;.</span><span class='id identifier rubyid_merge_date'>merge_date</span><span class='period'>.</span><span class='id identifier rubyid_present?'>present?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_owning_organisation'>owning_organisation</span><span class='period'>.</span><span class='id identifier rubyid_merge_date'>merge_date</span> <span class='op'>&lt;=</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_startdate'>startdate</span>
+      <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:owning_organisation_id</span><span class='comma'>,</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.setup.owning_organisation.inactive_merged_organisation</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+                                                        <span class='label'>owning_organisation:</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_owning_organisation'>owning_organisation</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span>
+                                                        <span class='label'>owning_organisation_merge_date:</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_owning_organisation'>owning_organisation</span><span class='period'>.</span><span class='id identifier rubyid_merge_date'>merge_date</span><span class='period'>.</span><span class='id identifier rubyid_to_formatted_s'>to_formatted_s</span><span class='lparen'>(</span><span class='symbol'>:govuk_date</span><span class='rparen'>)</span><span class='comma'>,</span>
+                                                        <span class='label'>owning_absorbing_organisation:</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_owning_organisation'>owning_organisation</span><span class='period'>.</span><span class='id identifier rubyid_absorbing_organisation'>absorbing_organisation</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='rparen'>)</span>
+    <span class='kw'>elsif</span> <span class='id identifier rubyid_owning_organisation'>owning_organisation</span><span class='op'>&amp;.</span><span class='id identifier rubyid_absorbed_organisations'>absorbed_organisations</span><span class='period'>.</span><span class='id identifier rubyid_present?'>present?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_owning_organisation'>owning_organisation</span><span class='period'>.</span><span class='id identifier rubyid_available_from'>available_from</span><span class='period'>.</span><span class='id identifier rubyid_present?'>present?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_owning_organisation'>owning_organisation</span><span class='period'>.</span><span class='id identifier rubyid_available_from'>available_from</span><span class='period'>.</span><span class='id identifier rubyid_to_date'>to_date</span> <span class='op'>&gt;</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_startdate'>startdate</span><span class='period'>.</span><span class='id identifier rubyid_to_date'>to_date</span>
+      <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:owning_organisation_id</span><span class='comma'>,</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.setup.owning_organisation.inactive_absorbing_organisation</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+                                                        <span class='label'>owning_organisation:</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_owning_organisation'>owning_organisation</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span>
+                                                        <span class='label'>owning_organisation_available_from:</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_owning_organisation'>owning_organisation</span><span class='period'>.</span><span class='id identifier rubyid_available_from'>available_from</span><span class='period'>.</span><span class='id identifier rubyid_to_formatted_s'>to_formatted_s</span><span class='lparen'>(</span><span class='symbol'>:govuk_date</span><span class='rparen'>)</span><span class='rparen'>)</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+
+  <span class='kw'>if</span> <span class='id identifier rubyid_managing_organisation'>managing_organisation</span><span class='period'>.</span><span class='id identifier rubyid_present?'>present?</span>
+    <span class='kw'>if</span> <span class='id identifier rubyid_managing_organisation'>managing_organisation</span><span class='op'>&amp;.</span><span class='id identifier rubyid_merge_date'>merge_date</span><span class='period'>.</span><span class='id identifier rubyid_present?'>present?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_managing_organisation'>managing_organisation</span><span class='period'>.</span><span class='id identifier rubyid_merge_date'>merge_date</span> <span class='op'>&lt;=</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_startdate'>startdate</span>
+      <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:managing_organisation_id</span><span class='comma'>,</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.setup.managing_organisation.inactive_merged_organisation</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+                                                          <span class='label'>managing_organisation:</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_managing_organisation'>managing_organisation</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span>
+                                                          <span class='label'>managing_organisation_merge_date:</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_managing_organisation'>managing_organisation</span><span class='period'>.</span><span class='id identifier rubyid_merge_date'>merge_date</span><span class='period'>.</span><span class='id identifier rubyid_to_formatted_s'>to_formatted_s</span><span class='lparen'>(</span><span class='symbol'>:govuk_date</span><span class='rparen'>)</span><span class='comma'>,</span>
+                                                          <span class='label'>managing_absorbing_organisation:</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_managing_organisation'>managing_organisation</span><span class='period'>.</span><span class='id identifier rubyid_absorbing_organisation'>absorbing_organisation</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='rparen'>)</span>
+    <span class='kw'>elsif</span> <span class='id identifier rubyid_managing_organisation'>managing_organisation</span><span class='op'>&amp;.</span><span class='id identifier rubyid_absorbed_organisations'>absorbed_organisations</span><span class='period'>.</span><span class='id identifier rubyid_present?'>present?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_managing_organisation'>managing_organisation</span><span class='period'>.</span><span class='id identifier rubyid_available_from'>available_from</span><span class='period'>.</span><span class='id identifier rubyid_present?'>present?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_managing_organisation'>managing_organisation</span><span class='period'>.</span><span class='id identifier rubyid_available_from'>available_from</span><span class='period'>.</span><span class='id identifier rubyid_to_date'>to_date</span> <span class='op'>&gt;</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_startdate'>startdate</span><span class='period'>.</span><span class='id identifier rubyid_to_date'>to_date</span>
+      <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:managing_organisation_id</span><span class='comma'>,</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.setup.managing_organisation.inactive_absorbing_organisation</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+                                                          <span class='label'>managing_organisation:</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_managing_organisation'>managing_organisation</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span>
+                                                          <span class='label'>managing_organisation_available_from:</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_managing_organisation'>managing_organisation</span><span class='period'>.</span><span class='id identifier rubyid_available_from'>available_from</span><span class='period'>.</span><span class='id identifier rubyid_to_formatted_s'>to_formatted_s</span><span class='lparen'>(</span><span class='symbol'>:govuk_date</span><span class='rparen'>)</span><span class='rparen'>)</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="validate_scheme-instance_method">
+  
+    #<strong>validate_scheme</strong>(record)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+92
+93
+94</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'setup_validations.rb', line 92</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_validate_scheme'>validate_scheme</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_scheme_during_startdate_validation'>scheme_during_startdate_validation</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="validate_scheme_has_confirmed_locations_validation-instance_method">
+  
+    #<strong>validate_scheme_has_confirmed_locations_validation</strong>(record)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+84
+85
+86
+87
+88
+89
+90</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'setup_validations.rb', line 84</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_validate_scheme_has_confirmed_locations_validation'>validate_scheme_has_confirmed_locations_validation</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='rparen'>)</span>
+  <span class='kw'>return</span> <span class='kw'>unless</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_scheme'>scheme</span>
+
+  <span class='kw'>unless</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_scheme'>scheme</span><span class='period'>.</span><span class='id identifier rubyid_locations'>locations</span><span class='period'>.</span><span class='id identifier rubyid_confirmed'>confirmed</span><span class='period'>.</span><span class='id identifier rubyid_any?'>any?</span>
+    <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:scheme_id</span><span class='comma'>,</span> <span class='symbol'>:no_completed_locations</span><span class='comma'>,</span> <span class='label'>message:</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.scheme.no_completed_locations</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="validate_startdate_setup-instance_method">
+  
+    #<strong>validate_startdate_setup</strong>(record)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'setup_validations.rb', line 5</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_validate_startdate_setup'>validate_startdate_setup</span><span class='lparen'>(</span><span class='id identifier rubyid_record'>record</span><span class='rparen'>)</span>
+  <span class='kw'>return</span> <span class='kw'>unless</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_startdate'>startdate</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_date_valid?'>date_valid?</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>startdate</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_record'>record</span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='const'>FeatureToggle</span><span class='period'>.</span><span class='id identifier rubyid_allow_future_form_use?'>allow_future_form_use?</span>
+
+  <span class='id identifier rubyid_first_collection_start_date'>first_collection_start_date</span> <span class='op'>=</span> <span class='kw'>if</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_startdate_was'>startdate_was</span><span class='period'>.</span><span class='id identifier rubyid_present?'>present?</span>
+                                  <span class='id identifier rubyid_editable_collection_start_date'>editable_collection_start_date</span>
+                                <span class='kw'>else</span>
+                                  <span class='id identifier rubyid_active_collection_start_date'>active_collection_start_date</span>
+                                <span class='kw'>end</span>
+
+  <span class='kw'>unless</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_startdate'>startdate</span><span class='period'>.</span><span class='id identifier rubyid_between?'>between?</span><span class='lparen'>(</span><span class='id identifier rubyid_first_collection_start_date'>first_collection_start_date</span><span class='comma'>,</span> <span class='id identifier rubyid_current_collection_end_date'>current_collection_end_date</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:startdate</span><span class='comma'>,</span> <span class='id identifier rubyid_startdate_validation_error_message'>startdate_validation_error_message</span>
+  <span class='kw'>end</span>
+
+  <span class='kw'>if</span> <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_startdate'>startdate</span> <span class='op'>&gt;</span> <span class='const'>Time</span><span class='period'>.</span><span class='id identifier rubyid_zone'>zone</span><span class='period'>.</span><span class='id identifier rubyid_today'>today</span> <span class='op'>+</span> <span class='int'>14</span><span class='period'>.</span><span class='id identifier rubyid_days'>days</span>
+    <span class='id identifier rubyid_record'>record</span><span class='period'>.</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:startdate</span><span class='comma'>,</span> <span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_t'>t</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>validations.setup.startdate.later_than_14_days_after</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+
+      <div id="footer">
+  Generated on Thu Apr 18 11:36:48 2024 by
+  <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.36 (ruby-3.1.4).
+</div>
+
+    </div>
+  </body>
+</html>
