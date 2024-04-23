@@ -378,3 +378,4 @@ private
     self[postcode_key] = nil
   end
 end
+
