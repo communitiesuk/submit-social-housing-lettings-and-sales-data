@@ -206,8 +206,8 @@ RSpec.describe BulkUpload::Sales::Validator do
     end
 
     context "when a log is not valid?" do
-      let(:log_1) { build(:sales_log, :completed, created_by: user) }
-      let(:log_2) { build(:sales_log, :completed, created_by: user) }
+      let(:log_1) { build(:sales_log, :completed, assigned_to: user) }
+      let(:log_2) { build(:sales_log, :completed, assigned_to: user) }
 
       before do
         file.write(BulkUpload::SalesLogToCsv.new(log: log_1, line_ending: "\r\n", col_offset: 0).to_2023_csv_row)
@@ -233,7 +233,7 @@ RSpec.describe BulkUpload::Sales::Validator do
     context "when a single log wants to block log creation" do
       let(:unaffiliated_org) { create(:organisation) }
 
-      let(:log_1) { build(:sales_log, :completed, created_by: user, owning_organisation: unaffiliated_org) }
+      let(:log_1) { build(:sales_log, :completed, assigned_to: user, owning_organisation: unaffiliated_org) }
 
       before do
         file.write(BulkUpload::SalesLogToCsv.new(log: log_1, line_ending: "\r\n", col_offset: 0).to_2023_csv_row)
@@ -247,7 +247,7 @@ RSpec.describe BulkUpload::Sales::Validator do
     end
 
     context "when a log has incomplete setup secion" do
-      let(:log) { build(:sales_log, created_by: user, saledate: Time.zone.local(2022, 5, 1)) }
+      let(:log) { build(:sales_log, assigned_to: user, saledate: Time.zone.local(2022, 5, 1)) }
 
       before do
         file.write(BulkUpload::SalesLogToCsv.new(log:, line_ending: "\r\n", col_offset: 0).to_2023_csv_row)

@@ -14,7 +14,7 @@ RSpec.describe Form::Sales::Questions::CreatedById, type: :model do
   end
 
   it "has the correct id" do
-    expect(question.id).to eq("created_by_id")
+    expect(question.id).to eq("assigned_to_id")
   end
 
   it "has the correct header" do

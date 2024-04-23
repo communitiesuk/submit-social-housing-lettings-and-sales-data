@@ -19,6 +19,6 @@ class SalesLogPolicy
     return true if user.data_coordinator? && user.sales_logs.visible.include?(log)
 
     # Data providers can only delete the log if it is assigned to them
-    log.created_by == user
+    log.assigned_to == user
   end
 end

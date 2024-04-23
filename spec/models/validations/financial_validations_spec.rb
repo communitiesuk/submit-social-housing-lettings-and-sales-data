@@ -141,7 +141,7 @@ RSpec.describe Validations::FinancialValidations do
   describe "rent period validations" do
     let(:organisation) { FactoryBot.create(:organisation) }
     let(:user) { FactoryBot.create(:user) }
-    let(:record) { FactoryBot.create(:lettings_log, owning_organisation: user.organisation, managing_organisation: organisation, created_by: user) }
+    let(:record) { FactoryBot.create(:lettings_log, owning_organisation: user.organisation, managing_organisation: organisation, assigned_to: user) }
 
     before do
       FactoryBot.create(:organisation_relationship, parent_organisation: user.organisation, child_organisation: organisation)

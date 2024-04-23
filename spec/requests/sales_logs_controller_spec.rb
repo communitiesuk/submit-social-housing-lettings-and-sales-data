@@ -13,7 +13,7 @@ RSpec.describe SalesLogsController, type: :request do
   let(:params) do
     {
       "owning_organisation_id": owning_organisation.id,
-      "created_by_id": user.id,
+      "assigned_to_id": user.id,
     }
   end
 
@@ -56,7 +56,7 @@ RSpec.describe SalesLogsController, type: :request do
       it "creates a sales log with the values passed" do
         json_response = JSON.parse(response.body)
         expect(json_response["owning_organisation_id"]).to eq(owning_organisation.id)
-        expect(json_response["created_by_id"]).to eq(user.id)
+        expect(json_response["assigned_to_id"]).to eq(user.id)
       end
 
       context "with a request containing invalid credentials" do
@@ -74,7 +74,7 @@ RSpec.describe SalesLogsController, type: :request do
           {
             "owning_organisation_id": owning_organisation.id,
             "managing_organisation_id": owning_organisation.id,
-            "created_by_id": user.id,
+            "assigned_to_id": user.id,
             "saledate": Time.zone.today,
             "purchid": "1",
             "ownershipsch": 1,
@@ -230,7 +230,7 @@ RSpec.describe SalesLogsController, type: :request do
 
         context "when there are duplicate logs for this user" do
           before do
-            FactoryBot.create_list(:sales_log, 2, :duplicate, owning_organisation: user.organisation, created_by: user)
+            FactoryBot.create_list(:sales_log, 2, :duplicate, owning_organisation: user.organisation, assigned_to: user)
           end
 
           it "does not show a notification banner even if there are duplicate logs for this user" do
@@ -310,12 +310,12 @@ RSpec.describe SalesLogsController, type: :request do
             let!(:not_started_sales_log) do
               FactoryBot.create(:sales_log,
                                 owning_organisation: organisation,
-                                created_by: user)
+                                assigned_to: user)
             end
             let!(:completed_sales_log) do
               FactoryBot.create(:sales_log, :completed,
                                 owning_organisation: organisation_2,
-                                created_by: user_2)
+                                assigned_to: user_2)
             end
 
             it "shows sales logs for multiple selected statuses" do
@@ -363,13 +363,13 @@ RSpec.describe SalesLogsController, type: :request do
             let!(:sales_log_2022) do
               FactoryBot.create(:sales_log, :completed,
                                 owning_organisation: organisation,
-                                created_by: user,
+                                assigned_to: user,
                                 saledate: Time.zone.today)
             end
             let!(:sales_log_2023) do
               FactoryBot.create(:sales_log,
                                 owning_organisation: organisation,
-                                created_by: user,
+                                assigned_to: user,
                                 saledate: Time.zone.today)
             end
 
@@ -408,13 +408,13 @@ RSpec.describe SalesLogsController, type: :request do
             let!(:sales_log_2022) do
               FactoryBot.create(:sales_log, :completed,
                                 owning_organisation: organisation,
-                                created_by: user,
+                                assigned_to: user,
                                 saledate: Time.zone.today)
             end
             let!(:sales_log_2023) do
               FactoryBot.create(:sales_log,
                                 owning_organisation: organisation,
-                                created_by: user,
+                                assigned_to: user,
                                 saledate: Time.zone.today)
             end
 
@@ -604,8 +604,8 @@ RSpec.describe SalesLogsController, type: :request do
         end
 
         context "when using a search query" do
-          let(:logs) { FactoryBot.create_list(:sales_log, 3, :completed, owning_organisation: user.organisation, created_by: user) }
-          let(:log_to_search) { FactoryBot.create(:sales_log, :completed, owning_organisation: user.organisation, created_by: user) }
+          let(:logs) { FactoryBot.create_list(:sales_log, 3, :completed, owning_organisation: user.organisation, assigned_to: user) }
+          let(:log_to_search) { FactoryBot.create(:sales_log, :completed, owning_organisation: user.organisation, assigned_to: user) }
           let(:log_total_count) { SalesLog.where(owning_organisation: user.organisation).count }
 
           it "has search results in the title" do
@@ -650,7 +650,7 @@ RSpec.describe SalesLogsController, type: :request do
 
           context "when search and filter is present" do
             let(:matching_status) { "completed" }
-            let!(:log_matching_filter_and_search) { FactoryBot.create(:sales_log, :completed, owning_organisation: user.organisation, created_by: user) }
+            let!(:log_matching_filter_and_search) { FactoryBot.create(:sales_log, :completed, owning_organisation: user.organisation, assigned_to: user) }
             let(:matching_id) { log_matching_filter_and_search.id }
 
             it "shows only logs matching both search and filters" do
@@ -766,7 +766,7 @@ RSpec.describe SalesLogsController, type: :request do
         end
 
         context "and there are duplicate logs for this user" do
-          let!(:duplicate_logs) { FactoryBot.create_list(:lettings_log, 2, :duplicate, owning_organisation: user.organisation, created_by: user) }
+          let!(:duplicate_logs) { FactoryBot.create_list(:lettings_log, 2, :duplicate, owning_organisation: user.organisation, assigned_to: user) }
 
           it "displays a notification banner with a link to review logs" do
             get sales_logs_path
@@ -821,7 +821,7 @@ RSpec.describe SalesLogsController, type: :request do
 
           context "when there are multiple sets of duplicates" do
             before do
-              FactoryBot.create_list(:sales_log, 2, :duplicate, owning_organisation: user.organisation, created_by: user)
+              FactoryBot.create_list(:sales_log, 2, :duplicate, owning_organisation: user.organisation, assigned_to: user)
             end
 
             it "displays the correct copy in the banner" do
@@ -866,7 +866,7 @@ RSpec.describe SalesLogsController, type: :request do
 
     context "when viewing a sales log" do
       let(:headers) { { "Accept" => "text/html" } }
-      let(:completed_sales_log) { FactoryBot.create(:sales_log, :completed, owning_organisation: user.organisation, created_by: user) }
+      let(:completed_sales_log) { FactoryBot.create(:sales_log, :completed, owning_organisation: user.organisation, assigned_to: user) }
 
       before do
         sign_in user
@@ -1034,7 +1034,7 @@ RSpec.describe SalesLogsController, type: :request do
     let!(:sales_log) do
       FactoryBot.create(
         :sales_log,
-        created_by: user,
+        assigned_to: user,
       )
     end
 
@@ -1045,7 +1045,7 @@ RSpec.describe SalesLogsController, type: :request do
       FactoryBot.create(:sales_log,
                         :completed,
                         owning_organisation:,
-                        created_by: user)
+                        assigned_to: user)
     end
 
     it "creates an E-mail job with the correct log type" do

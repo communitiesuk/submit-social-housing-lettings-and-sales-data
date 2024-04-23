@@ -4,6 +4,7 @@ class Log < ApplicationRecord
   self.abstract_class = true
 
   belongs_to :owning_organisation, class_name: "Organisation", optional: true
+  belongs_to :assigned_to, class_name: "User", optional: true
   belongs_to :created_by, class_name: "User", optional: true
   belongs_to :updated_by, class_name: "User", optional: true
   belongs_to :bulk_upload, optional: true
@@ -38,12 +39,12 @@ class Log < ApplicationRecord
   }
   scope :filter_by_postcode, ->(postcode_full) { where("REPLACE(postcode_full, ' ', '') ILIKE ?", "%#{postcode_full.delete(' ')}%") }
   scope :filter_by_id, ->(id) { where(id:) }
-  scope :filter_by_user, ->(selected_user, _user = nil) { selected_user.present? ? where(created_by: selected_user) : all }
+  scope :filter_by_user, ->(selected_user, _user = nil) { selected_user.present? ? where(assigned_to: selected_user) : all }
   scope :filter_by_bulk_upload_id, lambda { |bulk_upload_id, user|
     joins(:bulk_upload)
       .where(bulk_upload: { id: bulk_upload_id, user: })
   }
-  scope :created_by, ->(user) { where(created_by: user) }
+  scope :assigned_to, ->(user) { where(assigned_to: user) }
   scope :imported, -> { where.not(old_id: nil) }
   scope :not_imported, -> { where(old_id: nil) }
   scope :has_old_form_id, -> { where.not(old_form_id: nil) }
@@ -323,7 +324,7 @@ private
     return unless form
 
     form.reset_not_routed_questions_and_invalid_answers(self)
-    reset_created_by!
+    reset_assigned_to!
   end
 
   PIO = PostcodeService.new

@@ -11,7 +11,7 @@ RSpec.describe "Sales Log Check Answers Page" do
     FactoryBot.create(
       :sales_log,
       :completed,
-      created_by: user,
+      assigned_to: user,
       jointpur: 1,
       hholdcount: 4,
     )
@@ -21,7 +21,7 @@ RSpec.describe "Sales Log Check Answers Page" do
     FactoryBot.create(
       :sales_log,
       :completed,
-      created_by: user,
+      assigned_to: user,
       jointpur: 2,
       hholdcount: 4,
     )

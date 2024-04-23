@@ -14,7 +14,7 @@ RSpec.describe Form::Lettings::Questions::CreatedById, type: :model do
   end
 
   it "has the correct id" do
-    expect(question.id).to eq("created_by_id")
+    expect(question.id).to eq("assigned_to_id")
   end
 
   it "has the correct header" do
@@ -54,7 +54,7 @@ RSpec.describe Form::Lettings::Questions::CreatedById, type: :model do
 
     describe "#displayed_answer_options" do
       let(:lettings_log) do
-        create(:lettings_log, created_by: support_user, owning_organisation: owning_org_user.organisation, managing_organisation: managing_org_user.organisation)
+        create(:lettings_log, assigned_to: support_user, owning_organisation: owning_org_user.organisation, managing_organisation: managing_org_user.organisation)
       end
 
       it "only displays users that belong to owning and managing organisations" do
@@ -80,7 +80,7 @@ RSpec.describe Form::Lettings::Questions::CreatedById, type: :model do
 
     describe "#displayed_answer_options" do
       let(:lettings_log) do
-        create(:lettings_log, created_by: data_coordinator, owning_organisation: data_coordinator.organisation, managing_organisation: managing_org_user.organisation)
+        create(:lettings_log, assigned_to: data_coordinator, owning_organisation: data_coordinator.organisation, managing_organisation: managing_org_user.organisation)
       end
 
       let(:user_in_same_org) { create(:user, organisation: data_coordinator.organisation) }

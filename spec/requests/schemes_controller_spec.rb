@@ -2507,7 +2507,7 @@ RSpec.describe SchemesController, type: :request do
       let!(:scheme) { create(:scheme, owning_organisation: user.organisation, created_at: Time.zone.local(2023, 10, 11)) }
       let!(:location) { create(:location, scheme:) }
       let(:deactivation_date) { Time.utc(2022, 10, 10) }
-      let(:lettings_log) { create(:lettings_log, :sh, location:, scheme:, startdate:, owning_organisation: user.organisation, created_by: user) }
+      let(:lettings_log) { create(:lettings_log, :sh, location:, scheme:, startdate:, owning_organisation: user.organisation, assigned_to: user) }
       let(:startdate) { Time.utc(2022, 10, 11) }
       let(:setup_schemes) { nil }
 

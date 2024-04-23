@@ -31,7 +31,7 @@ RSpec.describe Csv::LettingsLogCsvService do
         tenancycode: "HIJKLMN",
         postcode_full: "NW9 5LL",
         ppostcode_full: "TN23 6LZ",
-        created_by: user,
+        assigned_to: user,
         managing_organisation: organisation,
         hhmemb: 4,
         details_known_3: 1,
@@ -124,7 +124,7 @@ RSpec.describe Csv::LettingsLogCsvService do
     end
 
     it "adds log attributes not related to questions to the headers" do
-      expect(headers.first(5)).to eq %w[id status duplicate_set_id created_by is_dpo]
+      expect(headers.first(5)).to eq %w[id status duplicate_set_id assigned_to is_dpo]
     end
 
     it "adds attributes related to associated schemes and locations to the headers" do

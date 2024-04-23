@@ -17,14 +17,14 @@ RSpec.describe "validations" do
     FactoryBot.create(
       :lettings_log,
       :in_progress,
-      created_by: user,
+      assigned_to: user,
       renewal: 0,
     )
   end
   let(:empty_lettings_log) do
     FactoryBot.create(
       :lettings_log,
-      created_by: user,
+      assigned_to: user,
     )
   end
   let(:id) { lettings_log.id }
@@ -121,7 +121,7 @@ RSpec.describe "validations" do
           :in_progress,
           hhmemb: 1,
           ecstat1: 1,
-          created_by: user,
+          assigned_to: user,
         )
       end
       let(:income_over_soft_limit) { 750 }
