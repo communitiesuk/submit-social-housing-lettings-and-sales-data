@@ -32,6 +32,17 @@
         autocomplete: "tel",
         width: 20 %>
 
+      <%= f.govuk_check_boxes_fieldset :rent_periods,
+        legend: { text: "What are the rent periods for the organisation?" } do %>
+        <% @rent_periods.map do |key, period| %>
+          <%= f.govuk_check_box :rent_periods,
+            key,
+            label: { text: period["value"] },
+            checked: period[:checked]
+            %>
+        <% end %>
+      <% end %>
+
       <%= f.govuk_submit "Save changes" %>
     </div>
   </div>

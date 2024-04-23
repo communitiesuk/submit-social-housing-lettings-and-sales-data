@@ -51,4 +51,33 @@ RSpec.describe OrganisationsController, type: :request do
       expect(org_rent_periods.map(&:organisation_id)).to all be org.id
     end
   end
+
+  describe "#edit" do
+    let(:organisation) { create(:organisation) }
+    let(:fake_rent_periods) do
+      {
+        "1" => { "value" => "Every minute" },
+        "2" => { "value" => "Every decade" },
+      }
+    end
+    let(:checked_rent_period_id) { "1" }
+
+    before do
+      create(:organisation_rent_period, organisation:, rent_period: checked_rent_period_id)
+      get edit_organisation_path organisation
+    end
+
+    it "displays the rent periods question" do
+      expect(page).to have_content "What are the rent periods for the organisation?"
+    end
+
+    it "the checkboxes for each rent period are checked where appropriate" do
+      checkboxes = page.all "input[type='checkbox']"
+      expect(checkboxes.count).to be 2
+      expected_checked_checkbox = checkboxes.find { |cb| cb[:value] == checked_rent_period_id }
+      expect(expected_checked_checkbox[:checked]).to be true
+      expected_not_checked_checkbox = checkboxes.find { |cb| cb[:value] != checked_rent_period_id }
+      expect(expected_not_checked_checkbox[:checked]).to be false
+    end
+  end
 end

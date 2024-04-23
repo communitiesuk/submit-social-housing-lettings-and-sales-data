@@ -16,7 +16,7 @@ module OrganisationsHelper
       { name: "Telephone number", value: organisation.phone, editable: true },
       { name: "Type of provider", value: organisation.display_provider_type, editable: false },
       { name: "Registration number", value: organisation.housing_registration_no || "", editable: false },
-      { name: "Rent periods", value: organisation.rent_period_labels, editable: false, format: :bullet },
+      { name: "Rent periods", value: organisation.rent_period_labels, editable: true, format: :bullet },
       { name: "Owns housing stock", value: organisation.holds_own_stock ? "Yes" : "No", editable: false },
       { name: "Status", value: status_tag(organisation.status), editable: false },
     ]

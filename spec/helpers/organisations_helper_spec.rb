@@ -14,7 +14,7 @@ RSpec.describe OrganisationsHelper do
          { editable: true, name: "Telephone number", value: nil },
          { editable: false, name: "Type of provider", value: "Local authority" },
          { editable: false, name: "Registration number", value: "1234" },
-         { editable: false, format: :bullet, name: "Rent periods", value: %w[All] },
+         { editable: true, format: :bullet, name: "Rent periods", value: %w[All] },
          { editable: false, name: "Owns housing stock", value: "Yes" },
          { editable: false, name: "Status", value: status_tag(organisation.status) }],
       )

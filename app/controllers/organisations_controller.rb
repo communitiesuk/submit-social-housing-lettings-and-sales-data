@@ -94,6 +94,8 @@ class OrganisationsController < ApplicationController
 
   def edit
     if current_user.data_coordinator? || current_user.support?
+      checked_periods = @organisation.organisation_rent_periods.map(&:rent_period).map(&:to_s)
+      @rent_periods = helpers.rent_periods_with_checked_attr(checked_periods:)
       render "edit", layout: "application"
     else
       head :unauthorized
