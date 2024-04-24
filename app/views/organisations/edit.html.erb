@@ -12,23 +12,24 @@
       </h1>
 
       <% if current_user.support? %>
-        <%= f.govuk_text_field :name, autocomplete: "name" %>
+        <%= f.govuk_text_field :name, autocomplete: "name", label: { size: "m" } %>
       <% end %>
 
       <%= f.govuk_text_field :address_line1,
-        label: { text: "Address line 1" },
+        label: { text: "Address line 1", size: "m" },
         autocomplete: "address-line1" %>
 
       <%= f.govuk_text_field :address_line2,
-        label: { text: "Address line 2" },
+        label: { text: "Address line 2", size: "m" },
         autocomplete: "address-line2" %>
 
       <%= f.govuk_text_field :postcode,
+        label: { size: "m" },
         autocomplete: "postal-code",
         width: 10 %>
 
       <%= f.govuk_phone_field :phone,
-        label: { text: "Telephone number" },
+        label: { text: "Telephone number", size: "m" },
         autocomplete: "tel",
         width: 20 %>
 

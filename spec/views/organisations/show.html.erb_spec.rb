@@ -2,13 +2,8 @@ require "rails_helper"
 
 RSpec.describe "organisations/show.html.erb" do
   before do
-    Timecop.freeze(Time.zone.local(2023, 1, 10))
     allow(view).to receive(:current_user).and_return(user)
     assign(:organisation, user.organisation)
-  end
-
-  after do
-    Timecop.return
   end
 
   let(:fragment) { Capybara::Node::Simple.new(rendered) }
@@ -21,7 +16,7 @@ RSpec.describe "organisations/show.html.erb" do
     it "includes data sharing agreement row" do
       render
 
-      expect(fragment).to have_content("Data Sharing Agreement")
+      expect(fragment).to have_content("Data protection agreement")
     end
 
     it "shows data sharing agreement not accepted" do
@@ -42,7 +37,7 @@ RSpec.describe "organisations/show.html.erb" do
       it "includes data sharing agreement row" do
         render
 
-        expect(fragment).to have_content("Data Sharing Agreement")
+        expect(fragment).to have_content("Data protection agreement")
       end
 
       it "shows data sharing agreement accepted" do
@@ -65,7 +60,7 @@ RSpec.describe "organisations/show.html.erb" do
     it "includes data sharing agreement row" do
       render
 
-      expect(fragment).to have_content("Data Sharing Agreement")
+      expect(fragment).to have_content("Data protection agreement")
     end
 
     it "shows data sharing agreement not accepted" do
@@ -92,7 +87,7 @@ RSpec.describe "organisations/show.html.erb" do
       it "includes data sharing agreement row" do
         render
 
-        expect(fragment).to have_content("Data Sharing Agreement")
+        expect(fragment).to have_content("Data protection agreement")
       end
 
       it "shows data sharing agreement accepted with date" do
@@ -135,7 +130,7 @@ RSpec.describe "organisations/show.html.erb" do
     it "includes data sharing agreement row" do
       render
 
-      expect(fragment).to have_content("Data Sharing Agreement")
+      expect(fragment).to have_content("Data protection agreement")
     end
 
     it "shows data sharing agreement not accepted" do
@@ -159,7 +154,7 @@ RSpec.describe "organisations/show.html.erb" do
       it "includes data sharing agreement row" do
         render
 
-        expect(fragment).to have_content("Data Sharing Agreement")
+        expect(fragment).to have_content("Data protection agreement")
       end
 
       it "shows data sharing agreement accepted" do
