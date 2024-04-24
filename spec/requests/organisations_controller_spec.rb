@@ -1569,7 +1569,8 @@ RSpec.describe OrganisationsController, type: :request do
 
         it "redirects to the organisation list" do
           request
-          expect(response).to redirect_to("/organisations")
+          organisation = Organisation.find_by(housing_registration_no:)
+          expect(response).to redirect_to organisation_path(organisation)
         end
 
         context "when required params are missing" do
