@@ -33,7 +33,10 @@ To do this, you will need to “exec” into the container.
 - AWS access
 
 #### Accessing the rails console
-In a shell using suitable AWS credentials for the relevant account (e.g. the development, staging, or production account), run `./exec.sh env command` 
+Prerequisite:
+Configure AWS auth following the [documentation in the infra repo](https://github.com/communitiesuk/submit-social-housing-lettings-and-sales-data-infrastructure/blob/main/docs/development_setup.md). This also details how to enter a subshell with suitable AWS credentials.
+
+In a shell using suitable AWS credentials for the relevant account (e.g. the development, staging, or production account), run `./exec.sh env command`
 
 E.g. `./exec.sh staging "rails c"` - this will open the rails console on an app container in the staging environment, when authenticated for the staging aws account.
 
