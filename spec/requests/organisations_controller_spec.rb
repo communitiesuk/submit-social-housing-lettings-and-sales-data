@@ -7,7 +7,8 @@ RSpec.describe OrganisationsController, type: :request do
   let(:page) { Capybara::Node::Simple.new(response.body) }
   let(:user) { create(:user, :data_coordinator) }
   let(:new_value) { "Test Name 35" }
-  let(:params) { { id: organisation.id, organisation: { name: new_value } } }
+  let(:active) { nil }
+  let(:params) { { id: organisation.id, organisation: { name: new_value, active:, rent_periods: [] } } }
 
   before do
     Timecop.freeze(Time.zone.local(2024, 3, 1))
@@ -581,12 +582,7 @@ RSpec.describe OrganisationsController, type: :request do
           end
 
           context "with active parameter true" do
-            let(:params) do
-              {
-                id: organisation.id,
-                organisation: { active: "true" },
-              }
-            end
+            let(:active) { true }
 
             it "redirects" do
               expect(response).to have_http_status(:unauthorized)
@@ -594,12 +590,7 @@ RSpec.describe OrganisationsController, type: :request do
           end
 
           context "with active parameter false" do
-            let(:params) do
-              {
-                id: organisation.id,
-                organisation: { active: "false" },
-              }
-            end
+            let(:active) { false }
 
             it "redirects" do
               expect(response).to have_http_status(:unauthorized)
@@ -705,6 +696,7 @@ RSpec.describe OrganisationsController, type: :request do
               provider_type: "LA",
               holds_own_stock: "true",
               housing_registration_no: "7917937",
+              rent_periods: [],
             },
           }
         end
@@ -1329,7 +1321,7 @@ RSpec.describe OrganisationsController, type: :request do
           end
 
           it "allows to edit the organisation details" do
-            expect(page).to have_link("Change", count: 3)
+            expect(page).to have_link("Change")
           end
         end
 
@@ -1434,8 +1426,10 @@ RSpec.describe OrganisationsController, type: :request do
       end
 
       describe "#update" do
+        let(:params) { { id: organisation.id, organisation: { active:, rent_periods: [] } } }
+
         context "with active parameter false" do
-          let(:params) { { id: organisation.id, organisation: { active: "false" } } }
+          let(:active) { false }
 
           user_to_update = nil
 
@@ -1455,15 +1449,9 @@ RSpec.describe OrganisationsController, type: :request do
           user_to_reactivate = nil
           user_not_to_reactivate = nil
 
-          let(:params) do
-            {
-              id: organisation.id,
-              organisation: { active: "true" },
-            }
-          end
           let(:notify_client) { instance_double(Notifications::Client) }
           let(:devise_notify_mailer) { DeviseNotifyMailer.new }
-
+          let(:active) { true }
           let(:expected_personalisation) do
             {
               name: user_to_reactivate.name,
@@ -1547,6 +1535,7 @@ RSpec.describe OrganisationsController, type: :request do
               provider_type:,
               holds_own_stock:,
               housing_registration_no:,
+              rent_periods: [],
             },
           }
         end

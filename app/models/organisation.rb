@@ -108,8 +108,11 @@ class Organisation < ApplicationRecord
   end
 
   def rent_period_labels
-    labels = rent_periods.map { |period| RentPeriod.rent_period_mappings.dig(period.to_s, "value") }
-    labels.compact.presence || %w[All]
+    rent_period_ids = rent_periods
+    mappings = RentPeriod.rent_period_mappings
+    return %w[All] if (mappings.keys.map(&:to_i) - rent_period_ids).empty?
+
+    rent_period_ids.map { |id| mappings.dig(id.to_s, "value") }.compact
   end
 
   def data_protection_confirmed?
