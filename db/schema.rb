@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_03_19_122706) do
+ActiveRecord::Schema[7.0].define(version: 2024_04_23_095327) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -193,14 +193,14 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_19_122706) do
     t.integer "hb"
     t.integer "hbrentshortfall"
     t.integer "property_relet"
-    t.datetime "mrcdate", precision: nil
+    t.datetime "mrcdate"
     t.integer "incref"
-    t.datetime "startdate", precision: nil
+    t.datetime "startdate"
     t.integer "armedforces"
     t.integer "first_time_property_let_as_social_housing"
     t.integer "unitletas"
     t.integer "builtype"
-    t.datetime "voiddate", precision: nil
+    t.datetime "voiddate"
     t.bigint "owning_organisation_id"
     t.bigint "managing_organisation_id"
     t.integer "renttype"
@@ -304,9 +304,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_19_122706) do
     t.integer "scharge_value_check"
     t.integer "pscharge_value_check"
     t.integer "duplicate_set_id"
-    t.integer "accessible_register"
     t.integer "nationality_all"
     t.integer "nationality_all_group"
+    t.integer "accessible_register"
     t.integer "reasonother_value_check"
     t.string "address_line1_input"
     t.string "postcode_full_input"
@@ -727,6 +727,16 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_19_122706) do
     t.index ["owning_organisation_id"], name: "index_schemes_on_owning_organisation_id"
   end
 
+  create_table "translations", force: :cascade do |t|
+    t.string "locale"
+    t.string "key"
+    t.text "value"
+    t.text "interpolations"
+    t.boolean "is_proc", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -738,8 +748,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_19_122706) do
     t.string "name"
     t.bigint "organisation_id"
     t.integer "sign_in_count", default: 0, null: false
-    t.datetime "current_sign_in_at", precision: nil
-    t.datetime "last_sign_in_at", precision: nil
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
     t.string "current_sign_in_ip"
     t.string "last_sign_in_ip"
     t.integer "role"
@@ -763,8 +773,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_19_122706) do
     t.datetime "confirmation_sent_at"
     t.string "unconfirmed_email"
     t.boolean "initial_confirmation_sent"
-    t.datetime "discarded_at"
     t.boolean "reactivate_with_organisation"
+    t.datetime "discarded_at"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["encrypted_otp_secret_key"], name: "index_users_on_encrypted_otp_secret_key", unique: true

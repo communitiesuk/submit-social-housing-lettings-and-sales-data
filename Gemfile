@@ -65,6 +65,7 @@ gem "auto_strip_attributes"
 gem "sidekiq"
 gem "sidekiq-cron"
 gem "unread"
+gem "i18n-active_record", require: "i18n/active_record"
 
 group :development, :test do
   # Check gems for known vulnerabilities

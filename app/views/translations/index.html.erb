@@ -1,0 +1,24 @@
+<%= govuk_table do |table| %>
+  <% @translation_overrides.each do |translation| %>
+    <%= table.with_body do |body| %>
+      <%= body.with_row do |row| %>
+        <%= row.with_cell(text: translation.key) %>
+        <%= row.with_cell(text: translation.value) %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= govuk_section_break(visible: true, size: "m") %>
+
+<%= govuk_table do |table| %>
+  <% @default_translations.each do |translation| %>
+    <%= table.with_body do |body| %>
+      <%= body.with_row do |row| %>
+        <%= row.with_cell(text: translation[0]) %>
+        <%= row.with_cell(text: translation[1]) %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
+

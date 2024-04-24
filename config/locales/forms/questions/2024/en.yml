@@ -1,14 +1,15 @@
 en:
   forms:
     questions:
+      sex1:
+        check_answer_label: "Default"
       2024:
         sex1:
           header: "Which of these best describes the lead tenant’s gender identity?"
-          check_answer_label: "Lead tenant’s gender identity"
           hint_text: "This should be however they personally choose to identify from the options below. This may or may not be the same as their biological sex or the sex they were assigned at birth."
           question_number: 32
           options:
-            F: "Female"
+            F: "Female 2024"
             M: "Male"
             X: "Non-binary"
             R: "Tenant prefers not to say"

@@ -2,7 +2,7 @@ class Form::Lettings::Questions::GenderIdentity1 < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "sex1"
-    @check_answer_label = I18n.t("forms.questions.#{form.start_date.year}.sex1.check_answer_label")
+    @check_answer_label = I18n.t("forms.questions.#{form.start_date.year}.sex1.check_answer_label", default: "forms.questions.sex1.check_answer_label".to_sym)
     @header = I18n.t("forms.questions.#{form.start_date.year}.sex1.header")
     @type = "radio"
     @check_answers_card_number = 1
