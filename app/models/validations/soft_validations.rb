@@ -239,18 +239,17 @@ private
     economic_status = public_send("ecstat#{person_num}")
     return unless age && economic_status
 
-    tenant_is_retired?(economic_status) && age < 60
+    tenant_is_retired?(economic_status) && age < 66
   end
 
   def not_retired_over_soft_max_age?(person_num)
     age = public_send("age#{person_num}")
     economic_status = public_send("ecstat#{person_num}")
-    gender = public_send("sex#{person_num}")
-    tenant_retired_or_prefers_not_say = tenant_is_retired?(economic_status) || tenant_prefers_not_to_say?(economic_status)
-    return unless age && economic_status && gender
+    return unless age && economic_status
 
-    %w[M X].include?(gender) && !tenant_retired_or_prefers_not_say && age > retirement_age_for_person(person_num) ||
-      gender == "F" && !tenant_retired_or_prefers_not_say && age > 60
+    return false if tenant_prefers_not_to_say?(economic_status)
+
+    !tenant_is_retired?(economic_status) && age > 66
   end
 
   def partner_under_16?(person_num)

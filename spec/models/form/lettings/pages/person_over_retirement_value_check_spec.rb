@@ -33,31 +33,12 @@ RSpec.describe Form::Lettings::Pages::PersonOverRetirementValueCheck, type: :mod
     it "has the correct title_text" do
       expect(page.title_text).to eq({
         "translation" => "soft_validations.retirement.max.title",
-        "arguments" => [
-          {
-            "key" => "retirement_age_for_person_2",
-            "label" => false,
-            "i18n_template" => "age",
-          },
-        ],
       })
     end
 
     it "has the correct informative_text" do
       expect(page.informative_text).to eq({
         "translation" => "soft_validations.retirement.max.hint_text",
-        "arguments" => [
-          {
-            "key" => "plural_gender_for_person_2",
-            "label" => false,
-            "i18n_template" => "gender",
-          },
-          {
-            "key" => "retirement_age_for_person_2",
-            "label" => false,
-            "i18n_template" => "age",
-          },
-        ],
       })
     end
   end
@@ -74,31 +55,12 @@ RSpec.describe Form::Lettings::Pages::PersonOverRetirementValueCheck, type: :mod
     it "has the correct title_text" do
       expect(page.title_text).to eq({
         "translation" => "soft_validations.retirement.max.title",
-        "arguments" => [
-          {
-            "key" => "retirement_age_for_person_3",
-            "label" => false,
-            "i18n_template" => "age",
-          },
-        ],
       })
     end
 
     it "has the correct informative_text" do
       expect(page.informative_text).to eq({
         "translation" => "soft_validations.retirement.max.hint_text",
-        "arguments" => [
-          {
-            "key" => "plural_gender_for_person_3",
-            "label" => false,
-            "i18n_template" => "gender",
-          },
-          {
-            "key" => "retirement_age_for_person_3",
-            "label" => false,
-            "i18n_template" => "age",
-          },
-        ],
       })
     end
   end
