@@ -145,11 +145,6 @@ module Validations::HouseholdValidations
       record.errors.add :age1, I18n.t("validations.household.age.lead.over_25")
     end
 
-    if record.sex1 == "M" && record.previous_tenancy_was_refuge?
-      record.errors.add :prevten, I18n.t("validations.household.prevten.male_refuge")
-      record.errors.add :sex1, I18n.t("validations.household.gender.male_refuge")
-    end
-
     # 3  Private Sector Tenancy
     # 4  Tied housing or rented with job
     # 7  Direct access hostel
