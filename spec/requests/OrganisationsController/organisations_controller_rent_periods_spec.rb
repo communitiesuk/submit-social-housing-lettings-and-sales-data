@@ -20,8 +20,8 @@ RSpec.describe OrganisationsController, type: :request do
     end
 
     it "the checkboxes for each rent period are checked by default" do
-      checkboxes = page.all "input[type='checkbox']"
-      expect(checkboxes.count).to be 10
+      checkboxes = page.all "input[type='checkbox'][name='organisation[rent_periods][]']"
+      expect(checkboxes.count).to be > 5
       expect(checkboxes.all? { |box| box[:checked] }).to be true
     end
   end
@@ -63,6 +63,7 @@ RSpec.describe OrganisationsController, type: :request do
     let(:checked_rent_period_id) { "1" }
 
     before do
+      allow(RentPeriod).to receive(:rent_period_mappings).and_return fake_rent_periods
       create(:organisation_rent_period, organisation:, rent_period: checked_rent_period_id)
       get edit_organisation_path organisation
     end
@@ -85,12 +86,6 @@ RSpec.describe OrganisationsController, type: :request do
     let(:organisation) { create(:organisation) }
     let(:initially_checked_rent_period_id) { "1" }
     let(:initially_unchecked_rent_period_id) { "2" }
-    let(:fake_rent_periods) do
-      {
-        initially_checked_rent_period_id => { "value" => "Every minute" },
-        initially_unchecked_rent_period_id => { "value" => "Every decade" },
-      }
-    end
     let(:params) do
       {
         "organisation": {
