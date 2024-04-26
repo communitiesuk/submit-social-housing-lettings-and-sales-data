@@ -49,8 +49,8 @@ RSpec.describe "update_created_by_values" do
           let(:other_user) { create(:user, organisation: user.organisation) }
 
           before do
-            PaperTrail::Version.find_by(item_id: lettings_log.id, event: "create").update!(whodunnit: other_user.to_global_id.uri.to_s)
-            PaperTrail::Version.find_by(item_id: sales_log.id, event: "create").update!(whodunnit: other_user.to_global_id.uri.to_s)
+            PaperTrail::Version.find_by(item_id: lettings_log.id, item_type: "LettingsLog", event: "create").update!(whodunnit: other_user.to_global_id.uri.to_s)
+            PaperTrail::Version.find_by(item_id: sales_log.id, item_type: "SalesLog", event: "create").update!(whodunnit: other_user.to_global_id.uri.to_s)
           end
 
           it "updates created_by to create whodunnit for lettings" do
