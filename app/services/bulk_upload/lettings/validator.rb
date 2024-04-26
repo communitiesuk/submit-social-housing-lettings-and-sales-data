@@ -99,14 +99,7 @@ private
   end
 
   def csv_parser
-    @csv_parser ||= case bulk_upload.year
-                    when 2023
-                      BulkUpload::Lettings::Year2023::CsvParser.new(path:)
-                    when 2024
-                      BulkUpload::Lettings::Year2024::CsvParser.new(path:)
-                    else
-                      raise "csv parser not found"
-                    end
+    @csv_parser = BulkUpload::Lettings::CsvParser.new(path:, year: bulk_upload.year)
   end
 
   def row_offset
