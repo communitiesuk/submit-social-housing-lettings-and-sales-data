@@ -28,7 +28,7 @@ RSpec.describe Form::Sales::Questions::MortgageAmount, type: :model do
   end
 
   it "is not marked as derived" do
-    expect(question.derived?(nil)).to be false
+    expect(question).not_to be_derived(nil)
   end
 
   it "has the correct hint" do
@@ -45,5 +45,21 @@ RSpec.describe Form::Sales::Questions::MortgageAmount, type: :model do
 
   it "has correct min" do
     expect(question.min).to be(1)
+  end
+
+  context "when the mortgage is not used" do
+    let(:log) { create(:sales_log, :completed, mortgageused: 2, deposit: nil) }
+
+    it "is marked as derived" do
+      expect(question.derived?(log)).to be true
+    end
+  end
+
+  context "when the mortgage is used" do
+    let(:log) { create(:sales_log, :completed, mortgageused: 1) }
+
+    it "is marked as derived" do
+      expect(question.derived?(log)).to be false
+    end
   end
 end
