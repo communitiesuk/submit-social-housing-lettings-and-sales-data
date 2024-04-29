@@ -1,7 +1,7 @@
 import { Controller } from '@hotwired/stimulus'
 import accessibleAutocomplete from 'accessible-autocomplete'
 import 'accessible-autocomplete/dist/accessible-autocomplete.min.css'
-import { enhanceOption, suggestion, sort } from '../modules/search'
+import { enhanceOption, suggestion, sort, getSearchableName } from '../modules/search'
 
 export default class extends Controller {
   connect () {
@@ -28,7 +28,7 @@ export default class extends Controller {
       onConfirm: (val) => {
         const selectedOption = [].filter.call(
           selectOptions,
-          (option) => (option.textContent || option.innerText) === val
+          (option) => (getSearchableName(option)) === val
         )[0]
         if (selectedOption) selectedOption.selected = true
       }

@@ -83,7 +83,7 @@ RSpec.describe "Accessible Autocomplete" do
 
     it "can match on synonyms", js: true do
       find("#lettings-log-scheme-id-field").click.native.send_keys("w", "6", :down, :enter)
-      expect(find("#lettings-log-scheme-id-field").value).to eq(scheme.service_name)
+      expect(find("#lettings-log-scheme-id-field").value).to include(scheme.service_name)
     end
 
     it "displays appended text next to the options", js: true do
