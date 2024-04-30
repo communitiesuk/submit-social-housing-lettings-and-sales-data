@@ -79,7 +79,7 @@ class OrganisationsController < ApplicationController
   end
 
   def create
-    selected_rent_periods = params.require(:organisation).permit(rent_periods: [])[:rent_periods].compact_blank
+    selected_rent_periods = rent_period_params
     @organisation = Organisation.new(org_params)
     if @organisation.save
       OrganisationRentPeriod.transaction do
@@ -95,8 +95,8 @@ class OrganisationsController < ApplicationController
 
   def edit
     if current_user.data_coordinator? || current_user.support?
-      checked_periods = @organisation.organisation_rent_periods.map(&:rent_period).map(&:to_s)
-      @rent_periods = helpers.rent_periods_with_checked_attr(checked_periods:)
+      current_allowed_rent_periods = @organisation.organisation_rent_periods.pluck(:rent_period).map(&:to_s)
+      @rent_periods = helpers.rent_periods_with_checked_attr(checked_periods: current_allowed_rent_periods)
       render "edit", layout: "application"
     else
       head :unauthorized
@@ -116,7 +116,7 @@ class OrganisationsController < ApplicationController
   end
 
   def update
-    selected_rent_periods = params.require(:organisation).permit(rent_periods: [])[:rent_periods].compact_blank
+    selected_rent_periods = rent_period_params
     if (current_user.data_coordinator? && org_params[:active].nil?) || current_user.support?
       if @organisation.update(org_params)
         case org_params[:active]
@@ -135,7 +135,7 @@ class OrganisationsController < ApplicationController
         else
           flash[:notice] = I18n.t("organisation.updated")
         end
-        existing_rent_periods = @organisation.organisation_rent_periods.map(&:rent_period)
+        existing_rent_periods = @organisation.organisation_rent_periods.pluck(:rent_period)
         rent_periods_to_create = selected_rent_periods.map(&:to_i) - existing_rent_periods
         rent_periods_to_delete = existing_rent_periods - selected_rent_periods.map(&:to_i)
         OrganisationRentPeriod.transaction do
@@ -291,6 +291,10 @@ private
 
   def org_params
     params.require(:organisation).permit(:name, :address_line1, :address_line2, :postcode, :phone, :holds_own_stock, :provider_type, :housing_registration_no, :active)
+  end
+
+  def rent_period_params
+    params.require(:organisation).permit(rent_periods: [])[:rent_periods].compact_blank
   end
 
   def codes_only_export?

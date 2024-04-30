@@ -40,12 +40,8 @@ module OrganisationsHelper
   end
 
   def rent_periods_with_checked_attr(checked_periods: nil)
-    all_rent_periods = RentPeriod.rent_period_mappings
-    rent_periods = all_rent_periods.map do |code, period|
-      period_copy = period.clone
-      period_copy[:checked] = true if checked_periods.nil? || checked_periods.include?(code)
-      [code, period_copy]
+    RentPeriod.rent_period_mappings.each_with_object({}) do |(period_code, period_value), result|
+      result[period_code] = period_value.merge(checked: checked_periods.nil? || checked_periods.include?(period_code))
     end
-    rent_periods.to_h
   end
 end
