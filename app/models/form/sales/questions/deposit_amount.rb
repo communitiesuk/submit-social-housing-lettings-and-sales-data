@@ -16,11 +16,7 @@ class Form::Sales::Questions::DepositAmount < ::Form::Question
   end
 
   def derived?(log)
-    log.outright_sale? && log.mortgage_not_used?
-  end
-
-  def selected_answer_option_is_derived?(_log)
-    true
+    log.outright_sale? && !log.mortgage_used?
   end
 
   QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP = {

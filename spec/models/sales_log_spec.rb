@@ -538,6 +538,11 @@ RSpec.describe SalesLog, type: :model do
   describe "derived variables" do
     let(:sales_log) { create(:sales_log, :completed) }
 
+    before do
+      Timecop.return
+      Singleton.__init__(FormHandler)
+    end
+
     it "correctly derives and saves exday, exmonth and exyear" do
       sales_log.update!(exdate: Time.gm(2023, 5, 4), saledate: Time.gm(2023, 7, 4), ownershipsch: 1, type: 18, staircase: 2, resale: 2, proplen: 0)
       record_from_db = described_class.find(sales_log.id)
@@ -564,18 +569,24 @@ RSpec.describe SalesLog, type: :model do
       expect(record_from_db["deposit"]).to eq(nil)
     end
 
-    it "does not derive deposit if the mortgage use is unknown" do
-      Timecop.freeze(2024, 5, 2)
-      sales_log.update!(value: 123_400, deposit: nil, saledate: Time.zone.local(2024, 5, 2), mortgageused: 3, ownershipsch: 3, type: 10, companybuy: 1, jointpur: 1, jointmore: 1)
+    it "derives deposit as nil if the mortgage use is unknown" do
+      sales_log.update!(value: 123_400, deposit: 0, saledate: Time.zone.local(2024, 5, 2), mortgageused: 3, ownershipsch: 3, type: 10, companybuy: 1, jointpur: 1, jointmore: 1)
       record_from_db = described_class.find(sales_log.id)
       expect(record_from_db["deposit"]).to eq(nil)
     end
 
-    it "clears deposit when setting mortgage used to yes from no for outright sales" do
-      sales_log.update!(value: 123_400, deposit: nil, mortgageused: 2, ownershipsch: 3, type: 10, companybuy: 1, jointpur: 1, jointmore: 1)
+    it "clears deposit when setting mortgage used to yes for outright sales" do
+      sales_log.update!(value: 123_400, deposit: 123_400, mortgageused: 2, ownershipsch: 3, type: 10, companybuy: 1, jointpur: 1, jointmore: 1)
       sales_log.update!(mortgageused: 1)
       record_from_db = described_class.find(sales_log.id)
       expect(record_from_db["deposit"]).to eq(nil)
+    end
+
+    it "does not clear deposit when mortgage used is not changed" do
+      sales_log.update!(value: 123_400, deposit: 25_000, mortgageused: 1, ownershipsch: 3, type: 10, companybuy: 1, jointpur: 1, jointmore: 1)
+      sales_log.update!(mortgageused: 1)
+      record_from_db = described_class.find(sales_log.id)
+      expect(record_from_db["deposit"]).to eq(25_000)
     end
 
     it "correctly derives and saves pcode1 and pcode1 and pcode2" do
@@ -587,16 +598,14 @@ RSpec.describe SalesLog, type: :model do
 
     it "derives a mortgage value of 0 when mortgage is not used" do
       # to avoid log failing validations when mortgage value is removed:
-      new_grant_value = sales_log.grant + sales_log.mortgage
-      sales_log.update!(mortgageused: 2, grant: new_grant_value)
+      sales_log.update!(mortgage: 100_000, grant: nil, deposit: nil)
+      sales_log.update!(mortgageused: 2)
       record_from_db = described_class.find(sales_log.id)
       expect(record_from_db["mortgage"]).to eq(0.0)
     end
 
     it "clears mortgage value if mortgage used is changed from no to yes" do
-      # to avoid log failing validations when mortgage value is removed:
-      new_grant_value = sales_log.grant + sales_log.mortgage
-      sales_log.update!(mortgageused: 2, grant: new_grant_value)
+      sales_log.update!(mortgageused: 2, grant: nil)
       sales_log.update!(mortgageused: 1)
       record_from_db = described_class.find(sales_log.id)
       expect(record_from_db["mortgage"]).to eq(nil)
