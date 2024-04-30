@@ -67,6 +67,7 @@ gem "sidekiq"
 gem "sidekiq-cron"
 gem "unread"
 gem 'rails_admin', '~> 3.0'
+gem 'method_source', '~> 1.1'
 
 group :development, :test do
   # Check gems for known vulnerabilities
