@@ -24,6 +24,7 @@
     "html5shiv": "^3.7.3",
     "intersection-observer": "^0.12.0",
     "mini-css-extract-plugin": "^2.6.0",
+    "rails_admin": "3.1.2",
     "regenerator-runtime": "^0.13.9",
     "sass": "^1.49.9",
     "sass-loader": "^12.6.0",
@@ -60,6 +61,7 @@
     "extends": "stylelint-config-gds/scss"
   },
   "scripts": {
-    "build": "webpack --config webpack.config.js"
+    "build": "webpack --config webpack.config.js",
+    "build:css": "sass ./app/assets/stylesheets/rails_admin.scss:./app/assets/builds/rails_admin.css --no-source-map --load-path=node_modules"
   }
 }

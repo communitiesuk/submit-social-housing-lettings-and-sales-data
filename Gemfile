@@ -62,9 +62,11 @@ gem "possessive"
 # Strip whitespace from active record attributes
 gem "auto_strip_attributes"
 # Use sidekiq for background processing
+gem "ruby-openai"
 gem "sidekiq"
 gem "sidekiq-cron"
 gem "unread"
+gem 'rails_admin', '~> 3.0'
 
 group :development, :test do
   # Check gems for known vulnerabilities
@@ -106,3 +108,4 @@ end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby]
+gem "cssbundling-rails"

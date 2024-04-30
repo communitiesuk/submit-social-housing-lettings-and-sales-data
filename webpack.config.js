@@ -13,7 +13,8 @@ module.exports = {
   entry: {
     application: [
       './app/frontend/application.js'
-    ]
+    ],
+    rails_admin: "./app/javascript/rails_admin.js",
   },
   module: {
     rules: [
