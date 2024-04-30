@@ -812,7 +812,7 @@ RSpec.describe LettingsLogsController, type: :request do
               expect(page).to have_title("Lettings logs (#{logs.count} logs matching ‘#{postcode}’) (page 1 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
             end
 
-            xit "has title with pagination details for page 2" do
+            it "has title with pagination details for page 2" do
               get "/lettings-logs?search=#{logs[0].postcode_full}&page=2", headers:, params: {}
               expect(page).to have_title("Lettings logs (#{logs.count} logs matching ‘#{postcode}’) (page 2 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
             end
@@ -969,7 +969,7 @@ RSpec.describe LettingsLogsController, type: :request do
             end
           end
 
-          xcontext "when on the second page" do
+          context "when on the second page" do
             before do
               get "/lettings-logs?page=2", headers:, params: {}
             end
@@ -1622,18 +1622,24 @@ RSpec.describe LettingsLogsController, type: :request do
     let(:headers) { { "Accept" => "text/html" } }
     let(:page) { Capybara::Node::Simple.new(response.body) }
     let(:user) { create(:user, :support) }
-    let!(:lettings_log) do
-      create(:lettings_log, :completed)
-    end
     let(:id) { lettings_log.id }
     let(:delete_request) { delete "/lettings-logs/#{id}", headers: }
 
     before do
+      Timecop.freeze(2024, 3, 1)
+      Singleton.__init__(FormHandler)
       allow(user).to receive(:need_two_factor_authentication?).and_return(false)
       sign_in user
     end
 
+    after do
+      Timecop.return
+      Singleton.__init__(FormHandler)
+    end
+
     context "when delete permitted" do
+      let!(:lettings_log) { create(:lettings_log, :completed) }
+
       it "redirects to lettings logs and shows message" do
         delete_request
         expect(response).to redirect_to(lettings_logs_path)
@@ -1641,13 +1647,17 @@ RSpec.describe LettingsLogsController, type: :request do
         expect(page).to have_content("Log #{id} has been deleted.")
       end
 
-      xit "marks the log as deleted" do
+      it "marks the log as deleted" do
         expect { delete_request }.to change { lettings_log.reload.status }.from("completed").to("deleted")
       end
     end
 
     context "when log does not exist" do
       let(:id) { -1 }
+
+      before do
+        create(:lettings_log, :completed)
+      end
 
       it "returns 404" do
         delete_request
@@ -1657,6 +1667,7 @@ RSpec.describe LettingsLogsController, type: :request do
 
     context "when user not authorised" do
       let(:user) { create(:user) }
+      let(:lettings_log) { create(:lettings_log, :completed) }
 
       it "returns 401" do
         delete_request
