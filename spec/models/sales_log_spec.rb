@@ -583,7 +583,7 @@ RSpec.describe SalesLog, type: :model do
     end
 
     it "does not clear deposit when mortgage used is not changed" do
-      sales_log.update!(value: 123_400, deposit: 25_000, mortgageused: 1, ownershipsch: 3, type: 10, companybuy: 1, jointpur: 1, jointmore: 1)
+      sales_log.update!(value: 125_000, deposit: 25_000, mortgageused: 1, mortgage: 100_000, ownershipsch: 3, type: 10, companybuy: 1, jointpur: 1, jointmore: 1)
       sales_log.update!(mortgageused: 1)
       record_from_db = described_class.find(sales_log.id)
       expect(record_from_db["deposit"]).to eq(25_000)
