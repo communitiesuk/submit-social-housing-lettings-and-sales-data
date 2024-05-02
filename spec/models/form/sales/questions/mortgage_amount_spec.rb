@@ -48,18 +48,18 @@ RSpec.describe Form::Sales::Questions::MortgageAmount, type: :model do
   end
 
   context "when the mortgage is not used" do
-    let(:log) { create(:sales_log, :completed, mortgageused: 2, deposit: nil) }
+    let(:log) { build(:sales_log, :completed, mortgageused: 2, deposit: nil) }
 
     it "is marked as derived" do
-      expect(question.derived?(log)).to be true
+      expect(question).to be_derived(log)
     end
   end
 
   context "when the mortgage is used" do
-    let(:log) { create(:sales_log, :completed, mortgageused: 1) }
+    let(:log) { build(:sales_log, :completed, mortgageused: 1) }
 
     it "is marked as derived" do
-      expect(question.derived?(log)).to be false
+      expect(question).not_to be_derived(log)
     end
   end
 end

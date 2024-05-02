@@ -20,6 +20,6 @@ class Form::Sales::Questions::MortgageAmount < ::Form::Question
   }.freeze
 
   def derived?(log)
-    log && log.mortgage_not_used?
+    log&.mortgage_not_used?
   end
 end
