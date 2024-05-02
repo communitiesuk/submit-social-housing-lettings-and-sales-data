@@ -27,6 +27,8 @@ FactoryBot.define do
       ownershipsch { 1 }
       type { 30 }
       jointpur { 2 }
+      noint { 2 }
+      privacynotice { 1 }
     end
     trait :outright_sale_setup_complete do
       saledate_today
@@ -35,6 +37,9 @@ FactoryBot.define do
       companybuy { 2 }
       buylivein { 1 }
       jointpur { 2 }
+      noint { 2 }
+      privacynotice { 1 }
+      purchid { rand(999_999_999).to_s }
     end
     trait :duplicate do
       purchid { "PC123" }

@@ -23,8 +23,8 @@ module DerivedVariables::SalesLogVariables
         self.deposit = value
       elsif mortgage_use_unknown?
         self.deposit = nil
-      elsif mortgageused_changed?(to: 1)
-        # Clear when switching mortgage used to yes
+      elsif mortgageused_changed?(from: 2, to: 1)
+        # Clear when switching mortgage used from no to yes
         self.deposit = nil
       end
     end

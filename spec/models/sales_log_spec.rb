@@ -1,5 +1,4 @@
 require "rails_helper"
-require "shared/shared_examples_for_derived_fields"
 require "shared/shared_log_examples"
 
 # rubocop:disable RSpec/MessageChain
@@ -17,7 +16,6 @@ RSpec.describe SalesLog, type: :model do
     Singleton.__init__(FormHandler)
   end
 
-  include_examples "shared examples for derived fields", :sales_log
   include_examples "shared log examples", :sales_log
 
   it "inherits from log" do
@@ -531,174 +529,6 @@ RSpec.describe SalesLog, type: :model do
         duplicate_sets = described_class.duplicate_sets(user.id)
         expect(duplicate_sets.count).to eq(1)
         expect(duplicate_sets.first).to contain_exactly(log.id, duplicate_log.id)
-      end
-    end
-  end
-
-  describe "derived variables" do
-    let(:sales_log) { create(:sales_log, :completed) }
-
-    before do
-      Timecop.return
-      Singleton.__init__(FormHandler)
-    end
-
-    it "correctly derives and saves exday, exmonth and exyear" do
-      sales_log.update!(exdate: Time.gm(2023, 5, 4), saledate: Time.gm(2023, 7, 4), ownershipsch: 1, type: 18, staircase: 2, resale: 2, proplen: 0)
-      record_from_db = described_class.find(sales_log.id)
-      expect(record_from_db["exday"]).to eq(4)
-      expect(record_from_db["exmonth"]).to eq(5)
-      expect(record_from_db["exyear"]).to eq(2023)
-    end
-
-    it "correctly derives and saves deposit for outright sales when no mortgage is used" do
-      sales_log.update!(value: 123_400, deposit: nil, mortgageused: 2, ownershipsch: 3, type: 10, companybuy: 1, jointpur: 1, jointmore: 1)
-      record_from_db = described_class.find(sales_log.id)
-      expect(record_from_db["deposit"]).to eq(123_400)
-    end
-
-    it "does not derive deposit if the sale isn't outright" do
-      sales_log.update!(value: 123_400, deposit: nil, mortgageused: 2, ownershipsch: 2)
-      record_from_db = described_class.find(sales_log.id)
-      expect(record_from_db["deposit"]).to eq(nil)
-    end
-
-    it "does not derive deposit if the mortgage is used" do
-      sales_log.update!(value: 123_400, deposit: nil, mortgageused: 1, ownershipsch: 3, type: 10, companybuy: 1, jointpur: 1, jointmore: 1)
-      record_from_db = described_class.find(sales_log.id)
-      expect(record_from_db["deposit"]).to eq(nil)
-    end
-
-    it "derives deposit as nil if the mortgage use is unknown" do
-      sales_log.update!(value: 123_400, deposit: 0, saledate: Time.zone.local(2024, 5, 2), mortgageused: 3, ownershipsch: 3, type: 10, companybuy: 1, jointpur: 1, jointmore: 1)
-      record_from_db = described_class.find(sales_log.id)
-      expect(record_from_db["deposit"]).to eq(nil)
-    end
-
-    it "clears deposit when setting mortgage used to yes for outright sales" do
-      sales_log.update!(value: 123_400, deposit: 123_400, mortgageused: 2, ownershipsch: 3, type: 10, companybuy: 1, jointpur: 1, jointmore: 1)
-      sales_log.update!(mortgageused: 1)
-      record_from_db = described_class.find(sales_log.id)
-      expect(record_from_db["deposit"]).to eq(nil)
-    end
-
-    it "does not clear deposit when mortgage used is not changed" do
-      sales_log.update!(value: 125_000, deposit: 25_000, mortgageused: 1, mortgage: 100_000, ownershipsch: 3, type: 10, companybuy: 1, jointpur: 1, jointmore: 1)
-      sales_log.update!(mortgageused: 1)
-      record_from_db = described_class.find(sales_log.id)
-      expect(record_from_db["deposit"]).to eq(25_000)
-    end
-
-    it "correctly derives and saves pcode1 and pcode1 and pcode2" do
-      sales_log.update!(postcode_full: "W6 0SP")
-      record_from_db = described_class.find(sales_log.id)
-      expect(record_from_db["pcode1"]).to eq("W6")
-      expect(record_from_db["pcode2"]).to eq("0SP")
-    end
-
-    it "derives a mortgage value of 0 when mortgage is not used" do
-      # to avoid log failing validations when mortgage value is removed:
-      sales_log.update!(mortgage: 100_000, grant: nil, deposit: nil)
-      sales_log.update!(mortgageused: 2)
-      record_from_db = described_class.find(sales_log.id)
-      expect(record_from_db["mortgage"]).to eq(0.0)
-    end
-
-    it "clears mortgage value if mortgage used is changed from no to yes" do
-      sales_log.update!(mortgageused: 2, grant: nil)
-      sales_log.update!(mortgageused: 1)
-      record_from_db = described_class.find(sales_log.id)
-      expect(record_from_db["mortgage"]).to eq(nil)
-    end
-
-    context "when outright sale and buyers will live in the property" do
-      let(:sales_log) { create(:sales_log, :outright_sale_setup_complete, buylivein: 1, jointpur:) }
-
-      context "and the sale is not a joint purchase" do
-        let(:jointpur) { 2 }
-
-        it "derives that buyer 1 will live in the property" do
-          expect(sales_log.buy1livein).to be 1
-        end
-
-        it "does not derive a value for whether buyer 2 will live in the property" do
-          expect(sales_log.buy2livein).to be nil
-        end
-
-        it "clears that buyer 1 will live in the property if joint purchase is updated" do
-          sales_log.update!(jointpur: 1)
-          expect(sales_log.buy1livein).to be nil
-        end
-      end
-
-      context "and the sale is a joint purchase" do
-        let(:jointpur) { 1 }
-
-        it "does not derive values for whether buyer 1 or buyer 2 will live in the property" do
-          expect(sales_log.buy1livein).to be nil
-          expect(sales_log.buy2livein).to be nil
-        end
-      end
-    end
-
-    context "when outright sale and buyers will not live in the property" do
-      let(:sales_log) { create(:sales_log, :outright_sale_setup_complete, buylivein: 2, jointpur:) }
-
-      context "and the sale is not a joint purchase" do
-        let(:jointpur) { 2 }
-
-        it "derives that buyer 1 will not live in the property" do
-          expect(sales_log.buy1livein).to be 2
-        end
-
-        it "does not derive a value for whether buyer 2 will live in the property" do
-          expect(sales_log.buy2livein).to be nil
-        end
-      end
-
-      context "and the sale is a joint purchase" do
-        let(:jointpur) { 1 }
-
-        it "derives that neither buyer 1 nor buyer 2 will live in the property" do
-          expect(sales_log.buy1livein).to be 2
-          expect(sales_log.buy2livein).to be 2
-        end
-      end
-    end
-
-    context "when deriving nationality variables" do
-      it "correctly derives nationality_all/nationality_all_buyer2 when it's UK" do
-        expect { sales_log.update!(nationality_all_group: 826) }.to change(sales_log, :nationality_all).to 826
-        expect { sales_log.update!(nationality_all_buyer2_group: 826) }.to change(sales_log, :nationality_all_buyer2).to 826
-      end
-
-      it "correctly derives nationality_all/nationality_all_buyer2 when buyer prefers not to say" do
-        expect { sales_log.update!(nationality_all_group: 0) }.to change(sales_log, :nationality_all).to 0
-        expect { sales_log.update!(nationality_all_buyer2_group: 0) }.to change(sales_log, :nationality_all_buyer2).to 0
-      end
-
-      it "does not derive nationality_all/nationality_all_buyer2 when it is other or not given" do
-        expect { sales_log.update!(nationality_all_group: 12) }.not_to change(sales_log, :nationality_all)
-        expect { sales_log.update!(nationality_all_buyer2_group: 12) }.not_to change(sales_log, :nationality_all_buyer2)
-        expect { sales_log.update!(nationality_all_group: nil) }.not_to change(sales_log, :nationality_all)
-        expect { sales_log.update!(nationality_all_buyer2_group: nil) }.not_to change(sales_log, :nationality_all_buyer2)
-      end
-    end
-
-    it "sets pregblank field when no buyer organisation is selected" do
-      expect {
-        sales_log.update!(pregyrha: 0,
-                          pregla: 0,
-                          pregghb: 0,
-                          pregother: 0)
-      }.to change(sales_log, :pregblank).to 1
-    end
-
-    %i[pregyrha pregla pregghb pregother].each do |field|
-      it "does not set pregblank field when #{field} is selected" do
-        expect {
-          sales_log.update!({ field => 1 })
-        }.not_to change(sales_log, :pregblank)
       end
     end
   end
