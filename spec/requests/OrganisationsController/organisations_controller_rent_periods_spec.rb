@@ -91,6 +91,7 @@ RSpec.describe OrganisationsController, type: :request do
         "organisation": {
           name: organisation.name,
           rent_periods: [initially_unchecked_rent_period_id],
+          all_rent_periods: [initially_unchecked_rent_period_id, initially_checked_rent_period_id],
         },
       }
     end

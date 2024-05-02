@@ -34,13 +34,19 @@
         width: 20 %>
 
       <%= f.govuk_check_boxes_fieldset :rent_periods,
-        legend: { text: "What are the rent periods for the organisation?" } do %>
+        legend: { text: "What are the rent periods for the organisation?" },
+        hint: { text: "It is not possible to deselect rent periods that are used in logs" } do %>
         <% @rent_periods.map do |key, period| %>
           <%= f.govuk_check_box :rent_periods,
             key,
             label: { text: period["value"] },
-            checked: period[:checked] %>
+            checked: period[:checked],
+            disabled: @used_rent_periods.include?(key) %>
         <% end %>
+      <% end %>
+
+      <% @rent_periods.keys.each do |period_key| %>
+        <%= f.hidden_field :all_rent_periods, value: period_key, multiple: true %>
       <% end %>
 
       <%= f.govuk_submit "Save changes" %>

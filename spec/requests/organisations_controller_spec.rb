@@ -8,7 +8,7 @@ RSpec.describe OrganisationsController, type: :request do
   let(:user) { create(:user, :data_coordinator) }
   let(:new_value) { "Test Name 35" }
   let(:active) { nil }
-  let(:params) { { id: organisation.id, organisation: { name: new_value, active:, rent_periods: [] } } }
+  let(:params) { { id: organisation.id, organisation: { name: new_value, active:, rent_periods: [], all_rent_periods: [] } } }
 
   before do
     Timecop.freeze(Time.zone.local(2024, 3, 1))
@@ -1426,7 +1426,7 @@ RSpec.describe OrganisationsController, type: :request do
       end
 
       describe "#update" do
-        let(:params) { { id: organisation.id, organisation: { active:, rent_periods: [] } } }
+        let(:params) { { id: organisation.id, organisation: { active:, rent_periods: [], all_rent_periods: [] } } }
 
         context "with active parameter false" do
           let(:active) { false }

@@ -79,7 +79,7 @@ class OrganisationsController < ApplicationController
   end
 
   def create
-    selected_rent_periods = rent_period_params
+    selected_rent_periods = rent_period_params[:rent_periods].compact_blank
     @organisation = Organisation.new(org_params)
     if @organisation.save
       OrganisationRentPeriod.transaction do
@@ -96,6 +96,7 @@ class OrganisationsController < ApplicationController
   def edit
     if current_user.data_coordinator? || current_user.support?
       current_allowed_rent_periods = @organisation.organisation_rent_periods.pluck(:rent_period).map(&:to_s)
+      @used_rent_periods = @organisation.lettings_logs.pluck(:period).uniq.compact.map(&:to_s)
       @rent_periods = helpers.rent_periods_with_checked_attr(checked_periods: current_allowed_rent_periods)
       render "edit", layout: "application"
     else
@@ -116,7 +117,7 @@ class OrganisationsController < ApplicationController
   end
 
   def update
-    selected_rent_periods = rent_period_params
+    selected_rent_periods = rent_period_params[:rent_periods].compact_blank
     if (current_user.data_coordinator? && org_params[:active].nil?) || current_user.support?
       if @organisation.update(org_params)
         case org_params[:active]
@@ -135,11 +136,9 @@ class OrganisationsController < ApplicationController
         else
           flash[:notice] = I18n.t("organisation.updated")
         end
-        existing_rent_periods = @organisation.organisation_rent_periods.pluck(:rent_period)
-        rent_periods_to_create = selected_rent_periods.map(&:to_i) - existing_rent_periods
-        rent_periods_to_delete = existing_rent_periods - selected_rent_periods.map(&:to_i)
+        rent_periods_to_delete = rent_period_params[:all_rent_periods] - selected_rent_periods
         OrganisationRentPeriod.transaction do
-          rent_periods_to_create.each { |period| OrganisationRentPeriod.create!(organisation: @organisation, rent_period: period) }
+          selected_rent_periods.each { |period| OrganisationRentPeriod.create(organisation: @organisation, rent_period: period) }
           OrganisationRentPeriod.where(organisation: @organisation, rent_period: rent_periods_to_delete).destroy_all
         end
         redirect_to details_organisation_path(@organisation)
@@ -294,7 +293,7 @@ private
   end
 
   def rent_period_params
-    params.require(:organisation).permit(rent_periods: [])[:rent_periods].compact_blank
+    params.require(:organisation).permit(rent_periods: [], all_rent_periods: [])
   end
 
   def codes_only_export?
