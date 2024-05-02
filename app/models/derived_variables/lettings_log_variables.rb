@@ -82,25 +82,6 @@ module DerivedVariables::LettingsLogVariables
     self.has_benefits = get_has_benefits
     self.tshortfall_known = 0 if tshortfall
     self.nocharge = household_charge&.zero? ? 1 : 0
-    if is_renewal?
-      self.underoccupation_benefitcap = 2 if collection_start_year == 2021
-      self.voiddate = startdate
-      self.unitletas = form.start_date.year >= 2023 ? UNITLETAS_MAPPING_23_24[rent_type] : UNITLETAS_MAPPING[rent_type]
-      if is_general_needs?
-        self.prevten = 32 if owning_organisation&.provider_type == "PRP"
-        self.prevten = 30 if owning_organisation&.provider_type == "LA"
-      end
-      self.ppostcode_full = postcode_full
-      self.ppcodenk = case postcode_known
-                      when 0
-                        1
-                      when 1
-                        0
-                      end
-      self.is_previous_la_inferred = is_la_inferred
-      self.previous_la_known = 1 if la.present?
-      self.prevloc = la
-    end
     if form.start_year_after_2024? && is_bedsit?
       self.beds = 1
     end
@@ -113,7 +94,6 @@ module DerivedVariables::LettingsLogVariables
     if is_supported_housing? && location
       self.wchair = location.mobility_type_before_type_cast == "W" ? 1 : 2
     end
-    self.vacdays = property_vacant_days
 
     set_housingneeds_fields if housingneeds?
 
@@ -134,7 +114,30 @@ module DerivedVariables::LettingsLogVariables
       self.postcode_known = nil
       self.postcode_full = nil
       self.la = nil
+      self.previous_la_known = nil if is_renewal?
     end
+
+    if is_renewal?
+      self.underoccupation_benefitcap = 2 if collection_start_year == 2021
+      self.voiddate = startdate
+      self.unitletas = form.start_date.year >= 2023 ? UNITLETAS_MAPPING_23_24[rent_type] : UNITLETAS_MAPPING[rent_type]
+      if is_general_needs?
+        self.prevten = 32 if owning_organisation&.provider_type == "PRP"
+        self.prevten = 30 if owning_organisation&.provider_type == "LA"
+      end
+      self.ppostcode_full = postcode_full
+      self.ppcodenk = case postcode_known
+                      when 0
+                        1
+                      when 1
+                        0
+                      end
+      self.is_previous_la_inferred = is_la_inferred
+      self.previous_la_known = 1 if la.present?
+      self.prevloc = la
+    end
+
+    self.vacdays = property_vacant_days
 
     self.nationality_all = nationality_all_group if nationality_uk_or_prefers_not_to_say?
 
