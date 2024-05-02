@@ -16,7 +16,7 @@ RSpec.describe "organisations/show.html.erb" do
     it "includes data sharing agreement row" do
       render
 
-      expect(fragment).to have_content("Data protection agreement")
+      expect(fragment).to have_content("Data Sharing Agreement")
     end
 
     it "shows data sharing agreement not accepted" do
@@ -37,7 +37,7 @@ RSpec.describe "organisations/show.html.erb" do
       it "includes data sharing agreement row" do
         render
 
-        expect(fragment).to have_content("Data protection agreement")
+        expect(fragment).to have_content("Data Sharing Agreement")
       end
 
       it "shows data sharing agreement accepted" do
@@ -60,7 +60,7 @@ RSpec.describe "organisations/show.html.erb" do
     it "includes data sharing agreement row" do
       render
 
-      expect(fragment).to have_content("Data protection agreement")
+      expect(fragment).to have_content("Data Sharing Agreement")
     end
 
     it "shows data sharing agreement not accepted" do
@@ -87,7 +87,7 @@ RSpec.describe "organisations/show.html.erb" do
       it "includes data sharing agreement row" do
         render
 
-        expect(fragment).to have_content("Data protection agreement")
+        expect(fragment).to have_content("Data Sharing Agreement")
       end
 
       it "shows data sharing agreement accepted with date" do
@@ -130,7 +130,7 @@ RSpec.describe "organisations/show.html.erb" do
     it "includes data sharing agreement row" do
       render
 
-      expect(fragment).to have_content("Data protection agreement")
+      expect(fragment).to have_content("Data Sharing Agreement")
     end
 
     it "shows data sharing agreement not accepted" do
@@ -154,7 +154,7 @@ RSpec.describe "organisations/show.html.erb" do
       it "includes data sharing agreement row" do
         render
 
-        expect(fragment).to have_content("Data protection agreement")
+        expect(fragment).to have_content("Data Sharing Agreement")
       end
 
       it "shows data sharing agreement accepted" do

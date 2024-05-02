@@ -5,7 +5,7 @@ RSpec.describe OrganisationsHelper do
   describe "display_organisation_attributes" do
     let(:organisation) { create(:organisation) }
 
-    it "does not include data protection agreement" do
+    it "has the correct values" do
       expect(display_organisation_attributes(organisation)).to eq(
         [{ editable: false, name: "Organisation ID", value: "ORG#{organisation.id}" },
          { editable: true,
@@ -14,9 +14,9 @@ RSpec.describe OrganisationsHelper do
          { editable: true, name: "Telephone number", value: nil },
          { editable: false, name: "Registration number", value: "1234" },
          { editable: false, name: "Type of provider", value: "Local authority" },
-         { editable: false, name: "Owns housing stock?", value: "Yes" },
+         { editable: false, name: "Owns housing stock", value: "Yes" },
          { editable: true, format: :bullet, name: "Rent periods", value: [] },
-         { name: "Data protection agreement" },
+         { name: "Data Sharing Agreement" },
          { editable: false, name: "Status", value: status_tag(organisation.status) }],
       )
     end
