@@ -3,8 +3,8 @@ require "rails_helper"
 RSpec.describe DuplicateLogsController, type: :request do
   let(:page) { Capybara::Node::Simple.new(response.body) }
   let(:user) { create(:user, :data_coordinator) }
-  let(:lettings_log) { create(:lettings_log, :duplicate, created_by: user) }
-  let(:sales_log) { create(:sales_log, :duplicate, created_by: user) }
+  let(:lettings_log) { create(:lettings_log, :duplicate, assigned_to: user) }
+  let(:sales_log) { create(:sales_log, :duplicate, assigned_to: user) }
 
   describe "GET show" do
     before do
@@ -485,7 +485,7 @@ RSpec.describe DuplicateLogsController, type: :request do
       let(:request) { get "/lettings-logs/#{id}/delete-duplicates?original_log_id=#{id}&referrer=duplicate_logs_banner" }
 
       context "when there is 1 duplicate log being deleted" do
-        let!(:duplicate_log) { create(:lettings_log, :duplicate, created_by: user) }
+        let!(:duplicate_log) { create(:lettings_log, :duplicate, assigned_to: user) }
 
         it "renders page with correct link params" do
           request
@@ -502,8 +502,8 @@ RSpec.describe DuplicateLogsController, type: :request do
       end
 
       context "when there are multiple duplicate logs being deleted" do
-        let!(:duplicate_log) { create(:lettings_log, :duplicate, created_by: user) }
-        let!(:duplicate_log_2) { create(:lettings_log, :duplicate, created_by: user) }
+        let!(:duplicate_log) { create(:lettings_log, :duplicate, assigned_to: user) }
+        let!(:duplicate_log_2) { create(:lettings_log, :duplicate, assigned_to: user) }
 
         it "renders page with correct link params" do
           request
@@ -522,7 +522,7 @@ RSpec.describe DuplicateLogsController, type: :request do
 
     context "when accessed from the single log submission flow" do
       context "when there is 1 duplicate log being deleted" do
-        let!(:duplicate_log) { create(:lettings_log, :duplicate, created_by: user) }
+        let!(:duplicate_log) { create(:lettings_log, :duplicate, assigned_to: user) }
 
         it "renders page" do
           request
@@ -539,8 +539,8 @@ RSpec.describe DuplicateLogsController, type: :request do
       end
 
       context "when there are multiple duplicate logs being deleted" do
-        let!(:duplicate_log) { create(:lettings_log, :duplicate, created_by: user) }
-        let!(:duplicate_log_2) { create(:lettings_log, :duplicate, created_by: user) }
+        let!(:duplicate_log) { create(:lettings_log, :duplicate, assigned_to: user) }
+        let!(:duplicate_log_2) { create(:lettings_log, :duplicate, assigned_to: user) }
 
         it "renders page" do
           request
@@ -612,7 +612,7 @@ RSpec.describe DuplicateLogsController, type: :request do
       end
 
       context "when there is 1 duplicate log being deleted" do
-        let!(:duplicate_log) { create(:sales_log, :duplicate, created_by: user) }
+        let!(:duplicate_log) { create(:sales_log, :duplicate, assigned_to: user) }
 
         it "renders page with correct link params" do
           request
@@ -629,8 +629,8 @@ RSpec.describe DuplicateLogsController, type: :request do
       end
 
       context "when there are multiple duplicate logs being deleted" do
-        let!(:duplicate_log) { create(:sales_log, :duplicate, created_by: user) }
-        let!(:duplicate_log_2) { create(:sales_log, :duplicate, created_by: user) }
+        let!(:duplicate_log) { create(:sales_log, :duplicate, assigned_to: user) }
+        let!(:duplicate_log_2) { create(:sales_log, :duplicate, assigned_to: user) }
 
         it "renders page with correct link params" do
           request
@@ -659,7 +659,7 @@ RSpec.describe DuplicateLogsController, type: :request do
       end
 
       context "when there is 1 duplicate log being deleted" do
-        let!(:duplicate_log) { create(:sales_log, :duplicate, created_by: user) }
+        let!(:duplicate_log) { create(:sales_log, :duplicate, assigned_to: user) }
 
         it "renders page" do
           request
@@ -676,8 +676,8 @@ RSpec.describe DuplicateLogsController, type: :request do
       end
 
       context "when there are multiple duplicate logs being deleted" do
-        let!(:duplicate_log) { create(:sales_log, :duplicate, created_by: user) }
-        let!(:duplicate_log_2) { create(:sales_log, :duplicate, created_by: user) }
+        let!(:duplicate_log) { create(:sales_log, :duplicate, assigned_to: user) }
+        let!(:duplicate_log_2) { create(:sales_log, :duplicate, assigned_to: user) }
 
         it "renders page" do
           request

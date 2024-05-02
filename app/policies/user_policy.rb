@@ -50,7 +50,7 @@ private
   def has_any_logs_in_editable_collection_period
     editable_from_date = FormHandler.instance.earliest_open_for_editing_collection_start_date
 
-    LettingsLog.where(created_by_id: user.id).after_date(editable_from_date).or(LettingsLog.where(startdate: nil, created_by_id: user.id)).any?
+    LettingsLog.where(assigned_to_id: user.id).after_date(editable_from_date).or(LettingsLog.where(startdate: nil, assigned_to_id: user.id)).any?
   end
 
   def has_signed_data_protection_agreement?

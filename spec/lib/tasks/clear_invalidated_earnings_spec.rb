@@ -15,7 +15,7 @@ RSpec.describe "clear_invalidated_earnings" do
     context "when the rake task is run" do
       context "and there are 2023 logs with invalid earnings" do
         let(:user) { create(:user) }
-        let!(:lettings_log) { create(:lettings_log, :completed, created_by: user, voiddate: nil, mrcdate: nil, tenancycode: "123", propcode: "321") }
+        let!(:lettings_log) { create(:lettings_log, :completed, assigned_to: user, voiddate: nil, mrcdate: nil, tenancycode: "123", propcode: "321") }
 
         before do
           lettings_log.startdate = Time.zone.local(2023, 4, 4)
@@ -32,7 +32,7 @@ RSpec.describe "clear_invalidated_earnings" do
           expect(lettings_log.earnings).to eq(20)
           expect(lettings_log.hhmemb).to eq(1)
           expect(lettings_log.ecstat1).to eq(1)
-          expect(Rails.logger).to receive(:info).with("Clearing earnings for lettings log #{lettings_log.id}, owning_organisation_id: #{lettings_log.owning_organisation_id}, managing_organisation_id: #{lettings_log.managing_organisation_id}, startdate: 2023-04-04, tenancy reference: 123, property reference: 321, created_by: #{user.email}(#{user.id}), earnings: 20, incfreq: 1")
+          expect(Rails.logger).to receive(:info).with("Clearing earnings for lettings log #{lettings_log.id}, owning_organisation_id: #{lettings_log.owning_organisation_id}, managing_organisation_id: #{lettings_log.managing_organisation_id}, startdate: 2023-04-04, tenancy reference: 123, property reference: 321, assigned_to: #{user.email}(#{user.id}), earnings: 20, incfreq: 1")
 
           task.invoke
           lettings_log.reload
@@ -47,7 +47,7 @@ RSpec.describe "clear_invalidated_earnings" do
 
       context "and there are valid 2023 logs" do
         let(:user) { create(:user) }
-        let!(:lettings_log) { create(:lettings_log, :completed, created_by: user, voiddate: nil, mrcdate: nil) }
+        let!(:lettings_log) { create(:lettings_log, :completed, assigned_to: user, voiddate: nil, mrcdate: nil) }
 
         before do
           lettings_log.startdate = Time.zone.local(2023, 4, 4)
@@ -78,7 +78,7 @@ RSpec.describe "clear_invalidated_earnings" do
 
       context "and there are 2022 logs" do
         let(:user) { create(:user) }
-        let!(:lettings_log) { create(:lettings_log, :completed, created_by: user, voiddate: nil, mrcdate: nil) }
+        let!(:lettings_log) { create(:lettings_log, :completed, assigned_to: user, voiddate: nil, mrcdate: nil) }
 
         before do
           lettings_log.startdate = Time.zone.local(2022, 4, 4)

@@ -9,7 +9,7 @@ RSpec.describe "Checkboxes" do
     FactoryBot.create(
       :lettings_log,
       :in_progress,
-      created_by: user,
+      assigned_to: user,
     )
   end
   let(:id) { lettings_log.id }

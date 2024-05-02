@@ -51,7 +51,7 @@ RSpec.describe "Sales Log Features" do
 
       it "is possible to delete multiple logs" do
         log_card_selector = "article.app-log-summary"
-        logs_by_user = create_list(:sales_log, 2, created_by: user)
+        logs_by_user = create_list(:sales_log, 2, assigned_to: user)
 
         visit sales_logs_path
         expect(page).to have_selector log_card_selector, count: 4
@@ -202,8 +202,8 @@ RSpec.describe "Sales Log Features" do
 
     context "and updating duplicate log" do
       let(:user) { create(:user, :data_coordinator) }
-      let(:sales_log) { create(:sales_log, :duplicate, created_by: user) }
-      let!(:duplicate_log) { create(:sales_log, :duplicate, created_by: user) }
+      let(:sales_log) { create(:sales_log, :duplicate, assigned_to: user) }
+      let!(:duplicate_log) { create(:sales_log, :duplicate, assigned_to: user) }
 
       before do
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)

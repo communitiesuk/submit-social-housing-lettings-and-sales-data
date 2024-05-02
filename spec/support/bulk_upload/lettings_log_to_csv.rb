@@ -91,7 +91,7 @@ class BulkUpload::LettingsLogToCsv
     [
       log.owning_organisation&.old_visible_id, # 1
       log.managing_organisation&.old_visible_id,
-      log.created_by&.email,
+      log.assigned_to&.email,
       log.needstype,
       "S#{log.scheme&.id}",
       log.location&.id,
@@ -355,7 +355,7 @@ class BulkUpload::LettingsLogToCsv
 
       nil, # 110
       log.owning_organisation&.old_visible_id,
-      log.created_by&.email,
+      log.assigned_to&.email,
       log.managing_organisation&.old_visible_id,
       leftreg,
       nil,
