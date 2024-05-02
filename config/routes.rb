@@ -214,6 +214,11 @@ Rails.application.routes.draw do
       post "delete-logs-confirmation", to: "delete_logs#delete_lettings_logs_confirmation"
       delete "delete-logs", to: "delete_logs#discard_lettings_logs"
 
+      %w[years status needstype assigned-to owned-by managed-by].each do |filter|
+        get "filters/#{filter}", to: "lettings_logs_filters##{filter.underscore}"
+      end
+      post "filters", to: "lettings_logs_filters#update"
+
       resources :bulk_upload_lettings_logs, path: "bulk-upload-logs", only: %i[show update] do
         collection do
           get :start
