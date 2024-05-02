@@ -154,6 +154,7 @@
     <createddate>2022-05-01T00:00:00+01:00</createddate>
     <uploaddate>2022-05-01T00:00:00+01:00</uploaddate>
     <log_id>{log_id}</log_id>
+    <assigned_to>fake@email.com</assigned_to>
     <created_by>fake@email.com</created_by>
     <amended_by>other@email.com</amended_by>
     <unittype_sh>7</unittype_sh>

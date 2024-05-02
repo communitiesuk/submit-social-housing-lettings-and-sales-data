@@ -26,7 +26,7 @@ RSpec.describe Form::Lettings::Subsections::Setup, type: :model do
         %w[
           stock_owner
           managing_organisation
-          created_by
+          assigned_to
           needs_type
           scheme
           location
@@ -50,7 +50,7 @@ RSpec.describe Form::Lettings::Subsections::Setup, type: :model do
         %w[
           stock_owner
           managing_organisation
-          created_by
+          assigned_to
           needs_type
           scheme
           location

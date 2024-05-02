@@ -207,7 +207,7 @@ RSpec.describe Form::Sales::Questions::OwningOrganisationId, type: :model do
 
     context "when user is support" do
       let(:user) { create(:user, :support, organisation: organisation_1) }
-      let(:log) { create(:lettings_log, created_by: user) }
+      let(:log) { create(:lettings_log, assigned_to: user) }
 
       it "shows active orgs where organisation holds own stock" do
         non_stock_organisation = create(:organisation, holds_own_stock: false)

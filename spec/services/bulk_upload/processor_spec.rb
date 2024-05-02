@@ -188,7 +188,7 @@ RSpec.describe BulkUpload::Processor do
           :completed,
           owning_organisation: owning_org,
           managing_organisation: owning_org,
-          created_by: user,
+          assigned_to: user,
           renttype: 1,
           leftreg: 3,
         )
@@ -362,7 +362,7 @@ RSpec.describe BulkUpload::Processor do
           ecstat1: 5,
           owning_organisation: owning_org,
           managing_organisation: owning_org,
-          created_by: nil,
+          assigned_to: nil,
           national: 18,
           waityear: 9,
           joint: 2,
@@ -444,7 +444,7 @@ RSpec.describe BulkUpload::Processor do
           managing_organisation: owning_org,
           startdate: Time.zone.local(2023, 10, 1),
           renewal: 2,
-          created_by: other_user, # unaffiliated user
+          assigned_to: other_user, # unaffiliated user
           declaration: 1,
         )
       end

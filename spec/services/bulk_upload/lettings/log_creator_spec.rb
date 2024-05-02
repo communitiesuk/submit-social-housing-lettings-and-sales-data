@@ -9,7 +9,7 @@ RSpec.describe BulkUpload::Lettings::LogCreator do
   let(:bulk_upload) { create(:bulk_upload, :lettings, user:) }
   let(:csv_parser) { instance_double(BulkUpload::Lettings::Year2023::CsvParser) }
   let(:row_parser) { instance_double(BulkUpload::Lettings::Year2023::RowParser) }
-  let(:log) { build(:lettings_log, :completed, created_by: user, owning_organisation: owning_org, managing_organisation: owning_org) }
+  let(:log) { build(:lettings_log, :completed, assigned_to: user, owning_organisation: owning_org, managing_organisation: owning_org) }
 
   before do
     allow(BulkUpload::Lettings::Year2023::CsvParser).to receive(:new).and_return(csv_parser)
@@ -82,7 +82,7 @@ RSpec.describe BulkUpload::Lettings::LogCreator do
           age1: 5,
           owning_organisation: owning_org,
           managing_organisation: owning_org,
-          created_by: user,
+          assigned_to: user,
           national: 18,
           waityear: 9,
           joint: 2,
@@ -154,7 +154,7 @@ RSpec.describe BulkUpload::Lettings::LogCreator do
           ecstat1: 5,
           owning_organisation: owning_org,
           managing_organisation: owning_org,
-          created_by: user,
+          assigned_to: user,
           national: 18,
           waityear: 9,
           joint: 2,

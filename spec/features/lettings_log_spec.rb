@@ -146,13 +146,13 @@ RSpec.describe "Lettings Log Features" do
         Singleton.__init__(FormHandler)
       end
 
-      it "includes the owning organisation and created by questions" do
+      it "includes the owning organisation and assigned to questions" do
         visit("/lettings-logs")
         click_button("Create a new lettings log")
         click_link("Set up this lettings log")
         select(support_user.organisation.name, from: "lettings-log-owning-organisation-id-field")
         click_button("Save and continue")
-        select("#{support_user.name} (#{support_user.email})", from: "lettings-log-created-by-id-field")
+        select("#{support_user.name} (#{support_user.email})", from: "lettings-log-assigned-to-id-field")
         click_button("Save and continue")
         log_id = page.current_path.scan(/\d/).join
         visit("lettings-logs/#{log_id}/setup/check-answers")
@@ -272,8 +272,8 @@ RSpec.describe "Lettings Log Features" do
 
     it "is possible to delete multiple logs" do
       postcode = "SW1A 1AA"
-      lettings_log_1 = create(:lettings_log, :setup_completed, created_by: support_user, postcode_full: postcode)
-      lettings_log_2 = create(:lettings_log, :in_progress, created_by: support_user, postcode_full: postcode)
+      lettings_log_1 = create(:lettings_log, :setup_completed, assigned_to: support_user, postcode_full: postcode)
+      lettings_log_2 = create(:lettings_log, :in_progress, assigned_to: support_user, postcode_full: postcode)
       create_list(:lettings_log, 5, :in_progress)
 
       visit lettings_logs_path
@@ -329,11 +329,11 @@ RSpec.describe "Lettings Log Features" do
 
     context "when completing the setup log section" do
       context "and there is at most 1 potential stock owner" do
-        it "does not include the owning organisation and includes the created by questions" do
+        it "does not include the owning organisation and includes the assigned to questions" do
           visit("/lettings-logs")
           click_button("Create a new lettings log")
           click_link("Set up this lettings log")
-          select(user.name, from: "lettings-log-created-by-id-field")
+          select(user.name, from: "lettings-log-assigned-to-id-field")
           click_button("Save and continue")
           log_id = page.current_path.scan(/\d/).join
           expect(page).to have_current_path("/lettings-logs/#{log_id}/needs-type")
@@ -464,8 +464,8 @@ RSpec.describe "Lettings Log Features" do
     end
 
     context "when a log becomes a duplicate" do
-      let(:lettings_log) { create(:lettings_log, :duplicate, owning_organisation: user.organisation, created_by: user) }
-      let!(:duplicate_log) { create(:lettings_log, :duplicate, owning_organisation: user.organisation, created_by: user) }
+      let(:lettings_log) { create(:lettings_log, :duplicate, owning_organisation: user.organisation, assigned_to: user) }
+      let!(:duplicate_log) { create(:lettings_log, :duplicate, owning_organisation: user.organisation, assigned_to: user) }
 
       before do
         lettings_log.update!(tenancycode: "different")

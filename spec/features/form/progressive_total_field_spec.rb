@@ -8,7 +8,7 @@ RSpec.describe "Accessible Autocomplete" do
     FactoryBot.create(
       :lettings_log,
       :in_progress,
-      created_by: user,
+      assigned_to: user,
     )
   end
 

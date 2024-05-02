@@ -249,16 +249,16 @@ RSpec.describe LocationsController, type: :request do
             get "/schemes/#{scheme.id}/locations?page=2"
           end
 
-          xit "shows which schemes are being shown on the current page" do
+          it "shows which schemes are being shown on the current page" do
             expect(CGI.unescape_html(response.body)).to match("Showing <b>21</b> to <b>25</b> of <b>#{locations.count}</b> locations")
           end
 
-          xit "has correct page 2 of 2 title" do
+          it "has correct page 2 of 2 title" do
             expected_title = CGI.escapeHTML("#{scheme.service_name} (page 2 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
             expect(page).to have_title(expected_title)
           end
 
-          xit "has pagination links" do
+          it "has pagination links" do
             expect(page).to have_content("Previous")
             expect(page).to have_link("Previous")
             expect(page).not_to have_content("Next")
@@ -377,16 +377,16 @@ RSpec.describe LocationsController, type: :request do
             get "/schemes/#{scheme.id}/locations?page=2"
           end
 
-          xit "shows which schemes are being shown on the current page" do
+          it "shows which schemes are being shown on the current page" do
             expect(CGI.unescape_html(response.body)).to match("Showing <b>21</b> to <b>25</b> of <b>#{locations.count}</b> locations")
           end
 
-          xit "has correct page 1 of 2 title" do
+          it "has correct page 1 of 2 title" do
             expected_title = CGI.escapeHTML("#{scheme.service_name} (page 2 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
             expect(page).to have_title(expected_title)
           end
 
-          xit "has pagination links" do
+          it "has pagination links" do
             expect(page).to have_content("Previous")
             expect(page).to have_link("Previous")
             expect(page).not_to have_content("Next")
@@ -1582,8 +1582,8 @@ RSpec.describe LocationsController, type: :request do
         before do
           allow(LocationOrSchemeDeactivationMailer).to receive(:send_deactivation_mail).and_call_original
 
-          create(:lettings_log, :sh, location:, scheme:, startdate:, created_by: user_a)
-          create_list(:lettings_log, 3, :sh, location:, scheme:, startdate:, created_by: user_b)
+          create(:lettings_log, :sh, location:, scheme:, startdate:, assigned_to: user_a)
+          create_list(:lettings_log, 3, :sh, location:, scheme:, startdate:, assigned_to: user_b)
 
           Timecop.freeze(Time.utc(2022, 10, 10))
           sign_in user

@@ -18,8 +18,8 @@ RSpec.describe DuplicateLogsHelper do
     let(:user_same_org) { create(:user, organisation: org) }
     let(:user_other_org) { create(:user, organisation: other_org) }
 
-    let!(:lettings_log) { create(:lettings_log, :duplicate, created_by: current_user) }
-    let!(:sales_log) { create(:sales_log, :duplicate, created_by: current_user) }
+    let!(:lettings_log) { create(:lettings_log, :duplicate, assigned_to: current_user) }
+    let!(:sales_log) { create(:sales_log, :duplicate, assigned_to: current_user) }
     let(:result) { duplicates_for_user(current_user) }
 
     context "when there are no duplicates" do
@@ -30,8 +30,8 @@ RSpec.describe DuplicateLogsHelper do
 
     context "when there are duplicates in another org" do
       before do
-        create(:lettings_log, :duplicate, created_by: user_other_org)
-        create(:sales_log, :duplicate, created_by: user_other_org)
+        create(:lettings_log, :duplicate, assigned_to: user_other_org)
+        create(:sales_log, :duplicate, assigned_to: user_other_org)
       end
 
       it "does not locate duplicates" do
@@ -40,7 +40,7 @@ RSpec.describe DuplicateLogsHelper do
     end
 
     context "when another user in the same org has created a duplicate lettings log" do
-      let!(:duplicate_lettings_log) { create(:lettings_log, :duplicate, created_by: user_same_org) }
+      let!(:duplicate_lettings_log) { create(:lettings_log, :duplicate, assigned_to: user_same_org) }
 
       it "returns the ids of the duplicates in a hash under the lettings key" do
         expect(result).to be_a Hash
@@ -49,7 +49,7 @@ RSpec.describe DuplicateLogsHelper do
     end
 
     context "when another user in the same org has created a duplicate sales log" do
-      let!(:duplicate_sales_log) { create(:sales_log, :duplicate, created_by: user_same_org) }
+      let!(:duplicate_sales_log) { create(:sales_log, :duplicate, assigned_to: user_same_org) }
 
       it "returns the ids of the duplicates in a hash under the sales key" do
         expect(result).to be_a Hash
@@ -80,10 +80,10 @@ RSpec.describe DuplicateLogsHelper do
     end
 
     context "when there are multiple sets of duplicates across lettings and sales" do
-      let!(:duplicate_lettings_log) { create(:lettings_log, :duplicate, created_by: user_same_org) }
-      let!(:duplicate_sales_log) { create(:sales_log, :duplicate, created_by: user_same_org) }
-      let!(:further_sales_log) { create(:sales_log, :duplicate, purchid: "further", created_by: current_user) }
-      let!(:further_duplicate_sales_logs) { create_list(:sales_log, 2, :duplicate, purchid: "further", created_by: user_same_org) }
+      let!(:duplicate_lettings_log) { create(:lettings_log, :duplicate, assigned_to: user_same_org) }
+      let!(:duplicate_sales_log) { create(:sales_log, :duplicate, assigned_to: user_same_org) }
+      let!(:further_sales_log) { create(:sales_log, :duplicate, purchid: "further", assigned_to: current_user) }
+      let!(:further_duplicate_sales_logs) { create_list(:sales_log, 2, :duplicate, purchid: "further", assigned_to: user_same_org) }
 
       it "returns them all with no repeats" do
         expected_sales_duplicates_result = [

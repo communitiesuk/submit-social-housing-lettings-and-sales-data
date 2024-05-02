@@ -108,7 +108,7 @@ RSpec.describe Form::Lettings::Questions::SchemeId, type: :model do
     let(:organisation_2) { FactoryBot.create(:organisation) }
     let(:user) { FactoryBot.create(:user, organisation:) }
     let(:scheme) { FactoryBot.create(:scheme, owning_organisation: organisation) }
-    let(:lettings_log) { FactoryBot.create(:lettings_log, created_by: user, needstype: 2) }
+    let(:lettings_log) { FactoryBot.create(:lettings_log, assigned_to: user, needstype: 2) }
 
     before do
       FactoryBot.create(:scheme, owning_organisation: organisation_2)

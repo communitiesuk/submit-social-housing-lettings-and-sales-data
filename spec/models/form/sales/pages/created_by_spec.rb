@@ -14,11 +14,11 @@ RSpec.describe Form::Sales::Pages::CreatedBy, type: :model do
   end
 
   it "has correct questions" do
-    expect(page.questions.map(&:id)).to eq(%w[created_by_id])
+    expect(page.questions.map(&:id)).to eq(%w[assigned_to_id])
   end
 
   it "has the correct id" do
-    expect(page.id).to eq("created_by")
+    expect(page.id).to eq("assigned_to")
   end
 
   it "has the correct header" do
