@@ -107,6 +107,39 @@ RSpec.describe "update_created_by_values" do
             expect(sales_log.updated_at).to eq(initial_updated_at)
           end
         end
+
+        context "and version whodunnit is not a User for create" do
+          let(:lettings_log) { create(:lettings_log, :completed, assigned_to: user, created_by_id: nil, updated_at: Time.zone.yesterday) }
+          let(:sales_log) { create(:sales_log, :completed, assigned_to: user, created_by_id: nil, updated_at: Time.zone.yesterday) }
+          let(:other_user) { create(:user, organisation: user.organisation) }
+
+          before do
+            PaperTrail::Version.find_by(item_id: lettings_log.id, item_type: "LettingsLog", event: "create").update!(whodunnit: other_user.email)
+            PaperTrail::Version.find_by(item_id: sales_log.id, item_type: "SalesLog", event: "create").update!(whodunnit: other_user.email)
+          end
+
+          it "sets created_by to assigned_to for lettings" do
+            initial_updated_at = lettings_log.updated_at
+            expect(lettings_log.created_by_id).to eq(nil)
+            expect(lettings_log.assigned_to_id).to eq(user.id)
+            task.invoke
+            lettings_log.reload
+            expect(lettings_log.created_by_id).to eq(user.id)
+            expect(lettings_log.assigned_to_id).to eq(user.id)
+            expect(lettings_log.updated_at).to eq(initial_updated_at)
+          end
+
+          it "sets created_by to assigned_to for sales" do
+            initial_updated_at = sales_log.updated_at
+            expect(sales_log.created_by_id).to eq(nil)
+            expect(sales_log.assigned_to_id).to eq(user.id)
+            task.invoke
+            sales_log.reload
+            expect(sales_log.created_by_id).to eq(user.id)
+            expect(sales_log.assigned_to_id).to eq(user.id)
+            expect(sales_log.updated_at).to eq(initial_updated_at)
+          end
+        end
       end
     end
   end
