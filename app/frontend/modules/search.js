@@ -110,7 +110,7 @@ export const sort = (query, options) => {
 export const suggestion = (value, options) => {
   const option = options.find((o) => o.name === value)
   if (option) {
-    const html = option.append ? `<span class="autocomplete__option__append">${value}</span> <span>${option.append}</span>` : `<span>${value}</span>`
+    const html = option.append ? `<span class="autocomplete__option__append">${option.text}</span> <span>${option.append}</span>` : `<span>${option.text}</span>`
     return option.hint ? `${html}<div class="autocomplete__option__hint">${option.hint}</div>` : html
   } else {
     return '<span>No results found</span>'
@@ -119,10 +119,15 @@ export const suggestion = (value, options) => {
 
 export const enhanceOption = (option) => {
   return {
-    name: option.label,
+    text: option.text,
+    name: getSearchableName(option),
     synonyms: (option.getAttribute('data-synonyms') ? option.getAttribute('data-synonyms').split('|') : []),
     append: option.getAttribute('data-append'),
     hint: option.getAttribute('data-hint'),
     boost: parseFloat(option.getAttribute('data-boost')) || 1
   }
+}
+
+export const getSearchableName = (option) => {
+  return option.getAttribute('data-hint') ? option.text + ' ' + option.getAttribute('data-hint') : option.text
 }
