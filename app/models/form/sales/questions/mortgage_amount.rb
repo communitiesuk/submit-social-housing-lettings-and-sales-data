@@ -18,4 +18,8 @@ class Form::Sales::Questions::MortgageAmount < ::Form::Question
     2023 => { 1 => 91, 2 => 104, 3 => 112 },
     2024 => { 1 => 92, 2 => 105, 3 => 113 },
   }.freeze
+
+  def derived?(log)
+    log&.mortgage_not_used?
+  end
 end
