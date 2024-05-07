@@ -1,0 +1,20 @@
+<%= form_with model: @filter_form, url: filters_lettings_logs_path(search: @search_term, codes_only: @codes_only) do |f| %>
+  <%= render partial: "filters/radio_filter", locals: {
+    f:,
+    options: {
+      "all": { label: "Any managing organisation" },
+      "specific_org": {
+        label: "Specific managing organisation",
+        conditional_filter: {
+          type: "select",
+          label: user_or_org_lettings_path? ? "Managed by" : "Reported by",
+          category: "managing_organisation",
+          options: managing_organisation_filter_options(current_user),
+        },
+      },
+    },
+    label: user_or_org_lettings_path? ? "Managed by" : "Reported by",
+    category: "managing_organisation_select",
+  } %>
+  <%= f.govuk_submit "Save changes", class: "govuk-!-margin-bottom-0" %>
+<% end %>

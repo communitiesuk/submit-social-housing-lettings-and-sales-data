@@ -1,0 +1,22 @@
+<%= form_with model: @filter_form, url: filters_lettings_logs_path(search: @search_term, codes_only: @codes_only) do |f| %>
+  <%= render partial: "filters/radio_filter",
+             locals: {
+                f:,
+                options: {
+                  "all": { label: "Any user" },
+                  "you": { label: "You" },
+                  "specific_user": {
+                    label: "Specific user",
+                    conditional_filter: {
+                      type: "select",
+                      label: "User",
+                      category: "user",
+                      options: assigned_to_filter_options(current_user),
+                    },
+                  },
+                },
+                label: "Assigned to",
+                category: "assigned_to",
+              } %>
+  <%= f.govuk_submit "Save changes", class: "govuk-!-margin-bottom-0" %>
+<% end %>

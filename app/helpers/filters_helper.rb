@@ -102,6 +102,14 @@ module FiltersHelper
     }
   end
 
+  def collection_year_radio_options
+    {
+      current_collection_start_year.to_s => { label: year_combo(current_collection_start_year) },
+      previous_collection_start_year.to_s => { label: year_combo(previous_collection_start_year) },
+      archived_collection_start_year.to_s => { label: year_combo(archived_collection_start_year) },
+    }
+  end
+
   def filters_applied_text(filter_type)
     applied_filters_count(filter_type).zero? ? "No filters applied" : "#{pluralize(applied_filters_count(filter_type), 'filter')} applied"
   end
@@ -155,6 +163,17 @@ module FiltersHelper
 
   def applied_filters_count(filter_type)
     filters_count(applied_filters(filter_type))
+  end
+
+  def check_your_answers_lettings_filters_list(session_filters)
+    [
+      { label: "Collection year", value: session_filters["years"]&.to_sentence, path: filters_years_lettings_logs_path },
+      { label: "Status", value: session_filters["status"]&.to_sentence, path: filters_status_lettings_logs_path },
+      { label: "Needs type", value: session_filters["needstypes"]&.to_sentence, path: filters_needstype_lettings_logs_path },
+      { label: "Assigned to", value: session_filters["assigned_to"]&.to_s, path: filters_assigned_to_lettings_logs_path },
+      { label: "Owned by", value: session_filters["owning_organisation"]&.to_s, path: filters_owned_by_lettings_logs_path },
+      { label: "Managed by", value: session_filters["managing_organisation"]&.to_s, path: filters_managed_by_lettings_logs_path },
+    ]
   end
 
 private

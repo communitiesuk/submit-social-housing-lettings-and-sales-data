@@ -3,6 +3,7 @@
     <%= f.govuk_radio_button category, key.to_s,
       label: { text: option[:label] },
       checked: filter_selected?(category, key, @filter_type),
+      name: "#{category}[]",
       size: "s" do %>
         <% if option[:conditional_filter] %>
           <%= render partial: "filters/#{option[:conditional_filter][:type]}_filter", locals: {

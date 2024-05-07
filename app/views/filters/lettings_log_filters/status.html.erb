@@ -1,0 +1,10 @@
+<%= form_with model: @filter_form, url: filters_lettings_logs_path(search: @search_term, codes_only: @codes_only) do |f| %>
+  <%= render partial: "filters/checkbox_filter",
+             locals: {
+                f:,
+                options: status_filters,
+                label: "Status",
+                category: "status",
+              } %>
+  <%= f.govuk_submit "Save changes", class: "govuk-!-margin-bottom-0" %>
+<% end %>
