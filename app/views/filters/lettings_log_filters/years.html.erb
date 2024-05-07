@@ -8,5 +8,9 @@
         label: "Which financial year do you want to download data for?",
         category: "years",
       } %>
-  <%= f.govuk_submit "Save changes", class: "govuk-!-margin-bottom-0" %>
+
+  <div class="govuk-button-group">
+    <%= f.govuk_submit "Save changes" %>
+    <%= govuk_button_link_to "Cancel", lettings_logs_path, secondary: true %>
+  </div>
 <% end %>

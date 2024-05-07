@@ -6,5 +6,8 @@
                 label: "Status",
                 category: "status",
               } %>
-  <%= f.govuk_submit "Save changes", class: "govuk-!-margin-bottom-0" %>
+  <div class="govuk-button-group">
+    <%= f.govuk_submit "Save changes" %>
+    <%= govuk_button_link_to "Cancel", csv_download_lettings_logs_path(search: @search_term, codes_only: @codes_only), secondary: true %>
+  </div>
 <% end %>
