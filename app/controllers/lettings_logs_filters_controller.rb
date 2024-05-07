@@ -6,20 +6,22 @@ class LettingsLogsFiltersController < ApplicationController
     define_method(filter) do
       @filter_form = Forms::FilterForm.new
       @filter_type = "lettings_logs"
+      @search_term = params["search"]
+      @codes_only = params["codes_only"]
       render "filters/lettings_log_filters/#{filter}"
     end
   end
 
   def update
     @filter_form = Forms::FilterForm.new(filter_form_params)
+    @filter_type = "lettings_logs"
+    @search_term = params["search"]
+    @codes_only = params["codes_only"]
 
     if @filter_form.valid?
       session_filters
-      redirect_to csv_download_lettings_logs_path(search: "", codes_only: true)
+      redirect_to csv_download_lettings_logs_path(search: @search_term, codes_only: @codes_only)
     else
-      @filter_type = "lettings_logs"
-      @search_term = params["search"]
-      @codes_only = params["codes_only"]
       render "filters/lettings_log_filters/years", status: :unprocessable_entity
     end
   end
