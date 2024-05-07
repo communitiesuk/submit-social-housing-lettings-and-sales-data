@@ -150,4 +150,21 @@ RSpec.describe "form/page" do
       end
     end
   end
+
+  context "with a question containing input playback" do
+    let(:expected_playback) { /This is input playback/ }
+
+    context "with radio type" do
+      let(:question_attributes) { { type: "radio", answer_options: { "1": "A", "2": "B" } } }
+
+      before do
+        allow(question).to receive(:input_playback).and_return("This is input playback")
+        render
+      end
+
+      it "renders the input playback for radio questions" do
+        expect(rendered).to match(expected_playback)
+      end
+    end
+  end
 end

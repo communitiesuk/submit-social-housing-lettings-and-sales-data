@@ -60,6 +60,8 @@ class Form::Question
 
   def notification_banner(_log = nil); end
 
+  def input_playback(_log = nil); end
+
   def get_inferred_answers(log)
     return [] unless inferred_answers
 

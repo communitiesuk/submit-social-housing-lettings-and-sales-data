@@ -8,6 +8,10 @@
       simple_format(banner[:heading])
     end %>
   <% end %>
+  <% input_playback = question.input_playback(@log) %>
+  <% if input_playback %>
+    <p class="govuk-body"><%= input_playback %></p>
+  <% end %>
 
 <%= f.govuk_radio_buttons_fieldset question.id.to_sym,
   caption: caption(caption_text, page_header, conditional),

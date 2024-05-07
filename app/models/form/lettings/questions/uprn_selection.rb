@@ -31,4 +31,12 @@ class Form::Lettings::Questions::UprnSelection < ::Form::Question
   def hidden_in_check_answers?(log, _current_user = nil)
     (log.uprn_known == 1 || log.uprn_confirmed == 1) || !(1..10).cover?(log.address_options&.count)
   end
+
+  def input_playback(log = nil)
+    return unless log&.address_line1_input || log&.postcode_full_input
+
+    address_options_count = answer_options(log).count > 1 ? answer_options(log).count - 2 : 0
+    searched_address = [log.address_line1_input, log.postcode_full_input].select(&:present?).map { |x| "<strong>#{x}</strong>" }.join(" and ")
+    "#{address_options_count} #{'address'.pluralize(address_options_count)} found for #{searched_address}. <a href=\"#{page.skip_href(log)}\">Search again</a>".html_safe
+  end
 end
