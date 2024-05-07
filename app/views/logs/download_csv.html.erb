@@ -11,6 +11,34 @@
     <p class="govuk-body">We'll send a secure download link to your email address <strong><%= @current_user.email %></strong>.</p>
     <p class="govuk-body">You've selected <%= count %> logs.</p>
 
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-three-quarters-from-desktop">
+        <h1 class="govuk-heading-l">
+          Check your filters
+        </h1>
+
+        <%= govuk_summary_list do |summary_list| %>
+        <% check_your_answers_lettings_filters_list(session_filters).each do |filter| %>
+          <% summary_list.with_row do |row| %>
+            <% row.with_key { filter[:label] } %>
+            <% row.with_value do %>
+              <%= simple_format(
+                filter[:value],
+                wrapper_tag: "span",
+                class: "govuk-!-margin-right-4",
+              ) %>
+            <% end %>
+
+            <% row.with_action(
+                text: "Change",
+                href: "#{filter[:path]}?search=#{search_term}&codes_only=#{codes_only}",
+              ) %>
+          <% end %>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+
     <%= govuk_button_to "Send email", post_path, method: :post, params: { search: search_term, codes_only: } %>
   </div>
 </div>
