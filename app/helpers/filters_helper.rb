@@ -205,25 +205,25 @@ private
   end
 
   def formatted_years_filter(session_filters)
-    return unanswered_value if session_filters["years"].blank?
+    return unanswered_filter_value if session_filters["years"].blank?
 
     session_filters["years"].map { |year| year_combo(year.to_i) }.to_sentence
   end
 
   def formatted_status_filter(session_filters)
-    return unanswered_value if session_filters["status"].blank?
+    return unanswered_filter_value if session_filters["status"].blank?
 
     session_filters["status"].map { |status| status_filters[status] }.to_sentence
   end
 
   def formatted_needstype_filter(session_filters)
-    return unanswered_value if session_filters["needstypes"].blank?
+    return unanswered_filter_value if session_filters["needstypes"].blank?
 
     session_filters["needstypes"].map { |needstype| needstype_filters[needstype] }.to_sentence
   end
 
   def formatted_assigned_to_filter(session_filters)
-    return unanswered_value if session_filters["assigned_to"].blank?
+    return unanswered_filter_value if session_filters["assigned_to"].blank?
     return "All" if session_filters["assigned_to"].include?("all")
     return "You" if session_filters["assigned_to"].include?("you")
 
@@ -243,7 +243,7 @@ private
     Organisation.find(session_filters["managing_organisation"].first)&.name
   end
 
-  def unanswered_value
+  def unanswered_filter_value
     "<span class=\"app-!-colour-muted\">You didn’t answer this question</span>".html_safe
   end
 end

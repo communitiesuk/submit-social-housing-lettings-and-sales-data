@@ -36,9 +36,7 @@ def filter_form_params
 end
 
 def session_filters
-  params["forms_filter_form"].each do |key, value|
-    params[key] = value
-  end
+  params["forms_filter_form"].each { |key, value| params[key] = value } if params["forms_filter_form"].present?
   params["years"] = [params["years"]] if params["years"].present?
   filter_manager.session_filters
 end
