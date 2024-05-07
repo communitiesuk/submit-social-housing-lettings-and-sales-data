@@ -84,7 +84,7 @@ class FilterManager
   def deserialize_filters_from_session(specific_org)
     current_filters = session[session_name_for(filter_type)]
     new_filters = if current_filters.present?
-                    JSON.parse(current_filters).transform_values { |value| value.is_a?(Array) ? value.reject(&:empty?) : value }
+                    JSON.parse(current_filters).transform_values { |value| value.is_a?(Array) ? value.reject(&:blank?) : value }
                   else
                     {}
                   end
