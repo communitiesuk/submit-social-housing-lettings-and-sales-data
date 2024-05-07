@@ -816,7 +816,7 @@ RSpec.describe LettingsLogsController, type: :request do
             end
           end
 
-          xcontext "when there are more than 1 page of search results" do
+          context "when there are more than 1 page of search results" do
             let(:postcode) { "XX11YY" }
             let(:logs) { FactoryBot.create_list(:lettings_log, 30, :completed, owning_organisation: user.organisation, postcode_full: postcode, assigned_to: user) }
             let(:log_total_count) { LettingsLog.where(owning_organisation: user.organisation).count }
@@ -983,7 +983,7 @@ RSpec.describe LettingsLogsController, type: :request do
             end
           end
 
-          xcontext "when on the second page" do
+          context "when on the second page" do
             before do
               get "/lettings-logs?page=2", headers:, params: {}
             end
