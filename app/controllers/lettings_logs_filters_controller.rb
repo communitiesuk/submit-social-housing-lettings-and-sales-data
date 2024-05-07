@@ -30,12 +30,16 @@ end
 private
 
 def filter_form_params
-  filter_params = params.permit(years: [], status: [], needstypes: [], assigned_to: [], owned_by: [], managed_by: [])
+  filter_params = params.permit(:years, :status, :needstypes, :assigned_to, :user, :owning_organisation_select, :owning_organisation, :managing_organisation_select, :managing_organisation)
   filter_params[:years] = session_filters["years"] if filter_params[:years].blank?
   filter_params
 end
 
 def session_filters
+  params["forms_filter_form"].each do |key, value|
+    params[key] = value
+  end
+  params["years"] = [params["years"]] if params["years"].present?
   filter_manager.session_filters
 end
 

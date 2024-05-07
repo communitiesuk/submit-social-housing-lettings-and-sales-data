@@ -167,12 +167,12 @@ module FiltersHelper
 
   def check_your_answers_lettings_filters_list(session_filters)
     [
-      { label: "Collection year", value: session_filters["years"]&.to_sentence, path: filters_years_lettings_logs_path },
-      { label: "Status", value: session_filters["status"]&.to_sentence, path: filters_status_lettings_logs_path },
-      { label: "Needs type", value: session_filters["needstypes"]&.to_sentence, path: filters_needstype_lettings_logs_path },
-      { label: "Assigned to", value: session_filters["assigned_to"]&.to_s, path: filters_assigned_to_lettings_logs_path },
-      { label: "Owned by", value: session_filters["owning_organisation"]&.to_s, path: filters_owned_by_lettings_logs_path },
-      { label: "Managed by", value: session_filters["managing_organisation"]&.to_s, path: filters_managed_by_lettings_logs_path },
+      { label: "Collection year", value: formatted_years_filter(session_filters), path: filters_years_lettings_logs_path },
+      { label: "Status", value: formatted_status_filter(session_filters), path: filters_status_lettings_logs_path },
+      { label: "Needs type", value: formatted_needstype_filter(session_filters), path: filters_needstype_lettings_logs_path },
+      { label: "Assigned to", value: formatted_assigned_to_filter(session_filters), path: filters_assigned_to_lettings_logs_path },
+      { label: "Owned by", value: formatted_owned_by_filter(session_filters), path: filters_owned_by_lettings_logs_path },
+      { label: "Managed by", value: formatted_managed_by_filter(session_filters), path: filters_managed_by_lettings_logs_path },
     ]
   end
 
@@ -202,5 +202,48 @@ private
 
   def year_combo(year)
     "#{year}/#{year - 2000 + 1}"
+  end
+
+  def formatted_years_filter(session_filters)
+    return unanswered_value if session_filters["years"].blank?
+
+    session_filters["years"].map { |year| year_combo(year.to_i) }.to_sentence
+  end
+
+  def formatted_status_filter(session_filters)
+    return unanswered_value if session_filters["status"].blank?
+
+    session_filters["status"].map { |status| status_filters[status] }.to_sentence
+  end
+
+  def formatted_needstype_filter(session_filters)
+    return unanswered_value if session_filters["needstypes"].blank?
+
+    session_filters["needstypes"].map { |needstype| needstype_filters[needstype] }.to_sentence
+  end
+
+  def formatted_assigned_to_filter(session_filters)
+    return unanswered_value if session_filters["assigned_to"].blank?
+    return "All" if session_filters["assigned_to"].include?("all")
+    return "You" if session_filters["assigned_to"].include?("you")
+
+    user = User.find(session_filters["user"].first)
+    "#{user.name} (#{user.email})"
+  end
+
+  def formatted_owned_by_filter(session_filters)
+    return "All" if session_filters["owning_organisation"].blank? || session_filters["owning_organisation"]&.include?("all")
+
+    Organisation.find(session_filters["owning_organisation"].first)&.name
+  end
+
+  def formatted_managed_by_filter(session_filters)
+    return "All" if session_filters["managing_organisation"].blank? || session_filters["managing_organisation"].include?("all")
+
+    Organisation.find(session_filters["managing_organisation"].first)&.name
+  end
+
+  def unanswered_value
+    "<span class=\"app-!-colour-muted\">You didn’t answer this question</span>".html_safe
   end
 end
