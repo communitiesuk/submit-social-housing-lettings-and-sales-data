@@ -116,10 +116,10 @@ RSpec.describe "Lettings Log Features" do
 
   context "when downloading logs" do
     let(:user) { create(:user, :support, last_sign_in_at: Time.zone.now) }
+    let!(:lettings_log) { create(:lettings_log, :setup_completed, owning_organisation: user.organisation, tenancycode: "1") }
 
     context "when I am signed in" do
       before do
-        create(:lettings_log, :setup_completed, owning_organisation: user.organisation, tenancycode: "1")
         create(:lettings_log, :setup_completed, :sh, owning_organisation: user.organisation, tenancycode: "1")
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
         sign_in user
@@ -136,7 +136,7 @@ RSpec.describe "Lettings Log Features" do
           expect(page).to have_selector("#forms-filter-form-years-error")
           expect(page).to have_content("There is a problem")
 
-          choose("forms-filter-form-years-2023-field", allow_label_click: true)
+          choose("forms-filter-form-years-#{lettings_log.form.start_date.year}-field", allow_label_click: true)
           click_button("Save changes")
 
           expect(page).to have_current_path("/lettings-logs/csv-download?codes_only=false&search=1")
@@ -167,8 +167,7 @@ RSpec.describe "Lettings Log Features" do
 
       context "when I have selected one year filter" do
         before do
-          check("2024")
-          click_button("Apply filters")
+          visit("/lettings-logs?years[]=#{lettings_log.form.start_date.year}&search=1")
         end
 
         it "allows changing the filters and downloading the csv data" do
@@ -182,10 +181,12 @@ RSpec.describe "Lettings Log Features" do
           click_link("Download (CSV, codes only)")
           expect(page).to have_content("You've selected 2 logs")
           click_link("Change", href: "/lettings-logs/filters/needstype?search=1&codes_only=true")
+          expect(page).to have_current_path("/lettings-logs/filters/needstype?search=1&codes_only=true")
 
           check("forms-filter-form-needstypes-1-field", allow_label_click: true)
           click_button("Save changes")
 
+          expect(page).to have_current_path("/lettings-logs/csv-download?codes_only=true&search=1")
           expect(page).to have_content("You've selected 1 logs")
 
           click_link("Change", href: "/lettings-logs/filters/status?search=1&codes_only=true")
