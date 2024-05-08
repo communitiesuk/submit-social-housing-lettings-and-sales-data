@@ -1,5 +1,19 @@
-<%= form_with model: @filter_form, url: filters_sales_logs_path(search: @search_term, codes_only: @codes_only) do |f| %>
-  <%= f.govuk_error_summary %>
+<%= form_with html: { method: :get }, url: filters_update_years_sales_logs_path do |f| %>  <% if params["error"].present? %>
+  <div class="govuk-error-summary" data-module="govuk-error-summary">
+    <div role="alert">
+      <h2 class="govuk-error-summary__title">
+        There is a problem
+      </h2>
+      <div class="govuk-error-summary__body">
+        <ul class="govuk-list govuk-error-summary__list">
+          <li>
+            <a href="#"><%= params["error"] %></a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <% end %>
 
   <%= render partial: "filters/radio_filter",
              locals: {
@@ -7,7 +21,13 @@
         options: collection_year_radio_options,
         label: "Which financial year do you want to download data for?",
         category: "years",
+        size: "l",
       } %>
+
+  <% if request.params["search"].present? %>
+    <%= f.hidden_field :search, value: request.params["search"] %>
+  <% end %>
+  <%= f.hidden_field :codes_only, value: request.params["codes_only"] %>
 
   <div class="govuk-button-group">
     <%= f.govuk_submit "Save changes" %>
