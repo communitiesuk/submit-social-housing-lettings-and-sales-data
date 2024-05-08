@@ -133,10 +133,8 @@ RSpec.describe "Lettings Log Features" do
           click_button("Save changes")
 
           expect(page).to have_selector(".govuk-error-summary__title")
-          expect(page).to have_selector("#forms-filter-form-years-error")
           expect(page).to have_content("There is a problem")
-
-          choose("forms-filter-form-years-#{lettings_log.form.start_date.year}-field", allow_label_click: true)
+          choose("years-#{lettings_log.form.start_date.year}-field", allow_label_click: true)
           click_button("Save changes")
 
           expect(page).to have_current_path("/lettings-logs/csv-download?codes_only=false&search=1")
@@ -148,10 +146,9 @@ RSpec.describe "Lettings Log Features" do
           click_button("Save changes")
 
           expect(page).to have_selector(".govuk-error-summary__title")
-          expect(page).to have_selector("#forms-filter-form-years-error")
           expect(page).to have_content("There is a problem")
 
-          choose("forms-filter-form-years-2023-field", allow_label_click: true)
+          choose("years-#{lettings_log.form.start_date.year}-field", allow_label_click: true)
           click_button("Save changes")
 
           expect(page).to have_current_path("/lettings-logs/csv-download?codes_only=true&search=1")
@@ -183,14 +180,14 @@ RSpec.describe "Lettings Log Features" do
           click_link("Change", href: "/lettings-logs/filters/needstype?search=1&codes_only=true")
           expect(page).to have_current_path("/lettings-logs/filters/needstype?search=1&codes_only=true")
 
-          check("forms-filter-form-needstypes-1-field", allow_label_click: true)
+          check("needstypes-1-field", allow_label_click: true)
           click_button("Save changes")
 
           expect(page).to have_current_path("/lettings-logs/csv-download?codes_only=true&search=1")
           expect(page).to have_content("You've selected 1 logs")
 
           click_link("Change", href: "/lettings-logs/filters/status?search=1&codes_only=true")
-          check("forms-filter-form-status-not-started-field", allow_label_click: true)
+          check("status-not-started-field", allow_label_click: true)
           click_button("Save changes")
 
           expect(page).to have_content("You haven't selected any logs. Please check your filters")

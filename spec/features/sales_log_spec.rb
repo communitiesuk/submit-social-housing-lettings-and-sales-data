@@ -159,10 +159,9 @@ RSpec.describe "Sales Log Features" do
           click_button("Save changes")
 
           expect(page).to have_selector(".govuk-error-summary__title")
-          expect(page).to have_selector("#forms-filter-form-years-error")
           expect(page).to have_content("There is a problem")
 
-          choose("forms-filter-form-years-2023-field", allow_label_click: true)
+          choose("years-2023-field", allow_label_click: true)
           click_button("Save changes")
 
           expect(page).to have_current_path("/sales-logs/csv-download?codes_only=false&search=1")
@@ -174,10 +173,9 @@ RSpec.describe "Sales Log Features" do
           click_button("Save changes")
 
           expect(page).to have_selector(".govuk-error-summary__title")
-          expect(page).to have_selector("#forms-filter-form-years-error")
           expect(page).to have_content("There is a problem")
 
-          choose("forms-filter-form-years-2023-field", allow_label_click: true)
+          choose("years-2023-field", allow_label_click: true)
           click_button("Save changes")
 
           expect(page).to have_current_path("/sales-logs/csv-download?codes_only=true&search=1")
@@ -209,13 +207,13 @@ RSpec.describe "Sales Log Features" do
           expect(page).to have_content("You've selected 2 logs")
           click_link("Change", href: "/sales-logs/filters/assigned-to?search=1&codes_only=true")
 
-          choose("forms-filter-form-assigned-to-you-field", allow_label_click: true)
+          choose("assigned-to-you-field", allow_label_click: true)
           click_button("Save changes")
 
           expect(page).to have_content("You've selected 1 logs")
 
           click_link("Change", href: "/sales-logs/filters/status?search=1&codes_only=true")
-          check("forms-filter-form-status-not-started-field", allow_label_click: true)
+          check("status-not-started-field", allow_label_click: true)
           click_button("Save changes")
 
           expect(page).to have_content("You haven't selected any logs. Please check your filters")

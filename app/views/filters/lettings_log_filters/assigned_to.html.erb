@@ -1,4 +1,4 @@
-<%= form_with model: @filter_form, url: filters_lettings_logs_path(search: @search_term, codes_only: @codes_only) do |f| %>
+<%= form_with html: { method: :get }, url: filters_update_assigned_to_lettings_logs_path do |f| %>
   <%= render partial: "filters/radio_filter",
              locals: {
                 f:,
@@ -17,10 +17,15 @@
                 },
                 label: "Assigned to",
                 category: "assigned_to",
+                size: "l",
               } %>
+  <% if request.params["search"].present? %>
+    <%= f.hidden_field :search, value: request.params["search"] %>
+  <% end %>
+  <%= f.hidden_field :codes_only, value: request.params["codes_only"] %>
 
   <div class="govuk-button-group">
     <%= f.govuk_submit "Save changes" %>
-    <%= govuk_button_link_to "Cancel", csv_download_lettings_logs_path(search: @search_term, codes_only: @codes_only), secondary: true %>
+    <%= govuk_button_link_to "Cancel", csv_download_lettings_logs_path(search: request.params["search"], codes_only: request.params["codes_only"]), secondary: true %>
   </div>
 <% end %>
