@@ -92,7 +92,7 @@ class LettingsLogsController < LogsController
 
     unpaginated_filtered_logs = filter_manager.filtered_logs(current_user.lettings_logs, search_term, session_filters)
 
-    render "download_csv", locals: { search_term:, count: unpaginated_filtered_logs.size, post_path: email_csv_lettings_logs_path, codes_only: codes_only_export?, session_filters: }
+    render "download_csv", locals: { search_term:, count: unpaginated_filtered_logs.size, post_path: email_csv_lettings_logs_path, codes_only: codes_only_export?, session_filters:, filter_type: "lettings_logs" }
   end
 
   def email_csv

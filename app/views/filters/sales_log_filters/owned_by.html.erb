@@ -1,0 +1,23 @@
+<%= form_with model: @filter_form, url: filters_sales_logs_path(search: @search_term, codes_only: @codes_only) do |f| %>
+  <%= render partial: "filters/radio_filter", locals: {
+    f:,
+    options: {
+      "all": { label: "Any owning organisation" },
+      "specific_org": {
+        label: "Specific owning organisation",
+        conditional_filter: {
+          type: "select",
+          label: "Owning Organisation",
+          category: "owning_organisation",
+          options: owning_organisation_filter_options(current_user),
+        },
+      },
+    },
+    label: "Owned by",
+    category: "owning_organisation_select",
+  } %>
+  <div class="govuk-button-group">
+    <%= f.govuk_submit "Save changes" %>
+    <%= govuk_button_link_to "Cancel", csv_download_sales_logs_path(search: @search_term, codes_only: @codes_only), secondary: true %>
+  </div>
+<% end %>

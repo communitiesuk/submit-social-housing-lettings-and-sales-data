@@ -1402,12 +1402,13 @@ RSpec.describe LettingsLogsController, type: :request do
       let(:search_term) { "foo" }
 
       before do
+        create(:lettings_log, :setup_completed, assigned_to: user, owning_organisation: user.organisation, tenancycode: search_term)
         sign_in user
       end
 
       context "when there is 1 year selected in the filters" do
         before do
-          get "/lettings-logs/csv-download?years[]=2021&search=#{search_term}&codes_only=false", headers:
+          get "/lettings-logs/csv-download?years[]=2024&search=#{search_term}&codes_only=false", headers:
         end
 
         it "returns http success" do
@@ -1783,29 +1784,33 @@ RSpec.describe LettingsLogsController, type: :request do
     let(:headers) { { "Accept" => "text/html" } }
 
     before do
+      create(:lettings_log, :setup_completed, assigned_to: user, tenancycode: search_term)
       allow(user).to receive(:need_two_factor_authentication?).and_return(false)
       sign_in user
     end
 
     it "renders a page with the correct header" do
-      get "/lettings-logs/csv-download?years[]=2021&codes_only=false", headers:, params: {}
+      get "/lettings-logs/csv-download?years[]=2024&codes_only=false", headers:, params: {}
       header = page.find_css("h1")
       expect(header.text).to include("Download CSV")
     end
 
     it "renders a form with the correct target containing a button with the correct text" do
-      get "/lettings-logs/csv-download?years[]=2021&codes_only=false", headers:, params: {}
+      get "/lettings-logs/csv-download?years[]=2024&codes_only=false", headers:, params: {}
       form = page.find("form.button_to")
       expect(form[:method]).to eq("post")
       expect(form[:action]).to eq("/lettings-logs/email-csv")
       expect(form).to have_button("Send email")
     end
 
-    it "when query string contains search parameter, form contains hidden field with correct value" do
-      search_term = "blam"
-      get "/lettings-logs/csv-download?years[]=2021&codes_only=false&search=#{search_term}", headers:, params: {}
-      hidden_field = page.find("form.button_to").find_field("search", type: "hidden")
-      expect(hidden_field.value).to eq(search_term)
+    context "when query string contains search parameter" do
+      let(:search_term) { "blam" }
+
+      it "contains hidden field with correct value" do
+        get "/lettings-logs/csv-download?years[]=2024&codes_only=false&search=#{search_term}", headers:, params: {}
+        hidden_field = page.find("form.button_to").find_field("search", type: "hidden")
+        expect(hidden_field.value).to eq(search_term)
+      end
     end
 
     context "when the user is a data coordinator" do
@@ -1813,7 +1818,7 @@ RSpec.describe LettingsLogsController, type: :request do
 
       it "when codes_only query parameter is false, form contains hidden field with correct value" do
         codes_only = false
-        get "/lettings-logs/csv-download?years[]=2021&codes_only=#{codes_only}", headers:, params: {}
+        get "/lettings-logs/csv-download?years[]=2024&codes_only=#{codes_only}", headers:, params: {}
         hidden_field = page.find("form.button_to").find_field("codes_only", type: "hidden")
         expect(hidden_field.value).to eq(codes_only.to_s)
       end
@@ -1828,7 +1833,7 @@ RSpec.describe LettingsLogsController, type: :request do
     context "when the user is a data provider" do
       it "when codes_only query parameter is false, form contains hidden field with correct value" do
         codes_only = false
-        get "/lettings-logs/csv-download?years[]=2021&codes_only=#{codes_only}", headers:, params: {}
+        get "/lettings-logs/csv-download?years[]=2024&codes_only=#{codes_only}", headers:, params: {}
         hidden_field = page.find("form.button_to").find_field("codes_only", type: "hidden")
         expect(hidden_field.value).to eq(codes_only.to_s)
       end
@@ -1845,14 +1850,14 @@ RSpec.describe LettingsLogsController, type: :request do
 
       it "when codes_only query parameter is false, form contains hidden field with correct value" do
         codes_only = false
-        get "/lettings-logs/csv-download?years[]=2021&codes_only=#{codes_only}", headers:, params: {}
+        get "/lettings-logs/csv-download?years[]=2024&codes_only=#{codes_only}", headers:, params: {}
         hidden_field = page.find("form.button_to").find_field("codes_only", type: "hidden")
         expect(hidden_field.value).to eq(codes_only.to_s)
       end
 
       it "when codes_only query parameter is true, form contains hidden field with correct value" do
         codes_only = true
-        get "/lettings-logs/csv-download?years[]=2021&codes_only=#{codes_only}", headers:, params: {}
+        get "/lettings-logs/csv-download?years[]=2024&codes_only=#{codes_only}", headers:, params: {}
         hidden_field = page.find("form.button_to").find_field("codes_only", type: "hidden")
         expect(hidden_field.value).to eq(codes_only.to_s)
       end

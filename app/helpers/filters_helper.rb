@@ -165,6 +165,14 @@ module FiltersHelper
     filters_count(applied_filters(filter_type))
   end
 
+  def check_your_answers_filters_list(session_filters, filter_type)
+    if filter_type == "lettings_logs"
+      check_your_answers_lettings_filters_list(session_filters)
+    else
+      check_your_answers_sales_filters_list(session_filters)
+    end
+  end
+
   def check_your_answers_lettings_filters_list(session_filters)
     [
       { label: "Collection year", value: formatted_years_filter(session_filters), path: filters_years_lettings_logs_path },
@@ -173,6 +181,16 @@ module FiltersHelper
       { label: "Assigned to", value: formatted_assigned_to_filter(session_filters), path: filters_assigned_to_lettings_logs_path },
       { label: "Owned by", value: formatted_owned_by_filter(session_filters), path: filters_owned_by_lettings_logs_path },
       { label: "Managed by", value: formatted_managed_by_filter(session_filters), path: filters_managed_by_lettings_logs_path },
+    ]
+  end
+
+  def check_your_answers_sales_filters_list(session_filters)
+    [
+      { label: "Collection year", value: formatted_years_filter(session_filters), path: filters_years_sales_logs_path },
+      { label: "Status", value: formatted_status_filter(session_filters), path: filters_status_sales_logs_path },
+      { label: "Assigned to", value: formatted_assigned_to_filter(session_filters), path: filters_assigned_to_sales_logs_path },
+      { label: "Owned by", value: formatted_owned_by_filter(session_filters), path: filters_owned_by_sales_logs_path },
+      { label: "Managed by", value: formatted_managed_by_filter(session_filters), path: filters_managed_by_sales_logs_path },
     ]
   end
 
