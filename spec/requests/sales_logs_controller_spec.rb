@@ -965,24 +965,70 @@ RSpec.describe SalesLogsController, type: :request do
       let(:codes_only) { false }
 
       before do
+        create(:sales_log, :in_progress, assigned_to: user, purchid: search_term)
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
         sign_in user
-        get "/sales-logs/csv-download?search=#{search_term}&codes_only=#{codes_only}", headers:
       end
 
-      it "returns http success" do
-        expect(response).to have_http_status(:success)
+      context "when there is 1 year selected in the filters" do
+        before do
+          get "/sales-logs/csv-download?years[]=2023&search=#{search_term}&codes_only=#{codes_only}", headers:
+        end
+
+        it "returns http success" do
+          expect(response).to have_http_status(:success)
+        end
+
+        it "shows a confirmation button" do
+          expect(page).to have_button("Send email")
+        end
+
+        it "allows updating log filters" do
+          expect(page).to have_content("Check your filters")
+          expect(page).to have_link("Change", count: 5)
+          expect(page).to have_link("Change", href: "/sales-logs/filters/years?search=#{search_term}&codes_only=false")
+          expect(page).to have_link("Change", href: "/sales-logs/filters/assigned-to?search=#{search_term}&codes_only=false")
+          expect(page).to have_link("Change", href: "/sales-logs/filters/owned-by?search=#{search_term}&codes_only=false")
+          expect(page).to have_link("Change", href: "/sales-logs/filters/managed-by?search=#{search_term}&codes_only=false")
+          expect(page).to have_link("Change", href: "/sales-logs/filters/status?search=#{search_term}&codes_only=false")
+        end
+
+        it "has a hidden field with the search term" do
+          expect(page).to have_field("search", type: "hidden", with: search_term)
+        end
       end
 
-      it "shows a confirmation button" do
-        expect(page).to have_button("Send email")
+      context "when there are no years selected in the filters" do
+        before do
+          get "/sales-logs/csv-download?search=#{search_term}&codes_only=false", headers:
+        end
+
+        it "redirects to the year filter question" do
+          expect(response).to redirect_to("/sales-logs/filters/years?codes_only=false&search=#{search_term}")
+          follow_redirect!
+          expect(page).to have_content("Which financial year do you want to download data for?")
+          expect(page).to have_button("Save changes")
+        end
       end
 
-      it "has a hidden field with the search term" do
-        expect(page).to have_field("search", type: "hidden", with: search_term)
+      context "when there are multiple years selected in the filters" do
+        before do
+          get "/sales-logs/csv-download?years[]=2021&years[]=2022&search=#{search_term}&codes_only=false", headers:
+        end
+
+        it "redirects to the year filter question" do
+          expect(response).to redirect_to("/sales-logs/filters/years?codes_only=false&search=#{search_term}")
+          follow_redirect!
+          expect(page).to have_content("Which financial year do you want to download data for?")
+          expect(page).to have_button("Save changes")
+        end
       end
 
       context "when user is not support" do
+        before do
+          get "/sales-logs/csv-download?years[]=2023&search=#{search_term}&codes_only=#{codes_only}", headers:
+        end
+
         context "and export type is not codes only" do
           it "has a hidden field with the export type" do
             expect(page).to have_field("codes_only", type: "hidden", with: codes_only)
@@ -1000,6 +1046,10 @@ RSpec.describe SalesLogsController, type: :request do
 
       context "when user is support" do
         let(:user) { FactoryBot.create(:user, :support) }
+
+        before do
+          get "/sales-logs/csv-download?years[]=2023&search=#{search_term}&codes_only=#{codes_only}", headers:
+        end
 
         context "and export type is not codes only" do
           it "has a hidden field with the export type" do

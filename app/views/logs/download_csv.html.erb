@@ -22,7 +22,7 @@
         </h1>
 
         <%= govuk_summary_list do |summary_list| %>
-        <% check_your_answers_lettings_filters_list(session_filters).each do |filter| %>
+        <% check_your_answers_filters_list(session_filters, filter_type).each do |filter| %>
           <% summary_list.with_row do |row| %>
             <% row.with_key { filter[:label] } %>
             <% row.with_value do %>
