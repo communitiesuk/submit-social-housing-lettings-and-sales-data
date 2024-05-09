@@ -83,6 +83,15 @@ class FormHandler
     ordered_questions
   end
 
+  def ordered_lettings_questions_for_year(year)
+    return [] unless year
+
+    form_for_year = forms[form_name_from_start_year(year, "lettings")]
+    return [] unless form_for_year
+
+    form_for_year.questions.uniq(&:id)
+  end
+
   def deprecated_questions_by_preceding_question_id(current_form_questions, all_questions_from_previous_forms)
     current_form_question_ids = current_form_questions.map(&:id)
     deprecated_questions = {}

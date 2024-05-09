@@ -55,12 +55,12 @@ describe EmailCsvJob do
     end
 
     it "creates a LettingsLogCsvService with the correct export type" do
-      expect(Csv::LettingsLogCsvService).to receive(:new).with(user:, export_type: "labels")
+      expect(Csv::LettingsLogCsvService).to receive(:new).with(user:, export_type: "labels", year: 2023)
       codes_only = false
-      job.perform(user, nil, {}, nil, nil, codes_only, "lettings")
-      expect(Csv::LettingsLogCsvService).to receive(:new).with(user:, export_type: "codes")
+      job.perform(user, nil, {}, nil, nil, codes_only, "lettings", 2023)
+      expect(Csv::LettingsLogCsvService).to receive(:new).with(user:, export_type: "codes", year: 2024)
       codes_only = true
-      job.perform(user, nil, {}, nil, nil, codes_only, "lettings")
+      job.perform(user, nil, {}, nil, nil, codes_only, "lettings", 2024)
     end
 
     it "passes the logs returned by the filter manager to the csv service" do
