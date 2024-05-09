@@ -5,7 +5,8 @@ class SalesLogsFiltersController < ApplicationController
   %w[years status assigned_to owned_by managed_by].each do |filter|
     define_method(filter) do
       @filter_type = "sales_logs"
-      render "filters/sales_log_filters/#{filter}"
+      @filter = filter
+      render "filters/#{filter}"
     end
   end
 
