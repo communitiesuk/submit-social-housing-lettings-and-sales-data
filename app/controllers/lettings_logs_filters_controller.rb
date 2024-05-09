@@ -5,7 +5,8 @@ class LettingsLogsFiltersController < ApplicationController
   %w[years status needstype assigned_to owned_by managed_by].each do |filter|
     define_method(filter) do
       @filter_type = "lettings_logs"
-      render "filters/lettings_log_filters/#{filter}"
+      @filter = filter
+      render "filters/#{filter}"
     end
   end
 

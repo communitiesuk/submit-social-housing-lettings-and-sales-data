@@ -983,7 +983,7 @@ RSpec.describe LettingsLogsController, type: :request do
             end
           end
 
-          xcontext "when on the second page" do
+          context "when on the second page" do
             before do
               get "/lettings-logs?page=2", headers:, params: {}
             end

@@ -216,7 +216,7 @@ Rails.application.routes.draw do
 
       %w[years status needstype assigned-to owned-by managed-by].each do |filter|
         get "filters/#{filter}", to: "lettings_logs_filters##{filter.underscore}"
-        get "filters/update_#{filter}", to: "lettings_logs_filters#update_#{filter.underscore}"
+        get "filters/update-#{filter}", to: "lettings_logs_filters#update_#{filter.underscore}"
       end
 
       resources :bulk_upload_lettings_logs, path: "bulk-upload-logs", only: %i[show update] do
@@ -286,7 +286,7 @@ Rails.application.routes.draw do
 
       %w[years status assigned-to owned-by managed-by].each do |filter|
         get "filters/#{filter}", to: "sales_logs_filters##{filter.underscore}"
-        get "filters/update_#{filter}", to: "sales_logs_filters#update_#{filter.underscore}"
+        get "filters/update-#{filter}", to: "sales_logs_filters#update_#{filter.underscore}"
       end
 
       resources :bulk_upload_sales_logs, path: "bulk-upload-logs" do

@@ -188,7 +188,7 @@ class OrganisationsController < ApplicationController
     unpaginated_filtered_logs = filter_manager.filtered_logs(organisation_logs, search_term, session_filters)
     codes_only = params.require(:codes_only) == "true"
 
-    render "logs/download_csv", locals: { search_term:, count: unpaginated_filtered_logs.size, post_path: sales_logs_email_csv_organisation_path, codes_only:, session_filters:, filter_type: "lettings_logs" }
+    render "logs/download_csv", locals: { search_term:, count: unpaginated_filtered_logs.size, post_path: sales_logs_email_csv_organisation_path, codes_only:, session_filters:, filter_type: "sales_logs" }
   end
 
   def email_sales_csv

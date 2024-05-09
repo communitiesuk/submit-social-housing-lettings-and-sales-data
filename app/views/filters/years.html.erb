@@ -1,4 +1,5 @@
-<%= form_with html: { method: :get }, url: filters_update_years_sales_logs_path do |f| %>  <% if params["error"].present? %>
+<%= form_with html: { method: :get }, url: send("filters_update_#{@filter}_#{@filter_type}_path") do |f| %>
+  <% if params["error"].present? %>
   <div class="govuk-error-summary" data-module="govuk-error-summary">
     <div role="alert">
       <h2 class="govuk-error-summary__title">
@@ -31,6 +32,6 @@
 
   <div class="govuk-button-group">
     <%= f.govuk_submit "Save changes" %>
-    <%= govuk_button_link_to "Cancel", sales_logs_path, secondary: true %>
+    <%= govuk_button_link_to "Cancel", send("#{@filter_type}_path"), secondary: true %>
   </div>
 <% end %>
