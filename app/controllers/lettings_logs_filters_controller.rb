@@ -1,6 +1,6 @@
 class LettingsLogsFiltersController < ApplicationController
-  before_action :session_filters, if: :current_user
-  before_action -> { filter_manager.serialize_filters_to_session }, if: :current_user
+  before_action :lettings_session_filters, if: :current_user
+  before_action -> { lettings_filter_manager.serialize_filters_to_session }, if: :current_user
 
   %w[years status needstype assigned_to owned_by managed_by].each do |filter|
     define_method(filter) do
@@ -30,11 +30,11 @@ end
 
 private
 
-def session_filters
+def lettings_session_filters
   params["years"] = [params["years"]] if params["years"].present?
-  filter_manager.session_filters
+  lettings_filter_manager.session_filters
 end
 
-def filter_manager
+def lettings_filter_manager
   FilterManager.new(current_user:, session:, params:, filter_type: "lettings_logs")
 end
