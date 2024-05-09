@@ -1426,12 +1426,12 @@ RSpec.describe LettingsLogsController, type: :request do
         it "allows updating log filters" do
           expect(page).to have_content("Check your filters")
           expect(page).to have_link("Change", count: 6)
-          expect(page).to have_link("Change", href: "/lettings-logs/filters/years?codes_only=false&search=#{search_term}")
-          expect(page).to have_link("Change", href: "/lettings-logs/filters/assigned-to?codes_only=false&search=#{search_term}")
-          expect(page).to have_link("Change", href: "/lettings-logs/filters/owned-by?codes_only=false&search=#{search_term}")
-          expect(page).to have_link("Change", href: "/lettings-logs/filters/managed-by?codes_only=false&search=#{search_term}")
-          expect(page).to have_link("Change", href: "/lettings-logs/filters/status?codes_only=false&search=#{search_term}")
-          expect(page).to have_link("Change", href: "/lettings-logs/filters/needstype?codes_only=false&search=#{search_term}")
+          expect(page).to have_link("Change", href: "/lettings-logs/filters/years?codes_only=false&referrer=check_answers&search=#{search_term}")
+          expect(page).to have_link("Change", href: "/lettings-logs/filters/assigned-to?codes_only=false&referrer=check_answers&search=#{search_term}")
+          expect(page).to have_link("Change", href: "/lettings-logs/filters/owned-by?codes_only=false&referrer=check_answers&search=#{search_term}")
+          expect(page).to have_link("Change", href: "/lettings-logs/filters/managed-by?codes_only=false&referrer=check_answers&search=#{search_term}")
+          expect(page).to have_link("Change", href: "/lettings-logs/filters/status?codes_only=false&referrer=check_answers&search=#{search_term}")
+          expect(page).to have_link("Change", href: "/lettings-logs/filters/needstype?codes_only=false&referrer=check_answers&search=#{search_term}")
         end
       end
 

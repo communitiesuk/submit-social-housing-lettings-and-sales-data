@@ -204,9 +204,9 @@ module FiltersHelper
 
   def change_filter_for_csv_url(filter, filter_type, search_term, codes_only, organisation_id)
     if organisation_id.present?
-      send("#{filter_type}_filters_#{filter[:id]}_organisation_path", organisation_id, search: search_term, codes_only:)
+      send("#{filter_type}_filters_#{filter[:id]}_organisation_path", organisation_id, search: search_term, codes_only:, referrer: "check_answers")
     else
-      send("filters_#{filter[:id]}_#{filter_type}_path", search: search_term, codes_only:)
+      send("filters_#{filter[:id]}_#{filter_type}_path", search: search_term, codes_only:, referrer: "check_answers")
     end
   end
 
