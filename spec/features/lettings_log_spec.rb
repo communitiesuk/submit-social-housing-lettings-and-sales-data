@@ -177,8 +177,8 @@ RSpec.describe "Lettings Log Features" do
         it "allows updating filters" do
           click_link("Download (CSV, codes only)")
           expect(page).to have_content("You've selected 2 logs")
-          click_link("Change", href: "/lettings-logs/filters/needstype?codes_only=true&search=1")
-          expect(page).to have_current_path("/lettings-logs/filters/needstype?codes_only=true&search=1")
+          click_link("Change", href: "/lettings-logs/filters/needstype?codes_only=true&referrer=check_answers&search=1")
+          expect(page).to have_current_path("/lettings-logs/filters/needstype?codes_only=true&referrer=check_answers&search=1")
 
           check("needstypes-1-field", allow_label_click: true)
           click_button("Save changes")
@@ -186,7 +186,7 @@ RSpec.describe "Lettings Log Features" do
           expect(page).to have_current_path("/lettings-logs/csv-download?codes_only=true&search=1")
           expect(page).to have_content("You've selected 1 logs")
 
-          click_link("Change", href: "/lettings-logs/filters/status?codes_only=true&search=1")
+          click_link("Change", href: "/lettings-logs/filters/status?codes_only=true&referrer=check_answers&search=1")
           check("status-not-started-field", allow_label_click: true)
           click_button("Save changes")
 
@@ -194,9 +194,17 @@ RSpec.describe "Lettings Log Features" do
           expect(page).not_to have_button("Send email")
         end
 
+        it "routes back to CYA when cancel is pressed from year question" do
+          click_link("Download (CSV, codes only)")
+          click_link("Change", href: "/lettings-logs/filters/years?codes_only=true&referrer=check_answers&search=1")
+
+          click_link(text: "Cancel")
+          expect(page).to have_current_path("/lettings-logs/csv-download?codes_only=true&search=1")
+        end
+
         it "routes back to the filters CYA when cancel is pressed" do
           click_link("Download (CSV)")
-          click_link("Change", href: "/lettings-logs/filters/needstype?codes_only=false&search=1")
+          click_link("Change", href: "/lettings-logs/filters/needstype?codes_only=false&referrer=check_answers&search=1")
 
           click_link(text: "Cancel")
           expect(page).to have_current_path("/lettings-logs/csv-download?codes_only=false&search=1")
