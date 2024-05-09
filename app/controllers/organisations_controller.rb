@@ -148,6 +148,8 @@ class OrganisationsController < ApplicationController
   end
 
   def download_lettings_csv
+    redirect_to lettings_logs_filters_years_organisation_path(search: search_term, codes_only: codes_only_export?) and return if session_filters["years"].blank? || session_filters["years"].count != 1
+
     organisation_logs = LettingsLog.visible.where(owning_organisation_id: @organisation.id)
     unpaginated_filtered_logs = filter_manager.filtered_logs(organisation_logs, search_term, session_filters)
     codes_only = params.require(:codes_only) == "true"

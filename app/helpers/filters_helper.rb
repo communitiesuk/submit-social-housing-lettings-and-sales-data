@@ -175,23 +175,39 @@ module FiltersHelper
 
   def check_your_answers_lettings_filters_list(session_filters)
     [
-      { label: "Collection year", value: formatted_years_filter(session_filters), path: filters_years_lettings_logs_path },
-      { label: "Status", value: formatted_status_filter(session_filters), path: filters_status_lettings_logs_path },
-      { label: "Needs type", value: formatted_needstype_filter(session_filters), path: filters_needstype_lettings_logs_path },
-      { label: "Assigned to", value: formatted_assigned_to_filter(session_filters), path: filters_assigned_to_lettings_logs_path },
-      { label: "Owned by", value: formatted_owned_by_filter(session_filters), path: filters_owned_by_lettings_logs_path },
-      { label: "Managed by", value: formatted_managed_by_filter(session_filters), path: filters_managed_by_lettings_logs_path },
+      { id: "years", label: "Collection year", value: formatted_years_filter(session_filters) },
+      { id: "status", label: "Status", value: formatted_status_filter(session_filters) },
+      { id: "needstype", label: "Needs type", value: formatted_needstype_filter(session_filters) },
+      { id: "assigned_to", label: "Assigned to", value: formatted_assigned_to_filter(session_filters) },
+      { id: "owned_by", label: "Owned by", value: formatted_owned_by_filter(session_filters) },
+      { id: "managed_by", label: "Managed by", value: formatted_managed_by_filter(session_filters) },
     ]
   end
 
   def check_your_answers_sales_filters_list(session_filters)
     [
-      { label: "Collection year", value: formatted_years_filter(session_filters), path: filters_years_sales_logs_path },
-      { label: "Status", value: formatted_status_filter(session_filters), path: filters_status_sales_logs_path },
-      { label: "Assigned to", value: formatted_assigned_to_filter(session_filters), path: filters_assigned_to_sales_logs_path },
-      { label: "Owned by", value: formatted_owned_by_filter(session_filters), path: filters_owned_by_sales_logs_path },
-      { label: "Managed by", value: formatted_managed_by_filter(session_filters), path: filters_managed_by_sales_logs_path },
+      { id: "years", label: "Collection year", value: formatted_years_filter(session_filters) },
+      { id: "status", label: "Status", value: formatted_status_filter(session_filters) },
+      { id: "assigned_to", label: "Assigned to", value: formatted_assigned_to_filter(session_filters) },
+      { id: "owned_by", label: "Owned by", value: formatted_owned_by_filter(session_filters) },
+      { id: "managed_by", label: "Managed by", value: formatted_managed_by_filter(session_filters) },
     ]
+  end
+
+  def update_csv_filters_url(filter_type, filter, organisation_id)
+    if organisation_id.present?
+      send("#{filter_type}_filters_update_#{filter}_organisation_path", organisation_id)
+    else
+      send("filters_update_#{filter}_#{filter_type}_path")
+    end
+  end
+
+  def change_filter_for_csv_url(filter, filter_type, search_term, codes_only, organisation_id)
+    if organisation_id.present?
+      send("#{filter_type}_filters_#{filter[:id]}_organisation_path", organisation_id, search: search_term, codes_only:)
+    else
+      send("filters_#{filter[:id]}_#{filter_type}_path", search: search_term, codes_only:)
+    end
   end
 
 private
@@ -250,9 +266,10 @@ private
   end
 
   def formatted_owned_by_filter(session_filters)
-    return "All" if session_filters["owning_organisation"].blank? || session_filters["owning_organisation"]&.include?("all")
+    return "All" if params["id"].blank? && (session_filters["owning_organisation"].blank? || session_filters["owning_organisation"]&.include?("all"))
 
-    Organisation.find(session_filters["owning_organisation"].first)&.name
+    session_org_id = session_filters["owning_organisation"].is_a?(Array) ? session_filters["owning_organisation"].first : session_filters["owning_organisation"]
+    Organisation.find(session_org_id || params["id"])&.name
   end
 
   def formatted_managed_by_filter(session_filters)

@@ -9,6 +9,13 @@ class SalesLogsFiltersController < ApplicationController
       @filter = filter
       render "filters/#{filter}"
     end
+
+    define_method("organisation_#{filter}") do
+      @filter_type = "sales_logs"
+      @organisation_id = params["id"]
+      @filter = filter
+      render "filters/#{filter}"
+    end
   end
 
   %w[status assigned_to owned_by managed_by].each do |filter|
@@ -16,6 +23,13 @@ class SalesLogsFiltersController < ApplicationController
       @filter_type = "sales_logs"
 
       redirect_to csv_download_sales_logs_path(search: params["search"], codes_only: params["codes_only"])
+    end
+
+    define_method("update_organisation_#{filter}") do
+      @organisation_id = params["id"]
+      @filter_type = "sales_logs"
+
+      redirect_to sales_logs_csv_download_organisation_path(params["id"], search: params["search"], codes_only: params["codes_only"])
     end
   end
 
@@ -25,6 +39,16 @@ class SalesLogsFiltersController < ApplicationController
       redirect_to filters_years_sales_logs_path(search: params["search"], codes_only: params["codes_only"], error: "Please select a year")
     else
       redirect_to csv_download_sales_logs_path(search: params["search"], codes_only: params["codes_only"])
+    end
+  end
+
+  def update_organisation_years
+    @filter_type = "sales_logs"
+    @organisation_id = params["id"]
+    if params["years"].nil?
+      redirect_to sales_logs_filters_years_organisation_path(search: params["search"], codes_only: params["codes_only"], error: "Please select a year")
+    else
+      redirect_to sales_logs_csv_download_organisation_path(params["id"], search: params["search"], codes_only: params["codes_only"])
     end
   end
 end

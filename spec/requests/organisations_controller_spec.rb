@@ -1589,7 +1589,7 @@ RSpec.describe OrganisationsController, type: :request do
         let(:tenancycode) { "42" }
 
         before do
-          create(:lettings_log, owning_organisation: organisation, tenancycode:)
+          create(:lettings_log, :in_progress, owning_organisation: organisation, tenancycode:)
         end
 
         context "when there is at least one log visible" do
@@ -1625,16 +1625,24 @@ RSpec.describe OrganisationsController, type: :request do
 
         context "when you download the CSV" do
           let(:other_organisation) { create(:organisation) }
+          let!(:lettings_logs) { create_list(:lettings_log, 2, :in_progress, owning_organisation: organisation) }
 
           before do
-            create_list(:lettings_log, 2, owning_organisation: organisation)
-            create(:lettings_log, owning_organisation: organisation, status: "pending", skip_update_status: true)
-            create_list(:lettings_log, 2, owning_organisation: other_organisation)
+            create(:lettings_log, :in_progress, owning_organisation: organisation, status: "pending", skip_update_status: true)
+            create_list(:lettings_log, 2, :in_progress, owning_organisation: other_organisation)
+          end
+
+          context "when no year filters are applied" do
+            it "redirects to years filter page" do
+              get "/organisations/#{organisation.id}/lettings-logs/csv-download?codes_only=false"
+              expect(response).to redirect_to("/organisations/#{organisation.id}/lettings-logs/filters/years?codes_only=false")
+              follow_redirect!
+              expect(page).to have_button("Save changes")
+            end
           end
 
           it "only includes logs from that organisation" do
-            get "/organisations/#{organisation.id}/lettings-logs/csv-download?codes_only=false"
-
+            get "/organisations/#{organisation.id}/lettings-logs/csv-download?years[]=#{lettings_logs[0].form.start_date.year}&codes_only=false"
             expect(page).to have_text("You've selected 3 logs.")
           end
 
