@@ -181,6 +181,14 @@ Rails.application.routes.draw do
       get "merge-request", to: "organisations#merge_request"
       get "deactivate", to: "organisations#deactivate"
       get "reactivate", to: "organisations#reactivate"
+      %w[years status needstype assigned-to owned-by managed-by].each do |filter|
+        get "lettings-logs/filters/#{filter}", to: "lettings_logs_filters#organisation_#{filter.underscore}"
+        get "lettings-logs/filters/update-#{filter}", to: "lettings_logs_filters#update_organisation_#{filter.underscore}"
+      end
+      %w[years status assigned-to owned-by managed-by].each do |filter|
+        get "sales-logs/filters/#{filter}", to: "sales_logs_filters#organisation_#{filter.underscore}"
+        get "sales-logs/filters/update-#{filter}", to: "sales_logs_filters#update_organisation_#{filter.underscore}"
+      end
     end
   end
 

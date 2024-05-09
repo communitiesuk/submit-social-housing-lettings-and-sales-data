@@ -6,6 +6,9 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
+    <% if @organisation.present? %>
+      <span class="govuk-caption-l"><%= @organisation.name %></span>
+    <% end %>
     <h1 class="govuk-heading-l">Download CSV</h1>
 
     <p class="govuk-body">We'll send a secure download link to your email address <strong><%= @current_user.email %></strong>.</p>
@@ -35,7 +38,7 @@
 
             <% row.with_action(
                 text: "Change",
-                href: "#{filter[:path]}?search=#{search_term}&codes_only=#{codes_only}",
+                href: change_filter_for_csv_url(filter, filter_type, search_term, codes_only, params["id"]),
               ) %>
           <% end %>
           <% end %>

@@ -1,4 +1,4 @@
-<%= form_with html: { method: :get }, url: send("filters_update_#{@filter}_#{@filter_type}_path") do |f| %>
+<%= form_with html: { method: :get }, url: update_csv_filters_url(@filter_type, @filter, @organisation_id) do |f| %>
   <%= render partial: "filters/radio_filter", locals: {
     f:,
     options: {

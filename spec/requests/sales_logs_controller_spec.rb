@@ -986,11 +986,11 @@ RSpec.describe SalesLogsController, type: :request do
         it "allows updating log filters" do
           expect(page).to have_content("Check your filters")
           expect(page).to have_link("Change", count: 5)
-          expect(page).to have_link("Change", href: "/sales-logs/filters/years?search=#{search_term}&codes_only=false")
-          expect(page).to have_link("Change", href: "/sales-logs/filters/assigned-to?search=#{search_term}&codes_only=false")
-          expect(page).to have_link("Change", href: "/sales-logs/filters/owned-by?search=#{search_term}&codes_only=false")
-          expect(page).to have_link("Change", href: "/sales-logs/filters/managed-by?search=#{search_term}&codes_only=false")
-          expect(page).to have_link("Change", href: "/sales-logs/filters/status?search=#{search_term}&codes_only=false")
+          expect(page).to have_link("Change", href: "/sales-logs/filters/years?codes_only=false&search=#{search_term}")
+          expect(page).to have_link("Change", href: "/sales-logs/filters/assigned-to?codes_only=false&search=#{search_term}")
+          expect(page).to have_link("Change", href: "/sales-logs/filters/owned-by?codes_only=false&search=#{search_term}")
+          expect(page).to have_link("Change", href: "/sales-logs/filters/managed-by?codes_only=false&search=#{search_term}")
+          expect(page).to have_link("Change", href: "/sales-logs/filters/status?codes_only=false&search=#{search_term}")
         end
 
         it "has a hidden field with the search term" do
