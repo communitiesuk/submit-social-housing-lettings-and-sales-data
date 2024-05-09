@@ -1,6 +1,7 @@
 class SalesLogsFiltersController < ApplicationController
   before_action :sales_session_filters, if: :current_user
   before_action -> { sales_filter_manager.serialize_filters_to_session }, if: :current_user
+  before_action :authenticate_user!
 
   %w[years status assigned_to owned_by managed_by].each do |filter|
     define_method(filter) do
