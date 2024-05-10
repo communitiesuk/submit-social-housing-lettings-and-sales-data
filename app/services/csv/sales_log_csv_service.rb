@@ -152,7 +152,6 @@ module Csv
           question.id
         end
       end
-      non_question_fields = %w[id status duplicate_set_id created_at updated_at old_form_id collection_start_year creation_method is_dpo address_line1_as_entered address_line2_as_entered town_or_city_as_entered county_as_entered postcode_full_as_entered la_as_entered created_by]
       final_attributes = non_question_fields + attributes
       @user.support? ? final_attributes : final_attributes - SUPPORT_ONLY_ATTRIBUTES
     end
@@ -165,6 +164,19 @@ module Csv
     def age_not_known?(log, attribute)
       age_known_field = PERSON_DETAILS.find { |key, _value| key == attribute }[1]["age_known_field"]
       log[age_known_field] == 1
+    end
+
+    def non_question_fields
+      case @year
+      when 2022
+        %w[id status created_at updated_at old_form_id collection_start_year creation_method is_dpo created_by]
+      when 2023
+        %w[id status duplicate_set_id created_at updated_at old_form_id collection_start_year creation_method is_dpo created_by]
+      when 2024
+        %w[id status duplicate_set_id created_at updated_at collection_start_year creation_method is_dpo address_line1_as_entered address_line2_as_entered town_or_city_as_entered county_as_entered postcode_full_as_entered la_as_entered created_by]
+      else
+        %w[id status duplicate_set_id created_at updated_at collection_start_year creation_method is_dpo address_line1_as_entered address_line2_as_entered town_or_city_as_entered county_as_entered postcode_full_as_entered la_as_entered created_by]
+      end
     end
   end
 end

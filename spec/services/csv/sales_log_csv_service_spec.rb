@@ -121,7 +121,7 @@ RSpec.describe Csv::SalesLogCsvService do
 
   it "includes attributes not related to questions to the headers" do
     headers = csv.first
-    expect(headers).to include(*%w[id status created_at updated_at old_form_id])
+    expect(headers).to include(*%w[id status created_at updated_at])
   end
 
   it "returns a csv with the correct number of logs" do
@@ -190,7 +190,7 @@ RSpec.describe Csv::SalesLogCsvService do
 
     context "when the requested form is 2023" do
       let(:now) { Time.zone.local(2024, 1, 1) }
-      let(:year) { 2024 }
+      let(:year) { 2023 }
 
       it "exports the CSV with the 2023 ordering and all values correct" do
         expected_content = CSV.read("spec/fixtures/files/sales_logs_csv_export_labels_23.csv")

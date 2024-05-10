@@ -315,7 +315,6 @@ module Csv
           ATTRIBUTE_MAPPINGS.fetch(question.id, question.id)
         end
       end
-      non_question_fields = %w[id status duplicate_set_id assigned_to is_dpo created_at updated_by updated_at creation_method old_id old_form_id collection_start_year address_line1_as_entered address_line2_as_entered town_or_city_as_entered county_as_entered postcode_full_as_entered la_as_entered created_by]
       scheme_and_location_attributes = %w[scheme_code scheme_service_name scheme_sensitive SCHTYPE scheme_registered_under_care_act scheme_owning_organisation_name scheme_primary_client_group scheme_has_other_client_group scheme_secondary_client_group scheme_support_type scheme_intended_stay scheme_created_at location_code location_postcode location_name location_units location_type_of_unit location_mobility_type location_local_authority location_startdate]
       final_attributes = non_question_fields + attributes + scheme_and_location_attributes
       @user.support? ? final_attributes : final_attributes - SUPPORT_ONLY_ATTRIBUTES
@@ -329,6 +328,19 @@ module Csv
     def age_not_known?(log, attribute)
       age_known_field = PERSON_DETAILS.find { |key, _value| key == attribute }[1]["age_known_field"]
       log[age_known_field] == 1
+    end
+
+    def non_question_fields
+      case @year
+      when 2022
+        %w[id status assigned_to is_dpo created_at updated_by updated_at creation_method old_id old_form_id collection_start_year created_by]
+      when 2023
+        %w[id status duplicate_set_id assigned_to is_dpo created_at updated_by updated_at creation_method old_id old_form_id collection_start_year created_by]
+      when 2024
+        %w[id status duplicate_set_id assigned_to is_dpo created_at updated_by updated_at creation_method collection_start_year bulk_upload_id address_line1_as_entered address_line2_as_entered town_or_city_as_entered county_as_entered postcode_full_as_entered la_as_entered created_by]
+      else
+        %w[id status duplicate_set_id assigned_to is_dpo created_at updated_by updated_at creation_method collection_start_year bulk_upload_id address_line1_as_entered address_line2_as_entered town_or_city_as_entered county_as_entered postcode_full_as_entered la_as_entered created_by]
+      end
     end
   end
 end
