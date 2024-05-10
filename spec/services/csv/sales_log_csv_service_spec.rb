@@ -32,8 +32,9 @@ RSpec.describe Csv::SalesLogCsvService do
       la_as_entered: "la as entered",
     )
   end
-  let(:service) { described_class.new(user:, export_type: "labels") }
+  let(:service) { described_class.new(user:, export_type: "labels", year:) }
   let(:csv) { CSV.parse(service.prepare_csv(SalesLog.all)) }
+  let(:year) { 2024 }
 
   before do
     Timecop.freeze(now)
@@ -43,13 +44,6 @@ RSpec.describe Csv::SalesLogCsvService do
 
   after do
     Timecop.return
-  end
-
-  it "calls the form handler to get all questions in order when initialized" do
-    allow(FormHandler).to receive(:instance).and_return(form_handler_mock)
-    allow(form_handler_mock).to receive(:ordered_sales_questions_for_all_years).and_return([])
-    service
-    expect(form_handler_mock).to have_received(:ordered_sales_questions_for_all_years)
   end
 
   it "returns a string" do
@@ -67,14 +61,21 @@ RSpec.describe Csv::SalesLogCsvService do
                  .with_sections([build(:section, :with_questions, question_ids:, questions:)])
                  .build
     end
-    let(:question_ids) { nil }
+    let(:question_ids) { [] }
     let(:questions) { nil }
 
     before do
       allow(FormHandler).to receive(:instance).and_return(form_handler_mock)
       allow(form_handler_mock).to receive(:form_name_from_start_year)
       allow(form_handler_mock).to receive(:get_form).and_return(sales_form)
-      allow(form_handler_mock).to receive(:ordered_sales_questions_for_all_years).and_return(sales_form.questions)
+      allow(form_handler_mock).to receive(:ordered_questions_for_year).and_return(sales_form.questions)
+    end
+
+    it "calls the form handler to get all questions in order when initialized" do
+      allow(FormHandler).to receive(:instance).and_return(form_handler_mock)
+      allow(form_handler_mock).to receive(:ordered_questions_for_year).and_return([])
+      service
+      expect(form_handler_mock).to have_received(:ordered_questions_for_year).with(2024, "sales")
     end
 
     context "when it returns questions with particular ids" do
@@ -131,6 +132,8 @@ RSpec.describe Csv::SalesLogCsvService do
   end
 
   context "when exporting with human readable labels" do
+    let(:year) { 2023 }
+
     it "gives answers to radio questions as their labels" do
       national_column_index = csv.first.index("national")
       national_value = csv.second[national_column_index]
@@ -165,43 +168,29 @@ RSpec.describe Csv::SalesLogCsvService do
       expect(la_label_value).to eq "Barnet"
     end
 
-    context "when the current form is 2024" do
+    context "when the requested form is 2024" do
       let(:now) { Time.zone.local(2024, 5, 1) }
+      let(:year) { 2024 }
+      let(:fixed_time) { Time.zone.local(2024, 5, 1) }
 
-      context "and the log is for 2024 collection period" do
-        let(:fixed_time) { Time.zone.local(2024, 5, 1) }
-
-        before do
-          log.update!(national: nil)
-          log.update!(nationality_all: 36)
-        end
-
-        it "exports the CSV with the 2024 ordering and all values correct" do
-          expected_content = CSV.read("spec/fixtures/files/sales_logs_csv_export_labels_24.csv")
-          values_to_delete = %w[id]
-          values_to_delete.each do |attribute|
-            index = csv.first.index(attribute)
-            csv.second[index] = nil
-          end
-          expect(csv).to eq expected_content
-        end
+      before do
+        log.update!(nationality_all: 36)
       end
 
-      context "and the log is for 2023 collection period" do
-        it "exports the CSV with the 2024 ordering and all values correct" do
-          expected_content = CSV.read("spec/fixtures/files/sales_logs_csv_export_labels_23_during_24_period.csv")
-          values_to_delete = %w[id]
-          values_to_delete.each do |attribute|
-            index = csv.first.index(attribute)
-            csv.second[index] = nil
-          end
-          expect(csv).to eq expected_content
+      it "exports the CSV with the 2024 ordering and all values correct" do
+        expected_content = CSV.read("spec/fixtures/files/sales_logs_csv_export_labels_24.csv")
+        values_to_delete = %w[id]
+        values_to_delete.each do |attribute|
+          index = csv.first.index(attribute)
+          csv.second[index] = nil
         end
+        expect(csv).to eq expected_content
       end
     end
 
-    context "when the current form is 2023" do
+    context "when the requested form is 2023" do
       let(:now) { Time.zone.local(2024, 1, 1) }
+      let(:year) { 2024 }
 
       it "exports the CSV with the 2023 ordering and all values correct" do
         expected_content = CSV.read("spec/fixtures/files/sales_logs_csv_export_labels_23.csv")
@@ -228,7 +217,8 @@ RSpec.describe Csv::SalesLogCsvService do
   end
 
   context "when exporting values as codes" do
-    let(:service) { described_class.new(user:, export_type: "codes") }
+    let(:service) { described_class.new(user:, export_type: "codes", year:) }
+    let(:year) { 2023 }
 
     it "gives answers to radio questions as their codes" do
       national_column_index = csv.first.index("national")
@@ -264,8 +254,9 @@ RSpec.describe Csv::SalesLogCsvService do
       expect(la_label_value).to eq "Barnet"
     end
 
-    context "when the current form is 2024" do
+    context "when the requested form is 2024" do
       let(:now) { Time.zone.local(2024, 5, 1) }
+      let(:year) { 2024 }
 
       it "exports the CSV with all values correct" do
         expected_content = CSV.read("spec/fixtures/files/sales_logs_csv_export_codes_24.csv")
@@ -278,8 +269,9 @@ RSpec.describe Csv::SalesLogCsvService do
       end
     end
 
-    context "when the current form is 2023" do
+    context "when the requested form is 2023" do
       let(:now) { Time.zone.local(2024, 1, 1) }
+      let(:year) { 2023 }
 
       it "exports the CSV with all values correct" do
         expected_content = CSV.read("spec/fixtures/files/sales_logs_csv_export_codes_23.csv")

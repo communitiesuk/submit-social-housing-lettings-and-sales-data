@@ -90,12 +90,12 @@ describe EmailCsvJob do
     end
 
     it "creates a SalesLogCsvService with the correct export type" do
-      expect(Csv::SalesLogCsvService).to receive(:new).with(user:, export_type: "labels")
+      expect(Csv::SalesLogCsvService).to receive(:new).with(user:, export_type: "labels", year: 2022)
       codes_only = false
-      job.perform(user, nil, {}, nil, nil, codes_only, "sales")
-      expect(Csv::SalesLogCsvService).to receive(:new).with(user:, export_type: "codes")
+      job.perform(user, nil, {}, nil, nil, codes_only, "sales", 2022)
+      expect(Csv::SalesLogCsvService).to receive(:new).with(user:, export_type: "codes", year: 2023)
       codes_only = true
-      job.perform(user, nil, {}, nil, nil, codes_only, "sales")
+      job.perform(user, nil, {}, nil, nil, codes_only, "sales", 2023)
     end
 
     it "passes the logs returned by the filter manager to the csv service" do

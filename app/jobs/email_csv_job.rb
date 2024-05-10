@@ -15,7 +15,7 @@ class EmailCsvJob < ApplicationJob
     when "sales"
       unfiltered_logs = organisation.present? && user.support? ? SalesLog.visible.where(owning_organisation_id: organisation.id) : user.sales_logs.visible
       filtered_logs = FilterManager.filter_logs(unfiltered_logs, search_term, filters, all_orgs, user)
-      csv_string = Csv::SalesLogCsvService.new(user:, export_type:).prepare_csv(filtered_logs)
+      csv_string = Csv::SalesLogCsvService.new(user:, export_type:, year:).prepare_csv(filtered_logs)
     end
 
     filename = "#{[log_type, 'logs', organisation&.name, Time.zone.now].compact.join('-')}.csv"

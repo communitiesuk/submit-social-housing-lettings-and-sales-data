@@ -83,10 +83,10 @@ class FormHandler
     ordered_questions
   end
 
-  def ordered_lettings_questions_for_year(year)
+  def ordered_questions_for_year(year, type)
     return [] unless year
 
-    form_for_year = forms[form_name_from_start_year(year, "lettings")]
+    form_for_year = forms[form_name_from_start_year(year, type)]
     return [] unless form_for_year
 
     form_for_year.questions.uniq(&:id)

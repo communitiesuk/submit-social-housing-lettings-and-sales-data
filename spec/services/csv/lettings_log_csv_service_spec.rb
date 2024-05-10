@@ -79,14 +79,14 @@ RSpec.describe Csv::LettingsLogCsvService do
         allow(FormHandler).to receive(:instance).and_return(form_handler_mock)
         allow(form_handler_mock).to receive(:form_name_from_start_year)
         allow(form_handler_mock).to receive(:get_form).and_return(lettings_form)
-        allow(form_handler_mock).to receive(:ordered_lettings_questions_for_year).and_return(lettings_form.questions)
+        allow(form_handler_mock).to receive(:ordered_questions_for_year).and_return(lettings_form.questions)
       end
 
       it "calls the form handler to get all questions for the specified year" do
         allow(FormHandler).to receive(:instance).and_return(form_handler_mock)
-        allow(form_handler_mock).to receive(:ordered_lettings_questions_for_year).and_return([])
+        allow(form_handler_mock).to receive(:ordered_questions_for_year).and_return([])
         service.prepare_csv(LettingsLog.all)
-        expect(form_handler_mock).to have_received(:ordered_lettings_questions_for_year).with(2024)
+        expect(form_handler_mock).to have_received(:ordered_questions_for_year).with(2024, "lettings")
       end
 
       context "when it returns questions with particular ids" do

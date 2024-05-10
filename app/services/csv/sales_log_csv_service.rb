@@ -1,8 +1,9 @@
 module Csv
   class SalesLogCsvService
-    def initialize(user:, export_type:)
+    def initialize(user:, export_type:, year:)
       @user = user
       @export_type = export_type
+      @year = year
       @attributes = sales_log_attributes
     end
 
@@ -140,7 +141,7 @@ module Csv
     SUPPORT_ONLY_ATTRIBUTES = %w[address_line1_as_entered address_line2_as_entered town_or_city_as_entered county_as_entered postcode_full_as_entered la_as_entered created_by].freeze
 
     def sales_log_attributes
-      ordered_questions = FormHandler.instance.ordered_sales_questions_for_all_years
+      ordered_questions = FormHandler.instance.ordered_questions_for_year(@year, "sales")
       ordered_questions.reject! { |q| q.id.match?(/((?<!la)_known)|(_check)|(_asked)|nationality_all_group|nationality_all_buyer2_group/) }
       attributes = ordered_questions.flat_map do |question|
         if question.type == "checkbox"
