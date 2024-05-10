@@ -83,7 +83,7 @@ RSpec.describe TasklistHelper do
 
   describe "with sales" do
     let(:empty_sales_log) { create(:sales_log, owning_organisation: nil) }
-    let(:completed_sales_log) { build(:sales_log, :completed) }
+    let(:completed_sales_log) { create(:sales_log, :completed) }
 
     describe "get sections count" do
       context "with an empty sales log" do

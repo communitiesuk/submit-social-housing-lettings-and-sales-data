@@ -56,9 +56,9 @@ RSpec.describe Form::Sales::Questions::DepositAmount, type: :model do
       expect(question.derived?(log)).to be true
     end
 
-    it "is not marked as derived when the mortgage use is unknown" do
+    it "is marked as derived when the mortgage use is unknown" do
       log.mortgageused = 3
-      expect(question.derived?(log)).to be false
+      expect(question.derived?(log)).to be true
     end
   end
 

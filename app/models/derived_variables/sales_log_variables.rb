@@ -18,11 +18,15 @@ module DerivedVariables::SalesLogVariables
       self.hoyear = hodate.year
     end
 
-    if outright_sale? && mortgage_not_used?
-      self.deposit = value
-    elsif outright_sale? && mortgageused_changed?(from: 2, to: 1)
-      # Clear when switching mortgage used from no to yes
-      self.deposit = nil
+    if outright_sale?
+      if mortgage_not_used?
+        self.deposit = value
+      elsif mortgage_use_unknown?
+        self.deposit = nil
+      elsif mortgageused_changed?(from: 2, to: 1)
+        # Clear when switching mortgage used from no to yes
+        self.deposit = nil
+      end
     end
 
     if saledate && form.start_year_after_2024? && discounted_ownership_sale?
@@ -106,6 +110,14 @@ private
       },
       derived_values: {
         mortgage: 0,
+      },
+    },
+    {
+      conditions: {
+        mortgageused: 3,
+      },
+      derived_values: {
+        mortgage: nil,
       },
     },
   ].freeze

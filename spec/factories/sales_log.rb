@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :sales_log do
-    assigned_to { FactoryBot.create(:user) }
+    assigned_to { association :user }
     created_by { assigned_to }
     owning_organisation { assigned_to.organisation }
     managing_organisation { owning_organisation }
@@ -28,6 +28,8 @@ FactoryBot.define do
       ownershipsch { 1 }
       type { 30 }
       jointpur { 2 }
+      noint { 2 }
+      privacynotice { 1 }
     end
     trait :outright_sale_setup_complete do
       saledate_today
@@ -36,6 +38,9 @@ FactoryBot.define do
       companybuy { 2 }
       buylivein { 1 }
       jointpur { 2 }
+      noint { 2 }
+      privacynotice { 1 }
+      purchid { rand(999_999_999).to_s }
     end
     trait :duplicate do
       purchid { "PC123" }
