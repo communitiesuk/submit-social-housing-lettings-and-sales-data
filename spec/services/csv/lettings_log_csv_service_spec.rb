@@ -190,7 +190,7 @@ RSpec.describe Csv::LettingsLogCsvService do
       end
 
       context "when the requested form is 2023" do
-        let(:year) { 2024 }
+        let(:year) { 2023 }
         let(:now) { Time.zone.local(2023, 11, 26) }
 
         it "exports the CSV with 2023 ordering and all values correct" do
@@ -297,6 +297,7 @@ RSpec.describe Csv::LettingsLogCsvService do
       context "and the requested form is 2024" do
         let(:year) { 2024 }
         let(:now) { Time.zone.local(2024, 4, 1) }
+        let(:fixed_time) { Time.zone.local(2024, 4, 1) }
 
         context "and exporting with labels" do
           let(:export_type) { "labels" }
@@ -330,6 +331,7 @@ RSpec.describe Csv::LettingsLogCsvService do
       context "and the requested form is 2023" do
         let(:year) { 2023 }
         let(:now) { Time.zone.local(2023, 11, 26) }
+        let(:fixed_time) { Time.zone.local(2023, 11, 26) }
 
         context "and exporting with labels" do
           let(:export_type) { "labels" }

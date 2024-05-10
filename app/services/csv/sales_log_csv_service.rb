@@ -173,9 +173,9 @@ module Csv
       when 2023
         %w[id status duplicate_set_id created_at updated_at old_form_id collection_start_year creation_method is_dpo created_by]
       when 2024
-        %w[id status duplicate_set_id created_at updated_at collection_start_year creation_method is_dpo address_line1_as_entered address_line2_as_entered town_or_city_as_entered county_as_entered postcode_full_as_entered la_as_entered created_by]
+        %w[id status duplicate_set_id created_at updated_at collection_start_year creation_method bulk_upload_id is_dpo address_line1_as_entered address_line2_as_entered town_or_city_as_entered county_as_entered postcode_full_as_entered la_as_entered created_by]
       else
-        %w[id status duplicate_set_id created_at updated_at collection_start_year creation_method is_dpo address_line1_as_entered address_line2_as_entered town_or_city_as_entered county_as_entered postcode_full_as_entered la_as_entered created_by]
+        %w[id status duplicate_set_id created_at updated_at collection_start_year creation_method bulk_upload_id is_dpo address_line1_as_entered address_line2_as_entered town_or_city_as_entered county_as_entered postcode_full_as_entered la_as_entered created_by]
       end
     end
   end

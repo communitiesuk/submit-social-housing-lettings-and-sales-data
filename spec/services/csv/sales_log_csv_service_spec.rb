@@ -256,6 +256,7 @@ RSpec.describe Csv::SalesLogCsvService do
 
     context "when the requested form is 2024" do
       let(:now) { Time.zone.local(2024, 5, 1) }
+      let(:fixed_time) { Time.zone.local(2024, 5, 1) }
       let(:year) { 2024 }
 
       it "exports the CSV with all values correct" do
