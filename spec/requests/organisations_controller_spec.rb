@@ -1677,7 +1677,7 @@ RSpec.describe OrganisationsController, type: :request do
 
       context "when they view the sales logs tab" do
         before do
-          create(:sales_log, owning_organisation: organisation)
+          create(:sales_log, :in_progress, owning_organisation: organisation)
         end
 
         it "has CSV download buttons with the correct paths if at least 1 log exists" do
@@ -1688,15 +1688,16 @@ RSpec.describe OrganisationsController, type: :request do
 
         context "when you download the CSV" do
           let(:other_organisation) { create(:organisation) }
+          let(:sales_logs_start_year) { organisation.owned_sales_logs.first.form.start_date.year }
 
           before do
-            create_list(:sales_log, 2, owning_organisation: organisation)
-            create(:sales_log, owning_organisation: organisation, status: "pending", skip_update_status: true)
-            create_list(:sales_log, 2, owning_organisation: other_organisation)
+            create_list(:sales_log, 2, :in_progress, owning_organisation: organisation)
+            create(:sales_log, :in_progress, owning_organisation: organisation, status: "pending", skip_update_status: true)
+            create_list(:sales_log, 2, :in_progress, owning_organisation: other_organisation)
           end
 
           it "only includes logs from that organisation" do
-            get "/organisations/#{organisation.id}/sales-logs/csv-download?codes_only=false"
+            get "/organisations/#{organisation.id}/sales-logs/csv-download?years[]=#{sales_logs_start_year}&codes_only=false"
 
             expect(page).to have_text("You've selected 3 logs.")
           end
@@ -1771,7 +1772,7 @@ RSpec.describe OrganisationsController, type: :request do
         let!(:sales_log) { create(:sales_log, :in_progress, owning_organisation: organisation, purchid: search_term) }
 
         it "renders a page with the correct header" do
-          get "/organisations/#{organisation.id}/sales-logs/csv-download?codes_only=false", headers:, params: {}
+          get "/organisations/#{organisation.id}/sales-logs/csv-download?years[]=#{sales_log.form.start_date.year}&codes_only=false", headers:, params: {}
           header = page.find_css("h1")
           expect(header.text).to include("Download CSV")
         end
