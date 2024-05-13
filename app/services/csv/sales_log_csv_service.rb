@@ -87,6 +87,8 @@ module Csv
       updated_at
     ].freeze
 
+    ORDERED_ADDRESS_FIELDS = %w[uprn address_line1 address_line2 town_or_city county postcode_full is_la_inferred la_label la uprn_selection address_search_value_check address_line1_input postcode_full_input address_line1_as_entered address_line2_as_entered town_or_city_as_entered county_as_entered postcode_full_as_entered la_as_entered].freeze
+
     def value(attribute, log)
       if CUSTOM_CALL_CHAINS.key? attribute.to_sym
         call_chain = CUSTOM_CALL_CHAINS[attribute.to_sym][@export_type.to_sym]
@@ -129,31 +131,38 @@ module Csv
       return "No" if value == false
     end
 
-    ATTRIBUTE_MAPPINGS = {
-      "saledate" => %w[day month year],
-      "exdate" => %w[exday exmonth exyear],
-      "hodate" => %w[hoday homonth hoyear],
-      "postcode_full" => %w[pcode1 pcode2],
-      "ppostcode_full" => %w[ppostc1 ppostc2],
-      "la" => %w[la la_label],
-      "prevloc" => %w[prevloc prevloc_label],
-      "assigned_to_id" => %w[assigned_to],
-      "owning_organisation_id" => %w[owning_organisation_name],
-      "managing_organisation_id" => %w[managing_organisation_name],
-      "value" => %w[value value_value_check],
-      "mscharge" => %w[mscharge mscharge_value_check],
-    }.freeze
+    def attribute_mappings
+      mappings = {
+        "saledate" => %w[day month year],
+        "exdate" => %w[exday exmonth exyear],
+        "hodate" => %w[hoday homonth hoyear],
+        "postcode_full" => %w[pcode1 pcode2],
+        "ppostcode_full" => %w[ppostc1 ppostc2],
+        "la" => %w[la la_label],
+        "prevloc" => %w[prevloc prevloc_label],
+        "assigned_to_id" => %w[assigned_to],
+        "owning_organisation_id" => %w[owning_organisation_name],
+        "managing_organisation_id" => %w[managing_organisation_name],
+        "value" => %w[value value_value_check],
+        "mscharge" => %w[mscharge mscharge_value_check],
+      }
+      if @user.support? && @year >= 2024
+        mappings["beds"] = ORDERED_ADDRESS_FIELDS + %w[beds]
+      end
+      mappings
+    end
 
     SUPPORT_ONLY_ATTRIBUTES = %w[address_line1_as_entered address_line2_as_entered town_or_city_as_entered county_as_entered postcode_full_as_entered la_as_entered created_by value_value_check mscharge_value_check].freeze
 
     def sales_log_attributes
       ordered_questions = FormHandler.instance.ordered_questions_for_year(@year, "sales")
       ordered_questions.reject! { |q| q.id.match?(/((?<!la)_known)|(_check)|(_asked)|nationality_all_group|nationality_all_buyer2_group/) }
+      ordered_questions.reject! { |q| all_address_fields.include?(q.id) } if @user.support? && @year >= 2024
       attributes = ordered_questions.flat_map do |question|
         if question.type == "checkbox"
           question.answer_options.keys
-        elsif ATTRIBUTE_MAPPINGS.key? question.id
-          ATTRIBUTE_MAPPINGS[question.id]
+        elsif attribute_mappings.key? question.id
+          attribute_mappings[question.id]
         else
           question.id
         end
@@ -179,10 +188,14 @@ module Csv
       when 2023
         %w[id status duplicate_set_id created_at updated_at old_form_id collection_start_year creation_method is_dpo created_by]
       when 2024
-        %w[id status duplicate_set_id created_at updated_at collection_start_year creation_method bulk_upload_id is_dpo address_line1_as_entered address_line2_as_entered town_or_city_as_entered county_as_entered postcode_full_as_entered la_as_entered created_by]
+        %w[id status duplicate_set_id created_at updated_at collection_start_year creation_method bulk_upload_id is_dpo created_by]
       else
-        %w[id status duplicate_set_id created_at updated_at collection_start_year creation_method bulk_upload_id is_dpo address_line1_as_entered address_line2_as_entered town_or_city_as_entered county_as_entered postcode_full_as_entered la_as_entered created_by]
+        %w[id status duplicate_set_id created_at updated_at collection_start_year creation_method bulk_upload_id is_dpo created_by]
       end
+    end
+
+    def all_address_fields
+      ORDERED_ADDRESS_FIELDS + %w[uprn_confirmed]
     end
   end
 end
