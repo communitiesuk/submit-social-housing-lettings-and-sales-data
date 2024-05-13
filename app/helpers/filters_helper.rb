@@ -166,32 +166,14 @@ module FiltersHelper
   end
 
   def check_your_answers_filters_list(session_filters, filter_type)
-    if filter_type == "lettings_logs"
-      check_your_answers_lettings_filters_list(session_filters)
-    else
-      check_your_answers_sales_filters_list(session_filters)
-    end
-  end
-
-  def check_your_answers_lettings_filters_list(session_filters)
     [
       { id: "years", label: "Collection year", value: formatted_years_filter(session_filters) },
       { id: "status", label: "Status", value: formatted_status_filter(session_filters) },
-      { id: "needstype", label: "Needs type", value: formatted_needstype_filter(session_filters) },
+      filter_type == "lettings_logs" ? { id: "needstype", label: "Needs type", value: formatted_needstype_filter(session_filters) } : nil,
       { id: "assigned_to", label: "Assigned to", value: formatted_assigned_to_filter(session_filters) },
       { id: "owned_by", label: "Owned by", value: formatted_owned_by_filter(session_filters) },
       { id: "managed_by", label: "Managed by", value: formatted_managed_by_filter(session_filters) },
-    ]
-  end
-
-  def check_your_answers_sales_filters_list(session_filters)
-    [
-      { id: "years", label: "Collection year", value: formatted_years_filter(session_filters) },
-      { id: "status", label: "Status", value: formatted_status_filter(session_filters) },
-      { id: "assigned_to", label: "Assigned to", value: formatted_assigned_to_filter(session_filters) },
-      { id: "owned_by", label: "Owned by", value: formatted_owned_by_filter(session_filters) },
-      { id: "managed_by", label: "Managed by", value: formatted_managed_by_filter(session_filters) },
-    ]
+    ].compact
   end
 
   def update_csv_filters_url(filter_type, filter, organisation_id)
