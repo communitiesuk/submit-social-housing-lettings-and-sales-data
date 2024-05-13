@@ -298,4 +298,37 @@ RSpec.describe Csv::SalesLogCsvService do
       end
     end
   end
+
+  context "when the user is not a support user" do
+    let(:user) { create(:user, email: "billyboy@eyeklaud.com") }
+    let(:headers) { csv.first }
+
+    it "does not include certain attributes in the headers" do
+      expect(headers).not_to include(*%w[address_line1_as_entered address_line2_as_entered town_or_city_as_entered county_as_entered postcode_full_as_entered la_as_entered created_by value_value_check monthly_charges_value_check])
+    end
+
+    context "and the requested form is 2024" do
+      let(:year) { 2024 }
+      let(:now) { Time.zone.local(2024, 5, 1) }
+      let(:fixed_time) { Time.zone.local(2024, 5, 1) }
+
+      before do
+        log.update!(nationality_all: 36)
+      end
+
+      context "and exporting with labels" do
+        let(:export_type) { "labels" }
+
+        it "exports the CSV with all values correct" do
+          expected_content = CSV.read("spec/fixtures/files/sales_logs_csv_export_non_support_labels_24.csv")
+          values_to_delete = %w[id]
+          values_to_delete.each do |attribute|
+            index = csv.first.index(attribute)
+            csv.second[index] = nil
+          end
+          expect(csv).to eq expected_content
+        end
+      end
+    end
+  end
 end

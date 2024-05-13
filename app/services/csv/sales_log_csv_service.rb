@@ -56,6 +56,10 @@ module Csv
         labels: %i[creation_method],
         codes: %i[creation_method_before_type_cast],
       },
+      mscharge_value_check: {
+        labels: %i[monthly_charges_value_check],
+        codes: %i[monthly_charges_value_check],
+      },
     }.freeze
 
     PERSON_DETAILS = {}.tap { |hash|
@@ -136,9 +140,11 @@ module Csv
       "assigned_to_id" => %w[assigned_to],
       "owning_organisation_id" => %w[owning_organisation_name],
       "managing_organisation_id" => %w[managing_organisation_name],
+      "value" => %w[value value_value_check],
+      "mscharge" => %w[mscharge mscharge_value_check],
     }.freeze
 
-    SUPPORT_ONLY_ATTRIBUTES = %w[address_line1_as_entered address_line2_as_entered town_or_city_as_entered county_as_entered postcode_full_as_entered la_as_entered created_by].freeze
+    SUPPORT_ONLY_ATTRIBUTES = %w[address_line1_as_entered address_line2_as_entered town_or_city_as_entered county_as_entered postcode_full_as_entered la_as_entered created_by value_value_check mscharge_value_check].freeze
 
     def sales_log_attributes
       ordered_questions = FormHandler.instance.ordered_questions_for_year(@year, "sales")
