@@ -1,46 +1,88 @@
 <div class="govuk-grid-row">
   <div class="govuk-width-container">
     <div class="govuk-grid-column-two-thirds">
-      <div class="govuk-grid-row govuk-!-margin-bottom-7">
+      <div class="govuk-grid-row govuk-!-margin-bottom-6">
         <span class="govuk-body-l"><%= "Welcome back, #{@current_user.name}" %></span>
-        <h1 class="govuk-heading-l"><%= heading_for_user_role(@current_user) %></h1>
+        <h1 class="govuk-heading-l"><%= @homepage_presenter.title_text_for_user %></h1>
       </div>
-      <div class="govuk-grid-row">
-        <div class="app-data-box-group">
-          <% if @current_user.support? || (@current_user.data_coordinator? && @current_user.sales_logs.present?) %>
-            <div class="app-data-box-group-one-third">
-              <div class="app-data-box-one-third">
-                <span><%= render partial: "home/data_box", locals: { type: "lettings" } %></span>
-              </div>
-              <div class="app-data-box-one-third">
-                <span><%= render partial: "home/data_box", locals: { type: "sales" } %></span>
-              </div>
-              <div class="app-data-box-one-third">
-                <span><%= render partial: "home/data_box", locals: { type: "schemes" } %></span>
-              </div>
-            </div>
-          <% else %>
-            <div class="app-data-box-group-one-half">
-              <div class="app-data-box-one-half">
-                <span><%= render partial: "home/data_box", locals: { type: "lettings" } %></span>
-              </div>
-              <% if @current_user.data_coordinator? %>
-                <div class="app-data-box-one-half">
-                  <span><%= render partial: "home/data_box", locals: { type: "schemes" } %></span>
-                </div>
-              <% elsif @current_user.sales_logs.present? %>
-                <div class="app-data-box-one-half">
-                  <span><%= render partial: "home/data_box", locals: { type: "sales" } %></span>
-                </div>
+
+      <div class="app-data-box-section govuk-grid-row">
+
+        <% if @homepage_presenter.in_crossover_period? %>
+          <div class="app-data-box-group">
+            <h2 class="govuk-heading-m govuk-!-margin-bottom-2"><%= @homepage_presenter.subheading_for_last_year %></h2>
+            <div class="app-data-box-group-row">
+              <% if @homepage_presenter.organisation_logs_sales? %>
+                <%= render partial: "home/data_box_two_by_two", locals: {
+                  top_left_data_box: @homepage_presenter.last_year_in_progress_lettings_data,
+                  bottom_left_data_box: @homepage_presenter.last_year_completed_lettings_data,
+                  top_right_data_box: @homepage_presenter.last_year_in_progress_sales_data,
+                  bottom_right_data_box: @homepage_presenter.last_year_completed_sales_data,
+                } %>
               <% else %>
-                <div class="app-data-box-one-half">
-                  <span><%= render partial: "home/data_box", locals: { type: "misc" } %></span>
-                </div>
+                <%= render partial: "home/data_box_row_of_two", locals: {
+                  left_data_box: @homepage_presenter.last_year_in_progress_lettings_data,
+                  right_data_box: @homepage_presenter.last_year_completed_lettings_data,
+                } %>
               <% end %>
+            </div>
+          </div>
+        <% end %>
+
+        <div class="app-data-box-group">
+          <h2 class="govuk-heading-m govuk-!-margin-bottom-2"><%= @homepage_presenter.subheading_for_current_year %></h2>
+          <div class="app-data-box-group-row">
+            <% if @homepage_presenter.organisation_logs_sales? %>
+              <%= render partial: "home/data_box_two_by_two", locals: {
+                top_left_data_box: @homepage_presenter.current_year_in_progress_lettings_data,
+                bottom_left_data_box: @homepage_presenter.current_year_completed_lettings_data,
+                top_right_data_box: @homepage_presenter.current_year_in_progress_sales_data,
+                bottom_right_data_box: @homepage_presenter.current_year_completed_sales_data,
+              } %>
+            <% else %>
+              <%= render partial: "home/data_box_row_of_two", locals: {
+                left_data_box: @homepage_presenter.current_year_in_progress_lettings_data,
+                right_data_box: @homepage_presenter.current_year_completed_lettings_data,
+              } %>
+            <% end %>
+          </div>
+        </div>
+
+        <% if !@homepage_presenter.in_crossover_period? %>
+          <div class="app-data-box-group">
+            <h2 class="govuk-heading-m govuk-!-margin-bottom-2"><%= @homepage_presenter.subheading_for_last_year %></h2>
+            <div class="app-data-box-group-row">
+              <%= render partial: "home/data_box_row_of_two", locals: {
+                left_data_box: @homepage_presenter.last_year_completed_lettings_data,
+                right_data_box: @homepage_presenter.last_year_completed_sales_data,
+              } %>
+            </div>
+          </div>
+        <% end %>
+
+        <div class="app-data-box-group-row">
+          <div class="app-data-box-one-half">
+            <%= render partial: "home/blue_box_link", locals: { text: "View all lettings", path: clear_filters_path(filter_type: "lettings_logs") } %>
+          </div>
+          <% if @homepage_presenter.organisation_logs_sales? %>
+            <div class="app-data-box-one-half">
+              <%= render partial: "home/blue_box_link", locals: { text: "View all sales", path: clear_filters_path(filter_type: "sales_logs") } %>
             </div>
           <% end %>
         </div>
-      </div>
+
+        <% if @homepage_presenter.display_schemes? %>
+          <div class="app-data-box-group">
+            <h2 class="govuk-heading-m govuk-!-margin-bottom-2">Schemes</h2>
+            <div class="app-data-box-group-row">
+              <div class="app-data-box-one-half">
+                <%= render partial: "home/data_box", object: @homepage_presenter.incomplete_schemes_data %>
+                <%= render partial: "home/blue_box_link", locals: { text: "View all schemes", path: clear_filters_path(filter_type: "schemes") } %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+
       <div class="govuk-grid-row">
         <div class="app-data-box__underline">
           <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--m govuk-!-margin-top-8 govuk-!-margin-bottom-8">
