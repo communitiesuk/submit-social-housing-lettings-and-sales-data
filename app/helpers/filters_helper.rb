@@ -250,14 +250,14 @@ private
   def formatted_owned_by_filter(session_filters)
     return "All" if params["id"].blank? && (session_filters["owning_organisation"].blank? || session_filters["owning_organisation"]&.include?("all"))
 
-    session_org_id = session_filters["owning_organisation"].is_a?(Array) ? session_filters["owning_organisation"].first : session_filters["owning_organisation"]
+    session_org_id = session_filters["owning_organisation"]
     Organisation.find(session_org_id || params["id"])&.name
   end
 
   def formatted_managed_by_filter(session_filters)
     return "All" if session_filters["managing_organisation"].blank? || session_filters["managing_organisation"].include?("all")
 
-    Organisation.find(session_filters["managing_organisation"].first)&.name
+    Organisation.find(session_filters["managing_organisation"])&.name
   end
 
   def unanswered_filter_value
