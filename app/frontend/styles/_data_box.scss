@@ -1,11 +1,15 @@
-.app-data-box-group {
+.app-data-box-section {
   @include govuk-font($size: 19);
   font-weight: bold;
   white-space: nowrap;
 }
 
+.app-data-box-group {
+  @include govuk-responsive-margin(4, "top")
+}
+
 @media (min-width: 54.0625em) {
-  .app-data-box-group-one-third {
+  .app-data-box-group-row {
     display: flex;
     justify-content: space-between;
     column-gap: govuk-spacing(4);
@@ -13,32 +17,20 @@
     min-width: 733.33px;
   }
 }
-@media (min-width: 54.0625em) {
-  .app-data-box-one-third {
-    width: 33.3333%;
-    float: left;
-  }
-}
+
 @media (min-width: 54.0625em) {
   .app-data-box__underline {
     min-width: 733.33px;
   }
 }
-@media (min-width: 54.0625em) {
-  .app-data-box-group-one-half {
-    display: flex;
-    justify-content: space-between;
-    column-gap: govuk-spacing(4);
-    width: 100%;
-    min-width: 733.33px;
-  }
-}
+
 @media (min-width: 54.0625em) {
   .app-data-box-one-half {
     width: 50%;
     float: left;
   }
 }
+
 @media (min-width: 54.0625em) {
   .app-data-box-one-half__underline {
     min-width: 733.33px;
