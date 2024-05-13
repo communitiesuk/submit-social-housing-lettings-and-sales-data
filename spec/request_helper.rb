@@ -83,6 +83,9 @@ module RequestHelper
 
     WebMock.stub_request(:get, "https://api.os.uk/search/places/v1/uprn?key=OS_DATA_KEY&uprn=1234567890123")
     .to_return(status: 404, body: "", headers: {})
+
+    WebMock.stub_request(:get, /api\.os\.uk/)
+    .to_return(status: 200, body: { results: [{ DPA: { MATCH: 0.9, BUILDING_NAME: "result address line 1", POST_TOWN: "result town or city", POSTCODE: "AA1 1AA", UPRN: "1" } }] }.to_json, headers: {})
   end
 
   def self.real_http_requests
