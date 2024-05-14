@@ -14,6 +14,7 @@ FactoryBot.define do
       declaration { 1 }
     end
     trait :in_progress do
+      setup_completed
       status { 1 }
       tenancycode { Faker::Name.initials(number: 10) }
       postcode_full { Faker::Address.postcode }
@@ -21,9 +22,6 @@ FactoryBot.define do
       hhmemb { 2 }
       age1 { 17 }
       age2 { 19 }
-      renewal { 1 }
-      rent_type { 1 }
-      startdate { Time.zone.today }
     end
     trait :conditional_section_complete do
       tenancycode { Faker::Name.initials(number: 10) }
