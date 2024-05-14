@@ -276,7 +276,6 @@ RSpec.describe HomepagePresenter do
             create_list(type, expected_count, :completed2024, created_by: user, saledate:)
             data = presenter.current_year_completed_sales_data
 
-            binding.pry
             expect(data[:count]).to be expected_count
             expect(data[:text]).to eq "Completed sales"
             uri = URI.parse(data[:path])
