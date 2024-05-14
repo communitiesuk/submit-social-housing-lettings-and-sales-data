@@ -575,7 +575,7 @@ class LettingsLog < Log
   def non_location_setup_questions_completed?
     form.setup_sections.all? do |section|
       section.subsections.all? do |subsection|
-        relevant_qs = subsection.applicable_questions(self).reject { |q| optional_fields.include?(q.id) || %w[scheme_id location].include?(q.id) }
+        relevant_qs = subsection.applicable_questions(self).reject { |q| optional_fields.include?(q.id) || %w[scheme_id location_id].include?(q.id) }
         relevant_qs.all? do |question|
           question.completed?(self)
         end
