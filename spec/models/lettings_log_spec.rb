@@ -2762,6 +2762,7 @@ RSpec.describe LettingsLog do
   describe "scopes" do
     let!(:lettings_log_1) { create(:lettings_log, :in_progress, startdate: Time.utc(2021, 5, 3), mrcdate: Time.utc(2021, 5, 3), voiddate: Time.utc(2021, 5, 3), assigned_to: assigned_to_user) }
     let!(:lettings_log_2) { create(:lettings_log, :completed, startdate: Time.utc(2021, 5, 3), mrcdate: Time.utc(2021, 5, 3), voiddate: Time.utc(2021, 5, 3), assigned_to: assigned_to_user) }
+    let(:postcode_to_search) { "SW1A 0AA" }
 
     before do
       Timecop.freeze(Time.utc(2022, 6, 3))
@@ -2824,21 +2825,27 @@ RSpec.describe LettingsLog do
       end
 
       describe "#filter_by_postcode" do
-        it "allows searching by a Property Postcode" do
-          result = described_class.filter_by_postcode(lettings_log_to_search.postcode_full)
-          expect(result.count).to eq(1)
-          expect(result.first.id).to eq lettings_log_to_search.id
+        context "when not associated with a location" do
+          before do
+            lettings_log_to_search.update!(postcode_full: postcode_to_search)
+          end
+
+          it "allows searching by a Property Postcode" do
+            result = described_class.filter_by_postcode(postcode_to_search)
+            expect(result.count).to eq(1)
+            expect(result.first.id).to eq lettings_log_to_search.id
+          end
         end
 
         context "when lettings log is supported housing" do
-          let(:location) { create(:location, postcode: "W6 0ST") }
+          let(:location) { create(:location, postcode: postcode_to_search) }
 
           before do
             lettings_log_to_search.update!(needstype: 2, location:)
           end
 
           it "allows searching by a Property Postcode" do
-            result = described_class.filter_by_location_postcode("W6 0ST")
+            result = described_class.filter_by_location_postcode(postcode_to_search)
             expect(result.count).to eq(1)
             expect(result.first.id).to eq lettings_log_to_search.id
           end
@@ -2865,7 +2872,8 @@ RSpec.describe LettingsLog do
         end
 
         it "allows searching by a Property Postcode" do
-          result = described_class.search_by(lettings_log_to_search.postcode_full)
+          lettings_log_to_search.update!(postcode_full: postcode_to_search)
+          result = described_class.search_by(postcode_to_search)
           expect(result.count).to eq(1)
           expect(result.first.id).to eq lettings_log_to_search.id
         end
@@ -2897,10 +2905,10 @@ RSpec.describe LettingsLog do
         end
 
         context "when postcode has spaces and lower case letters" do
-          let(:matching_postcode_lower_case_with_spaces) { lettings_log_to_search.postcode_full.downcase.chars.insert(3, " ").join }
-
           it "allows searching by a Property Postcode" do
-            result = described_class.search_by(matching_postcode_lower_case_with_spaces)
+            lettings_log_to_search.update!(postcode_full: postcode_to_search)
+            unformatted_postcode = postcode_to_search.downcase.chars.join(" ")
+            result = described_class.search_by(unformatted_postcode)
             expect(result.count).to eq(1)
             expect(result.first.id).to eq lettings_log_to_search.id
           end
