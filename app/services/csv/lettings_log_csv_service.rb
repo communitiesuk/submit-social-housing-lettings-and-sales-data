@@ -346,13 +346,13 @@ module Csv
     def non_question_fields
       case @year
       when 2022
-        %w[id status assigned_to is_dpo created_at updated_by updated_at creation_method old_id old_form_id collection_start_year created_by]
+        %w[id status created_by assigned_to is_dpo created_at updated_by updated_at creation_method old_id old_form_id collection_start_year]
       when 2023
-        %w[id status duplicate_set_id assigned_to is_dpo created_at updated_by updated_at creation_method old_id old_form_id collection_start_year created_by]
+        %w[id status duplicate_set_id created_by assigned_to is_dpo created_at updated_by updated_at creation_method old_id old_form_id collection_start_year]
       when 2024
-        %w[id status duplicate_set_id assigned_to is_dpo created_at updated_by updated_at creation_method collection_start_year bulk_upload_id created_by]
+        %w[id status duplicate_set_id created_by assigned_to is_dpo created_at updated_by updated_at creation_method collection_start_year bulk_upload_id]
       else
-        %w[id status duplicate_set_id assigned_to is_dpo created_at updated_by updated_at creation_method collection_start_year bulk_upload_id created_by]
+        %w[id status duplicate_set_id created_by assigned_to is_dpo created_at updated_by updated_at creation_method collection_start_year bulk_upload_id]
       end
     end
 
