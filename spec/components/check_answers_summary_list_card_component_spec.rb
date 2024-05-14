@@ -61,7 +61,7 @@ RSpec.describe CheckAnswersSummaryListCardComponent, type: :component do
 
   context "when before 23/24 collection" do
     context "when given a set of questions" do
-      let(:log) { build(:lettings_log, :completed, age2: 99, startdate: Time.zone.local(2021, 5, 1), assigned_to: create(:user)) }
+      let(:log) { build(:lettings_log, :completed, age2: 99, startdate: Time.zone.local(2021, 5, 1)) }
 
       it "renders a summary list card without question numbers for the answers to those questions" do
         expect(rendered).to have_content(questions.first.answer_label(log))
