@@ -55,7 +55,7 @@ RSpec.describe Csv::SalesLogCsvService do
     expect(csv.first.first).to eq "id"
   end
 
-  context "when stubbing :ordered_sales_questions_for_all_years" do
+  context "when stubbing :ordered_questions_for_year" do
     let(:sales_form) do
       FormFactory.new(year: 1936, type: "sales")
                  .with_sections([build(:section, :with_questions, question_ids:, questions:)])
@@ -63,6 +63,7 @@ RSpec.describe Csv::SalesLogCsvService do
     end
     let(:question_ids) { [] }
     let(:questions) { nil }
+    let(:year) { 1936 }
 
     before do
       allow(FormHandler).to receive(:instance).and_return(form_handler_mock)
@@ -75,7 +76,7 @@ RSpec.describe Csv::SalesLogCsvService do
       allow(FormHandler).to receive(:instance).and_return(form_handler_mock)
       allow(form_handler_mock).to receive(:ordered_questions_for_year).and_return([])
       service
-      expect(form_handler_mock).to have_received(:ordered_questions_for_year).with(2024, "sales")
+      expect(form_handler_mock).to have_received(:ordered_questions_for_year).with(1936, "sales")
     end
 
     context "when it returns questions with particular ids" do

@@ -54,7 +54,7 @@ describe EmailCsvJob do
       job.perform(user, search_term, filters, all_orgs, organisation, codes_only_export)
     end
 
-    it "creates a LettingsLogCsvService with the correct export type" do
+    it "creates a LettingsLogCsvService with the correct export type and year" do
       expect(Csv::LettingsLogCsvService).to receive(:new).with(user:, export_type: "labels", year: 2023)
       codes_only = false
       job.perform(user, nil, {}, nil, nil, codes_only, "lettings", 2023)
@@ -89,7 +89,7 @@ describe EmailCsvJob do
       job.perform(user, search_term, filters, all_orgs, organisation, codes_only_export, "sales")
     end
 
-    it "creates a SalesLogCsvService with the correct export type" do
+    it "creates a SalesLogCsvService with the correct export type and year" do
       expect(Csv::SalesLogCsvService).to receive(:new).with(user:, export_type: "labels", year: 2022)
       codes_only = false
       job.perform(user, nil, {}, nil, nil, codes_only, "sales", 2022)

@@ -61,28 +61,6 @@ class FormHandler
     @sales_forms
   end
 
-  def ordered_sales_questions_for_all_years
-    ordered_questions = current_sales_form.questions.uniq(&:id)
-    all_sales_forms = forms.filter { |name, _form| name.end_with? "sales" }.values
-    all_questions_from_available_sales_forms = all_sales_forms.flat_map(&:questions)
-    deprecated_questions_by_preceding_question_id(ordered_questions, all_questions_from_available_sales_forms).each do |preceding_question_id, deprecated_question|
-      index_of_preceding_question = ordered_questions.index { |q| q.id == preceding_question_id }
-      ordered_questions.insert(index_of_preceding_question + 1, deprecated_question)
-    end
-    ordered_questions
-  end
-
-  def ordered_lettings_questions_for_all_years
-    ordered_questions = current_lettings_form.questions.uniq(&:id)
-    all_lettings_forms = forms.filter { |name, _form| name.end_with? "lettings" }.values
-    all_questions_from_available_lettings_forms = all_lettings_forms.flat_map(&:questions)
-    deprecated_questions_by_preceding_question_id(ordered_questions, all_questions_from_available_lettings_forms).each do |preceding_question_id, deprecated_question|
-      index_of_preceding_question = ordered_questions.index { |q| q.id == preceding_question_id }
-      ordered_questions.insert(index_of_preceding_question + 1, deprecated_question)
-    end
-    ordered_questions
-  end
-
   def ordered_questions_for_year(year, type)
     return [] unless year
 
