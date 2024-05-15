@@ -89,7 +89,7 @@ RSpec.describe HomepagePresenter do
 
   context "when the user's organisation has submitted sales logs" do
     before do
-      create(:sales_log, created_by: user)
+      create(:sales_log, assigned_to: user)
     end
 
     it "shows the user's organisation logs sales" do
@@ -159,7 +159,7 @@ RSpec.describe HomepagePresenter do
           let(:startdate) { date_this_year }
 
           it "exposes the correct data for the data box" do
-            create_list(type, expected_count, status, created_by: user, startdate:)
+            create_list(type, expected_count, status, assigned_to: user, startdate:)
             data = presenter.current_year_in_progress_lettings_data
 
             expect(data[:count]).to be expected_count
@@ -176,7 +176,7 @@ RSpec.describe HomepagePresenter do
           let(:startdate) { date_last_year }
 
           it "exposes the correct data for the data box" do
-            create_list(type, expected_count, status, created_by: user, startdate:)
+            create_list(type, expected_count, status, assigned_to: user, startdate:)
             data = presenter.last_year_in_progress_lettings_data
 
             expect(data[:count]).to be expected_count
@@ -197,7 +197,7 @@ RSpec.describe HomepagePresenter do
           let(:startdate) { date_this_year }
 
           it "exposes the correct data for the data box" do
-            create_list(type, expected_count, :completed2024, created_by: user, startdate:)
+            create_list(type, expected_count, :completed2024, assigned_to: user, startdate:)
             data = presenter.current_year_completed_lettings_data
 
             expect(data[:count]).to be expected_count
@@ -214,7 +214,7 @@ RSpec.describe HomepagePresenter do
           let(:startdate) { date_last_year }
 
           it "exposes the correct data for the data box" do
-            create_list(type, expected_count, status, created_by: user, startdate:)
+            create_list(type, expected_count, status, assigned_to: user, startdate:)
             data = presenter.last_year_completed_lettings_data
 
             expect(data[:count]).to be expected_count
@@ -239,7 +239,7 @@ RSpec.describe HomepagePresenter do
           let(:saledate) { date_this_year }
 
           it "exposes the correct data for the data box" do
-            create_list(type, expected_count, status, created_by: user, saledate:)
+            create_list(type, expected_count, status, assigned_to: user, saledate:)
             data = presenter.current_year_in_progress_sales_data
 
             expect(data[:count]).to be expected_count
@@ -256,7 +256,7 @@ RSpec.describe HomepagePresenter do
           let(:saledate) { date_last_year }
 
           it "exposes the correct data for the data box" do
-            create_list(type, expected_count, status, created_by: user, saledate:)
+            create_list(type, expected_count, status, assigned_to: user, saledate:)
             data = presenter.last_year_in_progress_sales_data
 
             expect(data[:count]).to be expected_count
@@ -277,7 +277,7 @@ RSpec.describe HomepagePresenter do
           let(:saledate) { date_this_year }
 
           it "exposes the correct data for the data box" do
-            create_list(type, expected_count, :completed2024, created_by: user, saledate:)
+            create_list(type, expected_count, :completed2024, assigned_to: user, saledate:)
             data = presenter.current_year_completed_sales_data
 
             expect(data[:count]).to be expected_count
@@ -294,7 +294,7 @@ RSpec.describe HomepagePresenter do
           let(:saledate) { date_last_year }
 
           it "exposes the correct data for the data box" do
-            create_list(type, expected_count, status, created_by: user, saledate:)
+            create_list(type, expected_count, status, assigned_to: user, saledate:)
             data = presenter.last_year_completed_sales_data
 
             expect(data[:count]).to be expected_count
