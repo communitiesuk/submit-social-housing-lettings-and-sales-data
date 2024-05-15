@@ -5,11 +5,8 @@ RSpec.describe CollectionTimeHelper do
   let(:user) { create(:user, :data_coordinator) }
 
   describe "Current collection start year" do
-    around do |example|
-      Timecop.freeze(now) do
-        example.run
-      end
-      Timecop.return
+    before do
+      allow(Time).to receive(:now).and_return(now)
     end
 
     context "when the date is after 1st of April" do

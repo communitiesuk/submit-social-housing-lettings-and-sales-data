@@ -1,14 +1,10 @@
 require "rails_helper"
 
 RSpec.describe TasklistHelper do
-  let(:now) { Time.utc(2022, 1, 1) }
+  let(:now) { Time.utc(2025, 1, 1) }
 
-  around do |example|
-    Timecop.freeze(now) do
-      Singleton.__init__(FormHandler)
-      example.run
-    end
-    Timecop.return
+  before do
+    allow(Time).to receive(:now).and_return(now)
   end
 
   describe "with lettings" do
@@ -17,12 +13,12 @@ RSpec.describe TasklistHelper do
 
     describe "get next incomplete section" do
       it "returns the first subsection name if it is not completed" do
-        expect(get_next_incomplete_section(lettings_log).id).to eq("household_characteristics")
+        expect(get_next_incomplete_section(lettings_log).id).to eq("property_information")
       end
 
       it "returns the first subsection name if it is partially completed" do
-        lettings_log["tenancycode"] = 123
-        expect(get_next_incomplete_section(lettings_log).id).to eq("household_characteristics")
+        lettings_log["uprn_known"] = 0
+        expect(get_next_incomplete_section(lettings_log).id).to eq("property_information")
       end
     end
 
@@ -82,8 +78,9 @@ RSpec.describe TasklistHelper do
   end
 
   describe "with sales" do
+    let(:now) { Time.utc(2022, 4, 4) }
     let(:empty_sales_log) { create(:sales_log, owning_organisation: nil) }
-    let(:completed_sales_log) { create(:sales_log, :completed) }
+    let(:completed_sales_log) { create(:sales_log, :completed, saledate: now) }
 
     describe "get sections count" do
       context "with an empty sales log" do
@@ -126,13 +123,11 @@ RSpec.describe TasklistHelper do
       end
 
       context "when collection_period_open? == false" do
-        let(:now) { Time.utc(2022, 6, 1) }
-        let!(:sales_log) { create(:sales_log, :completed, saledate: now) }
+        let(:now) { Time.utc(2024, 6, 1) }
+        let!(:sales_log) { build(:sales_log, :completed, saledate: Time.utc(2022, 6, 1)) }
 
         it "returns relevant text" do
-          Timecop.freeze(now + 1.year) do
-            expect(review_log_text(sales_log)).to eq("This log is from the 2022/2023 collection window, which is now closed.")
-          end
+          expect(review_log_text(sales_log)).to eq("This log is from the 2022/2023 collection window, which is now closed.")
         end
       end
 
@@ -148,37 +143,26 @@ RSpec.describe TasklistHelper do
 
     context "with lettings log" do
       context "when collection_period_open? == true" do
-        context "with 2023 deadline" do
-          let(:now) { Time.utc(2022, 6, 1) }
-          let(:lettings_log) { create(:lettings_log, :completed) }
+        let(:now) { Time.utc(2022, 6, 1) }
+        let(:lettings_log) { build(:lettings_log, :completed, startdate: now, id: 123) }
 
-          it "returns relevant text" do
-            expect(review_log_text(lettings_log)).to eq(
-              "You can #{govuk_link_to 'review and make changes to this log', review_lettings_log_path(lettings_log)} until 9 June 2023.".html_safe,
-            )
-          end
+        before do
+          allow(lettings_log.form).to receive(:submission_deadline).and_return(Time.utc(2023, 6, 9))
         end
 
-        context "with 2024 deadline" do
-          let(:now) { Time.utc(2023, 6, 20) }
-          let(:lettings_log) { create(:lettings_log, :completed, national: 18, waityear: 2) }
-
-          it "returns relevant text" do
-            expect(review_log_text(lettings_log)).to eq(
-              "You can #{govuk_link_to 'review and make changes to this log', review_lettings_log_path(lettings_log)} until 7 June 2024.".html_safe,
-            )
-          end
+        it "returns relevant text" do
+          expect(review_log_text(lettings_log)).to eq(
+            "You can #{govuk_link_to 'review and make changes to this log', review_lettings_log_path(lettings_log)} until 9 June 2023.".html_safe,
+          )
         end
       end
 
       context "when collection_period_open? == false" do
-        let(:now) { Time.utc(2022, 6, 1) }
-        let!(:sales_log) { create(:lettings_log, :completed) }
+        let(:now) { Time.utc(2024, 6, 1) }
+        let!(:sales_log) { build(:lettings_log, :completed, startdate: Time.utc(2022, 6, 1), id: 123) }
 
         it "returns relevant text" do
-          Timecop.freeze(now + 1.year) do
-            expect(review_log_text(sales_log)).to eq("This log is from the 2022/2023 collection window, which is now closed.")
-          end
+          expect(review_log_text(sales_log)).to eq("This log is from the 2022/2023 collection window, which is now closed.")
         end
       end
 

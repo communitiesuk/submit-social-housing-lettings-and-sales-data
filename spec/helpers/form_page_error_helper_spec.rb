@@ -3,15 +3,6 @@ require "rails_helper"
 RSpec.describe FormPageErrorHelper do
   describe "#remove_other_page_errors" do
     context "when non base other questions are removed" do
-      around do |example|
-        Timecop.freeze(Time.zone.local(2022, 1, 1)) do
-          Singleton.__init__(FormHandler)
-          example.run
-        end
-        Timecop.return
-        Singleton.__init__(FormHandler)
-      end
-
       let!(:lettings_log) { FactoryBot.create(:lettings_log, :in_progress) }
       let!(:form) { lettings_log.form }
 
@@ -22,7 +13,7 @@ RSpec.describe FormPageErrorHelper do
       end
 
       it "returns details and user tabs" do
-        page = form.get_page("rent")
+        page = form.get_question("period", lettings_log).page
         remove_other_page_errors(lettings_log, page)
         expect(lettings_log.errors.count).to eq(2)
         expect(lettings_log.errors.map(&:attribute)).to include(:period)
