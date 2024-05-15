@@ -1893,7 +1893,7 @@ RSpec.describe LettingsLogsController, type: :request do
       it "creates an E-mail job" do
         expect {
           post "/lettings-logs/email-csv?years[]=2023&codes_only=true", headers:, params: {}
-        }.to enqueue_job(EmailCsvJob).with(user, nil, { "years" => %w[2023] }, false, nil, true, 2023)
+        }.to enqueue_job(EmailCsvJob).with(user, nil, { "years" => %w[2023] }, false, nil, true, "lettings", 2023)
       end
 
       it "redirects to the confirmation page" do
@@ -1904,22 +1904,22 @@ RSpec.describe LettingsLogsController, type: :request do
       it "passes the search term" do
         expect {
           post "/lettings-logs/email-csv?years[]=2023&search=#{lettings_log.id}&codes_only=false", headers:, params: {}
-        }.to enqueue_job(EmailCsvJob).with(user, lettings_log.id.to_s, { "years" => %w[2023] }, false, nil, false, 2023)
+        }.to enqueue_job(EmailCsvJob).with(user, lettings_log.id.to_s, { "years" => %w[2023] }, false, nil, false, "lettings", 2023)
       end
 
       it "passes filter parameters" do
         expect {
           post "/lettings-logs/email-csv?years[]=2023&status[]=completed&codes_only=true", headers:, params: {}
-        }.to enqueue_job(EmailCsvJob).with(user, nil, { "status" => %w[completed], "years" => %w[2023] }, false, nil, true, 2023)
+        }.to enqueue_job(EmailCsvJob).with(user, nil, { "status" => %w[completed], "years" => %w[2023] }, false, nil, true, "lettings", 2023)
       end
 
       it "passes export type flag" do
         expect {
           post "/lettings-logs/email-csv?years[]=2023&codes_only=true", headers:, params: {}
-        }.to enqueue_job(EmailCsvJob).with(user, nil, { "years" => %w[2023] }, false, nil, true, 2023)
+        }.to enqueue_job(EmailCsvJob).with(user, nil, { "years" => %w[2023] }, false, nil, true, "lettings", 2023)
         expect {
           post "/lettings-logs/email-csv?years[]=2023&codes_only=false", headers:, params: {}
-        }.to enqueue_job(EmailCsvJob).with(user, nil, { "years" => %w[2023] }, false, nil, false, 2023)
+        }.to enqueue_job(EmailCsvJob).with(user, nil, { "years" => %w[2023] }, false, nil, false, "lettings", 2023)
       end
 
       it "passes a combination of search term, export type and filter parameters" do
@@ -1927,7 +1927,7 @@ RSpec.describe LettingsLogsController, type: :request do
 
         expect {
           post "/lettings-logs/email-csv?years[]=2023&status[]=completed&search=#{postcode}&codes_only=false", headers:, params: {}
-        }.to enqueue_job(EmailCsvJob).with(user, postcode, { "status" => %w[completed], "years" => %w[2023] }, false, nil, false, 2023)
+        }.to enqueue_job(EmailCsvJob).with(user, postcode, { "status" => %w[completed], "years" => %w[2023] }, false, nil, false, "lettings", 2023)
       end
 
       context "when the user is not a support user" do
@@ -1937,7 +1937,7 @@ RSpec.describe LettingsLogsController, type: :request do
           codes_only_export = false
           expect {
             post "/lettings-logs/email-csv?years[]=2023&codes_only=#{codes_only_export}", headers:, params: {}
-          }.to enqueue_job(EmailCsvJob).with(user, nil, { "years" => %w[2023] }, false, nil, false, 2023)
+          }.to enqueue_job(EmailCsvJob).with(user, nil, { "years" => %w[2023] }, false, nil, false, "lettings", 2023)
         end
 
         it "is not authorized to download codes only csv" do
