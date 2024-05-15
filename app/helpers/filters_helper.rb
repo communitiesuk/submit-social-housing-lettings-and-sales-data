@@ -261,6 +261,6 @@ private
   end
 
   def unanswered_filter_value
-    "<span class=\"app-!-colour-muted\">You didn’t answer this question</span>".html_safe
+    "<span class=\"app-!-colour-muted\">You didn’t answer this filter</span>".html_safe
   end
 end
