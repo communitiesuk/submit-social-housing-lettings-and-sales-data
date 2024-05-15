@@ -3,7 +3,7 @@ FactoryBot.define do
     sequence(:email) { "test#{SecureRandom.hex}@example.com" }
     name { "Danny Rojas" }
     password { "pAssword1" }
-    organisation { association :organisation }
+    organisation
     role { "data_provider" }
     phone { "1234512345123" }
     trait :data_provider do
