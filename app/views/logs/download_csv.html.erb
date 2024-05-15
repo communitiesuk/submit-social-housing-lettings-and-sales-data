@@ -24,6 +24,8 @@
           Check your filters
         </h1>
 
+        <%= govuk_inset_text(text: "Amending these answers might change the amount of logs selected") %>
+
         <%= govuk_summary_list do |summary_list| %>
         <% check_your_answers_filters_list(session_filters, filter_type).each do |filter| %>
           <% summary_list.with_row do |row| %>
