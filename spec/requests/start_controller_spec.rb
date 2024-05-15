@@ -87,7 +87,7 @@ RSpec.describe StartController, type: :request do
 
         context "when the user's org has submitted sales logs" do
           before do
-            create(:sales_log, created_by: user)
+            create(:sales_log, assigned_to: user)
           end
 
           it "displays data related to sales" do
@@ -144,7 +144,7 @@ RSpec.describe StartController, type: :request do
           let(:in_crossover_period) { true }
 
           before do
-            create(:sales_log, created_by: user)
+            create(:sales_log, assigned_to: user)
             get root_path
           end
 
@@ -252,8 +252,8 @@ RSpec.describe StartController, type: :request do
             it "shows the correct counts of logs created by them" do
               last_year_in_progress_count = 2
               this_year_in_progress_count = 3
-              create_list(:lettings_log, last_year_in_progress_count, :in_progress, created_by: provider_1, startdate: Time.zone.today - 1.year)
-              create_list(:lettings_log, this_year_in_progress_count, :in_progress, created_by: provider_1, startdate: Time.zone.today)
+              create_list(:lettings_log, last_year_in_progress_count, :in_progress, assigned_to: provider_1, startdate: Time.zone.today - 1.year)
+              create_list(:lettings_log, this_year_in_progress_count, :in_progress, assigned_to: provider_1, startdate: Time.zone.today)
 
               get root_path
 
@@ -266,8 +266,8 @@ RSpec.describe StartController, type: :request do
             end
 
             it "does not include logs created by other users in the count, whether in their organisation or not" do
-              create(:lettings_log, :in_progress, created_by: coordinator, startdate: Time.zone.today - 1.year)
-              create(:lettings_log, :in_progress, created_by: provider_2, startdate: Time.zone.today)
+              create(:lettings_log, :in_progress, assigned_to: coordinator, startdate: Time.zone.today - 1.year)
+              create(:lettings_log, :in_progress, assigned_to: provider_2, startdate: Time.zone.today)
 
               get root_path
 
@@ -286,8 +286,8 @@ RSpec.describe StartController, type: :request do
             it "shows the correct counts of logs created by all users in their organisation" do
               last_year_in_progress_count = 2
               this_year_in_progress_count = 3
-              create_list(:lettings_log, last_year_in_progress_count, :in_progress, created_by: provider_1, startdate: Time.zone.today - 1.year)
-              create_list(:lettings_log, this_year_in_progress_count, :in_progress, created_by: coordinator, startdate: Time.zone.today)
+              create_list(:lettings_log, last_year_in_progress_count, :in_progress, assigned_to: provider_1, startdate: Time.zone.today - 1.year)
+              create_list(:lettings_log, this_year_in_progress_count, :in_progress, assigned_to: coordinator, startdate: Time.zone.today)
 
               get root_path
 
@@ -300,7 +300,7 @@ RSpec.describe StartController, type: :request do
             end
 
             it "does not include logs created by users from other organisations in the count" do
-              create(:lettings_log, :in_progress, created_by: provider_2, startdate: Time.zone.today)
+              create(:lettings_log, :in_progress, assigned_to: provider_2, startdate: Time.zone.today)
 
               get root_path
 
@@ -321,10 +321,10 @@ RSpec.describe StartController, type: :request do
               coordinator_lettings_this_year_in_progress_count = 3
               provider_2_lettings_last_year_in_progress_count = 2
               provider_2_sales_this_year_in_progress_count = 3
-              create_list(:lettings_log, provider_1_lettings_last_year_in_progress_count, :in_progress, created_by: provider_1, startdate: Time.zone.today - 1.year)
-              create_list(:lettings_log, coordinator_lettings_this_year_in_progress_count, :in_progress, created_by: coordinator, startdate: Time.zone.today)
-              create_list(:lettings_log, provider_2_lettings_last_year_in_progress_count, :in_progress, created_by: provider_2, startdate: Time.zone.today - 1.year)
-              create_list(:sales_log, provider_2_sales_this_year_in_progress_count, :in_progress, created_by: provider_2, saledate: Time.zone.today)
+              create_list(:lettings_log, provider_1_lettings_last_year_in_progress_count, :in_progress, assigned_to: provider_1, startdate: Time.zone.today - 1.year)
+              create_list(:lettings_log, coordinator_lettings_this_year_in_progress_count, :in_progress, assigned_to: coordinator, startdate: Time.zone.today)
+              create_list(:lettings_log, provider_2_lettings_last_year_in_progress_count, :in_progress, assigned_to: provider_2, startdate: Time.zone.today - 1.year)
+              create_list(:sales_log, provider_2_sales_this_year_in_progress_count, :in_progress, assigned_to: provider_2, saledate: Time.zone.today)
 
               get root_path
 
