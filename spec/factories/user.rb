@@ -6,6 +6,9 @@ FactoryBot.define do
     organisation { association :organisation }
     role { "data_provider" }
     phone { "1234512345123" }
+    trait :data_provider do
+      role { "data_provider" }
+    end
     trait :data_coordinator do
       role { "data_coordinator" }
     end

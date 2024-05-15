@@ -5,18 +5,18 @@ class HomepagePresenter
 
   def initialize(user)
     @user = user
-    @organisation_logs_sales = organisation_has_ever_logged_sales?
+    @display_sales = should_display_sales?
     @in_crossover_period = FormHandler.instance.in_crossover_period?
     @current_year = FormHandler.instance.current_lettings_form.start_date.year
     @current_year_in_progress_lettings_data = data_box_data(:lettings, @current_year, :in_progress)
     @current_year_completed_lettings_data = data_box_data(:lettings, @current_year, :completed)
-    @current_year_in_progress_sales_data = data_box_data(:sales, @current_year, :in_progress) if organisation_logs_sales?
-    @current_year_completed_sales_data = data_box_data(:sales, @current_year, :completed) if organisation_logs_sales?
+    @current_year_in_progress_sales_data = data_box_data(:sales, @current_year, :in_progress) if display_sales?
+    @current_year_completed_sales_data = data_box_data(:sales, @current_year, :completed) if display_sales?
     @last_year = @current_year - 1
     @last_year_in_progress_lettings_data = data_box_data(:lettings, @last_year, :in_progress) if in_crossover_period?
     @last_year_completed_lettings_data = data_box_data(:lettings, @last_year, :completed)
-    @last_year_in_progress_sales_data = data_box_data(:sales, @last_year, :in_progress) if in_crossover_period? && organisation_logs_sales?
-    @last_year_completed_sales_data = data_box_data(:sales, @last_year, :completed) if organisation_logs_sales?
+    @last_year_in_progress_sales_data = data_box_data(:sales, @last_year, :in_progress) if in_crossover_period? && display_sales?
+    @last_year_completed_sales_data = data_box_data(:sales, @last_year, :completed) if display_sales?
     if display_schemes?
       @incomplete_schemes_data = {
         count: @user.schemes.incomplete.count,
@@ -36,8 +36,8 @@ class HomepagePresenter
     end
   end
 
-  def organisation_logs_sales?
-    @organisation_logs_sales
+  def display_sales?
+    @display_sales
   end
 
   def in_crossover_period?
@@ -104,7 +104,7 @@ private
          .count
   end
 
-  def organisation_has_ever_logged_sales?
-    @user.organisation.sales_logs.exists?
+  def should_display_sales?
+    @user.support? || @user.organisation.sales_logs.exists?
   end
 end

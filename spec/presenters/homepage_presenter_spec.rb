@@ -23,6 +23,10 @@ RSpec.describe HomepagePresenter do
     it "returns that schemes should be displayed" do
       expect(presenter.display_schemes?).to be true
     end
+
+    it "returns that sales logs should be displayed" do
+      expect(presenter.display_sales?).to be true
+    end
   end
 
   context "when the user is a data coordinator" do
@@ -51,7 +55,7 @@ RSpec.describe HomepagePresenter do
 
   context "when the user's organisation has never submitted sales logs" do
     it "shows the user's organisation does not log sales" do
-      expect(presenter.organisation_logs_sales?).to be false
+      expect(presenter.display_sales?).to be false
     end
 
     context "when in the crossover period" do
@@ -89,7 +93,7 @@ RSpec.describe HomepagePresenter do
     end
 
     it "shows the user's organisation logs sales" do
-      expect(presenter.organisation_logs_sales?).to be true
+      expect(presenter.display_sales?).to be true
     end
 
     context "when in the crossover period" do

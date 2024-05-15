@@ -12,7 +12,7 @@
           <div class="app-data-box-group">
             <h2 class="govuk-heading-m govuk-!-margin-bottom-2"><%= @homepage_presenter.subheading_for_last_year %></h2>
             <div class="app-data-box-group-row">
-              <% if @homepage_presenter.organisation_logs_sales? %>
+              <% if @homepage_presenter.display_sales? %>
                 <%= render partial: "home/data_box_two_by_two", locals: {
                   top_left_data_box: @homepage_presenter.last_year_in_progress_lettings_data,
                   bottom_left_data_box: @homepage_presenter.last_year_completed_lettings_data,
@@ -32,7 +32,7 @@
         <div class="app-data-box-group">
           <h2 class="govuk-heading-m govuk-!-margin-bottom-2"><%= @homepage_presenter.subheading_for_current_year %></h2>
           <div class="app-data-box-group-row">
-            <% if @homepage_presenter.organisation_logs_sales? %>
+            <% if @homepage_presenter.display_sales? %>
               <%= render partial: "home/data_box_two_by_two", locals: {
                 top_left_data_box: @homepage_presenter.current_year_in_progress_lettings_data,
                 bottom_left_data_box: @homepage_presenter.current_year_completed_lettings_data,
@@ -64,7 +64,7 @@
           <div class="app-data-box-one-half">
             <%= render partial: "home/blue_box_link", locals: { text: "View all lettings", path: clear_filters_path(filter_type: "lettings_logs") } %>
           </div>
-          <% if @homepage_presenter.organisation_logs_sales? %>
+          <% if @homepage_presenter.display_sales? %>
             <div class="app-data-box-one-half">
               <%= render partial: "home/blue_box_link", locals: { text: "View all sales", path: clear_filters_path(filter_type: "sales_logs") } %>
             </div>
