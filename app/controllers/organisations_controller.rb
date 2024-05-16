@@ -154,7 +154,7 @@ class OrganisationsController < ApplicationController
     unpaginated_filtered_logs = filter_manager.filtered_logs(organisation_logs, search_term, session_filters)
     codes_only = params.require(:codes_only) == "true"
 
-    render "logs/download_csv", locals: { search_term:, count: unpaginated_filtered_logs.size, post_path: lettings_logs_email_csv_organisation_path, codes_only:, session_filters:, filter_type: "lettings_logs" }
+    render "logs/download_csv", locals: { search_term:, count: unpaginated_filtered_logs.size, post_path: lettings_logs_email_csv_organisation_path, codes_only:, session_filters:, filter_type: "lettings_logs", download_csv_back_link: lettings_logs_organisation_path(@organisation) }
   end
 
   def email_lettings_csv
@@ -192,7 +192,7 @@ class OrganisationsController < ApplicationController
     unpaginated_filtered_logs = filter_manager.filtered_logs(organisation_logs, search_term, session_filters)
     codes_only = params.require(:codes_only) == "true"
 
-    render "logs/download_csv", locals: { search_term:, count: unpaginated_filtered_logs.size, post_path: sales_logs_email_csv_organisation_path, codes_only:, session_filters:, filter_type: "sales_logs" }
+    render "logs/download_csv", locals: { search_term:, count: unpaginated_filtered_logs.size, post_path: sales_logs_email_csv_organisation_path, codes_only:, session_filters:, filter_type: "sales_logs", download_csv_back_link: sales_logs_organisation_path(@organisation) }
   end
 
   def email_sales_csv

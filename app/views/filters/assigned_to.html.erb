@@ -26,6 +26,6 @@
 
   <div class="govuk-button-group">
     <%= f.govuk_submit "Save changes" %>
-    <%= govuk_button_link_to "Cancel", send("csv_download_#{@filter_type}_path", search: request.params["search"], codes_only: request.params["codes_only"]), secondary: true %>
+    <%= govuk_button_link_to "Cancel", cancel_csv_filters_update_url(@filter_type, request.params["search"], request.params["codes_only"], @organisation_id), secondary: true %>
   </div>
 <% end %>
