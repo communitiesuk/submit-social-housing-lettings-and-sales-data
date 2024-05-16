@@ -184,6 +184,14 @@ module FiltersHelper
     end
   end
 
+  def cancel_csv_filters_update_url(filter_type, search, codes_only, organisation_id)
+    if organisation_id.present?
+      send("#{filter_type}_csv_download_organisation_path", id: organisation_id, search:, codes_only:)
+    else
+      send("csv_download_#{filter_type}_path", search:, codes_only:)
+    end
+  end
+
   def change_filter_for_csv_url(filter, filter_type, search_term, codes_only, organisation_id)
     if organisation_id.present?
       send("#{filter_type}_filters_#{filter[:id]}_organisation_path", organisation_id, search: search_term, codes_only:, referrer: "check_answers")
