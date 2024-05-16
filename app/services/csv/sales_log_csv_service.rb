@@ -101,7 +101,7 @@ module Csv
         get_label(value, attribute, log)
       elsif SYSTEM_DATE_FIELDS.include? attribute
         log.public_send(attribute)&.iso8601
-      elsif PERSON_DETAILS.any? { |key, _value| key == attribute } && (person_details_not_known?(log, attribute) || age_not_known?(log, attribute))
+      elsif PERSON_DETAILS.key?(attribute) && (person_details_not_known?(log, attribute) || age_not_known?(log, attribute))
         case @export_type
         when "codes"
           PERSON_DETAILS.find { |key, _value| key == attribute }[1]["refused_code"]
@@ -136,7 +136,6 @@ module Csv
         "saledate" => %w[day month year],
         "exdate" => %w[exday exmonth exyear],
         "hodate" => %w[hoday homonth hoyear],
-        "postcode_full" => %w[pcode1 pcode2],
         "ppostcode_full" => %w[ppostc1 ppostc2],
         "la" => %w[la la_label],
         "prevloc" => %w[prevloc prevloc_label],
@@ -146,8 +145,8 @@ module Csv
         "value" => %w[value value_value_check],
         "mscharge" => %w[mscharge mscharge_value_check],
       }
-      if @user.support? && @year >= 2024
-        mappings["beds"] = ORDERED_ADDRESS_FIELDS + %w[beds]
+      unless @user.support? && @year >= 2024
+        mappings["postcode_full"] = %w[pcode1 pcode2]
       end
       mappings
     end
@@ -157,7 +156,6 @@ module Csv
     def sales_log_attributes
       ordered_questions = FormHandler.instance.ordered_questions_for_year(@year, "sales")
       ordered_questions.reject! { |q| q.id.match?(/((?<!la)_known)|(_check)|(_asked)|nationality_all_group|nationality_all_buyer2_group/) }
-      ordered_questions.reject! { |q| all_address_fields.include?(q.id) } if @user.support? && @year >= 2024
       attributes = ordered_questions.flat_map do |question|
         if question.type == "checkbox"
           question.answer_options.keys
@@ -165,6 +163,13 @@ module Csv
           attribute_mappings[question.id]
         else
           question.id
+        end
+      end
+      if @user.support? && @year >= 2024
+        first_address_field_index = attributes.find_index { |q| all_address_fields.include?(q) }
+        if first_address_field_index
+          attributes.reject! { |q| all_address_fields.include?(q) }
+          attributes.insert(first_address_field_index, *ORDERED_ADDRESS_FIELDS)
         end
       end
       final_attributes = non_question_fields + attributes
