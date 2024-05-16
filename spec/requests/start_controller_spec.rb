@@ -32,7 +32,7 @@ RSpec.describe StartController, type: :request do
         expect(page).to have_content("Welcome back")
       end
 
-      context "when testing the data displayed at the top of the home page" do
+      describe "the data displayed at the top of the home page" do
         let(:current_year) { FormHandler.instance.current_collection_start_year }
         let(:in_crossover_period) { false }
 
@@ -139,7 +139,7 @@ RSpec.describe StartController, type: :request do
           end
         end
 
-        context "when testing the links in the data boxes" do
+        describe "the links in the data boxes" do
           let(:user) { create(:user, :data_coordinator) }
           let(:in_crossover_period) { true }
 
@@ -148,76 +148,27 @@ RSpec.describe StartController, type: :request do
             get root_path
           end
 
-          it "shows the correct links for in progress lettings" do
-            type = "lettings"
-            status = "in_progress"
-            databoxes = all_databoxes(type, status)
+          [
+            { type: "lettings", status: "in_progress" },
+            { type: "lettings", status: "completed" },
+            { type: "sales", status: "in_progress" },
+            { type: "sales", status: "completed" },
+          ].each do |test_case|
+            it "shows the correct links for #{test_case[:status]} #{test_case[:type]}" do
+              databoxes = all_databoxes(test_case[:type], test_case[:status])
 
-            expect(databoxes.count).to be 2
+              expect(databoxes.count).to be 2
 
-            links = databoxes.map { |databox| link_from_databox databox }
+              links = databoxes.map { |databox| link_from_databox databox }
 
-            expect(links.map(&:path)).to all eq lettings_logs_path
+              expect(links.map(&:path)).to all eq send("#{test_case[:type]}_logs_path")
 
-            params = links.map { |link| CGI.parse(link.query) }
+              params = links.map { |link| CGI.parse(link.query) }
 
-            expect(params.map { |prms| prms["status[]"] }).to all eq [status]
-            expect(params.first["years[]"]).to eq [(current_year - 1).to_s]
-            expect(params.second["years[]"]).to eq [current_year.to_s]
-          end
-
-          it "shows the correct links for completed lettings" do
-            type = "lettings"
-            status = "completed"
-            databoxes = all_databoxes(type, status)
-
-            expect(databoxes.count).to be 2
-
-            links = databoxes.map { |databox| link_from_databox databox }
-
-            expect(links.map(&:path)).to all eq lettings_logs_path
-
-            params = links.map { |link| CGI.parse(link.query) }
-
-            expect(params.map { |prms| prms["status[]"] }).to all eq [status]
-            expect(params.first["years[]"]).to eq [(current_year - 1).to_s]
-            expect(params.second["years[]"]).to eq [current_year.to_s]
-          end
-
-          it "shows the correct links for in progress sales" do
-            type = "sales"
-            status = "in_progress"
-            databoxes = all_databoxes(type, status)
-
-            expect(databoxes.count).to be 2
-
-            links = databoxes.map { |databox| link_from_databox databox }
-
-            expect(links.map(&:path)).to all eq sales_logs_path
-
-            params = links.map { |link| CGI.parse(link.query) }
-
-            expect(params.map { |prms| prms["status[]"] }).to all eq [status]
-            expect(params.first["years[]"]).to eq [(current_year - 1).to_s]
-            expect(params.second["years[]"]).to eq [current_year.to_s]
-          end
-
-          it "shows the correct links for completed sales" do
-            type = "sales"
-            status = "completed"
-            databoxes = all_databoxes(type, status)
-
-            expect(databoxes.count).to be 2
-
-            links = databoxes.map { |databox| link_from_databox databox }
-
-            expect(links.map(&:path)).to all eq sales_logs_path
-
-            params = links.map { |link| CGI.parse(link.query) }
-
-            expect(params.map { |prms| prms["status[]"] }).to all eq [status]
-            expect(params.first["years[]"]).to eq [(current_year - 1).to_s]
-            expect(params.second["years[]"]).to eq [current_year.to_s]
+              expect(params.map { |prms| prms["status[]"] }).to all eq [test_case[:status]]
+              expect(params.first["years[]"]).to eq [(current_year - 1).to_s]
+              expect(params.second["years[]"]).to eq [current_year.to_s]
+            end
           end
 
           it "shows the correct links for incomplete schemes" do
@@ -237,7 +188,7 @@ RSpec.describe StartController, type: :request do
           end
         end
 
-        context "when testing the counts displayed" do
+        describe "the counts displayed" do
           let(:in_crossover_period) { true }
           let(:org_1) { create(:organisation) }
           let(:org_2) { create(:organisation) }

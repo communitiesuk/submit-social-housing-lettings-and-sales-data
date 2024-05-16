@@ -5,7 +5,7 @@
 }
 
 .app-data-box-group {
-  @include govuk-responsive-margin(4, "top")
+  @include govuk-responsive-margin(4, "top");
 }
 
 @media (min-width: 54.0625em) {

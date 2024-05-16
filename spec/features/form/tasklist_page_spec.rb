@@ -67,7 +67,7 @@ RSpec.describe "Task List" do
     expect(page).to have_content("This log has not been started.")
   end
 
-  context "when testing completed subsection count" do
+  describe "completed subsection count" do
     let(:real_2021_2022_form) { Form.new("config/forms/2021_2022.json") }
 
     before do
