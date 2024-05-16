@@ -139,7 +139,7 @@ module Csv
         "ppostcode_full" => %w[ppostc1 ppostc2],
         "la" => %w[la la_label],
         "prevloc" => %w[prevloc prevloc_label],
-        "assigned_to_id" => %w[assigned_to],
+        "assigned_to_id" => %w[created_by assigned_to],
         "owning_organisation_id" => %w[owning_organisation_name],
         "managing_organisation_id" => %w[managing_organisation_name],
         "value" => %w[value value_value_check],
@@ -242,13 +242,13 @@ module Csv
     def non_question_fields
       case @year
       when 2022
-        %w[id status created_at updated_at old_form_id collection_start_year creation_method is_dpo created_by]
+        %w[id status created_at updated_at old_form_id collection_start_year creation_method is_dpo]
       when 2023
-        %w[id status duplicate_set_id created_at updated_at old_form_id collection_start_year creation_method is_dpo created_by]
+        %w[id status duplicate_set_id created_at updated_at old_form_id collection_start_year creation_method is_dpo]
       when 2024
-        %w[id status duplicate_set_id created_at updated_at collection_start_year creation_method bulk_upload_id is_dpo created_by]
+        %w[id status duplicate_set_id created_at updated_at collection_start_year creation_method bulk_upload_id is_dpo]
       else
-        %w[id status duplicate_set_id created_at updated_at collection_start_year creation_method bulk_upload_id is_dpo created_by]
+        %w[id status duplicate_set_id created_at updated_at collection_start_year creation_method bulk_upload_id is_dpo]
       end
     end
 
