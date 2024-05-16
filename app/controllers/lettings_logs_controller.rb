@@ -97,7 +97,7 @@ class LettingsLogsController < LogsController
 
   def email_csv
     all_orgs = params["organisation_select"] == "all"
-    EmailCsvJob.perform_later(current_user, search_term, session_filters, all_orgs, nil, codes_only_export?)
+    EmailCsvJob.perform_later(current_user, search_term, session_filters, all_orgs, nil, codes_only_export?, "lettings", session_filters["years"].first.to_i)
     redirect_to csv_confirmation_lettings_logs_path
   end
 

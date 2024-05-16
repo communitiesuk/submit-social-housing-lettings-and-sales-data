@@ -38,7 +38,7 @@ module Csv
       "scheme_code" => "id_to_display",
       "scheme_service_name" => "service_name",
       "scheme_status" => "status",
-      "scheme_sensitive" => "sensitive",
+      "scheme_confidential" => "sensitive",
       "scheme_registered_under_care_act" => "registered_under_care_act",
       "scheme_support_services_provided_by" => "arrangement_type",
       "scheme_primary_client_group" => "primary_client_group",
@@ -92,7 +92,7 @@ module Csv
     end
 
     def scheme_attributes
-      %w[scheme_code scheme_service_name scheme_status scheme_sensitive scheme_type scheme_registered_under_care_act scheme_owning_organisation_name scheme_support_services_provided_by scheme_primary_client_group scheme_has_other_client_group scheme_secondary_client_group scheme_support_type scheme_intended_stay scheme_created_at scheme_active_dates]
+      %w[scheme_code scheme_service_name scheme_status scheme_confidential scheme_type scheme_registered_under_care_act scheme_owning_organisation_name scheme_support_services_provided_by scheme_primary_client_group scheme_has_other_client_group scheme_secondary_client_group scheme_support_type scheme_intended_stay scheme_created_at scheme_active_dates]
     end
 
     def location_attributes
