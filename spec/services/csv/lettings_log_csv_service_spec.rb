@@ -50,18 +50,12 @@ RSpec.describe Csv::LettingsLogCsvService do
       )
     end
     let(:user) { create(:user, :support, email: "s.port@jeemayle.com") }
-    let(:service) { described_class.new(user:, export_type:) }
+    let(:service) { described_class.new(user:, export_type:, year:) }
     let(:export_type) { "labels" }
+    let(:year) { 2024 }
     let(:csv) { CSV.parse(service.prepare_csv(LettingsLog.where(id: logs.map(&:id)))) }
     let(:logs) { [log] }
     let(:headers) { csv.first }
-
-    it "calls the form handler to get all questions in order when initialized" do
-      allow(FormHandler).to receive(:instance).and_return(form_handler_mock)
-      allow(form_handler_mock).to receive(:ordered_lettings_questions_for_all_years).and_return([])
-      service
-      expect(form_handler_mock).to have_received(:ordered_lettings_questions_for_all_years)
-    end
 
     it "returns a string" do
       result = service.prepare_csv(LettingsLog.all)
@@ -72,21 +66,28 @@ RSpec.describe Csv::LettingsLogCsvService do
       expect(csv.first.first).to eq "id"
     end
 
-    context "when stubbing :ordered_lettings_questions_for_all_years" do
+    context "when stubbing :ordered_questions_for_year" do
       let(:lettings_form) do
         FormFactory.new(year: 2050, type: "lettings")
                   .with_sections([build(:section, :with_questions, question_ids:, questions:)])
                   .build
       end
-      let(:question_ids) { nil }
+      let(:question_ids) { [] }
       let(:questions) { nil }
+      let(:year) { 2050 }
 
       before do
         allow(FormHandler).to receive(:instance).and_return(form_handler_mock)
         allow(form_handler_mock).to receive(:form_name_from_start_year)
         allow(form_handler_mock).to receive(:get_form).and_return(lettings_form)
-        allow(form_handler_mock).to receive(:ordered_lettings_questions_for_all_years).and_return(lettings_form.questions)
-        allow(form_handler_mock).to receive(:lettings_in_crossover_period?).and_return false
+        allow(form_handler_mock).to receive(:ordered_questions_for_year).and_return(lettings_form.questions)
+      end
+
+      it "calls the form handler to get all questions for the specified year" do
+        allow(FormHandler).to receive(:instance).and_return(form_handler_mock)
+        allow(form_handler_mock).to receive(:ordered_questions_for_year).and_return([])
+        service.prepare_csv(LettingsLog.all)
+        expect(form_handler_mock).to have_received(:ordered_questions_for_year).with(2050, "lettings")
       end
 
       context "when it returns questions with particular ids" do
@@ -124,11 +125,11 @@ RSpec.describe Csv::LettingsLogCsvService do
     end
 
     it "adds log attributes not related to questions to the headers" do
-      expect(headers.first(5)).to eq %w[id status duplicate_set_id assigned_to is_dpo]
+      expect(headers.first(5)).to eq %w[id status duplicate_set_id created_by assigned_to]
     end
 
     it "adds attributes related to associated schemes and locations to the headers" do
-      expect(headers).to include(*%w[scheme_service_name scheme_sensitive SCHTYPE scheme_registered_under_care_act])
+      expect(headers).to include(*%w[scheme_service_name scheme_confidential SCHTYPE scheme_registered_under_care_act])
       expect(headers.last(5)).to eq %w[location_units location_type_of_unit location_mobility_type location_local_authority location_startdate]
     end
 
@@ -169,42 +170,28 @@ RSpec.describe Csv::LettingsLogCsvService do
         expect(la_label_value).to eq "Barnet"
       end
 
-      context "when the current form is 2024" do
+      context "when the requested form is 2024" do
+        let(:year) { 2024 }
         let(:now) { Time.zone.local(2024, 4, 1) }
+        let(:fixed_time) { Time.zone.local(2024, 4, 1) }
 
-        context "and the log is for 2024 collection period" do
-          let(:fixed_time) { Time.zone.local(2024, 4, 1) }
-
-          before do
-            log.update!(national: nil)
-            log.update!(nationality_all: 36)
-          end
-
-          it "exports the CSV with 2024 ordering and all values correct" do
-            expected_content = CSV.read("spec/fixtures/files/lettings_log_csv_export_labels_24.csv")
-            values_to_delete = %w[id vacdays]
-            values_to_delete.each do |attribute|
-              index = csv.first.index(attribute)
-              csv.second[index] = nil
-            end
-            expect(csv).to eq expected_content
-          end
+        before do
+          log.update!(nationality_all: 36)
         end
 
-        context "and the log is for 2023 collection period" do
-          it "exports the CSV with 2024 ordering and all values correct" do
-            expected_content = CSV.read("spec/fixtures/files/lettings_log_csv_export_labels_23_during_24_period.csv")
-            values_to_delete = %w[id vacdays]
-            values_to_delete.each do |attribute|
-              index = csv.first.index(attribute)
-              csv.second[index] = nil
-            end
-            expect(csv).to eq expected_content
+        it "exports the CSV with 2024 ordering and all values correct" do
+          expected_content = CSV.read("spec/fixtures/files/lettings_log_csv_export_labels_24.csv")
+          values_to_delete = %w[id vacdays]
+          values_to_delete.each do |attribute|
+            index = csv.first.index(attribute)
+            csv.second[index] = nil
           end
+          expect(csv).to eq expected_content
         end
       end
 
-      context "when the current form is 2023" do
+      context "when the requested form is 2023" do
+        let(:year) { 2023 }
         let(:now) { Time.zone.local(2023, 11, 26) }
 
         it "exports the CSV with 2023 ordering and all values correct" do
@@ -258,7 +245,8 @@ RSpec.describe Csv::LettingsLogCsvService do
         expect(la_label_value).to eq "Barnet"
       end
 
-      context "when the current form is 2024" do
+      context "when the requested form is 2024" do
+        let(:year) { 2024 }
         let(:now) { Time.zone.local(2024, 4, 1) }
 
         it "exports the CSV with all values correct" do
@@ -272,7 +260,8 @@ RSpec.describe Csv::LettingsLogCsvService do
         end
       end
 
-      context "when the current form is 2023" do
+      context "when the requested form is 2023" do
+        let(:year) { 2023 }
         let(:now) { Time.zone.local(2023, 11, 26) }
 
         it "exports the CSV with all values correct" do
@@ -306,8 +295,10 @@ RSpec.describe Csv::LettingsLogCsvService do
         expect(headers).not_to include(*%w[wrent wscharge wpschrge wsupchrg wtcharge])
       end
 
-      context "and the current form is 2024" do
+      context "and the requested form is 2024" do
+        let(:year) { 2024 }
         let(:now) { Time.zone.local(2024, 4, 1) }
+        let(:fixed_time) { Time.zone.local(2024, 4, 1) }
 
         context "and exporting with labels" do
           let(:export_type) { "labels" }
@@ -338,8 +329,10 @@ RSpec.describe Csv::LettingsLogCsvService do
         end
       end
 
-      context "and the current form is 2023" do
+      context "and the requested form is 2023" do
+        let(:year) { 2023 }
         let(:now) { Time.zone.local(2023, 11, 26) }
+        let(:fixed_time) { Time.zone.local(2023, 11, 26) }
 
         context "and exporting with labels" do
           let(:export_type) { "labels" }

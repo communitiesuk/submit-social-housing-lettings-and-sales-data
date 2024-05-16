@@ -1100,42 +1100,42 @@ RSpec.describe SalesLogsController, type: :request do
 
     it "creates an E-mail job with the correct log type" do
       expect {
-        post "/sales-logs/email-csv?codes_only=true", headers:, params: {}
-      }.to enqueue_job(EmailCsvJob).with(user, nil, {}, false, nil, true, "sales")
+        post "/sales-logs/email-csv?years[]=2023&codes_only=true", headers:, params: {}
+      }.to enqueue_job(EmailCsvJob).with(user, nil, { "years" => %w[2023] }, false, nil, true, "sales", 2023)
     end
 
     it "redirects to the confirmation page" do
-      post "/sales-logs/email-csv?codes_only=true", headers:, params: {}
+      post "/sales-logs/email-csv?years[]=2023&codes_only=true", headers:, params: {}
       expect(response).to redirect_to(csv_confirmation_sales_logs_path)
     end
 
     it "passes the search term" do
       expect {
-        post "/sales-logs/email-csv?search=#{sales_log.id}&codes_only=false", headers:, params: {}
-      }.to enqueue_job(EmailCsvJob).with(user, sales_log.id.to_s, {}, false, nil, false, "sales")
+        post "/sales-logs/email-csv?search=#{sales_log.id}&years[]=2023&codes_only=false", headers:, params: {}
+      }.to enqueue_job(EmailCsvJob).with(user, sales_log.id.to_s, { "years" => %w[2023] }, false, nil, false, "sales", 2023)
     end
 
     it "passes filter parameters" do
       expect {
-        post "/sales-logs/email-csv?status[]=completed&codes_only=true", headers:, params: {}
-      }.to enqueue_job(EmailCsvJob).with(user, nil, { "status" => %w[completed] }, false, nil, true, "sales")
+        post "/sales-logs/email-csv?years[]=2023&status[]=completed&codes_only=true", headers:, params: {}
+      }.to enqueue_job(EmailCsvJob).with(user, nil, { "status" => %w[completed], "years" => %w[2023] }, false, nil, true, "sales", 2023)
     end
 
     it "passes export type flag" do
       expect {
-        post "/sales-logs/email-csv?codes_only=true", headers:, params: {}
-      }.to enqueue_job(EmailCsvJob).with(user, nil, {}, false, nil, true, "sales")
+        post "/sales-logs/email-csv?years[]=2023&codes_only=true", headers:, params: {}
+      }.to enqueue_job(EmailCsvJob).with(user, nil, { "years" => %w[2023] }, false, nil, true, "sales", 2023)
       expect {
-        post "/sales-logs/email-csv?codes_only=false", headers:, params: {}
-      }.to enqueue_job(EmailCsvJob).with(user, nil, {}, false, nil, false, "sales")
+        post "/sales-logs/email-csv?years[]=2023&codes_only=false", headers:, params: {}
+      }.to enqueue_job(EmailCsvJob).with(user, nil, { "years" => %w[2023] }, false, nil, false, "sales", 2023)
     end
 
     it "passes a combination of search term, export type and filter parameters" do
       postcode = "XX1 1TG"
 
       expect {
-        post "/sales-logs/email-csv?status[]=completed&search=#{postcode}&codes_only=false", headers:, params: {}
-      }.to enqueue_job(EmailCsvJob).with(user, postcode, { "status" => %w[completed] }, false, nil, false, "sales")
+        post "/sales-logs/email-csv?years[]=2023&status[]=completed&search=#{postcode}&codes_only=false", headers:, params: {}
+      }.to enqueue_job(EmailCsvJob).with(user, postcode, { "status" => %w[completed], "years" => %w[2023] }, false, nil, false, "sales", 2023)
     end
 
     context "when the user is not a support user" do
@@ -1144,13 +1144,13 @@ RSpec.describe SalesLogsController, type: :request do
       it "has permission to download human readable csv" do
         codes_only_export = false
         expect {
-          post "/sales-logs/email-csv?codes_only=#{codes_only_export}", headers:, params: {}
-        }.to enqueue_job(EmailCsvJob).with(user, nil, {}, false, nil, false, "sales")
+          post "/sales-logs/email-csv?years[]=2023&codes_only=#{codes_only_export}", headers:, params: {}
+        }.to enqueue_job(EmailCsvJob).with(user, nil, { "years" => %w[2023] }, false, nil, false, "sales", 2023)
       end
 
       it "is not authorized to download codes only csv" do
         codes_only_export = true
-        post "/sales-logs/email-csv?codes_only=#{codes_only_export}", headers:, params: {}
+        post "/sales-logs/email-csv?years[]=2023&codes_only=#{codes_only_export}", headers:, params: {}
         expect(response).to have_http_status(:unauthorized)
       end
     end
