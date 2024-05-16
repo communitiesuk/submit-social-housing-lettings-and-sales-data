@@ -287,7 +287,6 @@ module Csv
       "la" => %w[is_la_inferred la_label la],
       "prevloc" => %w[is_previous_la_inferred prevloc_label prevloc],
       "needstype" => %w[needstype lettype],
-      "prevten" => %w[prevten new_old],
       "voiddate" => %w[voiddate vacdays],
       "rsnvac" => %w[rsnvac newprop],
       "household_charge" => %w[household_charge nocharge],
@@ -301,7 +300,9 @@ module Csv
       "letting_allocation_unknown" => %w[letting_allocation_none],
     }.freeze
 
-    SUPPORT_ONLY_ATTRIBUTES = %w[first_time_property_let_as_social_housing postcode_known is_la_inferred totchild totelder totadult net_income_known previous_la_known is_previous_la_inferred age1_known age2_known age3_known age4_known age5_known age6_known age7_known age8_known details_known_2 details_known_3 details_known_4 details_known_5 details_known_6 details_known_7 details_known_8 wrent wscharge wpschrge wsupchrg wtcharge wtshortfall old_form_id old_id tshortfall_known hhtype new_old la prevloc updated_by_id uprn_confirmed address_line1_input postcode_full_input uprn_selection address_line1_as_entered address_line2_as_entered town_or_city_as_entered county_as_entered postcode_full_as_entered la_as_entered created_by].freeze
+    ORDERED_ADDRESS_FIELDS = %w[uprn address_line1 address_line2 town_or_city county postcode_full is_la_inferred la_label la uprn_known uprn_selection address_search_value_check address_line1_input postcode_full_input address_line1_as_entered address_line2_as_entered town_or_city_as_entered county_as_entered postcode_full_as_entered la_as_entered].freeze
+
+    SUPPORT_ONLY_ATTRIBUTES = %w[postcode_known is_la_inferred totchild totelder totadult net_income_known previous_la_known is_previous_la_inferred age1_known age2_known age3_known age4_known age5_known age6_known age7_known age8_known details_known_2 details_known_3 details_known_4 details_known_5 details_known_6 details_known_7 details_known_8 wrent wscharge wpschrge wsupchrg wtcharge wtshortfall old_form_id old_id tshortfall_known hhtype la prevloc updated_by_id uprn_confirmed address_line1_input postcode_full_input uprn_selection address_line1_as_entered address_line2_as_entered town_or_city_as_entered county_as_entered postcode_full_as_entered la_as_entered created_by].freeze
 
     def soft_validations_attributes(ordered_questions)
       ordered_questions.select { |q| q.type == "interruption_screen" }.map(&:id)
@@ -317,6 +318,13 @@ module Csv
           }.flatten
         else
           ATTRIBUTE_MAPPINGS.fetch(question.id, question.id)
+        end
+      end
+      if @user.support? && @year >= 2024
+        first_address_field_index = attributes.find_index { |q| all_address_fields.include?(q) }
+        if first_address_field_index
+          attributes.reject! { |q| all_address_fields.include?(q) }
+          attributes.insert(first_address_field_index, *ORDERED_ADDRESS_FIELDS)
         end
       end
       scheme_and_location_attributes = %w[scheme_code scheme_service_name scheme_confidential SCHTYPE scheme_registered_under_care_act scheme_owning_organisation_name scheme_primary_client_group scheme_has_other_client_group scheme_secondary_client_group scheme_support_type scheme_intended_stay scheme_created_at location_code location_postcode location_name location_units location_type_of_unit location_mobility_type location_local_authority location_startdate]
@@ -337,14 +345,18 @@ module Csv
     def non_question_fields
       case @year
       when 2022
-        %w[id status assigned_to is_dpo created_at updated_by updated_at creation_method old_id old_form_id collection_start_year created_by]
+        %w[id status created_by assigned_to is_dpo created_at updated_by updated_at creation_method old_id old_form_id collection_start_year]
       when 2023
-        %w[id status duplicate_set_id assigned_to is_dpo created_at updated_by updated_at creation_method old_id old_form_id collection_start_year created_by]
+        %w[id status duplicate_set_id created_by assigned_to is_dpo created_at updated_by updated_at creation_method old_id old_form_id collection_start_year]
       when 2024
-        %w[id status duplicate_set_id assigned_to is_dpo created_at updated_by updated_at creation_method collection_start_year bulk_upload_id address_line1_as_entered address_line2_as_entered town_or_city_as_entered county_as_entered postcode_full_as_entered la_as_entered created_by]
+        %w[id status duplicate_set_id created_by assigned_to is_dpo created_at updated_by updated_at creation_method collection_start_year bulk_upload_id]
       else
-        %w[id status duplicate_set_id assigned_to is_dpo created_at updated_by updated_at creation_method collection_start_year bulk_upload_id address_line1_as_entered address_line2_as_entered town_or_city_as_entered county_as_entered postcode_full_as_entered la_as_entered created_by]
+        %w[id status duplicate_set_id created_by assigned_to is_dpo created_at updated_by updated_at creation_method collection_start_year bulk_upload_id]
       end
+    end
+
+    def all_address_fields
+      ORDERED_ADDRESS_FIELDS + %w[uprn_confirmed]
     end
   end
 end
