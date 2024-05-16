@@ -1337,6 +1337,26 @@ RSpec.describe LettingsLog do
       end
     end
 
+    context "when uprn is not confirmed" do
+      it "clears previous address on renewal logs" do
+        log = FactoryBot.build(:lettings_log, uprn_known: 1, uprn: 1, uprn_confirmed: 0, renewal: 1, prevloc: "E08000003", ppostcode_full: "A1 1AA", ppcodenk: 0, previous_la_known: 1)
+
+        expect { log.set_derived_fields! }.to change(log, :prevloc).from("E08000003").to(nil)
+                                          .and change(log, :ppostcode_full).from("A1 1AA").to(nil)
+                                          .and change(log, :ppcodenk).from(0).to(nil)
+                                          .and change(log, :previous_la_known).from(1).to(nil)
+      end
+
+      it "does not clear previous address on non renewal logs" do
+        log = FactoryBot.build(:lettings_log, uprn_known: 1, uprn: 1, uprn_confirmed: 0, renewal: 0, prevloc: "E08000003", ppostcode_full: "A1 1AA", ppcodenk: 0, previous_la_known: 1)
+        log.set_derived_fields!
+        expect(log.prevloc).to eq("E08000003")
+        expect(log.ppostcode_full).to eq("A1 1AA")
+        expect(log.ppcodenk).to eq(0)
+        expect(log.previous_la_known).to eq(1)
+      end
+    end
+
     context "when saving previous address" do
       before do
         stub_request(:get, /api.postcodes.io/)
