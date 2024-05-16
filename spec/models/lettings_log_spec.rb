@@ -3549,7 +3549,7 @@ RSpec.describe LettingsLog do
     end
 
     context "when scheme and location have not been completed" do
-      let(:lettings_log) { build(:lettings_log, :setup_completed, :sh, scheme_id: nil, location: nil) }
+      let(:lettings_log) { build(:lettings_log, :setup_completed, :sh, scheme_id: nil, location_id: nil) }
 
       it "returns true" do
         expect(lettings_log).to be_non_location_setup_questions_completed
