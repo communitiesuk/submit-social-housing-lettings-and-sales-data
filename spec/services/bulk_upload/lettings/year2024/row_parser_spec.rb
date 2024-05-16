@@ -125,7 +125,7 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
         end
       end
 
-      context "when testing valid/invalid attributes" do
+      describe "valid/invalid attributes" do
         let(:valid_attributes) do
           {
             bulk_upload:,

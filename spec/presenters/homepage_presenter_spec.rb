@@ -148,7 +148,7 @@ RSpec.describe HomepagePresenter do
     end
   end
 
-  context "when testing the data collected and exposed by the presenter" do
+  describe "the data collected and exposed by the presenter" do
     context "with lettings logs" do
       let(:type) { :lettings_log }
 

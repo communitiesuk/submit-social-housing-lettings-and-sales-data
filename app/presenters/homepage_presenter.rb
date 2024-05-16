@@ -1,5 +1,6 @@
 class HomepagePresenter
   include Rails.application.routes.url_helpers
+  include CollectionTimeHelper
 
   attr_reader :current_year_in_progress_lettings_data, :current_year_completed_lettings_data, :current_year_in_progress_sales_data, :current_year_completed_sales_data, :last_year_in_progress_lettings_data, :last_year_completed_lettings_data, :last_year_in_progress_sales_data, :last_year_completed_sales_data, :incomplete_schemes_data
 
@@ -7,7 +8,7 @@ class HomepagePresenter
     @user = user
     @display_sales = should_display_sales?
     @in_crossover_period = FormHandler.instance.in_crossover_period?
-    @current_year = FormHandler.instance.current_lettings_form.start_date.year
+    @current_year = current_collection_start_year
     @current_year_in_progress_lettings_data = data_box_data(:lettings, @current_year, :in_progress)
     @current_year_completed_lettings_data = data_box_data(:lettings, @current_year, :completed)
     @current_year_in_progress_sales_data = data_box_data(:sales, @current_year, :in_progress) if display_sales?
@@ -60,8 +61,6 @@ class HomepagePresenter
 private
 
   def subheading_from_year(year)
-    return "AAAAH" if year.nil?
-
     "#{year} to #{year + 1} Logs"
   end
 
