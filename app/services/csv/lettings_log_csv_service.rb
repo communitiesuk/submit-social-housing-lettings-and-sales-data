@@ -272,43 +272,36 @@ module Csv
 
     YES_OR_BLANK_ATTRIBUTES = %w[declaration rp_homeless rp_insan_unsat rp_medwel rp_hardship rp_dontknow].freeze
 
+    ATTRIBUTE_MAPPINGS = {
+      "owning_organisation_id" => %w[owning_organisation_name],
+      "managing_organisation_id" => %w[managing_organisation_name],
+      "assigned_to_id" => [],
+      "scheme_id" => [],
+      "location_id" => [],
+      "rent_type" => %w[renttype renttype_detail],
+      "hb" => %w[hb has_benefits],
+      "age1" => %w[refused hhtype totchild totelder totadult age1],
+      "housingneeds_type" => %w[housingneeds_type housingneeds_a housingneeds_b housingneeds_c housingneeds_f housingneeds_g housingneeds_h],
+      "net_income_known" => %w[net_income_known incref],
+      "irproduct_other" => %w[irproduct irproduct_other lar],
+      "la" => %w[is_la_inferred la_label la],
+      "prevloc" => %w[is_previous_la_inferred prevloc_label prevloc],
+      "needstype" => %w[needstype lettype],
+      "prevten" => %w[prevten new_old],
+      "voiddate" => %w[voiddate vacdays],
+      "rsnvac" => %w[rsnvac newprop],
+      "household_charge" => %w[household_charge nocharge],
+      "brent" => %w[brent wrent rent_value_check],
+      "scharge" => %w[scharge wscharge],
+      "pscharge" => %w[pscharge wpschrge],
+      "supcharg" => %w[supcharg wsupchrg],
+      "tcharge" => %w[tcharge wtcharge],
+      "chcharge" => %w[chcharge wchchrg],
+      "tshortfall" => %w[tshortfall wtshortfall],
+      "letting_allocation_unknown" => %w[letting_allocation_none],
+    }.freeze
+
     ORDERED_ADDRESS_FIELDS = %w[uprn address_line1 address_line2 town_or_city county postcode_full is_la_inferred la_label la uprn_known uprn_selection address_search_value_check address_line1_input postcode_full_input address_line1_as_entered address_line2_as_entered town_or_city_as_entered county_as_entered postcode_full_as_entered la_as_entered].freeze
-
-    def attribute_mappings
-      mappings = {
-        "owning_organisation_id" => %w[owning_organisation_name],
-        "managing_organisation_id" => %w[managing_organisation_name],
-        "assigned_to_id" => [],
-        "scheme_id" => [],
-        "location_id" => [],
-        "rent_type" => %w[renttype renttype_detail],
-        "hb" => %w[hb has_benefits],
-        "age1" => %w[refused hhtype totchild totelder totadult age1],
-        "housingneeds_type" => %w[housingneeds_type housingneeds_a housingneeds_b housingneeds_c housingneeds_f housingneeds_g housingneeds_h],
-        "net_income_known" => %w[net_income_known incref],
-        "irproduct_other" => %w[irproduct irproduct_other lar],
-        "la" => %w[is_la_inferred la_label la],
-        "prevloc" => %w[is_previous_la_inferred prevloc_label prevloc],
-        "needstype" => %w[needstype lettype],
-        "prevten" => %w[prevten new_old],
-        "voiddate" => %w[voiddate vacdays],
-        "rsnvac" => %w[rsnvac newprop],
-        "household_charge" => %w[household_charge nocharge],
-        "brent" => %w[brent wrent rent_value_check],
-        "scharge" => %w[scharge wscharge],
-        "pscharge" => %w[pscharge wpschrge],
-        "supcharg" => %w[supcharg wsupchrg],
-        "tcharge" => %w[tcharge wtcharge],
-        "chcharge" => %w[chcharge wchchrg],
-        "tshortfall" => %w[tshortfall wtshortfall],
-        "letting_allocation_unknown" => %w[letting_allocation_none],
-      }
-
-      if @user.support? && @year >= 2024
-        mappings["declaration"] = %w[declaration] + ORDERED_ADDRESS_FIELDS
-      end
-      mappings
-    end
 
     SUPPORT_ONLY_ATTRIBUTES = %w[first_time_property_let_as_social_housing postcode_known is_la_inferred totchild totelder totadult net_income_known previous_la_known is_previous_la_inferred age1_known age2_known age3_known age4_known age5_known age6_known age7_known age8_known details_known_2 details_known_3 details_known_4 details_known_5 details_known_6 details_known_7 details_known_8 wrent wscharge wpschrge wsupchrg wtcharge wtshortfall old_form_id old_id tshortfall_known hhtype new_old la prevloc updated_by_id uprn_confirmed address_line1_input postcode_full_input uprn_selection address_line1_as_entered address_line2_as_entered town_or_city_as_entered county_as_entered postcode_full_as_entered la_as_entered created_by].freeze
 
@@ -319,14 +312,20 @@ module Csv
     def lettings_log_attributes
       ordered_questions = FormHandler.instance.ordered_questions_for_year(@year, "lettings")
       ordered_questions.reject! { |q| q.id.match?(/age\d_known|nationality_all_group/) }
-      ordered_questions.reject! { |q| all_address_fields.include?(q.id) } if @user.support? && @year >= 2024
       attributes = ordered_questions.flat_map do |question|
         if question.type == "checkbox"
           question.answer_options.keys.reject { |key| key == "divider" }.map { |key|
-            attribute_mappings.fetch(key, key)
+            ATTRIBUTE_MAPPINGS.fetch(key, key)
           }.flatten
         else
-          attribute_mappings.fetch(question.id, question.id)
+          ATTRIBUTE_MAPPINGS.fetch(question.id, question.id)
+        end
+      end
+      if @user.support? && @year >= 2024
+        first_address_field_index = attributes.find_index { |q| all_address_fields.include?(q) }
+        if first_address_field_index
+          attributes.reject! { |q| all_address_fields.include?(q) }
+          attributes.insert(first_address_field_index, *ORDERED_ADDRESS_FIELDS)
         end
       end
       scheme_and_location_attributes = %w[scheme_code scheme_service_name scheme_confidential SCHTYPE scheme_registered_under_care_act scheme_owning_organisation_name scheme_primary_client_group scheme_has_other_client_group scheme_secondary_client_group scheme_support_type scheme_intended_stay scheme_created_at location_code location_postcode location_name location_units location_type_of_unit location_mobility_type location_local_authority location_startdate]
