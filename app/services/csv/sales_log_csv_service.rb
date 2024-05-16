@@ -9,7 +9,7 @@ module Csv
 
     def prepare_csv(logs)
       CSV.generate(headers: true) do |csv|
-        csv << @attributes
+        csv << formatted_attribute_headers
 
         logs.find_each do |log|
           csv << @attributes.map { |attribute| value(attribute, log) }
@@ -139,7 +139,7 @@ module Csv
         "ppostcode_full" => %w[ppostc1 ppostc2],
         "la" => %w[la la_label],
         "prevloc" => %w[prevloc prevloc_label],
-        "assigned_to_id" => %w[assigned_to],
+        "assigned_to_id" => %w[created_by assigned_to],
         "owning_organisation_id" => %w[owning_organisation_name],
         "managing_organisation_id" => %w[managing_organisation_name],
         "value" => %w[value value_value_check],
@@ -152,6 +152,59 @@ module Csv
     end
 
     SUPPORT_ONLY_ATTRIBUTES = %w[address_line1_as_entered address_line2_as_entered town_or_city_as_entered county_as_entered postcode_full_as_entered la_as_entered created_by value_value_check mscharge_value_check].freeze
+
+    SUPPORT_ATTRIBUTE_NAME_MAPPINGS = {
+      "duplicate_set_id" => "DUPLICATESET",
+      "bulk_upload_id" => "BULKUPLOADID",
+      "created_at" => "CREATEDDATE",
+      "updated_at" => "UPLOADDATE",
+      "old_form_id" => "FORM",
+      "collection_start_year" => "COLLECTIONYEAR",
+      "creation_method" => "CREATIONMETHOD",
+      "is_dpo" => "DATAPROTECT",
+      "created_by" => "CREATEDBY",
+      "owning_organisation_name" => "OWNINGORGNAME",
+      "managing_organisation_name" => "MANINGORGNAME",
+      "assigned_to" => "USERNAME",
+      "ownershipsch" => "OWNERSHIP",
+      "companybuy" => "COMPANY",
+      "buylivein" => "LIVEINBUYER",
+      "jointpur" => "JOINT",
+      "address_line1" => "ADDRESS1",
+      "address_line2" => "ADDRESS2",
+      "town_or_city" => "TOWNCITY",
+      "postcode_full" => "POSTCODE",
+      "is_la_inferred" => "ISLAINFERRED",
+      "la_label" => "LANAME",
+      "uprn_selection" => "UPRNSELECTED",
+      "address_line1_input" => "ADDRESS1INPUT",
+      "postcode_full_input" => "POSTCODEINPUT",
+      "address_line1_as_entered" => "BULKADDRESS1",
+      "address_line2_as_entered" => "BULKADDRESS2",
+      "town_or_city_as_entered" => "BULKTOWNCITY",
+      "county_as_entered" => "BULKCOUNTY",
+      "postcode_full_as_entered" => "BULKPOSTCODE",
+      "la_as_entered" => "BULKLA",
+      "ethnic_group" => "ETHNICGROUP1",
+      "nationality_all" => "NATIONALITYALL1",
+      "buy1livein" => "LIVEINBUYER1",
+      "ethnic_group2" => "ETHNICGROUP2",
+      "ethnicbuy2" => "ETHNIC2",
+      "nationality_all_buyer2" => "NATIONALITYALL2",
+      "buy2livein" => "LIVEINBUYER2",
+      "hholdcount" => "HHTYPE",
+      "previous_la_known" => "PREVIOUSLAKNOWN",
+      "prevloc_label" => "PREVLOCNAME",
+      "prevtenbuy2" => "PREVTEN2",
+      "income1nk" => "INC1NK",
+      "income2nk" => "INC2NK",
+      "staircasesale" => "STAIRCASETOSALE",
+      "soctenant" => "SOCTEN",
+      "mortlen" => "MORTLEN1",
+      "has_mscharge" => "HASMSCHARGE",
+      "nationalbuy2" => "NATIONAL2",
+      "uprn_confirmed" => "UPRNCONFIRMED",
+    }.freeze
 
     def sales_log_attributes
       ordered_questions = FormHandler.instance.ordered_questions_for_year(@year, "sales")
@@ -189,18 +242,26 @@ module Csv
     def non_question_fields
       case @year
       when 2022
-        %w[id status created_at updated_at old_form_id collection_start_year creation_method is_dpo created_by]
+        %w[id status created_at updated_at old_form_id collection_start_year creation_method is_dpo]
       when 2023
-        %w[id status duplicate_set_id created_at updated_at old_form_id collection_start_year creation_method is_dpo created_by]
+        %w[id status duplicate_set_id created_at updated_at old_form_id collection_start_year creation_method is_dpo]
       when 2024
-        %w[id status duplicate_set_id created_at updated_at collection_start_year creation_method bulk_upload_id is_dpo created_by]
+        %w[id status duplicate_set_id created_at updated_at collection_start_year creation_method bulk_upload_id is_dpo]
       else
-        %w[id status duplicate_set_id created_at updated_at collection_start_year creation_method bulk_upload_id is_dpo created_by]
+        %w[id status duplicate_set_id created_at updated_at collection_start_year creation_method bulk_upload_id is_dpo]
       end
     end
 
     def all_address_fields
       ORDERED_ADDRESS_FIELDS + %w[uprn_confirmed]
+    end
+
+    def formatted_attribute_headers
+      return @attributes unless @user.support?
+
+      @attributes.map do |attribute|
+        SUPPORT_ATTRIBUTE_NAME_MAPPINGS[attribute] || attribute.upcase
+      end
     end
   end
 end
