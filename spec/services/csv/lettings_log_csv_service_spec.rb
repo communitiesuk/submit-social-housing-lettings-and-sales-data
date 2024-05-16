@@ -125,11 +125,11 @@ RSpec.describe Csv::LettingsLogCsvService do
     end
 
     it "adds log attributes not related to questions to the headers" do
-      expect(headers.first(5)).to eq %w[id status duplicate_set_id assigned_to is_dpo]
+      expect(headers.first(5)).to eq %w[id status duplicate_set_id created_by assigned_to]
     end
 
     it "adds attributes related to associated schemes and locations to the headers" do
-      expect(headers).to include(*%w[scheme_service_name scheme_sensitive SCHTYPE scheme_registered_under_care_act])
+      expect(headers).to include(*%w[scheme_service_name scheme_confidential SCHTYPE scheme_registered_under_care_act])
       expect(headers.last(5)).to eq %w[location_units location_type_of_unit location_mobility_type location_local_authority location_startdate]
     end
 
