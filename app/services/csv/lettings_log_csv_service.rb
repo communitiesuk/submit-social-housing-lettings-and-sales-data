@@ -310,7 +310,8 @@ module Csv
 
     def lettings_log_attributes
       ordered_questions = FormHandler.instance.ordered_questions_for_year(@year, "lettings")
-      ordered_questions.reject! { |q| q.id.match?(/age\d_known|nationality_all_group/) }
+      soft_validations_attributes = soft_validations_attributes(ordered_questions)
+      ordered_questions.reject! { |q| q.id.match?(/age\d_known|nationality_all_group|rent_value_check/) }
       attributes = ordered_questions.flat_map do |question|
         if question.type == "checkbox"
           question.answer_options.keys.reject { |key| key == "divider" }.map { |key|
@@ -329,7 +330,7 @@ module Csv
       end
       scheme_and_location_attributes = %w[scheme_code scheme_service_name scheme_confidential SCHTYPE scheme_registered_under_care_act scheme_owning_organisation_name scheme_primary_client_group scheme_has_other_client_group scheme_secondary_client_group scheme_support_type scheme_intended_stay scheme_created_at location_code location_postcode location_name location_units location_type_of_unit location_mobility_type location_local_authority location_startdate]
       final_attributes = non_question_fields + attributes + scheme_and_location_attributes
-      @user.support? ? final_attributes : final_attributes - SUPPORT_ONLY_ATTRIBUTES - soft_validations_attributes(ordered_questions)
+      @user.support? ? final_attributes : final_attributes - SUPPORT_ONLY_ATTRIBUTES - soft_validations_attributes
     end
 
     def person_details_not_known?(log, attribute)
