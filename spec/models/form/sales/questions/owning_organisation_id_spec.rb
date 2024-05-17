@@ -9,7 +9,7 @@ RSpec.describe Form::Sales::Questions::OwningOrganisationId, type: :model do
   let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2023, 4, 1)))) }
   let!(:organisation_1) { FactoryBot.create(:organisation, name: "first test org") }
   let!(:organisation_2) { FactoryBot.create(:organisation, name: "second test org") }
-  let(:lettings_log) { FactoryBot.create(:lettings_log) }
+  let(:lettings_log) { FactoryBot.build(:lettings_log) }
   let(:expected_answer_options) do
     {
       "" => "Select an option",
@@ -59,7 +59,7 @@ RSpec.describe Form::Sales::Questions::OwningOrganisationId, type: :model do
       let(:owning_org_2) { create(:organisation, name: "Owning org 2") }
       let(:inactive_owning_org) { create(:organisation, name: "Inactive owning org", active: false) }
       let(:non_stock_owner) { create(:organisation, name: "Non stock owner", holds_own_stock: false) }
-      let(:log) { create(:lettings_log, owning_organisation: owning_org_1) }
+      let(:log) { build(:lettings_log, owning_organisation: owning_org_1) }
 
       context "when user's org owns stock" do
         before do
@@ -117,11 +117,7 @@ RSpec.describe Form::Sales::Questions::OwningOrganisationId, type: :model do
 
         before do
           merged_organisation.update!(merge_date: Time.zone.local(2023, 2, 2), absorbing_organisation: user.organisation)
-          Timecop.freeze(Time.zone.local(2023, 11, 10))
-        end
-
-        after do
-          Timecop.return
+          allow(Time).to receive(:now).and_return(Time.zone.local(2023, 11, 10))
         end
 
         it "shows merged organisation as an option" do
@@ -143,11 +139,7 @@ RSpec.describe Form::Sales::Questions::OwningOrganisationId, type: :model do
         before do
           merged_organisation.update!(merge_date: Time.zone.local(2023, 2, 2), absorbing_organisation: user.organisation)
           user.organisation.update!(available_from: Time.zone.local(2021, 2, 2))
-          Timecop.freeze(Time.zone.local(2023, 11, 10))
-        end
-
-        after do
-          Timecop.return
+          allow(Time).to receive(:now).and_return(Time.zone.local(2023, 11, 10))
         end
 
         it "shows available from date if it is given" do
@@ -169,11 +161,7 @@ RSpec.describe Form::Sales::Questions::OwningOrganisationId, type: :model do
         before do
           create(:organisation_relationship, child_organisation: user.organisation, parent_organisation: merged_organisation)
           merged_organisation.update!(merge_date: Time.zone.local(2023, 2, 2), absorbing_organisation: user.organisation)
-          Timecop.freeze(Time.zone.local(2023, 11, 10))
-        end
-
-        after do
-          Timecop.return
+          allow(Time).to receive(:now).and_return(Time.zone.local(2023, 11, 10))
         end
 
         it "does not show merged organisations stock owners as options" do
@@ -193,7 +181,7 @@ RSpec.describe Form::Sales::Questions::OwningOrganisationId, type: :model do
         end
 
         before do
-          Timecop.freeze(Time.zone.local(2023, 4, 2))
+          allow(Time).to receive(:now).and_return(Time.zone.local(2023, 4, 2))
           create(:organisation_relationship, child_organisation: user.organisation, parent_organisation: merged_organisation)
           merged_organisation.update!(merge_date: Time.zone.local(2021, 6, 2), absorbing_organisation: user.organisation)
           user.organisation.update!(available_from: Time.zone.local(2021, 2, 2))
@@ -207,7 +195,7 @@ RSpec.describe Form::Sales::Questions::OwningOrganisationId, type: :model do
 
     context "when user is support" do
       let(:user) { create(:user, :support, organisation: organisation_1) }
-      let(:log) { create(:lettings_log, assigned_to: user) }
+      let(:log) { build(:lettings_log, assigned_to: user) }
 
       it "shows active orgs where organisation holds own stock" do
         non_stock_organisation = create(:organisation, holds_own_stock: false)
@@ -238,11 +226,7 @@ RSpec.describe Form::Sales::Questions::OwningOrganisationId, type: :model do
         before do
           merged_organisation.update!(merge_date: Time.zone.local(2023, 2, 2), absorbing_organisation: organisation_1)
           organisation_1.update!(created_at: Time.zone.local(2021, 3, 2), available_from: Time.zone.local(2021, 2, 2))
-          Timecop.freeze(Time.zone.local(2023, 11, 10))
-        end
-
-        after do
-          Timecop.return
+          allow(Time).to receive(:now).and_return(Time.zone.local(2023, 11, 10))
         end
 
         it "shows merged organisation as an option" do
@@ -261,7 +245,7 @@ RSpec.describe Form::Sales::Questions::OwningOrganisationId, type: :model do
         end
 
         before do
-          Timecop.freeze(Time.zone.local(2023, 4, 2))
+          allow(Time).to receive(:now).and_return(Time.zone.local(2023, 4, 2))
           merged_organisation.update!(merge_date: Time.zone.local(2021, 6, 2), absorbing_organisation: user.organisation)
           user.organisation.update!(created_at: Time.zone.local(2021, 2, 2))
         end
@@ -285,11 +269,7 @@ RSpec.describe Form::Sales::Questions::OwningOrganisationId, type: :model do
         before do
           merged_organisation.update!(merge_date: Time.zone.local(2023, 2, 2), absorbing_organisation: organisation_1)
           organisation_1.update!(created_at: Time.zone.local(2021, 2, 2), available_from: nil)
-          Timecop.freeze(Time.zone.local(2023, 11, 10))
-        end
-
-        after do
-          Timecop.return
+          allow(Time).to receive(:now).and_return(Time.zone.local(2023, 11, 10))
         end
 
         it "does not show abailable from for absorbing organisation" do

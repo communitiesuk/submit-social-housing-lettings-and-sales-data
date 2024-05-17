@@ -3,32 +3,35 @@ require "rails_helper"
 RSpec.describe Form::Question, type: :model do
   subject(:question) { described_class.new(question_id, question_definition, page) }
 
-  around do |example|
-    Timecop.freeze(Time.zone.local(2022, 1, 1)) do
-      Singleton.__init__(FormHandler)
-      example.run
-    end
-    Timecop.return
-    Singleton.__init__(FormHandler)
-  end
-
   let(:lettings_log) { FactoryBot.build(:lettings_log) }
-  let(:form) { lettings_log.form }
-  let(:section_id) { "rent_and_charges" }
-  let(:section_definition) { form.form_definition["sections"][section_id] }
-  let(:section) { Form::Section.new(section_id, section_definition, form) }
-  let(:subsection_id) { "income_and_benefits" }
-  let(:subsection_definition) { section_definition["subsections"][subsection_id] }
-  let(:subsection) { Form::Subsection.new(subsection_id, subsection_definition, section) }
-  let(:page_id) { "net_income" }
-  let(:page_definition) { subsection_definition["pages"][page_id] }
-  let(:page) { Form::Page.new(page_id, page_definition, subsection) }
-  let(:question_id) { "earnings" }
-  let(:question_definition) { page_definition["questions"][question_id] }
-  let(:fake_2021_2022_form) { Form.new("spec/fixtures/forms/2021_2022.json") }
+  let(:type) { "numeric" }
+  let(:readonly) { nil }
+  let(:prefix) { nil }
+  let(:suffix) { nil }
+  let(:depends_on_met) { nil }
+  let(:conditional_question_conditions) { nil }
+  let(:form_questions) { nil }
+  let(:answer_options) { { "1" => { "value" => "Weekly" }, "2" => { "value" => "Monthly" } } }
+  let(:inferred_check_answers_value) { [{ "condition" => { "postcode_known" => 0 }, "value" => "Weekly" }] }
 
-  before do
-    allow(FormHandler.instance).to receive(:current_lettings_form).and_return(fake_2021_2022_form)
+  let(:form) { instance_double(Form, depends_on_met:, conditional_question_conditions:) }
+  let(:subsection) { instance_double(Form::Subsection, form:) }
+  let(:page) { instance_double(Form::Page, subsection:, routed_to?: true, questions: form_questions) }
+  let(:question_id) { "earnings" }
+  let(:question_definition) do
+    { "header" => "What is the tenant’s /and partner’s combined income after tax?",
+      "check_answer_label" => "Income",
+      "type" => type,
+      "min" => 0,
+      "step" => 1,
+      "answer_options" => answer_options,
+      "readonly" => readonly,
+      "result-field" => "tcharge",
+      "fields-to-add" => %w[brent scharge pscharge supcharg],
+      "inferred_check_answers_value" => inferred_check_answers_value,
+      "suffix" => suffix,
+      "prefix" => prefix,
+      "hidden_in_check_answers" => {} }
   end
 
   it "has an id" do
@@ -80,10 +83,10 @@ RSpec.describe Form::Question, type: :model do
   end
 
   context "when type is radio" do
-    let(:question_id) { "incfreq" }
+    let(:type) { "radio" }
 
     it "has answer options" do
-      expected_answer_options = { "1" => { "value" => "Weekly" }, "2" => { "value" => "Monthly" }, "3" => { "value" => "Yearly" } }
+      expected_answer_options = { "1" => { "value" => "Weekly" }, "2" => { "value" => "Monthly" } }
       expect(question.answer_options).to eq(expected_answer_options)
     end
 
@@ -92,13 +95,10 @@ RSpec.describe Form::Question, type: :model do
     end
 
     it "can map label from value" do
-      expect(question.label_from_value(3)).to eq("Yearly")
+      expect(question.label_from_value(1)).to eq("Weekly")
     end
 
     context "when answer options include yes, no, prefer not to say" do
-      let(:section_id) { "household" }
-      let(:subsection_id) { "household_needs" }
-      let(:page_id) { "medical_conditions" }
       let(:question_id) { "illness" }
 
       it "maps those options" do
@@ -109,9 +109,6 @@ RSpec.describe Form::Question, type: :model do
     end
 
     context "when answer options includes don’t know" do
-      let(:section_id) { "local_authority" }
-      let(:subsection_id) { "local_authority" }
-      let(:page_id) { "time_lived_in_la" }
       let(:question_id) { "layear" }
 
       it "maps those options" do
@@ -128,23 +125,11 @@ RSpec.describe Form::Question, type: :model do
     end
 
     context "when answer options include derived options" do
-      let(:section_id) { "household" }
-      let(:subsection_id) { "household_characteristics" }
-      let(:page_id) { "person_2_working_situation" }
-      let(:question_id) { "ecstat2" }
+      let(:answer_options) { { "0" => { "value" => "Other" }, "9" => { "value" => "This", "depends_on" => [false] } } }
+      let(:depends_on_met) { false }
       let(:expected_answer_options) do
         {
           "0" => { "value" => "Other" },
-          "1" => { "value" => "Full-time – 30 hours or more" },
-          "10" => { "value" => "Tenant prefers not to say" },
-          "2" => { "value" => "Part-time – Less than 30 hours" },
-          "3" => { "value" => "In government training into work, such as New Deal" },
-          "4" => { "value" => "Jobseeker" },
-          "5" => { "value" => "Retired" },
-          "6" => { "value" => "Not seeking work" },
-          "7" => { "value" => "Full-time student" },
-          "8" => { "value" => "Unable to work because of long term sick or disability" },
-          "divider" => { "value" => true },
         }
       end
 
@@ -153,7 +138,7 @@ RSpec.describe Form::Question, type: :model do
       end
 
       it "can still map the value label" do
-        expect(question.label_from_value(9)).to eq("Child under 16")
+        expect(question.label_from_value(9)).to eq("This")
       end
     end
 
@@ -165,10 +150,8 @@ RSpec.describe Form::Question, type: :model do
   end
 
   context "when type is select" do
-    let(:section_id) { "household" }
-    let(:subsection_id) { "household_needs" }
-    let(:page_id) { "accessible_select" }
-    let(:question_id) { "prevloc" }
+    let(:type) { "select" }
+    let(:answer_options) { { "E08000003" => "Manchester", "E09000033" => "Westminster" } }
 
     it "can map value from label" do
       expect(question.value_from_label("Manchester")).to eq("E08000003")
@@ -186,10 +169,9 @@ RSpec.describe Form::Question, type: :model do
   end
 
   context "when type is checkbox" do
-    let(:section_id) { "household" }
-    let(:subsection_id) { "household_needs" }
-    let(:page_id) { "condition_effects" }
-    let(:question_id) { "condition_effects" }
+    let(:type) { "checkbox" }
+    let(:page_id) { "illness" }
+    let(:answer_options) { { "illness_type_1" => { "value" => "Vision - such as blindness or partial sight" }, "illness_type_2" => { "value" => "Hearing - such as deafness or partial hearing" } } }
 
     it "has answer options" do
       expected_answer_options = {
@@ -206,9 +188,7 @@ RSpec.describe Form::Question, type: :model do
   end
 
   context "when the question is read only" do
-    let(:subsection_id) { "rent_and_charges" }
-    let(:page_id) { "rent" }
-    let(:question_id) { "tcharge" }
+    let(:readonly) { true }
 
     it "has a read only helper" do
       expect(question.read_only?).to be true
@@ -231,6 +211,8 @@ RSpec.describe Form::Question, type: :model do
   context "with a lettings log" do
     let(:lettings_log) { FactoryBot.build(:lettings_log, :in_progress) }
     let(:question_id) { "incfreq" }
+    let(:type) { "radio" }
+    let(:answer_options) { { "1" => { "value" => "Weekly" }, "2" => { "value" => "Monthly" }, "3" => { "value" => "Yearly", "depends_on" => true } } }
 
     it "has an answer label" do
       lettings_log.incfreq = 1
@@ -244,11 +226,9 @@ RSpec.describe Form::Question, type: :model do
     end
 
     context "when the question has an inferred answer" do
-      let(:section_id) { "tenancy_and_property" }
-      let(:subsection_id) { "property_information" }
-      let(:page_id) { "property_postcode" }
       let(:lettings_log) { FactoryBot.build(:lettings_log, :in_progress, postcode_known: 0, postcode_full: nil) }
-      let(:question_id) { "postcode_full" }
+      let(:question_id) { "incfreq" }
+      let(:type) { "radio" }
 
       it "displays 'change' in the check answers link text" do
         expect(question.action_text(lettings_log)).to match(/Change/)
@@ -256,13 +236,8 @@ RSpec.describe Form::Question, type: :model do
     end
 
     context "when the answer option is a derived answer option" do
-      let(:section_id) { "household" }
-      let(:subsection_id) { "household_characteristics" }
-      let(:page_id) { "person_2_working_situation" }
-      let(:question_id) { "ecstat2" }
-      let(:lettings_log) do
-        FactoryBot.create(:lettings_log, :in_progress, hhmemb: 2, details_known_2: 0, age2_known: 0, age2: 12)
-      end
+      let(:lettings_log) { FactoryBot.build(:lettings_log, :in_progress, incfreq: 3, postcode_full: nil) }
+      let(:depends_on_met) { true }
 
       it "knows it has an inferred value or is derived for check answers" do
         expect(question.is_derived_or_has_inferred_check_answers_value?(lettings_log)).to be true
@@ -270,10 +245,8 @@ RSpec.describe Form::Question, type: :model do
     end
 
     context "when type is date" do
-      let(:section_id) { "local_authority" }
-      let(:subsection_id) { "local_authority" }
-      let(:page_id) { "property_major_repairs" }
       let(:question_id) { "mrcdate" }
+      let(:type) { "date" }
 
       it "displays a formatted answer label" do
         lettings_log.mrcdate = Time.zone.local(2021, 10, 11)
@@ -287,10 +260,15 @@ RSpec.describe Form::Question, type: :model do
     end
 
     context "when type is checkbox" do
-      let(:section_id) { "household" }
-      let(:subsection_id) { "household_needs" }
-      let(:page_id) { "accessibility_requirements" }
-      let(:question_id) { "accessibility_requirements" }
+      let(:question_id) { "housingneeds_type" }
+      let(:type) { "checkbox" }
+      let(:answer_options) do
+        {
+          "housingneeds_a" => { "value" => "Fully wheelchair accessible housing" },
+          "housingneeds_b" => { "value" => "Wheelchair access to essential rooms" },
+          "housingneeds_c" => { "value" => "Level access housing" },
+        }
+      end
 
       it "has a joined answers label" do
         lettings_log.housingneeds_a = 1
@@ -301,8 +279,9 @@ RSpec.describe Form::Question, type: :model do
     end
 
     context "when a condition is present" do
-      let(:page_id) { "housing_benefit" }
       let(:question_id) { "conditional_question" }
+      let(:conditional_question_conditions) { [{ to: question_id, from: "hb", cond: [0] }] }
+      let(:form_questions) { [OpenStruct.new(id: "hb", type: "radio")] }
 
       it "knows whether it is enabled or not for unmet conditions" do
         expect(question.enabled?(lettings_log)).to be false
@@ -314,11 +293,7 @@ RSpec.describe Form::Question, type: :model do
       end
 
       context "when the condition type hasn't been implemented yet" do
-        let(:unimplemented_question) { OpenStruct.new(id: "hb", type: "unkown") }
-
-        before do
-          allow(page).to receive(:questions).and_return([unimplemented_question])
-        end
+        let(:form_questions) { [OpenStruct.new(id: "hb", type: "unkown")] }
 
         it "raises an exception" do
           expect { question.enabled?(lettings_log) }.to raise_error("Not implemented yet")
@@ -327,10 +302,16 @@ RSpec.describe Form::Question, type: :model do
     end
 
     context "when answers have a suffix dependent on another answer" do
-      let(:section_id) { "rent_and_charges" }
-      let(:subsection_id) { "income_and_benefits" }
-      let(:page_id) { "net_income" }
       let(:question_id) { "earnings" }
+      let(:type) { "numeric" }
+      let(:suffix) do
+        [
+          { "label" => " every week", "depends_on" => { "incfreq" => 1 } },
+          { "label" => " every month", "depends_on" => { "incfreq" => 2 } },
+          { "label" => " every year", "depends_on" => { "incfreq" => 3 } },
+        ]
+      end
+      let(:prefix) { "£" }
 
       it "displays the correct label for given suffix and answer the suffix depends on" do
         lettings_log.incfreq = 1
@@ -345,10 +326,8 @@ RSpec.describe Form::Question, type: :model do
 
     context "with inferred_check_answers_value" do
       context "when Lettings form" do
-        let(:section_id) { "household" }
-        let(:subsection_id) { "household_needs" }
-        let(:page_id) { "armed_forces" }
         let(:question_id) { "armedforces" }
+        let(:inferred_check_answers_value) { [{ "condition" => { "armedforces" => 3 }, "value" => "Prefers not to say" }] }
 
         it "returns the inferred label value" do
           lettings_log.armedforces = 3
@@ -357,8 +336,9 @@ RSpec.describe Form::Question, type: :model do
       end
 
       context "when Sales form" do
-        let(:sales_log) { FactoryBot.create(:sales_log, :completed, national: 13, saledate: Time.zone.local(2022, 1, 1)) }
-        let(:question) { sales_log.form.get_question("national", sales_log) }
+        let(:question_id) { "national" }
+        let(:sales_log) { FactoryBot.build(:sales_log, :completed, national: 13) }
+        let(:inferred_check_answers_value) { [{ "condition" => { "national" => 13 }, "value" => "Prefers not to say" }] }
 
         it "returns the inferred label value" do
           expect(question.answer_label(sales_log)).to eq("Prefers not to say")
@@ -369,11 +349,6 @@ RSpec.describe Form::Question, type: :model do
 
   describe ".completed?" do
     context "when the question has inferred value only for check answers display" do
-      let(:section_id) { "tenancy_and_property" }
-      let(:subsection_id) { "property_information" }
-      let(:page_id) { "property_postcode" }
-      let(:question_id) { "postcode_full" }
-
       it "returns true" do
         lettings_log["postcode_known"] = 0
         expect(question.completed?(lettings_log)).to be(true)
@@ -382,18 +357,22 @@ RSpec.describe Form::Question, type: :model do
   end
 
   context "when the question has a hidden in check answers attribute with dependencies" do
-    let(:section_id) { "local_authority" }
-    let(:subsection_id) { "local_authority" }
-    let(:page_id) { "time_lived_in_la" }
-    let(:question_id) { "layear" }
-    let(:lettings_log) do
-      FactoryBot.create(:lettings_log, :in_progress)
+    let(:lettings_log) { FactoryBot.build(:lettings_log, :in_progress) }
+
+    context "when it's hidden in check answers" do
+      let(:depends_on_met) { true }
+
+      it "can work out if the question will be shown in check answers" do
+        expect(question.hidden_in_check_answers?(lettings_log, nil)).to be(true)
+      end
     end
 
-    it "can work out if the question will be shown in check answers" do
-      expect(question.hidden_in_check_answers?(lettings_log, nil)).to be(false)
-      lettings_log.layear = 0
-      expect(question.hidden_in_check_answers?(lettings_log, nil)).to be(true)
+    context "when it's not hidden in check answers" do
+      let(:depends_on_met) { false }
+
+      it "can work out if the question will be shown in check answers" do
+        expect(question.hidden_in_check_answers?(lettings_log, nil)).to be(false)
+      end
     end
   end
 end

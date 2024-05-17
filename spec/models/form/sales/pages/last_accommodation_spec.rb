@@ -3,23 +3,13 @@ require "rails_helper"
 RSpec.describe Form::Sales::Pages::LastAccommodation, type: :model do
   subject(:page) { described_class.new(page_id, page_definition, subsection) }
 
-  let(:log) { create(:sales_log, :completed, saledate: now) }
-  let(:now) { Time.zone.local(2023, 4, 4) }
+  let(:log) { build(:sales_log, :completed) }
 
   let(:page_id) { nil }
   let(:page_definition) { nil }
-  let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2023, 4, 1))) }
-
-  before do
-    Timecop.freeze(now)
-    Singleton.__init__(FormHandler)
-    allow(subsection).to receive(:depends_on).and_return(nil)
-  end
-
-  after do
-    Timecop.return
-    Singleton.__init__(FormHandler)
-  end
+  let(:start_year_after_2024) { false }
+  let(:form) { instance_double(Form, start_date: Time.zone.local(2023, 4, 1), start_year_after_2024?: start_year_after_2024) }
+  let(:subsection) { instance_double(Form::Subsection, form:, depends_on: nil) }
 
   it "has correct subsection" do
     expect(page.subsection).to eq(subsection)
@@ -51,7 +41,7 @@ RSpec.describe Form::Sales::Pages::LastAccommodation, type: :model do
   end
 
   context "with 2024 form" do
-    let(:now) { Time.zone.local(2024, 4, 4) }
+    let(:start_year_after_2024) { true }
 
     it "is routed to for 2024 non discounted sale logs" do
       log.update!(ownershipsch: 1)

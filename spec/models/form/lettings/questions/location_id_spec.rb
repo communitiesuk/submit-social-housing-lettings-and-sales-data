@@ -61,11 +61,7 @@ RSpec.describe Form::Lettings::Questions::LocationId, type: :model do
 
     context "when selected scheme has locations" do
       before do
-        Timecop.freeze(Time.utc(2022, 5, 12))
-      end
-
-      after do
-        Timecop.unfreeze
+        allow(Time).to receive(:now).and_return(Time.utc(2022, 5, 12))
       end
 
       context "and all the locations have a startdate more than 2 weeks in the future" do

@@ -117,11 +117,7 @@ RSpec.describe Form::Lettings::Questions::StockOwner, type: :model do
         before do
           merged_organisation.update!(merge_date: Time.zone.local(2023, 2, 2), absorbing_organisation: user.organisation)
           user.organisation.update!(available_from: Time.zone.local(2021, 2, 2))
-          Timecop.freeze(Time.zone.local(2023, 11, 10))
-        end
-
-        after do
-          Timecop.return
+          allow(Time).to receive(:now).and_return(Time.zone.local(2023, 11, 10))
         end
 
         it "shows merged organisation as an option" do
@@ -143,11 +139,7 @@ RSpec.describe Form::Lettings::Questions::StockOwner, type: :model do
 
         before do
           merged_organisation.update!(merge_date: Time.zone.local(2023, 2, 2), absorbing_organisation: user.organisation)
-          Timecop.freeze(Time.zone.local(2023, 11, 10))
-        end
-
-        after do
-          Timecop.return
+          allow(Time).to receive(:now).and_return(Time.zone.local(2023, 11, 10))
         end
 
         it "shows merged organisation as an option" do
@@ -167,14 +159,10 @@ RSpec.describe Form::Lettings::Questions::StockOwner, type: :model do
         end
 
         before do
-          Timecop.freeze(Time.zone.local(2023, 11, 10))
+          allow(Time).to receive(:now).and_return(Time.zone.local(2023, 11, 10))
           org_rel.update!(child_organisation: merged_organisation)
           merged_organisation.update!(merge_date: Time.zone.local(2023, 2, 2), absorbing_organisation: user.organisation)
           user.organisation.update!(available_from: Time.zone.local(2021, 2, 2))
-        end
-
-        after do
-          Timecop.return
         end
 
         it "does not show merged organisations stock owners as options" do
@@ -193,7 +181,7 @@ RSpec.describe Form::Lettings::Questions::StockOwner, type: :model do
         end
 
         before do
-          Timecop.freeze(Time.zone.local(2023, 4, 2))
+          allow(Time).to receive(:now).and_return(Time.zone.local(2023, 4, 2))
           org_rel.update!(child_organisation: merged_organisation)
           merged_organisation.update!(merge_date: Time.zone.local(2021, 6, 2), absorbing_organisation: user.organisation)
           user.organisation.update!(available_from: Time.zone.local(2021, 2, 2))
@@ -238,11 +226,7 @@ RSpec.describe Form::Lettings::Questions::StockOwner, type: :model do
 
         before do
           merged_organisation.update!(merge_date: Time.zone.local(2023, 2, 2), absorbing_organisation: org)
-          Timecop.freeze(Time.zone.local(2023, 11, 10))
-        end
-
-        after do
-          Timecop.return
+          allow(Time).to receive(:now).and_return(Time.zone.local(2023, 11, 10))
         end
 
         it "shows merged organisation as an option" do
