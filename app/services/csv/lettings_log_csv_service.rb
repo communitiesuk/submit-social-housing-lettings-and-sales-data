@@ -157,64 +157,6 @@ module Csv
       voiddate
     ].freeze
 
-    def value(attribute, log)
-      attribute = "rent_type" if attribute == "rent_type_detail" # rent_type_detail is the requested column header for rent_type, so as not to confuse with renttype. It can be exported as label or code.
-      if CUSTOM_CALL_CHAINS.key? attribute.to_sym
-        call_chain = CUSTOM_CALL_CHAINS[attribute.to_sym][@export_type.to_sym]
-        call_chain.reduce(log) { |object, next_call| object&.public_send(next_call) }
-      elsif FIELDS_ALWAYS_EXPORTED_AS_CODES.include? attribute
-        log.public_send(attribute)
-      elsif FIELDS_ALWAYS_EXPORTED_AS_LABELS.key? attribute
-        attribute = FIELDS_ALWAYS_EXPORTED_AS_LABELS[attribute]
-        value = log.public_send(attribute)
-        get_label(value, attribute, log)
-      elsif SYSTEM_DATE_FIELDS.include? attribute
-        log.public_send(attribute)&.iso8601
-      elsif USER_DATE_FIELDS.include? attribute
-        log.public_send(attribute)&.strftime("%F")
-      elsif PERSON_DETAILS.any? { |key, _value| key == attribute } && (person_details_not_known?(log, attribute) || age_not_known?(log, attribute))
-        case @export_type
-        when "codes"
-          PERSON_DETAILS.find { |key, _value| key == attribute }[1]["refused_code"]
-        when "labels"
-          PERSON_DETAILS.find { |key, _value| key == attribute }[1]["refused_label"]
-        end
-      else
-        value = log.public_send(attribute)
-        case @export_type
-        when "codes"
-          value
-        when "labels"
-          answer_label = get_label(value, attribute, log)
-          answer_label || label_if_boolean_value(value) || (YES_OR_BLANK_ATTRIBUTES.include?(attribute) && value != 1 ? nil : value)
-        end
-      end
-    end
-
-    def get_label(value, attribute, log)
-      return LABELS[attribute][value] if LABELS.key?(attribute)
-      return conventional_yes_no_label(value) if CONVENTIONAL_YES_NO_ATTRIBUTES.include?(attribute)
-      return "Yes" if YES_OR_BLANK_ATTRIBUTES.include?(attribute) && value == 1
-
-      log.form
-         .get_question(attribute, log)
-         &.label_from_value(value)
-    end
-
-    def label_if_boolean_value(value)
-      return "Yes" if value == true
-      return "No" if value == false
-    end
-
-    def conventional_yes_no_label(value)
-      return "Yes" if value == 1
-      return "No" if value&.zero?
-    end
-
-    def yes_or_blank_label(value)
-      value == 1 ? "Yes" : nil
-    end
-
     LETTYPE_LABELS = {
       1 => "Social rent general needs private registered provider",
       2 => "Social rent supported housing private registered provider",
@@ -304,15 +246,20 @@ module Csv
 
     SUPPORT_ONLY_ATTRIBUTES = %w[postcode_known is_la_inferred totchild totelder totadult net_income_known previous_la_known is_previous_la_inferred age1_known age2_known age3_known age4_known age5_known age6_known age7_known age8_known details_known_2 details_known_3 details_known_4 details_known_5 details_known_6 details_known_7 details_known_8 wrent wscharge wpschrge wsupchrg wtcharge wtshortfall old_form_id old_id tshortfall_known hhtype la prevloc updated_by_id uprn_confirmed address_line1_input postcode_full_input uprn_selection address_line1_as_entered address_line2_as_entered town_or_city_as_entered county_as_entered postcode_full_as_entered la_as_entered created_by].freeze
 
-    def soft_validations_attributes(ordered_questions)
-      ordered_questions.select { |q| q.type == "interruption_screen" }.map(&:id)
-    end
+    SCHEME_AND_LOCATION_ATTRIBUTES = %w[scheme_code scheme_service_name scheme_confidential SCHTYPE scheme_registered_under_care_act scheme_owning_organisation_name scheme_primary_client_group scheme_has_other_client_group scheme_secondary_client_group scheme_support_type scheme_intended_stay scheme_created_at location_code location_postcode location_name location_units location_type_of_unit location_mobility_type location_local_authority location_startdate].freeze
 
     def lettings_log_attributes
       ordered_questions = FormHandler.instance.ordered_questions_for_year(@year, "lettings")
       soft_validations_attributes = soft_validations_attributes(ordered_questions)
       ordered_questions.reject! { |q| q.id.match?(/age\d_known|nationality_all_group|rent_value_check/) }
-      attributes = ordered_questions.flat_map do |question|
+      attributes = insert_derived_and_related_attributes(ordered_questions)
+      order_address_fields_for_support(attributes)
+      final_attributes = non_question_fields + attributes + SCHEME_AND_LOCATION_ATTRIBUTES
+      @user.support? ? final_attributes : final_attributes - SUPPORT_ONLY_ATTRIBUTES - soft_validations_attributes
+    end
+
+    def insert_derived_and_related_attributes(ordered_questions)
+      ordered_questions.flat_map do |question|
         if question.type == "checkbox"
           question.answer_options.keys.reject { |key| key == "divider" }.map { |key|
             ATTRIBUTE_MAPPINGS.fetch(key, key)
@@ -321,6 +268,9 @@ module Csv
           ATTRIBUTE_MAPPINGS.fetch(question.id, question.id)
         end
       end
+    end
+
+    def order_address_fields_for_support(attributes)
       if @user.support? && @year >= 2024
         first_address_field_index = attributes.find_index { |q| all_address_fields.include?(q) }
         if first_address_field_index
@@ -328,19 +278,10 @@ module Csv
           attributes.insert(first_address_field_index, *ORDERED_ADDRESS_FIELDS)
         end
       end
-      scheme_and_location_attributes = %w[scheme_code scheme_service_name scheme_confidential SCHTYPE scheme_registered_under_care_act scheme_owning_organisation_name scheme_primary_client_group scheme_has_other_client_group scheme_secondary_client_group scheme_support_type scheme_intended_stay scheme_created_at location_code location_postcode location_name location_units location_type_of_unit location_mobility_type location_local_authority location_startdate]
-      final_attributes = non_question_fields + attributes + scheme_and_location_attributes
-      @user.support? ? final_attributes : final_attributes - SUPPORT_ONLY_ATTRIBUTES - soft_validations_attributes
     end
 
-    def person_details_not_known?(log, attribute)
-      details_known_field = PERSON_DETAILS.find { |key, _value| key == attribute }[1]["details_known_field"]
-      log[details_known_field] == 1 # 1 for lettings logs, 2 for sales logs
-    end
-
-    def age_not_known?(log, attribute)
-      age_known_field = PERSON_DETAILS.find { |key, _value| key == attribute }[1]["age_known_field"]
-      log[age_known_field] == 1
+    def all_address_fields
+      ORDERED_ADDRESS_FIELDS + %w[uprn_confirmed]
     end
 
     def non_question_fields
@@ -356,8 +297,72 @@ module Csv
       end
     end
 
-    def all_address_fields
-      ORDERED_ADDRESS_FIELDS + %w[uprn_confirmed]
+    def soft_validations_attributes(ordered_questions)
+      ordered_questions.select { |q| q.type == "interruption_screen" }.map(&:id)
+    end
+
+    def value(attribute, log)
+      attribute = "rent_type" if attribute == "rent_type_detail" # rent_type_detail is the requested column header for rent_type, so as not to confuse with renttype. It can be exported as label or code.
+      if CUSTOM_CALL_CHAINS.key? attribute.to_sym
+        call_chain = CUSTOM_CALL_CHAINS[attribute.to_sym][@export_type.to_sym]
+        call_chain.reduce(log) { |object, next_call| object&.public_send(next_call) }
+      elsif FIELDS_ALWAYS_EXPORTED_AS_CODES.include? attribute
+        log.public_send(attribute)
+      elsif FIELDS_ALWAYS_EXPORTED_AS_LABELS.key? attribute
+        attribute = FIELDS_ALWAYS_EXPORTED_AS_LABELS[attribute]
+        value = log.public_send(attribute)
+        get_label(value, attribute, log)
+      elsif SYSTEM_DATE_FIELDS.include? attribute
+        log.public_send(attribute)&.iso8601
+      elsif USER_DATE_FIELDS.include? attribute
+        log.public_send(attribute)&.strftime("%F")
+      elsif PERSON_DETAILS.any? { |key, _value| key == attribute } && (person_details_not_known?(log, attribute) || age_not_known?(log, attribute))
+        case @export_type
+        when "codes"
+          PERSON_DETAILS.find { |key, _value| key == attribute }[1]["refused_code"]
+        when "labels"
+          PERSON_DETAILS.find { |key, _value| key == attribute }[1]["refused_label"]
+        end
+      else
+        value = log.public_send(attribute)
+        case @export_type
+        when "codes"
+          value
+        when "labels"
+          answer_label = get_label(value, attribute, log)
+          answer_label || label_if_boolean_value(value) || (YES_OR_BLANK_ATTRIBUTES.include?(attribute) && value != 1 ? nil : value)
+        end
+      end
+    end
+
+    def person_details_not_known?(log, attribute)
+      details_known_field = PERSON_DETAILS.find { |key, _value| key == attribute }[1]["details_known_field"]
+      log[details_known_field] == 1 # 1 for lettings logs, 2 for sales logs
+    end
+
+    def age_not_known?(log, attribute)
+      age_known_field = PERSON_DETAILS.find { |key, _value| key == attribute }[1]["age_known_field"]
+      log[age_known_field] == 1
+    end
+
+    def get_label(value, attribute, log)
+      return LABELS[attribute][value] if LABELS.key?(attribute)
+      return conventional_yes_no_label(value) if CONVENTIONAL_YES_NO_ATTRIBUTES.include?(attribute)
+      return "Yes" if YES_OR_BLANK_ATTRIBUTES.include?(attribute) && value == 1
+
+      log.form
+         .get_question(attribute, log)
+         &.label_from_value(value)
+    end
+
+    def label_if_boolean_value(value)
+      return "Yes" if value == true
+      return "No" if value == false
+    end
+
+    def conventional_yes_no_label(value)
+      return "Yes" if value == 1
+      return "No" if value&.zero?
     end
   end
 end
