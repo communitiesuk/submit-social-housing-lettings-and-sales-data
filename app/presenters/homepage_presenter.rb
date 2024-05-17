@@ -42,7 +42,7 @@ class HomepagePresenter
   end
 
   def in_crossover_period?
-    @in_crossover_period
+    false
   end
 
   def subheading_for_current_year
