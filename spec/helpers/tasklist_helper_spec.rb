@@ -143,11 +143,11 @@ RSpec.describe TasklistHelper do
 
     context "with lettings log" do
       context "when collection_period_open? == true" do
-        let(:now) { Time.utc(2022, 6, 1) }
         let(:lettings_log) { build(:lettings_log, :completed, startdate: now, id: 123) }
 
         before do
           allow(lettings_log.form).to receive(:submission_deadline).and_return(Time.utc(2023, 6, 9))
+          allow(lettings_log).to receive(:collection_period_open?).and_return(true)
         end
 
         it "returns relevant text" do
@@ -158,8 +158,12 @@ RSpec.describe TasklistHelper do
       end
 
       context "when collection_period_open? == false" do
-        let(:now) { Time.utc(2024, 6, 1) }
         let!(:sales_log) { build(:lettings_log, :completed, startdate: Time.utc(2022, 6, 1), id: 123) }
+
+        before do
+          allow(sales_log.form).to receive(:submission_deadline).and_return(Time.utc(2023, 6, 9))
+          allow(sales_log).to receive(:collection_period_open?).and_return(false)
+        end
 
         it "returns relevant text" do
           expect(review_log_text(sales_log)).to eq("This log is from the 2022/2023 collection window, which is now closed.")
@@ -167,8 +171,12 @@ RSpec.describe TasklistHelper do
       end
 
       context "when older_than_previous_collection_year" do
-        let(:now) { Time.utc(2023, 6, 1) }
         let(:lettings_log) { build(:lettings_log, :completed, startdate: Time.utc(2022, 2, 1)) }
+
+        before do
+          allow(lettings_log.form).to receive(:submission_deadline).and_return(Time.utc(2022, 6, 9))
+          allow(lettings_log).to receive(:older_than_previous_collection_year?).and_return(true)
+        end
 
         it "returns relevant text" do
           expect(review_log_text(lettings_log)).to eq("This log is from the 2021/2022 collection window, which is now closed.")
