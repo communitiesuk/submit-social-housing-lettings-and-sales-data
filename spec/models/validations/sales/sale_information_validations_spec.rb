@@ -321,10 +321,10 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
         end
 
         it "does not add errors if mortgage and deposit total is within a 0.05% x market value tolerance of market value - discount" do
-          record.value = 100_050
-          record.mortgage = 54_000
-          record.deposit = 0
-          record.discount = 46
+          record.value = 123_000
+          record.mortgage = 66_112
+          record.deposit = 0 # This would be a 46.25% discount
+          record.discount = 46.3
 
           sale_information_validator.validate_discounted_ownership_value(record)
 
@@ -338,20 +338,20 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
         end
 
         it "adds errors if mortgage and deposit total is not within a 0.05% x market value tolerance of market value - discount" do
-          record.value = 100_050
-          record.mortgage = 54_100
+          record.value = 123_000
+          record.mortgage = 66_113
           record.deposit = 0
-          record.discount = 46
+          record.discount = 46.3
 
           sale_information_validator.validate_discounted_ownership_value(record)
 
-          expect(record.errors["mortgageused"]).to include("The mortgage, deposit, and grant when added together is £54,100.00, and the purchase price times by the discount is £54,027.00. These figures should be the same")
-          expect(record.errors["mortgage"]).to include("The mortgage, deposit, and grant when added together is £54,100.00, and the purchase price times by the discount is £54,027.00. These figures should be the same")
-          expect(record.errors["value"]).to include("The mortgage, deposit, and grant when added together is £54,100.00, and the purchase price times by the discount is £54,027.00. These figures should be the same")
-          expect(record.errors["deposit"]).to include("The mortgage, deposit, and grant when added together is £54,100.00, and the purchase price times by the discount is £54,027.00. These figures should be the same")
-          expect(record.errors["ownershipsch"]).to include("The mortgage, deposit, and grant when added together is £54,100.00, and the purchase price times by the discount is £54,027.00. These figures should be the same")
-          expect(record.errors["discount"]).to include("The mortgage, deposit, and grant when added together is £54,100.00, and the purchase price times by the discount is £54,027.00. These figures should be the same")
-          expect(record.errors["grant"]).to include("The mortgage, deposit, and grant when added together is £54,100.00, and the purchase price times by the discount is £54,027.00. These figures should be the same")
+          expect(record.errors["mortgageused"]).to include("The mortgage, deposit, and grant when added together is £66,113.00, and the purchase price times by the discount is £66,051.00. These figures should be the same")
+          expect(record.errors["mortgage"]).to include("The mortgage, deposit, and grant when added together is £66,113.00, and the purchase price times by the discount is £66,051.00. These figures should be the same")
+          expect(record.errors["value"]).to include("The mortgage, deposit, and grant when added together is £66,113.00, and the purchase price times by the discount is £66,051.00. These figures should be the same")
+          expect(record.errors["deposit"]).to include("The mortgage, deposit, and grant when added together is £66,113.00, and the purchase price times by the discount is £66,051.00. These figures should be the same")
+          expect(record.errors["ownershipsch"]).to include("The mortgage, deposit, and grant when added together is £66,113.00, and the purchase price times by the discount is £66,051.00. These figures should be the same")
+          expect(record.errors["discount"]).to include("The mortgage, deposit, and grant when added together is £66,113.00, and the purchase price times by the discount is £66,051.00. These figures should be the same")
+          expect(record.errors["grant"]).to include("The mortgage, deposit, and grant when added together is £66,113.00, and the purchase price times by the discount is £66,051.00. These figures should be the same")
         end
       end
     end
