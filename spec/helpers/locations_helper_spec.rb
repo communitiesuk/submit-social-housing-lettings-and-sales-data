@@ -55,10 +55,6 @@ RSpec.describe LocationsHelper do
       allow(FormHandler.instance).to receive(:lettings_in_crossover_period?).and_return(true)
     end
 
-    after do
-      Timecop.unfreeze
-    end
-
     it "returns one active period without to date" do
       expect(location_active_periods(location).count).to eq(1)
       expect(location_active_periods(location).first).to have_attributes(from: Time.zone.local(2022, 4, 1), to: nil)
@@ -231,7 +227,6 @@ RSpec.describe LocationsHelper do
             allow(Time).to receive(:now).and_return(Time.zone.local(2023, 11, 10))
             FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 8, 10), reactivation_date: Time.zone.local(2022, 9, 1), location:)
             FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 9, 15), reactivation_date: Time.zone.local(2022, 9, 28), location:)
-            Timecop.return
             location.reload
           end
 
@@ -247,7 +242,6 @@ RSpec.describe LocationsHelper do
             allow(Time).to receive(:now).and_return(Time.zone.local(2023, 11, 10))
             FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 8, 10), reactivation_date: Time.zone.local(2022, 9, 1), location:)
             FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 9, 15), reactivation_date: nil, location:)
-            Timecop.return
             location.reload
           end
 
@@ -265,7 +259,6 @@ RSpec.describe LocationsHelper do
             allow(Time).to receive(:now).and_return(Time.zone.local(2023, 11, 10))
             FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 9, 24), reactivation_date: Time.zone.local(2022, 9, 28), location:)
             FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 15), reactivation_date: Time.zone.local(2022, 6, 18), location:)
-            Timecop.return
             location.reload
           end
 
@@ -281,7 +274,6 @@ RSpec.describe LocationsHelper do
             allow(Time).to receive(:now).and_return(Time.zone.local(2023, 11, 10))
             FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 9, 24), reactivation_date: Time.zone.local(2022, 9, 28), location:)
             FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 15), reactivation_date: nil, location:)
-            Timecop.return
             location.reload
           end
 
@@ -300,7 +292,6 @@ RSpec.describe LocationsHelper do
             FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 9, 24), reactivation_date: Time.zone.local(2022, 9, 28), location:)
             FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 10, 24), reactivation_date: Time.zone.local(2022, 10, 28), location:)
             FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 15), reactivation_date: nil, location:)
-            Timecop.return
             location.reload
           end
 
@@ -317,7 +308,6 @@ RSpec.describe LocationsHelper do
           allow(Time).to receive(:now).and_return(Time.zone.local(2023, 11, 10))
           FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 10, 10), reactivation_date: Time.zone.local(2022, 12, 1), location:)
           FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 11, 11), reactivation_date: Time.zone.local(2022, 12, 11), location:)
-          Timecop.return
           location.reload
         end
 
