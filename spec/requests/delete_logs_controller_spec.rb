@@ -20,8 +20,7 @@ RSpec.describe "DeleteLogs", type: :request do
     it "calls the filter service with the filters in the session and the search term from the query params" do
       search = "Schrödinger's cat"
       logs_filters = {
-        "years" => [""],
-        "status" => ["", "in_progress"],
+        "status" => %w[in_progress],
         "assigned_to" => "all",
       }
       get lettings_logs_path(logs_filters) # adds the filters to the session
@@ -69,8 +68,7 @@ RSpec.describe "DeleteLogs", type: :request do
     it "calls the filter service with the filters in the session and the search term from the query params" do
       search = "Schrödinger's cat"
       logs_filters = {
-        "years" => [""],
-        "status" => ["", "in_progress"],
+        "status" => %w[in_progress],
         "assigned_to" => "all",
       }
       get lettings_logs_path(logs_filters) # adds the filters to the session
@@ -307,8 +305,7 @@ RSpec.describe "DeleteLogs", type: :request do
     it "calls the filter service with the filters in the session and the search term from the query params" do
       search = "Schrödinger's cat"
       logs_filters = {
-        "years" => [""],
-        "status" => ["", "in_progress"],
+        "status" => %w[in_progress],
         "assigned_to" => "all",
       }
       get sales_logs_path(logs_filters) # adds the filters to the session
@@ -356,8 +353,7 @@ RSpec.describe "DeleteLogs", type: :request do
     it "calls the filter service with the filters in the session and the search term from the query params" do
       search = "Schrödinger's cat"
       logs_filters = {
-        "years" => [""],
-        "status" => ["", "in_progress"],
+        "status" => %w[in_progress],
         "assigned_to" => "all",
       }
       get sales_logs_path(logs_filters) # adds the filters to the session
@@ -598,8 +594,7 @@ RSpec.describe "DeleteLogs", type: :request do
       it "calls the filter service with the filters in the session and the search term from the query params" do
         search = "Schrödinger's cat"
         logs_filters = {
-          "years" => [""],
-          "status" => ["", "in_progress"],
+          "status" => %w[in_progress],
           "assigned_to" => "all",
         }
         get lettings_logs_path(logs_filters) # adds the filters to the session
@@ -647,8 +642,7 @@ RSpec.describe "DeleteLogs", type: :request do
       it "calls the filter service with the filters in the session and the search term from the query params" do
         search = "Schrödinger's cat"
         logs_filters = {
-          "years" => [""],
-          "status" => ["", "in_progress"],
+          "status" => %w[in_progress],
           "assigned_to" => "all",
         }
         get lettings_logs_path(logs_filters) # adds the filters to the session
@@ -823,8 +817,7 @@ RSpec.describe "DeleteLogs", type: :request do
       it "calls the filter service with the filters in the session and the search term from the query params" do
         search = "Schrödinger's cat"
         logs_filters = {
-          "years" => [""],
-          "status" => ["", "in_progress"],
+          "status" => %w[in_progress],
           "assigned_to" => "all",
         }
         get sales_logs_path(logs_filters) # adds the filters to the session
@@ -872,8 +865,7 @@ RSpec.describe "DeleteLogs", type: :request do
       it "calls the filter service with the filters in the session and the search term from the query params" do
         search = "Schrödinger's cat"
         logs_filters = {
-          "years" => [""],
-          "status" => ["", "in_progress"],
+          "status" => %w[in_progress],
           "assigned_to" => "all",
         }
         get sales_logs_path(logs_filters) # adds the filters to the session

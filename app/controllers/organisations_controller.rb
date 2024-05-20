@@ -148,11 +148,13 @@ class OrganisationsController < ApplicationController
   end
 
   def download_lettings_csv
+    redirect_to lettings_logs_filters_years_organisation_path(search: search_term, codes_only: codes_only_export?) and return if session_filters["years"].blank? || session_filters["years"].count != 1
+
     organisation_logs = LettingsLog.visible.where(owning_organisation_id: @organisation.id)
     unpaginated_filtered_logs = filter_manager.filtered_logs(organisation_logs, search_term, session_filters)
     codes_only = params.require(:codes_only) == "true"
 
-    render "logs/download_csv", locals: { search_term:, count: unpaginated_filtered_logs.size, post_path: lettings_logs_email_csv_organisation_path, codes_only: }
+    render "logs/download_csv", locals: { search_term:, count: unpaginated_filtered_logs.size, post_path: lettings_logs_email_csv_organisation_path, codes_only:, session_filters:, filter_type: "lettings_logs", download_csv_back_link: lettings_logs_organisation_path(@organisation) }
   end
 
   def email_lettings_csv
@@ -184,11 +186,13 @@ class OrganisationsController < ApplicationController
   end
 
   def download_sales_csv
+    redirect_to sales_logs_filters_years_organisation_path(search: search_term, codes_only: codes_only_export?) and return if session_filters["years"].blank? || session_filters["years"].count != 1
+
     organisation_logs = SalesLog.visible.where(owning_organisation_id: @organisation.id)
     unpaginated_filtered_logs = filter_manager.filtered_logs(organisation_logs, search_term, session_filters)
     codes_only = params.require(:codes_only) == "true"
 
-    render "logs/download_csv", locals: { search_term:, count: unpaginated_filtered_logs.size, post_path: sales_logs_email_csv_organisation_path, codes_only: }
+    render "logs/download_csv", locals: { search_term:, count: unpaginated_filtered_logs.size, post_path: sales_logs_email_csv_organisation_path, codes_only:, session_filters:, filter_type: "sales_logs", download_csv_back_link: sales_logs_organisation_path(@organisation) }
   end
 
   def email_sales_csv

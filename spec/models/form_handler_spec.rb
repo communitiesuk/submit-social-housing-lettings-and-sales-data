@@ -262,179 +262,73 @@ RSpec.describe FormHandler do
     end
   end
 
-  describe "#ordered_sales_questions_for_all_years" do
-    let(:result) { described_class.instance.ordered_sales_questions_for_all_years }
-    let(:now) { Time.zone.now }
+  describe "#ordered_questions_for_year" do
+    context "with lettings" do
+      let(:result) { described_class.instance.ordered_questions_for_year(2936, "lettings") }
+      let(:now) { Time.zone.local(2936, 5, 1) }
 
-    it "returns an array of questions" do
-      section = build(:section, :with_questions, question_ids: %w[1 2 3])
-      sales_form = FormFactory.new(year: 1936, type: "sales")
-                              .with_sections([section])
-                              .build
-      described_class.instance.use_fake_forms!({ "current_sales" => sales_form })
-      expect(result).to(satisfy { |result| result.all? { |element| element.is_a?(Form::Question) } })
+      it "returns an array of questions" do
+        section = build(:section, :with_questions, question_ids: %w[1 2 3])
+        lettings_form = FormFactory.new(year: 2936, type: "lettings")
+                                .with_sections([section])
+                                .build
+        described_class.instance.use_fake_forms!({ "current_lettings" => lettings_form })
+        expect(result).to(satisfy { |result| result.all? { |element| element.is_a?(Form::Question) } })
+      end
+
+      it "does not return multiple questions with the same id" do
+        first_section = build(:section, :with_questions, question_ids: %w[1 2 3])
+        second_section = build(:section, :with_questions, question_ids: %w[2 3 4 5])
+        lettings_form = FormFactory.new(year: 2936, type: "lettings")
+                                .with_sections([first_section, second_section])
+                                .build
+        described_class.instance.use_fake_forms!({ "current_lettings" => lettings_form })
+        expect(result.map(&:id)).to eq %w[1 2 3 4 5]
+      end
+
+      it "returns the questions in the same order as the form" do
+        first_section = build(:section, :with_questions, question_ids: %w[1 2 3])
+        second_section = build(:section, :with_questions, question_ids: %w[4 5 6])
+        lettings_form = FormFactory.new(year: 2936, type: "lettings")
+                                .with_sections([first_section, second_section])
+                                .build
+        described_class.instance.use_fake_forms!({ "current_lettings" => lettings_form })
+        expect(result.map(&:id)).to eq %w[1 2 3 4 5 6]
+      end
     end
 
-    it "does not return multiple questions with the same id" do
-      first_section = build(:section, :with_questions, question_ids: %w[1 2 3])
-      second_section = build(:section, :with_questions, question_ids: %w[2 3 4 5])
-      sales_form = FormFactory.new(year: 1936, type: "sales")
-                              .with_sections([first_section, second_section])
-                              .build
-      described_class.instance.use_fake_forms!({ "current_sales" => sales_form })
-      expect(result.map(&:id)).to eq %w[1 2 3 4 5]
-    end
+    context "with sales" do
+      let(:result) { described_class.instance.ordered_questions_for_year(2936, "sales") }
+      let(:now) { Time.zone.local(2936, 5, 1) }
 
-    it "returns the questions in the same order as the form" do
-      first_section = build(:section, :with_questions, question_ids: %w[1 2 3])
-      second_section = build(:section, :with_questions, question_ids: %w[4 5 6])
-      sales_form = FormFactory.new(year: 1945, type: "sales")
-                              .with_sections([first_section, second_section])
-                              .build
-      described_class.instance.use_fake_forms!({ "current_sales" => sales_form })
-      expect(result.map(&:id)).to eq %w[1 2 3 4 5 6]
-    end
+      it "returns an array of questions" do
+        section = build(:section, :with_questions, question_ids: %w[1 2 3])
+        sales_form = FormFactory.new(year: 2936, type: "sales")
+                                .with_sections([section])
+                                .build
+        described_class.instance.use_fake_forms!({ "current_sales" => sales_form })
+        expect(result).to(satisfy { |result| result.all? { |element| element.is_a?(Form::Question) } })
+      end
 
-    it "inserts questions from all years in their correct positions" do
-      original_section = build(:section, :with_questions, question_ids: %w[1 1a_deprecated 2 3])
-      new_section = build(:section, :with_questions, question_ids: %w[1 2 2a_new 3])
-      original_form = FormFactory.new(year: 1066, type: "sales")
-                                 .with_sections([original_section])
-                                 .build
-      new_form = FormFactory.new(year: 1485, type: "sales")
-                            .with_sections([new_section])
-                            .build
-      fake_forms = {
-        "previous_sales" => original_form,
-        "current_sales" => new_form,
-      }
-      described_class.instance.use_fake_forms!(fake_forms)
-      expect(result.map(&:id)).to eq %w[1 1a_deprecated 2 2a_new 3]
-    end
+      it "does not return multiple questions with the same id" do
+        first_section = build(:section, :with_questions, question_ids: %w[1 2 3])
+        second_section = build(:section, :with_questions, question_ids: %w[2 3 4 5])
+        sales_form = FormFactory.new(year: 2936, type: "sales")
+                                .with_sections([first_section, second_section])
+                                .build
+        described_class.instance.use_fake_forms!({ "current_sales" => sales_form })
+        expect(result.map(&:id)).to eq %w[1 2 3 4 5]
+      end
 
-    it "inserts questions from previous years that would start a section after new questions in the previous section" do
-      original_first_section = build(:section)
-      original_first_section.subsections = [build(:subsection, :with_questions, question_ids: %w[1 2], id: "1", section: original_first_section)]
-      new_first_section = build(:section)
-      new_first_section.subsections = [build(:subsection, :with_questions, question_ids: %w[1 2 extra], id: "1", section: new_first_section)]
-      original_second_section = build(:section)
-      original_second_section.subsections = [build(:subsection, :with_questions, question_ids: %w[3 4], id: "2")]
-      new_second_section = build(:section)
-      new_second_section.subsections = [build(:subsection, :with_questions, question_ids: %w[3_new 4], id: "2")]
-
-      original_form = FormFactory.new(year: 2022, type: "sales").with_sections([original_first_section, original_second_section]).build
-      new_form = FormFactory.new(year: 2023, type: "sales").with_sections([new_first_section, new_second_section]).build
-
-      fake_forms = {
-        "current_sales" => new_form,
-        "previous_sales" => original_form,
-      }
-      described_class.instance.use_fake_forms!(fake_forms)
-      expect(result.map(&:id)).to eq %w[1 2 extra 3 3_new 4]
-    end
-
-    it "builds the ordering based on the current form" do
-      archived_section = build(:section, :with_questions, question_ids: %w[0 1 2 3])
-      previous_section = build(:section, :with_questions, question_ids: %w[0 1 3 2])
-      current_section = build(:section, :with_questions, question_ids: %w[3 2 0 1])
-      next_section = build(:section, :with_questions, question_ids: %w[3 2 1 0])
-
-      fake_forms = {
-        "current_sales" => FormFactory.new(year: 2023, type: "sales").with_sections([current_section]).build,
-        "previous_sales" => FormFactory.new(year: 2022, type: "sales").with_sections([previous_section]).build,
-        "next_sales" => FormFactory.new(year: 2021, type: "sales").with_sections([next_section]).build,
-        "archived_sales" => FormFactory.new(year: 2020, type: "sales").with_sections([archived_section]).build,
-      }
-      described_class.instance.use_fake_forms!(fake_forms)
-      expect(result.map(&:id)).to eq %w[3 2 0 1]
-    end
-  end
-
-  describe "#ordered_lettings_questions_for_all_years" do
-    let(:result) { described_class.instance.ordered_lettings_questions_for_all_years }
-    let(:now) { Time.zone.now }
-
-    it "returns an array of questions" do
-      section = build(:section, :with_questions, question_ids: %w[1 2 3])
-      lettings_form = FormFactory.new(year: 2936, type: "lettings")
-                              .with_sections([section])
-                              .build
-      described_class.instance.use_fake_forms!({ "current_lettings" => lettings_form })
-      expect(result).to(satisfy { |result| result.all? { |element| element.is_a?(Form::Question) } })
-    end
-
-    it "does not return multiple questions with the same id" do
-      first_section = build(:section, :with_questions, question_ids: %w[1 2 3])
-      second_section = build(:section, :with_questions, question_ids: %w[2 3 4 5])
-      lettings_form = FormFactory.new(year: 2936, type: "lettings")
-                              .with_sections([first_section, second_section])
-                              .build
-      described_class.instance.use_fake_forms!({ "current_lettings" => lettings_form })
-      expect(result.map(&:id)).to eq %w[1 2 3 4 5]
-    end
-
-    it "returns the questions in the same order as the form" do
-      first_section = build(:section, :with_questions, question_ids: %w[1 2 3])
-      second_section = build(:section, :with_questions, question_ids: %w[4 5 6])
-      lettings_form = FormFactory.new(year: 2945, type: "lettings")
-                              .with_sections([first_section, second_section])
-                              .build
-      described_class.instance.use_fake_forms!({ "current_lettings" => lettings_form })
-      expect(result.map(&:id)).to eq %w[1 2 3 4 5 6]
-    end
-
-    it "inserts questions from all years in their correct positions" do
-      original_section = build(:section, :with_questions, question_ids: %w[1 1a_deprecated 2 3])
-      new_section = build(:section, :with_questions, question_ids: %w[1 2 2a_new 3])
-      original_form = FormFactory.new(year: 2066, type: "lettings")
-                                 .with_sections([original_section])
-                                 .build
-      new_form = FormFactory.new(year: 2485, type: "lettings")
-                            .with_sections([new_section])
-                            .build
-      fake_forms = {
-        "previous_lettings" => original_form,
-        "current_lettings" => new_form,
-      }
-      described_class.instance.use_fake_forms!(fake_forms)
-      expect(result.map(&:id)).to eq %w[1 1a_deprecated 2 2a_new 3]
-    end
-
-    it "inserts questions from previous years that would start a section after new questions in the previous section" do
-      original_first_section = build(:section)
-      original_first_section.subsections = [build(:subsection, :with_questions, question_ids: %w[1 2], id: "1", section: original_first_section)]
-      new_first_section = build(:section)
-      new_first_section.subsections = [build(:subsection, :with_questions, question_ids: %w[1 2 extra], id: "1", section: new_first_section)]
-      original_second_section = build(:section)
-      original_second_section.subsections = [build(:subsection, :with_questions, question_ids: %w[3 4], id: "2")]
-      new_second_section = build(:section)
-      new_second_section.subsections = [build(:subsection, :with_questions, question_ids: %w[3_new 4], id: "2")]
-
-      original_form = FormFactory.new(year: 2023, type: "lettings").with_sections([original_first_section, original_second_section]).build
-      new_form = FormFactory.new(year: 2024, type: "lettings").with_sections([new_first_section, new_second_section]).build
-
-      fake_forms = {
-        "current_lettings" => new_form,
-        "previous_lettings" => original_form,
-      }
-      described_class.instance.use_fake_forms!(fake_forms)
-      expect(result.map(&:id)).to eq %w[1 2 extra 3 3_new 4]
-    end
-
-    it "builds the ordering based on the current form" do
-      archived_section = build(:section, :with_questions, question_ids: %w[0 1 2 3])
-      previous_section = build(:section, :with_questions, question_ids: %w[0 1 3 2])
-      current_section = build(:section, :with_questions, question_ids: %w[3 2 0 1])
-      next_section = build(:section, :with_questions, question_ids: %w[3 2 1 0])
-
-      fake_forms = {
-        "current_lettings" => FormFactory.new(year: 2023, type: "sales").with_sections([current_section]).build,
-        "previous_lettings" => FormFactory.new(year: 2022, type: "sales").with_sections([previous_section]).build,
-        "next_lettings" => FormFactory.new(year: 2021, type: "sales").with_sections([next_section]).build,
-        "archived_lettings" => FormFactory.new(year: 2020, type: "sales").with_sections([archived_section]).build,
-      }
-      described_class.instance.use_fake_forms!(fake_forms)
-      expect(result.map(&:id)).to eq %w[3 2 0 1]
+      it "returns the questions in the same order as the form" do
+        first_section = build(:section, :with_questions, question_ids: %w[1 2 3])
+        second_section = build(:section, :with_questions, question_ids: %w[4 5 6])
+        sales_form = FormFactory.new(year: 2936, type: "sales")
+                                .with_sections([first_section, second_section])
+                                .build
+        described_class.instance.use_fake_forms!({ "current_sales" => sales_form })
+        expect(result.map(&:id)).to eq %w[1 2 3 4 5 6]
+      end
     end
   end
   # rubocop:enable RSpec/PredicateMatcher
