@@ -24,6 +24,10 @@ RSpec.describe Validations::Sales::SetupValidations do
       context "when saledate is in the open collection year" do
         let(:record) { build(:sales_log, :saledate_today) }
 
+        before do
+          allow(Time).to receive(:now).and_return(Time.zone.local(2023, 1, 10))
+        end
+
         it "does not add an error" do
           setup_validator.validate_saledate_collection_year(record)
 
