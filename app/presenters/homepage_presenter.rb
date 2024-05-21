@@ -97,7 +97,7 @@ private
             when :lettings then @user.lettings_logs
             when :sales then @user.sales_logs
             end
-    query = query.where(created_by: @user) if @user.data_provider?
+    query = query.where(assigned_to: @user) if @user.data_provider?
     query.filter_by_year(year)
          .where(status:)
          .count
