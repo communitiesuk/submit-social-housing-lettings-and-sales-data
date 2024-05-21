@@ -1626,6 +1626,7 @@ RSpec.describe OrganisationsController, type: :request do
         context "when you download the CSV" do
           let(:other_organisation) { create(:organisation) }
           let!(:lettings_logs) { create_list(:lettings_log, 2, :in_progress, owning_organisation: organisation) }
+          let(:lettings_log_start_year) { lettings_logs[0].form.start_date.year }
 
           before do
             create(:lettings_log, :in_progress, owning_organisation: organisation, status: "pending", skip_update_status: true)
@@ -1642,25 +1643,25 @@ RSpec.describe OrganisationsController, type: :request do
           end
 
           it "only includes logs from that organisation" do
-            get "/organisations/#{organisation.id}/lettings-logs/csv-download?years[]=#{lettings_logs[0].form.start_date.year}&codes_only=false"
+            get "/organisations/#{organisation.id}/lettings-logs/csv-download?years[]=#{lettings_log_start_year}&codes_only=false"
             expect(page).to have_text("You've selected 3 logs.")
           end
 
           it "provides the organisation to the mail job" do
             expect {
-              post "/organisations/#{organisation.id}/lettings-logs/email-csv?status[]=completed&codes_only=false", headers:, params: {}
-            }.to enqueue_job(EmailCsvJob).with(user, nil, { "status" => %w[completed] }, false, organisation, false)
+              post "/organisations/#{organisation.id}/lettings-logs/email-csv?years[]=#{lettings_log_start_year}&status[]=completed&codes_only=false", headers:, params: {}
+            }.to enqueue_job(EmailCsvJob).with(user, nil, { "status" => %w[completed], "years" => [lettings_log_start_year.to_s] }, false, organisation, false, "lettings", lettings_log_start_year)
           end
 
           it "provides the export type to the mail job" do
             codes_only_export_type = false
             expect {
-              post "/organisations/#{organisation.id}/lettings-logs/email-csv?codes_only=#{codes_only_export_type}", headers:, params: {}
-            }.to enqueue_job(EmailCsvJob).with(user, nil, {}, false, organisation, codes_only_export_type)
+              post "/organisations/#{organisation.id}/lettings-logs/email-csv?years[]=#{lettings_log_start_year}&codes_only=#{codes_only_export_type}", headers:, params: {}
+            }.to enqueue_job(EmailCsvJob).with(user, nil, { "years" => [lettings_log_start_year.to_s] }, false, organisation, codes_only_export_type, "lettings", lettings_log_start_year)
             codes_only_export_type = true
             expect {
-              post "/organisations/#{organisation.id}/lettings-logs/email-csv?codes_only=#{codes_only_export_type}", headers:, params: {}
-            }.to enqueue_job(EmailCsvJob).with(user, nil, {}, false, organisation, codes_only_export_type)
+              post "/organisations/#{organisation.id}/lettings-logs/email-csv?years[]=#{lettings_log_start_year}&codes_only=#{codes_only_export_type}", headers:, params: {}
+            }.to enqueue_job(EmailCsvJob).with(user, nil, { "years" => [lettings_log_start_year.to_s] }, false, organisation, codes_only_export_type, "lettings", lettings_log_start_year)
           end
         end
 
@@ -1704,26 +1705,26 @@ RSpec.describe OrganisationsController, type: :request do
 
           it "provides the organisation to the mail job" do
             expect {
-              post "/organisations/#{organisation.id}/sales-logs/email-csv?status[]=completed&codes_only=false", headers:, params: {}
-            }.to enqueue_job(EmailCsvJob).with(user, nil, { "status" => %w[completed] }, false, organisation, false, "sales")
+              post "/organisations/#{organisation.id}/sales-logs/email-csv?years[]=#{sales_logs_start_year}&status[]=completed&codes_only=false", headers:, params: {}
+            }.to enqueue_job(EmailCsvJob).with(user, nil, { "status" => %w[completed], "years" => [sales_logs_start_year.to_s] }, false, organisation, false, "sales", sales_logs_start_year)
           end
 
           it "provides the log type to the mail job" do
             log_type = "sales"
             expect {
-              post "/organisations/#{organisation.id}/sales-logs/email-csv?status[]=completed&codes_only=false", headers:, params: {}
-            }.to enqueue_job(EmailCsvJob).with(user, nil, { "status" => %w[completed] }, false, organisation, false, log_type)
+              post "/organisations/#{organisation.id}/sales-logs/email-csv?years[]=#{sales_logs_start_year}&status[]=completed&codes_only=false", headers:, params: {}
+            }.to enqueue_job(EmailCsvJob).with(user, nil, { "status" => %w[completed], "years" => [sales_logs_start_year.to_s] }, false, organisation, false, log_type, sales_logs_start_year)
           end
 
           it "provides the export type to the mail job" do
             codes_only_export_type = false
             expect {
-              post "/organisations/#{organisation.id}/sales-logs/email-csv?codes_only=#{codes_only_export_type}", headers:, params: {}
-            }.to enqueue_job(EmailCsvJob).with(user, nil, {}, false, organisation, codes_only_export_type, "sales")
+              post "/organisations/#{organisation.id}/sales-logs/email-csv?years[]=#{sales_logs_start_year}&codes_only=#{codes_only_export_type}", headers:, params: {}
+            }.to enqueue_job(EmailCsvJob).with(user, nil, { "years" => [sales_logs_start_year.to_s] }, false, organisation, codes_only_export_type, "sales", sales_logs_start_year)
             codes_only_export_type = true
             expect {
-              post "/organisations/#{organisation.id}/sales-logs/email-csv?codes_only=#{codes_only_export_type}", headers:, params: {}
-            }.to enqueue_job(EmailCsvJob).with(user, nil, {}, false, organisation, codes_only_export_type, "sales")
+              post "/organisations/#{organisation.id}/sales-logs/email-csv?years[]=#{sales_logs_start_year}&codes_only=#{codes_only_export_type}", headers:, params: {}
+            }.to enqueue_job(EmailCsvJob).with(user, nil, { "years" => [sales_logs_start_year.to_s] }, false, organisation, codes_only_export_type, "sales", sales_logs_start_year)
           end
         end
       end

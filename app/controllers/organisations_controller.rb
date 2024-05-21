@@ -158,7 +158,7 @@ class OrganisationsController < ApplicationController
   end
 
   def email_lettings_csv
-    EmailCsvJob.perform_later(current_user, search_term, session_filters, false, @organisation, codes_only_export?)
+    EmailCsvJob.perform_later(current_user, search_term, session_filters, false, @organisation, codes_only_export?, "lettings", session_filters["years"].first.to_i)
     redirect_to lettings_logs_csv_confirmation_organisation_path
   end
 
@@ -196,7 +196,7 @@ class OrganisationsController < ApplicationController
   end
 
   def email_sales_csv
-    EmailCsvJob.perform_later(current_user, search_term, session_filters, false, @organisation, codes_only_export?, "sales")
+    EmailCsvJob.perform_later(current_user, search_term, session_filters, false, @organisation, codes_only_export?, "sales", session_filters["years"].first.to_i)
     redirect_to sales_logs_csv_confirmation_organisation_path
   end
 
