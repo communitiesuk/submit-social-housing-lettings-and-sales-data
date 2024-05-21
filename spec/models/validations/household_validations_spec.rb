@@ -4,16 +4,8 @@ RSpec.describe Validations::HouseholdValidations do
   subject(:household_validator) { validator_class.new }
 
   let(:validator_class) { Class.new { include Validations::HouseholdValidations } }
-  let(:log_date) { Time.zone.now }
-  let(:record) { FactoryBot.create(:lettings_log, :setup_completed, startdate: log_date) }
-
-  before do
-    Timecop.freeze(log_date + 1)
-  end
-
-  after do
-    Timecop.return
-  end
+  let(:startdate) { Time.zone.now }
+  let(:record) { FactoryBot.build(:lettings_log, :setup_completed, startdate:) }
 
   describe "reasonable preference validations" do
     context "when reasonable preference is not given" do
@@ -59,7 +51,7 @@ RSpec.describe Validations::HouseholdValidations do
       end
 
       context "when form year is before 2024" do
-        let(:log_date) { Time.zone.local(2024, 1, 1) }
+        let(:startdate) { Time.zone.local(2024, 1, 1) }
 
         it "does not validate the content of reasonother for phrases indicating homelessness" do
           record.reason = 20
@@ -70,7 +62,7 @@ RSpec.describe Validations::HouseholdValidations do
       end
 
       context "when form year is >= 2024" do
-        let(:log_date) { Time.zone.local(2024, 4, 1) }
+        let(:startdate) { Time.zone.local(2024, 4, 1) }
 
         context "when checking the content of reasonother" do
           it "validates that the reason doesn't match phrase indicating homelessness" do
@@ -277,7 +269,7 @@ RSpec.describe Validations::HouseholdValidations do
   end
 
   describe "#validate_partner_count" do
-    let(:log_date) { Time.zone.local(2023, 4, 1) }
+    let(:startdate) { Time.zone.local(2023, 4, 1) }
 
     it "validates that only 1 partner exists" do
       record.relat2 = "P"
@@ -300,17 +292,7 @@ RSpec.describe Validations::HouseholdValidations do
 
   describe "#validate_person_age_matches_relationship" do
     context "with 2023 logs" do
-      let(:log_date) { Time.zone.local(2023, 4, 1) }
-
-      before do
-        Timecop.freeze(log_date)
-        Singleton.__init__(FormHandler)
-      end
-
-      after do
-        Timecop.return
-        Singleton.__init__(FormHandler)
-      end
+      let(:startdate) { Time.zone.local(2023, 4, 1) }
 
       context "when the household contains a person under 16" do
         it "validates that person must be a child of the tenant" do
@@ -334,17 +316,7 @@ RSpec.describe Validations::HouseholdValidations do
     end
 
     context "with 2024 logs" do
-      let(:log_date) { Time.zone.local(2024, 4, 1) }
-
-      before do
-        Timecop.freeze(log_date)
-        Singleton.__init__(FormHandler)
-      end
-
-      after do
-        Timecop.return
-        Singleton.__init__(FormHandler)
-      end
+      let(:startdate) { Time.zone.local(2024, 4, 1) }
 
       it "does not add an error is person under 16 is a partner" do
         record.age2 = 14
@@ -366,17 +338,7 @@ RSpec.describe Validations::HouseholdValidations do
 
   describe "#validate_person_age_matches_economic_status" do
     context "with 2023 logs" do
-      let(:log_date) { Time.zone.local(2023, 4, 1) }
-
-      before do
-        Timecop.freeze(log_date)
-        Singleton.__init__(FormHandler)
-      end
-
-      after do
-        Timecop.return
-        Singleton.__init__(FormHandler)
-      end
+      let(:startdate) { Time.zone.local(2023, 4, 1) }
 
       context "when the household contains a person under 16" do
         it "validates that person's economic status must be Child" do
@@ -411,17 +373,7 @@ RSpec.describe Validations::HouseholdValidations do
     end
 
     context "with 2024 logs" do
-      let(:log_date) { Time.zone.local(2024, 4, 1) }
-
-      before do
-        Timecop.freeze(log_date)
-        Singleton.__init__(FormHandler)
-      end
-
-      after do
-        Timecop.return
-        Singleton.__init__(FormHandler)
-      end
+      let(:startdate) { Time.zone.local(2024, 4, 1) }
 
       it "does not run the validation" do
         record.age2 = 14
@@ -437,17 +389,7 @@ RSpec.describe Validations::HouseholdValidations do
 
   describe "#validate_person_age_and_relationship_matches_economic_status" do
     context "with 2023 logs" do
-      let(:log_date) { Time.zone.local(2023, 4, 1) }
-
-      before do
-        Timecop.freeze(log_date)
-        Singleton.__init__(FormHandler)
-      end
-
-      after do
-        Timecop.return
-        Singleton.__init__(FormHandler)
-      end
+      let(:startdate) { Time.zone.local(2023, 4, 1) }
 
       context "when the household contains a tenant’s child between the ages of 16 and 19" do
         it "validates that person's economic status must be full time student or refused" do
@@ -519,17 +461,7 @@ RSpec.describe Validations::HouseholdValidations do
     end
 
     context "with 2024 logs" do
-      let(:log_date) { Time.zone.local(2024, 4, 1) }
-
-      before do
-        Timecop.freeze(log_date)
-        Singleton.__init__(FormHandler)
-      end
-
-      after do
-        Timecop.return
-        Singleton.__init__(FormHandler)
-      end
+      let(:startdate) { Time.zone.local(2024, 4, 1) }
 
       context "when the household contains a tenant’s child between the ages of 16 and 19" do
         it "does not add an error" do

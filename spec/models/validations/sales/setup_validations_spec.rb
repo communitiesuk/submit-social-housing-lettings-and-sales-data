@@ -7,15 +7,6 @@ RSpec.describe Validations::Sales::SetupValidations do
 
   describe "#validate_saledate_collection_year" do
     context "with sales_in_crossover_period == false" do
-      before do
-        Timecop.freeze(Time.zone.local(2023, 1, 10))
-        Singleton.__init__(FormHandler)
-      end
-
-      after do
-        Timecop.return
-      end
-
       context "when saledate is blank" do
         let(:record) { build(:sales_log, saledate: nil) }
 
@@ -26,8 +17,12 @@ RSpec.describe Validations::Sales::SetupValidations do
         end
       end
 
-      context "when saledate is in the 22/23 collection year" do
+      context "when saledate is in the open collection year" do
         let(:record) { build(:sales_log, saledate: Time.zone.local(2023, 1, 1)) }
+
+        before do
+          allow(Time).to receive(:now).and_return(Time.zone.local(2023, 1, 10))
+        end
 
         it "does not add an error" do
           setup_validator.validate_saledate_collection_year(record)
@@ -36,8 +31,12 @@ RSpec.describe Validations::Sales::SetupValidations do
         end
       end
 
-      context "when saledate is before the 22/23 collection year" do
+      context "when saledate is before the open collection year" do
         let(:record) { build(:sales_log, saledate: Time.zone.local(2020, 1, 1)) }
+
+        before do
+          allow(Time).to receive(:now).and_return(Time.zone.local(2023, 1, 10))
+        end
 
         it "adds error" do
           setup_validator.validate_saledate_collection_year(record)
@@ -46,8 +45,12 @@ RSpec.describe Validations::Sales::SetupValidations do
         end
       end
 
-      context "when saledate is after the 22/23 collection year" do
+      context "when saledate is after the open collection year" do
         let(:record) { build(:sales_log, saledate: Time.zone.local(2025, 4, 1)) }
+
+        before do
+          allow(Time).to receive(:now).and_return(Time.zone.local(2023, 1, 10))
+        end
 
         it "adds error" do
           setup_validator.validate_saledate_collection_year(record)
@@ -58,14 +61,6 @@ RSpec.describe Validations::Sales::SetupValidations do
     end
 
     context "with sales_in_crossover_period == true" do
-      around do |example|
-        Timecop.freeze(Time.zone.local(2024, 5, 1)) do
-          Singleton.__init__(FormHandler)
-          example.run
-        end
-        Timecop.return
-      end
-
       context "when saledate is blank" do
         let(:record) { build(:sales_log, saledate: nil) }
 
@@ -191,12 +186,6 @@ RSpec.describe Validations::Sales::SetupValidations do
     let(:absorbing_organisation) { create(:organisation, created_at: Time.zone.local(2023, 2, 1), available_from: Time.zone.local(2023, 2, 1), name: "Absorbing org") }
     let(:merged_organisation) { create(:organisation, name: "Merged org") }
 
-    around do |example|
-      Timecop.freeze(Time.zone.local(2023, 5, 1))
-      example.run
-      Timecop.return
-    end
-
     before do
       merged_organisation.update!(absorbing_organisation:, merge_date: Time.zone.local(2023, 2, 2))
     end
@@ -249,11 +238,8 @@ RSpec.describe Validations::Sales::SetupValidations do
       let(:absorbing_organisation) { create(:organisation, created_at: Time.zone.local(2023, 2, 1), available_from: Time.zone.local(2023, 2, 1), name: "Absorbing org") }
       let(:merged_organisation) { create(:organisation, name: "Merged org") }
 
-      around do |example|
-        Timecop.freeze(Time.zone.local(2023, 5, 1))
+      before do
         merged_organisation.update!(merge_date: Time.zone.local(2023, 2, 2), absorbing_organisation:)
-        example.run
-        Timecop.return
       end
 
       context "and owning organisation is no longer active" do
