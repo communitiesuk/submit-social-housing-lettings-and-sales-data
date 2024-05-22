@@ -251,7 +251,7 @@ private
     return "All" if session_filters["assigned_to"].include?("all")
     return "You" if session_filters["assigned_to"].include?("you")
 
-    user = User.find(session_filters["user"].first)
+    user = User.find(session_filters["user"])
     "#{user.name} (#{user.email})"
   end
 
