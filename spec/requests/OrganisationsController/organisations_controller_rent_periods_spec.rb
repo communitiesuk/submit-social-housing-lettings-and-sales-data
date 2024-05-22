@@ -44,8 +44,8 @@ RSpec.describe OrganisationsController, type: :request do
     end
 
     it "creates organisation rent periods with the correct rent period and organisation id" do
-      org = Organisation.find_by_name org_name
-      org_rent_periods = OrganisationRentPeriod.all
+      org = Organisation.includes(:organisation_rent_periods).find_by_name(org_name)
+      org_rent_periods = org.organisation_rent_periods
       expect(org_rent_periods.count).to be expected_rent_periods.count
       expect(org_rent_periods.map(&:rent_period)).to match_array expected_rent_periods
       expect(org_rent_periods.map(&:organisation_id)).to all be org.id
@@ -53,7 +53,7 @@ RSpec.describe OrganisationsController, type: :request do
   end
 
   describe "#edit" do
-    let(:organisation) { create(:organisation) }
+    let(:organisation) { create(:organisation, skip_rent_period_creation: true) }
     let(:fake_rent_periods) do
       {
         "1" => { "value" => "Every minute" },
@@ -83,7 +83,7 @@ RSpec.describe OrganisationsController, type: :request do
   end
 
   describe "#update" do
-    let(:organisation) { create(:organisation) }
+    let(:organisation) { create(:organisation, skip_rent_period_creation: true) }
     let(:initially_checked_rent_period_id) { "1" }
     let(:initially_unchecked_rent_period_id) { "2" }
     let(:params) do
@@ -101,13 +101,17 @@ RSpec.describe OrganisationsController, type: :request do
     end
 
     it "creates and destroys organisation rent periods as appropriate" do
-      rent_periods = OrganisationRentPeriod.all
+      rent_periods = Organisation.includes(:organisation_rent_periods)
+                                 .find(organisation.id)
+                                 .organisation_rent_periods
       expect(rent_periods.count).to be 1
       expect(rent_periods.first.rent_period.to_s).to eq initially_checked_rent_period_id
 
       patch organisation_path(organisation, headers:, params:)
 
-      rent_periods = OrganisationRentPeriod.all
+      rent_periods = Organisation.includes(:organisation_rent_periods)
+                                 .find(organisation.id)
+                                 .organisation_rent_periods
       expect(rent_periods.count).to be 1
       expect(rent_periods.first.rent_period.to_s).to eq initially_unchecked_rent_period_id
     end
