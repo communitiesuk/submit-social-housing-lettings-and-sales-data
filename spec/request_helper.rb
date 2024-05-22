@@ -14,6 +14,8 @@ module RequestHelper
            .to_return(status: 200, body: "{\"status\":200,\"result\":{\"postcode\":\"NW1L 5DP\",\"admin_district\":\"Westminster\",\"codes\":{\"admin_district\":\"E09000033\"}}}", headers: {})
     WebMock.stub_request(:get, "https://api.postcodes.io/postcodes/ZZ11ZZ")
            .to_return(status: 200, body: "{\"status\":200,\"result\":{\"postcode\":\"ZZ1 1ZZ\",\"admin_district\":\"Westminster\",\"codes\":{\"admin_district\":\"E09000033\"}}}", headers: {})
+    WebMock.stub_request(:get, "https://api.postcodes.io/postcodes/SW1A1AA")
+           .to_return(status: 200, body: "{\"status\":200,\"result\":{\"postcode\":\"ZZ1 1ZZ\",\"admin_district\":\"Westminster\",\"codes\":{\"admin_district\":\"E09000033\"}}}", headers: {})
 
     WebMock.stub_request(:post, /api.notifications.service.gov.uk\/v2\/notifications\/email/)
       .to_return(status: 200, body: "", headers: {})
