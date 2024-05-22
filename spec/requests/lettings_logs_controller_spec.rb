@@ -1433,6 +1433,14 @@ RSpec.describe LettingsLogsController, type: :request do
           expect(page).to have_link("Change", href: "/lettings-logs/filters/status?codes_only=false&referrer=check_answers&search=#{search_term}")
           expect(page).to have_link("Change", href: "/lettings-logs/filters/needstype?codes_only=false&referrer=check_answers&search=#{search_term}")
         end
+
+        it "displays correct assigned to filter" do
+          create_list(:user, 12, organisation: user.organisation)
+          filtered_user = create(:user, organisation: user.organisation, name: "Obviously not usual name")
+          get("/lettings-logs/csv-download?years[]=#{lettings_log.form.start_date.year}&search=#{search_term}&codes_only=false&assigned_to=specific_user&user=#{filtered_user.id}", headers:)
+
+          expect(page).to have_content("Obviously not usual name")
+        end
       end
 
       context "when there are no years selected in the filters" do
