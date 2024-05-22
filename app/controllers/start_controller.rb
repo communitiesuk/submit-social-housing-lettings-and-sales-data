@@ -1,6 +1,7 @@
 class StartController < ApplicationController
   def index
     if current_user
+      @homepage_presenter = HomepagePresenter.new(current_user)
       render "home/index"
     end
   end

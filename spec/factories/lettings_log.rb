@@ -87,7 +87,7 @@ FactoryBot.define do
       rsnvac { 6 }
       unittype_gn { 7 }
       beds { 3 }
-      voiddate { 2.days.ago }
+      voiddate { startdate - 2.days }
       offered { 2 }
       wchair { 1 }
       earnings { 268 }
@@ -102,7 +102,7 @@ FactoryBot.define do
       layear { 2 }
       waityear { 7 }
       postcode_known { 1 }
-      postcode_full { Faker::Address.postcode }
+      postcode_full { "SW1A 1AA" }
       reasonpref { 1 }
       cbl { 0 }
       chr { 1 }
@@ -154,7 +154,7 @@ FactoryBot.define do
       hbrentshortfall { 1 }
       tshortfall { 12 }
       property_relet { 0 }
-      mrcdate { 1.day.ago }
+      mrcdate { startdate - 1.day }
       incref { 0 }
       armedforces { 1 }
       builtype { 1 }
@@ -166,10 +166,18 @@ FactoryBot.define do
       referral { 2 }
       uprn_known { 0 }
       joint { 3 }
-      address_line1 { "fake address" }
+      address_line1 { "Address line 1" }
       town_or_city { "London" }
       ppcodenk { 1 }
       tshortfall_known { 1 }
+    end
+    trait :completed2024 do
+      completed
+      address_line1_input { address_line1 }
+      postcode_full_input { postcode_full }
+      nationality_all_group { 826 }
+      uprn { 1 }
+      uprn_selection { 1 }
     end
     trait :export do
       tenancycode { "987654" }
