@@ -1,15 +1,9 @@
 require "rails_helper"
 
 RSpec.describe TasklistHelper do
-  let(:now) { Time.utc(2025, 1, 1) }
-
-  before do
-    allow(Time).to receive(:now).and_return(now)
-  end
-
   describe "with lettings" do
     let(:empty_lettings_log) { create(:lettings_log) }
-    let(:lettings_log) { build_stubbed(:lettings_log, :in_progress, needstype: 1, startdate: now) }
+    let(:lettings_log) { build_stubbed(:lettings_log, :in_progress, needstype: 1) }
 
     describe "get next incomplete section" do
       it "returns the first subsection name if it is not completed" do
@@ -23,15 +17,16 @@ RSpec.describe TasklistHelper do
     end
 
     describe "get sections count" do
-      let(:real_2021_2022_form) { Form.new("config/forms/2021_2022.json") }
-
-      before do
-        allow(FormHandler.instance).to receive(:get_form).and_return(real_2021_2022_form)
-      end
+      let(:completed_subsection) { instance_double("Subsection", status: :completed, displayed_in_tasklist?: true, applicable_questions: [{ id: "question" }]) }
+      let(:incomplete_subsection) { instance_double("Subsection", status: :not_started, displayed_in_tasklist?: true, applicable_questions: []) }
 
       context "with an empty lettings log" do
+        before do
+          allow(empty_lettings_log.form).to receive(:subsections).and_return([incomplete_subsection])
+        end
+
         it "returns the total displayed subsections count if no status is given" do
-          expect(get_subsections_count(empty_lettings_log)).to eq(7)
+          expect(get_subsections_count(empty_lettings_log)).to eq(1)
         end
 
         it "returns 0 sections for completed sections if no sections are completed" do
@@ -40,8 +35,12 @@ RSpec.describe TasklistHelper do
       end
 
       context "with a partially complete lettings log" do
+        before do
+          allow(lettings_log.form).to receive(:subsections).and_return([completed_subsection, incomplete_subsection])
+        end
+
         it "returns the total displayed subsections count if no status is given" do
-          expect(get_subsections_count(lettings_log)).to eq(7)
+          expect(get_subsections_count(lettings_log)).to eq(2)
         end
 
         it "returns the completed sections count" do
@@ -78,14 +77,19 @@ RSpec.describe TasklistHelper do
   end
 
   describe "with sales" do
-    let(:now) { Time.utc(2022, 4, 4) }
-    let(:empty_sales_log) { create(:sales_log, owning_organisation: nil) }
-    let(:completed_sales_log) { create(:sales_log, :completed, saledate: now) }
+    let(:empty_sales_log) { build(:sales_log, owning_organisation: nil) }
+    let(:completed_sales_log) { build(:sales_log, :completed) }
+    let(:completed_subsection) { instance_double("Subsection", status: :completed, displayed_in_tasklist?: true, applicable_questions: [{ id: "question" }]) }
+    let(:incomplete_subsection) { instance_double("Subsection", status: :not_started, displayed_in_tasklist?: true, applicable_questions: []) }
 
     describe "get sections count" do
       context "with an empty sales log" do
+        before do
+          allow(empty_sales_log.form).to receive(:subsections).and_return([incomplete_subsection])
+        end
+
         it "returns the total displayed subsections count if no status is given (includes all 3 sale information subsections)" do
-          expect(get_subsections_count(empty_sales_log)).to eq(9)
+          expect(get_subsections_count(empty_sales_log)).to eq(1)
         end
 
         it "returns 0 sections for completed sections if no sections are completed" do
@@ -94,12 +98,16 @@ RSpec.describe TasklistHelper do
       end
 
       context "with a completed sales log" do
+        before do
+          allow(completed_sales_log.form).to receive(:subsections).and_return([completed_subsection])
+        end
+
         it "returns the total displayed subsections count if no status is given (includes only the 1 relevant sale information subsection)" do
-          expect(get_subsections_count(completed_sales_log)).to eq(7)
+          expect(get_subsections_count(completed_sales_log)).to eq(1)
         end
 
         it "returns the completed sections count" do
-          expect(get_subsections_count(completed_sales_log, :completed)).to eq(7)
+          expect(get_subsections_count(completed_sales_log, :completed)).to eq(1)
         end
       end
 
@@ -112,8 +120,12 @@ RSpec.describe TasklistHelper do
   describe "#review_log_text" do
     context "with sales log" do
       context "when collection_period_open? == true" do
-        let(:now) { Time.utc(2022, 6, 1) }
-        let(:sales_log) { create(:sales_log, :completed, saledate: now) }
+        let(:sales_log) { build(:sales_log, :completed, saledate: Time.utc(2022, 6, 9), id: 123) }
+
+        before do
+          allow(sales_log.form).to receive(:submission_deadline).and_return(Time.utc(2023, 6, 9))
+          allow(sales_log).to receive(:collection_period_open?).and_return(true)
+        end
 
         it "returns relevant text" do
           expect(review_log_text(sales_log)).to eq(
@@ -123,8 +135,12 @@ RSpec.describe TasklistHelper do
       end
 
       context "when collection_period_open? == false" do
-        let(:now) { Time.utc(2024, 6, 1) }
         let!(:sales_log) { build(:sales_log, :completed, saledate: Time.utc(2022, 6, 1)) }
+
+        before do
+          allow(sales_log.form).to receive(:submission_deadline).and_return(Time.utc(2023, 6, 9))
+          allow(sales_log).to receive(:collection_period_open?).and_return(false)
+        end
 
         it "returns relevant text" do
           expect(review_log_text(sales_log)).to eq("This log is from the 2022/2023 collection window, which is now closed.")
@@ -132,8 +148,12 @@ RSpec.describe TasklistHelper do
       end
 
       context "when older_than_previous_collection_year" do
-        let(:now) { Time.utc(2023, 6, 1) }
         let(:sales_log) { build(:sales_log, :completed, saledate: Time.utc(2022, 2, 1)) }
+
+        before do
+          allow(sales_log.form).to receive(:submission_deadline).and_return(Time.utc(2022, 6, 9))
+          allow(sales_log).to receive(:older_than_previous_collection_year?).and_return(true)
+        end
 
         it "returns relevant text" do
           expect(review_log_text(sales_log)).to eq("This log is from the 2021/2022 collection window, which is now closed.")
@@ -143,7 +163,7 @@ RSpec.describe TasklistHelper do
 
     context "with lettings log" do
       context "when collection_period_open? == true" do
-        let(:lettings_log) { build(:lettings_log, :completed, startdate: now, id: 123) }
+        let(:lettings_log) { build(:lettings_log, :completed, id: 123) }
 
         before do
           allow(lettings_log.form).to receive(:submission_deadline).and_return(Time.utc(2023, 6, 9))
@@ -158,15 +178,15 @@ RSpec.describe TasklistHelper do
       end
 
       context "when collection_period_open? == false" do
-        let!(:sales_log) { build(:lettings_log, :completed, startdate: Time.utc(2022, 6, 1), id: 123) }
+        let!(:lettings_log) { build(:lettings_log, :completed, startdate: Time.utc(2022, 6, 1), id: 123) }
 
         before do
-          allow(sales_log.form).to receive(:submission_deadline).and_return(Time.utc(2023, 6, 9))
-          allow(sales_log).to receive(:collection_period_open?).and_return(false)
+          allow(lettings_log.form).to receive(:submission_deadline).and_return(Time.utc(2023, 6, 9))
+          allow(lettings_log).to receive(:collection_period_open?).and_return(false)
         end
 
         it "returns relevant text" do
-          expect(review_log_text(sales_log)).to eq("This log is from the 2022/2023 collection window, which is now closed.")
+          expect(review_log_text(lettings_log)).to eq("This log is from the 2022/2023 collection window, which is now closed.")
         end
       end
 
