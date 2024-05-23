@@ -627,11 +627,11 @@ private
   end
 
   def joint_purchase?
-    field_116 == 1
+    field_14 == 1
   end
 
   def joint_purchase_asked?
-    shared_ownership? || discounted_ownership? || field_114 == 2
+    shared_ownership? || discounted_ownership? || field_12 == 2
   end
 
   def field_mapping_for_errors
