@@ -46,21 +46,15 @@ RSpec.describe SchemePolicy do
 
     context "with deactivated scheme" do
       before do
-        scheme.scheme_deactivation_periods << create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2024, 4, 10), scheme:)
+        scheme.scheme_deactivation_periods << create(:scheme_deactivation_period, deactivation_date: Time.zone.today, scheme:)
         scheme.save!
-        Timecop.freeze(Time.utc(2024, 4, 10))
-        log = create(:lettings_log, :sh, owning_organisation: scheme.owning_organisation, scheme:)
-        log.startdate = Time.zone.local(2022, 10, 10)
+        log = build(:lettings_log, :sh, owning_organisation: scheme.owning_organisation, scheme:, startdate: Time.zone.today  - 2.years)
         log.save!(validate: false)
-      end
-
-      after do
-        Timecop.unfreeze
       end
 
       context "and associated logs in editable collection period" do
         before do
-          create(:lettings_log, :sh, owning_organisation: scheme.owning_organisation, scheme:, startdate: Time.zone.local(2024, 4, 9))
+          create(:lettings_log, :sh, owning_organisation: scheme.owning_organisation, scheme:, startdate: Time.zone.yesterday)
         end
 
         it "does not allow deleting a scheme as a provider" do

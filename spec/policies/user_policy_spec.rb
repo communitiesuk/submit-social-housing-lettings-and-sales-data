@@ -144,19 +144,14 @@ RSpec.describe UserPolicy do
       let(:user) { create(:user, active: false) }
 
       before do
-        Timecop.freeze(Time.utc(2024, 4, 10))
-        log = create(:lettings_log, owning_organisation: user.organisation, assigned_to: user)
-        log.startdate = Time.zone.local(2022, 10, 10)
+        log = build(:lettings_log, owning_organisation: user.organisation, assigned_to: user, startdate: Time.zone.today - 2.years)
         log.save!(validate: false)
       end
 
-      after do
-        Timecop.unfreeze
-      end
 
       context "and associated logs in editable collection period" do
         before do
-          create(:lettings_log, :sh, owning_organisation: user.organisation, assigned_to: user, startdate: Time.zone.local(2024, 4, 9))
+          create(:lettings_log, :sh, owning_organisation: user.organisation, assigned_to: user, startdate: Time.zone.yesterday)
         end
 
         it "does not allow deleting a user as a provider" do

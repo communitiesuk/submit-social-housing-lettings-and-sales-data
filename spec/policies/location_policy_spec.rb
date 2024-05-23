@@ -44,16 +44,10 @@ RSpec.describe LocationPolicy do
 
     context "with deactivated location" do
       before do
-        location.location_deactivation_periods << create(:location_deactivation_period, deactivation_date: Time.zone.local(2024, 4, 10), location:)
+        location.location_deactivation_periods << create(:location_deactivation_period, deactivation_date: Time.zone.today, location:)
         location.save!
-        Timecop.freeze(Time.utc(2024, 4, 10))
-        log = create(:lettings_log, scheme: location.scheme, location:)
-        log.startdate = Time.zone.local(2022, 10, 10)
+        log = build(:lettings_log, scheme: location.scheme, location:, startdate: Time.zone.today - 2.years)
         log.save!(validate: false)
-      end
-
-      after do
-        Timecop.unfreeze
       end
 
       context "and associated logs in editable collection period" do
