@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_04_08_102550) do
+ActiveRecord::Schema[7.0].define(version: 2024_05_23_153434) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -775,6 +775,24 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_08_102550) do
     t.index ["organisation_id"], name: "index_users_on_organisation_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
+  end
+
+  create_table "validations", force: :cascade do |t|
+    t.string "log_type"
+    t.string "section"
+    t.string "validation_name"
+    t.string "description"
+    t.string "case"
+    t.string "field"
+    t.string "error_message"
+    t.datetime "from"
+    t.datetime "to"
+    t.string "validation_type"
+    t.string "hard_soft"
+    t.boolean "bulk_upload_specific", default: false
+    t.string "other_validated_models"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "versions", force: :cascade do |t|
