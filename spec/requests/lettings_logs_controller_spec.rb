@@ -1451,6 +1451,7 @@ RSpec.describe LettingsLogsController, type: :request do
         it "redirects to the year filter question" do
           expect(response).to redirect_to("/lettings-logs/filters/years?codes_only=false&search=#{search_term}")
           follow_redirect!
+          
           expect(page).to have_content("Which financial year do you want to download data for?")
           expect(page).to have_button("Save changes")
         end
