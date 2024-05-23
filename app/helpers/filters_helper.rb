@@ -251,21 +251,29 @@ private
     return "All" if session_filters["assigned_to"].include?("all")
     return "You" if session_filters["assigned_to"].include?("you")
 
-    user = User.find(session_filters["user"])
-    "#{user.name} (#{user.email})"
+    selected_user_option = assigned_to_filter_options(current_user).find { |x| x.id == session_filters["user"].to_i }
+    return unless selected_user_option
+
+    "#{selected_user_option.name} (#{selected_user_option.hint})"
   end
 
   def formatted_owned_by_filter(session_filters)
     return "All" if params["id"].blank? && (session_filters["owning_organisation"].blank? || session_filters["owning_organisation"]&.include?("all"))
 
-    session_org_id = session_filters["owning_organisation"]
-    Organisation.find(session_org_id || params["id"])&.name
+    session_org_id = session_filters["owning_organisation"] || params["id"]
+    selected_owning_organisation_option = owning_organisation_filter_options(current_user).find { |org| org.id == session_org_id.to_i }
+    return unless selected_owning_organisation_option
+
+    selected_owning_organisation_option&.name
   end
 
   def formatted_managed_by_filter(session_filters)
     return "All" if session_filters["managing_organisation"].blank? || session_filters["managing_organisation"].include?("all")
 
-    Organisation.find(session_filters["managing_organisation"])&.name
+    selected_managing_organisation_option = managing_organisation_filter_options(current_user).find { |org| org.id == session_filters["managing_organisation"].to_i }
+    return unless selected_managing_organisation_option
+
+    selected_managing_organisation_option&.name
   end
 
   def unanswered_filter_value

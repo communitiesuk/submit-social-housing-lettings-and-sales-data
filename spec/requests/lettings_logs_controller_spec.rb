@@ -1441,6 +1441,33 @@ RSpec.describe LettingsLogsController, type: :request do
 
           expect(page).to have_content("Obviously not usual name")
         end
+
+        it "does not display assigned to user from other org" do
+          user_from_different_org = create(:user, name: "User from different org")
+          get("/lettings-logs/csv-download?years[]=#{lettings_log.form.start_date.year}&search=#{search_term}&codes_only=false&assigned_to=specific_user&user=#{user_from_different_org.id}", headers:)
+
+          expect(page).not_to have_content("User from different org")
+        end
+
+        it "does not display non related managing orgs" do
+          managing_agent = create(:organisation, name: "Managing agent")
+          create(:organisation_relationship, child_organisation: managing_agent, parent_organisation: user.organisation)
+          unrelated_organisation = create(:organisation, name: "Unrelated managing org")
+
+          get("/lettings-logs/csv-download?years[]=#{lettings_log.form.start_date.year}&search=#{search_term}&codes_only=false&managing_organisation_select=specific_org&managing_organisation=#{unrelated_organisation.id}", headers:)
+
+          expect(page).not_to have_content("Unrelated managing org")
+        end
+
+        it "does not display non related owning orgs" do
+          managing_agent = create(:organisation, name: "Managing agent")
+          create(:organisation_relationship, child_organisation: managing_agent, parent_organisation: user.organisation)
+
+          unrelated_organisation = create(:organisation, name: "Unrelated owning org")
+          get("/lettings-logs/csv-download?years[]=#{lettings_log.form.start_date.year}&search=#{search_term}&codes_only=false&owning_organisation_select=specific_org&&owning_organisation=#{unrelated_organisation.id}", headers:)
+
+          expect(page).not_to have_content("Unrelated owning org")
+        end
       end
 
       context "when there are no years selected in the filters" do
