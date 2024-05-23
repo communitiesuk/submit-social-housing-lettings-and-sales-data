@@ -1,137 +1,134 @@
 require "rails_helper"
 require "shared/shared_examples_for_derived_fields"
 
-# rubocop:disable RSpec/BeforeAfterAll
-# rubocop:disable RSpec/InstanceVariable
 RSpec.describe LettingsLog, type: :model do
-  before(:context) do
-    owning_organisation = build(:organisation)
-    @log = build(:lettings_log, :startdate_today, owning_organisation:, managing_organisation: owning_organisation)
-  end
-
-  after(:context) do
-    @log.destroy
-  end
+  let(:organisation) { build(:organisation, name: "derived fields org") }
+  let(:user) { build(:user, organisation:) }
+  let(:log) { build(:lettings_log, :startdate_today, assigned_to: user) }
 
   include_examples "shared examples for derived fields", :lettings_log
 
   it "correctly derives incref from net_income_known" do
-    @log.net_income_known = 0
-    expect { @log.set_derived_fields! }.to change(@log, :incref).to 0
+    log.net_income_known = 0
+    expect { log.set_derived_fields! }.to change(log, :incref).to 0
 
-    @log.net_income_known = 1
-    expect { @log.set_derived_fields! }.to change(@log, :incref).to 2
+    log.net_income_known = 1
+    expect { log.set_derived_fields! }.to change(log, :incref).to 2
 
-    @log.net_income_known = 2
-    expect { @log.set_derived_fields! }.to change(@log, :incref).to 1
+    log.net_income_known = 2
+    expect { log.set_derived_fields! }.to change(log, :incref).to 1
   end
 
   it "derives shortfall_known when tshortfall is set" do
-    @log.tshortfall = 10
+    log.tshortfall = 10
 
-    expect { @log.set_derived_fields! }.to change(@log, :tshortfall_known).to 0
+    expect { log.set_derived_fields! }.to change(log, :tshortfall_known).to 0
   end
 
   describe "deriving has_benefits" do
     it "correctly derives when the household receives benefits" do
       benefits_codes = [1, 6, 8, 7]
-      @log.hb = benefits_codes.sample
-      @log.set_derived_fields!
+      log.hb = benefits_codes.sample
 
-      expect(@log.has_benefits).to be 1
+      log.set_derived_fields!
+
+      expect(log.has_benefits).to be 1
     end
 
     it "correctly derives when the household does not receive benefits" do
-      no_benefits_codes = [9, 3, 10, 1, 4]
-      @log.hb = no_benefits_codes.sample
-      @log.set_derived_fields!
+      no_benefits_codes = [9, 3, 10, 4]
+      log.hb = no_benefits_codes.sample
 
-      expect(@log.has_benefits).to be 0
+      log.set_derived_fields!
+
+      expect(log.has_benefits).to be 0
     end
   end
 
   describe "deriving vacant days" do
     it "correctly derives vacdays from startdate and mrcdate" do
       day_count = 8
-      @log.startdate = Time.zone.today
-      @log.mrcdate = Time.zone.today - day_count.days
+      log.startdate = Time.zone.today
+      log.mrcdate = Time.zone.today - day_count.days
 
-      @log.set_derived_fields!
+      log.set_derived_fields!
 
-      expect(@log.vacdays).to be day_count
+      expect(log.vacdays).to be day_count
     end
 
     it "correctly derives vacdays from startdate and voiddate if mrcdate is nil" do
       day_count = 3
-      @log.startdate = Time.zone.today
-      @log.voiddate = Time.zone.today - day_count.days
-      @log.mrcdate = nil
+      log.startdate = Time.zone.today
+      log.voiddate = Time.zone.today - day_count.days
+      log.mrcdate = nil
 
-      @log.set_derived_fields!
+      log.set_derived_fields!
 
-      expect(@log.vacdays).to be day_count
+      expect(log.vacdays).to be day_count
     end
 
     it "does not derive vacdays if voiddate and mrcdate are blank" do
-      @log.startdate = Time.zone.today
-      @log.voiddate = nil
-      @log.mrcdate = nil
+      log.startdate = Time.zone.today
+      log.voiddate = nil
+      log.mrcdate = nil
 
-      @log.set_derived_fields!
+      log.set_derived_fields!
 
-      expect(@log.vacdays).to be nil
+      expect(log.vacdays).to be nil
     end
 
     it "does not derive vacdays if startdate is blank" do
-      @log.startdate = nil
-      @log.voiddate = Time.zone.today
-      @log.mrcdate = Time.zone.today
+      log.startdate = nil
+      log.voiddate = Time.zone.today
+      log.mrcdate = Time.zone.today
 
-      @log.set_derived_fields!
+      log.set_derived_fields!
 
-      expect(@log.vacdays).to be nil
+      expect(log.vacdays).to be nil
     end
   end
 
   describe "deriving household member fields" do
-    before(:context) do
-      @log.relat2 = "X"
-      @log.relat3 = "C"
-      @log.relat4 = "X"
-      @log.relat5 = "C"
-      @log.relat7 = "C"
-      @log.relat8 = "X"
-      @log.age1 = 22
-      @log.age2 = 16
-      @log.age4 = 60
-      @log.age6 = 88
-      @log.age7 = 14
-      @log.age8 = 42
+    before do
+      log.assign_attributes(
+        relat2: "X",
+        relat3: "C",
+        relat4: "X",
+        relat5: "C",
+        relat7: "C",
+        relat8: "X",
+        age1: 22,
+        age2: 16,
+        age4: 60,
+        age6: 88,
+        age7: 14,
+        age8: 42,
+      )
 
-      @log.set_derived_fields!
+      log.set_derived_fields!
     end
 
     it "correctly derives totchild" do
-      expect(@log.totchild).to eq 3
+      expect(log.totchild).to eq 3
     end
 
     it "correctly derives totelder" do
-      expect(@log.totelder).to eq 2
+      expect(log.totelder).to eq 2
     end
 
     it "correctly derives totadult" do
-      expect(@log.totadult).to eq 3
+      expect(log.totadult).to eq 3
     end
 
     it "correctly derives economic status for tenants under 16" do
-      expect(@log.ecstat7).to eq 9
+      expect(log.ecstat7).to eq 9
     end
   end
 
   describe "deriving lettype" do
     context "when the owning organisation is a PRP" do
-      before(:context) do
-        @log.owning_organisation.provider_type = "PRP"
+      before do
+        log.owning_organisation.provider_type = "PRP"
       end
 
       [
@@ -174,17 +171,19 @@ RSpec.describe LettingsLog, type: :model do
       ].each do |test_case|
         context test_case[:context] do
           it "correctly derives lettype" do
-            @log.rent_type = test_case[:rent_type]
-            @log.needstype = test_case[:needstype]
-            expect { @log.set_derived_fields! }.to change(@log, :lettype).to test_case[:expected_lettype]
+            log.assign_attributes(
+              rent_type: test_case[:rent_type],
+              needstype: test_case[:needstype],
+            )
+            expect { log.set_derived_fields! }.to change(log, :lettype).to test_case[:expected_lettype]
           end
         end
       end
     end
 
     context "when the owning organisation is an LA" do
-      before(:context) do
-        @log.owning_organisation.provider_type = "LA"
+      before do
+        log.owning_organisation.provider_type = "LA"
       end
 
       [
@@ -227,9 +226,11 @@ RSpec.describe LettingsLog, type: :model do
       ].each do |test_case|
         context test_case[:context] do
           it "correctly derives lettype" do
-            @log.rent_type = test_case[:rent_type]
-            @log.needstype = test_case[:needstype]
-            expect { @log.set_derived_fields! }.to change(@log, :lettype).to test_case[:expected_lettype]
+            log.assign_attributes(
+              rent_type: test_case[:rent_type],
+              needstype: test_case[:needstype],
+            )
+            expect { log.set_derived_fields! }.to change(log, :lettype).to test_case[:expected_lettype]
           end
         end
       end
@@ -239,27 +240,27 @@ RSpec.describe LettingsLog, type: :model do
   describe "deriving newprop" do
     it "updates newprop correctly when this is the first time the property has been let" do
       first_time_let_codes = [15, 16, 17]
-      @log.rsnvac = first_time_let_codes.sample
+      log.rsnvac = first_time_let_codes.sample
 
-      @log.set_derived_fields!
+      log.set_derived_fields!
 
-      expect(@log.newprop).to eq 1
+      expect(log.newprop).to eq 1
     end
 
     it "updates newprop correctly when this is not the first time the property has been let" do
       not_first_time_let_codes = [14, 9, 13, 12, 8, 18, 20, 5, 19, 6, 10, 11, 21, 22]
-      @log.rsnvac = not_first_time_let_codes.sample
+      log.rsnvac = not_first_time_let_codes.sample
 
-      @log.set_derived_fields!
+      log.set_derived_fields!
 
-      expect(@log.newprop).to eq 2
+      expect(log.newprop).to eq 2
     end
   end
 
   describe "deriving charges based on rent period" do
     context "when rent is paid bi-weekly" do
-      before(:context) do
-        @log.period = 2
+      before do
+        log.period = 2
       end
 
       [
@@ -305,18 +306,18 @@ RSpec.describe LettingsLog, type: :model do
         },
       ].each do |test_case|
         it test_case[:test_title] do
-          test_case[:fields_to_set].each { |field, value| @log[field] = value }
-          @log.set_derived_fields!
+          log.assign_attributes(test_case[:fields_to_set])
+          log.set_derived_fields!
           test_case[:expected_values].each do |field, expected_value|
-            expect(@log[field]).to eq expected_value
+            expect(log[field]).to eq expected_value
           end
         end
       end
     end
 
     context "when rent is paid every 4 weeks" do
-      before(:context) do
-        @log.period = 3
+      before do
+        log.period = 3
       end
 
       [
@@ -362,18 +363,18 @@ RSpec.describe LettingsLog, type: :model do
         },
       ].each do |test_case|
         it test_case[:test_title] do
-          test_case[:fields_to_set].each { |field, value| @log[field] = value }
-          @log.set_derived_fields!
+          log.assign_attributes(test_case[:fields_to_set])
+          log.set_derived_fields!
           test_case[:expected_values].each do |field, expected_value|
-            expect(@log[field]).to eq expected_value
+            expect(log[field]).to eq expected_value
           end
         end
       end
     end
 
     context "when rent is paid every calendar month" do
-      before(:context) do
-        @log.period = 4
+      before do
+        log.period = 4
       end
 
       [
@@ -419,18 +420,18 @@ RSpec.describe LettingsLog, type: :model do
         },
       ].each do |test_case|
         it test_case[:test_title] do
-          test_case[:fields_to_set].each { |field, value| @log[field] = value }
-          @log.set_derived_fields!
+          log.assign_attributes(test_case[:fields_to_set])
+          log.set_derived_fields!
           test_case[:expected_values].each do |field, expected_value|
-            expect(@log[field]).to eq expected_value
+            expect(log[field]).to eq expected_value
           end
         end
       end
     end
 
     context "when rent is paid weekly for 50 weeks" do
-      before(:context) do
-        @log.period = 5
+      before do
+        log.period = 5
       end
 
       [
@@ -476,18 +477,18 @@ RSpec.describe LettingsLog, type: :model do
         },
       ].each do |test_case|
         it test_case[:test_title] do
-          test_case[:fields_to_set].each { |field, value| @log[field] = value }
-          @log.set_derived_fields!
+          log.assign_attributes(test_case[:fields_to_set])
+          log.set_derived_fields!
           test_case[:expected_values].each do |field, expected_value|
-            expect(@log[field]).to eq expected_value
+            expect(log[field]).to eq expected_value
           end
         end
       end
     end
 
     context "when rent is paid weekly for 49 weeks" do
-      before(:context) do
-        @log.period = 6
+      before do
+        log.period = 6
       end
 
       [
@@ -533,18 +534,18 @@ RSpec.describe LettingsLog, type: :model do
         },
       ].each do |test_case|
         it test_case[:test_title] do
-          test_case[:fields_to_set].each { |field, value| @log[field] = value }
-          @log.set_derived_fields!
+          log.assign_attributes(test_case[:fields_to_set])
+          log.set_derived_fields!
           test_case[:expected_values].each do |field, expected_value|
-            expect(@log[field]).to eq expected_value
+            expect(log[field]).to eq expected_value
           end
         end
       end
     end
 
     context "when rent is paid weekly for 48 weeks" do
-      before(:context) do
-        @log.period = 7
+      before do
+        log.period = 7
       end
 
       [
@@ -590,18 +591,18 @@ RSpec.describe LettingsLog, type: :model do
         },
       ].each do |test_case|
         it test_case[:test_title] do
-          test_case[:fields_to_set].each { |field, value| @log[field] = value }
-          @log.set_derived_fields!
+          log.assign_attributes(test_case[:fields_to_set])
+          log.set_derived_fields!
           test_case[:expected_values].each do |field, expected_value|
-            expect(@log[field]).to eq expected_value
+            expect(log[field]).to eq expected_value
           end
         end
       end
     end
 
     context "when rent is paid weekly for 47 weeks" do
-      before(:context) do
-        @log.period = 8
+      before do
+        log.period = 8
       end
 
       [
@@ -647,18 +648,18 @@ RSpec.describe LettingsLog, type: :model do
         },
       ].each do |test_case|
         it test_case[:test_title] do
-          test_case[:fields_to_set].each { |field, value| @log[field] = value }
-          @log.set_derived_fields!
+          log.assign_attributes(test_case[:fields_to_set])
+          log.set_derived_fields!
           test_case[:expected_values].each do |field, expected_value|
-            expect(@log[field]).to eq expected_value
+            expect(log[field]).to eq expected_value
           end
         end
       end
     end
 
     context "when rent is paid weekly for 46 weeks" do
-      before(:context) do
-        @log.period = 9
+      before do
+        log.period = 9
       end
 
       [
@@ -704,18 +705,18 @@ RSpec.describe LettingsLog, type: :model do
         },
       ].each do |test_case|
         it test_case[:test_title] do
-          test_case[:fields_to_set].each { |field, value| @log[field] = value }
-          @log.set_derived_fields!
+          log.assign_attributes(test_case[:fields_to_set])
+          log.set_derived_fields!
           test_case[:expected_values].each do |field, expected_value|
-            expect(@log[field]).to eq expected_value
+            expect(log[field]).to eq expected_value
           end
         end
       end
     end
 
     context "when rent is paid weekly for 52 weeks" do
-      before(:context) do
-        @log.period = 1
+      before do
+        log.period = 1
       end
 
       [
@@ -761,18 +762,18 @@ RSpec.describe LettingsLog, type: :model do
         },
       ].each do |test_case|
         it test_case[:test_title] do
-          test_case[:fields_to_set].each { |field, value| @log[field] = value }
-          @log.set_derived_fields!
+          log.assign_attributes(test_case[:fields_to_set])
+          log.set_derived_fields!
           test_case[:expected_values].each do |field, expected_value|
-            expect(@log[field]).to eq expected_value
+            expect(log[field]).to eq expected_value
           end
         end
       end
     end
 
     context "when rent is paid weekly for 53 weeks" do
-      before(:context) do
-        @log.period = 10
+      before do
+        log.period = 10
       end
 
       [
@@ -818,10 +819,10 @@ RSpec.describe LettingsLog, type: :model do
         },
       ].each do |test_case|
         it test_case[:test_title] do
-          test_case[:fields_to_set].each { |field, value| @log[field] = value }
-          @log.set_derived_fields!
+          log.assign_attributes(test_case[:fields_to_set])
+          log.set_derived_fields!
           test_case[:expected_values].each do |field, expected_value|
-            expect(@log[field]).to eq expected_value
+            expect(log[field]).to eq expected_value
           end
         end
       end
@@ -831,54 +832,46 @@ RSpec.describe LettingsLog, type: :model do
   describe "deriving charges" do
     describe "deriving the total charge" do
       it "sums all the charges" do
-        brent_value = 5.77
-        scharge_value = 10.01
-        pscharge_value = 3
-        supcharg_value = 12.2
-        @log.brent = brent_value
-        @log.scharge = scharge_value
-        @log.pscharge = pscharge_value
-        @log.supcharg = supcharg_value
+        brent = 5.77
+        scharge = 10.01
+        pscharge = 3
+        supcharg = 12.2
+        log.assign_attributes(brent:, scharge:, pscharge:, supcharg:)
 
-        @log.set_derived_fields!
+        log.set_derived_fields!
 
-        expect(@log.tcharge).to eq(brent_value + scharge_value + pscharge_value + supcharg_value)
+        expect(log.tcharge).to eq(brent + scharge + pscharge + supcharg)
       end
 
       it "takes nil values to be zero" do
-        brent_value = 5.77
-        scharge_value = nil
-        pscharge_value = nil
-        supcharg_value = 12.2
-        @log.brent = brent_value
-        @log.scharge = scharge_value
-        @log.pscharge = pscharge_value
-        @log.supcharg = supcharg_value
+        brent = 5.77
+        scharge = nil
+        pscharge = nil
+        supcharg = 12.2
+        log.assign_attributes(brent:, scharge:, pscharge:, supcharg:)
 
-        @log.set_derived_fields!
+        log.set_derived_fields!
 
-        expect(@log.tcharge).to eq(brent_value + supcharg_value)
+        expect(log.tcharge).to eq(brent + supcharg)
       end
     end
 
     it "when any charge field is set all blank charge fields are set to 0, non-blank fields are left the same" do
-      %i[brent scharge pscharge supcharg].each { |field| @log[field] = nil }
-
-      @log.set_derived_fields!
+      log.set_derived_fields!
       %i[brent scharge pscharge supcharg].each do |field|
-        expect(@log[field]).to be nil
+        expect(log[field]).to be nil
       end
 
       brent_val = 111
-      @log.brent = brent_val
-      @log.set_derived_fields!
+      log.brent = brent_val
+      log.set_derived_fields!
       %i[scharge pscharge supcharg].each do |field|
-        expect(@log[field]).to eq 0
+        expect(log[field]).to eq 0
       end
 
-      @log.scharge = 22
-      @log.set_derived_fields!
-      expect(@log.brent).to eq brent_val
+      log.scharge = 22
+      log.set_derived_fields!
+      expect(log.brent).to eq brent_val
     end
   end
 
@@ -886,64 +879,60 @@ RSpec.describe LettingsLog, type: :model do
     it "derives refused when any age field is refused or details field is unknown" do
       age_and_details_fields = %i[age1_known age2_known age3_known age4_known age5_known age6_known age7_known age8_known details_known_2 details_known_3 details_known_4 details_known_5 details_known_6 details_known_7 details_known_8]
 
-      @log[age_and_details_fields.sample] = 1
-      @log.set_derived_fields!
+      log[age_and_details_fields.sample] = 1
+      log.set_derived_fields!
 
-      expect(@log.refused).to eq 1
+      expect(log.refused).to eq 1
     end
 
     it "derives refused when any sex or relationship field is refused" do
       age_fields = %i[sex1 sex2 sex3 sex4 sex5 sex6 sex7 sex8 relat2 relat3 relat4 relat5 relat6 relat7 relat8]
 
-      @log[age_fields.sample] = "R"
-      @log.set_derived_fields!
+      log[age_fields.sample] = "R"
+      log.set_derived_fields!
 
-      expect(@log.refused).to eq 1
+      expect(log.refused).to eq 1
     end
 
     it "derives refused when any economic status field is refused" do
       economic_status_fields = %i[ecstat1 ecstat2 ecstat3 ecstat4 ecstat5 ecstat6 ecstat7 ecstat8]
 
-      @log[economic_status_fields.sample] = 10
-      @log.set_derived_fields!
+      log[economic_status_fields.sample] = 10
+      log.set_derived_fields!
 
-      expect(@log.refused).to eq 1
+      expect(log.refused).to eq 1
     end
   end
 
   describe "deriving renttype from rent_type" do
-    before do
-      @log.renttype = nil
-    end
-
     it "when rent_type is Social Rent derives renttype as Social Rent" do
-      @log.rent_type = 0
-      expect { @log.set_derived_fields! }.to change(@log, :renttype).to 1
+      log.rent_type = 0
+      expect { log.set_derived_fields! }.to change(log, :renttype).to 1
     end
 
     it "when rent_type is Affordable Rent derives renttype as Affordable Rent" do
-      @log.rent_type = 1
-      expect { @log.set_derived_fields! }.to change(@log, :renttype).to 2
+      log.rent_type = 1
+      expect { log.set_derived_fields! }.to change(log, :renttype).to 2
     end
 
     it "when rent_type is London Affordable Rent derives renttype as Affordable Rent" do
-      @log.rent_type = 2
-      expect { @log.set_derived_fields! }.to change(@log, :renttype).to 2
+      log.rent_type = 2
+      expect { log.set_derived_fields! }.to change(log, :renttype).to 2
     end
 
     it "when rent_type is Rent to Buy derives renttype as Intermediate Rent" do
-      @log.rent_type = 3
-      expect { @log.set_derived_fields! }.to change(@log, :renttype).to 3
+      log.rent_type = 3
+      expect { log.set_derived_fields! }.to change(log, :renttype).to 3
     end
 
     it "when rent_type is London Living Rent derives renttype as Intermediate Rent" do
-      @log.rent_type = 4
-      expect { @log.set_derived_fields! }.to change(@log, :renttype).to 3
+      log.rent_type = 4
+      expect { log.set_derived_fields! }.to change(log, :renttype).to 3
     end
 
     it "when rent_type is Other intermediate rent product derives renttype as Intermediate Rent" do
-      @log.rent_type = 5
-      expect { @log.set_derived_fields! }.to change(@log, :renttype).to 3
+      log.rent_type = 5
+      expect { log.set_derived_fields! }.to change(log, :renttype).to 3
     end
   end
 
@@ -1173,6 +1162,3 @@ RSpec.describe LettingsLog, type: :model do
     end
   end
 end
-
-# rubocop:enable RSpec/BeforeAfterAll
-# rubocop:enable RSpec/InstanceVariable
