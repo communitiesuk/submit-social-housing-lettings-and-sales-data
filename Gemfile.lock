@@ -160,6 +160,7 @@ GEM
     erubi (1.12.0)
     et-orbi (1.2.7)
       tzinfo
+    event_stream_parser (1.0.0)
     excon (0.109.0)
     factory_bot (6.4.6)
       activesupport (>= 5.0.0)
@@ -168,6 +169,12 @@ GEM
       railties (>= 5.0.0)
     faker (3.2.3)
       i18n (>= 1.8.11, < 2)
+    faraday (2.9.0)
+      faraday-net_http (>= 2.0, < 3.2)
+    faraday-multipart (1.0.4)
+      multipart-post (~> 2)
+    faraday-net_http (3.1.0)
+      net-http
     ffi (1.16.3)
     fugit (1.10.0)
       et-orbi (~> 1, >= 1.2.7)
@@ -218,6 +225,9 @@ GEM
     mini_mime (1.1.5)
     minitest (5.23.1)
     msgpack (1.7.2)
+    multipart-post (2.4.1)
+    net-http (0.4.1)
+      uri
     net-imap (0.4.12)
       date
       net-protocol
@@ -378,6 +388,10 @@ GEM
       rubocop (~> 1.0)
     rubocop-rspec (2.7.0)
       rubocop (~> 1.19)
+    ruby-openai (7.0.1)
+      event_stream_parser (>= 0.3.0, < 2.0.0)
+      faraday (>= 1)
+      faraday-multipart (>= 1)
     ruby-progressbar (1.13.0)
     ruby2_keywords (0.0.5)
     rubyzip (2.3.2)
@@ -419,6 +433,7 @@ GEM
     unicode-display_width (2.5.0)
     unread (0.13.1)
       activerecord (>= 6.1)
+    uri (0.13.0)
     view_component (3.10.0)
       activesupport (>= 5.2.0, < 8.0)
       concurrent-ruby (~> 1.0)
@@ -495,6 +510,7 @@ DEPENDENCIES
   rubocop-govuk (= 4.3.0)
   rubocop-performance
   rubocop-rails
+  ruby-openai
   selenium-webdriver
   sentry-rails
   sentry-ruby

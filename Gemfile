@@ -65,6 +65,7 @@ gem "auto_strip_attributes"
 gem "sidekiq"
 gem "sidekiq-cron"
 gem "unread"
+gem "ruby-openai"
 
 group :development, :test do
   # Check gems for known vulnerabilities
