@@ -9,7 +9,7 @@ RSpec.describe Location, type: :model do
     let(:location) { FactoryBot.build(:location) }
 
     before do
-      stub_request(:get, /api.postcodes.io/)
+      stub_request(:get, /api\.postcodes\.io/)
         .to_return(status: 200, body: "{\"status\":200,\"result\":{\"admin_district\":\"Manchester\",\"codes\":{\"admin_district\": \"E08000003\"}}}", headers: {})
 
       stub_request(:get, /api.postcodes.io\/postcodes\/CA101AA/)

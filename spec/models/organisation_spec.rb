@@ -243,7 +243,6 @@ RSpec.describe Organisation, type: :model do
 
   describe "scopes" do
     before do
-      described_class.destroy_all
       create(:organisation, name: "Joe Bloggs", active: false)
       create(:organisation, name: "Tom Smith", active: true)
     end
