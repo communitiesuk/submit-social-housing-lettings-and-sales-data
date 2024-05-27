@@ -86,7 +86,7 @@ RSpec.describe CheckAnswersSummaryListCardComponent, type: :component do
   context "when in 23/24 collection" do
     context "when given a set of questions" do
       let(:user) { create(:user) }
-      let(:log) { create(:lettings_log, :completed, age2: 99, startdate: Time.zone.local(2023, 5, 1)) }
+      let(:log) { build(:lettings_log, :completed, age2: 99, startdate: Time.zone.local(2023, 5, 1)) }
       let(:subsection_id) { "household_characteristics" }
       let(:subsection) { log.form.get_subsection(subsection_id) }
       let(:questions) { subsection.applicable_questions(log) }
@@ -100,6 +100,7 @@ RSpec.describe CheckAnswersSummaryListCardComponent, type: :component do
       end
 
       it "renders a summary list card including question numbers for the answers to those questions" do
+        allow(log).to receive(:id).and_return 1
         expect(rendered).to have_content(questions.first.answer_label(log))
         expect(rendered).to have_content("Q32 - Lead tenant’s age")
       end
