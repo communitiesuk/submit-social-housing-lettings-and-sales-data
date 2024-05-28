@@ -465,4 +465,43 @@ namespace :generate_documentation do
       end
     end
   end
+
+  desc "Generate documentation for lettings numeric validations"
+  task add_numeric_lettings_validations: :environment do
+    form = FormHandler.instance.forms["current_lettings"]
+
+    form.numeric_questions.each do |question|
+      next unless question.min || question.max
+
+      field = question.id
+      min = [question.prefix, question.min].join("") if question.min
+      max = [question.prefix, question.max].join("") if question.max
+
+      error_message = I18n.t("validations.numeric.above_min", field:, min:)
+      validation_name = "minimum"
+      validation_description = "Field value is lower than the minimum value"
+
+      if min && max
+        validation_name = "range"
+        error_message = I18n.t("validations.numeric.within_range", field:, min:, max:)
+        validation_description = "Field value is lower than the minimum value or higher than the maximum value"
+      end
+
+      if Validation.where(validation_name:, field:).exists?
+
+        Rails.logger.info("Validation #{validation_name} already exists for #{field}")
+        next
+      end
+
+      Validation.create!(log_type: "lettings",
+                         validation_name:,
+                         description: validation_description,
+                         field:,
+                         error_message:,
+                         case: validation_description,
+                         section: form.get_question(field, nil)&.subsection&.id,
+                         validation_type: validation_name,
+                         hard_soft: "hard")
+    end
+  end
 end
