@@ -25,7 +25,7 @@ namespace :generate_documentation do
     all_helper_methods = all_methods - validation_methods
 
     validation_methods.each do |meth|
-      if Validation.where(validation_name: meth.to_s).exists?
+      if Validation.where(validation_name: meth.to_s, bulk_upload_specific: false).exists?
         Rails.logger.info("Validation #{meth} already exists")
         next
       end
@@ -217,14 +217,6 @@ namespace :generate_documentation do
                         type: :string,
                         description: "A human-readbale description of the validation",
                       },
-                      from: {
-                        type: :number,
-                        description: "the year from which the validation starts. If this validation runs for logs with a startdate after a certain year, specify that year here, only if it is not specified in the validation method, leave this field blank",
-                      },
-                      to: {
-                        type: :number,
-                        description: "the year in which the validation ends. If this validation runs for logs with a startdate before a certain year, specify that year here, only if it is not specified in the validation method, leave this field blank",
-                      },
                       validation_type: {
                         type: :string,
                         enum: %w[presence format minimum maximum range inclusion length other],
@@ -319,6 +311,156 @@ namespace :generate_documentation do
                              other_validated_models: result["other_validated_models"])
 
           Rails.logger.info("******** described #{validation_depends_on_hash.keys.first} for #{page_the_validation_applied_to.questions.first.id} ********")
+        end
+      end
+    end
+  end
+
+  desc "Generate documentation for hard bu lettings validations"
+  task describe_bu_lettings_validations: :environment do
+    client = OpenAI::Client.new(access_token: ENV["OPENAI_API_KEY"])
+    en_yml = File.read("./config/locales/en.yml")
+
+    [[FormHandler.instance.forms[FormHandler.instance.form_name_from_start_year(2023, "lettings")], BulkUpload::Lettings::Year2023::RowParser],
+     [FormHandler.instance.forms[FormHandler.instance.form_name_from_start_year(2024, "lettings")], BulkUpload::Lettings::Year2024::RowParser]].each do |form, row_parser_class|
+      validation_methods = row_parser_class.private_instance_methods.select { |method| method.starts_with?("validate_") }
+
+      all_helper_methods = row_parser_class.private_instance_methods(false) +  row_parser_class.instance_methods(false) - validation_methods
+
+      field_mapping_for_errors = row_parser_class.new.send("field_mapping_for_errors")
+      validation_methods.each do |meth|
+        if Validation.where(validation_name: meth.to_s, bulk_upload_specific: true, from: form.start_date).exists?
+          Rails.logger.info("Validation #{meth} already exists for #{form.start_date.year}")
+          next
+        end
+
+        validation_source = row_parser_class.instance_method(meth).source
+        helper_methods_source = all_helper_methods.map { |helper_method|
+          if validation_source.include?(helper_method.to_s)
+            row_parser_class.instance_method(helper_method).source
+          end
+        }.compact.join("\n")
+
+        begin
+          response = client.chat(
+            parameters: {
+              model: "gpt-3.5-turbo",
+              messages: [
+                {
+                  role: "system",
+                  content: "You write amazing documentation, as a senior technical writer. Your audience is non-technical team members. You have been asked to document the validations in a Rails application. The application collects social housing data for different collection years. There are validations on different fields, sometimes the validations depend on several fields.
+      Describe what given validation does, be very explicit about all the different validation cases (be specific about the years for which these validations would run, which values would be invalid or which values are required, look at private helper methods to understand what is being checked in more detail). Quote the error messages that would be added in each case exactly. Here is the translation file for validation messages: #{en_yml}.
+      You should create `create_documentation_for_given_validation` method. Call it once, and include the documentation for given validation.",
+                },
+                {
+                  role: "user",
+                  content: "Describe #{meth} validation in detail. Here is the content of the validation:
+
+      #{validation_source}
+      Look at these helper methods where needed to understand what is being checked in more detail: #{helper_methods_source}",
+                },
+              ],
+              tools: [
+                {
+                  type: "function",
+                  function: {
+                    name: "create_documentation_for_given_validation",
+                    description: "Use this function to save the complete documentation, covering given validation in the provided code.",
+                    parameters: {
+                      type: :object,
+                      properties: {
+                        description: {
+                          type: :string,
+                          description: "A human-readbale description of the validation",
+                        },
+                        cases: {
+                          type: :array,
+                          description: "A list of cases that this validation triggers on, each with specific details",
+                          items: {
+                            type: :object,
+                            description: "Information about a single case that triggers this validation",
+                            properties: {
+                              case_description: {
+                                type: :string,
+                                description: "A human-readable description of the case in which this validation triggers",
+                              },
+                              errors: {
+                                type: :array,
+                                description: "The error messages that would be added if this case triggers the validation",
+                                items: {
+                                  type: :object,
+                                  description: "Information about a single error message for a specific field",
+                                  properties: {
+                                    error_message: {
+                                      type: :string,
+                                      description: "A single error message",
+                                    },
+                                    field: {
+                                      type: :string,
+                                      description: "The field that the error message would be added to.",
+                                    },
+                                  },
+                                  required: %w[error_message field],
+                                },
+                              },
+                              validation_type: {
+                                type: :string,
+                                enum: %w[presence format minimum maximum range inclusion length other],
+                                description: "The type of validation that is being performed. This should be one of the following: presence (validates that the question is answered), format (validates that the answer format is valid), minimum (validates that entered value is more than minimum allowed value), maximum (validates that entered value is less than maximum allowed value), range (values must be between two values), inclusion (validates that the values that are not allowed arent selected), length (validates the length of the answer), other",
+                              },
+                              other_validated_models: {
+                                type: :string,
+                                description: "Comma separated list of any other models (other than log) that were used in this validation. These are possible models (only add a value to this field if other validation models are one of these models): User, Organisation, Scheme, Location, Organisation_relationship, LaRentRange. Only leave this blank if no other models were used in this validation.",
+                              },
+                            },
+                            required: %w[case_description errors validation_type other_validated_models],
+                          },
+                        },
+                      },
+                      required: %w[description cases],
+                    },
+                  },
+                },
+              ],
+              tool_choice: { type: "function", function: { name: "create_documentation_for_given_validation" } },
+            },
+          )
+        rescue StandardError => e
+          Rails.logger.error("Failed to describe #{meth}")
+          Rails.logger.error("Error #{e.message}")
+          sleep(5)
+          next
+        end
+
+        begin
+          result = JSON.parse(response.dig("choices", 0, "message", "tool_calls", 0, "function", "arguments"))
+
+          result["cases"].each do |case_info|
+            case_info["errors"].each do |error|
+              error_fields = field_mapping_for_errors.select { |_key, values| values.include?(error["field"].to_sym) }.keys
+              error_fields = [error["field"]] if error_fields.empty?
+              error_fields.each do |error_field|
+                Validation.create!(log_type: "lettings",
+                                   validation_name: meth.to_s,
+                                   description: result["description"],
+                                   field: error_field,
+                                   error_message: error["error_message"],
+                                   case: case_info["case_description"],
+                                   section: form.get_question(error_field, nil)&.subsection&.id,
+                                   from: form.start_date,
+                                   to: form.start_date + 1.year,
+                                   validation_type: case_info["validation_type"],
+                                   hard_soft: "hard",
+                                   other_validated_models: case_info["other_validated_models"],
+                                   bulk_upload_specific: true)
+              end
+            end
+          end
+
+          Rails.logger.info("******** described #{meth} ********")
+        rescue StandardError => e
+          Rails.logger.error("Failed to save #{meth}")
+          Rails.logger.error("Error #{e.message}")
         end
       end
     end
