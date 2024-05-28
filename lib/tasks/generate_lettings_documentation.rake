@@ -1,4 +1,4 @@
-namespace :generate_documentation do
+namespace :generate_lettings_documentation do
   desc "Generate documentation for hard lettings validations"
   task describe_lettings_validations: :environment do
     client = OpenAI::Client.new(access_token: ENV["OPENAI_API_KEY"])

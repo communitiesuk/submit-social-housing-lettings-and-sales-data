@@ -1,9 +1,9 @@
 require "rails_helper"
 require "rake"
 
-RSpec.describe "generate_documentation" do
+RSpec.describe "generate_lettings_documentation" do
   describe ":describe_lettings_validations", type: :task do
-    subject(:task) { Rake::Task["generate_documentation:describe_lettings_validations"] }
+    subject(:task) { Rake::Task["generate_lettings_documentation:describe_lettings_validations"] }
 
     let(:client) { instance_double(OpenAI::Client) }
     let(:response) do
@@ -12,7 +12,7 @@ RSpec.describe "generate_documentation" do
     end
 
     before do
-      Rake.application.rake_require("tasks/generate_documentation")
+      Rake.application.rake_require("tasks/generate_lettings_documentation")
       Rake::Task.define_task(:environment)
       task.reenable
       allow(OpenAI::Client).to receive(:new).and_return(client)
@@ -70,7 +70,7 @@ RSpec.describe "generate_documentation" do
   end
 
   describe ":describe_soft_lettings_validations", type: :task do
-    subject(:task) { Rake::Task["generate_documentation:describe_soft_lettings_validations"] }
+    subject(:task) { Rake::Task["generate_lettings_documentation:describe_soft_lettings_validations"] }
 
     let(:client) { instance_double(OpenAI::Client) }
     let(:response) do
@@ -79,7 +79,7 @@ RSpec.describe "generate_documentation" do
     end
 
     before do
-      Rake.application.rake_require("tasks/generate_documentation")
+      Rake.application.rake_require("tasks/generate_lettings_documentation")
       Rake::Task.define_task(:environment)
       task.reenable
       allow(OpenAI::Client).to receive(:new).and_return(client)
@@ -116,7 +116,7 @@ RSpec.describe "generate_documentation" do
   end
 
   describe ":describe_bu_lettings_validations", type: :task do
-    subject(:task) { Rake::Task["generate_documentation:describe_bu_lettings_validations"] }
+    subject(:task) { Rake::Task["generate_lettings_documentation:describe_bu_lettings_validations"] }
 
     let(:client) { instance_double(OpenAI::Client) }
     let(:response) do
@@ -125,7 +125,7 @@ RSpec.describe "generate_documentation" do
     end
 
     before do
-      Rake.application.rake_require("tasks/generate_documentation")
+      Rake.application.rake_require("tasks/generate_lettings_documentation")
       Rake::Task.define_task(:environment)
       task.reenable
       allow(OpenAI::Client).to receive(:new).and_return(client)
@@ -183,10 +183,10 @@ RSpec.describe "generate_documentation" do
   end
 
   describe ":add_numeric_lettings_validations", type: :task do
-    subject(:task) { Rake::Task["generate_documentation:add_numeric_lettings_validations"] }
+    subject(:task) { Rake::Task["generate_lettings_documentation:add_numeric_lettings_validations"] }
 
     before do
-      Rake.application.rake_require("tasks/generate_documentation")
+      Rake.application.rake_require("tasks/generate_lettings_documentation")
       Rake::Task.define_task(:environment)
       task.reenable
     end
