@@ -62,10 +62,10 @@ gem "possessive"
 # Strip whitespace from active record attributes
 gem "auto_strip_attributes"
 # Use sidekiq for background processing
+gem "ruby-openai"
 gem "sidekiq"
 gem "sidekiq-cron"
 gem "unread"
-gem "ruby-openai"
 
 group :development, :test do
   # Check gems for known vulnerabilities
