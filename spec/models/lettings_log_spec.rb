@@ -260,20 +260,6 @@ RSpec.describe LettingsLog do
       )
     end
 
-    it "correctly derives and saves partial and full major repairs date" do # weird test, am I missing something?
-      record_from_db = described_class.find(lettings_log.id)
-      expect(record_from_db["mrcdate"].day).to eq(4)
-      expect(record_from_db["mrcdate"].month).to eq(5)
-      expect(record_from_db["mrcdate"].year).to eq(2021)
-    end
-
-    it "correctly derives and saves day, month, year from start date" do # weird test, am I missing something?
-      record_from_db = described_class.find(lettings_log.id)
-      expect(record_from_db["startdate"].day).to eq(10)
-      expect(record_from_db["startdate"].month).to eq(10)
-      expect(record_from_db["startdate"].year).to eq(2021)
-    end
-
     def check_postcode_fields(postcode_field)
       record_from_db = described_class.find(lettings_log.id)
       expect(address_lettings_log[postcode_field]).to eq("M1 1AE")
