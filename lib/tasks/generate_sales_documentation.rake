@@ -69,13 +69,13 @@ namespace :generate_sales_documentation do
         validation_description = "Field value is lower than the minimum value or higher than the maximum value"
       end
 
-      if Validation.where(validation_name:, field:).exists?
+      if LogValidation.where(validation_name:, field:).exists?
 
         Rails.logger.info("Validation #{validation_name} already exists for #{field}")
         next
       end
 
-      Validation.create!(log_type: "sales",
+      LogValidation.create!(log_type: "sales",
                          validation_name:,
                          description: validation_description,
                          field:,

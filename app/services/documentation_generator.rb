@@ -13,7 +13,7 @@ class DocumentationGenerator
     form = FormHandler.instance.forms["current_#{log_type}"]
 
     all_validation_methods.each do |meth|
-      if LogValidation.where(validation_name: meth.to_s, bulk_upload_specific: false).exists?
+      if LogValidation.where(validation_name: meth.to_s, bulk_upload_specific: false, log_type:).exists?
         Rails.logger.info("Validation #{meth} already exists")
         next
       end
@@ -41,7 +41,7 @@ class DocumentationGenerator
 
   def describe_bu_validations(client, form, row_parser_class, all_validation_methods, all_helper_methods, field_mapping_for_errors, log_type)
     all_validation_methods.each do |meth|
-      if LogValidation.where(validation_name: meth.to_s, bulk_upload_specific: true, from: form.start_date).exists?
+      if LogValidation.where(validation_name: meth.to_s, bulk_upload_specific: true, from: form.start_date, log_type:).exists?
         Rails.logger.info("Validation #{meth} already exists for #{form.start_date.year}")
         next
       end
@@ -265,17 +265,17 @@ Look at these helper methods where needed to understand what is being checked in
     result["cases"].each do |case_info|
       case_info["errors"].each do |error|
         LogValidation.create!(log_type:,
-                           validation_name: meth.to_s,
-                           description: result["description"],
-                           field: error["field"],
-                           error_message: error["error_message"],
-                           case: case_info["case_description"],
-                           section: form.get_question(error["field"], nil)&.subsection&.id,
-                           from: case_info["from"] || "",
-                           to: case_info["to"] || "",
-                           validation_type: case_info["validation_type"],
-                           hard_soft: "hard",
-                           other_validated_models: case_info["other_validated_models"])
+                              validation_name: meth.to_s,
+                              description: result["description"],
+                              field: error["field"],
+                              error_message: error["error_message"],
+                              case: case_info["case_description"],
+                              section: form.get_question(error["field"], nil)&.subsection&.id,
+                              from: case_info["from"] || "",
+                              to: case_info["to"] || "",
+                              validation_type: case_info["validation_type"],
+                              hard_soft: "hard",
+                              other_validated_models: case_info["other_validated_models"])
       end
     end
 
@@ -289,18 +289,18 @@ Look at these helper methods where needed to understand what is being checked in
         error_fields = [error["field"]] if error_fields.empty?
         error_fields.each do |error_field|
           LogValidation.create!(log_type:,
-                             validation_name: meth.to_s,
-                             description: result["description"],
-                             field: error_field,
-                             error_message: error["error_message"],
-                             case: case_info["case_description"],
-                             section: form.get_question(error_field, nil)&.subsection&.id,
-                             from: form.start_date,
-                             to: form.start_date + 1.year,
-                             validation_type: case_info["validation_type"],
-                             hard_soft: "hard",
-                             other_validated_models: case_info["other_validated_models"],
-                             bulk_upload_specific: true)
+                                validation_name: meth.to_s,
+                                description: result["description"],
+                                field: error_field,
+                                error_message: error["error_message"],
+                                case: case_info["case_description"],
+                                section: form.get_question(error_field, nil)&.subsection&.id,
+                                from: form.start_date,
+                                to: form.start_date + 1.year,
+                                validation_type: case_info["validation_type"],
+                                hard_soft: "hard",
+                                other_validated_models: case_info["other_validated_models"],
+                                bulk_upload_specific: true)
         end
       end
     end
@@ -333,7 +333,7 @@ Look at these helper methods where needed to understand what is being checked in
       return
     end
 
-    if LogValidation.where(validation_name: validation_depends_on_hash.keys.first, field: page_the_validation_applied_to.questions.first.id, from: form.start_date).exists?
+    if LogValidation.where(validation_name: validation_depends_on_hash.keys.first, field: page_the_validation_applied_to.questions.first.id, from: form.start_date, log_type:).exists?
       Rails.logger.info("Validation #{validation_depends_on_hash.keys.first} already exists for #{page_the_validation_applied_to.questions.first.id} for start year #{form.start_date.year}")
       return
     end
@@ -354,17 +354,17 @@ Look at these helper methods where needed to understand what is being checked in
 
     case_info = page.depends_on.first.values.first ? "Provided values fulfill the description" : "Provided values do not fulfill the description"
     LogValidation.create!(log_type:,
-                       validation_name: validation_depends_on_hash.keys.first.to_s,
-                       description: result["description"],
-                       field: page_the_validation_applied_to.questions.first.id,
-                       error_message:,
-                       case: case_info,
-                       section: form.get_question(page_the_validation_applied_to.questions.first.id, nil)&.subsection&.id,
-                       from: form.start_date,
-                       to: form.start_date + 1.year,
-                       validation_type: result["validation_type"],
-                       hard_soft: "soft",
-                       other_validated_models: result["other_validated_models"])
+                          validation_name: validation_depends_on_hash.keys.first.to_s,
+                          description: result["description"],
+                          field: page_the_validation_applied_to.questions.first.id,
+                          error_message:,
+                          case: case_info,
+                          section: form.get_question(page_the_validation_applied_to.questions.first.id, nil)&.subsection&.id,
+                          from: form.start_date,
+                          to: form.start_date + 1.year,
+                          validation_type: result["validation_type"],
+                          hard_soft: "soft",
+                          other_validated_models: result["other_validated_models"])
 
     Rails.logger.info("******** described #{validation_depends_on_hash.keys.first} for #{page_the_validation_applied_to.questions.first.id} ********")
   end

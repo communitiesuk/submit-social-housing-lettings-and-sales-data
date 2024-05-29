@@ -77,14 +77,14 @@ namespace :generate_lettings_documentation do
       end
 
       LogValidation.create!(log_type: "lettings",
-                         validation_name:,
-                         description: validation_description,
-                         field:,
-                         error_message:,
-                         case: validation_description,
-                         section: form.get_question(field, nil)&.subsection&.id,
-                         validation_type: validation_name,
-                         hard_soft: "hard")
+                            validation_name:,
+                            description: validation_description,
+                            field:,
+                            error_message:,
+                            case: validation_description,
+                            section: form.get_question(field, nil)&.subsection&.id,
+                            validation_type: validation_name,
+                            hard_soft: "hard")
     end
   end
 end
