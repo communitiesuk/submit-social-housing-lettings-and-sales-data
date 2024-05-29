@@ -2,7 +2,7 @@ require "rails_helper"
 require "shared/shared_examples_for_derived_fields"
 
 RSpec.describe LettingsLog, type: :model do
-  let(:organisation) { build(:organisation, name: "derived fields org") }
+  let(:organisation) { build(:organisation, name: "derived fields org", skip_rent_period_creation: true) }
   let(:user) { build(:user, organisation:) }
   let(:log) { build(:lettings_log, :startdate_today, assigned_to: user) }
 
@@ -937,226 +937,206 @@ RSpec.describe LettingsLog, type: :model do
   end
 
   describe "variables dependent on whether a letting is a renewal" do
-    let(:lettings_log) { create(:lettings_log, :setup_completed) }
+    let(:organisation) { create(:organisation, skip_rent_period_creation: true) }
+    let(:user) { create(:user, organisation:) }
+    let(:startdate) { Time.zone.today }
+    let(:persisted_renewal_lettings_log) { create(:lettings_log, :setup_completed, startdate:, renewal: 1, assigned_to: user) }
 
-    [
-      {
-        test_title: "correctly derives the length of time on local authority waiting list",
-        field: :waityear,
-        value: 2,
-      },
-      {
-        test_title: "correctly derives the number of times previously offered since becoming available",
-        field: :offered,
-        value: 0,
-      },
-      {
-        test_title: "correctly derives referral if the letting is a renewal and clears it if it is not",
-        field: :referral,
-        value: 1,
-      },
-      {
-        test_title: "correctly derives first_time_property_let_as_social_housing and clears it if it is not",
-        field: :first_time_property_let_as_social_housing,
-        value: 0,
-      },
-      {
-        test_title: "correctly derives vacancy reason and clears it if it is not",
-        field: :rsnvac,
-        value: 14,
-      },
-    ].each do |test_case|
-      it test_case[:test_title] do
-        expect { lettings_log.update!(renewal: 1) }.to change(lettings_log, test_case[:field]).to test_case[:value]
-        expect { lettings_log.update!(renewal: 0) }.to change(lettings_log, test_case[:field]).from(test_case[:value]).to nil
+    it "derives waityear offered referral first_time_property_let_as_social_housing rsnvac when renewal" do
+      log.renewal = 1
+      expect { log.set_derived_fields! }
+        .to change(log, :waityear).to(2)
+        .and change(log, :offered).to(0)
+        .and change(log, :referral).to(1)
+        .and change(log, :first_time_property_let_as_social_housing).to(0)
+        .and change(log, :rsnvac).to(14)
+    end
+
+    it "clears waityear offered referral first_time_property_let_as_social_housing rsnvac when not a renewal" do
+      expect { persisted_renewal_lettings_log.update!(renewal: 0) }
+        .to change(persisted_renewal_lettings_log, :waityear).from(2).to(nil)
+        .and change(persisted_renewal_lettings_log, :offered).from(0).to(nil)
+        .and change(persisted_renewal_lettings_log, :referral).from(1).to(nil)
+        .and change(persisted_renewal_lettings_log, :first_time_property_let_as_social_housing).from(0).to(nil)
+        .and change(persisted_renewal_lettings_log, :rsnvac).from(14).to(nil)
+    end
+
+    describe "deriving voiddate from startdate" do
+      let(:startdate) { Time.zone.now }
+
+      it "correctly derives voiddate if the letting is a renewal and clears it if it is not" do
+        log.assign_attributes(renewal: 1, startdate:)
+
+        expect { log.set_derived_fields! }.to change(log, :voiddate).to startdate
+      end
+
+      it "clears voiddate if the letting is no longer a renewal" do
+        expect { persisted_renewal_lettings_log.update!(renewal: 0) }.to change(persisted_renewal_lettings_log, :voiddate).from(startdate).to nil
       end
     end
 
-    it "correctly derives voiddate if the letting is a renewal and clears it if it is not" do
-      startdate = Time.zone.now
-      lettings_log.update!(startdate:)
-      expect { lettings_log.update!(renewal: 1) }.to change(lettings_log, :voiddate).to startdate
-      expect { lettings_log.update!(renewal: 0) }.to change(lettings_log, :voiddate).from(startdate).to nil
-    end
-
     it "derives values for local authority and previous location if postcode is set and log is a renewal" do
-      postcode = "SW1A 1AA"
       expected_la = "E09000033"
-      expect { lettings_log.update!(renewal: 1, postcode_full: postcode, postcode_known: 1) }
-        .to change(lettings_log, :la).to(expected_la)
-        .and change(lettings_log, :ppostcode_full).to(postcode)
-        .and change(lettings_log, :ppcodenk).to(0)
-        .and change(lettings_log, :prevloc).to(expected_la)
+      postcode = "SW1A 1AA"
+      log.assign_attributes(postcode_known: 1, postcode_full: postcode, renewal: 1)
+
+      expect { log.send :process_postcode_changes! }.to change(log, :la).to(expected_la)
+      expect { log.set_derived_fields! }
+        .to change(log, :ppostcode_full).to(postcode)
+        .and change(log, :ppcodenk).to(0)
+        .and change(log, :prevloc).to(expected_la)
     end
 
     context "when the log is general needs" do
       context "and the managing organisation is a private registered provider" do
         before do
-          lettings_log.managing_organisation.update!(provider_type: "PRP")
-          lettings_log.update!(needstype: 1, renewal: 1)
+          log.managing_organisation.provider_type = "PRP"
+          log.renewal = 1
         end
 
         it "correctly derives prevten" do
-          expect(lettings_log.prevten).to be 32
+          log.needstype = 1
+          log.set_derived_fields!
+
+          expect(log.prevten).to be 32
         end
 
         it "clears prevten if the log is marked as supported housing" do
-          lettings_log.update!(needstype: 2)
-          expect(lettings_log.prevten).to be nil
+          log.needstype = 2
+          log.set_derived_fields!
+
+          expect(log.prevten).to be nil
         end
 
         it "clears prevten if renewal is update to no" do
-          lettings_log.update!(renewal: 0)
-          expect(lettings_log.prevten).to be nil
+          log.renewal = 0
+          log.set_derived_fields!
+
+          expect(log.prevten).to be nil
         end
       end
 
       context "and the managing organisation is a local authority" do
         before do
-          lettings_log.managing_organisation.update!(provider_type: "LA")
-          lettings_log.update!(needstype: 1, renewal: 1)
+          log.managing_organisation.provider_type = "LA"
+          log.renewal = 1
         end
 
-        it "correctly derives prevten" do
-          expect(lettings_log.prevten).to be 30
+        it "correctly derives prevten if the log is general needs" do
+          log.needstype = 1
+          log.set_derived_fields!
+
+          expect(log.prevten).to be 30
         end
 
         it "clears prevten if the log is marked as supported housing" do
-          expect { lettings_log.update!(needstype: 2) }.to change(lettings_log, :prevten).to nil
+          log.needstype = 2
+          log.set_derived_fields!
+
+          expect(log.prevten).to be nil
         end
 
         it "clears prevten if renewal is update to no" do
-          expect { lettings_log.update!(renewal: 0) }.to change(lettings_log, :prevten).to nil
+          log.renewal = 0
+          log.set_derived_fields!
+
+          expect(log.prevten).to be nil
         end
       end
     end
 
     context "and updating rent_type" do
       let(:irproduct_other) { nil }
+      let(:persisted_renewal_lettings_log) { create(:lettings_log, :setup_completed, assigned_to: user, rent_type:, irproduct_other:, renewal: 1) }
 
-      around do |example|
-        Timecop.freeze(now) do
-          Singleton.__init__(FormHandler)
-          lettings_log.update!(rent_type:, irproduct_other:, startdate: now)
-          example.run
+      context "when rent_type is Social Rent" do
+        let(:rent_type) { 0 }
+        let(:expected_unitletas) { 1 }
+
+        it "derives the most recent let type as Social Rent basis if it is a renewal" do
+          log.assign_attributes(renewal: 1, rent_type:)
+
+          expect { log.set_derived_fields! }.to change(log, :unitletas).to expected_unitletas
+        end
+
+        it "clears the most recent let type if it is not a renewal" do
+          expect { persisted_renewal_lettings_log.update!(renewal: 0) }.to change(persisted_renewal_lettings_log, :unitletas).from(expected_unitletas).to nil
         end
       end
 
-      context "when collection year is 2022/23 or earlier" do
-        let(:now) { Time.zone.local(2023, 1, 1) }
+      context "when rent_type is Affordable Rent" do
+        let(:rent_type) { 1 }
+        let(:expected_unitletas) { 2 }
 
-        context "when rent_type is Social Rent" do
-          let(:rent_type) { 0 }
+        it "derives the most recent let type as Affordable Rent basis if it is a renewal" do
+          log.assign_attributes(renewal: 1, rent_type:)
 
-          it "derives the most recent let type as Social Rent basis if it is a renewal and clears it if it is not" do
-            expect { lettings_log.update!(renewal: 1) }.to change(lettings_log, :unitletas).to 1
-            expect { lettings_log.update!(renewal: 0) }.to change(lettings_log, :unitletas).from(1).to nil
-          end
+          expect { log.set_derived_fields! }.to change(log, :unitletas).to expected_unitletas
         end
 
-        context "when rent_type is Affordable Rent" do
-          let(:rent_type) { 1 }
-
-          it "derives the most recent let type as Affordable Rent basis if it is a renewal and clears it if it is not" do
-            expect { lettings_log.update!(renewal: 1) }.to change(lettings_log, :unitletas).to 2
-            expect { lettings_log.update!(renewal: 0) }.to change(lettings_log, :unitletas).from(2).to nil
-          end
-        end
-
-        context "when rent_type is London Affordable Rent" do
-          let(:rent_type) { 2 }
-
-          it "derives the most recent let type as Affordable Rent basis if it is a renewal and clears it if it is not" do
-            expect { lettings_log.update!(renewal: 1) }.to change(lettings_log, :unitletas).to 2
-            expect { lettings_log.update!(renewal: 0) }.to change(lettings_log, :unitletas).from(2).to nil
-          end
-        end
-
-        context "when rent_type is Rent to Buy" do
-          let(:rent_type) { 3 }
-
-          it "derives the most recent let type as Intermediate Rent basis if it is a renewal and clears it if it is not" do
-            expect { lettings_log.update!(renewal: 1) }.to change(lettings_log, :unitletas).to 4
-            expect { lettings_log.update!(renewal: 0) }.to change(lettings_log, :unitletas).from(4).to nil
-          end
-        end
-
-        context "when rent_type is London Living Rent" do
-          let(:rent_type) { 4 }
-
-          it "derives the most recent let type as Intermediate Rent basis if it is a renewal and clears it if it is not" do
-            expect { lettings_log.update!(renewal: 1) }.to change(lettings_log, :unitletas).to 4
-            expect { lettings_log.update!(renewal: 0) }.to change(lettings_log, :unitletas).from(4).to nil
-          end
-        end
-
-        context "when rent_type is Other intermediate rent product" do
-          let(:rent_type) { 5 }
-          let(:irproduct_other) { "Rent first" }
-
-          it "derives the most recent let type as Intermediate Rent basis if it is a renewal and clears it if it is not" do
-            expect { lettings_log.update!(renewal: 1) }.to change(lettings_log, :unitletas).to 4
-            expect { lettings_log.update!(renewal: 0) }.to change(lettings_log, :unitletas).from(4).to nil
-          end
+        it "clears the most recent let type if it is not a renewal" do
+          expect { persisted_renewal_lettings_log.update!(renewal: 0) }.to change(persisted_renewal_lettings_log, :unitletas).from(expected_unitletas).to nil
         end
       end
 
-      context "when collection year is 2023/24 or later" do
-        let(:now) { Time.zone.local(2024, 1, 1) }
+      context "when rent_type is London Affordable Rent" do
+        let(:rent_type) { 2 }
+        let(:expected_unitletas) { 5 }
 
-        context "when rent_type is Social Rent" do
-          let(:rent_type) { 0 }
+        it "derives the most recent let type as London Affordable Rent basis if it is a renewal" do
+          log.assign_attributes(renewal: 1, rent_type:)
 
-          it "derives the most recent let type as Social Rent basis if it is a renewal and clears it if it is not" do
-            expect { lettings_log.update!(renewal: 1) }.to change(lettings_log, :unitletas).to 1
-            expect { lettings_log.update!(renewal: 0) }.to change(lettings_log, :unitletas).from(1).to nil
-          end
+          expect { log.set_derived_fields! }.to change(log, :unitletas).to expected_unitletas
         end
 
-        context "when rent_type is Affordable Rent" do
-          let(:rent_type) { 1 }
+        it "clears the most recent let type if it is not a renewal" do
+          expect { persisted_renewal_lettings_log.update!(renewal: 0) }.to change(persisted_renewal_lettings_log, :unitletas).from(expected_unitletas).to nil
+        end
+      end
 
-          it "derives the most recent let type as Affordable Rent basis if it is a renewal and clears it if it is not" do
-            expect { lettings_log.update!(renewal: 1) }.to change(lettings_log, :unitletas).to 2
-            expect { lettings_log.update!(renewal: 0) }.to change(lettings_log, :unitletas).from(2).to nil
-          end
+      context "when rent_type is Rent to Buy" do
+        let(:rent_type) { 3 }
+        let(:expected_unitletas) { 6 }
+
+        it "derives the most recent let type as Rent to Buy basis if it is a renewal" do
+          log.assign_attributes(renewal: 1, rent_type:)
+
+          expect { log.set_derived_fields! }.to change(log, :unitletas).to expected_unitletas
         end
 
-        context "when rent_type is London Affordable Rent" do
-          let(:rent_type) { 2 }
+        it "clears the most recent let type if it is not a renewal" do
+          expect { persisted_renewal_lettings_log.update!(renewal: 0) }.to change(persisted_renewal_lettings_log, :unitletas).from(expected_unitletas).to nil
+        end
+      end
 
-          it "derives the most recent let type as London Affordable Rent basis if it is a renewal and clears it if it is not" do
-            expect { lettings_log.update!(renewal: 1) }.to change(lettings_log, :unitletas).to 5
-            expect { lettings_log.update!(renewal: 0) }.to change(lettings_log, :unitletas).from(5).to nil
-          end
+      context "when rent_type is London Living Rent" do
+        let(:rent_type) { 4 }
+        let(:expected_unitletas) { 7 }
+
+        it "derives the most recent let type as London Living Rent basis if it is a renewal" do
+          log.assign_attributes(renewal: 1, rent_type:)
+
+          expect { log.set_derived_fields! }.to change(log, :unitletas).to expected_unitletas
         end
 
-        context "when rent_type is Rent to Buy" do
-          let(:rent_type) { 3 }
+        it "clears the most recent let type if it is not a renewal" do
+          expect { persisted_renewal_lettings_log.update!(renewal: 0) }.to change(persisted_renewal_lettings_log, :unitletas).from(expected_unitletas).to nil
+        end
+      end
 
-          it "derives the most recent let type as Rent to Buy basis if it is a renewal and clears it if it is not" do
-            expect { lettings_log.update!(renewal: 1) }.to change(lettings_log, :unitletas).to 6
-            expect { lettings_log.update!(renewal: 0) }.to change(lettings_log, :unitletas).from(6).to nil
-          end
+      context "when rent_type is Other intermediate rent product" do
+        let(:rent_type) { 5 }
+        let(:irproduct_other) { "Rent first" }
+        let(:expected_unitletas) { 8 }
+
+        it "derives the most recent let type as London Living Rent basis if it is a renewal" do
+          log.assign_attributes(renewal: 1, rent_type:, irproduct_other:)
+
+          expect { log.set_derived_fields! }.to change(log, :unitletas).to expected_unitletas
         end
 
-        context "when rent_type is London Living Rent" do
-          let(:rent_type) { 4 }
-
-          it "derives the most recent let type as London Living Rent basis if it is a renewal and clears it if it is not" do
-            expect { lettings_log.update!(renewal: 1) }.to change(lettings_log, :unitletas).to 7
-            expect { lettings_log.update!(renewal: 0) }.to change(lettings_log, :unitletas).from(7).to nil
-          end
-        end
-
-        context "when rent_type is Other intermediate rent product" do
-          let(:rent_type) { 5 }
-          let(:irproduct_other) { "Rent first" }
-
-          it "derives the most recent let type as Another Intermediate Rent basis if it is a renewal and clears it if it is not" do
-            expect { lettings_log.update!(renewal: 1) }.to change(lettings_log, :unitletas).to 8
-            expect { lettings_log.update!(renewal: 0) }.to change(lettings_log, :unitletas).from(8).to nil
-          end
+        it "clears the most recent let type if it is not a renewal" do
+          expect { persisted_renewal_lettings_log.update!(renewal: 0) }.to change(persisted_renewal_lettings_log, :unitletas).from(expected_unitletas).to nil
         end
       end
     end
