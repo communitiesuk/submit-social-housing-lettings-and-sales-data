@@ -9,7 +9,7 @@ namespace :generate_sales_documentation do
     include Validations::Sales::SaleInformationValidations
     include Validations::SharedValidations
     include Validations::LocalAuthorityValidations
-    validation_methods = public_methods.select { |method| method.starts_with?("validate_") }
+    all_validation_methods = public_methods.select { |method| method.starts_with?("validate_") }
     all_methods = [Validations::Sales::SetupValidations,
                    Validations::Sales::HouseholdValidations,
                    Validations::Sales::PropertyValidations,
@@ -18,9 +18,9 @@ namespace :generate_sales_documentation do
                    Validations::SharedValidations,
                    Validations::LocalAuthorityValidations].map { |x| x.instance_methods + x.private_instance_methods }.flatten
 
-    all_helper_methods = all_methods - validation_methods
+    all_helper_methods = all_methods - all_validation_methods
 
-    DocumentationGenerator.new.describe_hard_validations(client, validation_methods, all_helper_methods, "sales")
+    DocumentationGenerator.new.describe_hard_validations(client, all_validation_methods, all_helper_methods, "sales")
   end
 
   desc "Generate documentation for soft sales validations"
@@ -30,9 +30,9 @@ namespace :generate_sales_documentation do
 
     client = OpenAI::Client.new(access_token: ENV["OPENAI_API_KEY"])
     all_helper_methods = Validations::SoftValidations.private_instance_methods + Validations::Sales::SoftValidations.private_instance_methods
-    validation_methods = Validations::SoftValidations.instance_methods + Validations::Sales::SoftValidations.instance_methods
+    all_validation_methods = Validations::SoftValidations.instance_methods + Validations::Sales::SoftValidations.instance_methods
 
-    DocumentationGenerator.new.describe_soft_validations(client, validation_methods, all_helper_methods, "sales")
+    DocumentationGenerator.new.describe_soft_validations(client, all_validation_methods, all_helper_methods, "sales")
   end
 
   desc "Generate documentation for hard bu sales validations"
@@ -40,11 +40,11 @@ namespace :generate_sales_documentation do
     client = OpenAI::Client.new(access_token: ENV["OPENAI_API_KEY"])
     [[FormHandler.instance.forms[FormHandler.instance.form_name_from_start_year(2023, "sales")], BulkUpload::Sales::Year2023::RowParser],
      [FormHandler.instance.forms[FormHandler.instance.form_name_from_start_year(2024, "sales")], BulkUpload::Sales::Year2024::RowParser]].each do |form, row_parser_class|
-      validation_methods = row_parser_class.private_instance_methods.select { |method| method.starts_with?("validate_") }
-      all_helper_methods = row_parser_class.private_instance_methods(false) +  row_parser_class.instance_methods(false) - validation_methods
+      all_validation_methods = row_parser_class.private_instance_methods.select { |method| method.starts_with?("validate_") }
+      all_helper_methods = row_parser_class.private_instance_methods(false) +  row_parser_class.instance_methods(false) - all_validation_methods
       field_mapping_for_errors = row_parser_class.new.send("field_mapping_for_errors")
 
-      DocumentationGenerator.new.describe_bu_validations(client, form, row_parser_class, validation_methods, all_helper_methods, field_mapping_for_errors, "sales")
+      DocumentationGenerator.new.describe_bu_validations(client, form, row_parser_class, all_validation_methods, all_helper_methods, field_mapping_for_errors, "sales")
     end
   end
 

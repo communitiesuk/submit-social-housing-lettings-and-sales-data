@@ -9,7 +9,7 @@ namespace :generate_lettings_documentation do
     include Validations::TenancyValidations
     include Validations::DateValidations
     include Validations::LocalAuthorityValidations
-    validation_methods = public_methods.select { |method| method.starts_with?("validate_") }
+    all_validation_methods = public_methods.select { |method| method.starts_with?("validate_") }
     all_methods = [Validations::SetupValidations,
                    Validations::HouseholdValidations,
                    Validations::PropertyValidations,
@@ -17,9 +17,9 @@ namespace :generate_lettings_documentation do
                    Validations::TenancyValidations,
                    Validations::DateValidations,
                    Validations::LocalAuthorityValidations].map { |x| x.instance_methods + x.private_instance_methods }.flatten
-    all_helper_methods = all_methods - validation_methods
+    all_helper_methods = all_methods - all_validation_methods
 
-    DocumentationGenerator.new.describe_hard_validations(client, validation_methods, all_helper_methods, "lettings")
+    DocumentationGenerator.new.describe_hard_validations(client, all_validation_methods, all_helper_methods, "lettings")
   end
 
   desc "Generate documentation for soft lettings validations"
@@ -29,9 +29,9 @@ namespace :generate_lettings_documentation do
     client = OpenAI::Client.new(access_token: ENV["OPENAI_API_KEY"])
 
     all_helper_methods = Validations::SoftValidations.private_instance_methods
-    validation_methods = Validations::SoftValidations.instance_methods
+    all_validation_methods = Validations::SoftValidations.instance_methods
 
-    DocumentationGenerator.new.describe_soft_validations(client, validation_methods, all_helper_methods, "lettings")
+    DocumentationGenerator.new.describe_soft_validations(client, all_validation_methods, all_helper_methods, "lettings")
   end
 
   desc "Generate documentation for hard bu lettings validations"
@@ -40,12 +40,12 @@ namespace :generate_lettings_documentation do
 
     [[FormHandler.instance.forms[FormHandler.instance.form_name_from_start_year(2023, "lettings")], BulkUpload::Lettings::Year2023::RowParser],
      [FormHandler.instance.forms[FormHandler.instance.form_name_from_start_year(2024, "lettings")], BulkUpload::Lettings::Year2024::RowParser]].each do |form, row_parser_class|
-      validation_methods = row_parser_class.private_instance_methods.select { |method| method.starts_with?("validate_") }
+      all_validation_methods = row_parser_class.private_instance_methods.select { |method| method.starts_with?("validate_") }
 
-      all_helper_methods = row_parser_class.private_instance_methods(false) +  row_parser_class.instance_methods(false) - validation_methods
+      all_helper_methods = row_parser_class.private_instance_methods(false) +  row_parser_class.instance_methods(false) - all_validation_methods
 
       field_mapping_for_errors = row_parser_class.new.send("field_mapping_for_errors")
-      DocumentationGenerator.new.describe_bu_validations(client, form, row_parser_class, validation_methods, all_helper_methods, field_mapping_for_errors, "lettings")
+      DocumentationGenerator.new.describe_bu_validations(client, form, row_parser_class, all_validation_methods, all_helper_methods, field_mapping_for_errors, "lettings")
     end
   end
 

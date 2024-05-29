@@ -9,10 +9,10 @@ class DocumentationGenerator
   include Validations::SoftValidations
   include Validations::Sales::SoftValidations
 
-  def describe_hard_validations(client, validation_methods, all_helper_methods, log_type)
+  def describe_hard_validations(client, all_validation_methods, all_helper_methods, log_type)
     form = FormHandler.instance.forms["current_#{log_type}"]
 
-    validation_methods.each do |meth|
+    all_validation_methods.each do |meth|
       if LogValidation.where(validation_name: meth.to_s, bulk_upload_specific: false).exists?
         Rails.logger.info("Validation #{meth} already exists")
         next
@@ -39,8 +39,8 @@ class DocumentationGenerator
     end
   end
 
-  def describe_bu_validations(client, form, row_parser_class, validation_methods, all_helper_methods, field_mapping_for_errors, log_type)
-    validation_methods.each do |meth|
+  def describe_bu_validations(client, form, row_parser_class, all_validation_methods, all_helper_methods, field_mapping_for_errors, log_type)
+    all_validation_methods.each do |meth|
       if LogValidation.where(validation_name: meth.to_s, bulk_upload_specific: true, from: form.start_date).exists?
         Rails.logger.info("Validation #{meth} already exists for #{form.start_date.year}")
         next
@@ -67,9 +67,9 @@ class DocumentationGenerator
     end
   end
 
-  def describe_soft_validations(client, validation_methods, all_helper_methods, log_type)
+  def describe_soft_validations(client, all_validation_methods, all_helper_methods, log_type)
     validation_descriptions = {}
-    validation_methods.each do |meth|
+    all_validation_methods.each do |meth|
       validation_source = method(meth).source
       helper_methods_source = all_helper_methods.map { |helper_method|
         if validation_source.include?(helper_method.to_s)
