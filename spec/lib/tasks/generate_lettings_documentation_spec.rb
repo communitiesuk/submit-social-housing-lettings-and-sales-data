@@ -23,9 +23,9 @@ RSpec.describe "generate_lettings_documentation" do
       it "creates new validation documentation records" do
         expect(Rails.logger).to receive(:info).with(/described/).at_least(:once)
         expect { task.invoke }.to change(Validation, :count)
-        expect(Validation.where(validation_name: "validate_numeric_min_max").count).to eq(1)
-        expect(Validation.where(validation_name: "validate_layear").count).to eq(1)
-        any_validation = Validation.first
+        expect(LogValidation.where(validation_name: "validate_numeric_min_max").count).to eq(1)
+        expect(LogValidation.where(validation_name: "validate_layear").count).to eq(1)
+        any_validation = LogValidation.first
         expect(any_validation.description).to eq("Validates the format.")
         expect(any_validation.field).to eq("ppostcode_full")
         expect(any_validation.error_message).to eq("Enter a valid postcode")
@@ -90,9 +90,9 @@ RSpec.describe "generate_lettings_documentation" do
     context "when the rake task is run" do
       it "creates new validation documentation records" do
         expect { task.invoke }.to change(Validation, :count)
-        expect(Validation.where(validation_name: "rent_in_soft_min_range?").count).to be_positive
-        expect(Validation.where(validation_name: "major_repairs_date_in_soft_range?").count).to be_positive
-        any_validation = Validation.first
+        expect(LogValidation.where(validation_name: "rent_in_soft_min_range?").count).to be_positive
+        expect(LogValidation.where(validation_name: "major_repairs_date_in_soft_range?").count).to be_positive
+        any_validation = LogValidation.first
         expect(any_validation.description).to eq("Validates the format.")
         expect(any_validation.field).not_to be_empty
         expect(any_validation.error_message).not_to be_empty
@@ -138,9 +138,9 @@ RSpec.describe "generate_lettings_documentation" do
       it "creates new validation documentation records" do
         expect(Rails.logger).to receive(:info).with(/described/).at_least(:once)
         expect { task.invoke }.to change(Validation, :count)
-        expect(Validation.where(validation_name: "validate_needs_type_present").count).to eq(2) # for both years
-        expect(Validation.where(validation_name: "validate_data_types").count).to eq(2)
-        any_validation = Validation.first
+        expect(LogValidation.where(validation_name: "validate_needs_type_present").count).to eq(2) # for both years
+        expect(LogValidation.where(validation_name: "validate_data_types").count).to eq(2)
+        any_validation = LogValidation.first
         expect(any_validation.description).to eq("Validates the format.")
         expect(any_validation.field).to eq("ppostcode_full")
         expect(any_validation.error_message).to eq("Enter a valid postcode")
@@ -197,9 +197,9 @@ RSpec.describe "generate_lettings_documentation" do
     context "when the rake task is run" do
       it "creates new validation documentation records" do
         expect { task.invoke }.to change(Validation, :count)
-        expect(Validation.where(validation_name: "minimum").count).to be_positive
-        expect(Validation.where(validation_name: "range").count).to be_positive
-        any_min_validation = Validation.where(validation_name: "minimum").first
+        expect(LogValidation.where(validation_name: "minimum").count).to be_positive
+        expect(LogValidation.where(validation_name: "range").count).to be_positive
+        any_min_validation = LogValidation.where(validation_name: "minimum").first
         expect(any_min_validation.description).to include("Field value is lower than the minimum value")
         expect(any_min_validation.field).not_to be_empty
         expect(any_min_validation.error_message).to include("must be at least")

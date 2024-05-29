@@ -13,7 +13,7 @@ class DocumentationGenerator
     form = FormHandler.instance.forms["current_#{log_type}"]
 
     validation_methods.each do |meth|
-      if Validation.where(validation_name: meth.to_s, bulk_upload_specific: false).exists?
+      if LogValidation.where(validation_name: meth.to_s, bulk_upload_specific: false).exists?
         Rails.logger.info("Validation #{meth} already exists")
         next
       end
@@ -41,7 +41,7 @@ class DocumentationGenerator
 
   def describe_bu_validations(client, form, row_parser_class, validation_methods, all_helper_methods, field_mapping_for_errors, log_type)
     validation_methods.each do |meth|
-      if Validation.where(validation_name: meth.to_s, bulk_upload_specific: true, from: form.start_date).exists?
+      if LogValidation.where(validation_name: meth.to_s, bulk_upload_specific: true, from: form.start_date).exists?
         Rails.logger.info("Validation #{meth} already exists for #{form.start_date.year}")
         next
       end
@@ -264,7 +264,7 @@ Look at these helper methods where needed to understand what is being checked in
   def save_hard_validation(result, meth, form, log_type)
     result["cases"].each do |case_info|
       case_info["errors"].each do |error|
-        Validation.create!(log_type:,
+        LogValidation.create!(log_type:,
                            validation_name: meth.to_s,
                            description: result["description"],
                            field: error["field"],
@@ -288,7 +288,7 @@ Look at these helper methods where needed to understand what is being checked in
         error_fields = field_mapping_for_errors.select { |_key, values| values.include?(error["field"].to_sym) }.keys
         error_fields = [error["field"]] if error_fields.empty?
         error_fields.each do |error_field|
-          Validation.create!(log_type:,
+          LogValidation.create!(log_type:,
                              validation_name: meth.to_s,
                              description: result["description"],
                              field: error_field,
@@ -333,7 +333,7 @@ Look at these helper methods where needed to understand what is being checked in
       return
     end
 
-    if Validation.where(validation_name: validation_depends_on_hash.keys.first, field: page_the_validation_applied_to.questions.first.id, from: form.start_date).exists?
+    if LogValidation.where(validation_name: validation_depends_on_hash.keys.first, field: page_the_validation_applied_to.questions.first.id, from: form.start_date).exists?
       Rails.logger.info("Validation #{validation_depends_on_hash.keys.first} already exists for #{page_the_validation_applied_to.questions.first.id} for start year #{form.start_date.year}")
       return
     end
@@ -353,7 +353,7 @@ Look at these helper methods where needed to understand what is being checked in
     error_message = [title_text, informative_text, page.questions.first.hint_text].compact.join("\n")
 
     case_info = page.depends_on.first.values.first ? "Provided values fulfill the description" : "Provided values do not fulfill the description"
-    Validation.create!(log_type:,
+    LogValidation.create!(log_type:,
                        validation_name: validation_depends_on_hash.keys.first.to_s,
                        description: result["description"],
                        field: page_the_validation_applied_to.questions.first.id,

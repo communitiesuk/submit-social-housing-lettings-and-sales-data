@@ -1,2 +1,0 @@
-class Validation < ApplicationRecord
-end
