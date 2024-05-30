@@ -33,7 +33,6 @@ en:
   service_name: "Submit social housing lettings and sales data (CORE)"
   feedback_form: "https://forms.office.com/Pages/ResponsePage.aspx?id=EGg0v32c3kOociSi7zmVqC4YDsCJ3llAvEZelBFBLUBURFVUTzFDTUJPQlM4M0laTE5DTlNFSjJBQi4u"
   organisation:
-    created: "%{organisation} was created"
     updated: "Organisation details updated"
     reactivated: "%{organisation} has been reactivated."
     deactivated: "%{organisation} has been deactivated."

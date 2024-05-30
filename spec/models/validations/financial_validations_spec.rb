@@ -139,34 +139,23 @@ RSpec.describe Validations::FinancialValidations do
   end
 
   describe "rent period validations" do
-    let(:organisation) { create(:organisation, skip_rent_period_creation: true) }
-    let(:user) { create(:user, organisation:) }
-    let(:record) { create(:lettings_log, owning_organisation: organisation, managing_organisation: organisation, assigned_to: user) }
-    let(:used_period) { 2 }
+    let(:organisation) { FactoryBot.create(:organisation) }
+    let(:user) { FactoryBot.create(:user) }
+    let(:record) { FactoryBot.create(:lettings_log, owning_organisation: user.organisation, managing_organisation: organisation, assigned_to: user) }
 
     before do
-      create(:organisation_rent_period, organisation:, rent_period: used_period)
-      record.period = period
+      FactoryBot.create(:organisation_relationship, parent_organisation: user.organisation, child_organisation: organisation)
+      FactoryBot.create(:organisation_rent_period, organisation:, rent_period: 2)
     end
 
-    context "when the log uses a period that the org allows" do
-      let(:period) { used_period }
-
-      it "does not apply a validation" do
-        financial_validator.validate_rent_period(record)
-        expect(record.errors["period"]).to be_empty
-      end
-    end
-
-    context "when the log uses a period that the org does not allow" do
-      let(:period) { used_period + 1 }
-
-      it "does apply a validation" do
+    context "when the organisation only uses specific rent periods" do
+      it "validates that the selected rent period is used by the managing organisation" do
+        record.period = 3
         financial_validator.validate_rent_period(record)
         expect(record.errors["period"])
           .to include(match I18n.t(
             "validations.financial.rent_period.invalid_for_org",
-            org_name: user.organisation.name,
+            org_name: organisation.name,
             rent_period: "every 4 weeks",
           ))
       end

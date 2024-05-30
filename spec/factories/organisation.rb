@@ -14,18 +14,6 @@ FactoryBot.define do
       with_dsa { true }
     end
 
-    transient do
-      skip_rent_period_creation { false }
-    end
-
-    after(:build) do |organisation, evaluator|
-      unless evaluator.skip_rent_period_creation
-        (1..11).each do |rent_period|
-          organisation.organisation_rent_periods << build(:organisation_rent_period, organisation:, rent_period:)
-        end
-      end
-    end
-
     after(:create) do |org, evaluator|
       if evaluator.with_dsa
         create(
