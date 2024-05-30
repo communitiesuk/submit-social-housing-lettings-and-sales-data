@@ -4,7 +4,7 @@
   <%= govuk_back_link(href: :back) %>
 <% end %>
 
-<%= form_for(@organisation, as: :organisation, html: { method: :post }) do |f| %>
+<%= form_for(@resource, as: :organisation, html: { method: :post }) do |f| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <%= f.govuk_error_summary %>
@@ -48,23 +48,13 @@
         :id,
         :name,
         label: { text: "Organisation type", size: "m" },
-        options: { disabled: [""], selected: @organisation.provider_type || "" } %>
+        options: { disabled: [""], selected: @resource.provider_type || "" } %>
 
       <%= f.govuk_collection_radio_buttons :holds_own_stock,
         [OpenStruct.new(id: true, name: "Yes"), OpenStruct.new(id: false, name: "No")],
         :id,
         :name,
         legend: { text: "Does the organisation hold its own stock?", size: "m" } %>
-
-      <%= f.govuk_check_boxes_fieldset :rent_periods,
-        legend: { text: "What are the rent periods for the organisation?" } do %>
-        <% @rent_periods.map do |key, period| %>
-          <%= f.govuk_check_box :rent_periods,
-            key,
-            label: { text: period["value"] },
-            checked: period[:checked] %>
-        <% end %>
-      <% end %>
 
       <%= f.govuk_submit "Create organisation" %>
     </div>

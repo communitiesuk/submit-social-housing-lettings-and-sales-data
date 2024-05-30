@@ -160,13 +160,13 @@ RSpec.describe Csv::SalesLogCsvService do
     it "exports the code for the local authority under the heading 'la'" do
       la_column_index = csv.first.index("LA")
       la_value = csv.second[la_column_index]
-      expect(la_value).to eq "E09000033"
+      expect(la_value).to eq "E09000003"
     end
 
     it "exports the label for the local authority under the heading 'la_label'" do
       la_label_column_index = csv.first.index("LANAME")
       la_label_value = csv.second[la_label_column_index]
-      expect(la_label_value).to eq "Westminster"
+      expect(la_label_value).to eq "Barnet"
     end
 
     context "when the requested form is 2024" do
@@ -246,13 +246,13 @@ RSpec.describe Csv::SalesLogCsvService do
     it "exports the code for the local authority under the heading 'la'" do
       la_column_index = csv.first.index("LA")
       la_value = csv.second[la_column_index]
-      expect(la_value).to eq "E09000033"
+      expect(la_value).to eq "E09000003"
     end
 
     it "exports the label for the local authority under the heading 'la_label'" do
       la_label_column_index = csv.first.index("LANAME")
       la_label_value = csv.second[la_label_column_index]
-      expect(la_label_value).to eq "Westminster"
+      expect(la_label_value).to eq "Barnet"
     end
 
     context "when the requested form is 2024" do
