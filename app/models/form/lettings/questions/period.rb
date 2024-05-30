@@ -27,3 +27,4 @@ class Form::Lettings::Questions::Period < ::Form::Question
 
   QUESTION_NUMBER_FROM_YEAR = { 2023 => 92, 2024 => 91 }.freeze
 end
+
