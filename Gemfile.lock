@@ -518,6 +518,7 @@ DEPENDENCIES
   jsbundling-rails
   json-schema
   listen (~> 3.3)
+  method_source (~> 1.1)
   notifications-ruby-client
   overcommit (>= 0.37.0)
   paper_trail
