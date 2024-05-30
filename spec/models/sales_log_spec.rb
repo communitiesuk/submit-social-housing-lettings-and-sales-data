@@ -535,7 +535,7 @@ RSpec.describe SalesLog, type: :model do
 
   context "when saving addresses" do
     before do
-      stub_request(:get, /api.postcodes.io/)
+      stub_request(:get, /api\.postcodes\.io/)
         .to_return(status: 200, body: "{\"status\":200,\"result\":{\"admin_district\":\"Manchester\",\"codes\":{\"admin_district\": \"E08000003\"}}}", headers: {})
     end
 
@@ -820,7 +820,7 @@ RSpec.describe SalesLog, type: :model do
     end
 
     before do
-      stub_request(:get, /api.postcodes.io/)
+      stub_request(:get, /api\.postcodes\.io/)
         .to_return(status: 200, body: "{\"status\":200,\"result\":{\"admin_district\":\"Manchester\", \"codes\":{\"admin_district\": \"E08000003\"}}}", headers: {})
     end
 

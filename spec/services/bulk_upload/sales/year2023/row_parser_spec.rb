@@ -232,7 +232,7 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
 
   describe "validations" do
     before do
-      stub_request(:get, /api.postcodes.io/)
+      stub_request(:get, /api\.postcodes\.io/)
       .to_return(status: 200, body: "{\"status\":200,\"result\":{\"admin_district\":\"Manchester\", \"codes\":{\"admin_district\": \"E08000003\"}}}", headers: {})
 
       parser.valid?
