@@ -1514,6 +1514,24 @@ RSpec.describe LettingsLog do
       expect(record_from_db["has_benefits"]).to eq(1)
     end
 
+    describe "deriving vacant days" do
+      it "correctly derives vacdays from startdate and mrcdate across DST boundaries" do
+        log = build(:lettings_log, startdate: Time.zone.local(2024, 4, 1), mrcdate: Time.zone.local(2024, 3, 30))
+
+        log.set_derived_fields!
+
+        expect(log.vacdays).to be 2
+      end
+
+      it "correctly derives vacdays from startdate and voiddate across DST boundaries" do
+        log = build(:lettings_log, startdate: Time.zone.local(2024, 4, 1), mrcdate: nil, voiddate: Time.zone.local(2024, 3, 30))
+
+        log.set_derived_fields!
+
+        expect(log.vacdays).to be 2
+      end
+    end
+
     context "when updating values that derive vacdays" do
       let(:lettings_log) { create(:lettings_log, startdate:) }
 
