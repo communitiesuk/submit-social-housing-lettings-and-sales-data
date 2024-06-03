@@ -84,7 +84,7 @@ RSpec.describe Form, type: :model do
   end
 
   describe "next_incomplete_section_redirect_path" do
-    let(:lettings_log) { FactoryBot.build(:lettings_log, :in_progress) }
+    let(:lettings_log) { FactoryBot.build_stubbed(:lettings_log, :in_progress) }
     let(:subsection) { form.get_subsection("household_characteristics") }
     let(:later_subsection) { form.get_subsection("declaration") }
 
