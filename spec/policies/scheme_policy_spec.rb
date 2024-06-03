@@ -48,7 +48,7 @@ RSpec.describe SchemePolicy do
       before do
         scheme.scheme_deactivation_periods << create(:scheme_deactivation_period, deactivation_date: Time.zone.today, scheme:)
         scheme.save!
-        log = build(:lettings_log, :sh, owning_organisation: scheme.owning_organisation, scheme:, startdate: Time.zone.today  - 2.years)
+        log = build(:lettings_log, :sh, owning_organisation: scheme.owning_organisation, scheme:, startdate: Time.zone.today - 2.years)
         log.save!(validate: false)
       end
 

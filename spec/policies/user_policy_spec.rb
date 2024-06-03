@@ -148,7 +148,6 @@ RSpec.describe UserPolicy do
         log.save!(validate: false)
       end
 
-
       context "and associated logs in editable collection period" do
         before do
           create(:lettings_log, :sh, owning_organisation: user.organisation, assigned_to: user, startdate: Time.zone.yesterday)
