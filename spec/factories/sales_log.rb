@@ -53,6 +53,7 @@ FactoryBot.define do
       sex1 { "F" }
       ecstat1 { 1 }
       postcode_full { "A1 1AA" }
+      noint { 2 }
       uprn_known { 0 }
     end
     trait :completed do
