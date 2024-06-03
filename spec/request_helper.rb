@@ -90,7 +90,6 @@ module RequestHelper
       address = request.uri.query_values["query"].split(",")
       { status: 200, body: { results: [{ DPA: { MATCH: 0.9, BUILDING_NAME: "result #{address[0]}", POST_TOWN: "result town or city", POSTCODE: address[1], UPRN: "1" } }] }.to_json, headers: {} }
     end
-
   end
 
   def self.real_http_requests
