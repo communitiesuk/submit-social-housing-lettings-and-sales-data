@@ -111,7 +111,7 @@ private
 
   def first_record_start_date
     if with_headers?
-      Date.new(row_parsers.first.field_4.to_i + 2000, row_parsers.first.field_3.to_i, row_parsers.first.field_2.to_i)
+      Date.new(row_parsers.first.field_5.to_i + 2000, row_parsers.first.field_4.to_i, row_parsers.first.field_3.to_i)
     else
       Date.new(rows.first[3].to_i + 2000, rows.first[2].to_i, rows.first[1].to_i)
     end
