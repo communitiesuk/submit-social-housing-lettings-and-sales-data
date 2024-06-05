@@ -635,11 +635,11 @@ private
   end
 
   def joint_purchase?
-    field_114 == 1
+    field_15 == 1
   end
 
   def joint_purchase_asked?
-    shared_ownership? || discounted_ownership? || field_112 == 2
+    shared_ownership? || discounted_ownership? || field_13 == 2
   end
 
   def field_mapping_for_errors
@@ -1450,6 +1450,8 @@ private
   end
 
   def validate_buyer2_economic_status
+    return unless joint_purchase?
+
     if field_42 == 9
       if field_38.present? && field_38.to_i >= 16
         errors.add(:field_42, I18n.t("validations.household.ecstat.buyer_cannot_be_over_16_and_child", buyer_index: "2"))
