@@ -108,32 +108,63 @@ RSpec.describe Organisation, type: :model do
       end
     end
 
-    context "when the organisation only uses specific rent periods" do
-      let(:rent_period_mappings) do
-        { "2" => { "value" => "Weekly for 52 weeks" }, "3" => { "value" => "Every 2 weeks" } }
+    context "with associated rent periods" do
+      let(:organisation) { create(:organisation, skip_rent_period_creation: true) }
+      let(:period_1_label) { "Every minute" }
+      let(:fake_rent_periods) do
+        {
+          "1" => { "value" => period_1_label },
+          "2" => { "value" => "Every decade" },
+        }
       end
 
       before do
-        create(:organisation_rent_period, organisation:, rent_period: 2)
-        create(:organisation_rent_period, organisation:, rent_period: 3)
-
-        # Unmapped and ignored by `rent_period_labels`
-        create(:organisation_rent_period, organisation:, rent_period: 10)
-        allow(RentPeriod).to receive(:rent_period_mappings).and_return(rent_period_mappings)
+        create(:organisation_rent_period, organisation:, rent_period: 1)
+        allow(RentPeriod).to receive(:rent_period_mappings).and_return(fake_rent_periods)
       end
 
-      it "has rent periods associated" do
-        expect(organisation.rent_periods).to eq([2, 3, 10])
+      context "when the org does not use all rent periods" do
+        it "#rent_periods returns the correct ids" do
+          expect(organisation.rent_periods).to eq [1]
+        end
+
+        it "#rent_period_labels returns the correct labels" do
+          expect(organisation.rent_period_labels).to eq [period_1_label]
+        end
+
+        context "and has organisation rent periods associated for rent periods that no longer appear in the form" do
+          before do
+            create(:organisation_rent_period, organisation:, rent_period: 3)
+          end
+
+          it "#rent_period_labels returns the correct labels" do
+            expect(organisation.rent_period_labels).to eq [period_1_label]
+          end
+        end
       end
 
-      it "maps the rent periods to display values" do
-        expect(organisation.rent_period_labels).to eq(["Weekly for 52 weeks", "Every 2 weeks"])
-      end
-    end
+      context "when the org uses all rent periods" do
+        before do
+          create(:organisation_rent_period, organisation:, rent_period: 2)
+        end
 
-    context "when the organisation has not specified which rent periods it uses" do
-      it "displays `all`" do
-        expect(organisation.rent_period_labels).to eq(%w[All])
+        it "#rent_periods returns the correct ids" do
+          expect(organisation.rent_periods).to eq [1, 2]
+        end
+
+        it "#rent_period_labels returns All" do
+          expect(organisation.rent_period_labels).to eq %w[All]
+        end
+
+        context "and has organisation rent periods associated for rent periods that no longer appear in the form" do
+          before do
+            create(:organisation_rent_period, organisation:, rent_period: 3)
+          end
+
+          it "#rent_period_labels returns All" do
+            expect(organisation.rent_period_labels).to eq %w[All]
+          end
+        end
       end
     end
 

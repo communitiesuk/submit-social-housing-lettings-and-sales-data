@@ -1027,7 +1027,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
       end
     end
 
-    describe "field_42" do # ecstat1
+    describe "field_42" do # ecstat2
       context "when buyer 2 has no age but has ecstat as child" do
         let(:attributes) { valid_attributes.merge({ field_38: nil, field_42: "9" }) }
 
@@ -1053,6 +1053,15 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
           validation_message = "Buyer 2's age cannot be 16 or over if their working situation is child under 16"
           expect(parser.errors[:field_42]).to include validation_message
           expect(parser.errors[:field_38]).to include validation_message
+        end
+      end
+
+      context "when person 2 a child but not a buyer" do
+        let(:attributes) { valid_attributes.merge({ field_15: 2, field_38: "10", field_42: "9" }) }
+
+        it "does not add errors to their age and ecstat fields" do
+          expect(parser.errors[:field_38]).to be_empty
+          expect(parser.errors[:field_42]).to be_empty
         end
       end
     end

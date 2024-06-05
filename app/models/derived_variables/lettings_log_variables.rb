@@ -1,7 +1,6 @@
 module DerivedVariables::LettingsLogVariables
   include DerivedVariables::SharedLogic
 
-  # renttype and unitletas values are different for intermediate rent (3 for renttype and 4 for unitletas)
   RENT_TYPE_MAPPING = {
     0 => 1, # "Social Rent"  =>  "Social Rent"
     1 => 2, # "Affordable Rent" => "Affordable Rent"
@@ -12,15 +11,6 @@ module DerivedVariables::LettingsLogVariables
   }.freeze
 
   UNITLETAS_MAPPING = {
-    0 => 1, # "Social Rent"  =>  "Social Rent basis"
-    1 => 2, # "Affordable Rent" => "Affordable Rent basis"
-    2 => 2, # "London Affordable Rent"  =>  "Affordable Rent basis"
-    3 => 4, # "Rent to Buy"  => "Intermediate Rent basis"
-    4 => 4, # "London Living Rent"  => "Intermediate Rent basis"
-    5 => 4, # "Other intermediate rent product"  => "Intermediate Rent basis"
-  }.freeze
-
-  UNITLETAS_MAPPING_23_24 = {
     0 => 1, # "Social Rent"  =>  "Social Rent basis"
     1 => 2, # "Affordable Rent" => "Affordable Rent basis"
     2 => 5, # "London Affordable Rent"  =>  "London Affordable Rent basis"
@@ -120,7 +110,7 @@ module DerivedVariables::LettingsLogVariables
     if is_renewal?
       self.underoccupation_benefitcap = 2 if collection_start_year == 2021
       self.voiddate = startdate
-      self.unitletas = form.start_date.year >= 2023 ? UNITLETAS_MAPPING_23_24[rent_type] : UNITLETAS_MAPPING[rent_type]
+      self.unitletas = UNITLETAS_MAPPING[rent_type]
       if is_general_needs?
         self.prevten = 32 if owning_organisation&.provider_type == "PRP"
         self.prevten = 30 if owning_organisation&.provider_type == "LA"
