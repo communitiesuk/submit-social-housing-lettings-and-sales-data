@@ -3,7 +3,8 @@ class Form::Lettings::Pages::PropertyLocalAuthority < ::Form::Page
     super
     @id = "property_local_authority"
     @depends_on = [
-      { "is_la_inferred" => false, "is_general_needs?" => true, "address_search_given?" => true },
+      { "is_la_inferred" => false, "is_general_needs?" => true, "form.start_year_after_2024?" => false },
+      { "is_la_inferred" => false, "is_general_needs?" => true, "form.start_year_after_2024?" => true, "address_search_given?" => true },
     ]
   end
 

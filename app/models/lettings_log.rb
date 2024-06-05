@@ -687,7 +687,7 @@ class LettingsLog < Log
   end
 
   def address_search_given?
-    address_line1_input.present? && postcode_full.present?
+    address_line1_input.present? && postcode_full_input.present?
   end
 
 private
