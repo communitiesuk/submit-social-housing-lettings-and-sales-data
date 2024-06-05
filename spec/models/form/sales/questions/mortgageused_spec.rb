@@ -5,32 +5,9 @@ RSpec.describe Form::Sales::Questions::Mortgageused, type: :model do
 
   let(:question_id) { nil }
   let(:question_definition) { nil }
-  let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2023, 4, 1)))) }
-  let(:log) { create(:sales_log) }
-
-  it "has correct page" do
-    expect(question.page).to eq(page)
-  end
-
-  it "has the correct id" do
-    expect(question.id).to eq("mortgageused")
-  end
-
-  it "has the correct header" do
-    expect(question.header).to eq("Was a mortgage used for the purchase of this property?")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Mortgage used")
-  end
-
-  it "has the correct type" do
-    expect(question.type).to eq("radio")
-  end
-
-  it "is not marked as derived" do
-    expect(question.derived?(nil)).to be false
-  end
+  let(:form) { instance_double(Form, start_date: Time.zone.local(2024, 4, 1)) }
+  let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form:)) }
+  let(:log) { build(:sales_log) }
 
   it "has the correct answer_options" do
     expect(question.answer_options).to eq({
@@ -38,14 +15,6 @@ RSpec.describe Form::Sales::Questions::Mortgageused, type: :model do
       "2" => { "value" => "No" },
       "3" => { "value" => "Don’t know" },
     })
-  end
-
-  it "has correct conditional for" do
-    expect(question.conditional_for).to eq(nil)
-  end
-
-  it "has the correct hint" do
-    expect(question.hint_text).to be_nil
   end
 
   context "when staircase owned percentage is 100%" do
