@@ -112,7 +112,7 @@ RSpec.describe BulkUpload::Lettings::Validator do
         end
       end
 
-      context "when uploading a 2022 template for 2023 bulk upload" do
+      context "when uploading a 2022 logs for 2023 bulk upload" do
         let(:bulk_upload) { create(:bulk_upload, user:, year: 2023) }
         let(:log) { build(:lettings_log, :completed, startdate: Time.zone.local(2022, 5, 6), tenancycode: "5") }
 
@@ -130,8 +130,8 @@ RSpec.describe BulkUpload::Lettings::Validator do
         context "with headers" do
           let(:seed) { rand }
           let(:log_to_csv) { BulkUpload::LettingsLogToCsv.new(log:) }
-          let(:field_numbers) { log_to_csv.default_2022_field_numbers + %w[invalid_field_number] }
-          let(:field_values) { log_to_csv.to_2022_row + %w[value_for_invalid_field_number] }
+          let(:field_numbers) { log_to_csv.default_2023_field_numbers }
+          let(:field_values) { log_to_csv.to_2023_row }
 
           before do
             file.write(log_to_csv.custom_field_numbers_row(seed:, field_numbers:))
@@ -145,7 +145,7 @@ RSpec.describe BulkUpload::Lettings::Validator do
         end
       end
 
-      context "when uploading a 2023 template for 2024 bulk upload" do
+      context "when uploading a 2023 logs for 2024 bulk upload" do
         let(:bulk_upload) { create(:bulk_upload, user:, year: 2024) }
         let(:log) { build(:lettings_log, :completed, startdate: Time.zone.local(2023, 5, 6), tenancycode: "5234234234234") }
 
@@ -163,8 +163,8 @@ RSpec.describe BulkUpload::Lettings::Validator do
         context "with headers" do
           let(:seed) { rand }
           let(:log_to_csv) { BulkUpload::LettingsLogToCsv.new(log:) }
-          let(:field_numbers) { log_to_csv.default_2023_field_numbers + %w[invalid_field_number] }
-          let(:field_values) { log_to_csv.to_2023_row + %w[value_for_invalid_field_number] }
+          let(:field_numbers) { log_to_csv.default_2024_field_numbers }
+          let(:field_values) { log_to_csv.to_2024_row }
 
           before do
             file.write(log_to_csv.custom_field_numbers_row(seed:, field_numbers:))

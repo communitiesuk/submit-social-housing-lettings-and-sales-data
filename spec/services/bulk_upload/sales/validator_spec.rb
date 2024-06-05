@@ -40,7 +40,98 @@ RSpec.describe BulkUpload::Sales::Validator do
       end
     end
 
-    context "when trying to upload 2022 data for 2023 bulk upload" do
+    context "when trying to upload different year data for 2024 bulk upload" do
+      let(:bulk_upload) { create(:bulk_upload, user:, year: 2024) }
+
+      context "with a valid csv" do
+        let(:path) { file_fixture("2022_23_sales_bulk_upload.csv") }
+
+        it "is not valid" do
+          expect(validator).not_to be_valid
+        end
+      end
+
+      context "with unix line endings" do
+        let(:fixture_path) { file_fixture("2022_23_sales_bulk_upload.csv") }
+        let(:file) { Tempfile.new }
+        let(:path) { file.path }
+
+        before do
+          string = File.read(fixture_path)
+          string.gsub!("\r\n", "\n")
+          file.write(string)
+          file.rewind
+        end
+
+        it "is not valid" do
+          expect(validator).not_to be_valid
+        end
+      end
+
+      context "without headers" do
+        let(:log) { build(:sales_log, :completed) }
+        let(:file) { Tempfile.new }
+        let(:path) { file.path }
+
+        before do
+          Timecop.freeze(Time.utc(2023, 10, 3))
+          file.write(BulkUpload::SalesLogToCsv.new(log:, line_ending: "\r\n", col_offset: 0).to_2024_csv_row)
+          file.close
+        end
+
+        after do
+          Timecop.unfreeze
+        end
+
+        it "is not valid" do
+          expect(validator).not_to be_valid
+        end
+      end
+
+      context "with headers" do
+        let(:file) { Tempfile.new }
+        let(:seed) { rand }
+        let(:log) { build(:sales_log, :completed, saledate: Time.zone.local(2023, 10, 10)) }
+        let(:log_to_csv) { BulkUpload::SalesLogToCsv.new(log:) }
+        let(:field_numbers) { log_to_csv.default_2024_field_numbers }
+        let(:field_values) { log_to_csv.to_2024_row }
+
+        before do
+          file.write(log_to_csv.custom_field_numbers_row(seed:, field_numbers:))
+          file.write(log_to_csv.to_custom_csv_row(seed:, field_values:))
+          file.rewind
+        end
+
+        it "is not valid" do
+          expect(validator).not_to be_valid
+        end
+      end
+    end
+
+    context "when trying to upload 2024 year data for 2024 bulk upload" do
+      let(:bulk_upload) { create(:bulk_upload, user:, year: 2024) }
+
+      context "with headers" do
+        let(:file) { Tempfile.new }
+        let(:seed) { rand }
+        let(:log) { build(:sales_log, :completed, saledate: Time.zone.local(2024, 10, 10)) }
+        let(:log_to_csv) { BulkUpload::SalesLogToCsv.new(log:) }
+        let(:field_numbers) { log_to_csv.default_2024_field_numbers }
+        let(:field_values) { log_to_csv.to_2024_row }
+
+        before do
+          file.write(log_to_csv.custom_field_numbers_row(seed:, field_numbers:))
+          file.write(log_to_csv.to_custom_csv_row(seed:, field_values:))
+          file.rewind
+        end
+
+        it "is valid" do
+          expect(validator).to be_valid
+        end
+      end
+    end
+
+    context "when trying to upload different years data for 2023 bulk upload" do
       let(:bulk_upload) { create(:bulk_upload, user:, year: 2023) }
 
       context "with a valid csv" do
@@ -75,12 +166,31 @@ RSpec.describe BulkUpload::Sales::Validator do
 
         before do
           Timecop.freeze(Time.utc(2022, 10, 3))
-          file.write(BulkUpload::SalesLogToCsv.new(log:, line_ending: "\r\n", col_offset: 0).to_2022_csv_row)
+          file.write(BulkUpload::SalesLogToCsv.new(log:, line_ending: "\r\n", col_offset: 0).to_2023_csv_row)
           file.close
         end
 
         after do
           Timecop.unfreeze
+        end
+
+        it "is not valid" do
+          expect(validator).not_to be_valid
+        end
+      end
+
+      context "with headers" do
+        let(:file) { Tempfile.new }
+        let(:seed) { rand }
+        let(:log) { build(:sales_log, :completed, saledate: Time.zone.local(2022, 10, 10)) }
+        let(:log_to_csv) { BulkUpload::SalesLogToCsv.new(log:) }
+        let(:field_numbers) { log_to_csv.default_2023_field_numbers }
+        let(:field_values) { log_to_csv.to_2023_row }
+
+        before do
+          file.write(log_to_csv.custom_field_numbers_row(seed:, field_numbers:))
+          file.write(log_to_csv.to_custom_csv_row(seed:, field_values:))
+          file.rewind
         end
 
         it "is not valid" do
