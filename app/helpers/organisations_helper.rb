@@ -14,10 +14,11 @@ module OrganisationsHelper
       { name: "Organisation ID", value: "ORG#{organisation.id}", editable: false },
       { name: "Address", value: organisation.address_string, editable: true },
       { name: "Telephone number", value: organisation.phone, editable: true },
-      { name: "Type of provider", value: organisation.display_provider_type, editable: false },
       { name: "Registration number", value: organisation.housing_registration_no || "", editable: false },
-      { name: "Rent periods", value: organisation.rent_period_labels, editable: false, format: :bullet },
+      { name: "Type of provider", value: organisation.display_provider_type, editable: false },
       { name: "Owns housing stock", value: organisation.holds_own_stock ? "Yes" : "No", editable: false },
+      { name: "Rent periods", value: organisation.rent_period_labels, editable: true, format: :bullet },
+      { name: "Data Sharing Agreement" },
       { name: "Status", value: status_tag(organisation.status), editable: false },
     ]
   end
@@ -35,6 +36,12 @@ module OrganisationsHelper
       else
         row.with_action
       end
+    end
+  end
+
+  def rent_periods_with_checked_attr(checked_periods: nil)
+    RentPeriod.rent_period_mappings.each_with_object({}) do |(period_code, period_value), result|
+      result[period_code] = period_value.merge(checked: checked_periods.nil? || checked_periods.include?(period_code))
     end
   end
 end
