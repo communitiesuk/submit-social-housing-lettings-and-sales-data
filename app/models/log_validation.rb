@@ -1,0 +1,2 @@
+class LogValidation < ApplicationRecord
+end
