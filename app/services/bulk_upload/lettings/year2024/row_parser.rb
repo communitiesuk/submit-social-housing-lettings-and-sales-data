@@ -338,33 +338,49 @@ class BulkUpload::Lettings::Year2024::RowParser
             on: :after_log
 
   validates :field_112,
+            presence: {
+              message: I18n.t("validations.not_answered", question: QUESTIONS[:field_112]),
+              category: :not_answered,
+            },
             inclusion: {
               in: [1, 2],
-              message: I18n.t("validations.invalid_option", question: "was the letting made under the Choice-Based Lettings (CBL)"),
+              message: I18n.t("validations.invalid_option", question: QUESTIONS[:field_112]),
               if: -> { field_112.present? },
             },
             on: :after_log
 
   validates :field_113,
+            presence: {
+              message: I18n.t("validations.not_answered", question: QUESTIONS[:field_113]),
+              category: :not_answered,
+            },
             inclusion: {
               in: [1, 2],
-              message: I18n.t("validations.invalid_option", question: "was the letting made under the Common Allocation Policy (CAP)"),
+              message: I18n.t("validations.invalid_option", question: QUESTIONS[:field_113]),
               if: -> { field_113.present? },
             },
             on: :after_log
 
   validates :field_114,
+            presence: {
+              message: I18n.t("validations.not_answered", question: QUESTIONS[:field_114]),
+              category: :not_answered,
+            },
             inclusion: {
               in: [1, 2],
-              message: I18n.t("validations.invalid_option", question: "was the letting made under the Common Housing Register (CHR)"),
+              message: I18n.t("validations.invalid_option", question: QUESTIONS[:field_114]),
               if: -> { field_114.present? },
             },
             on: :after_log
 
   validates :field_115,
+            presence: {
+              message: I18n.t("validations.not_answered", question: QUESTIONS[:field_115]),
+              category: :not_answered,
+            },
             inclusion: {
               in: [1, 2],
-              message: I18n.t("validations.invalid_option", question: "was the letting made under the Accessible Register"),
+              message: I18n.t("validations.invalid_option", question: QUESTIONS[:field_115]),
               if: -> { field_115.present? },
             },
             on: :after_log
@@ -391,7 +407,6 @@ class BulkUpload::Lettings::Year2024::RowParser
   validate :validate_no_housing_needs_questions_answered, on: :after_log
   validate :validate_reasonable_preference_homeless, on: :after_log
   validate :validate_condition_effects, on: :after_log
-  validate :validate_lettings_allocation, on: :after_log
   validate :validate_if_log_already_exists, on: :after_log, if: -> { FeatureToggle.bulk_upload_duplicate_log_check_enabled? }
 
   validate :validate_owning_org_data_given, on: :after_log
@@ -709,15 +724,6 @@ private
       illness_option_fields.each do |field|
         errors.add(field, I18n.t("validations.not_answered", question: "how is person affected by condition or illness"))
       end
-    end
-  end
-
-  def validate_lettings_allocation
-    if cbl.blank? && cap.blank? && chr.blank? && accessible_register.blank?
-      errors.add(:field_112, I18n.t("validations.not_answered", question: "was the letting made under the Choice-Based Lettings (CBL)?"))
-      errors.add(:field_113, I18n.t("validations.not_answered", question: "was the letting made under the Common Allocation Policy (CAP)?"))
-      errors.add(:field_114, I18n.t("validations.not_answered", question: "was the letting made under the Common Housing Register (CHR)?"))
-      errors.add(:field_115, I18n.t("validations.not_answered", question: "was the letting made under the Accessible Register?"))
     end
   end
 
