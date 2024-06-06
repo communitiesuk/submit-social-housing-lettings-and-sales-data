@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :lettings_log do
-    assigned_to { FactoryBot.create(:user) }
+    assigned_to { association :user }
     created_by { assigned_to }
     owning_organisation { assigned_to.organisation }
     managing_organisation { assigned_to.organisation }
@@ -215,6 +215,12 @@ FactoryBot.define do
       illness_type_8 { false }
       illness_type_9 { false }
       illness_type_10 { false }
+    end
+    trait :ignore_validation_errors do
+      to_create do |instance|
+        instance.valid?
+        instance.save!(validate: false)
+      end
     end
   end
 end

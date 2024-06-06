@@ -46,6 +46,25 @@ RSpec.describe LettingsLog, type: :model do
   end
 
   describe "deriving vacant days" do
+    it "correctly derives vacdays from startdate and mrcdate across DST boundaries" do
+      log.startdate = Time.zone.local(2024, 4, 1)
+      log.mrcdate = Time.zone.local(2024, 3, 30)
+
+      log.set_derived_fields!
+
+      expect(log.vacdays).to be 2
+    end
+
+    it "correctly derives vacdays from startdate and voiddate across DST boundaries" do
+      log.startdate = Time.zone.local(2024, 4, 1)
+      log.mrcdate = nil
+      log.voiddate = Time.zone.local(2024, 3, 30)
+
+      log.set_derived_fields!
+
+      expect(log.vacdays).to be 2
+    end
+
     it "correctly derives vacdays from startdate and mrcdate" do
       day_count = 8
       log.startdate = Time.zone.today

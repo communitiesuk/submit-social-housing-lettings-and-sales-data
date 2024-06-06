@@ -1,54 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Csv::LettingsLogCsvService do
-  before do
-    Timecop.freeze(now)
-    Singleton.__init__(FormHandler)
-    FormHandler.instance.use_real_forms!
-    log.irproduct = 1
-    log.save!(validate: false)
-  end
-
-  after do
-    Timecop.return
-  end
-
   context "when downloading a csv" do
-    let(:form_handler_mock) { instance_double(FormHandler) }
-    let(:organisation) { create(:organisation) }
-    let(:fixed_time) { Time.zone.local(2023, 11, 26) }
-    let(:now) { Time.zone.now }
-    let(:log) do
-      create(
-        :lettings_log,
-        :completed,
-        startdate: fixed_time,
-        created_at: fixed_time,
-        updated_at: now,
-        mrcdate: fixed_time - 1.day,
-        voiddate: fixed_time - 2.days,
-        propcode: "ABCDEFG",
-        tenancycode: "HIJKLMN",
-        postcode_full: "NW9 5LL",
-        ppostcode_full: "TN23 6LZ",
-        assigned_to: user,
-        managing_organisation: organisation,
-        hhmemb: 4,
-        details_known_3: 1,
-        details_known_4: 0,
-        sex4: "R",
-        ecstat4: 10,
-        relat4: "R",
-        age4_known: 1,
-        incref: 0,
-        address_line1_as_entered: "address line 1 as entered",
-        address_line2_as_entered: "address line 2 as entered",
-        town_or_city_as_entered: "town or city as entered",
-        county_as_entered: "county as entered",
-        postcode_full_as_entered: "AB1 2CD",
-        la_as_entered: "la as entered",
-      )
-    end
+    let(:log) { create(:lettings_log) }
     let(:user) { create(:user, :support, email: "s.port@jeemayle.com") }
     let(:service) { described_class.new(user:, export_type:, year:) }
     let(:export_type) { "labels" }
@@ -67,6 +21,7 @@ RSpec.describe Csv::LettingsLogCsvService do
     end
 
     context "when stubbing :ordered_questions_for_year" do
+      let(:form_handler_mock) { instance_double(FormHandler) }
       let(:lettings_form) do
         FormFactory.new(year: 2050, type: "lettings")
                   .with_sections([build(:section, :with_questions, question_ids:, questions:)])
@@ -81,6 +36,7 @@ RSpec.describe Csv::LettingsLogCsvService do
         allow(form_handler_mock).to receive(:form_name_from_start_year)
         allow(form_handler_mock).to receive(:get_form).and_return(lettings_form)
         allow(form_handler_mock).to receive(:ordered_questions_for_year).and_return(lettings_form.questions)
+        allow(form_handler_mock).to receive(:lettings_in_crossover_period?).and_return(true)
       end
 
       it "calls the form handler to get all questions for the specified year" do
@@ -145,6 +101,7 @@ RSpec.describe Csv::LettingsLogCsvService do
 
     context "when exporting with human readable labels" do
       let(:export_type) { "labels" }
+      let(:log) { create(:lettings_log, :setup_completed, hhmemb: 2, details_known_2: 0, relat2: "P", age1: 35, la: "E09000003", duplicate_set_id: 12_312) }
 
       it "gives answer to radio questions as labels" do
         relat2_column_index = csv.first.index("relat2")
@@ -170,56 +127,16 @@ RSpec.describe Csv::LettingsLogCsvService do
         expect(la_label_value).to eq "Barnet"
       end
 
-      context "when the requested form is 2024" do
-        let(:year) { 2024 }
-        let(:now) { Time.zone.local(2024, 4, 1) }
-        let(:fixed_time) { Time.zone.local(2024, 4, 1) }
-
-        before do
-          log.update!(nationality_all: 36)
-        end
-
-        it "exports the CSV with 2024 ordering and all values correct" do
-          expected_content = CSV.read("spec/fixtures/files/lettings_log_csv_export_labels_24.csv")
-          values_to_delete = %w[id vacdays]
-          values_to_delete.each do |attribute|
-            index = csv.first.index(attribute)
-            csv.second[index] = nil
-          end
-          expect(csv).to eq expected_content
-        end
-      end
-
-      context "when the requested form is 2023" do
-        let(:year) { 2023 }
-        let(:now) { Time.zone.local(2023, 11, 26) }
-
-        it "exports the CSV with 2023 ordering and all values correct" do
-          expected_content = CSV.read("spec/fixtures/files/lettings_log_csv_export_labels_23.csv")
-          values_to_delete = %w[id vacdays]
-          values_to_delete.each do |attribute|
-            index = csv.first.index(attribute)
-            csv.second[index] = nil
-          end
-          expect(csv).to eq expected_content
-        end
-      end
-
-      context "when the log has a duplicate log reference" do
-        before do
-          log.update!(duplicate_set_id: 12_312)
-        end
-
-        it "exports the id for under the heading 'duplicate_set_id'" do
-          duplicate_set_id_column_index = csv.first.index("duplicate_set_id")
-          duplicate_set_id_value = csv.second[duplicate_set_id_column_index]
-          expect(duplicate_set_id_value).to eq "12312"
-        end
+      it "exports the id for under the heading 'duplicate_set_id'" do
+        duplicate_set_id_column_index = csv.first.index("duplicate_set_id")
+        duplicate_set_id_value = csv.second[duplicate_set_id_column_index]
+        expect(duplicate_set_id_value).to eq "12312"
       end
     end
 
     context "when exporting as codes" do
       let(:export_type) { "codes" }
+      let(:log) { create(:lettings_log, :setup_completed, hhmemb: 2, details_known_2: 0, relat2: "P", age1: 35, la: "E09000003", duplicate_set_id: 12_312) }
 
       it "gives answer to radio questions as labels" do
         relat2_column_index = csv.first.index("relat2")
@@ -245,120 +162,399 @@ RSpec.describe Csv::LettingsLogCsvService do
         expect(la_label_value).to eq "Barnet"
       end
 
-      context "when the requested form is 2024" do
-        let(:year) { 2024 }
-        let(:now) { Time.zone.local(2024, 4, 1) }
-
-        it "exports the CSV with all values correct" do
-          expected_content = CSV.read("spec/fixtures/files/lettings_log_csv_export_codes_24.csv")
-          values_to_delete = %w[id vacdays]
-          values_to_delete.each do |attribute|
-            index = csv.first.index(attribute)
-            csv.second[index] = nil
-          end
-          expect(csv).to eq expected_content
-        end
-      end
-
-      context "when the requested form is 2023" do
-        let(:year) { 2023 }
-        let(:now) { Time.zone.local(2023, 11, 26) }
-
-        it "exports the CSV with all values correct" do
-          expected_content = CSV.read("spec/fixtures/files/lettings_log_csv_export_codes_23.csv")
-          values_to_delete = %w[id vacdays]
-          values_to_delete.each do |attribute|
-            index = csv.first.index(attribute)
-            csv.second[index] = nil
-          end
-          expect(csv).to eq expected_content
-        end
-      end
-
-      context "when the log has a duplicate log reference" do
-        before do
-          log.update!(duplicate_set_id: 12_312)
-        end
-
-        it "exports the id for under the heading 'duplicate_set_id'" do
-          duplicate_set_id_column_index = csv.first.index("duplicate_set_id")
-          duplicate_set_id_value = csv.second[duplicate_set_id_column_index]
-          expect(duplicate_set_id_value).to eq "12312"
-        end
+      it "exports the duplicate log reference under the heading 'duplicate_set_id'" do
+        duplicate_set_id_column_index = csv.first.index("duplicate_set_id")
+        duplicate_set_id_value = csv.second[duplicate_set_id_column_index]
+        expect(duplicate_set_id_value).to eq "12312"
       end
     end
 
     context "when the user is not a support user" do
-      let(:user) { create(:user, email: "choreographer@owtluk.com") }
+      let(:user) { create(:user, :data_coordinator, email: "choreographer@owtluk.com") }
 
       it "does not include certain attributes in the headers" do
         expect(headers).not_to include(*%w[wrent wscharge wpschrge wsupchrg wtcharge])
       end
+    end
 
-      context "and the requested form is 2024" do
+    describe "the full CSV output" do
+      context "when the requested log year is 2024" do
         let(:year) { 2024 }
-        let(:now) { Time.zone.local(2024, 4, 1) }
-        let(:fixed_time) { Time.zone.local(2024, 4, 1) }
+        let(:organisation) { create(:organisation, provider_type: "LA") }
+        let(:log) do
+          create(
+            :lettings_log,
+            :ignore_validation_errors,
+            created_by: user,
+            assigned_to: user,
+            created_at: Time.zone.local(2024, 4, 1),
+            updated_at: Time.zone.local(2024, 4, 1),
+            owning_organisation: organisation,
+            managing_organisation: organisation,
+            needstype: 1,
+            renewal: 0,
+            startdate: Time.zone.local(2024, 4, 1),
+            rent_type: 1,
+            tenancycode: "HIJKLMN",
+            propcode: "ABCDEFG",
+            declaration: 1,
+            address_line1: "Address line 1",
+            town_or_city: "London",
+            postcode_full: "NW9 5LL",
+            la: "E09000003",
+            is_la_inferred: false,
+            address_line1_as_entered: "address line 1 as entered",
+            address_line2_as_entered: "address line 2 as entered",
+            town_or_city_as_entered: "town or city as entered",
+            county_as_entered: "county as entered",
+            postcode_full_as_entered: "AB1 2CD",
+            la_as_entered: "la as entered",
+            first_time_property_let_as_social_housing: 0,
+            unitletas: 2,
+            rsnvac: 6,
+            unittype_gn: 7,
+            builtype: 1,
+            wchair: 1,
+            beds: 3,
+            voiddate: Time.zone.local(2024, 3, 30),
+            majorrepairs: 1,
+            mrcdate: Time.zone.local(2024, 3, 31),
+            joint: 3,
+            startertenancy: 1,
+            tenancy: 4,
+            tenancylength: 2,
+            hhmemb: 4,
+            age1_known: 0,
+            age1: 35,
+            sex1: "F",
+            ethnic_group: 0,
+            ethnic: 2,
+            nationality_all: 36,
+            ecstat1: 0,
+            details_known_2: 0,
+            relat2: "P",
+            age2_known: 0,
+            age2: 32,
+            sex2: "M",
+            ecstat2: 6,
+            details_known_3: 1,
+            details_known_4: 0,
+            relat4: "R",
+            age4_known: 1,
+            sex4: "R",
+            ecstat4: 10,
+            armedforces: 1,
+            leftreg: 4,
+            reservist: 1,
+            preg_occ: 2,
+            housingneeds: 1,
+            housingneeds_type: 0,
+            housingneeds_a: 1,
+            housingneeds_b: 0,
+            housingneeds_c: 0,
+            housingneeds_f: 0,
+            housingneeds_g: 0,
+            housingneeds_h: 0,
+            housingneeds_other: 0,
+            illness: 1,
+            illness_type_1: 0,
+            illness_type_2: 1,
+            illness_type_3: 0,
+            illness_type_4: 0,
+            illness_type_5: 0,
+            illness_type_6: 0,
+            illness_type_7: 0,
+            illness_type_8: 0,
+            illness_type_9: 0,
+            illness_type_10: 0,
+            layear: 2,
+            waityear: 7,
+            reason: 4,
+            prevten: 6,
+            homeless: 1,
+            ppcodenk: 1,
+            ppostcode_full: "TN23 6LZ",
+            previous_la_known: 1,
+            prevloc: "E07000105",
+            reasonpref: 1,
+            rp_homeless: 0,
+            rp_insan_unsat: 1,
+            rp_medwel: 0,
+            rp_hardship: 0,
+            rp_dontknow: 0,
+            cbl: 0,
+            chr: 1,
+            cap: 0,
+            accessible_register: 0,
+            referral: 2,
+            net_income_known: 0,
+            incref: 0,
+            incfreq: 1,
+            earnings: 268,
+            hb: 6,
+            has_benefits: 1,
+            benefits: 1,
+            period: 2,
+            brent: 200,
+            scharge: 50,
+            pscharge: 40,
+            supcharg: 35,
+            tcharge: 325,
+            hbrentshortfall: 1,
+            tshortfall_known: 1,
+            tshortfall: 12,
+          )
+        end
 
-        context "and exporting with labels" do
+        context "when exporting with human readable labels" do
           let(:export_type) { "labels" }
 
-          it "exports the CSV with all values correct" do
-            expected_content = CSV.read("spec/fixtures/files/lettings_log_csv_export_non_support_labels_24.csv")
-            values_to_delete = %w[id]
-            values_to_delete.each do |attribute|
-              index = csv.first.index(attribute)
-              csv.second[index] = nil
+          context "when the current user is a support user" do
+            let(:user) { create(:user, :support, organisation:, email: "s.port@jeemayle.com") }
+
+            it "exports the CSV with 2024 ordering and all values correct" do
+              expected_content = CSV.read("spec/fixtures/files/lettings_log_csv_export_labels_24.csv")
+              values_to_delete = %w[id]
+              values_to_delete.each do |attribute|
+                index = csv.first.index(attribute)
+                csv.second[index] = nil
+              end
+              expect(csv).to eq expected_content
             end
-            expect(csv).to eq expected_content
+          end
+
+          context "when the current user is not a support user" do
+            let(:user) { create(:user, :data_provider, organisation:, email: "choreographer@owtluk.com") }
+
+            it "exports the CSV with all values correct" do
+              expected_content = CSV.read("spec/fixtures/files/lettings_log_csv_export_non_support_labels_24.csv")
+              values_to_delete = %w[id]
+              values_to_delete.each do |attribute|
+                index = csv.first.index(attribute)
+                csv.second[index] = nil
+              end
+              expect(csv).to eq expected_content
+            end
           end
         end
 
-        context "and exporting values as codes" do
+        context "when exporting values as codes" do
           let(:export_type) { "codes" }
 
-          it "exports the CSV with all values correct" do
-            expected_content = CSV.read("spec/fixtures/files/lettings_log_csv_export_non_support_codes_24.csv")
-            values_to_delete = %w[id]
-            values_to_delete.each do |attribute|
-              index = csv.first.index(attribute)
-              csv.second[index] = nil
+          context "when the current user is a support user" do
+            let(:user) { create(:user, :support, organisation:, email: "s.port@jeemayle.com") }
+
+            it "exports the CSV with all values correct" do
+              expected_content = CSV.read("spec/fixtures/files/lettings_log_csv_export_codes_24.csv")
+              values_to_delete = %w[id]
+              values_to_delete.each do |attribute|
+                index = csv.first.index(attribute)
+                csv.second[index] = nil
+              end
+              expect(csv).to eq expected_content
             end
-            expect(csv).to eq expected_content
+          end
+
+          context "when the current user is not a support user" do
+            let(:user) { create(:user, :data_provider, organisation:, email: "choreographer@owtluk.com") }
+
+            it "exports the CSV with all values correct" do
+              expected_content = CSV.read("spec/fixtures/files/lettings_log_csv_export_non_support_codes_24.csv")
+              values_to_delete = %w[id]
+              values_to_delete.each do |attribute|
+                index = csv.first.index(attribute)
+                csv.second[index] = nil
+              end
+              expect(csv).to eq expected_content
+            end
           end
         end
       end
 
-      context "and the requested form is 2023" do
+      context "when the requested log year is 2023" do
         let(:year) { 2023 }
-        let(:now) { Time.zone.local(2023, 11, 26) }
-        let(:fixed_time) { Time.zone.local(2023, 11, 26) }
+        let(:organisation) { create(:organisation, provider_type: "LA") }
+        let(:log) do
+          create(
+            :lettings_log,
+            :ignore_validation_errors,
+            created_by: user,
+            assigned_to: user,
+            created_at: Time.zone.local(2023, 11, 26),
+            updated_at: Time.zone.local(2023, 11, 26),
+            owning_organisation: organisation,
+            managing_organisation: organisation,
+            needstype: 1,
+            renewal: 0,
+            startdate: Time.zone.local(2023, 11, 26),
+            rent_type: 1,
+            tenancycode: "HIJKLMN",
+            propcode: "ABCDEFG",
+            declaration: 1,
+            address_line1: "Address line 1",
+            town_or_city: "London",
+            postcode_full: "NW9 5LL",
+            la: "E09000003",
+            is_la_inferred: false,
+            first_time_property_let_as_social_housing: 0,
+            unitletas: 2,
+            rsnvac: 6,
+            offered: 2,
+            unittype_gn: 7,
+            builtype: 1,
+            wchair: 1,
+            beds: 3,
+            voiddate: Time.zone.local(2023, 11, 24),
+            majorrepairs: 1,
+            mrcdate: Time.zone.local(2023, 11, 25),
+            joint: 3,
+            startertenancy: 1,
+            tenancy: 4,
+            tenancylength: 2,
+            hhmemb: 4,
+            age1_known: 0,
+            age1: 35,
+            sex1: "F",
+            ethnic_group: 0,
+            ethnic: 2,
+            national: 13,
+            ecstat1: 0,
+            details_known_2: 0,
+            relat2: "P",
+            age2_known: 0,
+            age2: 32,
+            sex2: "M",
+            ecstat2: 6,
+            details_known_3: 1,
+            details_known_4: 0,
+            relat4: "R",
+            age4_known: 1,
+            sex4: "R",
+            ecstat4: 10,
+            armedforces: 1,
+            leftreg: 4,
+            reservist: 1,
+            preg_occ: 2,
+            housingneeds: 1,
+            housingneeds_type: 0,
+            housingneeds_a: 1,
+            housingneeds_b: 0,
+            housingneeds_c: 0,
+            housingneeds_f: 0,
+            housingneeds_g: 0,
+            housingneeds_h: 0,
+            housingneeds_other: 0,
+            illness: 1,
+            illness_type_1: 0,
+            illness_type_2: 1,
+            illness_type_3: 0,
+            illness_type_4: 0,
+            illness_type_5: 0,
+            illness_type_6: 0,
+            illness_type_7: 0,
+            illness_type_8: 0,
+            illness_type_9: 0,
+            illness_type_10: 0,
+            layear: 2,
+            waityear: 7,
+            reason: 4,
+            prevten: 6,
+            homeless: 1,
+            ppcodenk: 1,
+            ppostcode_full: "TN23 6LZ",
+            previous_la_known: 1,
+            prevloc: "E07000105",
+            reasonpref: 1,
+            rp_homeless: 0,
+            rp_insan_unsat: 1,
+            rp_medwel: 0,
+            rp_hardship: 0,
+            rp_dontknow: 0,
+            cbl: 0,
+            chr: 1,
+            cap: 0,
+            accessible_register: 0,
+            referral: 2,
+            net_income_known: 0,
+            incref: 0,
+            incfreq: 1,
+            earnings: 268,
+            hb: 6,
+            has_benefits: 1,
+            benefits: 1,
+            period: 2,
+            brent: 200,
+            scharge: 50,
+            pscharge: 40,
+            supcharg: 35,
+            tcharge: 325,
+            hbrentshortfall: 1,
+            tshortfall_known: 1,
+            tshortfall: 12,
+          )
+        end
 
-        context "and exporting with labels" do
+        context "when exporting with human readable labels" do
           let(:export_type) { "labels" }
 
-          it "exports the CSV with all values correct" do
-            expected_content = CSV.read("spec/fixtures/files/lettings_log_csv_export_non_support_labels_23.csv")
-            values_to_delete = %w[id]
-            values_to_delete.each do |attribute|
-              index = csv.first.index(attribute)
-              csv.second[index] = nil
+          context "when the current user is a support user" do
+            let(:user) { create(:user, :support, organisation:, email: "s.port@jeemayle.com") }
+
+            it "exports the CSV with all values correct" do
+              expected_content = CSV.read("spec/fixtures/files/lettings_log_csv_export_labels_23.csv")
+              values_to_delete = %w[id]
+              values_to_delete.each do |attribute|
+                index = csv.first.index(attribute)
+                csv.second[index] = nil
+              end
+              expect(csv).to eq expected_content
             end
-            expect(csv).to eq expected_content
+          end
+
+          context "when the current user is not a support user" do
+            let(:user) { create(:user, :data_provider, organisation:, email: "choreographer@owtluk.com") }
+
+            it "exports the CSV with all values correct" do
+              expected_content = CSV.read("spec/fixtures/files/lettings_log_csv_export_non_support_labels_23.csv")
+              values_to_delete = %w[id]
+              values_to_delete.each do |attribute|
+                index = csv.first.index(attribute)
+                csv.second[index] = nil
+              end
+              expect(csv).to eq expected_content
+            end
           end
         end
 
-        context "and exporting values as codes" do
+        context "when exporting values as codes" do
           let(:export_type) { "codes" }
 
-          it "exports the CSV with all values correct" do
-            expected_content = CSV.read("spec/fixtures/files/lettings_log_csv_export_non_support_codes_23.csv")
-            values_to_delete = %w[id]
-            values_to_delete.each do |attribute|
-              index = csv.first.index(attribute)
-              csv.second[index] = nil
+          context "when the current user is a support user" do
+            let(:user) { create(:user, :support, organisation:, email: "s.port@jeemayle.com") }
+
+            it "exports the CSV with all values correct" do
+              expected_content = CSV.read("spec/fixtures/files/lettings_log_csv_export_codes_23.csv")
+              values_to_delete = %w[id]
+              values_to_delete.each do |attribute|
+                index = csv.first.index(attribute)
+                csv.second[index] = nil
+              end
+              expect(csv).to eq expected_content
             end
-            expect(csv).to eq expected_content
+          end
+
+          context "when the current user is not a support user" do
+            let(:user) { create(:user, :data_provider, organisation:, email: "choreographer@owtluk.com") }
+
+            it "exports the CSV with all values correct" do
+              expected_content = CSV.read("spec/fixtures/files/lettings_log_csv_export_non_support_codes_23.csv")
+              values_to_delete = %w[id]
+              values_to_delete.each do |attribute|
+                index = csv.first.index(attribute)
+                csv.second[index] = nil
+              end
+              expect(csv).to eq expected_content
+            end
           end
         end
       end
