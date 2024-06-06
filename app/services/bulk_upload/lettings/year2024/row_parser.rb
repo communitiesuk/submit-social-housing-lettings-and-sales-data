@@ -339,48 +339,48 @@ class BulkUpload::Lettings::Year2024::RowParser
 
   validates :field_112,
             presence: {
-              message: I18n.t("validations.not_answered", question: QUESTIONS[:field_112]),
+              message: I18n.t("validations.not_answered", question: "was the letting made under the Choice-Based Lettings (CBL)"),
               category: :not_answered,
             },
             inclusion: {
               in: [1, 2],
-              message: I18n.t("validations.invalid_option", question: QUESTIONS[:field_112]),
+              message: I18n.t("validations.invalid_option", question: "was the letting made under the Choice-Based Lettings (CBL)"),
               if: -> { field_112.present? },
             },
             on: :after_log
 
   validates :field_113,
             presence: {
-              message: I18n.t("validations.not_answered", question: QUESTIONS[:field_113]),
+              message: I18n.t("validations.not_answered", question: "was the letting made under the Common Allocation Policy (CAP)"),
               category: :not_answered,
             },
             inclusion: {
               in: [1, 2],
-              message: I18n.t("validations.invalid_option", question: QUESTIONS[:field_113]),
+              message: I18n.t("validations.invalid_option", question: "was the letting made under the Common Allocation Policy (CAP)"),
               if: -> { field_113.present? },
             },
             on: :after_log
 
   validates :field_114,
             presence: {
-              message: I18n.t("validations.not_answered", question: QUESTIONS[:field_114]),
+              message: I18n.t("validations.not_answered", question: "was the letting made under the Common Housing Register (CHR)"),
               category: :not_answered,
             },
             inclusion: {
               in: [1, 2],
-              message: I18n.t("validations.invalid_option", question: QUESTIONS[:field_114]),
+              message: I18n.t("validations.invalid_option", question: "was the letting made under the Common Housing Register (CHR)"),
               if: -> { field_114.present? },
             },
             on: :after_log
 
   validates :field_115,
             presence: {
-              message: I18n.t("validations.not_answered", question: QUESTIONS[:field_115]),
+              message: I18n.t("validations.not_answered", question: "was the letting made under the Accessible Register"),
               category: :not_answered,
             },
             inclusion: {
               in: [1, 2],
-              message: I18n.t("validations.invalid_option", question: QUESTIONS[:field_115]),
+              message: I18n.t("validations.invalid_option", question: "was the letting made under the Accessible Register"),
               if: -> { field_115.present? },
             },
             on: :after_log
