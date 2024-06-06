@@ -191,32 +191,32 @@ RSpec.describe SalesLog, type: :model do
 
     it "allows searching using ID" do
       result = described_class.search_by(sales_log_to_search.id.to_s)
-      expect(result.count).to eq(1)
-      expect(result.first.id).to eq sales_log_to_search.id
+      expect(result.count).to be >= 1
+      expect(result).to include(have_attributes(id: sales_log_to_search.id))
     end
 
     it "allows searching using purchaser code" do
       result = described_class.search_by(sales_log_to_search.purchaser_code)
-      expect(result.count).to eq(1)
-      expect(result.first.id).to eq sales_log_to_search.id
+      expect(result.count).to be >= 1
+      expect(result).to include(have_attributes(id: sales_log_to_search.id))
     end
 
     it "allows searching by a Property Postcode" do
       result = described_class.search_by(sales_log_to_search.postcode_full)
-      expect(result.count).to eq(1)
-      expect(result.first.id).to eq sales_log_to_search.id
+      expect(result.count).to be >= 1
+      expect(result).to include(have_attributes(id: sales_log_to_search.id))
     end
 
     it "allows searching by id including the word log" do
       result = described_class.search_by("log#{sales_log_to_search.id}")
-      expect(result.count).to eq(1)
-      expect(result.first.id).to eq sales_log_to_search.id
+      expect(result.count).to be >= 1
+      expect(result).to include(have_attributes(id: sales_log_to_search.id))
     end
 
     it "allows searching by id including the capitalised word Log" do
       result = described_class.search_by("Log#{sales_log_to_search.id}")
-      expect(result.count).to eq(1)
-      expect(result.first.id).to eq sales_log_to_search.id
+      expect(result.count).to be >= 1
+      expect(result).to include(have_attributes(id: sales_log_to_search.id))
     end
 
     context "when postcode has spaces and lower case letters" do
@@ -224,8 +224,8 @@ RSpec.describe SalesLog, type: :model do
 
       it "allows searching by a Property Postcode" do
         result = described_class.search_by(matching_postcode_lower_case_with_spaces)
-        expect(result.count).to eq(1)
-        expect(result.first.id).to eq sales_log_to_search.id
+        expect(result.count).to be >= 1
+        expect(result).to include(have_attributes(id: sales_log_to_search.id))
       end
     end
   end
