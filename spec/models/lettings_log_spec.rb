@@ -949,23 +949,27 @@ RSpec.describe LettingsLog do
 
       context "when the organisation selected doesn't match the scheme set" do
         let(:scheme) { create(:scheme, owning_organisation: assigned_to_user.organisation) }
-        let(:location) { create(:location, scheme:) }
-        let(:lettings_log) { create(:lettings_log, owning_organisation: nil, needstype: 2, scheme_id: scheme.id) }
+        let(:location) { create_list(:location, 2, scheme:).first }
+        let(:lettings_log) { create(:lettings_log, owning_organisation: nil, needstype: 2, scheme_id: scheme.id, location_id: location.id) }
 
-        it "clears the scheme value" do
+        it "clears the scheme and location values" do
           lettings_log.update!(owning_organisation: organisation_2)
-          expect(lettings_log.reload.scheme).to be nil
+          lettings_log.reload
+          expect(lettings_log.scheme).to be nil
+          expect(lettings_log.location).to be nil
         end
       end
 
       context "when the organisation selected still matches the scheme set" do
         let(:scheme) { create(:scheme, owning_organisation: organisation_2) }
-        let(:location) { create(:location, scheme:) }
-        let(:lettings_log) { create(:lettings_log, owning_organisation: nil, needstype: 2, scheme_id: scheme.id) }
+        let(:location) { create_list(:location, 2, scheme:).first }
+        let(:lettings_log) { create(:lettings_log, owning_organisation: nil, needstype: 2, scheme_id: scheme.id, location_id: location.id) }
 
-        it "does not clear the scheme value" do
+        it "does not clear the scheme or location value" do
           lettings_log.update!(owning_organisation: organisation_2)
-          expect(lettings_log.reload.scheme_id).to eq(scheme.id)
+          lettings_log.reload
+          expect(lettings_log.scheme_id).to eq(scheme.id)
+          expect(lettings_log.location_id).to eq(location.id)
         end
       end
     end

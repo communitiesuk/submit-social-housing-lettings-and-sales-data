@@ -715,8 +715,10 @@ private
 
   def reset_scheme
     return unless scheme && owning_organisation
+    return unless scheme.owning_organisation != owning_organisation
 
-    self.scheme = nil if scheme.owning_organisation != owning_organisation
+    self.scheme = nil
+    self.location = nil
   end
 
   def reset_invalidated_dependent_fields!
