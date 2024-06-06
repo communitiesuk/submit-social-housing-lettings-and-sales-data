@@ -234,7 +234,13 @@ class LettingsLog < Log
 
     if hhmemb > 1
       (2..hhmemb).each do |person_index|
-        ecstat = self["ecstat#{person_index}"] || 10
+        ecstat = self["ecstat#{person_index}"]
+
+        if ecstat.nil?
+          age = self["age#{person_index}"]
+          # This should match the conditions under which ecstat is inferred as 9 (child under 16)
+          ecstat = age && age < 16 ? 9 : 10
+        end
 
         person_range = ALLOWED_INCOME_RANGES[ecstat]
         range.soft_min += person_range.soft_min

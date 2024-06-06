@@ -95,6 +95,13 @@ RSpec.describe LettingsLog do
       lettings_log.update(age1: 25)
     end
 
+    it "correctly allows net_income_value_check to be set when earnings is near a range boundary" do
+      log = create(:lettings_log, :setup_completed, hhmemb: 2, ecstat1: 1, details_known_2: 0, age2_known: 0, age2: 10, incfreq: 1, net_income_known: 0, earnings: 191)
+      log.update!(net_income_value_check: 0)
+      log.reload
+      expect(log.net_income_value_check).to be 0
+    end
+
     it "validates start date" do
       expect(validator).to receive(:validate_startdate)
     end
@@ -1877,17 +1884,49 @@ RSpec.describe LettingsLog do
 
   describe "#applicable_income_range" do
     context "when ecstat for a non-lead tenant is not set" do
-      let(:lettings_log) { build(:lettings_log, hhmemb: 2, ecstat1: 1) }
+      context "and their age is >= 16" do
+        let(:lettings_log) { build(:lettings_log, hhmemb: 2, ecstat1: 1, age2: 16) }
 
-      it "uses the prefers-not-to-say values for that tenant to calculate the range" do
-        range = lettings_log.applicable_income_range
-        expected_range = OpenStruct.new(
-          soft_min: 143 + 47,
-          soft_max: 730 + 730,
-          hard_min: 90 + 10,
-          hard_max: 1230 + 2000,
-        )
-        expect(range).to eq(expected_range)
+        it "uses the prefers-not-to-say values for that tenant to calculate the range" do
+          range = lettings_log.applicable_income_range
+          expected_range = OpenStruct.new(
+            soft_min: 143 + 47,
+            soft_max: 730 + 730,
+            hard_min: 90 + 10,
+            hard_max: 1230 + 2000,
+          )
+          expect(range).to eq(expected_range)
+        end
+      end
+
+      context "and their age is blank" do
+        let(:lettings_log) { build(:lettings_log, hhmemb: 2, ecstat1: 1, age2: nil) }
+
+        it "uses the prefers-not-to-say values for that tenant to calculate the range" do
+          range = lettings_log.applicable_income_range
+          expected_range = OpenStruct.new(
+            soft_min: 143 + 47,
+            soft_max: 730 + 730,
+            hard_min: 90 + 10,
+            hard_max: 1230 + 2000,
+          )
+          expect(range).to eq(expected_range)
+        end
+      end
+
+      context "and their age is < 16" do
+        let(:lettings_log) { build(:lettings_log, hhmemb: 2, ecstat1: 1, age2: 15) }
+
+        it "uses the child-under-16 values for that tenant to calculate the range" do
+          range = lettings_log.applicable_income_range
+          expected_range = OpenStruct.new(
+            soft_min: 143 + 50,
+            soft_max: 730 + 450,
+            hard_min: 90 + 10,
+            hard_max: 1230 + 750,
+          )
+          expect(range).to eq(expected_range)
+        end
       end
     end
 
