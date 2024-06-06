@@ -987,6 +987,16 @@ RSpec.describe LettingsLog, type: :model do
         .and change(log, :prevloc).to(expected_la)
     end
 
+    it "clears values for previous location and related fields when log is a renewal and current values are cleared" do
+      log.assign_attributes(postcode_known: 0, postcode_full: nil, la: nil, renewal: 1, previous_la_known: 1, prevloc: "E09000033", ppostcode_full: "SW1A 1AA", ppcodenk: 0)
+
+      expect { log.set_derived_fields! }
+        .to change(log, :previous_la_known).to(0)
+        .and change(log, :prevloc).to(nil)
+        .and change(log, :ppcodenk).to(1)
+        .and change(log, :ppostcode_full).to(nil)
+    end
+
     context "when the log is general needs" do
       context "and the managing organisation is a private registered provider" do
         before do

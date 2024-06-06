@@ -123,7 +123,7 @@ module DerivedVariables::LettingsLogVariables
                         0
                       end
       self.is_previous_la_inferred = is_la_inferred
-      self.previous_la_known = 1 if la.present?
+      self.previous_la_known = la.present? ? 1 : 0
       self.prevloc = la
     end
 
