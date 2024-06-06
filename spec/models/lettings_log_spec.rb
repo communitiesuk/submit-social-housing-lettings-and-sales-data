@@ -1915,7 +1915,7 @@ RSpec.describe LettingsLog do
     end
 
     context "when setup section has been completed" do
-      let(:lettings_log) { build(:lettings_log, :setup_completed) }
+      let(:lettings_log) { build_stubbed(:lettings_log, :setup_completed) }
 
       it "returns true" do
         expect(lettings_log).to be_non_location_setup_questions_completed
@@ -1923,7 +1923,7 @@ RSpec.describe LettingsLog do
     end
 
     context "when the declaration has not been completed for a 2024 log" do
-      let(:lettings_log) { build(:lettings_log, :setup_completed, startdate: Time.utc(2024, 10, 1), declaration: nil) }
+      let(:lettings_log) { build_stubbed(:lettings_log, :setup_completed, startdate: Time.utc(2024, 10, 1), declaration: nil) }
 
       it "returns false" do
         expect(lettings_log).not_to be_non_location_setup_questions_completed
@@ -1931,7 +1931,7 @@ RSpec.describe LettingsLog do
     end
 
     context "when an optional question has not been completed" do
-      let(:lettings_log) { build(:lettings_log, :setup_completed, propcode: nil) }
+      let(:lettings_log) { build_stubbed(:lettings_log, :setup_completed, propcode: nil) }
 
       it "returns true" do
         expect(lettings_log).to be_non_location_setup_questions_completed
@@ -1939,7 +1939,7 @@ RSpec.describe LettingsLog do
     end
 
     context "when scheme and location have not been completed" do
-      let(:lettings_log) { build(:lettings_log, :setup_completed, :sh, scheme_id: nil, location_id: nil) }
+      let(:lettings_log) { build_stubbed(:lettings_log, :setup_completed, :sh, scheme_id: nil, location_id: nil) }
 
       it "returns true" do
         expect(lettings_log).to be_non_location_setup_questions_completed

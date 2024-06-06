@@ -296,9 +296,9 @@ private
     return unless startdate
 
     if mrcdate.present?
-      (startdate - mrcdate).to_i / 1.day
+      startdate.to_date - mrcdate.to_date
     elsif voiddate.present?
-      (startdate - voiddate).to_i / 1.day
+      startdate.to_date - voiddate.to_date
     end
   end
 
