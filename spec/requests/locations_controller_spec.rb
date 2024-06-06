@@ -1582,8 +1582,8 @@ RSpec.describe LocationsController, type: :request do
         before do
           allow(LocationOrSchemeDeactivationMailer).to receive(:send_deactivation_mail).and_call_original
 
-          create(:lettings_log, :sh, location:, scheme:, startdate:, assigned_to: user_a)
-          create_list(:lettings_log, 3, :sh, location:, scheme:, startdate:, assigned_to: user_b)
+          create(:lettings_log, :sh, owning_organisation: scheme.owning_organisation, location:, scheme:, startdate:, assigned_to: user_a)
+          create_list(:lettings_log, 3, :sh, owning_organisation: scheme.owning_organisation, location:, scheme:, startdate:, assigned_to: user_b)
 
           Timecop.freeze(Time.utc(2022, 10, 10))
           sign_in user
@@ -1915,7 +1915,7 @@ RSpec.describe LocationsController, type: :request do
 
     context "when signed in as a support user" do
       let(:user) { create(:user, :support) }
-      let(:scheme) { create(:scheme) }
+      let(:scheme) { create(:scheme, owning_organisation: user.organisation) }
       let(:location) { create(:location, scheme:) }
       let(:add_deactivations) { location.location_deactivation_periods << location_deactivation_period }
 

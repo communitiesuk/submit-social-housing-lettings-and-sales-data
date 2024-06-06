@@ -494,7 +494,7 @@ RSpec.describe LettingsLog do
       end
 
       context "and a scheme with a single log is selected" do
-        let(:scheme) { create(:scheme) }
+        let(:scheme) { create(:scheme, owning_organisation:) }
         let!(:location) { create(:location, scheme:) }
 
         before do
@@ -567,7 +567,7 @@ RSpec.describe LettingsLog do
       end
 
       context "and not renewal" do
-        let(:scheme) { create(:scheme) }
+        let(:scheme) { create(:scheme, owning_organisation:) }
         let(:location) { create(:location, scheme:, postcode: "M11AE", type_of_unit: 1, mobility_type: "W") }
 
         let(:supported_housing_lettings_log) do
@@ -1743,7 +1743,7 @@ RSpec.describe LettingsLog do
       end
 
       context "when there is a duplicate supported housing log" do
-        let(:scheme) { create(:scheme) }
+        let(:scheme) { create(:scheme, owning_organisation: organisation) }
         let(:location) { create(:location, scheme:) }
         let(:location_2) { create(:location, scheme:) }
         let!(:supported_housing_log) { create(:lettings_log, :duplicate, needstype: 2, location:, scheme:, owning_organisation: organisation) }
@@ -1770,9 +1770,8 @@ RSpec.describe LettingsLog do
         end
 
         it "does not return logs not associated with the user if user is given" do
-          user = create(:user)
-          supported_housing_log.update!(assigned_to: user, owning_organisation: user.organisation)
-          duplicate_supported_housing_log.update!(owning_organisation: user.organisation)
+          user = create(:user, organisation:)
+          supported_housing_log.update!(assigned_to: user)
           duplicate_sets = described_class.duplicate_sets(user.id)
           expect(duplicate_sets.count).to eq(1)
           expect(duplicate_sets.first).to contain_exactly(supported_housing_log.id, duplicate_supported_housing_log.id)
