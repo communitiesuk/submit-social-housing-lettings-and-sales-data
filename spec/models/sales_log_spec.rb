@@ -1025,6 +1025,8 @@ RSpec.describe SalesLog, type: :model do
 
     describe "#search_by" do
       it "allows searching using ID" do
+        sales_log_to_search.id += 30_000
+        sales_log_to_search.save!
         result = described_class.search_by(sales_log_to_search.id.to_s)
         expect(result.count).to eq(1)
         expect(result.first.id).to eq sales_log_to_search.id
