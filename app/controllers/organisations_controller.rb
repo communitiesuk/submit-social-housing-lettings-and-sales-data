@@ -136,7 +136,8 @@ class OrganisationsController < ApplicationController
         else
           flash[:notice] = I18n.t("organisation.updated")
         end
-        rent_periods_to_delete = rent_period_params[:all_rent_periods] - selected_rent_periods
+        used_rent_periods = @organisation.lettings_logs.pluck(:period).uniq.compact.map(&:to_s)
+        rent_periods_to_delete = rent_period_params[:all_rent_periods] - selected_rent_periods - used_rent_periods
         OrganisationRentPeriod.transaction do
           selected_rent_periods.each { |period| OrganisationRentPeriod.create(organisation: @organisation, rent_period: period) }
           OrganisationRentPeriod.where(organisation: @organisation, rent_period: rent_periods_to_delete).destroy_all

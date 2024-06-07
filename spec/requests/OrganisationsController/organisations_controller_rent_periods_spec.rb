@@ -96,11 +96,9 @@ RSpec.describe OrganisationsController, type: :request do
       }
     end
 
-    before do
-      create(:organisation_rent_period, organisation:, rent_period: initially_checked_rent_period_id)
-    end
-
     it "creates and destroys organisation rent periods as appropriate" do
+      create(:organisation_rent_period, organisation:, rent_period: initially_checked_rent_period_id)
+
       rent_periods = Organisation.includes(:organisation_rent_periods)
                                  .find(organisation.id)
                                  .organisation_rent_periods
@@ -114,6 +112,34 @@ RSpec.describe OrganisationsController, type: :request do
                                  .organisation_rent_periods
       expect(rent_periods.count).to be 1
       expect(rent_periods.first.rent_period.to_s).to eq initially_unchecked_rent_period_id
+    end
+
+    context "when a user creates a log with a certain rent period while another user is on the edit page" do
+      let(:period_to_not_delete) { "4" }
+      let(:period_to_create) { "5" }
+      let(:coordinator) { create(:user, :data_coordinator, organisation:) }
+      let(:params) do
+        {
+          "organisation": {
+            name: organisation.name,
+            rent_periods: [period_to_create],
+            all_rent_periods: [period_to_not_delete],
+          },
+        }
+      end
+
+      it "does not delete rent periods that are in use by that organisation" do
+        create(:organisation_rent_period, organisation:, rent_period: period_to_not_delete)
+        create(:lettings_log, :setup_completed, period: period_to_not_delete, assigned_to: coordinator, owning_organisation: organisation, managing_organisation: organisation)
+
+        patch organisation_path(organisation, headers:, params:)
+
+        rent_periods = Organisation.includes(:organisation_rent_periods)
+                                   .find(organisation.id)
+                                   .organisation_rent_periods
+
+        expect(rent_periods.map(&:rent_period).map(&:to_s)).to match_array([period_to_create, period_to_not_delete])
+      end
     end
   end
 end
