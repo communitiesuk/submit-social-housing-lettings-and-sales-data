@@ -201,7 +201,7 @@ RSpec.describe Form::Lettings::Questions::StockOwner, type: :model do
 
     context "when user is support" do
       let!(:user) { create(:user, :support) }
-      let!(:log) { build(:lettings_log) }
+      let!(:log) { build(:lettings_log, assigned_to: create(:user)) }
 
       it "shows active orgs where organisation holds own stock" do
         non_stock_organisation = create(:organisation, name: "Non-stockholding org", holds_own_stock: false)
