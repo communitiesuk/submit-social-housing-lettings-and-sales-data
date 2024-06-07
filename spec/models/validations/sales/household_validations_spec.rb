@@ -5,9 +5,11 @@ RSpec.describe Validations::Sales::HouseholdValidations do
 
   let(:validator_class) { Class.new { include Validations::Sales::HouseholdValidations } }
   let(:record) { build(:sales_log, saledate:) }
-  let(:saledate) { Time.zone.local(2023, 4, 1) }
+  let(:saledate) { Time.zone.now }
 
   describe "#validate_partner_count" do
+    let(:saledate) { Time.zone.local(2023, 4, 1) }
+
     it "validates that only 1 partner exists" do
       record.relat2 = "P"
       record.relat3 = "P"
@@ -337,7 +339,6 @@ RSpec.describe Validations::Sales::HouseholdValidations do
   end
 
   describe "#validate_buyer1_previous_tenure" do
-    let(:saledate) { Time.zone.local(2024, 4, 4) }
     let(:record) { build(:sales_log, saledate:, ownershipsch: 2) }
 
     it "adds an error when previous tenure is not valid" do
