@@ -336,11 +336,11 @@ RSpec.describe "bulk_update" do
                     updated_at: Time.zone.local(2022, 3, 1),
                     scheme:)
       end
-      let!(:lettings_log) { FactoryBot.create(:lettings_log, :sh, location: locations[0], scheme:, values_updated_at: nil, startdate: Time.zone.local(2023, 4, 4)) }
-      let!(:lettings_log_2) { FactoryBot.create(:lettings_log, :sh, location: locations[1], scheme:, values_updated_at: nil, startdate: Time.zone.local(2023, 4, 4)) }
-      let!(:lettings_log_3) { FactoryBot.create(:lettings_log, :sh, location: locations[2], scheme:, values_updated_at: nil, startdate: Time.zone.local(2023, 4, 4)) }
-      let!(:lettings_log_4) { FactoryBot.create(:lettings_log, :sh, location: locations[0], scheme:, values_updated_at: nil, startdate: Time.zone.local(2023, 4, 4)) }
-      let!(:lettings_log_5) { FactoryBot.create(:lettings_log, :sh, location: locations[0], scheme:, values_updated_at: nil, startdate: Time.zone.local(2023, 4, 4)) }
+      let!(:lettings_log) { FactoryBot.create(:lettings_log, :sh, owning_organisation: scheme.owning_organisation, location: locations[0], scheme:, values_updated_at: nil, startdate: Time.zone.local(2023, 4, 4)) }
+      let!(:lettings_log_2) { FactoryBot.create(:lettings_log, :sh, owning_organisation: scheme.owning_organisation, location: locations[1], scheme:, values_updated_at: nil, startdate: Time.zone.local(2023, 4, 4)) }
+      let!(:lettings_log_3) { FactoryBot.create(:lettings_log, :sh, owning_organisation: scheme.owning_organisation, location: locations[2], scheme:, values_updated_at: nil, startdate: Time.zone.local(2023, 4, 4)) }
+      let!(:lettings_log_4) { FactoryBot.create(:lettings_log, :sh, owning_organisation: scheme.owning_organisation, location: locations[0], scheme:, values_updated_at: nil, startdate: Time.zone.local(2023, 4, 4)) }
+      let!(:lettings_log_5) { FactoryBot.create(:lettings_log, :sh, owning_organisation: scheme.owning_organisation, location: locations[0], scheme:, values_updated_at: nil, startdate: Time.zone.local(2023, 4, 4)) }
 
       before do
         allow(storage_service).to receive(:get_file_io)

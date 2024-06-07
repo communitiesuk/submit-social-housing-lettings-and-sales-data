@@ -501,7 +501,7 @@ RSpec.describe LettingsLog do
       end
 
       context "and a scheme with a single log is selected" do
-        let(:scheme) { create(:scheme) }
+        let(:scheme) { create(:scheme, owning_organisation:) }
         let!(:location) { create(:location, scheme:) }
 
         before do
@@ -574,7 +574,7 @@ RSpec.describe LettingsLog do
       end
 
       context "and not renewal" do
-        let(:scheme) { create(:scheme) }
+        let(:scheme) { create(:scheme, owning_organisation:) }
         let(:location) { create(:location, scheme:, postcode: "M11AE", type_of_unit: 1, mobility_type: "W") }
 
         let(:supported_housing_lettings_log) do
@@ -956,23 +956,27 @@ RSpec.describe LettingsLog do
 
       context "when the organisation selected doesn't match the scheme set" do
         let(:scheme) { create(:scheme, owning_organisation: assigned_to_user.organisation) }
-        let(:location) { create(:location, scheme:) }
-        let(:lettings_log) { create(:lettings_log, owning_organisation: nil, needstype: 2, scheme_id: scheme.id) }
+        let(:location) { create_list(:location, 2, scheme:).first }
+        let(:lettings_log) { create(:lettings_log, owning_organisation: nil, needstype: 2, scheme_id: scheme.id, location_id: location.id) }
 
-        it "clears the scheme value" do
+        it "clears the scheme and location values" do
           lettings_log.update!(owning_organisation: organisation_2)
-          expect(lettings_log.reload.scheme).to be nil
+          lettings_log.reload
+          expect(lettings_log.scheme).to be nil
+          expect(lettings_log.location).to be nil
         end
       end
 
       context "when the organisation selected still matches the scheme set" do
         let(:scheme) { create(:scheme, owning_organisation: organisation_2) }
-        let(:location) { create(:location, scheme:) }
-        let(:lettings_log) { create(:lettings_log, owning_organisation: nil, needstype: 2, scheme_id: scheme.id) }
+        let(:location) { create_list(:location, 2, scheme:).first }
+        let(:lettings_log) { create(:lettings_log, owning_organisation: nil, needstype: 2, scheme_id: scheme.id, location_id: location.id) }
 
-        it "does not clear the scheme value" do
+        it "does not clear the scheme or location value" do
           lettings_log.update!(owning_organisation: organisation_2)
-          expect(lettings_log.reload.scheme_id).to eq(scheme.id)
+          lettings_log.reload
+          expect(lettings_log.scheme_id).to eq(scheme.id)
+          expect(lettings_log.location_id).to eq(location.id)
         end
       end
     end
@@ -1746,7 +1750,7 @@ RSpec.describe LettingsLog do
       end
 
       context "when there is a duplicate supported housing log" do
-        let(:scheme) { create(:scheme) }
+        let(:scheme) { create(:scheme, owning_organisation: organisation) }
         let(:location) { create(:location, scheme:) }
         let(:location_2) { create(:location, scheme:) }
         let!(:supported_housing_log) { create(:lettings_log, :duplicate, needstype: 2, location:, scheme:, owning_organisation: organisation) }
@@ -1773,9 +1777,8 @@ RSpec.describe LettingsLog do
         end
 
         it "does not return logs not associated with the user if user is given" do
-          user = create(:user)
-          supported_housing_log.update!(assigned_to: user, owning_organisation: user.organisation)
-          duplicate_supported_housing_log.update!(owning_organisation: user.organisation)
+          user = create(:user, organisation:)
+          supported_housing_log.update!(assigned_to: user)
           duplicate_sets = described_class.duplicate_sets(user.id)
           expect(duplicate_sets.count).to eq(1)
           expect(duplicate_sets.first).to contain_exactly(supported_housing_log.id, duplicate_supported_housing_log.id)
