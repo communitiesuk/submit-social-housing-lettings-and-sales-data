@@ -51,7 +51,7 @@ RSpec.describe Form::Lettings::Questions::StockOwner, type: :model do
       let!(:org_rel) do
         create(:organisation_relationship, child_organisation: user.organisation, parent_organisation: owning_org_2)
       end
-      let(:log) { create(:lettings_log, owning_organisation: owning_org_1) }
+      let(:log) { build(:lettings_log, owning_organisation: owning_org_1) }
 
       context "when user's org owns stock" do
         let(:options) do
@@ -201,7 +201,7 @@ RSpec.describe Form::Lettings::Questions::StockOwner, type: :model do
 
     context "when user is support" do
       let!(:user) { create(:user, :support) }
-      let!(:log) { create(:lettings_log) }
+      let!(:log) { build(:lettings_log) }
 
       it "shows active orgs where organisation holds own stock" do
         non_stock_organisation = create(:organisation, name: "Non-stockholding org", holds_own_stock: false)
