@@ -339,7 +339,7 @@ class BulkUpload::Lettings::Year2023::RowParser
 
   validates :field_116,
             presence: {
-              message: I18n.t("validations.not_answered", question: "was the letting made under the Choice-Based Lettings (CBL)"),
+              message: I18n.t("validations.not_answered", question: "was the letting made under the Choice-Based Lettings (CBL)?"),
               category: :not_answered,
             },
             inclusion: {
@@ -351,7 +351,7 @@ class BulkUpload::Lettings::Year2023::RowParser
 
   validates :field_117,
             presence: {
-              message: I18n.t("validations.not_answered", question: "was the letting made under the Common Allocation Policy (CAP)"),
+              message: I18n.t("validations.not_answered", question: "was the letting made under the Common Allocation Policy (CAP)?"),
               category: :not_answered,
             },
             inclusion: {
@@ -363,7 +363,7 @@ class BulkUpload::Lettings::Year2023::RowParser
 
   validates :field_118,
             presence: {
-              message: I18n.t("validations.not_answered", question: "was the letting made under the Common Housing Register (CHR)"),
+              message: I18n.t("validations.not_answered", question: "was the letting made under the Common Housing Register (CHR)?"),
               category: :not_answered,
             },
             inclusion: {
