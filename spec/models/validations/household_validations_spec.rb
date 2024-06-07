@@ -5,7 +5,7 @@ RSpec.describe Validations::HouseholdValidations do
 
   let(:validator_class) { Class.new { include Validations::HouseholdValidations } }
   let(:startdate) { Time.zone.now }
-  let(:record) { FactoryBot.build(:lettings_log, :setup_completed, startdate:) }
+  let(:record) { FactoryBot.build(:lettings_log, :setup_completed, startdate:, assigned_to: create(:user)) }
 
   describe "reasonable preference validations" do
     context "when reasonable preference is not given" do
