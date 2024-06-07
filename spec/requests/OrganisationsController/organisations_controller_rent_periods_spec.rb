@@ -117,14 +117,14 @@ RSpec.describe OrganisationsController, type: :request do
     context "when a user creates a log with a certain rent period while another user is on the edit page" do
       let(:period_to_not_delete) { "4" }
       let(:period_to_create) { "5" }
-      let(:coordinator) { create(:user, :data_coordinator, organisation:)}
+      let(:coordinator) { create(:user, :data_coordinator, organisation:) }
       let(:params) do
         {
           "organisation": {
             name: organisation.name,
             rent_periods: [period_to_create],
             all_rent_periods: [period_to_not_delete],
-          }
+          },
         }
       end
 
