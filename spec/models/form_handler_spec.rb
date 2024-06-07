@@ -247,7 +247,7 @@ RSpec.describe FormHandler do
     end
 
     context "when only archived form form is defined in JSON (current collection start year 2024 onwards)" do
-      let(:now) { Time.utc(2024, 9, 20) }
+      let(:now) { Time.utc(2024, 5, 20) }
 
       it "creates previous_lettings, current_lettings and next_lettings forms from ruby form objects and archived form from json" do
         expect(form_handler.lettings_forms["archived_lettings"]).to be_present

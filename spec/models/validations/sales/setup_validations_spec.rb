@@ -74,6 +74,10 @@ RSpec.describe Validations::Sales::SetupValidations do
       context "when saledate is in the 22/23 collection year" do
         let(:record) { build(:sales_log, saledate: Time.zone.local(2024, 1, 1)) }
 
+        before do
+          allow(FormHandler.instance).to receive(:sales_in_crossover_period?).and_return(true)
+        end
+
         it "does not add an error" do
           setup_validator.validate_saledate_collection_year(record)
 
@@ -84,6 +88,10 @@ RSpec.describe Validations::Sales::SetupValidations do
       context "when saledate is before the 22/23 collection year" do
         let(:record) { build(:sales_log, saledate: Time.zone.local(2020, 5, 1)) }
 
+        before do
+          allow(FormHandler.instance).to receive(:sales_in_crossover_period?).and_return(true)
+        end
+
         it "adds error" do
           setup_validator.validate_saledate_collection_year(record)
 
@@ -93,6 +101,10 @@ RSpec.describe Validations::Sales::SetupValidations do
 
       context "when saledate is after the 22/23 collection year" do
         let(:record) { build(:sales_log, saledate: Time.zone.local(2025, 4, 1)) }
+
+        before do
+          allow(FormHandler.instance).to receive(:sales_in_crossover_period?).and_return(true)
+        end
 
         it "adds error" do
           setup_validator.validate_saledate_collection_year(record)
