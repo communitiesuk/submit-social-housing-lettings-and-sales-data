@@ -1,7 +1,6 @@
 desc "Recalculate vacdays after bugfix for daylight savings time changes"
 task recalculate_vacdays: :environment do
-  logs = LettingsLog.where.not(vacdays: nil)
-  logs.each do |log|
+  LettingsLog.where.not(vacdays: nil).find_each do |log|
     Rails.logger.log("Log #{log.id}")
     recalculated_vacdays = log.send(:property_vacant_days)
     next if recalculated_vacdays == log.vacdays
