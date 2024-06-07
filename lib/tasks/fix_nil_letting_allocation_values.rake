@@ -1,11 +1,10 @@
 desc "Infer nil letting allocation values as no"
 task fix_nil_letting_allocation_values: :environment do
-  logs = LettingsLog.where(cbl: nil)
-           .or(LettingsLog.where(chr: nil))
-           .or(LettingsLog.where(cap: nil))
-           .or(LettingsLog.filter_by_year(2024).where(accessible_register: nil))
-
-  logs.each do |log|
+  LettingsLog.where(cbl: nil)
+     .or(LettingsLog.where(chr: nil))
+     .or(LettingsLog.where(cap: nil))
+     .or(LettingsLog.filter_by_year(2024).where(accessible_register: nil))
+     .find_each do |log|
     next unless log.cbl.present? || log.chr.present? || log.cap.present? || log.accessible_register.present? || log.letting_allocation_unknown.present?
 
     log.cbl = 0 if log.cbl.blank?
