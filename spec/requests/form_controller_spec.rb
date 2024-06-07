@@ -1156,8 +1156,8 @@ RSpec.describe FormController, type: :request do
         end
 
         context "when the sales question was accessed from a duplicate logs screen" do
-          let!(:sales_log) { build(:sales_log, :duplicate, assigned_to: user, duplicate_set_id: 1) }
-          let!(:duplicate_log) { build(:sales_log, :duplicate, assigned_to: user, duplicate_set_id: 1) }
+          let!(:sales_log) { create(:sales_log, :duplicate, assigned_to: user, duplicate_set_id: 1) }
+          let!(:duplicate_log) { create(:sales_log, :duplicate, assigned_to: user, duplicate_set_id: 1) }
           let(:referrer) { "/sales-logs/#{sales_log.id}/buyer-1-age?referrer=duplicate_logs&first_remaining_duplicate_id=#{duplicate_log.id}&original_log_id=#{sales_log.id}&referrer=duplicate_logs" }
           let(:params) do
             {
@@ -1171,8 +1171,6 @@ RSpec.describe FormController, type: :request do
           end
 
           before do
-            sales_log.save!(validate: false)
-            duplicate_log.save!(validate: false)
             post "/sales-logs/#{sales_log.id}/buyer-1-age", params:, headers: headers.merge({ "HTTP_REFERER" => referrer })
           end
 

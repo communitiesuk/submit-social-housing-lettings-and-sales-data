@@ -13,7 +13,7 @@ RSpec.describe BulkUpload, type: :model do
 
     context "when there are no incomplete logs" do
       it "returns true" do
-        logs = build_list(:lettings_log, 2, :completed, bulk_upload:, startdate: Time.zone.local(2024, 3, 3), voiddate: Time.zone.local(2024, 3, 3), mrcdate: Time.zone.local(2024, 3, 3))
+        logs = build_list(:lettings_log, 2, :completed, bulk_upload:, startdate: Time.zone.local(2024, 3, 3), voiddate: Time.zone.local(2024, 3, 3), mrcdate: Time.zone.local(2024, 3, 3), assigned_to: create(:user))
         logs.each { |log| log.save(validate: false) }
         expect(bulk_upload.completed?).to equal(true)
       end

@@ -18,7 +18,7 @@ RSpec.describe Log, type: :model do
     end
 
     it "returns the correct status for a completed lettings log" do
-      complete_lettings_log = build(:lettings_log, :completed, startdate: Time.zone.local(2023, 12, 12), voiddate: Time.zone.local(2023, 12, 11), mrcdate: Time.zone.local(2023, 12, 11), status: nil)
+      complete_lettings_log = build(:lettings_log, :completed, startdate: Time.zone.local(2023, 12, 12), voiddate: Time.zone.local(2023, 12, 11), mrcdate: Time.zone.local(2023, 12, 11), status: nil, assigned_to: create(:user))
       expect(complete_lettings_log.calculate_status).to eq "completed"
     end
 
