@@ -15,9 +15,9 @@ class OrganisationsController < ApplicationController
     redirect_to organisation_path(current_user.organisation) unless current_user.support?
 
     all_organisations = Organisation.order(:name)
-    @pagy, @organisations = pagy(filtered_collection(all_organisations, search_term))
+    @pagy, @organisations = pagy(filtered_collection(all_organisations.visible, search_term))
     @searched = search_term.presence
-    @total_count = all_organisations.size
+    @total_count = all_organisations.visible.size
   end
 
   def schemes
@@ -152,7 +152,10 @@ class OrganisationsController < ApplicationController
     end
   end
 
-  def delete; end
+  def delete
+    @organisation.discard!
+    redirect_to organisations_path, notice: I18n.t("notification.organisation_deleted", name: @organisation.name)
+  end
 
   def lettings_logs
     organisation_logs = LettingsLog.visible.filter_by_organisation(@organisation).filter_by_years_or_nil(FormHandler.instance.years_of_available_lettings_forms)
