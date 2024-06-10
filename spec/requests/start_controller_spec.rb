@@ -262,6 +262,22 @@ RSpec.describe StartController, type: :request do
               counts = databoxes.map { |databox| count_from_databox databox }
               expect(counts).to eq [0, 0]
             end
+
+            it "shows the correct count for schemes" do
+              completed_schemes_count = 3
+              incomplete_schemes_count = 2
+              create_list(:scheme, completed_schemes_count, :incomplete, owning_organisation: coordinator.organisation)
+              create_list(:scheme, incomplete_schemes_count, :incomplete, owning_organisation: coordinator.organisation, discarded_at: Time.zone.yesterday)
+
+              get root_path
+
+              type = "schemes"
+              status = "incomplete"
+              databoxes = all_databoxes(type, status)
+              count = count_from_databox(databoxes.first)
+
+              expect(count).to eq(completed_schemes_count)
+            end
           end
 
           context "and logged in as a support user" do
