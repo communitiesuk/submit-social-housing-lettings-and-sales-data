@@ -44,4 +44,8 @@ module OrganisationsHelper
       result[period_code] = period_value.merge(checked: checked_periods.nil? || checked_periods.include?(period_code))
     end
   end
+
+  def delete_organisation_link(organisation)
+    govuk_button_link_to "Delete this organisation", delete_confirmation_organisation_path(organisation), warning: true
+  end
 end

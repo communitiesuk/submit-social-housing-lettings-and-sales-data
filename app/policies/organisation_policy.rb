@@ -13,4 +13,12 @@ class OrganisationPolicy
   def reactivate?
     user.support? && organisation.status == :deactivated
   end
+
+  def delete_confirmation?
+    delete?
+  end
+
+  def delete?
+    user.support? && (organisation.status == :deactivated || organisation.status == :merged)
+  end
 end
