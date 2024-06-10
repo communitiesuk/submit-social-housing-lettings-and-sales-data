@@ -47,6 +47,20 @@ RSpec.describe OrganisationsController, type: :request do
         expect(response).to redirect_to("/account/sign-in")
       end
     end
+
+    fdescribe "#delete-confirmation" do
+      let(:organisation) { create(:organisation) }
+  
+      before do
+        get "/organisations/#{organisation.id}/delete-confirmation"
+      end
+  
+      context "when not signed in" do
+        it "redirects to the sign in page" do
+          expect(response).to redirect_to("/account/sign-in")
+        end
+      end
+    end
   end
 
   context "when user is signed in" do
@@ -747,6 +761,22 @@ RSpec.describe OrganisationsController, type: :request do
           end
         end
       end
+
+      fdescribe "#delete-confirmation" do
+        let(:organisation) { user.organisation }
+  
+        before do
+          get "/organisations/#{organisation.id}/delete-confirmation"
+        end
+  
+        context "with a data provider user" do
+          let(:user) { create(:user) }
+  
+          it "returns 401 unauthorized" do
+            expect(response).to have_http_status(:unauthorized)
+          end
+        end
+      end
     end
 
     context "with a data provider user" do
@@ -874,6 +904,22 @@ RSpec.describe OrganisationsController, type: :request do
             post "/organisations/#{organisation.id}/sales-logs/email-csv", headers:, params: {}
           }.not_to enqueue_job(EmailCsvJob)
           expect(response).to have_http_status(:unauthorized)
+        end
+      end
+
+      fdescribe "#delete-confirmation" do
+        let(:organisation) { user.organisation }
+  
+        before do
+          get "/organisations/#{organisation.id}/delete-confirmation"
+        end
+  
+        context "with a data provider user" do
+          let(:user) { create(:user) }
+  
+          it "returns 401 unauthorized" do
+            expect(response).to have_http_status(:unauthorized)
+          end
         end
       end
     end
@@ -1578,6 +1624,41 @@ RSpec.describe OrganisationsController, type: :request do
             expect(page).to have_content(I18n.t("validations.organisation.name_missing"))
             expect(page).to have_content(I18n.t("validations.organisation.provider_type_missing"))
           end
+        end
+      end
+
+      fdescribe "#delete-confirmation" do
+        let(:organisation) { create(:organisation) }
+    
+        before do
+          get "/organisations/#{organisation.id}/delete-confirmation"
+        end
+
+        it "shows the correct title" do
+          expect(page.find("h1").text).to include "Are you sure you want to delete this organisation?"
+        end
+
+        it "shows a warning to the user" do
+          expect(page).to have_selector(".govuk-warning-text", text: "You will not be able to undo this action")
+        end
+
+        it "shows a button to delete the selected organisation" do
+          expect(page).to have_selector("form.button_to button", text: "Delete this organisation")
+        end
+
+        it "the delete organisation button submits the correct data to the correct path" do
+          form_containing_button = page.find("form.button_to")
+
+          expect(form_containing_button[:action]).to eq delete_organisation_path(organisation)
+          expect(form_containing_button).to have_field "_method", type: :hidden, with: "delete"
+        end
+
+        it "shows a cancel link with the correct style" do
+          expect(page).to have_selector("a.govuk-button--secondary", text: "Cancel")
+        end
+
+        it "shows cancel link that links back to the organisation page" do
+          expect(page).to have_link(text: "Cancel", href: organisation_path(organisation))
         end
       end
 
