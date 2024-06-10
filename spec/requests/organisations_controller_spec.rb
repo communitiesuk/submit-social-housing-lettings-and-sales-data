@@ -48,13 +48,27 @@ RSpec.describe OrganisationsController, type: :request do
       end
     end
 
-    fdescribe "#delete-confirmation" do
+    describe "#delete-confirmation" do
       let(:organisation) { create(:organisation) }
-  
+
       before do
         get "/organisations/#{organisation.id}/delete-confirmation"
       end
-  
+
+      context "when not signed in" do
+        it "redirects to the sign in page" do
+          expect(response).to redirect_to("/account/sign-in")
+        end
+      end
+    end
+
+    describe "#delete" do
+      let(:organisation) { create(:organisation) }
+
+      before do
+        delete "/organisations/#{organisation.id}/delete"
+      end
+
       context "when not signed in" do
         it "redirects to the sign in page" do
           expect(response).to redirect_to("/account/sign-in")
@@ -762,16 +776,32 @@ RSpec.describe OrganisationsController, type: :request do
         end
       end
 
-      fdescribe "#delete-confirmation" do
+      describe "#delete-confirmation" do
         let(:organisation) { user.organisation }
-  
+
         before do
           get "/organisations/#{organisation.id}/delete-confirmation"
         end
-  
+
         context "with a data provider user" do
           let(:user) { create(:user) }
-  
+
+          it "returns 401 unauthorized" do
+            expect(response).to have_http_status(:unauthorized)
+          end
+        end
+      end
+
+      describe "#delete" do
+        let(:organisation) { user.organisation }
+
+        before do
+          delete "/organisations/#{organisation.id}/delete"
+        end
+
+        context "with a data provider user" do
+          let(:user) { create(:user) }
+
           it "returns 401 unauthorized" do
             expect(response).to have_http_status(:unauthorized)
           end
@@ -907,16 +937,32 @@ RSpec.describe OrganisationsController, type: :request do
         end
       end
 
-      fdescribe "#delete-confirmation" do
+      describe "#delete-confirmation" do
         let(:organisation) { user.organisation }
-  
+
         before do
           get "/organisations/#{organisation.id}/delete-confirmation"
         end
-  
+
         context "with a data provider user" do
           let(:user) { create(:user) }
-  
+
+          it "returns 401 unauthorized" do
+            expect(response).to have_http_status(:unauthorized)
+          end
+        end
+      end
+
+      describe "#delete" do
+        let(:organisation) { user.organisation }
+
+        before do
+          delete "/organisations/#{organisation.id}/delete"
+        end
+
+        context "with a data provider user" do
+          let(:user) { create(:user) }
+
           it "returns 401 unauthorized" do
             expect(response).to have_http_status(:unauthorized)
           end
@@ -1627,9 +1673,9 @@ RSpec.describe OrganisationsController, type: :request do
         end
       end
 
-      fdescribe "#delete-confirmation" do
+      describe "#delete-confirmation" do
         let(:organisation) { create(:organisation) }
-    
+
         before do
           get "/organisations/#{organisation.id}/delete-confirmation"
         end
@@ -1659,6 +1705,33 @@ RSpec.describe OrganisationsController, type: :request do
 
         it "shows cancel link that links back to the organisation page" do
           expect(page).to have_link(text: "Cancel", href: organisation_path(organisation))
+        end
+      end
+
+      describe "#delete" do
+        let(:organisation) { create(:organisation) }
+
+        before do
+          delete "/organisations/#{organisation.id}/delete"
+        end
+
+        it "deletes the organisation" do
+          organisation.reload
+          expect(organisation.status).to eq(:deleted)
+          expect(organisation.discarded_at).not_to be nil
+        end
+
+        it "redirects to the organisations list and displays a notice that the organisation has been deleted" do
+          expect(response).to redirect_to organisations_path
+          follow_redirect!
+          expect(page).to have_selector(".govuk-notification-banner--success")
+          expect(page).to have_selector(".govuk-notification-banner--success", text: "#{organisation.name} has been deleted.")
+        end
+
+        it "does not display the deleted organisation" do
+          expect(response).to redirect_to organisations_path
+          follow_redirect!
+          expect(page).not_to have_content("Organisation to delete")
         end
       end
 
