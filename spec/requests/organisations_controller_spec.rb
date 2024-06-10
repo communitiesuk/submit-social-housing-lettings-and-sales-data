@@ -410,8 +410,25 @@ RSpec.describe OrganisationsController, type: :request do
             let!(:other_absorbed_organisation) { create(:organisation, name: "Other Absorbed Organisation") }
 
             before do
-              absorbed_organisation.update!(merge_date: Time.zone.local(2021, 4, 3), absorbing_organisation: organisation)
-              other_absorbed_organisation.update!(merge_date: Time.zone.local(2021, 4, 3), absorbing_organisation: organisation)
+              absorbed_organisation.update!(merge_date: Time.zone.today - 2.years, absorbing_organisation: organisation)
+              other_absorbed_organisation.update!(merge_date: Time.zone.today - 2.years, absorbing_organisation: organisation)
+              get "/organisations/#{organisation.id}/details", headers:, params: {}
+            end
+
+            it "displays absorbed organisations" do
+              expect(page).to have_content("View all organisations that were merged into #{organisation.name}")
+              expect(page).to have_content("First Absorbed Organisation")
+              expect(page).to have_content("Other Absorbed Organisation")
+            end
+          end
+
+          context "when the organisation has absorbed other organisations during a collection period before archived" do
+            let!(:absorbed_organisation) { create(:organisation, name: "First Absorbed Organisation") }
+            let!(:other_absorbed_organisation) { create(:organisation, name: "Other Absorbed Organisation") }
+
+            before do
+              absorbed_organisation.update!(merge_date: Time.zone.today - 3.years, absorbing_organisation: organisation)
+              other_absorbed_organisation.update!(merge_date: Time.zone.today - 3.years, absorbing_organisation: organisation)
               get "/organisations/#{organisation.id}/details", headers:, params: {}
             end
 

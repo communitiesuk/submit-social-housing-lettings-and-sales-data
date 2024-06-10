@@ -28,7 +28,7 @@
           <% end %>
         </p>
       <% end %>
-      <% if current_user.support? || current_user.organisation.has_managing_agents? || current_user.organisation.has_recent_absorbed_organisations? %>
+      <% if current_user.support? || current_user.organisation.has_managing_agents? || current_user.organisation.has_organisations_absorbed_during_displayed_collection_period? %>
         <dl class="app-metadata">
           <% if log.owning_organisation %>
             <div class="app-metadata__item">
