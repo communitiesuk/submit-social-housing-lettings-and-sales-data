@@ -1523,6 +1523,45 @@ RSpec.describe OrganisationsController, type: :request do
         end
       end
 
+      describe "#show" do
+        let(:organisation) { create(:organisation) }
+
+        before do
+          get "/organisations/#{organisation.id}", headers:, params: {}
+        end
+
+        context "with an active organisation" do
+          it "does not render delete this organisation" do
+            follow_redirect!
+            expect(response).to have_http_status(:ok)
+            expect(page).not_to have_link("Delete this organisation", href: "/organisations/#{organisation.id}/delete-confirmation")
+          end
+        end
+
+        context "with an inactive organisation" do
+          let(:organisation) { create(:organisation, active: false) }
+
+          it "renders delete this organisation" do
+            follow_redirect!
+            expect(response).to have_http_status(:ok)
+            expect(page).to have_link("Delete this organisation", href: "/organisations/#{organisation.id}/delete-confirmation")
+          end
+        end
+
+        context "with merged organisation" do
+          before do
+            organisation.update!(merge_date: Time.zone.yesterday)
+            get "/organisations/#{organisation.id}", headers:, params: {}
+          end
+
+          it "renders delete this organisation" do
+            follow_redirect!
+            expect(response).to have_http_status(:ok)
+            expect(page).to have_link("Delete this organisation", href: "/organisations/#{organisation.id}/delete-confirmation")
+          end
+        end
+      end
+
       describe "#update" do
         let(:params) { { id: organisation.id, organisation: { active:, rent_periods: [], all_rent_periods: [] } } }
 
@@ -1709,7 +1748,7 @@ RSpec.describe OrganisationsController, type: :request do
       end
 
       describe "#delete" do
-        let(:organisation) { create(:organisation) }
+        let(:organisation) { create(:organisation, active: false) }
 
         before do
           delete "/organisations/#{organisation.id}/delete"

@@ -153,6 +153,8 @@ class OrganisationsController < ApplicationController
   end
 
   def delete
+    authorize @organisation
+
     @organisation.discard!
     redirect_to organisations_path, notice: I18n.t("notification.organisation_deleted", name: @organisation.name)
   end
