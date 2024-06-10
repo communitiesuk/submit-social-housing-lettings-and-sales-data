@@ -152,6 +152,8 @@ class OrganisationsController < ApplicationController
     end
   end
 
+  def delete; end
+
   def lettings_logs
     organisation_logs = LettingsLog.visible.filter_by_organisation(@organisation).filter_by_years_or_nil(FormHandler.instance.years_of_available_lettings_forms)
     unpaginated_filtered_logs = filter_manager.filtered_logs(organisation_logs, search_term, session_filters)
@@ -306,7 +308,7 @@ private
   end
 
   def authenticate_scope!
-    if %w[create new lettings_logs sales_logs download_lettings_csv email_lettings_csv email_sales_csv download_sales_csv].include? action_name
+    if %w[create new lettings_logs sales_logs download_lettings_csv email_lettings_csv email_sales_csv download_sales_csv delete_confirmation delete].include? action_name
       head :unauthorized and return unless current_user.support?
     elsif current_user.organisation != @organisation && !current_user.support?
       render_not_found
