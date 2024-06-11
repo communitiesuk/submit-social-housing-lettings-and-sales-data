@@ -338,6 +338,10 @@ class BulkUpload::Lettings::Year2023::RowParser
             on: :after_log
 
   validates :field_116,
+            presence: {
+              message: I18n.t("validations.not_answered", question: "was the letting made under the Choice-Based Lettings (CBL)?"),
+              category: :not_answered,
+            },
             inclusion: {
               in: [1, 2],
               message: I18n.t("validations.invalid_option", question: "was the letting made under the Choice-Based Lettings (CBL)"),
@@ -346,6 +350,10 @@ class BulkUpload::Lettings::Year2023::RowParser
             on: :after_log
 
   validates :field_117,
+            presence: {
+              message: I18n.t("validations.not_answered", question: "was the letting made under the Common Allocation Policy (CAP)?"),
+              category: :not_answered,
+            },
             inclusion: {
               in: [1, 2],
               message: I18n.t("validations.invalid_option", question: "was the letting made under the Common Allocation Policy (CAP)"),
@@ -354,6 +362,10 @@ class BulkUpload::Lettings::Year2023::RowParser
             on: :after_log
 
   validates :field_118,
+            presence: {
+              message: I18n.t("validations.not_answered", question: "was the letting made under the Common Housing Register (CHR)?"),
+              category: :not_answered,
+            },
             inclusion: {
               in: [1, 2],
               message: I18n.t("validations.invalid_option", question: "was the letting made under the Common Housing Register (CHR)"),
@@ -384,7 +396,6 @@ class BulkUpload::Lettings::Year2023::RowParser
   validate :validate_no_housing_needs_questions_answered, on: :after_log
   validate :validate_reasonable_preference_homeless, on: :after_log
   validate :validate_condition_effects, on: :after_log
-  validate :validate_lettings_allocation, on: :after_log
   validate :validate_if_log_already_exists, on: :after_log, if: -> { FeatureToggle.bulk_upload_duplicate_log_check_enabled? }
 
   validate :validate_owning_org_data_given, on: :after_log
@@ -676,14 +687,6 @@ private
       illness_option_fields.each do |field|
         errors.add(field, I18n.t("validations.not_answered", question: "how is person affected by condition or illness"), category: :not_answered)
       end
-    end
-  end
-
-  def validate_lettings_allocation
-    if cbl.blank? && cap.blank? && chr.blank?
-      errors.add(:field_116, I18n.t("validations.not_answered", question: "was the letting made under the Choice-Based Lettings (CBL)?"), category: :not_answered)
-      errors.add(:field_117, I18n.t("validations.not_answered", question: "was the letting made under the Common Allocation Policy (CAP)?"), category: :not_answered)
-      errors.add(:field_118, I18n.t("validations.not_answered", question: "was the letting made under the Common Housing Register (CHR)?"), category: :not_answered)
     end
   end
 
