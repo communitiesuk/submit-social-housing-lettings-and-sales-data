@@ -693,7 +693,17 @@ class LettingsLog < Log
   end
 
   def address_search_given?
-    address_line1_input.present? && postcode_full.present?
+    address_line1_input.present? && postcode_full_input.present?
+  end
+
+  def process_postcode_changes!
+    self.postcode_full = upcase_and_remove_whitespace(postcode_full)
+    return if postcode_full.blank?
+
+    self.postcode_known = 1
+    inferred_la = get_inferred_la(postcode_full)
+    self.is_la_inferred = inferred_la.present?
+    self.la = inferred_la if inferred_la.present?
   end
 
 private
@@ -750,16 +760,6 @@ private
     return true if collection_start_year < 2022
 
     collection_start_year >= 2022 && !is_fixed_term_tenancy?
-  end
-
-  def process_postcode_changes!
-    self.postcode_full = upcase_and_remove_whitespace(postcode_full)
-    return if postcode_full.blank?
-
-    self.postcode_known = 1
-    inferred_la = get_inferred_la(postcode_full)
-    self.is_la_inferred = inferred_la.present?
-    self.la = inferred_la if inferred_la.present?
   end
 
   def process_previous_postcode_changes!
