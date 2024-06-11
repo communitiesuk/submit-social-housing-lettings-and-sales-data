@@ -19,7 +19,7 @@ module OrganisationsHelper
       { name: "Owns housing stock", value: organisation.holds_own_stock ? "Yes" : "No", editable: false },
       { name: "Rent periods", value: organisation.rent_period_labels, editable: true, format: :bullet },
       { name: "Data Sharing Agreement" },
-      { name: "Status", value: status_tag(organisation.status), editable: false },
+      { name: "Status", value: status_tag(organisation.status) + delete_organisation_text(organisation), editable: false },
     ]
   end
 
@@ -36,6 +36,12 @@ module OrganisationsHelper
       else
         row.with_action
       end
+    end
+  end
+
+  def delete_organisation_text(organisation)
+    if organisation.active == false && current_user.support? && !OrganisationPolicy.new(current_user, organisation).delete?
+      "<div class=\"app-!-colour-muted\">This organisation was active in an open or editable collection year, and cannot be deleted.</div>".html_safe
     end
   end
 

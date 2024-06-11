@@ -182,6 +182,8 @@ class Organisation < ApplicationRecord
   end
 
   def discard!
+    owned_schemes.each(&:discard!)
+    users.each(&:discard!)
     update!(discarded_at: Time.zone.now)
   end
 end

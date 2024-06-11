@@ -1536,6 +1536,12 @@ RSpec.describe OrganisationsController, type: :request do
             expect(response).to have_http_status(:ok)
             expect(page).not_to have_link("Delete this organisation", href: "/organisations/#{organisation.id}/delete-confirmation")
           end
+
+          it "does not render informative text about deleting the organisation" do
+            follow_redirect!
+            expect(response).to have_http_status(:ok)
+            expect(page).not_to have_content("This organisation was active in an open or editable collection year, and cannot be deleted.")
+          end
         end
 
         context "with an inactive organisation" do
@@ -1545,6 +1551,44 @@ RSpec.describe OrganisationsController, type: :request do
             follow_redirect!
             expect(response).to have_http_status(:ok)
             expect(page).to have_link("Delete this organisation", href: "/organisations/#{organisation.id}/delete-confirmation")
+          end
+
+          context "and associated lettings logs in editable collection period" do
+            before do
+              create(:lettings_log, owning_organisation: organisation)
+              get "/organisations/#{organisation.id}"
+            end
+
+            it "does not render delete this organisation" do
+              follow_redirect!
+              expect(response).to have_http_status(:ok)
+              expect(page).not_to have_link("Delete this organisation", href: "/organisations/#{organisation.id}/delete-confirmation")
+            end
+
+            it "adds informative text about deleting the organisation" do
+              follow_redirect!
+              expect(response).to have_http_status(:ok)
+              expect(page).to have_content("This organisation was active in an open or editable collection year, and cannot be deleted.")
+            end
+          end
+
+          context "and associated sales logs in editable collection period" do
+            before do
+              create(:sales_log, owning_organisation: organisation)
+              get "/organisations/#{organisation.id}"
+            end
+
+            it "does not render delete this organisation" do
+              follow_redirect!
+              expect(response).to have_http_status(:ok)
+              expect(page).not_to have_link("Delete this organisation", href: "/organisations/#{organisation.id}/delete-confirmation")
+            end
+
+            it "adds informative text about deleting the organisation" do
+              follow_redirect!
+              expect(response).to have_http_status(:ok)
+              expect(page).to have_content("This organisation was active in an open or editable collection year, and cannot be deleted.")
+            end
           end
         end
 
@@ -1749,15 +1793,26 @@ RSpec.describe OrganisationsController, type: :request do
 
       describe "#delete" do
         let(:organisation) { create(:organisation, active: false) }
+        let!(:org_user) { create(:user, active: false, organisation:) }
+        let!(:scheme) { create(:scheme, owning_organisation: organisation) }
+        let!(:location) { create(:location, scheme:) }
 
         before do
+          scheme.scheme_deactivation_periods << SchemeDeactivationPeriod.new(deactivation_date: Time.zone.yesterday)
+          location.location_deactivation_periods << LocationDeactivationPeriod.new(deactivation_date: Time.zone.yesterday)
           delete "/organisations/#{organisation.id}/delete"
         end
 
-        it "deletes the organisation" do
+        it "deletes the organisation and related resources" do
           organisation.reload
           expect(organisation.status).to eq(:deleted)
           expect(organisation.discarded_at).not_to be nil
+          expect(location.reload.status).to eq(:deleted)
+          expect(location.discarded_at).not_to be nil
+          expect(scheme.reload.status).to eq(:deleted)
+          expect(scheme.discarded_at).not_to be nil
+          expect(org_user.reload.status).to eq(:deleted)
+          expect(org_user.discarded_at).not_to be nil
         end
 
         it "redirects to the organisations list and displays a notice that the organisation has been deleted" do
