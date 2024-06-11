@@ -117,7 +117,6 @@ class OrganisationsController < ApplicationController
   end
 
   def update
-    selected_rent_periods = rent_period_params[:rent_periods].compact_blank
     if (current_user.data_coordinator? && org_params[:active].nil?) || current_user.support?
       if @organisation.update(org_params)
         case org_params[:active]
@@ -136,11 +135,14 @@ class OrganisationsController < ApplicationController
         else
           flash[:notice] = I18n.t("organisation.updated")
         end
-        used_rent_periods = @organisation.lettings_logs.pluck(:period).uniq.compact.map(&:to_s)
-        rent_periods_to_delete = rent_period_params[:all_rent_periods] - selected_rent_periods - used_rent_periods
-        OrganisationRentPeriod.transaction do
-          selected_rent_periods.each { |period| OrganisationRentPeriod.create(organisation: @organisation, rent_period: period) }
-          OrganisationRentPeriod.where(organisation: @organisation, rent_period: rent_periods_to_delete).destroy_all
+        if rent_period_params[:rent_periods].present?
+          selected_rent_periods = rent_period_params[:rent_periods].compact_blank
+          used_rent_periods = @organisation.lettings_logs.pluck(:period).uniq.compact.map(&:to_s)
+          rent_periods_to_delete = rent_period_params[:all_rent_periods] - selected_rent_periods - used_rent_periods
+          OrganisationRentPeriod.transaction do
+            selected_rent_periods.each { |period| OrganisationRentPeriod.create(organisation: @organisation, rent_period: period) }
+            OrganisationRentPeriod.where(organisation: @organisation, rent_period: rent_periods_to_delete).destroy_all
+          end
         end
         redirect_to details_organisation_path(@organisation)
       else
