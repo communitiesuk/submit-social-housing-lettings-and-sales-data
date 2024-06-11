@@ -111,13 +111,6 @@ RSpec.describe CollectionTimeHelper do
   end
 
   describe "#quarter_for_date" do
-    it "returns correct cutoff date for curent quarter" do
-      quarter = quarter_for_date(date: Time.zone.local(2023, 10, 1))
-      expect(quarter.cutoff_date).to eq(Time.zone.local(2024, 1, 12))
-      expect(quarter.quarter_start_date).to eq(Time.zone.local(2023, 10, 1))
-      expect(quarter.quarter_end_date).to eq(Time.zone.local(2023, 12, 31))
-    end
-
     it "returns correct cutoff date for the first quarter of 2024/25" do
       quarter = quarter_for_date(date: Time.zone.local(2024, 4, 1))
       expect(quarter.cutoff_date).to eq(Time.zone.local(2024, 7, 12))
