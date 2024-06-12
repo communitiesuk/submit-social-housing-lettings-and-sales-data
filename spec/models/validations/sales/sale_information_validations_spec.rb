@@ -354,7 +354,6 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
           expect(record.errors["grant"]).to include("The mortgage, deposit, and grant when added together is £66,113.00, and the purchase price times by the discount is £66,051.00. These figures should be the same")
         end
 
-
         it "does not add errors if mortgage and deposit total is exactly 0.05% x market value away from market value - discount" do
           record.value = 120_000
           record.mortgage = 64_500
