@@ -20,7 +20,7 @@ class HomepagePresenter
     @last_year_completed_sales_data = data_box_data(:sales, @last_year, :completed) if display_sales?
     if display_schemes?
       @incomplete_schemes_data = {
-        count: @user.schemes.incomplete.count,
+        count: @user.schemes.visible.incomplete.count,
         text: data_box_text(type: :schemes, status: :incomplete),
         path: schemes_path(status: [:incomplete], owning_organisation_select: "all"),
       }
