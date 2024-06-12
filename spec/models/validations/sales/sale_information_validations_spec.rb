@@ -323,7 +323,7 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
         it "does not add errors if mortgage and deposit total is within a 0.05% x market value tolerance of market value - discount" do
           record.value = 123_000
           record.mortgage = 66_112
-          record.deposit = 0 # This would be a 46.25% discount
+          record.deposit = 0
           record.discount = 46.3
 
           sale_information_validator.validate_discounted_ownership_value(record)
@@ -352,6 +352,24 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
           expect(record.errors["ownershipsch"]).to include("The mortgage, deposit, and grant when added together is £66,113.00, and the purchase price times by the discount is £66,051.00. These figures should be the same")
           expect(record.errors["discount"]).to include("The mortgage, deposit, and grant when added together is £66,113.00, and the purchase price times by the discount is £66,051.00. These figures should be the same")
           expect(record.errors["grant"]).to include("The mortgage, deposit, and grant when added together is £66,113.00, and the purchase price times by the discount is £66,051.00. These figures should be the same")
+        end
+
+
+        it "does not add errors if mortgage and deposit total is exactly 0.05% x market value away from market value - discount" do
+          record.value = 120_000
+          record.mortgage = 64_500
+          record.deposit = 0
+          record.discount = 46.3
+
+          sale_information_validator.validate_discounted_ownership_value(record)
+
+          expect(record.errors["mortgageused"]).to be_empty
+          expect(record.errors["mortgage"]).to be_empty
+          expect(record.errors["value"]).to be_empty
+          expect(record.errors["deposit"]).to be_empty
+          expect(record.errors["ownershipsch"]).to be_empty
+          expect(record.errors["discount"]).to be_empty
+          expect(record.errors["grant"]).to be_empty
         end
       end
     end
