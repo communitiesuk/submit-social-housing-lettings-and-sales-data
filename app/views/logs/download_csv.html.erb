@@ -1,16 +1,54 @@
 <% content_for :title, "Download CSV" %>
 
 <% content_for :before_content do %>
-  <%= govuk_back_link(href: :back) %>
+  <%= govuk_back_link(href: download_csv_back_link) %>
 <% end %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
+    <% if @organisation.present? %>
+      <span class="govuk-caption-l"><%= @organisation.name %></span>
+    <% end %>
     <h1 class="govuk-heading-l">Download CSV</h1>
 
     <p class="govuk-body">We'll send a secure download link to your email address <strong><%= @current_user.email %></strong>.</p>
-    <p class="govuk-body">You've selected <%= count %> logs.</p>
+    <% if count.positive? %>
+      <p class="govuk-body">You've selected <%= count %> logs.</p>
+    <% else %>
+      <p class="govuk-body">You haven't selected any logs. Please check your filters</p>
+    <% end %>
 
-    <%= govuk_button_to "Send email", post_path, method: :post, params: { search: search_term, codes_only: } %>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-three-quarters-from-desktop">
+        <h1 class="govuk-heading-l">
+          Check your filters
+        </h1>
+
+        <%= govuk_inset_text(text: "Amending these answers might change the amount of logs selected") %>
+
+        <%= govuk_summary_list do |summary_list| %>
+        <% check_your_answers_filters_list(session_filters, filter_type).each do |filter| %>
+          <% summary_list.with_row do |row| %>
+            <% row.with_key { filter[:label] } %>
+            <% row.with_value do %>
+              <%= simple_format(
+                filter[:value],
+                wrapper_tag: "span",
+                class: "govuk-!-margin-right-4",
+              ) %>
+            <% end %>
+
+            <% row.with_action(
+                text: "Change",
+                href: change_filter_for_csv_url(filter, filter_type, search_term, codes_only, params["id"]),
+              ) %>
+          <% end %>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+    <% if count.positive? %>
+      <%= govuk_button_to "Send email", post_path, method: :post, params: { search: search_term, codes_only: } %>
+    <% end %>
   </div>
 </div>

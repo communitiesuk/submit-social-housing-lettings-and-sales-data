@@ -73,21 +73,31 @@ class OrganisationsController < ApplicationController
   end
 
   def new
-    @resource = Organisation.new
+    @organisation = Organisation.new
+    @rent_periods = helpers.rent_periods_with_checked_attr
     render "new", layout: "application"
   end
 
   def create
-    @resource = Organisation.new(org_params)
-    if @resource.save
-      redirect_to organisations_path
+    selected_rent_periods = rent_period_params[:rent_periods].compact_blank
+    @organisation = Organisation.new(org_params)
+    if @organisation.save
+      OrganisationRentPeriod.transaction do
+        selected_rent_periods.each { |period| OrganisationRentPeriod.create!(organisation: @organisation, rent_period: period) }
+      end
+      flash[:notice] = I18n.t("organisation.created", organisation: @organisation.name)
+      redirect_to organisation_path @organisation
     else
+      @rent_periods = helpers.rent_periods_with_checked_attr(checked_periods: selected_rent_periods)
       render :new, status: :unprocessable_entity
     end
   end
 
   def edit
     if current_user.data_coordinator? || current_user.support?
+      current_allowed_rent_periods = @organisation.organisation_rent_periods.pluck(:rent_period).map(&:to_s)
+      @used_rent_periods = @organisation.lettings_logs.pluck(:period).uniq.compact.map(&:to_s)
+      @rent_periods = helpers.rent_periods_with_checked_attr(checked_periods: current_allowed_rent_periods)
       render "edit", layout: "application"
     else
       head :unauthorized
@@ -107,6 +117,7 @@ class OrganisationsController < ApplicationController
   end
 
   def update
+    selected_rent_periods = rent_period_params[:rent_periods].compact_blank
     if (current_user.data_coordinator? && org_params[:active].nil?) || current_user.support?
       if @organisation.update(org_params)
         case org_params[:active]
@@ -125,7 +136,16 @@ class OrganisationsController < ApplicationController
         else
           flash[:notice] = I18n.t("organisation.updated")
         end
+        used_rent_periods = @organisation.lettings_logs.pluck(:period).uniq.compact.map(&:to_s)
+        rent_periods_to_delete = rent_period_params[:all_rent_periods] - selected_rent_periods - used_rent_periods
+        OrganisationRentPeriod.transaction do
+          selected_rent_periods.each { |period| OrganisationRentPeriod.create(organisation: @organisation, rent_period: period) }
+          OrganisationRentPeriod.where(organisation: @organisation, rent_period: rent_periods_to_delete).destroy_all
+        end
         redirect_to details_organisation_path(@organisation)
+      else
+        @rent_periods = helpers.rent_periods_with_checked_attr(checked_periods: selected_rent_periods)
+        render :edit, status: :unprocessable_entity
       end
     else
       head :unauthorized
@@ -148,15 +168,17 @@ class OrganisationsController < ApplicationController
   end
 
   def download_lettings_csv
+    redirect_to lettings_logs_filters_years_organisation_path(search: search_term, codes_only: codes_only_export?) and return if session_filters["years"].blank? || session_filters["years"].count != 1
+
     organisation_logs = LettingsLog.visible.where(owning_organisation_id: @organisation.id)
     unpaginated_filtered_logs = filter_manager.filtered_logs(organisation_logs, search_term, session_filters)
     codes_only = params.require(:codes_only) == "true"
 
-    render "logs/download_csv", locals: { search_term:, count: unpaginated_filtered_logs.size, post_path: lettings_logs_email_csv_organisation_path, codes_only: }
+    render "logs/download_csv", locals: { search_term:, count: unpaginated_filtered_logs.size, post_path: lettings_logs_email_csv_organisation_path, codes_only:, session_filters:, filter_type: "lettings_logs", download_csv_back_link: lettings_logs_organisation_path(@organisation) }
   end
 
   def email_lettings_csv
-    EmailCsvJob.perform_later(current_user, search_term, session_filters, false, @organisation, codes_only_export?)
+    EmailCsvJob.perform_later(current_user, search_term, session_filters, false, @organisation, codes_only_export?, "lettings", session_filters["years"].first.to_i)
     redirect_to lettings_logs_csv_confirmation_organisation_path
   end
 
@@ -184,15 +206,17 @@ class OrganisationsController < ApplicationController
   end
 
   def download_sales_csv
+    redirect_to sales_logs_filters_years_organisation_path(search: search_term, codes_only: codes_only_export?) and return if session_filters["years"].blank? || session_filters["years"].count != 1
+
     organisation_logs = SalesLog.visible.where(owning_organisation_id: @organisation.id)
     unpaginated_filtered_logs = filter_manager.filtered_logs(organisation_logs, search_term, session_filters)
     codes_only = params.require(:codes_only) == "true"
 
-    render "logs/download_csv", locals: { search_term:, count: unpaginated_filtered_logs.size, post_path: sales_logs_email_csv_organisation_path, codes_only: }
+    render "logs/download_csv", locals: { search_term:, count: unpaginated_filtered_logs.size, post_path: sales_logs_email_csv_organisation_path, codes_only:, session_filters:, filter_type: "sales_logs", download_csv_back_link: sales_logs_organisation_path(@organisation) }
   end
 
   def email_sales_csv
-    EmailCsvJob.perform_later(current_user, search_term, session_filters, false, @organisation, codes_only_export?, "sales")
+    EmailCsvJob.perform_later(current_user, search_term, session_filters, false, @organisation, codes_only_export?, "sales", session_filters["years"].first.to_i)
     redirect_to sales_logs_csv_confirmation_organisation_path
   end
 
@@ -267,6 +291,10 @@ private
 
   def org_params
     params.require(:organisation).permit(:name, :address_line1, :address_line2, :postcode, :phone, :holds_own_stock, :provider_type, :housing_registration_no, :active)
+  end
+
+  def rent_period_params
+    params.require(:organisation).permit(rent_periods: [], all_rent_periods: [])
   end
 
   def codes_only_export?

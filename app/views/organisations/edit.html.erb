@@ -12,25 +12,42 @@
       </h1>
 
       <% if current_user.support? %>
-        <%= f.govuk_text_field :name, autocomplete: "name" %>
+        <%= f.govuk_text_field :name, autocomplete: "name", label: { size: "m" } %>
       <% end %>
 
       <%= f.govuk_text_field :address_line1,
-        label: { text: "Address line 1" },
+        label: { text: "Address line 1", size: "m" },
         autocomplete: "address-line1" %>
 
       <%= f.govuk_text_field :address_line2,
-        label: { text: "Address line 2" },
+        label: { text: "Address line 2", size: "m" },
         autocomplete: "address-line2" %>
 
       <%= f.govuk_text_field :postcode,
+        label: { size: "m" },
         autocomplete: "postal-code",
         width: 10 %>
 
       <%= f.govuk_phone_field :phone,
-        label: { text: "Telephone number" },
+        label: { text: "Telephone number", size: "m" },
         autocomplete: "tel",
         width: 20 %>
+
+      <%= f.govuk_check_boxes_fieldset :rent_periods,
+        legend: { text: "What are the rent periods for the organisation?" },
+        hint: { text: "It is not possible to deselect rent periods that are used in logs" } do %>
+        <% @rent_periods.map do |key, period| %>
+          <%= f.govuk_check_box :rent_periods,
+            key,
+            label: { text: period["value"] },
+            checked: period[:checked],
+            disabled: @used_rent_periods.include?(key) %>
+        <% end %>
+      <% end %>
+
+      <% @rent_periods.keys.each do |period_key| %>
+        <%= f.hidden_field :all_rent_periods, value: period_key, multiple: true %>
+      <% end %>
 
       <%= f.govuk_submit "Save changes" %>
     </div>

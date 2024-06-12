@@ -6,7 +6,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby "3.1.4"
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails', branch: 'main'
-gem "rails", "~> 7.0.2"
+gem "rails", "~> 7.0.8.3"
 # Use postgresql as the database for Active Record
 gem "pg", "~> 1.1"
 # Use Puma as the app server
@@ -62,6 +62,9 @@ gem "possessive"
 # Strip whitespace from active record attributes
 gem "auto_strip_attributes"
 # Use sidekiq for background processing
+gem "method_source", "~> 1.1"
+gem "rails_admin", "~> 3.0"
+gem "ruby-openai"
 gem "sidekiq"
 gem "sidekiq-cron"
 gem "unread"
@@ -105,4 +108,5 @@ group :test do
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
+gem "cssbundling-rails"
 gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby]

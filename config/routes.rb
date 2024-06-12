@@ -1,5 +1,6 @@
 # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 Rails.application.routes.draw do
+  mount RailsAdmin::Engine => "/admin", as: "rails_admin"
   mount_sidekiq = -> { mount Sidekiq::Web => "/sidekiq" }
   authenticate(:user, :support?.to_proc, &mount_sidekiq)
 
@@ -181,6 +182,14 @@ Rails.application.routes.draw do
       get "merge-request", to: "organisations#merge_request"
       get "deactivate", to: "organisations#deactivate"
       get "reactivate", to: "organisations#reactivate"
+      %w[years status needstype assigned-to owned-by managed-by].each do |filter|
+        get "lettings-logs/filters/#{filter}", to: "lettings_logs_filters#organisation_#{filter.underscore}"
+        get "lettings-logs/filters/update-#{filter}", to: "lettings_logs_filters#update_organisation_#{filter.underscore}"
+      end
+      %w[years status assigned-to owned-by managed-by].each do |filter|
+        get "sales-logs/filters/#{filter}", to: "sales_logs_filters#organisation_#{filter.underscore}"
+        get "sales-logs/filters/update-#{filter}", to: "sales_logs_filters#update_organisation_#{filter.underscore}"
+      end
     end
   end
 
@@ -213,6 +222,11 @@ Rails.application.routes.draw do
       post "delete-logs", to: "delete_logs#delete_lettings_logs_with_selected_ids"
       post "delete-logs-confirmation", to: "delete_logs#delete_lettings_logs_confirmation"
       delete "delete-logs", to: "delete_logs#discard_lettings_logs"
+
+      %w[years status needstype assigned-to owned-by managed-by].each do |filter|
+        get "filters/#{filter}", to: "lettings_logs_filters##{filter.underscore}"
+        get "filters/update-#{filter}", to: "lettings_logs_filters#update_#{filter.underscore}"
+      end
 
       resources :bulk_upload_lettings_logs, path: "bulk-upload-logs", only: %i[show update] do
         collection do
@@ -278,6 +292,11 @@ Rails.application.routes.draw do
       post "delete-logs", to: "delete_logs#delete_sales_logs_with_selected_ids"
       post "delete-logs-confirmation", to: "delete_logs#delete_sales_logs_confirmation"
       delete "delete-logs", to: "delete_logs#discard_sales_logs"
+
+      %w[years status assigned-to owned-by managed-by].each do |filter|
+        get "filters/#{filter}", to: "sales_logs_filters##{filter.underscore}"
+        get "filters/update-#{filter}", to: "sales_logs_filters#update_#{filter.underscore}"
+      end
 
       resources :bulk_upload_sales_logs, path: "bulk-upload-logs" do
         collection do

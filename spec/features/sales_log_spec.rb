@@ -139,6 +139,98 @@ RSpec.describe "Sales Log Features" do
     end
   end
 
+  context "when downloading logs" do
+    let(:user) { create(:user, :support) }
+    let(:other_user) { create(:user, organisation: user.organisation) }
+
+    context "when I am signed in" do
+      before do
+        create(:sales_log, :in_progress, owning_organisation: user.organisation, assigned_to: user)
+        create(:sales_log, :in_progress, owning_organisation: user.organisation, assigned_to: other_user)
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in user
+        visit("/sales-logs?search=1")
+      end
+
+      context "when no filters are selected" do
+        it "requires year filter to be selected for non codes download" do
+          click_link("Download (CSV)")
+          expect(page).to have_current_path("/sales-logs/filters/years?codes_only=false&search=1")
+          click_button("Save changes")
+
+          expect(page).to have_selector(".govuk-error-summary__title")
+          expect(page).to have_content("There is a problem")
+
+          choose("years-2023-field", allow_label_click: true)
+          click_button("Save changes")
+
+          expect(page).to have_current_path("/sales-logs/csv-download?codes_only=false&search=1")
+        end
+
+        it "requires year filter to be selected for codes only download" do
+          click_link("Download (CSV, codes only)")
+          expect(page).to have_current_path("/sales-logs/filters/years?codes_only=true&search=1")
+          click_button("Save changes")
+
+          expect(page).to have_selector(".govuk-error-summary__title")
+          expect(page).to have_content("There is a problem")
+
+          choose("years-2023-field", allow_label_click: true)
+          click_button("Save changes")
+
+          expect(page).to have_current_path("/sales-logs/csv-download?codes_only=true&search=1")
+        end
+
+        it "allows cancelling the download without selecting the year filter" do
+          click_link("Download (CSV)")
+
+          click_link(text: "Cancel")
+          expect(page).to have_current_path("/sales-logs")
+        end
+      end
+
+      context "when one year filter is selected" do
+        before do
+          check("2024")
+          click_button("Apply filters")
+        end
+
+        it "allows changing the filters and downloading the csv data" do
+          click_link("Download (CSV)")
+
+          expect(page).to have_current_path("/sales-logs/csv-download?codes_only=false&search=1")
+          expect(page).to have_content("You've selected 2 logs")
+        end
+
+        it "allows updating filters" do
+          click_link("Download (CSV, codes only)")
+          expect(page).to have_content("You've selected 2 logs")
+          click_link("Change", href: "/sales-logs/filters/assigned-to?codes_only=true&referrer=check_answers&search=1")
+
+          choose("assigned-to-you-field", allow_label_click: true)
+          click_button("Save changes")
+
+          expect(page).to have_content("You've selected 1 logs")
+
+          click_link("Change", href: "/sales-logs/filters/status?codes_only=true&referrer=check_answers&search=1")
+          check("status-not-started-field", allow_label_click: true)
+          click_button("Save changes")
+
+          expect(page).to have_content("You haven't selected any logs. Please check your filters")
+          expect(page).not_to have_button("Send email")
+        end
+
+        it "routes back to the filters CYA when cancel is pressed" do
+          click_link("Download (CSV)")
+          click_link("Change", href: "/sales-logs/filters/assigned-to?codes_only=false&referrer=check_answers&search=1")
+
+          click_link(text: "Cancel")
+          expect(page).to have_current_path("/sales-logs/csv-download?codes_only=false&search=1")
+        end
+      end
+    end
+  end
+
   context "when signed in as a support user" do
     let(:devise_notify_mailer) { DeviseNotifyMailer.new }
     let(:notify_client) { instance_double(Notifications::Client) }

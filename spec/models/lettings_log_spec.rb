@@ -95,6 +95,13 @@ RSpec.describe LettingsLog do
       lettings_log.update(age1: 25)
     end
 
+    it "correctly allows net_income_value_check to be set when earnings is near a range boundary" do
+      log = create(:lettings_log, :setup_completed, hhmemb: 2, ecstat1: 1, details_known_2: 0, age2_known: 0, age2: 10, incfreq: 1, net_income_known: 0, earnings: 191)
+      log.update!(net_income_value_check: 0)
+      log.reload
+      expect(log.net_income_value_check).to be 0
+    end
+
     it "validates start date" do
       expect(validator).to receive(:validate_startdate)
     end
@@ -241,7 +248,8 @@ RSpec.describe LettingsLog do
 
   describe "derived variables" do
     let!(:lettings_log) do
-      described_class.create({
+      create(
+        :lettings_log,
         managing_organisation: owning_organisation,
         owning_organisation:,
         assigned_to: assigned_to_user,
@@ -250,991 +258,13 @@ RSpec.describe LettingsLog do
         startdate: Time.gm(2021, 10, 10),
         mrcdate: Time.gm(2021, 5, 4),
         voiddate: Time.gm(2021, 3, 3),
-        net_income_known: 2,
+        net_income_known: 2, # refused
         hhmemb: 7,
         rent_type: 4,
         hb: 1,
         hbrentshortfall: 1,
         created_at: Time.utc(2022, 2, 8, 16, 52, 15),
-      })
-    end
-
-    it "correctly derives and saves partial and full major repairs date" do
-      record_from_db = described_class.find(lettings_log.id)
-      expect(record_from_db["mrcdate"].day).to eq(4)
-      expect(record_from_db["mrcdate"].month).to eq(5)
-      expect(record_from_db["mrcdate"].year).to eq(2021)
-    end
-
-    it "correctly derives and saves incref" do
-      expect(lettings_log.reload.incref).to eq(1)
-
-      lettings_log.update!(net_income_known: 1)
-      expect(lettings_log.reload.incref).to eq(2)
-
-      lettings_log.update!(net_income_known: 0)
-      expect(lettings_log.reload.incref).to eq(0)
-    end
-
-    it "correctly derives and saves renttype" do
-      record_from_db = described_class.find(lettings_log.id)
-      expect(lettings_log.renttype).to eq(3)
-      expect(record_from_db["renttype"]).to eq(3)
-    end
-
-    context "when deriving lettype" do
-      context "when the owning organisation is a PRP" do
-        before { lettings_log.owning_organisation.update!(provider_type: 2) }
-
-        context "when the rent type is intermediate rent and supported housing" do
-          it "correctly derives and saves lettype" do
-            lettings_log.update!(rent_type: 4, needstype: 2)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.lettype).to eq(10)
-            expect(record_from_db["lettype"]).to eq(10)
-          end
-        end
-
-        context "when the rent type is intermediate rent and general needs housing" do
-          it "correctly derives and saves lettype" do
-            lettings_log.update!(rent_type: 4, needstype: 1)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.lettype).to eq(9)
-            expect(record_from_db["lettype"]).to eq(9)
-          end
-        end
-
-        context "when the rent type is affordable rent and supported housing" do
-          it "correctly derives and saves lettype" do
-            lettings_log.update!(rent_type: 2, needstype: 2)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.lettype).to eq(6)
-            expect(record_from_db["lettype"]).to eq(6)
-          end
-        end
-
-        context "when the rent type is affordable rent and general needs housing" do
-          it "correctly derives and saves lettype" do
-            lettings_log.update!(rent_type: 2, needstype: 1)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.lettype).to eq(5)
-            expect(record_from_db["lettype"]).to eq(5)
-          end
-        end
-
-        context "when the rent type is social rent and supported housing" do
-          it "correctly derives and saves lettype" do
-            lettings_log.update!(rent_type: 0, needstype: 2)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.lettype).to eq(2)
-            expect(record_from_db["lettype"]).to eq(2)
-          end
-        end
-
-        context "when the rent type is social rent and general needs housing" do
-          it "correctly derives and saves lettype" do
-            lettings_log.update!(rent_type: 0, needstype: 1)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.lettype).to eq(1)
-            expect(record_from_db["lettype"]).to eq(1)
-          end
-        end
-
-        context "when the tenant is not in receipt of applicable benefits" do
-          it "correctly resets total shortfall" do
-            lettings_log.update!(hbrentshortfall: 2, wtshortfall: 100, hb: 9)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.wtshortfall).to be_nil
-            expect(record_from_db["wtshortfall"]).to be_nil
-          end
-        end
-
-        context "when rent is paid bi-weekly" do
-          it "correctly derives and saves weekly rent" do
-            lettings_log.update!(brent: 100, period: 2)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.wrent).to eq(50.0)
-            expect(record_from_db["wrent"]).to eq(50.0)
-          end
-
-          it "correctly derives and saves weekly service charge" do
-            lettings_log.update!(scharge: 70, period: 2)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.wscharge).to eq(35.0)
-            expect(record_from_db["wscharge"]).to eq(35.0)
-          end
-
-          it "correctly derives and saves weekly personal service charge" do
-            lettings_log.update!(pscharge: 60, period: 2)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.wpschrge).to eq(30.0)
-            expect(record_from_db["wpschrge"]).to eq(30.0)
-          end
-
-          it "correctly derives and saves weekly support charge" do
-            lettings_log.update!(supcharg: 80, period: 2)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.wsupchrg).to eq(40.0)
-            expect(record_from_db["wsupchrg"]).to eq(40.0)
-          end
-
-          it "correctly derives and saves weekly total charge" do
-            lettings_log.update!(tcharge: 100, period: 2)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.wtcharge).to eq(50.0)
-            expect(record_from_db["wtcharge"]).to eq(50.0)
-          end
-
-          context "when the tenant has an outstanding amount after benefits" do
-            context "when tenant is in receipt of housing benefit" do
-              it "correctly derives and saves weekly total shortfall" do
-                lettings_log.update!(hbrentshortfall: 1, tshortfall: 100, period: 2, hb: 1)
-                record_from_db = described_class.find(lettings_log.id)
-                expect(lettings_log.wtshortfall).to eq(50.0)
-                expect(record_from_db["wtshortfall"]).to eq(50.0)
-              end
-            end
-
-            context "when tenant is in receipt of universal credit with housing element exc. housing benefit" do
-              it "correctly derives and saves weekly total shortfall" do
-                lettings_log.update!(hbrentshortfall: 1, tshortfall: 100, period: 2, hb: 6)
-                record_from_db = described_class.find(lettings_log.id)
-                expect(lettings_log.wtshortfall).to eq(50.0)
-                expect(record_from_db["wtshortfall"]).to eq(50.0)
-              end
-            end
-
-            context "when tenant is in receipt of housing benefit and universal credit" do
-              it "correctly derives and saves weekly total shortfall" do
-                lettings_log.update!(hbrentshortfall: 1, tshortfall: 100, period: 2, hb: 8)
-                record_from_db = described_class.find(lettings_log.id)
-                expect(lettings_log.wtshortfall).to eq(50.0)
-                expect(record_from_db["wtshortfall"]).to eq(50.0)
-              end
-            end
-          end
-
-          it "correctly derives floats" do
-            lettings_log.update!(supcharg: 60.12, pscharge: 50.13, scharge: 60.98, brent: 60.97, period: 2)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.wsupchrg).to eq(30.06)
-            expect(lettings_log.wpschrge).to eq(25.06)
-            expect(lettings_log.wscharge).to eq(30.49)
-            expect(lettings_log.wrent).to eq(30.49)
-            expect(lettings_log.wtcharge).to eq(116.1)
-            expect(record_from_db["wsupchrg"]).to eq(30.06)
-            expect(record_from_db["wpschrge"]).to eq(25.06)
-            expect(record_from_db["wscharge"]).to eq(30.49)
-            expect(record_from_db["wrent"]).to eq(30.49)
-            expect(record_from_db["wtcharge"]).to eq(116.1)
-          end
-        end
-
-        context "when rent is paid every 4 weeks" do
-          it "correctly derives and saves weekly rent" do
-            lettings_log.update!(brent: 120, period: 3)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.wrent).to eq(30.0)
-            expect(record_from_db["wrent"]).to eq(30.0)
-          end
-
-          it "correctly derives and saves weekly service charge" do
-            lettings_log.update!(scharge: 120, period: 3)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.wscharge).to eq(30.0)
-            expect(record_from_db["wscharge"]).to eq(30.0)
-          end
-
-          it "correctly derives and saves weekly personal service charge" do
-            lettings_log.update!(pscharge: 120, period: 3)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.wpschrge).to eq(30.0)
-            expect(record_from_db["wpschrge"]).to eq(30.0)
-          end
-
-          it "correctly derives and saves weekly support charge" do
-            lettings_log.update!(supcharg: 120, period: 3)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.wsupchrg).to eq(30.0)
-            expect(record_from_db["wsupchrg"]).to eq(30.0)
-          end
-
-          it "correctly derives and saves weekly total charge" do
-            lettings_log.update!(tcharge: 120, period: 3)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.wtcharge).to eq(30.0)
-            expect(record_from_db["wtcharge"]).to eq(30.0)
-          end
-
-          context "when the tenant has an outstanding amount after benefits" do
-            context "when tenant is in receipt of housing benefit" do
-              it "correctly derives and saves weekly total shortfall" do
-                lettings_log.update!(hbrentshortfall: 1, tshortfall: 120, period: 3, hb: 1)
-                record_from_db = described_class.find(lettings_log.id)
-                expect(lettings_log.wtshortfall).to eq(30.0)
-                expect(record_from_db["wtshortfall"]).to eq(30.0)
-              end
-            end
-
-            context "when tenant is in receipt of universal credit with housing element exc. housing benefit" do
-              it "correctly derives and saves weekly total shortfall" do
-                lettings_log.update!(hbrentshortfall: 1, tshortfall: 120, period: 3, hb: 6)
-                record_from_db = described_class.find(lettings_log.id)
-                expect(lettings_log.wtshortfall).to eq(30.0)
-                expect(record_from_db["wtshortfall"]).to eq(30.0)
-              end
-            end
-
-            context "when tenant is in receipt of housing benefit and universal credit" do
-              it "correctly derives and saves weekly total shortfall" do
-                lettings_log.update!(hbrentshortfall: 1, tshortfall: 120, period: 3, hb: 8)
-                record_from_db = described_class.find(lettings_log.id)
-                expect(lettings_log.wtshortfall).to eq(30.0)
-                expect(record_from_db["wtshortfall"]).to eq(30.0)
-              end
-            end
-          end
-
-          it "correctly derives floats" do
-            lettings_log.update!(supcharg: 100.12, pscharge: 100.13, scharge: 100.98, brent: 100.97, period: 3)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.wsupchrg).to eq(25.03)
-            expect(lettings_log.wpschrge).to eq(25.03)
-            expect(lettings_log.wscharge).to eq(25.24)
-            expect(lettings_log.wrent).to eq(25.24)
-            expect(lettings_log.wtcharge).to eq(100.55)
-            expect(record_from_db["wsupchrg"]).to eq(25.03)
-            expect(record_from_db["wpschrge"]).to eq(25.03)
-            expect(record_from_db["wscharge"]).to eq(25.24)
-            expect(record_from_db["wrent"]).to eq(25.24)
-            expect(record_from_db["wtcharge"]).to eq(100.55)
-          end
-        end
-
-        context "when rent is paid every calendar month" do
-          it "correctly derives and saves weekly rent" do
-            lettings_log.update!(brent: 130, period: 4)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.wrent).to eq(30.0)
-            expect(record_from_db["wrent"]).to eq(30.0)
-          end
-
-          it "correctly derives and saves weekly service charge" do
-            lettings_log.update!(scharge: 130, period: 4)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.wscharge).to eq(30.0)
-            expect(record_from_db["wscharge"]).to eq(30.0)
-          end
-
-          it "correctly derives and saves weekly personal service charge" do
-            lettings_log.update!(pscharge: 130, period: 4)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.wpschrge).to eq(30.0)
-            expect(record_from_db["wpschrge"]).to eq(30.0)
-          end
-
-          it "correctly derives and saves weekly support charge" do
-            lettings_log.update!(supcharg: 130, period: 4)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.wsupchrg).to eq(30.0)
-            expect(record_from_db["wsupchrg"]).to eq(30.0)
-          end
-
-          it "correctly derives and saves weekly total charge" do
-            lettings_log.update!(tcharge: 130, period: 4)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.wtcharge).to eq(30.0)
-            expect(record_from_db["wtcharge"]).to eq(30.0)
-          end
-
-          context "when the tenant has an outstanding amount after benefits" do
-            context "when tenant is in receipt of housing benefit" do
-              it "correctly derives and saves weekly total shortfall" do
-                lettings_log.update!(hbrentshortfall: 1, tshortfall: 130, period: 4, hb: 1)
-                record_from_db = described_class.find(lettings_log.id)
-                expect(lettings_log.wtshortfall).to eq(30.0)
-                expect(record_from_db["wtshortfall"]).to eq(30.0)
-              end
-            end
-
-            context "when tenant is in receipt of universal credit with housing element exc. housing benefit" do
-              it "correctly derives and saves weekly total shortfall" do
-                lettings_log.update!(hbrentshortfall: 1, tshortfall: 130, period: 4, hb: 6)
-                record_from_db = described_class.find(lettings_log.id)
-                expect(lettings_log.wtshortfall).to eq(30.0)
-                expect(record_from_db["wtshortfall"]).to eq(30.0)
-              end
-            end
-
-            context "when tenant is in receipt of housing benefit and universal credit" do
-              it "correctly derives and saves weekly total shortfall" do
-                lettings_log.update!(hbrentshortfall: 1, tshortfall: 130, period: 4, hb: 8)
-                record_from_db = described_class.find(lettings_log.id)
-                expect(lettings_log.wtshortfall).to eq(30.0)
-                expect(record_from_db["wtshortfall"]).to eq(30.0)
-              end
-            end
-          end
-
-          it "correctly derives floats" do
-            lettings_log.update!(supcharg: 100.12, pscharge: 100.13, scharge: 100.98, brent: 100.97, period: 4)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.wsupchrg).to eq(23.10)
-            expect(lettings_log.wpschrge).to eq(23.11)
-            expect(lettings_log.wscharge).to eq(23.30)
-            expect(lettings_log.wrent).to eq(23.30)
-            expect(lettings_log.wtcharge).to eq(92.82)
-            expect(record_from_db["wsupchrg"]).to eq(23.10)
-            expect(record_from_db["wpschrge"]).to eq(23.11)
-            expect(record_from_db["wscharge"]).to eq(23.30)
-            expect(record_from_db["wrent"]).to eq(23.30)
-            expect(record_from_db["wtcharge"]).to eq(92.82)
-          end
-        end
-
-        context "when rent is paid weekly for 50 weeks" do
-          it "correctly derives and saves weekly rent" do
-            lettings_log.update!(brent: 130, period: 5)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.wrent).to eq(125.0)
-            expect(record_from_db["wrent"]).to eq(125.0)
-          end
-
-          it "correctly derives and saves weekly service charge" do
-            lettings_log.update!(scharge: 20, period: 5)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.wscharge).to eq(19.23)
-            expect(record_from_db["wscharge"]).to eq(19.23)
-          end
-
-          it "correctly derives and saves weekly personal service charge" do
-            lettings_log.update!(pscharge: 20, period: 5)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.wpschrge).to eq(19.23)
-            expect(record_from_db["wpschrge"]).to eq(19.23)
-          end
-
-          it "correctly derives and saves weekly support charge" do
-            lettings_log.update!(supcharg: 20, period: 5)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.wsupchrg).to eq(19.23)
-            expect(record_from_db["wsupchrg"]).to eq(19.23)
-          end
-
-          it "correctly derives and saves weekly total charge" do
-            lettings_log.update!(tcharge: 130, period: 5)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.wtcharge).to eq(125.0)
-            expect(record_from_db["wtcharge"]).to eq(125.0)
-          end
-
-          context "when the tenant has an outstanding amount after benefits" do
-            context "when tenant is in receipt of housing benefit" do
-              it "correctly derives and saves weekly total shortfall" do
-                lettings_log.update!(hbrentshortfall: 1, tshortfall: 130, period: 5, hb: 1)
-                record_from_db = described_class.find(lettings_log.id)
-                expect(lettings_log.wtshortfall).to eq(125.0)
-                expect(record_from_db["wtshortfall"]).to eq(125.0)
-              end
-            end
-
-            context "when tenant is in receipt of universal credit with housing element exc. housing benefit" do
-              it "correctly derives and saves weekly total shortfall" do
-                lettings_log.update!(hbrentshortfall: 1, tshortfall: 130, period: 5, hb: 6)
-                record_from_db = described_class.find(lettings_log.id)
-                expect(lettings_log.wtshortfall).to eq(125.0)
-                expect(record_from_db["wtshortfall"]).to eq(125.0)
-              end
-            end
-
-            context "when tenant is in receipt of housing benefit and universal credit" do
-              it "correctly derives and saves weekly total shortfall" do
-                lettings_log.update!(hbrentshortfall: 1, tshortfall: 130, period: 5, hb: 8)
-                record_from_db = described_class.find(lettings_log.id)
-                expect(lettings_log.wtshortfall).to eq(125.0)
-                expect(record_from_db["wtshortfall"]).to eq(125.0)
-              end
-            end
-          end
-
-          it "correctly derives floats" do
-            lettings_log.update!(supcharg: 20.12, pscharge: 20.13, scharge: 20.98, brent: 100.97, period: 5)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.wsupchrg).to eq(19.35)
-            expect(lettings_log.wpschrge).to eq(19.36)
-            expect(lettings_log.wscharge).to eq(20.17)
-            expect(lettings_log.wrent).to eq(97.09)
-            expect(lettings_log.wtcharge).to eq(155.96)
-            expect(record_from_db["wsupchrg"]).to eq(19.35)
-            expect(record_from_db["wpschrge"]).to eq(19.36)
-            expect(record_from_db["wscharge"]).to eq(20.17)
-            expect(record_from_db["wrent"]).to eq(97.09)
-            expect(record_from_db["wtcharge"]).to eq(155.96)
-          end
-        end
-
-        context "when rent is paid weekly for 49 weeks" do
-          it "correctly derives and saves weekly rent" do
-            lettings_log.update!(brent: 130, period: 6)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.wrent).to eq(122.5)
-            expect(record_from_db["wrent"]).to eq(122.5)
-          end
-
-          it "correctly derives and saves weekly service charge" do
-            lettings_log.update!(scharge: 30, period: 6)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.wscharge).to eq(28.27)
-            expect(record_from_db["wscharge"]).to eq(28.27)
-          end
-
-          it "correctly derives and saves weekly personal service charge" do
-            lettings_log.update!(pscharge: 30, period: 6)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.wpschrge).to eq(28.27)
-            expect(record_from_db["wpschrge"]).to eq(28.27)
-          end
-
-          it "correctly derives and saves weekly support charge" do
-            lettings_log.update!(supcharg: 30, period: 6)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.wsupchrg).to eq(28.27)
-            expect(record_from_db["wsupchrg"]).to eq(28.27)
-          end
-
-          it "correctly derives and saves weekly total charge" do
-            lettings_log.update!(tcharge: 130, period: 6)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.wtcharge).to eq(122.5)
-            expect(record_from_db["wtcharge"]).to eq(122.5)
-          end
-
-          context "when the tenant has an outstanding amount after benefits" do
-            context "when tenant is in receipt of housing benefit" do
-              it "correctly derives and saves weekly total shortfall" do
-                lettings_log.update!(hbrentshortfall: 1, tshortfall: 130, period: 6, hb: 1)
-                record_from_db = described_class.find(lettings_log.id)
-                expect(lettings_log.wtshortfall).to eq(122.5)
-                expect(record_from_db["wtshortfall"]).to eq(122.5)
-              end
-            end
-
-            context "when tenant is in receipt of universal credit with housing element exc. housing benefit" do
-              it "correctly derives and saves weekly total shortfall" do
-                lettings_log.update!(hbrentshortfall: 1, tshortfall: 130, period: 6, hb: 6)
-                record_from_db = described_class.find(lettings_log.id)
-                expect(lettings_log.wtshortfall).to eq(122.5)
-                expect(record_from_db["wtshortfall"]).to eq(122.5)
-              end
-            end
-
-            context "when tenant is in receipt of housing benefit and universal credit" do
-              it "correctly derives and saves weekly total shortfall" do
-                lettings_log.update!(hbrentshortfall: 1, tshortfall: 130, period: 6, hb: 8)
-                lettings_log.reload
-                expect(lettings_log.wtshortfall).to eq(122.5)
-              end
-            end
-          end
-
-          it "correctly derives floats" do
-            lettings_log.update!(supcharg: 30.12, pscharge: 30.13, scharge: 30.98, brent: 100.97, period: 6)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.wsupchrg).to eq(28.38)
-            expect(lettings_log.wpschrge).to eq(28.39)
-            expect(lettings_log.wscharge).to eq(29.19)
-            expect(lettings_log.wrent).to eq(95.14)
-            expect(lettings_log.wtcharge).to eq(181.11)
-            expect(record_from_db["wsupchrg"]).to eq(28.38)
-            expect(record_from_db["wpschrge"]).to eq(28.39)
-            expect(record_from_db["wscharge"]).to eq(29.19)
-            expect(record_from_db["wrent"]).to eq(95.14)
-            expect(record_from_db["wtcharge"]).to eq(181.11)
-          end
-        end
-
-        context "when rent is paid weekly for 48 weeks" do
-          it "correctly derives and saves weekly rent" do
-            lettings_log.update!(brent: 130, period: 7)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.wrent).to eq(120.0)
-            expect(record_from_db["wrent"]).to eq(120.0)
-          end
-
-          it "correctly derives and saves weekly service charge" do
-            lettings_log.update!(scharge: 30, period: 7)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.wscharge).to eq(27.69)
-            expect(record_from_db["wscharge"]).to eq(27.69)
-          end
-
-          it "correctly derives and saves weekly personal service charge" do
-            lettings_log.update!(pscharge: 30, period: 7)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.wpschrge).to eq(27.69)
-            expect(record_from_db["wpschrge"]).to eq(27.69)
-          end
-
-          it "correctly derives and saves weekly support charge" do
-            lettings_log.update!(supcharg: 30, period: 7)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.wsupchrg).to eq(27.69)
-            expect(record_from_db["wsupchrg"]).to eq(27.69)
-          end
-
-          it "correctly derives and saves weekly total charge" do
-            lettings_log.update!(tcharge: 130, period: 7)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.wtcharge).to eq(120.0)
-            expect(record_from_db["wtcharge"]).to eq(120.0)
-          end
-
-          context "when the tenant has an outstanding amount after benefits" do
-            context "when tenant is in receipt of housing benefit" do
-              it "correctly derives and saves weekly total shortfall" do
-                lettings_log.update!(hbrentshortfall: 1, tshortfall: 130, period: 7, hb: 1)
-                record_from_db = described_class.find(lettings_log.id)
-                expect(lettings_log.wtshortfall).to eq(120.0)
-                expect(record_from_db["wtshortfall"]).to eq(120.0)
-              end
-            end
-
-            context "when tenant is in receipt of universal credit with housing element exc. housing benefit" do
-              it "correctly derives and saves weekly total shortfall" do
-                lettings_log.update!(hbrentshortfall: 1, tshortfall: 130, period: 7, hb: 6)
-                record_from_db = described_class.find(lettings_log.id)
-                expect(lettings_log.wtshortfall).to eq(120.0)
-                expect(record_from_db["wtshortfall"]).to eq(120.0)
-              end
-            end
-
-            context "when tenant is in receipt of housing benefit and universal credit" do
-              it "correctly derives and saves weekly total shortfall" do
-                lettings_log.update!(hbrentshortfall: 1, tshortfall: 130, period: 7, hb: 8)
-                record_from_db = described_class.find(lettings_log.id)
-                expect(lettings_log.wtshortfall).to eq(120.0)
-                expect(record_from_db["wtshortfall"]).to eq(120.0)
-              end
-            end
-          end
-
-          it "correctly derives floats" do
-            lettings_log.update!(supcharg: 30.12, pscharge: 30.13, scharge: 30.98, brent: 100.97, period: 7)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.wsupchrg).to eq(27.8)
-            expect(lettings_log.wpschrge).to eq(27.81)
-            expect(lettings_log.wscharge).to eq(28.6)
-            expect(lettings_log.wrent).to eq(93.20)
-            expect(lettings_log.wtcharge).to eq(177.42)
-            expect(record_from_db["wsupchrg"]).to eq(27.8)
-            expect(record_from_db["wpschrge"]).to eq(27.81)
-            expect(record_from_db["wscharge"]).to eq(28.6)
-            expect(record_from_db["wrent"]).to eq(93.20)
-            expect(record_from_db["wtcharge"]).to eq(177.42)
-          end
-        end
-
-        context "when rent is paid weekly for 47 weeks" do
-          it "correctly derives and saves weekly rent" do
-            lettings_log.update!(brent: 130, period: 8)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.wrent).to eq(117.5)
-            expect(record_from_db["wrent"]).to eq(117.5)
-          end
-
-          it "correctly derives and saves weekly service charge" do
-            lettings_log.update!(scharge: 30, period: 8)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.wscharge).to eq(27.12)
-            expect(record_from_db["wscharge"]).to eq(27.12)
-          end
-
-          it "correctly derives and saves weekly personal service charge" do
-            lettings_log.update!(pscharge: 30, period: 8)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.wpschrge).to eq(27.12)
-            expect(record_from_db["wpschrge"]).to eq(27.12)
-          end
-
-          it "correctly derives and saves weekly support charge" do
-            lettings_log.update!(supcharg: 30, period: 8)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.wsupchrg).to eq(27.12)
-            expect(record_from_db["wsupchrg"]).to eq(27.12)
-          end
-
-          it "correctly derives and saves weekly total charge" do
-            lettings_log.update!(tcharge: 130, period: 8)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.wtcharge).to eq(117.5)
-            expect(record_from_db["wtcharge"]).to eq(117.5)
-          end
-
-          context "when the tenant has an outstanding amount after benefits" do
-            context "when tenant is in receipt of housing benefit" do
-              it "correctly derives and saves weekly total shortfall" do
-                lettings_log.update!(hbrentshortfall: 1, tshortfall: 130, period: 8, hb: 1)
-                record_from_db = described_class.find(lettings_log.id)
-                expect(lettings_log.wtshortfall).to eq(117.5)
-                expect(record_from_db["wtshortfall"]).to eq(117.5)
-              end
-            end
-
-            context "when tenant is in receipt of universal credit with housing element exc. housing benefit" do
-              it "correctly derives and saves weekly total shortfall" do
-                lettings_log.update!(hbrentshortfall: 1, tshortfall: 130, period: 8, hb: 6)
-                record_from_db = described_class.find(lettings_log.id)
-                expect(lettings_log.wtshortfall).to eq(117.5)
-                expect(record_from_db["wtshortfall"]).to eq(117.5)
-              end
-            end
-
-            context "when tenant is in receipt of housing benefit and universal credit" do
-              it "correctly derives and saves weekly total shortfall" do
-                lettings_log.update!(hbrentshortfall: 1, tshortfall: 130, period: 8, hb: 8)
-                record_from_db = described_class.find(lettings_log.id)
-                expect(lettings_log.wtshortfall).to eq(117.5)
-                expect(record_from_db["wtshortfall"]).to eq(117.5)
-              end
-            end
-          end
-
-          it "correctly derives floats" do
-            lettings_log.update!(supcharg: 30.12, pscharge: 30.13, scharge: 30.98, brent: 100.97, period: 8)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.wsupchrg).to eq(27.22)
-            expect(lettings_log.wpschrge).to eq(27.23)
-            expect(lettings_log.wscharge).to eq(28)
-            expect(lettings_log.wrent).to eq(91.26)
-            expect(lettings_log.wtcharge).to eq(173.72)
-            expect(record_from_db["wsupchrg"]).to eq(27.22)
-            expect(record_from_db["wpschrge"]).to eq(27.23)
-            expect(record_from_db["wscharge"]).to eq(28)
-            expect(record_from_db["wrent"]).to eq(91.26)
-            expect(record_from_db["wtcharge"]).to eq(173.72)
-          end
-        end
-
-        context "when rent is paid weekly for 46 weeks" do
-          it "correctly derives and saves weekly rent" do
-            lettings_log.update!(brent: 130, period: 9)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.wrent).to eq(115.0)
-            expect(record_from_db["wrent"]).to eq(115.0)
-          end
-
-          it "correctly derives and saves weekly service charge" do
-            lettings_log.update!(scharge: 30, period: 9)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.wscharge).to eq(26.54)
-            expect(record_from_db["wscharge"]).to eq(26.54)
-          end
-
-          it "correctly derives and saves weekly personal service charge" do
-            lettings_log.update!(pscharge: 30, period: 9)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.wpschrge).to eq(26.54)
-            expect(record_from_db["wpschrge"]).to eq(26.54)
-          end
-
-          it "correctly derives and saves weekly support charge" do
-            lettings_log.update!(supcharg: 30, period: 9)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.wsupchrg).to eq(26.54)
-            expect(record_from_db["wsupchrg"]).to eq(26.54)
-          end
-
-          it "correctly derives and saves weekly total charge" do
-            lettings_log.update!(tcharge: 130, period: 9)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.wtcharge).to eq(115.0)
-            expect(record_from_db["wtcharge"]).to eq(115.0)
-          end
-
-          context "when the tenant has an outstanding amount after benefits" do
-            context "when tenant is in receipt of housing benefit" do
-              it "correctly derives and saves weekly total shortfall" do
-                lettings_log.update!(hbrentshortfall: 1, tshortfall: 130, period: 9, hb: 1)
-                record_from_db = described_class.find(lettings_log.id)
-                expect(lettings_log.wtshortfall).to eq(115.0)
-                expect(record_from_db["wtshortfall"]).to eq(115.0)
-              end
-            end
-
-            context "when tenant is in receipt of universal credit with housing element exc. housing benefit" do
-              it "correctly derives and saves weekly total shortfall" do
-                lettings_log.update!(hbrentshortfall: 1, tshortfall: 130, period: 9, hb: 6)
-                record_from_db = described_class.find(lettings_log.id)
-                expect(lettings_log.wtshortfall).to eq(115.0)
-                expect(record_from_db["wtshortfall"]).to eq(115.0)
-              end
-            end
-
-            context "when tenant is in receipt of housing benefit and universal credit" do
-              it "correctly derives and saves weekly total shortfall" do
-                lettings_log.update!(hbrentshortfall: 1, tshortfall: 130, period: 9, hb: 8)
-                record_from_db = described_class.find(lettings_log.id)
-                expect(lettings_log.wtshortfall).to eq(115.0)
-                expect(record_from_db["wtshortfall"]).to eq(115.0)
-              end
-            end
-          end
-
-          it "correctly derives floats" do
-            lettings_log.update!(supcharg: 30.12, pscharge: 30.13, scharge: 30.98, brent: 100.97, period: 9)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.wsupchrg).to eq(26.64)
-            expect(lettings_log.wpschrge).to eq(26.65)
-            expect(lettings_log.wscharge).to eq(27.41)
-            expect(lettings_log.wrent).to eq(89.32)
-            expect(lettings_log.wtcharge).to eq(170.02)
-            expect(record_from_db["wsupchrg"]).to eq(26.64)
-            expect(record_from_db["wpschrge"]).to eq(26.65)
-            expect(record_from_db["wscharge"]).to eq(27.41)
-            expect(record_from_db["wrent"]).to eq(89.32)
-            expect(record_from_db["wtcharge"]).to eq(170.02)
-          end
-        end
-
-        context "when rent is paid weekly for 52 weeks" do
-          it "correctly derives and saves weekly rent" do
-            lettings_log.update!(brent: 130, period: 1)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.wrent).to eq(130.0)
-            expect(record_from_db["wrent"]).to eq(130.0)
-          end
-
-          it "correctly derives and saves weekly service charge" do
-            lettings_log.update!(scharge: 30, period: 1)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.wscharge).to eq(30.0)
-            expect(record_from_db["wscharge"]).to eq(30.0)
-          end
-
-          it "correctly derives and saves weekly personal service charge" do
-            lettings_log.update!(pscharge: 30, period: 1)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.wpschrge).to eq(30.0)
-            expect(record_from_db["wpschrge"]).to eq(30.0)
-          end
-
-          it "correctly derives and saves weekly support charge" do
-            lettings_log.update!(supcharg: 30, period: 1)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.wsupchrg).to eq(30.0)
-            expect(record_from_db["wsupchrg"]).to eq(30.0)
-          end
-
-          it "correctly derives and saves weekly total charge" do
-            lettings_log.update!(tcharge: 30, period: 1)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.wtcharge).to eq(30.0)
-            expect(record_from_db["wtcharge"]).to eq(30.0)
-          end
-
-          context "when the tenant has an outstanding amount after benefits" do
-            context "when tenant is in receipt of housing benefit" do
-              it "correctly derives and saves weekly total shortfall" do
-                lettings_log.update!(hbrentshortfall: 1, tshortfall: 130, period: 1, hb: 1)
-                record_from_db = described_class.find(lettings_log.id)
-                expect(lettings_log.wtshortfall).to eq(130.0)
-                expect(record_from_db["wtshortfall"]).to eq(130.0)
-              end
-            end
-
-            context "when tenant is in receipt of universal credit with housing element exc. housing benefit" do
-              it "correctly derives and saves weekly total shortfall" do
-                lettings_log.update!(hbrentshortfall: 1, tshortfall: 130, period: 1, hb: 6)
-                record_from_db = described_class.find(lettings_log.id)
-                expect(lettings_log.wtshortfall).to eq(130.0)
-                expect(record_from_db["wtshortfall"]).to eq(130.0)
-              end
-            end
-
-            context "when tenant is in receipt of housing benefit and universal credit" do
-              it "correctly derives and saves weekly total shortfall" do
-                lettings_log.update!(hbrentshortfall: 1, tshortfall: 130, period: 1, hb: 8)
-                record_from_db = described_class.find(lettings_log.id)
-                expect(lettings_log.wtshortfall).to eq(130.0)
-                expect(record_from_db["wtshortfall"]).to eq(130.0)
-              end
-            end
-          end
-
-          it "correctly derives floats" do
-            lettings_log.update!(supcharg: 30.12, pscharge: 25.13, scharge: 30.98, brent: 100.97, period: 1)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.wsupchrg).to eq(30.12)
-            expect(lettings_log.wpschrge).to eq(25.13)
-            expect(lettings_log.wscharge).to eq(30.98)
-            expect(lettings_log.wrent).to eq(100.97)
-            expect(lettings_log.wtcharge).to eq(187.2)
-            expect(record_from_db["wsupchrg"]).to eq(30.12)
-            expect(record_from_db["wpschrge"]).to eq(25.13)
-            expect(record_from_db["wscharge"]).to eq(30.98)
-            expect(record_from_db["wrent"]).to eq(100.97)
-            expect(record_from_db["wtcharge"]).to eq(187.2)
-          end
-        end
-
-        context "when rent is paid weekly for 53 weeks" do
-          it "correctly derives and saves weekly rent" do
-            lettings_log.update!(brent: 130, period: 10)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.wrent).to eq(132.5)
-            expect(record_from_db["wrent"]).to eq(132.5)
-          end
-
-          it "correctly derives and saves weekly service charge" do
-            lettings_log.update!(scharge: 30, period: 10)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.wscharge).to eq(30.58)
-            expect(record_from_db["wscharge"]).to eq(30.58)
-          end
-
-          it "correctly derives and saves weekly personal service charge" do
-            lettings_log.update!(pscharge: 30, period: 10)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.wpschrge).to eq(30.58)
-            expect(record_from_db["wpschrge"]).to eq(30.58)
-          end
-
-          it "correctly derives and saves weekly support charge" do
-            lettings_log.update!(supcharg: 30, period: 10)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.wsupchrg).to eq(30.58)
-            expect(record_from_db["wsupchrg"]).to eq(30.58)
-          end
-
-          it "correctly derives and saves weekly total charge" do
-            lettings_log.update!(tcharge: 30, period: 10)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.wtcharge).to eq(30.58)
-            expect(record_from_db["wtcharge"]).to eq(30.58)
-          end
-
-          context "when the tenant has an outstanding amount after benefits" do
-            context "when tenant is in receipt of housing benefit" do
-              it "correctly derives and saves weekly total shortfall" do
-                lettings_log.update!(hbrentshortfall: 1, tshortfall: 130, period: 10, hb: 1)
-                record_from_db = described_class.find(lettings_log.id)
-                expect(lettings_log.wtshortfall).to eq(132.5)
-                expect(record_from_db["wtshortfall"]).to eq(132.5)
-              end
-            end
-
-            context "when tenant is in receipt of universal credit with housing element exc. housing benefit" do
-              it "correctly derives and saves weekly total shortfall" do
-                lettings_log.update!(hbrentshortfall: 1, tshortfall: 130, period: 10, hb: 6)
-                record_from_db = described_class.find(lettings_log.id)
-                expect(lettings_log.wtshortfall).to eq(132.5)
-                expect(record_from_db["wtshortfall"]).to eq(132.5)
-              end
-            end
-
-            context "when tenant is in receipt of housing benefit and universal credit" do
-              it "correctly derives and saves weekly total shortfall" do
-                lettings_log.update!(hbrentshortfall: 1, tshortfall: 130, period: 10, hb: 8)
-                record_from_db = described_class.find(lettings_log.id)
-                expect(lettings_log.wtshortfall).to eq(132.5)
-                expect(record_from_db["wtshortfall"]).to eq(132.5)
-              end
-            end
-          end
-
-          it "correctly derives floats" do
-            lettings_log.update!(supcharg: 30.12, pscharge: 25.13, scharge: 30.98, brent: 100.97, period: 10)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.wsupchrg).to eq(30.7)
-            expect(lettings_log.wpschrge).to eq(25.61)
-            expect(lettings_log.wscharge).to eq(31.58)
-            expect(lettings_log.wrent).to eq(102.91)
-            expect(lettings_log.wtcharge).to eq(190.8)
-            expect(record_from_db["wsupchrg"]).to eq(30.7)
-            expect(record_from_db["wpschrge"]).to eq(25.61)
-            expect(record_from_db["wscharge"]).to eq(31.58)
-            expect(record_from_db["wrent"]).to eq(102.91)
-            expect(record_from_db["wtcharge"]).to eq(190.8)
-          end
-        end
-      end
-
-      context "when the owning organisation is a LA" do
-        before { lettings_log.owning_organisation.update!(provider_type: "LA") }
-
-        context "when the rent type is intermediate rent and supported housing" do
-          it "correctly derives and saves lettype" do
-            lettings_log.update!(rent_type: 4, needstype: 2)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.lettype).to eq(12)
-            expect(record_from_db["lettype"]).to eq(12)
-          end
-        end
-
-        context "when the rent type is intermediate rent and general needs housing" do
-          it "correctly derives and saves lettype" do
-            lettings_log.update!(rent_type: 4, needstype: 1)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.lettype).to eq(11)
-            expect(record_from_db["lettype"]).to eq(11)
-          end
-        end
-
-        context "when the rent type is affordable rent and supported housing" do
-          it "correctly derives and saves lettype" do
-            lettings_log.update!(rent_type: 2, needstype: 2)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.lettype).to eq(8)
-            expect(record_from_db["lettype"]).to eq(8)
-          end
-        end
-
-        context "when the rent type is affordable rent and general needs housing" do
-          it "correctly derives and saves lettype" do
-            lettings_log.update!(rent_type: 2, needstype: 1)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.lettype).to eq(7)
-            expect(record_from_db["lettype"]).to eq(7)
-          end
-        end
-
-        context "when the rent type is social rent and supported housing" do
-          it "correctly derives and saves lettype" do
-            lettings_log.update!(rent_type: 0, needstype: 2)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.lettype).to eq(4)
-            expect(record_from_db["lettype"]).to eq(4)
-          end
-        end
-
-        context "when the rent type is social rent and general needs housing" do
-          it "correctly derives and saves lettype" do
-            lettings_log.update!(rent_type: 0, needstype: 1)
-            record_from_db = described_class.find(lettings_log.id)
-            expect(lettings_log.lettype).to eq(3)
-            expect(record_from_db["lettype"]).to eq(3)
-          end
-        end
-      end
-    end
-
-    it "correctly derives and saves day, month, year from start date" do
-      record_from_db = described_class.find(lettings_log.id)
-      expect(record_from_db["startdate"].day).to eq(10)
-      expect(record_from_db["startdate"].month).to eq(10)
-      expect(record_from_db["startdate"].year).to eq(2021)
-    end
-
-    context "when any charge field is set" do
-      before do
-        lettings_log.update!(pscharge: 10)
-      end
-
-      it "derives that any blank ones are 0" do
-        record_from_db = described_class.find(lettings_log.id)
-        expect(record_from_db["supcharg"].to_f).to eq(0.0)
-        expect(record_from_db["scharge"].to_f).to eq(0.0)
-      end
+      )
     end
 
     def check_postcode_fields(postcode_field)
@@ -1251,7 +281,7 @@ RSpec.describe LettingsLog do
 
     context "when saving addresses" do
       before do
-        stub_request(:get, /api.postcodes.io/)
+        stub_request(:get, /api\.postcodes\.io/)
           .to_return(status: 200, body: "{\"status\":200,\"result\":{\"admin_district\":\"Manchester\",\"codes\":{\"admin_district\": \"E08000003\"}}}", headers: {})
       end
 
@@ -1359,7 +389,7 @@ RSpec.describe LettingsLog do
 
     context "when saving previous address" do
       before do
-        stub_request(:get, /api.postcodes.io/)
+        stub_request(:get, /api\.postcodes\.io/)
           .to_return(status: 200, body: "{\"status\":200,\"result\":{\"admin_district\":\"Manchester\", \"codes\":{\"admin_district\": \"E08000003\"}}}", headers: {})
       end
 
@@ -1447,647 +477,6 @@ RSpec.describe LettingsLog do
       end
     end
 
-    context "when saving rent and charges" do
-      let!(:lettings_log) do
-        described_class.create({
-          managing_organisation: owning_organisation,
-          owning_organisation:,
-          assigned_to: assigned_to_user,
-          brent: 5.77,
-          scharge: 10.01,
-          pscharge: 3,
-          supcharg: 12.2,
-        })
-      end
-
-      it "correctly sums rental charges" do
-        record_from_db = described_class.find(lettings_log.id)
-        expect(record_from_db["tcharge"]).to eq(30.98)
-      end
-    end
-
-    context "when validating household members derived vars" do
-      let!(:household_lettings_log) do
-        described_class.create!({
-          managing_organisation: owning_organisation,
-          owning_organisation:,
-          assigned_to: assigned_to_user,
-          hhmemb: 3,
-          relat2: "X",
-          relat3: "C",
-          relat4: "X",
-          relat5: "C",
-          relat7: "C",
-          relat8: "X",
-          age1: 22,
-          age2: 16,
-          age4: 60,
-          age6: 88,
-          age7: 14,
-          age8: 42,
-        })
-      end
-
-      it "correctly derives and saves totchild" do
-        record_from_db = described_class.find(household_lettings_log.id)
-        expect(record_from_db["totchild"]).to eq(3)
-      end
-
-      it "correctly derives and saves totelder" do
-        record_from_db = described_class.find(household_lettings_log.id)
-        expect(record_from_db["totelder"]).to eq(2)
-      end
-
-      it "correctly derives and saves totadult" do
-        record_from_db = described_class.find(household_lettings_log.id)
-        expect(record_from_db["totadult"]).to eq(3)
-      end
-
-      it "correctly derives economic status for tenants under 16" do
-        record_from_db = described_class.find(household_lettings_log.id)
-        expect(record_from_db["ecstat7"]).to eq(9)
-      end
-    end
-
-    it "correctly derives and saves has_benefits" do
-      record_from_db = described_class.find(lettings_log.id)
-      expect(record_from_db["has_benefits"]).to eq(1)
-    end
-
-    context "when updating values that derive vacdays" do
-      let(:lettings_log) { create(:lettings_log, startdate:) }
-
-      context "when start date is set" do
-        let(:startdate) { Time.zone.now }
-
-        it "correctly derives vacdays when voiddate is set" do
-          day_count = 3
-          expect { lettings_log.update!(voiddate: startdate - day_count.days) }.to change(lettings_log, :vacdays).to day_count
-          expect { lettings_log.update!(voiddate: nil) }.to change(lettings_log, :vacdays).from(day_count).to nil
-        end
-
-        it "correctly derives vacdays when mrcdate is set" do
-          day_count = 3
-          expect { lettings_log.update!(mrcdate: startdate - day_count.days) }.to change(lettings_log, :vacdays).to day_count
-          expect { lettings_log.update!(mrcdate: nil) }.to change(lettings_log, :vacdays).from(day_count).to nil
-        end
-      end
-
-      context "when start date is not set" do
-        let(:startdate) { nil }
-
-        it "correctly derives vacdays when voiddate is set" do
-          day_count = 3
-          lettings_log.update!(voiddate: Time.zone.now - day_count.days)
-          expect(lettings_log.vacdays).to be nil
-        end
-
-        it "correctly derives vacdays when mrcdate is set" do
-          day_count = 3
-          lettings_log.update!(mrcdate: Time.zone.now - day_count.days)
-          expect(lettings_log.vacdays).to be nil
-        end
-      end
-    end
-
-    context "when updating renewal" do
-      let!(:lettings_log) do
-        described_class.create({
-          managing_organisation: owning_organisation,
-          owning_organisation:,
-          assigned_to: assigned_to_user,
-          startdate: Time.zone.local(2021, 4, 10),
-          created_at: Time.utc(2022, 2, 8, 16, 52, 15),
-        })
-      end
-
-      it "correctly derives the length of time on local authority waiting list" do
-        expect { lettings_log.update!(renewal: 1) }.to change(lettings_log, :waityear).to 2
-        expect { lettings_log.update!(renewal: 0) }.to change(lettings_log, :waityear).from(2).to nil
-      end
-
-      it "correctly derives the number of times previously offered since becoming available" do
-        expect { lettings_log.update!(renewal: 1) }.to change(lettings_log, :offered).to 0
-        expect { lettings_log.update!(renewal: 0) }.to change(lettings_log, :offered).from(0).to nil
-      end
-
-      it "correctly derives referral if the letting is a renewal and clears it if it is not" do
-        expect { lettings_log.update!(renewal: 1) }.to change(lettings_log, :referral).to 1
-        expect { lettings_log.update!(renewal: 0) }.to change(lettings_log, :referral).from(1).to nil
-      end
-
-      it "correctly derives voiddate if the letting is a renewal and clears it if it is not" do
-        expect { lettings_log.update!(renewal: 1) }.to change(lettings_log, :voiddate).to lettings_log.startdate
-        expect { lettings_log.update!(renewal: 0) }.to change(lettings_log, :voiddate).from(lettings_log.startdate).to nil
-      end
-
-      it "correctly derives first_time_property_let_as_social_housing and clears it if it is not" do
-        expect { lettings_log.update!(renewal: 1) }.to change(lettings_log, :first_time_property_let_as_social_housing).to 0
-        expect { lettings_log.update!(renewal: 0) }.to change(lettings_log, :first_time_property_let_as_social_housing).from(0).to nil
-      end
-
-      it "correctly derives vacancy reason and clears it if it is not" do
-        expect { lettings_log.update!(renewal: 1) }.to change(lettings_log, :rsnvac).to 14
-        expect { lettings_log.update!(renewal: 0) }.to change(lettings_log, :rsnvac).from(14).to nil
-      end
-
-      it "derives vacdays as 0 if log is renewal" do
-        expect { lettings_log.update!(renewal: 1) }.to change(lettings_log, :vacdays).to 0
-      end
-
-      it "correctly derives underoccupation_benefitcap if log is a renewal from 2021/22" do
-        lettings_log.update!(renewal: 1)
-        expect(lettings_log.underoccupation_benefitcap).to be 2
-      end
-
-      it "clears underoccupation_benefitcap if log is no longer a renewal" do
-        expect { lettings_log.update!(renewal: 1) }.to change(lettings_log, :underoccupation_benefitcap).to 2
-        expect { lettings_log.update!(renewal: 0) }.to change(lettings_log, :underoccupation_benefitcap).from(2).to nil
-      end
-
-      it "clears underoccupation_benefitcap if log is no longer in 2021/22" do
-        expect { lettings_log.update!(renewal: 1) }.to change(lettings_log, :underoccupation_benefitcap).to 2
-        Timecop.return
-        Singleton.__init__(FormHandler)
-        expect { lettings_log.update!(startdate: Time.zone.local(2023, 4, 1)) }.to change(lettings_log, :underoccupation_benefitcap).from(2).to nil
-      end
-
-      it "derives ppostcode_full as postcode_full if log is renewal" do
-        lettings_log.update!(renewal: 0, postcode_full: "M1 1AE", postcode_known: 1, ppostcode_full: "M1 1AD")
-        lettings_log.update!(renewal: 1)
-        lettings_log.reload
-        expect(lettings_log.ppostcode_full).to eq("M1 1AE")
-        expect(lettings_log.ppcodenk).to eq(0)
-        expect(lettings_log.prevloc).to eq(lettings_log.la)
-      end
-
-      context "when the log is general needs" do
-        context "and the managing organisation is a private registered provider" do
-          before do
-            lettings_log.managing_organisation.update!(provider_type: "PRP")
-            lettings_log.update!(needstype: 1, renewal: 1)
-          end
-
-          it "correctly derives prevten" do
-            expect(lettings_log.prevten).to be 32
-          end
-
-          it "clears prevten if the log is marked as supported housing" do
-            lettings_log.update!(needstype: 2)
-            expect(lettings_log.prevten).to be nil
-          end
-
-          it "clears prevten if renewal is update to no" do
-            lettings_log.update!(renewal: 0)
-            expect(lettings_log.prevten).to be nil
-          end
-        end
-
-        context "and the managing organisation is a local authority" do
-          before do
-            lettings_log.managing_organisation.update!(provider_type: "LA")
-            lettings_log.update!(needstype: 1, renewal: 1)
-          end
-
-          it "correctly derives prevten" do
-            expect(lettings_log.prevten).to be 30
-          end
-
-          it "clears prevten if the log is marked as supported housing" do
-            expect { lettings_log.update!(needstype: 2) }.to change(lettings_log, :prevten).to nil
-          end
-
-          it "clears prevten if renewal is update to no" do
-            expect { lettings_log.update!(renewal: 0) }.to change(lettings_log, :prevten).to nil
-          end
-        end
-      end
-
-      context "and updating rent_type" do
-        let(:irproduct_other) { nil }
-
-        around do |example|
-          Timecop.freeze(now) do
-            Singleton.__init__(FormHandler)
-            lettings_log.update!(rent_type:, irproduct_other:, startdate: now)
-            example.run
-          end
-        end
-
-        context "when collection year is 2022/23 or earlier" do
-          let(:now) { Time.zone.local(2023, 1, 1) }
-
-          context "when rent_type is Social Rent" do
-            let(:rent_type) { 0 }
-
-            it "derives the most recent let type as Social Rent basis if it is a renewal and clears it if it is not" do
-              expect { lettings_log.update!(renewal: 1) }.to change(lettings_log, :unitletas).to 1
-              expect { lettings_log.update!(renewal: 0) }.to change(lettings_log, :unitletas).from(1).to nil
-            end
-          end
-
-          context "when rent_type is Affordable Rent" do
-            let(:rent_type) { 1 }
-
-            it "derives the most recent let type as Affordable Rent basis if it is a renewal and clears it if it is not" do
-              expect { lettings_log.update!(renewal: 1) }.to change(lettings_log, :unitletas).to 2
-              expect { lettings_log.update!(renewal: 0) }.to change(lettings_log, :unitletas).from(2).to nil
-            end
-          end
-
-          context "when rent_type is London Affordable Rent" do
-            let(:rent_type) { 2 }
-
-            it "derives the most recent let type as Affordable Rent basis if it is a renewal and clears it if it is not" do
-              expect { lettings_log.update!(renewal: 1) }.to change(lettings_log, :unitletas).to 2
-              expect { lettings_log.update!(renewal: 0) }.to change(lettings_log, :unitletas).from(2).to nil
-            end
-          end
-
-          context "when rent_type is Rent to Buy" do
-            let(:rent_type) { 3 }
-
-            it "derives the most recent let type as Intermediate Rent basis if it is a renewal and clears it if it is not" do
-              expect { lettings_log.update!(renewal: 1) }.to change(lettings_log, :unitletas).to 4
-              expect { lettings_log.update!(renewal: 0) }.to change(lettings_log, :unitletas).from(4).to nil
-            end
-          end
-
-          context "when rent_type is London Living Rent" do
-            let(:rent_type) { 4 }
-
-            it "derives the most recent let type as Intermediate Rent basis if it is a renewal and clears it if it is not" do
-              expect { lettings_log.update!(renewal: 1) }.to change(lettings_log, :unitletas).to 4
-              expect { lettings_log.update!(renewal: 0) }.to change(lettings_log, :unitletas).from(4).to nil
-            end
-          end
-
-          context "when rent_type is Other intermediate rent product" do
-            let(:rent_type) { 5 }
-            let(:irproduct_other) { "Rent first" }
-
-            it "derives the most recent let type as Intermediate Rent basis if it is a renewal and clears it if it is not" do
-              expect { lettings_log.update!(renewal: 1) }.to change(lettings_log, :unitletas).to 4
-              expect { lettings_log.update!(renewal: 0) }.to change(lettings_log, :unitletas).from(4).to nil
-            end
-          end
-        end
-
-        context "when collection year is 2023/24 or later" do
-          let(:now) { Time.zone.local(2024, 1, 1) }
-
-          context "when rent_type is Social Rent" do
-            let(:rent_type) { 0 }
-
-            it "derives the most recent let type as Social Rent basis if it is a renewal and clears it if it is not" do
-              expect { lettings_log.update!(renewal: 1) }.to change(lettings_log, :unitletas).to 1
-              expect { lettings_log.update!(renewal: 0) }.to change(lettings_log, :unitletas).from(1).to nil
-            end
-          end
-
-          context "when rent_type is Affordable Rent" do
-            let(:rent_type) { 1 }
-
-            it "derives the most recent let type as Affordable Rent basis if it is a renewal and clears it if it is not" do
-              expect { lettings_log.update!(renewal: 1) }.to change(lettings_log, :unitletas).to 2
-              expect { lettings_log.update!(renewal: 0) }.to change(lettings_log, :unitletas).from(2).to nil
-            end
-          end
-
-          context "when rent_type is London Affordable Rent" do
-            let(:rent_type) { 2 }
-
-            it "derives the most recent let type as London Affordable Rent basis if it is a renewal and clears it if it is not" do
-              expect { lettings_log.update!(renewal: 1) }.to change(lettings_log, :unitletas).to 5
-              expect { lettings_log.update!(renewal: 0) }.to change(lettings_log, :unitletas).from(5).to nil
-            end
-          end
-
-          context "when rent_type is Rent to Buy" do
-            let(:rent_type) { 3 }
-
-            it "derives the most recent let type as Rent to Buy basis if it is a renewal and clears it if it is not" do
-              expect { lettings_log.update!(renewal: 1) }.to change(lettings_log, :unitletas).to 6
-              expect { lettings_log.update!(renewal: 0) }.to change(lettings_log, :unitletas).from(6).to nil
-            end
-          end
-
-          context "when rent_type is London Living Rent" do
-            let(:rent_type) { 4 }
-
-            it "derives the most recent let type as London Living Rent basis if it is a renewal and clears it if it is not" do
-              expect { lettings_log.update!(renewal: 1) }.to change(lettings_log, :unitletas).to 7
-              expect { lettings_log.update!(renewal: 0) }.to change(lettings_log, :unitletas).from(7).to nil
-            end
-          end
-
-          context "when rent_type is Other intermediate rent product" do
-            let(:rent_type) { 5 }
-            let(:irproduct_other) { "Rent first" }
-
-            it "derives the most recent let type as Another Intermediate Rent basis if it is a renewal and clears it if it is not" do
-              expect { lettings_log.update!(renewal: 1) }.to change(lettings_log, :unitletas).to 8
-              expect { lettings_log.update!(renewal: 0) }.to change(lettings_log, :unitletas).from(8).to nil
-            end
-          end
-        end
-      end
-    end
-
-    context "when updating rent type" do
-      let(:irproduct_other) { nil }
-
-      before do
-        lettings_log.update!(rent_type:, irproduct_other:)
-      end
-
-      context "when rent_type is Social Rent" do
-        let(:rent_type) { 0 }
-
-        it "derives renttype as Social Rent" do
-          expect(lettings_log.renttype).to be 1
-        end
-      end
-
-      context "when rent_type is Affordable Rent" do
-        let(:rent_type) { 1 }
-
-        it "derives renttype as Affordable Rent" do
-          expect(lettings_log.renttype).to be 2
-        end
-      end
-
-      context "when rent_type is London Affordable Rent" do
-        let(:rent_type) { 2 }
-
-        it "derives renttype as Affordable Rent" do
-          expect(lettings_log.renttype).to be 2
-        end
-      end
-
-      context "when rent_type is Rent to Buy" do
-        let(:rent_type) { 3 }
-
-        it "derives renttype as Intermediate Rent" do
-          expect(lettings_log.renttype).to be 3
-        end
-      end
-
-      context "when rent_type is London Living Rent" do
-        let(:rent_type) { 4 }
-
-        it "derives renttype as Intermediate Rent" do
-          expect(lettings_log.renttype).to be 3
-        end
-      end
-
-      context "when rent_type is Other intermediate rent product" do
-        let(:rent_type) { 5 }
-        let(:irproduct_other) { "Rent first" }
-
-        it "derives renttype as Intermediate Rent" do
-          expect(lettings_log.renttype).to be 3
-        end
-      end
-    end
-
-    context "when answering the household characteristics questions" do
-      context "and some person details are refused" do
-        let!(:lettings_log) do
-          described_class.create({
-            managing_organisation: owning_organisation,
-            owning_organisation:,
-            assigned_to: assigned_to_user,
-            age1_known: 1,
-            sex1: "R",
-            relat2: "R",
-            ecstat1: 10,
-          })
-        end
-
-        it "correctly derives and saves refused" do
-          record_from_db = described_class.find(lettings_log.id)
-          expect(record_from_db["refused"]).to eq(1)
-          expect(lettings_log["refused"]).to eq(1)
-        end
-      end
-
-      context "and some person details are not known" do
-        let!(:lettings_log) do
-          described_class.create({
-            managing_organisation: owning_organisation,
-            owning_organisation:,
-            assigned_to: assigned_to_user,
-            details_known_2: 1,
-          })
-        end
-
-        it "correctly derives and saves refused" do
-          record_from_db = described_class.find(lettings_log.id)
-          expect(record_from_db["refused"]).to eq(1)
-          expect(lettings_log["refused"]).to eq(1)
-        end
-      end
-    end
-
-    context "when it is supported housing and a care home charge has been supplied" do
-      let!(:lettings_log) do
-        described_class.create({
-          managing_organisation: owning_organisation,
-          owning_organisation:,
-          assigned_to: assigned_to_user,
-          needstype: 2,
-        })
-      end
-
-      context "when the care home charge is paid bi-weekly" do
-        it "correctly derives and saves weekly care home charge" do
-          lettings_log.update!(chcharge: 100, period: 2)
-          record_from_db = described_class.find(lettings_log.id)
-          expect(lettings_log.wchchrg).to eq(50.0)
-          expect(record_from_db["wchchrg"]).to eq(50.0)
-        end
-
-        it "correctly derives floats" do
-          lettings_log.update!(chcharge: 100.12, period: 2)
-          record_from_db = described_class.find(lettings_log.id)
-          expect(lettings_log.wchchrg).to eq(50.06)
-          expect(record_from_db["wchchrg"]).to eq(50.06)
-        end
-      end
-
-      context "when the care home charge is paid every 4 weeks" do
-        it "correctly derives and saves weekly care home charge" do
-          lettings_log.update!(chcharge: 120, period: 3)
-          record_from_db = described_class.find(lettings_log.id)
-          expect(lettings_log.wchchrg).to eq(30.0)
-          expect(record_from_db["wchchrg"]).to eq(30.0)
-        end
-
-        it "correctly derives floats" do
-          lettings_log.update!(chcharge: 100.12, period: 3)
-          record_from_db = described_class.find(lettings_log.id)
-          expect(lettings_log.wchchrg).to eq(25.03)
-          expect(record_from_db["wchchrg"]).to eq(25.03)
-        end
-      end
-
-      context "when the care home charge is paid every calendar month" do
-        it "correctly derives and saves weekly care home charge" do
-          lettings_log.update!(chcharge: 130, period: 4)
-          record_from_db = described_class.find(lettings_log.id)
-          expect(lettings_log.wchchrg).to eq(30.0)
-          expect(record_from_db["wchchrg"]).to eq(30.0)
-        end
-
-        it "correctly derives floats" do
-          lettings_log.update!(chcharge: 100.12, period: 4)
-          record_from_db = described_class.find(lettings_log.id)
-          expect(lettings_log.wchchrg).to eq(23.10)
-          expect(record_from_db["wchchrg"]).to eq(23.10)
-        end
-      end
-
-      context "when the care home charge is paid weekly for 50 weeks" do
-        it "correctly derives and saves weekly care home charge" do
-          lettings_log.update!(chcharge: 130, period: 5)
-          record_from_db = described_class.find(lettings_log.id)
-          expect(lettings_log.wchchrg).to eq(125.0)
-          expect(record_from_db["wchchrg"]).to eq(125.0)
-        end
-
-        it "correctly derives floats" do
-          lettings_log.update!(chcharge: 100.12, period: 5)
-          record_from_db = described_class.find(lettings_log.id)
-          expect(lettings_log.wchchrg).to eq(96.27)
-          expect(record_from_db["wchchrg"]).to eq(96.27)
-        end
-      end
-
-      context "when the care home charge is paid weekly for 49 weeks" do
-        it "correctly derives and saves weekly care home charge" do
-          lettings_log.update!(chcharge: 130, period: 6)
-          record_from_db = described_class.find(lettings_log.id)
-          expect(lettings_log.wchchrg).to eq(122.5)
-          expect(record_from_db["wchchrg"]).to eq(122.5)
-        end
-
-        it "correctly derives floats" do
-          lettings_log.update!(chcharge: 100.12, period: 6)
-          record_from_db = described_class.find(lettings_log.id)
-          expect(lettings_log.wchchrg).to eq(94.34)
-          expect(record_from_db["wchchrg"]).to eq(94.34)
-        end
-      end
-
-      context "when the care home charge is paid weekly for 48 weeks" do
-        it "correctly derives and saves weekly care home charge" do
-          lettings_log.update!(chcharge: 130, period: 7)
-          record_from_db = described_class.find(lettings_log.id)
-          expect(lettings_log.wchchrg).to eq(120.0)
-          expect(record_from_db["wchchrg"]).to eq(120.0)
-        end
-
-        it "correctly derives floats" do
-          lettings_log.update!(chcharge: 100.12, period: 7)
-          record_from_db = described_class.find(lettings_log.id)
-          expect(lettings_log.wchchrg).to eq(92.42)
-          expect(record_from_db["wchchrg"]).to eq(92.42)
-        end
-      end
-
-      context "when the care home charge is paid weekly for 47 weeks" do
-        it "correctly derives and saves weekly care home charge" do
-          lettings_log.update!(chcharge: 130, period: 8)
-          record_from_db = described_class.find(lettings_log.id)
-          expect(lettings_log.wchchrg).to eq(117.5)
-          expect(record_from_db["wchchrg"]).to eq(117.5)
-        end
-
-        it "correctly derives floats" do
-          lettings_log.update!(chcharge: 100.12, period: 8)
-          record_from_db = described_class.find(lettings_log.id)
-          expect(lettings_log.wchchrg).to eq(90.49)
-          expect(record_from_db["wchchrg"]).to eq(90.49)
-        end
-      end
-
-      context "when the care home charge is paid weekly for 46 weeks" do
-        it "correctly derives and saves weekly care home charge" do
-          lettings_log.update!(chcharge: 130, period: 9)
-          record_from_db = described_class.find(lettings_log.id)
-          expect(lettings_log.wchchrg).to eq(115.0)
-          expect(record_from_db["wchchrg"]).to eq(115.0)
-        end
-
-        it "correctly derives floats" do
-          lettings_log.update!(chcharge: 100.12, period: 9)
-          record_from_db = described_class.find(lettings_log.id)
-          expect(lettings_log.wchchrg).to eq(88.57)
-          expect(record_from_db["wchchrg"]).to eq(88.57)
-        end
-      end
-
-      context "when the care home charge is paid weekly for 52 weeks" do
-        it "correctly derives and saves weekly care home charge" do
-          lettings_log.update!(chcharge: 130, period: 1)
-          record_from_db = described_class.find(lettings_log.id)
-          expect(lettings_log.wchchrg).to eq(130.0)
-          expect(record_from_db["wchchrg"]).to eq(130.0)
-        end
-
-        it "correctly derives floats" do
-          lettings_log.update!(chcharge: 100.12, period: 1)
-          record_from_db = described_class.find(lettings_log.id)
-          expect(lettings_log.wchchrg).to eq(100.12)
-          expect(record_from_db["wchchrg"]).to eq(100.12)
-        end
-      end
-    end
-
-    context "when the data provider is filling in the reason for the property being vacant" do
-      let!(:first_let_lettings_log) do
-        described_class.create({
-          managing_organisation: owning_organisation,
-          owning_organisation:,
-          assigned_to: assigned_to_user,
-          first_time_property_let_as_social_housing: 1,
-        })
-      end
-
-      let!(:relet_lettings_log) do
-        described_class.create({
-          managing_organisation: owning_organisation,
-          owning_organisation:,
-          assigned_to: assigned_to_user,
-          first_time_property_let_as_social_housing: 0,
-        })
-      end
-
-      it "the newprop variable is correctly derived and saved as 1 for a first let vacancy reason" do
-        first_let_lettings_log.update!({ rsnvac: 15 })
-        record_from_db = described_class.find(first_let_lettings_log.id)
-        expect(record_from_db["newprop"]).to eq(1)
-        expect(first_let_lettings_log["newprop"]).to eq(1)
-      end
-
-      it "the newprop variable is correctly derived and saved as 2 for anything that is not a first let vacancy reason" do
-        relet_lettings_log.update!({ rsnvac: 2 })
-        record_from_db = described_class.find(relet_lettings_log.id)
-        expect(record_from_db["newprop"]).to eq(2)
-        expect(relet_lettings_log["newprop"]).to eq(2)
-      end
-    end
-
-    context "when a total shortfall is provided" do
-      it "derives that tshortfall is known" do
-        lettings_log.update!({ tshortfall: 10 })
-        record_from_db = described_class.find(lettings_log.id)
-        expect(record_from_db["tshortfall_known"]).to eq(0)
-        expect(lettings_log["tshortfall_known"]).to eq(0)
-      end
-    end
-
     context "when a lettings log is a supported housing log" do
       let(:real_2021_2022_form) { Form.new("config/forms/2021_2022.json") }
 
@@ -2112,7 +501,7 @@ RSpec.describe LettingsLog do
       end
 
       context "and a scheme with a single log is selected" do
-        let(:scheme) { create(:scheme) }
+        let(:scheme) { create(:scheme, owning_organisation:) }
         let!(:location) { create(:location, scheme:) }
 
         before do
@@ -2185,7 +574,7 @@ RSpec.describe LettingsLog do
       end
 
       context "and not renewal" do
-        let(:scheme) { create(:scheme) }
+        let(:scheme) { create(:scheme, owning_organisation:) }
         let(:location) { create(:location, scheme:, postcode: "M11AE", type_of_unit: 1, mobility_type: "W") }
 
         let(:supported_housing_lettings_log) do
@@ -2201,7 +590,7 @@ RSpec.describe LettingsLog do
         end
 
         before do
-          stub_request(:get, /api.postcodes.io/)
+          stub_request(:get, /api\.postcodes\.io/)
             .to_return(status: 200, body: "{\"status\":200,\"result\":{\"admin_district\":\"Manchester\",\"codes\":{\"admin_district\": \"E08000003\"}}}", headers: {})
         end
 
@@ -2567,23 +956,27 @@ RSpec.describe LettingsLog do
 
       context "when the organisation selected doesn't match the scheme set" do
         let(:scheme) { create(:scheme, owning_organisation: assigned_to_user.organisation) }
-        let(:location) { create(:location, scheme:) }
-        let(:lettings_log) { create(:lettings_log, owning_organisation: nil, needstype: 2, scheme_id: scheme.id) }
+        let(:location) { create_list(:location, 2, scheme:).first }
+        let(:lettings_log) { create(:lettings_log, owning_organisation: nil, needstype: 2, scheme_id: scheme.id, location_id: location.id) }
 
-        it "clears the scheme value" do
+        it "clears the scheme and location values" do
           lettings_log.update!(owning_organisation: organisation_2)
-          expect(lettings_log.reload.scheme).to be nil
+          lettings_log.reload
+          expect(lettings_log.scheme).to be nil
+          expect(lettings_log.location).to be nil
         end
       end
 
       context "when the organisation selected still matches the scheme set" do
         let(:scheme) { create(:scheme, owning_organisation: organisation_2) }
-        let(:location) { create(:location, scheme:) }
-        let(:lettings_log) { create(:lettings_log, owning_organisation: nil, needstype: 2, scheme_id: scheme.id) }
+        let(:location) { create_list(:location, 2, scheme:).first }
+        let(:lettings_log) { create(:lettings_log, owning_organisation: nil, needstype: 2, scheme_id: scheme.id, location_id: location.id) }
 
-        it "does not clear the scheme value" do
+        it "does not clear the scheme or location value" do
           lettings_log.update!(owning_organisation: organisation_2)
-          expect(lettings_log.reload.scheme_id).to eq(scheme.id)
+          lettings_log.reload
+          expect(lettings_log.scheme_id).to eq(scheme.id)
+          expect(lettings_log.location_id).to eq(location.id)
         end
       end
     end
@@ -2762,6 +1155,7 @@ RSpec.describe LettingsLog do
   describe "scopes" do
     let!(:lettings_log_1) { create(:lettings_log, :in_progress, startdate: Time.utc(2021, 5, 3), mrcdate: Time.utc(2021, 5, 3), voiddate: Time.utc(2021, 5, 3), assigned_to: assigned_to_user) }
     let!(:lettings_log_2) { create(:lettings_log, :completed, startdate: Time.utc(2021, 5, 3), mrcdate: Time.utc(2021, 5, 3), voiddate: Time.utc(2021, 5, 3), assigned_to: assigned_to_user) }
+    let(:postcode_to_search) { "SW1A 0AA" }
 
     before do
       Timecop.freeze(Time.utc(2022, 6, 3))
@@ -2824,21 +1218,27 @@ RSpec.describe LettingsLog do
       end
 
       describe "#filter_by_postcode" do
-        it "allows searching by a Property Postcode" do
-          result = described_class.filter_by_postcode(lettings_log_to_search.postcode_full)
-          expect(result.count).to eq(1)
-          expect(result.first.id).to eq lettings_log_to_search.id
+        context "when not associated with a location" do
+          before do
+            lettings_log_to_search.update!(postcode_full: postcode_to_search)
+          end
+
+          it "allows searching by a Property Postcode" do
+            result = described_class.filter_by_postcode(postcode_to_search)
+            expect(result.count).to eq(1)
+            expect(result.first.id).to eq lettings_log_to_search.id
+          end
         end
 
         context "when lettings log is supported housing" do
-          let(:location) { create(:location, postcode: "W6 0ST") }
+          let(:location) { create(:location, postcode: postcode_to_search) }
 
           before do
             lettings_log_to_search.update!(needstype: 2, location:)
           end
 
           it "allows searching by a Property Postcode" do
-            result = described_class.filter_by_location_postcode("W6 0ST")
+            result = described_class.filter_by_location_postcode(postcode_to_search)
             expect(result.count).to eq(1)
             expect(result.first.id).to eq lettings_log_to_search.id
           end
@@ -2865,7 +1265,8 @@ RSpec.describe LettingsLog do
         end
 
         it "allows searching by a Property Postcode" do
-          result = described_class.search_by(lettings_log_to_search.postcode_full)
+          lettings_log_to_search.update!(postcode_full: postcode_to_search)
+          result = described_class.search_by(postcode_to_search)
           expect(result.count).to eq(1)
           expect(result.first.id).to eq lettings_log_to_search.id
         end
@@ -2897,10 +1298,10 @@ RSpec.describe LettingsLog do
         end
 
         context "when postcode has spaces and lower case letters" do
-          let(:matching_postcode_lower_case_with_spaces) { lettings_log_to_search.postcode_full.downcase.chars.insert(3, " ").join }
-
           it "allows searching by a Property Postcode" do
-            result = described_class.search_by(matching_postcode_lower_case_with_spaces)
+            lettings_log_to_search.update!(postcode_full: postcode_to_search)
+            unformatted_postcode = postcode_to_search.downcase.chars.join(" ")
+            result = described_class.search_by(unformatted_postcode)
             expect(result.count).to eq(1)
             expect(result.first.id).to eq lettings_log_to_search.id
           end
@@ -3349,7 +1750,7 @@ RSpec.describe LettingsLog do
       end
 
       context "when there is a duplicate supported housing log" do
-        let(:scheme) { create(:scheme) }
+        let(:scheme) { create(:scheme, owning_organisation: organisation) }
         let(:location) { create(:location, scheme:) }
         let(:location_2) { create(:location, scheme:) }
         let!(:supported_housing_log) { create(:lettings_log, :duplicate, needstype: 2, location:, scheme:, owning_organisation: organisation) }
@@ -3376,9 +1777,8 @@ RSpec.describe LettingsLog do
         end
 
         it "does not return logs not associated with the user if user is given" do
-          user = create(:user)
-          supported_housing_log.update!(assigned_to: user, owning_organisation: user.organisation)
-          duplicate_supported_housing_log.update!(owning_organisation: user.organisation)
+          user = create(:user, organisation:)
+          supported_housing_log.update!(assigned_to: user)
           duplicate_sets = described_class.duplicate_sets(user.id)
           expect(duplicate_sets.count).to eq(1)
           expect(duplicate_sets.first).to contain_exactly(supported_housing_log.id, duplicate_supported_housing_log.id)
@@ -3487,17 +1887,49 @@ RSpec.describe LettingsLog do
 
   describe "#applicable_income_range" do
     context "when ecstat for a non-lead tenant is not set" do
-      let(:lettings_log) { build(:lettings_log, hhmemb: 2, ecstat1: 1) }
+      context "and their age is >= 16" do
+        let(:lettings_log) { build(:lettings_log, hhmemb: 2, ecstat1: 1, age2: 16) }
 
-      it "uses the prefers-not-to-say values for that tenant to calculate the range" do
-        range = lettings_log.applicable_income_range
-        expected_range = OpenStruct.new(
-          soft_min: 143 + 47,
-          soft_max: 730 + 730,
-          hard_min: 90 + 10,
-          hard_max: 1230 + 2000,
-        )
-        expect(range).to eq(expected_range)
+        it "uses the prefers-not-to-say values for that tenant to calculate the range" do
+          range = lettings_log.applicable_income_range
+          expected_range = OpenStruct.new(
+            soft_min: 143 + 47,
+            soft_max: 730 + 730,
+            hard_min: 90 + 10,
+            hard_max: 1230 + 2000,
+          )
+          expect(range).to eq(expected_range)
+        end
+      end
+
+      context "and their age is blank" do
+        let(:lettings_log) { build(:lettings_log, hhmemb: 2, ecstat1: 1, age2: nil) }
+
+        it "uses the prefers-not-to-say values for that tenant to calculate the range" do
+          range = lettings_log.applicable_income_range
+          expected_range = OpenStruct.new(
+            soft_min: 143 + 47,
+            soft_max: 730 + 730,
+            hard_min: 90 + 10,
+            hard_max: 1230 + 2000,
+          )
+          expect(range).to eq(expected_range)
+        end
+      end
+
+      context "and their age is < 16" do
+        let(:lettings_log) { build(:lettings_log, hhmemb: 2, ecstat1: 1, age2: 15) }
+
+        it "uses the child-under-16 values for that tenant to calculate the range" do
+          range = lettings_log.applicable_income_range
+          expected_range = OpenStruct.new(
+            soft_min: 143 + 50,
+            soft_max: 730 + 450,
+            hard_min: 90 + 10,
+            hard_max: 1230 + 750,
+          )
+          expect(range).to eq(expected_range)
+        end
       end
     end
 
@@ -3525,7 +1957,7 @@ RSpec.describe LettingsLog do
     end
 
     context "when setup section has been completed" do
-      let(:lettings_log) { build(:lettings_log, :setup_completed) }
+      let(:lettings_log) { build_stubbed(:lettings_log, :setup_completed) }
 
       it "returns true" do
         expect(lettings_log).to be_non_location_setup_questions_completed
@@ -3533,7 +1965,7 @@ RSpec.describe LettingsLog do
     end
 
     context "when the declaration has not been completed for a 2024 log" do
-      let(:lettings_log) { build(:lettings_log, :setup_completed, startdate: Time.utc(2024, 10, 1), declaration: nil) }
+      let(:lettings_log) { build_stubbed(:lettings_log, :setup_completed, startdate: Time.utc(2024, 10, 1), declaration: nil) }
 
       it "returns false" do
         expect(lettings_log).not_to be_non_location_setup_questions_completed
@@ -3541,7 +1973,7 @@ RSpec.describe LettingsLog do
     end
 
     context "when an optional question has not been completed" do
-      let(:lettings_log) { build(:lettings_log, :setup_completed, propcode: nil) }
+      let(:lettings_log) { build_stubbed(:lettings_log, :setup_completed, propcode: nil) }
 
       it "returns true" do
         expect(lettings_log).to be_non_location_setup_questions_completed
@@ -3549,7 +1981,7 @@ RSpec.describe LettingsLog do
     end
 
     context "when scheme and location have not been completed" do
-      let(:lettings_log) { build(:lettings_log, :setup_completed, :sh, scheme_id: nil, location_id: nil) }
+      let(:lettings_log) { build_stubbed(:lettings_log, :setup_completed, :sh, scheme_id: nil, location_id: nil) }
 
       it "returns true" do
         expect(lettings_log).to be_non_location_setup_questions_completed

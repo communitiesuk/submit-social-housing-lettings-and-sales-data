@@ -234,7 +234,13 @@ class LettingsLog < Log
 
     if hhmemb > 1
       (2..hhmemb).each do |person_index|
-        ecstat = self["ecstat#{person_index}"] || 10
+        ecstat = self["ecstat#{person_index}"]
+
+        if ecstat.nil?
+          age = self["age#{person_index}"]
+          # This should match the conditions under which ecstat is inferred as 9 (child under 16)
+          ecstat = age && age < 16 ? 9 : 10
+        end
 
         person_range = ALLOWED_INCOME_RANGES[ecstat]
         range.soft_min += person_range.soft_min
@@ -687,7 +693,17 @@ class LettingsLog < Log
   end
 
   def address_search_given?
-    address_line1_input.present? && postcode_full.present?
+    address_line1_input.present? && postcode_full_input.present?
+  end
+
+  def process_postcode_changes!
+    self.postcode_full = upcase_and_remove_whitespace(postcode_full)
+    return if postcode_full.blank?
+
+    self.postcode_known = 1
+    inferred_la = get_inferred_la(postcode_full)
+    self.is_la_inferred = inferred_la.present?
+    self.la = inferred_la if inferred_la.present?
   end
 
 private
@@ -715,8 +731,10 @@ private
 
   def reset_scheme
     return unless scheme && owning_organisation
+    return unless scheme.owning_organisation != owning_organisation
 
-    self.scheme = nil if scheme.owning_organisation != owning_organisation
+    self.scheme = nil
+    self.location = nil
   end
 
   def reset_invalidated_dependent_fields!
@@ -742,16 +760,6 @@ private
     return true if collection_start_year < 2022
 
     collection_start_year >= 2022 && !is_fixed_term_tenancy?
-  end
-
-  def process_postcode_changes!
-    self.postcode_full = upcase_and_remove_whitespace(postcode_full)
-    return if postcode_full.blank?
-
-    self.postcode_known = 1
-    inferred_la = get_inferred_la(postcode_full)
-    self.is_la_inferred = inferred_la.present?
-    self.la = inferred_la if inferred_la.present?
   end
 
   def process_previous_postcode_changes!

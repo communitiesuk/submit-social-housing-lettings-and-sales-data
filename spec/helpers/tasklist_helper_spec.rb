@@ -13,7 +13,7 @@ RSpec.describe TasklistHelper do
 
   describe "with lettings" do
     let(:empty_lettings_log) { create(:lettings_log) }
-    let(:lettings_log) { build(:lettings_log, :in_progress, needstype: 1, startdate: now) }
+    let(:lettings_log) { build_stubbed(:lettings_log, :in_progress, needstype: 1, startdate: now) }
 
     describe "get next incomplete section" do
       it "returns the first subsection name if it is not completed" do

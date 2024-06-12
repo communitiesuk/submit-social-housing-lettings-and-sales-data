@@ -22,6 +22,7 @@
                        options: bulk_upload_options(@bulk_upload),
                        label: "Bulk upload",
                        category: "bulk_upload_id",
+                       size: "s",
                      } %>
         <% end %>
 
@@ -32,6 +33,7 @@
                        options: collection_year_options,
                        label: "Collection year",
                        category: "years",
+                       size: "s",
                      } %>
 
           <%= render partial: "filters/checkbox_filter",
@@ -40,6 +42,7 @@
                        options: status_filters,
                        label: "Status",
                        category: "status",
+                       size: "s",
                      } %>
 
           <% if logs_for_both_needstypes_present?(@organisation) && user_or_org_lettings_path? %>
@@ -49,6 +52,7 @@
                          options: needstype_filters,
                          label: "Needs type",
                          category: "needstypes",
+                         size: "s",
                        } %>
           <% end %>
         <% end %>
@@ -71,6 +75,7 @@
                      },
                      label: "Assigned to",
                      category: "assigned_to",
+                     size: "s",
                    } %>
 
          <% if current_user.support? || non_support_with_multiple_owning_orgs? %>
@@ -90,6 +95,7 @@
             },
             label: "Owned by",
             category: "owning_organisation_select",
+            size: "s",
           } %>
         <% end %>
 
@@ -110,6 +116,7 @@
             },
             label: user_or_org_lettings_path? ? "Managed by" : "Reported by",
             category: "managing_organisation_select",
+            size: "s",
           } %>
         <% end %>
 

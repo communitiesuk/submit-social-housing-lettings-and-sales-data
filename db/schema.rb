@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_04_08_102550) do
+ActiveRecord::Schema[7.0].define(version: 2024_05_29_133005) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -270,6 +270,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_08_102550) do
     t.integer "irproduct"
     t.string "old_id"
     t.integer "joint"
+    t.bigint "assigned_to_id"
     t.integer "retirement_value_check"
     t.integer "tshortfall_known"
     t.integer "sheltered"
@@ -319,7 +320,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_08_102550) do
     t.string "la_as_entered"
     t.integer "partner_under_16_value_check"
     t.integer "multiple_partners_value_check"
-    t.bigint "assigned_to_id"
     t.bigint "created_by_id"
     t.index ["assigned_to_id"], name: "index_lettings_logs_on_assigned_to_id"
     t.index ["bulk_upload_id"], name: "index_lettings_logs_on_bulk_upload_id"
@@ -379,6 +379,24 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_08_102550) do
     t.datetime "discarded_at"
     t.index ["old_id"], name: "index_locations_on_old_id", unique: true
     t.index ["scheme_id"], name: "index_locations_on_scheme_id"
+  end
+
+  create_table "log_validations", force: :cascade do |t|
+    t.string "log_type"
+    t.string "section"
+    t.string "validation_name"
+    t.string "description"
+    t.string "case"
+    t.string "field"
+    t.string "error_message"
+    t.datetime "from"
+    t.datetime "to"
+    t.string "validation_type"
+    t.string "hard_soft"
+    t.boolean "bulk_upload_specific", default: false
+    t.string "other_validated_models"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "logs_exports", force: :cascade do |t|
@@ -497,6 +515,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_08_102550) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "owning_organisation_id"
+    t.bigint "assigned_to_id"
     t.string "purchid"
     t.integer "type"
     t.integer "ownershipsch"
@@ -687,7 +706,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_08_102550) do
     t.string "la_as_entered"
     t.integer "partner_under_16_value_check"
     t.integer "multiple_partners_value_check"
-    t.bigint "assigned_to_id"
     t.bigint "created_by_id"
     t.index ["assigned_to_id"], name: "index_sales_logs_on_assigned_to_id"
     t.index ["bulk_upload_id"], name: "index_sales_logs_on_bulk_upload_id"
@@ -767,8 +785,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_08_102550) do
     t.datetime "confirmation_sent_at"
     t.string "unconfirmed_email"
     t.boolean "initial_confirmation_sent"
-    t.datetime "discarded_at"
     t.boolean "reactivate_with_organisation"
+    t.datetime "discarded_at"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["encrypted_otp_secret_key"], name: "index_users_on_encrypted_otp_secret_key", unique: true

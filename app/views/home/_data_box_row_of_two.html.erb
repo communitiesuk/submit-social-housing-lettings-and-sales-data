@@ -1,0 +1,8 @@
+<div class="app-data-box-one-half">
+  <%= render partial: "home/data_box", object: left_data_box %>
+</div>
+<% if right_data_box %>
+  <div class="app-data-box-one-half">
+    <%= render partial: "home/data_box", object: right_data_box %>
+  </div>
+<% end %>

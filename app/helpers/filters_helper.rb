@@ -102,6 +102,14 @@ module FiltersHelper
     }
   end
 
+  def collection_year_radio_options
+    {
+      current_collection_start_year.to_s => { label: year_combo(current_collection_start_year) },
+      previous_collection_start_year.to_s => { label: year_combo(previous_collection_start_year) },
+      archived_collection_start_year.to_s => { label: year_combo(archived_collection_start_year) },
+    }
+  end
+
   def filters_applied_text(filter_type)
     applied_filters_count(filter_type).zero? ? "No filters applied" : "#{pluralize(applied_filters_count(filter_type), 'filter')} applied"
   end
@@ -157,6 +165,41 @@ module FiltersHelper
     filters_count(applied_filters(filter_type))
   end
 
+  def check_your_answers_filters_list(session_filters, filter_type)
+    [
+      { id: "years", label: "Collection year", value: formatted_years_filter(session_filters) },
+      { id: "status", label: "Status", value: formatted_status_filter(session_filters) },
+      filter_type == "lettings_logs" ? { id: "needstype", label: "Needs type", value: formatted_needstype_filter(session_filters) } : nil,
+      { id: "assigned_to", label: "Assigned to", value: formatted_assigned_to_filter(session_filters) },
+      { id: "owned_by", label: "Owned by", value: formatted_owned_by_filter(session_filters) },
+      { id: "managed_by", label: "Managed by", value: formatted_managed_by_filter(session_filters) },
+    ].compact
+  end
+
+  def update_csv_filters_url(filter_type, filter, organisation_id)
+    if organisation_id.present?
+      send("#{filter_type}_filters_update_#{filter}_organisation_path", organisation_id)
+    else
+      send("filters_update_#{filter}_#{filter_type}_path")
+    end
+  end
+
+  def cancel_csv_filters_update_url(filter_type, search, codes_only, organisation_id)
+    if organisation_id.present?
+      send("#{filter_type}_csv_download_organisation_path", id: organisation_id, search:, codes_only:)
+    else
+      send("csv_download_#{filter_type}_path", search:, codes_only:)
+    end
+  end
+
+  def change_filter_for_csv_url(filter, filter_type, search_term, codes_only, organisation_id)
+    if organisation_id.present?
+      send("#{filter_type}_filters_#{filter[:id]}_organisation_path", organisation_id, search: search_term, codes_only:, referrer: "check_answers")
+    else
+      send("filters_#{filter[:id]}_#{filter_type}_path", search: search_term, codes_only:, referrer: "check_answers")
+    end
+  end
+
 private
 
   def applied_filters(filter_type)
@@ -183,5 +226,57 @@ private
 
   def year_combo(year)
     "#{year}/#{year - 2000 + 1}"
+  end
+
+  def formatted_years_filter(session_filters)
+    return unanswered_filter_value if session_filters["years"].blank?
+
+    session_filters["years"].map { |year| year_combo(year.to_i) }.to_sentence
+  end
+
+  def formatted_status_filter(session_filters)
+    return unanswered_filter_value if session_filters["status"].blank?
+
+    session_filters["status"].map { |status| status_filters[status] }.to_sentence
+  end
+
+  def formatted_needstype_filter(session_filters)
+    return unanswered_filter_value if session_filters["needstypes"].blank?
+
+    session_filters["needstypes"].map { |needstype| needstype_filters[needstype] }.to_sentence
+  end
+
+  def formatted_assigned_to_filter(session_filters)
+    return unanswered_filter_value if session_filters["assigned_to"].blank?
+    return "All" if session_filters["assigned_to"].include?("all")
+    return "You" if session_filters["assigned_to"].include?("you")
+
+    selected_user_option = assigned_to_filter_options(current_user).find { |x| x.id == session_filters["user"].to_i }
+    return unless selected_user_option
+
+    "#{selected_user_option.name} (#{selected_user_option.hint})"
+  end
+
+  def formatted_owned_by_filter(session_filters)
+    return "All" if params["id"].blank? && (session_filters["owning_organisation"].blank? || session_filters["owning_organisation"]&.include?("all"))
+
+    session_org_id = session_filters["owning_organisation"] || params["id"]
+    selected_owning_organisation_option = owning_organisation_filter_options(current_user).find { |org| org.id == session_org_id.to_i }
+    return unless selected_owning_organisation_option
+
+    selected_owning_organisation_option&.name
+  end
+
+  def formatted_managed_by_filter(session_filters)
+    return "All" if session_filters["managing_organisation"].blank? || session_filters["managing_organisation"].include?("all")
+
+    selected_managing_organisation_option = managing_organisation_filter_options(current_user).find { |org| org.id == session_filters["managing_organisation"].to_i }
+    return unless selected_managing_organisation_option
+
+    selected_managing_organisation_option&.name
+  end
+
+  def unanswered_filter_value
+    "<span class=\"app-!-colour-muted\">You didn’t answer this filter</span>".html_safe
   end
 end

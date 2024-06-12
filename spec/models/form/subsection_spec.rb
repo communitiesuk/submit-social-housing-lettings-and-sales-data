@@ -97,8 +97,7 @@ RSpec.describe Form::Subsection, type: :model do
     end
 
     it "has a status when optional fields are not filled" do
-      lettings_log.update!({ propcode: nil })
-      lettings_log.reload
+      lettings_log.propcode = nil
       expect(subsection.status(lettings_log)).to eq(:completed)
     end
 

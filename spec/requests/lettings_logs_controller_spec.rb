@@ -1319,7 +1319,7 @@ RSpec.describe LettingsLogsController, type: :request do
         Singleton.__init__(FormHandler)
         completed_lettings_log.update!(startdate: Time.zone.local(2021, 4, 1), voiddate: Time.zone.local(2021, 4, 1), mrcdate: Time.zone.local(2021, 4, 1))
         Timecop.unfreeze
-        stub_request(:get, /api.postcodes.io/)
+        stub_request(:get, /api\.postcodes\.io/)
           .to_return(status: 200, body: "{\"status\":200,\"result\":{\"admin_district\":\"Manchester\", \"codes\":{\"admin_district\": \"E08000003\"}}}", headers: {})
         sign_in user
       end
@@ -1400,22 +1400,100 @@ RSpec.describe LettingsLogsController, type: :request do
     context "when requesting CSV download" do
       let(:headers) { { "Accept" => "text/html" } }
       let(:search_term) { "foo" }
+      let!(:lettings_log) { create(:lettings_log, :setup_completed, assigned_to: user, owning_organisation: user.organisation, tenancycode: search_term) }
 
       before do
         sign_in user
-        get "/lettings-logs/csv-download?search=#{search_term}&codes_only=false", headers:
       end
 
-      it "returns http success" do
-        expect(response).to have_http_status(:success)
+      context "when there is 1 year selected in the filters" do
+        before do
+          get "/lettings-logs/csv-download?years[]=#{lettings_log.form.start_date.year}&search=#{search_term}&codes_only=false", headers:
+        end
+
+        it "returns http success" do
+          expect(response).to have_http_status(:success)
+        end
+
+        it "shows a confirmation button" do
+          expect(page).to have_button("Send email")
+        end
+
+        it "includes the search term" do
+          expect(page).to have_field("search", type: "hidden", with: search_term)
+        end
+
+        it "allows updating log filters" do
+          expect(page).to have_content("Check your filters")
+          expect(page).to have_link("Change", count: 6)
+          expect(page).to have_link("Change", href: "/lettings-logs/filters/years?codes_only=false&referrer=check_answers&search=#{search_term}")
+          expect(page).to have_link("Change", href: "/lettings-logs/filters/assigned-to?codes_only=false&referrer=check_answers&search=#{search_term}")
+          expect(page).to have_link("Change", href: "/lettings-logs/filters/owned-by?codes_only=false&referrer=check_answers&search=#{search_term}")
+          expect(page).to have_link("Change", href: "/lettings-logs/filters/managed-by?codes_only=false&referrer=check_answers&search=#{search_term}")
+          expect(page).to have_link("Change", href: "/lettings-logs/filters/status?codes_only=false&referrer=check_answers&search=#{search_term}")
+          expect(page).to have_link("Change", href: "/lettings-logs/filters/needstype?codes_only=false&referrer=check_answers&search=#{search_term}")
+        end
+
+        it "displays correct assigned to filter" do
+          create_list(:user, 12, organisation: user.organisation)
+          filtered_user = create(:user, organisation: user.organisation, name: "Obviously not usual name")
+          get("/lettings-logs/csv-download?years[]=#{lettings_log.form.start_date.year}&search=#{search_term}&codes_only=false&assigned_to=specific_user&user=#{filtered_user.id}", headers:)
+
+          expect(page).to have_content("Obviously not usual name")
+        end
+
+        it "does not display assigned to user from other org" do
+          user_from_different_org = create(:user, name: "User from different org")
+          get("/lettings-logs/csv-download?years[]=#{lettings_log.form.start_date.year}&search=#{search_term}&codes_only=false&assigned_to=specific_user&user=#{user_from_different_org.id}", headers:)
+
+          expect(page).not_to have_content("User from different org")
+        end
+
+        it "does not display non related managing orgs" do
+          managing_agent = create(:organisation, name: "Managing agent")
+          create(:organisation_relationship, child_organisation: managing_agent, parent_organisation: user.organisation)
+          unrelated_organisation = create(:organisation, name: "Unrelated managing org")
+
+          get("/lettings-logs/csv-download?years[]=#{lettings_log.form.start_date.year}&search=#{search_term}&codes_only=false&managing_organisation_select=specific_org&managing_organisation=#{unrelated_organisation.id}", headers:)
+
+          expect(page).not_to have_content("Unrelated managing org")
+        end
+
+        it "does not display non related owning orgs" do
+          managing_agent = create(:organisation, name: "Managing agent")
+          create(:organisation_relationship, child_organisation: managing_agent, parent_organisation: user.organisation)
+
+          unrelated_organisation = create(:organisation, name: "Unrelated owning org")
+          get("/lettings-logs/csv-download?years[]=#{lettings_log.form.start_date.year}&search=#{search_term}&codes_only=false&owning_organisation_select=specific_org&&owning_organisation=#{unrelated_organisation.id}", headers:)
+
+          expect(page).not_to have_content("Unrelated owning org")
+        end
       end
 
-      it "shows a confirmation button" do
-        expect(page).to have_button("Send email")
+      context "when there are no years selected in the filters" do
+        before do
+          get "/lettings-logs/csv-download?search=#{search_term}&codes_only=false", headers:
+        end
+
+        it "redirects to the year filter question" do
+          expect(response).to redirect_to("/lettings-logs/filters/years?codes_only=false&search=#{search_term}")
+          follow_redirect!
+          expect(page).to have_content("Which financial year do you want to download data for?")
+          expect(page).to have_button("Save changes")
+        end
       end
 
-      it "includes the search term" do
-        expect(page).to have_field("search", type: "hidden", with: search_term)
+      context "when there are multiple years selected in the filters" do
+        before do
+          get "/lettings-logs/csv-download?years[]=2021&years[]=2022&search=#{search_term}&codes_only=false", headers:
+        end
+
+        it "redirects to the year filter question" do
+          expect(response).to redirect_to("/lettings-logs/filters/years?codes_only=false&search=#{search_term}")
+          follow_redirect!
+          expect(page).to have_content("Which financial year do you want to download data for?")
+          expect(page).to have_button("Save changes")
+        end
       end
     end
 
@@ -1739,6 +1817,7 @@ RSpec.describe LettingsLogsController, type: :request do
     let(:page) { Capybara::Node::Simple.new(response.body) }
     let(:user) { FactoryBot.create(:user) }
     let(:headers) { { "Accept" => "text/html" } }
+    let!(:lettings_log) { create(:lettings_log, :setup_completed, assigned_to: user) }
 
     before do
       allow(user).to receive(:need_two_factor_authentication?).and_return(false)
@@ -1746,24 +1825,29 @@ RSpec.describe LettingsLogsController, type: :request do
     end
 
     it "renders a page with the correct header" do
-      get "/lettings-logs/csv-download?codes_only=false", headers:, params: {}
+      get "/lettings-logs/csv-download?years[]=#{lettings_log.form.start_date.year}&codes_only=false", headers:, params: {}
       header = page.find_css("h1")
       expect(header.text).to include("Download CSV")
     end
 
     it "renders a form with the correct target containing a button with the correct text" do
-      get "/lettings-logs/csv-download?codes_only=false", headers:, params: {}
+      get "/lettings-logs/csv-download?years[]=#{lettings_log.form.start_date.year}&codes_only=false", headers:, params: {}
       form = page.find("form.button_to")
       expect(form[:method]).to eq("post")
       expect(form[:action]).to eq("/lettings-logs/email-csv")
       expect(form).to have_button("Send email")
     end
 
-    it "when query string contains search parameter, form contains hidden field with correct value" do
-      search_term = "blam"
-      get "/lettings-logs/csv-download?codes_only=false&search=#{search_term}", headers:, params: {}
-      hidden_field = page.find("form.button_to").find_field("search", type: "hidden")
-      expect(hidden_field.value).to eq(search_term)
+    context "when query string contains search parameter" do
+      let(:search_term) { "blam" }
+      let!(:lettings_log) { create(:lettings_log, :setup_completed, assigned_to: user, tenancycode: search_term) }
+
+      it "contains hidden field with correct value" do
+        get "/lettings-logs/csv-download?years[]=#{lettings_log.form.start_date.year}&codes_only=false&search=#{search_term}", headers:, params: {}
+        expect(page).to have_button("Send email")
+        hidden_field = page.find("form.button_to").find_field("search", type: "hidden")
+        expect(hidden_field.value).to eq(search_term)
+      end
     end
 
     context "when the user is a data coordinator" do
@@ -1771,7 +1855,7 @@ RSpec.describe LettingsLogsController, type: :request do
 
       it "when codes_only query parameter is false, form contains hidden field with correct value" do
         codes_only = false
-        get "/lettings-logs/csv-download?codes_only=#{codes_only}", headers:, params: {}
+        get "/lettings-logs/csv-download?years[]=#{lettings_log.form.start_date.year}&codes_only=#{codes_only}", headers:, params: {}
         hidden_field = page.find("form.button_to").find_field("codes_only", type: "hidden")
         expect(hidden_field.value).to eq(codes_only.to_s)
       end
@@ -1786,7 +1870,7 @@ RSpec.describe LettingsLogsController, type: :request do
     context "when the user is a data provider" do
       it "when codes_only query parameter is false, form contains hidden field with correct value" do
         codes_only = false
-        get "/lettings-logs/csv-download?codes_only=#{codes_only}", headers:, params: {}
+        get "/lettings-logs/csv-download?years[]=#{lettings_log.form.start_date.year}&codes_only=#{codes_only}", headers:, params: {}
         hidden_field = page.find("form.button_to").find_field("codes_only", type: "hidden")
         expect(hidden_field.value).to eq(codes_only.to_s)
       end
@@ -1803,14 +1887,14 @@ RSpec.describe LettingsLogsController, type: :request do
 
       it "when codes_only query parameter is false, form contains hidden field with correct value" do
         codes_only = false
-        get "/lettings-logs/csv-download?codes_only=#{codes_only}", headers:, params: {}
+        get "/lettings-logs/csv-download?years[]=#{lettings_log.form.start_date.year}&codes_only=#{codes_only}", headers:, params: {}
         hidden_field = page.find("form.button_to").find_field("codes_only", type: "hidden")
         expect(hidden_field.value).to eq(codes_only.to_s)
       end
 
       it "when codes_only query parameter is true, form contains hidden field with correct value" do
         codes_only = true
-        get "/lettings-logs/csv-download?codes_only=#{codes_only}", headers:, params: {}
+        get "/lettings-logs/csv-download?years[]=#{lettings_log.form.start_date.year}&codes_only=#{codes_only}", headers:, params: {}
         hidden_field = page.find("form.button_to").find_field("codes_only", type: "hidden")
         expect(hidden_field.value).to eq(codes_only.to_s)
       end
@@ -1843,42 +1927,42 @@ RSpec.describe LettingsLogsController, type: :request do
 
       it "creates an E-mail job" do
         expect {
-          post "/lettings-logs/email-csv?codes_only=true", headers:, params: {}
-        }.to enqueue_job(EmailCsvJob).with(user, nil, {}, false, nil, true)
+          post "/lettings-logs/email-csv?years[]=2023&codes_only=true", headers:, params: {}
+        }.to enqueue_job(EmailCsvJob).with(user, nil, { "years" => %w[2023] }, false, nil, true, "lettings", 2023)
       end
 
       it "redirects to the confirmation page" do
-        post "/lettings-logs/email-csv?codes_only=true", headers:, params: {}
+        post "/lettings-logs/email-csv?years[]=2023&codes_only=true", headers:, params: {}
         expect(response).to redirect_to(csv_confirmation_lettings_logs_path)
       end
 
       it "passes the search term" do
         expect {
-          post "/lettings-logs/email-csv?search=#{lettings_log.id}&codes_only=false", headers:, params: {}
-        }.to enqueue_job(EmailCsvJob).with(user, lettings_log.id.to_s, {}, false, nil, false)
+          post "/lettings-logs/email-csv?years[]=2023&search=#{lettings_log.id}&codes_only=false", headers:, params: {}
+        }.to enqueue_job(EmailCsvJob).with(user, lettings_log.id.to_s, { "years" => %w[2023] }, false, nil, false, "lettings", 2023)
       end
 
       it "passes filter parameters" do
         expect {
-          post "/lettings-logs/email-csv?status[]=completed&codes_only=true", headers:, params: {}
-        }.to enqueue_job(EmailCsvJob).with(user, nil, { "status" => %w[completed] }, false, nil, true)
+          post "/lettings-logs/email-csv?years[]=2023&status[]=completed&codes_only=true", headers:, params: {}
+        }.to enqueue_job(EmailCsvJob).with(user, nil, { "status" => %w[completed], "years" => %w[2023] }, false, nil, true, "lettings", 2023)
       end
 
       it "passes export type flag" do
         expect {
-          post "/lettings-logs/email-csv?codes_only=true", headers:, params: {}
-        }.to enqueue_job(EmailCsvJob).with(user, nil, {}, false, nil, true)
+          post "/lettings-logs/email-csv?years[]=2023&codes_only=true", headers:, params: {}
+        }.to enqueue_job(EmailCsvJob).with(user, nil, { "years" => %w[2023] }, false, nil, true, "lettings", 2023)
         expect {
-          post "/lettings-logs/email-csv?codes_only=false", headers:, params: {}
-        }.to enqueue_job(EmailCsvJob).with(user, nil, {}, false, nil, false)
+          post "/lettings-logs/email-csv?years[]=2023&codes_only=false", headers:, params: {}
+        }.to enqueue_job(EmailCsvJob).with(user, nil, { "years" => %w[2023] }, false, nil, false, "lettings", 2023)
       end
 
       it "passes a combination of search term, export type and filter parameters" do
         postcode = "XX1 1TG"
 
         expect {
-          post "/lettings-logs/email-csv?status[]=completed&search=#{postcode}&codes_only=false", headers:, params: {}
-        }.to enqueue_job(EmailCsvJob).with(user, postcode, { "status" => %w[completed] }, false, nil, false)
+          post "/lettings-logs/email-csv?years[]=2023&status[]=completed&search=#{postcode}&codes_only=false", headers:, params: {}
+        }.to enqueue_job(EmailCsvJob).with(user, postcode, { "status" => %w[completed], "years" => %w[2023] }, false, nil, false, "lettings", 2023)
       end
 
       context "when the user is not a support user" do
@@ -1887,13 +1971,13 @@ RSpec.describe LettingsLogsController, type: :request do
         it "has permission to download human readable csv" do
           codes_only_export = false
           expect {
-            post "/lettings-logs/email-csv?codes_only=#{codes_only_export}", headers:, params: {}
-          }.to enqueue_job(EmailCsvJob).with(user, nil, {}, false, nil, false)
+            post "/lettings-logs/email-csv?years[]=2023&codes_only=#{codes_only_export}", headers:, params: {}
+          }.to enqueue_job(EmailCsvJob).with(user, nil, { "years" => %w[2023] }, false, nil, false, "lettings", 2023)
         end
 
         it "is not authorized to download codes only csv" do
           codes_only_export = true
-          post "/lettings-logs/email-csv?codes_only=#{codes_only_export}", headers:, params: {}
+          post "/lettings-logs/email-csv?years[]=2023&codes_only=#{codes_only_export}", headers:, params: {}
           expect(response).to have_http_status(:unauthorized)
         end
       end

@@ -1,0 +1,30 @@
+<%= form_with html: { method: :get }, url: update_csv_filters_url(@filter_type, @filter, @organisation_id) do |f| %>
+  <%= render partial: "filters/radio_filter", locals: {
+    f:,
+    options: {
+      "all": { label: "Any owning organisation" },
+      "specific_org": {
+        label: "Specific owning organisation",
+        conditional_filter: {
+          type: "select",
+          label: "Owning Organisation",
+          category: "owning_organisation",
+          options: owning_organisation_filter_options(current_user),
+        },
+      },
+    },
+    label: "Owned by",
+    category: "owning_organisation_select",
+    size: "l",
+  } %>
+
+  <% if request.params["search"].present? %>
+    <%= f.hidden_field :search, value: request.params["search"] %>
+  <% end %>
+  <%= f.hidden_field :codes_only, value: request.params["codes_only"] %>
+
+  <div class="govuk-button-group">
+    <%= f.govuk_submit "Save changes" %>
+    <%= govuk_button_link_to "Cancel", cancel_csv_filters_update_url(@filter_type, request.params["search"], request.params["codes_only"], @organisation_id), secondary: true %>
+  </div>
+<% end %>

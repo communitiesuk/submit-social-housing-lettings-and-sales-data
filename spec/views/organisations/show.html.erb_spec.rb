@@ -2,13 +2,8 @@ require "rails_helper"
 
 RSpec.describe "organisations/show.html.erb" do
   before do
-    Timecop.freeze(Time.zone.local(2023, 1, 10))
     allow(view).to receive(:current_user).and_return(user)
     assign(:organisation, user.organisation)
-  end
-
-  after do
-    Timecop.return
   end
 
   let(:fragment) { Capybara::Node::Simple.new(rendered) }

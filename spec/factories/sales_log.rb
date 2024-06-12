@@ -154,6 +154,15 @@ FactoryBot.define do
       buy2living { 3 }
       proplen_asked { 1 }
     end
+    trait :completed2024 do
+      completed
+      address_line1_input { address_line1 }
+      postcode_full_input { postcode_full }
+      nationality_all_group { 826 }
+      nationality_all_buyer2_group { 826 }
+      uprn { 1 }
+      uprn_selection { 1 }
+    end
     trait :with_uprn do
       uprn { rand(999_999_999_999).to_s }
       uprn_known { 1 }

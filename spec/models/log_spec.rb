@@ -30,7 +30,7 @@ RSpec.describe Log, type: :model do
 
   describe "#blank_invalid_non_setup_fields!" do
     context "when a setup field is invalid for a lettings log" do
-      subject(:model) { build(:lettings_log, needstype: 404) }
+      subject(:model) { build_stubbed(:lettings_log, needstype: 404) }
 
       it "does not blank it" do
         model.valid?
@@ -39,7 +39,7 @@ RSpec.describe Log, type: :model do
     end
 
     context "when a setup field is invalid for a sales log" do
-      subject(:model) { build(:sales_log, companybuy: 404) }
+      subject(:model) { build_stubbed(:sales_log, companybuy: 404) }
 
       it "does not blank it" do
         model.valid?
@@ -48,7 +48,7 @@ RSpec.describe Log, type: :model do
     end
 
     context "when a non setup field is invalid for a lettings log" do
-      subject(:model) { build(:lettings_log, :completed, startdate: Time.zone.local(2023, 12, 12), offered: 234) }
+      subject(:model) { build_stubbed(:lettings_log, :completed, startdate: Time.zone.local(2023, 12, 12), offered: 234) }
 
       it "blanks it" do
         model.valid?
@@ -58,7 +58,7 @@ RSpec.describe Log, type: :model do
     end
 
     context "when a non setup field is invalid for a sales log" do
-      subject(:model) { build(:sales_log, :completed, age1: 10) }
+      subject(:model) { build_stubbed(:sales_log, :completed, age1: 10) }
 
       it "blanks it" do
         model.valid?
@@ -68,7 +68,7 @@ RSpec.describe Log, type: :model do
     end
 
     context "when prevloc is invalid for a lettings log" do
-      subject(:model) { build(:lettings_log, :completed, previous_la_known: 1, prevloc: nil) }
+      subject(:model) { build_stubbed(:lettings_log, :completed, previous_la_known: 1, prevloc: nil) }
 
       it "blanks previous_la_known" do
         model.valid?
@@ -78,7 +78,7 @@ RSpec.describe Log, type: :model do
     end
 
     context "when hhmemb is invalid for a lettings log" do
-      subject(:model) { build(:lettings_log, :setup_completed, hhmemb: 1, joint: 1) }
+      subject(:model) { build_stubbed(:lettings_log, :setup_completed, hhmemb: 1, joint: 1) }
 
       it "does not blank it" do
         model.valid?

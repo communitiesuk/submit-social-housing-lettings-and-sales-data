@@ -125,7 +125,7 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
         end
       end
 
-      context "when testing valid/invalid attributes" do
+      describe "valid/invalid attributes" do
         let(:valid_attributes) do
           {
             bulk_upload:,
@@ -220,6 +220,7 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
             field_112: "1",
             field_113: "2",
             field_114: "2",
+            field_115: "2",
 
             field_116: "2",
 
@@ -1188,15 +1189,18 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
       end
     end
 
-    describe "#field_112, 117, 119" do
-      context "when none of field_112, 117, 119 are given" do
-        let(:attributes) { { bulk_upload:, field_112: "", field_113: "", field_114: "", field_85: "1" } }
+    describe "#field_112 - 115 (lettings allocation methods)" do
+      %i[field_112 field_113 field_114 field_115].each do |field|
+        context "when only #{field} is not given" do
+          let(:attributes) do
+            override = {}
+            override[field] = ""
+            { bulk_upload:, field_112: "2", field_113: "1", field_114: "2", field_115: "1" }.merge(override)
+          end
 
-        it "sets correct errors" do
-          expect(parser.errors[:field_112]).to include("You must answer was the letting made under the Choice-Based Lettings (CBL)?")
-          expect(parser.errors[:field_113]).to include("You must answer was the letting made under the Common Allocation Policy (CAP)?")
-          expect(parser.errors[:field_114]).to include("You must answer was the letting made under the Common Housing Register (CHR)?")
-          expect(parser.errors[:field_115]).to include("You must answer was the letting made under the Accessible Register?")
+          it "adds an error to #{field}" do
+            expect(parser.errors[field]).to be_present
+          end
         end
       end
     end

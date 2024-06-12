@@ -62,14 +62,16 @@ class SalesLogsController < LogsController
   end
 
   def download_csv
+    redirect_to filters_years_sales_logs_path(search: search_term, codes_only: codes_only_export?) and return if session_filters["years"].blank? || session_filters["years"].count != 1
+
     unpaginated_filtered_logs = filter_manager.filtered_logs(current_user.sales_logs, search_term, session_filters)
 
-    render "download_csv", locals: { search_term:, count: unpaginated_filtered_logs.size, post_path: email_csv_sales_logs_path, codes_only: codes_only_export? }
+    render "download_csv", locals: { search_term:, count: unpaginated_filtered_logs.size, post_path: email_csv_sales_logs_path, codes_only: codes_only_export?, session_filters:, filter_type: "sales_logs", download_csv_back_link: sales_logs_path }
   end
 
   def email_csv
     all_orgs = params["organisation_select"] == "all"
-    EmailCsvJob.perform_later(current_user, search_term, session_filters, all_orgs, nil, codes_only_export?, "sales")
+    EmailCsvJob.perform_later(current_user, search_term, session_filters, all_orgs, nil, codes_only_export?, "sales", session_filters["years"].first.to_i)
     redirect_to csv_confirmation_sales_logs_path
   end
 

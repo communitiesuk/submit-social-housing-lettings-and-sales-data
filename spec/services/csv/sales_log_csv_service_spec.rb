@@ -32,8 +32,9 @@ RSpec.describe Csv::SalesLogCsvService do
       la_as_entered: "la as entered",
     )
   end
-  let(:service) { described_class.new(user:, export_type: "labels") }
+  let(:service) { described_class.new(user:, export_type: "labels", year:) }
   let(:csv) { CSV.parse(service.prepare_csv(SalesLog.all)) }
+  let(:year) { 2024 }
 
   before do
     Timecop.freeze(now)
@@ -45,36 +46,37 @@ RSpec.describe Csv::SalesLogCsvService do
     Timecop.return
   end
 
-  it "calls the form handler to get all questions in order when initialized" do
-    allow(FormHandler).to receive(:instance).and_return(form_handler_mock)
-    allow(form_handler_mock).to receive(:ordered_sales_questions_for_all_years).and_return([])
-    service
-    expect(form_handler_mock).to have_received(:ordered_sales_questions_for_all_years)
-  end
-
   it "returns a string" do
     result = service.prepare_csv(SalesLog.all)
     expect(result).to be_a String
   end
 
   it "returns a csv with headers" do
-    expect(csv.first.first).to eq "id"
+    expect(csv.first.first).to eq "ID"
   end
 
-  context "when stubbing :ordered_sales_questions_for_all_years" do
+  context "when stubbing :ordered_questions_for_year" do
     let(:sales_form) do
       FormFactory.new(year: 1936, type: "sales")
                  .with_sections([build(:section, :with_questions, question_ids:, questions:)])
                  .build
     end
-    let(:question_ids) { nil }
+    let(:question_ids) { [] }
     let(:questions) { nil }
+    let(:year) { 1936 }
 
     before do
       allow(FormHandler).to receive(:instance).and_return(form_handler_mock)
       allow(form_handler_mock).to receive(:form_name_from_start_year)
       allow(form_handler_mock).to receive(:get_form).and_return(sales_form)
-      allow(form_handler_mock).to receive(:ordered_sales_questions_for_all_years).and_return(sales_form.questions)
+      allow(form_handler_mock).to receive(:ordered_questions_for_year).and_return(sales_form.questions)
+    end
+
+    it "calls the form handler to get all questions in order when initialized" do
+      allow(FormHandler).to receive(:instance).and_return(form_handler_mock)
+      allow(form_handler_mock).to receive(:ordered_questions_for_year).and_return([])
+      service
+      expect(form_handler_mock).to have_received(:ordered_questions_for_year).with(1936, "sales")
     end
 
     context "when it returns questions with particular ids" do
@@ -82,13 +84,13 @@ RSpec.describe Csv::SalesLogCsvService do
 
       it "includes log attributes related to questions to the headers" do
         headers = csv.first
-        expect(headers).to include(*question_ids.first(3))
+        expect(headers).to include(*%w[TYPE AGE1 LIVEINBUYER1])
       end
 
       it "removes some log attributes related to questions from the headers and replaces them with their derived values in the correct order" do
         headers = csv.first
-        expect(headers).not_to include "exdate"
-        expect(headers.last(4)).to eq %w[buy1livein exday exmonth exyear]
+        expect(headers).not_to include "EXDATE"
+        expect(headers.last(4)).to eq %w[LIVEINBUYER1 EXDAY EXMONTH EXYEAR]
       end
     end
 
@@ -113,14 +115,14 @@ RSpec.describe Csv::SalesLogCsvService do
 
       it "does not add the id of checkbox questions, but adds the related attributes of the log in the correct order" do
         headers = csv.first
-        expect(headers.last(4)).to eq %w[ownershipsch pregyrha pregother type]
+        expect(headers.last(4)).to eq %w[OWNERSHIP PREGYRHA PREGOTHER TYPE]
       end
     end
   end
 
   it "includes attributes not related to questions to the headers" do
     headers = csv.first
-    expect(headers).to include(*%w[id status created_at updated_at old_form_id])
+    expect(headers).to include(*%w[ID STATUS CREATEDDATE UPLOADDATE])
   end
 
   it "returns a csv with the correct number of logs" do
@@ -131,81 +133,69 @@ RSpec.describe Csv::SalesLogCsvService do
   end
 
   context "when exporting with human readable labels" do
+    let(:year) { 2023 }
+
     it "gives answers to radio questions as their labels" do
-      national_column_index = csv.first.index("national")
+      national_column_index = csv.first.index("NATIONAL")
       national_value = csv.second[national_column_index]
       expect(national_value).to eq "United Kingdom"
-      relat2_column_index = csv.first.index("relat2")
+      relat2_column_index = csv.first.index("RELAT2")
       relat2_value = csv.second[relat2_column_index]
       expect(relat2_value).to eq "Partner"
     end
 
     it "gives answers to free input questions as the user input" do
-      age1_column_index = csv.first.index("age1")
+      age1_column_index = csv.first.index("AGE1")
       age1_value = csv.second[age1_column_index]
       expect(age1_value).to eq 30.to_s
       postcode_part1, postcode_part2 = log.postcode_full.split
-      postcode_part1_column_index = csv.first.index("pcode1")
+      postcode_part1_column_index = csv.first.index("PCODE1")
       postcode_part1_value = csv.second[postcode_part1_column_index]
       expect(postcode_part1_value).to eq postcode_part1
-      postcode_part2_column_index = csv.first.index("pcode2")
+      postcode_part2_column_index = csv.first.index("PCODE2")
       postcode_part2_value = csv.second[postcode_part2_column_index]
       expect(postcode_part2_value).to eq postcode_part2
     end
 
     it "exports the code for the local authority under the heading 'la'" do
-      la_column_index = csv.first.index("la")
+      la_column_index = csv.first.index("LA")
       la_value = csv.second[la_column_index]
-      expect(la_value).to eq "E09000003"
+      expect(la_value).to eq "E09000033"
     end
 
     it "exports the label for the local authority under the heading 'la_label'" do
-      la_label_column_index = csv.first.index("la_label")
+      la_label_column_index = csv.first.index("LANAME")
       la_label_value = csv.second[la_label_column_index]
-      expect(la_label_value).to eq "Barnet"
+      expect(la_label_value).to eq "Westminster"
     end
 
-    context "when the current form is 2024" do
+    context "when the requested form is 2024" do
       let(:now) { Time.zone.local(2024, 5, 1) }
+      let(:year) { 2024 }
+      let(:fixed_time) { Time.zone.local(2024, 5, 1) }
 
-      context "and the log is for 2024 collection period" do
-        let(:fixed_time) { Time.zone.local(2024, 5, 1) }
-
-        before do
-          log.update!(national: nil)
-          log.update!(nationality_all: 36)
-        end
-
-        it "exports the CSV with the 2024 ordering and all values correct" do
-          expected_content = CSV.read("spec/fixtures/files/sales_logs_csv_export_labels_24.csv")
-          values_to_delete = %w[id]
-          values_to_delete.each do |attribute|
-            index = csv.first.index(attribute)
-            csv.second[index] = nil
-          end
-          expect(csv).to eq expected_content
-        end
+      before do
+        log.update!(nationality_all: 36)
       end
 
-      context "and the log is for 2023 collection period" do
-        it "exports the CSV with the 2024 ordering and all values correct" do
-          expected_content = CSV.read("spec/fixtures/files/sales_logs_csv_export_labels_23_during_24_period.csv")
-          values_to_delete = %w[id]
-          values_to_delete.each do |attribute|
-            index = csv.first.index(attribute)
-            csv.second[index] = nil
-          end
-          expect(csv).to eq expected_content
+      it "exports the CSV with the 2024 ordering and all values correct" do
+        expected_content = CSV.read("spec/fixtures/files/sales_logs_csv_export_labels_24.csv")
+        values_to_delete = %w[ID]
+        values_to_delete.each do |attribute|
+          index = csv.first.index(attribute)
+          csv.second[index] = nil
         end
+        expect(csv).to eq expected_content
       end
     end
 
-    context "when the current form is 2023" do
+    context "when the requested form is 2023" do
       let(:now) { Time.zone.local(2024, 1, 1) }
+      let(:year) { 2023 }
 
       it "exports the CSV with the 2023 ordering and all values correct" do
         expected_content = CSV.read("spec/fixtures/files/sales_logs_csv_export_labels_23.csv")
-        values_to_delete = %w[id]
+        values_to_delete = %w[ID]
         values_to_delete.each do |attribute|
           index = csv.first.index(attribute)
           csv.second[index] = nil
@@ -220,7 +210,7 @@ RSpec.describe Csv::SalesLogCsvService do
       end
 
       it "exports the id for under the heading 'duplicate_set_id'" do
-        duplicate_set_id_column_index = csv.first.index("duplicate_set_id")
+        duplicate_set_id_column_index = csv.first.index("DUPLICATESET")
         duplicate_set_id_value = csv.second[duplicate_set_id_column_index]
         expect(duplicate_set_id_value).to eq "12312"
       end
@@ -228,48 +218,51 @@ RSpec.describe Csv::SalesLogCsvService do
   end
 
   context "when exporting values as codes" do
-    let(:service) { described_class.new(user:, export_type: "codes") }
+    let(:service) { described_class.new(user:, export_type: "codes", year:) }
+    let(:year) { 2023 }
 
     it "gives answers to radio questions as their codes" do
-      national_column_index = csv.first.index("national")
+      national_column_index = csv.first.index("NATIONAL")
       national_value = csv.second[national_column_index]
       expect(national_value).to eq 18.to_s
-      relat2_column_index = csv.first.index("relat2")
+      relat2_column_index = csv.first.index("RELAT2")
       relat2_value = csv.second[relat2_column_index]
       expect(relat2_value).to eq "P"
     end
 
     it "gives answers to free input questions as the user input" do
-      age1_column_index = csv.first.index("age1")
+      age1_column_index = csv.first.index("AGE1")
       age1_value = csv.second[age1_column_index]
       expect(age1_value).to eq 30.to_s
       postcode_part1, postcode_part2 = log.postcode_full.split
-      postcode_part1_column_index = csv.first.index("pcode1")
+      postcode_part1_column_index = csv.first.index("PCODE1")
       postcode_part1_value = csv.second[postcode_part1_column_index]
       expect(postcode_part1_value).to eq postcode_part1
-      postcode_part2_column_index = csv.first.index("pcode2")
+      postcode_part2_column_index = csv.first.index("PCODE2")
       postcode_part2_value = csv.second[postcode_part2_column_index]
       expect(postcode_part2_value).to eq postcode_part2
     end
 
     it "exports the code for the local authority under the heading 'la'" do
-      la_column_index = csv.first.index("la")
+      la_column_index = csv.first.index("LA")
       la_value = csv.second[la_column_index]
-      expect(la_value).to eq "E09000003"
+      expect(la_value).to eq "E09000033"
     end
 
     it "exports the label for the local authority under the heading 'la_label'" do
-      la_label_column_index = csv.first.index("la_label")
+      la_label_column_index = csv.first.index("LANAME")
       la_label_value = csv.second[la_label_column_index]
-      expect(la_label_value).to eq "Barnet"
+      expect(la_label_value).to eq "Westminster"
     end
 
-    context "when the current form is 2024" do
+    context "when the requested form is 2024" do
       let(:now) { Time.zone.local(2024, 5, 1) }
+      let(:fixed_time) { Time.zone.local(2024, 5, 1) }
+      let(:year) { 2024 }
 
       it "exports the CSV with all values correct" do
         expected_content = CSV.read("spec/fixtures/files/sales_logs_csv_export_codes_24.csv")
-        values_to_delete = %w[id]
+        values_to_delete = %w[ID]
         values_to_delete.each do |attribute|
           index = csv.first.index(attribute)
           csv.second[index] = nil
@@ -278,12 +271,13 @@ RSpec.describe Csv::SalesLogCsvService do
       end
     end
 
-    context "when the current form is 2023" do
+    context "when the requested form is 2023" do
       let(:now) { Time.zone.local(2024, 1, 1) }
+      let(:year) { 2023 }
 
       it "exports the CSV with all values correct" do
         expected_content = CSV.read("spec/fixtures/files/sales_logs_csv_export_codes_23.csv")
-        values_to_delete = %w[id]
+        values_to_delete = %w[ID]
         values_to_delete.each do |attribute|
           index = csv.first.index(attribute)
           csv.second[index] = nil
@@ -298,9 +292,42 @@ RSpec.describe Csv::SalesLogCsvService do
       end
 
       it "exports the id for under the heading 'duplicate_set_id'" do
-        duplicate_set_id_column_index = csv.first.index("duplicate_set_id")
+        duplicate_set_id_column_index = csv.first.index("DUPLICATESET")
         duplicate_set_id_value = csv.second[duplicate_set_id_column_index]
         expect(duplicate_set_id_value).to eq "12312"
+      end
+    end
+  end
+
+  context "when the user is not a support user" do
+    let(:user) { create(:user, email: "billyboy@eyeklaud.com") }
+    let(:headers) { csv.first }
+
+    it "does not include certain attributes in the headers" do
+      expect(headers).not_to include(*%w[address_line1_as_entered address_line2_as_entered town_or_city_as_entered county_as_entered postcode_full_as_entered la_as_entered created_by value_value_check monthly_charges_value_check])
+    end
+
+    context "and the requested form is 2024" do
+      let(:year) { 2024 }
+      let(:now) { Time.zone.local(2024, 5, 1) }
+      let(:fixed_time) { Time.zone.local(2024, 5, 1) }
+
+      before do
+        log.update!(nationality_all: 36)
+      end
+
+      context "and exporting with labels" do
+        let(:export_type) { "labels" }
+
+        it "exports the CSV with all values correct" do
+          expected_content = CSV.read("spec/fixtures/files/sales_logs_csv_export_non_support_labels_24.csv")
+          values_to_delete = %w[id]
+          values_to_delete.each do |attribute|
+            index = csv.first.index(attribute)
+            csv.second[index] = nil
+          end
+          expect(csv).to eq expected_content
+        end
       end
     end
   end

@@ -1,4 +1,4 @@
-<%= f.govuk_radio_buttons_fieldset category.to_sym, legend: { text: label, size: "s" }, small: true, form_group: { classes: "app-filter__group" } do %>
+<%= f.govuk_radio_buttons_fieldset category.to_sym, legend: { text: label, size: }, small: true, form_group: { classes: "app-filter__group" } do %>
   <% options.map do |key, option| %>
     <%= f.govuk_radio_button category, key.to_s,
       label: { text: option[:label] },

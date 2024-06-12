@@ -1,11 +1,14 @@
 FactoryBot.define do
   factory :user do
-    sequence(:email) { |i| "test#{i}@example.com" }
+    sequence(:email) { "test#{SecureRandom.hex}@example.com" }
     name { "Danny Rojas" }
     password { "pAssword1" }
     organisation
     role { "data_provider" }
     phone { "1234512345123" }
+    trait :data_provider do
+      role { "data_provider" }
+    end
     trait :data_coordinator do
       role { "data_coordinator" }
     end
