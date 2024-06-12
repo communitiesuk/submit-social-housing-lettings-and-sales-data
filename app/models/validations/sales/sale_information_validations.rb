@@ -250,7 +250,7 @@ module Validations::Sales::SaleInformationValidations
     end
   end
 
-  def over_tolerance?(expected, actual, tolerance, strict = false)
+  def over_tolerance?(expected, actual, tolerance, strict: false)
     if strict
       (expected - actual).abs > tolerance
     else
