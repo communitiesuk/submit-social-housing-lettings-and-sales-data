@@ -1834,6 +1834,14 @@ RSpec.describe LettingsLog do
         expect(lettings_log.beds_for_la_rent_range).to eq(4)
       end
     end
+
+    context "when the log is for a bedsit, beds is not routed to and is not yet re-derived" do
+      let(:lettings_log) { build(:lettings_log, unittype_gn: 2, beds: nil) }
+
+      it "returns 1" do
+        expect(lettings_log.beds_for_la_rent_range).to eq(1)
+      end
+    end
   end
 
   describe "#collection_period_open?" do

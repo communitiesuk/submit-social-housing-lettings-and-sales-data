@@ -533,7 +533,9 @@ class LettingsLog < Log
   def beds_for_la_rent_range
     return 0 if is_supported_housing?
 
-    beds.nil? ? nil : [beds, LaRentRange::MAX_BEDS].min
+    real_beds = beds || (1 if is_bedsit?)
+
+    real_beds.nil? ? nil : [real_beds, LaRentRange::MAX_BEDS].min
   end
 
   def soft_min_for_period
