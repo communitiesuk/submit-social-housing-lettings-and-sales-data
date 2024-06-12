@@ -158,17 +158,17 @@ class Organisation < ApplicationRecord
   end
 
   def organisations_absorbed_during_displayed_collection_period_grouped_by_merge_date
-    return unless absorbed_organisations.present? && absorbed_organisations.merged_during_displayed_collection_period.present?
+    return unless absorbed_organisations.merged_during_displayed_collection_period.exists?
 
     absorbed_organisations.merged_during_displayed_collection_period.group_by(&:merge_date)
   end
 
   def has_recent_absorbed_organisations?
-    absorbed_organisations&.merged_during_open_collection_period.present?
+    absorbed_organisations.merged_during_open_collection_period.exists?
   end
 
   def has_organisations_absorbed_during_displayed_collection_period?
-    absorbed_organisations&.merged_during_displayed_collection_period.present?
+    absorbed_organisations.merged_during_displayed_collection_period.exists?
   end
 
   def organisation_or_stock_owner_signed_dsa_and_holds_own_stock?
