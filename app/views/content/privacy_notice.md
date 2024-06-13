@@ -34,9 +34,9 @@ Collected data will be held for as long as necessary for research and statistica
 
 DLUHC publishes data annually, in aggregate form, as part of a report and complementary tables.
 
-* For annual lettings data, visit: [www.gov.uk/government/collections/rents-lettings-and-tenancies](www.gov.uk/government/collections/rents-lettings-and-tenancies)
+* For annual lettings data, visit: [https://www.gov.uk/government/collections/rents-lettings-and-tenancies](https://www.gov.uk/government/collections/rents-lettings-and-tenancies)
 
-* For annual sales data, visit: [www.gov.uk/government/collections/social-housing-sales-including-right-to-buy-and-transfers](www.gov.uk/government/collections/social-housing-sales-including-right-to-buy-and-transfers)
+* For annual sales data, visit: [https://www.gov.uk/government/collections/social-housing-sales-including-right-to-buy-and-transfers](https://www.gov.uk/government/collections/social-housing-sales-including-right-to-buy-and-transfers)
 
 Detail-level data is anonymised and protected, minimising identification risk. It's held with the UK Data Archive.
 
@@ -44,4 +44,4 @@ Detail-level data is anonymised and protected, minimising identification risk. I
 
 If you’re unhappy with any privacy notice aspect, or how we process your information, contact the Department Data Protection Officer: <dataprotection@communities.gsi.gov.uk>
 
-You also have the right to complain to the Information Commissioner’s Office (ICO): [www.ico.org.uk/concern](www.ico.org.uk/concern)
+You also have the right to complain to the Information Commissioner’s Office (ICO): [https://ico.org.uk/make-a-complaint/](https://ico.org.uk/make-a-complaint/)
