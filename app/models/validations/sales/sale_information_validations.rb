@@ -47,7 +47,10 @@ module Validations::Sales::SaleInformationValidations
     return unless record.mortgage || record.mortgageused == 2 || record.mortgageused == 3
     return unless record.discount || record.grant || record.type == 29
 
-    if over_tolerance?(record.mortgage_deposit_and_grant_total, record.value_with_discount, 1) && record.discounted_ownership_sale?
+    # When a percentage discount is used, a percentage tolerance is needed to account for rounding errors
+    tolerance = record.discount ? record.value * 0.05 / 100 : 1
+
+    if over_tolerance?(record.mortgage_deposit_and_grant_total, record.value_with_discount, tolerance, strict: !record.discount.nil?) && record.discounted_ownership_sale?
       %i[mortgageused mortgage value deposit ownershipsch discount grant].each do |field|
         record.errors.add field, I18n.t("validations.sale_information.discounted_ownership_value", mortgage_deposit_and_grant_total: record.field_formatted_as_currency("mortgage_deposit_and_grant_total"), value_with_discount: record.field_formatted_as_currency("value_with_discount"))
       end
@@ -247,7 +250,11 @@ module Validations::Sales::SaleInformationValidations
     end
   end
 
-  def over_tolerance?(expected, actual, tolerance)
-    (expected - actual).abs >= tolerance
+  def over_tolerance?(expected, actual, tolerance, strict: false)
+    if strict
+      (expected - actual).abs > tolerance
+    else
+      (expected - actual).abs >= tolerance
+    end
   end
 end

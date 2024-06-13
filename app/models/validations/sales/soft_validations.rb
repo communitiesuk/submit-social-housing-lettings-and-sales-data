@@ -68,6 +68,7 @@ module Validations::Sales::SoftValidations
   end
 
   def extra_borrowing_expected_but_not_reported?
+    return unless saledate && !form.start_year_after_2024?
     return unless extrabor && mortgage && deposit && value && discount
 
     extrabor != 1 && mortgage + deposit > value - value * discount / 100

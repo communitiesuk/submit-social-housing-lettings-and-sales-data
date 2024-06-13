@@ -7,7 +7,7 @@ class Form::Sales::Questions::Discount < ::Form::Question
     @type = "numeric"
     @min = 0
     @max = form.start_year_after_2024? ? 70 : 100
-    @step = 1
+    @step = 0.1
     @width = 5
     @suffix = "%"
     @hint_text = "For Right to Buy (RTB), Preserved Right to Buy (PRTB), and Voluntary Right to Buy (VRTB)</br></br>
