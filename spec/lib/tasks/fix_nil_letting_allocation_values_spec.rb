@@ -66,7 +66,7 @@ RSpec.describe "fix_nil_letting_allocation_values" do
     it "logs the log id if the change cannot be saved" do
       log = create(:lettings_log, :ignore_validation_errors, :setup_completed, startdate: Time.zone.local(2022, 4, 1), cbl: 1, chr: nil, cap: nil, letting_allocation_unknown: nil)
 
-      expect(Rails.logger).to receive(:log).with(match(/log #{log.id}/))
+      expect(Rails.logger).to receive(:info).with(match(/log #{log.id}/))
       task.invoke
     end
   end
