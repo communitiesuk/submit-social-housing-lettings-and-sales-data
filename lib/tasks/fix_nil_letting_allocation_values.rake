@@ -20,6 +20,6 @@ task fix_nil_letting_allocation_values: :environment do
 
     next if log.save
 
-    Rails.logger.log("NilLettingsAllocationValues: Unable to save changes to log #{log.id}")
+    Rails.logger.info("NilLettingsAllocationValues: Unable to save changes to log #{log.id}")
   end
 end

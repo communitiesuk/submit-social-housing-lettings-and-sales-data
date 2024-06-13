@@ -229,6 +229,10 @@ class FormHandler
     years
   end
 
+  def start_date_of_earliest_lettings_form
+    lettings_forms.values.map(&:start_date).min
+  end
+
 private
 
   def get_all_forms

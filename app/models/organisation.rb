@@ -40,6 +40,7 @@ class Organisation < ApplicationRecord
   scope :filter_by_active, -> { where(active: true) }
   scope :filter_by_inactive, -> { where(active: false) }
   scope :merged_during_open_collection_period, -> { where("merge_date >= ?", FormHandler.instance.start_date_of_earliest_open_for_editing_collection_period) }
+  scope :merged_during_displayed_collection_period, -> { where("merge_date >= ?", FormHandler.instance.start_date_of_earliest_lettings_form) }
 
   has_paper_trail
 
@@ -156,14 +157,18 @@ class Organisation < ApplicationRecord
     sales_logs.after_date(FormHandler.instance.sales_earliest_open_for_editing_collection_start_date).duplicate_sets.map { |array_str| array_str ? array_str.map(&:to_i) : [] }
   end
 
-  def recently_absorbed_organisations_grouped_by_merge_date
-    return unless absorbed_organisations.present? && absorbed_organisations.merged_during_open_collection_period.present?
+  def organisations_absorbed_during_displayed_collection_period_grouped_by_merge_date
+    return unless absorbed_organisations.merged_during_displayed_collection_period.exists?
 
-    absorbed_organisations.merged_during_open_collection_period.group_by(&:merge_date)
+    absorbed_organisations.merged_during_displayed_collection_period.group_by(&:merge_date)
   end
 
   def has_recent_absorbed_organisations?
-    absorbed_organisations&.merged_during_open_collection_period.present?
+    absorbed_organisations.merged_during_open_collection_period.exists?
+  end
+
+  def has_organisations_absorbed_during_displayed_collection_period?
+    absorbed_organisations.merged_during_displayed_collection_period.exists?
   end
 
   def organisation_or_stock_owner_signed_dsa_and_holds_own_stock?
