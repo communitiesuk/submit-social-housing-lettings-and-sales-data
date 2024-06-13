@@ -17,7 +17,8 @@ class Form::Lettings::Questions::ManagingOrganisation < ::Form::Question
     return opts unless log
 
     if log.managing_organisation.present?
-      opts = opts.merge({ log.managing_organisation.id => log.managing_organisation.name })
+      org_value = log.managing_organisation.status == :deleted ? "#{log.managing_organisation.name} (deleted)" : log.managing_organisation.name
+      opts = opts.merge({ log.managing_organisation.id => org_value })
     end
 
     if user.support?
@@ -72,7 +73,10 @@ class Form::Lettings::Questions::ManagingOrganisation < ::Form::Question
   end
 
   def answer_label(log, _current_user = nil)
-    Organisation.find_by(id: log.managing_organisation_id)&.name
+    organisation = Organisation.find_by(id: log.managing_organisation_id)
+    return unless organisation
+
+    organisation.status == :deleted ? "#{organisation.name} (deleted)" : organisation.name
   end
 
 private
