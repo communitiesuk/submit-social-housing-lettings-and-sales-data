@@ -17,7 +17,8 @@ class Form::Sales::Questions::ManagingOrganisation < ::Form::Question
     return opts unless log
 
     if log.managing_organisation.present?
-      opts = opts.merge({ log.managing_organisation.id => log.managing_organisation.name })
+      org_value = log.managing_organisation.status == :deleted ? "#{log.managing_organisation.name} (deleted)" : log.managing_organisation.name
+      opts = opts.merge({ log.managing_organisation.id => org_value })
     end
 
     if user.support?
