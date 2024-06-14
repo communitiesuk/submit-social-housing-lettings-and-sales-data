@@ -1,0 +1,16 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-three-quarters-from-desktop">
+    <h1 class="govuk-heading-m govuk-!-margin-bottom-6">
+      <span class="govuk-grid-column-two-thirds">
+        Make sure these answers are correct: 
+      </span>
+      <span class="govuk-body govuk-!-text-align-right govuk-grid-column-one-third">
+        <%= govuk_link_to "Clear all", lettings_log_confirm_clear_all_answers_path(@log, related_question_ids: request.query_parameters["related_question_ids"] , original_question_id: request.query_parameters["original_question_id"])%>
+      </span>
+    </h1>
+
+    <%= render CheckAnswersSummaryListCardComponent.new(questions: @questions, log: @log, user: current_user, correcting_hard_validation: true) %>
+
+    <%= govuk_button_link_to "Confirm and continue", "/" %>
+  </div>
+</div>

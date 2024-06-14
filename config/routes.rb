@@ -214,6 +214,9 @@ Rails.application.routes.draw do
     get "delete-confirmation", to: "lettings_logs#delete_confirmation"
     get "duplicate-logs", to: "duplicate_logs#show"
     get "delete-duplicates", to: "duplicate_logs#delete_duplicates"
+    get "check-your-errors", to: "check_your_errors#index"
+    get "confirm-clear-answer", to: "check_your_errors#confirm_clear_answer"
+    get "confirm-clear-all-answers", to: "check_your_errors#confirm_clear_all_answers"
 
     collection do
       get "csv-download", to: "lettings_logs#download_csv"
