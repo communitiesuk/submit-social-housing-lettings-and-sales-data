@@ -111,8 +111,10 @@ class Form::Question
     end
   end
 
-  def action_text(log)
-    displayed_as_answered?(log) ? "Change" : "Answer"
+  def action_text(log, correcting_hard_validation: false)
+    return "Answer" unless displayed_as_answered?(log)
+
+    correcting_hard_validation ? "Clear" : "Change"
   end
 
   def displayed_as_answered?(log)
