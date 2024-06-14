@@ -31,7 +31,11 @@ class CheckAnswersSummaryListCardComponent < ViewComponent::Base
 
   def action_href(question, log, correcting_hard_validation: false)
     if correcting_hard_validation
-      lettings_log_confirm_clear_answer_path(log, question_id: question.id, related_question_ids: request.query_parameters["related_question_ids"], original_question_id: request.query_parameters["original_question_id"])
+      if question.displayed_as_answered?(log)
+        lettings_log_confirm_clear_answer_path(log, question_id: question.id, related_question_ids: request.query_parameters["related_question_ids"], original_question_id: request.query_parameters["original_question_id"])
+      else
+        send("#{log.model_name.param_key}_#{question.page.id}_path", log, referrer: "check_your_errors", related_question_ids: request.query_parameters["related_question_ids"], original_question_id: request.query_parameters["original_question_id"])
+      end
     else
       referrer = question.displayed_as_answered?(log) ? "check_answers" : "check_answers_new_answer"
       send("#{log.model_name.param_key}_#{question.page.id}_path", log, referrer:)
