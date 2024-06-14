@@ -445,6 +445,9 @@ en:
         over_max: "The maximum initial equity stake is %{max_equity}%"
         over_stairowned_minus_stairbought: "The initial equity stake is %{equity}% and the percentage owned in total minus the percentage bought is %{staircase_difference}%. In a staircasing transaction, the equity stake purchased cannot be larger than the percentage the %{buyer_owns} minus the percentage bought."
       mortgage: "Mortgage value cannot be £0 if a mortgage was used for the purchase of this property"
+      mortgage_used:
+        year: "You must answer either ‘yes’ or ‘no’ to the question ‘was a mortgage used’ for the selected year."
+        staircasing: "You must answer either ‘yes’ or ‘no’ to the question ‘was a mortgage used’ for staircasing transactions."
       shared_ownership_deposit: "The %{mortgage_deposit_and_discount_error_fields} added together is %{mortgage_deposit_and_discount_total}. The value times the equity percentage is %{value_times_equity}. These figures should be the same"
 
     household:
