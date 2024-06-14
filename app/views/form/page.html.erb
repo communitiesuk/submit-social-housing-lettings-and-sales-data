@@ -16,6 +16,7 @@
 <%= form_with model: @log, url: request.original_url, method: "post", local: true do |f| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
+      <% all_questions_with_errors = all_questions_affected_by_errors(@log) %>
       <% remove_other_page_errors(@log, @page) %>
       <%= f.govuk_error_summary %>
 
@@ -69,6 +70,12 @@
       <%= f.hidden_field :page, value: @page.id %>
       <%= f.hidden_field :interruption_page_id, value: @interruption_page_id %>
       <%= f.hidden_field :interruption_page_referrer_type, value: @interruption_page_referrer_type %>
+
+      <% if all_questions_with_errors.count > 1 %>
+        <div class="govuk-button-group">
+          <%= check_your_errors_link(@log, all_questions_with_errors, @page.id) %>
+        </div>
+      <% end %>
 
       <div class="govuk-button-group">
       <% if !@page.interruption_screen? %>
