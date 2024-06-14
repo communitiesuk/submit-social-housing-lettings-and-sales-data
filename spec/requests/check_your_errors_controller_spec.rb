@@ -30,13 +30,13 @@ RSpec.describe CheckYourErrorsController, type: :request do
       context "with multiple error fields and answered questions" do
         before do
           sign_in user
-          get "/lettings-logs/#{lettings_log.id}/check-your-errors?related_question_ids[]=startdate&related_question_ids[]=needstype&original_question_id=startdate"
+          get "/lettings-logs/#{lettings_log.id}/check-your-errors?related_question_ids[]=startdate&related_question_ids[]=needstype&original_page_id=tenancy_start_date"
         end
 
         it "displays correct clear links" do
-          expect(page).to have_link("Clear", href: "/lettings-logs/#{lettings_log.id}/confirm-clear-answer?original_question_id=startdate&question_id=startdate&related_question_ids%5B%5D=startdate&related_question_ids%5B%5D=needstype")
-          expect(page).to have_link("Clear", href: "/lettings-logs/#{lettings_log.id}/confirm-clear-answer?original_question_id=startdate&question_id=needstype&related_question_ids%5B%5D=startdate&related_question_ids%5B%5D=needstype")
-          expect(page).to have_link("Clear all", href: "/lettings-logs/#{lettings_log.id}/confirm-clear-all-answers?original_question_id=startdate&related_question_ids%5B%5D=startdate&related_question_ids%5B%5D=needstype")
+          expect(page).to have_link("Clear", href: "/lettings-logs/#{lettings_log.id}/confirm-clear-answer?original_page_id=tenancy_start_date&question_id=startdate&related_question_ids%5B%5D=startdate&related_question_ids%5B%5D=needstype")
+          expect(page).to have_link("Clear", href: "/lettings-logs/#{lettings_log.id}/confirm-clear-answer?original_page_id=tenancy_start_date&question_id=needstype&related_question_ids%5B%5D=startdate&related_question_ids%5B%5D=needstype")
+          expect(page).to have_link("Clear all", href: "/lettings-logs/#{lettings_log.id}/confirm-clear-all-answers?original_page_id=tenancy_start_date&related_question_ids%5B%5D=startdate&related_question_ids%5B%5D=needstype")
         end
       end
 
@@ -44,12 +44,12 @@ RSpec.describe CheckYourErrorsController, type: :request do
         before do
           lettings_log.update!(needstype: nil, startdate: nil)
           sign_in user
-          get "/lettings-logs/#{lettings_log.id}/check-your-errors?related_question_ids[]=startdate&related_question_ids[]=needstype&original_question_id=startdate"
+          get "/lettings-logs/#{lettings_log.id}/check-your-errors?related_question_ids[]=startdate&related_question_ids[]=needstype&original_page_id=tenancy_start_date"
         end
 
         it "displays correct clear links" do
-          expect(page).to have_link("Answer", href: "/lettings-logs/#{lettings_log.id}/needs-type?original_question_id=startdate&referrer=check_your_errors&related_question_ids%5B%5D=startdate&related_question_ids%5B%5D=needstype")
-          expect(page).to have_link("Answer", href: "/lettings-logs/#{lettings_log.id}/tenancy-start-date?original_question_id=startdate&referrer=check_your_errors&related_question_ids%5B%5D=startdate&related_question_ids%5B%5D=needstype")
+          expect(page).to have_link("Answer", href: "/lettings-logs/#{lettings_log.id}/needs-type?original_page_id=tenancy_start_date&referrer=check_your_errors&related_question_ids%5B%5D=startdate&related_question_ids%5B%5D=needstype")
+          expect(page).to have_link("Answer", href: "/lettings-logs/#{lettings_log.id}/tenancy-start-date?original_page_id=tenancy_start_date&referrer=check_your_errors&related_question_ids%5B%5D=startdate&related_question_ids%5B%5D=needstype")
         end
       end
     end
