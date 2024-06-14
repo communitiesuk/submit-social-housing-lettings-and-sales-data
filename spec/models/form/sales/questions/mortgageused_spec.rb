@@ -9,7 +9,9 @@ RSpec.describe Form::Sales::Questions::Mortgageused, type: :model do
   let(:form) { instance_double(Form, start_date: Time.zone.local(2024, 4, 1)) }
   let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form:)) }
   let(:stairowned) { nil }
-  let(:log) { build(:sales_log, ownershipsch:, stairowned:) }
+  let(:staircase) { nil }
+  let(:saledate) { Time.zone.today }
+  let(:log) { build(:sales_log, :in_progress, ownershipsch:, stairowned:, staircase:) }
 
   it "has the correct answer_options" do
     expect(question.answer_options).to eq({
@@ -19,38 +21,86 @@ RSpec.describe Form::Sales::Questions::Mortgageused, type: :model do
     })
   end
 
-  context "when staircase owned percentage is 100%" do
-    let(:stairowned) { 100 }
+  describe "the displayed answer options" do
+    context "when it is a discounted ownership sale" do
+      let(:ownershipsch) { 2 }
 
-    it "shows the don't know option" do
-      expect(question.displayed_answer_options(log)).to eq({
-        "1" => { "value" => "Yes" },
-        "2" => { "value" => "No" },
-        "3" => { "value" => "Don’t know" },
-      })
+      it "does not show the don't know option" do
+        expect_the_question_not_to_show_dont_know
+      end
+    end
+
+    context "when it is an outright sale" do
+      let(:ownershipsch) { 3 }
+
+      context "and the saledate is before 24/25" do
+        before do
+          allow(form).to receive(:start_year_after_2024?).and_return false
+        end
+
+        it "does not show the don't know option" do
+          expect_the_question_not_to_show_dont_know
+        end
+      end
+
+      context "and the saledate is 24/25 or after" do
+        before do
+          allow(form).to receive(:start_year_after_2024?).and_return true
+        end
+
+        it "shows the don't know option" do
+          expect_the_question_to_show_dont_know
+        end
+      end
+    end
+
+    context "when it is a shared ownership scheme" do
+      let(:ownershipsch) { 1 }
+
+      context "and it is a staircasing transaction" do
+        let(:staircase) { 1 }
+
+        context "and stairowned is less that 100" do
+          let(:stairowned) { 50 }
+
+          it "does not show the don't know option" do
+            expect_the_question_not_to_show_dont_know
+          end
+        end
+
+        context "and stairowned is 100" do
+          let(:stairowned) { 100 }
+
+          it "shows the don't know option" do
+            expect_the_question_to_show_dont_know
+          end
+        end
+      end
+
+      context "and it is not a staircasing transaction" do
+        let(:staircase) { 2 }
+
+        it "does not show the don't know option" do
+          expect_the_question_not_to_show_dont_know
+        end
+      end
     end
   end
 
-  context "when an outright sale" do
-    let(:ownershipsch) { 3 }
+private
 
-    it "shows the don't know option" do
-      expect(question.displayed_answer_options(log)).to eq({
-        "1" => { "value" => "Yes" },
-        "2" => { "value" => "No" },
-        "3" => { "value" => "Don’t know" },
-      })
-    end
+  def expect_the_question_not_to_show_dont_know
+    expect(question.displayed_answer_options(log)).to eq({
+      "1" => { "value" => "Yes" },
+      "2" => { "value" => "No" },
+    })
   end
 
-  context "when staircase owned percentage is less than 100%" do
-    let(:stairowned) { 99 }
-
-    it "shows the don't know option" do
-      expect(question.displayed_answer_options(log)).to eq({
-        "1" => { "value" => "Yes" },
-        "2" => { "value" => "No" },
-      })
-    end
+  def expect_the_question_to_show_dont_know
+    expect(question.displayed_answer_options(log)).to eq({
+      "1" => { "value" => "Yes" },
+      "2" => { "value" => "No" },
+      "3" => { "value" => "Don’t know" },
+    })
   end
 end
