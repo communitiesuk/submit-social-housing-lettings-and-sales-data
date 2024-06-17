@@ -30,10 +30,16 @@ class FormController < ApplicationController
         mandatory_questions_with_no_response.map do |question|
           @log.errors.add question.id.to_sym, question.unanswered_error_message, category: :not_answered
         end
-        Rails.logger.info "User triggered validation(s) on: #{@log.errors.map(&:attribute).join(', ')}"
+        error_attributes = @log.errors.map(&:attribute)
+        Rails.logger.info "User triggered validation(s) on: #{error_attributes.join(', ')}"
         @subsection = form.subsection_for_page(@page)
         restore_error_field_values(@page&.questions)
-        render "form/page"
+        if params["check_errors"]
+          @questions = @log.form.questions.select { |q| error_attributes.include?(q.id.to_sym) }
+          render "form/check_errors"
+        else
+          render "form/page"
+        end
       end
     else
       render_not_found
