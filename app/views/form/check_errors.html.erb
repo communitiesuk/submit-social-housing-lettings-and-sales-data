@@ -1,11 +1,15 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-three-quarters-from-desktop">
+      <%= form_with model: @log, url: request.original_url, method: "post", local: true do |f| %>
+          <%= f.govuk_error_summary %>
+    <% end %>
+
     <h1 class="govuk-heading-m govuk-!-margin-bottom-6">
       <span class="govuk-grid-column-two-thirds">
         Make sure these answers are correct:
       </span>
       <span class="govuk-body govuk-!-text-align-right govuk-grid-column-one-third">
-        <%= govuk_link_to "Clear all", lettings_log_confirm_clear_all_answers_path(@log, related_question_ids: request.query_parameters["related_question_ids"], original_page_id: request.query_parameters["original_page_id"]) %>
+        <%= govuk_link_to "Clear all", lettings_log_confirm_clear_all_answers_path(@log) %>
       </span>
     </h1>
 
