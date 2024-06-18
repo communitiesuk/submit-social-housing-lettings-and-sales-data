@@ -26,4 +26,12 @@ class Form::Lettings::Questions::Period < ::Form::Question
   }.freeze
 
   QUESTION_NUMBER_FROM_YEAR = { 2023 => 92, 2024 => 91 }.freeze
+
+  def displayed_answer_options(log, _user)
+    return ANSWER_OPTIONS if log.managing_organisation.nil?
+
+    available_rent_periods = log.managing_organisation.rent_periods
+
+    ANSWER_OPTIONS.select { |key, _| available_rent_periods.include?(key.to_i) }
+  end
 end

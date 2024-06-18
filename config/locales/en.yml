@@ -429,7 +429,7 @@ en:
         under_10: "Enter a total charge that is at least £10.00 per week"
         less_than_shortfall: "The total charge must be more than the outstanding amount"
       rent_period:
-        invalid_for_org: "%{org_name} does not charge rent %{rent_period}"
+        invalid_for_org: "%{org_name} does not use %{rent_period} as a rent period. Choose another rent period, or a data coordinator can add rent periods to your organisation"
       carehome:
         out_of_range: "Household rent and other charges must be between %{min_chcharge} and %{max_chcharge} if paying %{period}"
         not_provided: "Enter how much rent and other charges the household pays %{period}"
