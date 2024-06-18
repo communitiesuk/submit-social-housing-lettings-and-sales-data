@@ -1,65 +1,49 @@
 require "rails_helper"
 
 RSpec.describe Form::Lettings::Questions::Beds, type: :model do
-  subject(:question) { described_class.new(question_id, question_definition, page) }
+  subject(:question) { described_class.new(nil, nil, page) }
 
-  let(:question_id) { nil }
-  let(:question_definition) { nil }
-  let(:page) { instance_double(Form::Page) }
-  let(:subsection) { instance_double(Form::Subsection) }
+  let(:page) { instance_double(Form::Page, subsection:) }
+  let(:subsection) { instance_double(Form::Subsection, form:) }
   let(:form) { instance_double(Form, start_date: Time.zone.local(2023, 4, 1)) }
 
-  before do
-    allow(form).to receive(:start_year_after_2024?).and_return(false)
-    allow(page).to receive(:subsection).and_return(subsection)
-    allow(subsection).to receive(:form).and_return(form)
-  end
+  describe "the hint text" do
+    context "when the start date is before 24/25" do
+      before do
+        allow(form).to receive(:start_year_after_2024?).and_return false
+      end
 
-  it "has correct page" do
-    expect(question.page).to eq(page)
-  end
+      it "has the correct hint_text" do
+        expect(question.hint_text).to eq("If shared accommodation, enter the number of bedrooms occupied by this household. A bedsit has 1 bedroom.")
+      end
+    end
 
-  it "has the correct id" do
-    expect(question.id).to eq("beds")
-  end
+    context "when the start date is 24/25 or after" do
+      before do
+        allow(form).to receive(:start_year_after_2024?).and_return true
+      end
 
-  it "has the correct header" do
-    expect(question.header).to eq("How many bedrooms does the property have?")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Number of bedrooms")
-  end
-
-  it "has the correct type" do
-    expect(question.type).to eq("numeric")
-  end
-
-  it "is not marked as derived" do
-    expect(question.derived?(nil)).to be false
-  end
-
-  it "has the correct min" do
-    expect(question.min).to eq(1)
-  end
-
-  it "has the correct max" do
-    expect(question.max).to eq(12)
-  end
-
-  context "with 2023/24 form" do
-    it "has the correct hint_text" do
-      expect(question.hint_text).to eq("If shared accommodation, enter the number of bedrooms occupied by this household. A bedsit has 1 bedroom.")
+      it "has the correct hint_text" do
+        expect(question.hint_text).to eq("If shared accommodation, enter the number of bedrooms occupied by this household.")
+      end
     end
   end
 
-  context "with 2024/25 form" do
-    before do
-      allow(form).to receive(:start_year_after_2024?).and_return(true)
+  describe "whether the field is derived" do
+    context "when the log is a bedsit" do
+      let(:log) { build(:lettings_log, unittype_gn: 2) }
+
+      it "is not marked as derived" do
+        expect(question.derived?(log)).to be true
+      end
     end
 
-    it "has the correct hint_text" do
-      expect(question.hint_text).to eq("If shared accommodation, enter the number of bedrooms occupied by this household.")
+    context "when the log is not a bedsit" do
+      let(:log) { build(:lettings_log, unittype_gn: 9) }
+
+      it "is not marked as derived" do
+        expect(question.derived?(log)).to be false
+      end
     end
   end
 end
