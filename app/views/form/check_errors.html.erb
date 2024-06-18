@@ -1,20 +1,63 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-three-quarters-from-desktop">
-      <%= form_with model: @log, url: request.original_url, method: "post", local: true do |f| %>
-          <%= f.govuk_error_summary %>
+
+  
+    <%= form_with model: @log, url: lettings_log_confirm_clear_answer_path(@log), method: "post", local: true do |f| %>
+      <%= f.govuk_error_summary %>
+      <%= f.hidden_field :page_id, value: @page.id %>
+
+      <h1 class="govuk-heading-m govuk-!-margin-bottom-6">
+        <span class="govuk-grid-column-two-thirds">
+          Make sure these answers are correct:
+        </span>
+        <span class="govuk-body govuk-!-text-align-right govuk-grid-column-one-third">
+          <%= govuk_link_to "Clear all", lettings_log_confirm_clear_all_answers_path(@log) %>
+        </span>
+      </h1>
+
+      <div class="govuk-summary-card__content">
+        <% applicable_questions = @questions.reject { |q| q.hidden_in_check_answers?(@log, current_user) }%>
+        <% applicable_questions.each do |question| %>
+          <%= f.hidden_field question.id, value: @log[question.id] %>
+          <dl class="govuk-summary-list">
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">
+                <%= get_question_label(question) %>
+              </dt>
+              <dd class="govuk-summary-list__value">
+                <%= simple_format(
+                    get_answer_label(question, @log),
+                    wrapper_tag: "span",
+                    class: "govuk-!-margin-right-4",
+                  ) %>
+
+                  <% extra_value = question.get_extra_check_answer_value(@log) %>
+
+                  <% if extra_value && question.answer_label(@log).present? %>
+                    <%= simple_format(
+                      extra_value,
+                      wrapper_tag: "span",
+                      class: "govuk-!-font-weight-regular app-!-colour-muted",
+                    ) %>
+                  <% end %>
+
+                  <% question.get_inferred_answers(@log).each do |inferred_answer| %>
+                    <span class="govuk-!-font-weight-regular app-!-colour-muted"><%= inferred_answer %></span>
+                  <% end %>
+              </dd>
+              <dd class="govuk-summary-list__actions">
+                <% if question.displayed_as_answered?(@log) %>
+                  <input type="submit" value="Clear" name=<%= question.id %> class="govuk-body govuk-link submit-button-link" >
+                <% else %>
+                  <%= govuk_link_to "Answer", send("#{@log.model_name.param_key}_#{question.page.id}_path", @log, referrer: "check_errors", original_page_id: @page.id, related_question_ids: applicable_questions.map(&:id)) %>
+                <% end %>
+              </dd>
+            </div>
+          </dl>
+        <% end %>
+      </div>
     <% end %>
-
-    <h1 class="govuk-heading-m govuk-!-margin-bottom-6">
-      <span class="govuk-grid-column-two-thirds">
-        Make sure these answers are correct:
-      </span>
-      <span class="govuk-body govuk-!-text-align-right govuk-grid-column-one-third">
-        <%= govuk_link_to "Clear all", lettings_log_confirm_clear_all_answers_path(@log) %>
-      </span>
-    </h1>
-
-    <%= render CheckAnswersSummaryListCardComponent.new(questions: @questions, log: @log, user: current_user, correcting_hard_validation: true) %>
-
+ 
     <%= govuk_button_link_to "Confirm and continue", "/" %>
   </div>
 </div>

@@ -50,9 +50,7 @@ RSpec.describe CheckErrorsController, type: :request do
         end
 
         it "displays correct clear links" do
-          expect(page).to have_link("Clear", href: "/lettings-logs/#{lettings_log.id}/confirm-clear-answer?question_id=hhmemb")
-          expect(page).to have_link("Clear", href: "/lettings-logs/#{lettings_log.id}/confirm-clear-answer?question_id=ecstat1")
-          expect(page).to have_link("Clear", href: "/lettings-logs/#{lettings_log.id}/confirm-clear-answer?question_id=earnings")
+          expect(page).to have_button("Clear", count: 3)
           expect(page).to have_link("Clear all", href: "/lettings-logs/#{lettings_log.id}/confirm-clear-all-answers")
         end
       end
@@ -62,7 +60,7 @@ RSpec.describe CheckErrorsController, type: :request do
   describe "confirm clear answer page" do
     context "when user is not signed in" do
       it "redirects to sign in page" do
-        get "/lettings-logs/#{lettings_log.id}/confirm-clear-answer?original_page_id=income_amount&question_id=hhmemb&related_question_ids%5B%5D=hhmemb&related_question_ids%5B%5D=ecstat1&related_question_ids%5B%5D=earnings", params: {}
+        post "/lettings-logs/#{lettings_log.id}/confirm-clear-answer", params: {}
         expect(response).to redirect_to("/account/sign-in")
       end
     end
@@ -75,23 +73,36 @@ RSpec.describe CheckErrorsController, type: :request do
       end
 
       it "renders page not found" do
-        get "/lettings-logs/#{lettings_log.id}/confirm-clear-answer?original_page_id=income_amount&question_id=hhmemb&related_question_ids%5B%5D=hhmemb&related_question_ids%5B%5D=ecstat1&related_question_ids%5B%5D=earnings", params: {}
+        post "/lettings-logs/#{lettings_log.id}/confirm-clear-answer", params: {}
         expect(response).to have_http_status(:not_found)
       end
     end
 
     context "when user is signed in" do
-      context "with multiple error fields and answered questions" do
+      context "and clearing specific question" do
+        let(:params) do
+          {
+            id: lettings_log.id,
+            lettings_log: {
+              earnings: "100000",
+              incfreq: "1",
+              hhmemb: "2",
+              page_id: "income_amount",
+            },
+            hhmemb: "",
+          }
+        end
+
         before do
           sign_in user
-          get "/lettings-logs/#{lettings_log.id}/confirm-clear-answer?original_page_id=income_amount&question_id=hhmemb&related_question_ids%5B%5D=hhmemb&related_question_ids%5B%5D=ecstat1&related_question_ids%5B%5D=earnings", params: {}
+          post "/lettings-logs/#{lettings_log.id}/confirm-clear-answer", params:
         end
 
         it "displays correct clear links" do
-          expect(page).to have_content("Are you sure you want to clear Number of household members answer?")
+          expect(page).to have_content("Are you sure you want to clear Number of household members?")
           expect(page).to have_content("This action is permanent")
-          expect(page).to have_button("Cancel", href: "/lettings-logs/#{lettings_log.id}/income-amount")
-          expect(page).to have_button("Confirm and continue", href: "/lettings-logs/#{lettings_log.id}/clear-answer?original_page_id=income_amount&question_id=hhmemb&related_question_ids%5B%5D=hhmemb&related_question_ids%5B%5D=ecstat1&related_question_ids%5B%5D=earnings")
+          expect(page).to have_link("Cancel")
+          expect(page).to have_button("Confirm and continue")
         end
       end
     end
@@ -101,6 +112,54 @@ RSpec.describe CheckErrorsController, type: :request do
   end
 
   describe "clear answer" do
+    context "when user is not signed in" do
+      it "redirects to sign in page" do
+        post "/lettings-logs/#{lettings_log.id}/income-amount", params: {}
+        expect(response).to redirect_to("/account/sign-in")
+      end
+    end
+
+    context "when the user is from different organisation" do
+      let(:other_user) { create(:user) }
+
+      before do
+        sign_in other_user
+      end
+
+      it "renders page not found" do
+        post "/lettings-logs/#{lettings_log.id}/income-amount", params: {}
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+
+    context "when user is signed in" do
+      context "and clearing specific question" do
+        let(:params) do
+          {
+            id: lettings_log.id,
+            lettings_log: {
+              earnings: "100000",
+              incfreq: "1",
+              hhmemb: "2",
+              clear_question_id: "hhmemb",
+              page: "income_amount",
+            },
+            check_errors: "",
+          }
+        end
+
+        before do
+          sign_in user
+          post "/lettings-logs/#{lettings_log.id}/income-amount", params:
+        end
+
+        it "displays correct clear links" do
+          expect(page).to have_content("Make sure these answers are correct")
+          expect(page).to have_content("You didn’t answer this question")
+          expect(page).to have_link("Answer")
+        end
+      end
+    end
   end
 
   describe "clear all answers" do
