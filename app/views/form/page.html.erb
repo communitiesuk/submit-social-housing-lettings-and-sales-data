@@ -70,6 +70,11 @@
       <%= f.hidden_field :page, value: @page.id %>
       <%= f.hidden_field :interruption_page_id, value: @interruption_page_id %>
       <%= f.hidden_field :interruption_page_referrer_type, value: @interruption_page_referrer_type %>
+      <%= f.hidden_field :related_question_ids, value: @related_question_ids %>
+      <%= f.hidden_field :original_page_id, value: @original_page_id %>
+      <% if @check_errors %>
+        <%= f.hidden_field :check_errors, value: @check_errors %>
+      <% end %>
 
       <% if all_questions_with_errors.count > 1 %>
         <div class="govuk-button-group">
