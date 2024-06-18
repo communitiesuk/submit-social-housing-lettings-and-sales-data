@@ -34,7 +34,7 @@ class CheckAnswersSummaryListCardComponent < ViewComponent::Base
     send("#{log.model_name.param_key}_#{question.page.id}_path", log, referrer:)
   end
 
-  def correct_validation_action_href(question, log, related_question_ids)
+  def correct_validation_action_href(question, log, _related_question_ids)
     if question.displayed_as_answered?(log)
       lettings_log_confirm_clear_answer_path(log, question_id: question.id)
     else
