@@ -231,15 +231,15 @@ module Validations::Sales::SaleInformationValidations
     return unless record.mortgage_use_unknown?
 
     if record.discounted_ownership_sale?
-      record.errors.add(:mortgageused, I18n.t("validations.invalid_option", question: "was a mortgage used for the purchase of this property?"))
+      record.errors.add :mortgageused, I18n.t("validations.invalid_option", question: "was a mortgage used for the purchase of this property?")
     end
     if record.outright_sale? && record.saledate && !record.form.start_year_after_2024?
-      record.errors.add(:mortgageused, I18n.t("validations.invalid_option", question: "was a mortgage used for the purchase of this property?"))
-      record.errors.add(:saledate, I18n.t("validations.financial.mortgage_used.year"))
+      record.errors.add :mortgageused, I18n.t("validations.invalid_option", question: "was a mortgage used for the purchase of this property?")
+      record.errors.add :saledate, I18n.t("validations.financial.mortgage_used.year")
     end
     if record.shared_ownership_scheme? && record.is_not_staircasing?
-      record.errors.add(:mortgageused, I18n.t("validations.invalid_option", question: "was a mortgage used for the purchase of this property?"))
-      record.errors.add(:staircase, I18n.t("validations.financial.mortgage_used.staircasing"))
+      record.errors.add :mortgageused, I18n.t("validations.invalid_option", question: "was a mortgage used for the purchase of this property?")
+      record.errors.add :staircase, I18n.t("validations.financial.mortgage_used.staircasing")
     end
     if record.stairowned && !record.stairowned_100?
       record.errors.add :stairowned, I18n.t("validations.sale_information.stairowned.mortgageused_dont_know")
