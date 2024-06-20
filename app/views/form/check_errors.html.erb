@@ -1,7 +1,7 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-three-quarters-from-desktop">
 
-    <%= form_with model: @log, url: lettings_log_confirm_clear_answer_path(@log), method: "post", local: true do |f| %>
+    <%= form_with model: @log, url: send("#{@log.model_name.param_key}_confirm_clear_answer_path", @log), method: "post", local: true do |f| %>
       <%= f.govuk_error_summary %>
       <%= f.hidden_field :page_id, value: @page.id %>
 
@@ -11,7 +11,7 @@
             Make sure these answers are correct:
           </span>
           <span class="govuk-body govuk-!-text-align-right govuk-grid-column-one-third">
-            <%= govuk_link_to "Clear all", lettings_log_confirm_clear_all_answers_path(@log) %>
+            <%= govuk_link_to "Clear all", send("#{@log.model_name.param_key}_confirm_clear_all_answers_path", @log) %>
           </span>
         </div>
       </h1>
@@ -49,7 +49,7 @@
                 </dd>
                 <dd class="govuk-summary-list__actions">
                   <% if question.displayed_as_answered?(@log) %>
-                    <input type="submit" value="Clear" name=<%= question.id %> class="govuk-body govuk-link submit-button-link" >
+                    <input type="submit" value="Clear" class="govuk-body govuk-link submit-button-link" name="<%= question.id %>">
                   <% else %>
                     <%= govuk_link_to "Answer", send("#{@log.model_name.param_key}_#{question.page.id}_path", @log, referrer: "check_errors", original_page_id: @page.id, related_question_ids: applicable_questions.map(&:id)) %>
                   <% end %>
