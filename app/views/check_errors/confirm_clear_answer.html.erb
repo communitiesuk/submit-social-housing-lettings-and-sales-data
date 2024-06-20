@@ -17,7 +17,7 @@
 
       <%= f.hidden_field :clear_question_id, value: @question.id %>
       <%= f.hidden_field :page, value: @page.id %>
-      
+
       <div class="govuk-button-group">
         <%= f.govuk_submit "Confirm and continue", name: "check_errors" %>
         <%= govuk_button_link_to(
