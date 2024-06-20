@@ -81,11 +81,3 @@ $govuk-breakpoints: (
 .govuk-footer {
   border-top: govuk-spacing(2) solid $govuk-brand-colour;
 }
-
-.submit-button-link {
-  background: none;
-  border: none;
-  color: #1d70b8;
-  text-decoration: underline;
-  cursor: pointer; 
-}
