@@ -78,7 +78,7 @@
 
       <% if all_questions_with_errors.count > 1 %>
         <div class="govuk-button-group">
-          <%= f.govuk_submit "See all related answers", :name => "check_errors", secondary: true %>
+          <%= f.govuk_submit "See all related answers", name: "check_errors", secondary: true, class: "govuk-body govuk-link submit-button-link" %>
         </div>
       <% end %>
 
