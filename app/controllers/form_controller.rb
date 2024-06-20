@@ -227,9 +227,9 @@ private
       return send("#{@log.class.name.underscore}_#{previous_interruption_screen_page_id}_path", @log, { referrer: previous_interruption_screen_referrer, original_log_id: original_duplicate_log_id_from_query }.compact)
     end
 
-    if params["lettings_log"]["check_errors"]
-      @page = form.get_page(params["lettings_log"]["page"])
-      return send("#{@log.class.name.underscore}_#{params['lettings_log']['original_page_id']}_path", @log, { check_errors: true, related_question_ids: params["lettings_log"]["related_question_ids"].split(" ") }.compact)
+    if params[@log.model_name.param_key]["check_errors"]
+      @page = form.get_page(params[@log.model_name.param_key]["page"])
+      return send("#{@log.class.name.underscore}_#{params[@log.model_name.param_key]['original_page_id']}_path", @log, { check_errors: true, related_question_ids: params[@log.model_name.param_key]["related_question_ids"].split(" ") }.compact)
     end
 
     is_new_answer_from_check_answers = is_referrer_type?("check_answers_new_answer")
@@ -395,11 +395,11 @@ private
   end
 
   def render_check_errors_page
-    if params["lettings_log"]["clear_question_id"]
-      question_id = params["lettings_log"]["clear_question_id"]
+    if params[@log.model_name.param_key]["clear_question_id"]
+      question_id = params[@log.model_name.param_key]["clear_question_id"]
       @log.form.get_question(question_id, @log).page.questions.map(&:id).each { |id| @log[id] = nil }
       @log.save!
-      @questions = params["lettings_log"].keys.reject { |id| %w[clear_question_id page].include?(id) }.map { |id| @log.form.get_question(id, @log) }
+      @questions = params[@log.model_name.param_key].keys.reject { |id| %w[clear_question_id page].include?(id) }.map { |id| @log.form.get_question(id, @log) }
     else
       responses_for_page = responses_for_page(@page)
       @log.assign_attributes(responses_for_page)

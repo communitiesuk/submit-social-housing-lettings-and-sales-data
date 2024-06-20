@@ -216,7 +216,6 @@ Rails.application.routes.draw do
     get "delete-duplicates", to: "duplicate_logs#delete_duplicates"
     post "confirm-clear-answer", to: "check_errors#confirm_clear_answer"
     post "confirm-clear-all-answers", to: "check_errors#confirm_clear_all_answers"
-    post "clear-answer", to: "check_errors#clear_answer"
 
     collection do
       get "csv-download", to: "lettings_logs#download_csv"
@@ -287,6 +286,8 @@ Rails.application.routes.draw do
     get "delete-confirmation", to: "sales_logs#delete_confirmation"
     get "duplicate-logs", to: "duplicate_logs#show"
     get "delete-duplicates", to: "duplicate_logs#delete_duplicates"
+    post "confirm-clear-answer", to: "check_errors#confirm_clear_answer"
+    post "confirm-clear-all-answers", to: "check_errors#confirm_clear_all_answers"
 
     collection do
       get "csv-download", to: "sales_logs#download_csv"

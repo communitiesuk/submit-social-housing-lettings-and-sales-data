@@ -7,10 +7,10 @@ class CheckErrorsController < ApplicationController
   def confirm_clear_answer
     return render_not_found unless @log
 
-    @related_question_ids = params["lettings_log"].keys.reject { |id| id == "page_id" }
+    @related_question_ids = params[@log.model_name.param_key].keys.reject { |id| id == "page_id" }
     question_id = @related_question_ids.find { |id| !params[id].nil? }
     @question = @log.form.get_question(question_id, @log)
-    @page = @log.form.get_page(params["lettings_log"]["page_id"])
+    @page = @log.form.get_page(params[@log.model_name.param_key]["page_id"])
   end
 
 private
