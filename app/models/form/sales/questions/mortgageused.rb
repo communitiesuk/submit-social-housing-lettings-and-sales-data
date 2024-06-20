@@ -10,21 +10,24 @@ class Form::Sales::Questions::Mortgageused < ::Form::Question
     @question_number = QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP.max_by { |k, _v| k }.last)[ownershipsch]
   end
 
+  def displayed_answer_options(log, _user = nil)
+    if log.outright_sale? && log.saledate && !form.start_year_after_2024?
+      answer_options_without_dont_know
+    elsif log.stairowned == 100 || log.outright_sale?
+      ANSWER_OPTIONS
+    else
+      answer_options_without_dont_know
+    end
+  end
+
   ANSWER_OPTIONS = {
     "1" => { "value" => "Yes" },
     "2" => { "value" => "No" },
     "3" => { "value" => "Don’t know" },
   }.freeze
 
-  def displayed_answer_options(log, _user = nil)
-    if log.stairowned == 100 || @ownershipsch == 3
-      ANSWER_OPTIONS
-    else
-      {
-        "1" => { "value" => "Yes" },
-        "2" => { "value" => "No" },
-      }
-    end
+  def answer_options_without_dont_know
+    ANSWER_OPTIONS.reject { |key, _v| key == "3" }
   end
 
   QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP = {

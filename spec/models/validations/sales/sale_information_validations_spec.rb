@@ -1344,47 +1344,100 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
     end
   end
 
-  describe "#validate_mortgage_used_and_stairbought" do
-    let(:now) { Time.zone.local(2024, 4, 4) }
+  describe "#validate_mortgage_used_dont_know" do
+    let(:staircase) { nil }
+    let(:stairowned) { nil }
+    let(:saledate) { nil }
+    let(:sales_log) { build(:sales_log, ownershipsch:, mortgageused:, staircase:, stairowned:, saledate:) }
 
     before do
-      Timecop.freeze(now)
-      Singleton.__init__(FormHandler)
+      sale_information_validator.validate_mortgage_used_dont_know(sales_log)
     end
 
-    after do
-      Timecop.return
-      Singleton.__init__(FormHandler)
-    end
+    context "when mortgageused is don't know" do
+      let(:mortgageused) { 3 }
 
-    context "when mortgageused don't know" do
-      let(:record) { build(:sales_log, ownershipsch: 1, type: 9, saledate: now, mortgageused: 3) }
+      context "and it is a discounted ownership sale" do
+        let(:ownershipsch) { 2 }
 
-      it "does not add an error if stairowned 100" do
-        record.stairowned = 100
-        sale_information_validator.validate_mortgage_used_and_stairbought(record)
-
-        expect(record.errors).to be_empty
+        it "adds an error" do
+          expect(sales_log.errors[:mortgageused]).to include "Enter a valid value for was a mortgage used for the purchase of this property?"
+        end
       end
 
-      it "adds an error if stairowned is not 100" do
-        record.stairowned = 90
-        sale_information_validator.validate_mortgage_used_and_stairbought(record)
+      context "and it is an outright sale" do
+        let(:ownershipsch) { 3 }
 
-        expect(record.errors[:stairowned]).to include("The percentage owned has to be 100% if the mortgage used is 'Don’t know'")
-        expect(record.errors[:mortgageused]).to include("The percentage owned has to be 100% if the mortgage used is 'Don’t know'")
+        context "with a saledate before 24/25" do
+          let(:saledate) { Time.zone.local(2023, 9, 9) }
+
+          it "adds errors" do
+            expect(sales_log.errors[:mortgageused]).to include "Enter a valid value for was a mortgage used for the purchase of this property?"
+            expect(sales_log.errors[:saledate]).to include "You must answer either ‘yes’ or ‘no’ to the question ‘was a mortgage used’ for the selected year."
+          end
+        end
+
+        context "with a saledate from 24/25 or after" do
+          let(:saledate) { Time.zone.today }
+
+          it "does not add any errors" do
+            expect(sales_log.errors).to be_empty
+          end
+        end
+      end
+
+      context "and it is a shared ownership scheme sale" do
+        let(:ownershipsch) { 1 }
+
+        context "and a staircasing transaction" do
+          let(:staircase) { 1 }
+
+          context "and stairowned is nil" do
+            let(:stairowned) { nil }
+
+            it "does not add an error" do
+              expect(sales_log.errors).to be_empty
+            end
+          end
+
+          context "and stairowned is less than 100" do
+            let(:stairowned) { 50 }
+
+            it "adds errors" do
+              expect(sales_log.errors[:mortgageused]).to include "The percentage owned has to be 100% if the mortgage used is 'Don’t know'"
+              expect(sales_log.errors[:stairowned]).to include "The percentage owned has to be 100% if the mortgage used is 'Don’t know'"
+            end
+          end
+
+          context "and stairowned is 100" do
+            let(:stairowned) { 100 }
+
+            it "does not add an error" do
+              expect(sales_log.errors).to be_empty
+            end
+          end
+        end
+
+        context "and not a staircasing transaction" do
+          let(:staircase) { 2 }
+
+          it "adds errors" do
+            expect(sales_log.errors[:mortgageused]).to include "Enter a valid value for was a mortgage used for the purchase of this property?"
+            expect(sales_log.errors[:staircase]).to include "You must answer either ‘yes’ or ‘no’ to the question ‘was a mortgage used’ for staircasing transactions."
+          end
+        end
       end
     end
 
-    context "when the collection year is before 2024" do
-      let(:record) { build(:sales_log, ownershipsch: 1, type: 9, saledate: now, mortgageused: 3, stairowned: 90) }
-      let(:now) { Time.zone.local(2023, 4, 4) }
+    context "when mortgageused is not don't know" do
+      let(:mortgageused) { 1 }
 
-      it "adds an error" do
-        sale_information_validator.validate_mortgage_used_and_stairbought(record)
+      context "and it is a discounted ownership sale" do
+        let(:ownershipsch) { 2 }
 
-        expect(record.errors[:stairowned]).to include("The percentage owned has to be 100% if the mortgage used is 'Don’t know'")
-        expect(record.errors[:mortgageused]).to include("The percentage owned has to be 100% if the mortgage used is 'Don’t know'")
+        it "does not add an error" do
+          expect(sales_log.errors).to be_empty
+        end
       end
     end
   end

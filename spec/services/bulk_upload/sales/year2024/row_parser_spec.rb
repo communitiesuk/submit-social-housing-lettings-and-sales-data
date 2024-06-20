@@ -1265,8 +1265,8 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
 
         it "does not add errors" do
           parser.valid?
-          expect(parser.errors[:field_103]).not_to include("The percentage owned has to be 100% if the mortgage used is 'Don’t know'")
-          expect(parser.errors[:field_103]).not_to include("Enter a valid value for Was a mortgage used for the purchase of this property?")
+          expect(parser.errors[:field_103]).to be_empty
+          expect(parser.errors[:field_103]).to be_empty
         end
       end
 
@@ -1276,7 +1276,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
 
           it "returns correct errors" do
             parser.valid?
-            expect(parser.errors[:field_103]).to include("Enter a valid value for Was a mortgage used for the purchase of this property?")
+            expect(parser.errors[:field_103]).to include("Enter a valid value for was a mortgage used for the purchase of this property?")
 
             parser.log.blank_invalid_non_setup_fields!
             parser.log.save!
@@ -1289,7 +1289,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
 
           it "returns correct errors" do
             parser.valid?
-            expect(parser.errors[:field_103]).to include("Enter a valid value for Was a mortgage used for the purchase of this property?")
+            expect(parser.errors[:field_103]).to include("Enter a valid value for was a mortgage used for the purchase of this property?")
 
             parser.log.blank_invalid_non_setup_fields!
             parser.log.save!
@@ -1346,7 +1346,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
 
       it "does not allow 3 (don't know) as an option for discounted ownership" do
         parser.valid?
-        expect(parser.errors[:field_117]).to include("Enter a valid value for Was a mortgage used for the purchase of this property?")
+        expect(parser.errors[:field_117]).to include("Enter a valid value for was a mortgage used for the purchase of this property?")
 
         parser.log.blank_invalid_non_setup_fields!
         parser.log.save!
