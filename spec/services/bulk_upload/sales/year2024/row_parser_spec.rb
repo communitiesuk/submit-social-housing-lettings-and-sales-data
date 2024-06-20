@@ -984,7 +984,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
           context "and an address can be found with a high enough match rating" do
             before do
               stub_request(:get, /api\.os\.uk\/search\/places\/v1\/find/)
-                .to_return(status: 200, body: { results: [{ DPA: { MATCH: 0.7, BUILDING_NAME: "", POST_TOWN: "", POSTCODE: "AA1 1AA", UPRN: "1" } } ] }.to_json, headers: {})
+                .to_return(status: 200, body: { results: [{ DPA: { MATCH: 0.7, BUILDING_NAME: "", POST_TOWN: "", POSTCODE: "AA1 1AA", UPRN: "1" } }] }.to_json, headers: {})
             end
 
             it "does not add errors" do
@@ -1013,7 +1013,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
           context "when no address has a high enough match rating" do
             before do
               stub_request(:get, /api\.os\.uk\/search\/places\/v1\/find/)
-                .to_return(status: 200, body: { results: [{ DPA: { MATCH: 0.6, BUILDING_NAME: "", POST_TOWN: "", POSTCODE: "AA1 1AA", UPRN: "1" } } ] }.to_json, headers: {})
+                .to_return(status: 200, body: { results: [{ DPA: { MATCH: 0.6, BUILDING_NAME: "", POST_TOWN: "", POSTCODE: "AA1 1AA", UPRN: "1" } }] }.to_json, headers: {})
             end
 
             it "adds address not found errors to address fields only" do
