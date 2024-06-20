@@ -1156,8 +1156,8 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
         let(:attributes) { setup_section_params.merge(field_103: "3", field_86: "1", field_87: "50", field_88: nil, field_109: nil) }
 
         it "does not add errors" do
-          expect(parser.errors[:field_103]).not_to include("The percentage owned has to be 100% if the mortgage used is 'Don’t know'")
-          expect(parser.errors[:field_103]).not_to include("Enter a valid value for Was a mortgage used for the purchase of this property?")
+          expect(parser.errors[:field_103]).to be_empty
+          expect(parser.errors[:field_103]).to be_empty
         end
       end
 
@@ -1166,7 +1166,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
           let(:attributes) { setup_section_params.merge(field_103: "3", field_86: "2", field_87: "50", field_88: nil, field_109: nil) }
 
           it "returns correct errors" do
-            expect(parser.errors[:field_103]).to include("Enter a valid value for Was a mortgage used for the purchase of this property?")
+            expect(parser.errors[:field_103]).to include("Enter a valid value for was a mortgage used for the purchase of this property?")
             parser.log.blank_invalid_non_setup_fields!
             parser.log.save!
             expect(parser.log.mortgageused).to be_nil
@@ -1177,7 +1177,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
           let(:attributes) { setup_section_params.merge(field_103: "3", field_86: "2", field_87: "50", field_88: "100", field_109: nil) }
 
           it "returns correct errors" do
-            expect(parser.errors[:field_103]).to include("Enter a valid value for Was a mortgage used for the purchase of this property?")
+            expect(parser.errors[:field_103]).to include("Enter a valid value for was a mortgage used for the purchase of this property?")
             parser.log.blank_invalid_non_setup_fields!
             parser.log.save!
             expect(parser.log.mortgageused).to be_nil
@@ -1228,7 +1228,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
       let(:attributes) { valid_attributes.merge({ field_8: "2", field_10: "9", field_117: "3" }) }
 
       it "does not allow 3 (don't know) as an option for discounted ownership" do
-        expect(parser.errors[:field_117]).to include("Enter a valid value for Was a mortgage used for the purchase of this property?")
+        expect(parser.errors[:field_117]).to include("Enter a valid value for was a mortgage used for the purchase of this property?")
         parser.log.blank_invalid_non_setup_fields!
         parser.log.save!
         expect(parser.log.mortgageused).to be_nil
