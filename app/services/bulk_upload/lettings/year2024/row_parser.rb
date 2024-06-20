@@ -424,10 +424,10 @@ class BulkUpload::Lettings::Year2024::RowParser
   validate :validate_assigned_to_exists, on: :after_log
   validate :validate_assigned_to_related, on: :after_log
   validate :validate_all_charges_given, on: :after_log, if: proc { is_carehome.zero? }
-  validate :validate_address_option_found, on: :after_log
 
+  validate :validate_address_option_found, on: :after_log, unless: -> { supported_housing? }
   validate :validate_uprn_exists_if_any_key_address_fields_are_blank, on: :after_log, unless: -> { supported_housing? }
-  validate :validate_address_fields, on: :after_log
+  validate :validate_address_fields, on: :after_log, unless: -> { supported_housing? }
 
   validate :validate_incomplete_soft_validations, on: :after_log
   validate :validate_nationality, on: :after_log
@@ -584,17 +584,21 @@ private
   end
 
   def validate_uprn_exists_if_any_key_address_fields_are_blank
-    if field_16.blank? && (field_17.blank? || field_19.blank?)
+    if field_16.blank? && !key_address_fields_provided?
       errors.add(:field_16, I18n.t("validations.not_answered", question: "UPRN"))
     end
   end
 
   def validate_address_option_found
-    if log.uprn_selection.nil? && field_16.blank? && (field_17.present? || field_19.present?)
+    if log.uprn.nil? && field_16.blank? && key_address_fields_provided?
       %i[field_17 field_18 field_19 field_20 field_21 field_22].each do |field|
         errors.add(field, I18n.t("validations.no_address_found"))
       end
     end
+  end
+
+  def key_address_fields_provided?
+    field_17.present? && field_19.present? && field_21.present? && field_22.present?
   end
 
   def validate_address_fields
@@ -605,6 +609,14 @@ private
 
       if field_19.blank?
         errors.add(:field_19, I18n.t("validations.not_answered", question: "town or city"))
+      end
+
+      if field_21.blank?
+        errors.add(:field_21, I18n.t("validations.not_answered", question: "part 1 of postcode"))
+      end
+
+      if field_22.blank?
+        errors.add(:field_22, I18n.t("validations.not_answered", question: "part 2 of postcode"))
       end
     end
   end
@@ -1299,7 +1311,7 @@ private
     attributes["address_line1_input"] = address_line1_input
     attributes["postcode_full_input"] = postcode_full
     attributes["postcode_full_as_entered"] = postcode_full
-    attributes["select_best_address_match"] = true if field_16.blank?
+    attributes["select_best_address_match"] = true if field_16.blank? && !supported_housing?
 
     attributes
   end
