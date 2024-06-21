@@ -33,20 +33,20 @@ module Validations::PropertyValidations
   end
 
   def validate_shared_housing_rooms(record)
-    unless record.unittype_gn.nil?
-      if record.is_bedsit? && record.beds != 1 && record.beds.present? && !record.form.start_year_after_2024?
-        record.errors.add :unittype_gn, I18n.t("validations.property.unittype_gn.one_bedroom_bedsit")
-        record.errors.add :beds, I18n.t("validations.property.unittype_gn.one_bedroom_bedsit")
-      end
+    return unless record.unittype_gn
 
-      if record.hhmemb == 1 && record.is_shared_housing? &&
-          !record.beds.to_i.between?(1, 3) && record.beds.present?
-        record.errors.add :unittype_gn, I18n.t("validations.property.unittype_gn.one_three_bedroom_single_tenant_shared")
-        record.errors.add :beds, :one_three_bedroom_single_tenant_shared, message: I18n.t("validations.property.unittype_gn.one_three_bedroom_single_tenant_shared")
-      elsif record.is_shared_housing? && record.beds.present? && !record.beds.to_i.between?(1, 7)
-        record.errors.add :unittype_gn, I18n.t("validations.property.unittype_gn.one_seven_bedroom_shared")
-        record.errors.add :beds, I18n.t("validations.property.unittype_gn.one_seven_bedroom_shared")
-      end
+    if record.is_bedsit? && record.beds != 1 && record.beds.present? && !record.form.start_year_after_2024?
+      record.errors.add :unittype_gn, I18n.t("validations.property.unittype_gn.one_bedroom_bedsit")
+      record.errors.add :beds, I18n.t("validations.property.unittype_gn.one_bedroom_bedsit")
+    end
+
+    if record.hhmemb == 1 && record.is_shared_housing? &&
+        !record.beds.to_i.between?(1, 3) && record.beds.present?
+      record.errors.add :unittype_gn, I18n.t("validations.property.unittype_gn.one_three_bedroom_single_tenant_shared")
+      record.errors.add :beds, :one_three_bedroom_single_tenant_shared, message: I18n.t("validations.property.unittype_gn.one_three_bedroom_single_tenant_shared")
+    elsif record.is_shared_housing? && record.beds.present? && !record.beds.to_i.between?(1, 7)
+      record.errors.add :unittype_gn, I18n.t("validations.property.unittype_gn.one_seven_bedroom_shared")
+      record.errors.add :beds, I18n.t("validations.property.unittype_gn.one_seven_bedroom_shared")
     end
   end
 
