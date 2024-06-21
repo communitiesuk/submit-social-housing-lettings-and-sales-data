@@ -5,11 +5,7 @@ RSpec.describe SchemesHelper do
     let(:scheme) { FactoryBot.create(:scheme, created_at: Time.zone.today) }
 
     before do
-      Timecop.freeze(2023, 1, 10)
-    end
-
-    after do
-      Timecop.unfreeze
+      allow(Time).to receive(:now).and_return(Time.zone.local(2023, 1, 10))
     end
 
     it "returns one active period without to date" do

@@ -1,9 +1,6 @@
 require "rails_helper"
 
 RSpec.describe InterruptionScreenHelper do
-  form_handler = FormHandler.instance
-  let(:form) { form_handler.get_form("test_form") }
-  let(:subsection) { form.get_subsection("household_characteristics") }
   let(:user) { create(:user) }
   let(:lettings_log) do
     create(
@@ -11,21 +8,14 @@ RSpec.describe InterruptionScreenHelper do
       :in_progress,
       hhmemb: 1,
       ecstat1: 1,
+      period: 1,
       earnings: 750,
+      net_income_known: 0,
       incfreq: 1,
       assigned_to: user,
       sex1: "F",
       brent: 12_345,
     )
-  end
-
-  around do |example|
-    Timecop.freeze(Time.zone.local(2022, 1, 1)) do
-      Singleton.__init__(FormHandler)
-      example.run
-    end
-    Timecop.return
-    Singleton.__init__(FormHandler)
   end
 
   describe "display_informative_text" do
@@ -249,7 +239,7 @@ RSpec.describe InterruptionScreenHelper do
 
     it "returns a list of questions affected by the soft validation" do
       expect(soft_validation_affected_questions(question, lettings_log).count).to eq(2)
-      expect(soft_validation_affected_questions(question, lettings_log).map(&:id)).to eq(%w[age1 ecstat1])
+      expect(soft_validation_affected_questions(question, lettings_log).map(&:id)).to match_array(%w[ecstat1 age1])
     end
   end
 end

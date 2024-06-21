@@ -3,11 +3,13 @@ require "rails_helper"
 RSpec.describe Form::Sales::Pages::LaNominations, type: :model do
   subject(:page) { described_class.new(page_id, page_definition, subsection) }
 
-  let(:log) { create(:sales_log, :completed) }
+  let(:log) { build(:sales_log, :completed) }
 
   let(:page_id) { nil }
   let(:page_definition) { nil }
-  let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2023, 4, 1))) }
+  let(:start_year_after_2024) { false }
+  let(:form) { instance_double(Form, start_date: Time.zone.local(2023, 4, 1), start_year_after_2024?: start_year_after_2024) }
+  let(:subsection) { instance_double(Form::Subsection, form:) }
 
   before do
     allow(subsection).to receive(:depends_on).and_return(nil)
@@ -34,14 +36,7 @@ RSpec.describe Form::Sales::Pages::LaNominations, type: :model do
   end
 
   context "with 23/24 log" do
-    before do
-      Timecop.freeze(Time.zone.local(2023, 4, 2))
-      Singleton.__init__(FormHandler)
-    end
-
-    after do
-      Timecop.return
-    end
+    let(:start_year_after_2024) { false }
 
     it "has correct routed to" do
       log.staircase = 1
@@ -50,14 +45,7 @@ RSpec.describe Form::Sales::Pages::LaNominations, type: :model do
   end
 
   context "with 24/25 log" do
-    before do
-      Timecop.freeze(Time.zone.local(2024, 4, 2))
-      Singleton.__init__(FormHandler)
-    end
-
-    after do
-      Timecop.return
-    end
+    let(:start_year_after_2024) { true }
 
     it "has correct routed to when staircase is yes" do
       log.staircase = 1

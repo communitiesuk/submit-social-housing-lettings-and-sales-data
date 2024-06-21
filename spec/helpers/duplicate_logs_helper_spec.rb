@@ -1,16 +1,6 @@
 require "rails_helper"
 
 RSpec.describe DuplicateLogsHelper do
-  before do
-    Timecop.freeze(Time.zone.local(2024, 3, 1))
-    Singleton.__init__(FormHandler)
-  end
-
-  after do
-    Timecop.return
-    Singleton.__init__(FormHandler)
-  end
-
   describe "#duplicates_for_user" do
     let(:org) { create(:organisation) }
     let(:other_org) { create(:organisation) }

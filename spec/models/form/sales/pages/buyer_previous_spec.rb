@@ -3,20 +3,14 @@ require "rails_helper"
 RSpec.describe Form::Sales::Pages::BuyerPrevious, type: :model do
   subject(:page) { described_class.new(page_id, page_definition, subsection, joint_purchase:) }
 
-  let(:log) { create(:sales_log, :completed) }
+  let(:log) { build(:sales_log, :completed) }
 
   let(:page_id) { "example" }
   let(:page_definition) { nil }
-  let(:subsection) { instance_double(Form::Subsection) }
-  let(:form) { instance_double(Form, start_date: Time.zone.local(2023, 4, 1)) }
+  let(:subsection) { instance_double(Form::Subsection, depends_on: nil, enabled?: true, form:) }
+  let(:start_date_after_2024) { false }
+  let(:form) { instance_double(Form, start_date: Time.zone.local(2023, 4, 1), start_year_after_2024?: start_date_after_2024, depends_on_met: true) }
   let(:joint_purchase) { false }
-
-  before do
-    allow(subsection).to receive(:depends_on).and_return(nil)
-    allow(subsection).to receive(:enabled?).and_return(true)
-    allow(subsection).to receive(:form).and_return(form)
-    allow(form).to receive(:depends_on_met).and_return(true)
-  end
 
   it "has correct subsection" do
     expect(page.subsection).to eq(subsection)
@@ -53,14 +47,7 @@ RSpec.describe Form::Sales::Pages::BuyerPrevious, type: :model do
   end
 
   context "with 23/24 log" do
-    before do
-      Timecop.freeze(Time.zone.local(2023, 4, 2))
-      Singleton.__init__(FormHandler)
-    end
-
-    after do
-      Timecop.return
-    end
+    let(:start_date_after_2024) { false }
 
     it "has correct routed to" do
       log.staircase = 1
@@ -69,14 +56,7 @@ RSpec.describe Form::Sales::Pages::BuyerPrevious, type: :model do
   end
 
   context "with 24/25 log" do
-    before do
-      Timecop.freeze(Time.zone.local(2024, 4, 2))
-      Singleton.__init__(FormHandler)
-    end
-
-    after do
-      Timecop.return
-    end
+    let(:start_date_after_2024) { true }
 
     it "has correct routed to when staircase is yes" do
       log.staircase = 1

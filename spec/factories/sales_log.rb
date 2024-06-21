@@ -43,17 +43,14 @@ FactoryBot.define do
       purchid { rand(999_999_999).to_s }
     end
     trait :duplicate do
+      shared_ownership_setup_complete
       purchid { "PC123" }
-      ownershipsch { 2 }
-      type { 8 }
-      jointpur { 2 }
       saledate { Time.zone.today }
       age1_known { 1 }
       age1 { 20 }
       sex1 { "F" }
       ecstat1 { 1 }
       postcode_full { "A1 1AA" }
-      privacynotice { 1 }
       uprn_known { 0 }
     end
     trait :completed do

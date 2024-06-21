@@ -5,22 +5,10 @@ RSpec.describe Form::Sales::Pages::LastAccommodationLa, type: :model do
 
   let(:page_id) { nil }
   let(:page_definition) { nil }
-  let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, depends_on_met: true, start_date: Time.zone.local(2023, 4, 1))) }
-  let(:start_date) { Time.utc(2022, 4, 1) }
-  let(:log) { create(:sales_log, :completed, saledate: now) }
-  let(:now) { Time.zone.local(2023, 4, 4) }
-
-  before do
-    Timecop.freeze(now)
-    Singleton.__init__(FormHandler)
-    allow(subsection).to receive(:depends_on).and_return(nil)
-    allow(subsection).to receive(:enabled?).and_return(true)
-  end
-
-  after do
-    Timecop.return
-    Singleton.__init__(FormHandler)
-  end
+  let(:start_year_after_2024) { false }
+  let(:form) { instance_double(Form, depends_on_met: true, start_date: Time.zone.local(2023, 4, 1), start_year_after_2024?: start_year_after_2024) }
+  let(:subsection) { instance_double(Form::Subsection, form:, depends_on: nil, enabled?: true) }
+  let(:log) { build(:sales_log, :completed) }
 
   it "has correct subsection" do
     expect(page.subsection).to eq(subsection)
@@ -54,7 +42,7 @@ RSpec.describe Form::Sales::Pages::LastAccommodationLa, type: :model do
   end
 
   context "with 2024 form" do
-    let(:now) { Time.zone.local(2024, 4, 4) }
+    let(:start_year_after_2024) { true }
 
     it "is routed to for 2024 non discounted sale logs" do
       log.update!(ownershipsch: 1)

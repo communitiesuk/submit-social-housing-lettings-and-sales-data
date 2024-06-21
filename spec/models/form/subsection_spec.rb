@@ -4,27 +4,15 @@ require_relative "../../request_helper"
 RSpec.describe Form::Subsection, type: :model do
   subject(:subsection) { described_class.new(subsection_id, subsection_definition, section) }
 
-  around do |example|
-    Timecop.freeze(Time.zone.local(2022, 1, 1)) do
-      Singleton.__init__(FormHandler)
-      example.run
-    end
-    Timecop.return
-    Singleton.__init__(FormHandler)
-  end
-
   let(:lettings_log) { FactoryBot.build(:lettings_log) }
-  let(:form) { lettings_log.form }
-  let(:section_id) { "household" }
-  let(:section_definition) { form.form_definition["sections"][section_id] }
-  let(:section) { Form::Section.new(section_id, section_definition, form) }
+  let(:form) { instance_double(Form, conditional_question_conditions: []) }
+  let(:section) { instance_double(Form::Section, form:) }
   let(:subsection_id) { "household_characteristics" }
-  let(:subsection_definition) { section_definition["subsections"][subsection_id] }
-  let(:fake_2021_2022_form) { Form.new("spec/fixtures/forms/2021_2022.json") }
-
-  before do
-    RequestHelper.stub_http_requests
-    allow(FormHandler.instance).to receive(:current_lettings_form).and_return(fake_2021_2022_form)
+  let(:subsection_definition) do
+    {
+      "label" => "Household characteristics",
+      "pages" => [["tenant_code", { "questions" => { "tenancycode" => {} } }], ["person_1", { "questions" => { "age1" => {}, "sex1" => {} } }]],
+    }
   end
 
   it "has an id" do
@@ -36,12 +24,12 @@ RSpec.describe Form::Subsection, type: :model do
   end
 
   it "has pages" do
-    expected_pages = %w[tenant_code_test person_1_age person_1_gender person_1_working_situation household_number_of_members retirement_value_check person_2_working_situation propcode]
+    expected_pages = %w[tenant_code person_1]
     expect(subsection.pages.map(&:id)).to eq(expected_pages)
   end
 
   it "has questions" do
-    expected_questions = %w[tenancycode age1 sex1 ecstat1 hhmemb relat2 age2 sex2 retirement_value_check ecstat2 propcode]
+    expected_questions = %w[tenancycode age1 sex1]
     expect(subsection.questions.map(&:id)).to eq(expected_questions)
   end
 
@@ -53,13 +41,7 @@ RSpec.describe Form::Subsection, type: :model do
     end
 
     it "has a completed status for completed subsection" do
-      subsection_definition = section_definition["subsections"]["household_needs"]
-      subsection = described_class.new("household_needs", subsection_definition, section)
-      lettings_log.armedforces = 3
-      lettings_log.illness = 1
-      lettings_log.housingneeds_a = 1
-      lettings_log.la = "E06000014"
-      lettings_log.illness_type_1 = 1
+      lettings_log.sex1 = "X"
       expect(subsection.status(lettings_log)).to eq(:completed)
     end
 
@@ -69,22 +51,14 @@ RSpec.describe Form::Subsection, type: :model do
     end
 
     context "with optional fields" do
-      subject(:subsection) { described_class.new(subsection_id, subsection_definition, section) }
-
-      let(:section_id) { "tenancy_and_property" }
-      let(:section_definition) { form.form_definition["sections"][section_id] }
-      let(:section) { Form::Section.new(section_id, section_definition, form) }
-      let(:subsection_id) { "property_information" }
-      let(:subsection_definition) { section_definition["subsections"][subsection_id] }
-
       it "has a started status even if only an optional field has been answered" do
-        lettings_log.postcode_known = 0
+        lettings_log.tenancycode = 3
         expect(subsection.is_started?(lettings_log)).to be(true)
       end
     end
 
     it "has question helpers for the number of applicable questions" do
-      expected_questions = %w[tenancycode age1 sex1 ecstat1 hhmemb relat2 age2 sex2 ecstat2 propcode]
+      expected_questions = %w[tenancycode age1 sex1]
       expect(subsection.applicable_questions(lettings_log).map(&:id)).to eq(expected_questions)
     end
   end

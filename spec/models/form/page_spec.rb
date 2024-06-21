@@ -3,30 +3,21 @@ require "rails_helper"
 RSpec.describe Form::Page, type: :model do
   subject(:page) { described_class.new(page_id, page_definition, subsection) }
 
-  around do |example|
-    Timecop.freeze(Time.zone.local(2022, 1, 1)) do
-      Singleton.__init__(FormHandler)
-      example.run
-    end
-    Timecop.return
-    Singleton.__init__(FormHandler)
-  end
-
   let(:user) { FactoryBot.create(:user) }
   let(:lettings_log) { FactoryBot.build(:lettings_log) }
-  let(:form) { lettings_log.form }
-  let(:section_id) { "rent_and_charges" }
-  let(:section_definition) { form.form_definition["sections"][section_id] }
-  let(:section) { Form::Section.new(section_id, section_definition, form) }
-  let(:subsection_id) { "income_and_benefits" }
-  let(:subsection_definition) { section_definition["subsections"][subsection_id] }
-  let(:subsection) { Form::Subsection.new(subsection_id, subsection_definition, section) }
+  let(:depends_on) { nil }
+  let(:enabled) { true }
+  let(:depends_on_met) { true }
+  let(:form) { instance_double(Form, depends_on_met:) }
+  let(:subsection) { instance_double(Form::Subsection, depends_on:, enabled?: enabled, form:) }
   let(:page_id) { "net_income" }
-  let(:page_definition) { subsection_definition["pages"][page_id] }
-  let(:fake_2021_2022_form) { Form.new("spec/fixtures/forms/2021_2022.json") }
-
-  before do
-    allow(FormHandler.instance).to receive(:current_lettings_form).and_return(fake_2021_2022_form)
+  let(:questions) { [["earnings", { "conditional_for" => { "age1": nil }, "type" => "radio" }], %w[incfreq]] }
+  let(:page_definition) do
+    {
+      "header" => "Test header",
+      "description" => "Some extra text for the page",
+      "questions" => questions,
+    }
   end
 
   it "has an id" do
@@ -46,14 +37,10 @@ RSpec.describe Form::Page, type: :model do
     expect(page.questions.map(&:id)).to eq(expected_questions)
   end
 
-  context "with a page having conditional questions" do
-    let(:page_id) { "housing_benefit" }
-
-    it "knows which questions are not conditional" do
-      expected_non_conditional_questions = %w[hb]
-      expect(page.non_conditional_questions.map(&:id))
-        .to eq(expected_non_conditional_questions)
-    end
+  it "knows which questions are not conditional" do
+    expected_non_conditional_questions = %w[earnings incfreq]
+    expect(page.non_conditional_questions.map(&:id))
+      .to eq(expected_non_conditional_questions)
   end
 
   describe "#interruption_screen?" do
@@ -64,7 +51,7 @@ RSpec.describe Form::Page, type: :model do
     end
 
     context "when it has interruption_screen question" do
-      let(:page) { form.get_page("retirement_value_check") }
+      let(:questions) { [["earnings", { "type" => "interruption_screen" }]] }
 
       it "returns true" do
         expect(page.interruption_screen?).to be true
@@ -80,43 +67,33 @@ RSpec.describe Form::Page, type: :model do
     end
 
     context "with routing conditions" do
-      let(:page_id) { "dependent_page" }
+      let(:depends_on) { true }
 
-      it "evaluates not met conditions correctly" do
-        expect(page.routed_to?(lettings_log, user)).to be false
+      context "when the conditions are not met" do
+        let(:depends_on_met) { false }
+
+        it "evaluates conditions correctly" do
+          expect(page.routed_to?(lettings_log, user)).to be false
+        end
       end
 
-      it "evaluates met conditions correctly" do
-        lettings_log.incfreq = 1
-        expect(page.routed_to?(lettings_log, user)).to be true
-      end
-    end
+      context "when the conditions are met" do
+        let(:depends_on_met) { true }
 
-    context "with expression routing conditions" do
-      let(:section_id) { "household" }
-      let(:subsection_id) { "household_characteristics" }
-      let(:page_id) { "person_2_working_situation" }
-
-      it "evaluates not met conditions correctly" do
-        lettings_log.age2 = 12
-        expect(page.routed_to?(lettings_log, user)).to be false
-      end
-
-      it "evaluates met conditions correctly" do
-        lettings_log.age2 = 17
-        expect(page.routed_to?(lettings_log, user)).to be true
+        it "evaluates met conditions correctly" do
+          lettings_log.incfreq = 1
+          expect(page.routed_to?(lettings_log, user)).to be true
+        end
       end
     end
 
     context "when the page's subsection has routing conditions" do
-      let(:section_id) { "submission" }
-      let(:subsection_id) { "declaration" }
-      let(:page_id) { "declaration" }
-      let(:completed_lettings_log) { FactoryBot.build(:lettings_log, :completed, incfreq: "Weekly") }
+      let(:depends_on) { true }
+      let(:depends_on_met) { true }
+      let(:enabled) { false }
 
       it "evaluates the sections dependencies" do
         expect(page.routed_to?(lettings_log, user)).to be false
-        expect(page.routed_to?(completed_lettings_log, user)).to be true
       end
     end
   end
