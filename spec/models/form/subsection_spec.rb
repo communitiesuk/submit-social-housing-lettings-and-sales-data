@@ -34,7 +34,7 @@ RSpec.describe Form::Subsection, type: :model do
   end
 
   context "with an in progress lettings log" do
-    let(:lettings_log) { FactoryBot.build(:lettings_log, :in_progress, tenancycode: 3, age1: 18) }
+    let(:lettings_log) { FactoryBot.build(:lettings_log, :in_progress) }
 
     it "has a status" do
       expect(subsection.status(lettings_log)).to eq(:in_progress)
@@ -52,7 +52,7 @@ RSpec.describe Form::Subsection, type: :model do
 
     context "with optional fields" do
       it "has a started status even if only an optional field has been answered" do
-        lettings_log.age1 = nil
+        lettings_log.tenancycode = 3
         expect(subsection.is_started?(lettings_log)).to be(true)
       end
     end

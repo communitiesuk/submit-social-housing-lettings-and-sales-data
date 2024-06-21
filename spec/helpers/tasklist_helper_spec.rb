@@ -120,10 +120,10 @@ RSpec.describe TasklistHelper do
   describe "#review_log_text" do
     context "with sales log" do
       context "when collection_period_open? == true" do
-        let(:sales_log) { build(:sales_log, :completed, saledate: Time.utc(2022, 6, 9), id: 123) }
+        let(:sales_log) { build(:sales_log, :completed, saledate: Time.zone.local(2022, 6, 9), id: 123) }
 
         before do
-          allow(sales_log.form).to receive(:submission_deadline).and_return(Time.utc(2023, 6, 9))
+          allow(sales_log.form).to receive(:submission_deadline).and_return(Time.zone.local(2023, 6, 9))
           allow(sales_log).to receive(:collection_period_open?).and_return(true)
         end
 
@@ -135,10 +135,10 @@ RSpec.describe TasklistHelper do
       end
 
       context "when collection_period_open? == false" do
-        let!(:sales_log) { build(:sales_log, :completed, saledate: Time.utc(2022, 6, 1)) }
+        let!(:sales_log) { build(:sales_log, :completed, saledate: Time.zone.local(2022, 6, 1)) }
 
         before do
-          allow(sales_log.form).to receive(:submission_deadline).and_return(Time.utc(2023, 6, 9))
+          allow(sales_log.form).to receive(:submission_deadline).and_return(Time.zone.local(2023, 6, 9))
           allow(sales_log).to receive(:collection_period_open?).and_return(false)
         end
 
@@ -148,10 +148,10 @@ RSpec.describe TasklistHelper do
       end
 
       context "when older_than_previous_collection_year" do
-        let(:sales_log) { build(:sales_log, :completed, saledate: Time.utc(2022, 2, 1)) }
+        let(:sales_log) { build(:sales_log, :completed, saledate: Time.zone.local(2022, 2, 1)) }
 
         before do
-          allow(sales_log.form).to receive(:submission_deadline).and_return(Time.utc(2022, 6, 9))
+          allow(sales_log.form).to receive(:submission_deadline).and_return(Time.zone.local(2022, 6, 9))
           allow(sales_log).to receive(:older_than_previous_collection_year?).and_return(true)
         end
 
@@ -166,7 +166,7 @@ RSpec.describe TasklistHelper do
         let(:lettings_log) { build(:lettings_log, :completed, id: 123) }
 
         before do
-          allow(lettings_log.form).to receive(:submission_deadline).and_return(Time.utc(2023, 6, 9))
+          allow(lettings_log.form).to receive(:submission_deadline).and_return(Time.zone.local(2023, 6, 9))
           allow(lettings_log).to receive(:collection_period_open?).and_return(true)
         end
 
@@ -178,10 +178,10 @@ RSpec.describe TasklistHelper do
       end
 
       context "when collection_period_open? == false" do
-        let!(:lettings_log) { build(:lettings_log, :completed, startdate: Time.utc(2022, 6, 1), id: 123) }
+        let!(:lettings_log) { build(:lettings_log, :completed, startdate: Time.zone.local(2022, 6, 1), id: 123) }
 
         before do
-          allow(lettings_log.form).to receive(:submission_deadline).and_return(Time.utc(2023, 6, 9))
+          allow(lettings_log.form).to receive(:submission_deadline).and_return(Time.zone.local(2023, 6, 9))
           allow(lettings_log).to receive(:collection_period_open?).and_return(false)
         end
 
@@ -191,10 +191,10 @@ RSpec.describe TasklistHelper do
       end
 
       context "when older_than_previous_collection_year" do
-        let(:lettings_log) { build(:lettings_log, :completed, startdate: Time.utc(2022, 2, 1)) }
+        let(:lettings_log) { build(:lettings_log, :completed, startdate: Time.zone.local(2022, 2, 1)) }
 
         before do
-          allow(lettings_log.form).to receive(:submission_deadline).and_return(Time.utc(2022, 6, 9))
+          allow(lettings_log.form).to receive(:submission_deadline).and_return(Time.zone.local(2022, 6, 9))
           allow(lettings_log).to receive(:older_than_previous_collection_year?).and_return(true)
         end
 

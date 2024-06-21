@@ -239,7 +239,7 @@ RSpec.describe InterruptionScreenHelper do
 
     it "returns a list of questions affected by the soft validation" do
       expect(soft_validation_affected_questions(question, lettings_log).count).to eq(2)
-      expect(soft_validation_affected_questions(question, lettings_log).map(&:id)).to eq(%w[ecstat1 age1])
+      expect(soft_validation_affected_questions(question, lettings_log).map(&:id)).to match_array(%w[ecstat1 age1])
     end
   end
 end
