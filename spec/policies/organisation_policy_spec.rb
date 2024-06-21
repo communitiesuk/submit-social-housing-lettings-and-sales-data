@@ -63,4 +63,112 @@ RSpec.describe OrganisationPolicy do
       expect(policy).not_to permit(support, organisation)
     end
   end
+
+  permissions :delete? do
+    let(:organisation) { FactoryBot.create(:organisation) }
+
+    context "with active organisation" do
+      it "does not allow deleting a organisation as a provider" do
+        expect(policy).not_to permit(data_provider, organisation)
+      end
+
+      it "does not allow allows deleting a organisation as a coordinator" do
+        expect(policy).not_to permit(data_coordinator, organisation)
+      end
+
+      it "does not allow deleting a organisation as a support user" do
+        expect(policy).not_to permit(support, organisation)
+      end
+    end
+
+    context "with deactivated organisation" do
+      before do
+        organisation.update!(active: false)
+      end
+
+      it "does not allow deleting a organisation as a provider" do
+        expect(policy).not_to permit(data_provider, organisation)
+      end
+
+      it "does not allow allows deleting a organisation as a coordinator" do
+        expect(policy).not_to permit(data_coordinator, organisation)
+      end
+
+      it "allows deleting a organisation as a support user" do
+        expect(policy).to permit(support, organisation)
+      end
+
+      context "and associated lettings logs in editable collection period" do
+        before do
+          create(:lettings_log, owning_organisation: organisation)
+        end
+
+        it "does not allow deleting a organisation as a provider" do
+          expect(policy).not_to permit(data_provider, organisation)
+        end
+
+        it "does not allow allows deleting a organisation as a coordinator" do
+          expect(policy).not_to permit(data_coordinator, organisation)
+        end
+
+        it "does not allow deleting a organisation as a support user" do
+          expect(policy).not_to permit(support, organisation)
+        end
+      end
+
+      context "and deleted associated lettings logs in editable collection period" do
+        before do
+          create(:lettings_log, owning_organisation: organisation, discarded_at: Time.zone.yesterday)
+        end
+
+        it "does not allow deleting a organisation as a provider" do
+          expect(policy).not_to permit(data_provider, organisation)
+        end
+
+        it "does not allow allows deleting a organisation as a coordinator" do
+          expect(policy).not_to permit(data_coordinator, organisation)
+        end
+
+        it "allows deleting a organisation as a support user" do
+          expect(policy).to permit(support, organisation)
+        end
+      end
+
+      context "and associated sales logs in editable collection period" do
+        before do
+          create(:sales_log, owning_organisation: organisation)
+        end
+
+        it "does not allow deleting a organisation as a provider" do
+          expect(policy).not_to permit(data_provider, organisation)
+        end
+
+        it "does not allow allows deleting a organisation as a coordinator" do
+          expect(policy).not_to permit(data_coordinator, organisation)
+        end
+
+        it "does not allow deleting a organisation as a support user" do
+          expect(policy).not_to permit(support, organisation)
+        end
+      end
+
+      context "and deleted associated sales logs in editable collection period" do
+        before do
+          create(:sales_log, owning_organisation: organisation, discarded_at: Time.zone.yesterday)
+        end
+
+        it "does not allow deleting a organisation as a provider" do
+          expect(policy).not_to permit(data_provider, organisation)
+        end
+
+        it "does not allow allows deleting a organisation as a coordinator" do
+          expect(policy).not_to permit(data_coordinator, organisation)
+        end
+
+        it "allows deleting a organisation as a support user" do
+          expect(policy).to permit(support, organisation)
+        end
+      end
+    end
+  end
 end

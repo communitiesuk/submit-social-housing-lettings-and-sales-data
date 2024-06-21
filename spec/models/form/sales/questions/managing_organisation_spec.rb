@@ -58,6 +58,7 @@ RSpec.describe Form::Sales::Questions::ManagingOrganisation, type: :model do
       let(:managing_org2) { create(:organisation, name: "Managing org 2") }
       let(:managing_org3) { create(:organisation, name: "Managing org 3") }
       let(:inactive_org) { create(:organisation, name: "Inactive org", active: false) }
+      let(:deleted_org) { create(:organisation, name: "Deleted org", discarded_at: Time.zone.yesterday) }
 
       let(:log) do
         create(:lettings_log, owning_organisation: log_owning_org, managing_organisation: managing_org1,
@@ -83,6 +84,7 @@ RSpec.describe Form::Sales::Questions::ManagingOrganisation, type: :model do
 
         it "shows current managing agent at top, followed by the current owning organisation (with hint), followed by the active managing agents of the current owning organisation" do
           create(:organisation_relationship, parent_organisation: log_owning_org, child_organisation: inactive_org)
+          create(:organisation_relationship, parent_organisation: log_owning_org, child_organisation: deleted_org)
           log_owning_org.update!(holds_own_stock: true)
           expect(question.displayed_answer_options(log, user)).to eq(options)
         end
@@ -135,10 +137,12 @@ RSpec.describe Form::Sales::Questions::ManagingOrganisation, type: :model do
     context "when organisation has merged" do
       let(:absorbing_org) { create(:organisation, name: "Absorbing org", holds_own_stock: true) }
       let!(:merged_org) { create(:organisation, name: "Merged org", holds_own_stock: false) }
+      let!(:merged_deleted_org) { create(:organisation, name: "Merged deleted org", holds_own_stock: false, discarded_at: Time.zone.yesterday) }
       let(:user) { create(:user, :support, organisation: absorbing_org) }
 
       let(:log) do
         merged_org.update!(merge_date: Time.zone.local(2023, 8, 2), absorbing_organisation_id: absorbing_org.id)
+        merged_deleted_org.update!(merge_date: Time.zone.local(2023, 8, 2), absorbing_organisation_id: absorbing_org.id)
         create(:lettings_log, owning_organisation: absorbing_org, managing_organisation: nil)
       end
 

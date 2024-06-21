@@ -52,3 +52,7 @@
       <%= govuk_button_link_to "Reactivate this organisation", reactivate_organisation_path(@organisation) %>
     </span>
 <% end %>
+
+<% if OrganisationPolicy.new(current_user, @organisation).delete? %>
+  <%= delete_organisation_link(@organisation) %>
+<% end %>

@@ -10,4 +10,10 @@ class SalesLogSummaryComponent < ViewComponent::Base
   def log_status
     helpers.status_tag(log.status)
   end
+
+  def organisation_label(organisation)
+    return unless organisation
+
+    organisation.status == :deleted ? "#{organisation.name} (deleted)" : organisation.name
+  end
 end

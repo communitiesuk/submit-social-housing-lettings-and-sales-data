@@ -19,7 +19,7 @@ module OrganisationsHelper
       { name: "Owns housing stock", value: organisation.holds_own_stock ? "Yes" : "No", editable: false },
       { name: "Rent periods", value: organisation.rent_period_labels, editable: true, format: :bullet },
       { name: "Data Sharing Agreement" },
-      { name: "Status", value: status_tag(organisation.status), editable: false },
+      { name: "Status", value: status_tag(organisation.status) + delete_organisation_text(organisation), editable: false },
     ]
   end
 
@@ -39,9 +39,19 @@ module OrganisationsHelper
     end
   end
 
+  def delete_organisation_text(organisation)
+    if organisation.active == false && current_user.support? && !OrganisationPolicy.new(current_user, organisation).delete?
+      "<div class=\"app-!-colour-muted\">This organisation was active in an open or editable collection year, and cannot be deleted.</div>".html_safe
+    end
+  end
+
   def rent_periods_with_checked_attr(checked_periods: nil)
     RentPeriod.rent_period_mappings.each_with_object({}) do |(period_code, period_value), result|
       result[period_code] = period_value.merge(checked: checked_periods.nil? || checked_periods.include?(period_code))
     end
+  end
+
+  def delete_organisation_link(organisation)
+    govuk_button_link_to "Delete this organisation", delete_confirmation_organisation_path(organisation), warning: true
   end
 end
