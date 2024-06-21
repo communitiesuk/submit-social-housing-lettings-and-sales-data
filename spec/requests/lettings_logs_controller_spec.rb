@@ -1865,6 +1865,23 @@ RSpec.describe LettingsLogsController, type: :request do
         get "/lettings-logs/csv-download?codes_only=#{codes_only}", headers:, params: {}
         expect(response).to have_http_status(:unauthorized)
       end
+
+      context "when filtering by organisation and year" do
+        let(:other_organisation) { FactoryBot.create(:organisation) }
+        let(:lettings_logs) { create_list(:lettings_log, 2, :setup_completed, assigned_to: user, owning_organisation: other_organisation, managing_organisation: user.organisation) }
+
+        before do
+          create(:organisation_relationship, parent_organisation: other_organisation, child_organisation: user.organisation)
+          lettings_logs
+          create_list(:lettings_log, 2, :setup_completed, assigned_to: user, owning_organisation: other_organisation, managing_organisation: user.organisation, discarded_at: Time.zone.yesterday)
+        end
+
+        it "does not count deleted logs" do
+          get "/lettings-logs/csv-download?years[]=#{lettings_logs[0].form.start_date.year}&codes_only=false&owning_organisation_select=specific_org&owning_organisation=#{other_organisation.id}", headers:, params: {}
+
+          expect(page).to have_content("You've selected 2 logs.")
+        end
+      end
     end
 
     context "when the user is a data provider" do
