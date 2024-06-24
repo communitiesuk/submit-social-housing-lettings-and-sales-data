@@ -186,4 +186,8 @@ class Organisation < ApplicationRecord
     users.each(&:discard!)
     update!(discarded_at: Time.zone.now)
   end
+
+  def label
+    status == :deleted ? "#{name} (deleted)" : name
+  end
 end
