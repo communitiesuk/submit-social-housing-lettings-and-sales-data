@@ -40,7 +40,7 @@ describe UprnClient do
     context "when DPA results empty" do
       context "and LPI result is present" do
         let(:valid_lpi_response) do
-          { results: [{ LPI: { postcode: "LPI postcode" } }] }.to_json
+          { results: [{ LPI: { postcode_locator: "LPI postcode", LPI_KEY: "123" } }] }.to_json
         end
 
         before do
@@ -50,7 +50,7 @@ describe UprnClient do
         end
 
         it "returns result" do
-          expect(client.result).to eq({ "postcode" => "LPI postcode" })
+          expect(client.result).to eq({ "postcode_locator" => "LPI postcode", "LPI_KEY" => "123" })
         end
 
         it "returns no error" do
