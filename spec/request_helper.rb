@@ -34,7 +34,7 @@ module RequestHelper
       ],
     }.to_json
 
-    WebMock.stub_request(:get, "https://api.os.uk/search/places/v1/uprn?key=OS_DATA_KEY&uprn=1")
+    WebMock.stub_request(:get, "https://api.os.uk/search/places/v1/uprn?dataset=DPA,LPI&key=OS_DATA_KEY&uprn=1")
     .to_return(status: 200, body:, headers: {})
 
     body = {
@@ -50,7 +50,7 @@ module RequestHelper
       ],
     }.to_json
 
-    WebMock.stub_request(:get, "https://api.os.uk/search/places/v1/uprn?key&uprn=121")
+    WebMock.stub_request(:get, "https://api.os.uk/search/places/v1/uprn?dataset=DPA,LPI&key&uprn=121")
      .to_return(status: 200, body:, headers: {})
 
     body = {
@@ -65,7 +65,7 @@ module RequestHelper
       ],
     }.to_json
 
-    WebMock.stub_request(:get, "https://api.os.uk/search/places/v1/uprn?key=OS_DATA_KEY&uprn=123")
+    WebMock.stub_request(:get, "https://api.os.uk/search/places/v1/uprn?dataset=DPA,LPI&key=OS_DATA_KEY&uprn=123")
     .to_return(status: 200, body:, headers: {})
 
     body = {
@@ -80,10 +80,10 @@ module RequestHelper
       ],
     }.to_json
 
-    WebMock.stub_request(:get, "https://api.os.uk/search/places/v1/uprn?key=OS_DATA_KEY&uprn=12")
+    WebMock.stub_request(:get, "https://api.os.uk/search/places/v1/uprn?dataset=DPA,LPI&key=OS_DATA_KEY&uprn=12")
     .to_return(status: 200, body:, headers: {})
 
-    WebMock.stub_request(:get, "https://api.os.uk/search/places/v1/uprn?key=OS_DATA_KEY&uprn=1234567890123")
+    WebMock.stub_request(:get, "https://api.os.uk/search/places/v1/uprn?dataset=DPA,LPI&key=OS_DATA_KEY&uprn=1234567890123")
     .to_return(status: 404, body: "", headers: {})
 
     template = Addressable::Template.new "https://api.os.uk/search/places/v1/find?key=OS_DATA_KEY&maxresults=10&minmatch=0.4&query={+address_query}"
