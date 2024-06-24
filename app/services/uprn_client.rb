@@ -20,7 +20,7 @@ class UprnClient
   end
 
   def result
-    @result ||= JSON.parse(response.body).dig("results", 0, "DPA")
+    @result ||= JSON.parse(response.body).dig("results", 0, "DPA") || JSON.parse(response.body).dig("results", 0, "LPI")
   end
 
 private
@@ -39,6 +39,7 @@ private
     params = {
       uprn:,
       key: ENV["OS_DATA_KEY"],
+      dataset: %w[DPA LPI].join(","),
     }
     uri.query = URI.encode_www_form(params)
     uri.to_s

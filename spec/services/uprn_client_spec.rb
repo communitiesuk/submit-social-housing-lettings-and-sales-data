@@ -8,7 +8,7 @@ describe UprnClient do
   end
 
   def stub_api_request(body:, status: 200)
-    stub_request(:get, "https://api.os.uk/search/places/v1/uprn?key=OS_DATA_KEY&uprn=123")
+    stub_request(:get, "https://api.os.uk/search/places/v1/uprn?dataset=DPA,LPI&key=OS_DATA_KEY&uprn=123")
     .to_return(status:, body:, headers: {})
   end
 
@@ -37,15 +37,37 @@ describe UprnClient do
       end
     end
 
-    context "when results empty" do
-      before do
-        stub_api_request(body: {}.to_json)
+    context "when DPA results empty" do
+      context "and LPI result is present" do
+        let(:valid_lpi_response) do
+          { results: [{ LPI: { postcode: "LPI postcode" } }] }.to_json
+        end
 
-        client.call
+        before do
+          stub_api_request(body: valid_lpi_response, status: 200)
+
+          client.call
+        end
+
+        it "returns result" do
+          expect(client.result).to eq({ "postcode" => "LPI postcode" })
+        end
+
+        it "returns no error" do
+          expect(client.error).to be_nil
+        end
       end
 
-      it "returns error" do
-        expect(client.error).to eq("UPRN is not recognised. Check the number, or enter the address")
+      context "and LPI results empty" do
+        before do
+          stub_api_request(body: {}.to_json)
+
+          client.call
+        end
+
+        it "returns error" do
+          expect(client.error).to eq("UPRN is not recognised. Check the number, or enter the address")
+        end
       end
     end
 
