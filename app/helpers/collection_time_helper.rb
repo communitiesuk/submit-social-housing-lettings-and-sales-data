@@ -52,7 +52,6 @@ module CollectionTimeHelper
 
   def quarter_for_date(date: Time.zone.now)
     quarters = [
-      { quarter: "Q3", cutoff_date: Time.zone.local(2024, 1, 12), start_date: Time.zone.local(2023, 10, 1), end_date: Time.zone.local(2023, 12, 31) },
       { quarter: "Q1", cutoff_date: Time.zone.local(2024, 7, 12), start_date: Time.zone.local(2024, 4, 1), end_date: Time.zone.local(2024, 6, 30) },
       { quarter: "Q2", cutoff_date: Time.zone.local(2024, 10, 11), start_date: Time.zone.local(2024, 7, 1), end_date: Time.zone.local(2024, 9, 30) },
       { quarter: "Q3", cutoff_date: Time.zone.local(2025, 1, 10), start_date: Time.zone.local(2024, 10, 1), end_date: Time.zone.local(2024, 12, 31) },
