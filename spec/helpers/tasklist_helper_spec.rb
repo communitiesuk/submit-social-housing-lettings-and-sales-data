@@ -142,11 +142,6 @@ RSpec.describe TasklistHelper do
           allow(sales_log).to receive(:collection_period_open?).and_return(false)
         end
 
-        before do
-          allow(sales_log.form).to receive(:submission_deadline).and_return(Time.utc(2023, 6, 9))
-          allow(sales_log).to receive(:collection_period_open?).and_return(false)
-        end
-
         it "returns relevant text" do
           expect(review_log_text(sales_log)).to eq("This log is from the 2022/2023 collection window, which is now closed.")
         end
@@ -157,11 +152,6 @@ RSpec.describe TasklistHelper do
 
         before do
           allow(sales_log.form).to receive(:submission_deadline).and_return(Time.zone.local(2022, 6, 9))
-          allow(sales_log).to receive(:older_than_previous_collection_year?).and_return(true)
-        end
-
-        before do
-          allow(sales_log.form).to receive(:submission_deadline).and_return(Time.utc(2022, 6, 9))
           allow(sales_log).to receive(:older_than_previous_collection_year?).and_return(true)
         end
 
@@ -195,11 +185,6 @@ RSpec.describe TasklistHelper do
           allow(lettings_log).to receive(:collection_period_open?).and_return(false)
         end
 
-        before do
-          allow(lettings_log.form).to receive(:submission_deadline).and_return(Time.utc(2023, 6, 9))
-          allow(lettings_log).to receive(:collection_period_open?).and_return(false)
-        end
-
         it "returns relevant text" do
           expect(review_log_text(lettings_log)).to eq("This log is from the 2022/2023 collection window, which is now closed.")
         end
@@ -210,11 +195,6 @@ RSpec.describe TasklistHelper do
 
         before do
           allow(lettings_log.form).to receive(:submission_deadline).and_return(Time.zone.local(2022, 6, 9))
-          allow(lettings_log).to receive(:older_than_previous_collection_year?).and_return(true)
-        end
-
-        before do
-          allow(lettings_log.form).to receive(:submission_deadline).and_return(Time.utc(2022, 6, 9))
           allow(lettings_log).to receive(:older_than_previous_collection_year?).and_return(true)
         end
 
