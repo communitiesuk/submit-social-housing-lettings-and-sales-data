@@ -133,6 +133,17 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
         expect(parser).not_to be_blank_row
       end
     end
+
+    context "when the only populated fields are empty strings or whitespace" do
+      before do
+        parser.field_6 = " "
+        parser.field_19 = ""
+      end
+
+      it "returns true" do
+        expect(parser).to be_blank_row
+      end
+    end
   end
 
   describe "purchaser_code" do
