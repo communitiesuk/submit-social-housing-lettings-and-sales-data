@@ -1758,7 +1758,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
       end
 
       context "when blank" do
-        let(:attributes) { { bulk_upload:, field_2: "" } }
+        let(:attributes) { { bulk_upload:, field_2: "", field_6: "not blank" } }
 
         it "is not permitted as setup error" do
           parser.valid?
