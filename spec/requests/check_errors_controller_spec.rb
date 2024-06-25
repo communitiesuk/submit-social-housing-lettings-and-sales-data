@@ -274,7 +274,7 @@ RSpec.describe CheckErrorsController, type: :request do
       context "and answering specific lettings question" do
         let(:params) do
           {
-            original_page_id: "income_amount",
+            original_page_id: "household_members",
             referrer: "check_errors",
             related_question_ids: %w[hhmemb ecstat1 earnings],
             lettings_log: {
@@ -293,6 +293,7 @@ RSpec.describe CheckErrorsController, type: :request do
           follow_redirect!
           expect(request.query_parameters["check_errors"]).to eq("true")
           expect(request.query_parameters["related_question_ids"]).to eq(%w[hhmemb ecstat1 earnings])
+          expect(page).to have_content("You have successfully updated Number of household members")
         end
       end
 
@@ -319,6 +320,7 @@ RSpec.describe CheckErrorsController, type: :request do
           follow_redirect!
           expect(request.query_parameters["check_errors"]).to eq("true")
           expect(request.query_parameters["related_question_ids"]).to eq(%w[income1 la ownershipsch])
+          expect(page).to have_content("You have successfully updated Buyer 1’s gross annual income known? and Buyer 1’s gross annual income")
         end
       end
     end
