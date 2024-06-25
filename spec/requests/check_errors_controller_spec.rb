@@ -294,6 +294,7 @@ RSpec.describe CheckErrorsController, type: :request do
           expect(request.query_parameters["check_errors"]).to eq("true")
           expect(request.query_parameters["related_question_ids"]).to eq(%w[hhmemb ecstat1 earnings])
           expect(page).to have_content("You have successfully updated Number of household members")
+          expect(page).to have_link("Confirm and continue", href: "/lettings-logs/#{lettings_log.id}/household-members")
         end
       end
 
@@ -321,6 +322,7 @@ RSpec.describe CheckErrorsController, type: :request do
           expect(request.query_parameters["check_errors"]).to eq("true")
           expect(request.query_parameters["related_question_ids"]).to eq(%w[income1 la ownershipsch])
           expect(page).to have_content("You have successfully updated Buyer 1’s gross annual income known? and Buyer 1’s gross annual income")
+          expect(page).to have_link("Confirm and continue", href: "/sales-logs/#{sales_log.id}/buyer-1-income")
         end
       end
     end
