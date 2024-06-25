@@ -232,6 +232,11 @@ private
       return send("#{@log.class.name.underscore}_#{params[@log.model_name.param_key]['original_page_id']}_path", @log, { check_errors: true, related_question_ids: params[@log.model_name.param_key]["related_question_ids"].split(" ") }.compact)
     end
 
+    if params["referrer"] == "check_errors"
+      @page = form.get_page(params[@log.model_name.param_key]["page"])
+      return send("#{@log.class.name.underscore}_#{params['original_page_id']}_path", @log, { check_errors: true, related_question_ids: params["related_question_ids"] }.compact)
+    end
+
     is_new_answer_from_check_answers = is_referrer_type?("check_answers_new_answer")
     redirect_path = form.next_page_redirect_path(@page, @log, current_user, ignore_answered: is_new_answer_from_check_answers)
     referrer = is_new_answer_from_check_answers ? "check_answers_new_answer" : nil
