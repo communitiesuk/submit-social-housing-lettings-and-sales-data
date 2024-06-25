@@ -1,5 +1,5 @@
 <% content_for :before_content do %>
-  <% content_for :title, "Are you sure you want to clear #{@question.check_answer_label}?" %>
+  <% content_for :title, "Are you sure you want to clear all?" %>
 <% end %>
 
 <div class="govuk-grid-row">
@@ -7,15 +7,16 @@
     <h1 class="govuk-heading-xl">
       <%= content_for(:title) %>
     </h1>
+    <p class="govuk-body">You've selected <%= @questions_to_clear.count %> answers to clear</p>
 
-    <%= govuk_warning_text(text: "This action is permanent") %>
+    <%= govuk_warning_text(text: "You will not be able to undo this action") %>
       <%= form_with model: @log, url: send("#{@log.model_name.param_key}_#{@page.id}_path", @log), method: "post", local: true do |f| %>
 
       <% @related_question_ids.each do |id| %>
         <%= f.hidden_field id, value: @log[id] %>
       <% end %>
 
-      <%= f.hidden_field :clear_question_ids, value: [@question.id] %>
+      <%= f.hidden_field :clear_question_ids, value: @questions_to_clear %>
       <%= f.hidden_field :page, value: @page.id %>
 
       <div class="govuk-button-group">

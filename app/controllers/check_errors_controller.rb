@@ -8,9 +8,15 @@ class CheckErrorsController < ApplicationController
     return render_not_found unless @log
 
     @related_question_ids = params[@log.model_name.param_key].keys.reject { |id| id == "page_id" }
-    question_id = @related_question_ids.find { |id| !params[id].nil? }
-    @question = @log.form.get_question(question_id, @log)
     @page = @log.form.get_page(params[@log.model_name.param_key]["page_id"])
+
+    if params["clear_all"]
+      @questions_to_clear = @related_question_ids.map { |id| @log.form.get_question(id, @log).page.questions.map(&:id) }.flatten
+      render :confirm_clear_all_answers
+    else
+      question_id = @related_question_ids.find { |id| !params[id].nil? }
+      @question = @log.form.get_question(question_id, @log)
+    end
   end
 
 private
