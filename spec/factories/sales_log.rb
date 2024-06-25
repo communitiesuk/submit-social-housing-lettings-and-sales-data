@@ -11,7 +11,7 @@ FactoryBot.define do
       ownershipsch { 2 }
       type { 8 }
       jointpur { 2 }
-      saledate { Time.zone.today }
+      saledate_today
     end
     trait :shared_ownership do
       ownershipsch { 1 }
@@ -45,7 +45,7 @@ FactoryBot.define do
     trait :duplicate do
       shared_ownership_setup_complete
       purchid { "PC123" }
-      saledate { Time.zone.today }
+      saledate_today
       age1_known { 1 }
       age1 { 20 }
       sex1 { "F" }
@@ -57,7 +57,7 @@ FactoryBot.define do
       purchid { rand(999_999_999).to_s }
       ownershipsch { 2 }
       type { 8 }
-      saledate { Time.zone.today }
+      saledate_today
       jointpur { 1 }
       beds { 2 }
       jointmore { 1 }
@@ -150,15 +150,16 @@ FactoryBot.define do
       nationalbuy2 { 13 }
       buy2living { 3 }
       proplen_asked { 1 }
-    end
-    trait :completed2024 do
-      completed
-      address_line1_input { address_line1 }
-      postcode_full_input { postcode_full }
-      nationality_all_group { 826 }
-      nationality_all_buyer2_group { 826 }
-      uprn { 1 }
-      uprn_selection { 1 }
+      after(:build) do |log, _evaluator|
+        if log.saledate >= Time.zone.local(2024, 4, 1)
+          log.address_line1_input = log.address_line1
+          log.postcode_full_input = log.postcode_full
+          log.nationality_all_group = 826
+          log.nationality_all_buyer2_group = 826
+          log.uprn = 1
+          log.uprn_selection = 1
+        end
+      end
     end
     trait :with_uprn do
       uprn { rand(999_999_999_999).to_s }
