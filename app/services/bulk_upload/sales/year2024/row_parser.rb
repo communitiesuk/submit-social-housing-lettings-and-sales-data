@@ -597,17 +597,21 @@ private
   end
 
   def validate_uprn_exists_if_any_key_address_fields_are_blank
-    if field_22.blank? && (field_23.blank? || field_25.blank?)
+    if field_22.blank? && !key_address_fields_provided?
       errors.add(:field_22, I18n.t("validations.not_answered", question: "UPRN"))
     end
   end
 
   def validate_address_option_found
-    if log.uprn_selection.nil? && field_22.blank? && (field_23.present? || field_25.present?)
+    if log.uprn.nil? && field_22.blank? && key_address_fields_provided?
       %i[field_23 field_24 field_25 field_26 field_27 field_28].each do |field|
         errors.add(field, I18n.t("validations.no_address_found"))
       end
     end
+  end
+
+  def key_address_fields_provided?
+    field_23.present? && field_25.present? && field_27.present? && field_28.present?
   end
 
   def validate_address_fields
@@ -618,6 +622,14 @@ private
 
       if field_25.blank?
         errors.add(:field_25, I18n.t("validations.not_answered", question: "town or city"))
+      end
+
+      if field_27.blank?
+        errors.add(:field_27, I18n.t("validations.not_answered", question: "part 1 of postcode"))
+      end
+
+      if field_28.blank?
+        errors.add(:field_28, I18n.t("validations.not_answered", question: "part 2 of postcode"))
       end
     end
   end
