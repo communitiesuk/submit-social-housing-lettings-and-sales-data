@@ -11,7 +11,7 @@
             Make sure these answers are correct:
           </span>
           <span class="govuk-body govuk-!-text-align-right govuk-grid-column-one-third">
-            <%= govuk_link_to "Clear all", send("#{@log.model_name.param_key}_confirm_clear_all_answers_path", @log) %>
+            <input type="submit" value="Clear all" class="govuk-body govuk-link submit-button-link" name="clear_all">
           </span>
         </div>
       </h1>

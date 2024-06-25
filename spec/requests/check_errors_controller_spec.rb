@@ -59,7 +59,7 @@ RSpec.describe CheckErrorsController, type: :request do
 
         it "displays correct clear links" do
           expect(page).to have_selector("input[type=submit][value='Clear']", count: 3)
-          expect(page).to have_link("Clear all", href: "/lettings-logs/#{lettings_log.id}/confirm-clear-all-answers")
+          expect(page).to have_button("Clear all")
         end
       end
 
@@ -84,8 +84,8 @@ RSpec.describe CheckErrorsController, type: :request do
         end
 
         it "displays correct clear links" do
-          expect(page).to have_button("Clear", count: 3)
-          expect(page).to have_link("Clear all", href: "/sales-logs/#{sales_log.id}/confirm-clear-all-answers")
+          expect(page.all(:button, value: "Clear").count).to eq(3)
+          expect(page).to have_button("Clear all")
         end
       end
     end
@@ -179,6 +179,66 @@ RSpec.describe CheckErrorsController, type: :request do
     end
   end
 
+  describe "confirm clear all answers" do
+    context "when user is signed in" do
+      context "and clearing all lettings questions" do
+        let(:params) do
+          {
+            id: lettings_log.id,
+            clear_all: "Clear all",
+            lettings_log: {
+              earnings: "100000",
+              incfreq: "1",
+              hhmemb: "2",
+              page_id: "income_amount",
+            },
+          }
+        end
+
+        before do
+          sign_in user
+          post "/lettings-logs/#{lettings_log.id}/confirm-clear-answer", params:
+        end
+
+        it "displays correct clear links" do
+          expect(page).to have_content("Are you sure you want to clear all")
+          expect(page).to have_content("You've selected 5 answers to clear")
+          expect(page).to have_content("You will not be able to undo this action")
+          expect(page).to have_link("Cancel")
+          expect(page).to have_button("Confirm and continue")
+        end
+      end
+
+      context "and clearing all sales question" do
+        let(:params) do
+          {
+            id: sales_log.id,
+            clear_all: "Clear all",
+            sales_log: {
+              income1: "100000",
+              la: "E09000001",
+              ownershipsch: "1",
+              page_id: "buyer_1_income",
+            },
+          }
+        end
+
+        before do
+          sign_in user
+          post "/sales-logs/#{sales_log.id}/confirm-clear-answer", params:
+        end
+
+        it "displays correct clear links" do
+          expect(page).to have_content("Are you sure you want to clear all")
+          expect(page).to have_content("You've selected 4 answers to clear")
+          expect(page).to have_content("You will not be able to undo this action")
+          expect(page).to have_link("Cancel")
+          expect(page).to have_button("Confirm and continue")
+        end
+      end
+    end
+  end
+
   describe "clear answer" do
     context "when user is not signed in" do
       it "redirects to sign in page for lettings" do
@@ -219,7 +279,7 @@ RSpec.describe CheckErrorsController, type: :request do
               earnings: "100000",
               incfreq: "1",
               hhmemb: "2",
-              clear_question_id: "hhmemb",
+              clear_question_ids: "hhmemb",
               page: "income_amount",
             },
             check_errors: "",
@@ -247,7 +307,7 @@ RSpec.describe CheckErrorsController, type: :request do
               income1: "100000",
               la: "E09000001",
               ownershipsch: "1",
-              clear_question_id: "income1",
+              clear_question_ids: "income1",
               page: "buyer_1_income",
             },
             check_errors: "",
@@ -323,6 +383,70 @@ RSpec.describe CheckErrorsController, type: :request do
           expect(request.query_parameters["related_question_ids"]).to eq(%w[income1 la ownershipsch])
           expect(page).to have_content("You have successfully updated Buyer 1’s gross annual income known? and Buyer 1’s gross annual income")
           expect(page).to have_link("Confirm and continue", href: "/sales-logs/#{sales_log.id}/buyer-1-income")
+        end
+      end
+    end
+  end
+
+  describe "clear all answers" do
+    context "when user is signed in" do
+      context "and clearing all lettings question" do
+        let(:params) do
+          {
+            id: lettings_log.id,
+            lettings_log: {
+              earnings: "100000",
+              incfreq: "1",
+              hhmemb: "2",
+              clear_question_ids: "earnings incfreq hhmemb",
+              page: "income_amount",
+            },
+            check_errors: "",
+          }
+        end
+
+        before do
+          sign_in user
+          post "/lettings-logs/#{lettings_log.id}/income-amount", params:
+        end
+
+        it "correctly clears the values" do
+          expect(page).to have_content("Make sure these answers are correct")
+          expect(page).to have_content("You didn’t answer this question")
+          expect(page.all(:button, value: "Clear").count).to eq(0)
+          expect(lettings_log.reload.earnings).to eq(nil)
+          expect(lettings_log.reload.incfreq).to eq(nil)
+          expect(lettings_log.reload.hhmemb).to eq(nil)
+        end
+      end
+
+      context "and clearing all sales question" do
+        let(:params) do
+          {
+            id: sales_log.id,
+            sales_log: {
+              income1: "100000",
+              la: "E09000001",
+              ownershipsch: "1",
+              clear_question_ids: "income1 la ownershipsch",
+              page: "buyer_1_income",
+            },
+            check_errors: "",
+          }
+        end
+
+        before do
+          sign_in user
+          post "/sales-logs/#{sales_log.id}/buyer-1-income", params:
+        end
+
+        it "displays correct clear links" do
+          expect(page).to have_content("Make sure these answers are correct")
+          expect(page).to have_content("You didn’t answer this question")
+          expect(page.all(:button, value: "Clear").count).to eq(0)
+          expect(sales_log.reload.income1).to eq(nil)
+          expect(sales_log.reload.la).to eq(nil)
+          expect(sales_log.reload.ownershipsch).to eq(nil)
         end
       end
     end
