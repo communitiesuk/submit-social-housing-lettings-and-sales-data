@@ -29,6 +29,9 @@ SimpleCov.start "rails" do
   add_filter "app/channels/application_cable/connection.rb"
 end
 
+ENV["EVENT_PROF"] = "sql.activerecord"
+ENV["FDOC"] = "1"
+
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest

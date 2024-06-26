@@ -18,19 +18,19 @@ RSpec.describe Form::Lettings::Pages::CreatedBy, type: :model do
 
     context "when support" do
       it "is shown" do
-        expect(page.routed_to?(nil, create(:user, :support))).to eq(true)
+        expect(page.routed_to?(nil, build(:user, :support))).to eq(true)
       end
     end
 
     context "when data coordinator" do
       it "is shown" do
-        expect(page.routed_to?(nil, create(:user, :data_coordinator))).to eq(true)
+        expect(page.routed_to?(nil, build(:user, :data_coordinator))).to eq(true)
       end
     end
 
     context "when data provider" do
       it "is not shown" do
-        expect(page.routed_to?(nil, create(:user))).to eq(false)
+        expect(page.routed_to?(nil, build(:user))).to eq(false)
       end
     end
   end
