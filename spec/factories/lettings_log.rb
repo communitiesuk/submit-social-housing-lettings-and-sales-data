@@ -23,15 +23,6 @@ FactoryBot.define do
       age1 { 17 }
       age2 { 19 }
     end
-    trait :conditional_section_complete do
-      tenancycode { Faker::Name.initials(number: 10) }
-      age1 { 34 }
-      sex1 { "M" }
-      ethnic { 2 }
-      national { 18 }
-      ecstat1 { 2 }
-      hhmemb { 1 }
-    end
     trait :duplicate do
       setup_completed
       status { 1 }
@@ -173,7 +164,7 @@ FactoryBot.define do
           log.address_line1_input = log.address_line1
           log.postcode_full_input = log.postcode_full
           log.nationality_all_group = 826
-          log.uprn = 1
+          log.uprn = "10033558653"
           log.uprn_selection = 1
         end
       end

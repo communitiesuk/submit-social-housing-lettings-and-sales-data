@@ -1,6 +1,8 @@
 FactoryBot.define do
   factory :sales_log do
     assigned_to { association :user }
+    before(:create) { |log, _evaluator| log.assigned_to ||= create(:user) }
+
     created_by { assigned_to }
     owning_organisation { assigned_to.organisation }
     managing_organisation { owning_organisation }
@@ -156,7 +158,7 @@ FactoryBot.define do
           log.postcode_full_input = log.postcode_full
           log.nationality_all_group = 826
           log.nationality_all_buyer2_group = 826
-          log.uprn = 1
+          log.uprn = "10033558653"
           log.uprn_selection = 1
         end
       end

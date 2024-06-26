@@ -1076,8 +1076,8 @@ RSpec.describe LettingsLogsController, type: :request do
     end
 
     context "when requesting a specific lettings log" do
-      let!(:completed_lettings_log) { FactoryBot.create(:lettings_log, :completed, owning_organisation: user.organisation, managing_organisation: user.organisation, assigned_to: user) }
-      let(:id) { completed_lettings_log.id }
+      let(:lettings_log) { create(:lettings_log, :in_progress, assigned_to: user) }
+      let(:id) { lettings_log.id }
 
       before do
         get "/lettings-logs/#{id}", headers:
@@ -1089,7 +1089,7 @@ RSpec.describe LettingsLogsController, type: :request do
 
       it "returns a serialized lettings log" do
         json_response = JSON.parse(response.body)
-        expect(json_response["status"]).to eq(completed_lettings_log.status)
+        expect(json_response["status"]).to eq(lettings_log.status)
       end
 
       context "when requesting an invalid lettings log id" do
@@ -1101,12 +1101,10 @@ RSpec.describe LettingsLogsController, type: :request do
       end
 
       context "when viewing a pending log" do
-        let(:completed_lettings_log) do
-          FactoryBot.create(
+        let(:lettings_log) do
+          create(
             :lettings_log,
-            :completed,
-            owning_organisation: user.organisation,
-            managing_organisation: user.organisation,
+            :in_progress,
             assigned_to: user,
             status: "pending",
             skip_update_status: true,
@@ -1123,28 +1121,21 @@ RSpec.describe LettingsLogsController, type: :request do
 
         context "with a user that is not signed in" do
           it "does not let the user get lettings log tasklist pages they don't have access to" do
-            get "/lettings-logs/#{lettings_log.id}", headers:, params: {}
+            get lettings_log_path(lettings_log)
             expect(response).to redirect_to("/account/sign-in")
           end
         end
 
         context "with a signed in user" do
+          let(:lettings_log) { create(:lettings_log, :in_progress, assigned_to: user) }
+
           before do
-            Timecop.freeze(2021, 4, 1)
-            Singleton.__init__(FormHandler)
-            completed_lettings_log.update!(startdate: Time.zone.local(2021, 4, 1), voiddate: Time.zone.local(2021, 4, 1), mrcdate: Time.zone.local(2021, 4, 1))
-            completed_lettings_log.reload
+            sign_in user
           end
 
           context "with lettings logs that are owned or managed by your organisation" do
             before do
-              sign_in user
-              get "/lettings-logs/#{lettings_log.id}", headers:, params: {}
-            end
-
-            after do
-              Timecop.return
-              Singleton.__init__(FormHandler)
+              get lettings_log_path(lettings_log)
             end
 
             it "shows the tasklist for lettings logs you have access to" do
@@ -1153,119 +1144,54 @@ RSpec.describe LettingsLogsController, type: :request do
             end
 
             it "displays a section status for a lettings log" do
-              assert_select ".govuk-tag", text: /Not started/, count: 6
-              assert_select ".govuk-tag", text: /In progress/, count: 2
-              assert_select ".govuk-tag", text: /Completed/, count: 0
-              assert_select ".govuk-tag", text: /Cannot start yet/, count: 1
+              assert_select ".govuk-tag", text: /Not started/, count: 3
+              assert_select ".govuk-tag", text: /In progress/, count: 3
+              assert_select ".govuk-tag", text: /Completed/, count: 1
+              assert_select ".govuk-tag", text: /Cannot start yet/, count: 0
             end
 
-            it "displays a link to update the log for currently editable logs" do
-              completed_lettings_log.update!(startdate: Time.zone.local(2021, 4, 1), tenancylength: nil)
-              completed_lettings_log.reload
+            context "and the log is completed" do
+              let(:lettings_log) { create(:lettings_log, :completed, assigned_to: user) }
 
-              get "/lettings-logs/#{completed_lettings_log.id}", headers:, params: {}
-              expect(completed_lettings_log.form.new_logs_end_date).to eq(Time.zone.local(2022, 11, 20))
-              expect(completed_lettings_log.status).to eq("completed")
-              expect(page).to have_link("review and make changes to this log", href: "/lettings-logs/#{completed_lettings_log.id}/review")
+              it "displays a link to update the log for currently editable logs" do
+                expect(lettings_log.status).to eq("completed")
+                expect(page).to have_link("review and make changes to this log", href: "/lettings-logs/#{lettings_log.id}/review")
+              end
             end
           end
 
           context "with lettings logs from a closed collection period before the previous collection" do
+            let(:lettings_log) do
+              log = build(:lettings_log, :in_progress, assigned_to: user, startdate: Time.zone.today - 2.years)
+              log.save!(validate: false)
+              log
+            end
+
             before do
-              sign_in user
-              Timecop.return
-              Singleton.__init__(FormHandler)
-              get "/lettings-logs/#{completed_lettings_log.id}", headers:, params: {}
+              get lettings_log_path(lettings_log)
             end
 
             it "redirects to review page" do
-              expect(response).to redirect_to("/lettings-logs/#{completed_lettings_log.id}/review")
-            end
-          end
-
-          context "with lettings logs from a closed previous collection period" do
-            before do
-              sign_in user
-              Timecop.freeze(2023, 2, 1)
-              Singleton.__init__(FormHandler)
-              get "/lettings-logs/#{completed_lettings_log.id}", headers:, params: {}
-            end
-
-            after do
-              Timecop.return
-              Singleton.__init__(FormHandler)
-            end
-
-            it "redirects to review page" do
-              expect(response).to redirect_to("/lettings-logs/#{completed_lettings_log.id}/review")
+              expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}/review")
             end
 
             it "displays a closed collection window message for previous collection year logs" do
-              get "/lettings-logs/#{completed_lettings_log.id}", headers:, params: {}
-              expect(completed_lettings_log.form.new_logs_end_date).to eq(Time.zone.local(2022, 11, 20))
-              expect(completed_lettings_log.status).to eq("completed")
               follow_redirect!
-              expect(page).to have_content("This log is from the 2021/2022 collection window, which is now closed.")
+              expect(page).to have_content(/This log is from the \d{4}\/\d{4} collection window, which is now closed\./)
             end
           end
 
-          context "when a lettings log is for a renewal of supported housing, property information does not need to show" do
-            let(:lettings_log) do
-              FactoryBot.create(
-                :lettings_log,
-                owning_organisation: user.organisation,
-                managing_organisation: user.organisation,
-                assigned_to: user,
-                startdate: Time.zone.now,
-                renewal: 1,
-                needstype: 2,
-                rent_type: 3,
-                postcode_known: 0,
-              )
-            end
+          context "when a lettings log is for a renewal of supported housing" do
+            let(:lettings_log) { create(:lettings_log, :startdate_today, assigned_to: user, renewal: 1, needstype: 2, rent_type: 3, postcode_known: 0) }
 
-            before do
-              sign_in user
-            end
-
-            around do |example|
-              FormHandler.instance.use_real_forms!
-              example.run
-              FormHandler.instance.use_fake_forms!
+            it "does not show property information" do
+              get lettings_log_path(lettings_log)
+              expect(page).to have_content "Tenancy information"
+              expect(page).not_to have_content "Property information"
             end
 
             it "does not crash the app if postcode_known is not nil" do
-              expect {
-                get "/lettings-logs/#{lettings_log.id}", headers:, params: {}
-              }.not_to raise_error(ActionView::Template::Error)
-            end
-          end
-
-          context "with a lettings log with a single section complete" do
-            let(:section_completed_lettings_log) do
-              FactoryBot.create(
-                :lettings_log,
-                :conditional_section_complete,
-                assigned_to: user,
-              )
-            end
-
-            before do
-              Timecop.freeze(2021, 4, 1)
-              Singleton.__init__(FormHandler)
-              sign_in user
-              get "/lettings-logs/#{section_completed_lettings_log.id}", headers:, params: {}
-            end
-
-            after do
-              Timecop.unfreeze
-              Singleton.__init__(FormHandler)
-            end
-
-            it "displays a section status for a lettings log" do
-              assert_select ".govuk-tag", text: /Not started/, count: 6
-              assert_select ".govuk-tag", text: /Completed/, count: 1
-              assert_select ".govuk-tag", text: /Cannot start yet/, count: 1
+              expect { get lettings_log_path(lettings_log) }.not_to raise_error
             end
           end
 
@@ -1280,25 +1206,19 @@ RSpec.describe LettingsLogsController, type: :request do
             end
           end
 
-          context "when the log is unresolved" do
-            let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
-            let!(:location) { FactoryBot.create(:location, scheme:) }
+          context "when valid scheme and location are added to an unresolved log" do
+            let(:scheme) { create(:scheme, owning_organisation: user.organisation) }
+            let(:location) { create(:location, scheme:) }
+            let(:lettings_log) { create(:lettings_log, :in_progress, assigned_to: user, unresolved: true) }
+            let(:further_unresolved_logs_count) { 2 }
 
             before do
-              Timecop.freeze(2021, 4, 1)
-              Singleton.__init__(FormHandler)
-              FactoryBot.create_list(:lettings_log, 3, unresolved: true, assigned_to: user)
-              lettings_log.update!(needstype: 2, scheme:, location:, unresolved: true)
-              sign_in user
-              get "/lettings-logs/#{lettings_log.id}", headers:, params: {}
+              create_list(:lettings_log, further_unresolved_logs_count, unresolved: true, assigned_to: user)
+              lettings_log.update!(needstype: 2, scheme:, location:)
+              get lettings_log_path(lettings_log)
             end
 
-            after do
-              Timecop.return
-              Singleton.__init__(FormHandler)
-            end
-
-            it "marks it as resolved when both scheme and location exist" do
+            it "marks the log as resolved" do
               lettings_log.reload
               expect(lettings_log.unresolved).to eq(false)
             end
@@ -1306,7 +1226,7 @@ RSpec.describe LettingsLogsController, type: :request do
             it "displays a success banner" do
               expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
               expect(page).to have_content("You’ve updated all the fields affected by the scheme change")
-              expect(page).to have_link("Update 3 more logs", href: "/lettings-logs/update-logs")
+              expect(page).to have_link("Update #{further_unresolved_logs_count} more logs", href: "/lettings-logs/update-logs")
             end
           end
         end
@@ -1943,7 +1863,7 @@ RSpec.describe LettingsLogsController, type: :request do
         sign_in user
         FactoryBot.create(:lettings_log)
         FactoryBot.create(:lettings_log,
-                          :completed,
+                          :in_progress,
                           owning_organisation:,
                           managing_organisation: owning_organisation,
                           assigned_to: user)

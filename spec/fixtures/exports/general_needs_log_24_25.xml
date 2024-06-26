@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <forms>
   <form>
-    <status>1</status>
+    <status>2</status>
     <tenancycode>BZ737</tenancycode>
     <age1>35</age1>
     <sex1>F</sex1>
@@ -50,7 +50,7 @@
     <period>2</period>
     <layear>2</layear>
     <waityear>7</waityear>
-    <postcode_full>SE2 6RT</postcode_full>
+    <postcode_full>AA1 1AA</postcode_full>
     <reasonpref>1</reasonpref>
     <cbl>2</cbl>
     <chr>1</chr>
@@ -82,7 +82,7 @@
     <irproduct_other/>
     <reason>4</reason>
     <propcode>123</propcode>
-    <la>E09000003</la>
+    <la>E09000033</la>
     <prevloc>E07000105</prevloc>
     <hb>6</hb>
     <hbrentshortfall>1</hbrentshortfall>
@@ -137,12 +137,12 @@
     <new_old>2</new_old>
     <vacdays>698</vacdays>
     <bulk_upload_id>1</bulk_upload_id>
-    <uprn/>
-    <uprn_known>0</uprn_known>
-    <uprn_confirmed/>
-    <address_line1>Address line 1</address_line1>
+    <uprn>1</uprn>
+    <uprn_known>1</uprn_known>
+    <uprn_confirmed>1</uprn_confirmed>
+    <address_line1>1, Test Street</address_line1>
     <address_line2/>
-    <town_or_city>London</town_or_city>
+    <town_or_city>Test Town</town_or_city>
     <county/>
     <carehome_charges_value_check/>
     <discarded_at/>
@@ -152,7 +152,7 @@
     <pscharge_value_check/>
     <duplicate_set_id/>
     <accessible_register>2</accessible_register>
-    <nationality_all/>
+    <nationality_all>826</nationality_all>
     <address_line1_as_entered>address line 1 as entered</address_line1_as_entered>
     <address_line2_as_entered>address line 2 as entered</address_line2_as_entered>
     <town_or_city_as_entered>town or city as entered</town_or_city_as_entered>

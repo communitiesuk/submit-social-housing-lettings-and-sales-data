@@ -54,7 +54,7 @@ RSpec.describe Form::Sales::Questions::Uprn, type: :model do
 
     context "when address is present" do
       let(:log) do
-        create(
+        build(
           :sales_log,
           :completed,
           address_line1: "1, Test Street",
@@ -81,7 +81,7 @@ RSpec.describe Form::Sales::Questions::Uprn, type: :model do
 
         it "returns formatted value" do
           expect(question.get_extra_check_answer_value(log)).to eq(
-            "\n\n1, Test Street\nTest Town\nAA1 1AA\nWestminster",
+            "\n\n1, Test Street\nTest Town\nAA1 1AA\nBarnet",
           )
         end
       end
