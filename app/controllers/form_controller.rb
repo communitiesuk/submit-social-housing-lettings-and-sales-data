@@ -418,6 +418,7 @@ private
       responses_for_page = responses_for_page(@page)
       @log.assign_attributes(responses_for_page)
       @log.valid?
+      @log.reload
       error_attributes = @log.errors.map(&:attribute)
       @questions = @log.form.questions.select { |q| error_attributes.include?(q.id.to_sym) }
     end
