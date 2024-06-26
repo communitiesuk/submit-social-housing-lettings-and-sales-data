@@ -1042,6 +1042,30 @@ RSpec.describe SalesLogsController, type: :request do
             expect(response).to have_http_status(:unauthorized)
           end
         end
+
+        context "and filtering by organisation and year" do
+          let(:other_organisation) { FactoryBot.create(:organisation) }
+          let(:sales_logs) { create_list(:sales_log, 2, :in_progress, assigned_to: user, owning_organisation: other_organisation, managing_organisation: user.organisation) }
+          let(:params) do
+            {
+              years: [sales_logs[0].form.start_date.year],
+              owning_organisation: other_organisation.id,
+              owning_organisation_select: "specific_org",
+              codes_only: false,
+            }
+          end
+
+          before do
+            create(:organisation_relationship, parent_organisation: other_organisation, child_organisation: user.organisation)
+            create_list(:sales_log, 2, :in_progress, assigned_to: user, owning_organisation: other_organisation, managing_organisation: user.organisation, discarded_at: Time.zone.yesterday)
+          end
+
+          it "does not count deleted logs" do
+            get csv_download_sales_logs_path, headers:, params: params
+
+            expect(page).to have_content("You've selected 2 logs.")
+          end
+        end
       end
 
       context "when user is support" do
