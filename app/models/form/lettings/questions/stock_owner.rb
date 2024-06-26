@@ -17,7 +17,7 @@ class Form::Lettings::Questions::StockOwner < ::Form::Question
     return answer_opts unless log
 
     if log.owning_organisation_id.present?
-      org_value = log.owning_organisation.status == :deleted ? "#{log.owning_organisation.name} (deleted)" : log.owning_organisation.name
+      org_value = log.owning_organisation.label
       answer_opts[log.owning_organisation.id] = org_value
     end
 
