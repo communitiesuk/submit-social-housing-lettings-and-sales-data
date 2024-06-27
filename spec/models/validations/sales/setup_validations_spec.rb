@@ -44,7 +44,6 @@ RSpec.describe Validations::Sales::SetupValidations do
       context "when saledate is after the open collection year" do
         let(:record) { build(:sales_log, saledate: Time.zone.today + 2.years) }
 
-
         it "adds error" do
           setup_validator.validate_saledate_collection_year(record)
 
