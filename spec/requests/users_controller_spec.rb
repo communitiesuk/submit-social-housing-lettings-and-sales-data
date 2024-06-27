@@ -1188,7 +1188,7 @@ RSpec.describe UsersController, type: :request do
     describe "#index" do
       let!(:other_user) { create(:user, organisation: user.organisation, name: "User 2", email: "other@example.com") }
       let!(:inactive_user) { create(:user, organisation: user.organisation, active: false, name: "User 3", email: "inactive@example.com", last_sign_in_at: Time.zone.local(2022, 10, 10)) }
-      let!(:other_org_user) { create(:user, name: "User 4", email: "otherorg@otherexample.com", organisation: create(:organisation, :without_dpc)) }
+      let!(:other_org_user) { create(:user, name: "User 4", email: "otherorg@otherexample.com", organisation: create(:organisation, :without_dpc, name: "Other name")) }
 
       before do
         get "/users", headers:, params: {}
@@ -1199,6 +1199,11 @@ RSpec.describe UsersController, type: :request do
         expect(page).to have_content(other_user.name)
         expect(page).to have_content(inactive_user.name)
         expect(page).to have_content(other_org_user.name)
+      end
+
+      it "links to user organisations" do
+        expect(page).to have_link(user.organisation.name, href: "/organisations/#{user.organisation.id}/lettings-logs", count: 3)
+        expect(page).to have_link(other_org_user.organisation.name, href: "/organisations/#{other_org_user.organisation.id}/lettings-logs", count: 1)
       end
 
       it "shows last logged in date for all users" do
@@ -1430,6 +1435,10 @@ RSpec.describe UsersController, type: :request do
             expect(page).to have_link("Change", text: "role")
             expect(page).to have_link("Change", text: "if data protection officer")
             expect(page).to have_link("Change", text: "if a key contact")
+          end
+
+          it "links to user organisation" do
+            expect(page).to have_link(other_user.organisation.name, href: "/organisations/#{other_user.organisation.id}/lettings-logs")
           end
 
           it "does not show option to resend confirmation email" do

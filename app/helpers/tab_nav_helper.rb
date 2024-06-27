@@ -19,7 +19,8 @@ module TabNavHelper
   end
 
   def org_cell(user)
+    org_name = current_user.support? ? govuk_link_to(user.organisation.name, lettings_logs_organisation_path(user.organisation)) : user.organisation.name
     role = "<span class=\"app-!-colour-muted\">#{user.role.to_s.humanize}</span>"
-    [user.organisation.name, role].join("\n")
+    [org_name, role].join("\n")
   end
 end
