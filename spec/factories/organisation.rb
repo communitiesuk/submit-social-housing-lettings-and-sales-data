@@ -14,6 +14,16 @@ FactoryBot.define do
       with_dsa { true }
     end
 
+    transient do
+      rent_periods { [] }
+    end
+
+    after(:create) do |organisation, evaluator|
+      evaluator.rent_periods.each do |rent_period|
+        organisation.organisation_rent_periods << build(:organisation_rent_period, rent_period:)
+      end
+    end
+
     after(:create) do |org, evaluator|
       if evaluator.with_dsa
         create(
