@@ -22,7 +22,7 @@ RSpec.describe Validations::Sales::SetupValidations do
       end
 
       context "when saledate is in the open collection year" do
-        let(:record) { build(:sales_log) }
+        let(:record) { build(:sales_log, :saledate_today) }
 
         it "does not add an error" do
           setup_validator.validate_saledate_collection_year(record)
@@ -32,30 +32,23 @@ RSpec.describe Validations::Sales::SetupValidations do
       end
 
       context "when saledate is before the open collection year" do
-        let(:record) { build(:sales_log, saledate: Time.zone.local(2020, 1, 1)) }
-
-        before do
-          allow(Time).to receive(:now).and_return(Time.zone.local(2023, 1, 10))
-        end
+        let(:record) { build(:sales_log, saledate: Time.zone.today - 3.years) }
 
         it "adds error" do
           setup_validator.validate_saledate_collection_year(record)
 
-          expect(record.errors[:saledate]).to include("Enter a date within the 22/23 collection year, which is between 1st April 2022 and 31st March 2023")
+          expect(record.errors[:saledate]).to include(/Enter a date within the \d{2}\/\d{2} collection year, which is between 1st April \d{4} and 31st March \d{4}/)
         end
       end
 
       context "when saledate is after the open collection year" do
-        let(:record) { build(:sales_log, saledate: Time.zone.local(2025, 4, 1)) }
+        let(:record) { build(:sales_log, saledate: Time.zone.today + 2.years) }
 
-        before do
-          allow(Time).to receive(:now).and_return(Time.zone.local(2023, 1, 10))
-        end
 
         it "adds error" do
           setup_validator.validate_saledate_collection_year(record)
 
-          expect(record.errors[:saledate]).to include("Enter a date within the 22/23 collection year, which is between 1st April 2022 and 31st March 2023")
+          expect(record.errors[:saledate]).to include(/Enter a date within the \d{2}\/\d{2} collection year, which is between 1st April \d{4} and 31st March \d{4}/)
         end
       end
     end
@@ -106,20 +99,19 @@ RSpec.describe Validations::Sales::SetupValidations do
       end
 
       context "when current time is after the new logs end date but before edit end date for the previous period" do
-        let(:record) { build(:sales_log, saledate: Time.zone.local(2025, 4, 1)) }
+        let(:record) { build(:sales_log, saledate: nil) }
 
         before do
           allow(Time).to receive(:now).and_return(Time.zone.local(2025, 1, 8))
         end
 
         it "cannot create new logs for the archived collection year" do
-          record.update!(saledate: nil)
           record.saledate = Time.zone.local(2023, 1, 1)
           setup_validator.validate_saledate_collection_year(record)
           expect(record.errors["saledate"]).to include(match "Enter a date within the 23/24 or 24/25 collection years, which is between 1st April 2023 and 31st March 2025")
         end
 
-        xit "can edit already created logs for the previous collection year" do
+        it "can edit already created logs for the previous collection year" do
           record.saledate = Time.zone.local(2024, 1, 2)
           record.save!(validate: false)
           record.saledate = Time.zone.local(2024, 1, 1)

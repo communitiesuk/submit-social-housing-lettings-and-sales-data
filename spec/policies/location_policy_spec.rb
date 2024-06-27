@@ -44,8 +44,7 @@ RSpec.describe LocationPolicy do
 
     context "with deactivated location" do
       before do
-        location.location_deactivation_periods << create(:location_deactivation_period, deactivation_date: Time.zone.today, location:)
-        location.save!
+        location.location_deactivation_periods << build(:location_deactivation_period, deactivation_date: Time.zone.today, location:)
         log = build(:lettings_log, scheme: location.scheme, location:, startdate: Time.zone.today - 2.years)
         log.save!(validate: false)
       end
