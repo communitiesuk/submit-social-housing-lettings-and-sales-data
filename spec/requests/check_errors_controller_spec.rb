@@ -83,8 +83,9 @@ RSpec.describe CheckErrorsController, type: :request do
           post "/sales-logs/#{sales_log.id}/buyer-1-income", params: params
         end
 
-        it "displays correct clear links" do
-          expect(page).to have_button("Clear", count: 3)
+        it "displays correct clear and change links" do
+          expect(page).to have_button("Clear", count: 2)
+          expect(page).to have_link("Change", count: 1)
           expect(page).to have_link("Clear all", href: "/sales-logs/#{sales_log.id}/confirm-clear-all-answers")
         end
       end
