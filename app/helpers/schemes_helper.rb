@@ -20,10 +20,10 @@ module SchemesHelper
   end
 
   def owning_organisation_options(current_user)
-    all_orgs = Organisation.all.map { |org| OpenStruct.new(id: org.id, name: org.name) }
+    all_orgs = Organisation.visible.map { |org| OpenStruct.new(id: org.id, name: org.name) }
     user_org = [OpenStruct.new(id: current_user.organisation_id, name: current_user.organisation.name)]
-    stock_owners = current_user.organisation.stock_owners.map { |org| OpenStruct.new(id: org.id, name: org.name) }
-    merged_organisations = current_user.organisation.absorbed_organisations.merged_during_open_collection_period.map { |org| OpenStruct.new(id: org.id, name: org.name) }
+    stock_owners = current_user.organisation.stock_owners.visible.map { |org| OpenStruct.new(id: org.id, name: org.name) }
+    merged_organisations = current_user.organisation.absorbed_organisations.visible.merged_during_open_collection_period.map { |org| OpenStruct.new(id: org.id, name: org.name) }
     current_user.support? ? all_orgs : user_org + stock_owners + merged_organisations
   end
 
