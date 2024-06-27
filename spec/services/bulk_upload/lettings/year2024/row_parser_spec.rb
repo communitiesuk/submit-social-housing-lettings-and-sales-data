@@ -936,6 +936,15 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
           end
         end
 
+        context "when scheme ID has leading spaces" do
+          let(:attributes) { { bulk_upload:, field_1: owning_org.old_visible_id, field_2: owning_org.old_visible_id, field_4: "2", field_11: "1", field_5: " S#{scheme.id}", field_6: location.id } }
+
+          it "does not return an error" do
+            expect(parser.errors[:field_5]).to be_blank
+            expect(parser.errors[:field_6]).to be_blank
+          end
+        end
+
         context "when location exists but not related" do
           let(:other_scheme) { create(:scheme, :with_old_visible_id) }
           let(:other_location) { create(:location, :with_old_visible_id, scheme: other_scheme) }

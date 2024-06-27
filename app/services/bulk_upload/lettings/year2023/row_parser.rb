@@ -1317,11 +1317,11 @@ private
   end
 
   def log_uses_new_scheme_id?
-    field_16&.start_with?("S")
+    field_16&.strip&.start_with?("S")
   end
 
   def log_uses_old_scheme_id?
-    field_16.present? && !field_16.start_with?("S")
+    field_16.present? && !field_16.strip.start_with?("S")
   end
 
   def scheme_field
@@ -1330,7 +1330,7 @@ private
   end
 
   def scheme_id
-    return field_16 if log_uses_new_scheme_id?
+    return field_16.strip if log_uses_new_scheme_id?
     return field_15 if log_uses_old_scheme_id?
   end
 

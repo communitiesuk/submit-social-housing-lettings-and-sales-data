@@ -1358,7 +1358,7 @@ private
   def scheme
     return if field_5.nil? || owning_organisation.nil? || managing_organisation.nil?
 
-    @scheme ||= Scheme.where(id: (owning_organisation.owned_schemes + managing_organisation.owned_schemes).map(&:id)).find_by_id_on_multiple_fields(field_5, field_6)
+    @scheme ||= Scheme.where(id: (owning_organisation.owned_schemes + managing_organisation.owned_schemes).map(&:id)).find_by_id_on_multiple_fields(field_5.strip, field_6)
   end
 
   def location
