@@ -11,7 +11,13 @@ class CheckErrorsController < ApplicationController
     @page = @log.form.get_page(params[@log.model_name.param_key]["page_id"])
 
     if params["clear_all"]
-      @questions_to_clear = @related_question_ids.map { |id| @log.form.get_question(id, @log).page.questions.map(&:id) }.flatten
+      @questions_to_clear = @related_question_ids.map { |id|
+        question = @log.form.get_question(id, @log)
+        next if question.subsection.id == "setup"
+
+        question.page.questions.map(&:id)
+      }.flatten.compact
+
       render :confirm_clear_all_answers
     else
       question_id = @related_question_ids.find { |id| !params[id].nil? }
