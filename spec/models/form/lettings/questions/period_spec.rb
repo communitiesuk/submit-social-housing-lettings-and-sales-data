@@ -28,7 +28,7 @@ RSpec.describe Form::Lettings::Questions::Period, type: :model do
   end
 
   context "when managing organisation has rent periods" do
-    let(:managing_organisation) { create(:organisation, skip_rent_period_creation: true) }
+    let(:managing_organisation) { create(:organisation) }
     let(:log) { create(:lettings_log, managing_organisation:) }
 
     before do

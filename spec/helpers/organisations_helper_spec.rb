@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe OrganisationsHelper do
   include TagHelper
   describe "display_organisation_attributes" do
-    let(:organisation) { create(:organisation, skip_rent_period_creation: true) }
+    let(:organisation) { create(:organisation) }
 
     it "has the correct values" do
       expect(display_organisation_attributes(organisation)).to eq(

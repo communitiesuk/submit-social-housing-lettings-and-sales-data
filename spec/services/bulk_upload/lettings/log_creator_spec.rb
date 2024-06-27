@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe BulkUpload::Lettings::LogCreator do
   subject(:service) { described_class.new(bulk_upload:, path: "") }
 
-  let(:owning_org) { create(:organisation, old_visible_id: 123) }
+  let(:owning_org) { create(:organisation, old_visible_id: 123, rent_periods: [2]) }
   let(:user) { create(:user, organisation: owning_org) }
 
   let(:bulk_upload) { create(:bulk_upload, :lettings, user:) }

@@ -109,7 +109,7 @@ RSpec.describe Organisation, type: :model do
     end
 
     context "with associated rent periods" do
-      let(:organisation) { create(:organisation, skip_rent_period_creation: true) }
+      let(:organisation) { create(:organisation) }
       let(:period_1_label) { "Every minute" }
       let(:fake_rent_periods) do
         {

@@ -15,14 +15,12 @@ FactoryBot.define do
     end
 
     transient do
-      skip_rent_period_creation { false }
+      rent_periods { [] }
     end
 
-    after(:build) do |organisation, evaluator|
-      unless evaluator.skip_rent_period_creation
-        (1..11).each do |rent_period|
-          organisation.organisation_rent_periods << build(:organisation_rent_period, organisation:, rent_period:)
-        end
+    after(:create) do |organisation, evaluator|
+      evaluator.rent_periods.each do |rent_period|
+        organisation.organisation_rent_periods << build(:organisation_rent_period, rent_period:)
       end
     end
 
