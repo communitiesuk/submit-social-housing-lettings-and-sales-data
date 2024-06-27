@@ -75,8 +75,8 @@ RSpec.describe Merge::MergeOrganisationsService do
       end
 
       context "and merging organisation rent periods" do
-        let(:absorbing_organisation) { create(:organisation, holds_own_stock: false, name: "absorbing org", skip_rent_period_creation: true) }
-        let(:merging_organisation) { create(:organisation, holds_own_stock: true, name: "fake org", skip_rent_period_creation: true) }
+        let(:absorbing_organisation) { create(:organisation, holds_own_stock: false, name: "absorbing org") }
+        let(:merging_organisation) { create(:organisation, holds_own_stock: true, name: "fake org") }
 
         before do
           OrganisationRentPeriod.create!(organisation: absorbing_organisation, rent_period: 1)
@@ -1160,8 +1160,8 @@ RSpec.describe Merge::MergeOrganisationsService do
       end
 
       context "and merging organisation rent periods" do
-        let(:new_absorbing_organisation) { create(:organisation, :without_dpc, holds_own_stock: false, skip_rent_period_creation: true) }
-        let(:merging_organisation) { create(:organisation, holds_own_stock: true, name: "fake org", skip_rent_period_creation: true) }
+        let(:new_absorbing_organisation) { create(:organisation, :without_dpc, holds_own_stock: false) }
+        let(:merging_organisation) { create(:organisation, holds_own_stock: true, name: "fake org") }
 
         before do
           OrganisationRentPeriod.create!(organisation: new_absorbing_organisation, rent_period: 1)

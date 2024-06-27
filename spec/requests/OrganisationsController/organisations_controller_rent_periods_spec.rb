@@ -53,7 +53,7 @@ RSpec.describe OrganisationsController, type: :request do
   end
 
   describe "#edit" do
-    let(:organisation) { create(:organisation, skip_rent_period_creation: true) }
+    let(:organisation) { create(:organisation) }
     let(:fake_rent_periods) do
       {
         "1" => { "value" => "Every minute" },
@@ -83,7 +83,7 @@ RSpec.describe OrganisationsController, type: :request do
   end
 
   describe "#update" do
-    let(:organisation) { create(:organisation, skip_rent_period_creation: true) }
+    let(:organisation) { create(:organisation) }
     let(:initially_checked_rent_period_id) { "1" }
     let(:initially_unchecked_rent_period_id) { "2" }
     let(:params) do

@@ -6,6 +6,13 @@ FactoryBot.define do
     managing_organisation { assigned_to.organisation }
     created_at { Time.zone.today }
     updated_at { Time.zone.today }
+
+    before(:create) do |log, _evaluator|
+      if log.period && !log.managing_organisation.organisation_rent_periods.exists?(rent_period: log.period)
+        log.managing_organisation.organisation_rent_periods << build(:organisation_rent_period, rent_period: log.period)
+      end
+    end
+
     trait :setup_completed do
       startdate_today
       renewal { 0 }
