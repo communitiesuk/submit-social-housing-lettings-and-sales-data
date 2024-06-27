@@ -86,7 +86,7 @@ RSpec.describe CheckErrorsController, type: :request do
         it "displays correct clear and change links" do
           expect(page.all(:button, value: "Clear").count).to eq(2)
           expect(page).to have_link("Change", count: 1)
-          expect(page).to have_link("Clear all", href: "/sales-logs/#{sales_log.id}/confirm-clear-all-answers")
+          expect(page).to have_button("Clear all")
         end
       end
     end
@@ -231,7 +231,7 @@ RSpec.describe CheckErrorsController, type: :request do
 
         it "displays correct clear links" do
           expect(page).to have_content("Are you sure you want to clear all")
-          expect(page).to have_content("You've selected 4 answers to clear")
+          expect(page).to have_content("You've selected 3 answers to clear")
           expect(page).to have_content("You will not be able to undo this action")
           expect(page).to have_link("Cancel")
           expect(page).to have_button("Confirm and continue")
@@ -447,7 +447,7 @@ RSpec.describe CheckErrorsController, type: :request do
           expect(page.all(:button, value: "Clear").count).to eq(0)
           expect(sales_log.reload.income1).to eq(nil)
           expect(sales_log.reload.la).to eq(nil)
-          expect(sales_log.reload.ownershipsch).to eq(nil)
+          expect(sales_log.reload.ownershipsch).not_to eq(nil)
         end
       end
     end

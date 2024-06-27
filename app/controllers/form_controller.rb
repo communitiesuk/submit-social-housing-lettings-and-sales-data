@@ -405,7 +405,10 @@ private
     if params[@log.model_name.param_key]["clear_question_ids"].present?
       question_ids = params[@log.model_name.param_key]["clear_question_ids"].split(" ")
       question_ids.each do |question_id|
-        @log.form.get_question(question_id, @log).page.questions.map(&:id).each { |id| @log[id] = nil }
+        question = @log.form.get_question(question_id, @log)
+        next if question.subsection.id == "setup"
+
+        question.page.questions.map(&:id).each { |id| @log[id] = nil }
       end
       @log.save!
       @questions = params[@log.model_name.param_key].keys.reject { |id| %w[clear_question_ids page].include?(id) }.map { |id| @log.form.get_question(id, @log) }
