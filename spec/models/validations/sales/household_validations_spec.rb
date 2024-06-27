@@ -278,7 +278,7 @@ RSpec.describe Validations::Sales::HouseholdValidations do
   end
 
   describe "validating fields about buyers living in the property" do
-    let(:sales_log) { FactoryBot.create(:sales_log, :outright_sale_setup_complete, saledate:, noint: 1, companybuy: 2, buylivein:, jointpur:, jointmore:, buy1livein:) }
+    let(:sales_log) { build(:sales_log, :outright_sale_setup_complete, saledate:, noint: 1, companybuy: 2, buylivein:, jointpur:, jointmore:, buy1livein:) }
 
     context "when buyers will live in the property and the sale is a joint purchase" do
       let(:buylivein) { 1 }

@@ -55,7 +55,7 @@ RSpec.describe "clear_invalidated_earnings" do
           lettings_log.earnings = 95
           lettings_log.hhmemb = 1
           lettings_log.ecstat1 = 1
-          lettings_log.save!
+          lettings_log.save!(validate: false)
         end
 
         it "does not update the logs" do
