@@ -191,7 +191,7 @@ RSpec.describe "Form Navigation" do
     let(:now) { Time.zone.local(2024, 5, 1) }
 
     context "with a lettings log" do
-      let(:lettings_log) { create(:lettings_log, :completed, startdate: Time.zone.local(2024, 5, 5), assigned_to: user) }
+      let(:lettings_log) { create(:lettings_log, :setup_completed, startdate: Time.zone.local(2024, 5, 5), assigned_to: user) }
 
       before do
         stub_request(:get, /api\.os\.uk/)
@@ -211,7 +211,7 @@ RSpec.describe "Form Navigation" do
         fill_in("lettings-log-address-line1-input-field", with: "address")
         fill_in("lettings-log-postcode-full-input-field", with: "A1 1AA")
         click_button(text: "Search")
-        expect(page).to have_current_path("/lettings-logs/#{id}/uprn-selection?referrer=check_answers")
+        expect(page).to have_current_path("/lettings-logs/#{id}/uprn-selection?referrer=check_answers&unanswered_pages=property_local_authority")
         choose("lettings-log-uprn-selection-12345-field", allow_label_click: true)
         click_button(text: "Save changes")
         expect(page).to have_current_path("/lettings-logs/#{id}/property-information/check-answers")
@@ -219,7 +219,7 @@ RSpec.describe "Form Navigation" do
     end
 
     context "with a sales log" do
-      let(:sales_log) { create(:sales_log, :completed, saledate: Time.zone.local(2024, 5, 5), assigned_to: user) }
+      let(:sales_log) { create(:sales_log, :outright_sale_setup_complete, saledate: Time.zone.local(2024, 5, 5), assigned_to: user) }
 
       before do
         stub_request(:get, /api\.os\.uk/)
@@ -239,7 +239,7 @@ RSpec.describe "Form Navigation" do
         fill_in("sales-log-address-line1-input-field", with: "address")
         fill_in("sales-log-postcode-full-input-field", with: "A1 1AA")
         click_button(text: "Search")
-        expect(page).to have_current_path("/sales-logs/#{sales_log.id}/uprn-selection?referrer=check_answers")
+        expect(page).to have_current_path("/sales-logs/#{sales_log.id}/uprn-selection?referrer=check_answers&unanswered_pages=property_local_authority")
         choose("sales-log-uprn-selection-12345-field", allow_label_click: true)
         click_button(text: "Save changes")
         expect(page).to have_current_path("/sales-logs/#{sales_log.id}/property-information/check-answers")

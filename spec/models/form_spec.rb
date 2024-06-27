@@ -14,7 +14,6 @@ RSpec.describe Form, type: :model do
   let(:lettings_log) { FactoryBot.build(:lettings_log, :in_progress) }
   let(:form) { lettings_log.form }
   let(:completed_lettings_log) { FactoryBot.build(:lettings_log, :completed) }
-  let(:conditional_section_complete_lettings_log) { FactoryBot.build(:lettings_log, :conditional_section_complete) }
 
   describe ".next_page" do
     let(:previous_page_id) { form.get_page("person_1_age") }
