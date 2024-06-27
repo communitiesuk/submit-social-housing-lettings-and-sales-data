@@ -725,17 +725,7 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
   end
 
   describe "#validate_stairbought" do
-    let(:now) { Time.zone.local(2024, 4, 4) }
-
-    before do
-      Timecop.freeze(now)
-      Singleton.__init__(FormHandler)
-    end
-
-    after do
-      Timecop.return
-      Singleton.__init__(FormHandler)
-    end
+    let(:saledate) { Time.zone.local(2024, 4, 4) }
 
     [
       ["Shared Ownership (new model lease)", 30, 90],
@@ -748,7 +738,7 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
       ["Older Persons Shared Ownership", 24, 50],
     ].each do |label, type, max|
       context "when ownership type is #{label}" do
-        let(:record) { build(:sales_log, ownershipsch: 1, type:, saledate: now) }
+        let(:record) { build(:sales_log, ownershipsch: 1, type:, saledate:) }
 
         it "does not add an error if stairbought is under #{max}%" do
           record.stairbought = max - 1
@@ -781,8 +771,8 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
       end
     end
     context "when the collection year is before 2024" do
-      let(:record) { build(:sales_log, ownershipsch: 1, type: 24, saledate: now, stairbought: 90) }
-      let(:now) { Time.zone.local(2023, 4, 4) }
+      let(:record) { build(:sales_log, ownershipsch: 1, type: 24, saledate:, stairbought: 90) }
+      let(:saledate) { Time.zone.local(2023, 4, 4) }
 
       it "does not add an error" do
         sale_information_validator.validate_stairbought(record)
@@ -793,15 +783,8 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
   end
 
   describe "#validate_discount_and_value" do
-    let(:record) { FactoryBot.build(:sales_log, value: 200_000, discount: 50, ownershipsch: 2, type: 9, saledate: now) }
-    let(:now) { Time.zone.local(2024, 4, 1) }
-
-    around do |example|
-      Timecop.freeze(now) do
-        example.run
-      end
-      Timecop.return
-    end
+    let(:record) { FactoryBot.build(:sales_log, value: 200_000, discount: 50, ownershipsch: 2, type: 9, saledate:) }
+    let(:saledate) { Time.zone.local(2024, 4, 1) }
 
     context "with a log in the 24/25 collection year" do
       context "when in London" do
@@ -870,19 +853,10 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
   end
 
   describe "#validate_non_staircasing_mortgage" do
-    let(:record) { FactoryBot.build(:sales_log, mortgageused: 1, mortgage: 10_000, deposit: 5_000, value: 30_000, equity: 28, ownershipsch: 1, type: 30, saledate: now) }
-
-    around do |example|
-      Timecop.freeze(now) do
-        Singleton.__init__(FormHandler)
-        example.run
-      end
-      Timecop.return
-      Singleton.__init__(FormHandler)
-    end
+    let(:record) { FactoryBot.build(:sales_log, mortgageused: 1, mortgage: 10_000, deposit: 5_000, value: 30_000, equity: 28, ownershipsch: 1, type: 30, saledate:) }
 
     context "with a log in the 24/25 collection year" do
-      let(:now) { Time.zone.local(2024, 4, 4) }
+      let(:saledate) { Time.zone.local(2024, 4, 4) }
 
       context "when MORTGAGE + DEPOSIT does not equal VALUE * EQUITY/100 " do
         context "and it is not a staircase transaction" do
@@ -952,7 +926,7 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
       end
 
       context "when MORTGAGE + DEPOSIT equals VALUE * EQUITY/100" do
-        let(:record) { FactoryBot.build(:sales_log, mortgageused: 1, mortgage: 10_000, staircase: 2, deposit: 5_000, value: 30_000, equity: 50, ownershipsch: 1, type: 30, saledate: now) }
+        let(:record) { FactoryBot.build(:sales_log, mortgageused: 1, mortgage: 10_000, staircase: 2, deposit: 5_000, value: 30_000, equity: 50, ownershipsch: 1, type: 30, saledate:) }
 
         it "does not add an error" do
           sale_information_validator.validate_non_staircasing_mortgage(record)
@@ -966,7 +940,7 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
       end
 
       context "when MORTGAGE + DEPOSIT is within 1£ tolerance of VALUE * EQUITY/100" do
-        let(:record) { FactoryBot.build(:sales_log, mortgageused: 1, mortgage: 10_000, staircase: 2, deposit: 50_000, value: 120_001, equity: 50, ownershipsch: 1, type: 30, saledate: now) }
+        let(:record) { FactoryBot.build(:sales_log, mortgageused: 1, mortgage: 10_000, staircase: 2, deposit: 50_000, value: 120_001, equity: 50, ownershipsch: 1, type: 30, saledate:) }
 
         it "does not add an error" do
           sale_information_validator.validate_non_staircasing_mortgage(record)
@@ -1052,7 +1026,7 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
         end
 
         context "when DEPOSIT equals VALUE * EQUITY/100" do
-          let(:record) { FactoryBot.build(:sales_log, mortgageused: 2, staircase: 2, deposit: 15_000, value: 30_000, equity: 50, ownershipsch: 1, type: 30, saledate: now) }
+          let(:record) { FactoryBot.build(:sales_log, mortgageused: 2, staircase: 2, deposit: 15_000, value: 30_000, equity: 50, ownershipsch: 1, type: 30, saledate:) }
 
           it "does not add an error" do
             sale_information_validator.validate_non_staircasing_mortgage(record)
@@ -1066,7 +1040,7 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
         end
 
         context "when DEPOSIT is within 1£ tolerance of VALUE * EQUITY/100" do
-          let(:record) { FactoryBot.build(:sales_log, mortgageused: 2, staircase: 2, deposit: 15_000, value: 30_001, equity: 50, ownershipsch: 1, type: 30, saledate: now) }
+          let(:record) { FactoryBot.build(:sales_log, mortgageused: 2, staircase: 2, deposit: 15_000, value: 30_001, equity: 50, ownershipsch: 1, type: 30, saledate:) }
 
           it "does not add an error" do
             sale_information_validator.validate_non_staircasing_mortgage(record)
@@ -1082,8 +1056,8 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
     end
 
     context "when it is a 2023 log" do
-      let(:now) { Time.zone.local(2023, 4, 1) }
-      let(:record) { FactoryBot.build(:sales_log, mortgage: 10_000, staircase: 2, deposit: 5_000, value: 30_000, equity: 28, ownershipsch: 1, type: 30, saledate: now) }
+      let(:saledate) { Time.zone.local(2023, 4, 1) }
+      let(:record) { FactoryBot.build(:sales_log, mortgage: 10_000, staircase: 2, deposit: 5_000, value: 30_000, equity: 28, ownershipsch: 1, type: 30, saledate:) }
 
       it "does not add an error" do
         sale_information_validator.validate_non_staircasing_mortgage(record)
@@ -1098,19 +1072,10 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
   end
 
   describe "#validate_staircasing_mortgage" do
-    let(:record) { FactoryBot.build(:sales_log, mortgageused: 1, mortgage: 10_000, deposit: 5_000, value: 30_000, stairbought: 28, ownershipsch: 1, type: 30, saledate: now) }
-
-    around do |example|
-      Timecop.freeze(now) do
-        Singleton.__init__(FormHandler)
-        example.run
-      end
-      Timecop.return
-      Singleton.__init__(FormHandler)
-    end
+    let(:record) { FactoryBot.build(:sales_log, mortgageused: 1, mortgage: 10_000, deposit: 5_000, value: 30_000, stairbought: 28, ownershipsch: 1, type: 30, saledate:) }
 
     context "with a log in the 24/25 collection year" do
-      let(:now) { Time.zone.local(2024, 4, 4) }
+      let(:saledate) { Time.zone.local(2024, 4, 4) }
 
       context "when MORTGAGE + DEPOSIT does not equal STAIRBOUGHT/100 * VALUE" do
         context "and it is a staircase transaction" do
@@ -1180,7 +1145,7 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
       end
 
       context "when MORTGAGE + DEPOSIT equals STAIRBOUGHT/100 * VALUE" do
-        let(:record) { FactoryBot.build(:sales_log, mortgageused: 1, mortgage: 10_000, staircase: 1, deposit: 5_000, value: 30_000, stairbought: 50, ownershipsch: 1, type: 30, saledate: now) }
+        let(:record) { FactoryBot.build(:sales_log, mortgageused: 1, mortgage: 10_000, staircase: 1, deposit: 5_000, value: 30_000, stairbought: 50, ownershipsch: 1, type: 30, saledate:) }
 
         it "does not add an error" do
           sale_information_validator.validate_staircasing_mortgage(record)
@@ -1194,7 +1159,7 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
       end
 
       context "when MORTGAGE + DEPOSIT is within 1£ tolerance of STAIRBOUGHT/100 * VALUE" do
-        let(:record) { FactoryBot.build(:sales_log, mortgageused: 1, mortgage: 10_000, staircase: 1, deposit: 5_000, value: 30_001, stairbought: 50, ownershipsch: 1, type: 30, saledate: now) }
+        let(:record) { FactoryBot.build(:sales_log, mortgageused: 1, mortgage: 10_000, staircase: 1, deposit: 5_000, value: 30_001, stairbought: 50, ownershipsch: 1, type: 30, saledate:) }
 
         it "does not add an error" do
           sale_information_validator.validate_staircasing_mortgage(record)
@@ -1209,8 +1174,8 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
     end
 
     context "when it is a 2023 log" do
-      let(:now) { Time.zone.local(2023, 4, 1) }
-      let(:record) { FactoryBot.build(:sales_log, mortgage: 10_000, staircase: 1, deposit: 5_000, value: 30_000, stairbought: 28, ownershipsch: 1, type: 30, saledate: now) }
+      let(:saledate) { Time.zone.local(2023, 4, 1) }
+      let(:record) { FactoryBot.build(:sales_log, mortgage: 10_000, staircase: 1, deposit: 5_000, value: 30_000, stairbought: 28, ownershipsch: 1, type: 30, saledate:) }
 
       it "does not add an error" do
         sale_information_validator.validate_staircasing_mortgage(record)
@@ -1225,7 +1190,7 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
 
     context "when mortgage is not used" do
       context "with a log in the 24/25 collection year" do
-        let(:now) { Time.zone.local(2024, 4, 4) }
+        let(:saledate) { Time.zone.local(2024, 4, 4) }
 
         before do
           record.mortgageused = 2
@@ -1299,7 +1264,7 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
         end
 
         context "when DEPOSIT equals STAIRBOUGHT/100 * VALUE" do
-          let(:record) { FactoryBot.build(:sales_log, mortgageused: 2, staircase: 1, deposit: 15_000, value: 30_000, stairbought: 50, ownershipsch: 1, type: 30, saledate: now) }
+          let(:record) { FactoryBot.build(:sales_log, mortgageused: 2, staircase: 1, deposit: 15_000, value: 30_000, stairbought: 50, ownershipsch: 1, type: 30, saledate:) }
 
           it "does not add an error" do
             sale_information_validator.validate_staircasing_mortgage(record)
@@ -1313,7 +1278,7 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
         end
 
         context "when DEPOSIT is within 1£ tolerance of STAIRBOUGHT/100 * VALUE" do
-          let(:record) { FactoryBot.build(:sales_log, mortgageused: 2, staircase: 1, deposit: 15_000, value: 30_001, stairbought: 50, ownershipsch: 1, type: 30, saledate: now) }
+          let(:record) { FactoryBot.build(:sales_log, mortgageused: 2, staircase: 1, deposit: 15_000, value: 30_001, stairbought: 50, ownershipsch: 1, type: 30, saledate:) }
 
           it "does not add an error" do
             sale_information_validator.validate_staircasing_mortgage(record)
@@ -1328,8 +1293,8 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
       end
 
       context "when it is a 2023 log" do
-        let(:now) { Time.zone.local(2023, 4, 1) }
-        let(:record) { FactoryBot.build(:sales_log, mortgageused: 2, staircase: 1, deposit: 5_000, value: 30_000, stairbought: 28, ownershipsch: 1, type: 30, saledate: now) }
+        let(:saledate) { Time.zone.local(2023, 4, 1) }
+        let(:record) { FactoryBot.build(:sales_log, mortgageused: 2, staircase: 1, deposit: 5_000, value: 30_000, stairbought: 28, ownershipsch: 1, type: 30, saledate:) }
 
         it "does not add an error" do
           sale_information_validator.validate_staircasing_mortgage(record)

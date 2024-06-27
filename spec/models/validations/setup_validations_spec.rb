@@ -143,7 +143,7 @@ RSpec.describe Validations::SetupValidations do
 
     context "when attempted startdate is more than 14 days from the current date" do
       before do
-        Timecop.freeze(2024, 3, 1)
+        allow(Time).to receive(:now).and_return(Time.zone.local(2024, 3, 1))
       end
 
       it "adds an error to startdate" do
@@ -164,18 +164,13 @@ RSpec.describe Validations::SetupValidations do
     end
 
     context "when organisations were merged" do
-      around do |example|
-        Timecop.freeze(Time.zone.local(2023, 5, 1))
-        example.run
-        Timecop.return
-      end
-
       let(:absorbing_organisation) { create(:organisation, created_at: Time.zone.local(2023, 1, 30, 4, 5, 6), available_from: Time.zone.local(2023, 2, 1, 4, 5, 6), name: "Absorbing org") }
       let(:absorbing_organisation_2) { create(:organisation, created_at: Time.zone.local(2023, 1, 30), available_from: Time.zone.local(2023, 2, 1), name: "Absorbing org 2") }
       let(:merged_organisation) { create(:organisation, name: "Merged org") }
       let(:merged_organisation_2) { create(:organisation, name: "Merged org 2") }
 
       before do
+        allow(Time).to receive(:now).and_return(Time.zone.local(2023, 5, 1))
         merged_organisation.update!(absorbing_organisation:, merge_date: Time.zone.local(2023, 2, 2))
         merged_organisation_2.update!(absorbing_organisation:, merge_date: Time.zone.local(2023, 2, 2))
       end
@@ -431,9 +426,8 @@ RSpec.describe Validations::SetupValidations do
 
       before do
         create(:location, scheme:)
-        Timecop.freeze(Time.zone.local(2023, 11, 10))
-        create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 4), scheme:)
-        Timecop.return
+        scheme_deactivation_period = build(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 4), scheme:)
+        scheme_deactivation_period.save!(validate: false)
         scheme.reload
       end
 
@@ -461,9 +455,8 @@ RSpec.describe Validations::SetupValidations do
 
       before do
         create(:location, scheme:)
-        Timecop.freeze(Time.zone.local(2023, 11, 10))
-        create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 4), reactivation_date: Time.zone.local(2022, 8, 4), scheme:)
-        Timecop.return
+        scheme_deactivation_period = build(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 4), reactivation_date: Time.zone.local(2022, 8, 4), scheme:)
+        scheme_deactivation_period.save!(validate: false)
         scheme.reload
       end
 
@@ -491,11 +484,12 @@ RSpec.describe Validations::SetupValidations do
 
       before do
         create(:location, scheme:)
-        Timecop.freeze(Time.zone.local(2023, 11, 10))
-        create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 1), reactivation_date: Time.zone.local(2022, 9, 4), scheme:)
-        create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 4), reactivation_date: Time.zone.local(2022, 8, 4), scheme:)
-        create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 2), reactivation_date: Time.zone.local(2022, 8, 3), scheme:)
-        Timecop.return
+        scheme_deactivation_period = build(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 2), reactivation_date: Time.zone.local(2022, 8, 3), scheme:)
+        scheme_deactivation_period_2 = build(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 4), reactivation_date: Time.zone.local(2022, 8, 4), scheme:)
+        scheme_deactivation_period_3 = build(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 1), reactivation_date: Time.zone.local(2022, 9, 4), scheme:)
+        scheme_deactivation_period.save!(validate: false)
+        scheme_deactivation_period_2.save!(validate: false)
+        scheme_deactivation_period_3.save!(validate: false)
         scheme.reload
       end
 
@@ -525,9 +519,8 @@ RSpec.describe Validations::SetupValidations do
       let(:location) { create(:location, scheme:) }
 
       before do
-        Timecop.freeze(Time.zone.local(2023, 11, 10))
-        create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 4), location:)
-        Timecop.return
+        location_deactivation_period = build(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 4), location:)
+        location_deactivation_period.save!(validate: false)
         location.reload
       end
 
@@ -555,9 +548,8 @@ RSpec.describe Validations::SetupValidations do
       let(:location) { create(:location, scheme:) }
 
       before do
-        Timecop.freeze(Time.zone.local(2023, 11, 10))
-        create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 4), reactivation_date: Time.zone.local(2022, 8, 4), location:)
-        Timecop.return
+        location_deactivation_period = build(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 4), reactivation_date: Time.zone.local(2022, 8, 4), location:)
+        location_deactivation_period.save!(validate: false)
         location.reload
       end
 
@@ -585,11 +577,12 @@ RSpec.describe Validations::SetupValidations do
       let(:location) { create(:location, scheme:) }
 
       before do
-        Timecop.freeze(Time.zone.local(2023, 11, 10))
-        create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 1), reactivation_date: Time.zone.local(2022, 9, 4), location:)
-        create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 4), reactivation_date: Time.zone.local(2022, 8, 4), location:)
-        create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 2), reactivation_date: Time.zone.local(2022, 8, 3), location:)
-        Timecop.return
+        location_deactivation_period = build(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 2), reactivation_date: Time.zone.local(2022, 8, 3), location:)
+        location_deactivation_period_2 = build(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 4), reactivation_date: Time.zone.local(2022, 8, 4), location:)
+        location_deactivation_period_3 = build(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 1), reactivation_date: Time.zone.local(2022, 9, 4), location:)
+        location_deactivation_period.save!(validate: false)
+        location_deactivation_period_2.save!(validate: false)
+        location_deactivation_period_3.save!(validate: false)
         location.reload
       end
 
@@ -719,11 +712,10 @@ RSpec.describe Validations::SetupValidations do
       let(:absorbing_organisation) { create(:organisation, created_at: Time.zone.local(2023, 2, 1, 4, 5, 6), available_from: Time.zone.local(2023, 2, 1, 4, 5, 6), name: "Absorbing org") }
       let(:merged_organisation) { create(:organisation, name: "Merged org") }
 
-      around do |example|
-        Timecop.freeze(Time.zone.local(2023, 5, 1))
-        merged_organisation.update!(merge_date: Time.zone.local(2023, 2, 2), absorbing_organisation:)
-        example.run
-        Timecop.return
+      before do
+        merged_organisation.merge_date = Time.zone.local(2023, 2, 2)
+        merged_organisation.absorbing_organisation = absorbing_organisation
+        merged_organisation.save!(validate: false)
       end
 
       context "and owning organisation is no longer active" do

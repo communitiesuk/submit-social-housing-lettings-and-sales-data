@@ -4,10 +4,12 @@ RSpec.describe Validations::Sales::HouseholdValidations do
   subject(:household_validator) { validator_class.new }
 
   let(:validator_class) { Class.new { include Validations::Sales::HouseholdValidations } }
-  let(:record) { build(:sales_log, saledate: log_date) }
-  let(:log_date) { Time.zone.local(2023, 4, 1) }
+  let(:record) { build(:sales_log, saledate:) }
+  let(:saledate) { Time.zone.now }
 
   describe "#validate_partner_count" do
+    let(:saledate) { Time.zone.local(2023, 4, 1) }
+
     it "validates that only 1 partner exists" do
       record.relat2 = "P"
       record.relat3 = "P"
@@ -28,18 +30,8 @@ RSpec.describe Validations::Sales::HouseholdValidations do
   end
 
   describe "#validate_person_age_matches_relationship" do
-    before do
-      Timecop.freeze(log_date)
-      Singleton.__init__(FormHandler)
-    end
-
-    after do
-      Timecop.return
-      Singleton.__init__(FormHandler)
-    end
-
     context "with 2023 logs" do
-      let(:log_date) { Time.zone.local(2023, 4, 1) }
+      let(:saledate) { Time.zone.local(2023, 4, 1) }
 
       context "when the household contains a person under 16" do
         it "expects that person is a child of the tenant" do
@@ -73,7 +65,7 @@ RSpec.describe Validations::Sales::HouseholdValidations do
     end
 
     context "with 2024 logs" do
-      let(:log_date) { Time.zone.local(2024, 4, 1) }
+      let(:saledate) { Time.zone.local(2024, 4, 1) }
 
       it "does not add error if person under 16 is a partner" do
         record.age2 = 14
@@ -94,18 +86,8 @@ RSpec.describe Validations::Sales::HouseholdValidations do
   end
 
   describe "#validate_person_age_matches_economic_status" do
-    before do
-      Timecop.freeze(log_date)
-      Singleton.__init__(FormHandler)
-    end
-
-    after do
-      Timecop.return
-      Singleton.__init__(FormHandler)
-    end
-
     context "with 2023 logs" do
-      let(:log_date) { Time.zone.local(2023, 4, 1) }
+      let(:saledate) { Time.zone.local(2023, 4, 1) }
 
       it "validates that person's economic status must be Child" do
         record.age2 = 14
@@ -137,7 +119,7 @@ RSpec.describe Validations::Sales::HouseholdValidations do
     end
 
     context "with 2024 logs" do
-      let(:log_date) { Time.zone.local(2024, 4, 1) }
+      let(:saledate) { Time.zone.local(2024, 4, 1) }
 
       it "does not run the validation" do
         record.age2 = 14
@@ -152,18 +134,8 @@ RSpec.describe Validations::Sales::HouseholdValidations do
   end
 
   describe "#validate_child_12_years_younger" do
-    before do
-      Timecop.freeze(log_date)
-      Singleton.__init__(FormHandler)
-    end
-
-    after do
-      Timecop.return
-      Singleton.__init__(FormHandler)
-    end
-
     context "with 2023 logs" do
-      let(:log_date) { Time.zone.local(2023, 4, 1) }
+      let(:saledate) { Time.zone.local(2023, 4, 1) }
 
       it "validates the child is at least 12 years younger than buyer 1" do
         record.age1 = 30
@@ -190,7 +162,7 @@ RSpec.describe Validations::Sales::HouseholdValidations do
     end
 
     context "with 2024 logs" do
-      let(:log_date) { Time.zone.local(2024, 4, 1) }
+      let(:saledate) { Time.zone.local(2024, 4, 1) }
 
       it "does not validate that child is at least 12 year younger than buyer" do
         record.age1 = 20
@@ -205,18 +177,8 @@ RSpec.describe Validations::Sales::HouseholdValidations do
   end
 
   describe "#validate_person_age_and_relationship_matches_economic_status" do
-    before do
-      Timecop.freeze(log_date)
-      Singleton.__init__(FormHandler)
-    end
-
-    after do
-      Timecop.return
-      Singleton.__init__(FormHandler)
-    end
-
     context "with 2023 logs" do
-      let(:log_date) { Time.zone.local(2023, 4, 1) }
+      let(:saledate) { Time.zone.local(2023, 4, 1) }
 
       it "does not add an error for a person aged 16-19 who is a student but not a child of the buyer" do
         record.age2 = 18
@@ -266,7 +228,7 @@ RSpec.describe Validations::Sales::HouseholdValidations do
     end
 
     context "with 2024 logs" do
-      let(:log_date) { Time.zone.local(2024, 4, 1) }
+      let(:saledate) { Time.zone.local(2024, 4, 1) }
 
       context "when the household contains a tenant’s child between the ages of 16 and 19" do
         it "does not add an error" do
@@ -316,7 +278,7 @@ RSpec.describe Validations::Sales::HouseholdValidations do
   end
 
   describe "validating fields about buyers living in the property" do
-    let(:sales_log) { FactoryBot.create(:sales_log, :outright_sale_setup_complete, saledate: log_date, noint: 1, companybuy: 2, buylivein:, jointpur:, jointmore:, buy1livein:) }
+    let(:sales_log) { FactoryBot.create(:sales_log, :outright_sale_setup_complete, saledate:, noint: 1, companybuy: 2, buylivein:, jointpur:, jointmore:, buy1livein:) }
 
     context "when buyers will live in the property and the sale is a joint purchase" do
       let(:buylivein) { 1 }
@@ -349,7 +311,7 @@ RSpec.describe Validations::Sales::HouseholdValidations do
         end
 
         context "with 2023 logs" do
-          let(:log_date) { Time.zone.local(2023, 4, 1) }
+          let(:saledate) { Time.zone.local(2023, 4, 1) }
 
           it "triggers a validation if buyer two will also not live in the property" do
             sales_log.buy2livein = 2
@@ -377,21 +339,7 @@ RSpec.describe Validations::Sales::HouseholdValidations do
   end
 
   describe "#validate_buyer1_previous_tenure" do
-    let(:record) { build(:sales_log) }
-
-    let(:now) { Time.zone.local(2024, 4, 4) }
-
-    before do
-      Timecop.freeze(now)
-      Singleton.__init__(FormHandler)
-      record.ownershipsch = 2
-      record.saledate = now
-    end
-
-    after do
-      Timecop.return
-      Singleton.__init__(FormHandler)
-    end
+    let(:record) { build(:sales_log, saledate:, ownershipsch: 2) }
 
     it "adds an error when previous tenure is not valid" do
       [3, 4, 5, 6, 7, 9, 0].each do |prevten|
@@ -437,7 +385,7 @@ RSpec.describe Validations::Sales::HouseholdValidations do
     end
 
     context "with 23/24 logs" do
-      let(:now) { Time.zone.local(2023, 4, 4) }
+      let(:saledate) { Time.zone.local(2023, 4, 4) }
 
       it "does not add an error for outright sale" do
         record.ownershipsch = 2
@@ -452,18 +400,8 @@ RSpec.describe Validations::Sales::HouseholdValidations do
   end
 
   describe "#validate_buyer_not_child" do
-    before do
-      Timecop.freeze(log_date)
-      Singleton.__init__(FormHandler)
-    end
-
-    after do
-      Timecop.return
-      Singleton.__init__(FormHandler)
-    end
-
     context "with 2023 logs" do
-      let(:log_date) { Time.zone.local(2023, 4, 1) }
+      let(:saledate) { Time.zone.local(2023, 4, 1) }
 
       it "does not add an error if either buyer is a child" do
         record.jointpur = 1
@@ -476,7 +414,7 @@ RSpec.describe Validations::Sales::HouseholdValidations do
     end
 
     context "with 2024 logs" do
-      let(:log_date) { Time.zone.local(2024, 4, 1) }
+      let(:saledate) { Time.zone.local(2024, 4, 1) }
 
       it "validates buyer 1 isn't a child" do
         record.ecstat1 = 9

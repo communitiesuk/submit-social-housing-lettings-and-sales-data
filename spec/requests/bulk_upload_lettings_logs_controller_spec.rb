@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe BulkUploadLettingsLogsController, type: :request do
+  include CollectionTimeHelper
+
   let(:user) { create(:user) }
   let(:organisation) { user.organisation }
 
@@ -21,48 +23,54 @@ RSpec.describe BulkUploadLettingsLogsController, type: :request do
     end
 
     context "when not in crossover period" do
-      let(:expected_year) { 2022 }
+      let(:expected_year) { current_collection_start_year }
+
+      before do
+        allow(FormHandler.instance).to receive(:lettings_in_crossover_period?).and_return(false)
+      end
 
       it "redirects to /prepare-your-file" do
-        Timecop.freeze(2023, 1, 1) do
-          get "/lettings-logs/bulk-upload-logs/start", params: {}
+        get "/lettings-logs/bulk-upload-logs/start", params: {}
 
-          expect(response).to redirect_to("/lettings-logs/bulk-upload-logs/prepare-your-file?form%5Byear%5D=#{expected_year}")
-        end
+        expect(response).to redirect_to("/lettings-logs/bulk-upload-logs/prepare-your-file?form%5Byear%5D=#{expected_year}")
       end
     end
 
     context "when in crossover period" do
-      it "redirects to /year" do
-        Timecop.freeze(2022, 6, 1) do
-          get "/lettings-logs/bulk-upload-logs/start", params: {}
+      before do
+        allow(FormHandler.instance).to receive(:lettings_in_crossover_period?).and_return(true)
+      end
 
-          expect(response).to redirect_to("/lettings-logs/bulk-upload-logs/year")
-        end
+      it "redirects to /year" do
+        get "/lettings-logs/bulk-upload-logs/start", params: {}
+
+        expect(response).to redirect_to("/lettings-logs/bulk-upload-logs/year")
       end
     end
   end
 
   describe "GET /lettings-logs/bulk-upload-logs/guidance" do
     context "when not in crossover period" do
-      let(:expected_year) { FormHandler.instance.forms["current_lettings"].start_date.year }
+      before do
+        allow(FormHandler.instance).to receive(:lettings_in_crossover_period?).and_return(false)
+      end
 
       it "shows guidance page with correct title" do
-        Timecop.freeze(2022, 1, 1) do
-          get "/lettings-logs/bulk-upload-logs/guidance?form%5Byear%5D=2022", params: {}
+        get "/lettings-logs/bulk-upload-logs/guidance?form%5Byear%5D=#{current_collection_start_year}", params: {}
 
-          expect(response.body).to include("How to upload logs in bulk")
-        end
+        expect(response.body).to include("How to upload logs in bulk")
       end
     end
 
     context "when in crossover period" do
-      it "shows guidance page with correct title" do
-        Timecop.freeze(2023, 6, 1) do
-          get "/lettings-logs/bulk-upload-logs/guidance?form%5Byear%5D=2023", params: {}
+      before do
+        allow(FormHandler.instance).to receive(:lettings_in_crossover_period?).and_return(true)
+      end
 
-          expect(response.body).to include("How to upload logs in bulk")
-        end
+      it "shows guidance page with correct title" do
+        get "/lettings-logs/bulk-upload-logs/guidance?form%5Byear%5D=#{current_collection_start_year}", params: {}
+
+        expect(response.body).to include("How to upload logs in bulk")
       end
     end
   end

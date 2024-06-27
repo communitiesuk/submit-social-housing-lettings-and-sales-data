@@ -9,15 +9,6 @@ RSpec.describe Validations::DateValidations do
   let(:scheme_no_end_date) { create(:scheme, end_date: nil) }
 
   describe "tenancy start date" do
-    before do
-      Timecop.freeze(Time.zone.local(2023, 11, 10))
-      Singleton.__init__(FormHandler)
-    end
-
-    after do
-      Timecop.return
-    end
-
     it "must be a valid date" do
       record.startdate = Time.zone.local(0, 7, 1)
       date_validator.validate_startdate(record)
