@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe Csv::SalesLogCsvService do
   let(:form_handler_mock) { instance_double(FormHandler) }
   let(:organisation) { create(:organisation) }
-  let(:fixed_time) { Time.zone.local(2023, 12, 8) }
+  let(:fixed_time) { now }
   let(:now) { Time.zone.now }
   let(:user) { create(:user, :support, email: "billyboy@eyeKLAUD.com") }
   let(:log) do
@@ -134,6 +134,8 @@ RSpec.describe Csv::SalesLogCsvService do
 
   context "when exporting with human readable labels" do
     let(:year) { 2023 }
+    let(:fixed_time) { Time.zone.local(2023, 12, 8) }
+    let(:now) { fixed_time }
 
     it "gives answers to radio questions as their labels" do
       national_column_index = csv.first.index("NATIONAL")
@@ -220,6 +222,8 @@ RSpec.describe Csv::SalesLogCsvService do
   context "when exporting values as codes" do
     let(:service) { described_class.new(user:, export_type: "codes", year:) }
     let(:year) { 2023 }
+    let(:fixed_time) { Time.zone.local(2023, 12, 8) }
+    let(:now) { fixed_time }
 
     it "gives answers to radio questions as their codes" do
       national_column_index = csv.first.index("NATIONAL")
