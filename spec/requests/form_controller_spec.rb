@@ -499,6 +499,7 @@ RSpec.describe FormController, type: :request do
         end
 
         it "renders the review page for the sales log" do
+          Timecop.return # TODO: CLDC-3289 this can be removed when the Timecop freezing at the top of the describe GET is removed
           log = create(:sales_log, :completed, assigned_to: user)
           get "/sales-logs/#{log.id}/review", headers: headers, params: { sales_log: true }
           expect(response.body).to match("Review sales log")
@@ -872,7 +873,7 @@ RSpec.describe FormController, type: :request do
           end
 
           before do
-            lettings_log.update!(startdate: Time.zone.local(2023, 4, 1))
+            lettings_log.update!(startdate: Time.zone.today)
             post "/lettings-logs/#{lettings_log.id}/lead-tenant-age?referrer=interruption_screen", params:
           end
 
@@ -884,7 +885,7 @@ RSpec.describe FormController, type: :request do
             follow_redirect!
             follow_redirect!
 
-            expect(response.body).to include("You have successfully updated Q32: lead tenant’s age")
+            expect(response.body).to include("You have successfully updated Q31: lead tenant’s age")
           end
         end
 
@@ -1015,7 +1016,7 @@ RSpec.describe FormController, type: :request do
           end
         end
 
-        context "when the sale date changes from 2024 to 2023" do
+        context "when the sale date changes from 2024 to 2023" do # TODO: CLDC-3505 remove this test on year hard end
           let(:sales_log) { create(:sales_log, owning_organisation: organisation, managing_organisation:, assigned_to: user) }
           let(:params) do
             {
@@ -1156,8 +1157,8 @@ RSpec.describe FormController, type: :request do
         end
 
         context "when the sales question was accessed from a duplicate logs screen" do
-          let!(:sales_log) { create(:sales_log, :duplicate, assigned_to: user, duplicate_set_id: 1, saledate: Time.zone.local(2024, 3, 3)) }
-          let!(:duplicate_log) { create(:sales_log, :duplicate, assigned_to: user, duplicate_set_id: 1, saledate: Time.zone.local(2024, 3, 3)) }
+          let!(:sales_log) { create(:sales_log, :duplicate, :saledate_today, assigned_to: user, duplicate_set_id: 1) }
+          let!(:duplicate_log) { create(:sales_log, :duplicate, :saledate_today, assigned_to: user, duplicate_set_id: 1) }
           let(:referrer) { "/sales-logs/#{sales_log.id}/buyer-1-age?referrer=duplicate_logs&first_remaining_duplicate_id=#{duplicate_log.id}&original_log_id=#{sales_log.id}&referrer=duplicate_logs" }
           let(:params) do
             {
