@@ -9,6 +9,8 @@ class FormController < ApplicationController
   def submit_form
     if @log
       @page = form.get_page(params[@log.model_name.param_key][:page])
+      return render_check_errors_page if params["check_errors"]
+
       shown_page_ids_with_unanswered_questions_before_update = @page.subsection.pages
                                                       .select { |page| page.routed_to?(@log, current_user) }
                                                       .select { |page| page.has_unanswered_questions?(@log) }
@@ -30,7 +32,8 @@ class FormController < ApplicationController
         mandatory_questions_with_no_response.map do |question|
           @log.errors.add question.id.to_sym, question.unanswered_error_message, category: :not_answered
         end
-        Rails.logger.info "User triggered validation(s) on: #{@log.errors.map(&:attribute).join(', ')}"
+        error_attributes = @log.errors.map(&:attribute)
+        Rails.logger.info "User triggered validation(s) on: #{error_attributes.join(', ')}"
         @subsection = form.subsection_for_page(@page)
         restore_error_field_values(@page&.questions)
         render "form/page"
@@ -64,12 +67,23 @@ class FormController < ApplicationController
       @interruption_page_referrer_type = from_referrer_query("referrer")
     end
 
+    if adding_answer_from_check_errors_page?
+      @related_question_ids = request.params["related_question_ids"]
+      @original_page_id = request.params["original_page_id"]
+      @check_errors = true
+    end
+
     if @log
       page_id = request.path.split("/")[-1].underscore
       @page = form.get_page(page_id)
       @subsection = form.subsection_for_page(@page)
-      if @page.routed_to?(@log, current_user) || is_referrer_type?("interruption_screen")
-        render "form/page"
+      if @page.routed_to?(@log, current_user) || is_referrer_type?("interruption_screen") || adding_answer_from_check_errors_page?
+        if updated_answer_from_check_errors_page?
+          @questions = request.params["related_question_ids"].map { |id| @log.form.get_question(id, @log) }
+          render "form/check_errors"
+        else
+          render "form/page"
+        end
       else
         redirect_to @log.lettings? ? lettings_log_path(@log) : sales_log_path(@log)
       end
@@ -211,6 +225,11 @@ private
     end
     if previous_interruption_screen_page_id.present?
       return send("#{@log.class.name.underscore}_#{previous_interruption_screen_page_id}_path", @log, { referrer: previous_interruption_screen_referrer, original_log_id: original_duplicate_log_id_from_query }.compact)
+    end
+
+    if params[@log.model_name.param_key]["check_errors"]
+      @page = form.get_page(params[@log.model_name.param_key]["page"])
+      return send("#{@log.class.name.underscore}_#{params[@log.model_name.param_key]['original_page_id']}_path", @log, { check_errors: true, related_question_ids: params[@log.model_name.param_key]["related_question_ids"].split(" ") }.compact)
     end
 
     is_new_answer_from_check_answers = is_referrer_type?("check_answers_new_answer")
@@ -373,5 +392,29 @@ private
     return false if collection_start_year_for_date(saledate) >= 2024
 
     true
+  end
+
+  def render_check_errors_page
+    if params[@log.model_name.param_key]["clear_question_id"]
+      question_id = params[@log.model_name.param_key]["clear_question_id"]
+      @log.form.get_question(question_id, @log).page.questions.map(&:id).each { |id| @log[id] = nil }
+      @log.save!
+      @questions = params[@log.model_name.param_key].keys.reject { |id| %w[clear_question_id page].include?(id) }.map { |id| @log.form.get_question(id, @log) }
+    else
+      responses_for_page = responses_for_page(@page)
+      @log.assign_attributes(responses_for_page)
+      @log.valid?
+      error_attributes = @log.errors.map(&:attribute)
+      @questions = @log.form.questions.select { |q| error_attributes.include?(q.id.to_sym) }
+    end
+    render "form/check_errors"
+  end
+
+  def adding_answer_from_check_errors_page?
+    request.params["referrer"] == "check_errors"
+  end
+
+  def updated_answer_from_check_errors_page?
+    params["check_errors"]
   end
 end

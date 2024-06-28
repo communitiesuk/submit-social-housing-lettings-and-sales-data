@@ -119,6 +119,16 @@ RSpec.describe "Form Page Routing" do
         expect(find_field("lettings_log[startdate(2i)]").value).to eq(nil)
         expect(find_field("lettings_log[startdate(1i)]").value).to eq(nil)
       end
+
+      it "does not show see all related answers link if only 1 field has an error" do
+        visit("/lettings-logs/#{id}/tenancy-start-date")
+        fill_in("lettings_log[startdate(1i)]", with: "202")
+        fill_in("lettings_log[startdate(2i)]", with: "32")
+        fill_in("lettings_log[startdate(3i)]", with: "0")
+        click_button("Save and continue")
+
+        expect(page).not_to have_link("See all related answers")
+      end
     end
   end
 
@@ -259,6 +269,23 @@ RSpec.describe "Form Page Routing" do
         lettings_log.age2 = 15
 
         expect(lettings_log.form.depends_on_met(depends_on, lettings_log)).to eq(true)
+      end
+    end
+  end
+
+  describe "composite validations" do
+    context "when error is added to multiple fields" do
+      before do
+        lettings_log.update(needstype: 1, declaration: 1, ecstat1: 10, hhmemb: 2, net_income_known: 0, incfreq: 1, earnings: 1000)
+      end
+
+      it "does shows see all related answers link" do
+        visit("/lettings-logs/#{id}/income-amount")
+        fill_in("lettings-log-earnings-field", with: "100000")
+        click_button("Save and continue")
+
+        expect(page).to have_current_path("/lettings-logs/#{id}/income-amount")
+        expect(page).to have_button("See all related answers")
       end
     end
   end
