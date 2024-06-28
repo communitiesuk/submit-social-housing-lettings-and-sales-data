@@ -47,7 +47,7 @@ private
               when "prepare-your-file"
                 Forms::BulkUploadSales::PrepareYourFile.new(form_params)
               when "guidance"
-                Forms::BulkUploadSales::Guidance.new(form_params)
+                Forms::BulkUploadSales::Guidance.new(form_params.merge(referrer: params[:referrer]))
               when "upload-your-file"
                 Forms::BulkUploadSales::UploadYourFile.new(form_params.merge(current_user:))
               when "checking-file"

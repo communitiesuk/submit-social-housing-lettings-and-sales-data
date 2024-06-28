@@ -9,7 +9,7 @@
 
       <span class="govuk-caption-l">Upload sales logs in bulk (<%= @form.year_combo %>)</span>
       <h1 class="govuk-heading-l">Prepare your file</h1>
-      <p class="govuk-body govuk-!-margin-bottom-2"><%= govuk_link_to "Read the full guidance", bulk_upload_sales_log_path(id: "guidance", form: { year: @form.year }) %> before you start if you have not used bulk upload before.</p>
+      <p class="govuk-body govuk-!-margin-bottom-2"><%= govuk_link_to "Read the full guidance", bulk_upload_sales_log_path(id: "guidance", form: { year: @form.year }, referrer: "prepare-your-file") %> before you start if you have not used bulk upload before.</p>
 
       <h2 class="govuk-heading-s">Download template</h2>
 
