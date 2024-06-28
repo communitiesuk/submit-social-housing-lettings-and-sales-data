@@ -1016,44 +1016,6 @@ RSpec.describe FormController, type: :request do
           end
         end
 
-        context "when the sale date changes from 2024 to 2023" do # TODO: CLDC-3505 remove this test on year hard end
-          let(:sales_log) { create(:sales_log, owning_organisation: organisation, managing_organisation:, assigned_to: user) }
-          let(:params) do
-            {
-              id: sales_log.id,
-              sales_log: {
-                page: "completion_date",
-                "saledate(3i)" => 30,
-                "saledate(2i)" => 6,
-                "saledate(1i)" => 2023,
-              },
-            }
-          end
-          let(:managing_organisation) { create(:organisation) }
-
-          before do
-            organisation.managing_agents << managing_organisation
-            organisation.reload
-            sales_log.saledate = Time.zone.local(2024, 12, 1)
-            sales_log.save!(validate: false)
-            sales_log.reload
-            Timecop.freeze(Time.zone.local(2024, 12, 1))
-            Singleton.__init__(FormHandler)
-          end
-
-          after do
-            Timecop.unfreeze
-            Singleton.__init__(FormHandler)
-          end
-
-          it "sets managing organisation to assigned to organisation" do
-            post "/sales-logs/#{sales_log.id}/completion-date", params: params
-            sales_log.reload
-            expect(sales_log.owning_organisation).to eq(organisation)
-            expect(sales_log.managing_organisation).to eq(organisation)
-          end
-        end
-
         context "when the sale date changes from 2024 to a different date in 2024" do
           let(:sales_log) { create(:sales_log, owning_organisation: organisation, managing_organisation:, assigned_to: user) }
           let(:params) do
