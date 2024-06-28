@@ -245,21 +245,6 @@ RSpec.describe FormHandler do
         expect(form_handler.lettings_forms["next_lettings"].start_date.year).to eq(2024)
       end
     end
-
-    context "when only archived form form is defined in JSON (current collection start year 2024 onwards)" do # TODO: CLDC-3505 remove this test on year hard end
-      let(:now) { Time.utc(2024, 9, 20) }
-
-      it "creates previous_lettings, current_lettings and next_lettings forms from ruby form objects and archived form from json" do
-        expect(form_handler.lettings_forms["archived_lettings"]).to be_present
-        expect(form_handler.lettings_forms["archived_lettings"].start_date.year).to eq(2022)
-        expect(form_handler.lettings_forms["previous_lettings"]).to be_present
-        expect(form_handler.lettings_forms["previous_lettings"].start_date.year).to eq(2023)
-        expect(form_handler.lettings_forms["current_lettings"]).to be_present
-        expect(form_handler.lettings_forms["current_lettings"].start_date.year).to eq(2024)
-        expect(form_handler.lettings_forms["next_lettings"]).to be_present
-        expect(form_handler.lettings_forms["next_lettings"].start_date.year).to eq(2025)
-      end
-    end
   end
 
   describe "#ordered_questions_for_year" do
