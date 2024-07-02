@@ -1,6 +1,7 @@
 <% if current_user %>
   <h1 class="govuk-heading-l">Collection resources</h1>
   <p class="govuk-body"><strong><%= govuk_link_to "Guidance for submitting social housing lettings and sales data (CORE)", guidance_path %></strong></p>
+  <p class="govuk-body"><strong><%= govuk_link_to "How to upload logs in bulk", bulk_upload_lettings_log_path(id: "guidance", form: { year: current_collection_start_year }) %></strong></p>
 <% else %>
   <h2 class="govuk-heading-m">Collection resources</h2>
 <% end %>
