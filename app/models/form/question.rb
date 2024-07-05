@@ -160,6 +160,8 @@ class Form::Question
             when "select"
               if answer_options[value.to_s].respond_to?(:service_name)
                 answer_options[value.to_s].service_name
+              elsif answer_options[value.to_s].is_a?(Location)
+                answer_options[value.to_s].postcode
               else
                 answer_options[value.to_s]
               end

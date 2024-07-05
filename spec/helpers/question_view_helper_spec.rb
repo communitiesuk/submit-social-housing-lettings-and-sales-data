@@ -32,7 +32,7 @@ RSpec.describe QuestionViewHelper do
       end
     end
 
-    context "when viewig a question without a caption" do
+    context "when viewing a question without a caption" do
       let(:caption_text) { nil }
 
       it "returns nil" do
@@ -111,6 +111,58 @@ RSpec.describe QuestionViewHelper do
 
       it "returns an options hash with nil size" do
         expect(question_view_helper).to eq({ size: nil, tag: "div", text: "Some question header" })
+      end
+    end
+  end
+
+  describe "select_option_name" do
+    context "when value is a location" do
+      let(:value) { build(:location)}
+
+      it "returns the location's postcode" do
+        expect(select_option_name(value)).to eq(value.postcode)
+      end
+    end
+
+    context "when value is a hash with a name key" do
+      let(:value) { { "name" => "example name" } }
+
+      it "returns the value of the name key" do
+        expect(select_option_name(value)).to eq(value["name"])
+      end
+    end
+
+    context "when value responds to service_name" do
+      let(:value) { build(:scheme)}
+
+      it "returns the value of the service_name method" do
+        expect(select_option_name(value)).to eq(value.service_name)
+      end
+    end
+  end
+
+  describe "answer_option_hint" do
+    context "when not a scheme or location" do
+      let(:resource) { { "value" => "not a scheme or location" }}
+
+      it "returns nil" do
+        expect(answer_option_hint(resource)).to be_nil
+      end
+    end
+
+    context "when resource is a scheme" do
+      let(:resource) { build(:scheme, primary_client_group: "O", secondary_client_group: "E") }
+
+      it "returns the primary and secondary client groups" do
+        expect(answer_option_hint(resource)).to eq("Homeless families with support needs, People with mental health problems")
+      end
+    end
+
+    context "when resource is a location" do
+      let(:resource) { build(:location) }
+
+      it "returns the location's name" do
+        expect(answer_option_hint(resource)).to eq(resource.name)
       end
     end
   end

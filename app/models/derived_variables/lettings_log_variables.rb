@@ -28,13 +28,6 @@ module DerivedVariables::LettingsLogVariables
     5 => 6,
   }.freeze
 
-  def scheme_has_multiple_locations?
-    return false unless scheme
-
-    @scheme_locations_count ||= scheme.locations.active_in_2_weeks.size
-    @scheme_locations_count > 1
-  end
-
   def set_derived_fields!
     clear_inapplicable_derived_values!
     set_encoded_derived_values!(DEPENDENCIES)

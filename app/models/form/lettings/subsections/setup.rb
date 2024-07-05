@@ -14,6 +14,7 @@ class Form::Lettings::Subsections::Setup < ::Form::Subsection
       Form::Lettings::Pages::NeedsType.new(nil, nil, self),
       Form::Lettings::Pages::Scheme.new(nil, nil, self),
       Form::Lettings::Pages::Location.new(nil, nil, self),
+      Form::Lettings::Pages::LocationSearch.new(nil, nil, self),
       Form::Lettings::Pages::Renewal.new(nil, nil, self),
       Form::Lettings::Pages::TenancyStartDate.new(nil, nil, self),
       Form::Lettings::Pages::RentType.new(nil, nil, self),
