@@ -56,7 +56,7 @@ RSpec.describe Form::Lettings::Questions::Uprn, type: :model do
       let(:log) do
         create(
           :lettings_log,
-          :completed,
+          :in_progress,
           address_line1: "1, Test Street",
           town_or_city: "Test Town",
           county: "Test County",

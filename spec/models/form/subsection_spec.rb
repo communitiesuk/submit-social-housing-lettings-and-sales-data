@@ -34,7 +34,7 @@ RSpec.describe Form::Subsection, type: :model do
   end
 
   context "with an in progress lettings log" do
-    let(:lettings_log) { FactoryBot.build(:lettings_log, :in_progress) }
+    let(:lettings_log) { FactoryBot.build(:lettings_log, :in_progress, tenancycode: 3, age1: 18) }
 
     it "has a status" do
       expect(subsection.status(lettings_log)).to eq(:in_progress)

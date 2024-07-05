@@ -17,6 +17,17 @@ module RequestHelper
     WebMock.stub_request(:get, "https://api.postcodes.io/postcodes/SW1A1AA")
            .to_return(status: 200, body: "{\"status\":200,\"result\":{\"postcode\":\"ZZ1 1ZZ\",\"admin_district\":\"Westminster\",\"codes\":{\"admin_district\":\"E09000033\"}}}", headers: {})
 
+    body = { results: [{ DPA: { UPRN: "10033558653" } }] }.to_json
+    WebMock.stub_request(:get, "https://api.os.uk/search/places/v1/find?key&maxresults=10&minmatch=0.4&query=Address%20line%201,%20SW1A%201AA")
+           .to_return(status: 200, body:, headers: {})
+    body = { results: [{ DPA: { "POSTCODE": "SW1A 1AA", "POST_TOWN": "London" } }] }.to_json
+    WebMock.stub_request(:get, "https://api.os.uk/search/places/v1/uprn?dataset=DPA,LPI&key&uprn=1")
+           .to_return(status: 200, body:, headers: {})
+    WebMock.stub_request(:get, "https://api.os.uk/search/places/v1/uprn?dataset=DPA,LPI&key&uprn=10033558653")
+           .to_return(status: 200, body:, headers: {})
+    WebMock.stub_request(:get, "https://api.os.uk/search/places/v1/uprn?dataset=DPA,LPI&key=OS_DATA_KEY&uprn=10033558653")
+           .to_return(status: 200, body:, headers: {})
+
     WebMock.stub_request(:post, /api.notifications.service.gov.uk\/v2\/notifications\/email/)
       .to_return(status: 200, body: "", headers: {})
     WebMock.stub_request(:post, /api.notifications.service.gov.uk\/v2\/notifications\/sms/)

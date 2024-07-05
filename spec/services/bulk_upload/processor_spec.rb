@@ -5,7 +5,7 @@ RSpec.describe BulkUpload::Processor do
 
   let(:bulk_upload) { create(:bulk_upload, :lettings, user:) }
   let(:user) { create(:user, organisation: owning_org) }
-  let(:owning_org) { create(:organisation, old_visible_id: 123) }
+  let(:owning_org) { create(:organisation, old_visible_id: 123, rent_periods: [2]) }
   let(:mock_validator) do
     instance_double(
       BulkUpload::Lettings::Validator,

@@ -139,7 +139,7 @@ RSpec.describe Validations::FinancialValidations do
   end
 
   describe "rent period validations" do
-    let(:organisation) { create(:organisation, skip_rent_period_creation: true) }
+    let(:organisation) { create(:organisation) }
     let(:user) { create(:user, organisation:) }
     let(:record) { create(:lettings_log, owning_organisation: organisation, managing_organisation: organisation, assigned_to: user) }
     let(:used_period) { 2 }

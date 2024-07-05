@@ -216,11 +216,6 @@ RSpec.describe Scheme, type: :model do
 
     before do
       FactoryBot.create(:location, scheme:)
-      Timecop.freeze(2022, 6, 7)
-    end
-
-    after do
-      Timecop.unfreeze
     end
 
     context "when there have not been any previous deactivations" do
@@ -229,7 +224,7 @@ RSpec.describe Scheme, type: :model do
       end
 
       it "returns deactivating soon if deactivation_date is in the future" do
-        FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 8, 8), scheme:)
+        FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.today + 2.weeks, scheme:)
         scheme.reload
         expect(scheme.status).to eq(:deactivating_soon)
       end
@@ -240,34 +235,32 @@ RSpec.describe Scheme, type: :model do
       end
 
       it "returns deactivated if deactivation_date is in the past" do
-        FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 6), scheme:)
+        FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.yesterday, scheme:)
         scheme.reload
         expect(scheme.status).to eq(:deactivated)
       end
 
       it "returns deactivated if deactivation_date is today" do
-        FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 7), scheme:)
+        FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.today, scheme:)
         scheme.reload
         expect(scheme.status).to eq(:deactivated)
       end
 
       it "returns reactivating soon if the scheme has a future reactivation date" do
-        FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 7), reactivation_date: Time.zone.local(2022, 6, 8), scheme:)
+        FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.today, reactivation_date: Time.zone.tomorrow, scheme:)
         scheme.save!
         expect(scheme.status).to eq(:reactivating_soon)
       end
 
       it "returns activating soon if the scheme has a future startdate" do
-        Timecop.freeze(2022, 6, 4)
-        scheme.startdate = Time.zone.local(2022, 7, 7)
-        scheme.save!
+        scheme.startdate = Time.zone.today + 2.weeks
         expect(scheme.status).to eq(:activating_soon)
       end
     end
 
     context "when there have been previous deactivations" do
       before do
-        FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 4), reactivation_date: Time.zone.local(2022, 6, 5), scheme:)
+        FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.today - 3.days, reactivation_date: Time.zone.today - 2.days, scheme:)
       end
 
       it "returns active if the scheme has no relevant deactivation records" do
@@ -275,39 +268,37 @@ RSpec.describe Scheme, type: :model do
       end
 
       it "returns deactivating soon if deactivation_date is in the future" do
-        FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 8, 8), scheme:)
+        FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.today + 3.months, scheme:)
         scheme.reload
         expect(scheme.status).to eq(:deactivating_soon)
       end
 
       it "returns deactivated if deactivation_date is in the past" do
-        FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 6), scheme:)
+        FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.yesterday, scheme:)
         scheme.reload
         expect(scheme.status).to eq(:deactivated)
       end
 
       it "returns deactivated if deactivation_date is today" do
-        FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 7), scheme:)
+        FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.today, scheme:)
         scheme.reload
         expect(scheme.status).to eq(:deactivated)
       end
 
       it "returns reactivating soon if the scheme has a future reactivation date" do
-        Timecop.freeze(2022, 6, 8)
-        FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 7), reactivation_date: Time.zone.local(2022, 6, 9), scheme:)
+        FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.today, reactivation_date: Time.zone.tomorrow, scheme:)
         scheme.save!
         expect(scheme.status).to eq(:reactivating_soon)
       end
 
       it "returns reactivating soon if the scheme had a deactivation during another deactivation" do
-        Timecop.freeze(2022, 6, 4)
-        FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 5, 5), reactivation_date: Time.zone.local(2022, 6, 2), scheme:)
+        FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.today - 2.months, reactivation_date: Time.zone.today + 2.days, scheme:)
         scheme.save!
         expect(scheme.status).to eq(:reactivating_soon)
       end
 
       it "returns activating soon if the scheme has a future startdate" do
-        scheme.startdate = Time.zone.local(2022, 7, 7)
+        scheme.startdate = Time.zone.tomorrow
         scheme.save!
         expect(scheme.status).to eq(:activating_soon)
       end
@@ -327,20 +318,15 @@ RSpec.describe Scheme, type: :model do
 
     before do
       FactoryBot.create(:location, scheme:)
-      Timecop.freeze(2022, 6, 7)
-    end
-
-    after do
-      Timecop.unfreeze
     end
 
     context "when there have been previous deactivations" do
       before do
-        FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 4), reactivation_date: Time.zone.local(2022, 6, 5), scheme:)
+        FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.today - 3.days, reactivation_date: Time.zone.today - 2.days, scheme:)
       end
 
       it "returns active if the scheme has no relevant deactivation records" do
-        expect(scheme.status_at(Time.zone.local(2022, 5, 5))).to eq(:active)
+        expect(scheme.status_at(Time.zone.today - 1.month)).to eq(:active)
       end
     end
   end

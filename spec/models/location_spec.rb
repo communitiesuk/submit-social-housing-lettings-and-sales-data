@@ -99,11 +99,7 @@ RSpec.describe Location, type: :model do
       let(:today) { Time.zone.local(2022, 4, 1) }
 
       before do
-        Timecop.freeze(today)
-      end
-
-      after do
-        Timecop.unfreeze
+        allow(Time).to receive(:now).and_return(today)
       end
 
       it "returns a list of local authorities" do
@@ -425,11 +421,7 @@ RSpec.describe Location, type: :model do
       let(:today) { Time.zone.local(2023, 5, 1) }
 
       before do
-        Timecop.freeze(today)
-      end
-
-      after do
-        Timecop.unfreeze
+        allow(Time).to receive(:now).and_return(today)
       end
 
       it "returns a list of local authorities" do
@@ -842,15 +834,7 @@ RSpec.describe Location, type: :model do
   end
 
   describe "status" do
-    let(:location) { FactoryBot.build(:location, startdate: Time.zone.local(2022, 4, 1)) }
-
-    before do
-      Timecop.freeze(2022, 6, 7)
-    end
-
-    after do
-      Timecop.unfreeze
-    end
+    let(:location) { FactoryBot.build(:location, startdate: Time.zone.today - 2.months) }
 
     context "when location is not confirmed" do
       it "returns incomplete " do
@@ -865,7 +849,7 @@ RSpec.describe Location, type: :model do
       end
 
       it "returns deactivating soon if deactivation_date is in the future" do
-        FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 8, 8), location:)
+        FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.today + 2.months, location:)
         location.save!
         expect(location.status).to eq(:deactivating_soon)
       end
@@ -876,25 +860,25 @@ RSpec.describe Location, type: :model do
       end
 
       it "returns deactivated if deactivation_date is in the past" do
-        FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 6), location:)
+        FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.yesterday, location:)
         location.save!
         expect(location.status).to eq(:deactivated)
       end
 
       it "returns deactivated if deactivation_date is today" do
-        FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 7), location:)
+        FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.today, location:)
         location.save!
         expect(location.status).to eq(:deactivated)
       end
 
       it "returns reactivating soon if the location has a future reactivation date" do
-        FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 7), reactivation_date: Time.zone.local(2022, 6, 8), location:)
+        FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.today, reactivation_date: Time.zone.tomorrow, location:)
         location.save!
         expect(location.status).to eq(:reactivating_soon)
       end
 
       it "returns activating soon if the location has a future startdate" do
-        location.startdate = Time.zone.local(2022, 7, 7)
+        location.startdate = Time.zone.today + 1.month
         location.save!
         expect(location.status).to eq(:activating_soon)
       end
@@ -902,7 +886,7 @@ RSpec.describe Location, type: :model do
 
     context "when there have been previous deactivations" do
       before do
-        FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 5, 4), reactivation_date: Time.zone.local(2022, 6, 5), location:)
+        FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.today - 1.month, reactivation_date: Time.zone.today - 2.days, location:)
         location.save!
       end
 
@@ -911,39 +895,37 @@ RSpec.describe Location, type: :model do
       end
 
       it "returns deactivating soon if deactivation_date is in the future" do
-        FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 8, 8), location:)
+        FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.today + 1.month, location:)
         location.save!
         expect(location.status).to eq(:deactivating_soon)
       end
 
       it "returns deactivated if deactivation_date is in the past" do
-        FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 6), location:)
+        FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.yesterday, location:)
         location.save!
         expect(location.status).to eq(:deactivated)
       end
 
       it "returns deactivated if deactivation_date is today" do
-        FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 7), location:)
+        FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.today, location:)
         location.save!
         expect(location.status).to eq(:deactivated)
       end
 
       it "returns reactivating soon if the location has a future reactivation date" do
-        Timecop.freeze(2022, 6, 8)
-        FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 7), reactivation_date: Time.zone.local(2022, 6, 9), location:)
+        FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.yesterday, reactivation_date: Time.zone.tomorrow, location:)
         location.save!
         expect(location.status).to eq(:reactivating_soon)
       end
 
       it "returns reactivating soon if the location had a deactivation during another deactivation" do
-        Timecop.freeze(2022, 6, 4)
-        FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 5, 5), reactivation_date: Time.zone.local(2022, 6, 2), location:)
+        FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.today - 1.month, reactivation_date: Time.zone.today + 2.days, location:)
         location.save!
         expect(location.status).to eq(:reactivating_soon)
       end
 
       it "returns activating soon if the location has a future startdate" do
-        location.startdate = Time.zone.local(2022, 7, 7)
+        location.startdate = Time.zone.tomorrow
         location.save!
         expect(location.status).to eq(:activating_soon)
       end
@@ -951,24 +933,16 @@ RSpec.describe Location, type: :model do
   end
 
   describe "status_at" do
-    let(:location) { FactoryBot.build(:location, startdate: Time.zone.local(2022, 4, 1)) }
-
-    before do
-      Timecop.freeze(2022, 6, 7)
-    end
-
-    after do
-      Timecop.unfreeze
-    end
+    let(:location) { FactoryBot.build(:location, startdate: Time.zone.today - 3.months) }
 
     context "when there have been previous deactivations" do
       before do
-        FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 5, 4), reactivation_date: Time.zone.local(2022, 6, 5), location:)
+        FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.today - 1.month, reactivation_date: Time.zone.today - 2.days, location:)
         location.save!
       end
 
       it "returns active if the location has no relevant deactivation records" do
-        expect(location.status_at(Time.zone.local(2022, 4, 4))).to eq(:active)
+        expect(location.status_at(Time.zone.today - 2.months)).to eq(:active)
       end
     end
   end
@@ -977,26 +951,21 @@ RSpec.describe Location, type: :model do
     let!(:deactivated_organisation) { FactoryBot.create(:organisation, active: false) }
     let!(:deactivated_by_organisation_scheme) { FactoryBot.create(:scheme, owning_organisation: deactivated_organisation) }
     let!(:deactivated_by_organisation_location) { FactoryBot.create(:location, scheme: deactivated_by_organisation_scheme) }
-    let!(:incomplete_location) { FactoryBot.create(:location, :incomplete, startdate: Time.zone.local(2022, 4, 1)) }
-    let!(:incomplete_location_with_nil_confirmed) { FactoryBot.create(:location, :incomplete, startdate: Time.zone.local(2022, 4, 1), confirmed: nil) }
-    let!(:active_location) { FactoryBot.create(:location, startdate: Time.zone.local(2022, 4, 1)) }
-    let(:deactivating_soon_location) { FactoryBot.create(:location, startdate: Time.zone.local(2022, 4, 1)) }
-    let(:deactivated_location) { FactoryBot.create(:location, startdate: Time.zone.local(2022, 4, 1)) }
-    let(:reactivating_soon_location) { FactoryBot.create(:location, startdate: Time.zone.local(2022, 4, 1)) }
-    let!(:activating_soon_location) { FactoryBot.create(:location, startdate: Time.zone.local(2022, 7, 7)) }
+    let!(:incomplete_location) { FactoryBot.create(:location, :incomplete, startdate: Time.zone.today - 3.months) }
+    let!(:incomplete_location_with_nil_confirmed) { FactoryBot.create(:location, :incomplete, startdate: Time.zone.today - 3.months, confirmed: nil) }
+    let!(:active_location) { FactoryBot.create(:location, startdate: Time.zone.today - 3.months) }
+    let(:deactivating_soon_location) { FactoryBot.create(:location, startdate: Time.zone.today - 3.months) }
+    let(:deactivated_location) { FactoryBot.create(:location, startdate: Time.zone.today - 3.months) }
+    let(:reactivating_soon_location) { FactoryBot.create(:location, startdate: Time.zone.today - 3.months) }
+    let!(:activating_soon_location) { FactoryBot.create(:location, startdate: Time.zone.today + 1.day) }
 
     before do
-      Timecop.freeze(2022, 6, 7)
-      FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 8, 8), location: deactivating_soon_location)
+      FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.today + 1.month, location: deactivating_soon_location)
       deactivating_soon_location.save!
-      FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 6), location: deactivated_location)
+      FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.yesterday, location: deactivated_location)
       deactivated_location.save!
-      FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 7), reactivation_date: Time.zone.local(2022, 6, 8), location: reactivating_soon_location)
+      FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.today, reactivation_date: Time.zone.tomorrow, location: reactivating_soon_location)
       reactivating_soon_location.save!
-    end
-
-    after do
-      Timecop.unfreeze
     end
 
     context "when filtering by incomplete status" do

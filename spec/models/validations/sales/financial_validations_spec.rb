@@ -6,7 +6,7 @@ RSpec.describe Validations::Sales::FinancialValidations do
   let(:validator_class) { Class.new { include Validations::Sales::FinancialValidations } }
 
   describe "income validations for shared ownership" do
-    let(:record) { FactoryBot.create(:sales_log, ownershipsch: 1) }
+    let(:record) { FactoryBot.build(:sales_log, ownershipsch: 1) }
 
     context "when buying in a non london borough" do
       before do
@@ -150,7 +150,7 @@ RSpec.describe Validations::Sales::FinancialValidations do
   end
 
   describe "#validate_mortgage" do
-    let(:record) { FactoryBot.create(:sales_log) }
+    let(:record) { FactoryBot.build(:sales_log) }
 
     it "adds an error is the mortgage is zero" do
       record.mortgageused = 1
@@ -168,7 +168,7 @@ RSpec.describe Validations::Sales::FinancialValidations do
   end
 
   describe "#validate_percentage_bought_not_greater_than_percentage_owned" do
-    let(:record) { FactoryBot.create(:sales_log) }
+    let(:record) { FactoryBot.build(:sales_log) }
 
     it "does not add an error if the percentage bought is less than the percentage owned" do
       record.stairbought = 20
@@ -202,7 +202,7 @@ RSpec.describe Validations::Sales::FinancialValidations do
   end
 
   describe "#validate_percentage_bought_not_equal_percentage_owned" do
-    let(:record) { FactoryBot.create(:sales_log) }
+    let(:record) { FactoryBot.build(:sales_log) }
 
     context "with 24/25 logs" do
       before do
@@ -249,7 +249,7 @@ RSpec.describe Validations::Sales::FinancialValidations do
   end
 
   describe "#validate_monthly_leasehold_charges" do
-    let(:record) { FactoryBot.create(:sales_log) }
+    let(:record) { FactoryBot.build(:sales_log) }
 
     it "does not add an error if monthly leasehold charges are positive" do
       record.mscharge = 2345
@@ -265,7 +265,7 @@ RSpec.describe Validations::Sales::FinancialValidations do
   end
 
   describe "#validate_percentage_bought_at_least_threshold" do
-    let(:record) { FactoryBot.create(:sales_log) }
+    let(:record) { FactoryBot.build(:sales_log) }
 
     it "adds an error to stairbought and type if the percentage bought is less than the threshold (which is 1% by default, but higher for some shared ownership types)" do
       record.stairbought = 9
@@ -307,7 +307,7 @@ RSpec.describe Validations::Sales::FinancialValidations do
   end
 
   describe "#validate_child_income" do
-    let(:record) { FactoryBot.create(:sales_log) }
+    let(:record) { FactoryBot.build(:sales_log) }
 
     context "when buyer 2 is not a child" do
       before do
@@ -352,17 +352,10 @@ RSpec.describe Validations::Sales::FinancialValidations do
   end
 
   describe "#validate_equity_in_range_for_year_and_type" do
-    let(:record) { FactoryBot.create(:sales_log, saledate: now) }
-
-    around do |example|
-      Timecop.freeze(now) do
-        example.run
-      end
-      Timecop.return
-    end
+    let(:record) { FactoryBot.build(:sales_log, saledate:) }
 
     context "with a log in the 22/23 collection year" do
-      let(:now) { Time.zone.local(2023, 1, 1) }
+      let(:saledate) { Time.zone.local(2023, 1, 1) }
 
       it "adds an error for type 2, equity below min with the correct percentage" do
         record.type = 2
@@ -397,7 +390,7 @@ RSpec.describe Validations::Sales::FinancialValidations do
     end
 
     context "with a log in 23/24 collection year" do
-      let(:now) { Time.zone.local(2024, 1, 1) }
+      let(:saledate) { Time.zone.local(2024, 1, 1) }
 
       it "adds an error for type 2, equity below min with the correct percentage" do
         record.type = 2
@@ -433,19 +426,10 @@ RSpec.describe Validations::Sales::FinancialValidations do
   end
 
   describe "#validate_equity_less_than_staircase_difference" do
-    let(:record) { FactoryBot.create(:sales_log, saledate: now) }
-
-    around do |example|
-      Timecop.freeze(now) do
-        Singleton.__init__(FormHandler)
-        example.run
-      end
-      Timecop.return
-      Singleton.__init__(FormHandler)
-    end
+    let(:record) { FactoryBot.build(:sales_log, saledate:) }
 
     context "with a log in the 23/24 collection year" do
-      let(:now) { Time.zone.local(2023, 4, 1) }
+      let(:saledate) { Time.zone.local(2023, 4, 1) }
 
       it "does not add an error" do
         record.stairbought = 2
@@ -457,7 +441,7 @@ RSpec.describe Validations::Sales::FinancialValidations do
     end
 
     context "with a log in 24/25 collection year" do
-      let(:now) { Time.zone.local(2024, 4, 1) }
+      let(:saledate) { Time.zone.local(2024, 4, 1) }
 
       it "adds errors if equity is more than stairowned - stairbought for joint purchase" do
         record.stairbought = 2

@@ -2,7 +2,7 @@ require "rails_helper"
 require "shared/shared_examples_for_derived_fields"
 
 RSpec.describe LettingsLog, type: :model do
-  let(:organisation) { build(:organisation, name: "derived fields org", skip_rent_period_creation: true) }
+  let(:organisation) { build(:organisation, name: "derived fields org") }
   let(:user) { build(:user, organisation:) }
   let(:log) { build(:lettings_log, :startdate_today, assigned_to: user) }
 
@@ -956,7 +956,7 @@ RSpec.describe LettingsLog, type: :model do
   end
 
   describe "variables dependent on whether a letting is a renewal" do
-    let(:organisation) { create(:organisation, skip_rent_period_creation: true) }
+    let(:organisation) { create(:organisation) }
     let(:user) { create(:user, organisation:) }
     let(:startdate) { Time.zone.today }
     let(:persisted_renewal_lettings_log) { create(:lettings_log, :setup_completed, startdate:, renewal: 1, assigned_to: user) }

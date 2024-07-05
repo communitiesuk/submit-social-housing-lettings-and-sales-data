@@ -43,6 +43,8 @@ RSpec.describe CheckAnswersSummaryListCardComponent, type: :component do
   end
 
   context "when log was not created via a bulk upload and has an unanswered question" do
+    let(:log) { create(:lettings_log, :in_progress) }
+
     it "displays normal copy with muted colour " do
       expect(rendered).to have_selector("span", class: "app-!-colour-muted", text: "You didn’t answer this question")
     end

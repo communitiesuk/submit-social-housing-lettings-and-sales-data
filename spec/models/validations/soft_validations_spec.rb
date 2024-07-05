@@ -1,17 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Validations::SoftValidations do
-  let(:organisation) { FactoryBot.create(:organisation, provider_type: "PRP") }
-  let(:record) { FactoryBot.create(:lettings_log, owning_organisation: organisation) }
-
-  before do
-    Timecop.freeze(Time.zone.local(2021, 10, 10))
-    Singleton.__init__(FormHandler)
-  end
-
-  after do
-    Timecop.return
-  end
+  let(:organisation) { FactoryBot.build(:organisation, provider_type: "PRP", id: 123) }
+  let(:record) { FactoryBot.build(:lettings_log, owning_organisation: organisation) }
 
   describe "rent min max validations" do
     before do
@@ -32,7 +23,7 @@ RSpec.describe Validations::SoftValidations do
       record.rent_type = 0
       record.beds = 1
       record.period = 1
-      record.startdate = Time.zone.today
+      record.startdate = Time.zone.local(2021, 10, 10)
     end
 
     context "when validating soft min" do
@@ -84,7 +75,8 @@ RSpec.describe Validations::SoftValidations do
 
   describe "retirement soft validations" do
     before do
-      record.update!(age1:, ecstat1:)
+      record.age1 = age1
+      record.ecstat1 = ecstat1
     end
 
     context "when the tenant is under the expected retirement age" do
@@ -163,35 +155,57 @@ RSpec.describe Validations::SoftValidations do
   describe "pregnancy soft validations" do
     context "when there are no female tenants" do
       it "shows the interruption screen" do
-        record.update!(age1: 43, sex1: "M", preg_occ: 1, hhmemb: 1, age1_known: 0)
+        record.age1 = 43
+        record.sex1 = "M"
+        record.preg_occ = 1
+        record.hhmemb = 1
+        record.age1_known = 0
         expect(record.no_females_in_a_pregnant_household?).to be true
       end
     end
 
     context "when there are no female tenants and age of other tenants is unknown" do
       it "shows the interruption screen" do
-        record.update!(sex1: "M", preg_occ: 1, hhmemb: 1, age1_known: 1)
+        record.sex1 = "M"
+        record.preg_occ = 1
+        record.hhmemb = 1
+        record.age1_known = 1
         expect(record.no_females_in_a_pregnant_household?).to be true
       end
     end
 
     context "when female tenants are under 16" do
       it "shows the interruption screen" do
-        record.update!(age2: 14, sex2: "F", preg_occ: 1, hhmemb: 2, details_known_2: 0, age2_known: 0, age1: 18, sex1: "M", age1_known: 0)
+        record.age2 = 14
+        record.sex2 = "F"
+        record.preg_occ = 1
+        record.hhmemb = 2
+        record.details_known_2 = 0
+        record.age2_known = 0
+        record.age1 = 18
+        record.sex1 = "M"
+        record.age1_known = 0
         expect(record.female_in_pregnant_household_in_soft_validation_range?).to be true
       end
     end
 
     context "when female tenants are over 50" do
       it "shows the interruption screen" do
-        record.update!(age1: 54, sex1: "F", preg_occ: 1, hhmemb: 1, age1_known: 0)
+        record.age1 = 54
+        record.sex1 = "F"
+        record.preg_occ = 1
+        record.hhmemb = 1
+        record.age1_known = 0
         expect(record.female_in_pregnant_household_in_soft_validation_range?).to be true
       end
     end
 
     context "when female tenants are outside of soft validation ranges" do
       it "does not show the interruption screen" do
-        record.update!(age1: 44, sex1: "F", preg_occ: 1, hhmemb: 1)
+        record.age1 = 44
+        record.sex1 = "F"
+        record.preg_occ = 1
+        record.hhmemb = 1
         expect(record.no_females_in_a_pregnant_household?).to be false
         expect(record.female_in_pregnant_household_in_soft_validation_range?).to be false
       end
@@ -199,7 +213,8 @@ RSpec.describe Validations::SoftValidations do
 
     context "when the information about the tenants is not given" do
       it "does not show the interruption screen" do
-        record.update!(preg_occ: 1, hhmemb: 2)
+        record.preg_occ = 1
+        record.hhmemb = 2
         expect(record.no_females_in_a_pregnant_household?).to be false
         expect(record.female_in_pregnant_household_in_soft_validation_range?).to be false
       end
@@ -207,48 +222,36 @@ RSpec.describe Validations::SoftValidations do
   end
 
   describe "major repairs date soft validations" do
-    before do
-      Timecop.freeze(Time.zone.local(2022, 2, 1))
-    end
-
-    after do
-      Timecop.unfreeze
-    end
-
     context "when the major repairs date is within 10 years of the tenancy start date" do
       it "shows the interruption screen" do
-        record.update!(startdate: Time.zone.local(2022, 2, 1), mrcdate: Time.zone.local(2013, 2, 1))
+        record.startdate = Time.zone.local(2022, 2, 1)
+        record.mrcdate = Time.zone.local(2013, 2, 1)
         expect(record.major_repairs_date_in_soft_range?).to be true
       end
     end
 
     context "when the major repairs date is less than 2 years before the tenancy start date" do
       it "does not show the interruption screen" do
-        record.update!(startdate: Time.zone.local(2022, 2, 1), mrcdate: Time.zone.local(2021, 2, 1))
+        record.startdate = Time.zone.local(2022, 2, 1)
+        record.mrcdate = Time.zone.local(2021, 2, 1)
         expect(record.major_repairs_date_in_soft_range?).to be false
       end
     end
   end
 
   describe "void date soft validations" do
-    before do
-      Timecop.freeze(Time.zone.local(2022, 2, 1))
-    end
-
-    after do
-      Timecop.unfreeze
-    end
-
     context "when the void date is within 10 years of the tenancy start date" do
       it "shows the interruption screen" do
-        record.update!(startdate: Time.zone.local(2022, 2, 1), voiddate: Time.zone.local(2013, 2, 1))
+        record.startdate = Time.zone.local(2022, 2, 1)
+        record.voiddate = Time.zone.local(2013, 2, 1)
         expect(record.voiddate_in_soft_range?).to be true
       end
     end
 
     context "when the void date is less than 2 years before the tenancy start date" do
       it "does not show the interruption screen" do
-        record.update!(startdate: Time.zone.local(2022, 2, 1), voiddate: Time.zone.local(2021, 2, 1))
+        record.startdate = Time.zone.local(2022, 2, 1)
+        record.voiddate = Time.zone.local(2021, 2, 1)
         expect(record.voiddate_in_soft_range?).to be false
       end
     end

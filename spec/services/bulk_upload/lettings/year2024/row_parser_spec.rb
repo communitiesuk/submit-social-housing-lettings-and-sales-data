@@ -10,7 +10,7 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
   let(:user) { create(:user, organisation: owning_org) }
 
   let(:owning_org) { create(:organisation, :with_old_visible_id) }
-  let(:managing_org) { create(:organisation, :with_old_visible_id) }
+  let(:managing_org) { create(:organisation, :with_old_visible_id, rent_periods: [4, 1]) }
   let(:scheme) { create(:scheme, :with_old_visible_id, owning_organisation: owning_org) }
   let(:location) { create(:location, :with_old_visible_id, scheme:) }
 
