@@ -706,6 +706,20 @@ class LettingsLog < Log
     self.la = inferred_la if inferred_la.present?
   end
 
+  def scheme_has_multiple_locations?
+    return false unless scheme
+
+    @scheme_locations_count ||= scheme.locations.active_in_2_weeks.size
+    @scheme_locations_count > 1
+  end
+
+  def scheme_has_large_number_of_locations?
+    return false unless scheme
+
+    @scheme_locations_count ||= scheme.locations.active_in_2_weeks.size
+    @scheme_locations_count > 19
+  end
+
 private
 
   def reset_invalid_unresolved_log_fields!
@@ -871,4 +885,5 @@ private
       uprn_selection_changed? || startdate_changed?
     end
   end
+
 end
