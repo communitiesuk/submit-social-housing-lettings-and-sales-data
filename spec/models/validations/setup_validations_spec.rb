@@ -511,6 +511,16 @@ RSpec.describe Validations::SetupValidations do
         expect(record.errors["scheme_id"]).to be_empty
       end
     end
+
+    context "with an incomplete scheme" do
+      let(:scheme) { create(:scheme, :incomplete) }
+
+      it "adds an error to scheme_id" do
+        record.scheme = scheme
+        setup_validator.validate_scheme(record)
+        expect(record.errors["scheme_id"]).to include(I18n.t("validations.setup.scheme.incomplete"))
+      end
+    end
   end
 
   describe "#validate_location" do

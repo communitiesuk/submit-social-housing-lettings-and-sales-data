@@ -90,6 +90,10 @@ module Validations::SetupValidations
   end
 
   def validate_scheme(record)
+    if record.scheme&.status == :incomplete
+      record.errors.add :scheme_id, :incomplete, message: I18n.t("validations.setup.scheme.incomplete")
+    end
+
     scheme_during_startdate_validation(record)
   end
 
