@@ -16,6 +16,8 @@ module Forms
         case referrer
         when "prepare-your-file"
           bulk_upload_lettings_log_path(id: "prepare-your-file", form: { year: })
+        when "home"
+          root_path
         else
           guidance_path
         end

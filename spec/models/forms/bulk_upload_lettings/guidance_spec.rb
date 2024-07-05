@@ -16,6 +16,14 @@ RSpec.describe Forms::BulkUploadLettings::Guidance do
       end
     end
 
+    context "when referrer is home" do
+      let(:referrer) { "home" }
+
+      it "returns the root path" do
+        expect(bu_guidance.back_path).to eq root_path
+      end
+    end
+
     context "when referrer is guidance" do
       let(:referrer) { "guidance" }
 
