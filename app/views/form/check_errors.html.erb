@@ -61,6 +61,6 @@
       </div>
     <% end %>
 
-    <%= govuk_button_link_to "Confirm and continue", "/" %>
+    <%= govuk_button_link_to "Confirm and continue", @original_page_id ? send("#{@log.model_name.param_key}_#{@original_page_id}_path", @log) : send("#{@log.model_name.param_key}_#{@page.id}_path", @log) %>
   </div>
 </div>

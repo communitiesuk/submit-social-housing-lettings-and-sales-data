@@ -268,4 +268,63 @@ RSpec.describe CheckErrorsController, type: :request do
       end
     end
   end
+
+  describe "answer incomplete question" do
+    context "when user is signed in" do
+      context "and answering specific lettings question" do
+        let(:params) do
+          {
+            original_page_id: "household_members",
+            referrer: "check_errors",
+            related_question_ids: %w[hhmemb ecstat1 earnings],
+            lettings_log: {
+              page: "household_members",
+              hhmemb: "2",
+            },
+          }
+        end
+
+        before do
+          sign_in user
+          post "/lettings-logs/#{lettings_log.id}/household-members", params:
+        end
+
+        it "maintains original check_errors data in query params" do
+          follow_redirect!
+          expect(request.query_parameters["check_errors"]).to eq("true")
+          expect(request.query_parameters["related_question_ids"]).to eq(%w[hhmemb ecstat1 earnings])
+          expect(page).to have_content("You have successfully updated Number of household members")
+          expect(page).to have_link("Confirm and continue", href: "/lettings-logs/#{lettings_log.id}/household-members")
+        end
+      end
+
+      context "and answering specific sales question" do
+        let(:params) do
+          {
+            original_page_id: "buyer_1_income",
+            referrer: "check_errors",
+            related_question_ids: %w[income1 la ownershipsch],
+            sales_log: {
+              page: "buyer_1_income",
+              income1: "1000",
+              income1nk: "0",
+            },
+          }
+        end
+
+        before do
+          sign_in user
+          post "/sales-logs/#{sales_log.id}/buyer-1-income", params:
+        end
+
+        it "maintains original check_errors data in query params" do
+          follow_redirect!
+          expect(request.query_parameters["check_errors"]).to eq("true")
+          expect(request.query_parameters["related_question_ids"]).to eq(%w[income1 la ownershipsch])
+          expect(page).to have_content("You have successfully updated Buyer 1’s gross annual income known? and Buyer 1’s gross annual income")
+          expect(page).to have_link("Confirm and continue", href: "/sales-logs/#{sales_log.id}/buyer-1-income")
+        end
+      end
+    end
+  end
 end
