@@ -31,7 +31,7 @@ class Form::Lettings::Questions::LocationIdSearch < ::Form::Question
     return {} unless lettings_log.scheme
 
     scheme_location_ids = lettings_log.scheme.locations.visible.confirmed.pluck(:id)
-    answer_options.select { |k, _v| scheme_location_ids.include?(k.to_i) }
+    answer_options.select { |k, _v| scheme_location_ids.include?(k.to_i) }.to_h
   end
 
   def hidden_in_check_answers?(lettings_log, _current_user = nil)
