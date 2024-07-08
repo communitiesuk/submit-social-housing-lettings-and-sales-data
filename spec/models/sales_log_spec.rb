@@ -6,19 +6,7 @@ RSpec.describe SalesLog, type: :model do
   let(:owning_organisation) { create(:organisation) }
   let(:assigned_to_user) { create(:user) }
 
-  context "with shared examples" do
-    before do
-      Timecop.freeze(Time.zone.local(2024, 3, 1))
-      Singleton.__init__(FormHandler)
-    end
-
-    after do
-      Timecop.return
-      Singleton.__init__(FormHandler)
-    end
-
-    include_examples "shared log examples", :sales_log
-  end
+  include_examples "shared log examples", :sales_log
 
   it "inherits from log" do
     expect(described_class).to be < Log
