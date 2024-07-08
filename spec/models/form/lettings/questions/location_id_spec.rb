@@ -162,8 +162,7 @@ RSpec.describe Form::Lettings::Questions::LocationId, type: :model do
         end
 
         it "orders the locations by name then numerically" do
-          displayed_locations = question.displayed_answer_options(lettings_log)
-          expect(displayed_locations.values.map { |v| v["hint"] }).to eq([
+          expect(question.displayed_answer_options(lettings_log).values.map { |v| v["hint"] }).to eq([
             "Abacus Road",
             "1 Abe Road",
             "2 Abe Road",
