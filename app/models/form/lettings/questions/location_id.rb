@@ -30,7 +30,12 @@ class Form::Lettings::Questions::LocationId < ::Form::Question
     return {} unless lettings_log.scheme
 
     scheme_location_ids = lettings_log.scheme.locations.visible.confirmed.pluck(:id)
-    answer_options.select { |k, _v| scheme_location_ids.include?(k.to_i) }.sort_by { |_k, v| v["hint"] }
+    answer_options.select { |k, _v| scheme_location_ids.include?(k.to_i) }
+                  .sort_by do |_, v|
+                    name = v["hint"].match(/[a-zA-Z].*/).to_s
+                    number = v["hint"].match(/\d+/).to_s.to_i
+                    [name, number]
+                  end
   end
 
   def hidden_in_check_answers?(lettings_log, _current_user = nil)
