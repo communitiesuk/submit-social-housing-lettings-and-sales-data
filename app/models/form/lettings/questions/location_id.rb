@@ -35,7 +35,7 @@ class Form::Lettings::Questions::LocationId < ::Form::Question
                     name = v["hint"].match(/[a-zA-Z].*/).to_s
                     number = v["hint"].match(/\d+/).to_s.to_i
                     [name, number]
-                  end
+                  end.to_h
   end
 
   def hidden_in_check_answers?(lettings_log, _current_user = nil)
