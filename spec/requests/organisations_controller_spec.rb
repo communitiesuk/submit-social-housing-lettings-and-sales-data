@@ -1757,7 +1757,7 @@ RSpec.describe OrganisationsController, type: :request do
       end
 
       describe "#delete-confirmation" do
-        let(:organisation) { create(:organisation) }
+        let(:organisation) { create(:organisation, active: false) }
 
         before do
           get "/organisations/#{organisation.id}/delete-confirmation"
