@@ -12,7 +12,7 @@ class BulkUpload::Lettings::Year2024::RowParser
     field_8: "What is the tenancy start date?",
     field_9: "What is the tenancy start date?",
     field_10: "What is the tenancy start date?",
-    field_11: "Is this a London Affordable Rent letting?",
+    field_11: "What is the rent type?",
     field_12: "Which 'Other' type of Intermediate Rent is this letting?",
     field_13: "What is the tenant code?",
     field_14: "What is the property reference?",
@@ -134,6 +134,15 @@ class BulkUpload::Lettings::Year2024::RowParser
     field_128: "What is the support charge?",
     field_129: "After the household has received any housing-related benefits, will they still need to pay for rent and charges?",
     field_130: "What do you expect the outstanding amount to be?",
+  }.freeze
+
+  RENT_TYPE_BU_MAPPING = {
+    1 => 0,
+    2 => 1,
+    3 => 2,
+    4 => 3,
+    5 => 4,
+    6 => 5,
   }.freeze
 
   attribute :bulk_upload
@@ -280,7 +289,7 @@ class BulkUpload::Lettings::Year2024::RowParser
               category: :setup,
             },
             inclusion: {
-              in: (0..5).to_a,
+              in: (1..6).to_a,
               message: I18n.t("validations.invalid_option", question: "rent type"),
               unless: -> { field_11.blank? },
               category: :setup,
@@ -1134,7 +1143,7 @@ private
     attributes["assigned_to"] = assigned_to || bulk_upload.user
     attributes["created_by"] = bulk_upload.user
     attributes["needstype"] = field_4
-    attributes["rent_type"] = field_11
+    attributes["rent_type"] = RENT_TYPE_BU_MAPPING[field_11]
     attributes["startdate"] = startdate
     attributes["unittype_gn"] = field_26
     attributes["builtype"] = field_27
