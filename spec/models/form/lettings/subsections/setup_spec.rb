@@ -30,6 +30,7 @@ RSpec.describe Form::Lettings::Subsections::Setup, type: :model do
           needs_type
           scheme
           location
+          location_search
           renewal
           tenancy_start_date
           rent_type
@@ -54,6 +55,7 @@ RSpec.describe Form::Lettings::Subsections::Setup, type: :model do
           needs_type
           scheme
           location
+          location_search
           renewal
           tenancy_start_date
           rent_type
