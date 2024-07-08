@@ -117,7 +117,7 @@ RSpec.describe QuestionViewHelper do
 
   describe "select_option_name" do
     context "when value is a location" do
-      let(:value) { build(:location)}
+      let(:value) { build(:location) }
 
       it "returns the location's postcode" do
         expect(select_option_name(value)).to eq(value.postcode)
@@ -133,7 +133,7 @@ RSpec.describe QuestionViewHelper do
     end
 
     context "when value responds to service_name" do
-      let(:value) { build(:scheme)}
+      let(:value) { build(:scheme) }
 
       it "returns the value of the service_name method" do
         expect(select_option_name(value)).to eq(value.service_name)
@@ -143,7 +143,7 @@ RSpec.describe QuestionViewHelper do
 
   describe "answer_option_hint" do
     context "when not a scheme or location" do
-      let(:resource) { { "value" => "not a scheme or location" }}
+      let(:resource) { { "value" => "not a scheme or location" } }
 
       it "returns nil" do
         expect(answer_option_hint(resource)).to be_nil

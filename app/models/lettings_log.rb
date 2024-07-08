@@ -885,5 +885,4 @@ private
       uprn_selection_changed? || startdate_changed?
     end
   end
-
 end
