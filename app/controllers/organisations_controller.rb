@@ -161,6 +161,10 @@ class OrganisationsController < ApplicationController
     redirect_to organisations_path, notice: I18n.t("notification.organisation_deleted", name: @organisation.name)
   end
 
+  def delete_confirmation
+    authorize @organisation
+  end
+
   def lettings_logs
     organisation_logs = LettingsLog.visible.filter_by_organisation(@organisation).filter_by_years_or_nil(FormHandler.instance.years_of_available_lettings_forms)
     unpaginated_filtered_logs = filter_manager.filtered_logs(organisation_logs, search_term, session_filters)
