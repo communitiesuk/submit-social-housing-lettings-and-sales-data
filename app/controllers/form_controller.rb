@@ -230,7 +230,9 @@ private
     if params[@log.model_name.param_key]["check_errors"]
       @page = form.get_page(params[@log.model_name.param_key]["page"])
       flash[:notice] = "You have successfully updated #{@page.questions.map(&:check_answer_label).to_sentence}"
-      return send("#{@log.class.name.underscore}_#{params[@log.model_name.param_key]['original_page_id']}_path", @log, { check_errors: true, related_question_ids: params[@log.model_name.param_key]["related_question_ids"].split(" ") }.compact)
+      original_page_id = params[@log.model_name.param_key]["original_page_id"]
+      related_question_ids = params[@log.model_name.param_key]["related_question_ids"].split(" ")
+      return send("#{@log.class.name.underscore}_#{original_page_id}_path", @log, { check_errors: true, related_question_ids: }.compact)
     end
 
     if params["referrer"] == "check_errors"
