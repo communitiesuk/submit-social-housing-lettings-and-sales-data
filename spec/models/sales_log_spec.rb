@@ -923,7 +923,7 @@ RSpec.describe SalesLog, type: :model do
   end
 
   context "when searching logs" do
-    let!(:sales_log_to_search) { create(:sales_log, :completed, purchid: "to search", postcode_full: "ME0 0WW") }
+    let!(:sales_log_to_search) { create(:sales_log, purchid: "to search", postcode_full: "ME0 0WW") }
 
     before do
       create_list(:sales_log, 5, :completed)
