@@ -115,8 +115,11 @@ task :handle_unpended_logs, %i[perform_updates] => :environment do |_task, args|
         affected_non_updated_duplicates.each do |d|
           seen.add(d.id)
           csv << [d.id, d.collection_start_year, d.status, d.owning_organisation_name, d.assigned_to_id, d.assigned_to.email, "Delete", "Log is a duplicate of unaffected log(s)", unaffected_logs_reference]
+          # rubocop:disable Style/Next
           unless dry_run
-            d.discard!
+            d.discarded_at = Time.zone.now
+            d.status = "deleted"
+            d.save!(validate: false)
           end
         end
         next
@@ -134,7 +137,9 @@ task :handle_unpended_logs, %i[perform_updates] => :environment do |_task, args|
           seen.add(d.id)
           csv << [d.id, d.collection_start_year, d.status, d.owning_organisation_name, d.assigned_to_id, d.assigned_to.email, "Delete", "Log is a duplicate of log(s) which have been updated since being affected", updated_logs_reference]
           unless dry_run
-            d.discard!
+            d.discarded_at = Time.zone.now
+            d.status = "deleted"
+            d.save!(validate: false)
           end
         end
         next
@@ -150,8 +155,11 @@ task :handle_unpended_logs, %i[perform_updates] => :environment do |_task, args|
         seen.add(d.id)
         csv << [d.id, d.collection_start_year, d.status, d.owning_organisation_name, d.assigned_to_id, d.assigned_to.email, "Delete", "Log is a duplicate of more recently created affected log", latest_created.id]
         unless dry_run
-          d.discard!
+          d.discarded_at = Time.zone.now
+          d.status = "deleted"
+          d.save!(validate: false)
         end
+        # rubocop:enable Style/Next
       end
     end
   end
