@@ -1,5 +1,5 @@
 desc "Deduplicates logs where we have inadvertently turned some pending logs to in progress / completed"
-task :handle_unpended_logs, %i[perform_updates] => :environment do |_task, _args|
+task :handle_unpended_logs, %i[perform_updates] => :environment do |_task, args|
   dry_run = args[:perform_updates].blank? || args[:perform_updates] != "true"
 
   pg = ActiveRecord::Base.connection
