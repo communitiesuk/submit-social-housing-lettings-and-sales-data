@@ -36,7 +36,7 @@
             <% if @log.collection_period_open_for_editing? %>
               <% row.with_action(
                 text: question.action_text(log, correcting_hard_validation: @correcting_hard_validation),
-                href: @correcting_hard_validation ? correct_validation_action_href(question, log, applicable_questions.map(&:id)) : action_href(question, log),
+                href: correct_validation_action_href(question, log, applicable_questions.map(&:id), @correcting_hard_validation),
                 visually_hidden_text: question.check_answer_label.to_s.downcase,
               ) %>
             <% end %>
