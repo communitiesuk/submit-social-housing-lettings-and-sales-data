@@ -45,7 +45,7 @@ RSpec.describe Form::Sales::Pages::Uprn, type: :model do
     end
 
     context "when log is present" do
-      let(:log) { create(:sales_log) }
+      let(:log) { build(:sales_log) }
 
       context "with 2023/24 form" do
         it "points to address page" do

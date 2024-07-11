@@ -48,7 +48,7 @@ RSpec.describe Form::Sales::Questions::BuyersOrganisations, type: :model do
   end
 
   it "has the correct displayed answer_options" do
-    expect(question.displayed_answer_options(FactoryBot.create(:sales_log))).to eq(
+    expect(question.displayed_answer_options(FactoryBot.build(:sales_log))).to eq(
       {
         "pregyrha" => { "value" => "Their private registered provider (PRP) - housing association" },
         "pregother" => { "value" => "Other private registered provider (PRP) - housing association" },
