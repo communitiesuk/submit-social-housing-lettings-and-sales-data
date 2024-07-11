@@ -17,6 +17,7 @@ class Organisation < ApplicationRecord
 
   belongs_to :absorbing_organisation, class_name: "Organisation", optional: true
   has_many :absorbed_organisations, class_name: "Organisation", foreign_key: "absorbing_organisation_id"
+  scope :visible, -> { where(discarded_at: nil) }
 
   def affiliated_stock_owners
     ids = []
@@ -143,6 +144,7 @@ class Organisation < ApplicationRecord
   end
 
   def status_at(date)
+    return :deleted if discarded_at.present?
     return :merged if merge_date.present? && merge_date < date
     return :deactivated unless active
 
@@ -177,5 +179,15 @@ class Organisation < ApplicationRecord
     return true if absorbed_organisations.any? { |stock_owner| stock_owner.data_protection_confirmed? && stock_owner.holds_own_stock? }
 
     false
+  end
+
+  def discard!
+    owned_schemes.each(&:discard!)
+    users.each(&:discard!)
+    update!(discarded_at: Time.zone.now)
+  end
+
+  def label
+    status == :deleted ? "#{name} (deleted)" : name
   end
 end
