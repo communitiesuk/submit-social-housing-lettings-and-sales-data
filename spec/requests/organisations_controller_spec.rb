@@ -1648,6 +1648,7 @@ RSpec.describe OrganisationsController, type: :request do
             allow(notify_client).to receive(:send_email).and_return(true)
 
             user_to_reactivate = create(:user, :data_coordinator, organisation:, active: false, reactivate_with_organisation: true)
+            FactoryBot.create(:legacy_user, old_user_id: user_to_reactivate.old_user_id, user: user_to_reactivate)
             user_not_to_reactivate = create(:user, :data_coordinator, organisation:, active: false, reactivate_with_organisation: false)
             patch "/organisations/#{organisation.id}", headers:, params:
           end

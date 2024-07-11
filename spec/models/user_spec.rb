@@ -114,6 +114,7 @@ RSpec.describe User, type: :model do
     end
 
     it "can have one or more legacy users" do
+      FactoryBot.create(:legacy_user, old_user_id: user.old_user_id, user:)
       expect(user.legacy_users.size).to eq(1)
     end
 

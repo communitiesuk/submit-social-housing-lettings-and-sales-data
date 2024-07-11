@@ -26,11 +26,5 @@ FactoryBot.define do
     transient do
       old_user_id { SecureRandom.uuid }
     end
-
-    after(:create) do |user, evaluator|
-      FactoryBot.create(:legacy_user, old_user_id: evaluator.old_user_id, user:)
-
-      user.reload
-    end
   end
 end
