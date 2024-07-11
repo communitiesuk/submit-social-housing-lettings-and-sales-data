@@ -207,7 +207,9 @@ RSpec.describe LocationsHelper do
           allow(Time).to receive(:now).and_call_original
         end
 
-        it "displays current collection start date as availability date if created_at is later than collection start date" do
+        it "displays current collection start date as availability date if created_at is later than collection start date and not in a crossover period" do
+          allow(FormHandler.instance).to receive(:in_crossover_period?).with(anything).and_return(false)
+
           location.update!(startdate: nil, created_at: current_collection_start_date + 6.months)
           availability_attribute = display_location_attributes(location).find { |x| x[:name] == "Availability" }[:value]
 
@@ -215,7 +217,9 @@ RSpec.describe LocationsHelper do
         end
 
         it "displays previous collection start date as availability date if created_at is later than collection start date and in crossover" do
-          location.update!(startdate: nil, created_at: previous_collection_start_date + 1.week)
+          allow(FormHandler.instance).to receive(:in_crossover_period?).with(anything).and_return(true)
+
+          location.update!(startdate: nil, created_at: current_collection_start_date + 1.week)
           availability_attribute = display_location_attributes(location).find { |x| x[:name] == "Availability" }[:value]
 
           expect(availability_attribute).to eq("Active from 1 April #{previous_collection_start_date.year}")
