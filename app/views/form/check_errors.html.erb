@@ -11,7 +11,7 @@
             Make sure these answers are correct:
           </span>
           <span class="govuk-body govuk-!-text-align-right govuk-grid-column-one-third">
-            <%= govuk_link_to "Clear all", send("#{@log.model_name.param_key}_confirm_clear_all_answers_path", @log) %>
+            <input type="submit" value="Clear all" class="govuk-body govuk-link submit-button-link" name="clear_all">
           </span>
         </div>
       </h1>
@@ -48,10 +48,10 @@
                     <% end %>
                 </dd>
                 <dd class="govuk-summary-list__actions">
-                  <% if question.displayed_as_answered?(@log) %>
-                    <input type="submit" value="Clear" class="govuk-body govuk-link submit-button-link" name="<%= question.id %>">
+                  <% if !question.displayed_as_answered?(@log) || question.subsection.id == "setup" %>
+                    <%= govuk_link_to check_errors_answer_text(question, @log), check_errors_answer_link(@log, question, @page, applicable_questions) %>
                   <% else %>
-                    <%= govuk_link_to "Answer", send("#{@log.model_name.param_key}_#{question.page.id}_path", @log, referrer: "check_errors", original_page_id: @page.id, related_question_ids: applicable_questions.map(&:id)) %>
+                    <input type="submit" value="Clear" class="govuk-body govuk-link submit-button-link" name="<%= question.id %>">
                   <% end %>
                 </dd>
               </div>
