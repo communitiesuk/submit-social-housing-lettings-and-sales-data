@@ -59,7 +59,7 @@ RSpec.describe CheckErrorsController, type: :request do
 
         it "displays correct clear links" do
           expect(page).to have_selector("input[type=submit][value='Clear']", count: 2)
-          expect(page).to have_link("Clear all", href: "/lettings-logs/#{lettings_log.id}/confirm-clear-all-answers")
+          expect(page).to have_button("Clear all")
         end
       end
 
