@@ -27,8 +27,12 @@ FactoryBot.define do
       old_user_id { SecureRandom.uuid }
     end
 
-    after(:create) do |user, _evaluator|
-      unless user.organisation.data_protection_confirmed?
+    transient do
+      with_dsa { true }
+    end
+
+    after(:create) do |user, evaluator|
+      if evaluator.with_dsa && !user.organisation.data_protection_confirmed?
         create(
           :data_protection_confirmation,
           organisation: user.organisation,

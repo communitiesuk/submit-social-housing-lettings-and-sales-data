@@ -25,11 +25,11 @@ FactoryBot.define do
     end
 
     after(:create) do |org, evaluator|
-      if evaluator.with_dsa
+      if evaluator.with_dsa && !org.data_protection_confirmed?
         create(
           :data_protection_confirmation,
           organisation: org,
-          data_protection_officer: org.users.any? ? org.users.first : create(:user, :data_protection_officer, organisation: org),
+          data_protection_officer: org.users.any? ? org.users.first : create(:user, :data_protection_officer, organisation: org, with_dsa: false),
         )
       end
     end

@@ -66,7 +66,7 @@ RSpec.describe CreateLogActionsComponent, type: :component do
 
     context "when not support user" do
       context "without data sharing agreement" do
-        let(:user) { create(:user, organisation: create(:organisation, :without_dpc)) }
+        let(:user) { create(:user, organisation: create(:organisation, :without_dpc), with_dsa: false) }
 
         it "does not render actions" do
           expect(component).not_to be_display_actions

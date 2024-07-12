@@ -2145,7 +2145,7 @@ RSpec.describe OrganisationsController, type: :request do
             Timecop.unfreeze
           end
 
-          let(:user) { create(:user, is_dpo: true, organisation:) }
+          let(:user) { create(:user, is_dpo: true, organisation:, with_dsa: false) }
 
           it "returns redirects to details page" do
             post "/organisations/#{organisation.id}/data-sharing-agreement", headers: headers
