@@ -40,12 +40,8 @@ This documentation outlines the objects that are created and/or persisted to the
 ### Lettings Log
 Objects Created/Persisted:
 - **User**: The `assigned_to` user is created.
-  - **LegacyUser**: A `LegacyUser` is created and associated with the newly created `assigned_to` user by `User` factory.
   - **Organisation**: The `assigned_to` user’s organisation created by `User` factory.
-    - **DataProtectionConfirmation**: If `with_dsa` is `true` (default), a `DataProtectionConfirmation` is created with a `data_protection_officer`
-    - **User**: Data protection officer that signs the data protection confirmation
-        - **LegacyUser**: A `LegacyUser` is created and associated with the newly created `data_protection_officer` user by `User` factory.
-
+- **DataProtectionConfirmation**: If `organisation` does not have DSA signed, `DataProtectionConfirmation` gets created with `assigned_to` user as a `data_protection_officer`
 - **OrganisationRentPeriod**: If `log.period` is present and the `managing_organisation` does not have an `OrganisationRentPeriod` for that period, a new `OrganisationRentPeriod` is created and associated with `managing_organisation`.
 
 Example Usage:
@@ -56,11 +52,8 @@ let(:lettings_log) { create(:lettings_log) }
 ### Sales Log
 Objects Created/Persisted:
 - **User**: The `assigned_to` user is created.
-  - **LegacyUser**: A `LegacyUser` is created and associated with the newly created `assigned_to` user by `User` factory.
   - **Organisation**: The `assigned_to` user’s organisation created by `User` factory.
-    - **DataProtectionConfirmation**: If `with_dsa` is `true` (default), a `DataProtectionConfirmation` is created with a `data_protection_officer`
-    - **User**: Data protection officer that signs the data protection confirmation
-        - **LegacyUser**: A `LegacyUser` is created and associated with the newly created `data_protection_officer` user by `User` factory.
+- **DataProtectionConfirmation**: If `organisation` does not have DSA signed, `DataProtectionConfirmation` gets created with `assigned_to` user as a `data_protection_officer`
 
 Example Usage:
 ```
@@ -72,7 +65,6 @@ Objects Created/Persisted:
 - **OrganisationRentPeriod**: For each rent period in transient attribute `rent_periods`, an `OrganisationRentPeriod` is created.
 - **DataProtectionConfirmation**: If `with_dsa` is `true` (default), a `DataProtectionConfirmation` is created with a `data_protection_officer`
 - **User**: Data protection officer that signs the data protection confirmation
-      - **LegacyUser**: A `LegacyUser` is created and associated with the newly created `data_protection_officer` user by `User` factory.
 
 Example Usage:
 ```
@@ -81,11 +73,8 @@ let(:organisation) { create(:organisation, rent_periods: [1, 2])}
 
 ### User
 Objects Created/Persisted:
-- **LegacyUser**: A `LegacyUser` is created and associated with the newly created user.
 - **Organisation**: User’s organisation.
-  - **DataProtectionConfirmation**: If `with_dsa` is `true` (default), a `DataProtectionConfirmation` is created with a `data_protection_officer`
-  - **User**: Data protection officer that signs the data protection confirmation
-      - **LegacyUser**: A `LegacyUser` is created and associated with the newly created `data_protection_officer` user by `User` factory.
+- **DataProtectionConfirmation**: If `organisation` does not have DSA signed, `DataProtectionConfirmation` gets created with this user as a `data_protection_officer`
 
 Example Usage:
 ```
