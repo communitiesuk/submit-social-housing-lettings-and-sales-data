@@ -52,13 +52,13 @@ RSpec.describe CheckErrorsController, type: :request do
         end
 
         before do
-          lettings_log.update!(needstype: 1, declaration: 1, ecstat1: 10, hhmemb: 2, net_income_known: 0, incfreq: 1, earnings: 1000)
+          lettings_log.update!(needstype: 1, declaration: 1, ecstat1: 10, hhmemb: 2, net_income_known: 0, incfreq: nil, earnings: nil)
           sign_in user
           post "/lettings-logs/#{lettings_log.id}/income-amount", params: params
         end
 
         it "displays correct clear links" do
-          expect(page).to have_selector("input[type=submit][value='Clear']", count: 3)
+          expect(page).to have_selector("input[type=submit][value='Clear']", count: 2)
           expect(page).to have_button("Clear all")
         end
       end
