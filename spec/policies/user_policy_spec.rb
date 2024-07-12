@@ -201,7 +201,7 @@ RSpec.describe UserPolicy do
       end
 
       context "and user is the DPO that hasn't signed the agreement" do
-        let(:user) { create(:user, active: false, is_dpo: true) }
+        let(:user) { create(:user, active: false, is_dpo: true, with_dsa: false) }
 
         it "does not allow deleting a user as a provider" do
           expect(policy).not_to permit(data_provider, user)

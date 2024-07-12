@@ -6,7 +6,7 @@ RSpec.describe Form::Lettings::Questions::PropertyReference, type: :model do
   let(:question_id) { nil }
   let(:question_definition) { nil }
   let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2023, 4, 1)))) }
-  let(:lettings_log) { FactoryBot.create(:lettings_log) }
+  let(:lettings_log) { FactoryBot.build(:lettings_log) }
 
   it "has correct page" do
     expect(question.page).to eq(page)

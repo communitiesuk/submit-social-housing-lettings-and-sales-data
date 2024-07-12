@@ -28,7 +28,7 @@ RSpec.describe Form::Sales::Questions::DepositAmount, type: :model do
   end
 
   context "when the ownership type is shared" do
-    let(:log) { create(:sales_log, :completed, ownershipsch: 1, mortgageused: 2) }
+    let(:log) { build(:sales_log, :completed, ownershipsch: 1, mortgageused: 2) }
 
     it "is not marked as derived" do
       expect(question.derived?(log)).to be false
@@ -36,7 +36,7 @@ RSpec.describe Form::Sales::Questions::DepositAmount, type: :model do
   end
 
   context "when the ownership type is discounted for 2023" do
-    let(:log) { create(:sales_log, :completed, ownershipsch: 2, mortgageused: 2, saledate: Time.zone.local(2024, 3, 1)) }
+    let(:log) { build(:sales_log, :completed, ownershipsch: 2, mortgageused: 2, saledate: Time.zone.local(2024, 3, 1)) }
 
     it "is not marked as derived" do
       expect(question.derived?(log)).to be false
@@ -44,7 +44,7 @@ RSpec.describe Form::Sales::Questions::DepositAmount, type: :model do
   end
 
   context "when the ownership type is outright" do
-    let(:log) { create(:sales_log, :completed, ownershipsch: 3, mortgageused: 2) }
+    let(:log) { build(:sales_log, :completed, ownershipsch: 3, mortgageused: 2) }
 
     it "is not marked as derived when a mortgage is used" do
       log.mortgageused = 1

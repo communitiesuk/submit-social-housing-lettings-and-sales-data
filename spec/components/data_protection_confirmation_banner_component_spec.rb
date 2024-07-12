@@ -5,11 +5,11 @@ RSpec.describe DataProtectionConfirmationBannerComponent, type: :component do
 
   let(:component) { described_class.new(user:, organisation:) }
   let(:render) { render_inline(component) }
-  let(:user) { create(:user) }
+  let(:user) { create(:user, with_dsa: false) }
   let(:organisation) { user.organisation }
 
   context "when user is support and organisation is blank" do
-    let(:user) { create(:user, :support) }
+    let(:user) { create(:user, :support, with_dsa: false) }
     let(:organisation) { nil }
 
     it "does not display banner" do
@@ -37,8 +37,8 @@ RSpec.describe DataProtectionConfirmationBannerComponent, type: :component do
     context "when org does not have a signed data sharing agreement" do
       context "when user is not a DPO" do
         let(:organisation) { create(:organisation, :without_dpc) }
-        let(:user) { create(:user, organisation:) }
-        let!(:dpo) { create(:user, :data_protection_officer, organisation:) }
+        let(:user) { create(:user, organisation:, with_dsa: false) }
+        let!(:dpo) { create(:user, :data_protection_officer, organisation:, with_dsa: false) }
 
         it "displays the banner and shows DPOs" do
           expect(component.display_banner?).to eq(true)
@@ -50,7 +50,7 @@ RSpec.describe DataProtectionConfirmationBannerComponent, type: :component do
 
       context "when user is a DPO" do
         let(:organisation) { create(:organisation, :without_dpc) }
-        let(:user) { create(:user, :data_protection_officer, organisation:) }
+        let(:user) { create(:user, :data_protection_officer, organisation:, with_dsa: false) }
 
         it "displays the banner and asks to sign" do
           expect(component.display_banner?).to eq(true)
@@ -141,8 +141,8 @@ RSpec.describe DataProtectionConfirmationBannerComponent, type: :component do
       context "when org does not have a signed data sharing agreement" do
         context "when user is not a DPO" do
           let(:organisation) { create(:organisation, :without_dpc) }
-          let(:user) { create(:user, organisation:) }
-          let!(:dpo) { create(:user, :data_protection_officer, organisation:) }
+          let(:user) { create(:user, organisation:, with_dsa: false) }
+          let!(:dpo) { create(:user, :data_protection_officer, organisation:, with_dsa: false) }
 
           it "displays the banner and shows DPOs" do
             expect(component.display_banner?).to eq(true)
@@ -168,7 +168,7 @@ RSpec.describe DataProtectionConfirmationBannerComponent, type: :component do
 
         context "when user is a DPO" do
           let(:organisation) { create(:organisation, :without_dpc) }
-          let(:user) { create(:user, :data_protection_officer, organisation:) }
+          let(:user) { create(:user, :data_protection_officer, organisation:, with_dsa: false) }
 
           it "displays the banner and asks to sign" do
             expect(component.display_banner?).to eq(true)
