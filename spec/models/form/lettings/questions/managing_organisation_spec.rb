@@ -58,6 +58,7 @@ RSpec.describe Form::Lettings::Questions::ManagingOrganisation, type: :model do
       let(:managing_org2) { create(:organisation, name: "Managing org 2") }
       let(:managing_org3) { create(:organisation, name: "Managing org 3") }
       let(:inactive_managing_org) { create(:organisation, name: "Inactive managing org", active: false) }
+      let(:deleted_managing_org) { create(:organisation, name: "Deleted managing org", discarded_at: Time.zone.yesterday) }
 
       let(:log) { create(:lettings_log, managing_organisation: managing_org1) }
       let!(:org_rel1) do
@@ -79,6 +80,7 @@ RSpec.describe Form::Lettings::Questions::ManagingOrganisation, type: :model do
 
       it "shows current managing agent at top, followed by user's org (with hint), followed by the active managing agents of the user's org" do
         create(:organisation_relationship, parent_organisation: user.organisation, child_organisation: inactive_managing_org)
+        create(:organisation_relationship, parent_organisation: user.organisation, child_organisation: deleted_managing_org)
 
         expect(question.displayed_answer_options(log, user)).to eq(options)
       end
@@ -104,7 +106,10 @@ RSpec.describe Form::Lettings::Questions::ManagingOrganisation, type: :model do
       end
 
       before do
-        create(:organisation, name: "Inactive managing org", active: false)
+        inactive_managing_org = create(:organisation, name: "Inactive managing org", active: false)
+        create(:organisation_relationship, parent_organisation: log_owning_org, child_organisation: inactive_managing_org)
+        deleted_managing_org = create(:organisation, name: "Deleted managing org", discarded_at: Time.zone.yesterday)
+        create(:organisation_relationship, parent_organisation: log_owning_org, child_organisation: deleted_managing_org)
       end
 
       context "when org owns stock" do
@@ -192,10 +197,12 @@ RSpec.describe Form::Lettings::Questions::ManagingOrganisation, type: :model do
     context "when organisation has merged" do
       let(:absorbing_org) { create(:organisation, name: "Absorbing org", holds_own_stock: true) }
       let!(:merged_org) { create(:organisation, name: "Merged org", holds_own_stock: false) }
+      let!(:merged_deleted_org) { create(:organisation, name: "Merged org", holds_own_stock: false, discarded_at: Time.zone.yesterday) }
       let(:user) { create(:user, :data_coordinator, organisation: absorbing_org) }
 
       let(:log) do
         merged_org.update!(merge_date: Time.zone.local(2023, 8, 2), absorbing_organisation_id: absorbing_org.id)
+        merged_deleted_org.update!(merge_date: Time.zone.local(2023, 8, 2), absorbing_organisation_id: absorbing_org.id)
         create(:lettings_log, owning_organisation: absorbing_org, managing_organisation: nil)
       end
 

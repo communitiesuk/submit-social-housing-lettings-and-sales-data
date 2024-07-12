@@ -33,13 +33,13 @@
           <% if log.owning_organisation %>
             <div class="app-metadata__item">
               <dt class="app-metadata__term">Owned by</dt>
-              <dd class="app-metadata__definition"><%= log.owning_organisation&.name %></dd>
+              <dd class="app-metadata__definition"><%= log.owning_organisation&.label %></dd>
             </div>
           <% end %>
           <% if log.managing_organisation %>
             <div class="app-metadata__item">
               <dt class="app-metadata__term">Managed by</dt>
-              <dd class="app-metadata__definition"><%= log.managing_organisation&.name %></dd>
+              <dd class="app-metadata__definition"><%= log.managing_organisation&.label %></dd>
             </div>
           <% end %>
         </dl>

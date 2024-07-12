@@ -13,7 +13,7 @@ RSpec.describe BulkUploadSalesLogsController, type: :request do
   describe "GET /sales-logs/bulk-upload-logs/start" do
     context "when data protection confirmation not signed" do
       let(:organisation) { create(:organisation, :without_dpc) }
-      let(:user) { create(:user, organisation:) }
+      let(:user) { create(:user, organisation:, with_dsa: false) }
 
       it "redirects to sales index page" do
         get "/sales-logs/bulk-upload-logs/start", params: {}

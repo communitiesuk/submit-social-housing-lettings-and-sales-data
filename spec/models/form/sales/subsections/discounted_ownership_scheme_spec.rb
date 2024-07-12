@@ -67,7 +67,7 @@ RSpec.describe Form::Sales::Subsections::DiscountedOwnershipScheme, type: :model
   end
 
   context "when it is a discounted ownership scheme" do
-    let(:log) { FactoryBot.create(:sales_log, ownershipsch: 2) }
+    let(:log) { FactoryBot.build(:sales_log, ownershipsch: 2) }
 
     it "is displayed in tasklist" do
       expect(discounted_ownership_scheme.displayed_in_tasklist?(log)).to eq(true)
@@ -75,7 +75,7 @@ RSpec.describe Form::Sales::Subsections::DiscountedOwnershipScheme, type: :model
   end
 
   context "when it is not a discounted ownership scheme" do
-    let(:log) { FactoryBot.create(:sales_log, ownershipsch: 1) }
+    let(:log) { FactoryBot.build(:sales_log, ownershipsch: 1) }
 
     it "is displayed in tasklist" do
       expect(discounted_ownership_scheme.displayed_in_tasklist?(log)).to eq(false)

@@ -47,7 +47,7 @@ private
               when "prepare-your-file"
                 Forms::BulkUploadLettings::PrepareYourFile.new(form_params)
               when "guidance"
-                Forms::BulkUploadLettings::Guidance.new(form_params)
+                Forms::BulkUploadLettings::Guidance.new(form_params.merge(referrer: params[:referrer]))
               when "needstype"
                 Forms::BulkUploadLettings::Needstype.new(form_params)
               when "upload-your-file"

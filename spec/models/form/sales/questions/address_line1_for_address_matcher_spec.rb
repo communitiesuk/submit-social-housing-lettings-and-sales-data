@@ -6,7 +6,7 @@ RSpec.describe Form::Sales::Questions::AddressLine1ForAddressMatcher, type: :mod
   let(:question_id) { nil }
   let(:question_definition) { nil }
   let(:page) { instance_double(Form::Page) }
-  let(:log) { create(:sales_log, :in_progress, address_line1_input: "Address line 1", postcode_full_input: "AA1 1AA") }
+  let(:log) { build(:sales_log, :in_progress, address_line1_input: "Address line 1", postcode_full_input: "AA1 1AA") }
 
   it "has correct page" do
     expect(question.page).to eq(page)

@@ -123,6 +123,11 @@ RSpec.describe Form::Sales::Questions::OwningOrganisationId, type: :model do
         it "shows merged organisation as an option" do
           expect(question.displayed_answer_options(log, user)).to eq(options)
         end
+
+        it "does not show absorbed organisation if it has been deleted" do
+          merged_organisation.update!(discarded_at: Time.zone.yesterday)
+          expect(question.displayed_answer_options(log, user)).to eq(options.except(merged_organisation.id))
+        end
       end
 
       context "when user's org has recently absorbed other orgs and it has available from date" do
@@ -200,8 +205,9 @@ RSpec.describe Form::Sales::Questions::OwningOrganisationId, type: :model do
       it "shows active orgs where organisation holds own stock" do
         non_stock_organisation = create(:organisation, holds_own_stock: false)
         inactive_org = create(:organisation, active: false)
+        deleted_organisation = create(:organisation, discarded_at: Time.zone.yesterday)
 
-        expected_opts = Organisation.filter_by_active.where(holds_own_stock: true).each_with_object(options) do |organisation, hsh|
+        expected_opts = Organisation.visible.filter_by_active.where(holds_own_stock: true).each_with_object(options) do |organisation, hsh|
           hsh[organisation.id] = organisation.name
           hsh
         end
@@ -210,6 +216,7 @@ RSpec.describe Form::Sales::Questions::OwningOrganisationId, type: :model do
         expect(question.displayed_answer_options(log, user)).not_to include(non_stock_organisation.id)
         expect(question.displayed_answer_options(log, user)).not_to include(inactive_org.id)
         expect(question.displayed_answer_options(log, user)).to include(organisation_1.id)
+        expect(question.displayed_answer_options(log, user)).not_to include(deleted_organisation.id)
       end
 
       context "when an org has recently absorbed other orgs" do

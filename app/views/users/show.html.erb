@@ -67,7 +67,7 @@
 
       <%= summary_list.with_row do |row|
             row.with_key { "Organisation" }
-            row.with_value { @user.organisation.name }
+            row.with_value { current_user.support? ? govuk_link_to(@user.organisation.name, lettings_logs_organisation_path(@user.organisation)) : @user.organisation.name }
             row.with_action
           end %>
 

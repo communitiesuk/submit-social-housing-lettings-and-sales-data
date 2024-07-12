@@ -122,7 +122,7 @@ RSpec.describe Form::Sales::Subsections::OutrightSale, type: :model do
   end
 
   context "when it is a outright sale" do
-    let(:log) { FactoryBot.create(:sales_log, ownershipsch: 3) }
+    let(:log) { FactoryBot.build(:sales_log, ownershipsch: 3) }
 
     it "is displayed in tasklist" do
       expect(outright_sale.displayed_in_tasklist?(log)).to eq(true)
@@ -130,7 +130,7 @@ RSpec.describe Form::Sales::Subsections::OutrightSale, type: :model do
   end
 
   context "when it is not a outright sale" do
-    let(:log) { FactoryBot.create(:sales_log, ownershipsch: 2) }
+    let(:log) { FactoryBot.build(:sales_log, ownershipsch: 2) }
 
     it "is displayed in tasklist" do
       expect(outright_sale.displayed_in_tasklist?(log)).to eq(false)

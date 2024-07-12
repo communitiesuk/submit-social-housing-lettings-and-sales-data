@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Validations::Sales::SoftValidations do
-  let(:record) { create(:sales_log) }
+  let(:record) { build(:sales_log) }
 
   describe "income1 min validations" do
     context "when validating soft min" do

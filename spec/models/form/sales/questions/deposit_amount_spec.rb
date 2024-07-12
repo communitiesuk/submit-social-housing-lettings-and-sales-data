@@ -9,7 +9,7 @@ RSpec.describe Form::Sales::Questions::DepositAmount, type: :model do
   let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2023, 4, 1)))) }
 
   context "when the ownership type is shared" do
-    let(:log) { create(:sales_log, :completed, ownershipsch: 1, mortgageused: 2) }
+    let(:log) { build(:sales_log, :completed, ownershipsch: 1, mortgageused: 2) }
 
     it "is not marked as derived" do
       expect(question.derived?(log)).to be false

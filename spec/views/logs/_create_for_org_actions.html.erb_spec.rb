@@ -20,7 +20,7 @@ RSpec.describe "logs/_create_for_org_actions.html.erb" do
   end
 
   context "without data sharing agreement" do
-    let(:user) { create(:user, organisation: create(:organisation, :without_dpc)) }
+    let(:user) { create(:user, organisation: create(:organisation, :without_dpc), with_dsa: false) }
 
     it "does not include create log buttons" do
       render

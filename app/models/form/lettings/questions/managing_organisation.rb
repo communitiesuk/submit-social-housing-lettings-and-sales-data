@@ -17,7 +17,8 @@ class Form::Lettings::Questions::ManagingOrganisation < ::Form::Question
     return opts unless log
 
     if log.managing_organisation.present?
-      opts = opts.merge({ log.managing_organisation.id => log.managing_organisation.name })
+      org_value = log.managing_organisation.label
+      opts = opts.merge({ log.managing_organisation.id => org_value })
     end
 
     if user.support?
@@ -31,14 +32,14 @@ class Form::Lettings::Questions::ManagingOrganisation < ::Form::Question
     end
 
     orgs = if user.support?
-             log.owning_organisation.managing_agents.filter_by_active
+             log.owning_organisation.managing_agents.visible.filter_by_active
            elsif user.organisation.absorbed_organisations.include?(log.owning_organisation)
-             user.organisation.managing_agents.filter_by_active + log.owning_organisation.managing_agents.filter_by_active
+             user.organisation.managing_agents.visible.filter_by_active + log.owning_organisation.managing_agents.visible.filter_by_active # here
            else
-             user.organisation.managing_agents.filter_by_active
+             user.organisation.managing_agents.visible.filter_by_active
            end
 
-    user.organisation.absorbed_organisations.each do |absorbed_org|
+    user.organisation.absorbed_organisations.visible.each do |absorbed_org|
       opts[absorbed_org.id] = "#{absorbed_org.name} (inactive as of #{absorbed_org.merge_date.to_fs(:govuk_date)})"
     end
 
@@ -72,7 +73,10 @@ class Form::Lettings::Questions::ManagingOrganisation < ::Form::Question
   end
 
   def answer_label(log, _current_user = nil)
-    Organisation.find_by(id: log.managing_organisation_id)&.name
+    organisation = Organisation.find_by(id: log.managing_organisation_id)
+    return unless organisation
+
+    organisation.label
   end
 
 private
