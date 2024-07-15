@@ -1016,7 +1016,7 @@ RSpec.describe FormController, type: :request do
           end
         end
 
-        context "when the sale date changes from 2024 to 2023" do # TODO: CLDC-3505 remove this test on year hard end
+        xcontext "when the sale date changes from 2024 to 2023" do # TODO: CLDC-3505 remove this test on year hard end
           let(:sales_log) { create(:sales_log, owning_organisation: organisation, managing_organisation:, assigned_to: user) }
           let(:params) do
             {
