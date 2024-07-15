@@ -3,7 +3,7 @@ FactoryBot.define do
     sequence(:email) { "test#{SecureRandom.hex}@example.com" }
     name { "Danny Rojas" }
     password { "pAssword1" }
-    organisation
+    organisation { association :organisation, with_dsa: is_dpo ? false : true }
     role { "data_provider" }
     phone { "1234512345123" }
     trait :data_provider do
@@ -27,10 +27,18 @@ FactoryBot.define do
       old_user_id { SecureRandom.uuid }
     end
 
-    after(:create) do |user, evaluator|
-      FactoryBot.create(:legacy_user, old_user_id: evaluator.old_user_id, user:)
+    transient do
+      with_dsa { true }
+    end
 
-      user.reload
+    after(:create) do |user, evaluator|
+      if evaluator.with_dsa && !user.organisation.data_protection_confirmed?
+        create(
+          :data_protection_confirmation,
+          organisation: user.organisation,
+          data_protection_officer: user,
+        )
+      end
     end
   end
 end

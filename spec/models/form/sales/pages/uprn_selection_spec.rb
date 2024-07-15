@@ -6,7 +6,7 @@ RSpec.describe Form::Sales::Pages::UprnSelection, type: :model do
   let(:page_id) { nil }
   let(:page_definition) { nil }
   let(:subsection) { instance_double(Form::Subsection) }
-  let(:log) { create(:sales_log) }
+  let(:log) { build(:sales_log) }
 
   it "has correct subsection" do
     expect(page.subsection).to eq(subsection)

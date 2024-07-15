@@ -11,7 +11,7 @@ RSpec.describe "organisations/show.html.erb" do
   let(:organisation_with_dsa) { create(:organisation) }
 
   context "when dpo" do
-    let(:user) { create(:user, is_dpo: true, organisation: organisation_without_dpc) }
+    let(:user) { create(:user, is_dpo: true, organisation: organisation_without_dpc, with_dsa: false) }
 
     it "includes data sharing agreement row" do
       render
@@ -32,7 +32,7 @@ RSpec.describe "organisations/show.html.erb" do
     end
 
     context "when accepted" do
-      let(:user) { create(:user, organisation: organisation_with_dsa) }
+      let(:user) { create(:user, organisation: organisation_with_dsa, with_dsa: false) }
 
       it "includes data sharing agreement row" do
         render
@@ -55,7 +55,7 @@ RSpec.describe "organisations/show.html.erb" do
   end
 
   context "when support user" do
-    let(:user) { create(:user, :support, organisation: organisation_without_dpc) }
+    let(:user) { create(:user, :support, organisation: organisation_without_dpc, with_dsa: false) }
 
     it "includes data sharing agreement row" do
       render
@@ -82,7 +82,7 @@ RSpec.describe "organisations/show.html.erb" do
     end
 
     context "when accepted" do
-      let(:user) { create(:user, :support, organisation: organisation_with_dsa) }
+      let(:user) { create(:user, :support, organisation: organisation_with_dsa, with_dsa: false) }
 
       it "includes data sharing agreement row" do
         render
@@ -125,7 +125,7 @@ RSpec.describe "organisations/show.html.erb" do
   end
 
   context "when not dpo" do
-    let(:user) { create(:user, organisation: organisation_without_dpc) }
+    let(:user) { create(:user, organisation: organisation_without_dpc, with_dsa: false) }
 
     it "includes data sharing agreement row" do
       render
@@ -149,7 +149,7 @@ RSpec.describe "organisations/show.html.erb" do
     end
 
     context "when accepted" do
-      let(:user) { create(:user, organisation: organisation_with_dsa) }
+      let(:user) { create(:user, organisation: organisation_with_dsa, with_dsa: false) }
 
       it "includes data sharing agreement row" do
         render
