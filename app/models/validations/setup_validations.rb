@@ -93,6 +93,10 @@ module Validations::SetupValidations
     scheme_during_startdate_validation(record)
   end
 
+  def validate_tenancy(record)
+    tenancy_during_startdate_validation(record)
+  end
+
   def validate_managing_organisation_data_sharing_agremeent_signed(record)
     return if record.skip_dpo_validation
 

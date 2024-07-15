@@ -298,6 +298,13 @@ class Scheme < ApplicationRecord
   def all_locations_inactive?
     active? && locations.all? { |location| !location.active? }
   end
+
+  def any_location_active_on_date?(date)
+    return false unless date
+
+    locations.any? { |location| date && location.active_on_date?(date) }
+  end
+
   def reactivating_soon?
     status == :reactivating_soon
   end
