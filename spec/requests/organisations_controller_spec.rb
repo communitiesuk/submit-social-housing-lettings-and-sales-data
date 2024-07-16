@@ -2114,7 +2114,6 @@ RSpec.describe OrganisationsController, type: :request do
           get "/organisations/#{organisation.id}/data-sharing-agreement", headers: headers
           expect(response).to have_http_status(:ok)
           expect(page).to have_content("This agreement is made the 2nd day of March 2001")
-          # binding.pry
           expect(page).to have_content("1) Org name")
         end
       end
