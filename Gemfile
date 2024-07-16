@@ -103,7 +103,6 @@ group :test do
   gem "rspec-rails", require: false
   gem "selenium-webdriver", require: false
   gem "simplecov", require: false
-  gem "test-prof", "~> 1.0"
   gem "timecop", "~> 0.9.4"
   gem "webmock", require: false
 end
