@@ -93,14 +93,14 @@ class BulkUpload::LettingsLogToCsv
       log.managing_organisation&.old_visible_id,
       log.assigned_to&.email,
       log.needstype,
-      "S#{log.scheme&.id}",
+      log.scheme&.id ? "S#{log.scheme&.id}" : "",
       log.location&.id,
       renewal,
       log.startdate&.day,
       log.startdate&.month,
       log.startdate&.strftime("%y"), # 10
 
-      london_affordable_rent,
+      rent_type,
       log.irproduct_other,
       log.tenancycode,
       log.propcode,
@@ -137,7 +137,7 @@ class BulkUpload::LettingsLogToCsv
       log.age1 || overrides[:age1],
       log.sex1,
       log.ethnic,
-      log.national,
+      log.nationality_all_group,
       log.ecstat1,
       log.relat2,
       log.age2 || overrides[:age2],
@@ -214,11 +214,11 @@ class BulkUpload::LettingsLogToCsv
       cbl,
       chr,
       cap,
-      nil, # accessible register
+      accessible_register,
       log.referral,
       net_income_known,
-      log.earnings,
       log.incfreq,
+      log.earnings,
       log.hb, # 120
 
       log.benefits,
@@ -392,9 +392,7 @@ class BulkUpload::LettingsLogToCsv
   end
 
   def to_custom_csv_row(seed: nil, field_values: nil)
-    if seed
-      row = field_values.shuffle(random: Random.new(seed))
-    end
+    row = seed ? field_values.shuffle(random: Random.new(seed)) : field_values
     (row_prefix + row).flatten.join(",") + line_ending
   end
 
@@ -419,6 +417,23 @@ private
       2
     when LettingsLog::RENT_TYPE[:other_intermediate_rent_product]
       3
+    end
+  end
+
+  def rent_type
+    case log.renttype
+    when LettingsLog::RENT_TYPE[:social_rent]
+      1
+    when LettingsLog::RENT_TYPE[:affordable_rent]
+      2
+    when LettingsLog::RENT_TYPE[:london_affordable_rent]
+      3
+    when LettingsLog::RENT_TYPE[:rent_to_buy]
+      4
+    when LettingsLog::RENT_TYPE[:london_living_rent]
+      5
+    when LettingsLog::RENT_TYPE[:other_intermediate_rent_product]
+      6
     end
   end
 
@@ -469,6 +484,10 @@ private
 
   def cap
     checkbox_value(log.cap)
+  end
+
+  def accessible_register
+    checkbox_value(log.accessible_register)
   end
 
   def checkbox_value(field)
