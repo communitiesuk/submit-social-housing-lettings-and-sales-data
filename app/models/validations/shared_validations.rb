@@ -85,7 +85,6 @@ module Validations::SharedValidations
     end
   end
 
-
   def inactive_status(date, resource)
     return if date.blank? || resource.blank?
 
