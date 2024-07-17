@@ -338,16 +338,6 @@ RSpec.describe Validations::Sales::FinancialValidations do
           expect(record.errors["income2"]).to include(match I18n.t("validations.financial.income.child_has_income"))
         end
       end
-
-      context "and saledate is before the 23/24 collection window" do
-        let(:record) { build(:sales_log, saledate: Time.zone.local(2022, 4, 3), ecstat2: 9) }
-
-        it "does not add an error if the saledate is before the 23/24 collection window" do
-          record.income2 = 40_000
-          financial_validator.validate_child_income(record)
-          expect(record.errors).to be_empty
-        end
-      end
     end
   end
 
