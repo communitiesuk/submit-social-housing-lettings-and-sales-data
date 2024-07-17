@@ -235,11 +235,11 @@ RSpec.describe BulkUpload::Lettings::Validator do
   describe "#create_logs?" do
     context "when a log has a clearable, non-setup error" do
       let(:log_1) { build(:lettings_log, :completed, period: 2, assigned_to: user) }
-      let(:log_2) { build(:lettings_log, :completed, period: 2, assigned_to: user) }
+      let(:log_2) { build(:lettings_log, :completed, period: 2, assigned_to: user, age1: 5) }
 
       before do
         file.write(BulkUpload::LettingsLogToCsv.new(log: log_1, col_offset: 0).to_csv_row)
-        file.write(BulkUpload::LettingsLogToCsv.new(log: log_2, col_offset: 0, overrides: { age1: 5 }).to_csv_row)
+        file.write(BulkUpload::LettingsLogToCsv.new(log: log_2, col_offset: 0).to_csv_row)
         file.close
       end
 

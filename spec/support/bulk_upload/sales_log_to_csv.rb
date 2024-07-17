@@ -12,6 +12,62 @@ class BulkUpload::SalesLogToCsv
     [nil] * col_offset
   end
 
+  def to_csv_row(seed: nil)
+    year = log.collection_start_year
+    case year
+    when 2022
+      to_2022_csv_row(seed:)
+    when 2023
+      to_2023_csv_row(seed:)
+    when 2024
+      to_2024_csv_row(seed:)
+    else
+      raise NotImplementedError "No mapping function implemented for year #{year}"
+    end
+  end
+
+  def to_row
+    year = log.collection_start_year
+    case year
+    when 2022
+      to_2022_row
+    when 2023
+      to_2023_row
+    when 2024
+      to_2024_row
+    else
+      raise NotImplementedError "No mapping function implemented for year #{year}"
+    end
+  end
+
+  def default_field_numbers_row(seed: nil)
+    year = log.collection_start_year
+    case year
+    when 2022
+      default_2022_field_numbers_row(seed:)
+    when 2023
+      default_2023_field_numbers_row(seed:)
+    when 2024
+      default_2024_field_numbers_row(seed:)
+    else
+      raise NotImplementedError "No mapping function implemented for year #{year}"
+    end
+  end
+
+  def default_field_numbers
+    year = log.collection_start_year
+    case year
+    when 2022
+      default_2022_field_numbers
+    when 2023
+      default_2023_field_numbers
+    when 2024
+      default_2024_field_numbers
+    else
+      raise NotImplementedError "No mapping function implemented for year #{year}"
+    end
+  end
+
   def to_2022_csv_row
     (row_prefix + to_2022_row).flatten.join(",") + line_ending
   end
@@ -48,17 +104,17 @@ class BulkUpload::SalesLogToCsv
 
   def default_2023_field_numbers_row(seed: nil)
     if seed
-      ["Bulk upload field number"] + default_2023_field_numbers.shuffle(random: Random.new(seed))
+      ["Field number"] + default_2023_field_numbers.shuffle(random: Random.new(seed))
     else
-      ["Bulk upload field number"] + default_2023_field_numbers
+      ["Field number"] + default_2023_field_numbers
     end.flatten.join(",") + line_ending
   end
 
   def default_2024_field_numbers_row(seed: nil)
     if seed
-      ["Bulk upload field number"] + default_2024_field_numbers.shuffle(random: Random.new(seed))
+      ["Field number"] + default_2024_field_numbers.shuffle(random: Random.new(seed))
     else
-      ["Bulk upload field number"] + default_2024_field_numbers
+      ["Field number"] + default_2024_field_numbers
     end.flatten.join(",") + line_ending
   end
 
@@ -239,10 +295,10 @@ class BulkUpload::SalesLogToCsv
       log.saledate&.strftime("%y"),
       log.purchid,
       log.ownershipsch,
-      log.type, # field_9: "What is the type of shared ownership sale?",
-      log.type, # field_10: "What is the type of discounted ownership sale?",
+      log.ownershipsch == 1 ? log.type : "", # field_9: "What is the type of shared ownership sale?",
+      log.ownershipsch == 2 ? log.type : "", # field_10: "What is the type of discounted ownership sale?",
 
-      log.type, # field_11: "What is the type of outright sale?",
+      log.ownershipsch == 3 ? log.type : "", # field_11: "What is the type of outright sale?",
       log.othtype,
       log.companybuy,
       log.buylivein,
@@ -267,7 +323,7 @@ class BulkUpload::SalesLogToCsv
       log.age1,
       log.sex1,
       log.ethnic,
-      log.national,
+      log.nationality_all_group,
       log.ecstat1,
       log.buy1livein,
       log.relat2,
@@ -275,7 +331,7 @@ class BulkUpload::SalesLogToCsv
       log.sex2,
       log.ethnic_group2, # 40
 
-      log.nationalbuy2,
+      log.nationality_all_buyer2_group,
       log.ecstat2,
       log.buy2livein,
       log.hholdcount,
@@ -309,7 +365,7 @@ class BulkUpload::SalesLogToCsv
       log.buy2living, # 70
 
       log.prevtenbuy2,
-      hhregres,
+      log.hhregres,
       log.hhregresstill,
       log.armedforcesspouse,
       log.disabled,
@@ -320,7 +376,7 @@ class BulkUpload::SalesLogToCsv
       log.inc2mort, # 80
 
       log.hb,
-      log.savings,
+      log.savings.present? ? log.savings : "R",
       log.prevown,
       log.prevshared,
       log.proplen,
@@ -357,7 +413,7 @@ class BulkUpload::SalesLogToCsv
       log.proplen,
       log.value,
       log.grant,
-      log.discount,
+      log.discount || 0,
       log.mortgageused,
       log.mortgage,
       log.mortgagelender,
