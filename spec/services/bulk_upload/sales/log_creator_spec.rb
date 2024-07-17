@@ -93,7 +93,7 @@ RSpec.describe BulkUpload::Sales::LogCreator do
           deposit: 10_000,
           mortgageused: 1,
           mortgage: 100_000,
-          grant: 10_000
+          grant: 10_000,
         )
       end
 

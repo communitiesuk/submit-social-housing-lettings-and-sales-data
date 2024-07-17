@@ -75,7 +75,7 @@ RSpec.describe BulkUpload::Lettings::Validator do
 
     context "when uploading a 2023 logs for 2024 bulk upload" do
       let(:log) { build(:lettings_log, :completed, startdate: Time.zone.local(2023, 5, 6), tenancycode: "5234234234234") }
-      let(:bulk_upload) { build(:bulk_upload, user:, year: 2024)}
+      let(:bulk_upload) { build(:bulk_upload, user:, year: 2024) }
 
       context "with headers" do
         let(:seed) { rand }
