@@ -299,7 +299,7 @@ class Scheme < ApplicationRecord
     active? && locations.active.exists?
   end
 
-  def any_location_active_on_date?(date)
+  def has_active_locations_on_date?(date)
     return false unless date
 
     locations.any? { |location| date && location.active_on_date?(date) }

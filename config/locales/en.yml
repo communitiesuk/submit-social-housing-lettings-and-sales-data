@@ -302,6 +302,7 @@ en:
             scheme_id: "The scheme %{name} is not available until %{date}. Select another scheme or edit the tenancy start date"
           locations_inactive:
             startdate: "The scheme %{name} has no locations that are active on this date. Enter another date or choose another scheme."
+            scheme_id: "The scheme %{name} has no locations that are active on this date. Enter another date or choose another scheme."
       owning_organisation:
         invalid: "Please select the owning organisation or managing organisation that you belong to"
         data_sharing_agreement_not_signed: "The organisation must accept the Data Sharing Agreement before it can be selected as the owning organisation."

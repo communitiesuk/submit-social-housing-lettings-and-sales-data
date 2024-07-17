@@ -82,16 +82,9 @@ module Validations::SharedValidations
       record.errors.add :startdate, I18n.t("validations.setup.startdate.scheme.#{scope}.startdate", name: record.scheme.service_name, date:, deactivation_date:)
       record.errors.add :scheme_id, I18n.t("validations.setup.startdate.scheme.#{scope}.scheme_id", name: record.scheme.service_name, date:, deactivation_date:)
     end
-  end
-
-  def tenancy_during_startdate_validation(record)
-    return if record.startdate.blank?
-
-    if record.scheme.present? && !record.scheme.any_location_active_on_date?(record.startdate)
+    if record.scheme.present? && !record.scheme.has_active_locations_on_date?(record.startdate)
       record.errors.add :startdate, I18n.t("validations.setup.startdate.scheme.locations_inactive.startdate", name: record.scheme.service_name)
-    end
-    if record.location.present? && !record.location.active_on_date?(record.startdate)
-      record.errors.add :startdate, I18n.t("validations.setup.startdate.location.deactivated.startdate", postcode: record.location.postcode)
+      record.errors.add :scheme_id, I18n.t("validations.setup.startdate.scheme.locations_inactive.scheme_id", name: record.scheme.service_name)
     end
   end
 
