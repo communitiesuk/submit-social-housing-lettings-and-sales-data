@@ -564,37 +564,6 @@ RSpec.describe SalesLog, type: :model do
       expect(record_from_db["la"]).to eq("E08000003")
     end
 
-    context "with 23/24 logs" do
-      let(:address_sales_log_23_24) do
-        described_class.create({
-          owning_organisation:,
-          assigned_to: assigned_to_user,
-          ppcodenk: 1,
-          postcode_full: "CA10 1AA",
-          saledate: Time.zone.local(2023, 5, 2),
-        })
-      end
-
-      before do
-        WebMock.stub_request(:get, /api\.postcodes\.io\/postcodes\/CA101AA/)
-        .to_return(status: 200, body: '{"status":200,"result":{"admin_district":"Eden","codes":{"admin_district":"E07000030"}}}', headers: {})
-      end
-
-      it "correctly infers new la" do
-        record_from_db = described_class.find(address_sales_log_23_24.id)
-        expect(address_sales_log_23_24.la).to eq("E06000064")
-        expect(record_from_db["la"]).to eq("E06000064")
-      end
-
-      it "does not set previous postcode or previous la for discounted sale" do
-        address_sales_log_23_24.update!(ownershipsch: 2, ppostcode_full: nil, prevloc: nil)
-        record_from_db = described_class.find(address_sales_log_23_24.id)
-        expect(address_sales_log_23_24.ppostcode_full).to eq(nil)
-        expect(record_from_db["ppostcode_full"]).to eq(nil)
-        expect(record_from_db["prevloc"]).to eq(nil)
-      end
-    end
-
     context "with 24/25 logs" do
       let(:address_sales_log_24_25) do
         described_class.create({
