@@ -82,6 +82,7 @@ module Validations::SetupValidations
 
   def validate_scheme(record)
     scheme_during_startdate_validation(record)
+    tenancy_startdate_with_scheme_locations(record)
   end
 
   def validate_location(record)
