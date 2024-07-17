@@ -12,6 +12,62 @@ class BulkUpload::LettingsLogToCsv
     [nil] * col_offset
   end
 
+  def to_csv_row(seed: nil)
+    year = log.collection_start_year
+    case year
+    when 2022
+      to_2022_csv_row(seed:)
+    when 2023
+      to_2023_csv_row(seed:)
+    when 2024
+      to_2024_csv_row(seed:)
+    else
+      raise NotImplementedError "No mapping function implemented for year #{year}"
+    end
+  end
+
+  def to_row
+    year = log.collection_start_year
+    case year
+    when 2022
+      to_2022_row
+    when 2023
+      to_2023_row
+    when 2024
+      to_2024_row
+    else
+      raise NotImplementedError "No mapping function implemented for year #{year}"
+    end
+  end
+
+  def default_field_numbers_row(seed: nil)
+    year = log.collection_start_year
+    case year
+    when 2022
+      default_2022_field_numbers_row(seed:)
+    when 2023
+      default_2023_field_numbers_row(seed:)
+    when 2024
+      default_2024_field_numbers_row(seed:)
+    else
+      raise NotImplementedError "No mapping function implemented for year #{year}"
+    end
+  end
+
+  def default_field_numbers
+    year = log.collection_start_year
+    case year
+    when 2022
+      default_2022_field_numbers
+    when 2023
+      default_2023_field_numbers
+    when 2024
+      default_2024_field_numbers
+    else
+      raise NotImplementedError "No mapping function implemented for year #{year}"
+    end
+  end
+
   def to_2022_csv_row(seed: nil)
     if seed
       row = to_2022_row.shuffle(random: Random.new(seed))
@@ -421,7 +477,7 @@ private
   end
 
   def rent_type
-    case log.renttype
+    case log.rent_type
     when LettingsLog::RENT_TYPE[:social_rent]
       1
     when LettingsLog::RENT_TYPE[:affordable_rent]
