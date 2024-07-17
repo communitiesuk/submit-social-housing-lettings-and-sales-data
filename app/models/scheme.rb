@@ -295,8 +295,8 @@ class Scheme < ApplicationRecord
     status == :active
   end
 
-  def all_locations_inactive?
-    active? && locations.all? { |location| !location.active? }
+  def has_active_locations?
+    active? && locations.active.exists?
   end
 
   def any_location_active_on_date?(date)
