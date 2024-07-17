@@ -6,9 +6,9 @@ RSpec.describe BulkUploadErrorRowComponent, type: :component do
     let(:tenant_code) { SecureRandom.hex(4) }
     let(:property_ref) { SecureRandom.hex(4) }
     let(:purchaser_code) { nil }
-    let(:field) { :field_134 }
+    let(:field) { :field_130 }
     let(:error) { "some error" }
-    let(:bulk_upload) { create(:bulk_upload, :lettings) }
+    let(:bulk_upload) { create(:bulk_upload, :lettings, year: 2024) }
     let(:bulk_upload_errors) do
       [
         FactoryBot.build(
@@ -79,8 +79,8 @@ RSpec.describe BulkUploadErrorRowComponent, type: :component do
     end
 
     context "when a sales bulk upload" do
-      let(:bulk_upload) { create(:bulk_upload, :sales) }
-      let(:field) { :field_87 }
+      let(:bulk_upload) { create(:bulk_upload, :sales, year: 2024) }
+      let(:field) { :field_86 }
 
       it "renders the question for sales" do
         expected = "Is this a staircasing transaction?"
