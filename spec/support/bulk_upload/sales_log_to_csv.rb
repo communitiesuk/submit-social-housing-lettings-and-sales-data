@@ -376,7 +376,7 @@ class BulkUpload::SalesLogToCsv
       log.inc2mort, # 80
 
       log.hb,
-      log.savings.present? ? log.savings : "R",
+      log.savings.present? || "R",
       log.prevown,
       log.prevshared,
       log.proplen,
