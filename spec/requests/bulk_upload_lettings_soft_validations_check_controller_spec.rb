@@ -15,7 +15,7 @@ RSpec.describe BulkUploadLettingsSoftValidationsCheckController, type: :request 
       get "/lettings-logs/bulk-upload-soft-validations-check/#{bulk_upload.id}/confirm-soft-errors"
 
       expect(response.body).to include("Bulk upload for lettings")
-      expect(response.body).to include("2023/24")
+      expect(response.body).to include(bulk_upload.year_combo)
       expect(response.body).to include("Check these 2 answers")
       expect(response.body).to include(bulk_upload.filename)
       expect(response.body).to include("Are these fields correct?")
