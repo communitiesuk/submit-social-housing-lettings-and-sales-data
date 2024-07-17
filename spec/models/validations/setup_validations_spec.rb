@@ -525,17 +525,16 @@ RSpec.describe Validations::SetupValidations do
       it "produces error when scheme does not have any active locations on the tenancy start date" do
         record.startdate = Time.zone.local(2022, 7, 5)
         record.scheme = scheme
-        setup_validator.validate_tenancy(record)
+        setup_validator.validate_scheme(record)
         expect(record.errors["startdate"]).to include(match I18n.t("validations.setup.startdate.scheme.locations_inactive.startdate", name: scheme.service_name))
       end
 
       it "produces no error when scheme has active locations on the tenancy start date" do
         record.startdate = Time.zone.local(2022, 6, 1)
         record.scheme = scheme
-        setup_validator.validate_tenancy(record)
+        setup_validator.validate_scheme(record)
         expect(record.errors["startdate"]).to be_empty
       end
-
     end
 
     context "with a scheme with no locations active on the start date & location also set" do
@@ -552,15 +551,16 @@ RSpec.describe Validations::SetupValidations do
         record.startdate = Time.zone.local(2022, 7, 5)
         record.scheme = scheme
         record.location = location
-        setup_validator.validate_tenancy(record)
+        setup_validator.validate_scheme(record)
         expect(record.errors["startdate"]).to include(match I18n.t("validations.setup.startdate.scheme.locations_inactive.startdate", name: scheme.service_name))
+        expect(record.errors["startdate"]).not_to include(match I18n.t("validations.setup.startdate.location.deactivated.startdate", postcode: location.postcode))
       end
 
       it "produces no error when scheme has active locations on the tenancy start date" do
         record.startdate = Time.zone.local(2022, 6, 1)
         record.scheme = scheme
         record.location = location
-        setup_validator.validate_tenancy(record)
+        setup_validator.validate_scheme(record)
         expect(record.errors["startdate"]).to be_empty
       end
     end
@@ -701,7 +701,7 @@ RSpec.describe Validations::SetupValidations do
       end
     end
 
-    context "with the chosen location inactive on the start date" do
+    context "with the chosen location inactive on the tenancy start date" do
       let(:scheme) { create(:scheme) }
       let(:location) { create(:location, scheme:) }
 
@@ -714,14 +714,14 @@ RSpec.describe Validations::SetupValidations do
       it "produces the location error when the chosen location is inactive on the tenancy start date" do
         record.startdate = Time.zone.local(2022, 7, 5)
         record.location = location
-        setup_validator.validate_tenancy(record)
+        setup_validator.validate_location(record)
         expect(record.errors["startdate"]).to include(match I18n.t("validations.setup.startdate.location.deactivated.startdate", postcode: location.postcode))
       end
 
       it "produces no error when the chosen location is active on the tenancy start date" do
         record.startdate = Time.zone.local(2022, 6, 1)
         record.location = location
-        setup_validator.validate_tenancy(record)
+        setup_validator.validate_location(record)
         expect(record.errors["startdate"]).to be_empty
       end
     end
