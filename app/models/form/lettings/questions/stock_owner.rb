@@ -17,7 +17,8 @@ class Form::Lettings::Questions::StockOwner < ::Form::Question
     return answer_opts unless log
 
     if log.owning_organisation_id.present?
-      answer_opts[log.owning_organisation.id] = log.owning_organisation.name
+      org_value = log.owning_organisation.label
+      answer_opts[log.owning_organisation.id] = org_value
     end
 
     recently_absorbed_organisations = user.organisation.absorbed_organisations.merged_during_open_collection_period
@@ -30,7 +31,7 @@ class Form::Lettings::Questions::StockOwner < ::Form::Question
     end
 
     if user.support?
-      Organisation.filter_by_active.where(holds_own_stock: true).find_each do |org|
+      Organisation.visible.filter_by_active.where(holds_own_stock: true).find_each do |org|
         if org.merge_date.present?
           answer_opts[org.id] = "#{org.name} (inactive as of #{org.merge_date.to_fs(:govuk_date)})" if org.merge_date >= FormHandler.instance.start_date_of_earliest_open_for_editing_collection_period
         elsif org.absorbed_organisations.merged_during_open_collection_period.exists? && org.available_from.present?
@@ -40,10 +41,10 @@ class Form::Lettings::Questions::StockOwner < ::Form::Question
         end
       end
     else
-      user.organisation.stock_owners.filter_by_active.each do |stock_owner|
+      user.organisation.stock_owners.visible.filter_by_active.each do |stock_owner|
         answer_opts[stock_owner.id] = stock_owner.name
       end
-      recently_absorbed_organisations.each do |absorbed_org|
+      recently_absorbed_organisations.visible.each do |absorbed_org|
         answer_opts[absorbed_org.id] = merged_organisation_label(absorbed_org.name, absorbed_org.merge_date) if absorbed_org.holds_own_stock?
       end
     end
@@ -64,7 +65,7 @@ class Form::Lettings::Questions::StockOwner < ::Form::Question
   def hidden_in_check_answers?(_log, user = nil)
     return false if user.support?
 
-    stock_owners = user.organisation.stock_owners + user.organisation.absorbed_organisations.where(holds_own_stock: true)
+    stock_owners = user.organisation.stock_owners.visible + user.organisation.absorbed_organisations.visible.where(holds_own_stock: true)
 
     if user.organisation.holds_own_stock?
       stock_owners.count.zero?

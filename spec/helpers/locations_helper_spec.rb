@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe LocationsHelper do
+  include CollectionTimeHelper
+
   describe "mobility type selection" do
     expected_selection = [OpenStruct.new(id: "Wheelchair-user standard", name: "Wheelchair-user standard", description: "Suitable for someone who uses a wheelchair and offers the full use of all rooms and facilities."),
                           OpenStruct.new(id: "Fitted with equipment and adaptations", name: "Fitted with equipment and adaptations", description: "Fitted with stairlifts, ramps, level access showers or grab rails."),
@@ -201,18 +203,26 @@ RSpec.describe LocationsHelper do
 
     context "when viewing availability" do
       context "with no deactivations" do
-        it "displays current collection start date as availability date if created_at is later than collection start date" do
-          location.update!(startdate: nil, created_at: Time.zone.local(2024, 1, 16))
+        before do
+          allow(Time).to receive(:now).and_call_original
+        end
+
+        it "displays current collection start date as availability date if created_at is later than collection start date and not in a crossover period" do
+          allow(FormHandler.instance).to receive(:in_crossover_period?).with(anything).and_return(false)
+
+          location.update!(startdate: nil, created_at: current_collection_start_date + 6.months)
           availability_attribute = display_location_attributes(location).find { |x| x[:name] == "Availability" }[:value]
 
-          expect(availability_attribute).to eq("Active from 1 April 2023")
+          expect(availability_attribute).to eq("Active from 1 April #{current_collection_start_date.year}")
         end
 
         it "displays previous collection start date as availability date if created_at is later than collection start date and in crossover" do
-          location.update!(startdate: nil, created_at: Time.zone.local(2023, 4, 16))
+          allow(FormHandler.instance).to receive(:in_crossover_period?).with(anything).and_return(true)
+
+          location.update!(startdate: nil, created_at: current_collection_start_date + 1.week)
           availability_attribute = display_location_attributes(location).find { |x| x[:name] == "Availability" }[:value]
 
-          expect(availability_attribute).to eq("Active from 1 April 2022")
+          expect(availability_attribute).to eq("Active from 1 April #{previous_collection_start_date.year}")
         end
 
         context "when location was merged" do

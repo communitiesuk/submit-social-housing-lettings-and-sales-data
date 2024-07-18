@@ -31,7 +31,7 @@ module DerivedVariables::SalesLogVariables
 
     if saledate && form.start_year_after_2024? && discounted_ownership_sale?
       self.ppostcode_full = postcode_full
-      self.ppcodenk = 0 if postcode_full.present?
+      self.ppcodenk = pcodenk
       self.prevloc = la
       self.is_previous_la_inferred = is_la_inferred
       self.previous_la_known = la_known

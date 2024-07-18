@@ -190,6 +190,8 @@ Rails.application.routes.draw do
         get "sales-logs/filters/#{filter}", to: "sales_logs_filters#organisation_#{filter.underscore}"
         get "sales-logs/filters/update-#{filter}", to: "sales_logs_filters#update_organisation_#{filter.underscore}"
       end
+      get "delete-confirmation", to: "organisations#delete_confirmation"
+      delete "delete", to: "organisations#delete"
     end
   end
 

@@ -45,7 +45,7 @@ RSpec.describe Form::Sales::Questions::Uprn, type: :model do
 
   describe "get_extra_check_answer_value" do
     context "when address is not present" do
-      let(:log) { create(:sales_log) }
+      let(:log) { build(:sales_log) }
 
       it "returns nil" do
         expect(question.get_extra_check_answer_value(log)).to be_nil

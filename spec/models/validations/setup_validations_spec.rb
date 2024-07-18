@@ -4,7 +4,7 @@ RSpec.describe Validations::SetupValidations do
   subject(:setup_validator) { setup_validator_class.new }
 
   let(:setup_validator_class) { Class.new { include Validations::SetupValidations } }
-  let(:record) { create(:lettings_log) }
+  let(:record) { build(:lettings_log) }
 
   describe "tenancy start date" do
     context "when in 22/23 collection" do
@@ -853,7 +853,7 @@ RSpec.describe Validations::SetupValidations do
     end
 
     context "when updating" do
-      let(:log) { create(:lettings_log, :in_progress) }
+      let(:log) { build(:lettings_log, :in_progress) }
       let(:org_with_dpc) { create(:organisation) }
       let(:org_without_dpc) { create(:organisation, :without_dpc) }
 

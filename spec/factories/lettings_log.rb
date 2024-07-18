@@ -216,6 +216,7 @@ FactoryBot.define do
     trait :ignore_validation_errors do
       to_create do |instance|
         instance.valid?
+        instance.errors.clear
         instance.save!(validate: false)
       end
     end

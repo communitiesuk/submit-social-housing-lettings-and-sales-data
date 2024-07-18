@@ -378,7 +378,7 @@ RSpec.describe Form::Sales::Subsections::HouseholdCharacteristics, type: :model 
   end
 
   context "when the sale is to a company buyer" do
-    let(:log) { FactoryBot.create(:sales_log, ownershipsch: 3, companybuy: 1) }
+    let(:log) { FactoryBot.build(:sales_log, ownershipsch: 3, companybuy: 1) }
 
     it "is not displayed in tasklist" do
       expect(household_characteristics.displayed_in_tasklist?(log)).to eq(false)
@@ -386,7 +386,7 @@ RSpec.describe Form::Sales::Subsections::HouseholdCharacteristics, type: :model 
   end
 
   context "when the sale is not to a company buyer" do
-    let(:log) { FactoryBot.create(:sales_log, ownershipsch: 3, companybuy: 2) }
+    let(:log) { FactoryBot.build(:sales_log, ownershipsch: 3, companybuy: 2) }
 
     it "is displayed in tasklist" do
       expect(household_characteristics.displayed_in_tasklist?(log)).to eq(true)
