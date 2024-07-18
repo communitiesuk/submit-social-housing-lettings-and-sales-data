@@ -83,9 +83,9 @@ class BulkUpload::LettingsLogToCsv
 
   def default_2022_field_numbers_row(seed: nil)
     if seed
-      ["Bulk upload field number"] + default_2022_field_numbers.shuffle(random: Random.new(seed))
+      ["Field number"] + default_2022_field_numbers.shuffle(random: Random.new(seed))
     else
-      ["Bulk upload field number"] + default_2022_field_numbers
+      ["Field number"] + default_2022_field_numbers
     end.flatten.join(",") + line_ending
   end
 
@@ -121,17 +121,17 @@ class BulkUpload::LettingsLogToCsv
 
   def default_2023_field_numbers_row(seed: nil)
     if seed
-      ["Bulk upload field number"] + default_2023_field_numbers.shuffle(random: Random.new(seed))
+      ["Field number"] + default_2023_field_numbers.shuffle(random: Random.new(seed))
     else
-      ["Bulk upload field number"] + default_2023_field_numbers
+      ["Field number"] + default_2023_field_numbers
     end.flatten.join(",") + line_ending
   end
 
   def default_2024_field_numbers_row(seed: nil)
     if seed
-      ["Bulk upload field number"] + default_2024_field_numbers.shuffle(random: Random.new(seed))
+      ["Field number"] + default_2024_field_numbers.shuffle(random: Random.new(seed))
     else
-      ["Bulk upload field number"] + default_2024_field_numbers
+      ["Field number"] + default_2024_field_numbers
     end.flatten.join(",") + line_ending
   end
 
@@ -441,9 +441,9 @@ class BulkUpload::LettingsLogToCsv
 
   def custom_field_numbers_row(seed: nil, field_numbers: nil)
     if seed
-      ["Bulk upload field number"] + field_numbers.shuffle(random: Random.new(seed))
+      ["Field number"] + field_numbers.shuffle(random: Random.new(seed))
     else
-      ["Bulk upload field number"] + field_numbers
+      ["Field number"] + field_numbers
     end.flatten.join(",") + line_ending
   end
 
