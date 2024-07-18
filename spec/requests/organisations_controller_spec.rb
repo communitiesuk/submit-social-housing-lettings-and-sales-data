@@ -2099,6 +2099,25 @@ RSpec.describe OrganisationsController, type: :request do
         expect(response).to have_http_status(:ok)
       end
     end
+
+    context "when signed in as support" do
+      let(:support_user) { create(:user, :support, with_dsa: false) }
+
+      before do
+        organisation.data_protection_confirmation.update!(signed_at: Time.zone.local(2001, 3, 2), organisation_name: "Org name")
+        allow(support_user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in support_user
+      end
+
+      context "and viewing other org dsa" do
+        it "shows correct org data and dates" do
+          get "/organisations/#{organisation.id}/data-sharing-agreement", headers: headers
+          expect(response).to have_http_status(:ok)
+          expect(page).to have_content("This agreement is made the 2nd day of March 2001")
+          expect(page).to have_content("1) Org name")
+        end
+      end
+    end
   end
 
   describe "POST #data_sharing_agreement" do

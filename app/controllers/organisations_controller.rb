@@ -238,7 +238,7 @@ class OrganisationsController < ApplicationController
   end
 
   def data_sharing_agreement
-    @data_protection_confirmation = current_user.organisation.data_protection_confirmation
+    @data_protection_confirmation = @organisation.data_protection_confirmation
   end
 
   def confirm_data_sharing_agreement

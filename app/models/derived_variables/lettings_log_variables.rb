@@ -31,8 +31,8 @@ module DerivedVariables::LettingsLogVariables
   def scheme_has_multiple_locations?
     return false unless scheme
 
-    @scheme_locations_count ||= scheme.locations.active_in_2_weeks.size
-    @scheme_locations_count > 1
+    scheme_locations_count = scheme.locations.active_in_2_weeks.size
+    scheme_locations_count > 1
   end
 
   def set_derived_fields!
