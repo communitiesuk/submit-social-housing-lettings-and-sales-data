@@ -273,7 +273,6 @@ RSpec.describe BulkUpload::Sales::Validator do
       let(:log_3) { build(:sales_log, :completed, assigned_to: user) }
 
       before do
-        file.write(log_to_csv.to_custom_csv_row(field_values: %w[other header row]))
         file.write(log_to_csv.default_field_numbers_row)
         file.write(log_to_csv.to_csv_row)
         file.write(BulkUpload::SalesLogToCsv.new(log: log_2).to_csv_row)
