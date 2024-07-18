@@ -63,7 +63,6 @@ gem "possessive"
 gem "auto_strip_attributes"
 # Use sidekiq for background processing
 gem "method_source", "~> 1.1"
-gem "rack-mini-profiler", "~> 2.0"
 gem "rails_admin", "~> 3.1"
 gem "ruby-openai"
 gem "sidekiq"
@@ -91,6 +90,7 @@ group :development do
   # Display performance information such as SQL time and flame graphs for each request in your browser.
   # Can be configured to work on production as well see: https://github.com/MiniProfiler/rack-mini-profiler/blob/master/README.md
   gem "erb_lint", require: false
+  gem "rack-mini-profiler", "~> 2.0"
   gem "rubocop-govuk", "4.3.0", require: false
   gem "rubocop-performance", require: false
   gem "rubocop-rails", require: false
