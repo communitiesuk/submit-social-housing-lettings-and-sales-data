@@ -36,4 +36,19 @@ RSpec.describe BulkUpload, type: :model do
       end
     end
   end
+
+  describe "year_combo" do
+    [
+      { year: 2023, expected_value: "2023/24" },
+      { year: 2024, expected_value: "2024/25" },
+    ].each do |test_case|
+      context "when the bulk upload year is #{test_case[:year]}" do
+        let(:bulk_upload) { build(:bulk_upload, year: test_case[:year]) }
+
+        it "returns the expected year combination string" do
+          expect(bulk_upload.year_combo).to eql(test_case[:expected_value])
+        end
+      end
+    end
+  end
 end
