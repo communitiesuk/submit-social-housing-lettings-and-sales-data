@@ -1,10 +1,12 @@
 require "securerandom"
 
+include CollectionTimeHelper
+
 FactoryBot.define do
   factory :bulk_upload do
     user
     log_type { BulkUpload.log_types.values.sample }
-    year { 2024 }
+    year { current_collection_start_year }
     identifier { SecureRandom.uuid }
     sequence(:filename) { |n| "bulk-upload-#{n}.csv" }
     needstype { 1 }
