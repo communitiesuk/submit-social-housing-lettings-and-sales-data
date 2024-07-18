@@ -6,13 +6,13 @@ RSpec.describe BulkUpload::Lettings::LogCreator do
   let(:owning_org) { create(:organisation, old_visible_id: 123, rent_periods: [2]) }
   let(:user) { create(:user, organisation: owning_org) }
 
-  let(:bulk_upload) { create(:bulk_upload, :lettings, user:) }
-  let(:csv_parser) { instance_double(BulkUpload::Lettings::Year2023::CsvParser) }
-  let(:row_parser) { instance_double(BulkUpload::Lettings::Year2023::RowParser) }
+  let(:bulk_upload) { create(:bulk_upload, :lettings, user:, year: 2024) }
+  let(:csv_parser) { instance_double(BulkUpload::Lettings::Year2024::CsvParser) }
+  let(:row_parser) { instance_double(BulkUpload::Lettings::Year2024::RowParser) }
   let(:log) { build(:lettings_log, :completed, assigned_to: user, owning_organisation: owning_org, managing_organisation: owning_org) }
 
   before do
-    allow(BulkUpload::Lettings::Year2023::CsvParser).to receive(:new).and_return(csv_parser)
+    allow(BulkUpload::Lettings::Year2024::CsvParser).to receive(:new).and_return(csv_parser)
     allow(csv_parser).to receive(:row_parsers).and_return([row_parser])
     allow(row_parser).to receive(:log).and_return(log)
     allow(row_parser).to receive(:bulk_upload=).and_return(true)
@@ -20,23 +20,7 @@ RSpec.describe BulkUpload::Lettings::LogCreator do
     allow(row_parser).to receive(:blank_row?).and_return(false)
   end
 
-  around do |example|
-    Timecop.freeze(Time.zone.local(2023, 4, 1)) do
-      Singleton.__init__(FormHandler)
-      example.run
-    end
-  end
-
   describe "#call" do
-    before do
-      Timecop.freeze(Time.zone.local(2023, 11, 10))
-      Singleton.__init__(FormHandler)
-    end
-
-    after do
-      Timecop.return
-    end
-
     context "when a valid csv with new log" do
       it "creates a new log" do
         expect { service.call }.to change(LettingsLog, :count)
@@ -77,17 +61,11 @@ RSpec.describe BulkUpload::Lettings::LogCreator do
         build(
           :lettings_log,
           :completed,
-          renttype: 3,
           age1_known: 0,
           age1: 5,
           owning_organisation: owning_org,
           managing_organisation: owning_org,
           assigned_to: user,
-          national: 18,
-          waityear: 9,
-          joint: 2,
-          tenancy: 9,
-          ppcodenk: 1,
         )
       end
 
@@ -148,18 +126,12 @@ RSpec.describe BulkUpload::Lettings::LogCreator do
         build(
           :lettings_log,
           :completed,
-          renttype: 3,
           age1: 22,
           age1_known: 0,
           ecstat1: 5,
           owning_organisation: owning_org,
           managing_organisation: owning_org,
           assigned_to: user,
-          national: 18,
-          waityear: 9,
-          joint: 2,
-          tenancy: 9,
-          ppcodenk: 1,
         )
       end
 

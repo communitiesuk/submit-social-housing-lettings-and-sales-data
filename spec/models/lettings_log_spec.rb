@@ -512,18 +512,6 @@ RSpec.describe LettingsLog do
             create_list(:location, 2, scheme: new_scheme)
           end
 
-          context "with a 2023 log" do
-            let(:log) { create(:lettings_log, :completed, :sh, :ignore_validation_errors, startdate: Time.zone.local(2024, 1, 1), owning_organisation:, scheme_id: old_scheme.id, location_id: old_location.id) }
-
-            it "clears the location set on the log" do
-              expect { log.update!(scheme: new_scheme) }.to change(log, :location_id).from(old_location.id).to(nil)
-            end
-
-            it "recalculates the log status" do
-              expect { log.update!(scheme: new_scheme) }.to change(log, :status).from("completed").to("in_progress")
-            end
-          end
-
           context "with a current year log" do
             let(:log) { create(:lettings_log, :completed, :sh, :startdate_today, owning_organisation:, scheme_id: old_scheme.id, location_id: old_location.id) }
 

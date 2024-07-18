@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
   subject(:parser) { described_class.new(attributes) }
 
-  let(:now) { Time.zone.now.beginning_of_day }
+  let(:now) { Time.zone.local(2023, 12, 1) }
 
   let(:attributes) { { bulk_upload: } }
   let(:bulk_upload) { create(:bulk_upload, :lettings, user:, needstype: nil, year: 2023) }
@@ -30,7 +30,8 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
   end
 
   before do
-    allow(FormHandler.instance).to receive(:lettings_in_crossover_period?).and_return(true)
+    Timecop.freeze(now)
+
     create(:organisation_relationship, parent_organisation: owning_org, child_organisation: managing_org)
 
     LaRentRange.create!(
@@ -46,11 +47,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
     )
   end
 
-  around do |example|
-    Timecop.freeze(Date.new(2023, 10, 1)) do
-      FormHandler.instance.use_real_forms!
-      example.run
-    end
+  after do
     Timecop.return
   end
 
@@ -369,7 +366,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
             end
 
             context "when a supported housing log with chcharges already exists in the db" do
-              let(:bulk_upload) { create(:bulk_upload, :lettings, user:, needstype: 2) }
+              let(:bulk_upload) { create(:bulk_upload, :lettings, user:, needstype: 2, year: 2023) }
               let(:attributes) do
                 valid_attributes.merge({ field_15: scheme.old_visible_id,
                                          field_4: "2",
@@ -418,7 +415,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
             end
 
             context "when a supported housing log different chcharges already exists in the db" do
-              let(:bulk_upload) { create(:bulk_upload, :lettings, user:, needstype: 2) }
+              let(:bulk_upload) { create(:bulk_upload, :lettings, user:, needstype: 2, year: 2023) }
               let(:attributes) do
                 valid_attributes.merge({ field_15: scheme.old_visible_id,
                                          field_4: "2",
@@ -513,7 +510,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
             end
 
             context "when a supported housing log with chcharges already exists in the db" do
-              let(:bulk_upload) { create(:bulk_upload, :lettings, user:, needstype: 2) }
+              let(:bulk_upload) { create(:bulk_upload, :lettings, user:, needstype: 2, year: 2023) }
               let(:attributes) do
                 valid_attributes.merge({ field_16: "S#{scheme.id}",
                                          field_4: "2",
@@ -562,7 +559,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
             end
 
             context "when a supported housing log different chcharges already exists in the db" do
-              let(:bulk_upload) { create(:bulk_upload, :lettings, user:, needstype: 2) }
+              let(:bulk_upload) { create(:bulk_upload, :lettings, user:, needstype: 2, year: 2023) }
               let(:attributes) do
                 valid_attributes.merge({ field_16: "S#{scheme.id}",
                                          field_4: "2",
@@ -901,7 +898,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
       end
 
       context "when bulk upload is for supported housing" do
-        let(:bulk_upload) { create(:bulk_upload, :lettings, user:) }
+        let(:bulk_upload) { create(:bulk_upload, :lettings, user:, year: 2023) }
 
         context "when general needs option selected" do
           let(:attributes) { { bulk_upload:, field_5: "1", field_4: "2" } }
@@ -1374,7 +1371,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
       end
 
       context "when 4 ie referred by LA and is not general needs" do
-        let(:bulk_upload) { create(:bulk_upload, :lettings, user:) }
+        let(:bulk_upload) { create(:bulk_upload, :lettings, user:, year: 2023) }
         let(:attributes) { { bulk_upload:, field_119: "4", field_4: "2" } }
 
         it "is permitted" do
@@ -1411,9 +1408,9 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
       end
 
       context "when inside of collection year" do
-        let(:attributes) { { bulk_upload:, field_7: "1", field_8: "10", field_9: "22" } }
+        let(:attributes) { { bulk_upload:, field_7: "1", field_8: "10", field_9: "23" } }
 
-        let(:bulk_upload) { create(:bulk_upload, :lettings, user:, year: 2022) }
+        let(:bulk_upload) { create(:bulk_upload, :lettings, user:, year: 2023) }
 
         it "does not return errors" do
           expect(parser.errors[:field_7]).not_to be_present
@@ -1423,15 +1420,9 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
       end
 
       context "when outside of collection year" do
-        around do |example|
-          Timecop.freeze(Date.new(2022, 4, 2)) do
-            example.run
-          end
-        end
-
         let(:attributes) { { bulk_upload:, field_7: "1", field_8: "1", field_9: "22" } }
 
-        let(:bulk_upload) { create(:bulk_upload, :lettings, user:, year: 2022) }
+        let(:bulk_upload) { create(:bulk_upload, :lettings, user:, year: 2023) }
 
         it "returns setup errors" do
           expect(parser.errors.where(:field_7, category: :setup)).to be_present
@@ -1640,7 +1631,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
       end
 
       context "when neither UPRN nor address fields are given for a supported housing record" do
-        let(:bulk_upload) { create(:bulk_upload, :lettings, user:, needstype: 2) }
+        let(:bulk_upload) { create(:bulk_upload, :lettings, user:, needstype: 2, year: 2023) }
         let(:attributes) do
           { bulk_upload:,
             field_15: scheme.old_visible_id,
