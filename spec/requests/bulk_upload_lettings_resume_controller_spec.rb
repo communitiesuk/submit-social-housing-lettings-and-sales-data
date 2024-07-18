@@ -41,7 +41,7 @@ RSpec.describe BulkUploadLettingsResumeController, type: :request do
       expect(response).to be_successful
 
       expect(response.body).to include("Bulk upload for lettings")
-      expect(response.body).to include("2023/24")
+      expect(response.body).to include(bulk_upload.year_combo)
       expect(response.body).to include("View the error report")
       expect(response.body).to include("How would you like to fix the errors?")
       expect(response.body).to include(bulk_upload.filename)
@@ -180,7 +180,7 @@ RSpec.describe BulkUploadLettingsResumeController, type: :request do
       expect(response).to be_successful
 
       expect(response.body).to include("Bulk upload for lettings")
-      expect(response.body).to include("2023/24")
+      expect(response.body).to include(bulk_upload.year_combo)
       expect(response.body).to include("These 2 answers will be deleted if you upload the log")
       expect(response.body).to include(bulk_upload.filename)
       expect(response.body).to include("Clear this data and upload the logs")
@@ -222,7 +222,7 @@ RSpec.describe BulkUploadLettingsResumeController, type: :request do
         expect(response).to be_successful
 
         expect(response.body).to include("Bulk upload for lettings")
-        expect(response.body).to include("2023/24")
+        expect(response.body).to include(bulk_upload.year_combo)
         expect(response.body).to include("These 2 answers will be deleted if you upload the log")
         expect(response.body).to include(bulk_upload.filename)
         expect(response.body).to include("Clear this data and upload the logs")

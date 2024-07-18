@@ -486,16 +486,42 @@ RSpec.describe LettingsLog do
       end
 
       describe "when changing a log's scheme and hence calling reset_scheme_location!" do
-        let(:scheme) { FactoryBot.create(:scheme) }
-        let(:invalid_location_1) { FactoryBot.create(:location, scheme:, startdate: Time.zone.today + 3.weeks) }
-        let(:valid_location) { FactoryBot.create(:location, scheme:, startdate: Time.zone.yesterday) }
-        let(:invalid_location_2) { FactoryBot.create(:location, scheme:, startdate: Time.zone.today + 3.weeks) }
+        before do
+          Timecop.return
+          Singleton.__init__(FormHandler)
+        end
 
         context "when there is one valid location and many invalid locations in the new scheme" do
+          let(:scheme) { create(:scheme) }
+          let(:invalid_location_1) { create(:location, scheme:, startdate: Time.zone.today + 3.weeks) }
+          let(:valid_location) { create(:location, scheme:, startdate: Time.zone.yesterday) }
+          let(:invalid_location_2) { create(:location, scheme:, startdate: Time.zone.today + 3.weeks) }
           let(:log) { create(:lettings_log, scheme: nil, location_id: nil, startdate: Time.zone.today) }
 
           it "infers that the log is for the valid location" do
             expect { log.update!(scheme:) }.to change(log, :location_id).from(nil).to(valid_location.id)
+          end
+        end
+
+        context "when there are many valid locations in the new scheme" do
+          let(:old_scheme) { create(:scheme, owning_organisation:) }
+          let(:old_location) { create(:location, scheme: old_scheme) }
+          let(:new_scheme) { create(:scheme, owning_organisation:) }
+
+          before do
+            create_list(:location, 2, scheme: new_scheme)
+          end
+
+          context "with a current year log" do
+            let(:log) { create(:lettings_log, :completed, :sh, :startdate_today, owning_organisation:, scheme_id: old_scheme.id, location_id: old_location.id) }
+
+            it "clears the location set on the log" do
+              expect { log.update!(scheme: new_scheme) }.to change(log, :location_id).from(old_location.id).to(nil)
+            end
+
+            it "recalculates the log status" do
+              expect { log.update!(scheme: new_scheme) }.to change(log, :status).from("completed").to("in_progress")
+            end
           end
         end
       end
