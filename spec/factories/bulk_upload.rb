@@ -1,8 +1,8 @@
 require "securerandom"
 
-include CollectionTimeHelper
-
 FactoryBot.define do
+  include CollectionTimeHelper
+
   factory :bulk_upload do
     user
     log_type { BulkUpload.log_types.values.sample }
