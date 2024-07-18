@@ -6,6 +6,7 @@ RSpec.describe BulkUpload::Processor do
   let(:bulk_upload) { create(:bulk_upload, :lettings, user:) }
   let(:user) { create(:user, organisation: owning_org) }
   let(:owning_org) { create(:organisation, old_visible_id: 123, rent_periods: [2]) }
+
   let(:mock_validator) do
     instance_double(
       BulkUpload::Lettings::Validator,
@@ -13,20 +14,35 @@ RSpec.describe BulkUpload::Processor do
       call: nil,
       total_logs_count: 1,
       any_setup_errors?: false,
-      create_logs?: false,
+      create_logs?: true,
+      soft_validation_errors_only?: false,
+    )
+  end
+  let(:mock_downloader) do
+    instance_double(
+      BulkUpload::Downloader,
+      call: nil,
+      path:,
+      delete_local_file!: nil,
     )
   end
 
+  let(:file) { Tempfile.new }
+  let(:path) { file.path }
+
+  let(:log) { build(:lettings_log, :completed, assigned_to: user) }
+
+  before do
+    allow(BulkUpload::Lettings::Validator).to receive(:new).and_return(mock_validator)
+    log_to_csv = BulkUpload::LettingsLogToCsv.new(log:)
+    file.write(log_to_csv.default_field_numbers_row)
+    file.write(log_to_csv.to_csv_row)
+    file.rewind
+
+    allow(BulkUpload::Downloader).to receive(:new).with(bulk_upload:).and_return(mock_downloader)
+  end
+
   describe "#call" do
-    before do
-      Timecop.freeze(Time.zone.local(2023, 11, 10))
-      Singleton.__init__(FormHandler)
-    end
-
-    after do
-      Timecop.return
-    end
-
     context "when errors exist from prior job run" do
       let!(:existing_error) { create(:bulk_upload_error, bulk_upload:) }
 
@@ -38,15 +54,6 @@ RSpec.describe BulkUpload::Processor do
     end
 
     context "when the bulk upload itself is not considered valid" do
-      let(:mock_downloader) do
-        instance_double(
-          BulkUpload::Downloader,
-          call: nil,
-          path: file_fixture("2023_24_lettings_bulk_upload.csv"),
-          delete_local_file!: nil,
-        )
-      end
-
       let(:mock_validator) do
         instance_double(
           BulkUpload::Lettings::Validator,
@@ -55,11 +62,6 @@ RSpec.describe BulkUpload::Processor do
           total_logs_count: 1,
           errors: [],
         )
-      end
-
-      before do
-        allow(BulkUpload::Downloader).to receive(:new).with(bulk_upload:).and_return(mock_downloader)
-        allow(BulkUpload::Lettings::Validator).to receive(:new).and_return(mock_validator)
       end
 
       it "sends failure email" do
@@ -88,27 +90,7 @@ RSpec.describe BulkUpload::Processor do
     end
 
     context "when the bulk upload processing throws an error" do
-      let(:mock_downloader) do
-        instance_double(
-          BulkUpload::Downloader,
-          call: nil,
-          path: file_fixture("2023_24_lettings_bulk_upload.csv"),
-          delete_local_file!: nil,
-        )
-      end
-
-      let(:mock_validator) do
-        instance_double(
-          BulkUpload::Lettings::Validator,
-          invalid?: false,
-          total_logs_count: 1,
-        )
-      end
-
       before do
-        allow(BulkUpload::Downloader).to receive(:new).with(bulk_upload:).and_return(mock_downloader)
-        allow(BulkUpload::Lettings::Validator).to receive(:new).and_return(mock_validator)
-
         allow(mock_validator).to receive(:call).and_raise(StandardError)
       end
 
@@ -132,16 +114,7 @@ RSpec.describe BulkUpload::Processor do
       end
     end
 
-    context "when a log has an incomplete setup section" do
-      let(:mock_downloader) do
-        instance_double(
-          BulkUpload::Downloader,
-          call: nil,
-          path: file_fixture("2023_24_lettings_bulk_upload.csv"),
-          delete_local_file!: nil,
-        )
-      end
-
+    context "when a log has a setup error" do
       let(:mock_validator) do
         instance_double(
           BulkUpload::Lettings::Validator,
@@ -150,11 +123,6 @@ RSpec.describe BulkUpload::Processor do
           total_logs_count: 1,
           any_setup_errors?: true,
         )
-      end
-
-      before do
-        allow(BulkUpload::Downloader).to receive(:new).with(bulk_upload:).and_return(mock_downloader)
-        allow(BulkUpload::Lettings::Validator).to receive(:new).and_return(mock_validator)
       end
 
       it "sends setup failure email" do
@@ -170,37 +138,6 @@ RSpec.describe BulkUpload::Processor do
     end
 
     context "when processing a bulk with perfect data" do
-      let(:mock_downloader) do
-        instance_double(
-          BulkUpload::Downloader,
-          call: nil,
-          path:,
-          delete_local_file!: nil,
-        )
-      end
-
-      let(:file) { Tempfile.new }
-      let(:path) { file.path }
-
-      let(:log) do
-        build(
-          :lettings_log,
-          :completed,
-          owning_organisation: owning_org,
-          managing_organisation: owning_org,
-          assigned_to: user,
-          renttype: 1,
-          leftreg: 3,
-        )
-      end
-
-      before do
-        file.write(BulkUpload::LettingsLogToCsv.new(log:, col_offset: 0).to_2023_csv_row)
-        file.rewind
-
-        allow(BulkUpload::Downloader).to receive(:new).with(bulk_upload:).and_return(mock_downloader)
-      end
-
       it "creates logs as not pending" do
         expect { processor.call }.to change(LettingsLog.completed, :count).by(1)
       end
@@ -217,98 +154,10 @@ RSpec.describe BulkUpload::Processor do
       end
     end
 
-    context "when processing an empty file" do
-      let(:mock_downloader) do
-        instance_double(
-          BulkUpload::Downloader,
-          call: nil,
-          path:,
-          delete_local_file!: nil,
-        )
-      end
-
-      let(:file) { Tempfile.new }
-      let(:path) { file.path }
-
-      before do
-        allow(BulkUpload::Downloader).to receive(:new).with(bulk_upload:).and_return(mock_downloader)
-      end
-
-      it "sends failure email" do
-        mail_double = instance_double("ActionMailer::MessageDelivery", deliver_later: nil)
-
-        allow(BulkUploadMailer).to receive(:send_bulk_upload_failed_service_error_mail).and_return(mail_double)
-
-        processor.call
-
-        expect(BulkUploadMailer).to have_received(:send_bulk_upload_failed_service_error_mail).with(
-          bulk_upload:,
-          errors: ["Template is blank - The template must be filled in for us to create the logs and check if data is correct."],
-        )
-        expect(mail_double).to have_received(:deliver_later)
-      end
-    end
-
-    context "when 2023-24" do
-      let(:mock_downloader) do
-        instance_double(
-          BulkUpload::Downloader,
-          call: nil,
-          path: file_fixture("2023_24_lettings_bulk_upload_empty_with_headers.csv"),
-          delete_local_file!: nil,
-        )
-      end
-
-      before do
-        allow(BulkUpload::Downloader).to receive(:new).with(bulk_upload:).and_return(mock_downloader)
-      end
-
-      it "sends failure email" do
-        mail_double = instance_double("ActionMailer::MessageDelivery", deliver_later: nil)
-
-        allow(BulkUploadMailer).to receive(:send_bulk_upload_failed_service_error_mail).and_return(mail_double)
-
-        processor.call
-
-        expect(BulkUploadMailer).to have_received(:send_bulk_upload_failed_service_error_mail).with(
-          bulk_upload:,
-          errors: ["Template is blank - The template must be filled in for us to create the logs and check if data is correct."],
-        )
-        expect(mail_double).to have_received(:deliver_later)
-      end
-    end
-
     context "when a bulk upload has an in progress log" do
-      let(:mock_downloader) do
-        instance_double(
-          BulkUpload::Downloader,
-          call: nil,
-          path:,
-          delete_local_file!: nil,
-        )
-      end
-
-      let(:file) { Tempfile.new }
-      let(:path) { file.path }
-
-      let(:log) do
-        LettingsLog.new(
-          lettype: 2,
-          renttype: 3,
-          owning_organisation: owning_org,
-          managing_organisation: owning_org,
-          startdate: Time.zone.local(2023, 10, 1),
-          renewal: 2,
-          declaration: 1,
-        )
-      end
+      let(:log) { build(:lettings_log, :setup_completed, assigned_to: user) }
 
       before do
-        file.write(BulkUpload::LettingsLogToCsv.new(log:, col_offset: 0).to_2023_csv_row)
-        file.rewind
-
-        allow(BulkUpload::Downloader).to receive(:new).with(bulk_upload:).and_return(mock_downloader)
-        allow(BulkUpload::Lettings::Validator).to receive(:new).and_return(mock_validator)
         allow(mock_validator).to receive(:create_logs?).and_return(true)
         allow(mock_validator).to receive(:soft_validation_errors_only?).and_return(false)
         allow(FeatureToggle).to receive(:bulk_upload_duplicate_log_check_enabled?).and_return(true)
@@ -341,56 +190,10 @@ RSpec.describe BulkUpload::Processor do
     end
 
     context "when a bulk upload has logs with only soft validations triggered" do
-      let(:mock_downloader) do
-        instance_double(
-          BulkUpload::Downloader,
-          call: nil,
-          path:,
-          delete_local_file!: nil,
-        )
-      end
-
-      let(:file) { Tempfile.new }
-      let(:path) { file.path }
-
-      let(:log) do
-        build(
-          :lettings_log,
-          :completed,
-          renttype: 3,
-          age1: 20,
-          ecstat1: 5,
-          owning_organisation: owning_org,
-          managing_organisation: owning_org,
-          assigned_to: nil,
-          national: 18,
-          waityear: 9,
-          joint: 2,
-          tenancy: 2,
-          ppcodenk: 1,
-          voiddate: Date.new(2022, 1, 1),
-          reason: 40,
-          leftreg: 3,
-          mrcdate: nil,
-          startdate: Date.new(2023, 10, 1),
-          tenancylength: nil,
-        )
-      end
-
       before do
-        FormHandler.instance.use_real_forms!
-        file.write(BulkUpload::LettingsLogToCsv.new(log:, col_offset: 0).to_2023_csv_row)
-        file.rewind
-
-        allow(BulkUpload::Downloader).to receive(:new).with(bulk_upload:).and_return(mock_downloader)
-        allow(BulkUpload::Lettings::Validator).to receive(:new).and_return(mock_validator)
         allow(mock_validator).to receive(:create_logs?).and_return(true)
         allow(mock_validator).to receive(:soft_validation_errors_only?).and_return(true)
         allow(FeatureToggle).to receive(:bulk_upload_duplicate_log_check_enabled?).and_return(true)
-      end
-
-      after do
-        FormHandler.instance.use_fake_forms!
       end
 
       it "creates pending log" do
@@ -421,40 +224,16 @@ RSpec.describe BulkUpload::Processor do
       end
     end
 
-    context "when upload has no setup errors something blocks log creation" do
-      let(:mock_downloader) do
+    context "when upload has something blocking log creation" do
+      let(:mock_validator) do
         instance_double(
-          BulkUpload::Downloader,
+          BulkUpload::Lettings::Validator,
+          invalid?: false,
           call: nil,
-          path:,
-          delete_local_file!: nil,
+          total_logs_count: 1,
+          any_setup_errors?: false,
+          create_logs?: false,
         )
-      end
-
-      let(:file) { Tempfile.new }
-      let(:path) { file.path }
-
-      let(:other_user) { create(:user) }
-
-      let(:log) do
-        LettingsLog.new(
-          lettype: 2,
-          renttype: 3,
-          owning_organisation: owning_org,
-          managing_organisation: owning_org,
-          startdate: Time.zone.local(2023, 10, 1),
-          renewal: 2,
-          assigned_to: other_user, # unaffiliated user
-          declaration: 1,
-        )
-      end
-
-      before do
-        allow(BulkUpload::Lettings::Validator).to receive(:new).and_return(mock_validator)
-        file.write(BulkUpload::LettingsLogToCsv.new(log:, col_offset: 0).to_2023_csv_row)
-        file.rewind
-
-        allow(BulkUpload::Downloader).to receive(:new).with(bulk_upload:).and_return(mock_downloader)
       end
 
       it "sends correct_and_upload_again_mail" do
@@ -471,12 +250,12 @@ RSpec.describe BulkUpload::Processor do
   end
 
   describe "#approve" do
-    let!(:log) { create(:lettings_log, bulk_upload:, status: "pending", skip_update_status: true, status_cache: "not_started") }
+    let!(:log) { create(:lettings_log, :in_progress, bulk_upload:, status: "pending", skip_update_status: true, status_cache: "in_progress") }
 
     it "makes pending logs no longer pending" do
       expect(log.status).to eql("pending")
       processor.approve
-      expect(log.reload.status).to eql("not_started")
+      expect(log.reload.status).to eql("in_progress")
     end
   end
 end

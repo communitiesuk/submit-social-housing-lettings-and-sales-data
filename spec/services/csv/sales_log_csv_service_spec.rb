@@ -30,6 +30,8 @@ RSpec.describe Csv::SalesLogCsvService do
       county_as_entered: "county as entered",
       postcode_full_as_entered: "AB1 2CD",
       la_as_entered: "la as entered",
+      hhregres: 1,
+      hhregresstill: 4,
     )
   end
   let(:service) { described_class.new(user:, export_type: "labels", year:) }

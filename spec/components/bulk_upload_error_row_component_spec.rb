@@ -6,7 +6,7 @@ RSpec.describe BulkUploadErrorRowComponent, type: :component do
     let(:tenant_code) { SecureRandom.hex(4) }
     let(:property_ref) { SecureRandom.hex(4) }
     let(:purchaser_code) { nil }
-    let(:field) { :field_134 }
+    let(:field) { :field_130 }
     let(:error) { "some error" }
     let(:bulk_upload) { create(:bulk_upload, :lettings) }
     let(:bulk_upload_errors) do
@@ -45,10 +45,28 @@ RSpec.describe BulkUploadErrorRowComponent, type: :component do
       expect(result).to have_content(expected)
     end
 
-    it "renders the question for lettings" do
-      expected = "What do you expect the outstanding amount to be?"
-      result = render_inline(described_class.new(bulk_upload_errors:))
-      expect(result).to have_content(expected)
+    context "when the bulk upload is for 2024" do
+      context "with  a lettings bulk upload" do
+        let(:bulk_upload) { build(:bulk_upload, :lettings, year: 2024) }
+        let(:field) { :field_130 }
+
+        it "renders the expected question" do
+          expected = "What do you expect the outstanding amount to be?"
+          result = render_inline(described_class.new(bulk_upload_errors:))
+          expect(result).to have_content(expected)
+        end
+      end
+
+      context "with a sales bulk upload" do
+        let(:bulk_upload) { create(:bulk_upload, :sales, year: 2024) }
+        let(:field) { :field_86 }
+
+        it "renders the expected question" do
+          expected = "Is this a staircasing transaction?"
+          result = render_inline(described_class.new(bulk_upload_errors:))
+          expect(result).to have_content(expected)
+        end
+      end
     end
 
     context "when tenant_code not present" do
@@ -75,17 +93,6 @@ RSpec.describe BulkUploadErrorRowComponent, type: :component do
       it "does not render the purchaser_code label" do
         result = render_inline(described_class.new(bulk_upload_errors:))
         expect(result).not_to have_content("Purchaser code")
-      end
-    end
-
-    context "when a sales bulk upload" do
-      let(:bulk_upload) { create(:bulk_upload, :sales) }
-      let(:field) { :field_87 }
-
-      it "renders the question for sales" do
-        expected = "Is this a staircasing transaction?"
-        result = render_inline(described_class.new(bulk_upload_errors:))
-        expect(result).to have_content(expected)
       end
     end
 

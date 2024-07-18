@@ -11,11 +11,6 @@ class LettingsLogsController < LogsController
 
   before_action :extract_bulk_upload_from_session_filters, only: [:index]
   before_action :redirect_if_bulk_upload_resolved, only: [:index]
-  before_action do
-    if current_user && current_user.support?
-      Rack::MiniProfiler.authorize_request
-    end
-  end
 
   def index
     all_logs = current_user.lettings_logs.visible.filter_by_years_or_nil(FormHandler.instance.years_of_available_lettings_forms)

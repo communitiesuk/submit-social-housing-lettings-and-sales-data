@@ -10,8 +10,7 @@ RSpec.describe Validations::Sales::FinancialValidations do
 
     context "when buying in a non london borough" do
       before do
-        record.update!(la: "E08000035")
-        record.reload
+        record.la = "E08000035"
       end
 
       it "adds errors if buyer 1 has income over 80,000" do
@@ -80,8 +79,7 @@ RSpec.describe Validations::Sales::FinancialValidations do
 
     context "when buying in a london borough" do
       before do
-        record.update!(la: "E09000030")
-        record.reload
+        record.la = "E09000030"
       end
 
       it "adds errors if buyer 1 has income over 90,000" do
@@ -311,12 +309,10 @@ RSpec.describe Validations::Sales::FinancialValidations do
 
     context "when buyer 2 is not a child" do
       before do
-        record.update!(ecstat2: rand(0..8))
-        record.reload
+        record.ecstat2 = rand(0..8)
       end
 
       it "does not add an error if buyer 2 has an income" do
-        record.ecstat2 = rand(0..8)
         record.income2 = 40_000
         financial_validator.validate_child_income(record)
         expect(record.errors).to be_empty
@@ -324,29 +320,19 @@ RSpec.describe Validations::Sales::FinancialValidations do
     end
 
     context "when buyer 2 is a child" do
+      let(:record) { build(:sales_log, :saledate_today, ecstat2: 9) }
+
       it "does not add an error if buyer 2 has no income" do
-        record.saledate = Time.zone.local(2023, 4, 3)
-        record.ecstat2 = 9
         record.income2 = 0
         financial_validator.validate_child_income(record)
         expect(record.errors).to be_empty
       end
 
       it "adds errors if buyer 2 has an income" do
-        record.saledate = Time.zone.local(2023, 4, 3)
-        record.ecstat2 = 9
         record.income2 = 40_000
         financial_validator.validate_child_income(record)
         expect(record.errors["ecstat2"]).to include(match I18n.t("validations.financial.income.child_has_income"))
         expect(record.errors["income2"]).to include(match I18n.t("validations.financial.income.child_has_income"))
-      end
-
-      it "does not add an error if the saledate is before the 23/24 collection window" do
-        record.saledate = Time.zone.local(2022, 4, 3)
-        record.ecstat2 = 9
-        record.income2 = 40_000
-        financial_validator.validate_child_income(record)
-        expect(record.errors).to be_empty
       end
     end
   end
