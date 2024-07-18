@@ -145,7 +145,7 @@ RSpec.describe CheckErrorsController, type: :request do
 
         it "displays correct clear links" do
           expect(page).to have_content("Are you sure you want to clear Number of household members?")
-          expect(page).to have_content("This action is permanent")
+          expect(page).to have_content("Dependent answers related to this question may also get cleared. You will not be able to undo this action")
           expect(page).to have_link("Cancel")
           expect(page).to have_button("Confirm and continue")
         end
@@ -172,7 +172,7 @@ RSpec.describe CheckErrorsController, type: :request do
 
         it "displays correct clear links" do
           expect(page).to have_content("Are you sure you want to clear Buyer 1’s gross annual income?")
-          expect(page).to have_content("This action is permanent")
+          expect(page).to have_content("Dependent answers related to this question may also get cleared. You will not be able to undo this action")
           expect(page).to have_link("Cancel")
           expect(page).to have_button("Confirm and continue")
         end
