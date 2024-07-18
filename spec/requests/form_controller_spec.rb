@@ -1016,7 +1016,7 @@ RSpec.describe FormController, type: :request do
           end
         end
 
-        xcontext "when the sale date changes from 2024 to 2023" do # TODO: CLDC-3505 remove this test on year hard end
+        context "when the sale date changes from 2024 to 2023" do
           let(:sales_log) { create(:sales_log, owning_organisation: organisation, managing_organisation:, assigned_to: user) }
           let(:params) do
             {
@@ -1034,10 +1034,10 @@ RSpec.describe FormController, type: :request do
           before do
             organisation.managing_agents << managing_organisation
             organisation.reload
-            sales_log.saledate = Time.zone.local(2024, 12, 1)
+            sales_log.saledate = Time.zone.local(2024, 5, 1)
             sales_log.save!(validate: false)
             sales_log.reload
-            Timecop.freeze(Time.zone.local(2024, 12, 1))
+            Timecop.freeze(Time.zone.local(2024, 5, 1))
             Singleton.__init__(FormHandler)
           end
 
