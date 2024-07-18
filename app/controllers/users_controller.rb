@@ -31,6 +31,7 @@ class UsersController < ApplicationController
       end
     end
   end
+  
 
   def resend_invite
     @user.send_confirmation_instructions
