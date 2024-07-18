@@ -320,21 +320,19 @@ RSpec.describe Validations::Sales::FinancialValidations do
     end
 
     context "when buyer 2 is a child" do
-      context "and saledate is current" do
-        let(:record) { build(:sales_log, :saledate_today, ecstat2: 9) }
+      let(:record) { build(:sales_log, :saledate_today, ecstat2: 9) }
 
-        it "does not add an error if buyer 2 has no income" do
-          record.income2 = 0
-          financial_validator.validate_child_income(record)
-          expect(record.errors).to be_empty
-        end
+      it "does not add an error if buyer 2 has no income" do
+        record.income2 = 0
+        financial_validator.validate_child_income(record)
+        expect(record.errors).to be_empty
+      end
 
-        it "adds errors if buyer 2 has an income" do
-          record.income2 = 40_000
-          financial_validator.validate_child_income(record)
-          expect(record.errors["ecstat2"]).to include(match I18n.t("validations.financial.income.child_has_income"))
-          expect(record.errors["income2"]).to include(match I18n.t("validations.financial.income.child_has_income"))
-        end
+      it "adds errors if buyer 2 has an income" do
+        record.income2 = 40_000
+        financial_validator.validate_child_income(record)
+        expect(record.errors["ecstat2"]).to include(match I18n.t("validations.financial.income.child_has_income"))
+        expect(record.errors["income2"]).to include(match I18n.t("validations.financial.income.child_has_income"))
       end
     end
   end

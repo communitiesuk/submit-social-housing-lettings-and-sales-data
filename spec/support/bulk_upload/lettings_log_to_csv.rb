@@ -477,20 +477,7 @@ private
   end
 
   def rent_type
-    case log.rent_type
-    when LettingsLog::RENT_TYPE[:social_rent]
-      1
-    when LettingsLog::RENT_TYPE[:affordable_rent]
-      2
-    when LettingsLog::RENT_TYPE[:london_affordable_rent]
-      3
-    when LettingsLog::RENT_TYPE[:rent_to_buy]
-      4
-    when LettingsLog::RENT_TYPE[:london_living_rent]
-      5
-    when LettingsLog::RENT_TYPE[:other_intermediate_rent_product]
-      6
-    end
+    LettingsLog::RENTTYPE_DETAIL_MAPPING[log.rent_type]
   end
 
   def leftreg
