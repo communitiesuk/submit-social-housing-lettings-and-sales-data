@@ -24,13 +24,13 @@ RSpec.describe BulkUpload::Processor do
       call: nil,
       path:,
       delete_local_file!: nil,
-      )
+    )
   end
 
   let(:file) { Tempfile.new }
   let(:path) { file.path }
 
-  let(:log) { build(:lettings_log, :completed, assigned_to: user)}
+  let(:log) { build(:lettings_log, :completed, assigned_to: user) }
 
   before do
     allow(BulkUpload::Lettings::Validator).to receive(:new).and_return(mock_validator)
@@ -233,7 +233,7 @@ RSpec.describe BulkUpload::Processor do
           total_logs_count: 1,
           any_setup_errors?: false,
           create_logs?: false,
-          )
+        )
       end
 
       it "sends correct_and_upload_again_mail" do
