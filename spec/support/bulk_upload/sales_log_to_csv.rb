@@ -446,9 +446,7 @@ class BulkUpload::SalesLogToCsv
   end
 
   def to_custom_csv_row(seed: nil, field_values: nil)
-    if seed
-      row = field_values.shuffle(random: Random.new(seed))
-    end
+    row = seed ? field_values.shuffle(random: Random.new(seed)) : field_values
     (row_prefix + row).flatten.join(",") + line_ending
   end
 
