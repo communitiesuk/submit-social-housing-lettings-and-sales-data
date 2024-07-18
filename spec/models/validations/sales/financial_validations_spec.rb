@@ -10,8 +10,7 @@ RSpec.describe Validations::Sales::FinancialValidations do
 
     context "when buying in a non london borough" do
       before do
-        record.update!(la: "E08000035")
-        record.reload
+        record.la = "E08000035"
       end
 
       it "adds errors if buyer 1 has income over 80,000" do
@@ -80,8 +79,7 @@ RSpec.describe Validations::Sales::FinancialValidations do
 
     context "when buying in a london borough" do
       before do
-        record.update!(la: "E09000030")
-        record.reload
+        record.la = "E09000030"
       end
 
       it "adds errors if buyer 1 has income over 90,000" do
