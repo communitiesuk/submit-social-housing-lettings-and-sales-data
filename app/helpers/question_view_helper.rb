@@ -34,7 +34,7 @@ module QuestionViewHelper
   def answer_option_hint(resource)
     return unless resource.instance_of?(Scheme)
 
-    [resource.primary_client_group, resource.secondary_client_group].compact.join(", ")
+    "(S#{resource.id})" + [resource.primary_client_group, resource.secondary_client_group].compact.join(", ")
   end
 
   def select_option_name(value)
