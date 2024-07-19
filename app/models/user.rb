@@ -264,7 +264,8 @@ class User < ApplicationRecord
   end
 
   def discard!
-    update!(discarded_at: Time.zone.now)
+    self.discarded_at = Time.zone.now
+    save!(validate: false)
   end
 
 protected
