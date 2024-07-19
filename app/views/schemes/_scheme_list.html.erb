@@ -28,7 +28,7 @@
           <% row.with_cell(text: scheme.locations.visible&.count) %>
           <% row.with_cell do %>
             <%= status_tag_from_resource(scheme) %>
-            <% unless scheme.has_active_locations? %>
+            <% if scheme.active? && !scheme.has_active_locations? %>
               <%= content_tag(:div, "No currently active locations", class: "app-!-colour-muted", style: "margin-top: 10px") %>
             <% end %>
           <% end %>
