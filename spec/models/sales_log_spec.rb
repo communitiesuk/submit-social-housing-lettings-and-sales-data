@@ -173,7 +173,7 @@ RSpec.describe SalesLog, type: :model do
   end
 
   describe "#search_by" do
-    let!(:sales_log_to_search) { create(:sales_log, :completed) }
+    let!(:sales_log_to_search) { create(:sales_log, :completed, id: 193_285) }
 
     it "allows searching using ID" do
       result = described_class.search_by(sales_log_to_search.id.to_s)
