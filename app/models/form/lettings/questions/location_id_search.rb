@@ -1,10 +1,11 @@
-class Form::Lettings::Questions::LocationId < ::Form::Question
+class Form::Lettings::Questions::LocationIdSearch < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "location_id"
     @check_answer_label = "Location"
     @header = header_text
-    @type = "radio"
+    @hint_text = '<div class="govuk-inset-text">This scheme has 20 or more locations.</div>Enter postcode or address.'
+    @type = "select"
     @answer_options = answer_options
     @inferred_answers = {
       "location.name": {
@@ -21,7 +22,7 @@ class Form::Lettings::Questions::LocationId < ::Form::Question
     return answer_opts unless ActiveRecord::Base.connected?
 
     Location.visible.started_in_2_weeks.select(:id, :postcode, :name).each_with_object(answer_opts) do |location, hsh|
-      hsh[location.id.to_s] = { "value" => location.postcode, "hint" => location.name }
+      hsh[location.id.to_s] = location
       hsh
     end
   end
@@ -30,12 +31,7 @@ class Form::Lettings::Questions::LocationId < ::Form::Question
     return {} unless lettings_log.scheme
 
     scheme_location_ids = lettings_log.scheme.locations.visible.confirmed.pluck(:id)
-    answer_options.select { |k, _v| scheme_location_ids.include?(k.to_i) }
-                  .sort_by { |_, v|
-                    name = v["hint"].match(/[a-zA-Z].*/).to_s
-                    number = v["hint"].match(/\d+/).to_s.to_i
-                    [name, number]
-                  }.to_h
+    answer_options.select { |k, _v| scheme_location_ids.include?(k.to_i) }.to_h
   end
 
   def hidden_in_check_answers?(lettings_log, _current_user = nil)
