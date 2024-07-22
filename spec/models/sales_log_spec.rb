@@ -892,7 +892,7 @@ RSpec.describe SalesLog, type: :model do
   end
 
   context "when searching logs" do
-    let!(:sales_log_to_search) { create(:sales_log, purchid: "to search", postcode_full: "ME0 0WW") }
+    let!(:sales_log_to_search) { create(:sales_log, purchid: "to search", postcode_full: "ME0 0WW", id: 4_843_695) }
 
     before do
       create_list(:sales_log, 5, :completed)
@@ -934,8 +934,6 @@ RSpec.describe SalesLog, type: :model do
 
     describe "#search_by" do
       it "allows searching using ID" do
-        sales_log_to_search.id += 30_000
-        sales_log_to_search.save!
         result = described_class.search_by(sales_log_to_search.id.to_s)
         expect(result.count).to eq(1)
         expect(result.first.id).to eq sales_log_to_search.id

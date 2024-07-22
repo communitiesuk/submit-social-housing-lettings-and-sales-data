@@ -23,7 +23,7 @@ RSpec.describe Scheme, type: :model do
     end
 
     describe "scopes" do
-      let!(:scheme_1) { FactoryBot.create(:scheme) }
+      let!(:scheme_1) { FactoryBot.create(:scheme, id: 583_964) }
       let!(:scheme_2) { FactoryBot.create(:scheme) }
       let!(:location) { FactoryBot.create(:location, :export, scheme: scheme_1) }
       let!(:location_2) { FactoryBot.create(:location, scheme: scheme_2, postcode: "NE4 6TR", name: "second location") }
