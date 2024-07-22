@@ -151,7 +151,7 @@ RSpec.describe QuestionViewHelper do
     end
 
     context "when resource is a scheme" do
-      let(:resource) { build(:scheme, primary_client_group: "O", secondary_client_group: "E", id: 2736276) }
+      let(:resource) { build(:scheme, primary_client_group: "O", secondary_client_group: "E", id: 2_736_276) }
 
       it "returns the primary and secondary client groups" do
         expect(answer_option_hint(resource)).to eq("(S2736276) Homeless families with support needs, People with mental health problems")
