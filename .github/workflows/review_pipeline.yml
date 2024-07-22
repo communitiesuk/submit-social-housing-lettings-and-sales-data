@@ -18,7 +18,7 @@ defaults:
 jobs:
   infra:
     name: Deploy review app infrastructure
-    uses: communitiesuk/submit-social-housing-lettings-and-sales-data-infrastructure/.github/workflows/create_review_app_infra.yml@main
+    uses: communitiesuk/submit-social-housing-lettings-and-sales-data-infrastructure/.github/workflows/create_review_app_infra.yml@ScheduledScaling
     with:
       key: ${{ github.event.pull_request.number }}
       app_repo_role: arn:aws:iam::815624722760:role/core-application-repo
