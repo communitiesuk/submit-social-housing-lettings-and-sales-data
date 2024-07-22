@@ -104,7 +104,6 @@ module Validations::SharedValidations
   end
 
   def tenancy_startdate_with_scheme_locations(record)
-    return unless record.respond_to?(:scheme)
     return if record.scheme.blank? || record.startdate.blank?
     return if record.scheme.has_active_locations_on_date?(record.startdate)
 
