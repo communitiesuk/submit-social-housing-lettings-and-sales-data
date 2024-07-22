@@ -62,25 +62,25 @@ class Location < ApplicationRecord
     merge(Organisation.filter_by_inactive)
   }
 
-  scope :deactivated_directly, lambda {
+  scope :deactivated_directly, lambda { |date = Time.zone.now|
     merge(LocationDeactivationPeriod.deactivations_without_reactivation)
-      .where("location_deactivation_periods.deactivation_date <= ?", Time.zone.now)
+      .where("location_deactivation_periods.deactivation_date <= ?", date)
   }
 
-  scope :deactivating_soon, lambda {
+  scope :deactivating_soon, lambda { |date = Time.zone.now|
     merge(LocationDeactivationPeriod.deactivations_without_reactivation)
-    .where("location_deactivation_periods.deactivation_date > ?", Time.zone.now)
+    .where("location_deactivation_periods.deactivation_date > ?", date)
     .where.not(id: joins(scheme: [:owning_organisation]).deactivated_by_organisation.pluck(:id))
   }
 
-  scope :reactivating_soon, lambda {
+  scope :reactivating_soon, lambda { |date = Time.zone.now|
     where.not("location_deactivation_periods.reactivation_date IS NULL")
-    .where("location_deactivation_periods.reactivation_date > ?", Time.zone.now)
+    .where("location_deactivation_periods.reactivation_date > ?", date)
     .where.not(id: joins(scheme: [:owning_organisation]).deactivated_by_organisation.pluck(:id))
   }
 
-  scope :activating_soon, lambda {
-    where("locations.startdate > ?", Time.zone.now)
+  scope :activating_soon, lambda { |date = Time.zone.now|
+    where("locations.startdate > ?", date)
   }
 
   scope :active_status, lambda {
@@ -90,6 +90,14 @@ class Location < ApplicationRecord
     .where.not(id: incomplete.pluck(:id))
     .where.not(id: joins(:location_deactivation_periods).deactivating_soon.pluck(:id))
     .where.not(id: activating_soon.pluck(:id))
+  }
+
+  scope :active_on_date, lambda { |date = Time.zone.now|
+    where.not(id: joins(:location_deactivation_periods).reactivating_soon(date).pluck(:id))
+         .where.not(id: joins(scheme: [:owning_organisation]).deactivated_by_organisation.pluck(:id))
+         .where.not(id: joins(:location_deactivation_periods).deactivated_directly(date).pluck(:id))
+         .where.not(id: incomplete.pluck(:id))
+         .where.not(id: activating_soon(date).pluck(:id))
   }
 
   scope :visible, -> { where(discarded_at: nil) }
