@@ -35,7 +35,7 @@ module QuestionViewHelper
     return unless resource.instance_of?(Scheme) || resource.instance_of?(Location)
 
     if resource.instance_of?(Scheme)
-      [resource.primary_client_group, resource.secondary_client_group].compact.join(", ")
+      "(S#{resource.id}) " + [resource.primary_client_group, resource.secondary_client_group].compact.join(", ")
     elsif resource.instance_of?(Location)
       resource.name
     end

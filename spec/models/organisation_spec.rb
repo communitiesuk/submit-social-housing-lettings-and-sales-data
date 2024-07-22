@@ -298,4 +298,25 @@ RSpec.describe Organisation, type: :model do
       expect(organisation.status).to be(:active)
     end
   end
+
+  describe "discard" do
+    let(:organisation) { create(:organisation) }
+    let!(:user) { create(:user, organisation:) }
+    let!(:scheme) { create(:scheme, owning_organisation: organisation) }
+
+    context "when merged organisation is discarded" do
+      before do
+        organisation.merge_date = Time.zone.yesterday
+        organisation.absorbing_organisation_id = create(:organisation).id
+        organisation.save!
+      end
+
+      it "discards all of the organisation resources" do
+        organisation.discard!
+        expect(organisation.status).to eq(:deleted)
+        expect(user.reload.status).to eq(:deleted)
+        expect(scheme.reload.status).to eq(:deleted)
+      end
+    end
+  end
 end
