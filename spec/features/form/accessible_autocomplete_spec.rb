@@ -55,6 +55,36 @@ RSpec.describe "Accessible Autocomplete" do
     it "displays the placeholder text", js: true do
       expect(find("#lettings-log-prevloc-field")["placeholder"]).to eq("Start typing to search")
     end
+
+    context "and multiple schemes with same names", js: true do
+      let(:lettings_log) { FactoryBot.create(:lettings_log, :sh, assigned_to: user) }
+      let!(:schemes) { FactoryBot.create_list(:scheme, 2, owning_organisation_id: user.organisation_id, service_name: "Scheme", primary_client_group: "O", secondary_client_group: "O") }
+
+      before do
+        schemes.each do |scheme|
+          FactoryBot.create(:location, scheme:)
+        end
+
+        visit("/lettings-logs/#{lettings_log.id}/scheme")
+      end
+
+      it "allows selecting any scheme" do
+        find("#lettings-log-scheme-id-field").click.native.send_keys("s", "c", "h", :enter)
+        expect(find("#lettings-log-scheme-id-field").value).to match(/Scheme/)
+        click_button("Save and continue")
+        first_selected_scheme_id = lettings_log.reload.scheme_id
+        expect(schemes.map(&:id)).to include(first_selected_scheme_id)
+
+        visit("/lettings-logs/#{lettings_log.id}/scheme")
+        find("#lettings-log-scheme-id-field").click.native.send_keys("s", "c", "h", :down, :enter)
+        expect(find("#lettings-log-scheme-id-field").value).to match(/Scheme/)
+        click_button("Save and continue")
+
+        second_selected_scheme_id = lettings_log.reload.scheme_id
+        expect(schemes.map(&:id)).to include(lettings_log.reload.scheme_id)
+        expect(first_selected_scheme_id).not_to eq(second_selected_scheme_id)
+      end
+    end
   end
 
   context "when searching schemes" do

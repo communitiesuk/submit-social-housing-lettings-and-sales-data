@@ -4703,10 +4703,10 @@ quick-lru@^5.1.1:
   resolved "https://registry.yarnpkg.com/quick-lru/-/quick-lru-5.1.1.tgz#366493e6b3e42a3a6885e2e99d18f80fb7a8c932"
   integrity sha512-WuyALRjWPDGtt/wzJiadO5AXY+8hZ80hVpe6MyivgraREW751X3SbhRvG3eLKOYN+8VEvqLcf3wdnt44Z4S4SA==
 
-rails_admin@3.1.2:
-  version "3.1.2"
-  resolved "https://registry.yarnpkg.com/rails_admin/-/rails_admin-3.1.2.tgz#00d6d85b7a00c89c69b5dbf5f1f4620702626504"
-  integrity sha512-uIQHN27lBvlav6s5ppmOtVxKN8GIxyhHuDFc9ZbvWgFknR4zgG4/xEUGzKzQ9R34AEsfZ/t8cZbvtvgj+aXp4A==
+rails_admin@3.1.3:
+  version "3.1.3"
+  resolved "https://registry.yarnpkg.com/rails_admin/-/rails_admin-3.1.3.tgz#1da3f2214876f4ffd3a1db01452c28a8f7d4d989"
+  integrity sha512-79CBB2BMB3fSGPz1P8eNxCboHVlkBWBaxKxfo4QwCAFxsA3WAjfM0MeWUtGHI8Mn8XEZxCdEDz9oYlvlBpMtng==
   dependencies:
     "@babel/runtime" "^7.16.7"
     "@fortawesome/fontawesome-free" ">=5.15.0 <7.0.0"
