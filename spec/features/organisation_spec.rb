@@ -131,6 +131,7 @@ RSpec.describe "User Features" do
       let(:number_of_lettings_logs) { LettingsLog.count }
 
       before do
+        allow(FormHandler.instance).to receive(:in_crossover_period?).and_return(true)
         visit("/organisations/#{org_id}/lettings-logs")
       end
 
@@ -220,6 +221,7 @@ RSpec.describe "User Features" do
       let(:number_of_sales_logs) { SalesLog.count }
 
       before do
+        allow(FormHandler.instance).to receive(:in_crossover_period?).and_return(true)
         FactoryBot.create_list(:sales_log, 4, owning_organisation_id: organisation.id)
         visit("/organisations/#{org_id}/sales-logs")
       end
