@@ -95,11 +95,16 @@ module FiltersHelper
   end
 
   def collection_year_options
-    {
+    years = {
       current_collection_start_year.to_s => year_combo(current_collection_start_year),
       previous_collection_start_year.to_s => year_combo(previous_collection_start_year),
-      archived_collection_start_year.to_s => year_combo(archived_collection_start_year),
     }
+
+    if FormHandler.instance.in_crossover_period?
+      return years.merge({ archived_collection_start_year.to_s => year_combo(archived_collection_start_year) })
+    end
+
+    years
   end
 
   def collection_year_radio_options
