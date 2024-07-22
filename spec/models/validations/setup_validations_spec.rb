@@ -527,6 +527,7 @@ RSpec.describe Validations::SetupValidations do
         record.scheme = scheme
         setup_validator.validate_scheme(record)
         expect(record.errors["startdate"]).to include(match I18n.t("validations.setup.startdate.scheme.locations_inactive.startdate", name: scheme.service_name))
+        expect(record.errors["scheme_id"]).to include(match I18n.t("validations.setup.startdate.scheme.locations_inactive.startdate", name: scheme.service_name))
       end
 
       it "produces no error when scheme has active locations on the tenancy start date" do
