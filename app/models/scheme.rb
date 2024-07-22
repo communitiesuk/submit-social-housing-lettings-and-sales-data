@@ -296,13 +296,13 @@ class Scheme < ApplicationRecord
   end
 
   def has_active_locations?
-    locations.active_status.exists?
+    locations.active.exists?
   end
 
   def has_active_locations_on_date?(date)
     return false unless date
 
-    locations.active_on_date(date).exists?
+    locations.active(date).exists?
   end
 
   def reactivating_soon?

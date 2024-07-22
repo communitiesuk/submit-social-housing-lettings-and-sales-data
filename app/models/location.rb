@@ -22,7 +22,6 @@ class Location < ApplicationRecord
   scope :search_by_name, ->(name) { where("name ILIKE ?", "%#{name}%") }
   scope :search_by, ->(param) { search_by_name(param).or(search_by_postcode(param)) }
   scope :started, -> { where("locations.startdate <= ?", Time.zone.today).or(where(startdate: nil)) }
-  scope :active, -> { where(confirmed: true).and(started) }
   scope :started_in_2_weeks, -> { where("locations.startdate <= ?", Time.zone.today + 2.weeks).or(where(startdate: nil)) }
   scope :active_in_2_weeks, -> { where(confirmed: true).and(started_in_2_weeks) }
   scope :confirmed, -> { where(confirmed: true) }
@@ -92,7 +91,7 @@ class Location < ApplicationRecord
     .where.not(id: activating_soon.pluck(:id))
   }
 
-  scope :active_on_date, lambda { |date = Time.zone.now|
+  scope :active, lambda { |date = Time.zone.now|
     where.not(id: joins(:location_deactivation_periods).reactivating_soon(date).pluck(:id))
          .where.not(id: joins(scheme: [:owning_organisation]).deactivated_by_organisation.pluck(:id))
          .where.not(id: joins(:location_deactivation_periods).deactivated_directly(date).pluck(:id))
