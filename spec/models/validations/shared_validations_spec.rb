@@ -240,5 +240,11 @@ RSpec.describe Validations::SharedValidations do
       shared_validator.validate_numeric_input(sales_log)
       expect(sales_log.errors[:income1]).to be_empty
     end
+
+    it "does not allow decimal point in a wrong format" do
+      sales_log.income1 = "300.09.78"
+      shared_validator.validate_numeric_input(sales_log)
+      expect(sales_log.errors[:income1]).to include I18n.t("validations.numeric.format", field: "Buyer 1’s gross annual income")
+    end
   end
 end
