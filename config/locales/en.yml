@@ -231,6 +231,7 @@ en:
       nearest_ten: "%{field} must be given to the nearest ten"
       nearest_hundredth: "%{field} must be given to the nearest hundredth"
       normal_format: "Enter a number"
+      format: "%{field} must be a number"
 
     date:
       invalid_date: "Enter a date in the correct format, for example 31 1 2022"
