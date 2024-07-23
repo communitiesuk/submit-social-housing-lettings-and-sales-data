@@ -15,8 +15,6 @@ class SchemesController < ApplicationController
     redirect_to schemes_organisation_path(current_user.organisation) unless current_user.support?
     all_visible_schemes = Scheme.visible
 
-    redirect_to clear_filters_url(filter_type: "schemes") and return if params[:reset] == "true"
-
     @pagy, @schemes = pagy(filter_manager.filtered_schemes(all_visible_schemes, search_term, session_filters))
     @searched = search_term.presence
     @total_count = all_visible_schemes.size
