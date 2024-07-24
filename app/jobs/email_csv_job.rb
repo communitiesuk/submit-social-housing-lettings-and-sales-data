@@ -28,3 +28,5 @@ class EmailCsvJob < ApplicationJob
     CsvDownloadMailer.new.send_csv_download_mail(user, url, EXPIRATION_TIME)
   end
 end
+
+
