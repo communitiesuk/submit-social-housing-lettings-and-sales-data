@@ -10,7 +10,7 @@ Data is collected via a form that runs on an annual data collection window basis
 
 Each data collection window runs from 1 April to 1 April the following year (plus an extra 3 months to allow for any late submissions). This means that between April and June, 2 collection windows are open simultaneously and logs can be submitted for either.
 
-ADD (Analytics & Data Directorate) statisticians are the other primary users of the service. The data collected is transferred to MHCLGs consolidated data store (CDS) via nightly XML exports to an S3 bucket. CDS ingests and transforms this data, ultimately storing it in a MS SQL database and exposing it to analysts and statisticians via Amazon Workspaces.
+ADD (Analytics & Data Directorate) statisticians are the other primary users of the service. The data collected is transferred to MHCLG's consolidated data store (CDS) via nightly XML exports to an S3 bucket. CDS ingests and transforms this data, ultimately storing it in a MS SQL database and exposing it to analysts and statisticians via Amazon Workspaces.
 
 ## Users
 
