@@ -7,7 +7,6 @@ class BulkUpload::Sales::LogCreator
   end
 
   def call
-    @bulk_upload.update!(rent_type_fix_status: BulkUpload.rent_type_fix_statuses[:not_needed])
     row_parsers.each do |row_parser|
       row_parser.valid?
 
