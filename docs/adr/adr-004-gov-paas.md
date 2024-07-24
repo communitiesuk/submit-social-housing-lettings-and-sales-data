@@ -13,7 +13,7 @@ Production infrastructure sizing will be decided at a later time and once our ac
 The reasoning for this is:
 
 - Department policy is to use GOV.UK PaaS whenever possible
-- DLUHC does not have a lot of internal dev ops skills/capacity so by leveraging GOV.UK PaaS we can leverage having most of the monitoring, running, scaling and security already provided.
+- MHCLG does not have a lot of internal dev ops skills/capacity so by leveraging GOV.UK PaaS we can leverage having most of the monitoring, running, scaling and security already provided.
 - We get a simpler infrastructure setup than the AWS setup we currently have
 - All of the infrastructure we currently require is well supported on GOV.UK PaaS
 

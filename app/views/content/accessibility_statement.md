@@ -1,6 +1,6 @@
 This accessibility statement applies to the Submit social housing lettings and sales data (CORE) online service.
 
-This website is run by the Department for Levelling Up, Housing and Communities (DLUHC). We want as many people as possible to be able to use this website. For example, that means you should be able to:
+This website is run by the Ministry of Housing, Communities and Local Government (MHCLG). We want as many people as possible to be able to use this website. For example, that means you should be able to:
 
 - change colours, contrast levels and fonts
 - zoom in up to 300% without the text spilling off the screen
@@ -27,16 +27,16 @@ We know some parts of this website are not fully accessible:
 
 If you need information on this website in a different format like accessible PDF, large print, easy read, audio recording or braille, you can contact us by:
 
-- email: [dluhc.digital-services@levellingup.gov.uk](mailto: dluhc.digital-services@levellingup.gov.uk)
+- email: [mhclg.digital-services@communities.gov.uk](mailto: mhclg.digital-services@communities.gov.uk)
 - phone: 0333 202 5084
 
 We’ll consider your request and get back to you in 2 working days.
 
-You can also [contact us through the helpdesk](https://digital.dclg.gov.uk/jira/servicedesk/customer/portal/4/).
+You can also [contact us through the helpdesk](https://dluhcdigital.atlassian.net/servicedesk/customer/portal/6/group/11).
 
 ### Reporting accessibility problems with this website
 
-We’re always looking to improve the accessibility of this website. If you find any problems not listed on this page or think we’re not meeting accessibility requirements, [contact the helpdesk](https://digital.dclg.gov.uk/jira/servicedesk/customer/portal/4/).
+We’re always looking to improve the accessibility of this website. If you find any problems not listed on this page or think we’re not meeting accessibility requirements, [contact the helpdesk](https://dluhcdigital.atlassian.net/servicedesk/customer/portal/6/group/11).
 
 ### Enforcement procedure
 
@@ -44,7 +44,7 @@ The Equality and Human Rights Commission (EHRC) is responsible for enforcing the
 
 ## Technical information about this website’s accessibility
 
-DLUHC is committed to making its website accessible, in accordance with the Public Sector Bodies (Websites and Mobile Applications) (No. 2) Accessibility Regulations 2018.
+MHCLG is committed to making its website accessible, in accordance with the Public Sector Bodies (Websites and Mobile Applications) (No. 2) Accessibility Regulations 2018.
 
 ### Compliance status
 

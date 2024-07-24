@@ -259,7 +259,7 @@ RSpec.describe "Sales Log Features" do
         expect(breadcrumbs.length).to eq 3
         expect(breadcrumbs[0].text).to eq "Home"
         expect(breadcrumbs[0][:href]).to eq root_path
-        expect(breadcrumbs[1].text).to eq "Sales logs (DLUHC)"
+        expect(breadcrumbs[1].text).to eq "Sales logs (MHCLG)"
         expect(breadcrumbs[1][:href]).to eq sales_logs_organisation_path(sales_log.owning_organisation)
         expect(breadcrumbs[2].text).to eq "Log #{sales_log.id}"
         expect(breadcrumbs[2][:href]).to eq sales_log_path(sales_log.id)
@@ -273,7 +273,7 @@ RSpec.describe "Sales Log Features" do
         expect(breadcrumbs.length).to eq 3
         expect(breadcrumbs[0].text).to eq "Home"
         expect(breadcrumbs[0][:href]).to eq root_path
-        expect(breadcrumbs[1].text).to eq "Sales logs (DLUHC)"
+        expect(breadcrumbs[1].text).to eq "Sales logs (MHCLG)"
         expect(breadcrumbs[1][:href]).to eq sales_logs_organisation_path(sales_log.owning_organisation)
         expect(breadcrumbs[2].text).to eq "Log #{sales_log.id}"
         expect(breadcrumbs[2][:href]).to eq sales_log_path(sales_log.id)
