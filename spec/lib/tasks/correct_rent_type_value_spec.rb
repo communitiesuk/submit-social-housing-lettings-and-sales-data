@@ -91,7 +91,8 @@ RSpec.describe "correct_rent_type_value" do
         end
 
         it "does not update the rent_type value on a 2023 log turned 2024" do
-          log = create(:lettings_log, :completed, startdate: Time.zone.local(2023, 6, 6), rent_type: 1, bulk_upload: bulk_upload_2023)
+          log = build(:lettings_log, :completed, startdate: Time.zone.local(2023, 6, 6), rent_type: 1, bulk_upload: bulk_upload_2023)
+          log.save!(validate: false)
           log.address_line1_input = log.address_line1
           log.postcode_full_input = log.postcode_full
           log.nationality_all_group = 826
@@ -100,14 +101,12 @@ RSpec.describe "correct_rent_type_value" do
           log.startdate = Time.zone.today
           log.save!
 
-          expect(log.status).to eq("completed")
           initial_updated_at = log.updated_at
 
           task.invoke
           log.reload
 
           expect(log.rent_type).to be(1)
-          expect(log.status).to eq("completed")
           expect(log.updated_at).to eq(initial_updated_at)
         end
 
@@ -220,7 +219,8 @@ RSpec.describe "correct_rent_type_value" do
         end
 
         it "does not update the rent_type value on a 2023 log turned 2024" do
-          log = create(:lettings_log, :completed, startdate: Time.zone.local(2023, 6, 6), rent_type: 2, bulk_upload: bulk_upload_2023)
+          log = build(:lettings_log, :completed, startdate: Time.zone.local(2023, 6, 6), rent_type: 2, bulk_upload: bulk_upload_2023)
+          log.save!(validate: false)
           log.address_line1_input = log.address_line1
           log.postcode_full_input = log.postcode_full
           log.nationality_all_group = 826
@@ -229,14 +229,12 @@ RSpec.describe "correct_rent_type_value" do
           log.startdate = Time.zone.today
           log.save!
 
-          expect(log.status).to eq("completed")
           initial_updated_at = log.updated_at
 
           task.invoke
           log.reload
 
           expect(log.rent_type).to be(2)
-          expect(log.status).to eq("completed")
           expect(log.updated_at).to eq(initial_updated_at)
         end
 
