@@ -22,9 +22,8 @@ RSpec.describe TabNavHelper do
 
   describe "#location_cell" do
     it "returns the location link to the postcode with optional name" do
-      link = "/schemes/#{location.scheme.id}/locations/#{location.id}/edit"
-      expected_html = "<a class=\"govuk-link\" rel=\"nofollow\" data-method=\"patch\" href=\"/schemes/#{scheme.id}/locations/#{location.id}/edit\">#{location.postcode}</a>\n<span class=\"govuk-visually-hidden\">Location</span>"
-      expect(location_cell_postcode(location, link)).to match(expected_html)
+      expected_html = "<a class=\"govuk-link\" rel=\"nofollow\" data-method=\"patch\" href=\"/schemes/#{scheme.id}/locations/#{location.id}\">#{location.postcode}</a>\n<span class=\"govuk-visually-hidden\">Location</span>"
+      expect(location_cell_postcode(location, scheme)).to match(expected_html)
     end
   end
 
