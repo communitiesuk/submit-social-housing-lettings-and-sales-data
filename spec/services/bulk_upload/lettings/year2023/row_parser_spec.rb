@@ -694,7 +694,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
           let(:attributes) { valid_attributes.merge({ field_45: nil }) }
 
           it "cannot be nulled" do
-            expect(parser.errors[:field_45]).to eq(["You must show the DLUHC privacy notice to the tenant before you can submit this log."])
+            expect(parser.errors[:field_45]).to eq(["You must show the MHCLG privacy notice to the tenant before you can submit this log."])
           end
         end
       end
