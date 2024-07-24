@@ -1,11 +1,14 @@
 <% if current_user %>
   <h1 class="govuk-heading-l">Collection resources</h1>
   <p class="govuk-body"><strong><%= govuk_link_to "Guidance for submitting social housing lettings and sales data (CORE)", guidance_path %></strong></p>
+  <p class="govuk-body"><strong><%= govuk_link_to "How to upload logs in bulk", bulk_upload_lettings_log_path(id: "guidance", form: { year: current_collection_start_year }, referrer: "home") %></strong></p>
 <% else %>
   <h2 class="govuk-heading-m">Collection resources</h2>
 <% end %>
 <p class="govuk-body">Use the 2024 to 2025 forms for lettings that start and sales that complete between 1 April 2024 and 31 March 2025.</p>
-<p class="govuk-body">Use the 2023 to 2024 forms for lettings that start and sales that complete between 1 April 2023 and 31 March 2024.</p>
+<% if FormHandler.instance.lettings_form_for_start_year(2023) && FormHandler.instance.lettings_form_for_start_year(2023).edit_end_date > Time.zone.today %>
+  <p class="govuk-body">Use the 2023 to 2024 forms for lettings that start and sales that complete between 1 April 2023 and 31 March 2024.</p>
+<% end %>
 <div class="app-tab__list-view">
 <%= govuk_tabs(title: "Collection resources", classes: %w[app-tab__small-headers]) do |c| %>
   <% if FormHandler.instance.lettings_form_for_start_year(2024) && FormHandler.instance.lettings_form_for_start_year(2024).edit_end_date > Time.zone.today %>

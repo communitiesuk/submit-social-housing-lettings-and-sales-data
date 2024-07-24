@@ -26,20 +26,25 @@ module QuestionViewHelper
   def answer_option_append(resource)
     return unless resource.instance_of?(Scheme)
 
-    confirmed_locations_count = resource.locations.confirmed.size
-    unconfirmed_locations_count = resource.locations.unconfirmed.size
+    confirmed_locations_count = resource.locations.visible.confirmed.size
+    unconfirmed_locations_count = resource.locations.visible.unconfirmed.size
     "#{confirmed_locations_count} completed #{'location'.pluralize(confirmed_locations_count)}, #{unconfirmed_locations_count} incomplete #{'location'.pluralize(unconfirmed_locations_count)}"
   end
 
   def answer_option_hint(resource)
-    return unless resource.instance_of?(Scheme)
+    return unless resource.instance_of?(Scheme) || resource.instance_of?(Location)
 
-    [resource.primary_client_group, resource.secondary_client_group].compact.join(", ")
+    if resource.instance_of?(Scheme)
+      "(S#{resource.id}) " + [resource.primary_client_group, resource.secondary_client_group].compact.join(", ")
+    elsif resource.instance_of?(Location)
+      resource.name
+    end
   end
 
   def select_option_name(value)
     return value.service_name if value.respond_to?(:service_name)
     return value["name"] if value.is_a?(Hash) && value["name"].present?
+    return value["postcode"] if value.is_a?(Location)
   end
 
 private

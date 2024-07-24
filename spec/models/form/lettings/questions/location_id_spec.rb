@@ -147,6 +147,33 @@ RSpec.describe Form::Lettings::Questions::LocationId, type: :model do
           expect(question.displayed_answer_options(lettings_log).count).to eq(1)
         end
       end
+
+      context "and some locations start with numbers" do
+        before do
+          FactoryBot.create(:location, scheme:, startdate: Time.utc(2022, 5, 5), name: "2 Abe Road")
+          FactoryBot.create(:location, scheme:, startdate: Time.utc(2022, 5, 6), name: "1 Abe Road")
+          FactoryBot.create(:location, scheme:, startdate: Time.utc(2022, 5, 7), name: "1 Lake Lane")
+          FactoryBot.create(:location, scheme:, startdate: Time.utc(2022, 5, 8), name: "3 Abe Road")
+          FactoryBot.create(:location, scheme:, startdate: Time.utc(2022, 5, 9), name: "2 Lake Lane")
+          FactoryBot.create(:location, scheme:, startdate: Time.utc(2022, 5, 10), name: "Smith Avenue")
+          FactoryBot.create(:location, scheme:, startdate: Time.utc(2022, 5, 11), name: "Abacus Road")
+          FactoryBot.create(:location, scheme:, startdate: Time.utc(2022, 5, 12), name: "Hawthorne Road")
+          lettings_log.update!(scheme:)
+        end
+
+        it "orders the locations by name then numerically" do
+          expect(question.displayed_answer_options(lettings_log).values.map { |v| v["hint"] }).to eq([
+            "Abacus Road",
+            "1 Abe Road",
+            "2 Abe Road",
+            "3 Abe Road",
+            "Hawthorne Road",
+            "1 Lake Lane",
+            "2 Lake Lane",
+            "Smith Avenue",
+          ])
+        end
+      end
     end
   end
 

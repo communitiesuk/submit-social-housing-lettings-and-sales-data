@@ -12,6 +12,62 @@ class BulkUpload::LettingsLogToCsv
     [nil] * col_offset
   end
 
+  def to_csv_row(seed: nil)
+    year = log.collection_start_year
+    case year
+    when 2022
+      to_2022_csv_row(seed:)
+    when 2023
+      to_2023_csv_row(seed:)
+    when 2024
+      to_2024_csv_row(seed:)
+    else
+      raise NotImplementedError "No mapping function implemented for year #{year}"
+    end
+  end
+
+  def to_row
+    year = log.collection_start_year
+    case year
+    when 2022
+      to_2022_row
+    when 2023
+      to_2023_row
+    when 2024
+      to_2024_row
+    else
+      raise NotImplementedError "No mapping function implemented for year #{year}"
+    end
+  end
+
+  def default_field_numbers_row(seed: nil)
+    year = log.collection_start_year
+    case year
+    when 2022
+      default_2022_field_numbers_row(seed:)
+    when 2023
+      default_2023_field_numbers_row(seed:)
+    when 2024
+      default_2024_field_numbers_row(seed:)
+    else
+      raise NotImplementedError "No mapping function implemented for year #{year}"
+    end
+  end
+
+  def default_field_numbers
+    year = log.collection_start_year
+    case year
+    when 2022
+      default_2022_field_numbers
+    when 2023
+      default_2023_field_numbers
+    when 2024
+      default_2024_field_numbers
+    else
+      raise NotImplementedError "No mapping function implemented for year #{year}"
+    end
+  end
+
   def to_2022_csv_row(seed: nil)
     if seed
       row = to_2022_row.shuffle(random: Random.new(seed))
@@ -27,9 +83,9 @@ class BulkUpload::LettingsLogToCsv
 
   def default_2022_field_numbers_row(seed: nil)
     if seed
-      ["Bulk upload field number"] + default_2022_field_numbers.shuffle(random: Random.new(seed))
+      ["Field number"] + default_2022_field_numbers.shuffle(random: Random.new(seed))
     else
-      ["Bulk upload field number"] + default_2022_field_numbers
+      ["Field number"] + default_2022_field_numbers
     end.flatten.join(",") + line_ending
   end
 
@@ -65,17 +121,17 @@ class BulkUpload::LettingsLogToCsv
 
   def default_2023_field_numbers_row(seed: nil)
     if seed
-      ["Bulk upload field number"] + default_2023_field_numbers.shuffle(random: Random.new(seed))
+      ["Field number"] + default_2023_field_numbers.shuffle(random: Random.new(seed))
     else
-      ["Bulk upload field number"] + default_2023_field_numbers
+      ["Field number"] + default_2023_field_numbers
     end.flatten.join(",") + line_ending
   end
 
   def default_2024_field_numbers_row(seed: nil)
     if seed
-      ["Bulk upload field number"] + default_2024_field_numbers.shuffle(random: Random.new(seed))
+      ["Field number"] + default_2024_field_numbers.shuffle(random: Random.new(seed))
     else
-      ["Bulk upload field number"] + default_2024_field_numbers
+      ["Field number"] + default_2024_field_numbers
     end.flatten.join(",") + line_ending
   end
 
@@ -93,14 +149,14 @@ class BulkUpload::LettingsLogToCsv
       log.managing_organisation&.old_visible_id,
       log.assigned_to&.email,
       log.needstype,
-      "S#{log.scheme&.id}",
+      log.scheme&.id ? "S#{log.scheme&.id}" : "",
       log.location&.id,
       renewal,
       log.startdate&.day,
       log.startdate&.month,
       log.startdate&.strftime("%y"), # 10
 
-      london_affordable_rent,
+      rent_type,
       log.irproduct_other,
       log.tenancycode,
       log.propcode,
@@ -137,7 +193,7 @@ class BulkUpload::LettingsLogToCsv
       log.age1 || overrides[:age1],
       log.sex1,
       log.ethnic,
-      log.national,
+      log.nationality_all_group,
       log.ecstat1,
       log.relat2,
       log.age2 || overrides[:age2],
@@ -214,11 +270,11 @@ class BulkUpload::LettingsLogToCsv
       cbl,
       chr,
       cap,
-      nil, # accessible register
+      accessible_register,
       log.referral,
       net_income_known,
-      log.earnings,
       log.incfreq,
+      log.earnings,
       log.hb, # 120
 
       log.benefits,
@@ -385,16 +441,14 @@ class BulkUpload::LettingsLogToCsv
 
   def custom_field_numbers_row(seed: nil, field_numbers: nil)
     if seed
-      ["Bulk upload field number"] + field_numbers.shuffle(random: Random.new(seed))
+      ["Field number"] + field_numbers.shuffle(random: Random.new(seed))
     else
-      ["Bulk upload field number"] + field_numbers
+      ["Field number"] + field_numbers
     end.flatten.join(",") + line_ending
   end
 
   def to_custom_csv_row(seed: nil, field_values: nil)
-    if seed
-      row = field_values.shuffle(random: Random.new(seed))
-    end
+    row = seed ? field_values.shuffle(random: Random.new(seed)) : field_values
     (row_prefix + row).flatten.join(",") + line_ending
   end
 
@@ -420,6 +474,10 @@ private
     when LettingsLog::RENT_TYPE[:other_intermediate_rent_product]
       3
     end
+  end
+
+  def rent_type
+    LettingsLog::RENTTYPE_DETAIL_MAPPING[log.rent_type]
   end
 
   def leftreg
@@ -469,6 +527,10 @@ private
 
   def cap
     checkbox_value(log.cap)
+  end
+
+  def accessible_register
+    checkbox_value(log.accessible_register)
   end
 
   def checkbox_value(field)

@@ -25,7 +25,7 @@
           <% row.with_cell(text: simple_format(scheme_cell(scheme), { class: "govuk-!-font-weight-bold scheme-name-cell" }, wrapper_tag: "div")) %>
           <% row.with_cell(text: scheme.owning_organisation&.name) %>
           <% row.with_cell(text: scheme.id_to_display) %>
-          <% row.with_cell(text: scheme.locations&.count) %>
+          <% row.with_cell(text: scheme.locations.visible&.count) %>
           <% row.with_cell(text: status_tag_from_resource(scheme)) %>
         <% end %>
       <% end %>

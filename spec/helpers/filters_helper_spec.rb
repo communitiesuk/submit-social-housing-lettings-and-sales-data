@@ -245,12 +245,32 @@ RSpec.describe FiltersHelper do
         allow(Time).to receive(:now).and_return(Time.zone.local(2023, 5, 1))
       end
 
-      it "has the correct options" do
-        expect(collection_year_options).to eq(
-          {
-            "2023" => "2023/24", "2022" => "2022/23", "2021" => "2021/22"
-          },
-        )
+      context "and in crossover period" do
+        before do
+          allow(FormHandler.instance).to receive(:in_crossover_period?).and_return(true)
+        end
+
+        it "has the correct options" do
+          expect(collection_year_options).to eq(
+            {
+              "2023" => "2023/24", "2022" => "2022/23", "2021" => "2021/22"
+            },
+          )
+        end
+      end
+
+      context "and not in crossover period" do
+        before do
+          allow(FormHandler.instance).to receive(:in_crossover_period?).and_return(false)
+        end
+
+        it "has the correct options" do
+          expect(collection_year_options).to eq(
+            {
+              "2023" => "2023/24", "2022" => "2022/23"
+            },
+          )
+        end
       end
     end
 

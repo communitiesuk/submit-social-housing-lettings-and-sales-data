@@ -6,16 +6,6 @@ RSpec.describe SalesLog, type: :model do
   let(:owning_organisation) { create(:organisation) }
   let(:assigned_to_user) { create(:user) }
 
-  before do
-    Timecop.freeze(Time.zone.local(2024, 3, 1))
-    Singleton.__init__(FormHandler)
-  end
-
-  after do
-    Timecop.return
-    Singleton.__init__(FormHandler)
-  end
-
   include_examples "shared log examples", :sales_log
 
   it "inherits from log" do
@@ -143,11 +133,7 @@ RSpec.describe SalesLog, type: :model do
 
     context "when proplen is not given" do
       before do
-        Timecop.freeze(Time.zone.local(2023, 5, 1))
-      end
-
-      after do
-        Timecop.unfreeze
+        allow(Time).to receive(:now).and_return(Time.zone.local(2023, 5, 1))
       end
 
       it "is set to completed for a log with a saledate before 23/24" do
@@ -187,7 +173,7 @@ RSpec.describe SalesLog, type: :model do
   end
 
   describe "#search_by" do
-    let!(:sales_log_to_search) { create(:sales_log, :completed) }
+    let!(:sales_log_to_search) { create(:sales_log, :completed, id: 193_285) }
 
     it "allows searching using ID" do
       result = described_class.search_by(sales_log_to_search.id.to_s)
@@ -232,16 +218,14 @@ RSpec.describe SalesLog, type: :model do
 
   context "when filtering by year or nil" do
     before do
-      Timecop.freeze(Time.utc(2021, 5, 3))
       create(:sales_log, :in_progress, saledate: nil)
-      create(:sales_log, :in_progress, saledate: Time.zone.local(2021, 4, 1))
-      sales_log_3 = create(:sales_log, :in_progress)
+      sales_log_2021 = build(:sales_log, :in_progress)
+      sales_log_2021.saledate = Time.zone.local(2021, 4, 1)
+      sales_log_2021.save!(validate: false)
+
+      sales_log_3 = build(:sales_log, :in_progress)
       sales_log_3.saledate = Time.zone.local(2022, 5, 1)
       sales_log_3.save!(validate: false)
-    end
-
-    after do
-      Timecop.unfreeze
     end
 
     it "allows filtering on a single year or nil" do
@@ -580,74 +564,6 @@ RSpec.describe SalesLog, type: :model do
       expect(record_from_db["la"]).to eq("E08000003")
     end
 
-    context "with 22/23 logs" do
-      let(:address_sales_log_22_23) do
-        described_class.create({
-          owning_organisation:,
-          assigned_to: assigned_to_user,
-          ppcodenk: 1,
-          postcode_full: "CA10 1AA",
-          saledate: Time.zone.local(2022, 5, 2),
-        })
-      end
-
-      before do
-        WebMock.stub_request(:get, /api\.postcodes\.io\/postcodes\/CA101AA/)
-               .to_return(status: 200, body: '{"status":200,"result":{"admin_district":"Cumberland","codes":{"admin_district":"E06000064"}}}', headers: {})
-
-        Timecop.freeze(2023, 5, 1)
-        Singleton.__init__(FormHandler)
-      end
-
-      after do
-        Timecop.unfreeze
-      end
-
-      it "correctly sets la as nil" do
-        record_from_db = described_class.find(address_sales_log_22_23.id)
-        expect(address_sales_log_22_23.la).to eq(nil)
-        expect(record_from_db["la"]).to eq(nil)
-      end
-    end
-
-    context "with 23/24 logs" do
-      let(:address_sales_log_23_24) do
-        described_class.create({
-          owning_organisation:,
-          assigned_to: assigned_to_user,
-          ppcodenk: 1,
-          postcode_full: "CA10 1AA",
-          saledate: Time.zone.local(2023, 5, 2),
-        })
-      end
-
-      before do
-        WebMock.stub_request(:get, /api\.postcodes\.io\/postcodes\/CA101AA/)
-        .to_return(status: 200, body: '{"status":200,"result":{"admin_district":"Eden","codes":{"admin_district":"E07000030"}}}', headers: {})
-
-        Timecop.freeze(2023, 5, 2)
-        Singleton.__init__(FormHandler)
-      end
-
-      after do
-        Timecop.unfreeze
-      end
-
-      it "correctly infers new la" do
-        record_from_db = described_class.find(address_sales_log_23_24.id)
-        expect(address_sales_log_23_24.la).to eq("E06000064")
-        expect(record_from_db["la"]).to eq("E06000064")
-      end
-
-      it "does not set previous postcode or previous la for discounted sale" do
-        address_sales_log_23_24.update!(ownershipsch: 2, ppostcode_full: nil, prevloc: nil)
-        record_from_db = described_class.find(address_sales_log_23_24.id)
-        expect(address_sales_log_23_24.ppostcode_full).to eq(nil)
-        expect(record_from_db["ppostcode_full"]).to eq(nil)
-        expect(record_from_db["prevloc"]).to eq(nil)
-      end
-    end
-
     context "with 24/25 logs" do
       let(:address_sales_log_24_25) do
         described_class.create({
@@ -664,13 +580,6 @@ RSpec.describe SalesLog, type: :model do
       before do
         WebMock.stub_request(:get, /api\.postcodes\.io\/postcodes\/CA101AA/)
         .to_return(status: 200, body: '{"status":200,"result":{"admin_district":"Eden","codes":{"admin_district":"E07000030"}}}', headers: {})
-
-        Timecop.freeze(2024, 5, 2)
-        Singleton.__init__(FormHandler)
-      end
-
-      after do
-        Timecop.unfreeze
       end
 
       it "sets previous postcode for discounted sale" do
@@ -983,7 +892,7 @@ RSpec.describe SalesLog, type: :model do
   end
 
   context "when searching logs" do
-    let!(:sales_log_to_search) { create(:sales_log, :completed, purchid: "to search", postcode_full: "ME0 0WW") }
+    let!(:sales_log_to_search) { create(:sales_log, purchid: "to search", postcode_full: "ME0 0WW", id: 4_843_695) }
 
     before do
       create_list(:sales_log, 5, :completed)
@@ -1025,8 +934,6 @@ RSpec.describe SalesLog, type: :model do
 
     describe "#search_by" do
       it "allows searching using ID" do
-        sales_log_to_search.id += 30_000
-        sales_log_to_search.save!
         result = described_class.search_by(sales_log_to_search.id.to_s)
         expect(result.count).to eq(1)
         expect(result.first.id).to eq sales_log_to_search.id

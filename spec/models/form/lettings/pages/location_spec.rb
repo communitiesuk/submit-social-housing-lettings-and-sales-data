@@ -38,6 +38,7 @@ RSpec.describe Form::Lettings::Pages::Location, type: :model do
       {
         "needstype" => 2,
         "scheme_has_multiple_locations?" => true,
+        "scheme_has_large_number_of_locations?" => false,
       },
     ])
   end

@@ -23,7 +23,7 @@ RSpec.describe Scheme, type: :model do
     end
 
     describe "scopes" do
-      let!(:scheme_1) { FactoryBot.create(:scheme) }
+      let!(:scheme_1) { FactoryBot.create(:scheme, id: 583_964) }
       let!(:scheme_2) { FactoryBot.create(:scheme) }
       let!(:location) { FactoryBot.create(:location, :export, scheme: scheme_1) }
       let!(:location_2) { FactoryBot.create(:location, scheme: scheme_2, postcode: "NE4 6TR", name: "second location") }
@@ -305,7 +305,7 @@ RSpec.describe Scheme, type: :model do
     end
 
     context "when scheme has discarded_at value" do
-      let(:scheme) { FactoryBot.create(:scheme, discarded_at: Time.zone.now) }
+      let(:scheme) { FactoryBot.build(:scheme, discarded_at: Time.zone.now) }
 
       it "returns deleted" do
         expect(scheme.status).to eq(:deleted)
@@ -368,7 +368,7 @@ RSpec.describe Scheme, type: :model do
   describe "owning organisation" do
     let(:stock_owning_org) { FactoryBot.create(:organisation, holds_own_stock: true) }
     let(:non_stock_owning_org) { FactoryBot.create(:organisation, holds_own_stock: false) }
-    let(:scheme) { FactoryBot.create(:scheme, owning_organisation_id: stock_owning_org.id) }
+    let(:scheme) { FactoryBot.build(:scheme, owning_organisation_id: stock_owning_org.id) }
 
     context "when the owning organisation is set as a non-stock-owning organisation" do
       it "throws the correct validation error" do

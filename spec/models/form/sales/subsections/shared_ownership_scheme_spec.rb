@@ -77,7 +77,7 @@ RSpec.describe Form::Sales::Subsections::SharedOwnershipScheme, type: :model do
   end
 
   context "when it is a shared ownership scheme" do
-    let(:log) { FactoryBot.create(:sales_log, ownershipsch: 1) }
+    let(:log) { FactoryBot.build(:sales_log, ownershipsch: 1) }
 
     it "is displayed in tasklist" do
       expect(shared_ownership_scheme.displayed_in_tasklist?(log)).to eq(true)
@@ -85,7 +85,7 @@ RSpec.describe Form::Sales::Subsections::SharedOwnershipScheme, type: :model do
   end
 
   context "when it is not a shared ownership scheme" do
-    let(:log) { FactoryBot.create(:sales_log, ownershipsch: 2) }
+    let(:log) { FactoryBot.build(:sales_log, ownershipsch: 2) }
 
     it "is displayed in tasklist" do
       expect(shared_ownership_scheme.displayed_in_tasklist?(log)).to eq(false)

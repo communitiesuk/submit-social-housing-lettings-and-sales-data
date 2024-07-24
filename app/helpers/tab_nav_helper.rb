@@ -7,7 +7,15 @@ module TabNavHelper
     [govuk_link_to(link_text, user), "<span class=\"govuk-visually-hidden\">User </span><span class=\"govuk-!-font-weight-regular app-!-colour-muted\">#{user.email}</span>"].join("\n")
   end
 
-  def location_cell_postcode(location, link)
+  def location_cell_postcode(location, scheme)
+    link = if location.confirmed
+             scheme_location_path(scheme, location)
+           elsif location.postcode.present?
+             scheme_location_check_answers_path(scheme, location, route: "locations")
+           else
+             scheme_location_postcode_path(scheme, location)
+           end
+
     link_text = location.postcode || "Add postcode"
     [govuk_link_to(link_text, link, method: :patch), "<span class=\"govuk-visually-hidden\">Location</span>"].join("\n")
   end
@@ -19,7 +27,8 @@ module TabNavHelper
   end
 
   def org_cell(user)
+    org_name = current_user.support? ? govuk_link_to(user.organisation.name, lettings_logs_organisation_path(user.organisation)) : user.organisation.name
     role = "<span class=\"app-!-colour-muted\">#{user.role.to_s.humanize}</span>"
-    [user.organisation.name, role].join("\n")
+    [org_name, role].join("\n")
   end
 end

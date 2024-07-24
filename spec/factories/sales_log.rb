@@ -53,6 +53,7 @@ FactoryBot.define do
       sex1 { "F" }
       ecstat1 { 1 }
       postcode_full { "A1 1AA" }
+      noint { 2 }
       uprn_known { 0 }
     end
     trait :completed do
@@ -127,8 +128,7 @@ FactoryBot.define do
       pregla { 1 }
       pregother { 1 }
       pregghb { 1 }
-      hhregres { 1 }
-      hhregresstill { 4 }
+      hhregres { 7 }
       ppcodenk { 1 }
       prevten { 1 }
       previous_la_known { 0 }

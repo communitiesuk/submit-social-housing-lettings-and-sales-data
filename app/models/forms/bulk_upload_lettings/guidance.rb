@@ -6,13 +6,21 @@ module Forms
       include Rails.application.routes.url_helpers
 
       attribute :year, :integer
+      attribute :referrer
 
       def view_path
         "bulk_upload_shared/guidance"
       end
 
       def back_path
-        bulk_upload_lettings_log_path(id: "prepare-your-file", form: { year: })
+        case referrer
+        when "prepare-your-file"
+          bulk_upload_lettings_log_path(id: "prepare-your-file", form: { year: })
+        when "home"
+          root_path
+        else
+          guidance_path
+        end
       end
 
       def lettings_legacy_template_path

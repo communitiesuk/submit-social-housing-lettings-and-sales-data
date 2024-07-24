@@ -1,12 +1,16 @@
 require "rails_helper"
 
 RSpec.describe SalesLogSummaryComponent, type: :component do
-  let(:support_user) { FactoryBot.create(:user, :support) }
-  let(:coordinator_user) { FactoryBot.create(:user) }
+  let(:support_user) { build(:user, :support) }
+  let(:coordinator_user) { build(:user) }
   let(:purchid) { "62863" }
   let(:ownershipsch) { "0" }
   let(:saledate) {  Time.zone.today }
-  let(:sales_log) { FactoryBot.create(:sales_log, ownershipsch:, purchid:, saledate:) }
+  let(:sales_log) { build(:sales_log, ownershipsch:, purchid:, saledate:) }
+
+  before do
+    allow(sales_log).to receive(:id).and_return 1
+  end
 
   context "when rendering sales log for a support user" do
     it "shows the log summary with organisational relationships" do

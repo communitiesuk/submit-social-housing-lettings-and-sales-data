@@ -42,7 +42,7 @@ RSpec.describe Form::Lettings::Questions::UprnConfirmation, type: :model do
   describe "notification_banner" do
     context "when address is not present" do
       it "returns nil" do
-        log = create(:lettings_log)
+        log = build(:lettings_log)
 
         expect(question.notification_banner(log)).to be_nil
       end
@@ -50,7 +50,7 @@ RSpec.describe Form::Lettings::Questions::UprnConfirmation, type: :model do
 
     context "when address is present" do
       it "returns formatted value" do
-        log = create(:lettings_log, :setup_completed, address_line1: "1, Test Street", town_or_city: "Test Town", postcode_full: "AA1 1AA", uprn: "1", uprn_known: 1)
+        log = build(:lettings_log, :setup_completed, address_line1: "1, Test Street", town_or_city: "Test Town", postcode_full: "AA1 1AA", uprn: "1", uprn_known: 1)
 
         expect(question.notification_banner(log)).to eq(
           {
@@ -64,7 +64,7 @@ RSpec.describe Form::Lettings::Questions::UprnConfirmation, type: :model do
 
   describe "has the correct hidden_in_check_answers" do
     context "when uprn_known != 1 && uprn_confirmed == nil" do
-      let(:log) { create(:lettings_log, uprn_known: 0, uprn_confirmed: nil) }
+      let(:log) { build(:lettings_log, uprn_known: 0, uprn_confirmed: nil) }
 
       it "returns true" do
         expect(question.hidden_in_check_answers?(log)).to eq(true)
@@ -72,7 +72,7 @@ RSpec.describe Form::Lettings::Questions::UprnConfirmation, type: :model do
     end
 
     context "when uprn_known == 1 && uprn_confirmed == nil" do
-      let(:log) { create(:lettings_log, :completed, uprn_known: 1, uprn: 1, uprn_confirmed: nil) }
+      let(:log) { build(:lettings_log, :completed, uprn_known: 1, uprn: 1, uprn_confirmed: nil) }
 
       it "returns false" do
         expect(question.hidden_in_check_answers?(log)).to eq(false)
@@ -80,7 +80,7 @@ RSpec.describe Form::Lettings::Questions::UprnConfirmation, type: :model do
     end
 
     context "when uprn_known != 1 && uprn_confirmed == 1" do
-      let(:log) { create(:lettings_log) }
+      let(:log) { build(:lettings_log) }
 
       it "returns true" do
         log.uprn_known = 1

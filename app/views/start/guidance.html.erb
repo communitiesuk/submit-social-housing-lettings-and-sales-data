@@ -9,7 +9,7 @@
       <%= accordion.with_section(heading_text: "How to create logs", expanded: true) do %>
         <p class="govuk-body">There are 2 ways to create logs on CORE.</p>
         <p class="govuk-body">You can create logs one at a time by answering questions using the online form. Click the “Create a new log” button on the logs page to create logs this way.</p>
-        <p class="govuk-body">You can also create many logs at once by uploading a CSV file. This might be faster than creating logs individually if your organisation has its own database and a way to export the data. Click the “Upload logs in bulk” button on the logs page to create logs this way. For more information, <%= govuk_link_to "read the full guidance on bulk upload", bulk_upload_lettings_log_path(id: "guidance", form: { year: current_collection_start_year }) %>.</p>
+        <p class="govuk-body">You can also create many logs at once by uploading a CSV file. This might be faster than creating logs individually if your organisation has its own database and a way to export the data. Click the “Upload logs in bulk” button on the logs page to create logs this way. For more information, <%= govuk_link_to "read the full guidance on bulk upload", bulk_upload_lettings_log_path(id: "guidance", form: { year: current_collection_start_year }, referrer: "guidance") %>.</p>
         <p class="govuk-body">Once you have created and completed a log, there is nothing more you need to do to submit the data.</p>
       <% end %>
 

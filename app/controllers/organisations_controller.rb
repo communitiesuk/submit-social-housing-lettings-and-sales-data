@@ -15,9 +15,9 @@ class OrganisationsController < ApplicationController
     redirect_to organisation_path(current_user.organisation) unless current_user.support?
 
     all_organisations = Organisation.order(:name)
-    @pagy, @organisations = pagy(filtered_collection(all_organisations, search_term))
+    @pagy, @organisations = pagy(filtered_collection(all_organisations.visible, search_term))
     @searched = search_term.presence
-    @total_count = all_organisations.size
+    @total_count = all_organisations.visible.size
   end
 
   def schemes
@@ -117,7 +117,6 @@ class OrganisationsController < ApplicationController
   end
 
   def update
-    selected_rent_periods = rent_period_params[:rent_periods].compact_blank
     if (current_user.data_coordinator? && org_params[:active].nil?) || current_user.support?
       if @organisation.update(org_params)
         case org_params[:active]
@@ -136,11 +135,14 @@ class OrganisationsController < ApplicationController
         else
           flash[:notice] = I18n.t("organisation.updated")
         end
-        used_rent_periods = @organisation.lettings_logs.pluck(:period).uniq.compact.map(&:to_s)
-        rent_periods_to_delete = rent_period_params[:all_rent_periods] - selected_rent_periods - used_rent_periods
-        OrganisationRentPeriod.transaction do
-          selected_rent_periods.each { |period| OrganisationRentPeriod.create(organisation: @organisation, rent_period: period) }
-          OrganisationRentPeriod.where(organisation: @organisation, rent_period: rent_periods_to_delete).destroy_all
+        if rent_period_params[:rent_periods].present?
+          selected_rent_periods = rent_period_params[:rent_periods].compact_blank
+          used_rent_periods = @organisation.lettings_logs.pluck(:period).uniq.compact.map(&:to_s)
+          rent_periods_to_delete = rent_period_params[:all_rent_periods] - selected_rent_periods - used_rent_periods
+          OrganisationRentPeriod.transaction do
+            selected_rent_periods.each { |period| OrganisationRentPeriod.create(organisation: @organisation, rent_period: period) }
+            OrganisationRentPeriod.where(organisation: @organisation, rent_period: rent_periods_to_delete).destroy_all
+          end
         end
         redirect_to details_organisation_path(@organisation)
       else
@@ -150,6 +152,17 @@ class OrganisationsController < ApplicationController
     else
       head :unauthorized
     end
+  end
+
+  def delete
+    authorize @organisation
+
+    @organisation.discard!
+    redirect_to organisations_path, notice: I18n.t("notification.organisation_deleted", name: @organisation.name)
+  end
+
+  def delete_confirmation
+    authorize @organisation
   end
 
   def lettings_logs
@@ -225,7 +238,7 @@ class OrganisationsController < ApplicationController
   end
 
   def data_sharing_agreement
-    @data_protection_confirmation = current_user.organisation.data_protection_confirmation
+    @data_protection_confirmation = @organisation.data_protection_confirmation
   end
 
   def confirm_data_sharing_agreement
@@ -306,7 +319,7 @@ private
   end
 
   def authenticate_scope!
-    if %w[create new lettings_logs sales_logs download_lettings_csv email_lettings_csv email_sales_csv download_sales_csv].include? action_name
+    if %w[create new lettings_logs sales_logs download_lettings_csv email_lettings_csv email_sales_csv download_sales_csv delete_confirmation delete].include? action_name
       head :unauthorized and return unless current_user.support?
     elsif current_user.organisation != @organisation && !current_user.support?
       render_not_found

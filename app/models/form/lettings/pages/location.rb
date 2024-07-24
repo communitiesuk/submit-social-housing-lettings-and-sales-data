@@ -5,6 +5,7 @@ class Form::Lettings::Pages::Location < ::Form::Page
       {
         "needstype" => 2,
         "scheme_has_multiple_locations?" => true,
+        "scheme_has_large_number_of_locations?" => false,
       },
     ]
     @header = "Location"

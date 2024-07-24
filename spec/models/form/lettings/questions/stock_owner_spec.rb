@@ -47,10 +47,11 @@ RSpec.describe Form::Lettings::Questions::StockOwner, type: :model do
       let(:owning_org_1) { create(:organisation, name: "Owning org 1") }
       let(:owning_org_2) { create(:organisation, name: "Owning org 2") }
       let(:inactive_owning_org) { create(:organisation, name: "Inactive owning org", active: false) }
+      let(:deleted_owning_org) { create(:organisation, name: "Deleted owning org", discarded_at: Time.zone.yesterday) }
       let!(:org_rel) do
         create(:organisation_relationship, child_organisation: user.organisation, parent_organisation: owning_org_2)
       end
-      let(:log) { create(:lettings_log, owning_organisation: owning_org_1) }
+      let(:log) { build(:lettings_log, owning_organisation: owning_org_1) }
 
       context "when user's org owns stock" do
         let(:options) do
@@ -64,6 +65,7 @@ RSpec.describe Form::Lettings::Questions::StockOwner, type: :model do
 
         it "shows current stock owner at top, followed by user's org (with hint), followed by the active stock owners of the user's org" do
           create(:organisation_relationship, child_organisation: user.organisation, parent_organisation: inactive_owning_org)
+          create(:organisation_relationship, child_organisation: user.organisation, parent_organisation: deleted_owning_org)
           user.organisation.update!(holds_own_stock: true)
           expect(question.displayed_answer_options(log, user)).to eq(options)
         end
@@ -127,6 +129,7 @@ RSpec.describe Form::Lettings::Questions::StockOwner, type: :model do
 
       context "when user's org has recently absorbed other orgs and does not have available from date" do
         let(:merged_organisation) { create(:organisation, name: "Merged org") }
+        let(:merged_deleted_organisation) { create(:organisation, name: "Merged deleted org", discarded_at: Time.zone.yesterday) }
         let(:options) do
           {
             "" => "Select an option",
@@ -139,6 +142,7 @@ RSpec.describe Form::Lettings::Questions::StockOwner, type: :model do
 
         before do
           merged_organisation.update!(merge_date: Time.zone.local(2023, 2, 2), absorbing_organisation: user.organisation)
+          merged_deleted_organisation.update!(merge_date: Time.zone.local(2023, 2, 2), absorbing_organisation: user.organisation)
           allow(Time).to receive(:now).and_return(Time.zone.local(2023, 11, 10))
         end
 
@@ -172,6 +176,7 @@ RSpec.describe Form::Lettings::Questions::StockOwner, type: :model do
 
       context "when user's org has absorbed other orgs with parent organisations during closed collection periods" do
         let(:merged_organisation) { create(:organisation, name: "Merged org") }
+        let(:merged_deleted_organisation) { create(:organisation, name: "Merged deleted org", discarded_at: Time.zone.yesterday) }
         let(:options) do
           {
             "" => "Select an option",
@@ -184,6 +189,7 @@ RSpec.describe Form::Lettings::Questions::StockOwner, type: :model do
           allow(Time).to receive(:now).and_return(Time.zone.local(2023, 4, 2))
           org_rel.update!(child_organisation: merged_organisation)
           merged_organisation.update!(merge_date: Time.zone.local(2021, 6, 2), absorbing_organisation: user.organisation)
+          merged_deleted_organisation.update!(merge_date: Time.zone.local(2021, 6, 2), absorbing_organisation: user.organisation)
           user.organisation.update!(available_from: Time.zone.local(2021, 2, 2))
         end
 
@@ -195,13 +201,14 @@ RSpec.describe Form::Lettings::Questions::StockOwner, type: :model do
 
     context "when user is support" do
       let!(:user) { create(:user, :support) }
-      let!(:log) { create(:lettings_log) }
+      let!(:log) { build(:lettings_log, assigned_to: create(:user)) }
 
       it "shows active orgs where organisation holds own stock" do
         non_stock_organisation = create(:organisation, name: "Non-stockholding org", holds_own_stock: false)
         inactive_organisation = create(:organisation, name: "Inactive org", active: false)
+        deleted_organisation = create(:organisation, name: "Deleted org", discarded_at: Time.zone.yesterday)
 
-        expected_opts = Organisation.filter_by_active.where(holds_own_stock: true).each_with_object(options) do |organisation, hsh|
+        expected_opts = Organisation.visible.filter_by_active.where(holds_own_stock: true).each_with_object(options) do |organisation, hsh|
           hsh[organisation.id] = organisation.name
           hsh
         end
@@ -209,10 +216,12 @@ RSpec.describe Form::Lettings::Questions::StockOwner, type: :model do
         expect(question.displayed_answer_options(log, user)).to eq(expected_opts)
         expect(question.displayed_answer_options(log, user)).not_to include(non_stock_organisation.id)
         expect(question.displayed_answer_options(log, user)).not_to include(inactive_organisation.id)
+        expect(question.displayed_answer_options(log, user)).not_to include(deleted_organisation.id)
       end
 
       context "and org has recently absorbed other orgs and does not have available from date" do
         let(:merged_organisation) { create(:organisation, name: "Merged org") }
+        let(:merged_deleted_organisation) { create(:organisation, name: "Merged deleted org", discarded_at: Time.zone.yesterday) }
         let(:org) { create(:organisation, name: "User org") }
         let(:options) do
           {
@@ -226,6 +235,7 @@ RSpec.describe Form::Lettings::Questions::StockOwner, type: :model do
 
         before do
           merged_organisation.update!(merge_date: Time.zone.local(2023, 2, 2), absorbing_organisation: org)
+          merged_deleted_organisation.update!(merge_date: Time.zone.local(2023, 2, 2), absorbing_organisation: org)
           allow(Time).to receive(:now).and_return(Time.zone.local(2023, 11, 10))
         end
 
@@ -271,6 +281,18 @@ RSpec.describe Form::Lettings::Questions::StockOwner, type: :model do
         it "is visible in check answers" do
           expect(user.organisation.stock_owners.count).to eq(1)
           expect(question.hidden_in_check_answers?(nil, user)).to be false
+        end
+      end
+
+      context "when stock owner is deleted" do
+        before do
+          organisation_relationship = create(:organisation_relationship, child_organisation: user.organisation)
+          organisation_relationship.parent_organisation.update!(discarded_at: Time.zone.yesterday)
+        end
+
+        it "is hidden in check answers" do
+          expect(user.organisation.stock_owners.count).to eq(1)
+          expect(question.hidden_in_check_answers?(nil, user)).to be true
         end
       end
     end

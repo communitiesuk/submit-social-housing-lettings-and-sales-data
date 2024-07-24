@@ -6,7 +6,7 @@ RSpec.describe Validations::TenancyValidations do
   let(:validator_class) { Class.new { include Validations::TenancyValidations } }
 
   describe "tenancy length validations" do
-    let(:record) { FactoryBot.create(:lettings_log, :setup_completed) }
+    let(:record) { FactoryBot.build(:lettings_log, :setup_completed) }
 
     shared_examples "adds expected errors based on the tenancy length" do |tenancy_type_case, error_fields, min_tenancy_length|
       context "and tenancy type is #{tenancy_type_case[:name]}" do
@@ -276,7 +276,7 @@ RSpec.describe Validations::TenancyValidations do
   end
 
   describe "tenancy type validations" do
-    let(:record) { FactoryBot.create(:lettings_log, :setup_completed) }
+    let(:record) { FactoryBot.build(:lettings_log, :setup_completed) }
     let(:field) { "validations.other_field_missing" }
     let(:main_field_label) { "tenancy type" }
     let(:other_field) { "tenancyother" }
@@ -320,7 +320,7 @@ RSpec.describe Validations::TenancyValidations do
 
   describe "joint tenancy validation" do
     context "when the data inputter has said that there is only one member in the household" do
-      let(:record) { FactoryBot.create(:lettings_log, :setup_completed, hhmemb: 1) }
+      let(:record) { FactoryBot.build(:lettings_log, :setup_completed, hhmemb: 1) }
       let(:expected_error) { I18n.t("validations.tenancy.not_joint") }
       let(:hhmemb_expected_error) { I18n.t("validations.tenancy.joint_more_than_one_member") }
 

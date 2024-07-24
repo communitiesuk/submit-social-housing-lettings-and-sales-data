@@ -13,7 +13,7 @@ RSpec.describe BulkUploadLettingsLogsController, type: :request do
   describe "GET /lettings-logs/bulk-upload-logs/start" do
     context "when data protection confirmation not signed" do
       let(:organisation) { create(:organisation, :without_dpc) }
-      let(:user) { create(:user, organisation:) }
+      let(:user) { create(:user, organisation:, with_dsa: false) }
 
       it "redirects to lettings index page" do
         get "/lettings-logs/bulk-upload-logs/start", params: {}

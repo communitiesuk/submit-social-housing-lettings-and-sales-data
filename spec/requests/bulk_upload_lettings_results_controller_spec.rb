@@ -16,7 +16,7 @@ RSpec.describe BulkUploadLettingsResultsController, type: :request do
       get "/lettings-logs/bulk-upload-results/#{bulk_upload.id}/summary"
 
       expect(response).to be_successful
-      expect(response.body).to include("Bulk upload for lettings (2023/24)")
+      expect(response.body).to include("Bulk upload for lettings (#{bulk_upload.year_combo})")
     end
 
     it "renders the bulk upload filename" do
@@ -68,7 +68,7 @@ RSpec.describe BulkUploadLettingsResultsController, type: :request do
       get "/lettings-logs/bulk-upload-results/#{bulk_upload.id}"
 
       expect(response).to be_successful
-      expect(response.body).to include("Bulk upload for lettings (2023/24)")
+      expect(response.body).to include("Bulk upload for lettings (#{bulk_upload.year_combo})")
     end
 
     it "renders correct number of errors" do

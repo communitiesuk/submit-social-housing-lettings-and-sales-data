@@ -1,6 +1,6 @@
 desc "Deduplicates logs where we have inadvertently turned some pending logs to in progress / completed"
-task :handle_unpended_logs, %i[perform_updates] => :environment do |_task, _args|
-  dry_run = true # args[:perform_updates].blank? || args[:perform_updates] != "true"
+task :handle_unpended_logs, %i[perform_updates] => :environment do |_task, args|
+  dry_run = args[:perform_updates].blank? || args[:perform_updates] != "true"
 
   pg = ActiveRecord::Base.connection
   query = "SELECT \"versions\".* FROM \"versions\" WHERE \"versions\".\"item_type\" = 'LettingsLog' AND whodunnit is null AND ((object_changes like '%status:\n- 3\n- 1%') OR (object_changes like '%status:\n- 3\n- 2%'))"
@@ -115,9 +115,12 @@ task :handle_unpended_logs, %i[perform_updates] => :environment do |_task, _args
         affected_non_updated_duplicates.each do |d|
           seen.add(d.id)
           csv << [d.id, d.collection_start_year, d.status, d.owning_organisation_name, d.assigned_to_id, d.assigned_to.email, "Delete", "Log is a duplicate of unaffected log(s)", unaffected_logs_reference]
-          # unless dry_run
-          # d.discard!
-          # end
+          # rubocop:disable Style/Next
+          unless dry_run
+            d.discarded_at = Time.zone.now
+            d.status = "deleted"
+            d.save!(validate: false)
+          end
         end
         next
       end
@@ -133,9 +136,11 @@ task :handle_unpended_logs, %i[perform_updates] => :environment do |_task, _args
         affected_non_updated_duplicates.each do |d|
           seen.add(d.id)
           csv << [d.id, d.collection_start_year, d.status, d.owning_organisation_name, d.assigned_to_id, d.assigned_to.email, "Delete", "Log is a duplicate of log(s) which have been updated since being affected", updated_logs_reference]
-          # unless dry_run
-          # d.discard!
-          # end
+          unless dry_run
+            d.discarded_at = Time.zone.now
+            d.status = "deleted"
+            d.save!(validate: false)
+          end
         end
         next
       end
@@ -149,9 +154,12 @@ task :handle_unpended_logs, %i[perform_updates] => :environment do |_task, _args
 
         seen.add(d.id)
         csv << [d.id, d.collection_start_year, d.status, d.owning_organisation_name, d.assigned_to_id, d.assigned_to.email, "Delete", "Log is a duplicate of more recently created affected log", latest_created.id]
-        # unless dry_run
-        # d.discard!
-        # end
+        unless dry_run
+          d.discarded_at = Time.zone.now
+          d.status = "deleted"
+          d.save!(validate: false)
+        end
+        # rubocop:enable Style/Next
       end
     end
   end
