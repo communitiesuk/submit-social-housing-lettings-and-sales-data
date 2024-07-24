@@ -97,6 +97,7 @@ group :development do
 end
 
 group :test do
+  gem "axe-core-rspec"
   gem "capybara", require: false
   gem "capybara-lockstep"
   gem "capybara-screenshot"
@@ -105,7 +106,6 @@ group :test do
   gem "simplecov", require: false
   gem "timecop", "~> 0.9.4"
   gem "webmock", require: false
-  gem 'axe-core-rspec'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
