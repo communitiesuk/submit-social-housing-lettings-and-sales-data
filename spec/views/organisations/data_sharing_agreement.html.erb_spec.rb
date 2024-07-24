@@ -28,7 +28,7 @@ RSpec.describe "organisations/data_sharing_agreement.html.erb", :aggregate_failu
       # org details
       expect(fragment).to have_content("#{organisation.name} of #{organisation.address_row} (“CORE Data Provider”)")
       # header
-      expect(fragment).to have_css("h2", text: "#{organisation.name} and Department for Levelling Up, Housing and Communities")
+      expect(fragment).to have_css("h2", text: "#{organisation.name} and Ministry of Housing, Communities and Local Government")
       # action buttons
       expect(fragment).to have_button(text: "Accept this agreement")
       expect(fragment).to have_link(text: "Cancel", href: "/organisations/#{organisation.id}/details")
@@ -56,7 +56,7 @@ RSpec.describe "organisations/data_sharing_agreement.html.erb", :aggregate_failu
         # org details
         expect(fragment).to have_content("#{organisation.name} of #{organisation.address_row} (“CORE Data Provider”)")
         # header
-        expect(fragment).to have_css("h2", text: "#{organisation.name} and Department for Levelling Up, Housing and Communities")
+        expect(fragment).to have_css("h2", text: "#{organisation.name} and Ministry of Housing, Communities and Local Government")
         # does not show action buttons
         expect(fragment).not_to have_button(text: "Accept this agreement")
         expect(fragment).not_to have_link(text: "Cancel", href: "/organisations/#{organisation.id}/details")
@@ -99,7 +99,7 @@ RSpec.describe "organisations/data_sharing_agreement.html.erb", :aggregate_failu
           # org details
           expect(fragment).to have_content("#{organisation.name} of #{organisation.address_row} (“CORE Data Provider”)")
           # header
-          expect(fragment).to have_css("h2", text: "#{organisation.name} and Department for Levelling Up, Housing and Communities")
+          expect(fragment).to have_css("h2", text: "#{organisation.name} and Ministry of Housing, Communities and Local Government")
           # does not show action buttons
           expect(fragment).not_to have_button(text: "Accept this agreement")
           expect(fragment).not_to have_link(text: "Cancel", href: "/organisations/#{organisation.id}/details")
@@ -124,7 +124,7 @@ RSpec.describe "organisations/data_sharing_agreement.html.erb", :aggregate_failu
       # org details
       expect(fragment).to have_content("#{organisation.name} of #{organisation.address_row} (“CORE Data Provider”)")
       # header
-      expect(fragment).to have_css("h2", text: "#{organisation.name} and Department for Levelling Up, Housing and Communities")
+      expect(fragment).to have_css("h2", text: "#{organisation.name} and Ministry of Housing, Communities and Local Government")
       # does not show action buttons
       expect(fragment).not_to have_button(text: "Accept this agreement")
       expect(fragment).not_to have_link(text: "Cancel", href: "/organisations/#{organisation.id}/details")
@@ -152,7 +152,7 @@ RSpec.describe "organisations/data_sharing_agreement.html.erb", :aggregate_failu
         # org details
         expect(fragment).to have_content("#{organisation.name} of #{organisation.address_row} (“CORE Data Provider”)")
         # header
-        expect(fragment).to have_css("h2", text: "#{organisation.name} and Department for Levelling Up, Housing and Communities")
+        expect(fragment).to have_css("h2", text: "#{organisation.name} and Ministry of Housing, Communities and Local Government")
         # does not show action buttons
         expect(fragment).not_to have_button(text: "Accept this agreement")
         expect(fragment).not_to have_link(text: "Cancel", href: "/organisations/#{organisation.id}/details")

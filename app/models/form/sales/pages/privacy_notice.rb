@@ -1,7 +1,7 @@
 class Form::Sales::Pages::PrivacyNotice < ::Form::Page
   def initialize(id, hsh, subsection, joint_purchase:)
     super(id, hsh, subsection)
-    @header = "Department for Levelling Up, Housing and Communities privacy notice"
+    @header = "Ministry of Housing, Communities and Local Government privacy notice"
     @joint_purchase = joint_purchase
   end
 

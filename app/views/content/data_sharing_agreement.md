@@ -1,4 +1,4 @@
-## [Data provider organisation] and Department for Levelling Up, Housing and Communities
+## [Data provider organisation] and Ministry of Housing, Communities and Local Government
 
 This agreement is made the [XX] day of [XX] 20[XX]
 
@@ -8,18 +8,18 @@ This agreement is made the [XX] day of [XX] 20[XX]
 
 and
 
-2) The Department for Levelling Up, Housing and Communities of 2 Marsham Street, London, SW1P 4DF (“DLUHC”)
+2) The Ministry of Housing, Communities and Local Government of 2 Marsham Street, London, SW1P 4DF (“MHCLG”)
 
 ### 1. Background
-1.1. The Department for Levelling Up, Housing and Communities (DLUHC) collect data on social housing lettings and sales via CORE (COntinuous REcording of social housing lettings and sales) for statistical purposes. They are the data controller for all data within the CORE system.
+1.1. The Ministry of Housing, Communities and Local Government (MHCLG) collect data on social housing lettings and sales via CORE (COntinuous REcording of social housing lettings and sales) for statistical purposes. They are the data controller for all data within the CORE system.
 
-1.2. The purpose of this Agreement is to describe the duties of CORE data providers to DLUHC and to formalise the arrangement established to share the data between DLUHC and data providers. This agreement covers all data in the CORE system. This agreement does not cover data providers’ own versions of these data.
+1.2. The purpose of this Agreement is to describe the duties of CORE data providers to MHCLG and to formalise the arrangement established to share the data between MHCLG and data providers. This agreement covers all data in the CORE system. This agreement does not cover data providers’ own versions of these data.
 
-1.3. Data providers and DLUHC will each be responsible for compliance with the Data Protection legislation including the Data Protection Act 2018 and the EU General Data Protection Regulation (GDPR).
+1.3. Data providers and MHCLG will each be responsible for compliance with the Data Protection legislation including the Data Protection Act 2018 and the EU General Data Protection Regulation (GDPR).
 
-1.4. DLUHC shall only collect data from and share data with CORE data providers that have signed this data sharing agreement.
+1.4. MHCLG shall only collect data from and share data with CORE data providers that have signed this data sharing agreement.
 
-1.5. There are occasions when DLUHC may instruct a third party to carry out analysis on the CORE dataset on their behalf. This third party will be a data processor for DLUHC and work under a contract ensuring data protection compliance.
+1.5. There are occasions when MHCLG may instruct a third party to carry out analysis on the CORE dataset on their behalf. This third party will be a data processor for MHCLG and work under a contract ensuring data protection compliance.
 
 **It is now agreed** as follows:
 
@@ -35,7 +35,7 @@ parties with delegated authority to handle the day-to-day matters arising from t
 * “Data Protection Legislation” means the Data Protection Act 2018 and all applicable laws and regulations relating to the processing of personal data and privacy, including where applicable the guidance and codes of practice issued by the Information Commissioner; it includes the General Data Protection Regulation (GDPR).
 * “Data” means the data supplied by the CORE data providers via the CORE system and the data that is calculated or derived via the CORE system based on that initial data;
 * “GDPR” means the General Data Protection Regulation.
-* “Parties” means the parties to this Agreement, namely DLUHC and the CORE data providers. CORE data providers include social housing providers and managing organisations that provide data on behalf of the social housing providers.
+* “Parties” means the parties to this Agreement, namely MHCLG and the CORE data providers. CORE data providers include social housing providers and managing organisations that provide data on behalf of the social housing providers.
 * “Personal Data” has the meaning in Article 4(1) of the GDPR. “Processing” has the meaning in Article 4(2) of the GDPR.
 * “Request for Information” means a request for information or a request under the Freedom of Information Act 2000.
 * “Special category personal data” has the meaning in Article 9(1) of the GDPR. In this Agreement:
@@ -57,7 +57,7 @@ shall be construed as a reference to the statute, enactment, order, regulation o
 3.2. The Parties may, by mutual consent in writing, agree to amend this agreement.
 
 ### 4. Purpose and scope of data collection via CORE
-4.1. CORE (COntinuous Recording of social housing lettings and sales) is a national information source funded by the Department for Levelling Up, Housing and Communities that records information on the characteristics of Private Registered Providers’ and Local Authorities’ new social housing tenants and the homes they rent and buy.
+4.1. CORE (COntinuous Recording of social housing lettings and sales) is a national information source funded by the Ministry of Housing, Communities and Local Government that records information on the characteristics of Private Registered Providers’ and Local Authorities’ new social housing tenants and the homes they rent and buy.
 
 4.2. The CORE dataset includes information on the letting or sale, type of tenancy or sale, rents and charges, demographic information about the tenant/buyer and other information related to the tenants/buyers themselves (e.g. source of referral, route into housing, whether they are on benefits, income).
 
@@ -66,7 +66,7 @@ shall be construed as a reference to the statute, enactment, order, regulation o
 4.4. The dataset also contains information which is very sensitive, and which in some cases is “special category” personal data for the purposes of the GDPR, and if disclosed could cause considerable distress to the data subject, for example it indicates whether the social housing tenant has been in prison or probation or referred by a mental health institution; or whether anyone in the household has suffered from domestic abuse or hate crime.
 
 ### 5. Roles and responsibilities
-5.1. DLUHC shall be the ‘Data controller’ for all personal data held within the CORE database.
+5.1. MHCLG shall be the ‘Data controller’ for all personal data held within the CORE database.
 
 5.2. CORE data providers are data controllers for personal data that they hold within their own systems. It is recognised that while much of the CORE data will be replicated in data collections held by CORE data providers, each organisation accepts full data controller responsibility for the data it holds.
 
@@ -74,10 +74,10 @@ shall be construed as a reference to the statute, enactment, order, regulation o
 
 5.4. In order to be compliant with the data protection legislation all data subjects (social housing tenants and buyers) from the CORE dataset need to be informed of how their data will be processed and used.
 
-5.5. DLUHC has set the information that needs to be provided to new CORE data subjects in the privacy notice in Annex 1 of this agreement. CORE data providers must either share the DLUHC privacy notice with tenants or if using their own privacy notice, state within that they share the data with DLUHC and provide a link to the DLUHC privacy notice.
+5.5. MHCLG has set the information that needs to be provided to new CORE data subjects in the privacy notice in Annex 1 of this agreement. CORE data providers must either share the MHCLG privacy notice with tenants or if using their own privacy notice, state within that they share the data with MHCLG and provide a link to the MHCLG privacy notice.
 
 ### 6. Legal basis for data sharing
-6.1. CORE provides DLUHC with an essential evidence base for monitoring and developing government policy, in particular to assess who is accessing social housing and their associated tenancy and property details. It is necessary therefore that the personal data that forms the CORE data is processed for that purpose. The legal basis for processing this personal data is s(8)(d) of the Data Protection Act 2018 which states:
+6.1. CORE provides MHCLG with an essential evidence base for monitoring and developing government policy, in particular to assess who is accessing social housing and their associated tenancy and property details. It is necessary therefore that the personal data that forms the CORE data is processed for that purpose. The legal basis for processing this personal data is s(8)(d) of the Data Protection Act 2018 which states:
 
 > In Article 6(1) of the GDPR (lawfulness of processing), the reference in point (e) to processing of personal data that is necessary for the performance of a task carried out in the public interest or in the exercise of the controller’s official authority includes processing of personal data that is necessary for— (d) the exercise of a function of the Crown, a Minister of the Crown or a government department.
 
@@ -97,45 +97,45 @@ shall be construed as a reference to the statute, enactment, order, regulation o
 
 8.3. Data providers will be able to access the CORE personal data they submitted right after it is validated by the system; but can only access processed data from MHCLG after MHCLG has published the data. MHCLG will make the processed data available to data providers as soon as possible via the system.
 
-8.4.CORE team members in DLUHC and third-party data processors as developers/maintenance contractors have access to all parts of the website, including data. The handling of CORE data by contractors is covered in the contracts with these organisations. All CORE staff that have access to the data have had training on how to handle personal data.
+8.4.CORE team members in MHCLG and third-party data processors as developers/maintenance contractors have access to all parts of the website, including data. The handling of CORE data by contractors is covered in the contracts with these organisations. All CORE staff that have access to the data have had training on how to handle personal data.
 
-8.5. All work carried out by DLUHC will follow appropriate security measures and procedures to ensure the protection of the data.
+8.5. All work carried out by MHCLG will follow appropriate security measures and procedures to ensure the protection of the data.
 
 ### 9. Protection of personal data
-9.1. CORE data providers and DLUHC agree that they shall:
+9.1. CORE data providers and MHCLG agree that they shall:
 
 * A. Implement appropriate technical and organisational measures to protect the Personal Data against unauthorised or unlawful Processing and against accidental loss, destruction, damage, alteration or disclosure. These measures shall ensure a level of security appropriate to the harm which might result from any unauthorised or unlawful Processing, accidental loss, destruction or damage to the Personal Data and having regard to the nature of the Personal Data which is to be protected;
-* B. Take reasonable steps to ensure the reliability of any personnel who have access to the Personal Data. DLUHC and Data providers will ensure such personnel will be a limited number of analysts assigned to the data collection.
+* B. Take reasonable steps to ensure the reliability of any personnel who have access to the Personal Data. MHCLG and Data providers will ensure such personnel will be a limited number of analysts assigned to the data collection.
 
-9.2. The data providers and DLUHC shall comply at all times with the Data Protection Legislation and shall ensure that they each perform their obligations under this agreement in full compliance with the Data Protection Legislation and any other applicable law, in particular the Human Rights Act 1998 and the common law duty of confidentiality.
+9.2. The data providers and MHCLG shall comply at all times with the Data Protection Legislation and shall ensure that they each perform their obligations under this agreement in full compliance with the Data Protection Legislation and any other applicable law, in particular the Human Rights Act 1998 and the common law duty of confidentiality.
 
 9.3. CORE data providers should limit access to CORE to a small number of individuals who can be named on request. CORE access is limited to registered users only via password, but it is the responsibility of the CORE data providers to ensure that all individuals granted access to the datasets should be briefed on the legal requirements around handling and storing the Data from CORE.
 
 ### 10. Freedom of information
-10.1. DLUHC acknowledges that CORE data providers that are or act on behalf of local authorities may be subject to the requirements of the FOIA and the Environmental Information Regulations and shall assist and cooperate with them to enable them to comply with their Information disclosure requirements.
+10.1. MHCLG acknowledges that CORE data providers that are or act on behalf of local authorities may be subject to the requirements of the FOIA and the Environmental Information Regulations and shall assist and cooperate with them to enable them to comply with their Information disclosure requirements.
 
 ### 11. Loss or unauthorised release
-11.1. CORE data providers will report to DLUHC any loss or unauthorised release of the Data as soon as possible and no later than 24 hours after the loss or unauthorised release is identified. DLUHC will report to CORE data providers any loss or unauthorised release of the Data as soon as possible and no later than 24 hours after the loss or unauthorised release is identified.
+11.1. CORE data providers will report to MHCLG any loss or unauthorised release of the Data as soon as possible and no later than 24 hours after the loss or unauthorised release is identified. MHCLG will report to CORE data providers any loss or unauthorised release of the Data as soon as possible and no later than 24 hours after the loss or unauthorised release is identified.
 
-11.2. CORE data providers and DLUHC acknowledge that any loss or unauthorised release of the Data can be treated as valid grounds for immediately terminating this agreement by DLUHC.
+11.2. CORE data providers and MHCLG acknowledge that any loss or unauthorised release of the Data can be treated as valid grounds for immediately terminating this agreement by MHCLG.
 
 ### 12. Authorised representatives
-12.1. CORE data providers and DLUHC will each appoint an Authorised Representative to be the primary point of contact in all day-to-day matters relating to this Agreement:
+12.1. CORE data providers and MHCLG will each appoint an Authorised Representative to be the primary point of contact in all day-to-day matters relating to this Agreement:
 
 12.2. For [the Data Provider]: Name:
 Postal Address: E-mail address: Telephone number:
 
-12.3. For DLUHC: Name: Rachel Worledge
+12.3. For MHCLG: Name: Rachel Worledge
 Postal Address: South-west section, 4th Floor, Fry Building, 2 Marsham Street, London, SW1P 4DF
-E-mail address: Rachel.Worledge@levellingup.gov.uk 
+E-mail address: Rachel.Worledge@communities.gov.uk 
 
 ### 13. Products and publications
 13.1. The Data potentially allows for persons to be identified, although the risk of this happening should be minimised by the steps taken in clause 9. CORE data providers should agree to carry out a thorough check of the Data and ensure that all steps are taken within its powers to minimise the risk that any outputs lead to identification of a person by a third party.
 
 ### 14. Dispute resolution
-14.1. Any disputes arising concerning this Agreement will be resolved initially by discussions between the Authorised Representatives of the CORE data providers and DLUHC.
+14.1. Any disputes arising concerning this Agreement will be resolved initially by discussions between the Authorised Representatives of the CORE data providers and MHCLG.
 
-14.2. If the dispute cannot be resolved amicably between the Authorised Representatives then the matter will be escalated to: for the CORE data providers: the Chief Executive; and for DLUHC: the Deputy Director of the Data, Analytics and Statistics Division.
+14.2. If the dispute cannot be resolved amicably between the Authorised Representatives then the matter will be escalated to: for the CORE data providers: the Chief Executive; and for MHCLG: the Deputy Director of the Data, Analytics and Statistics Division.
 
 ### 15. Termination
 15.1. Any Party may terminate this Agreement upon one month’s written notice to the other. 
@@ -152,7 +152,7 @@ signed for and on behalf of [job title of an officer with appropriate delegated 
 * Name: 
 * Title:
 
-SIGNED for and on behalf of the deputy director of the data, analytics & statistics in the Department for Levelling Up, Housing and Communities, by:
+SIGNED for and on behalf of the deputy director of the data, analytics & statistics in the Ministry of Housing, Communities and Local Government, by:
 
 * Name: Sandra Tudor 
 * Title: Deputy Director
