@@ -20,8 +20,8 @@ RSpec.describe Organisation, type: :model do
     end
 
     context "with parent/child associations", :aggregate_failures do
-      let!(:child_organisation) { create(:organisation, name: "DLUHC Child") }
-      let!(:grandchild_organisation) { create(:organisation, name: "DLUHC Grandchild") }
+      let!(:child_organisation) { create(:organisation, name: "MHCLG Child") }
+      let!(:grandchild_organisation) { create(:organisation, name: "MHCLG Grandchild") }
 
       before do
         create(
@@ -49,8 +49,8 @@ RSpec.describe Organisation, type: :model do
     end
 
     context "with owning association", :aggregate_failures do
-      let!(:child_organisation) { create(:organisation, name: "DLUHC Child") }
-      let!(:grandchild_organisation) { create(:organisation, name: "DLUHC Grandchild") }
+      let!(:child_organisation) { create(:organisation, name: "MHCLG Child") }
+      let!(:grandchild_organisation) { create(:organisation, name: "MHCLG Grandchild") }
 
       before do
         create(
@@ -73,8 +73,8 @@ RSpec.describe Organisation, type: :model do
     end
 
     context "with managing association", :aggregate_failures do
-      let!(:child_organisation) { create(:organisation, name: "DLUHC Child") }
-      let!(:grandchild_organisation) { create(:organisation, name: "DLUHC Grandchild") }
+      let!(:child_organisation) { create(:organisation, name: "MHCLG Child") }
+      let!(:grandchild_organisation) { create(:organisation, name: "MHCLG Grandchild") }
 
       before do
         create(
@@ -208,7 +208,7 @@ RSpec.describe Organisation, type: :model do
 
     it "allows lettings logs to be restored to a previous version" do
       organisation.update!(name: "new test name")
-      expect(organisation.paper_trail.previous_version.name).to eq("DLUHC")
+      expect(organisation.paper_trail.previous_version.name).to eq("MHCLG")
     end
   end
 

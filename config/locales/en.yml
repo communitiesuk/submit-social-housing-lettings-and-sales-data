@@ -231,6 +231,7 @@ en:
       nearest_ten: "%{field} must be given to the nearest ten"
       nearest_hundredth: "%{field} must be given to the nearest hundredth"
       normal_format: "Enter a number"
+      format: "%{field} must be a number"
 
     date:
       invalid_date: "Enter a date in the correct format, for example 31 1 2022"
@@ -583,13 +584,13 @@ en:
 
     declaration:
       missing:
-        pre_2024: "You must show the DLUHC privacy notice to the tenant before you can submit this log."
-        post_2024: "You must show or give access to the DLUHC privacy notice to the tenant before you can submit this log."
+        pre_2024: "You must show the MHCLG privacy notice to the tenant before you can submit this log."
+        post_2024: "You must show or give access to the MHCLG privacy notice to the tenant before you can submit this log."
 
     privacynotice:
       missing:
-        pre_2024: "You must show the DLUHC privacy notice to the %{buyer_or_buyers} before you can submit this log."
-        post_2024: "You must show or give access to the DLUHC privacy notice to the %{buyer_or_buyers} before you can submit this log."
+        pre_2024: "You must show the MHCLG privacy notice to the %{buyer_or_buyers} before you can submit this log."
+        post_2024: "You must show or give access to the MHCLG privacy notice to the %{buyer_or_buyers} before you can submit this log."
 
     scheme:
       toggle_date:

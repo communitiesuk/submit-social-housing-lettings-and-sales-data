@@ -4,13 +4,13 @@ nav_order: 1
 
 # Overview
 
-All lettings and and sales of social housing in England need to be logged with the Department for levelling up, housing and communities (DLUHC). This is done by data providing organisations: Local Authorities and Private Registered Providers (PRPs, i.e. housing associations).
+All lettings and and sales of social housing in England need to be logged with the Ministry of Housing, Communities and Local Government (MHCLG). This is done by data providing organisations: Local Authorities and Private Registered Providers (PRPs, i.e. housing associations).
 
 Data is collected via a form that runs on an annual data collection window basis. Form changes are made annually to add new questions, remove any that are no longer needed, or adjust wording or answer options etc.
 
 Each data collection window runs from 1 April to 1 April the following year (plus an extra 3 months to allow for any late submissions). This means that between April and June, 2 collection windows are open simultaneously and logs can be submitted for either.
 
-ADD (Analytics & Data Directorate) statisticians are the other primary users of the service. The data collected is transferred to DLUHCs consolidated data store (CDS) via nightly XML exports to an S3 bucket. CDS ingests and transforms this data, ultimately storing it in a MS SQL database and exposing it to analysts and statisticians via Amazon Workspaces.
+ADD (Analytics & Data Directorate) statisticians are the other primary users of the service. The data collected is transferred to MHCLG's consolidated data store (CDS) via nightly XML exports to an S3 bucket. CDS ingests and transforms this data, ultimately storing it in a MS SQL database and exposing it to analysts and statisticians via Amazon Workspaces.
 
 ## Users
 

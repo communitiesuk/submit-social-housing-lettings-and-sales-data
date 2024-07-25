@@ -51,7 +51,7 @@ RSpec.describe Form::Sales::Questions::PrivacyNotice, type: :model do
     context "and there is a single buyer" do
       it "has the correct answer_options" do
         expect(question.answer_options).to eq({
-          "privacynotice" => { "value" => "The buyer has seen the DLUHC privacy notice" },
+          "privacynotice" => { "value" => "The buyer has seen the MHCLG privacy notice" },
         })
       end
 
@@ -60,7 +60,7 @@ RSpec.describe Form::Sales::Questions::PrivacyNotice, type: :model do
       end
 
       it "returns correct unanswered_error_message" do
-        expect(question.unanswered_error_message).to eq("You must show the DLUHC privacy notice to the buyer before you can submit this log.")
+        expect(question.unanswered_error_message).to eq("You must show the MHCLG privacy notice to the buyer before you can submit this log.")
       end
     end
 
@@ -69,7 +69,7 @@ RSpec.describe Form::Sales::Questions::PrivacyNotice, type: :model do
 
       it "has the correct answer_options" do
         expect(question.answer_options).to eq({
-          "privacynotice" => { "value" => "The buyers have seen the DLUHC privacy notice" },
+          "privacynotice" => { "value" => "The buyers have seen the MHCLG privacy notice" },
         })
       end
 
@@ -78,7 +78,7 @@ RSpec.describe Form::Sales::Questions::PrivacyNotice, type: :model do
       end
 
       it "returns correct unanswered_error_message" do
-        expect(question.unanswered_error_message).to eq("You must show the DLUHC privacy notice to the buyers before you can submit this log.")
+        expect(question.unanswered_error_message).to eq("You must show the MHCLG privacy notice to the buyers before you can submit this log.")
       end
     end
   end
@@ -91,7 +91,7 @@ RSpec.describe Form::Sales::Questions::PrivacyNotice, type: :model do
     context "and there is a single buyer" do
       it "has the correct answer_options" do
         expect(question.answer_options).to eq({
-          "privacynotice" => { "value" => "The buyer has seen or been given access to the DLUHC privacy notice" },
+          "privacynotice" => { "value" => "The buyer has seen or been given access to the MHCLG privacy notice" },
         })
       end
 
@@ -100,7 +100,7 @@ RSpec.describe Form::Sales::Questions::PrivacyNotice, type: :model do
       end
 
       it "returns correct unanswered_error_message" do
-        expect(question.unanswered_error_message).to eq("You must show or give access to the DLUHC privacy notice to the buyer before you can submit this log.")
+        expect(question.unanswered_error_message).to eq("You must show or give access to the MHCLG privacy notice to the buyer before you can submit this log.")
       end
     end
 
@@ -109,7 +109,7 @@ RSpec.describe Form::Sales::Questions::PrivacyNotice, type: :model do
 
       it "has the correct answer_options" do
         expect(question.answer_options).to eq({
-          "privacynotice" => { "value" => "The buyers have seen or been given access to the DLUHC privacy notice" },
+          "privacynotice" => { "value" => "The buyers have seen or been given access to the MHCLG privacy notice" },
         })
       end
 
@@ -118,7 +118,7 @@ RSpec.describe Form::Sales::Questions::PrivacyNotice, type: :model do
       end
 
       it "returns correct unanswered_error_message" do
-        expect(question.unanswered_error_message).to eq("You must show or give access to the DLUHC privacy notice to the buyers before you can submit this log.")
+        expect(question.unanswered_error_message).to eq("You must show or give access to the MHCLG privacy notice to the buyers before you can submit this log.")
       end
     end
   end
