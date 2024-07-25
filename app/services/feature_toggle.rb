@@ -11,10 +11,6 @@ class FeatureToggle
     !Rails.env.development?
   end
 
-  def self.deduplication_flow_enabled?
-    true
-  end
-
   def self.duplicate_summary_enabled?
     true
   end

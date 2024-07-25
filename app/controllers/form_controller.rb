@@ -26,9 +26,7 @@ class FormController < ApplicationController
           flash[:notice] = "You have successfully updated #{updated_question_string}"
         end
 
-        if FeatureToggle.deduplication_flow_enabled?
-          update_duplication_tracking
-        end
+        update_duplication_tracking
 
         pages_requiring_update = pages_requiring_update(shown_page_ids_with_unanswered_questions_before_update)
         redirect_to(successful_redirect_path(pages_requiring_update))
@@ -222,7 +220,6 @@ private
         end
         return send("#{class_name}_duplicate_logs_path", original_log, original_log_id: original_log.id, referrer: params[:referrer], organisation_id: params[:organisation_id])
       else
-        #remove_fixed_duplicate_set_ids(original_log)
         flash[:notice] = deduplication_success_banner
         return send("#{class_name}_duplicate_logs_path", "#{class_name}_id".to_sym => from_referrer_query("first_remaining_duplicate_id"), original_log_id: from_referrer_query("original_log_id"), referrer: params[:referrer], organisation_id: params[:organisation_id])
       end
