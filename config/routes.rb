@@ -147,7 +147,6 @@ Rails.application.routes.draw do
       post "data-sharing-agreement", to: "organisations#confirm_data_sharing_agreement"
 
       get "users", to: "organisations#users"
-      get "users/invite", to: "users/account#new"
       get "lettings-logs", to: "organisations#lettings_logs"
       get "delete-lettings-logs", to: "delete_logs#delete_lettings_logs_for_organisation"
       post "delete-lettings-logs", to: "delete_logs#delete_lettings_logs_for_organisation_with_selected_ids"

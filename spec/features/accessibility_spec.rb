@@ -42,20 +42,31 @@ RSpec.describe "Accessibility", js: true do
   end
 
   context "when viewing organisation pages" do
+    let(:parent_relationship) { create(:organisation_relationship, parent_organisation: other_user.organisation) }
+    let(:child_relationship) { create(:organisation_relationship, child_organisation: other_user.organisation) }
     let(:organisation_paths) do
-      routes = find_routes("organisation", other_user.organisation, other_user.organisation).reject { |route| route.match?(/\A\/organisations\/#{other_user.organisation_id}\z/) }
+      routes = find_routes("organisation", other_user.organisation, other_user.organisation).reject do |route|
+        route.match?(/\A\/organisations\/#{other_user.organisation_id}\z/) ||
+          route.include?("filters/update")
+      end
       routes << "/organisations/#{other_user.organisation_id}/details"
+      route_mappings = {
+        "/schemes/csv-download" => "?download_type=combined",
+        "logs/csv-download" => "?codes_only=false&years[]=2024",
+        "filters/update" => "?codes_only=false",
+        "stock-owners/remove" => "?target_organisation_id=#{child_relationship.parent_organisation.id}",
+        "managing-agents/remove" => "?target_organisation_id=#{parent_relationship.child_organisation.id}",
+      }
+
+      routes.map do |route|
+        additional_params = route_mappings.find { |pattern, _| route.include?(pattern) }&.last
+        route += additional_params if additional_params
+        route
+      end
     end
 
     it "is has accessible pages" do
       organisation_paths.each do |path|
-        next if path.include?("invite") # needs to be fixed
-        next if path.include?("csv") # needs to be fixed, needs codes_only
-        next if path.include?("lettings-logs") # needs to be fixed
-        next if path.include?("sales-logs") # needs to be fixed
-        next if path.include?("stock-owner") # needs to be fixed, needs target_organisation
-        next if path.include?("managing-agent") # needs to be fixed, needs target_organisation
-
         visit(path)
         expect(page).to have_current_path(path)
         expect(page).to be_axe_clean.according_to :wcag2aa
@@ -64,7 +75,7 @@ RSpec.describe "Accessibility", js: true do
   end
 
   context "when viewing lettings log pages" do
-    let(:bulk_upload) { create(:bulk_upload) }
+    let(:bulk_upload) { create(:bulk_upload, user:) }
     let(:lettings_log) { create(:lettings_log, :completed, assigned_to: other_user, bulk_upload_id: bulk_upload.id) }
     let(:organisation_relationship) { create(:organisation_relationship, parent_organisation: user.organisation) }
 
@@ -75,24 +86,29 @@ RSpec.describe "Accessibility", js: true do
       other_form_page_ids = all_page_ids - lettings_log_pages.map(&:id)
 
       routes.reject { |path|
-        path.include?("/edit") || path.include?("/new") || path.include?("*page") ||
+        path.include?("/edit") || path.include?("/new") || path.include?("*page") || path.include?("filters/update") ||
           path.include?("local-authority/check-answers") || path.include?("declaration/check-answers") ||
+          path.include?("/lettings-logs/bulk-upload-logs/#{bulk_upload.id}") ||
+          path.include?("bulk-upload-soft-validations-check") ||
+          path == "/lettings-logs/bulk-upload-resume/#{bulk_upload.id}" ||
           other_form_page_ids.any? { |page_id| path.include?(page_id.dasherize) } ||
           lettings_log_pages.any? { |page| path.include?(page.id.dasherize) && !page.routed_to?(lettings_log, user) }
       }.uniq
     end
 
     before do
+      lettings_log.dup.tap do |log|
+        log.save(validate: false)
+      end
       allow(FormHandler.instance).to receive(:in_crossover_period?).and_return(true)
     end
 
     it "is has accessible pages" do
       lettings_log_paths.each do |path|
-        next if path.include?("duplicate") # needs to be fixed, add a duplicate?
-        next if path.include?("csv") # needs to be fixed, needs codes_only
-        next if path.include?("filters/update") # needs to be fixed, needs codes_only
-        next if path.include?("bulk") # needs to be fixed
-
+        path += "?original_log_id=#{lettings_log.id}" if path.include?("duplicate")
+        path += "?codes_only=true&years[]=2024" if path.include?("csv")
+        path.gsub!("/start", "/prepare-your-file?form[year]=2024") if path.include?("bulk-upload-logs/start")
+        path.gsub!("/start", "/fix-choice") if path.include?("/bulk-upload-resume/#{bulk_upload.id}/start")
         visit(path)
         expect(page).to have_current_path(path)
         expect(page).to be_axe_clean.according_to :wcag2aa
@@ -101,7 +117,7 @@ RSpec.describe "Accessibility", js: true do
   end
 
   context "when viewing sales log pages" do
-    let(:bulk_upload) { create(:bulk_upload) }
+    let(:bulk_upload) { create(:bulk_upload, user:) }
     let(:sales_log) { create(:sales_log, :completed, assigned_to: other_user, bulk_upload_id: bulk_upload.id) }
     let(:organisation_relationship) { create(:organisation_relationship, parent_organisation: user.organisation) }
 
@@ -114,6 +130,10 @@ RSpec.describe "Accessibility", js: true do
 
       routes.reject { |path|
         path.include?("/edit") || path.include?("/new") || path.include?("*page") ||
+          path.include?("/sales-logs/bulk-upload-logs/#{bulk_upload.id}") ||
+          path.include?("bulk-upload-soft-validations-check") || path.include?("filters/update") ||
+          path == "/sales-logs/bulk-upload-resume/#{bulk_upload.id}" ||
+          path == "/sales-logs/bulk-upload-logs" ||
           other_form_page_ids.any? { |page_id| path.include?(page_id.dasherize) } ||
           sales_log_pages.any? { |page| path.include?(page.id.dasherize) && !page.routed_to?(sales_log, user) }
       }.uniq
@@ -121,10 +141,10 @@ RSpec.describe "Accessibility", js: true do
 
     it "is has accessible pages" do
       sales_log_paths.each do |path|
-        next if path.include?("duplicate") # needs to be fixed, add a duplicate?
-        next if path.include?("csv") # needs to be fixed, needs codes_only
-        next if path.include?("filters/update") # needs to be fixed, needs codes_only
-        next if path.include?("bulk") # needs to be fixed
+        path += "?original_log_id=#{sales_log.id}" if path.include?("duplicate")
+        path += "?codes_only=true&years[]=2024" if path.include?("csv")
+        path.gsub!("/start", "/prepare-your-file?form[year]=2024") if path.include?("bulk-upload-logs/start")
+        path.gsub!("/start", "/fix-choice") if path.include?("/bulk-upload-resume/#{bulk_upload.id}/start")
 
         visit(path)
         expect(page).to have_current_path(path)
@@ -139,7 +159,10 @@ RSpec.describe "Accessibility", js: true do
     let(:scheme_paths) do
       routes = find_routes("scheme", scheme, location)
 
-      routes.reject { |path| path.include?("/edit") || path.include?("/new") || path.include?("*page") }.uniq
+      routes.reject { |path|
+        path.include?("/edit") || path.include?("/new") || path.include?("*page") ||
+          path.include?("reactivate") || path.include?("deactivate")
+      }.uniq
     end
 
     before do
@@ -148,9 +171,6 @@ RSpec.describe "Accessibility", js: true do
 
     it "is has accessible pages" do
       scheme_paths.each do |path|
-        next if path.include?("reactivate") # needs to be fixed
-        next if path.include?("deactivate") # needs to be fixed
-
         visit(path)
         expect(page).to have_current_path(path)
         expect(page).to be_axe_clean.according_to :wcag2aa
