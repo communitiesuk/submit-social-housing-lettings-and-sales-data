@@ -325,6 +325,8 @@ en:
         lettype_not_supported_housing: This letting type is general needs, but the needs type is supported housing. Change either the needs type or the letting type.
       location:
         incomplete: "This location is incomplete. Select another location or update this one"
+      scheme:
+        incomplete: "This scheme is incomplete. Select another scheme or update this one"
 
     property:
       uprn:
