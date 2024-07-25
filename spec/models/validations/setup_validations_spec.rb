@@ -564,6 +564,7 @@ RSpec.describe Validations::SetupValidations do
         setup_validator.validate_scheme(record)
         expect(record.errors["startdate"]).to be_empty
       end
+    end
 
     context "with an incomplete scheme" do
       let(:scheme) { create(:scheme, :incomplete) }
