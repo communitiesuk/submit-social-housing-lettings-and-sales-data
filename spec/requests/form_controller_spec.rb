@@ -763,28 +763,30 @@ RSpec.describe FormController, type: :request do
             }
           end
 
-          before do
-            post "/lettings-logs/#{lettings_log.id}/#{page_id.dasherize}", params:
+          context "when the log will not be a duplicate" do
+            before do
+              post "/lettings-logs/#{lettings_log.id}/#{page_id.dasherize}", params:
+            end
+
+            it "re-renders the same page with errors if validation fails" do
+              expect(response).to have_http_status(:redirect)
+            end
+
+            it "only updates answers that apply to the page being submitted" do
+              lettings_log.reload
+              expect(lettings_log.age1).to eq(answer)
+              expect(lettings_log.age2).to be nil
+            end
+
+            it "tracks who updated the record" do
+              lettings_log.reload
+              whodunnit_actor = lettings_log.versions.last.actor
+              expect(whodunnit_actor).to be_a(User)
+              expect(whodunnit_actor.id).to eq(user.id)
+            end
           end
 
-          it "re-renders the same page with errors if validation fails" do
-            expect(response).to have_http_status(:redirect)
-          end
-
-          it "only updates answers that apply to the page being submitted" do
-            lettings_log.reload
-            expect(lettings_log.age1).to eq(answer)
-            expect(lettings_log.age2).to be nil
-          end
-
-          it "tracks who updated the record" do
-            lettings_log.reload
-            whodunnit_actor = lettings_log.versions.last.actor
-            expect(whodunnit_actor).to be_a(User)
-            expect(whodunnit_actor.id).to eq(user.id)
-          end
-
-          context "and the answer makes the log a duplicate" do
+          context "when the answer makes the log a duplicate" do
             context "with one other log" do
               let(:new_duplicate) { create(:lettings_log) }
 
@@ -880,7 +882,7 @@ RSpec.describe FormController, type: :request do
             end
           end
 
-          context "and the answer makes the log stop being a duplicate" do
+          context "when the answer makes the log stop being a duplicate" do
             context "when the log had one duplicate" do
               let(:old_duplicate_set_id) { 130 }
               let!(:old_duplicate) { create(:lettings_log, duplicate_set_id: old_duplicate_set_id) }
