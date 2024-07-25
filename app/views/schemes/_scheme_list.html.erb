@@ -26,7 +26,12 @@
           <% row.with_cell(text: scheme.owning_organisation&.name) %>
           <% row.with_cell(text: scheme.id_to_display) %>
           <% row.with_cell(text: scheme.locations.visible&.count) %>
-          <% row.with_cell(text: status_tag_from_resource(scheme)) %>
+          <% row.with_cell do %>
+            <%= status_tag_from_resource(scheme) %>
+            <% if scheme.active? && !scheme.has_active_locations? %>
+              <%= content_tag(:div, "No currently active locations", class: "app-!-colour-muted", style: "margin-top: 10px") %>
+            <% end %>
+          <% end %>
         <% end %>
       <% end %>
     <% end %>

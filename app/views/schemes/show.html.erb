@@ -26,6 +26,9 @@
             <dt class="govuk-summary-list__key">Status</dt>
             <dd class="govuk-summary-list__value">
               <%= details_html({ name: "Status", value: status_tag_from_resource(@scheme), id: "status" }) %>
+              <% if @scheme.confirmed? && @scheme.active? && !@scheme.has_active_locations? %>
+                <span class="app-!-colour-muted">No currently active locations</span>
+              <% end %>
               <% if @scheme.confirmed? && @scheme.locations.confirmed.none? && LocationPolicy.new(current_user, @scheme.locations.new).create? %>
                 <span class="app-!-colour-muted">Complete this scheme by adding a location using the <%= govuk_link_to("‘locations’ tab", scheme_locations_path(@scheme)) %>.</span>
               <% end %>
