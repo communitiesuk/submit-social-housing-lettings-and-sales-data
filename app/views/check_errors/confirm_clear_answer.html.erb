@@ -8,7 +8,7 @@
       <%= content_for(:title) %>
     </h1>
 
-    <%= govuk_warning_text(text: "This action is permanent") %>
+    <%= govuk_warning_text(text: "Dependent answers related to this question may also get cleared. You will not be able to undo this action.") %>
       <%= form_with model: @log, url: send("#{@log.model_name.param_key}_#{@page.id}_path", @log), method: "post", local: true do |f| %>
 
       <% @related_question_ids.each do |id| %>
