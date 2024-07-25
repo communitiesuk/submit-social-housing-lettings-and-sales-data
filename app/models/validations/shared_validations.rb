@@ -16,6 +16,16 @@ module Validations::SharedValidations
     end
   end
 
+  def validate_numeric_input(record)
+    record.form.numeric_questions.each do |question|
+      next unless record[question.id] && question.page.routed_to?(record, nil)
+      next if record.send("#{question.id}_before_type_cast").to_s.match?(/\A\d+(\.\d+)?\z/)
+
+      field = question.check_answer_label || question.id
+      record.errors.add question.id.to_sym, I18n.t("validations.numeric.format", field:)
+    end
+  end
+
   def validate_numeric_min_max(record)
     record.form.numeric_questions.each do |question|
       next unless question.min || question.max

@@ -161,10 +161,10 @@
     <la_as_entered>la as entered</la_as_entered>
     <formid>{id}</formid>
     <owningorgid>{owning_org_id}</owningorgid>
-    <owningorgname>DLUHC</owningorgname>
+    <owningorgname>MHCLG</owningorgname>
     <hcnum>1234</hcnum>
     <maningorgid>{managing_org_id}</maningorgid>
-    <maningorgname>DLUHC</maningorgname>
+    <maningorgname>MHCLG</maningorgname>
     <manhcnum>1234</manhcnum>
     <createddate>2024-04-03T00:00:00+01:00</createddate>
     <uploaddate>2024-04-03T00:00:00+01:00</uploaddate>

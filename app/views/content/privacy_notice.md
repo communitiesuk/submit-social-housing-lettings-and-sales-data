@@ -1,10 +1,10 @@
 ## How do we use your information?
 
-If your household enters a new social housing tenancy or purchases a social housing property, social housing providers will share your personal information with the Department for Levelling Up, Housing & Communities (DLUHC) for research and statistical purposes only.
+If your household enters a new social housing tenancy or purchases a social housing property, social housing providers will share your personal information with the Ministry of Housing, Communities and Local Government (MHCLG) for research and statistical purposes only.
 
 ## How do we get this information?
 
-The information is provided via ‘<%= t('service_name') %>’, a service funded and managed by DLUHC. It collects information on the tenants or residents, tenancy or sale, and the dwelling itself. Some of this data is personal and sensitive, so DLUHC is responsible for ensuring it’s processed in line with data protection legislation.
+The information is provided via ‘<%= t('service_name') %>’, a service funded and managed by MHCLG. It collects information on the tenants or residents, tenancy or sale, and the dwelling itself. Some of this data is personal and sensitive, so MHCLG is responsible for ensuring it’s processed in line with data protection legislation.
 
 
 ## Why do we share this information?
@@ -17,7 +17,7 @@ Information sharing will not affect your benefits, services or any treatments yo
 
 ## To find out more…
 
-Social housing lettings and sales data is collected on DLUHC’s behalf. Data providers do not require the tenant or buyer’s consent to provide this information, but tenants and buyers have the right to know how and for what purpose data is being collected, held and used.
+Social housing lettings and sales data is collected on MHCLG’s behalf. Data providers do not require the tenant or buyer’s consent to provide this information, but tenants and buyers have the right to know how and for what purpose data is being collected, held and used.
 
 Data processing must have a lawful basis. In this case it’s necessary for a task carried out in the public interest meeting a function of the Crown, a Minister of the Crown, or government department.
 
@@ -32,7 +32,7 @@ Collected data will be held for as long as necessary for research and statistica
 * if household left last settled home because discharged from prison, a long stay hospital or other institution
 * if referral source is probation or prison, youth offending or community mental health team, or health service
 
-DLUHC publishes data annually, in aggregate form, as part of a report and complementary tables.
+MHCLG publishes data annually, in aggregate form, as part of a report and complementary tables.
 
 * For annual lettings data, visit: [https://www.gov.uk/government/collections/rents-lettings-and-tenancies](https://www.gov.uk/government/collections/rents-lettings-and-tenancies)
 

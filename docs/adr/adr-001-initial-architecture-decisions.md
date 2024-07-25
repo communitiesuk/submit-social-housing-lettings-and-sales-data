@@ -6,7 +6,7 @@ parent: Architecture decisions
 
 ## Ruby on Rails
 
-- Well established and commonly used within DLUHC and GOV.UK in general
+- Well established and commonly used within MHCLG and GOV.UK in general
 - Good ecosystem for common web app tasks, quick productivity
 - Matches team skill set
 - Analysis/RAP pipelines will sit in the DAP platform and not this application directly so optimising for web framework tasks makes sense.

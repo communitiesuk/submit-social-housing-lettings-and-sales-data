@@ -1,10 +1,11 @@
 class CheckAnswersSummaryListCardComponent < ViewComponent::Base
   attr_reader :questions, :log, :user
 
-  def initialize(questions:, log:, user:)
+  def initialize(questions:, log:, user:, correcting_hard_validation: false)
     @questions = questions
     @log = log
     @user = user
+    @correcting_hard_validation = correcting_hard_validation
 
     super
   end
@@ -31,6 +32,16 @@ class CheckAnswersSummaryListCardComponent < ViewComponent::Base
   def action_href(question, log)
     referrer = question.displayed_as_answered?(log) ? "check_answers" : "check_answers_new_answer"
     send("#{log.model_name.param_key}_#{question.page.id}_path", log, referrer:)
+  end
+
+  def correct_validation_action_href(question, log, _related_question_ids, correcting_hard_validation)
+    return action_href(question, log) unless correcting_hard_validation
+
+    if question.displayed_as_answered?(log)
+      send("#{log.model_name.param_key}_confirm_clear_answer_path", log, question_id: question.id)
+    else
+      send("#{log.model_name.param_key}_#{question.page.id}_path", log, referrer: "check_errors", related_question_ids: request.query_parameters["related_question_ids"], original_page_id: request.query_parameters["original_page_id"])
+    end
   end
 
 private

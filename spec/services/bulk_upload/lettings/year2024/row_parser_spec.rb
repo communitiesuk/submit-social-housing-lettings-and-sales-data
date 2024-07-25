@@ -24,7 +24,7 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
       field_8: now.day.to_s,
       field_9: now.month.to_s,
       field_10: now.strftime("%g"),
-      field_11: "0",
+      field_11: "1",
       field_15: "1",
     }
   end
@@ -136,7 +136,7 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
             field_22: "2TD",
             field_1: owning_org.old_visible_id,
             field_2: managing_org.old_visible_id,
-            field_11: "0",
+            field_11: "1",
             field_7: "2",
             field_26: "2",
             field_27: "1",
@@ -412,7 +412,7 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
               let(:attributes) do
                 valid_attributes.merge({ field_5: "S#{scheme.id}",
                                          field_4: "2",
-                                         field_11: "1",
+                                         field_11: "2",
                                          field_6: location.old_visible_id,
                                          field_1: owning_org.old_visible_id,
                                          field_122: 0,
@@ -461,7 +461,7 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
               let(:attributes) do
                 valid_attributes.merge({ field_5: "S#{scheme.id}",
                                          field_4: "2",
-                                         field_11: "1",
+                                         field_11: "2",
                                          field_6: location.old_visible_id,
                                          field_1: owning_org.old_visible_id,
                                          field_122: 0,
@@ -471,7 +471,7 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
               let(:attributes_too) do
                 valid_attributes.merge({ field_5: "S#{scheme.id}",
                                          field_4: "2",
-                                         field_11: "1",
+                                         field_11: "2",
                                          field_6: location.old_visible_id,
                                          field_1: owning_org.old_visible_id,
                                          field_122: 0,
@@ -554,7 +554,7 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
               let(:attributes) do
                 valid_attributes.merge({ field_5: "S#{scheme.id}",
                                          field_4: "2",
-                                         field_11: "1",
+                                         field_11: "2",
                                          field_6: location.id,
                                          field_1: owning_org.old_visible_id,
                                          field_122: 0,
@@ -603,7 +603,7 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
               let(:attributes) do
                 valid_attributes.merge({ field_5: "S#{scheme.id}",
                                          field_4: "2",
-                                         field_11: "1",
+                                         field_11: "2",
                                          field_6: location.id,
                                          field_1: owning_org.old_visible_id,
                                          field_122: 0,
@@ -613,7 +613,7 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
               let(:attributes_too) do
                 valid_attributes.merge({ field_5: "S#{scheme.id}",
                                          field_4: "2",
-                                         field_11: "1",
+                                         field_11: "2",
                                          field_6: location.id,
                                          field_1: owning_org.old_visible_id,
                                          field_122: 0,
@@ -665,7 +665,7 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
                                            field_123: 1,
                                            field_29: 1,
                                            field_4: 1,
-                                           field_11: "1",
+                                           field_11: "2",
                                            field_23: "E09000008" })
             end
 
@@ -712,7 +712,7 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
             allow(FeatureToggle).to receive(:bulk_upload_duplicate_log_check_enabled?).and_return(true)
           end
 
-          let(:attributes) { valid_attributes.merge(field_11: "0.00") }
+          let(:attributes) { valid_attributes.merge(field_11: "1.00") }
 
           it "returns true" do
             expect(parser).to be_valid
@@ -724,7 +724,7 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
             allow(FeatureToggle).to receive(:bulk_upload_duplicate_log_check_enabled?).and_return(true)
           end
 
-          let(:attributes) { valid_attributes.merge(field_11: "0.56") }
+          let(:attributes) { valid_attributes.merge(field_11: "1.56") }
 
           it "returns false" do
             expect(parser).not_to be_valid
@@ -872,7 +872,7 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
 
     describe "#field_5, field_6" do # scheme and location fields
       context "when nullable not permitted" do
-        let(:attributes) { { bulk_upload:, field_4: "2", field_11: "1", field_5: nil, field_6: nil } }
+        let(:attributes) { { bulk_upload:, field_4: "2", field_11: "2", field_5: nil, field_6: nil } }
 
         it "cannot be nulled" do
           parser.valid?
@@ -882,7 +882,7 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
       end
 
       context "when nullable permitted" do
-        let(:attributes) { { bulk_upload:, field_4: "1", field_11: "0", field_5: nil, field_6: nil } }
+        let(:attributes) { { bulk_upload:, field_4: "1", field_11: "1", field_5: nil, field_6: nil } }
 
         it "can be nulled" do
           parser.valid?
@@ -900,7 +900,7 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
         end
 
         context "when matching scheme cannot be found" do
-          let(:attributes) { { bulk_upload:, field_1: owning_org.old_visible_id, field_2: owning_org.old_visible_id, field_4: "2", field_11: "1", field_5: "S123", field_6: location.id } }
+          let(:attributes) { { bulk_upload:, field_1: owning_org.old_visible_id, field_2: owning_org.old_visible_id, field_4: "2", field_11: "2", field_5: "S123", field_6: location.id } }
 
           it "returns a setup error" do
             expect(parser.errors.where(:field_5, category: :setup).map(&:message)).to eq(["This scheme code does not belong to the owning organisation or managing organisation"])
@@ -909,7 +909,7 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
         end
 
         context "when missing location" do
-          let(:attributes) { { bulk_upload:, field_1: owning_org.old_visible_id, field_2: owning_org.old_visible_id, field_4: "2", field_11: "1", field_5: "S#{scheme.id}", field_6: nil } }
+          let(:attributes) { { bulk_upload:, field_1: owning_org.old_visible_id, field_2: owning_org.old_visible_id, field_4: "2", field_11: "2", field_5: "S#{scheme.id}", field_6: nil } }
 
           it "returns a setup error" do
             expect(parser.errors[:field_5]).to be_blank
@@ -919,7 +919,7 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
         end
 
         context "when matching location cannot be found" do
-          let(:attributes) { { bulk_upload:, field_1: owning_org.old_visible_id, field_2: owning_org.old_visible_id, field_4: "2", field_11: "1", field_5: "S#{scheme.id}", field_6: "123" } }
+          let(:attributes) { { bulk_upload:, field_1: owning_org.old_visible_id, field_2: owning_org.old_visible_id, field_4: "2", field_11: "2", field_5: "S#{scheme.id}", field_6: "123" } }
 
           it "returns a setup error" do
             expect(parser.errors[:field_5]).to be_blank
@@ -928,7 +928,7 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
         end
 
         context "when matching location exists" do
-          let(:attributes) { { bulk_upload:, field_1: owning_org.old_visible_id, field_2: owning_org.old_visible_id, field_4: "2", field_11: "1", field_5: "S#{scheme.id}", field_6: location.id } }
+          let(:attributes) { { bulk_upload:, field_1: owning_org.old_visible_id, field_2: owning_org.old_visible_id, field_4: "2", field_11: "2", field_5: "S#{scheme.id}", field_6: location.id } }
 
           it "does not return an error" do
             expect(parser.errors[:field_5]).to be_blank
@@ -948,7 +948,7 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
         context "when location exists but not related" do
           let(:other_scheme) { create(:scheme, :with_old_visible_id) }
           let(:other_location) { create(:location, :with_old_visible_id, scheme: other_scheme) }
-          let(:attributes) { { bulk_upload:, field_1: owning_org.old_visible_id, field_2: owning_org.old_visible_id, field_4: "2", field_11: "1", field_5: "S#{scheme.id}", field_6: other_location.id } }
+          let(:attributes) { { bulk_upload:, field_1: owning_org.old_visible_id, field_2: owning_org.old_visible_id, field_4: "2", field_11: "2", field_5: "S#{scheme.id}", field_6: other_location.id } }
 
           it "returns a setup error" do
             expect(parser.errors[:field_5]).to be_blank
@@ -959,7 +959,7 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
         context "when scheme belongs to someone else" do
           let(:other_scheme) { create(:scheme, :with_old_visible_id) }
           let(:other_location) { create(:location, :with_old_visible_id, scheme: other_scheme) }
-          let(:attributes) { { bulk_upload:, field_4: "2", field_11: "1", field_5: "S#{other_scheme.id}", field_6: other_location.id, field_1: owning_org.old_visible_id, field_2: owning_org.old_visible_id } }
+          let(:attributes) { { bulk_upload:, field_4: "2", field_11: "2", field_5: "S#{other_scheme.id}", field_6: other_location.id, field_1: owning_org.old_visible_id, field_2: owning_org.old_visible_id } }
 
           it "returns a setup error" do
             expect(parser.errors.where(:field_5, category: :setup).map(&:message)).to eq(["This scheme code does not belong to the owning organisation or managing organisation"])
@@ -968,7 +968,7 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
         end
 
         context "when scheme belongs to owning org" do
-          let(:attributes) { { bulk_upload:, field_4: "2", field_11: "1", field_5: "S#{scheme.id}", field_6: location.id, field_1: owning_org.old_visible_id, field_2: owning_org.old_visible_id } }
+          let(:attributes) { { bulk_upload:, field_4: "2", field_11: "2", field_5: "S#{scheme.id}", field_6: location.id, field_1: owning_org.old_visible_id, field_2: owning_org.old_visible_id } }
 
           it "does not return an error" do
             expect(parser.errors[:field_5]).to be_blank
@@ -979,7 +979,7 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
         context "when scheme belongs to managing org" do
           let(:managing_org_scheme) { create(:scheme, :with_old_visible_id, owning_organisation: managing_org) }
           let(:managing_org_location) { create(:location, :with_old_visible_id, scheme: managing_org_scheme) }
-          let(:attributes) { { bulk_upload:, field_4: "2", field_11: "1", field_5: "S#{managing_org_scheme.id}", field_6: managing_org_location.id, field_2: managing_org.old_visible_id } }
+          let(:attributes) { { bulk_upload:, field_4: "2", field_11: "2", field_5: "S#{managing_org_scheme.id}", field_6: managing_org_location.id, field_2: managing_org.old_visible_id } }
 
           it "clears the scheme answer" do
             expect(parser.errors[:field_5]).to include("You must answer scheme name")
@@ -989,7 +989,7 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
 
         context "when matching location exists but is incomplete" do
           let(:incomplete_location) { create(:location, :with_old_visible_id, :incomplete, scheme:) }
-          let(:attributes) { { bulk_upload:, field_1: owning_org.old_visible_id, field_2: owning_org.old_visible_id, field_4: "2", field_11: "1", field_5: "S#{scheme.id}", field_6: incomplete_location.id } }
+          let(:attributes) { { bulk_upload:, field_1: owning_org.old_visible_id, field_2: owning_org.old_visible_id, field_4: "2", field_11: "2", field_5: "S#{scheme.id}", field_6: incomplete_location.id } }
 
           it "returns a setup error for scheme" do
             expect(parser.errors.where(:field_5).map(&:message)).to eq(["This location is incomplete. Select another location or update this one"])
@@ -1253,7 +1253,7 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
 
     describe "fields 7, 8, 9 => startdate" do
       context "when any one of these fields is blank" do
-        let(:attributes) { { bulk_upload:, field_11: "0", field_8: nil, field_9: nil, field_10: nil } }
+        let(:attributes) { { bulk_upload:, field_11: "1", field_8: nil, field_9: nil, field_10: nil } }
 
         it "returns an error" do
           parser.valid?
@@ -1273,7 +1273,7 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
       end
 
       context "when invalid date given" do
-        let(:attributes) { { bulk_upload:, field_11: "0", field_8: "a", field_9: "12", field_10: "23" } }
+        let(:attributes) { { bulk_upload:, field_11: "1", field_8: "a", field_9: "12", field_10: "23" } }
 
         it "does not raise an error" do
           expect { parser.valid? }.not_to raise_error
@@ -1817,7 +1817,7 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
       end
 
       context "when soft validation is triggered and not required" do
-        let(:attributes) { setup_section_params.merge({ field_125: 120, field_126: 120, field_127: 120, field_128: 120, field_123: 1, field_29: 1, field_4: 1, field_11: "1", field_23: "E09000008" }) }
+        let(:attributes) { setup_section_params.merge({ field_125: 120, field_126: 120, field_127: 120, field_128: 120, field_123: 1, field_29: 1, field_4: 1, field_11: "2", field_23: "E09000008" }) }
 
         it "adds an error to the relevant fields" do
           parser.valid?
