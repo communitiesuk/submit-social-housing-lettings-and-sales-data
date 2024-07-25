@@ -211,6 +211,8 @@ private
   end
 
   def successful_redirect_path(pages_to_check)
+    class_name = @log.class.name.underscore
+
     if is_referrer_type?("duplicate_logs") || is_referrer_type?("duplicate_logs_banner")
       original_log = current_user.send(class_name.pluralize).find_by(id: from_referrer_query("original_log_id"))
 
