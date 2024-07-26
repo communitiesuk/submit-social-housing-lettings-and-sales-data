@@ -120,12 +120,12 @@ export const suggestion = (value, options) => {
 export const searchSuggestion = (value, hints) => {
   try {
     const result = hints[value.toString()]
-      if (result) {
-        const html = result.append ? `<span class="autocomplete__option__append">${result.value}</span> <span>${result.append}</span>` : `<span>${result.value}</span>`
-        return result.hint ? `${html}<div class="autocomplete__option__hint">${result.hint}</div>` : html
-      } else {
-        return '<span>No results found</span>'
-      }
+    if (result) {
+      const html = result.append ? `<span class="autocomplete__option__append">${result.value}</span> <span>${result.append}</span>` : `<span>${result.value}</span>`
+      return result.hint ? `${html}<div class="autocomplete__option__hint">${result.hint}</div>` : html
+    } else {
+      return '<span>No results found</span>'
+    }
   } catch (error) {
     console.error('Error fetching user option:', error)
     return value
@@ -143,10 +143,9 @@ export const enhanceOption = (option) => {
   }
 }
 
-
 export const fetchAndPopulateSearchResults = async (query, populateResults, populateHint) => {
   if (/\S/.test(query)) {
-    let results = await fetchUserOptions(query)
+    const results = await fetchUserOptions(query)
     populateResults(Object.keys(results))
     populateHint(results)
   }

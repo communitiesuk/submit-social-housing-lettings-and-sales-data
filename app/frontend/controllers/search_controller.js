@@ -3,9 +3,8 @@ import accessibleAutocomplete from 'accessible-autocomplete'
 import 'accessible-autocomplete/dist/accessible-autocomplete.min.css'
 import { searchSuggestion, fetchAndPopulateSearchResults } from '../modules/search'
 
-let hints = [];
+let hints = []
 const populateHint = (results) => {
-  console.log("populating")
   hints = results
 }
 
@@ -26,7 +25,7 @@ export default class extends Controller {
       },
       autoselect: true,
       placeholder: 'Start typing to search',
-      templates: { suggestion:  (value) =>  searchSuggestion(value, hints) },
+      templates: { suggestion: (value) => searchSuggestion(value, hints) },
       name: rawFieldName,
       onConfirm: (val) => {
         const selectedOption = [].filter.call(
