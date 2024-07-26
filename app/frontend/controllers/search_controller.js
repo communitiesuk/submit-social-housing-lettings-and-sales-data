@@ -30,8 +30,8 @@ export default class extends Controller {
       name: rawFieldName,
       onConfirm: (val) => {
         const selectedOption = [].filter.call(
-          selectOptions,
-          (option) => (getSearchableName(option)) === val
+          Array.from(selectEl.options).filter(function (option, index, arr) { return option.value !== '' }),
+          (option) => option.value === val
         )[0]
         if (selectedOption) selectedOption.selected = true
       }
