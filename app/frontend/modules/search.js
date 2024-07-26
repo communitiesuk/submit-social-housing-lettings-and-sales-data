@@ -117,6 +117,21 @@ export const suggestion = (value, options) => {
   }
 }
 
+export const searchSuggestion = (value, hints) => {
+  try {
+    const result = hints[value.toString()]
+      if (result) {
+        const html = result.append ? `<span class="autocomplete__option__append">${result.value}</span> <span>${result.append}</span>` : `<span>${result.value}</span>`
+        return result.hint ? `${html}<div class="autocomplete__option__hint">${result.hint}</div>` : html
+      } else {
+        return '<span>No results found</span>'
+      }
+  } catch (error) {
+    console.error('Error fetching user option:', error)
+    return value
+  }
+}
+
 export const enhanceOption = (option) => {
   return {
     text: option.text,
@@ -125,6 +140,26 @@ export const enhanceOption = (option) => {
     append: option.getAttribute('data-append'),
     hint: option.getAttribute('data-hint'),
     boost: parseFloat(option.getAttribute('data-boost')) || 1
+  }
+}
+
+
+export const fetchAndPopulateSearchResults = async (query, populateResults, populateHint) => {
+  if (/\S/.test(query)) {
+    let results = await fetchUserOptions(query)
+    populateResults(Object.keys(results))
+    populateHint(results)
+  }
+}
+
+export const fetchUserOptions = async (query) => {
+  try {
+    const response = await fetch(`/users/search?query=${encodeURIComponent(query)}`)
+    const results = await response.json()
+    return results
+  } catch (error) {
+    console.error('Error fetching user options:', error)
+    return []
   }
 }
 

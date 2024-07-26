@@ -32,6 +32,13 @@ class UsersController < ApplicationController
     end
   end
 
+  def search
+    users = User.search_by_name(params["query"]).limit(20)
+    x = {}
+    users.each { |user| x[user.id] = { value: user.name, hint: user.email } }
+    render json: x.to_json
+  end
+
   def resend_invite
     @user.send_confirmation_instructions
     flash[:notice] = "Invitation sent to #{@user.email}"
