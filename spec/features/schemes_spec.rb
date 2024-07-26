@@ -101,7 +101,6 @@ RSpec.describe "Schemes scheme Features" do
             end
 
             context "when on the scheme question page" do
-
               let(:lettings_log) { FactoryBot.create(:lettings_log, assigned_to: user, needstype: 2) }
 
               it "open from guidance page with filters cleared" do
