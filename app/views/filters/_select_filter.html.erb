@@ -1,6 +1,6 @@
 <%= f.govuk_select(category.to_sym,
   label: { text: label, hidden: secondary },
-  "data-controller": "accessible-autocomplete conditional-filter") do %>
+  "data-controller": "search conditional-filter") do %>
     <% collection.each do |answer| %>
       <option value="<%= answer.id %>"
         data-hint="<%= answer.hint %>"
