@@ -33,10 +33,14 @@ class UsersController < ApplicationController
   end
 
   def search
-    users = User.search_by_name(params["query"]).limit(20)
-    x = {}
-    users.each { |user| x[user.id] = { value: user.name, hint: user.email } }
-    render json: x.to_json
+    user_options = current_user.support? ? User.all : User.affiliated_users(current_user.organisation)
+    users = user_options.search_by(params["query"]).limit(20)
+
+    user_data = users.each_with_object({}) do |user, hash|
+      hash[user.id] = { value: user.name, hint: user.email }
+    end
+
+    render json: user_data.to_json
   end
 
   def resend_invite

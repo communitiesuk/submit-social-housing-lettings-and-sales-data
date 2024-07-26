@@ -77,6 +77,7 @@ class User < ApplicationRecord
   scope :deactivated, -> { where(active: false) }
   scope :active_status, -> { where(active: true).where.not(last_sign_in_at: nil) }
   scope :visible, -> { where(discarded_at: nil) }
+  scope :affiliated_users, ->(organisation) { where(organisation: organisation.child_organisations + [organisation] + organisation.parent_organisations) }
 
   def lettings_logs
     if support?
