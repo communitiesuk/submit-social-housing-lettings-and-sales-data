@@ -177,4 +177,18 @@ RSpec.describe "Accessibility", js: true do
       end
     end
   end
+
+  context "when viewing other pages" do
+    [{ path: "/", title: "homepage" },
+     { path: "/guidance", title: "guidance" },
+     { path: "/privacy-notice", title: "privacy notice" },
+     { path: "/lettings-logs/bulk-upload-logs/guidance?form[year]=2024&referrer=home", title: "lettings BU guidance" },
+     { path: "/sales-logs/bulk-upload-logs/guidance?form[year]=2024&referrer=home", title: "sales BU guidance" }].each do |test_case|
+      it "is has accessible #{test_case[:title]} page" do
+        visit(test_case[:path])
+        expect(page).to have_current_path(test_case[:path])
+        expect(page).to be_axe_clean.according_to :wcag2aa
+      end
+    end
+  end
 end
