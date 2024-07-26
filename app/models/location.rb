@@ -18,8 +18,8 @@ class Location < ApplicationRecord
 
   auto_strip_attributes :name, squish: true
 
-  scope :search_by_postcode, ->(postcode) { where("REPLACE(postcode, ' ', '') ILIKE ?", "%#{postcode.delete(' ')}%") }
-  scope :search_by_name, ->(name) { where("name ILIKE ?", "%#{name}%") }
+  scope :search_by_postcode, ->(postcode) { where("REPLACE(locations.postcode, ' ', '') ILIKE ?", "%#{postcode.delete(' ')}%") }
+  scope :search_by_name, ->(name) { where("locations.name ILIKE ?", "%#{name}%") }
   scope :search_by, ->(param) { search_by_name(param).or(search_by_postcode(param)) }
   scope :started, -> { where("locations.startdate <= ?", Time.zone.today).or(where(startdate: nil)) }
   scope :started_in_2_weeks, -> { where("locations.startdate <= ?", Time.zone.today + 2.weeks).or(where(startdate: nil)) }
