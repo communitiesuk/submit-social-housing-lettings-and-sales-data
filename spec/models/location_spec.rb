@@ -1019,6 +1019,13 @@ RSpec.describe Location, type: :model do
         expect(described_class.filter_by_status(%w[deactivating_soon activating_soon])).to include(deactivating_soon_location)
       end
     end
+
+    context "when filtering by a status and searching" do
+      it "returns only active locations" do
+        expect(described_class.filter_by_status(%w[active]).search_by(active_location.name).count).to eq(1)
+        expect(described_class.filter_by_status(%w[active]).search_by(active_location.name).first).to eq(active_location)
+      end
+    end
   end
 
   describe "available_from" do
