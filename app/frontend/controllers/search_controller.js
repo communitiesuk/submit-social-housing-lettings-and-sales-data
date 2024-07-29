@@ -1,18 +1,26 @@
 import { Controller } from '@hotwired/stimulus'
 import accessibleAutocomplete from 'accessible-autocomplete'
 import 'accessible-autocomplete/dist/accessible-autocomplete.min.css'
-import { searchSuggestion, fetchAndPopulateSearchResults } from '../modules/search'
+import { searchSuggestion, fetchAndPopulateSearchResults, confirmSelectedOption, searchableName } from '../modules/search'
 
-let hints = []
-const populateHint = (results) => {
-  hints = results
+const options = []
+const populateOptions = (results, selectEl) => {
+  selectEl.innerHTML = ''
+
+  Object.keys(results).forEach((key) => {
+    const option = document.createElement('option')
+    option.value = key
+    option.innerHTML = searchableName(results[key])
+    option.setAttribute('data-hint', results[key].hint)
+    option.textContent = searchableName(results[key])
+    selectEl.appendChild(option)
+    options.push(option)
+  })
 }
 
 export default class extends Controller {
   connect () {
     const selectEl = this.element
-    const selectOptions = Array.from(selectEl.options).filter(function (option, index, arr) { return option.value !== '' })
-
     const matches = /^(\w+)\[(\w+)\]$/.exec(selectEl.name)
     const rawFieldName = matches ? `${matches[1]}[${matches[2]}_raw]` : ''
     const relativeUrlRoute = JSON.parse(this.element.dataset.info).relative_url_route
@@ -22,26 +30,13 @@ export default class extends Controller {
       selectElement: selectEl,
       minLength: 1,
       source: (query, populateResults) => {
-        fetchAndPopulateSearchResults(query, populateResults, populateHint, relativeUrlRoute)
+        fetchAndPopulateSearchResults(query, populateResults, relativeUrlRoute, populateOptions, selectEl)
       },
       autoselect: true,
       placeholder: 'Start typing to search',
-      templates: { suggestion: (value) => searchSuggestion(value, hints) },
+      templates: { suggestion: (value) => searchSuggestion(value, options) },
       name: rawFieldName,
-      onConfirm: (val) => {
-        const selectedOption = [].filter.call(
-          Array.from(selectEl.options).filter(function (option, index, arr) { return option.value !== '' }),
-          (option) => option.value === val
-        )[0]
-        if (selectedOption) selectedOption.selected = true
-      }
-    })
-
-    const parentElement = selectEl.parentElement
-    const inputElement = parentElement.querySelector('[role=combobox]')
-
-    inputElement.addEventListener('input', () => {
-      selectOptions.forEach((option) => { option.selected = false })
+      onConfirm: (val) => confirmSelectedOption(selectEl, val)
     })
   }
 }

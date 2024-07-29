@@ -117,11 +117,11 @@ export const suggestion = (value, options) => {
   }
 }
 
-export const searchSuggestion = (value, hints) => {
+export const searchSuggestion = (value, options) => {
   try {
-    const result = hints[value.toString()]
+    const result = enhanceOption(options.find((o) => o.innerHTML === value))
     if (result) {
-      const html = result.append ? `<span class="autocomplete__option__append">${result.value}</span> <span>${result.append}</span>` : `<span>${result.value}</span>`
+      const html = result.append ? `<span class="autocomplete__option__append">${result.text}</span> <span>${result.append}</span>` : `<span>${result.text}</span>`
       return result.hint ? `${html}<div class="autocomplete__option__hint">${result.hint}</div>` : html
     } else {
       return '<span>No results found</span>'
@@ -143,17 +143,22 @@ export const enhanceOption = (option) => {
   }
 }
 
-export const fetchAndPopulateSearchResults = async (query, populateResults, populateHint, relativeUrlRoute) => {
+export const fetchAndPopulateSearchResults = async (query, populateResults, relativeUrlRoute, populateOptions, selectEl) => {
   if (/\S/.test(query)) {
     const results = await fetchUserOptions(query, relativeUrlRoute)
-    populateResults(Object.keys(results))
-    populateHint(results)
+    populateOptions(results, selectEl)
+    populateResults(Object.values(results).map((o) => searchableName(o)))
   }
 }
 
 export const fetchUserOptions = async (query, relativeUrlRoute) => {
   try {
-    const response = await fetch(`${relativeUrlRoute}/users/search?query=${encodeURIComponent(query)}`)
+    let response
+    if (relativeUrlRoute) {
+      response = await fetch(`${relativeUrlRoute}/users/search?query=${encodeURIComponent(query)}`)
+    } else {
+      response = await fetch(`/users/search?query=${encodeURIComponent(query)}`)
+    }
     const results = await response.json()
     return results
   } catch (error) {
@@ -164,4 +169,18 @@ export const fetchUserOptions = async (query, relativeUrlRoute) => {
 
 export const getSearchableName = (option) => {
   return option.getAttribute('data-hint') ? option.text + ' ' + option.getAttribute('data-hint') : option.text
+}
+
+export const searchableName = (option) => {
+  return option.value + ' ' + option.hint
+}
+
+export const confirmSelectedOption = (selectEl, val) => {
+  const arrayOfOptions = Array.from(selectEl.options).filter(function (option, index, arr) { return option.value !== '' })
+
+  const selectedOption = [].filter.call(
+    arrayOfOptions,
+    (option) => option.innerHTML === val
+  )[0]
+  if (selectedOption) selectedOption.selected = true
 }
