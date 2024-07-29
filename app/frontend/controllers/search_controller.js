@@ -15,13 +15,14 @@ export default class extends Controller {
 
     const matches = /^(\w+)\[(\w+)\]$/.exec(selectEl.name)
     const rawFieldName = matches ? `${matches[1]}[${matches[2]}_raw]` : ''
+    const relativeUrlRoute = JSON.parse(this.element.dataset.info).relative_url_route
 
     accessibleAutocomplete.enhanceSelectElement({
       defaultValue: '',
       selectElement: selectEl,
       minLength: 1,
       source: (query, populateResults) => {
-        fetchAndPopulateSearchResults(query, populateResults, populateHint)
+        fetchAndPopulateSearchResults(query, populateResults, populateHint, relativeUrlRoute)
       },
       autoselect: true,
       placeholder: 'Start typing to search',
