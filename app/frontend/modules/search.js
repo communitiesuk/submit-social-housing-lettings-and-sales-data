@@ -143,17 +143,17 @@ export const enhanceOption = (option) => {
   }
 }
 
-export const fetchAndPopulateSearchResults = async (query, populateResults, populateHint) => {
+export const fetchAndPopulateSearchResults = async (query, populateResults, populateHint, relativeUrlRoute) => {
   if (/\S/.test(query)) {
-    const results = await fetchUserOptions(query)
+    const results = await fetchUserOptions(query, relativeUrlRoute)
     populateResults(Object.keys(results))
     populateHint(results)
   }
 }
 
-export const fetchUserOptions = async (query) => {
+export const fetchUserOptions = async (query, relativeUrlRoute) => {
   try {
-    const response = await fetch(`/users/search?query=${encodeURIComponent(query)}`)
+    const response = await fetch(`${relativeUrlRoute}/users/search?query=${encodeURIComponent(query)}`)
     const results = await response.json()
     return results
   } catch (error) {
