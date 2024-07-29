@@ -84,13 +84,31 @@ module FiltersHelper
     JSON.parse(session[session_name_for(filter_type)])[filter] || ""
   end
 
-  def owning_organisation_filter_options(user)
-    organisation_options = user.support? ? Organisation.all : ([user.organisation] + user.organisation.stock_owners + user.organisation.absorbed_organisations).uniq
-    [OpenStruct.new(id: "", name: "Select an option")] + organisation_options.map { |org| OpenStruct.new(id: org.id, name: org.name) }
+  def owning_organisation_filter_options(_user, filter_type)
+    if applied_filters(filter_type)["owning_organisation"].present?
+      org = Organisation.find(applied_filters(filter_type)["owning_organisation"]) # make sure this doesn't expose anything weird
+      [OpenStruct.new(id: org.id, name: org.name)]
+    else
+      [OpenStruct.new(id: "", name: "Select an option")]
+    end
   end
 
-  def assigned_to_filter_options
-    [OpenStruct.new(id: "", name: "Select an option", hint: "")]
+  def assigned_to_filter_options(filter_type)
+    if applied_filters(filter_type)["assigned_to"] == "specific_user"
+      user = User.find(applied_filters(filter_type)["user"]) # make sure this doesn't expose anything weird
+      [OpenStruct.new(id: user.id, name: user.name, hint: user.email)]
+    else
+      [OpenStruct.new(id: "", name: "Select an option", hint: "")]
+    end
+  end
+
+  def filter_search_url(category)
+    case category
+    when :user
+      ENV["RAILS_RELATIVE_URL_ROOT"].present? ? "#{ENV['RAILS_RELATIVE_URL_ROOT']}/users/search" : "/users/search"
+    when :owning_organisation, :managing_organisation
+      ENV["RAILS_RELATIVE_URL_ROOT"].present? ? "#{ENV['RAILS_RELATIVE_URL_ROOT']}/organisations/search" : "/organisations/search"
+    end
   end
 
   def collection_year_options
@@ -124,9 +142,13 @@ module FiltersHelper
     end
   end
 
-  def managing_organisation_filter_options(user)
-    organisation_options = user.support? ? Organisation.all : ([user.organisation] + user.organisation.managing_agents + user.organisation.absorbed_organisations).uniq
-    [OpenStruct.new(id: "", name: "Select an option")] + organisation_options.map { |org| OpenStruct.new(id: org.id, name: org.name) }
+  def managing_organisation_filter_options(_user, filter_type)
+    if applied_filters(filter_type)["managing_organisation"].present?
+      org = Organisation.find(applied_filters(filter_type)["managing_organisation"]) # make sure this doesn't expose anything weird
+      [OpenStruct.new(id: org.id, name: org.name)]
+    else
+      [OpenStruct.new(id: "", name: "Select an option")]
+    end
   end
 
   def show_scheme_managing_org_filter?(user)

@@ -11,8 +11,8 @@ const populateOptions = (results, selectEl) => {
     const option = document.createElement('option')
     option.value = key
     option.innerHTML = searchableName(results[key])
-    option.setAttribute('data-hint', results[key].hint)
-    option.textContent = searchableName(results[key])
+    if (results[key].hint) { option.setAttribute('data-hint', results[key].hint) }
+    option.setAttribute('text', searchableName(results[key]))
     selectEl.appendChild(option)
     options.push(option)
   })
@@ -23,14 +23,14 @@ export default class extends Controller {
     const selectEl = this.element
     const matches = /^(\w+)\[(\w+)\]$/.exec(selectEl.name)
     const rawFieldName = matches ? `${matches[1]}[${matches[2]}_raw]` : ''
-    const relativeUrlRoute = JSON.parse(this.element.dataset.info).relative_url_route
+    const searchUrl = JSON.parse(this.element.dataset.info).search_url
 
     accessibleAutocomplete.enhanceSelectElement({
       defaultValue: '',
       selectElement: selectEl,
       minLength: 1,
       source: (query, populateResults) => {
-        fetchAndPopulateSearchResults(query, populateResults, relativeUrlRoute, populateOptions, selectEl)
+        fetchAndPopulateSearchResults(query, populateResults, searchUrl, populateOptions, selectEl)
       },
       autoselect: true,
       placeholder: 'Start typing to search',

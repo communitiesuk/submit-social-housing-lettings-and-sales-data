@@ -1,7 +1,7 @@
 <%= f.govuk_select(category.to_sym,
   label: { text: label, hidden: secondary },
   "data-controller": "search conditional-filter",
-  "data-info": {relative_url_route: ENV["RAILS_RELATIVE_URL_ROOT"]}.to_json) do %>
+  "data-info": { search_url: filter_search_url(category.to_sym) }.to_json) do %>
     <% collection.each do |answer| %>
       <option value="<%= answer.id %>"
         data-hint="<%= answer.hint %>"

@@ -195,6 +195,10 @@ Rails.application.routes.draw do
       get "delete-confirmation", to: "organisations#delete_confirmation"
       delete "delete", to: "organisations#delete"
     end
+
+    collection do
+      get :search
+    end
   end
 
   resources :merge_requests, path: "/merge-request" do
