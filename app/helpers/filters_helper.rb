@@ -89,9 +89,8 @@ module FiltersHelper
     [OpenStruct.new(id: "", name: "Select an option")] + organisation_options.map { |org| OpenStruct.new(id: org.id, name: org.name) }
   end
 
-  def assigned_to_filter_options(user)
-    user_options = user.support? ? User.all : (user.organisation.users + user.organisation.managing_agents.flat_map(&:users) + user.organisation.stock_owners.flat_map(&:users)).uniq
-    [OpenStruct.new(id: "", name: "Select an option", hint: "")] + user_options.map { |user_option| OpenStruct.new(id: user_option.id, name: user_option.name, hint: user_option.email) }
+  def assigned_to_filter_options
+    [OpenStruct.new(id: "", name: "Select an option", hint: "")]
   end
 
   def collection_year_options
@@ -256,7 +255,8 @@ private
     return "All" if session_filters["assigned_to"].include?("all")
     return "You" if session_filters["assigned_to"].include?("you")
 
-    selected_user_option = assigned_to_filter_options(current_user).find { |x| x.id == session_filters["user"].to_i }
+    User.affiliated_users(current_user.organisationq).find(session_filters["user"].to_i).name
+    selected_user_option = User.affiliated_users(current_user.organisationq).find(session_filters["user"].to_i).name
     return unless selected_user_option
 
     "#{selected_user_option.name} (#{selected_user_option.hint})"
