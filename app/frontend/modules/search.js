@@ -119,8 +119,9 @@ export const suggestion = (value, options) => {
 
 export const searchSuggestion = (value, options) => {
   try {
-    const result = enhanceOption(options.find((o) => o.innerHTML === value))
-    if (result) {
+    const option = options.find((o) => o.innerHTML === value)
+    if (option) {
+      const result = enhanceOption(option)
       const html = result.append ? `<span class="autocomplete__option__append">${result.text}</span> <span>${result.append}</span>` : `<span>${result.text}</span>`
       return result.hint ? `${html}<div class="autocomplete__option__hint">${result.hint}</div>` : html
     } else {
@@ -151,14 +152,9 @@ export const fetchAndPopulateSearchResults = async (query, populateResults, rela
   }
 }
 
-export const fetchUserOptions = async (query, relativeUrlRoute) => {
+export const fetchUserOptions = async (query, searchUrl) => {
   try {
-    let response
-    if (relativeUrlRoute) {
-      response = await fetch(`${relativeUrlRoute}/users/search?query=${encodeURIComponent(query)}`)
-    } else {
-      response = await fetch(`/users/search?query=${encodeURIComponent(query)}`)
-    }
+    const response = await fetch(`${searchUrl}?query=${encodeURIComponent(query)}`)
     const results = await response.json()
     return results
   } catch (error) {
@@ -172,7 +168,7 @@ export const getSearchableName = (option) => {
 }
 
 export const searchableName = (option) => {
-  return option.value + ' ' + option.hint
+  return option.hint ? option.value + ' ' + option.hint : option.value
 }
 
 export const confirmSelectedOption = (selectEl, val) => {
