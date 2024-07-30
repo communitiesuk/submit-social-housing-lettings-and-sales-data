@@ -184,7 +184,9 @@ module Csv
         record = nil
         year = @year
         while year >= 2022 && record.nil?
-          record = records.find { |r| r.log_type == "sales" && r.year == year }
+          record = records.find do |r|
+            r.year == year && (!@user.support? || r.user_type == "support" || r.user_type == "user")
+          end
           year -= 1
         end
         record || records.first
