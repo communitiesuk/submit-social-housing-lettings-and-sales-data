@@ -11,8 +11,8 @@ module FiltersHelper
     return true if !selected_filters.key?("owning_organisation") && filter == "owning_organisation_select" && value == :all
     return true if !selected_filters.key?("managing_organisation") && filter == "managing_organisation_select" && value == :all
 
-    return true if selected_filters["owning_organisation"].present? && filter == "owning_organisation_select" && value == :specific_org
-    return true if selected_filters["managing_organisation"].present? && filter == "managing_organisation_select" && value == :specific_org
+    return true if (selected_filters["owning_organisation"].present? || selected_filters["owning_organisation_text_search"].present?) && filter == "owning_organisation_select" && value == :specific_org
+    return true if (selected_filters["managing_organisation"].present? || selected_filters["managing_organisation_text_search"].present?) && filter == "managing_organisation_select" && value == :specific_org
 
     return false if selected_filters[filter].blank?
 
@@ -242,7 +242,7 @@ private
     filters.each.sum do |category, category_filters|
       if %w[years status needstypes bulk_upload_id].include?(category)
         category_filters.count(&:present?)
-      elsif %w[user owning_organisation managing_organisation].include?(category)
+      elsif %w[user owning_organisation managing_organisation user_text_search owning_organisation_text_search managing_organisation_text_search].include?(category)
         1
       else
         0
