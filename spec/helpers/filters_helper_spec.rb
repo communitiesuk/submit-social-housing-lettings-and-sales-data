@@ -176,7 +176,7 @@ RSpec.describe FiltersHelper do
       let(:user) { FactoryBot.create(:user, :support, organisation: child_organisation) }
 
       it "returns a list of all organisations" do
-        expect(owning_organisation_filter_options(user)).to match_array([
+        expect(owning_organisation_filter_options(user, "lettings_logs")).to match_array([
           OpenStruct.new(id: "", name: "Select an option"),
           OpenStruct.new(id: child_organisation.id, name: "Child organisation"),
           OpenStruct.new(id: absorbed_organisation.id, name: "Absorbed organisation"),
@@ -190,7 +190,7 @@ RSpec.describe FiltersHelper do
       let(:user) { FactoryBot.create(:user, :data_coordinator, organisation: child_organisation) }
 
       it "returns a list of parent orgs and your own organisation" do
-        expect(owning_organisation_filter_options(user.reload)).to eq([
+        expect(owning_organisation_filter_options(user.reload, "lettings_logs")).to eq([
           OpenStruct.new(id: "", name: "Select an option"),
           OpenStruct.new(id: child_organisation.id, name: "Child organisation"),
           OpenStruct.new(id: parent_organisation.id, name: "Parent organisation"),
@@ -215,7 +215,7 @@ RSpec.describe FiltersHelper do
       let(:user) { FactoryBot.create(:user, :support, organisation: parent_organisation) }
 
       it "returns a list of all organisations" do
-        expect(managing_organisation_filter_options(user)).to eq([
+        expect(managing_organisation_filter_options(user, "lettings_logs")).to eq([
           OpenStruct.new(id: "", name: "Select an option"),
           OpenStruct.new(id: parent_organisation.id, name: "Parent organisation"),
           OpenStruct.new(id: absorbed_organisation.id, name: "Absorbed organisation"),
@@ -229,7 +229,7 @@ RSpec.describe FiltersHelper do
       let(:user) { FactoryBot.create(:user, :data_coordinator, organisation: parent_organisation) }
 
       it "returns a list of child orgs and your own organisation" do
-        expect(managing_organisation_filter_options(user.reload)).to eq([
+        expect(managing_organisation_filter_options(user.reload, "lettings_logs")).to eq([
           OpenStruct.new(id: "", name: "Select an option"),
           OpenStruct.new(id: parent_organisation.id, name: "Parent organisation"),
           OpenStruct.new(id: child_organisation.id, name: "Child organisation"),

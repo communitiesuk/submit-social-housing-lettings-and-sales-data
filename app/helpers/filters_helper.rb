@@ -84,9 +84,9 @@ module FiltersHelper
     JSON.parse(session[session_name_for(filter_type)])[filter] || ""
   end
 
-  def owning_organisation_filter_options(_user, filter_type)
-    if applied_filters(filter_type)["owning_organisation"].present?
-      org = Organisation.find(applied_filters(filter_type)["owning_organisation"]) # make sure this doesn't expose anything weird
+  def owning_organisation_filter_options(user, filter_type)
+    if applied_filters(filter_type)["owning_organisation"].present? && user.support?
+      org = Organisation.find(applied_filters(filter_type)["owning_organisation"])
       [OpenStruct.new(id: org.id, name: org.name)]
     else
       [OpenStruct.new(id: "", name: "Select an option")]
@@ -142,8 +142,8 @@ module FiltersHelper
     end
   end
 
-  def managing_organisation_filter_options(_user, filter_type)
-    if applied_filters(filter_type)["managing_organisation"].present?
+  def managing_organisation_filter_options(user, filter_type)
+    if applied_filters(filter_type)["managing_organisation"].present? && user.support?
       org = Organisation.find(applied_filters(filter_type)["managing_organisation"]) # make sure this doesn't expose anything weird
       [OpenStruct.new(id: org.id, name: org.name)]
     else
@@ -197,8 +197,8 @@ module FiltersHelper
       { id: "status", label: "Status", value: formatted_status_filter(session_filters) },
       filter_type == "lettings_logs" ? { id: "needstype", label: "Needs type", value: formatted_needstype_filter(session_filters) } : nil,
       { id: "assigned_to", label: "Assigned to", value: formatted_assigned_to_filter(session_filters) },
-      { id: "owned_by", label: "Owned by", value: formatted_owned_by_filter(session_filters) },
-      { id: "managed_by", label: "Managed by", value: formatted_managed_by_filter(session_filters) },
+      { id: "owned_by", label: "Owned by", value: formatted_owned_by_filter(session_filters, filter_type) },
+      { id: "managed_by", label: "Managed by", value: formatted_managed_by_filter(session_filters, filter_type) },
     ].compact
   end
 
@@ -284,20 +284,20 @@ private
     "#{selected_user_option.name} (#{selected_user_option.hint})"
   end
 
-  def formatted_owned_by_filter(session_filters)
+  def formatted_owned_by_filter(session_filters, filter_type)
     return "All" if params["id"].blank? && (session_filters["owning_organisation"].blank? || session_filters["owning_organisation"]&.include?("all"))
 
     session_org_id = session_filters["owning_organisation"] || params["id"]
-    selected_owning_organisation_option = owning_organisation_filter_options(current_user).find { |org| org.id == session_org_id.to_i }
+    selected_owning_organisation_option = owning_organisation_filter_options(current_user, filter_type).find { |org| org.id == session_org_id.to_i }
     return unless selected_owning_organisation_option
 
     selected_owning_organisation_option&.name
   end
 
-  def formatted_managed_by_filter(session_filters)
+  def formatted_managed_by_filter(session_filters, filter_type)
     return "All" if session_filters["managing_organisation"].blank? || session_filters["managing_organisation"].include?("all")
 
-    selected_managing_organisation_option = managing_organisation_filter_options(current_user).find { |org| org.id == session_filters["managing_organisation"].to_i }
+    selected_managing_organisation_option = managing_organisation_filter_options(current_user, filter_type).find { |org| org.id == session_filters["managing_organisation"].to_i }
     return unless selected_managing_organisation_option
 
     selected_managing_organisation_option&.name
