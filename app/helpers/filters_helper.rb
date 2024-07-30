@@ -94,7 +94,7 @@ module FiltersHelper
   end
 
   def assigned_to_filter_options(filter_type)
-    if applied_filters(filter_type)["assigned_to"] == "specific_user"
+    if applied_filters(filter_type)["assigned_to"] == "specific_user" && applied_filters(filter_type)["user"].present?
       user = User.find(applied_filters(filter_type)["user"]) # make sure this doesn't expose anything weird
       [OpenStruct.new(id: user.id, name: user.name, hint: user.email)]
     else
