@@ -1,7 +1,6 @@
 require "csv"
 
 module Imports
-
   class VariableDefinitionsService
     attr_reader :path, :count
 

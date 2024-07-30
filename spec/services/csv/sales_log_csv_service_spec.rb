@@ -42,7 +42,6 @@ RSpec.describe Csv::SalesLogCsvService do
   let(:definition_headers) { csv.first }
   let(:attribute_headers) { csv.second }
 
-
   before do
     Timecop.freeze(now)
     Singleton.__init__(FormHandler)
