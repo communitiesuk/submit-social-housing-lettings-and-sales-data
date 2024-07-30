@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_07_15_082338) do
+ActiveRecord::Schema[7.0].define(version: 2024_07_26_152326) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -44,6 +44,20 @@ ActiveRecord::Schema[7.0].define(version: 2024_07_15_082338) do
     t.string "rent_type_fix_status", default: "not_applied"
     t.index ["identifier"], name: "index_bulk_uploads_on_identifier", unique: true
     t.index ["user_id"], name: "index_bulk_uploads_on_user_id"
+  end
+
+  create_table "csv_variable_definitions", force: :cascade do |t|
+    t.string "variable", null: false
+    t.string "definition", null: false
+    t.string "log_type", null: false
+    t.string "user_type", null: false
+    t.integer "year", null: false
+    t.datetime "last_accessed"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.check_constraint "log_type::text = ANY (ARRAY['lettings'::character varying, 'sales'::character varying]::text[])", name: "log_type_check"
+    t.check_constraint "user_type::text = ANY (ARRAY['user'::character varying, 'support'::character varying]::text[])", name: "user_type_check"
+    t.check_constraint "year >= 2000 AND year <= 2099", name: "year_check"
   end
 
   create_table "data_protection_confirmations", force: :cascade do |t|
