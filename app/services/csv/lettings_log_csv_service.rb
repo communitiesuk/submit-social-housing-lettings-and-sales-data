@@ -5,10 +5,20 @@ module Csv
       @export_type = export_type
       @year = year
       @attributes = lettings_log_attributes
+      @definitions = lettings_log_definitions
     end
 
     def prepare_csv(logs)
       CSV.generate(headers: true) do |csv|
+        if @year >= 2023
+          csv << @attributes.map do |attribute|
+            definition = @definitions.find { |record| record.variable == attribute.downcase }
+            if definition
+              definition.update!(last_accessed: Time.zone.now)
+              definition.definition
+            end
+          end
+        end
         csv << @attributes
 
         logs.find_each do |log|
@@ -256,6 +266,25 @@ module Csv
       order_address_fields_for_support(attributes)
       final_attributes = non_question_fields + attributes + SCHEME_AND_LOCATION_ATTRIBUTES
       @user.support? ? final_attributes : final_attributes - SUPPORT_ONLY_ATTRIBUTES - soft_validations_attributes
+    end
+
+    def lettings_log_definitions
+      definitions = if @user.support?
+                      CsvVariableDefinition.where("log_type = 'lettings'")
+                    else
+                      CsvVariableDefinition.where("user_type = 'user' AND log_type = 'lettings'")
+                    end
+
+      definitions.group_by { |record| [record.variable, record.definition] }
+                 .map do |_, records|
+        record = nil
+        year = @year
+        while year >= 2021 && record.nil?
+          record = records.find { |r| r.log_type == "lettings" && r.year == year }
+          year -= 1
+        end
+        record || records.first
+      end
     end
 
     def insert_derived_and_related_attributes(ordered_questions)

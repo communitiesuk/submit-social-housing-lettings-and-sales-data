@@ -5,11 +5,22 @@ module Csv
       @export_type = export_type
       @year = year
       @attributes = sales_log_attributes
+      @definitions = sales_log_definitions
     end
 
     def prepare_csv(logs)
       CSV.generate(headers: true) do |csv|
-        csv << formatted_attribute_headers
+        formatted_attributes = formatted_attribute_headers
+        if @year >= 2023
+          csv << formatted_attributes.map do |attribute|
+            definition = @definitions.find { |record| record.variable == attribute.downcase }
+            if definition
+              definition.update!(last_accessed: Time.zone.now)
+              definition.definition
+            end
+          end
+        end
+        csv << formatted_attributes
 
         logs.find_each do |log|
           csv << @attributes.map { |attribute| value(attribute, log) }
@@ -159,6 +170,25 @@ module Csv
       order_address_fields_for_support(attributes)
       final_attributes = non_question_fields + attributes
       @user.support? ? final_attributes : final_attributes - SUPPORT_ONLY_ATTRIBUTES
+    end
+
+    def sales_log_definitions
+      definitions = if @user.support?
+                      CsvVariableDefinition.where("log_type = 'sales'")
+                    else
+                      CsvVariableDefinition.where("user_type = 'user' AND log_type = 'sales'")
+                    end
+
+      definitions.group_by { |record| [record.variable, record.definition] }
+                 .map do |_, records|
+        record = nil
+        year = @year
+        while year >= 2022 && record.nil?
+          record = records.find { |r| r.log_type == "sales" && r.year == year }
+          year -= 1
+        end
+        record || records.first
+      end
     end
 
     def insert_derived_and_related_attributes(ordered_questions)
