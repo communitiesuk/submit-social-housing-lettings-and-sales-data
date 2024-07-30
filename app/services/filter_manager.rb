@@ -24,6 +24,7 @@ class FilterManager
       next if category == "owning_organisation" && all_orgs
       next if category == "managing_organisation" && all_orgs
       next if category == "assigned_to"
+      next if category == "user_text_search" && filters["assigned_to"] != "specific_user"
 
       logs = logs.public_send("filter_by_#{category}", values, user)
     end
@@ -99,6 +100,7 @@ class FilterManager
 
       new_filters = new_filters.except("user") if params["assigned_to"] == "all"
       new_filters["user"] = current_user.id.to_s if params["assigned_to"] == "you"
+      new_filters = new_filters.except("user_text_search") if params["assigned_to"] == "all" || params["assigned_to"] == "you"
     end
 
     if (filter_type.include?("schemes") || filter_type.include?("users") || filter_type.include?("scheme_locations")) && params["status"].present?
