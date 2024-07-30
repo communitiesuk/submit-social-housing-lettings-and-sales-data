@@ -44,7 +44,7 @@ class BulkUpload::Lettings::Year2024::RowParser
     field_39: "If 'Other', what is the type of tenancy?",
     field_40: "What is the length of the fixed-term tenancy to the nearest year?",
     field_41: "Is this letting sheltered accommodation?",
-    field_15: "Has tenant seen the DLUHC privacy notice?",
+    field_15: "Has tenant seen the MHCLG privacy notice?",
     field_42: "What is the lead tenant's age?",
     field_43: "Which of these best describes the lead tenant's gender identity?",
     field_44: "Which of these best describes the lead tenant's ethnic background?",
