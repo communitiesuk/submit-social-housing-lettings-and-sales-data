@@ -57,21 +57,21 @@ ecstat2,What is buyer 2 or person 2's working situation?
 buy2livein,Will buyer 2 live in the property?
 hholdcount,Besides the buyer(s), how many other people live or will live in the property?
 relat3,What is person 3's relationship to buyer 1?
-age3,What is person 3�s age?
+age3,What is person 3's age?
 sex3,What is person 3's gender identity?
-ecstat3,What is person 3�s working situation?
+ecstat3,What is person 3's working situation?
 relat4,What is person 4's relationship to buyer 1?
-age4,What is person 4�s age?
+age4,What is person 4's age?
 sex4,What is person 4's gender identity?
-ecstat4,What is person 4�s working situation?
+ecstat4,What is person 4's working situation?
 relat5,What is person 5's relationship to buyer 1?
-age5,What is person 5�s age?
+age5,What is person 5's age?
 sex5,What is person 5's gender identity?
-ecstat5,What is person 5�s working situation?
+ecstat5,What is person 5's working situation?
 relat6,What is person 6's relationship to buyer 1?
-age6,What is person 6�s age?
+age6,What is person 6's age?
 sex6,What is person 6's gender identity?
-ecstat6,What is person 6�s working situation?
+ecstat6,What is person 6's working situation?
 prevten,What was buyer 1's previous tenure?
 ppcodenk,Do you know the postcode of buyer 1's last settled accommodation?
 ppostc1,Part 1 of postcode of buyer 1's last settled accommodation
@@ -114,11 +114,11 @@ exyear,Year of the exchange of contracts
 hoday,Day of the practical completion or handover date
 homonth,Month of the practical completion or handover date
 hoyear,Year of the practical completion or handover date
-lanomagr,Was the household rehoused under a �local authority nominations agreement�?
+lanomagr,Was the household rehoused under a local authority nominations agreement?
 soctenant,Was the buyer a private registered provider, housing association or local authority tenant immediately before this sale?
 frombeds,How many bedrooms did the buyer's previous property have?
 fromprop,What was the previous property type?
-socprevten,What was the rent type of buyer�s previous tenure?
+socprevten,What was the rent type of buyer's previous tenure?
 value,What is the full purchase price?
 equity,What was the initial percentage equity stake purchased?
 mortgageused,Was a mortgage used to buy this property?

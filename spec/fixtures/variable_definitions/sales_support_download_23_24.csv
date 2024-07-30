@@ -17,7 +17,7 @@ YEAR,Year of sale completion date
 PURCHID,What is the purchaser code?
 OWNERSHIP,Was this purchase made through an ownership scheme?
 TYPE,What is the type of shared ownership/discounted ownership/outright sale?
-OTHTYPE,If type = other, what is the type of outright sale?
+OTHTYPE,If type = 'Other', what is the type of outright sale?
 COMPANY,Is the buyer a company?
 LIVEINBUYER,Will the buyer(s) live in the property?
 JOINT,Is this a joint purchase?
@@ -55,21 +55,21 @@ ECSTAT2,What is buyer 2 or person 2's working situation?
 LIVEINBUYER2,Will buyer 2 live in the property?
 HHTYPE,Besides the buyer(s), how many other people live or will live in the property?
 RELAT3,What is person 3's relationship to buyer 1?
-AGE3,What is person 3�s age?
+AGE3,What is person 3's age?
 SEX3,What is person 3's gender identity?
-ECSTAT3,What is person 3�s working situation?
+ECSTAT3,What is person 3's working situation?
 RELAT4,What is person 4's relationship to buyer 1?
-AGE4,What is person 4�s age?
+AGE4,What is person 4's age?
 SEX4,What is person 4's gender identity?
-ECSTAT4,What is person 4�s working situation?
+ECSTAT4,What is person 4's working situation?
 RELAT5,What is person 5's relationship to buyer 1?
-AGE5,What is person 5�s age?
+AGE5,What is person 5's age?
 SEX5,What is person 5's gender identity?
-ECSTAT5,What is person 5�s working situation?
+ECSTAT5,What is person 5's working situation?
 RELAT6,What is person 6's relationship to buyer 1?
-AGE6,What is person 6�s age?
+AGE6,What is person 6's age?
 SEX6,What is person 6's gender identity?
-ECSTAT6,What is person 6�s working situation?
+ECSTAT6,What is person 6's working situation?
 PREVTEN,What was buyer 1's previous tenure?
 PPCODENK,Do you know the postcode of buyer 1's last settled accommodation?
 PPOSTC1,Part 1 of postcode of buyer 1's last settled accommodation
@@ -112,11 +112,11 @@ EXYEAR,Year of the exchange of contracts
 HODAY,Day of the practical completion or handover date
 HOMONTH,Month of the practical completion or handover date
 HOYEAR,Year of the practical completion or handover date
-LANOMAGR,Was the household rehoused under a �local authority nominations agreement�?
+LANOMAGR,Was the household rehoused under a local authority nominations agreement?
 SOCTEN,Was the buyer a private registered provider, housing association or local authority tenant immediately before this sale?
 FROMBEDS,How many bedrooms did the buyer's previous property have?
 FROMPROP,What was the previous property type?
-SOCPREVTEN,What was the rent type of buyer�s previous tenure?
+SOCPREVTEN,What was the rent type of buyer's previous tenure?
 VALUE,What is the full purchase price?
 VALUE_VALUE_CHECK,Populated if a soft validation is confirmed.
 EQUITY,What was the initial percentage equity stake purchased?
