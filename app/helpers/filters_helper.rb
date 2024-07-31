@@ -102,13 +102,13 @@ module FiltersHelper
   def assigned_to_filter_options(filter_type)
     if applied_filters(filter_type)["assigned_to"] == "specific_user" && applied_filters(filter_type)["user"].present?
       user_id = applied_filters(filter_type)["user"]
-      user = if user.support?
-               User.where(id: user_id)&.first
-             else
-               User.affiliated_users(user.organisation).where(id: user_id)&.first
-             end
+      selected_user = if current_user.support?
+                        User.where(id: user_id)&.first
+                      else
+                        User.affiliated_users(current_user.organisation).where(id: user_id)&.first
+                      end
 
-      return [OpenStruct.new(id: user.id, name: user.name, hint: user.email)] if user.present?
+      return [OpenStruct.new(id: selected_user.id, name: selected_user.name, hint: selected_user.email)] if selected_user.present?
     end
     [OpenStruct.new(id: "", name: "Select an option", hint: "")]
   end
