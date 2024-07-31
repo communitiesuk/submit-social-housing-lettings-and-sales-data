@@ -10,7 +10,7 @@ const populateOptions = (results, selectEl) => {
   Object.keys(results).forEach((key) => {
     const option = document.createElement('option')
     option.value = key
-    option.innerHTML = searchableName(results[key])
+    option.innerHTML = results[key].value
     if (results[key].hint) { option.setAttribute('data-hint', results[key].hint) }
     option.setAttribute('text', searchableName(results[key]))
     selectEl.appendChild(option)

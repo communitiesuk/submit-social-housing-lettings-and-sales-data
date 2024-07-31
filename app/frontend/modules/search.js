@@ -119,7 +119,7 @@ export const suggestion = (value, options) => {
 
 export const searchSuggestion = (value, options) => {
   try {
-    const option = options.find((o) => o.innerHTML === value)
+    const option = options.find((o) => o.getAttribute('text') === value)
     if (option) {
       const result = enhanceOption(option)
       const html = result.append ? `<span class="autocomplete__option__append">${result.text}</span> <span>${result.append}</span>` : `<span>${result.text}</span>`
@@ -176,7 +176,7 @@ export const confirmSelectedOption = (selectEl, val) => {
 
   const selectedOption = [].filter.call(
     arrayOfOptions,
-    (option) => option.innerHTML === val
+    (option) => option.getAttribute('text') === val
   )[0]
   if (selectedOption) selectedOption.selected = true
 }
