@@ -2625,7 +2625,7 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
     end
 
     describe "#postcode_full" do
-      let(:attributes) { { bulk_upload:, field_21: " EC1N ", field_22: " 2TD " } }
+      let(:attributes) { { bulk_upload:, field_4: 1, field_21: " EC1N ", field_22: " 2TD " } }
 
       it "strips whitespace" do
         expect(parser.log.postcode_full).to eql("EC1N 2TD")
@@ -2633,7 +2633,7 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
     end
 
     describe "#la" do
-      let(:attributes) { { bulk_upload:, field_23: "E07000223" } }
+      let(:attributes) { { bulk_upload:, field_4: 1, field_23: "E07000223" } }
 
       it "sets to given value" do
         expect(parser.log.la).to eql("E07000223")
