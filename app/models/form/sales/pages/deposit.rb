@@ -3,6 +3,7 @@ class Form::Sales::Pages::Deposit < ::Form::Page
     super(id, hsh, subsection)
     @ownershipsch = ownershipsch
     @optional = optional
+    @header = "About the deposit"
   end
 
   def questions

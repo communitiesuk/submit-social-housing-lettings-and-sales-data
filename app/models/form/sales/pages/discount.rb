@@ -2,6 +2,7 @@ class Form::Sales::Pages::Discount < ::Form::Page
   def initialize(id, hsh, subsection, optional:)
     super(id, hsh, subsection)
     @optional = optional
+    @header = "About the deposit"
   end
 
   def questions

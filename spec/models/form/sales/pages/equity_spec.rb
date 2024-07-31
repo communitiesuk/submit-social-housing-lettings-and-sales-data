@@ -20,7 +20,7 @@ RSpec.describe Form::Sales::Pages::Equity, type: :model do
   end
 
   it "has the correct header" do
-    expect(page.header).to be_nil
+    expect(page.header).to eq("About the price of the property")
   end
 
   it "has the correct description" do
