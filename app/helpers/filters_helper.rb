@@ -84,6 +84,11 @@ module FiltersHelper
     JSON.parse(session[session_name_for(filter_type)])[filter] || ""
   end
 
+  def owning_organisation_csv_filter_options(user)
+    organisation_options = user.support? ? Organisation.all : ([user.organisation] + user.organisation.stock_owners + user.organisation.absorbed_organisations).uniq
+    [OpenStruct.new(id: "", name: "Select an option")] + organisation_options.map { |org| OpenStruct.new(id: org.id, name: org.name) }
+  end
+
   def owning_organisation_filter_options(user, filter_type)
     if applied_filters(filter_type)["owning_organisation"].present?
       organisation_id = applied_filters(filter_type)["owning_organisation"]
@@ -97,6 +102,11 @@ module FiltersHelper
     end
 
     [OpenStruct.new(id: "", name: "Select an option")]
+  end
+
+  def assigned_to_csv_filter_options(user)
+    user_options = user.support? ? User.all : (user.organisation.users + user.organisation.managing_agents.flat_map(&:users) + user.organisation.stock_owners.flat_map(&:users)).uniq
+    [OpenStruct.new(id: "", name: "Select an option", hint: "")] + user_options.map { |user_option| OpenStruct.new(id: user_option.id, name: user_option.name, hint: user_option.email) }
   end
 
   def assigned_to_filter_options(filter_type)
@@ -151,6 +161,11 @@ module FiltersHelper
     if applied_filters_count(filter_type).positive?
       govuk_link_to "Clear", clear_filters_path(filter_type:, path_params:)
     end
+  end
+
+  def managing_organisation_csv_filter_options(user)
+    organisation_options = user.support? ? Organisation.all : ([user.organisation] + user.organisation.managing_agents + user.organisation.absorbed_organisations).uniq
+    [OpenStruct.new(id: "", name: "Select an option")] + organisation_options.map { |org| OpenStruct.new(id: org.id, name: org.name) }
   end
 
   def managing_organisation_filter_options(user, filter_type)
