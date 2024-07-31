@@ -10,10 +10,14 @@ require "capybara-screenshot/rspec"
 require "selenium-webdriver"
 require "view_component/test_helpers"
 require "pundit/rspec"
+require "axe-rspec"
 
 Capybara.register_driver :headless do |app|
   options = Selenium::WebDriver::Firefox::Options.new
   options.add_argument("--headless")
+  options.add_argument("--no-sandbox")
+  options.add_argument("--disable-dev-shm-usage")
+  options.add_argument("--window-size=1400,1400")
 
   Capybara::Selenium::Driver.new(app, browser: :firefox, options:)
 end
