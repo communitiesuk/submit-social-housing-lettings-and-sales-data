@@ -266,12 +266,10 @@ module Csv
     end
 
     def lettings_log_definitions
-
       definitions = @user.variable_definitions.lettings
 
       definitions.group_by { |record| [record.variable, record.definition] }
                  .map do |_, options|
-
         exact_match = options.find { |definition| definition.year == @year && definition.user_type == @user.user_type }
         next exact_match if exact_match
 

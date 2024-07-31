@@ -170,12 +170,10 @@ module Csv
     end
 
     def sales_log_definitions
-
       definitions = @user.variable_definitions.sales
 
       definitions.group_by { |record| [record.variable, record.definition] }
                  .map do |_, options|
-
         exact_match = options.find { |definition| definition.year == @year && definition.user_type == @user.user_type }
         next exact_match if exact_match
 
