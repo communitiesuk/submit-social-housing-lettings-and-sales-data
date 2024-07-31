@@ -97,6 +97,7 @@ group :development do
 end
 
 group :test do
+  gem "axe-core-rspec"
   gem "capybara", require: false
   gem "capybara-lockstep"
   gem "capybara-screenshot"
