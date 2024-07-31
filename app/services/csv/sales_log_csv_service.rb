@@ -14,10 +14,7 @@ module Csv
         if @year >= 2023
           csv << formatted_attributes.map do |attribute|
             record = @definitions.find { |r| r.variable == attribute.downcase }
-            if record
-              record.update!(last_accessed: Time.zone.now)
-              record.definition
-            end
+            record&.tap { |r| r.update!(last_accessed: Time.zone.now) }&.definition
           end
         end
         csv << formatted_attributes
