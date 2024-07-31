@@ -89,9 +89,9 @@ RSpec.describe "Lettings Log Features" do
           check("In progress")
           choose("You")
           choose("Specific owning organisation")
-          select(stock_owner_1.name, from: "owning_organisation")
+          fill_in("owning-organisation-text-search-field", with: "stock")
           choose("Specific managing organisation")
-          select(managing_agent_1.name, from: "managing_organisation")
+          fill_in("managing-organisation-text-search-field", with: "managing")
           click_button("Apply filters")
         end
 

@@ -795,13 +795,12 @@ RSpec.describe "User Features" do
         it "clears the previously selected organisation value" do
           visit("/lettings-logs")
           choose("owning-organisation-select-specific-org-field", allow_label_click: true)
-          expect(page).to have_field("owning-organisation-field", with: "")
-          find("#owning-organisation-field").click.native.send_keys("F", "i", "l", "t", :down, :enter)
+          fill_in("owning-organisation-text-search-field", with: "Filt")
           click_button("Apply filters")
-          expect(page).to have_current_path("/lettings-logs?%5Byears%5D%5B%5D=&%5Bstatus%5D%5B%5D=&%5Bneedstypes%5D%5B%5D=&assigned_to=all&owning_organisation_select=specific_org&owning_organisation=#{parent_organisation.id}&managing_organisation_select=all")
+          expect(page).to have_current_path("/lettings-logs?%5Byears%5D%5B%5D=&%5Bstatus%5D%5B%5D=&%5Bneedstypes%5D%5B%5D=&assigned_to=all&user_text_search=&owning_organisation_select=specific_org&owning_organisation_text_search=Filt&managing_organisation_select=all&managing_organisation_text_search=")
           choose("owning-organisation-select-all-field", allow_label_click: true)
           click_button("Apply filters")
-          expect(page).to have_current_path("/lettings-logs?%5Byears%5D%5B%5D=&%5Bstatus%5D%5B%5D=&%5Bneedstypes%5D%5B%5D=&assigned_to=all&owning_organisation_select=all&managing_organisation_select=all")
+          expect(page).to have_current_path("/lettings-logs?%5Byears%5D%5B%5D=&%5Bstatus%5D%5B%5D=&%5Bneedstypes%5D%5B%5D=&assigned_to=all&user_text_search=&owning_organisation_select=all&owning_organisation_text_search=&managing_organisation_select=all&managing_organisation_text_search=")
         end
       end
     end
