@@ -25,6 +25,10 @@ export default class extends Controller {
     const rawFieldName = matches ? `${matches[1]}[${matches[2]}_raw]` : ''
     const searchUrl = JSON.parse(this.element.dataset.info).search_url
 
+    document.querySelectorAll('.non-js-text-search-input-field').forEach((el) => {
+      el.style.display = 'none'
+    })
+
     accessibleAutocomplete.enhanceSelectElement({
       defaultValue: '',
       selectElement: selectEl,
