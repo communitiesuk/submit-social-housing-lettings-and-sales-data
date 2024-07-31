@@ -13,10 +13,10 @@ module Csv
         formatted_attributes = formatted_attribute_headers
         if @year >= 2023
           csv << formatted_attributes.map do |attribute|
-            definition = @definitions.find { |record| record.variable == attribute.downcase }
-            if definition
-              definition.update!(last_accessed: Time.zone.now)
-              definition.definition
+            record = @definitions.find { |r| r.variable == attribute.downcase }
+            if record
+              record.update!(last_accessed: Time.zone.now)
+              record.definition
             end
           end
         end
@@ -173,23 +173,19 @@ module Csv
     end
 
     def sales_log_definitions
-      definitions = if @user.support?
-                      CsvVariableDefinition.where("log_type = 'sales'")
-                    else
-                      CsvVariableDefinition.where("user_type = 'user' AND log_type = 'sales'")
-                    end
+
+      definitions = @user.variable_definitions.sales
 
       definitions.group_by { |record| [record.variable, record.definition] }
-                 .map do |_, records|
-        record = nil
-        year = @year
-        while year >= 2022 && record.nil?
-          record = records.find do |r|
-            r.year == year && (!@user.support? || r.user_type == "support" || r.user_type == "user")
-          end
-          year -= 1
-        end
-        record || records.first
+                 .map do |_, options|
+
+        exact_match = options.find { |definition| definition.year == @year && definition.user_type == @user.user_type }
+        next exact_match if exact_match
+
+        recent_match = options.select { |definition| definition.user_type == @user.user_type }.max_by(&:year)
+        next recent_match if recent_match
+
+        options.max_by(&:year)
       end
     end
 
