@@ -1,7 +1,6 @@
-class Form::Sales::Pages::AboutDepositWithoutDiscount < ::Form::Page
+class Form::Sales::Pages::Deposit < ::Form::Page
   def initialize(id, hsh, subsection, ownershipsch:, optional:)
     super(id, hsh, subsection)
-    @header = "About the deposit"
     @ownershipsch = ownershipsch
     @optional = optional
   end
@@ -16,11 +15,13 @@ class Form::Sales::Pages::AboutDepositWithoutDiscount < ::Form::Page
     if form.start_year_after_2024?
       [{ "social_homebuy?" => false, "ownershipsch" => 1, "stairowned_100?" => @optional },
        { "ownershipsch" => 2 },
-       { "ownershipsch" => 3, "mortgageused" => 1 }]
+       { "ownershipsch" => 3, "mortgageused" => 1 },
+       { "social_homebuy?" => true, "stairowned_100?" => @optional }]
     else
       [{ "social_homebuy?" => false, "ownershipsch" => 1 },
        { "ownershipsch" => 2 },
-       { "ownershipsch" => 3, "mortgageused" => 1 }]
+       { "ownershipsch" => 3, "mortgageused" => 1 },
+       { "social_homebuy?" => true }]
     end
   end
 end

@@ -36,8 +36,9 @@ RSpec.describe Form::Sales::Subsections::SharedOwnershipScheme, type: :model do
         previous_bedrooms
         previous_property_type
         shared_ownership_previous_tenure
-        about_price_shared_ownership
+        value_shared_ownership
         about_price_shared_ownership_value_check
+        equity
         shared_ownership_equity_value_check
         mortgage_used_shared_ownership
         mortgage_used_mortgage_value_check
@@ -48,8 +49,9 @@ RSpec.describe Form::Sales::Subsections::SharedOwnershipScheme, type: :model do
         mortgage_lender_other_shared_ownership
         mortgage_length_shared_ownership
         extra_borrowing_shared_ownership
-        about_deposit_with_discount
-        about_deposit_shared_ownership
+        deposit
+        discount
+        deposit_shared_ownership
         deposit_joint_purchase_value_check
         deposit_value_check
         shared_ownership_deposit_value_check

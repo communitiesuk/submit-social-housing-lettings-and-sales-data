@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Form::Sales::Pages::AboutDepositWithoutDiscount, type: :model do
+RSpec.describe Form::Sales::Pages::Deposit, type: :model do
   subject(:page) { described_class.new(page_id, page_definition, subsection, ownershipsch: 1, optional: false) }
 
   let(:page_id) { nil }
@@ -24,7 +24,7 @@ RSpec.describe Form::Sales::Pages::AboutDepositWithoutDiscount, type: :model do
   end
 
   it "has the correct header" do
-    expect(page.header).to eq("About the deposit")
+    expect(page.header).to be_nil
   end
 
   it "has the correct description" do
@@ -35,7 +35,8 @@ RSpec.describe Form::Sales::Pages::AboutDepositWithoutDiscount, type: :model do
     expect(page.depends_on).to eq(
       [{ "social_homebuy?" => false, "ownershipsch" => 1 },
        { "ownershipsch" => 2 },
-       { "ownershipsch" => 3, "mortgageused" => 1 }],
+       { "ownershipsch" => 3, "mortgageused" => 1 },
+       { "social_homebuy?" => true }],
     )
   end
 
@@ -46,7 +47,8 @@ RSpec.describe Form::Sales::Pages::AboutDepositWithoutDiscount, type: :model do
       expect(page.depends_on).to eq(
         [{ "social_homebuy?" => false, "ownershipsch" => 1 },
          { "ownershipsch" => 2 },
-         { "ownershipsch" => 3, "mortgageused" => 1 }],
+         { "ownershipsch" => 3, "mortgageused" => 1 },
+         { "social_homebuy?" => true }],
       )
     end
   end
@@ -60,7 +62,8 @@ RSpec.describe Form::Sales::Pages::AboutDepositWithoutDiscount, type: :model do
       expect(page.depends_on).to eq(
         [{ "social_homebuy?" => false, "ownershipsch" => 1, "stairowned_100?" => false },
          { "ownershipsch" => 2 },
-         { "ownershipsch" => 3, "mortgageused" => 1 }],
+         { "ownershipsch" => 3, "mortgageused" => 1 },
+         { "social_homebuy?" => true, "stairowned_100?" => false }],
       )
     end
 
@@ -71,7 +74,8 @@ RSpec.describe Form::Sales::Pages::AboutDepositWithoutDiscount, type: :model do
         expect(page.depends_on).to eq(
           [{ "social_homebuy?" => false, "ownershipsch" => 1, "stairowned_100?" => true },
            { "ownershipsch" => 2 },
-           { "ownershipsch" => 3, "mortgageused" => 1 }],
+           { "ownershipsch" => 3, "mortgageused" => 1 },
+           { "social_homebuy?" => true, "stairowned_100?" => true }],
         )
       end
     end

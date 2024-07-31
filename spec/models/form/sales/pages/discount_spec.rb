@@ -1,9 +1,9 @@
 require "rails_helper"
 
-RSpec.describe Form::Sales::Pages::AboutDepositWithDiscount, type: :model do
+RSpec.describe Form::Sales::Pages::Discount, type: :model do
   subject(:page) { described_class.new(page_id, page_definition, subsection, optional: false) }
 
-  let(:page_id) { "about_deposit_with_discount" }
+  let(:page_id) { "discount" }
   let(:page_definition) { nil }
   let(:subsection) { instance_double(Form::Subsection) }
 
@@ -16,15 +16,15 @@ RSpec.describe Form::Sales::Pages::AboutDepositWithDiscount, type: :model do
   end
 
   it "has correct questions" do
-    expect(page.questions.map(&:id)).to eq(%w[deposit cashdis])
+    expect(page.questions.map(&:id)).to eq(%w[cashdis])
   end
 
   it "has the correct id" do
-    expect(page.id).to eq("about_deposit_with_discount")
+    expect(page.id).to eq("discount")
   end
 
   it "has the correct header" do
-    expect(page.header).to eq("About the deposit")
+    expect(page.header).to be_nil
   end
 
   it "has the correct description" do

@@ -18,7 +18,7 @@ class Form::Sales::Subsections::OutrightSale < ::Form::Subsection
       (Form::Sales::Pages::MortgageLenderOther.new("mortgage_lender_other_outright_sale", nil, self, ownershipsch: 3) unless form.start_year_after_2024?),
       Form::Sales::Pages::MortgageLength.new("mortgage_length_outright_sale", nil, self, ownershipsch: 3),
       Form::Sales::Pages::ExtraBorrowing.new("extra_borrowing_outright_sale", nil, self, ownershipsch: 3),
-      Form::Sales::Pages::AboutDepositWithoutDiscount.new("about_deposit_outright_sale", nil, self, ownershipsch: 3, optional: false),
+      Form::Sales::Pages::Deposit.new("deposit_outright_sale", nil, self, ownershipsch: 3, optional: false),
       Form::Sales::Pages::DepositValueCheck.new("outright_sale_deposit_joint_purchase_value_check", nil, self, joint_purchase: true),
       Form::Sales::Pages::DepositValueCheck.new("outright_sale_deposit_value_check", nil, self, joint_purchase: false),
       leasehold_charge_pages,
