@@ -85,21 +85,32 @@ module FiltersHelper
   end
 
   def owning_organisation_filter_options(user, filter_type)
-    if applied_filters(filter_type)["owning_organisation"].present? && user.support?
-      org = Organisation.find(applied_filters(filter_type)["owning_organisation"])
-      [OpenStruct.new(id: org.id, name: org.name)]
-    else
-      [OpenStruct.new(id: "", name: "Select an option")]
+    if applied_filters(filter_type)["owning_organisation"].present?
+      organisation_id = applied_filters(filter_type)["owning_organisation"]
+
+      org = if user.support?
+              Organisation.where(id: organisation_id)&.first
+            else
+              Organisation.affiliated_organisations(user.organisation).where(id: organisation_id)&.first
+            end
+      return [OpenStruct.new(id: org.id, name: org.name)] if org.present?
     end
+
+    [OpenStruct.new(id: "", name: "Select an option")]
   end
 
   def assigned_to_filter_options(filter_type)
     if applied_filters(filter_type)["assigned_to"] == "specific_user" && applied_filters(filter_type)["user"].present?
-      user = User.find(applied_filters(filter_type)["user"]) # make sure this doesn't expose anything weird
-      [OpenStruct.new(id: user.id, name: user.name, hint: user.email)]
-    else
-      [OpenStruct.new(id: "", name: "Select an option", hint: "")]
+      user_id = applied_filters(filter_type)["user"]
+      user = if user.support?
+               User.where(id: user_id)&.first
+             else
+               User.affiliated_users(user.organisation).where(id: user_id)&.first
+             end
+
+      return [OpenStruct.new(id: user.id, name: user.name, hint: user.email)] if user.present?
     end
+    [OpenStruct.new(id: "", name: "Select an option", hint: "")]
   end
 
   def filter_search_url(category)
@@ -143,12 +154,18 @@ module FiltersHelper
   end
 
   def managing_organisation_filter_options(user, filter_type)
-    if applied_filters(filter_type)["managing_organisation"].present? && user.support?
-      org = Organisation.find(applied_filters(filter_type)["managing_organisation"]) # make sure this doesn't expose anything weird
-      [OpenStruct.new(id: org.id, name: org.name)]
-    else
-      [OpenStruct.new(id: "", name: "Select an option")]
+    if applied_filters(filter_type)["managing_organisation"].present?
+      organisation_id = applied_filters(filter_type)["managing_organisation"]
+
+      org = if user.support?
+              Organisation.where(id: organisation_id)&.first
+            else
+              Organisation.affiliated_organisations(user.organisation).where(id: organisation_id)&.first
+            end
+      return [OpenStruct.new(id: org.id, name: org.name)] if org.present?
     end
+
+    [OpenStruct.new(id: "", name: "Select an option")]
   end
 
   def show_scheme_managing_org_filter?(user)
@@ -277,11 +294,11 @@ private
     return "All" if session_filters["assigned_to"].include?("all")
     return "You" if session_filters["assigned_to"].include?("you")
 
-    User.affiliated_users(current_user.organisationq).find(session_filters["user"].to_i).name
-    selected_user_option = User.affiliated_users(current_user.organisationq).find(session_filters["user"].to_i).name
+    User.affiliated_users(current_user.organisation).find(session_filters["user"].to_i).name
+    selected_user_option = User.affiliated_users(current_user.organisation).find(session_filters["user"].to_i)
     return unless selected_user_option
 
-    "#{selected_user_option.name} (#{selected_user_option.hint})"
+    "#{selected_user_option.name} (#{selected_user_option.email})"
   end
 
   def formatted_owned_by_filter(session_filters, filter_type)
