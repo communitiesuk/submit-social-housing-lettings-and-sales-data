@@ -99,6 +99,20 @@ RSpec.describe "Schemes scheme Features" do
                 expect(page).not_to have_link("Clear", href: "/clear-filters?filter_type=schemes")
               end
             end
+
+            context "when on the scheme question page" do
+              let(:lettings_log) { FactoryBot.create(:lettings_log, assigned_to: user, needstype: 2) }
+
+              it "open from guidance page with filters cleared" do
+                expect(page).to have_text("2 filters applied")
+                visit("/lettings-logs/#{lettings_log.id}/scheme")
+                find(".govuk-details__summary").click
+                expect(page).to have_link("View your organisation’s schemes")
+                click_link "View your organisation’s schemes"
+                expect(page).to have_current_path("/organisations/#{user.organisation.id}/schemes")
+                expect(page).to have_text("No filters applied")
+              end
+            end
           end
         end
       end
