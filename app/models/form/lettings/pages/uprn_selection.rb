@@ -17,7 +17,7 @@ class Form::Lettings::Pages::UprnSelection < ::Form::Page
   end
 
   def routed_to?(log, _current_user = nil)
-    (log.uprn_known.nil? || log.uprn_known.zero?) && log.address_line1_input.present? && log.postcode_full_input.present? && (1..10).cover?(log.address_options&.count)
+    !log.is_supported_housing? && (log.uprn_known.nil? || log.uprn_known.zero?) && log.address_line1_input.present? && log.postcode_full_input.present? && (1..10).cover?(log.address_options&.count)
   end
 
   def skip_text
