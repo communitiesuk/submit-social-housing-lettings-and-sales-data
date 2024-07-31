@@ -164,7 +164,7 @@ RSpec.describe User, type: :model do
         end
 
         it "can filter lettings logs by user, year and status" do
-          expect(user.logs_filters).to match_array(%w[years status needstypes assigned_to user bulk_upload_id])
+          expect(user.logs_filters).to match_array(%w[years status needstypes assigned_to user bulk_upload_id user_text_search])
         end
       end
 
