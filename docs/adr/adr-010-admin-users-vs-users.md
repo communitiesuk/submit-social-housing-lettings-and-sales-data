@@ -6,7 +6,7 @@ parent: Architecture decisions
 
 ## Why do we have 2 user classes, `AdminUser` and `User`?
 
-This is modelling a real life split. `AdminUsers` are internal DLUHC users or help desk employees. While `Users` are external users working at data providing organisations. So local authority/housing association’s "admin" users, i.e. Data Co-ordinators are a type of the User class. They have the ability to add or remove other users to or from their organisation, and to update their organisation details etc, but only through the designed UI. They do not get direct access to ActiveAdmin.
+This is modelling a real life split. `AdminUsers` are internal MHCLG users or help desk employees. While `Users` are external users working at data providing organisations. So local authority/housing association’s "admin" users, i.e. Data Co-ordinators are a type of the User class. They have the ability to add or remove other users to or from their organisation, and to update their organisation details etc, but only through the designed UI. They do not get direct access to ActiveAdmin.
 
 AdminUsers on the other hand get direct access to ActiveAdmin. From there they can download entire datasets (via CSV, XML, JSON), view any log from any organisation, and add or remove users of any type including other Admin users. This means TDA will likely also require more stringent authentication for them using MFA (which users will likely not require). So the class split also helps there.
 

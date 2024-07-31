@@ -18,11 +18,10 @@ class Location < ApplicationRecord
 
   auto_strip_attributes :name, squish: true
 
-  scope :search_by_postcode, ->(postcode) { where("REPLACE(postcode, ' ', '') ILIKE ?", "%#{postcode.delete(' ')}%") }
-  scope :search_by_name, ->(name) { where("name ILIKE ?", "%#{name}%") }
+  scope :search_by_postcode, ->(postcode) { where("REPLACE(locations.postcode, ' ', '') ILIKE ?", "%#{postcode.delete(' ')}%") }
+  scope :search_by_name, ->(name) { where("locations.name ILIKE ?", "%#{name}%") }
   scope :search_by, ->(param) { search_by_name(param).or(search_by_postcode(param)) }
   scope :started, -> { where("locations.startdate <= ?", Time.zone.today).or(where(startdate: nil)) }
-  scope :active, -> { where(confirmed: true).and(started) }
   scope :started_in_2_weeks, -> { where("locations.startdate <= ?", Time.zone.today + 2.weeks).or(where(startdate: nil)) }
   scope :active_in_2_weeks, -> { where(confirmed: true).and(started_in_2_weeks) }
   scope :confirmed, -> { where(confirmed: true) }
@@ -62,25 +61,25 @@ class Location < ApplicationRecord
     merge(Organisation.filter_by_inactive)
   }
 
-  scope :deactivated_directly, lambda {
+  scope :deactivated_directly, lambda { |date = Time.zone.now|
     merge(LocationDeactivationPeriod.deactivations_without_reactivation)
-      .where("location_deactivation_periods.deactivation_date <= ?", Time.zone.now)
+      .where("location_deactivation_periods.deactivation_date <= ?", date)
   }
 
-  scope :deactivating_soon, lambda {
+  scope :deactivating_soon, lambda { |date = Time.zone.now|
     merge(LocationDeactivationPeriod.deactivations_without_reactivation)
-    .where("location_deactivation_periods.deactivation_date > ?", Time.zone.now)
+    .where("location_deactivation_periods.deactivation_date > ?", date)
     .where.not(id: joins(scheme: [:owning_organisation]).deactivated_by_organisation.pluck(:id))
   }
 
-  scope :reactivating_soon, lambda {
+  scope :reactivating_soon, lambda { |date = Time.zone.now|
     where.not("location_deactivation_periods.reactivation_date IS NULL")
-    .where("location_deactivation_periods.reactivation_date > ?", Time.zone.now)
+    .where("location_deactivation_periods.reactivation_date > ?", date)
     .where.not(id: joins(scheme: [:owning_organisation]).deactivated_by_organisation.pluck(:id))
   }
 
-  scope :activating_soon, lambda {
-    where("locations.startdate > ?", Time.zone.now)
+  scope :activating_soon, lambda { |date = Time.zone.now|
+    where("locations.startdate > ?", date)
   }
 
   scope :active_status, lambda {
@@ -90,6 +89,14 @@ class Location < ApplicationRecord
     .where.not(id: incomplete.pluck(:id))
     .where.not(id: joins(:location_deactivation_periods).deactivating_soon.pluck(:id))
     .where.not(id: activating_soon.pluck(:id))
+  }
+
+  scope :active, lambda { |date = Time.zone.now|
+    where.not(id: joins(:location_deactivation_periods).reactivating_soon(date).pluck(:id))
+         .where.not(id: joins(scheme: [:owning_organisation]).deactivated_by_organisation.pluck(:id))
+         .where.not(id: joins(:location_deactivation_periods).deactivated_directly(date).pluck(:id))
+         .where.not(id: incomplete.pluck(:id))
+         .where.not(id: activating_soon(date).pluck(:id))
   }
 
   scope :visible, -> { where(discarded_at: nil) }
@@ -157,9 +164,9 @@ class Location < ApplicationRecord
     return :incomplete unless confirmed
     return :deactivated if scheme.owning_organisation.status_at(date) == :deactivated ||
       open_deactivation&.deactivation_date.present? && date >= open_deactivation.deactivation_date
+    return :activating_soon if startdate.present? && date < startdate
     return :deactivating_soon if open_deactivation&.deactivation_date.present? && date < open_deactivation.deactivation_date
     return :reactivating_soon if last_deactivation_before(date)&.reactivation_date.present? && date < last_deactivation_before(date).reactivation_date
-    return :activating_soon if startdate.present? && date < startdate
 
     :active
   end

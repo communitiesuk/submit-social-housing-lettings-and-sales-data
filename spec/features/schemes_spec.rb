@@ -225,7 +225,7 @@ RSpec.describe "Schemes scheme Features" do
             end
 
             it "shows list of links to the organisation's schemes" do
-              click_on("Schemes (DLUHC)")
+              click_on("Schemes (MHCLG)")
               same_organisation_schemes.each do |scheme|
                 expect(page).to have_link(scheme.service_name)
                 expect(page).to have_content(scheme.id_to_display)

@@ -14,7 +14,7 @@ From CloudWatch, navigate to the desired log group (e.g. for the app task runnin
 Alternatively, you can also navigate to a specific AWS service / resource in question (e.g. ECS tasks), selecting the instance of interest (e.g. a specific ECS task), and finding the “logs” tab (or similar) to view the log “events”.
 
 ### Sentry
-To access Sentry, ensure you have been added to the DLUHC account.
+To access Sentry, ensure you have been added to the MHCLG account.
 Generally error logs in Sentry will also be present somewhere in the CloudWatch logs, but they will be easier to assess here (e.g. number of occurrences over a time period). The logs in Sentry are created by the application when it makes Rails.logger.error calls.
 
 ## Debugging

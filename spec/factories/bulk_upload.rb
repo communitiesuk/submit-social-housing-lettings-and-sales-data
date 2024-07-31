@@ -8,7 +8,7 @@ FactoryBot.define do
     identifier { SecureRandom.uuid }
     sequence(:filename) { |n| "bulk-upload-#{n}.csv" }
     needstype { 1 }
-    noint_fix_status { BulkUpload.noint_fix_statuses.values.sample }
+    rent_type_fix_status { BulkUpload.rent_type_fix_statuses.values.sample }
 
     trait(:sales) do
       log_type { BulkUpload.log_types[:sales] }

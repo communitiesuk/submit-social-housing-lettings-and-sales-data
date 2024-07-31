@@ -61,7 +61,7 @@ unless Rails.env.test?
   )
 
   org = Organisation.find_or_create_by!(
-    name: "DLUHC",
+    name: "MHCLG",
     address_line1: "2 Marsham Street",
     address_line2: "London",
     postcode: "SW1P 4DF",
@@ -70,7 +70,7 @@ unless Rails.env.test?
     managing_agents_label: "None",
     provider_type: "LA",
   ) do
-    info = "Seeded DLUHC Organisation"
+    info = "Seeded MHCLG Organisation"
     if Rails.env.development?
       pp info
     else

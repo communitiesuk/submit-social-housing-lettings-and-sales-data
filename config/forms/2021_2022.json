@@ -1134,7 +1134,7 @@
           ],
           "pages": {
             "declaration": {
-              "header": "Department for Levelling Up, Housing & Communities privacy notice",
+              "header": "Ministry of Housing, Communities and Local Government privacy notice",
               "description": "",
               "questions": {
                 "declaration": {
@@ -1145,7 +1145,7 @@
                   "type": "checkbox",
                   "answer_options": {
                     "declaration": {
-                      "value": "The tenant has seen the DLUHC privacy notice"
+                      "value": "The tenant has seen the MHCLG privacy notice"
                     }
                   }
                 }

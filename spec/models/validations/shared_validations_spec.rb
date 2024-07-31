@@ -215,4 +215,36 @@ RSpec.describe Validations::SharedValidations do
       end
     end
   end
+
+  describe "validate numeric question input" do
+    it "does not allow letters" do
+      sales_log.income1 = "abc"
+      shared_validator.validate_numeric_input(sales_log)
+      expect(sales_log.errors[:income1]).to include I18n.t("validations.numeric.format", field: "Buyer 1’s gross annual income")
+    end
+
+    it "does not allow special characters" do
+      sales_log.income1 = "3%5"
+      shared_validator.validate_numeric_input(sales_log)
+      expect(sales_log.errors[:income1]).to include I18n.t("validations.numeric.format", field: "Buyer 1’s gross annual income")
+    end
+
+    it "allows a digit" do
+      sales_log.income1 = "300"
+      shared_validator.validate_numeric_input(sales_log)
+      expect(sales_log.errors[:income1]).to be_empty
+    end
+
+    it "allows a decimal point" do
+      sales_log.income1 = "300.78"
+      shared_validator.validate_numeric_input(sales_log)
+      expect(sales_log.errors[:income1]).to be_empty
+    end
+
+    it "does not allow decimal point in a wrong format" do
+      sales_log.income1 = "300.09.78"
+      shared_validator.validate_numeric_input(sales_log)
+      expect(sales_log.errors[:income1]).to include I18n.t("validations.numeric.format", field: "Buyer 1’s gross annual income")
+    end
+  end
 end

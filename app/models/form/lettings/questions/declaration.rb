@@ -12,9 +12,9 @@ class Form::Lettings::Questions::Declaration < ::Form::Question
 
   def answer_options
     declaration_text = if form.start_year_after_2024?
-                         "The tenant has seen or been given access to the DLUHC privacy notice"
+                         "The tenant has seen or been given access to the MHCLG privacy notice"
                        else
-                         "The tenant has seen the DLUHC privacy notice"
+                         "The tenant has seen the MHCLG privacy notice"
                        end
 
     { "declaration" => { "value" => declaration_text } }.freeze

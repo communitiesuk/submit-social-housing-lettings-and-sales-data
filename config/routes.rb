@@ -72,7 +72,6 @@ Rails.application.routes.draw do
     get "details", to: "schemes#details"
     get "check-answers", to: "schemes#check_answers"
     get "edit-name", to: "schemes#edit_name"
-    get "support-services-provider", to: "schemes#support_services_provider"
     get "new-deactivation", to: "schemes#new_deactivation"
     get "deactivate-confirm", to: "schemes#deactivate_confirm"
     get "reactivate", to: "schemes#reactivate"
@@ -148,7 +147,6 @@ Rails.application.routes.draw do
       post "data-sharing-agreement", to: "organisations#confirm_data_sharing_agreement"
 
       get "users", to: "organisations#users"
-      get "users/invite", to: "users/account#new"
       get "lettings-logs", to: "organisations#lettings_logs"
       get "delete-lettings-logs", to: "delete_logs#delete_lettings_logs_for_organisation"
       post "delete-lettings-logs", to: "delete_logs#delete_lettings_logs_for_organisation_with_selected_ids"
@@ -214,6 +212,8 @@ Rails.application.routes.draw do
     get "delete-confirmation", to: "lettings_logs#delete_confirmation"
     get "duplicate-logs", to: "duplicate_logs#show"
     get "delete-duplicates", to: "duplicate_logs#delete_duplicates"
+    post "confirm-clear-answer", to: "check_errors#confirm_clear_answer"
+    post "confirm-clear-all-answers", to: "check_errors#confirm_clear_all_answers"
 
     collection do
       get "csv-download", to: "lettings_logs#download_csv"
@@ -284,6 +284,8 @@ Rails.application.routes.draw do
     get "delete-confirmation", to: "sales_logs#delete_confirmation"
     get "duplicate-logs", to: "duplicate_logs#show"
     get "delete-duplicates", to: "duplicate_logs#delete_duplicates"
+    post "confirm-clear-answer", to: "check_errors#confirm_clear_answer"
+    post "confirm-clear-all-answers", to: "check_errors#confirm_clear_all_answers"
 
     collection do
       get "csv-download", to: "sales_logs#download_csv"

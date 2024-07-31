@@ -1,6 +1,6 @@
 class BulkUpload < ApplicationRecord
   enum log_type: { lettings: "lettings", sales: "sales" }
-  enum noint_fix_status: { not_applied: "not_applied", applied: "applied", not_needed: "not_needed" }
+  enum rent_type_fix_status: { not_applied: "not_applied", applied: "applied", not_needed: "not_needed" }
 
   belongs_to :user
 

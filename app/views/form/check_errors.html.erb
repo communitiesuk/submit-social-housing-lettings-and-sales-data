@@ -1,0 +1,66 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-three-quarters-from-desktop">
+
+    <%= form_with model: @log, url: send("#{@log.model_name.param_key}_confirm_clear_answer_path", @log), method: "post", local: true do |f| %>
+      <%= f.govuk_error_summary %>
+      <%= f.hidden_field :page_id, value: @page.id %>
+
+      <h1 class="govuk-heading-m">
+        <div class="govuk-grid-row">
+          <span class="govuk-grid-column-two-thirds">
+            Make sure these answers are correct:
+          </span>
+          <span class="govuk-body govuk-!-text-align-right govuk-grid-column-one-third">
+            <input type="submit" value="Clear all" class="govuk-body govuk-link submit-button-link" name="clear_all">
+          </span>
+        </div>
+      </h1>
+
+      <div class="govuk-summary-card">
+        <div class="govuk-summary-card__content">
+          <% applicable_questions = @questions.reject { |q| q.hidden_in_check_answers?(@log, current_user) } %>
+          <dl class="govuk-summary-list">
+            <% applicable_questions.each do |question| %>
+              <%= f.hidden_field question.id, value: @log[question.id] %>
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                  <%= get_question_label(question) %>
+                </dt>
+                <dd class="govuk-summary-list__value">
+                  <%= simple_format(
+                      get_answer_label(question, @log),
+                      wrapper_tag: "span",
+                      class: "govuk-!-margin-right-4",
+                    ) %>
+
+                    <% extra_value = question.get_extra_check_answer_value(@log) %>
+
+                    <% if extra_value && question.answer_label(@log).present? %>
+                      <%= simple_format(
+                        extra_value,
+                        wrapper_tag: "span",
+                        class: "govuk-!-font-weight-regular app-!-colour-muted",
+                      ) %>
+                    <% end %>
+
+                    <% question.get_inferred_answers(@log).each do |inferred_answer| %>
+                      <span class="govuk-!-font-weight-regular app-!-colour-muted"><%= inferred_answer %></span>
+                    <% end %>
+                </dd>
+                <dd class="govuk-summary-list__actions">
+                  <% if !question.displayed_as_answered?(@log) || question.subsection.id == "setup" %>
+                    <%= govuk_link_to check_errors_answer_text(question, @log), check_errors_answer_link(@log, question, @page, applicable_questions) %>
+                  <% else %>
+                    <input type="submit" value="Clear" class="govuk-body govuk-link submit-button-link" name="<%= question.id %>">
+                  <% end %>
+                </dd>
+              </div>
+            <% end %>
+          </dl>
+        </div>
+      </div>
+    <% end %>
+
+    <%= govuk_button_link_to "Confirm and continue", @original_page_id ? send("#{@log.model_name.param_key}_#{@original_page_id}_path", @log) : send("#{@log.model_name.param_key}_#{@page.id}_path", @log) %>
+  </div>
+</div>

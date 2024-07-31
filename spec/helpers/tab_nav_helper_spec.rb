@@ -15,16 +15,15 @@ RSpec.describe TabNavHelper do
 
   describe "#org_cell" do
     it "returns the users org name and role separated by a newline character" do
-      expected_html = "DLUHC\n<span class=\"app-!-colour-muted\">Data provider</span>"
+      expected_html = "MHCLG\n<span class=\"app-!-colour-muted\">Data provider</span>"
       expect(org_cell(current_user)).to match(expected_html)
     end
   end
 
   describe "#location_cell" do
     it "returns the location link to the postcode with optional name" do
-      link = "/schemes/#{location.scheme.id}/locations/#{location.id}/edit"
-      expected_html = "<a class=\"govuk-link\" rel=\"nofollow\" data-method=\"patch\" href=\"/schemes/#{scheme.id}/locations/#{location.id}/edit\">#{location.postcode}</a>\n<span class=\"govuk-visually-hidden\">Location</span>"
-      expect(location_cell_postcode(location, link)).to match(expected_html)
+      expected_html = "<a class=\"govuk-link\" rel=\"nofollow\" data-method=\"patch\" href=\"/schemes/#{scheme.id}/locations/#{location.id}\">#{location.postcode}</a>\n<span class=\"govuk-visually-hidden\">Location</span>"
+      expect(location_cell_postcode(location, scheme)).to match(expected_html)
     end
   end
 
