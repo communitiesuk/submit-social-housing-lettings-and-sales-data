@@ -97,6 +97,11 @@ class FilterManager
         new_filters[filter] = params[filter] if params[filter].present?
       end
 
+      if params["action"] == "download_csv"
+        new_filters["assigned_to"] = "all" if new_filters["assigned_to"] == "specific_user" && new_filters["user_text_search"].present?
+        new_filters["owning_organisation_select"] = "all" if new_filters["owning_organisation_select"] == "specific_organisation" && new_filters["owning_organisation_text_search"].present?
+        new_filters["managing_organisation_select"] = "all" if new_filters["managing_organisation_select"] == "specific_organisation" && new_filters["managing_organisation_text_search"].present?
+      end
       new_filters = new_filters.except("owning_organisation") if params["owning_organisation_select"] == "all"
       new_filters = new_filters.except("managing_organisation") if params["managing_organisation_select"] == "all"
 
