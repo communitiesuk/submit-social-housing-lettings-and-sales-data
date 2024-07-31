@@ -238,7 +238,7 @@ RSpec.describe "User Features" do
         end
       end
 
-      fit "can filter sales logs" do
+      it "can filter sales logs" do
         expect(page).to have_content("#{number_of_sales_logs} total logs")
         organisation.sales_logs.map(&:id).each do |sales_log_id|
           expect(page).to have_link sales_log_id.to_s, href: "/sales-logs/#{sales_log_id}"
