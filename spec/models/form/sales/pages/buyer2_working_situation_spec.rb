@@ -21,6 +21,7 @@ RSpec.describe Form::Sales::Pages::Buyer2WorkingSituation, type: :model do
 
   it "has the correct header" do
     expect(page.header).to be_nil
+    
   end
 
   it "has the correct description" do
