@@ -4,7 +4,7 @@ require "rake"
 describe "rake core:data_export", type: task do
   let(:export_bucket) { "export_bucket" }
   let(:storage_service) { instance_double(Storage::S3Service) }
-  let(:export_service) { instance_double(Exports::LettingsLogExportService) }
+  let(:export_service) { instance_double(Exports::ExportService) }
 
   before do
     Rake.application.rake_require("tasks/data_export")
@@ -12,7 +12,7 @@ describe "rake core:data_export", type: task do
     task.reenable
 
     allow(Storage::S3Service).to receive(:new).and_return(storage_service)
-    allow(Exports::LettingsLogExportService).to receive(:new).and_return(export_service)
+    allow(Exports::ExportService).to receive(:new).and_return(export_service)
     allow(ENV).to receive(:[])
     allow(ENV).to receive(:[]).with("EXPORT_BUCKET").and_return(export_bucket)
   end
@@ -30,7 +30,7 @@ describe "rake core:data_export", type: task do
 
     context "with all available years" do
       it "calls the export service" do
-        expect(export_service).to receive(:export_xml_lettings_logs).with(full_update: true, collection_year: nil)
+        expect(export_service).to receive(:export_xml).with(full_update: true, collection_year: nil)
 
         task.invoke
       end
@@ -38,7 +38,7 @@ describe "rake core:data_export", type: task do
 
     context "with a specific year" do
       it "calls the export service" do
-        expect(export_service).to receive(:export_xml_lettings_logs).with(full_update: true, collection_year: 2022)
+        expect(export_service).to receive(:export_xml).with(full_update: true, collection_year: 2022)
 
         task.invoke("2022")
       end
