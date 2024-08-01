@@ -35,11 +35,8 @@ module Imports
         next if variable.nil? || definition.nil?
 
         existing_record = CsvVariableDefinition.find_by(variable: variable.strip, definition: definition.strip, log_type:)
-        if existing_record
-          if user_type == "user" && existing_record.user_type == "support"
-            existing_record.update!(user_type: "user")
-          end
-        else
+
+        if existing_record.nil?
           CsvVariableDefinition.create!(
             variable: variable.strip,
             definition: definition.strip,
@@ -48,6 +45,8 @@ module Imports
             year:,
           )
           records_added += 1
+        elsif existing_record.user_type == "support" && user_type == "user"
+          existing_record.update!(user_type: "user")
         end
       end
 
