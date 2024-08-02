@@ -20,7 +20,7 @@
         <% end %>
 
         <%= table.with_body do |body| %>
-          <% bulk_upload_errors.select { |error| error.category != "soft_validation" }.each do |error| %>
+          <% bulk_upload_errors.reject { |error| error.category == "soft_validation" }.each do |error| %>
             <% body.with_row do |row| %>
                 <% row.with_cell(text: error.cell) %>
                 <% row.with_cell(text: question_for_field(error.field)) %>
@@ -50,7 +50,7 @@
             <% potential_errors.group_by(&:error).each do |error_message, errors| %>
               <% errors.each_with_index do |error, index| %>
                 <% row_class = "grouped-rows" %>
-                <% row_class += " first-row" if index == 0 %>
+                <% row_class += " first-row" if index.zero? %>
                 <% row_class += " last-row" if index == errors.size - 1 %>
                 <% body.with_row(html_attributes: { class: row_class }) do |row| %>
                   <% row.with_cell(text: error.cell) %>
