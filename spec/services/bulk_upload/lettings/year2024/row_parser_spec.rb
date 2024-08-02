@@ -758,7 +758,7 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
           it "does not add that error" do
             parser.valid?
 
-            expect(parser.log.errors.map(&:attribute).sort).to eql(%i[managing_organisation period])
+            expect(parser.log.errors.map(&:attribute).sort).to eql(%i[managing_organisation_id period])
             expect(parser.errors.map(&:attribute)).to eql(%i[field_123])
           end
         end

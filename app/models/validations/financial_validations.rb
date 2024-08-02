@@ -153,7 +153,7 @@ module Validations::FinancialValidations
         org_name: record.managing_organisation.name,
         rent_period: record.form.get_question("period", record).label_from_value(record.period).downcase,
       )
-      record.errors.add :managing_organisation, :skip_bu_error, message: I18n.t(
+      record.errors.add :managing_organisation_id, :skip_bu_error, message: I18n.t(
         "validations.financial.rent_period.invalid_for_org.managing_org",
         org_name: record.managing_organisation.name,
         rent_period: record.form.get_question("period", record).label_from_value(record.period).downcase,
