@@ -16,6 +16,6 @@ class Form::Sales::Pages::Deposit < ::Form::Page
     return true if log.ownershipsch == 2 || (log.ownershipsch == 3 && log.mortgageused == 1)
     return false if log.stairowned_100? != @optional && form.start_year_after_2024?
 
-    log.social_homebuy? == false && log.ownershipsch == 1 || log.social_homebuy? == true
+    log.ownershipsch == 1
   end
 end
