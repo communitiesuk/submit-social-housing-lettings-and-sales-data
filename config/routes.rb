@@ -72,7 +72,6 @@ Rails.application.routes.draw do
     get "details", to: "schemes#details"
     get "check-answers", to: "schemes#check_answers"
     get "edit-name", to: "schemes#edit_name"
-    get "support-services-provider", to: "schemes#support_services_provider"
     get "new-deactivation", to: "schemes#new_deactivation"
     get "deactivate-confirm", to: "schemes#deactivate_confirm"
     get "reactivate", to: "schemes#reactivate"
@@ -148,7 +147,6 @@ Rails.application.routes.draw do
       post "data-sharing-agreement", to: "organisations#confirm_data_sharing_agreement"
 
       get "users", to: "organisations#users"
-      get "users/invite", to: "users/account#new"
       get "lettings-logs", to: "organisations#lettings_logs"
       get "delete-lettings-logs", to: "delete_logs#delete_lettings_logs_for_organisation"
       post "delete-lettings-logs", to: "delete_logs#delete_lettings_logs_for_organisation_with_selected_ids"

@@ -467,6 +467,7 @@ class BulkUpload::Lettings::Year2024::RowParser
 
       fields.each do |field|
         next if errors.include?(field)
+        next if error.type == :skip_bu_error
 
         question = log.form.get_question(error.attribute, log)
 
