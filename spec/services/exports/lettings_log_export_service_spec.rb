@@ -235,7 +235,7 @@ RSpec.describe Exports::LettingsLogExportService do
           let(:expected_zip_filename2) { "core_2022_2023_apr_mar_f0001_inc0001.zip" }
 
           before do
-            LogsExport.new(started_at: Time.zone.yesterday, base_number: 7, increment_number: 3, collection: 2021).save!
+            Export.new(started_at: Time.zone.yesterday, base_number: 7, increment_number: 3, collection: 2021).save!
           end
 
           it "generates multiple ZIP export files with different base numbers in the filenames" do
@@ -277,8 +277,8 @@ RSpec.describe Exports::LettingsLogExportService do
 
       it "creates a logs export record in a database with correct time" do
         expect { export_service.export_xml_lettings_logs }
-          .to change(LogsExport, :count).by(3)
-        expect(LogsExport.last.started_at).to be_within(2.seconds).of(start_time)
+          .to change(Export, :count).by(3)
+        expect(Export.last.started_at).to be_within(2.seconds).of(start_time)
       end
 
       context "when this is the first export (full)" do
@@ -328,7 +328,7 @@ RSpec.describe Exports::LettingsLogExportService do
       context "when this is a second export (partial)" do
         before do
           start_time = Time.zone.local(2022, 6, 1)
-          LogsExport.new(started_at: start_time).save!
+          Export.new(started_at: start_time).save!
         end
 
         it "does not add any entry for the master manifest (no lettings logs)" do
@@ -347,12 +347,12 @@ RSpec.describe Exports::LettingsLogExportService do
       context "and we trigger another full update" do
         it "increments the base number" do
           export_service.export_xml_lettings_logs(full_update: true)
-          expect(LogsExport.last.base_number).to eq(2)
+          expect(Export.last.base_number).to eq(2)
         end
 
         it "resets the increment number" do
           export_service.export_xml_lettings_logs(full_update: true)
-          expect(LogsExport.last.increment_number).to eq(1)
+          expect(Export.last.increment_number).to eq(1)
         end
 
         it "returns a correct archives list for manifest file" do
@@ -372,7 +372,7 @@ RSpec.describe Exports::LettingsLogExportService do
       it "doesn't increment the manifest number by 1" do
         export_service.export_xml_lettings_logs
 
-        expect(LogsExport.last.increment_number).to eq(1)
+        expect(Export.last.increment_number).to eq(1)
       end
     end
 
@@ -380,7 +380,7 @@ RSpec.describe Exports::LettingsLogExportService do
       before do
         FactoryBot.create(:lettings_log, startdate: Time.zone.local(2022, 2, 1), updated_at: Time.zone.local(2022, 4, 27), values_updated_at: Time.zone.local(2022, 4, 29))
         FactoryBot.create(:lettings_log, startdate: Time.zone.local(2022, 2, 1), updated_at: Time.zone.local(2022, 4, 27), values_updated_at: Time.zone.local(2022, 4, 29))
-        LogsExport.create!(started_at: Time.zone.local(2022, 4, 28), base_number: 1, increment_number: 1)
+        Export.create!(started_at: Time.zone.local(2022, 4, 28), base_number: 1, increment_number: 1)
       end
 
       it "generates an XML manifest file with the expected content within the ZIP file" do

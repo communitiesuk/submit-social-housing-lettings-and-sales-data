@@ -24,7 +24,7 @@ module Exports
 
     def get_daily_run_number
       today = Time.zone.today
-      LogsExport.where(created_at: today.beginning_of_day..today.end_of_day).select(:started_at).distinct.count + 1
+      Export.where(created_at: today.beginning_of_day..today.end_of_day).select(:started_at).distinct.count + 1
     end
 
     def write_master_manifest(daily_run, archive_datetimes)

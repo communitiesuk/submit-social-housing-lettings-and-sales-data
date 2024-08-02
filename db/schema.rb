@@ -77,6 +77,15 @@ ActiveRecord::Schema[7.0].define(version: 2024_09_18_112702) do
     t.index ["organisation_id"], name: "index_data_protection_confirmations_on_organisation_id"
   end
 
+  create_table "exports", force: :cascade do |t|
+    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }
+    t.datetime "started_at", null: false
+    t.integer "base_number", default: 1, null: false
+    t.integer "increment_number", default: 1, null: false
+    t.boolean "empty_export", default: false, null: false
+    t.string "collection"
+  end
+
   create_table "la_rent_ranges", force: :cascade do |t|
     t.integer "ranges_rent_id"
     t.integer "lettype"
@@ -410,15 +419,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_09_18_112702) do
     t.string "other_validated_models"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-  end
-
-  create_table "logs_exports", force: :cascade do |t|
-    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }
-    t.datetime "started_at", null: false
-    t.integer "base_number", default: 1, null: false
-    t.integer "increment_number", default: 1, null: false
-    t.boolean "empty_export", default: false, null: false
-    t.string "collection"
   end
 
   create_table "merge_request_organisations", force: :cascade do |t|
