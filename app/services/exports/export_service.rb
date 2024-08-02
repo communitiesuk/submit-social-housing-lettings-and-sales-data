@@ -11,10 +11,13 @@ module Exports
       start_time = Time.zone.now
       daily_run_number = get_daily_run_number
 
-      export_service = Exports::LettingsLogExportService.new(@storage_service, start_time)
-      archives_for_manifest = export_service.export_xml_lettings_logs(full_update:, collection_year:)
+      lettings_export_service = Exports::LettingsLogExportService.new(@storage_service, start_time)
+      lettings_archives_for_manifest = lettings_export_service.export_xml_lettings_logs(full_update:, collection_year:)
 
-      write_master_manifest(daily_run_number, archives_for_manifest)
+      users_export_service = Exports::UserExportService.new(@storage_service, start_time)
+      users_archives_for_manifest = users_export_service.export_xml_users(full_update:)
+
+      write_master_manifest(daily_run_number, lettings_archives_for_manifest.merge(users_archives_for_manifest))
     end
 
   private

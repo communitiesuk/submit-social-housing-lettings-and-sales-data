@@ -13,6 +13,7 @@ RSpec.describe Exports::ExportService do
     Singleton.__init__(FormHandler)
     allow(storage_service).to receive(:write_file)
     allow(Exports::LettingsLogExportService).to receive(:new).and_return(lettings_logs_export_service)
+    allow(Exports::UserExportService).to receive(:new).and_return(users_export_service)
   end
 
   after do
@@ -23,54 +24,120 @@ RSpec.describe Exports::ExportService do
     context "and no lettings archives get created in lettings logs export" do
       let(:lettings_logs_export_service) { instance_double("Exports::LettingsLogExportService", export_xml_lettings_logs: {}) }
 
-      it "generates a master manifest with the correct name" do
-        expect(storage_service).to receive(:write_file).with(expected_master_manifest_filename, any_args)
-        export_service.export_xml
+      context "and no user archives get created in user export" do
+        let(:users_export_service) { instance_double("Exports::UserExportService", export_xml_users: {}) }
+
+        it "generates a master manifest with the correct name" do
+          expect(storage_service).to receive(:write_file).with(expected_master_manifest_filename, any_args)
+          export_service.export_xml
+        end
+
+        it "generates a master manifest with CSV headers but no data" do
+          actual_content = nil
+          expected_content = "zip-name,date-time zipped folder generated,zip-file-uri\n"
+          allow(storage_service).to receive(:write_file).with(expected_master_manifest_filename, any_args) { |_, arg2| actual_content = arg2&.string }
+
+          export_service.export_xml
+          expect(actual_content).to eq(expected_content)
+        end
       end
 
-      it "generates a master manifest with CSV headers but no data" do
-        actual_content = nil
-        expected_content = "zip-name,date-time zipped folder generated,zip-file-uri\n"
-        allow(storage_service).to receive(:write_file).with(expected_master_manifest_filename, any_args) { |_, arg2| actual_content = arg2&.string }
+      context "and one user archive gets created in user export" do
+        let(:users_export_service) { instance_double("Exports::UserExportService", export_xml_users: { "some_user_file_base_name" => start_time }) }
 
-        export_service.export_xml
-        expect(actual_content).to eq(expected_content)
+        it "generates a master manifest with the correct name" do
+          expect(storage_service).to receive(:write_file).with(expected_master_manifest_filename, any_args)
+          export_service.export_xml
+        end
+
+        it "generates a master manifest with CSV headers and correct data" do
+          actual_content = nil
+          expected_content = "zip-name,date-time zipped folder generated,zip-file-uri\nsome_user_file_base_name,2022-05-01 00:00:00 +0100,some_user_file_base_name.zip\n"
+          allow(storage_service).to receive(:write_file).with(expected_master_manifest_filename, any_args) { |_, arg2| actual_content = arg2&.string }
+
+          export_service.export_xml
+          expect(actual_content).to eq(expected_content)
+        end
       end
     end
 
     context "and one lettings archive gets created in lettings logs export" do
       let(:lettings_logs_export_service) { instance_double("Exports::LettingsLogExportService", export_xml_lettings_logs: { "some_file_base_name" => start_time }) }
 
-      it "generates a master manifest with the correct name" do
-        expect(storage_service).to receive(:write_file).with(expected_master_manifest_filename, any_args)
-        export_service.export_xml
+      context "and no user archives get created in user export" do
+        let(:users_export_service) { instance_double("Exports::UserExportService", export_xml_users: {}) }
+
+        it "generates a master manifest with the correct name" do
+          expect(storage_service).to receive(:write_file).with(expected_master_manifest_filename, any_args)
+          export_service.export_xml
+        end
+
+        it "generates a master manifest with CSV headers and correct data" do
+          actual_content = nil
+          expected_content = "zip-name,date-time zipped folder generated,zip-file-uri\nsome_file_base_name,2022-05-01 00:00:00 +0100,some_file_base_name.zip\n"
+          allow(storage_service).to receive(:write_file).with(expected_master_manifest_filename, any_args) { |_, arg2| actual_content = arg2&.string }
+
+          export_service.export_xml
+          expect(actual_content).to eq(expected_content)
+        end
       end
 
-      it "generates a master manifest with CSV headers and correct data" do
-        actual_content = nil
-        expected_content = "zip-name,date-time zipped folder generated,zip-file-uri\nsome_file_base_name,2022-05-01 00:00:00 +0100,some_file_base_name.zip\n"
-        allow(storage_service).to receive(:write_file).with(expected_master_manifest_filename, any_args) { |_, arg2| actual_content = arg2&.string }
+      context "and one user archive gets created in user export" do
+        let(:users_export_service) { instance_double("Exports::UserExportService", export_xml_users: { "some_user_file_base_name" => start_time }) }
 
-        export_service.export_xml
-        expect(actual_content).to eq(expected_content)
+        it "generates a master manifest with the correct name" do
+          expect(storage_service).to receive(:write_file).with(expected_master_manifest_filename, any_args)
+          export_service.export_xml
+        end
+
+        it "generates a master manifest with CSV headers and correct data" do
+          actual_content = nil
+          expected_content = "zip-name,date-time zipped folder generated,zip-file-uri\nsome_file_base_name,2022-05-01 00:00:00 +0100,some_file_base_name.zip\nsome_user_file_base_name,2022-05-01 00:00:00 +0100,some_user_file_base_name.zip\n"
+          allow(storage_service).to receive(:write_file).with(expected_master_manifest_filename, any_args) { |_, arg2| actual_content = arg2&.string }
+
+          export_service.export_xml
+          expect(actual_content).to eq(expected_content)
+        end
       end
     end
 
     context "and multiple lettings archives get created in lettings logs export" do
       let(:lettings_logs_export_service) { instance_double("Exports::LettingsLogExportService", export_xml_lettings_logs: { "some_file_base_name" => start_time, "second_file_base_name" => start_time }) }
 
-      it "generates a master manifest with the correct name" do
-        expect(storage_service).to receive(:write_file).with(expected_master_manifest_filename, any_args)
-        export_service.export_xml
+      context "and no user archives get created in user export" do
+        let(:users_export_service) { instance_double("Exports::UserExportService", export_xml_users: {}) }
+
+        it "generates a master manifest with the correct name" do
+          expect(storage_service).to receive(:write_file).with(expected_master_manifest_filename, any_args)
+          export_service.export_xml
+        end
+
+        it "generates a master manifest with CSV headers and correct data" do
+          actual_content = nil
+          expected_content = "zip-name,date-time zipped folder generated,zip-file-uri\nsome_file_base_name,2022-05-01 00:00:00 +0100,some_file_base_name.zip\nsecond_file_base_name,2022-05-01 00:00:00 +0100,second_file_base_name.zip\n"
+          allow(storage_service).to receive(:write_file).with(expected_master_manifest_filename, any_args) { |_, arg2| actual_content = arg2&.string }
+
+          export_service.export_xml
+          expect(actual_content).to eq(expected_content)
+        end
       end
 
-      it "generates a master manifest with CSV headers and correct data" do
-        actual_content = nil
-        expected_content = "zip-name,date-time zipped folder generated,zip-file-uri\nsome_file_base_name,2022-05-01 00:00:00 +0100,some_file_base_name.zip\nsecond_file_base_name,2022-05-01 00:00:00 +0100,second_file_base_name.zip\n"
-        allow(storage_service).to receive(:write_file).with(expected_master_manifest_filename, any_args) { |_, arg2| actual_content = arg2&.string }
+      context "and multiple user archive gets created in user export" do
+        let(:users_export_service) { instance_double("Exports::UserExportService", export_xml_users: { "some_user_file_base_name" => start_time, "second_user_file_base_name" => start_time }) }
 
-        export_service.export_xml
-        expect(actual_content).to eq(expected_content)
+        it "generates a master manifest with the correct name" do
+          expect(storage_service).to receive(:write_file).with(expected_master_manifest_filename, any_args)
+          export_service.export_xml
+        end
+
+        it "generates a master manifest with CSV headers and correct data" do
+          actual_content = nil
+          expected_content = "zip-name,date-time zipped folder generated,zip-file-uri\nsome_file_base_name,2022-05-01 00:00:00 +0100,some_file_base_name.zip\nsecond_file_base_name,2022-05-01 00:00:00 +0100,second_file_base_name.zip\nsome_user_file_base_name,2022-05-01 00:00:00 +0100,some_user_file_base_name.zip\nsecond_user_file_base_name,2022-05-01 00:00:00 +0100,second_user_file_base_name.zip\n"
+          allow(storage_service).to receive(:write_file).with(expected_master_manifest_filename, any_args) { |_, arg2| actual_content = arg2&.string }
+
+          export_service.export_xml
+          expect(actual_content).to eq(expected_content)
+        end
       end
     end
   end
