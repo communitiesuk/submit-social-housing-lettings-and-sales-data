@@ -104,8 +104,8 @@ RSpec.describe Exports::UserExportService do
 
       it "creates an export record in a database with correct time" do
         expect { export_service.export_xml_users }
-          .to change(LogsExport, :count).by(1)
-        expect(LogsExport.last.started_at).to be_within(2.seconds).of(start_time)
+          .to change(Export, :count).by(1)
+        expect(Export.last.started_at).to be_within(2.seconds).of(start_time)
       end
 
       context "when this is the first export (full)" do
@@ -150,7 +150,7 @@ RSpec.describe Exports::UserExportService do
       context "when this is a second export (partial)" do
         before do
           start_time = Time.zone.local(2022, 6, 1)
-          LogsExport.new(started_at: start_time).save! # this should be user export
+          Export.new(started_at: start_time).save! # this should be user export
         end
 
         it "does not add any entry for the master manifest (no users)" do
@@ -168,12 +168,12 @@ RSpec.describe Exports::UserExportService do
       context "and we trigger another full update" do
         it "increments the base number" do
           export_service.export_xml_users(full_update: true)
-          expect(LogsExport.last.base_number).to eq(2)
+          expect(Export.last.base_number).to eq(2)
         end
 
         it "resets the increment number" do
           export_service.export_xml_users(full_update: true)
-          expect(LogsExport.last.increment_number).to eq(1)
+          expect(Export.last.increment_number).to eq(1)
         end
 
         it "returns a correct archives list for manifest file" do
@@ -193,7 +193,7 @@ RSpec.describe Exports::UserExportService do
       it "doesn't increment the manifest number by 1" do
         export_service.export_xml_users
 
-        expect(LogsExport.last.increment_number).to eq(1)
+        expect(Export.last.increment_number).to eq(1)
       end
     end
 
@@ -201,7 +201,7 @@ RSpec.describe Exports::UserExportService do
       before do
         create(:user, updated_at: Time.zone.local(2022, 4, 27), organisation:)
         create(:user, updated_at: Time.zone.local(2022, 4, 27), organisation:)
-        LogsExport.create!(started_at: Time.zone.local(2022, 4, 26), base_number: 1, increment_number: 1)
+        Export.create!(started_at: Time.zone.local(2022, 4, 26), base_number: 1, increment_number: 1)
       end
 
       it "generates an XML manifest file with the expected content within the ZIP file" do

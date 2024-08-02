@@ -10,10 +10,10 @@ module Exports
     end
 
     def export_xml_users(full_update: false)
-      recent_export = LogsExport.order("started_at").last
+      recent_export = Export.order("started_at").last
 
       collection = "users"
-      base_number = LogsExport.where(empty_export: false, collection:).maximum(:base_number) || 1
+      base_number = Export.where(empty_export: false, collection:).maximum(:base_number) || 1
       export = build_export_run(collection, base_number, full_update)
       archives_for_manifest = write_export_archive(export, collection, recent_export, full_update)
 
@@ -27,22 +27,22 @@ module Exports
 
     def build_export_run(collection, base_number, full_update)
       @logger.info("Building export run for #{collection}")
-      previous_exports_with_data = LogsExport.where(collection:, empty_export: false)
+      previous_exports_with_data = Export.where(collection:, empty_export: false)
 
       increment_number = previous_exports_with_data.where(base_number:).maximum(:increment_number) || 1
 
       if full_update
-        base_number += 1 if LogsExport.any? # Only increment when it's not the first run
+        base_number += 1 if Export.any? # Only increment when it's not the first run
         increment_number = 1
       else
         increment_number += 1
       end
 
       if previous_exports_with_data.empty?
-        return LogsExport.new(collection:, base_number:, started_at: @start_time)
+        return Export.new(collection:, base_number:, started_at: @start_time)
       end
 
-      LogsExport.new(collection:, started_at: @start_time, base_number:, increment_number:)
+      Export.new(collection:, started_at: @start_time, base_number:, increment_number:)
     end
 
     def get_archive_name(collection, base_number, increment)
