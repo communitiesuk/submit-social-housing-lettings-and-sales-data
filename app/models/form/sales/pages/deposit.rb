@@ -12,17 +12,10 @@ class Form::Sales::Pages::Deposit < ::Form::Page
     ]
   end
 
-  def depends_on
-    if form.start_year_after_2024?
-      [{ "social_homebuy?" => false, "ownershipsch" => 1, "stairowned_100?" => @optional },
-       { "ownershipsch" => 2 },
-       { "ownershipsch" => 3, "mortgageused" => 1 },
-       { "social_homebuy?" => true, "stairowned_100?" => @optional }]
-    else
-      [{ "social_homebuy?" => false, "ownershipsch" => 1 },
-       { "ownershipsch" => 2 },
-       { "ownershipsch" => 3, "mortgageused" => 1 },
-       { "social_homebuy?" => true }]
-    end
+  def routed_to?(log, _user)
+    return true if log.ownershipsch == 2 || (log.ownershipsch == 3 && log.mortgageused == 1)
+    return false if log.stairowned_100? != @optional && form.start_year_after_2024?
+
+    log.social_homebuy? == false && log.ownershipsch == 1 || log.social_homebuy? == true
   end
 end
