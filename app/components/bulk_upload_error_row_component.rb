@@ -18,7 +18,7 @@ class BulkUploadErrorRowComponent < ViewComponent::Base
   def tenant_code_html
     return if tenant_code.blank?
 
-    content_tag :span, class: "govuk-!-margin-left-3" do
+    content_tag :span, class: "govuk-!-margin-left-3", style: "font-weight: 400;" do
       "Tenant code: #{tenant_code}"
     end
   end
@@ -30,7 +30,7 @@ class BulkUploadErrorRowComponent < ViewComponent::Base
   def purchaser_code_html
     return if purchaser_code.blank?
 
-    content_tag :span, class: "govuk-!-margin-left-3" do
+    content_tag :span, class: "govuk-!-margin-left-3", style: "font-weight: 400;" do
       "Purchaser code: #{purchaser_code}"
     end
   end
@@ -42,7 +42,7 @@ class BulkUploadErrorRowComponent < ViewComponent::Base
   def property_ref_html
     return if property_ref.blank?
 
-    content_tag :span, class: "govuk-!-margin-left-3" do
+    content_tag :span, class: "govuk-!-margin-left-3", style: "font-weight: 400;" do
       "Property reference: #{property_ref}"
     end
   end

@@ -81,3 +81,16 @@ $govuk-breakpoints: (
 .govuk-footer {
   border-top: govuk-spacing(2) solid $govuk-brand-colour;
 }
+
+.grouped-rows td {
+  border-top: none;
+  border-bottom: none;
+}
+
+.grouped-rows.first-row td {
+  border-top: 1px solid #b1b4b6;
+}
+
+.grouped-rows.last-row td {
+  border-bottom: 1px solid #b1b4b6;
+}
