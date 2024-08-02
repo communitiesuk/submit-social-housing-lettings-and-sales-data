@@ -126,9 +126,9 @@ module FiltersHelper
   def filter_search_url(category)
     case category
     when :user
-      ENV["RAILS_RELATIVE_URL_ROOT"].present? ? "#{ENV['RAILS_RELATIVE_URL_ROOT']}/users/search" : "/users/search"
+      search_users_path
     when :owning_organisation, :managing_organisation
-      ENV["RAILS_RELATIVE_URL_ROOT"].present? ? "#{ENV['RAILS_RELATIVE_URL_ROOT']}/organisations/search" : "/organisations/search"
+      search_organisations_path
     end
   end
 
