@@ -11,8 +11,6 @@ RSpec.describe Exports::LettingsLogExportService do
   let(:real_2021_2022_form) { Form.new("config/forms/2021_2022.json") }
   let(:real_2022_2023_form) { Form.new("config/forms/2022_2023.json") }
 
-  let(:expected_master_manifest_filename) { "Manifest_2022_05_01_0001.csv" }
-  let(:expected_master_manifest_rerun) { "Manifest_2022_05_01_0002.csv" }
   let(:expected_zip_filename) { "core_2021_2022_apr_mar_f0001_inc0001.zip" }
   let(:expected_data_filename) { "core_2021_2022_apr_mar_f0001_inc0001_pt001.xml" }
   let(:expected_manifest_filename) { "manifest.xml" }
@@ -50,6 +48,7 @@ RSpec.describe Exports::LettingsLogExportService do
   context "when exporting daily lettings logs in XML" do
     context "and no lettings logs is available for export" do
       it "returns an empty archives list" do
+        expect(storage_service).not_to receive(:write_file)
         expect(export_service.export_xml_lettings_logs).to eq({})
       end
     end
@@ -74,7 +73,7 @@ RSpec.describe Exports::LettingsLogExportService do
       end
 
       it "returns empty archives list for archives manifest" do
-        export_service.export_xml_lettings_logs
+        expect(storage_service).not_to receive(:write_file)
         expect(export_service.export_xml_lettings_logs).to eq({})
       end
     end
@@ -333,6 +332,7 @@ RSpec.describe Exports::LettingsLogExportService do
         end
 
         it "does not add any entry for the master manifest (no lettings logs)" do
+          expect(storage_service).not_to receive(:write_file)
           expect(export_service.export_xml_lettings_logs).to eq({})
         end
       end

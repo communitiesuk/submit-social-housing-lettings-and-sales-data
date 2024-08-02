@@ -1,6 +1,5 @@
 module Exports
   class ExportService
-    include Exports::LettingsLogExportConstants
     include CollectionTimeHelper
 
     def initialize(storage_service, logger = Rails.logger)
