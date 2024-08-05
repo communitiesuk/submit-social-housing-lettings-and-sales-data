@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Form::Sales::Pages::AboutPriceSharedOwnership, type: :model do
+RSpec.describe Form::Sales::Pages::ValueSharedOwnership, type: :model do
   subject(:page) { described_class.new(page_id, page_definition, subsection) }
 
   let(:page_id) { nil }
@@ -12,11 +12,11 @@ RSpec.describe Form::Sales::Pages::AboutPriceSharedOwnership, type: :model do
   end
 
   it "has correct questions" do
-    expect(page.questions.map(&:id)).to eq(%w[value equity])
+    expect(page.questions.map(&:id)).to eq(%w[value])
   end
 
   it "has the correct id" do
-    expect(page.id).to eq("about_price_shared_ownership")
+    expect(page.id).to eq("value_shared_ownership")
   end
 
   it "has the correct header" do

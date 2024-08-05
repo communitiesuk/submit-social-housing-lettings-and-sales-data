@@ -12,6 +12,7 @@ class Form::Sales::Questions::MortgageAmount < ::Form::Question
     @hint_text = "Enter the amount of mortgage agreed with the mortgage lender. Exclude any deposits or cash payments. Numeric in pounds. Rounded to the nearest pound."
     @ownershipsch = ownershipsch
     @question_number = QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP.max_by { |k, _v| k }.last)[ownershipsch]
+    @top_guidance_partial = "financial_calculations_shared_ownership" if ownershipsch == 1
   end
 
   QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP = {
