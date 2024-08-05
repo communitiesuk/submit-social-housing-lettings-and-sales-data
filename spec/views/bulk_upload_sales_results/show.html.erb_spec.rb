@@ -32,7 +32,7 @@ RSpec.describe "bulk_upload_sales_results/show.html.erb" do
       render
 
       fragment = Capybara::Node::Simple.new(rendered)
-      expect(fragment.find_css("table tbody td").map(&:inner_text).values_at(0, 3)).to eql(%w[Z100 AA100])
+      expect(fragment.find_css("table tbody td").map(&:inner_text).values_at(0, 4)).to eql(%w[Z100 AA100])
     end
   end
 end

@@ -1,9 +1,9 @@
 <div class="govuk-summary-card govuk-!-margin-bottom-6">
   <div class="govuk-summary-card__title-wrapper">
     <% if lettings? %>
-      <h3 class="govuk-summary-card__title"><strong>Row <%= row %></strong> <%= tenant_code_html %> <%= property_ref_html %></h3>
+      <h3 class="govuk-summary-card__title govuk-!-font-weight-regular"><strong>Row <%= row %></strong> <%= tenant_code_html %> <%= property_ref_html %></h3>
     <% else %>
-      <h3 class="govuk-summary-card__title"><strong>Row <%= row %></strong> <%= purchaser_code_html %></h3>
+      <h3 class="govuk-summary-card__title govuk-!-font-weight-regular"><strong>Row <%= row %></strong> <%= purchaser_code_html %></h3>
     <% end %>
   </div>
 
@@ -56,7 +56,7 @@
                   <% row.with_cell(text: error.cell) %>
                   <% row.with_cell(text: question_for_field(error.field)) %>
                   <% if index == 0 %>
-                    <% row.with_cell(text: error_message, rowspan: errors.size, html_attributes: { class: "govuk-!-font-weight-bold" }) %>
+                    <% row.with_cell(text: error_message, rowspan: errors.size, html_attributes: { class: "govuk-!-font-weight-bold bulk-upload-error-message" }) %>
                   <% end %>
                   <% row.with_cell(text: error.field.humanize) %>
                 <% end %>
