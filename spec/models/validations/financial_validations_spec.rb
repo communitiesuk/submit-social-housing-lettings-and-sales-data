@@ -165,7 +165,13 @@ RSpec.describe Validations::FinancialValidations do
         financial_validator.validate_rent_period(record)
         expect(record.errors["period"])
           .to include(match I18n.t(
-            "validations.financial.rent_period.invalid_for_org",
+            "validations.financial.rent_period.invalid_for_org.period",
+            org_name: user.organisation.name,
+            rent_period: "every 4 weeks",
+          ))
+        expect(record.errors["managing_organisation_id"])
+          .to include(match I18n.t(
+            "validations.financial.rent_period.invalid_for_org.managing_org",
             org_name: user.organisation.name,
             rent_period: "every 4 weeks",
           ))
