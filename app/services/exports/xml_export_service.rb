@@ -9,23 +9,6 @@ module Exports
       @start_time = start_time
     end
 
-    def export_xml_lettings_logs(full_update: false, collection_year: nil)
-      archives_for_manifest = {}
-      recent_export = Export.order("started_at").last
-      collection_years_to_export(collection_year).each do |collection|
-        base_number = Export.where(empty_export: false, collection:).maximum(:base_number) || 1
-        export = build_export_run(collection, base_number, full_update)
-        archives = write_export_archive(export, collection, recent_export, full_update)
-
-        archives_for_manifest.merge!(archives)
-
-        export.empty_export = archives.empty?
-        export.save!
-      end
-
-      archives_for_manifest
-    end
-
   private
 
     def build_export_run(collection, base_number, full_update)
