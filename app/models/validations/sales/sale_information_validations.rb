@@ -155,9 +155,23 @@ module Validations::Sales::SaleInformationValidations
 
       if over_tolerance?(record.mortgage_deposit_and_discount_total, record.expected_shared_ownership_deposit_value, 1)
         %i[mortgage value deposit cashdis equity].each do |field|
-          record.errors.add field, I18n.t("validations.sale_information.non_staircasing_mortgage.mortgage_used_socialhomebuy", mortgage_deposit_and_discount_total: record.field_formatted_as_currency("mortgage_deposit_and_discount_total"), expected_shared_ownership_deposit_value: record.field_formatted_as_currency("expected_shared_ownership_deposit_value"))
+          record.errors.add field, I18n.t("validations.sale_information.non_staircasing_mortgage.mortgage_used_socialhomebuy",
+                                          mortgage: record.field_formatted_as_currency("mortgage"),
+                                          value: record.field_formatted_as_currency("value"),
+                                          deposit: record.field_formatted_as_currency("deposit"),
+                                          cashdis: record.field_formatted_as_currency("cashdis"),
+                                          equity: "#{record.equity}%",
+                                          mortgage_deposit_and_discount_total: record.field_formatted_as_currency("mortgage_deposit_and_discount_total"),
+                                          expected_shared_ownership_deposit_value: record.field_formatted_as_currency("expected_shared_ownership_deposit_value")).html_safe
         end
-        record.errors.add :type, :skip_bu_error, message: I18n.t("validations.sale_information.non_staircasing_mortgage.mortgage_used_socialhomebuy", mortgage_deposit_and_discount_total: record.field_formatted_as_currency("mortgage_deposit_and_discount_total"), expected_shared_ownership_deposit_value: record.field_formatted_as_currency("expected_shared_ownership_deposit_value"))
+        record.errors.add :type, :skip_bu_error, message: I18n.t("validations.sale_information.non_staircasing_mortgage.mortgage_used_socialhomebuy",
+                                                                 mortgage: record.field_formatted_as_currency("mortgage"),
+                                                                 value: record.field_formatted_as_currency("value"),
+                                                                 deposit: record.field_formatted_as_currency("deposit"),
+                                                                 cashdis: record.field_formatted_as_currency("cashdis"),
+                                                                 equity: "#{record.equity}%",
+                                                                 mortgage_deposit_and_discount_total: record.field_formatted_as_currency("mortgage_deposit_and_discount_total"),
+                                                                 expected_shared_ownership_deposit_value: record.field_formatted_as_currency("expected_shared_ownership_deposit_value"))
       end
     elsif record.mortgage_not_used?
       if over_tolerance?(record.deposit_and_discount_total, record.expected_shared_ownership_deposit_value, 1)

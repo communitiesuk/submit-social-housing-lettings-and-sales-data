@@ -38,7 +38,7 @@ RSpec.describe Form::Sales::Subsections::DiscountedOwnershipScheme, type: :model
         mortgage_length_discounted_ownership
         extra_borrowing_discounted_ownership
         extra_borrowing_value_check
-        about_deposit_discounted_ownership
+        deposit_discounted_ownership
         extra_borrowing_deposit_value_check
         discounted_ownership_deposit_joint_purchase_value_check
         discounted_ownership_deposit_value_check

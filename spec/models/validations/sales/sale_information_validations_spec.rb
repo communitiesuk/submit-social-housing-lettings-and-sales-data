@@ -882,12 +882,12 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
 
             it "adds an error" do
               sale_information_validator.validate_non_staircasing_mortgage(record)
-              expect(record.errors["mortgage"]).to include("The mortgage, deposit, and cash discount added together is £15,200.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
-              expect(record.errors["value"]).to include("The mortgage, deposit, and cash discount added together is £15,200.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
-              expect(record.errors["deposit"]).to include("The mortgage, deposit, and cash discount added together is £15,200.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
-              expect(record.errors["equity"]).to include("The mortgage, deposit, and cash discount added together is £15,200.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
-              expect(record.errors["cashdis"]).to include("The mortgage, deposit, and cash discount added together is £15,200.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
-              expect(record.errors["type"]).to include("The mortgage, deposit, and cash discount added together is £15,200.00. The value multiplied by the percentage bought is £8,400.00. These figures should be the same.")
+              expect(record.errors["mortgage"]).to include("The mortgage amount (£10,000.00), deposit (£5,000.00), and cash discount (£200.00) added together is £15,200.00.</br></br> The full purchase price (£30,000.00) multiplied by the percentage equity stake purchased (28.0%) is £8,400.00.</br></br> These two amounts should be the same.")
+              expect(record.errors["value"]).to include("The mortgage amount (£10,000.00), deposit (£5,000.00), and cash discount (£200.00) added together is £15,200.00.</br></br> The full purchase price (£30,000.00) multiplied by the percentage equity stake purchased (28.0%) is £8,400.00.</br></br> These two amounts should be the same.")
+              expect(record.errors["deposit"]).to include("The mortgage amount (£10,000.00), deposit (£5,000.00), and cash discount (£200.00) added together is £15,200.00.</br></br> The full purchase price (£30,000.00) multiplied by the percentage equity stake purchased (28.0%) is £8,400.00.</br></br> These two amounts should be the same.")
+              expect(record.errors["equity"]).to include("The mortgage amount (£10,000.00), deposit (£5,000.00), and cash discount (£200.00) added together is £15,200.00.</br></br> The full purchase price (£30,000.00) multiplied by the percentage equity stake purchased (28.0%) is £8,400.00.</br></br> These two amounts should be the same.")
+              expect(record.errors["cashdis"]).to include("The mortgage amount (£10,000.00), deposit (£5,000.00), and cash discount (£200.00) added together is £15,200.00.</br></br> The full purchase price (£30,000.00) multiplied by the percentage equity stake purchased (28.0%) is £8,400.00.</br></br> These two amounts should be the same.")
+              expect(record.errors["type"]).to include("The mortgage amount (£10,000.00), deposit (£5,000.00), and cash discount (£200.00) added together is £15,200.00.</br></br> The full purchase price (£30,000.00) multiplied by the percentage equity stake purchased (28.0%) is £8,400.00.</br></br> These two amounts should be the same.")
             end
           end
 
