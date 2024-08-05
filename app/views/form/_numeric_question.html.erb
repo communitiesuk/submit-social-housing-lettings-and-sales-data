@@ -1,4 +1,4 @@
-<%= render partial: "form/guidance/#{question.top_guidance_partial}" if question.top_guidance? %>
+<%= render partial: "form/guidance/#{question.top_guidance_partial}", locals: { log: @log } if question.top_guidance? %>
 
 <%= f.govuk_text_field(
   question.id.to_sym,
