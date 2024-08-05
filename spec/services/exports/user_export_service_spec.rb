@@ -114,7 +114,7 @@ RSpec.describe Exports::UserExportService do
         end
       end
 
-      context "and underlying data changes between getting the logs and writting the manifest" do
+      context "and underlying data changes between getting the users and writting the manifest" do
         def remove_users(users)
           users.each(&:destroy)
           file = Tempfile.new

@@ -207,15 +207,15 @@ RSpec.describe Exports::LettingsLogExportService do
           expect(storage_service).to receive(:write_file).with(expected_zip_filename, any_args)
           expect(storage_service).to receive(:write_file).with(expected_zip_filename2, any_args)
           expect(Rails.logger).to receive(:info).with("Building export run for 2021")
-          expect(Rails.logger).to receive(:info).with("Creating core_2021_2022_apr_mar_f0001_inc0001 - 1 logs")
+          expect(Rails.logger).to receive(:info).with("Creating core_2021_2022_apr_mar_f0001_inc0001 - 1 resources")
           expect(Rails.logger).to receive(:info).with("Added core_2021_2022_apr_mar_f0001_inc0001_pt001.xml")
           expect(Rails.logger).to receive(:info).with("Writing core_2021_2022_apr_mar_f0001_inc0001.zip")
           expect(Rails.logger).to receive(:info).with("Building export run for 2022")
-          expect(Rails.logger).to receive(:info).with("Creating core_2022_2023_apr_mar_f0001_inc0001 - 1 logs")
+          expect(Rails.logger).to receive(:info).with("Creating core_2022_2023_apr_mar_f0001_inc0001 - 1 resources")
           expect(Rails.logger).to receive(:info).with("Added core_2022_2023_apr_mar_f0001_inc0001_pt001.xml")
           expect(Rails.logger).to receive(:info).with("Writing core_2022_2023_apr_mar_f0001_inc0001.zip")
           expect(Rails.logger).to receive(:info).with("Building export run for 2023")
-          expect(Rails.logger).to receive(:info).with("Creating core_2023_2024_apr_mar_f0001_inc0001 - 0 logs")
+          expect(Rails.logger).to receive(:info).with("Creating core_2023_2024_apr_mar_f0001_inc0001 - 0 resources")
 
           export_service.export_xml_lettings_logs
         end
@@ -223,7 +223,7 @@ RSpec.describe Exports::LettingsLogExportService do
         it "generates zip export files only for specified year" do
           expect(storage_service).to receive(:write_file).with(expected_zip_filename2, any_args)
           expect(Rails.logger).to receive(:info).with("Building export run for 2022")
-          expect(Rails.logger).to receive(:info).with("Creating core_2022_2023_apr_mar_f0001_inc0001 - 1 logs")
+          expect(Rails.logger).to receive(:info).with("Creating core_2022_2023_apr_mar_f0001_inc0001 - 1 resources")
           expect(Rails.logger).to receive(:info).with("Added core_2022_2023_apr_mar_f0001_inc0001_pt001.xml")
           expect(Rails.logger).to receive(:info).with("Writing core_2022_2023_apr_mar_f0001_inc0001.zip")
 
@@ -242,15 +242,15 @@ RSpec.describe Exports::LettingsLogExportService do
             expect(storage_service).to receive(:write_file).with(expected_zip_filename, any_args)
             expect(storage_service).to receive(:write_file).with(expected_zip_filename2, any_args)
             expect(Rails.logger).to receive(:info).with("Building export run for 2021")
-            expect(Rails.logger).to receive(:info).with("Creating core_2021_2022_apr_mar_f0007_inc0004 - 1 logs")
+            expect(Rails.logger).to receive(:info).with("Creating core_2021_2022_apr_mar_f0007_inc0004 - 1 resources")
             expect(Rails.logger).to receive(:info).with("Added core_2021_2022_apr_mar_f0007_inc0004_pt001.xml")
             expect(Rails.logger).to receive(:info).with("Writing core_2021_2022_apr_mar_f0007_inc0004.zip")
             expect(Rails.logger).to receive(:info).with("Building export run for 2022")
-            expect(Rails.logger).to receive(:info).with("Creating core_2022_2023_apr_mar_f0001_inc0001 - 1 logs")
+            expect(Rails.logger).to receive(:info).with("Creating core_2022_2023_apr_mar_f0001_inc0001 - 1 resources")
             expect(Rails.logger).to receive(:info).with("Added core_2022_2023_apr_mar_f0001_inc0001_pt001.xml")
             expect(Rails.logger).to receive(:info).with("Writing core_2022_2023_apr_mar_f0001_inc0001.zip")
             expect(Rails.logger).to receive(:info).with("Building export run for 2023")
-            expect(Rails.logger).to receive(:info).with("Creating core_2023_2024_apr_mar_f0001_inc0001 - 0 logs")
+            expect(Rails.logger).to receive(:info).with("Creating core_2023_2024_apr_mar_f0001_inc0001 - 0 resources")
 
             export_service.export_xml_lettings_logs
           end
