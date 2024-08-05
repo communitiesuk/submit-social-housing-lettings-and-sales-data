@@ -50,7 +50,7 @@ module Exports
 
       base_number_str = "f#{base_number.to_s.rjust(4, '0')}"
       increment_str = "inc#{increment.to_s.rjust(4, '0')}"
-      "core_#{collection}_#{current_collection_start_year}_#{current_collection_start_year + 1}_apr_mar_#{base_number_str}_#{increment_str}".downcase
+      "core_#{collection}_#{base_number_str}_#{increment_str}".downcase
     end
 
     def write_export_archive(export, collection, recent_export, full_update)
