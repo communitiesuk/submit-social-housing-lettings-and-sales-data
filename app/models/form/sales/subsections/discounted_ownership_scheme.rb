@@ -10,7 +10,8 @@ class Form::Sales::Subsections::DiscountedOwnershipScheme < ::Form::Subsection
     @pages ||= [
       Form::Sales::Pages::LivingBeforePurchase.new("living_before_purchase_discounted_ownership_joint_purchase", nil, self, ownershipsch: 2, joint_purchase: true),
       Form::Sales::Pages::LivingBeforePurchase.new("living_before_purchase_discounted_ownership", nil, self, ownershipsch: 2, joint_purchase: false),
-      Form::Sales::Pages::AboutPriceRtb.new(nil, nil, self),
+      Form::Sales::Pages::PurchasePrice.new(nil, nil, self),
+      Form::Sales::Pages::Discount.new(nil, nil, self),
       Form::Sales::Pages::ExtraBorrowingValueCheck.new("extra_borrowing_price_value_check", nil, self),
       Form::Sales::Pages::PercentageDiscountValueCheck.new("percentage_discount_value_check", nil, self),
       Form::Sales::Pages::AboutPriceNotRtb.new(nil, nil, self),
