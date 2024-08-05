@@ -1,5 +1,4 @@
 require "rails_helper"
-require 'capybara/rspec'
 
 RSpec.describe "bulk_upload_sales_results/show.html.erb" do
   let(:bulk_upload) { create(:bulk_upload, :sales) }
