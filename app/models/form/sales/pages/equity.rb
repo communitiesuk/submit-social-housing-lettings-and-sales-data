@@ -1,13 +1,12 @@
-class Form::Sales::Pages::AboutPriceSharedOwnership < ::Form::Page
+class Form::Sales::Pages::Equity < ::Form::Page
   def initialize(id, hsh, subsection)
     super
-    @id = "about_price_shared_ownership"
+    @id = "equity"
     @header = "About the price of the property"
   end
 
   def questions
     @questions ||= [
-      Form::Sales::Questions::Value.new(nil, nil, self),
       Form::Sales::Questions::Equity.new(nil, nil, self),
     ]
   end

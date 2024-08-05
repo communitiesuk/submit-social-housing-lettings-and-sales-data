@@ -32,7 +32,7 @@ class Form::Sales::Subsections::DiscountedOwnershipScheme < ::Form::Subsection
       Form::Sales::Pages::MortgageLength.new("mortgage_length_discounted_ownership", nil, self, ownershipsch: 2),
       Form::Sales::Pages::ExtraBorrowing.new("extra_borrowing_discounted_ownership", nil, self, ownershipsch: 2),
       Form::Sales::Pages::ExtraBorrowingValueCheck.new("extra_borrowing_value_check", nil, self),
-      Form::Sales::Pages::AboutDepositWithoutDiscount.new("about_deposit_discounted_ownership", nil, self, ownershipsch: 2, optional: false),
+      Form::Sales::Pages::Deposit.new("deposit_discounted_ownership", nil, self, ownershipsch: 2, optional: false),
       Form::Sales::Pages::ExtraBorrowingValueCheck.new("extra_borrowing_deposit_value_check", nil, self),
       Form::Sales::Pages::DepositValueCheck.new("discounted_ownership_deposit_joint_purchase_value_check", nil, self, joint_purchase: true),
       Form::Sales::Pages::DepositValueCheck.new("discounted_ownership_deposit_value_check", nil, self, joint_purchase: false),

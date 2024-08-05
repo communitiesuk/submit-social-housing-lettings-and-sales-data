@@ -658,7 +658,7 @@ en:
       non_staircasing_mortgage:
         mortgage_used: "The mortgage and deposit added together is %{mortgage_and_deposit_total}. The value multiplied by the percentage bought is %{expected_shared_ownership_deposit_value}. These figures should be the same."
         mortgage_not_used: "The deposit is %{deposit} and the value multiplied by the percentage bought is %{expected_shared_ownership_deposit_value}. These figures should be the same."
-        mortgage_used_socialhomebuy: "The mortgage, deposit, and cash discount added together is %{mortgage_deposit_and_discount_total}. The value multiplied by the percentage bought is %{expected_shared_ownership_deposit_value}. These figures should be the same."
+        mortgage_used_socialhomebuy: "The mortgage amount (%{mortgage}), deposit (%{deposit}), and cash discount (%{cashdis}) added together is %{mortgage_deposit_and_discount_total}.</br></br> The full purchase price (%{value}) multiplied by the percentage equity stake purchased (%{equity}) is %{expected_shared_ownership_deposit_value}.</br></br> These two amounts should be the same."
         mortgage_not_used_socialhomebuy: "The deposit and cash discount added together is %{deposit_and_discount_total}. The value multiplied by the percentage bought is %{expected_shared_ownership_deposit_value}. These figures should be the same."
       staircasing_mortgage:
         mortgage_used: "The mortgage and deposit added together is %{mortgage_and_deposit_total}. The value multiplied by the percentage bought is %{stairbought_part_of_value}. These figures should be the same."
