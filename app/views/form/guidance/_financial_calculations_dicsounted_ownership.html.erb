@@ -1,0 +1,10 @@
+<%= govuk_details(summary_text: "How the financial values are calculated") do %>
+  <p class="govuk-body">
+  The mortgage amount (<%= govuk_link_to "Q105", send("#{log.class.name.underscore}_#{log.form.get_question('mortgage', log).page.id}_path", log) %>),
+   cash deposit (<%= govuk_link_to "Q109", send("#{log.class.name.underscore}_#{log.form.get_question('deposit', log).page.id}_path", log) %>)
+   and grant (<%= govuk_link_to "Q102", send("#{log.class.name.underscore}_#{log.form.get_question('grant', log).page.id}_path", log) %>)
+   added together must equal
+   the purchase price (<%= govuk_link_to "Q101", send("#{log.class.name.underscore}_#{log.form.get_question('value', log).page.id}_path", log) %>)
+   multiplied by the discount stake (<%= govuk_link_to "103", send("#{log.class.name.underscore}_#{log.form.get_question('discount', log).page.id}_path", log) %>)
+   </p>
+<% end %>

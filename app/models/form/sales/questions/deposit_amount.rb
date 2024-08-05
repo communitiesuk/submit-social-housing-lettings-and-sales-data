@@ -32,4 +32,9 @@ class Form::Sales::Questions::DepositAmount < ::Form::Question
       "Enter the total cash sum paid by the buyer towards the property that was not funded by the mortgage. This excludes any grant or loan"
     end
   end
+
+  def top_guidance_partial
+    return "financial_calculations_shared_ownership" if @ownershipsch == 1
+    return "financial_calculations_discounted_ownership" if @ownershipsch == 2
+  end
 end

@@ -12,6 +12,7 @@ class Form::Sales::Questions::PurchasePrice < ::Form::Question
     @hint_text = hint_text
     @ownership_sch = ownershipsch
     @question_number = QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP.max_by { |k, _v| k }.last)[ownershipsch]
+    @top_guidance_partial = "financial_calculations_discounted_ownership" if ownershipsch == 2
   end
 
   QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP = {
