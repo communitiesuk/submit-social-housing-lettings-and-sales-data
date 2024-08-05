@@ -1,4 +1,4 @@
-class Form::Sales::Pages::Discount < ::Form::Page
+class Form::Sales::Pages::DepositDiscount < ::Form::Page
   def initialize(id, hsh, subsection, optional:)
     super(id, hsh, subsection)
     @optional = optional

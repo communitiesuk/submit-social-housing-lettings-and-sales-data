@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Form::Sales::Pages::Discount, type: :model do
+RSpec.describe Form::Sales::Pages::DepositDiscount, type: :model do
   subject(:page) { described_class.new(page_id, page_definition, subsection, optional: false) }
 
   let(:page_id) { "discount" }
