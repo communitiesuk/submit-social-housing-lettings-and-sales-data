@@ -3,12 +3,6 @@ module Exports
     include Exports::UserExportConstants
     include CollectionTimeHelper
 
-    def initialize(storage_service, start_time, logger = Rails.logger)
-      @storage_service = storage_service
-      @logger = logger
-      @start_time = start_time
-    end
-
     def export_xml_users(full_update: false)
       recent_export = Export.order("started_at").last
 
