@@ -91,6 +91,7 @@ $govuk-breakpoints: (
   border-top: 1px solid #b1b4b6;
 }
 
-.grouped-rows.last-row td, .grouped-rows .bulk-upload-error-message {
+.grouped-rows.last-row td,
+.grouped-rows .bulk-upload-error-message {
   border-bottom: 1px solid #b1b4b6;
 }
