@@ -7,15 +7,23 @@ module Exports
       @logger = logger
     end
 
-    def export_xml(full_update: false, collection_year: nil)
+    def export_xml(full_update: false, collection: nil)
       start_time = Time.zone.now
       daily_run_number = get_daily_run_number
+      lettings_archives_for_manifest = {}
+      users_archives_for_manifest = {}
 
-      lettings_export_service = Exports::LettingsLogExportService.new(@storage_service, start_time)
-      lettings_archives_for_manifest = lettings_export_service.export_xml_lettings_logs(full_update:, collection_year:)
-
-      users_export_service = Exports::UserExportService.new(@storage_service, start_time)
-      users_archives_for_manifest = users_export_service.export_xml_users(full_update:)
+      if collection.present?
+        case collection
+        when "users"
+          users_archives_for_manifest = get_user_archives(start_time, full_update)
+        else
+          lettings_archives_for_manifest = get_lettings_archives(start_time, full_update, collection)
+        end
+      else
+        users_archives_for_manifest = get_user_archives(start_time, full_update)
+        lettings_archives_for_manifest = get_lettings_archives(start_time, full_update, collection)
+      end
 
       write_master_manifest(daily_run_number, lettings_archives_for_manifest.merge(users_archives_for_manifest))
     end
@@ -46,6 +54,16 @@ module Exports
         end
       end
       StringIO.new(csv_string)
+    end
+
+    def get_user_archives(start_time, full_update)
+      users_export_service = Exports::UserExportService.new(@storage_service, start_time)
+      users_export_service.export_xml_users(full_update:)
+    end
+
+    def get_lettings_archives(start_time, full_update, collection)
+      lettings_export_service = Exports::LettingsLogExportService.new(@storage_service, start_time)
+      lettings_export_service.export_xml_lettings_logs(full_update:, collection_year: collection)
     end
   end
 end
