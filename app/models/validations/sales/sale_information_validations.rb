@@ -71,9 +71,17 @@ module Validations::Sales::SaleInformationValidations
 
     if over_tolerance?(record.mortgage_and_deposit_total, record.value, 1)
       %i[mortgageused mortgage value deposit].each do |field|
-        record.errors.add field, I18n.t("validations.sale_information.outright_sale_value", mortgage_and_deposit_total: record.field_formatted_as_currency("mortgage_and_deposit_total"), value: record.field_formatted_as_currency("value"))
+        record.errors.add field, I18n.t("validations.sale_information.outright_sale_value", 
+        mortgage_and_deposit_total: record.field_formatted_as_currency("mortgage_and_deposit_total"), 
+        mortgage: record.mortgage&.positive? ? " (#{record.field_formatted_as_currency('mortgage')})" : "",
+        deposit: record.field_formatted_as_currency("deposit"),
+        value: record.field_formatted_as_currency("value")).html_safe
       end
-      record.errors.add :ownershipsch, :skip_bu_error, message: I18n.t("validations.sale_information.outright_sale_value", mortgage_and_deposit_total: record.field_formatted_as_currency("mortgage_and_deposit_total"), value: record.field_formatted_as_currency("value"))
+      record.errors.add :ownershipsch, :skip_bu_error, message: I18n.t("validations.sale_information.outright_sale_value", 
+      mortgage_and_deposit_total: record.field_formatted_as_currency("mortgage_and_deposit_total"), 
+      mortgage: record.mortgage&.positive? ? " (#{record.field_formatted_as_currency('mortgage')})" : "",
+      deposit: record.field_formatted_as_currency("deposit"),
+      value: record.field_formatted_as_currency("value")).html_safe
     end
   end
 
