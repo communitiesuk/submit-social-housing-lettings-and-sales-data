@@ -18,11 +18,11 @@
         multiplied by the percentage equity stake <%= question_link("equity", log, current_user) %>
       <% end %>
     <% else %>
-      The mortgage amount <%= "(#{govuk_link_to 'Q92', send("#{log.class.name.underscore}_#{mortgage_page.id}_path", log)})".html_safe %>
-      deposit <%= "(#{govuk_link_to 'Q96', send("#{log.class.name.underscore}_#{deposit_page.id}_path", log)})".html_safe %>
+      The mortgage amount (<%= govuk_link_to "Q92", send("#{log.class.name.underscore}_#{mortgage_page.id}_path", log) %>)
+      and deposit (<%= govuk_link_to "Q96", send("#{log.class.name.underscore}_#{deposit_page.id}_path", log) %>)
       added together must equal
-      the purchase price (<%= govuk_link_to 'Q89', send("#{log.class.name.underscore}_#{value_page.id}_path", log) %>)
-      multiplied by the percentage equity stake <%= "(#{govuk_link_to 'Q90', send("#{log.class.name.underscore}_#{equity_page.id}_path", log)}).".html_safe %>
+      the purchase price (<%= govuk_link_to "Q89", send("#{log.class.name.underscore}_#{value_page.id}_path", log) %>)
+      multiplied by the percentage equity stake (<%= govuk_link_to "Q90", send("#{log.class.name.underscore}_#{equity_page.id}_path", log) %>)
     <% end %>
    </p>
 <% end %>
