@@ -84,7 +84,7 @@ module FiltersHelper
     JSON.parse(session[session_name_for(filter_type)])[filter] || ""
   end
 
-  def owning_organisation_csv_filter_options(user)
+  def all_owning_organisation_filter_options(user)
     organisation_options = user.support? ? Organisation.all : ([user.organisation] + user.organisation.stock_owners + user.organisation.absorbed_organisations).uniq
     [OpenStruct.new(id: "", name: "Select an option")] + organisation_options.map { |org| OpenStruct.new(id: org.id, name: org.name) }
   end
