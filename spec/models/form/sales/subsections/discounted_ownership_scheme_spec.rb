@@ -20,7 +20,7 @@ RSpec.describe Form::Sales::Subsections::DiscountedOwnershipScheme, type: :model
         discount
         extra_borrowing_price_value_check
         percentage_discount_value_check
-        about_price_not_rtb
+        grant
         grant_value_check
         purchase_price_discounted_ownership
         discounted_sale_grant_value_check

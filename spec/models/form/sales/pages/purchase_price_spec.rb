@@ -32,8 +32,7 @@ RSpec.describe Form::Sales::Pages::PurchasePrice, type: :model do
   end
 
   it "has correct depends_on" do
-    expect(page.depends_on).to eq([{
-      "right_to_buy?" => true,
-    }])
+    expect(page.depends_on).to eq([{ "right_to_buy?" => true },
+                                   { "rent_to_buy_full_ownership?" => false, "right_to_buy?" => false }])
   end
 end
