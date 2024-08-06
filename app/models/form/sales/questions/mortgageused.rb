@@ -8,6 +8,7 @@ class Form::Sales::Questions::Mortgageused < ::Form::Question
     @answer_options = ANSWER_OPTIONS
     @ownershipsch = ownershipsch
     @question_number = QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP.max_by { |k, _v| k }.last)[ownershipsch]
+    @top_guidance_partial = "financial_calculations_discounted_ownership" if @ownershipsch == 2
   end
 
   def displayed_answer_options(log, _user = nil)
