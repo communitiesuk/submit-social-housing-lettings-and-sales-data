@@ -25,7 +25,7 @@ class Form::Sales::Questions::MortgageAmount < ::Form::Question
   end
 
   def top_guidance_partial
-    return "financial_calculations_shared_ownership" if ownershipsch == 1
-    return "financial_calculations_discounted_ownership" if ownershipsch == 2
+    return "financial_calculations_shared_ownership" if @ownershipsch == 1
+    return "financial_calculations_discounted_ownership" if @ownershipsch == 2
   end
 end
