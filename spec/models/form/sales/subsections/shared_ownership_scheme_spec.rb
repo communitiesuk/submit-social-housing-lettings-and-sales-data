@@ -49,11 +49,10 @@ RSpec.describe Form::Sales::Subsections::SharedOwnershipScheme, type: :model do
         mortgage_lender_other_shared_ownership
         mortgage_length_shared_ownership
         extra_borrowing_shared_ownership
-        deposit
-        discount
         deposit_shared_ownership
         deposit_joint_purchase_value_check
         deposit_value_check
+        discount
         shared_ownership_deposit_value_check
         monthly_rent
         leasehold_charges_shared_ownership
