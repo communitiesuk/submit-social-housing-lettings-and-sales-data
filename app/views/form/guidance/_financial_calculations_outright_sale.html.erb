@@ -1,0 +1,10 @@
+<% mortgage_page = log.form.get_question("mortgage", log).page %>
+<% deposit_page = log.form.get_question("deposit", log).page %>
+<%= govuk_details(summary_text: "How the financial values are calculated") do %>
+  <p class="govuk-body">
+  The mortgage amount <%= "(#{govuk_link_to 'Q113', send("#{log.class.name.underscore}_#{mortgage_page.id}_path", log)})".html_safe if mortgage_page.routed_to?(log, current_user) %>
+   and cash deposit <%= "(#{govuk_link_to 'Q116', send("#{log.class.name.underscore}_#{deposit_page.id}_path", log)})".html_safe if deposit_page.routed_to?(log, current_user) %>
+   added together must equal
+   the purchase price (<%= govuk_link_to "Q111", send("#{log.class.name.underscore}_#{log.form.get_question('value', log).page.id}_path", log) %>)
+   </p>
+<% end %>
