@@ -1,9 +1,9 @@
 require "rails_helper"
 
 RSpec.describe Form::Sales::Pages::Discount, type: :model do
-  subject(:page) { described_class.new(page_id, page_definition, subsection, optional: false) }
+  subject(:page) { described_class.new(page_id, page_definition, subsection) }
 
-  let(:page_id) { "discount" }
+  let(:page_id) { nil }
   let(:page_definition) { nil }
   let(:subsection) { instance_double(Form::Subsection) }
 
@@ -16,7 +16,7 @@ RSpec.describe Form::Sales::Pages::Discount, type: :model do
   end
 
   it "has correct questions" do
-    expect(page.questions.map(&:id)).to eq(%w[cashdis])
+    expect(page.questions.map(&:id)).to eq(%w[discount])
   end
 
   it "has the correct id" do
@@ -24,7 +24,7 @@ RSpec.describe Form::Sales::Pages::Discount, type: :model do
   end
 
   it "has the correct header" do
-    expect(page.header).to eq("About the deposit")
+    expect(page.header).to eq("About the price of the property")
   end
 
   it "has the correct description" do
@@ -32,40 +32,8 @@ RSpec.describe Form::Sales::Pages::Discount, type: :model do
   end
 
   it "has correct depends_on" do
-    expect(page.depends_on).to eq(
-      [{ "social_homebuy?" => true }],
-    )
-  end
-
-  context "when optional" do
-    subject(:page) { described_class.new(page_id, page_definition, subsection, optional: true) }
-
-    it "has correct depends_on" do
-      expect(page.depends_on).to eq(
-        [{ "social_homebuy?" => true }],
-      )
-    end
-  end
-
-  context "when it's a 2024 form" do
-    before do
-      allow(subsection).to receive(:form).and_return(instance_double(Form, start_year_after_2024?: true, start_date: Time.zone.local(2024, 4, 1)))
-    end
-
-    it "has correct depends_on" do
-      expect(page.depends_on).to eq(
-        [{ "social_homebuy?" => true, "stairowned_100?" => false }],
-      )
-    end
-
-    context "and optional" do
-      subject(:page) { described_class.new(page_id, page_definition, subsection, optional: true) }
-
-      it "has correct depends_on" do
-        expect(page.depends_on).to eq(
-          [{ "social_homebuy?" => true, "stairowned_100?" => true }],
-        )
-      end
-    end
+    expect(page.depends_on).to eq([{
+      "right_to_buy?" => true,
+    }])
   end
 end

@@ -644,7 +644,7 @@ en:
         must_be_after_hodate: "Sale completion date must be after practical completion or handover date"
       previous_property_type:
         property_type_bedsit: "A bedsit cannot have more than 1 bedroom"
-      discounted_ownership_value: "The mortgage, deposit, and grant when added together is %{mortgage_deposit_and_grant_total}, and the purchase price times by the discount is %{value_with_discount}. These figures should be the same"
+      discounted_ownership_value: "The mortgage%{mortgage}, cash deposit (%{deposit}), and grant%{grant} added together is %{mortgage_deposit_and_grant_total}.</br></br>The full purchase price%{discount_sentence} is %{value_with_discount}.</br></br>These two amounts should be the same."
       outright_sale_value: "The mortgage and deposit when added together is %{mortgage_and_deposit_total}, and the purchase price is %{value}. These figures should be the same."
       monthly_rent:
         higher_than_expected: "Basic monthly rent must be between £0.00 and £9,999.00"
