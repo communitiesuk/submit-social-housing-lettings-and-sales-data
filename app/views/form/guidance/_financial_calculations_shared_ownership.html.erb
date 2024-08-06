@@ -1,16 +1,28 @@
+<% mortgage_page = log.form.get_question("mortgage", log).page %>
+<% deposit_page = log.form.get_question("deposit", log).page %>
+<% equity_page = log.form.get_question("equity", log).page %>
+<% value_page = log.form.get_question("value", log).page %>
 <%= govuk_details(summary_text: "How the financial values are calculated") do %>
   <p class="govuk-body">
-  The mortgage amount <%= question_link("mortgage", log, current_user) %>,
-   cash deposit <%= question_link("deposit", log, current_user) %>,
-   and cash discount <%= question_link("cashdis", log, current_user) %>
-   added together must equal
-   the purchase price <%= question_link("value", log, current_user) %>
-   <% stairbought_page = log.form.get_question("stairbought", log).page %>
-   <% equity_page = log.form.get_question("equity", log).page %>
-   <% if stairbought_page.routed_to?(log, current_user) %>
-      multiplied by the percentage bought <%= question_link("stairbought", log, current_user) %>
+    <% if log.type == 18 %>
+      The mortgage amount <%= question_link("mortgage", log, current_user) %>,
+      cash deposit <%= question_link("deposit", log, current_user) %>,
+      and cash discount <%= question_link("cashdis", log, current_user) %>
+      added together must equal
+      the purchase price <%= question_link("value", log, current_user) %>
+      <% stairbought_page = log.form.get_question("stairbought", log).page %>
+      <% equity_page = log.form.get_question("equity", log).page %>
+      <% if stairbought_page.routed_to?(log, current_user) %>
+        multiplied by the percentage bought <%= question_link("stairbought", log, current_user) %>
+      <% else %>
+        multiplied by the percentage equity stake <%= question_link("equity", log, current_user) %>
+      <% end %>
     <% else %>
-      multiplied by the percentage equity stake <%= question_link("equity", log, current_user) %>
+      The mortgage amount <%= "(#{govuk_link_to 'Q92', send("#{log.class.name.underscore}_#{mortgage_page.id}_path", log)})".html_safe %>
+      deposit <%= "(#{govuk_link_to 'Q96', send("#{log.class.name.underscore}_#{deposit_page.id}_path", log)})".html_safe %>
+      added together must equal
+      the purchase price (<%= govuk_link_to 'Q88', send("#{log.class.name.underscore}_#{value_page.id}_path", log) %>)
+      multiplied by the percentage equity stake <%= "(#{govuk_link_to 'Q89', send("#{log.class.name.underscore}_#{equity_page.id}_path", log)}).".html_safe %>
     <% end %>
    </p>
 <% end %>
