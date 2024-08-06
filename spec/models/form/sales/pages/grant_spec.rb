@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Form::Sales::Pages::AboutPriceNotRtb, type: :model do
+RSpec.describe Form::Sales::Pages::Grant, type: :model do
   subject(:page) { described_class.new(page_id, page_definition, subsection) }
 
   let(:page_id) { nil }
@@ -12,11 +12,11 @@ RSpec.describe Form::Sales::Pages::AboutPriceNotRtb, type: :model do
   end
 
   it "has correct questions" do
-    expect(page.questions.map(&:id)).to eq(%w[value grant])
+    expect(page.questions.map(&:id)).to eq(%w[grant])
   end
 
   it "has the correct id" do
-    expect(page.id).to eq("about_price_not_rtb")
+    expect(page.id).to eq("grant")
   end
 
   it "has the correct header" do

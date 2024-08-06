@@ -1379,7 +1379,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
         it "only adds errors to the discounted ownership field" do
           parser.valid?
           expect(parser.errors[:field_103]).to be_empty
-          expect(parser.errors[:field_117]).to include("The mortgage, deposit, and grant when added together is £100.00, and the purchase price times by the discount is £90.00. These figures should be the same")
+          expect(parser.errors[:field_117]).to include("The mortgage, cash deposit (£100.00), and grant added together is £100.00.</br></br>The full purchase price (£100.00) times by the discount (10.0%) is £90.00.</br></br>These two amounts should be the same.")
           expect(parser.errors[:field_126]).to be_empty
         end
       end
