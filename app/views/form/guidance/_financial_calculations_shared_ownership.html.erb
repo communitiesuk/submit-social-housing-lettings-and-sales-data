@@ -1,4 +1,4 @@
-<%= govuk_details(summary_text: "How the financial values are calculated’") do %>
+<%= govuk_details(summary_text: "How the financial values are calculated") do %>
   <p class="govuk-body">
   The mortgage amount (<%= govuk_link_to "Q92", send("#{log.class.name.underscore}_#{log.form.get_question('mortgage', log).page.id}_path", log) %>),
    cash deposit (<%= govuk_link_to "Q95", send("#{log.class.name.underscore}_#{log.form.get_question('deposit', log).page.id}_path", log) %>)

@@ -14,6 +14,7 @@ class Form::Sales::Questions::Discount < ::Form::Question
     If discount capped, enter capped %</br></br>
     If the property is being sold to an existing tenant under the RTB, PRTB, or VRTB schemes, enter the % discount from the full market value that is being given."
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
+    @top_guidance_partial = "financial_calculations_discounted_ownership"
   end
 
   QUESTION_NUMBER_FROM_YEAR = { 2023 => 102, 2024 => 103 }.freeze
