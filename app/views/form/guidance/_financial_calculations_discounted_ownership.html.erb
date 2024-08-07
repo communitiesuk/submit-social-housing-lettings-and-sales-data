@@ -1,10 +1,20 @@
+<% discount_question_link = question_link("discount", log, current_user)%>
+<% grant_question_link = question_link("grant", log, current_user)%>
+<% value_question_link = question_link("value", log, current_user) %>
 <%= govuk_details(summary_text: "How the financial values are calculated") do %>
   <p class="govuk-body">
   The mortgage amount <%= question_link("mortgage", log, current_user) %>
+  <% if grant_question_link.blank? %>
+    and cash deposit <%= question_link("deposit", log, current_user) %>
+  <% else %>
    cash deposit <%= question_link("deposit", log, current_user) %>
-   and grant <%= question_link("grant", log, current_user) %>
+   and grant <%= grant_question_link %>
+  <% end %>
    added together must equal
-   the purchase price <%= question_link("value", log, current_user) %>
-   multiplied by the discount stake <%= question_link("discount", log, current_user) %>
+   the purchase price <%= value_question_link %>
+  <% if discount_question_link.present? %>
+    subtracted by the sum of the purchase price <%= value_question_link %>
+    multiplied by the discount <%= discount_question_link %>
+  <% end %>
    </p>
 <% end %>
