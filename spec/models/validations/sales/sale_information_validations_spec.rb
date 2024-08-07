@@ -345,13 +345,13 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
 
           sale_information_validator.validate_discounted_ownership_value(record)
 
-          expect(record.errors["mortgageused"]).to include("The mortgage (£66,113.00), cash deposit (£0.00), and grant added together is £66,113.00.</br></br>The full purchase price (£123,000.00) times by the discount (46.3%) is £66,051.00.</br></br>These two amounts should be the same.")
-          expect(record.errors["mortgage"]).to include("The mortgage (£66,113.00), cash deposit (£0.00), and grant added together is £66,113.00.</br></br>The full purchase price (£123,000.00) times by the discount (46.3%) is £66,051.00.</br></br>These two amounts should be the same.")
-          expect(record.errors["value"]).to include("The mortgage (£66,113.00), cash deposit (£0.00), and grant added together is £66,113.00.</br></br>The full purchase price (£123,000.00) times by the discount (46.3%) is £66,051.00.</br></br>These two amounts should be the same.")
-          expect(record.errors["deposit"]).to include("The mortgage (£66,113.00), cash deposit (£0.00), and grant added together is £66,113.00.</br></br>The full purchase price (£123,000.00) times by the discount (46.3%) is £66,051.00.</br></br>These two amounts should be the same.")
-          expect(record.errors["ownershipsch"]).to include("The mortgage (£66,113.00), cash deposit (£0.00), and grant added together is £66,113.00.</br></br>The full purchase price (£123,000.00) times by the discount (46.3%) is £66,051.00.</br></br>These two amounts should be the same.")
-          expect(record.errors["discount"]).to include("The mortgage (£66,113.00), cash deposit (£0.00), and grant added together is £66,113.00.</br></br>The full purchase price (£123,000.00) times by the discount (46.3%) is £66,051.00.</br></br>These two amounts should be the same.")
-          expect(record.errors["grant"]).to include("The mortgage (£66,113.00), cash deposit (£0.00), and grant added together is £66,113.00.</br></br>The full purchase price (£123,000.00) times by the discount (46.3%) is £66,051.00.</br></br>These two amounts should be the same.")
+          expect(record.errors["mortgageused"]).to include("The mortgage (£66,113.00) and cash deposit (£0.00) added together is £66,113.00.</br></br>The full purchase price (£123,000.00) times by the discount (46.3%) is £66,051.00.</br></br>These two amounts should be the same.")
+          expect(record.errors["mortgage"]).to include("The mortgage (£66,113.00) and cash deposit (£0.00) added together is £66,113.00.</br></br>The full purchase price (£123,000.00) times by the discount (46.3%) is £66,051.00.</br></br>These two amounts should be the same.")
+          expect(record.errors["value"]).to include("The mortgage (£66,113.00) and cash deposit (£0.00) added together is £66,113.00.</br></br>The full purchase price (£123,000.00) times by the discount (46.3%) is £66,051.00.</br></br>These two amounts should be the same.")
+          expect(record.errors["deposit"]).to include("The mortgage (£66,113.00) and cash deposit (£0.00) added together is £66,113.00.</br></br>The full purchase price (£123,000.00) times by the discount (46.3%) is £66,051.00.</br></br>These two amounts should be the same.")
+          expect(record.errors["ownershipsch"]).to include("The mortgage (£66,113.00) and cash deposit (£0.00) added together is £66,113.00.</br></br>The full purchase price (£123,000.00) times by the discount (46.3%) is £66,051.00.</br></br>These two amounts should be the same.")
+          expect(record.errors["discount"]).to include("The mortgage (£66,113.00) and cash deposit (£0.00) added together is £66,113.00.</br></br>The full purchase price (£123,000.00) times by the discount (46.3%) is £66,051.00.</br></br>These two amounts should be the same.")
+          expect(record.errors["grant"]).to include("The mortgage (£66,113.00) and cash deposit (£0.00) added together is £66,113.00.</br></br>The full purchase price (£123,000.00) times by the discount (46.3%) is £66,051.00.</br></br>These two amounts should be the same.")
         end
 
         it "does not add errors if mortgage and deposit total is exactly 0.05% x market value away from market value - discount" do
@@ -380,13 +380,13 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
         record.deposit = 2_000
         sale_information_validator.validate_discounted_ownership_value(record)
 
-        expect(record.errors["mortgageused"]).to include("The mortgage (£10,000.00), cash deposit (£2,000.00), and grant added together is £12,000.00.</br></br>The full purchase price is £30,000.00.</br></br>These two amounts should be the same.")
-        expect(record.errors["mortgage"]).to include("The mortgage (£10,000.00), cash deposit (£2,000.00), and grant added together is £12,000.00.</br></br>The full purchase price is £30,000.00.</br></br>These two amounts should be the same.")
-        expect(record.errors["value"]).to include("The mortgage (£10,000.00), cash deposit (£2,000.00), and grant added together is £12,000.00.</br></br>The full purchase price is £30,000.00.</br></br>These two amounts should be the same.")
-        expect(record.errors["deposit"]).to include("The mortgage (£10,000.00), cash deposit (£2,000.00), and grant added together is £12,000.00.</br></br>The full purchase price is £30,000.00.</br></br>These two amounts should be the same.")
-        expect(record.errors["ownershipsch"]).to include("The mortgage (£10,000.00), cash deposit (£2,000.00), and grant added together is £12,000.00.</br></br>The full purchase price is £30,000.00.</br></br>These two amounts should be the same.")
-        expect(record.errors["discount"]).to include("The mortgage (£10,000.00), cash deposit (£2,000.00), and grant added together is £12,000.00.</br></br>The full purchase price is £30,000.00.</br></br>These two amounts should be the same.")
-        expect(record.errors["grant"]).to include("The mortgage (£10,000.00), cash deposit (£2,000.00), and grant added together is £12,000.00.</br></br>The full purchase price is £30,000.00.</br></br>These two amounts should be the same.")
+        expect(record.errors["mortgageused"]).to include("The mortgage (£10,000.00) and cash deposit (£2,000.00) added together is £12,000.00.</br></br>The full purchase price is £30,000.00.</br></br>These two amounts should be the same.")
+        expect(record.errors["mortgage"]).to include("The mortgage (£10,000.00) and cash deposit (£2,000.00) added together is £12,000.00.</br></br>The full purchase price is £30,000.00.</br></br>These two amounts should be the same.")
+        expect(record.errors["value"]).to include("The mortgage (£10,000.00) and cash deposit (£2,000.00) added together is £12,000.00.</br></br>The full purchase price is £30,000.00.</br></br>These two amounts should be the same.")
+        expect(record.errors["deposit"]).to include("The mortgage (£10,000.00) and cash deposit (£2,000.00) added together is £12,000.00.</br></br>The full purchase price is £30,000.00.</br></br>These two amounts should be the same.")
+        expect(record.errors["ownershipsch"]).to include("The mortgage (£10,000.00) and cash deposit (£2,000.00) added together is £12,000.00.</br></br>The full purchase price is £30,000.00.</br></br>These two amounts should be the same.")
+        expect(record.errors["discount"]).to include("The mortgage (£10,000.00) and cash deposit (£2,000.00) added together is £12,000.00.</br></br>The full purchase price is £30,000.00.</br></br>These two amounts should be the same.")
+        expect(record.errors["grant"]).to include("The mortgage (£10,000.00) and cash deposit (£2,000.00) added together is £12,000.00.</br></br>The full purchase price is £30,000.00.</br></br>These two amounts should be the same.")
       end
 
       it "returns false if mortgage and deposit total equals market value" do
