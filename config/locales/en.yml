@@ -589,13 +589,13 @@ en:
 
     declaration:
       missing:
-        pre_2024: "You must show the MHCLG privacy notice to the tenant before you can submit this log."
-        post_2024: "You must show or give access to the MHCLG privacy notice to the tenant before you can submit this log."
+        pre_2024: "You must show the MHCLG privacy notice to the tenant before you can submit this log"
+        post_2024: "You must show or give access to the MHCLG privacy notice to the tenant before you can submit this log"
 
     privacynotice:
       missing:
-        pre_2024: "You must show the MHCLG privacy notice to the %{buyer_or_buyers} before you can submit this log."
-        post_2024: "You must show or give access to the MHCLG privacy notice to the %{buyer_or_buyers} before you can submit this log."
+        pre_2024: "You must show the MHCLG privacy notice to the %{buyer_or_buyers} before you can submit this log"
+        post_2024: "You must show or give access to the MHCLG privacy notice to the %{buyer_or_buyers} before you can submit this log"
 
     scheme:
       toggle_date:
