@@ -207,16 +207,34 @@ module Validations::Sales::SaleInformationValidations
 
       if over_tolerance?(record.mortgage_and_deposit_total, record.expected_shared_ownership_deposit_value, 1)
         %i[mortgage value deposit equity].each do |field|
-          record.errors.add field, I18n.t("validations.sale_information.non_staircasing_mortgage.mortgage_used", mortgage_and_deposit_total: record.field_formatted_as_currency("mortgage_and_deposit_total"), expected_shared_ownership_deposit_value: record.field_formatted_as_currency("expected_shared_ownership_deposit_value"))
+          record.errors.add field, I18n.t("validations.sale_information.non_staircasing_mortgage.mortgage_used",
+                                          mortgage: record.field_formatted_as_currency("mortgage"),
+                                          deposit: record.field_formatted_as_currency("deposit"),
+                                          value: record.field_formatted_as_currency("value"),
+                                          equity: "#{record.equity}%",
+                                          mortgage_and_deposit_total: record.field_formatted_as_currency("mortgage_and_deposit_total"),
+                                          expected_shared_ownership_deposit_value: record.field_formatted_as_currency("expected_shared_ownership_deposit_value"))
         end
-        record.errors.add :type, :skip_bu_error, message: I18n.t("validations.sale_information.non_staircasing_mortgage.mortgage_used", mortgage_and_deposit_total: record.field_formatted_as_currency("mortgage_and_deposit_total"), expected_shared_ownership_deposit_value: record.field_formatted_as_currency("expected_shared_ownership_deposit_value"))
+        record.errors.add :type, :skip_bu_error, message: I18n.t("validations.sale_information.non_staircasing_mortgage.mortgage_used",
+                                                                 mortgage: record.field_formatted_as_currency("mortgage"),
+                                                                 deposit: record.field_formatted_as_currency("deposit"),
+                                                                 value: record.field_formatted_as_currency("value"),
+                                                                 equity: "#{record.equity}%",
+                                                                 mortgage_and_deposit_total: record.field_formatted_as_currency("mortgage_and_deposit_total"),
+                                                                 expected_shared_ownership_deposit_value: record.field_formatted_as_currency("expected_shared_ownership_deposit_value"))
       end
     elsif record.mortgage_not_used?
       if over_tolerance?(record.deposit, record.expected_shared_ownership_deposit_value, 1)
         %i[mortgageused value deposit equity].each do |field|
-          record.errors.add field, I18n.t("validations.sale_information.non_staircasing_mortgage.mortgage_not_used", deposit: record.field_formatted_as_currency("deposit"), expected_shared_ownership_deposit_value: record.field_formatted_as_currency("expected_shared_ownership_deposit_value"))
+          record.errors.add field, I18n.t("validations.sale_information.non_staircasing_mortgage.mortgage_not_used",
+                                          deposit: record.field_formatted_as_currency("deposit"),
+                                          value: record.field_formatted_as_currency("value"),
+                                          expected_shared_ownership_deposit_value: record.field_formatted_as_currency("expected_shared_ownership_deposit_value"))
         end
-        record.errors.add :type, :skip_bu_error, message: I18n.t("validations.sale_information.non_staircasing_mortgage.mortgage_not_used", deposit: record.field_formatted_as_currency("deposit"), expected_shared_ownership_deposit_value: record.field_formatted_as_currency("expected_shared_ownership_deposit_value"))
+        record.errors.add :type, :skip_bu_error, message: I18n.t("validations.sale_information.non_staircasing_mortgage.mortgage_not_used",
+                                                                 deposit: record.field_formatted_as_currency("deposit"),
+                                                                 value: record.field_formatted_as_currency("value"),
+                                                                 expected_shared_ownership_deposit_value: record.field_formatted_as_currency("expected_shared_ownership_deposit_value"))
       end
     end
   end
