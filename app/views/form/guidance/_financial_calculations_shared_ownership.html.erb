@@ -5,8 +5,8 @@
    and cash discount <%= question_link("cashdis", log, current_user) %>
    added together must equal
    the purchase price <%= question_link("value", log, current_user) %>
-   <% stairbought_page = log.form.get_question('stairbought', log).page %>
-   <% equity_page = log.form.get_question('equity', log).page %>
+   <% stairbought_page = log.form.get_question("stairbought", log).page %>
+   <% equity_page = log.form.get_question("equity", log).page %>
    <% if stairbought_page.routed_to?(log, current_user) %>
       multiplied by the percentage bought <%= question_link("stairbought", log, current_user) %>
     <% else %>
