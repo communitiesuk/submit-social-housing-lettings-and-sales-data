@@ -52,7 +52,7 @@ RSpec.describe Form::Sales::Subsections::SharedOwnershipScheme, type: :model do
         deposit_shared_ownership
         deposit_joint_purchase_value_check
         deposit_value_check
-        discount
+        deposit_discount
         shared_ownership_deposit_value_check
         monthly_rent
         leasehold_charges_shared_ownership
