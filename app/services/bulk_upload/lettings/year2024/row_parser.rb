@@ -806,8 +806,8 @@ private
 
       if setup_question?(question)
         fields.each do |field|
-          if errors.select { |e| fields.include?(e.attribute) }.none?
-            errors.add(field, question.unanswered_error_message, category: :setup) if field.present?
+          if errors.select { |e| fields.include?(e.attribute) }.none? && field.present?
+            errors.add(field, question.unanswered_error_message, category: :setup)
           end
         end
       else
