@@ -416,18 +416,18 @@ RSpec.describe UsersController, type: :request do
       let(:parent_relationship) { create(:organisation_relationship, parent_organisation: user.organisation) }
       let(:child_relationship) { create(:organisation_relationship, child_organisation: user.organisation) }
       let!(:org_user) { create(:user, organisation: user.organisation, name: "test_name") }
-      let!(:managing_user) { create(:user, organisation: child_relationship.parent_organisation, name: "stock_owner_test_name") }
-      let!(:owner_user) { create(:user, organisation: parent_relationship.child_organisation, name: "managing_agent_test_name") }
+      let!(:managing_user) { create(:user, organisation: parent_relationship.child_organisation, name: "managing_agent_test_name") }
 
       before do
+        create(:user, organisation: child_relationship.parent_organisation, name: "stock_owner_test_name")
         create(:user, name: "other_organisation_test_name")
       end
 
-      it "only searches within the current user's organisation, managing agents and stock owners" do
+      it "only searches within the current user's organisation and managing agents" do
         get "/users/search", headers:, params: { query: "test_name" }
         result = JSON.parse(response.body)
-        expect(result.count).to eq(3)
-        expect(result.keys).to match_array([org_user.id.to_s, managing_user.id.to_s, owner_user.id.to_s])
+        expect(result.count).to eq(2)
+        expect(result.keys).to match_array([org_user.id.to_s, managing_user.id.to_s])
       end
     end
   end
@@ -1205,18 +1205,18 @@ RSpec.describe UsersController, type: :request do
       let(:parent_relationship) { create(:organisation_relationship, parent_organisation: user.organisation) }
       let(:child_relationship) { create(:organisation_relationship, child_organisation: user.organisation) }
       let!(:org_user) { create(:user, organisation: user.organisation, email: "test_name@example.com") }
-      let!(:managing_user) { create(:user, organisation: child_relationship.parent_organisation, email: "stock_owner_test_name@example.com") }
-      let!(:owner_user) { create(:user, organisation: parent_relationship.child_organisation, email: "managing_agent_test_name@example.com") }
+      let!(:managing_user) { create(:user, organisation: parent_relationship.child_organisation, email: "managing_agent_test_name@example.com") }
 
       before do
         create(:user, email: "other_organisation_test_name@example.com")
+        create(:user, organisation: child_relationship.parent_organisation, email: "stock_owner_test_name@example.com")
       end
 
-      it "only searches within the current user's organisation, managing agents and stock owners" do
+      it "only searches within the current user's organisation and managing agents" do
         get "/users/search", headers:, params: { query: "test_name" }
         result = JSON.parse(response.body)
-        expect(result.count).to eq(3)
-        expect(result.keys).to match_array([org_user.id.to_s, managing_user.id.to_s, owner_user.id.to_s])
+        expect(result.count).to eq(2)
+        expect(result.keys).to match_array([org_user.id.to_s, managing_user.id.to_s])
       end
     end
   end

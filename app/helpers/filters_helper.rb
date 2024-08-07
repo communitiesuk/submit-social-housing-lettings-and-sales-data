@@ -115,7 +115,7 @@ module FiltersHelper
       selected_user = if current_user.support?
                         User.where(id: user_id)&.first
                       else
-                        User.affiliated_users(current_user.organisation).where(id: user_id)&.first
+                        User.own_and_managing_org_users(current_user.organisation).where(id: user_id)&.first
                       end
 
       return [OpenStruct.new(id: selected_user.id, name: selected_user.name, hint: selected_user.email)] if selected_user.present?
@@ -309,8 +309,8 @@ private
     return "All" if session_filters["assigned_to"].include?("all")
     return "You" if session_filters["assigned_to"].include?("you")
 
-    User.affiliated_users(current_user.organisation).find(session_filters["user"].to_i).name
-    selected_user_option = User.affiliated_users(current_user.organisation).find(session_filters["user"].to_i)
+    User.own_and_managing_org_users(current_user.organisation).find(session_filters["user"].to_i).name
+    selected_user_option = User.own_and_managing_org_users(current_user.organisation).find(session_filters["user"].to_i)
     return unless selected_user_option
 
     "#{selected_user_option.name} (#{selected_user_option.email})"
