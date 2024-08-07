@@ -1341,10 +1341,10 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
 
         it "includes errors on other related fields" do
           parser.valid?
-          expect(parser.errors[:field_104]).to include("The mortgage (£10,000.00) and deposit (£5,000.00) added together is £15,000.00.</br></br>The full purchase price (£30,000.00) multiplied by the percentage equity stake purchased (28.0%) is £8,400.00.</br></br>These two amounts should be the same.")
-          expect(parser.errors[:field_109]).to include("The mortgage (£10,000.00) and deposit (£5,000.00) added together is £15,000.00.</br></br>The full purchase price (£30,000.00) multiplied by the percentage equity stake purchased (28.0%) is £8,400.00.</br></br>These two amounts should be the same.")
-          expect(parser.errors[:field_101]).to include("The mortgage (£10,000.00) and deposit (£5,000.00) added together is £15,000.00.</br></br>The full purchase price (£30,000.00) multiplied by the percentage equity stake purchased (28.0%) is £8,400.00.</br></br>These two amounts should be the same.")
-          expect(parser.errors[:field_102]).to include("The mortgage (£10,000.00) and deposit (£5,000.00) added together is £15,000.00.</br></br>The full purchase price (£30,000.00) multiplied by the percentage equity stake purchased (28.0%) is £8,400.00.</br></br>These two amounts should be the same.")
+          expect(parser.errors[:field_104]).to include("The mortgage (£10,000.00) and cash deposit (£5,000.00) added together is £15,000.00.</br></br>The full purchase price (£30,000.00) multiplied by the percentage equity stake purchased (28.0%) is £8,400.00.</br></br>These two amounts should be the same.")
+          expect(parser.errors[:field_109]).to include("The mortgage (£10,000.00) and cash deposit (£5,000.00) added together is £15,000.00.</br></br>The full purchase price (£30,000.00) multiplied by the percentage equity stake purchased (28.0%) is £8,400.00.</br></br>These two amounts should be the same.")
+          expect(parser.errors[:field_101]).to include("The mortgage (£10,000.00) and cash deposit (£5,000.00) added together is £15,000.00.</br></br>The full purchase price (£30,000.00) multiplied by the percentage equity stake purchased (28.0%) is £8,400.00.</br></br>These two amounts should be the same.")
+          expect(parser.errors[:field_102]).to include("The mortgage (£10,000.00) and cash deposit (£5,000.00) added together is £15,000.00.</br></br>The full purchase price (£30,000.00) multiplied by the percentage equity stake purchased (28.0%) is £8,400.00.</br></br>These two amounts should be the same.")
         end
 
         it "does not add errors to other ownership type fields" do
@@ -1379,7 +1379,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
         it "only adds errors to the discounted ownership field" do
           parser.valid?
           expect(parser.errors[:field_103]).to be_empty
-          expect(parser.errors[:field_117]).to include("The mortgage, cash deposit (£100.00), and grant added together is £100.00.</br></br>The full purchase price (£100.00) times by the discount (10.0%) is £90.00.</br></br>These two amounts should be the same.")
+          expect(parser.errors[:field_117]).to include("The mortgage and cash deposit (£100.00) added together is £100.00.</br></br>The full purchase price (£100.00) subtracted by the sum of the full purchase price (£100.00) multiplied by the percentage discount (10.0%) is £90.00.</br></br>These two amounts should be the same.")
           expect(parser.errors[:field_126]).to be_empty
         end
       end
