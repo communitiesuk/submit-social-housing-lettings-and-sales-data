@@ -296,7 +296,6 @@ module Validations::Sales::SaleInformationValidations
                                           deposit: record.field_formatted_as_currency("deposit"),
                                           mortgage_and_deposit_total: record.field_formatted_as_currency("mortgage_and_deposit_total"),
                                           value: record.field_formatted_as_currency("value"),
-                                          equity: "#{record.equity}%",
                                           stairbought_part_of_value: record.field_formatted_as_currency("stairbought_part_of_value")).html_safe
         end
         record.errors.add :type, :skip_bu_error, message: I18n.t("validations.sale_information.staircasing_mortgage.mortgage_used",
@@ -304,7 +303,6 @@ module Validations::Sales::SaleInformationValidations
                                                                  deposit: record.field_formatted_as_currency("deposit"),
                                                                  mortgage_and_deposit_total: record.field_formatted_as_currency("mortgage_and_deposit_total"),
                                                                  value: record.field_formatted_as_currency("value"),
-                                                                 equity: "#{record.equity}%",
                                                                  stairbought_part_of_value: record.field_formatted_as_currency("stairbought_part_of_value")).html_safe
       end
     elsif over_tolerance?(record.deposit, record.stairbought_part_of_value, 1)
