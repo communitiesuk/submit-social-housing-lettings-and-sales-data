@@ -686,7 +686,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
           it "cannot be nulled" do
             parser.valid?
-            expect(parser.errors[:field_45]).to eq(["You must show the MHCLG privacy notice to the tenant before you can submit this log"])
+            expect(parser.errors[:field_45]).to eq(["You must show the MHCLG privacy notice to the tenant before you can submit this log."])
           end
         end
       end

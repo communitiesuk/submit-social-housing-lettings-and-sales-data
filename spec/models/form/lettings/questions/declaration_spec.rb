@@ -63,7 +63,7 @@ RSpec.describe Form::Lettings::Questions::Declaration, type: :model do
     end
 
     it "returns correct unanswered_error_message" do
-      expect(question.unanswered_error_message).to eq("You must show the MHCLG privacy notice to the tenant before you can submit this log")
+      expect(question.unanswered_error_message).to eq("You must show the MHCLG privacy notice to the tenant before you can submit this log.")
     end
   end
 
@@ -87,7 +87,7 @@ RSpec.describe Form::Lettings::Questions::Declaration, type: :model do
     end
 
     it "returns correct unanswered_error_message" do
-      expect(question.unanswered_error_message).to eq("You must show or give access to the MHCLG privacy notice to the tenant before you can submit this log")
+      expect(question.unanswered_error_message).to eq("You must show or give access to the MHCLG privacy notice to the tenant before you can submit this log.")
     end
   end
 end
