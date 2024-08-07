@@ -538,11 +538,11 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
 
           it "adds errors" do
             sale_information_validator.validate_outright_sale_value_matches_mortgage_plus_deposit(record)
-            expect(record.errors["mortgageused"]).to include("The mortgage and deposit when added together is £200,000.00, and the purchase price is £300,000.00. These figures should be the same.")
-            expect(record.errors["mortgage"]).to include("The mortgage and deposit when added together is £200,000.00, and the purchase price is £300,000.00. These figures should be the same.")
-            expect(record.errors["deposit"]).to include("The mortgage and deposit when added together is £200,000.00, and the purchase price is £300,000.00. These figures should be the same.")
-            expect(record.errors["value"]).to include("The mortgage and deposit when added together is £200,000.00, and the purchase price is £300,000.00. These figures should be the same.")
-            expect(record.errors["ownershipsch"]).to include("The mortgage and deposit when added together is £200,000.00, and the purchase price is £300,000.00. These figures should be the same.")
+            expect(record.errors["mortgageused"]).to include("The mortgage (£100,000.00) and deposit (£100,000.00) when added together is £200,000.00.</br></br>The full purchase price is £300,000.00.</br></br>These two amounts should be the same.")
+            expect(record.errors["mortgage"]).to include("The mortgage (£100,000.00) and deposit (£100,000.00) when added together is £200,000.00.</br></br>The full purchase price is £300,000.00.</br></br>These two amounts should be the same.")
+            expect(record.errors["deposit"]).to include("The mortgage (£100,000.00) and deposit (£100,000.00) when added together is £200,000.00.</br></br>The full purchase price is £300,000.00.</br></br>These two amounts should be the same.")
+            expect(record.errors["value"]).to include("The mortgage (£100,000.00) and deposit (£100,000.00) when added together is £200,000.00.</br></br>The full purchase price is £300,000.00.</br></br>These two amounts should be the same.")
+            expect(record.errors["ownershipsch"]).to include("The mortgage (£100,000.00) and deposit (£100,000.00) when added together is £200,000.00.</br></br>The full purchase price is £300,000.00.</br></br>These two amounts should be the same.")
           end
         end
 
