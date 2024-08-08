@@ -66,10 +66,11 @@
                        "specific_user": {
                          label: "Specific user",
                          conditional_filter: {
-                           type: "select",
+                           type: "text_select",
                            label: "User",
                            category: "user",
-                           options: assigned_to_filter_options(current_user),
+                           options: assigned_to_filter_options(@filter_type),
+                           caption_text: "User's name or email",
                          },
                        },
                      },
@@ -86,10 +87,11 @@
               "specific_org": {
                 label: "Specific owning organisation",
                 conditional_filter: {
-                  type: "select",
+                  type: "text_select",
                   label: "Owning Organisation",
                   category: "owning_organisation",
-                  options: owning_organisation_filter_options(current_user),
+                  options: owning_organisation_filter_options(current_user, @filter_type),
+                  caption_text: "Organisation name",
                 },
               },
             },
@@ -107,10 +109,11 @@
               "specific_org": {
                 label: "Specific managing organisation",
                 conditional_filter: {
-                  type: "select",
+                  type: "text_select",
                   label: user_or_org_lettings_path? ? "Managed by" : "Reported by",
                   category: "managing_organisation",
-                  options: managing_organisation_filter_options(current_user),
+                  options: managing_organisation_filter_options(current_user, @filter_type),
+                  caption_text: "Organisation name",
                 },
               },
             },

@@ -11,8 +11,8 @@ module FiltersHelper
     return true if !selected_filters.key?("owning_organisation") && filter == "owning_organisation_select" && value == :all
     return true if !selected_filters.key?("managing_organisation") && filter == "managing_organisation_select" && value == :all
 
-    return true if selected_filters["owning_organisation"].present? && filter == "owning_organisation_select" && value == :specific_org
-    return true if selected_filters["managing_organisation"].present? && filter == "managing_organisation_select" && value == :specific_org
+    return true if (selected_filters["owning_organisation"].present? || selected_filters["owning_organisation_text_search"].present?) && filter == "owning_organisation_select" && value == :specific_org
+    return true if (selected_filters["managing_organisation"].present? || selected_filters["managing_organisation_text_search"].present?) && filter == "managing_organisation_select" && value == :specific_org
 
     return false if selected_filters[filter].blank?
 
@@ -84,14 +84,52 @@ module FiltersHelper
     JSON.parse(session[session_name_for(filter_type)])[filter] || ""
   end
 
-  def owning_organisation_filter_options(user)
+  def all_owning_organisation_filter_options(user)
     organisation_options = user.support? ? Organisation.all : ([user.organisation] + user.organisation.stock_owners + user.organisation.absorbed_organisations).uniq
     [OpenStruct.new(id: "", name: "Select an option")] + organisation_options.map { |org| OpenStruct.new(id: org.id, name: org.name) }
   end
 
-  def assigned_to_filter_options(user)
+  def owning_organisation_filter_options(user, filter_type)
+    if applied_filters(filter_type)["owning_organisation"].present?
+      organisation_id = applied_filters(filter_type)["owning_organisation"]
+
+      org = if user.support?
+              Organisation.where(id: organisation_id)&.first
+            else
+              Organisation.affiliated_organisations(user.organisation).where(id: organisation_id)&.first
+            end
+      return [OpenStruct.new(id: org.id, name: org.name)] if org.present?
+    end
+
+    [OpenStruct.new(id: "", name: "Select an option")]
+  end
+
+  def assigned_to_csv_filter_options(user)
     user_options = user.support? ? User.all : (user.organisation.users + user.organisation.managing_agents.flat_map(&:users) + user.organisation.stock_owners.flat_map(&:users)).uniq
     [OpenStruct.new(id: "", name: "Select an option", hint: "")] + user_options.map { |user_option| OpenStruct.new(id: user_option.id, name: user_option.name, hint: user_option.email) }
+  end
+
+  def assigned_to_filter_options(filter_type)
+    if applied_filters(filter_type)["assigned_to"] == "specific_user" && applied_filters(filter_type)["user"].present?
+      user_id = applied_filters(filter_type)["user"]
+      selected_user = if current_user.support?
+                        User.where(id: user_id)&.first
+                      else
+                        User.own_and_managing_org_users(current_user.organisation).where(id: user_id)&.first
+                      end
+
+      return [OpenStruct.new(id: selected_user.id, name: selected_user.name, hint: selected_user.email)] if selected_user.present?
+    end
+    [OpenStruct.new(id: "", name: "Select an option", hint: "")]
+  end
+
+  def filter_search_url(category)
+    case category
+    when :user
+      search_users_path
+    when :owning_organisation, :managing_organisation
+      search_organisations_path
+    end
   end
 
   def collection_year_options
@@ -125,9 +163,24 @@ module FiltersHelper
     end
   end
 
-  def managing_organisation_filter_options(user)
+  def managing_organisation_csv_filter_options(user)
     organisation_options = user.support? ? Organisation.all : ([user.organisation] + user.organisation.managing_agents + user.organisation.absorbed_organisations).uniq
     [OpenStruct.new(id: "", name: "Select an option")] + organisation_options.map { |org| OpenStruct.new(id: org.id, name: org.name) }
+  end
+
+  def managing_organisation_filter_options(user, filter_type)
+    if applied_filters(filter_type)["managing_organisation"].present?
+      organisation_id = applied_filters(filter_type)["managing_organisation"]
+
+      org = if user.support?
+              Organisation.where(id: organisation_id)&.first
+            else
+              Organisation.affiliated_organisations(user.organisation).where(id: organisation_id)&.first
+            end
+      return [OpenStruct.new(id: org.id, name: org.name)] if org.present?
+    end
+
+    [OpenStruct.new(id: "", name: "Select an option")]
   end
 
   def show_scheme_managing_org_filter?(user)
@@ -176,8 +229,8 @@ module FiltersHelper
       { id: "status", label: "Status", value: formatted_status_filter(session_filters) },
       filter_type == "lettings_logs" ? { id: "needstype", label: "Needs type", value: formatted_needstype_filter(session_filters) } : nil,
       { id: "assigned_to", label: "Assigned to", value: formatted_assigned_to_filter(session_filters) },
-      { id: "owned_by", label: "Owned by", value: formatted_owned_by_filter(session_filters) },
-      { id: "managed_by", label: "Managed by", value: formatted_managed_by_filter(session_filters) },
+      { id: "owned_by", label: "Owned by", value: formatted_owned_by_filter(session_filters, filter_type) },
+      { id: "managed_by", label: "Managed by", value: formatted_managed_by_filter(session_filters, filter_type) },
     ].compact
   end
 
@@ -221,7 +274,7 @@ private
     filters.each.sum do |category, category_filters|
       if %w[years status needstypes bulk_upload_id].include?(category)
         category_filters.count(&:present?)
-      elsif %w[user owning_organisation managing_organisation].include?(category)
+      elsif %w[user owning_organisation managing_organisation user_text_search owning_organisation_text_search managing_organisation_text_search].include?(category)
         1
       else
         0
@@ -256,26 +309,27 @@ private
     return "All" if session_filters["assigned_to"].include?("all")
     return "You" if session_filters["assigned_to"].include?("you")
 
-    selected_user_option = assigned_to_filter_options(current_user).find { |x| x.id == session_filters["user"].to_i }
+    User.own_and_managing_org_users(current_user.organisation).find(session_filters["user"].to_i).name
+    selected_user_option = User.own_and_managing_org_users(current_user.organisation).find(session_filters["user"].to_i)
     return unless selected_user_option
 
-    "#{selected_user_option.name} (#{selected_user_option.hint})"
+    "#{selected_user_option.name} (#{selected_user_option.email})"
   end
 
-  def formatted_owned_by_filter(session_filters)
+  def formatted_owned_by_filter(session_filters, filter_type)
     return "All" if params["id"].blank? && (session_filters["owning_organisation"].blank? || session_filters["owning_organisation"]&.include?("all"))
 
     session_org_id = session_filters["owning_organisation"] || params["id"]
-    selected_owning_organisation_option = owning_organisation_filter_options(current_user).find { |org| org.id == session_org_id.to_i }
+    selected_owning_organisation_option = owning_organisation_filter_options(current_user, filter_type).find { |org| org.id == session_org_id.to_i }
     return unless selected_owning_organisation_option
 
     selected_owning_organisation_option&.name
   end
 
-  def formatted_managed_by_filter(session_filters)
+  def formatted_managed_by_filter(session_filters, filter_type)
     return "All" if session_filters["managing_organisation"].blank? || session_filters["managing_organisation"].include?("all")
 
-    selected_managing_organisation_option = managing_organisation_filter_options(current_user).find { |org| org.id == session_filters["managing_organisation"].to_i }
+    selected_managing_organisation_option = managing_organisation_filter_options(current_user, filter_type).find { |org| org.id == session_filters["managing_organisation"].to_i }
     return unless selected_managing_organisation_option
 
     selected_managing_organisation_option&.name
