@@ -108,4 +108,53 @@ RSpec.describe BulkUploadErrorRowComponent, type: :component do
       expect(result).to have_content(expected)
     end
   end
+
+  context "when there are potential errors" do
+    let(:row) { rand(9_999) }
+    let(:tenant_code) { SecureRandom.hex(4) }
+    let(:property_ref) { SecureRandom.hex(4) }
+    let(:purchaser_code) { nil }
+    let(:category) { "soft_validation" }
+    let(:field_46) { 40 }
+    let(:field_50) { 5 }
+    let(:error) { "You told us this person is aged 40 years and retired." }
+    let(:bulk_upload) { create(:bulk_upload, :lettings) }
+    let(:bulk_upload_errors) do
+      [
+        FactoryBot.build(
+          :bulk_upload_error,
+          bulk_upload:,
+          row:,
+          tenant_code:,
+          property_ref:,
+          purchaser_code:,
+          field: :field_46,
+          error:,
+          category:,
+        ),
+        FactoryBot.build(
+          :bulk_upload_error,
+          bulk_upload:,
+          row:,
+          tenant_code:,
+          property_ref:,
+          purchaser_code:,
+          field: :field_50,
+          error:,
+          category:,
+        ),
+      ]
+    end
+
+    it "renders the potential errors section" do
+      result = render_inline(described_class.new(bulk_upload_errors:))
+      expect(result).to have_content("Potential errors")
+    end
+
+    it "renders the potential error message" do
+      expected = error
+      result = render_inline(described_class.new(bulk_upload_errors:))
+      expect(result).to have_content(expected, count: 1)
+    end
+  end
 end
