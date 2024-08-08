@@ -43,3 +43,4 @@ RSpec.describe Form::Lettings::Pages::Location, type: :model do
     ])
   end
 end
+
