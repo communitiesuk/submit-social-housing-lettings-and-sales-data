@@ -2,6 +2,7 @@
   <div class="govuk-grid-column-three-quarters-from-desktop">
 
     <%= form_with model: @log, url: send("#{@log.model_name.param_key}_confirm_clear_answer_path", @log), method: "post", local: true do |f| %>
+      <% remove_duplicate_page_errors(@log) %>
       <%= f.govuk_error_summary %>
       <%= f.hidden_field :page_id, value: @page.id %>
 

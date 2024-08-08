@@ -21,4 +21,22 @@ RSpec.describe FormPageErrorHelper do
       end
     end
   end
+
+  describe "#remove_duplicate_page_errors" do
+    context "when non base other questions are removed" do
+      let!(:lettings_log) { FactoryBot.create(:lettings_log, :in_progress) }
+
+      before do
+        lettings_log.errors.add :layear, "error"
+        lettings_log.errors.add :period, "error_one"
+        lettings_log.errors.add :base, "error_one"
+      end
+
+      it "returns details and user tabs" do
+        remove_duplicate_page_errors(lettings_log)
+        expect(lettings_log.errors.count).to eq(2)
+        expect(lettings_log.errors.map(&:message)).to match_array(%w[error_one error])
+      end
+    end
+  end
 end
