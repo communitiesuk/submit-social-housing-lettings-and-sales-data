@@ -542,4 +542,8 @@ class SalesLog < Log
   def address_search_given?
     address_line1_input.present? && postcode_full_input.present?
   end
+
+  def is_resale?
+    resale == 1
+  end
 end
