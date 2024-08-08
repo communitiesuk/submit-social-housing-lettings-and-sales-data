@@ -44,7 +44,7 @@ class BulkUpload::Lettings::Year2024::RowParser
     field_39: "If 'Other', what is the type of tenancy?",
     field_40: "What is the length of the fixed-term tenancy to the nearest year?",
     field_41: "Is this letting sheltered accommodation?",
-    field_15: "Has tenant seen the DLUHC privacy notice?",
+    field_15: "Has tenant seen the MHCLG privacy notice?",
     field_42: "What is the lead tenant's age?",
     field_43: "Which of these best describes the lead tenant's gender identity?",
     field_44: "Which of these best describes the lead tenant's ethnic background?",
@@ -806,16 +806,14 @@ private
 
       if setup_question?(question)
         fields.each do |field|
-          if errors.select { |e| fields.include?(e.attribute) }.none?
-            question_text = question.error_display_label.presence || "this question"
-            errors.add(field, I18n.t("validations.not_answered", question: question_text.downcase), category: :setup) if field.present?
+          if errors.select { |e| fields.include?(e.attribute) }.none? && field.present?
+            errors.add(field, question.unanswered_error_message, category: :setup)
           end
         end
       else
         fields.each do |field|
           unless errors.any? { |e| fields.include?(e.attribute) }
-            question_text = question.error_display_label.presence || "this question"
-            errors.add(field, I18n.t("validations.not_answered", question: question_text.downcase))
+            errors.add(field, question.unanswered_error_message)
           end
         end
       end
