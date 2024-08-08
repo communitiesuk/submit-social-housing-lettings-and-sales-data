@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_07_15_082338) do
+ActiveRecord::Schema[7.0].define(version: 2024_08_08_134014) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -430,6 +430,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_07_15_082338) do
     t.string "new_organisation_address_line2"
     t.string "new_organisation_postcode"
     t.string "new_organisation_telephone_number"
+    t.datetime "merge_date"
   end
 
   create_table "notifications", force: :cascade do |t|
