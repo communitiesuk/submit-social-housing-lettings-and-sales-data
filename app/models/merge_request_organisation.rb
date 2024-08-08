@@ -5,7 +5,7 @@ class MergeRequestOrganisation < ApplicationRecord
   validates :merging_organisation, presence: { message: I18n.t("validations.merge_request.merging_organisation_id.blank") }
   validate :validate_merging_organisations
 
-  scope :not_unsubmitted, -> { joins(:merge_request).where.not(merge_requests: { status: "unsubmitted" }) }
+  scope :not_unsubmitted, -> { joins(:merge_request).where.not(merge_requests: { status: %w[merge_issues incomplete ready_to_merge processing] }) }
   scope :with_merging_organisation, ->(merging_organisation) { where(merging_organisation:) }
 
   has_paper_trail
