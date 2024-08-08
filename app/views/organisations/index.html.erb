@@ -5,13 +5,26 @@
 
 <%= render partial: "organisations/headings", locals: request.path == organisations_path ? { main: "Organisations", sub: nil } : { main: @organisation.name, sub: "Organisations" } %>
 
-<% if current_user.support? %>
-  <%= govuk_button_link_to "Create a new organisation", new_organisation_path, html: { method: :get } %>
-<% end %>
+<div class="app-tab__list-view">
+  <%= govuk_tabs(title: "Collection resources", classes: %w[app-tab__large-headers]) do |c| %>
+    <% c.with_tab(label: "All organisations") do %>
+      <%= govuk_button_link_to "Create a new organisation", new_organisation_path, html: { method: :get } %>
+      <%= render SearchComponent.new(current_user:, search_label: "Search by organisation name", value: @searched) %>
+      <%= govuk_section_break(visible: true, size: "m") %>
+      <%= render partial: "organisation_list", locals: { organisations: @organisations, title: "Organisations", pagy: @pagy, searched: @searched, item_label:, total_count: @total_count } %>
+      <%== render partial: "pagy/nav", locals: { pagy: @pagy, item_name: "organisations" } %>
+    <% end %>
+    <% c.with_tab(label: "Merge requests") do %>
+      <%= govuk_button_link_to "Create new merge request", "/organisations/#{current_user.organisation_id}/merge-request", html: { method: :get } %>
+      <%= render partial: "merge_request_list", locals: { merge_requests: @merge_requests, title: "Merge requests", pagy: @pagy, searched: @searched, item_label:, total_count: @total_count } %>
+    <% end %>
+  <% end %>
+</div>
 
-<%= render SearchComponent.new(current_user:, search_label: "Search by organisation name", value: @searched) %>
 
-<%= govuk_section_break(visible: true, size: "m") %>
 
-<%= render partial: "organisation_list", locals: { organisations: @organisations, title: "Organisations", pagy: @pagy, searched: @searched, item_label:, total_count: @total_count } %>
-<%== render partial: "pagy/nav", locals: { pagy: @pagy, item_name: "organisations" } %>
+
+
+
+
+

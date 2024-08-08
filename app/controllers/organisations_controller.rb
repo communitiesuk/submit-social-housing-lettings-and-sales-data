@@ -16,6 +16,7 @@ class OrganisationsController < ApplicationController
 
     all_organisations = Organisation.order(:name)
     @pagy, @organisations = pagy(filtered_collection(all_organisations.visible, search_term))
+    @merge_requests = MergeRequest.visible.order(:new_organisation_name)
     @searched = search_term.presence
     @total_count = all_organisations.visible.size
   end

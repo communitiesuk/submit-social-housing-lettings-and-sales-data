@@ -7,10 +7,23 @@ class MergeRequest < ApplicationRecord
   validates :new_telephone_number, presence: true, if: -> { telephone_number_correct == false }
 
   STATUS = {
-    "unsubmitted" => 0,
-    "submitted" => 1,
+    "merge_issues" => 0,
+    "incomplete" => 1,
+    "ready_to_merge" => 2,
+    "processing" => 3,
+    "request_merged" => 4,
   }.freeze
   enum status: STATUS
+
+  scope :not_merged, -> { where.not(status: "request_merged") }
+  scope :visible, lambda {
+    open_collection_period_start_date = FormHandler.instance.start_date_of_earliest_open_collection_period
+    where(
+      "(status != :merged_status) OR (status = :merged_status AND merge_date >= :open_collection_period_start_date)",
+      merged_status: 4,
+      open_collection_period_start_date:,
+    )
+  }
 
   def organisation_name_uniqueness
     if Organisation.where("lower(name) = ?", new_organisation_name&.downcase).exists?

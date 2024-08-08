@@ -25,7 +25,7 @@ class MergeRequestsController < ApplicationController
 
   def create
     ActiveRecord::Base.transaction do
-      @merge_request = MergeRequest.create!(merge_request_params.merge(status: :unsubmitted))
+      @merge_request = MergeRequest.create!(merge_request_params.merge(status: :incomplete))
       MergeRequestOrganisation.create!({ merge_request: @merge_request, merging_organisation: @merge_request.requesting_organisation })
     end
     redirect_to organisations_merge_request_path(@merge_request)
