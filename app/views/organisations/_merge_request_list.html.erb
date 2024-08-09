@@ -3,7 +3,7 @@
     <p>No merge requests</p>
   <% else %>
   <%= govuk_table do |table| %>
-    <%= table.with_caption(classes: %w[govuk-!-font-size-19 govuk-!-font-weight-regular]) do |caption| %>
+    <%= table.with_caption(classes: %w[govuk-!-font-size-19 govuk-!-font-weight-regular]) do %>
       <strong><%= @merge_requests.where.not(status: 4).count %></strong> unresolved merge requests
     <% end %>
     <%= table.with_head do |head| %>
@@ -48,7 +48,7 @@
             <% row.with_cell(html_attributes: {
               scope: "row",
             }) do %>
-              <%= govuk_link_to("View details", "/merge-request/#{merge_request.id}/organisations") %>
+              <%= govuk_link_to("View details", "/merge-request/#{merge_request.id}/details") %>
             <% end %>
           <% end %>
         <% end %>

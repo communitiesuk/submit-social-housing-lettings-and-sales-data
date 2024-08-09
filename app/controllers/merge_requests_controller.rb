@@ -11,6 +11,7 @@ class MergeRequestsController < ApplicationController
     new_organisation_telephone_number
     new_organisation_type
     merge_date
+    details
   ]
   before_action :authenticate_user!
   before_action :authenticate_scope!, except: [:create]
@@ -45,6 +46,11 @@ class MergeRequestsController < ApplicationController
     else
       render previous_template, status: :unprocessable_entity
     end
+  end
+
+  def details
+    @merge_request = MergeRequest.find(params[:id])
+    render :details
   end
 
   def update_organisations
