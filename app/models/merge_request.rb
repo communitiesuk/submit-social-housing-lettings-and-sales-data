@@ -31,4 +31,12 @@ class MergeRequest < ApplicationRecord
   def absorbing_organisation_name
     absorbing_organisation&.name || ""
   end
+
+  def requesting_user
+    User.find(requester_id) if requester_id
+  end
+
+  def dpo_user
+    absorbing_organisation.users.find_by(is_dpo: true) if absorbing_organisation
+  end
 end
