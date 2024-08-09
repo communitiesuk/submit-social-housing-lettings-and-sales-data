@@ -12,6 +12,7 @@ class Form::Sales::Questions::PurchasePrice < ::Form::Question
     @hint_text = hint_text
     @ownership_sch = ownershipsch
     @question_number = QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP.max_by { |k, _v| k }.last)[ownershipsch]
+    @top_guidance_partial = top_guidance_partial
   end
 
   QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP = {
@@ -23,5 +24,10 @@ class Form::Sales::Questions::PurchasePrice < ::Form::Question
     return if @ownership_sch == 3 # outright sale
 
     "For all schemes, including Right to Acquire (RTA), Right to Buy (RTB), Voluntary Right to Buy (VRTB) or Preserved Right to Buy (PRTB) sales, enter the full price of the property without any discount"
+  end
+
+  def top_guidance_partial
+    return "financial_calculations_discounted_ownership" if @ownership_sch == 2
+    return "financial_calculations_outright_sale" if @ownership_sch == 3
   end
 end

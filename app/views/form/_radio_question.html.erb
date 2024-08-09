@@ -1,4 +1,4 @@
-<%= render partial: "form/guidance/#{question.top_guidance_partial}" if question.top_guidance? %>
+<%= render partial: "form/guidance/#{question.top_guidance_partial}", locals: { log: @log } if question.top_guidance? %>
   <% banner = question.notification_banner(@log) %>
   <% if banner %>
     <%= govuk_notification_banner(

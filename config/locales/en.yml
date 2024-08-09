@@ -644,8 +644,8 @@ en:
         must_be_after_hodate: "Sale completion date must be after practical completion or handover date"
       previous_property_type:
         property_type_bedsit: "A bedsit cannot have more than 1 bedroom"
-      discounted_ownership_value: "The mortgage, deposit, and grant when added together is %{mortgage_deposit_and_grant_total}, and the purchase price times by the discount is %{value_with_discount}. These figures should be the same"
-      outright_sale_value: "The mortgage and deposit when added together is %{mortgage_and_deposit_total}, and the purchase price is %{value}. These figures should be the same."
+      discounted_ownership_value: "The mortgage%{mortgage}%{deposit_and_grant_sentence} added together is %{mortgage_deposit_and_grant_total}.</br></br>The full purchase price%{discount_sentence} is %{value_with_discount}.</br></br>These two amounts should be the same."
+      outright_sale_value: "The mortgage%{mortgage} and cash deposit (%{deposit}) when added together is %{mortgage_and_deposit_total}.</br></br>The full purchase price is %{value}.</br></br>These two amounts should be the same."
       monthly_rent:
         higher_than_expected: "Basic monthly rent must be between £0.00 and £9,999.00"
       grant:
@@ -656,15 +656,15 @@ en:
         over_discounted_london_max: "The percentage discount multiplied by the purchase price is %{discount_value}. This figure should not be more than £136,400 for properties in London."
         over_discounted_max: "The percentage discount multiplied by the purchase price is %{discount_value}. This figure should not be more than £102,400 for properties outside of London."
       non_staircasing_mortgage:
-        mortgage_used: "The mortgage and deposit added together is %{mortgage_and_deposit_total}. The value multiplied by the percentage bought is %{expected_shared_ownership_deposit_value}. These figures should be the same."
-        mortgage_not_used: "The deposit is %{deposit} and the value multiplied by the percentage bought is %{expected_shared_ownership_deposit_value}. These figures should be the same."
-        mortgage_used_socialhomebuy: "The mortgage, deposit, and cash discount added together is %{mortgage_deposit_and_discount_total}. The value multiplied by the percentage bought is %{expected_shared_ownership_deposit_value}. These figures should be the same."
-        mortgage_not_used_socialhomebuy: "The deposit and cash discount added together is %{deposit_and_discount_total}. The value multiplied by the percentage bought is %{expected_shared_ownership_deposit_value}. These figures should be the same."
+        mortgage_used: "The mortgage (%{mortgage}) and cash deposit (%{deposit}) added together is %{mortgage_and_deposit_total}.</br></br>The full purchase price (%{value}) multiplied by the percentage equity stake purchased (%{equity}) is %{expected_shared_ownership_deposit_value}.</br></br>These two amounts should be the same."
+        mortgage_not_used: "The cash deposit is %{deposit}.</br></br>The full purchase price (%{value}) multiplied by the percentage bought is %{expected_shared_ownership_deposit_value}.</br></br>These two amounts should be the same."
+        mortgage_used_socialhomebuy: "The mortgage amount (%{mortgage}), cash deposit (%{deposit}), and cash discount (%{cashdis}) added together is %{mortgage_deposit_and_discount_total}.</br></br>The full purchase price (%{value}) multiplied by the percentage equity stake purchased (%{equity}) is %{expected_shared_ownership_deposit_value}.</br></br>These two amounts should be the same."
+        mortgage_not_used_socialhomebuy: "The cash deposit (%{deposit}) and cash discount (%{cashdis}) added together is %{deposit_and_discount_total}.</br></br>The full purchase price (%{value}) multiplied by the percentage bought (%{equity}) is %{expected_shared_ownership_deposit_value}.</br></br>These two amounts should be the same."
       staircasing_mortgage:
-        mortgage_used: "The mortgage and deposit added together is %{mortgage_and_deposit_total}. The value multiplied by the percentage bought is %{stairbought_part_of_value}. These figures should be the same."
-        mortgage_not_used: "The deposit is %{deposit} and the value multiplied by the percentage bought is %{stairbought_part_of_value}. These figures should be the same."
-        mortgage_used_socialhomebuy: "The mortgage, deposit, and cash discount added together is %{mortgage_deposit_and_discount_total}. The value multiplied by the percentage bought is %{stairbought_part_of_value}. These figures should be the same."
-        mortgage_not_used_socialhomebuy: "The deposit and cash discount added together is %{deposit_and_discount_total}. The value multiplied by the percentage bought is %{stairbought_part_of_value}. These figures should be the same."
+        mortgage_used: "The mortgage (%{mortgage}) and cash deposit (%{deposit}) added together is %{mortgage_and_deposit_total}.</br></br>The full purchase price (%{value}) multiplied by the percentage bought is %{stairbought_part_of_value}.</br></br>These two amounts should be the same."
+        mortgage_not_used: "The cash deposit is %{deposit}.</br></br>The full purchase price (%{value}) multiplied by the percentage bought is %{stairbought_part_of_value}.</br></br>These two amounts should be the same."
+        mortgage_used_socialhomebuy: "The mortgage amount (%{mortgage}), cash deposit (%{deposit}), and cash discount (%{cashdis}) added together is %{mortgage_deposit_and_discount_total}.</br></br>The full purchase price (%{value}) multiplied by the percentage bought (%{stairbought}) is %{stairbought_part_of_value}.</br></br>These two amounts should be the same."
+        mortgage_not_used_socialhomebuy: "The cash deposit (%{deposit}) and cash discount (%{cashdis}) added together is %{deposit_and_discount_total}.</br></br>The full purchase price (%{value}) multiplied by the percentage bought (%{stairbought}) is %{stairbought_part_of_value}.</br></br>These two amounts should be the same."
       stairowned:
         mortgageused_dont_know: "The percentage owned has to be 100% if the mortgage used is 'Don’t know'"
     merge_request:

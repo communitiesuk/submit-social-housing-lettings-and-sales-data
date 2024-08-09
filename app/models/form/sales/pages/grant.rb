@@ -1,7 +1,7 @@
-class Form::Sales::Pages::AboutPriceNotRtb < ::Form::Page
+class Form::Sales::Pages::Grant < ::Form::Page
   def initialize(id, hsh, subsection)
     super
-    @id = "about_price_not_rtb"
+    @id = "grant"
     @header = "About the price of the property"
     @depends_on = [{
       "right_to_buy?" => false,
@@ -11,7 +11,6 @@ class Form::Sales::Pages::AboutPriceNotRtb < ::Form::Page
 
   def questions
     @questions ||= [
-      Form::Sales::Questions::PurchasePrice.new(nil, nil, self, ownershipsch: 2),
       Form::Sales::Questions::Grant.new(nil, nil, self),
     ]
   end

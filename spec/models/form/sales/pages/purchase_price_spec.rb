@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Form::Sales::Pages::AboutPriceRtb, type: :model do
+RSpec.describe Form::Sales::Pages::PurchasePrice, type: :model do
   subject(:page) { described_class.new(page_id, page_definition, subsection) }
 
   let(:page_id) { nil }
@@ -16,11 +16,11 @@ RSpec.describe Form::Sales::Pages::AboutPriceRtb, type: :model do
   end
 
   it "has correct questions" do
-    expect(page.questions.map(&:id)).to eq(%w[value discount])
+    expect(page.questions.map(&:id)).to eq(%w[value])
   end
 
   it "has the correct id" do
-    expect(page.id).to eq("about_price_rtb")
+    expect(page.id).to eq("purchase_price")
   end
 
   it "has the correct header" do
@@ -32,8 +32,7 @@ RSpec.describe Form::Sales::Pages::AboutPriceRtb, type: :model do
   end
 
   it "has correct depends_on" do
-    expect(page.depends_on).to eq([{
-      "right_to_buy?" => true,
-    }])
+    expect(page.depends_on).to eq([{ "right_to_buy?" => true },
+                                   { "rent_to_buy_full_ownership?" => false, "right_to_buy?" => false }])
   end
 end
