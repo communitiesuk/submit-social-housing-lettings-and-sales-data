@@ -238,12 +238,12 @@ module Validations::Sales::SaleInformationValidations
           record.errors.add field, I18n.t("validations.sale_information.non_staircasing_mortgage.mortgage_not_used",
                                           deposit: record.field_formatted_as_currency("deposit"),
                                           value: record.field_formatted_as_currency("value"),
-                                          expected_shared_ownership_deposit_value: record.field_formatted_as_currency("expected_shared_ownership_deposit_value"))
+                                          expected_shared_ownership_deposit_value: record.field_formatted_as_currency("expected_shared_ownership_deposit_value")).html_safe
         end
         record.errors.add :type, :skip_bu_error, message: I18n.t("validations.sale_information.non_staircasing_mortgage.mortgage_not_used",
                                                                  deposit: record.field_formatted_as_currency("deposit"),
                                                                  value: record.field_formatted_as_currency("value"),
-                                                                 expected_shared_ownership_deposit_value: record.field_formatted_as_currency("expected_shared_ownership_deposit_value"))
+                                                                 expected_shared_ownership_deposit_value: record.field_formatted_as_currency("expected_shared_ownership_deposit_value")).html_safe
       end
     end
   end
