@@ -24,7 +24,7 @@ class MergeRequest < ApplicationRecord
       open_collection_period_start_date:,
     )
   }
-  scope :not_unsubmitted, -> { where.not(status: %w[merge_issues incomplete ready_to_merge processing]) }
+  scope :merged, -> { where(status: "request_merged") }
 
   def organisation_name_uniqueness
     if Organisation.where("lower(name) = ?", new_organisation_name&.downcase).exists?
