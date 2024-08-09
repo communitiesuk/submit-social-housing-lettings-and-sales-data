@@ -13,7 +13,7 @@ class MergeRequestsController < ApplicationController
     merge_date
   ]
   before_action :authenticate_user!
-  before_action :authenticate_scope!, except: [:create]
+  before_action :authenticate_scope!
 
   def absorbing_organisation; end
   def confirm_telephone_number; end
@@ -26,9 +26,8 @@ class MergeRequestsController < ApplicationController
   def create
     ActiveRecord::Base.transaction do
       @merge_request = MergeRequest.create!(merge_request_params.merge(status: :incomplete))
-      MergeRequestOrganisation.create!({ merge_request: @merge_request, merging_organisation: @merge_request.requesting_organisation })
     end
-    redirect_to organisations_merge_request_path(@merge_request)
+    redirect_to absorbing_organisation_merge_request_path(@merge_request)
   rescue ActiveRecord::RecordInvalid
     render_not_found
   end
@@ -72,13 +71,13 @@ private
   def next_page_path
     case page
     when "absorbing_organisation"
+      organisations_merge_request_path(@merge_request)
+    when "organisations"
       if create_new_organisation?
         new_organisation_name_merge_request_path(@merge_request)
       else
         confirm_telephone_number_merge_request_path(@merge_request)
       end
-    when "organisations"
-      absorbing_organisation_merge_request_path(@merge_request)
     when "confirm_telephone_number"
       merge_date_merge_request_path(@merge_request)
     when "new_organisation_name"
@@ -122,9 +121,7 @@ private
       :new_organisation_telephone_number,
     )
 
-    if merge_params[:requesting_organisation_id].present? && (current_user.data_coordinator? || current_user.data_provider?)
-      merge_params[:requesting_organisation_id] = current_user.organisation.id
-    end
+    merge_params[:requesting_organisation_id] = current_user.organisation.id
 
     if merge_params[:absorbing_organisation_id].present?
       if create_new_organisation?
@@ -172,7 +169,7 @@ private
   end
 
   def authenticate_scope!
-    if current_user.organisation != @merge_request.requesting_organisation && !current_user.support?
+    unless current_user.support?
       render_not_found
     end
   end
