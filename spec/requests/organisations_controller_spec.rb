@@ -1035,7 +1035,6 @@ RSpec.describe OrganisationsController, type: :request do
           expect(page).to have_content("No merge requests")
         end
 
-
         context "when viewing a specific organisation's lettings logs" do
           let(:parent_organisation) { create(:organisation) }
           let(:child_organisation) { create(:organisation) }
