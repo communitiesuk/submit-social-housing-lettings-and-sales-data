@@ -581,11 +581,19 @@ class LettingsLog < Log
   def non_location_setup_questions_completed?
     form.setup_sections.all? do |section|
       section.subsections.all? do |subsection|
-        relevant_qs = subsection.applicable_questions(self).reject { |q| optional_fields.include?(q.id) || %w[scheme_id location_id].include?(q.id) }
-        relevant_qs.all? do |question|
+        relevant_qs = subsection.questions.reject { |q| optional_fields.include?(q.id) || %w[scheme_id location_id].include?(q.id) }
+        relevant_applicable_qs = select_applicable_questions(self, relevant_qs)
+        relevant_applicable_qs.all? do |question|
           question.completed?(self)
         end
       end
+    end
+  end
+
+  # this is the same as the subsection method, but only for given questions
+  def select_applicable_questions(log, questions)
+    questions.select do |q|
+      (q.displayed_to_user?(log) && !q.derived?(log)) || q.is_derived_or_has_inferred_check_answers_value?(log)
     end
   end
 
