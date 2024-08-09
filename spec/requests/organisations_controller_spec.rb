@@ -1017,6 +1017,25 @@ RSpec.describe OrganisationsController, type: :request do
           expect(page).to have_field("search", type: "search")
         end
 
+        it "shows the merge request list" do
+          expect(page).to have_content("Merge requests")
+        end
+
+        it "has a create new merge request button" do
+          expect(page).to have_link("Create new merge request")
+        end
+
+        it "shows count of unresolved merge requests" do
+          total_number_of_unresolved_merge_requests = MergeRequest.visible.not_merged.count
+          expect(page).to have_content("#{total_number_of_unresolved_merge_requests} unresolved merge requests")
+        end
+
+        it "displays 'No merge requests' when @merge_requests is empty" do
+          allow(MergeRequest).to receive(:visible).and_return(nil)
+          expect(page).to have_content("No merge requests")
+        end
+
+
         context "when viewing a specific organisation's lettings logs" do
           let(:parent_organisation) { create(:organisation) }
           let(:child_organisation) { create(:organisation) }
