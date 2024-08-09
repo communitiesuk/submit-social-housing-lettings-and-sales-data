@@ -26,8 +26,6 @@ class FormController < ApplicationController
           flash[:notice] = "You have successfully updated #{updated_question_string}"
         end
 
-        update_duplication_tracking
-
         pages_requiring_update = pages_requiring_update(shown_page_ids_with_unanswered_questions_before_update)
         redirect_to(successful_redirect_path(pages_requiring_update))
       else
@@ -194,41 +192,22 @@ private
     params[@log.model_name.param_key]["interruption_page_referrer_type"].presence
   end
 
-  def update_duplication_tracking
-    class_name = @log.class.name.underscore
-    dynamic_duplicates = current_user.send(class_name.pluralize).duplicate_logs(@log)
-
-    if dynamic_duplicates.any?
-      saved_duplicates = @log.duplicates
-      if saved_duplicates.none? || duplicates_changed?(dynamic_duplicates, saved_duplicates)
-        duplicate_set_id = dynamic_duplicates.first.duplicate_set_id || new_duplicate_set_id(@log)
-        update_logs_with_duplicate_set_id(@log, dynamic_duplicates, duplicate_set_id)
-        saved_duplicates.first.update!(duplicate_set_id: nil) if saved_duplicates.count == 1
-      end
-    else
-      remove_fixed_duplicate_set_ids(@log)
-    end
-  end
-
   def successful_redirect_path(pages_to_check)
-    class_name = @log.class.name.underscore
-
-    if is_referrer_type?("duplicate_logs") || is_referrer_type?("duplicate_logs_banner")
-      original_log = current_user.send(class_name.pluralize).find_by(id: from_referrer_query("original_log_id"))
-
-      if original_log.present? && current_user.send(class_name.pluralize).duplicate_logs(original_log).any?
-        if @log.duplicates.none?
-          flash[:notice] = deduplication_success_banner
-        end
-        return send("#{class_name}_duplicate_logs_path", original_log, original_log_id: original_log.id, referrer: params[:referrer], organisation_id: params[:organisation_id])
-      else
-        flash[:notice] = deduplication_success_banner
-        return send("#{class_name}_duplicate_logs_path", "#{class_name}_id".to_sym => from_referrer_query("first_remaining_duplicate_id"), original_log_id: from_referrer_query("original_log_id"), referrer: params[:referrer], organisation_id: params[:organisation_id])
+    if FeatureToggle.deduplication_flow_enabled?
+      if is_referrer_type?("duplicate_logs") || is_referrer_type?("duplicate_logs_banner")
+        return correcting_duplicate_logs_redirect_path
       end
-    end
 
-    if @log.duplicates.any?
-      return send("#{@log.class.name.underscore}_duplicate_logs_path", @log, original_log_id: @log.id)
+      dynamic_duplicates = @log.lettings? ? current_user.lettings_logs.duplicate_logs(@log) : current_user.sales_logs.duplicate_logs(@log)
+      if dynamic_duplicates.any?
+        saved_duplicates = @log.duplicates
+        if saved_duplicates.none? || duplicates_changed?(dynamic_duplicates, saved_duplicates)
+          duplicate_set_id = dynamic_duplicates.first.duplicate_set_id || new_duplicate_set_id(@log)
+          update_logs_with_duplicate_set_id(@log, dynamic_duplicates, duplicate_set_id)
+          saved_duplicates.first.update!(duplicate_set_id: nil) if saved_duplicates.count == 1
+        end
+        return send("#{@log.class.name.underscore}_duplicate_logs_path", @log, original_log_id: @log.id)
+      end
     end
 
     if is_referrer_type?("check_answers")
@@ -335,6 +314,35 @@ private
   end
 
   CONFIRMATION_PAGE_IDS = %w[uprn_confirmation uprn_selection].freeze
+
+  def correcting_duplicate_logs_redirect_path
+    class_name = @log.class.name.underscore
+
+    original_log = current_user.send(class_name.pluralize).find_by(id: from_referrer_query("original_log_id"))
+    dynamic_duplicates = current_user.send(class_name.pluralize).duplicate_logs(@log)
+
+    if dynamic_duplicates.any?
+      saved_duplicates = @log.duplicates
+      if duplicates_changed?(dynamic_duplicates, saved_duplicates)
+        duplicate_set_id = dynamic_duplicates.first.duplicate_set_id || new_duplicate_set_id(@log)
+        update_logs_with_duplicate_set_id(@log, dynamic_duplicates, duplicate_set_id)
+        saved_duplicates.first.update!(duplicate_set_id: nil) if saved_duplicates.count == 1
+      end
+    else
+      remove_fixed_duplicate_set_ids(@log)
+    end
+
+    if original_log.present? && current_user.send(class_name.pluralize).duplicate_logs(original_log).any?
+      if dynamic_duplicates.none?
+        flash[:notice] = deduplication_success_banner
+      end
+      send("#{class_name}_duplicate_logs_path", original_log, original_log_id: original_log.id, referrer: params[:referrer], organisation_id: params[:organisation_id])
+    else
+      remove_fixed_duplicate_set_ids(original_log)
+      flash[:notice] = deduplication_success_banner
+      send("#{class_name}_duplicate_logs_path", "#{class_name}_id".to_sym => from_referrer_query("first_remaining_duplicate_id"), original_log_id: from_referrer_query("original_log_id"), referrer: params[:referrer], organisation_id: params[:organisation_id])
+    end
+  end
 
   def deduplication_success_banner
     deduplicated_log_link = "<a class=\"govuk-notification-banner__link govuk-!-font-weight-bold\" href=\"#{send("#{@log.class.name.underscore}_path", @log)}\">Log #{@log.id}</a>"
