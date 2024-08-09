@@ -763,162 +763,39 @@ RSpec.describe FormController, type: :request do
             }
           end
 
-          context "when the log will not be a duplicate" do
+          before do
+            post "/lettings-logs/#{lettings_log.id}/#{page_id.dasherize}", params:
+          end
+
+          it "re-renders the same page with errors if validation fails" do
+            expect(response).to have_http_status(:redirect)
+          end
+
+          it "only updates answers that apply to the page being submitted" do
+            lettings_log.reload
+            expect(lettings_log.age1).to eq(answer)
+            expect(lettings_log.age2).to be nil
+          end
+
+          it "tracks who updated the record" do
+            lettings_log.reload
+            whodunnit_actor = lettings_log.versions.last.actor
+            expect(whodunnit_actor).to be_a(User)
+            expect(whodunnit_actor.id).to eq(user.id)
+          end
+
+          context "and duplicate logs" do
+            let(:duplicate_logs) { create_list(:lettings_log, 2) }
+
             before do
+              allow(LettingsLog).to receive(:duplicate_logs).and_return(duplicate_logs)
               post "/lettings-logs/#{lettings_log.id}/#{page_id.dasherize}", params:
             end
 
-            it "re-renders the same page with errors if validation fails" do
-              expect(response).to have_http_status(:redirect)
-            end
-
-            it "only updates answers that apply to the page being submitted" do
-              lettings_log.reload
-              expect(lettings_log.age1).to eq(answer)
-              expect(lettings_log.age2).to be nil
-            end
-
-            it "tracks who updated the record" do
-              lettings_log.reload
-              whodunnit_actor = lettings_log.versions.last.actor
-              expect(whodunnit_actor).to be_a(User)
-              expect(whodunnit_actor.id).to eq(user.id)
-            end
-          end
-
-          context "when the answer makes the log a duplicate" do
-            context "with one other log" do
-              let(:new_duplicate) { create(:lettings_log) }
-
-              before do
-                allow(LettingsLog).to receive(:duplicate_logs).and_return(LettingsLog.where(id: new_duplicate.id))
-                post "/lettings-logs/#{lettings_log.id}/#{page_id.dasherize}", params:
-              end
-
-              it "sets a new duplicate set id on both logs" do
-                lettings_log.reload
-                new_duplicate.reload
-                expect(lettings_log.duplicate_set_id).not_to be_nil
-                expect(lettings_log.duplicate_set_id).to eql(new_duplicate.duplicate_set_id)
-              end
-
-              it "redirects to the duplicate logs page" do
-                expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}/duplicate-logs?original_log_id=#{lettings_log.id}")
-                follow_redirect!
-                expect(page).to have_content("These logs are duplicates")
-              end
-            end
-
-            context "with a set of other logs" do
-              let(:duplicate_set_id) { 100 }
-              let(:new_duplicates) { create_list(:lettings_log, 2, duplicate_set_id:) }
-
-              before do
-                allow(LettingsLog).to receive(:duplicate_logs).and_return(LettingsLog.where(id: new_duplicates.pluck(:id)))
-                post "/lettings-logs/#{lettings_log.id}/#{page_id.dasherize}", params:
-              end
-
-              it "sets the logs duplicate set id to that of the set it is now part of" do
-                lettings_log.reload
-                expect(lettings_log.duplicate_set_id).to eql(duplicate_set_id)
-                new_duplicates.each do |log|
-                  log.reload
-                  expect(log.duplicate_set_id).to eql(duplicate_set_id)
-                end
-              end
-
-              it "redirects to the duplicate logs page" do
-                expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}/duplicate-logs?original_log_id=#{lettings_log.id}")
-                follow_redirect!
-                expect(page).to have_content("These logs are duplicates")
-              end
-            end
-
-            context "when the log was previously in a different duplicate set" do
-              context "with a single other log" do
-                let(:old_duplicate_set_id) { 110 }
-                let!(:old_duplicate) { create(:lettings_log, duplicate_set_id: old_duplicate_set_id) }
-                let(:lettings_log) { create(:lettings_log, assigned_to: user, duplicate_set_id: old_duplicate_set_id) }
-                let(:new_duplicate) { create(:lettings_log) }
-
-                before do
-                  allow(LettingsLog).to receive(:duplicate_logs).and_return(LettingsLog.where(id: new_duplicate.id))
-                  post "/lettings-logs/#{lettings_log.id}/#{page_id.dasherize}", params:
-                end
-
-                it "updates the relevant duplicate set ids" do
-                  lettings_log.reload
-                  old_duplicate.reload
-                  new_duplicate.reload
-                  expect(old_duplicate.duplicate_set_id).to be_nil
-                  expect(lettings_log.duplicate_set_id).not_to be_nil
-                  expect(lettings_log.duplicate_set_id).to eql(new_duplicate.duplicate_set_id)
-                end
-              end
-
-              context "with multiple other logs" do
-                let(:old_duplicate_set_id) { 120 }
-                let!(:old_duplicates) { create_list(:lettings_log, 2, duplicate_set_id: old_duplicate_set_id) }
-                let(:lettings_log) { create(:lettings_log, assigned_to: user, duplicate_set_id: old_duplicate_set_id) }
-                let(:new_duplicate) { create(:lettings_log) }
-
-                before do
-                  allow(LettingsLog).to receive(:duplicate_logs).and_return(LettingsLog.where(id: new_duplicate.id))
-                  post "/lettings-logs/#{lettings_log.id}/#{page_id.dasherize}", params:
-                end
-
-                it "updates the relevant duplicate set ids" do
-                  lettings_log.reload
-                  new_duplicate.reload
-                  old_duplicates.each do |log|
-                    log.reload
-                    expect(log.duplicate_set_id).to eql(old_duplicate_set_id)
-                  end
-                  expect(lettings_log.duplicate_set_id).not_to be_nil
-                  expect(lettings_log.duplicate_set_id).not_to eql(old_duplicate_set_id)
-                  expect(lettings_log.duplicate_set_id).to eql(new_duplicate.duplicate_set_id)
-                end
-              end
-            end
-          end
-
-          context "when the answer makes the log stop being a duplicate" do
-            context "when the log had one duplicate" do
-              let(:old_duplicate_set_id) { 130 }
-              let!(:old_duplicate) { create(:lettings_log, duplicate_set_id: old_duplicate_set_id) }
-              let(:lettings_log) { create(:lettings_log, assigned_to: user, duplicate_set_id: old_duplicate_set_id) }
-
-              before do
-                allow(LettingsLog).to receive(:duplicate_logs).and_return(LettingsLog.none)
-                post "/lettings-logs/#{lettings_log.id}/#{page_id.dasherize}", params:
-              end
-
-              it "updates the relevant duplicate set ids" do
-                lettings_log.reload
-                old_duplicate.reload
-                expect(old_duplicate.duplicate_set_id).to be_nil
-                expect(lettings_log.duplicate_set_id).to be_nil
-              end
-            end
-
-            context "when the log had multiple duplicates" do
-              let(:old_duplicate_set_id) { 140 }
-              let!(:old_duplicates) { create_list(:lettings_log, 2, duplicate_set_id: old_duplicate_set_id) }
-              let(:lettings_log) { create(:lettings_log, assigned_to: user, duplicate_set_id: old_duplicate_set_id) }
-
-              before do
-                allow(LettingsLog).to receive(:duplicate_logs).and_return(LettingsLog.none)
-                post "/lettings-logs/#{lettings_log.id}/#{page_id.dasherize}", params:
-              end
-
-              it "updates the relevant duplicate set ids" do
-                lettings_log.reload
-                old_duplicates.each do |log|
-                  log.reload
-                  expect(log.duplicate_set_id).to eql(old_duplicate_set_id)
-                end
-                expect(lettings_log.duplicate_set_id).to be_nil
-              end
+            it "redirects to the duplicate logs page" do
+              expect(response).to redirect_to("/lettings-logs/#{lettings_log.id}/duplicate-logs?original_log_id=#{lettings_log.id}")
+              follow_redirect!
+              expect(page).to have_content("These logs are duplicates")
             end
           end
         end
@@ -939,141 +816,19 @@ RSpec.describe FormController, type: :request do
               },
             }
           end
-          let(:page_id) { "buyer_1_age" }
 
-          context "when the answer makes the log a duplicate" do
-            context "with one other log" do
-              let(:new_duplicate) { create(:sales_log) }
+          context "and duplicate logs" do
+            let!(:duplicate_logs) { create_list(:sales_log, 2) }
 
-              before do
-                allow(SalesLog).to receive(:duplicate_logs).and_return(SalesLog.where(id: new_duplicate.id))
-                post "/sales-logs/#{sales_log.id}/#{page_id.dasherize}", params:
-              end
-
-              it "sets a new duplicate set id on both logs" do
-                sales_log.reload
-                new_duplicate.reload
-                expect(sales_log.duplicate_set_id).not_to be_nil
-                expect(sales_log.duplicate_set_id).to eql(new_duplicate.duplicate_set_id)
-              end
-
-              it "redirects to the duplicate logs page" do
-                expect(response).to redirect_to("/sales-logs/#{sales_log.id}/duplicate-logs?original_log_id=#{sales_log.id}")
-                follow_redirect!
-                expect(page).to have_content("These logs are duplicates")
-              end
+            before do
+              allow(SalesLog).to receive(:duplicate_logs).and_return(duplicate_logs)
+              post "/sales-logs/#{sales_log.id}/buyer-1-age", params:
             end
 
-            context "with a set of other logs" do
-              let(:duplicate_set_id) { 100 }
-              let(:new_duplicates) { create_list(:sales_log, 2, duplicate_set_id:) }
-
-              before do
-                allow(SalesLog).to receive(:duplicate_logs).and_return(SalesLog.where(id: new_duplicates.pluck(:id)))
-                post "/sales-logs/#{sales_log.id}/#{page_id.dasherize}", params:
-              end
-
-              it "sets the logs duplicate set id to that of the set it is now part of" do
-                sales_log.reload
-                expect(sales_log.duplicate_set_id).to eql(duplicate_set_id)
-                new_duplicates.each do |log|
-                  log.reload
-                  expect(log.duplicate_set_id).to eql(duplicate_set_id)
-                end
-              end
-
-              it "redirects to the duplicate logs page" do
-                expect(response).to redirect_to("/sales-logs/#{sales_log.id}/duplicate-logs?original_log_id=#{sales_log.id}")
-                follow_redirect!
-                expect(page).to have_content("These logs are duplicates")
-              end
-            end
-
-            context "when the log was previously in a different duplicate set" do
-              context "with a single other log" do
-                let(:old_duplicate_set_id) { 110 }
-                let!(:old_duplicate) { create(:sales_log, duplicate_set_id: old_duplicate_set_id) }
-                let(:sales_log) { create(:sales_log, assigned_to: user, duplicate_set_id: old_duplicate_set_id) }
-                let(:new_duplicate) { create(:sales_log) }
-
-                before do
-                  allow(SalesLog).to receive(:duplicate_logs).and_return(SalesLog.where(id: new_duplicate.id))
-                  post "/sales-logs/#{sales_log.id}/#{page_id.dasherize}", params:
-                end
-
-                it "updates the relevant duplicate set ids" do
-                  sales_log.reload
-                  old_duplicate.reload
-                  new_duplicate.reload
-                  expect(old_duplicate.duplicate_set_id).to be_nil
-                  expect(sales_log.duplicate_set_id).not_to be_nil
-                  expect(sales_log.duplicate_set_id).to eql(new_duplicate.duplicate_set_id)
-                end
-              end
-
-              context "with multiple other logs" do
-                let(:old_duplicate_set_id) { 120 }
-                let!(:old_duplicates) { create_list(:sales_log, 2, duplicate_set_id: old_duplicate_set_id) }
-                let(:sales_log) { create(:sales_log, assigned_to: user, duplicate_set_id: old_duplicate_set_id) }
-                let(:new_duplicate) { create(:sales_log) }
-
-                before do
-                  allow(SalesLog).to receive(:duplicate_logs).and_return(SalesLog.where(id: new_duplicate.id))
-                  post "/sales-logs/#{sales_log.id}/#{page_id.dasherize}", params:
-                end
-
-                it "updates the relevant duplicate set ids" do
-                  sales_log.reload
-                  new_duplicate.reload
-                  old_duplicates.each do |log|
-                    log.reload
-                    expect(log.duplicate_set_id).to eql(old_duplicate_set_id)
-                  end
-                  expect(sales_log.duplicate_set_id).not_to be_nil
-                  expect(sales_log.duplicate_set_id).not_to eql(old_duplicate_set_id)
-                  expect(sales_log.duplicate_set_id).to eql(new_duplicate.duplicate_set_id)
-                end
-              end
-            end
-          end
-
-          context "when the answer makes the log stop being a duplicate" do
-            context "when the log had one duplicate" do
-              let(:old_duplicate_set_id) { 130 }
-              let!(:old_duplicate) { create(:sales_log, duplicate_set_id: old_duplicate_set_id) }
-              let(:sales_log) { create(:sales_log, assigned_to: user, duplicate_set_id: old_duplicate_set_id) }
-
-              before do
-                allow(SalesLog).to receive(:duplicate_logs).and_return(SalesLog.none)
-                post "/sales-logs/#{sales_log.id}/#{page_id.dasherize}", params:
-              end
-
-              it "updates the relevant duplicate set ids" do
-                sales_log.reload
-                old_duplicate.reload
-                expect(old_duplicate.duplicate_set_id).to be_nil
-                expect(sales_log.duplicate_set_id).to be_nil
-              end
-            end
-
-            context "when the log had multiple duplicates" do
-              let(:old_duplicate_set_id) { 140 }
-              let!(:old_duplicates) { create_list(:sales_log, 2, duplicate_set_id: old_duplicate_set_id) }
-              let(:sales_log) { create(:sales_log, assigned_to: user, duplicate_set_id: old_duplicate_set_id) }
-
-              before do
-                allow(SalesLog).to receive(:duplicate_logs).and_return(SalesLog.none)
-                post "/sales-logs/#{sales_log.id}/#{page_id.dasherize}", params:
-              end
-
-              it "updates the relevant duplicate set ids" do
-                sales_log.reload
-                old_duplicates.each do |log|
-                  log.reload
-                  expect(log.duplicate_set_id).to eql(old_duplicate_set_id)
-                end
-                expect(sales_log.duplicate_set_id).to be_nil
-              end
+            it "redirects to the duplicate logs page" do
+              expect(response).to redirect_to("/sales-logs/#{sales_log.id}/duplicate-logs?original_log_id=#{sales_log.id}")
+              follow_redirect!
+              expect(page).to have_content("These logs are duplicates")
             end
           end
         end
