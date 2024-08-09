@@ -22,15 +22,15 @@
     <% @merge_requests.each do |merge_request| %>
       <%= table.with_body do |body| %>
         <%= body.with_row do |row| %>
-          <% absorbing_organisation_name = merge_request.new_organisation_name %>
-          <% if absorbing_organisation_name.blank? %>
+          <% absorbing_organisation = @organisations.find { |org| org.id == merge_request.absorbing_organisation_id } %>
+          <% if absorbing_organisation&.name.blank? %>
             <% row.with_cell(text: "You didn't answer this question",
                              html_attributes: {
                                 scope: "row",
                                 class: "app-!-colour-muted",
                              }) %>
           <% else %>
-            <% row.with_cell(text: merge_request.new_organisation_name) %>
+            <% row.with_cell(text: absorbing_organisation&.name) %>
           <% end %>
           <% merge_date = merge_request.merge_date %>
           <% if merge_date.nil? %>
