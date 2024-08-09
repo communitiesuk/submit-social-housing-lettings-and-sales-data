@@ -16,15 +16,11 @@ class MergeRequest < ApplicationRecord
   enum status: STATUS
 
   scope :not_merged, -> { where.not(status: "request_merged") }
+  scope :merged, -> { where(status: "request_merged") }
   scope :visible, lambda {
     open_collection_period_start_date = FormHandler.instance.start_date_of_earliest_open_collection_period
-    where(
-      "(merge_requests.status != :merged_status) OR (merge_requests.status = :merged_status AND merge_requests.merge_date >= :open_collection_period_start_date)",
-      merged_status: 4,
-      open_collection_period_start_date:,
-    )
+    merged.where("merge_requests.merge_date >= ?", open_collection_period_start_date).or(not_merged)
   }
-  scope :merged, -> { where(status: "request_merged") }
 
   def organisation_name_uniqueness
     if Organisation.where("lower(name) = ?", new_organisation_name&.downcase).exists?
