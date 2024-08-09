@@ -442,6 +442,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_19_143150) do
     t.string "new_organisation_address_line2"
     t.string "new_organisation_postcode"
     t.string "new_organisation_telephone_number"
+    t.datetime "merge_date"
   end
 
   create_table "notifications", force: :cascade do |t|
