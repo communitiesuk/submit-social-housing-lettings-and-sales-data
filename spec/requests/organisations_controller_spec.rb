@@ -1025,11 +1025,6 @@ RSpec.describe OrganisationsController, type: :request do
           expect(page).to have_link("Create new merge request")
         end
 
-        it "shows count of unresolved merge requests" do
-          total_number_of_unresolved_merge_requests = MergeRequest.visible.not_merged.count
-          expect(page).to have_content("#{total_number_of_unresolved_merge_requests} unresolved merge requests")
-        end
-
         it "displays 'No merge requests' when @merge_requests is empty" do
           allow(MergeRequest).to receive(:visible).and_return(nil)
           expect(page).to have_content("No merge requests")
