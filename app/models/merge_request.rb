@@ -19,7 +19,7 @@ class MergeRequest < ApplicationRecord
   scope :visible, lambda {
     open_collection_period_start_date = FormHandler.instance.start_date_of_earliest_open_collection_period
     where(
-      "(status != :merged_status) OR (status = :merged_status AND merge_date >= :open_collection_period_start_date)",
+      "(merge_requests.status != :merged_status) OR (merge_requests.status = :merged_status AND merge_requests.merge_date >= :open_collection_period_start_date)",
       merged_status: 4,
       open_collection_period_start_date:,
     )
@@ -30,5 +30,9 @@ class MergeRequest < ApplicationRecord
     if Organisation.where("lower(name) = ?", new_organisation_name&.downcase).exists?
       errors.add(:new_organisation_name, :invalid)
     end
+  end
+
+  def absorbing_organisation_name
+    absorbing_organisation&.name || ""
   end
 end
