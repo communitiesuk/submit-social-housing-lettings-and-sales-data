@@ -61,7 +61,6 @@ RSpec.describe "merge_requests/details.html.erb", type: :view do
   end
 
   context "when the merge request is complete" do
-
     before do
       merge_request.update!(status: 4, signed_dsa: true, total_users: 10, total_schemes: 5, total_lettings_logs: 20, total_sales_logs: 30, total_stock_owners: 40, total_managing_agents: 50)
       assign(:merge_request, merge_request)
