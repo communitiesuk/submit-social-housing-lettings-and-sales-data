@@ -1,0 +1,27 @@
+<%= govuk_summary_list do |summary_list| %>
+  <% details.each do |detail| %>
+    <% summary_list.with_row do |row| %>
+      <% row.with_key { detail[:label]} %>
+
+      <% row.with_value do %>
+        <div class="govuk-!-margin-left-8 govuk-!-margin-right-4">
+          <% if detail[:value].html_safe? %>
+            <%= raw(detail[:value]) %>
+          <% elsif detail[:value].is_a?(Date) || detail[:value].is_a?(Time) %>
+            <%= detail[:value].strftime("%d %B %Y") %>
+          <% else %>
+            <%= simple_format(detail[:value]) %>
+          <% end %>
+        </div>
+      <% end %>
+
+      <% if detail[:action].present? %>
+        <% row.with_action(
+             text: detail[:action][:text],
+             href: detail[:action][:href],
+             visually_hidden_text: detail[:action][:visually_hidden_text],
+             ) %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

@@ -1,158 +1,64 @@
 <% content_for :before_content do %>
   <% title = "Merge details: #{@merge_request.absorbing_organisation_name}" %>
   <% content_for :title, title %>
-
   <%= govuk_back_link href: "#{organisations_path}#merge-requests" %>
 <% end %>
-<% unless @merge_request.signed_dsa %>
-<div class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
-  <div class="govuk-notification-banner__header">
-    <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
-      Important
-    </h2>
-  </div>
-  <div class="govuk-notification-banner__content">
-    <strong>The absorbing organisation must accept the Data Sharing Agreement before merging.</strong>
-    <p>Contact the Data Protection Officer:
+<% unless @merge_request.signed_dsa || @merge_request.absorbing_organisation_id.blank? %>
+  <div class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+    <div class="govuk-notification-banner__header">
+      <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+        Important
+      </h2>
+    </div>
+    <div class="govuk-notification-banner__content">
+      <strong>The absorbing organisation must accept the Data Sharing Agreement before merging.</strong>
+      <br>
       <% if @merge_request.dpo_user %>
-        <%= link_to @merge_request.dpo_user.name, user_path(@merge_request.dpo_user.id) %>
+        Contact the Data Protection Officer: <%= link_to @merge_request.dpo_user.name, user_path(@merge_request.dpo_user.id) %>
       <% else %>
-        None belong to the organisation
+        <%= @merge_request.absorbing_organisation_name %> does not have a Data Protection Officer. You can assign one on the <%= link_to 'users page', "#{organisation_path(@merge_request.absorbing_organisation_id)}/users" %>.
       <% end %>
-    </p>
+    </div>
   </div>
-</div>
 <% end %>
 <h1 class="govuk-heading-l">
   <span class="govuk-caption-l">Merge details</span>
   <%= @merge_request.absorbing_organisation_name %>
 </h1>
+<% unless @merge_request.status == "request_merged"%>
 <div class="govuk-button-group">
   <button type="submit" <%= @merge_request.status == "ready_to_merge" ? "" : "disabled aria-disabled=\"true\"" %> class="govuk-button" data-module="govuk-button">
     Begin merge
   </button>
-  <button type="submit" <%= @merge_request.status != "request_merged" ? "" : "disabled aria-disabled=\"true\"" %> class="govuk-button govuk-button--warning" data-module="govuk-button">
+  <button type="submit" class="govuk-button govuk-button--warning" data-module="govuk-button">
     Delete merge request
   </button>
 </div>
+<% end %>
 
-<table class="govuk-table govuk-!-width-three-quarters" style="border: 1px solid #b1b4b6;">
-  <thead class="govuk-table__head">
-  <tr class="govuk-table__row">
-    <th scope="col" colspan="3" class="govuk-table__header govuk-!-font-weight-regular govuk-!-padding-3" style="background-color:#f3f2f1">Request details</th>
-  </tr>
-  </thead>
-  <tbody class="govuk-table__body app-table-group">
-  <tr class="govuk-table__row">
-    <th scope="row" class="govuk-table__header govuk-!-padding-2 govuk-!-padding-right-9 govuk-!-padding-top-4">Requester</th>
-    <td class="govuk-table__cell govuk-!-width-one-half govuk-!-padding-2 govuk-!-padding-right-9 govuk-!-padding-top-4"><%= display_value_or_placeholder(@merge_request.requesting_user&.name) %></td>
-    <td class="govuk-table__cell govuk-!-width-one-quarter-width govuk-!-padding-2 govuk-!-padding-top-4 govuk-!-text-align-right" style="width: 10%;"></td>
-  </tr>
-  <tr class="govuk-table__row">
-    <th scope="row" class="govuk-table__header govuk-!-padding-2 govuk-!-padding-right-9">Helpdesk ticket</th>
-    <% ticket_base_url = "https://dluhcdigital.atlassian.net/browse/" %>
-    <td class="govuk-table__cell govuk-!-padding-2 govuk-!-padding-right-9">
-      <% if @merge_request.helpdesk_ticket.blank? %>
-        <%= display_value_or_placeholder(nil) %>
-    <% else %>
-        <a href="<%= ticket_base_url + @merge_request.helpdesk_ticket %>" target="_blank" rel="noopener noreferrer" title="<%= @merge_request.helpdesk_ticket %> (opens in a new tab)">
-          <%= @merge_request.helpdesk_ticket %> (opens in a new tab)
-        </a>
-      <% end %>
-    </td>
-    <td class="govuk-table__cell govuk-!-padding-2 govuk-!-text-align-right" style="width: 10%;"><a href="#" aria-label="Change helpdesk ticket">Change</a></td>
-  </tr>
-  <tr class="govuk-table__row">
-    <th scope="row" class="govuk-table__header govuk-!-padding-2 govuk-!-padding-right-9 govuk-!-padding-bottom-5">Status</th>
-    <td class="govuk-table__cell govuk-!-padding-2 govuk-!-padding-right-9"><%= status_tag(@merge_request.status) %></td>
-    <td class="govuk-table__cell govuk-!-padding-2 govuk-!-text-align-right" style="width: 10%;"></td>
-  </tr>
-  </tbody>
-</table>
+<% request_details = [
+  { label: "Requester", value: display_value_or_placeholder(@merge_request.requesting_user&.name) },
+  { label: "Helpdesk ticket", value: @merge_request.helpdesk_ticket.present? ? link_to(@merge_request.helpdesk_ticket, "https://dluhcdigital.atlassian.net/browse/#{@merge_request.helpdesk_ticket}", target: "_blank", rel: "noopener noreferrer") : display_value_or_placeholder(nil), action: @merge_request.status == "request_merged" ? nil : { text: "Change", href: "#", visually_hidden_text: "helpdesk ticket" } },
+  { label: "Status", value: status_tag(@merge_request.status) },
+] %>
 
-<table class="govuk-table govuk-!-width-three-quarters" style="border: 1px solid #b1b4b6;">
-  <thead class="govuk-table__head">
-  <tr class="govuk-table__row">
-    <th scope="col" colspan="3" class="govuk-table__header govuk-!-font-weight-regular govuk-!-padding-3" style="background-color:#f3f2f1">Merge details</th>
-  </tr>
-  </thead>
-  <tbody class="govuk-table__body app-table-group">
-  <tr class="govuk-table__row">
-    <th scope="row" class="govuk-table__header govuk-!-padding-2 govuk-!-padding-right-9 govuk-!-padding-top-4">Absorbing organisation</th>
-    <td class="govuk-table__cell govuk-!-width-one-half govuk-!-padding-2 govuk-!-padding-right-9 govuk-!-padding-top-4"><%= display_value_or_placeholder(@merge_request.absorbing_organisation_name) %></td>
-    <td class="govuk-table__cell govuk-!-width-one-quarter-width govuk-!-padding-2 govuk-!-padding-top-4 govuk-!-text-align-right" style="width: 10%;"><a href="#" aria-label="Change absorbing organisation">Change</a></td>
-  </tr>
-  <tr class="govuk-table__row">
-    <th scope="row" class="govuk-table__header govuk-!-padding-2 govuk-!-padding-right-9">Merging organisations</th>
-    <td class="govuk-table__cell govuk-!-padding-2 govuk-!-padding-right-9">
-      <% if @merge_request.other_merging_organisations.blank? %>
-        <%= display_value_or_placeholder(nil) %>
-      <% else %>
-        <% @merge_request.other_merging_organisations.split(',').each do |organisation| %>
-          <p class="govuk-!-padding-bottom-1 govuk-!-margin-0"><%= organisation.strip %></p>
-        <% end %>
-      <% end %>
-    </td>
-    <td class="govuk-table__cell govuk-!-padding-2 govuk-!-text-align-right" style="width: 10%;"><a href="#" aria-label="Change merging organisations">Change</a></td>
-  </tr>
-  <tr class="govuk-table__row">
-    <th scope="row" class="govuk-table__header govuk-!-padding-2 govuk-!-padding-right-9 govuk-!-padding-bottom-5">Merge date</th>
-    <td class="govuk-table__cell govuk-!-padding-2 govuk-!-padding-right-9"><%= display_value_or_placeholder(@merge_request.merge_date) %></td>
-    <td class="govuk-table__cell govuk-!-padding-2 govuk-!-text-align-right" style="width: 10%;"><a href="#" aria-label="Change merge date">Change</a></td>
-  </tr>
-  </tbody>
-</table>
+<%= render partial: "merge_requests/summary_card", locals: { title: "Request details", details: request_details } %>
 
-<table class="govuk-table govuk-!-width-three-quarters" style="border: 1px solid #b1b4b6;">
-  <thead class="govuk-table__head">
-  <tr class="govuk-table__row">
-    <th scope="col" colspan="3" class="govuk-table__header govuk-!-font-weight-regular govuk-!-padding-3" style="background-color:#f3f2f1">Merge outcomes</th>
-  </tr>
-  </thead>
-  <tbody class="govuk-table__body app-table-group">
-  <tr class="govuk-table__row">
-    <th scope="row" class="govuk-table__header govuk-!-padding-2 govuk-!-padding-right-9 govuk-!-padding-top-4">Total users after merge</th>
-    <td class="govuk-table__cell govuk-!-width-one-half govuk-!-padding-2 govuk-!-padding-right-9 govuk-!-padding-top-4"><%= display_value_or_placeholder(@merge_request.total_users) %></td>
-    <td class="govuk-table__cell govuk-!-width-one-quarter-width govuk-!-padding-2 govuk-!-padding-top-4 govuk-!-text-align-right" style="width: 10%;"><a href="#" aria-label="View all users after merge">View</a></td>
-  </tr>
-  <tr class="govuk-table__row">
-    <th scope="row" class="govuk-table__header govuk-!-padding-2 govuk-!-padding-right-9">Total schemes after merge</th>
-    <td class="govuk-table__cell govuk-!-padding-2 govuk-!-padding-right-9"><%= display_value_or_placeholder(@merge_request.total_schemes) %></td>
-    <td class="govuk-table__cell govuk-!-padding-2 govuk-!-text-align-right" style="width: 10%;"><a href="#" aria-label="View all schemes after merge">View</a></td>
-  </tr>
-  <tr class="govuk-table__row">
-    <th scope="row" class="govuk-table__header govuk-!-padding-2 govuk-!-padding-right-9">Total logs after merge</th>
-    <td class="govuk-table__cell govuk-!-padding-2 govuk-!-padding-right-9">
-      <% if @merge_request.total_lettings_logs.blank? && @merge_request.total_sales_logs.blank? %>
-        <%= display_value_or_placeholder(nil) %>
-      <% else %>
-        <% unless @merge_request.total_lettings_logs.blank? %>
-          <%=  @merge_request.total_lettings_logs  %> lettings logs
-        <% end %>
-          <br>
-        <% unless @merge_request.total_sales_logs.blank? %>
-          <%=  @merge_request.total_sales_logs  %> sales logs
-        <% end %>
-      <%  end %>
-    </td>
-    <td class="govuk-table__cell govuk-!-padding-2 govuk-!-text-align-right" style="width: 10%;"><a href="#" aria-label="View all lettings and sales logs after merge">View</a></td>
-  </tr>
-  <tr class="govuk-table__row">
-    <th scope="row" class="govuk-table__header govuk-!-padding-2 govuk-!-padding-right-9 govuk-!-padding-bottom-5">Total stock owners & managing agents after merge</th>
-    <td class="govuk-table__cell govuk-!-padding-2 govuk-!-padding-right-9">
-      <% if @merge_request.total_stock_owners.blank? && @merge_request.total_managing_agents.blank? %>
-        <%= display_value_or_placeholder(nil) %>
-      <% else %>
-        <% unless @merge_request.total_stock_owners.blank? %>
-          <%= @merge_request.total_stock_owners %> stock owners
-        <% end %>
-        <br>
-        <% unless @merge_request.total_managing_agents.blank? %>
-          <%= @merge_request.total_managing_agents %> managing agents
-        <% end %>
-      <%  end %>
-    </td>
-    <td class="govuk-table__cell govuk-!-padding-2 govuk-!-text-align-right" style="width: 10%;"><a href="#" aria-label="View all stock owners and managing agents after merge">View</a></td>
-  </tr>
-  </tbody>
-</table>
+<% merge_details = [
+  { label: "Absorbing organisation", value: display_value_or_placeholder(@merge_request.absorbing_organisation_name), action: @merge_request.status == "request_merged" ? nil : { text: "Change", href: "#", visually_hidden_text: "absorbing organisation" } },
+  { label: "Merging organisations", value: @merge_request.other_merging_organisations.present? ? @merge_request.other_merging_organisations.split(',').map(&:strip).join('<br>').html_safe : display_value_or_placeholder(nil), action: @merge_request.status == "request_merged" ? nil : { text: "Change", href: "#", visually_hidden_text: "merging organisations" } },
+  { label: "Merge date", value: display_value_or_placeholder(@merge_request.merge_date), action: @merge_request.status == "request_merged" ? nil : { text: "Change", href: "#", visually_hidden_text: "merge date" } },
+] %>
+
+<%= render partial: "merge_requests/summary_card", locals: { title: "Merge details", details: merge_details } %>
+
+<% unless @merge_request.status == "incomplete" %>
+  <% merge_outcomes = [
+    { label: "Total users after merge", value: display_value_or_placeholder(@merge_request.total_users), action: { text: "View", href: "#", visually_hidden_text: "total users after merge" } },
+    { label: "Total schemes after merge", value: display_value_or_placeholder(@merge_request.total_schemes), action: { text: "View", href: "#", visually_hidden_text: "total schemes after merge" } },
+    { label: "Total logs after merge", value: @merge_request.total_lettings_logs.present? || @merge_request.total_sales_logs.present? ? "#{@merge_request.total_lettings_logs} lettings logs<br>#{@merge_request.total_sales_logs} sales logs".html_safe : display_value_or_placeholder(nil), action: { text: "View", href: "#", visually_hidden_text: "total logs after merge" } },
+    { label: "Total stock owners & managing agents after merge", value: @merge_request.total_stock_owners.present? || @merge_request.total_managing_agents.present? ? "#{@merge_request.total_stock_owners} stock owners<br>#{@merge_request.total_managing_agents} managing agents".html_safe : display_value_or_placeholder(nil), action: { text: "View", href: "#", visually_hidden_text: "total stock owners & managing agents after merge" } }
+  ] %>
+
+  <%= render partial: "merge_requests/summary_card", locals: { title: "Merge outcomes", details: merge_outcomes } %>
+<% end %>
