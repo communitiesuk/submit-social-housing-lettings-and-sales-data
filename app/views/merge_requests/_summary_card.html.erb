@@ -3,6 +3,6 @@
     <h3 class="govuk-summary-card__title govuk-!-font-weight-regular"><%= title %></h3>
   </div>
   <div class="govuk-summary-card__content">
-    <%= render partial: "merge_requests/details_list", details: details %>
+    <%= render partial: "merge_requests/details_list", locals: { details: } %>
   </div>
 </div>
