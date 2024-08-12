@@ -37,6 +37,6 @@ class MergeRequest < ApplicationRecord
   end
 
   def dpo_user
-    absorbing_organisation.users.find_by(is_dpo: true) if absorbing_organisation
+    absorbing_organisation.users.filter_by_active.find_by(is_dpo: true) if absorbing_organisation
   end
 end
