@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "merge_requests/details.html.erb", type: :view do
+RSpec.describe "merge_requests/show.html.erb", type: :view do
   let(:absorbing_organisation) { create(:organisation, name: "Absorbing Org") }
   let(:dpo_user) { create(:user, name: "DPO User", is_dpo: true, organisation: absorbing_organisation) }
   let(:merge_request) { create(:merge_request, absorbing_organisation_id: absorbing_organisation.id, signed_dsa: false, status: 1) }
@@ -24,7 +24,7 @@ RSpec.describe "merge_requests/details.html.erb", type: :view do
 
   it "displays the requester details" do
     expect(rendered).to have_selector("dt", text: "Requester")
-    expect(rendered).to have_selector("dd", text: merge_request.requestor&.name || "You didn't answer this question")
+    expect(rendered).to have_selector("dd", text: merge_request.requester&.name || "You didn't answer this question")
   end
 
   it "displays the helpdesk ticket details" do
