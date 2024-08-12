@@ -1,21 +1,11 @@
 class MergeRequestsController < ApplicationController
-  before_action :find_resource, only: %i[
-    update
-    organisations
-    update_organisations
-    remove_merging_organisation
-    absorbing_organisation
-    confirm_telephone_number
-    new_organisation_name
-    new_organisation_address
-    new_organisation_telephone_number
-    new_organisation_type
-    merge_date
-  ]
+  before_action :find_resource, exclude: %i[create new]
   before_action :authenticate_user!
   before_action :authenticate_scope!
+  before_action :set_organisations_answer_options, only: %i[organisations absorbing_organisation update_organisations remove_merging_organisation update]
 
   def absorbing_organisation; end
+  def organisations; end
   def confirm_telephone_number; end
   def new_organisation_name; end
   def new_organisation_address; end
@@ -32,10 +22,6 @@ class MergeRequestsController < ApplicationController
     render_not_found
   end
 
-  def organisations
-    @answer_options = organisations_answer_options
-  end
-
   def update
     validate_response
 
@@ -48,7 +34,6 @@ class MergeRequestsController < ApplicationController
 
   def update_organisations
     merge_request_organisation = MergeRequestOrganisation.new(merge_request_organisation_params)
-    @answer_options = organisations_answer_options
     if merge_request_organisation.save
       render :organisations
     else
@@ -58,7 +43,6 @@ class MergeRequestsController < ApplicationController
 
   def remove_merging_organisation
     MergeRequestOrganisation.find_by(merge_request_organisation_params)&.destroy!
-    @answer_options = organisations_answer_options
     render :organisations
   end
 
@@ -97,13 +81,16 @@ private
     params.dig(:merge_request, :absorbing_organisation_id) == "other"
   end
 
-  def organisations_answer_options
+  def set_organisations_answer_options
     answer_options = { "" => "Select an option" }
 
-    Organisation.all.pluck(:id, :name).each do |organisation|
-      answer_options[organisation[0]] = organisation[1]
+    if current_user.support?
+      Organisation.all.pluck(:id, :name).each do |organisation|
+        answer_options[organisation[0]] = organisation[1]
+      end
     end
-    answer_options
+
+    @answer_options = answer_options
   end
 
   def merge_request_params
@@ -165,6 +152,8 @@ private
   end
 
   def find_resource
+    return if params[:id].blank?
+
     @merge_request = MergeRequest.find(params[:id])
   end
 

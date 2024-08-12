@@ -256,6 +256,21 @@ RSpec.describe MergeRequestsController, type: :request do
       end
     end
 
+    describe "#absorbing_organisation" do
+      let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation) }
+
+      before { get "/merge-request/#{merge_request.id}/absorbing-organisation", headers: }
+
+      it "asks for the absorbing organisation" do
+        expect(page).to have_content("Which organisation is absorbing the others?")
+        expect(page).to have_content("Select organisation name")
+      end
+
+      it "has the correct back button" do
+        expect(page).to have_link("Back", href: organisations_path(anchor: "merge-requests"))
+      end
+    end
+
     describe "#update" do
       describe "from absorbing_organisation page" do
         context "when not answering the question" do
