@@ -45,9 +45,9 @@
 <%= render partial: "merge_requests/summary_card", locals: { title: "Request details", details: request_details } %>
 
 <% merge_details = [
-  { label: "Absorbing organisation", value: display_value_or_placeholder(@merge_request.absorbing_organisation_name), action: @merge_request.status == "request_merged" ? nil : { text: "Change", href: "#", visually_hidden_text: "absorbing organisation" } },
-  { label: "Merging organisations", value: @merge_request.other_merging_organisations.present? ? @merge_request.other_merging_organisations.split(",").map(&:strip).join("<br>").html_safe : display_value_or_placeholder(nil), action: @merge_request.status == "request_merged" ? nil : { text: "Change", href: "#", visually_hidden_text: "merging organisations" } },
-  { label: "Merge date", value: display_value_or_placeholder(@merge_request.merge_date), action: @merge_request.status == "request_merged" ? nil : { text: "Change", href: "#", visually_hidden_text: "merge date" } },
+  { label: "Absorbing organisation", value: display_value_or_placeholder(@merge_request.absorbing_organisation_name), action: @merge_request.status == "request_merged" ? nil : { text: "Change", href: absorbing_organisation_merge_request_path(@merge_request), visually_hidden_text: "absorbing organisation" } },
+  { label: "Merging organisations", value: @merge_request.other_merging_organisations.present? ? @merge_request.other_merging_organisations.split(",").map(&:strip).join("<br>").html_safe : display_value_or_placeholder(nil), action: @merge_request.status == "request_merged" ? nil : { text: "Change", href: organisations_merge_request_path(@merge_request), visually_hidden_text: "merging organisations" } },
+  { label: "Merge date", value: display_value_or_placeholder(@merge_request.merge_date), action: @merge_request.status == "request_merged" ? nil : { text: "Change", href: merge_date_merge_request_path(@merge_request), visually_hidden_text: "merge date" } },
 ] %>
 
 <%= render partial: "merge_requests/summary_card", locals: { title: "Merge details", details: merge_details } %>
