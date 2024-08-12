@@ -32,9 +32,8 @@ class MergeRequestsController < ApplicationController
     end
   end
 
-  def details
+  def show
     @merge_request = MergeRequest.find(params[:id])
-    render :details
   end
 
   def update_organisations
