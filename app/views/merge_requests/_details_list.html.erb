@@ -4,15 +4,21 @@
       <% row.with_key { detail[:label] } %>
 
       <% row.with_value do %>
-        <div class="govuk-!-margin-left-8 govuk-!-margin-right-4">
           <% if detail[:value].html_safe? %>
+          <div class="govuk-!-margin-left-8 govuk-!-margin-right-4">
             <%= raw(detail[:value]) %>
+          </div>
           <% elsif detail[:value].is_a?(Date) || detail[:value].is_a?(Time) %>
+          <div class="govuk-!-margin-left-8 govuk-!-margin-right-4">
             <%= detail[:value].strftime("%d %B %Y") %>
+          </div>
           <% else %>
-            <%= simple_format(detail[:value]) %>
+            <%= simple_format(
+                  detail[:value],
+                  wrapper_tag: "span",
+                  class: "govuk-!-margin-left-8 govuk-!-margin-right-4",
+                  ) %>
           <% end %>
-        </div>
       <% end %>
 
       <% if detail[:action].present? %>
