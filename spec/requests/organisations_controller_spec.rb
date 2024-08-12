@@ -1048,7 +1048,7 @@ RSpec.describe OrganisationsController, type: :request do
         end
 
         it "has a create new merge request button" do
-          expect(page).to have_link("Create new merge request")
+          expect(page).to have_button("Create new merge request")
         end
 
         it "displays 'No merge requests' when @merge_requests is empty" do
