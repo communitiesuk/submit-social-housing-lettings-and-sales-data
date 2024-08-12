@@ -1,22 +1,11 @@
 class MergeRequestsController < ApplicationController
-  before_action :find_resource, only: %i[
-    update
-    organisations
-    update_organisations
-    remove_merging_organisation
-    absorbing_organisation
-    confirm_telephone_number
-    new_organisation_name
-    new_organisation_address
-    new_organisation_telephone_number
-    new_organisation_type
-    merge_date
-    details
-  ]
+  before_action :find_resource, exclude: %i[create new]
   before_action :authenticate_user!
-  before_action :authenticate_scope!, except: [:create]
+  before_action :authenticate_scope!
+  before_action :set_organisations_answer_options, only: %i[organisations absorbing_organisation update_organisations remove_merging_organisation update]
 
   def absorbing_organisation; end
+  def organisations; end
   def confirm_telephone_number; end
   def new_organisation_name; end
   def new_organisation_address; end
@@ -27,15 +16,10 @@ class MergeRequestsController < ApplicationController
   def create
     ActiveRecord::Base.transaction do
       @merge_request = MergeRequest.create!(merge_request_params.merge(status: :incomplete))
-      MergeRequestOrganisation.create!({ merge_request: @merge_request, merging_organisation: @merge_request.requesting_organisation })
     end
-    redirect_to organisations_merge_request_path(@merge_request)
+    redirect_to absorbing_organisation_merge_request_path(@merge_request)
   rescue ActiveRecord::RecordInvalid
     render_not_found
-  end
-
-  def organisations
-    @answer_options = organisations_answer_options
   end
 
   def update
@@ -55,7 +39,6 @@ class MergeRequestsController < ApplicationController
 
   def update_organisations
     merge_request_organisation = MergeRequestOrganisation.new(merge_request_organisation_params)
-    @answer_options = organisations_answer_options
     if merge_request_organisation.save
       render :organisations
     else
@@ -65,7 +48,6 @@ class MergeRequestsController < ApplicationController
 
   def remove_merging_organisation
     MergeRequestOrganisation.find_by(merge_request_organisation_params)&.destroy!
-    @answer_options = organisations_answer_options
     render :organisations
   end
 
@@ -78,13 +60,13 @@ private
   def next_page_path
     case page
     when "absorbing_organisation"
+      organisations_merge_request_path(@merge_request)
+    when "organisations"
       if create_new_organisation?
         new_organisation_name_merge_request_path(@merge_request)
       else
         confirm_telephone_number_merge_request_path(@merge_request)
       end
-    when "organisations"
-      absorbing_organisation_merge_request_path(@merge_request)
     when "confirm_telephone_number"
       merge_date_merge_request_path(@merge_request)
     when "new_organisation_name"
@@ -104,13 +86,16 @@ private
     params.dig(:merge_request, :absorbing_organisation_id) == "other"
   end
 
-  def organisations_answer_options
+  def set_organisations_answer_options
     answer_options = { "" => "Select an option" }
 
-    Organisation.all.pluck(:id, :name).each do |organisation|
-      answer_options[organisation[0]] = organisation[1]
+    if current_user.support?
+      Organisation.all.pluck(:id, :name).each do |organisation|
+        answer_options[organisation[0]] = organisation[1]
+      end
     end
-    answer_options
+
+    @answer_options = answer_options
   end
 
   def merge_request_params
@@ -128,9 +113,7 @@ private
       :new_organisation_telephone_number,
     )
 
-    if merge_params[:requesting_organisation_id].present? && (current_user.data_coordinator? || current_user.data_provider?)
-      merge_params[:requesting_organisation_id] = current_user.organisation.id
-    end
+    merge_params[:requesting_organisation_id] = current_user.organisation.id
 
     if merge_params[:absorbing_organisation_id].present?
       if create_new_organisation?
@@ -174,11 +157,13 @@ private
   end
 
   def find_resource
+    return if params[:id].blank?
+
     @merge_request = MergeRequest.find(params[:id])
   end
 
   def authenticate_scope!
-    if current_user.organisation != @merge_request.requesting_organisation && !current_user.support?
+    unless current_user.support?
       render_not_found
     end
   end
