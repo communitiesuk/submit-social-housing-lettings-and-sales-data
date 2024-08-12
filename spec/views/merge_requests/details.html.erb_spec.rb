@@ -24,7 +24,7 @@ RSpec.describe "merge_requests/details.html.erb", type: :view do
 
   it "displays the requester details" do
     expect(rendered).to have_selector("dt", text: "Requester")
-    expect(rendered).to have_selector("dd", text: merge_request.requesting_user&.name || "You didn't answer this question")
+    expect(rendered).to have_selector("dd", text: merge_request.requestor&.name || "You didn't answer this question")
   end
 
   it "displays the helpdesk ticket details" do

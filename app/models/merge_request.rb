@@ -3,6 +3,7 @@ class MergeRequest < ApplicationRecord
   has_many :merge_request_organisations
   belongs_to :absorbing_organisation, class_name: "Organisation", optional: true
   has_many :merging_organisations, through: :merge_request_organisations, source: :merging_organisation
+  belongs_to :requestor, class_name: "User", foreign_key: "requester_id"
   validate :organisation_name_uniqueness, if: :new_organisation_name
   validates :new_telephone_number, presence: true, if: -> { telephone_number_correct == false }
 
@@ -32,11 +33,7 @@ class MergeRequest < ApplicationRecord
     absorbing_organisation&.name || ""
   end
 
-  def requesting_user
-    User.find(requester_id) if requester_id
-  end
-
   def dpo_user
-    absorbing_organisation.users.filter_by_active.find_by(is_dpo: true) if absorbing_organisation
+    absorbing_organisation.data_protection_officers.filter_by_active.first
   end
 end
