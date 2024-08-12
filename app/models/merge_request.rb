@@ -3,7 +3,7 @@ class MergeRequest < ApplicationRecord
   has_many :merge_request_organisations
   belongs_to :absorbing_organisation, class_name: "Organisation", optional: true
   has_many :merging_organisations, through: :merge_request_organisations, source: :merging_organisation
-  belongs_to :requestor, class_name: "User", foreign_key: "requester_id"
+  belongs_to :requestor, class_name: "User", foreign_key: "requester_id", optional: true
   validate :organisation_name_uniqueness, if: :new_organisation_name
   validates :new_telephone_number, presence: true, if: -> { telephone_number_correct == false }
 
