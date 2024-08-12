@@ -23,7 +23,7 @@
 <% end %>
 <h1 class="govuk-heading-l">
   <span class="govuk-caption-l">Merge details</span>
-  <%= @merge_request.absorbing_organisation_name %>
+  <%= display_value_or_placeholder(@merge_request.absorbing_organisation_name) %>
 </h1>
 <% unless @merge_request.status == "request_merged" %>
 <div class="govuk-button-group">
