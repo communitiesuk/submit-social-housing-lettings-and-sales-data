@@ -38,7 +38,7 @@
 
 <% request_details = [
   { label: "Requester", value: display_value_or_placeholder(@merge_request.requesting_user&.name) },
-  { label: "Helpdesk ticket", value: @merge_request.helpdesk_ticket.present? ? link_to(@merge_request.helpdesk_ticket, "https://dluhcdigital.atlassian.net/browse/#{@merge_request.helpdesk_ticket}", target: "_blank", rel: "noopener noreferrer") : display_value_or_placeholder(nil), action: @merge_request.status == "request_merged" ? nil : { text: "Change", href: "#", visually_hidden_text: "helpdesk ticket" } },
+  { label: "Helpdesk ticket", value: @merge_request.helpdesk_ticket.present? ? link_to("#{@merge_request.helpdesk_ticket} (opens in a new tab)", "https://dluhcdigital.atlassian.net/browse/#{@merge_request.helpdesk_ticket}", target: "_blank", rel: "noopener noreferrer") : display_value_or_placeholder(nil), action: @merge_request.status == "request_merged" ? nil : { text: "Change", href: "#", visually_hidden_text: "helpdesk ticket" } },
   { label: "Status", value: status_tag(@merge_request.status) },
 ] %>
 
