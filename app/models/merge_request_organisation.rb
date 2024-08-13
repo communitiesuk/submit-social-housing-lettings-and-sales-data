@@ -26,11 +26,6 @@ private
       merge_request.errors.add(:merging_organisation, I18n.t("validations.merge_request.organisation_part_of_another_merge"))
     end
 
-    if MergeRequest.merged.where.not(id: merge_request_id).where(requesting_organisation: merging_organisation).count.positive?
-      errors.add(:merging_organisation, I18n.t("validations.merge_request.organisation_part_of_another_merge"))
-      merge_request.errors.add(:merging_organisation, I18n.t("validations.merge_request.organisation_part_of_another_merge"))
-    end
-
     if merging_organisation_id.blank? || !Organisation.where(id: merging_organisation_id).exists?
       merge_request.errors.add(:merging_organisation, I18n.t("validations.merge_request.organisation_not_selected"))
     end

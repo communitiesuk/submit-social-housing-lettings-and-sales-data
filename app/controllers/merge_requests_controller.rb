@@ -2,10 +2,10 @@ class MergeRequestsController < ApplicationController
   before_action :find_resource, exclude: %i[create new]
   before_action :authenticate_user!
   before_action :authenticate_scope!
-  before_action :set_organisations_answer_options, only: %i[organisations absorbing_organisation update_organisations remove_merging_organisation update]
+  before_action :set_organisations_answer_options, only: %i[merging_organisations absorbing_organisation update_merging_organisations remove_merging_organisation update]
 
   def absorbing_organisation; end
-  def organisations; end
+  def merging_organisations; end
   def confirm_telephone_number; end
   def new_organisation_name; end
   def new_organisation_address; end
@@ -32,18 +32,18 @@ class MergeRequestsController < ApplicationController
     end
   end
 
-  def update_organisations
+  def update_merging_organisations
     merge_request_organisation = MergeRequestOrganisation.new(merge_request_organisation_params)
     if merge_request_organisation.save
-      render :organisations
+      render :merging_organisations
     else
-      render :organisations, status: :unprocessable_entity
+      render :merging_organisations, status: :unprocessable_entity
     end
   end
 
   def remove_merging_organisation
     MergeRequestOrganisation.find_by(merge_request_organisation_params)&.destroy!
-    render :organisations
+    render :merging_organisations
   end
 
 private
@@ -55,8 +55,8 @@ private
   def next_page_path
     case page
     when "absorbing_organisation"
-      organisations_merge_request_path(@merge_request)
-    when "organisations"
+      merging_organisations_merge_request_path(@merge_request)
+    when "merging_organisations"
       if create_new_organisation?
         new_organisation_name_merge_request_path(@merge_request)
       else
@@ -96,7 +96,6 @@ private
   def merge_request_params
     merge_params = params.fetch(:merge_request, {}).permit(
       :requesting_organisation_id,
-      :other_merging_organisations,
       :status,
       :absorbing_organisation_id,
       :telephone_number_correct,

@@ -16,56 +16,56 @@ RSpec.describe MergeRequestsController, type: :request do
       sign_in support_user
     end
 
-    describe "#organisations" do
+    context "when creating a new merge request" do
       let(:params) { { merge_request: { requesting_organisation_id: support_user.organisation_id, status: "incomplete" } } }
 
-      context "when creating a new merge request" do
-        before do
-          post "/merge-request", headers:, params:
-        end
-
-        it "creates merge request with requesting organisation" do
-          follow_redirect!
-          expect(page).to have_content("Which organisation is absorbing the others?")
-          expect(page).to have_content(support_user.organisation.name)
-        end
-
-        context "when passing a different requesting organisation id" do
-          let(:params) { { merge_request: { requesting_organisation_id: other_organisation.id, status: "incomplete" } } }
-
-          it "creates merge request with current user organisation" do
-            follow_redirect!
-            expect(MergeRequest.count).to eq(1)
-            expect(MergeRequest.first.requesting_organisation_id).to eq(support_user.organisation_id)
-            expect(MergeRequest.first.merging_organisations.count).to eq(0)
-          end
-        end
+      before do
+        post "/merge-request", headers:, params:
       end
 
-      context "when viewing existing merge request" do
-        before do
-          get "/merge-request/#{merge_request.id}/organisations", headers:, params:
-        end
+      it "creates merge request with requesting organisation" do
+        follow_redirect!
+        expect(page).to have_content("Which organisation is absorbing the others?")
+        expect(MergeRequest.first.requesting_organisation_id).to eq(support_user.organisation_id)
+      end
 
-        it "shows merge request with requesting organisation" do
-          expect(page).to have_content("Which organisations are merging?")
-          expect(page).to have_content(organisation.name)
+      context "when passing a different requesting organisation id" do
+        let(:params) { { merge_request: { requesting_organisation_id: other_organisation.id, status: "incomplete" } } }
+
+        it "creates merge request with current user organisation" do
+          follow_redirect!
+          expect(MergeRequest.count).to eq(1)
+          expect(MergeRequest.first.requesting_organisation_id).to eq(support_user.organisation_id)
+          expect(MergeRequest.first.merging_organisations.count).to eq(0)
         end
       end
     end
 
-    describe "#update_organisations" do
+    describe "#merging-organisations" do
+      context "when viewing merging organisations page" do
+        before do
+          merge_request.update!(absorbing_organisation_id: organisation.id)
+          get "/merge-request/#{merge_request.id}/merging-organisations", headers:
+        end
+
+        it "shows the correct content" do
+          expect(page).to have_content("Which organisations are merging into MHCLG?")
+        end
+      end
+    end
+
+    describe "#update_merging_organisations" do
       let(:params) { { merge_request: { merging_organisation: other_organisation.id } } }
 
-      context "when updating a merge request with a new organisation" do
+      context "when updating a merge request with a new merging organisation" do
         before do
-          patch "/merge-request/#{merge_request.id}/organisations", headers:, params:
+          patch "/merge-request/#{merge_request.id}/merging-organisations", headers:, params:
         end
 
         it "updates the merge request" do
           merge_request.reload
           expect(merge_request.merging_organisations.count).to eq(1)
-          expect(page).to have_content("Test Org")
+          expect(page).to have_content("MHCLG")
           expect(page).to have_content("Other Test Org")
           expect(page).to have_link("Remove")
         end
@@ -76,23 +76,7 @@ RSpec.describe MergeRequestsController, type: :request do
 
         before do
           MergeRequest.create!(requesting_organisation_id: other_organisation.id, status: "request_merged")
-          patch "/merge-request/#{merge_request.id}/organisations", headers:, params:
-        end
-
-        it "does not update the merge request" do
-          merge_request.reload
-          expect(merge_request.merging_organisations.count).to eq(0)
-          expect(response).to have_http_status(:unprocessable_entity)
-          expect(page).to have_content(I18n.t("validations.merge_request.organisation_part_of_another_merge"))
-        end
-      end
-
-      context "when the user selects an organisation that has another non submitted merge" do
-        let(:params) { { merge_request: { merging_organisation: other_organisation.id } } }
-
-        before do
-          MergeRequest.create!(requesting_organisation_id: other_organisation.id, status: "incomplete")
-          patch "/merge-request/#{merge_request.id}/organisations", headers:, params:
+          patch "/merge-request/#{merge_request.id}/merging-organisations", headers:, params:
         end
 
         it "updates the merge request" do
@@ -109,7 +93,7 @@ RSpec.describe MergeRequestsController, type: :request do
         before do
           existing_merge_request = MergeRequest.create!(requesting_organisation_id: other_organisation.id, status: "request_merged")
           MergeRequestOrganisation.create!(merge_request_id: existing_merge_request.id, merging_organisation_id: another_organisation.id)
-          patch "/merge-request/#{merge_request.id}/organisations", headers:, params:
+          patch "/merge-request/#{merge_request.id}/merging-organisations", headers:, params:
         end
 
         it "does not update the merge request" do
@@ -120,17 +104,17 @@ RSpec.describe MergeRequestsController, type: :request do
         end
       end
 
-      context "when the user selects an organisation that is a part of another unsubmitted merge" do
+      context "when the user selects an organisation that is a part of another incomplete merge" do
         let(:another_organisation) { create(:organisation) }
         let(:params) { { merge_request: { merging_organisation: another_organisation.id } } }
 
         before do
           existing_merge_request = MergeRequest.create!(requesting_organisation_id: other_organisation.id, status: "incomplete")
           MergeRequestOrganisation.create!(merge_request_id: existing_merge_request.id, merging_organisation_id: another_organisation.id)
-          patch "/merge-request/#{merge_request.id}/organisations", headers:, params:
+          patch "/merge-request/#{merge_request.id}/merging-organisations", headers:, params:
         end
 
-        it "does not update the merge request" do
+        it "updates the merge request" do
           merge_request.reload
           expect(merge_request.merging_organisations.count).to eq(1)
           expect(page).not_to have_content(I18n.t("validations.merge_request.organisation_part_of_another_merge"))
@@ -143,25 +127,11 @@ RSpec.describe MergeRequestsController, type: :request do
 
         before do
           merge_request.merging_organisations << another_organisation
-          patch "/merge-request/#{merge_request.id}/organisations", headers:, params:
+          patch "/merge-request/#{merge_request.id}/merging-organisations", headers:, params:
         end
 
         it "does not update the merge request" do
           merge_request.reload
-          expect(merge_request.merging_organisations.count).to eq(1)
-        end
-      end
-
-      context "when the user selects an organisation that is requesting this merge" do
-        let(:params) { { merge_request: { merging_organisation: merge_request.requesting_organisation_id } } }
-
-        before do
-          patch "/merge-request/#{merge_request.id}/organisations", headers:, params:
-        end
-
-        it "does not update the merge request" do
-          merge_request.reload
-          expect(page).not_to have_content(I18n.t("validations.merge_request.organisation_part_of_another_merge"))
           expect(merge_request.merging_organisations.count).to eq(1)
         end
       end
@@ -170,7 +140,7 @@ RSpec.describe MergeRequestsController, type: :request do
         let(:params) { { merge_request: { merging_organisation: nil } } }
 
         before do
-          patch "/merge-request/#{merge_request.id}/organisations", headers:, params:
+          patch "/merge-request/#{merge_request.id}/merging-organisations", headers:, params:
         end
 
         it "does not update the merge request" do
@@ -185,7 +155,7 @@ RSpec.describe MergeRequestsController, type: :request do
         let(:params) { { merge_request: { merging_organisation: "clearly_not_an_id" } } }
 
         before do
-          patch "/merge-request/#{merge_request.id}/organisations", headers:, params:
+          patch "/merge-request/#{merge_request.id}/merging-organisations", headers:, params:
         end
 
         it "does not update the merge request" do
@@ -203,7 +173,7 @@ RSpec.describe MergeRequestsController, type: :request do
       context "when removing an organisation from merge request" do
         before do
           MergeRequestOrganisation.create!(merge_request_id: merge_request.id, merging_organisation_id: other_organisation.id)
-          get "/merge-request/#{merge_request.id}/organisations/remove", headers:, params:
+          get "/merge-request/#{merge_request.id}/merging-organisations/remove", headers:, params:
         end
 
         it "updates the merge request" do
@@ -214,7 +184,7 @@ RSpec.describe MergeRequestsController, type: :request do
 
       context "when removing an organisation that is not part of a merge from merge request" do
         before do
-          get "/merge-request/#{merge_request.id}/organisations/remove", headers:, params:
+          get "/merge-request/#{merge_request.id}/merging-organisations/remove", headers:, params:
         end
 
         it "does not throw an error" do
@@ -306,7 +276,7 @@ RSpec.describe MergeRequestsController, type: :request do
           it "redirects to merging organisations path" do
             request
 
-            expect(response).to redirect_to(organisations_merge_request_path(merge_request))
+            expect(response).to redirect_to(merging_organisations_merge_request_path(merge_request))
           end
 
           it "updates absorbing_organisation_id and sets new_absorbing_organisation to false" do
@@ -315,30 +285,6 @@ RSpec.describe MergeRequestsController, type: :request do
             }.from(nil).to(other_organisation).and change {
               merge_request.reload.new_absorbing_organisation
             }.from(true).to(false)
-          end
-        end
-      end
-
-      describe "#other_merging_organisations" do
-        let(:other_merging_organisations) { "A list of other merging organisations" }
-        let(:params) { { merge_request: { other_merging_organisations:, page: "organisations" } } }
-        let(:request) do
-          patch "/merge-request/#{merge_request.id}", headers:, params:
-        end
-
-        context "when adding other merging organisations" do
-          before do
-            MergeRequestOrganisation.create!(merge_request_id: merge_request.id, merging_organisation_id: other_organisation.id)
-          end
-
-          it "updates the merge request" do
-            expect { request }.to change { merge_request.reload.other_merging_organisations }.from(nil).to(other_merging_organisations)
-          end
-
-          it "redirects telephone number path" do
-            request
-
-            expect(response).to redirect_to(confirm_telephone_number_merge_request_path(merge_request))
           end
         end
       end
@@ -694,7 +640,7 @@ RSpec.describe MergeRequestsController, type: :request do
 
       context "when viewing existing merge request" do
         before do
-          get "/merge-request/#{merge_request.id}/organisations", headers:, params:
+          get "/merge-request/#{merge_request.id}/merging-organisations", headers:, params:
         end
 
         it "does not allow viewing a merge request" do
@@ -708,7 +654,7 @@ RSpec.describe MergeRequestsController, type: :request do
 
       context "when updating a merge request with a new organisation" do
         before do
-          patch "/merge-request/#{merge_request.id}/organisations", headers:, params:
+          patch "/merge-request/#{merge_request.id}/merging-organisations", headers:, params:
         end
 
         it "does not allow updaing a merge request" do
@@ -723,7 +669,7 @@ RSpec.describe MergeRequestsController, type: :request do
       context "when removing an organisation from merge request" do
         before do
           MergeRequestOrganisation.create!(merge_request_id: merge_request.id, merging_organisation_id: other_organisation.id)
-          get "/merge-request/#{merge_request.id}/organisations/remove", headers:, params:
+          get "/merge-request/#{merge_request.id}/merging-organisations/remove", headers:, params:
         end
 
         it "does not allow removing an organisation" do
