@@ -195,9 +195,9 @@ Rails.application.routes.draw do
 
   resources :merge_requests, path: "/merge-request" do
     member do
-      get "organisations"
-      patch "organisations", to: "merge_requests#update_organisations"
-      get "organisations/remove", to: "merge_requests#remove_merging_organisation"
+      get "merging-organisations"
+      patch "merging-organisations", to: "merge_requests#update_merging_organisations"
+      get "merging-organisations/remove", to: "merge_requests#remove_merging_organisation"
       get "absorbing-organisation"
       get "confirm-telephone-number"
       get "new-organisation-name"
