@@ -1,14 +1,25 @@
 <%= govuk_details(summary_text: "How the financial values are calculated") do %>
   <p class="govuk-body">
-    <% if log.type == 18 %>
-      The mortgage amount <%= question_link("mortgage", log, current_user) %>,
-      cash deposit <%= question_link("deposit", log, current_user) %>,
-      and cash discount <%= question_link("cashdis", log, current_user) %>
-    <% else %>
-      The mortgage amount <%= question_link("mortgage", log, current_user) %>
-      and cash deposit <%= question_link("deposit", log, current_user) %>
+    <% if log.mortgage_used? || log.mortgageused.blank? %>
+      The mortgage amount <%= log.mortgageused.blank? ? question_link("mortgageused", log, current_user) : question_link("mortgage", log, current_user) %>
+      <% if log.type == 18 %>
+        , cash deposit <%= question_link("deposit", log, current_user) %>,
+        and cash discount <%= question_link("cashdis", log, current_user) %>
+        added together
+      <% else %>
+        and cash deposit <%= question_link("deposit", log, current_user) %>
+        added together
+      <% end %>
+    <% elsif log.mortgage_not_used? || log.mortgage_use_unknown? %>
+        <% if log.type == 18 %>
+          The cash deposit <%= question_link("deposit", log, current_user) %>,
+          and cash discount <%= question_link("cashdis", log, current_user) %>
+          added together
+        <% else %>
+          Cash deposit <%= question_link("deposit", log, current_user) %>
+        <% end %>
     <% end %>
-    added together must equal
+     must equal
     the purchase price <%= question_link("value", log, current_user) %>
     <% stairbought_page = log.form.get_question("stairbought", log).page %>
     <% if stairbought_page.routed_to?(log, current_user) %>
