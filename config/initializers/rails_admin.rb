@@ -36,7 +36,7 @@ RailsAdmin.config do |config|
         help "Required. Specify the type of log associated with this variable: 'lettings' or 'sales'."
       end
       field :year do
-        help "Required. Specify the year this definition should be available from. This definition will be used in future years unless superseded by a newer definition."
+        help "Required. Specify the year this definition should be available from. This definition will be used in subsequent years unless superseded by a newer definition."
       end
     end
   end
