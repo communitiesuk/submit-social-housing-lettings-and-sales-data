@@ -32,10 +32,6 @@ class MergeRequestsController < ApplicationController
     end
   end
 
-  def show
-    @merge_request = MergeRequest.find(params[:id])
-  end
-
   def update_organisations
     merge_request_organisation = MergeRequestOrganisation.new(merge_request_organisation_params)
     if merge_request_organisation.save
