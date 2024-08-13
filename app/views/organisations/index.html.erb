@@ -16,7 +16,7 @@
     <% end %>
     <% c.with_tab(label: "Merge requests") do %>
       <%= govuk_button_to "Create new merge request", merge_requests_path, html: { method: :post } %>
-      <%= render partial: "merge_request_list", locals: { merge_requests: @merge_requests, title: "Merge requests", pagy: @pagy, searched: @searched, item_label:, total_count: @total_count } %>
+      <%= render partial: "merge_requests/merge_request_list", locals: { merge_requests: @merge_requests, title: "Merge requests", pagy: @pagy, searched: @searched, item_label:, total_count: @total_count } %>
     <% end %>
   <% end %>
 </div>

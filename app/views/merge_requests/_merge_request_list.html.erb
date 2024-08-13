@@ -3,7 +3,7 @@
     <p>No merge requests</p>
   <% else %>
   <%= govuk_table do |table| %>
-    <%= table.with_caption(classes: %w[govuk-!-font-size-19 govuk-!-font-weight-regular]) do |caption| %>
+    <%= table.with_caption(classes: %w[govuk-!-font-size-19 govuk-!-font-weight-regular]) do %>
       <strong><%= @merge_requests.where.not(status: 4).count %></strong> unresolved merge requests
     <% end %>
     <%= table.with_head do |head| %>
@@ -25,30 +25,18 @@
       <% @merge_requests.each do |merge_request| %>
         <%= table.with_body do |body| %>
           <%= body.with_row do |row| %>
-            <% if merge_request.absorbing_organisation_name.blank? %>
-              <% row.with_cell(text: "You didn't answer this question",
-                               html_attributes: {
-                                  scope: "row",
-                                  class: "app-!-colour-muted",
-                               }) %>
-            <% else %>
-              <% row.with_cell(text: merge_request.absorbing_organisation_name) %>
+            <%= row.with_cell(html_attributes: { scope: "row" }) do %>
+              <%= display_value_or_placeholder(merge_request.absorbing_organisation_name) %>
             <% end %>
             <% merge_date = merge_request.merge_date %>
-            <% if merge_date.nil? %>
-              <% row.with_cell(text: "You didn't answer this question",
-                               html_attributes: {
-                                 scope: "row",
-                                 class: "app-!-colour-muted",
-                               }) %>
-            <% else %>
-              <% row.with_cell(text: merge_date.strftime("%d %B %Y")) %>
+            <%= row.with_cell(html_attributes: { scope: "row" }) do %>
+              <%= display_value_or_placeholder(merge_date&.strftime("%d %B %Y")) %>
             <% end %>
             <% row.with_cell(text: status_tag(merge_request.status)) %>
             <% row.with_cell(html_attributes: {
               scope: "row",
             }) do %>
-              <%= govuk_link_to("View details", "/merge-request/#{merge_request.id}/organisations") %>
+              <%= govuk_link_to("View details", merge_request_path(merge_request.id)) %>
             <% end %>
           <% end %>
         <% end %>

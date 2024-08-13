@@ -238,6 +238,7 @@ class OrganisationsController < ApplicationController
 
   def merge_request
     @merge_request = MergeRequest.new
+    render "merge_requests/merge_request"
   end
 
   def data_sharing_agreement
