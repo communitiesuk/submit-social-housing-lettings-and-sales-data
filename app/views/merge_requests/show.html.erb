@@ -27,7 +27,7 @@
 </h1>
 <% unless @merge_request.status == "request_merged" %>
 <div class="govuk-button-group">
-  <%= govuk_button_link_to "Begin merge", "#", disabled: !(@merge_request.status == "ready_to_merge") %>
+  <%= govuk_button_link_to "Begin merge", "#", disabled: @merge_request.status != "ready_to_merge" %>
   <%= govuk_button_link_to "Delete merge request", delete_confirmation_merge_request_path(@merge_request), warning: true %>
 </div>
 <% end %>
