@@ -3,7 +3,7 @@
     <% if log.mortgage_used? || log.mortgageused.blank? %>
       The mortgage amount <%= log.mortgageused.blank? ? question_link("mortgageused", log, current_user) : question_link("mortgage", log, current_user) %>
       <% if log.type == 18 %>
-        , cash deposit <%= question_link("deposit", log, current_user) %>,
+      , cash deposit <%= question_link("deposit", log, current_user) %>,
         and cash discount <%= question_link("cashdis", log, current_user) %>
         added together
       <% else %>
