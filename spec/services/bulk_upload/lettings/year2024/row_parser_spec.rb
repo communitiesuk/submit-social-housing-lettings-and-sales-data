@@ -747,7 +747,19 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
 
           it "cannot be nulled" do
             parser.valid?
-            expect(parser.errors[:field_15]).to eq(["You must answer tenant has seen the privacy notice"])
+            expect(parser.errors[:field_15]).to eq(["You must show or give the tenant access to the MHCLG privacy notice before you can submit this log"])
+          end
+        end
+
+        context "when there is a :skip_bu_error error" do
+          let(:managing_org) { create(:organisation, :with_old_visible_id, rent_periods: [4, 1]) }
+          let(:attributes) { valid_attributes.merge({ field_123: 3, field_128: 80 }) }
+
+          it "does not add that error" do
+            parser.valid?
+
+            expect(parser.log.errors.map(&:attribute).sort).to eql(%i[managing_organisation_id period])
+            expect(parser.errors.map(&:attribute)).to eql(%i[field_123])
           end
         end
       end

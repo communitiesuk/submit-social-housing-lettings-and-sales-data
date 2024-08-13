@@ -1042,10 +1042,19 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
     describe "#field_18" do # data protection
       let(:attributes) { setup_section_params.merge({ field_18: nil }) }
 
+      before do
+        parser.valid?
+      end
+
       context "when not answered" do
         it "returns a setup error" do
-          parser.valid?
           expect(parser.errors.where(:field_18, category: :setup)).to be_present
+        end
+      end
+
+      context "when the privacy notice is not accepted" do
+        it "cannot be nulled" do
+          expect(parser.errors[:field_18]).to eq(["You must show or give the buyer access to the MHCLG privacy notice before you can submit this log"])
         end
       end
     end
