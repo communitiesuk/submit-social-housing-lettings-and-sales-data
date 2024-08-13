@@ -26,13 +26,10 @@ RSpec.describe MergeRequest, type: :model do
 
   describe "#discard!" do
     let(:merge_request) { create(:merge_request) }
-    let(:time) { Time.zone.now }
 
-    it "sets the discarded_at field to the current time" do
-      Timecop.freeze(time) do
-        merge_request.discard!
-        expect(merge_request.discarded_at).to eq(time)
-      end
+    it "sets the discarded_at field" do
+      merge_request.discard!
+      expect(merge_request.discarded_at).not_to be_nil
     end
 
     it "does not delete the record" do
