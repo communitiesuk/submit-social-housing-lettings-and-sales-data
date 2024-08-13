@@ -110,14 +110,6 @@ class User < ApplicationRecord
     SalesLog.filter_by_managing_organisation(organisation.absorbed_organisations + [organisation])
   end
 
-  def variable_definitions
-    if support?
-      CsvVariableDefinition.all
-    else
-      CsvVariableDefinition.user
-    end
-  end
-
   def schemes
     if support?
       Scheme.all

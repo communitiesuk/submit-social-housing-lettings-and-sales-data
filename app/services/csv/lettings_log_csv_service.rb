@@ -266,15 +266,10 @@ module Csv
     end
 
     def lettings_log_definitions
-      definitions = @user.variable_definitions.lettings
-
-      definitions.group_by { |record| [record.variable, record.definition] }
+      CsvVariableDefinition.lettings.group_by { |record| [record.variable, record.definition] }
                  .map do |_, options|
-        exact_match = options.find { |definition| definition.year == @year && definition.user_type == @user.user_type }
+        exact_match = options.find { |definition| definition.year == @year }
         next exact_match if exact_match
-
-        recent_match = options.select { |definition| definition.user_type == @user.user_type }.max_by(&:year)
-        next recent_match if recent_match
 
         options.max_by(&:year)
       end

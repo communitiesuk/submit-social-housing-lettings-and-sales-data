@@ -81,7 +81,7 @@ PREGYRHA,Was the buyer registered with their PRP (HA)?
 PREGOTHER,Was the buyer registered with another PRP (HA)?
 PREGLA,Was the buyer registered with the local authority?
 PREGGHB,Was the buyer registered with a Help to Buy agent?
-PREGBLANK,None of the above four options apply
+PREGBLANK,Populated if pregyrha, pregother, pregla and pregghb are blank
 BUY2LIVING,At the time of purchase, was buyer 2 living at the same address as buyer 1?
 PREVTEN2,What was buyer 2's previous tenure?
 HHREGRES,Have any of the buyers ever served as a regular in the UK armed forces?

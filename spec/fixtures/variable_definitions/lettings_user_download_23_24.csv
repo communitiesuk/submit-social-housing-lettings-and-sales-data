@@ -151,7 +151,7 @@ tshortfall,Estimated outstanding amount
 scheme_code,What scheme does this letting belong to?
 scheme_service_name,From scheme code, we map to the scheme name
 scheme_confidential,Does the scheme contain confidential information?
-SCHTYPE,What is this type of scheme? (Direct access hostel, Foyer, Housing for older people or Other supported housing
+SCHTYPE,What is this type of scheme? (Direct access hostel), Foyer, Housing for older people or Other supported housing
 scheme_registered_under_care_act,Is this scheme registered under the Care Standards Act 2000?
 scheme_owning_organisation_name,Which organisation owns the housing stock for this scheme?
 scheme_primary_client_group,What client group is this scheme intended for?

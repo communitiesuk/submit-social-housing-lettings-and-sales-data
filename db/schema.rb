@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_07_26_152326) do
+ActiveRecord::Schema[7.0].define(version: 2024_08_13_142947) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -50,13 +50,11 @@ ActiveRecord::Schema[7.0].define(version: 2024_07_26_152326) do
     t.string "variable", null: false
     t.string "definition", null: false
     t.string "log_type", null: false
-    t.string "user_type", null: false
     t.integer "year", null: false
     t.datetime "last_accessed"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.check_constraint "log_type::text = ANY (ARRAY['lettings'::character varying, 'sales'::character varying]::text[])", name: "log_type_check"
-    t.check_constraint "user_type::text = ANY (ARRAY['user'::character varying, 'support'::character varying]::text[])", name: "user_type_check"
     t.check_constraint "year >= 2000 AND year <= 2099", name: "year_check"
   end
 
@@ -431,19 +429,21 @@ ActiveRecord::Schema[7.0].define(version: 2024_07_26_152326) do
 
   create_table "merge_requests", force: :cascade do |t|
     t.integer "requesting_organisation_id"
-    t.text "other_merging_organisations"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "status"
     t.integer "absorbing_organisation_id"
-    t.boolean "new_absorbing_organisation"
-    t.boolean "telephone_number_correct"
-    t.string "new_telephone_number"
-    t.string "new_organisation_name"
-    t.string "new_organisation_address_line1"
-    t.string "new_organisation_address_line2"
-    t.string "new_organisation_postcode"
-    t.string "new_organisation_telephone_number"
+    t.datetime "merge_date"
+    t.integer "requester_id"
+    t.string "helpdesk_ticket"
+    t.integer "total_users"
+    t.integer "total_schemes"
+    t.integer "total_lettings_logs"
+    t.integer "total_sales_logs"
+    t.integer "total_stock_owners"
+    t.integer "total_managing_agents"
+    t.boolean "signed_dsa", default: false
+    t.datetime "discarded_at"
   end
 
   create_table "notifications", force: :cascade do |t|

@@ -22,7 +22,6 @@ module Imports
       file_name = File.basename(file, ".csv")
       parsed_file_name = file_name.split("_")
       log_type = parsed_file_name[0]
-      user_type = parsed_file_name[1]
       year = "20#{parsed_file_name[3]}".to_i
 
       records_added = 0
@@ -41,12 +40,9 @@ module Imports
             variable: variable.strip,
             definition: definition.strip,
             log_type:,
-            user_type:,
             year:,
           )
           records_added += 1
-        elsif existing_record.user_type == "support" && user_type == "user"
-          existing_record.update!(user_type: "user")
         end
       end
 

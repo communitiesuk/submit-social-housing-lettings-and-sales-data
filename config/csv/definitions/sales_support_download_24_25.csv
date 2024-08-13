@@ -23,7 +23,7 @@ LIVEINBUYER,Will the buyer(s) live in the property?
 JOINT,Is this a joint purchase?
 JOINTMORE,Are there more than 2 joint buyers of this property?
 NOINT,Did you interview the buyer to answer these questions?
-PRIVACYNOTICE,Has the buyer seen the DLUHC privacy notice?
+PRIVACYNOTICE,Has the buyer seen the MHCLG privacy notice?
 UPRN,What is the UPRN of the property?
 ADDRESS1,Address line 1
 ADDRESS2,Address line 2

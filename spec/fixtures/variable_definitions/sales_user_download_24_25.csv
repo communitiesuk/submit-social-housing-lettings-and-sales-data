@@ -24,7 +24,7 @@ jointmore,Are there more than 2 joint buyers of this property?
 beds,How many bedrooms does the property have?
 proptype,What type of unit is the property?
 builtype,Which type of building is the property?
-uprn,Property's UPRN
+uprn,What is the UPRN of the property?
 uprn_confirmed,We found an address that might be this property. Is this the property address?
 address_line1_input,Address line 1 input from address matching feature
 postcode_full_input,Postcode input from address matching feature

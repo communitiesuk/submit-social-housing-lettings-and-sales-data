@@ -48,7 +48,7 @@ tenancy,What is the type of tenancy?
 tenancyother,If 'Other', what is the type of tenancy?
 tenancylength,What is the length of the fixed-term tenancy to the nearest year?
 sheltered,Is this letting in sheltered accommodation?
-declaration,Has the tenant seen the DLUHC privacy notice?
+declaration,Has the tenant seen the MHCLG privacy notice?
 hhmemb,How many people live in the household at this letting?
 refused,Where household characteristics have a 'Refused' option for some or all of: AGE1-AGE8, SEX1-SEX8, RELAT2-RELAT8, ECSTAT1-ECSTAT8
 age1,What is the lead tenant's age?
