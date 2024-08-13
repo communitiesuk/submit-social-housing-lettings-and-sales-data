@@ -205,6 +205,7 @@ Rails.application.routes.draw do
       get "new-organisation-telephone-number"
       get "new-organisation-type"
       get "merge-date"
+      get "details", to: "merge_requests#details"
     end
   end
 

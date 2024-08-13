@@ -10,6 +10,10 @@ class MergeRequestOrganisation < ApplicationRecord
 
   has_paper_trail
 
+  def merging_organisation_name
+    merging_organisation.name || ""
+  end
+
 private
 
   def validate_merging_organisations
