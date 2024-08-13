@@ -20,7 +20,7 @@ class MergeRequest < ApplicationRecord
   scope :merged, -> { where(status: "request_merged") }
   scope :visible, lambda {
     open_collection_period_start_date = FormHandler.instance.start_date_of_earliest_open_collection_period
-    merged.where("merge_requests.merge_date >= ?", open_collection_period_start_date).or(not_merged)
+    merged.where("merge_requests.merge_date >= ?", open_collection_period_start_date).or(not_merged).where(discarded_at: nil)
   }
 
   def organisation_name_uniqueness
@@ -35,5 +35,9 @@ class MergeRequest < ApplicationRecord
 
   def dpo_user
     absorbing_organisation.data_protection_officers.filter_by_active.first
+  end
+
+  def discard!
+    update!(discarded_at: Time.zone.now)
   end
 end

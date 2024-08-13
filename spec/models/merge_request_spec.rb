@@ -23,4 +23,25 @@ RSpec.describe MergeRequest, type: :model do
       expect(described_class.visible).to include(not_merged)
     end
   end
+
+  describe "#discard!" do
+    let(:merge_request) { create(:merge_request) }
+
+    it "sets the discarded_at field to the current time" do
+      Timecop.freeze(Time.zone.now) do
+        merge_request.discard!
+        expect(merge_request.discarded_at).to eq(Time.zone.now)
+      end
+    end
+
+    it "does not delete the record" do
+      merge_request.discard!
+      expect(merge_request).to be_persisted
+    end
+
+    it "is not visible in the visible scope" do
+      merge_request.discard!
+      expect(described_class.visible).not_to include(merge_request)
+    end
+  end
 end
