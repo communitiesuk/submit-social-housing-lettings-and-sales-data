@@ -4,8 +4,6 @@ class MergeRequest < ApplicationRecord
   belongs_to :absorbing_organisation, class_name: "Organisation", optional: true
   has_many :merging_organisations, through: :merge_request_organisations, source: :merging_organisation
   belongs_to :requester, class_name: "User", optional: true
-  validate :organisation_name_uniqueness, if: :new_organisation_name
-  validates :new_telephone_number, presence: true, if: -> { telephone_number_correct == false }
 
   STATUS = {
     "merge_issues" => 0,
@@ -22,12 +20,6 @@ class MergeRequest < ApplicationRecord
     open_collection_period_start_date = FormHandler.instance.start_date_of_earliest_open_collection_period
     merged.where("merge_requests.merge_date >= ?", open_collection_period_start_date).or(not_merged)
   }
-
-  def organisation_name_uniqueness
-    if Organisation.where("lower(name) = ?", new_organisation_name&.downcase).exists?
-      errors.add(:new_organisation_name, :invalid)
-    end
-  end
 
   def absorbing_organisation_name
     absorbing_organisation&.name || ""
