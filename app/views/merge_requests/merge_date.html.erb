@@ -1,8 +1,24 @@
 <% content_for :before_content do %>
   <% title = "Tell us if your organisation is merging" %>
   <% content_for :title, title %>
-  <%# TODO: Update this backlink to also work with the create org flow %>
-  <%= govuk_back_link href: confirm_telephone_number_merge_request_path(@merge_request) %>
+  <%= govuk_back_link href: merging_organisations_merge_request_path(@merge_request) %>
 <% end %>
+ <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+    <%= form_with model: @merge_request, url: merge_request_path, method: :patch do |f| %>
+      <%= f.govuk_error_summary %>
 
-<h2 class="govuk-heading-l">What is the merge date?</h2>
+      <h2 class="govuk-heading-l">What is the merge date?</h2>
+      <p class="govuk-hint">
+        Enter the official merge date. Log and organisation page data will show the new organisation name from this date. <br/><br/>
+        For example, 27 3 2024</p>
+      <%= f.govuk_date_field :merge_date,
+        legend: {hidden: true},
+        width: 20 do %>
+      <% end %>
+      <%= f.hidden_field :page, value: "merge_date" %>
+
+      <%= f.govuk_submit %>
+    <% end %>
+  </div>
+</div>
