@@ -429,7 +429,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_19_143150) do
 
   create_table "merge_requests", force: :cascade do |t|
     t.integer "requesting_organisation_id"
-    t.text "other_merging_organisations"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "status"
