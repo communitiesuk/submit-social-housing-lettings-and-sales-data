@@ -82,7 +82,7 @@ private
       :requesting_organisation_id,
       :status,
       :absorbing_organisation_id,
-      :merge_date
+      :merge_date,
     )
 
     merge_params[:requesting_organisation_id] = current_user.organisation.id
@@ -102,6 +102,7 @@ private
       year = merge_request_params["merge_date(1i)"]
 
       return @merge_request.errors.add(:merge_date, :blank) if [day, month, year].all?(&:blank?)
+
       if [day, month, year].none?(&:blank?) && Date.valid_date?(year.to_i, month.to_i, day.to_i)
         merge_request_params["merge_date"] = Time.zone.local(year.to_i, month.to_i, day.to_i)
       else
