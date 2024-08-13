@@ -16,7 +16,7 @@ class MergeRequestsController < ApplicationController
 
   def create
     ActiveRecord::Base.transaction do
-      @merge_request = MergeRequest.create!(merge_request_params.merge(status: :incomplete))
+      @merge_request = MergeRequest.create!(merge_request_params.merge(status: :incomplete, requester_id: current_user.id))
     end
     redirect_to absorbing_organisation_merge_request_path(@merge_request)
   rescue ActiveRecord::RecordInvalid
