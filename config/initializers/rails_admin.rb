@@ -35,9 +35,6 @@ RailsAdmin.config do |config|
       field :log_type do
         help "Required. Specify the type of log associated with this variable: 'lettings' or 'sales'."
       end
-      field :user_type do
-        help "Required. Specify the user access associated with this variable: 'support' or 'user'. Support users have access to all variables, including those set as 'user'."
-      end
       field :year do
         help "Required. Specify the year this definition should be available from. This definition will be used in future years unless superseded by a newer definition."
       end
