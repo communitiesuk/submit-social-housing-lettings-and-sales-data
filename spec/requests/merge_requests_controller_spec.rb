@@ -222,6 +222,23 @@ RSpec.describe MergeRequestsController, type: :request do
       end
     end
 
+    describe "#helpdesk_ticket" do
+      context "when viewing helpdesk ticket page" do
+        before do
+          merge_request.update!(absorbing_organisation_id: organisation.id, merge_date: Time.zone.today)
+          get "/merge-request/#{merge_request.id}/helpdesk-ticket", headers:
+        end
+
+        it "shows the correct content" do
+          expect(page).to have_content("Which helpdesk ticket reported this merge?")
+        end
+
+        it "takes the user to the merge request page" do
+          expect(page).to have_link("Continue", href: merge_request_path(merge_request))
+        end
+      end
+    end
+
     describe "#update" do
       describe "from absorbing_organisation page" do
         context "when not answering the question" do
