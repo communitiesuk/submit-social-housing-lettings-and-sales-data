@@ -53,6 +53,8 @@ private
   end
 
   def next_page_path
+    return merge_request_path if is_referrer_type?("check_answers")
+
     case page
     when "absorbing_organisation"
       merging_organisations_merge_request_path(@merge_request)
@@ -160,5 +162,20 @@ private
     unless current_user.support?
       render_not_found
     end
+  end
+
+  def is_referrer_type?(referrer_type)
+    from_referrer_query("referrer") == referrer_type
+  end
+
+  def from_referrer_query(query_param)
+    referrer = request.headers["HTTP_REFERER"]
+    return unless referrer
+
+    query_params = URI.parse(referrer).query
+    return unless query_params
+
+    parsed_params = CGI.parse(query_params)
+    parsed_params[query_param]&.first
   end
 end

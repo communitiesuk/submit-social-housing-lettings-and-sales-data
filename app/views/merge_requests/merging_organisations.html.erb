@@ -38,7 +38,7 @@
     <%= form_with model: @merge_request, url: merge_request_path(id: @merge_request.id), method: :patch do |f| %>
       <% if @merge_request.merging_organisations.count.positive? %>
         <%= f.hidden_field :page, value: "merging_organisations" %>
-        <%= f.govuk_submit "Continue" %>
+        <%= f.govuk_submit submit_merge_request_button_text(request.query_parameters["referrer"]) %>
       <% end %>
     <% end %>
   </div>
