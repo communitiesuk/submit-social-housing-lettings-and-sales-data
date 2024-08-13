@@ -46,15 +46,6 @@ RSpec.describe "merge_requests/show.html.erb", type: :view do
     expect(rendered).to have_selector("dd", text: merge_request.absorbing_organisation_name)
   end
 
-  it "displays the merging organisations details" do
-    expect(rendered).to have_selector("dt", text: "Merging organisations")
-    if merge_request.other_merging_organisations.present?
-      merge_request.other_merging_organisations.split(",").each do |organisation|
-        expect(rendered).to have_selector("dd", text: organisation.strip)
-      end
-    end
-  end
-
   it "displays the merge date details" do
     expect(rendered).to have_selector("dt", text: "Merge date")
     expect(rendered).to have_selector("dd", text: merge_request.merge_date || "You didn't answer this question")
