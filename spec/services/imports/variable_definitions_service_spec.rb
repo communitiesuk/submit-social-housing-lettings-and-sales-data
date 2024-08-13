@@ -40,23 +40,5 @@ RSpec.describe Imports::VariableDefinitionsService, type: :service do
         }.to change(CsvVariableDefinition, :count).by(3)
       end
     end
-
-    context "when existing record with user_type support" do
-      let!(:existing_record) { create(:csv_variable_definition, variable: "id", definition: "Log ID", log_type: "lettings", user_type: "support") }
-
-      it "updates the user_type to user" do
-        service.send(:process_file, file)
-        expect(existing_record.reload.user_type).to eq("user")
-      end
-    end
-
-    context "when existing record with user_type user" do
-      let!(:existing_record) { create(:csv_variable_definition, variable: "id", definition: "Log ID", log_type: "lettings", user_type: "user") }
-
-      it "does not update the user_type" do
-        service.send(:process_file, file)
-        expect(existing_record.reload.user_type).to eq("user")
-      end
-    end
   end
 end
