@@ -12,6 +12,7 @@ class MergeRequestsController < ApplicationController
   def new_organisation_telephone_number; end
   def new_organisation_type; end
   def merge_date; end
+  def helpdesk_ticket; end
 
   def create
     ActiveRecord::Base.transaction do
@@ -62,6 +63,8 @@ private
       else
         confirm_telephone_number_merge_request_path(@merge_request)
       end
+    when "helpdesk_ticket"
+      merge_request_path(@merge_request)
     when "confirm_telephone_number"
       merge_date_merge_request_path(@merge_request)
     when "new_organisation_name"
@@ -97,6 +100,7 @@ private
     merge_params = params.fetch(:merge_request, {}).permit(
       :requesting_organisation_id,
       :other_merging_organisations,
+      :helpdesk_ticket,
       :status,
       :absorbing_organisation_id,
       :telephone_number_correct,

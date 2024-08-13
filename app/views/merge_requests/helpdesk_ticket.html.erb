@@ -1,0 +1,27 @@
+<% content_for :before_content do %>
+  <% title = "Which helpdesk ticket reported this merge?" %>
+  <% content_for :title, title %>
+  <%= govuk_back_link href: merge_date_merge_request_path(@merge_request) %>
+<% end %>
+
+<%= form_with model: @merge_request, url: merge_request_path, method: :patch do |f| %>
+  <%= f.govuk_error_summary %>
+
+  <h1 class="govuk-heading-l">Which helpdesk ticket reported this merge?</h1>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <p class="govuk-hint">If this merge was reported via the helpdesk ticket, provide the ticket number.<br>The ticket will be linked to the merge request for reference.</p>
+      <br>
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds-from-desktop">
+          <%= f.govuk_text_field :helpdesk_ticket, caption: { text: "Ticket number", class: "govuk-label--m" }, label: { text: "For example, MSD-12345" }%>
+          <%= f.hidden_field :page, value: "helpdesk_ticket" %>
+          <div class="govuk-button-group">
+            <%= f.govuk_submit %>
+            <%= govuk_link_to("Skip for now", merge_request_path(@merge_request)) %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
