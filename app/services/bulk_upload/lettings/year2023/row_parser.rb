@@ -315,6 +315,7 @@ class BulkUpload::Lettings::Year2023::RowParser
               category: :setup,
             },
             on: :after_log
+            
 
   validates :field_9,
             presence: {
