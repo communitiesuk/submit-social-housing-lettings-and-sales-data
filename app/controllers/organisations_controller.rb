@@ -18,7 +18,7 @@ class OrganisationsController < ApplicationController
     @pagy, @organisations = pagy(filtered_collection(all_organisations.visible, search_term))
     @merge_requests = MergeRequest.visible
                                   .joins("LEFT JOIN organisations ON organisations.id = merge_requests.absorbing_organisation_id")
-                                  .order(Arel.sql("organisations.name, merge_requests.merge_date IS NULL, merge_requests.merge_date DESC, merge_requests.id"))
+                                  .order("organisations.name, merge_requests.merge_date DESC NULLS LAST, merge_requests.id")
     @searched = search_term.presence
     @total_count = all_organisations.visible.size
   end
