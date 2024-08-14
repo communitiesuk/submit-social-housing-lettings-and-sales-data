@@ -17,8 +17,10 @@
         width: 20 do %>
       <% end %>
       <%= f.hidden_field :page, value: "merge_date" %>
-
-      <%= f.govuk_submit %>
+        <div class="govuk-button-group">
+          <%= f.govuk_submit submit_merge_request_button_text(request.query_parameters["referrer"]) %>
+          <%= govuk_link_to(secondary_merge_request_link_text(request.query_parameters["referrer"]), merge_request_path(@merge_request)) %>
+        </div>
     <% end %>
   </div>
 </div>
