@@ -40,7 +40,7 @@ module MergeRequestsHelper
     end
   end
 
-  def secondary_merge_request_link_text(referrer, skip_for_now=false)
+  def secondary_merge_request_link_text(referrer, skip_for_now: false)
     if accessed_from_check_answers?(referrer)
       "Cancel"
     elsif skip_for_now
