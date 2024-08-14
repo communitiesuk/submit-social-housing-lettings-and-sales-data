@@ -17,7 +17,7 @@
           <%= f.govuk_text_field :helpdesk_ticket, caption: { text: "Ticket number", class: "govuk-label--m" }, label: { text: "For example, MSD-12345" } %>
           <%= f.hidden_field :page, value: "helpdesk_ticket" %>
           <div class="govuk-button-group">
-            <%= f.govuk_submit %>
+            <%= f.govuk_submit submit_merge_request_button_text(request.query_parameters["referrer"]) %>
             <%= govuk_link_to("Skip for now", merge_request_path(@merge_request)) %>
           </div>
         </div>
