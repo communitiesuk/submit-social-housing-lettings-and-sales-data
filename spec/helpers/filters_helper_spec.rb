@@ -168,7 +168,7 @@ RSpec.describe FiltersHelper do
 
     before do
       FactoryBot.create(:organisation_relationship, parent_organisation:, child_organisation:)
-      FactoryBot.create(:organisation, name: "Other organisation", id: 99)
+      FactoryBot.create(:organisation, name: "Other organisation", id: 9_999_999)
       user.organisation.reload
     end
 
@@ -181,7 +181,7 @@ RSpec.describe FiltersHelper do
           OpenStruct.new(id: child_organisation.id, name: "Child organisation"),
           OpenStruct.new(id: absorbed_organisation.id, name: "Absorbed organisation"),
           OpenStruct.new(id: parent_organisation.id, name: "Parent organisation"),
-          OpenStruct.new(id: 99, name: "Other organisation"),
+          OpenStruct.new(id: 9_999_999, name: "Other organisation"),
         ])
       end
     end
@@ -207,7 +207,7 @@ RSpec.describe FiltersHelper do
 
     before do
       FactoryBot.create(:organisation_relationship, parent_organisation:, child_organisation:)
-      FactoryBot.create(:organisation, name: "Other organisation", id: 99)
+      FactoryBot.create(:organisation, name: "Other organisation", id: 9_999_999)
       user.organisation.reload
     end
 
@@ -220,7 +220,7 @@ RSpec.describe FiltersHelper do
           OpenStruct.new(id: parent_organisation.id, name: "Parent organisation"),
           OpenStruct.new(id: absorbed_organisation.id, name: "Absorbed organisation"),
           OpenStruct.new(id: child_organisation.id, name: "Child organisation"),
-          OpenStruct.new(id: 99, name: "Other organisation"),
+          OpenStruct.new(id: 9_999_999, name: "Other organisation"),
         ])
       end
     end
