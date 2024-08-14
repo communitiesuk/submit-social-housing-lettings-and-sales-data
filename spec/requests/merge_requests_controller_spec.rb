@@ -396,6 +396,30 @@ RSpec.describe MergeRequestsController, type: :request do
         end
       end
     end
+
+    describe "#show" do
+      before do
+        get "/merge-request/#{merge_request.id}", headers:
+      end
+
+      context "when request has previously failed" do
+        let(:merge_request) { create(:merge_request, last_failed_attempt: Time.zone.yesterday) }
+
+        it "shows a banner" do
+          expect(page).to have_content("An error occurred while processing the merge.")
+          expect(page).to have_content("No changes have been made. Try beginning the merge again.")
+        end
+      end
+
+      context "when request has not previously failed" do
+        let(:merge_request) { create(:merge_request, last_failed_attempt: nil) }
+
+        it "does not show a banner" do
+          expect(page).not_to have_content("An error occurred while processing the merge.")
+          expect(page).not_to have_content("No changes have been made. Try beginning the merge again.")
+        end
+      end
+    end
   end
 
   context "when user is signed in with a data coordinator user" do

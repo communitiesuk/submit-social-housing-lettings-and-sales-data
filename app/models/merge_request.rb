@@ -48,7 +48,7 @@ class MergeRequest < ApplicationRecord
     return "request_merged" if status == "request_merged"
     return "processing" if status == "processing"
     return "incomplete" unless required_questions_answered?
-    return "ready_to_merge" if absorbing_organisation.data_protection_confirmed?
+    return "ready_to_merge" if absorbing_organisation_signed_dsa?
 
     "merge_issues"
   end
@@ -58,5 +58,9 @@ class MergeRequest < ApplicationRecord
       merge_date.present? &&
       merging_organisations.count.positive? &&
       errors.empty?
+  end
+
+  def absorbing_organisation_signed_dsa?
+    absorbing_organisation&.data_protection_confirmed?
   end
 end
