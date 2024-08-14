@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_08_13_112119) do
+ActiveRecord::Schema[7.0].define(version: 2024_08_14_083017) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -432,6 +432,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_13_112119) do
     t.integer "total_managing_agents"
     t.boolean "signed_dsa", default: false
     t.datetime "discarded_at"
+    t.datetime "last_failed_attempt"
   end
 
   create_table "notifications", force: :cascade do |t|
