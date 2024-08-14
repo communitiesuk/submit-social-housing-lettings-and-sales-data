@@ -11,7 +11,7 @@ class MergeRequestsController < ApplicationController
 
   def create
     ActiveRecord::Base.transaction do
-      @merge_request = MergeRequest.create!(merge_request_params.merge(status: :incomplete))
+      @merge_request = MergeRequest.create!(merge_request_params.merge(status: :incomplete, requester: current_user))
     end
     redirect_to absorbing_organisation_merge_request_path(@merge_request)
   rescue ActiveRecord::RecordInvalid
@@ -63,6 +63,8 @@ private
       merge_date_merge_request_path(@merge_request)
     when "merge_date"
       helpdesk_ticket_merge_request_path(@merge_request)
+    when "helpdesk_ticket"
+      merge_request_path(@merge_request)
     end
   end
 
@@ -85,6 +87,7 @@ private
   def merge_request_params
     merge_params = params.fetch(:merge_request, {}).permit(
       :requesting_organisation_id,
+      :helpdesk_ticket,
       :status,
       :absorbing_organisation_id,
       :merge_date,
