@@ -203,6 +203,7 @@ Rails.application.routes.draw do
       get "helpdesk-ticket"
       get "delete-confirmation", to: "merge_requests#delete_confirmation"
       delete "delete", to: "merge_requests#delete"
+      patch "start-merge", to: "merge_requests#start_merge"
     end
   end
 
