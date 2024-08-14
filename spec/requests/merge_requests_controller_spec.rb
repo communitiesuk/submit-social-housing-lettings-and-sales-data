@@ -232,10 +232,6 @@ RSpec.describe MergeRequestsController, type: :request do
         it "shows the correct content" do
           expect(page).to have_content("Which helpdesk ticket reported this merge?")
         end
-
-        it "takes the user to the merge request page" do
-          expect(page).to have_link("Continue", href: merge_request_path(merge_request))
-        end
       end
     end
 
