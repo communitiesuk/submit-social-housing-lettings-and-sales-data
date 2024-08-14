@@ -263,10 +263,6 @@ class User < ApplicationRecord
     :active
   end
 
-  def user_type
-    support? ? "support" : "user"
-  end
-
   def discard!
     self.discarded_at = Time.zone.now
     save!(validate: false)

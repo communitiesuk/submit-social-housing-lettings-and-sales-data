@@ -3,7 +3,6 @@ FactoryBot.define do
     variable { "variable" }
     definition { "definition" }
     log_type { "lettings" }
-    user_type { "support" }
     year { 2024 }
   end
 end
