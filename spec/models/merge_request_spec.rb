@@ -42,4 +42,51 @@ RSpec.describe MergeRequest, type: :model do
       expect(described_class.visible).not_to include(merge_request)
     end
   end
+
+  describe "#calculate_status" do
+    it "returns the correct status for deleted merge request" do
+      merge_request = build(:merge_request, id: 1, discarded_at: Time.zone.today)
+      expect(merge_request.calculate_status).to eq "deleted"
+    end
+
+    it "returns the correct status for a merged request" do
+      merge_request = build(:merge_request, id: 1, status: "request_merged")
+      expect(merge_request.calculate_status).to eq "request_merged"
+    end
+
+    it "returns the correct status for a ready to merge request" do
+      merge_request = build(:merge_request, id: 1, absorbing_organisation: create(:organisation), merge_date: Time.zone.today)
+      create(:merge_request_organisation, merge_request:)
+      expect(merge_request.calculate_status).to eq "ready_to_merge"
+    end
+
+    it "returns the merge issues if dsa is not signed for absorbing organisation" do
+      merge_request = build(:merge_request, id: 1, absorbing_organisation: create(:organisation, with_dsa: false), merge_date: Time.zone.today)
+      create(:merge_request_organisation, merge_request:)
+      expect(merge_request.calculate_status).to eq "merge_issues"
+    end
+
+    it "returns the incomplete if absorbing organisation is missing" do
+      merge_request = build(:merge_request, id: 1, absorbing_organisation: nil, merge_date: Time.zone.today)
+      create(:merge_request_organisation, merge_request:)
+      expect(merge_request.calculate_status).to eq "incomplete"
+    end
+
+    it "returns the incomplete if merge requests organisation is missing" do
+      merge_request = build(:merge_request, id: 1, absorbing_organisation: create(:organisation), merge_date: Time.zone.today)
+      expect(merge_request.calculate_status).to eq "incomplete"
+    end
+
+    it "returns the incomplete if merge date is missing" do
+      merge_request = build(:merge_request, id: 1, absorbing_organisation: create(:organisation))
+      create(:merge_request_organisation, merge_request:)
+      expect(merge_request.calculate_status).to eq "incomplete"
+    end
+
+    it "returns processing if merge is processing" do
+      merge_request = build(:merge_request, id: 1, absorbing_organisation: create(:organisation), status: "processing")
+      create(:merge_request_organisation, merge_request:)
+      expect(merge_request.calculate_status).to eq "processing"
+    end
+  end
 end
