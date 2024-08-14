@@ -1,7 +1,7 @@
 <% content_for :before_content do %>
   <% title = "Merge details: #{@merge_request.absorbing_organisation_name}" %>
   <% content_for :title, title %>
-  <%= govuk_back_link href: "#{organisations_path}#merge-requests" %>
+  <%= govuk_back_link href: organisations_path(anchor: "merge-requests") %>
 <% end %>
 <% unless @merge_request.signed_dsa || @merge_request.absorbing_organisation_id.blank? %>
   <div class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
@@ -27,12 +27,8 @@
 </h1>
 <% unless @merge_request.status == "request_merged" %>
 <div class="govuk-button-group">
-  <button type="submit" <%= @merge_request.status == "ready_to_merge" ? "" : "disabled aria-disabled=\"true\"" %> class="govuk-button" data-module="govuk-button">
-    Begin merge
-  </button>
-  <button type="submit" class="govuk-button govuk-button--warning" data-module="govuk-button">
-    Delete merge request
-  </button>
+  <%= govuk_button_link_to "Begin merge", "#", disabled: @merge_request.status != "ready_to_merge" %>
+  <%= govuk_button_link_to "Delete merge request", delete_confirmation_merge_request_path(@merge_request), warning: true %>
 </div>
 <% end %>
 
