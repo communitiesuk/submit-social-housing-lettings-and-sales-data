@@ -1,6 +1,6 @@
 class MergeRequestsController < ApplicationController
   before_action :find_resource, exclude: %i[create new]
-  # before_action :authenticate_user!
+  before_action :authenticate_user!
   before_action :authenticate_scope!
   before_action :set_organisations_answer_options, only: %i[merging_organisations absorbing_organisation update_merging_organisations remove_merging_organisation update]
 
