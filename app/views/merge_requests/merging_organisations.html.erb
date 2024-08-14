@@ -4,7 +4,7 @@
   <%= govuk_back_link href: merge_request_organisation_path(id: @merge_request.requesting_organisation_id) %>
 <% end %>
 
-<%= form_with model: @merge_request, url: merging_organisations_merge_request_path, method: :patch do |f| %>
+<%= form_with model: @merge_request, url: merging_organisations_merge_request_path(referrer: request.query_parameters["referrer"]), method: :patch do |f| %>
   <%= f.govuk_error_summary %>
   <h2 class="govuk-heading-l">Which organisations are merging into <%= @merge_request.absorbing_organisation&.name %>?</h2>
 
@@ -38,7 +38,10 @@
     <%= form_with model: @merge_request, url: merge_request_path(id: @merge_request.id), method: :patch do |f| %>
       <% if @merge_request.merging_organisations.count.positive? %>
         <%= f.hidden_field :page, value: "merging_organisations" %>
-        <%= f.govuk_submit submit_merge_request_button_text(request.query_parameters["referrer"]) %>
+        <div class="govuk-button-group">
+          <%= f.govuk_submit submit_merge_request_button_text(request.query_parameters["referrer"]) %>
+          <%= govuk_link_to(secondary_merge_request_link_text(request.query_parameters["referrer"]), merge_request_path(@merge_request)) %>
+        </div>
       <% end %>
     <% end %>
   </div>
