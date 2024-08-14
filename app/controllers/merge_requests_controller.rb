@@ -47,11 +47,6 @@ class MergeRequestsController < ApplicationController
     redirect_to organisations_path(anchor: "merge-requests")
   end
 
-  def delete
-    @merge_request.discard!
-    redirect_to organisations_path(anchor: "merge-requests")
-  end
-
 private
 
   def page
