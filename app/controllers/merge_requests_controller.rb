@@ -61,10 +61,10 @@ private
       merging_organisations_merge_request_path(@merge_request)
     when "merging_organisations"
       merge_date_merge_request_path(@merge_request)
-    when "helpdesk_ticket"
-      merge_request_path(@merge_request)
     when "merge_date"
       helpdesk_ticket_merge_request_path(@merge_request)
+    when "helpdesk_ticket"
+      merge_request_path(@merge_request)
     end
   end
 
