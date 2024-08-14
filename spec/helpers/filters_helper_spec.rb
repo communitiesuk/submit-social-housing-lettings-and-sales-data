@@ -350,6 +350,7 @@ RSpec.describe FiltersHelper do
           OpenStruct.new(id: child_organisation.id, name: "Child organisation"),
           OpenStruct.new(id: 9_999_999, name: "Other organisation"),
         ])
+      end
 
       context "when no organisation is selected in the filters" do
         it "returns an empty list" do
