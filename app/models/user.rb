@@ -77,7 +77,6 @@ class User < ApplicationRecord
   scope :deactivated, -> { where(active: false) }
   scope :active_status, -> { where(active: true).where.not(last_sign_in_at: nil) }
   scope :visible, -> { where(discarded_at: nil) }
-  scope :own_and_managing_org_users, ->(organisation) { where(organisation: organisation.child_organisations + [organisation]) }
 
   def lettings_logs
     if support?
@@ -210,9 +209,9 @@ class User < ApplicationRecord
 
   def logs_filters(specific_org: false)
     if (support? && !specific_org) || organisation.has_managing_agents? || organisation.has_stock_owners?
-      %w[years status needstypes assigned_to user managing_organisation owning_organisation bulk_upload_id user_text_search owning_organisation_text_search managing_organisation_text_search]
+      %w[years status needstypes assigned_to user managing_organisation owning_organisation bulk_upload_id]
     else
-      %w[years status needstypes assigned_to user bulk_upload_id user_text_search]
+      %w[years status needstypes assigned_to user bulk_upload_id]
     end
   end
 

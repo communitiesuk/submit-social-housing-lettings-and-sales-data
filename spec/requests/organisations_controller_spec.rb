@@ -75,13 +75,6 @@ RSpec.describe OrganisationsController, type: :request do
         end
       end
     end
-
-    describe "#search" do
-      it "redirects to the sign in page" do
-        get "/organisations/search"
-        expect(response).to redirect_to("/account/sign-in")
-      end
-    end
   end
 
   context "when user is signed in" do
@@ -812,25 +805,6 @@ RSpec.describe OrganisationsController, type: :request do
           it "returns 401 unauthorized" do
             expect(response).to have_http_status(:unauthorized)
           end
-        end
-      end
-
-      describe "#search" do
-        let(:parent_organisation) { create(:organisation, name: "parent test organisation") }
-        let(:child_organisation) { create(:organisation, name: "child test organisation") }
-
-        before do
-          user.organisation.update!(name: "test organisation")
-          create(:organisation_relationship, parent_organisation: user.organisation, child_organisation:)
-          create(:organisation_relationship, child_organisation: user.organisation, parent_organisation:)
-          create(:organisation, name: "other organisation test organisation")
-        end
-
-        it "only searches within the current user's organisation, managing agents and stock owners" do
-          get "/organisations/search", headers:, params: { query: "test organisation" }
-          result = JSON.parse(response.body)
-          expect(result.count).to eq(3)
-          expect(result.keys).to match_array([user.organisation.id.to_s, parent_organisation.id.to_s, child_organisation.id.to_s])
         end
       end
     end
@@ -2101,25 +2075,6 @@ RSpec.describe OrganisationsController, type: :request do
             csv = CSV.parse(response.body)
             expect(csv.count).to eq(other_organisation.users.count + 1)
           end
-        end
-      end
-
-      describe "#search" do
-        let(:parent_organisation) { create(:organisation, name: "parent test organisation") }
-        let(:child_organisation) { create(:organisation, name: "child test organisation") }
-        let!(:other_organisation) { create(:organisation, name: "other organisation test organisation") }
-
-        before do
-          user.organisation.update!(name: "test organisation")
-          create(:organisation_relationship, parent_organisation: user.organisation, child_organisation:)
-          create(:organisation_relationship, child_organisation: user.organisation, parent_organisation:)
-        end
-
-        it "searches within all the organisations" do
-          get "/organisations/search", headers:, params: { query: "test organisation" }
-          result = JSON.parse(response.body)
-          expect(result.count).to eq(4)
-          expect(result.keys).to match_array([user.organisation.id.to_s, parent_organisation.id.to_s, child_organisation.id.to_s, other_organisation.id.to_s])
         end
       end
     end

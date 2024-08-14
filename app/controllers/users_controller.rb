@@ -32,17 +32,6 @@ class UsersController < ApplicationController
     end
   end
 
-  def search
-    user_options = current_user.support? ? User.all : User.own_and_managing_org_users(current_user.organisation)
-    users = user_options.search_by(params["query"]).limit(20)
-
-    user_data = users.each_with_object({}) do |user, hash|
-      hash[user.id] = { value: user.name, hint: user.email }
-    end
-
-    render json: user_data.to_json
-  end
-
   def resend_invite
     @user.send_confirmation_instructions
     flash[:notice] = "Invitation sent to #{@user.email}"

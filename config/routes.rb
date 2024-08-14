@@ -125,10 +125,6 @@ Rails.application.routes.draw do
     get "edit-dpo", to: "users#dpo"
     get "edit-key-contact", to: "users#key_contact"
 
-    collection do
-      get :search
-    end
-
     member do
       get "deactivate", to: "users#deactivate"
       get "reactivate", to: "users#reactivate"
@@ -194,10 +190,6 @@ Rails.application.routes.draw do
       end
       get "delete-confirmation", to: "organisations#delete_confirmation"
       delete "delete", to: "organisations#delete"
-    end
-
-    collection do
-      get :search
     end
   end
 

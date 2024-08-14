@@ -4,8 +4,8 @@ class OrganisationsController < ApplicationController
   include DuplicateLogsHelper
 
   before_action :authenticate_user!
-  before_action :find_resource, except: %i[index new create search]
-  before_action :authenticate_scope!, except: %i[index search]
+  before_action :find_resource, except: %i[index new create]
+  before_action :authenticate_scope!, except: [:index]
   before_action :session_filters, if: -> { current_user.support? || current_user.organisation.has_managing_agents? }, only: %i[lettings_logs sales_logs email_lettings_csv download_lettings_csv email_sales_csv download_sales_csv]
   before_action :session_filters, only: %i[users schemes email_schemes_csv download_schemes_csv]
   before_action -> { filter_manager.serialize_filters_to_session }, if: -> { current_user.support? || current_user.organisation.has_managing_agents? }, only: %i[lettings_logs sales_logs email_lettings_csv download_lettings_csv email_sales_csv download_sales_csv]
@@ -278,17 +278,6 @@ class OrganisationsController < ApplicationController
 
   def changes
     render "schemes/changes"
-  end
-
-  def search
-    org_options = current_user.support? ? Organisation.all : Organisation.affiliated_organisations(current_user.organisation)
-    organisations = org_options.search_by(params["query"]).limit(20)
-
-    org_data = organisations.each_with_object({}) do |org, hash|
-      hash[org.id] = { value: org.name }
-    end
-
-    render json: org_data.to_json
   end
 
 private

@@ -117,13 +117,6 @@ RSpec.describe UsersController, type: :request do
         expect(response).to redirect_to("/account/sign-in")
       end
     end
-
-    describe "#search" do
-      it "redirects to the sign in page" do
-        get "/users/search"
-        expect(response).to redirect_to("/account/sign-in")
-      end
-    end
   end
 
   context "when user is signed in as a data provider" do
@@ -409,25 +402,6 @@ RSpec.describe UsersController, type: :request do
 
       it "returns 401 unauthorized" do
         expect(response).to have_http_status(:unauthorized)
-      end
-    end
-
-    describe "#search" do
-      let(:parent_relationship) { create(:organisation_relationship, parent_organisation: user.organisation) }
-      let(:child_relationship) { create(:organisation_relationship, child_organisation: user.organisation) }
-      let!(:org_user) { create(:user, organisation: user.organisation, name: "test_name") }
-      let!(:managing_user) { create(:user, organisation: parent_relationship.child_organisation, name: "managing_agent_test_name") }
-
-      before do
-        create(:user, organisation: child_relationship.parent_organisation, name: "stock_owner_test_name")
-        create(:user, name: "other_organisation_test_name")
-      end
-
-      it "only searches within the current user's organisation and managing agents" do
-        get "/users/search", headers:, params: { query: "test_name" }
-        result = JSON.parse(response.body)
-        expect(result.count).to eq(2)
-        expect(result.keys).to match_array([org_user.id.to_s, managing_user.id.to_s])
       end
     end
   end
@@ -1198,25 +1172,6 @@ RSpec.describe UsersController, type: :request do
 
       it "returns 401 unauthorized" do
         expect(response).to have_http_status(:unauthorized)
-      end
-    end
-
-    describe "#search" do
-      let(:parent_relationship) { create(:organisation_relationship, parent_organisation: user.organisation) }
-      let(:child_relationship) { create(:organisation_relationship, child_organisation: user.organisation) }
-      let!(:org_user) { create(:user, organisation: user.organisation, email: "test_name@example.com") }
-      let!(:managing_user) { create(:user, organisation: parent_relationship.child_organisation, email: "managing_agent_test_name@example.com") }
-
-      before do
-        create(:user, email: "other_organisation_test_name@example.com")
-        create(:user, organisation: child_relationship.parent_organisation, email: "stock_owner_test_name@example.com")
-      end
-
-      it "only searches within the current user's organisation and managing agents" do
-        get "/users/search", headers:, params: { query: "test_name" }
-        result = JSON.parse(response.body)
-        expect(result.count).to eq(2)
-        expect(result.keys).to match_array([org_user.id.to_s, managing_user.id.to_s])
       end
     end
   end
@@ -2154,22 +2109,6 @@ RSpec.describe UsersController, type: :request do
         expect(response).to redirect_to users_organisation_path(other_user.organisation)
         follow_redirect!
         expect(page).not_to have_link("User to be deleted")
-      end
-    end
-
-    describe "#search" do
-      let(:parent_relationship) { create(:organisation_relationship, parent_organisation: user.organisation) }
-      let(:child_relationship) { create(:organisation_relationship, child_organisation: user.organisation) }
-      let!(:org_user) { create(:user, organisation: user.organisation, name: "test_name") }
-      let!(:managing_user) { create(:user, organisation: child_relationship.parent_organisation, name: "stock_owner_test_name") }
-      let!(:owner_user) { create(:user, organisation: parent_relationship.child_organisation, name: "managing_agent_test_name") }
-      let!(:other_user) { create(:user, name: "other_organisation_test_name") }
-
-      it "searches all users" do
-        get "/users/search", headers:, params: { query: "test_name" }
-        result = JSON.parse(response.body)
-        expect(result.count).to eq(4)
-        expect(result.keys).to match_array([org_user.id.to_s, managing_user.id.to_s, owner_user.id.to_s, other_user.id.to_s])
       end
     end
   end

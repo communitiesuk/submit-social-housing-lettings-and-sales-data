@@ -18,7 +18,6 @@ class Organisation < ApplicationRecord
   belongs_to :absorbing_organisation, class_name: "Organisation", optional: true
   has_many :absorbed_organisations, class_name: "Organisation", foreign_key: "absorbing_organisation_id"
   scope :visible, -> { where(discarded_at: nil) }
-  scope :affiliated_organisations, ->(organisation) { where(id: (organisation.child_organisations + [organisation] + organisation.parent_organisations + organisation.absorbed_organisations).map(&:id)) }
 
   def affiliated_stock_owners
     ids = []
