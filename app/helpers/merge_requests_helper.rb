@@ -6,7 +6,7 @@ module MergeRequestsHelper
   def request_details(merge_request)
     [
       { label: "Requester", value: display_value_or_placeholder(merge_request.requester&.name) },
-      { label: "Helpdesk ticket", value: merge_request.helpdesk_ticket.present? ? link_to("#{merge_request.helpdesk_ticket} (opens in a new tab)", "https://dluhcdigital.atlassian.net/browse/#{merge_request.helpdesk_ticket}", target: "_blank", rel: "noopener noreferrer") : display_value_or_placeholder(nil), action: merge_request.status == "request_merged" ? nil : { text: "Change", href: "#", visually_hidden_text: "helpdesk ticket" } },
+      { label: "Helpdesk ticket", value: merge_request.helpdesk_ticket.present? ? link_to("#{merge_request.helpdesk_ticket} (opens in a new tab)", "https://dluhcdigital.atlassian.net/browse/#{merge_request.helpdesk_ticket}", target: "_blank", rel: "noopener noreferrer") : display_value_or_placeholder(nil), action: merge_request.status == "request_merged" ? nil : { text: "Change", href: helpdesk_ticket_merge_request_path(merge_request, referrer: "check_answers"), visually_hidden_text: "helpdesk ticket" } },
       { label: "Status", value: status_tag(merge_request.status) },
     ]
   end
@@ -37,6 +37,16 @@ module MergeRequestsHelper
       "Save changes"
     else
       "Save and continue"
+    end
+  end
+
+  def secondary_merge_request_link_text(referrer, skip_for_now: false)
+    if accessed_from_check_answers?(referrer)
+      "Cancel"
+    elsif skip_for_now
+      "Skip for now"
+    else
+      ""
     end
   end
 
