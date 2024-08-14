@@ -42,6 +42,11 @@ class MergeRequestsController < ApplicationController
     render :merging_organisations
   end
 
+  def delete
+    @merge_request.discard!
+    redirect_to organisations_path(anchor: "merge-requests")
+  end
+
 private
 
   def page

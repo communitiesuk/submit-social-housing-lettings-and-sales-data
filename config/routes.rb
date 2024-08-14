@@ -201,6 +201,8 @@ Rails.application.routes.draw do
       get "absorbing-organisation"
       get "merge-date"
       get "helpdesk-ticket"
+      get "delete-confirmation", to: "merge_requests#delete_confirmation"
+      delete "delete", to: "merge_requests#delete"
     end
   end
 
