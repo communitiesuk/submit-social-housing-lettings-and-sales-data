@@ -208,7 +208,8 @@ class Form::Question
   end
 
   def unanswered_error_message
-    I18n.t("validations.not_answered", question: error_display_label.downcase)
+    question_text = error_display_label.presence || "this question"
+    I18n.t("validations.not_answered", question: question_text.downcase)
   end
 
   def suffix_label(log)

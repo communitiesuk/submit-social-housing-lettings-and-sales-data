@@ -467,6 +467,7 @@ class BulkUpload::Lettings::Year2024::RowParser
 
       fields.each do |field|
         next if errors.include?(field)
+        next if error.type == :skip_bu_error
 
         question = log.form.get_question(error.attribute, log)
 
@@ -805,16 +806,14 @@ private
 
       if setup_question?(question)
         fields.each do |field|
-          if errors.select { |e| fields.include?(e.attribute) }.none?
-            question_text = question.error_display_label.presence || "this question"
-            errors.add(field, I18n.t("validations.not_answered", question: question_text.downcase), category: :setup) if field.present?
+          if errors.select { |e| fields.include?(e.attribute) }.none? && field.present?
+            errors.add(field, question.unanswered_error_message, category: :setup)
           end
         end
       else
         fields.each do |field|
           unless errors.any? { |e| fields.include?(e.attribute) }
-            question_text = question.error_display_label.presence || "this question"
-            errors.add(field, I18n.t("validations.not_answered", question: question_text.downcase))
+            errors.add(field, question.unanswered_error_message)
           end
         end
       end
@@ -1131,10 +1130,6 @@ private
 
     attributes["lettype"] = nil # should get this from rent_type
     attributes["tenancycode"] = field_13
-    attributes["la"] = field_23
-    attributes["la_as_entered"] = field_23
-    attributes["postcode_known"] = postcode_known
-    attributes["postcode_full"] = postcode_full
     attributes["owning_organisation"] = owning_organisation
     attributes["managing_organisation"] = managing_organisation
     attributes["renewal"] = renewal
@@ -1305,22 +1300,29 @@ private
 
     attributes["first_time_property_let_as_social_housing"] = first_time_property_let_as_social_housing
 
-    attributes["uprn_known"] = field_16.present? ? 1 : 0
-    attributes["uprn_confirmed"] = 1 if field_16.present?
-    attributes["skip_update_uprn_confirmed"] = true
-    attributes["uprn"] = field_16
-    attributes["address_line1"] = field_17
-    attributes["address_line1_as_entered"] = field_17
-    attributes["address_line2"] = field_18
-    attributes["address_line2_as_entered"] = field_18
-    attributes["town_or_city"] = field_19
-    attributes["town_or_city_as_entered"] = field_19
-    attributes["county"] = field_20
-    attributes["county_as_entered"] = field_20
-    attributes["address_line1_input"] = address_line1_input
-    attributes["postcode_full_input"] = postcode_full
-    attributes["postcode_full_as_entered"] = postcode_full
-    attributes["select_best_address_match"] = true if field_16.blank? && !supported_housing?
+    if general_needs?
+      attributes["uprn_known"] = field_16.present? ? 1 : 0
+      attributes["uprn_confirmed"] = 1 if field_16.present?
+      attributes["skip_update_uprn_confirmed"] = true
+      attributes["uprn"] = field_16
+      attributes["address_line1"] = field_17
+      attributes["address_line1_as_entered"] = field_17
+      attributes["address_line2"] = field_18
+      attributes["address_line2_as_entered"] = field_18
+      attributes["town_or_city"] = field_19
+      attributes["town_or_city_as_entered"] = field_19
+      attributes["county"] = field_20
+      attributes["county_as_entered"] = field_20
+      attributes["postcode_full"] = postcode_full
+      attributes["postcode_full_as_entered"] = postcode_full
+      attributes["postcode_known"] = postcode_known
+      attributes["la"] = field_23
+      attributes["la_as_entered"] = field_23
+
+      attributes["address_line1_input"] = address_line1_input
+      attributes["postcode_full_input"] = postcode_full
+      attributes["select_best_address_match"] = true if field_16.blank?
+    end
 
     attributes
   end

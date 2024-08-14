@@ -183,19 +183,147 @@ RSpec.describe FiltersHelper do
           OpenStruct.new(id: parent_organisation.id, name: "Parent organisation"),
           OpenStruct.new(id: 9_999_999, name: "Other organisation"),
         ])
+
+        context "when no organisation is selected in the filters" do
+        it "returns an empty list" do
+          expect(owning_organisation_filter_options(user.reload, "lettings_logs")).to eq([
+            OpenStruct.new(id: "", name: "Select an option"),
+          ])
+        end
+      end
+
+      context "when a specific child organisation is selected in the filters" do
+        before do
+          session[:lettings_logs_filters] = { "owning_organisation": child_organisation.id }.to_json
+        end
+
+        it "returns the selected organisation in the list" do
+          expect(owning_organisation_filter_options(user.reload, "lettings_logs")).to eq([
+            OpenStruct.new(id: child_organisation.id, name: "Child organisation"),
+          ])
+        end
+      end
+
+      context "when a specific parent organisation is selected in the filters" do
+        before do
+          session[:lettings_logs_filters] = { "owning_organisation": parent_organisation.id }.to_json
+        end
+
+        it "returns the selected organisation in the list" do
+          expect(owning_organisation_filter_options(user.reload, "lettings_logs")).to eq([
+            OpenStruct.new(id: parent_organisation.id, name: "Parent organisation"),
+          ])
+        end
+      end
+
+      context "when a specific absorbed organisation is selected in the filters" do
+        before do
+          session[:lettings_logs_filters] = { "owning_organisation": absorbed_organisation.id }.to_json
+        end
+
+        it "returns the selected organisation in the list" do
+          expect(owning_organisation_filter_options(user.reload, "lettings_logs")).to eq([
+            OpenStruct.new(id: absorbed_organisation.id, name: "Absorbed organisation"),
+          ])
+        end
+      end
+
+      context "when a specific non related organisation is selected in the filters" do
+        let(:unrelated_organisation) { create(:organisation, name: "Unrelated organisation") }
+
+        before do
+          session[:lettings_logs_filters] = { "owning_organisation": unrelated_organisation.id }.to_json
+        end
+
+        it "returns the selected organisation in the list" do
+          expect(owning_organisation_filter_options(user.reload, "lettings_logs")).to eq([
+            OpenStruct.new(id: unrelated_organisation.id, name: "Unrelated organisation"),
+          ])
+        end
+      end
+
+      context "when a non existing organisation is selected in the filters" do
+        before do
+          session[:lettings_logs_filters] = { "owning_organisation": 143_542_542 }.to_json
+        end
+
+        it "returns an empty list" do
+          expect(owning_organisation_filter_options(user.reload, "lettings_logs")).to eq([
+            OpenStruct.new(id: "", name: "Select an option"),
+          ])
+        end
       end
     end
 
     context "with a data coordinator user" do
       let(:user) { FactoryBot.create(:user, :data_coordinator, organisation: child_organisation) }
 
-      it "returns a list of parent orgs and your own organisation" do
-        expect(owning_organisation_filter_options(user.reload)).to eq([
-          OpenStruct.new(id: "", name: "Select an option"),
-          OpenStruct.new(id: child_organisation.id, name: "Child organisation"),
-          OpenStruct.new(id: parent_organisation.id, name: "Parent organisation"),
-          OpenStruct.new(id: absorbed_organisation.id, name: "Absorbed organisation"),
-        ])
+      context "when no organisation is selected in the filters" do
+        it "returns an empty list" do
+          expect(owning_organisation_filter_options(user.reload, "lettings_logs")).to eq([
+            OpenStruct.new(id: "", name: "Select an option"),
+          ])
+        end
+      end
+
+      context "when a specific child organisation is selected in the filters" do
+        before do
+          session[:lettings_logs_filters] = { "owning_organisation": child_organisation.id }.to_json
+        end
+
+        it "returns the selected organisation in the list" do
+          expect(owning_organisation_filter_options(user.reload, "lettings_logs")).to eq([
+            OpenStruct.new(id: child_organisation.id, name: "Child organisation"),
+          ])
+        end
+      end
+
+      context "when a specific parent organisation is selected in the filters" do
+        before do
+          session[:lettings_logs_filters] = { "owning_organisation": parent_organisation.id }.to_json
+        end
+
+        it "returns the selected organisation in the list" do
+          expect(owning_organisation_filter_options(user.reload, "lettings_logs")).to eq([
+            OpenStruct.new(id: parent_organisation.id, name: "Parent organisation"),
+          ])
+        end
+      end
+
+      context "when a specific absorbed organisation is selected in the filters" do
+        before do
+          session[:lettings_logs_filters] = { "owning_organisation": absorbed_organisation.id }.to_json
+        end
+
+        it "returns the selected organisation in the list" do
+          expect(owning_organisation_filter_options(user.reload, "lettings_logs")).to eq([
+            OpenStruct.new(id: absorbed_organisation.id, name: "Absorbed organisation"),
+          ])
+        end
+      end
+
+      context "when a specific non related organisation is selected in the filters" do
+        before do
+          session[:lettings_logs_filters] = { "owning_organisation": create(:organisation).id }.to_json
+        end
+
+        it "returns an empty list" do
+          expect(owning_organisation_filter_options(user.reload, "lettings_logs")).to eq([
+            OpenStruct.new(id: "", name: "Select an option"),
+          ])
+        end
+      end
+
+      context "when a non existing organisation is selected in the filters" do
+        before do
+          session[:lettings_logs_filters] = { "owning_organisation": 143_542_542 }.to_json
+        end
+
+        it "returns an empty list" do
+          expect(owning_organisation_filter_options(user.reload, "lettings_logs")).to eq([
+            OpenStruct.new(id: "", name: "Select an option"),
+          ])
+        end
       end
     end
   end
@@ -222,19 +350,147 @@ RSpec.describe FiltersHelper do
           OpenStruct.new(id: child_organisation.id, name: "Child organisation"),
           OpenStruct.new(id: 9_999_999, name: "Other organisation"),
         ])
+
+      context "when no organisation is selected in the filters" do
+        it "returns an empty list" do
+          expect(managing_organisation_filter_options(user.reload, "lettings_logs")).to eq([
+            OpenStruct.new(id: "", name: "Select an option"),
+          ])
+        end
+      end
+
+      context "when a specific child organisation is selected in the filters" do
+        before do
+          session[:lettings_logs_filters] = { "managing_organisation": child_organisation.id }.to_json
+        end
+
+        it "returns the selected organisation in the list" do
+          expect(managing_organisation_filter_options(user.reload, "lettings_logs")).to eq([
+            OpenStruct.new(id: child_organisation.id, name: "Child organisation"),
+          ])
+        end
+      end
+
+      context "when a specific parent organisation is selected in the filters" do
+        before do
+          session[:lettings_logs_filters] = { "managing_organisation": parent_organisation.id }.to_json
+        end
+
+        it "returns the selected organisation in the list" do
+          expect(managing_organisation_filter_options(user.reload, "lettings_logs")).to eq([
+            OpenStruct.new(id: parent_organisation.id, name: "Parent organisation"),
+          ])
+        end
+      end
+
+      context "when a specific absorbed organisation is selected in the filters" do
+        before do
+          session[:lettings_logs_filters] = { "managing_organisation": absorbed_organisation.id }.to_json
+        end
+
+        it "returns the selected organisation in the list" do
+          expect(managing_organisation_filter_options(user.reload, "lettings_logs")).to eq([
+            OpenStruct.new(id: absorbed_organisation.id, name: "Absorbed organisation"),
+          ])
+        end
+      end
+
+      context "when a specific non related organisation is selected in the filters" do
+        let(:unrelated_organisation) { create(:organisation, name: "Unrelated organisation") }
+
+        before do
+          session[:lettings_logs_filters] = { "managing_organisation": unrelated_organisation.id }.to_json
+        end
+
+        it "returns the selected organisation in the list" do
+          expect(managing_organisation_filter_options(user.reload, "lettings_logs")).to eq([
+            OpenStruct.new(id: unrelated_organisation.id, name: "Unrelated organisation"),
+          ])
+        end
+      end
+
+      context "when a non existing organisation is selected in the filters" do
+        before do
+          session[:lettings_logs_filters] = { "managing_organisation": 143_542_542 }.to_json
+        end
+
+        it "returns an empty list" do
+          expect(managing_organisation_filter_options(user.reload, "lettings_logs")).to eq([
+            OpenStruct.new(id: "", name: "Select an option"),
+          ])
+        end
       end
     end
 
     context "with a data coordinator user" do
       let(:user) { FactoryBot.create(:user, :data_coordinator, organisation: parent_organisation) }
 
-      it "returns a list of child orgs and your own organisation" do
-        expect(managing_organisation_filter_options(user.reload)).to eq([
-          OpenStruct.new(id: "", name: "Select an option"),
-          OpenStruct.new(id: parent_organisation.id, name: "Parent organisation"),
-          OpenStruct.new(id: child_organisation.id, name: "Child organisation"),
-          OpenStruct.new(id: absorbed_organisation.id, name: "Absorbed organisation"),
-        ])
+      context "when no organisation is selected in the filters" do
+        it "returns an empty list" do
+          expect(managing_organisation_filter_options(user.reload, "lettings_logs")).to eq([
+            OpenStruct.new(id: "", name: "Select an option"),
+          ])
+        end
+      end
+
+      context "when a specific child organisation is selected in the filters" do
+        before do
+          session[:lettings_logs_filters] = { "managing_organisation": child_organisation.id }.to_json
+        end
+
+        it "returns the selected organisation in the list" do
+          expect(managing_organisation_filter_options(user.reload, "lettings_logs")).to eq([
+            OpenStruct.new(id: child_organisation.id, name: "Child organisation"),
+          ])
+        end
+      end
+
+      context "when a specific parent organisation is selected in the filters" do
+        before do
+          session[:lettings_logs_filters] = { "managing_organisation": parent_organisation.id }.to_json
+        end
+
+        it "returns the selected organisation in the list" do
+          expect(managing_organisation_filter_options(user.reload, "lettings_logs")).to eq([
+            OpenStruct.new(id: parent_organisation.id, name: "Parent organisation"),
+          ])
+        end
+      end
+
+      context "when a specific absorbed organisation is selected in the filters" do
+        before do
+          session[:lettings_logs_filters] = { "managing_organisation": absorbed_organisation.id }.to_json
+        end
+
+        it "returns the selected organisation in the list" do
+          expect(managing_organisation_filter_options(user.reload, "lettings_logs")).to eq([
+            OpenStruct.new(id: absorbed_organisation.id, name: "Absorbed organisation"),
+          ])
+        end
+      end
+
+      context "when a specific non related organisation is selected in the filters" do
+        before do
+          session[:lettings_logs_filters] = { "managing_organisation": create(:organisation).id }.to_json
+        end
+
+        it "returns an empty list" do
+          expect(managing_organisation_filter_options(user.reload, "lettings_logs")).to eq([
+            OpenStruct.new(id: "", name: "Select an option"),
+          ])
+        end
+      end
+
+      context "when a non existing organisation is selected in the filters" do
+        before do
+          session[:lettings_logs_filters] = { "managing_organisation": 143_542_542 }.to_json
+        end
+
+        it "returns an empty list" do
+          expect(managing_organisation_filter_options(user.reload, "lettings_logs")).to eq([
+            OpenStruct.new(id: "", name: "Select an option"),
+          ])
+        end
       end
     end
   end

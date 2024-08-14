@@ -1,13 +1,16 @@
 <div class="govuk-summary-card govuk-!-margin-bottom-6">
   <div class="govuk-summary-card__title-wrapper">
     <% if lettings? %>
-      <h3 class="govuk-summary-card__title"><strong>Row <%= row %></strong> <%= tenant_code_html %> <%= property_ref_html %></h3>
+      <h3 class="govuk-summary-card__title govuk-!-font-weight-regular"><strong>Row <%= row %></strong> <%= tenant_code_html %> <%= property_ref_html %></h3>
     <% else %>
-      <h3 class="govuk-summary-card__title"><strong>Row <%= row %></strong> <%= purchaser_code_html %></h3>
+      <h3 class="govuk-summary-card__title govuk-!-font-weight-regular"><strong>Row <%= row %></strong> <%= purchaser_code_html %></h3>
     <% end %>
   </div>
 
   <div class="govuk-summary-card__content">
+    <% potential_errors, critical_errors = bulk_upload_errors.partition { |error| error.category == "soft_validation" } %>
+    <h2 class="govuk-heading-m">Critical errors</h2>
+    <p class="govuk-body">These errors must be fixed to complete your logs.</p>
     <%= govuk_table do |table| %>
       <%= table.with_head do |head| %>
         <% head.with_row do |row| %>
@@ -18,16 +21,49 @@
         <% end %>
 
         <%= table.with_body do |body| %>
-          <% bulk_upload_errors.each do |error| %>
+          <% critical_errors.each do |error| %>
             <% body.with_row do |row| %>
-              <% row.with_cell(header: true, text: error.cell) %>
-              <% row.with_cell(text: question_for_field(error.field)) %>
-              <% row.with_cell(text: error.error) %>
-              <% row.with_cell(text: error.field.humanize) %>
+                <% row.with_cell(text: error.cell) %>
+                <% row.with_cell(text: question_for_field(error.field)) %>
+                <% row.with_cell(text: error.error, html_attributes: { class: "govuk-!-font-weight-bold" }) %>
+                <% row.with_cell(text: error.field.humanize) %>
             <% end %>
           <% end %>
         <% end %>
       <% end %>
+    <% end %>
+
+    <% if potential_errors.any? %>
+      <h2 class="govuk-heading-m">Potential errors</h2>
+      <p class="govuk-body">The following groups of cells might have conflicting data. Check the answers and fix any incorrect data.<br><br>If the answers are correct, fix the critical errors and reupload the file. You'll need to confirm that the following data is correct when the file only contains potential errors.</p>
+        <%= govuk_table do |table| %>
+          <%= table.with_head do |head| %>
+            <% head.with_row do |row| %>
+              <% row.with_cell(header: true, text: "Cell") %>
+              <% row.with_cell(header: true, text: "Question") %>
+              <% row.with_cell(header: true, text: "Potential error") %>
+              <% row.with_cell(header: true, text: "Specification") %>
+            <% end %>
+          <% end %>
+
+          <%= table.with_body do |body| %>
+            <% potential_errors.group_by(&:error).each do |error_message, errors| %>
+              <% errors.each_with_index do |error, index| %>
+                <% row_class = "grouped-rows" %>
+                <% row_class += " first-row" if index.zero? %>
+                <% row_class += " last-row" if index == errors.size - 1 %>
+                <% body.with_row(html_attributes: { class: row_class }) do |row| %>
+                  <% row.with_cell(text: error.cell) %>
+                  <% row.with_cell(text: question_for_field(error.field)) %>
+                  <% if index == 0 %>
+                    <% row.with_cell(text: error_message, rowspan: errors.size, html_attributes: { class: "govuk-!-font-weight-bold grouped-multirow-cell" }) %>
+                  <% end %>
+                  <% row.with_cell(text: error.field.humanize) %>
+                <% end %>
+              <% end %>
+            <% end %>
+          <% end %>
+        <% end %>
     <% end %>
   </div>
 </div>
