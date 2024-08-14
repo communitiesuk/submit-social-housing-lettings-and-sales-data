@@ -24,8 +24,8 @@
           <% critical_errors.each do |error| %>
             <% body.with_row do |row| %>
                 <% row.with_cell(text: error.cell) %>
-                <% row.with_cell(text: question_for_field(error.field)) %>
-                <% row.with_cell(text: error.error, html_attributes: { class: "govuk-!-font-weight-bold" }) %>
+                <% row.with_cell(text: question_for_field(error.field), html_attributes: { class: "govuk-!-width-one-half" }) %>
+                <% row.with_cell(text: error.error, html_attributes: { class: "govuk-!-font-weight-bold govuk-!-width-one-half" }) %>
                 <% row.with_cell(text: error.field.humanize) %>
             <% end %>
           <% end %>
@@ -54,9 +54,9 @@
                 <% row_class += " last-row" if index == errors.size - 1 %>
                 <% body.with_row(html_attributes: { class: row_class }) do |row| %>
                   <% row.with_cell(text: error.cell) %>
-                  <% row.with_cell(text: question_for_field(error.field)) %>
+                  <% row.with_cell(text: question_for_field(error.field), html_attributes: { class: "govuk-!-width-one-half" }) %>
                   <% if index == 0 %>
-                    <% row.with_cell(text: error_message, rowspan: errors.size, html_attributes: { class: "govuk-!-font-weight-bold grouped-multirow-cell" }) %>
+                    <% row.with_cell(text: error_message, rowspan: errors.size, html_attributes: { class: "govuk-!-font-weight-bold govuk-!-width-one-half grouped-multirow-cell" }) %>
                   <% end %>
                   <% row.with_cell(text: error.field.humanize) %>
                 <% end %>
