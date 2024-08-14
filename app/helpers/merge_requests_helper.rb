@@ -28,8 +28,8 @@ module MergeRequestsHelper
     ]
   end
 
-  def ordered_merging_organisations(merge_request)
-    merge_request.merge_request_organisations.order(created_at: :desc).map(&:merging_organisation)
+  def ordered_merging_organisations(merge_request, new_merging_org_ids)
+    Organisation.where(id: new_merging_org_ids) + merge_request.merge_request_organisations.order(created_at: :desc).map(&:merging_organisation)
   end
 
   def submit_merge_request_button_text(referrer)
