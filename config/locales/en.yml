@@ -175,7 +175,7 @@ en:
         merge_request:
           attributes:
             absorbing_organisation_id:
-              blank: "Select the organisation absorbing the others"
+              blank: "Select the absorbing organisation"
             merge_date: 
               blank: "Enter a merge date"
               invalid: "Enter a valid merge date"

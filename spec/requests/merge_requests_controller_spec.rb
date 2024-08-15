@@ -246,7 +246,7 @@ RSpec.describe MergeRequestsController, type: :request do
           it "renders the error" do
             request
 
-            expect(page).to have_content("Select the organisation absorbing the others")
+            expect(page).to have_content("Select the absorbing organisation")
           end
 
           it "does not update the request" do
