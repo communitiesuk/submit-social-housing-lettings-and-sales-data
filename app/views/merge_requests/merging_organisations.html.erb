@@ -42,8 +42,8 @@
       <div class="govuk-button-group">
         <% if @merge_request.merging_organisations.count.positive? || @new_merging_org_ids.count.positive? %>
           <%= f.govuk_submit submit_merge_request_button_text(request.query_parameters["referrer"]) %>
+          <%= govuk_link_to secondary_merge_request_link_text(request.query_parameters["referrer"]), merge_request_path(@merge_request) %>
         <% end %>
-        <%= govuk_link_to secondary_merge_request_link_text(request.query_parameters["referrer"]), merge_request_path(@merge_request) %>
       </div>
     <% end %>
   </div>
