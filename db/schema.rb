@@ -444,6 +444,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_19_143150) do
     t.integer "total_managing_agents"
     t.boolean "signed_dsa", default: false
     t.datetime "discarded_at"
+    t.datetime "last_failed_attempt"
   end
 
   create_table "notifications", force: :cascade do |t|

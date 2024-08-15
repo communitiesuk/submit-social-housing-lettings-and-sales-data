@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "merge_requests/show.html.erb", type: :view do
-  let(:absorbing_organisation) { create(:organisation, name: "Absorbing Org") }
+  let(:absorbing_organisation) { create(:organisation, name: "Absorbing Org", with_dsa: false) }
   let(:dpo_user) { create(:user, name: "DPO User", is_dpo: true, organisation: absorbing_organisation) }
   let(:merge_request) { create(:merge_request, absorbing_organisation_id: absorbing_organisation.id, signed_dsa: false, status: 1) }
 

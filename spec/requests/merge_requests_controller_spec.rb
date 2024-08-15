@@ -364,6 +364,62 @@ RSpec.describe MergeRequestsController, type: :request do
         end
       end
     end
+
+    describe "#start_merge" do
+      let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation, absorbing_organisation: organisation, merge_date: Time.zone.local(2022, 3, 3)) }
+      let(:merging_organisation) { create(:organisation, name: "Merging Test Org") }
+
+      before do
+        allow(ProcessMergeRequestJob).to receive(:perform_later).and_return(nil)
+      end
+
+      context "when merge request is ready to merge" do
+        before do
+          create(:merge_request_organisation, merge_request:, merging_organisation: other_organisation)
+          create(:merge_request_organisation, merge_request:, merging_organisation:)
+        end
+
+        it "runs the job with correct merge request" do
+          expect(merge_request.reload.status).to eq("ready_to_merge")
+          expect(ProcessMergeRequestJob).to receive(:perform_later).with(merge_request:).once
+          patch "/merge-request/#{merge_request.id}/start-merge"
+          expect(merge_request.reload.status).to eq("processing")
+        end
+      end
+
+      context "when merge request is not ready to merge" do
+        it "does not run the job" do
+          expect(merge_request.status).to eq("incomplete")
+          expect(ProcessMergeRequestJob).not_to receive(:perform_later).with(merge_request:)
+          patch "/merge-request/#{merge_request.id}/start-merge"
+          expect(merge_request.reload.status).to eq("incomplete")
+        end
+      end
+    end
+
+    describe "#show" do
+      before do
+        get "/merge-request/#{merge_request.id}", headers:
+      end
+
+      context "when request has previously failed" do
+        let(:merge_request) { create(:merge_request, last_failed_attempt: Time.zone.yesterday) }
+
+        it "shows a banner" do
+          expect(page).to have_content("An error occurred while processing the merge.")
+          expect(page).to have_content("No changes have been made. Try beginning the merge again.")
+        end
+      end
+
+      context "when request has not previously failed" do
+        let(:merge_request) { create(:merge_request, last_failed_attempt: nil) }
+
+        it "does not show a banner" do
+          expect(page).not_to have_content("An error occurred while processing the merge.")
+          expect(page).not_to have_content("No changes have been made. Try beginning the merge again.")
+        end
+      end
+    end
   end
 
   context "when user is signed in with a data coordinator user" do
