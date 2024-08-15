@@ -8,10 +8,17 @@ class MergeRequestOrganisation < ApplicationRecord
   scope :merged, -> { joins(:merge_request).where(merge_requests: { status: "request_merged" }) }
   scope :with_merging_organisation, ->(merging_organisation) { where(merging_organisation:) }
 
+  after_save :update_merge_request_status
+
   has_paper_trail
 
   def merging_organisation_name
     merging_organisation.name || ""
+  end
+
+  def update_merge_request_status
+    merge_request.update_status!
+    merge_request.save!
   end
 
 private

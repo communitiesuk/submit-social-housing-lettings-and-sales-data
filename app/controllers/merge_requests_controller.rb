@@ -61,6 +61,15 @@ class MergeRequestsController < ApplicationController
     @new_merging_org_ids = []
   end
 
+  def start_merge
+    if @merge_request.status == "ready_to_merge"
+      @merge_request.update!(status: :processing)
+      ProcessMergeRequestJob.perform_later(merge_request: @merge_request)
+    end
+
+    redirect_to merge_request_path(@merge_request)
+  end
+
 private
 
   def page
