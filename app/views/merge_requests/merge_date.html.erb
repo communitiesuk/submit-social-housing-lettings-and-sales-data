@@ -1,7 +1,7 @@
 <% content_for :before_content do %>
   <% title = "Tell us if your organisation is merging" %>
   <% content_for :title, title %>
-  <%= govuk_back_link href: merging_organisations_merge_request_path(@merge_request) %>
+  <%= govuk_back_link href: merge_request_back_link(@merge_request, "merge_date", request.query_parameters["referrer"]) %>
 <% end %>
  <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">

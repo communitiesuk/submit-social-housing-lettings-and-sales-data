@@ -1,7 +1,7 @@
 <% content_for :before_content do %>
   <% title = "Tell us if your organisation is merging" %>
   <% content_for :title, title %>
-  <%= govuk_back_link href: merge_request_organisation_path(id: @merge_request.requesting_organisation_id) %>
+  <%= govuk_back_link href: merge_request_back_link(@merge_request, "merging_organisations", request.query_parameters["referrer"]) %>
 <% end %>
 
 <%= form_with model: @merge_request, url: merging_organisations_merge_request_path(referrer: request.query_parameters["referrer"]), method: :patch do |f| %>
@@ -18,9 +18,10 @@
         question: Form::Question.new("", { "answer_options" => @answer_options.reject { |id, _org_name| id != "" && id == @merge_request.absorbing_organisation_id } }, nil),
         f:,
       } %>
+      <%= f.hidden_field :new_merging_org_ids, value: @new_merging_org_ids %>
       <%= f.govuk_submit "Add organisation", secondary: true, classes: "govuk-button--secondary" %>
       <%= govuk_table do |table| %>
-        <% ordered_merging_organisations(@merge_request).each do |merging_organisation| %>
+        <% ordered_merging_organisations(@merge_request, @new_merging_org_ids).each do |merging_organisation| %>
           <%= table.with_body do |body| %>
             <%= body.with_row do |row| %>
               <% row.with_cell(text: merging_organisation.name) %>
@@ -28,7 +29,7 @@
                 scope: "row",
                 class: "govuk-!-text-align-right",
               }) do %>
-                <%= govuk_link_to("Remove", merging_organisations_remove_merge_request_path(merge_request: { merging_organisation: merging_organisation.id })) %>
+                <%= govuk_link_to("Remove", merging_organisations_remove_merge_request_path(merge_request: { merging_organisation: merging_organisation.id, new_merging_org_ids: @new_merging_org_ids })) %>
               <% end %>
             <% end %>
           <% end %>
@@ -36,13 +37,14 @@
       <% end %>
     <% end %>
     <%= form_with model: @merge_request, url: merge_request_path(id: @merge_request.id), method: :patch do |f| %>
-      <% if @merge_request.merging_organisations.count.positive? %>
-        <%= f.hidden_field :page, value: "merging_organisations" %>
-        <div class="govuk-button-group">
+      <%= f.hidden_field :page, value: "merging_organisations" %>
+      <%= f.hidden_field :new_merging_org_ids, value: @new_merging_org_ids %>
+      <div class="govuk-button-group">
+        <% if @merge_request.merging_organisations.count.positive? || @new_merging_org_ids.count.positive? %>
           <%= f.govuk_submit submit_merge_request_button_text(request.query_parameters["referrer"]) %>
-          <%= govuk_link_to(secondary_merge_request_link_text(request.query_parameters["referrer"]), merge_request_path(@merge_request)) %>
-        </div>
-      <% end %>
+        <% end %>
+        <%= govuk_link_to secondary_merge_request_link_text(request.query_parameters["referrer"]), merge_request_path(@merge_request) %>
+      </div>
     <% end %>
   </div>
 </div>
