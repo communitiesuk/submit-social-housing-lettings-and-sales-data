@@ -1,7 +1,7 @@
 <% content_for :before_content do %>
   <% title = "Tell us if your organisation is merging" %>
   <% content_for :title, title %>
-  <%= govuk_back_link href: merge_request_organisation_path(id: @merge_request.requesting_organisation_id) %>
+  <%= govuk_back_link href: merge_request_back_link(@merge_request, "merging_organisations", request.query_parameters["referrer"]) %>
 <% end %>
 
 <%= form_with model: @merge_request, url: merging_organisations_merge_request_path(referrer: request.query_parameters["referrer"]), method: :patch do |f| %>

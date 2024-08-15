@@ -53,4 +53,19 @@ module MergeRequestsHelper
   def accessed_from_check_answers?(referrer)
     %w[check_answers].include?(referrer)
   end
+
+  def merge_request_back_link(merge_request, page, referrer)
+    return merge_request_path(merge_request) if accessed_from_check_answers?(referrer)
+
+    case page
+    when "absorbing_organisation"
+      organisations_path(anchor: "merge-requests")
+    when "merging_organisations"
+      absorbing_organisation_merge_request_path(merge_request)
+    when "merge_date"
+      merging_organisations_merge_request_path(merge_request)
+    when "helpdesk_ticket"
+      merge_date_merge_request_path(merge_request)
+    end
+  end
 end
