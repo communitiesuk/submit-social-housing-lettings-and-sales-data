@@ -319,7 +319,7 @@ RSpec.describe Csv::LettingsLogCsvService do
             hbrentshortfall: 1,
             tshortfall_known: 1,
             tshortfall: 12,
-            )
+          )
         end
 
         context "when exporting with human readable labels" do
@@ -507,7 +507,7 @@ RSpec.describe Csv::LettingsLogCsvService do
             hbrentshortfall: 1,
             tshortfall_known: 1,
             tshortfall: 12,
-            )
+          )
         end
 
         context "when exporting with human readable labels" do
