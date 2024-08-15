@@ -6,16 +6,16 @@ module MergeRequestsHelper
   def request_details(merge_request)
     [
       { label: "Requester", value: display_value_or_placeholder(merge_request.requester&.name) },
-      { label: "Helpdesk ticket", value: merge_request.helpdesk_ticket.present? ? link_to("#{merge_request.helpdesk_ticket} (opens in a new tab)", "https://dluhcdigital.atlassian.net/browse/#{merge_request.helpdesk_ticket}", target: "_blank", rel: "noopener noreferrer") : display_value_or_placeholder(nil), action: merge_request.status == "request_merged" ? nil : { text: "Change", href: helpdesk_ticket_merge_request_path(merge_request, referrer: "check_answers"), visually_hidden_text: "helpdesk ticket" } },
+      { label: "Helpdesk ticket", value: merge_request.helpdesk_ticket.present? ? link_to("#{merge_request.helpdesk_ticket} (opens in a new tab)", "https://dluhcdigital.atlassian.net/browse/#{merge_request.helpdesk_ticket}", target: "_blank", rel: "noopener noreferrer") : display_value_or_placeholder(nil), action: merge_request_action(merge_request, "helpdesk_ticket") },
       { label: "Status", value: status_tag(merge_request.status) },
     ]
   end
 
   def merge_details(merge_request)
     [
-      { label: "Absorbing organisation", value: display_value_or_placeholder(merge_request.absorbing_organisation_name), action: merge_request.status == "request_merged" ? nil : { text: "Change", href: absorbing_organisation_merge_request_path(merge_request, referrer: "check_answers"), visually_hidden_text: "absorbing organisation" } },
-      { label: "Merging organisations", value: merge_request.merge_request_organisations.any? ? merge_request.merge_request_organisations.map(&:merging_organisation_name).join("<br>").html_safe : display_value_or_placeholder(nil), action: merge_request.status == "request_merged" ? nil : { text: "Change", href: merging_organisations_merge_request_path(merge_request, referrer: "check_answers"), visually_hidden_text: "merging organisations" } },
-      { label: "Merge date", value: display_value_or_placeholder(merge_request.merge_date), action: merge_request.status == "request_merged" ? nil : { text: "Change", href: merge_date_merge_request_path(merge_request, referrer: "check_answers"), visually_hidden_text: "merge date" } },
+      { label: "Absorbing organisation", value: display_value_or_placeholder(merge_request.absorbing_organisation_name), action: merge_request_action(merge_request, "absorbing_organisation") },
+      { label: "Merging organisations", value: merge_request.merge_request_organisations.any? ? merge_request.merge_request_organisations.map(&:merging_organisation_name).join("<br>").html_safe : display_value_or_placeholder(nil), action: merge_request_action(merge_request, "merging_organisations") },
+      { label: "Merge date", value: display_value_or_placeholder(merge_request.merge_date), action: merge_request_action(merge_request, "merge_date") },
     ]
   end
 
@@ -66,6 +66,12 @@ module MergeRequestsHelper
       merging_organisations_merge_request_path(merge_request)
     when "helpdesk_ticket"
       merge_date_merge_request_path(merge_request)
+    end
+  end
+
+  def merge_request_action(merge_request, page)
+    unless merge_request.status == "request_merged" || merge_request.status == "processing"
+      { text: "Change", href: send("#{page}_merge_request_path", merge_request, referrer: "check_answers"), visually_hidden_text: page.humanize }
     end
   end
 end
