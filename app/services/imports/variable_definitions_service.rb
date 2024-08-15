@@ -22,7 +22,7 @@ module Imports
       file_name = File.basename(file, ".csv")
       parsed_file_name = file_name.split("_")
       log_type = parsed_file_name[0]
-      year = "20#{parsed_file_name[3]}".to_i
+      year = "20#{parsed_file_name[2]}".to_i
 
       records_added = 0
 

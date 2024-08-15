@@ -26,7 +26,7 @@ RSpec.describe Imports::VariableDefinitionsService, type: :service do
   end
 
   describe "#process_file" do
-    let(:file) { "spec/fixtures/variable_definitions/lettings_user_download_23_24.csv" }
+    let(:file) { "spec/fixtures/variable_definitions/lettings_download_23_24.csv" }
     let(:csv_content) { [["id", "Log ID"], ["status", "Status of log"], ["duplicate_set_id", "ID of a set of duplicate logs"]] }
 
     before do

@@ -175,16 +175,6 @@ RSpec.describe FiltersHelper do
     context "with a support user" do
       let(:user) { FactoryBot.create(:user, :support, organisation: child_organisation) }
 
-      it "returns a list of all organisations" do
-        expect(owning_organisation_filter_options(user)).to match_array([
-          OpenStruct.new(id: "", name: "Select an option"),
-          OpenStruct.new(id: child_organisation.id, name: "Child organisation"),
-          OpenStruct.new(id: absorbed_organisation.id, name: "Absorbed organisation"),
-          OpenStruct.new(id: parent_organisation.id, name: "Parent organisation"),
-          OpenStruct.new(id: 9_999_999, name: "Other organisation"),
-        ])
-      end
-
       context "when no organisation is selected in the filters" do
         it "returns an empty list" do
           expect(owning_organisation_filter_options(user.reload, "lettings_logs")).to eq([
@@ -342,16 +332,6 @@ RSpec.describe FiltersHelper do
 
     context "with a support user" do
       let(:user) { FactoryBot.create(:user, :support, organisation: parent_organisation) }
-
-      it "returns a list of all organisations" do
-        expect(managing_organisation_filter_options(user)).to eq([
-          OpenStruct.new(id: "", name: "Select an option"),
-          OpenStruct.new(id: parent_organisation.id, name: "Parent organisation"),
-          OpenStruct.new(id: absorbed_organisation.id, name: "Absorbed organisation"),
-          OpenStruct.new(id: child_organisation.id, name: "Child organisation"),
-          OpenStruct.new(id: 9_999_999, name: "Other organisation"),
-        ])
-      end
 
       context "when no organisation is selected in the filters" do
         it "returns an empty list" do

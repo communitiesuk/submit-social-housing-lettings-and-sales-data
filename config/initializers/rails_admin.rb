@@ -28,6 +28,10 @@ RailsAdmin.config do |config|
   config.show_gravatar = false
   config.included_models = %w[LogValidation CsvVariableDefinition]
 
+  config.model "LogValidation" do
+    label "Log Validation"
+  end
+
   config.model "CsvVariableDefinition" do
     label "CSV Variable Definition"
     edit do
@@ -39,11 +43,6 @@ RailsAdmin.config do |config|
         help "Required. Specify the year this definition should be available from. This definition will be used in subsequent years unless superseded by a newer definition."
       end
     end
-  end
-
-  config.model "LogValidation" do
-    label "Log Validation"
-    hide
   end
 
   config.actions do
