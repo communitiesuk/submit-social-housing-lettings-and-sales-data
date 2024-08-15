@@ -1,7 +1,7 @@
 <% content_for :before_content do %>
   <% title = "Which helpdesk ticket reported this merge?" %>
   <% content_for :title, title %>
-  <%= govuk_back_link href: merge_date_merge_request_path(@merge_request) %>
+  <%= govuk_back_link href: merge_request_back_link(@merge_request, "helpdesk_ticket", request.query_parameters["referrer"]) %>
 <% end %>
 
 <%= form_with model: @merge_request, url: merge_request_path, method: :patch do |f| %>

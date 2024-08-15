@@ -5,7 +5,6 @@ class MergeRequestsController < ApplicationController
   before_action :set_organisations_answer_options, only: %i[merging_organisations absorbing_organisation update_merging_organisations remove_merging_organisation update]
 
   def absorbing_organisation; end
-  def merging_organisations; end
   def merge_date; end
   def helpdesk_ticket; end
 
@@ -22,6 +21,12 @@ class MergeRequestsController < ApplicationController
     validate_response
 
     if @merge_request.errors.blank? && @merge_request.update(merge_request_params)
+      if page == "merging_organisations"
+        new_merging_org_ids = params["merge_request"]["new_merging_org_ids"].split(" ")
+        new_merging_org_ids.each do |org_id|
+          MergeRequestOrganisation.create!(merge_request: @merge_request, merging_organisation_id: org_id)
+        end
+      end
       redirect_to next_page_path
     else
       render previous_template, status: :unprocessable_entity
@@ -29,8 +34,10 @@ class MergeRequestsController < ApplicationController
   end
 
   def update_merging_organisations
+    @new_merging_org_ids = params["merge_request"]["new_merging_org_ids"].split(" ")
     merge_request_organisation = MergeRequestOrganisation.new(merge_request_organisation_params)
-    if merge_request_organisation.save
+    if merge_request_organisation.valid?
+      @new_merging_org_ids.push(merge_request_organisation_params[:merging_organisation_id])
       render :merging_organisations
     else
       render :merging_organisations, status: :unprocessable_entity
@@ -38,6 +45,9 @@ class MergeRequestsController < ApplicationController
   end
 
   def remove_merging_organisation
+    @new_merging_org_ids = params["merge_request"]["new_merging_org_ids"] || []
+    org_id_to_remove = merge_request_organisation_params[:merging_organisation_id]
+    @new_merging_org_ids.delete(org_id_to_remove)
     MergeRequestOrganisation.find_by(merge_request_organisation_params)&.destroy!
     render :merging_organisations
   end
@@ -45,6 +55,10 @@ class MergeRequestsController < ApplicationController
   def delete
     @merge_request.discard!
     redirect_to organisations_path(anchor: "merge-requests")
+  end
+
+  def merging_organisations
+    @new_merging_org_ids = []
   end
 
 private
