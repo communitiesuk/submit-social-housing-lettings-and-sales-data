@@ -194,7 +194,13 @@ private
     params[@log.model_name.param_key]["interruption_page_referrer_type"].presence
   end
 
+  def page_has_duplicate_check_question
+    @page.questions.any? { |q| @log.duplicate_check_question_ids.include?(q.id) }
+  end
+
   def update_duplication_tracking
+    return unless page_has_duplicate_check_question
+
     class_name = @log.class.name.underscore
     dynamic_duplicates = current_user.send(class_name.pluralize).duplicate_logs(@log)
 
@@ -217,7 +223,7 @@ private
       original_log = current_user.send(class_name.pluralize).find_by(id: from_referrer_query("original_log_id"))
 
       if original_log.present? && current_user.send(class_name.pluralize).duplicate_logs(original_log).any?
-        if @log.duplicates.none?
+        if @log.duplicate_set_id.nil?
           flash[:notice] = deduplication_success_banner
         end
         return send("#{class_name}_duplicate_logs_path", original_log, original_log_id: original_log.id, referrer: params[:referrer], organisation_id: params[:organisation_id])
@@ -227,7 +233,7 @@ private
       end
     end
 
-    if @log.duplicates.any?
+    unless @log.duplicate_set_id.nil?
       return send("#{@log.class.name.underscore}_duplicate_logs_path", @log, original_log_id: @log.id)
     end
 
