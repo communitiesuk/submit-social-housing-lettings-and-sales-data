@@ -16,12 +16,12 @@ The current system is built around a form definition written in JSON. At the top
 An example of this might look like the following:
 
 ```json
-{ 
+{
   "form_type": "lettings",
   "start_date": "2021-04-01T00:00:00.000+01:00",
   "end_date": "2022-07-01T00:00:00.000+01:00",
   "sections": {
-    ... 
+    ...
   }
 }
 ```

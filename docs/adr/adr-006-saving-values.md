@@ -18,6 +18,6 @@ There are a few reasons we have opted to save the values directly, they are as f
 
 - Changing the wording/casing of the answers could result in discrepancies in the database.
 
-- There is a small risk that if the database is accessed by someone unauthorised they would have access to personally identifiable information if we were to collect Any. We  will be mitigating this risk by encrypting the production database.
+- There is a small risk that if the database is accessed by someone unauthorised they would have access to personally identifiable information if we were to collect Any. We will be mitigating this risk by encrypting the production database.
 
 This decision is not too difficult to change and can be revisited in the future if there is sufficient reason to switch to storing keys/numbers and using enums and active record to convert those to the appropriate values.

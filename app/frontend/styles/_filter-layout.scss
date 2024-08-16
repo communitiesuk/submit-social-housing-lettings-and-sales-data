@@ -34,7 +34,9 @@
 .app-filter-layout__content {
   @include govuk-media-query(wide) {
     float: right;
-    max-width: calc(#{govuk-grid-width("three-quarters")} - #{govuk-spacing(6)});
+    max-width: calc(
+      #{govuk-grid-width("three-quarters")} - #{govuk-spacing(6)}
+    );
     width: 100%;
   }
 }
