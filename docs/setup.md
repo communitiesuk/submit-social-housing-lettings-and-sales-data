@@ -18,6 +18,8 @@ We recommend using [RBenv](https://github.com/rbenv/rbenv) to manage Ruby versio
 
 We recommend using [nvm](https://github.com/nvm-sh/nvm) to manage NodeJS versions.
 
+## Pre-setup installation
+
 1. Install PostgreSQL
 
    macOS:
@@ -95,7 +97,21 @@ We recommend using [nvm](https://github.com/nvm-sh/nvm) to manage NodeJS version
    npm install --location=global yarn
    ```
 
-6. Clone the repo
+6. (For running tests) Install Gecko Driver
+
+   Linux (Debian):
+
+   ```bash
+   wget https://github.com/mozilla/geckodriver/releases/download/v0.31.0/geckodriver-v0.31.0-linux64.tar.gz
+   tar -xvzf geckodriver-v0.31.0-linux64.tar.gz
+   rm geckodriver-v0.31.0-linux64.tar.gz
+   chmod +x geckodriver
+   sudo mv geckodriver /usr/local/bin/
+   ```
+
+Also ensure you have firefox installed
+
+7. Clone the repo
 
    ```bash
    git clone https://github.com/communitiesuk/submit-social-housing-lettings-and-sales-data.git
@@ -123,57 +139,60 @@ We recommend using [nvm](https://github.com/nvm-sh/nvm) to manage NodeJS version
    bundle exec rake db:seed
    ```
 
-5. Start the dev servers
+## Running Locally
 
-   a. Using Foreman:
+### Application
 
-   ```bash
-   ./bin/dev
-   ```
+Start the dev servers
 
-   b. Individually:
+a. Using Foreman:
 
-   Rails:
+```bash
+./bin/dev
+```
 
-   ```bash
-   bundle exec rails s
-   ```
+b. Individually:
 
-   JavaScript (for hot reloading):
+Rails:
 
-   ```bash
-   yarn build --mode=development --watch
-   ```
+```bash
+bundle exec rails s
+```
 
-   If you’re not modifying front end assets you can bundle them as a one off task:
+JavaScript (for hot reloading):
 
-   ```bash
-   yarn build --mode=development
-   ```
+```bash
+yarn build --mode=development --watch
+```
 
-   Development mode will target the latest versions of Chrome, Firefox and Safari for transpilation while production mode will target older browsers.
+If you’re not modifying front end assets you can bundle them as a one off task:
 
-   The Rails server will start on <http://localhost:3000>.
+```bash
+yarn build --mode=development
+```
 
-6. Install Gecko Driver
+Development mode will target the latest versions of Chrome, Firefox and Safari for transpilation while production mode will target older browsers.
 
-   Linux (Debian):
+The Rails server will start on <http://localhost:3000>.
 
-   ```bash
-   wget https://github.com/mozilla/geckodriver/releases/download/v0.31.0/geckodriver-v0.31.0-linux64.tar.gz
-   tar -xvzf geckodriver-v0.31.0-linux64.tar.gz
-   rm geckodriver-v0.31.0-linux64.tar.gz
-   chmod +x geckodriver
-   sudo mv geckodriver /usr/local/bin/
-   ```
+### Tests
 
-   Running the test suite (front end assets need to be built or server needs to be running):
+```bash
+bundle exec rspec
+```
 
-   ```bash
-   bundle exec rspec
-   ```
+Or to run individual tests / files use your IDE
 
-   Note that these tests assume you have firefox installed.
+### Formatting
+
+- `yarn prettier . --write` for scss, yml, md, and json files
+- `yarn standard --fix` for js files
+
+### Linting
+
+```bash
+bundle exec rake lint
+```
 
 ## Using Docker
 
