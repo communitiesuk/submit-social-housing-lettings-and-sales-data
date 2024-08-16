@@ -54,9 +54,7 @@
           {
             "schema": {
               "type": "string",
-              "enum": [
-                "application/json"
-              ]
+              "enum": ["application/json"]
             },
             "in": "header",
             "name": "Accept",
@@ -109,9 +107,7 @@
                   "Invalid Age": {
                     "value": {
                       "errors": {
-                        "age1": [
-                          "Tenant age must be between 16 and 120"
-                        ]
+                        "age1": ["Tenant age must be between 16 and 120"]
                       }
                     }
                   }
@@ -136,9 +132,7 @@
           {
             "schema": {
               "type": "string",
-              "enum": [
-                "application/json"
-              ]
+              "enum": ["application/json"]
             },
             "in": "header",
             "name": "Accept",
@@ -177,9 +171,7 @@
           {
             "schema": {
               "type": "string",
-              "enum": [
-                "application/json"
-              ]
+              "enum": ["application/json"]
             },
             "in": "header",
             "name": "Accept",
@@ -219,9 +211,7 @@
                         "reasonable_preference_reason": [
                           "If reasonable preference is Yes, a reason must be given"
                         ],
-                        "age1": [
-                          "Tenant age must be between 16 and 120"
-                        ]
+                        "age1": ["Tenant age must be between 16 and 120"]
                       }
                     }
                   }
@@ -247,9 +237,7 @@
             "schema": {
               "type": "string",
               "pattern": "application/json",
-              "enum": [
-                "application/json"
-              ]
+              "enum": ["application/json"]
             },
             "in": "header",
             "name": "Accept",
@@ -430,12 +418,7 @@
           "sex1": {
             "type": "string",
             "minLength": 1,
-            "enum": [
-              "F: Female",
-              "M:Male",
-              "X:Non-binary",
-              "R:Refused"
-            ],
+            "enum": ["F: Female", "M:Male", "X:Non-binary", "R:Refused"],
             "maxLength": 1
           },
           "ethnic": {

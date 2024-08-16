@@ -54,7 +54,7 @@
   @include govuk-typography-weight-bold;
 
   // Extend the touch area of the link to the list
-  &:after {
+  &::after {
     bottom: 0;
     content: "";
     left: 0;

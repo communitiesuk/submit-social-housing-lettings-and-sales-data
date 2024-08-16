@@ -338,16 +338,16 @@
                     }
                   },
                   "conditional_for": {
-                    "leftreg": [
-                      1
-                    ]
+                    "leftreg": [1]
                   },
-                  "inferred_check_answers_value": [{
-                    "condition": {
-                      "armedforces": 3
-                    },
-                    "value": "Prefers not to say"
-                  }]
+                  "inferred_check_answers_value": [
+                    {
+                      "condition": {
+                        "armedforces": 3
+                      },
+                      "value": "Prefers not to say"
+                    }
+                  ]
                 },
                 "leftreg": {
                   "header": "Are they still serving?",
@@ -512,9 +512,7 @@
                     }
                   },
                   "conditional_for": {
-                    "postcode_full": [
-                      1
-                    ]
+                    "postcode_full": [1]
                   },
                   "hidden_in_check_answers": true
                 },
@@ -530,12 +528,14 @@
                       "is_la_inferred": true
                     }
                   },
-                  "inferred_check_answers_value": [{
-                    "condition": {
-                      "postcode_known": 0
-                    },
-                    "value": "Not known"
-                  }]
+                  "inferred_check_answers_value": [
+                    {
+                      "condition": {
+                        "postcode_known": 0
+                      },
+                      "value": "Not known"
+                    }
+                  ]
                 }
               }
             },
@@ -769,13 +769,13 @@
                   "check_answer_label": "Net income soft validation",
                   "hidden_in_check_answers": {
                     "depends_on": [
-                    {
-                      "net_income_value_check": 0
-                    },
-                    {
-                      "net_income_value_check": 1
-                    }
-                  ]
+                      {
+                        "net_income_value_check": 0
+                      },
+                      {
+                        "net_income_value_check": 1
+                      }
+                    ]
                   },
                   "header": "Are you sure this is correct?",
                   "type": "interruption_screen",
@@ -789,7 +789,11 @@
                   }
                 }
               },
-              "interruption_screen_question_ids": ["ecstat1", "incfreq", "earnings"]
+              "interruption_screen_question_ids": [
+                "ecstat1",
+                "incfreq",
+                "earnings"
+              ]
             },
             "net_income_uc_proportion": {
               "questions": {
@@ -838,9 +842,7 @@
                     }
                   },
                   "conditional_for": {
-                    "conditional_question": [
-                      0
-                    ]
+                    "conditional_question": [0]
                   }
                 },
                 "conditional_question": {
@@ -932,12 +934,7 @@
                   "min": 0,
                   "step": 0.01,
                   "width": 4,
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge"
                 },
                 "scharge": {
@@ -948,12 +945,7 @@
                   "min": 0,
                   "step": 0.01,
                   "width": 4,
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge"
                 },
                 "pscharge": {
@@ -964,12 +956,7 @@
                   "min": 0,
                   "step": 0.01,
                   "width": 4,
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge"
                 },
                 "supcharg": {
@@ -981,12 +968,7 @@
                   "max": 300,
                   "step": 0.01,
                   "width": 4,
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge"
                 },
                 "tcharge": {

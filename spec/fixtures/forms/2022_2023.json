@@ -41,9 +41,7 @@
                   }
                 }
               },
-              "depends_on": [
-                false
-              ]
+              "depends_on": [false]
             }
           },
           "depends_on": [

@@ -34,9 +34,7 @@
                     }
                   },
                   "conditional_for": {
-                    "postcode_full": [
-                      1
-                    ]
+                    "postcode_full": [1]
                   },
                   "hidden_in_check_answers": {
                     "depends_on": [
@@ -61,12 +59,14 @@
                       "is_la_inferred": true
                     }
                   },
-                  "inferred_check_answers_value": [{
-                    "condition": {
-                      "postcode_known": 0
-                    },
-                    "value": "Not known"
-                  }]
+                  "inferred_check_answers_value": [
+                    {
+                      "condition": {
+                        "postcode_known": 0
+                      },
+                      "value": "Not known"
+                    }
+                  ]
                 }
               },
               "depends_on": [
@@ -851,9 +851,7 @@
                     }
                   },
                   "conditional_for": {
-                    "mrcdate": [
-                      1
-                    ]
+                    "mrcdate": [1]
                   }
                 },
                 "mrcdate": {
@@ -999,9 +997,7 @@
                     }
                   },
                   "conditional_for": {
-                    "tenancyother": [
-                      3
-                    ]
+                    "tenancyother": [3]
                   }
                 },
                 "tenancyother": {
@@ -1043,9 +1039,7 @@
                     }
                   },
                   "conditional_for": {
-                    "tenancyother": [
-                      3
-                    ]
+                    "tenancyother": [3]
                   }
                 },
                 "tenancyother": {
@@ -1277,9 +1271,7 @@
                     }
                   },
                   "conditional_for": {
-                    "age1": [
-                      0
-                    ]
+                    "age1": [0]
                   },
                   "hidden_in_check_answers": {
                     "depends_on": [
@@ -1301,12 +1293,14 @@
                   "max": 120,
                   "step": 1,
                   "width": 2,
-                  "inferred_check_answers_value": [{
-                    "condition": {
-                      "age1_known": 1
-                    },
-                    "value": "Not known"
-                  }]
+                  "inferred_check_answers_value": [
+                    {
+                      "condition": {
+                        "age1_known": 1
+                      },
+                      "value": "Not known"
+                    }
+                  ]
                 }
               },
               "depends_on": [
@@ -2056,9 +2050,7 @@
                     }
                   },
                   "conditional_for": {
-                    "age2": [
-                      0
-                    ]
+                    "age2": [0]
                   },
                   "hidden_in_check_answers": {
                     "depends_on": [
@@ -2080,12 +2072,14 @@
                   "max": 120,
                   "step": 1,
                   "width": 2,
-                  "inferred_check_answers_value": [{
-                    "condition": {
-                      "age2_known": 1
-                    },
-                    "value": "Not known"
-                  }]
+                  "inferred_check_answers_value": [
+                    {
+                      "condition": {
+                        "age2_known": 1
+                      },
+                      "value": "Not known"
+                    }
+                  ]
                 }
               },
               "depends_on": [
@@ -2591,9 +2585,7 @@
                     }
                   },
                   "conditional_for": {
-                    "age3": [
-                      0
-                    ]
+                    "age3": [0]
                   },
                   "hidden_in_check_answers": {
                     "depends_on": [
@@ -2615,12 +2607,14 @@
                   "max": 120,
                   "step": 1,
                   "width": 2,
-                  "inferred_check_answers_value": [{
-                    "condition": {
-                      "age3_known": 1
-                    },
-                    "value": "Not known"
-                  }]
+                  "inferred_check_answers_value": [
+                    {
+                      "condition": {
+                        "age3_known": 1
+                      },
+                      "value": "Not known"
+                    }
+                  ]
                 }
               },
               "depends_on": [
@@ -3123,9 +3117,7 @@
                     }
                   },
                   "conditional_for": {
-                    "age4": [
-                      0
-                    ]
+                    "age4": [0]
                   },
                   "hidden_in_check_answers": {
                     "depends_on": [
@@ -3147,12 +3139,14 @@
                   "max": 120,
                   "step": 1,
                   "width": 2,
-                  "inferred_check_answers_value": [{
-                    "condition": {
-                      "age4_known": 1
-                    },
-                    "value": "Not known"
-                  }]
+                  "inferred_check_answers_value": [
+                    {
+                      "condition": {
+                        "age4_known": 1
+                      },
+                      "value": "Not known"
+                    }
+                  ]
                 }
               },
               "depends_on": [
@@ -3652,9 +3646,7 @@
                     }
                   },
                   "conditional_for": {
-                    "age5": [
-                      0
-                    ]
+                    "age5": [0]
                   },
                   "hidden_in_check_answers": {
                     "depends_on": [
@@ -3676,12 +3668,14 @@
                   "max": 120,
                   "step": 1,
                   "width": 2,
-                  "inferred_check_answers_value": [{
-                    "condition": {
-                      "age5_known": 1
-                    },
-                    "value": "Not known"
-                  }]
+                  "inferred_check_answers_value": [
+                    {
+                      "condition": {
+                        "age5_known": 1
+                      },
+                      "value": "Not known"
+                    }
+                  ]
                 }
               },
               "depends_on": [
@@ -4178,9 +4172,7 @@
                     }
                   },
                   "conditional_for": {
-                    "age6": [
-                      0
-                    ]
+                    "age6": [0]
                   },
                   "hidden_in_check_answers": {
                     "depends_on": [
@@ -4202,12 +4194,14 @@
                   "max": 120,
                   "step": 1,
                   "width": 2,
-                  "inferred_check_answers_value": [{
-                    "condition": {
-                      "age6_known": 1
-                    },
-                    "value": "Not known"
-                  }]
+                  "inferred_check_answers_value": [
+                    {
+                      "condition": {
+                        "age6_known": 1
+                      },
+                      "value": "Not known"
+                    }
+                  ]
                 }
               },
               "depends_on": [
@@ -4701,9 +4695,7 @@
                     }
                   },
                   "conditional_for": {
-                    "age7": [
-                      0
-                    ]
+                    "age7": [0]
                   },
                   "hidden_in_check_answers": {
                     "depends_on": [
@@ -4725,12 +4717,14 @@
                   "max": 120,
                   "step": 1,
                   "width": 2,
-                  "inferred_check_answers_value": [{
-                    "condition": {
-                      "age7_known": 1
-                    },
-                    "value": "Not known"
-                  }]
+                  "inferred_check_answers_value": [
+                    {
+                      "condition": {
+                        "age7_known": 1
+                      },
+                      "value": "Not known"
+                    }
+                  ]
                 }
               },
               "depends_on": [
@@ -5221,9 +5215,7 @@
                     }
                   },
                   "conditional_for": {
-                    "age8": [
-                      0
-                    ]
+                    "age8": [0]
                   },
                   "hidden_in_check_answers": {
                     "depends_on": [
@@ -5245,12 +5237,14 @@
                   "max": 120,
                   "step": 1,
                   "width": 2,
-                  "inferred_check_answers_value": [{
-                    "condition": {
-                      "age8_known": 1
-                    },
-                    "value": "Not known"
-                  }]
+                  "inferred_check_answers_value": [
+                    {
+                      "condition": {
+                        "age8_known": 1
+                      },
+                      "value": "Not known"
+                    }
+                  ]
                 }
               },
               "depends_on": [
@@ -6251,7 +6245,7 @@
                       "value": "Other"
                     },
                     "47": {
-                      "value":"Tenant prefers not to say"
+                      "value": "Tenant prefers not to say"
                     },
                     "divider": {
                       "value": true
@@ -6261,9 +6255,7 @@
                     }
                   },
                   "conditional_for": {
-                    "reasonother": [
-                      20
-                    ]
+                    "reasonother": [20]
                   }
                 },
                 "reasonother": {
@@ -6495,9 +6487,7 @@
                     }
                   },
                   "conditional_for": {
-                    "ppostcode_full": [
-                      0
-                    ]
+                    "ppostcode_full": [0]
                   },
                   "hidden_in_check_answers": {
                     "depends_on": [
@@ -6522,12 +6512,14 @@
                       "is_previous_la_inferred": true
                     }
                   },
-                  "inferred_check_answers_value": [{
-                    "condition": {
-                      "ppcodenk": 1
-                    },
-                    "value": "Not known"
-                  }]
+                  "inferred_check_answers_value": [
+                    {
+                      "condition": {
+                        "ppcodenk": 1
+                      },
+                      "value": "Not known"
+                    }
+                  ]
                 }
               }
             },
@@ -6560,9 +6552,7 @@
                     }
                   },
                   "conditional_for": {
-                    "prevloc": [
-                      1
-                    ]
+                    "prevloc": [1]
                   }
                 },
                 "prevloc": {
@@ -6957,12 +6947,14 @@
                     "W92000004": "Wales",
                     "9300000XX": "Outside UK"
                   },
-                  "inferred_check_answers_value": [{
-                    "condition": {
-                      "previous_la_known": 0
-                    },
-                    "value": "Not known"
-                  }]
+                  "inferred_check_answers_value": [
+                    {
+                      "condition": {
+                        "previous_la_known": 0
+                      },
+                      "value": "Not known"
+                    }
+                  ]
                 }
               },
               "depends_on": [
@@ -7618,9 +7610,7 @@
                     }
                   },
                   "conditional_for": {
-                    "chcharge": [
-                      1
-                    ]
+                    "chcharge": [1]
                   }
                 },
                 "chcharge": {
@@ -7715,9 +7705,7 @@
                     }
                   },
                   "conditional_for": {
-                    "chcharge": [
-                      1
-                    ]
+                    "chcharge": [1]
                   }
                 },
                 "chcharge": {
@@ -7762,9 +7750,7 @@
                     }
                   },
                   "conditional_for": {
-                    "chcharge": [
-                      1
-                    ]
+                    "chcharge": [1]
                   }
                 },
                 "chcharge": {
@@ -7809,9 +7795,7 @@
                     }
                   },
                   "conditional_for": {
-                    "chcharge": [
-                      1
-                    ]
+                    "chcharge": [1]
                   }
                 },
                 "chcharge": {
@@ -7888,12 +7872,7 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every week",
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -7907,12 +7886,7 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every week",
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -7926,12 +7900,7 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every week",
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -7945,12 +7914,7 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every week",
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -7966,12 +7930,7 @@
                   "suffix": " every week",
                   "readonly": true,
                   "requires_js": true,
-                  "fields_added": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ]
+                  "fields_added": ["brent", "scharge", "pscharge", "supcharg"]
                 }
               },
               "depends_on": [
@@ -8111,12 +8070,7 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every 2 weeks",
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -8130,12 +8084,7 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every 2 weeks",
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -8149,12 +8098,7 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every 2 weeks",
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -8168,12 +8112,7 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every 2 weeks",
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -8189,12 +8128,7 @@
                   "suffix": " every 2 weeks",
                   "readonly": true,
                   "requires_js": true,
-                  "fields_added": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ]
+                  "fields_added": ["brent", "scharge", "pscharge", "supcharg"]
                 }
               },
               "depends_on": [
@@ -8234,12 +8168,7 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every 4 weeks",
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -8253,12 +8182,7 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every 4 weeks",
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -8272,12 +8196,7 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every 4 weeks",
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -8291,12 +8210,7 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every 4 weeks",
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -8312,12 +8226,7 @@
                   "suffix": " every 4 weeks",
                   "readonly": true,
                   "requires_js": true,
-                  "fields_added": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ]
+                  "fields_added": ["brent", "scharge", "pscharge", "supcharg"]
                 }
               },
               "depends_on": [
@@ -8357,12 +8266,7 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every month",
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -8376,12 +8280,7 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every month",
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -8395,12 +8294,7 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every month",
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -8414,12 +8308,7 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every month",
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -8435,12 +8324,7 @@
                   "suffix": " every month",
                   "readonly": true,
                   "requires_js": true,
-                  "fields_added": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ]
+                  "fields_added": ["brent", "scharge", "pscharge", "supcharg"]
                 }
               },
               "depends_on": [
@@ -8637,9 +8521,7 @@
                     }
                   },
                   "conditional_for": {
-                    "tshortfall": [
-                      0
-                    ]
+                    "tshortfall": [0]
                   }
                 },
                 "tshortfall": {

@@ -7,11 +7,11 @@ Ruby on Rails app that handles the submission of lettings and sales of social ho
 
 ## Domain documentation
 
-* [Domain and technical documentation](https://communitiesuk.github.io/submit-social-housing-lettings-and-sales-data)
-  * [Local development setup](https://communitiesuk.github.io/submit-social-housing-lettings-and-sales-data/setup)
-  * [Architecture decision records](https://communitiesuk.github.io/submit-social-housing-lettings-and-sales-data/adr)
-* [API browser](https://communitiesuk.github.io/submit-social-housing-lettings-and-sales-data/api) (using this [OpenAPI specification](docs/api/v1.json))
-* [Design history](https://core-design-history.herokuapp.com)
+- [Domain and technical documentation](https://communitiesuk.github.io/submit-social-housing-lettings-and-sales-data)
+  - [Local development setup](https://communitiesuk.github.io/submit-social-housing-lettings-and-sales-data/setup)
+  - [Architecture decision records](https://communitiesuk.github.io/submit-social-housing-lettings-and-sales-data/adr)
+- [API browser](https://communitiesuk.github.io/submit-social-housing-lettings-and-sales-data/api) (using this [OpenAPI specification](docs/api/v1.json))
+- [Design history](https://core-design-history.herokuapp.com)
 
 ## User interface
 

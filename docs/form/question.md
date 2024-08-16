@@ -31,7 +31,7 @@ An example question might look something like this:
 }
 ```
 
-In the above example the the question has the id `postcode_known`. 
+In the above example the the question has the id `postcode_known`.
 
 The `check_answer_label` contains the text that will be displayed in the label of the table on the check answers page.
 
@@ -85,6 +85,6 @@ The answer the data inputter provides to some questions allows us to infer the v
 
 In the above example the width is an optional attribute and can be provided for text type questions to determine the width of the text box on the page when when the question is displayed to a user (this allows you to match the width of the text box on the page to that of the design for a question).
 
-The above example links to the first example as both of these questions would be on the same page. The `inferred_check_answers_value` is what should be displayed on the check answers page for this question if we infer it. If the value of `postcode_known` was given as `0` (which is a no), as seen in the condition part of `inferred_check_answers_value`  then we can infer that the data inputter does not know the postcode and so we would display the value of `Not known` on the check answers page for the postcode. 
+The above example links to the first example as both of these questions would be on the same page. The `inferred_check_answers_value` is what should be displayed on the check answers page for this question if we infer it. If the value of `postcode_known` was given as `0` (which is a no), as seen in the condition part of `inferred_check_answers_value` then we can infer that the data inputter does not know the postcode and so we would display the value of `Not known` on the check answers page for the postcode.
 
 In the above example the `inferred_answers` refers to a question where we can infer the answer based on the answer of this question. In this case the `la` question can be inferred from the postcode value given by the data inputter as we are able to lookup the local authority based on the postcode given. We then set a property on the lettings log `is_la_inferred` to true to indicate that this is an answer we've inferred.
