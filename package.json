@@ -37,8 +37,8 @@
   "devDependencies": {
     "are-you-es5": "^2.1.2",
     "standard": "^17.0.0",
-    "stylelint": "^15.10.1",
-    "stylelint-config-gds": "^0.2.0"
+    "stylelint": "^16.8.2",
+    "stylelint-config-gds": "^2.0.0"
   },
   "browserslist": {
     "production": [

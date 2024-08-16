@@ -5,7 +5,7 @@
 
 .govuk-checkboxes__label,
 .govuk-radios__label {
-  &:before {
+  &::before {
     background-color: govuk-colour("white");
   }
 }
@@ -57,7 +57,7 @@
     border: 0;
   }
 
-  &:before {
+  &::before {
     background-image: url("../assets/images/icon-cross.svg");
     content: "";
     display: inline-block;
