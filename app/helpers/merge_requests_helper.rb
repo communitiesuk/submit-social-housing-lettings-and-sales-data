@@ -59,7 +59,7 @@ module MergeRequestsHelper
 
     case page
     when "absorbing_organisation"
-      organisations_path(anchor: "merge-requests")
+      organisations_path(tab: "merge-requests")
     when "merging_organisations"
       absorbing_organisation_merge_request_path(merge_request)
     when "merge_date"

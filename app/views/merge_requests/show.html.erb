@@ -1,7 +1,7 @@
 <% content_for :before_content do %>
   <% title = "Merge details: #{@merge_request.absorbing_organisation_name}" %>
   <% content_for :title, title %>
-  <%= govuk_back_link href: organisations_path(anchor: "merge-requests") %>
+  <%= govuk_back_link href: organisations_path(tab: "merge-requests") %>
 <% end %>
 
 <%= render partial: "notification_banners" %>

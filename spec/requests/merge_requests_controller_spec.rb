@@ -202,7 +202,7 @@ RSpec.describe MergeRequestsController, type: :request do
       end
 
       it "has the correct back button" do
-        expect(page).to have_link("Back", href: organisations_path(anchor: "merge-requests"))
+        expect(page).to have_link("Back", href: organisations_path(tab: "merge-requests"))
       end
     end
 
