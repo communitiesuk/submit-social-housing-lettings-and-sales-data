@@ -115,7 +115,7 @@ Assumptions made by the format:
 - For conditionally shown questions, conditions that have been implemented and can be used are:
 
   - Radio question answer option selected matches one of conditional e.g.\
-  `["answer-options-1-string", "answer-option-3-string"]`
+    `["answer-options-1-string", "answer-option-3-string"]`
 
   - Numeric question value matches condition e.g. [">2"], ["<7"] or ["== 6"]
 

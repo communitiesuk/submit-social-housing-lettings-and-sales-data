@@ -10,7 +10,7 @@
 }
 
 .app-task-list__section-heading {
-  @include govuk-font($size:24, $weight: bold);
+  @include govuk-font($size: 24, $weight: bold);
   display: table;
   margin-top: govuk-spacing(0);
   margin-bottom: govuk-spacing(4);

@@ -16,10 +16,11 @@ RSpec.describe Form::Sales::Subsections::DiscountedOwnershipScheme, type: :model
       %w[
         living_before_purchase_discounted_ownership_joint_purchase
         living_before_purchase_discounted_ownership
-        about_price_rtb
+        purchase_price
+        discount
         extra_borrowing_price_value_check
         percentage_discount_value_check
-        about_price_not_rtb
+        grant
         grant_value_check
         purchase_price_discounted_ownership
         discounted_sale_grant_value_check
@@ -38,7 +39,7 @@ RSpec.describe Form::Sales::Subsections::DiscountedOwnershipScheme, type: :model
         mortgage_length_discounted_ownership
         extra_borrowing_discounted_ownership
         extra_borrowing_value_check
-        about_deposit_discounted_ownership
+        deposit_discounted_ownership
         extra_borrowing_deposit_value_check
         discounted_ownership_deposit_joint_purchase_value_check
         discounted_ownership_deposit_value_check

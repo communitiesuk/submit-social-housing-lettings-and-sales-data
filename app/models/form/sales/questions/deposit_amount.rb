@@ -13,6 +13,7 @@ class Form::Sales::Questions::DepositAmount < ::Form::Question
     @ownershipsch = ownershipsch
     @question_number = QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP.max_by { |k, _v| k }.last)[ownershipsch]
     @optional = optional
+    @top_guidance_partial = top_guidance_partial
   end
 
   def derived?(log)
@@ -30,5 +31,11 @@ class Form::Sales::Questions::DepositAmount < ::Form::Question
     else
       "Enter the total cash sum paid by the buyer towards the property that was not funded by the mortgage. This excludes any grant or loan"
     end
+  end
+
+  def top_guidance_partial
+    return "financial_calculations_shared_ownership" if @ownershipsch == 1
+    return "financial_calculations_discounted_ownership" if @ownershipsch == 2
+    return "financial_calculations_outright_sale" if @ownershipsch == 3
   end
 end

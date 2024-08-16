@@ -53,7 +53,7 @@ jobs:
         id: ecr-login
         uses: aws-actions/amazon-ecr-login@v1
         with:
-          mask-password: 'true'
+          mask-password: "true"
 
       - name: Check if image with tag already exists
         run: |
@@ -90,7 +90,7 @@ jobs:
         id: ecr-login
         uses: aws-actions/amazon-ecr-login@v1
         with:
-          mask-password: 'true'
+          mask-password: "true"
 
       - name: Get timestamp
         id: timestamp

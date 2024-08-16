@@ -1,13 +1,12 @@
-class Form::Sales::Pages::AboutDepositWithDiscount < ::Form::Page
+class Form::Sales::Pages::DepositDiscount < ::Form::Page
   def initialize(id, hsh, subsection, optional:)
     super(id, hsh, subsection)
-    @header = "About the deposit"
     @optional = optional
+    @header = "About the deposit"
   end
 
   def questions
     @questions ||= [
-      Form::Sales::Questions::DepositAmount.new(nil, nil, self, ownershipsch: 1, optional: @optional),
       Form::Sales::Questions::DepositDiscount.new(nil, nil, self),
     ]
   end
