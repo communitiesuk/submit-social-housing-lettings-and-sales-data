@@ -1,26 +1,26 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   const urlParams = new URLSearchParams(window.location.search)
   let tab = urlParams.get('tab')
 
   if (!tab && window.location.hash) {
     tab = window.location.hash.substring(1)
     urlParams.set('tab', tab)
-    history.replaceState(null, null, `${window.location.pathname}?${urlParams.toString()}`)
+    window.history.replaceState(null, null, `${window.location.pathname}?${urlParams.toString()}`)
   }
-  function activateTab(tabId) {
+  function activateTab (tabId) {
     const tabElement = document.getElementById(tabId)
     if (tabElement) {
       tabElement.click()
     }
-    history.replaceState(null, null, `${window.location.pathname}?${urlParams.toString()}`)
+    window.history.replaceState(null, null, `${window.location.pathname}?${urlParams.toString()}`)
   }
 
-  function handleTabClick(event) {
+  function handleTabClick (event) {
     event.preventDefault()
     const targetId = this.getAttribute('href').substring(1)
     activateTab(targetId)
     urlParams.set('tab', targetId)
-    history.replaceState(null, null, `${window.location.pathname}?${urlParams.toString()}`)
+    window.history.replaceState(null, null, `${window.location.pathname}?${urlParams.toString()}`)
   }
 
   if (tab) {
