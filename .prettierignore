@@ -12,4 +12,8 @@
 config/locales/
 app/views/content/data_sharing_agreement.md
 
-# N.B. Anything specified in the .gitignore will also be ignored as long as prettier as run from this directory
+/node_modules
+/vendor
+/coverage
+/public/assets
+/app/assets/builds/*
