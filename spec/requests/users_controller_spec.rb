@@ -434,7 +434,7 @@ RSpec.describe UsersController, type: :request do
 
   context "when user is signed in as a data coordinator" do
     let(:user) { create(:user, :data_coordinator, email: "coordinator@example.com", organisation: create(:organisation, :without_dpc)) }
-    let!(:other_user) { create(:user, organisation: user.organisation, name: "filter name", email: "filter@example.com") }
+    let!(:other_user) { create(:user, organisation: user.organisation, name: "filter name", email: "filter@example.com", unconfirmed_email: "email@something.com") }
 
     before do
       sign_in user
@@ -884,6 +884,11 @@ RSpec.describe UsersController, type: :request do
               it "marks user as deactivated" do
                 expect { patch "/users/#{other_user.id}", headers:, params: }
                   .to change { other_user.reload.active }.from(true).to(false)
+              end
+
+              it "discards unconfirmed email" do
+                expect { patch "/users/#{other_user.id}", headers:, params: }
+                  .to change { other_user.reload.unconfirmed_email }.from("email@something.com").to(nil)
               end
             end
 
