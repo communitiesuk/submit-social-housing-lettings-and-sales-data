@@ -54,7 +54,7 @@ class MergeRequestsController < ApplicationController
 
   def delete
     @merge_request.discard!
-    flash[:notice] = "The merge request has been deleted"
+    flash[:notice] = "The merge request has been deleted."
     redirect_to organisations_path(tab: "merge-requests")
   end
 
