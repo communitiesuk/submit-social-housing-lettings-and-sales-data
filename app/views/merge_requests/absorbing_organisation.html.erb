@@ -4,7 +4,7 @@
   <%= govuk_back_link href: merge_request_back_link(@merge_request, "absorbing_organisation", request.query_parameters["referrer"]) %>
 <% end %>
 
-<%= form_with model: @merge_request, url: merge_request_path, method: :patch do |f| %>
+<%= form_with model: @merge_request, url: submit_merge_request_url(request.query_parameters["referrer"]), method: :patch do |f| %>
   <%= f.govuk_error_summary %>
 
   <h1 class="govuk-heading-l">Which organisation is absorbing the others?</h1>
