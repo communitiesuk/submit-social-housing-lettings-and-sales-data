@@ -49,6 +49,13 @@ class User < ApplicationRecord
     support: 99,
   }.freeze
 
+  LOG_REASSIGNMENT = {
+    reassign_all: "Yes, change the stock owner and the managing agent",
+    reassign_stock_owner: "Yes, change the stock owner but keep the managing agent the same",
+    reassign_managing_agent: "Yes, change the managing agent but keep the stock owner the same",
+    unassign: "No, unassign the logs",
+  }.freeze
+
   enum role: ROLES
 
   scope :search_by_name, ->(name) { where("users.name ILIKE ?", "%#{name}%") }
@@ -79,6 +86,8 @@ class User < ApplicationRecord
   scope :active_status, -> { where(active: true).where.not(last_sign_in_at: nil) }
   scope :visible, -> { where(discarded_at: nil) }
   scope :own_and_managing_org_users, ->(organisation) { where(organisation: organisation.child_organisations + [organisation]) }
+
+  attr_accessor :log_reassignment
 
   def lettings_logs
     if support?
@@ -268,6 +277,14 @@ class User < ApplicationRecord
     return phone if phone_extension.blank?
 
     "#{phone}, Ext. #{phone_extension}"
+  end
+
+  def assigned_to_lettings_logs
+    lettings_logs.where(assigned_to: self)
+  end
+
+  def assigned_to_sales_logs
+    sales_logs.where(assigned_to: self)
   end
 
 protected

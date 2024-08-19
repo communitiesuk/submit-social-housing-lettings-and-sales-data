@@ -49,6 +49,10 @@ class UserPolicy
     @current_user.support? && @user.active?
   end
 
+  def log_reassignment?
+    edit_organisation?
+  end
+
 private
 
   def has_any_logs_in_editable_collection_period

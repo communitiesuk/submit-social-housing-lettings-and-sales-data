@@ -153,6 +153,16 @@ class UsersController < ApplicationController
     redirect_to users_organisation_path(@user.organisation), notice: I18n.t("notification.user_deleted", name: @user.name)
   end
 
+  def log_reassignment
+    authorize @user
+
+    if params[:organisation_id].present? && Organisation.where(id: params[:organisation_id]).exists?
+      @new_organisation = Organisation.find(params[:organisation_id])
+    else
+      redirect_to user_path(@user)
+    end
+  end
+
 private
 
   def validate_attributes

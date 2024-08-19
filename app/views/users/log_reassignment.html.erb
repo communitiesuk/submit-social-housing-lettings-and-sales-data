@@ -1,0 +1,34 @@
+<% content_for :title, "Should this user’s logs move to their new organisation?" %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link(href: aliased_user_edit(@user, current_user)) %>
+<% end %>
+
+<%= form_for(@user, html: { method: :patch }) do |f| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <%= f.govuk_error_summary %>
+
+      <h1 class="govuk-heading-l">
+        <%= content_for(:title) %>
+      </h1>
+
+      <%= govuk_warning_text do %>
+        <%= organisation_change_warning(@user, @new_organisation) %>
+      <% end %>
+
+      <% log_reassignment = User::LOG_REASSIGNMENT.map { |key, value| OpenStruct.new(id: key, name: value) } %>
+
+      <%= f.govuk_collection_radio_buttons :log_reassignment,
+        log_reassignment,
+        :id,
+        :name,
+        legend: { text: "Log reassignment", hidden: true } %>
+
+      <div class="govuk-button-group">
+        <%= f.govuk_submit "Continue" %>
+        <%= govuk_button_link_to "Cancel", aliased_user_edit(@user, current_user), secondary: true %>
+      </div>
+    </div>
+  </div>
+<% end %>

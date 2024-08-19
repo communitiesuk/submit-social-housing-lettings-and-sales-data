@@ -61,4 +61,47 @@ RSpec.describe UserHelper do
       end
     end
   end
+
+  describe "organisation_change_warning" do
+    context "when user doesn't own any logs" do
+      it "returns a message with the number of logs" do
+        expected_text = "You’re moving #{user.name} from #{user.organisation.name} to #{current_user.organisation.name}. There are 0 logs assigned to them."
+        expect(organisation_change_warning(user, current_user.organisation)).to eq(expected_text)
+      end
+    end
+
+    context "when user owns 1 lettings log" do
+      before do
+        create(:lettings_log, assigned_to: user)
+      end
+
+      it "returns a message with the number of logs" do
+        expected_text = "You’re moving #{user.name} from #{user.organisation.name} to #{current_user.organisation.name}. There is 1 log assigned to them."
+        expect(organisation_change_warning(user, current_user.organisation)).to eq(expected_text)
+      end
+    end
+
+    context "when user owns 1 sales log" do
+      before do
+        create(:sales_log, assigned_to: user)
+      end
+
+      it "returns a message with the number of logs" do
+        expected_text = "You’re moving #{user.name} from #{user.organisation.name} to #{current_user.organisation.name}. There is 1 log assigned to them."
+        expect(organisation_change_warning(user, current_user.organisation)).to eq(expected_text)
+      end
+    end
+
+    context "when user owns multiple log" do
+      before do
+        create(:lettings_log, assigned_to: user)
+        create(:sales_log, assigned_to: user)
+      end
+
+      it "returns a message with the number of logs" do
+        expected_text = "You’re moving #{user.name} from #{user.organisation.name} to #{current_user.organisation.name}. There are 2 logs assigned to them."
+        expect(organisation_change_warning(user, current_user.organisation)).to eq(expected_text)
+      end
+    end
+  end
 end

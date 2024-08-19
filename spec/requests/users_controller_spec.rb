@@ -124,6 +124,13 @@ RSpec.describe UsersController, type: :request do
         expect(response).to redirect_to("/account/sign-in")
       end
     end
+
+    describe "#log_reassignment" do
+      it "redirects to the sign in page" do
+        get "/users/#{user.id}/log-reassignment"
+        expect(response).to redirect_to("/account/sign-in")
+      end
+    end
   end
 
   context "when user is signed in as a data provider" do
@@ -431,6 +438,13 @@ RSpec.describe UsersController, type: :request do
         result = JSON.parse(response.body)
         expect(result.count).to eq(2)
         expect(result.keys).to match_array([org_user.id.to_s, managing_user.id.to_s])
+      end
+    end
+
+    describe "#log_reassignment" do
+      it "returns unauthorized status" do
+        get "/users/#{user.id}/log-reassignment"
+        expect(response).to have_http_status(:unauthorized)
       end
     end
   end
@@ -1232,6 +1246,13 @@ RSpec.describe UsersController, type: :request do
         result = JSON.parse(response.body)
         expect(result.count).to eq(2)
         expect(result.keys).to match_array([org_user.id.to_s, managing_user.id.to_s])
+      end
+    end
+
+    describe "#log_reassignment" do
+      it "returns unauthorised status" do
+        get "/users/#{user.id}/log-reassignment"
+        expect(response).to have_http_status(:unauthorized)
       end
     end
   end
@@ -2270,6 +2291,39 @@ RSpec.describe UsersController, type: :request do
         result = JSON.parse(response.body)
         expect(result.count).to eq(4)
         expect(result.keys).to match_array([org_user.id.to_s, managing_user.id.to_s, owner_user.id.to_s, other_user.id.to_s])
+      end
+    end
+
+    describe "#log_reassignment" do
+      context "when organisation id is not given" do
+        it "redirects to the user page" do
+          get "/users/#{other_user.id}/log-reassignment"
+          expect(response).to redirect_to("/users/#{other_user.id}")
+        end
+      end
+
+      context "when organisation id does not exist" do
+        it "redirects to the user page" do
+          get "/users/#{other_user.id}/log-reassignment?organisation_id=123123"
+          expect(response).to redirect_to("/users/#{other_user.id}")
+        end
+      end
+
+      context "with valid organisation id" do
+        let(:new_organisation) { create(:organisation, name: "new org") }
+
+        before do
+          create(:lettings_log, assigned_to: other_user)
+        end
+
+        it "allows reassigning logs" do
+          get "/users/#{other_user.id}/log-reassignment?organisation_id=#{new_organisation.id}"
+          expect(page).to have_content("Should this user’s logs move to their new organisation?")
+          expect(page).to have_content("You’re moving #{other_user.name} from #{other_user.organisation_name} to new org. There is 1 log assigned to them.")
+          expect(page).to have_button("Continue")
+          expect(page).to have_link("Back", href: "/users/#{other_user.id}/edit")
+          expect(page).to have_link("Cancel", href: "/users/#{other_user.id}/edit")
+        end
       end
     end
   end
