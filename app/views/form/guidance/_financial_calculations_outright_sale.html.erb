@@ -1,0 +1,13 @@
+<%= govuk_details(summary_text: "How the financial values are calculated") do %>
+  <p class="govuk-body">
+  <% if log.mortgage_used? || log.mortgageused.blank? %>
+    <% mortgage_question_link = log.mortgageused.blank? ? question_link("mortgageused", log, current_user) : question_link("mortgage", log, current_user) %>
+    The mortgage amount <%= mortgage_question_link %>
+    and cash deposit <%= question_link("deposit", log, current_user) %>
+    added together must equal
+  <% else %>
+    Cash deposit <%= question_link("deposit", log, current_user) %> must equal
+  <% end %>
+  the purchase price  <%= question_link("value", log, current_user) %>
+  </p>
+<% end %>

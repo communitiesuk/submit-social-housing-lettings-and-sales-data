@@ -18,7 +18,8 @@ The amount of application context needed to make it work is what ultimately drov
 Instead the setup section is now composed of coded Ruby class in `app/models/form/setup`.
 
 It still has all the same components as before:
-- Section 
+
+- Section
 - Subsection
 - Pages
 - Questions
