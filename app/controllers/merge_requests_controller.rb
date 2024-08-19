@@ -21,12 +21,9 @@ class MergeRequestsController < ApplicationController
     validate_response
 
     if @merge_request.errors.blank? && @merge_request.update(merge_request_params)
-      if page == "merging_organisations"
-        new_merging_org_ids = params["merge_request"]["new_merging_org_ids"].split(" ")
-        new_merging_org_ids.each do |org_id|
-          MergeRequestOrganisation.create!(merge_request: @merge_request, merging_organisation_id: org_id)
-        end
-      end
+      add_merging_organsations if page == "merging_organisations"
+      remove_absorbing_org_from_merging_organisations if page == "absorbing_organisation" && @merge_request.absorbing_organisation_id.present?
+
       redirect_to next_page_path
     else
       render previous_template, status: :unprocessable_entity
@@ -175,5 +172,18 @@ private
 
     parsed_params = CGI.parse(query_params)
     parsed_params[query_param]&.first
+  end
+
+  def add_merging_organsations
+    new_merging_org_ids = params["merge_request"]["new_merging_org_ids"].split(" ")
+    new_merging_org_ids.each do |org_id|
+      MergeRequestOrganisation.create!(merge_request: @merge_request, merging_organisation_id: org_id)
+    end
+  end
+
+  def remove_absorbing_org_from_merging_organisations
+    if @merge_request.merge_request_organisations.where(merging_organisation_id: @merge_request.absorbing_organisation_id).exists?
+      MergeRequestOrganisation.find_by(merge_request: @merge_request, merging_organisation_id: @merge_request.absorbing_organisation_id).destroy!
+    end
   end
 end
