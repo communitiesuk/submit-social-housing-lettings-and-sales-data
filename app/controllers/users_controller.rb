@@ -61,7 +61,7 @@ class UsersController < ApplicationController
 
   def update
     validate_attributes
-    if @user.errors.empty? && @user.update(user_params)
+    if @user.errors.empty? && @user.update(user_params_without_org)
       if @user == current_user
         bypass_sign_in @user
         flash[:notice] = I18n.t("devise.passwords.updated") if user_params.key?("password")
@@ -69,7 +69,11 @@ class UsersController < ApplicationController
           flash[:notice] = I18n.t("devise.email.updated", email: @user.unconfirmed_email)
         end
 
-        redirect_to account_path
+        if updating_organisation?
+          redirect_to user_log_reassignment_path(@user, organisation_id: user_params[:organisation_id])
+        else
+          redirect_to account_path
+        end
       else
         user_name = @user.name&.possessive || @user.email.possessive
         if user_params[:active] == "false"
@@ -82,7 +86,12 @@ class UsersController < ApplicationController
         elsif user_params.key?("email")
           flash[:notice] = I18n.t("devise.email.updated", email: @user.unconfirmed_email)
         end
-        redirect_to user_path(@user)
+
+        if updating_organisation?
+          redirect_to user_log_reassignment_path(@user, organisation_id: user_params[:organisation_id])
+        else
+          redirect_to user_path(@user)
+        end
       end
     elsif user_params.key?("password")
       format_error_messages
@@ -157,6 +166,10 @@ private
     elsif !user_params[:phone].nil? && !valid_phone_number?(user_params[:phone])
       @user.errors.add :phone
     end
+
+    if user_params.key?(:organisation_id) && user_params[:organisation_id].blank?
+      @user.errors.add :organisation, :blank
+    end
   end
 
   def valid_phone_number?(number)
@@ -191,8 +204,10 @@ private
 
   def user_params
     if @user == current_user
-      if current_user.data_coordinator? || current_user.support?
+      if current_user.data_coordinator?
         params.require(:user).permit(:email, :phone, :phone_extension, :name, :password, :password_confirmation, :role, :is_dpo, :is_key_contact, :initial_confirmation_sent)
+      elsif current_user.support?
+        params.require(:user).permit(:email, :phone, :phone_extension, :name, :password, :password_confirmation, :role, :is_dpo, :is_key_contact, :initial_confirmation_sent, :organisation_id)
       else
         params.require(:user).permit(:email, :phone, :phone_extension, :name, :password, :password_confirmation, :initial_confirmation_sent)
       end
@@ -201,6 +216,10 @@ private
     elsif current_user.support?
       params.require(:user).permit(:email, :phone, :phone_extension, :name, :role, :is_dpo, :is_key_contact, :organisation_id, :active, :initial_confirmation_sent)
     end
+  end
+
+  def user_params_without_org
+    user_params.except(:organisation_id)
   end
 
   def created_user_redirect_path
@@ -233,5 +252,9 @@ private
 
   def session_filters
     filter_manager.session_filters
+  end
+
+  def updating_organisation?
+    user_params["organisation_id"].present? && @user.organisation_id != user_params["organisation_id"].to_i
   end
 end

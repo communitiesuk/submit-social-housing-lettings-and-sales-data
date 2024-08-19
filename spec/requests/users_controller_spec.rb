@@ -1850,6 +1850,39 @@ RSpec.describe UsersController, type: :request do
             expect(page).to have_selector(".govuk-error-summary__title")
           end
         end
+
+        context "when updating organisation" do
+          let(:new_organisation) { create(:organisation) }
+
+          before do
+            patch "/users/#{user.id}", headers:, params:
+          end
+
+          context "and organisation id is nil" do
+            let(:params) { { id: user.id, user: { organisation_id: "" } } }
+
+            it "does not update the organisation" do
+              expect(response).to have_http_status(:unprocessable_entity)
+              expect(page).to have_selector(".govuk-error-summary__title")
+            end
+          end
+
+          context "and organisation id is not nil" do
+            let(:params) { { id: user.id, user: { organisation_id: new_organisation.id, name: "new_name" } } }
+
+            it "does not update the organisation" do
+              expect(user.reload.organisation).not_to eq(new_organisation)
+            end
+
+            it "redirects to log reassignment page" do
+              expect(response).to redirect_to("/users/#{user.id}/log-reassignment?organisation_id=#{new_organisation.id}")
+            end
+
+            it "updated other fields" do
+              expect(user.reload.name).to eq("new_name")
+            end
+          end
+        end
       end
 
       context "when the current user does not match the user ID" do
@@ -1985,6 +2018,39 @@ RSpec.describe UsersController, type: :request do
                 expect(notify_client).not_to receive(:send_email)
 
                 patch "/users/#{other_user.id}", headers:, params:
+              end
+            end
+
+            context "when updating organisation" do
+              let(:new_organisation) { create(:organisation) }
+
+              before do
+                patch "/users/#{other_user.id}", headers:, params:
+              end
+
+              context "and organisation id is nil" do
+                let(:params) { { id: other_user.id, user: { organisation_id: "" } } }
+
+                it "does not update the organisation" do
+                  expect(response).to have_http_status(:unprocessable_entity)
+                  expect(page).to have_selector(".govuk-error-summary__title")
+                end
+              end
+
+              context "and organisation id is not nil" do
+                let(:params) { { id: other_user.id, user: { organisation_id: new_organisation.id, name: "new_name" } } }
+
+                it "does not update the organisation" do
+                  expect(user.reload.organisation).not_to eq(new_organisation)
+                end
+
+                it "redirects to log reassignment page" do
+                  expect(response).to redirect_to("/users/#{other_user.id}/log-reassignment?organisation_id=#{new_organisation.id}")
+                end
+
+                it "updated other fields" do
+                  expect(other_user.reload.name).to eq("new_name")
+                end
               end
             end
           end
