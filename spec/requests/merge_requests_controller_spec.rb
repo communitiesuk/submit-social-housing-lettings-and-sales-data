@@ -276,6 +276,43 @@ RSpec.describe MergeRequestsController, type: :request do
             }.from(nil).to(other_organisation)
           end
         end
+
+        context "when updating from check_answers page" do
+          let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation) }
+          let(:params) do
+            { merge_request: { absorbing_organisation_id: "", page: "absorbing_organisation" } }
+          end
+
+          let(:request) do
+            patch "/merge-request/#{merge_request.id}?referrer=check_answers", headers:, params:
+          end
+
+          it "keeps corrent links if validation fails" do
+            request
+
+            expect(page).to have_link("Cancel", href: merge_request_path(merge_request))
+            expect(page).to have_button("Save changes")
+          end
+        end
+
+        context "when absorbing_organisation_id set to one of the merging organisations" do
+          let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation) }
+          let(:params) do
+            { merge_request: { absorbing_organisation_id: other_organisation.id, page: "absorbing_organisation" } }
+          end
+
+          let(:request) do
+            MergeRequestOrganisation.create!(merge_request_id: merge_request.id, merging_organisation_id: other_organisation.id)
+            patch "/merge-request/#{merge_request.id}", headers:, params:
+          end
+
+          it "removes organisation from merge request organisations" do
+            request
+
+            merge_request.reload
+            expect(merge_request.merging_organisations.count).to eq(0)
+          end
+        end
       end
 
       describe "from merge_date page" do
