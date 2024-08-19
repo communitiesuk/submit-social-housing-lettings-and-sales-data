@@ -157,7 +157,6 @@ class User < ApplicationRecord
   RESET_PASSWORD_TEMPLATE_ID = "2c410c19-80a7-481c-a531-2bcb3264f8e6".freeze
   CONFIRMABLE_TEMPLATE_ID = "3fc2e3a7-0835-4b84-ab7a-ce51629eb614".freeze
   RECONFIRMABLE_TEMPLATE_ID = "bcdec787-f0a7-46e9-8d63-b3e0a06ee455".freeze
-  BETA_ONBOARDING_TEMPLATE_ID = "b48bc2cd-5887-4611-8296-d0ab3ed0e7fd".freeze
   USER_REACTIVATED_TEMPLATE_ID = "ac45a899-490e-4f59-ae8d-1256fc0001f9".freeze
   FOR_OLD_EMAIL_CHANGED_BY_OTHER_USER_TEMPLATE_ID = "3eb80517-1051-4dfc-b4cc-cb18228a3829".freeze
   FOR_NEW_EMAIL_CHANGED_BY_OTHER_USER_TEMPLATE_ID = "0cdd0be1-7fa5-4808-8225-ae4c5a002352".freeze
@@ -169,17 +168,11 @@ class User < ApplicationRecord
   def confirmable_template
     if last_sign_in_at.present? && (unconfirmed_email.blank? || unconfirmed_email == email)
       USER_REACTIVATED_TEMPLATE_ID
-    elsif was_migrated_from_softwire? && last_sign_in_at.blank?
-      BETA_ONBOARDING_TEMPLATE_ID
     elsif initial_confirmation_sent && !confirmed?
       RECONFIRMABLE_TEMPLATE_ID
     else
       CONFIRMABLE_TEMPLATE_ID
     end
-  end
-
-  def was_migrated_from_softwire?
-    legacy_users.any? || old_user_id.present?
   end
 
   def send_confirmation_instructions
