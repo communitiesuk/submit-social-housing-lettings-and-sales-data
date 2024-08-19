@@ -63,7 +63,7 @@ class MergeRequestsController < ApplicationController
 
   def start_merge
     if @merge_request.status == "ready_to_merge"
-      @merge_request.update!(status: :processing)
+      @merge_request.update!(processing: true)
       ProcessMergeRequestJob.perform_later(merge_request: @merge_request)
     end
 
