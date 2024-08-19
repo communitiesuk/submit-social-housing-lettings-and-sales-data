@@ -12,7 +12,7 @@ RSpec.describe "merge_requests/show.html.erb", type: :view do
 
   it "displays the correct title" do
     expect(rendered).to have_selector("h1.govuk-heading-l") do |h1|
-      expect(h1).to have_selector("span.govuk-caption-l", text: "Merge details")
+      expect(h1).to have_selector("span.govuk-caption-l", text: "Merge request")
       expect(h1).to have_content("Absorbing Org")
     end
   end
