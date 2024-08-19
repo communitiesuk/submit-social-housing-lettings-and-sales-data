@@ -74,4 +74,8 @@ module MergeRequestsHelper
       { text: "Change", href: send("#{page}_merge_request_path", merge_request, referrer: "check_answers"), visually_hidden_text: page.humanize }
     end
   end
+
+  def submit_merge_request_url(referrer)
+    referrer == "check_answers" ? merge_request_path(referrer: "check_answers") : merge_request_path
+  end
 end
