@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe "merge_requests/show.html.erb", type: :view do
   let(:absorbing_organisation) { create(:organisation, name: "Absorbing Org", with_dsa: false) }
   let(:dpo_user) { create(:user, name: "DPO User", is_dpo: true, organisation: absorbing_organisation) }
-  let(:merge_request) { create(:merge_request, absorbing_organisation_id: absorbing_organisation.id, signed_dsa: false, status: 1) }
+  let(:merge_request) { create(:merge_request, absorbing_organisation_id: absorbing_organisation.id, signed_dsa: false) }
 
   before do
     assign(:merge_request, merge_request)
@@ -53,7 +53,7 @@ RSpec.describe "merge_requests/show.html.erb", type: :view do
 
   context "when the merge request is complete" do
     before do
-      merge_request.update!(status: 4, signed_dsa: true, total_users: 10, total_schemes: 5, total_lettings_logs: 20, total_sales_logs: 30, total_stock_owners: 40, total_managing_agents: 50)
+      merge_request.update!(request_merged: true, signed_dsa: true, total_users: 10, total_schemes: 5, total_lettings_logs: 20, total_sales_logs: 30, total_stock_owners: 40, total_managing_agents: 50)
       assign(:merge_request, merge_request)
       render
     end
