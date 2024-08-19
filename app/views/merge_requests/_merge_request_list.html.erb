@@ -4,7 +4,7 @@
   <% else %>
   <%= govuk_table do |table| %>
     <%= table.with_caption(classes: %w[govuk-!-font-size-19 govuk-!-font-weight-regular]) do %>
-      <strong><%= @merge_requests.where.not(status: 4).count %></strong> unresolved merge requests
+      <strong><%= @merge_requests.not_merged.count %></strong> unresolved merge requests
     <% end %>
     <%= table.with_head do |head| %>
       <%= head.with_row do |row| %>

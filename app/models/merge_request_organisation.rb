@@ -5,20 +5,13 @@ class MergeRequestOrganisation < ApplicationRecord
   validates :merging_organisation, presence: { message: I18n.t("validations.merge_request.merging_organisation_id.blank") }
   validate :validate_merging_organisations
 
-  scope :merged, -> { joins(:merge_request).where(merge_requests: { status: "request_merged" }) }
+  scope :merged, -> { joins(:merge_request).where(merge_requests: { request_merged: true }) }
   scope :with_merging_organisation, ->(merging_organisation) { where(merging_organisation:) }
-
-  after_save :update_merge_request_status
 
   has_paper_trail
 
   def merging_organisation_name
     merging_organisation.name || ""
-  end
-
-  def update_merge_request_status
-    merge_request.update_status!
-    merge_request.save!
   end
 
 private

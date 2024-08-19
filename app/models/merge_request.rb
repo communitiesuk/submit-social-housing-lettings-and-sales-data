@@ -4,26 +4,23 @@ class MergeRequest < ApplicationRecord
   belongs_to :absorbing_organisation, class_name: "Organisation", optional: true
   has_many :merging_organisations, through: :merge_request_organisations, source: :merging_organisation
   belongs_to :requester, class_name: "User", optional: true
-  before_save :update_status!
 
   STATUS = {
-    "merge_issues" => 0,
-    "incomplete" => 1,
-    "ready_to_merge" => 2,
-    "processing" => 3,
-    "request_merged" => 4,
-    "deleted" => 5,
+    merge_issues: "merge_issues",
+    incomplete: "incomplete",
+    ready_to_merge: "ready_to_merge",
+    processing: "processing",
+    request_merged: "request_merged",
+    deleted: "deleted",
   }.freeze
   enum status: STATUS
 
-  scope :not_merged, -> { where.not(status: "request_merged") }
-  scope :merged, -> { where(status: "request_merged") }
+  scope :not_merged, -> { where(request_merged: [false, nil]) }
+  scope :merged, -> { where(request_merged: true) }
   scope :visible, lambda {
     open_collection_period_start_date = FormHandler.instance.start_date_of_earliest_open_collection_period
     merged.where("merge_requests.merge_date >= ?", open_collection_period_start_date).or(not_merged).where(discarded_at: nil)
   }
-
-  attr_accessor :skip_update_status
 
   def absorbing_organisation_name
     absorbing_organisation&.name || ""
@@ -37,20 +34,14 @@ class MergeRequest < ApplicationRecord
     update!(discarded_at: Time.zone.now)
   end
 
-  def update_status!
-    return if skip_update_status
+  def status
+    return STATUS[:deleted] if discarded_at.present?
+    return STATUS[:request_merged] if request_merged
+    return STATUS[:processing] if processing
+    return STATUS[:incomplete] unless required_questions_answered?
+    return STATUS[:ready_to_merge] if absorbing_organisation_signed_dsa?
 
-    self.status = calculate_status
-  end
-
-  def calculate_status
-    return "deleted" if discarded_at.present?
-    return "request_merged" if status == "request_merged"
-    return "processing" if status == "processing"
-    return "incomplete" unless required_questions_answered?
-    return "ready_to_merge" if absorbing_organisation_signed_dsa?
-
-    "merge_issues"
+    STATUS[:merge_issues]
   end
 
   def required_questions_answered?

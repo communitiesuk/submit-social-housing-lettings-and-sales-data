@@ -17,7 +17,7 @@ RSpec.describe MergeRequestsController, type: :request do
     end
 
     context "when creating a new merge request" do
-      let(:params) { { merge_request: { requesting_organisation_id: support_user.organisation_id, status: "incomplete" } } }
+      let(:params) { { merge_request: { requesting_organisation_id: support_user.organisation_id } } }
 
       before do
         post "/merge-request", headers:, params:
@@ -30,7 +30,7 @@ RSpec.describe MergeRequestsController, type: :request do
       end
 
       context "when passing a different requesting organisation id" do
-        let(:params) { { merge_request: { requesting_organisation_id: other_organisation.id, status: "incomplete" } } }
+        let(:params) { { merge_request: { requesting_organisation_id: other_organisation.id } } }
 
         it "creates merge request with current user organisation" do
           follow_redirect!
@@ -74,7 +74,7 @@ RSpec.describe MergeRequestsController, type: :request do
         let(:params) { { merge_request: { merging_organisation: other_organisation.id, new_merging_org_ids: [] } } }
 
         before do
-          MergeRequest.create!(requesting_organisation_id: other_organisation.id, status: "request_merged")
+          MergeRequest.create!(requesting_organisation_id: other_organisation.id, request_merged: true)
           patch "/merge-request/#{merge_request.id}/merging-organisations", headers:, params:
         end
 
@@ -89,7 +89,7 @@ RSpec.describe MergeRequestsController, type: :request do
         let(:params) { { merge_request: { merging_organisation: another_organisation.id, new_merging_org_ids: [] } } }
 
         before do
-          existing_merge_request = MergeRequest.create!(requesting_organisation_id: other_organisation.id, status: "request_merged")
+          existing_merge_request = MergeRequest.create!(requesting_organisation_id: other_organisation.id, request_merged: true)
           MergeRequestOrganisation.create!(merge_request_id: existing_merge_request.id, merging_organisation_id: another_organisation.id)
           patch "/merge-request/#{merge_request.id}/merging-organisations", headers:, params:
         end
@@ -107,7 +107,7 @@ RSpec.describe MergeRequestsController, type: :request do
         let(:params) { { merge_request: { merging_organisation: another_organisation.id, new_merging_org_ids: [] } } }
 
         before do
-          existing_merge_request = MergeRequest.create!(requesting_organisation_id: other_organisation.id, status: "incomplete")
+          existing_merge_request = MergeRequest.create!(requesting_organisation_id: other_organisation.id)
           MergeRequestOrganisation.create!(merge_request_id: existing_merge_request.id, merging_organisation_id: another_organisation.id)
           patch "/merge-request/#{merge_request.id}/merging-organisations", headers:, params:
         end
@@ -428,7 +428,7 @@ RSpec.describe MergeRequestsController, type: :request do
     end
 
     describe "#merging_organisations" do
-      let(:params) { { merge_request: { requesting_organisation_id: other_organisation.id, status: "incomplete" } } }
+      let(:params) { { merge_request: { requesting_organisation_id: other_organisation.id } } }
 
       context "when creating a new merge request" do
         before do
