@@ -431,7 +431,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_19_143150) do
     t.integer "requesting_organisation_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "status"
     t.integer "absorbing_organisation_id"
     t.datetime "merge_date"
     t.integer "requester_id"
@@ -445,6 +444,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_19_143150) do
     t.boolean "signed_dsa", default: false
     t.datetime "discarded_at"
     t.datetime "last_failed_attempt"
+    t.boolean "request_merged"
+    t.boolean "processing"
   end
 
   create_table "notifications", force: :cascade do |t|
