@@ -1,5 +1,5 @@
 <% content_for :before_content do %>
-  <% title = "Merge details: #{@merge_request.absorbing_organisation_name}" %>
+  <% title = "Merge request: #{@merge_request.absorbing_organisation_name}" %>
   <% content_for :title, title %>
   <%= govuk_back_link href: organisations_path(tab: "merge-requests") %>
 <% end %>
@@ -7,10 +7,10 @@
 <%= render partial: "notification_banners" %>
 
 <h1 class="govuk-heading-l">
-  <span class="govuk-caption-l">Merge details</span>
+  <span class="govuk-caption-l">Merge request</span>
   <%= display_value_or_placeholder(@merge_request.absorbing_organisation_name) %>
 </h1>
-<% unless @merge_request.status == "request_merged" %>
+<% unless @merge_request.status == "request_merged" || @merge_request.status == "processing" %>
 <div class="govuk-button-group">
    <%= form_with model: @merge_request, url: start_merge_merge_request_path(@merge_request) do |f| %>
     <%= f.govuk_submit "Begin merge", disabled: @merge_request.status != "ready_to_merge" %>
