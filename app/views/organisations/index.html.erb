@@ -5,7 +5,7 @@
 
 <%= render partial: "organisations/headings", locals: request.path == organisations_path ? { main: "Organisations", sub: nil } : { main: @organisation.name, sub: "Organisations" } %>
 
-<div class="app-tab__list-view">
+<div class="app-tab__list-view" data-controller="tabs">
   <%= govuk_tabs(title: "Collection resources", classes: %w[app-tab__large-headers]) do |c| %>
     <% c.with_tab(label: "All organisations") do %>
       <%= govuk_button_link_to "Create a new organisation", new_organisation_path, html: { method: :get } %>

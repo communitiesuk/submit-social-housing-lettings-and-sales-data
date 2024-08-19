@@ -14,9 +14,13 @@ import GovukfrontendController from './govukfrontend_controller.js'
 import NumericQuestionController from './numeric_question_controller.js'
 
 import FilterLayoutController from './filter_layout_controller.js'
+
+import TabsController from './tabs_controller.js'
+
 application.register('accessible-autocomplete', AccessibleAutocompleteController)
 application.register('conditional-filter', ConditionalFilterController)
 application.register('conditional-question', ConditionalQuestionController)
 application.register('govukfrontend', GovukfrontendController)
 application.register('numeric-question', NumericQuestionController)
 application.register('filter-layout', FilterLayoutController)
+application.register('tabs', TabsController)

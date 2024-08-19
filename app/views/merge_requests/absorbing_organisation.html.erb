@@ -11,7 +11,7 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
       <p class="govuk-hint">If organisations are merging into a new organisation, <%= govuk_link_to "create the new organisation", new_organisation_path %> first and then select it here.</p>
-
+      <br>
       <%= f.govuk_select(:absorbing_organisation_id,
         label: { text: "Select organisation name", class: "govuk-label--m" },
         "data-controller": "accessible-autocomplete") do %>
