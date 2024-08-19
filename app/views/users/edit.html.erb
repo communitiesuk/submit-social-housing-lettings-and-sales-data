@@ -42,6 +42,24 @@
           legend: { text: "Role", size: "m" } %>
       <% end %>
 
+      <% if UserPolicy.new(current_user, @user).edit_organisation? %>
+        <% null_option = [OpenStruct.new(id: "", name: "Select an option")] %>
+        <% organisations = Organisation.filter_by_active.map { |org| OpenStruct.new(id: org.id, name: org.name) } %>
+        <% answer_options = null_option + organisations %>
+
+          <%= f.govuk_select(:organisation_id,
+            label: { text: "Organisation", size: "m" },
+            "data-controller": "accessible-autocomplete") do %>
+              <% answer_options.each do |answer| %>
+                <option value="<%= answer.id %>"
+                  data-synonyms="<%= answer_option_synonyms(answer.resource) %>"
+                  data-append="<%= answer_option_append(answer.resource) %>"
+                  data-hint="<%= answer_option_hint(answer.resource) %>"
+                  <%= @user.organisation_id == answer.id ? "selected" : "" %>><%= answer.name || answer.resource %></option>
+              <% end %>
+          <% end %>
+        <% end %>
+
       <%= f.govuk_submit "Save changes" %>
     </div>
   </div>

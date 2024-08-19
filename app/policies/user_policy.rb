@@ -45,6 +45,10 @@ class UserPolicy
     !has_any_logs_in_editable_collection_period && !has_signed_data_protection_agreement?
   end
 
+  def edit_organisation?
+    @current_user.support? && @user.active?
+  end
+
 private
 
   def has_any_logs_in_editable_collection_period

@@ -149,6 +149,7 @@ RSpec.describe UsersController, type: :request do
           expect(page).not_to have_link("Change", text: "role")
           expect(page).not_to have_link("Change", text: "if data protection officer")
           expect(page).not_to have_link("Change", text: "if a key contact")
+          expect(page).not_to have_link("Change", text: "organisation")
         end
 
         it "does not allow deactivating the user" do
@@ -208,6 +209,7 @@ RSpec.describe UsersController, type: :request do
             expect(page).not_to have_link("Change", text: "role")
             expect(page).not_to have_link("Change", text: "if data protection officer")
             expect(page).not_to have_link("Change", text: "if a key contact")
+            expect(page).not_to have_link("Change", text: "organisation")
           end
 
           it "does not allow deactivating the user" do
@@ -258,6 +260,7 @@ RSpec.describe UsersController, type: :request do
           expect(page).not_to have_field("user[role]")
           expect(page).not_to have_field("user[is_dpo]")
           expect(page).not_to have_field("user[is_key_contact]")
+          expect(page).not_to have_field("user[organisation_id]")
         end
       end
 
@@ -607,6 +610,7 @@ RSpec.describe UsersController, type: :request do
           expect(page).to have_link("Change", text: "role")
           expect(page).to have_link("Change", text: "if data protection officer")
           expect(page).to have_link("Change", text: "if a key contact")
+          expect(page).not_to have_link("Change", text: "organisation")
         end
 
         it "does not allow deactivating the user" do
@@ -655,6 +659,7 @@ RSpec.describe UsersController, type: :request do
             expect(page).to have_link("Change", text: "role")
             expect(page).to have_link("Change", text: "if data protection officer")
             expect(page).to have_link("Change", text: "if a key contact")
+            expect(page).not_to have_link("Change", text: "organisation")
           end
 
           it "allows deactivating the user" do
@@ -713,6 +718,7 @@ RSpec.describe UsersController, type: :request do
           expect(page).to have_field("user[name]")
           expect(page).to have_field("user[email]")
           expect(page).to have_field("user[role]")
+          expect(page).not_to have_field("user[organisation_id]")
         end
 
         it "does not allow setting the role to `support`" do
@@ -738,6 +744,7 @@ RSpec.describe UsersController, type: :request do
             expect(page).to have_field("user[name]")
             expect(page).to have_field("user[email]")
             expect(page).to have_field("user[role]")
+            expect(page).not_to have_field("user[organisation_id]")
           end
         end
 
@@ -1459,6 +1466,7 @@ RSpec.describe UsersController, type: :request do
           expect(page).to have_link("Change", text: "role")
           expect(page).to have_link("Change", text: "if data protection officer")
           expect(page).to have_link("Change", text: "if a key contact")
+          expect(page).to have_link("Change", text: "organisation")
         end
 
         it "does not allow deactivating the user" do
@@ -1488,6 +1496,7 @@ RSpec.describe UsersController, type: :request do
             expect(page).to have_link("Change", text: "role")
             expect(page).to have_link("Change", text: "if data protection officer")
             expect(page).to have_link("Change", text: "if a key contact")
+            expect(page).to have_link("Change", text: "organisation")
           end
 
           it "links to user organisation" do
@@ -1626,6 +1635,7 @@ RSpec.describe UsersController, type: :request do
           expect(page).to have_field("user[role]")
           expect(page).to have_field("user[phone]")
           expect(page).to have_field("user[phone_extension]")
+          expect(page).to have_field("user[organisation_id]")
         end
 
         it "allows setting the role to `support`" do
@@ -1653,6 +1663,7 @@ RSpec.describe UsersController, type: :request do
             expect(page).to have_field("user[role]")
             expect(page).to have_field("user[phone]")
             expect(page).to have_field("user[phone_extension]")
+            expect(page).to have_field("user[organisation_id]")
           end
         end
 
@@ -1673,6 +1684,7 @@ RSpec.describe UsersController, type: :request do
             expect(page).to have_field("user[role]")
             expect(page).to have_field("user[phone]")
             expect(page).to have_field("user[phone_extension]")
+            expect(page).to have_field("user[organisation_id]")
           end
         end
 

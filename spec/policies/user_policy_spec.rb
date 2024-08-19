@@ -100,6 +100,20 @@ RSpec.describe UserPolicy do
     end
   end
 
+  permissions :edit_organisation? do
+    it "as a provider it does not allow changing organisation" do
+      expect(policy).not_to permit(data_provider, data_provider)
+    end
+
+    it "as a coordinator it does not allow changing organisatio" do
+      expect(policy).not_to permit(data_coordinator, data_provider)
+    end
+
+    it "as a support user allows changing other user's organisation" do
+      expect(policy).to permit(support, data_provider)
+    end
+  end
+
   permissions :delete? do
     context "with active user" do
       let(:user) { create(:user, last_sign_in_at: Time.zone.yesterday) }
