@@ -2,7 +2,7 @@
   <%= govuk_notification_banner(title_text: "Important") do %>
     <p class="govuk-notification-banner__heading govuk-!-width-full" style="max-width: fit-content">
       The absorbing organisation must accept the Data Sharing Agreement before merging.
-    <p>
+    </p>
     <% if @merge_request.dpo_user %>
         Contact the Data Protection Officer: <%= link_to @merge_request.dpo_user.name, user_path(@merge_request.dpo_user.id) %>
       <% else %>
@@ -15,7 +15,7 @@
   <%= govuk_notification_banner(title_text: "Important") do %>
     <p class="govuk-notification-banner__heading govuk-!-width-full" style="max-width: fit-content">
       An error occurred while processing the merge.
-    <p>
+    </p>
     No changes have been made. Try beginning the merge again.
   <% end %>
 <% end %>

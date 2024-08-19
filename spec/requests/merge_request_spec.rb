@@ -20,7 +20,7 @@ RSpec.describe MergeRequest, type: :request do
 
     it "redirects to the merge request list" do
       delete delete_merge_request_path(merge_request)
-      expect(response).to redirect_to(organisations_path(anchor: "merge-requests"))
+      expect(response).to redirect_to(organisations_path(tab: "merge-requests"))
       follow_redirect!
       expect(page).to have_content("Merge requests")
     end
