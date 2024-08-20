@@ -10,17 +10,15 @@ class UserPolicy
     @current_user == @user
   end
 
-  def edit_roles?
-    (@current_user.data_coordinator? || @current_user.support?) && @user.active?
-  end
-
   %w[
     edit_roles?
     edit_dpo?
     edit_key_contact?
   ].each do |method_name|
     define_method method_name do
-      (@current_user.data_coordinator? || @current_user.support?) && @user.active?
+      return true if @current_user.support?
+
+      @current_user.data_coordinator? && @user.active?
     end
   end
 
@@ -30,7 +28,9 @@ class UserPolicy
     edit_names?
   ].each do |method_name|
     define_method method_name do
-      (@current_user == @user || @current_user.data_coordinator? || @current_user.support?) && @user.active?
+      return true if @current_user.support?
+
+      (@current_user == @user || @current_user.data_coordinator?) && @user.active?
     end
   end
 
@@ -53,7 +53,7 @@ class UserPolicy
     confirm_organisation_change?
   ].each do |method_name|
     define_method method_name do
-      @current_user.support? && @user.active?
+      @current_user.support?
     end
   end
 

@@ -1715,10 +1715,11 @@ RSpec.describe UsersController, type: :request do
             get "/users/#{other_user.id}/edit", headers:, params: {}
           end
 
-          it "redirects to user details page" do
-            expect(response).to redirect_to("/users/#{other_user.id}")
-            follow_redirect!
-            expect(page).not_to have_link("Change")
+          it "allows editing the user" do
+            expect(page).to have_field("user[name]")
+            expect(page).to have_field("user[email]")
+            expect(page).to have_field("user[role]")
+            expect(page).to have_field("user[organisation_id]")
           end
         end
       end
@@ -2469,6 +2470,10 @@ RSpec.describe UsersController, type: :request do
 
       context "when reassignment option is not given" do
         let(:new_organisation) { create(:organisation, name: "new org") }
+
+        before do
+          create(:lettings_log, assigned_to: other_user)
+        end
 
         it "redirects to the user page" do
           get "/users/#{other_user.id}/organisation-change-confirmation?organisation_id=#{new_organisation.id}"
