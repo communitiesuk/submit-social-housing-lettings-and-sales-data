@@ -170,6 +170,7 @@ class User < ApplicationRecord
   USER_REACTIVATED_TEMPLATE_ID = "ac45a899-490e-4f59-ae8d-1256fc0001f9".freeze
   FOR_OLD_EMAIL_CHANGED_BY_OTHER_USER_TEMPLATE_ID = "3eb80517-1051-4dfc-b4cc-cb18228a3829".freeze
   FOR_NEW_EMAIL_CHANGED_BY_OTHER_USER_TEMPLATE_ID = "0cdd0be1-7fa5-4808-8225-ae4c5a002352".freeze
+  ORGANISATION_UPDATE_TEMPLATE_ID = "4b7716c0-cc5c-41dd-92e4-a0dff03bdf5e".freeze
 
   def reset_password_notify_template
     RESET_PASSWORD_TEMPLATE_ID
@@ -311,6 +312,7 @@ class User < ApplicationRecord
         unassign_organisations(lettings_logs_to_reassign, sales_logs_to_reassign, current_organisation)
       end
 
+      send_organisation_change_email(current_organisation, new_organisation, log_reassignment, logs_count)
     rescue ActiveRecord::RecordInvalid => e
       Rails.logger.error("User update failed with: #{e.message}")
       Sentry.capture_exception(e)
@@ -376,5 +378,27 @@ private
     end
     lettings_logs_to_reassign.update_all(assigned_to_id: unassigned_user.id, values_updated_at: Time.zone.now)
     sales_logs_to_reassign.update_all(assigned_to_id: unassigned_user.id, values_updated_at: Time.zone.now)
+  end
+
+  def send_organisation_change_email(current_organisation, new_organisation, log_reassignment, logs_count)
+    reassigned_logs_text = ""
+    case log_reassignment
+    when "reassign_all"
+      reassigned_logs_text = "There are #{logs_count} logs assigned to you. The stock owner and managing agent on these logs has been changed from #{current_organisation.name} to #{new_organisation.name}."
+    when "reassign_stock_owner"
+      reassigned_logs_text = "There are #{logs_count} logs assigned to you. The stock owner on these logs has been changed from #{current_organisation.name} to #{new_organisation.name}."
+    when "reassign_managing_agent"
+      reassigned_logs_text = "There are #{logs_count} logs assigned to you. The managing agent on these logs has been changed from #{current_organisation.name} to #{new_organisation.name}."
+    when "unassign"
+      reassigned_logs_text = "There are #{logs_count} logs assigned to you. These have now been unassigned."
+    end
+
+    template_id = ORGANISATION_UPDATE_TEMPLATE_ID
+    personalisation = {
+      from_organisation: "#{current_organisation.name} (Organisation ID: #{current_organisation.id})",
+      to_organisation: "#{new_organisation.name} (Organisation ID: #{new_organisation.id})",
+      reassigned_logs_text:,
+    }
+    DeviseNotifyMailer.new.send_email(email, template_id, personalisation)
   end
 end

@@ -534,6 +534,14 @@ RSpec.describe User, type: :model do
     let(:new_organisation) { create(:organisation) }
     let!(:lettings_log) { create(:lettings_log, assigned_to: user) }
     let!(:sales_log) { create(:sales_log, assigned_to: user) }
+    let(:notify_client) { instance_double(Notifications::Client) }
+    let(:devise_notify_mailer) { DeviseNotifyMailer.new }
+
+    before do
+      allow(DeviseNotifyMailer).to receive(:new).and_return(devise_notify_mailer)
+      allow(devise_notify_mailer).to receive(:notify_client).and_return(notify_client)
+      allow(notify_client).to receive(:send_email).and_return(true)
+    end
 
     context "when reassigning all orgs for logs" do
       it "reassigns all logs to the new organisation" do
@@ -550,6 +558,17 @@ RSpec.describe User, type: :model do
         user.reassign_logs_and_update_organisation(new_organisation, "reassign_all")
 
         expect(user.organisation).to eq(new_organisation)
+      end
+
+      it "sends organisation update emails" do
+        expected_personalisation = {
+          from_organisation: "#{user.organisation.name} (Organisation ID: #{user.organisation_id})",
+          to_organisation: "#{new_organisation.name} (Organisation ID: #{new_organisation.id})",
+          reassigned_logs_text: "There are 2 logs assigned to you. The stock owner and managing agent on these logs has been changed from #{user.organisation.name} to #{new_organisation.name}.",
+        }
+        user.reassign_logs_and_update_organisation(new_organisation, "reassign_all")
+
+        expect(notify_client).to have_received(:send_email).with(email_address: user.email, template_id: User::ORGANISATION_UPDATE_TEMPLATE_ID, personalisation: expected_personalisation).once
       end
 
       context "and there is an error" do
@@ -587,6 +606,17 @@ RSpec.describe User, type: :model do
         expect(user.organisation).to eq(new_organisation)
       end
 
+      it "sends organisation update emails" do
+        expected_personalisation = {
+          from_organisation: "#{user.organisation.name} (Organisation ID: #{user.organisation_id})",
+          to_organisation: "#{new_organisation.name} (Organisation ID: #{new_organisation.id})",
+          reassigned_logs_text: "There are 2 logs assigned to you. The stock owner on these logs has been changed from #{user.organisation.name} to #{new_organisation.name}.",
+        }
+        user.reassign_logs_and_update_organisation(new_organisation, "reassign_stock_owner")
+
+        expect(notify_client).to have_received(:send_email).with(email_address: user.email, template_id: User::ORGANISATION_UPDATE_TEMPLATE_ID, personalisation: expected_personalisation).once
+      end
+
       context "and there is an error" do
         before do
           allow(user).to receive(:update!).and_raise(ActiveRecord::RecordInvalid)
@@ -620,6 +650,17 @@ RSpec.describe User, type: :model do
         user.reassign_logs_and_update_organisation(new_organisation, "reassign_managing_agent")
 
         expect(user.organisation).to eq(new_organisation)
+      end
+
+      it "sends organisation update emails" do
+        expected_personalisation = {
+          from_organisation: "#{user.organisation.name} (Organisation ID: #{user.organisation_id})",
+          to_organisation: "#{new_organisation.name} (Organisation ID: #{new_organisation.id})",
+          reassigned_logs_text: "There are 2 logs assigned to you. The managing agent on these logs has been changed from #{user.organisation.name} to #{new_organisation.name}.",
+        }
+        user.reassign_logs_and_update_organisation(new_organisation, "reassign_managing_agent")
+
+        expect(notify_client).to have_received(:send_email).with(email_address: user.email, template_id: User::ORGANISATION_UPDATE_TEMPLATE_ID, personalisation: expected_personalisation).once
       end
 
       context "and there is an error" do
@@ -657,6 +698,17 @@ RSpec.describe User, type: :model do
           user.reassign_logs_and_update_organisation(new_organisation, "unassign")
 
           expect(user.organisation).to eq(new_organisation)
+        end
+
+        it "sends organisation update emails" do
+          expected_personalisation = {
+            from_organisation: "#{user.organisation.name} (Organisation ID: #{user.organisation_id})",
+            to_organisation: "#{new_organisation.name} (Organisation ID: #{new_organisation.id})",
+            reassigned_logs_text: "There are 2 logs assigned to you. These have now been unassigned.",
+          }
+          user.reassign_logs_and_update_organisation(new_organisation, "unassign")
+
+          expect(notify_client).to have_received(:send_email).with(email_address: user.email, template_id: User::ORGANISATION_UPDATE_TEMPLATE_ID, personalisation: expected_personalisation).once
         end
 
         context "and there is an error" do
@@ -727,6 +779,17 @@ RSpec.describe User, type: :model do
             user_without_logs.reassign_logs_and_update_organisation(new_organisation, nil)
             expect(user_without_logs.organisation).not_to eq(new_organisation)
           end
+        end
+
+        it "sends organisation update emails" do
+          expected_personalisation = {
+            from_organisation: "#{user_without_logs.organisation.name} (Organisation ID: #{user_without_logs.organisation_id})",
+            to_organisation: "#{new_organisation.name} (Organisation ID: #{new_organisation.id})",
+            reassigned_logs_text: "",
+          }
+          user_without_logs.reassign_logs_and_update_organisation(new_organisation, nil)
+
+          expect(notify_client).to have_received(:send_email).with(email_address: user_without_logs.email, template_id: User::ORGANISATION_UPDATE_TEMPLATE_ID, personalisation: expected_personalisation).once
         end
       end
 
