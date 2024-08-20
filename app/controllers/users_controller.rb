@@ -163,6 +163,20 @@ class UsersController < ApplicationController
     end
   end
 
+  def update_log_reassignment
+    return redirect_to user_path(@user) unless log_reassignment_params[:organisation_id].present? && Organisation.where(id: log_reassignment_params[:organisation_id]).exists?
+
+    @new_organisation = Organisation.find(log_reassignment_params[:organisation_id])
+
+    validate_log_reassignment
+
+    if @user.errors.empty?
+      redirect_to user_confirm_organisation_change_path(@user, log_reassignment_params)
+    else
+      render :log_reassignment, status: :unprocessable_entity
+    end
+  end
+
 private
 
   def validate_attributes
@@ -232,6 +246,10 @@ private
     user_params.except(:organisation_id)
   end
 
+  def log_reassignment_params
+    params.require(:user).permit(:log_reassignment, :organisation_id)
+  end
+
   def created_user_redirect_path
     if current_user.support?
       users_path
@@ -266,5 +284,32 @@ private
 
   def updating_organisation?
     user_params["organisation_id"].present? && @user.organisation_id != user_params["organisation_id"].to_i
+  end
+
+  def validate_log_reassignment
+    return @user.errors.add :log_reassignment, :blank if log_reassignment_params[:log_reassignment].blank?
+
+    case log_reassignment_params[:log_reassignment]
+    when "reassign_stock_owner"
+      required_managing_agents = (@user.assigned_to_lettings_logs.map(&:managing_organisation) + @user.assigned_to_sales_logs.map(&:managing_organisation)).uniq
+      current_managing_agents = @new_organisation.managing_agents
+      missing_managing_agents = required_managing_agents - current_managing_agents
+
+      if missing_managing_agents.any?
+        new_organisation = @new_organisation.name
+        missing_managing_agents = missing_managing_agents.map(&:name).sort.to_sentence
+        @user.errors.add :log_reassignment, I18n.t("activerecord.errors.models.user.attributes.log_reassignment.missing_managing_agents", new_organisation:, missing_managing_agents:)
+      end
+    when "reassign_managing_agent"
+      required_stock_owners = (@user.assigned_to_lettings_logs.map(&:owning_organisation) + @user.assigned_to_sales_logs.map(&:owning_organisation)).uniq
+      current_stock_owners = @new_organisation.stock_owners
+      missing_stock_owners = required_stock_owners - current_stock_owners
+
+      if missing_stock_owners.any?
+        new_organisation = @new_organisation.name
+        missing_stock_owners = missing_stock_owners.map(&:name).sort.to_sentence
+        @user.errors.add :log_reassignment, I18n.t("activerecord.errors.models.user.attributes.log_reassignment.missing_stock_owners", new_organisation:, missing_stock_owners:)
+      end
+    end
   end
 end

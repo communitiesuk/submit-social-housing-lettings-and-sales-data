@@ -125,6 +125,8 @@ Rails.application.routes.draw do
     get "edit-dpo", to: "users#dpo"
     get "edit-key-contact", to: "users#key_contact"
     get "log-reassignment", to: "users#log_reassignment"
+    patch "log-reassignment", to: "users#update_log_reassignment"
+    patch "confirm-organisation-change", to: "users#confirm-organisation-change"
 
     collection do
       get :search

@@ -4,7 +4,7 @@
   <%= govuk_back_link(href: aliased_user_edit(@user, current_user)) %>
 <% end %>
 
-<%= form_for(@user, html: { method: :patch }) do |f| %>
+<%= form_with model: @user, method: :patch, url: user_log_reassignment_path(@user) do |f| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <%= f.govuk_error_summary %>
@@ -24,6 +24,8 @@
         :id,
         :name,
         legend: { text: "Log reassignment", hidden: true } %>
+
+      <%= f.hidden_field :organisation_id, value: @new_organisation.id %>
 
       <div class="govuk-button-group">
         <%= f.govuk_submit "Continue" %>
