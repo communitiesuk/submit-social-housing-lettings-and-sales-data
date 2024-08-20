@@ -21,4 +21,24 @@ module UserHelper
 
     "You’re moving #{user.name} from #{user.organisation.name} to #{new_organisation.name}. There #{logs_count_text} assigned to them."
   end
+
+  def organisation_change_confirmation_warning(user, new_organisation, log_reassignment)
+    log_reassignment_text = "There are no logs assigned to them."
+
+    logs_count = user.assigned_to_lettings_logs.count + user.assigned_to_sales_logs.count
+    if logs_count.positive?
+      case log_reassignment
+      when "reassign_all"
+        log_reassignment_text = "The stock owner and managing agent on their logs will change to #{new_organisation.name}."
+      when "reassign_stock_owner"
+        log_reassignment_text = "The stock owner on their logs will change to #{new_organisation.name}."
+      when "reassign_managing_agent"
+        log_reassignment_text = "The managing agent on their logs will change to #{new_organisation.name}."
+      when "unassign"
+        log_reassignment_text = "Their logs will be unassigned."
+      end
+    end
+
+    "You’re moving #{user.name} from #{user.organisation.name} to #{new_organisation.name}. #{log_reassignment_text}"
+  end
 end

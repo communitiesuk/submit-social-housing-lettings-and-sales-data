@@ -171,10 +171,19 @@ class UsersController < ApplicationController
     validate_log_reassignment
 
     if @user.errors.empty?
-      redirect_to user_confirm_organisation_change_path(@user, log_reassignment_params)
+      redirect_to user_organisation_change_confirmation_path(@user, log_reassignment_params)
     else
       render :log_reassignment, status: :unprocessable_entity
     end
+  end
+
+  def organisation_change_confirmation
+    if params[:organisation_id].blank? || params[:log_reassignment].blank? || !Organisation.where(id: params[:organisation_id]).exists?
+      return redirect_to user_path(@user)
+    end
+
+    @new_organisation = Organisation.find(params[:organisation_id])
+    @log_reassignment = params[:log_reassignment]
   end
 
 private

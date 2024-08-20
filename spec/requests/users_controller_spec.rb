@@ -2108,7 +2108,7 @@ RSpec.describe UsersController, type: :request do
               end
 
               it "redirects to confirmation page" do
-                expect(response).to redirect_to("/users/#{other_user.id}/confirm-organisation-change?log_reassignment=reassign_all&organisation_id=#{new_organisation.id}")
+                expect(response).to redirect_to("/users/#{other_user.id}/organisation-change-confirmation?log_reassignment=reassign_all&organisation_id=#{new_organisation.id}")
               end
             end
 
@@ -2124,7 +2124,7 @@ RSpec.describe UsersController, type: :request do
               end
 
               it "redirects to confirmation page" do
-                expect(response).to redirect_to("/users/#{other_user.id}/confirm-organisation-change?log_reassignment=unassign&organisation_id=#{new_organisation.id}")
+                expect(response).to redirect_to("/users/#{other_user.id}/organisation-change-confirmation?log_reassignment=unassign&organisation_id=#{new_organisation.id}")
               end
             end
 
@@ -2438,6 +2438,45 @@ RSpec.describe UsersController, type: :request do
           expect(page).to have_button("Continue")
           expect(page).to have_link("Back", href: "/users/#{other_user.id}/edit")
           expect(page).to have_link("Cancel", href: "/users/#{other_user.id}/edit")
+        end
+      end
+    end
+
+    describe "#confirm_organisation_change" do
+      context "when organisation id is not given" do
+        it "redirects to the user page" do
+          get "/users/#{other_user.id}/organisation-change-confirmation?log_reassignment=reassign_all"
+          expect(response).to redirect_to("/users/#{other_user.id}")
+        end
+      end
+
+      context "when reassignment option is not given" do
+        let(:new_organisation) { create(:organisation, name: "new org") }
+
+        it "redirects to the user page" do
+          get "/users/#{other_user.id}/organisation-change-confirmation?organisation_id=#{new_organisation.id}"
+          expect(response).to redirect_to("/users/#{other_user.id}")
+        end
+      end
+
+      context "when organisation id does not exist" do
+        it "redirects to the user page" do
+          get "/users/#{other_user.id}/organisation-change-confirmation?organisation_id=123123&log_reassignment=reassign_all"
+          expect(response).to redirect_to("/users/#{other_user.id}")
+        end
+      end
+
+      context "with valid organisation id" do
+        let(:new_organisation) { create(:organisation, name: "new org") }
+
+        before do
+          create(:lettings_log, assigned_to: other_user)
+        end
+
+        it "displays confirm organisation change page" do
+          get "/users/#{other_user.id}/organisation-change-confirmation?organisation_id=#{new_organisation.id}&log_reassignment=reassign_all"
+          expect(page).to have_content("Are you sure you want to move this user?")
+          expect(page).to have_content("You’re moving #{other_user.name} from #{other_user.organisation_name} to #{new_organisation.name}. The stock owner and managing agent on their logs will change to #{new_organisation.name}.")
         end
       end
     end
