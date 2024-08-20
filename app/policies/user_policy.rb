@@ -45,12 +45,16 @@ class UserPolicy
     !has_any_logs_in_editable_collection_period && !has_signed_data_protection_agreement?
   end
 
-  def edit_organisation?
-    @current_user.support? && @user.active?
-  end
-
-  def log_reassignment?
+  %w[
     edit_organisation?
+    log_reassignment?
+    update_log_reassignment?
+    organisation_change_confirmation?
+    confirm_organisation_change?
+  ].each do |method_name|
+    define_method method_name do
+      @current_user.support? && @user.active?
+    end
   end
 
 private

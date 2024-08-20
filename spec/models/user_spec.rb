@@ -707,5 +707,36 @@ RSpec.describe User, type: :model do
         end
       end
     end
+
+    context "when log_reassignent is not given" do
+      context "and user has no logs" do
+        let(:user_without_logs) { create(:user) }
+
+        it "moves the user to the new organisation" do
+          user_without_logs.reassign_logs_and_update_organisation(new_organisation, nil)
+
+          expect(user_without_logs.organisation).to eq(new_organisation)
+        end
+
+        context "and there is an error" do
+          before do
+            allow(user_without_logs).to receive(:update!).and_raise(ActiveRecord::RecordInvalid)
+          end
+
+          it "rolls back the changes" do
+            user_without_logs.reassign_logs_and_update_organisation(new_organisation, nil)
+            expect(user_without_logs.organisation).not_to eq(new_organisation)
+          end
+        end
+      end
+
+      context "and user has logs" do
+        it "does not move the user to the new organisation" do
+          user.reassign_logs_and_update_organisation(new_organisation, nil)
+
+          expect(user.organisation).not_to eq(new_organisation)
+        end
+      end
+    end
   end
 end

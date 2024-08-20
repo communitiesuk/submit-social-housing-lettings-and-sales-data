@@ -295,6 +295,9 @@ class User < ApplicationRecord
       sales_logs_to_reassign = assigned_to_sales_logs
       current_organisation = organisation
 
+      logs_count = lettings_logs_to_reassign.count + sales_logs_to_reassign.count
+      return if logs_count.positive? && (log_reassignment.blank? || !LOG_REASSIGNMENT.key?(log_reassignment.to_sym))
+
       update!(organisation: new_organisation)
 
       case log_reassignment

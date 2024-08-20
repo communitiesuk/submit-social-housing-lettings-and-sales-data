@@ -155,6 +155,8 @@ class UsersController < ApplicationController
 
   def log_reassignment
     authorize @user
+    assigned_to_logs_count = @user.assigned_to_lettings_logs.count + @user.assigned_to_sales_logs.count
+    return redirect_to user_organisation_change_confirmation_path(@user, organisation_id: params[:organisation_id]) if assigned_to_logs_count.zero?
 
     if params[:organisation_id].present? && Organisation.where(id: params[:organisation_id]).exists?
       @new_organisation = Organisation.find(params[:organisation_id])
@@ -164,6 +166,7 @@ class UsersController < ApplicationController
   end
 
   def update_log_reassignment
+    authorize @user
     return redirect_to user_path(@user) unless log_reassignment_params[:organisation_id].present? && Organisation.where(id: log_reassignment_params[:organisation_id]).exists?
 
     @new_organisation = Organisation.find(log_reassignment_params[:organisation_id])
@@ -178,6 +181,7 @@ class UsersController < ApplicationController
   end
 
   def organisation_change_confirmation
+    authorize @user
     if params[:organisation_id].blank? || params[:log_reassignment].blank? || !Organisation.where(id: params[:organisation_id]).exists?
       return redirect_to user_path(@user)
     end
@@ -187,6 +191,7 @@ class UsersController < ApplicationController
   end
 
   def confirm_organisation_change
+    authorize @user
     if log_reassignment_params[:organisation_id].blank? || log_reassignment_params[:log_reassignment].blank? || !Organisation.where(id: log_reassignment_params[:organisation_id]).exists?
       return redirect_to user_path(@user)
     end
