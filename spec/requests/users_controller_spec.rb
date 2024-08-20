@@ -997,6 +997,7 @@ RSpec.describe UsersController, type: :request do
             email: "new_user@example.com",
             role: "data_coordinator",
             phone: "12345678910",
+            phone_extension: "1234",
           },
         }
       end
@@ -1020,12 +1021,14 @@ RSpec.describe UsersController, type: :request do
         request
       end
 
-      it "creates a new scheme for user organisation with valid params" do
+      it "creates a new user for user organisation with valid params" do
         request
 
         expect(User.last.name).to eq("new user")
         expect(User.last.email).to eq("new_user@example.com")
         expect(User.last.role).to eq("data_coordinator")
+        expect(User.last.phone).to eq("12345678910")
+        expect(User.last.phone_extension).to eq("1234")
       end
 
       it "redirects back to organisation users page" do
@@ -1612,11 +1615,12 @@ RSpec.describe UsersController, type: :request do
           expect(page).to have_content("Change your personal details")
         end
 
-        it "has fields for name, email, role, dpo and key contact" do
+        it "has fields for name, email, role, phone number and phone extension" do
           expect(page).to have_field("user[name]")
           expect(page).to have_field("user[email]")
           expect(page).to have_field("user[role]")
           expect(page).to have_field("user[phone]")
+          expect(page).to have_field("user[phone_extension]")
         end
 
         it "allows setting the role to `support`" do
@@ -1638,10 +1642,12 @@ RSpec.describe UsersController, type: :request do
             expect(page).to have_content("Change #{other_user.name}’s personal details")
           end
 
-          it "has fields for name, email, role, dpo and key contact" do
+          it "has fields for name, email, role, phone number and phone extension" do
             expect(page).to have_field("user[name]")
             expect(page).to have_field("user[email]")
             expect(page).to have_field("user[role]")
+            expect(page).to have_field("user[phone]")
+            expect(page).to have_field("user[phone_extension]")
           end
         end
 
@@ -1656,10 +1662,12 @@ RSpec.describe UsersController, type: :request do
             expect(page).to have_content("Change #{other_user.name}’s personal details")
           end
 
-          it "has fields for name, email, role, dpo and key contact" do
+          it "has fields for name, email, role, phone number and phone extension" do
             expect(page).to have_field("user[name]")
             expect(page).to have_field("user[email]")
             expect(page).to have_field("user[role]")
+            expect(page).to have_field("user[phone]")
+            expect(page).to have_field("user[phone_extension]")
           end
         end
 
@@ -1989,6 +1997,7 @@ RSpec.describe UsersController, type: :request do
             email:,
             role: "data_coordinator",
             phone: "12345612456",
+            phone_extension: "1234",
             organisation_id: organisation.id,
           },
         }
@@ -2002,6 +2011,14 @@ RSpec.describe UsersController, type: :request do
       it "adds the user to the correct organisation" do
         request
         expect(User.find_by(email:).organisation).to eq(organisation)
+      end
+
+      it "sets expected values on the user" do
+        request
+        user = User.find_by(email:)
+        expect(user.name).to eq("new user")
+        expect(user.phone).to eq("12345612456")
+        expect(user.phone_extension).to eq("1234")
       end
 
       it "redirects back to users page" do

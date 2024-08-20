@@ -43,7 +43,7 @@
 
       <%= summary_list.with_row do |row|
             row.with_key { "Telephone number" }
-            row.with_value { @user.phone }
+            row.with_value { @user.phone_with_extension }
             if UserPolicy.new(current_user, @user).edit_telephone_numbers?
               row.with_action(visually_hidden_text: "telephone number", href: aliased_user_edit(@user, current_user), html_attributes: { "data-qa": "change-telephone-number" })
             else

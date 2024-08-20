@@ -269,6 +269,12 @@ class User < ApplicationRecord
     save!(validate: false)
   end
 
+  def phone_with_extension
+    return phone if phone_extension.blank?
+
+    "#{phone}, Ext. #{phone_extension}"
+  end
+
 protected
 
   # Checks whether a password is needed or not. For validations only.
