@@ -125,14 +125,14 @@ RSpec.describe UserHelper do
         end
       end
 
-      context "with reassign all choice" do
+      context "with reassign managing agent choice" do
         it "returns the correct message" do
           expected_text = "You’re moving #{user.name} from #{user.organisation.name} to #{current_user.organisation.name}. The managing agent on their logs will change to #{current_user.organisation.name}."
           expect(organisation_change_confirmation_warning(user, current_user.organisation, "reassign_managing_agent")).to eq(expected_text)
         end
       end
 
-      context "with reassign all choice" do
+      context "with unassign choice" do
         it "returns the correct message" do
           expected_text = "You’re moving #{user.name} from #{user.organisation.name} to #{current_user.organisation.name}. Their logs will be unassigned."
           expect(organisation_change_confirmation_warning(user, current_user.organisation, "unassign")).to eq(expected_text)

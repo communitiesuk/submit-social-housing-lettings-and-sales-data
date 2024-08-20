@@ -186,6 +186,18 @@ class UsersController < ApplicationController
     @log_reassignment = params[:log_reassignment]
   end
 
+  def confirm_organisation_change
+    if log_reassignment_params[:organisation_id].blank? || log_reassignment_params[:log_reassignment].blank? || !Organisation.where(id: log_reassignment_params[:organisation_id]).exists?
+      return redirect_to user_path(@user)
+    end
+
+    @new_organisation = Organisation.find(log_reassignment_params[:organisation_id])
+    @log_reassignment = log_reassignment_params[:log_reassignment]
+    @user.reassign_logs_and_update_organisation(@new_organisation, @log_reassignment)
+
+    redirect_to user_path(@user)
+  end
+
 private
 
   def validate_attributes
@@ -201,7 +213,7 @@ private
     end
 
     if user_params.key?(:organisation_id) && user_params[:organisation_id].blank?
-      @user.errors.add :organisation, :blank
+      @user.errors.add :organisation_id, :blank
     end
   end
 

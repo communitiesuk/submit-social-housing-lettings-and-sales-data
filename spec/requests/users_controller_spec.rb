@@ -2480,6 +2480,58 @@ RSpec.describe UsersController, type: :request do
         end
       end
     end
+
+    describe "#confirm_organisation_change patch" do
+      context "when organisation id is not given" do
+        let(:params) { { user: { organisation_id: nil, log_reassignment: "reassign_all" } } }
+
+        it "redirects to the user page" do
+          patch "/users/#{other_user.id}/organisation-change-confirmation", headers:, params: params
+          expect(response).to redirect_to("/users/#{other_user.id}")
+        end
+      end
+
+      context "when reassignment option is not given" do
+        let(:new_organisation) { create(:organisation, name: "new org") }
+        let(:params) { { user: { organisation_id: new_organisation.id, log_reassignment: "reassign_all" } } }
+
+        it "redirects to the user page" do
+          patch "/users/#{other_user.id}/organisation-change-confirmation", headers:, params: params
+          expect(response).to redirect_to("/users/#{other_user.id}")
+        end
+      end
+
+      context "when organisation id does not exist" do
+        let(:params) { { user: { organisation_id: 123_123, log_reassignment: "reassign_all" } } }
+
+        it "redirects to the user page" do
+          patch "/users/#{other_user.id}/organisation-change-confirmation", headers:, params: params
+          expect(response).to redirect_to("/users/#{other_user.id}")
+        end
+      end
+
+      context "with valid organisation id" do
+        let(:new_organisation) { create(:organisation, name: "new org") }
+        let(:params) { { user: { organisation_id: new_organisation.id, log_reassignment: "reassign_all" } } }
+        let!(:lettings_log) { create(:lettings_log, assigned_to: other_user) }
+        let!(:sales_log) { create(:sales_log, assigned_to: other_user) }
+
+        context "and reassign all option" do
+          it "updates logs and moves the user" do
+            patch "/users/#{other_user.id}/organisation-change-confirmation", headers:, params: params
+            expect(response).to redirect_to("/users/#{other_user.id}")
+
+            expect(other_user.reload.organisation).to eq(new_organisation)
+            expect(other_user.lettings_logs.count).to eq(1)
+            expect(other_user.sales_logs.count).to eq(1)
+            expect(lettings_log.reload.managing_organisation).to eq(new_organisation)
+            expect(lettings_log.owning_organisation).to eq(new_organisation)
+            expect(sales_log.reload.managing_organisation).to eq(new_organisation)
+            expect(sales_log.owning_organisation).to eq(new_organisation)
+          end
+        end
+      end
+    end
   end
 
   describe "title link" do

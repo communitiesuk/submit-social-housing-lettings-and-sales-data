@@ -287,6 +287,35 @@ class User < ApplicationRecord
     sales_logs.where(assigned_to: self)
   end
 
+  def reassign_logs_and_update_organisation(new_organisation, log_reassignment)
+    return unless new_organisation
+
+    ActiveRecord::Base.transaction do
+      lettings_logs_to_reassign = assigned_to_lettings_logs
+      sales_logs_to_reassign = assigned_to_sales_logs
+      current_organisation = organisation
+
+      update!(organisation: new_organisation)
+
+      case log_reassignment
+      when "reassign_all"
+        reassign_all_orgs(new_organisation, lettings_logs_to_reassign, sales_logs_to_reassign)
+      when "reassign_stock_owner"
+        reassign_stock_owners(new_organisation, lettings_logs_to_reassign, sales_logs_to_reassign)
+      when "reassign_managing_agent"
+        reassign_managing_agents(new_organisation, lettings_logs_to_reassign, sales_logs_to_reassign)
+      when "unassign"
+        unassign_organisations(lettings_logs_to_reassign, sales_logs_to_reassign, current_organisation)
+      end
+
+    rescue ActiveRecord::RecordInvalid => e
+      Rails.logger.error("User update failed with: #{e.message}")
+      Sentry.capture_exception(e)
+
+      raise ActiveRecord::Rollback
+    end
+  end
+
 protected
 
   # Checks whether a password is needed or not. For validations only.
@@ -310,5 +339,39 @@ private
     return if organisation.data_protection_confirmed?
 
     DataProtectionConfirmationMailer.send_confirmation_email(self).deliver_later
+  end
+
+  def reassign_all_orgs(new_organisation, lettings_logs_to_reassign, sales_logs_to_reassign)
+    lettings_logs_to_reassign.update_all(owning_organisation_id: new_organisation.id, managing_organisation_id: new_organisation.id, values_updated_at: Time.zone.now)
+    sales_logs_to_reassign.update_all(owning_organisation_id: new_organisation.id, managing_organisation_id: new_organisation.id, values_updated_at: Time.zone.now)
+  end
+
+  def reassign_stock_owners(new_organisation, lettings_logs_to_reassign, sales_logs_to_reassign)
+    lettings_logs_to_reassign.update_all(owning_organisation_id: new_organisation.id, values_updated_at: Time.zone.now)
+    sales_logs_to_reassign.update_all(owning_organisation_id: new_organisation.id, values_updated_at: Time.zone.now)
+  end
+
+  def reassign_managing_agents(new_organisation, lettings_logs_to_reassign, sales_logs_to_reassign)
+    lettings_logs_to_reassign.update_all(managing_organisation_id: new_organisation.id, values_updated_at: Time.zone.now)
+    sales_logs_to_reassign.update_all(managing_organisation_id: new_organisation.id, values_updated_at: Time.zone.now)
+  end
+
+  def unassign_organisations(lettings_logs_to_reassign, sales_logs_to_reassign, current_organisation)
+    if User.find_by(name: "Unassigned", organisation: current_organisation)
+      unassigned_user = User.find_by(name: "Unassigned", organisation: current_organisation)
+    else
+      unassigned_user = User.new(
+        name: "Unassigned",
+        organisation_id:,
+        is_dpo: false,
+        encrypted_password: SecureRandom.hex(10),
+        email: SecureRandom.uuid,
+        confirmed_at: Time.zone.now,
+        active: false,
+      )
+      unassigned_user.save!(validate: false)
+    end
+    lettings_logs_to_reassign.update_all(assigned_to_id: unassigned_user.id, values_updated_at: Time.zone.now)
+    sales_logs_to_reassign.update_all(assigned_to_id: unassigned_user.id, values_updated_at: Time.zone.now)
   end
 end

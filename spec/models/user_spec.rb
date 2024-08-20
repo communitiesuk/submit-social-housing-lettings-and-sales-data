@@ -528,4 +528,184 @@ RSpec.describe User, type: :model do
       end
     end
   end
+
+  describe "#reassign_logs_and_update_organisation" do
+    let(:user) { create(:user) }
+    let(:new_organisation) { create(:organisation) }
+    let!(:lettings_log) { create(:lettings_log, assigned_to: user) }
+    let!(:sales_log) { create(:sales_log, assigned_to: user) }
+
+    context "when reassigning all orgs for logs" do
+      it "reassigns all logs to the new organisation" do
+        user.reassign_logs_and_update_organisation(new_organisation, "reassign_all")
+        expect(lettings_log.reload.owning_organisation).to eq(new_organisation)
+        expect(lettings_log.managing_organisation).to eq(new_organisation)
+        expect(lettings_log.values_updated_at).not_to be_nil
+        expect(sales_log.reload.owning_organisation).to eq(new_organisation)
+        expect(sales_log.managing_organisation).to eq(new_organisation)
+        expect(sales_log.values_updated_at).not_to be_nil
+      end
+
+      it "moves the user to the new organisation" do
+        user.reassign_logs_and_update_organisation(new_organisation, "reassign_all")
+
+        expect(user.organisation).to eq(new_organisation)
+      end
+
+      context "and there is an error" do
+        before do
+          allow(user).to receive(:update!).and_raise(ActiveRecord::RecordInvalid)
+        end
+
+        it "rolls back the changes" do
+          user.reassign_logs_and_update_organisation(new_organisation, "reassign_all")
+          expect(lettings_log.reload.owning_organisation).not_to eq(new_organisation)
+          expect(lettings_log.managing_organisation).not_to eq(new_organisation)
+          expect(lettings_log.values_updated_at).to be_nil
+          expect(sales_log.reload.owning_organisation).not_to eq(new_organisation)
+          expect(sales_log.managing_organisation).not_to eq(new_organisation)
+          expect(sales_log.values_updated_at).to be_nil
+          expect(user.organisation).not_to eq(new_organisation)
+        end
+      end
+    end
+
+    context "when reassigning stock owners for logs" do
+      it "reassigns stock owners for logs to the new organisation" do
+        user.reassign_logs_and_update_organisation(new_organisation, "reassign_stock_owner")
+        expect(lettings_log.reload.owning_organisation).to eq(new_organisation)
+        expect(lettings_log.managing_organisation).not_to eq(new_organisation)
+        expect(lettings_log.values_updated_at).not_to be_nil
+        expect(sales_log.reload.owning_organisation).to eq(new_organisation)
+        expect(sales_log.managing_organisation).not_to eq(new_organisation)
+        expect(sales_log.values_updated_at).not_to be_nil
+      end
+
+      it "moves the user to the new organisation" do
+        user.reassign_logs_and_update_organisation(new_organisation, "reassign_stock_owner")
+
+        expect(user.organisation).to eq(new_organisation)
+      end
+
+      context "and there is an error" do
+        before do
+          allow(user).to receive(:update!).and_raise(ActiveRecord::RecordInvalid)
+        end
+
+        it "rolls back the changes" do
+          user.reassign_logs_and_update_organisation(new_organisation, "reassign_all")
+          expect(lettings_log.reload.owning_organisation).not_to eq(new_organisation)
+          expect(lettings_log.managing_organisation).not_to eq(new_organisation)
+          expect(lettings_log.values_updated_at).to be_nil
+          expect(sales_log.reload.owning_organisation).not_to eq(new_organisation)
+          expect(sales_log.managing_organisation).not_to eq(new_organisation)
+          expect(sales_log.values_updated_at).to be_nil
+          expect(user.organisation).not_to eq(new_organisation)
+        end
+      end
+    end
+
+    context "when reassigning managing agents for logs" do
+      it "reassigns managing agents for logs to the new organisation" do
+        user.reassign_logs_and_update_organisation(new_organisation, "reassign_managing_agent")
+        expect(lettings_log.reload.owning_organisation).not_to eq(new_organisation)
+        expect(lettings_log.managing_organisation).to eq(new_organisation)
+        expect(lettings_log.values_updated_at).not_to be_nil
+        expect(sales_log.reload.owning_organisation).not_to eq(new_organisation)
+        expect(sales_log.managing_organisation).to eq(new_organisation)
+        expect(sales_log.values_updated_at).not_to be_nil
+      end
+
+      it "moves the user to the new organisation" do
+        user.reassign_logs_and_update_organisation(new_organisation, "reassign_managing_agent")
+
+        expect(user.organisation).to eq(new_organisation)
+      end
+
+      context "and there is an error" do
+        before do
+          allow(user).to receive(:update!).and_raise(ActiveRecord::RecordInvalid)
+        end
+
+        it "rolls back the changes" do
+          user.reassign_logs_and_update_organisation(new_organisation, "reassign_all")
+          expect(lettings_log.reload.owning_organisation).not_to eq(new_organisation)
+          expect(lettings_log.managing_organisation).not_to eq(new_organisation)
+          expect(lettings_log.values_updated_at).to be_nil
+          expect(sales_log.reload.owning_organisation).not_to eq(new_organisation)
+          expect(sales_log.managing_organisation).not_to eq(new_organisation)
+          expect(sales_log.values_updated_at).to be_nil
+          expect(user.organisation).not_to eq(new_organisation)
+        end
+      end
+    end
+
+    context "when unassigning the logs" do
+      context "and unassigned user exists" do
+        let!(:unassigned_user) { create(:user, name: "Unassigned", organisation: user.organisation) }
+
+        it "reassigns all the logs to the unassigned user" do
+          user.reassign_logs_and_update_organisation(new_organisation, "unassign")
+
+          expect(lettings_log.reload.assigned_to).to eq(unassigned_user)
+          expect(lettings_log.values_updated_at).not_to be_nil
+          expect(sales_log.reload.assigned_to).to eq(unassigned_user)
+          expect(sales_log.values_updated_at).not_to be_nil
+        end
+
+        it "moves the user to the new organisation" do
+          user.reassign_logs_and_update_organisation(new_organisation, "unassign")
+
+          expect(user.organisation).to eq(new_organisation)
+        end
+
+        context "and there is an error" do
+          before do
+            allow(user).to receive(:update!).and_raise(ActiveRecord::RecordInvalid)
+          end
+
+          it "rolls back the changes" do
+            user.reassign_logs_and_update_organisation(new_organisation, "unassign")
+            expect(lettings_log.reload.assigned_to).to eq(user)
+            expect(lettings_log.values_updated_at).to be_nil
+            expect(sales_log.reload.assigned_to).to eq(user)
+            expect(sales_log.values_updated_at).to be_nil
+            expect(user.organisation).not_to eq(new_organisation)
+          end
+        end
+      end
+
+      context "and unassigned user doesn't exist" do
+        it "reassigns all the logs to the unassigned user" do
+          user.reassign_logs_and_update_organisation(new_organisation, "unassign")
+
+          expect(lettings_log.reload.assigned_to.name).to eq("Unassigned")
+          expect(lettings_log.values_updated_at).not_to be_nil
+          expect(sales_log.reload.assigned_to.name).to eq("Unassigned")
+          expect(sales_log.values_updated_at).not_to be_nil
+        end
+
+        it "moves the user to the new organisation" do
+          user.reassign_logs_and_update_organisation(new_organisation, "unassign")
+
+          expect(user.organisation).to eq(new_organisation)
+        end
+
+        context "and there is an error" do
+          before do
+            allow(user).to receive(:update!).and_raise(ActiveRecord::RecordInvalid)
+          end
+
+          it "rolls back the changes" do
+            user.reassign_logs_and_update_organisation(new_organisation, "unassign")
+            expect(lettings_log.reload.assigned_to).to eq(user)
+            expect(lettings_log.values_updated_at).to be_nil
+            expect(sales_log.reload.assigned_to).to eq(user)
+            expect(sales_log.values_updated_at).to be_nil
+            expect(user.organisation).not_to eq(new_organisation)
+          end
+        end
+      end
+    end
+  end
 end
