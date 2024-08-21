@@ -169,5 +169,11 @@ module Exports
 
       xml_doc_to_temp_file(doc)
     end
+
+    def collection_years_to_export(collection_year)
+      return [collection_year] if collection_year.present?
+
+      FormHandler.instance.lettings_forms.values.map { |f| f.start_date.year }.uniq
+    end
   end
 end

@@ -7,8 +7,10 @@ namespace :core do
   end
 
   desc "Export all data XMLs for import into Central Data System (CDS)"
-  task :full_data_export_xml, %i[year] => :environment do |_task, args|
-    collection = args[:year].present? ? args[:year].to_i : nil
+  task :full_data_export_xml, %i[collection] => :environment do |_task, args|
+    collection = args[:collection].presence
+    collection = collection.to_i if collection.present? && collection.scan(/\D/).empty?
+
     storage_service = Storage::S3Service.new(Configuration::EnvConfigurationService.new, ENV["EXPORT_BUCKET"])
     export_service = Exports::ExportService.new(storage_service)
 
