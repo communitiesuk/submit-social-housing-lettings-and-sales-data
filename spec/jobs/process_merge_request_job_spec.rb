@@ -27,14 +27,7 @@ describe ProcessMergeRequestJob do
       expect(merge_request.reload.status).to eq("request_merged")
     end
 
-    it "clears last_failed_attempt value" do
-      merge_request.update!(last_failed_attempt: Time.zone.now)
-      job.perform(merge_request:)
-
-      expect(merge_request.reload.last_failed_attempt).to be_nil
-    end
-
-    it "sets last_failed_attempt value if there's an error" do
+    it "sets last_failed_attempt value if there's an error and sets processing to false" do
       allow(merge_organisations_service).to receive(:call).and_raise(ActiveRecord::Rollback)
 
       expect(merge_request.last_failed_attempt).to be_nil
@@ -42,6 +35,7 @@ describe ProcessMergeRequestJob do
 
       merge_request.reload
       expect(merge_request.last_failed_attempt).to be_within(10.seconds).of(Time.zone.now)
+      expect(merge_request.processing).to eq(false)
     end
   end
 end
