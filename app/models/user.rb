@@ -142,6 +142,7 @@ class User < ApplicationRecord
       sign_in_count: 0,
       initial_confirmation_sent: false,
       reactivate_with_organisation:,
+      unconfirmed_email: nil,
     )
   end
 
