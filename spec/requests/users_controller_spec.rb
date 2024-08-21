@@ -1854,6 +1854,20 @@ RSpec.describe UsersController, type: :request do
               patch "/users/#{other_user.id}", headers:, params:
             end
           end
+
+          context "and email address hasn't changed" do
+            let(:params) { { id: user.id, user: { name: new_name, email: other_user.email, is_dpo: "true", is_key_contact: "true" } } }
+
+            before do
+              user.legacy_users.destroy_all
+            end
+
+            it "shows flash notice" do
+              patch("/users/#{other_user.id}", headers:, params:)
+
+              expect(flash[:notice]).to be_nil
+            end
+          end
         end
 
         context "when we update the user password" do

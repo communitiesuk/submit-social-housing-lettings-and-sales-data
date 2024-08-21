@@ -65,7 +65,7 @@ class UsersController < ApplicationController
       if @user == current_user
         bypass_sign_in @user
         flash[:notice] = I18n.t("devise.passwords.updated") if user_params.key?("password")
-        if user_params.key?("email")
+        if user_params.key?("email") && user_params[:email] != @user.email
           flash[:notice] = I18n.t("devise.email.updated", email: @user.unconfirmed_email)
         end
 
@@ -83,7 +83,7 @@ class UsersController < ApplicationController
           @user.reactivate!
           @user.send_confirmation_instructions
           flash[:notice] = I18n.t("devise.activation.reactivated", user_name:)
-        elsif user_params.key?("email")
+        elsif user_params.key?("email") && user_params[:email] != @user.email
           flash[:notice] = I18n.t("devise.email.updated", email: @user.unconfirmed_email)
         end
 
