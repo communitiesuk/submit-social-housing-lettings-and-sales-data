@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<forms>
+  <form>
+    <id>{id}</id>
+    <name>MHCLG</name>
+    <phone/>
+    <provider_type>LA</provider_type>
+    <address_line1>2 Marsham Street</address_line1>
+    <address_line2>London</address_line2>
+    <postcode>SW1P 4DF</postcode>
+    <holds_own_stock>true</holds_own_stock>
+    <active>true</active>
+    <housing_registration_no>1234</housing_registration_no>
+    <old_org_id/>
+    <old_visible_id/>
+    <merge_date/>
+    <absorbing_organisation_id/>
+    <available_from/>
+    <discarded_at/>
+  </form>
+</forms>

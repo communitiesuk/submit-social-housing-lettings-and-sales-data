@@ -1,0 +1,22 @@
+module Exports::OrganisationExportConstants
+  MAX_XML_RECORDS = 10_000
+
+  EXPORT_FIELDS = Set[
+   "id",
+   "name",
+   "phone",
+   "provider_type",
+   "address_line1",
+   "address_line2",
+   "postcode",
+   "holds_own_stock",
+   "housing_registration_no",
+   "active",
+   "old_org_id",
+   "old_visible_id",
+   "merge_date",
+   "absorbing_organisation_id",
+   "available_from",
+   "discarded_at",
+  ]
+end
