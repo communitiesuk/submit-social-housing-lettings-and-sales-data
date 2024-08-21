@@ -42,7 +42,7 @@ RSpec.describe ResendInvitationMailer do
 
       it "sends an initial invitation" do
         FactoryBot.create(:legacy_user, old_user_id: new_active_migrated_user.old_user_id, user: new_active_migrated_user)
-        expect(notify_client).to receive(:send_email).with(email_address: "new_active_migrated_user@example.com", template_id: User::BETA_ONBOARDING_TEMPLATE_ID, personalisation:).once
+        expect(notify_client).to receive(:send_email).with(email_address: "new_active_migrated_user@example.com", template_id: User::CONFIRMABLE_TEMPLATE_ID, personalisation:).once
         described_class.new.resend_invitation_email(new_active_migrated_user)
       end
     end
