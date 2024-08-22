@@ -25,9 +25,15 @@
 
       <%= f.govuk_phone_field :phone,
         label: { text: "Telephone number", size: "m" },
-        autocomplete: "phone",
+        autocomplete: "tel-national",
         spellcheck: "false",
         value: @user.phone %>
+
+      <%= f.govuk_phone_field :phone_extension,
+        label: { text: "Extension number (optional)", size: "m" },
+        autocomplete: "tel-extension",
+        spellcheck: "false",
+        value: @user.phone_extension %>
 
       <% if current_user.support? %>
         <% null_option = [OpenStruct.new(id: "", name: "Select an option")] %>
