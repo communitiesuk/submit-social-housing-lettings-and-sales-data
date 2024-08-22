@@ -4,6 +4,8 @@ class Form::Sales::Pages::PurchasePriceOutrightOwnership < ::Form::Page
     @depends_on = [
       { "outright_sale_or_discounted_with_full_ownership?" => true },
     ]
+    @header = "About the price of the property"
+    @top_guidance_partial = "financial_calculations_outright_sale"
     @ownershipsch = ownershipsch
   end
 

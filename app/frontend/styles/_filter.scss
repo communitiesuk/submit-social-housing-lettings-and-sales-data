@@ -5,7 +5,7 @@
 
 .govuk-checkboxes__label,
 .govuk-radios__label {
-  &:before {
+  &::before {
     background-color: govuk-colour("white");
   }
 }
@@ -47,7 +47,9 @@
   &:focus {
     background-color: $govuk-focus-colour;
     color: $govuk-focus-text-colour;
-    box-shadow: 0 -2px $govuk-focus-colour, 0 4px $govuk-focus-text-colour;
+    box-shadow:
+      0 -2px $govuk-focus-colour,
+      0 4px $govuk-focus-text-colour;
     outline: none;
   }
 
@@ -57,7 +59,7 @@
     border: 0;
   }
 
-  &:before {
+  &::before {
     background-image: url("../assets/images/icon-cross.svg");
     content: "";
     display: inline-block;

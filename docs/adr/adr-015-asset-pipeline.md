@@ -12,12 +12,11 @@ However, since Rails 7, it's been deprecated by the Rails CORE team and it's jav
 
 The primary options considered were:
 
-
 1. [Import maps](https://github.com/rails/importmap-rails) - Rails 7 default. Serve JS directly but do no transpiling so not suitable
 2. [JSBundling](https://github.com/rails/jsbundling-rails) - Rails recommended
-    - With [ESBuild](https://esbuild.github.io/) - fast and does some transpiling but [doesn't support ES5/IE11](https://github.com/communitiesuk/submit-social-housing-lettings-and-sales-data/pull/203)
-    - With [Rollup](https://www.rollupjs.org/guide/en/) - similar to ESBuild, node rather than Go based, doesn't have the big speed benefits
-    - With [Webpack](https://webpack.js.org/) - rather than the old approach of using Webpacker as a opinionated wrapper around webpack, this approach uses webpack directly.
+   - With [ESBuild](https://esbuild.github.io/) - fast and does some transpiling but [doesn't support ES5/IE11](https://github.com/communitiesuk/submit-social-housing-lettings-and-sales-data/pull/203)
+   - With [Rollup](https://www.rollupjs.org/guide/en/) - similar to ESBuild, node rather than Go based, doesn't have the big speed benefits
+   - With [Webpack](https://webpack.js.org/) - rather than the old approach of using Webpacker as a opinionated wrapper around webpack, this approach uses webpack directly.
 3. [Shakapacker](https://github.com/shakacode/shakapacker) - the "official" community maintained fork of Webpacker 6 RC. Requires upgrading current install since breaking changes happened between Webpacker 5 & 6
 4. [Vite](https://vite-ruby.netlify.app/) - Webpack alternative
 

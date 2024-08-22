@@ -338,7 +338,7 @@ RSpec.describe Validations::Sales::FinancialValidations do
   end
 
   describe "#validate_equity_in_range_for_year_and_type" do
-    let(:record) { FactoryBot.build(:sales_log, saledate:) }
+    let(:record) { FactoryBot.build(:sales_log, saledate:, resale: nil) }
 
     context "with a log in the 22/23 collection year" do
       let(:saledate) { Time.zone.local(2023, 1, 1) }
@@ -372,6 +372,14 @@ RSpec.describe Validations::Sales::FinancialValidations do
         financial_validator.validate_equity_in_range_for_year_and_type(record)
         expect(record.errors["equity"]).to include(match I18n.t("validations.financial.equity.over_max", max_equity: 75))
         expect(record.errors["type"]).to include(match I18n.t("validations.financial.equity.over_max", max_equity: 75))
+      end
+
+      it "does not add an error if it's a resale" do
+        record.type = 2
+        record.equity = 90
+        record.resale = 1
+        financial_validator.validate_equity_in_range_for_year_and_type(record)
+        expect(record.errors).to be_empty
       end
     end
 

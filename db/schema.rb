@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_07_15_082338) do
+ActiveRecord::Schema[7.0].define(version: 2024_08_19_143150) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -788,6 +788,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_07_15_082338) do
     t.boolean "initial_confirmation_sent"
     t.boolean "reactivate_with_organisation"
     t.datetime "discarded_at"
+    t.string "phone_extension"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["encrypted_otp_secret_key"], name: "index_users_on_encrypted_otp_secret_key", unique: true

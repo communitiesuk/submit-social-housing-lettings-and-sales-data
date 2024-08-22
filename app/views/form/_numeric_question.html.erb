@@ -1,4 +1,4 @@
-<%= render partial: "form/guidance/#{question.top_guidance_partial}" if question.top_guidance? %>
+<%= render partial: "form/guidance/#{question.top_guidance_partial}", locals: { log: @log } if question.top_guidance? %>
 
 <%= f.govuk_text_field(
   question.id.to_sym,
@@ -14,7 +14,7 @@
   suffix_text: question.suffix_label(@log),
   value: format_money_input(log: @log, question:),
   inputmode: "numeric",
-  pattern: "\d*\.?\d*",
+  pattern: "\\d*\\.?\\d*",
   **stimulus_html_attributes(question),
 ) %>
 

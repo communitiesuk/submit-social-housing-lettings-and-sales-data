@@ -38,7 +38,7 @@ RSpec.describe Form::Sales::Subsections::OutrightSale, type: :model do
             mortgage_lender_other_outright_sale
             mortgage_length_outright_sale
             extra_borrowing_outright_sale
-            about_deposit_outright_sale
+            deposit_outright_sale
             outright_sale_deposit_joint_purchase_value_check
             outright_sale_deposit_value_check
             monthly_charges_outright_sale_value_check
@@ -67,7 +67,7 @@ RSpec.describe Form::Sales::Subsections::OutrightSale, type: :model do
             mortgage_lender_other_outright_sale
             mortgage_length_outright_sale
             extra_borrowing_outright_sale
-            about_deposit_outright_sale
+            deposit_outright_sale
             outright_sale_deposit_joint_purchase_value_check
             outright_sale_deposit_value_check
             leasehold_charges_outright_sale
@@ -94,7 +94,7 @@ RSpec.describe Form::Sales::Subsections::OutrightSale, type: :model do
             outright_sale_mortgage_amount_mortgage_value_check
             mortgage_length_outright_sale
             extra_borrowing_outright_sale
-            about_deposit_outright_sale
+            deposit_outright_sale
             outright_sale_deposit_joint_purchase_value_check
             outright_sale_deposit_value_check
             leasehold_charges_outright_sale
