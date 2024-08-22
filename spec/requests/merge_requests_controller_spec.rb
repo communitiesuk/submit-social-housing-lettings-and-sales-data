@@ -402,6 +402,19 @@ RSpec.describe MergeRequestsController, type: :request do
       end
     end
 
+    describe "#merge_start_confirmation" do
+      before do
+        get "/merge-request/#{merge_request.id}/merge-start-confirmation", headers:
+      end
+
+      it "has correct content" do
+        expect(page).to have_content("Are you sure you want to begin this merge?")
+        expect(page).to have_content("You will not be able to undo this action")
+        expect(page).to have_link("Back", href: merge_request_path(merge_request))
+        expect(page).to have_button("Begin merge")
+      end
+    end
+
     describe "#start_merge" do
       let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation, absorbing_organisation: organisation, merge_date: Time.zone.local(2022, 3, 3)) }
       let(:merging_organisation) { create(:organisation, name: "Merging Test Org") }
@@ -455,6 +468,10 @@ RSpec.describe MergeRequestsController, type: :request do
           expect(page).not_to have_content("An error occurred while processing the merge.")
           expect(page).not_to have_content("No changes have been made. Try beginning the merge again.")
         end
+      end
+
+      it "has begin merge button" do
+        expect(page).to have_link("Begin merge", href: merge_start_confirmation_merge_request_path(merge_request))
       end
     end
   end

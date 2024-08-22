@@ -7,6 +7,7 @@ class MergeRequestsController < ApplicationController
   def absorbing_organisation; end
   def merge_date; end
   def helpdesk_ticket; end
+  def merge_start_confirmation; end
 
   def create
     ActiveRecord::Base.transaction do
