@@ -13,7 +13,7 @@ describe ProcessMergeRequestJob do
     let(:organisation) { create(:organisation) }
     let(:merging_organisation) { create(:organisation) }
     let(:other_merging_organisation) { create(:organisation) }
-    let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation, absorbing_organisation: organisation, merge_date: Time.zone.local(2022, 3, 3), total_users: 5, total_schemes: 5) }
+    let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation, absorbing_organisation: organisation, merge_date: Time.zone.local(2022, 3, 3), total_users: 5, total_schemes: 5, existing_absorbing_organisation: true) }
 
     before do
       create(:merge_request_organisation, merge_request:, merging_organisation:)
@@ -21,10 +21,28 @@ describe ProcessMergeRequestJob do
     end
 
     it "calls the merge organisations service with correct arguments" do
-      expect(Merge::MergeOrganisationsService).to receive(:new).with(absorbing_organisation_id: organisation.id, merging_organisation_ids: [merging_organisation.id, other_merging_organisation.id], merge_date: Time.zone.local(2022, 3, 3))
+      expect(Merge::MergeOrganisationsService).to receive(:new).with(absorbing_organisation_id: organisation.id, merging_organisation_ids: [merging_organisation.id, other_merging_organisation.id], merge_date: Time.zone.local(2022, 3, 3), absorbing_organisation_active_from_merge_date: false)
 
       job.perform(merge_request:)
       expect(merge_request.reload.status).to eq("request_merged")
+    end
+
+    context "with new absorbing organisation" do
+      let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation, absorbing_organisation: organisation, merge_date: Time.zone.local(2022, 3, 3), existing_absorbing_organisation: false) }
+
+      it "calls the merge organisations service with correct arguments" do
+        expect(Merge::MergeOrganisationsService).to receive(:new).with(absorbing_organisation_id: organisation.id, merging_organisation_ids: [merging_organisation.id, other_merging_organisation.id], merge_date: Time.zone.local(2022, 3, 3), absorbing_organisation_active_from_merge_date: true)
+
+        job.perform(merge_request:)
+        expect(merge_request.reload.status).to eq("request_merged")
+      end
+    end
+
+    it "clears last_failed_attempt value" do
+      merge_request.update!(last_failed_attempt: Time.zone.now)
+      job.perform(merge_request:)
+
+      expect(merge_request.reload.last_failed_attempt).to be_nil
     end
 
     it "sets last_failed_attempt value, sets processing to false and clears total_schemes and total_users if there's an error" do
