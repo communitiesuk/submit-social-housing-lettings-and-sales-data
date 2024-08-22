@@ -514,7 +514,9 @@ class SalesLog < Log
   end
 
   def duplicates
-    SalesLog.where.not(duplicate_set_id: nil).where(duplicate_set_id:).where.not(id:)
+    return SalesLog.none if duplicate_set_id.nil?
+
+    SalesLog.where(duplicate_set_id:).where.not(id:)
   end
 
   def nationality2_uk_or_prefers_not_to_say?
