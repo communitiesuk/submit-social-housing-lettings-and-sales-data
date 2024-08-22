@@ -55,13 +55,13 @@ RSpec.describe MergeRequest, type: :model do
     end
 
     it "returns the correct status for a ready to merge request" do
-      merge_request = build(:merge_request, id: 1, absorbing_organisation: create(:organisation), merge_date: Time.zone.today)
+      merge_request = build(:merge_request, id: 1, absorbing_organisation: create(:organisation), merge_date: Time.zone.today, existing_absorbing_organisation: true)
       create(:merge_request_organisation, merge_request:)
       expect(merge_request.status).to eq MergeRequest::STATUS[:ready_to_merge]
     end
 
     it "returns the merge issues if dsa is not signed for absorbing organisation" do
-      merge_request = build(:merge_request, id: 1, absorbing_organisation: create(:organisation, with_dsa: false), merge_date: Time.zone.today)
+      merge_request = build(:merge_request, id: 1, absorbing_organisation: create(:organisation, with_dsa: false), merge_date: Time.zone.today, existing_absorbing_organisation: true)
       create(:merge_request_organisation, merge_request:)
       expect(merge_request.status).to eq MergeRequest::STATUS[:merge_issues]
     end
@@ -79,6 +79,12 @@ RSpec.describe MergeRequest, type: :model do
 
     it "returns the incomplete if merge date is missing" do
       merge_request = build(:merge_request, id: 1, absorbing_organisation: create(:organisation))
+      create(:merge_request_organisation, merge_request:)
+      expect(merge_request.status).to eq MergeRequest::STATUS[:incomplete]
+    end
+
+    it "returns the incomplete if existing absorbing organisation is missing" do
+      merge_request = build(:merge_request, id: 1, absorbing_organisation: create(:organisation, with_dsa: false), merge_date: Time.zone.today)
       create(:merge_request_organisation, merge_request:)
       expect(merge_request.status).to eq MergeRequest::STATUS[:incomplete]
     end
