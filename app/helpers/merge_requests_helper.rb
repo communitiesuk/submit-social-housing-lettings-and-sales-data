@@ -21,7 +21,7 @@ module MergeRequestsHelper
 
   def merge_outcomes(merge_request)
     [
-      { label: "Total users after merge", value: display_value_or_placeholder(merge_request.total_users), action: { text: "View", href: "#", visually_hidden_text: "total users after merge" } },
+      { label: "Total users after merge", value: display_value_or_placeholder(merge_request.total_users_label), action: merge_outcome_action(merge_request, "user_outcomes") },
       { label: "Total schemes after merge", value: display_value_or_placeholder(merge_request.total_schemes), action: { text: "View", href: "#", visually_hidden_text: "total schemes after merge" } },
       { label: "Total logs after merge", value: merge_request.total_lettings_logs.present? || merge_request.total_sales_logs.present? ? "#{merge_request.total_lettings_logs} lettings logs<br>#{merge_request.total_sales_logs} sales logs".html_safe : display_value_or_placeholder(nil), action: { text: "View", href: "#", visually_hidden_text: "total logs after merge" } },
       { label: "Total stock owners & managing agents after merge", value: merge_request.total_stock_owners.present? || merge_request.total_managing_agents.present? ? "#{merge_request.total_stock_owners} stock owners<br>#{merge_request.total_managing_agents} managing agents".html_safe : display_value_or_placeholder(nil), action: { text: "View", href: "#", visually_hidden_text: "total stock owners & managing agents after merge" } },
@@ -72,6 +72,12 @@ module MergeRequestsHelper
   def merge_request_action(merge_request, page)
     unless merge_request.status == "request_merged" || merge_request.status == "processing"
       { text: "Change", href: send("#{page}_merge_request_path", merge_request, referrer: "check_answers"), visually_hidden_text: page.humanize }
+    end
+  end
+
+  def merge_outcome_action(merge_request, page)
+    unless merge_request.status == "request_merged" || merge_request.status == "processing"
+      { text: "View", href: send("#{page}_merge_request_path", merge_request), visually_hidden_text: page.humanize }
     end
   end
 

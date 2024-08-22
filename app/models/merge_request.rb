@@ -54,4 +54,14 @@ class MergeRequest < ApplicationRecord
   def absorbing_organisation_signed_dsa?
     absorbing_organisation&.data_protection_confirmed?
   end
+
+  def total_users_after_merge
+    return total_users if status == STATUS[:request_merged] || status == STATUS[:processing]
+
+    absorbing_organisation.users.count + merging_organisations.sum { |org| org.users.count }
+  end
+
+  def total_users_label
+    "#{total_users_after_merge} Users"
+  end
 end

@@ -449,6 +449,7 @@ RSpec.describe MergeRequestsController, type: :request do
 
     describe "#show" do
       before do
+        create(:merge_request_organisation, merge_request:, merging_organisation: other_organisation)
         get "/merge-request/#{merge_request.id}", headers:
       end
 
@@ -472,6 +473,35 @@ RSpec.describe MergeRequestsController, type: :request do
 
       it "has begin merge button" do
         expect(page).to have_link("Begin merge", href: merge_start_confirmation_merge_request_path(merge_request))
+      end
+
+      context "with unmerged request" do
+        let(:merge_request) { create(:merge_request, absorbing_organisation_id: organisation.id, merge_date: Time.zone.today) }
+
+        it "shows users count and has links to view merge outcomes" do
+          expect(page).to have_link("View", href: user_outcomes_merge_request_path(merge_request))
+          expect(page).to have_content("4 Users")
+        end
+      end
+
+      context "with a merged request" do
+        let(:merge_request) { create(:merge_request, request_merged: true, total_users: 34) }
+
+        it "shows saved users count and doesn't have links to view merge outcomes" do
+          expect(merge_request.status).to eq("request_merged")
+          expect(page).not_to have_link("View", href: user_outcomes_merge_request_path(merge_request))
+          expect(page).to have_content("34 Users")
+        end
+      end
+
+      context "with a processing request" do
+        let(:merge_request) { create(:merge_request, processing: true, total_users: 51) }
+
+        it "shows saved users count and doesn't have links to view merge outcomes" do
+          expect(merge_request.status).to eq("processing")
+          expect(page).not_to have_link("View", href: user_outcomes_merge_request_path(merge_request))
+          expect(page).to have_content("51 Users")
+        end
       end
     end
   end
