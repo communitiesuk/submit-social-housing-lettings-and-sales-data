@@ -12,9 +12,7 @@
 </h1>
 <% unless @merge_request.status == "request_merged" || @merge_request.status == "processing" %>
 <div class="govuk-button-group">
-   <%= form_with model: @merge_request, url: start_merge_merge_request_path(@merge_request) do |f| %>
-    <%= f.govuk_submit "Begin merge", disabled: @merge_request.status != "ready_to_merge" %>
-  <% end %>
+  <%= govuk_button_link_to "Begin merge", merge_start_confirmation_merge_request_path(@merge_request), disabled: @merge_request.status != "ready_to_merge" %>
   <%= govuk_button_link_to "Delete merge request", delete_confirmation_merge_request_path(@merge_request), warning: true %>
 </div>
 <% end %>
