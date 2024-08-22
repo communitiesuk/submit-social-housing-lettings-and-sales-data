@@ -222,7 +222,7 @@ module Validations::Sales::SaleInformationValidations
                                           value: record.field_formatted_as_currency("value"),
                                           equity: "#{record.equity}%",
                                           mortgage_and_deposit_total: record.field_formatted_as_currency("mortgage_and_deposit_total"),
-                                          expected_shared_ownership_deposit_value: record.field_formatted_as_currency("expected_shared_ownership_deposit_value"))
+                                          expected_shared_ownership_deposit_value: record.field_formatted_as_currency("expected_shared_ownership_deposit_value")).html_safe
         end
         record.errors.add :type, :skip_bu_error, message: I18n.t("validations.sale_information.non_staircasing_mortgage.mortgage_used",
                                                                  mortgage: record.field_formatted_as_currency("mortgage"),
@@ -230,7 +230,7 @@ module Validations::Sales::SaleInformationValidations
                                                                  value: record.field_formatted_as_currency("value"),
                                                                  equity: "#{record.equity}%",
                                                                  mortgage_and_deposit_total: record.field_formatted_as_currency("mortgage_and_deposit_total"),
-                                                                 expected_shared_ownership_deposit_value: record.field_formatted_as_currency("expected_shared_ownership_deposit_value"))
+                                                                 expected_shared_ownership_deposit_value: record.field_formatted_as_currency("expected_shared_ownership_deposit_value")).html_safe
       end
     elsif record.mortgage_not_used?
       if over_tolerance?(record.deposit, record.expected_shared_ownership_deposit_value, 1)
