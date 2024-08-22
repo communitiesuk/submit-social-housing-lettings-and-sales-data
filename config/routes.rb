@@ -208,6 +208,7 @@ Rails.application.routes.draw do
       get "merging-organisations/remove", to: "merge_requests#remove_merging_organisation"
       get "absorbing-organisation"
       get "merge-date"
+      get "existing-absorbing-organisation"
       get "helpdesk-ticket"
       get "merge-start-confirmation"
       get "user-outcomes"

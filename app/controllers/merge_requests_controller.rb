@@ -6,6 +6,7 @@ class MergeRequestsController < ApplicationController
 
   def absorbing_organisation; end
   def merge_date; end
+  def existing_absorbing_organisation; end
   def helpdesk_ticket; end
   def merge_start_confirmation; end
   def user_outcomes; end
@@ -86,6 +87,8 @@ private
     when "merging_organisations"
       merge_date_merge_request_path(@merge_request)
     when "merge_date"
+      existing_absorbing_organisation_merge_request_path(@merge_request)
+    when "existing_absorbing_organisation"
       helpdesk_ticket_merge_request_path(@merge_request)
     when "helpdesk_ticket"
       merge_request_path(@merge_request)
@@ -115,6 +118,7 @@ private
       :status,
       :absorbing_organisation_id,
       :merge_date,
+      :existing_absorbing_organisation,
     )
 
     merge_params[:requesting_organisation_id] = current_user.organisation.id
@@ -139,6 +143,10 @@ private
         merge_request_params["merge_date"] = Time.zone.local(year.to_i, month.to_i, day.to_i)
       else
         @merge_request.errors.add(:merge_date, :invalid)
+      end
+    when "existing_absorbing_organisation"
+      if merge_request_params[:existing_absorbing_organisation].nil?
+        @merge_request.errors.add(:existing_absorbing_organisation, :blank)
       end
     end
   end

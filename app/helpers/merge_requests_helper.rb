@@ -67,8 +67,10 @@ module MergeRequestsHelper
       absorbing_organisation_merge_request_path(merge_request)
     when "merge_date"
       merging_organisations_merge_request_path(merge_request)
-    when "helpdesk_ticket"
+    when "existing_absorbing_organisation"
       merge_date_merge_request_path(merge_request)
+    when "helpdesk_ticket"
+      existing_absorbing_organisation_merge_request_path(merge_request)
     end
   end
 
