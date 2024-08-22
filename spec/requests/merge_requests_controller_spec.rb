@@ -434,6 +434,7 @@ RSpec.describe MergeRequestsController, type: :request do
           expect(ProcessMergeRequestJob).to receive(:perform_later).with(merge_request:).once
           patch "/merge-request/#{merge_request.id}/start-merge"
           expect(merge_request.reload.status).to eq("processing")
+          expect(merge_request.total_users).to eq(5)
         end
       end
 

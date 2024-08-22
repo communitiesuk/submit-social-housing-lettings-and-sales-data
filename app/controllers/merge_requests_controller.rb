@@ -63,7 +63,7 @@ class MergeRequestsController < ApplicationController
 
   def start_merge
     if @merge_request.status == "ready_to_merge"
-      @merge_request.update!(processing: true, last_failed_attempt: nil)
+      @merge_request.update!(processing: true, last_failed_attempt: nil, total_users: @merge_request.total_visible_users_after_merge)
       ProcessMergeRequestJob.perform_later(merge_request: @merge_request)
     end
 
