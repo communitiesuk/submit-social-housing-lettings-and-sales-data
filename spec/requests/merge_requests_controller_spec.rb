@@ -458,7 +458,7 @@ RSpec.describe MergeRequestsController, type: :request do
     end
 
     describe "#start_merge" do
-      let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation, absorbing_organisation: organisation, merge_date: Time.zone.local(2022, 3, 3)) }
+      let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation, absorbing_organisation: organisation, merge_date: Time.zone.local(2022, 3, 3), existing_absorbing_organisation: true) }
       let(:merging_organisation) { create(:organisation, name: "Merging Test Org") }
 
       before do
