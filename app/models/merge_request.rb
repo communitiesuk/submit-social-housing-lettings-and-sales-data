@@ -55,13 +55,25 @@ class MergeRequest < ApplicationRecord
     absorbing_organisation&.data_protection_confirmed?
   end
 
-  def total_users_after_merge
+  def total_visible_users_after_merge
     return total_users if status == STATUS[:request_merged] || status == STATUS[:processing]
 
-    absorbing_organisation.users.count + merging_organisations.sum { |org| org.users.count }
+    absorbing_organisation.users.visible.count + merging_organisations.sum { |org| org.users.visible.count }
   end
 
   def total_users_label
-    "#{total_users_after_merge} Users"
+    "#{total_visible_users_after_merge} #{'User'.pluralize(total_visible_users_after_merge)}"
+  end
+
+  def organisations_with_users
+    return [] unless absorbing_organisation.present? && merging_organisations.any?
+
+    ([absorbing_organisation] + merging_organisations).select(&:has_visible_users?)
+  end
+
+  def organisations_without_users
+    return [] unless absorbing_organisation.present? && merging_organisations.any?
+
+    ([absorbing_organisation] + merging_organisations).reject(&:has_visible_users?)
   end
 end

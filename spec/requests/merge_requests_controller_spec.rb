@@ -504,6 +504,32 @@ RSpec.describe MergeRequestsController, type: :request do
         end
       end
     end
+
+    describe "#user_outcomes" do
+      let(:merge_request) { create(:merge_request, absorbing_organisation: organisation) }
+      let(:organisation_with_no_users) { create(:organisation, name: "Organisation with no users", with_dsa: false) }
+      let(:organisation_with_no_users_too) { create(:organisation, name: "Organisation with no users too", with_dsa: false) }
+      let(:organisation_with_some_users) { create(:organisation, name: "Organisation with some users", with_dsa: false) }
+      let(:organisation_with_some_more_users) { create(:organisation, name: "Organisation with many users", with_dsa: false) }
+
+      before do
+        create_list(:user, 4, organisation: organisation_with_some_users)
+        create_list(:user, 12, organisation: organisation_with_some_more_users)
+        create(:merge_request_organisation, merge_request:, merging_organisation: organisation_with_no_users)
+        create(:merge_request_organisation, merge_request:, merging_organisation: organisation_with_no_users_too)
+        create(:merge_request_organisation, merge_request:, merging_organisation: organisation_with_some_users)
+        create(:merge_request_organisation, merge_request:, merging_organisation: organisation_with_some_more_users)
+        get "/merge-request/#{merge_request.id}/user-outcomes", headers:
+      end
+
+      it "shows user outcomes after merge" do
+        expect(page).to have_link("View all 4 Organisation with some users users (opens in a new tab)", href: users_organisation_path(organisation_with_some_users))
+        expect(page).to have_link("View all 12 Organisation with many users users (opens in a new tab)", href: users_organisation_path(organisation_with_some_more_users))
+        expect(page).to have_link("View all 3 MHCLG users (opens in a new tab)", href: users_organisation_path(organisation))
+        expect(page).to have_content("Organisation with no users and Organisation with no users too have no users.")
+        expect(page).to have_content("19 users after merge")
+      end
+    end
   end
 
   context "when user is signed in with a data coordinator user" do

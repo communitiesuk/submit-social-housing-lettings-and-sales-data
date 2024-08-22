@@ -1,4 +1,7 @@
 module MergeRequestsHelper
+  include GovukLinkHelper
+  include GovukVisuallyHiddenHelper
+
   def display_value_or_placeholder(value, placeholder = "You didn't answer this question")
     value.presence || content_tag(:span, placeholder, class: "app-!-colour-muted")
   end
@@ -83,5 +86,20 @@ module MergeRequestsHelper
 
   def submit_merge_request_url(referrer)
     referrer == "check_answers" ? merge_request_path(referrer: "check_answers") : merge_request_path
+  end
+
+  def merging_organisations_without_users_text(organisations)
+    return "" unless organisations.count.positive?
+
+    if organisations.count == 1
+      "#{organisations.first.name} has no users."
+    else
+      "#{organisations.map(&:name).to_sentence} have no users."
+    end
+  end
+
+  def link_to_merging_organisation_users(organisation)
+    count_text = organisation.users.count == 1 ? "1 #{organisation.name} user" : "all #{organisation.users.count} #{organisation.name} users"
+    govuk_link_to "View #{count_text} (opens in a new tab)", users_organisation_path(organisation), target: "_blank"
   end
 end

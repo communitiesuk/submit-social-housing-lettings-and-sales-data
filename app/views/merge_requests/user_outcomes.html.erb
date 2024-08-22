@@ -1,0 +1,23 @@
+<% content_for :before_content do %>
+  <% title = "Users" %>
+  <% content_for :title, title %>
+  <%= govuk_back_link href: organisations_path(tab: "merge-requests") %>
+<% end %>
+
+<h1 class="govuk-heading-l">
+  <span class="govuk-caption-l"><%= @merge_request.absorbing_organisation_name %></span>
+  Users
+</h1>
+
+<% unless @merge_request.status == "request_merged" || @merge_request.status == "processing" %>
+  <h2 class="govuk-heading-m">19 users after merge</h2>
+   <p class="govuk-body">
+    <%= merging_organisations_without_users_text(@merge_request.organisations_without_users) %>
+  </p>
+
+  <% @merge_request.organisations_with_users.map do |org| %>
+    <p class="govuk-body">
+      <%= link_to_merging_organisation_users(org) %>
+    </p>
+  <% end %>
+<% end %>
