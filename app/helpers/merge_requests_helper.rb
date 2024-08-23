@@ -27,7 +27,7 @@ module MergeRequestsHelper
       { label: "Total users after merge", value: display_value_or_placeholder(merge_request.total_users_label), action: merge_outcome_action(merge_request, "user_outcomes") },
       { label: "Total schemes after merge", value: display_value_or_placeholder(merge_request.total_schemes), action: { text: "View", href: "#", visually_hidden_text: "total schemes after merge" } },
       { label: "Total logs after merge", value: merge_request.total_lettings_logs.present? || merge_request.total_sales_logs.present? ? "#{merge_request.total_lettings_logs} lettings logs<br>#{merge_request.total_sales_logs} sales logs".html_safe : display_value_or_placeholder(nil), action: { text: "View", href: "#", visually_hidden_text: "total logs after merge" } },
-      { label: "Total stock owners & managing agents after merge", value: merge_request.total_stock_owners.present? || merge_request.total_managing_agents.present? ? "#{merge_request.total_stock_owners} stock owners<br>#{merge_request.total_managing_agents} managing agents".html_safe : display_value_or_placeholder(nil), action: { text: "View", href: "#", visually_hidden_text: "total stock owners & managing agents after merge" } },
+      { label: "Total stock owners & managing agents after merge", value: display_value_or_placeholder(merge_request.total_stock_owners_managing_agents_label), action: merge_outcome_action(merge_request, "relationship_outcomes") },
     ]
   end
 
@@ -106,5 +106,69 @@ module MergeRequestsHelper
   def total_users_after_merge_text(merge_request)
     count = merge_request.total_visible_users_after_merge
     "#{"#{count} user".pluralize(count)} after merge"
+  end
+
+  def total_stock_owners_after_merge_text(merge_request)
+    count = merge_request.total_stock_owners_after_merge || 0
+    "#{"#{count} stock owner".pluralize(count)} after merge"
+  end
+
+  def total_managing_agents_after_merge_text(merge_request)
+    count = merge_request.total_managing_agents_after_merge || 0
+    "#{"#{count} managing agent".pluralize(count)} after merge"
+  end
+
+  def stock_owners_text(merge_request)
+    relationship_text(merge_request, "stock_owner", :stock_owners_organisation_path)
+  end
+
+  def managing_agent_text(merge_request)
+    relationship_text(merge_request, "managing_agent", :managing_agents_organisation_path)
+  end
+
+  def relationship_text(merge_request, relationship_type, relationship_path_helper)
+    html_content = ""
+    duplicates = duplicate_relationships(merge_request, relationship_type)
+    organisations_without_relationships = ([merge_request.absorbing_organisation] + merge_request.merging_organisations).select { |org| org.send(relationship_type.pluralize).visible.empty? }
+
+    if duplicates.any?
+      html_content += "Some of the organisations merging have common #{relationship_type.humanize(capitalize: false).pluralize}.<br><br>"
+    end
+
+    if organisations_without_relationships.any?
+      org_names = organisations_without_relationships.map(&:name).to_sentence
+      verb = organisations_without_relationships.count > 1 ? "have" : "has"
+      html_content += "#{org_names} #{verb} no #{relationship_type.humanize(capitalize: false).pluralize}.<br><br>"
+    end
+
+    ([merge_request.absorbing_organisation] + merge_request.merging_organisations).each do |org|
+      relationship_count = org.send(relationship_type.pluralize).visible.count
+      next if relationship_count.zero?
+
+      link_text = if relationship_count == 1
+                    "View the #{relationship_count} #{org.name} #{relationship_type.humanize(capitalize: false)} (opens in a new tab)"
+                  else
+                    "View all #{relationship_count} #{org.name} #{relationship_type.humanize(capitalize: false).pluralize} (opens in a new tab)"
+                  end
+      html_content += "#{govuk_link_to(link_text, send(relationship_path_helper, org), target: '_blank')}<br><br>"
+    end
+
+    html_content.html_safe
+  end
+
+  def duplicate_relationships(merge_request, relationship_type)
+    relationships = merge_request.absorbing_organisation.send(relationship_type.pluralize) + merge_request.merging_organisations.flat_map { |org| org.send(relationship_type.pluralize) }
+    seen = Set.new
+    duplicates = []
+
+    relationships.each do |relationship|
+      if seen.include?(relationship)
+        duplicates << relationship
+      else
+        seen.add(relationship)
+      end
+    end
+
+    duplicates
   end
 end

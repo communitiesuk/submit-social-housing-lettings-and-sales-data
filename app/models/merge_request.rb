@@ -61,8 +61,29 @@ class MergeRequest < ApplicationRecord
     absorbing_organisation.users.visible.count + merging_organisations.sum { |org| org.users.visible.count }
   end
 
+  def total_stock_owners_after_merge
+    return total_stock_owners if status == STATUS[:request_merged] || status == STATUS[:processing]
+
+    stock_owners = absorbing_organisation.stock_owners.visible + merging_organisations.flat_map { |org| org.stock_owners.visible }
+    stock_owners.uniq.count
+  end
+
+  def total_managing_agents_after_merge
+    return total_managing_agents if status == STATUS[:request_merged] || status == STATUS[:processing]
+
+    managing_agents = absorbing_organisation.managing_agents.visible + merging_organisations.flat_map { |org| org.managing_agents.visible }
+    managing_agents.uniq.count
+  end
+
   def total_users_label
-    "#{total_visible_users_after_merge} #{'User'.pluralize(total_visible_users_after_merge)}"
+    "#{total_visible_users_after_merge} #{'user'.pluralize(total_visible_users_after_merge)}"
+  end
+
+  def total_stock_owners_managing_agents_label
+    stock_owners_count = total_stock_owners_after_merge
+    managing_agents_count = total_managing_agents_after_merge
+
+    "#{stock_owners_count} #{'stock owner'.pluralize(stock_owners_count)}\n#{managing_agents_count} #{'managing agent'.pluralize(managing_agents_count)}"
   end
 
   def organisations_with_users
