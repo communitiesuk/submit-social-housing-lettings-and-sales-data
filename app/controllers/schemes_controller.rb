@@ -387,22 +387,4 @@ private
   def session_filters
     filter_manager.session_filters
   end
-
-  def deactivate_locations(deactivation_date)
-    # Add a deactivation period to @locations_without_deactivation_period
-    @locations_without_deactivation_period.each do |location|
-      LocationDeactivationPeriod.create!(location:, deactivation_date:)
-    end
-
-    # Change the deactivation period for @locations_with_future_deactivation_period
-    @locations_with_future_deactivation_period.each do |location|
-      location_deactivation_period = location.location_deactivation_periods.find_by("deactivation_date > ?", Time.zone.now)
-      location_deactivation_period.update!(deactivation_date:) if location_deactivation_period
-    end
-
-    # Clear the start date for @locations_with_future_start_date
-    @locations_with_future_start_date.each do |location|
-      location.update!(startdate: nil)
-    end
-  end
 end
