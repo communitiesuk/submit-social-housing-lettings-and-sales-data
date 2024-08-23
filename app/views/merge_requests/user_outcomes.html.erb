@@ -10,7 +10,7 @@
 </h1>
 
 <% unless @merge_request.status == "request_merged" || @merge_request.status == "processing" %>
-  <h2 class="govuk-heading-m"><%= @merge_request.total_visible_users_after_merge %> users after merge</h2>
+  <h2 class="govuk-heading-m"><%= total_users_after_merge_text(@merge_request) %></h2>
    <p class="govuk-body">
     <%= merging_organisations_without_users_text(@merge_request.organisations_without_users) %>
   </p>

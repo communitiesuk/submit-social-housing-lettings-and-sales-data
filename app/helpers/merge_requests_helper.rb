@@ -102,4 +102,9 @@ module MergeRequestsHelper
     count_text = organisation.users.count == 1 ? "1 #{organisation.name} user" : "all #{organisation.users.count} #{organisation.name} users"
     govuk_link_to "View #{count_text} (opens in a new tab)", users_organisation_path(organisation), target: "_blank"
   end
+
+  def total_users_after_merge_text(merge_request)
+    count = merge_request.total_visible_users_after_merge
+    "#{"#{count} user".pluralize(count)} after merge"
+  end
 end
