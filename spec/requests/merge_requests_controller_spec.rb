@@ -485,8 +485,8 @@ RSpec.describe MergeRequestsController, type: :request do
 
         it "shows users and schemes count and has links to view merge outcomes" do
           expect(page).to have_link("View", href: scheme_outcomes_merge_request_path(merge_request))
-          expect(page).to have_content("4 Users")
-          expect(page).to have_content("4 Schemes")
+          expect(page).to have_content("4 users")
+          expect(page).to have_content("4 schemes")
         end
       end
 
@@ -496,13 +496,13 @@ RSpec.describe MergeRequestsController, type: :request do
         it "shows saved users count and doesn't have links to view merge outcomes" do
           expect(merge_request.status).to eq("request_merged")
           expect(page).not_to have_link("View", href: user_outcomes_merge_request_path(merge_request))
-          expect(page).to have_content("34 Users")
+          expect(page).to have_content("34 users")
         end
 
         it "shows saved schemes count and doesn't have links to view merge outcomes" do
           expect(merge_request.status).to eq("request_merged")
           expect(page).not_to have_link("View", href: scheme_outcomes_merge_request_path(merge_request))
-          expect(page).to have_content("12 Schemes")
+          expect(page).to have_content("12 schemes")
         end
       end
 
@@ -512,13 +512,13 @@ RSpec.describe MergeRequestsController, type: :request do
         it "shows saved users count and doesn't have links to view merge outcomes" do
           expect(merge_request.status).to eq("processing")
           expect(page).not_to have_link("View", href: user_outcomes_merge_request_path(merge_request))
-          expect(page).to have_content("51 Users")
+          expect(page).to have_content("51 users")
         end
 
         it "shows saved schemes count and doesn't have links to view merge outcomes" do
           expect(merge_request.status).to eq("processing")
           expect(page).not_to have_link("View", href: scheme_outcomes_merge_request_path(merge_request))
-          expect(page).to have_content("33 Schemes")
+          expect(page).to have_content("33 schemes")
         end
       end
     end
