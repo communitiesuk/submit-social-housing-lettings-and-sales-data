@@ -105,7 +105,7 @@ class MergeRequest < ApplicationRecord
   end
 
   def total_schemes_label
-    "#{total_visible_schemes_after_merge} #{'Scheme'.pluralize(total_visible_schemes_after_merge)}"
+    "#{total_visible_schemes_after_merge} #{'scheme'.pluralize(total_visible_schemes_after_merge)}"
   end
 
   def organisations_with_schemes
