@@ -53,4 +53,61 @@ RSpec.describe MergeRequestsHelper do
       end
     end
   end
+
+  describe "#merging_organisations_without_schemes_text" do
+    context "with 1 organisation" do
+      let(:organisation) { build(:organisation, name: "Org 1") }
+
+      it "returns the correct text" do
+        expect(merging_organisations_without_schemes_text([organisation])).to eq("Org 1 has no schemes.")
+      end
+    end
+
+    context "with 2 organisations" do
+      let(:organisation) { build(:organisation, name: "Org 1") }
+      let(:organisation_2) { build(:organisation, name: "Org 2") }
+
+      it "returns the correct text" do
+        expect(merging_organisations_without_schemes_text([organisation, organisation_2])).to eq("Org 1 and Org 2 have no schemes.")
+      end
+    end
+
+    context "with 3 organisations" do
+      let(:organisation) { build(:organisation, name: "Org 1") }
+      let(:organisation_2) { build(:organisation, name: "Org 2") }
+      let(:organisation_3) { build(:organisation, name: "Org 3") }
+
+      it "returns the correct text" do
+        expect(merging_organisations_without_schemes_text([organisation, organisation_2, organisation_3])).to eq("Org 1, Org 2, and Org 3 have no schemes.")
+      end
+    end
+  end
+
+  describe "#link_to_merging_organisation_schemes" do
+    context "with 1 organisation scheme" do
+      let(:organisation) { create(:organisation, name: "Org 1") }
+
+      before do
+        create(:scheme, owning_organisation: organisation)
+      end
+
+      it "returns the correct link" do
+        expect(link_to_merging_organisation_schemes(organisation)).to include("View 1 Org 1 scheme (opens in a new tab)")
+        expect(link_to_merging_organisation_schemes(organisation)).to include(schemes_organisation_path(organisation))
+      end
+    end
+
+    context "with multiple organisation schemes" do
+      let(:organisation) { create(:organisation, name: "Org 1") }
+
+      before do
+        create_list(:scheme, 2, owning_organisation: organisation)
+      end
+
+      it "returns the correct link" do
+        expect(link_to_merging_organisation_schemes(organisation)).to include("View all 2 Org 1 schemes (opens in a new tab)")
+        expect(link_to_merging_organisation_schemes(organisation)).to include(schemes_organisation_path(organisation))
+      end
+    end
+  end
 end

@@ -84,6 +84,18 @@ class MergeRequest < ApplicationRecord
   end
 
   def total_schemes_label
-    "#{total_visible_schemes_after_merge} Schemes"
+    "#{total_visible_schemes_after_merge} #{'Scheme'.pluralize(total_visible_schemes_after_merge)}"
+  end
+
+  def organisations_with_schemes
+    return [] unless absorbing_organisation.present? && merging_organisations.any?
+
+    ([absorbing_organisation] + merging_organisations).select(&:has_visible_schemes?)
+  end
+
+  def organisations_without_schemes
+    return [] unless absorbing_organisation.present? && merging_organisations.any?
+
+    ([absorbing_organisation] + merging_organisations).reject(&:has_visible_schemes?)
   end
 end

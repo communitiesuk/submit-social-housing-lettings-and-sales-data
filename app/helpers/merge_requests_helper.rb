@@ -107,4 +107,24 @@ module MergeRequestsHelper
     count = merge_request.total_visible_users_after_merge
     "#{"#{count} user".pluralize(count)} after merge"
   end
+
+  def merging_organisations_without_schemes_text(organisations)
+    return "" unless organisations.count.positive?
+
+    if organisations.count == 1
+      "#{organisations.first.name} has no schemes."
+    else
+      "#{organisations.map(&:name).to_sentence} have no schemes."
+    end
+  end
+
+  def link_to_merging_organisation_schemes(organisation)
+    count_text = organisation.owned_schemes.count == 1 ? "1 #{organisation.name} scheme" : "all #{organisation.owned_schemes.count} #{organisation.name} schemes"
+    govuk_link_to "View #{count_text} (opens in a new tab)", schemes_organisation_path(organisation), target: "_blank"
+  end
+
+  def total_schemes_after_merge_text(merge_request)
+    count = merge_request.total_visible_schemes_after_merge
+    "#{"#{count} scheme".pluralize(count)} after merge"
+  end
 end

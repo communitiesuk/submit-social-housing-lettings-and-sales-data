@@ -546,6 +546,33 @@ RSpec.describe MergeRequestsController, type: :request do
         expect(page).to have_content("19 users after merge")
       end
     end
+
+    describe "#scheme_outcomes" do
+      let(:merge_request) { create(:merge_request, absorbing_organisation: organisation) }
+      let(:organisation_with_no_schemes) { create(:organisation, name: "Organisation with no schemes") }
+      let(:organisation_with_no_schemes_too) { create(:organisation, name: "Organisation with no schemes too") }
+      let(:organisation_with_some_schemes) { create(:organisation, name: "Organisation with some schemes") }
+      let(:organisation_with_some_more_schemes) { create(:organisation, name: "Organisation with many schemes") }
+
+      before do
+        create_list(:scheme, 4, owning_organisation: organisation_with_some_schemes)
+        create_list(:scheme, 6, owning_organisation: organisation_with_some_more_schemes)
+        create_list(:scheme, 3, owning_organisation: organisation)
+        create(:merge_request_organisation, merge_request:, merging_organisation: organisation_with_no_schemes)
+        create(:merge_request_organisation, merge_request:, merging_organisation: organisation_with_no_schemes_too)
+        create(:merge_request_organisation, merge_request:, merging_organisation: organisation_with_some_schemes)
+        create(:merge_request_organisation, merge_request:, merging_organisation: organisation_with_some_more_schemes)
+        get "/merge-request/#{merge_request.id}/scheme-outcomes", headers:
+      end
+
+      it "shows scheme outcomes after merge" do
+        expect(page).to have_link("View all 4 Organisation with some schemes schemes (opens in a new tab)", href: schemes_organisation_path(organisation_with_some_schemes))
+        expect(page).to have_link("View all 6 Organisation with many schemes schemes (opens in a new tab)", href: schemes_organisation_path(organisation_with_some_more_schemes))
+        expect(page).to have_link("View all 3 MHCLG schemes (opens in a new tab)", href: schemes_organisation_path(organisation))
+        expect(page).to have_content("Organisation with no schemes and Organisation with no schemes too have no schemes.")
+        expect(page).to have_content("13 schemes after merge")
+      end
+    end
   end
 
   context "when user is signed in with a data coordinator user" do
