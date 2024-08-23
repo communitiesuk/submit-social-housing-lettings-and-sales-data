@@ -25,7 +25,7 @@ module MergeRequestsHelper
   def merge_outcomes(merge_request)
     [
       { label: "Total users after merge", value: display_value_or_placeholder(merge_request.total_users_label), action: merge_outcome_action(merge_request, "user_outcomes") },
-      { label: "Total schemes after merge", value: display_value_or_placeholder(merge_request.total_schemes), action: { text: "View", href: "#", visually_hidden_text: "total schemes after merge" } },
+      { label: "Total schemes after merge", value: display_value_or_placeholder(merge_request.total_schemes_label), action: merge_outcome_action(merge_request, "scheme_outcomes") },
       { label: "Total logs after merge", value: merge_request.total_lettings_logs.present? || merge_request.total_sales_logs.present? ? "#{merge_request.total_lettings_logs} lettings logs<br>#{merge_request.total_sales_logs} sales logs".html_safe : display_value_or_placeholder(nil), action: { text: "View", href: "#", visually_hidden_text: "total logs after merge" } },
       { label: "Total stock owners & managing agents after merge", value: merge_request.total_stock_owners.present? || merge_request.total_managing_agents.present? ? "#{merge_request.total_stock_owners} stock owners<br>#{merge_request.total_managing_agents} managing agents".html_safe : display_value_or_placeholder(nil), action: { text: "View", href: "#", visually_hidden_text: "total stock owners & managing agents after merge" } },
     ]
@@ -106,5 +106,25 @@ module MergeRequestsHelper
   def total_users_after_merge_text(merge_request)
     count = merge_request.total_visible_users_after_merge
     "#{"#{count} user".pluralize(count)} after merge"
+  end
+
+  def merging_organisations_without_schemes_text(organisations)
+    return "" unless organisations.count.positive?
+
+    if organisations.count == 1
+      "#{organisations.first.name} has no schemes."
+    else
+      "#{organisations.map(&:name).to_sentence} have no schemes."
+    end
+  end
+
+  def link_to_merging_organisation_schemes(organisation)
+    count_text = organisation.owned_schemes.count == 1 ? "1 #{organisation.name} scheme" : "all #{organisation.owned_schemes.count} #{organisation.name} schemes"
+    govuk_link_to "View #{count_text} (opens in a new tab)", schemes_organisation_path(organisation), target: "_blank"
+  end
+
+  def total_schemes_after_merge_text(merge_request)
+    count = merge_request.total_visible_schemes_after_merge
+    "#{"#{count} scheme".pluralize(count)} after merge"
   end
 end

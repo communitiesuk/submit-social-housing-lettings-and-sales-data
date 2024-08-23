@@ -195,4 +195,8 @@ class Organisation < ApplicationRecord
   def has_visible_users?
     users.visible.count.positive?
   end
+
+  def has_visible_schemes?
+    owned_schemes.visible.count.positive?
+  end
 end
