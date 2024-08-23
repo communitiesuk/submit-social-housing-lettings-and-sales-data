@@ -9,24 +9,24 @@
         <span class="govuk-caption-l"><%= @scheme.service_name %></span>
         <% sentence_parts = [] %>
         <% if @affected_logs.count > 0 %>
-          <% sentence_parts << pluralize(@affected_logs.count, 'log') %>
+          <% sentence_parts << pluralize(@affected_logs.count, "log") %>
         <% end %>
         <% if @affected_locations.count > 0 %>
-          <% sentence_parts << pluralize(@affected_locations.count, 'location') %>
+          <% sentence_parts << pluralize(@affected_locations.count, "location") %>
         <% end %>
-        This change will affect <%= sentence_parts.join(' and ') %>.
+        This change will affect <%= sentence_parts.join(" and ") %>.
       </h1>
 
       <% if @affected_logs.count > 0 %>
         <p>
-          <%= pluralize(@affected_logs.count, 'existing log') %> using this scheme <%= @affected_logs.count == 1 ? 'has' : 'have' %> a tenancy start date after <%= @deactivation_date.to_formatted_s(:govuk_date) %>.
+          <%= pluralize(@affected_logs.count, "existing log") %> using this scheme <%= @affected_logs.count == 1 ? "has" : "have" %> a tenancy start date after <%= @deactivation_date.to_formatted_s(:govuk_date) %>.
         </p>
       <% end %>
 
-      <%= govuk_warning_text text: I18n.t("warnings.scheme.deactivate.review_logs"), html_attributes: { class: "" }  %>
+      <%= govuk_warning_text text: I18n.t("warnings.scheme.deactivate.review_logs"), html_attributes: { class: "" } %>
 
       <p>
-        This scheme has <%= pluralize(@affected_locations.count, 'location') %> active on <%= @deactivation_date.to_formatted_s(:govuk_date) %>.  <%= @affected_locations.count == 1 ? 'This location' : 'These locations' %> will deactivate on that date. If the scheme is ever reactivated, <%= @affected_locations.count == 1 ? 'this location' : 'these locations' %> will reactivate as well.
+        This scheme has <%= pluralize(@affected_locations.count, "location") %> active on <%= @deactivation_date.to_formatted_s(:govuk_date) %>.  <%= @affected_locations.count == 1 ? "This location" : "These locations" %> will deactivate on that date. If the scheme is ever reactivated, <%= @affected_locations.count == 1 ? "this location" : "these locations" %> will reactivate as well.
       </p>
       <br>
 
