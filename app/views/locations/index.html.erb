@@ -56,10 +56,17 @@
       <% end %>
     <% end %>
 
-    <% if LocationPolicy.new(current_user, @scheme.locations.new).create? %>
-      <%= govuk_button_to "Add a location", scheme_locations_path(@scheme), method: "post", secondary: true %>
+    <% if status_hint_message = scheme_status_hint(@scheme) %>
+      <div class="govuk-hint">
+        <%= status_hint_message %>
+      </div>
+      <br>
     <% end %>
+
+    <% if LocationPolicy.new(current_user, @scheme.locations.new).create? %>
+      <%= govuk_button_to "Add a location", scheme_locations_path(@scheme), method: "post" %>
+    <% end %>
+    <br>
+    <%== render partial: "pagy/nav", locals: { pagy: @pagy, item_name: "locations" } %>
   </div>
 </div>
-
-<%== render partial: "pagy/nav", locals: { pagy: @pagy, item_name: "locations" } %>

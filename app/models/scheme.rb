@@ -275,6 +275,10 @@ class Scheme < ApplicationRecord
     scheme_deactivation_periods.where("deactivation_date <= ?", date).order("created_at").last
   end
 
+  def last_deactivation_date
+    scheme_deactivation_periods.order(deactivation_date: :desc).first&.deactivation_date
+  end
+
   def status
     @status ||= status_at(Time.zone.now)
   end
@@ -311,6 +315,10 @@ class Scheme < ApplicationRecord
 
   def deactivated?
     status == :deactivated
+  end
+
+  def deactivating_soon?
+    status == :deactivating_soon
   end
 
   def deactivates_in_a_long_time?

@@ -70,7 +70,7 @@ module LocationsHelper
 
   def toggle_location_link(location)
     return govuk_button_link_to "Deactivate this location", scheme_location_new_deactivation_path(location.scheme, location), warning: true if location.active? || location.deactivates_in_a_long_time?
-    return govuk_button_link_to "Reactivate this location", scheme_location_new_reactivation_path(location.scheme, location) if location.deactivated?
+    return govuk_button_link_to "Reactivate this location", scheme_location_new_reactivation_path(location.scheme, location) if location.deactivated? && !location.deactivated_by_scheme?
   end
 
   def delete_location_link(location)
@@ -105,6 +105,14 @@ private
     sorted_deactivation_periods.each do |deactivation|
       periods.last.to = deactivation.deactivation_date
       periods << ActivePeriod.new(deactivation.reactivation_date, nil)
+    end
+
+    if location.deactivated_by_scheme? || location.deactivating_soon_by_scheme?
+      scheme_periods = location.scheme.scheme_deactivation_periods.sort_by(&:deactivation_date)
+      scheme_periods.each do |scheme_period|
+        periods.last.to = scheme_period.deactivation_date
+        periods << ActivePeriod.new(scheme_period.reactivation_date, nil)
+      end
     end
 
     remove_overlapping_and_empty_periods(periods)
