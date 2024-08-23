@@ -89,4 +89,164 @@ RSpec.describe MergeRequest, type: :model do
       expect(merge_request.status).to eq MergeRequest::STATUS[:processing]
     end
   end
+
+  describe "#organisations_with_users" do
+    context "when absorbing organisation has users" do
+      let(:merge_request) { create(:merge_request, absorbing_organisation:) }
+      let(:absorbing_organisation) { create(:organisation) }
+
+      before do
+        create(:merge_request_organisation, merge_request:, merging_organisation: merging_organisation_1)
+        create(:merge_request_organisation, merge_request:, merging_organisation: merging_organisation_2)
+      end
+
+      context "and some merging organisations have users" do
+        let(:merging_organisation_1) { create(:organisation) }
+        let(:merging_organisation_2) { create(:organisation, with_dsa: false) }
+
+        it "returns correct organisations with users" do
+          expect(absorbing_organisation.users.count).to eq(1)
+          expect(merging_organisation_1.users.count).to eq(1)
+          expect(merging_organisation_2.users.count).to eq(0)
+
+          expect(merge_request.organisations_with_users.count).to eq(2)
+          expect(merge_request.organisations_with_users).to include(merging_organisation_1)
+          expect(merge_request.organisations_with_users).to include(absorbing_organisation)
+        end
+      end
+
+      context "and no merging organisations have users" do
+        let(:merging_organisation_1) { create(:organisation, with_dsa: false) }
+        let(:merging_organisation_2) { create(:organisation, with_dsa: false) }
+
+        it "returns correct organisations with users" do
+          expect(absorbing_organisation.users.count).to eq(1)
+          expect(merging_organisation_1.users.count).to eq(0)
+          expect(merging_organisation_2.users.count).to eq(0)
+
+          expect(merge_request.organisations_with_users.count).to eq(1)
+          expect(merge_request.organisations_with_users).to include(absorbing_organisation)
+        end
+      end
+    end
+
+    context "when absorbing organisation has no users" do
+      let(:merge_request) { create(:merge_request, absorbing_organisation:) }
+      let(:absorbing_organisation) { create(:organisation, with_dsa: false) }
+
+      before do
+        create(:merge_request_organisation, merge_request:, merging_organisation: merging_organisation_1)
+        create(:merge_request_organisation, merge_request:, merging_organisation: merging_organisation_2)
+      end
+
+      context "and some merging organisations have users" do
+        let(:merging_organisation_1) { create(:organisation) }
+        let(:merging_organisation_2) { create(:organisation, with_dsa: false) }
+
+        it "returns correct organisations with users" do
+          expect(merging_organisation_1.users.count).to eq(1)
+          expect(absorbing_organisation.users.count).to eq(0)
+          expect(merging_organisation_2.users.count).to eq(0)
+
+          expect(merge_request.organisations_with_users.count).to eq(1)
+          expect(merge_request.organisations_with_users).to include(merging_organisation_1)
+        end
+      end
+
+      context "and no merging organisations have users" do
+        let(:merging_organisation_1) { create(:organisation, with_dsa: false) }
+        let(:merging_organisation_2) { create(:organisation, with_dsa: false) }
+
+        it "returns correct organisations with users" do
+          expect(absorbing_organisation.users.count).to eq(0)
+          expect(merging_organisation_1.users.count).to eq(0)
+          expect(merging_organisation_2.users.count).to eq(0)
+
+          expect(merge_request.organisations_with_users.count).to eq(0)
+        end
+      end
+    end
+  end
+
+  describe "#organisations_without_users" do
+    context "when absorbing organisation has users" do
+      let(:merge_request) { create(:merge_request, absorbing_organisation:) }
+      let(:absorbing_organisation) { create(:organisation) }
+
+      before do
+        create(:merge_request_organisation, merge_request:, merging_organisation: merging_organisation_1)
+        create(:merge_request_organisation, merge_request:, merging_organisation: merging_organisation_2)
+      end
+
+      context "and some merging organisations have users" do
+        let(:merging_organisation_1) { create(:organisation) }
+        let(:merging_organisation_2) { create(:organisation, with_dsa: false) }
+
+        it "returns correct organisations with users" do
+          expect(absorbing_organisation.users.count).to eq(1)
+          expect(merging_organisation_1.users.count).to eq(1)
+          expect(merging_organisation_2.users.count).to eq(0)
+
+          expect(merge_request.organisations_without_users.count).to eq(1)
+          expect(merge_request.organisations_without_users).to include(merging_organisation_2)
+        end
+      end
+
+      context "and no merging organisations have users" do
+        let(:merging_organisation_1) { create(:organisation, with_dsa: false) }
+        let(:merging_organisation_2) { create(:organisation, with_dsa: false) }
+
+        it "returns correct organisations with users" do
+          expect(absorbing_organisation.users.count).to eq(1)
+          expect(merging_organisation_1.users.count).to eq(0)
+          expect(merging_organisation_2.users.count).to eq(0)
+
+          expect(merge_request.organisations_without_users.count).to eq(2)
+          expect(merge_request.organisations_without_users).to include(merging_organisation_1)
+          expect(merge_request.organisations_without_users).to include(merging_organisation_2)
+        end
+      end
+    end
+
+    context "when absorbing organisation has no users" do
+      let(:merge_request) { create(:merge_request, absorbing_organisation:) }
+      let(:absorbing_organisation) { create(:organisation, with_dsa: false) }
+
+      before do
+        create(:merge_request_organisation, merge_request:, merging_organisation: merging_organisation_1)
+        create(:merge_request_organisation, merge_request:, merging_organisation: merging_organisation_2)
+      end
+
+      context "and some merging organisations have users" do
+        let(:merging_organisation_1) { create(:organisation) }
+        let(:merging_organisation_2) { create(:organisation, with_dsa: false) }
+
+        it "returns correct organisations with users" do
+          expect(merging_organisation_1.users.count).to eq(1)
+          expect(absorbing_organisation.users.count).to eq(0)
+          expect(merging_organisation_2.users.count).to eq(0)
+
+          expect(merge_request.organisations_without_users.count).to eq(2)
+          expect(merge_request.organisations_without_users).to include(absorbing_organisation)
+          expect(merge_request.organisations_without_users).to include(merging_organisation_2)
+        end
+      end
+
+      context "and no merging organisations have users" do
+        let(:merging_organisation_1) { create(:organisation, with_dsa: false) }
+        let(:merging_organisation_2) { create(:organisation, with_dsa: false) }
+
+        it "returns correct organisations with users" do
+          expect(absorbing_organisation.users.count).to eq(0)
+          expect(merging_organisation_1.users.count).to eq(0)
+          expect(merging_organisation_2.users.count).to eq(0)
+
+          expect(merge_request.organisations_without_users.count).to eq(3)
+          expect(merge_request.organisations_without_users).to include(absorbing_organisation)
+          expect(merge_request.organisations_without_users).to include(merging_organisation_1)
+          expect(merge_request.organisations_without_users).to include(merging_organisation_2)
+        end
+      end
+    end
+  end
 end
