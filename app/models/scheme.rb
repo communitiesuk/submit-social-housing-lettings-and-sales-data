@@ -61,14 +61,14 @@ class Scheme < ApplicationRecord
     merge(Organisation.filter_by_inactive)
   }
 
-  scope :deactivated_directly, lambda {
+  scope :deactivated_directly, lambda { |date = Time.zone.now|
     merge(SchemeDeactivationPeriod.deactivations_without_reactivation)
-      .where("scheme_deactivation_periods.deactivation_date <= ?", Time.zone.now)
+      .where("scheme_deactivation_periods.deactivation_date <= ?", date)
   }
 
-  scope :deactivating_soon, lambda {
+  scope :deactivating_soon, lambda { |date = Time.zone.now|
     merge(SchemeDeactivationPeriod.deactivations_without_reactivation)
-    .where("scheme_deactivation_periods.deactivation_date > ? AND scheme_deactivation_periods.deactivation_date < ? ", Time.zone.now, 6.months.from_now)
+    .where("scheme_deactivation_periods.deactivation_date > ? AND scheme_deactivation_periods.deactivation_date < ? ",  date, 6.months.from_now)
     .where.not(id: joins(:owning_organisation).deactivated_by_organisation.pluck(:id))
   }
 
