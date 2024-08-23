@@ -427,6 +427,7 @@ RSpec.describe MergeRequestsController, type: :request do
         before do
           create(:merge_request_organisation, merge_request:, merging_organisation: other_organisation)
           create(:merge_request_organisation, merge_request:, merging_organisation:)
+          create_list(:scheme, 2, owning_organisation: organisation)
         end
 
         it "runs the job with correct merge request" do
@@ -435,6 +436,7 @@ RSpec.describe MergeRequestsController, type: :request do
           patch "/merge-request/#{merge_request.id}/start-merge"
           expect(merge_request.reload.status).to eq("processing")
           expect(merge_request.total_users).to eq(5)
+          expect(merge_request.total_schemes).to eq(2)
         end
       end
 
@@ -451,6 +453,8 @@ RSpec.describe MergeRequestsController, type: :request do
     describe "#show" do
       before do
         create(:merge_request_organisation, merge_request:, merging_organisation: other_organisation)
+        create_list(:scheme, 2, owning_organisation: organisation)
+        create_list(:scheme, 2, owning_organisation: other_organisation)
         get "/merge-request/#{merge_request.id}", headers:
       end
 
@@ -479,29 +483,42 @@ RSpec.describe MergeRequestsController, type: :request do
       context "with unmerged request" do
         let(:merge_request) { create(:merge_request, absorbing_organisation_id: organisation.id, merge_date: Time.zone.today) }
 
-        it "shows users count and has links to view merge outcomes" do
-          expect(page).to have_link("View", href: user_outcomes_merge_request_path(merge_request))
+        it "shows users and schemes count and has links to view merge outcomes" do
+          expect(page).to have_link("View", href: scheme_outcomes_merge_request_path(merge_request))
           expect(page).to have_content("4 Users")
+          expect(page).to have_content("4 Schemes")
         end
       end
 
       context "with a merged request" do
-        let(:merge_request) { create(:merge_request, request_merged: true, total_users: 34) }
+        let(:merge_request) { create(:merge_request, request_merged: true, total_users: 34, total_schemes: 12) }
 
         it "shows saved users count and doesn't have links to view merge outcomes" do
           expect(merge_request.status).to eq("request_merged")
           expect(page).not_to have_link("View", href: user_outcomes_merge_request_path(merge_request))
           expect(page).to have_content("34 Users")
         end
+
+        it "shows saved schemes count and doesn't have links to view merge outcomes" do
+          expect(merge_request.status).to eq("request_merged")
+          expect(page).not_to have_link("View", href: scheme_outcomes_merge_request_path(merge_request))
+          expect(page).to have_content("12 Schemes")
+        end
       end
 
       context "with a processing request" do
-        let(:merge_request) { create(:merge_request, processing: true, total_users: 51) }
+        let(:merge_request) { create(:merge_request, processing: true, total_users: 51, total_schemes: 33) }
 
         it "shows saved users count and doesn't have links to view merge outcomes" do
           expect(merge_request.status).to eq("processing")
           expect(page).not_to have_link("View", href: user_outcomes_merge_request_path(merge_request))
           expect(page).to have_content("51 Users")
+        end
+
+        it "shows saved schemes count and doesn't have links to view merge outcomes" do
+          expect(merge_request.status).to eq("processing")
+          expect(page).not_to have_link("View", href: scheme_outcomes_merge_request_path(merge_request))
+          expect(page).to have_content("33 Schemes")
         end
       end
     end
@@ -529,6 +546,33 @@ RSpec.describe MergeRequestsController, type: :request do
         expect(page).to have_link("View all 3 MHCLG users (opens in a new tab)", href: users_organisation_path(organisation))
         expect(page).to have_content("Organisation with no users and Organisation with no users too have no users.")
         expect(page).to have_content("19 users after merge")
+      end
+    end
+
+    describe "#scheme_outcomes" do
+      let(:merge_request) { create(:merge_request, absorbing_organisation: organisation) }
+      let(:organisation_with_no_schemes) { create(:organisation, name: "Organisation with no schemes") }
+      let(:organisation_with_no_schemes_too) { create(:organisation, name: "Organisation with no schemes too") }
+      let(:organisation_with_some_schemes) { create(:organisation, name: "Organisation with some schemes") }
+      let(:organisation_with_some_more_schemes) { create(:organisation, name: "Organisation with many schemes") }
+
+      before do
+        create_list(:scheme, 4, owning_organisation: organisation_with_some_schemes)
+        create_list(:scheme, 6, owning_organisation: organisation_with_some_more_schemes)
+        create_list(:scheme, 3, owning_organisation: organisation)
+        create(:merge_request_organisation, merge_request:, merging_organisation: organisation_with_no_schemes)
+        create(:merge_request_organisation, merge_request:, merging_organisation: organisation_with_no_schemes_too)
+        create(:merge_request_organisation, merge_request:, merging_organisation: organisation_with_some_schemes)
+        create(:merge_request_organisation, merge_request:, merging_organisation: organisation_with_some_more_schemes)
+        get "/merge-request/#{merge_request.id}/scheme-outcomes", headers:
+      end
+
+      it "shows scheme outcomes after merge" do
+        expect(page).to have_link("View all 4 Organisation with some schemes schemes (opens in a new tab)", href: schemes_organisation_path(organisation_with_some_schemes))
+        expect(page).to have_link("View all 6 Organisation with many schemes schemes (opens in a new tab)", href: schemes_organisation_path(organisation_with_some_more_schemes))
+        expect(page).to have_link("View all 3 MHCLG schemes (opens in a new tab)", href: schemes_organisation_path(organisation))
+        expect(page).to have_content("Organisation with no schemes and Organisation with no schemes too have no schemes.")
+        expect(page).to have_content("13 schemes after merge")
       end
     end
   end
