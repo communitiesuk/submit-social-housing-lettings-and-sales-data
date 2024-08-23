@@ -76,4 +76,26 @@ class MergeRequest < ApplicationRecord
 
     ([absorbing_organisation] + merging_organisations).reject(&:has_visible_users?)
   end
+
+  def total_visible_schemes_after_merge
+    return total_schemes if status == STATUS[:request_merged] || status == STATUS[:processing]
+
+    absorbing_organisation.owned_schemes.visible.count + merging_organisations.sum { |org| org.owned_schemes.visible.count }
+  end
+
+  def total_schemes_label
+    "#{total_visible_schemes_after_merge} #{'Scheme'.pluralize(total_visible_schemes_after_merge)}"
+  end
+
+  def organisations_with_schemes
+    return [] unless absorbing_organisation.present? && merging_organisations.any?
+
+    ([absorbing_organisation] + merging_organisations).select(&:has_visible_schemes?)
+  end
+
+  def organisations_without_schemes
+    return [] unless absorbing_organisation.present? && merging_organisations.any?
+
+    ([absorbing_organisation] + merging_organisations).reject(&:has_visible_schemes?)
+  end
 end
