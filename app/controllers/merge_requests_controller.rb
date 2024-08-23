@@ -9,6 +9,7 @@ class MergeRequestsController < ApplicationController
   def helpdesk_ticket; end
   def merge_start_confirmation; end
   def user_outcomes; end
+  def scheme_outcomes; end
 
   def create
     ActiveRecord::Base.transaction do
