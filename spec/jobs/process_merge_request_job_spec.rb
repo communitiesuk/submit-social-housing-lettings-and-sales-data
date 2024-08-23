@@ -13,7 +13,7 @@ describe ProcessMergeRequestJob do
     let(:organisation) { create(:organisation) }
     let(:merging_organisation) { create(:organisation) }
     let(:other_merging_organisation) { create(:organisation) }
-    let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation, absorbing_organisation: organisation, merge_date: Time.zone.local(2022, 3, 3)) }
+    let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation, absorbing_organisation: organisation, merge_date: Time.zone.local(2022, 3, 3), total_users: 5) }
 
     before do
       create(:merge_request_organisation, merge_request:, merging_organisation:)
@@ -27,7 +27,7 @@ describe ProcessMergeRequestJob do
       expect(merge_request.reload.status).to eq("request_merged")
     end
 
-    it "sets last_failed_attempt value if there's an error and sets processing to false" do
+    it "sets last_failed_attempt value, sets processing to false and clears total_users if there's an error" do
       allow(merge_organisations_service).to receive(:call).and_raise(ActiveRecord::Rollback)
 
       expect(merge_request.last_failed_attempt).to be_nil
@@ -36,6 +36,7 @@ describe ProcessMergeRequestJob do
       merge_request.reload
       expect(merge_request.last_failed_attempt).to be_within(10.seconds).of(Time.zone.now)
       expect(merge_request.processing).to eq(false)
+      expect(merge_request.total_users).to be_nil
     end
   end
 end

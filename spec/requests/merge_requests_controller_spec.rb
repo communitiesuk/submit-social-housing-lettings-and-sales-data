@@ -434,6 +434,7 @@ RSpec.describe MergeRequestsController, type: :request do
           expect(ProcessMergeRequestJob).to receive(:perform_later).with(merge_request:).once
           patch "/merge-request/#{merge_request.id}/start-merge"
           expect(merge_request.reload.status).to eq("processing")
+          expect(merge_request.total_users).to eq(5)
         end
       end
 
@@ -449,6 +450,7 @@ RSpec.describe MergeRequestsController, type: :request do
 
     describe "#show" do
       before do
+        create(:merge_request_organisation, merge_request:, merging_organisation: other_organisation)
         get "/merge-request/#{merge_request.id}", headers:
       end
 
@@ -472,6 +474,61 @@ RSpec.describe MergeRequestsController, type: :request do
 
       it "has begin merge button" do
         expect(page).to have_link("Begin merge", href: merge_start_confirmation_merge_request_path(merge_request))
+      end
+
+      context "with unmerged request" do
+        let(:merge_request) { create(:merge_request, absorbing_organisation_id: organisation.id, merge_date: Time.zone.today) }
+
+        it "shows users count and has links to view merge outcomes" do
+          expect(page).to have_link("View", href: user_outcomes_merge_request_path(merge_request))
+          expect(page).to have_content("4 Users")
+        end
+      end
+
+      context "with a merged request" do
+        let(:merge_request) { create(:merge_request, request_merged: true, total_users: 34) }
+
+        it "shows saved users count and doesn't have links to view merge outcomes" do
+          expect(merge_request.status).to eq("request_merged")
+          expect(page).not_to have_link("View", href: user_outcomes_merge_request_path(merge_request))
+          expect(page).to have_content("34 Users")
+        end
+      end
+
+      context "with a processing request" do
+        let(:merge_request) { create(:merge_request, processing: true, total_users: 51) }
+
+        it "shows saved users count and doesn't have links to view merge outcomes" do
+          expect(merge_request.status).to eq("processing")
+          expect(page).not_to have_link("View", href: user_outcomes_merge_request_path(merge_request))
+          expect(page).to have_content("51 Users")
+        end
+      end
+    end
+
+    describe "#user_outcomes" do
+      let(:merge_request) { create(:merge_request, absorbing_organisation: organisation) }
+      let(:organisation_with_no_users) { create(:organisation, name: "Organisation with no users", with_dsa: false) }
+      let(:organisation_with_no_users_too) { create(:organisation, name: "Organisation with no users too", with_dsa: false) }
+      let(:organisation_with_some_users) { create(:organisation, name: "Organisation with some users", with_dsa: false) }
+      let(:organisation_with_some_more_users) { create(:organisation, name: "Organisation with many users", with_dsa: false) }
+
+      before do
+        create_list(:user, 4, organisation: organisation_with_some_users)
+        create_list(:user, 12, organisation: organisation_with_some_more_users)
+        create(:merge_request_organisation, merge_request:, merging_organisation: organisation_with_no_users)
+        create(:merge_request_organisation, merge_request:, merging_organisation: organisation_with_no_users_too)
+        create(:merge_request_organisation, merge_request:, merging_organisation: organisation_with_some_users)
+        create(:merge_request_organisation, merge_request:, merging_organisation: organisation_with_some_more_users)
+        get "/merge-request/#{merge_request.id}/user-outcomes", headers:
+      end
+
+      it "shows user outcomes after merge" do
+        expect(page).to have_link("View all 4 Organisation with some users users (opens in a new tab)", href: users_organisation_path(organisation_with_some_users))
+        expect(page).to have_link("View all 12 Organisation with many users users (opens in a new tab)", href: users_organisation_path(organisation_with_some_more_users))
+        expect(page).to have_link("View all 3 MHCLG users (opens in a new tab)", href: users_organisation_path(organisation))
+        expect(page).to have_content("Organisation with no users and Organisation with no users too have no users.")
+        expect(page).to have_content("19 users after merge")
       end
     end
   end

@@ -9,6 +9,6 @@ class ProcessMergeRequestJob < ApplicationJob
     Merge::MergeOrganisationsService.new(absorbing_organisation_id:, merging_organisation_ids:, merge_date:).call
     merge_request.update!(request_merged: true)
   rescue StandardError
-    merge_request.update!(last_failed_attempt: Time.zone.now, processing: false)
+    merge_request.update!(last_failed_attempt: Time.zone.now, processing: false, total_users: nil)
   end
 end
