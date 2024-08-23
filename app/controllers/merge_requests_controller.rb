@@ -8,6 +8,7 @@ class MergeRequestsController < ApplicationController
   def merge_date; end
   def helpdesk_ticket; end
   def merge_start_confirmation; end
+  def user_outcomes; end
 
   def create
     ActiveRecord::Base.transaction do
@@ -62,7 +63,7 @@ class MergeRequestsController < ApplicationController
 
   def start_merge
     if @merge_request.status == "ready_to_merge"
-      @merge_request.update!(processing: true, last_failed_attempt: nil)
+      @merge_request.update!(processing: true, last_failed_attempt: nil, total_users: @merge_request.total_visible_users_after_merge)
       ProcessMergeRequestJob.perform_later(merge_request: @merge_request)
     end
 
