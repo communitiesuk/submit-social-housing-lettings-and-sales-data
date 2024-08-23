@@ -427,6 +427,7 @@ RSpec.describe MergeRequestsController, type: :request do
         before do
           create(:merge_request_organisation, merge_request:, merging_organisation: other_organisation)
           create(:merge_request_organisation, merge_request:, merging_organisation:)
+          create_list(:scheme, 2, owning_organisation: organisation)
         end
 
         it "runs the job with correct merge request" do
@@ -435,6 +436,7 @@ RSpec.describe MergeRequestsController, type: :request do
           patch "/merge-request/#{merge_request.id}/start-merge"
           expect(merge_request.reload.status).to eq("processing")
           expect(merge_request.total_users).to eq(5)
+          expect(merge_request.total_schemes).to eq(2)
         end
       end
 
