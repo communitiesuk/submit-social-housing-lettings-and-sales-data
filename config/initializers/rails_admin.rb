@@ -25,25 +25,8 @@ RailsAdmin.config do |config|
 
   ## == Gravatar integration ==
   ## To disable Gravatar integration in Navigation Bar set to false
-  config.show_gravatar = false
-  config.included_models = %w[LogValidation CsvVariableDefinition]
-
-  config.model "LogValidation" do
-    label "Log Validation"
-  end
-
-  config.model "CsvVariableDefinition" do
-    label "CSV Variable Definition"
-    edit do
-      exclude_fields :last_accessed
-      field :log_type do
-        help "Required. Specify the type of log associated with this variable: 'lettings' or 'sales'."
-      end
-      field :year do
-        help "Required. Specify the year this definition should be available from. This definition will be used in subsequent years unless superseded by a newer definition."
-      end
-    end
-  end
+  # config.show_gravatar = true
+  config.included_models = %w[LogValidation]
 
   config.actions do
     dashboard                     # mandatory
