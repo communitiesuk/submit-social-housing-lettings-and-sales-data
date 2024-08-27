@@ -6,7 +6,6 @@ If your household enters a new social housing tenancy or purchases a social hous
 
 The information is provided via ‘<%= t('service_name') %>’, a service funded and managed by MHCLG. It collects information on the tenants or residents, tenancy or sale, and the dwelling itself. Some of this data is personal and sensitive, so MHCLG is responsible for ensuring it’s processed in line with data protection legislation.
 
-
 ## Why do we share this information?
 
 Information collected via CORE is shared with other government departments and agencies. It’s shared with the Greater London Authority and the Regulator of Social Housing. Data providers can also access data for their organisations via CORE. Data is only shared for research and statistical purposes.
@@ -27,16 +26,16 @@ Information collected via CORE relates to your tenancy, the dwelling you are liv
 
 Collected data will be held for as long as necessary for research and statistical purposes. When no longer needed, data will be deleted in a safe manner. We’re aware some collected data is particularly sensitive. For example:
 
-* ethnic group
-* if previous tenure is a hospital, prison or approved probation hostel support
-* if household left last settled home because discharged from prison, a long stay hospital or other institution
-* if referral source is probation or prison, youth offending or community mental health team, or health service
+- ethnic group
+- if previous tenure is a hospital, prison or approved probation hostel support
+- if household left last settled home because discharged from prison, a long stay hospital or other institution
+- if referral source is probation or prison, youth offending or community mental health team, or health service
 
 MHCLG publishes data annually, in aggregate form, as part of a report and complementary tables.
 
-* For annual lettings data, visit: [https://www.gov.uk/government/collections/rents-lettings-and-tenancies](https://www.gov.uk/government/collections/rents-lettings-and-tenancies)
+- For annual lettings data, visit: [https://www.gov.uk/government/collections/rents-lettings-and-tenancies](https://www.gov.uk/government/collections/rents-lettings-and-tenancies)
 
-* For annual sales data, visit: [https://www.gov.uk/government/collections/social-housing-sales-including-right-to-buy-and-transfers](https://www.gov.uk/government/collections/social-housing-sales-including-right-to-buy-and-transfers)
+- For annual sales data, visit: [https://www.gov.uk/government/collections/social-housing-sales-including-right-to-buy-and-transfers](https://www.gov.uk/government/collections/social-housing-sales-including-right-to-buy-and-transfers)
 
 Detail-level data is anonymised and protected, minimising identification risk. It's held with the UK Data Archive.
 

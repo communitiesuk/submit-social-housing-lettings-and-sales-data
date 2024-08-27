@@ -1688,7 +1688,7 @@ RSpec.describe OrganisationsController, type: :request do
           end
 
           it "sends invitation emails" do
-            expect(notify_client).to have_received(:send_email).with(email_address: user_to_reactivate.email, template_id: User::BETA_ONBOARDING_TEMPLATE_ID, personalisation: expected_personalisation).once
+            expect(notify_client).to have_received(:send_email).with(email_address: user_to_reactivate.email, template_id: User::CONFIRMABLE_TEMPLATE_ID, personalisation: expected_personalisation).once
           end
         end
       end

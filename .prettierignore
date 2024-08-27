@@ -1,0 +1,19 @@
+# Ignore everything except as negated below
+*
+
+!*.scss
+!*.md
+!*.yml
+!*.json
+
+# Ensures subdirectories are checked for files matching the above
+!*/
+
+config/locales/
+app/views/content/data_sharing_agreement.md
+
+/node_modules
+/vendor
+/coverage
+/public/assets
+/app/assets/builds/*

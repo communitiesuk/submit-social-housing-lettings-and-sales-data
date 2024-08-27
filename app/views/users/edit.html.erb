@@ -24,7 +24,12 @@
 
       <%= f.govuk_phone_field :phone,
         label: { text: "Telephone number", size: "m" },
-        autocomplete: "phone",
+        autocomplete: "tel-national",
+        spellcheck: "false" %>
+
+      <%= f.govuk_phone_field :phone_extension,
+        label: { text: "Extension number (optional)", size: "m" },
+        autocomplete: "tel-extension",
         spellcheck: "false" %>
 
       <% if current_user.data_coordinator? || current_user.support? %>

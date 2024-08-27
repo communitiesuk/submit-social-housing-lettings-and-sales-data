@@ -51,8 +51,15 @@ module Validations::Sales::SaleInformationValidations
     tolerance = record.discount ? record.value * 0.05 / 100 : 1
 
     if over_tolerance?(record.mortgage_deposit_and_grant_total, record.value_with_discount, tolerance, strict: !record.discount.nil?) && record.discounted_ownership_sale?
+      deposit_and_grant_sentence = record.grant.present? ? ", cash deposit (#{record.field_formatted_as_currency('deposit')}), and grant (#{record.field_formatted_as_currency('grant')})" : " and cash deposit (#{record.field_formatted_as_currency('deposit')})"
+      discount_sentence = record.discount.present? ? " (#{record.field_formatted_as_currency('value')}) subtracted by the sum of the full purchase price (#{record.field_formatted_as_currency('value')}) multiplied by the percentage discount (#{record.discount}%)" : ""
       %i[mortgageused mortgage value deposit ownershipsch discount grant].each do |field|
-        record.errors.add field, I18n.t("validations.sale_information.discounted_ownership_value", mortgage_deposit_and_grant_total: record.field_formatted_as_currency("mortgage_deposit_and_grant_total"), value_with_discount: record.field_formatted_as_currency("value_with_discount"))
+        record.errors.add field, I18n.t("validations.sale_information.discounted_ownership_value",
+                                        mortgage: record.mortgage&.positive? ? " (#{record.field_formatted_as_currency('mortgage')})" : "",
+                                        deposit_and_grant_sentence:,
+                                        mortgage_deposit_and_grant_total: record.field_formatted_as_currency("mortgage_deposit_and_grant_total"),
+                                        discount_sentence:,
+                                        value_with_discount: record.field_formatted_as_currency("value_with_discount")).html_safe
       end
     end
   end
@@ -65,9 +72,17 @@ module Validations::Sales::SaleInformationValidations
 
     if over_tolerance?(record.mortgage_and_deposit_total, record.value, 1)
       %i[mortgageused mortgage value deposit].each do |field|
-        record.errors.add field, I18n.t("validations.sale_information.outright_sale_value", mortgage_and_deposit_total: record.field_formatted_as_currency("mortgage_and_deposit_total"), value: record.field_formatted_as_currency("value"))
+        record.errors.add field, I18n.t("validations.sale_information.outright_sale_value",
+                                        mortgage_and_deposit_total: record.field_formatted_as_currency("mortgage_and_deposit_total"),
+                                        mortgage: record.mortgage&.positive? ? " (#{record.field_formatted_as_currency('mortgage')})" : "",
+                                        deposit: record.field_formatted_as_currency("deposit"),
+                                        value: record.field_formatted_as_currency("value")).html_safe
       end
-      record.errors.add :ownershipsch, :skip_bu_error, message: I18n.t("validations.sale_information.outright_sale_value", mortgage_and_deposit_total: record.field_formatted_as_currency("mortgage_and_deposit_total"), value: record.field_formatted_as_currency("value"))
+      record.errors.add :ownershipsch, :skip_bu_error, message: I18n.t("validations.sale_information.outright_sale_value",
+                                                                       mortgage_and_deposit_total: record.field_formatted_as_currency("mortgage_and_deposit_total"),
+                                                                       mortgage: record.mortgage&.positive? ? " (#{record.field_formatted_as_currency('mortgage')})" : "",
+                                                                       deposit: record.field_formatted_as_currency("deposit"),
+                                                                       value: record.field_formatted_as_currency("value")).html_safe
     end
   end
 
@@ -155,16 +170,42 @@ module Validations::Sales::SaleInformationValidations
 
       if over_tolerance?(record.mortgage_deposit_and_discount_total, record.expected_shared_ownership_deposit_value, 1)
         %i[mortgage value deposit cashdis equity].each do |field|
-          record.errors.add field, I18n.t("validations.sale_information.non_staircasing_mortgage.mortgage_used_socialhomebuy", mortgage_deposit_and_discount_total: record.field_formatted_as_currency("mortgage_deposit_and_discount_total"), expected_shared_ownership_deposit_value: record.field_formatted_as_currency("expected_shared_ownership_deposit_value"))
+          record.errors.add field, I18n.t("validations.sale_information.non_staircasing_mortgage.mortgage_used_socialhomebuy",
+                                          mortgage: record.field_formatted_as_currency("mortgage"),
+                                          value: record.field_formatted_as_currency("value"),
+                                          deposit: record.field_formatted_as_currency("deposit"),
+                                          cashdis: record.field_formatted_as_currency("cashdis"),
+                                          equity: "#{record.equity}%",
+                                          mortgage_deposit_and_discount_total: record.field_formatted_as_currency("mortgage_deposit_and_discount_total"),
+                                          expected_shared_ownership_deposit_value: record.field_formatted_as_currency("expected_shared_ownership_deposit_value")).html_safe
         end
-        record.errors.add :type, :skip_bu_error, message: I18n.t("validations.sale_information.non_staircasing_mortgage.mortgage_used_socialhomebuy", mortgage_deposit_and_discount_total: record.field_formatted_as_currency("mortgage_deposit_and_discount_total"), expected_shared_ownership_deposit_value: record.field_formatted_as_currency("expected_shared_ownership_deposit_value"))
+        record.errors.add :type, :skip_bu_error, message: I18n.t("validations.sale_information.non_staircasing_mortgage.mortgage_used_socialhomebuy",
+                                                                 mortgage: record.field_formatted_as_currency("mortgage"),
+                                                                 value: record.field_formatted_as_currency("value"),
+                                                                 deposit: record.field_formatted_as_currency("deposit"),
+                                                                 cashdis: record.field_formatted_as_currency("cashdis"),
+                                                                 equity: "#{record.equity}%",
+                                                                 mortgage_deposit_and_discount_total: record.field_formatted_as_currency("mortgage_deposit_and_discount_total"),
+                                                                 expected_shared_ownership_deposit_value: record.field_formatted_as_currency("expected_shared_ownership_deposit_value")).html_safe
       end
     elsif record.mortgage_not_used?
       if over_tolerance?(record.deposit_and_discount_total, record.expected_shared_ownership_deposit_value, 1)
         %i[mortgageused value deposit cashdis equity].each do |field|
-          record.errors.add field, I18n.t("validations.sale_information.non_staircasing_mortgage.mortgage_not_used_socialhomebuy", deposit_and_discount_total: record.field_formatted_as_currency("deposit_and_discount_total"), expected_shared_ownership_deposit_value: record.field_formatted_as_currency("expected_shared_ownership_deposit_value"))
+          record.errors.add field, I18n.t("validations.sale_information.non_staircasing_mortgage.mortgage_not_used_socialhomebuy",
+                                          deposit_and_discount_total: record.field_formatted_as_currency("deposit_and_discount_total"),
+                                          expected_shared_ownership_deposit_value: record.field_formatted_as_currency("expected_shared_ownership_deposit_value"),
+                                          value: record.field_formatted_as_currency("value"),
+                                          deposit: record.field_formatted_as_currency("deposit"),
+                                          cashdis: record.field_formatted_as_currency("cashdis"),
+                                          equity: "#{record.equity}%").html_safe
         end
-        record.errors.add :type, :skip_bu_error, message: I18n.t("validations.sale_information.non_staircasing_mortgage.mortgage_not_used_socialhomebuy", deposit_and_discount_total: record.field_formatted_as_currency("deposit_and_discount_total"), expected_shared_ownership_deposit_value: record.field_formatted_as_currency("expected_shared_ownership_deposit_value"))
+        record.errors.add :type, :skip_bu_error, message: I18n.t("validations.sale_information.non_staircasing_mortgage.mortgage_not_used_socialhomebuy",
+                                                                 deposit_and_discount_total: record.field_formatted_as_currency("deposit_and_discount_total"),
+                                                                 expected_shared_ownership_deposit_value: record.field_formatted_as_currency("expected_shared_ownership_deposit_value"),
+                                                                 value: record.field_formatted_as_currency("value"),
+                                                                 deposit: record.field_formatted_as_currency("deposit"),
+                                                                 cashdis: record.field_formatted_as_currency("cashdis"),
+                                                                 equity: "#{record.equity}%").html_safe
       end
     end
   end
@@ -175,16 +216,34 @@ module Validations::Sales::SaleInformationValidations
 
       if over_tolerance?(record.mortgage_and_deposit_total, record.expected_shared_ownership_deposit_value, 1)
         %i[mortgage value deposit equity].each do |field|
-          record.errors.add field, I18n.t("validations.sale_information.non_staircasing_mortgage.mortgage_used", mortgage_and_deposit_total: record.field_formatted_as_currency("mortgage_and_deposit_total"), expected_shared_ownership_deposit_value: record.field_formatted_as_currency("expected_shared_ownership_deposit_value"))
+          record.errors.add field, I18n.t("validations.sale_information.non_staircasing_mortgage.mortgage_used",
+                                          mortgage: record.field_formatted_as_currency("mortgage"),
+                                          deposit: record.field_formatted_as_currency("deposit"),
+                                          value: record.field_formatted_as_currency("value"),
+                                          equity: "#{record.equity}%",
+                                          mortgage_and_deposit_total: record.field_formatted_as_currency("mortgage_and_deposit_total"),
+                                          expected_shared_ownership_deposit_value: record.field_formatted_as_currency("expected_shared_ownership_deposit_value")).html_safe
         end
-        record.errors.add :type, :skip_bu_error, message: I18n.t("validations.sale_information.non_staircasing_mortgage.mortgage_used", mortgage_and_deposit_total: record.field_formatted_as_currency("mortgage_and_deposit_total"), expected_shared_ownership_deposit_value: record.field_formatted_as_currency("expected_shared_ownership_deposit_value"))
+        record.errors.add :type, :skip_bu_error, message: I18n.t("validations.sale_information.non_staircasing_mortgage.mortgage_used",
+                                                                 mortgage: record.field_formatted_as_currency("mortgage"),
+                                                                 deposit: record.field_formatted_as_currency("deposit"),
+                                                                 value: record.field_formatted_as_currency("value"),
+                                                                 equity: "#{record.equity}%",
+                                                                 mortgage_and_deposit_total: record.field_formatted_as_currency("mortgage_and_deposit_total"),
+                                                                 expected_shared_ownership_deposit_value: record.field_formatted_as_currency("expected_shared_ownership_deposit_value")).html_safe
       end
     elsif record.mortgage_not_used?
       if over_tolerance?(record.deposit, record.expected_shared_ownership_deposit_value, 1)
         %i[mortgageused value deposit equity].each do |field|
-          record.errors.add field, I18n.t("validations.sale_information.non_staircasing_mortgage.mortgage_not_used", deposit: record.field_formatted_as_currency("deposit"), expected_shared_ownership_deposit_value: record.field_formatted_as_currency("expected_shared_ownership_deposit_value"))
+          record.errors.add field, I18n.t("validations.sale_information.non_staircasing_mortgage.mortgage_not_used",
+                                          deposit: record.field_formatted_as_currency("deposit"),
+                                          value: record.field_formatted_as_currency("value"),
+                                          expected_shared_ownership_deposit_value: record.field_formatted_as_currency("expected_shared_ownership_deposit_value")).html_safe
         end
-        record.errors.add :type, :skip_bu_error, message: I18n.t("validations.sale_information.non_staircasing_mortgage.mortgage_not_used", deposit: record.field_formatted_as_currency("deposit"), expected_shared_ownership_deposit_value: record.field_formatted_as_currency("expected_shared_ownership_deposit_value"))
+        record.errors.add :type, :skip_bu_error, message: I18n.t("validations.sale_information.non_staircasing_mortgage.mortgage_not_used",
+                                                                 deposit: record.field_formatted_as_currency("deposit"),
+                                                                 value: record.field_formatted_as_currency("value"),
+                                                                 expected_shared_ownership_deposit_value: record.field_formatted_as_currency("expected_shared_ownership_deposit_value")).html_safe
       end
     end
   end
@@ -197,15 +256,41 @@ module Validations::Sales::SaleInformationValidations
 
       if over_tolerance?(record.mortgage_deposit_and_discount_total, record.stairbought_part_of_value, 1)
         %i[mortgage value deposit cashdis stairbought].each do |field|
-          record.errors.add field, I18n.t("validations.sale_information.staircasing_mortgage.mortgage_used_socialhomebuy", mortgage_deposit_and_discount_total: record.field_formatted_as_currency("mortgage_deposit_and_discount_total"), stairbought_part_of_value: record.field_formatted_as_currency("stairbought_part_of_value"))
+          record.errors.add field, I18n.t("validations.sale_information.staircasing_mortgage.mortgage_used_socialhomebuy",
+                                          mortgage_deposit_and_discount_total: record.field_formatted_as_currency("mortgage_deposit_and_discount_total"),
+                                          stairbought_part_of_value: record.field_formatted_as_currency("stairbought_part_of_value"),
+                                          mortgage: record.field_formatted_as_currency("mortgage"),
+                                          value: record.field_formatted_as_currency("value"),
+                                          deposit: record.field_formatted_as_currency("deposit"),
+                                          cashdis: record.field_formatted_as_currency("cashdis"),
+                                          stairbought: "#{record.stairbought}%").html_safe
         end
-        record.errors.add :type, :skip_bu_error, message: I18n.t("validations.sale_information.staircasing_mortgage.mortgage_used_socialhomebuy", mortgage_deposit_and_discount_total: record.field_formatted_as_currency("mortgage_deposit_and_discount_total"), stairbought_part_of_value: record.field_formatted_as_currency("stairbought_part_of_value"))
+        record.errors.add :type, :skip_bu_error, message: I18n.t("validations.sale_information.staircasing_mortgage.mortgage_used_socialhomebuy",
+                                                                 mortgage_deposit_and_discount_total: record.field_formatted_as_currency("mortgage_deposit_and_discount_total"),
+                                                                 stairbought_part_of_value: record.field_formatted_as_currency("stairbought_part_of_value"),
+                                                                 mortgage: record.field_formatted_as_currency("mortgage"),
+                                                                 value: record.field_formatted_as_currency("value"),
+                                                                 deposit: record.field_formatted_as_currency("deposit"),
+                                                                 cashdis: record.field_formatted_as_currency("cashdis"),
+                                                                 stairbought: "#{record.stairbought}%").html_safe
       end
     elsif over_tolerance?(record.deposit_and_discount_total, record.stairbought_part_of_value, 1)
       %i[mortgageused value deposit cashdis stairbought].each do |field|
-        record.errors.add field, I18n.t("validations.sale_information.staircasing_mortgage.mortgage_not_used_socialhomebuy", deposit_and_discount_total: record.field_formatted_as_currency("deposit_and_discount_total"), stairbought_part_of_value: record.field_formatted_as_currency("stairbought_part_of_value"))
+        record.errors.add field, I18n.t("validations.sale_information.staircasing_mortgage.mortgage_not_used_socialhomebuy",
+                                        deposit_and_discount_total: record.field_formatted_as_currency("deposit_and_discount_total"),
+                                        stairbought_part_of_value: record.field_formatted_as_currency("stairbought_part_of_value"),
+                                        value: record.field_formatted_as_currency("value"),
+                                        deposit: record.field_formatted_as_currency("deposit"),
+                                        cashdis: record.field_formatted_as_currency("cashdis"),
+                                        stairbought: "#{record.stairbought}%").html_safe
       end
-      record.errors.add :type, :skip_bu_error, message: I18n.t("validations.sale_information.staircasing_mortgage.mortgage_not_used_socialhomebuy", deposit_and_discount_total: record.field_formatted_as_currency("deposit_and_discount_total"), stairbought_part_of_value: record.field_formatted_as_currency("stairbought_part_of_value"))
+      record.errors.add :type, :skip_bu_error, message: I18n.t("validations.sale_information.staircasing_mortgage.mortgage_not_used_socialhomebuy",
+                                                               deposit_and_discount_total: record.field_formatted_as_currency("deposit_and_discount_total"),
+                                                               stairbought_part_of_value: record.field_formatted_as_currency("stairbought_part_of_value"),
+                                                               value: record.field_formatted_as_currency("value"),
+                                                               deposit: record.field_formatted_as_currency("deposit"),
+                                                               cashdis: record.field_formatted_as_currency("cashdis"),
+                                                               stairbought: "#{record.stairbought}%").html_safe
     end
   end
 
@@ -215,15 +300,31 @@ module Validations::Sales::SaleInformationValidations
 
       if over_tolerance?(record.mortgage_and_deposit_total, record.stairbought_part_of_value, 1)
         %i[mortgage value deposit stairbought type].each do |field|
-          record.errors.add field, I18n.t("validations.sale_information.staircasing_mortgage.mortgage_used", mortgage_and_deposit_total: record.field_formatted_as_currency("mortgage_and_deposit_total"), stairbought_part_of_value: record.field_formatted_as_currency("stairbought_part_of_value"))
+          record.errors.add field, I18n.t("validations.sale_information.staircasing_mortgage.mortgage_used",
+                                          mortgage: record.field_formatted_as_currency("mortgage"),
+                                          deposit: record.field_formatted_as_currency("deposit"),
+                                          mortgage_and_deposit_total: record.field_formatted_as_currency("mortgage_and_deposit_total"),
+                                          value: record.field_formatted_as_currency("value"),
+                                          stairbought_part_of_value: record.field_formatted_as_currency("stairbought_part_of_value")).html_safe
         end
-        record.errors.add :type, :skip_bu_error, message: I18n.t("validations.sale_information.staircasing_mortgage.mortgage_used", mortgage_and_deposit_total: record.field_formatted_as_currency("mortgage_and_deposit_total"), stairbought_part_of_value: record.field_formatted_as_currency("stairbought_part_of_value"))
+        record.errors.add :type, :skip_bu_error, message: I18n.t("validations.sale_information.staircasing_mortgage.mortgage_used",
+                                                                 mortgage: record.field_formatted_as_currency("mortgage"),
+                                                                 deposit: record.field_formatted_as_currency("deposit"),
+                                                                 mortgage_and_deposit_total: record.field_formatted_as_currency("mortgage_and_deposit_total"),
+                                                                 value: record.field_formatted_as_currency("value"),
+                                                                 stairbought_part_of_value: record.field_formatted_as_currency("stairbought_part_of_value")).html_safe
       end
     elsif over_tolerance?(record.deposit, record.stairbought_part_of_value, 1)
       %i[mortgageused value deposit stairbought type].each do |field|
-        record.errors.add field, I18n.t("validations.sale_information.staircasing_mortgage.mortgage_not_used", deposit: record.field_formatted_as_currency("deposit"), stairbought_part_of_value: record.field_formatted_as_currency("stairbought_part_of_value"))
+        record.errors.add field, I18n.t("validations.sale_information.staircasing_mortgage.mortgage_not_used",
+                                        deposit: record.field_formatted_as_currency("deposit"),
+                                        value: record.field_formatted_as_currency("value"),
+                                        stairbought_part_of_value: record.field_formatted_as_currency("stairbought_part_of_value")).html_safe
       end
-      record.errors.add :type, :skip_bu_error, message: I18n.t("validations.sale_information.staircasing_mortgage.mortgage_not_used", deposit: record.field_formatted_as_currency("deposit"), stairbought_part_of_value: record.field_formatted_as_currency("stairbought_part_of_value"))
+      record.errors.add :type, :skip_bu_error, message: I18n.t("validations.sale_information.staircasing_mortgage.mortgage_not_used",
+                                                               deposit: record.field_formatted_as_currency("deposit"),
+                                                               value: record.field_formatted_as_currency("value"),
+                                                               stairbought_part_of_value: record.field_formatted_as_currency("stairbought_part_of_value")).html_safe
     end
   end
 

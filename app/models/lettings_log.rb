@@ -701,7 +701,9 @@ class LettingsLog < Log
   end
 
   def duplicates
-    LettingsLog.where.not(duplicate_set_id: nil).where(duplicate_set_id:).where.not(id:)
+    return LettingsLog.none if duplicate_set_id.nil?
+
+    LettingsLog.where(duplicate_set_id:).where.not(id:)
   end
 
   def address_search_given?
