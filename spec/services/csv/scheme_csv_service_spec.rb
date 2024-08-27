@@ -13,14 +13,12 @@ RSpec.describe Csv::SchemeCsvService do
 
   before do
     Timecop.freeze(fixed_time)
-    Singleton.__init__(FormHandler)
     create(:scheme_deactivation_period, scheme:, deactivation_date: scheme.created_at + 1.year, reactivation_date: scheme.created_at + 2.years)
     create(:location_deactivation_period, location:, deactivation_date: location.created_at + 6.months)
   end
 
   after do
     Timecop.return
-    Singleton.__init__(FormHandler)
   end
 
   it "returns a string" do
