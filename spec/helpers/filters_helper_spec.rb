@@ -168,7 +168,7 @@ RSpec.describe FiltersHelper do
 
     before do
       FactoryBot.create(:organisation_relationship, parent_organisation:, child_organisation:)
-      FactoryBot.create(:organisation, name: "Other organisation", id: 9_999_999)
+      FactoryBot.create(:organisation, name: "Other organisation", id: 99)
       user.organisation.reload
     end
 
@@ -326,7 +326,7 @@ RSpec.describe FiltersHelper do
 
     before do
       FactoryBot.create(:organisation_relationship, parent_organisation:, child_organisation:)
-      FactoryBot.create(:organisation, name: "Other organisation", id: 9_999_999)
+      FactoryBot.create(:organisation, name: "Other organisation", id: 99)
       user.organisation.reload
     end
 
