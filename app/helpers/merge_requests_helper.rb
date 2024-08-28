@@ -104,17 +104,17 @@ module MergeRequestsHelper
   end
 
   def total_users_after_merge_text(merge_request)
-    count = merge_request.total_visible_users_after_merge || 0
+    count = merge_request.total_visible_users_after_merge
     "#{"#{count} user".pluralize(count)} after merge"
   end
 
   def total_stock_owners_after_merge_text(merge_request)
-    count = merge_request.total_stock_owners_after_merge || 0
+    count = merge_request.total_stock_owners_after_merge
     "#{"#{count} stock owner".pluralize(count)} after merge"
   end
 
   def total_managing_agents_after_merge_text(merge_request)
-    count = merge_request.total_managing_agents_after_merge || 0
+    count = merge_request.total_managing_agents_after_merge
     "#{"#{count} managing agent".pluralize(count)} after merge"
   end
 
@@ -126,50 +126,52 @@ module MergeRequestsHelper
     relationship_text(merge_request, "managing_agent", :managing_agents_organisation_path)
   end
 
-  def relationship_text(merge_request, relationship_type, relationship_path_helper)
-    html_content = ""
-    duplicates = duplicate_relationships(merge_request, relationship_type)
-    organisations_without_relationships = ([merge_request.absorbing_organisation] + merge_request.merging_organisations).select { |org| org.send(relationship_type.pluralize).visible.empty? }
-
-    if duplicates.any?
-      html_content += "Some of the organisations merging have common #{relationship_type.humanize(capitalize: false).pluralize}.<br><br>"
-    end
-
-    if organisations_without_relationships.any?
-      org_names = organisations_without_relationships.map(&:name).to_sentence
-      verb = organisations_without_relationships.count > 1 ? "have" : "has"
-      html_content += "#{org_names} #{verb} no #{relationship_type.humanize(capitalize: false).pluralize}.<br><br>"
-    end
-
-    ([merge_request.absorbing_organisation] + merge_request.merging_organisations).each do |org|
-      relationship_count = org.send(relationship_type.pluralize).visible.count
-      next if relationship_count.zero?
-
-      link_text = if relationship_count == 1
-                    "View the #{relationship_count} #{org.name} #{relationship_type.humanize(capitalize: false)} (opens in a new tab)"
-                  else
-                    "View all #{relationship_count} #{org.name} #{relationship_type.humanize(capitalize: false).pluralize} (opens in a new tab)"
-                  end
-      html_content += "#{govuk_link_to(link_text, send(relationship_path_helper, org), target: '_blank')}<br><br>"
-    end
-
-    html_content.html_safe
+  def related_organisations(merge_request, relationship_type)
+    organisations =  merge_request.absorbing_organisation.send(relationship_type.pluralize).visible + merge_request.merging_organisations.flat_map { |org| org.send(relationship_type.pluralize).visible }
+    organisations += [merge_request.absorbing_organisation] + merge_request.merging_organisations
+    organisations.group_by { |relationship| relationship }.select { |_, occurrences| occurrences.size > 1 }.keys
   end
 
-  def duplicate_relationships(merge_request, relationship_type)
-    relationships = merge_request.absorbing_organisation.send(relationship_type.pluralize) + merge_request.merging_organisations.flat_map { |org| org.send(relationship_type.pluralize) }
-    seen = Set.new
-    duplicates = []
+  def relationship_text(merge_request, relationship_type, organisation_path_helper)
+    text = ""
+    organisations_without_relationships = organisations_without_relationships(merge_request, relationship_type)
 
-    relationships.each do |relationship|
-      if seen.include?(relationship)
-        duplicates << relationship
-      else
-        seen.add(relationship)
-      end
+    text += related_organisations_text(merge_request, relationship_type)
+    text += organisations_without_relationships_text(organisations_without_relationships, relationship_type)
+
+    ([merge_request.absorbing_organisation] + merge_request.merging_organisations).each do |org|
+      organisation_count = org.send(relationship_type.pluralize).visible.count
+      next if organisation_count.zero?
+
+      link_text = generate_link_text(organisation_count, org, relationship_type)
+      text += "#{govuk_link_to(link_text, send(organisation_path_helper, org), target: '_blank')}<br><br>"
     end
 
-    duplicates
+    text.html_safe
+  end
+
+  def organisations_without_relationships(merge_request, relationship_type)
+    ([merge_request.absorbing_organisation] + merge_request.merging_organisations).select { |org| org.send(relationship_type.pluralize).visible.empty? }
+  end
+
+  def related_organisations_text(merge_request, relationship_type)
+    if related_organisations(merge_request, relationship_type).any?
+      "Some of the organisations merging have common #{relationship_type.humanize(capitalize: false).pluralize}.<br><br>"
+    else
+      ""
+    end
+  end
+
+  def organisations_without_relationships_text(organisations_without_relationships, relationship_type)
+    return "" unless organisations_without_relationships.any?
+
+    org_names = organisations_without_relationships.map(&:name).to_sentence
+    verb = organisations_without_relationships.count > 1 ? "have" : "has"
+    "#{org_names} #{verb} no #{relationship_type.humanize(capitalize: false).pluralize}.<br><br>"
+  end
+
+  def generate_link_text(organisation_count, org, relationship_type)
+    "View #{organisation_count == 1 ? 'the' : 'all'} #{organisation_count} #{org.name} #{relationship_type.humanize(capitalize: false).pluralize(organisation_count)} (opens in a new tab)"
   end
 
   def merging_organisations_without_schemes_text(organisations)
@@ -188,7 +190,7 @@ module MergeRequestsHelper
   end
 
   def total_schemes_after_merge_text(merge_request)
-    count = merge_request.total_visible_schemes_after_merge || 0
+    count = merge_request.total_visible_schemes_after_merge
     "#{"#{count} scheme".pluralize(count)} after merge"
   end
 end
