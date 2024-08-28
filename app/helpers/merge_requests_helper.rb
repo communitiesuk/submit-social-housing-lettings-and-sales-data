@@ -118,18 +118,34 @@ module MergeRequestsHelper
     "#{"#{count} managing agent".pluralize(count)} after merge"
   end
 
-  def stock_owners_text(merge_request)
-    relationship_text(merge_request, "stock_owner", :stock_owners_organisation_path)
-  end
-
-  def managing_agent_text(merge_request)
-    relationship_text(merge_request, "managing_agent", :managing_agents_organisation_path)
-  end
-
   def related_organisations(merge_request, relationship_type)
     organisations =  merge_request.absorbing_organisation.send(relationship_type.pluralize).visible + merge_request.merging_organisations.flat_map { |org| org.send(relationship_type.pluralize).visible }
     organisations += [merge_request.absorbing_organisation] + merge_request.merging_organisations
     organisations.group_by { |relationship| relationship }.select { |_, occurrences| occurrences.size > 1 }.keys
+  end
+
+  def related_organisations_text(merge_request, relationship_type)
+    if related_organisations(merge_request, relationship_type).any?
+      "Some of the organisations merging have common #{relationship_type.humanize(capitalize: false).pluralize}.<br><br>"
+    else
+      ""
+    end
+  end
+
+  def organisations_without_relationships(merge_request, relationship_type)
+    ([merge_request.absorbing_organisation] + merge_request.merging_organisations).select { |org| org.send(relationship_type.pluralize).visible.empty? }
+  end
+
+  def organisations_without_relationships_text(organisations_without_relationships, relationship_type)
+    return "" unless organisations_without_relationships.any?
+
+    org_names = organisations_without_relationships.map(&:name).to_sentence
+    verb = organisations_without_relationships.count > 1 ? "have" : "has"
+    "#{org_names} #{verb} no #{relationship_type.humanize(capitalize: false).pluralize}.<br><br>"
+  end
+
+  def generate_organisation_link_text(organisation_count, org, relationship_type)
+    "View #{organisation_count == 1 ? 'the' : 'all'} #{organisation_count} #{org.name} #{relationship_type.humanize(capitalize: false).pluralize(organisation_count)} (opens in a new tab)"
   end
 
   def relationship_text(merge_request, relationship_type, organisation_path_helper)
@@ -150,28 +166,12 @@ module MergeRequestsHelper
     text.html_safe
   end
 
-  def organisations_without_relationships(merge_request, relationship_type)
-    ([merge_request.absorbing_organisation] + merge_request.merging_organisations).select { |org| org.send(relationship_type.pluralize).visible.empty? }
+  def stock_owners_text(merge_request)
+    relationship_text(merge_request, "stock_owner", :stock_owners_organisation_path)
   end
 
-  def related_organisations_text(merge_request, relationship_type)
-    if related_organisations(merge_request, relationship_type).any?
-      "Some of the organisations merging have common #{relationship_type.humanize(capitalize: false).pluralize}.<br><br>"
-    else
-      ""
-    end
-  end
-
-  def organisations_without_relationships_text(organisations_without_relationships, relationship_type)
-    return "" unless organisations_without_relationships.any?
-
-    org_names = organisations_without_relationships.map(&:name).to_sentence
-    verb = organisations_without_relationships.count > 1 ? "have" : "has"
-    "#{org_names} #{verb} no #{relationship_type.humanize(capitalize: false).pluralize}.<br><br>"
-  end
-
-  def generate_organisation_link_text(organisation_count, org, relationship_type)
-    "View #{organisation_count == 1 ? 'the' : 'all'} #{organisation_count} #{org.name} #{relationship_type.humanize(capitalize: false).pluralize(organisation_count)} (opens in a new tab)"
+  def managing_agent_text(merge_request)
+    relationship_text(merge_request, "managing_agent", :managing_agents_organisation_path)
   end
 
   def merging_organisations_without_schemes_text(organisations)
