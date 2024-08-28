@@ -600,8 +600,8 @@ RSpec.describe "User Features" do
         visit(user_path(other_user))
       end
 
-      it "sends beta onboarding email to be sent when user is legacy" do
-        expect(notify_client).to receive(:send_email).with(email_address: "new_user@example.com", template_id: User::BETA_ONBOARDING_TEMPLATE_ID, personalisation:).once
+      it "sends initial confirmable template email when user is legacy" do
+        expect(notify_client).to receive(:send_email).with(email_address: "new_user@example.com", template_id: User::CONFIRMABLE_TEMPLATE_ID, personalisation:).once
         click_button("Resend invite link")
       end
     end

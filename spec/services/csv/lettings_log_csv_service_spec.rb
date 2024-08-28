@@ -1,6 +1,16 @@
 require "rails_helper"
+require "rake"
 
 RSpec.describe Csv::LettingsLogCsvService do
+  subject(:task) { Rake::Task["data_import:add_variable_definitions"] }
+
+  before do
+    Rake.application.rake_require("tasks/log_variable_definitions")
+    Rake::Task.define_task(:environment)
+    task.reenable
+    task.invoke("spec/fixtures/variable_definitions")
+  end
+
   context "when downloading a csv" do
     let(:log) { create(:lettings_log) }
     let(:user) { create(:user, :support, email: "s.port@jeemayle.com") }
@@ -9,23 +19,29 @@ RSpec.describe Csv::LettingsLogCsvService do
     let(:year) { 2024 }
     let(:csv) { CSV.parse(service.prepare_csv(LettingsLog.where(id: logs.map(&:id)))) }
     let(:logs) { [log] }
-    let(:headers) { csv.first }
+    let(:definition_line) { csv.first }
+    let(:attribute_line) { csv.second }
+    let(:content_line) { csv.third }
 
     it "returns a string" do
       result = service.prepare_csv(LettingsLog.all)
       expect(result).to be_a String
     end
 
-    it "returns a csv with headers" do
-      expect(csv.first.first).to eq "id"
+    it "returns a csv with definition headers on the first line" do
+      expect(definition_line.first).to eq "Log ID"
+    end
+
+    it "returns a csv with attribute headers on the second line" do
+      expect(attribute_line.first).to eq "id"
     end
 
     context "when stubbing :ordered_questions_for_year" do
       let(:form_handler_mock) { instance_double(FormHandler) }
       let(:lettings_form) do
         FormFactory.new(year: 2050, type: "lettings")
-                  .with_sections([build(:section, :with_questions, question_ids:, questions:)])
-                  .build
+                   .with_sections([build(:section, :with_questions, question_ids:, questions:)])
+                   .build
       end
       let(:question_ids) { [] }
       let(:questions) { nil }
@@ -50,13 +66,13 @@ RSpec.describe Csv::LettingsLogCsvService do
         let(:question_ids) { %w[prevten startdate brent rent_type] }
 
         it "includes log attributes related to questions to the headers" do
-          expect(headers).to include(*question_ids.first(3))
+          expect(attribute_line).to include(*question_ids.first(3))
         end
 
         it "removes some log attributes related to questions from the headers and replaces them with their derived values in the correct order" do
-          expect(headers).not_to include "rent_type"
-          expect(headers).to include(*%w[wrent renttype renttype_detail])
-          expect(headers).not_to include("rent_type_detail")
+          expect(attribute_line).not_to include "rent_type"
+          expect(attribute_line).to include(*%w[wrent renttype renttype_detail])
+          expect(attribute_line).not_to include("rent_type_detail")
         end
       end
 
@@ -70,23 +86,23 @@ RSpec.describe Csv::LettingsLogCsvService do
 
         it "does not add the id of the checkbox question to the headers" do
           question_ids = questions.map(&:id)
-          expect(headers).not_to include(*question_ids)
+          expect(attribute_line).not_to include(*question_ids)
         end
 
         it "adds the related log attributes from the answer options to the headers" do
           log_attributes = questions.flat_map { |q| q.answer_options.keys }
-          expect(headers).to include(*log_attributes)
+          expect(attribute_line).to include(*log_attributes)
         end
       end
     end
 
     it "adds log attributes not related to questions to the headers" do
-      expect(headers.first(5)).to eq %w[id status duplicate_set_id created_by assigned_to]
+      expect(attribute_line.first(5)).to eq %w[id status duplicate_set_id created_by assigned_to]
     end
 
     it "adds attributes related to associated schemes and locations to the headers" do
-      expect(headers).to include(*%w[scheme_service_name scheme_confidential SCHTYPE scheme_registered_under_care_act])
-      expect(headers.last(5)).to eq %w[location_units location_type_of_unit location_mobility_type location_local_authority location_startdate]
+      expect(attribute_line).to include(*%w[scheme_service_name scheme_confidential SCHTYPE scheme_registered_under_care_act])
+      expect(attribute_line.last(5)).to eq %w[location_units location_type_of_unit location_mobility_type location_local_authority location_startdate]
     end
 
     context "when there are many logs" do
@@ -94,7 +110,7 @@ RSpec.describe Csv::LettingsLogCsvService do
       let(:log_count) { 30 }
 
       it "creates a CSV with the correct number of logs" do
-        expected_row_count_with_headers = log_count + 1
+        expected_row_count_with_headers = log_count + 2
         expect(csv.size).to be expected_row_count_with_headers
       end
     end
@@ -104,32 +120,32 @@ RSpec.describe Csv::LettingsLogCsvService do
       let(:log) { create(:lettings_log, :setup_completed, hhmemb: 2, details_known_2: 0, relat2: "P", age1: 35, la: "E09000003", duplicate_set_id: 12_312) }
 
       it "gives answer to radio questions as labels" do
-        relat2_column_index = csv.first.index("relat2")
-        relat2_value = csv.second[relat2_column_index]
+        relat2_column_index = attribute_line.index("relat2")
+        relat2_value = content_line[relat2_column_index]
         expect(relat2_value).to eq "Partner"
       end
 
       it "gives answers to free input questions as the user input" do
-        age1_column_index = csv.first.index("age1")
-        age1_value = csv.second[age1_column_index]
+        age1_column_index = attribute_line.index("age1")
+        age1_value = content_line[age1_column_index]
         expect(age1_value).to eq 35.to_s
       end
 
       it "exports the code for the local authority under the heading 'la'" do
-        la_column_index = csv.first.index("la")
-        la_value = csv.second[la_column_index]
+        la_column_index = attribute_line.index("la")
+        la_value = content_line[la_column_index]
         expect(la_value).to eq "E09000003"
       end
 
       it "exports the label for the local authority under the heading 'la_label'" do
-        la_label_column_index = csv.first.index("la_label")
-        la_label_value = csv.second[la_label_column_index]
+        la_label_column_index = attribute_line.index("la_label")
+        la_label_value = content_line[la_label_column_index]
         expect(la_label_value).to eq "Barnet"
       end
 
       it "exports the id for under the heading 'duplicate_set_id'" do
-        duplicate_set_id_column_index = csv.first.index("duplicate_set_id")
-        duplicate_set_id_value = csv.second[duplicate_set_id_column_index]
+        duplicate_set_id_column_index = attribute_line.index("duplicate_set_id")
+        duplicate_set_id_value = content_line[duplicate_set_id_column_index]
         expect(duplicate_set_id_value).to eq "12312"
       end
     end
@@ -139,32 +155,32 @@ RSpec.describe Csv::LettingsLogCsvService do
       let(:log) { create(:lettings_log, :setup_completed, hhmemb: 2, details_known_2: 0, relat2: "P", age1: 35, la: "E09000003", duplicate_set_id: 12_312) }
 
       it "gives answer to radio questions as labels" do
-        relat2_column_index = csv.first.index("relat2")
-        relat2_value = csv.second[relat2_column_index]
+        relat2_column_index = attribute_line.index("relat2")
+        relat2_value = content_line[relat2_column_index]
         expect(relat2_value).to eq "P"
       end
 
       it "gives answers to free input questions as the user input" do
-        age1_column_index = csv.first.index("age1")
-        age1_value = csv.second[age1_column_index]
+        age1_column_index = attribute_line.index("age1")
+        age1_value = content_line[age1_column_index]
         expect(age1_value).to eq 35.to_s
       end
 
       it "exports the code for the local authority under the heading 'la'" do
-        la_column_index = csv.first.index("la")
-        la_value = csv.second[la_column_index]
+        la_column_index = attribute_line.index("la")
+        la_value = content_line[la_column_index]
         expect(la_value).to eq "E09000003"
       end
 
       it "exports the label for the local authority under the heading 'la_label'" do
-        la_label_column_index = csv.first.index("la_label")
-        la_label_value = csv.second[la_label_column_index]
+        la_label_column_index = attribute_line.index("la_label")
+        la_label_value = content_line[la_label_column_index]
         expect(la_label_value).to eq "Barnet"
       end
 
       it "exports the duplicate log reference under the heading 'duplicate_set_id'" do
-        duplicate_set_id_column_index = csv.first.index("duplicate_set_id")
-        duplicate_set_id_value = csv.second[duplicate_set_id_column_index]
+        duplicate_set_id_column_index = attribute_line.index("duplicate_set_id")
+        duplicate_set_id_value = content_line[duplicate_set_id_column_index]
         expect(duplicate_set_id_value).to eq "12312"
       end
     end
@@ -173,7 +189,7 @@ RSpec.describe Csv::LettingsLogCsvService do
       let(:user) { create(:user, :data_coordinator, email: "choreographer@owtluk.com") }
 
       it "does not include certain attributes in the headers" do
-        expect(headers).not_to include(*%w[wrent wscharge wpschrge wsupchrg wtcharge])
+        expect(attribute_line).not_to include(*%w[wrent wscharge wpschrge wsupchrg wtcharge])
       end
     end
 
@@ -316,8 +332,8 @@ RSpec.describe Csv::LettingsLogCsvService do
               expected_content = CSV.read("spec/fixtures/files/lettings_log_csv_export_labels_24.csv")
               values_to_delete = %w[id]
               values_to_delete.each do |attribute|
-                index = csv.first.index(attribute)
-                csv.second[index] = nil
+                index = attribute_line.index(attribute)
+                content_line[index] = nil
               end
               expect(csv).to eq expected_content
             end
@@ -330,8 +346,8 @@ RSpec.describe Csv::LettingsLogCsvService do
               expected_content = CSV.read("spec/fixtures/files/lettings_log_csv_export_non_support_labels_24.csv")
               values_to_delete = %w[id]
               values_to_delete.each do |attribute|
-                index = csv.first.index(attribute)
-                csv.second[index] = nil
+                index = attribute_line.index(attribute)
+                content_line[index] = nil
               end
               expect(csv).to eq expected_content
             end
@@ -348,8 +364,8 @@ RSpec.describe Csv::LettingsLogCsvService do
               expected_content = CSV.read("spec/fixtures/files/lettings_log_csv_export_codes_24.csv")
               values_to_delete = %w[id]
               values_to_delete.each do |attribute|
-                index = csv.first.index(attribute)
-                csv.second[index] = nil
+                index = attribute_line.index(attribute)
+                content_line[index] = nil
               end
               expect(csv).to eq expected_content
             end
@@ -362,8 +378,8 @@ RSpec.describe Csv::LettingsLogCsvService do
               expected_content = CSV.read("spec/fixtures/files/lettings_log_csv_export_non_support_codes_24.csv")
               values_to_delete = %w[id]
               values_to_delete.each do |attribute|
-                index = csv.first.index(attribute)
-                csv.second[index] = nil
+                index = attribute_line.index(attribute)
+                content_line[index] = nil
               end
               expect(csv).to eq expected_content
             end
@@ -504,8 +520,8 @@ RSpec.describe Csv::LettingsLogCsvService do
               expected_content = CSV.read("spec/fixtures/files/lettings_log_csv_export_labels_23.csv")
               values_to_delete = %w[id]
               values_to_delete.each do |attribute|
-                index = csv.first.index(attribute)
-                csv.second[index] = nil
+                index = attribute_line.index(attribute)
+                content_line[index] = nil
               end
               expect(csv).to eq expected_content
             end
@@ -518,8 +534,8 @@ RSpec.describe Csv::LettingsLogCsvService do
               expected_content = CSV.read("spec/fixtures/files/lettings_log_csv_export_non_support_labels_23.csv")
               values_to_delete = %w[id]
               values_to_delete.each do |attribute|
-                index = csv.first.index(attribute)
-                csv.second[index] = nil
+                index = attribute_line.index(attribute)
+                content_line[index] = nil
               end
               expect(csv).to eq expected_content
             end
@@ -536,8 +552,8 @@ RSpec.describe Csv::LettingsLogCsvService do
               expected_content = CSV.read("spec/fixtures/files/lettings_log_csv_export_codes_23.csv")
               values_to_delete = %w[id]
               values_to_delete.each do |attribute|
-                index = csv.first.index(attribute)
-                csv.second[index] = nil
+                index = attribute_line.index(attribute)
+                content_line[index] = nil
               end
               expect(csv).to eq expected_content
             end
@@ -550,8 +566,8 @@ RSpec.describe Csv::LettingsLogCsvService do
               expected_content = CSV.read("spec/fixtures/files/lettings_log_csv_export_non_support_codes_23.csv")
               values_to_delete = %w[id]
               values_to_delete.each do |attribute|
-                index = csv.first.index(attribute)
-                csv.second[index] = nil
+                index = attribute_line.index(attribute)
+                content_line[index] = nil
               end
               expect(csv).to eq expected_content
             end

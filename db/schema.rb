@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_07_15_082338) do
+ActiveRecord::Schema[7.0].define(version: 2024_08_19_143150) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -44,6 +44,18 @@ ActiveRecord::Schema[7.0].define(version: 2024_07_15_082338) do
     t.string "rent_type_fix_status", default: "not_applied"
     t.index ["identifier"], name: "index_bulk_uploads_on_identifier", unique: true
     t.index ["user_id"], name: "index_bulk_uploads_on_user_id"
+  end
+
+  create_table "csv_variable_definitions", force: :cascade do |t|
+    t.string "variable", null: false
+    t.string "definition", null: false
+    t.string "log_type", null: false
+    t.integer "year", null: false
+    t.datetime "last_accessed"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.check_constraint "log_type::text = ANY (ARRAY['lettings'::character varying::text, 'sales'::character varying::text])", name: "log_type_check"
+    t.check_constraint "year >= 2000 AND year <= 2099", name: "year_check"
   end
 
   create_table "data_protection_confirmations", force: :cascade do |t|
@@ -788,6 +800,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_07_15_082338) do
     t.boolean "initial_confirmation_sent"
     t.boolean "reactivate_with_organisation"
     t.datetime "discarded_at"
+    t.string "phone_extension"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["encrypted_otp_secret_key"], name: "index_users_on_encrypted_otp_secret_key", unique: true

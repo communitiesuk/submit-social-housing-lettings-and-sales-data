@@ -4,6 +4,15 @@ module FormPageErrorHelper
     other_page_error_ids.each { |id| lettings_log.errors.delete(id) }
   end
 
+  def remove_duplicate_page_errors(lettings_log)
+    lettings_log.errors.group_by(&:message).each do |_, errors|
+      next if errors.size == 1
+
+      errors.shift
+      errors.each { |error| lettings_log.errors.delete(error.attribute) }
+    end
+  end
+
   def all_questions_affected_by_errors(log)
     log.errors.map(&:attribute) - [:base]
   end
