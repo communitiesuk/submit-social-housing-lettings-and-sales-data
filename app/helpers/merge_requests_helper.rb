@@ -143,7 +143,7 @@ module MergeRequestsHelper
       organisation_count = org.send(relationship_type.pluralize).visible.count
       next if organisation_count.zero?
 
-      link_text = generate_link_text(organisation_count, org, relationship_type)
+      link_text = generate_organisation_link_text(organisation_count, org, relationship_type)
       text += "#{govuk_link_to(link_text, send(organisation_path_helper, org), target: '_blank')}<br><br>"
     end
 
@@ -170,7 +170,7 @@ module MergeRequestsHelper
     "#{org_names} #{verb} no #{relationship_type.humanize(capitalize: false).pluralize}.<br><br>"
   end
 
-  def generate_link_text(organisation_count, org, relationship_type)
+  def generate_organisation_link_text(organisation_count, org, relationship_type)
     "View #{organisation_count == 1 ? 'the' : 'all'} #{organisation_count} #{org.name} #{relationship_type.humanize(capitalize: false).pluralize(organisation_count)} (opens in a new tab)"
   end
 
