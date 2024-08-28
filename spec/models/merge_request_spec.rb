@@ -424,7 +424,7 @@ RSpec.describe MergeRequest, type: :model do
       end
     end
 
-    describe "#total_managing_agents_after_merge"do
+    describe "#total_managing_agents_after_merge" do
       it "returns the correct count of managing agents after merge" do
         expect(merge_request.total_managing_agents_after_merge).to eq(1)
       end
