@@ -397,4 +397,43 @@ RSpec.describe MergeRequest, type: :model do
       end
     end
   end
+
+  describe "relationship outcomes" do
+    let(:stock_owner1) { create(:organisation, name: "Stock owner 1") }
+    let(:stock_owner2) { create(:organisation, name: "Stock owner 2") }
+    let(:stock_owner3) { create(:organisation, name: "Stock owner 3") }
+    let(:managing_agent1) { create(:organisation, name: "Managing agent 1") }
+    let(:managing_agent2) { create(:organisation, name: "Managing agent 2") }
+    let(:absorbing_organisation) { create(:organisation, name: "Absorbing Org") }
+    let(:merging_organisations) { create_list(:organisation, 2) { |org, i| org.name = "Dummy Org #{i + 1}" } }
+    let(:merge_request) { create(:merge_request, absorbing_organisation:, merging_organisations:) }
+
+    before do
+      create(:organisation_relationship, child_organisation: absorbing_organisation, parent_organisation: stock_owner1)
+      create(:organisation_relationship, child_organisation: merging_organisations.first, parent_organisation: stock_owner2)
+      create(:organisation_relationship, child_organisation: merging_organisations.first, parent_organisation: stock_owner1)
+      create(:organisation_relationship, child_organisation: merging_organisations.first, parent_organisation: stock_owner3)
+      create(:organisation_relationship, parent_organisation: absorbing_organisation, child_organisation: managing_agent1)
+      create(:organisation_relationship, parent_organisation: absorbing_organisation, child_organisation: managing_agent2)
+      create(:organisation_relationship, parent_organisation: merging_organisations.first, child_organisation: managing_agent2)
+    end
+
+    describe "#total_stock_owners_after_merge" do
+      it "returns the correct count of stock owners after merge" do
+        expect(merge_request.total_stock_owners_after_merge).to eq(2)
+      end
+    end
+
+    describe "#total_managing_agents_after_merge"do
+      it "returns the correct count of managing agents after merge" do
+        expect(merge_request.total_managing_agents_after_merge).to eq(1)
+      end
+    end
+
+    describe "#total_stock_owners_managing_agents_label" do
+      it "returns the correct label" do
+        expect(merge_request.total_stock_owners_managing_agents_label).to eq("2 stock owners\n1 managing agent")
+      end
+    end
+  end
 end
