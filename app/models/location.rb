@@ -103,7 +103,7 @@ class Location < ApplicationRecord
          .where.not(id: joins(scheme: [:owning_organisation]).merge(Location.deactivated_by_organisation).pluck(:id))
          .where.not(id: incomplete.pluck(:id))
          .where.not(id: joins(:location_deactivation_periods).merge(Location.deactivating_soon_directly).pluck(:id))
-         .where.not(id: joins(scheme: [:owning_organisation, :scheme_deactivation_periods]).merge(Location.deactivating_soon_by_scheme).pluck(:id))
+         .where.not(id: joins(scheme: %i[owning_organisation scheme_deactivation_periods]).merge(Location.deactivating_soon_by_scheme).pluck(:id))
          .where.not(id: activating_soon.pluck(:id))
   }
 
@@ -114,7 +114,7 @@ class Location < ApplicationRecord
          .where.not(id: joins(scheme: [:owning_organisation]).merge(Location.deactivated_by_organisation).pluck(:id))
          .where.not(id: incomplete.pluck(:id))
          .where.not(id: joins(:location_deactivation_periods).merge(Location.deactivating_soon_directly(date)).pluck(:id))
-         .where.not(id: joins(scheme: [:owning_organisation, :scheme_deactivation_periods]).merge(Location.deactivating_soon_by_scheme(date)).pluck(:id))
+         .where.not(id: joins(scheme: %i[owning_organisation scheme_deactivation_periods]).merge(Location.deactivating_soon_by_scheme(date)).pluck(:id))
          .where.not(id: activating_soon(date).pluck(:id))
   }
 
