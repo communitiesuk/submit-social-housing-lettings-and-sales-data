@@ -523,7 +523,7 @@ RSpec.describe MergeRequestsController, type: :request do
       end
 
       context "with unmerged request" do
-        let(:merge_request) { create(:merge_request, absorbing_organisation_id: organisation.id, merge_date: Time.zone.today) }
+        let(:merge_request) { create(:merge_request, absorbing_organisation_id: organisation.id, merge_date: Time.zone.today, existing_absorbing_organisation: true) }
 
         it "shows users and schemes count and has links to view merge outcomes" do
           expect(page).to have_link("View", href: scheme_outcomes_merge_request_path(merge_request))
