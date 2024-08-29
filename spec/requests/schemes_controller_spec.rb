@@ -748,7 +748,7 @@ RSpec.describe SchemesController, type: :request do
         let(:add_deactivations) { scheme.scheme_deactivation_periods << scheme_deactivation_period }
 
         before do
-          create(:location, scheme:)
+          create(:location, scheme:, startdate: Time.utc(2022, 9, 9))
           Timecop.freeze(Time.utc(2022, 10, 10))
           sign_in user
           add_deactivations
@@ -784,6 +784,7 @@ RSpec.describe SchemesController, type: :request do
 
           context "and associated logs in editable collection period" do
             before do
+              create(:location, scheme:, startdate: Time.zone.local(2022, 9, 9))
               create(:lettings_log, :sh, scheme:, startdate: Time.zone.local(2022, 9, 9), owning_organisation: user.organisation)
               get "/schemes/#{scheme.id}"
             end
