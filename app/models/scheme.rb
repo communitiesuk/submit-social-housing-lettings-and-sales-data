@@ -72,9 +72,10 @@ class Scheme < ApplicationRecord
     .where.not(id: joins(:owning_organisation).deactivated_by_organisation.pluck(:id))
   }
 
-  scope :reactivating_soon, lambda {
+  scope :reactivating_soon, lambda { |date = Time.zone.now|
+    merge(SchemeDeactivationPeriod.deactivations_with_reactivation)
     where.not("scheme_deactivation_periods.reactivation_date IS NULL")
-    .where("scheme_deactivation_periods.reactivation_date > ?", Time.zone.now)
+    .where("scheme_deactivation_periods.reactivation_date > ?", date)
     .where.not(id: joins(:owning_organisation).deactivated_by_organisation.pluck(:id))
   }
 

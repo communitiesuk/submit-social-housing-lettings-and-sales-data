@@ -107,12 +107,10 @@ private
       periods << ActivePeriod.new(deactivation.reactivation_date, nil)
     end
 
-    if location.deactivated_by_scheme? || location.deactivating_soon_by_scheme?
-      scheme_periods = location.scheme.scheme_deactivation_periods.sort_by(&:deactivation_date)
-      scheme_periods.each do |scheme_period|
-        periods.last.to = scheme_period.deactivation_date
-        periods << ActivePeriod.new(scheme_period.reactivation_date, nil)
-      end
+    scheme_periods = location.scheme.scheme_deactivation_periods.sort_by(&:deactivation_date)
+    scheme_periods.each do |scheme_period|
+      periods.last.to = scheme_period.deactivation_date
+      periods << ActivePeriod.new(scheme_period.reactivation_date, nil)
     end
 
     remove_overlapping_and_empty_periods(periods)
