@@ -84,12 +84,10 @@ RSpec.describe "merge_requests/show.html.erb", type: :view do
 
     it "displays the total stock owners & managing agents after merge details" do
       expect(rendered).to have_selector("dt", text: "Total stock owners & managing agents after merge")
-      if merge_request.total_stock_owners.present? || merge_request.total_managing_agents.present?
-        combined_text = []
-        combined_text << "#{merge_request.total_stock_owners} stock owners" if merge_request.total_stock_owners.present?
-        combined_text << "#{merge_request.total_managing_agents} managing agents" if merge_request.total_managing_agents.present?
-        expect(rendered).to have_selector("dd", text: combined_text.join(""))
-      end
+      combined_text = []
+      combined_text << "#{merge_request.total_stock_owners} stock owners" if merge_request.total_stock_owners.present?
+      combined_text << "#{merge_request.total_managing_agents} managing agents" if merge_request.total_managing_agents.present?
+      expect(rendered).to have_selector("dd", text: combined_text.join("\n"))
     end
   end
 end

@@ -62,7 +62,7 @@ class MergeRequest < ApplicationRecord
   end
 
   def total_users_label
-    "#{total_visible_users_after_merge} #{'User'.pluralize(total_visible_users_after_merge)}"
+    "#{total_visible_users_after_merge} #{'user'.pluralize(total_visible_users_after_merge)}"
   end
 
   def organisations_with_users
@@ -84,7 +84,7 @@ class MergeRequest < ApplicationRecord
   end
 
   def total_schemes_label
-    "#{total_visible_schemes_after_merge} #{'Scheme'.pluralize(total_visible_schemes_after_merge)}"
+    "#{total_visible_schemes_after_merge} #{'scheme'.pluralize(total_visible_schemes_after_merge)}"
   end
 
   def organisations_with_schemes
@@ -97,5 +97,44 @@ class MergeRequest < ApplicationRecord
     return [] unless absorbing_organisation.present? && merging_organisations.any?
 
     ([absorbing_organisation] + merging_organisations).reject(&:has_visible_schemes?)
+  end
+
+  def filter_relationships(absorbing_relationships, merging_relationships, absorbing_organisation, merging_organisations)
+    filtered_absorbing_relationships = absorbing_relationships.reject do |relationship|
+      merging_relationships.include?(relationship) || merging_organisations.include?(relationship)
+    end
+
+    filtered_merging_relationships = merging_relationships.reject do |relationship|
+      absorbing_relationships.include?(relationship) || relationship == absorbing_organisation || merging_organisations.include?(relationship)
+    end
+
+    (filtered_absorbing_relationships + filtered_merging_relationships).uniq
+  end
+
+  def total_stock_owners_after_merge
+    return total_stock_owners if status == STATUS[:request_merged] || status == STATUS[:processing]
+
+    absorbing_stock_owners = absorbing_organisation.stock_owners.visible
+    merging_stock_owners = merging_organisations.flat_map { |org| org.stock_owners.visible }
+
+    total_filtered_stock_owners = filter_relationships(absorbing_stock_owners, merging_stock_owners, absorbing_organisation, merging_organisations)
+    total_filtered_stock_owners.count
+  end
+
+  def total_managing_agents_after_merge
+    return total_managing_agents if status == STATUS[:request_merged] || status == STATUS[:processing]
+
+    absorbing_managing_agents = absorbing_organisation.managing_agents.visible
+    merging_managing_agents = merging_organisations.flat_map { |org| org.managing_agents.visible }
+
+    total_filtered_managing_agents = filter_relationships(absorbing_managing_agents, merging_managing_agents, absorbing_organisation, merging_organisations)
+    total_filtered_managing_agents.count
+  end
+
+  def total_stock_owners_managing_agents_label
+    stock_owners_count = total_stock_owners_after_merge
+    managing_agents_count = total_managing_agents_after_merge
+
+    "#{stock_owners_count} #{'stock owner'.pluralize(stock_owners_count)}\n#{managing_agents_count} #{'managing agent'.pluralize(managing_agents_count)}"
   end
 end
