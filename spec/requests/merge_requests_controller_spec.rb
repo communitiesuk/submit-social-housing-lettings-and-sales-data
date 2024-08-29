@@ -485,40 +485,54 @@ RSpec.describe MergeRequestsController, type: :request do
 
         it "shows users and schemes count and has links to view merge outcomes" do
           expect(page).to have_link("View", href: scheme_outcomes_merge_request_path(merge_request))
-          expect(page).to have_content("4 Users")
-          expect(page).to have_content("4 Schemes")
+          expect(page).to have_content("4 users")
+          expect(page).to have_content("4 schemes")
         end
       end
 
       context "with a merged request" do
-        let(:merge_request) { create(:merge_request, request_merged: true, total_users: 34, total_schemes: 12) }
+        let(:merge_request) { create(:merge_request, request_merged: true, total_users: 34, total_schemes: 12, total_stock_owners: 8, total_managing_agents: 5) }
 
         it "shows saved users count and doesn't have links to view merge outcomes" do
           expect(merge_request.status).to eq("request_merged")
           expect(page).not_to have_link("View", href: user_outcomes_merge_request_path(merge_request))
-          expect(page).to have_content("34 Users")
+          expect(page).to have_content("34 users")
         end
 
         it "shows saved schemes count and doesn't have links to view merge outcomes" do
           expect(merge_request.status).to eq("request_merged")
           expect(page).not_to have_link("View", href: scheme_outcomes_merge_request_path(merge_request))
-          expect(page).to have_content("12 Schemes")
+          expect(page).to have_content("12 schemes")
+        end
+
+        it "shows stock owners and managing agents count and doesn't have links to view merge outcomes" do
+          expect(merge_request.status).to eq("request_merged")
+          expect(page).not_to have_link("View", href: relationship_outcomes_merge_request_path(merge_request))
+          expect(page).to have_content("8 stock owners")
+          expect(page).to have_content("5 managing agents")
         end
       end
 
       context "with a processing request" do
-        let(:merge_request) { create(:merge_request, processing: true, total_users: 51, total_schemes: 33) }
+        let(:merge_request) { create(:merge_request, processing: true, total_users: 51, total_schemes: 33, total_stock_owners: 15, total_managing_agents: 20) }
 
         it "shows saved users count and doesn't have links to view merge outcomes" do
           expect(merge_request.status).to eq("processing")
           expect(page).not_to have_link("View", href: user_outcomes_merge_request_path(merge_request))
-          expect(page).to have_content("51 Users")
+          expect(page).to have_content("51 users")
         end
 
         it "shows saved schemes count and doesn't have links to view merge outcomes" do
           expect(merge_request.status).to eq("processing")
           expect(page).not_to have_link("View", href: scheme_outcomes_merge_request_path(merge_request))
-          expect(page).to have_content("33 Schemes")
+          expect(page).to have_content("33 schemes")
+        end
+
+        it "shows stock owners and managing agents count and doesn't have links to view merge outcomes" do
+          expect(merge_request.status).to eq("processing")
+          expect(page).not_to have_link("View", href: relationship_outcomes_merge_request_path(merge_request))
+          expect(page).to have_content("15 stock owners")
+          expect(page).to have_content("20 managing agents")
         end
       end
     end

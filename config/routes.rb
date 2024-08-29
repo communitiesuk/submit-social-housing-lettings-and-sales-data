@@ -211,6 +211,7 @@ Rails.application.routes.draw do
       get "helpdesk-ticket"
       get "merge-start-confirmation"
       get "user-outcomes"
+      get "relationship-outcomes"
       get "scheme-outcomes"
       get "delete-confirmation", to: "merge_requests#delete_confirmation"
       delete "delete", to: "merge_requests#delete"
