@@ -179,6 +179,8 @@ en:
             merge_date: 
               blank: "Enter a merge date"
               invalid: "Enter a valid merge date"
+            existing_absorbing_organisation:
+              blank: "You must answer absorbing organisation already active?"
 
   notification:
     logs_deleted:

@@ -47,6 +47,7 @@ class MergeRequest < ApplicationRecord
   def required_questions_answered?
     absorbing_organisation_id.present? &&
       merge_date.present? &&
+      existing_absorbing_organisation.present? &&
       merging_organisations.count.positive? &&
       errors.empty?
   end
@@ -97,6 +98,12 @@ class MergeRequest < ApplicationRecord
     return [] unless absorbing_organisation.present? && merging_organisations.any?
 
     ([absorbing_organisation] + merging_organisations).reject(&:has_visible_schemes?)
+  end
+
+  def existing_absorbing_organisation_label
+    return if existing_absorbing_organisation.nil?
+
+    existing_absorbing_organisation ? "Yes" : "No"
   end
 
   def filter_relationships(absorbing_relationships, merging_relationships, absorbing_organisation, merging_organisations)
