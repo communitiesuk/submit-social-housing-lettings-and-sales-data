@@ -219,6 +219,23 @@ RSpec.describe MergeRequestsController, type: :request do
       end
     end
 
+    describe "#existing_absorbing_organisation" do
+      context "when viewing helpdesk ticket page" do
+        before do
+          merge_request.update!(absorbing_organisation_id: organisation.id, merge_date: Time.zone.today)
+          get "/merge-request/#{merge_request.id}/existing-absorbing-organisation", headers:
+        end
+
+        it "shows the correct content" do
+          expect(page).to have_content("Was #{merge_request.absorbing_organisation.name} already active before the merge date?")
+          expect(page).to have_content("Yes, this organisation existed before the merge")
+          expect(page).to have_content("No, it is a new organisation created by this merge")
+          expect(page).to have_link("Back", href: merge_date_merge_request_path(merge_request))
+          expect(page).to have_button("Save and continue")
+        end
+      end
+    end
+
     describe "#helpdesk_ticket" do
       context "when viewing helpdesk ticket page" do
         before do
@@ -228,6 +245,8 @@ RSpec.describe MergeRequestsController, type: :request do
 
         it "shows the correct content" do
           expect(page).to have_content("Which helpdesk ticket reported this merge?")
+          expect(page).to have_link("Back", href: existing_absorbing_organisation_merge_request_path(merge_request))
+          expect(page).to have_button("Save and continue")
         end
       end
     end
@@ -365,10 +384,10 @@ RSpec.describe MergeRequestsController, type: :request do
             patch "/merge-request/#{merge_request.id}", headers:, params:
           end
 
-          it "redirects to helpdesk ticket path" do
+          it "redirects to existing absorbing organisation path" do
             request
 
-            expect(response).to redirect_to(helpdesk_ticket_merge_request_path(merge_request))
+            expect(response).to redirect_to(existing_absorbing_organisation_merge_request_path(merge_request))
           end
 
           it "updates merge_date" do
@@ -400,6 +419,29 @@ RSpec.describe MergeRequestsController, type: :request do
           end
         end
       end
+
+      describe "from existing_absorbing_organisation page" do
+        context "when not answering the question" do
+          let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation, absorbing_organisation: other_organisation) }
+          let(:params) do
+            { merge_request: { page: "existing_absorbing_organisation" } }
+          end
+          let(:request) do
+            patch "/merge-request/#{merge_request.id}", headers:, params:
+          end
+
+          it "renders the error" do
+            request
+
+            expect(response).to have_http_status(:unprocessable_entity)
+            expect(page).to have_content("You must answer absorbing organisation already active?")
+          end
+
+          it "does not update the request" do
+            expect { request }.not_to(change { merge_request.reload.attributes })
+          end
+        end
+      end
     end
 
     describe "#merge_start_confirmation" do
@@ -416,7 +458,7 @@ RSpec.describe MergeRequestsController, type: :request do
     end
 
     describe "#start_merge" do
-      let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation, absorbing_organisation: organisation, merge_date: Time.zone.local(2022, 3, 3)) }
+      let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation, absorbing_organisation: organisation, merge_date: Time.zone.local(2022, 3, 3), existing_absorbing_organisation: true) }
       let(:merging_organisation) { create(:organisation, name: "Merging Test Org") }
 
       before do
@@ -481,7 +523,7 @@ RSpec.describe MergeRequestsController, type: :request do
       end
 
       context "with unmerged request" do
-        let(:merge_request) { create(:merge_request, absorbing_organisation_id: organisation.id, merge_date: Time.zone.today) }
+        let(:merge_request) { create(:merge_request, absorbing_organisation_id: organisation.id, merge_date: Time.zone.today, existing_absorbing_organisation: true) }
 
         it "shows users and schemes count and has links to view merge outcomes" do
           expect(page).to have_link("View", href: scheme_outcomes_merge_request_path(merge_request))

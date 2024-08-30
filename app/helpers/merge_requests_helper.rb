@@ -19,6 +19,7 @@ module MergeRequestsHelper
       { label: "Absorbing organisation", value: display_value_or_placeholder(merge_request.absorbing_organisation_name), action: merge_request_action(merge_request, "absorbing_organisation") },
       { label: "Merging organisations", value: merge_request.merge_request_organisations.any? ? merge_request.merge_request_organisations.map(&:merging_organisation_name).join("<br>").html_safe : display_value_or_placeholder(nil), action: merge_request_action(merge_request, "merging_organisations") },
       { label: "Merge date", value: display_value_or_placeholder(merge_request.merge_date), action: merge_request_action(merge_request, "merge_date") },
+      { label: "Absorbing organisation already active?", value: display_value_or_placeholder(merge_request.existing_absorbing_organisation_label), action: merge_request_action(merge_request, "existing_absorbing_organisation") },
     ]
   end
 
@@ -67,8 +68,10 @@ module MergeRequestsHelper
       absorbing_organisation_merge_request_path(merge_request)
     when "merge_date"
       merging_organisations_merge_request_path(merge_request)
-    when "helpdesk_ticket"
+    when "existing_absorbing_organisation"
       merge_date_merge_request_path(merge_request)
+    when "helpdesk_ticket"
+      existing_absorbing_organisation_merge_request_path(merge_request)
     end
   end
 

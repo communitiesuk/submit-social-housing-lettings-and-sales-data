@@ -1,0 +1,27 @@
+<% content_for :before_content do %>
+  <% title = "Tell us if your organisation is merging" %>
+  <% content_for :title, title %>
+  <%= govuk_back_link href: merge_request_back_link(@merge_request, "existing_absorbing_organisation", request.query_parameters["referrer"]) %>
+<% end %>
+ <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+    <%= form_with model: @merge_request, url: submit_merge_request_url(request.query_parameters["referrer"]), method: :patch do |f| %>
+      <%= f.govuk_error_summary %>
+      <%= f.govuk_radio_buttons_fieldset :existing_absorbing_organisation,
+                                        legend: { text: "Was #{@merge_request.absorbing_organisation&.name} already active before the merge date?", size: "l" } do %>
+        <%= f.govuk_radio_button :existing_absorbing_organisation,
+                                "true",
+                                label: { text: "Yes, this organisation existed before the merge" } %>
+        <%= f.govuk_radio_button :existing_absorbing_organisation,
+                                "false",
+                                label: { text: "No, it is a new organisation created by this merge" } %>
+      <% end %>
+
+      <%= f.hidden_field :page, value: "existing_absorbing_organisation" %>
+      <div class="govuk-button-group">
+        <%= f.govuk_submit submit_merge_request_button_text(request.query_parameters["referrer"]) %>
+        <%= govuk_link_to(secondary_merge_request_link_text(request.query_parameters["referrer"]), merge_request_path(@merge_request)) %>
+      </div>
+    <% end %>
+  </div>
+</div>
