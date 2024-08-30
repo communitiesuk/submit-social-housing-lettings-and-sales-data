@@ -90,7 +90,6 @@ class Location < ApplicationRecord
     where.not("location_deactivation_periods.reactivation_date IS NULL")
          .where("location_deactivation_periods.reactivation_date > ?", date)
          .where.not(id: joins(scheme: [:owning_organisation]).deactivated_by_organisation.pluck(:id))
-         .or(reactivating_soon_by_scheme(date))
   }
 
   scope :reactivating_soon_by_scheme, lambda { |date = Time.zone.now|
@@ -102,7 +101,8 @@ class Location < ApplicationRecord
   }
 
   scope :active_status, lambda {
-    where.not(id: joins(:location_deactivation_periods, scheme: [:scheme_deactivation_periods]).reactivating_soon.pluck(:id))
+    where.not(id: joins(:location_deactivation_periods).reactivating_soon.pluck(:id))
+         .where.not(id: joins(scheme: [:scheme_deactivation_periods]).reactivating_soon_by_scheme.pluck(:id))
          .where.not(id: joins(:location_deactivation_periods).merge(Location.deactivated_directly).pluck(:id))
          .where.not(id: joins(scheme: [:scheme_deactivation_periods]).merge(Location.deactivated_by_scheme).pluck(:id))
          .where.not(id: joins(scheme: [:owning_organisation]).merge(Location.deactivated_by_organisation).pluck(:id))
@@ -113,7 +113,8 @@ class Location < ApplicationRecord
   }
 
   scope :active, lambda { |date = Time.zone.now|
-    where.not(id: joins(:location_deactivation_periods, scheme: [:scheme_deactivation_periods]).reactivating_soon(date).pluck(:id))
+    where.not(id: joins(:location_deactivation_periods).reactivating_soon(date).pluck(:id))
+         .where.not(id: joins(scheme: [:scheme_deactivation_periods]).reactivating_soon_by_scheme.pluck(:id))
          .where.not(id: joins(:location_deactivation_periods).merge(Location.deactivated_directly(date)).pluck(:id))
          .where.not(id: joins(scheme: [:scheme_deactivation_periods]).merge(Location.deactivated_by_scheme(date)).pluck(:id))
          .where.not(id: joins(scheme: [:owning_organisation]).merge(Location.deactivated_by_organisation).pluck(:id))

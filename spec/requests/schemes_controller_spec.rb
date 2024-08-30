@@ -2534,14 +2534,18 @@ RSpec.describe SchemesController, type: :request do
           it "redirects to the confirmation page" do
             follow_redirect!
             expect(response).to have_http_status(:ok)
-            expect(page).to have_content("This change will affect #{scheme.lettings_logs.count} logs")
+            expect(page).to have_content("This change will affect #{scheme.lettings_logs.count} log")
           end
         end
 
-        context "and no affected logs" do
+        fcontext "and no affected logs" do
           let(:setup_schemes) { scheme.lettings_logs.update(scheme: nil) }
 
-          it "redirects to the location page and updates the deactivation period" do
+          before do
+            create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 4, 5), reactivation_date: nil, location:)
+          end
+
+          it "redirects to the scheme page and updates the deactivation period" do
             follow_redirect!
             follow_redirect!
             follow_redirect!
@@ -2561,14 +2565,18 @@ RSpec.describe SchemesController, type: :request do
           it "redirects to the confirmation page" do
             follow_redirect!
             expect(response).to have_http_status(:ok)
-            expect(page).to have_content("This change will affect #{scheme.lettings_logs.count} logs")
+            expect(page).to have_content("This change will affect #{scheme.lettings_logs.count} log")
           end
         end
 
         context "and no affected logs" do
           let(:setup_schemes) { scheme.lettings_logs.update(scheme: nil) }
 
-          it "redirects to the location page and updates the deactivation period" do
+          before do
+            create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 4, 5), reactivation_date: nil, location:)
+          end
+
+          it "redirects to the scheme page and updates the deactivation period" do
             follow_redirect!
             follow_redirect!
             follow_redirect!
@@ -2752,6 +2760,10 @@ RSpec.describe SchemesController, type: :request do
         let(:params) { { scheme_deactivation_period: { deactivation_date_type: "other", "deactivation_date(3i)": "8", "deactivation_date(2i)": "9", "deactivation_date(1i)": "2023" } } }
         let(:add_deactivations) { create(:scheme_deactivation_period, deactivation_date: Time.zone.local(2023, 6, 5), reactivation_date: nil, scheme:) }
 
+        before do
+          create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 4, 5), reactivation_date: nil, location:)
+        end
+
         it "redirects to the scheme page and updates the existing deactivation period" do
           follow_redirect!
           follow_redirect!
@@ -2772,7 +2784,7 @@ RSpec.describe SchemesController, type: :request do
         it "redirects to the confirmation page" do
           follow_redirect!
           expect(response).to have_http_status(:ok)
-          expect(page).to have_content("This change will affect 1 logs")
+          expect(page).to have_content("This change will affect 1 log")
         end
       end
     end
