@@ -107,11 +107,11 @@ private
       periods << ActivePeriod.new(deactivation.reactivation_date, nil)
     end
 
-    last_location_deactivation_date = sorted_deactivation_periods.last&.deactivation_date
-    scheme_periods = location.scheme.scheme_deactivation_periods
-                             .where("deactivation_date > ? AND (reactivation_date < ? OR reactivation_date IS NULL)", location.available_from, last_location_deactivation_date || Time.zone.now)
-                             .sort_by(&:deactivation_date)
-    if scheme_periods.any?
+    if location.scheme.scheme_deactivation_periods.any?
+      last_location_deactivation_date = sorted_deactivation_periods.last&.deactivation_date
+      scheme_periods = location.scheme.scheme_deactivation_periods
+                               .where("deactivation_date > ? AND (reactivation_date < ? OR reactivation_date IS NULL)", location.available_from, last_location_deactivation_date || Time.zone.now)
+                               .sort_by(&:deactivation_date)
       scheme_periods.each do |scheme_period|
         periods.last.to = scheme_period.deactivation_date
         periods << ActivePeriod.new(scheme_period.reactivation_date, nil)
