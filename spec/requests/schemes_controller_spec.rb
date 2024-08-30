@@ -2542,7 +2542,7 @@ RSpec.describe SchemesController, type: :request do
           let(:setup_schemes) { scheme.lettings_logs.update(scheme: nil) }
 
           before do
-            create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 4, 5), reactivation_date: nil, location:)
+            create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 4, 1), reactivation_date: nil, location:)
           end
 
           it "redirects to the scheme page and updates the deactivation period" do
