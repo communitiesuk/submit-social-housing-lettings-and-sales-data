@@ -930,6 +930,39 @@ RSpec.describe Location, type: :model do
         expect(location.status).to eq(:activating_soon)
       end
     end
+
+    context "when the scheme the location belongs to is deactivated" do
+      before do
+        FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.yesterday, scheme: location.scheme)
+        location.save!
+      end
+
+      it "returns deactivated" do
+        expect(location.status).to eq(:deactivated)
+      end
+    end
+
+    context "when the scheme the location belongs to is deactivating soon" do
+      before do
+        FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.today + 1.month, scheme: location.scheme)
+        location.save!
+      end
+
+      it "returns deactivating soon" do
+        expect(location.status).to eq(:deactivating_soon)
+      end
+    end
+
+    context "when the scheme the location belongs to is reactivating soon" do
+      before do
+        FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.yesterday, reactivation_date: Time.zone.tomorrow, scheme: location.scheme)
+        location.save!
+      end
+
+      it "returns reactivating soon" do
+        expect(location.status).to eq(:reactivating_soon)
+      end
+    end
   end
 
   describe "status_at" do
