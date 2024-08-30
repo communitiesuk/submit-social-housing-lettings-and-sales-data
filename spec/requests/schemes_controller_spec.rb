@@ -2538,7 +2538,7 @@ RSpec.describe SchemesController, type: :request do
           end
         end
 
-        fcontext "and no affected logs" do
+        context "and no affected logs" do
           let(:setup_schemes) { scheme.lettings_logs.update(scheme: nil) }
 
           before do
