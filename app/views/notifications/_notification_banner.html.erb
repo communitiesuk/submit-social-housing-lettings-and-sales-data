@@ -6,16 +6,16 @@
         <% if notification_count > 1  && current_user.present? %>
           <p>Notification 1 of <%= notification_count %></p>
         <% end %>
-      <p class="govuk-!-font-weight-bold"><%= notification.title.html_safe %></p>
+      <%== notification.rendered_title(invert_link_colour: true, bold_all_text: true) %>
         <% if notification.page_content.present? %>
           <div class="govuk-body">
-            <%= govuk_link_to notification.link_text, notifications_path, class: "govuk-link--inverse govuk-!-font-weight-bold" %>
+            <%= govuk_link_to notification.link_text, notification_path(notification), class: "govuk-link--inverse govuk-!-font-weight-bold" %>
           </div>
         <% end %>
       </div>
       <% if current_user.present? %>
         <p class="govuk-grid-column-one-quarter govuk-!-text-align-right ">
-          <%= govuk_link_to "Dismiss", dismiss_notifications_path, class: "govuk-link--inverse" %>
+          <%= govuk_link_to "Dismiss", notification_dismiss_path(notification), class: "govuk-link--inverse" %>
         </p>
       <% end %>
     </div>

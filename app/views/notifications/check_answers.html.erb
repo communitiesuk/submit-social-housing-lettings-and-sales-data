@@ -1,0 +1,42 @@
+<% content_for :title, "Create a notification" %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-three-quarters-from-desktop">
+    <% content_for :before_content do %>
+      <%= govuk_back_link(href: :back) %>
+    <% end %>
+
+    <h1 class="govuk-heading-l">
+      <span class="govuk-caption-l">Create a notification</span>
+      Check your answers
+    </h1>
+
+    <span class="govuk-caption-m govuk-!-margin-bottom-6">This notification will be visible to all users until you delete it</span>
+
+    <%= form_for(@notification, method: :patch) do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <div class="govuk-summary-card">
+        <div class="govuk-summary-card__content">
+          <%= govuk_summary_list do |summary_list| %>
+            <% summary_list.with_row do |row| %>
+              <% row.with_key { "Title" } %>
+              <% row.with_value do %>
+                <%== @notification.rendered_title %>
+              <% end %>
+              <% row.with_action(text: "Change", href: edit_notification_path(@notification)) %>
+            <% end %>
+            <% summary_list.with_row do |row| %>
+              <% row.with_key { "Show on unauthenticated pages?" } %>
+              <% row.with_value { @notification.show_on_unauthenticated_pages ? "Yes" : "No" } %>
+              <% row.with_action(text: "Change", href: edit_notification_path(@notification)) %>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+
+      <%= f.hidden_field :start_now, value: true %>
+      <%= f.govuk_submit "Create notification" %>
+    <% end %>
+  </div>
+</div>

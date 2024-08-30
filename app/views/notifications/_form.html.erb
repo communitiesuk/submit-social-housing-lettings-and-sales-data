@@ -1,0 +1,29 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= f.govuk_error_summary %>
+
+    <% content_for :page_title, "Create a new notification" %>
+
+    <% content_for :before_content do %>
+      <%= govuk_back_link(href: :back) %>
+    <% end %>
+
+    <h1 class="govuk-heading-l">
+      <%= content_for(:page_title) %>
+    </h1>
+
+    <span class="govuk-caption-m govuk-!-margin-bottom-6">This notification will be visible to all users until you delete it</span>
+
+    <%= f.govuk_text_field :title,
+                           label: { text: "Title", size: "m" },
+                           hint: { text: "Use markdown for links to existing pages" } %>
+
+    <%= f.govuk_check_boxes_fieldset :show_on_unauthenticated_pages, multiple: false, legend: { text: "Display Options" } do %>
+      <%= f.govuk_check_box :show_on_unauthenticated_pages, 1, 0, multiple: false, label: { text: "Show this notification on unauthenticated pages, for example the start page" } %>
+    <% end %>
+
+    <span class="govuk-caption-m govuk-!-margin-bottom-6">View <%= govuk_link_to "markdown syntax guide", "https://www.markdownguide.org/basic-syntax/" %></span>
+
+    <%= f.govuk_submit "Continue" %>
+  </div>
+</div>

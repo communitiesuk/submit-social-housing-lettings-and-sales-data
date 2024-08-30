@@ -138,8 +138,9 @@ Rails.application.routes.draw do
     end
   end
 
-  resource :notifications do
+  resources :notifications do
     get "dismiss", to: "notifications#dismiss"
+    get "check-answers", to: "notifications#check_answers"
   end
 
   resources :organisations do

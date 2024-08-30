@@ -186,6 +186,10 @@ en:
               invalid: "An organisation with this name already exists"
             new_organisation_telephone_number:
               blank: "Enter a valid telephone number"
+        notification:
+          attributes:
+            title:
+              blank: "Enter a title"
 
   notification:
     logs_deleted:

@@ -6,6 +6,12 @@
         <h1 class="govuk-heading-l"><%= @homepage_presenter.title_text_for_user %></h1>
       </div>
 
+      <% if @current_user.support? %>
+        <div class="govuk-grid-row">
+          <%= govuk_button_link_to "Create a new notification", new_notification_path %>
+        </div>
+      <% end %>
+
       <div class="app-data-box-section govuk-grid-row">
 
         <% if @homepage_presenter.in_crossover_period? %>
