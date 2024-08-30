@@ -2534,7 +2534,7 @@ RSpec.describe SchemesController, type: :request do
           it "redirects to the confirmation page" do
             follow_redirect!
             expect(response).to have_http_status(:ok)
-            expect(page).to have_content("This change will affect #{scheme.lettings_logs.count} log")
+            expect(page).to have_content("This change will affect #{scheme.lettings_logs.count} log and 1 location.")
           end
         end
 
@@ -2565,7 +2565,7 @@ RSpec.describe SchemesController, type: :request do
           it "redirects to the confirmation page" do
             follow_redirect!
             expect(response).to have_http_status(:ok)
-            expect(page).to have_content("This change will affect #{scheme.lettings_logs.count} log")
+            expect(page).to have_content("This change will affect #{scheme.lettings_logs.count} log and 1 location.")
           end
         end
 
@@ -2784,7 +2784,7 @@ RSpec.describe SchemesController, type: :request do
         it "redirects to the confirmation page" do
           follow_redirect!
           expect(response).to have_http_status(:ok)
-          expect(page).to have_content("This change will affect 1 log")
+          expect(page).to have_content("This change will affect 1 log and 1 location.")
         end
       end
     end
