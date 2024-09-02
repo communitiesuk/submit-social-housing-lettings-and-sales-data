@@ -30,13 +30,13 @@ class NotificationTitleRenderer < Redcarpet::Render::HTML
   def initialize(options = {})
     link_class = "govuk-link"
     link_class += " govuk-link--inverse" if options[:invert_link_colour]
-    @bold = options[:bold_all_text]
+    @bold = options[:bold_all_text] # rubocop:disable Rails/HelperInstanceVariable
     base_options = { escape_html: true, safe_links_only: true, link_attributes: { class: link_class } }
     super base_options
   end
 
   def paragraph(text)
-    return %(<p class="govuk-!-font-weight-bold">#{text}</p>) if @bold
+    return %(<p class="govuk-!-font-weight-bold">#{text}</p>) if @bold # rubocop:disable Rails/HelperInstanceVariable
 
     %(<p>#{text}</p>)
   end
