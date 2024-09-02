@@ -17,6 +17,9 @@ module Exports::OrganisationExportConstants
    "merge_date",
    "absorbing_organisation_id",
    "available_from",
-   "discarded_at",
+   "deleted_at",
+   "dsa_signed",
+   "dsa_signed_at",
+   "dpo_email"
   ]
 end

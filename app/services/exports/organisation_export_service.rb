@@ -57,7 +57,13 @@ module Exports
     end
 
     def apply_cds_transformation(organisation)
-      organisation.attributes
+      attribute_hash = organisation.attributes
+      attribute_hash["deleted_at"] = organisation.discarded_at
+      attribute_hash["dsa_signed"] = organisation.data_protection_confirmed?
+      attribute_hash["dsa_signed_at"] = organisation.data_protection_confirmation&.signed_at
+      attribute_hash["dpo_email"] = organisation.data_protection_confirmation&.data_protection_officer_email
+
+      attribute_hash
     end
   end
 end
