@@ -1,6 +1,8 @@
 FROM ruby:3.1.4-alpine3.18 as base
 
 WORKDIR /app
+ARG CONCURRENCY_TAG
+ENV CONCURRENCY_TAG=${CONCURRENCY_TAG}
 
 # Add the timezone as it's not configured by default in Alpine
 RUN apk add --update --no-cache tzdata && \
@@ -24,7 +26,7 @@ RUN yarn install --frozen-lockfile
 
 COPY . /app/
 
-RUN bundle exec rake assets:precompile
+RUN CONCURRENCY_TAG=${CONCURRENCY_TAG} bundle exec rails assets:precompile
 
 ENV PORT=8080
 EXPOSE ${PORT}

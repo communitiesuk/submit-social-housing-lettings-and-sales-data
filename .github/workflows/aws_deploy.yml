@@ -70,7 +70,7 @@ jobs:
             echo "Error: Deployment to production environment is not allowed as there is no docker image (i.e. the AWS deploy on staging was unsuccessful for this commit)."
             exit 1
           fi
-          docker build -t $registry/$repository:$commit_tag . --target=production
+          docker build -t $registry/$repository:$commit_tag . --target=production --build-arg CONCURRENCY_TAG=${{ inputs.concurrency_tag }}
           docker push $registry/$repository:$commit_tag
 
   deploy:
