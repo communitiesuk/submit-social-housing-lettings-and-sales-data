@@ -22,7 +22,7 @@
             <% summary_list.with_row do |row| %>
               <% row.with_key { "Title" } %>
               <% row.with_value do %>
-                <%== @notification.rendered_title %>
+                <%== render_for_summary(@notification.title) %>
               <% end %>
               <% row.with_action(text: "Change", href: edit_notification_path(@notification)) %>
             <% end %>

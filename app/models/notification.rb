@@ -19,19 +19,3 @@ class Notification < ApplicationRecord
     Redcarpet::Markdown.new(renderer, no_intra_emphasis: true).render(title)
   end
 end
-
-class NotificationTitleRenderer < Redcarpet::Render::HTML
-  def initialize(options = {})
-    link_class = "govuk-link"
-    link_class += " govuk-link--inverse" if options[:invert_link_colour]
-    @bold = options[:bold_all_text]
-    base_options = { escape_html: true, safe_links_only: true, link_attributes: { class: link_class } }
-    super base_options
-  end
-
-  def paragraph(text)
-    return %(<p class="govuk-!-font-weight-bold">#{text}</p>) if @bold
-
-    %(<p>#{text}</p>)
-  end
-end

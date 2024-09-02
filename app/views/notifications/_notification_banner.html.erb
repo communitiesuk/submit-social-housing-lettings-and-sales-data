@@ -6,7 +6,7 @@
         <% if notification_count > 1  && current_user.present? %>
           <p>Notification 1 of <%= notification_count %></p>
         <% end %>
-      <%== notification.rendered_title(invert_link_colour: true, bold_all_text: true) %>
+      <%== render_for_banner(notification.title) %>
         <% if notification.page_content.present? %>
           <div class="govuk-body">
             <%= govuk_link_to notification.link_text, notification_path(notification), class: "govuk-link--inverse govuk-!-font-weight-bold" %>
