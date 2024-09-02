@@ -182,14 +182,6 @@ class Location < ApplicationRecord
   end
 
   def status_at(date)
-    Rails.logger.debug "Checking status at #{date} for location #{id}"
-    Rails.logger.debug "Discarded at: #{discarded_at}"
-    Rails.logger.debug "Confirmed: #{confirmed}"
-    Rails.logger.debug "Scheme status: #{scheme.status_at(date)}"
-    Rails.logger.debug "Open deactivation: #{open_deactivation&.deactivation_date}"
-    Rails.logger.debug "Last deactivation before: #{last_deactivation_before(date)&.reactivation_date}"
-    Rails.logger.debug "Start date: #{startdate}"
-
     return :deleted if discarded_at.present?
     return :incomplete unless confirmed
     return :deactivated if scheme.owning_organisation.status_at(date) == :deactivated ||

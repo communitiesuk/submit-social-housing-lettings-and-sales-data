@@ -310,7 +310,6 @@ class Scheme < ApplicationRecord
   end
 
   def has_active_locations?
-    # binding.pry
     locations.active.exists?
   end
 
