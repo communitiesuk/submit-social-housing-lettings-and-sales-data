@@ -497,6 +497,10 @@ RSpec.describe MergeRequestsController, type: :request do
         create(:merge_request_organisation, merge_request:, merging_organisation: other_organisation)
         create_list(:scheme, 2, owning_organisation: organisation)
         create_list(:scheme, 2, owning_organisation: other_organisation)
+        create(:lettings_log, owning_organisation: organisation)
+        create(:lettings_log, owning_organisation: other_organisation)
+        create_list(:sales_log, 2, owning_organisation: other_organisation)
+        create(:sales_log, owning_organisation: organisation)
         get "/merge-request/#{merge_request.id}", headers:
       end
 
@@ -525,15 +529,22 @@ RSpec.describe MergeRequestsController, type: :request do
       context "with unmerged request" do
         let(:merge_request) { create(:merge_request, absorbing_organisation_id: organisation.id, merge_date: Time.zone.today, existing_absorbing_organisation: true) }
 
-        it "shows users and schemes count and has links to view merge outcomes" do
+        it "shows outcomes count and has links to view merge outcomes" do
+          expect(page).to have_link("View", href: user_outcomes_merge_request_path(merge_request))
           expect(page).to have_link("View", href: scheme_outcomes_merge_request_path(merge_request))
+          expect(page).to have_link("View", href: relationship_outcomes_merge_request_path(merge_request))
+          expect(page).to have_link("View", href: logs_outcomes_merge_request_path(merge_request))
           expect(page).to have_content("4 users")
           expect(page).to have_content("4 schemes")
+          expect(page).to have_content("0 stock owners")
+          expect(page).to have_content("0 managing agents")
+          expect(page).to have_content("2 lettings logs")
+          expect(page).to have_content("3 sales logs")
         end
       end
 
       context "with a merged request" do
-        let(:merge_request) { create(:merge_request, request_merged: true, total_users: 34, total_schemes: 12, total_stock_owners: 8, total_managing_agents: 5) }
+        let(:merge_request) { create(:merge_request, request_merged: true, total_users: 34, total_schemes: 12, total_stock_owners: 8, total_managing_agents: 5, total_lettings_logs: 4, total_sales_logs: 5) }
 
         it "shows saved users count and doesn't have links to view merge outcomes" do
           expect(merge_request.status).to eq("request_merged")
@@ -552,6 +563,13 @@ RSpec.describe MergeRequestsController, type: :request do
           expect(page).not_to have_link("View", href: relationship_outcomes_merge_request_path(merge_request))
           expect(page).to have_content("8 stock owners")
           expect(page).to have_content("5 managing agents")
+        end
+
+        it "shows logs counts and doesn't have links to view merge outcomes" do
+          expect(merge_request.status).to eq("request_merged")
+          expect(page).not_to have_link("View", href: logs_outcomes_merge_request_path(merge_request))
+          expect(page).to have_content("4 lettings logs")
+          expect(page).to have_content("5 sales logs")
         end
       end
 

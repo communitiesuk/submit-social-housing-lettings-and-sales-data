@@ -214,6 +214,7 @@ Rails.application.routes.draw do
       get "user-outcomes"
       get "relationship-outcomes"
       get "scheme-outcomes"
+      get "logs-outcomes"
       get "delete-confirmation", to: "merge_requests#delete_confirmation"
       delete "delete", to: "merge_requests#delete"
       patch "start-merge", to: "merge_requests#start_merge"

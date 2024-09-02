@@ -12,6 +12,7 @@ class MergeRequestsController < ApplicationController
   def user_outcomes; end
   def relationship_outcomes; end
   def scheme_outcomes; end
+  def logs_outcomes; end
 
   def create
     ActiveRecord::Base.transaction do
