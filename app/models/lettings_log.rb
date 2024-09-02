@@ -58,6 +58,7 @@ class LettingsLog < Log
     needstypes.each { |needstype| query = query.or(filter_by_needstype(needstype)) }
     query.all
   }
+  
   scope :search_by, lambda { |param|
     by_id = Arel.sql("CASE WHEN lettings_logs.id = #{param.to_i} THEN 0 ELSE 1 END")
     by_tenant_code = Arel.sql("CASE WHEN tenancycode = '#{param}' THEN 0 WHEN tenancycode ILIKE '%#{param}%' THEN 1 ELSE 2 END")
