@@ -313,7 +313,7 @@ class User < ApplicationRecord
       end
 
       send_organisation_change_email(current_organisation, new_organisation, log_reassignment, logs_count)
-    rescue ActiveRecord::RecordInvalid => e
+    rescue StandardError => e
       Rails.logger.error("User update failed with: #{e.message}")
       Sentry.capture_exception(e)
 
