@@ -113,13 +113,12 @@ class Location < ApplicationRecord
   }
 
   scope :active, lambda { |date = Time.zone.now|
-    where.not(id: joins(:location_deactivation_periods).reactivating_soon(date).pluck(:id))
-         .where.not(id: joins(scheme: [:scheme_deactivation_periods]).reactivating_soon_by_scheme.pluck(:id))
+    where.not(id: joins(scheme: [:scheme_deactivation_periods]).reactivating_soon_by_scheme.pluck(:id))
          .where.not(id: joins(:location_deactivation_periods).merge(Location.deactivated_directly(date)).pluck(:id))
-         .where.not(id: joins(scheme: [:scheme_deactivation_periods]).merge(Location.deactivated_by_scheme(date)).pluck(:id))
          .where.not(id: joins(scheme: [:owning_organisation]).merge(Location.deactivated_by_organisation).pluck(:id))
          .where.not(id: incomplete.pluck(:id))
          .where.not(id: activating_soon(date).pluck(:id))
+         .where(scheme: Scheme.active)
   }
 
   scope :visible, -> { where(discarded_at: nil) }
@@ -183,6 +182,14 @@ class Location < ApplicationRecord
   end
 
   def status_at(date)
+    Rails.logger.debug "Checking status at #{date} for location #{id}"
+    Rails.logger.debug "Discarded at: #{discarded_at}"
+    Rails.logger.debug "Confirmed: #{confirmed}"
+    Rails.logger.debug "Scheme status: #{scheme.status_at(date)}"
+    Rails.logger.debug "Open deactivation: #{open_deactivation&.deactivation_date}"
+    Rails.logger.debug "Last deactivation before: #{last_deactivation_before(date)&.reactivation_date}"
+    Rails.logger.debug "Start date: #{startdate}"
+
     return :deleted if discarded_at.present?
     return :incomplete unless confirmed
     return :deactivated if scheme.owning_organisation.status_at(date) == :deactivated ||
