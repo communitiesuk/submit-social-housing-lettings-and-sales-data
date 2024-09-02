@@ -47,7 +47,7 @@ class MergeRequest < ApplicationRecord
   def required_questions_answered?
     absorbing_organisation_id.present? &&
       merge_date.present? &&
-      existing_absorbing_organisation.present? &&
+      !existing_absorbing_organisation.nil? &&
       merging_organisations.count.positive? &&
       errors.empty?
   end
