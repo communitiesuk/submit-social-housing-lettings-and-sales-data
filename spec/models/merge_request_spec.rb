@@ -60,6 +60,12 @@ RSpec.describe MergeRequest, type: :model do
       expect(merge_request.status).to eq MergeRequest::STATUS[:ready_to_merge]
     end
 
+    it "returns the correct status for a ready to merge request when existing_absorbing_organisation is false" do
+      merge_request = build(:merge_request, id: 1, absorbing_organisation: create(:organisation), merge_date: Time.zone.today, existing_absorbing_organisation: false)
+      create(:merge_request_organisation, merge_request:)
+      expect(merge_request.status).to eq MergeRequest::STATUS[:ready_to_merge]
+    end
+
     it "returns the merge issues if dsa is not signed for absorbing organisation" do
       merge_request = build(:merge_request, id: 1, absorbing_organisation: create(:organisation, with_dsa: false), merge_date: Time.zone.today, existing_absorbing_organisation: true)
       create(:merge_request_organisation, merge_request:)
