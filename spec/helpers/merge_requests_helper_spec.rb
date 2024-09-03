@@ -172,8 +172,8 @@ RSpec.describe MergeRequestsHelper do
     context "when merging organisations don't have logs" do
       it "returns the correct merging_organisations_lettings_logs_outcomes_text text" do
         outcome_text = merging_organisations_lettings_logs_outcomes_text(merge_request)
-        expect(outcome_text).not_to include("Org 1 users will have access to all lettings logs owned or managed by the merging organisations after the merge.")
-        expect(outcome_text).not_to include("Lettings logs that are owned or managed by the merging organisations and have a tenancy start date after the merge date will have their owning or managing organisation changed to Org 1.")
+        expect(outcome_text).not_to include("Org 1 users will have access to all lettings logs owned or managed by the merging organisation after the merge.")
+        expect(outcome_text).not_to include("Lettings logs that are owned or managed by the merging organisation and have a tenancy start date after the merge date will have their owning or managing organisation changed to Org 1.")
         expect(outcome_text).not_to include("Some logs are owned and managed by different organisations in this merge. They appear in the list for both the owning and the managing organisation.")
         expect(outcome_text).to include("Org 1 and Org 2 have no lettings logs.")
       end
@@ -184,9 +184,9 @@ RSpec.describe MergeRequestsHelper do
 
       it "returns the correct merging_organisations_sales_logs_outcomes_text text" do
         outcome_text = merging_organisations_sales_logs_outcomes_text(merge_request)
-        expect(outcome_text).not_to include("Org 1 users will have access to all sales logs owned or managed by the merging organisations after the merge.")
-        expect(outcome_text).not_to include("Sales logs that are owned or managed by the merging organisations and have a tenancy start date after the merge date will have their owning or managing organisation changed to Org 1.")
-        expect(outcome_text).not_to include("Some logs are owned and managed by different organisations in this merge. They appear in the list for both the owning and the managing organisation.")
+        expect(outcome_text).not_to include("Org 1 users will have access to all sales logs owned or reported by the merging organisation after the merge.")
+        expect(outcome_text).not_to include("Sales logs that are owned or reported by the merging organisation and have a sale completion date after the merge date will have their owning or managing organisation changed to Org 1.")
+        expect(outcome_text).not_to include("Some logs are owned and reported by different organisation in this merge. They appear in the list for both the owning and the managing organisation.")
         expect(outcome_text).to include("Org 1 and Org 2 have no sales logs.")
       end
 
@@ -207,8 +207,8 @@ RSpec.describe MergeRequestsHelper do
 
       it "returns the correct merging_organisations_lettings_logs_outcomes_text text" do
         outcome_text = merging_organisations_lettings_logs_outcomes_text(merge_request)
-        expect(outcome_text).to include("Org 1 users will have access to all lettings logs owned or managed by the merging organisations after the merge.")
-        expect(outcome_text).to include("Lettings logs that are owned or managed by the merging organisations and have a tenancy start date after the merge date will have their owning or managing organisation changed to Org 1.")
+        expect(outcome_text).to include("Org 1 users will have access to all lettings logs owned or managed by the merging organisation after the merge.")
+        expect(outcome_text).to include("Lettings logs that are owned or managed by the merging organisation and have a tenancy start date after the merge date will have their owning or managing organisation changed to Org 1.")
         expect(outcome_text).not_to include("Some logs are owned and managed by different organisations in this merge. They appear in the list for both the owning and the managing organisation.")
         expect(outcome_text).not_to include("Org 2 has no lettings logs.")
         expect(outcome_text).to include("View all 2 Org 2 lettings logs (opens in a new tab)")
@@ -220,9 +220,9 @@ RSpec.describe MergeRequestsHelper do
 
       it "returns the correct merging_organisations_sales_logs_outcomes_text text" do
         outcome_text = merging_organisations_sales_logs_outcomes_text(merge_request)
-        expect(outcome_text).to include("Org 1 users will have access to all sales logs owned or managed by the merging organisations after the merge.")
-        expect(outcome_text).to include("Sales logs that are owned or managed by the merging organisations and have a tenancy start date after the merge date will have their owning or managing organisation changed to Org 1.")
-        expect(outcome_text).not_to include("Some logs are owned and managed by different organisations in this merge. They appear in the list for both the owning and the managing organisation.")
+        expect(outcome_text).to include("Org 1 users will have access to all sales logs owned or reported by the merging organisation after the merge.")
+        expect(outcome_text).to include("Sales logs that are owned or reported by the merging organisation and have a sale completion date after the merge date will have their owning or managing organisation changed to Org 1.")
+        expect(outcome_text).not_to include("Some logs are owned and reported by different organisations in this merge. They appear in the list for both the owning and the managing organisation.")
         expect(outcome_text).not_to include("Org 2 has no sales logs.")
         expect(outcome_text).to include("View all 2 Org 2 sales logs (opens in a new tab)")
       end
@@ -255,9 +255,9 @@ RSpec.describe MergeRequestsHelper do
 
         it "returns the correct merging_organisations_sales_logs_outcomes_text text" do
           outcome_text = merging_organisations_sales_logs_outcomes_text(merge_request)
-          expect(outcome_text).to include("Org 1 users will have access to all sales logs owned or managed by the merging organisations after the merge.")
-          expect(outcome_text).to include("Sales logs that are owned or managed by the merging organisations and have a tenancy start date after the merge date will have their owning or managing organisation changed to Org 1.")
-          expect(outcome_text).to include("Some logs are owned and managed by different organisations in this merge. They appear in the list for both the owning and the managing organisation.")
+          expect(outcome_text).to include("Org 1 users will have access to all sales logs owned or reported by the merging organisations after the merge.")
+          expect(outcome_text).to include("Sales logs that are owned or reported by the merging organisations and have a sale completion date after the merge date will have their owning or managing organisation changed to Org 1.")
+          expect(outcome_text).to include("Some logs are owned and reported by different organisations in this merge. They appear in the list for both the owning and the managing organisation.")
           expect(outcome_text).not_to include("Org 2 has no sales logs.")
           expect(outcome_text).to include("View all 3 Org 2 sales logs (opens in a new tab)")
           expect(outcome_text).to include("View 1 Org 3 sales log (opens in a new tab)")

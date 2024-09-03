@@ -218,14 +218,17 @@ module MergeRequestsHelper
   def merging_organisations_logs_outcomes_text(merge_request, type)
     text = ""
     if any_organisations_have_logs?(merge_request.merging_organisations, type)
-      text += "#{merge_request.absorbing_organisation.name} users will have access to all #{type} logs owned or managed by the merging organisations after the merge.<br><br>"
+      managed_or_reported = type == "lettings" ? "managed" : "reported"
+      merging_organisations = merge_request.merging_organisations.count == 1 ? "merging organisation" : "merging organisations"
+      text += "#{merge_request.absorbing_organisation.name} users will have access to all #{type} logs owned or #{managed_or_reported} by the #{merging_organisations} after the merge.<br><br>"
 
       if any_organisations_have_logs_after_merge_date?(merge_request.merging_organisations, type, merge_request.merge_date)
-        text += "#{type.capitalize} logs that are owned or managed by the merging organisations and have a tenancy start date after the merge date will have their owning or managing organisation changed to #{merge_request.absorbing_organisation.name}.<br><br>"
+        startdate = type == "lettings" ? "tenancy start date" : "sale completion date"
+        text += "#{type.capitalize} logs that are owned or #{managed_or_reported} by the #{merging_organisations} and have a #{startdate} after the merge date will have their owning or managing organisation changed to #{merge_request.absorbing_organisation.name}.<br><br>"
       end
 
       if any_organisations_share_logs?(merge_request.merging_organisations, type)
-        text += "Some logs are owned and managed by different organisations in this merge. They appear in the list for both the owning and the managing organisation.<br><br>"
+        text += "Some logs are owned and #{managed_or_reported} by different organisations in this merge. They appear in the list for both the owning and the managing organisation.<br><br>"
       end
     end
 
