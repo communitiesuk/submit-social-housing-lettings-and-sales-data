@@ -470,6 +470,8 @@ RSpec.describe MergeRequestsController, type: :request do
           create(:merge_request_organisation, merge_request:, merging_organisation: other_organisation)
           create(:merge_request_organisation, merge_request:, merging_organisation:)
           create_list(:scheme, 2, owning_organisation: organisation)
+          create(:lettings_log, owning_organisation: organisation)
+          create(:sales_log, owning_organisation: organisation)
         end
 
         it "runs the job with correct merge request" do
@@ -479,6 +481,10 @@ RSpec.describe MergeRequestsController, type: :request do
           expect(merge_request.reload.status).to eq("processing")
           expect(merge_request.total_users).to eq(5)
           expect(merge_request.total_schemes).to eq(2)
+          expect(merge_request.total_stock_owners).to eq(0)
+          expect(merge_request.total_managing_agents).to eq(0)
+          expect(merge_request.total_lettings_logs).to eq(1)
+          expect(merge_request.total_sales_logs).to eq(1)
         end
       end
 
@@ -497,6 +503,10 @@ RSpec.describe MergeRequestsController, type: :request do
         create(:merge_request_organisation, merge_request:, merging_organisation: other_organisation)
         create_list(:scheme, 2, owning_organisation: organisation)
         create_list(:scheme, 2, owning_organisation: other_organisation)
+        create(:lettings_log, owning_organisation: organisation)
+        create(:lettings_log, owning_organisation: other_organisation)
+        create_list(:sales_log, 2, owning_organisation: other_organisation)
+        create(:sales_log, owning_organisation: organisation)
         get "/merge-request/#{merge_request.id}", headers:
       end
 
@@ -525,15 +535,22 @@ RSpec.describe MergeRequestsController, type: :request do
       context "with unmerged request" do
         let(:merge_request) { create(:merge_request, absorbing_organisation_id: organisation.id, merge_date: Time.zone.today, existing_absorbing_organisation: true) }
 
-        it "shows users and schemes count and has links to view merge outcomes" do
+        it "shows outcomes count and has links to view merge outcomes" do
+          expect(page).to have_link("View", href: user_outcomes_merge_request_path(merge_request))
           expect(page).to have_link("View", href: scheme_outcomes_merge_request_path(merge_request))
+          expect(page).to have_link("View", href: relationship_outcomes_merge_request_path(merge_request))
+          expect(page).to have_link("View", href: logs_outcomes_merge_request_path(merge_request))
           expect(page).to have_content("4 users")
           expect(page).to have_content("4 schemes")
+          expect(page).to have_content("0 stock owners")
+          expect(page).to have_content("0 managing agents")
+          expect(page).to have_content("2 lettings logs")
+          expect(page).to have_content("3 sales logs")
         end
       end
 
       context "with a merged request" do
-        let(:merge_request) { create(:merge_request, request_merged: true, total_users: 34, total_schemes: 12, total_stock_owners: 8, total_managing_agents: 5) }
+        let(:merge_request) { create(:merge_request, request_merged: true, total_users: 34, total_schemes: 12, total_stock_owners: 8, total_managing_agents: 5, total_lettings_logs: 4, total_sales_logs: 5) }
 
         it "shows saved users count and doesn't have links to view merge outcomes" do
           expect(merge_request.status).to eq("request_merged")
@@ -552,6 +569,13 @@ RSpec.describe MergeRequestsController, type: :request do
           expect(page).not_to have_link("View", href: relationship_outcomes_merge_request_path(merge_request))
           expect(page).to have_content("8 stock owners")
           expect(page).to have_content("5 managing agents")
+        end
+
+        it "shows logs counts and doesn't have links to view merge outcomes" do
+          expect(merge_request.status).to eq("request_merged")
+          expect(page).not_to have_link("View", href: logs_outcomes_merge_request_path(merge_request))
+          expect(page).to have_content("4 lettings logs")
+          expect(page).to have_content("5 sales logs")
         end
       end
 
@@ -629,6 +653,35 @@ RSpec.describe MergeRequestsController, type: :request do
         expect(page).to have_link("View all 3 MHCLG schemes (opens in a new tab)", href: schemes_organisation_path(organisation))
         expect(page).to have_content("Organisation with no schemes and Organisation with no schemes too have no schemes.")
         expect(page).to have_content("13 schemes after merge")
+      end
+    end
+
+    describe "#logs_outcomes" do
+      let(:merge_request) { create(:merge_request, absorbing_organisation: organisation) }
+      let(:organisation_with_no_logs) { create(:organisation, name: "Organisation with no logs") }
+      let(:organisation_with_no_logs_too) { create(:organisation, name: "Organisation with no logs too") }
+      let(:organisation_with_some_logs) { create(:organisation, name: "Organisation with some logs") }
+
+      before do
+        create_list(:lettings_log, 4, owning_organisation: organisation_with_some_logs)
+        create_list(:sales_log, 2, owning_organisation: organisation_with_some_logs)
+        create_list(:lettings_log, 2, owning_organisation: organisation)
+        create_list(:sales_log, 3, owning_organisation: organisation)
+        create(:merge_request_organisation, merge_request:, merging_organisation: organisation_with_no_logs)
+        create(:merge_request_organisation, merge_request:, merging_organisation: organisation_with_no_logs_too)
+        create(:merge_request_organisation, merge_request:, merging_organisation: organisation_with_some_logs)
+        get "/merge-request/#{merge_request.id}/logs-outcomes", headers:
+      end
+
+      it "shows logs outcomes after merge" do
+        expect(page).to have_link("View all 4 Organisation with some logs lettings logs (opens in a new tab)", href: lettings_logs_organisation_path(organisation_with_some_logs))
+        expect(page).to have_link("View all 2 Organisation with some logs sales logs (opens in a new tab)", href: sales_logs_organisation_path(organisation_with_some_logs))
+        expect(page).to have_link("View all 2 MHCLG lettings logs (opens in a new tab)", href: lettings_logs_organisation_path(organisation))
+        expect(page).to have_link("View all 3 MHCLG sales logs (opens in a new tab)", href: sales_logs_organisation_path(organisation))
+        expect(page).to have_content("Organisation with no logs and Organisation with no logs too have no lettings logs.")
+        expect(page).to have_content("Organisation with no logs and Organisation with no logs too have no sales logs.")
+        expect(page).to have_content("6 lettings logs after merge")
+        expect(page).to have_content("5 sales logs after merge")
       end
     end
   end

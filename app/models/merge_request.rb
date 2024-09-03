@@ -144,4 +144,46 @@ class MergeRequest < ApplicationRecord
 
     "#{stock_owners_count} #{'stock owner'.pluralize(stock_owners_count)}\n#{managing_agents_count} #{'managing agent'.pluralize(managing_agents_count)}"
   end
+
+  def total_visible_sales_logs_after_merge
+    return total_sales_logs if status == STATUS[:request_merged] || status == STATUS[:processing]
+
+    (absorbing_organisation.sales_logs.visible.pluck(:id) + merging_organisations.map { |org| org.sales_logs.visible.pluck(:id) }.flatten).uniq.count
+  end
+
+  def total_visible_lettings_logs_after_merge
+    return total_lettings_logs if status == STATUS[:request_merged] || status == STATUS[:processing]
+
+    (absorbing_organisation.lettings_logs.visible.pluck(:id) + merging_organisations.map { |org| org.lettings_logs.visible.pluck(:id) }.flatten).uniq.count
+  end
+
+  def total_logs_label
+    "#{total_visible_lettings_logs_after_merge} lettings logs<br>#{total_visible_sales_logs_after_merge} sales logs"
+  end
+
+  def start_merge!
+    update!(
+      processing: true,
+      last_failed_attempt: nil,
+      total_users: total_visible_users_after_merge,
+      total_schemes: total_visible_schemes_after_merge,
+      total_stock_owners: total_stock_owners_after_merge,
+      total_managing_agents: total_managing_agents_after_merge,
+      total_lettings_logs: total_visible_lettings_logs_after_merge,
+      total_sales_logs: total_visible_sales_logs_after_merge,
+    )
+  end
+
+  def set_back_to_ready_to_merge!
+    update!(
+      last_failed_attempt: Time.zone.now,
+      processing: false,
+      total_users: nil,
+      total_schemes: nil,
+      total_stock_owners: nil,
+      total_managing_agents: nil,
+      total_lettings_logs: nil,
+      total_sales_logs: nil,
+    )
+  end
 end
