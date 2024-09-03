@@ -145,19 +145,19 @@ class MergeRequest < ApplicationRecord
     "#{stock_owners_count} #{'stock owner'.pluralize(stock_owners_count)}\n#{managing_agents_count} #{'managing agent'.pluralize(managing_agents_count)}"
   end
 
-  def total_sales_logs_after_merge
+  def total_visible_sales_logs_after_merge
     return total_sales_logs if status == STATUS[:request_merged] || status == STATUS[:processing]
 
-    (absorbing_organisation.sales_logs.pluck(:id) + merging_organisations.map { |org| org.sales_logs.pluck(:id) }.flatten).uniq.count
+    (absorbing_organisation.sales_logs.visible.pluck(:id) + merging_organisations.map { |org| org.sales_logs.visible.pluck(:id) }.flatten).uniq.count
   end
 
-  def total_lettings_logs_after_merge
+  def total_visible_lettings_logs_after_merge
     return total_lettings_logs if status == STATUS[:request_merged] || status == STATUS[:processing]
 
-    (absorbing_organisation.lettings_logs.pluck(:id) + merging_organisations.map { |org| org.lettings_logs.pluck(:id) }.flatten).uniq.count
+    (absorbing_organisation.lettings_logs.visible.pluck(:id) + merging_organisations.map { |org| org.lettings_logs.visible.pluck(:id) }.flatten).uniq.count
   end
 
   def total_logs_label
-    "#{total_lettings_logs_after_merge} lettings logs<br>#{total_sales_logs_after_merge} sales logs"
+    "#{total_visible_lettings_logs_after_merge} lettings logs<br>#{total_visible_sales_logs_after_merge} sales logs"
   end
 end

@@ -649,6 +649,35 @@ RSpec.describe MergeRequestsController, type: :request do
         expect(page).to have_content("13 schemes after merge")
       end
     end
+
+    describe "#logs_outcomes" do
+      let(:merge_request) { create(:merge_request, absorbing_organisation: organisation) }
+      let(:organisation_with_no_logs) { create(:organisation, name: "Organisation with no logs") }
+      let(:organisation_with_no_logs_too) { create(:organisation, name: "Organisation with no logs too") }
+      let(:organisation_with_some_logs) { create(:organisation, name: "Organisation with some logs") }
+
+      before do
+        create_list(:lettings_log, 4, owning_organisation: organisation_with_some_logs)
+        create_list(:sales_log, 2, owning_organisation: organisation_with_some_logs)
+        create_list(:lettings_log, 2, owning_organisation: organisation)
+        create_list(:sales_log, 3, owning_organisation: organisation)
+        create(:merge_request_organisation, merge_request:, merging_organisation: organisation_with_no_logs)
+        create(:merge_request_organisation, merge_request:, merging_organisation: organisation_with_no_logs_too)
+        create(:merge_request_organisation, merge_request:, merging_organisation: organisation_with_some_logs)
+        get "/merge-request/#{merge_request.id}/logs-outcomes", headers:
+      end
+
+      it "shows logs outcomes after merge" do
+        expect(page).to have_link("View all 4 Organisation with some logs lettings logs (opens in a new tab)", href: lettings_logs_organisation_path(organisation_with_some_logs))
+        expect(page).to have_link("View all 2 Organisation with some logs sales logs (opens in a new tab)", href: sales_logs_organisation_path(organisation_with_some_logs))
+        expect(page).to have_link("View all 2 MHCLG lettings logs (opens in a new tab)", href: lettings_logs_organisation_path(organisation))
+        expect(page).to have_link("View all 3 MHCLG sales logs (opens in a new tab)", href: sales_logs_organisation_path(organisation))
+        expect(page).to have_content("Organisation with no logs and Organisation with no logs too have no lettings logs.")
+        expect(page).to have_content("Organisation with no logs and Organisation with no logs too have no sales logs.")
+        expect(page).to have_content("6 lettings logs after merge")
+        expect(page).to have_content("5 sales logs after merge")
+      end
+    end
   end
 
   context "when user is signed in with a data coordinator user" do

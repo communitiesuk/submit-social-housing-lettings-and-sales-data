@@ -196,4 +196,81 @@ module MergeRequestsHelper
     count = merge_request.total_visible_schemes_after_merge
     "#{"#{count} scheme".pluralize(count)} after merge"
   end
+
+  def total_lettings_logs_after_merge_text(merge_request)
+    count = merge_request.total_visible_lettings_logs_after_merge
+    "#{"#{count} lettings log".pluralize(count)} after merge"
+  end
+
+  def total_sales_logs_after_merge_text(merge_request)
+    count = merge_request.total_visible_sales_logs_after_merge
+    "#{"#{count} sales log".pluralize(count)} after merge"
+  end
+
+  def merging_organisations_lettings_logs_outcomes_text(merge_request)
+    merging_organisations_logs_outcomes_text(merge_request, "lettings")
+  end
+
+  def merging_organisations_sales_logs_outcomes_text(merge_request)
+    merging_organisations_logs_outcomes_text(merge_request, "sales")
+  end
+
+  def merging_organisations_logs_outcomes_text(merge_request, type)
+    text = ""
+    if any_organisations_have_logs?(merge_request.merging_organisations, type)
+      text += "#{merge_request.absorbing_organisation.name} users will have access to all #{type} logs owned or managed by the merging organisations after the merge.<br><br>"
+
+      if any_organisations_have_logs_after_merge_date?(merge_request.merging_organisations, type, merge_request.merge_date)
+        text += "#{type.capitalize} logs that are owned or managed by the merging organisations and have a tenancy start date after the merge date will have their owning or managing organisation changed to #{merge_request.absorbing_organisation.name}.<br><br>"
+      end
+
+      if any_organisations_share_logs?(merge_request.merging_organisations, type)
+        text += "Some logs are owned and managed by different organisations in this merge. They appear in the list for both the owning and the managing organisation.<br><br>"
+      end
+    end
+
+    organisations_without_logs, organisations_with_logs = merge_request.merging_organisations.partition { |organisation| organisation.send("#{type}_logs").count.zero? }
+    if merge_request.absorbing_organisation.send("#{type}_logs").count.zero?
+      organisations_without_logs = [merge_request.absorbing_organisation] + organisations_without_logs
+    else
+      organisations_with_logs = [merge_request.absorbing_organisation] + organisations_with_logs
+    end
+
+    if organisations_without_logs.any?
+      text += "#{organisations_without_logs.map(&:name).to_sentence} #{organisations_without_logs.count == 1 ? 'has' : 'have'} no #{type} logs.<br><br>"
+    end
+
+    organisations_with_logs.each do |organisation|
+      text += "#{link_to_merging_organisation_logs(organisation, type)}<br><br>"
+    end
+
+    text.html_safe
+  end
+
+  def link_to_merging_organisation_logs(organisation, type)
+    count_text = organisation.send("#{type}_logs").count == 1 ? "1 #{organisation.name} #{type} log" : "all #{organisation.send("#{type}_logs").count} #{organisation.name} #{type} logs"
+    govuk_link_to "View #{count_text} (opens in a new tab)", send("#{type}_logs_organisation_path", organisation), target: "_blank"
+  end
+
+  def lettings_logs_outcomes_header_text(merge_request)
+    count = merge_request.total_visible_lettings_logs_after_merge
+    "#{count} #{'lettings log'.pluralize(count)} after merge"
+  end
+
+  def sales_logs_outcomes_header_text(merge_request)
+    count = merge_request.total_visible_sales_logs_after_merge
+    "#{count} #{'sales log'.pluralize(count)} after merge"
+  end
+
+  def any_organisations_have_logs?(organisations, type)
+    organisations.any? { |organisation| organisation.send("#{type}_logs").count.positive? }
+  end
+
+  def any_organisations_have_logs_after_merge_date?(organisations, type, merge_date)
+    organisations.any? { |organisation| organisation.send("#{type}_logs").after_date(merge_date).exists? }
+  end
+
+  def any_organisations_share_logs?(organisations, type)
+    organisations.any? { |organisation| organisation.send("#{type}_logs").filter_by_managing_organisation(organisations.where.not(id: organisation.id)).exists? }
+  end
 end
