@@ -13,9 +13,4 @@ class Notification < ApplicationRecord
   def self.newest_active_unauthenticated_notification
     active_unauthenticated_notifications.last
   end
-
-  def rendered_title(options = {})
-    renderer = NotificationTitleRenderer.new(options)
-    Redcarpet::Markdown.new(renderer, no_intra_emphasis: true).render(title)
-  end
 end
