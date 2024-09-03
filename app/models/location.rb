@@ -118,7 +118,7 @@ class Location < ApplicationRecord
          .where.not(id: joins(scheme: [:owning_organisation]).merge(Location.deactivated_by_organisation).pluck(:id))
          .where.not(id: incomplete.pluck(:id))
          .where.not(id: activating_soon(date).pluck(:id))
-         .where(scheme: Scheme.active)
+         .where(scheme: Scheme.active(date))
   }
 
   scope :visible, -> { where(discarded_at: nil) }
