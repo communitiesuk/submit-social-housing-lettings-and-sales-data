@@ -47,7 +47,7 @@ module NavigationItemsHelper
 private
 
   def home_current?(path)
-    path == root_path || path == notifications_path
+    path == root_path || path.match?(/^\/notifications\/\d+$/)
   end
 
   def lettings_logs_current?(path)

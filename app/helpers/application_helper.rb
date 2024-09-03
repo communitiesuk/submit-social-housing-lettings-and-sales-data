@@ -12,7 +12,7 @@ module ApplicationHelper
   def govuk_header_classes(current_user)
     if current_user&.support?
       "app-header app-header--orange"
-    elsif ((current_user.blank? && Notification.active_unauthenticated_notifications.present?) || current_user&.active_unread_notifications.present?) && !current_page?(notifications_path)
+    elsif notifications_to_display?
       "app-header app-header__no-border-bottom"
     else
       "app-header"
@@ -28,7 +28,7 @@ module ApplicationHelper
   end
 
   def notifications_to_display?
-    !current_page?(notifications_path) && (authenticated_user_has_notifications? || unauthenticated_user_has_notifications?)
+    !request.path.match?(/^\/notifications\/\d+$/) && (authenticated_user_has_notifications? || unauthenticated_user_has_notifications?)
   end
 
 private
