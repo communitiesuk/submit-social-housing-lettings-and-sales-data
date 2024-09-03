@@ -16,12 +16,12 @@ module NotificationsHelper
   end
 
   def render_for_banner(title)
-    banner_renderer ||= NotificationTitleRenderer.new({ invert_link_colour: true, bold_all_text: true })
+    banner_renderer = NotificationTitleRenderer.new({ invert_link_colour: true, bold_all_text: true })
     Redcarpet::Markdown.new(banner_renderer, no_intra_emphasis: true).render(title)
   end
 
   def render_for_summary(title)
-    plain_title_renderer ||= NotificationTitleRenderer.new({ invert_link_colour: false, bold_all_text: false })
+    plain_title_renderer = NotificationTitleRenderer.new({ invert_link_colour: false, bold_all_text: false })
     Redcarpet::Markdown.new(plain_title_renderer, no_intra_emphasis: true).render(title)
   end
 end
