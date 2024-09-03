@@ -28,7 +28,7 @@ module ApplicationHelper
   end
 
   def notifications_to_display?
-    !request.path.match?(/^\/notifications\/\d+$/) && (authenticated_user_has_notifications? || unauthenticated_user_has_notifications?)
+    !request.path.match?(/\/notifications\/\d+$/) && (authenticated_user_has_notifications? || unauthenticated_user_has_notifications?)
   end
 
 private
