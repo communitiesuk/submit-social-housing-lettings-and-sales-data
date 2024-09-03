@@ -67,14 +67,7 @@ class MergeRequestsController < ApplicationController
 
   def start_merge
     if @merge_request.status == "ready_to_merge"
-      @merge_request.update!(
-        processing: true,
-        last_failed_attempt: nil,
-        total_users: @merge_request.total_visible_users_after_merge,
-        total_schemes: @merge_request.total_visible_schemes_after_merge,
-        total_stock_owners: @merge_request.total_stock_owners_after_merge,
-        total_managing_agents: @merge_request.total_managing_agents_after_merge,
-      )
+      @merge_request.start_merge!
       ProcessMergeRequestJob.perform_later(merge_request: @merge_request)
     end
 

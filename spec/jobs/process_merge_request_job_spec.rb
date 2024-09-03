@@ -13,7 +13,7 @@ describe ProcessMergeRequestJob do
     let(:organisation) { create(:organisation) }
     let(:merging_organisation) { create(:organisation) }
     let(:other_merging_organisation) { create(:organisation) }
-    let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation, absorbing_organisation: organisation, merge_date: Time.zone.local(2022, 3, 3), total_users: 5, total_schemes: 5, existing_absorbing_organisation: true) }
+    let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation, absorbing_organisation: organisation, merge_date: Time.zone.local(2022, 3, 3), total_users: 5, total_schemes: 5, total_lettings_logs: 2, total_sales_logs: 8, total_managing_agents: 2, total_stock_owners: 1, existing_absorbing_organisation: true) }
 
     before do
       create(:merge_request_organisation, merge_request:, merging_organisation:)
@@ -45,7 +45,7 @@ describe ProcessMergeRequestJob do
       expect(merge_request.reload.last_failed_attempt).to be_nil
     end
 
-    it "sets last_failed_attempt value, sets processing to false and clears total_schemes and total_users if there's an error" do
+    it "sets last_failed_attempt value, sets processing to false and clears all outcomes if there's an error" do
       allow(merge_organisations_service).to receive(:call).and_raise(ActiveRecord::Rollback)
 
       expect(merge_request.last_failed_attempt).to be_nil
@@ -56,6 +56,10 @@ describe ProcessMergeRequestJob do
       expect(merge_request.processing).to eq(false)
       expect(merge_request.total_users).to be_nil
       expect(merge_request.total_schemes).to be_nil
+      expect(merge_request.total_managing_agents).to be_nil
+      expect(merge_request.total_stock_owners).to be_nil
+      expect(merge_request.total_lettings_logs).to be_nil
+      expect(merge_request.total_sales_logs).to be_nil
     end
   end
 end
