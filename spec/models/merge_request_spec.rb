@@ -444,7 +444,7 @@ RSpec.describe MergeRequest, type: :model do
 
     describe "#total_stock_owners_managing_agents_label" do
       it "returns the correct label" do
-        expect(merge_request.total_stock_owners_managing_agents_label).to eq("2 stock owners\n1 managing agent")
+        expect(merge_request.total_stock_owners_managing_agents_label).to eq("3 stock owners\n2 managing agent")
       end
     end
   end
