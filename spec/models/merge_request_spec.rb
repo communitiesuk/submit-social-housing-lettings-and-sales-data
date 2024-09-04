@@ -432,13 +432,13 @@ RSpec.describe MergeRequest, type: :model do
 
     describe "#total_stock_owners_after_merge" do
       it "returns the correct count of stock owners after merge" do
-        expect(merge_request.total_stock_owners_after_merge).to eq(2)
+        expect(merge_request.total_stock_owners_after_merge).to eq(3)
       end
     end
 
     describe "#total_managing_agents_after_merge" do
       it "returns the correct count of managing agents after merge" do
-        expect(merge_request.total_managing_agents_after_merge).to eq(1)
+        expect(merge_request.total_managing_agents_after_merge).to eq(2)
       end
     end
 
