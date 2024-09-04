@@ -107,15 +107,10 @@ class MergeRequest < ApplicationRecord
   end
 
   def filter_relationships(absorbing_relationships, merging_relationships, absorbing_organisation, merging_organisations)
-    filtered_absorbing_relationships = absorbing_relationships.reject do |relationship|
-      merging_relationships.include?(relationship) || merging_organisations.include?(relationship)
+    unique_relationships = (absorbing_relationships + merging_relationships).uniq
+    unique_relationships.reject do |relationship|
+      merging_organisations.include?(relationship) || relationship == absorbing_organisation
     end
-
-    filtered_merging_relationships = merging_relationships.reject do |relationship|
-      absorbing_relationships.include?(relationship) || relationship == absorbing_organisation || merging_organisations.include?(relationship)
-    end
-
-    (filtered_absorbing_relationships + filtered_merging_relationships).uniq
   end
 
   def total_stock_owners_after_merge
