@@ -48,6 +48,9 @@ jobs:
 
       - name: Run Performance Test
         run: |
+          echo "test curl"
+          curl https://review.submit-social-housing-data.levellingup.gov.uk/${{ github.event.pull_request.number }}/account/sign-in
+
           echo "Fetching CSRF token..."
           TOKEN=$(curl -c token_cookies.txt -s https://review.submit-social-housing-data.levellingup.gov.uk/${{ github.event.pull_request.number }}/account/sign-in | grep '<meta name="csrf-token"' | sed -n 's/.*content="\([^"]*\)".*/\1/p')
 
