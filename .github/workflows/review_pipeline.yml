@@ -73,7 +73,7 @@ jobs:
           else
             echo "login_cookies.txt does not exist."
           fi
-          
+
           # Extract cookies for use in the benchmark
           COOKIES=$(awk '/_data_collector_session/ { print $6, $7 }' login_cookies.txt | tr ' ' '=')
 
