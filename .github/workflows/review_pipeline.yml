@@ -48,15 +48,32 @@ jobs:
 
       - name: Run Performance Test
         run: |
-          # Get the CSRF token
+          echo "Fetching CSRF token..."
           TOKEN=$(curl -c token_cookies.txt -s https://review.submit-social-housing-data.levellingup.gov.uk/${{ github.event.pull_request.number }}/account/sign-in | grep '<meta name="csrf-token"' | sed -n 's/.*content="\([^"]*\)".*/\1/p')
 
-          # Log in and capture cookies
+          if [ -z "$TOKEN" ]; then
+            echo "Failed to retrieve CSRF token."
+            exit 1
+          fi
+
+          if [ -f token_cookies.txt ]; then
+            echo "token_cookies.txt exists."
+          else
+            echo "token_cookies.txt does not exist."
+          fi
+
+          echo "Logging in..."
           curl -L -c login_cookies.txt -b token_cookies.txt -X POST https://review.submit-social-housing-data.levellingup.gov.uk/${{ github.event.pull_request.number }}/account/sign-in \
             -d "user[email]=$PERFORMANCE_TESTING_USER_EMAIL" \
             -d "user[password]=$PERFORMANCE_TESTING_USER_PASSWORD" \
             -d "authenticity_token=$TOKEN"
 
+          if [ -f login_cookies.txt ]; then
+            echo "login_cookies.txt exists."
+          else
+            echo "login_cookies.txt does not exist."
+          fi
+          
           # Extract cookies for use in the benchmark
           COOKIES=$(awk '/_data_collector_session/ { print $6, $7 }' login_cookies.txt | tr ' ' '=')
 
