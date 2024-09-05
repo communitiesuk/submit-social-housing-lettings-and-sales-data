@@ -64,8 +64,8 @@ jobs:
           ab -n 50 -c 50 -C "$COOKIES" 'https://review.submit-social-housing-data.levellingup.gov.uk/${{ github.event.pull_request.number }}/lettings-logs'
 
     env:
-      PERFORMANCE_TESTING_USER_EMAIL: coordinator@example.com
-      PERFORMANCE_TESTING_USER_PASSWORD: ${{ secrets.REVIEW_APP_USER_PASSWORD }}
+      PERFORMANCE_TESTING_USER_EMAIL: coordinator1@example.com
+      PERFORMANCE_TESTING_USER_PASSWORD: password
 
   comment:
     name: Add link to PR
