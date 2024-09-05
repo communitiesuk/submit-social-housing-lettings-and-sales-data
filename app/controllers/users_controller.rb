@@ -155,7 +155,7 @@ class UsersController < ApplicationController
 
   def log_reassignment
     authorize @user
-    assigned_to_logs_count = @user.assigned_to_lettings_logs.count + @user.assigned_to_sales_logs.count
+    assigned_to_logs_count = @user.assigned_to_lettings_logs.visible.count + @user.assigned_to_sales_logs.visible.count
     return redirect_to user_organisation_change_confirmation_path(@user, organisation_id: params[:organisation_id]) if assigned_to_logs_count.zero?
 
     if params[:organisation_id].present? && Organisation.where(id: params[:organisation_id]).exists?
@@ -182,7 +182,7 @@ class UsersController < ApplicationController
 
   def organisation_change_confirmation
     authorize @user
-    assigned_to_logs_count = @user.assigned_to_lettings_logs.count + @user.assigned_to_sales_logs.count
+    assigned_to_logs_count = @user.assigned_to_lettings_logs.visible.count + @user.assigned_to_sales_logs.visible.count
 
     return redirect_to user_path(@user) if params[:organisation_id].blank? || !Organisation.where(id: params[:organisation_id]).exists?
     return redirect_to user_path(@user) if params[:log_reassignment].blank? && assigned_to_logs_count.positive?
@@ -193,7 +193,7 @@ class UsersController < ApplicationController
 
   def confirm_organisation_change
     authorize @user
-    assigned_to_logs_count = @user.assigned_to_lettings_logs.count + @user.assigned_to_sales_logs.count
+    assigned_to_logs_count = @user.assigned_to_lettings_logs.visible.count + @user.assigned_to_sales_logs.visible.count
 
     return redirect_to user_path(@user) if log_reassignment_params[:organisation_id].blank? || !Organisation.where(id: log_reassignment_params[:organisation_id]).exists?
     return redirect_to user_path(@user) if log_reassignment_params[:log_reassignment].blank? && assigned_to_logs_count.positive?
@@ -319,7 +319,7 @@ private
 
     case log_reassignment_params[:log_reassignment]
     when "reassign_stock_owner"
-      required_managing_agents = (@user.assigned_to_lettings_logs.map(&:managing_organisation) + @user.assigned_to_sales_logs.map(&:managing_organisation)).uniq
+      required_managing_agents = (@user.assigned_to_lettings_logs.visible.map(&:managing_organisation) + @user.assigned_to_sales_logs.visible.map(&:managing_organisation)).uniq
       current_managing_agents = @new_organisation.managing_agents
       missing_managing_agents = required_managing_agents - current_managing_agents
 
@@ -329,7 +329,7 @@ private
         @user.errors.add :log_reassignment, I18n.t("activerecord.errors.models.user.attributes.log_reassignment.missing_managing_agents", new_organisation:, missing_managing_agents:)
       end
     when "reassign_managing_agent"
-      required_stock_owners = (@user.assigned_to_lettings_logs.map(&:owning_organisation) + @user.assigned_to_sales_logs.map(&:owning_organisation)).uniq
+      required_stock_owners = (@user.assigned_to_lettings_logs.visible.map(&:owning_organisation) + @user.assigned_to_sales_logs.visible.map(&:owning_organisation)).uniq
       current_stock_owners = @new_organisation.stock_owners
       missing_stock_owners = required_stock_owners - current_stock_owners
 

@@ -292,8 +292,8 @@ class User < ApplicationRecord
     return unless new_organisation
 
     ActiveRecord::Base.transaction do
-      lettings_logs_to_reassign = assigned_to_lettings_logs
-      sales_logs_to_reassign = assigned_to_sales_logs
+      lettings_logs_to_reassign = assigned_to_lettings_logs.visible
+      sales_logs_to_reassign = assigned_to_sales_logs.visible
       current_organisation = organisation
 
       logs_count = lettings_logs_to_reassign.count + sales_logs_to_reassign.count
