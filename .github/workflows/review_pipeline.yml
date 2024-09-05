@@ -38,6 +38,35 @@ jobs:
     permissions:
       id-token: write
 
+  performance:
+    needs: [code]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Install Apache Benchmark (ab)
+        run: sudo apt-get update && sudo apt-get install -y apache2-utils
+
+      - name: Run Performance Test
+        run: |
+          # Get the CSRF token
+          TOKEN=$(curl -c token_cookies.txt -s https://review.submit-social-housing-data.levellingup.gov.uk/${{ github.event.pull_request.number }}/account/sign-in | grep '<meta name="csrf-token"' | sed -n 's/.*content="\([^"]*\)".*/\1/p')
+
+          # Log in and capture cookies
+          curl -L -c login_cookies.txt -b token_cookies.txt -X POST https://review.submit-social-housing-data.levellingup.gov.uk/${{ github.event.pull_request.number }}/account/sign-in \
+            -d "user[email]=$PERFORMANCE_TESTING_USER_EMAIL" \
+            -d "user[password]=$PERFORMANCE_TESTING_USER_PASSWORD" \
+            -d "authenticity_token=$TOKEN"
+
+          # Extract cookies for use in the benchmark
+          COOKIES=$(awk '/_data_collector_session/ { print $6, $7 }' login_cookies.txt | tr ' ' '=')
+
+          # Run the Apache Benchmark
+          ab -n 50 -c 50 -C "$COOKIES" 'https://review.submit-social-housing-data.levellingup.gov.uk/${{ github.event.pull_request.number }}/lettings-logs'
+
+    env:
+      PERFORMANCE_TESTING_USER_EMAIL: coordinator@example.com
+      PERFORMANCE_TESTING_USER_PASSWORD: ${{ secrets.REVIEW_APP_USER_PASSWORD }}
+
   comment:
     name: Add link to PR
     needs: [code]
