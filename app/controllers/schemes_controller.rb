@@ -57,19 +57,9 @@ class SchemesController < ApplicationController
 
     scheme_locations = @scheme.locations.confirmed
 
-    locations_active_on_deactivation_date, remaining_locations = scheme_locations.partition do |location|
-      location.status_at(@deactivation_date) == :active
+    @affected_locations = scheme_locations.select do |location|
+      %i[active deactivating_soon reactivating_soon activating_soon].include?(location.status_at(@deactivation_date))
     end
-
-    locations_deactivating_after_deactivation_date, remaining_locations = remaining_locations.partition do |location|
-      location.status_at(@deactivation_date) == :deactivating_soon || location.status_at(@deactivation_date) == :reactivating_soon
-    end
-
-    locations_startdate_after_deactivation_date, = remaining_locations.partition do |location|
-      location.status_at(@deactivation_date) == :activating_soon
-    end
-
-    @affected_locations = locations_active_on_deactivation_date + locations_deactivating_after_deactivation_date + locations_startdate_after_deactivation_date
 
     if @affected_logs.count.zero? && @affected_locations.count.zero?
       deactivate

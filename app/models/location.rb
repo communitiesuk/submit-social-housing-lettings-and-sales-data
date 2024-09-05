@@ -113,10 +113,8 @@ class Location < ApplicationRecord
   }
 
   scope :active, lambda { |date = Time.zone.now|
-    where.not(id: joins(scheme: [:scheme_deactivation_periods]).reactivating_soon_by_scheme.pluck(:id))
-         .where.not(id: joins(:location_deactivation_periods).merge(Location.deactivated_directly(date)).pluck(:id))
-         .where.not(id: joins(scheme: [:owning_organisation]).merge(Location.deactivated_by_organisation).pluck(:id))
-         .where.not(id: incomplete.pluck(:id))
+    where.not(id: joins(:location_deactivation_periods).merge(Location.deactivated_directly(date)).pluck(:id))
+          .where.not(id: incomplete.pluck(:id))
          .where.not(id: activating_soon(date).pluck(:id))
          .where(scheme: Scheme.active(date))
   }
