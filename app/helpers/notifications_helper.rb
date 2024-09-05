@@ -16,17 +16,37 @@ module NotificationsHelper
   end
 
   def render_for_banner(title)
-    banner_renderer = NotificationTitleRenderer.new({ invert_link_colour: true, bold_all_text: true })
-    Redcarpet::Markdown.new(banner_renderer, no_intra_emphasis: true).render(title)
+    # rubocop:disable Rails/HelperInstanceVariable
+    @banner_renderer ||= NotificationRenderer.new({ invert_link_colour: true, bold_all_text: true })
+    @banner_markdown ||= Redcarpet::Markdown.new(@banner_renderer, no_intra_emphasis: true)
+    @banner_markdown.render(title)
+    # rubocop:enable Rails/HelperInstanceVariable
   end
 
   def render_for_summary(title)
-    plain_title_renderer = NotificationTitleRenderer.new({ invert_link_colour: false, bold_all_text: false })
-    Redcarpet::Markdown.new(plain_title_renderer, no_intra_emphasis: true).render(title)
+    render_normal_markdown(title)
+  end
+
+  def render_for_page(title, page_content)
+    content = page_content
+    unless /\A\s*#[^#]/.match?(page_content)
+      content = "# #{title}\n#{page_content}"
+    end
+    render_normal_markdown(content)
+  end
+
+private
+
+  def render_normal_markdown(content)
+    # rubocop:disable Rails/HelperInstanceVariable
+    @on_page_renderer ||= NotificationRenderer.new({ invert_link_colour: false, bold_all_text: false })
+    @on_page_markdown ||= Redcarpet::Markdown.new(@on_page_renderer, no_intra_emphasis: true)
+    @on_page_markdown.render(content)
+    # rubocop:enable Rails/HelperInstanceVariable
   end
 end
 
-class NotificationTitleRenderer < Redcarpet::Render::HTML
+class NotificationRenderer < Redcarpet::Render::HTML
   def initialize(options = {})
     link_class = "govuk-link"
     link_class += " govuk-link--inverse" if options[:invert_link_colour]
@@ -35,9 +55,38 @@ class NotificationTitleRenderer < Redcarpet::Render::HTML
     super base_options
   end
 
+  def header(text, header_level)
+    header_size = case header_level
+                  when 1
+                    "xl"
+                  when 2
+                    "l"
+                  when 3
+                    "m"
+                  else
+                    "s"
+                  end
+
+    %(<h#{header_level} class="govuk-heading-#{header_size}">#{text}</h#{header_level}>)
+  end
+
   def paragraph(text)
     return %(<p class="govuk-!-font-weight-bold">#{text}</p>) if @bold # rubocop:disable Rails/HelperInstanceVariable
 
-    %(<p>#{text}</p>)
+    %(<p class="govuk-body-m">#{text}</p>)
+  end
+
+  def list(contents, list_type)
+    return %(<ol class="govuk-list govuk-list--number">#{contents}</ol>) if list_type == :ordered
+
+    %(<ul class="govuk-list govuk-list--bullet">#{contents}</ul>)
+  end
+
+  def hrule
+    %(<hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">)
+  end
+
+  def block_quote(quote)
+    %(<div class="govuk-inset-text">#{quote}</div>)
   end
 end

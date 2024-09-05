@@ -5,10 +5,7 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-xl"><%= @notification.title %></h1>
-    <p>
-    <%= sanitize @notification.page_content %>
-    </p>
+    <%== render_for_page(@notification.title, @notification.page_content) %>
   </div>
 </div>
 <br>

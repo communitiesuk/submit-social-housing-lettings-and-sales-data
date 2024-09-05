@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_08_19_143150) do
+ActiveRecord::Schema[7.0].define(version: 2024_09_04_135306) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -54,7 +54,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_19_143150) do
     t.datetime "last_accessed"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.check_constraint "log_type::text = ANY (ARRAY['lettings'::character varying::text, 'sales'::character varying::text])", name: "log_type_check"
+    t.check_constraint "log_type::text = ANY (ARRAY['lettings'::character varying, 'sales'::character varying]::text[])", name: "log_type_check"
     t.check_constraint "year >= 2000 AND year <= 2099", name: "year_check"
   end
 
@@ -205,14 +205,14 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_19_143150) do
     t.integer "hb"
     t.integer "hbrentshortfall"
     t.integer "property_relet"
-    t.datetime "mrcdate", precision: nil
+    t.datetime "mrcdate"
     t.integer "incref"
-    t.datetime "startdate", precision: nil
+    t.datetime "startdate"
     t.integer "armedforces"
     t.integer "first_time_property_let_as_social_housing"
     t.integer "unitletas"
     t.integer "builtype"
-    t.datetime "voiddate", precision: nil
+    t.datetime "voiddate"
     t.bigint "owning_organisation_id"
     t.bigint "managing_organisation_id"
     t.integer "renttype"
@@ -453,6 +453,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_19_143150) do
     t.boolean "show_on_unauthenticated_pages"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "show_additional_page"
   end
 
   create_table "organisation_relationships", force: :cascade do |t|
@@ -773,8 +774,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_19_143150) do
     t.string "name"
     t.bigint "organisation_id"
     t.integer "sign_in_count", default: 0, null: false
-    t.datetime "current_sign_in_at", precision: nil
-    t.datetime "last_sign_in_at", precision: nil
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
     t.string "current_sign_in_ip"
     t.string "last_sign_in_ip"
     t.integer "role"

@@ -9,8 +9,8 @@ class NotificationsController < ApplicationController
   end
 
   def show
-    @notification = Notification.find_by(id: params[:id])
-    if @notification&.page_content && (@notification&.show_on_unauthenticated_pages || current_user)
+    @notification = current_user&.support? ? Notification.find_by(id: params[:id]) : Notification.active.find_by(id: params[:id])
+    if @notification&.show_additional_page && (@notification&.show_on_unauthenticated_pages || current_user)
       render "show"
     else
       redirect_back(fallback_location: root_path)
@@ -22,7 +22,7 @@ class NotificationsController < ApplicationController
   end
 
   def create
-    @notification = Notification.new(notification_params)
+    @notification = Notification.new(notification_model_params)
 
     if @notification.errors.empty? && @notification.save
       redirect_to notification_check_answers_path(@notification)
@@ -48,10 +48,7 @@ class NotificationsController < ApplicationController
 
     start_now = params[:notification][:start_now]
 
-    update_params = notification_params.except(:start_now)
-    update_params[:start_date] = Time.zone.now if start_now
-
-    if @notification.errors.empty? && @notification.update(update_params)
+    if @notification.errors.empty? && @notification.update(notification_model_params)
       if start_now
         flash[:notice] = "The notification has been created"
         redirect_to root_path
@@ -68,10 +65,23 @@ class NotificationsController < ApplicationController
 private
 
   def notification_params
-    params.require(:notification).permit(:title, :show_on_unauthenticated_pages, :start_now)
+    params.require(:notification).permit(:title, :show_on_unauthenticated_pages, :show_additional_page, :link_text, :page_content, :start_now)
   end
 
   def authenticate_scope!
     render_not_found unless current_user.support?
+  end
+
+  def notification_model_params
+    model_params = notification_params.except(:start_now)
+
+    if notification_params[:show_additional_page] == "0"
+      model_params[:link_text] = nil
+      model_params[:page_content] = nil
+    end
+
+    model_params[:start_date] = Time.zone.now if notification_params[:start_now]
+
+    model_params
   end
 end

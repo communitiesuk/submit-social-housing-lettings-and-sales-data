@@ -190,6 +190,10 @@ en:
           attributes:
             title:
               blank: "Enter a title"
+            link_text:
+              blank_when_additional_page_set: "Enter the link text"
+            page_content:
+              blank_when_additional_page_set: "Enter the page content"
 
   notification:
     logs_deleted:
