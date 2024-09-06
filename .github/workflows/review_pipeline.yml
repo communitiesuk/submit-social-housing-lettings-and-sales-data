@@ -15,6 +15,10 @@ defaults:
   run:
     shell: bash
 
+env:
+  app_repo_role: arn:aws:iam::815624722760:role/core-application-repo
+  aws_region: eu-west-2
+
 jobs:
   infra:
     name: Deploy review app infrastructure
@@ -41,48 +45,41 @@ jobs:
   performance:
     needs: [code]
     runs-on: ubuntu-latest
+    with:
+    aws_role_prefix: core-dev
+    aws_task_prefix: core-review-${{ github.event.pull_request.number }}
+    environment: review
 
     steps:
-      - name: Install Apache Benchmark (ab)
-        run: sudo apt-get update && sudo apt-get install -y apache2-utils
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          aws-region: ${{ env.aws_region }}
+          role-to-assume: ${{ env.app_repo_role }}
+
+      - name: Login to Amazon ECR
+        id: ecr-login
+        uses: aws-actions/amazon-ecr-login@v1
+        with:
+          mask-password: "true"
 
       - name: Run Performance Test
+        env:
+          ad_hoc_task_definition: ${{ inputs.aws_task_prefix }}-ad-hoc
+          cluster: ${{ inputs.aws_task_prefix }}-app
+          service: ${{ inputs.aws_task_prefix }}-app
+          email: performance_testing_user@example.com
+          password: password
         run: |
-          echo "test curl"
-          curl https://review.submit-social-housing-data.levellingup.gov.uk/${{ github.event.pull_request.number }}/account/sign-in
-
-          echo "Fetching CSRF token..."
-          TOKEN=$(curl -c token_cookies.txt -s https://review.submit-social-housing-data.levellingup.gov.uk/${{ github.event.pull_request.number }}/account/sign-in | grep '<meta name="csrf-token"' | sed -n 's/.*content="\([^"]*\)".*/\1/p')
-
-          if [ -z "$TOKEN" ]; then
-            echo "Failed to retrieve CSRF token."
-            exit 1
-          fi
-
-          if [ -f token_cookies.txt ]; then
-            echo "token_cookies.txt exists."
-          else
-            echo "token_cookies.txt does not exist."
-          fi
-
-          echo "Logging in..."
-          curl -L -c login_cookies.txt -b token_cookies.txt -X POST https://review.submit-social-housing-data.levellingup.gov.uk/${{ github.event.pull_request.number }}/account/sign-in \
-            -d "user[email]=$PERFORMANCE_TESTING_USER_EMAIL" \
-            -d "user[password]=$PERFORMANCE_TESTING_USER_PASSWORD" \
-            -d "authenticity_token=$TOKEN"
-
-          if [ -f login_cookies.txt ]; then
-            echo "login_cookies.txt exists."
-          else
-            echo "login_cookies.txt does not exist."
-          fi
-
-          # Extract cookies for use in the benchmark
-          COOKIES=$(awk '/_data_collector_session/ { print $6, $7 }' login_cookies.txt | tr ' ' '=')
-
-          # Run the Apache Benchmark
-          ab -n 50 -c 50 -C "$COOKIES" 'https://review.submit-social-housing-data.levellingup.gov.uk/${{ github.event.pull_request.number }}/lettings-logs'
-
+          network=$(aws ecs describe-services --cluster $cluster --services $service --query services[0].networkConfiguration)
+          overrides='{ "containerOverrides" : [{ "name" : "app", "command" : ["bundle", "exec", "rake", "performance:run_ab[$email,$password]"]}]}'
+          arn=$(aws ecs run-task --cluster $cluster --task-definition $ad_hoc_task_definition --network-configuration "$network" --overrides "$overrides" --group migrations --launch-type FARGATE --query tasks[0].taskArn)
+          echo "Waiting for performance test task to complete"
+          temp=${arn##*/}
+          id=${temp%*\"}
+          aws ecs wait tasks-stopped --cluster $cluster --tasks $id
+          succeeded=$(aws ecs describe-tasks --cluster $cluster --tasks $id --query "tasks[0].stopCode == 'EssentialContainerExited' && to_string(tasks[0].containers[0].exitCode) == '0'")
+          if [ $succeeded == true ]; then exit 0; else exit 1; fi
     env:
       PERFORMANCE_TESTING_USER_EMAIL: coordinator1@example.com
       PERFORMANCE_TESTING_USER_PASSWORD: password
