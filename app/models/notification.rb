@@ -1,6 +1,8 @@
 class Notification < ApplicationRecord
   acts_as_readable
 
+  has_paper_trail
+
   validates :title, presence: { message: I18n.t("activerecord.errors.models.notification.attributes.title.blank") }
   validate :validate_additional_page_information
 
