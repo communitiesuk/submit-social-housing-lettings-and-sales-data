@@ -384,13 +384,13 @@ private
     reassigned_logs_text = ""
     case log_reassignment
     when "reassign_all"
-      reassigned_logs_text = "There are #{logs_count} logs assigned to you. The stock owner and managing agent on these logs has been changed from #{current_organisation.name} to #{new_organisation.name}."
+      reassigned_logs_text = "There are #{logs_count} #{'log'.pluralize(logs_count)} assigned to you. The stock owner and managing agent on #{logs_count == 1 ? 'this log' : 'these logs'} has been changed from #{current_organisation.name} to #{new_organisation.name}."
     when "reassign_stock_owner"
-      reassigned_logs_text = "There are #{logs_count} logs assigned to you. The stock owner on these logs has been changed from #{current_organisation.name} to #{new_organisation.name}."
+      reassigned_logs_text = "There are #{logs_count} #{'log'.pluralize(logs_count)} assigned to you. The stock owner on #{logs_count == 1 ? 'this log' : 'these logs'} has been changed from #{current_organisation.name} to #{new_organisation.name}."
     when "reassign_managing_agent"
-      reassigned_logs_text = "There are #{logs_count} logs assigned to you. The managing agent on these logs has been changed from #{current_organisation.name} to #{new_organisation.name}."
+      reassigned_logs_text = "There are #{logs_count} #{'log'.pluralize(logs_count)} assigned to you. The managing agent on #{logs_count == 1 ? 'this log' : 'these logs'} has been changed from #{current_organisation.name} to #{new_organisation.name}."
     when "unassign"
-      reassigned_logs_text = "There are #{logs_count} logs assigned to you. These have now been unassigned."
+      reassigned_logs_text = "There are #{logs_count} #{'log'.pluralize(logs_count)} assigned to you. #{logs_count == 1 ? 'This' : 'These'} have now been unassigned."
     end
 
     template_id = ORGANISATION_UPDATE_TEMPLATE_ID
