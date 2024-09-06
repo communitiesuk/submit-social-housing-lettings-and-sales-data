@@ -71,18 +71,22 @@ jobs:
           email: performance_testing_user@example.com
           password: password
         run: |
-          network=$(aws ecs describe-services --cluster $cluster --services $service --query services[0].networkConfiguration)
-          overrides='{ "containerOverrides" : [{ "name" : "app", "command" : ["bundle", "exec", "rake", "performance:run_ab[$email,$password]"]}]}'
-          arn=$(aws ecs run-task --cluster $cluster --task-definition $ad_hoc_task_definition --network-configuration "$network" --overrides "$overrides" --group migrations --launch-type FARGATE --query tasks[0].taskArn)
-          echo "Waiting for performance test task to complete"
-          temp=${arn##*/}
-          id=${temp%*\"}
-          aws ecs wait tasks-stopped --cluster $cluster --tasks $id
-          succeeded=$(aws ecs describe-tasks --cluster $cluster --tasks $id --query "tasks[0].stopCode == 'EssentialContainerExited' && to_string(tasks[0].containers[0].exitCode) == '0'")
-          if [ $succeeded == true ]; then exit 0; else exit 1; fi
-    env:
-      PERFORMANCE_TESTING_USER_EMAIL: coordinator1@example.com
-      PERFORMANCE_TESTING_USER_PASSWORD: password
+          echo install apache2-utils
+          sudo apt-get update && sudo apt-get install -y apache2-utils
+          echo get token
+          TOKEN=$(curl -c token_cookies.txt -s https://review.submit-social-housing-data.levellingup.gov.uk/2621/account/sign-in | grep '<meta name="csrf-token"' | sed -n 's/.*content="\\([^"]*\\)".*/\\1/p')
+
+          echo "Logging in..."
+
+          curl -L -o nul -c login_cookies.txt -b token_cookies.txt -X POST https://review.submit-social-housing-data.levellingup.gov.uk/2621/account/sign-in \
+            -d "user[email]=$email" \
+            -d "user[password]=$password" \
+            -d "authenticity_token=$TOKEN"
+
+          COOKIES=$(awk '/_data_collector_session/ { print $6, $7 }' login_cookies.txt | tr ' ' '=')
+
+          echo "Running performance test..."
+          ab -n 50 -c 50 -C "$COOKIES" 'https://review.submit-social-housing-data.levellingup.gov.uk/2621/lettings-logs'
 
   comment:
     name: Add link to PR
