@@ -7,6 +7,7 @@
 <%= form_for(@user, as: :user, html: { method: :patch }) do |f| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
+      <% remove_attributes_from_error_messages(@user) %>
       <%= f.govuk_error_summary %>
 
       <h1 class="govuk-heading-l">

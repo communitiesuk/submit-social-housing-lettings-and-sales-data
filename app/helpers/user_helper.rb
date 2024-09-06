@@ -41,4 +41,19 @@ module UserHelper
 
     "You’re moving #{user.name} from #{user.organisation.name} to #{new_organisation.name}. #{log_reassignment_text}"
   end
+
+  def remove_attributes_from_error_messages(user)
+    modified_errors = []
+
+    user.errors.each do |error|
+      cleaned_message = error.type.gsub(error.attribute.to_s.humanize, "").strip
+      modified_errors << [error.attribute, cleaned_message]
+    end
+
+    user.errors.clear
+
+    modified_errors.each do |attribute, message|
+      user.errors.add(attribute, message)
+    end
+  end
 end
