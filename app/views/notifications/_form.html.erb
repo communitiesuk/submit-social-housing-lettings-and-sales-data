@@ -22,7 +22,7 @@
       <%= f.govuk_check_box :show_on_unauthenticated_pages, 1, 0, multiple: false, label: { text: "Show this notification on unauthenticated pages, for example the start page" } %>
       <%= f.govuk_check_box :show_additional_page, 1, 0, multiple: false, label: { text: "Include a link to a separate page with additional information" } do %>
         <%= f.govuk_text_field :link_text, label: { text: "Link text" }, hint: { text: "Use descriptive language and relevant terms. The link text should make sense out of context." } %>
-        <%= f.govuk_text_area :page_content, label: { text: "Page content" }, hint: { text: "Use markdown to format the page content. <br/><br/> The page title will be the notification title by default. Use a heading level one if you want to override it." } %>
+        <%= f.govuk_text_area :page_content, label: { text: "Page content" }, hint: { text: "Use markdown to format the page content. The page title will be the notification title by default. Use a heading level one if you want to override it." } %>
       <% end %>
     <% end %>
 
