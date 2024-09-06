@@ -1457,7 +1457,7 @@ private
 
         field_mapping_for_errors[interruption_screen_question_id.to_sym]&.each do |field|
           if errors.none? { |e| e.options[:category] == :soft_validation && field_mapping_for_errors[interruption_screen_question_id.to_sym].include?(e.attribute) }
-            error_message = [display_title_text(question.page.title_text, log), display_informative_text(question.page.informative_text, log)].reject(&:empty?).join(". ")
+            error_message = [display_title_text(question.page.title_text, log), display_informative_text(question.page.informative_text, log)].reject(&:empty?).join(" ")
             errors.add(field, message: error_message, category: :soft_validation)
           end
         end

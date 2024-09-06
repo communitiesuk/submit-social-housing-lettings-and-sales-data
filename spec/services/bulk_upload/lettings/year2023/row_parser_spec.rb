@@ -686,7 +686,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
           it "cannot be nulled" do
             parser.valid?
-            expect(parser.errors[:field_45]).to eq(["You must show the MHCLG privacy notice to the tenant before you can submit this log"])
+            expect(parser.errors[:field_45]).to eq(["You must show the MHCLG privacy notice to the tenant before you can submit this log."])
           end
         end
       end
@@ -1106,8 +1106,8 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
             parser.valid?
 
             expect(parser.errors[:field_15]).to be_blank
-            expect(parser.errors.where(:field_16).map(&:message)).to eq(["This location is incomplete. Select another location or update this one"])
-            expect(parser.errors.where(:field_17).map(&:message)).to eq(["This location is incomplete. Select another location or update this one"])
+            expect(parser.errors.where(:field_16).map(&:message)).to eq(["This location is incomplete. Select another location or update this one."])
+            expect(parser.errors.where(:field_17).map(&:message)).to eq(["This location is incomplete. Select another location or update this one."])
           end
         end
       end
@@ -1480,7 +1480,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
         it "returns an error" do
           parser.valid?
-          expect(parser.errors[:field_9]).to include("Tenancy start year must be 2 digits")
+          expect(parser.errors[:field_9]).to include("Tenancy start year must be 2 digits.")
         end
       end
 
@@ -2710,8 +2710,8 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
         it "sets error on housingneeds a and b" do
           parser.valid?
-          expect(parser.errors[:field_83]).to include("Only one disabled access need: fully wheelchair-accessible housing, wheelchair access to essential rooms or level access housing, can be selected")
-          expect(parser.errors[:field_84]).to include("Only one disabled access need: fully wheelchair-accessible housing, wheelchair access to essential rooms or level access housing, can be selected")
+          expect(parser.errors[:field_83]).to include("Only one disabled access need: fully wheelchair-accessible housing, wheelchair access to essential rooms or level access housing, can be selected.")
+          expect(parser.errors[:field_84]).to include("Only one disabled access need: fully wheelchair-accessible housing, wheelchair access to essential rooms or level access housing, can be selected.")
           expect(parser.errors[:field_85]).to be_blank
         end
       end
@@ -2721,8 +2721,8 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
         it "sets error on housingneeds a and c" do
           parser.valid?
-          expect(parser.errors[:field_83]).to include("Only one disabled access need: fully wheelchair-accessible housing, wheelchair access to essential rooms or level access housing, can be selected")
-          expect(parser.errors[:field_85]).to include("Only one disabled access need: fully wheelchair-accessible housing, wheelchair access to essential rooms or level access housing, can be selected")
+          expect(parser.errors[:field_83]).to include("Only one disabled access need: fully wheelchair-accessible housing, wheelchair access to essential rooms or level access housing, can be selected.")
+          expect(parser.errors[:field_85]).to include("Only one disabled access need: fully wheelchair-accessible housing, wheelchair access to essential rooms or level access housing, can be selected.")
           expect(parser.errors[:field_84]).to be_blank
         end
       end
@@ -2732,8 +2732,8 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
         it "sets error on housingneeds b and c" do
           parser.valid?
-          expect(parser.errors[:field_84]).to include("Only one disabled access need: fully wheelchair-accessible housing, wheelchair access to essential rooms or level access housing, can be selected")
-          expect(parser.errors[:field_85]).to include("Only one disabled access need: fully wheelchair-accessible housing, wheelchair access to essential rooms or level access housing, can be selected")
+          expect(parser.errors[:field_84]).to include("Only one disabled access need: fully wheelchair-accessible housing, wheelchair access to essential rooms or level access housing, can be selected.")
+          expect(parser.errors[:field_85]).to include("Only one disabled access need: fully wheelchair-accessible housing, wheelchair access to essential rooms or level access housing, can be selected.")
           expect(parser.errors[:field_83]).to be_blank
         end
       end
@@ -2743,8 +2743,8 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
         it "sets error on housingneeds a and g" do
           parser.valid?
-          expect(parser.errors[:field_87]).to include("No disabled access needs can’t be selected if you have selected fully wheelchair-accessible housing, wheelchair access to essential rooms, level access housing or other disabled access needs")
-          expect(parser.errors[:field_83]).to include("No disabled access needs can’t be selected if you have selected fully wheelchair-accessible housing, wheelchair access to essential rooms, level access housing or other disabled access needs")
+          expect(parser.errors[:field_87]).to include("No disabled access needs can’t be selected if you have selected fully wheelchair-accessible housing, wheelchair access to essential rooms, level access housing or other disabled access needs.")
+          expect(parser.errors[:field_83]).to include("No disabled access needs can’t be selected if you have selected fully wheelchair-accessible housing, wheelchair access to essential rooms, level access housing or other disabled access needs.")
           expect(parser.errors[:field_84]).to be_blank
           expect(parser.errors[:field_85]).to be_blank
         end
@@ -2767,8 +2767,8 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
         it "sets error on housingneeds a and h" do
           parser.valid?
-          expect(parser.errors[:field_88]).to include("Don’t know disabled access needs can’t be selected if you have selected fully wheelchair-accessible housing, wheelchair access to essential rooms, level access housing or other disabled access needs")
-          expect(parser.errors[:field_83]).to include("Don’t know disabled access needs can’t be selected if you have selected fully wheelchair-accessible housing, wheelchair access to essential rooms, level access housing or other disabled access needs")
+          expect(parser.errors[:field_88]).to include("Don’t know disabled access needs can’t be selected if you have selected fully wheelchair-accessible housing, wheelchair access to essential rooms, level access housing or other disabled access needs.")
+          expect(parser.errors[:field_83]).to include("Don’t know disabled access needs can’t be selected if you have selected fully wheelchair-accessible housing, wheelchair access to essential rooms, level access housing or other disabled access needs.")
           expect(parser.errors[:field_84]).to be_blank
           expect(parser.errors[:field_85]).to be_blank
         end

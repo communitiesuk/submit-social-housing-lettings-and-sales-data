@@ -54,7 +54,7 @@ RSpec.describe BulkUpload::Sales::Validator do
 
       it "is not valid" do
         expect(validator).not_to be_valid
-        expect(validator.errors["base"]).to eql(["Incorrect sale dates, please ensure you have used the correct template"])
+        expect(validator.errors["base"]).to eql(["Incorrect sale dates, please ensure you have used the correct template."])
       end
     end
 

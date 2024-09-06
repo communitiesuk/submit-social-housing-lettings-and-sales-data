@@ -597,7 +597,7 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
         let(:attributes) { setup_section_params.merge({ bulk_upload:, field_5: "2022" }) }
 
         it "returns a setup error" do
-          expect(parser.errors.where(:field_5, category: :setup).map(&:message)).to include("Sale completion year must be 2 digits")
+          expect(parser.errors.where(:field_5, category: :setup).map(&:message)).to include("Sale completion year must be 2 digits.")
         end
       end
 

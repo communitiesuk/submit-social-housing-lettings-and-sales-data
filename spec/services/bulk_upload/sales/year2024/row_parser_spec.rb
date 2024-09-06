@@ -716,7 +716,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
 
         it "returns a setup error" do
           parser.valid?
-          expect(parser.errors.where(:field_6, category: :setup).map(&:message)).to include("Sale completion year must be 2 digits")
+          expect(parser.errors.where(:field_6, category: :setup).map(&:message)).to include("Sale completion year must be 2 digits.")
         end
       end
 
@@ -986,7 +986,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
 
           it "adds an appropriate error to the UPRN field" do
             parser.valid?
-            expect(parser.errors[:field_22]).to eql(["UPRN must be 12 digits or less"])
+            expect(parser.errors[:field_22]).to eql(["UPRN must be 12 digits or less."])
           end
 
           it "adds errors to missing key address fields" do
@@ -1003,7 +1003,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
 
           it "adds an error to the UPRN field only" do
             parser.valid?
-            expect(parser.errors[:field_22]).to eql(["UPRN must be 12 digits or less"])
+            expect(parser.errors[:field_22]).to eql(["UPRN must be 12 digits or less."])
             %i[field_23 field_25 field_27 field_28].each do |field|
               expect(parser.errors[field]).to be_empty
             end
@@ -1108,7 +1108,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
 
       context "when the privacy notice is not accepted" do
         it "cannot be nulled" do
-          expect(parser.errors[:field_18]).to eq(["You must show or give the buyer access to the MHCLG privacy notice before you can submit this log"])
+          expect(parser.errors[:field_18]).to eq(["You must show or give the buyer access to the MHCLG privacy notice before you can submit this log."])
         end
       end
     end
@@ -1198,7 +1198,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
         it "a custom validation is applied" do
           parser.valid?
 
-          validation_message = "Buyer 2 cannot have a working situation of child under 16"
+          validation_message = "Buyer 2 cannot have a working situation of child under 16."
           expect(parser.errors[:field_42]).to include validation_message
         end
       end
@@ -1220,7 +1220,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
         it "a custom validation is applied" do
           parser.valid?
 
-          validation_message = "Buyer 2's age cannot be 16 or over if their working situation is child under 16"
+          validation_message = "Buyer 2's age cannot be 16 or over if their working situation is child under 16."
           expect(parser.errors[:field_42]).to include validation_message
           expect(parser.errors[:field_38]).to include validation_message
         end
@@ -1244,7 +1244,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
         it "a custom validation is applied" do
           parser.valid?
 
-          validation_message = "Buyer 1 cannot have a working situation of child under 16"
+          validation_message = "Buyer 1 cannot have a working situation of child under 16."
           expect(parser.errors[:field_35]).to include validation_message
         end
       end
@@ -1266,7 +1266,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
         it "a custom validation is applied" do
           parser.valid?
 
-          validation_message = "Buyer 1's age cannot be 16 or over if their working situation is child under 16"
+          validation_message = "Buyer 1's age cannot be 16 or over if their working situation is child under 16."
           expect(parser.errors[:field_35]).to include validation_message
           expect(parser.errors[:field_31]).to include validation_message
         end
@@ -1676,7 +1676,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
           parser.valid?
           expect(parser.log.nationality_all).to be(nil)
           expect(parser.log.nationality_all_group).to be(nil)
-          expect(parser.errors["field_34"]).to include("Select a valid nationality")
+          expect(parser.errors["field_34"]).to include("Select a valid nationality.")
         end
       end
     end
@@ -1761,7 +1761,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
           parser.valid?
           expect(parser.log.nationality_all_buyer2).to be(nil)
           expect(parser.log.nationality_all_buyer2_group).to be(nil)
-          expect(parser.errors["field_41"]).to include("Select a valid nationality")
+          expect(parser.errors["field_41"]).to include("Select a valid nationality.")
         end
       end
     end
