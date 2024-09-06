@@ -183,7 +183,7 @@ RSpec.describe Validations::Sales::SetupValidations do
       it "adds an error" do
         setup_validator.validate_saledate_two_weeks(record)
 
-        expect(record.errors[:saledate]).to include("Sale completion date must not be later than 14 days from today’s date")
+        expect(record.errors[:saledate]).to include("Sale completion date must not be later than 14 days from today’s date.")
       end
     end
   end

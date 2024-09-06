@@ -700,7 +700,7 @@ RSpec.describe Validations::SetupValidations do
         record.location = location
         setup_validator.validate_location(record)
         expect(record.errors["location_id"])
-          .to include("This location is incomplete. Select another location or update this one")
+          .to include("This location is incomplete. Select another location or update this one.")
       end
 
       it "produces no error when location is completes" do

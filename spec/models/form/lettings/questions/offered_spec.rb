@@ -18,7 +18,7 @@ RSpec.describe Form::Lettings::Questions::Offered, type: :model do
   end
 
   it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq "Times previously offered since becoming available"
+    expect(question.check_answer_label).to eq "Times previously offered since becoming available."
   end
 
   it "has the correct type" do

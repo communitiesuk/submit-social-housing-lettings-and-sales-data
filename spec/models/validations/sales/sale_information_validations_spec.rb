@@ -147,10 +147,10 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
         sale_information_validator.validate_exchange_date(record)
 
         expect(record.errors[:exdate]).to eq(
-          ["Contract exchange date must be less than 1 year before sale completion date"],
+          ["Contract exchange date must be less than 1 year before sale completion date."],
         )
         expect(record.errors[:saledate]).to eq(
-          ["Sale completion date must be less than 1 year after contract exchange date"],
+          ["Sale completion date must be less than 1 year after contract exchange date."],
         )
       end
     end
@@ -162,10 +162,10 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
         sale_information_validator.validate_exchange_date(record)
 
         expect(record.errors[:exdate]).to eq(
-          ["Contract exchange date must be before sale completion date"],
+          ["Contract exchange date must be before sale completion date."],
         )
         expect(record.errors[:saledate]).to eq(
-          ["Sale completion date must be after contract exchange date"],
+          ["Sale completion date must be after contract exchange date."],
         )
       end
     end
