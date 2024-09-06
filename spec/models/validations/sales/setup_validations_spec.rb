@@ -91,7 +91,7 @@ RSpec.describe Validations::Sales::SetupValidations do
         it "adds error" do
           setup_validator.validate_saledate_collection_year(record)
 
-          expect(record.errors[:saledate]).to include("Enter a date within the 23/24 or 24/25 collection years, which is between 1st April 2023 and 31st March 2025")
+          expect(record.errors[:saledate]).to include("Enter a date within the 23/24 or 24/25 collection years, which is between 1st April 2023 and 31st March 2025.")
         end
       end
 
@@ -105,7 +105,7 @@ RSpec.describe Validations::Sales::SetupValidations do
         it "adds error" do
           setup_validator.validate_saledate_collection_year(record)
 
-          expect(record.errors[:saledate]).to include("Enter a date within the 23/24 or 24/25 collection years, which is between 1st April 2023 and 31st March 2025")
+          expect(record.errors[:saledate]).to include("Enter a date within the 23/24 or 24/25 collection years, which is between 1st April 2023 and 31st March 2025.")
         end
       end
 
@@ -119,7 +119,7 @@ RSpec.describe Validations::Sales::SetupValidations do
         it "cannot create new logs for the archived collection year" do
           record.saledate = Time.zone.local(2023, 1, 1)
           setup_validator.validate_saledate_collection_year(record)
-          expect(record.errors["saledate"]).to include(match "Enter a date within the 23/24 or 24/25 collection years, which is between 1st April 2023 and 31st March 2025")
+          expect(record.errors["saledate"]).to include(match "Enter a date within the 23/24 or 24/25 collection years, which is between 1st April 2023 and 31st March 2025.")
         end
 
         it "can edit already created logs for the previous collection year" do
@@ -127,7 +127,7 @@ RSpec.describe Validations::Sales::SetupValidations do
           record.save!(validate: false)
           record.saledate = Time.zone.local(2024, 1, 1)
           setup_validator.validate_saledate_collection_year(record)
-          expect(record.errors["saledate"]).not_to include(match "Enter a date within the 24/25 collection year, which is between 1st April 2024 and 31st March 2025")
+          expect(record.errors["saledate"]).not_to include(match "Enter a date within the 24/25 collection year, which is between 1st April 2024 and 31st March 2025.")
         end
       end
 
@@ -142,7 +142,7 @@ RSpec.describe Validations::Sales::SetupValidations do
           record.update!(saledate: nil)
           record.saledate = Time.zone.local(2023, 1, 1)
           setup_validator.validate_saledate_collection_year(record)
-          expect(record.errors["saledate"]).to include(match "Enter a date within the 23/24 or 24/25 collection years, which is between 1st April 2023 and 31st March 2025")
+          expect(record.errors["saledate"]).to include(match "Enter a date within the 23/24 or 24/25 collection years, which is between 1st April 2023 and 31st March 2025.")
         end
 
         it "cannot edit already created logs for the archived collection year" do
@@ -150,7 +150,7 @@ RSpec.describe Validations::Sales::SetupValidations do
           record.save!(validate: false)
           record.saledate = Time.zone.local(2023, 1, 1)
           setup_validator.validate_saledate_collection_year(record)
-          expect(record.errors["saledate"]).to include(match "Enter a date within the 23/24 or 24/25 collection years, which is between 1st April 2023 and 31st March 2025")
+          expect(record.errors["saledate"]).to include(match "Enter a date within the 23/24 or 24/25 collection years, which is between 1st April 2023 and 31st March 2025.")
         end
       end
     end
