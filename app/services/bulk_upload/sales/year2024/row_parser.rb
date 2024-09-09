@@ -1300,7 +1300,9 @@ private
   end
 
   def validate_owning_org_permitted
-    if owning_organisation && !bulk_upload.user.organisation.affiliated_stock_owners.include?(owning_organisation)
+    return unless owning_organisation
+
+    if (bulk_upload.user.support? && !bulk_upload.organisation.affiliated_stock_owners.include?(bulk_upload.organisation)) || (!bulk_upload.user.support? && !bulk_upload.user.organisation.affiliated_stock_owners.include?(owning_organisation))
       block_log_creation!
 
       if errors[:field_1].blank?
