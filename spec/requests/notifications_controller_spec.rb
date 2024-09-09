@@ -101,6 +101,17 @@ RSpec.describe NotificationsController, type: :request do
         end
       end
     end
+
+    describe "#delete" do
+      let(:notification) { create(:notification, end_date: nil) }
+      let(:request) { delete notification_delete_path(notification) }
+
+      it "sets end_date on the notification" do
+        request
+        notification.reload
+        expect(notification.end_date).to be < Time.zone.now
+      end
+    end
   end
 
   context "when user is signed in as a non-support user" do
@@ -125,11 +136,27 @@ RSpec.describe NotificationsController, type: :request do
 
     describe "#update" do
       let(:notification) { create(:notification) }
-      let(:request) { patch notification_path(notification), params: { "notification": { title: "Test Create" } } }
+      let(:request) { patch notification_path(notification), params: { "notification": { title: "Test Update" } } }
 
       it "returns not found" do
         request
         expect(response).to have_http_status(:not_found)
+      end
+    end
+
+    describe "#delete" do
+      let(:notification) { create(:notification, end_date: nil) }
+      let(:request) { delete notification_delete_path(notification) }
+
+      it "returns not found" do
+        request
+        expect(response).to have_http_status(:not_found)
+      end
+
+      it "does not set end_date on the notification" do
+        request
+        notification.reload
+        expect(notification.end_date).to be_nil
       end
     end
   end

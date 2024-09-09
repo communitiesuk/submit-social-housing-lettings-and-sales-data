@@ -1,0 +1,27 @@
+<% content_for :before_content do %>
+  <% content_for :title, "Are you sure you want to delete this notification?" %>
+  <%= govuk_back_link(href: :back) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+    <h1 class="govuk-heading-xl">
+      <%= content_for(:title) %>
+    </h1>
+
+    <p class="govuk-body"><%== render_for_summary("**Notification:** #{@notification.title}") %></p>
+
+    <p class="govuk-body">Users will no longer see this notification.</p>
+
+    <%= govuk_warning_text(text: "You will not be able to undo this action.") %>
+
+    <div class="govuk-button-group">
+      <%= govuk_button_to(
+            "Delete notification",
+            notification_delete_path(@notification),
+            method: :delete,
+            ) %>
+      <%= govuk_button_link_to "Cancel", root_path, html: { method: :get }, secondary: true %>
+    </div>
+  </div>
+</div>

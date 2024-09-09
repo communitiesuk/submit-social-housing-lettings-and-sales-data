@@ -35,6 +35,13 @@ module NotificationsHelper
     render_normal_markdown(content)
   end
 
+  def render_for_home(notification)
+    return render_normal_markdown(notification.title) unless notification.show_additional_page
+
+    content = "#{notification.title}  \n[#{notification.link_text}](#{notification_path(notification)})"
+    render_normal_markdown(content)
+  end
+
 private
 
   def render_normal_markdown(content)

@@ -62,6 +62,22 @@ class NotificationsController < ApplicationController
     end
   end
 
+  def delete_confirmation
+    @notification = Notification.find_by(id: params[:notification_id])
+    render_not_found and return unless @notification
+
+    render "notifications/delete_confirmation"
+  end
+
+  def delete
+    @notification = Notification.find_by(id: params[:notification_id])
+    render_not_found and return unless @notification
+
+    @notification.update!(end_date: Time.zone.now)
+    flash[:notice] = "The notification has been deleted"
+    redirect_to root_path
+  end
+
 private
 
   def notification_params

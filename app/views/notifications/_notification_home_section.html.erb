@@ -1,0 +1,17 @@
+<div class="govuk-grid-row">
+  <p class="govuk-!-font-weight-bold"><%== I18n.t("active_notifications", count: Notification.active.count) %></p>
+  <% Notification.active.each do |notification| %>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-three-quarters">
+        <%== render_for_home(notification) %>
+      </div>
+      <div class="govuk-grid-column-one-quarter">
+        <%= govuk_link_to("Delete notification", notification_delete_confirmation_path(notification)) %>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<div class="govuk-grid-row">
+  <%= govuk_button_link_to "Create a new notification", new_notification_path %>
+</div>
