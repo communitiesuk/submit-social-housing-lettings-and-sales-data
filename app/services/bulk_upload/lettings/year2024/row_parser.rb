@@ -889,7 +889,9 @@ private
   end
 
   def validate_owning_org_permitted
-    if owning_organisation && !bulk_upload.user.organisation.affiliated_stock_owners.include?(owning_organisation)
+    return unless owning_organisation
+
+    if (bulk_upload.user.support? && !bulk_upload.organisation.affiliated_stock_owners.include?(bulk_upload.organisation)) || (!bulk_upload.user.support? && !bulk_upload.user.organisation.affiliated_stock_owners.include?(owning_organisation))
       block_log_creation!
 
       if errors[:field_1].blank?
@@ -1135,7 +1137,7 @@ private
     attributes["renewal"] = renewal
     attributes["scheme"] = scheme
     attributes["location"] = location
-    attributes["assigned_to"] = assigned_to || bulk_upload.user
+    attributes["assigned_to"] = bulk_upload.user.support? ? nil : (assigned_to || bulk_upload.user) # don't set to support users, leave as nil - validate nil
     attributes["created_by"] = bulk_upload.user
     attributes["needstype"] = field_4
     attributes["rent_type"] = RENT_TYPE_BU_MAPPING[field_11]
