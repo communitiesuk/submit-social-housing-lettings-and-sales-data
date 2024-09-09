@@ -49,7 +49,7 @@ private
               when "guidance"
                 Forms::BulkUploadSales::Guidance.new(form_params.merge(referrer: params[:referrer]))
               when "upload-your-file"
-                Forms::BulkUploadSales::UploadYourFile.new(form_params.merge(current_user:))
+                Forms::BulkUploadSales::UploadYourFile.new(form_params.merge(current_user:, organisation_id: params[:org]))
               when "checking-file"
                 Forms::BulkUploadSales::CheckingFile.new(form_params)
               else

@@ -10,6 +10,7 @@ module Forms
       attribute :year, :integer
       attribute :file
       attribute :current_user
+      attribute :organisation_id
 
       validates :file, presence: true
       validate :validate_file_is_csv
@@ -19,7 +20,11 @@ module Forms
       end
 
       def back_path
-        bulk_upload_sales_log_path(id: "prepare-your-file", form: { year: })
+        if organisation_id.present?
+          sales_logs_organisation_path(organisation_id)
+        else
+          bulk_upload_sales_log_path(id: "prepare-your-file", form: { year: })
+        end
       end
 
       def year_combo
@@ -36,6 +41,7 @@ module Forms
           log_type: BulkUpload.log_types[:sales],
           year:,
           filename: file.original_filename,
+          organisation_id: organisation_id || current_user.organisation_id,
         )
 
         storage_service.write_file(bulk_upload.identifier, File.read(file.path))

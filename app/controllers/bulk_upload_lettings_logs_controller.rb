@@ -51,7 +51,7 @@ private
               when "needstype"
                 Forms::BulkUploadLettings::Needstype.new(form_params)
               when "upload-your-file"
-                Forms::BulkUploadLettings::UploadYourFile.new(form_params.merge(current_user:))
+                Forms::BulkUploadLettings::UploadYourFile.new(form_params.merge(current_user:, organisation_id: params[:org]))
               when "checking-file"
                 Forms::BulkUploadLettings::CheckingFile.new(form_params)
               else
