@@ -15,6 +15,10 @@ module TagHelper
     deleted: "Deleted",
     merged: "Merged",
     unconfirmed: "Unconfirmed",
+    merge_issues: "Merge issues",
+    request_merged: "Merged",
+    ready_to_merge: "Ready to merge",
+    processing: "Processing",
   }.freeze
 
   COLOUR = {
@@ -31,6 +35,10 @@ module TagHelper
     deleted: "red",
     merged: "orange",
     unconfirmed: "blue",
+    merge_issues: "orange",
+    request_merged: "green",
+    ready_to_merge: "blue",
+    processing: "yellow",
   }.freeze
 
   def status_tag(status, classes = [])

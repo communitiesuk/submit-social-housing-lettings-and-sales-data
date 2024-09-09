@@ -1,36 +1,34 @@
 <% content_for :before_content do %>
   <% title = "Tell us if your organisation is merging" %>
   <% content_for :title, title %>
-  <%= govuk_back_link href: organisations_merge_request_path(id: @merge_request) %>
+  <%= govuk_back_link href: merge_request_back_link(@merge_request, "absorbing_organisation", request.query_parameters["referrer"]) %>
 <% end %>
 
-<%= form_with model: @merge_request, url: merge_request_path, method: :patch do |f| %>
+<%= form_with model: @merge_request, url: submit_merge_request_url(request.query_parameters["referrer"]), method: :patch do |f| %>
   <%= f.govuk_error_summary %>
 
-  <h2 class="govuk-heading-l">Which organisation is absorbing the others?</h2>
+  <h1 class="govuk-heading-l">Which organisation is absorbing the others?</h1>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
-      <p class="govuk-body">Select the organisation that the other organisations are merging into.</p>
-
-      <%= f.govuk_radio_buttons_fieldset(
-        :absorbing_organisation_id,
-        hint: { text: "For example, if Skype and Yammer merged into Microsoft, you would select Microsoft." },
-        legend: nil,
-      ) do %>
-        <% @merge_request.merging_organisations.order(:name).each do |org| %>
-          <%= f.govuk_radio_button(
-            :absorbing_organisation_id,
-            org.id,
-            label: { text: org.name },
-          ) %>
+      <p class="govuk-hint">If organisations are merging into a new organisation, <%= govuk_link_to "create the new organisation", new_organisation_path %> first and then select it here.</p>
+      <br>
+      <%= f.govuk_select(:absorbing_organisation_id,
+        label: { text: "Select organisation name", class: "govuk-label--m" },
+        "data-controller": "accessible-autocomplete") do %>
+          <% @answer_options.map { |id, name| OpenStruct.new(id:, name:) }.each do |answer| %>
+            <option value="<%= answer.id %>"
+              data-synonyms="<%= answer_option_synonyms(answer.resource) %>"
+              data-append="<%= answer_option_append(answer.resource) %>"
+              data-hint="<%= answer_option_hint(answer.resource) %>"
+              <%= @merge_request.absorbing_organisation_id == answer.id ? "selected" : "" %>><%= answer.name || answer.resource %></option>
+          <% end %>
         <% end %>
-        <%= f.govuk_radio_divider %>
-        <%= f.govuk_radio_button :absorbing_organisation_id, "other", checked: @merge_request.new_absorbing_organisation?, label: { text: "These organisations are merging into a new one" } %>
-      <% end %>
 
       <%= f.hidden_field :page, value: "absorbing_organisation" %>
-
-      <%= f.govuk_submit %>
+      <div class="govuk-button-group">
+        <%= f.govuk_submit submit_merge_request_button_text(request.query_parameters["referrer"]) %>
+        <%= govuk_link_to(secondary_merge_request_link_text(request.query_parameters["referrer"]), merge_request_path(@merge_request)) %>
+      </div>
     <% end %>
   </div>
 </div>
