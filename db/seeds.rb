@@ -107,7 +107,7 @@ unless Rails.env.test?
     role: "data_provider",
     is_dpo: true,
   ) do |user|
-    user.password = "password"
+    user.password = ENV["REVIEW_APP_USER_PASSWORD"]
     user.confirmed_at = Time.zone.now
     create_data_protection_confirmation(user)
   end
@@ -119,7 +119,7 @@ unless Rails.env.test?
     role: "data_coordinator",
     is_dpo: true,
   ) do |user|
-    user.password = "password"
+    user.password = ENV["REVIEW_APP_USER_PASSWORD"]
     user.confirmed_at = Time.zone.now
     create_data_protection_confirmation(user)
   end
@@ -131,7 +131,7 @@ unless Rails.env.test?
     role: "data_provider",
     is_dpo: true,
   ) do |user|
-    user.password = "password"
+    user.password = ENV["REVIEW_APP_USER_PASSWORD"]
     user.confirmed_at = Time.zone.now
     create_data_protection_confirmation(user)
   end
@@ -142,7 +142,7 @@ unless Rails.env.test?
     organisation: standalone_no_stock,
     role: "data_coordinator",
   ) do |user|
-    user.password = "password"
+    user.password = ENV["REVIEW_APP_USER_PASSWORD"]
     user.confirmed_at = Time.zone.now
   end
 
@@ -153,7 +153,7 @@ unless Rails.env.test?
     role: "data_coordinator",
     is_dpo: true,
   ) do |user|
-    user.password = "password"
+    user.password = ENV["REVIEW_APP_USER_PASSWORD"]
     user.confirmed_at = Time.zone.now
     create_data_protection_confirmation(user)
   end
@@ -165,7 +165,7 @@ unless Rails.env.test?
     role: "data_coordinator",
     is_dpo: true,
   ) do |user|
-    user.password = "password"
+    user.password = ENV["REVIEW_APP_USER_PASSWORD"]
     user.confirmed_at = Time.zone.now
     create_data_protection_confirmation(user)
   end
@@ -177,7 +177,7 @@ unless Rails.env.test?
     role: "data_coordinator",
     is_dpo: true,
   ) do |user|
-    user.password = "password"
+    user.password = ENV["REVIEW_APP_USER_PASSWORD"]
     user.confirmed_at = Time.zone.now
     create_data_protection_confirmation(user)
   end
@@ -189,7 +189,7 @@ unless Rails.env.test?
     role: "data_coordinator",
     is_dpo: true,
   ) do |user|
-    user.password = "password"
+    user.password = ENV["REVIEW_APP_USER_PASSWORD"]
     user.confirmed_at = Time.zone.now
     create_data_protection_confirmation(user)
   end
@@ -218,7 +218,7 @@ unless Rails.env.test?
       organisation: org,
       role: "data_provider",
     ) do |user|
-      user.password = "password"
+      user.password = ENV["REVIEW_APP_USER_PASSWORD"]
       user.confirmed_at = Time.zone.now
     end
 
@@ -229,7 +229,7 @@ unless Rails.env.test?
       role: "data_coordinator",
       is_dpo: true,
     ) do |user|
-      user.password = "password"
+      user.password = ENV["REVIEW_APP_USER_PASSWORD"]
       user.confirmed_at = Time.zone.now
       user.is_dpo = true
       create_data_protection_confirmation(user)
@@ -242,7 +242,7 @@ unless Rails.env.test?
       role: "support",
       is_dpo: true,
     ) do |user|
-      user.password = "password"
+      user.password = ENV["REVIEW_APP_USER_PASSWORD"]
       user.confirmed_at = Time.zone.now
       create_data_protection_confirmation(user)
     end
@@ -310,7 +310,7 @@ unless Rails.env.test?
       role: "data_provider",
       is_dpo: true,
     ) do |user|
-      user.password = "password"
+      user.password = ENV["REVIEW_APP_USER_PASSWORD"]
       user.confirmed_at = Time.zone.now
       create_data_protection_confirmation(user)
     end

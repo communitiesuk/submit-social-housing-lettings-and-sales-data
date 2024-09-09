@@ -1,0 +1,26 @@
+<% content_for :before_content do %>
+  <% title = "Merge request: #{@merge_request.absorbing_organisation_name}" %>
+  <% content_for :title, title %>
+  <%= govuk_back_link href: organisations_path(tab: "merge-requests") %>
+<% end %>
+
+<%= render partial: "notification_banners" %>
+
+<h1 class="govuk-heading-l">
+  <span class="govuk-caption-l">Merge request</span>
+  <%= display_value_or_placeholder(@merge_request.absorbing_organisation_name) %>
+</h1>
+<% unless @merge_request.status == "request_merged" || @merge_request.status == "processing" %>
+<div class="govuk-button-group">
+  <%= govuk_button_link_to "Begin merge", merge_start_confirmation_merge_request_path(@merge_request), disabled: @merge_request.status != "ready_to_merge" %>
+  <%= govuk_button_link_to "Delete merge request", delete_confirmation_merge_request_path(@merge_request), warning: true %>
+</div>
+<% end %>
+
+<%= render partial: "merge_requests/summary_card", locals: { title: "Request details", details: request_details(@merge_request) } %>
+
+<%= render partial: "merge_requests/summary_card", locals: { title: "Merge details", details: merge_details(@merge_request) } %>
+
+<% unless @merge_request.status == "incomplete" %>
+  <%= render partial: "merge_requests/summary_card", locals: { title: "Merge outcomes", details: merge_outcomes(@merge_request) } %>
+<% end %>

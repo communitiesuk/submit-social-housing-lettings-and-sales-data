@@ -299,7 +299,7 @@ module Validations::Sales::SaleInformationValidations
       return unless record.mortgage
 
       if over_tolerance?(record.mortgage_and_deposit_total, record.stairbought_part_of_value, 1)
-        %i[mortgage value deposit stairbought type].each do |field|
+        %i[mortgage value deposit stairbought].each do |field|
           record.errors.add field, I18n.t("validations.sale_information.staircasing_mortgage.mortgage_used",
                                           mortgage: record.field_formatted_as_currency("mortgage"),
                                           deposit: record.field_formatted_as_currency("deposit"),
@@ -315,7 +315,7 @@ module Validations::Sales::SaleInformationValidations
                                                                  stairbought_part_of_value: record.field_formatted_as_currency("stairbought_part_of_value")).html_safe
       end
     elsif over_tolerance?(record.deposit, record.stairbought_part_of_value, 1)
-      %i[mortgageused value deposit stairbought type].each do |field|
+      %i[mortgageused value deposit stairbought].each do |field|
         record.errors.add field, I18n.t("validations.sale_information.staircasing_mortgage.mortgage_not_used",
                                         deposit: record.field_formatted_as_currency("deposit"),
                                         value: record.field_formatted_as_currency("value"),
