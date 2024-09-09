@@ -19,6 +19,7 @@
   <% end %>
   <%= render partial: "organisation_relationships/related_organisation_select_question", locals: {
     field: :parent_organisation_id,
+    label: { hidden: true },
     question: Form::Question.new("", { "answer_options" => answer_options }, nil),
     f:,
   } %>
