@@ -3,9 +3,10 @@ echo "Get token"
 TOKEN=$(curl -c token_cookies.txt -s https://review.submit-social-housing-data.levellingup.gov.uk/2623/account/sign-in | grep '<meta name="csrf-token"' | sed -n 's/.*content="\([^"]*\)".*/\1/p')
 
 echo "Logging in..."
+echo $email
 curl -L -o nul -c login_cookies.txt -b token_cookies.txt -X POST https://review.submit-social-housing-data.levellingup.gov.uk/2623/account/sign-in \
-  -d "user[email]=performance_testing_user@example.com" \
-  -d "user[password]=password" \
+  -d "user[email]=$email" \
+  -d "user[password]=$password" \
   -d "authenticity_token=$TOKEN"
 
 COOKIES=$(awk '/_data_collector_session/ { print $6, $7 }' login_cookies.txt | tr ' ' '=')
