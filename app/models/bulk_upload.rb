@@ -3,7 +3,6 @@ class BulkUpload < ApplicationRecord
   enum rent_type_fix_status: { not_applied: "not_applied", applied: "applied", not_needed: "not_needed" }
 
   belongs_to :user
-  belongs_to :organisation, optional: true
 
   has_many :bulk_upload_errors, dependent: :destroy
 

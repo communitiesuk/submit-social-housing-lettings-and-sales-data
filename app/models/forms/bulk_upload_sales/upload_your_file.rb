@@ -10,7 +10,8 @@ module Forms
       attribute :year, :integer
       attribute :file
       attribute :current_user
-      attribute :organisation_id
+      attribute :organisation_id, :integer
+      attr_accessor :request
 
       validates :file, presence: true
       validate :validate_file_is_csv
@@ -20,6 +21,7 @@ module Forms
       end
 
       def back_path
+        organisation_id = request.query_parameters[:organisation_id]
         if organisation_id.present?
           sales_logs_organisation_path(organisation_id)
         else
