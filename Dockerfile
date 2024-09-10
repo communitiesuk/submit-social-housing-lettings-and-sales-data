@@ -31,6 +31,9 @@ EXPOSE ${PORT}
 
 RUN adduser --system --no-create-home nonroot
 
+RUN apk add curl
+RUN apk add apache2-utils
+
 FROM base as test
 
 RUN bundle config set without ""
@@ -66,6 +69,9 @@ FROM base as production
 RUN mkdir -p tmp log
 RUN chown -R nonroot tmp log
 RUN chown nonroot db/schema.rb
+
+RUN mkdir -p performance_test
+RUN chown -R nonroot performance_test
 
 USER nonroot
 
