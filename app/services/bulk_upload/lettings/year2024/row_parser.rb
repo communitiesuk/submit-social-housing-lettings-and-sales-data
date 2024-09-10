@@ -432,6 +432,7 @@ class BulkUpload::Lettings::Year2024::RowParser
 
   validate :validate_assigned_to_exists, on: :after_log
   validate :validate_assigned_to_related, on: :after_log
+  validate :validate_assigned_to_when_support, on: :after_log
   validate :validate_all_charges_given, on: :after_log, if: proc { is_carehome.zero? }
 
   validate :validate_address_option_found, on: :after_log, unless: -> { supported_housing? }
@@ -577,6 +578,13 @@ private
 
     unless assigned_to
       errors.add(:field_3, "User with the specified email could not be found")
+    end
+  end
+
+  def validate_assigned_to_when_support
+    if field_3.blank? && bulk_upload.user.support?
+      block_log_creation!
+      errors.add(:field_3, :setup, message: "User was not provided")
     end
   end
 
@@ -891,12 +899,13 @@ private
   def validate_owning_org_permitted
     return unless owning_organisation
 
-    if (bulk_upload.user.support? && !bulk_upload.organisation.affiliated_stock_owners.include?(bulk_upload.organisation)) || (!bulk_upload.user.support? && !bulk_upload.user.organisation.affiliated_stock_owners.include?(owning_organisation))
-      block_log_creation!
+    return if (bulk_upload.user.support? && bulk_upload.organisation.affiliated_stock_owners.include?(bulk_upload.organisation)) ||
+      (!bulk_upload.user.support? && bulk_upload.user.organisation.affiliated_stock_owners.include?(owning_organisation))
 
-      if errors[:field_1].blank?
-        errors.add(:field_1, "You do not have permission to add logs for this owning organisation", category: :setup)
-      end
+    block_log_creation!
+
+    if errors[:field_1].blank?
+      errors.add(:field_1, "You do not have permission to add logs for this owning organisation", category: :setup)
     end
   end
 

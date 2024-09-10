@@ -1439,6 +1439,41 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
           expect(parser.errors[:field_10]).to include(/Enter a date when the owning and managing organisation was active/)
         end
       end
+
+      context "when user is an unaffiliated non-support user and bulk upload organisation is affiliated with the owning organisation" do
+        let(:affiliated_org) { create(:organisation, :with_old_visible_id) }
+        let(:unaffiliated_user) { create(:user, organisation: create(:organisation)) }
+        let(:attributes) { { bulk_upload:, field_1: affiliated_org.old_visible_id } }
+
+        before do
+          create(:organisation_relationship, parent_organisation: owning_org, child_organisation: affiliated_org)
+          bulk_upload.update!(organisation_id: affiliated_org.id, user: unaffiliated_user)
+        end
+
+        it "blocks log creation and adds an error to field_1" do
+          parser = described_class.new(attributes)
+          parser.valid?
+          expect(parser).to be_block_log_creation
+          expect(parser.errors[:field_1]).to include("You do not have permission to add logs for this owning organisation")
+        end
+      end
+
+      context "when user is an unaffiliated support user and bulk upload organisation is affiliated with the owning organisation" do
+        let(:affiliated_org) { create(:organisation, :with_old_visible_id) }
+        let(:unaffiliated_support_user) { create(:user, :support, organisation: create(:organisation)) }
+        let(:attributes) { { bulk_upload:, field_1: affiliated_org.old_visible_id } }
+
+        before do
+          create(:organisation_relationship, parent_organisation: owning_org, child_organisation: affiliated_org)
+          bulk_upload.update!(organisation_id: affiliated_org.id, user: unaffiliated_support_user)
+        end
+
+        it "does not block log creation and does not add an error to field_1" do
+          parser = described_class.new(attributes)
+          parser.valid?
+          expect(parser.errors[:field_1]).not_to include("You do not have permission to add logs for this owning organisation")
+        end
+      end
     end
 
     describe "#field_2" do # managing org
