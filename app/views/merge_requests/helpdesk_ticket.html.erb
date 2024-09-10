@@ -1,0 +1,27 @@
+<% content_for :before_content do %>
+  <% title = "Which helpdesk ticket reported this merge?" %>
+  <% content_for :title, title %>
+  <%= govuk_back_link href: merge_request_back_link(@merge_request, "helpdesk_ticket", request.query_parameters["referrer"]) %>
+<% end %>
+
+<%= form_with model: @merge_request, url: submit_merge_request_url(request.query_parameters["referrer"]), method: :patch do |f| %>
+  <%= f.govuk_error_summary %>
+
+  <h1 class="govuk-heading-l">Which helpdesk ticket reported this merge?</h1>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <p class="govuk-hint">If this merge was reported via a helpdesk ticket, provide the ticket number.<br>The ticket will be linked to the merge request for reference.</p>
+      <br>
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds-from-desktop">
+          <%= f.govuk_text_field :helpdesk_ticket, caption: { text: "Ticket number", class: "govuk-label govuk-label--s" }, label: { text: "For example, MSD-12345", class: "app-!-colour-muted" } %>
+          <%= f.hidden_field :page, value: "helpdesk_ticket" %>
+          <div class="govuk-button-group">
+            <%= f.govuk_submit submit_merge_request_button_text(request.query_parameters["referrer"]) %>
+            <%= govuk_link_to(secondary_merge_request_link_text(request.query_parameters["referrer"], skip_for_now: true), merge_request_path(@merge_request)) %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

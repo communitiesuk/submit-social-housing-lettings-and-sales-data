@@ -766,8 +766,10 @@ RSpec.describe "Schemes scheme Features" do
 
           before do
             Timecop.freeze(Time.zone.local(2023, 10, 10))
+            Singleton.__init__(FormHandler)
             FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 6, 4), location: deactivated_location)
             Timecop.unfreeze
+            Singleton.__init__(FormHandler)
             click_link(scheme.service_name)
           end
 

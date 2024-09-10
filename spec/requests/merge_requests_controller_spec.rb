@@ -10,115 +10,88 @@ RSpec.describe MergeRequestsController, type: :request do
   let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation) }
   let(:other_merge_request) { MergeRequest.create!(requesting_organisation: other_organisation) }
 
-  context "when user is signed in with a data coordinator user" do
-    before { sign_in user }
+  context "when user is signed in with a support user" do
+    before do
+      allow(support_user).to receive(:need_two_factor_authentication?).and_return(false)
+      sign_in support_user
+    end
 
-    describe "#organisations" do
-      let(:params) { { merge_request: { requesting_organisation_id: "9", status: "unsubmitted" } } }
+    context "when creating a new merge request" do
+      let(:params) { { merge_request: { requesting_organisation_id: support_user.organisation_id } } }
 
-      context "when creating a new merge request" do
-        before do
-          post "/merge-request", headers:, params:
-        end
+      before do
+        post "/merge-request", headers:, params:
+      end
 
-        it "creates merge request with requesting organisation" do
+      it "creates merge request with requesting organisation" do
+        follow_redirect!
+        expect(page).to have_content("Which organisation is absorbing the others?")
+        expect(MergeRequest.first.requesting_organisation_id).to eq(support_user.organisation_id)
+      end
+
+      context "when passing a different requesting organisation id" do
+        let(:params) { { merge_request: { requesting_organisation_id: other_organisation.id } } }
+
+        it "creates merge request with current user organisation" do
           follow_redirect!
-          expect(page).to have_content("Which organisations are merging?")
-          expect(page).to have_content(organisation.name)
-          expect(page).not_to have_link("Remove")
-        end
-
-        context "when passing a different requesting organisation id" do
-          let(:params) { { merge_request: { requesting_organisation_id: other_organisation.id, status: "unsubmitted" } } }
-
-          it "creates merge request with current user organisation" do
-            follow_redirect!
-            expect(MergeRequest.count).to eq(1)
-            expect(MergeRequest.first.requesting_organisation_id).to eq(organisation.id)
-            expect(MergeRequest.first.merging_organisations.count).to eq(1)
-            expect(MergeRequest.first.merging_organisations.first.id).to eq(organisation.id)
-          end
-        end
-      end
-
-      context "when viewing existing merge request" do
-        before do
-          get "/merge-request/#{merge_request.id}/organisations", headers:, params:
-        end
-
-        it "shows merge request with requesting organisation" do
-          expect(page).to have_content("Which organisations are merging?")
-          expect(page).to have_content(organisation.name)
-        end
-      end
-
-      context "when viewing existing merge request of a different (unauthorised) organisation" do
-        before do
-          get "/merge-request/#{other_merge_request.id}/organisations", headers:, params:
-        end
-
-        it "shows merge request with requesting organisation" do
-          expect(response).to have_http_status(:not_found)
+          expect(MergeRequest.count).to eq(1)
+          expect(MergeRequest.first.requesting_organisation_id).to eq(support_user.organisation_id)
+          expect(MergeRequest.first.merging_organisations.count).to eq(0)
         end
       end
     end
 
-    describe "#update_organisations" do
-      let(:params) { { merge_request: { merging_organisation: other_organisation.id } } }
-
-      context "when updating a merge request with a new organisation" do
+    describe "#merging-organisations" do
+      context "when viewing merging organisations page" do
         before do
-          patch "/merge-request/#{merge_request.id}/organisations", headers:, params:
+          merge_request.update!(absorbing_organisation_id: organisation.id)
+          get "/merge-request/#{merge_request.id}/merging-organisations", headers:
         end
 
-        it "updates the merge request" do
+        it "shows the correct content" do
+          expect(page).to have_content("Which organisations are merging into MHCLG?")
+        end
+      end
+    end
+
+    describe "#update_merging_organisations" do
+      let(:params) { { merge_request: { merging_organisation: other_organisation.id, new_merging_org_ids: [] } } }
+
+      context "when updating a merge request with a new merging organisation" do
+        before do
+          patch "/merge-request/#{merge_request.id}/merging-organisations", headers:, params:
+        end
+
+        it "adds merging organisation to the page" do
           merge_request.reload
-          expect(merge_request.merging_organisations.count).to eq(1)
-          expect(page).to have_content("Test Org")
+          expect(page).to have_content("MHCLG")
           expect(page).to have_content("Other Test Org")
           expect(page).to have_link("Remove")
         end
       end
 
       context "when the user selects an organisation that requested another merge" do
-        let(:params) { { merge_request: { merging_organisation: other_organisation.id } } }
+        let(:params) { { merge_request: { merging_organisation: other_organisation.id, new_merging_org_ids: [] } } }
 
         before do
-          MergeRequest.create!(requesting_organisation_id: other_organisation.id, status: "submitted")
-          patch "/merge-request/#{merge_request.id}/organisations", headers:, params:
+          MergeRequest.create!(requesting_organisation_id: other_organisation.id, request_merged: true)
+          patch "/merge-request/#{merge_request.id}/merging-organisations", headers:, params:
         end
 
-        it "does not update the merge request" do
+        it "does not error" do
           merge_request.reload
-          expect(merge_request.merging_organisations.count).to eq(0)
-          expect(response).to have_http_status(:unprocessable_entity)
-          expect(page).to have_content(I18n.t("validations.merge_request.organisation_part_of_another_merge"))
-        end
-      end
-
-      context "when the user selects an organisation that has another non submitted merge" do
-        let(:params) { { merge_request: { merging_organisation: other_organisation.id } } }
-
-        before do
-          MergeRequest.create!(requesting_organisation_id: other_organisation.id, status: "unsubmitted")
-          patch "/merge-request/#{merge_request.id}/organisations", headers:, params:
-        end
-
-        it "updates the merge request" do
-          merge_request.reload
-          expect(merge_request.merging_organisations.count).to eq(1)
           expect(page).not_to have_content(I18n.t("validations.merge_request.organisation_part_of_another_merge"))
         end
       end
 
       context "when the user selects an organisation that is a part of another merge" do
         let(:another_organisation) { create(:organisation) }
-        let(:params) { { merge_request: { merging_organisation: another_organisation.id } } }
+        let(:params) { { merge_request: { merging_organisation: another_organisation.id, new_merging_org_ids: [] } } }
 
         before do
-          existing_merge_request = MergeRequest.create!(requesting_organisation_id: other_organisation.id, status: "submitted")
+          existing_merge_request = MergeRequest.create!(requesting_organisation_id: other_organisation.id, request_merged: true)
           MergeRequestOrganisation.create!(merge_request_id: existing_merge_request.id, merging_organisation_id: another_organisation.id)
-          patch "/merge-request/#{merge_request.id}/organisations", headers:, params:
+          patch "/merge-request/#{merge_request.id}/merging-organisations", headers:, params:
         end
 
         it "does not update the merge request" do
@@ -129,57 +102,42 @@ RSpec.describe MergeRequestsController, type: :request do
         end
       end
 
-      context "when the user selects an organisation that is a part of another unsubmitted merge" do
+      context "when the user selects an organisation that is a part of another incomplete merge" do
         let(:another_organisation) { create(:organisation) }
-        let(:params) { { merge_request: { merging_organisation: another_organisation.id } } }
+        let(:params) { { merge_request: { merging_organisation: another_organisation.id, new_merging_org_ids: [] } } }
 
         before do
-          existing_merge_request = MergeRequest.create!(requesting_organisation_id: other_organisation.id, status: "unsubmitted")
+          existing_merge_request = MergeRequest.create!(requesting_organisation_id: other_organisation.id)
           MergeRequestOrganisation.create!(merge_request_id: existing_merge_request.id, merging_organisation_id: another_organisation.id)
-          patch "/merge-request/#{merge_request.id}/organisations", headers:, params:
+          patch "/merge-request/#{merge_request.id}/merging-organisations", headers:, params:
         end
 
-        it "does not update the merge request" do
+        it "does not error" do
           merge_request.reload
-          expect(merge_request.merging_organisations.count).to eq(1)
           expect(page).not_to have_content(I18n.t("validations.merge_request.organisation_part_of_another_merge"))
         end
       end
 
       context "when the user selects an organisation that is a part of current merge" do
         let(:another_organisation) { create(:organisation) }
-        let(:params) { { merge_request: { merging_organisation: another_organisation.id } } }
+        let(:params) { { merge_request: { merging_organisation: another_organisation.id, new_merging_org_ids: [] } } }
 
         before do
           merge_request.merging_organisations << another_organisation
-          patch "/merge-request/#{merge_request.id}/organisations", headers:, params:
+          patch "/merge-request/#{merge_request.id}/merging-organisations", headers:, params:
         end
 
         it "does not update the merge request" do
           merge_request.reload
-          expect(merge_request.merging_organisations.count).to eq(1)
-        end
-      end
-
-      context "when the user selects an organisation that is requesting this merge" do
-        let(:params) { { merge_request: { merging_organisation: merge_request.requesting_organisation_id } } }
-
-        before do
-          patch "/merge-request/#{merge_request.id}/organisations", headers:, params:
-        end
-
-        it "does not update the merge request" do
-          merge_request.reload
-          expect(page).not_to have_content(I18n.t("validations.merge_request.organisation_part_of_another_merge"))
           expect(merge_request.merging_organisations.count).to eq(1)
         end
       end
 
       context "when the user does not select an organisation" do
-        let(:params) { { merge_request: { merging_organisation: nil } } }
+        let(:params) { { merge_request: { merging_organisation: nil, new_merging_org_ids: [] } } }
 
         before do
-          patch "/merge-request/#{merge_request.id}/organisations", headers:, params:
+          patch "/merge-request/#{merge_request.id}/merging-organisations", headers:, params:
         end
 
         it "does not update the merge request" do
@@ -191,10 +149,10 @@ RSpec.describe MergeRequestsController, type: :request do
       end
 
       context "when the user selects non existent id" do
-        let(:params) { { merge_request: { merging_organisation: "clearly_not_an_id" } } }
+        let(:params) { { merge_request: { merging_organisation: "clearly_not_an_id", new_merging_org_ids: [] } } }
 
         before do
-          patch "/merge-request/#{merge_request.id}/organisations", headers:, params:
+          patch "/merge-request/#{merge_request.id}/merging-organisations", headers:, params:
         end
 
         it "does not update the merge request" do
@@ -212,7 +170,7 @@ RSpec.describe MergeRequestsController, type: :request do
       context "when removing an organisation from merge request" do
         before do
           MergeRequestOrganisation.create!(merge_request_id: merge_request.id, merging_organisation_id: other_organisation.id)
-          get "/merge-request/#{merge_request.id}/organisations/remove", headers:, params:
+          get "/merge-request/#{merge_request.id}/merging-organisations/remove", headers:, params:
         end
 
         it "updates the merge request" do
@@ -223,7 +181,7 @@ RSpec.describe MergeRequestsController, type: :request do
 
       context "when removing an organisation that is not part of a merge from merge request" do
         before do
-          get "/merge-request/#{merge_request.id}/organisations/remove", headers:, params:
+          get "/merge-request/#{merge_request.id}/merging-organisations/remove", headers:, params:
         end
 
         it "does not throw an error" do
@@ -233,65 +191,67 @@ RSpec.describe MergeRequestsController, type: :request do
       end
     end
 
-    describe "#confirm_telephone_number" do
-      let(:merge_request) do
-        MergeRequest.create!(
-          absorbing_organisation: create(:organisation, phone: phone_number),
-          requesting_organisation: organisation,
-        )
+    describe "#absorbing_organisation" do
+      let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation) }
+
+      before { get "/merge-request/#{merge_request.id}/absorbing-organisation", headers: }
+
+      it "asks for the absorbing organisation" do
+        expect(page).to have_content("Which organisation is absorbing the others?")
+        expect(page).to have_content("Select organisation name")
       end
 
-      before { get "/merge-request/#{merge_request.id}/confirm-telephone-number", headers: }
+      it "has the correct back button" do
+        expect(page).to have_link("Back", href: organisations_path(tab: "merge-requests"))
+      end
+    end
 
-      context "when org has phone number" do
-        let(:phone_number) { 123 }
+    describe "#merge_date" do
+      context "when viewing merge date page" do
+        before do
+          merge_request.update!(absorbing_organisation_id: organisation.id)
+          get "/merge-request/#{merge_request.id}/merge-date", headers:
+        end
 
-        it "asks to confirm or provide new number" do
-          expect(page).to have_content("This telephone number is correct")
-          expect(page).to have_content("Confirm the telephone number on file, or enter a new one.")
-          expect(page).to have_content(phone_number)
-          expect(page).to have_content("What is #{merge_request.absorbing_organisation.name}'s telephone number?")
+        it "shows the correct content" do
+          expect(page).to have_content("What is the merge date?")
         end
       end
+    end
 
-      context "when org does not have a phone number set" do
-        let(:phone_number) { nil }
+    describe "#existing_absorbing_organisation" do
+      context "when viewing helpdesk ticket page" do
+        before do
+          merge_request.update!(absorbing_organisation_id: organisation.id, merge_date: Time.zone.today)
+          get "/merge-request/#{merge_request.id}/existing-absorbing-organisation", headers:
+        end
 
-        it "asks provide new number" do
-          expect(page).not_to have_content("This telephone number is correct")
-          expect(page).not_to have_content("Confirm the telephone number on file, or enter a new one.")
-          expect(page).to have_content("What is #{merge_request.absorbing_organisation.name}'s telephone number?")
+        it "shows the correct content" do
+          expect(page).to have_content("Was #{merge_request.absorbing_organisation.name} already active before the merge date?")
+          expect(page).to have_content("Yes, this organisation existed before the merge")
+          expect(page).to have_content("No, it is a new organisation created by this merge")
+          expect(page).to have_link("Back", href: merge_date_merge_request_path(merge_request))
+          expect(page).to have_button("Save and continue")
+        end
+      end
+    end
+
+    describe "#helpdesk_ticket" do
+      context "when viewing helpdesk ticket page" do
+        before do
+          merge_request.update!(absorbing_organisation_id: organisation.id, merge_date: Time.zone.today)
+          get "/merge-request/#{merge_request.id}/helpdesk-ticket", headers:
+        end
+
+        it "shows the correct content" do
+          expect(page).to have_content("Which helpdesk ticket reported this merge?")
+          expect(page).to have_link("Back", href: existing_absorbing_organisation_merge_request_path(merge_request))
+          expect(page).to have_button("Save and continue")
         end
       end
     end
 
     describe "#update" do
-      before { sign_in user }
-
-      describe "#other_merging_organisations" do
-        let(:other_merging_organisations) { "A list of other merging organisations" }
-        let(:params) { { merge_request: { other_merging_organisations:, page: "organisations" } } }
-        let(:request) do
-          patch "/merge-request/#{merge_request.id}", headers:, params:
-        end
-
-        context "when adding other merging organisations" do
-          before do
-            MergeRequestOrganisation.create!(merge_request_id: merge_request.id, merging_organisation_id: other_organisation.id)
-          end
-
-          it "updates the merge request" do
-            expect { request }.to change { merge_request.reload.other_merging_organisations }.from(nil).to(other_merging_organisations)
-          end
-
-          it "redirects telephone number path" do
-            request
-
-            expect(response).to redirect_to(absorbing_organisation_merge_request_path(merge_request))
-          end
-        end
-      end
-
       describe "from absorbing_organisation page" do
         context "when not answering the question" do
           let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation, absorbing_organisation: other_organisation) }
@@ -305,7 +265,7 @@ RSpec.describe MergeRequestsController, type: :request do
           it "renders the error" do
             request
 
-            expect(page).to have_content("Select the organisation absorbing the others")
+            expect(page).to have_content("Select the absorbing organisation")
           end
 
           it "does not update the request" do
@@ -313,32 +273,8 @@ RSpec.describe MergeRequestsController, type: :request do
           end
         end
 
-        context "when absorbing_organisation_id set to other" do
-          let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation, absorbing_organisation: other_organisation) }
-          let(:params) do
-            { merge_request: { absorbing_organisation_id: "other", page: "absorbing_organisation" } }
-          end
-          let(:request) do
-            patch "/merge-request/#{merge_request.id}", headers:, params:
-          end
-
-          it "redirects to new org path" do
-            request
-
-            expect(response).to redirect_to(new_organisation_name_merge_request_path(merge_request))
-          end
-
-          it "resets absorbing_organisation and sets new_absorbing_organisation to true" do
-            expect { request }.to change {
-              merge_request.reload.absorbing_organisation
-            }.from(other_organisation).to(nil).and change {
-              merge_request.reload.new_absorbing_organisation
-            }.from(nil).to(true)
-          end
-        end
-
         context "when absorbing_organisation_id set to id" do
-          let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation, new_absorbing_organisation: true) }
+          let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation) }
           let(:params) do
             { merge_request: { absorbing_organisation_id: other_organisation.id, page: "absorbing_organisation" } }
           end
@@ -347,95 +283,62 @@ RSpec.describe MergeRequestsController, type: :request do
             patch "/merge-request/#{merge_request.id}", headers:, params:
           end
 
-          it "redirects telephone number path" do
+          it "redirects to merging organisations path" do
             request
 
-            expect(response).to redirect_to(confirm_telephone_number_merge_request_path(merge_request))
+            expect(response).to redirect_to(merging_organisations_merge_request_path(merge_request))
           end
 
-          it "updates absorbing_organisation_id and sets new_absorbing_organisation to false" do
+          it "updates absorbing_organisation_id" do
             expect { request }.to change {
               merge_request.reload.absorbing_organisation
-            }.from(nil).to(other_organisation).and change {
-              merge_request.reload.new_absorbing_organisation
-            }.from(true).to(false)
+            }.from(nil).to(other_organisation)
+          end
+        end
+
+        context "when updating from check_answers page" do
+          let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation) }
+          let(:params) do
+            { merge_request: { absorbing_organisation_id: "", page: "absorbing_organisation" } }
+          end
+
+          let(:request) do
+            patch "/merge-request/#{merge_request.id}?referrer=check_answers", headers:, params:
+          end
+
+          it "keeps corrent links if validation fails" do
+            request
+
+            expect(page).to have_link("Cancel", href: merge_request_path(merge_request))
+            expect(page).to have_button("Save changes")
+          end
+        end
+
+        context "when absorbing_organisation_id set to one of the merging organisations" do
+          let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation) }
+          let(:params) do
+            { merge_request: { absorbing_organisation_id: other_organisation.id, page: "absorbing_organisation" } }
+          end
+
+          let(:request) do
+            MergeRequestOrganisation.create!(merge_request_id: merge_request.id, merging_organisation_id: other_organisation.id)
+            patch "/merge-request/#{merge_request.id}", headers:, params:
+          end
+
+          it "removes organisation from merge request organisations" do
+            request
+
+            merge_request.reload
+            expect(merge_request.merging_organisations.count).to eq(0)
           end
         end
       end
 
-      describe "from confirm_telephone_number page" do
-        context "when confirming the number" do
-          let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation, new_absorbing_organisation: true, new_telephone_number: "123") }
-          let(:params) do
-            { merge_request: { telephone_number_correct: true, page: "confirm_telephone_number" } }
-          end
-
-          let(:request) do
-            patch "/merge-request/#{merge_request.id}", headers:, params:
-          end
-
-          it "redirects telephone number path" do
-            request
-
-            expect(response).to redirect_to(merge_date_merge_request_path(merge_request))
-          end
-
-          it "updates telephone_number_correct and sets new_telephone_number to nil" do
-            expect { request }.to change {
-              merge_request.reload.telephone_number_correct
-            }.from(nil).to(true).and change {
-              merge_request.reload.new_telephone_number
-            }.from("123").to(nil)
-          end
-        end
-
-        context "when setting new number" do
-          let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation, new_absorbing_organisation: true) }
-          let(:params) do
-            { merge_request: { telephone_number_correct: false, new_telephone_number: "123", page: "confirm_telephone_number" } }
-          end
-
-          let(:request) do
-            patch "/merge-request/#{merge_request.id}", headers:, params:
-          end
-
-          it "redirects telephone number path" do
-            request
-
-            expect(response).to redirect_to(merge_date_merge_request_path(merge_request))
-          end
-
-          it "updates telephone_number_correct and sets new_telephone_number to nil" do
-            expect { request }.to change {
-              merge_request.reload.new_telephone_number
-            }.from(nil).to("123")
-          end
-        end
-
-        context "when not answering the question and the org has phone number" do
-          let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation, absorbing_organisation: create(:organisation, phone: "123")) }
-          let(:params) do
-            { merge_request: { page: "confirm_telephone_number" } }
-          end
-          let(:request) do
-            patch "/merge-request/#{merge_request.id}", headers:, params:
-          end
-
-          it "renders the error" do
-            request
-
-            expect(page).to have_content("Select to confirm or enter a new telephone number")
-          end
-
-          it "does not update the request" do
-            expect { request }.not_to(change { merge_request.reload.attributes })
-          end
-        end
-
-        context "when not answering the question and the org does not have a phone number" do
+      describe "from merge_date page" do
+        context "when not answering the question" do
           let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation, absorbing_organisation: other_organisation) }
           let(:params) do
-            { merge_request: { page: "confirm_telephone_number" } }
+            { merge_request: { page: "merge_date" } }
           end
           let(:request) do
             patch "/merge-request/#{merge_request.id}", headers:, params:
@@ -444,7 +347,8 @@ RSpec.describe MergeRequestsController, type: :request do
           it "renders the error" do
             request
 
-            expect(page).to have_content("Enter a valid telephone number")
+            expect(response).to have_http_status(:unprocessable_entity)
+            expect(page).to have_content("Enter a merge date")
           end
 
           it "does not update the request" do
@@ -452,10 +356,75 @@ RSpec.describe MergeRequestsController, type: :request do
           end
         end
 
-        context "when not answering the phone number" do
+        context "when merge date set to an invalid date" do
+          let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation) }
+          let(:params) do
+            { merge_request: { page: "merge_date", "merge_date(3i)": "10", "merge_date(2i)": "44", "merge_date(1i)": "2022" } }
+          end
+
+          let(:request) do
+            patch "/merge-request/#{merge_request.id}", headers:, params:
+          end
+
+          it "displays the page with an error message" do
+            request
+
+            expect(response).to have_http_status(:unprocessable_entity)
+            expect(page).to have_content("Enter a valid merge date")
+          end
+        end
+
+        context "when merge date set to a valid date" do
+          let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation) }
+          let(:params) do
+            { merge_request: { page: "merge_date", "merge_date(3i)": "10", "merge_date(2i)": "4", "merge_date(1i)": "2022" } }
+          end
+
+          let(:request) do
+            patch "/merge-request/#{merge_request.id}", headers:, params:
+          end
+
+          it "redirects to existing absorbing organisation path" do
+            request
+
+            expect(response).to redirect_to(existing_absorbing_organisation_merge_request_path(merge_request))
+          end
+
+          it "updates merge_date" do
+            expect { request }.to change {
+              merge_request.reload.merge_date
+            }.from(nil).to(Time.zone.local(2022, 4, 10))
+          end
+        end
+      end
+
+      describe "from merging_organisations page" do
+        context "when the user updates merge request with valid merging organisation ID" do
+          let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation) }
+          let(:another_organisation) { create(:organisation) }
+          let(:params) do
+            { merge_request: { page: "merging_organisations", new_merging_org_ids: another_organisation.id } }
+          end
+
+          let(:request) do
+            patch "/merge-request/#{merge_request.id}", headers:, params:
+          end
+
+          it "updates the merge request" do
+            request
+
+            merge_request.reload
+            expect(merge_request.merging_organisations.count).to eq(1)
+            expect(merge_request.merging_organisations.first.id).to eq(another_organisation.id)
+          end
+        end
+      end
+
+      describe "from existing_absorbing_organisation page" do
+        context "when not answering the question" do
           let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation, absorbing_organisation: other_organisation) }
           let(:params) do
-            { merge_request: { page: "confirm_telephone_number", telephone_number_correct: false } }
+            { merge_request: { page: "existing_absorbing_organisation" } }
           end
           let(:request) do
             patch "/merge-request/#{merge_request.id}", headers:, params:
@@ -464,7 +433,8 @@ RSpec.describe MergeRequestsController, type: :request do
           it "renders the error" do
             request
 
-            expect(page).to have_content("Enter a valid telephone number")
+            expect(response).to have_http_status(:unprocessable_entity)
+            expect(page).to have_content("You must answer absorbing organisation already active?")
           end
 
           it "does not update the request" do
@@ -472,245 +442,324 @@ RSpec.describe MergeRequestsController, type: :request do
           end
         end
       end
+    end
 
-      describe "#new_organisation_name" do
-        let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation, new_absorbing_organisation: true) }
+    describe "#merge_start_confirmation" do
+      before do
+        get "/merge-request/#{merge_request.id}/merge-start-confirmation", headers:
+      end
 
-        context "when viewing the new organisation name page" do
-          before do
-            get "/merge-request/#{merge_request.id}/new-organisation-name", headers:
-          end
+      it "has correct content" do
+        expect(page).to have_content("Are you sure you want to begin this merge?")
+        expect(page).to have_content("You will not be able to undo this action")
+        expect(page).to have_link("Back", href: merge_request_path(merge_request))
+        expect(page).to have_button("Begin merge")
+      end
+    end
 
-          it "displays the correct question" do
-            expect(page).to have_content("What is the new organisation called?")
-          end
+    describe "#start_merge" do
+      let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation, absorbing_organisation: organisation, merge_date: Time.zone.local(2022, 3, 3), existing_absorbing_organisation: true) }
+      let(:merging_organisation) { create(:organisation, name: "Merging Test Org") }
 
-          it "has the correct back button" do
-            expect(page).to have_link("Back", href: absorbing_organisation_merge_request_path(merge_request))
-          end
+      before do
+        allow(ProcessMergeRequestJob).to receive(:perform_later).and_return(nil)
+      end
+
+      context "when merge request is ready to merge" do
+        before do
+          create(:merge_request_organisation, merge_request:, merging_organisation: other_organisation)
+          create(:merge_request_organisation, merge_request:, merging_organisation:)
+          create_list(:scheme, 2, owning_organisation: organisation)
+          create(:lettings_log, owning_organisation: organisation)
+          create(:sales_log, owning_organisation: organisation)
         end
 
-        context "when updating the new organisation name" do
-          let(:params) do
-            { merge_request: { new_organisation_name: "new org name", page: "new_organisation_name" } }
-          end
-
-          let(:request) do
-            patch "/merge-request/#{merge_request.id}", headers:, params:
-          end
-
-          it "redirects to new organisation address path" do
-            request
-            expect(response).to redirect_to(new_organisation_address_merge_request_path(merge_request))
-          end
-
-          it "updates new organisation name to the correct name" do
-            expect { request }.to change {
-              merge_request.reload.new_organisation_name
-            }.from(nil).to("new org name")
-          end
-        end
-
-        context "when the new organisation name is not answered" do
-          let(:params) do
-            { merge_request: { new_organisation_name: nil, page: "new_organisation_name" } }
-          end
-
-          let(:request) do
-            patch "/merge-request/#{merge_request.id}", headers:, params:
-          end
-
-          it "renders the error" do
-            request
-            expect(page).to have_content("Enter an organisation name")
-          end
-
-          it "does not update the organisation name" do
-            expect { request }.not_to(change { merge_request.reload.attributes })
-          end
-        end
-
-        context "when the new organisation name already exists" do
-          before do
-            create(:organisation, name: "new org name")
-          end
-
-          let(:params) do
-            { merge_request: { new_organisation_name: "New org name", page: "new_organisation_name" } }
-          end
-
-          let(:request) do
-            patch "/merge-request/#{merge_request.id}", headers:, params:
-          end
-
-          it "renders the error" do
-            request
-            expect(page).to have_content("An organisation with this name already exists")
-          end
-
-          it "does not update the organisation name" do
-            expect { request }.not_to(change { merge_request.reload.attributes })
-          end
+        it "runs the job with correct merge request" do
+          expect(merge_request.reload.status).to eq("ready_to_merge")
+          expect(ProcessMergeRequestJob).to receive(:perform_later).with(merge_request:).once
+          patch "/merge-request/#{merge_request.id}/start-merge"
+          expect(merge_request.reload.status).to eq("processing")
+          expect(merge_request.total_users).to eq(5)
+          expect(merge_request.total_schemes).to eq(2)
+          expect(merge_request.total_stock_owners).to eq(0)
+          expect(merge_request.total_managing_agents).to eq(0)
+          expect(merge_request.total_lettings_logs).to eq(1)
+          expect(merge_request.total_sales_logs).to eq(1)
         end
       end
 
-      describe "#new_organisation_address" do
-        let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation, new_organisation_name: "New name", new_absorbing_organisation: true) }
-
-        context "when viewing the new organisation name page" do
-          before do
-            get "/merge-request/#{merge_request.id}/new-organisation-address", headers:
-          end
-
-          it "displays the correct question" do
-            expect(page).to have_content("What is New name’s address?")
-          end
-
-          it "has the correct back button" do
-            expect(page).to have_link("Back", href: new_organisation_name_merge_request_path(merge_request))
-          end
-
-          it "has a skip link" do
-            expect(page).to have_link("Skip for now", href: new_organisation_telephone_number_merge_request_path(merge_request))
-          end
+      context "when merge request is not ready to merge" do
+        it "does not run the job" do
+          expect(merge_request.status).to eq("incomplete")
+          expect(ProcessMergeRequestJob).not_to receive(:perform_later).with(merge_request:)
+          patch "/merge-request/#{merge_request.id}/start-merge"
+          expect(merge_request.reload.status).to eq("incomplete")
         end
+      end
+    end
 
-        context "when updating the new organisation address" do
-          let(:params) do
-            { merge_request: {
-              new_organisation_address_line1: "first address line",
-              new_organisation_address_line2: "second address line",
-              new_organisation_postcode: "new postcode",
-              page: "new_organisation_address",
-            } }
-          end
+    describe "#show" do
+      before do
+        create(:merge_request_organisation, merge_request:, merging_organisation: other_organisation)
+        create_list(:scheme, 2, owning_organisation: organisation)
+        create_list(:scheme, 2, owning_organisation: other_organisation)
+        create(:lettings_log, owning_organisation: organisation)
+        create(:lettings_log, owning_organisation: other_organisation)
+        create_list(:sales_log, 2, owning_organisation: other_organisation)
+        create(:sales_log, owning_organisation: organisation)
+        get "/merge-request/#{merge_request.id}", headers:
+      end
 
-          let(:request) do
-            patch "/merge-request/#{merge_request.id}", headers:, params:
-          end
+      context "when request has previously failed" do
+        let(:merge_request) { create(:merge_request, last_failed_attempt: Time.zone.yesterday) }
 
-          it "redirects to new organisation telephone path" do
-            request
-            expect(response).to redirect_to(new_organisation_telephone_number_merge_request_path(merge_request))
-          end
-
-          it "updates new organisation address line 1 to correct address line" do
-            expect { request }.to change {
-              merge_request.reload.new_organisation_address_line1
-            }.from(nil).to("first address line")
-          end
-
-          it "updates new organisation address line 2 to correct address line" do
-            expect { request }.to change {
-              merge_request.reload.new_organisation_address_line2
-            }.from(nil).to("second address line")
-          end
-
-          it "updates new organisation postcode to correct address line" do
-            expect { request }.to change {
-              merge_request.reload.new_organisation_postcode
-            }.from(nil).to("new postcode")
-          end
-        end
-
-        context "when address is not provided" do
-          let(:params) do
-            { merge_request: {
-              new_organisation_address_line1: nil,
-              new_organisation_address_line2: nil,
-              new_organisation_postcode: nil,
-              page: "new_organisation_address",
-            } }
-          end
-
-          let(:request) do
-            patch "/merge-request/#{merge_request.id}", headers:, params:
-          end
-
-          it "does not throw an error" do
-            request
-            expect(response).to redirect_to(new_organisation_telephone_number_merge_request_path(merge_request))
-          end
+        it "shows a banner" do
+          expect(page).to have_content("An error occurred while processing the merge.")
+          expect(page).to have_content("No changes have been made. Try beginning the merge again.")
         end
       end
 
-      describe "#new_organisation_telephone_number" do
-        let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation, new_organisation_name: "New name", new_absorbing_organisation: true) }
+      context "when request has not previously failed" do
+        let(:merge_request) { create(:merge_request, last_failed_attempt: nil) }
 
-        context "when viewing the new organisation telephone number page" do
-          before do
-            get "/merge-request/#{merge_request.id}/new-organisation-telephone-number", headers:
-          end
+        it "does not show a banner" do
+          expect(page).not_to have_content("An error occurred while processing the merge.")
+          expect(page).not_to have_content("No changes have been made. Try beginning the merge again.")
+        end
+      end
 
-          it "displays the correct question" do
-            expect(page).to have_content("What is New name’s telephone number?")
-          end
+      it "has begin merge button" do
+        expect(page).to have_link("Begin merge", href: merge_start_confirmation_merge_request_path(merge_request))
+      end
 
-          it "has the correct back button" do
-            expect(page).to have_link("Back", href: new_organisation_address_merge_request_path(merge_request))
-          end
+      context "with unmerged request" do
+        let(:merge_request) { create(:merge_request, absorbing_organisation_id: organisation.id, merge_date: Time.zone.today, existing_absorbing_organisation: true) }
+
+        it "shows outcomes count and has links to view merge outcomes" do
+          expect(page).to have_link("View", href: user_outcomes_merge_request_path(merge_request))
+          expect(page).to have_link("View", href: scheme_outcomes_merge_request_path(merge_request))
+          expect(page).to have_link("View", href: relationship_outcomes_merge_request_path(merge_request))
+          expect(page).to have_link("View", href: logs_outcomes_merge_request_path(merge_request))
+          expect(page).to have_content("4 users")
+          expect(page).to have_content("4 schemes")
+          expect(page).to have_content("0 stock owners")
+          expect(page).to have_content("0 managing agents")
+          expect(page).to have_content("2 lettings logs")
+          expect(page).to have_content("3 sales logs")
+        end
+      end
+
+      context "with a merged request" do
+        let(:merge_request) { create(:merge_request, request_merged: true, total_users: 34, total_schemes: 12, total_stock_owners: 8, total_managing_agents: 5, total_lettings_logs: 4, total_sales_logs: 5) }
+
+        it "shows saved users count and doesn't have links to view merge outcomes" do
+          expect(merge_request.status).to eq("request_merged")
+          expect(page).not_to have_link("View", href: user_outcomes_merge_request_path(merge_request))
+          expect(page).to have_content("34 users")
         end
 
-        context "when updating the new organisation telephone number" do
-          let(:params) do
-            { merge_request: { new_organisation_telephone_number: "1234", page: "new_organisation_telephone_number" } }
-          end
-
-          let(:request) do
-            patch "/merge-request/#{merge_request.id}", headers:, params:
-          end
-
-          it "redirects to new organisation type path" do
-            request
-            expect(response).to redirect_to(new_organisation_type_merge_request_path(merge_request))
-          end
-
-          it "updates new organisation name to the correct telephone number" do
-            expect { request }.to change {
-              merge_request.reload.new_organisation_telephone_number
-            }.from(nil).to("1234")
-          end
+        it "shows saved schemes count and doesn't have links to view merge outcomes" do
+          expect(merge_request.status).to eq("request_merged")
+          expect(page).not_to have_link("View", href: scheme_outcomes_merge_request_path(merge_request))
+          expect(page).to have_content("12 schemes")
         end
 
-        context "when the new organisation telephone number is not answered" do
-          let(:params) do
-            { merge_request: { new_organisation_telephone_number: nil, page: "new_organisation_telephone_number" } }
-          end
-
-          let(:request) do
-            patch "/merge-request/#{merge_request.id}", headers:, params:
-          end
-
-          it "renders the error" do
-            request
-            expect(page).to have_content("Enter a valid telephone number")
-          end
-
-          it "does not update the organisation telephone number" do
-            expect { request }.not_to(change { merge_request.reload.attributes })
-          end
+        it "shows stock owners and managing agents count and doesn't have links to view merge outcomes" do
+          expect(merge_request.status).to eq("request_merged")
+          expect(page).not_to have_link("View", href: relationship_outcomes_merge_request_path(merge_request))
+          expect(page).to have_content("8 stock owners")
+          expect(page).to have_content("5 managing agents")
         end
+
+        it "shows logs counts and doesn't have links to view merge outcomes" do
+          expect(merge_request.status).to eq("request_merged")
+          expect(page).not_to have_link("View", href: logs_outcomes_merge_request_path(merge_request))
+          expect(page).to have_content("4 lettings logs")
+          expect(page).to have_content("5 sales logs")
+        end
+      end
+
+      context "with a processing request" do
+        let(:merge_request) { create(:merge_request, processing: true, total_users: 51, total_schemes: 33, total_stock_owners: 15, total_managing_agents: 20) }
+
+        it "shows saved users count and doesn't have links to view merge outcomes" do
+          expect(merge_request.status).to eq("processing")
+          expect(page).not_to have_link("View", href: user_outcomes_merge_request_path(merge_request))
+          expect(page).to have_content("51 users")
+        end
+
+        it "shows saved schemes count and doesn't have links to view merge outcomes" do
+          expect(merge_request.status).to eq("processing")
+          expect(page).not_to have_link("View", href: scheme_outcomes_merge_request_path(merge_request))
+          expect(page).to have_content("33 schemes")
+        end
+
+        it "shows stock owners and managing agents count and doesn't have links to view merge outcomes" do
+          expect(merge_request.status).to eq("processing")
+          expect(page).not_to have_link("View", href: relationship_outcomes_merge_request_path(merge_request))
+          expect(page).to have_content("15 stock owners")
+          expect(page).to have_content("20 managing agents")
+        end
+      end
+    end
+
+    describe "#user_outcomes" do
+      let(:merge_request) { create(:merge_request, absorbing_organisation: organisation) }
+      let(:organisation_with_no_users) { create(:organisation, name: "Organisation with no users", with_dsa: false) }
+      let(:organisation_with_no_users_too) { create(:organisation, name: "Organisation with no users too", with_dsa: false) }
+      let(:organisation_with_some_users) { create(:organisation, name: "Organisation with some users", with_dsa: false) }
+      let(:organisation_with_some_more_users) { create(:organisation, name: "Organisation with many users", with_dsa: false) }
+
+      before do
+        create_list(:user, 4, organisation: organisation_with_some_users)
+        create_list(:user, 12, organisation: organisation_with_some_more_users)
+        create(:merge_request_organisation, merge_request:, merging_organisation: organisation_with_no_users)
+        create(:merge_request_organisation, merge_request:, merging_organisation: organisation_with_no_users_too)
+        create(:merge_request_organisation, merge_request:, merging_organisation: organisation_with_some_users)
+        create(:merge_request_organisation, merge_request:, merging_organisation: organisation_with_some_more_users)
+        get "/merge-request/#{merge_request.id}/user-outcomes", headers:
+      end
+
+      it "shows user outcomes after merge" do
+        expect(page).to have_link("View all 4 Organisation with some users users (opens in a new tab)", href: users_organisation_path(organisation_with_some_users))
+        expect(page).to have_link("View all 12 Organisation with many users users (opens in a new tab)", href: users_organisation_path(organisation_with_some_more_users))
+        expect(page).to have_link("View all 3 MHCLG users (opens in a new tab)", href: users_organisation_path(organisation))
+        expect(page).to have_content("Organisation with no users and Organisation with no users too have no users.")
+        expect(page).to have_content("19 users after merge")
+      end
+    end
+
+    describe "#scheme_outcomes" do
+      let(:merge_request) { create(:merge_request, absorbing_organisation: organisation) }
+      let(:organisation_with_no_schemes) { create(:organisation, name: "Organisation with no schemes") }
+      let(:organisation_with_no_schemes_too) { create(:organisation, name: "Organisation with no schemes too") }
+      let(:organisation_with_some_schemes) { create(:organisation, name: "Organisation with some schemes") }
+      let(:organisation_with_some_more_schemes) { create(:organisation, name: "Organisation with many schemes") }
+
+      before do
+        create_list(:scheme, 4, owning_organisation: organisation_with_some_schemes)
+        create_list(:scheme, 6, owning_organisation: organisation_with_some_more_schemes)
+        create_list(:scheme, 3, owning_organisation: organisation)
+        create(:merge_request_organisation, merge_request:, merging_organisation: organisation_with_no_schemes)
+        create(:merge_request_organisation, merge_request:, merging_organisation: organisation_with_no_schemes_too)
+        create(:merge_request_organisation, merge_request:, merging_organisation: organisation_with_some_schemes)
+        create(:merge_request_organisation, merge_request:, merging_organisation: organisation_with_some_more_schemes)
+        get "/merge-request/#{merge_request.id}/scheme-outcomes", headers:
+      end
+
+      it "shows scheme outcomes after merge" do
+        expect(page).to have_link("View all 4 Organisation with some schemes schemes (opens in a new tab)", href: schemes_organisation_path(organisation_with_some_schemes))
+        expect(page).to have_link("View all 6 Organisation with many schemes schemes (opens in a new tab)", href: schemes_organisation_path(organisation_with_some_more_schemes))
+        expect(page).to have_link("View all 3 MHCLG schemes (opens in a new tab)", href: schemes_organisation_path(organisation))
+        expect(page).to have_content("Organisation with no schemes and Organisation with no schemes too have no schemes.")
+        expect(page).to have_content("13 schemes after merge")
+      end
+    end
+
+    describe "#logs_outcomes" do
+      let(:merge_request) { create(:merge_request, absorbing_organisation: organisation) }
+      let(:organisation_with_no_logs) { create(:organisation, name: "Organisation with no logs") }
+      let(:organisation_with_no_logs_too) { create(:organisation, name: "Organisation with no logs too") }
+      let(:organisation_with_some_logs) { create(:organisation, name: "Organisation with some logs") }
+
+      before do
+        create_list(:lettings_log, 4, owning_organisation: organisation_with_some_logs)
+        create_list(:sales_log, 2, owning_organisation: organisation_with_some_logs)
+        create_list(:lettings_log, 2, owning_organisation: organisation)
+        create_list(:sales_log, 3, owning_organisation: organisation)
+        create(:merge_request_organisation, merge_request:, merging_organisation: organisation_with_no_logs)
+        create(:merge_request_organisation, merge_request:, merging_organisation: organisation_with_no_logs_too)
+        create(:merge_request_organisation, merge_request:, merging_organisation: organisation_with_some_logs)
+        get "/merge-request/#{merge_request.id}/logs-outcomes", headers:
+      end
+
+      it "shows logs outcomes after merge" do
+        expect(page).to have_link("View all 4 Organisation with some logs lettings logs (opens in a new tab)", href: lettings_logs_organisation_path(organisation_with_some_logs))
+        expect(page).to have_link("View all 2 Organisation with some logs sales logs (opens in a new tab)", href: sales_logs_organisation_path(organisation_with_some_logs))
+        expect(page).to have_link("View all 2 MHCLG lettings logs (opens in a new tab)", href: lettings_logs_organisation_path(organisation))
+        expect(page).to have_link("View all 3 MHCLG sales logs (opens in a new tab)", href: sales_logs_organisation_path(organisation))
+        expect(page).to have_content("Organisation with no logs and Organisation with no logs too have no lettings logs.")
+        expect(page).to have_content("Organisation with no logs and Organisation with no logs too have no sales logs.")
+        expect(page).to have_content("6 lettings logs after merge")
+        expect(page).to have_content("5 sales logs after merge")
       end
     end
   end
 
-  context "when user is signed in as a support user" do
+  context "when user is signed in with a data coordinator user" do
     before do
-      allow(support_user).to receive(:need_two_factor_authentication?).and_return(false)
-      sign_in support_user
+      sign_in user
     end
 
-    describe "#organisations" do
-      let(:params) { { merge_request: { requesting_organisation_id: other_organisation.id, status: "unsubmitted" } } }
+    describe "#merging_organisations" do
+      let(:params) { { merge_request: { requesting_organisation_id: other_organisation.id } } }
 
-      before do
-        post "/merge-request", headers:, params:
+      context "when creating a new merge request" do
+        before do
+          post "/merge-request", headers:, params:
+        end
+
+        it "does not allow creating a new merge request" do
+          expect(response).to have_http_status(:not_found)
+        end
       end
 
-      it "creates merge request with requesting organisation" do
-        follow_redirect!
-        expect(MergeRequest.count).to eq(1)
-        expect(MergeRequest.first.requesting_organisation_id).to eq(other_organisation.id)
+      context "when viewing existing merge request" do
+        before do
+          get "/merge-request/#{merge_request.id}/merging-organisations", headers:, params:
+        end
+
+        it "does not allow viewing a merge request" do
+          expect(response).to have_http_status(:not_found)
+        end
+      end
+    end
+
+    describe "#update_merging_organisations" do
+      let(:params) { { merge_request: { merging_organisation: other_organisation.id } } }
+
+      context "when updating a merge request with a new organisation" do
+        before do
+          patch "/merge-request/#{merge_request.id}/merging-organisations", headers:, params:
+        end
+
+        it "does not allow updaing a merge request" do
+          expect(response).to have_http_status(:not_found)
+        end
+      end
+    end
+
+    describe "#remove_merging_organisation" do
+      let(:params) { { merge_request: { merging_organisation: other_organisation.id } } }
+
+      context "when removing an organisation from merge request" do
+        before do
+          MergeRequestOrganisation.create!(merge_request_id: merge_request.id, merging_organisation_id: other_organisation.id)
+          get "/merge-request/#{merge_request.id}/merging-organisations/remove", headers:, params:
+        end
+
+        it "does not allow removing an organisation" do
+          expect(response).to have_http_status(:not_found)
+        end
+      end
+    end
+
+    describe "#update" do
+      describe "from absorbing_organisation page" do
+        context "when absorbing_organisation_id set to id" do
+          let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation) }
+          let(:params) do
+            { merge_request: { absorbing_organisation_id: other_organisation.id, page: "absorbing_organisation" } }
+          end
+
+          before do
+            patch "/merge-request/#{merge_request.id}", headers:, params:
+          end
+
+          it "does not allow updating absorbing organisation" do
+            expect(response).to have_http_status(:not_found)
+          end
+        end
       end
     end
   end
