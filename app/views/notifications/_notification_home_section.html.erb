@@ -6,7 +6,7 @@
         <%== render_for_home(notification) %>
       </div>
       <div class="govuk-grid-column-one-quarter">
-        <%= govuk_link_to("Delete notification", notification_delete_confirmation_path(notification)) %>
+        <%= govuk_link_to("Delete notification", notification_delete_confirmation_path(notification), class: "app-!-colour-red") %>
       </div>
     </div>
   <% end %>
