@@ -1,16 +1,21 @@
 class NotificationsController < ApplicationController
   before_action :authenticate_user!, except: %i[show]
   before_action :authenticate_scope!, except: %i[show dismiss]
+  before_action :find_notification, except: %i[new create]
+
+  rescue_from ActiveRecord::RecordNotFound, with: :render_not_found
 
   def dismiss
-    @notification = Notification.find_by(id: params[:notification_id])
     @notification.mark_as_read! for: current_user
     redirect_back(fallback_location: root_path)
   end
 
   def show
-    @notification = current_user&.support? ? Notification.find_by(id: params[:id]) : Notification.active.find_by(id: params[:id])
-    if @notification&.show_additional_page && (@notification&.show_on_unauthenticated_pages || current_user)
+    if !@notification.show_on_unauthenticated_pages && !current_user
+      render_not_found and return
+    end
+
+    if @notification.show_additional_page
       render "show"
     else
       redirect_back(fallback_location: root_path)
@@ -31,21 +36,7 @@ class NotificationsController < ApplicationController
     end
   end
 
-  def check_answers
-    @notification = Notification.find_by(id: params[:notification_id])
-    render_not_found and return unless @notification
-
-    render "notifications/check_answers"
-  end
-
-  def edit
-    @notification = Notification.find_by(id: params[:id])
-  end
-
   def update
-    @notification = Notification.find_by(id: params[:id])
-    render_not_found and return unless @notification
-
     start_now = params[:notification][:start_now]
 
     if @notification.errors.empty? && @notification.update(notification_model_params)
@@ -62,17 +53,7 @@ class NotificationsController < ApplicationController
     end
   end
 
-  def delete_confirmation
-    @notification = Notification.find_by(id: params[:notification_id])
-    render_not_found and return unless @notification
-
-    render "notifications/delete_confirmation"
-  end
-
   def delete
-    @notification = Notification.find_by(id: params[:notification_id])
-    render_not_found and return unless @notification
-
     @notification.update!(end_date: Time.zone.now)
     flash[:notice] = "The notification has been deleted"
     redirect_to root_path
@@ -99,5 +80,14 @@ private
     model_params[:start_date] = Time.zone.now if notification_params[:start_now]
 
     model_params
+  end
+
+  def find_notification
+    id = params[:id] || params[:notification_id]
+    @notification = current_user&.support? ? Notification.find_by(id:) : Notification.active.find_by(id:)
+
+    raise ActiveRecord::RecordNotFound unless @notification
+
+    @notification
   end
 end
