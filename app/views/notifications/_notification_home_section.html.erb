@@ -1,6 +1,6 @@
 <div class="govuk-grid-row">
-  <p class="govuk-!-font-weight-bold"><%== I18n.t("active_notifications", count: Notification.active.count) %></p>
-  <% Notification.active.each do |notification| %>
+  <p class="govuk-!-font-weight-bold"><%== I18n.t("active_notifications", count: active_notifications.count) %></p>
+  <% active_notifications.each do |notification| %>
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-three-quarters">
         <%== render_for_home(notification) %>

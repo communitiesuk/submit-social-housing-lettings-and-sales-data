@@ -7,7 +7,7 @@
       </div>
 
       <% if @current_user.support? %>
-        <%= render partial: "notifications/notification_home_section" %>
+        <%= render partial: "notifications/notification_home_section", locals: { active_notifications: @homepage_presenter.active_notifications } %>
       <% end %>
 
       <div class="app-data-box-section govuk-grid-row">
