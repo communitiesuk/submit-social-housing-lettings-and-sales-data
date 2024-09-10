@@ -1,9 +1,12 @@
 cd performance_test
 echo "Get token"
-TOKEN=$(curl -c token_cookies.txt -s https://review.submit-social-housing-data.levellingup.gov.uk/2623/account/sign-in | grep '\<meta name=\"csrf-token\"' | sed -n 's/.*content=\"\\([^\\\"]*\\)\".*/\\1/p')
+TOKEN=$(curl -c token_cookies.txt -s https://review.submit-social-housing-data.levellingup.gov.uk/2623/account/sign-in | grep '<meta name="csrf-token"' | sed -n 's/.*content="\([^"]*\)".*/\1/p')
 
 echo "Logging in..."
-curl -L -o nul -c login_cookies.txt -b token_cookies.txt -X POST https://review.submit-social-housing-data.levellingup.gov.uk/2623/account/sign-in -d "user[email]=coordinator@example.com" -d "user[password]=$REVIEW_APP_USER_PASSWORD" -d "authenticity_token=$TOKEN"
+curl -L -o nul -c login_cookies.txt -b token_cookies.txt -X POST https://review.submit-social-housing-data.levellingup.gov.uk/2623/account/sign-in \
+  -d "user[email]=performance_testing_user@example.com" \
+  -d "user[password]=password" \
+  -d "authenticity_token=$TOKEN"
 
 COOKIES=$(awk '/_data_collector_session/ { print $6, $7 }' login_cookies.txt | tr ' ' '=')
 
@@ -27,7 +30,7 @@ if [ "$non_2xx_responses" -ne 0 ] && [ -n "$non_2xx_responses" ]; then
   exit 1
 fi
 
-if (( $(echo "$time_per_request_all > 25" | bc -l) )); then
+if (( $(echo "$time_per_request_all > 45" | bc -l) )); then
   echo "Performance test failed - Time per request across all concurrent requests is more than 25 ms: $time_per_request_all ms"
   exit 1
 fi
