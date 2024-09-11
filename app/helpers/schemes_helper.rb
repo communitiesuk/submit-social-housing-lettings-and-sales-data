@@ -12,7 +12,7 @@ module SchemesHelper
 
   def toggle_scheme_link(scheme)
     return govuk_button_link_to "Deactivate this scheme", scheme_new_deactivation_path(scheme), warning: true if scheme.active? || scheme.deactivates_in_a_long_time?
-    return govuk_button_link_to "Reactivate this scheme", scheme_new_reactivation_path(scheme) if scheme.deactivated?
+    return govuk_button_link_to "Reactivate this scheme", scheme_new_reactivation_path(scheme) if scheme.deactivated? || scheme.deactivating_soon?
   end
 
   def delete_scheme_link(scheme)
@@ -73,6 +73,15 @@ module SchemesHelper
       scheme_secondary_client_group_path(scheme, check_answers: true)
     when "support_type", "intended_stay"
       scheme_support_path(scheme, check_answers: true)
+    end
+  end
+
+  def scheme_status_hint(scheme)
+    case scheme.status
+    when :deactivating_soon
+      "This scheme deactivates on #{scheme.last_deactivation_date.to_formatted_s(:govuk_date)}. Any locations you add will be deactivated on the same date. Reactivate the scheme to add locations active after this date."
+    when :deactivated
+      "This scheme deactivated on #{scheme.last_deactivation_date.to_formatted_s(:govuk_date)}. Any locations you add will be deactivated on the same date. Reactivate the scheme to add locations active after this date."
     end
   end
 
