@@ -905,7 +905,7 @@ private
     block_log_creation!
 
     if errors[:field_1].blank?
-      errors.add(:field_1, "You do not have permission to add logs for this owning organisation.", category: :setup)
+      errors.add(:field_1, "You do not have permission to add logs for this owning organisation", category: :setup)
     end
   end
 
