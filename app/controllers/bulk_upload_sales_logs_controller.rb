@@ -53,7 +53,7 @@ private
               when "upload-your-file"
                 Forms::BulkUploadSales::UploadYourFile.new(form_params.merge(current_user:, request:))
               when "checking-file"
-                Forms::BulkUploadSales::CheckingFile.new(form_params.merge(request:))
+                Forms::BulkUploadSales::CheckingFile.new(form_params)
               else
                 raise "Page not found for path #{params[:id]}"
               end
