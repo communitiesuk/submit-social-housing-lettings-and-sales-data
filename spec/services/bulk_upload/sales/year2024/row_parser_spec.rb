@@ -569,7 +569,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
           parser = described_class.new(attributes)
           parser.valid?
           expect(parser).to be_block_log_creation
-          expect(parser.errors[:field_1]).to include("You do not have permission to add logs for this owning organisation.")
+          expect(parser.errors[:field_1]).to include("You do not have permission to add logs for this owning organisation")
         end
       end
 
@@ -586,7 +586,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
         it "does not block log creation and does not add an error to field_1" do
           parser = described_class.new(attributes)
           parser.valid?
-          expect(parser.errors[:field_1]).not_to include("You do not have permission to add logs for this owning organisation.")
+          expect(parser.errors[:field_1]).not_to include("You do not have permission to add logs for this owning organisation")
         end
       end
     end
