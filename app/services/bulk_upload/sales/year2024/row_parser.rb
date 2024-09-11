@@ -1303,8 +1303,8 @@ private
   def validate_owning_org_permitted
     return unless owning_organisation
 
-    return if (bulk_upload.user.support? && bulk_upload.organisation.affiliated_stock_owners.include?(bulk_upload.organisation)) ||
-      (!bulk_upload.user.support? && bulk_upload.user.organisation.affiliated_stock_owners.include?(owning_organisation))
+    bulk_upload_organisation = bulk_upload.user.support? ? Organisation.find(bulk_upload.organisation_id) : bulk_upload.user.organisation
+    return if bulk_upload_organisation.affiliated_stock_owners.include?(owning_organisation)
 
     block_log_creation!
 
