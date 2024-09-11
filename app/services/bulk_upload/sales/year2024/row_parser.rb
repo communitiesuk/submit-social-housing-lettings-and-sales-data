@@ -1323,7 +1323,6 @@ private
 
   def validate_assigned_to_when_support
     if field_3.blank? && bulk_upload.user.support?
-      block_log_creation!
       errors.add(:field_3, :setup, message: I18n.t("validations.not_answered", question: "what is the CORE username of the account this sales log should be assigned to?"))
     end
   end
