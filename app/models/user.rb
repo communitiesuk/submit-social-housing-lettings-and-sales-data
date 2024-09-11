@@ -312,6 +312,7 @@ class User < ApplicationRecord
         unassign_organisations(lettings_logs_to_reassign, sales_logs_to_reassign, current_organisation)
       end
 
+      cancel_related_bulk_uploads
       send_organisation_change_email(current_organisation, new_organisation, log_reassignment, logs_count)
     rescue StandardError => e
       Rails.logger.error("User update failed with: #{e.message}")
@@ -400,5 +401,13 @@ private
       reassigned_logs_text:,
     }
     DeviseNotifyMailer.new.send_email(email, template_id, personalisation)
+  end
+
+  def cancel_related_bulk_uploads
+    lettings_bu_ids = LettingsLog.where(assigned_to: self, status: "pending").map(&:bulk_upload_id).compact.uniq
+    BulkUpload.where(id: lettings_bu_ids).update!(choice: "cancelled-by-moved-user", moved_user_id: id)
+
+    sales_bu_ids = SalesLog.where(assigned_to: self, status: "pending").map(&:bulk_upload_id).compact.uniq
+    BulkUpload.where(id: sales_bu_ids).update!(choice: "cancelled-by-moved-user", moved_user_id: id)
   end
 end
