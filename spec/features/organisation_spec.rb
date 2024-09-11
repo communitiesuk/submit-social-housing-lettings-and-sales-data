@@ -234,7 +234,7 @@ RSpec.describe "User Features" do
         expect(page).to have_button("Create a new sales log for this organisation")
       end
 
-      it "shows a upload lettings logs in bulk link" do
+      it "shows a upload sales logs in bulk link" do
         expect(page).to have_link("Upload sales logs in bulk")
       end
 
