@@ -3,7 +3,7 @@ class BulkUploadSalesLogsController < ApplicationController
   before_action :validate_data_protection_agrement_signed!
 
   def start
-    support_user_redirection and return if current_user.support?
+    support_user_redirection if current_user.support?
 
     if have_choice_of_year?
       redirect_to bulk_upload_sales_log_path(id: "year")
