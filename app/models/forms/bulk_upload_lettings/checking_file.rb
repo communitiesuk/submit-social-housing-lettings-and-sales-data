@@ -6,13 +6,19 @@ module Forms
       include Rails.application.routes.url_helpers
 
       attribute :year, :integer
+      attribute :organisation_id, :integer
 
       def view_path
         "bulk_upload_lettings_logs/forms/checking_file"
       end
 
       def back_path
-        bulk_upload_lettings_log_path(id: "start")
+        organisation_id = request.query_parameters[:organisation_id]
+        if organisation_id.present?
+          lettings_logs_organisation_path(organisation_id)
+        else
+          bulk_upload_lettings_log_path(id: "start")
+        end
       end
 
       def year_combo
