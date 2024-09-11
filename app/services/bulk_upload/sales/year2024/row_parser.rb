@@ -924,7 +924,7 @@ private
 
     attributes["owning_organisation"] = owning_organisation
     attributes["managing_organisation"] = managing_organisation
-    attributes["assigned_to"] = assigned_to || bulk_upload.user
+    attributes["assigned_to"] = bulk_upload.user.support? ? nil : (assigned_to || bulk_upload.user)
     attributes["created_by"] = bulk_upload.user
     attributes["hhregres"] = field_72
     attributes["hhregresstill"] = field_73

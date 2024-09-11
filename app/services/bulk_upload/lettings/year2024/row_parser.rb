@@ -1145,7 +1145,7 @@ private
     attributes["renewal"] = renewal
     attributes["scheme"] = scheme
     attributes["location"] = location
-    attributes["assigned_to"] = bulk_upload.user.support? ? nil : (assigned_to || bulk_upload.user) # don't set to support users, leave as nil - validate nil
+    attributes["assigned_to"] = bulk_upload.user.support? ? nil : (assigned_to || bulk_upload.user)
     attributes["created_by"] = bulk_upload.user
     attributes["needstype"] = field_4
     attributes["rent_type"] = RENT_TYPE_BU_MAPPING[field_11]
