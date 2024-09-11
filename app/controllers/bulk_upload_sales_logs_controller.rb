@@ -3,9 +3,9 @@ class BulkUploadSalesLogsController < ApplicationController
   before_action :validate_data_protection_agrement_signed!
 
   def start
-    support_user_redirection if current_user.support?
-
-    if have_choice_of_year?
+    if current_user.support? && params[:organisation_id].present?
+      redirect_to bulk_upload_sales_log_path(id: "upload-your-file", form: { year: current_year }, organisation_id: params[:organisation_id])
+    elsif have_choice_of_year?
       redirect_to bulk_upload_sales_log_path(id: "year")
     else
       redirect_to bulk_upload_sales_log_path(id: "prepare-your-file", form: { year: current_year })
@@ -61,11 +61,5 @@ private
 
   def form_params
     params.fetch(:form, {}).permit(:year, :file, :organisation_id)
-  end
-
-  def support_user_redirection
-    if params[:organisation_id].present?
-      redirect_to bulk_upload_sales_log_path(id: "upload-your-file", form: { year: current_year }, organisation_id: params[:organisation_id])
-    end
   end
 end
