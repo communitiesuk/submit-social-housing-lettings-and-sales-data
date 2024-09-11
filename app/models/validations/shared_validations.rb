@@ -102,7 +102,11 @@ module Validations::SharedValidations
     return unless %i[reactivating_soon activating_soon deactivated].include?(status)
 
     closest_reactivation = resource.last_deactivation_before(date)
-    open_deactivation = resource.open_deactivation
+    open_deactivation = if resource.is_a?(Location)
+                          resource.open_deactivation || resource.scheme.open_deactivation
+                        else
+                          resource.open_deactivation
+                        end
 
     date = case status
            when :reactivating_soon then closest_reactivation.reactivation_date

@@ -51,17 +51,24 @@ class SchemesController < ApplicationController
   end
 
   def deactivate_confirm
-    @affected_logs = @scheme.lettings_logs.visible.after_date(params[:deactivation_date])
-    if @affected_logs.count.zero?
+    @deactivation_date = Time.zone.parse(params[:deactivation_date])
+    @affected_logs = @scheme.lettings_logs.visible.after_date(@deactivation_date)
+    @deactivation_date_type = params[:deactivation_date_type]
+
+    scheme_locations = @scheme.locations.confirmed
+
+    @affected_locations = scheme_locations.select do |location|
+      %i[active deactivating_soon reactivating_soon activating_soon].include?(location.status_at(@deactivation_date))
+    end
+
+    if @affected_logs.count.zero? && @affected_locations.count.zero?
       deactivate
-    else
-      @deactivation_date = params[:deactivation_date]
-      @deactivation_date_type = params[:deactivation_date_type]
     end
   end
 
   def deactivate
-    if @scheme.open_deactivation&.update!(deactivation_date: params[:deactivation_date]) || @scheme.scheme_deactivation_periods.create!(deactivation_date: params[:deactivation_date])
+    deactivation_date = params[:deactivation_date]
+    if @scheme.open_deactivation&.update!(deactivation_date:) || @scheme.scheme_deactivation_periods.create!(deactivation_date:)
       logs = reset_location_and_scheme_for_logs!
 
       flash[:notice] = deactivate_success_notice
