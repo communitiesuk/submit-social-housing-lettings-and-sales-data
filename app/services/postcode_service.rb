@@ -1,5 +1,4 @@
 class PostcodeService
-
   def lookup(postcode)
     # Avoid network calls when postcode is invalid
     return unless postcode.match(POSTCODE_REGEXP)
