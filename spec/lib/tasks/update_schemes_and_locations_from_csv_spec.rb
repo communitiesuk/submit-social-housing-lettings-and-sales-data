@@ -25,7 +25,7 @@ RSpec.describe "bulk_update" do
     allow(ENV).to receive(:[]).with("BULK_UPLOAD_BUCKET").and_return(instance_name)
 
     WebMock.stub_request(:get, /api\.postcodes\.io/)
-      .to_return(status: 200, body: "{\"status\":404,\"error\":\"Postcode not found\"}", headers: {})
+      .to_return(status: 404, body: "{\"status\":404,\"error\":\"Postcode not found\"}", headers: {})
     WebMock.stub_request(:get, /api\.postcodes\.io\/postcodes\/B11BB/)
       .to_return(status: 200, body: '{"status":200,"result":{"admin_district":"Westminster","codes":{"admin_district":"E09000033"}}}', headers: {})
   end
