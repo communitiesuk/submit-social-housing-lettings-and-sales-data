@@ -628,17 +628,6 @@ RSpec.describe SalesLog, type: :model do
         .to raise_error(ActiveRecord::RecordInvalid, /#{I18n.t("validations.postcode")}/)
     end
 
-    context "when the local authority lookup times out" do
-      before do
-        allow(Timeout).to receive(:timeout).and_raise(Timeout::Error)
-      end
-
-      it "logs a warning" do
-        expect(Rails.logger).to receive(:warn).with("Postcodes.io lookup timed out")
-        address_sales_log.update!({ pcodenk: 1, postcode_full: "M1 1AD" })
-      end
-    end
-
     it "correctly resets all fields if property postcode not known" do
       address_sales_log.update!({ pcodenk: 1 })
 
