@@ -3,7 +3,7 @@ This accessibility statement applies to the Submit social housing lettings and s
 This website is run by the Ministry of Housing, Communities and Local Government (MHCLG). We want as many people as possible to be able to use this website. For example, that means you should be able to:
 
 - change colours, contrast levels and fonts
-- zoom in up to 300% without the text spilling off the screen
+- zoom in up to 3000% without the text spilling off the screen
 - navigate most of the website using just a keyboard
 - navigate most of the website using speech recognition software
 - listen to most of the website using a screen reader (including the most recent versions of JAWS, NVDA and VoiceOver)
