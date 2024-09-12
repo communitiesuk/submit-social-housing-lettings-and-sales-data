@@ -164,6 +164,7 @@ class User < ApplicationRecord
   def reset_password_notify_template
     RESET_PASSWORD_TEMPLATE_ID
   end
+  
 
   def confirmable_template
     if last_sign_in_at.present? && (unconfirmed_email.blank? || unconfirmed_email == email)
