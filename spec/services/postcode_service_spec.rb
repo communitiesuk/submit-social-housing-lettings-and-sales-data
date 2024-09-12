@@ -60,5 +60,21 @@ describe PostcodeService do
         service.lookup("A00 0AA")
       end
     end
+
+    context "when the request returns a success response that causes later errors" do
+      before do
+        Excon.stub({}, { body: '{"result": { "admin_district": "District" } }', status: 200 })
+      end
+
+      it "returns nil" do
+        result = service.lookup("A00 0AA")
+        expect(result).to be_nil
+      end
+
+      it "logs the error at error level" do
+        expect(Rails.logger).to receive(:error).with(match "Unexpected error with postcode lookup request")
+        service.lookup("A00 0AA")
+      end
+    end
   end
 end

@@ -14,7 +14,9 @@ class PostcodeService
         location_admin_district: parsed_response["result"]["admin_district"],
       }
     rescue Excon::Error => e
-      Rails.logger.warn("An error occurred with the postcode lookup request: #{e} #{e.response.body}")
+      Rails.logger.warn("Postcode lookup request was not successful: #{e} #{e.response.body}")
+    rescue StandardError => e
+      Rails.logger.error("Unexpected error with postcode lookup request: #{e}")
     end
     result
   end
