@@ -38,7 +38,6 @@ gem "devise_two_factor_authentication"
 # UK postcode parsing and validation
 gem "uk_postcode"
 # Get rich data from postcode lookups. Wraps postcodes.io
-gem "postcodes_io"
 # Use Ruby objects to build reusable markup. A React inspired evolution of the presenter pattern
 gem "view_component", "~> 3.9"
 # Use the AWS S3 SDK as storage mechanism
@@ -111,3 +110,5 @@ end
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "cssbundling-rails"
 gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby]
+
+gem "excon", "~> 0.111.0"

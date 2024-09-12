@@ -1,26 +1,23 @@
 class PostcodeService
-  def initialize
-    @pio = Postcodes::IO.new
-  end
 
   def lookup(postcode)
     # Avoid network calls when postcode is invalid
     return unless postcode.match(POSTCODE_REGEXP)
 
-    postcode_lookup = nil
+    result = nil
     begin
       # URI encoding only supports ASCII characters
       ascii_postcode = self.class.clean(postcode)
-      Timeout.timeout(30) { postcode_lookup = @pio.lookup(ascii_postcode) }
-    rescue Timeout::Error
-      Rails.logger.warn("Postcodes.io lookup timed out")
-    end
-    if postcode_lookup && postcode_lookup.info.present?
-      {
-        location_code: postcode_lookup.codes["admin_district"],
-        location_admin_district: postcode_lookup&.admin_district,
+      response = Excon.get("https://api.postcodes.io/postcodes/#{ascii_postcode}", idempotent: true, timeout: 30, expects: [200])
+      parsed_response = JSON.parse(response.body)
+      result = {
+        location_code: parsed_response["result"]["codes"]["admin_district"],
+        location_admin_district: parsed_response["result"]["admin_district"],
       }
+    rescue Excon::Error => e
+      Rails.logger.warn("An error occurred with the postcode lookup request: #{e} #{e.response.body}")
     end
+    result
   end
 
   def self.clean(postcode)
