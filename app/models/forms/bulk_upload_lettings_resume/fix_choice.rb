@@ -56,7 +56,7 @@ module Forms
       end
 
       def preflight_valid?
-        bulk_upload.choice != "create-fix-inline" && bulk_upload.choice != "bulk-confirm-soft-validations"
+        bulk_upload.choice.blank?
       end
 
       def preflight_redirect
@@ -65,6 +65,8 @@ module Forms
           page_bulk_upload_lettings_resume_path(bulk_upload, :chosen)
         when "bulk-confirm-soft-validations"
           page_bulk_upload_lettings_soft_validations_check_path(bulk_upload, :chosen)
+        else
+          bulk_upload_lettings_result_path(bulk_upload)
         end
       end
     end
