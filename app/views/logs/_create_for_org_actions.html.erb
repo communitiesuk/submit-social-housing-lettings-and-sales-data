@@ -2,11 +2,11 @@
   <% if @organisation.data_protection_confirmed? %>
     <% if current_page?(controller: 'organisations', action: 'lettings_logs') %>
       <%= govuk_button_to "Create a new lettings log for this organisation", lettings_logs_path(lettings_log: { owning_organisation_id: @organisation.id }, method: :post), class: "govuk-!-margin-right-6" %>
-      <%= govuk_button_link_to "Upload lettings logs in bulk", bulk_upload_lettings_log_path(id: "prepare-your-file", form: { year: FormHandler.instance.current_collection_start_year, organisation_id: @organisation.id }), secondary: true %>
+      <%= govuk_button_link_to "Upload lettings logs in bulk", bulk_upload_lettings_log_path(id: "start", organisation_id: @organisation.id ), secondary: true %>
 <% end %>
     <% if current_page?(controller: 'organisations', action: 'sales_logs') %>
       <%= govuk_button_to "Create a new sales log for this organisation", sales_logs_path(sales_log: { owning_organisation_id: @organisation.id }, method: :post), class: "govuk-!-margin-right-6" %>
-      <%= govuk_button_link_to "Upload sales logs in bulk", bulk_upload_sales_log_path(id: "prepare-your-file", form: { year: FormHandler.instance.current_collection_start_year, organisation_id: @organisation.id }), secondary: true %>
+      <%= govuk_button_link_to "Upload sales logs in bulk", bulk_upload_sales_log_path(id: "start", organisation_id: @organisation.id ), secondary: true %>
 <% end %>
   <% end %>
 </div>
