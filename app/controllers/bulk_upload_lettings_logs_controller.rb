@@ -4,9 +4,9 @@ class BulkUploadLettingsLogsController < ApplicationController
 
   def start
     if have_choice_of_year?
-      redirect_to bulk_upload_lettings_log_path(id: "year", form: { organisation_id: })
+      redirect_to bulk_upload_lettings_log_path(id: "year", form: { organisation_id: }.compact)
     else
-      redirect_to bulk_upload_lettings_log_path(id: "prepare-your-file", form: { year: current_year, organisation_id: })
+      redirect_to bulk_upload_lettings_log_path(id: "prepare-your-file", form: { year: current_year, organisation_id: }.compact)
     end
   end
 

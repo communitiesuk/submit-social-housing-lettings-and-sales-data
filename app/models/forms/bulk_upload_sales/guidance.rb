@@ -16,7 +16,7 @@ module Forms
       def back_path
         case referrer
         when "prepare-your-file"
-          bulk_upload_sales_log_path(id: "prepare-your-file", form: { year:, organisation_id: })
+          bulk_upload_sales_log_path(id: "prepare-your-file", form: { year:, organisation_id: }.compact)
         when "home"
           root_path
         else

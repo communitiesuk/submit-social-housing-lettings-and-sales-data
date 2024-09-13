@@ -19,7 +19,7 @@ module Forms
 
       def back_path
         if have_choice_of_year?
-          Rails.application.routes.url_helpers.bulk_upload_sales_log_path(id: "year", form: { year: })
+          Rails.application.routes.url_helpers.bulk_upload_sales_log_path(id: "year", form: { year: }.compact)
         elsif organisation_id.present?
           sales_logs_organisation_path(organisation_id)
         else
@@ -28,7 +28,7 @@ module Forms
       end
 
       def next_path
-        bulk_upload_sales_log_path(id: "upload-your-file", form: { year:, organisation_id: })
+        bulk_upload_sales_log_path(id: "upload-your-file", form: { year:, organisation_id: }.compact)
       end
 
       def legacy_template_path

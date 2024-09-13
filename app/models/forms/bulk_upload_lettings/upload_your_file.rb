@@ -21,7 +21,7 @@ module Forms
       end
 
       def back_path
-        bulk_upload_lettings_log_path(id: "prepare-your-file", form: { year:, needstype:, organisation_id: })
+        bulk_upload_lettings_log_path(id: "prepare-your-file", form: { year:, needstype:, organisation_id: }.compact)
       end
 
       def year_combo
@@ -29,7 +29,7 @@ module Forms
       end
 
       def next_path
-        bulk_upload_lettings_log_path(id: "checking-file", form: { year:, organisation_id: })
+        bulk_upload_lettings_log_path(id: "checking-file", form: { year:, organisation_id: }.compact)
       end
 
       def save!

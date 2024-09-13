@@ -29,7 +29,7 @@ module Forms
       end
 
       def next_path
-        bulk_upload_sales_log_path(id: "prepare-your-file", form: { year: })
+        bulk_upload_sales_log_path(id: "prepare-your-file", form: { year:, organisation_id: }.compact)
       end
 
       def save!
