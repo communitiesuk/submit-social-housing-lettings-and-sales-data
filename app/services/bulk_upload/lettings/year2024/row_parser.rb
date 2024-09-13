@@ -421,7 +421,6 @@ class BulkUpload::Lettings::Year2024::RowParser
   validate :validate_owning_org_data_given, on: :after_log
   validate :validate_owning_org_exists, on: :after_log
   validate :validate_owning_org_owns_stock, on: :after_log
-  validate :validate_owning_org_affiliated, on: :after_log
   validate :validate_owning_org_permitted, on: :after_log
 
   validate :validate_managing_org_data_given, on: :after_log
@@ -902,20 +901,12 @@ private
 
     block_log_creation!
 
-    if errors[:field_1].blank?
-      errors.add(:field_1, "You do not have permission to add logs for this owning organisation", category: :setup)
-    end
-  end
+    return if errors[:field_1].present?
 
-  def validate_owning_org_affiliated
-    return unless owning_organisation
-    return unless bulk_upload.user.support?
-    return if bulk_upload_organisation.affiliated_stock_owners.include?(owning_organisation)
-
-    block_log_creation!
-
-    if errors[:field_1].blank?
+    if bulk_upload.user.support?
       errors.add(:field_1, "This owning organisation is not affiliated with #{bulk_upload_organisation.name}", category: :setup)
+    else
+      errors.add(:field_1, "You do not have permission to add logs for this owning organisation", category: :setup)
     end
   end
 
