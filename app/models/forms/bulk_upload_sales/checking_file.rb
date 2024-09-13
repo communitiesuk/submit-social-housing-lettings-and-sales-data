@@ -16,7 +16,7 @@ module Forms
         if organisation_id.present?
           sales_logs_organisation_path(organisation_id)
         else
-          bulk_upload_sales_log_path(id: "start", form: { organisation_id: organisation_id }.compact)
+          bulk_upload_sales_log_path(id: "start")
         end
       end
 
