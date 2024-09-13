@@ -421,6 +421,7 @@ class BulkUpload::Lettings::Year2024::RowParser
   validate :validate_owning_org_data_given, on: :after_log
   validate :validate_owning_org_exists, on: :after_log
   validate :validate_owning_org_owns_stock, on: :after_log
+  validate :validate_owning_org_affiliated, on: :after_log
   validate :validate_owning_org_permitted, on: :after_log
 
   validate :validate_managing_org_data_given, on: :after_log
@@ -897,14 +898,24 @@ private
 
   def validate_owning_org_permitted
     return unless owning_organisation
-
-    bulk_upload_organisation = bulk_upload.user.support? ? Organisation.find(bulk_upload.organisation_id) : bulk_upload.user.organisation
     return if bulk_upload_organisation.affiliated_stock_owners.include?(owning_organisation)
 
     block_log_creation!
 
     if errors[:field_1].blank?
       errors.add(:field_1, "You do not have permission to add logs for this owning organisation", category: :setup)
+    end
+  end
+
+  def validate_owning_org_affiliated
+    return unless owning_organisation
+    return unless bulk_upload.user.support?
+    return if bulk_upload_organisation.affiliated_stock_owners.include?(owning_organisation)
+
+    block_log_creation!
+
+    if errors[:field_1].blank?
+      errors.add(:field_1, "This owning organisation is not affiliated with #{bulk_upload_organisation.name}", category: :setup)
     end
   end
 
@@ -1632,5 +1643,9 @@ private
 
   def reason_is_other?
     field_98 == 20
+  end
+
+  def bulk_upload_organisation
+    Organisation.find(bulk_upload.organisation_id)
   end
 end
