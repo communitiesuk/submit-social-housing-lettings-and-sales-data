@@ -30,13 +30,15 @@ class BulkUpload::Lettings::Year2024::CsvParser
   end
 
   def row_parsers
-    @row_parsers ||= body_rows.map do |row|
+    @row_parsers ||= body_rows.map { |row|
+      next if row.empty?
+
       stripped_row = row[col_offset..]
 
       hash = Hash[field_numbers.zip(stripped_row)]
 
       BulkUpload::Lettings::Year2024::RowParser.new(hash)
-    end
+    }.compact
   end
 
   def body_rows

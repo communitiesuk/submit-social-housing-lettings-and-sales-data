@@ -41,6 +41,7 @@ RSpec.describe BulkUpload::Lettings::Year2024::CsvParser do
       file.write("Duplicate check field?\n")
       file.write(BulkUpload::LettingsLogToCsv.new(log:).default_2024_field_numbers_row)
       file.write(BulkUpload::LettingsLogToCsv.new(log:).to_2024_csv_row)
+      file.write("\n")
       file.rewind
     end
 
@@ -51,6 +52,10 @@ RSpec.describe BulkUpload::Lettings::Year2024::CsvParser do
 
     it "parses csv correctly" do
       expect(service.row_parsers[0].field_13).to eql(log.tenancycode)
+    end
+
+    it "does not parse the last empty row" do
+      expect(service.row_parsers.count).to eq(1)
     end
   end
 
