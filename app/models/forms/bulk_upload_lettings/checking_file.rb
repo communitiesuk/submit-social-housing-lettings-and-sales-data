@@ -6,6 +6,7 @@ module Forms
       include Rails.application.routes.url_helpers
 
       attribute :year, :integer
+      attribute :organisation_id, :integer
 
       def view_path
         "bulk_upload_lettings_logs/forms/checking_file"

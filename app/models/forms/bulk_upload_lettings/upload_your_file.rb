@@ -12,7 +12,6 @@ module Forms
       attribute :file
       attribute :current_user
       attribute :organisation_id, :integer
-      attr_accessor :request
 
       validates :file, presence: true
       validate :validate_file_is_csv
@@ -22,13 +21,7 @@ module Forms
       end
 
       def back_path
-        organisation_id = request.query_parameters[:organisation_id]
-        if organisation_id.present?
-          lettings_logs_organisation_path(organisation_id)
-        else
-          page_id = year == 2022 ? "needstype" : "prepare-your-file"
-          bulk_upload_lettings_log_path(id: page_id, form: { year:, needstype: })
-        end
+        bulk_upload_lettings_log_path(id: "prepare-your-file", form: { year:, needstype:, organisation_id: })
       end
 
       def year_combo
@@ -36,7 +29,7 @@ module Forms
       end
 
       def next_path
-        bulk_upload_lettings_log_path(id: "checking-file", form: { year: })
+        bulk_upload_lettings_log_path(id: "checking-file", form: { year:, organisation_id: })
       end
 
       def save!
@@ -46,7 +39,7 @@ module Forms
           year:,
           needstype:,
           filename: file.original_filename,
-          organisation_id: organisation_id || current_user.organisation_id,
+          organisation_id:,
         )
 
         storage_service.write_file(bulk_upload.identifier, File.read(file.path))

@@ -3,12 +3,10 @@ class BulkUploadLettingsLogsController < ApplicationController
   before_action :validate_data_protection_agrement_signed!
 
   def start
-    if current_user.support? && params[:organisation_id].present?
-      redirect_to bulk_upload_lettings_log_path(id: "upload-your-file", form: { year: current_year }, organisation_id: params[:organisation_id])
-    elsif have_choice_of_year?
-      redirect_to bulk_upload_lettings_log_path(id: "year")
+    if have_choice_of_year?
+      redirect_to bulk_upload_lettings_log_path(id: "year", form: { organisation_id: })
     else
-      redirect_to bulk_upload_lettings_log_path(id: "prepare-your-file", form: { year: current_year })
+      redirect_to bulk_upload_lettings_log_path(id: "prepare-your-file", form: { year: current_year, organisation_id: })
     end
   end
 
@@ -53,7 +51,7 @@ private
               when "needstype"
                 Forms::BulkUploadLettings::Needstype.new(form_params)
               when "upload-your-file"
-                Forms::BulkUploadLettings::UploadYourFile.new(form_params.merge(current_user:, request:))
+                Forms::BulkUploadLettings::UploadYourFile.new(form_params.merge(current_user:))
               when "checking-file"
                 Forms::BulkUploadLettings::CheckingFile.new(form_params)
               else

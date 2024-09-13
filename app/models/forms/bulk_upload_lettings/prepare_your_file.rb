@@ -7,6 +7,7 @@ module Forms
 
       attribute :year, :integer
       attribute :needstype, :integer
+      attribute :organisation_id, :integer
 
       def view_path
         case year
@@ -19,15 +20,16 @@ module Forms
 
       def back_path
         if have_choice_of_year?
-          Rails.application.routes.url_helpers.bulk_upload_lettings_log_path(id: "year", form: { year: })
+          Rails.application.routes.url_helpers.bulk_upload_lettings_log_path(id: "year", form: { year:, organisation_id: })
+        elsif organisation_id.present?
+          lettings_logs_organisation_path(organisation_id)
         else
           Rails.application.routes.url_helpers.lettings_logs_path
         end
       end
 
       def next_path
-        page_id = year == 2022 ? "needstype" : "upload-your-file"
-        bulk_upload_lettings_log_path(id: page_id, form: { year:, needstype: })
+        bulk_upload_lettings_log_path(id: "upload-your-file", form: { year:, needstype:, organisation_id: })
       end
 
       def legacy_template_path
