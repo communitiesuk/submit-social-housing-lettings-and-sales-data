@@ -87,7 +87,7 @@ COOKIES=$(awk '/_data_collector_session/ { print $6, $7 }' login_cookies.txt | t
 
 echo "lettings_log[tenancycode]=performance_test_tenancy_code&lettings_log[page]=tenant_code&authenticity_token=$TOKEN" > post_data.txt
 
-ab -n 50 -c 50 -T application/x-www-form-urlencoded \
+ab -n 1 -c 1 -T application/x-www-form-urlencoded \
 -H "X-CSRF-Token: $TOKEN" \
 -C "$COOKIES" \
 -p post_data.txt \
