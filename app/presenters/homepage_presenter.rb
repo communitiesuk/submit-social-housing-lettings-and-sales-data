@@ -2,7 +2,7 @@ class HomepagePresenter
   include Rails.application.routes.url_helpers
   include CollectionTimeHelper
 
-  attr_reader :current_year_in_progress_lettings_data, :current_year_completed_lettings_data, :current_year_in_progress_sales_data, :current_year_completed_sales_data, :last_year_in_progress_lettings_data, :last_year_completed_lettings_data, :last_year_in_progress_sales_data, :last_year_completed_sales_data, :incomplete_schemes_data
+  attr_reader :current_year_in_progress_lettings_data, :current_year_completed_lettings_data, :current_year_in_progress_sales_data, :current_year_completed_sales_data, :last_year_in_progress_lettings_data, :last_year_completed_lettings_data, :last_year_in_progress_sales_data, :last_year_completed_sales_data, :incomplete_schemes_data, :active_notifications
 
   def initialize(user)
     @user = user
@@ -25,6 +25,7 @@ class HomepagePresenter
         path: schemes_path(status: [:incomplete], owning_organisation_select: "all"),
       }
     end
+    @active_notifications = Notification.active if @user.support?
   end
 
   def title_text_for_user

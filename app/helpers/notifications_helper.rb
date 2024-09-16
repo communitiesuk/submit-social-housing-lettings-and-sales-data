@@ -27,11 +27,18 @@ module NotificationsHelper
     render_normal_markdown(title)
   end
 
-  def render_for_page(title, page_content)
-    content = page_content
-    unless /\A\s*#[^#]/.match?(page_content)
-      content = "# #{title}\n#{page_content}"
-    end
+  def render_for_page(notification)
+    content_includes_own_title = /\A\s*#[^#]/.match?(notification.page_content)
+    return render_normal_markdown(notification.page_content) if content_includes_own_title
+
+    content = "# #{notification.title}\n#{notification.page_content}"
+    render_normal_markdown(content)
+  end
+
+  def render_for_home(notification)
+    return render_normal_markdown(notification.title) unless notification.show_additional_page
+
+    content = "#{notification.title}  \n[#{notification.link_text}](#{notification_path(notification)})"
     render_normal_markdown(content)
   end
 
