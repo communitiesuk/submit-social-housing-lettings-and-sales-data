@@ -1,5 +1,5 @@
 <% content_for :before_content do %>
-  <% title = "Merge request: #{@merge_request.absorbing_organisation_name}" %>
+  <% title = "Merge request: #{sanitise_characters(@merge_request.absorbing_organisation_name)}" %>
   <% content_for :title, title %>
   <%= govuk_back_link href: organisations_path(tab: "merge-requests") %>
 <% end %>
