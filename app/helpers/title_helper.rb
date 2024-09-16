@@ -4,6 +4,7 @@ module TitleHelper
   end
 
   def format_title(searched, page_title, current_user, item_label, count, organisation_name)
+    organisation_name = sanitise_characters(organisation_name)
     if searched.present?
       actual_title = support_sab_nav?(current_user, organisation_name) ? organisation_name : page_title
       "#{actual_title} (#{count} #{item_label} matching ‘#{searched}’)"

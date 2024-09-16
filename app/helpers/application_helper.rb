@@ -31,6 +31,12 @@ module ApplicationHelper
     !current_page?(notifications_path) && (authenticated_user_has_notifications? || unauthenticated_user_has_notifications?)
   end
 
+  def sanitise_characters(string)
+    return string unless string
+
+    string.gsub("'", "’").gsub("&", "and")
+  end
+
 private
 
   def paginated_title(title, pagy)
