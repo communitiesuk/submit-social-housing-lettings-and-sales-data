@@ -56,4 +56,23 @@ module UserHelper
       user.errors.add(attribute, message)
     end
   end
+
+  def display_pending_email_change_banner?(user)
+    user.unconfirmed_email.present? && user.email != user.unconfirmed_email
+  end
+
+  def pending_email_change_title_text(current_user, user)
+    if current_user == user
+      "You have requested to change your email address to #{user.unconfirmed_email}."
+    else
+      "There has been a request to change this user’s email address to #{user.unconfirmed_email}."
+    end
+  end
+
+  def pending_email_change_banner_text(current_user)
+    text = "A confirmation link has been sent to the new email address. The current email will continue to work until the change is confirmed."
+    text += " Deactivating this user will cancel the email change request." if current_user.support?
+
+    text
+  end
 end
