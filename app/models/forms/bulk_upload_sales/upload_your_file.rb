@@ -37,7 +37,7 @@ module Forms
           log_type: BulkUpload.log_types[:sales],
           year:,
           filename: file.original_filename,
-          organisation_id: organisation_id || current_user.organisation_id,
+          organisation_id: (organisation_id if current_user.support?) || current_user.organisation_id,
         )
 
         storage_service.write_file(bulk_upload.identifier, File.read(file.path))
