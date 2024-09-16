@@ -91,13 +91,6 @@ COOKIES=$(awk '/_data_collector_session/ { print $6, $7 }' login_cookies.txt | t
 
 echo "lettings_log[tenancycode]=performance_test_tenancy_code&lettings_log[page]=tenant_code&authenticity_token=$TOKEN" > post_data.txt
 
-# do a test post
-curl -b login_cookies.txt -X POST https://staging.submit-social-housing-data.levellingup.gov.uk$completed_log_link/tenant-code \
-  -H "X-CSRF-Token: $TOKEN" \
-  -d "lettings_log[tenancycode]=7" \
-  -d "lettings_log[page]=tenant_code" \
-  -d "authenticity_token=$TOKEN"
-
 ab -n 50 -c 50 -l -T application/x-www-form-urlencoded \
 -H "X-CSRF-Token: $TOKEN" \
 -C "$COOKIES" \

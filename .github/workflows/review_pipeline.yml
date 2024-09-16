@@ -85,8 +85,8 @@ jobs:
 
           aws ecs wait tasks-stopped --cluster $cluster --tasks $task_id
 
-          succeeded=$(aws ecs describe-tasks --cluster $cluster --tasks $task_id --query "tasks[0].containers[0].exitCode == '0'")
-          if [ "$succeeded" == "true" ]; then exit 0; else exit 1; fi
+          code=$(aws ecs describe-tasks --cluster $cluster --tasks $task_id --query "tasks[0].containers[0].exitCode")
+          if [ "$code == 0" ]; then exit 0; else exit 1; fi
 
   comment:
     name: Add link to PR
