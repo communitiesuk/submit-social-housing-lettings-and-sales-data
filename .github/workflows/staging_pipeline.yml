@@ -13,7 +13,7 @@ on:
 defaults:
   run:
     shell: bash
-    
+
 env:
   app_repo_role: arn:aws:iam::815624722760:role/core-application-repo
   aws_region: eu-west-2
