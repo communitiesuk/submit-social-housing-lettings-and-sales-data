@@ -815,6 +815,23 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
         end
       end
 
+      context "when blank and bulk upload user is support" do
+        let(:bulk_upload) { create(:bulk_upload, :sales, user: create(:user, :support), year: 2024) }
+
+        let(:attributes) { setup_section_params.merge(bulk_upload:, field_3: nil) }
+
+        it "is not permitted" do
+          parser.valid?
+          expect(parser.errors[:field_3]).to be_present
+          expect(parser.errors[:field_3]).to include("You must answer what is the CORE username of the account this letting log should be assigned to?")
+        end
+
+        it "blocks log creation" do
+          parser.valid?
+          expect(parser).to be_block_log_creation
+        end
+      end
+
       context "when user could not be found" do
         let(:attributes) { { bulk_upload:, field_3: "idonotexist@example.com" } }
 
