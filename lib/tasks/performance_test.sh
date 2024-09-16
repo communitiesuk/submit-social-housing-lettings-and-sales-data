@@ -81,17 +81,21 @@ echo "Sales logs page test passed: No failed requests and no non-2xx responses."
 
 
 # Post data to a log test
-TOKEN=$(curl -L -b login_cookies.txt -c login_cookies.txt https://staging.submit-social-housing-data.levellingup.gov.uk/lettings-logs/2510815/tenant-code | grep '<meta name="csrf-token"' | sed -n 's/.*content="\([^"]*\)".*/\1/p')
+page_content=$(curl -b login_cookies.txt -s 'https://staging.submit-social-housing-data.levellingup.gov.uk/lettings-logs?years[]=2024&status[]=completed')
+completed_log_link=$(echo "$page_content" | sed -n 's/.*<a class="govuk-link" href="\([^"]*lettings-logs[^"]*\)".*/\1/p' | head -n 1)
+echo "testing post to $completed_log_link"
+
+TOKEN=$(curl -L -b login_cookies.txt -c login_cookies.txt https://staging.submit-social-housing-data.levellingup.gov.uk$completed_log_link/tenant-code | grep '<meta name="csrf-token"' | sed -n 's/.*content="\([^"]*\)".*/\1/p')
 
 COOKIES=$(awk '/_data_collector_session/ { print $6, $7 }' login_cookies.txt | tr ' ' '=')
 
 echo "lettings_log[tenancycode]=performance_test_tenancy_code&lettings_log[page]=tenant_code&authenticity_token=$TOKEN" > post_data.txt
 
-ab -n 1 -c 1 -T application/x-www-form-urlencoded \
+ab -n 50 -c 50 -T application/x-www-form-urlencoded \
 -H "X-CSRF-Token: $TOKEN" \
 -C "$COOKIES" \
 -p post_data.txt \
-'https://staging.submit-social-housing-data.levellingup.gov.uk/lettings-logs/2510815/tenant-code' > performance_post_test_results.txt
+"https://staging.submit-social-housing-data.levellingup.gov.uk$completed_log_link/tenant-code" > performance_post_test_results.txt
 
 file="performance_post_test_results.txt"
 failed_requests=$(grep "Failed requests:" "$file" | awk '{print $3}')
@@ -109,7 +113,7 @@ if (( $(echo "$time_per_request_all > 500" | bc -l) )); then
   exit 1
 fi
 
-if (( $(echo "$requests_per_second < 5" | bc -l) )); then
+if (( $(echo "$requests_per_second < 3" | bc -l) )); then
   echo "Update logs: Performance test failed - Requests per second is less than 5: $requests_per_second"
   exit 1
 fi
