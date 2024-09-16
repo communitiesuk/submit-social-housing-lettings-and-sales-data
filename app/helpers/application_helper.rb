@@ -34,7 +34,7 @@ module ApplicationHelper
   def sanitise_characters(string)
     return string unless string
 
-    string.gsub("'", "’").gsub("&", "＆")
+    string.tr("'", "’").tr("&", "＆")
   end
 
 private
