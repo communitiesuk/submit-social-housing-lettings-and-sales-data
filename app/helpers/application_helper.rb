@@ -31,6 +31,13 @@ module ApplicationHelper
     !current_page?(notifications_path) && (authenticated_user_has_notifications? || unauthenticated_user_has_notifications?)
   end
 
+  def sanitise_text(text)
+    return if text.blank?
+
+    text.gsub(/[^a-zA-Z0-9\s\-\_\'\&]/, "")
+    text.html_safe
+  end
+
 private
 
   def paginated_title(title, pagy)
