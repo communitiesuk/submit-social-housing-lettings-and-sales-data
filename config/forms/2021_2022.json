@@ -1170,7 +1170,7 @@
             "no_females_pregnant_household_lead_hhmemb_value_check": {
               "depends_on": [
                 {
-                  "no_females_in_a_pregnant_household?": true
+                  "all_male_tenants_in_a_pregnant_household?": true
                 }
               ],
               "title_text": {
@@ -1312,7 +1312,7 @@
             "no_females_pregnant_household_lead_age_value_check": {
               "depends_on": [
                 {
-                  "no_females_in_a_pregnant_household?": true
+                  "all_male_tenants_in_a_pregnant_household?": true
                 }
               ],
               "title_text": {
@@ -1433,7 +1433,7 @@
             "no_females_pregnant_household_lead_value_check": {
               "depends_on": [
                 {
-                  "no_females_in_a_pregnant_household?": true
+                  "all_male_tenants_in_a_pregnant_household?": true
                 }
               ],
               "title_text": {
@@ -2091,7 +2091,7 @@
             "no_females_pregnant_household_person_2_age_value_check": {
               "depends_on": [
                 {
-                  "no_females_in_a_pregnant_household?": true,
+                  "all_male_tenants_in_a_pregnant_household?": true,
                   "age2_known": 0
                 }
               ],
@@ -2214,7 +2214,7 @@
             "no_females_pregnant_household_person_2_value_check": {
               "depends_on": [
                 {
-                  "no_females_in_a_pregnant_household?": true,
+                  "all_male_tenants_in_a_pregnant_household?": true,
                   "details_known_2": 0
                 }
               ],
@@ -2626,7 +2626,7 @@
             "no_females_pregnant_household_person_3_age_value_check": {
               "depends_on": [
                 {
-                  "no_females_in_a_pregnant_household?": true,
+                  "all_male_tenants_in_a_pregnant_household?": true,
                   "age3_known": 0
                 }
               ],
@@ -2749,7 +2749,7 @@
             "no_females_pregnant_household_person_3_value_check": {
               "depends_on": [
                 {
-                  "no_females_in_a_pregnant_household?": true,
+                  "all_male_tenants_in_a_pregnant_household?": true,
                   "details_known_3": 0
                 }
               ],
@@ -3158,7 +3158,7 @@
             "no_females_pregnant_household_person_4_age_value_check": {
               "depends_on": [
                 {
-                  "no_females_in_a_pregnant_household?": true,
+                  "all_male_tenants_in_a_pregnant_household?": true,
                   "age4_known": 0
                 }
               ],
@@ -3281,7 +3281,7 @@
             "no_females_pregnant_household_person_4_value_check": {
               "depends_on": [
                 {
-                  "no_females_in_a_pregnant_household?": true,
+                  "all_male_tenants_in_a_pregnant_household?": true,
                   "details_known_4": 0
                 }
               ],
@@ -3687,7 +3687,7 @@
             "no_females_pregnant_household_person_5_age_value_check": {
               "depends_on": [
                 {
-                  "no_females_in_a_pregnant_household?": true,
+                  "all_male_tenants_in_a_pregnant_household?": true,
                   "age5_known": 0
                 }
               ],
@@ -3810,7 +3810,7 @@
             "no_females_pregnant_household_person_5_value_check": {
               "depends_on": [
                 {
-                  "no_females_in_a_pregnant_household?": true,
+                  "all_male_tenants_in_a_pregnant_household?": true,
                   "details_known_5": 0
                 }
               ],
@@ -4213,7 +4213,7 @@
             "no_females_pregnant_household_person_6_age_value_check": {
               "depends_on": [
                 {
-                  "no_females_in_a_pregnant_household?": true,
+                  "all_male_tenants_in_a_pregnant_household?": true,
                   "age6_known": 0
                 }
               ],
@@ -4336,7 +4336,7 @@
             "no_females_pregnant_household_person_6_value_check": {
               "depends_on": [
                 {
-                  "no_females_in_a_pregnant_household?": true,
+                  "all_male_tenants_in_a_pregnant_household?": true,
                   "details_known_6": 0
                 }
               ],
@@ -4736,7 +4736,7 @@
             "no_females_pregnant_household_person_7_age_value_check": {
               "depends_on": [
                 {
-                  "no_females_in_a_pregnant_household?": true,
+                  "all_male_tenants_in_a_pregnant_household?": true,
                   "age7_known": 0
                 }
               ],
@@ -4859,7 +4859,7 @@
             "no_females_pregnant_household_person_7_value_check": {
               "depends_on": [
                 {
-                  "no_females_in_a_pregnant_household?": true,
+                  "all_male_tenants_in_a_pregnant_household?": true,
                   "details_known_7": 0
                 }
               ],
@@ -5256,7 +5256,7 @@
             "no_females_pregnant_household_person_8_age_value_check": {
               "depends_on": [
                 {
-                  "no_females_in_a_pregnant_household?": true,
+                  "all_male_tenants_in_a_pregnant_household?": true,
                   "age8_known": 0
                 }
               ],
@@ -5379,7 +5379,7 @@
             "no_females_pregnant_household_person_8_value_check": {
               "depends_on": [
                 {
-                  "no_females_in_a_pregnant_household?": true,
+                  "all_male_tenants_in_a_pregnant_household?": true,
                   "details_known_8": 0
                 }
               ],
@@ -5794,7 +5794,7 @@
             "no_females_pregnant_household_value_check": {
               "depends_on": [
                 {
-                  "no_females_in_a_pregnant_household?": true
+                  "all_male_tenants_in_a_pregnant_household?": true
                 }
               ],
               "title_text": {
