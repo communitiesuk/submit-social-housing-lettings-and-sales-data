@@ -1444,10 +1444,11 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
         let(:affiliated_org) { create(:organisation, :with_old_visible_id) }
         let(:unaffiliated_user) { create(:user, organisation: create(:organisation)) }
         let(:attributes) { { bulk_upload:, field_1: affiliated_org.old_visible_id } }
+        let(:organisation_id) { unaffiliated_user.organisation_id }
 
         before do
           create(:organisation_relationship, parent_organisation: owning_org, child_organisation: affiliated_org)
-          bulk_upload.update!(organisation_id: affiliated_org.id, user: unaffiliated_user)
+          bulk_upload.update!(organisation_id:, user: unaffiliated_user)
         end
 
         it "blocks log creation and adds an error to field_1" do
@@ -1462,10 +1463,11 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
         let(:affiliated_org) { create(:organisation, :with_old_visible_id) }
         let(:unaffiliated_support_user) { create(:user, :support, organisation: create(:organisation)) }
         let(:attributes) { { bulk_upload:, field_1: affiliated_org.old_visible_id } }
+        let(:organisation_id) { affiliated_org.id }
 
         before do
           create(:organisation_relationship, parent_organisation: owning_org, child_organisation: affiliated_org)
-          bulk_upload.update!(organisation_id: affiliated_org.id, user: unaffiliated_support_user)
+          bulk_upload.update!(organisation_id:, user: unaffiliated_support_user)
         end
 
         it "does not block log creation and does not add an error to field_1" do
