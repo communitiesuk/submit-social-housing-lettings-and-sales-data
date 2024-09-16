@@ -18,11 +18,15 @@
                            label: { text: "Title", size: "m" },
                            hint: { text: "Use markdown for links to existing pages" } %>
 
-    <%= f.govuk_check_boxes_fieldset :show_on_unauthenticated_pages, multiple: false, legend: { text: "Display Options" } do %>
+    <%= f.govuk_check_boxes_fieldset :display_options, multiple: false, legend: { text: "Display Options" } do %>
       <%= f.govuk_check_box :show_on_unauthenticated_pages, 1, 0, multiple: false, label: { text: "Show this notification on unauthenticated pages, for example the start page" } %>
+      <%= f.govuk_check_box :show_additional_page, 1, 0, multiple: false, label: { text: "Include a link to a separate page with additional information" } do %>
+        <%= f.govuk_text_field :link_text, label: { text: "Link text" }, hint: { text: "Use descriptive language and relevant terms. The link text should make sense out of context." } %>
+        <%= f.govuk_text_area :page_content, label: { text: "Page content" }, hint: { text: "Use markdown to format the page content. The page title will be the notification title by default. Use a heading level one if you want to override it." } %>
+      <% end %>
     <% end %>
 
-    <span class="govuk-caption-m govuk-!-margin-bottom-6">View <%= govuk_link_to "markdown syntax guide at markdownguide.org", "https://www.markdownguide.org/basic-syntax/" %></span>
+    <span class="govuk-caption-m govuk-!-margin-bottom-6"><%= govuk_link_to "Find out more about using Markdown at Markdown Guide", "https://www.markdownguide.org/basic-syntax/" %></span>
 
     <%= f.govuk_submit "Continue" %>
   </div>

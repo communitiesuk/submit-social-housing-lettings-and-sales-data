@@ -41,6 +41,11 @@ en:
     create_password: "Create a password to finish setting up your account"
     reset_password: "Reset your password"
 
+  active_notifications:
+    zero: "There are no active notifications"
+    one: "There is one active notification:"
+    other: "There are %{count} active notifications:"
+
   activemodel:
     errors:
       models:
@@ -190,6 +195,10 @@ en:
           attributes:
             title:
               blank: "Enter a title"
+            link_text:
+              blank_when_additional_page_set: "Enter the link text"
+            page_content:
+              blank_when_additional_page_set: "Enter the page content"
 
   notification:
     logs_deleted:

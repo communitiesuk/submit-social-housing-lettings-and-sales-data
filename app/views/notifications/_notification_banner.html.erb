@@ -7,7 +7,7 @@
           <p>Notification 1 of <%= notification_count %></p>
         <% end %>
       <%== render_for_banner(notification.title) %>
-        <% if notification.page_content.present? %>
+        <% if notification.show_additional_page %>
           <div class="govuk-body">
             <%= govuk_link_to notification.link_text, notification_path(notification), class: "govuk-link--inverse govuk-!-font-weight-bold" %>
           </div>

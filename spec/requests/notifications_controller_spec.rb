@@ -13,12 +13,15 @@ RSpec.describe NotificationsController, type: :request do
       let(:request) { post notifications_path, params: params }
 
       context "with valid parameters" do
-        let(:params) { { "notification": { title: "Test Create", show_on_unauthenticated_pages: true } } }
+        let(:params) { { "notification": { title: "Test Create", show_on_unauthenticated_pages: "1", show_additional_page: "1", link_text: "link", page_content: "page" } } }
 
         it "creates a new notification with no start date set" do
           request
           notification = Notification.find_by(title: "Test Create")
-          expect(notification.show_on_unauthenticated_pages).to be_truthy
+          expect(notification.show_on_unauthenticated_pages).to be(true)
+          expect(notification.show_additional_page).to be(true)
+          expect(notification.link_text).to eq("link")
+          expect(notification.page_content).to eq("page")
           expect(notification.start_date).to be_nil
         end
 
@@ -30,11 +33,22 @@ RSpec.describe NotificationsController, type: :request do
       end
 
       context "with invalid parameters" do
-        let(:params) { { "notification": { title: "", show_on_unauthenticated_pages: true } } }
+        let(:params) { { "notification": { title: "", show_on_unauthenticated_pages: "1" } } }
 
         it "gives an error response" do
           request
           expect(response).to have_http_status(:unprocessable_entity)
+        end
+      end
+
+      context "when show additional page is false" do
+        let(:params) { { "notification": { title: "No Additional Page", show_on_unauthenticated_pages: "1", show_additional_page: "0", link_text: "text", page_content: "content" } } }
+
+        it "ignores values for link_text and page_content" do
+          request
+          notification = Notification.find_by(title: "No Additional Page")
+          expect(notification.link_text).to be_nil
+          expect(notification.page_content).to be_nil
         end
       end
     end
@@ -60,7 +74,7 @@ RSpec.describe NotificationsController, type: :request do
       end
 
       context "when start_now is not set" do
-        let(:params) { { "notification": { title: "Updated Title", show_on_unauthenticated_pages: true } } }
+        let(:params) { { "notification": { title: "Updated Title", show_on_unauthenticated_pages: "1" } } }
 
         it "sets the relevant values on the notification" do
           request
@@ -74,6 +88,29 @@ RSpec.describe NotificationsController, type: :request do
           expect(response).to redirect_to(notification_check_answers_path(notification))
         end
       end
+
+      context "when show additional page is false" do
+        let(:notification) { create(:notification, show_additional_page: "0", link_text: "link", page_content: "page") }
+        let(:params) { { "notification": { show_additional_page: "0", link_text: "text", page_content: "content" } } }
+
+        it "removes values for link_text and page_content" do
+          request
+          notification.reload
+          expect(notification.link_text).to be_nil
+          expect(notification.page_content).to be_nil
+        end
+      end
+    end
+
+    describe "#delete" do
+      let(:notification) { create(:notification, end_date: nil) }
+      let(:request) { delete notification_delete_path(notification) }
+
+      it "sets end_date on the notification" do
+        request
+        notification.reload
+        expect(notification.end_date).to be < Time.zone.now
+      end
     end
   end
 
@@ -85,7 +122,7 @@ RSpec.describe NotificationsController, type: :request do
     end
 
     describe "#create" do
-      let(:request) { post notifications_path, params: { "notification": { title: "Test Create", show_on_unauthenticated_pages: true } } }
+      let(:request) { post notifications_path, params: { "notification": { title: "Test Create" } } }
 
       it "returns not found" do
         request
@@ -99,11 +136,27 @@ RSpec.describe NotificationsController, type: :request do
 
     describe "#update" do
       let(:notification) { create(:notification) }
-      let(:request) { patch notification_path(notification), params: { "notification": { title: "Test Create", show_on_unauthenticated_pages: true } } }
+      let(:request) { patch notification_path(notification), params: { "notification": { title: "Test Update" } } }
 
       it "returns not found" do
         request
         expect(response).to have_http_status(:not_found)
+      end
+    end
+
+    describe "#delete" do
+      let(:notification) { create(:notification, end_date: nil) }
+      let(:request) { delete notification_delete_path(notification) }
+
+      it "returns not found" do
+        request
+        expect(response).to have_http_status(:not_found)
+      end
+
+      it "does not set end_date on the notification" do
+        request
+        notification.reload
+        expect(notification.end_date).to be_nil
       end
     end
   end

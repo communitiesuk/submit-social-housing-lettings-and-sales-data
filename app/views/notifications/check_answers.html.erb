@@ -31,6 +31,25 @@
               <% row.with_value { @notification.show_on_unauthenticated_pages ? "Yes" : "No" } %>
               <% row.with_action(text: "Change", href: edit_notification_path(@notification)) %>
             <% end %>
+            <% summary_list.with_row do |row| %>
+              <% row.with_key { "Link to additional information?" } %>
+              <% row.with_value { @notification.show_additional_page ? "Yes" : "No" } %>
+              <% row.with_action(text: "Change", href: edit_notification_path(@notification)) %>
+            <% end %>
+            <% if @notification.show_additional_page %>
+              <% summary_list.with_row do |row| %>
+                <% row.with_key { "Link text" } %>
+                <% row.with_value { @notification.link_text } %>
+                <% row.with_action(text: "Change", href: edit_notification_path(@notification)) %>
+              <% end %>
+              <% summary_list.with_row do |row| %>
+                <% row.with_key { "Page content" } %>
+                <% row.with_value do %>
+                  <%= govuk_link_to "View page preview", notification_path(@notification), new_tab: true %>
+                <% end %>
+                <% row.with_action(text: "Change", href: edit_notification_path(@notification)) %>
+              <% end %>
+            <% end %>
           <% end %>
         </div>
       </div>

@@ -7,9 +7,7 @@
       </div>
 
       <% if @current_user.support? %>
-        <div class="govuk-grid-row">
-          <%= govuk_button_link_to "Create a new notification", new_notification_path %>
-        </div>
+        <%= render partial: "notifications/notification_home_section", locals: { active_notifications: @homepage_presenter.active_notifications } %>
       <% end %>
 
       <div class="app-data-box-section govuk-grid-row">
