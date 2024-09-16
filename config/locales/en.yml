@@ -180,17 +180,12 @@ en:
         merge_request:
           attributes:
             absorbing_organisation_id:
-              blank: "Select the organisation absorbing the others"
-            telephone_number_correct:
-              blank: "Select to confirm or enter a new telephone number"
-              invalid: "Enter a valid telephone number"
-            new_telephone_number:
-              blank: "Enter a valid telephone number"
-            new_organisation_name:
-              blank: "Enter an organisation name"
-              invalid: "An organisation with this name already exists"
-            new_organisation_telephone_number:
-              blank: "Enter a valid telephone number"
+              blank: "Select the absorbing organisation"
+            merge_date:
+              blank: "Enter a merge date"
+              invalid: "Enter a valid merge date"
+            existing_absorbing_organisation:
+              blank: "You must answer absorbing organisation already active?"
         notification:
           attributes:
             title:

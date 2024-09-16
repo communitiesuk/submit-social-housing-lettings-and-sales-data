@@ -429,19 +429,24 @@ ActiveRecord::Schema[7.0].define(version: 2024_09_04_135306) do
 
   create_table "merge_requests", force: :cascade do |t|
     t.integer "requesting_organisation_id"
-    t.text "other_merging_organisations"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "status"
     t.integer "absorbing_organisation_id"
-    t.boolean "new_absorbing_organisation"
-    t.boolean "telephone_number_correct"
-    t.string "new_telephone_number"
-    t.string "new_organisation_name"
-    t.string "new_organisation_address_line1"
-    t.string "new_organisation_address_line2"
-    t.string "new_organisation_postcode"
-    t.string "new_organisation_telephone_number"
+    t.datetime "merge_date"
+    t.integer "requester_id"
+    t.string "helpdesk_ticket"
+    t.integer "total_users"
+    t.integer "total_schemes"
+    t.integer "total_lettings_logs"
+    t.integer "total_sales_logs"
+    t.integer "total_stock_owners"
+    t.integer "total_managing_agents"
+    t.boolean "signed_dsa", default: false
+    t.datetime "discarded_at"
+    t.datetime "last_failed_attempt"
+    t.boolean "request_merged"
+    t.boolean "processing"
+    t.boolean "existing_absorbing_organisation"
   end
 
   create_table "notifications", force: :cascade do |t|

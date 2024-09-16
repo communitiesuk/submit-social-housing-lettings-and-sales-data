@@ -1,0 +1,27 @@
+<% content_for :before_content do %>
+  <% content_for :title, "Are you sure you want to begin this merge?" %>
+  <%= govuk_back_link href: merge_request_path(@merge_request) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+    <h1 class="govuk-heading-xl">
+      <%= content_for(:title) %>
+    </h1>
+
+    <%= govuk_warning_text(text: "You will not be able to undo this action.") %>
+
+    <div class="govuk-button-group">
+      <%= govuk_button_to(
+        "Begin merge",
+        start_merge_merge_request_path(@merge_request),
+        method: :patch,
+      ) %>
+      <%= govuk_button_link_to(
+        "Cancel",
+        merge_request_path(@merge_request),
+        secondary: true,
+      ) %>
+    </div>
+  </div>
+</div>

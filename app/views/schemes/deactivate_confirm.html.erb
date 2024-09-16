@@ -2,16 +2,35 @@
   <% content_for :before_content do %>
     <%= govuk_back_link(href: :back) %>
   <% end %>
-  <h1 class="govuk-heading-l">
-    <span class="govuk-caption-l"><%= @scheme.service_name %></span>
-    This change will affect <%= @affected_logs.count %> logs
-  </h1>
-  <%= govuk_warning_text text: I18n.t("warnings.scheme.deactivate.review_logs") %>
-  <%= f.hidden_field :confirm, value: true %>
-  <%= f.hidden_field :deactivation_date, value: @deactivation_date %>
-  <%= f.hidden_field :deactivation_date_type, value: @deactivation_date_type %>
-  <div class="govuk-button-group">
-    <%= f.govuk_submit "Deactivate this scheme" %>
-    <%= govuk_button_link_to "Cancel", scheme_details_path(@scheme), html: { method: :get }, secondary: true %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l"><%= @scheme.service_name %></span>
+        <%= affected_title(@affected_logs, @affected_locations) %>
+      </h1>
+
+      <% if @affected_logs.count > 0 %>
+        <p>
+          <%= pluralize(@affected_logs.count, "existing log") %> using this scheme <%= @affected_logs.count == 1 ? "has" : "have" %> a tenancy start date after <%= @deactivation_date.to_formatted_s(:govuk_date) %>.
+        </p>
+        <%= govuk_warning_text text: I18n.t("warnings.scheme.deactivate.review_logs"), html_attributes: { class: "" } %>
+    <% end %>
+
+      <% if @affected_locations.count > 0 %>
+        <p>
+          This scheme has <%= pluralize(@affected_locations.count, "location") %> active on <%= @deactivation_date.to_formatted_s(:govuk_date) %>.  <%= @affected_locations.count == 1 ? "This location" : "These locations" %> will deactivate on that date. If the scheme is ever reactivated, <%= @affected_locations.count == 1 ? "this location" : "these locations" %> will reactivate as well.
+        </p>
+        <br>
+      <% end %>
+
+      <%= f.hidden_field :confirm, value: true %>
+      <%= f.hidden_field :deactivation_date, value: @deactivation_date %>
+      <%= f.hidden_field :deactivation_date_type, value: @deactivation_date_type %>
+      <div class="govuk-button-group">
+        <%= f.govuk_submit "Deactivate this scheme" %>
+        <%= govuk_button_link_to "Cancel", scheme_details_path(@scheme), html: { method: :get }, secondary: true %>
+      </div>
+    </div>
   </div>
 <% end %>

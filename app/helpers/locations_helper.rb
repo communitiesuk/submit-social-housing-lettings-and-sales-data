@@ -70,7 +70,7 @@ module LocationsHelper
 
   def toggle_location_link(location)
     return govuk_button_link_to "Deactivate this location", scheme_location_new_deactivation_path(location.scheme, location), warning: true if location.active? || location.deactivates_in_a_long_time?
-    return govuk_button_link_to "Reactivate this location", scheme_location_new_reactivation_path(location.scheme, location) if location.deactivated?
+    return govuk_button_link_to "Reactivate this location", scheme_location_new_reactivation_path(location.scheme, location) if location.deactivated? && !location.deactivated_by_scheme?
   end
 
   def delete_location_link(location)
@@ -100,14 +100,37 @@ private
   ActivePeriod = Struct.new(:from, :to)
   def location_active_periods(location)
     periods = [ActivePeriod.new(location.available_from, nil)]
+    location_deactivation_periods = location_deactivation_periods(location)
+    scheme_deactivation_periods = scheme_deactivation_periods(location, location_deactivation_periods)
 
-    sorted_deactivation_periods = remove_nested_periods(location.location_deactivation_periods.sort_by(&:deactivation_date))
+    combined_deactivation_periods = location_deactivation_periods + scheme_deactivation_periods
+    sorted_deactivation_periods = combined_deactivation_periods.sort_by(&:deactivation_date)
+
+    update_periods_with_deactivations(periods, sorted_deactivation_periods)
+    remove_overlapping_and_empty_periods(periods)
+  end
+
+  def location_deactivation_periods(location)
+    periods = remove_nested_periods(location.location_deactivation_periods.sort_by(&:deactivation_date))
+    periods.last&.deactivation_date if periods.last&.reactivation_date.nil?
+    periods
+  end
+
+  def scheme_deactivation_periods(location, location_deactivation_periods)
+    return [] unless location.scheme.scheme_deactivation_periods.any?
+
+    location_deactivation_date = location_deactivation_periods.last&.deactivation_date
+    periods = remove_nested_periods(location.scheme.scheme_deactivation_periods.sort_by(&:deactivation_date))
+    periods.select do |period|
+      period.deactivation_date >= location.available_from && (location_deactivation_date.nil? || period.deactivation_date <= location_deactivation_date)
+    end
+  end
+
+  def update_periods_with_deactivations(periods, sorted_deactivation_periods)
     sorted_deactivation_periods.each do |deactivation|
       periods.last.to = deactivation.deactivation_date
       periods << ActivePeriod.new(deactivation.reactivation_date, nil)
     end
-
-    remove_overlapping_and_empty_periods(periods)
   end
 
   def remove_overlapping_and_empty_periods(periods)
