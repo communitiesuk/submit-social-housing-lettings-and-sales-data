@@ -14,7 +14,7 @@ curl -L -o nul -c login_cookies.txt -b token_cookies.txt -X POST https://staging
 COOKIES=$(awk '/_data_collector_session/ { print $6, $7 }' login_cookies.txt | tr ' ' '=')
 
 echo "Running lettings logs page performance test..."
-ab -n 50 -c 50 -C "$COOKIES" 'https://staging.submit-social-housing-data.levellingup.gov.uk/lettings-logs?years[]=2024&status[]=completed' > performance_lettings_test_results.txt
+ab -n 50 -c 50 -l -C "$COOKIES" 'https://staging.submit-social-housing-data.levellingup.gov.uk/lettings-logs?years[]=2024&status[]=completed' > performance_lettings_test_results.txt
 file="performance_lettings_test_results.txt"
 
 failed_requests=$(grep "Failed requests:" "$file" | awk '{print $3}')
@@ -48,7 +48,7 @@ echo "Lettings logs page test passed: No failed requests and no non-2xx response
 
 # Sales logs page
 echo "Running sales logs page performance test..."
-ab -n 50 -c 50 -C "$COOKIES" 'https://staging.submit-social-housing-data.levellingup.gov.uk/sales-logs?years[]=2024&status[]=completed' > performance_sales_test_results.txt
+ab -n 50 -c 50 -l -C "$COOKIES" 'https://staging.submit-social-housing-data.levellingup.gov.uk/sales-logs?years[]=2024&status[]=completed' > performance_sales_test_results.txt
 file="performance_sales_test_results.txt"
 
 failed_requests=$(grep "Failed requests:" "$file" | awk '{print $3}')
@@ -98,7 +98,7 @@ curl -b login_cookies.txt -X POST https://staging.submit-social-housing-data.lev
   -d "lettings_log[page]=tenant_code" \
   -d "authenticity_token=$TOKEN"
 
-ab -n 50 -c 50 -T application/x-www-form-urlencoded \
+ab -n 50 -c 50 -l -T application/x-www-form-urlencoded \
 -H "X-CSRF-Token: $TOKEN" \
 -C "$COOKIES" \
 -p post_data.txt \
