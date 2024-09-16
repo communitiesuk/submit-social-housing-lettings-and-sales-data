@@ -235,18 +235,6 @@ unless Rails.env.test?
       create_data_protection_confirmation(user)
     end
 
-    User.find_or_create_by!(
-      name: "Coordinator",
-      email: "performance_testing_user@example.com",
-      organisation: org,
-      role: "data_coordinator",
-      is_dpo: true,
-    ) do |user|
-      user.password = "password"
-      user.confirmed_at = Time.zone.now
-      user.is_dpo = true
-    end
-
     support_user = User.find_or_create_by!(
       name: "Support",
       email: "support@example.com",

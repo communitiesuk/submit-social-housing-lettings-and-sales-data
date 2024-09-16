@@ -114,7 +114,7 @@ if (( $(echo "$time_per_request_all > 500" | bc -l) )); then
 fi
 
 if (( $(echo "$requests_per_second < 3" | bc -l) )); then
-  echo "Update logs: Performance test failed - Requests per second is less than 5: $requests_per_second"
+  echo "Update logs: Performance test failed - Requests per second is less than 3: $requests_per_second"
   exit 1
 fi
 
