@@ -1,4 +1,4 @@
-<% content_for :title, "#{action.capitalize} #{@user.name.presence || @user.email}’s account" %>
+<% content_for :title, "#{action.capitalize} #{sanitise_characters(@user.name.presence) || @user.email}’s account" %>
 
 <div class="govuk-grid-row">
     <%= form_for(@user, as: :user, html: { method: :patch }) do |f| %>
