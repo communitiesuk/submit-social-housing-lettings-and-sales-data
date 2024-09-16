@@ -723,7 +723,7 @@ Make sure these answers are correct."
       hint_text: "This is higher than the purchase price minus the discount."
     pregnancy:
       title: "You told us somebody in the household is pregnant"
-      no_females: "You also told us there are no female tenants living at the property."
+      all_male_tenants: "You also told us that all the tenants living at the property are male."
       females_not_in_soft_age_range: "You also told us that any female tenants living at the property are in the following age ranges:<ul><li>under 16 years old</li><li>over 50 years old</li></ul>"
     major_repairs_date:
       title_text: "You told us the property has been vacant for 2 years."
