@@ -1,5 +1,5 @@
 <% if @organisation.organisations_absorbed_during_displayed_collection_period_grouped_by_merge_date.present? %>
-  <%= govuk_details(summary_text: "View all organisations that were merged into #{@organisation.name}") do %>
+  <%= govuk_details(summary_text: "View all organisations that were merged into #{sanitise_characters(@organisation.name)}") do %>
     <% @organisation.organisations_absorbed_during_displayed_collection_period_grouped_by_merge_date.each do |merge_date, organisations| %>
       <p><strong>Merge date:</strong> <%= merge_date&.to_formatted_s(:govuk_date) %></p>
       <%= govuk_table do |table| %>
