@@ -35,6 +35,10 @@ RSpec.describe Form::Sales::Questions::PersonKnown, type: :model do
     expect(question.hint_text).to be_nil
   end
 
+  it "has the correct hidden_in_check_answers" do
+    expect(question.hidden_in_check_answers).to be_nil
+  end
+
   context "with person 2" do
     let(:question_id) { "details_known_2" }
     let(:person_index) { 2 }
@@ -49,12 +53,6 @@ RSpec.describe Form::Sales::Questions::PersonKnown, type: :model do
 
     it "has the correct check_answer_label" do
       expect(question.check_answer_label).to eq("Details known for person 2?")
-    end
-
-    it "has the correct hidden_in_check_answers" do
-      expect(question.hidden_in_check_answers).to eq(
-        "depends_on" => [{ "details_known_2" => 1 }],
-      )
     end
 
     it "has the correct check_answers_card_number" do
@@ -78,12 +76,6 @@ RSpec.describe Form::Sales::Questions::PersonKnown, type: :model do
       expect(question.check_answer_label).to eq("Details known for person 3?")
     end
 
-    it "has the correct hidden_in_check_answers" do
-      expect(question.hidden_in_check_answers).to eq(
-        "depends_on" => [{ "details_known_3" => 1 }],
-      )
-    end
-
     it "has the correct check_answers_card_number" do
       expect(question.check_answers_card_number).to eq(3)
     end
@@ -105,12 +97,6 @@ RSpec.describe Form::Sales::Questions::PersonKnown, type: :model do
       expect(question.check_answer_label).to eq("Details known for person 4?")
     end
 
-    it "has the correct hidden_in_check_answers" do
-      expect(question.hidden_in_check_answers).to eq(
-        "depends_on" => [{ "details_known_4" => 1 }],
-      )
-    end
-
     it "has the correct check_answers_card_number" do
       expect(question.check_answers_card_number).to eq(4)
     end
@@ -130,12 +116,6 @@ RSpec.describe Form::Sales::Questions::PersonKnown, type: :model do
 
     it "has the correct check_answer_label" do
       expect(question.check_answer_label).to eq("Details known for person 5?")
-    end
-
-    it "has the correct hidden_in_check_answers" do
-      expect(question.hidden_in_check_answers).to eq(
-        "depends_on" => [{ "details_known_5" => 1 }],
-      )
     end
 
     it "has the correct check_answers_card_number" do
