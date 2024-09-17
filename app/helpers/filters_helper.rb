@@ -309,11 +309,19 @@ private
     return "All" if session_filters["assigned_to"].include?("all")
     return "You" if session_filters["assigned_to"].include?("you")
 
-    User.own_and_managing_org_users(current_user.organisation).find(session_filters["user"].to_i).name
-    selected_user_option = User.own_and_managing_org_users(current_user.organisation).find(session_filters["user"].to_i)
+    selected_user_option = find_selected_specific_user(session_filters)
     return unless selected_user_option
 
     "#{selected_user_option.name} (#{selected_user_option.email})"
+  end
+
+  def find_selected_specific_user(session_filters)
+    user_id = session_filters["user"].to_i
+    if current_user.support?
+      User.find(user_id)
+    else
+      User.own_and_managing_org_users(current_user.organisation).find(user_id)
+    end
   end
 
   def formatted_owned_by_filter(session_filters, filter_type)
