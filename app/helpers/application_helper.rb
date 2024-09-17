@@ -36,7 +36,6 @@ module ApplicationHelper
     return string unless string
 
     CGI.unescapeHTML(string)
-    # string.gsub(/[^a-zA-Z0-9\s\-_'&]/, "").tr("'", "’").tr("&", "＆")
   end
 
 private
