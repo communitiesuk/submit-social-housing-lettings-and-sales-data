@@ -31,6 +31,7 @@ module ApplicationHelper
   def notifications_to_display?
     !current_page?(notifications_path) && (authenticated_user_has_notifications? || unauthenticated_user_has_notifications?)
   end
+
 private
 
   def paginated_title(title, pagy)
