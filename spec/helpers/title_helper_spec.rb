@@ -1,8 +1,6 @@
 require "rails_helper"
 
 RSpec.describe TitleHelper do
-  include ApplicationHelper
-
   describe "#format_label" do
     let(:item) { "organisation" }
 
