@@ -1471,6 +1471,18 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
         end
       end
     end
+
+    describe "log_already_exists?" do
+      let(:attributes) { { bulk_upload: } }
+
+      before do
+        build(:sales_log, owning_organisation: nil, saledate: nil, purchid: nil, age1: nil, sex1: nil, ecstat1: nil).save(validate: false)
+      end
+
+      it "does not add duplicate logs validation to the blank row" do
+        expect(parser.log_already_exists?).to eq(false)
+      end
+    end
   end
 
   describe "#log" do
