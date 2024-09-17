@@ -1,4 +1,4 @@
-<% content_for :title, current_user == @user ? "Change your personal details" : "Change #{sanitise_characters(@user.name.presence) || 'this user'}’s personal details" %>
+<% content_for :title, current_user == @user ? "Change your personal details" : "Change #{@user.name.presence || 'this user'}’s personal details" %>
 
 <% content_for :before_content do %>
   <%= govuk_back_link(href: :back) %>
