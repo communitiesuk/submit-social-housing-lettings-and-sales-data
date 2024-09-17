@@ -2,7 +2,7 @@ module ApplicationHelper
   include Pagy::Frontend
 
   def browser_title(title, pagy, *resources)
-    title = sanitise_characters(title)
+    title = CGI.unescapeHTML(title)
     if resources.any? { |r| r.present? && r.errors.present? }
       "Error: #{[title, t('service_name'), 'GOV.UK'].select(&:present?).join(' - ')}"
     else
@@ -31,13 +31,6 @@ module ApplicationHelper
   def notifications_to_display?
     !current_page?(notifications_path) && (authenticated_user_has_notifications? || unauthenticated_user_has_notifications?)
   end
-
-  def sanitise_characters(string)
-    return string unless string
-
-    CGI.unescapeHTML(string)
-  end
-
 private
 
   def paginated_title(title, pagy)
