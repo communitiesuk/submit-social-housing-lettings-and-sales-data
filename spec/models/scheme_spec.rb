@@ -309,8 +309,18 @@ RSpec.describe Scheme, type: :model do
         end
 
         context "when there is a scheme with nil values for duplicate check fields" do
-          let!(:scheme) { build(:scheme, :duplicate, owning_organisation: organisation, scheme_type: nil, registered_under_care_act: nil, primary_client_group: nil, secondary_client_group: nil, has_other_client_group: nil, support_type: nil, intended_stay: nil).save(validate: false) }
-          let!(:duplicate_scheme) { build(:scheme, :duplicate, owning_organisation: organisation, scheme_type: nil, registered_under_care_act: nil, primary_client_group: nil, secondary_client_group: nil, has_other_client_group: nil, support_type: nil, intended_stay: nil).save(validate: false) }
+          before do
+            [scheme, duplicate_scheme].each do |s|
+              s.scheme_type = nil
+              s.registered_under_care_act = nil
+              s.primary_client_group = nil
+              s.secondary_client_group = nil
+              s.has_other_client_group = nil
+              s.support_type = nil
+              s.intended_stay = nil
+              s.save!(validate: false)
+            end
+          end
 
           it "does not return a scheme with nil values as a duplicate" do
             expect(duplicate_sets).to be_empty

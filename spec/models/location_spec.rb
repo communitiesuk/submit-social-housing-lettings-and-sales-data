@@ -888,8 +888,13 @@ RSpec.describe Location, type: :model do
       end
 
       context "when there is a location with nil values for duplicate check fields" do
-        let!(:location) { build(:location, postcode: nil, mobility_type: nil, scheme:).save(validate: false) }
-        let!(:duplicate_location) { build(:location, postcode: nil, mobility_type: nil, scheme:).save(validate: false) }
+        before do
+          [location, duplicate_location].each do |l|
+            l.postcode = nil
+            l.mobility_type = nil
+            l.save!(validate: false)
+          end
+        end
 
         it "does not return a location with nil values as a duplicate" do
           expect(duplicate_sets).to be_empty

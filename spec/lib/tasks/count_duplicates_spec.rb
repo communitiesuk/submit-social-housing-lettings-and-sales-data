@@ -2,6 +2,12 @@ require "rails_helper"
 require "rake"
 
 RSpec.describe "count_duplicates" do
+  before do
+    allow(Storage::S3Service).to receive(:new).and_return(storage_service)
+    allow(storage_service).to receive(:write_file)
+    allow(storage_service).to receive(:get_presigned_url).and_return(test_url)
+  end
+
   describe "count_duplicates:scheme_duplicates_per_org", type: :task do
     subject(:task) { Rake::Task["count_duplicates:scheme_duplicates_per_org"] }
 
@@ -12,14 +18,13 @@ RSpec.describe "count_duplicates" do
       Rake.application.rake_require("tasks/count_duplicates")
       Rake::Task.define_task(:environment)
       task.reenable
-      allow(Storage::S3Service).to receive(:new).and_return(storage_service)
-      allow(storage_service).to receive(:write_file)
-      allow(storage_service).to receive(:get_presigned_url).and_return(test_url)
     end
 
     context "when the rake task is run" do
       context "and there are no duplicate schemes" do
-        let!(:organisation) { create(:organisation) }
+        before do
+          create(:organisation)
+        end
 
         it "creates a csv with headers only" do
           expect(storage_service).to receive(:write_file).with(/scheme-duplicates-.*\.csv/, "\uFEFFOrganisation id,Number of duplicate sets,Total duplicate schemes\n")
@@ -57,14 +62,13 @@ RSpec.describe "count_duplicates" do
       Rake.application.rake_require("tasks/count_duplicates")
       Rake::Task.define_task(:environment)
       task.reenable
-      allow(Storage::S3Service).to receive(:new).and_return(storage_service)
-      allow(storage_service).to receive(:write_file)
-      allow(storage_service).to receive(:get_presigned_url).and_return(test_url)
     end
 
     context "when the rake task is run" do
       context "and there are no duplicate locations" do
-        let!(:organisation) { create(:organisation) }
+        before do
+          create(:organisation)
+        end
 
         it "creates a csv with headers only" do
           expect(storage_service).to receive(:write_file).with(/location-duplicates-.*\.csv/, "\uFEFFOrganisation id,Number of duplicate sets,Total duplicate locations\n")
