@@ -2,6 +2,7 @@ module ApplicationHelper
   include Pagy::Frontend
 
   def browser_title(title, pagy, *resources)
+    title = sanitise_characters(title)
     if resources.any? { |r| r.present? && r.errors.present? }
       "Error: #{[title, t('service_name'), 'GOV.UK'].select(&:present?).join(' - ')}"
     else
@@ -34,7 +35,8 @@ module ApplicationHelper
   def sanitise_characters(string)
     return string unless string
 
-    string.gsub(/[^a-zA-Z0-9\s\-_'&]/, "").tr("'", "’").tr("&", "＆")
+    CGI.unescapeHTML(string)
+    # string.gsub(/[^a-zA-Z0-9\s\-_'&]/, "").tr("'", "’").tr("&", "＆")
   end
 
 private
