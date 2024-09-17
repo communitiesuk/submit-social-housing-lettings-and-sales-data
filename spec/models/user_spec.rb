@@ -528,4 +528,304 @@ RSpec.describe User, type: :model do
       end
     end
   end
+
+  describe "#reassign_logs_and_update_organisation" do
+    let(:user) { create(:user) }
+    let(:new_organisation) { create(:organisation) }
+    let!(:lettings_log) { create(:lettings_log, assigned_to: user) }
+    let!(:sales_log) { create(:sales_log, assigned_to: user) }
+    let(:notify_client) { instance_double(Notifications::Client) }
+    let(:devise_notify_mailer) { DeviseNotifyMailer.new }
+
+    before do
+      allow(DeviseNotifyMailer).to receive(:new).and_return(devise_notify_mailer)
+      allow(devise_notify_mailer).to receive(:notify_client).and_return(notify_client)
+      allow(notify_client).to receive(:send_email).and_return(true)
+    end
+
+    context "when reassigning all orgs for logs" do
+      it "reassigns all logs to the new organisation" do
+        user.reassign_logs_and_update_organisation(new_organisation, "reassign_all")
+        expect(lettings_log.reload.owning_organisation).to eq(new_organisation)
+        expect(lettings_log.managing_organisation).to eq(new_organisation)
+        expect(lettings_log.values_updated_at).not_to be_nil
+        expect(sales_log.reload.owning_organisation).to eq(new_organisation)
+        expect(sales_log.managing_organisation).to eq(new_organisation)
+        expect(sales_log.values_updated_at).not_to be_nil
+      end
+
+      it "moves the user to the new organisation" do
+        user.reassign_logs_and_update_organisation(new_organisation, "reassign_all")
+
+        expect(user.organisation).to eq(new_organisation)
+      end
+
+      it "sends organisation update emails" do
+        expected_personalisation = {
+          from_organisation: "#{user.organisation.name} (Organisation ID: #{user.organisation_id})",
+          to_organisation: "#{new_organisation.name} (Organisation ID: #{new_organisation.id})",
+          reassigned_logs_text: "There are 2 logs assigned to you. The stock owner and managing agent on these logs has been changed from #{user.organisation.name} to #{new_organisation.name}.",
+        }
+        user.reassign_logs_and_update_organisation(new_organisation, "reassign_all")
+
+        expect(notify_client).to have_received(:send_email).with(email_address: user.email, template_id: User::ORGANISATION_UPDATE_TEMPLATE_ID, personalisation: expected_personalisation).once
+      end
+
+      context "and there is an error" do
+        before do
+          allow(user).to receive(:update!).and_raise(ActiveRecord::RecordInvalid)
+        end
+
+        it "rolls back the changes" do
+          user.reassign_logs_and_update_organisation(new_organisation, "reassign_all")
+          expect(lettings_log.reload.owning_organisation).not_to eq(new_organisation)
+          expect(lettings_log.managing_organisation).not_to eq(new_organisation)
+          expect(lettings_log.values_updated_at).to be_nil
+          expect(sales_log.reload.owning_organisation).not_to eq(new_organisation)
+          expect(sales_log.managing_organisation).not_to eq(new_organisation)
+          expect(sales_log.values_updated_at).to be_nil
+          expect(user.organisation).not_to eq(new_organisation)
+        end
+      end
+
+      context "and the user has pending logs assigned to them" do
+        let(:lettings_bu) { create(:bulk_upload, :lettings) }
+        let(:sales_bu) { create(:bulk_upload, :sales) }
+        let!(:pending_lettings_log) { build(:lettings_log, status: "pending", assigned_to: user, bulk_upload: lettings_bu) }
+        let!(:pending_sales_log) { build(:sales_log, status: "pending", assigned_to: user, bulk_upload: sales_bu) }
+
+        before do
+          pending_lettings_log.skip_update_status = true
+          pending_lettings_log.save!
+          pending_sales_log.skip_update_status = true
+          pending_sales_log.save!
+        end
+
+        it "sets choice for fixing the logs to cancelled-by-moved-user" do
+          user.reassign_logs_and_update_organisation(new_organisation, "reassign_all")
+
+          expect(lettings_bu.reload.choice).to eq("cancelled-by-moved-user")
+          expect(sales_bu.reload.choice).to eq("cancelled-by-moved-user")
+          expect(lettings_bu.moved_user_id).to eq(user.id)
+          expect(sales_bu.moved_user_id).to eq(user.id)
+
+          expect(pending_lettings_log.reload.status).to eq("pending")
+          expect(pending_sales_log.reload.status).to eq("pending")
+        end
+      end
+    end
+
+    context "when reassigning stock owners for logs" do
+      it "reassigns stock owners for logs to the new organisation" do
+        user.reassign_logs_and_update_organisation(new_organisation, "reassign_stock_owner")
+        expect(lettings_log.reload.owning_organisation).to eq(new_organisation)
+        expect(lettings_log.managing_organisation).not_to eq(new_organisation)
+        expect(lettings_log.values_updated_at).not_to be_nil
+        expect(sales_log.reload.owning_organisation).to eq(new_organisation)
+        expect(sales_log.managing_organisation).not_to eq(new_organisation)
+        expect(sales_log.values_updated_at).not_to be_nil
+      end
+
+      it "moves the user to the new organisation" do
+        user.reassign_logs_and_update_organisation(new_organisation, "reassign_stock_owner")
+
+        expect(user.organisation).to eq(new_organisation)
+      end
+
+      it "sends organisation update emails" do
+        expected_personalisation = {
+          from_organisation: "#{user.organisation.name} (Organisation ID: #{user.organisation_id})",
+          to_organisation: "#{new_organisation.name} (Organisation ID: #{new_organisation.id})",
+          reassigned_logs_text: "There are 2 logs assigned to you. The stock owner on these logs has been changed from #{user.organisation.name} to #{new_organisation.name}.",
+        }
+        user.reassign_logs_and_update_organisation(new_organisation, "reassign_stock_owner")
+
+        expect(notify_client).to have_received(:send_email).with(email_address: user.email, template_id: User::ORGANISATION_UPDATE_TEMPLATE_ID, personalisation: expected_personalisation).once
+      end
+
+      context "and there is an error" do
+        before do
+          allow(user).to receive(:update!).and_raise(ActiveRecord::RecordInvalid)
+        end
+
+        it "rolls back the changes" do
+          user.reassign_logs_and_update_organisation(new_organisation, "reassign_all")
+          expect(lettings_log.reload.owning_organisation).not_to eq(new_organisation)
+          expect(lettings_log.managing_organisation).not_to eq(new_organisation)
+          expect(lettings_log.values_updated_at).to be_nil
+          expect(sales_log.reload.owning_organisation).not_to eq(new_organisation)
+          expect(sales_log.managing_organisation).not_to eq(new_organisation)
+          expect(sales_log.values_updated_at).to be_nil
+          expect(user.organisation).not_to eq(new_organisation)
+        end
+      end
+    end
+
+    context "when reassigning managing agents for logs" do
+      it "reassigns managing agents for logs to the new organisation" do
+        user.reassign_logs_and_update_organisation(new_organisation, "reassign_managing_agent")
+        expect(lettings_log.reload.owning_organisation).not_to eq(new_organisation)
+        expect(lettings_log.managing_organisation).to eq(new_organisation)
+        expect(lettings_log.values_updated_at).not_to be_nil
+        expect(sales_log.reload.owning_organisation).not_to eq(new_organisation)
+        expect(sales_log.managing_organisation).to eq(new_organisation)
+        expect(sales_log.values_updated_at).not_to be_nil
+      end
+
+      it "moves the user to the new organisation" do
+        user.reassign_logs_and_update_organisation(new_organisation, "reassign_managing_agent")
+
+        expect(user.organisation).to eq(new_organisation)
+      end
+
+      it "sends organisation update emails" do
+        expected_personalisation = {
+          from_organisation: "#{user.organisation.name} (Organisation ID: #{user.organisation_id})",
+          to_organisation: "#{new_organisation.name} (Organisation ID: #{new_organisation.id})",
+          reassigned_logs_text: "There are 2 logs assigned to you. The managing agent on these logs has been changed from #{user.organisation.name} to #{new_organisation.name}.",
+        }
+        user.reassign_logs_and_update_organisation(new_organisation, "reassign_managing_agent")
+
+        expect(notify_client).to have_received(:send_email).with(email_address: user.email, template_id: User::ORGANISATION_UPDATE_TEMPLATE_ID, personalisation: expected_personalisation).once
+      end
+
+      context "and there is an error" do
+        before do
+          allow(user).to receive(:update!).and_raise(ActiveRecord::RecordInvalid)
+        end
+
+        it "rolls back the changes" do
+          user.reassign_logs_and_update_organisation(new_organisation, "reassign_all")
+          expect(lettings_log.reload.owning_organisation).not_to eq(new_organisation)
+          expect(lettings_log.managing_organisation).not_to eq(new_organisation)
+          expect(lettings_log.values_updated_at).to be_nil
+          expect(sales_log.reload.owning_organisation).not_to eq(new_organisation)
+          expect(sales_log.managing_organisation).not_to eq(new_organisation)
+          expect(sales_log.values_updated_at).to be_nil
+          expect(user.organisation).not_to eq(new_organisation)
+        end
+      end
+    end
+
+    context "when unassigning the logs" do
+      context "and unassigned user exists" do
+        let!(:unassigned_user) { create(:user, name: "Unassigned", organisation: user.organisation) }
+
+        it "reassigns all the logs to the unassigned user" do
+          user.reassign_logs_and_update_organisation(new_organisation, "unassign")
+
+          expect(lettings_log.reload.assigned_to).to eq(unassigned_user)
+          expect(lettings_log.values_updated_at).not_to be_nil
+          expect(sales_log.reload.assigned_to).to eq(unassigned_user)
+          expect(sales_log.values_updated_at).not_to be_nil
+        end
+
+        it "moves the user to the new organisation" do
+          user.reassign_logs_and_update_organisation(new_organisation, "unassign")
+
+          expect(user.organisation).to eq(new_organisation)
+        end
+
+        it "sends organisation update emails" do
+          expected_personalisation = {
+            from_organisation: "#{user.organisation.name} (Organisation ID: #{user.organisation_id})",
+            to_organisation: "#{new_organisation.name} (Organisation ID: #{new_organisation.id})",
+            reassigned_logs_text: "There are 2 logs assigned to you. These have now been unassigned.",
+          }
+          user.reassign_logs_and_update_organisation(new_organisation, "unassign")
+
+          expect(notify_client).to have_received(:send_email).with(email_address: user.email, template_id: User::ORGANISATION_UPDATE_TEMPLATE_ID, personalisation: expected_personalisation).once
+        end
+
+        context "and there is an error" do
+          before do
+            allow(user).to receive(:update!).and_raise(ActiveRecord::RecordInvalid)
+          end
+
+          it "rolls back the changes" do
+            user.reassign_logs_and_update_organisation(new_organisation, "unassign")
+            expect(lettings_log.reload.assigned_to).to eq(user)
+            expect(lettings_log.values_updated_at).to be_nil
+            expect(sales_log.reload.assigned_to).to eq(user)
+            expect(sales_log.values_updated_at).to be_nil
+            expect(user.organisation).not_to eq(new_organisation)
+          end
+        end
+      end
+
+      context "and unassigned user doesn't exist" do
+        it "reassigns all the logs to the unassigned user" do
+          user.reassign_logs_and_update_organisation(new_organisation, "unassign")
+
+          expect(lettings_log.reload.assigned_to.name).to eq("Unassigned")
+          expect(lettings_log.values_updated_at).not_to be_nil
+          expect(sales_log.reload.assigned_to.name).to eq("Unassigned")
+          expect(sales_log.values_updated_at).not_to be_nil
+        end
+
+        it "moves the user to the new organisation" do
+          user.reassign_logs_and_update_organisation(new_organisation, "unassign")
+
+          expect(user.organisation).to eq(new_organisation)
+        end
+
+        context "and there is an error" do
+          before do
+            allow(user).to receive(:update!).and_raise(ActiveRecord::RecordInvalid)
+          end
+
+          it "rolls back the changes" do
+            user.reassign_logs_and_update_organisation(new_organisation, "unassign")
+            expect(lettings_log.reload.assigned_to).to eq(user)
+            expect(lettings_log.values_updated_at).to be_nil
+            expect(sales_log.reload.assigned_to).to eq(user)
+            expect(sales_log.values_updated_at).to be_nil
+            expect(user.organisation).not_to eq(new_organisation)
+          end
+        end
+      end
+    end
+
+    context "when log_reassignent is not given" do
+      context "and user has no logs" do
+        let(:user_without_logs) { create(:user) }
+
+        it "moves the user to the new organisation" do
+          user_without_logs.reassign_logs_and_update_organisation(new_organisation, nil)
+
+          expect(user_without_logs.organisation).to eq(new_organisation)
+        end
+
+        context "and there is an error" do
+          before do
+            allow(user_without_logs).to receive(:update!).and_raise(ActiveRecord::RecordInvalid)
+          end
+
+          it "rolls back the changes" do
+            user_without_logs.reassign_logs_and_update_organisation(new_organisation, nil)
+            expect(user_without_logs.organisation).not_to eq(new_organisation)
+          end
+        end
+
+        it "sends organisation update emails" do
+          expected_personalisation = {
+            from_organisation: "#{user_without_logs.organisation.name} (Organisation ID: #{user_without_logs.organisation_id})",
+            to_organisation: "#{new_organisation.name} (Organisation ID: #{new_organisation.id})",
+            reassigned_logs_text: "",
+          }
+          user_without_logs.reassign_logs_and_update_organisation(new_organisation, nil)
+
+          expect(notify_client).to have_received(:send_email).with(email_address: user_without_logs.email, template_id: User::ORGANISATION_UPDATE_TEMPLATE_ID, personalisation: expected_personalisation).once
+        end
+      end
+
+      context "and user has logs" do
+        it "does not move the user to the new organisation" do
+          user.reassign_logs_and_update_organisation(new_organisation, nil)
+
+          expect(user.organisation).not_to eq(new_organisation)
+        end
+      end
+    end
+  end
 end

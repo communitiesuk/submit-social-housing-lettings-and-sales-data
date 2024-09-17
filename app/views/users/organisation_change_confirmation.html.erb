@@ -1,0 +1,24 @@
+<% content_for :before_content do %>
+  <% content_for :title, "Are you sure you want to move this user?" %>
+  <%= govuk_back_link(href: :back) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+    <h1 class="govuk-heading-xl">
+      <%= content_for(:title) %>
+    </h1>
+
+    <%= govuk_warning_text(text: organisation_change_confirmation_warning(@user, @new_organisation, @log_reassignment)) %>
+
+    <%= form_with model: @user, url: user_organisation_change_confirmation_path(@user), method: :patch do |f| %>
+      <%= f.hidden_field :organisation_id, value: @new_organisation.id %>
+      <%= f.hidden_field :log_reassignment, value: @log_reassignment %>
+
+      <div class="govuk-button-group">
+        <%= f.govuk_submit "Move this user" %>
+        <%= govuk_button_link_to "Cancel", user_log_reassignment_path(@user, organisation_id: @new_organisation.id, log_reassignment: @log_reassignment), secondary: true %>
+      </div>
+      <% end %>
+  </div>
+</div>
