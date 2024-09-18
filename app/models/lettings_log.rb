@@ -132,7 +132,7 @@ class LettingsLog < Log
           illness_type_10: false)
   }
 
-  scope :filter_by_user_text_search, ->(param, user) { where(assigned_to: user.support? ? User.search_by(param) : User.own_and_managing_org_users(user.organisation).search_by(param)) }
+  scope :filter_by_user_text_search, ->(param, user) { where(assigned_to: User.visible_to_user(user).search_by(param)) }
   scope :filter_by_owning_organisation_text_search, ->(param, _user) { where(owning_organisation: Organisation.search_by(param)) }
   scope :filter_by_managing_organisation_text_search, ->(param, _user) { where(managing_organisation: Organisation.search_by(param)) }
 

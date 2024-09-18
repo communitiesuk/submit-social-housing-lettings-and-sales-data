@@ -33,7 +33,7 @@ class UsersController < ApplicationController
   end
 
   def search
-    user_options = current_user.support? ? User.all : User.own_and_managing_org_users(current_user.organisation)
+    user_options = User.visible_to_user(current_user)
     users = user_options.search_by(params["query"]).limit(20)
 
     user_data = users.each_with_object({}) do |user, hash|
