@@ -30,14 +30,15 @@ RSpec.describe "Start Page Features" do
     end
 
     context "when the unauthenticated user clicks a notification link" do
+      let!(:notification) { create(:notification, title: "Notification title", link_text: "link", page_content: "Some html content", show_on_unauthenticated_pages: true) }
+
       before do
-        create(:notification, show_on_unauthenticated_pages: true)
         visit(root_path)
-        click_link("Link text")
+        click_link("link")
       end
 
       it "takes them to the notification details page" do
-        expect(page).to have_current_path(notifications_path)
+        expect(page).to have_current_path(notification_path(notification))
         expect(page).to have_content("Notification title")
         expect(page).to have_content("Some html content")
         expect(page).to have_link("Back to Start")
