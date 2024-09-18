@@ -172,6 +172,10 @@ en:
               too_short: The password you entered is too short. Enter a password that is %{count} characters or longer.
             reset_password_token:
               invalid: "That link is invalid. Check you are using the correct link."
+            log_reassignment:
+              blank: "Select if you want to reassign logs"
+              missing_managing_agents: "%{new_organisation} must be a stock owner of %{missing_managing_agents} to make this change."
+              missing_stock_owners: "%{new_organisation} must be a managing agent of %{missing_stock_owners} to make this change."
         merge_request:
           attributes:
             absorbing_organisation_id:

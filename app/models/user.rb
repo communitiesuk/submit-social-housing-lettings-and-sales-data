@@ -49,6 +49,13 @@ class User < ApplicationRecord
     support: 99,
   }.freeze
 
+  LOG_REASSIGNMENT = {
+    reassign_all: "Yes, change the stock owner and the managing agent",
+    reassign_stock_owner: "Yes, change the stock owner but keep the managing agent the same",
+    reassign_managing_agent: "Yes, change the managing agent but keep the stock owner the same",
+    unassign: "No, unassign the logs",
+  }.freeze
+
   enum role: ROLES
 
   scope :search_by_name, ->(name) { where("users.name ILIKE ?", "%#{name}%") }
@@ -79,6 +86,8 @@ class User < ApplicationRecord
   scope :active_status, -> { where(active: true).where.not(last_sign_in_at: nil) }
   scope :visible, -> { where(discarded_at: nil) }
   scope :own_and_managing_org_users, ->(organisation) { where(organisation: organisation.child_organisations + [organisation]) }
+
+  attr_accessor :log_reassignment
 
   def lettings_logs
     if support?
@@ -161,6 +170,7 @@ class User < ApplicationRecord
   USER_REACTIVATED_TEMPLATE_ID = "ac45a899-490e-4f59-ae8d-1256fc0001f9".freeze
   FOR_OLD_EMAIL_CHANGED_BY_OTHER_USER_TEMPLATE_ID = "3eb80517-1051-4dfc-b4cc-cb18228a3829".freeze
   FOR_NEW_EMAIL_CHANGED_BY_OTHER_USER_TEMPLATE_ID = "0cdd0be1-7fa5-4808-8225-ae4c5a002352".freeze
+  ORGANISATION_UPDATE_TEMPLATE_ID = "4b7716c0-cc5c-41dd-92e4-a0dff03bdf5e".freeze
 
   def reset_password_notify_template
     RESET_PASSWORD_TEMPLATE_ID
@@ -270,6 +280,48 @@ class User < ApplicationRecord
     "#{phone}, Ext. #{phone_extension}"
   end
 
+  def assigned_to_lettings_logs
+    lettings_logs.where(assigned_to: self)
+  end
+
+  def assigned_to_sales_logs
+    sales_logs.where(assigned_to: self)
+  end
+
+  def reassign_logs_and_update_organisation(new_organisation, log_reassignment)
+    return unless new_organisation
+
+    ActiveRecord::Base.transaction do
+      lettings_logs_to_reassign = assigned_to_lettings_logs.visible
+      sales_logs_to_reassign = assigned_to_sales_logs.visible
+      current_organisation = organisation
+
+      logs_count = lettings_logs_to_reassign.count + sales_logs_to_reassign.count
+      return if logs_count.positive? && (log_reassignment.blank? || !LOG_REASSIGNMENT.key?(log_reassignment.to_sym))
+
+      update!(organisation: new_organisation)
+
+      case log_reassignment
+      when "reassign_all"
+        reassign_all_orgs(new_organisation, lettings_logs_to_reassign, sales_logs_to_reassign)
+      when "reassign_stock_owner"
+        reassign_stock_owners(new_organisation, lettings_logs_to_reassign, sales_logs_to_reassign)
+      when "reassign_managing_agent"
+        reassign_managing_agents(new_organisation, lettings_logs_to_reassign, sales_logs_to_reassign)
+      when "unassign"
+        unassign_organisations(lettings_logs_to_reassign, sales_logs_to_reassign, current_organisation)
+      end
+
+      cancel_related_bulk_uploads
+      send_organisation_change_email(current_organisation, new_organisation, log_reassignment, logs_count)
+    rescue StandardError => e
+      Rails.logger.error("User update failed with: #{e.message}")
+      Sentry.capture_exception(e)
+
+      raise ActiveRecord::Rollback
+    end
+  end
+
 protected
 
   # Checks whether a password is needed or not. For validations only.
@@ -293,5 +345,71 @@ private
     return if organisation.data_protection_confirmed?
 
     DataProtectionConfirmationMailer.send_confirmation_email(self).deliver_later
+  end
+
+  def reassign_all_orgs(new_organisation, lettings_logs_to_reassign, sales_logs_to_reassign)
+    lettings_logs_to_reassign.update_all(owning_organisation_id: new_organisation.id, managing_organisation_id: new_organisation.id, values_updated_at: Time.zone.now)
+    sales_logs_to_reassign.update_all(owning_organisation_id: new_organisation.id, managing_organisation_id: new_organisation.id, values_updated_at: Time.zone.now)
+  end
+
+  def reassign_stock_owners(new_organisation, lettings_logs_to_reassign, sales_logs_to_reassign)
+    lettings_logs_to_reassign.update_all(owning_organisation_id: new_organisation.id, values_updated_at: Time.zone.now)
+    sales_logs_to_reassign.update_all(owning_organisation_id: new_organisation.id, values_updated_at: Time.zone.now)
+  end
+
+  def reassign_managing_agents(new_organisation, lettings_logs_to_reassign, sales_logs_to_reassign)
+    lettings_logs_to_reassign.update_all(managing_organisation_id: new_organisation.id, values_updated_at: Time.zone.now)
+    sales_logs_to_reassign.update_all(managing_organisation_id: new_organisation.id, values_updated_at: Time.zone.now)
+  end
+
+  def unassign_organisations(lettings_logs_to_reassign, sales_logs_to_reassign, current_organisation)
+    if User.find_by(name: "Unassigned", organisation: current_organisation)
+      unassigned_user = User.find_by(name: "Unassigned", organisation: current_organisation)
+    else
+      unassigned_user = User.new(
+        name: "Unassigned",
+        organisation_id:,
+        is_dpo: false,
+        encrypted_password: SecureRandom.hex(10),
+        email: SecureRandom.uuid,
+        confirmed_at: Time.zone.now,
+        active: false,
+      )
+      unassigned_user.save!(validate: false)
+    end
+    lettings_logs_to_reassign.update_all(assigned_to_id: unassigned_user.id, values_updated_at: Time.zone.now)
+    sales_logs_to_reassign.update_all(assigned_to_id: unassigned_user.id, values_updated_at: Time.zone.now)
+  end
+
+  def send_organisation_change_email(current_organisation, new_organisation, log_reassignment, logs_count)
+    reassigned_logs_text = ""
+    assigned_logs_count = logs_count == 1 ? "is 1 log" : "are #{logs_count} logs"
+
+    case log_reassignment
+    when "reassign_all"
+      reassigned_logs_text = "There #{assigned_logs_count} assigned to you. The stock owner and managing agent on #{logs_count == 1 ? 'this log' : 'these logs'} has been changed from #{current_organisation.name} to #{new_organisation.name}."
+    when "reassign_stock_owner"
+      reassigned_logs_text = "There #{assigned_logs_count} assigned to you. The stock owner on #{logs_count == 1 ? 'this log' : 'these logs'} has been changed from #{current_organisation.name} to #{new_organisation.name}."
+    when "reassign_managing_agent"
+      reassigned_logs_text = "There #{assigned_logs_count} assigned to you. The managing agent on #{logs_count == 1 ? 'this log' : 'these logs'} has been changed from #{current_organisation.name} to #{new_organisation.name}."
+    when "unassign"
+      reassigned_logs_text = "There #{assigned_logs_count} assigned to you. #{logs_count == 1 ? 'This' : 'These'} have now been unassigned."
+    end
+
+    template_id = ORGANISATION_UPDATE_TEMPLATE_ID
+    personalisation = {
+      from_organisation: "#{current_organisation.name} (Organisation ID: #{current_organisation.id})",
+      to_organisation: "#{new_organisation.name} (Organisation ID: #{new_organisation.id})",
+      reassigned_logs_text:,
+    }
+    DeviseNotifyMailer.new.send_email(email, template_id, personalisation)
+  end
+
+  def cancel_related_bulk_uploads
+    lettings_bu_ids = LettingsLog.where(assigned_to: self, status: "pending").map(&:bulk_upload_id).compact.uniq
+    BulkUpload.where(id: lettings_bu_ids).update!(choice: "cancelled-by-moved-user", moved_user_id: id)
+
+    sales_bu_ids = SalesLog.where(assigned_to: self, status: "pending").map(&:bulk_upload_id).compact.uniq
+    BulkUpload.where(id: sales_bu_ids).update!(choice: "cancelled-by-moved-user", moved_user_id: id)
   end
 end
