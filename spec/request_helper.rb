@@ -4,7 +4,7 @@ module RequestHelper
   def self.stub_http_requests
     WebMock.disable_net_connect!(allow_localhost: true)
     WebMock.stub_request(:get, /api\.postcodes\.io/)
-      .to_return(status: 200, body: "{\"status\":404,\"error\":\"Postcode not found\"}", headers: {})
+      .to_return(status: 404, body: "{\"status\":404,\"error\":\"Postcode not found\"}", headers: {})
 
     WebMock.stub_request(:get, "https://api.postcodes.io/postcodes/AA11AA")
            .to_return(status: 200, body: "{\"status\":200,\"result\":{\"postcode\":\"AA1 1AA\",\"admin_district\":\"Westminster\",\"codes\":{\"admin_district\":\"E09000033\"}}}", headers: {})
