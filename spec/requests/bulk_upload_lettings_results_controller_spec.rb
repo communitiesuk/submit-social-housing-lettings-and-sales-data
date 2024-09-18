@@ -60,6 +60,28 @@ RSpec.describe BulkUploadLettingsResultsController, type: :request do
         expect(response).to be_successful
         expect(response.body).to include(bulk_upload.filename)
       end
+
+      context "and bulk upload has been cancelled by not the current moved user" do
+        let(:bulk_upload) { create(:bulk_upload, :lettings, user:, bulk_upload_errors:, choice: "cancelled-by-moved-user", moved_user_id: user.id) }
+
+        it "is displays a correct banner" do
+          get "/lettings-logs/bulk-upload-results/#{bulk_upload.id}/summary"
+
+          expect(response.body).to include("This error report is out of date.")
+          expect(response.body).to include("Some logs in this upload are assigned to #{user.name}, who has moved to a different organisation since this file was uploaded. Reupload the file to get an accurate error report.")
+        end
+      end
+
+      context "and bulk upload has been cancelled by the current moved user" do
+        let(:bulk_upload) { create(:bulk_upload, :lettings, user:, bulk_upload_errors:, choice: "cancelled-by-moved-user", moved_user_id: other_user.id) }
+
+        it "is displays a correct banner" do
+          get "/lettings-logs/bulk-upload-results/#{bulk_upload.id}/summary"
+
+          expect(response.body).to include("This error report is out of date.")
+          expect(response.body).to include("You moved to a different organisation since this file was uploaded. Reupload the file to get an accurate error report.")
+        end
+      end
     end
   end
 
@@ -105,6 +127,29 @@ RSpec.describe BulkUploadLettingsResultsController, type: :request do
 
         expect(response).not_to be_successful
         expect(response).to be_not_found
+      end
+    end
+
+    context "and bulk upload has been cancelled by not the current moved user" do
+      let(:other_user) { create(:user, organisation: user.organisation) }
+      let(:bulk_upload) { create(:bulk_upload, :lettings, user:, bulk_upload_errors:, choice: "cancelled-by-moved-user", moved_user_id: other_user.id) }
+
+      it "is displays a correct banner" do
+        get "/lettings-logs/bulk-upload-results/#{bulk_upload.id}/summary"
+
+        expect(response.body).to include("This error report is out of date.")
+        expect(response.body).to include("Some logs in this upload are assigned to #{other_user.name}, who has moved to a different organisation since this file was uploaded. Reupload the file to get an accurate error report.")
+      end
+    end
+
+    context "and bulk upload has been cancelled by the current moved user" do
+      let(:bulk_upload) { create(:bulk_upload, :lettings, user:, bulk_upload_errors:, choice: "cancelled-by-moved-user", moved_user_id: user.id) }
+
+      it "is displays a correct banner" do
+        get "/lettings-logs/bulk-upload-results/#{bulk_upload.id}/summary"
+
+        expect(response.body).to include("This error report is out of date.")
+        expect(response.body).to include("You moved to a different organisation since this file was uploaded. Reupload the file to get an accurate error report.")
       end
     end
   end

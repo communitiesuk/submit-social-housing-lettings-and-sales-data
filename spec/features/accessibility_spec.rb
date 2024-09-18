@@ -29,7 +29,13 @@ RSpec.describe "Accessibility", js: true do
       Rails.application.routes.routes.select { |route| route.verb == "GET" && route.path.spec.to_s.start_with?("/user") }.map { |route|
         route_path = route.path.spec.to_s
         route_path.gsub(":id", other_user.id.to_s).gsub(":user_id", other_user.id.to_s).gsub("(.:format)", "")
+        .gsub("log-reassignment", "log-reassignment?&organisation_id=#{other_user.organisation_id}")
+        .gsub("organisation-change-confirmation", "organisation-change-confirmation?&organisation_id=#{other_user.organisation_id}&log_reassignment=reassign_all")
       }.uniq
+    end
+
+    before do
+      create(:lettings_log, assigned_to: other_user)
     end
 
     it "is has accessible pages" do
