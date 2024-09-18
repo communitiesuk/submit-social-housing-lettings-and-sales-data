@@ -68,7 +68,15 @@
       <%= summary_list.with_row do |row|
             row.with_key { "Organisation" }
             row.with_value { current_user.support? ? govuk_link_to(@user.organisation.name, lettings_logs_organisation_path(@user.organisation)) : @user.organisation.name }
-            row.with_action
+            if UserPolicy.new(current_user, @user).edit_organisation?
+              row.with_action(
+                visually_hidden_text: "organisation",
+                href: aliased_user_edit(@user, current_user),
+                html_attributes: { "data-qa": "change-organisation" },
+              )
+            else
+              row.with_action
+            end
           end %>
 
       <%= summary_list.with_row do |row|

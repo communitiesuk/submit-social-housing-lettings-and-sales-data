@@ -1,0 +1,3 @@
+<%= form_for(@notification, as: :notification, method: :post) do |f| %>
+  <% render partial: "form", locals: { notification: @notification, f: } %>
+<% end %>

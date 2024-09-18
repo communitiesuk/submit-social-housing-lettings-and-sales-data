@@ -7,6 +7,7 @@
 <%= form_for(@user, as: :user, html: { method: :patch }) do |f| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
+      <% remove_attributes_from_error_messages(@user) %>
       <%= f.govuk_error_summary %>
 
       <h1 class="govuk-heading-l">
@@ -31,6 +32,24 @@
         label: { text: "Extension number (optional)", size: "m" },
         autocomplete: "tel-extension",
         spellcheck: "false" %>
+
+      <% if UserPolicy.new(current_user, @user).edit_organisation? %>
+        <% null_option = [OpenStruct.new(id: "", name: "Select an option")] %>
+        <% organisations = Organisation.filter_by_active.map { |org| OpenStruct.new(id: org.id, name: org.name) } %>
+        <% answer_options = null_option + organisations %>
+
+        <%= f.govuk_select(:organisation_id,
+          label: { text: "Organisation", size: "m" },
+          "data-controller": "accessible-autocomplete") do %>
+            <% answer_options.each do |answer| %>
+              <option value="<%= answer.id %>"
+                data-synonyms="<%= answer_option_synonyms(answer.resource) %>"
+                data-append="<%= answer_option_append(answer.resource) %>"
+                data-hint="<%= answer_option_hint(answer.resource) %>"
+                <%= @user.organisation_id == answer.id ? "selected" : "" %>><%= answer.name || answer.resource %></option>
+            <% end %>
+        <% end %>
+      <% end %>
 
       <% if current_user.data_coordinator? || current_user.support? %>
         <% roles = current_user.assignable_roles.map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>

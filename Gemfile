@@ -23,6 +23,7 @@ gem "govuk-components", "~> 5.1"
 gem "govuk_design_system_formbuilder", "~> 5.0"
 # Convert Markdown into GOV.UK frontend-styled HTML
 gem "govuk_markdown"
+gem "redcarpet", "~> 3.6"
 # GOV UK Notify
 gem "notifications-ruby-client"
 # A modest javascript framework for the html you already have

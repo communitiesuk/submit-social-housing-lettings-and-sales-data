@@ -101,6 +101,10 @@ class BulkUpload < ApplicationRecord
     logs.filter_by_status("in_progress").map(&:missing_answers_count).sum(0)
   end
 
+  def moved_user_name
+    User.find_by(id: moved_user_id)&.name
+  end
+
 private
 
   def generate_identifier

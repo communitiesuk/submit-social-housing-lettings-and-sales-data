@@ -557,6 +557,7 @@ DEPENDENCIES
   rack-mini-profiler (~> 2.0)
   rails (~> 7.0.8.3)
   rails_admin (~> 3.1)
+  redcarpet (~> 3.6)
   redis (~> 4.8)
   roo
   rspec-rails
