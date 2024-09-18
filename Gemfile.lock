@@ -183,7 +183,7 @@ GEM
     et-orbi (1.2.11)
       tzinfo
     event_stream_parser (1.0.0)
-    excon (0.109.0)
+    excon (0.111.0)
     factory_bot (6.4.6)
       activesupport (>= 5.0.0)
     factory_bot_rails (6.4.3)
@@ -302,8 +302,6 @@ GEM
       racc
     pg (1.5.5)
     possessive (1.0.1)
-    postcodes_io (0.4.0)
-      excon (~> 0.39)
     propshaft (0.8.0)
       actionpack (>= 7.0.0)
       activesupport (>= 7.0.0)
@@ -533,6 +531,7 @@ DEPENDENCIES
   devise_two_factor_authentication
   dotenv-rails
   erb_lint
+  excon (~> 0.111.0)
   factory_bot_rails
   faker
   govuk-components (~> 5.1)
@@ -549,7 +548,6 @@ DEPENDENCIES
   parallel_tests
   pg (~> 1.1)
   possessive
-  postcodes_io
   propshaft
   pry-byebug
   puma (~> 5.6)
