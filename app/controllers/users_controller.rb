@@ -56,20 +56,24 @@ class UsersController < ApplicationController
   def key_contact; end
 
   def edit
-    redirect_to user_path(@user) unless @user.active?
+    redirect_to user_path(@user) unless @user.active? || current_user.support?
   end
 
   def update
     validate_attributes
-    if @user.errors.empty? && @user.update(user_params)
+    if @user.errors.empty? && @user.update(user_params_without_org)
       if @user == current_user
         bypass_sign_in @user
         flash[:notice] = I18n.t("devise.passwords.updated") if user_params.key?("password")
-        if user_params.key?("email")
+        if user_params.key?("email") && user_params[:email] != @user.email
           flash[:notice] = I18n.t("devise.email.updated", email: @user.unconfirmed_email)
         end
 
-        redirect_to account_path
+        if updating_organisation?
+          redirect_to user_log_reassignment_path(@user, organisation_id: user_params[:organisation_id])
+        else
+          redirect_to account_path
+        end
       else
         user_name = @user.name&.possessive || @user.email.possessive
         if user_params[:active] == "false"
@@ -79,10 +83,15 @@ class UsersController < ApplicationController
           @user.reactivate!
           @user.send_confirmation_instructions
           flash[:notice] = I18n.t("devise.activation.reactivated", user_name:)
-        elsif user_params.key?("email")
+        elsif user_params.key?("email") && user_params[:email] != @user.email
           flash[:notice] = I18n.t("devise.email.updated", email: @user.unconfirmed_email)
         end
-        redirect_to user_path(@user)
+
+        if updating_organisation?
+          redirect_to user_log_reassignment_path(@user, organisation_id: user_params[:organisation_id])
+        else
+          redirect_to user_path(@user)
+        end
       end
     elsif user_params.key?("password")
       format_error_messages
@@ -144,6 +153,58 @@ class UsersController < ApplicationController
     redirect_to users_organisation_path(@user.organisation), notice: I18n.t("notification.user_deleted", name: @user.name)
   end
 
+  def log_reassignment
+    authorize @user
+    assigned_to_logs_count = @user.assigned_to_lettings_logs.visible.count + @user.assigned_to_sales_logs.visible.count
+    return redirect_to user_organisation_change_confirmation_path(@user, organisation_id: params[:organisation_id]) if assigned_to_logs_count.zero?
+
+    if params[:organisation_id].present? && Organisation.where(id: params[:organisation_id]).exists?
+      @new_organisation = Organisation.find(params[:organisation_id])
+    else
+      redirect_to user_path(@user)
+    end
+  end
+
+  def update_log_reassignment
+    authorize @user
+    return redirect_to user_path(@user) unless log_reassignment_params[:organisation_id].present? && Organisation.where(id: log_reassignment_params[:organisation_id]).exists?
+
+    @new_organisation = Organisation.find(log_reassignment_params[:organisation_id])
+
+    validate_log_reassignment
+
+    if @user.errors.empty?
+      redirect_to user_organisation_change_confirmation_path(@user, log_reassignment_params)
+    else
+      render :log_reassignment, status: :unprocessable_entity
+    end
+  end
+
+  def organisation_change_confirmation
+    authorize @user
+    assigned_to_logs_count = @user.assigned_to_lettings_logs.visible.count + @user.assigned_to_sales_logs.visible.count
+
+    return redirect_to user_path(@user) if params[:organisation_id].blank? || !Organisation.where(id: params[:organisation_id]).exists?
+    return redirect_to user_path(@user) if params[:log_reassignment].blank? && assigned_to_logs_count.positive?
+
+    @new_organisation = Organisation.find(params[:organisation_id])
+    @log_reassignment = params[:log_reassignment]
+  end
+
+  def confirm_organisation_change
+    authorize @user
+    assigned_to_logs_count = @user.assigned_to_lettings_logs.visible.count + @user.assigned_to_sales_logs.visible.count
+
+    return redirect_to user_path(@user) if log_reassignment_params[:organisation_id].blank? || !Organisation.where(id: log_reassignment_params[:organisation_id]).exists?
+    return redirect_to user_path(@user) if log_reassignment_params[:log_reassignment].blank? && assigned_to_logs_count.positive?
+
+    @new_organisation = Organisation.find(log_reassignment_params[:organisation_id])
+    @log_reassignment = log_reassignment_params[:log_reassignment]
+    @user.reassign_logs_and_update_organisation(@new_organisation, @log_reassignment)
+
+    redirect_to user_path(@user)
+  end
+
 private
 
   def validate_attributes
@@ -156,6 +217,10 @@ private
       @user.errors.add :phone, :blank
     elsif !user_params[:phone].nil? && !valid_phone_number?(user_params[:phone])
       @user.errors.add :phone
+    end
+
+    if user_params.key?(:organisation_id) && user_params[:organisation_id].blank?
+      @user.errors.add :organisation_id, :blank
     end
   end
 
@@ -191,8 +256,10 @@ private
 
   def user_params
     if @user == current_user
-      if current_user.data_coordinator? || current_user.support?
+      if current_user.data_coordinator?
         params.require(:user).permit(:email, :phone, :phone_extension, :name, :password, :password_confirmation, :role, :is_dpo, :is_key_contact, :initial_confirmation_sent)
+      elsif current_user.support?
+        params.require(:user).permit(:email, :phone, :phone_extension, :name, :password, :password_confirmation, :role, :is_dpo, :is_key_contact, :initial_confirmation_sent, :organisation_id)
       else
         params.require(:user).permit(:email, :phone, :phone_extension, :name, :password, :password_confirmation, :initial_confirmation_sent)
       end
@@ -201,6 +268,14 @@ private
     elsif current_user.support?
       params.require(:user).permit(:email, :phone, :phone_extension, :name, :role, :is_dpo, :is_key_contact, :organisation_id, :active, :initial_confirmation_sent)
     end
+  end
+
+  def user_params_without_org
+    user_params.except(:organisation_id)
+  end
+
+  def log_reassignment_params
+    params.require(:user).permit(:log_reassignment, :organisation_id)
   end
 
   def created_user_redirect_path
@@ -233,5 +308,36 @@ private
 
   def session_filters
     filter_manager.session_filters
+  end
+
+  def updating_organisation?
+    user_params["organisation_id"].present? && @user.organisation_id != user_params["organisation_id"].to_i
+  end
+
+  def validate_log_reassignment
+    return @user.errors.add :log_reassignment, :blank if log_reassignment_params[:log_reassignment].blank?
+
+    case log_reassignment_params[:log_reassignment]
+    when "reassign_stock_owner"
+      required_managing_agents = (@user.assigned_to_lettings_logs.visible.map(&:managing_organisation) + @user.assigned_to_sales_logs.visible.map(&:managing_organisation)).uniq
+      current_managing_agents = @new_organisation.managing_agents
+      missing_managing_agents = required_managing_agents - current_managing_agents
+
+      if missing_managing_agents.any?
+        new_organisation = @new_organisation.name
+        missing_managing_agents = missing_managing_agents.map(&:name).sort.to_sentence
+        @user.errors.add :log_reassignment, I18n.t("activerecord.errors.models.user.attributes.log_reassignment.missing_managing_agents", new_organisation:, missing_managing_agents:)
+      end
+    when "reassign_managing_agent"
+      required_stock_owners = (@user.assigned_to_lettings_logs.visible.map(&:owning_organisation) + @user.assigned_to_sales_logs.visible.map(&:owning_organisation)).uniq
+      current_stock_owners = @new_organisation.stock_owners
+      missing_stock_owners = required_stock_owners - current_stock_owners
+
+      if missing_stock_owners.any?
+        new_organisation = @new_organisation.name
+        missing_stock_owners = missing_stock_owners.map(&:name).sort.to_sentence
+        @user.errors.add :log_reassignment, I18n.t("activerecord.errors.models.user.attributes.log_reassignment.missing_stock_owners", new_organisation:, missing_stock_owners:)
+      end
+    end
   end
 end
