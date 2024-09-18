@@ -207,6 +207,24 @@ RSpec.describe OrganisationsController, type: :request do
             expect(page).to have_title("#{user.organisation.name} (1 scheme matching ‘#{search_param}’) - Submit social housing lettings and sales data (CORE) - GOV.UK")
           end
         end
+
+        context "when organisation has absorbed other organisations" do
+          before do
+            create(:organisation, merge_date: Time.zone.today, absorbing_organisation: organisation)
+          end
+
+          context "and it has duplicate schemes or locations" do
+            before do
+              create_list(:scheme, 2, :duplicate, owning_organisation: organisation)
+              get "/organisations/#{organisation.id}/schemes", headers:, params: {}
+            end
+
+            it "displays a banner with correct content" do
+              expect(page).to have_content("Some schemes and locations might be duplicates.")
+              expect(page).to have_link("Review possible duplicates", href: "/organisations/#{organisation.id}/schemes/duplicates")
+            end
+          end
+        end
       end
 
       context "when data coordinator user" do
