@@ -32,6 +32,26 @@ RSpec.describe BulkUploadLettingsResumeController, type: :request do
         expect(response.body).to include("You have created logs from your bulk upload, and the logs are complete. Return to lettings logs to view them.")
       end
     end
+
+    context "when a choice to reupload has been made" do
+      it "redirects to the error report" do
+        bulk_upload.update!(choice: "upload-again")
+
+        get "/lettings-logs/bulk-upload-resume/#{bulk_upload.id}/start"
+        follow_redirect!
+        expect(response).to redirect_to("/lettings-logs/bulk-upload-results/#{bulk_upload.id}")
+      end
+    end
+
+    context "when bulk upload was cancelled by moved user" do
+      it "redirects to the error report" do
+        bulk_upload.update!(choice: "cancelled-by-moved-user")
+
+        get "/lettings-logs/bulk-upload-resume/#{bulk_upload.id}/start"
+        follow_redirect!
+        expect(response).to redirect_to("/lettings-logs/bulk-upload-results/#{bulk_upload.id}")
+      end
+    end
   end
 
   describe "GET /lettings-logs/bulk-upload-resume/:ID/fix-choice" do
@@ -71,6 +91,25 @@ RSpec.describe BulkUploadLettingsResumeController, type: :request do
         get "/lettings-logs/bulk-upload-resume/#{bulk_upload.id}/fix-choice"
 
         expect(response).to redirect_to("/lettings-logs/bulk-upload-soft-validations-check/#{bulk_upload.id}/chosen")
+      end
+    end
+
+    context "when a choice to reupload has been made" do
+      let(:bulk_upload) { create(:bulk_upload, :lettings, user:, bulk_upload_errors:, choice: "upload-again") }
+
+      it "redirects to the error report" do
+        get "/lettings-logs/bulk-upload-resume/#{bulk_upload.id}/fix-choice"
+        expect(response).to redirect_to("/lettings-logs/bulk-upload-results/#{bulk_upload.id}")
+      end
+    end
+
+    context "when bulk upload was cancelled by moved user" do
+      let(:bulk_upload) { create(:bulk_upload, :lettings, user:, bulk_upload_errors:, choice: "cancelled-by-moved-user") }
+
+      it "redirects to the error report" do
+        get "/lettings-logs/bulk-upload-resume/#{bulk_upload.id}/start"
+        follow_redirect!
+        expect(response).to redirect_to("/lettings-logs/bulk-upload-results/#{bulk_upload.id}")
       end
     end
   end

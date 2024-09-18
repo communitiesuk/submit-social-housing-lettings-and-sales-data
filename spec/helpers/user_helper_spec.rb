@@ -61,4 +61,90 @@ RSpec.describe UserHelper do
       end
     end
   end
+
+  describe "organisation_change_warning" do
+    context "when user doesn't own any logs" do
+      it "returns a message with the number of logs" do
+        expected_text = "You’re moving #{user.name} from #{user.organisation.name} to #{current_user.organisation.name}. There are 0 logs assigned to them."
+        expect(organisation_change_warning(user, current_user.organisation)).to eq(expected_text)
+      end
+    end
+
+    context "when user owns 1 lettings log" do
+      before do
+        create(:lettings_log, assigned_to: user)
+      end
+
+      it "returns a message with the number of logs" do
+        expected_text = "You’re moving #{user.name} from #{user.organisation.name} to #{current_user.organisation.name}. There is 1 log assigned to them."
+        expect(organisation_change_warning(user, current_user.organisation)).to eq(expected_text)
+      end
+    end
+
+    context "when user owns 1 sales log" do
+      before do
+        create(:sales_log, assigned_to: user)
+      end
+
+      it "returns a message with the number of logs" do
+        expected_text = "You’re moving #{user.name} from #{user.organisation.name} to #{current_user.organisation.name}. There is 1 log assigned to them."
+        expect(organisation_change_warning(user, current_user.organisation)).to eq(expected_text)
+      end
+    end
+
+    context "when user owns multiple logs" do
+      before do
+        create(:lettings_log, assigned_to: user)
+        create(:sales_log, assigned_to: user)
+      end
+
+      it "returns a message with the number of logs" do
+        expected_text = "You’re moving #{user.name} from #{user.organisation.name} to #{current_user.organisation.name}. There are 2 logs assigned to them."
+        expect(organisation_change_warning(user, current_user.organisation)).to eq(expected_text)
+      end
+    end
+  end
+
+  describe "organisation_change_confirmation_warning" do
+    context "when user owns logs" do
+      before do
+        create(:lettings_log, assigned_to: user)
+      end
+
+      context "with reassign all choice" do
+        it "returns the correct message" do
+          expected_text = "You’re moving #{user.name} from #{user.organisation.name} to #{current_user.organisation.name}. The stock owner and managing agent on their logs will change to #{current_user.organisation.name}."
+          expect(organisation_change_confirmation_warning(user, current_user.organisation, "reassign_all")).to eq(expected_text)
+        end
+      end
+
+      context "with reassign stock owners choice" do
+        it "returns the correct message" do
+          expected_text = "You’re moving #{user.name} from #{user.organisation.name} to #{current_user.organisation.name}. The stock owner on their logs will change to #{current_user.organisation.name}."
+          expect(organisation_change_confirmation_warning(user, current_user.organisation, "reassign_stock_owner")).to eq(expected_text)
+        end
+      end
+
+      context "with reassign managing agent choice" do
+        it "returns the correct message" do
+          expected_text = "You’re moving #{user.name} from #{user.organisation.name} to #{current_user.organisation.name}. The managing agent on their logs will change to #{current_user.organisation.name}."
+          expect(organisation_change_confirmation_warning(user, current_user.organisation, "reassign_managing_agent")).to eq(expected_text)
+        end
+      end
+
+      context "with unassign choice" do
+        it "returns the correct message" do
+          expected_text = "You’re moving #{user.name} from #{user.organisation.name} to #{current_user.organisation.name}. Their logs will be unassigned."
+          expect(organisation_change_confirmation_warning(user, current_user.organisation, "unassign")).to eq(expected_text)
+        end
+      end
+    end
+
+    context "when user doesn't own logs" do
+      it "returns the correct message" do
+        expected_text = "You’re moving #{user.name} from #{user.organisation.name} to #{current_user.organisation.name}. There are no logs assigned to them."
+        expect(organisation_change_confirmation_warning(user, current_user.organisation, "reassign_all")).to eq(expected_text)
+      end
+    end
+  end
 end
