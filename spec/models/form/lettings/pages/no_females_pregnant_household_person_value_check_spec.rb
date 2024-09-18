@@ -33,7 +33,7 @@ RSpec.describe Form::Lettings::Pages::NoFemalesPregnantHouseholdPersonValueCheck
         [
           {
             "details_known_2" => 0,
-            "no_females_in_a_pregnant_household?" => true,
+            "all_male_tenants_in_a_pregnant_household?" => true,
           },
         ],
       )
@@ -54,7 +54,7 @@ RSpec.describe Form::Lettings::Pages::NoFemalesPregnantHouseholdPersonValueCheck
 
     it "has the correct informative_text" do
       expect(page.informative_text).to eq({
-        "translation" => "soft_validations.pregnancy.no_females",
+        "translation" => "soft_validations.pregnancy.all_male_tenants",
         "arguments" => [
           {
             "key" => "sex1",
@@ -78,7 +78,7 @@ RSpec.describe Form::Lettings::Pages::NoFemalesPregnantHouseholdPersonValueCheck
         [
           {
             "details_known_3" => 0,
-            "no_females_in_a_pregnant_household?" => true,
+            "all_male_tenants_in_a_pregnant_household?" => true,
           },
         ],
       )
@@ -99,7 +99,7 @@ RSpec.describe Form::Lettings::Pages::NoFemalesPregnantHouseholdPersonValueCheck
 
     it "has the correct informative_text" do
       expect(page.informative_text).to eq({
-        "translation" => "soft_validations.pregnancy.no_females",
+        "translation" => "soft_validations.pregnancy.all_male_tenants",
         "arguments" => [
           {
             "key" => "sex1",

@@ -67,8 +67,8 @@ module Validations::SoftValidations
     end
   end
 
-  def no_females_in_a_pregnant_household?
-    !females_in_the_household? && all_tenants_gender_information_completed? && preg_occ == 1
+  def all_male_tenants_in_a_pregnant_household?
+    all_male_tenants_in_the_household? && all_tenants_gender_information_completed? && preg_occ == 1
   end
 
   def female_in_pregnant_household_in_soft_validation_range?
@@ -223,6 +223,14 @@ private
 
     (1..person_count).any? do |n|
       public_send("sex#{n}") == "F" || public_send("sex#{n}").nil?
+    end
+  end
+
+  def all_male_tenants_in_the_household?
+    person_count = hhmemb || 8
+
+    (1..person_count).all? do |n|
+      public_send("sex#{n}") == "M"
     end
   end
 
