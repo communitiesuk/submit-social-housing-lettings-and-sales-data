@@ -85,6 +85,13 @@ module SchemesHelper
     end
   end
 
+  def display_duplicate_schemes_banner?(organisation, current_user)
+    return unless organisation.absorbed_organisations.merged_during_open_collection_period.any?
+    return unless current_user.data_coordinator? || current_user.support?
+
+    organisation.owned_schemes.duplicate_sets.any? || organisation.owned_schemes.any? { |scheme| scheme.locations.duplicate_sets.any? }
+  end
+
 private
 
   ActivePeriod = Struct.new(:from, :to)
