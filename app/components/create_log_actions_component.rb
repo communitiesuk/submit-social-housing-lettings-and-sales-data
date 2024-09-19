@@ -57,9 +57,9 @@ class CreateLogActionsComponent < ViewComponent::Base
   def view_uploads_button_copy
     case log_type
     when "lettings"
-      "View lettings logs in bulk"
+      "View lettings bulk uploads"
     when "sales"
-      "View sales logs in bulk"
+      "View sales bulk uploads"
     end
   end
 
