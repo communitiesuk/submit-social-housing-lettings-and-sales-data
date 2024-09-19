@@ -1,0 +1,82 @@
+<div class="app-filter-layout__filter">
+  <div class="app-filter">
+    <div class="app-filter__header">
+      <h2 class="govuk-heading-m">Filters</h2>
+    </div>
+
+    <div class="app-filter__content">
+      <%= form_with html: { method: :get } do |f| %>
+
+        <div class="govuk-grid-row" style="white-space: nowrap">
+          <p class="govuk-grid-column-one-half">
+            <%= filters_applied_text(@filter_type) %>
+          </p>
+          <p class="govuk-!-text-align-right govuk-grid-column-one-half">
+            <%= reset_filters_link(@filter_type, { search: request.params["search"], organisation_id: @organisation&.id }.compact) %>
+          </p>
+        </div>
+
+        <% if bulk_upload_options(@bulk_upload).blank? %>
+          <%= render partial: "filters/checkbox_filter",
+                     locals: {
+                       f:,
+                       options: collection_year_options,
+                       label: "Collection year",
+                       category: "years",
+                       size: "s",
+                     } %>
+        <% end %>
+
+        <%= render partial: "filters/radio_filter",
+                   locals: {
+                     f:,
+                     options: {
+                       "all": { label: "Any user" },
+                       "you": { label: "You" },
+                       "specific_user": {
+                         label: "Specific user",
+                         conditional_filter: {
+                           type: "text_select",
+                           label: "User",
+                           category: "user",
+                           options: assigned_to_filter_options(@filter_type),
+                           caption_text: "User's name or email",
+                         },
+                       },
+                     },
+                     label: "Uploaded by",
+                     category: "created_by",
+                     size: "s",
+                   } %>
+
+        <% if current_user.support? || non_support_with_multiple_owning_orgs? %>
+          <%= render partial: "filters/radio_filter", locals: {
+            f:,
+            options: {
+              "all": { label: "Any owning organisation" },
+              "specific_org": {
+                label: "Specific owning organisation",
+                conditional_filter: {
+                  type: "text_select",
+                  label: "Owning Organisation",
+                  category: "owning_organisation",
+                  options: owning_organisation_filter_options(current_user, @filter_type),
+                  caption_text: "Organisation name",
+                },
+              },
+            },
+            label: "Uploading organisation",
+            category: "uploading_organisation_select",
+            size: "s",
+          } %>
+        <% end %>
+
+        <% if request.params["search"].present? %>
+          <%= f.hidden_field :search, value: request.params["search"] %>
+        <% end %>
+
+        <%= f.govuk_submit "Apply filters", class: "govuk-!-margin-bottom-0" %>
+      <% end %>
+    </div>
+  </div>
+</div>
