@@ -133,7 +133,19 @@ class Location < ApplicationRecord
     scope.pluck("ARRAY_AGG(id)")
   }
 
-  DUPLICATE_LOCATION_ATTRIBUTES = %w[scheme_id postcode mobility_type].freeze
+  scope :duplicate_sets_within_duplicate_schemes, lambda {
+    scope = visible
+    .group(*DUPLICATE_LOCATION_ATTRIBUTES - %w[scheme_id])
+    .where(scheme_id: nil)
+    .where.not(postcode: nil)
+    .where.not(mobility_type: nil)
+    .having(
+      "COUNT(*) > 1",
+    )
+    scope.pluck("ARRAY_AGG(id)")
+  }
+
+  DUPLICATE_LOCATION_ATTRIBUTES = %w[postcode mobility_type].freeze
   LOCAL_AUTHORITIES = LocalAuthority.all.map { |la| [la.name, la.code] }.to_h
 
   enum local_authorities: LOCAL_AUTHORITIES

@@ -71,7 +71,7 @@ RSpec.describe "count_duplicates" do
         end
 
         it "creates a csv with headers only" do
-          expect(storage_service).to receive(:write_file).with(/location-duplicates-.*\.csv/, "\uFEFFOrganisation id,Number of duplicate sets,Total duplicate locations\n")
+          expect(storage_service).to receive(:write_file).with(/location-duplicates-.*\.csv/, "\uFEFFOrganisation id,Duplicate sets within individual schemes,Duplicate locations within individual schemes,All duplicate sets,All duplicates\n")
           expect(Rails.logger).to receive(:info).with("Download URL: #{test_url}")
           task.invoke
         end
@@ -79,20 +79,29 @@ RSpec.describe "count_duplicates" do
 
       context "and there are duplicate locations" do
         let(:organisation) { create(:organisation) }
-        let(:scheme) { create(:scheme, owning_organisation: organisation) }
+        let(:scheme_a) { create(:scheme, :duplicate, owning_organisation: organisation) }
+        let(:scheme_b) { create(:scheme, :duplicate, owning_organisation: organisation) }
+        let(:scheme_c) { create(:scheme, owning_organisation: organisation) }
         let(:organisation2) { create(:organisation) }
         let(:scheme2) { create(:scheme, owning_organisation: organisation2) }
         let(:scheme3) { create(:scheme, owning_organisation: organisation2) }
 
         before do
-          create_list(:location, 2, postcode: "A1 1AB", mobility_type: "M", scheme:)
-          create_list(:location, 3, postcode: "A1 1AB", mobility_type: "A", scheme:)
+          create_list(:location, 2, postcode: "A1 1AB", mobility_type: "M", scheme: scheme_a) # Location A
+          create_list(:location, 1, postcode: "A1 1AB", mobility_type: "A", scheme: scheme_a) # Location B
+
+          create_list(:location, 1, postcode: "A1 1AB", mobility_type: "M", scheme: scheme_b) # Location A
+          create_list(:location, 1, postcode: "A1 1AB", mobility_type: "A", scheme: scheme_b) # Location B
+          create_list(:location, 2, postcode: "A1 1AB", mobility_type: "N", scheme: scheme_b) # Location C
+
+          create_list(:location, 2, postcode: "A1 1AB", mobility_type: "A", scheme: scheme_c) # Location B
+
           create_list(:location, 5, postcode: "A1 1AB", mobility_type: "M", scheme: scheme2)
           create_list(:location, 2, postcode: "A1 1AB", mobility_type: "M", scheme: scheme3)
         end
 
         it "creates a csv with correct duplicate numbers" do
-          expect(storage_service).to receive(:write_file).with(/location-duplicates-.*\.csv/, "\uFEFFOrganisation id,Number of duplicate sets,Total duplicate locations\n#{organisation.id},2,5\n#{organisation2.id},2,7\n")
+          expect(storage_service).to receive(:write_file).with(/location-duplicates-.*\.csv/, "\uFEFFOrganisation id,Duplicate sets within individual schemes,Duplicate locations within individual schemes,All duplicate sets,All duplicates\n#{organisation.id},3,6,4,9\n#{organisation2.id},2,7,2,7\n")
           expect(Rails.logger).to receive(:info).with("Download URL: #{test_url}")
           task.invoke
         end
