@@ -6,5 +6,6 @@ FactoryBot.define do
     start_date { Time.zone.yesterday }
     end_date { Time.zone.tomorrow }
     show_on_unauthenticated_pages { false }
+    show_additional_page { true }
   end
 end
