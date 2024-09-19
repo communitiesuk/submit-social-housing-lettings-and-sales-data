@@ -71,7 +71,7 @@ module UserHelper
 
   def pending_email_change_banner_text(current_user)
     text = "A confirmation link has been sent to the new email address. The current email will continue to work until the change is confirmed."
-    text += " Deactivating this user will cancel the email change request." if current_user.support?
+    text += " Deactivating this user will cancel the email change request." if current_user.support? || current_user.data_coordinator?
 
     text
   end

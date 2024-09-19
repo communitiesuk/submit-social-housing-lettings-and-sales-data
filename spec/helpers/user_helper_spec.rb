@@ -114,7 +114,7 @@ RSpec.describe UserHelper do
       end
     end
 
-    context "when the user doesn't has the same unconfirmed email as current email" do
+    context "when the user has the same unconfirmed email as current email" do
       let(:user) { FactoryBot.create(:user, :data_provider, unconfirmed_email: "updated_email@example.com", email: "updated_email@example.com") }
 
       it "does not display pending email change banner" do
@@ -122,7 +122,7 @@ RSpec.describe UserHelper do
       end
     end
 
-    context "when the user doesn't has a different unconfirmed email" do
+    context "when the user has a different unconfirmed email" do
       let(:user) { FactoryBot.create(:user, :data_provider, unconfirmed_email: "updated_email@example.com", email: "old_email@example.com") }
 
       it "displays pending email change banner" do
@@ -192,7 +192,7 @@ RSpec.describe UserHelper do
   end
 
   describe "pending_email_change_banner_text" do
-    context "with non support user" do
+    context "with provider user" do
       let(:user) { FactoryBot.create(:user, :data_provider) }
 
       it "returns the correct text" do
