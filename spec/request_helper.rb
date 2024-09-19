@@ -15,7 +15,7 @@ module RequestHelper
     WebMock.stub_request(:get, "https://api.postcodes.io/postcodes/ZZ11ZZ")
            .to_return(status: 200, body: "{\"status\":200,\"result\":{\"postcode\":\"ZZ1 1ZZ\",\"admin_district\":\"Westminster\",\"codes\":{\"admin_district\":\"E09000033\"}}}", headers: {})
     WebMock.stub_request(:get, "https://api.postcodes.io/postcodes/SW1A1AA")
-           .to_return(status: 200, body: "{\"status\":200,\"result\":{\"postcode\":\"ZZ1 1ZZ\",\"admin_district\":\"Westminster\",\"codes\":{\"admin_district\":\"E09000033\"}}}", headers: {})
+           .to_return(status: 200, body: "{\"status\":200,\"result\":{\"postcode\":\"SW1A 1AA\",\"admin_district\":\"Westminster\",\"codes\":{\"admin_district\":\"E09000033\"}}}", headers: {})
 
     body = { results: [{ DPA: { UPRN: "10033558653" } }] }.to_json
     WebMock.stub_request(:get, "https://api.os.uk/search/places/v1/find?key&maxresults=10&minmatch=0.4&query=Address%20line%201,%20SW1A%201AA")
