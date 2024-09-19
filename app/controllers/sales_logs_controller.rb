@@ -85,6 +85,17 @@ class SalesLogsController < LogsController
     params.require(:sales_log).permit(SalesLog.editable_fields)
   end
 
+  def bulk_uploads
+    uploads = BulkUpload.sales.where("created_at >= ?", 30.days.ago)
+    # unpaginated_filtered_uploads = filter_manager.filtered_uploads(uploads, search_term, session_filters)
+
+    @pagy, @bulk_uploads = pagy(uploads)
+    @search_term = search_term
+    @searched = search_term.presence
+    @filter_type = "sales_bulk_uploads"
+    render "bulk_upload_shared/uploads"
+  end
+
 private
 
   def session_filters

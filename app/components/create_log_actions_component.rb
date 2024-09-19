@@ -53,4 +53,22 @@ class CreateLogActionsComponent < ViewComponent::Base
       bulk_upload_sales_log_path(id: "start")
     end
   end
+
+  def view_uploads_button_copy
+    case log_type
+    when "lettings"
+      "View lettings logs in bulk"
+    when "sales"
+      "View sales logs in bulk"
+    end
+  end
+
+  def view_uploads_button_href
+    case log_type
+    when "lettings"
+      bulk_uploads_lettings_logs_path
+    when "sales"
+      bulk_uploads_sales_logs_path
+    end
+  end
 end

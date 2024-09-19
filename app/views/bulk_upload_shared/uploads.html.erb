@@ -1,0 +1,28 @@
+<% item_label = format_label(@pagy.count, "uploads") %>
+<% title = format_title(@searched, "Lettings bulk uploads", current_user, item_label, @pagy.count, nil) %>
+
+<% content_for :title, title %>
+
+<h1 class="govuk-heading-l govuk-!-margin-bottom-8">
+  <%= "#{log_type_for_controller(controller).capitalize} bulk uploads" %>
+</h1>
+
+<div class="app-filter-layout" data-controller="filter-layout">
+  <%= render partial: "bulk_upload_shared/upload_filters" %>
+
+  <div class="app-filter-layout__content">
+    <%= render SearchComponent.new(current_user:, search_label: "Search by file name, user's name or email, or organisation", value: @searched) %>
+    <%= govuk_section_break(visible: true, size: "m") %>
+    <%= render partial: "bulk_upload_shared/upload_list",
+               locals: {
+                 bulk_uploads: @bulk_uploads,
+                 title: "Bulk uploads",
+                 pagy: @pagy,
+                 searched: @searched,
+                 item_label:,
+                 total_count: @total_count,
+                 filter_type: @filter_type,
+               } %>
+    <%== render partial: "pagy/nav", locals: { pagy: @pagy, item_name: "bulk uploads" } %>
+  </div>
+</div>

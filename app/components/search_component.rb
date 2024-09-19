@@ -19,6 +19,10 @@ class SearchComponent < ViewComponent::Base
       request.path
     elsif request.path.include?("organisations") && request.path.include?("managing-agents")
       request.path
+    elsif request.path.include?("bulk-uploads") && request.path.include?("sales-logs")
+      request.path
+    elsif request.path.include?("bulk-uploads") && request.path.include?("lettings-logs")
+      request.path
     elsif request.path.include?("users")
       user_path(current_user)
     elsif request.path.include?("organisations")

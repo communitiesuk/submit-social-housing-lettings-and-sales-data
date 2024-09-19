@@ -115,6 +115,17 @@ class LettingsLogsController < LogsController
     end
   end
 
+  def bulk_uploads
+    uploads = BulkUpload.lettings.where("created_at >= ?", 30.days.ago)
+    # unpaginated_filtered_uploads = filter_manager.filtered_uploads(uploads, search_term, session_filters)
+
+    @pagy, @bulk_uploads = pagy(uploads)
+    @search_term = search_term
+    @searched = search_term.presence
+    @filter_type = "lettings_bulk_uploads"
+    render "bulk_upload_shared/uploads"
+  end
+
 private
 
   def session_filters
