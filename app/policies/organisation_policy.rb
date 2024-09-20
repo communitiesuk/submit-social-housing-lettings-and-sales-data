@@ -34,4 +34,8 @@ class OrganisationPolicy
     editable_sales_logs = organisation.sales_logs.visible.after_date(editable_from_date)
     organisation.sales_logs.visible.where(saledate: nil).any? || editable_sales_logs.any?
   end
+
+  def duplicate_schemes?
+    user.support? || (user.data_coordinator? && user.organisation == organisation)
+  end
 end

@@ -366,6 +366,77 @@ RSpec.describe OrganisationsController, type: :request do
       end
     end
 
+    describe "#duplicate_schemes" do
+      context "with support user" do
+        let(:user) { create(:user, :support) }
+
+        before do
+          allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+          sign_in user
+          get "/organisations/#{organisation.id}/schemes/duplicates", headers:
+        end
+
+        it "has page heading" do
+          expect(page).to have_content("Review these sets of schemes and locations")
+        end
+
+        context "with duplicate schemes and locations" do
+          let(:schemes) { create_list(:scheme, 5, :duplicate, owning_organisation: organisation) }
+
+          before do
+            create_list(:location, 2, scheme: schemes.first, postcode: "M1 1AA", mobility_type: "M")
+            create_list(:location, 2, scheme: schemes.first, postcode: "M1 1AA", mobility_type: "A")
+            get "/organisations/#{organisation.id}/schemes/duplicates", headers:
+          end
+
+          it "displays the duplicate schemes" do
+            expect(page).to have_content("This set of schemes might have duplicates")
+          end
+
+          it "displays the duplicate locations" do
+            expect(page).to have_content("These 2 sets of locations might have duplicates")
+          end
+        end
+
+        context "without duplicate schemes and locations" do
+          it "does not display the schemes" do
+            expect(page).not_to have_content("schemes might have duplicates")
+          end
+
+          it "does not display the locations" do
+            expect(page).not_to have_content("locations might have duplicates")
+          end
+        end
+      end
+
+      context "with data coordinator user" do
+        let(:user) { create(:user, :data_coordinator) }
+        let!(:schemes) { create_list(:scheme, 5, :duplicate) }
+
+        before do
+          sign_in user
+          get "/organisations/#{organisation.id}/schemes/duplicates", headers:
+        end
+
+        it "has page heading" do
+          expect(page).to have_content("Review these sets of schemes and locations")
+        end
+      end
+
+      context "with data coordinator user" do
+        let(:user) { create(:user, :data_provider) }
+
+        before do
+          sign_in user
+          get "/organisations/#{organisation.id}/schemes/duplicates", headers:
+        end
+
+        it "be unauthorised" do
+          expect(response).to have_http_status(:unauthorized)
+        end
+      end
+    end
+
     describe "#show" do
       context "with an organisation that the user belongs to" do
         let(:set_time) {}

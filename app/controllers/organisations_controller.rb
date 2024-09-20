@@ -44,6 +44,22 @@ class OrganisationsController < ApplicationController
     redirect_to schemes_csv_confirmation_organisation_path
   end
 
+  def duplicate_schemes
+    authorize @organisation
+
+    duplicate_scheme_sets = @organisation.owned_schemes.duplicate_sets
+    @duplicate_schemes = duplicate_scheme_sets.map { |set| set.map { |id| @organisation.owned_schemes.find(id) } }
+    @duplicate_locations = []
+    @organisation.owned_schemes.each do |scheme|
+      duplicate_location_sets = scheme.locations.duplicate_sets
+      next unless duplicate_location_sets.any?
+
+      duplicate_location_sets.each do |duplicate_set|
+        @duplicate_locations << { scheme: scheme, locations: duplicate_set.map { |id| scheme.locations.find(id) } }
+      end
+    end
+  end
+
   def show
     redirect_to details_organisation_path(@organisation)
   end
