@@ -10,7 +10,7 @@ RUN apk add --update --no-cache tzdata && \
 # build-base: compilation tools for bundle
 # yarn: node package manager
 # postgresql-dev: postgres driver and libraries
-RUN apk add --no-cache build-base=0.5-r3 busybox=1.36.1-r7 nodejs-current=20.8.1-r0 yarn=1.22.19-r0 postgresql13-dev=13.15-r0 git=2.40.3-r0 bash=5.2.15-r5
+RUN apk add --no-cache build-base=0.5-r3 busybox=1.36.1-r7 nodejs-current=20.8.1-r0 yarn=1.22.19-r0 postgresql13-dev=13.16-r0 git=2.40.3-r0 bash=5.2.15-r5
 
 # Bundler version should be the same version as what the Gemfile.lock was bundled with
 RUN gem install bundler:2.3.14 --no-document
