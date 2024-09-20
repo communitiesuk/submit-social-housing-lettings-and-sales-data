@@ -8,8 +8,8 @@ RSpec.describe Exports::OrganisationExportService do
   let(:xml_export_file) { File.open("spec/fixtures/exports/organisation.xml", "r:UTF-8") }
   let(:local_manifest_file) { File.open("spec/fixtures/exports/manifest.xml", "r:UTF-8") }
 
-  let(:expected_zip_filename) { "core_organisations_f0001_inc0001.zip" }
-  let(:expected_data_filename) { "core_organisations_f0001_inc0001_pt001.xml" }
+  let(:expected_zip_filename) { "organisations_2024_2025_apr_mar_f0001_inc0001.zip" }
+  let(:expected_data_filename) { "organisations_2024_2025_apr_mar_f0001_inc0001_pt001.xml" }
   let(:expected_manifest_filename) { "manifest.xml" }
   let(:start_time) { Time.zone.local(2022, 5, 1) }
   let(:organisation) { create(:organisation, with_dsa: false) }
@@ -177,11 +177,11 @@ RSpec.describe Exports::OrganisationExportService do
         end
 
         it "returns a correct archives list for manifest file" do
-          expect(export_service.export_xml_organisations(full_update: true)).to eq({ "core_organisations_f0002_inc0001" => start_time })
+          expect(export_service.export_xml_organisations(full_update: true)).to eq({ "organisations_2024_2025_apr_mar_f0002_inc0001" => start_time })
         end
 
         it "generates a ZIP export file with the expected filename" do
-          expect(storage_service).to receive(:write_file).with("core_organisations_f0002_inc0001.zip", any_args)
+          expect(storage_service).to receive(:write_file).with("organisations_2024_2025_apr_mar_f0002_inc0001.zip", any_args)
           export_service.export_xml_organisations(full_update: true)
         end
       end
