@@ -4,7 +4,7 @@
 <% content_for :title, title %>
 
 <h1 class="govuk-heading-l govuk-!-margin-bottom-7">
-  <%= "#{log_type_for_controller(controller).capitalize} bulk uploads" %>
+  <%= bulk_upload_title(controller) %>
 </h1>
 
 <div class="app-filter-layout" data-controller="filter-layout">

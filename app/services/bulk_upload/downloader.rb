@@ -15,6 +15,10 @@ class BulkUpload::Downloader
     file.unlink
   end
 
+  def file_path
+    file.path
+  end
+
 private
 
   def download

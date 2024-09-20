@@ -278,6 +278,12 @@ Rails.application.routes.draw do
         end
       end
 
+      resources :bulk_uploads, only: [] do
+        member do
+          get "download", to: "lettings_logs#download_bulk_upload", as: "download_lettings"
+        end
+      end
+
       get "update-logs", to: "lettings_logs#update_logs"
     end
 
@@ -348,6 +354,12 @@ Rails.application.routes.draw do
         member do
           get "*page", to: "bulk_upload_sales_soft_validations_check#show", as: "page"
           patch "*page", to: "bulk_upload_sales_soft_validations_check#update"
+        end
+      end
+
+      resources :bulk_uploads, only: [] do
+        member do
+          get "download", to: "sales_logs#download_bulk_upload"
         end
       end
     end

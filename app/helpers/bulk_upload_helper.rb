@@ -2,11 +2,11 @@ module BulkUploadHelper
   def bulk_upload_title(controller)
     case controller.controller_name
     when "lettings_logs"
-      "Lettings Bulk Uploads"
+      "Lettings bulk uploads"
     when "sales_logs"
-      "Sales Bulk Uploads"
+      "Sales bulk uploads"
     else
-      "Bulk Uploads"
+      "Bulk uploads"
     end
   end
 
@@ -34,15 +34,32 @@ module BulkUploadHelper
     }.compact.join("").html_safe
   end
 
-  def download_file_link
-    link_to "Download file", "#", class: "govuk-link govuk-!-margin-right-2"
+  def download_file_link(controller, bulk_upload)
+    case controller.controller_name
+    when "lettings_logs"
+      download_lettings_file_link(bulk_upload)
+    when "sales_logs"
+      download_sales_file_link(bulk_upload)
+    else
+      raise "Download file link not found for bulk upload"
+    end
   end
 
   def view_error_report_link
     link_to "View error report", "#", class: "govuk-link"
+  def download_lettings_file_link(bulk_upload)
+    link_to "Download file", download_lettings_bulk_upload_path(bulk_upload), class: "govuk-link govuk-!-margin-right-2"
   end
 
-  def view_logs_link
+  def download_sales_file_link(bulk_upload)
+    link_to "Download file", download_sales_bulk_upload_path(bulk_upload), class: "govuk-link govuk-!-margin-right-2"
+  end
+
+  def view_error_report_link(bulk_upload)
+    link_to "View error report", "/lettings-logs/bulk-upload-resume/#{bulk_upload.id}/start", class: "govuk-link"
+  end
+
+  def view_logs_link(bulk_upload)
     link_to "View logs", "#", class: "govuk-link"
   end
 
