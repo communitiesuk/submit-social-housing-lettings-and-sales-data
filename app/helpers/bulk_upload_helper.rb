@@ -22,7 +22,7 @@ module BulkUploadHelper
     return if count.nil? || count <= 0
 
     text = count > 1 ? (plural_text || singular_text.pluralize(count)) : singular_text
-    content_tag(:p, class: "govuk-hint govuk-!-font-size-16 govuk-!-margin-bottom-1") do
+    content_tag(:p, class: "govuk-!-font-size-16 govuk-!-margin-bottom-1") do
       concat(content_tag(:strong, count))
       concat(" #{text}")
     end
