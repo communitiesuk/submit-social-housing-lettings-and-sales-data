@@ -4,7 +4,7 @@
     <id>{id}</id>
     <name>MHCLG</name>
     <phone/>
-    <provider_type>LA</provider_type>
+    <provider_type>1</provider_type>
     <address_line1>2 Marsham Street</address_line1>
     <address_line2>London</address_line2>
     <postcode>SW1P 4DF</postcode>
@@ -20,5 +20,7 @@
     <dsa_signed>true</dsa_signed>
     <dsa_signed_at>{dsa_signed_at}</dsa_signed_at>
     <dpo_email>{dpo_email}</dpo_email>
+    <profit_status/>
+    <group/>
   </form>
 </forms>
