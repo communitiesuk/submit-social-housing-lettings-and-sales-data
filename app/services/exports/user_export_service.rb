@@ -24,7 +24,7 @@ module Exports
 
       base_number_str = "f#{base_number.to_s.rjust(4, '0')}"
       increment_str = "inc#{increment.to_s.rjust(4, '0')}"
-      "core_#{collection}_#{base_number_str}_#{increment_str}".downcase
+      "#{collection}_2024_2025_apr_mar_#{base_number_str}_#{increment_str}".downcase
     end
 
     def retrieve_resources(recent_export, full_update, _collection)
