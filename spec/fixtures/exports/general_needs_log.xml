@@ -147,18 +147,13 @@
     <duplicate_set_id/>
     <formid>{id}</formid>
     <owningorgid>{owning_org_id}</owningorgid>
-    <owningorgname>MHCLG</owningorgname>
-    <hcnum>1234</hcnum>
     <maningorgid>{managing_org_id}</maningorgid>
-    <maningorgname>MHCLG</maningorgname>
-    <manhcnum>1234</manhcnum>
     <createddate>2022-05-01T00:00:00+01:00</createddate>
     <uploaddate>2022-05-01T00:00:00+01:00</uploaddate>
     <log_id>{log_id}</log_id>
-    <assigned_to>test1@example.com</assigned_to>
-    <created_by>test1@example.com</created_by>
+    <assigned_to>{assigned_to}</assigned_to>
+    <created_by>{created_by}</created_by>
     <amended_by/>
     <renttype_detail>2</renttype_detail>
-    <providertype>1</providertype>
   </form>
 </forms>
