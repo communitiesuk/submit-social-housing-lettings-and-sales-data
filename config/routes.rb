@@ -359,7 +359,7 @@ Rails.application.routes.draw do
 
       resources :bulk_uploads, only: [] do
         member do
-          get "download", to: "sales_logs#download_bulk_upload"
+          get "download", to: "sales_logs#download_bulk_upload", as: "download_sales"
         end
       end
     end
