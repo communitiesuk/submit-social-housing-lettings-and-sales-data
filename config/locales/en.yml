@@ -41,6 +41,11 @@ en:
     create_password: "Create a password to finish setting up your account"
     reset_password: "Reset your password"
 
+  active_notifications:
+    zero: "There are no active notifications"
+    one: "There is one active notification:"
+    other: "There are %{count} active notifications:"
+
   activemodel:
     errors:
       models:
@@ -180,11 +185,19 @@ en:
           attributes:
             absorbing_organisation_id:
               blank: "Select the absorbing organisation"
-            merge_date: 
+            merge_date:
               blank: "Enter a merge date"
               invalid: "Enter a valid merge date"
             existing_absorbing_organisation:
               blank: "You must answer absorbing organisation already active?"
+        notification:
+          attributes:
+            title:
+              blank: "Enter a title"
+            link_text:
+              blank_when_additional_page_set: "Enter the link text"
+            page_content:
+              blank_when_additional_page_set: "Enter the page content"
 
   notification:
     logs_deleted:
@@ -710,7 +723,7 @@ Make sure these answers are correct."
       hint_text: "This is higher than the purchase price minus the discount."
     pregnancy:
       title: "You told us somebody in the household is pregnant"
-      no_females: "You also told us there are no female tenants living at the property."
+      all_male_tenants: "You also told us that all the tenants living at the property are male."
       females_not_in_soft_age_range: "You also told us that any female tenants living at the property are in the following age ranges:<ul><li>under 16 years old</li><li>over 50 years old</li></ul>"
     major_repairs_date:
       title_text: "You told us the property has been vacant for 2 years."

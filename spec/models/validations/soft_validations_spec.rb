@@ -153,24 +153,24 @@ RSpec.describe Validations::SoftValidations do
   end
 
   describe "pregnancy soft validations" do
-    context "when there are no female tenants" do
+    context "when all tenants are male" do
       it "shows the interruption screen" do
         record.age1 = 43
         record.sex1 = "M"
         record.preg_occ = 1
         record.hhmemb = 1
         record.age1_known = 0
-        expect(record.no_females_in_a_pregnant_household?).to be true
+        expect(record.all_male_tenants_in_a_pregnant_household?).to be true
       end
     end
 
-    context "when there are no female tenants and age of other tenants is unknown" do
+    context "when there all tenants are male and age of tenants is unknown" do
       it "shows the interruption screen" do
         record.sex1 = "M"
         record.preg_occ = 1
         record.hhmemb = 1
         record.age1_known = 1
-        expect(record.no_females_in_a_pregnant_household?).to be true
+        expect(record.all_male_tenants_in_a_pregnant_household?).to be true
       end
     end
 
@@ -206,7 +206,7 @@ RSpec.describe Validations::SoftValidations do
         record.sex1 = "F"
         record.preg_occ = 1
         record.hhmemb = 1
-        expect(record.no_females_in_a_pregnant_household?).to be false
+        expect(record.all_male_tenants_in_a_pregnant_household?).to be false
         expect(record.female_in_pregnant_household_in_soft_validation_range?).to be false
       end
     end
@@ -215,7 +215,7 @@ RSpec.describe Validations::SoftValidations do
       it "does not show the interruption screen" do
         record.preg_occ = 1
         record.hhmemb = 2
-        expect(record.no_females_in_a_pregnant_household?).to be false
+        expect(record.all_male_tenants_in_a_pregnant_household?).to be false
         expect(record.female_in_pregnant_household_in_soft_validation_range?).to be false
       end
     end
