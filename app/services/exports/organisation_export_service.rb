@@ -4,9 +4,9 @@ module Exports
     include CollectionTimeHelper
 
     def export_xml_organisations(full_update: false)
-      recent_export = Export.order("started_at").last
-
       collection = "organisations"
+      recent_export = Export.where(collection:).order("started_at").last
+
       base_number = Export.where(empty_export: false, collection:).maximum(:base_number) || 1
       export = build_export_run(collection, base_number, full_update)
       archives_for_manifest = write_export_archive(export, collection, recent_export, full_update)
