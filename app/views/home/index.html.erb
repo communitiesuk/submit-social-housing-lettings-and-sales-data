@@ -6,6 +6,10 @@
         <h1 class="govuk-heading-l"><%= @homepage_presenter.title_text_for_user %></h1>
       </div>
 
+      <% if @current_user.support? %>
+        <%= render partial: "notifications/notification_home_section", locals: { active_notifications: @homepage_presenter.active_notifications } %>
+      <% end %>
+
       <div class="app-data-box-section govuk-grid-row">
 
         <% if @homepage_presenter.in_crossover_period? %>

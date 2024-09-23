@@ -981,9 +981,9 @@ RSpec.describe LettingsLog, type: :model do
     end
 
     describe "deriving voiddate from startdate" do
-      let(:startdate) { Time.zone.now }
+      let(:startdate) { Time.zone.now.beginning_of_day }
 
-      it "correctly derives voiddate if the letting is a renewal and clears it if it is not" do
+      it "correctly derives voiddate if the letting is a renewal" do
         log.assign_attributes(renewal: 1, startdate:)
 
         expect { log.set_derived_fields! }.to change(log, :voiddate).to startdate
