@@ -10,6 +10,12 @@ class User < ApplicationRecord
     Thread.current[:current_user]
   end
 
+  def self.visible_organisations
+    return [] unless current
+
+    current.organisation.child_organisations + [current.organisation]
+  end
+
   # Marked as optional because we validate organisation_id below instead so that
   # the error message is linked to the right field on the form
   belongs_to :organisation, optional: true
@@ -89,11 +95,10 @@ class User < ApplicationRecord
   scope :deactivated, -> { where(active: false) }
   scope :active_status, -> { where(active: true).where.not(last_sign_in_at: nil) }
   scope :visible, lambda {
-    current_user = User.current
-    if current_user&.support?
+    if User.current&.support?
       where(discarded_at: nil)
     else
-      where(discarded_at: nil, organisation: current_user.organisation.child_organisations + [current_user.organisation])
+      where(discarded_at: nil, organisation: visible_organisations)
     end
   }
 
