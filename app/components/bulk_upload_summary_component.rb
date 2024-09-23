@@ -24,6 +24,4 @@ class BulkUploadSummaryComponent < ViewComponent::Base
   def potential_errors_count
     @bulk_upload_errors.where(category: "soft_validations").count
   end
-
-
 end
