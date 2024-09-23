@@ -12,14 +12,10 @@ describe PostcodeService do
   end
 
   describe "lookup" do
-    before do
-      Excon.defaults[:mock] = true
-      Excon.defaults[:stubs] = :local
-    end
-
     context "when the request returns a success response" do
       before do
-        Excon.stub({}, { body: '{"result": { "admin_district": "District", "codes": { "admin_district": "123" } } }', status: 200 })
+        WebMock.stub_request(:get, "https://api.postcodes.io/postcodes/A000AA")
+        .to_return(status: 200, body: "{\"status\":200,\"result\":{\"postcode\":\"A00 0AA\",\"admin_district\":\"District\",\"codes\":{\"admin_district\":\"123\"}}}", headers: {})
       end
 
       it "returns the admin district and admin district code" do
@@ -31,7 +27,8 @@ describe PostcodeService do
 
     context "when the request returns a not found response" do
       before do
-        Excon.stub({}, { status: 404 })
+        WebMock.stub_request(:get, "https://api.postcodes.io/postcodes/A000AA")
+        .to_return(status: 404, body: "{\"status\":404,\"error\":\"Postcode not found\"}", headers: {})
       end
 
       it "returns nil" do
@@ -47,7 +44,8 @@ describe PostcodeService do
 
     context "when the request returns an error response" do
       before do
-        Excon.stub({}, { body: "This is an error message that is not valid json", status: 500 })
+        WebMock.stub_request(:get, "https://api.postcodes.io/postcodes/A000AA")
+        .to_return(status: 500, body: "This is an error message that is not valid json", headers: {})
       end
 
       it "returns nil" do
@@ -63,7 +61,8 @@ describe PostcodeService do
 
     context "when the request returns a success response that causes later errors" do
       before do
-        Excon.stub({}, { body: '{"result": { "admin_district": "District" } }', status: 200 })
+        WebMock.stub_request(:get, "https://api.postcodes.io/postcodes/A000AA")
+        .to_return(status: 200, body: "{\"status\":200,\"result\":{\"admin_district\":\"Westminster\"", headers: {})
       end
 
       it "returns nil" do
