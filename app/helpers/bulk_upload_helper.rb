@@ -10,57 +10,34 @@ module BulkUploadHelper
     end
   end
 
-  def bulk_upload_details(bulk_upload)
-    content_tag(:span) do
-      concat("Uploaded by: #{bulk_upload.user.name} (#{bulk_upload.user.email})<br>".html_safe)
-      concat("Uploading organisation: #{bulk_upload.user.organisation.name}<br>".html_safe)
-      concat("Time of upload: #{bulk_upload.created_at.to_formatted_s(:govuk_date)}".html_safe)
-    end
-  end
+  def bulk_upload_status(bulk_upload)
+    validator = validator_class(bulk_upload).new(bulk_upload: bulk_upload, path: bulk_upload.file_path)
 
-  def formatted_count_text(count, singular_text, plural_text = nil)
-    return if count.nil? || count <= 0
-
-    text = count > 1 ? (plural_text || singular_text.pluralize(count)) : singular_text
-    content_tag(:p, class: "govuk-!-font-size-16 govuk-!-margin-bottom-1") do
-      concat(content_tag(:strong, count))
-      concat(" #{text}")
-    end
-  end
-
-  def counts(*counts_with_texts)
-    counts_with_texts.map { |count, singular_text, plural_text|
-      formatted_count_text(count, singular_text, plural_text) if count.present?
-    }.compact.join("").html_safe
-  end
-
-  def download_file_link(controller, bulk_upload)
-    case controller.controller_name
-    when "lettings_logs"
-      download_lettings_file_link(bulk_upload)
-    when "sales_logs"
-      download_sales_file_link(bulk_upload)
+    if validator.invalid?
+      "The bulk upload has failed due to validation errors."
+    elsif validator.any_setup_errors?
+      "The bulk upload has setup errors."
+    elsif validator.soft_validation_errors_only?
+      "The bulk upload has soft validation errors."
+    elsif bulk_upload.logs.where.not(status_cache: %w[completed]).count.positive?
+      "The bulk upload has created logs but some are incomplete."
+    elsif bulk_upload.logs.group(:status_cache).count.keys == %w[completed]
+      "The bulk upload has successfully completed."
     else
-      raise "Download file link not found for bulk upload"
+      "The bulk upload status is unknown."
     end
   end
 
-  def view_error_report_link
-    link_to "View error report", "#", class: "govuk-link"
-  def download_lettings_file_link(bulk_upload)
-    link_to "Download file", download_lettings_bulk_upload_path(bulk_upload), class: "govuk-link govuk-!-margin-right-2"
-  end
+private
 
-  def download_sales_file_link(bulk_upload)
-    link_to "Download file", download_sales_bulk_upload_path(bulk_upload), class: "govuk-link govuk-!-margin-right-2"
+  def validator_class(bulk_upload)
+    case bulk_upload.log_type
+    when "lettings"
+      BulkUpload::Lettings::Validator
+    when "sales"
+      BulkUpload::Sales::Validator
+    else
+      raise "Validator not found for #{bulk_upload.log_type}"
+    end
   end
-
-  def view_error_report_link(bulk_upload)
-    link_to "View error report", "/lettings-logs/bulk-upload-resume/#{bulk_upload.id}/start", class: "govuk-link"
-  end
-
-  def view_logs_link(bulk_upload)
-    link_to "View logs", "#", class: "govuk-link"
-  end
-
 end
