@@ -124,6 +124,10 @@ Rails.application.routes.draw do
   resources :users do
     get "edit-dpo", to: "users#dpo"
     get "edit-key-contact", to: "users#key_contact"
+    get "log-reassignment", to: "users#log_reassignment"
+    patch "log-reassignment", to: "users#update_log_reassignment"
+    get "organisation-change-confirmation", to: "users#organisation_change_confirmation"
+    patch "organisation-change-confirmation", to: "users#confirm_organisation_change"
 
     collection do
       get :search
@@ -138,8 +142,11 @@ Rails.application.routes.draw do
     end
   end
 
-  resource :notifications do
+  resources :notifications do
     get "dismiss", to: "notifications#dismiss"
+    get "check-answers", to: "notifications#check_answers"
+    get "delete-confirmation", to: "notifications#delete_confirmation"
+    delete "delete", to: "notifications#delete"
   end
 
   resources :organisations do

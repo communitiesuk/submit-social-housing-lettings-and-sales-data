@@ -124,6 +124,13 @@ RSpec.describe UsersController, type: :request do
         expect(response).to redirect_to("/account/sign-in")
       end
     end
+
+    describe "#log_reassignment" do
+      it "redirects to the sign in page" do
+        get "/users/#{user.id}/log-reassignment"
+        expect(response).to redirect_to("/account/sign-in")
+      end
+    end
   end
 
   context "when user is signed in as a data provider" do
@@ -149,6 +156,7 @@ RSpec.describe UsersController, type: :request do
           expect(page).not_to have_link("Change", text: "role")
           expect(page).not_to have_link("Change", text: "if data protection officer")
           expect(page).not_to have_link("Change", text: "if a key contact")
+          expect(page).not_to have_link("Change", text: "organisation")
         end
 
         it "does not allow deactivating the user" do
@@ -208,6 +216,7 @@ RSpec.describe UsersController, type: :request do
             expect(page).not_to have_link("Change", text: "role")
             expect(page).not_to have_link("Change", text: "if data protection officer")
             expect(page).not_to have_link("Change", text: "if a key contact")
+            expect(page).not_to have_link("Change", text: "organisation")
           end
 
           it "does not allow deactivating the user" do
@@ -258,6 +267,7 @@ RSpec.describe UsersController, type: :request do
           expect(page).not_to have_field("user[role]")
           expect(page).not_to have_field("user[is_dpo]")
           expect(page).not_to have_field("user[is_key_contact]")
+          expect(page).not_to have_field("user[organisation_id]")
         end
       end
 
@@ -428,6 +438,13 @@ RSpec.describe UsersController, type: :request do
         result = JSON.parse(response.body)
         expect(result.count).to eq(2)
         expect(result.keys).to match_array([org_user.id.to_s, managing_user.id.to_s])
+      end
+    end
+
+    describe "#log_reassignment" do
+      it "returns unauthorized status" do
+        get "/users/#{user.id}/log-reassignment"
+        expect(response).to have_http_status(:unauthorized)
       end
     end
   end
@@ -607,6 +624,7 @@ RSpec.describe UsersController, type: :request do
           expect(page).to have_link("Change", text: "role")
           expect(page).to have_link("Change", text: "if data protection officer")
           expect(page).to have_link("Change", text: "if a key contact")
+          expect(page).not_to have_link("Change", text: "organisation")
         end
 
         it "does not allow deactivating the user" do
@@ -655,6 +673,7 @@ RSpec.describe UsersController, type: :request do
             expect(page).to have_link("Change", text: "role")
             expect(page).to have_link("Change", text: "if data protection officer")
             expect(page).to have_link("Change", text: "if a key contact")
+            expect(page).not_to have_link("Change", text: "organisation")
           end
 
           it "allows deactivating the user" do
@@ -713,6 +732,7 @@ RSpec.describe UsersController, type: :request do
           expect(page).to have_field("user[name]")
           expect(page).to have_field("user[email]")
           expect(page).to have_field("user[role]")
+          expect(page).not_to have_field("user[organisation_id]")
         end
 
         it "does not allow setting the role to `support`" do
@@ -738,6 +758,7 @@ RSpec.describe UsersController, type: :request do
             expect(page).to have_field("user[name]")
             expect(page).to have_field("user[email]")
             expect(page).to have_field("user[role]")
+            expect(page).not_to have_field("user[organisation_id]")
           end
         end
 
@@ -1227,6 +1248,13 @@ RSpec.describe UsersController, type: :request do
         expect(result.keys).to match_array([org_user.id.to_s, managing_user.id.to_s])
       end
     end
+
+    describe "#log_reassignment" do
+      it "returns unauthorised status" do
+        get "/users/#{user.id}/log-reassignment"
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
   end
 
   context "when user is signed in as a support user" do
@@ -1459,6 +1487,7 @@ RSpec.describe UsersController, type: :request do
           expect(page).to have_link("Change", text: "role")
           expect(page).to have_link("Change", text: "if data protection officer")
           expect(page).to have_link("Change", text: "if a key contact")
+          expect(page).to have_link("Change", text: "organisation")
         end
 
         it "does not allow deactivating the user" do
@@ -1488,6 +1517,7 @@ RSpec.describe UsersController, type: :request do
             expect(page).to have_link("Change", text: "role")
             expect(page).to have_link("Change", text: "if data protection officer")
             expect(page).to have_link("Change", text: "if a key contact")
+            expect(page).to have_link("Change", text: "organisation")
           end
 
           it "links to user organisation" do
@@ -1626,6 +1656,7 @@ RSpec.describe UsersController, type: :request do
           expect(page).to have_field("user[role]")
           expect(page).to have_field("user[phone]")
           expect(page).to have_field("user[phone_extension]")
+          expect(page).to have_field("user[organisation_id]")
         end
 
         it "allows setting the role to `support`" do
@@ -1653,6 +1684,7 @@ RSpec.describe UsersController, type: :request do
             expect(page).to have_field("user[role]")
             expect(page).to have_field("user[phone]")
             expect(page).to have_field("user[phone_extension]")
+            expect(page).to have_field("user[organisation_id]")
           end
         end
 
@@ -1673,6 +1705,7 @@ RSpec.describe UsersController, type: :request do
             expect(page).to have_field("user[role]")
             expect(page).to have_field("user[phone]")
             expect(page).to have_field("user[phone_extension]")
+            expect(page).to have_field("user[organisation_id]")
           end
         end
 
@@ -1682,10 +1715,11 @@ RSpec.describe UsersController, type: :request do
             get "/users/#{other_user.id}/edit", headers:, params: {}
           end
 
-          it "redirects to user details page" do
-            expect(response).to redirect_to("/users/#{other_user.id}")
-            follow_redirect!
-            expect(page).not_to have_link("Change")
+          it "allows editing the user" do
+            expect(page).to have_field("user[name]")
+            expect(page).to have_field("user[email]")
+            expect(page).to have_field("user[role]")
+            expect(page).to have_field("user[organisation_id]")
           end
         end
       end
@@ -1820,6 +1854,20 @@ RSpec.describe UsersController, type: :request do
               patch "/users/#{other_user.id}", headers:, params:
             end
           end
+
+          context "and email address hasn't changed" do
+            let(:params) { { id: user.id, user: { name: new_name, email: other_user.email, is_dpo: "true", is_key_contact: "true" } } }
+
+            before do
+              user.legacy_users.destroy_all
+            end
+
+            it "shows flash notice" do
+              patch("/users/#{other_user.id}", headers:, params:)
+
+              expect(flash[:notice]).to be_nil
+            end
+          end
         end
 
         context "when we update the user password" do
@@ -1836,6 +1884,39 @@ RSpec.describe UsersController, type: :request do
           it "shows an error if passwords don't match" do
             expect(response).to have_http_status(:unprocessable_entity)
             expect(page).to have_selector(".govuk-error-summary__title")
+          end
+        end
+
+        context "when updating organisation" do
+          let(:new_organisation) { create(:organisation) }
+
+          before do
+            patch "/users/#{user.id}", headers:, params:
+          end
+
+          context "and organisation id is nil" do
+            let(:params) { { id: user.id, user: { organisation_id: "" } } }
+
+            it "does not update the organisation" do
+              expect(response).to have_http_status(:unprocessable_entity)
+              expect(page).to have_selector(".govuk-error-summary__title")
+            end
+          end
+
+          context "and organisation id is not nil" do
+            let(:params) { { id: user.id, user: { organisation_id: new_organisation.id, name: "new_name" } } }
+
+            it "does not update the organisation" do
+              expect(user.reload.organisation).not_to eq(new_organisation)
+            end
+
+            it "redirects to log reassignment page" do
+              expect(response).to redirect_to("/users/#{user.id}/log-reassignment?organisation_id=#{new_organisation.id}")
+            end
+
+            it "updated other fields" do
+              expect(user.reload.name).to eq("new_name")
+            end
           end
         end
       end
@@ -1890,89 +1971,237 @@ RSpec.describe UsersController, type: :request do
           end
         end
 
-        context "when the current user does not match the user ID" do
-          context "when the user is not part of the same organisation as the current user" do
-            let(:other_user) { create(:user) }
-            let(:params) { { id: other_user.id, user: { name: new_name } } }
+        context "when the user is not part of the same organisation as the current user" do
+          let(:other_user) { create(:user) }
+          let(:params) { { id: other_user.id, user: { name: new_name } } }
 
-            it "updates the user" do
-              expect { patch "/users/#{other_user.id}", headers:, params: }
-                .to change { other_user.reload.name }.from(other_user.name).to(new_name)
-            end
+          it "updates the user" do
+            expect { patch "/users/#{other_user.id}", headers:, params: }
+              .to change { other_user.reload.name }.from(other_user.name).to(new_name)
+          end
 
-            it "tracks who updated the record" do
-              expect { patch "/users/#{other_user.id}", headers:, params: }
-                .to change { other_user.reload.versions.last.actor&.id }.from(nil).to(user.id)
-            end
+          it "tracks who updated the record" do
+            expect { patch "/users/#{other_user.id}", headers:, params: }
+              .to change { other_user.reload.versions.last.actor&.id }.from(nil).to(user.id)
+          end
 
-            context "when user changes email, dpo, key_contact" do
-              let(:params) { { id: other_user.id, user: { name: new_name, email: new_email, is_dpo: "true", is_key_contact: "true" } } }
+          context "when user changes email, dpo, key_contact" do
+            let(:params) { { id: other_user.id, user: { name: new_name, email: new_email, is_dpo: "true", is_key_contact: "true" } } }
 
-              it "allows changing email, dpo, key_contact" do
-                patch "/users/#{other_user.id}", headers: headers, params: params
-                other_user.reload
-                expect(other_user.unconfirmed_email).to eq(new_email)
-                expect(other_user.is_data_protection_officer?).to be true
-                expect(other_user.is_key_contact?).to be true
-              end
-            end
-
-            it "does not bypass sign in for the support user" do
+            it "allows changing email, dpo, key_contact" do
               patch "/users/#{other_user.id}", headers: headers, params: params
-              follow_redirect!
-              expect(page).to have_content("#{other_user.reload.name}’s account")
-              expect(page).to have_content(other_user.reload.email.to_s)
+              other_user.reload
+              expect(other_user.unconfirmed_email).to eq(new_email)
+              expect(other_user.is_data_protection_officer?).to be true
+              expect(other_user.is_key_contact?).to be true
+            end
+          end
+
+          it "does not bypass sign in for the support user" do
+            patch "/users/#{other_user.id}", headers: headers, params: params
+            follow_redirect!
+            expect(page).to have_content("#{other_user.reload.name}’s account")
+            expect(page).to have_content(other_user.reload.email.to_s)
+          end
+
+          context "when the support user tries to update the user’s password", :aggregate_failures do
+            let(:params) do
+              {
+                id: user.id, user: { password: new_name, password_confirmation: new_name, name: "new name", email: new_email }
+              }
             end
 
-            context "when the support user tries to update the user’s password", :aggregate_failures do
-              let(:params) do
-                {
-                  id: user.id, user: { password: new_name, password_confirmation: new_name, name: "new name", email: new_email }
-                }
+            let(:personalisation) do
+              {
+                name: params[:user][:name],
+                email: new_email,
+                organisation: other_user.organisation.name,
+                link: include("/account/confirmation?confirmation_token="),
+              }
+            end
+
+            before do
+              other_user.legacy_users.destroy_all
+            end
+
+            it "shows flash notice" do
+              patch("/users/#{other_user.id}", headers:, params:)
+
+              expect(flash[:notice]).to eq("An email has been sent to #{new_email} to confirm this change.")
+            end
+
+            it "sends new flow emails" do
+              expect(notify_client).to receive(:send_email).with(
+                email_address: other_user.email,
+                template_id: User::FOR_OLD_EMAIL_CHANGED_BY_OTHER_USER_TEMPLATE_ID,
+                personalisation: {
+                  new_email:,
+                  old_email: other_user.email,
+                },
+              ).once
+
+              expect(notify_client).to receive(:send_email).with(
+                email_address: new_email,
+                template_id: User::FOR_NEW_EMAIL_CHANGED_BY_OTHER_USER_TEMPLATE_ID,
+                personalisation: {
+                  new_email:,
+                  old_email: other_user.email,
+                  link: include("/account/confirmation?confirmation_token="),
+                },
+              ).once
+
+              expect(notify_client).not_to receive(:send_email)
+
+              patch "/users/#{other_user.id}", headers:, params:
+            end
+          end
+
+          context "when updating organisation" do
+            let(:new_organisation) { create(:organisation) }
+
+            before do
+              patch "/users/#{other_user.id}", headers:, params:
+            end
+
+            context "and organisation id is nil" do
+              let(:params) { { id: other_user.id, user: { organisation_id: "" } } }
+
+              it "does not update the organisation" do
+                expect(response).to have_http_status(:unprocessable_entity)
+                expect(page).to have_selector(".govuk-error-summary__title")
+              end
+            end
+
+            context "and organisation id is not nil" do
+              let(:params) { { id: other_user.id, user: { organisation_id: new_organisation.id, name: "new_name" } } }
+
+              it "does not update the organisation" do
+                expect(user.reload.organisation).not_to eq(new_organisation)
               end
 
-              let(:personalisation) do
-                {
-                  name: params[:user][:name],
-                  email: new_email,
-                  organisation: other_user.organisation.name,
-                  link: include("/account/confirmation?confirmation_token="),
-                }
+              it "redirects to log reassignment page" do
+                expect(response).to redirect_to("/users/#{other_user.id}/log-reassignment?organisation_id=#{new_organisation.id}")
               end
+
+              it "updated other fields" do
+                expect(other_user.reload.name).to eq("new_name")
+              end
+            end
+          end
+
+          context "when updating log reassignment" do
+            let(:new_organisation) { create(:organisation, name: "New org") }
+            let(:new_organisation_2) { create(:organisation, name: "New org 2") }
+            let(:new_organisation_3) { create(:organisation, name: "New org 3") }
+
+            context "and log reassignment choice is not present" do
+              let(:params) { { user: { organisation_id: new_organisation.id, log_reassignment: nil } } }
 
               before do
-                other_user.legacy_users.destroy_all
+                patch "/users/#{other_user.id}/log-reassignment", headers:, params:
               end
 
-              it "shows flash notice" do
-                patch("/users/#{other_user.id}", headers:, params:)
-
-                expect(flash[:notice]).to eq("An email has been sent to #{new_email} to confirm this change.")
+              it "does not update the user's organisation" do
+                expect(other_user.reload.organisation).not_to eq(new_organisation)
               end
 
-              it "sends new flow emails" do
-                expect(notify_client).to receive(:send_email).with(
-                  email_address: other_user.email,
-                  template_id: User::FOR_OLD_EMAIL_CHANGED_BY_OTHER_USER_TEMPLATE_ID,
-                  personalisation: {
-                    new_email:,
-                    old_email: other_user.email,
-                  },
-                ).once
+              it "displays the error message" do
+                expect(response).to have_http_status(:unprocessable_entity)
+                expect(page).to have_content("Select if you want to reassign logs")
+              end
+            end
 
-                expect(notify_client).to receive(:send_email).with(
-                  email_address: new_email,
-                  template_id: User::FOR_NEW_EMAIL_CHANGED_BY_OTHER_USER_TEMPLATE_ID,
-                  personalisation: {
-                    new_email:,
-                    old_email: other_user.email,
-                    link: include("/account/confirmation?confirmation_token="),
-                  },
-                ).once
+            context "and log reassignment choice is to change the stock owner and managing agent" do
+              let(:params) { { user: { organisation_id: new_organisation.id, log_reassignment: "reassign_all" } } }
 
-                expect(notify_client).not_to receive(:send_email)
+              before do
+                patch "/users/#{other_user.id}/log-reassignment", headers:, params:
+              end
 
-                patch "/users/#{other_user.id}", headers:, params:
+              it "does not update the user's organisation" do
+                expect(other_user.reload.organisation).not_to eq(new_organisation)
+              end
+
+              it "redirects to confirmation page" do
+                expect(response).to redirect_to("/users/#{other_user.id}/organisation-change-confirmation?log_reassignment=reassign_all&organisation_id=#{new_organisation.id}")
+              end
+            end
+
+            context "and log reassignment choice is to unassign logs" do
+              let(:params) { { user: { organisation_id: new_organisation.id, log_reassignment: "unassign" } } }
+
+              before do
+                patch "/users/#{other_user.id}/log-reassignment", headers:, params:
+              end
+
+              it "does not update the user's organisation" do
+                expect(other_user.reload.organisation).not_to eq(new_organisation)
+              end
+
+              it "redirects to confirmation page" do
+                expect(response).to redirect_to("/users/#{other_user.id}/organisation-change-confirmation?log_reassignment=unassign&organisation_id=#{new_organisation.id}")
+              end
+            end
+
+            context "and log reassignment choice is to change stock owner" do
+              let(:params) { { user: { organisation_id: new_organisation.id, log_reassignment: "reassign_stock_owner" } } }
+
+              context "when users organisation manages the logs" do
+                before do
+                  create(:lettings_log, managing_organisation: other_user.organisation, assigned_to: other_user)
+                  create(:sales_log, managing_organisation: other_user.organisation, assigned_to: other_user)
+                  patch "/users/#{other_user.id}/log-reassignment", headers:, params:
+                end
+
+                it "required the new org to have stock owner relationship with the current user org" do
+                  expect(response).to have_http_status(:unprocessable_entity)
+                  expect(page).to have_content("New org must be a stock owner of #{other_user.organisation_name} to make this change.")
+                end
+              end
+
+              context "when different organisations manage the logs" do
+                before do
+                  create(:lettings_log, managing_organisation: other_user.organisation, assigned_to: other_user)
+                  create(:lettings_log, managing_organisation: new_organisation_2, assigned_to: other_user)
+                  create(:sales_log, managing_organisation: new_organisation_3, assigned_to: other_user)
+                  patch "/users/#{other_user.id}/log-reassignment", headers:, params:
+                end
+
+                it "required the new org to have stock owner relationship with the managing organisations" do
+                  expect(response).to have_http_status(:unprocessable_entity)
+                  expect(page).to have_content("New org must be a stock owner of #{other_user.organisation_name}, #{new_organisation_2.name}, and #{new_organisation_3.name} to make this change.")
+                end
+              end
+            end
+
+            context "and log reassignment choice is to change managing agent" do
+              let(:params) { { user: { organisation_id: new_organisation.id, log_reassignment: "reassign_managing_agent" } } }
+
+              context "when users organisation manages the logs" do
+                before do
+                  create(:lettings_log, owning_organisation: other_user.organisation, assigned_to: other_user)
+                  create(:sales_log, owning_organisation: other_user.organisation, assigned_to: other_user)
+                  patch "/users/#{other_user.id}/log-reassignment", headers:, params:
+                end
+
+                it "required the new org to have managing agent relationship with the current user org" do
+                  expect(response).to have_http_status(:unprocessable_entity)
+                  expect(page).to have_content("New org must be a managing agent of #{other_user.organisation_name} to make this change.")
+                end
+              end
+
+              context "when different organisations manage the logs" do
+                before do
+                  create(:lettings_log, owning_organisation: other_user.organisation, assigned_to: other_user)
+                  create(:lettings_log, owning_organisation: new_organisation_2, assigned_to: other_user)
+                  create(:sales_log, owning_organisation: new_organisation_3, managing_organisation: other_user.organisation, assigned_to: other_user)
+                  patch "/users/#{other_user.id}/log-reassignment", headers:, params:
+                end
+
+                it "required the new org to have managing agent relationship with owning organisations" do
+                  expect(response).to have_http_status(:unprocessable_entity)
+                  expect(page).to have_content("New org must be a managing agent of #{other_user.organisation_name}, #{new_organisation_2.name}, and #{new_organisation_3.name} to make this change.")
+                end
               end
             end
           end
@@ -2192,6 +2421,151 @@ RSpec.describe UsersController, type: :request do
         result = JSON.parse(response.body)
         expect(result.count).to eq(4)
         expect(result.keys).to match_array([org_user.id.to_s, managing_user.id.to_s, owner_user.id.to_s, other_user.id.to_s])
+      end
+    end
+
+    describe "#log_reassignment" do
+      context "when organisation id is not given" do
+        before do
+          create(:lettings_log, assigned_to: other_user)
+        end
+
+        it "redirects to the user page" do
+          get "/users/#{other_user.id}/log-reassignment"
+          expect(response).to redirect_to("/users/#{other_user.id}")
+        end
+      end
+
+      context "when organisation id does not exist" do
+        before do
+          create(:lettings_log, assigned_to: other_user)
+        end
+
+        it "redirects to the user page" do
+          get "/users/#{other_user.id}/log-reassignment?organisation_id=123123"
+          expect(response).to redirect_to("/users/#{other_user.id}")
+        end
+      end
+
+      context "with valid organisation id" do
+        let(:new_organisation) { create(:organisation, name: "new org") }
+
+        context "and user has assigned logs" do
+          before do
+            create(:lettings_log, assigned_to: other_user)
+          end
+
+          it "allows reassigning logs" do
+            get "/users/#{other_user.id}/log-reassignment?organisation_id=#{new_organisation.id}"
+            expect(page).to have_content("Should this user’s logs move to their new organisation?")
+            expect(page).to have_content("You’re moving #{other_user.name} from #{other_user.organisation_name} to new org. There is 1 log assigned to them.")
+            expect(page).to have_button("Continue")
+            expect(page).to have_link("Back", href: "/users/#{other_user.id}/edit")
+            expect(page).to have_link("Cancel", href: "/users/#{other_user.id}/edit")
+          end
+        end
+
+        context "and user has no assigned logs" do
+          it "redirects to confirm organisation change page" do
+            get "/users/#{other_user.id}/log-reassignment?organisation_id=#{new_organisation.id}"
+            expect(response).to redirect_to("/users/#{other_user.id}/organisation-change-confirmation?organisation_id=#{new_organisation.id}")
+          end
+        end
+      end
+    end
+
+    describe "#confirm_organisation_change" do
+      context "when organisation id is not given" do
+        it "redirects to the user page" do
+          get "/users/#{other_user.id}/organisation-change-confirmation?log_reassignment=reassign_all"
+          expect(response).to redirect_to("/users/#{other_user.id}")
+        end
+      end
+
+      context "when reassignment option is not given" do
+        let(:new_organisation) { create(:organisation, name: "new org") }
+
+        before do
+          create(:lettings_log, assigned_to: other_user)
+        end
+
+        it "redirects to the user page" do
+          get "/users/#{other_user.id}/organisation-change-confirmation?organisation_id=#{new_organisation.id}"
+          expect(response).to redirect_to("/users/#{other_user.id}")
+        end
+      end
+
+      context "when organisation id does not exist" do
+        it "redirects to the user page" do
+          get "/users/#{other_user.id}/organisation-change-confirmation?organisation_id=123123&log_reassignment=reassign_all"
+          expect(response).to redirect_to("/users/#{other_user.id}")
+        end
+      end
+
+      context "with valid organisation id" do
+        let(:new_organisation) { create(:organisation, name: "new org") }
+
+        before do
+          create(:lettings_log, assigned_to: other_user)
+        end
+
+        it "displays confirm organisation change page" do
+          get "/users/#{other_user.id}/organisation-change-confirmation?organisation_id=#{new_organisation.id}&log_reassignment=reassign_all"
+          expect(page).to have_content("Are you sure you want to move this user?")
+          expect(page).to have_content("You’re moving #{other_user.name} from #{other_user.organisation_name} to #{new_organisation.name}. The stock owner and managing agent on their logs will change to #{new_organisation.name}.")
+        end
+      end
+    end
+
+    describe "#confirm_organisation_change patch" do
+      context "when organisation id is not given" do
+        let(:params) { { user: { organisation_id: nil, log_reassignment: "reassign_all" } } }
+
+        it "redirects to the user page" do
+          patch "/users/#{other_user.id}/organisation-change-confirmation", headers:, params: params
+          expect(response).to redirect_to("/users/#{other_user.id}")
+        end
+      end
+
+      context "when reassignment option is not given" do
+        let(:new_organisation) { create(:organisation, name: "new org") }
+        let(:params) { { user: { organisation_id: new_organisation.id, log_reassignment: "reassign_all" } } }
+
+        it "redirects to the user page" do
+          patch "/users/#{other_user.id}/organisation-change-confirmation", headers:, params: params
+          expect(response).to redirect_to("/users/#{other_user.id}")
+        end
+      end
+
+      context "when organisation id does not exist" do
+        let(:params) { { user: { organisation_id: 123_123, log_reassignment: "reassign_all" } } }
+
+        it "redirects to the user page" do
+          patch "/users/#{other_user.id}/organisation-change-confirmation", headers:, params: params
+          expect(response).to redirect_to("/users/#{other_user.id}")
+        end
+      end
+
+      context "with valid organisation id" do
+        let(:new_organisation) { create(:organisation, name: "new org") }
+        let(:params) { { user: { organisation_id: new_organisation.id, log_reassignment: "reassign_all" } } }
+        let!(:lettings_log) { create(:lettings_log, assigned_to: other_user) }
+        let!(:sales_log) { create(:sales_log, assigned_to: other_user) }
+
+        context "and reassign all option" do
+          it "updates logs and moves the user" do
+            patch "/users/#{other_user.id}/organisation-change-confirmation", headers:, params: params
+            expect(response).to redirect_to("/users/#{other_user.id}")
+
+            expect(other_user.reload.organisation).to eq(new_organisation)
+            expect(other_user.lettings_logs.count).to eq(1)
+            expect(other_user.sales_logs.count).to eq(1)
+            expect(lettings_log.reload.managing_organisation).to eq(new_organisation)
+            expect(lettings_log.owning_organisation).to eq(new_organisation)
+            expect(sales_log.reload.managing_organisation).to eq(new_organisation)
+            expect(sales_log.owning_organisation).to eq(new_organisation)
+          end
+        end
       end
     end
   end
