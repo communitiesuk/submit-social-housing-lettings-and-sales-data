@@ -150,7 +150,7 @@ RSpec.describe Exports::UserExportService do
       context "when this is a second export (partial)" do
         before do
           start_time = Time.zone.local(2022, 6, 1)
-          Export.new(started_at: start_time).save! # this should be user export
+          Export.new(started_at: start_time, collection: "users").save! # this should be user export
         end
 
         it "does not add any entry for the master manifest (no users)" do

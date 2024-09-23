@@ -150,7 +150,7 @@ RSpec.describe Exports::OrganisationExportService do
       context "when this is a second export (partial)" do
         before do
           start_time = Time.zone.local(2022, 6, 1)
-          Export.new(started_at: start_time).save! # this should be organisation export
+          Export.new(started_at: start_time, collection: "organisations").save! # this should be organisation export
         end
 
         it "does not add any entry for the master manifest (no organisations)" do
