@@ -2,13 +2,13 @@ class Form::Lettings::Pages::NoFemalesPregnantHouseholdPersonValueCheck < ::Form
   def initialize(id, hsh, subsection, person_index:)
     super(id, hsh, subsection)
     @id = "no_females_pregnant_household_person_#{person_index}_value_check"
-    @depends_on = [{ "no_females_in_a_pregnant_household?" => true, "details_known_#{person_index}" => 0 }]
+    @depends_on = [{ "all_male_tenants_in_a_pregnant_household?" => true, "details_known_#{person_index}" => 0 }]
     @title_text = {
       "translation" => "soft_validations.pregnancy.title",
       "arguments" => [{ "key" => "sex1", "label" => true, "i18n_template" => "sex1" }],
     }
     @informative_text = {
-      "translation" => "soft_validations.pregnancy.no_females",
+      "translation" => "soft_validations.pregnancy.all_male_tenants",
       "arguments" => [{ "key" => "sex1", "label" => true, "i18n_template" => "sex1" }],
     }
     @person_index = person_index
