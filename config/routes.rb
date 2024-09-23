@@ -281,7 +281,7 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :bulk_uploads, only: [] do
+      resources :bulk_uploads, path: "bulk-uploads", only: [] do
         member do
           get "download", to: "lettings_logs#download_bulk_upload", as: "download_lettings"
         end
@@ -360,9 +360,9 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :bulk_uploads, only: [] do
+      resources :bulk_uploads, path: "bulk-uploads", only: [] do
         member do
-          get "download", to: "sales_logs#download_bulk_upload", as: "download_sales"
+          get "download", to: "sales_logs#download_bulk_upload", as: "download-sales"
         end
       end
     end
