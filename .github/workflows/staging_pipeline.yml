@@ -404,7 +404,7 @@ jobs:
               "command": ["bash", "-c", "export email=$STAGING_PERFORMANCE_TEST_EMAIL && export password=$STAGING_PERFORMANCE_TEST_PASSWORD && sh ./lib/tasks/performance_test.sh"]
             }]
           }'
-          arn=$(aws ecs run-task --cluster $cluster --task-definition $ad_hoc_task_definition --network-configuration "$network" --overrides "$overrides" --group migrations --launch-type FARGATE --query tasks[0].taskArn)
+          arn=$(aws ecs run-task --cluster $cluster --task-definition $ad_hoc_task_definition --network-configuration "$network" --overrides "$overrides" --group performance --launch-type FARGATE --query tasks[0].taskArn)
 
           echo "Waiting for performance tests to run"
           task_id=${arn##*/}
