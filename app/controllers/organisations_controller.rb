@@ -47,17 +47,7 @@ class OrganisationsController < ApplicationController
   def duplicate_schemes
     authorize @organisation
 
-    duplicate_scheme_sets = @organisation.owned_schemes.duplicate_sets
-    @duplicate_schemes = duplicate_scheme_sets.map { |set| set.map { |id| @organisation.owned_schemes.find(id) } }
-    @duplicate_locations = []
-    @organisation.owned_schemes.each do |scheme|
-      duplicate_location_sets = scheme.locations.duplicate_sets
-      next unless duplicate_location_sets.any?
-
-      duplicate_location_sets.each do |duplicate_set|
-        @duplicate_locations << { scheme: scheme, locations: duplicate_set.map { |id| scheme.locations.find(id) } }
-      end
-    end
+    get_duplicate_schemes_and_locations
   end
 
   def show
@@ -311,6 +301,22 @@ class OrganisationsController < ApplicationController
     render json: org_data.to_json
   end
 
+  def confirm_duplicate_schemes
+    authorize @organisation
+
+    if scheme_duplicates_checked_params[:scheme_duplicates_checked] == "true"
+      @organisation.schemes_deduplicated_at = Time.zone.now
+      if @organisation.save
+        flash[:notice] = I18n.t("organisation.duplicate_schemes_confirmed")
+        redirect_to schemes_organisation_path(@organisation)
+      end
+    else
+      @organisation.errors.add(:scheme_duplicates_checked, I18n.t("validations.organisation.scheme_duplicates_not_resolved"))
+      get_duplicate_schemes_and_locations
+      render :duplicate_schemes, status: :unprocessable_entity
+    end
+  end
+
 private
 
   def filter_type
@@ -341,6 +347,10 @@ private
     params.require(:organisation).permit(rent_periods: [], all_rent_periods: [])
   end
 
+  def scheme_duplicates_checked_params
+    params.require(:organisation).permit(:scheme_duplicates_checked)
+  end
+
   def codes_only_export?
     params.require(:codes_only) == "true"
   end
@@ -359,5 +369,19 @@ private
 
   def find_resource
     @organisation = Organisation.find(params[:id])
+  end
+
+  def get_duplicate_schemes_and_locations
+    duplicate_scheme_sets = @organisation.owned_schemes.duplicate_sets
+    @duplicate_schemes = duplicate_scheme_sets.map { |set| set.map { |id| @organisation.owned_schemes.find(id) } }
+    @duplicate_locations = []
+    @organisation.owned_schemes.each do |scheme|
+      duplicate_location_sets = scheme.locations.duplicate_sets
+      next unless duplicate_location_sets.any?
+
+      duplicate_location_sets.each do |duplicate_set|
+        @duplicate_locations << { scheme: scheme, locations: duplicate_set.map { |id| scheme.locations.find(id) } }
+      end
+    end
   end
 end

@@ -37,6 +37,7 @@ en:
     updated: "Organisation details updated"
     reactivated: "%{organisation} has been reactivated."
     deactivated: "%{organisation} has been deactivated."
+    duplicate_schemes_confirmed: "You’ve confirmed the remaining schemes and locations are not duplicates."
   user:
     create_password: "Create a password to finish setting up your account"
     reset_password: "Reset your password"
@@ -229,6 +230,7 @@ en:
         blank: "You must choose a managing agent"
         already_added: "You have already added this managing agent"
       merged: "That organisation has already been merged. Select a different organisation."
+      scheme_duplicates_not_resolved: "You must resolve all duplicates or indicate that there are no duplicates"
     not_answered: "You must answer %{question}"
     invalid_option: "Enter a valid value for %{question}"
     invalid_number: "Enter a number for %{question}"

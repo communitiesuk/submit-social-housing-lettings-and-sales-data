@@ -38,4 +38,8 @@ class OrganisationPolicy
   def duplicate_schemes?
     user.support? || (user.data_coordinator? && user.organisation == organisation)
   end
+
+  def confirm_duplicate_schemes?
+    duplicate_schemes?
+  end
 end

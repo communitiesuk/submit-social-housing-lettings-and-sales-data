@@ -411,10 +411,10 @@ RSpec.describe OrganisationsController, type: :request do
 
       context "with data coordinator user" do
         let(:user) { create(:user, :data_coordinator) }
-        let!(:schemes) { create_list(:scheme, 5, :duplicate) }
 
         before do
           sign_in user
+          create_list(:scheme, 5, :duplicate)
           get "/organisations/#{organisation.id}/schemes/duplicates", headers:
         end
 
@@ -423,7 +423,7 @@ RSpec.describe OrganisationsController, type: :request do
         end
       end
 
-      context "with data coordinator user" do
+      context "with data provider user" do
         let(:user) { create(:user, :data_provider) }
 
         before do
@@ -2347,6 +2347,67 @@ RSpec.describe OrganisationsController, type: :request do
               post "/organisations/#{organisation.id}/data-sharing-agreement", headers: headers
               expect(response).to have_http_status(:not_found)
             end
+          end
+        end
+      end
+    end
+  end
+
+  describe "POST #confirm_duplicate_schemes" do
+    let(:organisation) { create(:organisation) }
+
+    context "when not signed in" do
+      it "redirects to sign in" do
+        post "/organisations/#{organisation.id}/schemes/duplicates", headers: headers
+        expect(response).to redirect_to("/account/sign-in")
+      end
+    end
+
+    context "when signed in" do
+      before do
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in user
+      end
+
+      context "when user is data provider" do
+        let(:user) { create(:user, role: "data_provider", organisation:) }
+
+        it "returns not found" do
+          post "/organisations/#{organisation.id}/schemes/duplicates", headers: headers
+          expect(response).to have_http_status(:unauthorized)
+        end
+      end
+
+      context "when user is coordinator" do
+        let(:user) { create(:user, role: "data_coordinator", organisation:) }
+
+        context "and the duplicate schemes have been confirmed" do
+          let(:params) { { "organisation": { scheme_duplicates_checked: "true" } } }
+
+          it "redirects to schemes page" do
+            post "/organisations/#{organisation.id}/schemes/duplicates", headers: headers, params: params
+
+            expect(response).to redirect_to("/organisations/#{organisation.id}/schemes")
+            expect(flash[:notice]).to eq("You’ve confirmed the remaining schemes and locations are not duplicates.")
+          end
+
+          it "updates schemes_deduplicated_at" do
+            expect(organisation.reload.schemes_deduplicated_at).to be_nil
+
+            post "/organisations/#{organisation.id}/schemes/duplicates", headers: headers, params: params
+
+            expect(organisation.reload.schemes_deduplicated_at).not_to be_nil
+          end
+        end
+
+        context "and the duplicate schemes have not been confirmed" do
+          let(:params) { { "organisation": { scheme_duplicates_checked: "" } } }
+
+          it "displays an error" do
+            post "/organisations/#{organisation.id}/schemes/duplicates", headers: headers, params: params
+
+            expect(response).to have_http_status(:unprocessable_entity)
+            expect(page).to have_content("You must resolve all duplicates or indicate that there are no duplicates")
           end
         end
       end
