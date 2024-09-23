@@ -3,8 +3,8 @@ class SalesLogsController < LogsController
 
   rescue_from ActiveRecord::RecordNotFound, with: :render_not_found
 
-  before_action :session_filters, if: :current_user, only: %i[index email_csv download_csv]
-  before_action -> { filter_manager.serialize_filters_to_session }, if: :current_user, only: %i[index email_csv download_csv]
+  before_action :session_filters, if: :current_user, only: %i[index email_csv download_csv bulk_uploads]
+  before_action -> { filter_manager.serialize_filters_to_session }, if: :current_user, only: %i[index email_csv download_csv bulk_uploads]
   before_action :authenticate_scope!, only: %i[download_csv email_csv]
 
   before_action :extract_bulk_upload_from_session_filters, only: [:index]
@@ -87,13 +87,21 @@ class SalesLogsController < LogsController
 
   def bulk_uploads
     uploads = BulkUpload.sales.where("created_at >= ?", 30.days.ago)
-    # unpaginated_filtered_uploads = filter_manager.filtered_uploads(uploads, search_term, session_filters)
+    unpaginated_filtered_uploads = filter_manager.filtered_uploads(uploads, search_term, session_filters)
 
-    @pagy, @bulk_uploads = pagy(uploads)
+    @pagy, @bulk_uploads = pagy(unpaginated_filtered_uploads)
     @search_term = search_term
     @searched = search_term.presence
     @filter_type = "sales_bulk_uploads"
     render "bulk_upload_shared/uploads"
+  end
+
+  def download_bulk_upload
+    bulk_upload = BulkUpload.find(params[:id])
+    downloader = BulkUpload::Downloader.new(bulk_upload: bulk_upload)
+    downloader.call
+
+    send_file downloader.file_path, filename: bulk_upload.filename, type: "text/csv"
   end
 
 private
