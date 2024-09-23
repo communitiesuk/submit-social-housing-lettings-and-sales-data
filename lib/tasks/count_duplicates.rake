@@ -35,7 +35,7 @@ namespace :count_duplicates do
         duplicate_sets_within_duplicate_schemes = []
         if organisation.owned_schemes.duplicate_sets.count.positive?
           organisation.owned_schemes.duplicate_sets.each do |duplicate_set|
-            duplicate_sets_within_duplicate_schemes += Location.where(scheme_id: duplicate_set).duplicate_sets
+            duplicate_sets_within_duplicate_schemes += Location.where(scheme_id: duplicate_set).duplicate_sets_within_given_schemes
           end
           duplicate_locations_within_duplicate_schemes_ids = duplicate_sets_within_duplicate_schemes.flatten
 
