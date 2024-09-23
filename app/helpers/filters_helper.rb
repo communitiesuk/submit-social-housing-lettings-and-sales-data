@@ -14,6 +14,12 @@ module FiltersHelper
     return true if (selected_filters["owning_organisation"].present? || selected_filters["owning_organisation_text_search"].present?) && filter == "owning_organisation_select" && value == :specific_org
     return true if (selected_filters["managing_organisation"].present? || selected_filters["managing_organisation_text_search"].present?) && filter == "managing_organisation_select" && value == :specific_org
 
+    return true if !selected_filters.key?("uploaded_by") && filter == "uploaded_by" && value == :all
+    return true if selected_filters["uploaded_by"] == "specific_user" && filter == "uploaded_by" && value == :specific_user
+
+    return true if !selected_filters.key?("uploading_organisation") && filter == "uploading_organisation_select" && value == :all
+    return true if selected_filters["uploading_organisation"] == "specific_org" && filter == "uploading_organisation_select" && value == :specific_org
+
     return false if selected_filters[filter].blank?
 
     selected_filters[filter].include?(value.to_s)
@@ -121,6 +127,11 @@ module FiltersHelper
       return [OpenStruct.new(id: selected_user.id, name: selected_user.name, hint: selected_user.email)] if selected_user.present?
     end
     [OpenStruct.new(id: "", name: "Select an option", hint: "")]
+  end
+
+  def uploaded_by_filter_options
+    user_options = User.all
+    [OpenStruct.new(id: "", name: "Select an option", hint: "")] + user_options.map { |user_option| OpenStruct.new(id: user_option.id, name: user_option.name, hint: user_option.email) }
   end
 
   def filter_search_url(category)

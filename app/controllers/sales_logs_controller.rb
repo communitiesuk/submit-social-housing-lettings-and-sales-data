@@ -111,7 +111,11 @@ private
   end
 
   def filter_manager
-    FilterManager.new(current_user:, session:, params:, filter_type: "sales_logs")
+    if request.path.include?("bulk-uploads")
+      FilterManager.new(current_user:, session:, params:, filter_type: "sales_bulk_uploads")
+    else
+      FilterManager.new(current_user:, session:, params:, filter_type: "sales_logs")
+    end
   end
 
   def extract_bulk_upload_from_session_filters

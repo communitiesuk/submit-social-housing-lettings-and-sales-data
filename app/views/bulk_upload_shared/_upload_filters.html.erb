@@ -12,11 +12,10 @@
             <%= filters_applied_text(@filter_type) %>
           </p>
           <p class="govuk-!-text-align-right govuk-grid-column-one-half">
-            <%= reset_filters_link(@filter_type, { search: request.params["search"], organisation_id: @organisation&.id }.compact) %>
+            <%= reset_filters_link(@filter_type, { search: request.params["search"], bulk_uploads: true }.compact) %>
           </p>
         </div>
 
-        <% if bulk_upload_options(@bulk_upload).blank? %>
           <%= render partial: "filters/checkbox_filter",
                      locals: {
                        f:,
@@ -25,7 +24,6 @@
                        category: "years",
                        size: "s",
                      } %>
-        <% end %>
 
         <%= render partial: "filters/radio_filter",
                    locals: {
@@ -38,29 +36,28 @@
                          conditional_filter: {
                            type: "text_select",
                            label: "User",
-                           category: "user",
-                           options: assigned_to_filter_options(@filter_type),
+                           category: "uploaded_by",
+                           options: uploaded_by_filter_options,
                            caption_text: "User's name or email",
                          },
                        },
                      },
                      label: "Uploaded by",
-                     category: "created_by",
+                     category: "uploaded_by",
                      size: "s",
                    } %>
 
-        <% if current_user.support? || non_support_with_multiple_owning_orgs? %>
           <%= render partial: "filters/radio_filter", locals: {
             f:,
             options: {
-              "all": { label: "Any owning organisation" },
+              "all": { label: "Any uploading organisation" },
               "specific_org": {
-                label: "Specific owning organisation",
+                label: "Specific uploading organisation",
                 conditional_filter: {
                   type: "text_select",
-                  label: "Owning Organisation",
-                  category: "owning_organisation",
-                  options: owning_organisation_filter_options(current_user, @filter_type),
+                  label: "Uploading Organisation",
+                  category: "uploading_organisation",
+                  options: all_owning_organisation_filter_options(current_user),
                   caption_text: "Organisation name",
                 },
               },
@@ -69,7 +66,6 @@
             category: "uploading_organisation_select",
             size: "s",
           } %>
-        <% end %>
 
         <% if request.params["search"].present? %>
           <%= f.hidden_field :search, value: request.params["search"] %>

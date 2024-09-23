@@ -11,6 +11,29 @@ class BulkUpload < ApplicationRecord
 
   after_initialize :generate_identifier, unless: :identifier
 
+  scope :search_by_filename, ->(filename) { where("filename ILIKE ?", "%#{filename}%") }
+  scope :search_by_user_name, ->(name) { where(user_id: User.where("name ILIKE ?", "%#{name}%").select(:id)) }
+  scope :search_by_user_email, ->(email) { where(user_id: User.where("email ILIKE ?", "%#{email}%").select(:id)) }
+  scope :search_by_organisation_name, ->(name) { where(user_id: User.joins(:organisation).where("organisations.name ILIKE ?", "%#{name}%").select(:id)) }
+
+  scope :search_by, lambda { |param|
+    search_by_filename(param)
+      .or(search_by_user_name(param))
+      .or(search_by_user_email(param))
+      .or(search_by_organisation_name(param))
+  }
+
+  scope :filter_by_id, ->(id) { where(id:) }
+  scope :filter_by_years, lambda { |years, _user = nil|
+    first_year = years.shift
+    query = where(year: first_year)
+    years.each { |year| query = query.or(where(year:)) }
+    query.all
+  }
+  scope :filter_by_uploaded_by, ->(user_id, _user = nil) { where(user_id:) }
+  scope :filter_by_user_text_search, ->(param, _user = nil) { where(user_id: User.search_by(param).select(:id)) }
+  scope :filter_by_user, ->(selected_user, _user = nil) { selected_user.present? ? where(user: selected_user) : all }
+
   def completed?
     incomplete_logs = logs.where.not(status: "completed")
     !incomplete_logs.exists?
@@ -103,6 +126,10 @@ class BulkUpload < ApplicationRecord
 
   def moved_user_name
     User.find_by(id: moved_user_id)&.name
+  end
+
+  def user
+    User.find_by(id: user_id)
   end
 
 private

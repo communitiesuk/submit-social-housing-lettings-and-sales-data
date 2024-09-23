@@ -76,6 +76,21 @@ class FilterManager
     locations.order(created_at: :desc)
   end
 
+  def self.filter_uploads(uploads, search_term, filters, all_orgs, user)
+    uploads = filter_by_search(uploads, search_term)
+
+    filters.each do |category, values|
+      next if Array(values).reject(&:empty?).blank?
+      next if category == "uploading_organisation" && all_orgs
+      next if category == "uploading_organisation_text_search" && all_orgs
+      # next if category == "uploaded_by"
+      next if category == "uploaded_by_text_search" && filters["uploaded_by"] != "specific_user"
+
+      uploads = uploads.public_send("filter_by_#{category}", values, user)
+    end
+    uploads.order(created_at: :desc)
+  end
+
   def serialize_filters_to_session(specific_org: false)
     session[session_name_for(filter_type)] = session_filters(specific_org:).to_json
   end
@@ -91,7 +106,6 @@ class FilterManager
                   else
                     {}
                   end
-
     if filter_type.include?("logs")
       current_user.logs_filters(specific_org:).each do |filter|
         new_filters[filter] = params[filter] if params[filter].present?
@@ -107,7 +121,7 @@ class FilterManager
 
       new_filters = new_filters.except("user") if params["assigned_to"] == "all"
       new_filters["user"] = current_user.id.to_s if params["assigned_to"] == "you"
-      new_filters = new_filters.except("user_text_search") if params["assigned_to"] == "all" || params["assigned_to"] == "you"
+      new_filters = new_filters.except("user_text_search") if params["assigned_to"] == "all" || params["assigned_to"] == "you" # add later
       new_filters = new_filters.except("owning_organisation_text_search") if params["owning_organisation_select"] == "all"
       new_filters = new_filters.except("managing_organisation_text_search") if params["managing_organisation_select"] == "all"
     end
@@ -122,6 +136,15 @@ class FilterManager
       end
 
       new_filters = new_filters.except("owning_organisation") if params["owning_organisation_select"] == "all"
+    end
+
+    if filter_type.include?("bulk_uploads")
+      current_user.logs_filters(specific_org:).each do |filter|
+        new_filters[filter] = params[filter] if params[filter].present?
+      end
+      new_filters = new_filters.except("uploading_organisation") if params["uploading_organisation_select"] == "all"
+      new_filters = new_filters.except("uploaded_by") if params["uploaded_by"] == "all"
+      new_filters["uploaded_by"] = current_user.id.to_s if params["uploaded_by"] == "you"
     end
 
     new_filters
@@ -150,6 +173,12 @@ class FilterManager
   def bulk_upload
     id = (logs_filters["bulk_upload_id"] || []).reject(&:blank?)[0]
     @bulk_upload ||= current_user.bulk_uploads.find_by(id:)
+  end
+
+  def filtered_uploads(uploads, search_term, filters)
+    all_orgs = params["uploading_organisation_select"] == "all"
+
+    FilterManager.filter_uploads(uploads, search_term, filters, all_orgs, current_user)
   end
 
 private

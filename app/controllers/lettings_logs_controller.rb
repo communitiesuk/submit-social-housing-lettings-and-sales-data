@@ -141,7 +141,11 @@ private
   end
 
   def filter_manager
-    FilterManager.new(current_user:, session:, params:, filter_type: "lettings_logs")
+    if request.path.include?("bulk-uploads")
+      FilterManager.new(current_user:, session:, params:, filter_type: "lettings_bulk_uploads")
+    else
+      FilterManager.new(current_user:, session:, params:, filter_type: "lettings_logs")
+    end
   end
 
   def authenticate_scope!
