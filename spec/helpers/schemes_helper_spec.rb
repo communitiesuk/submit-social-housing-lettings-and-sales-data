@@ -137,7 +137,7 @@ RSpec.describe SchemesHelper do
 
     context "when organisation has absorbed other organisations in open collection year" do
       before do
-        build(:organisation, merge_date: Time.zone.today, absorbing_organisation_id: organisation.id).save(validate: false)
+        build(:organisation, merge_date: Time.zone.yesterday, absorbing_organisation_id: organisation.id).save(validate: false)
       end
 
       context "and it has duplicate schemes" do
@@ -147,6 +147,26 @@ RSpec.describe SchemesHelper do
 
         it "displays the banner" do
           expect(display_duplicate_schemes_banner?(organisation, current_user)).to be_truthy
+        end
+
+        context "and organisation has confirmed duplicate schemes after the most recent merge" do
+          before do
+            organisation.update!(schemes_deduplicated_at: Time.zone.today)
+          end
+
+          it "does not display the banner" do
+            expect(display_duplicate_schemes_banner?(organisation, current_user)).to be_falsey
+          end
+        end
+
+        context "and organisation has confirmed duplicate schemes before the most recent merge" do
+          before do
+            organisation.update!(schemes_deduplicated_at: Time.zone.today - 2.days)
+          end
+
+          it "displays the banner" do
+            expect(display_duplicate_schemes_banner?(organisation, current_user)).to be_truthy
+          end
         end
       end
 
