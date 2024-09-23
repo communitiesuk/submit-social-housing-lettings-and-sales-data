@@ -208,6 +208,135 @@ RSpec.describe Scheme, type: :model do
           end
         end
       end
+
+      context "when getting list of duplicate schemes" do
+        let(:organisation) { create(:organisation) }
+        let!(:scheme) { create(:scheme, :duplicate, owning_organisation: organisation) }
+        let!(:duplicate_scheme) { create(:scheme, :duplicate, owning_organisation: organisation) }
+        let(:duplicate_sets) { described_class.duplicate_sets }
+
+        it "returns a list of duplicates in the same organisation" do
+          expect(duplicate_sets.count).to eq(1)
+          expect(duplicate_sets.first).to contain_exactly(scheme.id, duplicate_scheme.id)
+        end
+
+        context "when there is a deleted duplicate scheme" do
+          before do
+            create(:scheme, :duplicate, discarded_at: Time.zone.now)
+          end
+
+          it "does not return the deleted scheme as a duplicate" do
+            expect(duplicate_sets.count).to eq(1)
+            expect(duplicate_sets.first).to contain_exactly(scheme.id, duplicate_scheme.id)
+          end
+        end
+
+        context "when there is a scheme with a different scheme_type" do
+          before do
+            create(:scheme, :duplicate, scheme_type: 7)
+          end
+
+          it "does not return a scheme with a different scheme_type as a duplicate" do
+            expect(duplicate_sets.count).to eq(1)
+            expect(duplicate_sets.first).to contain_exactly(scheme.id, duplicate_scheme.id)
+          end
+        end
+
+        context "when there is a scheme with a different registered_under_care_act" do
+          before do
+            create(:scheme, :duplicate, registered_under_care_act: 2)
+          end
+
+          it "does not return a scheme with a different registered_under_care_act as a duplicate" do
+            expect(duplicate_sets.count).to eq(1)
+            expect(duplicate_sets.first).to contain_exactly(scheme.id, duplicate_scheme.id)
+          end
+        end
+
+        context "when there is a scheme with a different primary_client_group" do
+          before do
+            create(:scheme, :duplicate, primary_client_group: "H")
+          end
+
+          it "does not return a scheme with a different primary_client_group as a duplicate" do
+            expect(duplicate_sets.count).to eq(1)
+            expect(duplicate_sets.first).to contain_exactly(scheme.id, duplicate_scheme.id)
+          end
+        end
+
+        context "when there is a scheme with a different secondary_client_group" do
+          before do
+            create(:scheme, :duplicate, secondary_client_group: "O")
+          end
+
+          it "does not return a scheme with a different secondary_client_group as a duplicate" do
+            expect(duplicate_sets.count).to eq(1)
+            expect(duplicate_sets.first).to contain_exactly(scheme.id, duplicate_scheme.id)
+          end
+        end
+
+        context "when there is a scheme with a different has_other_client_group" do
+          before do
+            create(:scheme, :duplicate, has_other_client_group: 0)
+          end
+
+          it "does not return a scheme with a different has_other_client_group as a duplicate" do
+            expect(duplicate_sets.count).to eq(1)
+            expect(duplicate_sets.first).to contain_exactly(scheme.id, duplicate_scheme.id)
+          end
+        end
+
+        context "when there is a scheme with a different support_type" do
+          before do
+            create(:scheme, :duplicate, support_type: 4)
+          end
+
+          it "does not return a scheme with a different support_type as a duplicate" do
+            expect(duplicate_sets.count).to eq(1)
+            expect(duplicate_sets.first).to contain_exactly(scheme.id, duplicate_scheme.id)
+          end
+        end
+
+        context "when there is a scheme with a different intended_stay" do
+          before do
+            create(:scheme, :duplicate, intended_stay: "P")
+          end
+
+          it "does not return a scheme with a different intended_stay as a duplicate" do
+            expect(duplicate_sets.count).to eq(1)
+            expect(duplicate_sets.first).to contain_exactly(scheme.id, duplicate_scheme.id)
+          end
+        end
+
+        context "when there is a scheme with nil values for duplicate check fields" do
+          before do
+            [scheme, duplicate_scheme].each do |s|
+              s.scheme_type = nil
+              s.registered_under_care_act = nil
+              s.primary_client_group = nil
+              s.secondary_client_group = nil
+              s.has_other_client_group = nil
+              s.support_type = nil
+              s.intended_stay = nil
+              s.save!(validate: false)
+            end
+          end
+
+          it "does not return a scheme with nil values as a duplicate" do
+            expect(duplicate_sets).to be_empty
+          end
+        end
+
+        context "when there are duplicate schemes without secondary client group" do
+          let!(:scheme) { create(:scheme, :duplicate, owning_organisation: organisation, secondary_client_group: nil, has_other_client_group: 0) }
+          let!(:duplicate_scheme) { create(:scheme, :duplicate, owning_organisation: organisation, secondary_client_group: nil, has_other_client_group: 0) }
+
+          it "does not returns the duplicates" do
+            expect(duplicate_sets.count).to eq(1)
+            expect(duplicate_sets.first).to contain_exactly(scheme.id, duplicate_scheme.id)
+          end
+        end
+      end
     end
   end
 

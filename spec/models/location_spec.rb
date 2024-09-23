@@ -831,6 +831,76 @@ RSpec.describe Location, type: :model do
         expect(described_class.active.count).to eq(2)
       end
     end
+
+    context "when getting list of duplicate locations" do
+      let!(:scheme) { create(:scheme) }
+      let!(:location) { create(:location, postcode: "AB1 2CD", mobility_type: "M", scheme:) }
+      let!(:duplicate_location) { create(:location, postcode: "AB1 2CD", mobility_type: "M", scheme:) }
+      let(:duplicate_sets) { described_class.duplicate_sets }
+
+      it "returns a list of duplicates for the same scheme" do
+        expect(duplicate_sets.count).to eq(1)
+        expect(duplicate_sets.first).to contain_exactly(location.id, duplicate_location.id)
+      end
+
+      context "when there is a deleted duplicate location" do
+        before do
+          create(:location, postcode: "AB1 2CD", mobility_type: "M", discarded_at: Time.zone.now, scheme:)
+        end
+
+        it "does not return the deleted location as a duplicate" do
+          expect(duplicate_sets.count).to eq(1)
+          expect(duplicate_sets.first).to contain_exactly(location.id, duplicate_location.id)
+        end
+      end
+
+      context "when there is a location with a different postcode" do
+        before do
+          create(:location, postcode: "A1 1AB", mobility_type: "M", scheme:)
+        end
+
+        it "does not return a location with a different postcode as a duplicate" do
+          expect(duplicate_sets.count).to eq(1)
+          expect(duplicate_sets.first).to contain_exactly(location.id, duplicate_location.id)
+        end
+      end
+
+      context "when there is a location with a different mobility_type" do
+        before do
+          create(:location, postcode: "AB1 2CD", mobility_type: "A", scheme:)
+        end
+
+        it "does not return a location with a different mobility_type as a duplicate" do
+          expect(duplicate_sets.count).to eq(1)
+          expect(duplicate_sets.first).to contain_exactly(location.id, duplicate_location.id)
+        end
+      end
+
+      context "when there is a location with a different scheme" do
+        before do
+          create(:location, postcode: "AB1 2CD", mobility_type: "M")
+        end
+
+        it "does not return a location with a different scheme as a duplicate" do
+          expect(duplicate_sets.count).to eq(1)
+          expect(duplicate_sets.first).to contain_exactly(location.id, duplicate_location.id)
+        end
+      end
+
+      context "when there is a location with nil values for duplicate check fields" do
+        before do
+          [location, duplicate_location].each do |l|
+            l.postcode = nil
+            l.mobility_type = nil
+            l.save!(validate: false)
+          end
+        end
+
+        it "does not return a location with nil values as a duplicate" do
+          expect(duplicate_sets).to be_empty
+        end
+      end
+    end
   end
 
   describe "status" do

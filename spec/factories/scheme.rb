@@ -32,5 +32,14 @@ FactoryBot.define do
       confirmed { false }
       support_type { nil }
     end
+    trait :duplicate do
+      scheme_type { 4 }
+      registered_under_care_act { 1 }
+      primary_client_group { "O" }
+      secondary_client_group { "H" }
+      has_other_client_group { 1 }
+      support_type { 2 }
+      intended_stay { "M" }
+    end
   end
 end
