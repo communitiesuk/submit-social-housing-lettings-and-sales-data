@@ -11,7 +11,7 @@ class BulkUpload::Processor
     download
 
     @bulk_upload.update!(total_logs_count: validator.total_logs_count)
-    return send_failure_mail(errors: validator.errors.full_messages) if validator.invalid?
+    return handle_invalid_validator if validator.invalid?
 
     validator.call
 
@@ -143,5 +143,14 @@ private
     else
       raise "Validator not found for #{bulk_upload.log_type}"
     end
+  end
+
+  def handle_invalid_validator
+    if validator.errors.full_messages.include?("Template is blank - The template must be filled in for us to create the logs and check if data is correct.")
+      @bulk_upload.update!(choice: "blank_template")
+    elsif validator.errors.full_messages.include?("Incorrect number of fields, please ensure you have used the correct template")
+      @bulk_upload.update!(choice: "wrong_template")
+    end
+    send_failure_mail(errors: validator.errors.full_messages)
   end
 end

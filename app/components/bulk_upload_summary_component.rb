@@ -59,7 +59,7 @@ class BulkUploadSummaryComponent < ViewComponent::Base
   end
 
   def view_error_report_link(controller, bulk_upload)
-    return nil if %w[errors_fixed_in_service logs_uploaded_with_errors logs_uploaded_no_errors].include?(bulk_upload.status.to_s)
+    return nil if %w[errors_fixed_in_service logs_uploaded_with_errors logs_uploaded_no_errors wrong_template blank_template].include?(bulk_upload.status.to_s)
 
     case controller.controller_name
     when "lettings_logs"
@@ -74,7 +74,7 @@ class BulkUploadSummaryComponent < ViewComponent::Base
   end
 
   def view_logs_link(controller, bulk_upload)
-    return nil if %w[errors_fixed_in_service logs_uploaded_no_errors].include?(bulk_upload.status.to_s)
+    return nil if %w[errors_fixed_in_service logs_uploaded_no_errors wrong_template blank_template].include?(bulk_upload.status.to_s)
 
     case controller.controller_name
     when "lettings_logs"

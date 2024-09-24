@@ -51,6 +51,8 @@ class BulkUpload < ApplicationRecord
   end
 
   def status
+    return :wrong_template if choice == "wrong_template"
+    return :blank_template if choice == "blank_template"
     return :logs_uploaded_no_errors if bulk_upload_errors.none?
 
     if logs.visible.exists?
