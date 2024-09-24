@@ -2,6 +2,17 @@ class BulkUpload < ApplicationRecord
   enum log_type: { lettings: "lettings", sales: "sales" }
   enum rent_type_fix_status: { not_applied: "not_applied", applied: "applied", not_needed: "not_needed" }
 
+  enum status: {
+    blank_template: 0,
+    wrong_template: 1,
+    important_errors: 2,
+    critical_errors: 3,
+    potential_errors: 4,
+    logs_uploaded_with_errors: 5,
+    errors_fixed_in_service: 6,
+    logs_uploaded_no_errors: 7,
+  }
+
   belongs_to :user
 
   has_many :bulk_upload_errors, dependent: :destroy
@@ -37,6 +48,24 @@ class BulkUpload < ApplicationRecord
   def completed?
     incomplete_logs = logs.where.not(status: "completed")
     !incomplete_logs.exists?
+  end
+
+  def status
+    return :logs_uploaded_no_errors if bulk_upload_errors.none?
+
+    if logs.exists?
+      return :errors_fixed_in_service if completed? && bulk_upload_errors.any?
+      return :logs_uploaded_with_errors if bulk_upload_errors.any?
+    end
+
+    case bulk_upload_errors.map(&:category).uniq
+    when ["setup"]
+      :important_errors
+    when ["soft_validations"]
+      :potential_errors
+    else
+      :critical_errors
+    end
   end
 
   def year_combo

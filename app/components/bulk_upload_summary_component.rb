@@ -8,7 +8,7 @@ class BulkUploadSummaryComponent < ViewComponent::Base
   end
 
   def upload_status
-    helpers.status_tag("in_progress")
+    helpers.status_tag(bulk_upload.status, ["app-tag--small govuk-!-font-weight-regular no-max-width"])
   end
 
   def setup_errors_count
