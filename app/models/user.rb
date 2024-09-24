@@ -6,10 +6,6 @@ class User < ApplicationRecord
   devise :database_authenticatable, :recoverable, :rememberable,
          :trackable, :lockable, :two_factor_authenticatable, :confirmable, :timeoutable
 
-  def self.current
-    Thread.current[:current_user]
-  end
-
   # Marked as optional because we validate organisation_id below instead so that
   # the error message is linked to the right field on the form
   belongs_to :organisation, optional: true
@@ -88,14 +84,8 @@ class User < ApplicationRecord
   scope :not_signed_in, -> { where(last_sign_in_at: nil, active: true) }
   scope :deactivated, -> { where(active: false) }
   scope :active_status, -> { where(active: true).where.not(last_sign_in_at: nil) }
-  scope :visible, lambda {
-    current_user = User.current
-    if current_user&.support?
-      where(discarded_at: nil)
-    else
-      where(discarded_at: nil).where(organisation: current_user.organisation.child_organisations + [current_user.organisation])
-    end
-  }
+  scope :visible, -> { where(discarded_at: nil) }
+  scope :visible_to_user, ->(user) { user.support? ? visible : visible.where(organisation: user.organisation.child_organisations + [user.organisation]) }
 
   attr_accessor :log_reassignment
 

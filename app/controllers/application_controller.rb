@@ -5,7 +5,6 @@ class ApplicationController < ActionController::Base
 
   before_action :check_maintenance_status
   before_action :set_paper_trail_whodunnit
-  before_action :set_current_user
 
   def check_maintenance_status
     if FeatureToggle.service_moved?
@@ -41,9 +40,5 @@ protected
 
   def byte_order_mark
     "\uFEFF"
-  end
-
-  def set_current_user
-    Thread.current[:current_user] = current_user
   end
 end
