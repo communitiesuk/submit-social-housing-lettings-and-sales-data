@@ -14,8 +14,8 @@
       </div>
       <p class="govuk-body govuk-!-margin-bottom-3">
         <%= download_file_link(controller, bulk_upload) %>
-        <%#= view_error_report_link(bulk_upload) %>
-        <%#= view_logs_link(bulk_upload) %>
+        <%= view_error_report_link(controller, bulk_upload) %>
+        <%= view_logs_link(controller, bulk_upload) %>
       </p>
     </div>
     <footer class="govuk-grid-column-one-third app-log-summary__footer">

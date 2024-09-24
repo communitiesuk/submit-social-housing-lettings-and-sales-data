@@ -58,11 +58,33 @@ class BulkUploadSummaryComponent < ViewComponent::Base
     link_to "Download file", download_sales_bulk_upload_path(bulk_upload), class: "govuk-link govuk-!-margin-right-2"
   end
 
-  def view_error_report_link(bulk_upload)
-    link_to "View error report", "/lettings-logs/bulk-upload-resume/#{bulk_upload.id}/start", class: "govuk-link"
+  def view_error_report_link(controller, bulk_upload)
+    return nil if %w[errors_fixed_in_service logs_uploaded_with_errors logs_uploaded_no_errors].include?(bulk_upload.status.to_s)
+
+    case controller.controller_name
+    when "lettings_logs"
+      return link_to "View error report", summary_bulk_upload_lettings_result_url(bulk_upload), class: "govuk-link" if %w[important_errors].include?(bulk_upload.status.to_s)
+      link_to "View error report", bulk_upload_lettings_result_path(bulk_upload.id), class: "govuk-link"
+    when "sales_logs"
+      return link_to "View error report", summary_bulk_upload_sales_result_url(bulk_upload), class: "govuk-link" if %w[important_errors].include?(bulk_upload.status.to_s)
+      link_to "View error report", bulk_upload_sales_result_path(bulk_upload.id), class: "govuk-link"
+    else
+      raise "Error report link not found for bulk upload"
+    end
   end
 
-  def view_logs_link(bulk_upload)
-    link_to "View logs", "#", class: "govuk-link"
+  def view_logs_link(controller, bulk_upload)
+    return nil if %w[errors_fixed_in_service logs_uploaded_no_errors].include?(bulk_upload.status.to_s)
+
+    case controller.controller_name
+    when "lettings_logs"
+      return nil unless %w[errors_fixed_in_service logs_uploaded_with_errors logs_uploaded_no_errors].include?(bulk_upload.status.to_s)
+      link_to "View logs", "/lettings-logs?bulk_upload_id%5B%5D=#{bulk_upload.id}", class: "govuk-link"
+    when "sales_logs"
+      return nil unless %w[errors_fixed_in_service logs_uploaded_with_errors logs_uploaded_no_errors].include?(bulk_upload.status.to_s)
+      link_to "View logs", "/sales-logs?bulk_upload_id%5B%5D=#{bulk_upload.id}", class: "govuk-link"
+    else
+      raise "View logs link not found for bulk upload"
+    end
   end
 end

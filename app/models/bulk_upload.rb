@@ -53,7 +53,7 @@ class BulkUpload < ApplicationRecord
   def status
     return :logs_uploaded_no_errors if bulk_upload_errors.none?
 
-    if logs.exists?
+    if logs.visible.exists?
       return :errors_fixed_in_service if completed? && bulk_upload_errors.any?
       return :logs_uploaded_with_errors if bulk_upload_errors.any?
     end
