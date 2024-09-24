@@ -123,6 +123,22 @@ RSpec.describe Validations::FinancialValidations do
           .to include(match I18n.t("validations.financial.tshortfall.more_than_total_charge"))
       end
 
+      it "validates that carehome charge is no less than the shortfall" do
+        record.hb = 6
+        record.hbrentshortfall = 1
+        record.tshortfall_known = 0
+        record.tshortfall = 299.50
+        record.chcharge = 198
+        record.needstype = 2
+        record.period = 2
+        record.set_derived_fields!
+        financial_validator.validate_rent_amount(record)
+        expect(record.errors["chcharge"])
+          .to include(match I18n.t("validations.financial.carehome.less_than_shortfall"))
+        expect(record.errors["tshortfall"])
+          .to include(match I18n.t("validations.financial.tshortfall.more_than_carehome_charge"))
+      end
+
       it "expects that rent can be less than the shortfall if total charge is higher" do
         record.hb = 6
         record.hbrentshortfall = 1

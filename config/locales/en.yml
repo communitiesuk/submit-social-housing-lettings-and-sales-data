@@ -382,6 +382,7 @@ en:
       tshortfall:
         outstanding_amount_not_expected: "You cannot answer the outstanding amount question if you don’t have outstanding rent or charges"
         more_than_total_charge: "Enter a value less than the total charge"
+        more_than_carehome_charge: "Enter a value less than the care home charge"
         must_be_positive: "Enter a value over £0.01 as you told us there is an outstanding amount"
       hbrentshortfall:
         outstanding_amount_not_expected: "Answer must be ‘yes’ as you have answered the outstanding amount question"
@@ -454,6 +455,7 @@ en:
       carehome:
         out_of_range: "Household rent and other charges must be between %{min_chcharge} and %{max_chcharge} if paying %{period}"
         not_provided: "Enter how much rent and other charges the household pays %{period}"
+        less_than_shortfall: "The care home charge must be more than the outstanding amount"
       cash_discount_invalid: "Cash discount must be £0 - £999,999"
       staircasing:
         percentage_bought_must_be_greater_than_percentage_owned: "Total percentage %{buyer_now_owns} must be more than percentage bought in this transaction"
