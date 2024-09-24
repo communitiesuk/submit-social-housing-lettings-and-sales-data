@@ -53,7 +53,7 @@ class Log < ApplicationRecord
   scope :filter_by_organisation, ->(org, _user = nil) { where(owning_organisation: org).or(where(managing_organisation: org)) }
   scope :filter_by_owning_organisation, ->(owning_organisation, _user = nil) { where(owning_organisation:) }
   scope :filter_by_managing_organisation, ->(managing_organisation, _user = nil) { where(managing_organisation:) }
-  scope :filter_by_user_text_search, ->(param, user) { where(assigned_to: User.visible_to_user(user).search_by(param)) }
+  scope :filter_by_user_text_search, ->(param, user) { where(assigned_to: User.visible(user).search_by(param)) }
   scope :filter_by_owning_organisation_text_search, ->(param, _user) { where(owning_organisation: Organisation.search_by(param)) }
   scope :filter_by_managing_organisation_text_search, ->(param, _user) { where(managing_organisation: Organisation.search_by(param)) }
 

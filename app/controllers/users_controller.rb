@@ -33,7 +33,7 @@ class UsersController < ApplicationController
   end
 
   def search
-    users = User.visible_to_user(current_user).search_by(params["query"]).limit(20)
+    users = User.visible(current_user).search_by(params["query"]).limit(20)
 
     user_data = users.each_with_object({}) do |user, hash|
       hash[user.id] = { value: user.name, hint: user.email }

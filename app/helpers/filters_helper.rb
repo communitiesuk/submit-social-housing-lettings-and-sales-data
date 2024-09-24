@@ -112,7 +112,7 @@ module FiltersHelper
   def assigned_to_filter_options(filter_type)
     if applied_filters(filter_type)["assigned_to"] == "specific_user" && applied_filters(filter_type)["user"].present?
       user_id = applied_filters(filter_type)["user"]
-      selected_user = User.visible_to_user(current_user).where(id: user_id)&.first
+      selected_user = User.visible(current_user).where(id: user_id)&.first
 
       return [OpenStruct.new(id: selected_user.id, name: selected_user.name, hint: selected_user.email)] if selected_user.present?
     end
@@ -306,7 +306,7 @@ private
     return "You" if session_filters["assigned_to"].include?("you")
 
     user_id = session_filters["user"].to_i
-    selected_user_option = User.visible_to_user(current_user).where(id: user_id)&.first
+    selected_user_option = User.visible(current_user).where(id: user_id)&.first
 
     return unless selected_user_option
 

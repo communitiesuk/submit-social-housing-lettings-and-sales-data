@@ -84,8 +84,13 @@ class User < ApplicationRecord
   scope :not_signed_in, -> { where(last_sign_in_at: nil, active: true) }
   scope :deactivated, -> { where(active: false) }
   scope :active_status, -> { where(active: true).where.not(last_sign_in_at: nil) }
-  scope :visible, -> { where(discarded_at: nil) }
-  scope :visible_to_user, ->(user) { user.support? ? visible : visible.where(organisation: user.organisation.child_organisations + [user.organisation]) }
+  scope :visible, lambda { |user = nil|
+    if user && !user.support?
+      where(discarded_at: nil, organisation: user.organisation.child_organisations + [user.organisation])
+    else
+      where(discarded_at: nil)
+    end
+  }
 
   attr_accessor :log_reassignment
 
