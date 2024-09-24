@@ -58,10 +58,9 @@ class BulkUpload < ApplicationRecord
       return :logs_uploaded_with_errors if bulk_upload_errors.any?
     end
 
-    case bulk_upload_errors.map(&:category).uniq
-    when ["setup"]
+    if bulk_upload_errors.any? { |error| error.category == "setup" }
       :important_errors
-    when ["soft_validations"]
+    elsif bulk_upload_errors.any? { |error| error.category == "soft_validations" }
       :potential_errors
     else
       :critical_errors
