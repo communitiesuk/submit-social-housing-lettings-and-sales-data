@@ -93,7 +93,7 @@ class User < ApplicationRecord
     if current_user&.support?
       where(discarded_at: nil)
     else
-      where(discarded_at: nil, organisation: current_user.organisation.child_organisations + [current_user.organisation])
+      where(discarded_at: nil).where(organisation: current_user.organisation.child_organisations + [current_user.organisation])
     end
   }
 
