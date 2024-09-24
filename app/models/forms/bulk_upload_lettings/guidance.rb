@@ -7,6 +7,7 @@ module Forms
 
       attribute :year, :integer
       attribute :referrer
+      attribute :organisation_id, :integer
 
       def view_path
         "bulk_upload_shared/guidance"
@@ -15,7 +16,7 @@ module Forms
       def back_path
         case referrer
         when "prepare-your-file"
-          bulk_upload_lettings_log_path(id: "prepare-your-file", form: { year: })
+          bulk_upload_lettings_log_path(id: "prepare-your-file", form: { year:, organisation_id: }.compact)
         when "home"
           root_path
         else
