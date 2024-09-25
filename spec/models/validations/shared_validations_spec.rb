@@ -68,6 +68,7 @@ RSpec.describe Validations::SharedValidations do
         expect(lettings_log.errors["age6"]).to be_empty
       end
 
+
       context "with sales log" do
         it "validates that person 2's age is between 0 and 110 for non joint purchase" do
           sales_log.jointpur = 2
