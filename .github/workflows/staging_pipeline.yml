@@ -14,6 +14,11 @@ defaults:
   run:
     shell: bash
 
+env:
+  app_repo_role: arn:aws:iam::815624722760:role/core-application-repo
+  aws_region: eu-west-2
+  repository: core
+
 jobs:
   test:
     name: Tests
@@ -364,3 +369,48 @@ jobs:
       environment: staging
     permissions:
       id-token: write
+
+  performance:
+    needs: [aws_deploy]
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          aws-region: ${{ env.aws_region }}
+          role-to-assume: ${{ env.app_repo_role }}
+
+      - name: Configure AWS credentials for the environment
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          aws-region: eu-west-2
+          role-to-assume: arn:aws:iam::107155005276:role/core-staging-deployment
+          role-chaining: true
+
+      - name: Run Performance Test
+        env:
+          ad_hoc_task_definition: core-staging-ad-hoc
+          cluster: core-staging-app
+          service: core-staging-app
+        run: |
+          echo $cluster
+          network=$(aws ecs describe-services --cluster $cluster --services $service --query services[0].networkConfiguration)
+          overrides='{
+            "containerOverrides": [{
+              "name": "app",
+              "command": ["bash", "-c", "export email=$STAGING_PERFORMANCE_TEST_EMAIL && export password=$STAGING_PERFORMANCE_TEST_PASSWORD && sh ./lib/tasks/performance_test.sh"]
+            }]
+          }'
+          arn=$(aws ecs run-task --cluster $cluster --task-definition $ad_hoc_task_definition --network-configuration "$network" --overrides "$overrides" --group performance --launch-type FARGATE --query tasks[0].taskArn)
+
+          echo "Waiting for performance tests to run"
+          task_id=${arn##*/}
+          task_id=${task_id%*\"}
+
+          aws ecs wait tasks-stopped --cluster $cluster --tasks $task_id
+
+          code=$(aws ecs describe-tasks --cluster $cluster --tasks $task_id --query "tasks[0].containers[0].exitCode")
+          if [ "$code == 0" ]; then exit 0; else exit 1; fi

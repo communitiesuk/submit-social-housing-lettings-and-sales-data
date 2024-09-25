@@ -103,6 +103,22 @@ class Scheme < ApplicationRecord
 
   scope :visible, -> { where(discarded_at: nil) }
 
+  scope :duplicate_sets, lambda {
+    scope = visible
+    .group(*DUPLICATE_SCHEME_ATTRIBUTES)
+    .where.not(scheme_type: nil)
+    .where.not(registered_under_care_act: nil)
+    .where.not(primary_client_group: nil)
+    .where.not(has_other_client_group: nil)
+    .where.not(secondary_client_group: nil).or(where(has_other_client_group: 0))
+    .where.not(support_type: nil)
+    .where.not(intended_stay: nil)
+    .having(
+      "COUNT(*) > 1",
+    )
+    scope.pluck("ARRAY_AGG(id)")
+  }
+
   validate :validate_confirmed
   validate :validate_owning_organisation
 
@@ -191,6 +207,8 @@ class Scheme < ApplicationRecord
     "Another organisation": "O",
     "Missing": "X",
   }.freeze
+
+  DUPLICATE_SCHEME_ATTRIBUTES = %w[scheme_type registered_under_care_act primary_client_group secondary_client_group has_other_client_group support_type intended_stay].freeze
 
   enum arrangement_type: ARRANGEMENT_TYPE, _suffix: true
 
