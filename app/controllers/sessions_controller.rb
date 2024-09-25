@@ -5,9 +5,14 @@ class SessionsController < ApplicationController
 
     if path_params[:organisation_id].present?
       redirect_to send("#{params[:filter_type]}_organisation_path", id: path_params[:organisation_id], scheme_id: path_params[:scheme_id], search: path_params[:search])
-    elsif path_params[:bulk_uploads]
+    elsif params[:filter_type].include?("bulk_uploads")
       bulk_upload_type = params[:filter_type].split("_").first
-      redirect_to send("bulk_uploads_#{bulk_upload_type}_logs_path", search: path_params[:search])
+      uploading_organisation = params[:organisation_id].presence
+      if uploading_organisation.present?
+        redirect_to send("bulk_uploads_#{bulk_upload_type}_logs_path", search: path_params[:search], uploading_organisation:)
+      else
+        redirect_to send("bulk_uploads_#{bulk_upload_type}_logs_path", search: path_params[:search])
+      end
     else
       redirect_to send("#{params[:filter_type]}_path", scheme_id: path_params[:scheme_id], search: path_params[:search])
     end

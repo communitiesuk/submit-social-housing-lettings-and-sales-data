@@ -116,13 +116,19 @@ class LettingsLogsController < LogsController
   end
 
   def bulk_uploads
+    @filter_type = "lettings_bulk_uploads"
+
+    if params[:organisation_id].present? && params[:clear_old_filters].present?
+      redirect_to clear_filters_path(filter_type: @filter_type, organisation_id: params[:organisation_id]) and return
+    end
+
     uploads = BulkUpload.lettings.where("created_at >= ?", 30.days.ago)
     unpaginated_filtered_uploads = filter_manager.filtered_uploads(uploads, search_term, filter_manager.session_filters)
+
     @pagy, @bulk_uploads = pagy(unpaginated_filtered_uploads)
     @search_term = search_term
     @total_count = uploads.size
     @searched = search_term.presence
-    @filter_type = "lettings_bulk_uploads"
     render "bulk_upload_shared/uploads"
   end
 
