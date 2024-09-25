@@ -3,14 +3,14 @@ class BulkUpload < ApplicationRecord
   enum rent_type_fix_status: { not_applied: "not_applied", applied: "applied", not_needed: "not_needed" }
 
   enum status: {
-    blank_template: 0,
-    wrong_template: 1,
-    important_errors: 2,
-    critical_errors: 3,
-    potential_errors: 4,
-    logs_uploaded_with_errors: 5,
-    errors_fixed_in_service: 6,
-    logs_uploaded_no_errors: 7,
+    logs_uploaded_no_errors: 0,
+    blank_template: 1,
+    wrong_template: 2,
+    important_errors: 3,
+    critical_errors: 4,
+    potential_errors: 5,
+    logs_uploaded_with_errors: 6,
+    errors_fixed_in_service: 7,
   }
 
   belongs_to :user
@@ -51,8 +51,8 @@ class BulkUpload < ApplicationRecord
   end
 
   def status
-    return :wrong_template if choice == "wrong_template"
-    return :blank_template if choice == "blank_template"
+    return :blank_template if failed == 1
+    return :wrong_template if failed == 2
     return :logs_uploaded_no_errors if bulk_upload_errors.none?
 
     if logs.visible.exists?
