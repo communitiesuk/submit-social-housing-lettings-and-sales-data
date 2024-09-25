@@ -16,11 +16,11 @@ class BulkUploadSummaryComponent < ViewComponent::Base
   end
 
   def critical_errors_count
-    @bulk_upload_errors.where(category: [nil, ""]).count
+    @bulk_upload_errors.where(category: [nil, "", "not_answered"]).count
   end
 
   def potential_errors_count
-    @bulk_upload_errors.where(category: "soft_validations").count
+    @bulk_upload_errors.where(category: "soft_validation").count
   end
 
   def formatted_count_text(count, singular_text, plural_text = nil)
@@ -39,15 +39,8 @@ class BulkUploadSummaryComponent < ViewComponent::Base
     }.compact.join("").html_safe
   end
 
-  def download_file_link(controller, bulk_upload)
-    case controller.controller_name
-    when "lettings_logs"
-      download_lettings_file_link(bulk_upload)
-    when "sales_logs"
-      download_sales_file_link(bulk_upload)
-    else
-      raise "Download file link not found for bulk upload"
-    end
+  def download_file_link(bulk_upload)
+    send("download_#{bulk_upload.log_type}_file_link", bulk_upload)
   end
 
   def download_lettings_file_link(bulk_upload)
@@ -58,33 +51,15 @@ class BulkUploadSummaryComponent < ViewComponent::Base
     link_to "Download file", download_sales_bulk_upload_path(bulk_upload), class: "govuk-link govuk-!-margin-right-2"
   end
 
-  def view_error_report_link(controller, bulk_upload)
+  def view_error_report_link(bulk_upload)
     return nil if %w[errors_fixed_in_service logs_uploaded_with_errors logs_uploaded_no_errors wrong_template blank_template].include?(bulk_upload.status.to_s)
-
-    case controller.controller_name
-    when "lettings_logs"
-      return link_to "View error report", summary_bulk_upload_lettings_result_url(bulk_upload), class: "govuk-link" if %w[important_errors].include?(bulk_upload.status.to_s)
-      link_to "View error report", bulk_upload_lettings_result_path(bulk_upload.id), class: "govuk-link"
-    when "sales_logs"
-      return link_to "View error report", summary_bulk_upload_sales_result_url(bulk_upload), class: "govuk-link" if %w[important_errors].include?(bulk_upload.status.to_s)
-      link_to "View error report", bulk_upload_sales_result_path(bulk_upload.id), class: "govuk-link"
-    else
-      raise "Error report link not found for bulk upload"
-    end
+    return link_to "View error report", send("summary_bulk_upload_#{bulk_upload.log_type}_result_url", bulk_upload), class: "govuk-link" if %w[important_errors].include?(bulk_upload.status.to_s)
+    link_to "View error report", send("bulk_upload_#{bulk_upload.log_type}_result_path", bulk_upload.id), class: "govuk-link"
   end
 
-  def view_logs_link(controller, bulk_upload)
+  def view_logs_link(bulk_upload)
     return nil if %w[errors_fixed_in_service logs_uploaded_no_errors wrong_template blank_template].include?(bulk_upload.status.to_s)
-
-    case controller.controller_name
-    when "lettings_logs"
-      return nil unless %w[errors_fixed_in_service logs_uploaded_with_errors logs_uploaded_no_errors].include?(bulk_upload.status.to_s)
-      link_to "View logs", "/lettings-logs?bulk_upload_id%5B%5D=#{bulk_upload.id}", class: "govuk-link"
-    when "sales_logs"
-      return nil unless %w[errors_fixed_in_service logs_uploaded_with_errors logs_uploaded_no_errors].include?(bulk_upload.status.to_s)
-      link_to "View logs", "/sales-logs?bulk_upload_id%5B%5D=#{bulk_upload.id}", class: "govuk-link"
-    else
-      raise "View logs link not found for bulk upload"
-    end
+    return nil unless %w[errors_fixed_in_service logs_uploaded_with_errors logs_uploaded_no_errors].include?(bulk_upload.status.to_s)
+    link_to "View logs", send("#{bulk_upload.log_type}_logs_path", bulk_upload_id: [bulk_upload.id]), class: "govuk-link"
   end
 end
