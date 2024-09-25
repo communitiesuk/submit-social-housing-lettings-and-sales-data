@@ -139,6 +139,10 @@ RSpec.describe "User Features" do
         expect(page).to have_button("Create a new lettings log for this organisation")
       end
 
+      it "shows a upload lettings logs in bulk link" do
+        expect(page).to have_link("Upload lettings logs in bulk")
+      end
+
       context "when creating a log for that organisation" do
         it "pre-fills the value for owning organisation for that log" do
           click_button("Create a new lettings log for this organisation")
@@ -228,6 +232,10 @@ RSpec.describe "User Features" do
 
       it "shows a create button for that organisation" do
         expect(page).to have_button("Create a new sales log for this organisation")
+      end
+
+      it "shows a upload sales logs in bulk link" do
+        expect(page).to have_link("Upload sales logs in bulk")
       end
 
       context "when creating a log for that organisation" do
