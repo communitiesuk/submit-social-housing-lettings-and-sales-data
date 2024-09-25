@@ -5,8 +5,8 @@ module Exports
 
     def export_xml_lettings_logs(full_update: false, collection_year: nil)
       archives_for_manifest = {}
-      recent_export = Export.order("started_at").last
       collection_years_to_export(collection_year).each do |collection|
+        recent_export = Export.where(collection:).order("started_at").last
         base_number = Export.where(empty_export: false, collection:).maximum(:base_number) || 1
         export = build_export_run(collection, base_number, full_update)
         archives = write_export_archive(export, collection, recent_export, full_update)

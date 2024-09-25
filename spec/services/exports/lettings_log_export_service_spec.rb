@@ -328,7 +328,7 @@ RSpec.describe Exports::LettingsLogExportService do
       context "when this is a second export (partial)" do
         before do
           start_time = Time.zone.local(2022, 6, 1)
-          Export.new(started_at: start_time).save!
+          Export.new(started_at: start_time, collection: 2021).save!
         end
 
         it "does not add any entry for the master manifest (no lettings logs)" do
