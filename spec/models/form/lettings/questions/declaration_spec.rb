@@ -50,7 +50,7 @@ RSpec.describe Form::Lettings::Questions::Declaration, type: :model do
 
     it "has the correct answer_options" do
       expect(question.answer_options).to eq({
-        "declaration" => { "value" => "The tenant has seen the MHCLG privacy notice." },
+        "declaration" => { "value" => "The tenant has seen the MHCLG privacy notice" },
       })
     end
 

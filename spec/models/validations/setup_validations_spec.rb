@@ -157,7 +157,7 @@ RSpec.describe Validations::SetupValidations do
           record.startdate = Time.zone.local(2024, 4, 1)
           setup_validator.validate_startdate_setup(record)
           expect(record.errors["startdate"].length).to be >= 2
-          expect(record.errors["startdate"][0]).to eq("Enter a date within the 23/24 collection year, which is between 1st April 2023 and 31st March 2024")
+          expect(record.errors["startdate"][0]).to eq("Enter a date within the 23/24 collection year, which is between 1st April 2023 and 31st March 2024.")
           expect(record.errors["startdate"][1]).to eq(I18n.t("validations.setup.startdate.later_than_14_days_after"))
         end
       end

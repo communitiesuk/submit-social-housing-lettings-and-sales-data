@@ -91,7 +91,7 @@ RSpec.describe Form::Sales::Questions::PrivacyNotice, type: :model do
     context "and there is a single buyer" do
       it "has the correct answer_options" do
         expect(question.answer_options).to eq({
-          "privacynotice" => { "value" => "The buyer has seen or been given access to the MHCLG privacy notice." },
+          "privacynotice" => { "value" => "The buyer has seen or been given access to the MHCLG privacy notice" },
         })
       end
 
@@ -109,7 +109,7 @@ RSpec.describe Form::Sales::Questions::PrivacyNotice, type: :model do
 
       it "has the correct answer_options" do
         expect(question.answer_options).to eq({
-          "privacynotice" => { "value" => "The buyers have seen or been given access to the MHCLG privacy notice." },
+          "privacynotice" => { "value" => "The buyers have seen or been given access to the MHCLG privacy notice" },
         })
       end
 

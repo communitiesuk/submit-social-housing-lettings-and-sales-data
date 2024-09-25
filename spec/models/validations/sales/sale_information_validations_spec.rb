@@ -671,7 +671,7 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
       it "adds an error" do
         sale_information_validator.validate_grant_amount(record)
 
-        expect(record.errors[:grant]).to include("Loan, grants or subsidies must be between £9,000 and £16,000")
+        expect(record.errors[:grant]).to include("Loan, grants or subsidies must be between £9,000 and £16,000.")
       end
     end
 
@@ -681,7 +681,7 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
       it "adds an error" do
         sale_information_validator.validate_grant_amount(record)
 
-        expect(record.errors[:grant]).to include("Loan, grants or subsidies must be between £9,000 and £16,000")
+        expect(record.errors[:grant]).to include("Loan, grants or subsidies must be between £9,000 and £16,000.")
       end
     end
 
