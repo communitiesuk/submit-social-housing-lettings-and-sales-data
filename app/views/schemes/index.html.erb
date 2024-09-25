@@ -6,7 +6,9 @@
 <%= render partial: "organisations/headings", locals: current_user.support? ? { main: "Supported housing schemes", sub: nil } : { main: "Supported housing schemes", sub: current_user.organisation.name } %>
 
 <% if SchemePolicy.new(current_user, nil).create? %>
-  <%= govuk_button_link_to "Create a new supported housing scheme", new_scheme_path, html: { method: :post } %>
+  <div class="govuk-button-group govuk-!-margin-bottom-6">
+    <%= govuk_button_link_to "Create a new supported housing scheme", new_scheme_path, html: { method: :post } %>
+  </div>
 <% end %>
 <div class="app-filter-layout" data-controller="filter-layout">
   <%= render partial: "schemes/scheme_filters" %>

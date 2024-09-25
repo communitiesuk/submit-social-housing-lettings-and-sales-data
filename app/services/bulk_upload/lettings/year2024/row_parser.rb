@@ -432,6 +432,7 @@ class BulkUpload::Lettings::Year2024::RowParser
 
   validate :validate_assigned_to_exists, on: :after_log
   validate :validate_assigned_to_related, on: :after_log
+  validate :validate_assigned_to_when_support, on: :after_log
   validate :validate_all_charges_given, on: :after_log, if: proc { is_carehome.zero? }
 
   validate :validate_address_option_found, on: :after_log, unless: -> { supported_housing? }
@@ -579,6 +580,12 @@ private
 
     unless assigned_to
       errors.add(:field_3, "User with the specified email could not be found")
+    end
+  end
+
+  def validate_assigned_to_when_support
+    if field_3.blank? && bulk_upload.user.support?
+      errors.add(:field_3, category: :setup, message: I18n.t("validations.not_answered", question: "what is the CORE username of the account this letting log should be assigned to?"))
     end
   end
 
@@ -891,12 +898,17 @@ private
   end
 
   def validate_owning_org_permitted
-    if owning_organisation && !bulk_upload.user.organisation.affiliated_stock_owners.include?(owning_organisation)
-      block_log_creation!
+    return unless owning_organisation
+    return if bulk_upload_organisation.affiliated_stock_owners.include?(owning_organisation)
 
-      if errors[:field_1].blank?
-        errors.add(:field_1, "You do not have permission to add logs for this owning organisation", category: :setup)
-      end
+    block_log_creation!
+
+    return if errors[:field_1].present?
+
+    if bulk_upload.user.support?
+      errors.add(:field_1, "This owning organisation is not affiliated with #{bulk_upload_organisation.name}", category: :setup)
+    else
+      errors.add(:field_1, "You do not have permission to add logs for this owning organisation", category: :setup)
     end
   end
 
@@ -1137,7 +1149,7 @@ private
     attributes["renewal"] = renewal
     attributes["scheme"] = scheme
     attributes["location"] = location
-    attributes["assigned_to"] = assigned_to || bulk_upload.user
+    attributes["assigned_to"] = assigned_to || (bulk_upload.user.support? ? nil : bulk_upload.user)
     attributes["created_by"] = bulk_upload.user
     attributes["needstype"] = field_4
     attributes["rent_type"] = RENT_TYPE_BU_MAPPING[field_11]
@@ -1624,5 +1636,9 @@ private
 
   def reason_is_other?
     field_98 == 20
+  end
+
+  def bulk_upload_organisation
+    Organisation.find(bulk_upload.organisation_id)
   end
 end

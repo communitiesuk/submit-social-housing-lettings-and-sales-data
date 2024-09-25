@@ -2,6 +2,7 @@ module ApplicationHelper
   include Pagy::Frontend
 
   def browser_title(title, pagy, *resources)
+    title = sanitize(title)&.gsub("&amp;", "&")
     if resources.any? { |r| r.present? && r.errors.present? }
       "Error: #{[title, t('service_name'), 'GOV.UK'].select(&:present?).join(' - ')}"
     else
