@@ -104,7 +104,7 @@ class SalesLogsController < LogsController
 
   def download_bulk_upload
     bulk_upload = BulkUpload.find(params[:id])
-    downloader = BulkUpload::Downloader.new(bulk_upload: bulk_upload)
+    downloader = BulkUpload::Downloader.new(bulk_upload:)
     downloader.call
 
     send_file downloader.file_path, filename: bulk_upload.filename, type: "text/csv"

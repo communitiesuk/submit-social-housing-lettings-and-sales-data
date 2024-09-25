@@ -53,13 +53,17 @@ class BulkUploadSummaryComponent < ViewComponent::Base
 
   def view_error_report_link(bulk_upload)
     return nil if %w[errors_fixed_in_service logs_uploaded_with_errors logs_uploaded_no_errors wrong_template blank_template].include?(bulk_upload.status.to_s)
+
     return link_to "View error report", send("summary_bulk_upload_#{bulk_upload.log_type}_result_url", bulk_upload), class: "govuk-link" if %w[important_errors].include?(bulk_upload.status.to_s)
+
     link_to "View error report", send("bulk_upload_#{bulk_upload.log_type}_result_path", bulk_upload.id), class: "govuk-link"
   end
 
   def view_logs_link(bulk_upload)
     return nil if %w[errors_fixed_in_service logs_uploaded_no_errors wrong_template blank_template].include?(bulk_upload.status.to_s)
+
     return nil unless %w[logs_uploaded_with_errors].include?(bulk_upload.status.to_s)
+
     link_to "View logs", send("#{bulk_upload.log_type}_logs_path", bulk_upload_id: [bulk_upload.id]), class: "govuk-link"
   end
 end

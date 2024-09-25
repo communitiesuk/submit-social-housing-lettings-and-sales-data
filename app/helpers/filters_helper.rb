@@ -21,6 +21,7 @@ module FiltersHelper
     return true if (selected_filters["uploading_organisation"].present? || selected_filters["uploading_organisation_text_search"].present?) && filter == "uploading_organisation_select" && value == :specific_org
 
     return false if selected_filters[filter].blank?
+
     selected_filters[filter].include?(value.to_s)
   end
 
