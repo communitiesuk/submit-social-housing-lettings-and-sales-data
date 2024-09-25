@@ -116,6 +116,8 @@ class LettingsLogsController < LogsController
   end
 
   def bulk_uploads
+    return render_not_authorized unless current_user.support?
+
     @filter_type = "lettings_bulk_uploads"
 
     if params[:organisation_id].present? && params[:clear_old_filters].present?

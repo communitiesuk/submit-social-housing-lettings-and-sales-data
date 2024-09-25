@@ -86,6 +86,8 @@ class SalesLogsController < LogsController
   end
 
   def bulk_uploads
+    return render_not_authorized unless current_user.support?
+
     @filter_type = "sales_bulk_uploads"
 
     if params[:organisation_id].present? && params[:clear_old_filters].present?
