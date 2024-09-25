@@ -105,6 +105,32 @@ RSpec.describe UserHelper do
     end
   end
 
+  describe "display_pending_email_change_banner?" do
+    context "when the user doesn't have an unconfirmed email" do
+      let(:user) { FactoryBot.create(:user, :data_provider, unconfirmed_email: nil) }
+
+      it "does not display pending email change banner" do
+        expect(display_pending_email_change_banner?(user)).to be false
+      end
+    end
+
+    context "when the user has the same unconfirmed email as current email" do
+      let(:user) { FactoryBot.create(:user, :data_provider, unconfirmed_email: "updated_email@example.com", email: "updated_email@example.com") }
+
+      it "does not display pending email change banner" do
+        expect(display_pending_email_change_banner?(user)).to be false
+      end
+    end
+
+    context "when the user has a different unconfirmed email" do
+      let(:user) { FactoryBot.create(:user, :data_provider, unconfirmed_email: "updated_email@example.com", email: "old_email@example.com") }
+
+      it "displays pending email change banner" do
+        expect(display_pending_email_change_banner?(user)).to be true
+      end
+    end
+  end
+
   describe "organisation_change_confirmation_warning" do
     context "when user owns logs" do
       before do
@@ -144,6 +170,41 @@ RSpec.describe UserHelper do
       it "returns the correct message" do
         expected_text = "You’re moving #{user.name} from #{user.organisation.name} to #{current_user.organisation.name}. There are no logs assigned to them."
         expect(organisation_change_confirmation_warning(user, current_user.organisation, "reassign_all")).to eq(expected_text)
+      end
+    end
+  end
+
+  describe "pending_email_change_title_text" do
+    let(:user) { FactoryBot.create(:user, :data_provider, unconfirmed_email: "updated_email@example.com", email: "old_email@example.com") }
+    let(:current_user) { FactoryBot.create(:user, :support) }
+
+    context "when viewing own profile" do
+      it "returns the correct text" do
+        expect(pending_email_change_title_text(user, user)).to eq("You have requested to change your email address to updated_email@example.com.")
+      end
+    end
+
+    context "when viewing another user's profile" do
+      it "returns the correct text" do
+        expect(pending_email_change_title_text(current_user, user)).to eq("There has been a request to change this user’s email address to updated_email@example.com.")
+      end
+    end
+  end
+
+  describe "pending_email_change_banner_text" do
+    context "with provider user" do
+      let(:user) { FactoryBot.create(:user, :data_provider) }
+
+      it "returns the correct text" do
+        expect(pending_email_change_banner_text(user)).to eq("A confirmation link has been sent to the new email address. The current email will continue to work until the change is confirmed.")
+      end
+    end
+
+    context "with support user" do
+      let(:user) { FactoryBot.create(:user, :support) }
+
+      it "returns the correct text" do
+        expect(pending_email_change_banner_text(user)).to eq("A confirmation link has been sent to the new email address. The current email will continue to work until the change is confirmed. Deactivating this user will cancel the email change request.")
       end
     end
   end
