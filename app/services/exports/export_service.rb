@@ -12,20 +12,24 @@ module Exports
       daily_run_number = get_daily_run_number
       lettings_archives_for_manifest = {}
       users_archives_for_manifest = {}
+      organisations_archives_for_manifest = {}
 
       if collection.present?
         case collection
         when "users"
           users_archives_for_manifest = get_user_archives(start_time, full_update)
+        when "organisations"
+          organisations_archives_for_manifest = get_organisation_archives(start_time, full_update)
         else
           lettings_archives_for_manifest = get_lettings_archives(start_time, full_update, collection)
         end
       else
         users_archives_for_manifest = get_user_archives(start_time, full_update)
+        organisations_archives_for_manifest = get_organisation_archives(start_time, full_update)
         lettings_archives_for_manifest = get_lettings_archives(start_time, full_update, collection)
       end
 
-      write_master_manifest(daily_run_number, lettings_archives_for_manifest.merge(users_archives_for_manifest))
+      write_master_manifest(daily_run_number, lettings_archives_for_manifest.merge(users_archives_for_manifest).merge(organisations_archives_for_manifest))
     end
 
   private
@@ -59,6 +63,11 @@ module Exports
     def get_user_archives(start_time, full_update)
       users_export_service = Exports::UserExportService.new(@storage_service, start_time)
       users_export_service.export_xml_users(full_update:)
+    end
+
+    def get_organisation_archives(start_time, full_update)
+      organisations_export_service = Exports::OrganisationExportService.new(@storage_service, start_time)
+      organisations_export_service.export_xml_organisations(full_update:)
     end
 
     def get_lettings_archives(start_time, full_update, collection)

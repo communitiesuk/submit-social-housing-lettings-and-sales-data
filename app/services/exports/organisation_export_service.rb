@@ -1,10 +1,10 @@
 module Exports
-  class UserExportService < Exports::XmlExportService
-    include Exports::UserExportConstants
+  class OrganisationExportService < Exports::XmlExportService
+    include Exports::OrganisationExportConstants
     include CollectionTimeHelper
 
-    def export_xml_users(full_update: false)
-      collection = "users"
+    def export_xml_organisations(full_update: false)
+      collection = "organisations"
       recent_export = Export.where(collection:).order("started_at").last
 
       base_number = Export.where(empty_export: false, collection:).maximum(:base_number) || 1
@@ -30,18 +30,18 @@ module Exports
     def retrieve_resources(recent_export, full_update, _collection)
       if !full_update && recent_export
         params = { from: recent_export.started_at, to: @start_time }
-        User.where("(updated_at >= :from AND updated_at <= :to)", params)
+        Organisation.where("(updated_at >= :from AND updated_at <= :to)", params)
       else
         params = { to: @start_time }
-        User.where("updated_at <= :to", params)
+        Organisation.where("updated_at <= :to", params)
       end
     end
 
-    def build_export_xml(users)
+    def build_export_xml(organisations)
       doc = Nokogiri::XML("<forms/>")
 
-      users.each do |user|
-        attribute_hash = apply_cds_transformation(user)
+      organisations.each do |organisation|
+        attribute_hash = apply_cds_transformation(organisation)
         form = doc.create_element("form")
         doc.at("forms") << form
         attribute_hash.each do |key, value|
@@ -56,12 +56,16 @@ module Exports
       xml_doc_to_temp_file(doc)
     end
 
-    def apply_cds_transformation(user)
-      attribute_hash = user.attributes_before_type_cast
-      attribute_hash["role"] = user.role
-      attribute_hash["organisation_name"] = user.organisation.name
-      attribute_hash["active"] = user.active?
-      attribute_hash["phone"] = [user.phone, user.phone_extension].compact.join(" ")
+    def apply_cds_transformation(organisation)
+      attribute_hash = organisation.attributes
+      attribute_hash["deleted_at"] = organisation.discarded_at
+      attribute_hash["dsa_signed"] = organisation.data_protection_confirmed?
+      attribute_hash["dsa_signed_at"] = organisation.data_protection_confirmation&.signed_at
+      attribute_hash["dpo_email"] = organisation.data_protection_confirmation&.data_protection_officer_email
+      attribute_hash["provider_type"] = organisation.provider_type_before_type_cast
+      attribute_hash["profit_status"] = nil # will need update when we add the field to the org
+      attribute_hash["group"] = nil # will need update when we add the field to the org
+
       attribute_hash
     end
   end
