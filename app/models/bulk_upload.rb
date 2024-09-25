@@ -149,10 +149,6 @@ class BulkUpload < ApplicationRecord
     User.find_by(id: moved_user_id)&.name
   end
 
-  def user
-    User.find_by(id: user_id)
-  end
-
 private
 
   def generate_identifier
