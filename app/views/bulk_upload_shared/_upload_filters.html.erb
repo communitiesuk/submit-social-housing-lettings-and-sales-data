@@ -36,7 +36,7 @@
                          conditional_filter: {
                            type: "text_select",
                            label: "User",
-                           category: "uploaded_by",
+                           category: "user",
                            options: uploaded_by_filter_options,
                            caption_text: "User's name or email",
                          },
@@ -54,7 +54,7 @@
               "specific_org": {
                 label: "Specific uploading organisation",
                 conditional_filter: {
-                  type: "text_select",
+                  type: "select",
                   label: "Uploading Organisation",
                   category: "uploading_organisation",
                   options: all_owning_organisation_filter_options(current_user),

@@ -83,7 +83,7 @@ class FilterManager
       next if Array(values).reject(&:empty?).blank?
       next if category == "uploading_organisation" && all_orgs
       next if category == "uploading_organisation_text_search" && all_orgs
-      # next if category == "uploaded_by"
+      next if category == "uploaded_by"
       next if category == "uploaded_by_text_search" && filters["uploaded_by"] != "specific_user"
 
       uploads = uploads.public_send("filter_by_#{category}", values, user)
@@ -142,11 +142,12 @@ class FilterManager
       current_user.logs_filters(specific_org:).each do |filter|
         new_filters[filter] = params[filter] if params[filter].present?
       end
+      # binding.pry
       new_filters = new_filters.except("uploading_organisation") if params["uploading_organisation_select"] == "all"
-      new_filters = new_filters.except("uploaded_by") if params["uploaded_by"] == "all"
-      new_filters["uploaded_by"] = current_user.id.to_s if params["uploaded_by"] == "you"
+      new_filters = new_filters.except("user") if params["uploaded_by"] == "all"
+      new_filters["user"] = current_user.id.to_s if params["uploaded_by"] == "you"
     end
-
+    # binding.pry
     new_filters
   end
 

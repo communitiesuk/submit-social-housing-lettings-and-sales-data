@@ -43,7 +43,8 @@ class BulkUpload < ApplicationRecord
   }
   scope :filter_by_uploaded_by, ->(user_id, _user = nil) { where(user_id:) }
   scope :filter_by_user_text_search, ->(param, _user = nil) { where(user_id: User.search_by(param).select(:id)) }
-  scope :filter_by_user, ->(selected_user, _user = nil) { selected_user.present? ? where(user: selected_user) : all }
+  scope :filter_by_user, ->(user_id, _user = nil) { user_id.present? ? where(user_id:) : all }
+  scope :filter_by_uploading_organisation , ->(organisation_id, _user = nil) { where(user_id: User.where(organisation_id: organisation_id).select(:id)) }
 
   def completed?
     incomplete_logs = logs.where.not(status: "completed")
