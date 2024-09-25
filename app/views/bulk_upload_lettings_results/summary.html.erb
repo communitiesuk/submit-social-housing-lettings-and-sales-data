@@ -29,4 +29,4 @@
   <% end %>
 </div>
 
-<%= govuk_button_link_to "Upload your file again", start_bulk_upload_lettings_logs_path %>
+<%= govuk_button_link_to "Upload your file again", start_bulk_upload_lettings_logs_path(organisation_id: @bulk_upload.organisation_id) %>
