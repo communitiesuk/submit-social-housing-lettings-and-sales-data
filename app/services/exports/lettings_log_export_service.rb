@@ -81,9 +81,7 @@ module Exports
       end
 
       attribute_hash["log_id"] = lettings_log.id
-      attribute_hash["assigned_to"] = lettings_log.assigned_to_id
-      attribute_hash["created_by"] = lettings_log.created_by_id
-      attribute_hash["amended_by"] = lettings_log.updated_by_id
+      attribute_hash["amended_by_id"] = lettings_log.updated_by_id
 
       attribute_hash["la"] = lettings_log.la
       attribute_hash["postcode_full"] = lettings_log.postcode_full

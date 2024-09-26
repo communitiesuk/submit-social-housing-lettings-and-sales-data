@@ -131,7 +131,7 @@ module Exports::LettingsLogExportConstants
     "log_id",
     "scheme_status",
     "location_status",
-    "amended_by",
+    "amended_by_id",
     "duplicate_set_id",
     "accessible_register",
     "nationality_all",
@@ -148,8 +148,8 @@ module Exports::LettingsLogExportConstants
     "pscharge_value_check",
     "supcharg_value_check",
     "carehome_charges_value_check",
-    "assigned_to",
-    "created_by",
+    "assigned_to_id",
+    "created_by_id",
   ]
 
   (1..8).each do |index|

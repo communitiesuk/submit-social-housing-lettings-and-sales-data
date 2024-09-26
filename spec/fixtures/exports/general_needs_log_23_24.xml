@@ -132,6 +132,7 @@
     <lar>2</lar>
     <irproduct/>
     <joint>3</joint>
+    <assigned_to_id>{assigned_to}</assigned_to_id>
     <sheltered/>
     <hhtype>4</hhtype>
     <new_old>2</new_old>
@@ -146,15 +147,14 @@
     <discarded_at/>
     <creation_method>1</creation_method>
     <duplicate_set_id/>
+    <created_by_id>{created_by}</created_by_id>
     <formid>{id}</formid>
     <owningorgid>{owning_org_id}</owningorgid>
     <maningorgid>{managing_org_id}</maningorgid>
     <createddate>2023-04-03T00:00:00+01:00</createddate>
     <uploaddate>2023-04-03T00:00:00+01:00</uploaddate>
     <log_id>{log_id}</log_id>
-    <assigned_to>{assigned_to}</assigned_to>
-    <created_by>{created_by}</created_by>
-    <amended_by/>
+    <amended_by_id/>
     <renttype_detail>2</renttype_detail>
   </form>
 </forms>
