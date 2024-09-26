@@ -263,7 +263,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
             it "adds an error to all (and only) the fields used to determine duplicates" do
               parser.valid?
 
-              error_message = "This is a duplicate log"
+              error_message = "This is a duplicate log."
 
               [
                 :field_1, # owning_organisation
@@ -300,7 +300,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
             it "adds an error to all the fields used to determine duplicates" do
               parser.valid?
 
-              error_message = "This is a duplicate log"
+              error_message = "This is a duplicate log."
 
               [
                 :field_1, # owning_organisation
@@ -338,7 +338,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
               it "adds an error to all the fields used to determine duplicates" do
                 parser.valid?
 
-                error_message = "This is a duplicate log"
+                error_message = "This is a duplicate log."
 
                 [
                   :field_1, # owning_organisation
@@ -385,7 +385,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
               it "adds an error to all the fields used to determine duplicates" do
                 parser.valid?
 
-                error_message = "This is a duplicate log"
+                error_message = "This is a duplicate log."
 
                 [
                   :field_1, # owning_organisation
@@ -444,7 +444,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
               it "does not add an error to all the fields used to determine duplicates" do
                 parser_too.valid?
 
-                error_message = "This is a duplicate log"
+                error_message = "This is a duplicate log."
 
                 [
                   :field_1, # owning_organisation
@@ -479,7 +479,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
               it "adds an error to all the fields used to determine duplicates" do
                 parser.valid?
 
-                error_message = "This is a duplicate log"
+                error_message = "This is a duplicate log."
 
                 [
                   :field_1, # owning_organisation
@@ -526,7 +526,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
               it "adds an error to all the fields used to determine duplicates" do
                 parser.valid?
 
-                error_message = "This is a duplicate log"
+                error_message = "This is a duplicate log."
 
                 [
                   :field_1, # owning_organisation
@@ -585,7 +585,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
               it "does not add an error to all the fields used to determine duplicates" do
                 parser_too.valid?
 
-                error_message = "This is a duplicate log"
+                error_message = "This is a duplicate log."
 
                 [
                   :field_1, # owning_organisation
@@ -979,7 +979,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
             parser.valid?
 
             expect(parser.errors[:field_15]).to be_blank
-            expect(parser.errors.where(:field_16, category: :setup).map(&:message)).to eq(["This scheme code does not belong to the owning organisation or managing organisation"])
+            expect(parser.errors.where(:field_16, category: :setup).map(&:message)).to eq(["This scheme code does not belong to the owning organisation or managing organisation."])
             expect(parser.errors[:field_17]).to be_blank
           end
         end
@@ -1018,7 +1018,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
             expect(parser.errors[:field_15]).to be_blank
             expect(parser.errors[:field_16]).to be_blank
-            expect(parser.errors.where(:field_17, category: :setup).map(&:message)).to eq(["Location code must relate to a location that is owned by the owning organisation or managing organisation"])
+            expect(parser.errors.where(:field_17, category: :setup).map(&:message)).to eq(["Location code must relate to a location that is owned by the owning organisation or managing organisation."])
           end
         end
 
@@ -1054,7 +1054,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
             expect(parser.errors[:field_15]).to be_blank
             expect(parser.errors[:field_16]).to be_blank
-            expect(parser.errors.where(:field_17, category: :setup).map(&:message)).to eq(["Location code must relate to a location that is owned by the owning organisation or managing organisation"])
+            expect(parser.errors.where(:field_17, category: :setup).map(&:message)).to eq(["Location code must relate to a location that is owned by the owning organisation or managing organisation."])
           end
         end
 
@@ -1067,7 +1067,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
             parser.valid?
 
             expect(parser.errors[:field_15]).to be_blank
-            expect(parser.errors.where(:field_16, category: :setup).map(&:message)).to eq(["This scheme code does not belong to the owning organisation or managing organisation"])
+            expect(parser.errors.where(:field_16, category: :setup).map(&:message)).to eq(["This scheme code does not belong to the owning organisation or managing organisation."])
             expect(parser.errors[:field_17]).to be_blank
           end
         end
@@ -1122,7 +1122,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
           it "returns a setup error" do
             parser.valid?
 
-            expect(parser.errors.where(:field_15, category: :setup).map(&:message)).to eq(["This management group code does not belong to the owning organisation or managing organisation"])
+            expect(parser.errors.where(:field_15, category: :setup).map(&:message)).to eq(["This management group code does not belong to the owning organisation or managing organisation."])
             expect(parser.errors[:field_16]).to be_blank
             expect(parser.errors[:field_17]).to be_blank
           end
@@ -1147,7 +1147,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
             parser.valid?
 
             expect(parser.errors[:field_15]).to be_blank
-            expect(parser.errors.where(:field_16, category: :setup).map(&:message)).to eq(["Scheme code must relate to a scheme that is owned by the owning organisation or managing organisation"])
+            expect(parser.errors.where(:field_16, category: :setup).map(&:message)).to eq(["Scheme code must relate to a scheme that is owned by the owning organisation or managing organisation."])
             expect(parser.errors[:field_17]).to be_blank
           end
         end
@@ -1173,7 +1173,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
             parser.valid?
 
             expect(parser.errors[:field_15]).to be_blank
-            expect(parser.errors.where(:field_16, category: :setup).map(&:message)).to eq(["Scheme code must relate to a scheme that is owned by the owning organisation or managing organisation"])
+            expect(parser.errors.where(:field_16, category: :setup).map(&:message)).to eq(["Scheme code must relate to a scheme that is owned by the owning organisation or managing organisation."])
             expect(parser.errors[:field_17]).to be_blank
           end
         end
@@ -1186,7 +1186,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
           it "returns a setup error" do
             parser.valid?
 
-            expect(parser.errors.where(:field_15, category: :setup).map(&:message)).to eq(["This management group code does not belong to the owning organisation or managing organisation"])
+            expect(parser.errors.where(:field_15, category: :setup).map(&:message)).to eq(["This management group code does not belong to the owning organisation or managing organisation."])
             expect(parser.errors[:field_16]).to be_blank
             expect(parser.errors[:field_17]).to be_blank
           end
@@ -1543,7 +1543,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
           parser.valid?
 
           setup_errors = parser.errors.select { |e| e.options[:category] == :setup }
-          expect(setup_errors.find { |e| e.attribute == :field_1 }.message).to eql("The owning organisation code is incorrect")
+          expect(setup_errors.find { |e| e.attribute == :field_1 }.message).to eql("The owning organisation code is incorrect.")
         end
 
         it "blocks log creation" do
@@ -1561,7 +1561,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
           parser.valid?
 
           setup_errors = parser.errors.select { |e| e.options[:category] == :setup }
-          expect(setup_errors.find { |e| e.attribute == :field_1 }.message).to eql("The owning organisation code provided is for an organisation that does not own stock")
+          expect(setup_errors.find { |e| e.attribute == :field_1 }.message).to eql("The owning organisation code provided is for an organisation that does not own stock.")
         end
 
         it "blocks log creation" do
@@ -1579,7 +1579,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
           parser.valid?
 
           setup_errors = parser.errors.select { |e| e.options[:category] == :setup }
-          expect(setup_errors.find { |e| e.attribute == :field_1 }.message).to eql("You do not have permission to add logs for this owning organisation")
+          expect(setup_errors.find { |e| e.attribute == :field_1 }.message).to eql("You do not have permission to add logs for this owning organisation.")
         end
 
         it "blocks log creation" do
@@ -1642,7 +1642,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
           parser.valid?
 
           setup_errors = parser.errors.select { |e| e.options[:category] == :setup }
-          expect(setup_errors.find { |e| e.attribute == :field_2 }.message).to eql("The managing organisation code is incorrect")
+          expect(setup_errors.find { |e| e.attribute == :field_2 }.message).to eql("The managing organisation code is incorrect.")
         end
 
         it "blocks log creation" do
@@ -1658,7 +1658,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
           parser.valid?
 
           setup_errors = parser.errors.select { |e| e.options[:category] == :setup }
-          expect(setup_errors.find { |e| e.attribute == :field_2 }.message).to eql("The managing organisation code is incorrect")
+          expect(setup_errors.find { |e| e.attribute == :field_2 }.message).to eql("The managing organisation code is incorrect.")
         end
 
         it "blocks log creation" do
@@ -1676,7 +1676,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
           parser.valid?
 
           setup_errors = parser.errors.select { |e| e.options[:category] == :setup }
-          expect(setup_errors.find { |e| e.attribute == :field_2 }.message).to eql("This managing organisation does not have a relationship with the owning organisation")
+          expect(setup_errors.find { |e| e.attribute == :field_2 }.message).to eql("This managing organisation does not have a relationship with the owning organisation.")
         end
 
         it "blocks log creation" do

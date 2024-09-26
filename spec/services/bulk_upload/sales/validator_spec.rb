@@ -199,7 +199,7 @@ RSpec.describe BulkUpload::Sales::Validator do
       end
 
       it "creates errors" do
-        expect { validator.call }.to change(BulkUploadError.where(category: :setup, error: "This is a duplicate of a log in your file"), :count).by(20)
+        expect { validator.call }.to change(BulkUploadError.where(category: :setup, error: "This is a duplicate of a log in your file."), :count).by(20)
       end
     end
   end

@@ -467,7 +467,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
 
         it "is not permitted as a setup error" do
           parser.valid?
-          expect(parser.errors.where(:field_1, category: :setup).map(&:message)).to eql(["The owning organisation code is incorrect"])
+          expect(parser.errors.where(:field_1, category: :setup).map(&:message)).to eql(["The owning organisation code is incorrect."])
         end
 
         it "blocks log creation" do
@@ -483,7 +483,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
 
         it "is not permitted as setup error" do
           parser.valid?
-          expect(parser.errors.where(:field_1, category: :setup).map(&:message)).to eql(["You do not have permission to add logs for this owning organisation"])
+          expect(parser.errors.where(:field_1, category: :setup).map(&:message)).to eql(["You do not have permission to add logs for this owning organisation."])
         end
 
         it "blocks log creation" do
@@ -570,7 +570,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
           parser = described_class.new(attributes)
           parser.valid?
           expect(parser).to be_block_log_creation
-          expect(parser.errors[:field_1]).to include("You do not have permission to add logs for this owning organisation")
+          expect(parser.errors[:field_1]).to include("You do not have permission to add logs for this owning organisation.")
         end
       end
 
@@ -588,7 +588,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
         it "does not block log creation and does not add an error to field_1" do
           parser = described_class.new(attributes)
           parser.valid?
-          expect(parser.errors[:field_1]).not_to include("You do not have permission to add logs for this owning organisation")
+          expect(parser.errors[:field_1]).not_to include("You do not have permission to add logs for this owning organisation.")
         end
       end
     end
@@ -782,7 +782,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
       it "adds an error to all (and only) the fields used to determine duplicates" do
         parser.valid?
 
-        error_message = "This is a duplicate log"
+        error_message = "This is a duplicate log."
 
         [
           :field_1, # Owning org
@@ -871,7 +871,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
 
         it "returns correct error" do
           parser.valid?
-          expect(parser.errors.where(:field_116).map(&:message)).to include("Percentage discount must be between 0% and 70%")
+          expect(parser.errors.where(:field_116).map(&:message)).to include("Percentage discount must be between 0% and 70%.")
         end
       end
 
@@ -889,7 +889,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
 
         it "returns correct error" do
           parser.valid?
-          expect(parser.errors.where(:field_116).map(&:message)).to include("Percentage discount must be between 0% and 70%")
+          expect(parser.errors.where(:field_116).map(&:message)).to include("Percentage discount must be between 0% and 70%.")
         end
       end
     end
@@ -1209,7 +1209,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
         it "a custom validation is applied" do
           parser.valid?
 
-          validation_message = "Buyer 2’s age must be between 16 and 110"
+          validation_message = "Buyer 2’s age must be between 16 and 110."
           expect(parser.errors[:field_38]).to include validation_message
         end
       end
@@ -1255,7 +1255,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
         it "a custom validation is applied" do
           parser.valid?
 
-          validation_message = "Buyer 1’s age must be between 16 and 110"
+          validation_message = "Buyer 1’s age must be between 16 and 110."
           expect(parser.errors[:field_31]).to include validation_message
         end
       end
@@ -1997,7 +1997,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
           parser.valid?
           setup_errors = parser.errors.select { |e| e.options[:category] == :setup }
 
-          expect(setup_errors.find { |e| e.attribute == :field_2 }.message).to eql("This organisation does not have a relationship with the owning organisation")
+          expect(setup_errors.find { |e| e.attribute == :field_2 }.message).to eql("This organisation does not have a relationship with the owning organisation.")
         end
 
         it "blocks log creation" do
@@ -2019,7 +2019,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
         parser.valid?
         setup_errors = parser.errors.select { |e| e.options[:category] == :setup }
 
-        expect(setup_errors.find { |e| e.attribute == :field_1 }.message).to eql("The owning organisation code provided is for an organisation that does not own stock")
+        expect(setup_errors.find { |e| e.attribute == :field_1 }.message).to eql("The owning organisation code provided is for an organisation that does not own stock.")
       end
 
       it "blocks log creation" do

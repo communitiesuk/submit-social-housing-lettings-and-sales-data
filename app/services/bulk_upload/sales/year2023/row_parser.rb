@@ -1158,7 +1158,7 @@ private
       block_log_creation!
 
       if errors[:field_1].blank?
-        errors.add(:field_1, "The owning organisation code is incorrect", category: :setup)
+        errors.add(:field_1, "The owning organisation code is incorrect.", category: :setup)
       end
     end
   end
@@ -1168,7 +1168,7 @@ private
       block_log_creation!
 
       if errors[:field_1].blank?
-        errors.add(:field_1, "The owning organisation code is incorrect", category: :setup)
+        errors.add(:field_1, "The owning organisation code is incorrect.", category: :setup)
       end
     end
   end
@@ -1178,7 +1178,7 @@ private
       block_log_creation!
 
       if errors[:field_1].blank?
-        errors.add(:field_1, "The owning organisation code provided is for an organisation that does not own stock", category: :setup)
+        errors.add(:field_1, "The owning organisation code provided is for an organisation that does not own stock.", category: :setup)
       end
     end
   end
@@ -1188,7 +1188,7 @@ private
       block_log_creation!
 
       if errors[:field_1].blank?
-        errors.add(:field_1, "You do not have permission to add logs for this owning organisation", category: :setup)
+        errors.add(:field_1, "You do not have permission to add logs for this owning organisation.", category: :setup)
       end
     end
   end
@@ -1197,7 +1197,7 @@ private
     return if field_2.blank?
 
     unless assigned_to
-      errors.add(:field_2, "User with the specified email could not be found")
+      errors.add(:field_2, "User with the specified email could not be found.")
     end
   end
 
@@ -1207,7 +1207,7 @@ private
     return if assigned_to.organisation == owning_organisation&.absorbing_organisation || assigned_to.organisation == managing_organisation&.absorbing_organisation
 
     block_log_creation!
-    errors.add(:field_2, "User must be related to owning organisation or managing organisation", category: :setup)
+    errors.add(:field_2, "User must be related to owning organisation or managing organisation.", category: :setup)
   end
 
   def managing_organisation
@@ -1221,7 +1221,7 @@ private
       block_log_creation!
 
       if errors[:field_2].blank?
-        errors.add(:field_2, "This user belongs to an organisation that does not have a relationship with the owning organisation", category: :setup)
+        errors.add(:field_2, "This user belongs to an organisation that does not have a relationship with the owning organisation.", category: :setup)
       end
     end
   end
@@ -1296,7 +1296,7 @@ private
 
   def validate_if_log_already_exists
     if log_already_exists?
-      error_message = "This is a duplicate log"
+      error_message = "This is a duplicate log."
 
       errors.add(:field_1, error_message) # Owning org
       errors.add(:field_3, error_message) # Sale completion date
@@ -1331,7 +1331,7 @@ private
 
   def validate_buyer1_economic_status
     if field_35 == 9
-      errors.add(:field_35, "Buyer 1 cannot be a child under 16")
+      errors.add(:field_35, "Buyer 1 cannot be a child under 16.")
     end
   end
 end
