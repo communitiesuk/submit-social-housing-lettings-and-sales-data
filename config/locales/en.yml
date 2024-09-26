@@ -412,7 +412,7 @@ en:
           over_hard_max: "The household’s income of %{earnings} %{frequency} is too high for this number of tenants. Change either the household income or number of tenants."
           under_hard_min: "The household’s income of %{earnings} %{frequency} is too low for this number of tenants. Change either the household income or number of tenants."
       brent:
-        below_hard_min: "Rent is below the absolute minimum expected for a property of this type. Please check the rent, rent period, local authority and (if general needs) number of bedroom."
+        below_hard_min: "Rent is below the absolute minimum expected for a property of this type. Please check the rent, rent period, local authority and (if general needs) number of bedrooms."
         above_hard_max: "Rent is higher than the absolute maximum expected for a property of this type. Please check the rent, rent period, local authority and (if general needs) number of bedrooms."
         scheme_id:
           below_hard_min: "Rent is below the absolute minimum expected for a property of this type. Please check the rent, rent period and local authority."
