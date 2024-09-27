@@ -46,14 +46,19 @@ class SalesLog < Log
   }
   scope :filter_by_purchaser_code, ->(purchid) { where("purchid ILIKE ?", "%#{purchid}%") }
   scope :search_by, lambda { |param|
-    by_id = Arel.sql("CASE WHEN id = #{param.to_i} THEN 0 ELSE 1 END")
-    by_purchaser_code = Arel.sql("CASE WHEN purchid = '#{param}' THEN 0 WHEN purchid ILIKE '%#{param}%' THEN 1 ELSE 2 END")
-    by_postcode = Arel.sql("CASE WHEN REPLACE(postcode_full, ' ', '') = '#{param.delete(' ')}' THEN 0 WHEN REPLACE(postcode_full, ' ', '') ILIKE '%#{param.delete(' ')}%' THEN 1 ELSE 2 END")
+    sanitized_order_param = ActiveRecord::Base.sanitize_sql_for_order(param)
+    order_param_without_spaces = sanitized_order_param.delete(" ")
+
+    by_id = Arel.sql("CASE WHEN id = ? THEN 0 ELSE 1 END")
+    by_purchaser_code = Arel.sql("CASE WHEN purchid = ? THEN 0 WHEN purchid ILIKE ? THEN 1 ELSE 2 END")
+    by_postcode = Arel.sql("CASE WHEN REPLACE(postcode_full, ' ', '') = ? THEN 0 WHEN REPLACE(postcode_full, ' ', '') ILIKE ? THEN 1 ELSE 2 END")
 
     filter_by_purchaser_code(param)
       .or(filter_by_postcode(param))
       .or(filter_by_id(param.gsub(/log/i, "")))
-      .order(by_id, by_purchaser_code, by_postcode)
+      .order([by_id, sanitized_order_param.to_i],
+             [by_purchaser_code, sanitized_order_param, sanitized_order_param],
+             [by_postcode, order_param_without_spaces, order_param_without_spaces])
   }
   scope :age1_answered, -> { where.not(age1: nil).or(where(age1_known: [1, 2])) }
   scope :duplicate_logs, lambda { |log|
