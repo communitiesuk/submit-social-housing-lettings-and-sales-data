@@ -45,7 +45,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_09_25_095041) do
     t.integer "organisation_id"
     t.integer "moved_user_id"
     t.integer "failed"
-    t.boolean "processed", default: false
+    t.boolean "processed"
     t.index ["identifier"], name: "index_bulk_uploads_on_identifier", unique: true
     t.index ["user_id"], name: "index_bulk_uploads_on_user_id"
   end
