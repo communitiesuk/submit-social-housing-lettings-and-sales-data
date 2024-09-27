@@ -46,7 +46,6 @@ class BulkUpload < ApplicationRecord
   def status
     return :blank_template if failed == "blank_template"
     return :wrong_template if failed == "wrong_template"
-    return :logs_uploaded_no_errors if bulk_upload_errors.none?
 
     if logs.visible.exists?
       return :errors_fixed_in_service if completed? && bulk_upload_errors.any?
@@ -55,10 +54,12 @@ class BulkUpload < ApplicationRecord
 
     if bulk_upload_errors.any? { |error| error.category == "setup" }
       :important_errors
+    elsif bulk_upload_errors.any? { |error| error.category.nil? || error.category == "not_answered" }
+      :critical_errors
     elsif bulk_upload_errors.any? { |error| error.category == "soft_validation" }
       :potential_errors
     else
-      :critical_errors
+      :logs_uploaded_no_errors
     end
   end
 
