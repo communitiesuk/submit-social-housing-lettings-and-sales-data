@@ -19,6 +19,10 @@ class BulkUpload::Downloader
     file.path
   end
 
+  def presigned_url
+    s3_storage_service.get_presigned_url(bulk_upload.identifier, 60)
+  end
+
 private
 
   def download
@@ -33,6 +37,7 @@ private
   end
 
   def storage_service
+    # or use !Rails.env.development?
     @storage_service ||= if FeatureToggle.upload_enabled?
                            s3_storage_service
                          else
