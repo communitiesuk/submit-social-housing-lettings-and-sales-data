@@ -142,7 +142,7 @@ class LettingsLogsController < LogsController
       send_file downloader.path, filename: bulk_upload.filename, type: "text/csv"
     else
       presigned_url = downloader.presigned_url
-      redirect_to presigned_url
+      redirect_to presigned_url, allow_other_host: true
     end
   end
 
