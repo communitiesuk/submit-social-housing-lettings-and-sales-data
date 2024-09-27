@@ -55,7 +55,7 @@ class BulkUpload < ApplicationRecord
 
     if bulk_upload_errors.any? { |error| error.category == "setup" }
       :important_errors
-    elsif bulk_upload_errors.any? { |error| error.category == "soft_validations" }
+    elsif bulk_upload_errors.any? { |error| error.category == "soft_validation" }
       :potential_errors
     else
       :critical_errors
