@@ -139,6 +139,7 @@ class LettingsLogsController < LogsController
     downloader = BulkUpload::Downloader.new(bulk_upload:)
 
     if Rails.env.development?
+      downloader.call
       send_file downloader.path, filename: bulk_upload.filename, type: "text/csv"
     else
       presigned_url = downloader.presigned_url
