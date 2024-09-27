@@ -12,8 +12,6 @@ class BulkUpload < ApplicationRecord
 
   after_initialize :generate_identifier, unless: :identifier
 
-  scope :visible, -> { where.not(processing: true) }
-
   scope :search_by_filename, ->(filename) { where("filename ILIKE ?", "%#{filename}%") }
   scope :search_by_user_name, ->(name) { where(user_id: User.where("name ILIKE ?", "%#{name}%").select(:id)) }
   scope :search_by_user_email, ->(email) { where(user_id: User.where("email ILIKE ?", "%#{email}%").select(:id)) }
@@ -44,6 +42,7 @@ class BulkUpload < ApplicationRecord
   end
 
   def status
+    return :processing if processing
     return :blank_template if failed == "blank_template"
     return :wrong_template if failed == "wrong_template"
 
