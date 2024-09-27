@@ -28,7 +28,7 @@ module Storage
           bucket: @configuration.bucket_name,
           key: file_name,
           expires_in: duration,
-          response_content_disposition: response_content_disposition,)
+          response_content_disposition:,)
     end
 
     def get_file_io(file_name)
