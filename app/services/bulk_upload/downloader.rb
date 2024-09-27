@@ -1,7 +1,7 @@
 class BulkUpload::Downloader
   attr_reader :bulk_upload
 
-  delegate :path, to: :file, prefix: true
+  delegate :path, to: :file
 
   def initialize(bulk_upload:)
     @bulk_upload = bulk_upload

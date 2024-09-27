@@ -136,7 +136,7 @@ RSpec.describe "User Features" do
       end
 
       it "shows a create button for that organisation" do
-        expect(page).to have_button("Create a new lettings log for this organisation")
+        expect(page).to have_button("Create a new lettings log")
       end
 
       it "shows a upload lettings logs in bulk link" do
@@ -145,7 +145,7 @@ RSpec.describe "User Features" do
 
       context "when creating a log for that organisation" do
         it "pre-fills the value for owning organisation for that log" do
-          click_button("Create a new lettings log for this organisation")
+          click_button("Create a new lettings log")
           click_link("Set up this lettings log")
           expect(page).to have_content(org_name)
         end
@@ -231,7 +231,7 @@ RSpec.describe "User Features" do
       end
 
       it "shows a create button for that organisation" do
-        expect(page).to have_button("Create a new sales log for this organisation")
+        expect(page).to have_button("Create a new sales log")
       end
 
       it "shows a upload sales logs in bulk link" do
@@ -240,7 +240,7 @@ RSpec.describe "User Features" do
 
       context "when creating a log for that organisation" do
         it "pre-fills the value for owning organisation for that log" do
-          click_button("Create a new sales log for this organisation")
+          click_button("Create a new sales log")
           click_link("Set up this sales log")
           expect(page).to have_content(org_name)
         end
