@@ -243,6 +243,128 @@ RSpec.describe User, type: :model do
         expect(user.need_two_factor_authentication?(nil)).to be false
       end
     end
+
+    context "when the user is in non staging environment" do
+      before do
+        allow(Rails.env).to receive(:staging?).and_return(false)
+      end
+
+      context "and the user is in the staging role update email allowlist" do
+        before do
+          allow(Rails.application.credentials).to receive(:[]).with(:staging_role_update_email_allowlist).and_return(["example.com"])
+        end
+
+        context "when the user is a data provider" do
+          it "cannot assign roles" do
+            expect(user.assignable_roles).to eq({})
+          end
+        end
+
+        context "when the user is a data coordinator" do
+          let(:user) { create(:user, :data_coordinator) }
+
+          it "can assign all roles except support" do
+            expect(user.assignable_roles).to eq({
+              data_provider: 1,
+              data_coordinator: 2,
+            })
+          end
+        end
+
+        context "when the user is a Support user" do
+          let(:user) { create(:user, :support) }
+
+          it "can assign all roles" do
+            expect(user.assignable_roles).to eq({
+              data_provider: 1,
+              data_coordinator: 2,
+              support: 99,
+            })
+          end
+        end
+      end
+    end
+
+    context "when the user is in staging environment" do
+      before do
+        allow(Rails.env).to receive(:staging?).and_return(true)
+      end
+
+      context "and the user is not in the staging role update email allowlist" do
+        context "when the user is a data provider" do
+          let(:user) { create(:user, :data_provider) }
+
+          it "cannot assign roles" do
+            expect(user.assignable_roles).to eq({})
+          end
+        end
+
+        context "when the user is a data coordinator" do
+          let(:user) { create(:user, :data_coordinator) }
+
+          it "can assign all roles except support" do
+            expect(user.assignable_roles).to eq({
+              data_provider: 1,
+              data_coordinator: 2,
+            })
+          end
+        end
+
+        context "when the user is a Support user" do
+          let(:user) { create(:user, :support) }
+
+          it "can assign all roles" do
+            expect(user.assignable_roles).to eq({
+              data_provider: 1,
+              data_coordinator: 2,
+              support: 99,
+            })
+          end
+        end
+      end
+
+      context "and the user is in the staging role update email allowlist" do
+        before do
+          allow(Rails.application.credentials).to receive(:[]).with(:staging_role_update_email_allowlist).and_return(["example.com"])
+        end
+
+        context "when the user is a data provider" do
+          let(:user) { create(:user, :data_provider) }
+
+          it "can assign all roles" do
+            expect(user.assignable_roles).to eq({
+              data_provider: 1,
+              data_coordinator: 2,
+              support: 99,
+            })
+          end
+        end
+
+        context "when the user is a data coordinator" do
+          let(:user) { create(:user, :data_coordinator) }
+
+          it "can assign all roles" do
+            expect(user.assignable_roles).to eq({
+              data_provider: 1,
+              data_coordinator: 2,
+              support: 99,
+            })
+          end
+        end
+
+        context "when the user is a Support user" do
+          let(:user) { create(:user, :support) }
+
+          it "can assign all roles" do
+            expect(user.assignable_roles).to eq({
+              data_provider: 1,
+              data_coordinator: 2,
+              support: 99,
+            })
+          end
+        end
+      end
+    end
   end
 
   describe "paper trail" do
