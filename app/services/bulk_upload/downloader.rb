@@ -16,7 +16,11 @@ class BulkUpload::Downloader
   end
 
   def presigned_url
-    s3_storage_service.get_presigned_url(bulk_upload.identifier, 60)
+    s3_storage_service.get_presigned_url(
+      bulk_upload.identifier,
+      60,
+      response_content_disposition: "attachment; filename=#{bulk_upload.filename}.csv"
+    )
   end
 
 private
