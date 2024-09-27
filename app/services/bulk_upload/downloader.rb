@@ -1,7 +1,7 @@
 class BulkUpload::Downloader
   attr_reader :bulk_upload
 
-  delegate :path, to: :file
+  delegate :path, to: :file, prefix: true
 
   def initialize(bulk_upload:)
     @bulk_upload = bulk_upload
@@ -13,10 +13,6 @@ class BulkUpload::Downloader
 
   def delete_local_file!
     file.unlink
-  end
-
-  def file_path
-    file.path
   end
 
   def presigned_url
