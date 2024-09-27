@@ -6,6 +6,7 @@ class BulkUpload::Processor
   end
 
   def call
+    bulk_upload.update!(processing: true)
     destroy_any_existing_errors_from_prior_run
 
     download
@@ -37,7 +38,7 @@ class BulkUpload::Processor
     send_failure_mail
   ensure
     downloader.delete_local_file!
-    bulk_upload.update!(processed: true)
+    bulk_upload.update!(processing: false)
   end
 
   def approve
