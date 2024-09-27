@@ -12,6 +12,8 @@ class BulkUpload < ApplicationRecord
 
   after_initialize :generate_identifier, unless: :identifier
 
+  scope :visible, -> { where(processed: true) }
+
   scope :search_by_filename, ->(filename) { where("filename ILIKE ?", "%#{filename}%") }
   scope :search_by_user_name, ->(name) { where(user_id: User.where("name ILIKE ?", "%#{name}%").select(:id)) }
   scope :search_by_user_email, ->(email) { where(user_id: User.where("email ILIKE ?", "%#{email}%").select(:id)) }

@@ -94,7 +94,7 @@ class SalesLogsController < LogsController
       redirect_to clear_filters_path(filter_type: @filter_type, organisation_id: params[:organisation_id]) and return
     end
 
-    uploads = BulkUpload.sales.where("created_at >= ?", 30.days.ago)
+    uploads = BulkUpload.sales.visible.where("created_at >= ?", 30.days.ago)
     unpaginated_filtered_uploads = filter_manager.filtered_uploads(uploads, search_term, session_filters)
 
     @pagy, @bulk_uploads = pagy(unpaginated_filtered_uploads)

@@ -37,6 +37,7 @@ class BulkUpload::Processor
     send_failure_mail
   ensure
     downloader.delete_local_file!
+    bulk_upload.update!(processed: true)
   end
 
   def approve
