@@ -46,7 +46,7 @@ RSpec.describe BulkUpload, type: :model do
         let(:bulk_upload) { build(:bulk_upload, year: test_case[:year]) }
 
         it "returns the expected year combination string" do
-          expect(bulk_upload.year_combo).to eql(test_case[:expected_value])
+          expect(bulk_upload.year_combo).to eq(test_case[:expected_value])
         end
       end
     end
@@ -60,113 +60,113 @@ RSpec.describe BulkUpload, type: :model do
 
     describe ".lettings" do
       it "returns only lettings bulk uploads" do
-        expect(BulkUpload.lettings).to match_array([lettings_bulk_upload_1, lettings_bulk_upload_2])
+        expect(described_class.lettings).to match_array([lettings_bulk_upload_1, lettings_bulk_upload_2])
       end
     end
 
     describe ".sales" do
       it "returns only sales bulk uploads" do
-        expect(BulkUpload.sales).to match_array([sales_bulk_upload_1, sales_bulk_upload_2])
+        expect(described_class.sales).to match_array([sales_bulk_upload_1, sales_bulk_upload_2])
       end
     end
 
     describe ".search_by_filename" do
       it "returns the correct bulk upload" do
-        expect(BulkUpload.search_by_filename(lettings_bulk_upload_1.filename).first).to eql(lettings_bulk_upload_1)
+        expect(described_class.search_by_filename(lettings_bulk_upload_1.filename).first).to eq(lettings_bulk_upload_1)
       end
 
       it "does not return the incorrect bulk upload" do
-        expect(BulkUpload.search_by_filename(lettings_bulk_upload_1.filename).first).not_to eql(lettings_bulk_upload_2)
+        expect(described_class.search_by_filename(lettings_bulk_upload_1.filename).first).not_to eq(lettings_bulk_upload_2)
       end
     end
 
     describe ".search_by_user_name" do
       it "returns the correct bulk upload" do
-        expect(BulkUpload.search_by_user_name(lettings_bulk_upload_1.user.name).first).to eql(lettings_bulk_upload_1)
+        expect(described_class.search_by_user_name(lettings_bulk_upload_1.user.name).first).to eq(lettings_bulk_upload_1)
       end
 
       it "does not return the incorrect bulk upload" do
-        expect(BulkUpload.search_by_user_name(lettings_bulk_upload_1.user.name).first).not_to eql(lettings_bulk_upload_2)
+        expect(described_class.search_by_user_name(lettings_bulk_upload_1.user.name).first).not_to eq(lettings_bulk_upload_2)
       end
     end
 
     describe ".search_by_user_email" do
       it "returns the correct bulk upload" do
-        expect(BulkUpload.search_by_user_email(sales_bulk_upload_1.user.email).first).to eql(sales_bulk_upload_1)
+        expect(described_class.search_by_user_email(sales_bulk_upload_1.user.email).first).to eq(sales_bulk_upload_1)
       end
 
       it "does not return the incorrect bulk upload" do
-        expect(BulkUpload.search_by_user_email(sales_bulk_upload_1.user.email).first).not_to eql(sales_bulk_upload_2)
+        expect(described_class.search_by_user_email(sales_bulk_upload_1.user.email).first).not_to eq(sales_bulk_upload_2)
       end
     end
 
     describe ".search_by_organisation_name" do
       it "returns the correct bulk upload" do
-        expect(BulkUpload.search_by_organisation_name(lettings_bulk_upload_1.user.organisation.name).first).to eql(lettings_bulk_upload_1)
+        expect(described_class.search_by_organisation_name(lettings_bulk_upload_1.user.organisation.name).first).to eq(lettings_bulk_upload_1)
       end
 
       it "does not return the incorrect bulk upload" do
-        expect(BulkUpload.search_by_organisation_name(lettings_bulk_upload_1.user.organisation.name).first).not_to eql(lettings_bulk_upload_2)
+        expect(described_class.search_by_organisation_name(lettings_bulk_upload_1.user.organisation.name).first).not_to eq(lettings_bulk_upload_2)
       end
     end
 
     describe ".filter_by_id" do
       it "returns the correct bulk upload" do
-        expect(BulkUpload.filter_by_id(lettings_bulk_upload_1.id).first).to eql(lettings_bulk_upload_1)
+        expect(described_class.filter_by_id(lettings_bulk_upload_1.id).first).to eq(lettings_bulk_upload_1)
       end
 
       it "does not return the incorrect bulk upload" do
-        expect(BulkUpload.filter_by_id(lettings_bulk_upload_1.id).first).not_to eql(lettings_bulk_upload_2)
+        expect(described_class.filter_by_id(lettings_bulk_upload_1.id).first).not_to eq(lettings_bulk_upload_2)
       end
     end
 
     describe ".filter_by_years" do
       it "returns the correct bulk upload" do
-        expect(BulkUpload.filter_by_years([lettings_bulk_upload_1.year]).first).to eql(lettings_bulk_upload_1)
+        expect(described_class.filter_by_years([lettings_bulk_upload_1.year]).first).to eq(lettings_bulk_upload_1)
       end
 
       it "does not return the incorrect bulk upload" do
-        expect(BulkUpload.filter_by_years([lettings_bulk_upload_1.year]).first).not_to eql(lettings_bulk_upload_2)
+        expect(described_class.filter_by_years([lettings_bulk_upload_1.year]).first).not_to eq(lettings_bulk_upload_2)
       end
     end
 
     describe ".filter_by_uploaded_by" do
       it "returns the correct bulk upload" do
-        expect(BulkUpload.filter_by_uploaded_by(sales_bulk_upload_1.user.id).first).to eql(sales_bulk_upload_1)
+        expect(described_class.filter_by_uploaded_by(sales_bulk_upload_1.user.id).first).to eq(sales_bulk_upload_1)
       end
 
       it "does not return the incorrect bulk upload" do
-        expect(BulkUpload.filter_by_uploaded_by(sales_bulk_upload_1.user.id).first).not_to eql(sales_bulk_upload_2)
+        expect(described_class.filter_by_uploaded_by(sales_bulk_upload_1.user.id).first).not_to eq(sales_bulk_upload_2)
       end
     end
 
     describe ".filter_by_user_text_search" do
       it "returns the correct bulk upload" do
-        expect(BulkUpload.filter_by_user_text_search(lettings_bulk_upload_1.user.name).first).to eql(lettings_bulk_upload_1)
+        expect(described_class.filter_by_user_text_search(lettings_bulk_upload_1.user.name).first).to eq(lettings_bulk_upload_1)
       end
 
       it "does not return the incorrect bulk upload" do
-        expect(BulkUpload.filter_by_user_text_search(lettings_bulk_upload_1.user.name).first).not_to eql(lettings_bulk_upload_2)
+        expect(described_class.filter_by_user_text_search(lettings_bulk_upload_1.user.name).first).not_to eq(lettings_bulk_upload_2)
       end
     end
 
     describe ".filter_by_user" do
       it "returns the correct bulk upload" do
-        expect(BulkUpload.filter_by_user(sales_bulk_upload_1.user.id).first).to eql(sales_bulk_upload_1)
+        expect(described_class.filter_by_user(sales_bulk_upload_1.user.id).first).to eq(sales_bulk_upload_1)
       end
 
       it "does not return the incorrect bulk upload" do
-        expect(BulkUpload.filter_by_user(sales_bulk_upload_1.user.id).first).not_to eql(sales_bulk_upload_2)
+        expect(described_class.filter_by_user(sales_bulk_upload_1.user.id).first).not_to eq(sales_bulk_upload_2)
       end
     end
 
     describe ".filter_by_uploading_organisation" do
       it "returns the correct bulk upload" do
-        expect(BulkUpload.filter_by_uploading_organisation(lettings_bulk_upload_1.user.organisation.id).first).to eql(lettings_bulk_upload_1)
+        expect(described_class.filter_by_uploading_organisation(lettings_bulk_upload_1.user.organisation.id).first).to eq(lettings_bulk_upload_1)
       end
 
       it "does not return the incorrect bulk upload" do
-        expect(BulkUpload.filter_by_uploading_organisation(lettings_bulk_upload_1.user.organisation.id).first).not_to eql(lettings_bulk_upload_2)
+        expect(described_class.filter_by_uploading_organisation(lettings_bulk_upload_1.user.organisation.id).first).not_to eq(lettings_bulk_upload_2)
       end
     end
   end
@@ -176,7 +176,7 @@ RSpec.describe BulkUpload, type: :model do
       let(:bulk_upload) { create(:bulk_upload, failed: 1) }
 
       it "returns the correct status" do
-        expect(bulk_upload.status).to eql(:blank_template)
+        expect(bulk_upload.status).to eq(:blank_template)
       end
     end
 
@@ -184,7 +184,7 @@ RSpec.describe BulkUpload, type: :model do
       let(:bulk_upload) { create(:bulk_upload, failed: 2) }
 
       it "returns the correct status" do
-        expect(bulk_upload.status).to eql(:wrong_template)
+        expect(bulk_upload.status).to eq(:wrong_template)
       end
     end
 
@@ -192,7 +192,7 @@ RSpec.describe BulkUpload, type: :model do
       let(:bulk_upload) { create(:bulk_upload, processing: true) }
 
       it "returns the correct status" do
-        expect(bulk_upload.status).to eql(:processing)
+        expect(bulk_upload.status).to eq(:processing)
       end
     end
 
@@ -201,7 +201,7 @@ RSpec.describe BulkUpload, type: :model do
       let(:bulk_upload) { create(:bulk_upload, bulk_upload_errors:) }
 
       it "returns the correct status" do
-        expect(bulk_upload.status).to eql(:potential_errors)
+        expect(bulk_upload.status).to eq(:potential_errors)
       end
     end
 
@@ -210,7 +210,7 @@ RSpec.describe BulkUpload, type: :model do
       let(:bulk_upload) { create(:bulk_upload, bulk_upload_errors:) }
 
       it "returns the correct status" do
-        expect(bulk_upload.status).to eql(:critical_errors)
+        expect(bulk_upload.status).to eq(:critical_errors)
       end
     end
 
@@ -219,7 +219,7 @@ RSpec.describe BulkUpload, type: :model do
       let(:bulk_upload) { create(:bulk_upload, bulk_upload_errors:) }
 
       it "returns the correct status" do
-        expect(bulk_upload.status).to eql(:important_errors)
+        expect(bulk_upload.status).to eq(:important_errors)
       end
     end
 
@@ -227,7 +227,7 @@ RSpec.describe BulkUpload, type: :model do
       let(:bulk_upload) { create(:bulk_upload) }
 
       it "returns the correct status" do
-        expect(bulk_upload.status).to eql(:logs_uploaded_no_errors)
+        expect(bulk_upload.status).to eq(:logs_uploaded_no_errors)
       end
     end
 
@@ -237,7 +237,7 @@ RSpec.describe BulkUpload, type: :model do
       let!(:log) { create(:lettings_log, :in_progress, bulk_upload:) }
 
       it "returns logs_uploaded_with_errors" do
-        expect(bulk_upload.status).to eql(:logs_uploaded_with_errors)
+        expect(bulk_upload.status).to eq(:logs_uploaded_with_errors)
       end
     end
 
@@ -247,7 +247,7 @@ RSpec.describe BulkUpload, type: :model do
       let!(:log) { create(:lettings_log, :completed, bulk_upload:) }
 
       it "returns errors_fixed_in_service" do
-        expect(bulk_upload.status).to eql(:errors_fixed_in_service)
+        expect(bulk_upload.status).to eq(:errors_fixed_in_service)
       end
     end
   end

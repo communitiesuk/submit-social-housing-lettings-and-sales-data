@@ -40,7 +40,7 @@ RSpec.describe BulkUploadSummaryComponent, type: :component do
     expect(result).to have_content("Time of upload: #{bulk_upload.created_at.to_formatted_s(:govuk_date_and_time)}")
   end
 
-  context "shows a bulk upload with only critical errors" do
+  context "when bulk upload has only critical errors" do
     let(:bulk_upload_errors) { create_list(:bulk_upload_error, 2, category: nil) }
     let(:bulk_upload) { create(:bulk_upload, :lettings, user:, bulk_upload_errors:, total_logs_count: 10) }
 
@@ -58,7 +58,7 @@ RSpec.describe BulkUploadSummaryComponent, type: :component do
     end
   end
 
-  context "shows a bulk upload with only potential errors" do
+  context "when bulk upload has only potential errors" do
     let(:bulk_upload_errors) { create_list(:bulk_upload_error, 2, category: "soft_validation") }
     let(:bulk_upload) { create(:bulk_upload, :lettings, user:, bulk_upload_errors:, total_logs_count: 16) }
 
@@ -72,7 +72,7 @@ RSpec.describe BulkUploadSummaryComponent, type: :component do
     end
   end
 
-  context "shows a bulk upload with only errors on important questions" do
+  context "when bulk upload has only errors on important questions" do
     let(:bulk_upload_errors) { create_list(:bulk_upload_error, 2, category: "setup") }
     let(:bulk_upload) { create(:bulk_upload, :lettings, user:, bulk_upload_errors:, total_logs_count: 16) }
 
@@ -91,7 +91,7 @@ RSpec.describe BulkUploadSummaryComponent, type: :component do
     end
   end
 
-  context "shows a bulk upload uploaded with no errors" do
+  context "when a bulk upload is uploaded with no errors" do
     let(:bulk_upload) { create(:bulk_upload, :sales, user:, total_logs_count: 1) }
 
     it "shows the logs uploaded with no errors status and no error counts" do
@@ -104,12 +104,12 @@ RSpec.describe BulkUploadSummaryComponent, type: :component do
     end
   end
 
-  context "shows a bulk upload uploaded with errors" do
+  context "when a bulk upload is uploaded with errors" do
     let(:bulk_upload_errors) { create_list(:bulk_upload_error, 1) }
     let(:bulk_upload) { create(:bulk_upload, :sales, user:, bulk_upload_errors:, total_logs_count: 21) }
 
     before do
-      create_list(:sales_log, 21, bulk_upload: bulk_upload)
+      create_list(:sales_log, 21, bulk_upload:)
     end
 
     it "shows the logs upload with errors status and error count" do
@@ -122,7 +122,7 @@ RSpec.describe BulkUploadSummaryComponent, type: :component do
     end
   end
 
-  context "shows a bulk upload with a wrong template" do
+  context "when a bulk upload uses the wrong template" do
     let(:bulk_upload) { create(:bulk_upload, :sales, user:, total_logs_count: 1) }
 
     it "shows the wrong template status and no error counts" do
