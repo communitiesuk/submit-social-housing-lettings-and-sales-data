@@ -33,7 +33,6 @@ private
   end
 
   def storage_service
-    # or use !Rails.env.development?
     @storage_service ||= if FeatureToggle.upload_enabled?
                            s3_storage_service
                          else
