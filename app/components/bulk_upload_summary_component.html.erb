@@ -22,14 +22,16 @@
       <p class="govuk-body govuk-!-margin-bottom-3">
         <%= upload_status %>
       </p>
-      <div>
-        <%= counts(
-              [bulk_upload.total_logs_count, "total log"],
-              [setup_errors_count, "error on important questions", "errors on important questions"],
-              [critical_errors_count, "critical error"],
-              [potential_errors_count, "potential error"],
-            ) %>
-      </div>
+      <% unless bulk_upload.processing %>
+        <div>
+            <%= counts(
+                  [bulk_upload.total_logs_count, "total log"],
+                  [setup_errors_count, "error on important questions", "errors on important questions"],
+                  [critical_errors_count, "critical error"],
+                  [potential_errors_count, "potential error"],
+                ) %>
+          </div>
+      <% end %>
     </footer>
   </div>
 </article>
