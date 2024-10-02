@@ -1,10 +1,10 @@
 <% item_label = format_label(@pagy.count, "uploads") %>
-<% title = format_title(@searched, "Lettings bulk uploads", current_user, item_label, @pagy.count, nil) %>
+<% title = format_title(@searched, bulk_upload_title(controller.controller_name), current_user, item_label, @pagy.count, nil) %>
 
 <% content_for :title, title %>
 
 <h1 class="govuk-heading-l govuk-!-margin-bottom-7">
-  <%= bulk_upload_title(controller) %>
+  <%= bulk_upload_title(controller.controller_name) %>
 </h1>
 
 <div class="app-filter-layout" data-controller="filter-layout">
