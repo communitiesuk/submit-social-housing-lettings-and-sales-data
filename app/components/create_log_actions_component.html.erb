@@ -3,7 +3,7 @@
     <% if create_button_href.present? %>
       <%= govuk_button_to create_button_copy, create_button_href, class: "govuk-!-margin-right-6" %>
     <% end %>
-    <% if upload_button_href.present? %>
+    <% if upload_button_href.present? && !user.support? %>
       <%= govuk_button_link_to upload_button_copy, upload_button_href, secondary: true %>
     <% end %>
   </div>
