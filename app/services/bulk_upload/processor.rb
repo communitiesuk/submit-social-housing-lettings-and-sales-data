@@ -6,7 +6,6 @@ class BulkUpload::Processor
   end
 
   def call
-    bulk_upload.update!(processing: true)
     destroy_any_existing_errors_from_prior_run
 
     download

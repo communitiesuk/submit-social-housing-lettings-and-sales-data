@@ -11,6 +11,7 @@ class BulkUpload < ApplicationRecord
   has_many :sales_logs
 
   after_initialize :generate_identifier, unless: :identifier
+  after_initialize :initialize_processing, if: :new_record?
 
   scope :search_by_filename, ->(filename) { where("filename ILIKE ?", "%#{filename}%") }
   scope :search_by_user_name, ->(name) { where(user_id: User.where("name ILIKE ?", "%#{name}%").select(:id)) }
@@ -154,5 +155,9 @@ private
 
   def generate_identifier
     self.identifier ||= SecureRandom.uuid
+  end
+
+  def initialize_processing
+    self.processing = true if processing.nil?
   end
 end
