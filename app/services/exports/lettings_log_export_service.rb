@@ -57,9 +57,13 @@ module Exports
       # Organisation fields
       if lettings_log.owning_organisation
         attribute_hash["owningorgid"] = lettings_log.owning_organisation.old_visible_id || (lettings_log.owning_organisation.id + LOG_ID_OFFSET)
+        attribute_hash["owningorgname"] = lettings_log.owning_organisation.name
+        attribute_hash["hcnum"] = lettings_log.owning_organisation.housing_registration_no
       end
       if lettings_log.managing_organisation
         attribute_hash["maningorgid"] = lettings_log.managing_organisation.old_visible_id || (lettings_log.managing_organisation.id + LOG_ID_OFFSET)
+        attribute_hash["maningorgname"] = lettings_log.managing_organisation.name
+        attribute_hash["manhcnum"] = lettings_log.managing_organisation.housing_registration_no
       end
 
       # Covert date times to ISO 8601
@@ -81,7 +85,9 @@ module Exports
       end
 
       attribute_hash["log_id"] = lettings_log.id
-      attribute_hash["amended_by_id"] = lettings_log.updated_by_id
+      attribute_hash["assigned_to"] = lettings_log.assigned_to&.email
+      attribute_hash["created_by"] = lettings_log.created_by&.email
+      attribute_hash["amended_by"] = lettings_log.updated_by&.email
 
       attribute_hash["la"] = lettings_log.la
       attribute_hash["postcode_full"] = lettings_log.postcode_full
@@ -158,6 +164,7 @@ module Exports
             form << doc.create_element(key, value)
           end
         end
+        form << doc.create_element("providertype", lettings_log.owning_organisation&.read_attribute_before_type_cast(:provider_type))
       end
 
       xml_doc_to_temp_file(doc)

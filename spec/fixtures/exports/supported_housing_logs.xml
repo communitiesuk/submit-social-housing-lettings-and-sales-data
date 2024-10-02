@@ -130,7 +130,6 @@
     <relat8/>
     <lar>2</lar>
     <irproduct/>
-    <assigned_to_id>{assigned_to}</assigned_to_id>
     <sheltered>1</sheltered>
     <hhtype>4</hhtype>
     <new_old>2</new_old>
@@ -145,14 +144,19 @@
     <discarded_at/>
     <creation_method>1</creation_method>
     <duplicate_set_id/>
-    <created_by_id>{created_by}</created_by_id>
     <formid>{id}</formid>
     <owningorgid>{owning_org_id}</owningorgid>
+    <owningorgname>MHCLG</owningorgname>
+    <hcnum>1234</hcnum>
     <maningorgid>{managing_org_id}</maningorgid>
+    <maningorgname>MHCLG</maningorgname>
+    <manhcnum>1234</manhcnum>
     <createddate>2022-05-01T00:00:00+01:00</createddate>
     <uploaddate>2022-05-01T00:00:00+01:00</uploaddate>
     <log_id>{log_id}</log_id>
-    <amended_by_id>{amended_by}</amended_by_id>
+    <assigned_to>fake@email.com</assigned_to>
+    <created_by>fake@email.com</created_by>
+    <amended_by>other@email.com</amended_by>
     <unittype_sh>7</unittype_sh>
     <confidential>1</confidential>
     <cligrp1>G</cligrp1>
@@ -171,5 +175,6 @@
     <location_code>{location_id}</location_code>
     <location_status>active</location_status>
     <renttype_detail>2</renttype_detail>
+    <providertype>1</providertype>
   </form>
 </forms>

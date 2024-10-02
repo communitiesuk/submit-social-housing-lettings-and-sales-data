@@ -23,9 +23,6 @@ RSpec.describe Exports::LettingsLogExportService do
     export_template.sub!(/\{managing_org_id\}/, (lettings_log["managing_organisation_id"] + Exports::LettingsLogExportService::LOG_ID_OFFSET).to_s)
     export_template.sub!(/\{location_id\}/, (lettings_log["location_id"]).to_s) if lettings_log.needstype == 2
     export_template.sub!(/\{scheme_id\}/, (lettings_log["scheme_id"]).to_s) if lettings_log.needstype == 2
-    export_template.sub!(/\{assigned_to\}/, lettings_log["assigned_to_id"].to_s)
-    export_template.sub!(/\{created_by\}/, lettings_log["created_by_id"].to_s)
-    export_template.sub!(/\{amended_by\}/, lettings_log["updated_by_id"].to_s)
     export_template.sub!(/\{log_id\}/, lettings_log["id"].to_s)
   end
 
