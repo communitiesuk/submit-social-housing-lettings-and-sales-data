@@ -2,9 +2,9 @@ class Form::Sales::Questions::PurchaserCode < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "purchid"
-    @check_answer_label = "Purchaser code"
-    @header = "What is the purchaser code?"
-    @hint_text = "This is how you usually refer to the purchaser on your own systems."
+    @check_answer_label = I18n.t("forms.#{form.start_date.year}.sales.setup.purchid.check_answer_label")
+    @header = I18n.t("forms.#{form.start_date.year}.sales.setup.purchid.question_text")
+    @hint_text = I18n.t("forms.#{form.start_date.year}.sales.setup.purchid.hint_text")
     @type = "text"
     @width = 10
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]

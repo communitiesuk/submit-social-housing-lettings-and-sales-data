@@ -18,4 +18,22 @@ en:
             hint_text: ""
             question_text: "Which user are you creating this log for?"
 
+          saledate:
+            check_answer_label: "Sale completion date"
+            hint_text: ""
+            question_text: "What is the sale completion date?"
+
+          purchid:
+            check_answer_label: "Purchaser code"
+            hint_text: "This is how you usually refer to the purchaser on your own systems."
+            question_text: "What is the purchaser code?"
+
+          ownerschipsch:
+            check_answer_label: "Purchase made under ownership scheme"
+            hint_text: ""
+            question_text: "Was this purchase made through an ownership scheme?"
+
+          type:
+            shared_ownership:
+
 
