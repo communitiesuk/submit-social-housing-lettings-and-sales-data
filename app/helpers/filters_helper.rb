@@ -350,30 +350,35 @@ private
   def assigned_to_filter_selected?(selected_filters, value)
     return true if !selected_filters.key?("user") && value == :all
     return true if selected_filters["assigned_to"] == "specific_user" && value == :specific_user
+
     false
   end
 
   def owning_organisation_filter_selected?(selected_filters, value)
     return true if !selected_filters.key?("owning_organisation") && value == :all
     return true if (selected_filters["owning_organisation"].present? || selected_filters["owning_organisation_text_search"].present?) && value == :specific_org
+
     false
   end
 
   def managing_organisation_filter_selected?(selected_filters, value)
     return true if !selected_filters.key?("managing_organisation") && value == :all
     return true if (selected_filters["managing_organisation"].present? || selected_filters["managing_organisation_text_search"].present?) && value == :specific_org
+
     false
   end
 
   def uploaded_by_filter_selected?(selected_filters, value)
     return true if !selected_filters.key?("user") && value == :all
     return true if selected_filters["uploaded_by"] == "specific_user" && value == :specific_user
+
     false
   end
 
   def uploading_organisation_filter_selected?(selected_filters, value)
     return true if !selected_filters.key?("uploading_organisation") && value == :all
     return true if (selected_filters["uploading_organisation"].present? || selected_filters["uploading_organisation_text_search"].present?) && value == :specific_org
+
     false
   end
 end

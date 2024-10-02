@@ -36,7 +36,7 @@ private
       %r{organisations/\d+/stock-owners},
       %r{organisations/\d+/managing-agents},
       %r{sales-logs/bulk-uploads},
-      %r{lettings-logs/bulk-uploads}
+      %r{lettings-logs/bulk-uploads},
     ].any? { |pattern| request.path.match?(pattern) }
   end
 end
