@@ -1,0 +1,21 @@
+en:
+  forms:
+    2024:
+      sales:
+        setup:
+          owning_organisation_id:
+            check_answer_label: "Owning organisation"
+            hint_text: ""
+            question_text: "Which organisation owns this log?"
+
+          managing_organisation_id:
+            check_answer_label: "Reported by"
+            hint_text: ""
+            question_text: "Which organisation is reporting this sale?"
+
+          assigned_to_id:
+            check_answer_label: "Log owner"
+            hint_text: ""
+            question_text: "Which user are you creating this log for?"
+
+

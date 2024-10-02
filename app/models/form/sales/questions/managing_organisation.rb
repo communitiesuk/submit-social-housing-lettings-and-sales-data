@@ -2,8 +2,9 @@ class Form::Sales::Questions::ManagingOrganisation < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "managing_organisation_id"
-    @check_answer_label = "Reported by"
-    @header = "Which organisation is reporting this sale?"
+    @check_answer_label = I18n.t("forms.#{form.start_date.year}.sales.setup.managing_organisation_id.check_answer_label")
+    @header = I18n.t("forms.#{form.start_date.year}.sales.setup.managing_organisation_id.question_text")
+    @hint = I18n.t("forms.#{form.start_date.year}.sales.setup.managing_organisation_id.hint_text")
     @derived = true
     @type = "select"
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
