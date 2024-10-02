@@ -9,21 +9,9 @@ class SearchComponent < ViewComponent::Base
   end
 
   def path(current_user)
-    if request.path.include?("organisations") && request.path.include?("users")
-      request.path
-    elsif request.path.include?("organisations") && request.path.include?("logs")
-      request.path
-    elsif request.path.include?("organisations") && request.path.include?("schemes")
-      request.path
-    elsif request.path.include?("organisations") && request.path.include?("stock-owners")
-      request.path
-    elsif request.path.include?("organisations") && request.path.include?("managing-agents")
-      request.path
-    elsif request.path.include?("bulk-uploads") && request.path.include?("sales-logs")
-      request.path
-    elsif request.path.include?("bulk-uploads") && request.path.include?("lettings-logs")
-      request.path
-    elsif request.path.include?("users")
+    return request.path if matching_path_conditions?
+
+    if request.path.include?("users")
       user_path(current_user)
     elsif request.path.include?("organisations")
       organisations_path
@@ -38,5 +26,17 @@ private
 
   def user_path(current_user)
     current_user.support? ? users_path : users_organisation_path(current_user.organisation)
+  end
+
+  def matching_path_conditions?
+    [
+      %r{organisations/\d+/users},
+      %r{organisations/\d+/logs},
+      %r{organisations/\d+/schemes},
+      %r{organisations/\d+/stock-owners},
+      %r{organisations/\d+/managing-agents},
+      %r{sales-logs/bulk-uploads},
+      %r{lettings-logs/bulk-uploads}
+    ].any? { |pattern| request.path.match?(pattern) }
   end
 end
