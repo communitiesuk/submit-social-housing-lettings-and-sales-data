@@ -25,12 +25,7 @@ class BulkUpload < ApplicationRecord
   }
 
   scope :filter_by_id, ->(id) { where(id:) }
-  scope :filter_by_years, lambda { |years, _user = nil|
-    first_year = years.shift
-    query = where(year: first_year)
-    years.each { |year| query = query.or(where(year:)) }
-    query.all
-  }
+  scope :filter_by_years, ->(years, _user = nil) { where(year: years) }
   scope :filter_by_uploaded_by, ->(user_id, _user = nil) { where(user_id:) }
   scope :filter_by_user_text_search, ->(param, _user = nil) { where(user_id: User.search_by(param).select(:id)) }
   scope :filter_by_user, ->(user_id, _user = nil) { user_id.present? ? where(user_id:) : all }
