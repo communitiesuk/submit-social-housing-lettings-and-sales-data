@@ -121,7 +121,7 @@ class FilterManager
 
       new_filters = new_filters.except("user") if params["assigned_to"] == "all"
       new_filters["user"] = current_user.id.to_s if params["assigned_to"] == "you"
-      new_filters = new_filters.except("user_text_search") if params["assigned_to"] == "all" || params["assigned_to"] == "you" # add later
+      new_filters = new_filters.except("user_text_search") if params["assigned_to"] == "all" || params["assigned_to"] == "you"
       new_filters = new_filters.except("owning_organisation_text_search") if params["owning_organisation_select"] == "all"
       new_filters = new_filters.except("managing_organisation_text_search") if params["managing_organisation_select"] == "all"
     end
@@ -142,12 +142,10 @@ class FilterManager
       current_user.logs_filters(specific_org:).each do |filter|
         new_filters[filter] = params[filter] if params[filter].present?
       end
-      # binding.pry
       new_filters = new_filters.except("uploading_organisation") if params["uploading_organisation_select"] == "all"
       new_filters = new_filters.except("user") if params["uploaded_by"] == "all"
       new_filters["user"] = current_user.id.to_s if params["uploaded_by"] == "you"
     end
-    # binding.pry
     new_filters
   end
 
