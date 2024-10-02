@@ -5,24 +5,21 @@ module FiltersHelper
     return false unless session[session_name_for(filter_type)]
 
     selected_filters = JSON.parse(session[session_name_for(filter_type)])
-    return true if !selected_filters.key?("user") && filter == "assigned_to" && value == :all
-    return true if selected_filters["assigned_to"] == "specific_user" && filter == "assigned_to" && value == :specific_user
 
-    return true if !selected_filters.key?("owning_organisation") && filter == "owning_organisation_select" && value == :all
-    return true if !selected_filters.key?("managing_organisation") && filter == "managing_organisation_select" && value == :all
-
-    return true if (selected_filters["owning_organisation"].present? || selected_filters["owning_organisation_text_search"].present?) && filter == "owning_organisation_select" && value == :specific_org
-    return true if (selected_filters["managing_organisation"].present? || selected_filters["managing_organisation_text_search"].present?) && filter == "managing_organisation_select" && value == :specific_org
-
-    return true if !selected_filters.key?("user") && filter == "uploaded_by" && value == :all
-    return true if selected_filters["uploaded_by"] == "specific_user" && filter == "uploaded_by" && value == :specific_user
-
-    return true if !selected_filters.key?("uploading_organisation") && filter == "uploading_organisation_select" && value == :all
-    return true if (selected_filters["uploading_organisation"].present? || selected_filters["uploading_organisation_text_search"].present?) && filter == "uploading_organisation_select" && value == :specific_org
-
-    return false if selected_filters[filter].blank?
-
-    selected_filters[filter].include?(value.to_s)
+    case filter
+    when "assigned_to"
+      assigned_to_filter_selected?(selected_filters, value)
+    when "owning_organisation_select"
+      owning_organisation_filter_selected?(selected_filters, value)
+    when "managing_organisation_select"
+      managing_organisation_filter_selected?(selected_filters, value)
+    when "uploaded_by"
+      uploaded_by_filter_selected?(selected_filters, value)
+    when "uploading_organisation_select"
+      uploading_organisation_filter_selected?(selected_filters, value)
+    else
+      selected_filters[filter]&.include?(value.to_s) || false
+    end
   end
 
   def any_filter_selected?(filter_type)
@@ -348,5 +345,35 @@ private
 
   def unanswered_filter_value
     "<span class=\"app-!-colour-muted\">You didn’t answer this filter</span>".html_safe
+  end
+
+  def assigned_to_filter_selected?(selected_filters, value)
+    return true if !selected_filters.key?("user") && value == :all
+    return true if selected_filters["assigned_to"] == "specific_user" && value == :specific_user
+    false
+  end
+
+  def owning_organisation_filter_selected?(selected_filters, value)
+    return true if !selected_filters.key?("owning_organisation") && value == :all
+    return true if (selected_filters["owning_organisation"].present? || selected_filters["owning_organisation_text_search"].present?) && value == :specific_org
+    false
+  end
+
+  def managing_organisation_filter_selected?(selected_filters, value)
+    return true if !selected_filters.key?("managing_organisation") && value == :all
+    return true if (selected_filters["managing_organisation"].present? || selected_filters["managing_organisation_text_search"].present?) && value == :specific_org
+    false
+  end
+
+  def uploaded_by_filter_selected?(selected_filters, value)
+    return true if !selected_filters.key?("user") && value == :all
+    return true if selected_filters["uploaded_by"] == "specific_user" && value == :specific_user
+    false
+  end
+
+  def uploading_organisation_filter_selected?(selected_filters, value)
+    return true if !selected_filters.key?("uploading_organisation") && value == :all
+    return true if (selected_filters["uploading_organisation"].present? || selected_filters["uploading_organisation_text_search"].present?) && value == :specific_org
+    false
   end
 end
