@@ -105,6 +105,8 @@ class SalesLogsController < LogsController
   end
 
   def download_bulk_upload
+    return render_not_authorized unless current_user.support?
+
     bulk_upload = BulkUpload.find(params[:id])
     downloader = BulkUpload::Downloader.new(bulk_upload:)
 
