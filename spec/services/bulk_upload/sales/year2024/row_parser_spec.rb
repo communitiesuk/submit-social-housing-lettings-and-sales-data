@@ -554,6 +554,43 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
           expect(parser.errors[:field_6]).to include(/Enter a date when the owning organisation was active/)
         end
       end
+
+      context "when user is an unaffiliated non-support user and bulk upload organisation is affiliated with the owning organisation" do
+        let(:affiliated_org) { create(:organisation, :with_old_visible_id) }
+        let(:unaffiliated_user) { create(:user, organisation: create(:organisation)) }
+        let(:attributes) { { bulk_upload:, field_1: affiliated_org.old_visible_id } }
+        let(:organisation_id) { unaffiliated_user.organisation_id }
+
+        before do
+          create(:organisation_relationship, parent_organisation: owning_org, child_organisation: affiliated_org)
+          bulk_upload.update!(organisation_id:, user: unaffiliated_user)
+        end
+
+        it "blocks log creation and adds an error to field_1" do
+          parser = described_class.new(attributes)
+          parser.valid?
+          expect(parser).to be_block_log_creation
+          expect(parser.errors[:field_1]).to include("You do not have permission to add logs for this owning organisation")
+        end
+      end
+
+      context "when user is an unaffiliated support user and bulk upload organisation is affiliated with the owning organisation" do
+        let(:affiliated_org) { create(:organisation, :with_old_visible_id) }
+        let(:unaffiliated_support_user) { create(:user, :support, organisation: create(:organisation)) }
+        let(:attributes) { { bulk_upload:, field_1: affiliated_org.old_visible_id } }
+        let(:organisation_id) { affiliated_org.id }
+
+        before do
+          create(:organisation_relationship, parent_organisation: owning_org, child_organisation: affiliated_org)
+          bulk_upload.update!(organisation_id:, user: unaffiliated_support_user)
+        end
+
+        it "does not block log creation and does not add an error to field_1" do
+          parser = described_class.new(attributes)
+          parser.valid?
+          expect(parser.errors[:field_1]).not_to include("You do not have permission to add logs for this owning organisation")
+        end
+      end
     end
 
     describe "#field_3" do # username for assigned_to
@@ -573,6 +610,23 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
         it "sets created by to bulk upload user" do
           parser.valid?
           expect(parser.log.created_by).to eq(bulk_upload.user)
+        end
+      end
+
+      context "when blank and bulk upload user is support" do
+        let(:bulk_upload) { create(:bulk_upload, :sales, user: create(:user, :support), year: 2024) }
+
+        let(:attributes) { setup_section_params.merge(bulk_upload:, field_3: nil) }
+
+        it "is not permitted" do
+          parser.valid?
+          expect(parser.errors[:field_3]).to be_present
+          expect(parser.errors[:field_3]).to include("You must answer what is the CORE username of the account this sales log should be assigned to?")
+        end
+
+        it "blocks log creation" do
+          parser.valid?
+          expect(parser).to be_block_log_creation
         end
       end
 

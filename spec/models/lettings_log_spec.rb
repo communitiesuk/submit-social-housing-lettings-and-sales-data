@@ -1345,6 +1345,13 @@ RSpec.describe LettingsLog do
             expect(result.third.id).to eq lettings_log_with_postcode.id
           end
         end
+
+        it "sanitises input for order" do
+          lettings_log_to_search.update!(tenancycode: "' 1234")
+          result = described_class.search_by(lettings_log_to_search.tenancycode)
+          expect(result.count).to eq(1)
+          expect(result.first.id).to eq lettings_log_to_search.id
+        end
       end
     end
 
