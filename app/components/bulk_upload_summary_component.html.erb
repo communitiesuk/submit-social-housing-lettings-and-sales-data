@@ -9,7 +9,7 @@
       </header>
       <div class="govuk-!-margin-bottom-2">
           <p class="govuk-hint govuk-!-font-size-16 govuk-!-margin-bottom-1">Uploaded by: <%= bulk_upload.user.name %> (<%= bulk_upload.user.email %>)</p>
-          <p class="govuk-hint govuk-!-font-size-16 govuk-!-margin-bottom-1">Uploading organisation: <%= bulk_upload.user.organisation.name %></p>
+          <p class="govuk-hint govuk-!-font-size-16 govuk-!-margin-bottom-1">Uploading organisation: <%= bulk_upload.organisation.name %></p>
           <p class="govuk-hint govuk-!-font-size-16 govuk-!-margin-bottom-1">Time of upload: <%= bulk_upload.created_at.to_formatted_s(:govuk_date_and_time) %></p>
       </div>
       <p class="govuk-body govuk-!-margin-bottom-3">

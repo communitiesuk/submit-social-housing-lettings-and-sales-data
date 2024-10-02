@@ -15,7 +15,7 @@ class BulkUpload < ApplicationRecord
   scope :search_by_filename, ->(filename) { where("filename ILIKE ?", "%#{filename}%") }
   scope :search_by_user_name, ->(name) { where(user_id: User.where("name ILIKE ?", "%#{name}%").select(:id)) }
   scope :search_by_user_email, ->(email) { where(user_id: User.where("email ILIKE ?", "%#{email}%").select(:id)) }
-  scope :search_by_organisation_name, ->(name) { where(user_id: User.joins(:organisation).where("organisations.name ILIKE ?", "%#{name}%").select(:id)) }
+  scope :search_by_organisation_name, ->(name) { where(organisation_id: Organisation.where("name ILIKE ?", "%#{name}%").select(:id)) }
 
   scope :search_by, lambda { |param|
     search_by_filename(param)
@@ -34,7 +34,7 @@ class BulkUpload < ApplicationRecord
   scope :filter_by_uploaded_by, ->(user_id, _user = nil) { where(user_id:) }
   scope :filter_by_user_text_search, ->(param, _user = nil) { where(user_id: User.search_by(param).select(:id)) }
   scope :filter_by_user, ->(user_id, _user = nil) { user_id.present? ? where(user_id:) : all }
-  scope :filter_by_uploading_organisation, ->(organisation_id, _user = nil) { where(user_id: User.where(organisation_id:).select(:id)) }
+  scope :filter_by_uploading_organisation, ->(organisation_id, _user = nil) { where(organisation_id:) }
 
   def completed?
     incomplete_logs = logs.where.not(status: "completed")
@@ -149,6 +149,10 @@ class BulkUpload < ApplicationRecord
 
   def moved_user_name
     User.find_by(id: moved_user_id)&.name
+  end
+
+  def organisation
+    Organisation.find_by(id: organisation_id)
   end
 
 private
