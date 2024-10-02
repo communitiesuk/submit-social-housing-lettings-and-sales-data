@@ -234,7 +234,10 @@ RSpec.describe BulkUpload, type: :model do
     context "when the bulk upload has visible logs, errors and is not complete" do
       let(:bulk_upload_errors) { create_list(:bulk_upload_error, 2, category: "soft_validation") }
       let(:bulk_upload) { create(:bulk_upload, :lettings, bulk_upload_errors:) }
-      let!(:log) { create(:lettings_log, :in_progress, bulk_upload:) }
+
+      before do
+        create(:lettings_log, :in_progress, bulk_upload:)
+      end
 
       it "returns logs_uploaded_with_errors" do
         expect(bulk_upload.status).to eq(:logs_uploaded_with_errors)
@@ -244,7 +247,10 @@ RSpec.describe BulkUpload, type: :model do
     context "when the bulk upload has visible logs, errors and is complete" do
       let(:bulk_upload_errors) { create_list(:bulk_upload_error, 2, category: "soft_validation") }
       let(:bulk_upload) { create(:bulk_upload, :lettings, bulk_upload_errors:) }
-      let!(:log) { create(:lettings_log, :completed, bulk_upload:) }
+
+      before do
+        create(:lettings_log, :completed, bulk_upload:)
+      end
 
       it "returns errors_fixed_in_service" do
         expect(bulk_upload.status).to eq(:errors_fixed_in_service)

@@ -57,9 +57,9 @@ class BulkUploadSummaryComponent < ViewComponent::Base
 
     path = if status == "important_errors"
                     "summary_bulk_upload_#{bulk_upload.log_type}_result_url"
-                  else
+                else
                     "bulk_upload_#{bulk_upload.log_type}_result_path"
-                  end
+                end
 
     link_to "View error report", send(path, bulk_upload), class: "govuk-link"
   end
