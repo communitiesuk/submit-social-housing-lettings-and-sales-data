@@ -1,6 +1,22 @@
 class BulkUpload::Processor
   attr_reader :bulk_upload
 
+  BLANK_TEMPLATE_ERRORS = [
+    I18n.t('activemodel.errors.models.bulk_upload/lettings/validator.attributes.base.blank_file'),
+    I18n.t('activemodel.errors.models.bulk_upload/sales/validator.attributes.base.blank_file')
+  ].freeze
+
+  WRONG_TEMPLATE_ERRORS = [
+    I18n.t('activemodel.errors.models.bulk_upload/lettings/validator.attributes.base.wrong_field_numbers_count'),
+    I18n.t('activemodel.errors.models.bulk_upload/lettings/validator.attributes.base.over_max_column_count'),
+    I18n.t('activemodel.errors.models.bulk_upload/lettings/validator.attributes.base.wrong_template'),
+    I18n.t('activemodel.errors.models.bulk_upload/lettings/validator.attributes.base.no_headers'),
+    I18n.t('activemodel.errors.models.bulk_upload/sales/validator.attributes.base.wrong_field_numbers_count'),
+    I18n.t('activemodel.errors.models.bulk_upload/sales/validator.attributes.base.over_max_column_count'),
+    I18n.t('activemodel.errors.models.bulk_upload/sales/validator.attributes.base.wrong_template'),
+    I18n.t('activemodel.errors.models.bulk_upload/sales/validator.attributes.base.no_headers')
+  ].freeze
+
   def initialize(bulk_upload:)
     @bulk_upload = bulk_upload
   end
@@ -147,11 +163,12 @@ private
   end
 
   def handle_invalid_validator
-    if validator.errors.full_messages.include?("Template is blank - The template must be filled in for us to create the logs and check if data is correct.")
-      @bulk_upload.update!(failed: 1)
-    elsif validator.errors.full_messages.include?("Incorrect number of fields, please ensure you have used the correct template")
-      @bulk_upload.update!(failed: 2)
+    if BLANK_TEMPLATE_ERRORS.any? { |error| validator.errors.full_messages.include?(error) }
+      @bulk_upload.update!(failure_reason: "blank_template")
+    elsif WRONG_TEMPLATE_ERRORS.any? { |error| validator.errors.full_messages.include?(error) }
+      @bulk_upload.update!(failure_reason: "wrong_template")
     end
+
     send_failure_mail(errors: validator.errors.full_messages)
   end
 end

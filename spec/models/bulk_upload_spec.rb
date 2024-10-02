@@ -173,7 +173,7 @@ RSpec.describe BulkUpload, type: :model do
 
   describe "#status" do
     context "when the bulk upload was uploaded with a blank template" do
-      let(:bulk_upload) { create(:bulk_upload, failed: 1) }
+      let(:bulk_upload) { create(:bulk_upload, failure_reason: "blank_template") }
 
       it "returns the correct status" do
         expect(bulk_upload.status).to eq(:blank_template)
@@ -181,7 +181,7 @@ RSpec.describe BulkUpload, type: :model do
     end
 
     context "when the bulk upload was uploaded with the wrong template" do
-      let(:bulk_upload) { create(:bulk_upload, failed: 2) }
+      let(:bulk_upload) { create(:bulk_upload, failure_reason: "wrong_template") }
 
       it "returns the correct status" do
         expect(bulk_upload.status).to eq(:wrong_template)

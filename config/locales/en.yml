@@ -63,7 +63,7 @@ en:
         bulk_upload/lettings/validator:
           attributes:
             base:
-              blank_file: Template is blank - The template must be filled in for us to create the logs and check if data is correct.
+              blank_file: "Template is blank - The template must be filled in for us to create the logs and check if data is correct."
               wrong_field_numbers_count: "Incorrect number of fields, please ensure you have used the correct template"
               over_max_column_count: "Too many columns, please ensure you have used the correct template"
               wrong_template: "Incorrect start dates, please ensure you have used the correct template"
@@ -71,7 +71,7 @@ en:
         bulk_upload/sales/validator:
           attributes:
             base:
-              blank_file: Template is blank - The template must be filled in for us to create the logs and check if data is correct.
+              blank_file: "Template is blank - The template must be filled in for us to create the logs and check if data is correct."
               wrong_field_numbers_count: "Incorrect number of fields, please ensure you have used the correct template"
               over_max_column_count: "Too many columns, please ensure you have used the correct template"
               wrong_template: "Incorrect sale dates, please ensure you have used the correct template"
