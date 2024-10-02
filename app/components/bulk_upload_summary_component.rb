@@ -44,11 +44,11 @@ class BulkUploadSummaryComponent < ViewComponent::Base
   end
 
   def download_lettings_file_link(bulk_upload)
-    link_to "Download file", download_lettings_bulk_upload_path(bulk_upload), class: "govuk-link govuk-!-margin-right-2"
+    govuk_link_to "Download file", download_lettings_bulk_upload_path(bulk_upload), class: "govuk-link govuk-!-margin-right-2"
   end
 
   def download_sales_file_link(bulk_upload)
-    link_to "Download file", download_sales_bulk_upload_path(bulk_upload), class: "govuk-link govuk-!-margin-right-2"
+    govuk_link_to "Download file", download_sales_bulk_upload_path(bulk_upload), class: "govuk-link govuk-!-margin-right-2"
   end
 
   def view_error_report_link(bulk_upload)
@@ -61,12 +61,12 @@ class BulkUploadSummaryComponent < ViewComponent::Base
              "bulk_upload_#{bulk_upload.log_type}_result_path"
            end
 
-    link_to "View error report", send(path, bulk_upload), class: "govuk-link"
+    govuk_link_to "View error report", send(path, bulk_upload), class: "govuk-link"
   end
 
   def view_logs_link(bulk_upload)
     return unless bulk_upload.status.to_s == "logs_uploaded_with_errors"
 
-    link_to "View logs with errors", send("#{bulk_upload.log_type}_logs_path", bulk_upload_id: [bulk_upload.id]), class: "govuk-link"
+    govuk_link_to "View logs with errors", send("#{bulk_upload.log_type}_logs_path", bulk_upload_id: [bulk_upload.id]), class: "govuk-link"
   end
 end
