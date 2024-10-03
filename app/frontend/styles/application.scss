@@ -82,3 +82,7 @@ $govuk-breakpoints: (
 .govuk-footer {
   border-top: govuk-spacing(2) solid $govuk-brand-colour;
 }
+
+.govuk-notification-banner__content > * {
+  max-width: fit-content;
+}
