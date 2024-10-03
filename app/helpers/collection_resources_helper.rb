@@ -54,4 +54,24 @@ module CollectionResourcesHelper
   def short_underscored_year_range_format(year)
     "#{year % 100}_#{(year + 1) % 100}"
   end
+
+  def document_list_component_items(resources)
+    resources.map do |resource|
+      {
+        name: "Download the #{resource.display_name}",
+        href: send(resource.download_path),
+        metadata: file_type_size_and_pages(resource.download_filename),
+      }
+    end
+  end
+
+  def document_list_edit_component_items(resources)
+    resources.map do |resource|
+      {
+        name: resource.download_filename,
+        href: send(resource.download_path),
+        metadata: file_type_size_and_pages(resource.download_filename),
+      }
+    end
+  end
 end

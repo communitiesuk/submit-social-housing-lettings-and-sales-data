@@ -1,0 +1,23 @@
+<% title = "Collection resources" %>
+<% content_for :title, title %>
+<% content_for :before_content do %>
+  <%= govuk_back_link(href: :back) %>
+<% end %>
+
+<h1 class="govuk-heading-l"><%= title %></h1>
+
+<% @mandatory_lettings_collection_resources_per_year.each do |year, mandatory_resources| %>
+  <h2 class="govuk-heading-m">
+    Lettings <%= text_year_range_format(year) %>
+  </h2>
+  <%= render partial: "collection_resource_summary_list", locals: { mandatory_resources: } %>
+  <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--m">
+<% end %>
+
+<% @mandatory_sales_collection_resources_per_year.each do |year, mandatory_resources| %>
+  <h2 class="govuk-heading-m">
+    Sales <%= text_year_range_format(year) %>
+  </h2>
+  <%= render partial: "collection_resource_summary_list", locals: { mandatory_resources: } %>
+  <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--m">
+<% end %>

@@ -5,56 +5,22 @@
 <% else %>
   <h2 class="govuk-heading-m">Collection resources</h2>
 <% end %>
-<% collection_resource_years.each do |collection_start_year| %>
+<% displayed_collection_resource_years.each do |collection_start_year| %>
   <p class="govuk-body">Use the <%= collection_start_year %> to <%= collection_start_year + 1 %> forms for lettings that start and sales that complete between 1 April <%= collection_start_year %> and 31 March <%= collection_start_year + 1 %>.</p>
 <% end %>
 <div class="app-tab__list-view">
   <%= govuk_tabs(title: "Collection resources", classes: %w[app-tab__small-headers]) do |c| %>
-    <% collection_resource_years.each do |collection_start_year| %>
-      <% c.with_tab(label: "Lettings #{year_range_format(collection_start_year)}") do %>
-        <%= render DocumentListComponent.new(
-          items: [
-            {
-              name: "Download the lettings log for tenants (#{text_year_range_format(collection_start_year)})",
-              href: send("download_#{short_underscored_year_range_format(collection_start_year)}_lettings_form_path"),
-              metadata: file_type_size_and_pages("#{underscored_file_year_format(collection_start_year)}_lettings_paper_form.pdf", number_of_pages: 8),
-            },
-            {
-              name: "Download the lettings bulk upload template (#{text_year_range_format(collection_start_year)})",
-              href: send("download_#{short_underscored_year_range_format(collection_start_year)}_lettings_bulk_upload_template_path"),
-              metadata: file_type_size_and_pages("bulk-upload-lettings-template-#{dasherised_file_year_format(collection_start_year)}.xlsx"),
-            },
-            {
-              name: "Download the lettings bulk upload specification (#{text_year_range_format(collection_start_year)})",
-              href: send("download_#{short_underscored_year_range_format(collection_start_year)}_lettings_bulk_upload_specification_path"),
-              metadata: file_type_size_and_pages("bulk-upload-lettings-specification-#{dasherised_file_year_format(collection_start_year)}.xlsx"),
-            },
-          ],
-          label: "Lettings #{text_year_range_format(collection_start_year)}",
-        ) %>
+    <% @mandatory_lettings_collection_resources_per_year.each do |year, resources| %>
+      <% c.with_tab(label: "Lettings #{year_range_format(year)}") do %>
+          <%= render DocumentListComponent.new(items: document_list_component_items(resources), label: "Lettings #{text_year_range_format(year)}") %>
       <% end %>
-      <% c.with_tab(label: "Sales #{year_range_format(collection_start_year)}") do %>
-        <%= render DocumentListComponent.new(
-          items: [
-            {
-              name: "Download the sales log for buyers (#{text_year_range_format(collection_start_year)})",
-              href: send("download_#{short_underscored_year_range_format(collection_start_year)}_sales_form_path"),
-              metadata: file_type_size_and_pages("#{underscored_file_year_format(collection_start_year)}_sales_paper_form.pdf", number_of_pages: 8),
-            },
-            {
-              name: "Download the sales bulk upload template (#{text_year_range_format(collection_start_year)})",
-              href: send("download_#{short_underscored_year_range_format(collection_start_year)}_sales_bulk_upload_template_path"),
-              metadata: file_type_size_and_pages("bulk-upload-sales-template-#{dasherised_file_year_format(collection_start_year)}.xlsx"),
-            },
-            {
-              name: "Download the sales bulk upload specification (#{text_year_range_format(collection_start_year)})",
-              href: send("download_#{short_underscored_year_range_format(collection_start_year)}_sales_bulk_upload_specification_path"),
-              metadata: file_type_size_and_pages("bulk-upload-sales-specification-#{dasherised_file_year_format(collection_start_year)}.xlsx"),
-            },
-          ],
-          label: "Sales #{text_year_range_format(collection_start_year)}",
-        ) %>
+    <% end %>
+    <% @mandatory_sales_collection_resources_per_year.each do |year, resources| %>
+      <% c.with_tab(label: "Sales #{year_range_format(year)}") do %>
+          <%= render DocumentListComponent.new(items: document_list_component_items(resources), label: "Sales #{text_year_range_format(year)}") %>
       <% end %>
     <% end %>
   <% end %>
 </div>
+
+<%= govuk_button_link_to "Manage collection resources", collection_resources_path, secondary: true, class: "govuk-!-margin-bottom-2" if current_user.support? %>
