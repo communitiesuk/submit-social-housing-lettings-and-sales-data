@@ -527,6 +527,56 @@ RSpec.describe FiltersHelper do
     end
   end
 
+  describe "#collection_year_radio_options" do
+    context "with 23/24 as the current collection year" do
+      before do
+        allow(Time).to receive(:now).and_return(Time.zone.local(2023, 5, 1))
+      end
+
+      context "and in crossover period" do
+        before do
+          allow(FormHandler.instance).to receive(:in_crossover_period?).and_return(true)
+        end
+
+        it "has the correct options" do
+          expect(collection_year_radio_options).to eq(
+            {
+              "2023" => { label: "2023/24" }, "2022" => { label: "2022/23" }, "2021" => { label: "2021/22" }
+            },
+          )
+        end
+      end
+
+      context "and not in crossover period" do
+        before do
+          allow(FormHandler.instance).to receive(:in_crossover_period?).and_return(false)
+        end
+
+        it "has the correct options" do
+          expect(collection_year_radio_options).to eq(
+            {
+              "2023" => { label: "2023/24" }, "2022" => { label: "2022/23" }
+            },
+          )
+        end
+      end
+    end
+
+    context "with 24/25 as the current collection year" do
+      before do
+        allow(Time).to receive(:now).and_return(Time.zone.local(2024, 5, 1))
+      end
+
+      it "has the correct options" do
+        expect(collection_year_radio_options).to eq(
+          {
+            "2024" => { label: "2024/25" }, "2023" => { label: "2023/24" }, "2022" => { label: "2022/23" }
+          },
+        )
+      end
+    end
+  end
+
   describe "#filters_applied_text" do
     let(:filter_type) { "lettings_logs" }
     let(:result) { filters_applied_text(filter_type) }

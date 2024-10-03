@@ -51,9 +51,9 @@ RSpec.describe Validations::Sales::PropertyValidations do
         record.ppostcode_full = "SW1A 0AA"
         record.jointpur = 1
         property_validator.validate_postcodes_match_if_discounted_ownership(record)
-        expect(record.errors["postcode_full"]).to include("Buyers’ last accommodation and discounted ownership postcodes must match")
-        expect(record.errors["ppostcode_full"]).to include("Buyers’ last accommodation and discounted ownership postcodes must match")
-        expect(record.errors["ownershipsch"]).to include("Buyers’ last accommodation and discounted ownership postcodes must match")
+        expect(record.errors["postcode_full"]).to include("Buyers’ last accommodation and discounted ownership postcodes must match.")
+        expect(record.errors["ppostcode_full"]).to include("Buyers’ last accommodation and discounted ownership postcodes must match.")
+        expect(record.errors["ownershipsch"]).to include("Buyers’ last accommodation and discounted ownership postcodes must match.")
       end
 
       it "when postcodes do not match an error is added for non joint purchase" do
@@ -61,9 +61,9 @@ RSpec.describe Validations::Sales::PropertyValidations do
         record.ppostcode_full = "SW1A 0AA"
         record.jointpur = 2
         property_validator.validate_postcodes_match_if_discounted_ownership(record)
-        expect(record.errors["postcode_full"]).to include("Buyer’s last accommodation and discounted ownership postcodes must match")
-        expect(record.errors["ppostcode_full"]).to include("Buyer’s last accommodation and discounted ownership postcodes must match")
-        expect(record.errors["ownershipsch"]).to include("Buyer’s last accommodation and discounted ownership postcodes must match")
+        expect(record.errors["postcode_full"]).to include("Buyer’s last accommodation and discounted ownership postcodes must match.")
+        expect(record.errors["ppostcode_full"]).to include("Buyer’s last accommodation and discounted ownership postcodes must match.")
+        expect(record.errors["ownershipsch"]).to include("Buyer’s last accommodation and discounted ownership postcodes must match.")
       end
 
       it "does not add error for 2024 log" do
@@ -93,8 +93,8 @@ RSpec.describe Validations::Sales::PropertyValidations do
 
       it "does add an error if it's a bedsit" do
         property_validator.validate_bedsit_number_of_beds(record)
-        expect(record.errors.added?(:proptype, "Answer cannot be 'Bedsit' if the property has 2 or more bedrooms")).to be true
-        expect(record.errors.added?(:beds, "Number of bedrooms must be 1 if the property is a bedsit")).to be true
+        expect(record.errors.added?(:proptype, "Answer cannot be 'Bedsit' if the property has 2 or more bedrooms.")).to be true
+        expect(record.errors.added?(:beds, "Number of bedrooms must be 1 if the property is a bedsit.")).to be true
       end
 
       it "does not add an error if proptype is undefined" do
@@ -120,7 +120,7 @@ RSpec.describe Validations::Sales::PropertyValidations do
 
       it "adds an error" do
         property_validator.validate_uprn(record)
-        expect(record.errors.added?(:uprn, "UPRN must be 12 digits or less")).to be true
+        expect(record.errors.added?(:uprn, "UPRN must be 12 digits or less.")).to be true
       end
     end
 
@@ -129,7 +129,7 @@ RSpec.describe Validations::Sales::PropertyValidations do
 
       it "adds an error" do
         property_validator.validate_uprn(record)
-        expect(record.errors.added?(:uprn, "UPRN must be 12 digits or less")).to be true
+        expect(record.errors.added?(:uprn, "UPRN must be 12 digits or less.")).to be true
       end
     end
 

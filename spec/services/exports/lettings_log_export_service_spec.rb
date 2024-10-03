@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Exports::LettingsLogExportService do
-  subject(:export_service) { described_class.new(storage_service) }
+  subject(:export_service) { described_class.new(storage_service, start_time) }
 
   let(:storage_service) { instance_double(Storage::S3Service) }
 
@@ -11,8 +11,6 @@ RSpec.describe Exports::LettingsLogExportService do
   let(:real_2021_2022_form) { Form.new("config/forms/2021_2022.json") }
   let(:real_2022_2023_form) { Form.new("config/forms/2022_2023.json") }
 
-  let(:expected_master_manifest_filename) { "Manifest_2022_05_01_0001.csv" }
-  let(:expected_master_manifest_rerun) { "Manifest_2022_05_01_0002.csv" }
   let(:expected_zip_filename) { "core_2021_2022_apr_mar_f0001_inc0001.zip" }
   let(:expected_data_filename) { "core_2021_2022_apr_mar_f0001_inc0001_pt001.xml" }
   let(:expected_manifest_filename) { "manifest.xml" }
@@ -49,18 +47,9 @@ RSpec.describe Exports::LettingsLogExportService do
 
   context "when exporting daily lettings logs in XML" do
     context "and no lettings logs is available for export" do
-      it "generates a master manifest with the correct name" do
-        expect(storage_service).to receive(:write_file).with(expected_master_manifest_filename, any_args)
-        export_service.export_xml_lettings_logs
-      end
-
-      it "generates a master manifest with CSV headers but no data" do
-        actual_content = nil
-        expected_content = "zip-name,date-time zipped folder generated,zip-file-uri\n"
-        allow(storage_service).to receive(:write_file).with(expected_master_manifest_filename, any_args) { |_, arg2| actual_content = arg2&.string }
-
-        export_service.export_xml_lettings_logs
-        expect(actual_content).to eq(expected_content)
+      it "returns an empty archives list" do
+        expect(storage_service).not_to receive(:write_file)
+        expect(export_service.export_xml_lettings_logs).to eq({})
       end
     end
 
@@ -83,13 +72,9 @@ RSpec.describe Exports::LettingsLogExportService do
         )
       end
 
-      it "generates a master manifest with CSV headers but no data" do
-        actual_content = nil
-        expected_content = "zip-name,date-time zipped folder generated,zip-file-uri\n"
-        allow(storage_service).to receive(:write_file).with(expected_master_manifest_filename, any_args) { |_, arg2| actual_content = arg2&.string }
-
-        export_service.export_xml_lettings_logs
-        expect(actual_content).to eq(expected_content)
+      it "returns empty archives list for archives manifest" do
+        expect(storage_service).not_to receive(:write_file)
+        expect(export_service.export_xml_lettings_logs).to eq({})
       end
     end
 
@@ -98,15 +83,6 @@ RSpec.describe Exports::LettingsLogExportService do
 
       it "generates a ZIP export file with the expected filename" do
         expect(storage_service).to receive(:write_file).with(expected_zip_filename, any_args)
-        export_service.export_xml_lettings_logs
-      end
-
-      it "generates an XML manifest file with the expected filename within the ZIP file" do
-        expect(storage_service).to receive(:write_file).with(expected_zip_filename, any_args) do |_, content|
-          entry = Zip::File.open_buffer(content).find_entry(expected_manifest_filename)
-          expect(entry).not_to be_nil
-          expect(entry.name).to eq(expected_manifest_filename)
-        end
         export_service.export_xml_lettings_logs
       end
 
@@ -141,13 +117,8 @@ RSpec.describe Exports::LettingsLogExportService do
         export_service.export_xml_lettings_logs
       end
 
-      it "generates a master manifest with CSV headers" do
-        actual_content = nil
-        expected_content = "zip-name,date-time zipped folder generated,zip-file-uri\ncore_2021_2022_apr_mar_f0001_inc0001,2022-05-01 00:00:00 +0100,#{expected_zip_filename}\n"
-        allow(storage_service).to receive(:write_file).with(expected_master_manifest_filename, any_args) { |_, arg2| actual_content = arg2&.string }
-
-        export_service.export_xml_lettings_logs
-        expect(actual_content).to eq(expected_content)
+      it "returns the list with correct archive" do
+        expect(export_service.export_xml_lettings_logs).to eq({ expected_zip_filename.gsub(".zip", "") => start_time })
       end
     end
 
@@ -178,8 +149,10 @@ RSpec.describe Exports::LettingsLogExportService do
     end
 
     context "with 23/24 collection period" do
+      let(:start_time) { Time.zone.local(2023, 4, 3) }
+
       before do
-        Timecop.freeze(Time.zone.local(2023, 4, 3))
+        Timecop.freeze(start_time)
         Singleton.__init__(FormHandler)
         stub_request(:get, "https://api.os.uk/search/places/v1/uprn?dataset=DPA,LPI&key=OS_DATA_KEY&uprn=100023336956")
          .to_return(status: 200, body: '{"status":200,"results":[{"DPA":{
@@ -234,15 +207,15 @@ RSpec.describe Exports::LettingsLogExportService do
           expect(storage_service).to receive(:write_file).with(expected_zip_filename, any_args)
           expect(storage_service).to receive(:write_file).with(expected_zip_filename2, any_args)
           expect(Rails.logger).to receive(:info).with("Building export run for 2021")
-          expect(Rails.logger).to receive(:info).with("Creating core_2021_2022_apr_mar_f0001_inc0001 - 1 logs")
+          expect(Rails.logger).to receive(:info).with("Creating core_2021_2022_apr_mar_f0001_inc0001 - 1 resources")
           expect(Rails.logger).to receive(:info).with("Added core_2021_2022_apr_mar_f0001_inc0001_pt001.xml")
           expect(Rails.logger).to receive(:info).with("Writing core_2021_2022_apr_mar_f0001_inc0001.zip")
           expect(Rails.logger).to receive(:info).with("Building export run for 2022")
-          expect(Rails.logger).to receive(:info).with("Creating core_2022_2023_apr_mar_f0001_inc0001 - 1 logs")
+          expect(Rails.logger).to receive(:info).with("Creating core_2022_2023_apr_mar_f0001_inc0001 - 1 resources")
           expect(Rails.logger).to receive(:info).with("Added core_2022_2023_apr_mar_f0001_inc0001_pt001.xml")
           expect(Rails.logger).to receive(:info).with("Writing core_2022_2023_apr_mar_f0001_inc0001.zip")
           expect(Rails.logger).to receive(:info).with("Building export run for 2023")
-          expect(Rails.logger).to receive(:info).with("Creating core_2023_2024_apr_mar_f0001_inc0001 - 0 logs")
+          expect(Rails.logger).to receive(:info).with("Creating core_2023_2024_apr_mar_f0001_inc0001 - 0 resources")
 
           export_service.export_xml_lettings_logs
         end
@@ -250,7 +223,7 @@ RSpec.describe Exports::LettingsLogExportService do
         it "generates zip export files only for specified year" do
           expect(storage_service).to receive(:write_file).with(expected_zip_filename2, any_args)
           expect(Rails.logger).to receive(:info).with("Building export run for 2022")
-          expect(Rails.logger).to receive(:info).with("Creating core_2022_2023_apr_mar_f0001_inc0001 - 1 logs")
+          expect(Rails.logger).to receive(:info).with("Creating core_2022_2023_apr_mar_f0001_inc0001 - 1 resources")
           expect(Rails.logger).to receive(:info).with("Added core_2022_2023_apr_mar_f0001_inc0001_pt001.xml")
           expect(Rails.logger).to receive(:info).with("Writing core_2022_2023_apr_mar_f0001_inc0001.zip")
 
@@ -262,22 +235,22 @@ RSpec.describe Exports::LettingsLogExportService do
           let(:expected_zip_filename2) { "core_2022_2023_apr_mar_f0001_inc0001.zip" }
 
           before do
-            LogsExport.new(started_at: Time.zone.yesterday, base_number: 7, increment_number: 3, collection: 2021).save!
+            Export.new(started_at: Time.zone.yesterday, base_number: 7, increment_number: 3, collection: 2021).save!
           end
 
           it "generates multiple ZIP export files with different base numbers in the filenames" do
             expect(storage_service).to receive(:write_file).with(expected_zip_filename, any_args)
             expect(storage_service).to receive(:write_file).with(expected_zip_filename2, any_args)
             expect(Rails.logger).to receive(:info).with("Building export run for 2021")
-            expect(Rails.logger).to receive(:info).with("Creating core_2021_2022_apr_mar_f0007_inc0004 - 1 logs")
+            expect(Rails.logger).to receive(:info).with("Creating core_2021_2022_apr_mar_f0007_inc0004 - 1 resources")
             expect(Rails.logger).to receive(:info).with("Added core_2021_2022_apr_mar_f0007_inc0004_pt001.xml")
             expect(Rails.logger).to receive(:info).with("Writing core_2021_2022_apr_mar_f0007_inc0004.zip")
             expect(Rails.logger).to receive(:info).with("Building export run for 2022")
-            expect(Rails.logger).to receive(:info).with("Creating core_2022_2023_apr_mar_f0001_inc0001 - 1 logs")
+            expect(Rails.logger).to receive(:info).with("Creating core_2022_2023_apr_mar_f0001_inc0001 - 1 resources")
             expect(Rails.logger).to receive(:info).with("Added core_2022_2023_apr_mar_f0001_inc0001_pt001.xml")
             expect(Rails.logger).to receive(:info).with("Writing core_2022_2023_apr_mar_f0001_inc0001.zip")
             expect(Rails.logger).to receive(:info).with("Building export run for 2023")
-            expect(Rails.logger).to receive(:info).with("Creating core_2023_2024_apr_mar_f0001_inc0001 - 0 logs")
+            expect(Rails.logger).to receive(:info).with("Creating core_2023_2024_apr_mar_f0001_inc0001 - 0 resources")
 
             export_service.export_xml_lettings_logs
           end
@@ -304,18 +277,13 @@ RSpec.describe Exports::LettingsLogExportService do
 
       it "creates a logs export record in a database with correct time" do
         expect { export_service.export_xml_lettings_logs }
-          .to change(LogsExport, :count).by(3)
-        expect(LogsExport.last.started_at).to be_within(2.seconds).of(start_time)
+          .to change(Export, :count).by(3)
+        expect(Export.last.started_at).to be_within(2.seconds).of(start_time)
       end
 
       context "when this is the first export (full)" do
-        it "records a ZIP archive in the master manifest (existing lettings logs)" do
-          expect(storage_service).to receive(:write_file).with(expected_master_manifest_filename, any_args) do |_, csv_content|
-            csv = CSV.parse(csv_content, headers: true)
-            expect(csv&.count).to be > 0
-          end
-
-          export_service.export_xml_lettings_logs
+        it "returns a ZIP archive for the master manifest (existing lettings logs)" do
+          expect(export_service.export_xml_lettings_logs).to eq({ expected_zip_filename.gsub(".zip", "").gsub(".zip", "") => start_time })
         end
       end
 
@@ -360,15 +328,12 @@ RSpec.describe Exports::LettingsLogExportService do
       context "when this is a second export (partial)" do
         before do
           start_time = Time.zone.local(2022, 6, 1)
-          LogsExport.new(started_at: start_time).save!
+          Export.new(started_at: start_time, collection: 2021).save!
         end
 
-        it "does not add any entry in the master manifest (no lettings logs)" do
-          expect(storage_service).to receive(:write_file).with(expected_master_manifest_rerun, any_args) do |_, csv_content|
-            csv = CSV.parse(csv_content, headers: true)
-            expect(csv&.count).to eq(0)
-          end
-          export_service.export_xml_lettings_logs
+        it "does not add any entry for the master manifest (no lettings logs)" do
+          expect(storage_service).not_to receive(:write_file)
+          expect(export_service.export_xml_lettings_logs).to eq({})
         end
       end
     end
@@ -379,28 +344,19 @@ RSpec.describe Exports::LettingsLogExportService do
         export_service.export_xml_lettings_logs
       end
 
-      it "increments the master manifest number by 1" do
-        expect(storage_service).to receive(:write_file).with(expected_master_manifest_rerun, any_args)
-        export_service.export_xml_lettings_logs
-      end
-
       context "and we trigger another full update" do
         it "increments the base number" do
           export_service.export_xml_lettings_logs(full_update: true)
-          expect(LogsExport.last.base_number).to eq(2)
+          expect(Export.last.base_number).to eq(2)
         end
 
         it "resets the increment number" do
           export_service.export_xml_lettings_logs(full_update: true)
-          expect(LogsExport.last.increment_number).to eq(1)
+          expect(Export.last.increment_number).to eq(1)
         end
 
-        it "records a ZIP archive in the master manifest (existing lettings logs)" do
-          expect(storage_service).to receive(:write_file).with(expected_master_manifest_rerun, any_args) do |_, csv_content|
-            csv = CSV.parse(csv_content, headers: true)
-            expect(csv&.count).to be > 0
-          end
-          export_service.export_xml_lettings_logs(full_update: true)
+        it "returns a correct archives list for manifest file" do
+          expect(export_service.export_xml_lettings_logs(full_update: true)).to eq({ "core_2021_2022_apr_mar_f0002_inc0001" => start_time })
         end
 
         it "generates a ZIP export file with the expected filename" do
@@ -416,7 +372,7 @@ RSpec.describe Exports::LettingsLogExportService do
       it "doesn't increment the manifest number by 1" do
         export_service.export_xml_lettings_logs
 
-        expect(LogsExport.last.increment_number).to eq(1)
+        expect(Export.last.increment_number).to eq(1)
       end
     end
 
@@ -424,19 +380,18 @@ RSpec.describe Exports::LettingsLogExportService do
       before do
         FactoryBot.create(:lettings_log, startdate: Time.zone.local(2022, 2, 1), updated_at: Time.zone.local(2022, 4, 27), values_updated_at: Time.zone.local(2022, 4, 29))
         FactoryBot.create(:lettings_log, startdate: Time.zone.local(2022, 2, 1), updated_at: Time.zone.local(2022, 4, 27), values_updated_at: Time.zone.local(2022, 4, 29))
-        LogsExport.create!(started_at: Time.zone.local(2022, 4, 28), base_number: 1, increment_number: 1)
+        Export.create!(started_at: Time.zone.local(2022, 4, 28), base_number: 1, increment_number: 1)
       end
 
       it "generates an XML manifest file with the expected content within the ZIP file" do
         expected_content = replace_record_number(local_manifest_file.read, 2)
-        expect(storage_service).to receive(:write_file).with(expected_master_manifest_rerun, any_args)
         expect(storage_service).to receive(:write_file).with(expected_zip_filename, any_args) do |_, content|
           entry = Zip::File.open_buffer(content).find_entry(expected_manifest_filename)
           expect(entry).not_to be_nil
           expect(entry.get_input_stream.read).to eq(expected_content)
         end
 
-        export_service.export_xml_lettings_logs
+        expect(export_service.export_xml_lettings_logs).to eq({ expected_zip_filename.gsub(".zip", "") => start_time })
       end
     end
 
@@ -461,8 +416,10 @@ RSpec.describe Exports::LettingsLogExportService do
     end
 
     context "with 24/25 collection period" do
+      let(:start_time) { Time.zone.local(2024, 4, 3) }
+
       before do
-        Timecop.freeze(Time.zone.local(2024, 4, 3))
+        Timecop.freeze(start_time)
         Singleton.__init__(FormHandler)
       end
 
