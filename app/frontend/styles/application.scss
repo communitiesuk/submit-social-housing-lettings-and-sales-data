@@ -23,6 +23,7 @@ $govuk-breakpoints: (
 @import "govuk-prototype-styles";
 
 @import "accessible-autocomplete";
+@import "bulk-uploads";
 @import "button";
 @import "card";
 @import "data_box";
@@ -80,18 +81,4 @@ $govuk-breakpoints: (
 
 .govuk-footer {
   border-top: govuk-spacing(2) solid $govuk-brand-colour;
-}
-
-.grouped-rows td {
-  border-top: none;
-  border-bottom: none;
-}
-
-.grouped-rows.first-row td {
-  border-top: 1px solid #b1b4b6;
-}
-
-.grouped-rows.last-row td,
-.grouped-rows .grouped-multirow-cell {
-  border-bottom: 1px solid #b1b4b6;
 }
