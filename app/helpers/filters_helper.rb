@@ -154,11 +154,11 @@ module FiltersHelper
   end
 
   def collection_year_radio_options
-    options = {}
-    collection_year_options.map do |year, label|
-      options[year] = { label: }
-    end
-    options
+    {
+      current_collection_start_year.to_s => { label: year_combo(current_collection_start_year) },
+      previous_collection_start_year.to_s => { label: year_combo(previous_collection_start_year) },
+      archived_collection_start_year.to_s => { label: year_combo(archived_collection_start_year) },
+    }
   end
 
   def filters_applied_text(filter_type)
@@ -349,7 +349,7 @@ private
 
   def assigned_to_filter_selected?(selected_filters, value)
     return true if !selected_filters.key?("user") && value == :all
-    return true if selected_filters["assigned_to"] == "specific_user" && value == :specific_user
+    return true if selected_filters["assigned_to"] == value.to_s
 
     false
   end
@@ -370,7 +370,7 @@ private
 
   def uploaded_by_filter_selected?(selected_filters, value)
     return true if !selected_filters.key?("user") && value == :all
-    return true if selected_filters["uploaded_by"] == "specific_user" && value == :specific_user
+    return true if selected_filters["uploaded_by"] == value.to_s
 
     false
   end
