@@ -103,6 +103,9 @@ module RequestHelper
       address = request.uri.query_values["query"].split(",")
       { status: 200, body: { results: [{ DPA: { MATCH: 0.9, BUILDING_NAME: "result #{address[0]}", POST_TOWN: "result town or city", POSTCODE: address[1], UPRN: "1" } }] }.to_json, headers: {} }
     end
+
+    WebMock.stub_request(:head, /https:\/\/core-test-collection-resources\.s3\.amazonaws\.com/)
+         .to_return(status: 200, body: "", headers: { "Content-Type" => "application/pdf", "Content-Length" => 1000 })
   end
 
   def self.real_http_requests
