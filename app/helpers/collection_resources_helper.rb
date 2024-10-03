@@ -1,4 +1,6 @@
 module CollectionResourcesHelper
+  include CollectionTimeHelper
+
   HUMAN_READABLE_CONTENT_TYPE = { "application/pdf": "PDF",
                                   "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": "Microsoft Excel",
                                   "application/vnd.ms-excel": "Microsoft Excel (Old Format)",
@@ -18,5 +20,38 @@ module CollectionResourcesHelper
     file_size = number_to_human_size(metadata["content_length"].to_i)
     file_type = HUMAN_READABLE_CONTENT_TYPE[metadata["content_type"].to_sym] || "Unknown File Type"
     [file_type, file_size, file_pages].compact.join(", ")
+  end
+
+  def displayed_collection_resource_years
+    return [previous_collection_start_year, current_collection_start_year] if FormHandler.instance.in_edit_crossover_period?
+
+    [current_collection_start_year]
+  end
+
+  def editable_collection_resource_years
+    return [previous_collection_start_year, current_collection_start_year] if FormHandler.instance.in_edit_crossover_period?
+    return [current_collection_start_year, next_collection_start_year] if Time.zone.today >= Time.zone.local(Time.zone.today.year, 1, 1) && Time.zone.today < Time.zone.local(Time.zone.today.year, 4, 1)
+
+    [current_collection_start_year]
+  end
+
+  def year_range_format(year)
+    "#{year % 100}/#{(year + 1) % 100}"
+  end
+
+  def text_year_range_format(year)
+    "#{year} to #{year + 1}"
+  end
+
+  def underscored_file_year_format(year)
+    "#{year}_#{(year + 1) % 100}"
+  end
+
+  def dasherised_file_year_format(year)
+    underscored_file_year_format(year).dasherize
+  end
+
+  def short_underscored_year_range_format(year)
+    "#{year % 100}_#{(year + 1) % 100}"
   end
 end

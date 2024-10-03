@@ -5,113 +5,56 @@
 <% else %>
   <h2 class="govuk-heading-m">Collection resources</h2>
 <% end %>
-<p class="govuk-body">Use the 2024 to 2025 forms for lettings that start and sales that complete between 1 April 2024 and 31 March 2025.</p>
-<% if FormHandler.instance.lettings_form_for_start_year(2023) && FormHandler.instance.lettings_form_for_start_year(2023).edit_end_date > Time.zone.today %>
-  <p class="govuk-body">Use the 2023 to 2024 forms for lettings that start and sales that complete between 1 April 2023 and 31 March 2024.</p>
+<% collection_resource_years.each do |collection_start_year| %>
+  <p class="govuk-body">Use the <%= collection_start_year %> to <%= collection_start_year + 1 %> forms for lettings that start and sales that complete between 1 April <%= collection_start_year %> and 31 March <%= collection_start_year + 1 %>.</p>
 <% end %>
 <div class="app-tab__list-view">
-<%= govuk_tabs(title: "Collection resources", classes: %w[app-tab__small-headers]) do |c| %>
-  <% if FormHandler.instance.lettings_form_for_start_year(2024) && FormHandler.instance.lettings_form_for_start_year(2024).edit_end_date > Time.zone.today %>
-    <% c.with_tab(label: "Lettings 24/25") do %>
-      <%= render DocumentListComponent.new(
-        items: [
-          {
-            name: "Download the lettings log for tenants (2024 to 2025)",
-            href: download_24_25_lettings_form_path,
-            metadata: file_type_size_and_pages("2024_25_lettings_paper_form.pdf", number_of_pages: 8),
-          },
-          {
-            name: "Download the lettings bulk upload template (2024 to 2025)",
-            href: download_24_25_lettings_bulk_upload_template_path,
-            metadata: file_type_size_and_pages("bulk-upload-lettings-template-2024-25.xlsx"),
-          },
-          {
-            name: "Download the lettings bulk upload specification (2024 to 2025)",
-            href: download_24_25_lettings_bulk_upload_specification_path,
-            metadata: file_type_size_and_pages("bulk-upload-lettings-specification-2024-25.xlsx"),
-          },
-        ],
-        label: "Lettings 2024 to 2025",
-      ) %>
-    <% end %>
-    <% c.with_tab(label: "Sales 24/25") do %>
-      <%= render DocumentListComponent.new(
-        items: [
-          {
-            name: "Download the sales log for buyers (2024 to 2025)",
-            href: download_24_25_sales_form_path,
-            metadata: file_type_size_and_pages("2024_25_sales_paper_form.pdf", number_of_pages: 8),
-          },
-          {
-            name: "Download the sales bulk upload template (2024 to 2025)",
-            href: download_24_25_sales_bulk_upload_template_path,
-            metadata: file_type_size_and_pages("bulk-upload-sales-template-2024-25.xlsx"),
-          },
-          {
-            name: "Download the sales bulk upload specification (2024 to 2025)",
-            href: download_24_25_sales_bulk_upload_specification_path,
-            metadata: file_type_size_and_pages("bulk-upload-sales-specification-2024-25.xlsx"),
-          },
-        ],
-        label: "Sales 2024 to 2025",
-      ) %>
-    <% end %>
-  <% end %>
-  <% if FormHandler.instance.lettings_form_for_start_year(2023) && FormHandler.instance.lettings_form_for_start_year(2023).edit_end_date > Time.zone.today %>
-    <% c.with_tab(label: "Lettings 23/24") do %>
-      <%= render DocumentListComponent.new(
-        items: [
-          {
-            name: "Download the lettings log for tenants (2023 to 2024)",
-            href: download_23_24_lettings_form_path,
-            metadata: file_type_size_and_pages("2023_24_lettings_paper_form.pdf", number_of_pages: 8),
-          },
-          {
-            name: "Download the lettings bulk upload template (2023 to 2024) – New question ordering",
-            href: download_23_24_lettings_bulk_upload_template_path,
-            metadata: file_type_size_and_pages("bulk-upload-lettings-template-2023-24.xlsx"),
-          },
-          {
-            name: "Download the lettings bulk upload template (2023 to 2024) – Legacy version",
-            href: download_23_24_lettings_bulk_upload_legacy_template_path,
-            metadata: file_type_size_and_pages("bulk-upload-lettings-legacy-template-2023-24.xlsx"),
-          },
-          {
-            name: "Download the lettings bulk upload specification (2023 to 2024)",
-            href: download_23_24_lettings_bulk_upload_specification_path,
-            metadata: file_type_size_and_pages("bulk-upload-lettings-specification-2023-24.xlsx"),
-          },
-        ],
-        label: "Lettings 2023 to 2024",
-      ) %>
-    <% end %>
-    <% c.with_tab(label: "Sales 23/24") do %>
-      <%= render DocumentListComponent.new(
-        items: [
-          {
-            name: "Download the sales log for buyers (2023 to 2024)",
-            href: download_23_24_sales_form_path,
-            metadata: file_type_size_and_pages("2023_24_sales_paper_form.pdf", number_of_pages: 8),
-          },
-          {
-            name: "Download the sales bulk upload template (2023 to 2024) – New question ordering",
-            href: download_23_24_sales_bulk_upload_template_path,
-            metadata: file_type_size_and_pages("bulk-upload-sales-template-2023-24.xlsx"),
-          },
-          {
-            name: "Download the sales bulk upload template (2023 to 2024) – Legacy version",
-            href: download_23_24_sales_bulk_upload_legacy_template_path,
-            metadata: file_type_size_and_pages("bulk-upload-sales-legacy-template-2023-24.xlsx"),
-          },
-          {
-            name: "Download the sales bulk upload specification (2023 to 2024)",
-            href: download_23_24_sales_bulk_upload_specification_path,
-            metadata: file_type_size_and_pages("bulk-upload-sales-specification-2023-24.xlsx"),
-          },
-        ],
-        label: "Sales 2023 to 2024",
-      ) %>
+  <%= govuk_tabs(title: "Collection resources", classes: %w[app-tab__small-headers]) do |c| %>
+    <% collection_resource_years.each do |collection_start_year| %>
+      <% c.with_tab(label: "Lettings #{year_range_format(collection_start_year)}") do %>
+        <%= render DocumentListComponent.new(
+          items: [
+            {
+              name: "Download the lettings log for tenants (#{text_year_range_format(collection_start_year)})",
+              href: send("download_#{short_underscored_year_range_format(collection_start_year)}_lettings_form_path"),
+              metadata: file_type_size_and_pages("#{underscored_file_year_format(collection_start_year)}_lettings_paper_form.pdf", number_of_pages: 8),
+            },
+            {
+              name: "Download the lettings bulk upload template (#{text_year_range_format(collection_start_year)})",
+              href: send("download_#{short_underscored_year_range_format(collection_start_year)}_lettings_bulk_upload_template_path"),
+              metadata: file_type_size_and_pages("bulk-upload-lettings-template-#{dasherised_file_year_format(collection_start_year)}.xlsx"),
+            },
+            {
+              name: "Download the lettings bulk upload specification (#{text_year_range_format(collection_start_year)})",
+              href: send("download_#{short_underscored_year_range_format(collection_start_year)}_lettings_bulk_upload_specification_path"),
+              metadata: file_type_size_and_pages("bulk-upload-lettings-specification-#{dasherised_file_year_format(collection_start_year)}.xlsx"),
+            },
+          ],
+          label: "Lettings #{text_year_range_format(collection_start_year)}",
+        ) %>
+      <% end %>
+      <% c.with_tab(label: "Sales #{year_range_format(collection_start_year)}") do %>
+        <%= render DocumentListComponent.new(
+          items: [
+            {
+              name: "Download the sales log for buyers (#{text_year_range_format(collection_start_year)})",
+              href: send("download_#{short_underscored_year_range_format(collection_start_year)}_sales_form_path"),
+              metadata: file_type_size_and_pages("#{underscored_file_year_format(collection_start_year)}_sales_paper_form.pdf", number_of_pages: 8),
+            },
+            {
+              name: "Download the sales bulk upload template (#{text_year_range_format(collection_start_year)})",
+              href: send("download_#{short_underscored_year_range_format(collection_start_year)}_sales_bulk_upload_template_path"),
+              metadata: file_type_size_and_pages("bulk-upload-sales-template-#{dasherised_file_year_format(collection_start_year)}.xlsx"),
+            },
+            {
+              name: "Download the sales bulk upload specification (#{text_year_range_format(collection_start_year)})",
+              href: send("download_#{short_underscored_year_range_format(collection_start_year)}_sales_bulk_upload_specification_path"),
+              metadata: file_type_size_and_pages("bulk-upload-sales-specification-#{dasherised_file_year_format(collection_start_year)}.xlsx"),
+            },
+          ],
+          label: "Sales #{text_year_range_format(collection_start_year)}",
+        ) %>
+      <% end %>
     <% end %>
   <% end %>
-<% end %>
 </div>

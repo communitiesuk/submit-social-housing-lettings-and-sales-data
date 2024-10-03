@@ -31,4 +31,96 @@ RSpec.describe CollectionResourcesHelper do
       end
     end
   end
+
+  describe "#editable_collection_resource_years" do
+    context "when in crossover period" do
+      before do
+        allow(FormHandler.instance).to receive(:in_edit_crossover_period?).and_return(true)
+        allow(Time.zone).to receive(:today).and_return(Time.zone.local(2024, 4, 8))
+      end
+
+      it "returns previous and current years" do
+        expect(editable_collection_resource_years).to eq([2023, 2024])
+      end
+    end
+
+    context "when not in crossover period" do
+      before do
+        allow(FormHandler.instance).to receive(:in_edit_crossover_period?).and_return(false)
+      end
+
+      context "and after 1st January" do
+        before do
+          allow(Time.zone).to receive(:today).and_return(Time.zone.local(2025, 2, 1))
+        end
+
+        it "returns current and next years" do
+          expect(editable_collection_resource_years).to eq([2024, 2025])
+        end
+      end
+
+      context "and before 1st January" do
+        before do
+          allow(Time.zone).to receive(:today).and_return(Time.zone.local(2024, 12, 1))
+        end
+
+        it "returns current year" do
+          expect(editable_collection_resource_years).to eq([2024])
+        end
+      end
+    end
+  end
+
+  describe "#displayed_collection_resource_years" do
+    context "when in crossover period" do
+      before do
+        allow(FormHandler.instance).to receive(:in_edit_crossover_period?).and_return(true)
+        allow(Time.zone).to receive(:today).and_return(Time.zone.local(2024, 4, 8))
+      end
+
+      it "returns previous and current years" do
+        expect(displayed_collection_resource_years).to eq([2023, 2024])
+      end
+    end
+
+    context "when not in crossover period" do
+      before do
+        allow(FormHandler.instance).to receive(:in_edit_crossover_period?).and_return(false)
+      end
+
+      it "returns current year" do
+        expect(displayed_collection_resource_years).to eq([2024])
+      end
+    end
+  end
+
+  describe "#year_range_format" do
+    it "returns formatted year range" do
+      expect(year_range_format(2023)).to eq("23/24")
+    end
+  end
+
+  describe "#text_year_range_format" do
+    it "returns formatted text year range" do
+      expect(text_year_range_format(2023)).to eq("2023 to 2024")
+    end
+  end
+
+  describe "#underscored_file_year_format" do
+    it "returns formatted dasherised file year" do
+      expect(underscored_file_year_format(2023)).to eq("2023_24")
+    end
+  end
+
+  describe "#dasherised_file_year_format" do
+    it "returns formatted dasherised file year" do
+      expect(dasherised_file_year_format(2023)).to eq("2023-24")
+    end
+  end
+
+  describe "#short_underscored_year_range_format" do
+    it "returns formatted short underscored year range" do
+      expect(short_underscored_year_range_format(2023)).to eq("23_24")
+    end
+  end
 end

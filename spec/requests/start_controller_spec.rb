@@ -342,10 +342,10 @@ RSpec.describe StartController, type: :request do
 
       context "and 2023 collection window is closed for editing" do
         before do
-          allow(Time).to receive(:now).and_return(Time.zone.local(2025, 1, 1))
+          allow(Time).to receive(:now).and_return(Time.zone.local(2024, 12, 1))
         end
 
-        it "displays correct resources for 2023/24 and 2024/25 collection years" do
+        it "displays correct resources" do
           get root_path
           expect(page).to have_content("Lettings 24/25")
           expect(page).not_to have_content("Lettings 23/24")
