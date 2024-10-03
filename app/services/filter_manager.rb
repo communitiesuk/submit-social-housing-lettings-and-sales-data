@@ -131,7 +131,7 @@ class FilterManager
     end
 
     if filter_type.include?("schemes")
-      current_user.logs_filters(specific_org:).each do |filter|
+      current_user.scheme_filters(specific_org:).each do |filter|
         new_filters[filter] = params[filter] if params[filter].present?
       end
 
@@ -139,7 +139,7 @@ class FilterManager
     end
 
     if filter_type.include?("bulk_uploads")
-      current_user.logs_filters(specific_org:).each do |filter|
+      current_user.bulk_uploads_filters(specific_org:).each do |filter|
         new_filters[filter] = params[filter] if params[filter].present?
       end
       new_filters = new_filters.except("uploading_organisation") if params["uploading_organisation_select"] == "all"
