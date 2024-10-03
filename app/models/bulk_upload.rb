@@ -47,11 +47,11 @@ class BulkUpload < ApplicationRecord
       return :logs_uploaded_with_errors if bulk_upload_errors.any?
     end
 
-    if bulk_upload_errors.any? { |error| error.category == "setup" }
+    if bulk_upload_errors.important.any?
       :important_errors
-    elsif bulk_upload_errors.any? { |error| error.category.nil? || error.category == "not_answered" }
+    elsif bulk_upload_errors.critical.any?
       :critical_errors
-    elsif bulk_upload_errors.any? { |error| error.category == "soft_validation" }
+    elsif bulk_upload_errors.potential.any?
       :potential_errors
     else
       :logs_uploaded_no_errors
