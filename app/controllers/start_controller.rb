@@ -1,5 +1,5 @@
 class StartController < ApplicationController
-  include CollectionResourcesHelper
+  include CollectionTimeHelper
 
   def index
     if current_user
@@ -8,60 +8,48 @@ class StartController < ApplicationController
     end
   end
 
-  def download_24_25_sales_form
-    download_resource("2024_25_sales_paper_form.pdf", "2024-25 Sales paper form.pdf")
+  FormHandler.instance.years_of_available_lettings_forms.each do |year|
+    short_underscored_year = "#{year % 100}_#{(year + 1) % 100}"
+    underscored_year = "#{year}_#{(year + 1) % 100}"
+    dasherised_year = underscored_year.dasherize
+
+    define_method "download_#{short_underscored_year}_lettings_form" do
+      download_resource("#{underscored_year}_lettings_paper_form.pdf", "#{dasherised_year}-lettings-paper-form.pdf")
+    end
+
+    define_method "download_#{short_underscored_year}_lettings_bulk_upload_template" do
+      download_resource("bulk-upload-lettings-template-#{dasherised_year}.xlsx", "#{dasherised_year}-lettings-bulk-upload-template.xlsx")
+    end
+
+    define_method "download_#{short_underscored_year}_lettings_bulk_upload_specification" do
+      download_resource("bulk-upload-lettings-specification-#{dasherised_year}.xlsx", "#{dasherised_year}-lettings-bulk-upload-specification.xlsx")
+    end
   end
 
-  def download_23_24_sales_form
-    download_resource("2023_24_sales_paper_form.pdf", "2023-24 Sales paper form.pdf")
-  end
+  FormHandler.instance.years_of_available_sales_forms.each do |year|
+    short_underscored_year = "#{year % 100}_#{(year + 1) % 100}"
+    underscored_year = "#{year}_#{(year + 1) % 100}"
+    dasherised_year = underscored_year.dasherize
 
-  def download_24_25_lettings_form
-    download_resource("2024_25_lettings_paper_form.pdf", "2024-25 Lettings paper form.pdf")
-  end
+    define_method "download_#{short_underscored_year}_sales_form" do
+      download_resource("#{underscored_year}_sales_paper_form.pdf", "#{dasherised_year}-sales-paper-form.pdf")
+    end
 
-  def download_23_24_lettings_form
-    download_resource("2023_24_lettings_paper_form.pdf", "2023-24 Lettings paper form.pdf")
-  end
+    define_method "download_#{short_underscored_year}_sales_bulk_upload_template" do
+      download_resource("bulk-upload-sales-template-#{dasherised_year}.xlsx", "#{dasherised_year}-sales-bulk-upload-template.xlsx")
+    end
 
-  def download_24_25_lettings_bulk_upload_template
-    download_resource("bulk-upload-lettings-template-2024-25.xlsx", "2024-25-lettings-bulk-upload-template.xlsx")
-  end
-
-  def download_24_25_lettings_bulk_upload_specification
-    download_resource("bulk-upload-lettings-specification-2024-25.xlsx", "2024-25-lettings-bulk-upload-specification.xlsx")
-  end
-
-  def download_24_25_sales_bulk_upload_template
-    download_resource("bulk-upload-sales-template-2024-25.xlsx", "2024-25-sales-bulk-upload-template.xlsx")
-  end
-
-  def download_24_25_sales_bulk_upload_specification
-    download_resource("bulk-upload-sales-specification-2024-25.xlsx", "2024-25-sales-bulk-upload-specification.xlsx")
-  end
-
-  def download_23_24_lettings_bulk_upload_template
-    download_resource("bulk-upload-lettings-template-2023-24.xlsx", "2023-24-lettings-bulk-upload-template.xlsx")
+    define_method "download_#{short_underscored_year}_sales_bulk_upload_specification" do
+      download_resource("bulk-upload-sales-specification-#{dasherised_year}.xlsx", "#{dasherised_year}-sales-bulk-upload-specification.xlsx")
+    end
   end
 
   def download_23_24_lettings_bulk_upload_legacy_template
     download_resource("bulk-upload-lettings-legacy-template-2023-24.xlsx", "2023-24-lettings-bulk-upload-legacy-template.xlsx")
   end
 
-  def download_23_24_lettings_bulk_upload_specification
-    download_resource("bulk-upload-lettings-specification-2023-24.xlsx", "2023-24-lettings-bulk-upload-specification.xlsx")
-  end
-
-  def download_23_24_sales_bulk_upload_template
-    download_resource("bulk-upload-sales-template-2023-24.xlsx", "2023-24-sales-bulk-upload-template.xlsx")
-  end
-
   def download_23_24_sales_bulk_upload_legacy_template
     download_resource("bulk-upload-sales-legacy-template-2023-24.xlsx", "2023-24-sales-bulk-upload-legacy-template.xlsx")
-  end
-
-  def download_23_24_sales_bulk_upload_specification
-    download_resource("bulk-upload-sales-specification-2023-24.xlsx", "2023-24-sales-bulk-upload-specification.xlsx")
   end
 
 private
