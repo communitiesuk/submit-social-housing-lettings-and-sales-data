@@ -2,8 +2,7 @@ class Form::Sales::Questions::BuyerCompany < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "companybuy"
-    @check_answer_label = "Company buyer"
-    @header = "Is the buyer a company?"
+    @copy_key = "sales.setup.companybuy"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]

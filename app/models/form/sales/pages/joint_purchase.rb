@@ -2,6 +2,7 @@ class Form::Sales::Pages::JointPurchase < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "joint_purchase"
+    @copy_key = "sales.setup.jointpur"
     @depends_on = [
       { "ownershipsch" => 1 },
       { "ownershipsch" => 2 },

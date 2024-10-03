@@ -2,6 +2,7 @@ class Form::Sales::Pages::ManagingOrganisation < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "managing_organisation"
+    @copy_key = "sales.setup.managing_organisation_id"
   end
 
   def questions

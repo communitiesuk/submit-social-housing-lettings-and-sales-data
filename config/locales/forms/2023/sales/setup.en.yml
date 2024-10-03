@@ -1,6 +1,6 @@
 en:
   forms:
-    2024:
+    2023:
       sales:
         setup:
           owning_organisation_id:
@@ -43,7 +43,7 @@ en:
             shared_ownership:
               page_header: "Type of shared ownership sale"
               check_answer_label: "Type of shared ownership sale"
-              hint_text: "When the purchaser buys an initial share of up to 75% of the property value and pays rent to the Private Registered Provider (PRP) on the remaining portion, or a subsequent staircasing transaction"
+              hint_text: "A shared ownership sale is when the purchaser buys up to 75% of the property value and pays rent to the Private Registered Provider (PRP) on the remaining portion"
               question_text: "What is the type of shared ownership sale?"
             discounted_ownership:
               page_header: "Type of discounted ownership sale"
@@ -71,18 +71,18 @@ en:
             page_header: ""
             check_answer_label: "Buyers living in property"
             hint_text: ""
-            question_text: "Will any buyers live in the property?"
+            question_text: "Will the buyers live in the property?"
 
           jointpur:
             page_header: ""
             check_answer_label: "Joint purchase"
-            hint_text: "This is where two or more people are named as legal owners of the property after the purchase"
+            hint_text: ""
             question_text: "Is this a joint purchase?"
 
           jointmore:
             page_header: ""
             check_answer_label: "More than 2 joint buyers"
-            hint_text: ""
+            hint_text: "You should still try to answer all questions even if the buyers weren’t interviewed in person"
             question_text: "Are there more than 2 joint buyers of this property?"
 
           noint:

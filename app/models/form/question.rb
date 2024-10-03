@@ -11,6 +11,7 @@ class Form::Question
   def initialize(id, hsh, page)
     @id = id
     @page = page
+    @copy_reference = nil
     if hsh
       @check_answer_label = hsh["check_answer_label"]
       @header = hsh["header"]
@@ -47,6 +48,24 @@ class Form::Question
 
   delegate :subsection, to: :page
   delegate :form, to: :subsection
+
+  def check_answer_label
+    return @check_answer_label if @copy_reference.nil?
+
+    I18n.t("forms.#{form.start_date.year}.#{@copy_key}.check_answer_label")
+  end
+
+  def header
+    return @header if @copy_key.nil?
+
+    I18n.t("forms.#{form.start_date.year}.#{@copy_key}.question_text")
+  end
+
+  def hint_text
+    return @hint_text if @copy_key.nil?
+
+    I18n.t("forms.#{form.start_date.year}.#{@copy_key}.hint_text")
+  end
 
   def answer_label(log, user = nil)
     return checkbox_answer_label(log) if type == "checkbox"

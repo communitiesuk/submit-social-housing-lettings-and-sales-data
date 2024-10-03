@@ -24,6 +24,12 @@ class Form::Page
 
   delegate :form, to: :subsection
 
+  def header
+    @header if @copy_key.nil?
+
+    I18n.t("forms.#{form.start_date.year}.#{@copy_key}.page_header")
+  end
+
   def routed_to?(log, _current_user)
     return true unless depends_on || subsection.depends_on
 

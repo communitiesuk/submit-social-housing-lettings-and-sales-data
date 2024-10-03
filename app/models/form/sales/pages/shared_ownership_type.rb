@@ -2,6 +2,7 @@ class Form::Sales::Pages::SharedOwnershipType < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "shared_ownership_type"
+    @copy_key = "sales.setup.type.shared_ownership"
     @header = header
     @depends_on = [{
       "ownershipsch" => 1,
@@ -12,9 +13,5 @@ class Form::Sales::Pages::SharedOwnershipType < ::Form::Page
     @questions ||= [
       Form::Sales::Questions::SharedOwnershipType.new(nil, nil, self),
     ]
-  end
-
-  def header
-    "Type of shared ownership sale" if form.start_date.year >= 2023
   end
 end
