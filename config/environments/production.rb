@@ -147,4 +147,5 @@ Rails.application.configure do
       end
     }
   end
+  config.collection_resources_s3_bucket_name = "core-prod-collection-resources"
 end

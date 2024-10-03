@@ -85,4 +85,5 @@ Rails.application.configure do
   config.active_record.yaml_column_permitted_classes = [Time, BigDecimal]
 
   config.active_job.queue_adapter = :inline
+  config.collection_resources_s3_bucket_name = "core-dev-collection-resources"
 end
