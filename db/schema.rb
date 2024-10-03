@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_09_27_143916) do
+ActiveRecord::Schema[7.0].define(version: 2024_10_02_163937) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -44,8 +44,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_09_27_143916) do
     t.string "rent_type_fix_status", default: "not_applied"
     t.integer "organisation_id"
     t.integer "moved_user_id"
-    t.integer "failed"
-    t.boolean "processing", default: false
     t.string "failure_reason"
     t.boolean "processing"
     t.index ["identifier"], name: "index_bulk_uploads_on_identifier", unique: true
