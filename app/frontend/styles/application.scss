@@ -95,3 +95,7 @@ $govuk-breakpoints: (
 .grouped-rows .grouped-multirow-cell {
   border-bottom: 1px solid #b1b4b6;
 }
+
+.govuk-notification-banner__content > * {
+  max-width: fit-content;
+}
