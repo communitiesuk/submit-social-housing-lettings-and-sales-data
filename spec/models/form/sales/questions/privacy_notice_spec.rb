@@ -60,7 +60,7 @@ RSpec.describe Form::Sales::Questions::PrivacyNotice, type: :model do
       end
 
       it "returns correct unanswered_error_message" do
-        expect(question.unanswered_error_message).to eq("You must show the MHCLG privacy notice to the buyer before you can submit this log")
+        expect(question.unanswered_error_message).to eq("You must show the MHCLG privacy notice to the buyer before you can submit this log.")
       end
     end
 
@@ -78,7 +78,7 @@ RSpec.describe Form::Sales::Questions::PrivacyNotice, type: :model do
       end
 
       it "returns correct unanswered_error_message" do
-        expect(question.unanswered_error_message).to eq("You must show the MHCLG privacy notice to the buyers before you can submit this log")
+        expect(question.unanswered_error_message).to eq("You must show the MHCLG privacy notice to the buyers before you can submit this log.")
       end
     end
   end
@@ -100,7 +100,7 @@ RSpec.describe Form::Sales::Questions::PrivacyNotice, type: :model do
       end
 
       it "returns correct unanswered_error_message" do
-        expect(question.unanswered_error_message).to eq("You must show or give the buyer access to the MHCLG privacy notice before you can submit this log")
+        expect(question.unanswered_error_message).to eq("You must show or give the buyer access to the MHCLG privacy notice before you can submit this log.")
       end
     end
 
@@ -118,7 +118,7 @@ RSpec.describe Form::Sales::Questions::PrivacyNotice, type: :model do
       end
 
       it "returns correct unanswered_error_message" do
-        expect(question.unanswered_error_message).to eq("You must show or give the buyers access to the MHCLG privacy notice before you can submit this log")
+        expect(question.unanswered_error_message).to eq("You must show or give the buyers access to the MHCLG privacy notice before you can submit this log.")
       end
     end
   end

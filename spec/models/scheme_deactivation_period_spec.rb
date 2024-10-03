@@ -23,7 +23,7 @@ RSpec.describe SchemeDeactivationPeriod do
           record.deactivation_date = current_collection_start_date - 1.year
           scheme.scheme_deactivation_periods.clear
           validator.validate(record)
-          expect(record.errors[:deactivation_date]).to include("The date must be on or after the 1 April 2023")
+          expect(record.errors[:deactivation_date]).to include("The date must be on or after the 1 April 2023.")
         end
       end
 
@@ -47,7 +47,7 @@ RSpec.describe SchemeDeactivationPeriod do
           record.deactivation_date = previous_collection_start_date - 2.years
           scheme.scheme_deactivation_periods.clear
           validator.validate(record)
-          expect(record.errors[:deactivation_date]).to include("The date must be on or after the 1 April 2022")
+          expect(record.errors[:deactivation_date]).to include("The date must be on or after the 1 April 2022.")
         end
       end
 

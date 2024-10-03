@@ -212,6 +212,10 @@ class User < ApplicationRecord
   end
 
   def assignable_roles
+    if Rails.env.staging? && Rails.application.credentials[:staging_role_update_email_allowlist].include?(email.split("@").last.downcase)
+      return ROLES
+    end
+
     return {} unless data_coordinator? || support?
     return ROLES if support?
 

@@ -214,6 +214,13 @@ RSpec.describe SalesLog, type: :model do
         expect(result).to include(have_attributes(id: sales_log_to_search.id))
       end
     end
+
+    it "sanitises input for order" do
+      sales_log_to_search.update!(purchid: "' 123456")
+      result = described_class.search_by(sales_log_to_search.purchid)
+      expect(result.count).to be >= 1
+      expect(result).to include(have_attributes(id: sales_log_to_search.id))
+    end
   end
 
   context "when filtering by year or nil" do

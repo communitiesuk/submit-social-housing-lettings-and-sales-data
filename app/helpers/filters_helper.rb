@@ -142,11 +142,11 @@ module FiltersHelper
   end
 
   def collection_year_radio_options
-    {
-      current_collection_start_year.to_s => { label: year_combo(current_collection_start_year) },
-      previous_collection_start_year.to_s => { label: year_combo(previous_collection_start_year) },
-      archived_collection_start_year.to_s => { label: year_combo(archived_collection_start_year) },
-    }
+    options = {}
+    collection_year_options.map do |year, label|
+      options[year] = { label: }
+    end
+    options
   end
 
   def filters_applied_text(filter_type)

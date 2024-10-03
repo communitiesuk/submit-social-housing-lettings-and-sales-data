@@ -1,22 +1,15 @@
 module Exports
-  class LettingsLogExportService
+  class LettingsLogExportService < Exports::XmlExportService
     include Exports::LettingsLogExportConstants
     include CollectionTimeHelper
 
-    def initialize(storage_service, logger = Rails.logger)
-      @storage_service = storage_service
-      @logger = logger
-    end
-
     def export_xml_lettings_logs(full_update: false, collection_year: nil)
-      start_time = Time.zone.now
-      daily_run_number = get_daily_run_number
       archives_for_manifest = {}
-      recent_export = LogsExport.order("started_at").last
       collection_years_to_export(collection_year).each do |collection|
-        base_number = LogsExport.where(empty_export: false, collection:).maximum(:base_number) || 1
-        export = build_export_run(collection, start_time, base_number, full_update)
-        archives = write_export_archive(export, collection, start_time, recent_export, full_update)
+        recent_export = Export.where(collection:).order("started_at").last
+        base_number = Export.where(empty_export: false, collection:).maximum(:base_number) || 1
+        export = build_export_run(collection, base_number, full_update)
+        archives = write_export_archive(export, collection, recent_export, full_update)
 
         archives_for_manifest.merge!(archives)
 
@@ -24,45 +17,10 @@ module Exports
         export.save!
       end
 
-      write_master_manifest(daily_run_number, archives_for_manifest)
+      archives_for_manifest
     end
 
   private
-
-    def get_daily_run_number
-      today = Time.zone.today
-      LogsExport.where(created_at: today.beginning_of_day..today.end_of_day).select(:started_at).distinct.count + 1
-    end
-
-    def build_export_run(collection, current_time, base_number, full_update)
-      @logger.info("Building export run for #{collection}")
-      previous_exports_with_data = LogsExport.where(collection:, empty_export: false)
-
-      increment_number = previous_exports_with_data.where(base_number:).maximum(:increment_number) || 1
-
-      if full_update
-        base_number += 1 if LogsExport.any? # Only increment when it's not the first run
-        increment_number = 1
-      else
-        increment_number += 1
-      end
-
-      if previous_exports_with_data.empty?
-        return LogsExport.new(collection:, base_number:, started_at: current_time)
-      end
-
-      LogsExport.new(collection:, started_at: current_time, base_number:, increment_number:)
-    end
-
-    def write_master_manifest(daily_run, archive_datetimes)
-      today = Time.zone.today
-      increment_number = daily_run.to_s.rjust(4, "0")
-      month = today.month.to_s.rjust(2, "0")
-      day = today.day.to_s.rjust(2, "0")
-      file_path = "Manifest_#{today.year}_#{month}_#{day}_#{increment_number}.csv"
-      string_io = build_manifest_csv_io(archive_datetimes)
-      @storage_service.write_file(file_path, string_io)
-    end
 
     def get_archive_name(collection, base_number, increment)
       return unless collection
@@ -72,88 +30,14 @@ module Exports
       "core_#{collection}_#{collection + 1}_apr_mar_#{base_number_str}_#{increment_str}".downcase
     end
 
-    def write_export_archive(export, collection, start_time, recent_export, full_update)
-      archive = get_archive_name(collection, export.base_number, export.increment_number) # archive name would be the same for all logs because they're already filtered by year (?)
-
-      initial_logs_count = retrieve_lettings_logs(start_time, recent_export, full_update).filter_by_year(collection).count
-      @logger.info("Creating #{archive} - #{initial_logs_count} logs")
-      return {} if initial_logs_count.zero?
-
-      zip_file = Zip::File.open_buffer(StringIO.new)
-
-      part_number = 1
-      last_processed_marker = nil
-      logs_count_after_export = 0
-
-      loop do
-        lettings_logs_slice = if last_processed_marker.present?
-                                retrieve_lettings_logs(start_time, recent_export, full_update).filter_by_year(collection)
-                                      .where("created_at > ?", last_processed_marker)
-                                      .order(:created_at)
-                                      .limit(MAX_XML_RECORDS).to_a
-                              else
-                                retrieve_lettings_logs(start_time, recent_export, full_update).filter_by_year(collection)
-                                .order(:created_at)
-                                .limit(MAX_XML_RECORDS).to_a
-                              end
-
-        break if lettings_logs_slice.empty?
-
-        data_xml = build_export_xml(lettings_logs_slice)
-        part_number_str = "pt#{part_number.to_s.rjust(3, '0')}"
-        zip_file.add("#{archive}_#{part_number_str}.xml", data_xml)
-        part_number += 1
-        last_processed_marker = lettings_logs_slice.last.created_at
-        logs_count_after_export += lettings_logs_slice.count
-        @logger.info("Added #{archive}_#{part_number_str}.xml")
-      end
-
-      manifest_xml = build_manifest_xml(logs_count_after_export)
-      zip_file.add("manifest.xml", manifest_xml)
-
-      # Required by S3 to avoid Aws::S3::Errors::BadDigest
-      zip_io = zip_file.write_buffer
-      zip_io.rewind
-      @logger.info("Writing #{archive}.zip")
-      @storage_service.write_file("#{archive}.zip", zip_io)
-      { archive => Time.zone.now }
-    end
-
-    def retrieve_lettings_logs(start_time, recent_export, full_update)
+    def retrieve_resources(recent_export, full_update, collection)
       if !full_update && recent_export
-        params = { from: recent_export.started_at, to: start_time }
-        LettingsLog.exportable.where("(updated_at >= :from AND updated_at <= :to) OR (values_updated_at IS NOT NULL AND values_updated_at >= :from AND values_updated_at <= :to)", params)
+        params = { from: recent_export.started_at, to: @start_time }
+        LettingsLog.exportable.where("(updated_at >= :from AND updated_at <= :to) OR (values_updated_at IS NOT NULL AND values_updated_at >= :from AND values_updated_at <= :to)", params).filter_by_year(collection)
       else
-        params = { to: start_time }
-        LettingsLog.exportable.where("updated_at <= :to", params)
+        params = { to: @start_time }
+        LettingsLog.exportable.where("updated_at <= :to", params).filter_by_year(collection)
       end
-    end
-
-    def build_manifest_csv_io(archive_datetimes)
-      headers = ["zip-name", "date-time zipped folder generated", "zip-file-uri"]
-      csv_string = CSV.generate do |csv|
-        csv << headers
-        archive_datetimes.each do |(archive, datetime)|
-          csv << [archive, datetime, "#{archive}.zip"]
-        end
-      end
-      StringIO.new(csv_string)
-    end
-
-    def xml_doc_to_temp_file(xml_doc)
-      file = Tempfile.new
-      xml_doc.write_xml_to(file, encoding: "UTF-8")
-      file.rewind
-      file
-    end
-
-    def build_manifest_xml(record_number)
-      doc = Nokogiri::XML("<report/>")
-      doc.at("report") << doc.create_element("form-data-summary")
-      doc.at("form-data-summary") << doc.create_element("records")
-      doc.at("records") << doc.create_element("count-of-records", record_number)
-
-      xml_doc_to_temp_file(doc)
     end
 
     def apply_cds_transformation(lettings_log, export_mode)

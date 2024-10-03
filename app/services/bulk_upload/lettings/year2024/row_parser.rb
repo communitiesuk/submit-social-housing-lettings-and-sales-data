@@ -432,6 +432,7 @@ class BulkUpload::Lettings::Year2024::RowParser
 
   validate :validate_assigned_to_exists, on: :after_log
   validate :validate_assigned_to_related, on: :after_log
+  validate :validate_assigned_to_when_support, on: :after_log
   validate :validate_all_charges_given, on: :after_log, if: proc { is_carehome.zero? }
 
   validate :validate_address_option_found, on: :after_log, unless: -> { supported_housing? }
@@ -578,7 +579,13 @@ private
     return if field_3.blank?
 
     unless assigned_to
-      errors.add(:field_3, "User with the specified email could not be found")
+      errors.add(:field_3, "User with the specified email could not be found.")
+    end
+  end
+
+  def validate_assigned_to_when_support
+    if field_3.blank? && bulk_upload.user.support?
+      errors.add(:field_3, category: :setup, message: I18n.t("validations.not_answered", question: "what is the CORE username of the account this letting log should be assigned to?"))
     end
   end
 
@@ -588,7 +595,7 @@ private
     return if assigned_to.organisation == owning_organisation&.absorbing_organisation || assigned_to.organisation == managing_organisation&.absorbing_organisation
 
     block_log_creation!
-    errors.add(:field_3, "User must be related to owning organisation or managing organisation")
+    errors.add(:field_3, "User must be related to owning organisation or managing organisation.")
   end
 
   def assigned_to
@@ -643,7 +650,7 @@ private
 
         field_mapping_for_errors[interruption_screen_question_id.to_sym]&.each do |field|
           if errors.none? { |e| field_mapping_for_errors[interruption_screen_question_id.to_sym].include?(e.attribute) }
-            error_message = [display_title_text(question.page.title_text, log), display_informative_text(question.page.informative_text, log)].reject(&:empty?).join(". ")
+            error_message = [display_title_text(question.page.title_text, log), display_informative_text(question.page.informative_text, log)].reject(&:empty?).join(" ")
             errors.add(field, message: error_message, category: :soft_validation)
           end
         end
@@ -825,14 +832,14 @@ private
   def validate_related_location_exists
     if scheme && field_6.present? && location.nil? && :field_6.present?
       block_log_creation!
-      errors.add(:field_6, "Location code must relate to a location that is owned by the owning organisation or managing organisation", category: :setup)
+      errors.add(:field_6, "Location code must relate to a location that is owned by the owning organisation or managing organisation.", category: :setup)
     end
   end
 
   def validate_related_scheme_exists
     if field_5.present? && :field_5.present? && owning_organisation.present? && managing_organisation.present? && scheme.nil?
       block_log_creation!
-      errors.add(:field_5, "This scheme code does not belong to the owning organisation or managing organisation", category: :setup)
+      errors.add(:field_5, "This scheme code does not belong to the owning organisation or managing organisation.", category: :setup)
     end
   end
 
@@ -841,7 +848,7 @@ private
       block_log_creation!
 
       if errors[:field_2].blank?
-        errors.add(:field_2, "This managing organisation does not have a relationship with the owning organisation", category: :setup)
+        errors.add(:field_2, "This managing organisation does not have a relationship with the owning organisation.", category: :setup)
       end
     end
   end
@@ -851,7 +858,7 @@ private
       block_log_creation!
 
       if field_2.present? && errors[:field_2].blank?
-        errors.add(:field_2, "The managing organisation code is incorrect", category: :setup)
+        errors.add(:field_2, "The managing organisation code is incorrect.", category: :setup)
       end
     end
   end
@@ -868,7 +875,7 @@ private
       block_log_creation!
 
       if errors[:field_1].blank?
-        errors.add(:field_1, "The owning organisation code provided is for an organisation that does not own stock", category: :setup)
+        errors.add(:field_1, "The owning organisation code provided is for an organisation that does not own stock.", category: :setup)
       end
     end
   end
@@ -878,7 +885,7 @@ private
       block_log_creation!
 
       if field_1.present? && errors[:field_1].blank?
-        errors.add(:field_1, "The owning organisation code is incorrect", category: :setup)
+        errors.add(:field_1, "The owning organisation code is incorrect.", category: :setup)
       end
     end
   end
@@ -891,12 +898,17 @@ private
   end
 
   def validate_owning_org_permitted
-    if owning_organisation && !bulk_upload.user.organisation.affiliated_stock_owners.include?(owning_organisation)
-      block_log_creation!
+    return unless owning_organisation
+    return if bulk_upload_organisation.affiliated_stock_owners.include?(owning_organisation)
 
-      if errors[:field_1].blank?
-        errors.add(:field_1, "You do not have permission to add logs for this owning organisation", category: :setup)
-      end
+    block_log_creation!
+
+    return if errors[:field_1].present?
+
+    if bulk_upload.user.support?
+      errors.add(:field_1, "This owning organisation is not affiliated with #{bulk_upload_organisation.name}.", category: :setup)
+    else
+      errors.add(:field_1, "You do not have permission to add logs for this owning organisation.", category: :setup)
     end
   end
 
@@ -931,7 +943,7 @@ private
 
   def validate_if_log_already_exists
     if log_already_exists?
-      error_message = "This is a duplicate log"
+      error_message = "This is a duplicate log."
 
       errors.add(:field_1, error_message) # owning_organisation
       errors.add(:field_8, error_message) # startdate
@@ -1137,7 +1149,7 @@ private
     attributes["renewal"] = renewal
     attributes["scheme"] = scheme
     attributes["location"] = location
-    attributes["assigned_to"] = assigned_to || bulk_upload.user
+    attributes["assigned_to"] = assigned_to || (bulk_upload.user.support? ? nil : bulk_upload.user)
     attributes["created_by"] = bulk_upload.user
     attributes["needstype"] = field_4
     attributes["rent_type"] = RENT_TYPE_BU_MAPPING[field_11]
@@ -1624,5 +1636,9 @@ private
 
   def reason_is_other?
     field_98 == 20
+  end
+
+  def bulk_upload_organisation
+    Organisation.find(bulk_upload.organisation_id)
   end
 end

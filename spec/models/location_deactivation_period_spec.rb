@@ -23,7 +23,7 @@ RSpec.describe LocationDeactivationPeriod do
           record.deactivation_date = current_collection_start_date - 1.year
           location.location_deactivation_periods.clear
           validator.validate(record)
-          expect(record.errors[:deactivation_date]).to include "The date must be on or after the 1 April 2023"
+          expect(record.errors[:deactivation_date]).to include "The date must be on or after the 1 April 2023."
         end
       end
 
@@ -47,7 +47,7 @@ RSpec.describe LocationDeactivationPeriod do
           record.deactivation_date = previous_collection_start_date - 2.years
           location.location_deactivation_periods.clear
           validator.validate(record)
-          expect(record.errors[:deactivation_date]).to include "The date must be on or after the 1 April 2022"
+          expect(record.errors[:deactivation_date]).to include "The date must be on or after the 1 April 2022."
         end
       end
 
@@ -80,7 +80,7 @@ RSpec.describe LocationDeactivationPeriod do
             location.location_deactivation_periods.clear
             validator.validate(record)
             start_date = startdate.to_formatted_s(:govuk_date)
-            expect(record.errors[:deactivation_date]).to include "The location cannot be deactivated before #{start_date}, the date when it was first available"
+            expect(record.errors[:deactivation_date]).to include "The location cannot be deactivated before #{start_date}, the date when it was first available."
           end
         end
       end

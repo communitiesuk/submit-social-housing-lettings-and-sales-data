@@ -51,7 +51,7 @@ RSpec.describe BulkUpload::Lettings::Validator do
 
         it "is not valid" do
           expect(validator).not_to be_valid
-          expect(validator.errors["base"]).to eql(["Incorrect number of fields, please ensure you have used the correct template"])
+          expect(validator.errors["base"]).to eql(["Incorrect number of fields, please ensure you have used the correct template."])
         end
       end
 
@@ -68,7 +68,7 @@ RSpec.describe BulkUpload::Lettings::Validator do
 
         it "is not valid" do
           expect(validator).not_to be_valid
-          expect(validator.errors["base"]).to eql(["Incorrect number of fields, please ensure you have used the correct template"])
+          expect(validator.errors["base"]).to eql(["Incorrect number of fields, please ensure you have used the correct template."])
         end
       end
     end
@@ -90,7 +90,7 @@ RSpec.describe BulkUpload::Lettings::Validator do
 
         it "is not valid" do
           expect(validator).not_to be_valid
-          expect(validator.errors["base"]).to eql(["Incorrect start dates, please ensure you have used the correct template"])
+          expect(validator.errors["base"]).to eql(["Incorrect start dates, please ensure you have used the correct template."])
         end
       end
     end
@@ -179,7 +179,7 @@ RSpec.describe BulkUpload::Lettings::Validator do
       end
 
       it "creates errors" do
-        expect { validator.call }.to change(BulkUploadError.where(category: :setup, error: "This is a duplicate of a log in your file"), :count)
+        expect { validator.call }.to change(BulkUploadError.where(category: :setup, error: "This is a duplicate of a log in your file."), :count)
       end
     end
 

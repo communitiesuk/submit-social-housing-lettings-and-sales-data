@@ -6,6 +6,7 @@ module Forms
       include Rails.application.routes.url_helpers
 
       attribute :year, :integer
+      attribute :organisation_id, :integer
 
       validates :year, presence: true
 
@@ -20,11 +21,15 @@ module Forms
       end
 
       def back_path
-        sales_logs_path
+        if organisation_id.present?
+          sales_logs_organisation_path(organisation_id)
+        else
+          sales_logs_path
+        end
       end
 
       def next_path
-        bulk_upload_sales_log_path(id: "prepare-your-file", form: { year: })
+        bulk_upload_sales_log_path(id: "prepare-your-file", form: { year:, organisation_id: }.compact)
       end
 
       def save!
