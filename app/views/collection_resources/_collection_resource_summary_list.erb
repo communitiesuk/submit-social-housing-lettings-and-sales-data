@@ -1,0 +1,14 @@
+<%= govuk_summary_list do |summary_list| %>
+  <% mandatory_resources.each do |resource| %>
+    <% summary_list.with_row do |row| %>
+      <% row.with_key { resource.short_display_name } %>
+      <% row.with_value do %>
+        <%= render DocumentListComponent.new(items: document_list_edit_component_items([resource]), label: "") %>
+      <% end %>
+      <% row.with_action(
+        text: "Change",
+        href: "/",
+      ) %>
+    <% end %>
+  <% end %>
+<% end %>

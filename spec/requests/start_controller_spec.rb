@@ -364,6 +364,24 @@ RSpec.describe StartController, type: :request do
         get root_path
         expect(page).to have_content("About this service")
       end
+
+      context "with support user" do
+        let(:user) { create(:user, :support) }
+
+        it "displays link to edit collection resources" do
+          get root_path
+
+          expect(page).to have_link("Manage collection resources", href: collection_resources_path)
+        end
+      end
+
+      context "with data coordinator" do
+        it "does not display the link to edit collection resources" do
+          get root_path
+
+          expect(page).not_to have_link("Manage collection resources", href: collection_resources_path)
+        end
+      end
     end
   end
 

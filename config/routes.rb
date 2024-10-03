@@ -40,25 +40,30 @@ Rails.application.routes.draw do
   get "/service-moved", to: "maintenance#service_moved"
   get "/service-unavailable", to: "maintenance#service_unavailable"
 
-  get "/download-23-24-lettings-form", to: "start#download_23_24_lettings_form"
-  get "/download-23-24-lettings-bulk-upload-template", to: "start#download_23_24_lettings_bulk_upload_template"
   get "/download-23-24-lettings-bulk-upload-legacy-template", to: "start#download_23_24_lettings_bulk_upload_legacy_template"
-  get "/download-23-24-lettings-bulk-upload-specification", to: "start#download_23_24_lettings_bulk_upload_specification"
-
-  get "/download-23-24-sales-form", to: "start#download_23_24_sales_form"
-  get "/download-23-24-sales-bulk-upload-template", to: "start#download_23_24_sales_bulk_upload_template"
   get "/download-23-24-sales-bulk-upload-legacy-template", to: "start#download_23_24_sales_bulk_upload_legacy_template"
-  get "/download-23-24-sales-bulk-upload-specification", to: "start#download_23_24_sales_bulk_upload_specification"
 
-  get "/download-24-25-lettings-form", to: "start#download_24_25_lettings_form"
-  get "/download-24-25-lettings-bulk-upload-template", to: "start#download_24_25_lettings_bulk_upload_template"
-  get "/download-24-25-lettings-bulk-upload-specification", to: "start#download_24_25_lettings_bulk_upload_specification"
+  FormHandler.instance.years_of_available_lettings_forms.each do |year|
+    short_underscored_year = "#{year % 100}_#{(year + 1) % 100}"
+    short_dasherized_year = short_underscored_year.dasherize
 
-  get "/download-24-25-sales-form", to: "start#download_24_25_sales_form"
-  get "/download-24-25-sales-bulk-upload-template", to: "start#download_24_25_sales_bulk_upload_template"
-  get "/download-24-25-sales-bulk-upload-specification", to: "start#download_24_25_sales_bulk_upload_specification"
+    get "/download-#{short_dasherized_year}-lettings-form", to: "start#download_#{short_underscored_year}_lettings_form"
+    get "/download-#{short_dasherized_year}-lettings-bulk-upload-template", to: "start#download_#{short_underscored_year}_lettings_bulk_upload_template"
+    get "/download-#{short_dasherized_year}-lettings-bulk-upload-specification", to: "start#download_#{short_underscored_year}_lettings_bulk_upload_specification"
+  end
+
+  FormHandler.instance.years_of_available_sales_forms.each do |year|
+    short_underscored_year = "#{year % 100}_#{(year + 1) % 100}"
+    short_dasherized_year = short_underscored_year.dasherize
+
+    get "/download-#{short_dasherized_year}-sales-form", to: "start#download_#{short_underscored_year}_sales_form"
+    get "/download-#{short_dasherized_year}-sales-bulk-upload-template", to: "start#download_#{short_underscored_year}_sales_bulk_upload_template"
+    get "/download-#{short_dasherized_year}-sales-bulk-upload-specification", to: "start#download_#{short_underscored_year}_sales_bulk_upload_specification"
+  end
 
   get "clear-filters", to: "sessions#clear_filters"
+
+  get "collection-resources", to: "collection_resources#index"
 
   resource :account, only: %i[show edit], controller: "users" do
     get "edit/password", to: "users#edit_password"
