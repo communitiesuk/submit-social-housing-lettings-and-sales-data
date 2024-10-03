@@ -2,19 +2,19 @@ class BulkUpload::Processor
   attr_reader :bulk_upload
 
   BLANK_TEMPLATE_ERRORS = [
-    I18n.t('activemodel.errors.models.bulk_upload/lettings/validator.attributes.base.blank_file'),
-    I18n.t('activemodel.errors.models.bulk_upload/sales/validator.attributes.base.blank_file')
+    I18n.t("activemodel.errors.models.bulk_upload/lettings/validator.attributes.base.blank_file"),
+    I18n.t("activemodel.errors.models.bulk_upload/sales/validator.attributes.base.blank_file")
   ].freeze
 
   WRONG_TEMPLATE_ERRORS = [
-    I18n.t('activemodel.errors.models.bulk_upload/lettings/validator.attributes.base.wrong_field_numbers_count'),
-    I18n.t('activemodel.errors.models.bulk_upload/lettings/validator.attributes.base.over_max_column_count'),
-    I18n.t('activemodel.errors.models.bulk_upload/lettings/validator.attributes.base.wrong_template'),
-    I18n.t('activemodel.errors.models.bulk_upload/lettings/validator.attributes.base.no_headers'),
-    I18n.t('activemodel.errors.models.bulk_upload/sales/validator.attributes.base.wrong_field_numbers_count'),
-    I18n.t('activemodel.errors.models.bulk_upload/sales/validator.attributes.base.over_max_column_count'),
-    I18n.t('activemodel.errors.models.bulk_upload/sales/validator.attributes.base.wrong_template'),
-    I18n.t('activemodel.errors.models.bulk_upload/sales/validator.attributes.base.no_headers')
+    I18n.t("activemodel.errors.models.bulk_upload/lettings/validator.attributes.base.wrong_field_numbers_count"),
+    I18n.t("activemodel.errors.models.bulk_upload/lettings/validator.attributes.base.over_max_column_count"),
+    I18n.t("activemodel.errors.models.bulk_upload/lettings/validator.attributes.base.wrong_template"),
+    I18n.t("activemodel.errors.models.bulk_upload/lettings/validator.attributes.base.no_headers"),
+    I18n.t("activemodel.errors.models.bulk_upload/sales/validator.attributes.base.wrong_field_numbers_count"),
+    I18n.t("activemodel.errors.models.bulk_upload/sales/validator.attributes.base.over_max_column_count"),
+    I18n.t("activemodel.errors.models.bulk_upload/sales/validator.attributes.base.wrong_template"),
+    I18n.t("activemodel.errors.models.bulk_upload/sales/validator.attributes.base.no_headers")
   ].freeze
 
   def initialize(bulk_upload:)
