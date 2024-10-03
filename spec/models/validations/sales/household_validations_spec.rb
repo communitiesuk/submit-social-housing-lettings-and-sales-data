@@ -345,8 +345,8 @@ RSpec.describe Validations::Sales::HouseholdValidations do
       [3, 4, 5, 6, 7, 9, 0].each do |prevten|
         record.prevten = prevten
         household_validator.validate_buyer1_previous_tenure(record)
-        expect(record.errors["prevten"]).to include("Buyer 1’s previous tenure should be “local authority tenant” or “private registered provider or housing association tenant” for discounted sales")
-        expect(record.errors["ownershipsch"]).to include("Buyer 1’s previous tenure should be “local authority tenant” or “private registered provider or housing association tenant” for discounted sales")
+        expect(record.errors["prevten"]).to include("Buyer 1’s previous tenure should be “local authority tenant” or “private registered provider or housing association tenant” for discounted sales.")
+        expect(record.errors["ownershipsch"]).to include("Buyer 1’s previous tenure should be “local authority tenant” or “private registered provider or housing association tenant” for discounted sales.")
       end
     end
 
@@ -420,7 +420,7 @@ RSpec.describe Validations::Sales::HouseholdValidations do
         record.ecstat1 = 9
         household_validator.validate_buyer_not_child(record)
         expect(record.errors["ecstat1"])
-          .to include("Buyer 1 cannot have a working situation of child under 16")
+          .to include("Buyer 1 cannot have a working situation of child under 16.")
       end
 
       it "validates buyer 2 isn't a child" do
@@ -428,7 +428,7 @@ RSpec.describe Validations::Sales::HouseholdValidations do
         record.ecstat2 = 9
         household_validator.validate_buyer_not_child(record)
         expect(record.errors["ecstat2"])
-          .to include("Buyer 2 cannot have a working situation of child under 16")
+          .to include("Buyer 2 cannot have a working situation of child under 16.")
       end
 
       it "allows person 2 to be a child" do

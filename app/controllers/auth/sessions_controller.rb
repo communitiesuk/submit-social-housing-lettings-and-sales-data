@@ -4,12 +4,12 @@ class Auth::SessionsController < Devise::SessionsController
   def create
     self.resource = User.new
     if params.dig("user", "email").empty?
-      resource.errors.add :email, "Enter an email address"
+      resource.errors.add :email, "Enter an email address."
     elsif !email_valid?(params.dig("user", "email"))
-      resource.errors.add :email, "Enter an email address in the correct format, like name@example.com"
+      resource.errors.add :email, "Enter an email address in the correct format, like name@example.com."
     end
     if params.dig("user", "password").empty?
-      resource.errors.add :password, "Enter a password"
+      resource.errors.add :password, "Enter a password."
     end
     if resource.errors.present?
       render :new, status: :unprocessable_entity

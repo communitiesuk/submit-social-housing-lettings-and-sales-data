@@ -763,7 +763,7 @@ RSpec.describe Validations::HouseholdValidations do
         it "is invalid" do
           household_validator.validate_combination_of_housing_needs_responses(record)
 
-          error_message = ["If somebody in the household has disabled access needs, they must have the access needs listed, or other access needs"]
+          error_message = ["If somebody in the household has disabled access needs, they must have the access needs listed, or other access needs."]
 
           expect(record.errors["housingneeds"]).to eq(error_message)
           expect(record.errors["housingneeds_type"]).to eq(error_message)
@@ -779,7 +779,7 @@ RSpec.describe Validations::HouseholdValidations do
         it "is invalid" do
           household_validator.validate_combination_of_housing_needs_responses(record)
 
-          error_message = ["If somebody in the household has disabled access needs, they must have the access needs listed, or other access needs"]
+          error_message = ["If somebody in the household has disabled access needs, they must have the access needs listed, or other access needs."]
 
           expect(record.errors["housingneeds"]).to eq(error_message)
           expect(record.errors["housingneeds_type"]).to eq(error_message)

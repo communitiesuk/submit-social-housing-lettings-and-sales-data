@@ -24,7 +24,7 @@ RSpec.describe Form::Sales::Questions::StaircaseOwned, type: :model do
     end
 
     it "has the correct check_answer_label" do
-      expect(question.check_answer_label).to eq("Percentage the buyers now own in total")
+      expect(question.check_answer_label).to eq("Percentage the buyers now own in total.")
     end
   end
 
@@ -34,7 +34,7 @@ RSpec.describe Form::Sales::Questions::StaircaseOwned, type: :model do
     end
 
     it "has the correct check_answer_label" do
-      expect(question.check_answer_label).to eq("Percentage the buyer now owns in total")
+      expect(question.check_answer_label).to eq("Percentage the buyer now owns in total.")
     end
   end
 

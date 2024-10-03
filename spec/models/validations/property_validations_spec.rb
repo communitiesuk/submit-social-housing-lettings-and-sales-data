@@ -276,7 +276,7 @@ RSpec.describe Validations::PropertyValidations do
 
       it "adds an error" do
         property_validator.validate_uprn(log)
-        expect(log.errors.added?(:uprn, "UPRN must be 12 digits or less")).to be true
+        expect(log.errors.added?(:uprn, "UPRN must be 12 digits or less.")).to be true
       end
     end
 
@@ -285,7 +285,7 @@ RSpec.describe Validations::PropertyValidations do
 
       it "adds an error" do
         property_validator.validate_uprn(log)
-        expect(log.errors.added?(:uprn, "UPRN must be 12 digits or less")).to be true
+        expect(log.errors.added?(:uprn, "UPRN must be 12 digits or less.")).to be true
       end
     end
 
