@@ -22,7 +22,7 @@ RSpec.describe Form::Sales::Questions::Prevown, type: :model do
     end
 
     it "has the correct check_answer_label" do
-      expect(question.check_answer_label).to eq("Buyer previously owned a property")
+      expect(question.check_answer_label).to eq("Buyer previously owned a property.")
     end
   end
 
@@ -34,7 +34,7 @@ RSpec.describe Form::Sales::Questions::Prevown, type: :model do
     end
 
     it "has the correct check_answer_label" do
-      expect(question.check_answer_label).to eq("Buyers previously owned a property")
+      expect(question.check_answer_label).to eq("Buyers previously owned a property.")
     end
   end
 
