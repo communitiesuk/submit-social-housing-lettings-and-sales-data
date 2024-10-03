@@ -11,6 +11,7 @@ FactoryBot.define do
     rent_type_fix_status { BulkUpload.rent_type_fix_statuses.values.sample }
     organisation_id { user.organisation_id }
     total_logs_count { Faker::Number.number(digits: 2) }
+    processing { false }
 
     trait(:sales) do
       log_type { BulkUpload.log_types[:sales] }
