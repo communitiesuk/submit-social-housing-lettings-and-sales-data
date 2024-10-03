@@ -123,7 +123,7 @@ RSpec.describe BulkUploadSummaryComponent, type: :component do
   end
 
   context "when a bulk upload uses the wrong template" do
-    let(:bulk_upload) { create(:bulk_upload, :sales, user:, failed: 2) }
+    let(:bulk_upload) { create(:bulk_upload, :sales, user:, failure_reason: "wrong_template") }
 
     it "shows the wrong template status and no error counts" do
       result = render_inline(described_class.new(bulk_upload:))
@@ -135,7 +135,7 @@ RSpec.describe BulkUploadSummaryComponent, type: :component do
   end
 
   context "when a bulk upload uses a blank template" do
-    let(:bulk_upload) { create(:bulk_upload, :sales, user:, failed: 1) }
+    let(:bulk_upload) { create(:bulk_upload, :sales, user:, failure_reason: "blank_template") }
 
     it "shows the wrong template status and no error counts" do
       result = render_inline(described_class.new(bulk_upload:))
