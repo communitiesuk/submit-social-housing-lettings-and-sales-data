@@ -223,7 +223,7 @@ RSpec.describe User, type: :model do
       end
 
       it "can filter bulk uploads by year, uploaded_by and uploading_organisation " do
-        expect(user.bulk_uploads_filters).to match_array(%w[years uploaded_by uploading_organisation])
+        expect(user.bulk_uploads_filters).to match_array(%w[user years uploaded_by uploading_organisation user_text_search uploading_organisation_text_search])
       end
 
       it "can filter schemes by status and owning_organisation" do
