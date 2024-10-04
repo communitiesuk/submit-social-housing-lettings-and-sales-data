@@ -69,30 +69,29 @@ RSpec.describe CollectionResourcesController, type: :request do
         end
 
         it "displays file names with download links" do
-          expect(page).to have_link("2024_25_lettings_paper_form.pdf", href: download_24_25_lettings_form_path)
-          expect(page).to have_link("bulk-upload-lettings-template-2024-25.xlsx", href: download_24_25_lettings_bulk_upload_template_path)
-          expect(page).to have_link("bulk-upload-lettings-specification-2024-25.xlsx", href: download_24_25_lettings_bulk_upload_specification_path)
-          expect(page).to have_link("2024_25_sales_paper_form.pdf", href: download_24_25_sales_form_path)
-          expect(page).to have_link("bulk-upload-sales-template-2024-25.xlsx", href: download_24_25_sales_bulk_upload_template_path)
-          expect(page).to have_link("bulk-upload-sales-specification-2024-25.xlsx", href: download_24_25_sales_bulk_upload_specification_path)
+          expect(page).to have_link("2024_25_lettings_paper_form.pdf", href: download_mandatory_collection_resource_path(year: 2024, log_type: "lettings", resource_type: "paper_form"))
+          expect(page).to have_link("bulk-upload-lettings-template-2024-25.xlsx", href: download_mandatory_collection_resource_path(year: 2024, log_type: "lettings", resource_type: "bulk_upload_template"))
+          expect(page).to have_link("bulk-upload-lettings-specification-2024-25.xlsx", href: download_mandatory_collection_resource_path(year: 2024, log_type: "lettings", resource_type: "bulk_upload_specification"))
+          expect(page).to have_link("2024_25_sales_paper_form.pdf", href: download_mandatory_collection_resource_path(year: 2024, log_type: "sales", resource_type: "paper_form"))
+          expect(page).to have_link("bulk-upload-sales-template-2024-25.xlsx", href: download_mandatory_collection_resource_path(year: 2024, log_type: "sales", resource_type: "bulk_upload_template"))
+          expect(page).to have_link("bulk-upload-sales-specification-2024-25.xlsx", href: download_mandatory_collection_resource_path(year: 2024, log_type: "sales", resource_type: "bulk_upload_specification"))
 
-          expect(page).to have_link("2025_26_lettings_paper_form.pdf", href: download_25_26_lettings_form_path)
-          expect(page).to have_link("bulk-upload-lettings-template-2025-26.xlsx", href: download_25_26_lettings_bulk_upload_template_path)
-          expect(page).to have_link("bulk-upload-lettings-specification-2025-26.xlsx", href: download_25_26_lettings_bulk_upload_specification_path)
-          expect(page).to have_link("2025_26_sales_paper_form.pdf", href: download_25_26_sales_form_path)
-          expect(page).to have_link("bulk-upload-sales-template-2025-26.xlsx", href: download_25_26_sales_bulk_upload_template_path)
-          expect(page).to have_link("bulk-upload-sales-specification-2025-26.xlsx", href: download_25_26_sales_bulk_upload_specification_path)
+          expect(page).to have_link("2025_26_lettings_paper_form.pdf", href: download_mandatory_collection_resource_path(year: 2025, log_type: "lettings", resource_type: "paper_form"))
+          expect(page).to have_link("bulk-upload-lettings-template-2025-26.xlsx", href: download_mandatory_collection_resource_path(year: 2025, log_type: "lettings", resource_type: "bulk_upload_template"))
+          expect(page).to have_link("bulk-upload-lettings-specification-2025-26.xlsx", href: download_mandatory_collection_resource_path(year: 2025, log_type: "lettings", resource_type: "bulk_upload_specification"))
+          expect(page).to have_link("2025_26_sales_paper_form.pdf", href: download_mandatory_collection_resource_path(year: 2025, log_type: "sales", resource_type: "paper_form"))
+          expect(page).to have_link("bulk-upload-sales-template-2025-26.xlsx", href: download_mandatory_collection_resource_path(year: 2025, log_type: "sales", resource_type: "bulk_upload_template"))
+          expect(page).to have_link("bulk-upload-sales-specification-2025-26.xlsx", href: download_mandatory_collection_resource_path(year: 2025, log_type: "sales", resource_type: "bulk_upload_specification"))
         end
 
         it "displays change links" do
           expect(page).to have_selector(:link_or_button, "Change", count: 12)
-          expect(page).to have_link("Change", href: edit_24_25_lettings_form_path)
         end
       end
 
       context "when files are not on S3" do
         before do
-          WebMock.stub_request(:get, /https:\/\/core-test-collection-resources\.s3\.amazonaws\.com/)
+          WebMock.stub_request(:head, /https:\/\/core-test-collection-resources\.s3\.amazonaws\.com/)
           .to_return(status: 404, body: "", headers: {})
           get collection_resources_path
         end
