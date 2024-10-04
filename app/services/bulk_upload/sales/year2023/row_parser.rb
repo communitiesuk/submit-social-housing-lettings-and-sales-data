@@ -1243,13 +1243,13 @@ private
       if setup_question?(question)
         fields.each do |field|
           unless errors.any? { |e| fields.include?(e.attribute) }
-            errors.add(field, I18n.t("validations.not_answered", question: question.error_display_label&.downcase), category: :setup)
+            errors.add(field, I18n.t("validations.not_answered", question: downcase(question.error_display_label)), category: :setup)
           end
         end
       else
         fields.each do |field|
           unless errors.any? { |e| fields.include?(e.attribute) }
-            errors.add(field, I18n.t("validations.not_answered", question: question.error_display_label&.downcase), category: :not_answered)
+            errors.add(field, I18n.t("validations.not_answered", question: downcase(question.error_display_label)), category: :not_answered)
           end
         end
       end
@@ -1271,13 +1271,13 @@ private
         fields.each do |field|
           if errors[field].none?
             block_log_creation!
-            errors.add(field, I18n.t("validations.invalid_option", question: ensure_punctuation(QUESTIONS[field])&.downcase), category: :setup)
+            errors.add(field, I18n.t("validations.invalid_option", question: ensure_punctuation(downcase(QUESTIONS[field]))), category: :setup)
           end
         end
       else
         fields.each do |field|
           unless errors.any? { |e| fields.include?(e.attribute) }
-            errors.add(field, I18n.t("validations.invalid_option", question: ensure_punctuation(QUESTIONS[field])&.downcase))
+            errors.add(field, I18n.t("validations.invalid_option", question: ensure_punctuation(downcase(QUESTIONS[field]))))
           end
         end
       end
@@ -1334,5 +1334,9 @@ private
     if field_35 == 9
       errors.add(:field_35, "Buyer 1 cannot be a child under 16.")
     end
+  end
+
+  def downcase(str)
+    downcase_first_letter(str)
   end
 end
