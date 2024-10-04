@@ -395,57 +395,57 @@ RSpec.describe Form::Question, type: :model do
     let(:question_with_id_only_no_punctuation) { described_class.new("address_line1_input", {}, page) }
 
     context "when the error label should stay the same" do
-      it "returns the error label" do
+      it "returns the error label unchanged with full stop" do
         expect(question_with_error_label_with_full_stop.error_display_label).to eq("Address line 1.")
       end
 
-      it "returns the error label" do
+      it "returns the error label unchanged with question mark" do
         expect(question_with_error_label_with_question_mark.error_display_label).to eq("Address line 1?")
       end
 
-      it "returns the error label" do
+      it "returns the check answer label unchanged with full stop" do
         expect(question_with_check_answer_label_with_full_stop.error_display_label).to eq("Address line 1.")
       end
 
-      it "returns the error label" do
+      it "returns the check answer label unchanged with question mark" do
         expect(question_with_check_answer_label_with_question_mark.error_display_label).to eq("Address line 1?")
       end
 
-      it "returns the error label" do
+      it "returns the header unchanged with full stop" do
         expect(question_with_header_with_full_stop.error_display_label).to eq("Address line 1.")
       end
 
-      it "returns the error label" do
+      it "returns the header unchanged with question mark" do
         expect(question_with_header_with_question_mark.error_display_label).to eq("Address line 1?")
       end
     end
 
     context "when the error label should have a full stop added" do
-      it "returns the error label" do
+      it "returns the error label with no punctuation changed to with a full stop" do
         expect(question_with_error_label_no_punctuation.error_display_label).to eq("Address line 1.")
       end
 
-      it "returns the error label" do
+      it "returns the error label with brackets changed to with a full stop" do
         expect(question_with_error_label_with_brackets.error_display_label).to eq("(Address line 1).")
       end
 
-      it "returns the error label" do
+      it "returns the check answer label with no punctuation changed with a full stop" do
         expect(question_with_check_answer_label_no_punctuation.error_display_label).to eq("Address line 1.")
       end
 
-      it "returns the error label" do
+      it "returns the check answer label with brackets changed with a full stop" do
         expect(question_with_check_answer_label_with_brackets.error_display_label).to eq("(Address line 1).")
       end
 
-      it "returns the error label" do
+      it "returns the header with no punctuation changed with a full stop" do
         expect(question_with_header_no_punctuation.error_display_label).to eq("Address line 1.")
       end
 
-      it "returns the error label" do
+      it "returns the header with brackets changed with a full stop" do
         expect(question_with_header_with_brackets.error_display_label).to eq("(Address line 1).")
       end
 
-      it "returns the error label" do
+      it "returns the id with no punctuation changed with a full stop" do
         expect(question_with_id_only_no_punctuation.error_display_label).to eq("Address line1 input.")
       end
     end
