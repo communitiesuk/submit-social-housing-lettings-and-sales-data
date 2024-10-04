@@ -8,7 +8,7 @@ class BulkUpload::Processor
 
   WRONG_TEMPLATE_ERRORS = [
     *I18n.t("activemodel.errors.models.bulk_upload/lettings/validator.attributes.base", default: {}).values,
-    *I18n.t("activemodel.errors.models.bulk_upload/sales/validator.attributes.base", default: {}).values
+    *I18n.t("activemodel.errors.models.bulk_upload/sales/validator.attributes.base", default: {}).values,
   ].freeze
 
   def initialize(bulk_upload:)
