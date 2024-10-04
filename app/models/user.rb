@@ -241,7 +241,7 @@ class User < ApplicationRecord
   def bulk_uploads_filters(specific_org: false)
     return [] unless support? && !specific_org
 
-    %w[years uploaded_by uploading_organisation]
+    %w[user years uploaded_by uploading_organisation user_text_search uploading_organisation_text_search]
   end
 
   delegate :name, to: :organisation, prefix: true
