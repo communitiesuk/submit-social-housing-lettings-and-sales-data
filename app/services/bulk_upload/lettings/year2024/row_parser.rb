@@ -924,12 +924,12 @@ private
     }.partition { |field, _| public_send(field).blank? }.map(&:to_h)
 
     blank_charge_fields.each do |field, charge|
-      errors.add(field, I18n.t("validations.financial.charges.missing_charges", question: charge))
+      errors.add(field, I18n.t("validations.financial.charges.missing_charges", sentence_fragment: charge))
     end
 
     other_charge_fields.each do |field, _charge|
       blank_charge_fields.each do |_blank_field, blank_charge|
-        errors.add(field, I18n.t("validations.financial.charges.missing_charges", question: blank_charge))
+        errors.add(field, I18n.t("validations.financial.charges.missing_charges", sentence_fragment: blank_charge))
       end
     end
   end
