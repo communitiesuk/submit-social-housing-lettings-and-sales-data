@@ -31,7 +31,8 @@ private
   def matching_path_conditions?
     [
       %r{organisations/\d+/users},
-      %r{organisations/\d+/logs},
+      %r{organisations/\d+/lettings-logs},
+      %r{organisations/\d+/sales-logs},
       %r{organisations/\d+/schemes},
       %r{organisations/\d+/stock-owners},
       %r{organisations/\d+/managing-agents},
