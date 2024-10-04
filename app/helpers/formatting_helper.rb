@@ -5,9 +5,9 @@ module FormattingHelper
     value.match?(/[[:punct:]]\z/) && !value.match?(/[(){}\[\]]\z/) ? value : "#{value}."
   end
 
-  def downcase_first_letter(str)
-    return str if str.blank?
+  def downcase_first_letter(sentence)
+    return sentence if sentence.blank?
 
-    str[0].downcase + str[1..]
+    sentence[0].downcase + sentence[1..]
   end
 end
