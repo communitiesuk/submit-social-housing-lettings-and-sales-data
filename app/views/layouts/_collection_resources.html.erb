@@ -23,4 +23,4 @@
   <% end %>
 </div>
 
-<%= govuk_button_link_to "Manage collection resources", collection_resources_path, secondary: true, class: "govuk-!-margin-bottom-2" if current_user&.support? %>
+<%= govuk_button_link_to "Manage collection resources", collection_resources_path, secondary: true, class: "govuk-!-margin-bottom-2" if current_user&.support? && FeatureToggle.managing_resources_enabled? %>
