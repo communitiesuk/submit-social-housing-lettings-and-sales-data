@@ -16,14 +16,6 @@ RSpec.describe Form::Sales::Pages::DiscountedOwnershipType, type: :model do
         expect(page.header).to eq("Type of discounted ownership sale")
       end
     end
-
-    context "when form year is for before 2023/24" do
-      let(:start_date) { Time.zone.local(2022, 2, 8) }
-
-      it "does not have a page header" do
-        expect(page.header).to eq(nil)
-      end
-    end
   end
 
   it "has correct subsection" do

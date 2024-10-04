@@ -50,7 +50,7 @@ class Form::Question
   delegate :form, to: :subsection
 
   def check_answer_label
-    return @check_answer_label if @copy_reference.nil?
+    return @check_answer_label if @copy_key.nil?
 
     I18n.t("forms.#{form.start_date.year}.#{@copy_key}.check_answer_label")
   end
