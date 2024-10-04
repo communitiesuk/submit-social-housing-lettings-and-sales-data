@@ -25,7 +25,7 @@ class Form::Page
   delegate :form, to: :subsection
 
   def header
-    @header if @copy_key.nil?
+    return @header if @copy_key.nil?
 
     I18n.t("forms.#{form.start_date.year}.#{@copy_key}.page_header")
   end
