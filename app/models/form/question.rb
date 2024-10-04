@@ -204,11 +204,12 @@ class Form::Question
   end
 
   def error_display_label
-    error_label || check_answer_label || header || id.humanize
+    label = error_label || check_answer_label || header || id.humanize
+    label.match?(/[[:punct:]]\z/) && !label.match?(/[(){}\[\]]\z/) ? label : "#{label}."
   end
 
   def unanswered_error_message
-    question_text = error_display_label.presence || "this question"
+    question_text = error_display_label.presence || "this question."
     I18n.t("validations.not_answered", question: question_text.downcase)
   end
 
