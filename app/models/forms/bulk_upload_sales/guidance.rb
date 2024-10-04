@@ -24,20 +24,12 @@ module Forms
         end
       end
 
-      def lettings_legacy_template_path
-        Forms::BulkUploadLettings::PrepareYourFile.new.legacy_template_path
-      end
-
       def lettings_template_path
         Forms::BulkUploadLettings::PrepareYourFile.new(year:).template_path
       end
 
       def lettings_specification_path
         Forms::BulkUploadLettings::PrepareYourFile.new(year:).specification_path
-      end
-
-      def sales_legacy_template_path
-        Forms::BulkUploadSales::PrepareYourFile.new.legacy_template_path
       end
 
       def sales_template_path
