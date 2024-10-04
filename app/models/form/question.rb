@@ -1,4 +1,6 @@
 class Form::Question
+  include FormattingHelper
+
   attr_accessor :id, :header, :hint_text, :description, :questions, :disable_clearing_if_not_routed_or_dynamic_answer_options,
                 :type, :min, :max, :step, :width, :fields_to_add, :result_field,
                 :conditional_for, :readonly, :answer_options, :page, :check_answer_label,
@@ -205,7 +207,7 @@ class Form::Question
 
   def error_display_label
     label = error_label || check_answer_label || header || id.humanize
-    label.match?(/[[:punct:]]\z/) && !label.match?(/[(){}\[\]]\z/) ? label : "#{label}."
+    ensure_punctuation(label)
   end
 
   def unanswered_error_message

@@ -2,6 +2,7 @@ class BulkUpload::Lettings::Year2024::RowParser
   include ActiveModel::Model
   include ActiveModel::Attributes
   include InterruptionScreenHelper
+  include FormattingHelper
 
   QUESTIONS = {
     field_1: "Which organisation owns this property?",
@@ -567,9 +568,9 @@ private
 
       fields.each do |field|
         if setup_question?(question)
-          errors.add(field, I18n.t("validations.invalid_option", question: QUESTIONS[field]), category: :setup)
+          errors.add(field, I18n.t("validations.invalid_option", question: ensure_punctuation(QUESTIONS[field])&.downcase), category: :setup)
         else
-          errors.add(field, I18n.t("validations.invalid_option", question: QUESTIONS[field]))
+          errors.add(field, I18n.t("validations.invalid_option", question: ensure_punctuation(QUESTIONS[field])&.downcase))
         end
       end
     end
@@ -800,7 +801,7 @@ private
 
   def validate_data_types
     unless attribute_set["field_11"].value_before_type_cast&.match?(/^\d+\.?0*$/)
-      errors.add(:field_11, I18n.t("validations.invalid_number", question: "rent type"))
+      errors.add(:field_11, I18n.t("validations.invalid_number", question: "rent type."))
     end
   end
 

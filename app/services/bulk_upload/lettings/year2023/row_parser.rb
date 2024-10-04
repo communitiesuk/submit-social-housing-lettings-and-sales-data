@@ -2,6 +2,7 @@ class BulkUpload::Lettings::Year2023::RowParser
   include ActiveModel::Model
   include ActiveModel::Attributes
   include InterruptionScreenHelper
+  include FormattingHelper
 
   QUESTIONS = {
     field_1: "Which organisation owns this property?",
@@ -289,7 +290,7 @@ class BulkUpload::Lettings::Year2023::RowParser
             },
             inclusion: {
               in: (1..12).to_a,
-              message: I18n.t("validations.invalid_option", question: "letting type"),
+              message: I18n.t("validations.invalid_option", question: "letting type."),
               unless: -> { field_5.blank? },
               category: :setup,
             },
@@ -543,9 +544,9 @@ private
 
       fields.each do |field|
         if setup_question?(question)
-          errors.add(field, I18n.t("validations.invalid_option", question: QUESTIONS[field]), category: :setup)
+          errors.add(field, I18n.t("validations.invalid_option", question: ensure_punctuation(QUESTIONS[field])&.downcase), category: :setup)
         else
-          errors.add(field, I18n.t("validations.invalid_option", question: QUESTIONS[field]))
+          errors.add(field, I18n.t("validations.invalid_option", question: ensure_punctuation(QUESTIONS[field])&.downcase))
         end
       end
     end
@@ -746,7 +747,7 @@ private
 
   def validate_data_types
     unless attribute_set["field_5"].value_before_type_cast&.match?(/^\d+\.?0*$/)
-      errors.add(:field_5, I18n.t("validations.invalid_number", question: "letting type"))
+      errors.add(:field_5, I18n.t("validations.invalid_number", question: "letting type."))
     end
   end
 
