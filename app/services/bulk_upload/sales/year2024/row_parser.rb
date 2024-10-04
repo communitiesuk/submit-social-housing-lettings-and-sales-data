@@ -1510,7 +1510,7 @@ private
     Organisation.find(bulk_upload.organisation_id)
   end
 
-  def downcase(str)
-    downcase_first_letter(str)
+  def downcase(sentence)
+    downcase_first_letter(sentence)
   end
 end
