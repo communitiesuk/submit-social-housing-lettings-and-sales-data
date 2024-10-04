@@ -10,7 +10,7 @@
             <% end %>
             <% row.with_action(
               text: "Change",
-              href: "/",
+              href: update_mandatory_collection_resource_path(year: resource.year, log_type: resource.log_type, resource_type: resource.resource_type),
             ) %>
           <% else %>
             <% row.with_value do %>

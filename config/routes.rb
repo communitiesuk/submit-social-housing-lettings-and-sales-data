@@ -42,6 +42,7 @@ Rails.application.routes.draw do
 
   get "collection-resources", to: "collection_resources#index"
   get "/collection-resources/:log_type/:year/:resource_type/download", to: "collection_resources#download_mandatory_collection_resource", as: :download_mandatory_collection_resource
+  get "/collection-resources/:log_type/:year/:resource_type/edit", to: "collection_resources#update_mandatory_collection_resource", as: :update_mandatory_collection_resource
 
   resources :collection_resources, path: "/collection-resources" do
     get "/download", to: "collection_resources#download_additional_collection_resource" # when we get to adding them

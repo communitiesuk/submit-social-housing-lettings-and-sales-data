@@ -23,7 +23,27 @@ class CollectionResourcesController < ApplicationController
     download_resource(resource.download_filename)
   end
 
+  def update_mandatory_collection_resource
+    return render_not_found unless current_user.support?
+
+    year = params[:year].to_i
+    resource_type = params[:resource_type]
+    log_type = params[:log_type]
+
+    return render_not_found unless resource_for_year_can_be_updated?(year)
+
+    @collection_resource = MandatoryCollectionResourcesService.generate_resource(log_type, year, resource_type)
+
+    return render_not_found unless @collection_resource
+
+    render "collection_resources/edit"
+  end
+
 private
+
+  def resource_params
+    params.require(:collection_resource).permit(:year, :log_type, :resource_type, :file)
+  end
 
   def download_resource(filename)
     url = "https://#{Rails.application.config.collection_resources_s3_bucket_name}.s3.amazonaws.com/#{filename}"
@@ -45,5 +65,9 @@ private
     return true if current_user&.support? && editable_collection_resource_years.include?(year)
 
     displayed_collection_resource_years.include?(year)
+  end
+
+  def resource_for_year_can_be_updated?(year)
+    editable_collection_resource_years.include?(year)
   end
 end
