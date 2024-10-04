@@ -7,14 +7,8 @@ class BulkUpload::Processor
   ].freeze
 
   WRONG_TEMPLATE_ERRORS = [
-    I18n.t("activemodel.errors.models.bulk_upload/lettings/validator.attributes.base.wrong_field_numbers_count"),
-    I18n.t("activemodel.errors.models.bulk_upload/lettings/validator.attributes.base.over_max_column_count"),
-    I18n.t("activemodel.errors.models.bulk_upload/lettings/validator.attributes.base.wrong_template"),
-    I18n.t("activemodel.errors.models.bulk_upload/lettings/validator.attributes.base.no_headers"),
-    I18n.t("activemodel.errors.models.bulk_upload/sales/validator.attributes.base.wrong_field_numbers_count"),
-    I18n.t("activemodel.errors.models.bulk_upload/sales/validator.attributes.base.over_max_column_count"),
-    I18n.t("activemodel.errors.models.bulk_upload/sales/validator.attributes.base.wrong_template"),
-    I18n.t("activemodel.errors.models.bulk_upload/sales/validator.attributes.base.no_headers"),
+    *I18n.t("activemodel.errors.models.bulk_upload/lettings/validator.attributes.base", default: {}).values,
+    *I18n.t("activemodel.errors.models.bulk_upload/sales/validator.attributes.base", default: {}).values
   ].freeze
 
   def initialize(bulk_upload:)
