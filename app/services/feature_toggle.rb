@@ -42,4 +42,8 @@ class FeatureToggle
   def self.allow_future_resource_updates?
     !Rails.env.production? && !Rails.env.test?
   end
+
+  def self.managing_resources_enabled?
+    !Rails.env.production?
+  end
 end
