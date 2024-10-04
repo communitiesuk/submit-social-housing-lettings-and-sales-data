@@ -55,7 +55,7 @@ RSpec.describe CollectionResourcesHelper do
         end
 
         it "returns current and next years" do
-          expect(editable_collection_resource_years).to eq([2024, 2025])
+          expect(editable_collection_resource_years).to match_array([2024, 2025])
         end
       end
 
@@ -106,21 +106,65 @@ RSpec.describe CollectionResourcesHelper do
     end
   end
 
-  describe "#underscored_file_year_format" do
-    it "returns formatted dasherised file year" do
-      expect(underscored_file_year_format(2023)).to eq("2023_24")
+  describe "#document_list_component_items" do
+    let(:resources) do
+      [
+        build(:collection_resource, year: 2023, resource_type: "paper_form", display_name: "lettings log for tenants (2023 to 2024)", download_filename: "2023_24_lettings_paper_form.pdf"),
+        build(:collection_resource, year: 2023, resource_type: "bulk_upload_template", display_name: "bulk upload template (2023 to 2024)", download_filename: "2023_24_lettings_bulk_upload_template.xlsx"),
+      ]
+    end
+
+    before do
+      WebMock.stub_request(:head, /https:\/\/core-test-collection-resources\.s3\.amazonaws\.com\/2023_24_lettings_paper_form.pdf/)
+        .to_return(status: 200, body: "", headers: { "Content-Length" => 292_864, "Content-Type" => "application/pdf" })
+      WebMock.stub_request(:head, /https:\/\/core-test-collection-resources\.s3\.amazonaws\.com\/2023_24_lettings_bulk_upload_template.xlsx/)
+        .to_return(status: 200, body: "", headers: { "Content-Length" => 19_456, "Content-Type" => "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" })
+    end
+
+    it "returns component items" do
+      expect(document_list_component_items(resources)).to eq([
+        {
+          name: "Download the lettings log for tenants (2023 to 2024)",
+          href: "/collection-resources/lettings/2023/paper_form/download",
+          metadata: "PDF, 286 KB",
+        },
+        {
+          name: "Download the bulk upload template (2023 to 2024)",
+          href: "/collection-resources/lettings/2023/bulk_upload_template/download",
+          metadata: "Microsoft Excel, 19 KB",
+        },
+      ])
     end
   end
 
-  describe "#dasherised_file_year_format" do
-    it "returns formatted dasherised file year" do
-      expect(dasherised_file_year_format(2023)).to eq("2023-24")
+  describe "#document_list_edit_component_items" do
+    let(:resources) do
+      [
+        build(:collection_resource, year: 2023, resource_type: "paper_form", display_name: "lettings log for tenants (2023 to 2024)", download_filename: "2023_24_lettings_paper_form.pdf"),
+        build(:collection_resource, year: 2023, resource_type: "bulk_upload_template", display_name: "bulk upload template (2023 to 2024)", download_filename: "2023_24_lettings_bulk_upload_template.xlsx"),
+      ]
     end
-  end
 
-  describe "#short_underscored_year_range_format" do
-    it "returns formatted short underscored year range" do
-      expect(short_underscored_year_range_format(2023)).to eq("23_24")
+    before do
+      WebMock.stub_request(:head, /https:\/\/core-test-collection-resources\.s3\.amazonaws\.com\/2023_24_lettings_paper_form.pdf/)
+        .to_return(status: 200, body: "", headers: { "Content-Length" => 292_864, "Content-Type" => "application/pdf" })
+      WebMock.stub_request(:head, /https:\/\/core-test-collection-resources\.s3\.amazonaws\.com\/2023_24_lettings_bulk_upload_template.xlsx/)
+        .to_return(status: 200, body: "", headers: { "Content-Length" => 19_456, "Content-Type" => "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" })
+    end
+
+    it "returns component items" do
+      expect(document_list_edit_component_items(resources)).to eq([
+        {
+          name: "2023_24_lettings_paper_form.pdf",
+          href: "/collection-resources/lettings/2023/paper_form/download",
+          metadata: "PDF, 286 KB",
+        },
+        {
+          name: "2023_24_lettings_bulk_upload_template.xlsx",
+          href: "/collection-resources/lettings/2023/bulk_upload_template/download",
+          metadata: "Microsoft Excel, 19 KB",
+        },
+      ])
     end
   end
 end

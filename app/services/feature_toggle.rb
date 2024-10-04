@@ -38,4 +38,8 @@ class FeatureToggle
   def self.local_storage?
     Rails.env.development?
   end
+
+  def self.allow_future_resource_updates?
+    !Rails.env.production? && !Rails.env.test?
+  end
 end

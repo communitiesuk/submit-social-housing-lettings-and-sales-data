@@ -324,7 +324,7 @@ RSpec.describe StartController, type: :request do
 
       context "and 2023 collection window is open for editing" do
         before do
-          allow(Time).to receive(:now).and_return(Time.zone.local(2024, 1, 1))
+          allow(Time).to receive(:now).and_return(Time.zone.local(2024, 4, 1))
         end
 
         it "displays correct resources for 2023/24 and 2024/25 collection years" do
