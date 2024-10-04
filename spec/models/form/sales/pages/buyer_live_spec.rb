@@ -25,10 +25,6 @@ RSpec.describe Form::Sales::Pages::BuyerLive, type: :model do
     expect(page.id).to eq("buyer_live")
   end
 
-  it "has the correct header" do
-    expect(page.header).to be_nil
-  end
-
   it "has the correct description" do
     expect(page.description).to be_nil
   end

@@ -11,7 +11,6 @@ class Form::Question
   def initialize(id, hsh, page)
     @id = id
     @page = page
-    @copy_reference = nil
     if hsh
       @check_answer_label = hsh["check_answer_label"]
       @header = hsh["header"]
