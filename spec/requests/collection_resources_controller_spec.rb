@@ -44,10 +44,11 @@ RSpec.describe CollectionResourcesController, type: :request do
         allow(Time.zone).to receive(:today).and_return(Time.zone.local(2025, 1, 8))
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
         sign_in user
-        get collection_resources_path
       end
 
       it "displays collection resources" do
+        get collection_resources_path
+
         expect(page).to have_content("Lettings 2024 to 2025")
         expect(page).to have_content("Lettings 2025 to 2026")
         expect(page).to have_content("Sales 2024 to 2025")
@@ -55,12 +56,18 @@ RSpec.describe CollectionResourcesController, type: :request do
       end
 
       it "displays mandatory filed" do
+        get collection_resources_path
+
         expect(page).to have_content("Paper form")
         expect(page).to have_content("Bulk upload template")
         expect(page).to have_content("Bulk upload specification")
       end
 
       context "when files are on S3" do
+        before do
+          get collection_resources_path
+        end
+
         it "displays file names with download links" do
           expect(page).to have_link("2024_25_lettings_paper_form.pdf", href: download_24_25_lettings_form_path)
           expect(page).to have_link("bulk-upload-lettings-template-2024-25.xlsx", href: download_24_25_lettings_bulk_upload_template_path)
@@ -79,6 +86,99 @@ RSpec.describe CollectionResourcesController, type: :request do
 
         it "displays change links" do
           expect(page).to have_selector(:link_or_button, "Change", count: 12)
+          expect(page).to have_link("Change", href: edit_24_25_lettings_form_path)
+        end
+      end
+
+      context "when files are not on S3" do
+        before do
+          WebMock.stub_request(:get, /https:\/\/core-test-collection-resources\.s3\.amazonaws\.com/)
+          .to_return(status: 404, body: "", headers: {})
+          get collection_resources_path
+        end
+
+        it "displays No file uploaded" do
+          expect(page).to have_content("No file uploaded")
+        end
+
+        it "displays upload links" do
+          expect(page).to have_selector(:link_or_button, "Upload", count: 12)
+        end
+      end
+    end
+  end
+
+  describe "GET #download_mandatory_collection_resource" do
+    before do
+      # rubocop:disable RSpec/AnyInstance
+      allow_any_instance_of(CollectionResourcesHelper).to receive(:editable_collection_resource_years).and_return([2025, 2026])
+      allow_any_instance_of(CollectionResourcesHelper).to receive(:displayed_collection_resource_years).and_return([2025])
+      # rubocop:enable RSpec/AnyInstance
+      allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+      sign_in user
+    end
+
+    context "when user is signed in as a data coordinator" do
+      let(:user) { create(:user, :data_coordinator) }
+
+      context "when the file exists on S3" do
+        before do
+          WebMock.stub_request(:get, /https:\/\/core-test-collection-resources\.s3\.amazonaws\.com/)
+          .to_return(status: 200, body: "file", headers: { "Content-Type" => "application/pdf", "Content-Length" => 1000 })
+          get download_mandatory_collection_resource_path(log_type: "lettings", year: 2025, resource_type: "paper_form")
+        end
+
+        it "downloads the file" do
+          expect(response.body).to eq("file")
+        end
+      end
+
+      context "when the file does not exist on S3" do
+        before do
+          WebMock.stub_request(:get, /https:\/\/core-test-collection-resources\.s3\.amazonaws\.com/)
+            .to_return(status: 404, body: "", headers: {})
+          get download_mandatory_collection_resource_path(log_type: "lettings", year: 2024, resource_type: "paper_form")
+        end
+
+        it "returns page not found" do
+          expect(response).to have_http_status(:not_found)
+        end
+      end
+
+      context "when resource isn't a mandatory resources" do
+        before do
+          get download_mandatory_collection_resource_path(log_type: "lettings", year: 2024, resource_type: "invalid_resource")
+        end
+
+        it "returns page not found" do
+          expect(response).to have_http_status(:not_found)
+        end
+      end
+
+      context "when year not in displayed_collection_resource_years" do
+        before do
+          get download_mandatory_collection_resource_path(log_type: "lettings", year: 2026, resource_type: "paper_form")
+        end
+
+        it "returns page not found" do
+          expect(response).to have_http_status(:not_found)
+        end
+      end
+    end
+
+    context "when user is signed in as a support user" do
+      let(:user) { create(:user, :support) }
+
+      context "when year is in editable_collection_resource_years but not in displayed_collection_resource_years" do
+        before do
+          WebMock.stub_request(:get, /https:\/\/core-test-collection-resources\.s3\.amazonaws\.com/)
+            .to_return(status: 200, body: "file", headers: { "Content-Type" => "application/pdf", "Content-Length" => 1000 })
+          get download_mandatory_collection_resource_path(log_type: "lettings", year: 2026, resource_type: "paper_form")
+        end
+
+        it "downloads the file" do
+          expect(response.status).to eq(200)
+          expect(response.body).to eq("file")
         end
       end
     end

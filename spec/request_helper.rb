@@ -106,6 +106,8 @@ module RequestHelper
 
     WebMock.stub_request(:head, /https:\/\/core-test-collection-resources\.s3\.amazonaws\.com/)
          .to_return(status: 200, body: "", headers: { "Content-Type" => "application/pdf", "Content-Length" => 1000 })
+    WebMock.stub_request(:get, /https:\/\/core-test-collection-resources\.s3\.amazonaws\.com/)
+         .to_return(status: 200, body: "file content")
   end
 
   def self.real_http_requests

@@ -34,4 +34,8 @@ class FeatureToggle
   def self.delete_user_enabled?
     true
   end
+
+  def self.allow_future_resource_updates?
+    !Rails.env.production? && !Rails.env.test?
+  end
 end

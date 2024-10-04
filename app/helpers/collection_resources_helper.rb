@@ -34,7 +34,7 @@ module CollectionResourcesHelper
 
   def editable_collection_resource_years
     return [previous_collection_start_year, current_collection_start_year] if FormHandler.instance.in_edit_crossover_period?
-    return [current_collection_start_year, next_collection_start_year] if Time.zone.today >= Time.zone.local(Time.zone.today.year, 1, 1) && Time.zone.today < Time.zone.local(Time.zone.today.year, 4, 1)
+    return [next_collection_start_year, current_collection_start_year] if (Time.zone.today >= Time.zone.local(Time.zone.today.year, 1, 1) && Time.zone.today < Time.zone.local(Time.zone.today.year, 4, 1)) || FeatureToggle.allow_future_resource_updates?
 
     [current_collection_start_year]
   end
@@ -47,23 +47,11 @@ module CollectionResourcesHelper
     "#{year} to #{year + 1}"
   end
 
-  def underscored_file_year_format(year)
-    "#{year}_#{(year + 1) % 100}"
-  end
-
-  def dasherised_file_year_format(year)
-    underscored_file_year_format(year).dasherize
-  end
-
-  def short_underscored_year_range_format(year)
-    "#{year % 100}_#{(year + 1) % 100}"
-  end
-
   def document_list_component_items(resources)
     resources.map do |resource|
       {
         name: "Download the #{resource.display_name}",
-        href: send(resource.download_path),
+        href: resource.download_path,
         metadata: file_type_size_and_pages(resource.download_filename),
       }
     end
@@ -73,9 +61,19 @@ module CollectionResourcesHelper
     resources.map do |resource|
       {
         name: resource.download_filename,
-        href: send(resource.download_path),
+        href: resource.download_path,
         metadata: file_type_size_and_pages(resource.download_filename),
       }
     end
+  end
+
+  def file_exists_on_s3?(file)
+    url = "https://#{Rails.application.config.collection_resources_s3_bucket_name}.s3.amazonaws.com/#{file}"
+    uri = URI.parse(url)
+
+    response = Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == "https") do |http|
+      http.request_head(uri)
+    end
+    response.is_a?(Net::HTTPSuccess) || response.is_a?(Net::HTTPRedirection)
   end
 end
