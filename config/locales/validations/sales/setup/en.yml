@@ -16,8 +16,9 @@ en:
                             "Enter a date when the owning organisation was active. %{owning_organisation} became active on %{available_from}."
 
                 owning_organisation:
-                    inactive_merged_organisation:
-                        "The owning organisation must be active on the sale completion date. %{owning_organisation} became inactive on %{merge_date} and was replaced by %{absorbing_organisation}."
-                    inactive_absorbing_organisation:
-                        "The owning organisation must be active on the sale completion date. %{owning_organisation} became active on %{available_from}."
+                    inactive:
+                        merged_organisation:
+                            "The owning organisation must be active on the sale completion date. %{owning_organisation} became inactive on %{merge_date} and was replaced by %{absorbing_organisation}."
+                        absorbing_organisation:
+                            "The owning organisation must be active on the sale completion date. %{owning_organisation} became active on %{available_from}."
 
