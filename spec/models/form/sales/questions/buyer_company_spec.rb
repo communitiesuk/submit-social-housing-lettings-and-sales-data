@@ -27,10 +27,6 @@ RSpec.describe Form::Sales::Questions::BuyerCompany, type: :model do
     expect(question.derived?(nil)).to be false
   end
 
-  it "has the correct hint_text" do
-    expect(question.hint_text).to be_nil
-  end
-
   it "has the correct answer_options" do
     expect(question.answer_options).to eq({
       "1" => { "value" => "Yes" },

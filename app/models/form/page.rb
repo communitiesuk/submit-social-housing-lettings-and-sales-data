@@ -1,5 +1,5 @@
 class Form::Page
-  attr_accessor :id, :header, :header_partial, :description, :questions, :depends_on, :title_text,
+  attr_accessor :id, :header_partial, :description, :questions, :depends_on, :title_text,
                 :informative_text, :subsection, :hide_subsection_label, :next_unresolved_page_id,
                 :skip_text, :interruption_screen_question_ids, :submit_text
 

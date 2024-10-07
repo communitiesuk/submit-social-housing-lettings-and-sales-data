@@ -1,7 +1,7 @@
 class Form::Question
-  attr_accessor :id, :header, :hint_text, :description, :questions, :disable_clearing_if_not_routed_or_dynamic_answer_options,
+  attr_accessor :id, :description, :questions, :disable_clearing_if_not_routed_or_dynamic_answer_options,
                 :type, :min, :max, :step, :width, :fields_to_add, :result_field,
-                :conditional_for, :readonly, :answer_options, :page, :check_answer_label,
+                :conditional_for, :readonly, :answer_options, :page,
                 :inferred_answers, :hidden_in_check_answers, :inferred_check_answers_value,
                 :top_guidance_partial, :bottom_guidance_partial, :prefix, :suffix,
                 :requires_js, :fields_added, :derived, :check_answers_card_number,
