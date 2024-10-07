@@ -2,7 +2,6 @@ class Form::Sales::Questions::OwnershipScheme < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "ownershipsch"
-    @copy_key = "sales.setup.ownershipsch"
     @type = "radio"
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
   end

@@ -3,7 +3,6 @@ class Form::Sales::Pages::SharedOwnershipType < ::Form::Page
     super
     @id = "shared_ownership_type"
     @copy_key = "sales.setup.type.shared_ownership"
-    @header = header
     @depends_on = [{
       "ownershipsch" => 1,
     }]

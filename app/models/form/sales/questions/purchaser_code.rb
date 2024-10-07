@@ -2,7 +2,6 @@ class Form::Sales::Questions::PurchaserCode < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "purchid"
-    @copy_key = "sales.setup.purchid"
     @type = "text"
     @width = 10
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]

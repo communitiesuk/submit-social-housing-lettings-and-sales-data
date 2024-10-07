@@ -4,7 +4,6 @@ class Form::Sales::Questions::CreatedById < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "assigned_to_id"
-    @copy_key = "sales.setup.assigned_to_id"
     @derived = true
     @type = "select"
   end

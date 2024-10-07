@@ -2,7 +2,6 @@ class Form::Sales::Questions::BuyerLive < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "buylivein"
-    @copy_key = "sales.setup.buylivein"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]

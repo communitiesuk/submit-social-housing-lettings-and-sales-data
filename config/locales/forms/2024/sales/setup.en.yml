@@ -99,12 +99,12 @@ en:
 
           privacynotice:
             joint_purchase:
-              page_header: ""
+              page_header: "Ministry of Housing, Communities and Local Government privacy notice"
               check_answer_label: "Buyers have seen the privacy notice?"
               hint_text: ""
               question_text: "Declaration"
             not_joint_purchase:
-              page_header: ""
+              page_header: "Ministry of Housing, Communities and Local Government privacy notice"
               check_answer_label: "Buyer has seen the privacy notice?"
               hint_text: ""
               question_text: "Declaration"

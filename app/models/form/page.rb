@@ -24,10 +24,12 @@ class Form::Page
 
   delegate :form, to: :subsection
 
-  def header
-    return @header if @copy_key.nil?
+  def copy_key
+    @copy_key ||= "#{form.type}.#{subsection.id}.#{questions[0].id}"
+  end
 
-    I18n.t("forms.#{form.start_date.year}.#{@copy_key}.page_header")
+  def header
+    @header ||= I18n.t("forms.#{form.start_date.year}.#{copy_key}.page_header")
   end
 
   def routed_to?(log, _current_user)

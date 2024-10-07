@@ -2,7 +2,7 @@ class Form::Sales::Pages::OutrightOwnershipType < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "outright_ownership_type"
-    @header = header
+    @copy_key = "sales.setup.type.outright_ownership"
     @depends_on = [{
       "ownershipsch" => 3,
     }]

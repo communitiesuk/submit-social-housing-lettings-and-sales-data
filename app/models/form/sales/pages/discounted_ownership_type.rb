@@ -3,7 +3,6 @@ class Form::Sales::Pages::DiscountedOwnershipType < ::Form::Page
     super
     @id = "discounted_ownership_type"
     @copy_key = "sales.setup.type.discounted_ownership"
-    @header = header
     @depends_on = [{
       "ownershipsch" => 2,
     }]

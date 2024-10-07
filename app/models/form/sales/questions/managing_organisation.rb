@@ -2,7 +2,6 @@ class Form::Sales::Questions::ManagingOrganisation < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "managing_organisation_id"
-    @copy_key = "sales.setup.managing_organisation_id"
     @derived = true
     @type = "select"
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]

@@ -2,7 +2,6 @@ class Form::Sales::Questions::NumberJointBuyers < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "jointmore"
-    @copy_key = "sales.setup.jointmore"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
