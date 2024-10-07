@@ -4,7 +4,7 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= form_with model: @collection_resource, scope: :form, url: update_mandatory_collection_resource_path, method: :patch do |f| %>
+    <%= form_with model: @collection_resource, url: update_mandatory_collection_resource_path, method: :patch do |f| %>
       <%= f.hidden_field :year %>
       <%= f.hidden_field :log_type %>
       <%= f.hidden_field :resource_type %>

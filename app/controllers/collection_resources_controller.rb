@@ -23,7 +23,7 @@ class CollectionResourcesController < ApplicationController
     download_resource(resource.download_filename)
   end
 
-  def update_mandatory_collection_resource
+  def edit
     return render_not_found unless current_user.support?
 
     year = params[:year].to_i
@@ -37,6 +37,31 @@ class CollectionResourcesController < ApplicationController
     return render_not_found unless @collection_resource
 
     render "collection_resources/edit"
+  end
+
+  def update
+    return render_not_found unless current_user.support?
+
+    year = resource_params[:year].to_i
+    resource_type = resource_params[:resource_type]
+    log_type = resource_params[:log_type]
+    file = resource_params[:file]
+
+    return render_not_found unless resource_for_year_can_be_updated?(year)
+
+    @collection_resource = MandatoryCollectionResourcesService.generate_resource(log_type, year, resource_type)
+    render_not_found unless @collection_resource
+
+    filename = @collection_resource.download_filename
+    begin
+      UploadCollectionResourcesService.upload_collection_resource(filename, file)
+    rescue StandardError
+      @collection_resource.errors.add(:file, "There was an error uploading this file.")
+      return render "collection_resources/edit"
+    end
+
+    flash[:notice] = "The #{log_type} #{text_year_range_format(year)} #{@collection_resource.short_display_name.downcase} has been updated"
+    redirect_to collection_resources_path
   end
 
 private
