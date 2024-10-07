@@ -568,9 +568,9 @@ private
 
       fields.each do |field|
         if setup_question?(question)
-          errors.add(field, I18n.t("validations.invalid_option", question: ensure_punctuation(downcase(QUESTIONS[field]))), category: :setup)
+          errors.add(field, I18n.t("validations.invalid_option", question: format_ending(downcase(QUESTIONS[field]))), category: :setup)
         else
-          errors.add(field, I18n.t("validations.invalid_option", question: ensure_punctuation(downcase(QUESTIONS[field]))))
+          errors.add(field, I18n.t("validations.invalid_option", question: format_ending(downcase(QUESTIONS[field]))))
         end
       end
     end
@@ -1643,7 +1643,7 @@ private
     Organisation.find(bulk_upload.organisation_id)
   end
 
-  def downcase(sentence)
-    downcase_first_letter(sentence)
+  def downcase(text)
+    downcase_first_letter(text)
   end
 end

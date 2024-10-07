@@ -1271,13 +1271,13 @@ private
         fields.each do |field|
           if errors[field].none?
             block_log_creation!
-            errors.add(field, I18n.t("validations.invalid_option", question: ensure_punctuation(downcase(QUESTIONS[field]))), category: :setup)
+            errors.add(field, I18n.t("validations.invalid_option", question: format_ending(downcase(QUESTIONS[field]))), category: :setup)
           end
         end
       else
         fields.each do |field|
           unless errors.any? { |e| fields.include?(e.attribute) }
-            errors.add(field, I18n.t("validations.invalid_option", question: ensure_punctuation(downcase(QUESTIONS[field]))))
+            errors.add(field, I18n.t("validations.invalid_option", question: format_ending(downcase(QUESTIONS[field]))))
           end
         end
       end
@@ -1336,7 +1336,7 @@ private
     end
   end
 
-  def downcase(sentence)
-    downcase_first_letter(sentence)
+  def downcase(text)
+    downcase_first_letter(text)
   end
 end

@@ -207,7 +207,7 @@ class Form::Question
 
   def error_display_label
     label = error_label || check_answer_label || header || id.humanize
-    ensure_punctuation(label)
+    format_ending(label)
   end
 
   def unanswered_error_message

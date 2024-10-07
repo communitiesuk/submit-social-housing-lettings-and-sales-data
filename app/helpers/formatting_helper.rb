@@ -1,13 +1,16 @@
 module FormattingHelper
-  def ensure_punctuation(value)
+  def format_ending(value)
     return value if value.blank?
 
-    value.match?(/[[:punct:]]\z/) && !value.match?(/[%(){}\[\]]\z/) ? value : "#{value}."
+    ends_with_any_punctuation = value.match?(/[[:punct:]]\z/)
+    ends_with_special_char = value.match?(/[%(){}\[\]]\z/)
+
+    ends_with_any_punctuation && !ends_with_special_char ? value : "#{value}."
   end
 
-  def downcase_first_letter(sentence)
-    return sentence if sentence.blank?
+  def downcase_first_letter(text)
+    return text if text.blank?
 
-    sentence[0].downcase + sentence[1..]
+    text[0].downcase + text[1..]
   end
 end
