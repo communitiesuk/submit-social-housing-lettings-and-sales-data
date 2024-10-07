@@ -28,14 +28,14 @@ module Validations::Sales::SetupValidations
     return unless record.saledate && date_valid?("saledate", record)
 
     if merged_owning_organisation_inactive?(record)
-      record.errors.add :saledate, I18n.t("validations.sales.setup.saledate.invalid.merged_organisations_saledate",
+      record.errors.add :saledate, I18n.t("validations.sales.setup.saledate.invalid.merged_organisations",
                                           owning_organisation: record.owning_organisation.name,
                                           merge_date: record.owning_organisation.merge_date.to_formatted_s(:govuk_date),
                                           absorbing_organisation: record.owning_organisation.absorbing_organisation.name)
     end
 
     if absorbing_owning_organisation_inactive?(record)
-      record.errors.add :saledate, I18n.t("validations.sales.setup.saledate.invalid.absorbing_organisations_saledate",
+      record.errors.add :saledate, I18n.t("validations.sales.setup.saledate.invalid.absorbing_organisations",
                                           owning_organisation: record.owning_organisation.name,
                                           available_from: record.owning_organisation.available_from.to_formatted_s(:govuk_date))
     end

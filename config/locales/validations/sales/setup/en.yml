@@ -10,9 +10,9 @@ en:
                         previous_and_current_collection_year:
                             "Enter a date within the %{previous_start_year_short}/%{previous_end_year_short} or %{previous_end_year_short}/%{current_end_year_short} collection years, which is between %{previous_start_year_long} and %{current_end_year_long}."
                     invalid:
-                        merged_organisations_saledate:
+                        merged_organisations:
                             "Enter a date when the owning organisation was active. %{owning_organisation} became inactive on %{merge_date} and was replaced by %{absorbing_organisation}."
-                        absorbing_organisations_saledate:
+                        absorbing_organisations:
                             "Enter a date when the owning organisation was active. %{owning_organisation} became active on %{available_from}."
 
                 owning_organisation:
