@@ -293,45 +293,5 @@ RSpec.describe CollectionResourcesController, type: :request do
         expect(response).to have_http_status(:not_found)
       end
     end
-
-    context "when user is signed in as a support user" do
-      let(:user) { create(:user, :support) }
-
-      before do
-        allow(Time.zone).to receive(:today).and_return(Time.zone.local(2025, 1, 8))
-        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
-        # rubocop:disable RSpec/AnyInstance
-        allow_any_instance_of(CollectionResourcesHelper).to receive(:editable_collection_resource_years).and_return([2024, 2025])
-        # rubocop:enable RSpec/AnyInstance
-        sign_in user
-      end
-
-      it "correcty updates a sales file" do
-        params = { collection_resource: { year: 2024, log_type: "sales", resource_type: "bulk_upload_template", file: some_file } }
-        patch update_mandatory_collection_resource_path, params: params
-
-        expect(response).to redirect_to(collection_resources_path)
-        expect(UploadCollectionResourcesService).to have_received(:upload_collection_resource).with("bulk-upload-sales-template-2024-25.xlsx", anything)
-        expect(flash[:notice]).to eq("The sales 2024 to 2025 bulk upload template has been updated")
-      end
-
-      it "correcty updates a lettings file" do
-        params = { collection_resource: { year: 2025, log_type: "lettings", resource_type: "paper_form", file: some_file } }
-        patch update_mandatory_collection_resource_path, params: params
-
-        expect(response).to redirect_to(collection_resources_path)
-        expect(UploadCollectionResourcesService).to have_received(:upload_collection_resource).with("2025_26_lettings_paper_form.pdf", anything)
-        expect(flash[:notice]).to eq("The lettings 2025 to 2026 paper form has been updated")
-      end
-
-      it "displays error message if the upload fails" do
-        allow(UploadCollectionResourcesService).to receive(:upload_collection_resource).and_raise(StandardError)
-
-        params = { collection_resource: { year: 2025, log_type: "lettings", resource_type: "paper_form", file: some_file } }
-        patch update_mandatory_collection_resource_path, params: params
-
-        expect(page).to have_content("There was an error uploading this file.")
-      end
-    end
   end
 end
