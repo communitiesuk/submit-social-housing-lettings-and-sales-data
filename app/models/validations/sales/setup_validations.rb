@@ -85,7 +85,7 @@ private
         previous_start_year_long: previous_collection_start_date.strftime("#{previous_collection_start_date.day.ordinalize} %B %Y"),
         current_end_year_short: current_collection_end_date.strftime("%y"),
         current_end_year_long: current_collection_end_date.strftime("#{current_collection_end_date.day.ordinalize} %B %Y"),
-        )
+      )
     else
       I18n.t(
         "validations.sales.setup.saledate.must_be_within.current_collection_year",
@@ -93,7 +93,7 @@ private
         current_start_year_long: current_collection_start_date.strftime("#{current_collection_start_date.day.ordinalize} %B %Y"),
         current_end_year_short: current_collection_end_date.strftime("%y"),
         current_end_year_long: current_collection_end_date.strftime("#{current_collection_end_date.day.ordinalize} %B %Y"),
-        )
+      )
     end
   end
 
