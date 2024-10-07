@@ -261,14 +261,7 @@ en:
       intermediate_rent_product_name:
         blank: "Enter name of other intermediate rent product."
       saledate:
-        later_than_14_days_after: "Sale completion date must not be later than 14 days from today’s date."
-        current_collection_year:
-          "Enter a date within the %{current_start_year_short}/%{current_end_year_short} collection year, which is between %{current_start_year_long} and %{current_end_year_long}."
-        previous_and_current_collection_year:
-          "Enter a date within the %{previous_start_year_short}/%{previous_end_year_short} or %{previous_end_year_short}/%{current_end_year_short} collection years, which is between %{previous_start_year_long} and %{current_end_year_long}."
         year_not_two_digits: "Sale completion year must be 2 digits."
-        invalid_merged_organisations_saledate: "Enter a date when the owning organisation was active. %{owning_organisation} became inactive on %{owning_organisation_merge_date} and was replaced by %{owning_absorbing_organisation}."
-        invalid_absorbing_organisations_saledate:  "Enter a date when the owning organisation was active. %{owning_organisation} became active on %{owning_organisation_available_from}."
       type:
         percentage_bought_must_be_at_least_threshold: "The minimum increase in equity while staircasing is %{threshold}% for this shared ownership type."
 
@@ -321,8 +314,6 @@ en:
         data_sharing_agreement_not_signed: "The organisation must accept the Data Sharing Agreement before it can be selected as the owning organisation."
         inactive_merged_organisation: "The owning organisation must be active on the tenancy start date. %{owning_organisation} became inactive on %{owning_organisation_merge_date} and was replaced by %{owning_absorbing_organisation}."
         inactive_absorbing_organisation: "The owning organisation must be active on the tenancy start date. %{owning_organisation} became active on %{owning_organisation_available_from}."
-        inactive_merged_organisation_sales: "The owning organisation must be active on the sale completion date. %{owning_organisation} became inactive on %{owning_organisation_merge_date} and was replaced by %{owning_absorbing_organisation}."
-        inactive_absorbing_organisation_sales: "The owning organisation must be active on the sale completion date. %{owning_organisation} became active on %{owning_organisation_available_from}."
       managing_organisation:
         invalid: "Please select the owning organisation or managing organisation that you belong to."
         data_sharing_agreement_not_signed: "The organisation must accept the Data Sharing Agreement before it can be selected as the managing organisation."
