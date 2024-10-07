@@ -445,7 +445,7 @@ RSpec.describe "bulk_update" do
         expect(Rails.logger).to receive(:info).with("Will not export log #{lettings_log_5.id} as it is before the exportable date")
         expect(Rails.logger).to receive(:info).with("No changes to location #{locations[1].id}.")
 
-        expect(Rails.logger).to receive(:info).with("Cannot update location #{locations[2].id} with postcode: SWAAA. Enter a postcode in the correct format, for example AA1 1AA")
+        expect(Rails.logger).to receive(:info).with("Cannot update location #{locations[2].id} with postcode: SWAAA. Enter a postcode in the correct format, for example AA1 1AA.")
         expect(Rails.logger).to receive(:info).with("Cannot update location #{locations[2].id} with scheme_code: S. Scheme with id S is not in the database")
         expect(Rails.logger).to receive(:info).with("Cannot update location #{locations[2].id} with location_admin_district: Westminst. Location admin distrint Westminst is not a valid option")
         expect(Rails.logger).to receive(:info).with("Cannot update location #{locations[2].id} with type_of_unit: elf-contained house. 'elf-contained house' is not a valid type_of_unit")
