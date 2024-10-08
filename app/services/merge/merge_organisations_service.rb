@@ -38,7 +38,9 @@ private
 
   def merge_rent_periods(merging_organisation)
     merging_organisation.rent_periods.each do |rent_period|
-      @absorbing_organisation.organisation_rent_periods << OrganisationRentPeriod.new(rent_period:) unless @absorbing_organisation.rent_periods.include?(rent_period)
+      unless @absorbing_organisation.organisation_rent_periods.exists?(rent_period: rent_period)
+        @absorbing_organisation.organisation_rent_periods << OrganisationRentPeriod.new(rent_period:)
+      end
     end
   end
 
