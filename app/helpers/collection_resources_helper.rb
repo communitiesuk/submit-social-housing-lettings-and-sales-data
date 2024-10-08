@@ -26,6 +26,7 @@ module CollectionResourcesHelper
 
   def displayed_collection_resource_years
     return [previous_collection_start_year, current_collection_start_year] if FormHandler.instance.in_edit_crossover_period?
+    return [current_collection_start_year, next_collection_start_year] if CollectionResource.where(year: next_collection_start_year, mandatory: true, released_to_user: true).any?
 
     [current_collection_start_year]
   end
@@ -70,6 +71,8 @@ module CollectionResourcesHelper
   end
 
   def display_next_year_banner?
+    return false if CollectionResource.where(year: next_collection_start_year, mandatory: true, released_to_user: true).any?
+    
     editable_collection_resource_years.include?(next_collection_start_year)
   end
 
