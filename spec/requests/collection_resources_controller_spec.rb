@@ -111,7 +111,7 @@ RSpec.describe CollectionResourcesController, type: :request do
 
         it "displays next year banner" do
           expect(page).to have_content("The 2025 to 2026 collection resources are not yet available to users.")
-          expect(page).to have_link("Release the 2025 to 2026 collection resources to users", href: release_mandatory_collection_resources_path(year: 2025))
+          expect(page).to have_link("Release the 2025 to 2026 collection resources to users", href: confirm_mandatory_collection_resources_release(year: 2025))
         end
       end
 
@@ -340,6 +340,64 @@ RSpec.describe CollectionResourcesController, type: :request do
       it "returns page not found" do
         patch update_mandatory_collection_resource_path, params: params
         expect(response).to have_http_status(:not_found)
+      end
+    end
+  end
+
+  describe "GET #confirm_mandatory_collection_resources_release" do
+    context "when user is not signed in" do
+      it "redirects to the sign in page" do
+        get confirm_mandatory_collection_resources_release_path(year: 2025)
+        expect(response).to redirect_to(new_user_session_path)
+      end
+    end
+
+    context "when user is signed in as a data coordinator" do
+      let(:user) { create(:user, :data_coordinator) }
+
+      before do
+        sign_in user
+      end
+
+      it "returns page not found" do
+        get confirm_mandatory_collection_resources_release_path(year: 2025)
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+
+    context "when user is signed in as a data provider" do
+      let(:user) { create(:user, :data_provider) }
+
+      before do
+        sign_in user
+      end
+
+      it "returns page not found" do
+        get confirm_mandatory_collection_resources_release_path(year: 2025)
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+
+    context "when user is signed in as a support user" do
+      let(:user) { create(:user, :support) }
+
+      before do
+        # rubocop:disable RSpec/AnyInstance
+        allow_any_instance_of(CollectionResourcesHelper).to receive(:editable_collection_resource_years).and_return([2025])
+        # rubocop:enable RSpec/AnyInstance
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in user
+      end
+
+      it "displays correct page content" do
+        get confirm_mandatory_collection_resources_release_path(year: 2025)
+
+        expect(page).to have_content("Are you sure you want to release the 2025 to 2026 collection resources?")
+        expect(page).to have_content("The files uploaded will immediately become available for users to download.")
+        expect(page).to have_content("You will not be able to undo this action.")
+        expect(page).to have_button("Release the resources")
+        expect(page).to have_link("Cancel", href: collection_resources_path)
+        expect(page).to have_link("Back", href: collection_resources_path)
       end
     end
   end

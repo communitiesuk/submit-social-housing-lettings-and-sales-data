@@ -68,6 +68,16 @@ class CollectionResourcesController < ApplicationController
     redirect_to collection_resources_path
   end
 
+  def confirm_mandatory_collection_resources_release
+    return render_not_found unless current_user.support?
+
+    @year = params[:year].to_i
+
+    return render_not_found unless editable_collection_resource_years.include?(@year)
+
+    render "collection_resources/confirm_mandatory_collection_resources_release"
+  end
+
 private
 
   def resource_params

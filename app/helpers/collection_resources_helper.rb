@@ -72,7 +72,7 @@ module CollectionResourcesHelper
 
   def display_next_year_banner?
     return false if CollectionResource.where(year: next_collection_start_year, mandatory: true, released_to_user: true).any?
-    
+
     editable_collection_resource_years.include?(next_collection_start_year)
   end
 
