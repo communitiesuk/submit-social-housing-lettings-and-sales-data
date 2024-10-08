@@ -544,9 +544,9 @@ private
 
       fields.each do |field|
         if setup_question?(question)
-          errors.add(field, I18n.t("validations.invalid_option", question: format_ending(downcase(QUESTIONS[field]))), category: :setup)
+          errors.add(field, I18n.t("validations.invalid_option", question: format_ending(QUESTIONS[field])), category: :setup)
         else
-          errors.add(field, I18n.t("validations.invalid_option", question: format_ending(downcase(QUESTIONS[field]))))
+          errors.add(field, I18n.t("validations.invalid_option", question: format_ending(QUESTIONS[field])))
         end
       end
     end
@@ -764,14 +764,14 @@ private
         fields.each do |field|
           if errors.select { |e| fields.include?(e.attribute) }.none?
             question_text = question.error_display_label.presence || "this question."
-            errors.add(field, I18n.t("validations.not_answered", question: downcase(question_text)), category: :setup) if field.present?
+            errors.add(field, I18n.t("validations.not_answered", question: format_ending(question_text)), category: :setup) if field.present?
           end
         end
       else
         fields.each do |field|
           unless errors.any? { |e| fields.include?(e.attribute) }
             question_text = question.error_display_label.presence || "this question."
-            errors.add(field, I18n.t("validations.not_answered", question: downcase(question_text)), category: :not_answered)
+            errors.add(field, I18n.t("validations.not_answered", question: format_ending(question_text)), category: :not_answered)
           end
         end
       end
@@ -1606,9 +1606,5 @@ private
 
   def is_carehome
     field_127.present? ? 1 : 0
-  end
-
-  def downcase(text)
-    downcase_first_letter(text)
   end
 end
