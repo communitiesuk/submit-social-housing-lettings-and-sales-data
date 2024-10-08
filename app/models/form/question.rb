@@ -53,15 +53,15 @@ class Form::Question
   end
 
   def check_answer_label
-    @check_answer_label ||= I18n.t("forms.#{form.start_date.year}.#{copy_key}.check_answer_label")
+    @check_answer_label ||= I18n.t("forms.#{form.start_date.year}.#{copy_key}.check_answer_label", default: "")
   end
 
   def header
-    @header ||= I18n.t("forms.#{form.start_date.year}.#{copy_key}.question_text")
+    @header ||= I18n.t("forms.#{form.start_date.year}.#{copy_key}.question_text", default: "")
   end
 
   def hint_text
-    @hint_text ||= I18n.t("forms.#{form.start_date.year}.#{copy_key}.hint_text")
+    @hint_text ||= I18n.t("forms.#{form.start_date.year}.#{copy_key}.hint_text", default: "")
   end
 
   def answer_label(log, user = nil)

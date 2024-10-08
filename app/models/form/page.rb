@@ -29,7 +29,7 @@ class Form::Page
   end
 
   def header
-    @header ||= I18n.t("forms.#{form.start_date.year}.#{copy_key}.page_header")
+    @header ||= I18n.t("forms.#{form.start_date.year}.#{copy_key}.page_header", default: "")
   end
 
   def routed_to?(log, _current_user)
