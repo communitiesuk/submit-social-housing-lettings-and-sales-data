@@ -52,11 +52,15 @@ class CollectionResourcesController < ApplicationController
     @collection_resource = MandatoryCollectionResourcesService.generate_resource(log_type, year, resource_type)
     render_not_found unless @collection_resource
 
+    validate_file(file)
+
+    return render "collection_resources/edit" if @collection_resource.errors.any?
+
     filename = @collection_resource.download_filename
     begin
       UploadCollectionResourcesService.upload_collection_resource(filename, file)
     rescue StandardError
-      @collection_resource.errors.add(:file, "There was an error uploading this file.")
+      @collection_resource.errors.add(:file, :error_uploading)
       return render "collection_resources/edit"
     end
 
@@ -85,5 +89,24 @@ private
 
   def resource_for_year_can_be_updated?(year)
     editable_collection_resource_years.include?(year)
+  end
+
+  def validate_file(file)
+    return @collection_resource.errors.add(:file, :blank) unless file
+    return @collection_resource.errors.add(:file, :above_100_mb) if file.size > 100.megabytes
+
+    argv = %W[file --brief --mime-type -- #{file.path}]
+    output = `#{argv.shelljoin}`
+
+    case @collection_resource.resource_type
+    when "paper_form"
+      unless output.match?(/application\/pdf/)
+        @collection_resource.errors.add(:file, :must_be_pdf)
+      end
+    when "bulk_upload_template", "bulk_upload_specification"
+      unless output.match?(/application\/vnd\.ms-excel|application\/vnd\.openxmlformats-officedocument\.spreadsheetml\.sheet/)
+        @collection_resource.errors.add(:file, :must_be_xlsx, resource: @collection_resource.short_display_name.downcase)
+      end
+    end
   end
 end
