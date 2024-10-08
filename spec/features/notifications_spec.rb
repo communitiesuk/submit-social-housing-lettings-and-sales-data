@@ -3,6 +3,12 @@ require_relative "form/helpers"
 
 RSpec.describe "Notifications Features" do
   include Helpers
+  let(:storage_service) { instance_double(Storage::S3Service) }
+
+  before do
+    allow(Storage::S3Service).to receive(:new).and_return(storage_service)
+    allow(storage_service).to receive(:configuration).and_return(OpenStruct.new(bucket_name: "core-test-collection-resources"))
+  end
 
   context "when there are notifications" do
     let!(:user) { FactoryBot.create(:user) }
