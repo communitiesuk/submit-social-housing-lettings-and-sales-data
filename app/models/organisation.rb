@@ -115,7 +115,7 @@ class Organisation < ApplicationRecord
     mappings = RentPeriod.rent_period_mappings
     return %w[All] if (mappings.keys.map(&:to_i) - rent_period_ids).empty?
 
-    rent_period_ids.map { |id| mappings.dig(id.to_s, "value") }.compact.sort_by do |label|
+    rent_period_ids.map { |id| mappings.dig(id.to_s, "value") }.compact.uniq.sort_by do |label|
       mappings.keys.index { |key| mappings[key]["value"] == label }
     end
   end
