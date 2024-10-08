@@ -20,7 +20,7 @@ module Validations::Sales::SetupValidations
     return unless record.saledate && date_valid?("saledate", record) && !FeatureToggle.allow_future_form_use?
 
     if record.saledate > Time.zone.today + 14.days
-      record.errors.add :saledate, I18n.t("validations.sales.setup.saledate.not_within_next_two_weeks")
+      record.errors.add :saledate, I18n.t("validations.sales.setup.saledate.not_within.next_two_weeks")
     end
   end
 
