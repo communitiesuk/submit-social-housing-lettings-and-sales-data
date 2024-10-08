@@ -86,6 +86,19 @@ RSpec.describe CollectionResourcesController, type: :request do
 
         it "displays change links" do
           expect(page).to have_selector(:link_or_button, "Change", count: 12)
+          expect(page).to have_link("Change", href: edit_mandatory_collection_resource_path(year: 2024, log_type: "lettings", resource_type: "paper_form"))
+          expect(page).to have_link("Change", href: edit_mandatory_collection_resource_path(year: 2024, log_type: "lettings", resource_type: "bulk_upload_template"))
+          expect(page).to have_link("Change", href: edit_mandatory_collection_resource_path(year: 2024, log_type: "lettings", resource_type: "bulk_upload_specification"))
+          expect(page).to have_link("Change", href: edit_mandatory_collection_resource_path(year: 2024, log_type: "sales", resource_type: "paper_form"))
+          expect(page).to have_link("Change", href: edit_mandatory_collection_resource_path(year: 2024, log_type: "sales", resource_type: "bulk_upload_template"))
+          expect(page).to have_link("Change", href: edit_mandatory_collection_resource_path(year: 2024, log_type: "sales", resource_type: "bulk_upload_specification"))
+
+          expect(page).to have_link("Change", href: edit_mandatory_collection_resource_path(year: 2025, log_type: "lettings", resource_type: "paper_form"))
+          expect(page).to have_link("Change", href: edit_mandatory_collection_resource_path(year: 2025, log_type: "lettings", resource_type: "bulk_upload_template"))
+          expect(page).to have_link("Change", href: edit_mandatory_collection_resource_path(year: 2025, log_type: "lettings", resource_type: "bulk_upload_specification"))
+          expect(page).to have_link("Change", href: edit_mandatory_collection_resource_path(year: 2025, log_type: "sales", resource_type: "paper_form"))
+          expect(page).to have_link("Change", href: edit_mandatory_collection_resource_path(year: 2025, log_type: "sales", resource_type: "bulk_upload_template"))
+          expect(page).to have_link("Change", href: edit_mandatory_collection_resource_path(year: 2025, log_type: "sales", resource_type: "bulk_upload_specification"))
         end
       end
 
@@ -179,6 +192,145 @@ RSpec.describe CollectionResourcesController, type: :request do
           expect(response.status).to eq(200)
           expect(response.body).to eq("file")
         end
+      end
+    end
+  end
+
+  describe "GET #edit_mandatory_collection_resource" do
+    context "when user is not signed in" do
+      it "redirects to the sign in page" do
+        get edit_mandatory_collection_resource_path(year: 2024, log_type: "sales", resource_type: "bulk_upload_template")
+        expect(response).to redirect_to(new_user_session_path)
+      end
+    end
+
+    context "when user is signed in as a data coordinator" do
+      let(:user) { create(:user, :data_coordinator) }
+
+      before do
+        sign_in user
+      end
+
+      it "returns page not found" do
+        get edit_mandatory_collection_resource_path(year: 2024, log_type: "sales", resource_type: "bulk_upload_template")
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+
+    context "when user is signed in as a data provider" do
+      let(:user) { create(:user, :data_provider) }
+
+      before do
+        sign_in user
+      end
+
+      it "returns page not found" do
+        get edit_mandatory_collection_resource_path(year: 2024, log_type: "sales", resource_type: "bulk_upload_template")
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+
+    context "when user is signed in as a support user" do
+      let(:user) { create(:user, :support) }
+
+      before do
+        allow(Time.zone).to receive(:today).and_return(Time.zone.local(2025, 1, 8))
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in user
+      end
+
+      it "displays update collection resources page content" do
+        get edit_mandatory_collection_resource_path(year: 2024, log_type: "sales", resource_type: "bulk_upload_template")
+
+        expect(page).to have_content("Sales 2024 to 2025")
+        expect(page).to have_content("Change the bulk upload template")
+        expect(page).to have_content("This file will be available for all users to download.")
+        expect(page).to have_content("Upload file")
+        expect(page).to have_button("Save changes")
+        expect(page).to have_link("Back", href: collection_resources_path)
+        expect(page).to have_link("Cancel", href: collection_resources_path)
+      end
+    end
+  end
+
+  describe "PATCH #update_mandatory_collection_resource" do
+    let(:some_file) { File.open(file_fixture("blank_bulk_upload_sales.csv")) }
+    let(:params) { { collection_resource: { year: 2024, log_type: "sales", resource_type: "bulk_upload_template", file: some_file } } }
+
+    before do
+      allow(UploadCollectionResourcesService).to receive(:upload_collection_resource)
+    end
+
+    context "when user is not signed in" do
+      it "redirects to the sign in page" do
+        patch update_mandatory_collection_resource_path(year: 2024, log_type: "sales", resource_type: "bulk_upload_template", file: some_file)
+        expect(response).to redirect_to(new_user_session_path)
+      end
+    end
+
+    context "when user is signed in as a data coordinator" do
+      let(:user) { create(:user, :data_coordinator) }
+
+      before do
+        sign_in user
+      end
+
+      it "returns page not found" do
+        patch update_mandatory_collection_resource_path, params: params
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+
+    context "when user is signed in as a data provider" do
+      let(:user) { create(:user, :data_provider) }
+
+      before do
+        sign_in user
+      end
+
+      it "returns page not found" do
+        patch update_mandatory_collection_resource_path, params: params
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+
+    context "when user is signed in as a support user" do
+      let(:user) { create(:user, :support) }
+
+      before do
+        allow(Time.zone).to receive(:today).and_return(Time.zone.local(2025, 1, 8))
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        # rubocop:disable RSpec/AnyInstance
+        allow_any_instance_of(CollectionResourcesHelper).to receive(:editable_collection_resource_years).and_return([2024, 2025])
+        # rubocop:enable RSpec/AnyInstance
+        sign_in user
+      end
+
+      it "correcty updates a sales file" do
+        params = { collection_resource: { year: 2024, log_type: "sales", resource_type: "bulk_upload_template", file: some_file } }
+        patch update_mandatory_collection_resource_path, params: params
+
+        expect(response).to redirect_to(collection_resources_path)
+        expect(UploadCollectionResourcesService).to have_received(:upload_collection_resource).with("bulk-upload-sales-template-2024-25.xlsx", anything)
+        expect(flash[:notice]).to eq("The sales 2024 to 2025 bulk upload template has been updated")
+      end
+
+      it "correcty updates a lettings file" do
+        params = { collection_resource: { year: 2025, log_type: "lettings", resource_type: "paper_form", file: some_file } }
+        patch update_mandatory_collection_resource_path, params: params
+
+        expect(response).to redirect_to(collection_resources_path)
+        expect(UploadCollectionResourcesService).to have_received(:upload_collection_resource).with("2025_26_lettings_paper_form.pdf", anything)
+        expect(flash[:notice]).to eq("The lettings 2025 to 2026 paper form has been updated")
+      end
+
+      it "displays error message if the upload fails" do
+        allow(UploadCollectionResourcesService).to receive(:upload_collection_resource).and_raise(StandardError)
+
+        params = { collection_resource: { year: 2025, log_type: "lettings", resource_type: "paper_form", file: some_file } }
+        patch update_mandatory_collection_resource_path, params: params
+
+        expect(page).to have_content("There was an error uploading this file.")
       end
     end
   end
