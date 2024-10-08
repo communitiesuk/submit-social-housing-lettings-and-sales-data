@@ -401,4 +401,72 @@ RSpec.describe CollectionResourcesController, type: :request do
       end
     end
   end
+
+  describe "PATCH #release_mandatory_collection_resources_path" do
+    let(:some_file) { File.open(file_fixture("blank_bulk_upload_sales.csv")) }
+
+    before do
+      allow(UploadCollectionResourcesService).to receive(:upload_collection_resource)
+    end
+
+    context "when user is not signed in" do
+      it "redirects to the sign in page" do
+        patch release_mandatory_collection_resources_path(year: 2024)
+        expect(response).to redirect_to(new_user_session_path)
+      end
+    end
+
+    context "when user is signed in as a data coordinator" do
+      let(:user) { create(:user, :data_coordinator) }
+
+      before do
+        sign_in user
+      end
+
+      it "returns page not found" do
+        patch release_mandatory_collection_resources_path(year: 2024)
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+
+    context "when user is signed in as a data provider" do
+      let(:user) { create(:user, :data_provider) }
+
+      before do
+        sign_in user
+      end
+
+      it "returns page not found" do
+        patch release_mandatory_collection_resources_path(year: 2024)
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+
+    context "when user is signed in as a support user" do
+      let(:user) { create(:user, :support) }
+
+      before do
+        # rubocop:disable RSpec/AnyInstance
+        allow_any_instance_of(CollectionResourcesHelper).to receive(:editable_collection_resource_years).and_return([2025])
+        # rubocop:enable RSpec/AnyInstance
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in user
+      end
+
+      it "saves resources as released to users" do
+        expect(CollectionResource.where(year: 2025, mandatory: true, released_to_user: true).count).to eq(0)
+
+        patch release_mandatory_collection_resources_path(year: 2025)
+        expect(CollectionResource.all.count).to eq(6)
+        expect(CollectionResource.where(year: 2025, mandatory: true, released_to_user: true, log_type: "sales", resource_type: "paper_form").count).to eq(1)
+        expect(CollectionResource.where(year: 2025, mandatory: true, released_to_user: true, log_type: "sales", resource_type: "bulk_upload_template").count).to eq(1)
+        expect(CollectionResource.where(year: 2025, mandatory: true, released_to_user: true, log_type: "sales", resource_type: "bulk_upload_specification").count).to eq(1)
+        expect(CollectionResource.where(year: 2025, mandatory: true, released_to_user: true, log_type: "lettings", resource_type: "paper_form").count).to eq(1)
+        expect(CollectionResource.where(year: 2025, mandatory: true, released_to_user: true, log_type: "lettings", resource_type: "bulk_upload_template").count).to eq(1)
+        expect(CollectionResource.where(year: 2025, mandatory: true, released_to_user: true, log_type: "lettings", resource_type: "bulk_upload_specification").count).to eq(1)
+        expect(response).to redirect_to(collection_resources_path)
+        expect(flash[:notice]).to eq("The 2025 to 2026 collection resources are now available to users.")
+      end
+    end
+  end
 end
