@@ -67,7 +67,8 @@ class StartController < ApplicationController
 private
 
   def download_resource(file, filename)
-    url = "https://#{Rails.application.config.collection_resources_s3_bucket_name}.s3.amazonaws.com/#{file}"
+    storage_service = Storage::S3Service.new(Configuration::EnvConfigurationService.new, ENV["COLLECTION_RESOURCES_BUCKET"])
+    url = "https://#{storage_service.configuration.bucket_name}.s3.amazonaws.com/#{file}"
     uri = URI.parse(url)
 
     response = Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http|

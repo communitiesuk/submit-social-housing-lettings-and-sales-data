@@ -11,7 +11,8 @@ module CollectionResourcesHelper
 
   def file_type_size_and_pages(file, number_of_pages: nil)
     file_pages = number_of_pages ? pluralize(number_of_pages, "page") : nil
-    url = "https://#{Rails.application.config.collection_resources_s3_bucket_name}.s3.amazonaws.com/#{file}"
+    storage_service = Storage::S3Service.new(Configuration::EnvConfigurationService.new, ENV["COLLECTION_RESOURCES_BUCKET"])
+    url = "https://#{storage_service.configuration.bucket_name}.s3.amazonaws.com/#{file}"
     uri = URI.parse(url)
 
     response = Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == "https") do |http|
