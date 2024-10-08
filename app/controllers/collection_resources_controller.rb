@@ -60,7 +60,7 @@ class CollectionResourcesController < ApplicationController
     begin
       UploadCollectionResourcesService.upload_collection_resource(filename, file)
     rescue StandardError
-      @collection_resource.errors.add(:file, "There was an error uploading this file.")
+      @collection_resource.errors.add(:file, :error_uploading)
       return render "collection_resources/edit"
     end
 
@@ -101,8 +101,8 @@ private
   end
 
   def validate_file(file)
-    return @collection_resource.errors.add(:file, "Select which file to upload") unless file
-    return @collection_resource.errors.add(:file, "The file is above 100MB") if file.size > 100.megabytes
+    return @collection_resource.errors.add(:file, :blank) unless file
+    return @collection_resource.errors.add(:file, :above_100_mb) if file.size > 100.megabytes
 
     argv = %W[file --brief --mime-type -- #{file.path}]
     output = `#{argv.shelljoin}`
@@ -110,11 +110,11 @@ private
     case @collection_resource.resource_type
     when "paper_form"
       unless output.match?(/application\/pdf/)
-        @collection_resource.errors.add(:file, "The paper form must be a PDF.")
+        @collection_resource.errors.add(:file, :must_be_pdf)
       end
     when "bulk_upload_template", "bulk_upload_specification"
       unless output.match?(/application\/vnd\.ms-excel|application\/vnd\.openxmlformats-officedocument\.spreadsheetml\.sheet/)
-        @collection_resource.errors.add(:file, "The #{@collection_resource.short_display_name.downcase} must be a Microsoft Excel file.")
+        @collection_resource.errors.add(:file, :must_be_xlsx, resource: @collection_resource.short_display_name.downcase)
       end
     end
   end
