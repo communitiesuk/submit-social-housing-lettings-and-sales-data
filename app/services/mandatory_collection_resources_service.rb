@@ -16,6 +16,8 @@ class MandatoryCollectionResourcesService
   end
 
   def self.generate_resource(log_type, year, resource_type)
+    return unless log_type && year && resource_type
+    return unless %w[lettings sales].include?(log_type)
     return unless MANDATORY_RESOURCES.include?(resource_type)
 
     CollectionResource.new(
