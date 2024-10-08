@@ -59,17 +59,25 @@ class LettingsLog < Log
     query.all
   }
   scope :search_by, lambda { |param|
-    by_id = Arel.sql("CASE WHEN lettings_logs.id = #{param.to_i} THEN 0 ELSE 1 END")
-    by_tenant_code = Arel.sql("CASE WHEN tenancycode = '#{param}' THEN 0 WHEN tenancycode ILIKE '%#{param}%' THEN 1 ELSE 2 END")
-    by_propcode = Arel.sql("CASE WHEN propcode = '#{param}' THEN 0 WHEN propcode ILIKE '%#{param}%' THEN 1 ELSE 2 END")
-    by_postcode = Arel.sql("CASE WHEN REPLACE(postcode_full, ' ', '') = '#{param.delete(' ')}' THEN 0 when REPLACE(postcode_full, ' ', '') ILIKE '%#{param.delete(' ')}%' then 1 ELSE 2 END")
+    sanitized_param = ActiveRecord::Base.sanitize_sql(param)
+    param_without_spaces = sanitized_param.delete(" ")
+
+    by_id = Arel.sql("CASE WHEN lettings_logs.id = ? THEN 0 ELSE 1 END")
+    by_tenant_code = Arel.sql("CASE WHEN tenancycode = ? THEN 0 WHEN tenancycode ILIKE ? THEN 1 ELSE 2 END")
+    by_propcode = Arel.sql("CASE WHEN propcode = ? THEN 0 WHEN propcode ILIKE ? THEN 1 ELSE 2 END")
+    by_postcode = Arel.sql("CASE WHEN REPLACE(postcode_full, ' ', '') = ? THEN 0 WHEN REPLACE(postcode_full, ' ', '') ILIKE ? THEN 1 ELSE 2 END")
 
     filter_by_location_postcode(param)
       .or(filter_by_tenant_code(param))
       .or(filter_by_propcode(param))
       .or(filter_by_postcode(param))
       .or(filter_by_id(param.gsub(/log/i, "")))
-      .order(by_id, by_tenant_code, by_propcode, by_postcode)
+      .order(
+        [by_id, sanitized_param.to_i],
+        [by_tenant_code, sanitized_param, sanitized_param],
+        [by_propcode, sanitized_param, sanitized_param],
+        [by_postcode, param_without_spaces, param_without_spaces],
+      )
   }
   scope :after_date, ->(date) { where("lettings_logs.startdate >= ?", date) }
   scope :before_date, ->(date) { where("lettings_logs.startdate < ?", date) }
@@ -132,7 +140,7 @@ class LettingsLog < Log
           illness_type_10: false)
   }
 
-  scope :filter_by_user_text_search, ->(param, user) { where(assigned_to: user.support? ? User.search_by(param) : User.own_and_managing_org_users(user.organisation).search_by(param)) }
+  scope :filter_by_user_text_search, ->(param, user) { where(assigned_to: User.visible(user).search_by(param)) }
   scope :filter_by_owning_organisation_text_search, ->(param, _user) { where(owning_organisation: Organisation.search_by(param)) }
   scope :filter_by_managing_organisation_text_search, ->(param, _user) { where(managing_organisation: Organisation.search_by(param)) }
 

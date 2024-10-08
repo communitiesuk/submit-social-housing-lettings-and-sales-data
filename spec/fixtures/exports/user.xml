@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<forms>
+  <form>
+    <id>{id}</id>
+    <email>{email}</email>
+    <name>Danny Rojas</name>
+    <organisation_id>{organisation_id}</organisation_id>
+    <sign_in_count>5</sign_in_count>
+    <last_sign_in_at/>
+    <role>data_provider</role>
+    <phone>1234512345123 123</phone>
+    <is_dpo>false</is_dpo>
+    <is_key_contact>false</is_key_contact>
+    <active>true</active>
+    <organisation_name>MHCLG</organisation_name>
+  </form>
+</forms>

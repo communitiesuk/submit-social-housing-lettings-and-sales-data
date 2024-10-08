@@ -3,8 +3,8 @@ class DataExportXmlJob < ApplicationJob
 
   def perform(full_update: false)
     storage_service = Storage::S3Service.new(Configuration::EnvConfigurationService.new, ENV["EXPORT_BUCKET"])
-    export_service = Exports::LettingsLogExportService.new(storage_service)
+    export_service = Exports::ExportService.new(storage_service)
 
-    export_service.export_xml_lettings_logs(full_update:)
+    export_service.export_xml(full_update:)
   end
 end
