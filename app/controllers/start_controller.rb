@@ -66,20 +66,10 @@ class StartController < ApplicationController
 
 private
 
-  def download_resource(file, filename)
-    storage_service = Storage::S3Service.new(Configuration::EnvConfigurationService.new, ENV["COLLECTION_RESOURCES_BUCKET"])
-    url = "https://#{storage_service.configuration.bucket_name}.s3.amazonaws.com/#{file}"
-    uri = URI.parse(url)
+  def download_resource(filename, download_filename)
+    file = CollectionResourcesService.new.get_file(filename)
+    render_not_found unless file
 
-    response = Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http|
-      request = Net::HTTP::Get.new(uri)
-      http.request(request)
-    end
-
-    if response.is_a?(Net::HTTPSuccess)
-      send_data(response.body, disposition: "attachment", filename:)
-    else
-      render_not_found
-    end
+    send_data(file, disposition: "attachment", filename: download_filename)
   end
 end

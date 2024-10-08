@@ -11,17 +11,12 @@ module CollectionResourcesHelper
 
   def file_type_size_and_pages(file, number_of_pages: nil)
     file_pages = number_of_pages ? pluralize(number_of_pages, "page") : nil
-    storage_service = Storage::S3Service.new(Configuration::EnvConfigurationService.new, ENV["COLLECTION_RESOURCES_BUCKET"])
-    url = "https://#{storage_service.configuration.bucket_name}.s3.amazonaws.com/#{file}"
-    uri = URI.parse(url)
+    metadata = CollectionResourcesService.new.get_file_metadata(file)
 
-    response = Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == "https") do |http|
-      http.request_head(uri)
-    end
-    return [file_pages].compact.join(", ") unless response.is_a?(Net::HTTPSuccess) || response.is_a?(Net::HTTPRedirection)
+    return [file_pages].compact.join(", ") unless metadata
 
-    file_size = number_to_human_size(response["Content-Length"].to_i)
-    file_type = HUMAN_READABLE_CONTENT_TYPE[response["Content-Type"].to_sym] || "Unknown File Type"
+    file_size = number_to_human_size(metadata["Content-Length"].to_i)
+    file_type = HUMAN_READABLE_CONTENT_TYPE[metadata["Content-Type"].to_sym] || "Unknown File Type"
     [file_type, file_size, file_pages].compact.join(", ")
   end
 end
