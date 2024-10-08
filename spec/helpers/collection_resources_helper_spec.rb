@@ -163,4 +163,54 @@ RSpec.describe CollectionResourcesHelper do
       ])
     end
   end
+
+  describe "#display_next_year_banner?" do
+    context "when next year is not editable" do
+      before do
+        allow(FormHandler.instance).to receive(:in_edit_crossover_period?).and_return(true)
+      end
+
+      it "returns false" do
+        expect(display_next_year_banner?).to be_falsey
+      end
+    end
+
+    context "when next year is editable" do
+      before do
+        allow(FormHandler.instance).to receive(:in_edit_crossover_period?).and_return(false)
+        allow(Time.zone).to receive(:today).and_return(Time.zone.local(2025, 1, 1))
+      end
+
+      it "returns true" do
+        expect(display_next_year_banner?).to be_truthy
+      end
+    end
+  end
+
+  describe "#next_year_banner_text" do
+    let(:lettings_resources) { MandatoryCollectionResourcesService.generate_resources("lettings", [next_collection_start_year]) }
+    let(:sales_resources) { MandatoryCollectionResourcesService.generate_resources("sales", [next_collection_start_year]) }
+
+    context "when all the mandatory resources for next year are uploaded" do
+      before do
+        WebMock.stub_request(:head, /https:\/\/core-test-collection-resources\.s3\.amazonaws\.com/)
+          .to_return(status: 200, body: "", headers: { "Content-Length" => 292_864, "Content-Type" => "application/pdf" })
+      end
+
+      it "returns correct text" do
+        expect(next_year_banner_text(lettings_resources, sales_resources)).to match(/Release the 2025 to 2026 collection resources to users/)
+      end
+    end
+
+    context "when some of the mandatory resources for next year are not uploaded" do
+      before do
+        WebMock.stub_request(:head, /https:\/\/core-test-collection-resources\.s3\.amazonaws\.com/)
+          .to_return(status: 404, body: "", headers: { "Content-Length" => 292_864, "Content-Type" => "application/pdf" })
+      end
+
+      it "returns correct text" do
+        expect(next_year_banner_text(lettings_resources, sales_resources)).to eq("Once you have uploaded all the required 2025 to 2026 collection resources, you will be able to release them to users.")
+      end
+    end
+  end
 end

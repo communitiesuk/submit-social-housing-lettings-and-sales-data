@@ -108,6 +108,11 @@ RSpec.describe CollectionResourcesController, type: :request do
           expect(page).to have_link("Change", href: edit_mandatory_collection_resource_path(year: 2025, log_type: "sales", resource_type: "bulk_upload_template"))
           expect(page).to have_link("Change", href: edit_mandatory_collection_resource_path(year: 2025, log_type: "sales", resource_type: "bulk_upload_specification"))
         end
+
+        it "displays next year banner" do
+          expect(page).to have_content("The 2025 to 2026 collection resources are not yet available to users.")
+          expect(page).to have_link("Release the 2025 to 2026 collection resources to users", href: release_mandatory_collection_resources_path(year: 2025))
+        end
       end
 
       context "when files are not on S3" do
@@ -135,6 +140,11 @@ RSpec.describe CollectionResourcesController, type: :request do
           expect(page).to have_link("Upload", href: edit_mandatory_collection_resource_path(year: 2025, log_type: "sales", resource_type: "paper_form"))
           expect(page).to have_link("Upload", href: edit_mandatory_collection_resource_path(year: 2025, log_type: "sales", resource_type: "bulk_upload_template"))
           expect(page).to have_link("Upload", href: edit_mandatory_collection_resource_path(year: 2025, log_type: "sales", resource_type: "bulk_upload_specification"))
+        end
+
+        it "displays next year banner" do
+          expect(page).to have_content("The 2025 to 2026 collection resources are not yet available to users.")
+          expect(page).to have_content("Once you have uploaded all the required 2025 to 2026 collection resources, you will be able to release them to users.")
         end
       end
     end
