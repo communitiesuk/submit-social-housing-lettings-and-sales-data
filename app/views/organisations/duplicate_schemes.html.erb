@@ -4,7 +4,16 @@
 <%= form_with model: @organisation, url: schemes_duplicates_organisation_path(@organisation), method: "post" do |f| %>
   <%= f.govuk_error_summary %>
 
-  <% title = "Review these sets of schemes and locations" %>
+  <% if @duplicate_schemes.any? %>
+    <% if @duplicate_locations.any? %>
+      <% title = "Review these sets of schemes and locations" %>
+    <% else %>
+      <% title = "Review these sets of schemes" %>
+      <% end %>
+  <% else %>
+    <% title = "Review these sets of locations" %>
+  <% end %>
+
   <% content_for :title, title %>
 
   <% if current_user.support? %>

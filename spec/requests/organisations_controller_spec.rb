@@ -376,10 +376,6 @@ RSpec.describe OrganisationsController, type: :request do
           get "/organisations/#{organisation.id}/schemes/duplicates", headers:
         end
 
-        it "has page heading" do
-          expect(page).to have_content("Review these sets of schemes and locations")
-        end
-
         context "with duplicate schemes and locations" do
           let(:schemes) { create_list(:scheme, 5, :duplicate, owning_organisation: organisation) }
 
@@ -395,6 +391,10 @@ RSpec.describe OrganisationsController, type: :request do
 
           it "displays the duplicate locations" do
             expect(page).to have_content("These 2 sets of locations might have duplicates")
+          end
+
+          it "has page heading" do
+            expect(page).to have_content("Review these sets of schemes and locations")
           end
         end
 
@@ -414,12 +414,12 @@ RSpec.describe OrganisationsController, type: :request do
 
         before do
           sign_in user
-          create_list(:scheme, 5, :duplicate)
+          create_list(:scheme, 5, :duplicate, owning_organisation: organisation)
           get "/organisations/#{organisation.id}/schemes/duplicates", headers:
         end
 
         it "has page heading" do
-          expect(page).to have_content("Review these sets of schemes and locations")
+          expect(page).to have_content("Review these sets of schemes")
         end
       end
 
