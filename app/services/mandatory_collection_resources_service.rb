@@ -30,6 +30,17 @@ class MandatoryCollectionResourcesService
     )
   end
 
+  def self.release_resources(year)
+    sales_resources = resources_per_year(year, "sales")
+    lettings_resources = resources_per_year(year, "lettings")
+
+    (sales_resources + lettings_resources).each do |resource|
+      resource.released_to_user = true
+      resource.mandatory = true
+      resource.save!
+    end
+  end
+
   def self.display_name(resource, year, log_type)
     year_range = "#{year} to #{year + 1}"
     case resource

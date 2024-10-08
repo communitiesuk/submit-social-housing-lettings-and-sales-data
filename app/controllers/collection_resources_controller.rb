@@ -78,6 +78,19 @@ class CollectionResourcesController < ApplicationController
     render "collection_resources/confirm_mandatory_collection_resources_release"
   end
 
+  def release_mandatory_collection_resources
+    return render_not_found unless current_user.support?
+
+    year = params[:year].to_i
+
+    return render_not_found unless editable_collection_resource_years.include?(year)
+
+    MandatoryCollectionResourcesService.release_resources(year)
+
+    flash[:notice] = "The #{text_year_range_format(year)} collection resources are now available to users."
+    redirect_to collection_resources_path
+  end
+
 private
 
   def resource_params
