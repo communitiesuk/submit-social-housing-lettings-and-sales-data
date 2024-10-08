@@ -122,6 +122,19 @@ RSpec.describe CollectionResourcesController, type: :request do
 
         it "displays upload links" do
           expect(page).to have_selector(:link_or_button, "Upload", count: 12)
+          expect(page).to have_link("Upload", href: edit_mandatory_collection_resource_path(year: 2024, log_type: "lettings", resource_type: "paper_form"))
+          expect(page).to have_link("Upload", href: edit_mandatory_collection_resource_path(year: 2024, log_type: "lettings", resource_type: "bulk_upload_template"))
+          expect(page).to have_link("Upload", href: edit_mandatory_collection_resource_path(year: 2024, log_type: "lettings", resource_type: "bulk_upload_specification"))
+          expect(page).to have_link("Upload", href: edit_mandatory_collection_resource_path(year: 2024, log_type: "sales", resource_type: "paper_form"))
+          expect(page).to have_link("Upload", href: edit_mandatory_collection_resource_path(year: 2024, log_type: "sales", resource_type: "bulk_upload_template"))
+          expect(page).to have_link("Upload", href: edit_mandatory_collection_resource_path(year: 2024, log_type: "sales", resource_type: "bulk_upload_specification"))
+
+          expect(page).to have_link("Upload", href: edit_mandatory_collection_resource_path(year: 2025, log_type: "lettings", resource_type: "paper_form"))
+          expect(page).to have_link("Upload", href: edit_mandatory_collection_resource_path(year: 2025, log_type: "lettings", resource_type: "bulk_upload_template"))
+          expect(page).to have_link("Upload", href: edit_mandatory_collection_resource_path(year: 2025, log_type: "lettings", resource_type: "bulk_upload_specification"))
+          expect(page).to have_link("Upload", href: edit_mandatory_collection_resource_path(year: 2025, log_type: "sales", resource_type: "paper_form"))
+          expect(page).to have_link("Upload", href: edit_mandatory_collection_resource_path(year: 2025, log_type: "sales", resource_type: "bulk_upload_template"))
+          expect(page).to have_link("Upload", href: edit_mandatory_collection_resource_path(year: 2025, log_type: "sales", resource_type: "bulk_upload_specification"))
         end
       end
     end
@@ -243,16 +256,37 @@ RSpec.describe CollectionResourcesController, type: :request do
         sign_in user
       end
 
-      it "displays update collection resources page content" do
-        get edit_mandatory_collection_resource_path(year: 2024, log_type: "sales", resource_type: "bulk_upload_template")
+      context "and the file exists on S3" do
+        it "displays update collection resources page content" do
+          get edit_mandatory_collection_resource_path(year: 2024, log_type: "sales", resource_type: "bulk_upload_template")
 
-        expect(page).to have_content("Sales 2024 to 2025")
-        expect(page).to have_content("Change the bulk upload template")
-        expect(page).to have_content("This file will be available for all users to download.")
-        expect(page).to have_content("Upload file")
-        expect(page).to have_button("Save changes")
-        expect(page).to have_link("Back", href: collection_resources_path)
-        expect(page).to have_link("Cancel", href: collection_resources_path)
+          expect(page).to have_content("Sales 2024 to 2025")
+          expect(page).to have_content("Change the bulk upload template")
+          expect(page).to have_content("This file will be available for all users to download.")
+          expect(page).to have_content("Upload file")
+          expect(page).to have_button("Save changes")
+          expect(page).to have_link("Back", href: collection_resources_path)
+          expect(page).to have_link("Cancel", href: collection_resources_path)
+        end
+      end
+
+      context "and the file does not exist on S3" do
+        before do
+          WebMock.stub_request(:head, /https:\/\/core-test-collection-resources\.s3\.amazonaws\.com/)
+            .to_return(status: 404, body: "", headers: {})
+        end
+
+        it "displays upload collection resources page content" do
+          get edit_mandatory_collection_resource_path(year: 2024, log_type: "sales", resource_type: "bulk_upload_template")
+
+          expect(page).to have_content("Sales 2024 to 2025")
+          expect(page).to have_content("Upload the bulk upload template")
+          expect(page).to have_content("This file will be available for all users to download.")
+          expect(page).to have_content("Upload file")
+          expect(page).to have_button("Upload")
+          expect(page).to have_link("Back", href: collection_resources_path)
+          expect(page).to have_link("Cancel", href: collection_resources_path)
+        end
       end
     end
   end
