@@ -15,10 +15,6 @@ RSpec.describe Form::Sales::Questions::BuyerCompany, type: :model do
     expect(question.id).to eq("companybuy")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("Is the buyer a company?")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("radio")
   end

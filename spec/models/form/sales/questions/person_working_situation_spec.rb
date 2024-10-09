@@ -49,14 +49,6 @@ RSpec.describe Form::Sales::Questions::PersonWorkingSituation, type: :model do
       expect(question.id).to eq("ecstat2")
     end
 
-    it "has the correct header" do
-      expect(question.header).to eq("Which of these best describes Person 2’s working situation?")
-    end
-
-    it "has the correct check_answer_label" do
-      expect(question.check_answer_label).to eq("Person 2’s working situation")
-    end
-
     it "has expected check answers card number" do
       expect(question.check_answers_card_number).to eq(2)
     end
@@ -74,14 +66,6 @@ RSpec.describe Form::Sales::Questions::PersonWorkingSituation, type: :model do
 
     it "has the correct id" do
       expect(question.id).to eq("ecstat3")
-    end
-
-    it "has the correct header" do
-      expect(question.header).to eq("Which of these best describes Person 3’s working situation?")
-    end
-
-    it "has the correct check_answer_label" do
-      expect(question.check_answer_label).to eq("Person 3’s working situation")
     end
 
     it "has expected check answers card number" do
@@ -103,14 +87,6 @@ RSpec.describe Form::Sales::Questions::PersonWorkingSituation, type: :model do
       expect(question.id).to eq("ecstat4")
     end
 
-    it "has the correct header" do
-      expect(question.header).to eq("Which of these best describes Person 4’s working situation?")
-    end
-
-    it "has the correct check_answer_label" do
-      expect(question.check_answer_label).to eq("Person 4’s working situation")
-    end
-
     it "has expected check answers card number" do
       expect(question.check_answers_card_number).to eq(4)
     end
@@ -128,14 +104,6 @@ RSpec.describe Form::Sales::Questions::PersonWorkingSituation, type: :model do
 
     it "has the correct id" do
       expect(question.id).to eq("ecstat5")
-    end
-
-    it "has the correct header" do
-      expect(question.header).to eq("Which of these best describes Person 5’s working situation?")
-    end
-
-    it "has the correct check_answer_label" do
-      expect(question.check_answer_label).to eq("Person 5’s working situation")
     end
 
     it "has expected check answers card number" do

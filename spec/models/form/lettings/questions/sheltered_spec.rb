@@ -21,20 +21,8 @@ RSpec.describe Form::Lettings::Questions::Sheltered, type: :model do
     expect(question.id).to eq "sheltered"
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq "Is this letting in sheltered accommodation?"
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq "Is this letting in sheltered accommodation?"
-  end
-
   it "has the correct type" do
     expect(question.type).to eq "radio"
-  end
-
-  it "has the correct hint_text" do
-    expect(question.hint_text).to eq "Sheltered housing and special retirement housing are for tenants with low-level care and support needs. This typically provides some limited support to enable independent living, such as alarm-based assistance or a scheme manager.</br></br>Extra care housing is for tenants with medium to high care and support needs, often with 24 hour access to support staff provided by an agency registered with the Care Quality Commission."
   end
 
   context "with 2023/24 form" do

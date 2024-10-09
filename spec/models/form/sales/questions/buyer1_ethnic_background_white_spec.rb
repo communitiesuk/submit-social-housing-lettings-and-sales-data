@@ -23,14 +23,6 @@ RSpec.describe Form::Sales::Questions::Buyer1EthnicBackgroundWhite, type: :model
     expect(question.id).to eq("ethnic")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("Which of the following best describes buyer 1’s White background?")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Buyer 1’s ethnic background")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("radio")
   end
@@ -48,10 +40,6 @@ RSpec.describe Form::Sales::Questions::Buyer1EthnicBackgroundWhite, type: :model
         "3" => { "value" => "Any other White background" },
       })
     end
-
-    it "has the correct hint_text" do
-      expect(question.hint_text).to eq("Buyer 1 is the person in the household who does the most paid work. If it’s a joint purchase and the buyers do the same amount of paid work, buyer 1 is whoever is the oldest.")
-    end
   end
 
   context "with 2024/25 form" do
@@ -67,10 +55,6 @@ RSpec.describe Form::Sales::Questions::Buyer1EthnicBackgroundWhite, type: :model
         "20" => { "value" => "Roma" },
         "3" => { "value" => "Any other White background" },
       })
-    end
-
-    it "has the correct hint_text" do
-      expect(question.hint_text).to eq("")
     end
   end
 

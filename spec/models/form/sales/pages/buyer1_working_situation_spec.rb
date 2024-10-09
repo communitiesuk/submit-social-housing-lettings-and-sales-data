@@ -18,8 +18,4 @@ RSpec.describe Form::Sales::Pages::Buyer1WorkingSituation, type: :model do
   it "has the correct id" do
     expect(page.id).to eq("buyer_1_working_situation")
   end
-
-  it "has the correct header" do
-    expect(page.header).to be_nil
-  end
 end

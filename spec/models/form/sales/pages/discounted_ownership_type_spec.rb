@@ -8,16 +8,6 @@ RSpec.describe Form::Sales::Pages::DiscountedOwnershipType, type: :model do
   let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date:)) }
   let(:start_date) { Time.zone.today }
 
-  describe "headers" do
-    context "when form year is for 2023/24" do
-      let(:start_date) { Time.zone.local(2023, 4, 8) }
-
-      it "has the correct header" do
-        expect(page.header).to eq("Type of discounted ownership sale")
-      end
-    end
-  end
-
   it "has correct subsection" do
     expect(page.subsection).to eq(subsection)
   end

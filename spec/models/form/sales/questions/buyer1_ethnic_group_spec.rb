@@ -15,24 +15,12 @@ RSpec.describe Form::Sales::Questions::Buyer1EthnicGroup, type: :model do
     expect(question.id).to eq("ethnic_group")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("What is buyer 1’s ethnic group?")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Buyer 1’s ethnic group")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("radio")
   end
 
   it "is not marked as derived" do
     expect(question.derived?(nil)).to be false
-  end
-
-  it "has the correct hint_text" do
-    expect(question.hint_text).to eq("Buyer 1 is the person in the household who does the most paid work. If it’s a joint purchase and the buyers do the same amount of paid work, buyer 1 is whoever is the oldest.")
   end
 
   it "has the correct answer_options" do

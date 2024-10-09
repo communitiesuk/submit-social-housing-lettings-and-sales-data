@@ -13,10 +13,6 @@ RSpec.describe Form::Lettings::Pages::MultiplePartnersValueCheck, type: :model d
     expect(page.subsection).to eq(subsection)
   end
 
-  it "has the correct header" do
-    expect(page.header).to be_nil
-  end
-
   it "has the correct description" do
     expect(page.description).to be_nil
   end

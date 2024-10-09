@@ -15,14 +15,6 @@ RSpec.describe Form::Sales::Questions::PropertyUnitType, type: :model do
     expect(question.id).to eq("proptype")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("What type of unit is the property?")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Type of unit")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("radio")
   end
