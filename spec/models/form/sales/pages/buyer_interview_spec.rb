@@ -22,4 +22,20 @@ RSpec.describe Form::Sales::Pages::BuyerInterview, type: :model do
   it "has the correct description" do
     expect(page.description).to be_nil
   end
+
+  context "when there are joint buyers" do
+    subject(:page) { described_class.new(page_id, page_definition, subsection, joint_purchase: true) }
+
+    it "has the expected copy_key" do
+      expect(page.copy_key).to eq("sales.setup.noint.joint_purchase")
+    end
+  end
+
+  context "when there is a single buyer" do
+    subject(:page) { described_class.new(page_id, page_definition, subsection, joint_purchase: false) }
+
+    it "has the expected copy_key" do
+      expect(page.copy_key).to eq("sales.setup.noint.not_joint_purchase")
+    end
+  end
 end

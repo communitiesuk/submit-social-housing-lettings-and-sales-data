@@ -29,21 +29,27 @@ RSpec.describe Form::Sales::Pages::PrivacyNotice, type: :model do
     expect(page.description).to be_nil
   end
 
-  it "has correct depends_on" do
-    expect(page.depends_on).to eq([{ "not_joint_purchase?" => true }, { "jointpur" => nil }])
-  end
-
-  context "with joint purchase" do
+  context "when there are joint buyers" do
     subject(:page) { described_class.new(page_id, page_definition, subsection, joint_purchase: true) }
 
-    let(:page_id) { "privacy_notice_joint_purchase" }
+    it "has the expected copy_key" do
+      expect(page.copy_key).to eq("sales.setup.privacynotice.joint_purchase")
+    end
 
     it "has correct depends_on" do
       expect(page.depends_on).to eq([{ "joint_purchase?" => true }])
     end
+  end
 
-    it "has the correct id" do
-      expect(page.id).to eq("privacy_notice_joint_purchase")
+  context "when there is a single buyer" do
+    subject(:page) { described_class.new(page_id, page_definition, subsection, joint_purchase: false) }
+
+    it "has the expected copy_key" do
+      expect(page.copy_key).to eq("sales.setup.privacynotice.not_joint_purchase")
+    end
+
+    it "has correct depends_on" do
+      expect(page.depends_on).to eq([{ "not_joint_purchase?" => true }, { "jointpur" => nil }])
     end
   end
 end

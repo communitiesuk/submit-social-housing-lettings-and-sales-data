@@ -31,6 +31,22 @@ RSpec.describe Form::Sales::Questions::PrivacyNotice, type: :model do
     expect(question.derived?(nil)).to be false
   end
 
+  context "when there are joint buyers" do
+    subject(:question) { described_class.new(question_id, question_definition, page, joint_purchase: true) }
+
+    it "has the expected copy_key" do
+      expect(question.copy_key).to eq("sales.setup.privacynotice.joint_purchase")
+    end
+  end
+
+  context "when there is a single buyer" do
+    subject(:question) { described_class.new(question_id, question_definition, page, joint_purchase: false) }
+
+    it "has the expected copy_key" do
+      expect(question.copy_key).to eq("sales.setup.privacynotice.not_joint_purchase")
+    end
+  end
+
   context "when the form year is before 2024" do
     before do
       allow(form).to receive(:start_year_after_2024?).and_return(false)

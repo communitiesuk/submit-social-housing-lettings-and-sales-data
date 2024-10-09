@@ -29,4 +29,20 @@ RSpec.describe Form::Sales::Questions::BuyerInterview, type: :model do
       "1" => { "value" => "No" },
     })
   end
+
+  context "when there are joint buyers" do
+    subject(:question) { described_class.new(question_id, question_definition, page, joint_purchase: true) }
+
+    it "has the expected copy_key" do
+      expect(question.copy_key).to eq("sales.setup.noint.joint_purchase")
+    end
+  end
+
+  context "when there is a single buyer" do
+    subject(:question) { described_class.new(question_id, question_definition, page, joint_purchase: false) }
+
+    it "has the expected copy_key" do
+      expect(question.copy_key).to eq("sales.setup.noint.not_joint_purchase")
+    end
+  end
 end
