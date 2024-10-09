@@ -64,12 +64,6 @@ module CollectionResourcesHelper
   end
 
   def file_exists_on_s3?(file)
-    url = "https://#{Rails.application.config.collection_resources_s3_bucket_name}.s3.amazonaws.com/#{file}"
-    uri = URI.parse(url)
-
-    response = Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == "https") do |http|
-      http.request_head(uri)
-    end
-    response.is_a?(Net::HTTPSuccess) || response.is_a?(Net::HTTPRedirection)
+    CollectionResourcesService.new.file_exists_on_s3?(file)
   end
 end

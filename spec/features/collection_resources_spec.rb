@@ -2,9 +2,12 @@ require "rails_helper"
 
 RSpec.describe "Collection resources" do
   let(:user) { create(:user, :support) }
+  let(:collection_resources_service) { instance_double(CollectionResourcesService, file_exists_on_s3?: true) }
 
   before do
-    allow(UploadCollectionResourcesService).to receive(:upload_collection_resource)
+    allow(CollectionResourcesService).to receive(:new).and_return(collection_resources_service)
+    allow(collection_resources_service).to receive(:upload_collection_resource)
+    allow(collection_resources_service).to receive(:get_file_metadata).and_return({ "Content-Type" => "application/pdf", "Content-Length" => 1000 })
     allow(user).to receive(:need_two_factor_authentication?).and_return(false)
     sign_in user
   end
@@ -29,7 +32,7 @@ RSpec.describe "Collection resources" do
       click_button("Save changes")
 
       expect(page).not_to have_content("The paper form must be a PDF.")
-      expect(UploadCollectionResourcesService).to have_received(:upload_collection_resource).with("2024_25_lettings_paper_form.pdf", anything)
+      expect(collection_resources_service).to have_received(:upload_collection_resource).with("2024_25_lettings_paper_form.pdf", anything)
       expect(page).to have_content("The lettings 2024 to 2025 paper form has been updated")
     end
 
@@ -52,7 +55,7 @@ RSpec.describe "Collection resources" do
       click_button("Save changes")
 
       expect(page).not_to have_content("The paper form must be a PDF.")
-      expect(UploadCollectionResourcesService).to have_received(:upload_collection_resource).with("2024_25_sales_paper_form.pdf", anything)
+      expect(collection_resources_service).to have_received(:upload_collection_resource).with("2024_25_sales_paper_form.pdf", anything)
       expect(page).to have_content("The sales 2024 to 2025 paper form has been updated")
     end
   end
@@ -77,7 +80,7 @@ RSpec.describe "Collection resources" do
       click_button("Save changes")
 
       expect(page).not_to have_content("The bulk upload template must be a Microsoft Excel file.")
-      expect(UploadCollectionResourcesService).to have_received(:upload_collection_resource).with("bulk-upload-lettings-template-2024-25.xlsx", anything)
+      expect(collection_resources_service).to have_received(:upload_collection_resource).with("bulk-upload-lettings-template-2024-25.xlsx", anything)
       expect(page).to have_content("The lettings 2024 to 2025 bulk upload template has been updated")
     end
 
@@ -100,7 +103,7 @@ RSpec.describe "Collection resources" do
       click_button("Save changes")
 
       expect(page).not_to have_content("The bulk upload template must be a Microsoft Excel file.")
-      expect(UploadCollectionResourcesService).to have_received(:upload_collection_resource).with("bulk-upload-sales-template-2024-25.xlsx", anything)
+      expect(collection_resources_service).to have_received(:upload_collection_resource).with("bulk-upload-sales-template-2024-25.xlsx", anything)
       expect(page).to have_content("The sales 2024 to 2025 bulk upload template has been updated")
     end
   end
@@ -125,7 +128,7 @@ RSpec.describe "Collection resources" do
       click_button("Save changes")
 
       expect(page).not_to have_content("The bulk upload specification must be a Microsoft Excel file.")
-      expect(UploadCollectionResourcesService).to have_received(:upload_collection_resource).with("bulk-upload-lettings-specification-2024-25.xlsx", anything)
+      expect(collection_resources_service).to have_received(:upload_collection_resource).with("bulk-upload-lettings-specification-2024-25.xlsx", anything)
       expect(page).to have_content("The lettings 2024 to 2025 bulk upload specification has been updated")
     end
 
@@ -148,12 +151,12 @@ RSpec.describe "Collection resources" do
       click_button("Save changes")
 
       expect(page).not_to have_content("The bulk upload specification must be a Microsoft Excel file.")
-      expect(UploadCollectionResourcesService).to have_received(:upload_collection_resource).with("bulk-upload-sales-specification-2024-25.xlsx", anything)
+      expect(collection_resources_service).to have_received(:upload_collection_resource).with("bulk-upload-sales-specification-2024-25.xlsx", anything)
       expect(page).to have_content("The sales 2024 to 2025 bulk upload specification has been updated")
     end
 
     it "displays error message if the upload fails" do
-      allow(UploadCollectionResourcesService).to receive(:upload_collection_resource).and_raise(StandardError)
+      allow(collection_resources_service).to receive(:upload_collection_resource).and_raise(StandardError)
 
       visit("/collection-resources/sales/2024/bulk_upload_specification/edit")
       attach_file "file", file_fixture("excel_file.xlsx")

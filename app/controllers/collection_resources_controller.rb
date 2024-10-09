@@ -58,7 +58,7 @@ class CollectionResourcesController < ApplicationController
 
     filename = @collection_resource.download_filename
     begin
-      UploadCollectionResourcesService.upload_collection_resource(filename, file)
+      CollectionResourcesService.new.upload_collection_resource(filename, file)
     rescue StandardError
       @collection_resource.errors.add(:file, :error_uploading)
       return render "collection_resources/edit"
@@ -74,11 +74,11 @@ private
     params.require(:collection_resource).permit(:year, :log_type, :resource_type, :file)
   end
 
-  def download_resource(filename, download_filename)
+  def download_resource(filename)
     file = CollectionResourcesService.new.get_file(filename)
     return render_not_found unless file
 
-    send_data(file, disposition: "attachment", filename: download_filename)
+    send_data(file, disposition: "attachment", filename:)
   end
 
   def resource_for_year_can_be_downloaded?(year)

@@ -2,6 +2,12 @@ require "rails_helper"
 
 RSpec.describe CollectionResourcesController, type: :request do
   let(:page) { Capybara::Node::Simple.new(response.body) }
+  let(:storage_service) { instance_double(Storage::S3Service) }
+
+  before do
+    allow(Storage::S3Service).to receive(:new).and_return(storage_service)
+    allow(storage_service).to receive(:configuration).and_return(OpenStruct.new(bucket_name: "core-test-collection-resources"))
+  end
 
   describe "GET #index" do
     context "when user is not signed in" do

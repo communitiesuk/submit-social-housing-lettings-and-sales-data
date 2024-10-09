@@ -1,7 +1,7 @@
 require "rails_helper"
 
-describe UploadCollectionResourcesService do
-  let(:service) { described_class }
+describe CollectionResourcesService do
+  let(:service) { described_class.new }
   let(:some_file) { File.open(file_fixture("blank_bulk_upload_sales.csv")) }
   let(:storage_service) { instance_double(Storage::S3Service) }
 
