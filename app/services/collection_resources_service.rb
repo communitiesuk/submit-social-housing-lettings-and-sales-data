@@ -1,6 +1,6 @@
 class CollectionResourcesService
   def initialize
-    @storage_service = if Rails.env.development?
+    @storage_service = if FeatureToggle.local_storage?
                          Storage::LocalDiskService.new
                        else
                          Storage::S3Service.new(Configuration::EnvConfigurationService.new, ENV["COLLECTION_RESOURCES_BUCKET"])
