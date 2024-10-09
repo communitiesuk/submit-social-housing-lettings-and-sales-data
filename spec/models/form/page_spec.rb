@@ -8,7 +8,7 @@ RSpec.describe Form::Page, type: :model do
   let(:depends_on) { nil }
   let(:enabled) { true }
   let(:depends_on_met) { true }
-  let(:form) { instance_double(Form, depends_on_met:, type: "form-type") }
+  let(:form) { instance_double(Form, depends_on_met:, type: "form-type", start_date: Time.utc(2024, 12, 25)) }
   let(:subsection) { instance_double(Form::Subsection, depends_on:, enabled?: enabled, form:, id: "subsection-id") }
   let(:page_id) { "net_income" }
   let(:questions) { [["earnings", { "conditional_for" => { "age1": nil }, "type" => "radio" }], %w[incfreq]] }
@@ -25,7 +25,7 @@ RSpec.describe Form::Page, type: :model do
   end
 
   it "sets copy_key in the default style" do
-    expect(page.copy_key).to eq("#{form.type}.#{subsection.id}.#{questions[0].id}")
+    expect(page.copy_key).to eq("#{form.type}.#{subsection.id}.#{questions[0][0]}")
   end
 
   context "when header is not provided" do
