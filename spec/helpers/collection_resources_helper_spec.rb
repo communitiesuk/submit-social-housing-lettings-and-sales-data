@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe CollectionResourcesHelper do
   let(:current_user) { create(:user, :data_coordinator) }
   let(:user) { create(:user, :data_coordinator) }
-  let(:storage_service) { instance_double(Storage::S3Service) }
+  let(:storage_service) { instance_double(Storage::S3Service, get_file_metadata: nil) }
 
   before do
     allow(Storage::S3Service).to receive(:new).and_return(storage_service)
