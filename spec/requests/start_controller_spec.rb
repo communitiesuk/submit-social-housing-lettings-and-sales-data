@@ -5,11 +5,14 @@ RSpec.describe StartController, type: :request do
   let(:page) { Capybara::Node::Simple.new(response.body) }
   let(:notify_client) { instance_double(Notifications::Client) }
   let(:devise_notify_mailer) { DeviseNotifyMailer.new }
+  let(:storage_service) { instance_double(Storage::S3Service, get_file_metadata: nil) }
 
   before do
     allow(DeviseNotifyMailer).to receive(:new).and_return(devise_notify_mailer)
     allow(devise_notify_mailer).to receive(:notify_client).and_return(notify_client)
     allow(notify_client).to receive(:send_email).and_return(true)
+    allow(Storage::S3Service).to receive(:new).and_return(storage_service)
+    allow(storage_service).to receive(:configuration).and_return(OpenStruct.new(bucket_name: "core-test-collection-resources"))
   end
 
   describe "GET" do
