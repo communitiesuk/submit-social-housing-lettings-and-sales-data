@@ -4,7 +4,7 @@ require_relative "form/helpers"
 RSpec.describe "Start Page Features" do
   include Helpers
   let(:user) { FactoryBot.create(:user) }
-  let(:storage_service) { instance_double(Storage::S3Service) }
+  let(:storage_service) { instance_double(Storage::S3Service, get_file_metadata: nil) }
 
   before do
     allow(Storage::S3Service).to receive(:new).and_return(storage_service)

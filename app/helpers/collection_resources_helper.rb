@@ -15,8 +15,8 @@ module CollectionResourcesHelper
 
     return [file_pages].compact.join(", ") unless metadata
 
-    file_size = number_to_human_size(metadata["Content-Length"].to_i)
-    file_type = HUMAN_READABLE_CONTENT_TYPE[metadata["Content-Type"].to_sym] || "Unknown File Type"
+    file_size = number_to_human_size(metadata["content_length"].to_i)
+    file_type = HUMAN_READABLE_CONTENT_TYPE[metadata["content_type"].to_sym] || "Unknown File Type"
     [file_type, file_size, file_pages].compact.join(", ")
   end
 end

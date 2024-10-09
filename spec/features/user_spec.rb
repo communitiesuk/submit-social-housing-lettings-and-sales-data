@@ -6,7 +6,7 @@ RSpec.describe "User Features" do
   let(:notify_client) { instance_double(Notifications::Client) }
   let(:reset_password_token) { "MCDH5y6Km-U7CFPgAMVS" }
   let(:devise_notify_mailer) { DeviseNotifyMailer.new }
-  let(:storage_service) { instance_double(Storage::S3Service) }
+  let(:storage_service) { instance_double(Storage::S3Service, get_file_metadata: nil) }
 
   before do
     allow(DeviseNotifyMailer).to receive(:new).and_return(devise_notify_mailer)
