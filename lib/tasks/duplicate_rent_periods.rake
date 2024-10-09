@@ -11,9 +11,9 @@ task find_redundant_rent_periods: :environment do
   duplicate_groups.each do |group|
     group_records = duplicate_records.where(organisation_id: group.organisation_id, rent_period: group.rent_period)
     group_records.each do |record|
-      puts "ID: #{record.id}, Organisation ID: #{record.organisation_id}, Rent Period: #{record.rent_period}"
+      Rails.logger.info "ID: #{record.id}, Organisation ID: #{record.organisation_id}, Rent Period: #{record.rent_period}"
     end
-    puts "----------------------"
+    Rails.logger.info "----------------------"
   end
 
   ids_to_keep = OrganisationRentPeriod
@@ -24,8 +24,10 @@ task find_redundant_rent_periods: :environment do
 
   redundant_ids = duplicate_records.pluck(:id) - ids_to_keep
 
-  puts "Number of duplicate records: #{redundant_ids.size}"
-  puts "Number of records to keep: #{ids_to_keep.size}"
+  Rails.logger.info "Total number of records: #{OrganisationRentPeriod.count}"
+  Rails.logger.info "Number of duplicate records: #{duplicate_records.size}"
+  Rails.logger.info "Number of records to delete: #{redundant_ids.size}"
+  Rails.logger.info "Number of records to keep: #{ids_to_keep.size}"
 end
 
 desc "Delete redundant rent periods"
@@ -49,5 +51,5 @@ task delete_duplicate_rent_periods: :environment do
 
   OrganisationRentPeriod.where(id: redundant_ids).delete_all
 
-  puts "Number of deleted duplicate records: #{redundant_ids.size}"
+  Rails.logger.info "Number of deleted duplicate records: #{redundant_ids.size}"
 end
