@@ -782,6 +782,16 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
             expect(parser.errors[:field_112]).to eql(["You must answer was the letting made under the Choice-Based Lettings (CBL)?"])
           end
         end
+
+        context "when an invalid value error has been added" do
+          let(:attributes) { setup_section_params.merge({ field_116: "100" }) }
+
+          it "does not add an additional error" do
+            parser.valid?
+            expect(parser.errors[:field_116].length).to eq(1)
+            expect(parser.errors[:field_116]).to include(match "Enter a valid value for")
+          end
+        end
       end
     end
 
