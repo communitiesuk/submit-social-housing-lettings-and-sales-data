@@ -9,7 +9,7 @@ RSpec.describe Notification, type: :model do
         it "adds an error to page_content" do
           notification.valid?
 
-          expect(notification.errors[:page_content]).to include("Enter the page content")
+          expect(notification.errors[:page_content]).to include("Enter the page content.")
         end
       end
 
@@ -19,7 +19,7 @@ RSpec.describe Notification, type: :model do
         it "adds an error to link_text" do
           notification.valid?
 
-          expect(notification.errors[:link_text]).to include("Enter the link text")
+          expect(notification.errors[:link_text]).to include("Enter the link text.")
         end
       end
     end

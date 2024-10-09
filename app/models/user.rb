@@ -84,8 +84,13 @@ class User < ApplicationRecord
   scope :not_signed_in, -> { where(last_sign_in_at: nil, active: true) }
   scope :deactivated, -> { where(active: false) }
   scope :active_status, -> { where(active: true).where.not(last_sign_in_at: nil) }
-  scope :visible, -> { where(discarded_at: nil) }
-  scope :own_and_managing_org_users, ->(organisation) { where(organisation: organisation.child_organisations + [organisation]) }
+  scope :visible, lambda { |user = nil|
+    if user && !user.support?
+      where(discarded_at: nil, organisation: user.organisation.child_organisations + [user.organisation])
+    else
+      where(discarded_at: nil)
+    end
+  }
 
   attr_accessor :log_reassignment
 
@@ -207,6 +212,10 @@ class User < ApplicationRecord
   end
 
   def assignable_roles
+    if Rails.env.staging? && Rails.application.credentials[:staging_role_update_email_allowlist].include?(email.split("@").last.downcase)
+      return ROLES
+    end
+
     return {} unless data_coordinator? || support?
     return ROLES if support?
 

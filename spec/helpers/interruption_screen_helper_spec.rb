@@ -151,7 +151,7 @@ RSpec.describe InterruptionScreenHelper do
             },
           ],
         }
-        expect(display_informative_text(informative_text_hash, lettings_log)).to eq("You said this: £12,345.00")
+        expect(display_informative_text(informative_text_hash, lettings_log)).to eq("You said this: £12,345.00.")
       end
     end
 
@@ -216,7 +216,7 @@ RSpec.describe InterruptionScreenHelper do
               },
             ],
           }
-          expect(display_title_text(title_text, lettings_log)).to eq("You said this: £12,345.00")
+          expect(display_title_text(title_text, lettings_log)).to eq("You said this: £12,345.00.")
         end
       end
     end
