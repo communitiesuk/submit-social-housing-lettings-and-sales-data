@@ -13,8 +13,7 @@ RSpec.describe CollectionResourcesHelper do
   describe "when displaying file metadata" do
     context "with pages" do
       before do
-        stub_request(:head, "https://core-test-collection-resources.s3.amazonaws.com/2023_24_lettings_paper_form.pdf")
-          .to_return(status: 200, body: "", headers: { "Content-Length" => 292_864, "Content-Type" => "application/pdf" })
+        allow(storage_service).to receive(:get_file_metadata).with("2023_24_lettings_paper_form.pdf").and_return("content_length" => 292_864, "content_type" => "application/pdf")
       end
 
       it "returns correct metadata" do
@@ -24,8 +23,7 @@ RSpec.describe CollectionResourcesHelper do
 
     context "without pages" do
       before do
-        stub_request(:head, "https://core-test-collection-resources.s3.amazonaws.com/bulk-upload-lettings-template-2023-24.xlsx")
-          .to_return(status: 200, body: "", headers: { "Content-Length" => 19_456, "Content-Type" => "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" })
+        allow(storage_service).to receive(:get_file_metadata).with("bulk-upload-lettings-template-2023-24.xlsx").and_return("content_length" => 19_456, "content_type" => "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
       end
 
       it "returns correct metadata" do
