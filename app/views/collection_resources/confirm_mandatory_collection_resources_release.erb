@@ -1,0 +1,27 @@
+<% content_for :before_content do %>
+  <% content_for :title, "Are you sure you want to release the #{text_year_range_format(@year)} collection resources?" %>
+  <%= govuk_back_link(href: collection_resources_path) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+    <h1 class="govuk-heading-xl">
+      <%= content_for(:title) %>
+    </h1>
+
+    <p class="govuk-body">
+      The files uploaded will immediately become available for users to download.
+    </p>
+
+    <%= govuk_warning_text(text: "You will not be able to undo this action.") %>
+
+    <div class="govuk-button-group">
+      <%= govuk_button_to(
+        "Release the resources",
+        release_mandatory_collection_resources_path(year: @year),
+        method: :patch,
+      ) %>
+      <%= govuk_button_link_to "Cancel", collection_resources_path, secondary: true %>
+    </div>
+  </div>
+</div>

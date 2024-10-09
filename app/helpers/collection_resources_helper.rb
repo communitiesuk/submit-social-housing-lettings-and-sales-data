@@ -1,5 +1,7 @@
 module CollectionResourcesHelper
   include CollectionTimeHelper
+  include GovukLinkHelper
+  include GovukVisuallyHiddenHelper
 
   HUMAN_READABLE_CONTENT_TYPE = { "application/pdf": "PDF",
                                   "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": "Microsoft Excel",
@@ -24,6 +26,7 @@ module CollectionResourcesHelper
 
   def displayed_collection_resource_years
     return [previous_collection_start_year, current_collection_start_year] if FormHandler.instance.in_edit_crossover_period?
+    return [current_collection_start_year, next_collection_start_year] if CollectionResource.where(year: next_collection_start_year, mandatory: true, released_to_user: true).any?
 
     [current_collection_start_year]
   end
@@ -65,5 +68,19 @@ module CollectionResourcesHelper
 
   def file_exists_on_s3?(file)
     CollectionResourcesService.new.file_exists_on_s3?(file)
+  end
+
+  def display_next_year_banner?
+    return false if CollectionResource.where(year: next_collection_start_year, mandatory: true, released_to_user: true).any?
+
+    editable_collection_resource_years.include?(next_collection_start_year)
+  end
+
+  def next_year_banner_text(lettings_resources, sales_resources)
+    if lettings_resources[next_collection_start_year].map(&:download_filename).all? { |file| file_exists_on_s3?(file) } && sales_resources[next_collection_start_year].map(&:download_filename).all? { |file| file_exists_on_s3?(file) }
+      govuk_link_to "Release the #{text_year_range_format(next_collection_start_year)} collection resources to users", release_mandatory_collection_resources_path(year: next_collection_start_year), class: "govuk-link"
+    else
+      "Once you have uploaded all the required #{text_year_range_format(next_collection_start_year)} collection resources, you will be able to release them to users."
+    end
   end
 end

@@ -91,6 +91,18 @@ RSpec.describe CollectionResourcesHelper do
       it "returns current year" do
         expect(displayed_collection_resource_years).to eq([2024])
       end
+
+      context "and next year resources were manually released" do
+        before do
+          CollectionResource.create!(year: 2025, resource_type: "paper_form", display_name: "lettings log for tenants (2025 to 2026)", download_filename: "file.pdf", mandatory: true, released_to_user: true)
+          CollectionResource.create!(year: 2025, resource_type: "bulk_upload_template", display_name: "bulk upload template (2025 to 2026)", download_filename: "file.xlsx", mandatory: true, released_to_user: true)
+          CollectionResource.create!(year: 2025, resource_type: "bulk_upload_specification", display_name: "sales log for tenants (2025 to 2026)", download_filename: "file.xlsx", mandatory: true, released_to_user: true)
+        end
+
+        it "reutrns current and next years" do
+          expect(displayed_collection_resource_years).to eq([2024, 2025])
+        end
+      end
     end
   end
 
@@ -161,6 +173,66 @@ RSpec.describe CollectionResourcesHelper do
           metadata: "Microsoft Excel, 19 KB",
         },
       ])
+    end
+  end
+
+  describe "#display_next_year_banner?" do
+    context "when next year is not editable" do
+      before do
+        allow(FormHandler.instance).to receive(:in_edit_crossover_period?).and_return(true)
+      end
+
+      it "returns false" do
+        expect(display_next_year_banner?).to be_falsey
+      end
+    end
+
+    context "when next year is editable" do
+      before do
+        allow(FormHandler.instance).to receive(:in_edit_crossover_period?).and_return(false)
+        allow(Time.zone).to receive(:today).and_return(Time.zone.local(2025, 1, 1))
+      end
+
+      it "returns true" do
+        expect(display_next_year_banner?).to be_truthy
+      end
+
+      context "and the resources have been manually released" do
+        before do
+          CollectionResource.create!(year: 2025, resource_type: "paper_form", display_name: "lettings log for tenants (2025 to 2026)", download_filename: "file.pdf", mandatory: true, released_to_user: true)
+          CollectionResource.create!(year: 2025, resource_type: "bulk_upload_template", display_name: "bulk upload template (2025 to 2026)", download_filename: "file.xlsx", mandatory: true, released_to_user: true)
+          CollectionResource.create!(year: 2025, resource_type: "bulk_upload_specification", display_name: "sales log for tenants (2025 to 2026)", download_filename: "file.xlsx", mandatory: true, released_to_user: true)
+        end
+
+        it "returns false" do
+          expect(display_next_year_banner?).to be_falsey
+        end
+      end
+    end
+  end
+
+  describe "#next_year_banner_text" do
+    let(:lettings_resources) { MandatoryCollectionResourcesService.generate_resources("lettings", [next_collection_start_year]) }
+    let(:sales_resources) { MandatoryCollectionResourcesService.generate_resources("sales", [next_collection_start_year]) }
+
+    context "when all the mandatory resources for next year are uploaded" do
+      before do
+        allow(storage_service).to receive(:file_exists?).and_return(true)
+      end
+
+      it "returns correct text" do
+        expect(next_year_banner_text(lettings_resources, sales_resources)).to match(/Release the 2025 to 2026 collection resources to users/)
+      end
+    end
+
+    context "when some of the mandatory resources for next year are not uploaded" do
+      before do
+        allow(storage_service).to receive(:file_exists?).and_return(false)
+      end
+
+      it "returns correct text" do
+        expect(next_year_banner_text(lettings_resources, sales_resources)).to eq("Once you have uploaded all the required 2025 to 2026 collection resources, you will be able to release them to users.")
+      end
     end
   end
 end
