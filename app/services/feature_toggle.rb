@@ -34,4 +34,8 @@ class FeatureToggle
   def self.delete_user_enabled?
     true
   end
+
+  def self.local_storage?
+    Rails.env.development?
+  end
 end

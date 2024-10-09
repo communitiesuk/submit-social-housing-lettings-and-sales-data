@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe "Accessibility", js: true do
   let(:user) { create(:user, :support) }
   let!(:other_user) { create(:user, name: "new user", organisation: user.organisation, email: "new_user@example.com", confirmation_token: "abc") }
-  let(:storage_service) { instance_double(Storage::S3Service) }
+  let(:storage_service) { instance_double(Storage::S3Service, get_file_metadata: nil) }
 
   def find_routes(type, resource, subresource)
     routes = Rails.application.routes.routes.select do |route|

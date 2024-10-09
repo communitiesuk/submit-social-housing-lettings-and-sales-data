@@ -4,7 +4,7 @@ RSpec.describe "RailsAdmin", type: :request do
   let(:user) { create(:user) }
   let(:support_user) { create(:user, :support) }
   let(:page) { Capybara::Node::Simple.new(response.body) }
-  let(:storage_service) { instance_double(Storage::S3Service) }
+  let(:storage_service) { instance_double(Storage::S3Service, get_file_metadata: nil) }
 
   before do
     allow(support_user).to receive(:need_two_factor_authentication?).and_return(false)
