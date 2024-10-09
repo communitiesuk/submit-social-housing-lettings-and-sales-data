@@ -68,7 +68,7 @@ private
 
   def download_resource(filename, download_filename)
     file = CollectionResourcesService.new.get_file(filename)
-    render_not_found unless file
+    return render_not_found unless file
 
     send_data(file, disposition: "attachment", filename: download_filename)
   end
