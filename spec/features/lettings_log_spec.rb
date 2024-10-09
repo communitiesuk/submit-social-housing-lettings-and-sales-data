@@ -1,6 +1,13 @@
 require "rails_helper"
 
 RSpec.describe "Lettings Log Features" do
+  let(:storage_service) { instance_double(Storage::S3Service) }
+
+  before do
+    allow(Storage::S3Service).to receive(:new).and_return(storage_service)
+    allow(storage_service).to receive(:configuration).and_return(OpenStruct.new(bucket_name: "core-test-collection-resources"))
+  end
+
   context "when searching for specific logs" do
     context "when I am signed in and there are logs in the database" do
       let(:user) { create(:user, last_sign_in_at: Time.zone.now) }

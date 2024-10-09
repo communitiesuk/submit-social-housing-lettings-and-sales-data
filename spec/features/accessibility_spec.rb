@@ -3,6 +3,7 @@ require "rails_helper"
 RSpec.describe "Accessibility", js: true do
   let(:user) { create(:user, :support) }
   let!(:other_user) { create(:user, name: "new user", organisation: user.organisation, email: "new_user@example.com", confirmation_token: "abc") }
+  let(:storage_service) { instance_double(Storage::S3Service) }
 
   def find_routes(type, resource, subresource)
     routes = Rails.application.routes.routes.select do |route|
@@ -20,6 +21,8 @@ RSpec.describe "Accessibility", js: true do
   end
 
   before do
+    allow(Storage::S3Service).to receive(:new).and_return(storage_service)
+    allow(storage_service).to receive(:configuration).and_return(OpenStruct.new(bucket_name: "core-test-collection-resources"))
     allow(user).to receive(:need_two_factor_authentication?).and_return(false)
     sign_in(user)
   end

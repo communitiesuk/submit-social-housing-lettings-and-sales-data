@@ -4,9 +4,12 @@ RSpec.describe "RailsAdmin", type: :request do
   let(:user) { create(:user) }
   let(:support_user) { create(:user, :support) }
   let(:page) { Capybara::Node::Simple.new(response.body) }
+  let(:storage_service) { instance_double(Storage::S3Service) }
 
   before do
     allow(support_user).to receive(:need_two_factor_authentication?).and_return(false)
+    allow(Storage::S3Service).to receive(:new).and_return(storage_service)
+    allow(storage_service).to receive(:configuration).and_return(OpenStruct.new(bucket_name: "core-test-collection-resources"))
   end
 
   describe "GET /admin" do
