@@ -115,10 +115,8 @@ RSpec.describe CollectionResourcesHelper do
     end
 
     before do
-      WebMock.stub_request(:head, /https:\/\/core-test-collection-resources\.s3\.amazonaws\.com\/2023_24_lettings_paper_form.pdf/)
-        .to_return(status: 200, body: "", headers: { "Content-Length" => 292_864, "Content-Type" => "application/pdf" })
-      WebMock.stub_request(:head, /https:\/\/core-test-collection-resources\.s3\.amazonaws\.com\/2023_24_lettings_bulk_upload_template.xlsx/)
-        .to_return(status: 200, body: "", headers: { "Content-Length" => 19_456, "Content-Type" => "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" })
+      allow(storage_service).to receive(:get_file_metadata).with("2023_24_lettings_paper_form.pdf").and_return("content_length" => 292_864, "content_type" => "application/pdf")
+      allow(storage_service).to receive(:get_file_metadata).with("2023_24_lettings_bulk_upload_template.xlsx").and_return("content_length" => 19_456, "content_type" => "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
     end
 
     it "returns component items" do
@@ -146,10 +144,8 @@ RSpec.describe CollectionResourcesHelper do
     end
 
     before do
-      WebMock.stub_request(:head, /https:\/\/core-test-collection-resources\.s3\.amazonaws\.com\/2023_24_lettings_paper_form.pdf/)
-        .to_return(status: 200, body: "", headers: { "Content-Length" => 292_864, "Content-Type" => "application/pdf" })
-      WebMock.stub_request(:head, /https:\/\/core-test-collection-resources\.s3\.amazonaws\.com\/2023_24_lettings_bulk_upload_template.xlsx/)
-        .to_return(status: 200, body: "", headers: { "Content-Length" => 19_456, "Content-Type" => "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" })
+      allow(storage_service).to receive(:get_file_metadata).with("2023_24_lettings_paper_form.pdf").and_return("content_length" => 292_864, "content_type" => "application/pdf")
+      allow(storage_service).to receive(:get_file_metadata).with("2023_24_lettings_bulk_upload_template.xlsx").and_return("content_length" => 19_456, "content_type" => "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
     end
 
     it "returns component items" do

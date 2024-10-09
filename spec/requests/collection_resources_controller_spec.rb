@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe CollectionResourcesController, type: :request do
   let(:page) { Capybara::Node::Simple.new(response.body) }
-  let(:storage_service) { instance_double(Storage::S3Service) }
+  let(:storage_service) { instance_double(Storage::S3Service, get_file_metadata: nil) }
 
   before do
     allow(Storage::S3Service).to receive(:new).and_return(storage_service)
@@ -49,6 +49,7 @@ RSpec.describe CollectionResourcesController, type: :request do
       before do
         allow(Time.zone).to receive(:today).and_return(Time.zone.local(2025, 1, 8))
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        allow(storage_service).to receive(:file_exists?).and_return(true)
         sign_in user
       end
 
@@ -71,6 +72,7 @@ RSpec.describe CollectionResourcesController, type: :request do
 
       context "when files are on S3" do
         before do
+          allow(storage_service).to receive(:file_exists?).and_return(true)
           get collection_resources_path
         end
 
@@ -110,8 +112,7 @@ RSpec.describe CollectionResourcesController, type: :request do
 
       context "when files are not on S3" do
         before do
-          WebMock.stub_request(:head, /https:\/\/core-test-collection-resources\.s3\.amazonaws\.com/)
-          .to_return(status: 404, body: "", headers: {})
+          allow(storage_service).to receive(:file_exists?).and_return(false)
           get collection_resources_path
         end
 
@@ -141,8 +142,7 @@ RSpec.describe CollectionResourcesController, type: :request do
 
       context "when the file exists on S3" do
         before do
-          WebMock.stub_request(:get, /https:\/\/core-test-collection-resources\.s3\.amazonaws\.com/)
-          .to_return(status: 200, body: "file", headers: { "Content-Type" => "application/pdf", "Content-Length" => 1000 })
+          allow(storage_service).to receive(:get_file_io).and_return("file")
           get download_mandatory_collection_resource_path(log_type: "lettings", year: 2025, resource_type: "paper_form")
         end
 
@@ -153,8 +153,7 @@ RSpec.describe CollectionResourcesController, type: :request do
 
       context "when the file does not exist on S3" do
         before do
-          WebMock.stub_request(:get, /https:\/\/core-test-collection-resources\.s3\.amazonaws\.com/)
-            .to_return(status: 404, body: "", headers: {})
+          allow(storage_service).to receive(:get_file_io).and_return(nil)
           get download_mandatory_collection_resource_path(log_type: "lettings", year: 2024, resource_type: "paper_form")
         end
 
@@ -189,8 +188,7 @@ RSpec.describe CollectionResourcesController, type: :request do
 
       context "when year is in editable_collection_resource_years but not in displayed_collection_resource_years" do
         before do
-          WebMock.stub_request(:get, /https:\/\/core-test-collection-resources\.s3\.amazonaws\.com/)
-            .to_return(status: 200, body: "file", headers: { "Content-Type" => "application/pdf", "Content-Length" => 1000 })
+          allow(storage_service).to receive(:get_file_io).and_return("file")
           get download_mandatory_collection_resource_path(log_type: "lettings", year: 2026, resource_type: "paper_form")
         end
 
@@ -262,9 +260,10 @@ RSpec.describe CollectionResourcesController, type: :request do
   describe "PATCH #update_mandatory_collection_resource" do
     let(:some_file) { File.open(file_fixture("blank_bulk_upload_sales.csv")) }
     let(:params) { { collection_resource: { year: 2024, log_type: "sales", resource_type: "bulk_upload_template", file: some_file } } }
+    let(:collection_resource_service) { instance_double(CollectionResourcesService) }
 
     before do
-      allow(UploadCollectionResourcesService).to receive(:upload_collection_resource)
+      allow(CollectionResourcesService).to receive(:new).and_return(collection_resource_service)
     end
 
     context "when user is not signed in" do

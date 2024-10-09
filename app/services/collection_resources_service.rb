@@ -20,13 +20,7 @@ class CollectionResourcesService
   end
 
   def file_exists_on_s3?(file)
-    url = "https://#{@storage_service.configuration.bucket_name}.s3.amazonaws.com/#{file}"
-    uri = URI.parse(url)
-
-    response = Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == "https") do |http|
-      http.request_head(uri)
-    end
-    response.is_a?(Net::HTTPSuccess) || response.is_a?(Net::HTTPRedirection)
+    @storage_service.file_exists?(file)
   end
 
   def upload_collection_resource(filename, file)

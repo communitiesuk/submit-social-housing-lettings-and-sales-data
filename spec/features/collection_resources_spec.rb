@@ -7,7 +7,7 @@ RSpec.describe "Collection resources" do
   before do
     allow(CollectionResourcesService).to receive(:new).and_return(collection_resources_service)
     allow(collection_resources_service).to receive(:upload_collection_resource)
-    allow(collection_resources_service).to receive(:get_file_metadata).and_return({ "Content-Type" => "application/pdf", "Content-Length" => 1000 })
+    allow(collection_resources_service).to receive(:get_file_metadata).and_return({ "content_type" => "application/pdf", "content_length" => 1000 })
     allow(user).to receive(:need_two_factor_authentication?).and_return(false)
     sign_in user
   end
