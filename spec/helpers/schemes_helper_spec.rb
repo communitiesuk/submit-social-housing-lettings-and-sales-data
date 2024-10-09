@@ -118,4 +118,121 @@ RSpec.describe SchemesHelper do
       end
     end
   end
+
+  describe "display_duplicate_schemes_banner?" do
+    let(:organisation) { create(:organisation) }
+    let(:current_user) { create(:user, :support) }
+
+    context "when organisation has not absorbed other organisations" do
+      context "and it has duplicate schemes" do
+        before do
+          create_list(:scheme, 2, :duplicate, owning_organisation: organisation)
+        end
+
+        it "does not display the banner" do
+          expect(display_duplicate_schemes_banner?(organisation, current_user)).to be_falsey
+        end
+      end
+    end
+
+    context "when organisation has absorbed other organisations in open collection year" do
+      before do
+        build(:organisation, merge_date: Time.zone.yesterday, absorbing_organisation_id: organisation.id).save(validate: false)
+      end
+
+      context "and it has duplicate schemes" do
+        before do
+          create_list(:scheme, 2, :duplicate, owning_organisation: organisation)
+        end
+
+        it "displays the banner" do
+          expect(display_duplicate_schemes_banner?(organisation, current_user)).to be_truthy
+        end
+
+        context "and organisation has confirmed duplicate schemes after the most recent merge" do
+          before do
+            organisation.update!(schemes_deduplicated_at: Time.zone.today)
+          end
+
+          it "does not display the banner" do
+            expect(display_duplicate_schemes_banner?(organisation, current_user)).to be_falsey
+          end
+        end
+
+        context "and organisation has confirmed duplicate schemes before the most recent merge" do
+          before do
+            organisation.update!(schemes_deduplicated_at: Time.zone.today - 2.days)
+          end
+
+          it "displays the banner" do
+            expect(display_duplicate_schemes_banner?(organisation, current_user)).to be_truthy
+          end
+        end
+      end
+
+      context "and it has duplicate locations" do
+        let(:scheme) { create(:scheme, owning_organisation: organisation) }
+
+        before do
+          create_list(:location, 2, postcode: "AB1 2CD", mobility_type: "A", scheme:)
+        end
+
+        it "displays the banner" do
+          expect(display_duplicate_schemes_banner?(organisation, current_user)).to be_truthy
+        end
+      end
+
+      context "and it has no duplicate schemes or locations" do
+        it "does not display the banner" do
+          expect(display_duplicate_schemes_banner?(organisation, current_user)).to be_falsey
+        end
+      end
+
+      context "and it is viewed by data provider" do
+        let(:current_user) { create(:user, :data_provider) }
+
+        before do
+          create_list(:scheme, 2, :duplicate, owning_organisation: organisation)
+        end
+
+        it "does not display the banner" do
+          expect(display_duplicate_schemes_banner?(organisation, current_user)).to be_falsey
+        end
+      end
+    end
+
+    context "when organisation has absorbed other organisations in closed collection year" do
+      before do
+        build(:organisation, merge_date: Time.zone.today - 2.years, absorbing_organisation_id: organisation.id).save(validate: false)
+      end
+
+      context "and it has duplicate schemes" do
+        before do
+          create_list(:scheme, 2, :duplicate, owning_organisation: organisation)
+        end
+
+        it "does not display the banner" do
+          expect(display_duplicate_schemes_banner?(organisation, current_user)).to be_falsey
+        end
+      end
+
+      context "and it has duplicate locations" do
+        let(:scheme) { create(:scheme, owning_organisation: organisation) }
+
+        before do
+          create(:location, postcode: "AB1 2CD", mobility_type: "A", scheme:)
+        end
+
+        it "does not display the banner" do
+          expect(display_duplicate_schemes_banner?(organisation, current_user)).to be_falsey
+        end
+      end
+
+      context "and it has no duplicate schemes or locations" do
+        it "does not display the banner" do
+          expect(display_duplicate_schemes_banner?(organisation, current_user)).to be_falsey
+        end
+      end
+    end
+  end
 end
