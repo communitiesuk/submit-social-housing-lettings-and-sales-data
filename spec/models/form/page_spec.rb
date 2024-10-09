@@ -8,8 +8,8 @@ RSpec.describe Form::Page, type: :model do
   let(:depends_on) { nil }
   let(:enabled) { true }
   let(:depends_on_met) { true }
-  let(:form) { instance_double(Form, depends_on_met:) }
-  let(:subsection) { instance_double(Form::Subsection, depends_on:, enabled?: enabled, form:) }
+  let(:form) { instance_double(Form, depends_on_met:, type: "form-type") }
+  let(:subsection) { instance_double(Form::Subsection, depends_on:, enabled?: enabled, form:, id: "subsection-id") }
   let(:page_id) { "net_income" }
   let(:questions) { [["earnings", { "conditional_for" => { "age1": nil }, "type" => "radio" }], %w[incfreq]] }
   let(:page_definition) do
@@ -22,6 +22,39 @@ RSpec.describe Form::Page, type: :model do
 
   it "has an id" do
     expect(page.id).to eq(page_id)
+  end
+
+  it "sets copy_key in the default style" do
+    expect(page.copy_key).to eq("#{form.type}.#{subsection.id}.#{questions[0].id}")
+  end
+
+  context "when header is not provided" do
+    let(:page_definition) do
+      {
+        "questions" => questions,
+      }
+    end
+
+    context "and translation is present" do
+      before do
+        allow(I18n).to receive(:t).and_return("page header copy")
+        allow(I18n).to receive(:exists?).and_return(true)
+      end
+
+      it "uses header from translations" do
+        expect(page.header).to eq("page header copy")
+      end
+    end
+
+    context "and translation is not present" do
+      before do
+        allow(I18n).to receive(:exists?).and_return(false)
+      end
+
+      it "uses empty header" do
+        expect(page.header).to eq("")
+      end
+    end
   end
 
   it "has a header" do
