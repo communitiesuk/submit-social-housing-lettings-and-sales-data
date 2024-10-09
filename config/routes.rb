@@ -178,6 +178,8 @@ Rails.application.routes.draw do
       get "schemes/csv-download", to: "organisations#download_schemes_csv"
       post "schemes/email-csv", to: "organisations#email_schemes_csv"
       get "schemes/csv-confirmation", to: "schemes#csv_confirmation"
+      get "schemes/duplicates", to: "organisations#duplicate_schemes"
+      post "schemes/duplicates", to: "organisations#confirm_duplicate_schemes"
       get "stock-owners", to: "organisation_relationships#stock_owners"
       get "stock-owners/add", to: "organisation_relationships#add_stock_owner"
       get "stock-owners/remove", to: "organisation_relationships#remove_stock_owner"

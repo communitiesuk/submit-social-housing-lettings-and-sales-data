@@ -130,7 +130,10 @@ class Log < ApplicationRecord
     if [address_line1_input, postcode_full_input].all?(&:present?)
       service = AddressClient.new(address_string)
       service.call
-      return nil if service.result.blank? || service.error.present?
+      if service.result.blank? || service.error.present?
+        @address_options = []
+        return @answer_options
+      end
 
       address_opts = []
       service.result.first(10).each do |result|

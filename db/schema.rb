@@ -516,6 +516,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_02_163937) do
     t.bigint "absorbing_organisation_id"
     t.datetime "available_from"
     t.datetime "discarded_at"
+    t.datetime "schemes_deduplicated_at"
     t.index ["absorbing_organisation_id"], name: "index_organisations_on_absorbing_organisation_id"
     t.index ["old_visible_id"], name: "index_organisations_on_old_visible_id", unique: true
   end

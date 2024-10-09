@@ -39,6 +39,10 @@ module Storage
       )
     end
 
+    def get_file_metadata(file_name)
+      @client.head_object(bucket: @configuration.bucket_name, key: file_name)
+    end
+
   private
 
     def create_configuration

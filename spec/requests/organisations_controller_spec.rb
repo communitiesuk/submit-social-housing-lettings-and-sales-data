@@ -207,6 +207,24 @@ RSpec.describe OrganisationsController, type: :request do
             expect(page).to have_title("#{user.organisation.name} (1 scheme matching ‘#{search_param}’) - Submit social housing lettings and sales data (CORE) - GOV.UK")
           end
         end
+
+        context "when organisation has absorbed other organisations" do
+          before do
+            create(:organisation, merge_date: Time.zone.today, absorbing_organisation: organisation)
+          end
+
+          context "and it has duplicate schemes or locations" do
+            before do
+              create_list(:scheme, 2, :duplicate, owning_organisation: organisation)
+              get "/organisations/#{organisation.id}/schemes", headers:, params: {}
+            end
+
+            it "displays a banner with correct content" do
+              expect(page).to have_content("Some schemes and locations might be duplicates.")
+              expect(page).to have_link("Review possible duplicates", href: "/organisations/#{organisation.id}/schemes/duplicates")
+            end
+          end
+        end
       end
 
       context "when data coordinator user" do
@@ -344,6 +362,77 @@ RSpec.describe OrganisationsController, type: :request do
           it "has search in the title" do
             expect(page).to have_title("Supported housing schemes (1 scheme matching ‘#{search_param}’) - Submit social housing lettings and sales data (CORE) - GOV.UK")
           end
+        end
+      end
+    end
+
+    describe "#duplicate_schemes" do
+      context "with support user" do
+        let(:user) { create(:user, :support) }
+
+        before do
+          allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+          sign_in user
+          get "/organisations/#{organisation.id}/schemes/duplicates", headers:
+        end
+
+        context "with duplicate schemes and locations" do
+          let(:schemes) { create_list(:scheme, 5, :duplicate, owning_organisation: organisation) }
+
+          before do
+            create_list(:location, 2, scheme: schemes.first, postcode: "M1 1AA", mobility_type: "M")
+            create_list(:location, 2, scheme: schemes.first, postcode: "M1 1AA", mobility_type: "A")
+            get "/organisations/#{organisation.id}/schemes/duplicates", headers:
+          end
+
+          it "displays the duplicate schemes" do
+            expect(page).to have_content("This set of schemes might have duplicates")
+          end
+
+          it "displays the duplicate locations" do
+            expect(page).to have_content("These 2 sets of locations might have duplicates")
+          end
+
+          it "has page heading" do
+            expect(page).to have_content("Review these sets of schemes and locations")
+          end
+        end
+
+        context "without duplicate schemes and locations" do
+          it "does not display the schemes" do
+            expect(page).not_to have_content("schemes might have duplicates")
+          end
+
+          it "does not display the locations" do
+            expect(page).not_to have_content("locations might have duplicates")
+          end
+        end
+      end
+
+      context "with data coordinator user" do
+        let(:user) { create(:user, :data_coordinator) }
+
+        before do
+          sign_in user
+          create_list(:scheme, 5, :duplicate, owning_organisation: organisation)
+          get "/organisations/#{organisation.id}/schemes/duplicates", headers:
+        end
+
+        it "has page heading" do
+          expect(page).to have_content("Review these sets of schemes")
+        end
+      end
+
+      context "with data provider user" do
+        let(:user) { create(:user, :data_provider) }
+
+        before do
+          sign_in user
+          get "/organisations/#{organisation.id}/schemes/duplicates", headers:
+        end
+
+        it "be unauthorised" do
+          expect(response).to have_http_status(:unauthorized)
         end
       end
     end
@@ -2258,6 +2347,67 @@ RSpec.describe OrganisationsController, type: :request do
               post "/organisations/#{organisation.id}/data-sharing-agreement", headers: headers
               expect(response).to have_http_status(:not_found)
             end
+          end
+        end
+      end
+    end
+  end
+
+  describe "POST #confirm_duplicate_schemes" do
+    let(:organisation) { create(:organisation) }
+
+    context "when not signed in" do
+      it "redirects to sign in" do
+        post "/organisations/#{organisation.id}/schemes/duplicates", headers: headers
+        expect(response).to redirect_to("/account/sign-in")
+      end
+    end
+
+    context "when signed in" do
+      before do
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in user
+      end
+
+      context "when user is data provider" do
+        let(:user) { create(:user, role: "data_provider", organisation:) }
+
+        it "returns not found" do
+          post "/organisations/#{organisation.id}/schemes/duplicates", headers: headers
+          expect(response).to have_http_status(:unauthorized)
+        end
+      end
+
+      context "when user is coordinator" do
+        let(:user) { create(:user, role: "data_coordinator", organisation:) }
+
+        context "and the duplicate schemes have been confirmed" do
+          let(:params) { { "organisation": { scheme_duplicates_checked: "true" } } }
+
+          it "redirects to schemes page" do
+            post "/organisations/#{organisation.id}/schemes/duplicates", headers: headers, params: params
+
+            expect(response).to redirect_to("/organisations/#{organisation.id}/schemes")
+            expect(flash[:notice]).to eq("You’ve confirmed the remaining schemes and locations are not duplicates.")
+          end
+
+          it "updates schemes_deduplicated_at" do
+            expect(organisation.reload.schemes_deduplicated_at).to be_nil
+
+            post "/organisations/#{organisation.id}/schemes/duplicates", headers: headers, params: params
+
+            expect(organisation.reload.schemes_deduplicated_at).not_to be_nil
+          end
+        end
+
+        context "and the duplicate schemes have not been confirmed" do
+          let(:params) { { "organisation": { scheme_duplicates_checked: "" } } }
+
+          it "displays an error" do
+            post "/organisations/#{organisation.id}/schemes/duplicates", headers: headers, params: params
+
+            expect(response).to have_http_status(:unprocessable_entity)
+            expect(page).to have_content("You must resolve all duplicates or indicate that there are no duplicates")
           end
         end
       end

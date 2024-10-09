@@ -43,12 +43,12 @@ class BulkUpload::Sales::Validator
     return false if any_setup_errors?
 
     if row_parsers.any?(&:block_log_creation?)
-      Sentry.capture_exception("Bulk upload log creation blocked: #{bulk_upload.id}.")
+      Sentry.capture_message("Bulk upload log creation blocked: #{bulk_upload.id}.")
       return false
     end
 
     if any_logs_already_exist? && FeatureToggle.bulk_upload_duplicate_log_check_enabled?
-      Sentry.capture_exception("Bulk upload log creation blocked due to duplicate logs: #{bulk_upload.id}.")
+      Sentry.capture_message("Bulk upload log creation blocked due to duplicate logs: #{bulk_upload.id}.")
       return false
     end
 
@@ -57,7 +57,7 @@ class BulkUpload::Sales::Validator
     end
 
     if any_logs_invalid?
-      Sentry.capture_exception("Bulk upload log creation blocked due to invalid logs after blanking non setup fields: #{bulk_upload.id}.")
+      Sentry.capture_message("Bulk upload log creation blocked due to invalid logs after blanking non setup fields: #{bulk_upload.id}.")
       return false
     end
 
