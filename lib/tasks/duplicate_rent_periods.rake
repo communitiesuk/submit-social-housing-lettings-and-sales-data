@@ -1,9 +1,9 @@
 desc "Find and output each group of duplicate rent periods with a total count"
 task find_redundant_rent_periods: :environment do
   duplicate_groups = OrganisationRentPeriod
-                       .select('organisation_id, rent_period')
-                       .group('organisation_id, rent_period')
-                       .having('COUNT(*) > 1')
+                       .select("organisation_id, rent_period")
+                       .group("organisation_id, rent_period")
+                       .having("COUNT(*) > 1")
 
   duplicate_records = OrganisationRentPeriod
                         .where(organisation_id: duplicate_groups.map(&:organisation_id), rent_period: duplicate_groups.map(&:rent_period))
@@ -17,9 +17,9 @@ task find_redundant_rent_periods: :environment do
   end
 
   ids_to_keep = OrganisationRentPeriod
-                  .select('MIN(id) as id')
-                  .group('organisation_id, rent_period')
-                  .having('COUNT(*) > 1')
+                  .select("MIN(id) as id")
+                  .group("organisation_id, rent_period")
+                  .having("COUNT(*) > 1")
                   .map(&:id)
 
   redundant_ids = duplicate_records.pluck(:id) - ids_to_keep
@@ -31,18 +31,18 @@ end
 desc "Delete redundant rent periods"
 task delete_duplicate_rent_periods: :environment do
   duplicate_groups = OrganisationRentPeriod
-                       .select('organisation_id, rent_period')
-                       .group('organisation_id, rent_period')
-                       .having('COUNT(*) > 1')
+                       .select("organisation_id, rent_period")
+                       .group("organisation_id, rent_period")
+                       .having("COUNT(*) > 1")
 
   duplicate_ids = OrganisationRentPeriod
                     .where(organisation_id: duplicate_groups.map(&:organisation_id), rent_period: duplicate_groups.map(&:rent_period))
                     .pluck(:id)
 
   ids_to_keep = OrganisationRentPeriod
-                  .select('MIN(id) as id')
-                  .group('organisation_id, rent_period')
-                  .having('COUNT(*) > 1')
+                  .select("MIN(id) as id")
+                  .group("organisation_id, rent_period")
+                  .having("COUNT(*) > 1")
                   .map(&:id)
 
   redundant_ids = duplicate_ids - ids_to_keep
