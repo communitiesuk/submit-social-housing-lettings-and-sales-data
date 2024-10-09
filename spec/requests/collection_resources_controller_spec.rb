@@ -111,7 +111,7 @@ RSpec.describe CollectionResourcesController, type: :request do
 
         it "displays next year banner" do
           expect(page).to have_content("The 2025 to 2026 collection resources are not yet available to users.")
-          expect(page).to have_link("Release the 2025 to 2026 collection resources to users", href: confirm_mandatory_collection_resources_release(year: 2025))
+          expect(page).to have_link("Release the 2025 to 2026 collection resources to users", href: confirm_mandatory_collection_resources_release_path(year: 2025))
         end
       end
 
@@ -267,6 +267,10 @@ RSpec.describe CollectionResourcesController, type: :request do
       end
 
       context "and the file exists on S3" do
+        before do
+          allow(storage_service).to receive(:file_exists?).and_return(true)
+        end
+
         it "displays update collection resources page content" do
           get edit_mandatory_collection_resource_path(year: 2024, log_type: "sales", resource_type: "bulk_upload_template")
 
@@ -282,8 +286,7 @@ RSpec.describe CollectionResourcesController, type: :request do
 
       context "and the file does not exist on S3" do
         before do
-          WebMock.stub_request(:head, /https:\/\/core-test-collection-resources\.s3\.amazonaws\.com/)
-            .to_return(status: 404, body: "", headers: {})
+          allow(storage_service).to receive(:file_exists?).and_return(false)
         end
 
         it "displays upload collection resources page content" do
@@ -404,9 +407,10 @@ RSpec.describe CollectionResourcesController, type: :request do
 
   describe "PATCH #release_mandatory_collection_resources_path" do
     let(:some_file) { File.open(file_fixture("blank_bulk_upload_sales.csv")) }
+    let(:collection_resource_service) { instance_double(CollectionResourcesService) }
 
     before do
-      allow(UploadCollectionResourcesService).to receive(:upload_collection_resource)
+      allow(CollectionResourcesService).to receive(:new).and_return(collection_resource_service)
     end
 
     context "when user is not signed in" do

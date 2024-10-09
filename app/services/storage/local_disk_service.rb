@@ -31,5 +31,11 @@ module Storage
         "content_type" => MiniMime.lookup_by_filename(path.to_s)&.content_type || "application/octet-stream",
       }
     end
+
+    def file_exists?(filename)
+      path = Rails.root.join("tmp/storage", filename)
+
+      File.exist?(path)
+    end
   end
 end

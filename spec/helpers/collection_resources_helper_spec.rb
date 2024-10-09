@@ -217,8 +217,7 @@ RSpec.describe CollectionResourcesHelper do
 
     context "when all the mandatory resources for next year are uploaded" do
       before do
-        WebMock.stub_request(:head, /https:\/\/core-test-collection-resources\.s3\.amazonaws\.com/)
-          .to_return(status: 200, body: "", headers: { "Content-Length" => 292_864, "Content-Type" => "application/pdf" })
+        allow(storage_service).to receive(:file_exists?).and_return(true)
       end
 
       it "returns correct text" do
@@ -228,8 +227,7 @@ RSpec.describe CollectionResourcesHelper do
 
     context "when some of the mandatory resources for next year are not uploaded" do
       before do
-        WebMock.stub_request(:head, /https:\/\/core-test-collection-resources\.s3\.amazonaws\.com/)
-          .to_return(status: 404, body: "", headers: { "Content-Length" => 292_864, "Content-Type" => "application/pdf" })
+        allow(storage_service).to receive(:file_exists?).and_return(false)
       end
 
       it "returns correct text" do
