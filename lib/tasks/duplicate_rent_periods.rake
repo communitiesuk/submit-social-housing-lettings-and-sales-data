@@ -26,9 +26,9 @@ def process_duplicate_rent_periods(log_groups: true)
   redundant_ids = duplicate_records.pluck(:id) - ids_to_keep
 
   {
-    duplicate_records: duplicate_records,
-    ids_to_keep: ids_to_keep,
-    redundant_ids: redundant_ids
+    duplicate_records:,
+    ids_to_keep:,
+    redundant_ids:,
   }
 end
 
