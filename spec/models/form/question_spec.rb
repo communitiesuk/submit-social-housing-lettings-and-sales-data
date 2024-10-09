@@ -55,7 +55,7 @@ RSpec.describe Form::Question, type: :model do
         "inferred_check_answers_value" => inferred_check_answers_value,
         "suffix" => suffix,
         "prefix" => prefix,
-        "hidden_in_check_answers" => {}
+        "hidden_in_check_answers" => {},
       }
     end
 
