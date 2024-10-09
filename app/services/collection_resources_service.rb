@@ -18,4 +18,12 @@ class CollectionResourcesService
   rescue StandardError
     nil
   end
+
+  def file_exists_on_s3?(file)
+    @storage_service.file_exists?(file)
+  end
+
+  def upload_collection_resource(filename, file)
+    @storage_service.write_file(filename, file)
+  end
 end

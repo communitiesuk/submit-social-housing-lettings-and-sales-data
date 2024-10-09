@@ -117,6 +117,14 @@ en:
           attributes:
             confirm_soft_errors:
               blank: "You must select if there are errors in these fields."
+        collection_resource:
+          attributes:
+            file:
+              error_uploading: There was an error uploading this file.
+              blank: Select which file to upload.
+              above_100_mb: The file is above 100MB.
+              must_be_pdf: The paper form must be a PDF.
+              must_be_xlsx: The %{resource} must be a Microsoft Excel file.
 
   activerecord:
     attributes:

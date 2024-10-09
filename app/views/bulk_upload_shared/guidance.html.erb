@@ -52,8 +52,6 @@
           <p class="govuk-body"><%= govuk_link_to "Download the sales bulk upload template (2023 to 2024) – New question ordering", @form.sales_template_path %></p>
 
           <p class="govuk-body"><strong>Legacy template</strong>: In this template, the questions are in the same order as the 2022/23 template, with new questions added on to the end. Use this template if you have not updated your system to match the new template yet.</p>
-          <p class="govuk-body"><%= govuk_link_to "Download the lettings bulk upload template (2023 to 2024) - Legacy version", @form.lettings_legacy_template_path %></p>
-          <p class="govuk-body"><%= govuk_link_to "Download the sales bulk upload template (2023 to 2024) – Legacy version", @form.sales_legacy_template_path %></p>
         <% else %>
           <p class="govuk-body"><%= govuk_link_to "Download the lettings bulk upload template (2024 to 2025)", @form.lettings_template_path %></p>
           <p class="govuk-body"><%= govuk_link_to "Download the sales bulk upload template (2024 to 2025)", @form.sales_template_path %></p>
