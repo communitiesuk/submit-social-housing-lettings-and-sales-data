@@ -32,7 +32,7 @@ def process_duplicate_rent_periods(log_groups: true)
   }
 end
 
-desc "Find and output each group of duplicate rent periods with a total count"
+desc "Find and output each group of duplicate rent periods with counts"
 task find_redundant_rent_periods: :environment do
   result = process_duplicate_rent_periods(log_groups: true)
 
@@ -42,7 +42,7 @@ task find_redundant_rent_periods: :environment do
   Rails.logger.info "Number of records to keep: #{result[:to_keep_ids].size}"
 end
 
-desc "Delete redundant rent periods"
+desc "Delete duplicate rent periods"
 task delete_duplicate_rent_periods: :environment do
   result = process_duplicate_rent_periods(log_groups: false)
 
