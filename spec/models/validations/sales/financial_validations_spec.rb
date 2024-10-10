@@ -187,7 +187,7 @@ RSpec.describe Validations::Sales::FinancialValidations do
       record.stairowned = 40
       record.jointpur = 1
       financial_validator.validate_percentage_bought_not_greater_than_percentage_owned(record)
-      expect(record.errors["stairowned"]).to include("Total percentage buyers now own must be more than percentage bought in this transaction")
+      expect(record.errors["stairowned"]).to include("Total percentage buyers now own must be more than percentage bought in this transaction.")
     end
 
     it "adds an error to stairowned and not stairbought if the percentage bought is more than the percentage owned for non joint purchase" do
@@ -195,7 +195,7 @@ RSpec.describe Validations::Sales::FinancialValidations do
       record.stairowned = 40
       record.jointpur = 2
       financial_validator.validate_percentage_bought_not_greater_than_percentage_owned(record)
-      expect(record.errors["stairowned"]).to include("Total percentage buyer now owns must be more than percentage bought in this transaction")
+      expect(record.errors["stairowned"]).to include("Total percentage buyer now owns must be more than percentage bought in this transaction.")
     end
   end
 
@@ -270,8 +270,8 @@ RSpec.describe Validations::Sales::FinancialValidations do
       [2, 16, 18, 24].each do |type|
         record.type = type
         financial_validator.validate_percentage_bought_at_least_threshold(record)
-        expect(record.errors["stairbought"]).to eq(["The minimum increase in equity while staircasing is 10%"])
-        expect(record.errors["type"]).to eq(["The minimum increase in equity while staircasing is 10% for this shared ownership type"])
+        expect(record.errors["stairbought"]).to eq(["The minimum increase in equity while staircasing is 10%."])
+        expect(record.errors["type"]).to eq(["The minimum increase in equity while staircasing is 10% for this shared ownership type."])
         record.errors.clear
       end
 
@@ -279,8 +279,8 @@ RSpec.describe Validations::Sales::FinancialValidations do
       [28, 30, 31, 32].each do |type|
         record.type = type
         financial_validator.validate_percentage_bought_at_least_threshold(record)
-        expect(record.errors["stairbought"]).to eq(["The minimum increase in equity while staircasing is 1%"])
-        expect(record.errors["type"]).to eq(["The minimum increase in equity while staircasing is 1% for this shared ownership type"])
+        expect(record.errors["stairbought"]).to eq(["The minimum increase in equity while staircasing is 1%."])
+        expect(record.errors["type"]).to eq(["The minimum increase in equity while staircasing is 1% for this shared ownership type."])
         record.errors.clear
       end
     end

@@ -33,13 +33,14 @@ en:
   service_name: "Submit social housing lettings and sales data (CORE)"
   feedback_form: "https://forms.office.com/Pages/ResponsePage.aspx?id=EGg0v32c3kOociSi7zmVqC4YDsCJ3llAvEZelBFBLUBURFVUTzFDTUJPQlM4M0laTE5DTlNFSjJBQi4u"
   organisation:
-    created: "%{organisation} was created"
-    updated: "Organisation details updated"
+    created: "%{organisation} was created."
+    updated: "Organisation details updated."
     reactivated: "%{organisation} has been reactivated."
     deactivated: "%{organisation} has been deactivated."
+    duplicate_schemes_confirmed: "You’ve confirmed the remaining schemes and locations are not duplicates."
   user:
-    create_password: "Create a password to finish setting up your account"
-    reset_password: "Reset your password"
+    create_password: "Create a password to finish setting up your account."
+    reset_password: "Reset your password."
 
   active_notifications:
     zero: "There are no active notifications"
@@ -50,8 +51,8 @@ en:
     errors:
       models:
         bulk_upload/row_parser: &bulk_upload__row_parser__base
-          inclusion: Enter a valid value for %{question}
-          spreadsheet_dupe: This is a duplicate of a log in your file
+          inclusion: "Enter a valid value for %{question}"
+          spreadsheet_dupe: "This is a duplicate of a log in your file."
         bulk_upload/lettings/year2024/row_parser:
           <<: *bulk_upload__row_parser__base
         bulk_upload/lettings/year2023/row_parser:
@@ -63,118 +64,118 @@ en:
         bulk_upload/lettings/validator:
           attributes:
             base:
-              blank_file: Template is blank - The template must be filled in for us to create the logs and check if data is correct.
-              wrong_field_numbers_count: "Incorrect number of fields, please ensure you have used the correct template"
-              over_max_column_count: "Too many columns, please ensure you have used the correct template"
-              wrong_template: "Incorrect start dates, please ensure you have used the correct template"
+              blank_file: "Template is blank - The template must be filled in for us to create the logs and check if data is correct."
+              wrong_field_numbers_count: "Incorrect number of fields, please ensure you have used the correct template."
+              over_max_column_count: "Too many columns, please ensure you have used the correct template."
+              wrong_template: "Incorrect start dates, please ensure you have used the correct template."
               no_headers: "Your file does not contain the required header rows. Add or check the header rows and upload your file again. [Read more about using the template headers](%{guidance_link})."
         bulk_upload/sales/validator:
           attributes:
             base:
-              blank_file: Template is blank - The template must be filled in for us to create the logs and check if data is correct.
-              wrong_field_numbers_count: "Incorrect number of fields, please ensure you have used the correct template"
-              over_max_column_count: "Too many columns, please ensure you have used the correct template"
-              wrong_template: "Incorrect sale dates, please ensure you have used the correct template"
+              blank_file: "Template is blank - The template must be filled in for us to create the logs and check if data is correct."
+              wrong_field_numbers_count: "Incorrect number of fields, please ensure you have used the correct template."
+              over_max_column_count: "Too many columns, please ensure you have used the correct template."
+              wrong_template: "Incorrect sale dates, please ensure you have used the correct template."
               no_headers: "Your file does not contain the required header rows. Add or check the header rows and upload your file again. [Read more about using the template headers](%{guidance_link})."
         forms/bulk_upload_lettings/year:
           attributes:
             year:
-              blank: You must select a collection period to upload for
+              blank: "You must select a collection period to upload for."
         forms/bulk_upload_sales/year:
           attributes:
             year:
-              blank: You must select a collection period to upload for
+              blank: "You must select a collection period to upload for."
         forms/bulk_upload_lettings/upload_your_file:
           attributes:
             file:
-              blank: Select which file to upload
-              not_csv: Your file must be in CSV format
+              blank: "Select which file to upload."
+              not_csv: "Your file must be in CSV format."
         forms/bulk_upload_sales/upload_your_file:
           attributes:
             file:
-              blank: Select which file to upload
-              not_csv: Your file must be in CSV format
+              blank: "Select which file to upload."
+              not_csv: "Your file must be in CSV format."
         forms/bulk_upload_lettings/needstype:
           attributes:
             needstype:
-              blank: You must answer needs type
+              blank: "You must answer needs type."
         forms/bulk_upload_lettings_resume/fix_choice:
           attributes:
             choice:
-              blank: Select how you would like to fix these errors
-              inclusion: You must select one of the following options for how you would like to fix these errors
+              blank: "Select how you would like to fix these errors."
+              inclusion: "You must select one of the following options for how you would like to fix these errors."
         forms/bulk_upload_sales_resume/fix_choice:
           attributes:
             choice:
-              blank: Select how you would like to fix these errors
-              inclusion: You must select one of the following options for how you would like to fix these errors
+              blank: "Select how you would like to fix these errors."
+              inclusion: "You must select one of the following options for how you would like to fix these errors."
         forms/bulk_upload_lettings_soft_validations_check/confirm_soft_errors:
           attributes:
             confirm_soft_errors:
-              blank: You must select if there are errors in these fields
+              blank: "You must select if there are errors in these fields."
         forms/bulk_upload_sales_soft_validations_check/confirm_soft_errors:
           attributes:
             confirm_soft_errors:
-              blank: You must select if there are errors in these fields
+              blank: "You must select if there are errors in these fields."
 
   activerecord:
     attributes:
       user:
-        email: email
+        email: "email"
     errors:
       models:
         scheme:
           attributes:
             owning_organisation_id:
-              invalid: "Enter the name of the organisation that owns the housing stock"
+              invalid: "Enter the name of the organisation that owns the housing stock."
             service_name:
-              invalid: "Enter the name of the scheme"
+              invalid: "Enter the name of the scheme."
             scheme_type:
-              invalid: "Select the type of scheme"
+              invalid: "Select the type of scheme."
             registered_under_care_act:
-              invalid: "Select if this scheme is registered under the Care Standards Act 2000"
+              invalid: "Select if this scheme is registered under the Care Standards Act 2000."
             primary_client_group:
-              invalid: "Select what client group this scheme is intended for"
+              invalid: "Select what client group this scheme is intended for."
             secondary_client_group:
-              invalid: "Select the other client group for this scheme"
+              invalid: "Select the other client group for this scheme."
             support_type:
-              invalid: "Select the level of support provided by this scheme"
+              invalid: "Select the level of support provided by this scheme."
             intended_stay:
-              invalid: "Select the intended length of stay"
+              invalid: "Select the intended length of stay."
             has_other_client_group:
-              invalid: "Select if this scheme provides for another client group"
+              invalid: "Select if this scheme provides for another client group."
             arrangement_type:
-              invalid: "Select who provides the support services used by this scheme"
+              invalid: "Select who provides the support services used by this scheme."
         location:
           attributes:
             startdate:
-              invalid: "Enter a date in the correct format, for example 31 1 2022"
+              invalid: "Enter a date in the correct format, for example 31 1 2022."
             units:
-              blank: "Enter the total number of units at this location"
+              blank: "Enter the total number of units at this location."
             type_of_unit:
-              blank: "Select the most common type of unit at this location"
+              blank: "Select the most common type of unit at this location."
             mobility_type:
-              blank: "Select the mobility standards for the majority of units in this location"
+              blank: "Select the mobility standards for the majority of units in this location."
         user:
           attributes:
             organisation_id:
-              blank: "Select the user’s organisation"
-              invalid: "Select the user’s organisation"
+              blank: "Select the user’s organisation."
+              invalid: "Select the user’s organisation."
             name:
-              blank: "Enter a name"
+              blank: "Enter a name."
             email:
-              invalid: "Enter an email address in the correct format, like name@example.com"
-              blank: "Enter an email address"
-              taken: "Enter an email address that hasn’t already been used to sign up"
+              invalid: "Enter an email address in the correct format, like name@example.com."
+              blank: "Enter an email address."
+              taken: "Enter an email address that hasn’t already been used to sign up."
             phone:
-              invalid: "Enter a telephone number in the correct format"
-              blank: "Enter a telephone number"
+              invalid: "Enter a telephone number in the correct format."
+              blank: "Enter a telephone number."
             role:
-              invalid: "Role must be data accessor, data provider or data coordinator"
-              blank: "Select role"
+              invalid: "Role must be data accessor, data provider or data coordinator."
+              blank: "Select role."
             password:
-              blank: Enter a password
-              too_short: The password you entered is too short. Enter a password that is %{count} characters or longer.
+              blank: "Enter a password."
+              too_short: "The password you entered is too short. Enter a password that is %{count} characters or longer."
             reset_password_token:
               invalid: "That link is invalid. Check you are using the correct link."
             log_reassignment:
@@ -184,20 +185,20 @@ en:
         merge_request:
           attributes:
             absorbing_organisation_id:
-              blank: "Select the absorbing organisation"
+              blank: "Select the absorbing organisation."
             merge_date:
-              blank: "Enter a merge date"
-              invalid: "Enter a valid merge date"
+              blank: "Enter a merge date."
+              invalid: "Enter a valid merge date."
             existing_absorbing_organisation:
               blank: "You must answer absorbing organisation already active?"
         notification:
           attributes:
             title:
-              blank: "Enter a title"
+              blank: "Enter a title."
             link_text:
-              blank_when_additional_page_set: "Enter the link text"
+              blank_when_additional_page_set: "Enter the link text."
             page_content:
-              blank_when_additional_page_set: "Enter the page content"
+              blank_when_additional_page_set: "Enter the page content."
 
   notification:
     logs_deleted:
@@ -209,8 +210,8 @@ en:
     duplicate_logs:
         deduplication_success_banner: "%{log_link} is no longer a duplicate and has been removed from the list.<p class=\"govuk-body govuk-!-margin-top-4\">You changed the %{changed_question_label}.</p>"
     duplicate_sets:
-      one: "There is %{count} set of duplicate logs"
-      other: "There are %{count} sets of duplicate logs"
+      one: "There is %{count} set of duplicate logs."
+      other: "There are %{count} sets of duplicate logs."
     location_deleted: "%{postcode} has been deleted."
     scheme_deleted: "%{service_name} has been deleted."
     user_deleted: "%{name} has been deleted."
@@ -221,72 +222,73 @@ en:
 
   validations:
     organisation:
-      data_sharing_agreement_not_signed: Your organisation must accept the Data Sharing Agreement before you can create any logs.
-      name_missing: "Enter the name of the organisation"
-      provider_type_missing: "Select the organisation type"
+      data_sharing_agreement_not_signed: "Your organisation must accept the Data Sharing Agreement before you can create any logs."
+      name_missing: "Enter the name of the organisation."
+      provider_type_missing: "Select the organisation type."
       stock_owner:
-        blank: "You must choose a stock owner"
-        already_added: "You have already added this stock owner"
+        blank: "You must choose a stock owner."
+        already_added: "You have already added this stock owner."
         does_not_own_stock: "You can only add stock owners who own stock, which this organisation does not."
       managing_agent:
-        blank: "You must choose a managing agent"
-        already_added: "You have already added this managing agent"
+        blank: "You must choose a managing agent."
+        already_added: "You have already added this managing agent."
       merged: "That organisation has already been merged. Select a different organisation."
+      scheme_duplicates_not_resolved: "You must resolve all duplicates or indicate that there are no duplicates"
     not_answered: "You must answer %{question}"
     invalid_option: "Enter a valid value for %{question}"
     invalid_number: "Enter a number for %{question}"
     no_address_found: "We could not find this address. Check the address data in your CSV file is correct and complete, or select the correct address using the CORE site."
 
-    other_field_missing: "If %{main_field_label} is other then %{other_field_label} must be provided"
-    other_field_not_required: "%{other_field_label} must not be provided if %{main_field_label} was not other"
+    other_field_missing: "If %{main_field_label} is other then %{other_field_label} must be provided."
+    other_field_not_required: "%{other_field_label} must not be provided if %{main_field_label} was not other."
     numeric:
-      within_range: "%{field} must be between %{min} and %{max}"
-      above_min: "%{field} must be at least %{min}"
-      whole_number: "%{field} must be a whole number"
-      nearest_ten: "%{field} must be given to the nearest ten"
-      nearest_hundredth: "%{field} must be given to the nearest hundredth"
-      normal_format: "Enter a number"
-      format: "%{field} must be a number"
+      within_range: "%{field} must be between %{min} and %{max}."
+      above_min: "%{field} must be at least %{min}."
+      whole_number: "%{field} must be a whole number."
+      nearest_ten: "%{field} must be given to the nearest ten."
+      nearest_hundredth: "%{field} must be given to the nearest hundredth."
+      normal_format: "Enter a number."
+      format: "%{field} must be a number."
 
     date:
-      invalid_date: "Enter a date in the correct format, for example 31 1 2022"
-      outside_collection_window: Enter a date within the %{year_combo} collection year, which is between 1st April %{start_year} and 31st March %{end_year}
-    postcode: "Enter a postcode in the correct format, for example AA1 1AA"
-    location_admin_district: "Select a local authority"
+      invalid_date: "Enter a date in the correct format, for example 31 1 2024."
+      outside_collection_window: "Enter a date within the %{year_combo} collection year, which is between 1st April %{start_year} and 31st March %{end_year}."
+    postcode: "Enter a postcode in the correct format, for example AA1 1AA."
+    location_admin_district: "Select a local authority."
     email:
-      taken: "Enter an email address that hasn’t already been used to sign up"
-      invalid: "Enter an email address in the correct format, like name@example.com"
-      blank: "Enter an email address"
+      taken: "Enter an email address that hasn’t already been used to sign up."
+      invalid: "Enter an email address in the correct format, like name@example.com."
+      blank: "Enter an email address."
     role:
-      invalid: "Role must be data accessor, data provider or data coordinator"
+      invalid: "Role must be data accessor, data provider or data coordinator."
 
     setup:
       intermediate_rent_product_name:
-        blank: "Enter name of other intermediate rent product"
+        blank: "Enter name of other intermediate rent product."
       saledate:
-        later_than_14_days_after: "Sale completion date must not be later than 14 days from today’s date"
+        later_than_14_days_after: "Sale completion date must not be later than 14 days from today’s date."
         current_collection_year:
-          Enter a date within the %{current_start_year_short}/%{current_end_year_short} collection year, which is between %{current_start_year_long} and %{current_end_year_long}
+          "Enter a date within the %{current_start_year_short}/%{current_end_year_short} collection year, which is between %{current_start_year_long} and %{current_end_year_long}."
         previous_and_current_collection_year:
-          "Enter a date within the %{previous_start_year_short}/%{previous_end_year_short} or %{previous_end_year_short}/%{current_end_year_short} collection years, which is between %{previous_start_year_long} and %{current_end_year_long}"
-        year_not_two_digits: "Sale completion year must be 2 digits"
+          "Enter a date within the %{previous_start_year_short}/%{previous_end_year_short} or %{previous_end_year_short}/%{current_end_year_short} collection years, which is between %{previous_start_year_long} and %{current_end_year_long}."
+        year_not_two_digits: "Sale completion year must be 2 digits."
         invalid_merged_organisations_saledate: "Enter a date when the owning organisation was active. %{owning_organisation} became inactive on %{owning_organisation_merge_date} and was replaced by %{owning_absorbing_organisation}."
         invalid_absorbing_organisations_saledate:  "Enter a date when the owning organisation was active. %{owning_organisation} became active on %{owning_organisation_available_from}."
       type:
-        percentage_bought_must_be_at_least_threshold: "The minimum increase in equity while staircasing is %{threshold}% for this shared ownership type"
+        percentage_bought_must_be_at_least_threshold: "The minimum increase in equity while staircasing is %{threshold}% for this shared ownership type."
 
       startdate:
         current_collection_year:
-          Enter a date within the %{current_start_year_short}/%{current_end_year_short} collection year, which is between %{current_start_year_long} and %{current_end_year_long}
+          "Enter a date within the %{current_start_year_short}/%{current_end_year_short} collection year, which is between %{current_start_year_long} and %{current_end_year_long}."
         previous_and_current_collection_year:
-          "Enter a date within the %{previous_start_year_short}/%{previous_end_year_short} or %{previous_end_year_short}/%{current_end_year_short} collection years, which is between %{previous_start_year_long} and %{current_end_year_long}"
-        later_than_14_days_after: "The tenancy start date must not be later than 14 days from today’s date"
-        before_scheme_end_date: "The tenancy start date must be before the end date for this supported housing scheme"
-        after_void_date: "Enter a tenancy start date that is after the void date"
-        after_major_repair_date: "Enter a tenancy start date that is after the major repair date"
-        year_not_two_digits: Tenancy start year must be 2 digits
-        ten_years_after_void_date: "Enter a tenancy start date that is no more than 10 years after the void date"
-        ten_years_after_mrc_date: "Enter a tenancy start date that is no more than 10 years after the major repairs completion date"
+          "Enter a date within the %{previous_start_year_short}/%{previous_end_year_short} or %{previous_end_year_short}/%{current_end_year_short} collection years, which is between %{previous_start_year_long} and %{current_end_year_long}."
+        later_than_14_days_after: "The tenancy start date must not be later than 14 days from today’s date."
+        before_scheme_end_date: "The tenancy start date must be before the end date for this supported housing scheme."
+        after_void_date: "Enter a tenancy start date that is after the void date."
+        after_major_repair_date: "Enter a tenancy start date that is after the major repair date."
+        year_not_two_digits: "Tenancy start year must be 2 digits."
+        ten_years_after_void_date: "Enter a tenancy start date that is no more than 10 years after the void date."
+        ten_years_after_mrc_date: "Enter a tenancy start date that is no more than 10 years after the major repairs completion date."
         invalid_merged_organisations_start_date:
           same_organisation: "Enter a date when the owning and managing organisation was active. %{owning_organisation} became inactive on %{owning_organisation_merge_date} and was replaced by %{owning_absorbing_organisation}."
           same_merge: "Enter a date when the owning and managing organisations were active. %{owning_organisation} and %{managing_organisation} became inactive on %{owning_organisation_merge_date} and were replaced by %{owning_absorbing_organisation}."
@@ -304,110 +306,111 @@ en:
             startdate: "The location %{postcode} is inactive on this date. Enter another date or choose another location."
             location_id: "This location is not active on the tenancy start date. Choose another location or edit the tenancy start date."
           activating_soon:
-            startdate: "The location %{postcode} is not available until %{date}. Enter a tenancy start date after %{date}"
-            location_id: "The location %{postcode} is not available until %{date}. Select another location or edit the tenancy start date"
+            startdate: "The location %{postcode} is not available until %{date}. Enter a tenancy start date after %{date}."
+            location_id: "The location %{postcode} is not available until %{date}. Select another location or edit the tenancy start date."
           reactivating_soon:
-            startdate: "The location %{postcode} is not available until %{date}. Enter a tenancy start date after %{date}"
-            location_id: "The location %{postcode} is not available until %{date}. Select another location or edit the tenancy start date"
+            startdate: "The location %{postcode} is not available until %{date}. Enter a tenancy start date after %{date}."
+            location_id: "The location %{postcode} is not available until %{date}. Select another location or edit the tenancy start date."
         scheme:
           deactivated:
-            startdate: "The scheme %{name} was deactivated on %{date} and was not available on the day you entered. Select another scheme or edit the tenancy start date"
-            scheme_id: "The scheme %{name} was deactivated on %{date} and was not available on the day you entered. Select another scheme or edit the tenancy start date"
+            startdate: "The scheme %{name} was deactivated on %{date} and was not available on the day you entered. Select another scheme or edit the tenancy start date."
+            scheme_id: "The scheme %{name} was deactivated on %{date} and was not available on the day you entered. Select another scheme or edit the tenancy start date."
           reactivating_soon:
-            startdate: "The scheme %{name} is not available until %{date}. Enter a tenancy start date after %{date}"
-            scheme_id: "The scheme %{name} is not available until %{date}. Select another scheme or edit the tenancy start date"
+            startdate: "The scheme %{name} is not available until %{date}. Enter a tenancy start date after %{date}."
+            scheme_id: "The scheme %{name} is not available until %{date}. Select another scheme or edit the tenancy start date."
           locations_inactive:
             startdate: "The scheme %{name} has no locations that are active on this date. Enter another date or choose another scheme."
             scheme_id: "The scheme %{name} has no locations that are active on this date. Enter another date or choose another scheme."
       owning_organisation:
-        invalid: "Please select the owning organisation or managing organisation that you belong to"
+        invalid: "Please select the owning organisation or managing organisation that you belong to."
         data_sharing_agreement_not_signed: "The organisation must accept the Data Sharing Agreement before it can be selected as the owning organisation."
         inactive_merged_organisation: "The owning organisation must be active on the tenancy start date. %{owning_organisation} became inactive on %{owning_organisation_merge_date} and was replaced by %{owning_absorbing_organisation}."
         inactive_absorbing_organisation: "The owning organisation must be active on the tenancy start date. %{owning_organisation} became active on %{owning_organisation_available_from}."
         inactive_merged_organisation_sales: "The owning organisation must be active on the sale completion date. %{owning_organisation} became inactive on %{owning_organisation_merge_date} and was replaced by %{owning_absorbing_organisation}."
         inactive_absorbing_organisation_sales: "The owning organisation must be active on the sale completion date. %{owning_organisation} became active on %{owning_organisation_available_from}."
       managing_organisation:
-        invalid: "Please select the owning organisation or managing organisation that you belong to"
+        invalid: "Please select the owning organisation or managing organisation that you belong to."
         data_sharing_agreement_not_signed: "The organisation must accept the Data Sharing Agreement before it can be selected as the managing organisation."
         inactive_merged_organisation: "The managing organisation must be active on the tenancy start date. %{managing_organisation} became inactive on %{managing_organisation_merge_date} and was replaced by %{managing_absorbing_organisation}."
         inactive_absorbing_organisation: "The managing organisation must be active on the tenancy start date. %{managing_organisation} became active on %{managing_organisation_available_from}."
       assigned_to:
-        invalid: "Please select the owning organisation or managing organisation that you belong to"
+        invalid: "Please select the owning organisation or managing organisation that you belong to."
       lettype:
-        general_needs_mismatch: Lettings type must be a general needs type because you selected general needs when uploading the file
-        supported_housing_mismatch: Lettings type must be a supported housing type because you selected supported housing when uploading the file
-        needstype_general_needs: This needs type is general needs, but the letting type is supported housing. Change either the needs type or the letting type.
-        needstype_supported_housing: This needs type is supported housing, but the letting type is general needs. Change either the needs type or the letting type.
+        general_needs_mismatch: "Lettings type must be a general needs type because you selected general needs when uploading the file."
+        supported_housing_mismatch: "Lettings type must be a supported housing type because you selected supported housing when uploading the file."
+        needstype_general_needs: "This needs type is general needs, but the letting type is supported housing. Change either the needs type or the letting type."
+        needstype_supported_housing: "This needs type is supported housing, but the letting type is general needs. Change either the needs type or the letting type."
       needstype:
-        lettype_not_general_needs: This letting type is supported housing, but the needs type is general needs. Change either the needs type or the letting type.
-        lettype_not_supported_housing: This letting type is general needs, but the needs type is supported housing. Change either the needs type or the letting type.
+        lettype_not_general_needs: "This letting type is supported housing, but the needs type is general needs. Change either the needs type or the letting type."
+        lettype_not_supported_housing: "This letting type is general needs, but the needs type is supported housing. Change either the needs type or the letting type."
       location:
-        incomplete: "This location is incomplete. Select another location or update this one"
+        incomplete: "This location is incomplete. Select another location or update this one."
       scheme:
-        incomplete: "This scheme is incomplete. Select another scheme or update this one"
+        incomplete: "This scheme is incomplete. Select another scheme or update this one."
 
     property:
       uprn:
-        invalid: "UPRN must be 12 digits or less"
+        invalid: "UPRN must be 12 digits or less."
       uprn_known:
         invalid: "You must answer UPRN known?"
       mrcdate:
-        before_tenancy_start: "Enter a major repairs date that is before the tenancy start date"
-        not_first_let: "Major repairs date must not be completed if the tenancy is a first let"
-        ten_years_before_tenancy_start: "Enter a major repairs completion date that is no more than 10 years before the tenancy start date"
-        before_void_date: "Major repairs date must be after the void date if provided"
+        before_tenancy_start: "Enter a major repairs date that is before the tenancy start date."
+        not_first_let: "Major repairs date must not be completed if the tenancy is a first let."
+        ten_years_before_tenancy_start: "Enter a major repairs completion date that is no more than 10 years before the tenancy start date."
+        before_void_date: "Major repairs date must be after the void date if provided."
       void_date:
-        ten_years_before_tenancy_start: "Enter a void date no more than 10 years before the tenancy start date"
-        before_tenancy_start: "Enter a void date that is before the tenancy start date"
-        after_mrcdate: "Void date must be before the major repairs date if provided"
+        ten_years_before_tenancy_start: "Enter a void date no more than 10 years before the tenancy start date."
+        before_tenancy_start: "Enter a void date that is before the tenancy start date."
+        after_mrcdate: "Void date must be before the major repairs date if provided."
       la:
-        la_invalid_for_org: "%{org_name} does not operate in %{la_name}"
-        postcode_invalid_for_org: "Enter a postcode in an area covered by %{org_name}"
+        la_invalid_for_org: "%{org_name} does not operate in %{la_name}."
+        postcode_invalid_for_org: "Enter a postcode in an area covered by %{org_name}."
       rsnvac:
-        first_let_not_social: "Enter a reason for vacancy that is not 'first let' if unit has been previously let as social housing"
-        first_let_social: "Reason for vacancy must be first let if unit has been previously let as social housing"
-        previous_let_social: "Property cannot have a previous let type if being let as social housing for the first time"
-        non_temp_accommodation: "Answer cannot be re-let to tenant who occupied the same property as temporary accommodation as this accommodation is not temporary"
-        referral_invalid: "Answer cannot be re-let to tenant who occupied the same property as temporary accommodation as a different source of referral for this letting"
-        not_a_renewal: "Reason for vacancy cannot be 'Renewal of fixed-term tenancy' if letting is not a renewal"
+        first_let_not_social: "Enter a reason for vacancy that is not 'first let' if unit has been previously let as social housing."
+        first_let_social: "Reason for vacancy must be first let if unit has been previously let as social housing."
+        previous_let_social: "Property cannot have a previous let type if being let as social housing for the first time."
+        non_temp_accommodation: "Answer cannot be re-let to tenant who occupied the same property as temporary accommodation as this accommodation is not temporary."
+        referral_invalid: "Answer cannot be re-let to tenant who occupied the same property as temporary accommodation as a different source of referral for this letting."
+        not_a_renewal: "Reason for vacancy cannot be 'Renewal of fixed-term tenancy' if letting is not a renewal."
       unittype_gn:
-        one_bedroom_bedsit: "A bedsit can only have one bedroom"
-        one_seven_bedroom_shared: "A shared house must have 1 to 7 bedrooms"
-        one_three_bedroom_single_tenant_shared: "A shared house with fewer than two tenants must have 1 to 3 bedrooms"
+        one_bedroom_bedsit: "A bedsit can only have one bedroom."
+        one_seven_bedroom_shared: "A shared house must have 1 to 7 bedrooms."
+        one_three_bedroom_single_tenant_shared: "A shared house with fewer than two tenants must have 1 to 3 bedrooms."
       beds:
-        bedsits_have_max_one_bedroom: "Number of bedrooms must be 1 if the property is a bedsit"
+        bedsits_have_max_one_bedroom: "Number of bedrooms must be 1 if the property is a bedsit."
       proptype:
-        bedsits_have_max_one_bedroom: "Answer cannot be 'Bedsit' if the property has 2 or more bedrooms"
+        bedsits_have_max_one_bedroom: "Answer cannot be 'Bedsit' if the property has 2 or more bedrooms."
       postcode:
-        must_match_previous: "%{buyer_possessive} last accommodation and discounted ownership postcodes must match"
+        must_match_previous: "%{buyer_possessive} last accommodation and discounted ownership postcodes must match."
 
     financial:
       tshortfall:
-        outstanding_amount_not_expected: "You cannot answer the outstanding amount question if you don’t have outstanding rent or charges"
-        more_than_total_charge: "Enter a value less than the total charge"
-        must_be_positive: "Enter a value over £0.01 as you told us there is an outstanding amount"
+        outstanding_amount_not_expected: "You cannot answer the outstanding amount question if you don’t have outstanding rent or charges."
+        more_than_total_charge: "Enter a value less than the total charge."
+        more_than_carehome_charge: "Enter a value less than the care home charge."
+        must_be_positive: "Enter a value over £0.01 as you told us there is an outstanding amount."
       hbrentshortfall:
-        outstanding_amount_not_expected: "Answer must be ‘yes’ as you have answered the outstanding amount question"
-        outstanding_no_benefits: "Answer cannot be ‘yes’ to outstanding amount for basic rent or charges if tenant does not receive housing benefit or Universal Credit or you‘re not sure"
+        outstanding_amount_not_expected: "Answer must be ‘yes’ as you have answered the outstanding amount question."
+        outstanding_no_benefits: "Answer cannot be ‘yes’ to outstanding amount for basic rent or charges if tenant does not receive housing benefit or Universal Credit or you‘re not sure."
       benefits:
-        part_or_full_time: "Answer cannot be ‘all’ for income from Universal Credit, state pensions or benefits if the tenant or their partner works part-time or full-time"
+        part_or_full_time: "Answer cannot be ‘all’ for income from Universal Credit, state pensions or benefits if the tenant or their partner works part-time or full-time."
       earnings:
-        over_hard_max: "The household’s income cannot be greater than %{hard_max} per week given the household’s working situation"
-        under_hard_min: "The household’s income cannot be less than %{hard_min} per week given the household’s working situation"
-        freq_missing: "Select how often the household receives income"
-        earnings_missing: "Enter how much income the household has in total"
+        over_hard_max: "The household’s income cannot be greater than %{hard_max} per week given the household’s working situation."
+        under_hard_min: "The household’s income cannot be less than %{hard_min} per week given the household’s working situation."
+        freq_missing: "Select how often the household receives income."
+        earnings_missing: "Enter how much income the household has in total."
       income:
-        outside_london_income_range: "Income must be between £0 and £90,000 for properties within a London local authority"
-        outside_non_london_income_range: "Income must be between £0 and £80,000 for properties in a non-London local authority"
-        combined_over_hard_max_for_london: "Combined income must be £90,000 or lower for properties within a London local authority"
-        combined_over_hard_max_for_outside_london: "Combined income must be £80,000 or lower for properties outside London local authorities"
-        child_has_income: "Child's income must be £0"
-      negative_currency: "Enter an amount above 0"
+        outside_london_income_range: "Income must be between £0 and £90,000 for properties within a London local authority."
+        outside_non_london_income_range: "Income must be between £0 and £80,000 for properties in a non-London local authority."
+        combined_over_hard_max_for_london: "Combined income must be £90,000 or lower for properties within a London local authority."
+        combined_over_hard_max_for_outside_london: "Combined income must be £80,000 or lower for properties outside London local authorities."
+        child_has_income: "Child's income must be £0."
+      negative_currency: "Enter an amount above 0."
       rent:
         out_of_range: "Enter a value for the %{charge_name} between £0 and %{maximum_per_period} paid %{frequency}. %{maximum_per_period} is the max limit for rent and charges paid %{frequency} for %{letting_type} lettings owned by a %{provider_type}."
       ecstat:
-        over_hard_max: "The household’s income of %{earnings} %{frequency} is too high given the household’s working situation"
-        under_hard_min: "The household’s income of %{earnings} %{frequency} is too low given the household’s working situation"
+        over_hard_max: "The household’s income of %{earnings} %{frequency} is too high given the household’s working situation."
+        under_hard_min: "The household’s income of %{earnings} %{frequency} is too low given the household’s working situation."
       age:
         earnings_over_hard_max: "The household’s income of %{earnings} %{frequency} is too high for the number of adults. Change either the household income or the age of the tenants."
       hhmemb:
@@ -415,159 +418,159 @@ en:
           over_hard_max: "The household’s income of %{earnings} %{frequency} is too high for this number of tenants. Change either the household income or number of tenants."
           under_hard_min: "The household’s income of %{earnings} %{frequency} is too low for this number of tenants. Change either the household income or number of tenants."
       brent:
-        below_hard_min: "Rent is below the absolute minimum expected for a property of this type. Please check the rent, rent period, local authority and (if general needs) number of bedrooms"
-        above_hard_max: "Rent is higher than the absolute maximum expected for a property of this type. Please check the rent, rent period, local authority and (if general needs) number of bedrooms"
+        below_hard_min: "Rent is below the absolute minimum expected for a property of this type. Please check the rent, rent period, local authority and (if general needs) number of bedrooms."
+        above_hard_max: "Rent is higher than the absolute maximum expected for a property of this type. Please check the rent, rent period, local authority and (if general needs) number of bedrooms."
         scheme_id:
-          below_hard_min: "Rent is below the absolute minimum expected for a property of this type. Please check the rent, rent period and local authority"
-          above_hard_max: "Rent is higher than the absolute maximum expected for a property of this type. Please check the rent, rent period and local authority"
+          below_hard_min: "Rent is below the absolute minimum expected for a property of this type. Please check the rent, rent period and local authority."
+          above_hard_max: "Rent is higher than the absolute maximum expected for a property of this type. Please check the rent, rent period and local authority."
         location_id:
-          below_hard_min: "Rent is below the absolute minimum expected for a property of this type. Please check the rent, rent period and local authority"
-          above_hard_max: "Rent is higher than the absolute maximum expected for a property of this type. Please check the rent, rent period and local authority"
+          below_hard_min: "Rent is below the absolute minimum expected for a property of this type. Please check the rent, rent period and local authority."
+          above_hard_max: "Rent is higher than the absolute maximum expected for a property of this type. Please check the rent, rent period and local authority."
         postcode_known:
-          below_hard_min: "Rent is below the absolute minimum expected for a property of this type. Please check the rent, rent period, local authority and number of bedrooms"
-          above_hard_max: "Rent is higher than the absolute maximum expected for a property of this type. Please check the rent, rent period, local authority and number of bedrooms"
+          below_hard_min: "Rent is below the absolute minimum expected for a property of this type. Please check the rent, rent period, local authority and number of bedrooms."
+          above_hard_max: "Rent is higher than the absolute maximum expected for a property of this type. Please check the rent, rent period, local authority and number of bedrooms."
         uprn:
-          below_hard_min: "Rent is below the absolute minimum expected for a property of this type based on this UPRN"
-          above_hard_max: "Rent is higher than the absolute maximum expected for a property of this type based on this UPRN"
+          below_hard_min: "Rent is below the absolute minimum expected for a property of this type based on this UPRN."
+          above_hard_max: "Rent is higher than the absolute maximum expected for a property of this type based on this UPRN."
         la:
-          below_hard_min: "Rent is below the absolute minimum expected for a property of this type based on this local authority"
-          above_hard_max: "Rent is higher than the absolute maximum expected for a property of this type based on this local authority"
+          below_hard_min: "Rent is below the absolute minimum expected for a property of this type based on this local authority."
+          above_hard_max: "Rent is higher than the absolute maximum expected for a property of this type based on this local authority."
         beds:
-          below_hard_min: "Rent is below the absolute minimum expected for a property of this type based on this number of bedrooms"
-          above_hard_max: "Rent is higher than the absolute maximum expected for a property of this type based on this number of bedrooms"
+          below_hard_min: "Rent is below the absolute minimum expected for a property of this type based on this number of bedrooms."
+          above_hard_max: "Rent is higher than the absolute maximum expected for a property of this type based on this number of bedrooms."
         needstype:
-          below_hard_min: "Rent is below the absolute minimum expected for a property of this type based on this lettings type"
-          above_hard_max: "Rent is higher than the absolute maximum expected for a property of this type based on this lettings type"
+          below_hard_min: "Rent is below the absolute minimum expected for a property of this type based on this lettings type."
+          above_hard_max: "Rent is higher than the absolute maximum expected for a property of this type based on this lettings type."
         rent_type:
-          below_hard_min: "Rent is below the absolute minimum expected for a property of this type based on this lettings type"
-          above_hard_max: "Rent is higher than the absolute maximum expected for a property of this type based on this lettings type"
+          below_hard_min: "Rent is below the absolute minimum expected for a property of this type based on this lettings type."
+          above_hard_max: "Rent is higher than the absolute maximum expected for a property of this type based on this lettings type."
         period:
-          below_hard_min: "Rent is below the absolute minimum expected for a property of this type based on this period"
-          above_hard_max: "Rent is higher than the absolute maximum expected for a property of this type based on this period"
+          below_hard_min: "Rent is below the absolute minimum expected for a property of this type based on this period."
+          above_hard_max: "Rent is higher than the absolute maximum expected for a property of this type based on this period."
       charges:
         complete_1_of_3: "Answer either the ‘household rent and charges’ question or ‘is this accommodation a care home‘, or select ‘no’ for ‘does the household pay rent or charges for the accommodation?’"
         missing_charges: "Please enter the %{question}. If there is no %{question}, please enter '0'."
       tcharge:
-        under_10: "Enter a total charge that is at least £10.00 per week"
-        less_than_shortfall: "The total charge must be more than the outstanding amount"
+        under_10: "Enter a total charge that is at least £10.00 per week."
+        less_than_shortfall: "The total charge must be more than the outstanding amount."
       rent_period:
         invalid_for_org:
-          period: "%{org_name} does not use %{rent_period} as a rent period. Choose another rent period, or a data coordinator can add rent periods to your organisation"
-          managing_org: "%{org_name} does not use %{rent_period} as a rent period. Set another rent period on this log, or a data coordinator can add rent periods to this organisation"
+          period: "%{org_name} does not use %{rent_period} as a rent period. Choose another rent period, or a data coordinator can add rent periods to your organisation."
+          managing_org: "%{org_name} does not use %{rent_period} as a rent period. Set another rent period on this log, or a data coordinator can add rent periods to this organisation."
       carehome:
-        out_of_range: "Household rent and other charges must be between %{min_chcharge} and %{max_chcharge} if paying %{period}"
-        not_provided: "Enter how much rent and other charges the household pays %{period}"
-      cash_discount_invalid: "Cash discount must be £0 - £999,999"
+        out_of_range: "Household rent and other charges must be between %{min_chcharge} and %{max_chcharge} if paying %{period}."
+        not_provided: "Enter how much rent and other charges the household pays %{period}."
+        less_than_shortfall: "The care home charge must be more than the outstanding amount."
+      cash_discount_invalid: "Cash discount must be £0 - £999,999."
       staircasing:
-        percentage_bought_must_be_greater_than_percentage_owned: "Total percentage %{buyer_now_owns} must be more than percentage bought in this transaction"
-        percentage_bought_must_be_at_least_threshold: "The minimum increase in equity while staircasing is %{threshold}%"
+        percentage_bought_must_be_greater_than_percentage_owned: "Total percentage %{buyer_now_owns} must be more than percentage bought in this transaction."
+        percentage_bought_must_be_at_least_threshold: "The minimum increase in equity while staircasing is %{threshold}%."
         percentage_bought_equal_percentage_owned: "The percentage bought is %{stairbought}% and the percentage owned in total is %{stairowned}%. These figures cannot be the same."
       monthly_leasehold_charges:
-        not_zero: "Monthly leasehold charges cannot be £0 if the property has monthly charges"
+        not_zero: "Monthly leasehold charges cannot be £0 if the property has monthly charges."
       equity:
-        under_min: "The minimum initial equity stake for this type of shared ownership sale is %{min_equity}%"
-        over_max: "The maximum initial equity stake is %{max_equity}%"
+        under_min: "The minimum initial equity stake for this type of shared ownership sale is %{min_equity}%."
+        over_max: "The maximum initial equity stake is %{max_equity}%."
         over_stairowned_minus_stairbought: "The initial equity stake is %{equity}% and the percentage owned in total minus the percentage bought is %{staircase_difference}%. In a staircasing transaction, the equity stake purchased cannot be larger than the percentage the %{buyer_owns} minus the percentage bought."
-      mortgage: "Mortgage value cannot be £0 if a mortgage was used for the purchase of this property"
+      mortgage: "Mortgage value cannot be £0 if a mortgage was used for the purchase of this property."
       mortgage_used:
         year: "You must answer either ‘yes’ or ‘no’ to the question ‘was a mortgage used’ for the selected year."
         staircasing: "You must answer either ‘yes’ or ‘no’ to the question ‘was a mortgage used’ for staircasing transactions."
-      shared_ownership_deposit: "The %{mortgage_deposit_and_discount_error_fields} added together is %{mortgage_deposit_and_discount_total}. The value times the equity percentage is %{value_times_equity}. These figures should be the same"
+      shared_ownership_deposit: "The %{mortgage_deposit_and_discount_error_fields} added together is %{mortgage_deposit_and_discount_total}. The value times the equity percentage is %{value_times_equity}. These figures should be the same."
 
     household:
       reasonable_preference_reason:
-        reason_required: "Enter a reason if you've answered 'yes' to reasonable preference"
-        reason_not_required: "Do not enter a reason if you've answered 'no' to reasonable preference"
+        reason_required: "Enter a reason if you've answered 'yes' to reasonable preference."
+        reason_not_required: "Do not enter a reason if you've answered 'no' to reasonable preference."
       underoccupation_benefitcap:
-        dont_know_required: "Answer must be ‘don’t know’ as you told us you don’t know the tenant’s main reason for leaving"
+        dont_know_required: "Answer must be ‘don’t know’ as you told us you don’t know the tenant’s main reason for leaving."
       reservist:
-        injury_required: "Tell us whether the person was seriously injured or ill as a result of serving in the UK armed forces"
-        injury_not_required: "You cannot answer this question as you told us the person has not served in the UK armed forces or prefers not to say"
+        injury_required: "Tell us whether the person was seriously injured or ill as a result of serving in the UK armed forces."
+        injury_not_required: "You cannot answer this question as you told us the person has not served in the UK armed forces or prefers not to say."
       leftreg:
-        question_required: "Tell us whether the person is still serving in the UK armed forces as you told us they’re a current or former regular"
-        question_not_required: "You cannot answer whether the person is still serving in the UK armed forces as you told us they’re not a current or former regular"
+        question_required: "Tell us whether the person is still serving in the UK armed forces as you told us they’re a current or former regular."
+        question_not_required: "You cannot answer whether the person is still serving in the UK armed forces as you told us they’re not a current or former regular."
       age:
-        retired_male: "A male tenant who is retired must be 65 or over"
-        retired_female: "A female tenant who is retired must be 60 or over"
-        retired_over_70: "Answer cannot be over 70 as person %{person_num} has economic status that is not ‘retired’"
-        child_under_16_relat_lettings: "Answer cannot be under 16 as person %{person_num}'s relationship to the lead tenant is ‘partner’"
-        child_under_16_relat_sales: "Answer cannot be under 16 as person %{person_num}'s relationship to buyer 1 is ‘partner’"
-        child_under_16_ecstat: "Answer cannot be under 16 as person %{person_num}’s working situation is not ‘child under 16’, ‘other’ or ‘prefers not to say’"
-        child_over_16: "Answer cannot be over 16 as person’s %{person_num} working situation is ‘child under 16‘"
-        child_over_20: "Answer cannot be 20 or over as the relationship is ‘child’"
-        child_12_years_younger: "A child must be at least 12 years younger than their parent"
-        not_student_16_19: "Answer cannot be between 16 and 19 as person %{person_num} is a child of the lead tenant but is not a full-time student"
+        retired_male: "A male tenant who is retired must be 65 or over."
+        retired_female: "A female tenant who is retired must be 60 or over."
+        retired_over_70: "Answer cannot be over 70 as person %{person_num} has economic status that is not ‘retired’."
+        child_under_16_relat_lettings: "Answer cannot be under 16 as person %{person_num}'s relationship to the lead tenant is ‘partner’."
+        child_under_16_relat_sales: "Answer cannot be under 16 as person %{person_num}'s relationship to buyer 1 is ‘partner’."
+        child_under_16_ecstat: "Answer cannot be under 16 as person %{person_num}’s working situation is not ‘child under 16’, ‘other’ or ‘prefers not to say’."
+        child_over_16: "Answer cannot be over 16 as person’s %{person_num} working situation is ‘child under 16‘."
+        child_over_20: "Answer cannot be 20 or over as the relationship is ‘child’."
+        child_12_years_younger: "A child must be at least 12 years younger than their parent."
+        not_student_16_19: "Answer cannot be between 16 and 19 as person %{person_num} is a child of the lead tenant but is not a full-time student."
         student_16_19:
           cannot_be_16_19:
-            child_not_student: "Person cannot be aged 16-19 if they have relationship ‘child’ but are not a student"
-          must_be_16_19: "Person must be aged 16-19 if they are a student and have relationship ‘child’"
+            child_not_student: "Person cannot be aged 16-19 if they have relationship ‘child’ but are not a student."
+          must_be_16_19: "Person must be aged 16-19 if they are a student and have relationship ‘child’."
         lead:
-          over_25: "The lead tenant must be under 26 as you told us their housing situation immediately before this letting was a children’s home or foster care"
+          over_25: "The lead tenant must be under 26 as you told us their housing situation immediately before this letting was a children’s home or foster care."
         student_not_child:
-          cannot_be_16_19: "Person cannot be aged 16-19 if they are a student but not a child"
+          cannot_be_16_19: "Person cannot be aged 16-19 if they are a student but not a child."
       ecstat:
-        retired_over_70: "Person %{person_num} must be retired if over 70"
-        child_under_16: "Person %{person_num}’s working situation must be ‘child under 16’, ‘other’ or ‘prefers not to say’ as you told us they’re under 16"
-        child_over_16: "Answer cannot be ‘child under 16’ as you told us the person %{person_num} is older than 16"
+        retired_over_70: "Person %{person_num} must be retired if over 70."
+        child_under_16: "Person %{person_num}’s working situation must be ‘child under 16’, ‘other’ or ‘prefers not to say’ as you told us they’re under 16."
+        child_over_16: "Answer cannot be ‘child under 16’ as you told us the person %{person_num} is older than 16."
         not_student_16_19: "Person’s %{person_num} working situation must be full-time student or prefers not to say as you told us they’re between 16 and 19."
         student_16_19:
           cannot_be_student:
-            child_not_16_19: "Person cannot be a student if they are not aged 16-19 but have relationship ‘child’"
-          must_be_student: "Person must be a student if they are aged 16-19 and have relationship ‘child’"
-        retired_male: "Answer cannot be ‘retired’ as the male tenant is under 65"
-        retired_female: "Answer cannot be ‘retired’ as the female tenant is under 60"
+            child_not_16_19: "Person cannot be a student if they are not aged 16-19 but have relationship ‘child’."
+          must_be_student: "Person must be a student if they are aged 16-19 and have relationship ‘child’."
+        retired_male: "Answer cannot be ‘retired’ as the male tenant is under 65."
+        retired_female: "Answer cannot be ‘retired’ as the female tenant is under 60."
         not_child_16_19:
-          cannot_be_student: "Person cannot be a student if they are aged 16-19 but are not a child"
-        buyer_cannot_be_child: "Buyer %{buyer_index} cannot have a working situation of child under 16"
-        buyer_cannot_be_over_16_and_child: "Buyer %{buyer_index}'s age cannot be 16 or over if their working situation is child under 16"
+          cannot_be_student: "Person cannot be a student if they are aged 16-19 but are not a child."
+        buyer_cannot_be_child: "Buyer %{buyer_index} cannot have a working situation of child under 16."
+        buyer_cannot_be_over_16_and_child: "Buyer %{buyer_index}'s age cannot be 16 or over if their working situation is child under 16."
       relat:
-        child_under_16_sales: "Answer cannot be ‘partner’ as you told us person %{person_num}'s age is under 16"
-        child_under_16_lettings: "Answer cannot be ‘partner’ as you told us person %{person_num}'s age is under 16"
-        child_over_20: "Answer cannot be ‘child’ if the person's age is 20 or over"
-        one_partner: "Number of partners cannot be greater than 1"
-        not_student_16_19: "Answer cannot be ‘child’ as you told us the person %{person_num} is between 16 and 19 and is not a full-time student"
+        child_under_16_sales: "Answer cannot be ‘partner’ as you told us person %{person_num}'s age is under 16."
+        child_under_16_lettings: "Answer cannot be ‘partner’ as you told us person %{person_num}'s age is under 16."
+        child_over_20: "Answer cannot be ‘child’ if the person's age is 20 or over."
+        one_partner: "Number of partners cannot be greater than 1."
+        not_student_16_19: "Answer cannot be ‘child’ as you told us the person %{person_num} is between 16 and 19 and is not a full-time student."
         student_16_19:
           cannot_be_child:
-            student_not_16_19: "Answer cannot be ‘child’ if the person is a student but not aged 16-19"
-            16_19_not_student:  "Answer cannot be ‘child’ if the person is aged 16-19 but not a student"
-        child_over_19: "Answer cannot be child as you told us person %{person_num} is over 19"
+            student_not_16_19: "Answer cannot be ‘child’ if the person is a student but not aged 16-19."
+            16_19_not_student:  "Answer cannot be ‘child’ if the person is aged 16-19 but not a student."
+        child_over_19: "Answer cannot be child as you told us person %{person_num} is over 19."
       housingneeds_a:
-        one_or_two_choices: "You can only select one option or ‘other disabled access needs’ plus ‘wheelchair-accessible housing’, ‘wheelchair access to essential rooms’ or ‘level access housing’"
+        one_or_two_choices: "You can only select one option or ‘other disabled access needs’ plus ‘wheelchair-accessible housing’, ‘wheelchair access to essential rooms’ or ‘level access housing’."
       housingneeds_type:
-        only_one_option_permitted: "Only one disabled access need: fully wheelchair-accessible housing, wheelchair access to essential rooms or level access housing, can be selected"
+        only_one_option_permitted: "Only one disabled access need: fully wheelchair-accessible housing, wheelchair access to essential rooms or level access housing, can be selected."
       housingneeds:
-        invalid:
-          If somebody in the household has disabled access needs, they must have the access needs listed, or other access needs
-        no_disabled_needs_conjunction: "No disabled access needs can’t be selected if you have selected fully wheelchair-accessible housing, wheelchair access to essential rooms, level access housing or other disabled access needs"
-        dont_know_disabled_needs_conjunction: "Don’t know disabled access needs can’t be selected if you have selected fully wheelchair-accessible housing, wheelchair access to essential rooms, level access housing or other disabled access needs"
-        no_and_dont_know_disabled_needs_conjunction: "No disabled access needs and don’t know disabled access needs cannot be selected together"
+        invalid: "If somebody in the household has disabled access needs, they must have the access needs listed, or other access needs."
+        no_disabled_needs_conjunction: "No disabled access needs can’t be selected if you have selected fully wheelchair-accessible housing, wheelchair access to essential rooms, level access housing or other disabled access needs."
+        dont_know_disabled_needs_conjunction: "Don’t know disabled access needs can’t be selected if you have selected fully wheelchair-accessible housing, wheelchair access to essential rooms, level access housing or other disabled access needs."
+        no_and_dont_know_disabled_needs_conjunction: "No disabled access needs and don’t know disabled access needs cannot be selected together."
       prevten:
-        non_temp_accommodation: "Answer cannot be non-temporary accommodation as this is a re-let to a tenant who occupied the same property as temporary accommodation"
-        over_25_foster_care: "Answer cannot be a children’s home or foster care as the lead tenant is 26 or older"
-        internal_transfer: "Answer cannot be %{prevten} as this tenancy is an internal transfer"
+        non_temp_accommodation: "Answer cannot be non-temporary accommodation as this is a re-let to a tenant who occupied the same property as temporary accommodation."
+        over_25_foster_care: "Answer cannot be a children’s home or foster care as the lead tenant is 26 or older."
+        internal_transfer: "Answer cannot be %{prevten} as this tenancy is an internal transfer."
         la_general_needs:
-          internal_transfer: "Answer cannot be a fixed-term or lifetime local authority general needs tenancy as it’s an internal transfer and a private registered provider is on the tenancy agreement"
-        invalid_for_discounted_sale: "Buyer 1’s previous tenure should be “local authority tenant” or “private registered provider or housing association tenant” for discounted sales"
+          internal_transfer: "Answer cannot be a fixed-term or lifetime local authority general needs tenancy as it’s an internal transfer and a private registered provider is on the tenancy agreement."
+        invalid_for_discounted_sale: "Buyer 1’s previous tenure should be “local authority tenant” or “private registered provider or housing association tenant” for discounted sales."
       referral:
-        secure_tenancy: "Answer must be internal transfer as this is a secure tenancy"
-        rsnvac_non_temp: "Answer cannot be this source of referral as this is a re-let to tenant who occupied the same property as temporary accommodation"
-        cannot_be_secure_tenancy: "Answer cannot be secure tenancy as this is not an internal transfer"
-        assessed_homeless: "Answer cannot be internal transfer as the tenant was assessed as homeless"
-        other_homeless: "Answer cannot be internal transfer as the tenant was considered homeless by their landlord"
-        prevten_invalid: "Answer cannot be internal transfer as the household situation immediately before this letting was %{prevten}"
-        reason_permanently_decanted: "Answer must be internal transfer as the tenant was permanently decanted from another property owned by this landlord"
-        nominated_by_local_ha_but_la: The source of the referral cannot be Nominated by local housing authority as your organisation is a local authority
+        secure_tenancy: "Answer must be internal transfer as this is a secure tenancy."
+        rsnvac_non_temp: "Answer cannot be this source of referral as this is a re-let to tenant who occupied the same property as temporary accommodation."
+        cannot_be_secure_tenancy: "Answer cannot be secure tenancy as this is not an internal transfer."
+        assessed_homeless: "Answer cannot be internal transfer as the tenant was assessed as homeless."
+        other_homeless: "Answer cannot be internal transfer as the tenant was considered homeless by their landlord."
+        prevten_invalid: "Answer cannot be internal transfer as the household situation immediately before this letting was %{prevten}."
+        reason_permanently_decanted: "Answer must be internal transfer as the tenant was permanently decanted from another property owned by this landlord."
+        nominated_by_local_ha_but_la: "The source of the referral cannot be Nominated by local housing authority as your organisation is a local authority."
         la_general_needs:
-          internal_transfer: "Answer cannot be internal transfer as it’s the same landlord on the tenancy agreement and the household had either a fixed-term or lifetime local authority general needs tenancy immediately before this letting"
-          prp_referred_by_la: "The source of the referral cannot be referred by local authority housing department for a general needs log"
+          internal_transfer: "Answer cannot be internal transfer as it’s the same landlord on the tenancy agreement and the household had either a fixed-term or lifetime local authority general needs tenancy immediately before this letting."
+          prp_referred_by_la: "The source of the referral cannot be referred by local authority housing department for a general needs log."
       homeless:
         assessed:
-          internal_transfer: "Answer cannot be 'assessed as homeless' as this tenancy is an internal transfer"
+          internal_transfer: "Answer cannot be 'assessed as homeless' as this tenancy is an internal transfer."
         other:
-          internal_transfer: "Answer cannot be 'other homelessness' as this tenancy was an internal transfer"
+          internal_transfer: "Answer cannot be 'other homelessness' as this tenancy was an internal transfer."
         reasonpref:
-          not_homeless: "Answer cannot be ‘no’ as the tenant was homeless or about to lose their home"
-      previous_la_known: "Enter name of local authority"
+          not_homeless: "Answer cannot be ‘no’ as the tenant was homeless or about to lose their home."
+      previous_la_known: "Enter name of local authority."
       renewal_just_moved_to_area:
         layear: 'The household cannot have just moved to the local authority area if this letting is a renewal'
         renewal: 'This letting cannot be a renewal if the household has just moved to the local authority area'
@@ -576,95 +579,95 @@ en:
         current_la: 'You told us the tenant had just moved into the local authority, but this location is in the same local authority. Check your answers are correct'
         previous_la: 'The local authority of the previous property should not be the same as the current local authority, as you told us they had just moved to the local authority area. Check your answers are correct.'
       gender:
-        retired_male: "Answer cannot be ‘male’ as tenant is under 65 and retired"
-        retired_female: "Answer cannot be ‘female’ as tenant is under 60 and retired"
+        retired_male: "Answer cannot be ‘male’ as tenant is under 65 and retired."
+        retired_female: "Answer cannot be ‘female’ as tenant is under 60 and retired."
       reason:
-        not_internal_transfer: "Answer cannot be ‘permanently decanted from another property owned by this landlord’ as you told us the source of referral for this tenancy was not an internal transfer"
-        renewal_reason_needed: 'The reason for leaving must be "End of assured shorthold tenancy - no fault" or "End of fixed term tenancy - no fault" if the letting is a renewal'
-        renewal_reason_needed_2024: 'The reason for leaving must be "End of social or private sector tenancy - no fault", "End of social or private sector tenancy - evicted due to anti-social behaviour (ASB)", "End of social or private sector tenancy - evicted due to rent arrears" or "End of social or private sector tenancy - evicted for any other reason"'
-        other_not_settled: "Please give the reason for the tenant leaving their last settled home. This is where they were living before they became homeless, were living in temporary accommodation or sleeping rough"
+        not_internal_transfer: "Answer cannot be ‘permanently decanted from another property owned by this landlord’ as you told us the source of referral for this tenancy was not an internal transfer."
+        renewal_reason_needed: 'The reason for leaving must be "End of assured shorthold tenancy - no fault" or "End of fixed term tenancy - no fault" if the letting is a renewal.'
+        renewal_reason_needed_2024: 'The reason for leaving must be "End of social or private sector tenancy - no fault", "End of social or private sector tenancy - evicted due to anti-social behaviour (ASB)", "End of social or private sector tenancy - evicted due to rent arrears" or "End of social or private sector tenancy - evicted for any other reason".'
+        other_not_settled: "Please give the reason for the tenant leaving their last settled home. This is where they were living before they became homeless, were living in temporary accommodation or sleeping rough."
       condition_effects:
-        no_choices: "You cannot answer this question as you told us nobody in the household has a physical or mental health condition (or other illness) expected to last 12 months or more"
+        no_choices: "You cannot answer this question as you told us nobody in the household has a physical or mental health condition (or other illness) expected to last 12 months or more."
       postcode:
-        discounted_ownership: "Last settled accommodation and discounted ownership property postcodes must match"
+        discounted_ownership: "Last settled accommodation and discounted ownership property postcodes must match."
       buylivein:
-        buyers_will_live_in_property_values_inconsistent_setup: "You have already told us that both buyer 1 and buyer 2 will not live in the property"
-        buyers_will_live_in_property_values_inconsistent: "You have already told us that the buyers will live in the property. Either buyer 1 or buyer 2 must live in the property"
-      nationality: "Select a valid nationality"
+        buyers_will_live_in_property_values_inconsistent_setup: "You have already told us that both buyer 1 and buyer 2 will not live in the property."
+        buyers_will_live_in_property_values_inconsistent: "You have already told us that the buyers will live in the property. Either buyer 1 or buyer 2 must live in the property."
+      nationality: "Select a valid nationality."
 
     tenancy:
       length:
-        fixed_term_not_required: "You must only answer the length of the tenancy if it's fixed-term"
-        invalid_fixed: "Enter a tenancy length between %{min_tenancy_length} and 99 years for a tenancy of this type"
-        invalid_periodic: "Enter a tenancy length between %{min_tenancy_length} and 99 years (or don't specify the length) for a tenancy of this type"
-      internal_transfer: "Answer must be secure tenancy as this tenancy is an internal transfer"
-      cannot_be_internal_transfer: "Answer cannot be internal transfer as this is not a secure tenancy"
-      not_joint: "This cannot be a joint tenancy as you've told us there's only one person in the household"
-      joint_more_than_one_member: "There must be more than one person in the household as you've told us this is a joint tenancy"
+        fixed_term_not_required: "You must only answer the length of the tenancy if it's fixed-term."
+        invalid_fixed: "Enter a tenancy length between %{min_tenancy_length} and 99 years for a tenancy of this type."
+        invalid_periodic: "Enter a tenancy length between %{min_tenancy_length} and 99 years (or don't specify the length) for a tenancy of this type."
+      internal_transfer: "Answer must be secure tenancy as this tenancy is an internal transfer."
+      cannot_be_internal_transfer: "Answer cannot be internal transfer as this is not a secure tenancy."
+      not_joint: "This cannot be a joint tenancy as you've told us there's only one person in the household."
+      joint_more_than_one_member: "There must be more than one person in the household as you've told us this is a joint tenancy."
 
     declaration:
       missing:
-        pre_2024: "You must show the MHCLG privacy notice to the tenant before you can submit this log"
-        post_2024: "You must show or give the tenant access to the MHCLG privacy notice before you can submit this log"
+        pre_2024: "You must show the MHCLG privacy notice to the tenant before you can submit this log."
+        post_2024: "You must show or give the tenant access to the MHCLG privacy notice before you can submit this log."
 
     privacynotice:
       missing:
-        pre_2024: "You must show the MHCLG privacy notice to the %{buyer_or_buyers} before you can submit this log"
-        post_2024: "You must show or give the %{buyer_or_buyers} access to the MHCLG privacy notice before you can submit this log"
+        pre_2024: "You must show the MHCLG privacy notice to the %{buyer_or_buyers} before you can submit this log."
+        post_2024: "You must show or give the %{buyer_or_buyers} access to the MHCLG privacy notice before you can submit this log."
 
     scheme:
       toggle_date:
-        not_selected: "Select one of the options"
-        invalid: "Enter a valid day, month and year"
-        before_creation: "The scheme cannot be deactivated before %{date}, the start of the collection year when it was created"
-        out_of_range: "The date must be on or after the %{date}"
+        not_selected: "Select one of the options."
+        invalid: "Enter a valid day, month and year."
+        before_creation: "The scheme cannot be deactivated before %{date}, the start of the collection year when it was created."
+        out_of_range: "The date must be on or after the %{date}."
       reactivation:
-        before_deactivation: "This scheme was deactivated on %{date}. The reactivation date must be on or after deactivation date"
+        before_deactivation: "This scheme was deactivated on %{date}. The reactivation date must be on or after deactivation date."
       deactivation:
-        during_deactivated_period: "The scheme is already deactivated during this date, please enter a different date"
+        during_deactivated_period: "The scheme is already deactivated during this date, please enter a different date."
       owning_organisation:
-        does_not_own_stock: "Enter an organisation that owns housing stock"
-      no_completed_locations: "This scheme cannot be chosen as it has no completed locations"
+        does_not_own_stock: "Enter an organisation that owns housing stock."
+      no_completed_locations: "This scheme cannot be chosen as it has no completed locations."
 
     location:
-      postcode_blank: "Enter a postcode"
-      units: "The units at this location must be a number"
-      type_of_unit: "Select the most common type of unit at this location"
-      mobility_standards: "Select the mobility standard for the majority of the units at this location"
-      startdate_invalid: "Enter a valid day, month and year when the first property became available at this location"
-      startdate_out_of_range: "Availability date must be on or after the %{date}"
+      postcode_blank: "Enter a postcode."
+      units: "The units at this location must be a number."
+      type_of_unit: "Select the most common type of unit at this location."
+      mobility_standards: "Select the mobility standard for the majority of the units at this location."
+      startdate_invalid: "Enter a valid day, month and year when the first property became available at this location."
+      startdate_out_of_range: "Availability date must be on or after the %{date}."
       toggle_date:
-        not_selected: "Select one of the options"
-        invalid: "Enter a valid day, month and year"
-        before_creation: "The location cannot be deactivated before %{date}, the date when it was first available"
-        out_of_range: "The date must be on or after the %{date}"
+        not_selected: "Select one of the options."
+        invalid: "Enter a valid day, month and year."
+        before_creation: "The location cannot be deactivated before %{date}, the date when it was first available."
+        out_of_range: "The date must be on or after the %{date}."
       reactivation:
-        before_deactivation: "This location was deactivated on %{date}. The reactivation date must be on or after deactivation date"
+        before_deactivation: "This location was deactivated on %{date}. The reactivation date must be on or after deactivation date."
       deactivation:
-        during_deactivated_period: "The location is already deactivated during this date, please enter a different date"
+        during_deactivated_period: "The location is already deactivated during this date, please enter a different date."
     sale_information:
       proplen:
-        social_homebuy: "Social HomeBuy buyers should not have lived here before"
-        rent_to_buy: "Rent to Buy buyers should not have lived here before"
+        social_homebuy: "Social HomeBuy buyers should not have lived here before."
+        rent_to_buy: "Rent to Buy buyers should not have lived here before."
       hodate:
-        must_be_before_saledate: "Practical completion or handover date must be before sale completion date"
-        must_be_less_than_3_years_from_saledate: "Practical completion or handover date must be less than 3 years before sale completion date"
+        must_be_before_saledate: "Practical completion or handover date must be before sale completion date."
+        must_be_less_than_3_years_from_saledate: "Practical completion or handover date must be less than 3 years before sale completion date."
       exdate:
-        must_be_before_saledate: "Contract exchange date must be before sale completion date"
-        must_be_less_than_1_year_from_saledate: "Contract exchange date must be less than 1 year before sale completion date"
+        must_be_before_saledate: "Contract exchange date must be before sale completion date."
+        must_be_less_than_1_year_from_saledate: "Contract exchange date must be less than 1 year before sale completion date."
       saledate:
-        must_be_after_exdate: "Sale completion date must be after contract exchange date"
-        must_be_less_than_1_year_from_exdate: "Sale completion date must be less than 1 year after contract exchange date"
-        must_be_less_than_3_years_from_hodate: "Sale completion date must be less than 3 years after practical completion or handover date"
-        must_be_after_hodate: "Sale completion date must be after practical completion or handover date"
+        must_be_after_exdate: "Sale completion date must be after contract exchange date."
+        must_be_less_than_1_year_from_exdate: "Sale completion date must be less than 1 year after contract exchange date."
+        must_be_less_than_3_years_from_hodate: "Sale completion date must be less than 3 years after practical completion or handover date."
+        must_be_after_hodate: "Sale completion date must be after practical completion or handover date."
       previous_property_type:
-        property_type_bedsit: "A bedsit cannot have more than 1 bedroom"
+        property_type_bedsit: "A bedsit cannot have more than 1 bedroom."
       discounted_ownership_value: "The mortgage%{mortgage}%{deposit_and_grant_sentence} added together is %{mortgage_deposit_and_grant_total}.</br></br>The full purchase price%{discount_sentence} is %{value_with_discount}.</br></br>These two amounts should be the same."
       outright_sale_value: "The mortgage%{mortgage} and cash deposit (%{deposit}) when added together is %{mortgage_and_deposit_total}.</br></br>The full purchase price is %{value}.</br></br>These two amounts should be the same."
       monthly_rent:
-        higher_than_expected: "Basic monthly rent must be between £0.00 and £9,999.00"
+        higher_than_expected: "Basic monthly rent must be between £0.00 and £9,999.00."
       grant:
-        out_of_range: "Loan, grants or subsidies must be between £9,000 and £16,000"
+        out_of_range: "Loan, grants or subsidies must be between £9,000 and £16,000."
       stairbought:
         over_max: "The percentage bought in this staircasing transaction cannot be higher than %{max_stairbought}% for %{type} sales."
       value:
@@ -683,12 +686,12 @@ en:
       stairowned:
         mortgageused_dont_know: "The percentage owned has to be 100% if the mortgage used is 'Don’t know'"
     merge_request:
-      organisation_part_of_another_merge: "This organisation is part of another merge - select a different one"
-      organisation_not_selected: "Select an organisation from the search list"
+      organisation_part_of_another_merge: "This organisation is part of another merge - select a different one."
+      organisation_not_selected: "Select an organisation from the search list."
 
   soft_validations:
     net_income:
-      title_text: "You told us that the household’s income is %{earnings} %{incfreq}"
+      title_text: "You told us that the household’s income is %{earnings} %{incfreq}."
       hint_text: "This is %{net_income_higher_or_lower_text} than we would expect for the household’s working situation."
       in_soft_min_range:
         message: "Net income is lower than expected based on the household’s working situation. Are you sure this is correct?"
@@ -702,16 +705,16 @@ en:
       over_soft_max_for_la_buyer_2: "You told us the income of buyer 2 is %{income}. This seems high.  Are you sure this is correct?"
       over_soft_max_for_la_combined: "You told us the combined income of this household is %{combined_income}. This seems high.  Are you sure this is correct?"
     rent:
-      outside_range_title: "You told us the rent is %{brent}"
+      outside_range_title: "You told us the rent is %{brent}."
       informative_text: "This is %{higher_or_lower} than we would expect."
       hint_text: "Check the following:<ul class=\"govuk-body-l app-panel--interruption\"><li>the decimal point</li><li>the frequency, for example every week or every calendar month</li><li>the rent type is correct, for example affordable or social rent</li></ul>"
     purchase_price:
-      title_text: "You told us the purchase price is %{value}"
-      hint_text: "This is %{higher_or_lower} than we would expect"
+      title_text: "You told us the purchase price is %{value}."
+      hint_text: "This is %{higher_or_lower} than we would expect."
     staircase_owned:
       title_text:
-        one: "You told us that the buyer now owns %{stairowned} of the property"
-        two: "You told us that the buyers now own %{stairowned} of the property"
+        one: "You told us that the buyer now owns %{stairowned} of the property."
+        two: "You told us that the buyers now own %{stairowned} of the property."
       hint_text: "The maximum percentage that can be owned under the Older Persons Shared Ownership scheme is 75%, unless the property was funded outside the Affordable Homes Programme.
 Make sure these answers are correct."
     retirement:
@@ -719,13 +722,13 @@ Make sure these answers are correct."
         title: "You told us this person is aged %{age} years and retired."
         hint_text: "The minimum expected retirement age in England is 66."
       max:
-        title: "You told us this person is over 66 and not retired"
+        title: "You told us this person is over 66 and not retired."
         hint_text: "The minimum expected retirement age in England is 66."
     extra_borrowing:
-      title_text: "You told us that the mortgage and deposit total is %{mortgage_and_deposit_total}"
+      title_text: "You told us that the mortgage and deposit total is %{mortgage_and_deposit_total}."
       hint_text: "This is higher than the purchase price minus the discount."
     pregnancy:
-      title: "You told us somebody in the household is pregnant"
+      title: "You told us somebody in the household is pregnant."
       all_male_tenants: "You also told us that all the tenants living at the property are male."
       females_not_in_soft_age_range: "You also told us that any female tenants living at the property are in the following age ranges:<ul><li>under 16 years old</li><li>over 50 years old</li></ul>"
     major_repairs_date:
@@ -735,7 +738,7 @@ Make sure these answers are correct."
       title_text: "You told us that the property has been vacant for more than 2 years."
       hint_text: "This is higher than we would expect."
     shared_ownership_deposit:
-      title_text: "You told us that the %{mortgage_deposit_and_discount_error_fields} add up to %{mortgage_deposit_and_discount_total}"
+      title_text: "You told us that the %{mortgage_deposit_and_discount_error_fields} add up to %{mortgage_deposit_and_discount_total}."
     old_persons_shared_ownership:
       title_text:
         one: "You told us the buyer is using the Older Persons Shared Ownership scheme."
@@ -748,12 +751,12 @@ Make sure these answers are correct."
       title_text: "You told us that the monthly charges were %{mscharge}."
       hint_text: "This is higher than we would expect."
     student_not_child:
-      title_text: "You told us this person is a student aged beween 16 and 19"
+      title_text: "You told us this person is a student aged between 16 and 19."
     discounted_sale_value:
-      title_text: "Mortgage, deposit, and grant total must equal %{value_with_discount}"
-      informative_text: "Your given mortgage, deposit and grant total is %{mortgage_deposit_and_grant_total}"
+      title_text: "Mortgage, deposit, and grant total must equal %{value_with_discount}."
+      informative_text: "Your given mortgage, deposit and grant total is %{mortgage_deposit_and_grant_total}."
     care_home_charges:
-      title_text: "Care home charges should be provided if this is a care home accommodation"
+      title_text: "Care home charges should be provided if this is a care home accommodation."
     buyer1_livein_wrong_for_ownership_type:
       title_text: "You told us that buyer 1 will not live in the property."
       hint_text: " For %{ownership_scheme} types, the buyer usually lives in the property."
@@ -774,22 +777,22 @@ Make sure these answers are correct."
         two: "You told us the buyers’ deposit was %{deposit} and their savings were %{savings}."
       hint_text: "The deposit amount is higher than we would expect for the amount of savings they have."
     grant:
-      title_text: "You told us that the grant amount is %{grant}"
+      title_text: "You told us that the grant amount is %{grant}."
       hint_text: "Loans, grants and subsidies are usually between £9,000 and £16,000."
     wheelchair:
       title_text: "You told us that someone in the household uses a wheelchair."
     mortgage:
-      title_text: "You told us that the mortgage amount is %{mortgage}"
+      title_text: "You told us that the mortgage amount is %{mortgage}."
       hint_text: "This is more than 5 times the income, which is higher than we would expect."
     referral:
       title_text: "Are you sure?"
       hint_text: "This is a general needs log, and this referral type is for supported housing."
     scharge:
-      over_soft_max_title: "You told us the service charge is %{scharge}"
+      over_soft_max_title: "You told us the service charge is %{scharge}."
     pscharge:
-      over_soft_max_title: "You told us the personal service charge is %{pscharge}"
+      over_soft_max_title: "You told us the personal service charge is %{pscharge}."
     supcharg:
-      over_soft_max_title: "You told us the support charge is %{supcharg}"
+      over_soft_max_title: "You told us the support charge is %{supcharg}."
     charges:
       informative_text: "This is higher than we would expect."
       hint_text: "Check the following:<ul class=\"govuk-body-l app-panel--interruption\"><li>the decimal point</li><li>the frequency, for example every week or every calendar month</li><li>the needs type</li></ul>"
@@ -797,16 +800,16 @@ Make sure these answers are correct."
       title_text: "You told us the mortgage amount was %{mortgage}, the cash deposit was %{deposit} and the discount was %{discount}."
       hint_text: "We would expect the mortgage amount and the deposit added together to be the same as the purchase price minus the discount."
     reasonother:
-      title_text: "You told us that the tenant’s main reason for leaving their last settled home was %{reasonother}"
+      title_text: "You told us that the tenant’s main reason for leaving their last settled home was %{reasonother}."
       informative_text: "The reason you have entered looks very similar to one of the existing response categories.
                          Please check the categories and select the appropriate one.
                          If the existing categories are not suitable, please confirm here to move onto the next question."
     hodate:
-      must_be_less_than_3_years_from_saledate: "You told us practical completion or handover date is more than 3 years before sale completion date"
+      must_be_less_than_3_years_from_saledate: "You told us practical completion or handover date is more than 3 years before sale completion date."
     saledate:
-      must_be_less_than_3_years_from_hodate: "You told us sale completion date is more than 3 years after practical completion or handover date"
+      must_be_less_than_3_years_from_hodate: "You told us sale completion date is more than 3 years after practical completion or handover date."
     no_address_found:
-      title_text: "No address found"
+      title_text: "No address found."
       informative_text: "We could not find an address that matches your search. You can search again or continue to enter the address manually."
     partner_under_16_lettings:
       title: "You told us this person is aged %{age} years and has 'Partner' relationship to the lead tenant."
@@ -819,14 +822,14 @@ Make sure these answers are correct."
 
   devise:
     two_factor_authentication:
-      success: "Two-factor authentication successful"
-      attempt_failed: "Attempt failed"
-      max_login_attempts_reached: "Too many incorrect log in attempts"
-      account_locked: "Your account has been locked for security reasons"
-      contact_administrator: "Contact another helpdesk administrator for access"
-      code_has_been_sent: "Your security code has been sent"
-      code_required: "Security code is required"
-      code_incorrect: "Security code is incorrect"
+      success: "Two-factor authentication successful."
+      attempt_failed: "Attempt failed."
+      max_login_attempts_reached: "Too many incorrect log in attempts."
+      account_locked: "Your account has been locked for security reasons."
+      contact_administrator: "Contact another helpdesk administrator for access."
+      code_has_been_sent: "Your security code has been sent."
+      code_required: "Security code is required."
+      code_incorrect: "Security code is incorrect."
 
   questions:
     location:
@@ -861,10 +864,10 @@ Make sure these answers are correct."
   hints:
     location:
       postcode: "For example, SW1P 4DF."
-      name: "This is how you refer to this location within your organisation"
+      name: "This is how you refer to this location within your organisation."
       units: "A unit is the space being let. For example, the property might be a block of flats and the unit would be the specific flat being let. A unit can also be a bedroom in a shared house or flat. Do not include spaces used for staff."
       toggle_active: "If the date is before %{date}, select ‘From the start of the open collection period’ because the previous period has now closed."
-      startdate: "For example, 27 3 2021"
+      startdate: "For example, 27 3 2021."
     scheme:
       toggle_active: "If the date is before %{date}, select ‘From the start of the open collection period’ because the previous period has now closed."
     bulk_upload:
@@ -876,12 +879,12 @@ Make sure these answers are correct."
       one: "Buyer was a registered provider, housing association or local authority tenant immediately before this sale?"
       other: "Any buyers were registered providers, housing association or local authority tenants immediately before this sale?"
     prevown:
-      one: "Buyer previously owned a property"
-      other: "Buyers previously owned a property"
+      one: "Buyer previously owned a property."
+      other: "Buyers previously owned a property."
     stairowned:
-      one: "Percentage the buyer now owns in total"
-      other: "Percentage the buyers now own in total"
-    offered: "Times previously offered since becoming available"
+      one: "Percentage the buyer now owns in total."
+      other: "Percentage the buyers now own in total."
+    offered: "Times previously offered since becoming available."
 
   warnings:
     organisation:
@@ -901,7 +904,7 @@ Make sure these answers are correct."
         existing_logs: "You’ll be able to add logs with this scheme if their tenancy start date is on or after the date you enter."
 
   test:
-    one_argument: "This is based on the tenant’s work situation: %{ecstat1}"
+    one_argument: "This is based on the tenant’s work situation: %{ecstat1}."
     title_text:
-      no_argument: "Some test text"
-      one_argument: "You said this: %{argument}"
+      no_argument: "Some test text."
+      one_argument: "You said this: %{argument}."

@@ -112,11 +112,7 @@ module FiltersHelper
   def assigned_to_filter_options(filter_type)
     if applied_filters(filter_type)["assigned_to"] == "specific_user" && applied_filters(filter_type)["user"].present?
       user_id = applied_filters(filter_type)["user"]
-      selected_user = if current_user.support?
-                        User.where(id: user_id)&.first
-                      else
-                        User.own_and_managing_org_users(current_user.organisation).where(id: user_id)&.first
-                      end
+      selected_user = User.visible(current_user).where(id: user_id)&.first
 
       return [OpenStruct.new(id: selected_user.id, name: selected_user.name, hint: selected_user.email)] if selected_user.present?
     end
@@ -146,11 +142,11 @@ module FiltersHelper
   end
 
   def collection_year_radio_options
-    {
-      current_collection_start_year.to_s => { label: year_combo(current_collection_start_year) },
-      previous_collection_start_year.to_s => { label: year_combo(previous_collection_start_year) },
-      archived_collection_start_year.to_s => { label: year_combo(archived_collection_start_year) },
-    }
+    options = {}
+    collection_year_options.map do |year, label|
+      options[year] = { label: }
+    end
+    options
   end
 
   def filters_applied_text(filter_type)
@@ -309,8 +305,9 @@ private
     return "All" if session_filters["assigned_to"].include?("all")
     return "You" if session_filters["assigned_to"].include?("you")
 
-    User.own_and_managing_org_users(current_user.organisation).find(session_filters["user"].to_i).name
-    selected_user_option = User.own_and_managing_org_users(current_user.organisation).find(session_filters["user"].to_i)
+    user_id = session_filters["user"].to_i
+    selected_user_option = User.visible(current_user).where(id: user_id)&.first
+
     return unless selected_user_option
 
     "#{selected_user_option.name} (#{selected_user_option.email})"

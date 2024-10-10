@@ -78,6 +78,15 @@ ActiveRecord::Schema[7.0].define(version: 2024_09_23_145326) do
     t.index ["organisation_id"], name: "index_data_protection_confirmations_on_organisation_id"
   end
 
+  create_table "exports", force: :cascade do |t|
+    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }
+    t.datetime "started_at", null: false
+    t.integer "base_number", default: 1, null: false
+    t.integer "increment_number", default: 1, null: false
+    t.boolean "empty_export", default: false, null: false
+    t.string "collection"
+  end
+
   create_table "la_rent_ranges", force: :cascade do |t|
     t.integer "ranges_rent_id"
     t.integer "lettype"
@@ -414,15 +423,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_09_23_145326) do
     t.boolean "checked"
   end
 
-  create_table "logs_exports", force: :cascade do |t|
-    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }
-    t.datetime "started_at", null: false
-    t.integer "base_number", default: 1, null: false
-    t.integer "increment_number", default: 1, null: false
-    t.boolean "empty_export", default: false, null: false
-    t.string "collection"
-  end
-
   create_table "merge_request_organisations", force: :cascade do |t|
     t.integer "merge_request_id"
     t.integer "merging_organisation_id"
@@ -514,6 +514,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_09_23_145326) do
     t.bigint "absorbing_organisation_id"
     t.datetime "available_from"
     t.datetime "discarded_at"
+    t.datetime "schemes_deduplicated_at"
     t.index ["absorbing_organisation_id"], name: "index_organisations_on_absorbing_organisation_id"
     t.index ["old_visible_id"], name: "index_organisations_on_old_visible_id", unique: true
   end

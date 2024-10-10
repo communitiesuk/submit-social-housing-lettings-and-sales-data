@@ -34,25 +34,25 @@ module Forms
       def legacy_template_path
         case year
         when 2023
-          "/files/bulk-upload-sales-legacy-template-2023-24.xlsx"
+          download_23_24_sales_bulk_upload_legacy_template_path
         end
       end
 
       def template_path
         case year
         when 2023
-          "/files/bulk-upload-sales-template-2023-24.xlsx"
+          download_23_24_sales_bulk_upload_template_path
         when 2024
-          "/files/bulk-upload-sales-template-2024-25.xlsx"
+          download_24_25_sales_bulk_upload_template_path
         end
       end
 
       def specification_path
         case year
         when 2023
-          "/files/bulk-upload-sales-specification-2023-24.xlsx"
+          download_23_24_sales_bulk_upload_specification_path
         when 2024
-          "/files/bulk-upload-sales-specification-2024-25.xlsx"
+          download_24_25_sales_bulk_upload_specification_path
         end
       end
 

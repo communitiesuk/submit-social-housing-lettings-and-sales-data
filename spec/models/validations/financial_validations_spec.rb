@@ -123,6 +123,22 @@ RSpec.describe Validations::FinancialValidations do
           .to include(match I18n.t("validations.financial.tshortfall.more_than_total_charge"))
       end
 
+      it "validates that carehome charge is no less than the shortfall" do
+        record.hb = 6
+        record.hbrentshortfall = 1
+        record.tshortfall_known = 0
+        record.tshortfall = 299.50
+        record.chcharge = 198
+        record.needstype = 2
+        record.period = 2
+        record.set_derived_fields!
+        financial_validator.validate_rent_amount(record)
+        expect(record.errors["chcharge"])
+          .to include(match I18n.t("validations.financial.carehome.less_than_shortfall"))
+        expect(record.errors["tshortfall"])
+          .to include(match I18n.t("validations.financial.tshortfall.more_than_carehome_charge"))
+      end
+
       it "expects that rent can be less than the shortfall if total charge is higher" do
         record.hb = 6
         record.hbrentshortfall = 1
@@ -237,9 +253,9 @@ RSpec.describe Validations::FinancialValidations do
         record.ecstat1 = 1
         financial_validator.validate_net_income(record)
         expect(record.errors["earnings"])
-          .to eq(["The household’s income cannot be greater than £1,230.00 per week given the household’s working situation"])
+          .to eq(["The household’s income cannot be greater than £1,230.00 per week given the household’s working situation."])
         expect(record.errors["ecstat1"])
-          .to eq(["The household’s income of £5,000.00 weekly is too high given the household’s working situation"])
+          .to eq(["The household’s income of £5,000.00 weekly is too high given the household’s working situation."])
         expect(record.errors["hhmemb"])
           .to eq(["The household’s income of £5,000.00 weekly is too high for this number of tenants. Change either the household income or number of tenants."])
       end
@@ -254,9 +270,9 @@ RSpec.describe Validations::FinancialValidations do
         record.ecstat1 = 1
         financial_validator.validate_net_income(record)
         expect(record.errors["earnings"])
-          .to eq(["The household’s income cannot be less than £90.00 per week given the household’s working situation"])
+          .to eq(["The household’s income cannot be less than £90.00 per week given the household’s working situation."])
         expect(record.errors["ecstat1"])
-          .to eq(["The household’s income of £50.00 weekly is too low given the household’s working situation"])
+          .to eq(["The household’s income of £50.00 weekly is too low given the household’s working situation."])
         expect(record.errors["hhmemb"])
           .to eq(["The household’s income of £50.00 weekly is too low for this number of tenants. Change either the household income or number of tenants."])
       end
@@ -286,7 +302,7 @@ RSpec.describe Validations::FinancialValidations do
         record.ecstat3 = 9
         financial_validator.validate_net_income(record)
         expect(record.errors["earnings"])
-          .to eq(["The household’s income cannot be less than £150.00 per week given the household’s working situation"])
+          .to eq(["The household’s income cannot be less than £150.00 per week given the household’s working situation."])
       end
 
       it "adds errors to relevant fields for each tenant when income is too high" do
@@ -301,7 +317,7 @@ RSpec.describe Validations::FinancialValidations do
         financial_validator.validate_net_income(record)
         (1..record.hhmemb).each do |n|
           expect(record.errors["ecstat#{n}"])
-            .to eq(["The household’s income of £5,000.00 weekly is too high given the household’s working situation"])
+            .to eq(["The household’s income of £5,000.00 weekly is too high given the household’s working situation."])
         end
         expect(record.errors["age1"]).to be_empty
         expect(record.errors["age2"]).to be_empty
@@ -325,7 +341,7 @@ RSpec.describe Validations::FinancialValidations do
         financial_validator.validate_net_income(record)
         (1..record.hhmemb).each do |n|
           expect(record.errors["ecstat#{n}"])
-            .to eq(["The household’s income of £50.00 weekly is too low given the household’s working situation"])
+            .to eq(["The household’s income of £50.00 weekly is too low given the household’s working situation."])
         end
         (record.hhmemb + 1..8).each do |n|
           expect(record.errors["ecstat#{n}"]).to be_empty
@@ -1121,9 +1137,9 @@ RSpec.describe Validations::FinancialValidations do
           record.chcharge = 5001
           financial_validator.validate_care_home_charges(record)
           expect(record.errors["chcharge"])
-            .to include("Household rent and other charges must be between £10.00 and £5,000.00 if paying weekly for 52 weeks")
+            .to include("Household rent and other charges must be between £10.00 and £5,000.00 if paying weekly for 52 weeks.")
           expect(record.errors["period"])
-            .to include("Household rent and other charges must be between £10.00 and £5,000.00 if paying weekly for 52 weeks")
+            .to include("Household rent and other charges must be between £10.00 and £5,000.00 if paying weekly for 52 weeks.")
         end
 
         it "validates charge when period is monthly" do
@@ -1131,9 +1147,9 @@ RSpec.describe Validations::FinancialValidations do
           record.chcharge = 21_667
           financial_validator.validate_care_home_charges(record)
           expect(record.errors["chcharge"])
-            .to include("Household rent and other charges must be between £43.00 and £21,666.00 if paying every calendar month")
+            .to include("Household rent and other charges must be between £43.00 and £21,666.00 if paying every calendar month.")
           expect(record.errors["period"])
-            .to include("Household rent and other charges must be between £43.00 and £21,666.00 if paying every calendar month")
+            .to include("Household rent and other charges must be between £43.00 and £21,666.00 if paying every calendar month.")
         end
 
         it "validates charge when period is every 2 weeks" do
@@ -1141,9 +1157,9 @@ RSpec.describe Validations::FinancialValidations do
           record.chcharge = 12_001
           financial_validator.validate_care_home_charges(record)
           expect(record.errors["chcharge"])
-            .to include("Household rent and other charges must be between £20.00 and £10,000.00 if paying every 2 weeks")
+            .to include("Household rent and other charges must be between £20.00 and £10,000.00 if paying every 2 weeks.")
           expect(record.errors["period"])
-            .to include("Household rent and other charges must be between £20.00 and £10,000.00 if paying every 2 weeks")
+            .to include("Household rent and other charges must be between £20.00 and £10,000.00 if paying every 2 weeks.")
         end
 
         it "validates charge when period is every 4 weeks" do
@@ -1151,9 +1167,9 @@ RSpec.describe Validations::FinancialValidations do
           record.chcharge = 24_001
           financial_validator.validate_care_home_charges(record)
           expect(record.errors["chcharge"])
-            .to include("Household rent and other charges must be between £40.00 and £20,000.00 if paying every 4 weeks")
+            .to include("Household rent and other charges must be between £40.00 and £20,000.00 if paying every 4 weeks.")
           expect(record.errors["period"])
-            .to include("Household rent and other charges must be between £40.00 and £20,000.00 if paying every 4 weeks")
+            .to include("Household rent and other charges must be between £40.00 and £20,000.00 if paying every 4 weeks.")
         end
       end
 
@@ -1209,9 +1225,9 @@ RSpec.describe Validations::FinancialValidations do
           record.chcharge = 9
           financial_validator.validate_care_home_charges(record)
           expect(record.errors["chcharge"])
-            .to include("Household rent and other charges must be between £10.00 and £5,000.00 if paying weekly for 52 weeks")
+            .to include("Household rent and other charges must be between £10.00 and £5,000.00 if paying weekly for 52 weeks.")
           expect(record.errors["period"])
-            .to include("Household rent and other charges must be between £10.00 and £5,000.00 if paying weekly for 52 weeks")
+            .to include("Household rent and other charges must be between £10.00 and £5,000.00 if paying weekly for 52 weeks.")
         end
 
         it "validates charge when period is monthly" do
@@ -1219,9 +1235,9 @@ RSpec.describe Validations::FinancialValidations do
           record.chcharge = 42
           financial_validator.validate_care_home_charges(record)
           expect(record.errors["chcharge"])
-            .to include("Household rent and other charges must be between £43.00 and £21,666.00 if paying every calendar month")
+            .to include("Household rent and other charges must be between £43.00 and £21,666.00 if paying every calendar month.")
           expect(record.errors["period"])
-            .to include("Household rent and other charges must be between £43.00 and £21,666.00 if paying every calendar month")
+            .to include("Household rent and other charges must be between £43.00 and £21,666.00 if paying every calendar month.")
         end
 
         it "validates charge when period is every 2 weeks" do
@@ -1229,9 +1245,9 @@ RSpec.describe Validations::FinancialValidations do
           record.chcharge = 19
           financial_validator.validate_care_home_charges(record)
           expect(record.errors["chcharge"])
-            .to include("Household rent and other charges must be between £20.00 and £10,000.00 if paying every 2 weeks")
+            .to include("Household rent and other charges must be between £20.00 and £10,000.00 if paying every 2 weeks.")
           expect(record.errors["period"])
-            .to include("Household rent and other charges must be between £20.00 and £10,000.00 if paying every 2 weeks")
+            .to include("Household rent and other charges must be between £20.00 and £10,000.00 if paying every 2 weeks.")
         end
 
         it "validates charge when period is every 4 weeks" do
@@ -1239,9 +1255,9 @@ RSpec.describe Validations::FinancialValidations do
           record.chcharge = 39
           financial_validator.validate_care_home_charges(record)
           expect(record.errors["chcharge"])
-            .to include("Household rent and other charges must be between £40.00 and £20,000.00 if paying every 4 weeks")
+            .to include("Household rent and other charges must be between £40.00 and £20,000.00 if paying every 4 weeks.")
           expect(record.errors["period"])
-            .to include("Household rent and other charges must be between £40.00 and £20,000.00 if paying every 4 weeks")
+            .to include("Household rent and other charges must be between £40.00 and £20,000.00 if paying every 4 weeks.")
         end
       end
     end
