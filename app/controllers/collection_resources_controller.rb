@@ -91,6 +91,17 @@ class CollectionResourcesController < ApplicationController
     redirect_to collection_resources_path
   end
 
+  def new
+    return render_not_found unless current_user.support?
+
+    year = params[:year].to_i
+    log_type = params[:log_type]
+
+    return render_not_found unless editable_collection_resource_years.include?(year)
+
+    @collection_resource = CollectionResource.new(year:, log_type:)
+  end
+
 private
 
   def resource_params
