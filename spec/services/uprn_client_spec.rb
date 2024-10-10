@@ -21,7 +21,7 @@ describe UprnClient do
       end
 
       it "returns error" do
-        expect(client.error).to eq("UPRN is not recognised. Check the number, or enter the address")
+        expect(client.error).to eq("UPRN is not recognised. Check the number, or enter the address.")
       end
     end
 
@@ -33,7 +33,7 @@ describe UprnClient do
       end
 
       it "returns error" do
-        expect(client.error).to eq("UPRN is not recognised. Check the number, or enter the address")
+        expect(client.error).to eq("UPRN is not recognised. Check the number, or enter the address.")
       end
     end
 
@@ -66,7 +66,7 @@ describe UprnClient do
         end
 
         it "returns error" do
-          expect(client.error).to eq("UPRN is not recognised. Check the number, or enter the address")
+          expect(client.error).to eq("UPRN is not recognised. Check the number, or enter the address.")
         end
       end
     end

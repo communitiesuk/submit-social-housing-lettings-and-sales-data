@@ -13,10 +13,10 @@ class UprnClient
 
   def call
     unless response.is_a?(Net::HTTPSuccess) && result.present?
-      @error = "UPRN is not recognised. Check the number, or enter the address"
+      @error = "UPRN is not recognised. Check the number, or enter the address."
     end
   rescue JSON::ParserError
-    @error = "UPRN is not recognised. Check the number, or enter the address"
+    @error = "UPRN is not recognised. Check the number, or enter the address."
   end
 
   def result

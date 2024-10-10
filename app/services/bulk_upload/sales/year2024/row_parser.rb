@@ -2,6 +2,7 @@ class BulkUpload::Sales::Year2024::RowParser
   include ActiveModel::Model
   include ActiveModel::Attributes
   include InterruptionScreenHelper
+  include FormattingHelper
 
   QUESTIONS = {
     field_1: "Which organisation owned this property before the sale?",
@@ -302,20 +303,20 @@ class BulkUpload::Sales::Year2024::RowParser
 
   validates :field_4,
             presence: {
-              message: I18n.t("validations.not_answered", question: "sale completion date (day)"),
+              message: I18n.t("validations.not_answered", question: "sale completion date (day)."),
               category: :setup,
             },
             on: :after_log
 
   validates :field_5,
             presence: {
-              message: I18n.t("validations.not_answered", question: "sale completion date (month)"),
+              message: I18n.t("validations.not_answered", question: "sale completion date (month)."),
               category: :setup,
             }, on: :after_log
 
   validates :field_6,
             presence: {
-              message: I18n.t("validations.not_answered", question: "sale completion date (year)"),
+              message: I18n.t("validations.not_answered", question: "sale completion date (year)."),
               category: :setup,
             },
             format: {
@@ -327,7 +328,7 @@ class BulkUpload::Sales::Year2024::RowParser
 
   validates :field_8,
             presence: {
-              message: I18n.t("validations.not_answered", question: "purchase made under ownership scheme"),
+              message: I18n.t("validations.not_answered", question: "purchase made under ownership scheme."),
               category: :setup,
             },
             on: :after_log
@@ -343,7 +344,7 @@ class BulkUpload::Sales::Year2024::RowParser
 
   validates :field_9,
             presence: {
-              message: I18n.t("validations.not_answered", question: "type of shared ownership sale"),
+              message: I18n.t("validations.not_answered", question: "type of shared ownership sale."),
               category: :setup,
               if: :shared_ownership?,
             },
@@ -360,7 +361,7 @@ class BulkUpload::Sales::Year2024::RowParser
 
   validates :field_10,
             presence: {
-              message: I18n.t("validations.not_answered", question: "type of discounted ownership sale"),
+              message: I18n.t("validations.not_answered", question: "type of discounted ownership sale."),
               category: :setup,
               if: :discounted_ownership?,
             },
@@ -386,7 +387,7 @@ class BulkUpload::Sales::Year2024::RowParser
 
   validates :field_11,
             presence: {
-              message: I18n.t("validations.not_answered", question: "type of outright sale"),
+              message: I18n.t("validations.not_answered", question: "type of outright sale."),
               category: :setup,
               if: :outright_sale?,
             },
@@ -394,7 +395,7 @@ class BulkUpload::Sales::Year2024::RowParser
 
   validates :field_12,
             presence: {
-              message: I18n.t("validations.not_answered", question: "type of outright sale"),
+              message: I18n.t("validations.not_answered", question: "type of outright sale."),
               category: :setup,
               if: proc { field_11 == 12 },
             },
@@ -411,7 +412,7 @@ class BulkUpload::Sales::Year2024::RowParser
 
   validates :field_13,
             presence: {
-              message: I18n.t("validations.not_answered", question: "company buyer"),
+              message: I18n.t("validations.not_answered", question: "company buyer."),
               category: :setup,
               if: :outright_sale?,
             },
@@ -428,7 +429,7 @@ class BulkUpload::Sales::Year2024::RowParser
 
   validates :field_14,
             presence: {
-              message: I18n.t("validations.not_answered", question: "buyers living in property"),
+              message: I18n.t("validations.not_answered", question: "buyers living in property."),
               category: :setup,
               if: :outright_sale?,
             },
@@ -436,7 +437,7 @@ class BulkUpload::Sales::Year2024::RowParser
 
   validates :field_15,
             presence: {
-              message: I18n.t("validations.not_answered", question: "joint purchase"),
+              message: I18n.t("validations.not_answered", question: "joint purchase."),
               category: :setup,
               if: :joint_purchase_asked?,
             },
@@ -444,7 +445,7 @@ class BulkUpload::Sales::Year2024::RowParser
 
   validates :field_16,
             presence: {
-              message: I18n.t("validations.not_answered", question: "more than 2 joint buyers"),
+              message: I18n.t("validations.not_answered", question: "more than 2 joint buyers."),
               category: :setup,
               if: :joint_purchase?,
             },
@@ -602,7 +603,7 @@ private
 
   def validate_uprn_exists_if_any_key_address_fields_are_blank
     if field_22.blank? && !key_address_fields_provided?
-      errors.add(:field_22, I18n.t("validations.not_answered", question: "UPRN"))
+      errors.add(:field_22, I18n.t("validations.not_answered", question: "UPRN."))
     end
   end
 
@@ -621,19 +622,19 @@ private
   def validate_address_fields
     if field_22.blank? || log.errors.attribute_names.include?(:uprn)
       if field_23.blank?
-        errors.add(:field_23, I18n.t("validations.not_answered", question: "address line 1"))
+        errors.add(:field_23, I18n.t("validations.not_answered", question: "address line 1."))
       end
 
       if field_25.blank?
-        errors.add(:field_25, I18n.t("validations.not_answered", question: "town or city"))
+        errors.add(:field_25, I18n.t("validations.not_answered", question: "town or city."))
       end
 
       if field_27.blank?
-        errors.add(:field_27, I18n.t("validations.not_answered", question: "part 1 of postcode"))
+        errors.add(:field_27, I18n.t("validations.not_answered", question: "part 1 of postcode."))
       end
 
       if field_28.blank?
-        errors.add(:field_28, I18n.t("validations.not_answered", question: "part 2 of postcode"))
+        errors.add(:field_28, I18n.t("validations.not_answered", question: "part 2 of postcode."))
       end
     end
   end
@@ -1277,7 +1278,7 @@ private
       block_log_creation!
 
       if errors[:field_1].blank?
-        errors.add(:field_1, I18n.t("validations.not_answered", question: "owning organisation"), category: :setup)
+        errors.add(:field_1, I18n.t("validations.not_answered", question: "owning organisation."), category: :setup)
       end
     end
   end
@@ -1406,13 +1407,13 @@ private
         fields.each do |field|
           if errors[field].none?
             block_log_creation!
-            errors.add(field, I18n.t("validations.invalid_option", question: QUESTIONS[field]), category: :setup)
+            errors.add(field, I18n.t("validations.invalid_option", question: format_ending(QUESTIONS[field])), category: :setup)
           end
         end
       else
         fields.each do |field|
           unless errors.any? { |e| fields.include?(e.attribute) }
-            errors.add(field, I18n.t("validations.invalid_option", question: QUESTIONS[field]))
+            errors.add(field, I18n.t("validations.invalid_option", question: format_ending(QUESTIONS[field])))
           end
         end
       end

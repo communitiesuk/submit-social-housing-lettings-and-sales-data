@@ -137,7 +137,7 @@ RSpec.describe BulkUpload::Sales::Validator do
         error = BulkUploadError.find_by(row: "2", field: "field_1", category: "setup")
 
         expect(error.field).to eql("field_1")
-        expect(error.error).to eql("You must answer owning organisation")
+        expect(error.error).to eql("You must answer owning organisation.")
         expect(error.purchaser_code).to eql(log.purchaser_code)
         expect(error.row).to eql("2")
         expect(error.cell).to eql("B2")
