@@ -1,6 +1,7 @@
 class BulkUpload < ApplicationRecord
   enum log_type: { lettings: "lettings", sales: "sales" }
   enum rent_type_fix_status: { not_applied: "not_applied", applied: "applied", not_needed: "not_needed" }
+  enum failure_reason: { blank_template: "blank_template", wrong_template: "wrong_template" }
 
   belongs_to :user
 
@@ -10,10 +11,51 @@ class BulkUpload < ApplicationRecord
   has_many :sales_logs
 
   after_initialize :generate_identifier, unless: :identifier
+  after_initialize :initialize_processing, if: :new_record?
+
+  scope :search_by_filename, ->(filename) { where("filename ILIKE ?", "%#{filename}%") }
+  scope :search_by_user_name, ->(name) { where(user_id: User.where("name ILIKE ?", "%#{name}%").select(:id)) }
+  scope :search_by_user_email, ->(email) { where(user_id: User.where("email ILIKE ?", "%#{email}%").select(:id)) }
+  scope :search_by_organisation_name, ->(name) { where(organisation_id: Organisation.where("name ILIKE ?", "%#{name}%").select(:id)) }
+
+  scope :search_by, lambda { |param|
+    search_by_filename(param)
+      .or(search_by_user_name(param))
+      .or(search_by_user_email(param))
+      .or(search_by_organisation_name(param))
+  }
+
+  scope :filter_by_id, ->(id) { where(id:) }
+  scope :filter_by_years, ->(years, _user = nil) { where(year: years) }
+  scope :filter_by_uploaded_by, ->(user_id, _user = nil) { where(user_id:) }
+  scope :filter_by_user_text_search, ->(param, _user = nil) { where(user_id: User.search_by(param).select(:id)) }
+  scope :filter_by_user, ->(user_id, _user = nil) { user_id.present? ? where(user_id:) : all }
+  scope :filter_by_uploading_organisation, ->(organisation_id, _user = nil) { where(organisation_id:) }
 
   def completed?
     incomplete_logs = logs.where.not(status: "completed")
     !incomplete_logs.exists?
+  end
+
+  def status
+    return :processing if processing
+    return :blank_template if failure_reason == "blank_template"
+    return :wrong_template if failure_reason == "wrong_template"
+
+    if logs.visible.exists?
+      return :errors_fixed_in_service if completed? && bulk_upload_errors.any?
+      return :logs_uploaded_with_errors if bulk_upload_errors.any?
+    end
+
+    if bulk_upload_errors.important.any?
+      :important_errors
+    elsif bulk_upload_errors.critical.any?
+      :critical_errors
+    elsif bulk_upload_errors.potential.any?
+      :potential_errors
+    else
+      :logs_uploaded_no_errors
+    end
   end
 
   def year_combo
@@ -105,9 +147,17 @@ class BulkUpload < ApplicationRecord
     User.find_by(id: moved_user_id)&.name
   end
 
+  def organisation
+    Organisation.find_by(id: organisation_id)
+  end
+
 private
 
   def generate_identifier
     self.identifier ||= SecureRandom.uuid
+  end
+
+  def initialize_processing
+    self.processing = true if processing.nil?
   end
 end

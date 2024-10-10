@@ -279,6 +279,37 @@ RSpec.describe "Sales Log Features" do
         expect(breadcrumbs[2][:href]).to eq sales_log_path(sales_log.id)
       end
     end
+
+    context "when visiting the bulk uploads page" do
+      let(:bulk_upload_errors) { create_list(:bulk_upload_error, 2, category: nil) }
+      let(:bulk_upload) { create(:bulk_upload, :sales, user:, bulk_upload_errors:, total_logs_count: 10) }
+      let(:mock_storage_service) { instance_double("S3Service") }
+
+      before do
+        allow(Storage::S3Service).to receive(:new).and_return(mock_storage_service)
+        allow(mock_storage_service).to receive(:get_presigned_url).with(bulk_upload.identifier, 60, response_content_disposition: "attachment; filename=#{bulk_upload.filename}").and_return("/sales-logs/bulk-uploads")
+        bulk_upload
+        visit("/sales-logs/bulk-uploads")
+      end
+
+      it "displays the right title" do
+        expect(page).to have_content("Sales bulk uploads")
+      end
+
+      it "shows the bulk upload file name" do
+        expect(page).to have_content(bulk_upload.filename)
+      end
+
+      it "redirects to the error report page when clicking 'View error report'" do
+        click_link("View error report")
+        expect(page).to have_current_path("/sales-logs/bulk-upload-results/#{bulk_upload.id}")
+      end
+
+      it "allows the user to download the file" do
+        click_link("Download file", href: "/sales-logs/bulk-uploads/#{bulk_upload.id}/download")
+        expect(page).to have_current_path("/sales-logs/bulk-uploads")
+      end
+    end
   end
 
   context "when a log becomes a duplicate" do
