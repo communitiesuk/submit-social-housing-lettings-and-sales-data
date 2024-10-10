@@ -26,8 +26,8 @@ RSpec.describe "duplicate_rent_periods" do
 
       expect(Rails.logger).to have_received(:info).with(include("Total number of records: 17"))
       expect(Rails.logger).to have_received(:info).with(include("Number of affected records: 11"))
-      expect(Rails.logger).to have_received(:info).with(include("Number of records to delete: 7"))
-      expect(Rails.logger).to have_received(:info).with(include("Number of records to keep: 4"))
+      expect(Rails.logger).to have_received(:info).with(include("Number of affected records to delete: 7"))
+      expect(Rails.logger).to have_received(:info).with(include("Number of affected records to keep: 4"))
     end
   end
 

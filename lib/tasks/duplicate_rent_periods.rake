@@ -38,8 +38,8 @@ task find_redundant_rent_periods: :environment do
 
   Rails.logger.info "Total number of records: #{OrganisationRentPeriod.count}"
   Rails.logger.info "Number of affected records: #{result[:affected_records].size}"
-  Rails.logger.info "Number of records to delete: #{result[:duplicate_ids].size}"
-  Rails.logger.info "Number of records to keep: #{result[:to_keep_ids].size}"
+  Rails.logger.info "Number of affected records to delete: #{result[:duplicate_ids].size}"
+  Rails.logger.info "Number of affected records to keep: #{result[:to_keep_ids].size}"
 end
 
 desc "Delete duplicate rent periods"
