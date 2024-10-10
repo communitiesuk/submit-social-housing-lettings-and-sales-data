@@ -215,6 +215,9 @@ en:
               above_100_mb: The file is above 100MB.
               must_be_pdf: The paper form must be a PDF.
               must_be_xlsx: The %{resource} must be a Microsoft Excel file.
+            short_display_name:
+              blank: "You must answer resource type."
+
   notification:
     logs_deleted:
       one: "%{count} log has been deleted."

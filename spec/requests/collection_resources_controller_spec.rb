@@ -156,6 +156,23 @@ RSpec.describe CollectionResourcesController, type: :request do
           expect(page).to have_content("Once you have uploaded all the required 2025 to 2026 collection resources, you will be able to release them to users.")
         end
       end
+
+      context "when there are additional resources" do
+        before do
+          # rubocop:disable RSpec/AnyInstance
+          allow_any_instance_of(CollectionResourcesHelper).to receive(:editable_collection_resource_years).and_return([2025])
+          # rubocop:enable RSpec/AnyInstance
+          create(:collection_resource, :additional, year: 2025, short_display_name: "additional resource")
+          create(:collection_resource, :additional, year: 2026, short_display_name: "additional resource 2")
+        end
+
+        it "displays additional resources for editable years" do
+          get collection_resources_path
+
+          expect(page).to have_content("additional resource")
+          expect(page).not_to have_content("additional resource 2")
+        end
+      end
     end
   end
 
