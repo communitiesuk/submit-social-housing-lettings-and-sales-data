@@ -5,18 +5,21 @@ module FiltersHelper
     return false unless session[session_name_for(filter_type)]
 
     selected_filters = JSON.parse(session[session_name_for(filter_type)])
-    return true if !selected_filters.key?("user") && filter == "assigned_to" && value == :all
-    return true if selected_filters["assigned_to"] == "specific_user" && filter == "assigned_to" && value == :specific_user
 
-    return true if !selected_filters.key?("owning_organisation") && filter == "owning_organisation_select" && value == :all
-    return true if !selected_filters.key?("managing_organisation") && filter == "managing_organisation_select" && value == :all
-
-    return true if (selected_filters["owning_organisation"].present? || selected_filters["owning_organisation_text_search"].present?) && filter == "owning_organisation_select" && value == :specific_org
-    return true if (selected_filters["managing_organisation"].present? || selected_filters["managing_organisation_text_search"].present?) && filter == "managing_organisation_select" && value == :specific_org
-
-    return false if selected_filters[filter].blank?
-
-    selected_filters[filter].include?(value.to_s)
+    case filter
+    when "assigned_to"
+      assigned_to_filter_selected?(selected_filters, value)
+    when "owning_organisation_select"
+      owning_organisation_filter_selected?(selected_filters, value)
+    when "managing_organisation_select"
+      managing_organisation_filter_selected?(selected_filters, value)
+    when "uploaded_by"
+      uploaded_by_filter_selected?(selected_filters, value)
+    when "uploading_organisation_select"
+      uploading_organisation_filter_selected?(selected_filters, value)
+    else
+      selected_filters[filter]&.include?(value.to_s) || false
+    end
   end
 
   def any_filter_selected?(filter_type)
@@ -117,6 +120,11 @@ module FiltersHelper
       return [OpenStruct.new(id: selected_user.id, name: selected_user.name, hint: selected_user.email)] if selected_user.present?
     end
     [OpenStruct.new(id: "", name: "Select an option", hint: "")]
+  end
+
+  def uploaded_by_filter_options
+    user_options = User.all
+    [OpenStruct.new(id: "", name: "Select an option", hint: "")] + user_options.map { |user_option| OpenStruct.new(id: user_option.id, name: user_option.name, hint: user_option.email) }
   end
 
   def filter_search_url(category)
@@ -270,7 +278,7 @@ private
     filters.each.sum do |category, category_filters|
       if %w[years status needstypes bulk_upload_id].include?(category)
         category_filters.count(&:present?)
-      elsif %w[user owning_organisation managing_organisation user_text_search owning_organisation_text_search managing_organisation_text_search].include?(category)
+      elsif %w[user owning_organisation managing_organisation user_text_search owning_organisation_text_search managing_organisation_text_search uploading_organisation].include?(category)
         1
       else
         0
@@ -334,5 +342,35 @@ private
 
   def unanswered_filter_value
     "<span class=\"app-!-colour-muted\">You didn’t answer this filter</span>".html_safe
+  end
+
+  def assigned_to_filter_selected?(selected_filters, value)
+    return true if !selected_filters.key?("user") && value == :all
+
+    selected_filters["assigned_to"] == value.to_s
+  end
+
+  def owning_organisation_filter_selected?(selected_filters, value)
+    return true if !selected_filters.key?("owning_organisation") && value == :all
+
+    (selected_filters["owning_organisation"].present? || selected_filters["owning_organisation_text_search"].present?) && value == :specific_org
+  end
+
+  def managing_organisation_filter_selected?(selected_filters, value)
+    return true if !selected_filters.key?("managing_organisation") && value == :all
+
+    (selected_filters["managing_organisation"].present? || selected_filters["managing_organisation_text_search"].present?) && value == :specific_org
+  end
+
+  def uploaded_by_filter_selected?(selected_filters, value)
+    return true if !selected_filters.key?("user") && value == :all
+
+    selected_filters["uploaded_by"] == value.to_s
+  end
+
+  def uploading_organisation_filter_selected?(selected_filters, value)
+    return true if !selected_filters.key?("uploading_organisation") && value == :all
+
+    (selected_filters["uploading_organisation"].present? || selected_filters["uploading_organisation_text_search"].present?) && value == :specific_org
   end
 end

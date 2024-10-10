@@ -1,0 +1,37 @@
+<article class="app-log-summary">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <header class="app-log-summary__header">
+        <h2 class="govuk-heading-m govuk-!-font-weight-regular govuk-!-margin-bottom-0 text-normal-break ">
+          <span class="govuk-!-margin-right-1"><%= bulk_upload.filename %></span>
+          <span class="app-metadata app-log-summary__details" style="white-space: nowrap;"><%= bulk_upload.year %>/<%= bulk_upload.year + 1 %></span>
+        </h2>
+      </header>
+      <div class="govuk-!-margin-bottom-2">
+          <p class="govuk-hint govuk-!-font-size-16 govuk-!-margin-bottom-1">Uploaded by: <%= bulk_upload.user.name %> (<%= bulk_upload.user.email %>)</p>
+          <p class="govuk-hint govuk-!-font-size-16 govuk-!-margin-bottom-1">Uploading organisation: <%= bulk_upload.organisation.name %></p>
+          <p class="govuk-hint govuk-!-font-size-16 govuk-!-margin-bottom-1">Time of upload: <%= bulk_upload.created_at.to_formatted_s(:govuk_date_and_time) %></p>
+      </div>
+      <p class="govuk-body govuk-!-margin-bottom-3">
+        <%= download_file_link(bulk_upload) %>
+        <%= view_error_report_link(bulk_upload) %>
+        <%= view_logs_link(bulk_upload) %>
+      </p>
+    </div>
+    <footer class="govuk-grid-column-one-third app-log-summary__footer">
+      <p class="govuk-body govuk-!-margin-bottom-3">
+        <%= upload_status %>
+      </p>
+      <% unless bulk_upload.processing %>
+        <div>
+            <%= counts(
+                  [bulk_upload.total_logs_count, "total log"],
+                  [setup_errors_count, "error on important questions", "errors on important questions"],
+                  [critical_errors_count, "critical error"],
+                  [potential_errors_count, "potential error"],
+                ) %>
+          </div>
+      <% end %>
+    </footer>
+  </div>
+</article>
