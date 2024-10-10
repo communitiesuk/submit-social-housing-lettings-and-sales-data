@@ -100,12 +100,12 @@ class CollectionResourcesController < ApplicationController
     return render_not_found unless resource_for_year_can_be_updated?(@collection_resource.year)
 
     @collection_resource.file = resource_params[:file]
-    @collection_resource.short_display_name = resource_params[:short_display_name]
-    @collection_resource.download_filename = @collection_resource.file&.original_filename
-    @collection_resource.display_name = "#{@collection_resource.log_type} #{@collection_resource.short_display_name} (#{text_year_range_format(@collection_resource.year)})"
     @collection_resource.validate_attached_file
     return render "collection_resources/edit" if @collection_resource.errors.any?
 
+    @collection_resource.short_display_name = resource_params[:short_display_name]
+    @collection_resource.download_filename = @collection_resource.file&.original_filename
+    @collection_resource.display_name = "#{@collection_resource.log_type} #{@collection_resource.short_display_name} (#{text_year_range_format(@collection_resource.year)})"
     if @collection_resource.save
       begin
         CollectionResourcesService.new.upload_collection_resource(@collection_resource.download_filename, @collection_resource.file)
