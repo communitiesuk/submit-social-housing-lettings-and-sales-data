@@ -25,6 +25,15 @@ class CollectionResourcesController < ApplicationController
     download_resource(resource.download_filename)
   end
 
+  def download_additional_collection_resource
+    resource = CollectionResource.find_by(id: params[:collection_resource_id])
+
+    return render_not_found unless resource
+    return render_not_found unless resource_for_year_can_be_downloaded?(resource.year)
+
+    download_resource(resource.download_filename)
+  end
+
   def edit
     return render_not_found unless current_user.support?
 
