@@ -26,23 +26,13 @@
       <% additional_resources&.each do |resource| %>
         <% summary_list.with_row do |row| %>
           <% row.with_key { resource.short_display_name } %>
-          <% if file_exists_on_s3?(resource.download_filename) %>
-            <% row.with_value do %>
-              <%= render DocumentListComponent.new(items: document_list_edit_component_items([resource]), label: "") %>
-            <% end %>
-            <% row.with_action(
-              text: "Change",
-              href: "/",
-            ) %>
-          <% else %>
-            <% row.with_value do %>
-              <p class="govuk-body app-!-colour-muted">No file uploaded</p>
-            <% end %>
-            <% row.with_action(
-              text: "Upload",
-              href: "/",
-            ) %>
+          <% row.with_value do %>
+            <%= render DocumentListComponent.new(items: document_list_edit_component_items([resource]), label: "") %>
           <% end %>
+          <% row.with_action(
+            text: "Change",
+            href: collection_resource_edit_path(resource),
+          ) %>
         <% end %>
       <% end %>
     <% end %>

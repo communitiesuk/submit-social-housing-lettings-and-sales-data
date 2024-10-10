@@ -122,6 +122,16 @@ RSpec.describe CollectionResourcesController, type: :request do
           expect(page).to have_content("The 2025 to 2026 collection resources are not yet available to users.")
           expect(page).to have_link("Release the 2025 to 2026 collection resources to users", href: confirm_mandatory_collection_resources_release_path(year: 2025))
         end
+
+        context "when there are additional resources" do
+          let!(:collection_resource) { create(:collection_resource, :additional, year: 2025, short_display_name: "additional resource", download_filename: "additional.pdf") }
+
+          it "displays change links for additional resources" do
+            get collection_resources_path
+
+            expect(page).to have_link("Change", href: collection_resource_edit_path(collection_resource))
+          end
+        end
       end
 
       context "when files are not on S3" do
@@ -673,6 +683,115 @@ RSpec.describe CollectionResourcesController, type: :request do
           expect(response.status).to eq(200)
           expect(response.body).to eq("file")
         end
+      end
+    end
+  end
+
+  describe "GET #edit_additional_collection_resource" do
+    let(:collection_resource) { create(:collection_resource, :additional, year: 2025, log_type: "sales", short_display_name: "additional resource", download_filename: "additional.pdf") }
+
+    context "when user is not signed in" do
+      it "redirects to the sign in page" do
+        get collection_resource_edit_path(collection_resource)
+        expect(response).to redirect_to(new_user_session_path)
+      end
+    end
+
+    context "when user is signed in as a data coordinator" do
+      let(:user) { create(:user, :data_coordinator) }
+
+      before do
+        sign_in user
+      end
+
+      it "returns page not found" do
+        get collection_resource_edit_path(collection_resource)
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+
+    context "when user is signed in as a data provider" do
+      let(:user) { create(:user, :data_provider) }
+
+      before do
+        sign_in user
+      end
+
+      it "returns page not found" do
+        get collection_resource_edit_path(collection_resource)
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+
+    context "when user is signed in as a support user" do
+      let(:user) { create(:user, :support) }
+
+      before do
+        allow(Time.zone).to receive(:today).and_return(Time.zone.local(2025, 1, 8))
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in user
+      end
+
+      context "and the file exists on S3" do
+        before do
+          allow(storage_service).to receive(:file_exists?).and_return(true)
+        end
+
+        it "displays update collection resources page content" do
+          get collection_resource_edit_path(collection_resource)
+
+          expect(page).to have_content("Sales 2025 to 2026")
+          expect(page).to have_content("Change the additional resource")
+          expect(page).to have_content("This file will be available for all users to download.")
+          expect(page).to have_content("Upload file")
+          expect(page).to have_button("Save changes")
+          expect(page).to have_link("Back", href: collection_resources_path)
+          expect(page).to have_link("Cancel", href: collection_resources_path)
+        end
+      end
+    end
+  end
+
+  describe "PATCH #update_additional_collection_resource" do
+    let(:some_file) { File.open(file_fixture("blank_bulk_upload_sales.csv")) }
+    let(:params) { { collection_resource: { short_display_name: "short name", file: some_file } } }
+    let(:collection_resource_service) { instance_double(CollectionResourcesService) }
+    let(:collection_resource) { create(:collection_resource, :additional, year: 2025, log_type: "sales", short_display_name: "additional resource", download_filename: "additional.pdf") }
+
+    before do
+      allow(CollectionResourcesService).to receive(:new).and_return(collection_resource_service)
+    end
+
+    context "when user is not signed in" do
+      it "redirects to the sign in page" do
+        patch collection_resource_update_path(collection_resource), params: params
+        expect(response).to redirect_to(new_user_session_path)
+      end
+    end
+
+    context "when user is signed in as a data coordinator" do
+      let(:user) { create(:user, :data_coordinator) }
+
+      before do
+        sign_in user
+      end
+
+      it "returns page not found" do
+        patch collection_resource_update_path(collection_resource), params: params
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+
+    context "when user is signed in as a data provider" do
+      let(:user) { create(:user, :data_provider) }
+
+      before do
+        sign_in user
+      end
+
+      it "returns page not found" do
+        patch collection_resource_update_path(collection_resource), params: params
+        expect(response).to have_http_status(:not_found)
       end
     end
   end

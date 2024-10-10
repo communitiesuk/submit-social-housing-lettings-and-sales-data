@@ -23,7 +23,7 @@
 
       <%= f.govuk_text_field :short_display_name,
                       label: nil,
-                      hint: { text: "This will be used in the download link on the homepage. Do not include the log type or collection year. For example, if you enter “bulk upload change log”, the download link will say “Download the lettings bulk upload change log (2024 to 2025)”." } %>
+                      hint: { text: "This will be used in the download link on the homepage. Do not include the log type or collection year.</br>For example, if you enter “bulk upload change log”, the download link will say “Download the #{@collection_resource.log_type} bulk upload change log (#{text_year_range_format(@collection_resource.year)})”.".html_safe } %>
 
       <%= f.govuk_submit "Add resource" %>
       <%= govuk_button_link_to "Cancel", collection_resources_path, secondary: true %>
