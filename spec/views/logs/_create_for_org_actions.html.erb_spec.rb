@@ -14,8 +14,8 @@ RSpec.describe "logs/_create_for_org_actions.html.erb" do
   context "with data sharing agreement" do
     it "does include create log buttons" do
       render
-      expect(fragment).to have_button("Create a new lettings log for this organisation")
-      expect(fragment).to have_button("Create a new sales log for this organisation")
+      expect(fragment).to have_button("Create a new lettings log")
+      expect(fragment).to have_button("Create a new sales log")
     end
   end
 
@@ -24,8 +24,8 @@ RSpec.describe "logs/_create_for_org_actions.html.erb" do
 
     it "does not include create log buttons" do
       render
-      expect(fragment).not_to have_button("Create a new lettings log for this organisation")
-      expect(fragment).not_to have_button("Create a new sales log for this organisation")
+      expect(fragment).not_to have_button("Create a new lettings log")
+      expect(fragment).not_to have_button("Create a new sales log")
     end
   end
 end
