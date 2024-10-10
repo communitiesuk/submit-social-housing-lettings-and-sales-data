@@ -34,7 +34,7 @@ class CollectionResourcesController < ApplicationController
     download_resource(resource.download_filename)
   end
 
-  def edit
+  def edit_mandatory_collection_resource
     return render_not_found unless current_user.support?
 
     year = params[:year].to_i
@@ -50,7 +50,18 @@ class CollectionResourcesController < ApplicationController
     render "collection_resources/edit"
   end
 
-  def update
+  def edit_additional_collection_resource
+    return render_not_found unless current_user.support?
+
+    @collection_resource = CollectionResource.find_by(id: params[:collection_resource_id])
+
+    return render_not_found unless @collection_resource
+    return render_not_found unless resource_for_year_can_be_updated?(@collection_resource.year)
+
+    render "collection_resources/edit"
+  end
+
+  def update_mandatory_collection_resource
     return render_not_found unless current_user.support?
 
     year = resource_params[:year].to_i
@@ -78,6 +89,35 @@ class CollectionResourcesController < ApplicationController
 
     flash[:notice] = "The #{log_type} #{text_year_range_format(year)} #{@collection_resource.short_display_name.downcase} has been updated"
     redirect_to collection_resources_path
+  end
+
+  def update_additional_collection_resource
+    return render_not_found unless current_user.support?
+
+    @collection_resource = CollectionResource.find_by(id: params[:collection_resource_id])
+
+    return render_not_found unless @collection_resource
+    return render_not_found unless resource_for_year_can_be_updated?(@collection_resource.year)
+
+    @collection_resource.file = resource_params[:file]
+    @collection_resource.short_display_name = resource_params[:short_display_name]
+    @collection_resource.download_filename = @collection_resource.file&.original_filename
+    @collection_resource.display_name = "#{@collection_resource.log_type} #{@collection_resource.short_display_name} (#{text_year_range_format(@collection_resource.year)})"
+    @collection_resource.validate_attached_file
+    return render "collection_resources/edit" if @collection_resource.errors.any?
+
+    if @collection_resource.save
+      begin
+        CollectionResourcesService.new.upload_collection_resource(@collection_resource.download_filename, @collection_resource.file)
+        flash[:notice] = "The #{@collection_resource.log_type} #{text_year_range_format(@collection_resource.year)} #{@collection_resource.short_display_name.downcase} has been updated."
+        redirect_to collection_resources_path
+      rescue StandardError
+        @collection_resource.errors.add(:file, :error_uploading)
+        render "collection_resources/edit"
+      end
+    else
+      render "collection_resources/edit"
+    end
   end
 
   def confirm_mandatory_collection_resources_release

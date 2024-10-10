@@ -170,7 +170,7 @@ RSpec.describe "Collection resources" do
   end
 
   context "when uploading an additional resource" do
-    it "only allows excel files for lettings" do
+    it "allows valid files" do
       expect(CollectionResource.count).to eq(0)
 
       visit(new_collection_resource_path(year: 2025, log_type: "sales"))
@@ -204,6 +204,38 @@ RSpec.describe "Collection resources" do
       attach_file "file", file_fixture("pdf_file.pdf")
       click_button("Add resource")
       expect(page).to have_content("You must answer resource type.")
+    end
+  end
+
+  context "when updating an additional resource" do
+    let!(:collection_resource) { create(:collection_resource, :additional, year: 2025, log_type: "sales") }
+
+    it "only allows valid files" do
+      expect(CollectionResource.count).to eq(1)
+
+      visit(collection_resource_edit_path(collection_resource))
+      fill_in("collection_resource[short_display_name]", with: "some updated file")
+      attach_file "file", file_fixture("pdf_file.pdf")
+
+      click_button("Save changes")
+      expect(collection_resources_service).to have_received(:upload_collection_resource).with("pdf_file.pdf", anything)
+      expect(CollectionResource.count).to eq(1)
+      expect(CollectionResource.first.year).to eq(2025)
+      expect(CollectionResource.first.log_type).to eq("sales")
+      expect(CollectionResource.first.resource_type).to be_nil
+      expect(CollectionResource.first.mandatory).to be_falsey
+      expect(CollectionResource.first.released_to_user).to be_nil
+      expect(CollectionResource.first.display_name).to eq("sales some updated file (2025 to 2026)")
+      expect(CollectionResource.first.short_display_name).to eq("some updated file")
+      expect(page).to have_content("The sales 2025 to 2026 some updated file has been updated.")
+    end
+
+    it "validates file is attached" do
+      visit(collection_resource_edit_path(collection_resource))
+
+      fill_in("collection_resource[short_display_name]", with: "some file")
+      click_button("Save changes")
+      expect(page).to have_content("Select which file to upload.")
     end
   end
 end

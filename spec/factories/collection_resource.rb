@@ -8,8 +8,8 @@ FactoryBot.define do
     download_filename { "24_25_lettings_paper_form.pdf" }
     trait(:additional) do
       resource_type { nil }
-      display_name { "additional resource" }
-      short_display_name { nil }
+      display_name { "lettings additional resource (2024 to 2025)" }
+      short_display_name { "additional resource" }
       year { 2024 }
       log_type { "lettings" }
       download_filename { "additional.pdf" }
