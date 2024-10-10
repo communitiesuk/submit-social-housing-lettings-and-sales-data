@@ -102,10 +102,31 @@ class CollectionResourcesController < ApplicationController
     @collection_resource = CollectionResource.new(year:, log_type:)
   end
 
+  def create
+    return render_not_found unless current_user.support? && editable_collection_resource_years.include?(resource_params[:year].to_i)
+
+    @collection_resource = CollectionResource.new(resource_params)
+    @collection_resource.download_filename ||= @collection_resource.file&.original_filename
+
+    validate_file(@collection_resource.file)
+    return render "collection_resources/new" if @collection_resource.errors.any?
+
+    begin
+      CollectionResourcesService.new.upload_collection_resource(@collection_resource.download_filename, @collection_resource.file)
+      @collection_resource.save!
+    rescue StandardError
+      @collection_resource.errors.add(:file, :error_uploading)
+      return render "collection_resources/new"
+    end
+
+    flash[:notice] = "The #{@collection_resource.log_type} #{text_year_range_format(@collection_resource.year)} #{@collection_resource.display_name} is now available to users."
+    redirect_to collection_resources_path
+  end
+
 private
 
   def resource_params
-    params.require(:collection_resource).permit(:year, :log_type, :resource_type, :file)
+    params.require(:collection_resource).permit(:year, :log_type, :resource_type, :file, :mandatory, :display_name)
   end
 
   def download_resource(filename)
