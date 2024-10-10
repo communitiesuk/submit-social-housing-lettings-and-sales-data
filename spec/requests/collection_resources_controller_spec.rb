@@ -62,12 +62,21 @@ RSpec.describe CollectionResourcesController, type: :request do
         expect(page).to have_content("Sales 2025 to 2026")
       end
 
-      it "displays mandatory filed" do
+      it "displays mandatory files" do
         get collection_resources_path
 
         expect(page).to have_content("Paper form")
         expect(page).to have_content("Bulk upload template")
         expect(page).to have_content("Bulk upload specification")
+      end
+
+      it "allows uploading new resources" do
+        get collection_resources_path
+
+        expect(page).to have_link("Add new sales 2024 to 2025 resource", href: new_collection_resource_path(year: 2024, log_type: "sales"))
+        expect(page).to have_link("Add new lettings 2024 to 2025 resource", href: new_collection_resource_path(year: 2024, log_type: "lettings"))
+        expect(page).to have_link("Add new sales 2025 to 2026 resource", href: new_collection_resource_path(year: 2025, log_type: "sales"))
+        expect(page).to have_link("Add new lettings 2025 to 2026 resource", href: new_collection_resource_path(year: 2025, log_type: "lettings"))
       end
 
       context "when files are on S3" do
@@ -470,6 +479,64 @@ RSpec.describe CollectionResourcesController, type: :request do
         expect(CollectionResource.where(year: 2025, mandatory: true, released_to_user: true, log_type: "lettings", resource_type: "bulk_upload_specification").count).to eq(1)
         expect(response).to redirect_to(collection_resources_path)
         expect(flash[:notice]).to eq("The 2025 to 2026 collection resources are now available to users.")
+      end
+    end
+  end
+
+  describe "GET #new_collection_resource" do
+    context "when user is not signed in" do
+      it "redirects to the sign in page" do
+        get new_collection_resource_path(year: 2025, log_type: "sales")
+        expect(response).to redirect_to(new_user_session_path)
+      end
+    end
+
+    context "when user is signed in as a data coordinator" do
+      let(:user) { create(:user, :data_coordinator) }
+
+      before do
+        sign_in user
+      end
+
+      it "returns page not found" do
+        get new_collection_resource_path(year: 2025, log_type: "sales")
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+
+    context "when user is signed in as a data provider" do
+      let(:user) { create(:user, :data_provider) }
+
+      before do
+        sign_in user
+      end
+
+      it "returns page not found" do
+        get new_collection_resource_path(year: 2025, log_type: "sales")
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+
+    context "when user is signed in as a support user" do
+      let(:user) { create(:user, :support) }
+
+      before do
+        # rubocop:disable RSpec/AnyInstance
+        allow_any_instance_of(CollectionResourcesHelper).to receive(:editable_collection_resource_years).and_return([2025, 2026])
+        # rubocop:enable RSpec/AnyInstance
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in user
+      end
+
+      it "displays new collection resource page content" do
+        get new_collection_resource_path(year: 2025, log_type: "sales")
+
+        expect(page).to have_content("Sales 2025 to 2026")
+        expect(page).to have_content("Add a new collection resource")
+        expect(page).to have_content("Upload file")
+        expect(page).to have_button("Add resource")
+        expect(page).to have_link("Back", href: collection_resources_path)
+        expect(page).to have_link("Cancel", href: collection_resources_path)
       end
     end
   end
