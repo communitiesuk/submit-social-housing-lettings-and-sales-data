@@ -2,7 +2,7 @@ require "rails_helper"
 require "rake"
 
 RSpec.describe "duplicate_rent_periods" do
-  before(:all) do
+  before(:each) do
     Rake.application.rake_require("tasks/duplicate_rent_periods")
     Rake::Task.define_task(:environment)
   end
@@ -13,7 +13,7 @@ RSpec.describe "duplicate_rent_periods" do
 
     [2, 4, 6, 11].each do |rent_period|
       org_rent_period = build(:organisation_rent_period, organisation:)
-      org_rent_period.save(validate: false)
+      org_rent_period.save!(validate: false)
       org_rent_period.update_column(:rent_period, rent_period)
     end
   end
@@ -43,7 +43,7 @@ RSpec.describe "duplicate_rent_periods" do
     end
 
     it "deletes redundant rent periods" do
-      expect { task.invoke }.to change { OrganisationRentPeriod.count }.by(-4)
+      expect { task.invoke }.to change(OrganisationRentPeriod, :count).by(-4)
       expect(Rails.logger).to have_received(:info).with(include("Number of deleted duplicate records: 4"))
     end
   end
