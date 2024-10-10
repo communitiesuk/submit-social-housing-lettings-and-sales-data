@@ -9,7 +9,7 @@ class CollectionResource < ApplicationRecord
     if mandatory
       download_mandatory_collection_resource_path(log_type:, year:, resource_type:)
     else
-      "/"
+      collection_resource_download_path(self)
     end
   end
 

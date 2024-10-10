@@ -158,11 +158,12 @@ RSpec.describe CollectionResourcesController, type: :request do
       end
 
       context "when there are additional resources" do
+        let!(:collection_resource) { create(:collection_resource, :additional, year: 2025, short_display_name: "additional resource", download_filename: "additional.pdf") }
+
         before do
           # rubocop:disable RSpec/AnyInstance
           allow_any_instance_of(CollectionResourcesHelper).to receive(:editable_collection_resource_years).and_return([2025])
           # rubocop:enable RSpec/AnyInstance
-          create(:collection_resource, :additional, year: 2025, short_display_name: "additional resource")
           create(:collection_resource, :additional, year: 2026, short_display_name: "additional resource 2")
         end
 
@@ -171,6 +172,7 @@ RSpec.describe CollectionResourcesController, type: :request do
 
           expect(page).to have_content("additional resource")
           expect(page).not_to have_content("additional resource 2")
+          expect(page).to have_link("additional.pdf", href: collection_resource_download_path(collection_resource))
         end
       end
     end
@@ -592,6 +594,85 @@ RSpec.describe CollectionResourcesController, type: :request do
       it "returns page not found" do
         post collection_resources_path, params: params
         expect(response).to have_http_status(:not_found)
+      end
+    end
+  end
+
+  describe "GET #download_additional_collection_resource" do
+    let(:collection_resource) { create(:collection_resource, :additional, year: 2025, short_display_name: "additional resource") }
+
+    before do
+      # rubocop:disable RSpec/AnyInstance
+      allow_any_instance_of(CollectionResourcesHelper).to receive(:editable_collection_resource_years).and_return([2025, 2026])
+      allow_any_instance_of(CollectionResourcesHelper).to receive(:displayed_collection_resource_years).and_return([2025])
+      # rubocop:enable RSpec/AnyInstance
+      allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+      sign_in user
+    end
+
+    context "when user is signed in as a data coordinator" do
+      let(:user) { create(:user, :data_coordinator) }
+
+      context "when the file exists on S3" do
+        before do
+          allow(storage_service).to receive(:get_file_io).and_return("file")
+          get collection_resource_download_path(collection_resource)
+        end
+
+        it "downloads the file" do
+          expect(response.body).to eq("file")
+        end
+      end
+
+      context "when the file does not exist on S3" do
+        before do
+          allow(storage_service).to receive(:get_file_io).and_return(nil)
+          get collection_resource_download_path(collection_resource)
+        end
+
+        it "returns page not found" do
+          expect(response).to have_http_status(:not_found)
+        end
+      end
+
+      context "when resource id is invalid" do
+        before do
+          allow(storage_service).to receive(:get_file_io).and_return(nil)
+          get collection_resource_download_path(collection_resource_id: "invalid")
+        end
+
+        it "returns page not found" do
+          expect(response).to have_http_status(:not_found)
+        end
+      end
+
+      context "when year not in displayed_collection_resource_years" do
+        let(:collection_resource) { create(:collection_resource, :additional, year: 2026, short_display_name: "additional resource") }
+
+        before do
+          get collection_resource_download_path(collection_resource)
+        end
+
+        it "returns page not found" do
+          expect(response).to have_http_status(:not_found)
+        end
+      end
+    end
+
+    context "when user is signed in as a support user" do
+      let(:collection_resource) { create(:collection_resource, :additional, year: 2026, short_display_name: "additional resource") }
+      let(:user) { create(:user, :support) }
+
+      context "when year is in editable_collection_resource_years but not in displayed_collection_resource_years" do
+        before do
+          allow(storage_service).to receive(:get_file_io).and_return("file")
+          get collection_resource_download_path(collection_resource)
+        end
+
+        it "downloads the file" do
+          expect(response.status).to eq(200)
+          expect(response.body).to eq("file")
+        end
       end
     end
   end
