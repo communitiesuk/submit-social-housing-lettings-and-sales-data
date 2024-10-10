@@ -20,10 +20,10 @@ module Storage
       response.key_count == 1
     end
 
-    def get_presigned_url(file_name, duration)
+    def get_presigned_url(file_name, duration, response_content_disposition: nil)
       Aws::S3::Presigner
         .new({ client: @client })
-        .presigned_url(:get_object, bucket: @configuration.bucket_name, key: file_name, expires_in: duration)
+        .presigned_url(:get_object, bucket: @configuration.bucket_name, key: file_name, expires_in: duration, response_content_disposition:)
     end
 
     def get_file_io(file_name)
@@ -37,6 +37,10 @@ module Storage
         bucket: @configuration.bucket_name,
         key: file_name,
       )
+    end
+
+    def get_file_metadata(file_name)
+      @client.head_object(bucket: @configuration.bucket_name, key: file_name)
     end
 
   private

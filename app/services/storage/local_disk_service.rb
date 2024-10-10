@@ -22,5 +22,14 @@ module Storage
         f.write data
       end
     end
+
+    def get_file_metadata(filename)
+      path = Rails.root.join("tmp/storage", filename)
+
+      {
+        "content_length" => File.size(path),
+        "content_type" => MiniMime.lookup_by_filename(path.to_s)&.content_type || "application/octet-stream",
+      }
+    end
   end
 end
