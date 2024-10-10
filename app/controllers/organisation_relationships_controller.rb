@@ -14,7 +14,7 @@ class OrganisationRelationshipsController < ApplicationController
   ]
 
   def stock_owners
-    stock_owners = organisation.stock_owners.filter_by_active
+    stock_owners = organisation.stock_owners.filter_by_active.order('LOWER(name)')
     unpaginated_filtered_stock_owners = filtered_collection(stock_owners, search_term)
 
     @pagy, @stock_owners = pagy(unpaginated_filtered_stock_owners)
@@ -23,7 +23,7 @@ class OrganisationRelationshipsController < ApplicationController
   end
 
   def managing_agents
-    managing_agents = organisation.managing_agents.filter_by_active
+    managing_agents = organisation.managing_agents.filter_by_active.order('LOWER(name)')
     unpaginated_filtered_managing_agents = filtered_collection(managing_agents, search_term)
 
     @pagy, @managing_agents = pagy(unpaginated_filtered_managing_agents)
