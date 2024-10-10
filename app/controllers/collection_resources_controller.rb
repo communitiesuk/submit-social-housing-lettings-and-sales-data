@@ -8,6 +8,8 @@ class CollectionResourcesController < ApplicationController
 
     @mandatory_lettings_collection_resources_per_year = MandatoryCollectionResourcesService.generate_resources("lettings", editable_collection_resource_years)
     @mandatory_sales_collection_resources_per_year = MandatoryCollectionResourcesService.generate_resources("sales", editable_collection_resource_years)
+    @additional_lettings_collection_resources_per_year = CollectionResource.where(log_type: "lettings", mandatory: false).group_by(&:year)
+    @additional_sales_collection_resources_per_year = CollectionResource.where(log_type: "sales", mandatory: false).group_by(&:year)
   end
 
   def download_mandatory_collection_resource
@@ -52,7 +54,8 @@ class CollectionResourcesController < ApplicationController
     @collection_resource = MandatoryCollectionResourcesService.generate_resource(log_type, year, resource_type)
     render_not_found unless @collection_resource
 
-    validate_file(file)
+    @collection_resource.file = file
+    @collection_resource.validate_attached_file
 
     return render "collection_resources/edit" if @collection_resource.errors.any?
 
@@ -107,26 +110,29 @@ class CollectionResourcesController < ApplicationController
 
     @collection_resource = CollectionResource.new(resource_params)
     @collection_resource.download_filename ||= @collection_resource.file&.original_filename
+    @collection_resource.display_name = "#{@collection_resource.log_type} #{@collection_resource.short_display_name} (#{text_year_range_format(@collection_resource.year)})"
 
-    validate_file(@collection_resource.file)
+    @collection_resource.validate_attached_file
     return render "collection_resources/new" if @collection_resource.errors.any?
 
-    begin
-      CollectionResourcesService.new.upload_collection_resource(@collection_resource.download_filename, @collection_resource.file)
-      @collection_resource.save!
-    rescue StandardError
-      @collection_resource.errors.add(:file, :error_uploading)
-      return render "collection_resources/new"
+    if @collection_resource.save
+      begin
+        CollectionResourcesService.new.upload_collection_resource(@collection_resource.download_filename, @collection_resource.file)
+        flash[:notice] = "The #{@collection_resource.log_type} #{text_year_range_format(@collection_resource.year)} #{@collection_resource.short_display_name} is now available to users."
+        redirect_to collection_resources_path
+      rescue StandardError
+        @collection_resource.errors.add(:file, :error_uploading)
+        render "collection_resources/new"
+      end
+    else
+      render "collection_resources/new"
     end
-
-    flash[:notice] = "The #{@collection_resource.log_type} #{text_year_range_format(@collection_resource.year)} #{@collection_resource.display_name} is now available to users."
-    redirect_to collection_resources_path
   end
 
 private
 
   def resource_params
-    params.require(:collection_resource).permit(:year, :log_type, :resource_type, :file, :mandatory, :display_name)
+    params.require(:collection_resource).permit(:year, :log_type, :resource_type, :file, :mandatory, :short_display_name)
   end
 
   def download_resource(filename)
@@ -144,24 +150,5 @@ private
 
   def resource_for_year_can_be_updated?(year)
     editable_collection_resource_years.include?(year)
-  end
-
-  def validate_file(file)
-    return @collection_resource.errors.add(:file, :blank) unless file
-    return @collection_resource.errors.add(:file, :above_100_mb) if file.size > 100.megabytes
-
-    argv = %W[file --brief --mime-type -- #{file.path}]
-    output = `#{argv.shelljoin}`
-
-    case @collection_resource.resource_type
-    when "paper_form"
-      unless output.match?(/application\/pdf/)
-        @collection_resource.errors.add(:file, :must_be_pdf)
-      end
-    when "bulk_upload_template", "bulk_upload_specification"
-      unless output.match?(/application\/vnd\.ms-excel|application\/vnd\.openxmlformats-officedocument\.spreadsheetml\.sheet/)
-        @collection_resource.errors.add(:file, :must_be_xlsx, resource: @collection_resource.short_display_name.downcase)
-      end
-    end
   end
 end
