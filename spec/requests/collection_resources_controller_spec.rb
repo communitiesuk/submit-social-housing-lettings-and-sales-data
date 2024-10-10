@@ -540,4 +540,42 @@ RSpec.describe CollectionResourcesController, type: :request do
       end
     end
   end
+
+  describe "POST #collection_resources" do
+    let(:some_file) { File.open(file_fixture("blank_bulk_upload_sales.csv")) }
+    let(:params) { { collection_resource: { year: 2025, log_type: "sales", file: some_file, display_name: "some file" } } }
+
+    context "when user is not signed in" do
+      it "redirects to the sign in page" do
+        post collection_resources_path, params: params
+        expect(response).to redirect_to(new_user_session_path)
+      end
+    end
+
+    context "when user is signed in as a data coordinator" do
+      let(:user) { create(:user, :data_coordinator) }
+
+      before do
+        sign_in user
+      end
+
+      it "returns page not found" do
+        post collection_resources_path, params: params
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+
+    context "when user is signed in as a data provider" do
+      let(:user) { create(:user, :data_provider) }
+
+      before do
+        sign_in user
+      end
+
+      it "returns page not found" do
+        post collection_resources_path, params: params
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+  end
 end
