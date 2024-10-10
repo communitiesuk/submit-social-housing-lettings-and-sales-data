@@ -121,6 +121,11 @@ module Validations::FinancialValidations
 
   def validate_rent_amount(record)
     if record.wtshortfall
+      if record.is_supported_housing? && record.wchchrg && (record.wtshortfall > record.wchchrg)
+        record.errors.add :tshortfall, message: I18n.t("validations.financial.tshortfall.more_than_carehome_charge")
+        record.errors.add :chcharge, I18n.t("validations.financial.carehome.less_than_shortfall")
+      end
+
       if record.wtcharge && (record.wtshortfall > record.wtcharge)
         record.errors.add :tshortfall, :more_than_rent, message: I18n.t("validations.financial.tshortfall.more_than_total_charge")
         record.errors.add :tcharge, I18n.t("validations.financial.tcharge.less_than_shortfall")

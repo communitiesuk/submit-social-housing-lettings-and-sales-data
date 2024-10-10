@@ -300,6 +300,33 @@ RSpec.describe CheckErrorsController, type: :request do
         end
       end
 
+      context "and clearing ppostcode_full when previous_la_known is yes" do
+        let(:params) do
+          {
+            id: lettings_log.id,
+            lettings_log: {
+              layear: "1",
+              clear_question_ids: "ppostcode_full",
+              page: "time_lived_in_local_authority",
+            },
+            check_errors: "",
+          }
+        end
+
+        before do
+          lettings_log.update!(previous_la_known: 1, ppcodenk: 0, ppostcode_full: "AA11AA")
+          sign_in user
+          post "/lettings-logs/#{lettings_log.id}/time-lived-in-local-authority", params:
+        end
+
+        it "clears related previous location fields" do
+          expect(lettings_log.reload.prevloc).to eq(nil)
+          expect(lettings_log.reload.previous_la_known).to eq(nil)
+          expect(lettings_log.reload.ppostcode_full).to eq(nil)
+          expect(lettings_log.reload.ppcodenk).to eq(nil)
+        end
+      end
+
       context "and clearing specific sales question" do
         let(:params) do
           {

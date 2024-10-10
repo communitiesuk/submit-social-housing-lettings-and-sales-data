@@ -110,6 +110,7 @@ RSpec.describe "Accessibility", js: true do
         log.save(validate: false)
       end
       allow(FormHandler.instance).to receive(:in_crossover_period?).and_return(true)
+      allow(storage_service).to receive(:get_presigned_url).with(bulk_upload.identifier, 60, response_content_disposition: "attachment; filename=#{bulk_upload.filename}").and_return("http://example.com/lettings-logs/bulk-uploads/#{bulk_upload.id}/download")
     end
 
     it "is has accessible pages" do
@@ -146,6 +147,10 @@ RSpec.describe "Accessibility", js: true do
           other_form_page_ids.any? { |page_id| path.include?(page_id.dasherize) } ||
           sales_log_pages.any? { |page| path.include?(page.id.dasherize) && !page.routed_to?(sales_log, user) }
       }.uniq
+    end
+
+    before do
+      allow(storage_service).to receive(:get_presigned_url).with(bulk_upload.identifier, 60, response_content_disposition: "attachment; filename=#{bulk_upload.filename}").and_return("http://example.com/sales-logs/bulk-uploads/#{bulk_upload.id}/download")
     end
 
     it "is has accessible pages" do

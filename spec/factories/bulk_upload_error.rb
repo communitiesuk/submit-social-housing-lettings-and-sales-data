@@ -11,5 +11,6 @@ FactoryBot.define do
     purchaser_code { SecureRandom.hex(4) }
     field { "field_#{rand(1..134)}" }
     error { "some error" }
+    category { nil }
   end
 end
