@@ -2,12 +2,9 @@ require "rails_helper"
 require "rake"
 
 RSpec.describe "duplicate_rent_periods" do
-  before(:each) do
+  before do
     Rake.application.rake_require("tasks/duplicate_rent_periods")
     Rake::Task.define_task(:environment)
-  end
-
-  before do
     allow(Rails.logger).to receive(:info)
     organisation = create(:organisation, rent_periods: (1..11).to_a)
 
