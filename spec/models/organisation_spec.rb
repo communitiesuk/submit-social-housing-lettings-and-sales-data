@@ -124,7 +124,7 @@ RSpec.describe Organisation, type: :model do
       end
 
       before do
-        [4,2,1].each do |rent_period|
+        [4, 2, 1].each do |rent_period|
           create(:organisation_rent_period, organisation:, rent_period:)
         end
         allow(RentPeriod).to receive(:rent_period_mappings).and_return(fake_rent_periods)
