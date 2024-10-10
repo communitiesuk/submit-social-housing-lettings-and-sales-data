@@ -7,6 +7,17 @@ RSpec.describe "duplicate_rent_periods" do
     Rake::Task.define_task(:environment)
   end
 
+  before do
+    allow(Rails.logger).to receive(:info)
+    organisation = create(:organisation, rent_periods: (1..11).to_a)
+
+    [2, 4, 6, 11].each do |rent_period|
+      org_rent_period = build(:organisation_rent_period, organisation:)
+      org_rent_period.save(validate: false)
+      org_rent_period.update_column(:rent_period, rent_period)
+    end
+  end
+
   describe "find_redundant_rent_periods" do
     let(:task) { Rake::Task["find_redundant_rent_periods"] }
 
@@ -15,15 +26,6 @@ RSpec.describe "duplicate_rent_periods" do
     end
 
     it "logs the correct information about duplicate rent periods" do
-      allow(Rails.logger).to receive(:info)
-      organisation = create(:organisation, rent_periods: (1..11).to_a)
-
-      [2,4,6,11].each do |rent_period|
-        org_rent_period = build(:organisation_rent_period, organisation: organisation)
-        org_rent_period.save(validate: false)
-        org_rent_period.update_column(:rent_period, rent_period)
-      end
-
       task.invoke
 
       expect(Rails.logger).to have_received(:info).with(include("Total number of records: 15"))
@@ -41,15 +43,6 @@ RSpec.describe "duplicate_rent_periods" do
     end
 
     it "deletes redundant rent periods" do
-      allow(Rails.logger).to receive(:info)
-      organisation = create(:organisation, rent_periods: (1..11).to_a)
-
-      [2,4,6,11].each do |rent_period|
-        org_rent_period = build(:organisation_rent_period, organisation: organisation)
-        org_rent_period.save(validate: false)
-        org_rent_period.update_column(:rent_period, rent_period)
-      end
-
       expect { task.invoke }.to change { OrganisationRentPeriod.count }.by(-4)
       expect(Rails.logger).to have_received(:info).with(include("Number of deleted duplicate records: 4"))
     end
