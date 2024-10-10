@@ -313,6 +313,16 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
             expect(parser.errors[:field_23]).to eql(["You must answer address line 1"])
           end
         end
+
+        context "when an invalid value error has been added" do
+          let(:attributes) { setup_section_params.merge({ field_35: "100" }) }
+
+          it "does not add an additional error" do
+            parser.valid?
+            expect(parser.errors[:field_35].length).to eq(1)
+            expect(parser.errors[:field_35]).to include(match "Enter a valid value for")
+          end
+        end
       end
     end
 
