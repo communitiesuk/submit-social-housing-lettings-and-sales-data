@@ -13,24 +13,12 @@ RSpec.describe Form::Sales::Questions::Buyer2Nationality, type: :model do
     expect(question.id).to eq "nationalbuy2"
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq "What is buyer 2’s nationality?"
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq "Buyer 2’s nationality"
-  end
-
   it "has the correct type" do
     expect(question.type).to eq "radio"
   end
 
   it "is not marked as derived" do
     expect(question.derived?(nil)).to be false
-  end
-
-  it "has the correct hint" do
-    expect(question.hint_text).to be nil
   end
 
   it "has the correct answer_options" do

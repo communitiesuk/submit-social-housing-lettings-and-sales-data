@@ -5,7 +5,7 @@ RSpec.describe Form::Sales::Pages::CreatedBy, type: :model do
 
   let(:page_id) { nil }
   let(:page_definition) { nil }
-  let(:subsection) { instance_double(Form::Subsection) }
+  let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2024, 4, 1))) }
   let(:form) { instance_double(Form) }
   let(:lettings_log) { instance_double(LettingsLog) }
 
@@ -19,10 +19,6 @@ RSpec.describe Form::Sales::Pages::CreatedBy, type: :model do
 
   it "has the correct id" do
     expect(page.id).to eq("assigned_to")
-  end
-
-  it "has the correct header" do
-    expect(page.header).to be_nil
   end
 
   it "has the correct description" do

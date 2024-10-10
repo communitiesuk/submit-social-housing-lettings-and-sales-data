@@ -25,10 +25,6 @@ RSpec.describe Form::Lettings::Pages::LeadTenantEthnicBackgroundWhite, type: :mo
     expect(page.id).to eq("lead_tenant_ethnic_background_white")
   end
 
-  it "has the correct header" do
-    expect(page.header).to be_nil
-  end
-
   it "has the correct description" do
     expect(page.description).to be_nil
   end

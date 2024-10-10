@@ -15,14 +15,6 @@ RSpec.describe Form::Sales::Questions::PreviousPostcodeKnown, type: :model do
     expect(question.id).to eq("ppcodenk")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("Do you know the postcode of buyer 1’s last settled accommodation?")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Buyer 1’s last settled accommodation")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("radio")
   end
@@ -42,10 +34,6 @@ RSpec.describe Form::Sales::Questions::PreviousPostcodeKnown, type: :model do
     expect(question.conditional_for).to eq({
       "ppostcode_full" => [0],
     })
-  end
-
-  it "has the correct hint" do
-    expect(question.hint_text).to eq("This is also known as the household’s 'last settled home'")
   end
 
   it "has the correct hidden_in_check_answers" do

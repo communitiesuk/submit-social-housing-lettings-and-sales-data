@@ -19,10 +19,6 @@ RSpec.describe Form::Sales::Pages::MortgageLender, type: :model do
     expect(page.id).to eq("mortgage_lender")
   end
 
-  it "has the correct header" do
-    expect(page.header).to eq("")
-  end
-
   it "has the correct description" do
     expect(page.description).to eq("")
   end

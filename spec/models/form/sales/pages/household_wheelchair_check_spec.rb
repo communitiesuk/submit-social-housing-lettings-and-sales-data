@@ -19,10 +19,6 @@ RSpec.describe Form::Sales::Pages::HouseholdWheelchairCheck, type: :model do
     expect(page.id).to eq("buyer_1_income_mortgage_value_check")
   end
 
-  it "has the correct header" do
-    expect(page.header).to be_nil
-  end
-
   it "has correct depends_on" do
     expect(page.depends_on).to eq([
       {

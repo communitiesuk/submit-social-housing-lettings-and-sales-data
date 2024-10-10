@@ -13,20 +13,8 @@ RSpec.describe Form::Lettings::Questions::TenancyOther, type: :model do
     expect(question.id).to eq("tenancyother")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("Please state the tenancy type")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("text")
-  end
-
-  it "has the correct hint_text" do
-    expect(question.hint_text).to eq("")
   end
 
   it "is not marked as derived" do

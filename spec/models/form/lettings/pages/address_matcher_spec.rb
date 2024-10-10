@@ -20,10 +20,6 @@ RSpec.describe Form::Lettings::Pages::AddressMatcher, type: :model do
     expect(page.id).to eq("address_matcher")
   end
 
-  it "has the correct header" do
-    expect(page.header).to eq("Find an address")
-  end
-
   it "has the correct description" do
     expect(page.description).to be_nil
   end

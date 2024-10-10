@@ -41,10 +41,6 @@ RSpec.describe Form::Lettings::Questions::PersonWorkingSituation, type: :model d
                                           "divider" => { "value" => true })
   end
 
-  it "has the correct hint" do
-    expect(question.hint_text).to eq("")
-  end
-
   it "has correct conditional for" do
     expect(question.conditional_for).to be nil
   end
@@ -58,16 +54,8 @@ RSpec.describe Form::Lettings::Questions::PersonWorkingSituation, type: :model d
       expect(question.id).to eq("ecstat2")
     end
 
-    it "has the correct header" do
-      expect(question.header).to eq("Which of these best describes person 2’s working situation?")
-    end
-
     it "has the correct check_answers_card_number" do
       expect(question.check_answers_card_number).to eq(2)
-    end
-
-    it "has the correct check_answer_label" do
-      expect(question.check_answer_label).to eq("Person 2’s working situation")
     end
   end
 
@@ -78,16 +66,8 @@ RSpec.describe Form::Lettings::Questions::PersonWorkingSituation, type: :model d
       expect(question.id).to eq("ecstat3")
     end
 
-    it "has the correct header" do
-      expect(question.header).to eq("Which of these best describes person 3’s working situation?")
-    end
-
     it "has the correct check_answers_card_number" do
       expect(question.check_answers_card_number).to eq(3)
-    end
-
-    it "has the correct check_answer_label" do
-      expect(question.check_answer_label).to eq("Person 3’s working situation")
     end
   end
 end

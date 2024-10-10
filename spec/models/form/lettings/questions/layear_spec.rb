@@ -23,14 +23,6 @@ RSpec.describe Form::Lettings::Questions::Layear, type: :model do
     expect(question.id).to eq("layear")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("How long has the household continuously lived in the local authority area of the new letting?")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Length of time in local authority area")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("radio")
   end

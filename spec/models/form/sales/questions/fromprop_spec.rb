@@ -15,24 +15,12 @@ RSpec.describe Form::Sales::Questions::Fromprop, type: :model do
     expect(question.id).to eq("fromprop")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("What was the previous property type?")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Previous property type")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("radio")
   end
 
   it "is not marked as derived" do
     expect(question.derived?(nil)).to be false
-  end
-
-  it "has the correct hint" do
-    expect(question.hint_text).to eq("")
   end
 
   it "has the correct displayed_answer_options" do

@@ -15,20 +15,12 @@ RSpec.describe Form::Sales::Questions::BuyerCompany, type: :model do
     expect(question.id).to eq("companybuy")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("Is the buyer a company?")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("radio")
   end
 
   it "is not marked as derived" do
     expect(question.derived?(nil)).to be false
-  end
-
-  it "has the correct hint_text" do
-    expect(question.hint_text).to be_nil
   end
 
   it "has the correct answer_options" do

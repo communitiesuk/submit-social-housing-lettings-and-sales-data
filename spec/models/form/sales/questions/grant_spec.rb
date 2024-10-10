@@ -15,24 +15,12 @@ RSpec.describe Form::Sales::Questions::Grant, type: :model do
     expect(question.id).to eq("grant")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("What was the amount of any loan, grant, discount or subsidy given?")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Amount of any loan, grant or subsidy")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("numeric")
   end
 
   it "is not marked as derived" do
     expect(question.derived?(nil)).to be false
-  end
-
-  it "has the correct hint" do
-    expect(question.hint_text).to eq("For all schemes except Right to Buy (RTB), Preserved Right to Buy (PRTB), Voluntary Right to Buy (VRTB) and Rent to Buy")
   end
 
   it "has correct width" do

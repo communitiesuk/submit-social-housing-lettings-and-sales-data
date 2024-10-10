@@ -20,10 +20,6 @@ RSpec.describe Form::Sales::Pages::HousingBenefits, type: :model do
     expect(page.id).to eq(page_id)
   end
 
-  it "has the correct header" do
-    expect(page.header).to be_nil
-  end
-
   it "has the correct description" do
     expect(page.description).to be_nil
   end

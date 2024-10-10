@@ -15,24 +15,12 @@ RSpec.describe Form::Sales::Questions::DepositDiscount, type: :model do
     expect(question.id).to eq("cashdis")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("How much cash discount was given through Social HomeBuy?")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Cash discount through SocialHomeBuy")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("numeric")
   end
 
   it "is not marked as derived" do
     expect(question.derived?(nil)).to be false
-  end
-
-  it "has the correct hint" do
-    expect(question.hint_text).to eq("Enter the total cash discount given on the property being purchased through the Social HomeBuy scheme")
   end
 
   it "has correct width" do

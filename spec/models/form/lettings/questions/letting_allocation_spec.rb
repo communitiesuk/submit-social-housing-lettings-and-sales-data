@@ -23,14 +23,6 @@ RSpec.describe Form::Lettings::Questions::LettingAllocation, type: :model do
     expect(question.id).to eq("letting_allocation")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("How was this letting allocated?")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Allocation system")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("checkbox")
   end

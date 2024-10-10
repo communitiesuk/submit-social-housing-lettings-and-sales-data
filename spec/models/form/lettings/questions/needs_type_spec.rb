@@ -15,14 +15,6 @@ RSpec.describe Form::Lettings::Questions::NeedsType, type: :model do
     expect(question.id).to eq("needstype")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("What is the needs type?")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Needs type")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("radio")
   end

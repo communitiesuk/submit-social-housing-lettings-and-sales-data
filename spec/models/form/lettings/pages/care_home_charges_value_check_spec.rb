@@ -10,10 +10,6 @@ RSpec.describe Form::Lettings::Pages::CareHomeChargesValueCheck, type: :model do
     expect(page.subsection).to eq(subsection)
   end
 
-  it "has the correct header" do
-    expect(page.header).to be nil
-  end
-
   it "has the correct description" do
     expect(page.description).to be nil
   end

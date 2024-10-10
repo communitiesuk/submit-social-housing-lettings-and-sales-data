@@ -23,24 +23,12 @@ RSpec.describe Form::Lettings::Questions::ReasonRenewal, type: :model do
     expect(question.id).to eq("reason")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("What is the tenant’s main reason for the household leaving their last settled home?")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Reason for leaving last settled home")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("radio")
   end
 
   it "has the correct check_answers_card_number" do
     expect(question.check_answers_card_number).to eq(0)
-  end
-
-  it "has the correct hint" do
-    expect(question.hint_text).to eq("You told us this letting is a renewal. We have removed some options because of this.")
   end
 
   it "has the correct conditional_for" do

@@ -15,24 +15,12 @@ RSpec.describe Form::Sales::Questions::ArmedForces, type: :model do
     expect(question.id).to eq("hhregres")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("Have any of the buyers ever served as a regular in the UK armed forces?")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Have any of the buyers ever served as a regular in the UK armed forces?")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("radio")
   end
 
   it "is not marked as derived" do
     expect(question.derived?(nil)).to be false
-  end
-
-  it "has the correct hint" do
-    expect(question.hint_text).to eq("A regular is somebody who has served in the Royal Navy, the Royal Marines, the Royal Airforce or Army full time and does not include reserve forces")
   end
 
   it "has the correct answer_options" do

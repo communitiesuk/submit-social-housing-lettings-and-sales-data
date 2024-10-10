@@ -1,17 +1,19 @@
 require "rails_helper"
 
 RSpec.describe Form::Sales::Questions::SharedOwnershipType, type: :model do
+  include CollectionTimeHelper
+
   subject(:question) { described_class.new(question_id, question_definition, page) }
 
   let(:question_id) { nil }
   let(:question_definition) { nil }
-  let(:start_date) { Time.zone.local(2022, 4, 1) }
+  let(:start_date) { current_collection_start_date }
   let(:form) { instance_double(Form, start_date:) }
   let(:subsection) { instance_double(Form::Subsection, form:) }
   let(:page) { instance_double(Form::Page, subsection:) }
 
   before do
-    allow(form).to receive(:start_year_after_2024?).and_return(false)
+    allow(form).to receive(:start_year_after_2024?).and_return(true)
   end
 
   it "has correct page" do
@@ -22,14 +24,6 @@ RSpec.describe Form::Sales::Questions::SharedOwnershipType, type: :model do
     expect(question.id).to eq("type")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("What is the type of shared ownership sale?")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Type of shared ownership sale")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("radio")
   end
@@ -38,32 +32,12 @@ RSpec.describe Form::Sales::Questions::SharedOwnershipType, type: :model do
     expect(question.derived?(nil)).to be false
   end
 
-  it "has the correct hint_text" do
-    expect(question.hint_text).to eq("A shared ownership sale is when the purchaser buys up to 75% of the property value and pays rent to the Private Registered Provider (PRP) on the remaining portion")
-  end
-
-  context "when form start date is 2022/23" do
-    let(:start_date) { Time.zone.local(2022, 4, 1) }
-
-    it "has the correct answer_options" do
-      expect(question.answer_options).to eq({
-        "2" => { "value" => "Shared Ownership" },
-        "24" => { "value" => "Old Persons Shared Ownership" },
-        "18" => { "value" => "Social HomeBuy (shared ownership purchase)" },
-        "16" => { "value" => "Home Ownership for people with Long-Term Disabilities (HOLD)" },
-        "28" => { "value" => "Rent to Buy - Shared Ownership" },
-        "31" => { "value" => "Right to Shared Ownership" },
-        "30" => { "value" => "Shared Ownership - 2021 model lease" },
-      })
-    end
-
-    it "does not show a top_guidance_partial" do
-      expect(question.top_guidance_partial).to eq(nil)
-    end
-  end
-
   context "when form start date is 2023/24" do
     let(:start_date) { Time.zone.local(2023, 4, 2) }
+
+    before do
+      allow(form).to receive(:start_year_after_2024?).and_return(false)
+    end
 
     it "has the correct answer_options" do
       expect(question.answer_options).to eq({
@@ -90,10 +64,6 @@ RSpec.describe Form::Sales::Questions::SharedOwnershipType, type: :model do
 
     it "shows shows correct top_guidance_partial" do
       expect(question.top_guidance_partial).to eq("shared_ownership_type_definitions_2024")
-    end
-
-    it "has the correct hint_text" do
-      expect(question.hint_text).to eq("When the purchaser buys an initial share of up to 75% of the property value and pays rent to the Private Registered Provider (PRP) on the remaining portion, or a subsequent staircasing transaction")
     end
   end
 end

@@ -19,10 +19,6 @@ RSpec.describe Form::Sales::Pages::OldPersonsSharedOwnershipValueCheck, type: :m
     expect(page.id).to eq("old_persons_shared_ownership_value_check")
   end
 
-  it "has the correct header" do
-    expect(page.header).to be_nil
-  end
-
   it "has correct depends_on" do
     expect(page.depends_on).to eq([
       {

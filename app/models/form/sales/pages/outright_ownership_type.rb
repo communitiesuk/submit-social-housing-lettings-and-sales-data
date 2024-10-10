@@ -2,7 +2,7 @@ class Form::Sales::Pages::OutrightOwnershipType < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "outright_ownership_type"
-    @header = header
+    @copy_key = "sales.setup.type.outright_ownership"
     @depends_on = [{
       "ownershipsch" => 3,
     }]
@@ -13,9 +13,5 @@ class Form::Sales::Pages::OutrightOwnershipType < ::Form::Page
       Form::Sales::Questions::OutrightOwnershipType.new(nil, nil, self),
       Form::Sales::Questions::OtherOwnershipType.new(nil, nil, self),
     ]
-  end
-
-  def header
-    "Type of outright sale" if form.start_date.year >= 2023
   end
 end

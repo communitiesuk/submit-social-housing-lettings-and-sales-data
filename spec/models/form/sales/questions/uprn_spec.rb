@@ -15,14 +15,6 @@ RSpec.describe Form::Sales::Questions::Uprn, type: :model do
     expect(question.id).to eq("uprn")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("What is the property's UPRN?")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("UPRN")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("text")
   end
@@ -33,10 +25,6 @@ RSpec.describe Form::Sales::Questions::Uprn, type: :model do
 
   it "has the correct question_number" do
     expect(question.question_number).to eq(14)
-  end
-
-  it "has the correct hint" do
-    expect(question.hint_text).to be_nil
   end
 
   it "has the correct unanswered_error_message" do

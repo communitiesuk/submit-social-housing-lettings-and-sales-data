@@ -14,24 +14,12 @@ RSpec.describe Form::Lettings::Questions::CareHomeChargesValueCheck, type: :mode
     expect(question.id).to eq("carehome_charges_value_check")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("Are you sure there are no care home charges?")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Care home charges confirmation")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("interruption_screen")
   end
 
   it "is not marked as derived" do
     expect(question.derived?(nil)).to be false
-  end
-
-  it "has the correct hint" do
-    expect(question.hint_text).to be_nil
   end
 
   it "has the correct answer_options" do

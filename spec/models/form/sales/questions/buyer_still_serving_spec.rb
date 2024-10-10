@@ -15,24 +15,12 @@ RSpec.describe Form::Sales::Questions::BuyerStillServing, type: :model do
     expect(question.id).to eq("hhregresstill")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("Is the buyer still serving in the UK armed forces?")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Are they still serving in the UK armed forces?")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("radio")
   end
 
   it "is not marked as derived" do
     expect(question.derived?(nil)).to be false
-  end
-
-  it "has the correct hint" do
-    expect(question.hint_text).to be_nil
   end
 
   it "has the correct answer_options" do

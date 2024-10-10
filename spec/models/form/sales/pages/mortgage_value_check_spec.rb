@@ -20,10 +20,6 @@ RSpec.describe Form::Sales::Pages::MortgageValueCheck, type: :model do
     expect(page.id).to eq("buyer_1_income_mortgage_value_check")
   end
 
-  it "has the correct header" do
-    expect(page.header).to be_nil
-  end
-
   it "is interruption screen page" do
     expect(page.interruption_screen?).to eq(true)
   end

@@ -15,20 +15,8 @@ RSpec.describe Form::Lettings::Questions::MinRentValueCheck, type: :model do
     expect(question.id).to eq("rent_value_check")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("Are you sure this is correct?")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Total rent confirmation")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("interruption_screen")
-  end
-
-  it "has the correct hint" do
-    expect(question.hint_text).to eq("Check the following:<ul class=\"govuk-body-l app-panel--interruption\"><li>the decimal point</li><li>the frequency, for example every week or every calendar month</li><li>the rent type is correct, for example affordable or social rent</li></ul>")
   end
 
   it "has the correct answer_options" do

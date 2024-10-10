@@ -36,40 +36,12 @@ RSpec.describe Form::Sales::Questions::PersonGenderIdentity, type: :model do
     })
   end
 
-  context "when form year is before 2024" do
-    before do
-      allow(form).to receive(:start_year_after_2024?).and_return(false)
-    end
-
-    it "has the correct hint" do
-      expect(question.hint_text).to be_nil
-    end
-  end
-
-  context "when form year is >= 2024" do
-    before do
-      allow(form).to receive(:start_year_after_2024?).and_return(true)
-    end
-
-    it "has the correct hint" do
-      expect(question.hint_text).to eq("This should be however they personally choose to identify from the options below. This may or may not be the same as their biological sex or the sex they were assigned at birth.")
-    end
-  end
-
   context "when person 2" do
     let(:question_id) { "sex2" }
     let(:person_index) { 2 }
 
     it "has the correct id" do
       expect(question.id).to eq("sex2")
-    end
-
-    it "has the correct header" do
-      expect(question.header).to eq("Which of these best describes Person 2’s gender identity?")
-    end
-
-    it "has the correct check_answer_label" do
-      expect(question.check_answer_label).to eq("Person 2’s gender identity")
     end
 
     it "has expected check answers card number" do
@@ -91,14 +63,6 @@ RSpec.describe Form::Sales::Questions::PersonGenderIdentity, type: :model do
       expect(question.id).to eq("sex3")
     end
 
-    it "has the correct header" do
-      expect(question.header).to eq("Which of these best describes Person 3’s gender identity?")
-    end
-
-    it "has the correct check_answer_label" do
-      expect(question.check_answer_label).to eq("Person 3’s gender identity")
-    end
-
     it "has expected check answers card number" do
       expect(question.check_answers_card_number).to eq(3)
     end
@@ -118,14 +82,6 @@ RSpec.describe Form::Sales::Questions::PersonGenderIdentity, type: :model do
       expect(question.id).to eq("sex4")
     end
 
-    it "has the correct header" do
-      expect(question.header).to eq("Which of these best describes Person 4’s gender identity?")
-    end
-
-    it "has the correct check_answer_label" do
-      expect(question.check_answer_label).to eq("Person 4’s gender identity")
-    end
-
     it "has expected check answers card number" do
       expect(question.check_answers_card_number).to eq(4)
     end
@@ -143,14 +99,6 @@ RSpec.describe Form::Sales::Questions::PersonGenderIdentity, type: :model do
 
     it "has the correct id" do
       expect(question.id).to eq("sex5")
-    end
-
-    it "has the correct header" do
-      expect(question.header).to eq("Which of these best describes Person 5’s gender identity?")
-    end
-
-    it "has the correct check_answer_label" do
-      expect(question.check_answer_label).to eq("Person 5’s gender identity")
     end
 
     it "has expected check answers card number" do

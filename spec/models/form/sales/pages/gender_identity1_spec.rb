@@ -19,10 +19,6 @@ RSpec.describe Form::Sales::Pages::GenderIdentity1, type: :model do
     expect(page.id).to eq("buyer_1_gender_identity")
   end
 
-  it "has the correct header" do
-    expect(page.header).to be_nil
-  end
-
   it "has the correct description" do
     expect(page.description).to be_nil
   end

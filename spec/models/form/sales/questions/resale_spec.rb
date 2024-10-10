@@ -15,14 +15,6 @@ RSpec.describe Form::Sales::Questions::Resale, type: :model do
     expect(question.id).to eq("resale")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("Is this a resale?")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Is this a resale?")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("radio")
   end
@@ -40,9 +32,5 @@ RSpec.describe Form::Sales::Questions::Resale, type: :model do
 
   it "has correct conditional for" do
     expect(question.conditional_for).to eq(nil)
-  end
-
-  it "has the correct hint" do
-    expect(question.hint_text).to eq("If the social landlord has previously sold the property to another buyer and is now reselling the property, select 'yes'. If this is the first time the property has been sold, select 'no'.")
   end
 end

@@ -15,14 +15,6 @@ RSpec.describe Form::Sales::Questions::ExchangeDate, type: :model do
     expect(question.id).to eq("exdate")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("What is the exchange of contracts date?")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Exchange of contracts date")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("date")
   end

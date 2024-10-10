@@ -13,14 +13,6 @@ RSpec.describe Form::Lettings::Questions::Homeless, type: :model do
     expect(question.id).to eq("homeless")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("Did the household experience homelessness immediately before this letting?")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Household homeless immediately before letting")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("radio")
   end

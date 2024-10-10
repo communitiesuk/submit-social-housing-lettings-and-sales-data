@@ -15,24 +15,12 @@ RSpec.describe Form::Sales::Questions::BuyerInterview, type: :model do
     expect(question.id).to eq("noint")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("Was the buyer interviewed for any of the answers you will provide on this log?")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Buyer interviewed in person?")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("radio")
   end
 
   it "is not marked as derived" do
     expect(question.derived?(nil)).to be false
-  end
-
-  it "has the correct hint" do
-    expect(question.hint_text).to eq("You should still try to answer all questions even if the buyer wasn’t interviewed in person")
   end
 
   it "has the correct answer_options" do
@@ -42,19 +30,19 @@ RSpec.describe Form::Sales::Questions::BuyerInterview, type: :model do
     })
   end
 
-  context "with joint purchase" do
+  context "when there are joint buyers" do
     subject(:question) { described_class.new(question_id, question_definition, page, joint_purchase: true) }
 
-    it "has the correct header" do
-      expect(question.header).to eq("Were the buyers interviewed for any of the answers you will provide on this log?")
+    it "has the expected copy_key" do
+      expect(question.copy_key).to eq("sales.setup.noint.joint_purchase")
     end
+  end
 
-    it "has the correct hint_text" do
-      expect(question.hint_text).to eq("You should still try to answer all questions even if the buyers weren’t interviewed in person")
-    end
+  context "when there is a single buyer" do
+    subject(:question) { described_class.new(question_id, question_definition, page, joint_purchase: false) }
 
-    it "has the correct check_answer_label" do
-      expect(question.check_answer_label).to eq("Buyers interviewed in person?")
+    it "has the expected copy_key" do
+      expect(question.copy_key).to eq("sales.setup.noint.not_joint_purchase")
     end
   end
 end

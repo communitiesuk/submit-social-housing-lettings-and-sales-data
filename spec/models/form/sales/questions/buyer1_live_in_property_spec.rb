@@ -15,14 +15,6 @@ RSpec.describe Form::Sales::Questions::Buyer1LiveInProperty, type: :model do
     expect(question.id).to eq("buy1livein")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("Will buyer 1 live in the property?")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Will buyer 1 live in the property?")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("radio")
   end
@@ -40,10 +32,6 @@ RSpec.describe Form::Sales::Questions::Buyer1LiveInProperty, type: :model do
 
   it "has correct conditional for" do
     expect(question.conditional_for).to be_nil
-  end
-
-  it "has the correct hint" do
-    expect(question.hint_text).to eq("Buyer 1 is the person in the household who does the most paid work. If it’s a joint purchase and the buyers do the same amount of paid work, buyer 1 is whoever is the oldest.")
   end
 
   it "has the correct check_answers_card_number" do

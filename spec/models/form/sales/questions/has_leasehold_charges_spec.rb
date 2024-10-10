@@ -15,14 +15,6 @@ RSpec.describe Form::Sales::Questions::HasLeaseholdCharges, type: :model do
     expect(question.id).to eq("has_mscharge")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("Does the property have any monthly leasehold charges?")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Does the property have any monthly leasehold charges?")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("radio")
   end
@@ -42,10 +34,6 @@ RSpec.describe Form::Sales::Questions::HasLeaseholdCharges, type: :model do
     expect(question.conditional_for).to eq({
       "mscharge" => [1],
     })
-  end
-
-  it "has the correct hint" do
-    expect(question.hint_text).to eq("For example, service and management charges")
   end
 
   it "has correct hidden_in_check_answers for" do

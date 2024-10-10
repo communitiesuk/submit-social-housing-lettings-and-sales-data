@@ -23,14 +23,6 @@ RSpec.describe Form::Sales::Questions::PrivacyNotice, type: :model do
     expect(question.id).to eq("privacynotice")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("Declaration")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Buyer has seen the privacy notice?")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("checkbox")
   end
@@ -39,8 +31,20 @@ RSpec.describe Form::Sales::Questions::PrivacyNotice, type: :model do
     expect(question.derived?(nil)).to be false
   end
 
-  it "has the correct hint" do
-    expect(question.hint_text).to be_nil
+  context "when there are joint buyers" do
+    subject(:question) { described_class.new(question_id, question_definition, page, joint_purchase: true) }
+
+    it "has the expected copy_key" do
+      expect(question.copy_key).to eq("sales.setup.privacynotice.joint_purchase")
+    end
+  end
+
+  context "when there is a single buyer" do
+    subject(:question) { described_class.new(question_id, question_definition, page, joint_purchase: false) }
+
+    it "has the expected copy_key" do
+      expect(question.copy_key).to eq("sales.setup.privacynotice.not_joint_purchase")
+    end
   end
 
   context "when the form year is before 2024" do

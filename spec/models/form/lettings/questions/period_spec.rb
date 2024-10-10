@@ -5,10 +5,6 @@ RSpec.describe Form::Lettings::Questions::Period, type: :model do
 
   let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2023, 4, 1)))) }
 
-  it "has the correct hint" do
-    expect(question.hint_text).to eq("Select how often the household is charged. This may be different to how often they pay.")
-  end
-
   it "has correct answer options" do
     expect(question.answer_options).to eq(
       {

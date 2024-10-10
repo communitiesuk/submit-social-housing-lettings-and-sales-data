@@ -2,7 +2,7 @@ class Form::Sales::Pages::DiscountedOwnershipType < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "discounted_ownership_type"
-    @header = header
+    @copy_key = "sales.setup.type.discounted_ownership"
     @depends_on = [{
       "ownershipsch" => 2,
     }]
@@ -12,9 +12,5 @@ class Form::Sales::Pages::DiscountedOwnershipType < ::Form::Page
     @questions ||= [
       Form::Sales::Questions::DiscountedOwnershipType.new(nil, nil, self),
     ]
-  end
-
-  def header
-    "Type of discounted ownership sale" if form.start_date.year >= 2023
   end
 end

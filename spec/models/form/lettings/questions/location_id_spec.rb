@@ -23,14 +23,6 @@ RSpec.describe Form::Lettings::Questions::LocationId, type: :model do
     expect(question.id).to eq("location_id")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("Which location is this log for?")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Location")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("radio")
   end
@@ -174,16 +166,6 @@ RSpec.describe Form::Lettings::Questions::LocationId, type: :model do
           ])
         end
       end
-    end
-  end
-
-  context "with collection year on or after 2023" do
-    before do
-      allow(form).to receive(:start_date).and_return(Time.zone.local(2023, 4, 1))
-    end
-
-    it "has the correct header" do
-      expect(question.header).to eq("Which location is this letting for?")
     end
   end
 

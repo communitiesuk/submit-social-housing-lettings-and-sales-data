@@ -15,14 +15,6 @@ RSpec.describe Form::Sales::Questions::SavingsNk, type: :model do
     expect(question.id).to eq("savingsnk")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("Do you know how much the buyer had in savings before they paid any deposit for the property?")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Buyer’s total savings known?")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("radio")
   end
@@ -42,10 +34,6 @@ RSpec.describe Form::Sales::Questions::SavingsNk, type: :model do
     expect(question.conditional_for).to eq({
       "savings" => [0],
     })
-  end
-
-  it "has the correct hint" do
-    expect(question.hint_text).to be_nil
   end
 
   it "has the correct hidden_in_check_answers" do

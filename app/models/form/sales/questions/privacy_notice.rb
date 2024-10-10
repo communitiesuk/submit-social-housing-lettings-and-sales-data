@@ -2,8 +2,7 @@ class Form::Sales::Questions::PrivacyNotice < ::Form::Question
   def initialize(id, hsh, page, joint_purchase:)
     super(id, hsh, page)
     @id = "privacynotice"
-    @check_answer_label = "#{joint_purchase ? 'Buyers have' : 'Buyer has'} seen the privacy notice?"
-    @header = "Declaration"
+    @copy_key = "sales.setup.privacynotice.#{joint_purchase ? 'joint_purchase' : 'not_joint_purchase'}"
     @type = "checkbox"
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
     @joint_purchase = joint_purchase

@@ -17,20 +17,8 @@ RSpec.describe Form::Sales::Questions::CreatedById, type: :model do
     expect(question.id).to eq("assigned_to_id")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("Which user are you creating this log for?")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Log owner")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("select")
-  end
-
-  it "has the correct hint_text" do
-    expect(question.hint_text).to be_nil
   end
 
   it "is marked as derived" do

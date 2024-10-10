@@ -15,14 +15,6 @@ RSpec.describe Form::Lettings::Questions::Voiddate, type: :model do
     expect(question.id).to eq("voiddate")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("What is the void date?")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Void date")
-  end
-
   it "has the correct check_answers_card_number" do
     expect(question.check_answers_card_number).to eq(0)
   end

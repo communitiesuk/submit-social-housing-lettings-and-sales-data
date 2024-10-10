@@ -19,10 +19,6 @@ RSpec.describe Form::Lettings::Pages::UprnConfirmation, type: :model do
     expect(page.id).to eq("uprn_confirmation")
   end
 
-  it "has the correct header" do
-    expect(page.header).to eq("We found an address that might be this property")
-  end
-
   it "has the correct description" do
     expect(page.description).to be_nil
   end

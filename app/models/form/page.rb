@@ -1,5 +1,5 @@
 class Form::Page
-  attr_accessor :id, :header, :header_partial, :description, :questions, :depends_on, :title_text,
+  attr_accessor :id, :header_partial, :description, :questions, :depends_on, :title_text,
                 :informative_text, :subsection, :hide_subsection_label, :next_unresolved_page_id,
                 :skip_text, :interruption_screen_question_ids, :submit_text
 
@@ -23,6 +23,14 @@ class Form::Page
   end
 
   delegate :form, to: :subsection
+
+  def copy_key
+    @copy_key ||= "#{form.type}.#{subsection.id}.#{questions[0].id}"
+  end
+
+  def header
+    @header ||= I18n.t("forms.#{form.start_date.year}.#{copy_key}.page_header", default: "")
+  end
 
   def routed_to?(log, _current_user)
     return true unless depends_on || subsection.depends_on

@@ -24,10 +24,6 @@ RSpec.describe Form::Lettings::Pages::PreviousLocalAuthority, type: :model do
     expect(page.id).to eq("previous_local_authority")
   end
 
-  it "has the correct header" do
-    expect(page.header).to be_nil
-  end
-
   it "has the correct description" do
     expect(page.description).to be_nil
   end

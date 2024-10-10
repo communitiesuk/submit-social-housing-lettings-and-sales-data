@@ -15,16 +15,8 @@ RSpec.describe Form::Sales::Questions::NationalityAll, type: :model do
     expect(question.id).to eq "some_id"
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq "Enter a nationality"
-  end
-
   it "has the correct type" do
     expect(question.type).to eq "select"
-  end
-
-  it "has the correct hint" do
-    expect(question.hint_text).to be_nil
   end
 
   it "has the correct answer_options" do
@@ -46,10 +38,6 @@ RSpec.describe Form::Sales::Questions::NationalityAll, type: :model do
       expect(question.check_answers_card_number).to be 1
     end
 
-    it "has the correct check_answer_label" do
-      expect(question.check_answer_label).to eq "Buyer 1’s nationality"
-    end
-
     it "has the correct question_number" do
       expect(question.question_number).to be 24
     end
@@ -60,10 +48,6 @@ RSpec.describe Form::Sales::Questions::NationalityAll, type: :model do
 
     it "has the correct check_answers_card_number" do
       expect(question.check_answers_card_number).to be 2
-    end
-
-    it "has the correct check_answer_label" do
-      expect(question.check_answer_label).to eq "Buyer 2’s nationality"
     end
 
     it "has the correct question_number" do

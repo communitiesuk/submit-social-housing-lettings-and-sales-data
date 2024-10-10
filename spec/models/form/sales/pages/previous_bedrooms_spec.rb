@@ -19,10 +19,6 @@ RSpec.describe Form::Sales::Pages::PreviousBedrooms, type: :model do
     expect(page.id).to eq("previous_bedrooms")
   end
 
-  it "has the correct header" do
-    expect(page.header).to eq("About the buyers’ previous property")
-  end
-
   it "has the correct description" do
     expect(page.description).to be_nil
   end

@@ -15,24 +15,12 @@ RSpec.describe Form::Sales::Questions::BuyersOrganisations, type: :model do
     expect(question.id).to eq("buyers_organisations")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("What organisations were the buyers registered with?")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Organisations buyers were registered with")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("checkbox")
   end
 
   it "is not marked as derived" do
     expect(question.derived?(nil)).to be false
-  end
-
-  it "has the correct hint" do
-    expect(question.hint_text).to eq("Select all that apply. This question is optional. If no options are applicable, leave the options blank, and select save and continue.")
   end
 
   it "has the correct answer_options" do

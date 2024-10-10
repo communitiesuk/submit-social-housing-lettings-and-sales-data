@@ -15,24 +15,12 @@ RSpec.describe Form::Sales::Questions::ArmedForcesSpouse, type: :model do
     expect(question.id).to eq("armedforcesspouse")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("Are any of the buyers a spouse or civil partner of a UK armed forces regular who died in service within the last 2 years?")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Are any of the buyers a spouse or civil partner of a UK armed forces regular who died in service within the last 2 years?")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("radio")
   end
 
   it "is not marked as derived" do
     expect(question.derived?(nil)).to be false
-  end
-
-  it "has the correct hint" do
-    expect(question.hint_text).to be_nil
   end
 
   it "has the correct answer_options" do

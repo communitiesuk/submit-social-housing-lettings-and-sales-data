@@ -16,14 +16,6 @@ RSpec.describe Form::Sales::Questions::PostcodeForAddressMatcher, type: :model d
     expect(question.id).to eq("postcode_full_input")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("Postcode")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq(nil)
-  end
-
   it "has the correct question_number" do
     expect(question.question_number).to eq(nil)
   end
@@ -34,10 +26,6 @@ RSpec.describe Form::Sales::Questions::PostcodeForAddressMatcher, type: :model d
 
   it "is not marked as derived" do
     expect(question.derived?(nil)).to be false
-  end
-
-  it "has the correct hint" do
-    expect(question.hint_text).to be_nil
   end
 
   it "has the correct answer label" do

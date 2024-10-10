@@ -4,8 +4,6 @@ class Form::Sales::Questions::CreatedById < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "assigned_to_id"
-    @check_answer_label = "Log owner"
-    @header = "Which user are you creating this log for?"
     @derived = true
     @type = "select"
   end

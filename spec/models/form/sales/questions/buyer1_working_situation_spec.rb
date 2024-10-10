@@ -15,14 +15,6 @@ RSpec.describe Form::Sales::Questions::Buyer1WorkingSituation, type: :model do
     expect(question.id).to eq("ecstat1")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("Which of these best describes buyer 1's working situation?")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Buyer 1's working situation")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("radio")
   end

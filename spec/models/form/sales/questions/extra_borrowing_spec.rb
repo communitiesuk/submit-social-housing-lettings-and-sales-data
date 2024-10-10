@@ -15,14 +15,6 @@ RSpec.describe Form::Sales::Questions::ExtraBorrowing, type: :model do
     expect(question.id).to eq("extrabor")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("Does this include any extra borrowing?")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Any other borrowing?")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("radio")
   end
@@ -41,9 +33,5 @@ RSpec.describe Form::Sales::Questions::ExtraBorrowing, type: :model do
 
   it "has correct conditional for" do
     expect(question.conditional_for).to eq(nil)
-  end
-
-  it "has the correct hint" do
-    expect(question.hint_text).to eq("")
   end
 end

@@ -22,14 +22,6 @@ RSpec.describe Form::Sales::Questions::JointPurchase, type: :model do
     expect(question.id).to eq("jointpur")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("Is this a joint purchase?")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Joint purchase")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("radio")
   end
@@ -43,25 +35,5 @@ RSpec.describe Form::Sales::Questions::JointPurchase, type: :model do
       "1" => { "value" => "Yes" },
       "2" => { "value" => "No" },
     })
-  end
-
-  context "with collection year before 2024" do
-    before do
-      allow(form).to receive(:start_year_after_2024?).and_return(false)
-    end
-
-    it "has the blank hint_text" do
-      expect(question.hint_text).to be_nil
-    end
-  end
-
-  context "with collection year >= 2024" do
-    before do
-      allow(form).to receive(:start_year_after_2024?).and_return(true)
-    end
-
-    it "has the correct hint_text" do
-      expect(question.hint_text).to eq("This is where two or more people are named as legal owners of the property after the purchase")
-    end
   end
 end

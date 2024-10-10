@@ -19,10 +19,6 @@ RSpec.describe Form::Sales::Pages::PropertyNumberOfBedrooms, type: :model do
     expect(page.id).to eq("property_number_of_bedrooms")
   end
 
-  it "has the correct header" do
-    expect(page.header).to be_nil
-  end
-
   it "has the correct description" do
     expect(page.description).to be_nil
   end

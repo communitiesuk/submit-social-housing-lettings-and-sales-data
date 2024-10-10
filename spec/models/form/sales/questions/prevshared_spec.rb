@@ -15,14 +15,6 @@ RSpec.describe Form::Sales::Questions::Prevshared, type: :model do
     expect(question.id).to eq("prevshared")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("Was the previous property under shared ownership?")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Previous property shared ownership?")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("radio")
   end
@@ -41,9 +33,5 @@ RSpec.describe Form::Sales::Questions::Prevshared, type: :model do
 
   it "has correct conditional for" do
     expect(question.conditional_for).to eq(nil)
-  end
-
-  it "has the correct hint" do
-    expect(question.hint_text).to eq("For any buyer")
   end
 end

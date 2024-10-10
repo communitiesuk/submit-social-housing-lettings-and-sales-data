@@ -27,10 +27,6 @@ RSpec.describe Form::Lettings::Questions::PersonRelationship, type: :model do
                                           "divider" => { "value" => true })
   end
 
-  it "has the correct hint" do
-    expect(question.hint_text).to eq("")
-  end
-
   it "has correct conditional for" do
     expect(question.conditional_for).to be nil
   end
@@ -44,16 +40,8 @@ RSpec.describe Form::Lettings::Questions::PersonRelationship, type: :model do
       expect(question.id).to eq("relat2")
     end
 
-    it "has the correct header" do
-      expect(question.header).to eq("What is person 2’s relationship to the lead tenant?")
-    end
-
     it "has the correct check_answers_card_number" do
       expect(question.check_answers_card_number).to eq(2)
-    end
-
-    it "has the correct check_answer_label" do
-      expect(question.check_answer_label).to eq("Person 2’s relationship to the lead tenant")
     end
   end
 
@@ -64,16 +52,8 @@ RSpec.describe Form::Lettings::Questions::PersonRelationship, type: :model do
       expect(question.id).to eq("relat3")
     end
 
-    it "has the correct header" do
-      expect(question.header).to eq("What is person 3’s relationship to the lead tenant?")
-    end
-
     it "has the correct check_answers_card_number" do
       expect(question.check_answers_card_number).to eq(3)
-    end
-
-    it "has the correct check_answer_label" do
-      expect(question.check_answer_label).to eq("Person 3’s relationship to the lead tenant")
     end
   end
 end

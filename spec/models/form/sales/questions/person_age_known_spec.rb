@@ -27,24 +27,12 @@ RSpec.describe Form::Sales::Questions::PersonAgeKnown, type: :model do
     })
   end
 
-  it "has the correct hint" do
-    expect(question.hint_text).to be_nil
-  end
-
   context "with person 2" do
     let(:question_id) { "age2_known" }
     let(:person_index) { 2 }
 
     it "has the correct id" do
       expect(question.id).to eq("age2_known")
-    end
-
-    it "has the correct header" do
-      expect(question.header).to eq("Do you know person 2’s age?")
-    end
-
-    it "has the correct check_answer_label" do
-      expect(question.check_answer_label).to eq("Person 2’s age known?")
     end
 
     it "has correct conditional for" do
@@ -81,14 +69,6 @@ RSpec.describe Form::Sales::Questions::PersonAgeKnown, type: :model do
       expect(question.id).to eq("age3_known")
     end
 
-    it "has the correct header" do
-      expect(question.header).to eq("Do you know person 3’s age?")
-    end
-
-    it "has the correct check_answer_label" do
-      expect(question.check_answer_label).to eq("Person 3’s age known?")
-    end
-
     it "has correct conditional for" do
       expect(question.conditional_for).to eq({
         "age3" => [0],
@@ -123,14 +103,6 @@ RSpec.describe Form::Sales::Questions::PersonAgeKnown, type: :model do
       expect(question.id).to eq("age4_known")
     end
 
-    it "has the correct header" do
-      expect(question.header).to eq("Do you know person 4’s age?")
-    end
-
-    it "has the correct check_answer_label" do
-      expect(question.check_answer_label).to eq("Person 4’s age known?")
-    end
-
     it "has correct conditional for" do
       expect(question.conditional_for).to eq({
         "age4" => [0],
@@ -163,14 +135,6 @@ RSpec.describe Form::Sales::Questions::PersonAgeKnown, type: :model do
 
     it "has the correct id" do
       expect(question.id).to eq("age5_known")
-    end
-
-    it "has the correct header" do
-      expect(question.header).to eq("Do you know person 5’s age?")
-    end
-
-    it "has the correct check_answer_label" do
-      expect(question.check_answer_label).to eq("Person 5’s age known?")
     end
 
     it "has correct conditional for" do

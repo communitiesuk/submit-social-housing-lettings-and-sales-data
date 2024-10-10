@@ -26,16 +26,8 @@ RSpec.describe Form::Lettings::Questions::Waityear, type: :model do
     expect(question.derived?(nil)).to be false
   end
 
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Length of time on local authority waiting list")
-  end
-
   it "has the correct id" do
     expect(question.id).to eq("waityear")
-  end
-
-  it "has the correct hint" do
-    expect(question.hint_text).to eq("")
   end
 
   it "has correct conditional for" do
@@ -51,10 +43,6 @@ RSpec.describe Form::Lettings::Questions::Waityear, type: :model do
   end
 
   context "with 2023/24 form" do
-    it "has the correct header" do
-      expect(question.header).to eq("How long has the household been on the local authority waiting list for the new letting?")
-    end
-
     it "has the correct answer_options" do
       expect(question.answer_options).to eq({
         "2" => { "value" => "Less than 1 year" },
@@ -72,10 +60,6 @@ RSpec.describe Form::Lettings::Questions::Waityear, type: :model do
   context "with 2024/25 form" do
     before do
       allow(form).to receive(:start_year_after_2024?).and_return(true)
-    end
-
-    it "has the correct header" do
-      expect(question.header).to eq("How long has the household been on the local authority waiting list for the area of the new letting?")
     end
 
     it "has the correct answer_options" do

@@ -19,10 +19,6 @@ RSpec.describe Form::Sales::Pages::AddressFallback, type: :model do
     expect(page.id).to eq("address")
   end
 
-  it "has the correct header" do
-    expect(page.header).to eq("Q12 - What is the property's address?")
-  end
-
   it "has the correct description" do
     expect(page.description).to be_nil
   end

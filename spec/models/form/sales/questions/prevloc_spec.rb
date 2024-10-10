@@ -17,14 +17,6 @@ RSpec.describe Form::Sales::Questions::Prevloc, type: :model do
     expect(question.id).to eq("prevloc")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("Select a local authority")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Local authority of buyer 1’s last settled accommodation")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("select")
   end

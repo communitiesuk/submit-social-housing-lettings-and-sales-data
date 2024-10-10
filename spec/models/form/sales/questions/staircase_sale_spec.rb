@@ -15,14 +15,6 @@ RSpec.describe Form::Sales::Questions::StaircaseSale, type: :model do
     expect(question.id).to eq("staircasesale")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("Is this transaction part of a back-to-back staircasing transaction to facilitate sale of the home on the open market?")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Part of a back-to-back staircasing transaction")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("radio")
   end
@@ -41,9 +33,5 @@ RSpec.describe Form::Sales::Questions::StaircaseSale, type: :model do
 
   it "has correct conditional for" do
     expect(question.conditional_for).to eq(nil)
-  end
-
-  it "has the correct hint" do
-    expect(question.hint_text).to be_nil
   end
 end
