@@ -142,7 +142,7 @@ RSpec.describe CollectionResourcesController, type: :request do
 
       context "when the file exists on S3" do
         before do
-          allow(storage_service).to receive(:get_file_io).and_return("file")
+          allow(storage_service).to receive(:get_file).and_return("file")
           get download_mandatory_collection_resource_path(log_type: "lettings", year: 2025, resource_type: "paper_form")
         end
 
@@ -153,7 +153,7 @@ RSpec.describe CollectionResourcesController, type: :request do
 
       context "when the file does not exist on S3" do
         before do
-          allow(storage_service).to receive(:get_file_io).and_return(nil)
+          allow(storage_service).to receive(:get_file).and_return(nil)
           get download_mandatory_collection_resource_path(log_type: "lettings", year: 2024, resource_type: "paper_form")
         end
 
@@ -188,7 +188,7 @@ RSpec.describe CollectionResourcesController, type: :request do
 
       context "when year is in editable_collection_resource_years but not in displayed_collection_resource_years" do
         before do
-          allow(storage_service).to receive(:get_file_io).and_return("file")
+          allow(storage_service).to receive(:get_file).and_return("file")
           get download_mandatory_collection_resource_path(log_type: "lettings", year: 2026, resource_type: "paper_form")
         end
 
