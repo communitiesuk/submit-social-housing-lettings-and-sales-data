@@ -6,6 +6,7 @@ RSpec.describe Forms::BulkUploadSales::Guidance do
   subject(:bu_guidance) { described_class.new(year:, referrer:) }
 
   let(:year) { 2024 }
+  let(:referrer) { nil }
 
   describe "#back_path" do
     context "when referrer is prepare-your-file" do
@@ -37,6 +38,20 @@ RSpec.describe Forms::BulkUploadSales::Guidance do
 
       it "returns the main guidance page path" do
         expect(bu_guidance.back_path).to eq guidance_path
+      end
+    end
+  end
+
+  describe "year" do
+    context "when year is not provided" do
+      let(:year) { nil }
+
+      before do
+        allow_any_instance_of(CollectionTimeHelper).to receive(:current_collection_start_year).and_return(2030)
+      end
+
+      it "is set to the current collection start year" do
+        expect(bu_guidance.year).to eq(2030)
       end
     end
   end
