@@ -1074,7 +1074,7 @@ private
   end
 
   def postcode_full
-    "#{field_27} #{field_28}" if field_27 && field_28
+    "#{field_27} #{field_28}" if field_27 || field_28
   end
 
   def ppostcode_full
