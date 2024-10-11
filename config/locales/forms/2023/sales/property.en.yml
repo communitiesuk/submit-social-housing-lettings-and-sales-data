@@ -1,0 +1,117 @@
+en:
+  forms:
+    2023:
+      sales:
+        property:
+          uprn:
+            page_header: "What is the property's UPRN?"
+            check_answer_label: "UPRN"
+            hint_text: ""
+            question_text: ""
+
+          uprn_known:
+            page_header: "Do you know the property's UPRN?"
+            check_answer_label: "UPRN known?"
+            hint_text: "The Unique Property Reference Number (UPRN) is a unique number system created by Ordnance Survey and used by housing providers and various industries across the UK. An example UPRN is 10010457355.<br><br>
+                              The UPRN may not be the same as the property reference assigned by your organisation.<br><br>
+                              If you don’t know the UPRN you can enter the address of the property instead on the next screen."
+            question_text: ""
+
+          uprn_confirmed:
+            page_header: "Is this the property address?"
+            check_answer_label: "Is this the right address?"
+            hint_text: ""
+            question_text: ""
+
+          address:
+            address_line1:
+              page_header: "Address line 1"
+              check_answer_label: "Address lines 1 and 2"
+              hint_text: ""
+              question_text: ""
+            address_line2:
+              page_header: "Address line 2 (optional)"
+              check_answer_label: ""
+              hint_text: ""
+              question_text: ""
+            town_or_city:
+              page_header: "Town or city"
+              check_answer_label: "Town or city"
+              hint_text: ""
+              question_text: ""
+            county:
+              page_header: "County (optional)"
+              check_answer_label: "County"
+              hint_text: ""
+              question_text: ""
+            postcode_full:
+              page_header: "Postcode"
+              check_answer_label: "Postcode"
+              hint_text: ""
+              question_text: ""
+
+          la:
+            page_header: "What is the property’s local authority?"
+            check_answer_label: "Local authority"
+            hint_text: ""
+            question_text: ""
+
+          income1_value_check:
+            page_header: "Are you sure this is correct?"
+            check_answer_label: "Buyer 1 income confirmation"
+            hint_text: ""
+            question_text: ""
+
+          income2_value_check":
+            page_header: "Are you sure this is correct?"
+            check_answer_label: "Buyer 2 income confirmation"
+            hint_text: ""
+            question_text: ""
+
+          combined_income_value_check:
+            page_header: "Are you sure this is correct?"
+            check_answer_label: "Combined income confirmation"
+            hint_text: ""
+            question_text: ""
+
+          value_value_check:
+            page_header: "Are you sure?"
+            check_answer_label: "Purchase price confirmation"
+            hint_text: ""
+            question_text: ""
+
+          beds:
+            page_header: "How many bedrooms does the property have?"
+            check_answer_label: "Number of bedrooms"
+            hint_text: "A bedsit has 1 bedroom."
+            question_text: ""
+
+          proptype:
+            page_header: "What type of unit is the property?"
+            check_answer_label: "Type of unit"
+            hint_text: ""
+            question_text: ""
+
+          monthly_charges_value_check:
+            page_header: "Are you sure this is correct?"
+            check_answer_label: "Monthly charges confirmation"
+            hint_text: ""
+            question_text: ""
+
+          percentage_discount_value_check:
+            page_header: "Are you sure this is correct?"
+            check_answer_label: "Percentage discount confirmation"
+            hint_text: ""
+            question_text: ""
+
+          builtype:
+            page_header: "What type of building is the property?"
+            check_answer_label: "Type of building"
+            hint_text: ""
+            question_text: ""
+
+          wchair:
+            page_header: "Is the property built or adapted to wheelchair-user standards?"
+            check_answer_label: "Property built or adapted to wheelchair-user standards"
+            hint_text: ""
+            question_text: ""

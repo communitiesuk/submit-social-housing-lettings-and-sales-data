@@ -2,9 +2,8 @@ class Form::Sales::Questions::UprnSelection < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "uprn_selection"
-    @header = "Select the correct address"
+    @copy_key = "sales.property.uprn_selection"
     @type = "radio"
-    @check_answer_label = "Select the correct address"
     @disable_clearing_if_not_routed_or_dynamic_answer_options = true
   end
 

@@ -2,8 +2,7 @@ class Form::Sales::Questions::CombinedIncomeValueCheck < ::Form::Question
   def initialize(id, hsh, page, check_answers_card_number:)
     super(id, hsh, page)
     @id = "combined_income_value_check"
-    @check_answer_label = "Combined income confirmation"
-    @header = "Are you sure this is correct?"
+    @copy_key = "sales.property.combined_income_value_check"
     @type = "interruption_screen"
     @answer_options = {
       "0" => { "value" => "Yes" },

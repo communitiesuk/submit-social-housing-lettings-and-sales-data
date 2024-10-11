@@ -2,8 +2,7 @@ class Form::Sales::Questions::PropertyWheelchairAccessible < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "wchair"
-    @check_answer_label = "Property built or adapted to wheelchair-user standards"
-    @header = "Is the property built or adapted to wheelchair-user standards?"
+    @copy_key = "sales.property.wchair"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]

@@ -2,8 +2,7 @@ class Form::Sales::Questions::MonthlyChargesValueCheck < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "monthly_charges_value_check"
-    @check_answer_label = "Monthly charges confirmation"
-    @header = "Are you sure this is correct?"
+    @copy_key = "sales.property.monthly_charges_value_check"
     @type = "interruption_screen"
     @answer_options = {
       "0" => { "value" => "Yes" },

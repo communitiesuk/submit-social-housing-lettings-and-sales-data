@@ -2,7 +2,7 @@ class Form::Sales::Questions::PostcodeForFullAddress < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "postcode_full"
-    @header = "Postcode"
+    @copy_key = "sales.property.address.postcode_full"
     @type = "text"
     @width = 5
     @inferred_check_answers_value = [{
@@ -17,7 +17,6 @@ class Form::Sales::Questions::PostcodeForFullAddress < ::Form::Question
       },
     }
     @plain_label = true
-    @check_answer_label = "Postcode"
     @disable_clearing_if_not_routed_or_dynamic_answer_options = true
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
     @hide_question_number_on_page = true
