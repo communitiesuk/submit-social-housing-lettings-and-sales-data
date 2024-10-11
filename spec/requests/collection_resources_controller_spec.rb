@@ -277,9 +277,9 @@ RSpec.describe CollectionResourcesController, type: :request do
         sign_in user
       end
 
-      it "returns page not found" do
+      it "returns page not authorised" do
         get edit_mandatory_collection_resource_path(year: 2024, log_type: "sales", resource_type: "bulk_upload_template")
-        expect(response).to have_http_status(:not_found)
+        expect(response).to have_http_status(:unauthorized)
       end
     end
 
@@ -290,9 +290,9 @@ RSpec.describe CollectionResourcesController, type: :request do
         sign_in user
       end
 
-      it "returns page not found" do
+      it "returns page not authorised" do
         get edit_mandatory_collection_resource_path(year: 2024, log_type: "sales", resource_type: "bulk_upload_template")
-        expect(response).to have_http_status(:not_found)
+        expect(response).to have_http_status(:unauthorized)
       end
     end
 
@@ -366,9 +366,9 @@ RSpec.describe CollectionResourcesController, type: :request do
         sign_in user
       end
 
-      it "returns page not found" do
+      it "returns page not authorised" do
         patch update_mandatory_collection_resource_path, params: params
-        expect(response).to have_http_status(:not_found)
+        expect(response).to have_http_status(:unauthorized)
       end
     end
 
@@ -379,9 +379,9 @@ RSpec.describe CollectionResourcesController, type: :request do
         sign_in user
       end
 
-      it "returns page not found" do
+      it "returns page not authorised" do
         patch update_mandatory_collection_resource_path, params: params
-        expect(response).to have_http_status(:not_found)
+        expect(response).to have_http_status(:unauthorized)
       end
     end
   end
@@ -401,9 +401,9 @@ RSpec.describe CollectionResourcesController, type: :request do
         sign_in user
       end
 
-      it "returns page not found" do
+      it "returns page not authorised" do
         get confirm_mandatory_collection_resources_release_path(year: 2025)
-        expect(response).to have_http_status(:not_found)
+        expect(response).to have_http_status(:unauthorized)
       end
     end
 
@@ -414,9 +414,9 @@ RSpec.describe CollectionResourcesController, type: :request do
         sign_in user
       end
 
-      it "returns page not found" do
+      it "returns page not authorised" do
         get confirm_mandatory_collection_resources_release_path(year: 2025)
-        expect(response).to have_http_status(:not_found)
+        expect(response).to have_http_status(:unauthorized)
       end
     end
 
@@ -466,9 +466,9 @@ RSpec.describe CollectionResourcesController, type: :request do
         sign_in user
       end
 
-      it "returns page not found" do
+      it "returns page not authorised" do
         patch release_mandatory_collection_resources_path(year: 2024)
-        expect(response).to have_http_status(:not_found)
+        expect(response).to have_http_status(:unauthorized)
       end
     end
 
@@ -479,9 +479,9 @@ RSpec.describe CollectionResourcesController, type: :request do
         sign_in user
       end
 
-      it "returns page not found" do
+      it "returns page not authorised" do
         patch release_mandatory_collection_resources_path(year: 2024)
-        expect(response).to have_http_status(:not_found)
+        expect(response).to have_http_status(:unauthorized)
       end
     end
 
@@ -528,9 +528,9 @@ RSpec.describe CollectionResourcesController, type: :request do
         sign_in user
       end
 
-      it "returns page not found" do
+      it "returns page not authorised" do
         get new_collection_resource_path(year: 2025, log_type: "sales")
-        expect(response).to have_http_status(:not_found)
+        expect(response).to have_http_status(:unauthorized)
       end
     end
 
@@ -541,9 +541,9 @@ RSpec.describe CollectionResourcesController, type: :request do
         sign_in user
       end
 
-      it "returns page not found" do
+      it "returns page not authorised" do
         get new_collection_resource_path(year: 2025, log_type: "sales")
-        expect(response).to have_http_status(:not_found)
+        expect(response).to have_http_status(:unauthorized)
       end
     end
 
@@ -589,9 +589,9 @@ RSpec.describe CollectionResourcesController, type: :request do
         sign_in user
       end
 
-      it "returns page not found" do
+      it "returns page not authorised" do
         post collection_resources_path, params: params
-        expect(response).to have_http_status(:not_found)
+        expect(response).to have_http_status(:unauthorized)
       end
     end
 
@@ -602,9 +602,9 @@ RSpec.describe CollectionResourcesController, type: :request do
         sign_in user
       end
 
-      it "returns page not found" do
+      it "returns page not authorised" do
         post collection_resources_path, params: params
-        expect(response).to have_http_status(:not_found)
+        expect(response).to have_http_status(:unauthorized)
       end
     end
   end
@@ -722,9 +722,9 @@ RSpec.describe CollectionResourcesController, type: :request do
         sign_in user
       end
 
-      it "returns page not found" do
+      it "returns page not authorised" do
         get collection_resource_edit_path(collection_resource)
-        expect(response).to have_http_status(:not_found)
+        expect(response).to have_http_status(:unauthorized)
       end
     end
 
@@ -735,9 +735,9 @@ RSpec.describe CollectionResourcesController, type: :request do
         sign_in user
       end
 
-      it "returns page not found" do
+      it "returns page not authorised" do
         get collection_resource_edit_path(collection_resource)
-        expect(response).to have_http_status(:not_found)
+        expect(response).to have_http_status(:unauthorized)
       end
     end
 
@@ -794,9 +794,9 @@ RSpec.describe CollectionResourcesController, type: :request do
         sign_in user
       end
 
-      it "returns page not found" do
+      it "returns page not authorised" do
         patch collection_resource_update_path(collection_resource), params: params
-        expect(response).to have_http_status(:not_found)
+        expect(response).to have_http_status(:unauthorized)
       end
     end
 
@@ -807,9 +807,9 @@ RSpec.describe CollectionResourcesController, type: :request do
         sign_in user
       end
 
-      it "returns page not found" do
+      it "returns page not authorised" do
         patch collection_resource_update_path(collection_resource), params: params
-        expect(response).to have_http_status(:not_found)
+        expect(response).to have_http_status(:unauthorized)
       end
     end
   end
@@ -831,9 +831,9 @@ RSpec.describe CollectionResourcesController, type: :request do
         sign_in user
       end
 
-      it "returns page not found" do
+      it "returns page not authorised" do
         get collection_resource_delete_confirmation_path(collection_resource)
-        expect(response).to have_http_status(:not_found)
+        expect(response).to have_http_status(:unauthorized)
       end
     end
 
@@ -844,9 +844,9 @@ RSpec.describe CollectionResourcesController, type: :request do
         sign_in user
       end
 
-      it "returns page not found" do
+      it "returns page not authorised" do
         get collection_resource_delete_confirmation_path(collection_resource)
-        expect(response).to have_http_status(:not_found)
+        expect(response).to have_http_status(:unauthorized)
       end
     end
 
@@ -892,9 +892,9 @@ RSpec.describe CollectionResourcesController, type: :request do
         sign_in user
       end
 
-      it "returns page not found" do
+      it "returns page not authorised" do
         delete collection_resource_delete_path(collection_resource)
-        expect(response).to have_http_status(:not_found)
+        expect(response).to have_http_status(:unauthorized)
       end
     end
 
@@ -905,9 +905,9 @@ RSpec.describe CollectionResourcesController, type: :request do
         sign_in user
       end
 
-      it "returns page not found" do
+      it "returns page not authorised" do
         delete collection_resource_delete_path(collection_resource)
-        expect(response).to have_http_status(:not_found)
+        expect(response).to have_http_status(:unauthorized)
       end
     end
 
