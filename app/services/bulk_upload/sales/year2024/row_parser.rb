@@ -616,7 +616,7 @@ private
   end
 
   def key_address_fields_provided?
-    field_23.present? && field_25.present? && field_27.present? && field_28.present?
+    field_23.present? && field_25.present? && postcode_full.present?
   end
 
   def validate_address_fields
