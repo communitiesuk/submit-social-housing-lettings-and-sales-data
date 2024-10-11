@@ -118,7 +118,7 @@ RSpec.describe BulkUpload::Lettings::Validator do
         error = BulkUploadError.find_by(row: "2", field: "field_8", category: "setup")
 
         expect(error.field).to eql("field_8")
-        expect(error.error).to eql("You must answer tenancy start date (day)")
+        expect(error.error).to eql("You must answer tenancy start date (day).")
         expect(error.tenant_code).to eql(log.tenancycode)
         expect(error.property_ref).to eql(log.propcode)
         expect(error.row).to eql("2")
@@ -161,7 +161,7 @@ RSpec.describe BulkUpload::Lettings::Validator do
         error = BulkUploadError.find_by(field: "field_4")
 
         expect(error.field).to eql("field_4")
-        expect(error.error).to eql("You must answer needs type")
+        expect(error.error).to eql("You must answer needs type.")
         expect(error.tenant_code).to eql(log.tenancycode)
         expect(error.property_ref).to eql(log.propcode)
         expect(error.row).to eql("2")
