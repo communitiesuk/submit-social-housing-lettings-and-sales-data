@@ -18,19 +18,6 @@ RSpec.describe Form::Sales::Pages::PropertyLocalAuthority, type: :model do
   end
 
   describe "has correct questions" do
-    context "when 2022" do
-      let(:start_date) { Time.utc(2022, 2, 8) }
-
-      it "has correct questions" do
-        expect(page.questions.map(&:id)).to eq(
-          %w[
-            la_known
-            la
-          ],
-        )
-      end
-    end
-
     context "when 2023" do
       let(:start_date) { Time.utc(2023, 2, 8) }
 

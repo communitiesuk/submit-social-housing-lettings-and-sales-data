@@ -16,7 +16,6 @@ class Form::Sales::Subsections::PropertyInformation < ::Form::Subsection
       Form::Sales::Pages::PercentageDiscountValueCheck.new("percentage_discount_proptype_value_check", nil, self),
       Form::Sales::Pages::PropertyBuildingType.new(nil, nil, self),
       (uprn_questions if form.start_date.year == 2023),
-      (postcode_and_la_questions if form.start_date.year < 2023), #TODO: Pre 2023, could be removed?
       Form::Sales::Pages::PropertyWheelchairAccessible.new(nil, nil, self),
     ].flatten.compact
   end
@@ -48,16 +47,5 @@ class Form::Sales::Subsections::PropertyInformation < ::Form::Subsection
         Form::Sales::Pages::AboutPriceValueCheck.new("about_price_la_value_check", nil, self),
       ]
     end
-  end
-
-  def postcode_and_la_questions #TODO: Pre 2023, could be removed?
-    [
-      Form::Sales::Pages::Postcode.new(nil, nil, self),
-      Form::Sales::Pages::PropertyLocalAuthority.new(nil, nil, self),
-      Form::Sales::Pages::Buyer1IncomeMaxValueCheck.new("local_authority_buyer_1_income_max_value_check", nil, self, check_answers_card_number: nil),
-      Form::Sales::Pages::Buyer2IncomeMaxValueCheck.new("local_authority_buyer_2_income_max_value_check", nil, self, check_answers_card_number: nil),
-      Form::Sales::Pages::CombinedIncomeMaxValueCheck.new("local_authority_combined_income_max_value_check", nil, self, check_answers_card_number: nil),
-      Form::Sales::Pages::AboutPriceValueCheck.new("about_price_la_value_check", nil, self),
-    ]
   end
 end
