@@ -31,6 +31,11 @@ module Storage
              .body
     end
 
+    def get_file(file_name)
+      @client.get_object(bucket: @configuration.bucket_name, key: file_name)
+             .body.read
+    end
+
     def write_file(file_name, data)
       @client.put_object(
         body: data,

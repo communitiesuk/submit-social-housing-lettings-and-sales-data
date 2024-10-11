@@ -7,7 +7,7 @@ module Storage
       Dir.entries(path)
     end
 
-    def get_file_io(filename)
+    def get_file(filename)
       path = Rails.root.join("tmp/storage", filename)
 
       File.open(path, "r")
