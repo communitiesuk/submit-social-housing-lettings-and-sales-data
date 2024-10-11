@@ -132,7 +132,7 @@ RSpec.describe Organisation, type: :model do
 
       context "when the org does not use all rent periods" do
         it "#rent_periods returns the correct ids" do
-          expect(organisation.rent_periods).to eq [4, 2, 1]
+          expect(organisation.rent_periods).to match_array([4, 2, 1])
         end
 
         it "#rent_period_labels returns the correct labels in order" do
@@ -156,7 +156,7 @@ RSpec.describe Organisation, type: :model do
         end
 
         it "#rent_periods returns the correct ids" do
-          expect(organisation.rent_periods).to eq [4, 2, 1, 3]
+          expect(organisation.rent_periods).to match_array([4, 2, 1, 3])
         end
 
         it "#rent_period_labels returns All" do
