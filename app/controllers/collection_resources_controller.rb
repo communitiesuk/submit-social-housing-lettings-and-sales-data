@@ -184,6 +184,16 @@ class CollectionResourcesController < ApplicationController
     end
   end
 
+  def delete_confirmation
+    return render_not_found unless current_user.support?
+
+    @collection_resource = CollectionResource.find_by(id: params[:collection_resource_id])
+
+    return render_not_found unless @collection_resource
+
+    render "collection_resources/delete_confirmation"
+  end
+
 private
 
   def resource_params

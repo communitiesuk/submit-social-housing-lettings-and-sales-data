@@ -183,7 +183,7 @@ RSpec.describe CollectionResourcesController, type: :request do
           expect(page).to have_content("additional resource")
           expect(page).not_to have_content("additional resource 2")
           expect(page).to have_link("additional.pdf", href: collection_resource_download_path(collection_resource))
-          expect(page).to have_link("Delete")
+          expect(page).to have_link("Delete", href: collection_resource_delete_confirmation_path(collection_resource))
         end
       end
     end
@@ -810,6 +810,67 @@ RSpec.describe CollectionResourcesController, type: :request do
       it "returns page not found" do
         patch collection_resource_update_path(collection_resource), params: params
         expect(response).to have_http_status(:not_found)
+      end
+    end
+  end
+
+  describe "GET #collection_resource_delete_confirmation" do
+    let(:collection_resource) { create(:collection_resource, :additional, year: 2025, log_type: "sales", short_display_name: "additional resource", download_filename: "additional.pdf") }
+
+    context "when user is not signed in" do
+      it "redirects to the sign in page" do
+        get collection_resource_delete_confirmation_path(collection_resource)
+        expect(response).to redirect_to(new_user_session_path)
+      end
+    end
+
+    context "when user is signed in as a data coordinator" do
+      let(:user) { create(:user, :data_coordinator) }
+
+      before do
+        sign_in user
+      end
+
+      it "returns page not found" do
+        get collection_resource_delete_confirmation_path(collection_resource)
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+
+    context "when user is signed in as a data provider" do
+      let(:user) { create(:user, :data_provider) }
+
+      before do
+        sign_in user
+      end
+
+      it "returns page not found" do
+        get collection_resource_delete_confirmation_path(collection_resource)
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+
+    context "when user is signed in as a support user" do
+      let(:user) { create(:user, :support) }
+
+      before do
+        allow(Time.zone).to receive(:today).and_return(Time.zone.local(2025, 1, 8))
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in user
+      end
+
+      context "and the file exists on S3" do
+        it "displays delete confirmation page content" do
+          get collection_resource_delete_confirmation_path(collection_resource)
+
+          expect(page).to have_content("Sales 2025 to 2026")
+          expect(page).to have_content("Are you sure you want to delete the additional resource?")
+          expect(page).to have_content("This file will no longer be available for users to download.")
+          expect(page).to have_content("You will not be able to undo this action.")
+          expect(page).to have_button("Delete resource")
+          expect(page).to have_link("Back", href: collection_resources_path)
+          expect(page).to have_link("Cancel", href: collection_resources_path)
+        end
       end
     end
   end
