@@ -8,7 +8,7 @@ class CollectionResourcesService
   end
 
   def get_file(file)
-    @storage_service.get_file_io(file)
+    @storage_service.get_file(file)
   rescue StandardError
     nil
   end
