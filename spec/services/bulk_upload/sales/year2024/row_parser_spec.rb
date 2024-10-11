@@ -301,7 +301,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
 
           it "fetches the question's check_answer_label if it exists" do
             parser.valid?
-            expect(parser.errors[:field_32]).to eql(["You must answer buyer 1’s gender identity"])
+            expect(parser.errors[:field_32]).to eql(["You must answer buyer 1’s gender identity."])
           end
         end
 
@@ -310,7 +310,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
 
           it "only has one error added to the field" do
             parser.valid?
-            expect(parser.errors[:field_23]).to eql(["You must answer address line 1"])
+            expect(parser.errors[:field_23]).to eql(["You must answer address line 1."])
           end
         end
 
@@ -463,7 +463,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
 
         it "is not permitted as setup error" do
           parser.valid?
-          expect(parser.errors.where(:field_1, category: :setup).map(&:message)).to eql(["You must answer owning organisation"])
+          expect(parser.errors.where(:field_1, category: :setup).map(&:message)).to eql(["You must answer owning organisation."])
         end
 
         it "blocks log creation" do
@@ -1001,10 +1001,10 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
 
           it "adds errors to missing key address fields" do
             parser.valid?
-            expect(parser.errors[:field_23]).to eql(["You must answer address line 1"])
-            expect(parser.errors[:field_25]).to eql(["You must answer town or city"])
-            expect(parser.errors[:field_27]).to eql(["You must answer part 1 of postcode"])
-            expect(parser.errors[:field_28]).to eql(["You must answer part 2 of postcode"])
+            expect(parser.errors[:field_23]).to eql(["You must answer address line 1."])
+            expect(parser.errors[:field_25]).to eql(["You must answer town or city."])
+            expect(parser.errors[:field_27]).to eql(["You must answer part 1 of postcode."])
+            expect(parser.errors[:field_28]).to eql(["You must answer part 2 of postcode."])
           end
         end
 
@@ -1032,11 +1032,11 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
 
           it "adds appropriate errors to UPRN and key address fields" do
             parser.valid?
-            expect(parser.errors[:field_22]).to eql(["You must answer UPRN"])
-            expect(parser.errors[:field_23]).to eql(["You must answer address line 1"])
-            expect(parser.errors[:field_25]).to eql(["You must answer town or city"])
-            expect(parser.errors[:field_27]).to eql(["You must answer part 1 of postcode"])
-            expect(parser.errors[:field_28]).to eql(["You must answer part 2 of postcode"])
+            expect(parser.errors[:field_22]).to eql(["You must answer UPRN."])
+            expect(parser.errors[:field_23]).to eql(["You must answer address line 1."])
+            expect(parser.errors[:field_25]).to eql(["You must answer town or city."])
+            expect(parser.errors[:field_27]).to eql(["You must answer part 1 of postcode."])
+            expect(parser.errors[:field_28]).to eql(["You must answer part 2 of postcode."])
           end
         end
 
@@ -1045,8 +1045,8 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
 
           it "adds errors to UPRN and the missing key address field" do
             parser.valid?
-            expect(parser.errors[:field_22]).to eql(["You must answer UPRN"])
-            expect(parser.errors[:field_23]).to eql(["You must answer address line 1"])
+            expect(parser.errors[:field_22]).to eql(["You must answer UPRN."])
+            expect(parser.errors[:field_23]).to eql(["You must answer address line 1."])
             expect(parser.errors[:field_25]).to be_empty
             expect(parser.errors[:field_27]).to be_empty
             expect(parser.errors[:field_28]).to be_empty
@@ -1323,7 +1323,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
 
         it "returns correct errors" do
           parser.valid?
-          expect(parser.errors[:field_103]).to include("Enter a valid value for Was a mortgage used for the purchase of this property? - Shared ownership")
+          expect(parser.errors[:field_103]).to include("Enter a valid value for was a mortgage used for the purchase of this property? - Shared ownership.")
 
           parser.log.blank_invalid_non_setup_fields!
           parser.log.save!
@@ -1973,7 +1973,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
           parser.valid?
           setup_errors = parser.errors.select { |e| e.options[:category] == :setup }
 
-          expect(setup_errors.find { |e| e.attribute == :field_2 }.message).to eql("You must answer reported by")
+          expect(setup_errors.find { |e| e.attribute == :field_2 }.message).to eql("You must answer reported by.")
         end
 
         it "blocks log creation" do
@@ -1989,7 +1989,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
           parser.valid?
           setup_errors = parser.errors.select { |e| e.options[:category] == :setup }
 
-          expect(setup_errors.find { |e| e.attribute == :field_2 }.message).to eql("You must answer reported by")
+          expect(setup_errors.find { |e| e.attribute == :field_2 }.message).to eql("You must answer reported by.")
         end
 
         it "blocks log creation" do
