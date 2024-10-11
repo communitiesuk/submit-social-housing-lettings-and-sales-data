@@ -47,7 +47,9 @@ RSpec.describe Forms::BulkUploadSales::Guidance do
       let(:year) { nil }
 
       before do
+        # rubocop:disable RSpec/AnyInstance
         allow_any_instance_of(CollectionTimeHelper).to receive(:current_collection_start_year).and_return(2030)
+        # rubocop:enable RSpec/AnyInstance
       end
 
       it "is set to the current collection start year" do
