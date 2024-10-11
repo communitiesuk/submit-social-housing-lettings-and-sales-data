@@ -10,6 +10,12 @@ module Storage
     def get_file(filename)
       path = Rails.root.join("tmp/storage", filename)
 
+      File.open(path, "r").read
+    end
+
+    def get_file_io(filename)
+      path = Rails.root.join("tmp/storage", filename)
+
       File.open(path, "r")
     end
 
