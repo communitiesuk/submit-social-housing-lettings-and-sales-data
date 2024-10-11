@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe CollectionResourcesController, type: :request do
   let(:page) { Capybara::Node::Simple.new(response.body) }
-  let(:storage_service) { instance_double(Storage::S3Service, get_file_metadata: nil) }
+  let(:storage_service) { instance_double(Storage::S3Service, get_file_metadata: nil, delete_file: nil) }
 
   before do
     allow(Storage::S3Service).to receive(:new).and_return(storage_service)
@@ -870,6 +870,68 @@ RSpec.describe CollectionResourcesController, type: :request do
           expect(page).to have_button("Delete resource")
           expect(page).to have_link("Back", href: collection_resources_path)
           expect(page).to have_link("Cancel", href: collection_resources_path)
+        end
+      end
+    end
+  end
+
+  describe "DELETE #collection_resource_delete" do
+    let!(:collection_resource) { create(:collection_resource, :additional, year: 2025, log_type: "sales", short_display_name: "additional resource", download_filename: "additional.pdf") }
+
+    context "when user is not signed in" do
+      it "redirects to the sign in page" do
+        delete collection_resource_delete_path(collection_resource)
+        expect(response).to redirect_to(new_user_session_path)
+      end
+    end
+
+    context "when user is signed in as a data coordinator" do
+      let(:user) { create(:user, :data_coordinator) }
+
+      before do
+        sign_in user
+      end
+
+      it "returns page not found" do
+        delete collection_resource_delete_path(collection_resource)
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+
+    context "when user is signed in as a data provider" do
+      let(:user) { create(:user, :data_provider) }
+
+      before do
+        sign_in user
+      end
+
+      it "returns page not found" do
+        delete collection_resource_delete_path(collection_resource)
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+
+    context "when user is signed in as a support user" do
+      let(:user) { create(:user, :support) }
+
+      before do
+        allow(storage_service).to receive(:file_exists?).and_return(true)
+        allow(Time.zone).to receive(:today).and_return(Time.zone.local(2025, 1, 8))
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in user
+      end
+
+      context "and the file exists on S3" do
+        it "displays delete confirmation page content" do
+          expect(CollectionResource.visible.count).to eq(1)
+          delete collection_resource_delete_path(collection_resource)
+
+          expect(CollectionResource.count).to eq(1)
+          expect(CollectionResource.visible.count).to eq(0)
+          expect(response).to redirect_to(collection_resources_path)
+          expect(storage_service).to have_received(:delete_file).with(collection_resource.download_filename)
+          follow_redirect!
+          expect(page).to have_content("The sales 2025 to 2026 additional resource has been deleted.")
         end
       end
     end

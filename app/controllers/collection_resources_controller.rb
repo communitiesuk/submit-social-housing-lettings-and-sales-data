@@ -8,8 +8,8 @@ class CollectionResourcesController < ApplicationController
 
     @mandatory_lettings_collection_resources_per_year = MandatoryCollectionResourcesService.generate_resources("lettings", editable_collection_resource_years)
     @mandatory_sales_collection_resources_per_year = MandatoryCollectionResourcesService.generate_resources("sales", editable_collection_resource_years)
-    @additional_lettings_collection_resources_per_year = CollectionResource.where(log_type: "lettings", mandatory: false).group_by(&:year)
-    @additional_sales_collection_resources_per_year = CollectionResource.where(log_type: "sales", mandatory: false).group_by(&:year)
+    @additional_lettings_collection_resources_per_year = CollectionResource.visible.where(log_type: "lettings", mandatory: false).group_by(&:year)
+    @additional_sales_collection_resources_per_year = CollectionResource.visible.where(log_type: "sales", mandatory: false).group_by(&:year)
   end
 
   def download_mandatory_collection_resource
@@ -192,6 +192,19 @@ class CollectionResourcesController < ApplicationController
     return render_not_found unless @collection_resource
 
     render "collection_resources/delete_confirmation"
+  end
+
+  def delete
+    return render_not_found unless current_user.support?
+
+    @collection_resource = CollectionResource.find_by(id: params[:collection_resource_id])
+
+    return render_not_found unless @collection_resource
+
+    @collection_resource.discard!
+
+    flash[:notice] = "The #{@collection_resource.log_type} #{text_year_range_format(@collection_resource.year)} #{@collection_resource.short_display_name.downcase} has been deleted."
+    redirect_to collection_resources_path
   end
 
 private
