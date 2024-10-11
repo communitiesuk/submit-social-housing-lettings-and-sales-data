@@ -51,6 +51,7 @@ Rails.application.routes.draw do
     get "/download", to: "collection_resources#download_additional_collection_resource"
     get "/edit", to: "collection_resources#edit_additional_collection_resource"
     patch "/update", to: "collection_resources#update_additional_collection_resource"
+    get "/delete-confirmation", to: "collection_resources#delete_confirmation"
   end
 
   get "clear-filters", to: "sessions#clear_filters"
