@@ -13,6 +13,12 @@ module Storage
       File.open(path, "r")
     end
 
+    def get_file_io(filename)
+      path = Rails.root.join("tmp/storage", filename)
+
+      File.open(path, "r")
+    end
+
     def write_file(filename, data)
       path = Rails.root.join("tmp/storage", filename)
 
