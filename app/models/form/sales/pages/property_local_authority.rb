@@ -15,7 +15,7 @@ class Form::Sales::Pages::PropertyLocalAuthority < ::Form::Page
     ].compact
   end
 
-  def la_known_question
+  def la_known_question #TODO: Pre 2023, could be removed? Only used here.
     if form.start_date.year < 2023
       Form::Sales::Questions::PropertyLocalAuthorityKnown.new(nil, nil, self)
     end
