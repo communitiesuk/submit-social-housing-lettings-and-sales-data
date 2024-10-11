@@ -26,4 +26,8 @@ class CollectionResourcesService
   def upload_collection_resource(filename, file)
     @storage_service.write_file(filename, file)
   end
+
+  def delete_collection_resource(filename)
+    @storage_service.delete_file(filename)
+  end
 end

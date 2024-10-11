@@ -1,8 +1,10 @@
 class CollectionResource < ApplicationRecord
   include Rails.application.routes.url_helpers
+  has_paper_trail
 
   attr_accessor :file
 
+  scope :visible, -> { where(discarded_at: nil) }
   validates :short_display_name, presence: true
 
   def download_path
@@ -30,5 +32,10 @@ class CollectionResource < ApplicationRecord
         errors.add(:file, :must_be_xlsx, resource: short_display_name.downcase)
       end
     end
+  end
+
+  def discard!
+    CollectionResourcesService.new.delete_collection_resource(download_filename)
+    update!(discarded_at: Time.zone.now)
   end
 end

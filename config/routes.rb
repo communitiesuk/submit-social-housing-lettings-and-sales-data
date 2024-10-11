@@ -52,6 +52,7 @@ Rails.application.routes.draw do
     get "/edit", to: "collection_resources#edit_additional_collection_resource"
     patch "/update", to: "collection_resources#update_additional_collection_resource"
     get "/delete-confirmation", to: "collection_resources#delete_confirmation"
+    delete "/delete", to: "collection_resources#delete"
   end
 
   get "clear-filters", to: "sessions#clear_filters"
