@@ -1,7 +1,7 @@
 class CollectionResourcesController < ApplicationController
   include CollectionResourcesHelper
 
-  before_action :authenticate_user!, except: %i[download_mandatory_collection_resource]
+  before_action :authenticate_user!, except: %i[download_mandatory_collection_resource download_additional_collection_resource]
 
   def index
     render_not_found unless current_user.support?
@@ -35,7 +35,7 @@ class CollectionResourcesController < ApplicationController
   end
 
   def edit_mandatory_collection_resource
-    return render_not_found unless current_user.support?
+    return render_not_authorized unless current_user.support?
 
     year = params[:year].to_i
     resource_type = params[:resource_type]
@@ -51,7 +51,7 @@ class CollectionResourcesController < ApplicationController
   end
 
   def edit_additional_collection_resource
-    return render_not_found unless current_user.support?
+    return render_not_authorized unless current_user.support?
 
     @collection_resource = CollectionResource.find_by(id: params[:collection_resource_id])
 
@@ -62,7 +62,7 @@ class CollectionResourcesController < ApplicationController
   end
 
   def update_mandatory_collection_resource
-    return render_not_found unless current_user.support?
+    return render_not_authorized unless current_user.support?
 
     year = resource_params[:year].to_i
     resource_type = resource_params[:resource_type]
@@ -92,7 +92,7 @@ class CollectionResourcesController < ApplicationController
   end
 
   def update_additional_collection_resource
-    return render_not_found unless current_user.support?
+    return render_not_authorized unless current_user.support?
 
     @collection_resource = CollectionResource.find_by(id: params[:collection_resource_id])
 
@@ -121,7 +121,7 @@ class CollectionResourcesController < ApplicationController
   end
 
   def confirm_mandatory_collection_resources_release
-    return render_not_found unless current_user.support?
+    return render_not_authorized unless current_user.support?
 
     @year = params[:year].to_i
 
@@ -131,7 +131,7 @@ class CollectionResourcesController < ApplicationController
   end
 
   def release_mandatory_collection_resources
-    return render_not_found unless current_user.support?
+    return render_not_authorized unless current_user.support?
 
     year = params[:year].to_i
 
@@ -144,7 +144,7 @@ class CollectionResourcesController < ApplicationController
   end
 
   def new
-    return render_not_found unless current_user.support?
+    return render_not_authorized unless current_user.support?
 
     year = params[:year].to_i
     log_type = params[:log_type]
@@ -155,7 +155,7 @@ class CollectionResourcesController < ApplicationController
   end
 
   def create
-    return render_not_found unless current_user.support? && editable_collection_resource_years.include?(resource_params[:year].to_i)
+    return render_not_authorized unless current_user.support? && editable_collection_resource_years.include?(resource_params[:year].to_i)
 
     @collection_resource = CollectionResource.new(resource_params)
     @collection_resource.download_filename ||= @collection_resource.file&.original_filename
@@ -179,7 +179,7 @@ class CollectionResourcesController < ApplicationController
   end
 
   def delete_confirmation
-    return render_not_found unless current_user.support?
+    return render_not_authorized unless current_user.support?
 
     @collection_resource = CollectionResource.find_by(id: params[:collection_resource_id])
 
@@ -189,7 +189,7 @@ class CollectionResourcesController < ApplicationController
   end
 
   def delete
-    return render_not_found unless current_user.support?
+    return render_not_authorized unless current_user.support?
 
     @collection_resource = CollectionResource.find_by(id: params[:collection_resource_id])
 
