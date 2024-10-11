@@ -2,7 +2,7 @@ class Form::Sales::Pages::UprnConfirmation < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "uprn_confirmation"
-    @header = "We found an address that might be this property"
+    @copy_key = "sales.property.uprn_confirmed"
   end
 
   def questions

@@ -2,7 +2,7 @@ class Form::Sales::Pages::UprnSelection < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "uprn_selection"
-    @header = "We found some addresses that might be this property"
+    @copy_key = "sales.property.uprn_selection"
     @depends_on = [
       { "uprn_known" => nil, "address_options_present?" => true },
       { "uprn_known" => 0, "address_options_present?" => true },
