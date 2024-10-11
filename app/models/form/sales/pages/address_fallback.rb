@@ -2,7 +2,7 @@ class Form::Sales::Pages::AddressFallback < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "address"
-    @header = "Q12 - What is the property's address?"
+    @copy_key = "sales.property.address"
     @depends_on = [
       { "uprn_known" => nil, "uprn_selection" => "uprn_not_listed" },
       { "uprn_known" => 0, "uprn_selection" => "uprn_not_listed" },
