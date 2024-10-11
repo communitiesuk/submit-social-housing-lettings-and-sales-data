@@ -505,12 +505,12 @@ class BulkUpload::Sales::Year2024::RowParser
     return true if blank_row?
 
     super(:before_log)
-    before_errors = errors.dup
+    @before_errors = errors.dup
 
     log.valid?
 
     super(:after_log)
-    errors.merge!(before_errors)
+    errors.merge!(@before_errors)
 
     log.errors.each do |error|
       fields = field_mapping_for_errors[error.attribute] || []
@@ -1378,13 +1378,13 @@ private
 
       if setup_question?(question)
         fields.each do |field|
-          unless errors.any? { |e| fields.include?(e.attribute) }
+          if errors.none? { |e| fields.include?(e.attribute) } && @before_errors.none? { |e| fields.include?(e.attribute) }
             errors.add(field, question.unanswered_error_message, category: :setup)
           end
         end
       else
         fields.each do |field|
-          unless errors.any? { |e| fields.include?(e.attribute) }
+          if errors.none? { |e| fields.include?(e.attribute) } && @before_errors.none? { |e| fields.include?(e.attribute) }
             errors.add(field, question.unanswered_error_message)
           end
         end
