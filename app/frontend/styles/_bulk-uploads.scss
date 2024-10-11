@@ -1,0 +1,18 @@
+.grouped-rows td {
+  border-top: none;
+  border-bottom: none;
+}
+
+.grouped-rows.first-row td {
+  border-top: 1px solid #b1b4b6;
+}
+
+.grouped-rows.last-row td,
+.grouped-rows .grouped-multirow-cell {
+  border-bottom: 1px solid #b1b4b6;
+}
+
+.text-normal-break {
+  white-space: normal;
+  word-break: break-all;
+}
