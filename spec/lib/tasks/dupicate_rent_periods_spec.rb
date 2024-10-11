@@ -14,8 +14,8 @@ RSpec.describe "duplicate_rent_periods" do
     end
   end
 
-  describe "find_redundant_rent_periods" do
-    let(:task) { Rake::Task["find_redundant_rent_periods"] }
+  describe "find_duplicate_rent_periods" do
+    let(:task) { Rake::Task["find_duplicate_rent_periods"] }
 
     before do
       task.reenable
