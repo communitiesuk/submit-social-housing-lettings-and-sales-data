@@ -33,6 +33,11 @@
             text: "Change",
             href: collection_resource_edit_path(resource),
           ) %>
+          <% row.with_action(
+            text: "Delete",
+            href: "/",
+            classes: "app-!-colour-red"
+          ) %>
         <% end %>
       <% end %>
     <% end %>

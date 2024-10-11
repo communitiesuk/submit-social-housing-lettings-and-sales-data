@@ -183,6 +183,7 @@ RSpec.describe CollectionResourcesController, type: :request do
           expect(page).to have_content("additional resource")
           expect(page).not_to have_content("additional resource 2")
           expect(page).to have_link("additional.pdf", href: collection_resource_download_path(collection_resource))
+          expect(page).to have_link("Delete")
         end
       end
     end
