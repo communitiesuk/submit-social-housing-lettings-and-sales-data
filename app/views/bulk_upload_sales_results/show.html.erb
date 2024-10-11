@@ -13,7 +13,14 @@
       Here’s a list of everything that you need to fix your spreadsheet. You can download the <%= govuk_link_to "specification", Forms::BulkUploadSales::PrepareYourFile.new(year: @bulk_upload.year).specification_path, target: "_blank" %> to help you fix the cells in your CSV file.
     </div>
 
-    <h2 class="govuk-heading-m">File: <%= @bulk_upload.filename %></h2>
+    <p class="govuk-!-font-size-19 govuk-!-margin-bottom-2"><strong>File name: </strong><%= @bulk_upload.filename %></p>
+
+    <% if current_user.support? %>
+      <div class="govuk-!-margin-bottom-7">
+        <%= govuk_link_to "Download file", download_sales_bulk_upload_path(@bulk_upload) %>
+      </div>
+    <% end %>
+
   </div>
 </div>
 

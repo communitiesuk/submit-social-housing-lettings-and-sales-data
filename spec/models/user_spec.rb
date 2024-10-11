@@ -176,6 +176,10 @@ RSpec.describe User, type: :model do
         it "can filter lettings logs by user, year, status, managing_organisation and owning_organisation" do
           expect(user.logs_filters).to match_array(%w[years status needstypes assigned_to user managing_organisation owning_organisation bulk_upload_id managing_organisation_text_search owning_organisation_text_search user_text_search])
         end
+
+        it "can filter schemes by status and owning_organisation" do
+          expect(user.scheme_filters).to match_array(%w[status owning_organisation owning_organisation_text_search])
+        end
       end
     end
 
@@ -216,6 +220,14 @@ RSpec.describe User, type: :model do
 
       it "can filter lettings logs by user, year, status, managing_organisation and owning_organisation" do
         expect(user.logs_filters).to match_array(%w[years status needstypes assigned_to user owning_organisation managing_organisation bulk_upload_id managing_organisation_text_search owning_organisation_text_search user_text_search])
+      end
+
+      it "can filter bulk uploads by year, uploaded_by and uploading_organisation " do
+        expect(user.bulk_uploads_filters).to match_array(%w[user years uploaded_by uploading_organisation user_text_search uploading_organisation_text_search])
+      end
+
+      it "can filter schemes by status and owning_organisation" do
+        expect(user.scheme_filters).to match_array(%w[status owning_organisation owning_organisation_text_search])
       end
     end
 

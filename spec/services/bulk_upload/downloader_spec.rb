@@ -45,4 +45,16 @@ RSpec.describe BulkUpload::Downloader do
       expect(File).not_to exist(path)
     end
   end
+
+  describe "#presigned_url" do
+    let(:mock_storage_service) { instance_double(Storage::S3Service, get_presigned_url: "https://example.com") }
+
+    before do
+      allow(Storage::S3Service).to receive(:new).and_return(mock_storage_service)
+    end
+
+    it "returns a presigned URL" do
+      expect(downloader.presigned_url).to eql("https://example.com")
+    end
+  end
 end

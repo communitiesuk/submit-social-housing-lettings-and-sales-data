@@ -232,6 +232,7 @@ Rails.application.routes.draw do
       get "csv-download", to: "lettings_logs#download_csv"
       post "email-csv", to: "lettings_logs#email_csv"
       get "csv-confirmation", to: "lettings_logs#csv_confirmation"
+      get "bulk-uploads", to: "lettings_logs#bulk_uploads"
 
       get "delete-logs", to: "delete_logs#delete_lettings_logs"
       post "delete-logs", to: "delete_logs#delete_lettings_logs_with_selected_ids"
@@ -273,6 +274,12 @@ Rails.application.routes.draw do
         end
       end
 
+      resources :bulk_uploads, path: "bulk-uploads", only: [] do
+        member do
+          get "download", to: "lettings_logs#download_bulk_upload", as: "download_lettings"
+        end
+      end
+
       get "update-logs", to: "lettings_logs#update_logs"
     end
 
@@ -304,6 +311,7 @@ Rails.application.routes.draw do
       get "csv-download", to: "sales_logs#download_csv"
       post "email-csv", to: "sales_logs#email_csv"
       get "csv-confirmation", to: "sales_logs#csv_confirmation"
+      get "bulk-uploads", to: "sales_logs#bulk_uploads"
 
       get "delete-logs", to: "delete_logs#delete_sales_logs"
       post "delete-logs", to: "delete_logs#delete_sales_logs_with_selected_ids"
@@ -342,6 +350,12 @@ Rails.application.routes.draw do
         member do
           get "*page", to: "bulk_upload_sales_soft_validations_check#show", as: "page"
           patch "*page", to: "bulk_upload_sales_soft_validations_check#update"
+        end
+      end
+
+      resources :bulk_uploads, path: "bulk-uploads", only: [] do
+        member do
+          get "download", to: "sales_logs#download_bulk_upload", as: "download-sales"
         end
       end
     end

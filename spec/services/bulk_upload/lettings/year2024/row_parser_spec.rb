@@ -235,7 +235,7 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
             field_127: "13.14",
             field_128: "101.11",
             field_129: "1",
-            field_130: "234.56",
+            field_130: "34.56",
 
             field_24: "15",
             field_30: now.day.to_s,
@@ -780,6 +780,16 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
           it "only has one error added to the field" do
             parser.valid?
             expect(parser.errors[:field_112]).to eql(["You must answer was the letting made under the Choice-Based Lettings (CBL)?"])
+          end
+        end
+
+        context "when an invalid value error has been added" do
+          let(:attributes) { setup_section_params.merge({ field_116: "100" }) }
+
+          it "does not add an additional error" do
+            parser.valid?
+            expect(parser.errors[:field_116].length).to eq(1)
+            expect(parser.errors[:field_116]).to include(match "Enter a valid value for")
           end
         end
       end

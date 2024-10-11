@@ -409,6 +409,7 @@ private
         next if question.subsection.id == "setup"
 
         question.page.questions.map(&:id).each { |id| @log[id] = nil }
+        @log.previous_la_known = nil if question.id == "ppostcode_full"
       end
       @log.save!
       @questions = params[@log.model_name.param_key].keys.reject { |id| %w[clear_question_ids page].include?(id) }.map { |id| @log.form.get_question(id, @log) }
