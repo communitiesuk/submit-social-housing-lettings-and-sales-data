@@ -60,6 +60,7 @@ class UsersController < ApplicationController
 
   def update
     validate_attributes
+    unconfirmed_email_changed = @user.unconfirmed_email.present? && @user.unconfirmed_email != user_params[:email] && @user.email != user_params[:email]
     if @user.errors.empty? && @user.update(user_params_without_org)
       if @user == current_user
         bypass_sign_in @user
@@ -83,7 +84,7 @@ class UsersController < ApplicationController
           @user.reactivate!
           @user.send_confirmation_instructions
           flash[:notice] = I18n.t("devise.activation.reactivated", user_name:)
-        elsif @user.saved_changes?
+        elsif @user.saved_changes? || unconfirmed_email_changed
           flash[:notice] = I18n.t("notification.user_updated.other", name: @user.name)
         end
 
