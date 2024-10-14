@@ -16,7 +16,7 @@ en:
                         question_text: "Do you know the property's UPRN?"
 
                     uprn_confirmed:
-                        page_header: "We found an address that might be this property"
+                        page_header: ""
                         check_answer_label: "Is this the right address?"
                         hint_text: ""
                         question_text: "Is this the property address?"
@@ -39,7 +39,7 @@ en:
                         question_text: "No address found"
 
                     uprn_selection:
-                        page_header: "We found some addresses that might be this property"
+                        page_header: ""
                         check_answer_label: "Select the correct address"
                         hint_text: ""
                         question_text: "Select the correct address"
