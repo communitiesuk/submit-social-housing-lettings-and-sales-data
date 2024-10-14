@@ -324,7 +324,7 @@ RSpec.describe StartController, type: :request do
 
       context "and 2023 collection window is open for editing" do
         before do
-          allow(Time).to receive(:now).and_return(Time.zone.local(2024, 1, 1))
+          allow(Time).to receive(:now).and_return(Time.zone.local(2024, 4, 1))
         end
 
         it "displays correct resources for 2023/24 and 2024/25 collection years" do
@@ -342,10 +342,10 @@ RSpec.describe StartController, type: :request do
 
       context "and 2023 collection window is closed for editing" do
         before do
-          allow(Time).to receive(:now).and_return(Time.zone.local(2025, 1, 1))
+          allow(Time).to receive(:now).and_return(Time.zone.local(2024, 12, 1))
         end
 
-        it "displays correct resources for 2023/24 and 2024/25 collection years" do
+        it "displays correct resources" do
           get root_path
           expect(page).to have_content("Lettings 24/25")
           expect(page).not_to have_content("Lettings 23/24")
@@ -366,6 +366,24 @@ RSpec.describe StartController, type: :request do
       it "displays About this service section" do
         get root_path
         expect(page).to have_content("About this service")
+      end
+
+      context "with support user" do
+        let(:user) { create(:user, :support) }
+
+        it "displays link to edit collection resources" do
+          get root_path
+
+          expect(page).to have_link("Manage collection resources", href: collection_resources_path)
+        end
+      end
+
+      context "with data coordinator" do
+        it "does not display the link to edit collection resources" do
+          get root_path
+
+          expect(page).not_to have_link("Manage collection resources", href: collection_resources_path)
+        end
       end
     end
   end
