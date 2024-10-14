@@ -224,10 +224,24 @@ class User < ApplicationRecord
 
   def logs_filters(specific_org: false)
     if (support? && !specific_org) || organisation.has_managing_agents? || organisation.has_stock_owners?
-      %w[years status needstypes assigned_to user managing_organisation owning_organisation bulk_upload_id user_text_search owning_organisation_text_search managing_organisation_text_search]
+      %w[years status needstypes assigned_to user owning_organisation managing_organisation bulk_upload_id user_text_search owning_organisation_text_search managing_organisation_text_search]
     else
       %w[years status needstypes assigned_to user bulk_upload_id user_text_search]
     end
+  end
+
+  def scheme_filters(specific_org: false)
+    if (support? && !specific_org) || organisation.has_managing_agents? || organisation.has_stock_owners?
+      %w[status owning_organisation owning_organisation_text_search]
+    else
+      %w[status]
+    end
+  end
+
+  def bulk_uploads_filters(specific_org: false)
+    return [] unless support? && !specific_org
+
+    %w[user years uploaded_by uploading_organisation user_text_search uploading_organisation_text_search]
   end
 
   delegate :name, to: :organisation, prefix: true

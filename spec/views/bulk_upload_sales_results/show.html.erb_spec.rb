@@ -1,10 +1,12 @@
 require "rails_helper"
 
 RSpec.describe "bulk_upload_sales_results/show.html.erb" do
+  let(:user) { create(:user) }
   let(:bulk_upload) { create(:bulk_upload, :sales) }
 
   context "when mutiple rows in wrong order" do
     before do
+      allow(view).to receive(:current_user).and_return(user)
       create(:bulk_upload_error, bulk_upload:, cell: "C14", row: "14", col: "C")
       create(:bulk_upload_error, bulk_upload:, cell: "D10", row: "10", col: "D")
     end
@@ -22,6 +24,7 @@ RSpec.describe "bulk_upload_sales_results/show.html.erb" do
 
   context "when 1 row with 2 errors" do
     before do
+      allow(view).to receive(:current_user).and_return(user)
       create(:bulk_upload_error, bulk_upload:, cell: "AA100", row: "100", col: "AA")
       create(:bulk_upload_error, bulk_upload:, cell: "Z100", row: "100", col: "Z")
     end

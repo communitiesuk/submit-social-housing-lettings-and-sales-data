@@ -216,6 +216,9 @@ en:
     scheme_deleted: "%{service_name} has been deleted."
     user_deleted: "%{name} has been deleted."
     organisation_deleted: "%{name} has been deleted."
+    user_updated: 
+      self: "Your account details have been updated."
+      other: "%{name}’s details have been updated."
 
   validations:
     organisation:
@@ -446,7 +449,7 @@ en:
           above_hard_max: "Rent is higher than the absolute maximum expected for a property of this type based on this period."
       charges:
         complete_1_of_3: "Answer either the ‘household rent and charges’ question or ‘is this accommodation a care home‘, or select ‘no’ for ‘does the household pay rent or charges for the accommodation?’"
-        missing_charges: "Please enter the %{question}. If there is no %{question}, please enter '0'."
+        missing_charges: "Please enter the %{sentence_fragment}. If there is no %{sentence_fragment}, please enter '0'."
       tcharge:
         under_10: "Enter a total charge that is at least £10.00 per week."
         less_than_shortfall: "The total charge must be more than the outstanding amount."
@@ -818,8 +821,6 @@ Make sure these answers are correct."
       title: "You told us there are more than 1 persons with 'Partner' relationship to buyer 1."
 
   devise:
-    email:
-      updated: "An email has been sent to %{email} to confirm this change."
     two_factor_authentication:
       success: "Two-factor authentication successful."
       attempt_failed: "Attempt failed."

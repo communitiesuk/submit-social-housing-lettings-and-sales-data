@@ -697,8 +697,8 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
           it "fetches the question's check_answer_label if it exists" do
             parser.valid?
-            expect(parser.errors[:field_19]).to eql(["You must answer address line 1"])
-            expect(parser.errors[:field_21]).to eql(["You must answer town or city"])
+            expect(parser.errors[:field_19]).to eql(["You must answer address line 1."])
+            expect(parser.errors[:field_21]).to eql(["You must answer town or city."])
           end
         end
       end
@@ -846,7 +846,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
           parser.valid?
 
           expect(parser.errors[:field_5]).to be_present
-          expect(parser.errors[:field_11]).to eq(["You must answer intermediate rent type"])
+          expect(parser.errors[:field_11]).to eq(["You must answer intermediate rent type."])
         end
       end
 
@@ -857,7 +857,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
           parser.valid?
 
           expect(parser.errors[:field_5]).to be_present
-          expect(parser.errors[:field_11]).to eq(["You must answer intermediate rent type"])
+          expect(parser.errors[:field_11]).to eq(["You must answer intermediate rent type."])
         end
       end
 
@@ -868,7 +868,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
           parser.valid?
 
           expect(parser.errors[:field_5]).to be_present
-          expect(parser.errors[:field_10]).to eq(["You must answer is this a London Affordable Rent letting"])
+          expect(parser.errors[:field_10]).to eq(["You must answer is this a London Affordable Rent letting."])
         end
       end
 
@@ -879,7 +879,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
           parser.valid?
 
           expect(parser.errors[:field_5]).to be_present
-          expect(parser.errors[:field_10]).to eq(["You must answer is this a London Affordable Rent letting"])
+          expect(parser.errors[:field_10]).to eq(["You must answer is this a London Affordable Rent letting."])
         end
       end
 
@@ -888,7 +888,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
         it "adds error on field_12" do
           parser.valid?
-          expect(parser.errors[:field_12]).to eq(["You must answer product name"])
+          expect(parser.errors[:field_12]).to eq(["You must answer product name."])
         end
       end
 
@@ -951,7 +951,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
           parser.valid?
 
           expect(parser.errors[:field_15]).to be_blank
-          expect(parser.errors[:field_16]).to eq(["You must answer scheme code"])
+          expect(parser.errors[:field_16]).to eq(["You must answer scheme code."])
           expect(parser.errors[:field_17]).to be_blank
         end
       end
@@ -992,7 +992,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
             expect(parser.errors[:field_15]).to be_blank
             expect(parser.errors[:field_16]).to be_blank
-            expect(parser.errors.where(:field_17, category: :setup).map(&:message)).to eq(["You must answer location code"])
+            expect(parser.errors.where(:field_17, category: :setup).map(&:message)).to eq(["You must answer location code."])
             expect(parser.errors[:field_17].count).to eq(1)
           end
         end
@@ -1005,7 +1005,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
             expect(parser.errors[:field_16]).to be_blank
             expect(parser.errors[:field_17]).to be_blank
-            expect(parser.errors.where(:field_15, category: :setup).map(&:message)).to eq(["You must answer management group code"])
+            expect(parser.errors.where(:field_15, category: :setup).map(&:message)).to eq(["You must answer management group code."])
             expect(parser.errors[:field_15].count).to eq(1)
           end
         end
@@ -1093,7 +1093,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
             parser.valid?
 
             expect(parser.errors[:field_15]).to be_blank
-            expect(parser.errors[:field_16]).to include("You must answer scheme name")
+            expect(parser.errors[:field_16]).to include("You must answer scheme name.")
             expect(parser.errors[:field_17]).to be_blank
           end
         end
@@ -1135,7 +1135,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
             parser.valid?
 
             expect(parser.errors[:field_15]).to be_blank
-            expect(parser.errors.where(:field_16, category: :setup).map(&:message)).to eq(["You must answer scheme code"])
+            expect(parser.errors.where(:field_16, category: :setup).map(&:message)).to eq(["You must answer scheme code."])
             expect(parser.errors[:field_17]).to be_blank
           end
         end
@@ -1212,7 +1212,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
           it "clears the scheme answer" do
             parser.valid?
 
-            expect(parser.errors[:field_15]).to include("You must answer scheme name")
+            expect(parser.errors[:field_15]).to include("You must answer scheme name.")
             expect(parser.errors[:field_16]).to be_blank
             expect(parser.errors[:field_17]).to be_blank
           end
@@ -1255,7 +1255,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
         it "returns an error" do
           parser.valid?
-          expect(parser.errors[:field_102]).to include("Enter a valid value for What is the tenant’s main reason for the household leaving their last settled home?")
+          expect(parser.errors[:field_102]).to include("Enter a valid value for what is the tenant’s main reason for the household leaving their last settled home?")
         end
       end
     end
@@ -1527,7 +1527,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
         it "is not permitted as setup error" do
           parser.valid?
-          expect(parser.errors.where(:field_1, category: :setup).map(&:message)).to eql(["You must answer owning organisation"])
+          expect(parser.errors.where(:field_1, category: :setup).map(&:message)).to eql(["You must answer owning organisation."])
         end
 
         it "blocks log creation" do
@@ -1692,7 +1692,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
         it "is reported as a setup error" do
           parser.valid?
-          expect(parser.errors.where(:field_4, category: :setup).map(&:message)).to eql(["You must answer needs type"])
+          expect(parser.errors.where(:field_4, category: :setup).map(&:message)).to eql(["You must answer needs type."])
         end
       end
     end
@@ -1703,7 +1703,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
         it "has setup errors on the field" do
           parser.valid?
-          expect(parser.errors.where(:field_6, category: :setup).map(&:message)).to eql(["You must answer property renewal"])
+          expect(parser.errors.where(:field_6, category: :setup).map(&:message)).to eql(["You must answer property renewal."])
         end
       end
 
@@ -1712,7 +1712,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
         it "adds a setup error" do
           parser.valid?
-          expect(parser.errors.where(:field_6, category: :setup).map(&:message)).to include("Enter a valid value for Is this letting a renewal?")
+          expect(parser.errors.where(:field_6, category: :setup).map(&:message)).to include("Enter a valid value for is this letting a renewal?")
         end
       end
     end
@@ -1723,7 +1723,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
         it "adds an appropriate error" do
           parser.valid?
-          expect(parser.errors[:field_18]).to eql(["UPRN is not recognised. Check the number, or enter the address"])
+          expect(parser.errors[:field_18]).to eql(["UPRN is not recognised. Check the number, or enter the address."])
         end
       end
 
@@ -1733,9 +1733,9 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
         it "adds appropriate errors" do
           parser.valid?
 
-          expect(parser.errors[:field_18]).to eql(["You must answer UPRN"])
-          expect(parser.errors[:field_19]).to eql(["You must answer address line 1"])
-          expect(parser.errors[:field_21]).to eql(["You must answer town or city"])
+          expect(parser.errors[:field_18]).to eql(["You must answer UPRN."])
+          expect(parser.errors[:field_19]).to eql(["You must answer address line 1."])
+          expect(parser.errors[:field_21]).to eql(["You must answer town or city."])
         end
       end
 
@@ -1811,7 +1811,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
         it "populates with correct error message" do
           parser.valid?
-          expect(parser.errors[:field_30]).to eql(["You must answer type of building"])
+          expect(parser.errors[:field_30]).to eql(["You must answer type of building."])
         end
       end
     end
@@ -2160,7 +2160,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
         it "adds an error" do
           parser.valid?
-          expect(parser.errors[:field_116]).to include("Enter a valid value for was the letting made under the Choice-Based Lettings (CBL)")
+          expect(parser.errors[:field_116]).to include("Enter a valid value for was the letting made under the Choice-Based Lettings (CBL)?")
         end
       end
     end
@@ -2187,7 +2187,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
         it "adds an error" do
           parser.valid?
-          expect(parser.errors[:field_118]).to include("Enter a valid value for was the letting made under the Common Housing Register (CHR)")
+          expect(parser.errors[:field_118]).to include("Enter a valid value for was the letting made under the Common Housing Register (CHR)?")
         end
       end
     end
@@ -2214,7 +2214,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
         it "adds an error" do
           parser.valid?
-          expect(parser.errors[:field_117]).to include("Enter a valid value for was the letting made under the Common Allocation Policy (CAP)")
+          expect(parser.errors[:field_117]).to include("Enter a valid value for was the letting made under the Common Allocation Policy (CAP)?")
         end
       end
     end

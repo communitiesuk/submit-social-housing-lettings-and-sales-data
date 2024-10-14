@@ -3,8 +3,8 @@ class SalesLogsController < LogsController
 
   rescue_from ActiveRecord::RecordNotFound, with: :render_not_found
 
-  before_action :session_filters, if: :current_user, only: %i[index email_csv download_csv]
-  before_action -> { filter_manager.serialize_filters_to_session }, if: :current_user, only: %i[index email_csv download_csv]
+  before_action :session_filters, if: :current_user, only: %i[index email_csv download_csv bulk_uploads]
+  before_action -> { filter_manager.serialize_filters_to_session }, if: :current_user, only: %i[index email_csv download_csv bulk_uploads]
   before_action :authenticate_scope!, only: %i[download_csv email_csv]
 
   before_action :extract_bulk_upload_from_session_filters, only: [:index]
@@ -85,6 +85,40 @@ class SalesLogsController < LogsController
     params.require(:sales_log).permit(SalesLog.editable_fields)
   end
 
+  def bulk_uploads
+    return render_not_authorized unless current_user.support?
+
+    @filter_type = "sales_bulk_uploads"
+
+    if params[:organisation_id].present? && params[:clear_old_filters].present?
+      redirect_to clear_filters_path(filter_type: @filter_type, organisation_id: params[:organisation_id]) and return
+    end
+
+    uploads = BulkUpload.sales.where("created_at >= ?", 30.days.ago)
+    unpaginated_filtered_uploads = filter_manager.filtered_uploads(uploads, search_term, session_filters)
+
+    @pagy, @bulk_uploads = pagy(unpaginated_filtered_uploads)
+    @search_term = search_term
+    @total_count = uploads.size
+    @searched = search_term.presence
+    render "bulk_upload_shared/uploads"
+  end
+
+  def download_bulk_upload
+    return render_not_authorized unless current_user.support?
+
+    bulk_upload = BulkUpload.find(params[:id])
+    downloader = BulkUpload::Downloader.new(bulk_upload:)
+
+    if Rails.env.development?
+      downloader.call
+      send_file downloader.path, filename: bulk_upload.filename, type: "text/csv"
+    else
+      presigned_url = downloader.presigned_url
+      redirect_to presigned_url, allow_other_host: true
+    end
+  end
+
 private
 
   def session_filters
@@ -92,7 +126,11 @@ private
   end
 
   def filter_manager
-    FilterManager.new(current_user:, session:, params:, filter_type: "sales_logs")
+    if request.path.include?("bulk-uploads")
+      FilterManager.new(current_user:, session:, params:, filter_type: "sales_bulk_uploads")
+    else
+      FilterManager.new(current_user:, session:, params:, filter_type: "sales_logs")
+    end
   end
 
   def extract_bulk_upload_from_session_filters
