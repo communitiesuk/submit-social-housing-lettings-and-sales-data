@@ -3,6 +3,7 @@ require "rails_helper"
 RSpec.describe "Accessibility", js: true do
   let(:user) { create(:user, :support) }
   let!(:other_user) { create(:user, name: "new user", organisation: user.organisation, email: "new_user@example.com", confirmation_token: "abc") }
+  let(:storage_service) { instance_double(Storage::S3Service, get_file_metadata: nil) }
 
   def find_routes(type, resource, subresource)
     routes = Rails.application.routes.routes.select do |route|
@@ -20,6 +21,8 @@ RSpec.describe "Accessibility", js: true do
   end
 
   before do
+    allow(Storage::S3Service).to receive(:new).and_return(storage_service)
+    allow(storage_service).to receive(:configuration).and_return(OpenStruct.new(bucket_name: "core-test-collection-resources"))
     allow(user).to receive(:need_two_factor_authentication?).and_return(false)
     sign_in(user)
   end
@@ -107,6 +110,7 @@ RSpec.describe "Accessibility", js: true do
         log.save(validate: false)
       end
       allow(FormHandler.instance).to receive(:in_crossover_period?).and_return(true)
+      allow(storage_service).to receive(:get_presigned_url).with(bulk_upload.identifier, 60, response_content_disposition: "attachment; filename=#{bulk_upload.filename}").and_return("http://example.com/lettings-logs/bulk-uploads/#{bulk_upload.id}/download")
     end
 
     it "is has accessible pages" do
@@ -143,6 +147,10 @@ RSpec.describe "Accessibility", js: true do
           other_form_page_ids.any? { |page_id| path.include?(page_id.dasherize) } ||
           sales_log_pages.any? { |page| path.include?(page.id.dasherize) && !page.routed_to?(sales_log, user) }
       }.uniq
+    end
+
+    before do
+      allow(storage_service).to receive(:get_presigned_url).with(bulk_upload.identifier, 60, response_content_disposition: "attachment; filename=#{bulk_upload.filename}").and_return("http://example.com/sales-logs/bulk-uploads/#{bulk_upload.id}/download")
     end
 
     it "is has accessible pages" do
