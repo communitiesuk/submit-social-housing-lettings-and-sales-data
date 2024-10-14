@@ -85,12 +85,6 @@ en:
                         hint_text: ""
                         question_text: "What type of unit is the property?"
 
-                    monthly_charges_value_check:
-                        page_header: ""
-                        check_answer_label: "Monthly charges confirmation"
-                        hint_text: ""
-                        question_text: "Are you sure this is correct?"
-
                     percentage_discount_value_check:
                         page_header: ""
                         check_answer_label: "Percentage discount confirmation"
