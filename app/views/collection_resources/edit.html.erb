@@ -1,0 +1,29 @@
+<% content_for :before_content do %>
+  <%= govuk_back_link href: collection_resources_path %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <% resource_exists = file_exists_on_s3?(@collection_resource.download_filename) %>
+    <%= form_with model: @collection_resource, url: update_mandatory_collection_resource_path, method: :patch do |f| %>
+      <%= f.hidden_field :year %>
+      <%= f.hidden_field :log_type %>
+      <%= f.hidden_field :resource_type %>
+
+      <%= f.govuk_error_summary %>
+
+      <span class="govuk-caption-l"><%= "#{@collection_resource.log_type.humanize} #{text_year_range_format(@collection_resource.year)}" %></span>
+      <h1 class="govuk-heading-l"><%= resource_exists ? "Change" : "Upload" %> the <%= @collection_resource.resource_type.humanize.downcase %></h1>
+
+      <p class="govuk-body">
+        This file will be available for all users to download.
+      </p>
+
+      <%= f.govuk_file_field :file,
+        label: { text: "Upload file", size: "m" } %>
+
+      <%= f.govuk_submit resource_exists ? "Save changes" : "Upload" %>
+      <%= govuk_button_link_to "Cancel", collection_resources_path, secondary: true %>
+    <% end %>
+  </div>
+</div>
