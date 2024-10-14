@@ -85,12 +85,6 @@ en:
                         hint_text: ""
                         question_text: "What type of unit is the property?"
 
-                    percentage_discount_value_check:
-                        page_header: ""
-                        check_answer_label: "Percentage discount confirmation"
-                        hint_text: ""
-                        question_text: "Are you sure this is correct?"
-
                     builtype:
                         page_header: ""
                         check_answer_label: "Type of building"
