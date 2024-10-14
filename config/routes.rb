@@ -40,23 +40,16 @@ Rails.application.routes.draw do
   get "/service-moved", to: "maintenance#service_moved"
   get "/service-unavailable", to: "maintenance#service_unavailable"
 
-  get "/download-23-24-lettings-form", to: "start#download_23_24_lettings_form"
-  get "/download-23-24-lettings-bulk-upload-template", to: "start#download_23_24_lettings_bulk_upload_template"
-  get "/download-23-24-lettings-bulk-upload-legacy-template", to: "start#download_23_24_lettings_bulk_upload_legacy_template"
-  get "/download-23-24-lettings-bulk-upload-specification", to: "start#download_23_24_lettings_bulk_upload_specification"
+  get "collection-resources", to: "collection_resources#index"
+  get "/collection-resources/:log_type/:year/:resource_type/download", to: "collection_resources#download_mandatory_collection_resource", as: :download_mandatory_collection_resource
+  get "/collection-resources/:log_type/:year/:resource_type/edit", to: "collection_resources#edit", as: :edit_mandatory_collection_resource
+  patch "/collection-resources", to: "collection_resources#update", as: :update_mandatory_collection_resource
+  get "/collection-resources/:year/release", to: "collection_resources#confirm_mandatory_collection_resources_release", as: :confirm_mandatory_collection_resources_release
+  patch "/collection-resources/:year/release", to: "collection_resources#release_mandatory_collection_resources", as: :release_mandatory_collection_resources
 
-  get "/download-23-24-sales-form", to: "start#download_23_24_sales_form"
-  get "/download-23-24-sales-bulk-upload-template", to: "start#download_23_24_sales_bulk_upload_template"
-  get "/download-23-24-sales-bulk-upload-legacy-template", to: "start#download_23_24_sales_bulk_upload_legacy_template"
-  get "/download-23-24-sales-bulk-upload-specification", to: "start#download_23_24_sales_bulk_upload_specification"
-
-  get "/download-24-25-lettings-form", to: "start#download_24_25_lettings_form"
-  get "/download-24-25-lettings-bulk-upload-template", to: "start#download_24_25_lettings_bulk_upload_template"
-  get "/download-24-25-lettings-bulk-upload-specification", to: "start#download_24_25_lettings_bulk_upload_specification"
-
-  get "/download-24-25-sales-form", to: "start#download_24_25_sales_form"
-  get "/download-24-25-sales-bulk-upload-template", to: "start#download_24_25_sales_bulk_upload_template"
-  get "/download-24-25-sales-bulk-upload-specification", to: "start#download_24_25_sales_bulk_upload_specification"
+  resources :collection_resources, path: "/collection-resources" do
+    get "/download", to: "collection_resources#download_additional_collection_resource" # when we get to adding them
+  end
 
   get "clear-filters", to: "sessions#clear_filters"
 

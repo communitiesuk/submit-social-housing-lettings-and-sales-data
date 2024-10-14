@@ -48,6 +48,13 @@ module Storage
       @client.head_object(bucket: @configuration.bucket_name, key: file_name)
     end
 
+    def file_exists?(file_name)
+      @client.head_object(bucket: @configuration.bucket_name, key: file_name)
+      true
+    rescue Aws::S3::Errors::NotFound
+      false
+    end
+
   private
 
     def create_configuration
