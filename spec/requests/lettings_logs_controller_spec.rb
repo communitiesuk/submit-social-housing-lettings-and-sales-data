@@ -1331,7 +1331,7 @@ RSpec.describe LettingsLogsController, type: :request do
 
       before do
         lettings_log.save!(validate: false)
-        WebMock.stub_request(:get, /https:\/\/api.os.uk\/search\/places\/v1\/find/)
+        WebMock.stub_request(:get, /https:\/\/api\.os\.uk\/search\/places\/v1\/find/)
         .to_return(status: 503, body: "something went wrong", headers: {})
         sign_in user
       end
