@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_10_02_163937) do
+ActiveRecord::Schema[7.0].define(version: 2024_10_08_100119) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -48,6 +48,19 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_02_163937) do
     t.boolean "processing"
     t.index ["identifier"], name: "index_bulk_uploads_on_identifier", unique: true
     t.index ["user_id"], name: "index_bulk_uploads_on_user_id"
+  end
+
+  create_table "collection_resources", force: :cascade do |t|
+    t.string "log_type"
+    t.string "resource_type"
+    t.string "display_name"
+    t.string "short_display_name"
+    t.integer "year"
+    t.string "download_filename"
+    t.boolean "mandatory"
+    t.boolean "released_to_user"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "csv_variable_definitions", force: :cascade do |t|
