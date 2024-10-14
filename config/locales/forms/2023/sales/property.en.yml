@@ -50,18 +50,6 @@ en:
                         hint_text: ""
                         question_text: "What is the property’s local authority?"
 
-                    income1_value_check:
-                        page_header: ""
-                        check_answer_label: "Buyer 1 income confirmation"
-                        hint_text: ""
-                        question_text: "Are you sure this is correct?"
-
-                    income2_value_check":
-                        page_header: ""
-                        check_answer_label: "Buyer 2 income confirmation"
-                        hint_text: ""
-                        question_text: "Are you sure this is correct?"
-
                     combined_income_value_check:
                         page_header: ""
                         check_answer_label: "Combined income confirmation"
