@@ -91,12 +91,6 @@ en:
                         hint_text: ""
                         question_text: "Are you sure this is correct?"
 
-                    value_value_check:
-                        page_header: ""
-                        check_answer_label: "Purchase price confirmation"
-                        hint_text: ""
-                        question_text: "Are you sure?"
-
                     beds:
                         page_header: ""
                         check_answer_label: "Number of bedrooms"

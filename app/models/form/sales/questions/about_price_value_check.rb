@@ -2,7 +2,8 @@ class Form::Sales::Questions::AboutPriceValueCheck < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "value_value_check"
-    @copy_key = "sales.property.value_value_check"
+    @check_answer_label = "Purchase price confirmation"
+    @header = "Are you sure?"
     @type = "interruption_screen"
     @answer_options = {
       "0" => { "value" => "Yes" },
