@@ -216,6 +216,9 @@ en:
     scheme_deleted: "%{service_name} has been deleted."
     user_deleted: "%{name} has been deleted."
     organisation_deleted: "%{name} has been deleted."
+    user_updated: 
+      self: "Your account details have been updated."
+      other: "%{name}’s details have been updated."
 
   validations:
     organisation:
@@ -818,8 +821,6 @@ Make sure these answers are correct."
       title: "You told us there are more than 1 persons with 'Partner' relationship to buyer 1."
 
   devise:
-    email:
-      updated: "An email has been sent to %{email} to confirm this change."
     two_factor_authentication:
       success: "Two-factor authentication successful."
       attempt_failed: "Attempt failed."
