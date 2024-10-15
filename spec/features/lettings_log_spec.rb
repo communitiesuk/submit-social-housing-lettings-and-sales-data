@@ -415,6 +415,37 @@ RSpec.describe "Lettings Log Features" do
       expect(deleted_log.status).to eq "deleted"
       expect(deleted_log.discarded_at).not_to be nil
     end
+
+    context "when visiting the bulk uploads page" do
+      let(:bulk_upload_errors) { create_list(:bulk_upload_error, 2, category: nil) }
+      let(:bulk_upload) { create(:bulk_upload, :lettings, user: support_user, bulk_upload_errors:, total_logs_count: 10) }
+      let(:mock_storage_service) { instance_double("S3Service") }
+
+      before do
+        allow(Storage::S3Service).to receive(:new).and_return(mock_storage_service)
+        allow(mock_storage_service).to receive(:get_presigned_url).with(bulk_upload.identifier, 60, response_content_disposition: "attachment; filename=#{bulk_upload.filename}").and_return("/lettings-logs/bulk-uploads")
+        bulk_upload
+        visit("/lettings-logs/bulk-uploads")
+      end
+
+      it "displays the right title" do
+        expect(page).to have_content("Lettings bulk uploads")
+      end
+
+      it "shows the bulk upload file name" do
+        expect(page).to have_content(bulk_upload.filename)
+      end
+
+      it "redirects to the error report page when clicking 'View error report'" do
+        click_link("View error report")
+        expect(page).to have_current_path("/lettings-logs/bulk-upload-results/#{bulk_upload.id}")
+      end
+
+      it "allows the user to download the file" do
+        click_link("Download file", href: "/lettings-logs/bulk-uploads/#{bulk_upload.id}/download")
+        expect(page).to have_current_path("/lettings-logs/bulk-uploads")
+      end
+    end
   end
 
   context "when the signed is user is not a Support user" do

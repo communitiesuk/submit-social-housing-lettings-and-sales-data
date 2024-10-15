@@ -1,4 +1,6 @@
 class Form::Question
+  include FormattingHelper
+
   attr_accessor :id, :description, :questions, :disable_clearing_if_not_routed_or_dynamic_answer_options,
                 :type, :min, :max, :step, :width, :fields_to_add, :result_field,
                 :conditional_for, :readonly, :answer_options, :page,
@@ -220,11 +222,20 @@ class Form::Question
   end
 
   def error_display_label
-    error_label || check_answer_label || header || id.humanize
+    label = if error_label.present?
+              error_label
+            elsif check_answer_label.present?
+              check_answer_label
+            elsif header.present?
+              header
+            else
+              id.humanize
+            end
+    format_ending(label)
   end
 
   def unanswered_error_message
-    question_text = error_display_label.presence || "this question"
+    question_text = error_display_label.presence || "this question."
     I18n.t("validations.not_answered", question: question_text.downcase)
   end
 

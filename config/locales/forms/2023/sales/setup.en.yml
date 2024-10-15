@@ -51,7 +51,7 @@ en:
               hint_text: ""
               question_text: "What is the type of discounted ownership sale?"
             outright_ownership:
-              page_header: "Type of outright sale page"
+              page_header: "Type of outright sale"
               type:
                 check_answer_label: "Type of outright sale"
                 hint_text: ""
