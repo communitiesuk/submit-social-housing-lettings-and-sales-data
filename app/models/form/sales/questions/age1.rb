@@ -2,8 +2,6 @@ class Form::Sales::Questions::Age1 < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "age1"
-    @check_answer_label = "Buyer 1’s age"
-    @header = "Age"
     @type = "numeric"
     @width = 2
     @inferred_check_answers_value = [

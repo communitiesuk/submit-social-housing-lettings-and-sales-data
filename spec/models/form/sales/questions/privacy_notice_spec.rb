@@ -31,22 +31,6 @@ RSpec.describe Form::Sales::Questions::PrivacyNotice, type: :model do
     expect(question.derived?(nil)).to be false
   end
 
-  context "when there are joint buyers" do
-    subject(:question) { described_class.new(question_id, question_definition, page, joint_purchase: true) }
-
-    it "has the expected copy_key" do
-      expect(question.copy_key).to eq("sales.setup.privacynotice.joint_purchase")
-    end
-  end
-
-  context "when there is a single buyer" do
-    subject(:question) { described_class.new(question_id, question_definition, page, joint_purchase: false) }
-
-    it "has the expected copy_key" do
-      expect(question.copy_key).to eq("sales.setup.privacynotice.not_joint_purchase")
-    end
-  end
-
   context "when the form year is before 2024" do
     before do
       allow(form).to receive(:start_year_after_2024?).and_return(false)
@@ -66,6 +50,10 @@ RSpec.describe Form::Sales::Questions::PrivacyNotice, type: :model do
       it "returns correct unanswered_error_message" do
         expect(question.unanswered_error_message).to eq("You must show the MHCLG privacy notice to the buyer before you can submit this log.")
       end
+
+      it "has the expected copy_key" do
+        expect(question.copy_key).to eq("sales.household_characteristics.privacynotice.not_joint_purchase")
+      end
     end
 
     context "and there are joint buyers" do
@@ -83,6 +71,10 @@ RSpec.describe Form::Sales::Questions::PrivacyNotice, type: :model do
 
       it "returns correct unanswered_error_message" do
         expect(question.unanswered_error_message).to eq("You must show the MHCLG privacy notice to the buyers before you can submit this log.")
+      end
+
+      it "has the expected copy_key" do
+        expect(question.copy_key).to eq("sales.household_characteristics.privacynotice.joint_purchase")
       end
     end
   end
@@ -106,6 +98,10 @@ RSpec.describe Form::Sales::Questions::PrivacyNotice, type: :model do
       it "returns correct unanswered_error_message" do
         expect(question.unanswered_error_message).to eq("You must show or give the buyer access to the MHCLG privacy notice before you can submit this log.")
       end
+
+      it "has the expected copy_key" do
+        expect(question.copy_key).to eq("sales.setup.privacynotice.not_joint_purchase")
+      end
     end
 
     context "and there are joint buyers" do
@@ -123,6 +119,10 @@ RSpec.describe Form::Sales::Questions::PrivacyNotice, type: :model do
 
       it "returns correct unanswered_error_message" do
         expect(question.unanswered_error_message).to eq("You must show or give the buyers access to the MHCLG privacy notice before you can submit this log.")
+      end
+
+      it "has the expected copy_key" do
+        expect(question.copy_key).to eq("sales.setup.privacynotice.joint_purchase")
       end
     end
   end
