@@ -1,7 +1,7 @@
 class CollectionResourcesController < ApplicationController
   include CollectionResourcesHelper
 
-  before_action :authenticate_user!, except: %i[download_mandatory_collection_resource]
+  before_action :authenticate_user!, except: %i[download_mandatory_collection_resource download_additional_collection_resource]
 
   def index
     render_not_found unless current_user.support?

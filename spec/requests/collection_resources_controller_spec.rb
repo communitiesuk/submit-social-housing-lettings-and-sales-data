@@ -617,8 +617,19 @@ RSpec.describe CollectionResourcesController, type: :request do
       allow_any_instance_of(CollectionResourcesHelper).to receive(:editable_collection_resource_years).and_return([2025, 2026])
       allow_any_instance_of(CollectionResourcesHelper).to receive(:displayed_collection_resource_years).and_return([2025])
       # rubocop:enable RSpec/AnyInstance
-      allow(user).to receive(:need_two_factor_authentication?).and_return(false)
-      sign_in user
+    end
+
+    context "when the user is not signed in" do
+      context "when the file exists on S3" do
+        before do
+          allow(storage_service).to receive(:get_file).and_return("file")
+          get collection_resource_download_path(collection_resource)
+        end
+
+        it "downloads the file" do
+          expect(response.body).to eq("file")
+        end
+      end
     end
 
     context "when user is signed in as a data coordinator" do
@@ -626,6 +637,7 @@ RSpec.describe CollectionResourcesController, type: :request do
 
       context "when the file exists on S3" do
         before do
+          sign_in user
           allow(storage_service).to receive(:get_file).and_return("file")
           get collection_resource_download_path(collection_resource)
         end
@@ -637,6 +649,7 @@ RSpec.describe CollectionResourcesController, type: :request do
 
       context "when the file does not exist on S3" do
         before do
+          sign_in user
           allow(storage_service).to receive(:get_file).and_return(nil)
           get collection_resource_download_path(collection_resource)
         end
@@ -648,6 +661,7 @@ RSpec.describe CollectionResourcesController, type: :request do
 
       context "when resource id is invalid" do
         before do
+          sign_in user
           allow(storage_service).to receive(:get_file).and_return(nil)
           get collection_resource_download_path(collection_resource_id: "invalid")
         end
@@ -661,6 +675,7 @@ RSpec.describe CollectionResourcesController, type: :request do
         let(:collection_resource) { create(:collection_resource, :additional, year: 2026, short_display_name: "additional resource") }
 
         before do
+          sign_in user
           get collection_resource_download_path(collection_resource)
         end
 
@@ -676,6 +691,8 @@ RSpec.describe CollectionResourcesController, type: :request do
 
       context "when year is in editable_collection_resource_years but not in displayed_collection_resource_years" do
         before do
+          allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+          sign_in user
           allow(storage_service).to receive(:get_file).and_return("file")
           get collection_resource_download_path(collection_resource)
         end
