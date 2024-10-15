@@ -2,7 +2,7 @@ class Form::Sales::Questions::TownOrCity < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "town_or_city"
-    @copy_key = "sales.property.address.town_or_city"
+    @copy_key = "sales.property_information.address.town_or_city"
     @type = "text"
     @plain_label = true
     @disable_clearing_if_not_routed_or_dynamic_answer_options = true

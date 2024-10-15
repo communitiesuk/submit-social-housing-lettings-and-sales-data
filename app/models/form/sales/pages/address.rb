@@ -2,7 +2,7 @@ class Form::Sales::Pages::Address < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "address"
-    @copy_key = "sales.property.address"
+    @copy_key = "sales.property_information.address"
     @depends_on = [
       { "uprn_known" => nil },
       { "uprn_known" => 0 },

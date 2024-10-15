@@ -2,7 +2,7 @@ class Form::Sales::Questions::AddressLine1 < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "address_line1"
-    @copy_key = "sales.property.address.address_line1"
+    @copy_key = "sales.property_information.address.address_line1"
     @error_label = "Address line 1"
     @type = "text"
     @plain_label = true

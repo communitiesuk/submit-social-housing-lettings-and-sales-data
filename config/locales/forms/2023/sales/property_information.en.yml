@@ -2,7 +2,7 @@ en:
   forms:
     2023:
       sales:
-        property:
+        property_information:
           uprn:
             page_header: ""
             check_answer_label: "UPRN"

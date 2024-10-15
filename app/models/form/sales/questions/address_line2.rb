@@ -2,7 +2,7 @@ class Form::Sales::Questions::AddressLine2 < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "address_line2"
-    @copy_key = "sales.property.address.address_line2"
+    @copy_key = "sales.property_information.address.address_line2"
     @type = "text"
     @plain_label = true
     @disable_clearing_if_not_routed_or_dynamic_answer_options = true

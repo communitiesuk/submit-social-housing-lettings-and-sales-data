@@ -2,7 +2,7 @@ class Form::Sales::Questions::PostcodeForFullAddress < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "postcode_full"
-    @copy_key = "sales.property.address.postcode_full"
+    @copy_key = "sales.property_information.address.postcode_full"
     @type = "text"
     @width = 5
     @inferred_check_answers_value = [{

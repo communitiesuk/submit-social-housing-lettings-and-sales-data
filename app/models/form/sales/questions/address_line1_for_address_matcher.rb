@@ -2,7 +2,7 @@ class Form::Sales::Questions::AddressLine1ForAddressMatcher < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "address_line1_input"
-    @copy_key = "sales.property.address_matcher.address_line1_input"
+    @copy_key = "sales.property_information.address_matcher.address_line1_input"
     @error_label = "Address line 1"
     @type = "text"
     @plain_label = true

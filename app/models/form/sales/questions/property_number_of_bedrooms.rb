@@ -2,7 +2,7 @@ class Form::Sales::Questions::PropertyNumberOfBedrooms < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "beds"
-    @copy_key = "sales.property.beds"
+    @copy_key = "sales.property_information.beds"
     @type = "numeric"
     @width = 2
     @min = 1
