@@ -324,6 +324,7 @@ RSpec.describe StartController, type: :request do
 
       context "and 2023 collection window is open for editing" do
         before do
+          create(:collection_resource, :additional, year: 2023, log_type: "sales", display_name: "sales additional resource (2023 to 2024)")
           allow(Time).to receive(:now).and_return(Time.zone.local(2024, 4, 1))
         end
 
@@ -337,6 +338,7 @@ RSpec.describe StartController, type: :request do
           expect(page).to have_content("Sales 23/24")
           expect(page).to have_content("Sales 2024 to 2025")
           expect(page).to have_content("Sales 2023 to 2024")
+          expect(page).to have_content("Download the sales additional resource (2023 to 2024)")
         end
       end
 

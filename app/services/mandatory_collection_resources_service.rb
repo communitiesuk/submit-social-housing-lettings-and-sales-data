@@ -27,6 +27,7 @@ class MandatoryCollectionResourcesService
       year:,
       log_type:,
       download_filename: download_filename(resource_type, year, log_type),
+      mandatory: true,
     )
   end
 

@@ -94,9 +94,9 @@ RSpec.describe CollectionResourcesHelper do
 
       context "and next year resources were manually released" do
         before do
-          CollectionResource.create!(year: 2025, resource_type: "paper_form", display_name: "lettings log for tenants (2025 to 2026)", download_filename: "file.pdf", mandatory: true, released_to_user: true)
-          CollectionResource.create!(year: 2025, resource_type: "bulk_upload_template", display_name: "bulk upload template (2025 to 2026)", download_filename: "file.xlsx", mandatory: true, released_to_user: true)
-          CollectionResource.create!(year: 2025, resource_type: "bulk_upload_specification", display_name: "sales log for tenants (2025 to 2026)", download_filename: "file.xlsx", mandatory: true, released_to_user: true)
+          create(:collection_resource, year: 2025, resource_type: "paper_form", display_name: "lettings log for tenants (2025 to 2026)", download_filename: "file.pdf", mandatory: true, released_to_user: true)
+          create(:collection_resource, year: 2025, resource_type: "bulk_upload_template", display_name: "bulk upload template (2025 to 2026)", download_filename: "file.xlsx", mandatory: true, released_to_user: true)
+          create(:collection_resource, year: 2025, resource_type: "bulk_upload_specification", display_name: "sales log for tenants (2025 to 2026)", download_filename: "file.xlsx", mandatory: true, released_to_user: true)
         end
 
         it "reutrns current and next years" do
@@ -199,9 +199,9 @@ RSpec.describe CollectionResourcesHelper do
 
       context "and the resources have been manually released" do
         before do
-          CollectionResource.create!(year: 2025, resource_type: "paper_form", display_name: "lettings log for tenants (2025 to 2026)", download_filename: "file.pdf", mandatory: true, released_to_user: true)
-          CollectionResource.create!(year: 2025, resource_type: "bulk_upload_template", display_name: "bulk upload template (2025 to 2026)", download_filename: "file.xlsx", mandatory: true, released_to_user: true)
-          CollectionResource.create!(year: 2025, resource_type: "bulk_upload_specification", display_name: "sales log for tenants (2025 to 2026)", download_filename: "file.xlsx", mandatory: true, released_to_user: true)
+          create(:collection_resource, year: 2025, resource_type: "paper_form", display_name: "lettings log for tenants (2025 to 2026)", download_filename: "file.pdf", mandatory: true, released_to_user: true)
+          create(:collection_resource, year: 2025, resource_type: "bulk_upload_template", display_name: "bulk upload template (2025 to 2026)", download_filename: "file.xlsx", mandatory: true, released_to_user: true)
+          create(:collection_resource, year: 2025, resource_type: "bulk_upload_specification", display_name: "sales log for tenants (2025 to 2026)", download_filename: "file.xlsx", mandatory: true, released_to_user: true)
         end
 
         it "returns false" do

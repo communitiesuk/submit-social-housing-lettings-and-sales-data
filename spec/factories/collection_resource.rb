@@ -6,5 +6,15 @@ FactoryBot.define do
     year { 2024 }
     log_type { "lettings" }
     download_filename { "24_25_lettings_paper_form.pdf" }
+    mandatory { true }
+    trait(:additional) do
+      resource_type { nil }
+      display_name { "lettings additional resource (2024 to 2025)" }
+      short_display_name { "additional resource" }
+      year { 2024 }
+      log_type { "lettings" }
+      download_filename { "additional.pdf" }
+      mandatory { false }
+    end
   end
 end
