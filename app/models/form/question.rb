@@ -222,7 +222,15 @@ class Form::Question
   end
 
   def error_display_label
-    label = error_label || check_answer_label || header || id.humanize
+    label = if error_label.present?
+              error_label
+            elsif check_answer_label.present?
+              check_answer_label
+            elsif header.present?
+              header
+            else
+             id.humanize
+            end
     format_ending(label)
   end
 
