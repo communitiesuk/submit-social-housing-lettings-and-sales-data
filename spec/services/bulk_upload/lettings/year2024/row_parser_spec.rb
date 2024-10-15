@@ -2718,6 +2718,14 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
       it "strips whitespace" do
         expect(parser.log.postcode_full).to eql("EC1N 2TD")
       end
+
+      context "when a partial postcode is provided" do
+        let(:attributes) { { bulk_upload:, field_4: 1, field_21: "EC1N", field_22: "" } }
+
+        it "is set to the partial value" do
+          expect(parser.log.postcode_full).to eql("EC1N")
+        end
+      end
     end
 
     describe "#la" do
