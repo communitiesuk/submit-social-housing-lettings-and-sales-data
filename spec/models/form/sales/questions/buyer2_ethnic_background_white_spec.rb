@@ -23,24 +23,12 @@ RSpec.describe Form::Sales::Questions::Buyer2EthnicBackgroundWhite, type: :model
     expect(question.id).to eq("ethnicbuy2")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("Which of the following best describes buyer 2’s White background?")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Buyer 2’s ethnic background")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("radio")
   end
 
   it "is not marked as derived" do
     expect(question.derived?(nil)).to be false
-  end
-
-  it "has the correct hint_text" do
-    expect(question.hint_text).to be nil
   end
 
   context "with 2023/24 form" do

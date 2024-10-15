@@ -1317,6 +1317,31 @@ RSpec.describe LettingsLogsController, type: :request do
       end
     end
 
+    context "when os places api returns non json response" do
+      let(:lettings_log) do
+        build(:lettings_log,
+              :completed,
+              assigned_to: user,
+              uprn_known: 0,
+              uprn: nil,
+              address_line1_input: "Address line 1",
+              postcode_full_input: "SW1A 1AA")
+      end
+      let(:id) { lettings_log.id }
+
+      before do
+        lettings_log.save!(validate: false)
+        WebMock.stub_request(:get, /https:\/\/api\.os\.uk\/search\/places\/v1\/find/)
+        .to_return(status: 503, body: "something went wrong", headers: {})
+        sign_in user
+      end
+
+      it "renders the property information check answers without error" do
+        get "/lettings-logs/#{id}/property-information/check-answers"
+        expect(response).to have_http_status(:ok)
+      end
+    end
+
     context "when requesting CSV download" do
       let(:headers) { { "Accept" => "text/html" } }
       let(:search_term) { "foo" }

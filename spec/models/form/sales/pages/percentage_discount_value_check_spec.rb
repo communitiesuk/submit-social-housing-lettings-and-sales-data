@@ -19,10 +19,6 @@ RSpec.describe Form::Sales::Pages::PercentageDiscountValueCheck, type: :model do
     expect(page.id).to eq("percentage_discount_value_check")
   end
 
-  it "has the correct header" do
-    expect(page.header).to be_nil
-  end
-
   it "has the correct title_text" do
     expect(page.title_text).to eq({
       "translation" => "soft_validations.percentage_discount_value.title_text",

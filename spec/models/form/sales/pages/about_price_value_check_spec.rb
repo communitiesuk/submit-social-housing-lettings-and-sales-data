@@ -19,10 +19,6 @@ RSpec.describe Form::Sales::Pages::AboutPriceValueCheck, type: :model do
     expect(page.id).to eq("savings_value_check")
   end
 
-  it "has the correct header" do
-    expect(page.header).to be_nil
-  end
-
   it "has correct depends_on" do
     expect(page.depends_on).to eq([{ "purchase_price_out_of_soft_range?" => true }])
   end

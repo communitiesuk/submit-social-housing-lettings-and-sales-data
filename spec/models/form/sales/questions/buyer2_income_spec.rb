@@ -15,24 +15,12 @@ RSpec.describe Form::Sales::Questions::Buyer2Income, type: :model do
     expect(question.id).to eq("income2")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("Buyer 2’s gross annual income")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Buyer 2’s gross annual income")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("numeric")
   end
 
   it "is not marked as derived" do
     expect(question.derived?(nil)).to be false
-  end
-
-  it "has the correct hint" do
-    expect(question.hint_text).to eq("Provide the gross annual income (i.e. salary before tax) plus the annual amount of benefits, Universal Credit or pensions, and income from investments.")
   end
 
   it "has correct width" do

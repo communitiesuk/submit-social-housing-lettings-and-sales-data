@@ -15,14 +15,6 @@ RSpec.describe Form::Lettings::Questions::County, type: :model do
     expect(question.id).to eq("county")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("County (optional)")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("County")
-  end
-
   it "has the correct question_number" do
     expect(question.question_number).to eq(12)
   end
@@ -33,10 +25,6 @@ RSpec.describe Form::Lettings::Questions::County, type: :model do
 
   it "is not marked as derived" do
     expect(question.derived?(nil)).to be false
-  end
-
-  it "has the correct hint" do
-    expect(question.hint_text).to be_nil
   end
 
   it "has the correct inferred check answers value" do

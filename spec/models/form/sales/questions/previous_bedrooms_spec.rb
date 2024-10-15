@@ -15,24 +15,12 @@ RSpec.describe Form::Sales::Questions::PreviousBedrooms, type: :model do
     expect(question.id).to eq("frombeds")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("How many bedrooms did the property have?")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Number of bedrooms in previous property")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("numeric")
   end
 
   it "is not marked as derived" do
     expect(question.derived?(nil)).to be false
-  end
-
-  it "has the correct hint" do
-    expect(question.hint_text).to eq("For bedsits enter 1")
   end
 
   it "has correct width" do

@@ -13,20 +13,8 @@ RSpec.describe Form::Lettings::Questions::TenancyLength, type: :model do
     expect(question.id).to eq("tenancylength")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("What is the length of the fixed-term tenancy to the nearest year?")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Length of fixed-term tenancy")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("numeric")
-  end
-
-  it "has the correct hint_text" do
-    expect(question.hint_text).to eq("Do not include the starter or introductory period.")
   end
 
   it "has the correct minimum and maximum" do

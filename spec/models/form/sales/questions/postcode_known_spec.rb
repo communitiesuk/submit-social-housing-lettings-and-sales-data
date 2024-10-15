@@ -15,14 +15,6 @@ RSpec.describe Form::Sales::Questions::PostcodeKnown, type: :model do
     expect(question.id).to eq("pcodenk")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("Do you know the property’s postcode?")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Property’s postcode")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("radio")
   end
@@ -42,10 +34,6 @@ RSpec.describe Form::Sales::Questions::PostcodeKnown, type: :model do
     expect(question.conditional_for).to eq({
       "postcode_full" => [0],
     })
-  end
-
-  it "has the correct hint" do
-    expect(question.hint_text).to be_nil
   end
 
   it "has the correct hidden_in_check_answers" do

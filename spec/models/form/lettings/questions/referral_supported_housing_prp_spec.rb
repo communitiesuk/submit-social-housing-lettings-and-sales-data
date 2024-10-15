@@ -23,24 +23,12 @@ RSpec.describe Form::Lettings::Questions::ReferralSupportedHousingPrp, type: :mo
     expect(question.id).to eq("referral")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("What was the source of referral for this letting?")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Source of referral for letting")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("radio")
   end
 
   it "has the correct check_answers_card_number" do
     expect(question.check_answers_card_number).to eq(0)
-  end
-
-  it "has the correct hint" do
-    expect(question.hint_text).to eq("")
   end
 
   it "is not marked as derived" do

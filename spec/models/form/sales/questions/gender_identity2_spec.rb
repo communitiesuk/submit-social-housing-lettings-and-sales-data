@@ -22,14 +22,6 @@ RSpec.describe Form::Sales::Questions::GenderIdentity2, type: :model do
     expect(question.id).to eq("sex2")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("Which of these best describes buyer 2’s gender identity?")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Buyer 2’s gender identity")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("radio")
   end
@@ -55,25 +47,5 @@ RSpec.describe Form::Sales::Questions::GenderIdentity2, type: :model do
     expect(question.inferred_check_answers_value).to eq([
       { "condition" => { "sex2" => "R" }, "value" => "Prefers not to say" },
     ])
-  end
-
-  context "with start year before 2024" do
-    before do
-      allow(form).to receive(:start_year_after_2024?).and_return(false)
-    end
-
-    it "has the correct hint" do
-      expect(question.hint_text).to be_nil
-    end
-  end
-
-  context "with start year >= 2024" do
-    before do
-      allow(form).to receive(:start_year_after_2024?).and_return(true)
-    end
-
-    it "has the correct hint" do
-      expect(question.hint_text).to eq("This should be however they personally choose to identify from the options below. This may or may not be the same as their biological sex or the sex they were assigned at birth.")
-    end
   end
 end

@@ -26,21 +26,9 @@ RSpec.describe Form::Lettings::Questions::AgeKnown, type: :model do
     })
   end
 
-  it "has the correct hint" do
-    expect(question.hint_text).to eq("")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("")
-  end
-
   context "with person 2" do
     it "has the correct id" do
       expect(question.id).to eq("age2_known")
-    end
-
-    it "has the correct header" do
-      expect(question.header).to eq("Do you know person 2’s age?")
     end
 
     it "has correct conditional for" do
@@ -74,10 +62,6 @@ RSpec.describe Form::Lettings::Questions::AgeKnown, type: :model do
 
     it "has the correct id" do
       expect(question.id).to eq("age3_known")
-    end
-
-    it "has the correct header" do
-      expect(question.header).to eq("Do you know person 3’s age?")
     end
 
     it "has correct conditional for" do

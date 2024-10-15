@@ -20,10 +20,6 @@ RSpec.describe Form::Lettings::Pages::NoAddressFound, type: :model do
     expect(page.id).to eq("no_address_found")
   end
 
-  it "has the correct header" do
-    expect(page.header).to be_nil
-  end
-
   it "has correct depends_on" do
     expect(page.depends_on).to eq([{ "address_options_present?" => false,
                                      "is_supported_housing?" => false,

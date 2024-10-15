@@ -23,28 +23,6 @@ RSpec.describe Form::Sales::Questions::BuyerPrevious, type: :model do
     expect(question.id).to eq("soctenant")
   end
 
-  context "when a joint purchase" do
-    it "has the correct header" do
-      expect(question.header).to eq("Were any of the buyers private registered providers, housing association or local authority tenants immediately before this sale?")
-    end
-
-    it "has the correct check_answer_label" do
-      expect(question.check_answer_label).to eq("Any buyers were registered providers, housing association or local authority tenants immediately before this sale?")
-    end
-  end
-
-  context "when not a joint purchase" do
-    let(:joint_purchase) { false }
-
-    it "has the correct header" do
-      expect(question.header).to eq("Was the buyer a private registered provider, housing association or local authority tenant immediately before this sale?")
-    end
-
-    it "has the correct check_answer_label" do
-      expect(question.check_answer_label).to eq("Buyer was a registered provider, housing association or local authority tenant immediately before this sale?")
-    end
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("radio")
   end
@@ -66,10 +44,6 @@ RSpec.describe Form::Sales::Questions::BuyerPrevious, type: :model do
 
   it "has correct conditional for" do
     expect(question.conditional_for).to eq(nil)
-  end
-
-  it "has the correct hint" do
-    expect(question.hint_text).to eq(nil)
   end
 
   context "when form year is before 2024" do

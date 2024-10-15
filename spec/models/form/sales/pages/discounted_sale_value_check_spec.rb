@@ -20,10 +20,6 @@ RSpec.describe Form::Sales::Pages::DiscountedSaleValueCheck, type: :model do
     expect(page.id).to eq("discounted_sale_value_check")
   end
 
-  it "has the correct header" do
-    expect(page.header).to be_nil
-  end
-
   it "has the correct title_text" do
     expect(page.title_text).to eq({
       "translation" => "soft_validations.discounted_sale_value.title_text",

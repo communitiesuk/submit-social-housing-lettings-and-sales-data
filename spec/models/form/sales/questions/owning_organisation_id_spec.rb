@@ -26,20 +26,8 @@ RSpec.describe Form::Sales::Questions::OwningOrganisationId, type: :model do
     expect(question.id).to eq("owning_organisation_id")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("Which organisation owns this log?")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Owning organisation")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("select")
-  end
-
-  it "has the correct hint_text" do
-    expect(question.hint_text).to be_nil
   end
 
   describe "answer options" do

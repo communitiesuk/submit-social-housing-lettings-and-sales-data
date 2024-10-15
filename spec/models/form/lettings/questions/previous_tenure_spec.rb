@@ -9,16 +9,8 @@ RSpec.describe Form::Lettings::Questions::PreviousTenure, type: :model do
     expect(question.id).to eq("prevten")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("Where was the household immediately before this letting?")
-  end
-
   it "has correct page" do
     expect(question.page).to eq(page)
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Where was the household immediately before this letting?")
   end
 
   it "has the correct type" do
@@ -27,10 +19,6 @@ RSpec.describe Form::Lettings::Questions::PreviousTenure, type: :model do
 
   it "is not marked as derived" do
     expect(question.derived?(nil)).to be false
-  end
-
-  it "has the correct hint" do
-    expect(question.hint_text).to eq("This is where the household was the night before they moved into this new let.")
   end
 
   it "has the correct answer_options" do

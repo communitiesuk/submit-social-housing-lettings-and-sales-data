@@ -17,14 +17,6 @@ RSpec.describe Form::Sales::Questions::DiscountedOwnershipType, type: :model do
     expect(question.id).to eq("type")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("What is the type of discounted ownership sale?")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Type of discounted ownership sale")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("radio")
   end
