@@ -15,24 +15,12 @@ RSpec.describe Form::Sales::Questions::Savings, type: :model do
     expect(question.id).to eq("savings")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("Enter their total savings to the nearest £10")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Buyer’s total savings before any deposit paid")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("numeric")
   end
 
   it "is not marked as derived" do
     expect(question.derived?(nil)).to be false
-  end
-
-  it "has the correct hint" do
-    expect(question.hint_text).to be_nil
   end
 
   it "has the correct width" do

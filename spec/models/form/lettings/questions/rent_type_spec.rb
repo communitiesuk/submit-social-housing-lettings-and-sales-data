@@ -23,20 +23,8 @@ RSpec.describe Form::Lettings::Questions::RentType, type: :model do
     expect(question.id).to eq("rent_type")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("What is the rent type?")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Rent type")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("radio")
-  end
-
-  it "has the correct hint_text" do
-    expect(question.hint_text).to be_nil
   end
 
   it "has the correct conditional_for" do

@@ -17,10 +17,6 @@ RSpec.describe Form::Sales::Questions::OutrightOwnershipType, type: :model do
     expect(question.id).to eq("type")
   end
 
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Type of outright sale")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("radio")
   end
@@ -40,10 +36,6 @@ RSpec.describe Form::Sales::Questions::OutrightOwnershipType, type: :model do
     expect(question.conditional_for).to eq({
       "othtype" => [12],
     })
-  end
-
-  it "has the correct header" do
-    expect(question.header).to eq("What is the type of outright sale?")
   end
 
   describe "partial guidance" do

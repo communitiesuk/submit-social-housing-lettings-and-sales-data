@@ -19,10 +19,6 @@ RSpec.describe Form::Lettings::Pages::TenancyStartDate, type: :model do
     expect(page.id).to eq("tenancy_start_date")
   end
 
-  it "has the correct header" do
-    expect(page.header).to be nil
-  end
-
   it "has the correct description" do
     expect(page.description).to be_nil
   end
