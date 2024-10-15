@@ -1,4 +1,6 @@
-<h3 class="govuk-heading-m"><%= label %></h3>
+<% unless label.blank? %>
+  <h3 class="govuk-heading-m"><%= label %></h3>
+<% end %>
 <dl class="app-document-list">
   <% items.each do |item| %>
     <div class="app-document-list__item">
