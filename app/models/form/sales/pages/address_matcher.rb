@@ -2,7 +2,7 @@ class Form::Sales::Pages::AddressMatcher < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "address_matcher"
-    @header = "sales.property.address_matcher"
+    @copy_key = "sales.property.address_matcher"
     @depends_on = [
       { "uprn_known" => nil },
       { "uprn_known" => 0 },

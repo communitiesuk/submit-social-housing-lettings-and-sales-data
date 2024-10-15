@@ -19,7 +19,7 @@ en:
                         page_header: "We found an address that might be this property"
                         check_answer_label: "Is this the right address?"
                         hint_text: ""
-                        question_text: "Is this the property address?"
+                        question_text: "Select the correct address"
 
                     address:
                         page_header: "Q15 - What is the property's address?"
