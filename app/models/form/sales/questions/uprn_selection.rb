@@ -2,7 +2,7 @@ class Form::Sales::Questions::UprnSelection < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "uprn_selection"
-    @copy_key = "sales.property.uprn_selection"
+    @header = "We found some addresses that might be this property"
     @type = "radio"
     @disable_clearing_if_not_routed_or_dynamic_answer_options = true
   end
