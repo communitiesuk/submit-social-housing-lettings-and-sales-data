@@ -12,30 +12,12 @@ RSpec.describe Form::Lettings::Questions::Age, type: :model do
     expect(question.page).to eq(page)
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("Age")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("numeric")
   end
 
   it "is not marked as derived" do
     expect(question.derived?(nil)).to be false
-  end
-
-  context "when child" do
-    let(:person_type) { "child" }
-
-    it "has the correct hint" do
-      expect(question.hint_text).to eq("For a child under 1, enter 1")
-    end
-  end
-
-  context "when not child" do
-    it "has no hint" do
-      expect(question.hint_text).to be nil
-    end
   end
 
   it "has the correct min" do
@@ -53,10 +35,6 @@ RSpec.describe Form::Lettings::Questions::Age, type: :model do
   context "with person 2" do
     it "has the correct id" do
       expect(question.id).to eq("age2")
-    end
-
-    it "has the correct check_answer_label" do
-      expect(question.check_answer_label).to eq("Person 2’s age")
     end
 
     it "has the correct inferred check answers value" do
@@ -78,10 +56,6 @@ RSpec.describe Form::Lettings::Questions::Age, type: :model do
 
     it "has the correct id" do
       expect(question.id).to eq("age3")
-    end
-
-    it "has the correct check_answer_label" do
-      expect(question.check_answer_label).to eq("Person 3’s age")
     end
 
     it "has the correct inferred check answers value" do

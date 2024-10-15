@@ -14,8 +14,8 @@ RSpec.describe Form::Question, type: :model do
   let(:answer_options) { { "1" => { "value" => "Weekly" }, "2" => { "value" => "Monthly" } } }
   let(:inferred_check_answers_value) { [{ "condition" => { "postcode_known" => 0 }, "value" => "Weekly" }] }
 
-  let(:form) { instance_double(Form, depends_on_met:, conditional_question_conditions:) }
-  let(:subsection) { instance_double(Form::Subsection, form:) }
+  let(:form) { instance_double(Form, depends_on_met:, conditional_question_conditions:, type: "form-type", start_date: Time.utc(2024, 12, 25)) }
+  let(:subsection) { instance_double(Form::Subsection, form:, id: "subsection-id") }
   let(:page) { instance_double(Form::Page, subsection:, routed_to?: true, questions: form_questions) }
   let(:question_id) { "earnings" }
   let(:question_definition) do
@@ -36,6 +36,67 @@ RSpec.describe Form::Question, type: :model do
 
   it "has an id" do
     expect(question.id).to eq(question_id)
+  end
+
+  it "sets copy_key in the default style" do
+    expect(question.copy_key).to eq("#{form.type}.#{subsection.id}.#{question_id}")
+  end
+
+  context "when copy is not provided" do
+    let(:question_definition) do
+      {
+        "type" => type,
+        "min" => 0,
+        "step" => 1,
+        "answer_options" => answer_options,
+        "readonly" => readonly,
+        "result-field" => "tcharge",
+        "fields-to-add" => %w[brent scharge pscharge supcharg],
+        "inferred_check_answers_value" => inferred_check_answers_value,
+        "suffix" => suffix,
+        "prefix" => prefix,
+        "hidden_in_check_answers" => {},
+      }
+    end
+
+    context "and translations are present" do
+      before do
+        allow(I18n).to receive(:t).with("forms.#{form.start_date.year}.#{question.copy_key}.question_text", { default: "" }).and_return("header copy")
+        allow(I18n).to receive(:t).with("forms.#{form.start_date.year}.#{question.copy_key}.check_answer_label", { default: "" }).and_return("check answer label copy")
+        allow(I18n).to receive(:t).with("forms.#{form.start_date.year}.#{question.copy_key}.hint_text", { default: "" }).and_return("hint text copy")
+        allow(I18n).to receive(:exists?).and_return(true)
+      end
+
+      it "uses header from translations" do
+        expect(question.header).to eq("header copy")
+      end
+
+      it "uses check answer label from translations" do
+        expect(question.check_answer_label).to eq("check answer label copy")
+      end
+
+      it "uses hint text from translations" do
+        expect(question.hint_text).to eq("hint text copy")
+      end
+    end
+
+    context "and translations are not present" do
+      before do
+        allow(I18n).to receive(:exists?).and_return(false)
+      end
+
+      it "uses empty header" do
+        expect(question.header).to eq("")
+      end
+
+      it "uses empty check answer label" do
+        expect(question.check_answer_label).to eq("")
+      end
+
+      it "uses empty hint text" do
+        expect(question.hint_text).to eq("")
+      end
+    end
   end
 
   it "has a header" do
@@ -372,6 +433,96 @@ RSpec.describe Form::Question, type: :model do
 
       it "can work out if the question will be shown in check answers" do
         expect(question.hidden_in_check_answers?(lettings_log, nil)).to be(false)
+      end
+    end
+  end
+
+  describe "#error_display_label" do
+    let(:question_with_error_label_no_punctuation) { described_class.new("address_line1_input", { "header" => "address line 1", "error_label" => "address line 1" }, page) }
+    let(:question_with_error_label_with_full_stop) { described_class.new("address_line1_input", { "header" => "address line 1", "error_label" => "address line 1." }, page) }
+    let(:question_with_error_label_with_question_mark) { described_class.new("address_line1_input", { "header" => "address line 1", "error_label" => "address line 1?" }, page) }
+    let(:question_with_error_label_with_brackets) { described_class.new("address_line1_input", { "header" => "address line 1", "error_label" => "(address line 1)" }, page) }
+    let(:question_with_error_label_with_percentage) { described_class.new("address_line1_input", { "header" => "address line 1", "error_label" => "address line 1%" }, page) }
+
+    let(:question_with_check_answer_label_no_punctuation) { described_class.new("address_line1_input", { "header" => "address line 1", "check_answer_label" => "address line 1" }, page) }
+    let(:question_with_check_answer_label_with_full_stop) { described_class.new("address_line1_input", { "header" => "address line 1", "check_answer_label" => "address line 1." }, page) }
+    let(:question_with_check_answer_label_with_question_mark) { described_class.new("address_line1_input", { "header" => "address line 1", "check_answer_label" => "address line 1?" }, page) }
+    let(:question_with_check_answer_label_with_brackets) { described_class.new("address_line1_input", { "header" => "address line 1", "check_answer_label" => "(address line 1)" }, page) }
+    let(:question_with_check_answer_label_with_percentage) { described_class.new("address_line1_input", { "header" => "address line 1", "check_answer_label" => "address line 1%" }, page) }
+
+    let(:question_with_header_no_punctuation) { described_class.new("address_line1_input", { "header" => "address line 1" }, page) }
+    let(:question_with_header_with_full_stop) { described_class.new("address_line1_input", { "header" => "address line 1." }, page) }
+    let(:question_with_header_with_question_mark) { described_class.new("address_line1_input", { "header" => "address line 1?" }, page) }
+    let(:question_with_header_with_brackets) { described_class.new("address_line1_input", { "header" => "(address line 1)" }, page) }
+    let(:question_with_header_with_percentage) { described_class.new("address_line1_input", { "header" => "address line 1%" }, page) }
+
+    let(:question_with_id_only_no_punctuation) { described_class.new("address_line1_input", {}, page) }
+
+    context "when the error label should stay the same" do
+      it "returns the error label unchanged with full stop" do
+        expect(question_with_error_label_with_full_stop.error_display_label).to eq("address line 1.")
+      end
+
+      it "returns the error label unchanged with question mark" do
+        expect(question_with_error_label_with_question_mark.error_display_label).to eq("address line 1?")
+      end
+
+      it "returns the check answer label unchanged with full stop" do
+        expect(question_with_check_answer_label_with_full_stop.error_display_label).to eq("address line 1.")
+      end
+
+      it "returns the check answer label unchanged with question mark" do
+        expect(question_with_check_answer_label_with_question_mark.error_display_label).to eq("address line 1?")
+      end
+
+      it "returns the header unchanged with full stop" do
+        expect(question_with_header_with_full_stop.error_display_label).to eq("address line 1.")
+      end
+
+      it "returns the header unchanged with question mark" do
+        expect(question_with_header_with_question_mark.error_display_label).to eq("address line 1?")
+      end
+    end
+
+    context "when the error label should have a full stop added" do
+      it "returns the error label with no punctuation changed to with a full stop" do
+        expect(question_with_error_label_no_punctuation.error_display_label).to eq("address line 1.")
+      end
+
+      it "returns the error label with brackets changed to with a full stop" do
+        expect(question_with_error_label_with_brackets.error_display_label).to eq("(address line 1).")
+      end
+
+      it "returns the error label with percentage changed to with a full stop" do
+        expect(question_with_error_label_with_percentage.error_display_label).to eq("address line 1%.")
+      end
+
+      it "returns the check answer label with no punctuation changed with a full stop" do
+        expect(question_with_check_answer_label_no_punctuation.error_display_label).to eq("address line 1.")
+      end
+
+      it "returns the check answer label with brackets changed with a full stop" do
+        expect(question_with_check_answer_label_with_brackets.error_display_label).to eq("(address line 1).")
+      end
+
+      it "returns the check answer label with percentage changed with a full stop" do
+        expect(question_with_check_answer_label_with_percentage.error_display_label).to eq("address line 1%.")
+      end
+
+      it "returns the header with no punctuation changed with a full stop" do
+        expect(question_with_header_no_punctuation.error_display_label).to eq("address line 1.")
+      end
+
+      it "returns the header with brackets changed with a full stop" do
+        expect(question_with_header_with_brackets.error_display_label).to eq("(address line 1).")
+      end
+
+      it "returns the header with percentage changed with a full stop" do
+        expect(question_with_header_with_percentage.error_display_label).to eq("address line 1%.")
+      end
+
+      it "returns the id with no punctuation changed with a full stop" do
+        expect(question_with_id_only_no_punctuation.error_display_label).to eq("address line1 input.")
       end
     end
   end

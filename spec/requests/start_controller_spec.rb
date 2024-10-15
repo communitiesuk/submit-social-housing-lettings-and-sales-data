@@ -5,11 +5,14 @@ RSpec.describe StartController, type: :request do
   let(:page) { Capybara::Node::Simple.new(response.body) }
   let(:notify_client) { instance_double(Notifications::Client) }
   let(:devise_notify_mailer) { DeviseNotifyMailer.new }
+  let(:storage_service) { instance_double(Storage::S3Service, get_file_metadata: nil) }
 
   before do
     allow(DeviseNotifyMailer).to receive(:new).and_return(devise_notify_mailer)
     allow(devise_notify_mailer).to receive(:notify_client).and_return(notify_client)
     allow(notify_client).to receive(:send_email).and_return(true)
+    allow(Storage::S3Service).to receive(:new).and_return(storage_service)
+    allow(storage_service).to receive(:configuration).and_return(OpenStruct.new(bucket_name: "core-test-collection-resources"))
   end
 
   describe "GET" do
@@ -321,7 +324,7 @@ RSpec.describe StartController, type: :request do
 
       context "and 2023 collection window is open for editing" do
         before do
-          allow(Time).to receive(:now).and_return(Time.zone.local(2024, 1, 1))
+          allow(Time).to receive(:now).and_return(Time.zone.local(2024, 4, 1))
         end
 
         it "displays correct resources for 2023/24 and 2024/25 collection years" do
@@ -339,10 +342,10 @@ RSpec.describe StartController, type: :request do
 
       context "and 2023 collection window is closed for editing" do
         before do
-          allow(Time).to receive(:now).and_return(Time.zone.local(2025, 1, 1))
+          allow(Time).to receive(:now).and_return(Time.zone.local(2024, 12, 1))
         end
 
-        it "displays correct resources for 2023/24 and 2024/25 collection years" do
+        it "displays correct resources" do
           get root_path
           expect(page).to have_content("Lettings 24/25")
           expect(page).not_to have_content("Lettings 23/24")
@@ -363,6 +366,24 @@ RSpec.describe StartController, type: :request do
       it "displays About this service section" do
         get root_path
         expect(page).to have_content("About this service")
+      end
+
+      context "with support user" do
+        let(:user) { create(:user, :support) }
+
+        it "displays link to edit collection resources" do
+          get root_path
+
+          expect(page).to have_link("Manage collection resources", href: collection_resources_path)
+        end
+      end
+
+      context "with data coordinator" do
+        it "does not display the link to edit collection resources" do
+          get root_path
+
+          expect(page).not_to have_link("Manage collection resources", href: collection_resources_path)
+        end
       end
     end
   end

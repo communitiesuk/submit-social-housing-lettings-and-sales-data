@@ -111,45 +111,52 @@ RSpec.describe Organisation, type: :model do
     context "with associated rent periods" do
       let(:organisation) { create(:organisation) }
       let(:period_1_label) { "Every minute" }
+      let(:period_2_label) { "Every decade" }
+      let(:period_3_label) { "Every century" }
+      let(:period_4_label) { "Every millennium" }
       let(:fake_rent_periods) do
         {
           "1" => { "value" => period_1_label },
-          "2" => { "value" => "Every decade" },
+          "2" => { "value" => period_2_label },
+          "3" => { "value" => period_3_label },
+          "4" => { "value" => period_4_label },
         }
       end
 
       before do
-        create(:organisation_rent_period, organisation:, rent_period: 1)
+        [4, 2, 1].each do |rent_period|
+          create(:organisation_rent_period, organisation:, rent_period:)
+        end
         allow(RentPeriod).to receive(:rent_period_mappings).and_return(fake_rent_periods)
       end
 
       context "when the org does not use all rent periods" do
         it "#rent_periods returns the correct ids" do
-          expect(organisation.rent_periods).to eq [1]
+          expect(organisation.rent_periods).to match_array([4, 2, 1])
         end
 
-        it "#rent_period_labels returns the correct labels" do
-          expect(organisation.rent_period_labels).to eq [period_1_label]
+        it "#rent_period_labels returns the correct labels in order" do
+          expect(organisation.rent_period_labels).to eq [period_1_label, period_2_label, period_4_label]
         end
 
         context "and has organisation rent periods associated for rent periods that no longer appear in the form" do
           before do
-            create(:organisation_rent_period, organisation:, rent_period: 3)
+            create(:organisation_rent_period, organisation:, rent_period: 6)
           end
 
           it "#rent_period_labels returns the correct labels" do
-            expect(organisation.rent_period_labels).to eq [period_1_label]
+            expect(organisation.rent_period_labels).to eq [period_1_label, period_2_label, period_4_label]
           end
         end
       end
 
       context "when the org uses all rent periods" do
         before do
-          create(:organisation_rent_period, organisation:, rent_period: 2)
+          create(:organisation_rent_period, organisation:, rent_period: 3)
         end
 
         it "#rent_periods returns the correct ids" do
-          expect(organisation.rent_periods).to eq [1, 2]
+          expect(organisation.rent_periods).to match_array([4, 2, 1, 3])
         end
 
         it "#rent_period_labels returns All" do
@@ -158,7 +165,7 @@ RSpec.describe Organisation, type: :model do
 
         context "and has organisation rent periods associated for rent periods that no longer appear in the form" do
           before do
-            create(:organisation_rent_period, organisation:, rent_period: 3)
+            create(:organisation_rent_period, organisation:, rent_period: 6)
           end
 
           it "#rent_period_labels returns All" do

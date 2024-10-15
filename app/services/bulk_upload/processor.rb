@@ -1,6 +1,16 @@
 class BulkUpload::Processor
   attr_reader :bulk_upload
 
+  BLANK_TEMPLATE_ERRORS = [
+    I18n.t("activemodel.errors.models.bulk_upload/lettings/validator.attributes.base.blank_file"),
+    I18n.t("activemodel.errors.models.bulk_upload/sales/validator.attributes.base.blank_file"),
+  ].freeze
+
+  WRONG_TEMPLATE_ERRORS = [
+    *I18n.t("activemodel.errors.models.bulk_upload/lettings/validator.attributes.base", default: {}).values,
+    *I18n.t("activemodel.errors.models.bulk_upload/sales/validator.attributes.base", default: {}).values,
+  ].freeze
+
   def initialize(bulk_upload:)
     @bulk_upload = bulk_upload
   end
@@ -11,7 +21,7 @@ class BulkUpload::Processor
     download
 
     @bulk_upload.update!(total_logs_count: validator.total_logs_count)
-    return send_failure_mail(errors: validator.errors.full_messages) if validator.invalid?
+    return handle_invalid_validator if validator.invalid?
 
     validator.call
 
@@ -37,6 +47,7 @@ class BulkUpload::Processor
     send_failure_mail
   ensure
     downloader.delete_local_file!
+    bulk_upload.update!(processing: false)
   end
 
   def approve
@@ -143,5 +154,15 @@ private
     else
       raise "Validator not found for #{bulk_upload.log_type}"
     end
+  end
+
+  def handle_invalid_validator
+    if BLANK_TEMPLATE_ERRORS.any? { |error| validator.errors.full_messages.include?(error) }
+      @bulk_upload.update!(failure_reason: "blank_template")
+    elsif WRONG_TEMPLATE_ERRORS.any? { |error| validator.errors.full_messages.include?(error) }
+      @bulk_upload.update!(failure_reason: "wrong_template")
+    end
+
+    send_failure_mail(errors: validator.errors.full_messages)
   end
 end

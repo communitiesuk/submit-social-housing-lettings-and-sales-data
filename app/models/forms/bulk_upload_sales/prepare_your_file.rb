@@ -31,29 +31,12 @@ module Forms
         bulk_upload_sales_log_path(id: "upload-your-file", form: { year:, organisation_id: }.compact)
       end
 
-      def legacy_template_path
-        case year
-        when 2023
-          "/files/bulk-upload-sales-legacy-template-2023-24.xlsx"
-        end
-      end
-
       def template_path
-        case year
-        when 2023
-          "/files/bulk-upload-sales-template-2023-24.xlsx"
-        when 2024
-          "/files/bulk-upload-sales-template-2024-25.xlsx"
-        end
+        download_mandatory_collection_resource_path(year:, log_type: "sales", resource_type: "bulk_upload_template")
       end
 
       def specification_path
-        case year
-        when 2023
-          "/files/bulk-upload-sales-specification-2023-24.xlsx"
-        when 2024
-          "/files/bulk-upload-sales-specification-2024-25.xlsx"
-        end
+        download_mandatory_collection_resource_path(year:, log_type: "sales", resource_type: "bulk_upload_specification")
       end
 
       def year_combo

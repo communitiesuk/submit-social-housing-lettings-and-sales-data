@@ -23,14 +23,6 @@ RSpec.describe Form::Lettings::Questions::EthnicWhite, type: :model do
     expect(question.id).to eq("ethnic")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("Which of the following best describes the lead tenant’s White background?")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Lead tenant’s ethnic background")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("radio")
   end
@@ -48,10 +40,6 @@ RSpec.describe Form::Lettings::Questions::EthnicWhite, type: :model do
         "3" => { "value" => "Any other White background" },
       })
     end
-
-    it "has the correct hint_text" do
-      expect(question.hint_text).to eq("The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest.")
-    end
   end
 
   context "with 2024/25 form" do
@@ -67,10 +55,6 @@ RSpec.describe Form::Lettings::Questions::EthnicWhite, type: :model do
         "20" => { "value" => "Roma" },
         "3" => { "value" => "Any other White background" },
       })
-    end
-
-    it "has the correct hint_text" do
-      expect(question.hint_text).to eq("")
     end
   end
 

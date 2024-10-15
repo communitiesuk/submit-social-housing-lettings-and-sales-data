@@ -1,30 +1,13 @@
 require "rails_helper"
 
 RSpec.describe Form::Sales::Pages::SharedOwnershipType, type: :model do
+  include CollectionTimeHelper
+
   subject(:page) { described_class.new(page_id, page_definition, subsection) }
 
   let(:page_id) { nil }
   let(:page_definition) { nil }
-  let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date:, start_year_after_2024?: false)) }
-  let(:start_date) { Time.utc(2022, 4, 1) }
-
-  describe "headers" do
-    context "when form is after the year 2023/24" do
-      let(:start_date) { Time.zone.local(2023, 4, 8) }
-
-      it "has the correct header" do
-        expect(page.header).to eq("Type of shared ownership sale")
-      end
-    end
-
-    context "when form is before the year 2023/24" do
-      let(:start_date) { Time.zone.local(2022, 2, 8) }
-
-      it "has the correct header" do
-        expect(page.header).to eq(nil)
-      end
-    end
-  end
+  let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date: current_collection_start_date, start_year_after_2024?: true)) }
 
   it "has correct subsection" do
     expect(page.subsection).to eq(subsection)

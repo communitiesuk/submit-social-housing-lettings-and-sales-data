@@ -32,29 +32,12 @@ module Forms
         bulk_upload_lettings_log_path(id: "upload-your-file", form: { year:, needstype:, organisation_id: }.compact)
       end
 
-      def legacy_template_path
-        case year
-        when 2023
-          "/files/bulk-upload-lettings-legacy-template-2023-24.xlsx"
-        end
-      end
-
       def template_path
-        case year
-        when 2023
-          "/files/bulk-upload-lettings-template-2023-24.xlsx"
-        when 2024
-          "/files/bulk-upload-lettings-template-2024-25.xlsx"
-        end
+        download_mandatory_collection_resource_path(year:, log_type: "lettings", resource_type: "bulk_upload_template")
       end
 
       def specification_path
-        case year
-        when 2023
-          "/files/bulk-upload-lettings-specification-2023-24.xlsx"
-        when 2024
-          "/files/bulk-upload-lettings-specification-2024-25.xlsx"
-        end
+        download_mandatory_collection_resource_path(year:, log_type: "lettings", resource_type: "bulk_upload_specification")
       end
 
       def year_combo

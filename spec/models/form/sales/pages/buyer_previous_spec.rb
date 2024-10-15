@@ -24,10 +24,6 @@ RSpec.describe Form::Sales::Pages::BuyerPrevious, type: :model do
     expect(page.id).to eq("example")
   end
 
-  it "has the correct header" do
-    expect(page.header).to be_nil
-  end
-
   it "has the correct description" do
     expect(page.description).to be_nil
   end

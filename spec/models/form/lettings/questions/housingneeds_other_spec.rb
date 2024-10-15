@@ -23,14 +23,6 @@ RSpec.describe Form::Lettings::Questions::HousingneedsOther, type: :model do
     expect(question.id).to eq("housingneeds_other")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("Do they have any other disabled access needs?")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Other disabled access needs")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("radio")
   end

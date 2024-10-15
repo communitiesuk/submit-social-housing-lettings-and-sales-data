@@ -15,14 +15,6 @@ RSpec.describe Form::Sales::Questions::HouseholdWheelchair, type: :model do
     expect(question.id).to eq("wheel")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("Does anyone in the household use a wheelchair?")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to be_nil
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("radio")
   end
@@ -41,9 +33,5 @@ RSpec.describe Form::Sales::Questions::HouseholdWheelchair, type: :model do
 
   it "has correct conditional for" do
     expect(question.conditional_for).to be_nil
-  end
-
-  it "has the correct hint" do
-    expect(question.hint_text).to eq("This can be inside or outside the home")
   end
 end

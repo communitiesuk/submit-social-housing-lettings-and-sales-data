@@ -15,24 +15,12 @@ RSpec.describe Form::Sales::Questions::Buyer1IncomeValueCheck, type: :model do
     expect(question.id).to eq("income1_value_check")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("Are you sure this is correct?")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Buyer 1 income confirmation")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("interruption_screen")
   end
 
   it "is not marked as derived" do
     expect(question.derived?(nil)).to be false
-  end
-
-  it "has the correct hint" do
-    expect(question.hint_text).to be_nil
   end
 
   it "has a correct check_answers_card_number" do

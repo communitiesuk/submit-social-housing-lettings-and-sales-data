@@ -20,7 +20,11 @@ class AddressClient
   end
 
   def result
-    @result ||= JSON.parse(response.body)["results"]&.map { |address| address["DPA"] }
+    if response.is_a?(Net::HTTPSuccess)
+      @result ||= JSON.parse(response.body)["results"]&.map { |address| address["DPA"] }
+    else
+      @result = nil
+    end
   end
 
 private

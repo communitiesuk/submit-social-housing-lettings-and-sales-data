@@ -37,13 +37,23 @@ RSpec.describe CreateLogActionsComponent, type: :component do
         expect(component.create_button_href).to eq("/lettings-logs")
       end
 
-      it "returns upload button copy" do
-        expect(component.upload_button_copy).to eq("Upload lettings logs in bulk")
+      it "does not show the upload button" do
+        render_inline(component)
+        expect(rendered_content).not_to have_link("Upload lettings logs in bulk", href: "/lettings-logs/bulk-upload-logs/start")
       end
 
-      it "returns upload button href" do
+      it "returns view uploads button copy" do
+        expect(component.view_uploads_button_copy).to eq("View lettings bulk uploads")
+      end
+
+      it "returns view uploads button href" do
         render
-        expect(component.upload_button_href).to eq("/lettings-logs/bulk-upload-logs/start")
+        expect(component.view_uploads_button_href).to eq("/lettings-logs/bulk-uploads")
+      end
+
+      it "shows the view uploads button" do
+        render_inline(component)
+        expect(rendered_content).to have_link("View lettings bulk uploads", href: "/lettings-logs/bulk-uploads")
       end
 
       context "when sales log type" do
@@ -60,6 +70,16 @@ RSpec.describe CreateLogActionsComponent, type: :component do
         it "returns create button href" do
           render
           expect(component.create_button_href).to eq("/sales-logs")
+        end
+
+        it "does not show the upload button" do
+          render_inline(component)
+          expect(rendered_content).not_to have_link("Upload sales logs in bulk", href: "/sales-logs/bulk-upload-logs/start")
+        end
+
+        it "shows the view uploads button" do
+          render_inline(component)
+          expect(rendered_content).to have_link("View sales bulk uploads", href: "/sales-logs/bulk-uploads")
         end
       end
     end

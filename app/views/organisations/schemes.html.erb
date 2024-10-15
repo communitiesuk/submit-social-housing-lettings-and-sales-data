@@ -11,6 +11,16 @@
   ) %>
   <h2 class="govuk-visually-hidden">Supported housing schemes</h2>
 <% end %>
+
+<% if display_duplicate_schemes_banner?(@organisation, current_user) %>
+  <%= govuk_notification_banner(title_text: "Important") do %>
+    <p class="govuk-notification-banner__heading govuk-!-width-full" style="max-width: fit-content">
+      Some schemes and locations might be duplicates.
+    <p>
+    <%= govuk_link_to "Review possible duplicates", href: schemes_duplicates_organisation_path(@organisation) %>
+  <% end %>
+<% end %>
+
 <div class="app-filter-layout" data-controller="filter-layout">
   <% if SchemePolicy.new(current_user, nil).create? %>
     <%= govuk_button_link_to "Create a new supported housing scheme", new_scheme_path, html: { method: :post } %>

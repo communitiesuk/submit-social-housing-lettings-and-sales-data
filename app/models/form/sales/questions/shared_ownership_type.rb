@@ -2,20 +2,11 @@ class Form::Sales::Questions::SharedOwnershipType < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "type"
-    @check_answer_label = "Type of shared ownership sale"
-    @header = "What is the type of shared ownership sale?"
+    @copy_key = "sales.setup.type.shared_ownership"
     @top_guidance_partial = guidance_partial
     @type = "radio"
     @answer_options = answer_options
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
-  end
-
-  def hint_text
-    if form.start_year_after_2024?
-      "When the purchaser buys an initial share of up to 75% of the property value and pays rent to the Private Registered Provider (PRP) on the remaining portion, or a subsequent staircasing transaction"
-    else
-      "A shared ownership sale is when the purchaser buys up to 75% of the property value and pays rent to the Private Registered Provider (PRP) on the remaining portion"
-    end
   end
 
   def answer_options

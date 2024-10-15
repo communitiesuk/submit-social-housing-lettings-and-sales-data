@@ -10,11 +10,14 @@ RSpec.describe UsersController, type: :request do
   let(:params) { { id: user.id, user: { name: new_name } } }
   let(:notify_client) { instance_double(Notifications::Client) }
   let(:devise_notify_mailer) { DeviseNotifyMailer.new }
+  let(:storage_service) { instance_double(Storage::S3Service, get_file_metadata: nil) }
 
   before do
     allow(DeviseNotifyMailer).to receive(:new).and_return(devise_notify_mailer)
     allow(devise_notify_mailer).to receive(:notify_client).and_return(notify_client)
     allow(notify_client).to receive(:send_email).and_return(true)
+    allow(Storage::S3Service).to receive(:new).and_return(storage_service)
+    allow(storage_service).to receive(:configuration).and_return(OpenStruct.new(bucket_name: "core-test-collection-resources"))
   end
 
   context "when user is not signed in" do
@@ -1783,18 +1786,18 @@ RSpec.describe UsersController, type: :request do
           end
 
           it "shows flash notice" do
-            patch("/users/#{other_user.id}", headers:, params:)
+            request
 
-            expect(flash[:notice]).to eq("An email has been sent to #{new_email} to confirm this change.")
+            expect(flash[:notice]).to eq("Your account details have been updated.")
           end
 
           it "sends new flow emails" do
             expect(notify_client).to receive(:send_email).with(
-              email_address: other_user.email,
+              email_address: user.email,
               template_id: User::FOR_OLD_EMAIL_CHANGED_BY_OTHER_USER_TEMPLATE_ID,
               personalisation: {
                 new_email:,
-                old_email: other_user.email,
+                old_email: user.email,
               },
             ).once
 
@@ -1803,14 +1806,14 @@ RSpec.describe UsersController, type: :request do
               template_id: User::FOR_NEW_EMAIL_CHANGED_BY_OTHER_USER_TEMPLATE_ID,
               personalisation: {
                 new_email:,
-                old_email: other_user.email,
+                old_email: user.email,
                 link: include("/account/confirmation?confirmation_token="),
               },
             ).once
 
             expect(notify_client).not_to receive(:send_email)
 
-            patch "/users/#{other_user.id}", headers:, params:
+            request
           end
 
           context "when user has never confirmed email address" do
@@ -1823,9 +1826,9 @@ RSpec.describe UsersController, type: :request do
             end
 
             it "shows flash notice" do
-              patch("/users/#{other_user.id}", headers:, params:)
+              request
 
-              expect(flash[:notice]).to eq("An email has been sent to #{new_email} to confirm this change.")
+              expect(flash[:notice]).to eq("Your account details have been updated.")
             end
 
             it "sends new flow emails" do
@@ -1855,14 +1858,38 @@ RSpec.describe UsersController, type: :request do
             end
           end
 
-          context "and email address hasn't changed" do
-            let(:params) { { id: user.id, user: { name: new_name, email: other_user.email, is_dpo: "true", is_key_contact: "true" } } }
+          context "and no fields have changed" do
+            let(:params) { { id: user.id, user: { name: user.name, email: user.email, is_dpo: user.is_dpo, is_key_contact: user.is_key_contact } } }
 
             before do
               user.legacy_users.destroy_all
             end
 
-            it "shows flash notice" do
+            it "does not show flash notice" do
+              request
+
+              expect(flash[:notice]).to be_nil
+            end
+          end
+        end
+
+        context "when user changes phone number", :aggregate_failures do
+          let(:params) { { id: user.id, user: { phone: "123123123123" } } }
+
+          it "shows flash notice" do
+            request
+
+            expect(flash[:notice]).to eq("Your account details have been updated.")
+          end
+
+          context "and phone numbr hasn't changed" do
+            let(:params) { { id: user.id, user: { phone: other_user.phone } } }
+
+            before do
+              user.legacy_users.destroy_all
+            end
+
+            it "does not show flash notice" do
               patch("/users/#{other_user.id}", headers:, params:)
 
               expect(flash[:notice]).to be_nil
@@ -2027,7 +2054,7 @@ RSpec.describe UsersController, type: :request do
             it "shows flash notice" do
               patch("/users/#{other_user.id}", headers:, params:)
 
-              expect(flash[:notice]).to eq("An email has been sent to #{new_email} to confirm this change.")
+              expect(flash[:notice]).to eq("new name’s details have been updated.")
             end
 
             it "sends new flow emails" do

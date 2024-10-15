@@ -37,6 +37,7 @@ en:
     updated: "Organisation details updated."
     reactivated: "%{organisation} has been reactivated."
     deactivated: "%{organisation} has been deactivated."
+    duplicate_schemes_confirmed: "You’ve confirmed the remaining schemes and locations are not duplicates."
   user:
     create_password: "Create a password to finish setting up your account."
     reset_password: "Reset your password."
@@ -116,6 +117,14 @@ en:
           attributes:
             confirm_soft_errors:
               blank: "You must select if there are errors in these fields."
+        collection_resource:
+          attributes:
+            file:
+              error_uploading: There was an error uploading this file.
+              blank: Select which file to upload.
+              above_100_mb: The file is above 100MB.
+              must_be_pdf: The paper form must be a PDF.
+              must_be_xlsx: The %{resource} must be a Microsoft Excel file.
 
   activerecord:
     attributes:
@@ -198,7 +207,14 @@ en:
               blank_when_additional_page_set: "Enter the link text."
             page_content:
               blank_when_additional_page_set: "Enter the page content."
-
+        collection_resource:
+          attributes:
+            file:
+              error_uploading: There was an error uploading this file.
+              blank: Select which file to upload.
+              above_100_mb: The file is above 100MB.
+              must_be_pdf: The paper form must be a PDF.
+              must_be_xlsx: The %{resource} must be a Microsoft Excel file.
   notification:
     logs_deleted:
       one: "%{count} log has been deleted."
@@ -215,6 +231,9 @@ en:
     scheme_deleted: "%{service_name} has been deleted."
     user_deleted: "%{name} has been deleted."
     organisation_deleted: "%{name} has been deleted."
+    user_updated: 
+      self: "Your account details have been updated."
+      other: "%{name}’s details have been updated."
 
   validations:
     organisation:
@@ -229,6 +248,7 @@ en:
         blank: "You must choose a managing agent."
         already_added: "You have already added this managing agent."
       merged: "That organisation has already been merged. Select a different organisation."
+      scheme_duplicates_not_resolved: "You must resolve all duplicates or indicate that there are no duplicates"
     not_answered: "You must answer %{question}"
     invalid_option: "Enter a valid value for %{question}"
     invalid_number: "Enter a number for %{question}"
@@ -373,6 +393,7 @@ en:
       tshortfall:
         outstanding_amount_not_expected: "You cannot answer the outstanding amount question if you don’t have outstanding rent or charges."
         more_than_total_charge: "Enter a value less than the total charge."
+        more_than_carehome_charge: "Enter a value less than the care home charge."
         must_be_positive: "Enter a value over £0.01 as you told us there is an outstanding amount."
       hbrentshortfall:
         outstanding_amount_not_expected: "Answer must be ‘yes’ as you have answered the outstanding amount question."
@@ -434,7 +455,7 @@ en:
           above_hard_max: "Rent is higher than the absolute maximum expected for a property of this type based on this period."
       charges:
         complete_1_of_3: "Answer either the ‘household rent and charges’ question or ‘is this accommodation a care home‘, or select ‘no’ for ‘does the household pay rent or charges for the accommodation?’"
-        missing_charges: "Please enter the %{question}. If there is no %{question}, please enter '0'."
+        missing_charges: "Please enter the %{sentence_fragment}. If there is no %{sentence_fragment}, please enter '0'."
       tcharge:
         under_10: "Enter a total charge that is at least £10.00 per week."
         less_than_shortfall: "The total charge must be more than the outstanding amount."
@@ -445,6 +466,7 @@ en:
       carehome:
         out_of_range: "Household rent and other charges must be between %{min_chcharge} and %{max_chcharge} if paying %{period}."
         not_provided: "Enter how much rent and other charges the household pays %{period}."
+        less_than_shortfall: "The care home charge must be more than the outstanding amount."
       cash_discount_invalid: "Cash discount must be £0 - £999,999."
       staircasing:
         percentage_bought_must_be_greater_than_percentage_owned: "Total percentage %{buyer_now_owns} must be more than percentage bought in this transaction."
@@ -805,8 +827,6 @@ Make sure these answers are correct."
       title: "You told us there are more than 1 persons with 'Partner' relationship to buyer 1."
 
   devise:
-    email:
-      updated: "An email has been sent to %{email} to confirm this change."
     two_factor_authentication:
       success: "Two-factor authentication successful."
       attempt_failed: "Attempt failed."
