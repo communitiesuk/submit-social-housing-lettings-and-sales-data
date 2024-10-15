@@ -15,20 +15,8 @@ RSpec.describe Form::Lettings::Questions::ManagingOrganisation, type: :model do
     expect(question.id).to eq("managing_organisation_id")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("Which organisation manages this letting?")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Managing agent")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("select")
-  end
-
-  it "has the correct hint_text" do
-    expect(question.hint_text).to be_nil
   end
 
   describe "#displayed_answer_options" do

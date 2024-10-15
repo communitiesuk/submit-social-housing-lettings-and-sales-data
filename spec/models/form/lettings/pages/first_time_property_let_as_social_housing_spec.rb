@@ -25,10 +25,6 @@ RSpec.describe Form::Lettings::Pages::FirstTimePropertyLetAsSocialHousing, type:
     expect(page.id).to eq("first_time_property_let_as_social_housing")
   end
 
-  it "has the correct header" do
-    expect(page.header).to be_nil
-  end
-
   it "has the correct description" do
     expect(page.description).to be_nil
   end

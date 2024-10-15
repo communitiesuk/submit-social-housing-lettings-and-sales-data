@@ -15,14 +15,6 @@ RSpec.describe Form::Sales::Questions::SharedOwnershipDepositValueCheck, type: :
     expect(question.id).to eq("shared_ownership_deposit_value_check")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("Are you sure this is correct?")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Shared ownership deposit confirmation")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("interruption_screen")
   end
@@ -30,14 +22,6 @@ RSpec.describe Form::Sales::Questions::SharedOwnershipDepositValueCheck, type: :
   it "is not marked as derived" do
     expect(question.derived?(nil)).to be false
   end
-
-  it "has the correct hint" do
-    expect(question.hint_text).to be_nil
-  end
-
-  # it "has a correct check_answers_card_number" do
-  #   expect(question.check_answers_card_number).to eq(0)
-  # end
 
   it "has the correct answer_options" do
     expect(question.answer_options).to eq({

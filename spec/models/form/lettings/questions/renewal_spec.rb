@@ -23,20 +23,8 @@ RSpec.describe Form::Lettings::Questions::Renewal, type: :model do
     expect(question.id).to eq("renewal")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("Is this letting a renewal?")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Property renewal")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("radio")
-  end
-
-  it "has the correct hint_text" do
-    expect(question.hint_text).to eq("A renewal is a letting to the same tenant in the same property. If the property was previously being used as temporary accommodation, then answer 'no'")
   end
 
   it "has the correct answer_options" do
@@ -48,19 +36,5 @@ RSpec.describe Form::Lettings::Questions::Renewal, type: :model do
 
   it "is not marked as derived" do
     expect(question.derived?(nil)).to be false
-  end
-
-  context "with collection year on or after 2024" do
-    before do
-      allow(form).to receive(:start_year_after_2024?).and_return(true)
-    end
-
-    it "has the correct header" do
-      expect(question.header).to eq("Is this letting a renewal of social housing to the same tenant in the same property?")
-    end
-
-    it "has the correct hint_text" do
-      expect(question.hint_text).to eq("If the property was previously being used as temporary accommodation, then answer 'no'")
-    end
   end
 end

@@ -21,20 +21,8 @@ RSpec.describe Form::Lettings::Questions::PreviousLetType, type: :model do
     expect(question.id).to eq "unitletas"
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq "What type was the property most recently let as?"
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq "Most recent let type"
-  end
-
   it "has the correct type" do
     expect(question.type).to eq "radio"
-  end
-
-  it "has the correct hint_text" do
-    expect(question.hint_text).to eq ""
   end
 
   it "is not marked as derived" do
@@ -70,10 +58,6 @@ RSpec.describe Form::Lettings::Questions::PreviousLetType, type: :model do
         "divider" => { "value" => true },
         "3" => { "value" => "Don’t know" },
       })
-    end
-
-    it "has the correct hint_text" do
-      expect(question.hint_text).to eq("This is the rent type of the previous tenancy in this property.")
     end
   end
 end

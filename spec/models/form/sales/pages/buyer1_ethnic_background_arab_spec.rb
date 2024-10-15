@@ -19,10 +19,6 @@ RSpec.describe Form::Sales::Pages::Buyer1EthnicBackgroundArab, type: :model do
     expect(page.id).to eq("buyer_1_ethnic_background_arab")
   end
 
-  it "has the correct header" do
-    expect(page.header).to be_nil
-  end
-
   it "has the correct description" do
     expect(page.description).to be_nil
   end

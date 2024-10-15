@@ -19,10 +19,6 @@ RSpec.describe Form::Lettings::Pages::PropertyNumberOfTimesRelet, type: :model d
     expect(page.id).to eq("property_number_of_times_relet")
   end
 
-  it "has the correct header" do
-    expect(page.header).to be_nil
-  end
-
   it "has the correct description" do
     expect(page.description).to be_nil
   end

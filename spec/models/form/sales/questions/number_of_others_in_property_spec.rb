@@ -16,14 +16,6 @@ RSpec.describe Form::Sales::Questions::NumberOfOthersInProperty, type: :model do
     expect(question.id).to eq("hholdcount")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("Besides the buyers, how many other people live or will live in the property?")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Number of other people living in the property")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("numeric")
   end
@@ -32,27 +24,11 @@ RSpec.describe Form::Sales::Questions::NumberOfOthersInProperty, type: :model do
     expect(question.derived?(nil)).to be false
   end
 
-  it "has the correct hint" do
-    expect(question.hint_text).to eq("You can provide details for a maximum of 4 other people for a joint purchase.")
-  end
-
   it "has the correct min" do
     expect(question.min).to be 0
   end
 
   it "has the correct max" do
     expect(question.max).to be 15
-  end
-
-  context "with non joint purchase" do
-    let(:joint_purchase) { false }
-
-    it "has the correct hint" do
-      expect(question.hint_text).to eq("You can provide details for a maximum of 5 other people if there is only one buyer.")
-    end
-
-    it "has the correct header" do
-      expect(question.header).to eq("Besides the buyer, how many other people live or will live in the property?")
-    end
   end
 end

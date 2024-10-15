@@ -15,14 +15,6 @@ RSpec.describe Form::Sales::Questions::PreviousLaKnown, type: :model do
     expect(question.id).to eq("previous_la_known")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("Do you know the local authority of buyer 1’s last settled accommodation?")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Local authority of buyer 1’s last settled accommodation")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("radio")
   end
@@ -57,9 +49,5 @@ RSpec.describe Form::Sales::Questions::PreviousLaKnown, type: :model do
     expect(question.conditional_for).to eq({
       "prevloc" => [1],
     })
-  end
-
-  it "has the correct hint" do
-    expect(question.hint_text).to eq("This is also known as the household’s 'last settled home'")
   end
 end

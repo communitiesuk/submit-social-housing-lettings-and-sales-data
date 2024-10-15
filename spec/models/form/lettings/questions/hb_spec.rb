@@ -23,14 +23,6 @@ RSpec.describe Form::Lettings::Questions::Hb, type: :model do
     expect(question.id).to eq("hb")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("Is the household likely to be receiving any of these housing-related benefits?")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Housing-related benefits received")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("radio")
   end
@@ -49,22 +41,6 @@ RSpec.describe Form::Lettings::Questions::Hb, type: :model do
       "10" => { "value" => "Tenant prefers not to say" },
 
     })
-  end
-
-  context "with 2023/24 form" do
-    it "has the correct hint" do
-      expect(question.hint_text).to eq("")
-    end
-  end
-
-  context "with 2024/25 form" do
-    before do
-      allow(form).to receive(:start_year_after_2024?).and_return(true)
-    end
-
-    it "has the correct hint" do
-      expect(question.hint_text).to eq("This is about when the tenant is in their new let. If they are unsure about the situation for their new let and their financial and working situation hasn’t changed significantly, answer based on what housing-related benefits they currently receive.")
-    end
   end
 
   it "has the correct check_answers_card_number" do

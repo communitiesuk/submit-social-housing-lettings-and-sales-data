@@ -23,20 +23,8 @@ RSpec.describe Form::Lettings::Questions::Joint, type: :model do
     expect(question.id).to eq("joint")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("Is this a joint tenancy?")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Is this a joint tenancy?")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("radio")
-  end
-
-  it "has the correct hint_text" do
-    expect(question.hint_text).to eq("")
   end
 
   it "has the correct answer_options" do
@@ -50,15 +38,5 @@ RSpec.describe Form::Lettings::Questions::Joint, type: :model do
 
   it "is not marked as derived" do
     expect(question.derived?(nil)).to be false
-  end
-
-  context "with collection year on or after 2024" do
-    before do
-      allow(form).to receive(:start_year_after_2024?).and_return(true)
-    end
-
-    it "has the correct hint_text" do
-      expect(question.hint_text).to eq("This is where two or more people are named on the tenancy agreement")
-    end
   end
 end

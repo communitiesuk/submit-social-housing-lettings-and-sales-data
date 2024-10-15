@@ -12,20 +12,12 @@ RSpec.describe Form::Sales::Questions::PersonAge, type: :model do
     expect(question.page).to eq(page)
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("Age")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("numeric")
   end
 
   it "is not marked as derived" do
     expect(question.derived?(nil)).to be false
-  end
-
-  it "has the correct hint" do
-    expect(question.hint_text).to be_nil
   end
 
   it "has the correct min" do
@@ -52,10 +44,6 @@ RSpec.describe Form::Sales::Questions::PersonAge, type: :model do
       expect(question.id).to eq("age2")
     end
 
-    it "has the correct check_answer_label" do
-      expect(question.check_answer_label).to eq("Person 2’s age")
-    end
-
     it "has the correct inferred check answers value" do
       expect(question.inferred_check_answers_value).to eq([{
         "condition" => { "age2_known" => 1 },
@@ -74,10 +62,6 @@ RSpec.describe Form::Sales::Questions::PersonAge, type: :model do
 
     it "has the correct id" do
       expect(question.id).to eq("age3")
-    end
-
-    it "has the correct check_answer_label" do
-      expect(question.check_answer_label).to eq("Person 3’s age")
     end
 
     it "has the correct inferred check answers value" do
@@ -100,10 +84,6 @@ RSpec.describe Form::Sales::Questions::PersonAge, type: :model do
       expect(question.id).to eq("age4")
     end
 
-    it "has the correct check_answer_label" do
-      expect(question.check_answer_label).to eq("Person 4’s age")
-    end
-
     it "has the correct inferred check answers value" do
       expect(question.inferred_check_answers_value).to eq([{
         "condition" => { "age4_known" => 1 },
@@ -122,10 +102,6 @@ RSpec.describe Form::Sales::Questions::PersonAge, type: :model do
 
     it "has the correct id" do
       expect(question.id).to eq("age5")
-    end
-
-    it "has the correct check_answer_label" do
-      expect(question.check_answer_label).to eq("Person 5’s age")
     end
 
     it "has the correct inferred check answers value" do

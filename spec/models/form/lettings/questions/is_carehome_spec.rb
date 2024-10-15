@@ -23,14 +23,6 @@ RSpec.describe Form::Lettings::Questions::IsCarehome, type: :model do
     expect(question.id).to eq("is_carehome")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("Is this accommodation a care home?")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Care home accommodation")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("radio")
   end

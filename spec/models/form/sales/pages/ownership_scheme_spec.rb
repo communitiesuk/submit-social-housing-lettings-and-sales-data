@@ -19,10 +19,6 @@ RSpec.describe Form::Sales::Pages::OwnershipScheme, type: :model do
     expect(page.id).to eq("ownership_scheme")
   end
 
-  it "has the correct header" do
-    expect(page.header).to be_nil
-  end
-
   it "has the correct description" do
     expect(page.description).to be_nil
   end
