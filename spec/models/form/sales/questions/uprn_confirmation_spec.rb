@@ -5,7 +5,7 @@ RSpec.describe Form::Sales::Questions::UprnConfirmation, type: :model do
 
   let(:question_id) { nil }
   let(:question_definition) { nil }
-  let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2023, 4, 1)))) }
+  let(:page) { instance_double(Form::Page) }
 
   it "has correct page" do
     expect(question.page).to eq(page)
