@@ -15,26 +15,12 @@ RSpec.describe Form::Sales::Questions::PurchasePrice, type: :model do
     expect(question.id).to eq("value")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("What is the full purchase price?")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Purchase price")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("numeric")
   end
 
   it "is not marked as derived" do
     expect(question.derived?(nil)).to be false
-  end
-
-  it "has the correct hint" do
-    expect(question.hint_text).to eq(
-      "For all schemes, including Right to Acquire (RTA), Right to Buy (RTB), Voluntary Right to Buy (VRTB) or Preserved Right to Buy (PRTB) sales, enter the full price of the property without any discount",
-    )
   end
 
   it "has the correct question_number" do
@@ -44,12 +30,6 @@ RSpec.describe Form::Sales::Questions::PurchasePrice, type: :model do
   context "when discounted ownership scheme" do
     subject(:question) { described_class.new(question_id, question_definition, page, ownershipsch: 2) }
 
-    it "has the correct hint" do
-      expect(question.hint_text).to eq(
-        "For all schemes, including Right to Acquire (RTA), Right to Buy (RTB), Voluntary Right to Buy (VRTB) or Preserved Right to Buy (PRTB) sales, enter the full price of the property without any discount",
-      )
-    end
-
     it "has the correct question_number" do
       expect(question.question_number).to eq(100)
     end
@@ -57,10 +37,6 @@ RSpec.describe Form::Sales::Questions::PurchasePrice, type: :model do
 
   context "when outright sale" do
     subject(:question) { described_class.new(question_id, question_definition, page, ownershipsch: 3) }
-
-    it "has the correct hint" do
-      expect(question.hint_text).to be_nil
-    end
 
     it "has the correct question_number" do
       expect(question.question_number).to eq(110)

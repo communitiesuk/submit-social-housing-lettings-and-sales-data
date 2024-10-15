@@ -15,14 +15,6 @@ RSpec.describe Form::Sales::Questions::Buyer1IncomeKnown, type: :model do
     expect(question.id).to eq("income1nk")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("Do you know buyer 1’s annual income?")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Buyer 1’s gross annual income known?")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("radio")
   end

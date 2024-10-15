@@ -1,9 +1,9 @@
 class Form::Question
   include FormattingHelper
 
-  attr_accessor :id, :header, :hint_text, :description, :questions, :disable_clearing_if_not_routed_or_dynamic_answer_options,
+  attr_accessor :id, :description, :questions, :disable_clearing_if_not_routed_or_dynamic_answer_options,
                 :type, :min, :max, :step, :width, :fields_to_add, :result_field,
-                :conditional_for, :readonly, :answer_options, :page, :check_answer_label,
+                :conditional_for, :readonly, :answer_options, :page,
                 :inferred_answers, :hidden_in_check_answers, :inferred_check_answers_value,
                 :top_guidance_partial, :bottom_guidance_partial, :prefix, :suffix,
                 :requires_js, :fields_added, :derived, :check_answers_card_number,
@@ -49,6 +49,22 @@ class Form::Question
 
   delegate :subsection, to: :page
   delegate :form, to: :subsection
+
+  def copy_key
+    @copy_key ||= "#{form.type}.#{subsection.id}.#{id}"
+  end
+
+  def check_answer_label
+    @check_answer_label ||= I18n.t("forms.#{form.start_date.year}.#{copy_key}.check_answer_label", default: "")
+  end
+
+  def header
+    @header ||= I18n.t("forms.#{form.start_date.year}.#{copy_key}.question_text", default: "")
+  end
+
+  def hint_text
+    @hint_text ||= I18n.t("forms.#{form.start_date.year}.#{copy_key}.hint_text", default: "")
+  end
 
   def answer_label(log, user = nil)
     return checkbox_answer_label(log) if type == "checkbox"
@@ -206,7 +222,15 @@ class Form::Question
   end
 
   def error_display_label
-    label = error_label || check_answer_label || header || id.humanize
+    label = if error_label.present?
+              error_label
+            elsif check_answer_label.present?
+              check_answer_label
+            elsif header.present?
+              header
+            else
+              id.humanize
+            end
     format_ending(label)
   end
 

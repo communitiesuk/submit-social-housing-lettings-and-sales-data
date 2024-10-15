@@ -19,10 +19,6 @@ RSpec.describe Form::Lettings::Pages::VoidDate, type: :model do
     expect(page.id).to eq("void_date")
   end
 
-  it "has the correct header" do
-    expect(page.header).to eq("Void date")
-  end
-
   it "has the correct description" do
     expect(page.description).to be_nil
   end

@@ -31,10 +31,6 @@ RSpec.describe Form::Sales::Questions::PersonKnown, type: :model do
     expect(question.conditional_for).to be_nil
   end
 
-  it "has the correct hint" do
-    expect(question.hint_text).to be_nil
-  end
-
   it "has the correct hidden_in_check_answers" do
     expect(question.hidden_in_check_answers).to be_nil
   end
@@ -45,14 +41,6 @@ RSpec.describe Form::Sales::Questions::PersonKnown, type: :model do
 
     it "has the correct id" do
       expect(question.id).to eq("details_known_2")
-    end
-
-    it "has the correct header" do
-      expect(question.header).to eq("Do you know the details for person 2?")
-    end
-
-    it "has the correct check_answer_label" do
-      expect(question.check_answer_label).to eq("Details known for person 2?")
     end
 
     it "has the correct check_answers_card_number" do
@@ -68,14 +56,6 @@ RSpec.describe Form::Sales::Questions::PersonKnown, type: :model do
       expect(question.id).to eq("details_known_3")
     end
 
-    it "has the correct header" do
-      expect(question.header).to eq("Do you know the details for person 3?")
-    end
-
-    it "has the correct check_answer_label" do
-      expect(question.check_answer_label).to eq("Details known for person 3?")
-    end
-
     it "has the correct check_answers_card_number" do
       expect(question.check_answers_card_number).to eq(3)
     end
@@ -89,14 +69,6 @@ RSpec.describe Form::Sales::Questions::PersonKnown, type: :model do
       expect(question.id).to eq("details_known_4")
     end
 
-    it "has the correct header" do
-      expect(question.header).to eq("Do you know the details for person 4?")
-    end
-
-    it "has the correct check_answer_label" do
-      expect(question.check_answer_label).to eq("Details known for person 4?")
-    end
-
     it "has the correct check_answers_card_number" do
       expect(question.check_answers_card_number).to eq(4)
     end
@@ -108,14 +80,6 @@ RSpec.describe Form::Sales::Questions::PersonKnown, type: :model do
 
     it "has the correct id" do
       expect(question.id).to eq("details_known_5")
-    end
-
-    it "has the correct header" do
-      expect(question.header).to eq("Do you know the details for person 5?")
-    end
-
-    it "has the correct check_answer_label" do
-      expect(question.check_answer_label).to eq("Details known for person 5?")
     end
 
     it "has the correct check_answers_card_number" do

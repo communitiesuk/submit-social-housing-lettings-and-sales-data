@@ -19,10 +19,6 @@ RSpec.describe Form::Lettings::Pages::NetIncomeValueCheck, type: :model do
     expect(page.id).to eq("net_income_value_check")
   end
 
-  it "has the correct header" do
-    expect(page.header).to be_nil
-  end
-
   it "has correct depends_on" do
     expect(page.depends_on).to eq([{ "net_income_soft_validation_triggered?" => true }])
   end

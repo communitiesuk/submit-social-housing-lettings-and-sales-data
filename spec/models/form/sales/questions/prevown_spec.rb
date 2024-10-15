@@ -16,28 +16,6 @@ RSpec.describe Form::Sales::Questions::Prevown, type: :model do
     expect(question.id).to eq("prevown")
   end
 
-  context "when sale is not a joint purchase" do
-    it "has the correct header" do
-      expect(question.header).to eq("Has the buyer previously owned a property?")
-    end
-
-    it "has the correct check_answer_label" do
-      expect(question.check_answer_label).to eq("Buyer previously owned a property.")
-    end
-  end
-
-  context "when sale is a joint purchase" do
-    let(:joint_purchase) { true }
-
-    it "has the correct header" do
-      expect(question.header).to eq("Have any of the buyers previously owned a property?")
-    end
-
-    it "has the correct check_answer_label" do
-      expect(question.check_answer_label).to eq("Buyers previously owned a property.")
-    end
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("radio")
   end
@@ -56,9 +34,5 @@ RSpec.describe Form::Sales::Questions::Prevown, type: :model do
 
   it "has correct conditional for" do
     expect(question.conditional_for).to eq(nil)
-  end
-
-  it "has the correct hint" do
-    expect(question.hint_text).to be_nil
   end
 end

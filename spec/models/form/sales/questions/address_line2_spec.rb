@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Form::Sales::Questions::AddressLine2, type: :model do
+  include CollectionTimeHelper
+
   subject(:question) { described_class.new(question_id, question_definition, page) }
 
   let(:question_id) { nil }
@@ -15,24 +17,12 @@ RSpec.describe Form::Sales::Questions::AddressLine2, type: :model do
     expect(question.id).to eq("address_line2")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("Address line 2 (optional)")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to be_nil
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("text")
   end
 
   it "is not marked as derived" do
     expect(question.derived?(nil)).to be false
-  end
-
-  it "has the correct hint" do
-    expect(question.hint_text).to be_nil
   end
 
   it "has the correct inferred check answers value" do

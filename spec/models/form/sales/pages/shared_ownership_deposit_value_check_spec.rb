@@ -19,10 +19,6 @@ RSpec.describe Form::Sales::Pages::SharedOwnershipDepositValueCheck, type: :mode
     expect(page.id).to eq("shared_ownership_deposit_value_check")
   end
 
-  it "has the correct header" do
-    expect(page.header).to be_nil
-  end
-
   it "has correct depends_on" do
     expect(page.depends_on).to eq([
       {

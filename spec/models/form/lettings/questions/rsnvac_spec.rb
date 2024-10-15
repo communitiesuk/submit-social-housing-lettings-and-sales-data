@@ -23,14 +23,6 @@ RSpec.describe Form::Lettings::Questions::Rsnvac, type: :model do
     expect(question.id).to eq("rsnvac")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("What is the reason for the property being vacant?")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Vacancy reason")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("radio")
   end

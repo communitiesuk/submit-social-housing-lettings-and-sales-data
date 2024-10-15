@@ -51,22 +51,4 @@ RSpec.describe Form::Sales::Questions::DepositAmount, type: :model do
       end
     end
   end
-
-  describe "hint text" do
-    context "when optional is false" do
-      let(:optional) { false }
-
-      it "has the correct hint" do
-        expect(question.hint_text).to eq("Enter the total cash sum paid by the buyer towards the property that was not funded by the mortgage. This excludes any grant or loan")
-      end
-    end
-
-    context "when optional is true" do
-      let(:optional) { true }
-
-      it "has the correct hint" do
-        expect(question.hint_text).to eq("Enter the total cash sum paid by the buyer towards the property that was not funded by the mortgage. This excludes any grant or loan. As this is a fully staircased sale this question is optional. If you do not have the information available click save and continue")
-      end
-    end
-  end
 end
