@@ -17,8 +17,9 @@ class UserPolicy
   ].each do |method_name|
     define_method method_name do
       return true if @current_user.support?
+      return true if @current_user.data_coordinator? && @user.active?
 
-      @current_user.data_coordinator? && @user.active?
+      Rails.env.staging? && Rails.application.credentials[:staging_role_update_email_allowlist].include?(@current_user.email.split("@").last.downcase)
     end
   end
 
