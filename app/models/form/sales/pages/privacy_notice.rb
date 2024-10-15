@@ -1,7 +1,11 @@
 class Form::Sales::Pages::PrivacyNotice < ::Form::Page
   def initialize(id, hsh, subsection, joint_purchase:)
     super(id, hsh, subsection)
-    @copy_key = "sales.setup.privacynotice.#{joint_purchase ? 'joint_purchase' : 'not_joint_purchase'}"
+    @copy_key = if form.start_year_after_2024?
+                  "sales.setup.privacynotice.#{joint_purchase ? 'joint_purchase' : 'not_joint_purchase'}"
+                else
+                  "sales.household_characteristics.privacynotice.#{joint_purchase ? 'joint_purchase' : 'not_joint_purchase'}"
+                end
     @joint_purchase = joint_purchase
   end
 
