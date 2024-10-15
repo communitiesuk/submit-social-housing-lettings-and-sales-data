@@ -8,7 +8,7 @@ class CollectionResourcesService
   end
 
   def get_file(file)
-    @storage_service.get_file_io(file)
+    @storage_service.get_file(file)
   rescue StandardError
     nil
   end
@@ -17,5 +17,13 @@ class CollectionResourcesService
     @storage_service.get_file_metadata(file)
   rescue StandardError
     nil
+  end
+
+  def file_exists_on_s3?(file)
+    @storage_service.file_exists?(file)
+  end
+
+  def upload_collection_resource(filename, file)
+    @storage_service.write_file(filename, file)
   end
 end

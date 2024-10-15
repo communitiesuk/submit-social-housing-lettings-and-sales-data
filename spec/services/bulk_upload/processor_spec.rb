@@ -43,6 +43,13 @@ RSpec.describe BulkUpload::Processor do
   end
 
   describe "#call" do
+    it "changes processing from true to false" do
+      bulk_upload.update!(processing: true)
+      expect {
+        processor.call
+      }.to change { bulk_upload.reload.processing }.from(true).to(false)
+    end
+
     context "when errors exist from prior job run" do
       let!(:existing_error) { create(:bulk_upload_error, bulk_upload:) }
 

@@ -1,0 +1,15 @@
+<h2 class="govuk-body">
+  <div class="govuk-grid-row app-search__caption">
+    <div class="govuk-grid-column-three-quarters">
+      <%= render(SearchResultCaptionComponent.new(searched:, count: pagy.count, item_label:, total_count:, item: "files uploaded in the last 30 days", filters_count: applied_filters_count(@filter_type))) %>
+    </div>
+    <div class="govuk-grid-column-one-quarter govuk-!-text-align-right">
+      <% if searched || applied_filters_count(@filter_type).positive? %>
+        <br>
+      <% end %>
+    </div>
+  </div>
+</h2>
+<% bulk_uploads.map do |bulk_upload| %>
+  <%= render BulkUploadSummaryComponent.new(bulk_upload:) %>
+<% end %>

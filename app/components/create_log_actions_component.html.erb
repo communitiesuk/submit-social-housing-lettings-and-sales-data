@@ -1,10 +1,11 @@
 <% if display_actions? %>
   <div class="govuk-button-group app-filter-toggle govuk-!-margin-bottom-6">
-    <% if create_button_href.present? %>
-      <%= govuk_button_to create_button_copy, create_button_href, class: "govuk-!-margin-right-6" %>
+    <%= govuk_button_to create_button_copy, create_button_href, class: "govuk-!-margin-right-6" %>
+    <% unless user.support? %>
+    <%= govuk_button_link_to upload_button_copy, upload_button_href, secondary: true %>
     <% end %>
-    <% if upload_button_href.present? && !user.support? %>
-      <%= govuk_button_link_to upload_button_copy, upload_button_href, secondary: true %>
+    <% if user.support? %>
+      <%= govuk_button_link_to view_uploads_button_copy, view_uploads_button_href, secondary: true %>
     <% end %>
   </div>
 <% end %>
