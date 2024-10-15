@@ -229,7 +229,7 @@ class Form::Question
             elsif header.present?
               header
             else
-             id.humanize
+              id.humanize
             end
     format_ending(label)
   end
