@@ -1,9 +1,8 @@
 class Form::Sales::Questions::Buyer2IncomeValueCheck < ::Form::Question
   def initialize(id, hsh, page, check_answers_card_number:)
     super(id, hsh, page)
-    @id = "income2_value_check"
-    @check_answer_label = "Buyer 2 income confirmation"
-    @header = "Are you sure this is correct?"
+    @id = ""
+    @copy_key = "sales.soft_validations.income2_value_check"
     @type = "interruption_screen"
     @answer_options = {
       "0" => { "value" => "Yes" },

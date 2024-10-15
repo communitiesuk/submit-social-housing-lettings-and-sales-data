@@ -1,0 +1,40 @@
+en:
+    forms:
+        2024:
+            sales:
+                soft_validations:
+                    income1_value_check:
+                        page_header: ""
+                        check_answer_label: "Buyer 1 income confirmation"
+                        hint_text: ""
+                        question_text: "Are you sure this is correct?"
+
+                    income2_value_check:
+                        page_header: ""
+                        check_answer_label: "Buyer 2 income confirmation"
+                        hint_text: ""
+                        question_text: "Are you sure this is correct?"
+
+                    combined_income_value_check:
+                        page_header: ""
+                        check_answer_label: "Combined income confirmation"
+                        hint_text: ""
+                        question_text: "Are you sure this is correct?"
+
+                    value_value_check:
+                        page_header: ""
+                        check_answer_label: "Purchase price confirmation"
+                        hint_text: ""
+                        question_text: "Are you sure?"
+
+                    monthly_charges_value_check:
+                        page_header: ""
+                        check_answer_label: "Monthly charges confirmation"
+                        hint_text: ""
+                        question_text: "Are you sure this is correct?"
+
+                    percentage_discount_value_check:
+                        page_header: ""
+                        check_answer_label: "Percentage discount confirmation"
+                        hint_text: ""
+                        question_text: "Are you sure this is correct?"
