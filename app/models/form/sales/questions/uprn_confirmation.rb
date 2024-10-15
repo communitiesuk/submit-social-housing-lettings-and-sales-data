@@ -2,8 +2,8 @@ class Form::Sales::Questions::UprnConfirmation < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "uprn_confirmed"
+    @header = "We found an address that might be this property"
     @type = "radio"
-    @copy_key = "sales.property.uprn_confirmed"
   end
 
   def answer_options
