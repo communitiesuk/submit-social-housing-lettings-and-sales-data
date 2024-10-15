@@ -33,6 +33,7 @@ Rails.application.routes.draw do
   root to: "start#index"
   get "/guidance", to: "start#guidance"
 
+  get "/error", to: "start#error"
   get "/logs", to: redirect("lettings-logs")
   get "/accessibility-statement", to: "content#accessibility_statement"
   get "/privacy-notice", to: "content#privacy_notice"

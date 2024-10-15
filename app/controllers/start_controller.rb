@@ -9,4 +9,8 @@ class StartController < ApplicationController
       render "home/index"
     end
   end
+
+  def error
+    render json: { status: 503, error: "Service unavailable" }, status: :service_unavailable
+  end
 end

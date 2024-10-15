@@ -46,6 +46,7 @@ private
   end
 
   def response
-    @response ||= http_client.request_get(endpoint_uri)
+    @response ||= http_client.request_get("localhost:3000/error")
+    # @response ||= http_client.request_get(endpoint_uri)
   end
 end
