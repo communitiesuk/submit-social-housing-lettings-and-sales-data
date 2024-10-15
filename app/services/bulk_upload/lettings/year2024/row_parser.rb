@@ -1355,7 +1355,7 @@ private
   end
 
   def postcode_full
-    "#{field_21} #{field_22}" if field_21 || field_22
+    [field_21, field_22].compact_blank.join(" ") if field_21 || field_22
   end
 
   def owning_organisation
