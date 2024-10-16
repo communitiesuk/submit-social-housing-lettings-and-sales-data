@@ -3,6 +3,7 @@ class Form::Sales::Questions::Buyer1AgeKnown < ::Form::Question
     super
     @id = "age1_known"
     @type = "radio"
+    @copy_key = "sales.household_characteristics.age1.age1_known"
     @answer_options = ANSWER_OPTIONS
     @conditional_for = {
       "age1" => [0],
