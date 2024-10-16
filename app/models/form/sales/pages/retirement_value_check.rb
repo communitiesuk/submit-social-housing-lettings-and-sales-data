@@ -7,8 +7,9 @@ class Form::Sales::Pages::RetirementValueCheck < Form::Sales::Pages::Person
       },
     ]
     @person_index = person_index
+    @copy_key = "sales.soft_validations.retirement_value_check.min"
     @title_text = {
-      "translation" => "soft_validations.retirement.min.title",
+      "translation" => "forms.#{form.start_date.year}.#{@copy_key}.title_text",
       "arguments" => [
         {
           "key" => "age#{person_index}",
