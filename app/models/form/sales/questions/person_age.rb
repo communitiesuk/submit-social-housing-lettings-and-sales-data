@@ -2,7 +2,7 @@ class Form::Sales::Questions::PersonAge < ::Form::Question
   def initialize(id, hsh, page, person_index:)
     super(id, hsh, page)
     @type = "numeric"
-    @copy_key = "sales.household_characteristics.age2.person" if person_index == 2
+    @copy_key = person_index == 2 ? "sales.household_characteristics.age2.person.age2" : "sales.household_characteristics.age#{person_index}.age#{person_index}"
     @width = 3
     @inferred_check_answers_value = [{
       "condition" => { "age#{person_index}_known" => 1 },
