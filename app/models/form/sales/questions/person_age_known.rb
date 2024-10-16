@@ -2,8 +2,7 @@ class Form::Sales::Questions::PersonAgeKnown < ::Form::Question
   def initialize(id, hsh, page, person_index:)
     super(id, hsh, page)
     @type = "radio"
-    @copy_key = "sales.household_characteristics.age2_known.person" if person_index == 2
-    @answer_options = ANSWER_OPTIONS
+    @copy_key = person_index == 2 ? "sales.household_characteristics.age2.person.age2_known" : "sales.household_characteristics.age#{person_index}.age#{person_index}_known"
     @conditional_for = {
       "age#{person_index}" => [0],
     }

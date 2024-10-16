@@ -27,17 +27,16 @@ en:
               hint_text: ""
               question_text: "Declaration"
 
-          age1_known:
-            page_header: ""
-            check_answer_label: "Buyer 1’s age"
-            hint_text: "Buyer 1 is the person in the household who does the most paid work. If it’s a joint purchase and the buyers do the same amount of paid work, buyer 1 is whoever is the oldest."
-            question_text: "Do you know buyer 1’s age?"
-
           age1:
             page_header: ""
-            check_answer_label: "Buyer 1’s age"
-            hint_text: ""
-            question_text: "Age"
+            age1_known:
+              check_answer_label: "Buyer 1’s age"
+              hint_text: "Buyer 1 is the person in the household who does the most paid work. If it’s a joint purchase and the buyers do the same amount of paid work, buyer 1 is whoever is the oldest."
+              question_text: "Do you know buyer 1’s age?"
+            age1:
+              check_answer_label: "Buyer 1’s age"
+              hint_text: ""
+              question_text: "Age"
           
           sex1:
             page_header: ""
@@ -108,29 +107,27 @@ en:
               hint_text: ""
               question_text: "What is Person 2’s relationship to Buyer 1?"
 
-          age2_known:
-            buyer:
-              page_header: ""
-              check_answer_label: "Buyer 2’s age"
-              hint_text: ""
-              question_text: "Do you know buyer 2’s age?"
-            person:
-              page_header: ""
-              check_answer_label: "Person 2’s age known?"
-              hint_text: ""
-              question_text: "Do you know person 2’s age?"
-
           age2:
             buyer:
               page_header: ""
-              check_answer_label: "Buyer 2’s age"
-              hint_text: ""
-              question_text: "Age"
+              age2_known:
+                check_answer_label: "Buyer 2’s age"
+                hint_text: ""
+                question_text: "Do you know buyer 2’s age?"
+              age2:
+                check_answer_label: "Buyer 2’s age"
+                hint_text: ""
+                question_text: "Age"
             person:
               page_header: ""
-              check_answer_label: "Person 2’s age"
-              hint_text: ""
-              question_text: "Age"
+              age2_known:
+                check_answer_label: "Person 2’s age known?"
+                hint_text: ""
+                question_text: "Do you know person 2’s age?"
+              age:
+                check_answer_label: "Person 2’s age"
+                hint_text: ""
+                question_text: "Age"
 
           sex2:
             buyer:
@@ -231,17 +228,16 @@ en:
             hint_text: ""
             question_text: "What is Person 3’s relationship to Buyer 1?"
 
-          age3_known:
-            page_header: ""
-            check_answer_label: "Person 3’s age known?"
-            hint_text: ""
-            question_text: "Do you know person 3’s age?"
-
           age3:
             page_header: ""
-            check_answer_label: "Person 3’s age"
-            hint_text: ""
-            question_text: "Age"
+            age3_known:
+              check_answer_label: "Person 3’s age known?"
+              hint_text: ""
+              question_text: "Do you know person 3’s age?"
+            age3:
+              check_answer_label: "Person 3’s age"
+              hint_text: ""
+              question_text: "Age"
           
           sex3:
             page_header: ""
@@ -267,17 +263,16 @@ en:
             hint_text: ""
             question_text: "What is Person 4’s relationship to Buyer 1?"
 
-          age4_known:
-            page_header: ""
-            check_answer_label: "Person 4’s age known?"
-            hint_text: ""
-            question_text: "Do you know person 4’s age?"
-
           age4:
             page_header: ""
-            check_answer_label: "Person 4’s age"
-            hint_text: ""
-            question_text: "Age"
+            age4_known:
+              check_answer_label: "Person 4’s age known?"
+              hint_text: ""
+              question_text: "Do you know person 4’s age?"
+            age4:
+              check_answer_label: "Person 4’s age"
+              hint_text: ""
+              question_text: "Age"
           
           sex4:
             page_header: ""
@@ -303,17 +298,16 @@ en:
             hint_text: ""
             question_text: "What is Person 5’s relationship to Buyer 1?"
 
-          age5_known:
-            page_header: ""
-            check_answer_label: "Person 5’s age known?"
-            hint_text: ""
-            question_text: "Do you know person 5’s age?"
-
           age5:
             page_header: ""
-            check_answer_label: "Person 5’s age"
-            hint_text: ""
-            question_text: "Age"
+            age5_known:
+              check_answer_label: "Person 5’s age known?"
+              hint_text: ""
+              question_text: "Do you know person 5’s age?"
+            age5:
+              check_answer_label: "Person 5’s age"
+              hint_text: ""
+              question_text: "Age"
           
           sex5:
             page_header: ""
@@ -339,17 +333,16 @@ en:
             hint_text: ""
             question_text: "What is Person 6’s relationship to Buyer 1?"
 
-          age6_known:
-            page_header: ""
-            check_answer_label: "Person 6’s age known?"
-            hint_text: ""
-            question_text: "Do you know person 6’s age?"
-
           age6:
             page_header: ""
-            check_answer_label: "Person 6’s age"
-            hint_text: ""
-            question_text: "Age"
+            age6_known:
+              check_answer_label: "Person 6’s age known?"
+              hint_text: ""
+              question_text: "Do you know person 6’s age?"
+            age6:
+              check_answer_label: "Person 6’s age"
+              hint_text: ""
+              question_text: "Age"
           
           sex6:
             page_header: ""
