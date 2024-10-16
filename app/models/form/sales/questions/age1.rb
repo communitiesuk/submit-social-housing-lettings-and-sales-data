@@ -4,6 +4,7 @@ class Form::Sales::Questions::Age1 < ::Form::Question
     @id = "age1"
     @type = "numeric"
     @width = 2
+    @copy_key = "sales.household_characteristics.age1.age1"
     @inferred_check_answers_value = [
       {
         "condition" => { "age1_known" => 1 },

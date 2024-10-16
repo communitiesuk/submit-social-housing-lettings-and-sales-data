@@ -106,7 +106,7 @@ en:
                 check_answer_label: "Person 2’s age known?"
                 hint_text: ""
                 question_text: "Do you know person 2’s age?"
-              age:
+              age2:
                 check_answer_label: "Person 2’s age"
                 hint_text: ""
                 question_text: "Age"
