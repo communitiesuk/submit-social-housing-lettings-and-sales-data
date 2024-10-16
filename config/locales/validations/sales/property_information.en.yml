@@ -1,0 +1,27 @@
+en:
+  validations:
+    sales:
+      property_information:
+        postcode_full:
+          postcode_must_match_previous: 
+            joint_purchase: "Buyers’ last accommodation and discounted ownership postcodes must match."
+            not_joint_purchase: "Buyer’s last accommodation and discounted ownership postcodes must match."
+        ppostcode_full:
+          postcode_must_match_previous: 
+            joint_purchase: "Buyers’ last accommodation and discounted ownership postcodes must match."
+            not_joint_purchase: "Buyer’s last accommodation and discounted ownership postcodes must match."
+        ownershipsch:
+          postcode_must_match_previous:
+            joint_purchase: "Buyers’ last accommodation and discounted ownership postcodes must match."
+            not_joint_purchase: "Buyer’s last accommodation and discounted ownership postcodes must match."
+        uprn:
+          postcode_must_match_previous: 
+            joint_purchase: "Buyers’ last accommodation and discounted ownership postcodes must match."
+            not_joint_purchase: "Buyer’s last accommodation and discounted ownership postcodes must match."
+          invalid: "UPRN must be 12 digits or less."
+        beds:
+          bedsits_have_max_one_bedroom: "Number of bedrooms must be 1 if the property is a bedsit."
+        proptype:
+          bedsits_have_max_one_bedroom: "Answer cannot be 'Bedsit' if the property has 2 or more bedrooms."
+        uprn_known:
+          invalid: "You must answer UPRN known?"

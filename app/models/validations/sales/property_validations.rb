@@ -4,10 +4,11 @@ module Validations::Sales::PropertyValidations
     return unless record.ppostcode_full.present? && record.postcode_full.present?
 
     if record.discounted_ownership_sale? && record.ppostcode_full != record.postcode_full
-      record.errors.add :postcode_full, I18n.t("validations.property.postcode.must_match_previous", buyer_possessive: record.joint_purchase? ? "Buyers’" : "Buyer’s")
-      record.errors.add :ppostcode_full, I18n.t("validations.property.postcode.must_match_previous", buyer_possessive: record.joint_purchase? ? "Buyers’" : "Buyer’s")
-      record.errors.add :ownershipsch, I18n.t("validations.property.postcode.must_match_previous", buyer_possessive: record.joint_purchase? ? "Buyers’" : "Buyer’s")
-      record.errors.add :uprn, I18n.t("validations.property.postcode.must_match_previous", buyer_possessive: record.joint_purchase? ? "Buyers’" : "Buyer’s")
+      joint_purchase_id = record.joint_purchase? ? "joint_purchase" : "not_joint_purchase"
+      record.errors.add :postcode_full, I18n.t("validations.sales.property_information.postcode_full.postcode_must_match_previous.#{joint_purchase_id}")
+      record.errors.add :ppostcode_full, I18n.t("validations.sales.property_information.ppostcode_full.postcode_must_match_previous.#{joint_purchase_id}")
+      record.errors.add :ownershipsch, I18n.t("validations.sales.property_information.ownershipsch.postcode_must_match_previous.#{joint_purchase_id}")
+      record.errors.add :uprn, I18n.t("validations.sales.property_information.uprn.postcode_must_match_previous.#{joint_purchase_id}")
     end
   end
 
@@ -15,8 +16,8 @@ module Validations::Sales::PropertyValidations
     return unless record.proptype.present? && record.beds.present?
 
     if record.is_bedsit? && record.beds > 1
-      record.errors.add :proptype, I18n.t("validations.property.proptype.bedsits_have_max_one_bedroom")
-      record.errors.add :beds, I18n.t("validations.property.beds.bedsits_have_max_one_bedroom")
+      record.errors.add :proptype, I18n.t("validations.sales.property_information.proptype.bedsits_have_max_one_bedroom")
+      record.errors.add :beds, I18n.t("validations.sales.property_information.beds.bedsits_have_max_one_bedroom")
     end
   end
 
@@ -25,6 +26,6 @@ module Validations::Sales::PropertyValidations
 
     return if record.uprn.match?(/^[0-9]{1,12}$/)
 
-    record.errors.add :uprn, I18n.t("validations.property.uprn.invalid")
+    record.errors.add :uprn, I18n.t("validations.sales.property_information.uprn.invalid")
   end
 end
