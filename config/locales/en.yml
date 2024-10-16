@@ -756,8 +756,6 @@ Make sure these answers are correct."
     monthly_charges_over_soft_max:
       title_text: "You told us that the monthly charges were %{mscharge}."
       hint_text: "This is higher than we would expect."
-    student_not_child:
-      title_text: "You told us this person is a student aged between 16 and 19."
     discounted_sale_value:
       title_text: "Mortgage, deposit, and grant total must equal %{value_with_discount}."
       informative_text: "Your given mortgage, deposit and grant total is %{mortgage_deposit_and_grant_total}."

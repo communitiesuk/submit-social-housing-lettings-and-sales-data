@@ -56,3 +56,9 @@ en:
               question_text: "Are you sure this is correct?"
               title_text: "You told us that buyer 2 will not live in the property."
               informative_text: "For %{ownership_scheme} types, the buyer usually lives in the property."
+          student_not_child_value_check:
+            page_header: ""
+            check_answer_label: "Student not a child confirmation"
+            hint_text: ""
+            question_text: "Are you sure this person is not a child?"
+            title_text: "You told us this person is a student aged between 16 and 19."
