@@ -41,3 +41,18 @@ en:
             question_text: "Are you sure this is correct?"
             title_text: "You told us income was %{income}."
             informative_text: "This is less than we would expect for someone in this working situation."
+          buyer_livein_value_check:
+            buyer1:
+              page_header: ""
+              check_answer_label: "Buyer live in confirmation"
+              hint_text: ""
+              question_text: "Are you sure this is correct?"
+              title_text: "You told us that buyer 1 will not live in the property."
+              informative_text: "For %{ownership_scheme} types, the buyer usually lives in the property."
+            buyer2:
+              page_header: ""
+              check_answer_label: "Buyer live in confirmation"
+              hint_text: ""
+              question_text: "Are you sure this is correct?"
+              title_text: "You told us that buyer 2 will not live in the property."
+              informative_text: "For %{ownership_scheme} types, the buyer usually lives in the property."
