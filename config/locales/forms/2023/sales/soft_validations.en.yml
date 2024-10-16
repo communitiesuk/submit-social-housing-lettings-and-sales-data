@@ -19,7 +19,7 @@ en:
               title_text: "You told us this person is aged %{age} years and retired."
               informative_text: "The minimum expected retirement age in England is 66."
           old_persons_shared_ownership_value_check:
-            age_header: ""
+            page_header: ""
             check_answer_label: "Shared ownership confirmation"
             hint_text: ""
             question_text: "Are you sure this is correct?"
@@ -27,4 +27,17 @@ en:
               joint_purchase: "You told us the buyers are using the Older Persons Shared Ownership scheme."
               not_joint_purchase: "You told us the buyer is using the Older Persons Shared Ownership scheme."
             informative_text: "At least one buyer must be aged 65 years and over to use this scheme."
-
+          income1_value_check:
+            page_header: ""
+            check_answer_label: "Buyer 1 income confirmation"
+            hint_text: ""
+            question_text: "Are you sure this is correct?"
+            title_text: "You told us income was %{income}."
+            informative_text: "This is less than we would expect for someone in this working situation."
+          income2_value_check:
+            page_header: ""
+            check_answer_label: "Buyer 2 income confirmation"
+            hint_text: ""
+            question_text: "Are you sure this is correct?"
+            title_text: "You told us income was %{income}."
+            informative_text: "This is less than we would expect for someone in this working situation."

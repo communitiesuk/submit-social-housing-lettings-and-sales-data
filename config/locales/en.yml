@@ -712,10 +712,6 @@ en:
         message: "Net income is lower than expected based on the household’s working situation. Are you sure this is correct?"
       in_soft_max_range:
         message: "Net income is higher than expected based on the household’s working situation. Are you sure this is correct?"
-    income:
-      under_soft_min_for_economic_status:
-        title_text: "You told us income was %{income}."
-        hint_text: "This is less than we would expect for someone in this working situation."
       over_soft_max_for_la_buyer_1: "You told us the income of buyer 1 is %{income}. This seems high.  Are you sure this is correct?"
       over_soft_max_for_la_buyer_2: "You told us the income of buyer 2 is %{income}. This seems high.  Are you sure this is correct?"
       over_soft_max_for_la_combined: "You told us the combined income of this household is %{combined_income}. This seems high.  Are you sure this is correct?"
