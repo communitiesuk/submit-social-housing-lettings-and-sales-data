@@ -2,6 +2,7 @@ class Form::Sales::Pages::Buyer2RelationshipToBuyer1 < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "buyer_2_relationship_to_buyer_1"
+    @copy_key = "sales.household_characteristics.relat2.buyer"
     @depends_on = [
       {
         "joint_purchase?" => true,

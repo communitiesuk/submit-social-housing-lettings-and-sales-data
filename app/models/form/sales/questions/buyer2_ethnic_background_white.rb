@@ -2,8 +2,7 @@ class Form::Sales::Questions::Buyer2EthnicBackgroundWhite < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "ethnicbuy2"
-    @check_answer_label = "Buyer 2’s ethnic background"
-    @header = "Which of the following best describes buyer 2’s White background?"
+    @copy_key = "sales.household_characteristics.ethnicbuy2.ethnic_background_white"
     @type = "radio"
     @check_answers_card_number = 2
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]

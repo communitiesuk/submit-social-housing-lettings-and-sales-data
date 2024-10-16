@@ -1,10 +1,7 @@
 class Form::Sales::Questions::NationalityAllGroup < ::Form::Question
   def initialize(id, hsh, page, buyer_index)
     super(id, hsh, page)
-    @check_answer_label = "Buyer #{buyer_index}’s nationality"
-    @header = "What is buyer #{buyer_index}’s nationality?"
     @type = "radio"
-    @hint_text = "If buyer #{buyer_index} is a dual national of the United Kingdom and another country, enter United Kingdom. If they are a dual national of two other countries, the buyer should decide which country to enter."
     @answer_options = ANSWER_OPTIONS
     @check_answers_card_number = buyer_index
     @conditional_for = buyer_index == 1 ? { "nationality_all" => [12] } : { "nationality_all_buyer2" => [12] }
