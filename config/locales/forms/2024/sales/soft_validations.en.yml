@@ -68,3 +68,9 @@ en:
             hint_text: ""
             question_text: "Are you sure this is correct?"
             title_text: "You told us this person is aged %{age} years and has 'Partner' relationship to buyer 1."
+          multiple_partners_value_check:
+            page_header: ""
+            check_answer_label: "Multiple partners confirmation"
+            hint_text: ""
+            question_text: "Are you sure this is correct?"
+            title_text: "You told us there are more than 1 persons with 'Partner' relationship to buyer 1."
