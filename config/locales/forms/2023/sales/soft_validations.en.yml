@@ -62,3 +62,9 @@ en:
             hint_text: ""
             question_text: "Are you sure this person is not a child?"
             title_text: "You told us this person is a student aged between 16 and 19."
+          partner_under_16_value_check:
+            page_header: ""
+            check_answer_label: "Partner under 16 confirmation"
+            hint_text: ""
+            question_text: "Are you sure this is correct?"
+            title_text: "You told us this person is aged %{age} years and has 'Partner' relationship to buyer 1."

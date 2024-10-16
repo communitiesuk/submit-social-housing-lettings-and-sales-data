@@ -811,8 +811,6 @@ Make sure these answers are correct."
       informative_text: "We could not find an address that matches your search. You can search again or continue to enter the address manually."
     partner_under_16_lettings:
       title: "You told us this person is aged %{age} years and has 'Partner' relationship to the lead tenant."
-    partner_under_16_sales:
-      title: "You told us this person is aged %{age} years and has 'Partner' relationship to buyer 1."
     multiple_partners_lettings:
       title: "You told us there are more than 1 persons with 'Partner' relationship to the lead tenant."
     multiple_partners_sales:
