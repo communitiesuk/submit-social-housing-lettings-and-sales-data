@@ -6,9 +6,10 @@ class Form::Sales::Pages::MultiplePartnersValueCheck < Form::Sales::Pages::Perso
         "multiple_partners?" => true,
       },
     ]
+    @copy_key = "sales.soft_validations.multiple_partners_value_check"
     @person_index = person_index
     @title_text = {
-      "translation" => "soft_validations.multiple_partners_sales.title",
+      "translation" => "forms.#{form.start_date.year}.#{@copy_key}.title_text",
       "arguments" => [],
     }
     @informative_text = {}
