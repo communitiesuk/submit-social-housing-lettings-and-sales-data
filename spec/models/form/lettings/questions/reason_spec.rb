@@ -23,14 +23,6 @@ RSpec.describe Form::Lettings::Questions::Reason, type: :model do
     expect(question.id).to eq("reason")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("What is the tenant’s main reason for the household leaving their last settled home?")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Reason for leaving last settled home")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("radio")
   end
@@ -48,10 +40,6 @@ RSpec.describe Form::Lettings::Questions::Reason, type: :model do
   end
 
   context "with 2023/24 form" do
-    it "has the correct hint" do
-      expect(question.hint_text).to eq("The tenant’s ‘last settled home’ is their last long-standing home. For tenants who were in temporary accommodation or sleeping rough, their last settled home is where they were living previously.")
-    end
-
     it "has the correct answer_options" do
       expect(question.answer_options).to eq({
         "40" => { "value" => "End of assured shorthold tenancy (no fault)" },
@@ -97,10 +85,6 @@ RSpec.describe Form::Lettings::Questions::Reason, type: :model do
   context "with 2024/25 form" do
     before do
       allow(form).to receive(:start_year_after_2024?).and_return(true)
-    end
-
-    it "has the correct hint" do
-      expect(question.hint_text).to eq("The tenant’s ‘last settled home’ is their last long-standing home. For tenants who were in temporary accommodation, sleeping rough or otherwise homeless, their last settled home is where they were living previously.")
     end
 
     it "has the correct answer_options" do

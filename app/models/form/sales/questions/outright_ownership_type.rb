@@ -2,8 +2,7 @@ class Form::Sales::Questions::OutrightOwnershipType < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "type"
-    @check_answer_label = "Type of outright sale"
-    @header = "What is the type of outright sale?"
+    @copy_key = "sales.setup.type.outright_ownership.type"
     @type = "radio"
     @top_guidance_partial = guidance_partial
     @answer_options = ANSWER_OPTIONS

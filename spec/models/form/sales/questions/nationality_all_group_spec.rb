@@ -45,18 +45,6 @@ RSpec.describe Form::Sales::Questions::NationalityAllGroup, type: :model do
     it "has correct check_answers_card_number" do
       expect(question.check_answers_card_number).to eq(1)
     end
-
-    it "has the correct hint" do
-      expect(question.hint_text).to eq "If buyer 1 is a dual national of the United Kingdom and another country, enter United Kingdom. If they are a dual national of two other countries, the buyer should decide which country to enter."
-    end
-
-    it "has the correct header" do
-      expect(question.header).to eq "What is buyer 1’s nationality?"
-    end
-
-    it "has the correct check_answer_label" do
-      expect(question.check_answer_label).to eq "Buyer 1’s nationality"
-    end
   end
 
   context "with buyer 2" do
@@ -72,18 +60,6 @@ RSpec.describe Form::Sales::Questions::NationalityAllGroup, type: :model do
 
     it "has correct check_answers_card_number" do
       expect(question.check_answers_card_number).to eq(2)
-    end
-
-    it "has the correct hint" do
-      expect(question.hint_text).to eq "If buyer 2 is a dual national of the United Kingdom and another country, enter United Kingdom. If they are a dual national of two other countries, the buyer should decide which country to enter."
-    end
-
-    it "has the correct header" do
-      expect(question.header).to eq "What is buyer 2’s nationality?"
-    end
-
-    it "has the correct check_answer_label" do
-      expect(question.check_answer_label).to eq "Buyer 2’s nationality"
     end
   end
 end

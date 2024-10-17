@@ -2,8 +2,7 @@ class Form::Sales::Questions::DiscountedOwnershipType < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "type"
-    @check_answer_label = "Type of discounted ownership sale"
-    @header = "What is the type of discounted ownership sale?"
+    @copy_key = "sales.setup.type.discounted_ownership"
     @type = "radio"
     @top_guidance_partial = guidance_partial
     @answer_options = ANSWER_OPTIONS

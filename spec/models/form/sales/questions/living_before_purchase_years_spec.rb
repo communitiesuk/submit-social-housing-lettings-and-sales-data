@@ -20,24 +20,12 @@ RSpec.describe Form::Sales::Questions::LivingBeforePurchaseYears, type: :model d
       expect(question.id).to eq("proplen")
     end
 
-    it "has the correct header" do
-      expect(question.header).to eq("How long did the buyer(s) live in the property before purchase?")
-    end
-
-    it "has the correct check_answer_label" do
-      expect(question.check_answer_label).to eq("Number of years living in the property before purchase")
-    end
-
     it "has the correct type" do
       expect(question.type).to eq("numeric")
     end
 
     it "is not marked as derived" do
       expect(question.derived?(nil)).to be false
-    end
-
-    it "has the correct hint" do
-      expect(question.hint_text).to eq("You should round this up to the nearest year. If the buyers haven't been living in the property, enter '0'")
     end
 
     it "has correct width" do
@@ -68,24 +56,12 @@ RSpec.describe Form::Sales::Questions::LivingBeforePurchaseYears, type: :model d
       expect(question.id).to eq("proplen")
     end
 
-    it "has the correct header" do
-      expect(question.header).to eq("How long did they live there?")
-    end
-
-    it "has the correct check_answer_label" do
-      expect(question.check_answer_label).to eq("Number of years living in the property before purchase")
-    end
-
     it "has the correct type" do
       expect(question.type).to eq("numeric")
     end
 
     it "is not marked as derived" do
       expect(question.derived?(nil)).to be false
-    end
-
-    it "has the correct hint" do
-      expect(question.hint_text).to eq("You should round up to the nearest year")
     end
 
     it "has correct width" do

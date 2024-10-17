@@ -33,16 +33,8 @@ RSpec.describe Form::Lettings::Questions::Age1Known, type: :model do
     })
   end
 
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("")
-  end
-
   it "has the correct id" do
     expect(question.id).to eq("age1_known")
-  end
-
-  it "has the correct header" do
-    expect(question.header).to eq("Do you know the lead tenant’s age?")
   end
 
   it "has correct conditional for" do
@@ -68,21 +60,5 @@ RSpec.describe Form::Lettings::Questions::Age1Known, type: :model do
 
   it "has the correct check_answers_card_number" do
     expect(question.check_answers_card_number).to eq(1)
-  end
-
-  context "with 2023/24 form" do
-    it "has the correct hint" do
-      expect(question.hint_text).to eq("The ’lead’ or ’main’ tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest.")
-    end
-  end
-
-  context "with 2024/25 form" do
-    before do
-      allow(form).to receive(:start_year_after_2024?).and_return(true)
-    end
-
-    it "has the correct hint" do
-      expect(question.hint_text).to eq("The ’lead’ or ’main’ tenant is the person in the household who does the most paid work. If several people do the same amount of paid work, the lead tenant is whoever is the oldest.")
-    end
   end
 end

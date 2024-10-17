@@ -15,16 +15,8 @@ RSpec.describe Form::Sales::Questions::AddressLine1, type: :model do
     expect(question.id).to eq("address_line1")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("Address line 1")
-  end
-
   it "has the correct error label" do
     expect(question.error_label).to eq("Address line 1")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Address lines 1 and 2")
   end
 
   it "has the correct question_number" do
@@ -37,10 +29,6 @@ RSpec.describe Form::Sales::Questions::AddressLine1, type: :model do
 
   it "is not marked as derived" do
     expect(question.derived?(nil)).to be false
-  end
-
-  it "has the correct hint" do
-    expect(question.hint_text).to be_nil
   end
 
   it "has the correct inferred check answers value" do

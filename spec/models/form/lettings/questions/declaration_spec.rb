@@ -23,24 +23,12 @@ RSpec.describe Form::Lettings::Questions::Declaration, type: :model do
     expect(question.id).to eq("declaration")
   end
 
-  it "has the correct header" do
-    expect(question.header).to eq("Declaration")
-  end
-
-  it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Tenant has seen the privacy notice")
-  end
-
   it "has the correct type" do
     expect(question.type).to eq("checkbox")
   end
 
   it "is not marked as derived" do
     expect(question.derived?(nil)).to be false
-  end
-
-  it "has the correct hint" do
-    expect(question.hint_text).to be_nil
   end
 
   context "when the form year is before 2024" do

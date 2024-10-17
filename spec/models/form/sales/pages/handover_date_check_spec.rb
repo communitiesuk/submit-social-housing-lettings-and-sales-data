@@ -19,10 +19,6 @@ RSpec.describe Form::Sales::Pages::HandoverDateCheck, type: :model do
     expect(page.id).to eq("handover_date_check")
   end
 
-  it "has the correct header" do
-    expect(page.header).to be_nil
-  end
-
   it "has the correct title_text" do
     expect(page.title_text).to eq({
       "translation" => "soft_validations.hodate.must_be_less_than_3_years_from_saledate",

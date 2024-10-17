@@ -41,14 +41,6 @@ RSpec.describe Form::Sales::Questions::PersonRelationshipToBuyer1, type: :model 
       expect(question.id).to eq("relat2")
     end
 
-    it "has the correct header" do
-      expect(question.header).to eq("What is Person 2’s relationship to Buyer 1?")
-    end
-
-    it "has the correct check_answer_label" do
-      expect(question.check_answer_label).to eq("Person 2’s relationship to Buyer 1")
-    end
-
     it "has expected check answers card number" do
       expect(question.check_answers_card_number).to eq(2)
     end
@@ -66,14 +58,6 @@ RSpec.describe Form::Sales::Questions::PersonRelationshipToBuyer1, type: :model 
 
     it "has the correct id" do
       expect(question.id).to eq("relat3")
-    end
-
-    it "has the correct header" do
-      expect(question.header).to eq("What is Person 3’s relationship to Buyer 1?")
-    end
-
-    it "has the correct check_answer_label" do
-      expect(question.check_answer_label).to eq("Person 3’s relationship to Buyer 1")
     end
 
     it "has expected check answers card number" do
@@ -95,14 +79,6 @@ RSpec.describe Form::Sales::Questions::PersonRelationshipToBuyer1, type: :model 
       expect(question.id).to eq("relat4")
     end
 
-    it "has the correct header" do
-      expect(question.header).to eq("What is Person 4’s relationship to Buyer 1?")
-    end
-
-    it "has the correct check_answer_label" do
-      expect(question.check_answer_label).to eq("Person 4’s relationship to Buyer 1")
-    end
-
     it "has expected check answers card number" do
       expect(question.check_answers_card_number).to eq(4)
     end
@@ -120,14 +96,6 @@ RSpec.describe Form::Sales::Questions::PersonRelationshipToBuyer1, type: :model 
 
     it "has the correct id" do
       expect(question.id).to eq("relat5")
-    end
-
-    it "has the correct header" do
-      expect(question.header).to eq("What is Person 5’s relationship to Buyer 1?")
-    end
-
-    it "has the correct check_answer_label" do
-      expect(question.check_answer_label).to eq("Person 5’s relationship to Buyer 1")
     end
 
     it "has expected check answers card number" do
