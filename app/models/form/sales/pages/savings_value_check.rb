@@ -1,8 +1,9 @@
 class Form::Sales::Pages::SavingsValueCheck < ::Form::Page
   def initialize(id, hsh, subsection, joint_purchase:)
     super(id, hsh, subsection)
+    @copy_key = "sales.soft_validations.savings_value_check.#{joint_purchase ? 'joint_purchase' : 'not_joint_purchase'}"
     @title_text = {
-      "translation" => "soft_validations.savings.title_text.#{joint_purchase ? 'two' : 'one'}",
+      "translation" => "forms.#{form.start_date.year}.#{@copy_key}.title_text",
       "arguments" => [
         {
           "key" => "field_formatted_as_currency",
@@ -12,7 +13,7 @@ class Form::Sales::Pages::SavingsValueCheck < ::Form::Page
       ],
     }
     @informative_text = {
-      "translation" => "soft_validations.savings.hint_text",
+      "translation" => "forms.#{form.start_date.year}.#{@copy_key}.informative_text",
       "arguments" => [],
     }
     @joint_purchase = joint_purchase
