@@ -2,6 +2,7 @@ class Form::Sales::Questions::Buyer1Income < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "income1"
+    @copy_key = "sales.income_benefits_and_savings.buyer_1_income.income1"
     @type = "numeric"
     @min = 0
     @max = 999_999
