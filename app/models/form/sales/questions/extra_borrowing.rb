@@ -2,12 +2,10 @@ class Form::Sales::Questions::ExtraBorrowing < ::Form::Question
   def initialize(id, hsh, subsection, ownershipsch:)
     super(id, hsh, subsection)
     @id = "extrabor"
-    @check_answer_label = "Any other borrowing?"
-    @header = "Does this include any extra borrowing?"
+    @copy_key = "sales.sale_information.extrabor"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @page = page
-    @hint_text = ""
     @ownershipsch = ownershipsch
     @question_number = QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP.max_by { |k, _v| k }.last)[ownershipsch]
   end
