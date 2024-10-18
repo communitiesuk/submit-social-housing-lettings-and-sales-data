@@ -2,6 +2,7 @@ class Form::Sales::Pages::Buyer2EthnicBackgroundWhite < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "buyer_2_ethnic_background_white"
+    @copy_key = "sales.household_characteristics.ethnicbuy2.ethnic_background_white"
     @depends_on = [{
       "ethnic_group2" => 0,
     }]

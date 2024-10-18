@@ -1,9 +1,8 @@
 class Form::Sales::Questions::PersonWorkingSituation < ::Form::Question
   def initialize(id, hsh, page, person_index:)
     super(id, hsh, page)
-    @check_answer_label = "Person #{person_index}’s working situation"
-    @header = "Which of these best describes Person #{person_index}’s working situation?"
     @type = "radio"
+    @copy_key = "sales.household_characteristics.ecstat2.person" if person_index == 2
     @check_answers_card_number = person_index
     @inferred_check_answers_value = [{
       "condition" => {

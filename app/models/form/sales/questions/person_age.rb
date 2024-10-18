@@ -1,9 +1,8 @@
 class Form::Sales::Questions::PersonAge < ::Form::Question
   def initialize(id, hsh, page, person_index:)
     super(id, hsh, page)
-    @check_answer_label = "Person #{person_index}’s age"
-    @header = "Age"
     @type = "numeric"
+    @copy_key = person_index == 2 ? "sales.household_characteristics.age2.person.age2" : "sales.household_characteristics.age#{person_index}.age#{person_index}"
     @width = 3
     @inferred_check_answers_value = [{
       "condition" => { "age#{person_index}_known" => 1 },
@@ -26,11 +25,5 @@ class Form::Sales::Questions::PersonAge < ::Form::Question
                            end
 
     base_question_number + (4 * @person_index)
-  end
-
-  def hint_text
-    if form.start_year_after_2024?
-      "Answer 1 for children aged under 1 year old"
-    end
   end
 end

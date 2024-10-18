@@ -2,8 +2,7 @@ class Form::Sales::Questions::Age2 < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "age2"
-    @check_answer_label = "Buyer 2’s age"
-    @header = "Age"
+    @copy_key = "sales.household_characteristics.age2.buyer.age2"
     @type = "numeric"
     @width = 2
     @inferred_check_answers_value = [{
