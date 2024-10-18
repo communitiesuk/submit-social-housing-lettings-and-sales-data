@@ -7,11 +7,12 @@ class Form::Sales::Pages::NotRetiredValueCheck < Form::Sales::Pages::Person
       },
     ]
     @person_index = person_index
+    @copy_key = "sales.soft_validations.retirement_value_check.max"
     @title_text = {
-      "translation" => "soft_validations.retirement.max.title",
+      "translation" => "forms.#{form.start_date.year}.#{@copy_key}.title_text",
     }
     @informative_text = {
-      "translation" => "soft_validations.retirement.max.hint_text",
+      "translation" => "forms.#{form.start_date.year}.#{@copy_key}.informative_text",
     }
   end
 

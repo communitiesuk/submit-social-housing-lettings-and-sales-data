@@ -1,12 +1,13 @@
 class Form::Sales::Pages::OldPersonsSharedOwnershipValueCheck < ::Form::Page
   def initialize(id, hsh, subsection, joint_purchase:)
     super(id, hsh, subsection)
+    @copy_key = "sales.soft_validations.old_persons_shared_ownership_value_check"
     @title_text = {
-      "translation" => "soft_validations.old_persons_shared_ownership.title_text.#{joint_purchase ? 'two' : 'one'}",
+      "translation" => "forms.#{form.start_date.year}.#{@copy_key}.title_text.#{joint_purchase ? 'joint_purchase' : 'not_joint_purchase'}",
       "arguments" => [],
     }
     @informative_text = {
-      "translation" => "soft_validations.old_persons_shared_ownership.hint_text",
+      "translation" => "forms.#{form.start_date.year}.#{@copy_key}.informative_text",
       "arguments" => [],
     }
     @joint_purchase = joint_purchase

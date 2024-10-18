@@ -6,7 +6,8 @@ RSpec.describe Form::Sales::Pages::BuyerLiveInValueCheck, type: :model do
   let(:page_id) { "buyer_1_live_in_value_check" }
   let(:page_definition) { nil }
   let(:person_index) { 1 }
-  let(:subsection) { instance_double(Form::Subsection) }
+  let(:form) { instance_double(Form, start_date: Time.zone.local(2024, 4, 1)) }
+  let(:subsection) { instance_double(Form::Subsection, form:) }
 
   it "has correct subsection" do
     expect(page.subsection).to eq(subsection)
@@ -34,7 +35,7 @@ RSpec.describe Form::Sales::Pages::BuyerLiveInValueCheck, type: :model do
 
   it "has the correct title_text" do
     expect(page.title_text).to eq({
-      "translation" => "soft_validations.buyer1_livein_wrong_for_ownership_type.title_text",
+      "translation" => "forms.2024.sales.soft_validations.buyer_livein_value_check.buyer1.title_text",
       "arguments" => [{ "key" => "ownership_scheme", "label" => false, "i18n_template" => "ownership_scheme" }],
     })
   end
@@ -56,7 +57,7 @@ RSpec.describe Form::Sales::Pages::BuyerLiveInValueCheck, type: :model do
 
     it "has the correct title_text" do
       expect(page.title_text).to eq({
-        "translation" => "soft_validations.buyer2_livein_wrong_for_ownership_type.title_text",
+        "translation" => "forms.2024.sales.soft_validations.buyer_livein_value_check.buyer2.title_text",
         "arguments" => [{ "key" => "ownership_scheme", "label" => false, "i18n_template" => "ownership_scheme" }],
       })
     end

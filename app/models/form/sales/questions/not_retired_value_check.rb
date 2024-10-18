@@ -2,7 +2,7 @@ class Form::Sales::Questions::NotRetiredValueCheck < ::Form::Question
   def initialize(id, hsh, page, person_index:)
     super(id, hsh, page)
     @id = "retirement_value_check"
-    @check_answer_label = "Retirement confirmation"
+    @copy_key = "sales.soft_validations.retirement_value_check.max"
     @type = "interruption_screen"
     @answer_options = {
       "0" => { "value" => "Yes" },
@@ -19,6 +19,5 @@ class Form::Sales::Questions::NotRetiredValueCheck < ::Form::Question
       ],
     }
     @check_answers_card_number = person_index
-    @header = "Are you sure this person isn't retired?"
   end
 end

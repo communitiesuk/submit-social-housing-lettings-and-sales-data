@@ -6,12 +6,13 @@ class Form::Sales::Pages::BuyerLiveInValueCheck < Form::Sales::Pages::Person
         "buyer#{person_index}_livein_wrong_for_ownership_type?" => true,
       },
     ]
+    @copy_key = "sales.soft_validations.buyer_livein_value_check.buyer#{person_index}"
     @title_text = {
-      "translation" => "soft_validations.buyer#{person_index}_livein_wrong_for_ownership_type.title_text",
+      "translation" => "forms.#{form.start_date.year}.#{@copy_key}.title_text",
       "arguments" => [{ "key" => "ownership_scheme", "label" => false, "i18n_template" => "ownership_scheme" }],
     }
     @informative_text = {
-      "translation" => "soft_validations.buyer#{person_index}_livein_wrong_for_ownership_type.hint_text",
+      "translation" => "forms.#{form.start_date.year}.#{@copy_key}.informative_text",
       "arguments" => [{ "key" => "ownership_scheme", "label" => false, "i18n_template" => "ownership_scheme" }],
     }
   end
