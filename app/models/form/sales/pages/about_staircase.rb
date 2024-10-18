@@ -2,7 +2,7 @@ class Form::Sales::Pages::AboutStaircase < ::Form::Page
   def initialize(id, hsh, subsection, joint_purchase:)
     super(id, hsh, subsection)
     @joint_purchase = joint_purchase
-    @header = "About the staircasing transaction"
+    @copy_key = "sales.sale_information.about_staircasing.#{joint_purchase ? 'joint_purchase' : 'not_joint_purchase'}"
     @depends_on = [{
       "staircase" => 1,
       "joint_purchase?" => joint_purchase,
