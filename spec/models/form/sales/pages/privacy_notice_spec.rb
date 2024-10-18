@@ -5,7 +5,7 @@ RSpec.describe Form::Sales::Pages::PrivacyNotice, type: :model do
 
   let(:page_id) { "privacy_notice" }
   let(:page_definition) { nil }
-  let(:subsection) { instance_double(Form::Subsection) }
+  let(:subsection) { instance_double(Form::Subsection, id: "setup") }
   let(:form) { instance_double(Form, start_date: Time.zone.local(2023, 4, 1), start_year_after_2024?: false) }
 
   before do
@@ -32,6 +32,8 @@ RSpec.describe Form::Sales::Pages::PrivacyNotice, type: :model do
     subject(:page) { described_class.new(page_id, page_definition, subsection, joint_purchase: true) }
 
     context "when the form start year is before 2024" do
+      let(:subsection) { instance_double(Form::Subsection, id: "household_characteristics") }
+
       it "has the expected copy_key" do
         expect(page.copy_key).to eq("sales.household_characteristics.privacynotice.joint_purchase")
       end
@@ -54,6 +56,8 @@ RSpec.describe Form::Sales::Pages::PrivacyNotice, type: :model do
     subject(:page) { described_class.new(page_id, page_definition, subsection, joint_purchase: false) }
 
     context "when the form start year is before 2024" do
+      let(:subsection) { instance_double(Form::Subsection, id: "household_characteristics") }
+
       it "has the expected copy_key" do
         expect(page.copy_key).to eq("sales.household_characteristics.privacynotice.not_joint_purchase")
       end
