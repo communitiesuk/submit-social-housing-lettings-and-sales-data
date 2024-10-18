@@ -1,10 +1,8 @@
 class Form::Sales::Questions::LivingBeforePurchaseYears < ::Form::Question
-  def initialize(id, hsh, page, ownershipsch:)
+  def initialize(id, hsh, page, ownershipsch:, joint_purchase:)
     super(id, hsh, page)
     @id = "proplen"
-    @check_answer_label = "Number of years living in the property before purchase"
-    @header = header_text
-    @hint_text = hint_text
+    @copy_key = "sales.sale_information.living_before_purchase.#{joint_purchase ? 'joint_purchase' : 'not_joint_purchase'}.proplen"
     @type = "numeric"
     @min = 0
     @max = 80
@@ -12,22 +10,6 @@ class Form::Sales::Questions::LivingBeforePurchaseYears < ::Form::Question
     @width = 5
     @ownershipsch = ownershipsch
     @question_number = question_number
-  end
-
-  def header_text
-    if form.start_date.year >= 2023
-      "How long did they live there?"
-    else
-      "How long did the buyer(s) live in the property before purchase?"
-    end
-  end
-
-  def hint_text
-    if form.start_date.year >= 2023
-      "You should round up to the nearest year"
-    else
-      "You should round this up to the nearest year. If the buyers haven't been living in the property, enter '0'"
-    end
   end
 
   def suffix_label(log)

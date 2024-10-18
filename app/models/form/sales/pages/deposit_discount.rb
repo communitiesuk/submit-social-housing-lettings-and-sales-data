@@ -2,7 +2,7 @@ class Form::Sales::Pages::DepositDiscount < ::Form::Page
   def initialize(id, hsh, subsection, optional:)
     super(id, hsh, subsection)
     @optional = optional
-    @header = "About the deposit"
+    @copy_key = "sales.sale_information.cashdis"
   end
 
   def questions
