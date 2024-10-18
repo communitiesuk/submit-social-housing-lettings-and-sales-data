@@ -6,7 +6,7 @@ RSpec.describe Form::Sales::Questions::BuyerInterview, type: :model do
   let(:question_id) { nil }
   let(:question_definition) { nil }
   let(:form) { instance_double(Form, start_date: Time.zone.local(2023, 4, 1), start_year_after_2024?: true) }
-  let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form:)) }
+  let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form:, id: "setup")) }
 
   it "has correct page" do
     expect(question.page).to eq(page)
@@ -35,6 +35,7 @@ RSpec.describe Form::Sales::Questions::BuyerInterview, type: :model do
     subject(:question) { described_class.new(question_id, question_definition, page, joint_purchase: true) }
 
     context "when the form start year is before 2024" do
+      let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form:, id: "household_characteristics")) }
       let(:form) { instance_double(Form, start_date: Time.zone.local(2024, 3, 1), start_year_after_2024?: false) }
 
       it "has the expected copy_key" do
@@ -55,6 +56,7 @@ RSpec.describe Form::Sales::Questions::BuyerInterview, type: :model do
     subject(:question) { described_class.new(question_id, question_definition, page, joint_purchase: false) }
 
     context "when the form start year is before 2024" do
+      let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form:, id: "household_characteristics")) }
       let(:form) { instance_double(Form, start_date: Time.zone.local(2023, 4, 1), start_year_after_2024?: false) }
 
       it "has the expected copy_key" do
