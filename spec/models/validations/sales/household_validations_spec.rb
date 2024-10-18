@@ -15,11 +15,11 @@ RSpec.describe Validations::Sales::HouseholdValidations do
       record.relat3 = "P"
       household_validator.validate_partner_count(record)
       expect(record.errors["relat2"])
-        .to include(match I18n.t("validations.household.relat.one_partner"))
+        .to include(match I18n.t("validations.sales.household.relat.one_partner"))
       expect(record.errors["relat3"])
-        .to include(match I18n.t("validations.household.relat.one_partner"))
+        .to include(match I18n.t("validations.sales.household.relat.one_partner"))
       expect(record.errors["relat4"])
-        .not_to include(match I18n.t("validations.household.relat.one_partner"))
+        .not_to include(match I18n.t("validations.sales.household.relat.one_partner"))
     end
 
     it "expects that a tenant can have a partner" do
@@ -47,9 +47,9 @@ RSpec.describe Validations::Sales::HouseholdValidations do
           record.relat2 = "P"
           household_validator.validate_person_age_matches_relationship(record)
           expect(record.errors["relat2"])
-            .to include(match I18n.t("validations.household.relat.child_under_16_sales", person_num: 2))
+            .to include(match I18n.t("validations.sales.household.relat.child_under_16", person_num: 2))
           expect(record.errors["age2"])
-            .to include(match I18n.t("validations.household.age.child_under_16_relat_sales", person_num: 2))
+            .to include(match I18n.t("validations.sales.household.age.child_under_16", person_num: 2))
         end
       end
 
@@ -58,9 +58,9 @@ RSpec.describe Validations::Sales::HouseholdValidations do
         record.relat2 = "C"
         household_validator.validate_person_age_matches_relationship(record)
         expect(record.errors["relat2"])
-          .to include(match I18n.t("validations.household.relat.child_over_20"))
+          .to include(match I18n.t("validations.sales.household.relat.child_over_20"))
         expect(record.errors["age2"])
-          .to include(match I18n.t("validations.household.age.child_over_20"))
+          .to include(match I18n.t("validations.sales.household.age.child_over_20"))
       end
     end
 
@@ -94,9 +94,9 @@ RSpec.describe Validations::Sales::HouseholdValidations do
         record.ecstat2 = 1
         household_validator.validate_person_age_matches_economic_status(record)
         expect(record.errors["ecstat2"])
-          .to include(match I18n.t("validations.household.ecstat.child_under_16", person_num: 2))
+          .to include(match I18n.t("validations.sales.household.ecstat.child_under_16", person_num: 2))
         expect(record.errors["age2"])
-          .to include(match I18n.t("validations.household.age.child_under_16_ecstat", person_num: 2))
+          .to include(match I18n.t("validations.sales.household.age.child_under_16_ecstat", person_num: 2))
       end
 
       it "expects that person's economic status is Child" do
@@ -112,9 +112,9 @@ RSpec.describe Validations::Sales::HouseholdValidations do
         record.ecstat2 = 9
         household_validator.validate_person_age_matches_economic_status(record)
         expect(record.errors["ecstat2"])
-          .to include(match I18n.t("validations.household.ecstat.child_over_16", person_num: 2))
+          .to include(match I18n.t("validations.sales.household.ecstat.child_over_16", person_num: 2))
         expect(record.errors["age2"])
-          .to include(match I18n.t("validations.household.age.child_over_16", person_num: 2))
+          .to include(match I18n.t("validations.sales.household.age.child_over_16", person_num: 2))
       end
     end
 
@@ -126,9 +126,9 @@ RSpec.describe Validations::Sales::HouseholdValidations do
         record.ecstat2 = 1
         household_validator.validate_person_age_matches_economic_status(record)
         expect(record.errors["ecstat2"])
-          .not_to include(match I18n.t("validations.household.ecstat.child_under_16", person_num: 2))
+          .not_to include(match I18n.t("validations.sales.household.ecstat.child_under_16", person_num: 2))
         expect(record.errors["age2"])
-          .not_to include(match I18n.t("validations.household.age.child_under_16_ecstat", person_num: 2))
+          .not_to include(match I18n.t("validations.sales.household.age.child_under_16_ecstat", person_num: 2))
       end
     end
   end
@@ -143,11 +143,11 @@ RSpec.describe Validations::Sales::HouseholdValidations do
         record.relat2 = "C"
         household_validator.validate_child_12_years_younger(record)
         expect(record.errors["age1"])
-          .to include(match I18n.t("validations.household.age.child_12_years_younger", person_num: 2))
+          .to include(match I18n.t("validations.sales.household.age.child_12_years_younger", person_num: 2))
         expect(record.errors["age2"])
-          .to include(match I18n.t("validations.household.age.child_12_years_younger", person_num: 2))
+          .to include(match I18n.t("validations.sales.household.age.child_12_years_younger", person_num: 2))
         expect(record.errors["relat2"])
-          .to include(match I18n.t("validations.household.age.child_12_years_younger", person_num: 2))
+          .to include(match I18n.t("validations.sales.household.age.child_12_years_younger", person_num: 2))
       end
 
       it "expects the child is at least 12 years younger than buyer 1" do
@@ -206,11 +206,11 @@ RSpec.describe Validations::Sales::HouseholdValidations do
         record.relat2 = "C"
         household_validator.validate_person_age_and_relationship_matches_economic_status(record)
         expect(record.errors["relat2"])
-          .to include(match I18n.t("validations.household.relat.student_16_19.cannot_be_child.16_19_not_student"))
+          .to include(match I18n.t("validations.sales.household.relat.student_16_19.cannot_be_child.16_19_not_student"))
         expect(record.errors["age2"])
-          .to include(match I18n.t("validations.household.age.student_16_19.cannot_be_16_19.child_not_student"))
+          .to include(match I18n.t("validations.sales.household.age.student_16_19.cannot_be_16_19.child_not_student"))
         expect(record.errors["ecstat2"])
-          .to include(match I18n.t("validations.household.ecstat.student_16_19.must_be_student"))
+          .to include(match I18n.t("validations.sales.household.ecstat.student_16_19.must_be_student"))
       end
 
       it "adds errors for a person who is a child of the buyer and a student but not aged 16-19" do
@@ -219,11 +219,11 @@ RSpec.describe Validations::Sales::HouseholdValidations do
         record.relat2 = "C"
         household_validator.validate_person_age_and_relationship_matches_economic_status(record)
         expect(record.errors["relat2"])
-          .to include(match I18n.t("validations.household.relat.student_16_19.cannot_be_child.student_not_16_19"))
+          .to include(match I18n.t("validations.sales.household.relat.student_16_19.cannot_be_child.student_not_16_19"))
         expect(record.errors["age2"])
-          .to include(match I18n.t("validations.household.age.student_16_19.must_be_16_19"))
+          .to include(match I18n.t("validations.sales.household.age.student_16_19.must_be_16_19"))
         expect(record.errors["ecstat2"])
-          .to include(match I18n.t("validations.household.ecstat.student_16_19.cannot_be_student.child_not_16_19"))
+          .to include(match I18n.t("validations.sales.household.ecstat.student_16_19.cannot_be_student.child_not_16_19"))
       end
     end
 
@@ -316,9 +316,9 @@ RSpec.describe Validations::Sales::HouseholdValidations do
           it "triggers a validation if buyer two will also not live in the property" do
             sales_log.buy2livein = 2
             household_validator.validate_buyers_living_in_property(sales_log)
-            expect(sales_log.errors[:buylivein]).to include I18n.t("validations.household.buylivein.buyers_will_live_in_property_values_inconsistent_setup")
-            expect(sales_log.errors[:buy2livein]).to include I18n.t("validations.household.buylivein.buyers_will_live_in_property_values_inconsistent")
-            expect(sales_log.errors[:buy1livein]).to include I18n.t("validations.household.buylivein.buyers_will_live_in_property_values_inconsistent")
+            expect(sales_log.errors[:buylivein]).to include I18n.t("validations.sales.household.buylivein.buyers_will_live_in_property_values_inconsistent")
+            expect(sales_log.errors[:buy2livein]).to include I18n.t("validations.sales.household.buy2livein.buyers_will_live_in_property_values_inconsistent")
+            expect(sales_log.errors[:buy1livein]).to include I18n.t("validations.sales.household.buy1livein.buyers_will_live_in_property_values_inconsistent")
           end
         end
       end
