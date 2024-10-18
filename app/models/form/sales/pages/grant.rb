@@ -2,7 +2,7 @@ class Form::Sales::Pages::Grant < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "grant"
-    @header = "About the price of the property"
+    @copy_key = "sales.sale_information.grant"
     @depends_on = [{
       "right_to_buy?" => false,
       "rent_to_buy_full_ownership?" => false,

@@ -176,3 +176,33 @@ en:
               check_answer_label:  "Monthly leasehold charges"
               hint_text: ""
               question_text: "Enter the total monthly charge"
+
+          purchase_price:
+            shared_ownership:
+              page_header: "About the price of the property"
+              check_answer_label: "Purchase price"
+              hint_text: "For all schemes, including Right to Acquire (RTA), Right to Buy (RTB), Voluntary Right to Buy (VRTB) or Preserved Right to Buy (PRTB) sales, enter the full price of the property without any discount"
+              question_text: "What is the full purchase price?"
+            discounted_ownership:
+              page_header: "About the price of the property"
+              check_answer_label: "Purchase price"
+              hint_text: "For all schemes, including Right to Acquire (RTA), Right to Buy (RTB), Voluntary Right to Buy (VRTB) or Preserved Right to Buy (PRTB) sales, enter the full price of the property without any discount"
+              question_text: "What is the full purchase price?"
+            outright_sale:
+              page_header: "About the price of the property"
+              check_answer_label: "Purchase price"
+              hint_text: ""
+              question_text: "What is the full purchase price?"
+
+          discount:
+            page_header: "About the price of the property"
+            check_answer_label: "Percentage discount"
+            hint_text: "For Right to Buy (RTB), Preserved Right to Buy (PRTB), and Voluntary Right to Buy (VRTB)</br></br>If discount capped, enter capped %</br></br>If the property is being sold to an existing tenant under the RTB, PRTB, or VRTB schemes, enter the % discount from the full market value that is being given."
+            question_text: "What was the percentage discount?"
+          
+          grant:
+            page_header: "About the price of the property"
+            check_answer_label: "Amount of any loan, grant or subsidy"
+            hint_text: "For all schemes except Right to Buy (RTB), Preserved Right to Buy (PRTB), Voluntary Right to Buy (VRTB) and Rent to Buy"
+            question_text: "What was the amount of any loan, grant, discount or subsidy given?"
+          
