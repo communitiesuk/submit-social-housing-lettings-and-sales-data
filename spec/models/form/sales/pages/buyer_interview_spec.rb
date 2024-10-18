@@ -6,7 +6,7 @@ RSpec.describe Form::Sales::Pages::BuyerInterview, type: :model do
   let(:page_id) { "buyer_interview" }
   let(:page_definition) { nil }
   let(:form) { instance_double(Form, start_date: Time.zone.local(2023, 4, 1), start_year_after_2024?: false) }
-  let(:subsection) { instance_double(Form::Subsection, form:) }
+  let(:subsection) { instance_double(Form::Subsection, form:, id: "setup") }
 
   it "has correct subsection" do
     expect(page.subsection).to eq(subsection)
@@ -25,6 +25,8 @@ RSpec.describe Form::Sales::Pages::BuyerInterview, type: :model do
   end
 
   context "when form is before 2024" do
+    let(:subsection) { instance_double(Form::Subsection, form:, id: "household_characteristics") }
+
     context "when there are joint buyers" do
       subject(:page) { described_class.new(page_id, page_definition, subsection, joint_purchase: true) }
 
