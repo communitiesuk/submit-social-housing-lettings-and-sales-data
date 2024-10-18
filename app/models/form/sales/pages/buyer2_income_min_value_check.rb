@@ -6,8 +6,9 @@ class Form::Sales::Pages::Buyer2IncomeMinValueCheck < ::Form::Page
         "income2_under_soft_min?" => true,
       },
     ]
+    @copy_key = "sales.soft_validations.income2_value_check.min"
     @title_text = {
-      "translation" => "soft_validations.income.under_soft_min_for_economic_status.title_text",
+      "translation" => "forms.#{form.start_date.year}.#{@copy_key}.title_text",
       "arguments" => [
         {
           "key" => "field_formatted_as_currency",
@@ -22,7 +23,7 @@ class Form::Sales::Pages::Buyer2IncomeMinValueCheck < ::Form::Page
       ],
     }
     @informative_text = {
-      "translation" => "soft_validations.income.under_soft_min_for_economic_status.hint_text",
+      "translation" => "forms.#{form.start_date.year}.#{@copy_key}.informative_text",
       "arguments" => [],
     }
   end

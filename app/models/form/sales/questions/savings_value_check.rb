@@ -2,8 +2,7 @@ class Form::Sales::Questions::SavingsValueCheck < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "savings_value_check"
-    @check_answer_label = "Savings confirmation"
-    @header = "Are you sure the savings are higher than £100,000?"
+    @copy_key = "sales.soft_validations.savings_value_check"
     @type = "interruption_screen"
     @answer_options = {
       "0" => { "value" => "Yes" },

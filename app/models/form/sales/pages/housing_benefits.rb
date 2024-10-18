@@ -2,6 +2,7 @@ class Form::Sales::Pages::HousingBenefits < ::Form::Page
   def initialize(id, hsh, subsection, joint_purchase:)
     super(id, hsh, subsection)
     @joint_purchase = joint_purchase
+    @copy_key = "sales.income_benefits_and_savings.housing_benefits.#{joint_purchase ? 'joint_purchase' : 'not_joint_purchase'}"
   end
 
   def questions

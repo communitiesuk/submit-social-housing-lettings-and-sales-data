@@ -2,8 +2,7 @@ class Form::Sales::Questions::DepositValueCheck < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "deposit_value_check"
-    @check_answer_label = "Deposit confirmation"
-    @header = "Are you sure that the deposit is this much higher than the buyer's savings?"
+    @copy_key = "sales.soft_validations.deposit_value_check"
     @type = "interruption_screen"
     @answer_options = {
       "0" => { "value" => "Yes" },

@@ -8,7 +8,7 @@ RSpec.describe Form::Sales::Subsections::SharedOwnershipScheme, type: :model do
   let(:section) { instance_double(Form::Sales::Sections::SaleInformation) }
 
   before do
-    allow(section).to receive(:form).and_return(instance_double(Form, start_year_after_2024?: false))
+    allow(section).to receive(:form).and_return(instance_double(Form, start_year_after_2024?: false, start_date: Time.zone.local(2023, 4, 1)))
   end
 
   it "has correct section" do
