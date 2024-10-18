@@ -1,7 +1,7 @@
 class Form::Sales::Pages::Mortgageused < ::Form::Page
   def initialize(id, hsh, subsection, ownershipsch:)
     super(id, hsh, subsection)
-    @header = "Mortgage Amount"
+    @copy_key = "sales.sale_information.mortgageused"
     @ownershipsch = ownershipsch
   end
 

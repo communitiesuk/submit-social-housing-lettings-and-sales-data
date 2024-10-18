@@ -2,10 +2,8 @@ class Form::Sales::Questions::MortgageLender < ::Form::Question
   def initialize(id, hsh, subsection, ownershipsch:)
     super(id, hsh, subsection)
     @id = "mortgagelender"
-    @check_answer_label = "Mortgage Lender"
-    @header = "What is the name of the mortgage lender?"
+    @copy_key = "sales.sale_information.mortgagelender"
     @type = "select"
-    @hint_text = ""
     @page = page
     @bottom_guidance_partial = "mortgage_lender"
     @ownershipsch = ownershipsch

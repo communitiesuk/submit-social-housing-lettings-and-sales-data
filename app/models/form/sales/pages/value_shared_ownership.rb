@@ -2,7 +2,7 @@ class Form::Sales::Pages::ValueSharedOwnership < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "value_shared_ownership"
-    @header = "About the price of the property"
+    @copy_key = "sales.sale_information.value"
   end
 
   def questions

@@ -2,7 +2,7 @@ class Form::Sales::Pages::MortgageLender < ::Form::Page
   def initialize(id, hsh, subsection, ownershipsch:)
     super(id, hsh, subsection)
     @ownershipsch = ownershipsch
-    @header = ""
+    @copy_key = "sales.sale_information.mortgagelender"
     @description = ""
     @subsection = subsection
     @depends_on = [{

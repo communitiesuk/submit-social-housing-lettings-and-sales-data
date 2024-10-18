@@ -2,9 +2,7 @@ class Form::Sales::Questions::LivingBeforePurchase < ::Form::Question
   def initialize(id, hsh, page, ownershipsch:, joint_purchase:)
     super(id, hsh, page)
     @id = "proplen_asked"
-    @check_answer_label = "#{joint_purchase ? 'Buyers' : 'Buyer'} lived in the property before purchasing"
-    @header = "Did the #{joint_purchase ? 'buyers' : 'buyer'} live in the property before purchasing it?"
-    @hint_text = nil
+    @copy_key = "sales.sale_information.living_before_purchase.#{joint_purchase ? 'joint_purchase' : 'not_joint_purchase'}.proplen_asked"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @conditional_for = {

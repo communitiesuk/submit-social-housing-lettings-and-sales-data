@@ -2,11 +2,9 @@ class Form::Sales::Questions::LaNominations < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "lanomagr"
-    @check_answer_label = "Household rehoused under a local authority nominations agreement?"
-    @header = "Was the household rehoused under a 'local authority nominations agreement'?"
+    @copy_key = "sales.sale_information.la_nominations"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
-    @hint_text = "A local authority nominations agreement is a written agreement between a local authority and private registered provider (PRP) that some or all of its sales vacancies are offered to local authorities for rehousing"
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
   end
 
