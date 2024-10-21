@@ -231,7 +231,7 @@ en:
     scheme_deleted: "%{service_name} has been deleted."
     user_deleted: "%{name} has been deleted."
     organisation_deleted: "%{name} has been deleted."
-    user_updated: 
+    user_updated:
       self: "Your account details have been updated."
       other: "%{name}’s details have been updated."
 
@@ -282,8 +282,6 @@ en:
         blank: "Enter name of other intermediate rent product."
       saledate:
         year_not_two_digits: "Sale completion year must be 2 digits."
-      type:
-        percentage_bought_must_be_at_least_threshold: "The minimum increase in equity while staircasing is %{threshold}% for this shared ownership type."
 
       startdate:
         current_collection_year:
@@ -405,12 +403,6 @@ en:
         under_hard_min: "The household’s income cannot be less than %{hard_min} per week given the household’s working situation."
         freq_missing: "Select how often the household receives income."
         earnings_missing: "Enter how much income the household has in total."
-      income:
-        outside_london_income_range: "Income must be between £0 and £90,000 for properties within a London local authority."
-        outside_non_london_income_range: "Income must be between £0 and £80,000 for properties in a non-London local authority."
-        combined_over_hard_max_for_london: "Combined income must be £90,000 or lower for properties within a London local authority."
-        combined_over_hard_max_for_outside_london: "Combined income must be £80,000 or lower for properties outside London local authorities."
-        child_has_income: "Child's income must be £0."
       negative_currency: "Enter an amount above 0."
       rent:
         out_of_range: "Enter a value for the %{charge_name} between £0 and %{maximum_per_period} paid %{frequency}. %{maximum_per_period} is the max limit for rent and charges paid %{frequency} for %{letting_type} lettings owned by a %{provider_type}."
@@ -468,17 +460,6 @@ en:
         not_provided: "Enter how much rent and other charges the household pays %{period}."
         less_than_shortfall: "The care home charge must be more than the outstanding amount."
       cash_discount_invalid: "Cash discount must be £0 - £999,999."
-      staircasing:
-        percentage_bought_must_be_greater_than_percentage_owned: "Total percentage %{buyer_now_owns} must be more than percentage bought in this transaction."
-        percentage_bought_must_be_at_least_threshold: "The minimum increase in equity while staircasing is %{threshold}%."
-        percentage_bought_equal_percentage_owned: "The percentage bought is %{stairbought}% and the percentage owned in total is %{stairowned}%. These figures cannot be the same."
-      monthly_leasehold_charges:
-        not_zero: "Monthly leasehold charges cannot be £0 if the property has monthly charges."
-      equity:
-        under_min: "The minimum initial equity stake for this type of shared ownership sale is %{min_equity}%."
-        over_max: "The maximum initial equity stake is %{max_equity}%."
-        over_stairowned_minus_stairbought: "The initial equity stake is %{equity}% and the percentage owned in total minus the percentage bought is %{staircase_difference}%. In a staircasing transaction, the equity stake purchased cannot be larger than the percentage the %{buyer_owns} minus the percentage bought."
-      mortgage: "Mortgage value cannot be £0 if a mortgage was used for the purchase of this property."
       mortgage_used:
         year: "You must answer either ‘yes’ or ‘no’ to the question ‘was a mortgage used’ for the selected year."
         staircasing: "You must answer either ‘yes’ or ‘no’ to the question ‘was a mortgage used’ for staircasing transactions."
