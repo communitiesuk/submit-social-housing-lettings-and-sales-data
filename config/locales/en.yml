@@ -700,9 +700,6 @@ en:
       max:
         title: "You told us this person is over 66 and not retired."
         hint_text: "The minimum expected retirement age in England is 66."
-    extra_borrowing:
-      title_text: "You told us that the mortgage and deposit total is %{mortgage_and_deposit_total}."
-      hint_text: "This is higher than the purchase price minus the discount."
     pregnancy:
       title: "You told us somebody in the household is pregnant."
       all_male_tenants: "You also told us that all the tenants living at the property are male."
@@ -720,9 +717,6 @@ en:
       hint_text: "At least one buyer must be aged 65 years and over to use this scheme."
     student_not_child:
       title_text: "You told us this person is a student aged between 16 and 19."
-    discounted_sale_value:
-      title_text: "Mortgage, deposit, and grant total must equal %{value_with_discount}."
-      informative_text: "Your given mortgage, deposit and grant total is %{mortgage_deposit_and_grant_total}."
     care_home_charges:
       title_text: "Care home charges should be provided if this is a care home accommodation."
     buyer1_livein_wrong_for_ownership_type:
@@ -731,12 +725,6 @@ en:
     buyer2_livein_wrong_for_ownership_type:
       title_text: "You told us that buyer 2 will not live in the property."
       hint_text: " For %{ownership_scheme} types, the buyer usually lives in the property."
-    percentage_discount_value:
-      title_text: "You told us that the percentage discount is %{discount}."
-      hint_text: "This is higher than we would expect."
-    grant:
-      title_text: "You told us that the grant amount is %{grant}."
-      hint_text: "Loans, grants and subsidies are usually between £9,000 and £16,000."
     wheelchair:
       title_text: "You told us that someone in the household uses a wheelchair."
     referral:
@@ -751,9 +739,6 @@ en:
     charges:
       informative_text: "This is higher than we would expect."
       hint_text: "Check the following:<ul class=\"govuk-body-l app-panel--interruption\"><li>the decimal point</li><li>the frequency, for example every week or every calendar month</li><li>the needs type</li></ul>"
-    deposit_and_mortgage:
-      title_text: "You told us the mortgage amount was %{mortgage}, the cash deposit was %{deposit} and the discount was %{discount}."
-      hint_text: "We would expect the mortgage amount and the deposit added together to be the same as the purchase price minus the discount."
     reasonother:
       title_text: "You told us that the tenant’s main reason for leaving their last settled home was %{reasonother}."
       informative_text: "The reason you have entered looks very similar to one of the existing response categories.

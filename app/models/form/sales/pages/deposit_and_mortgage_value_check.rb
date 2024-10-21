@@ -6,8 +6,9 @@ class Form::Sales::Pages::DepositAndMortgageValueCheck < ::Form::Page
         "mortgage_plus_deposit_less_than_discounted_value?" => true,
       },
     ]
+    @copy_key = "sales.sale_information.deposit_and_mortgage_value_check"
     @title_text = {
-      "translation" => "soft_validations.deposit_and_mortgage.title_text",
+      "translation" => "forms.#{form.start_date.year}.#{@copy_key}.title_text",
       "arguments" => [
         {
           "key" => "mortgage",
@@ -27,7 +28,7 @@ class Form::Sales::Pages::DepositAndMortgageValueCheck < ::Form::Page
       ],
     }
     @informative_text = {
-      "translation" => "soft_validations.deposit_and_mortgage.hint_text",
+      "translation" => "forms.#{form.start_date.year}.#{@copy_key}.informative_text",
       "arguments" => [],
     }
   end
