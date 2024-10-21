@@ -1,12 +1,13 @@
 class Form::Sales::Pages::PercentageDiscountValueCheck < ::Form::Page
   def initialize(id, hsh, subsection)
     super
+    @copy_key = "sales.sale_information.percentage_discount_value_check"
     @title_text = {
-      "translation" => "soft_validations.percentage_discount_value.title_text",
+      "translation" => "forms.#{form.start_date.year}.#{@copy_key}.title_text",
       "arguments" => [{ "key" => "discount", "label" => true, "i18n_template" => "discount" }],
     }
     @informative_text = {
-      "translation" => "soft_validations.percentage_discount_value.hint_text",
+      "translation" => "forms.#{form.start_date.year}.#{@copy_key}.informative_text",
       "arguments" => [],
     }
     @depends_on = [{ "percentage_discount_invalid?" => true }]

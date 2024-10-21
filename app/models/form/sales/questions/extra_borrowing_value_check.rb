@@ -2,7 +2,7 @@ class Form::Sales::Questions::ExtraBorrowingValueCheck < ::Form::Question
   def initialize(id, hsh, page)
     super(id, hsh, page)
     @id = "extrabor_value_check"
-    @check_answer_label = "Extra borrowing confirmation"
+    @copy_key = "sales.sale_information.extra_borrowing_value_check"
     @type = "interruption_screen"
     @answer_options = {
       "0" => { "value" => "Yes" },
@@ -18,6 +18,5 @@ class Form::Sales::Questions::ExtraBorrowingValueCheck < ::Form::Question
         },
       ],
     }
-    @header = "Are you sure there is no extra borrowing?"
   end
 end

@@ -2,13 +2,14 @@ class Form::Sales::Pages::GrantValueCheck < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "grant_value_check"
+    @copy_key = "sales.sale_information.grant_value_check"
     @depends_on = [
       {
         "grant_outside_common_range?" => true,
       },
     ]
     @title_text = {
-      "translation" => "soft_validations.grant.title_text",
+      "translation" => "forms.#{form.start_date.year}.#{@copy_key}.title_text",
       "arguments" => [
         {
           "key" => "field_formatted_as_currency",
@@ -18,7 +19,7 @@ class Form::Sales::Pages::GrantValueCheck < ::Form::Page
       ],
     }
     @informative_text = {
-      "translation" => "soft_validations.grant.hint_text",
+      "translation" => "forms.#{form.start_date.year}.#{@copy_key}.informative_text",
       "arguments" => [],
     }
   end
