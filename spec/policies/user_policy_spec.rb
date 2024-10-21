@@ -4,7 +4,7 @@ require "rails_helper"
 RSpec.describe UserPolicy do
   subject(:policy) { described_class }
 
-  let(:data_provider) { FactoryBot.create(:user, :data_provider) }
+  let(:data_provider) { FactoryBot.create(:user, :data_provider, email: "provider@example.com") }
   let(:data_coordinator) { FactoryBot.create(:user, :data_coordinator) }
   let(:support) { FactoryBot.create(:user, :support) }
 
@@ -63,12 +63,37 @@ RSpec.describe UserPolicy do
       expect(policy).not_to permit(data_provider, data_provider)
     end
 
+    it "as a provider it does not allow changing roles when user is in email allowlist" do
+      allow(Rails.application.credentials).to receive(:[]).with(:staging_role_update_email_allowlist).and_return(["example.com"])
+      expect(policy).not_to permit(data_provider, data_provider)
+    end
+
     it "as a coordinator allows changing other user's roles" do
       expect(policy).to permit(data_coordinator, data_provider)
     end
 
     it "as a support user allows changing other user's roles" do
       expect(policy).to permit(support, data_provider)
+    end
+
+    context "when on staging" do
+      context "and user is in the email allowlist" do
+        it "allows changing roles" do
+          allow(Rails.env).to receive(:staging?).and_return(true)
+          allow(Rails.application.credentials).to receive(:[]).with(:staging_role_update_email_allowlist).and_return(["example.com"])
+
+          expect(policy).to permit(data_provider, data_provider)
+        end
+      end
+
+      context "and user is not in the email allowlist" do
+        it "does not allow changing roles" do
+          allow(Rails.env).to receive(:staging?).and_return(true)
+          allow(Rails.application.credentials).to receive(:[]).with(:staging_role_update_email_allowlist).and_return(["something.com"])
+
+          expect(policy).not_to permit(data_provider, data_provider)
+        end
+      end
     end
   end
 
