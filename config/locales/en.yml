@@ -650,15 +650,6 @@ en:
       outside_range_title: "You told us the rent is %{brent}."
       informative_text: "This is %{higher_or_lower} than we would expect."
       hint_text: "Check the following:<ul class=\"govuk-body-l app-panel--interruption\"><li>the decimal point</li><li>the frequency, for example every week or every calendar month</li><li>the rent type is correct, for example affordable or social rent</li></ul>"
-    purchase_price:
-      title_text: "You told us the purchase price is %{value}."
-      hint_text: "This is %{higher_or_lower} than we would expect."
-    staircase_owned:
-      title_text:
-        one: "You told us that the buyer now owns %{stairowned} of the property."
-        two: "You told us that the buyers now own %{stairowned} of the property."
-      hint_text: "The maximum percentage that can be owned under the Older Persons Shared Ownership scheme is 75%, unless the property was funded outside the Affordable Homes Programme.
-Make sure these answers are correct."
     retirement:
       min:
         title: "You told us this person is aged %{age} years and retired."
@@ -678,14 +669,6 @@ Make sure these answers are correct."
       hint_text: "This is higher than we would expect."
     void_date:
       title_text: "You told us that the property has been vacant for more than 2 years."
-      hint_text: "This is higher than we would expect."
-    shared_ownership_deposit:
-      title_text: "You told us that the %{mortgage_deposit_and_discount_error_fields} add up to %{mortgage_deposit_and_discount_total}."
-    staircase_bought_seems_high:
-      title_text: "You told us that %{percentage}% was bought in this staircasing transaction."
-      hint_text: "Most staircasing transactions are less than 50%"
-    monthly_charges_over_soft_max:
-      title_text: "You told us that the monthly charges were %{mscharge}."
       hint_text: "This is higher than we would expect."
     discounted_sale_value:
       title_text: "Mortgage, deposit, and grant total must equal %{value_with_discount}."
@@ -718,8 +701,6 @@ Make sure these answers are correct."
       informative_text: "The reason you have entered looks very similar to one of the existing response categories.
                          Please check the categories and select the appropriate one.
                          If the existing categories are not suitable, please confirm here to move onto the next question."
-    hodate:
-      must_be_less_than_3_years_from_saledate: "You told us practical completion or handover date is more than 3 years before sale completion date."
     saledate:
       must_be_less_than_3_years_from_hodate: "You told us sale completion date is more than 3 years after practical completion or handover date."
     no_address_found:
