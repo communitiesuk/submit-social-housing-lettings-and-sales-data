@@ -47,7 +47,7 @@ en:
             not_joint_purchase:
               title_text: "You told us the buyer’s savings were %{savings}."
               informative_text: "This is higher than we would expect."
-          deposit_value_check::
+          deposit_value_check:
             page_header: ""
             check_answer_label: "Deposit confirmation"
             hint_text: ""
