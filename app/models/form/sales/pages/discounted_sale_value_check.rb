@@ -2,7 +2,7 @@ class Form::Sales::Pages::DiscountedSaleValueCheck < ::Form::Page
   def initialize(id, hsh, subsection, person_index = nil)
     super(id, hsh, subsection)
     @depends_on = depends_on
-    @copy_key = "sales.sale_information.discounted_sale_value_check"
+    @copy_key = "sales.soft_validations.discounted_sale_value_check"
     @title_text = {
       "translation" => "forms.#{form.start_date.year}.#{@copy_key}.title_text",
       "arguments" => [

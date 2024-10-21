@@ -2,7 +2,7 @@ class Form::Sales::Questions::DiscountedSaleValueCheck < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "discounted_sale_value_check"
-    @copy_key = "sales.sale_information.discounted_sale_value_check"
+    @copy_key = "sales.soft_validations.discounted_sale_value_check"
     @type = "interruption_screen"
     @answer_options = {
       "0" => { "value" => "Yes" },

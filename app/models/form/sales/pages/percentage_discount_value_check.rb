@@ -1,7 +1,7 @@
 class Form::Sales::Pages::PercentageDiscountValueCheck < ::Form::Page
   def initialize(id, hsh, subsection)
     super
-    @copy_key = "sales.sale_information.percentage_discount_value_check"
+    @copy_key = "sales.soft_validations.percentage_discount_value_check"
     @title_text = {
       "translation" => "forms.#{form.start_date.year}.#{@copy_key}.title_text",
       "arguments" => [{ "key" => "discount", "label" => true, "i18n_template" => "discount" }],

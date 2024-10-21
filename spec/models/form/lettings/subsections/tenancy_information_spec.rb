@@ -12,7 +12,7 @@ RSpec.describe Form::Lettings::Subsections::TenancyInformation, type: :model do
   end
 
   describe "pages" do
-    let(:section) { instance_double(Form::Sales::Sections::TenancyInformation, form:) }
+    let(:section) { instance_double(Form::Lettings::Sections::TenancyAndProperty, form:) }
     let(:form) { instance_double(Form, start_date:) }
 
     before do

@@ -2,7 +2,7 @@ class Form::Sales::Questions::DepositAndMortgageValueCheck < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "deposit_and_mortgage_value_check"
-    @copy_key = "sales.sale_information.deposit_and_mortgage_value_check"
+    @copy_key = "sales.soft_validations.deposit_and_mortgage_value_check"
     @type = "interruption_screen"
     @answer_options = {
       "0" => { "value" => "Yes" },
