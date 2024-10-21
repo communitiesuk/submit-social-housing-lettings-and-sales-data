@@ -1001,13 +1001,15 @@ private
   end
 
   def hodate
-    Date.new(field_96 + 2000, field_95, field_94) if field_96.present? && field_95.present? && field_94.present?
+    year = field_96.to_s.strip.length.between?(1, 2) ? field_96 + 2000 : field_96
+    Date.new(year, field_95, field_94) if field_96.present? && field_95.present? && field_94.present?
   rescue Date::Error
     Date.new
   end
 
   def exdate
-    Date.new(field_93 + 2000, field_92, field_91) if field_93.present? && field_92.present? && field_91.present?
+    year = field_93.to_s.strip.length.between?(1, 2) ? field_93 + 2000 : field_93
+    Date.new(year, field_92, field_91) if field_93.present? && field_92.present? && field_91.present?
   rescue Date::Error
     Date.new
   end

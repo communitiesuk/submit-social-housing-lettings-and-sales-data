@@ -2669,6 +2669,14 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
         end
       end
 
+      context "when valid (4 digit year)" do
+        let(:attributes) { { bulk_upload:, field_33: "13", field_34: "12", field_35: "2022" } }
+
+        it "sets value given" do
+          expect(parser.log.mrcdate).to eq(Date.new(2022, 12, 13))
+        end
+      end
+
       context "when invalid" do
         let(:attributes) { { bulk_upload:, field_33: "13", field_34: "13", field_35: "22" } }
 
@@ -2699,6 +2707,14 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
     describe "#voiddate" do
       context "when valid" do
         let(:attributes) { { bulk_upload:, field_30: "13", field_31: "12", field_32: "22" } }
+
+        it "sets value given" do
+          expect(parser.log.voiddate).to eq(Date.new(2022, 12, 13))
+        end
+      end
+
+      context "when valid (4 digit year)" do
+        let(:attributes) { { bulk_upload:, field_30: "13", field_31: "12", field_32: "2022" } }
 
         it "sets value given" do
           expect(parser.log.voiddate).to eq(Date.new(2022, 12, 13))

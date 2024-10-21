@@ -1592,13 +1592,15 @@ private
   end
 
   def mrcdate
-    Date.new(field_35 + 2000, field_34, field_33) if field_35.present? && field_34.present? && field_33.present?
+    year = field_35.to_s.strip.length.between?(1, 2) ? field_35 + 2000 : field_35
+    Date.new(year, field_34, field_33) if field_35.present? && field_34.present? && field_33.present?
   rescue Date::Error
     Date.new
   end
 
   def voiddate
-    Date.new(field_32 + 2000, field_31, field_30) if field_32.present? && field_31.present? && field_30.present?
+    year = field_32.to_s.strip.length.between?(1, 2) ? field_32 + 2000 : field_32
+    Date.new(year, field_31, field_30) if field_32.present? && field_31.present? && field_30.present?
   rescue Date::Error
     Date.new
   end
