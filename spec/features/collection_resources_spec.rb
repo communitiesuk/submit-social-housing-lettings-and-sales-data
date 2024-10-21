@@ -187,7 +187,7 @@ RSpec.describe "Collection resources" do
       expect(CollectionResource.first.released_to_user).to be_nil
       expect(CollectionResource.first.display_name).to eq("sales some file (2025 to 2026)")
       expect(CollectionResource.first.short_display_name).to eq("some file")
-      expect(page).to have_content("The sales 2025 to 2026 some file is now available to users.")
+      expect(page).to have_content("The sales 2025 to 2026 some file has been uploaded.")
     end
 
     it "validates file is attached" do

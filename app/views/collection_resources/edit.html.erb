@@ -27,14 +27,16 @@
 
       <% unless @collection_resource.mandatory %>
         <%= f.govuk_text_field :short_display_name,
-                  label: nil,
+                  label: { text: "Resource type", size: "m" },
                   hint: { text: safe_join(["This will be used in the download link on the homepage. Do not include the log type or collection year.",
                                            content_tag(:br),
                                            "For example, if you enter “bulk upload change log”, the download link will say “Download the #{@collection_resource.log_type} bulk upload change log (#{text_year_range_format(@collection_resource.year)})”."]) } %>
                                           <% end %>
 
-      <%= f.govuk_submit resource_exists ? "Save changes" : "Upload" %>
-      <%= govuk_button_link_to "Cancel", collection_resources_path, secondary: true %>
+      <div class="govuk-button-group">
+        <%= f.govuk_submit resource_exists ? "Save changes" : "Upload" %>
+        <%= govuk_button_link_to "Cancel", collection_resources_path, secondary: true %>
+      </div>
     <% end %>
   </div>
 </div>

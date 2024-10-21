@@ -167,7 +167,11 @@ class CollectionResourcesController < ApplicationController
     if @collection_resource.save
       begin
         CollectionResourcesService.new.upload_collection_resource(@collection_resource.download_filename, @collection_resource.file)
-        flash[:notice] = "The #{@collection_resource.log_type} #{text_year_range_format(@collection_resource.year)} #{@collection_resource.short_display_name} is now available to users."
+        flash[:notice] = if displayed_collection_resource_years.include?(@collection_resource.year)
+                           "The #{@collection_resource.log_type} #{text_year_range_format(@collection_resource.year)} #{@collection_resource.short_display_name} is now available to users."
+                         else
+                           "The #{@collection_resource.log_type} #{text_year_range_format(@collection_resource.year)} #{@collection_resource.short_display_name} has been uploaded."
+                         end
         redirect_to collection_resources_path
       rescue StandardError
         @collection_resource.errors.add(:file, :error_uploading)

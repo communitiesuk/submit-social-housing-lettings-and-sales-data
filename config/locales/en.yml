@@ -122,7 +122,7 @@ en:
             file:
               error_uploading: There was an error uploading this file.
               blank: Select which file to upload.
-              above_100_mb: The file is above 100MB.
+              above_100_mb: File must be 100MB or less.
               must_be_pdf: The paper form must be a PDF.
               must_be_xlsx: The %{resource} must be a Microsoft Excel file.
 
@@ -212,7 +212,7 @@ en:
             file:
               error_uploading: There was an error uploading this file.
               blank: Select which file to upload.
-              above_100_mb: The file is above 100MB.
+              above_100_mb: File must be 100MB or less.
               must_be_pdf: The paper form must be a PDF.
               must_be_xlsx: The %{resource} must be a Microsoft Excel file.
             short_display_name:
