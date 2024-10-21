@@ -2,9 +2,8 @@ class Form::Sales::Questions::SharedOwnershipDepositValueCheck < ::Form::Questio
   def initialize(id, hsh, page)
     super
     @id = "shared_ownership_deposit_value_check"
-    @check_answer_label = "Shared ownership deposit confirmation"
+    @copy_key = "sales.soft_validations.shared_ownership_deposit_value_check"
     @type = "interruption_screen"
-    @header = "Are you sure this is correct?"
     @answer_options = {
       "0" => { "value" => "Yes" },
       "1" => { "value" => "No" },

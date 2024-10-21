@@ -7,8 +7,9 @@ class Form::Sales::Pages::StaircaseBoughtValueCheck < ::Form::Page
         "staircase_bought_above_fifty?" => true,
       },
     ]
+    @copy_key = "sales.soft_validations.staircase_bought_value_check"
     @title_text = {
-      "translation" => "soft_validations.staircase_bought_seems_high.title_text",
+      "translation" => "forms.#{form.start_date.year}.#{@copy_key}.title_text",
       "arguments" => [
         {
           "key" => "stairbought",
@@ -17,7 +18,7 @@ class Form::Sales::Pages::StaircaseBoughtValueCheck < ::Form::Page
       ],
     }
     @informative_text = {
-      "translation" => "soft_validations.staircase_bought_seems_high.hint_text",
+      "translation" => "forms.#{form.start_date.year}.#{@copy_key}.informative_text",
       "arguments" => [],
     }
   end

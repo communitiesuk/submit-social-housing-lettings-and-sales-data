@@ -5,7 +5,8 @@ RSpec.describe Form::Sales::Pages::MonthlyChargesValueCheck, type: :model do
 
   let(:page_id) { "monthly_charges_value_check" }
   let(:page_definition) { nil }
-  let(:subsection) { instance_double(Form::Subsection) }
+  let(:form) { instance_double(Form, start_date: Time.zone.local(2024, 4, 1)) }
+  let(:subsection) { instance_double(Form::Subsection, form:) }
 
   it "has correct subsection" do
     expect(page.subsection).to eq(subsection)
@@ -33,13 +34,13 @@ RSpec.describe Form::Sales::Pages::MonthlyChargesValueCheck, type: :model do
 
   it "has correct title_text" do
     expect(page.title_text).to eq({
-      "translation" => "soft_validations.monthly_charges_over_soft_max.title_text",
+      "translation" => "forms.2024.sales.soft_validations.monthly_charges_value_check.title_text",
       "arguments" => [{ "arguments_for_key" => "mscharge", "i18n_template" => "mscharge", "key" => "field_formatted_as_currency" }],
     })
   end
 
   it "has correct informative_text" do
-    expect(page.informative_text).to eq({ "arguments" => [], "translation" => "soft_validations.monthly_charges_over_soft_max.hint_text" })
+    expect(page.informative_text).to eq({ "arguments" => [], "translation" => "forms.2024.sales.soft_validations.monthly_charges_value_check.informative_text" })
   end
 
   it "has correct interruption_screen_question_ids" do
