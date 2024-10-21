@@ -286,7 +286,7 @@ private
     end
   end
 
-  def year_combo(year) 
+  def year_combo(year)
     "#{year} to #{year + 1}"
   end
 
