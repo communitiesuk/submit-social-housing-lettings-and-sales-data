@@ -4,10 +4,17 @@ module Forms
       include ActiveModel::Model
       include ActiveModel::Attributes
       include Rails.application.routes.url_helpers
+      include CollectionTimeHelper
 
       attribute :year, :integer
       attribute :referrer
       attribute :organisation_id, :integer
+
+      def initialize(params)
+        super(params)
+
+        self.year = current_collection_start_year if year.nil?
+      end
 
       def view_path
         "bulk_upload_shared/guidance"
