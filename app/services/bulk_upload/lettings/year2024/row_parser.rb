@@ -324,8 +324,8 @@ class BulkUpload::Lettings::Year2024::RowParser
               category: :setup,
             },
             format: {
-              with: /\A\d{2}\z/,
-              message: I18n.t("validations.setup.startdate.year_not_two_digits"),
+              with: /\A(\d{2}|\d{4})\z/,
+              message: I18n.t("validations.setup.startdate.year_not_two_or_four_digits"),
               category: :setup,
               unless: -> { field_10.blank? },
             },
@@ -686,14 +686,6 @@ private
     end
   end
 
-  def start_date
-    return if field_8.blank? || field_9.blank? || field_10.blank?
-
-    Date.parse("20#{field_10.to_s.rjust(2, '0')}-#{field_9}-#{field_8}")
-  rescue StandardError
-    nil
-  end
-
   def validate_no_and_dont_know_disabled_needs_conjunction
     if field_83 == 1 && field_84 == 1
       errors.add(:field_83, I18n.t("validations.household.housingneeds.no_and_dont_know_disabled_needs_conjunction"))
@@ -790,9 +782,9 @@ private
   end
 
   def validate_relevant_collection_window
-    return if start_date.blank? || bulk_upload.form.blank?
+    return if startdate.blank? || bulk_upload.form.blank?
 
-    unless bulk_upload.form.valid_start_date_for_form?(start_date)
+    unless bulk_upload.form.valid_start_date_for_form?(startdate)
       errors.add(:field_8, I18n.t("validations.date.outside_collection_window", year_combo: bulk_upload.year_combo, start_year: bulk_upload.year, end_year: bulk_upload.end_year), category: :setup)
       errors.add(:field_9, I18n.t("validations.date.outside_collection_window", year_combo: bulk_upload.year_combo, start_year: bulk_upload.year, end_year: bulk_upload.end_year), category: :setup)
       errors.add(:field_10, I18n.t("validations.date.outside_collection_window", year_combo: bulk_upload.year_combo, start_year: bulk_upload.year, end_year: bulk_upload.end_year), category: :setup)
@@ -1394,7 +1386,8 @@ private
   end
 
   def startdate
-    Date.new(field_10 + 2000, field_9, field_8) if field_10.present? && field_9.present? && field_8.present?
+    year = field_10.to_s.strip.length.between?(1, 2) ? field_10 + 2000 : field_10
+    Date.new(year, field_9, field_8) if field_10.present? && field_9.present? && field_8.present?
   rescue Date::Error
     Date.new
   end

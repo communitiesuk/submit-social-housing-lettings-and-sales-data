@@ -114,9 +114,11 @@ private
 
   def first_record_start_date
     if with_headers?
-      Date.new(row_parsers.first.field_6.to_i + 2000, row_parsers.first.field_5.to_i, row_parsers.first.field_4.to_i)
+      year = row_parsers.first.field_6.to_s.strip.length.between?(1, 2) ? row_parsers.first.field_6.to_i + 2000 : row_parsers.first.field_6.to_i
+      Date.new(year, row_parsers.first.field_5.to_i, row_parsers.first.field_4.to_i)
     else
-      Date.new(rows.first[5].to_i + 2000, rows.first[4].to_i, rows.first[3].to_i)
+      year = rows.first[5].to_s.strip.length.between?(1, 2) ? rows.first[5].to_i + 2000 : rows.first[5].to_i
+      Date.new(year, rows.first[4].to_i, rows.first[3].to_i)
     end
   end
 end

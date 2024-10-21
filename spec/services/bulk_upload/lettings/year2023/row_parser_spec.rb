@@ -1476,11 +1476,21 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
       end
 
       context "when field_9 is 4 digits instead of 2" do
-        let(:attributes) { { bulk_upload:, field_9: "2022" } }
+        let(:attributes) { setup_section_params.merge({ bulk_upload:, field_9: "2023", field_8: "12", field_7: "1" }) }
+
+        it "correctly sets the date" do
+          parser.valid?
+          expect(parser.errors[:field_9]).to be_empty
+          expect(parser.log.startdate).to eq(Date.new(2023, 12, 1))
+        end
+      end
+
+      context "when field_9 is not 4 or 2 digits" do
+        let(:attributes) { { bulk_upload:, field_9: "202" } }
 
         it "returns an error" do
           parser.valid?
-          expect(parser.errors[:field_9]).to include("Tenancy start year must be 2 digits.")
+          expect(parser.errors[:field_9]).to include("Tenancy start year must be 2 or 4 digits.")
         end
       end
 
@@ -2824,12 +2834,12 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
     end
   end
 
-  describe "#start_date" do
+  describe "#startdate" do
     context "when year of 9 is passed to represent 2009" do
       let(:attributes) { { bulk_upload:, field_7: "1", field_8: "1", field_9: "9" } }
 
       it "uses the year 2009" do
-        expect(parser.send(:start_date)).to eql(Date.new(2009, 1, 1))
+        expect(parser.send(:startdate)).to eql(Date.new(2009, 1, 1))
       end
     end
   end

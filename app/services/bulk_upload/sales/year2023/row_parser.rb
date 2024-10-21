@@ -328,8 +328,8 @@ class BulkUpload::Sales::Year2023::RowParser
               category: :setup,
             },
             format: {
-              with: /\A\d{2}\z/,
-              message: I18n.t("validations.setup.saledate.year_not_two_digits"),
+              with: /\A(\d{2}|\d{4})\z/,
+              message: I18n.t("validations.setup.saledate.year_not_two_or_four_digits"),
               category: :setup,
               if: proc { field_5.present? },
             }, on: :after_log
@@ -954,7 +954,8 @@ private
   end
 
   def saledate
-    Date.new(field_5 + 2000, field_4, field_3) if field_5.present? && field_4.present? && field_3.present?
+    year = field_5.to_s.strip.length.between?(1, 2) ? field_5 + 2000 : field_5
+    Date.new(year, field_4, field_3) if field_5.present? && field_4.present? && field_3.present?
   rescue Date::Error
     Date.new
   end

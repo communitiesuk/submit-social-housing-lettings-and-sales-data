@@ -721,12 +721,22 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
         end
       end
 
-      context "when field 5 is 4 digits instead of 2" do
-        let(:attributes) { setup_section_params.merge({ bulk_upload:, field_6: "2023" }) }
+      context "when field 6 is 4 digits instead of 2" do
+        let(:attributes) { setup_section_params.merge({ bulk_upload:, field_6: "2024" }) }
+
+        it "correctly sets the date" do
+          parser.valid?
+          expect(parser.errors.where(:field_6, category: :setup)).to be_empty
+          expect(parser.log.saledate).to eq(Time.zone.local(2024, 5, 1))
+        end
+      end
+
+      context "when field 5 is not 2 or 4 digits" do
+        let(:attributes) { setup_section_params.merge({ bulk_upload:, field_6: "202" }) }
 
         it "returns a setup error" do
           parser.valid?
-          expect(parser.errors.where(:field_6, category: :setup).map(&:message)).to include("Sale completion year must be 2 digits.")
+          expect(parser.errors.where(:field_6, category: :setup).map(&:message)).to include("Sale completion year must be 2 or 4 digits.")
         end
       end
 
