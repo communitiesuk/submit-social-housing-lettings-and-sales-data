@@ -6,7 +6,7 @@ class Form::Sales::Pages::ExtraBorrowingValueCheck < Form::Page
         "extra_borrowing_expected_but_not_reported?" => true,
       },
     ]
-    @copy_key = "sales.sale_information.extra_borrowing_value_check"
+    @copy_key = "sales.soft_validations.extra_borrowing_value_check"
     @title_text = {
       "translation" => "forms.#{form.start_date.year}.#{@copy_key}.title_text",
       "arguments" => [

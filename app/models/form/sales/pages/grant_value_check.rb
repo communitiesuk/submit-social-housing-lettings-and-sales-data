@@ -2,7 +2,7 @@ class Form::Sales::Pages::GrantValueCheck < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "grant_value_check"
-    @copy_key = "sales.sale_information.grant_value_check"
+    @copy_key = "sales.soft_validations.grant_value_check"
     @depends_on = [
       {
         "grant_outside_common_range?" => true,
