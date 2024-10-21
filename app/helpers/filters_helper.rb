@@ -286,8 +286,8 @@ private
     end
   end
 
-  def year_combo(year)
-    "#{year}/#{year - 2000 + 1}"
+  def year_combo(year) 
+    "#{year} to #{year + 1}"
   end
 
   def formatted_years_filter(session_filters)
