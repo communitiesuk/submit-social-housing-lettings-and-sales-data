@@ -80,14 +80,18 @@ private
     if FormHandler.instance.sales_in_crossover_period?
       I18n.t(
         "validations.sales.setup.saledate.must_be_within.previous_and_current_collection_year",
-        previous_end_year_long: previous_collection_end_date.strftime("#{previous_collection_end_date.day.ordinalize} %B %Y"),
+        previous_start_year_short: previous_collection_start_date.strftime("%Y"),
+        previous_end_year_short: previous_collection_end_date.strftime("%Y"),
         previous_start_year_long: previous_collection_start_date.strftime("#{previous_collection_start_date.day.ordinalize} %B %Y"),
+        current_end_year_short: current_collection_end_date.strftime("%Y"),
         current_end_year_long: current_collection_end_date.strftime("#{current_collection_end_date.day.ordinalize} %B %Y"),
       )
     else
       I18n.t(
         "validations.sales.setup.saledate.must_be_within.current_collection_year",
+        current_start_year_short: current_collection_start_date.strftime("%Y"),
         current_start_year_long: current_collection_start_date.strftime("#{current_collection_start_date.day.ordinalize} %B %Y"),
+        current_end_year_short: current_collection_end_date.strftime("%Y"),
         current_end_year_long: current_collection_end_date.strftime("#{current_collection_end_date.day.ordinalize} %B %Y"),
       )
     end

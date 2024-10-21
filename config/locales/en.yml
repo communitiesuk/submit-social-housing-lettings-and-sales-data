@@ -287,9 +287,9 @@ en:
 
       startdate:
         current_collection_year:
-          "Enter a date within the %{current_start_year_long} to %{current_end_year_long} collection year, which is between %{current_start_year_long} and %{current_end_year_long}."
+          "Enter a date within the %{current_start_year_short} to %{current_end_year_short} collection year, which is between %{current_start_year_long} and %{current_end_year_long}."
         previous_and_current_collection_year:
-          "Enter a date within the %{previous_start_year_long} to %{previous_end_year_long} or %{previous_end_year_long} to %{current_end_year_long} collection years, which is between %{previous_start_year_long} and %{current_end_year_long}."
+          "Enter a date within the %{previous_start_year_short} to %{previous_end_year_short} or %{previous_end_year_short} to %{current_end_year_short} collection years, which is between %{previous_start_year_long} and %{current_end_year_long}."
         later_than_14_days_after: "The tenancy start date must not be later than 14 days from today’s date."
         before_scheme_end_date: "The tenancy start date must be before the end date for this supported housing scheme."
         after_void_date: "Enter a tenancy start date that is after the void date."
