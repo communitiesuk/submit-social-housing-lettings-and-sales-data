@@ -618,7 +618,7 @@ private
   end
 
   def key_address_fields_provided?
-    field_17.present? && field_19.present? && field_21.present? && field_22.present?
+    field_17.present? && field_19.present? && postcode_full.present?
   end
 
   def validate_address_fields
@@ -1355,7 +1355,7 @@ private
   end
 
   def postcode_full
-    "#{field_21} #{field_22}" if field_21 && field_22
+    [field_21, field_22].compact_blank.join(" ") if field_21 || field_22
   end
 
   def owning_organisation
