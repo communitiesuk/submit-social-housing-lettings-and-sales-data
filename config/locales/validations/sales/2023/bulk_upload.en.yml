@@ -1,0 +1,23 @@
+en:
+  validations:
+    sales:
+      2023:
+        bulk_upload:
+          not_answered: "You must answer %{question}" # this is the same as not default not answered for single log submission
+          invalid_option: "Enter a valid value for %{question}" # this is the same as not default not answered for single log submission
+          spreadsheet_dupe: "This is a duplicate of a log in your file."
+          duplicate: "This is a duplicate log."
+          owning_organisation:
+            not_answered: "The owning organisation code is incorrect."
+            not_found: "The owning organisation code is incorrect."
+            not_stock_owner: "The owning organisation code provided is for an organisation that does not own stock."
+            not_permitted: "You do not have permission to add logs for this owning organisation."
+          assigned_to:
+            not_found: "User with the specified email could not be found."
+            organisation_not_related: "User must be related to owning organisation or managing organisation."
+            managing_organisation_not_related: "This user belongs to an organisation that does not have a relationship with the owning organisation."
+          saledate:
+            outside_collection_window: "Enter a date within the %{year_combo} collection year, which is between 1st April %{start_year} and 31st March %{end_year}."
+            year_not_two_or_four_digits: "Sale completion year must be 2 or 4 digits."
+          ecstat1:
+            child_under_16: "Buyer 1 cannot be a child under 16."
