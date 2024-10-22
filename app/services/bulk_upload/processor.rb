@@ -3,12 +3,12 @@ class BulkUpload::Processor
 
   BLANK_TEMPLATE_ERRORS = [
     I18n.t("activemodel.errors.models.bulk_upload/lettings/validator.attributes.base.blank_file"),
-    I18n.t("activemodel.errors.models.bulk_upload/sales/validator.attributes.base.blank_file"),
+    I18n.t("validations.sales.2024.bulk_upload.blank_file"),
   ].freeze
 
   WRONG_TEMPLATE_ERRORS = [
     *I18n.t("activemodel.errors.models.bulk_upload/lettings/validator.attributes.base", default: {}).values,
-    *I18n.t("activemodel.errors.models.bulk_upload/sales/validator.attributes.base", default: {}).values,
+    *I18n.t("validations.sales.2024", default: {}).values,
   ].freeze
 
   def initialize(bulk_upload:)
