@@ -3,6 +3,11 @@ en:
     sales:
       2023:
         bulk_upload:
+          blank_file: "Template is blank - The template must be filled in for us to create the logs and check if data is correct."
+          over_max_column_count: "Too many columns, please ensure you have used the correct template."
+          no_headers: "Your file does not contain the required header rows. Add or check the header rows and upload your file again. [Read more about using the template headers](%{guidance_link})."
+          wrong_field_numbers_count: "Incorrect number of fields, please ensure you have used the correct template."
+          wrong_template: "Incorrect sale dates, please ensure you have used the correct template."
           not_answered: "You must answer %{question}" # this is the same as not default not answered for single log submission
           invalid_option: "Enter a valid value for %{question}" # this is the same as not default not answered for single log submission
           spreadsheet_dupe: "This is a duplicate of a log in your file."
