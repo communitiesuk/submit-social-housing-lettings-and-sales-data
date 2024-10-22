@@ -82,3 +82,9 @@ en:
               check_answer_label: "Buyer previously owned a property."
               hint_text: ""
               question_text: "Has the buyer previously owned a property?"
+
+          prevshared:
+            page_header: ""
+            check_answer_label: "Previous property shared ownership?"
+            hint_text: "For any buyer"
+            question_text: "Was the previous property under shared ownership?"
