@@ -2,6 +2,7 @@ class Form::Sales::Questions::UprnKnown < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "uprn_known"
+    @copy_key="sales.property_information.uprn.uprn_known"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @conditional_for = { "uprn" => [1] }

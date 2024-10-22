@@ -2,6 +2,7 @@ class Form::Sales::Pages::Uprn < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "uprn"
+    @copy_key="sales.property_information.uprn"
   end
 
   def questions
