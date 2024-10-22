@@ -151,6 +151,8 @@ class BulkUpload::Sales::Year2024::RowParser
     field_131: "What are the total monthly leasehold charges for the property?",
   }.freeze
 
+  ERROR_BASE_KEY = "validations.sales.2024.bulk_upload".freeze
+
   attribute :bulk_upload
   attribute :block_log_creation, :boolean, default: -> { false }
 
@@ -303,32 +305,32 @@ class BulkUpload::Sales::Year2024::RowParser
 
   validates :field_4,
             presence: {
-              message: I18n.t("validations.not_answered", question: "sale completion date (day)."),
+              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "sale completion date (day)."),
               category: :setup,
             },
             on: :after_log
 
   validates :field_5,
             presence: {
-              message: I18n.t("validations.not_answered", question: "sale completion date (month)."),
+              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "sale completion date (month)."),
               category: :setup,
             }, on: :after_log
 
   validates :field_6,
             presence: {
-              message: I18n.t("validations.not_answered", question: "sale completion date (year)."),
+              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "sale completion date (year)."),
               category: :setup,
             },
             format: {
               with: /\A(\d{2}|\d{4})\z/,
-              message: I18n.t("validations.setup.saledate.year_not_two_or_four_digits"),
+              message: I18n.t("#{ERROR_BASE_KEY}.saledate.year_not_two_or_four_digits"),
               category: :setup,
               if: proc { field_6.present? },
             }, on: :after_log
 
   validates :field_8,
             presence: {
-              message: I18n.t("validations.not_answered", question: "purchase made under ownership scheme."),
+              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "purchase made under ownership scheme."),
               category: :setup,
             },
             on: :after_log
@@ -344,7 +346,7 @@ class BulkUpload::Sales::Year2024::RowParser
 
   validates :field_9,
             presence: {
-              message: I18n.t("validations.not_answered", question: "type of shared ownership sale."),
+              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "type of shared ownership sale."),
               category: :setup,
               if: :shared_ownership?,
             },
@@ -361,7 +363,7 @@ class BulkUpload::Sales::Year2024::RowParser
 
   validates :field_10,
             presence: {
-              message: I18n.t("validations.not_answered", question: "type of discounted ownership sale."),
+              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "type of discounted ownership sale."),
               category: :setup,
               if: :discounted_ownership?,
             },
@@ -369,7 +371,7 @@ class BulkUpload::Sales::Year2024::RowParser
 
   validates :field_116,
             numericality: {
-              message: I18n.t("validations.numeric.within_range", field: "Percentage discount", min: "0%", max: "70%"),
+              message: I18n.t("#{ERROR_BASE_KEY}.numeric.within_range", field: "Percentage discount", min: "0%", max: "70%"),
               greater_than_or_equal_to: 0,
               less_than_or_equal_to: 70,
               if: :discounted_ownership?,
@@ -387,7 +389,7 @@ class BulkUpload::Sales::Year2024::RowParser
 
   validates :field_11,
             presence: {
-              message: I18n.t("validations.not_answered", question: "type of outright sale."),
+              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "type of outright sale."),
               category: :setup,
               if: :outright_sale?,
             },
@@ -395,7 +397,7 @@ class BulkUpload::Sales::Year2024::RowParser
 
   validates :field_12,
             presence: {
-              message: I18n.t("validations.not_answered", question: "type of outright sale."),
+              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "type of outright sale."),
               category: :setup,
               if: proc { field_11 == 12 },
             },
@@ -412,7 +414,7 @@ class BulkUpload::Sales::Year2024::RowParser
 
   validates :field_13,
             presence: {
-              message: I18n.t("validations.not_answered", question: "company buyer."),
+              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "company buyer."),
               category: :setup,
               if: :outright_sale?,
             },
@@ -429,7 +431,7 @@ class BulkUpload::Sales::Year2024::RowParser
 
   validates :field_14,
             presence: {
-              message: I18n.t("validations.not_answered", question: "buyers living in property."),
+              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "buyers living in property."),
               category: :setup,
               if: :outright_sale?,
             },
@@ -437,7 +439,7 @@ class BulkUpload::Sales::Year2024::RowParser
 
   validates :field_15,
             presence: {
-              message: I18n.t("validations.not_answered", question: "joint purchase."),
+              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "joint purchase."),
               category: :setup,
               if: :joint_purchase_asked?,
             },
@@ -445,7 +447,7 @@ class BulkUpload::Sales::Year2024::RowParser
 
   validates :field_16,
             presence: {
-              message: I18n.t("validations.not_answered", question: "more than 2 joint buyers."),
+              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "more than 2 joint buyers."),
               category: :setup,
               if: :joint_purchase?,
             },
@@ -569,7 +571,7 @@ class BulkUpload::Sales::Year2024::RowParser
 
   def add_duplicate_found_in_spreadsheet_errors
     spreadsheet_duplicate_hash.each_key do |field|
-      errors.add(field, :spreadsheet_dupe, category: :setup)
+      errors.add(field, I18n.t("#{ERROR_BASE_KEY}.spreadsheet_dupe"), category: :setup)
     end
   end
 
@@ -603,14 +605,14 @@ private
 
   def validate_uprn_exists_if_any_key_address_fields_are_blank
     if field_22.blank? && !key_address_fields_provided?
-      errors.add(:field_22, I18n.t("validations.not_answered", question: "UPRN."))
+      errors.add(:field_22, I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "UPRN."))
     end
   end
 
   def validate_address_option_found
     if log.uprn.nil? && field_22.blank? && key_address_fields_provided?
       %i[field_23 field_24 field_25 field_26 field_27 field_28].each do |field|
-        errors.add(field, I18n.t("validations.no_address_found"))
+        errors.add(field, I18n.t("#{ERROR_BASE_KEY}.address.not_found"))
       end
     end
   end
@@ -622,19 +624,19 @@ private
   def validate_address_fields
     if field_22.blank? || log.errors.attribute_names.include?(:uprn)
       if field_23.blank?
-        errors.add(:field_23, I18n.t("validations.not_answered", question: "address line 1."))
+        errors.add(:field_23, I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "address line 1."))
       end
 
       if field_25.blank?
-        errors.add(:field_25, I18n.t("validations.not_answered", question: "town or city."))
+        errors.add(:field_25, I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "town or city."))
       end
 
       if field_27.blank?
-        errors.add(:field_27, I18n.t("validations.not_answered", question: "part 1 of postcode."))
+        errors.add(:field_27, I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "part 1 of postcode."))
       end
 
       if field_28.blank?
-        errors.add(:field_28, I18n.t("validations.not_answered", question: "part 2 of postcode."))
+        errors.add(:field_28, I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "part 2 of postcode."))
       end
     end
   end
@@ -1281,7 +1283,7 @@ private
       block_log_creation!
 
       if errors[:field_1].blank?
-        errors.add(:field_1, I18n.t("validations.not_answered", question: "owning organisation."), category: :setup)
+        errors.add(:field_1, I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "owning organisation."), category: :setup)
       end
     end
   end
@@ -1291,7 +1293,7 @@ private
       block_log_creation!
 
       if field_1.present? && errors[:field_1].blank?
-        errors.add(:field_1, "The owning organisation code is incorrect.", category: :setup)
+        errors.add(:field_1, I18n.t("#{ERROR_BASE_KEY}.owning_organisation.not_found"), category: :setup)
       end
     end
   end
@@ -1301,7 +1303,7 @@ private
       block_log_creation!
 
       if errors[:field_1].blank?
-        errors.add(:field_1, "The owning organisation code provided is for an organisation that does not own stock.", category: :setup)
+        errors.add(:field_1, I18n.t("#{ERROR_BASE_KEY}.owning_organisation.not_stock_owner"), category: :setup)
       end
     end
   end
@@ -1315,9 +1317,9 @@ private
     return if errors[:field_1].present?
 
     if bulk_upload.user.support?
-      errors.add(:field_1, "This owning organisation is not affiliated with #{bulk_upload_organisation.name}.", category: :setup)
+      errors.add(:field_1, I18n.t("#{ERROR_BASE_KEY}.owning_organisation.not_permitted.support", name: bulk_upload_organisation.name), category: :setup)
     else
-      errors.add(:field_1, "You do not have permission to add logs for this owning organisation.", category: :setup)
+      errors.add(:field_1, I18n.t("#{ERROR_BASE_KEY}.owning_organisation.not_permitted.not_support"), category: :setup)
     end
   end
 
@@ -1325,13 +1327,13 @@ private
     return if field_3.blank?
 
     unless assigned_to
-      errors.add(:field_3, "User with the specified email could not be found.")
+      errors.add(:field_3, I18n.t("#{ERROR_BASE_KEY}.assigned_to.not_found"))
     end
   end
 
   def validate_assigned_to_when_support
     if field_3.blank? && bulk_upload.user.support?
-      errors.add(:field_3, category: :setup, message: I18n.t("validations.not_answered", question: "what is the CORE username of the account this sales log should be assigned to?"))
+      errors.add(:field_3, category: :setup, message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "what is the CORE username of the account this sales log should be assigned to?"))
     end
   end
 
@@ -1341,7 +1343,7 @@ private
     return if assigned_to.organisation == owning_organisation&.absorbing_organisation || assigned_to.organisation == managing_organisation&.absorbing_organisation
 
     block_log_creation!
-    errors.add(:field_3, "User must be related to owning organisation or managing organisation.", category: :setup)
+    errors.add(:field_3, I18n.t("#{ERROR_BASE_KEY}.assigned_to.organisation_not_related"), category: :setup)
   end
 
   def managing_organisation
@@ -1361,7 +1363,7 @@ private
       block_log_creation!
 
       if errors[:field_2].blank?
-        errors.add(:field_2, "This organisation does not have a relationship with the owning organisation.", category: :setup)
+        errors.add(:field_2, I18n.t("#{ERROR_BASE_KEY}.assigned_to.managing_organisation_not_related"), category: :setup)
       end
     end
   end
@@ -1410,13 +1412,13 @@ private
         fields.each do |field|
           if errors[field].none?
             block_log_creation!
-            errors.add(field, I18n.t("validations.invalid_option", question: format_ending(QUESTIONS[field])), category: :setup)
+            errors.add(field, I18n.t("#{ERROR_BASE_KEY}.invalid_option", question: format_ending(QUESTIONS[field])), category: :setup)
           end
         end
       else
         fields.each do |field|
           unless errors.any? { |e| fields.include?(e.attribute) }
-            errors.add(field, I18n.t("validations.invalid_option", question: format_ending(QUESTIONS[field])))
+            errors.add(field, I18n.t("#{ERROR_BASE_KEY}.invalid_option", question: format_ending(QUESTIONS[field])))
           end
         end
       end
@@ -1428,15 +1430,15 @@ private
     return if errors.key?(:field_4) || errors.key?(:field_5) || errors.key?(:field_6)
 
     unless bulk_upload.form.valid_start_date_for_form?(saledate)
-      errors.add(:field_4, I18n.t("validations.date.outside_collection_window", year_combo: bulk_upload.year_combo, start_year: bulk_upload.year, end_year: bulk_upload.end_year), category: :setup)
-      errors.add(:field_5, I18n.t("validations.date.outside_collection_window", year_combo: bulk_upload.year_combo, start_year: bulk_upload.year, end_year: bulk_upload.end_year), category: :setup)
-      errors.add(:field_6, I18n.t("validations.date.outside_collection_window", year_combo: bulk_upload.year_combo, start_year: bulk_upload.year, end_year: bulk_upload.end_year), category: :setup)
+      errors.add(:field_4, I18n.t("#{ERROR_BASE_KEY}.saledate.outside_collection_window", year_combo: bulk_upload.year_combo, start_year: bulk_upload.year, end_year: bulk_upload.end_year), category: :setup)
+      errors.add(:field_5, I18n.t("#{ERROR_BASE_KEY}.saledate.outside_collection_window", year_combo: bulk_upload.year_combo, start_year: bulk_upload.year, end_year: bulk_upload.end_year), category: :setup)
+      errors.add(:field_6, I18n.t("#{ERROR_BASE_KEY}.saledate.outside_collection_window", year_combo: bulk_upload.year_combo, start_year: bulk_upload.year, end_year: bulk_upload.end_year), category: :setup)
     end
   end
 
   def validate_if_log_already_exists
     if log_already_exists?
-      error_message = "This is a duplicate log."
+      error_message = I18n.t("#{ERROR_BASE_KEY}.duplicate")
 
       errors.add(:field_1, error_message) # Owning org
       errors.add(:field_4, error_message) # Sale completion date
@@ -1472,10 +1474,10 @@ private
   def validate_buyer1_economic_status
     if field_35 == 9
       if field_31.present? && field_31.to_i >= 16
-        errors.add(:field_35, I18n.t("validations.sales.household.ecstat.buyer_cannot_be_over_16_and_child", buyer_index: "1"))
-        errors.add(:field_31, I18n.t("validations.sales.household.ecstat.buyer_cannot_be_over_16_and_child", buyer_index: "1"))
+        errors.add(:field_35, I18n.t("#{ERROR_BASE_KEY}.ecstat1.buyer_cannot_be_over_16_and_child"))
+        errors.add(:field_31, I18n.t("#{ERROR_BASE_KEY}.age1.buyer_cannot_be_over_16_and_child"))
       else
-        errors.add(:field_35, I18n.t("validations.sales.household.ecstat1.buyer_cannot_be_child"))
+        errors.add(:field_35, I18n.t("#{ERROR_BASE_KEY}.ecstat1.buyer_cannot_be_child"))
       end
     end
   end
@@ -1485,23 +1487,23 @@ private
 
     if field_42 == 9
       if field_38.present? && field_38.to_i >= 16
-        errors.add(:field_42, I18n.t("validations.sales.household.ecstat.buyer_cannot_be_over_16_and_child", buyer_index: "2"))
-        errors.add(:field_38, I18n.t("validations.sales.household.ecstat.buyer_cannot_be_over_16_and_child", buyer_index: "2"))
+        errors.add(:field_42, I18n.t("#{ERROR_BASE_KEY}.ecstat2.buyer_cannot_be_over_16_and_child"))
+        errors.add(:field_38, I18n.t("#{ERROR_BASE_KEY}.age2.buyer_cannot_be_over_16_and_child"))
       else
-        errors.add(:field_42, I18n.t("validations.sales.household.ecstat2.buyer_cannot_be_child"))
+        errors.add(:field_42, I18n.t("#{ERROR_BASE_KEY}.ecstat2.buyer_cannot_be_child"))
       end
     end
   end
 
   def validate_nationality
     if field_34.present? && !valid_nationality_options.include?(field_34.to_s)
-      errors.add(:field_34, I18n.t("validations.household.nationality"))
+      errors.add(:field_34, I18n.t("#{ERROR_BASE_KEY}.nationality.invalid"))
     end
   end
 
   def validate_buyer_2_nationality
     if field_41.present? && !valid_nationality_options.include?(field_41.to_s)
-      errors.add(:field_41, I18n.t("validations.household.nationality"))
+      errors.add(:field_41, I18n.t("#{ERROR_BASE_KEY}.nationality.invalid"))
     end
   end
 
