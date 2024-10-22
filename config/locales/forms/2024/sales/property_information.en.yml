@@ -31,12 +31,6 @@ en:
               hint_text: ""
               question_text: "Postcode"
 
-          address_search_value_check:
-            page_header: ""
-            check_answer_label: ""
-            hint_text: ""
-            question_text: "No address found"
-
           uprn_selection:
             page_header: "We found an address that might be this property"
             check_answer_label: "Select the correct address"

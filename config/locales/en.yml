@@ -231,7 +231,7 @@ en:
     scheme_deleted: "%{service_name} has been deleted."
     user_deleted: "%{name} has been deleted."
     organisation_deleted: "%{name} has been deleted."
-    user_updated: 
+    user_updated:
       self: "Your account details have been updated."
       other: "%{name}’s details have been updated."
 
@@ -716,16 +716,10 @@ en:
       under_soft_min_for_economic_status:
         title_text: "You told us income was %{income}."
         hint_text: "This is less than we would expect for someone in this working situation."
-      over_soft_max_for_la_buyer_1: "You told us the income of buyer 1 is %{income}. This seems high.  Are you sure this is correct?"
-      over_soft_max_for_la_buyer_2: "You told us the income of buyer 2 is %{income}. This seems high.  Are you sure this is correct?"
-      over_soft_max_for_la_combined: "You told us the combined income of this household is %{combined_income}. This seems high.  Are you sure this is correct?"
     rent:
       outside_range_title: "You told us the rent is %{brent}."
       informative_text: "This is %{higher_or_lower} than we would expect."
       hint_text: "Check the following:<ul class=\"govuk-body-l app-panel--interruption\"><li>the decimal point</li><li>the frequency, for example every week or every calendar month</li><li>the rent type is correct, for example affordable or social rent</li></ul>"
-    purchase_price:
-      title_text: "You told us the purchase price is %{value}."
-      hint_text: "This is %{higher_or_lower} than we would expect."
     staircase_owned:
       title_text:
         one: "You told us that the buyer now owns %{stairowned} of the property."
@@ -762,9 +756,6 @@ Make sure these answers are correct."
     staircase_bought_seems_high:
       title_text: "You told us that %{percentage}% was bought in this staircasing transaction."
       hint_text: "Most staircasing transactions are less than 50%"
-    monthly_charges_over_soft_max:
-      title_text: "You told us that the monthly charges were %{mscharge}."
-      hint_text: "This is higher than we would expect."
     student_not_child:
       title_text: "You told us this person is a student aged between 16 and 19."
     discounted_sale_value:
@@ -778,9 +769,6 @@ Make sure these answers are correct."
     buyer2_livein_wrong_for_ownership_type:
       title_text: "You told us that buyer 2 will not live in the property."
       hint_text: " For %{ownership_scheme} types, the buyer usually lives in the property."
-    percentage_discount_value:
-      title_text: "You told us that the percentage discount is %{discount}."
-      hint_text: "This is higher than we would expect."
     savings:
       title_text:
         one: "You told us the buyer’s savings were %{savings}."
@@ -823,8 +811,6 @@ Make sure these answers are correct."
       must_be_less_than_3_years_from_saledate: "You told us practical completion or handover date is more than 3 years before sale completion date."
     saledate:
       must_be_less_than_3_years_from_hodate: "You told us sale completion date is more than 3 years after practical completion or handover date."
-    no_address_found:
-      title_text: "No address found."
       informative_text: "We could not find an address that matches your search. You can search again or continue to enter the address manually."
     partner_under_16_lettings:
       title: "You told us this person is aged %{age} years and has 'Partner' relationship to the lead tenant."

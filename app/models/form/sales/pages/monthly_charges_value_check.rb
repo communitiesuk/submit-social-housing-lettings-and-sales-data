@@ -7,7 +7,7 @@ class Form::Sales::Pages::MonthlyChargesValueCheck < ::Form::Page
       },
     ]
     @title_text = {
-      "translation" => "soft_validations.monthly_charges_over_soft_max.title_text",
+      "translation" => "forms.#{form.start_date.year}.#{@copy_key}.title_text",
       "arguments" => [
         {
           "key" => "field_formatted_as_currency",
@@ -17,7 +17,7 @@ class Form::Sales::Pages::MonthlyChargesValueCheck < ::Form::Page
       ],
     }
     @informative_text = {
-      "translation" => "soft_validations.monthly_charges_over_soft_max.hint_text",
+      "translation" => "forms.#{form.start_date.year}.#{@copy_key}.informative_text",
       "arguments" => [],
     }
   end

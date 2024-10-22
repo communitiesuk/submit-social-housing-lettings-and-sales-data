@@ -27,27 +27,6 @@ RSpec.describe Form::Sales::Pages::AboutPriceValueCheck, type: :model do
     expect(page.interruption_screen?).to eq(true)
   end
 
-  it "has the correct title_text" do
-    expect(page.title_text).to eq({ "arguments" => [{ "i18n_template" => "value", "key" => "value", "label" => true }], "translation" => "soft_validations.purchase_price.title_text" })
-  end
-
-  it "has the correct informative_text" do
-    expect(page.informative_text).to eq({
-      "translation" => "soft_validations.purchase_price.hint_text",
-      "arguments" => [
-        {
-          "key" => "field_formatted_as_currency",
-          "arguments_for_key" => "purchase_price_soft_min_or_soft_max",
-          "i18n_template" => "soft_min_or_soft_max",
-        },
-        {
-          "key" => "purchase_price_higher_or_lower_text",
-          "i18n_template" => "higher_or_lower",
-        },
-      ],
-    })
-  end
-
   it "has the correct interruption_screen_question_ids" do
     expect(page.interruption_screen_question_ids).to eq(%w[value beds uprn postcode_full la])
   end
