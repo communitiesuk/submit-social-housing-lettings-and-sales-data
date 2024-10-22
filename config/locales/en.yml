@@ -684,13 +684,6 @@ en:
         message: "Net income is lower than expected based on the household’s working situation. Are you sure this is correct?"
       in_soft_max_range:
         message: "Net income is higher than expected based on the household’s working situation. Are you sure this is correct?"
-    income:
-      under_soft_min_for_economic_status:
-        title_text: "You told us income was %{income}."
-        hint_text: "This is less than we would expect for someone in this working situation."
-      over_soft_max_for_la_buyer_1: "You told us the income of buyer 1 is %{income}. This seems high.  Are you sure this is correct?"
-      over_soft_max_for_la_buyer_2: "You told us the income of buyer 2 is %{income}. This seems high.  Are you sure this is correct?"
-      over_soft_max_for_la_combined: "You told us the combined income of this household is %{combined_income}. This seems high.  Are you sure this is correct?"
     rent:
       outside_range_title: "You told us the rent is %{brent}."
       informative_text: "This is %{higher_or_lower} than we would expect."
@@ -753,24 +746,11 @@ Make sure these answers are correct."
     percentage_discount_value:
       title_text: "You told us that the percentage discount is %{discount}."
       hint_text: "This is higher than we would expect."
-    savings:
-      title_text:
-        one: "You told us the buyer’s savings were %{savings}."
-        two: "You told us the buyers’ savings were %{savings}."
-      hint_text: "This is higher than we would expect."
-    deposit:
-      title_text:
-        one: "You told us the buyer’s deposit was %{deposit} and their savings were %{savings}."
-        two: "You told us the buyers’ deposit was %{deposit} and their savings were %{savings}."
-      hint_text: "The deposit amount is higher than we would expect for the amount of savings they have."
     grant:
       title_text: "You told us that the grant amount is %{grant}."
       hint_text: "Loans, grants and subsidies are usually between £9,000 and £16,000."
     wheelchair:
       title_text: "You told us that someone in the household uses a wheelchair."
-    mortgage:
-      title_text: "You told us that the mortgage amount is %{mortgage}."
-      hint_text: "This is more than 5 times the income, which is higher than we would expect."
     referral:
       title_text: "Are you sure?"
       hint_text: "This is a general needs log, and this referral type is for supported housing."
@@ -840,9 +820,6 @@ Make sure these answers are correct."
     soctenant:
       one: "Was the buyer a private registered provider, housing association or local authority tenant immediately before this sale?"
       other: "Were any of the buyers private registered providers, housing association or local authority tenants immediately before this sale?"
-    prevown:
-      one: "Has the buyer previously owned a property?"
-      other: "Have any of the buyers previously owned a property?"
     stairowned:
       one: "What percentage of the property does the buyer now own in total?"
       other: "What percentage of the property do the buyers now own in total?"
@@ -865,9 +842,6 @@ Make sure these answers are correct."
     soctenant:
       one: "Buyer was a registered provider, housing association or local authority tenant immediately before this sale?"
       other: "Any buyers were registered providers, housing association or local authority tenants immediately before this sale?"
-    prevown:
-      one: "Buyer previously owned a property."
-      other: "Buyers previously owned a property."
     stairowned:
       one: "Percentage the buyer now owns in total."
       other: "Percentage the buyers now own in total."

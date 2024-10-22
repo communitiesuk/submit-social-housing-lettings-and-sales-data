@@ -2,8 +2,7 @@ class Form::Sales::Questions::Buyer1IncomeKnown < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "income1nk"
-    @check_answer_label = "Buyer 1’s gross annual income known?"
-    @header = "Do you know buyer 1’s annual income?"
+    @copy_key = "sales.income_benefits_and_savings.buyer_1_income.income1nk"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @conditional_for = {
