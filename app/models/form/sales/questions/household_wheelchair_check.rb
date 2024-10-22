@@ -2,8 +2,7 @@ class Form::Sales::Questions::HouseholdWheelchairCheck < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "wheel_value_check"
-    @check_answer_label = "Does anyone in the household use a wheelchair?"
-    @header = "You told us that someone in the household uses a wheelchair."
+    @copy_key = "sales.soft_validations.wheel_value_check"
     @type = "interruption_screen"
     @answer_options = {
       "0" => { "value" => "Yes" },
