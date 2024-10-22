@@ -301,7 +301,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
 
           it "fetches the question's check_answer_label if it exists" do
             parser.valid?
-            expect(parser.errors[:field_32]).to eql(["You must answer buyer 1’s gender identity."])
+            expect(parser.errors[:field_32]).to eql([I18n.t("validations.not_answered", question: "buyer 1’s gender identity.")])
           end
         end
 
@@ -310,7 +310,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
 
           it "only has one error added to the field" do
             parser.valid?
-            expect(parser.errors[:field_23]).to eql(["You must answer address line 1."])
+            expect(parser.errors[:field_23]).to eql([I18n.t("validations.sales.2024.bulk_upload.not_answered", question: "address line 1.")])
           end
         end
 
@@ -320,7 +320,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
           it "does not add an additional error" do
             parser.valid?
             expect(parser.errors[:field_35].length).to eq(1)
-            expect(parser.errors[:field_35]).to include(match "Enter a valid value for")
+            expect(parser.errors[:field_35]).to include(match I18n.t("validations.sales.2024.bulk_upload.invalid_option", question: ""))
           end
         end
       end
@@ -463,7 +463,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
 
         it "is not permitted as setup error" do
           parser.valid?
-          expect(parser.errors.where(:field_1, category: :setup).map(&:message)).to eql(["You must answer owning organisation."])
+          expect(parser.errors.where(:field_1, category: :setup).map(&:message)).to eql([I18n.t("validations.sales.2024.bulk_upload.not_answered", question: "owning organisation.")])
         end
 
         it "blocks log creation" do
@@ -477,7 +477,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
 
         it "is not permitted as a setup error" do
           parser.valid?
-          expect(parser.errors.where(:field_1, category: :setup).map(&:message)).to eql(["The owning organisation code is incorrect."])
+          expect(parser.errors.where(:field_1, category: :setup).map(&:message)).to eql([I18n.t("validations.sales.2024.bulk_upload.owning_organisation.not_found")])
         end
 
         it "blocks log creation" do
@@ -493,7 +493,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
 
         it "is not permitted as setup error" do
           parser.valid?
-          expect(parser.errors.where(:field_1, category: :setup).map(&:message)).to eql(["You do not have permission to add logs for this owning organisation."])
+          expect(parser.errors.where(:field_1, category: :setup).map(&:message)).to eql([I18n.t("validations.sales.2024.bulk_upload.owning_organisation.not_permitted.not_support")])
         end
 
         it "blocks log creation" do
@@ -580,7 +580,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
           parser = described_class.new(attributes)
           parser.valid?
           expect(parser).to be_block_log_creation
-          expect(parser.errors[:field_1]).to include("You do not have permission to add logs for this owning organisation.")
+          expect(parser.errors[:field_1]).to include(I18n.t("validations.sales.2024.bulk_upload.owning_organisation.not_permitted.not_support"))
         end
       end
 
@@ -598,7 +598,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
         it "does not block log creation and does not add an error to field_1" do
           parser = described_class.new(attributes)
           parser.valid?
-          expect(parser.errors[:field_1]).not_to include("You do not have permission to add logs for this owning organisation.")
+          expect(parser.errors[:field_1]).not_to include(I18n.t("validations.sales.2024.bulk_upload.owning_organisation.not_permitted.not_support"))
         end
       end
     end
@@ -631,7 +631,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
         it "is not permitted" do
           parser.valid?
           expect(parser.errors[:field_3]).to be_present
-          expect(parser.errors[:field_3]).to include("You must answer what is the CORE username of the account this sales log should be assigned to?")
+          expect(parser.errors[:field_3]).to include(I18n.t("validations.sales.2024.bulk_upload.not_answered", question: "what is the CORE username of the account this sales log should be assigned to?"))
         end
 
         it "blocks log creation" do
@@ -736,7 +736,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
 
         it "returns a setup error" do
           parser.valid?
-          expect(parser.errors.where(:field_6, category: :setup).map(&:message)).to include("Sale completion year must be 2 or 4 digits.")
+          expect(parser.errors.where(:field_6, category: :setup).map(&:message)).to include(I18n.t("validations.sales.2024.bulk_upload.saledate.year_not_two_or_four_digits"))
         end
       end
 
@@ -802,7 +802,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
       it "adds an error to all (and only) the fields used to determine duplicates" do
         parser.valid?
 
-        error_message = "This is a duplicate log."
+        error_message = I18n.t("validations.sales.2024.bulk_upload.duplicate")
 
         [
           :field_1, # Owning org
@@ -891,7 +891,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
 
         it "returns correct error" do
           parser.valid?
-          expect(parser.errors.where(:field_116).map(&:message)).to include("Percentage discount must be between 0% and 70%.")
+          expect(parser.errors.where(:field_116).map(&:message)).to include(I18n.t("validations.sales.2024.bulk_upload.numeric.within_range", field: "Percentage discount", min: "0%", max: "70%"))
         end
       end
 
@@ -909,7 +909,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
 
         it "returns correct error" do
           parser.valid?
-          expect(parser.errors.where(:field_116).map(&:message)).to include("Percentage discount must be between 0% and 70%.")
+          expect(parser.errors.where(:field_116).map(&:message)).to include(I18n.t("validations.sales.2024.bulk_upload.numeric.within_range", field: "Percentage discount", min: "0%", max: "70%"))
         end
       end
     end
@@ -942,7 +942,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
 
         it "returns setup error" do
           parser.valid?
-          expect(parser.errors.where(:field_13).map(&:message)).to include("Enter a valid value for is the buyer a company?")
+          expect(parser.errors.where(:field_13).map(&:message)).to include(I18n.t("validations.invalid_option", question: "is the buyer a company?"))
           expect(parser.errors.where(:field_13, category: :setup)).to be_present
         end
       end
@@ -954,7 +954,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
 
         it "returns setup error" do
           parser.valid?
-          expect(parser.errors.where(:field_14).map(&:message)).to eql(["Enter a valid value for will the buyers live in the property?"])
+          expect(parser.errors.where(:field_14).map(&:message)).to eql([I18n.t("validations.invalid_option", question: "will the buyers live in the property?")])
           expect(parser.errors.where(:field_14, category: :setup)).to be_present
         end
       end
@@ -1011,10 +1011,10 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
 
           it "adds errors to missing key address fields" do
             parser.valid?
-            expect(parser.errors[:field_23]).to eql(["You must answer address line 1."])
-            expect(parser.errors[:field_25]).to eql(["You must answer town or city."])
-            expect(parser.errors[:field_27]).to eql(["You must answer part 1 of postcode."])
-            expect(parser.errors[:field_28]).to eql(["You must answer part 2 of postcode."])
+            expect(parser.errors[:field_23]).to eql([I18n.t("validations.sales.2024.bulk_upload.not_answered", question: "address line 1.")])
+            expect(parser.errors[:field_25]).to eql([I18n.t("validations.sales.2024.bulk_upload.not_answered", question: "town or city.")])
+            expect(parser.errors[:field_27]).to eql([I18n.t("validations.sales.2024.bulk_upload.not_answered", question: "part 1 of postcode.")])
+            expect(parser.errors[:field_28]).to eql([I18n.t("validations.sales.2024.bulk_upload.not_answered", question: "part 2 of postcode.")])
           end
         end
 
@@ -1042,11 +1042,11 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
 
           it "adds appropriate errors to UPRN and key address fields" do
             parser.valid?
-            expect(parser.errors[:field_22]).to eql(["You must answer UPRN."])
-            expect(parser.errors[:field_23]).to eql(["You must answer address line 1."])
-            expect(parser.errors[:field_25]).to eql(["You must answer town or city."])
-            expect(parser.errors[:field_27]).to eql(["You must answer part 1 of postcode."])
-            expect(parser.errors[:field_28]).to eql(["You must answer part 2 of postcode."])
+            expect(parser.errors[:field_22]).to eql([I18n.t("validations.sales.2024.bulk_upload.not_answered", question: "UPRN.")])
+            expect(parser.errors[:field_23]).to eql([I18n.t("validations.sales.2024.bulk_upload.not_answered", question: "address line 1.")])
+            expect(parser.errors[:field_25]).to eql([I18n.t("validations.sales.2024.bulk_upload.not_answered", question: "town or city.")])
+            expect(parser.errors[:field_27]).to eql([I18n.t("validations.sales.2024.bulk_upload.not_answered", question: "part 1 of postcode.")])
+            expect(parser.errors[:field_28]).to eql([I18n.t("validations.sales.2024.bulk_upload.not_answered", question: "part 2 of postcode.")])
           end
         end
 
@@ -1055,8 +1055,8 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
 
           it "adds errors to UPRN and the missing key address field" do
             parser.valid?
-            expect(parser.errors[:field_22]).to eql(["You must answer UPRN."])
-            expect(parser.errors[:field_23]).to eql(["You must answer address line 1."])
+            expect(parser.errors[:field_22]).to eql([I18n.t("validations.sales.2024.bulk_upload.not_answered", question: "UPRN.")])
+            expect(parser.errors[:field_23]).to eql([I18n.t("validations.sales.2024.bulk_upload.not_answered", question: "address line 1.")])
             expect(parser.errors[:field_25]).to be_empty
             expect(parser.errors[:field_27]).to be_empty
             expect(parser.errors[:field_28]).to be_empty
@@ -1090,7 +1090,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
               parser.valid?
               expect(parser.errors[:field_22]).to be_empty
               %i[field_23 field_24 field_25 field_26 field_27 field_28].each do |field|
-                expect(parser.errors[field]).to eql(["We could not find this address. Check the address data in your CSV file is correct and complete, or select the correct address using the CORE site."])
+                expect(parser.errors[field]).to eql([I18n.t("validations.sales.2024.bulk_upload.address.not_found")])
               end
             end
           end
@@ -1105,7 +1105,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
               parser.valid?
               expect(parser.errors[:field_22]).to be_empty
               %i[field_23 field_24 field_25 field_26 field_27 field_28].each do |field|
-                expect(parser.errors[field]).to eql(["We could not find this address. Check the address data in your CSV file is correct and complete, or select the correct address using the CORE site."])
+                expect(parser.errors[field]).to eql([I18n.t("validations.sales.2024.bulk_upload.address.not_found")])
               end
             end
           end
@@ -1218,8 +1218,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
         it "a custom validation is applied" do
           parser.valid?
 
-          validation_message = "Buyer 2 cannot have a working situation of child under 16."
-          expect(parser.errors[:field_42]).to include validation_message
+          expect(parser.errors[:field_42]).to include I18n.t("validations.sales.2024.bulk_upload.ecstat2.buyer_cannot_be_child")
         end
       end
 
@@ -1240,9 +1239,8 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
         it "a custom validation is applied" do
           parser.valid?
 
-          validation_message = "Buyer 2's age cannot be 16 or over if their working situation is child under 16."
-          expect(parser.errors[:field_42]).to include validation_message
-          expect(parser.errors[:field_38]).to include validation_message
+          expect(parser.errors[:field_42]).to include I18n.t("validations.sales.2024.bulk_upload.ecstat2.buyer_cannot_be_over_16_and_child")
+          expect(parser.errors[:field_38]).to include I18n.t("validations.sales.2024.bulk_upload.age2.buyer_cannot_be_over_16_and_child")
         end
       end
 
@@ -1264,8 +1262,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
         it "a custom validation is applied" do
           parser.valid?
 
-          validation_message = "Buyer 1 cannot have a working situation of child under 16."
-          expect(parser.errors[:field_35]).to include validation_message
+          expect(parser.errors[:field_35]).to include I18n.t("validations.sales.2024.bulk_upload.ecstat1.buyer_cannot_be_child")
         end
       end
 
@@ -1286,9 +1283,8 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
         it "a custom validation is applied" do
           parser.valid?
 
-          validation_message = "Buyer 1's age cannot be 16 or over if their working situation is child under 16."
-          expect(parser.errors[:field_35]).to include validation_message
-          expect(parser.errors[:field_31]).to include validation_message
+          expect(parser.errors[:field_35]).to include I18n.t("validations.sales.2024.bulk_upload.ecstat1.buyer_cannot_be_over_16_and_child")
+          expect(parser.errors[:field_31]).to include I18n.t("validations.sales.2024.bulk_upload.age1.buyer_cannot_be_over_16_and_child")
         end
       end
     end
@@ -1333,7 +1329,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
 
         it "returns correct errors" do
           parser.valid?
-          expect(parser.errors[:field_103]).to include("Enter a valid value for was a mortgage used for the purchase of this property? - Shared ownership.")
+          expect(parser.errors[:field_103]).to include(I18n.t("validations.sales.2024.bulk_upload.invalid_option", question: "was a mortgage used for the purchase of this property? - Shared ownership."))
 
           parser.log.blank_invalid_non_setup_fields!
           parser.log.save!
@@ -1370,7 +1366,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
 
           it "returns correct errors" do
             parser.valid?
-            expect(parser.errors[:field_103]).to include("Enter a valid value for was a mortgage used for the purchase of this property?")
+            expect(parser.errors[:field_103]).to include(I18n.t("validations.invalid_option", question: "was a mortgage used for the purchase of this property?"))
 
             parser.log.blank_invalid_non_setup_fields!
             parser.log.save!
@@ -1383,7 +1379,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
 
           it "returns correct errors" do
             parser.valid?
-            expect(parser.errors[:field_103]).to include("Enter a valid value for was a mortgage used for the purchase of this property?")
+            expect(parser.errors[:field_103]).to include(I18n.t("validations.invalid_option", question: "was a mortgage used for the purchase of this property?"))
 
             parser.log.blank_invalid_non_setup_fields!
             parser.log.save!
@@ -1440,7 +1436,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
 
       it "does not allow 3 (don't know) as an option for discounted ownership" do
         parser.valid?
-        expect(parser.errors[:field_117]).to include("Enter a valid value for was a mortgage used for the purchase of this property?")
+        expect(parser.errors[:field_117]).to include(I18n.t("validations.invalid_option", question: "was a mortgage used for the purchase of this property?"))
 
         parser.log.blank_invalid_non_setup_fields!
         parser.log.save!
@@ -1696,7 +1692,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
           parser.valid?
           expect(parser.log.nationality_all).to be(nil)
           expect(parser.log.nationality_all_group).to be(nil)
-          expect(parser.errors["field_34"]).to include("Select a valid nationality.")
+          expect(parser.errors["field_34"]).to include(I18n.t("validations.sales.2024.bulk_upload.nationality.invalid"))
         end
       end
     end
@@ -1781,7 +1777,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
           parser.valid?
           expect(parser.log.nationality_all_buyer2).to be(nil)
           expect(parser.log.nationality_all_buyer2_group).to be(nil)
-          expect(parser.errors["field_41"]).to include("Select a valid nationality.")
+          expect(parser.errors["field_41"]).to include(I18n.t("validations.sales.2024.bulk_upload.nationality.invalid"))
         end
       end
     end
@@ -1983,7 +1979,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
           parser.valid?
           setup_errors = parser.errors.select { |e| e.options[:category] == :setup }
 
-          expect(setup_errors.find { |e| e.attribute == :field_2 }.message).to eql("You must answer reported by.")
+          expect(setup_errors.find { |e| e.attribute == :field_2 }.message).to eql(I18n.t("validations.not_answered", question: "reported by."))
         end
 
         it "blocks log creation" do
@@ -1999,7 +1995,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
           parser.valid?
           setup_errors = parser.errors.select { |e| e.options[:category] == :setup }
 
-          expect(setup_errors.find { |e| e.attribute == :field_2 }.message).to eql("You must answer reported by.")
+          expect(setup_errors.find { |e| e.attribute == :field_2 }.message).to eql(I18n.t("validations.not_answered", question: "reported by."))
         end
 
         it "blocks log creation" do
@@ -2017,7 +2013,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
           parser.valid?
           setup_errors = parser.errors.select { |e| e.options[:category] == :setup }
 
-          expect(setup_errors.find { |e| e.attribute == :field_2 }.message).to eql("This organisation does not have a relationship with the owning organisation.")
+          expect(setup_errors.find { |e| e.attribute == :field_2 }.message).to eql(I18n.t("validations.sales.2024.bulk_upload.assigned_to.managing_organisation_not_related"))
         end
 
         it "blocks log creation" do
@@ -2039,7 +2035,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
         parser.valid?
         setup_errors = parser.errors.select { |e| e.options[:category] == :setup }
 
-        expect(setup_errors.find { |e| e.attribute == :field_1 }.message).to eql("The owning organisation code provided is for an organisation that does not own stock.")
+        expect(setup_errors.find { |e| e.attribute == :field_1 }.message).to eql(I18n.t("validations.sales.2024.bulk_upload.owning_organisation.not_stock_owner"))
       end
 
       it "blocks log creation" do
