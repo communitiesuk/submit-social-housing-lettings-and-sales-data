@@ -616,7 +616,7 @@ private
   end
 
   def key_address_fields_provided?
-    field_23.present? && field_25.present? && field_27.present? && field_28.present?
+    field_23.present? && field_25.present? && postcode_full.present?
   end
 
   def validate_address_fields
@@ -1074,7 +1074,7 @@ private
   end
 
   def postcode_full
-    "#{field_27} #{field_28}" if field_27 && field_28
+    [field_27, field_28].compact_blank.join(" ") if field_27 || field_28
   end
 
   def ppostcode_full
@@ -1469,10 +1469,10 @@ private
   def validate_buyer1_economic_status
     if field_35 == 9
       if field_31.present? && field_31.to_i >= 16
-        errors.add(:field_35, I18n.t("validations.household.ecstat.buyer_cannot_be_over_16_and_child", buyer_index: "1"))
-        errors.add(:field_31, I18n.t("validations.household.ecstat.buyer_cannot_be_over_16_and_child", buyer_index: "1"))
+        errors.add(:field_35, I18n.t("validations.sales.household.ecstat.buyer_cannot_be_over_16_and_child", buyer_index: "1"))
+        errors.add(:field_31, I18n.t("validations.sales.household.ecstat.buyer_cannot_be_over_16_and_child", buyer_index: "1"))
       else
-        errors.add(:field_35, I18n.t("validations.household.ecstat.buyer_cannot_be_child", buyer_index: "1"))
+        errors.add(:field_35, I18n.t("validations.sales.household.ecstat1.buyer_cannot_be_child"))
       end
     end
   end
@@ -1482,10 +1482,10 @@ private
 
     if field_42 == 9
       if field_38.present? && field_38.to_i >= 16
-        errors.add(:field_42, I18n.t("validations.household.ecstat.buyer_cannot_be_over_16_and_child", buyer_index: "2"))
-        errors.add(:field_38, I18n.t("validations.household.ecstat.buyer_cannot_be_over_16_and_child", buyer_index: "2"))
+        errors.add(:field_42, I18n.t("validations.sales.household.ecstat.buyer_cannot_be_over_16_and_child", buyer_index: "2"))
+        errors.add(:field_38, I18n.t("validations.sales.household.ecstat.buyer_cannot_be_over_16_and_child", buyer_index: "2"))
       else
-        errors.add(:field_42, I18n.t("validations.household.ecstat.buyer_cannot_be_child", buyer_index: "2"))
+        errors.add(:field_42, I18n.t("validations.sales.household.ecstat2.buyer_cannot_be_child"))
       end
     end
   end

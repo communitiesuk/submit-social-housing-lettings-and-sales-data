@@ -5,7 +5,8 @@ RSpec.describe Form::Sales::Subsections::DiscountedOwnershipScheme, type: :model
 
   let(:subsection_id) { nil }
   let(:subsection_definition) { nil }
-  let(:section) { instance_double(Form::Sales::Sections::SaleInformation) }
+  let(:form) { instance_double(Form, start_date: Time.zone.local(2024, 4, 1)) }
+  let(:section) { instance_double(Form::Sales::Sections::SaleInformation, form:) }
 
   it "has correct section" do
     expect(discounted_ownership_scheme.section).to eq(section)
