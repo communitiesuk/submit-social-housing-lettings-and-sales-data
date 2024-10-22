@@ -1469,10 +1469,10 @@ private
   def validate_buyer1_economic_status
     if field_35 == 9
       if field_31.present? && field_31.to_i >= 16
-        errors.add(:field_35, I18n.t("validations.household.ecstat.buyer_cannot_be_over_16_and_child", buyer_index: "1"))
-        errors.add(:field_31, I18n.t("validations.household.ecstat.buyer_cannot_be_over_16_and_child", buyer_index: "1"))
+        errors.add(:field_35, I18n.t("validations.sales.household.ecstat.buyer_cannot_be_over_16_and_child", buyer_index: "1"))
+        errors.add(:field_31, I18n.t("validations.sales.household.ecstat.buyer_cannot_be_over_16_and_child", buyer_index: "1"))
       else
-        errors.add(:field_35, I18n.t("validations.household.ecstat.buyer_cannot_be_child", buyer_index: "1"))
+        errors.add(:field_35, I18n.t("validations.sales.household.ecstat1.buyer_cannot_be_child"))
       end
     end
   end
@@ -1482,10 +1482,10 @@ private
 
     if field_42 == 9
       if field_38.present? && field_38.to_i >= 16
-        errors.add(:field_42, I18n.t("validations.household.ecstat.buyer_cannot_be_over_16_and_child", buyer_index: "2"))
-        errors.add(:field_38, I18n.t("validations.household.ecstat.buyer_cannot_be_over_16_and_child", buyer_index: "2"))
+        errors.add(:field_42, I18n.t("validations.sales.household.ecstat.buyer_cannot_be_over_16_and_child", buyer_index: "2"))
+        errors.add(:field_38, I18n.t("validations.sales.household.ecstat.buyer_cannot_be_over_16_and_child", buyer_index: "2"))
       else
-        errors.add(:field_42, I18n.t("validations.household.ecstat.buyer_cannot_be_child", buyer_index: "2"))
+        errors.add(:field_42, I18n.t("validations.sales.household.ecstat2.buyer_cannot_be_child"))
       end
     end
   end
