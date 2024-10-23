@@ -2,7 +2,7 @@ class Form::Sales::Questions::BuyerLiveInValueCheck < ::Form::Question
   def initialize(id, hsh, page, person_index:)
     super(id, hsh, page)
     @id = "buyer_livein_value_check"
-    @check_answer_label = "Buyer live in confirmation"
+    @copy_key = "sales.soft_validations.buyer_livein_value_check.buyer#{person_index}"
     @type = "interruption_screen"
     @answer_options = {
       "0" => { "value" => "Yes" },
@@ -19,6 +19,5 @@ class Form::Sales::Questions::BuyerLiveInValueCheck < ::Form::Question
       ],
     }
     @check_answers_card_number = person_index
-    @header = "Are you sure this is correct?"
   end
 end

@@ -4,7 +4,8 @@ RSpec.describe Form::Sales::Pages::RetirementValueCheck, type: :model do
   subject(:page) { described_class.new(page_id, page_definition, subsection, person_index:) }
 
   let(:page_definition) { nil }
-  let(:subsection) { instance_double(Form::Subsection) }
+  let(:form) { instance_double(Form, start_date: Time.zone.local(2024, 4, 1)) }
+  let(:subsection) { instance_double(Form::Subsection, form:) }
   let(:person_index) { 1 }
 
   let(:page_id) { "person_1_retirement_value_check" }
@@ -39,7 +40,7 @@ RSpec.describe Form::Sales::Pages::RetirementValueCheck, type: :model do
 
     it "has correct title_text" do
       expect(page.title_text).to eq({
-        "translation" => "soft_validations.retirement.min.title",
+        "translation" => "forms.2024.sales.soft_validations.retirement_value_check.min.title_text",
         "arguments" => [
           {
             "key" => "age1",
@@ -77,7 +78,7 @@ RSpec.describe Form::Sales::Pages::RetirementValueCheck, type: :model do
 
     it "has correct title_text" do
       expect(page.title_text).to eq({
-        "translation" => "soft_validations.retirement.min.title",
+        "translation" => "forms.2024.sales.soft_validations.retirement_value_check.min.title_text",
         "arguments" => [
           {
             "key" => "age2",
@@ -115,7 +116,7 @@ RSpec.describe Form::Sales::Pages::RetirementValueCheck, type: :model do
 
     it "has correct title_text" do
       expect(page.title_text).to eq({
-        "translation" => "soft_validations.retirement.min.title",
+        "translation" => "forms.2024.sales.soft_validations.retirement_value_check.min.title_text",
         "arguments" => [
           {
             "key" => "age3",
@@ -153,7 +154,7 @@ RSpec.describe Form::Sales::Pages::RetirementValueCheck, type: :model do
 
     it "has correct title_text" do
       expect(page.title_text).to eq({
-        "translation" => "soft_validations.retirement.min.title",
+        "translation" => "forms.2024.sales.soft_validations.retirement_value_check.min.title_text",
         "arguments" => [
           {
             "key" => "age4",
@@ -191,7 +192,7 @@ RSpec.describe Form::Sales::Pages::RetirementValueCheck, type: :model do
 
     it "has correct title_text" do
       expect(page.title_text).to eq({
-        "translation" => "soft_validations.retirement.min.title",
+        "translation" => "forms.2024.sales.soft_validations.retirement_value_check.min.title_text",
         "arguments" => [
           {
             "key" => "age5",
@@ -229,7 +230,7 @@ RSpec.describe Form::Sales::Pages::RetirementValueCheck, type: :model do
 
     it "has correct title_text" do
       expect(page.title_text).to eq({
-        "translation" => "soft_validations.retirement.min.title",
+        "translation" => "forms.2024.sales.soft_validations.retirement_value_check.min.title_text",
         "arguments" => [
           {
             "key" => "age6",
