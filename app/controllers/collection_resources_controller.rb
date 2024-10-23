@@ -101,6 +101,7 @@ class CollectionResourcesController < ApplicationController
 
     @collection_resource.file = resource_params[:file]
     @collection_resource.validate_attached_file
+    @collection_resource.validate_short_display_name
     return render "collection_resources/edit" if @collection_resource.errors.any?
 
     @collection_resource.short_display_name = resource_params[:short_display_name]
@@ -162,6 +163,7 @@ class CollectionResourcesController < ApplicationController
     @collection_resource.display_name = "#{@collection_resource.log_type} #{@collection_resource.short_display_name} (#{text_year_range_format(@collection_resource.year)})"
 
     @collection_resource.validate_attached_file
+    @collection_resource.validate_short_display_name
     return render "collection_resources/new" if @collection_resource.errors.any?
 
     if @collection_resource.save

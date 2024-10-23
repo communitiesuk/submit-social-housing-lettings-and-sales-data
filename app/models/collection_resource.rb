@@ -31,4 +31,8 @@ class CollectionResource < ApplicationRecord
       end
     end
   end
+
+  def validate_short_display_name
+    errors.add(:short_display_name, :blank) if short_display_name.blank?
+  end
 end
