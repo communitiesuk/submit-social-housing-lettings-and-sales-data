@@ -1,8 +1,10 @@
 class CollectionResource < ApplicationRecord
   include Rails.application.routes.url_helpers
+  has_paper_trail
 
   attr_accessor :file
 
+  scope :visible, -> { where(discarded_at: nil) }
   validates :short_display_name, presence: true
 
   def download_path
@@ -34,5 +36,10 @@ class CollectionResource < ApplicationRecord
 
   def validate_short_display_name
     errors.add(:short_display_name, :blank) if short_display_name.blank?
+  end
+
+  def discard!
+    CollectionResourcesService.new.delete_collection_resource(download_filename)
+    update!(discarded_at: Time.zone.now)
   end
 end

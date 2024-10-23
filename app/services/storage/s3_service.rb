@@ -64,6 +64,10 @@ module Storage
       false
     end
 
+    def delete_file(file_name)
+      @client.delete_object(bucket: @configuration.bucket_name, key: file_name)
+    end
+
   private
 
     def create_configuration
