@@ -3,6 +3,7 @@ class Form::Sales::Pages::MortgageValueCheck < ::Form::Page
     super(id, hsh, subsection)
     @depends_on = depends_on
     @person_index = person_index
+    # empty
     @copy_key = "sales.soft_validations.mortgage_value_check"
     @title_text = {
       "translation" => "forms.#{form.start_date.year}.#{@copy_key}.title_text",
