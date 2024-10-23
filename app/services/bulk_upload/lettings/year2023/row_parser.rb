@@ -323,8 +323,8 @@ class BulkUpload::Lettings::Year2023::RowParser
               category: :setup,
             },
             format: {
-              with: /\A\d{2}\z/,
-              message: I18n.t("validations.setup.startdate.year_not_two_digits"),
+              with: /\A(\d{2}|\d{4})\z/,
+              message: I18n.t("validations.setup.startdate.year_not_two_or_four_digits"),
               category: :setup,
               unless: -> { field_9.blank? },
             },
@@ -618,14 +618,6 @@ private
     end
   end
 
-  def start_date
-    return if field_7.blank? || field_8.blank? || field_9.blank?
-
-    Date.parse("20#{field_9.to_s.rjust(2, '0')}-#{field_8}-#{field_7}")
-  rescue StandardError
-    nil
-  end
-
   def validate_no_and_dont_know_disabled_needs_conjunction
     if field_87 == 1 && field_88 == 1
       errors.add(:field_87, I18n.t("validations.household.housingneeds.no_and_dont_know_disabled_needs_conjunction"))
@@ -736,9 +728,9 @@ private
   end
 
   def validate_relevant_collection_window
-    return if start_date.blank? || bulk_upload.form.blank?
+    return if startdate.blank? || bulk_upload.form.blank?
 
-    unless bulk_upload.form.valid_start_date_for_form?(start_date)
+    unless bulk_upload.form.valid_start_date_for_form?(startdate)
       errors.add(:field_7, I18n.t("validations.date.outside_collection_window", year_combo: bulk_upload.year_combo, start_year: bulk_upload.year, end_year: bulk_upload.end_year), category: :setup)
       errors.add(:field_8, I18n.t("validations.date.outside_collection_window", year_combo: bulk_upload.year_combo, start_year: bulk_upload.year, end_year: bulk_upload.end_year), category: :setup)
       errors.add(:field_9, I18n.t("validations.date.outside_collection_window", year_combo: bulk_upload.year_combo, start_year: bulk_upload.year, end_year: bulk_upload.end_year), category: :setup)
@@ -1388,7 +1380,8 @@ private
   end
 
   def startdate
-    Date.new(field_9 + 2000, field_8, field_7) if field_9.present? && field_8.present? && field_7.present?
+    year = field_9.to_s.strip.length.between?(1, 2) ? field_9 + 2000 : field_9
+    Date.new(year, field_8, field_7) if field_9.present? && field_8.present? && field_7.present?
   rescue Date::Error
     Date.new
   end
@@ -1584,13 +1577,15 @@ private
   end
 
   def mrcdate
-    Date.new(field_38 + 2000, field_37, field_36) if field_38.present? && field_37.present? && field_36.present?
+    year = field_38.to_s.strip.length.between?(1, 2) ? field_38 + 2000 : field_38
+    Date.new(year, field_37, field_36) if field_38.present? && field_37.present? && field_36.present?
   rescue Date::Error
     Date.new
   end
 
   def voiddate
-    Date.new(field_35 + 2000, field_34, field_33) if field_35.present? && field_34.present? && field_33.present?
+    year = field_35.to_s.strip.length.between?(1, 2) ? field_35 + 2000 : field_35
+    Date.new(year, field_34, field_33) if field_35.present? && field_34.present? && field_33.present?
   rescue Date::Error
     Date.new
   end

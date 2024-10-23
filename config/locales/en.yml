@@ -284,7 +284,7 @@ en:
       intermediate_rent_product_name:
         blank: "Enter name of other intermediate rent product."
       saledate:
-        year_not_two_digits: "Sale completion year must be 2 digits."
+        year_not_two_or_four_digits: "Sale completion year must be 2 or 4 digits."
       type:
         percentage_bought_must_be_at_least_threshold: "The minimum increase in equity while staircasing is %{threshold}% for this shared ownership type."
 
@@ -297,7 +297,7 @@ en:
         before_scheme_end_date: "The tenancy start date must be before the end date for this supported housing scheme."
         after_void_date: "Enter a tenancy start date that is after the void date."
         after_major_repair_date: "Enter a tenancy start date that is after the major repair date."
-        year_not_two_digits: "Tenancy start year must be 2 digits."
+        year_not_two_or_four_digits: "Tenancy start year must be 2 or 4 digits."
         ten_years_after_void_date: "Enter a tenancy start date that is no more than 10 years after the void date."
         ten_years_after_mrc_date: "Enter a tenancy start date that is no more than 10 years after the major repairs completion date."
         invalid_merged_organisations_start_date:
