@@ -8,7 +8,7 @@ class Form::Sales::Pages::PercentageDiscountValueCheck < ::Form::Page
       "arguments" => [{ "key" => "discount", "label" => true, "i18n_template" => "discount" }],
     }
     @informative_text = {
-      "translation" => "forms.#{form.start_date.year}.#{@copy_key}.hint_text",
+      "translation" => "forms.#{form.start_date.year}.#{@copy_key}.informative_text",
       "arguments" => [],
     }
   end
