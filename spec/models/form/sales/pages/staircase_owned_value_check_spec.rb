@@ -5,7 +5,8 @@ RSpec.describe Form::Sales::Pages::StaircaseOwnedValueCheck, type: :model do
 
   let(:page_id) { "an_id" }
   let(:page_definition) { nil }
-  let(:subsection) { instance_double(Form::Subsection) }
+  let(:form) { instance_double(Form, start_date: Time.zone.local(2024, 4, 1)) }
+  let(:subsection) { instance_double(Form::Subsection, form:) }
   let(:joint_purchase) { false }
 
   it "has correct subsection" do
@@ -33,7 +34,7 @@ RSpec.describe Form::Sales::Pages::StaircaseOwnedValueCheck, type: :model do
 
   it "has the correct informative_text" do
     expect(page.informative_text).to eq({
-      "translation" => "soft_validations.staircase_owned.hint_text",
+      "translation" => "forms.2024.sales.soft_validations.stairowned_value_check.not_joint_purchase.informative_text",
       "arguments" => [],
     })
   end
@@ -45,7 +46,7 @@ RSpec.describe Form::Sales::Pages::StaircaseOwnedValueCheck, type: :model do
   context "when not a joint purchase" do
     it "has the correct title_text" do
       expect(page.title_text).to eq({
-        "translation" => "soft_validations.staircase_owned.title_text.one",
+        "translation" => "forms.2024.sales.soft_validations.stairowned_value_check.not_joint_purchase.title_text",
         "arguments" => [
           {
             "key" => "stairowned",
@@ -62,7 +63,7 @@ RSpec.describe Form::Sales::Pages::StaircaseOwnedValueCheck, type: :model do
 
     it "has the correct title_text" do
       expect(page.title_text).to eq({
-        "translation" => "soft_validations.staircase_owned.title_text.two",
+        "translation" => "forms.2024.sales.soft_validations.stairowned_value_check.joint_purchase.title_text",
         "arguments" => [
           {
             "key" => "stairowned",

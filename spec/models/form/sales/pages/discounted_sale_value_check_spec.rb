@@ -6,7 +6,8 @@ RSpec.describe Form::Sales::Pages::DiscountedSaleValueCheck, type: :model do
   let(:page_id) { "discounted_sale_value_check" }
   let(:page_definition) { nil }
   let(:index) { 1 }
-  let(:subsection) { instance_double(Form::Subsection) }
+  let(:form) { instance_double(Form, start_date: Time.zone.local(2024, 4, 1)) }
+  let(:subsection) { instance_double(Form::Subsection, form:) }
 
   it "has correct subsection" do
     expect(page.subsection).to eq(subsection)
@@ -22,14 +23,14 @@ RSpec.describe Form::Sales::Pages::DiscountedSaleValueCheck, type: :model do
 
   it "has the correct title_text" do
     expect(page.title_text).to eq({
-      "translation" => "soft_validations.discounted_sale_value.title_text",
+      "translation" => "forms.2024.sales.soft_validations.discounted_sale_value_check.title_text",
       "arguments" => [{ "arguments_for_key" => "value_with_discount", "i18n_template" => "value_with_discount", "key" => "field_formatted_as_currency" }],
     })
   end
 
   it "has the correct informative_text" do
     expect(page.informative_text).to eq({
-      "translation" => "soft_validations.discounted_sale_value.informative_text",
+      "translation" => "forms.2024.sales.soft_validations.discounted_sale_value_check.informative_text",
       "arguments" => [{ "arguments_for_key" => "mortgage_deposit_and_grant_total", "i18n_template" => "mortgage_deposit_and_grant_total", "key" => "field_formatted_as_currency" }],
     })
   end

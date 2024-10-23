@@ -6,8 +6,9 @@ class Form::Sales::Pages::AboutPriceValueCheck < ::Form::Page
         "purchase_price_out_of_soft_range?" => true,
       },
     ]
+    @copy_key = "sales.soft_validations.value_value_check"
     @title_text = {
-      "translation" => "soft_validations.purchase_price.title_text",
+      "translation" => "forms.#{form.start_date.year}.#{@copy_key}.title_text",
       "arguments" => [
         {
           "key" => "value",
@@ -17,7 +18,7 @@ class Form::Sales::Pages::AboutPriceValueCheck < ::Form::Page
       ],
     }
     @informative_text = {
-      "translation" => "soft_validations.purchase_price.hint_text",
+      "translation" => "forms.#{form.start_date.year}.#{@copy_key}.informative_text",
       "arguments" => [
         {
           "key" => "field_formatted_as_currency",

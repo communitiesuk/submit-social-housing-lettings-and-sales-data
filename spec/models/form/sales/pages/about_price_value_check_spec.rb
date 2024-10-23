@@ -5,7 +5,8 @@ RSpec.describe Form::Sales::Pages::AboutPriceValueCheck, type: :model do
 
   let(:page_id) { "savings_value_check" }
   let(:page_definition) { nil }
-  let(:subsection) { instance_double(Form::Subsection) }
+  let(:form) { instance_double(Form, start_date: Time.zone.local(2024, 4, 1)) }
+  let(:subsection) { instance_double(Form::Subsection, form:) }
 
   it "has correct subsection" do
     expect(page.subsection).to eq(subsection)
@@ -28,12 +29,12 @@ RSpec.describe Form::Sales::Pages::AboutPriceValueCheck, type: :model do
   end
 
   it "has the correct title_text" do
-    expect(page.title_text).to eq({ "arguments" => [{ "i18n_template" => "value", "key" => "value", "label" => true }], "translation" => "soft_validations.purchase_price.title_text" })
+    expect(page.title_text).to eq({ "arguments" => [{ "i18n_template" => "value", "key" => "value", "label" => true }], "translation" => "forms.2024.sales.soft_validations.value_value_check.title_text" })
   end
 
   it "has the correct informative_text" do
     expect(page.informative_text).to eq({
-      "translation" => "soft_validations.purchase_price.hint_text",
+      "translation" => "forms.2024.sales.soft_validations.value_value_check.informative_text",
       "arguments" => [
         {
           "key" => "field_formatted_as_currency",

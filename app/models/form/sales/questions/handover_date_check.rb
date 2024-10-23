@@ -2,8 +2,7 @@ class Form::Sales::Questions::HandoverDateCheck < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "hodate_check"
-    @check_answer_label = "Practical completion or handover date check"
-    @header = "Are you sure?"
+    @copy_key = "sales.soft_validations.hodate_check"
     @type = "interruption_screen"
     @answer_options = {
       "0" => { "value" => "Yes" },
