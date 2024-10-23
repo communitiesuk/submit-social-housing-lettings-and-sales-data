@@ -2,7 +2,7 @@ class Form::Sales::Questions::PostcodeForAddressMatcher < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "postcode_full_input"
-    @header = "Postcode"
+    @copy_key = "sales.property_information.address_matcher.postcode_full_input"
     @type = "text"
     @width = 5
     @plain_label = true

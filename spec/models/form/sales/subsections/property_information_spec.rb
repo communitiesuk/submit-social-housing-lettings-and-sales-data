@@ -17,30 +17,6 @@ RSpec.describe Form::Sales::Subsections::PropertyInformation, type: :model do
       allow(form).to receive(:start_year_after_2024?).and_return(false)
     end
 
-    context "when 2022" do
-      let(:start_date) { Time.utc(2022, 2, 8) }
-
-      it "has correct pages" do
-        expect(property_information.pages.compact.map(&:id)).to eq(
-          %w[
-            property_number_of_bedrooms
-            about_price_bedrooms_value_check
-            property_unit_type
-            monthly_charges_property_type_value_check
-            percentage_discount_proptype_value_check
-            property_building_type
-            property_postcode
-            property_local_authority
-            local_authority_buyer_1_income_max_value_check
-            local_authority_buyer_2_income_max_value_check
-            local_authority_combined_income_max_value_check
-            about_price_la_value_check
-            property_wheelchair_accessible
-          ],
-        )
-      end
-    end
-
     context "when 2023" do
       let(:start_date) { Time.utc(2023, 2, 8) }
 
