@@ -6,6 +6,7 @@ class Form::Sales::Pages::MonthlyChargesValueCheck < ::Form::Page
         "monthly_charges_over_soft_max?" => true,
       },
     ]
+    @copy_key = "sales.soft_validations.monthly_charges_value_check"
     @title_text = {
       "translation" => "forms.#{form.start_date.year}.#{@copy_key}.title_text",
       "arguments" => [
