@@ -32,11 +32,11 @@ RSpec.describe Form::Sales::Pages::NoAddressFound, type: :model do
   end
 
   it "has the correct title_text" do
-    expect(page.title_text).to eq({ "arguments" => [], "translation" => "soft_validations.no_address_found.title_text" })
+    expect(page.title_text).to eq({ "arguments" => [], "translation" => "forms.2024.sales.soft_validations.address_search_value_check.title_text" })
   end
 
   it "has the correct informative_text" do
-    expect(page.informative_text).to eq({ "arguments" => [], "translation" => "soft_validations.no_address_found.informative_text" })
+    expect(page.informative_text).to eq({ "arguments" => [], "translation" => "forms.2024.sales.soft_validations.address_search_value_check.informative_text" })
   end
 
   it "has the correct interruption_screen_question_ids" do

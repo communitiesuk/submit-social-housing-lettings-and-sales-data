@@ -22,14 +22,14 @@ RSpec.describe Form::Sales::Pages::PercentageDiscountValueCheck, type: :model do
 
   it "has the correct title_text" do
     expect(page.title_text).to eq({
-      "translation" => "soft_validations.percentage_discount_value.title_text",
+      "translation" => "forms.2024.sales.soft_validations.percentage_discount_value.title_text",
       "arguments" => [{ "key" => "discount", "label" => true, "i18n_template" => "discount" }],
     })
   end
 
   it "has the correct informative_text" do
     expect(page.informative_text).to eq({
-      "translation" => "soft_validations.percentage_discount_value.hint_text",
+      "translation" => "forms.2024.sales.soft_validations.percentage_discount_value.informative_text",
       "arguments" => [],
     })
   end
