@@ -2,7 +2,7 @@ class Form::Sales::Pages::PurchasePrice < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "purchase_price"
-    @header = "About the price of the property"
+    @copy_key = "sales.sale_information.purchase_price.discounted_ownership"
     @depends_on = [{ "right_to_buy?" => true },
                    {
                      "right_to_buy?" => false,

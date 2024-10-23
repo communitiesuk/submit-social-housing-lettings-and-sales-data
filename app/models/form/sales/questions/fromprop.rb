@@ -2,10 +2,8 @@ class Form::Sales::Questions::Fromprop < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "fromprop"
-    @check_answer_label = "Previous property type"
-    @header = "What was the previous property type?"
+    @copy_key = "sales.sale_information.fromprop"
     @type = "radio"
-    @hint_text = ""
     @page = page
     @answer_options = ANSWER_OPTIONS
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
