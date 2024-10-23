@@ -19,7 +19,7 @@ module Storage
       File.open(path, "r")
     end
 
-    def write_file(filename, data)
+    def write_file(filename, data, _content_type: nil)
       path = Rails.root.join("tmp/storage", filename)
 
       FileUtils.mkdir_p(path.dirname)
