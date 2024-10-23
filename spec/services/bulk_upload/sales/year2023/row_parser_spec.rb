@@ -406,7 +406,7 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
         let(:attributes) { setup_section_params.merge(field_1: nil) }
 
         it "is not permitted as setup error" do
-          expect(parser.errors.where(:field_1, category: :setup).map(&:message)).to eql(["You must answer owning organisation."])
+          expect(parser.errors.where(:field_1, category: :setup).map(&:message)).to eql([I18n.t("validations.sales.2023.bulk_upload.not_answered", question: "owning organisation.")])
         end
 
         it "blocks log creation" do
@@ -418,7 +418,7 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
         let(:attributes) { { bulk_upload:, field_1: "donotexist" } }
 
         it "is not permitted as a setup error" do
-          expect(parser.errors.where(:field_1, category: :setup).map(&:message)).to eql(["You must answer owning organisation."])
+          expect(parser.errors.where(:field_1, category: :setup).map(&:message)).to eql([I18n.t("validations.sales.2023.bulk_upload.not_answered", question: "owning organisation.")])
         end
 
         it "blocks log creation" do
@@ -432,7 +432,7 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
         let(:attributes) { { bulk_upload:, field_1: unaffiliated_org.old_visible_id } }
 
         it "is not permitted as setup error" do
-          expect(parser.errors.where(:field_1, category: :setup).map(&:message)).to eql(["You do not have permission to add logs for this owning organisation."])
+          expect(parser.errors.where(:field_1, category: :setup).map(&:message)).to eql([I18n.t("validations.sales.2023.bulk_upload.owning_organisation.not_permitted")])
         end
 
         it "blocks log creation" do
@@ -608,7 +608,7 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
 
         it "returns a setup error" do
           parser.valid?
-          expect(parser.errors.where(:field_5, category: :setup).map(&:message)).to include("Sale completion year must be 2 or 4 digits.")
+          expect(parser.errors.where(:field_5, category: :setup).map(&:message)).to include(I18n.t("validations.sales.2023.bulk_upload.saledate.year_not_two_or_four_digits"))
         end
       end
 
@@ -672,7 +672,7 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
       it "adds an error to all (and only) the fields used to determine duplicates" do
         parser.valid?
 
-        error_message = "This is a duplicate log."
+        error_message = I18n.t("validations.sales.2023.bulk_upload.duplicate")
 
         [
           :field_1, # Owning org
@@ -932,7 +932,7 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
 
             it "does not set ##{age}" do
               parser.valid?
-              expect(parser.errors[field.to_sym]).to include(/You must answer/)
+              expect(parser.errors[field.to_sym]).to include(/#{I18n.t("validations.sales.2023.bulk_upload.not_answered", question: "")}/)
             end
           end
         end
@@ -980,7 +980,7 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
         let(:attributes) { valid_attributes.merge({ field_35: "9" }) }
 
         it "a custom validation is applied" do
-          validation_message = "Buyer 1 cannot be a child under 16."
+          validation_message = I18n.t("validations.sales.2023.bulk_upload.ecstat1.child_under_16")
           expect(parser.errors[:field_35]).to include validation_message
         end
       end
@@ -1052,7 +1052,7 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
         let(:attributes) { setup_section_params.merge(field_105: "4") }
 
         it "returns correct errors" do
-          expect(parser.errors[:field_105]).to include("Enter a valid value for was a mortgage used for the purchase of this property? - Shared ownership.")
+          expect(parser.errors[:field_105]).to include(I18n.t("validations.sales.2023.bulk_upload.invalid_option", question: "was a mortgage used for the purchase of this property? - Shared ownership."))
           parser.log.blank_invalid_non_setup_fields!
           parser.log.save!
           expect(parser.log.mortgageused).to be_nil
@@ -1420,7 +1420,7 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
           parser.valid?
           setup_errors = parser.errors.select { |e| e.options[:category] == :setup }
 
-          expect(setup_errors.find { |e| e.attribute == :field_2 }.message).to eql("This user belongs to an organisation that does not have a relationship with the owning organisation.")
+          expect(setup_errors.find { |e| e.attribute == :field_2 }.message).to eql(I18n.t("validations.sales.2023.bulk_upload.assigned_to.managing_organisation_not_related"))
         end
 
         it "blocks log creation" do
@@ -1442,7 +1442,7 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
         parser.valid?
         setup_errors = parser.errors.select { |e| e.options[:category] == :setup }
 
-        expect(setup_errors.find { |e| e.attribute == :field_1 }.message).to eql("The owning organisation code provided is for an organisation that does not own stock.")
+        expect(setup_errors.find { |e| e.attribute == :field_1 }.message).to eql(I18n.t("validations.sales.2023.bulk_upload.owning_organisation.not_stock_owner"))
       end
 
       it "blocks log creation" do
