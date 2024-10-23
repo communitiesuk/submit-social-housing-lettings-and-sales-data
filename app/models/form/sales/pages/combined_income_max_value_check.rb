@@ -6,6 +6,7 @@ class Form::Sales::Pages::CombinedIncomeMaxValueCheck < ::Form::Page
         "combined_income_over_soft_max?" => true,
       },
     ]
+    @copy_key = "sales.soft_validations.combined_income_value_check"
     @title_text = {
       "translation" => "forms.#{form.start_date.year}.#{@copy_key}.title_text",
       "arguments" => [

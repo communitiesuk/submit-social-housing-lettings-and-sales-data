@@ -1,13 +1,15 @@
 class CollectionResourcesController < ApplicationController
   include CollectionResourcesHelper
 
-  before_action :authenticate_user!, except: %i[download_mandatory_collection_resource]
+  before_action :authenticate_user!, except: %i[download_mandatory_collection_resource download_additional_collection_resource]
 
   def index
     render_not_found unless current_user.support?
 
     @mandatory_lettings_collection_resources_per_year = MandatoryCollectionResourcesService.generate_resources("lettings", editable_collection_resource_years)
     @mandatory_sales_collection_resources_per_year = MandatoryCollectionResourcesService.generate_resources("sales", editable_collection_resource_years)
+    @additional_lettings_collection_resources_per_year = CollectionResource.where(log_type: "lettings", mandatory: false).group_by(&:year)
+    @additional_sales_collection_resources_per_year = CollectionResource.where(log_type: "sales", mandatory: false).group_by(&:year)
   end
 
   def download_mandatory_collection_resource
@@ -23,7 +25,16 @@ class CollectionResourcesController < ApplicationController
     download_resource(resource.download_filename)
   end
 
-  def edit
+  def download_additional_collection_resource
+    resource = CollectionResource.find_by(id: params[:collection_resource_id])
+
+    return render_not_found unless resource
+    return render_not_found unless resource_for_year_can_be_downloaded?(resource.year)
+
+    download_resource(resource.download_filename)
+  end
+
+  def edit_mandatory_collection_resource
     return render_not_found unless current_user.support?
 
     year = params[:year].to_i
@@ -39,7 +50,18 @@ class CollectionResourcesController < ApplicationController
     render "collection_resources/edit"
   end
 
-  def update
+  def edit_additional_collection_resource
+    return render_not_found unless current_user.support?
+
+    @collection_resource = CollectionResource.find_by(id: params[:collection_resource_id])
+
+    return render_not_found unless @collection_resource
+    return render_not_found unless resource_for_year_can_be_updated?(@collection_resource.year)
+
+    render "collection_resources/edit"
+  end
+
+  def update_mandatory_collection_resource
     return render_not_found unless current_user.support?
 
     year = resource_params[:year].to_i
@@ -52,7 +74,8 @@ class CollectionResourcesController < ApplicationController
     @collection_resource = MandatoryCollectionResourcesService.generate_resource(log_type, year, resource_type)
     render_not_found unless @collection_resource
 
-    validate_file(file)
+    @collection_resource.file = file
+    @collection_resource.validate_attached_file
 
     return render "collection_resources/edit" if @collection_resource.errors.any?
 
@@ -66,6 +89,36 @@ class CollectionResourcesController < ApplicationController
 
     flash[:notice] = "The #{log_type} #{text_year_range_format(year)} #{@collection_resource.short_display_name.downcase} has been updated"
     redirect_to collection_resources_path
+  end
+
+  def update_additional_collection_resource
+    return render_not_found unless current_user.support?
+
+    @collection_resource = CollectionResource.find_by(id: params[:collection_resource_id])
+
+    return render_not_found unless @collection_resource
+    return render_not_found unless resource_for_year_can_be_updated?(@collection_resource.year)
+
+    @collection_resource.file = resource_params[:file]
+    @collection_resource.validate_attached_file
+    @collection_resource.validate_short_display_name
+    return render "collection_resources/edit" if @collection_resource.errors.any?
+
+    @collection_resource.short_display_name = resource_params[:short_display_name]
+    @collection_resource.download_filename = @collection_resource.file&.original_filename
+    @collection_resource.display_name = "#{@collection_resource.log_type} #{@collection_resource.short_display_name} (#{text_year_range_format(@collection_resource.year)})"
+    if @collection_resource.save
+      begin
+        CollectionResourcesService.new.upload_collection_resource(@collection_resource.download_filename, @collection_resource.file)
+        flash[:notice] = "The #{@collection_resource.log_type} #{text_year_range_format(@collection_resource.year)} #{@collection_resource.short_display_name.downcase} has been updated."
+        redirect_to collection_resources_path
+      rescue StandardError
+        @collection_resource.errors.add(:file, :error_uploading)
+        render "collection_resources/edit"
+      end
+    else
+      render "collection_resources/edit"
+    end
   end
 
   def confirm_mandatory_collection_resources_release
@@ -91,10 +144,50 @@ class CollectionResourcesController < ApplicationController
     redirect_to collection_resources_path
   end
 
+  def new
+    return render_not_found unless current_user.support?
+
+    year = params[:year].to_i
+    log_type = params[:log_type]
+
+    return render_not_found unless editable_collection_resource_years.include?(year)
+
+    @collection_resource = CollectionResource.new(year:, log_type:)
+  end
+
+  def create
+    return render_not_found unless current_user.support? && editable_collection_resource_years.include?(resource_params[:year].to_i)
+
+    @collection_resource = CollectionResource.new(resource_params)
+    @collection_resource.download_filename ||= @collection_resource.file&.original_filename
+    @collection_resource.display_name = "#{@collection_resource.log_type} #{@collection_resource.short_display_name} (#{text_year_range_format(@collection_resource.year)})"
+
+    @collection_resource.validate_attached_file
+    @collection_resource.validate_short_display_name
+    return render "collection_resources/new" if @collection_resource.errors.any?
+
+    if @collection_resource.save
+      begin
+        CollectionResourcesService.new.upload_collection_resource(@collection_resource.download_filename, @collection_resource.file)
+        flash[:notice] = if displayed_collection_resource_years.include?(@collection_resource.year)
+                           "The #{@collection_resource.log_type} #{text_year_range_format(@collection_resource.year)} #{@collection_resource.short_display_name} is now available to users."
+                         else
+                           "The #{@collection_resource.log_type} #{text_year_range_format(@collection_resource.year)} #{@collection_resource.short_display_name} has been uploaded."
+                         end
+        redirect_to collection_resources_path
+      rescue StandardError
+        @collection_resource.errors.add(:file, :error_uploading)
+        render "collection_resources/new"
+      end
+    else
+      render "collection_resources/new"
+    end
+  end
+
 private
 
   def resource_params
-    params.require(:collection_resource).permit(:year, :log_type, :resource_type, :file)
+    params.require(:collection_resource).permit(:year, :log_type, :resource_type, :file, :mandatory, :short_display_name)
   end
 
   def download_resource(filename)
@@ -112,24 +205,5 @@ private
 
   def resource_for_year_can_be_updated?(year)
     editable_collection_resource_years.include?(year)
-  end
-
-  def validate_file(file)
-    return @collection_resource.errors.add(:file, :blank) unless file
-    return @collection_resource.errors.add(:file, :above_100_mb) if file.size > 100.megabytes
-
-    argv = %W[file --brief --mime-type -- #{file.path}]
-    output = `#{argv.shelljoin}`
-
-    case @collection_resource.resource_type
-    when "paper_form"
-      unless output.match?(/application\/pdf/)
-        @collection_resource.errors.add(:file, :must_be_pdf)
-      end
-    when "bulk_upload_template", "bulk_upload_specification"
-      unless output.match?(/application\/vnd\.ms-excel|application\/vnd\.openxmlformats-officedocument\.spreadsheetml\.sheet/)
-        @collection_resource.errors.add(:file, :must_be_xlsx, resource: @collection_resource.short_display_name.downcase)
-      end
-    end
   end
 end

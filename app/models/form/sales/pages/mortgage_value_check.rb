@@ -2,10 +2,10 @@ class Form::Sales::Pages::MortgageValueCheck < ::Form::Page
   def initialize(id, hsh, subsection, person_index = nil)
     super(id, hsh, subsection)
     @depends_on = depends_on
-    @informative_text = {}
     @person_index = person_index
+    @copy_key = "sales.soft_validations.mortgage_value_check"
     @title_text = {
-      "translation" => "soft_validations.mortgage.title_text",
+      "translation" => "forms.#{form.start_date.year}.#{@copy_key}.title_text",
       "arguments" => [
         {
           "key" => "field_formatted_as_currency",
@@ -15,7 +15,7 @@ class Form::Sales::Pages::MortgageValueCheck < ::Form::Page
       ],
     }
     @informative_text = {
-      "translation" => "soft_validations.mortgage.hint_text",
+      "translation" => "forms.#{form.start_date.year}.#{@copy_key}.informative_text",
       "arguments" => [],
     }
   end

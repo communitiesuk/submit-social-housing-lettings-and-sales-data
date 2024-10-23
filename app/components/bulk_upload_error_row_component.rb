@@ -62,4 +62,17 @@ class BulkUploadErrorRowComponent < ViewComponent::Base
   def sales?
     bulk_upload.log_type == "sales"
   end
+
+  def row_classes(index, errors_size)
+    row_class = "grouped-rows"
+    row_class += " first-row" if index.zero?
+    row_class += " last-row" if index == errors_size - 1
+    row_class
+  end
+
+  def cell_classes(group_index, total_groups)
+    cell_class = "govuk-!-font-weight-bold govuk-!-width-one-half"
+    cell_class += " grouped-multirow-cell" unless group_index == total_groups - 1
+    cell_class
+  end
 end

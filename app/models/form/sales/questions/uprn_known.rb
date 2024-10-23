@@ -27,7 +27,7 @@ class Form::Sales::Questions::UprnKnown < ::Form::Question
   }.freeze
 
   def unanswered_error_message
-    I18n.t("validations.property.uprn_known.invalid")
+    I18n.t("validations.sales.property_information.uprn_known.invalid")
   end
 
   QUESTION_NUMBER_FROM_YEAR = { 2023 => 14, 2024 => 15 }.freeze
