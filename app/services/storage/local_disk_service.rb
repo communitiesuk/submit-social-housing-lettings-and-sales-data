@@ -43,5 +43,11 @@ module Storage
 
       File.exist?(path)
     end
+
+    def delete_file(filename)
+      path = Rails.root.join("tmp/storage", filename)
+
+      File.delete(path)
+    end
   end
 end
