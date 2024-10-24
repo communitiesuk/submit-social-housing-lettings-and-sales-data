@@ -143,7 +143,7 @@ RSpec.describe TasklistHelper do
         end
 
         it "returns relevant text" do
-          expect(review_log_text(sales_log)).to eq("This log is from the 2022/2023 collection window, which is now closed.")
+          expect(review_log_text(sales_log)).to eq("This log is from the 2022 to 2023 collection window, which is now closed.")
         end
       end
 
@@ -156,7 +156,7 @@ RSpec.describe TasklistHelper do
         end
 
         it "returns relevant text" do
-          expect(review_log_text(sales_log)).to eq("This log is from the 2021/2022 collection window, which is now closed.")
+          expect(review_log_text(sales_log)).to eq("This log is from the 2021 to 2022 collection window, which is now closed.")
         end
       end
     end
@@ -186,7 +186,7 @@ RSpec.describe TasklistHelper do
         end
 
         it "returns relevant text" do
-          expect(review_log_text(lettings_log)).to eq("This log is from the 2022/2023 collection window, which is now closed.")
+          expect(review_log_text(lettings_log)).to eq("This log is from the 2022 to 2023 collection window, which is now closed.")
         end
       end
 
@@ -199,7 +199,7 @@ RSpec.describe TasklistHelper do
         end
 
         it "returns relevant text" do
-          expect(review_log_text(lettings_log)).to eq("This log is from the 2021/2022 collection window, which is now closed.")
+          expect(review_log_text(lettings_log)).to eq("This log is from the 2021 to 2022 collection window, which is now closed.")
         end
       end
     end

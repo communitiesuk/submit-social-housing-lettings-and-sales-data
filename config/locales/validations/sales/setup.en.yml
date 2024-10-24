@@ -7,9 +7,9 @@ en:
             next_two_weeks: "Sale completion date must not be later than 14 days from today’s date."
           must_be_within:
             current_collection_year:
-              "Enter a date within the %{current_start_year_short}/%{current_end_year_short} collection year, which is between %{current_start_year_long} and %{current_end_year_long}."
+              "Enter a date within the %{current_start_year_short} to %{current_end_year_short} collection year, which is between %{current_start_year_long} and %{current_end_year_long}."
             previous_and_current_collection_year:
-              "Enter a date within the %{previous_start_year_short}/%{previous_end_year_short} or %{previous_end_year_short}/%{current_end_year_short} collection years, which is between %{previous_start_year_long} and %{current_end_year_long}."
+              "Enter a date within the %{previous_start_year_short} to %{previous_end_year_short} or %{previous_end_year_short} to %{current_end_year_short} collection years, which is between %{previous_start_year_long} and %{current_end_year_long}."
           invalid:
             merged_organisations:
               "Enter a date when the owning organisation was active. %{owning_organisation} became inactive on %{merge_date} and was replaced by %{absorbing_organisation}."

@@ -14,7 +14,7 @@ RSpec.describe BulkUploadSalesSoftValidationsCheckController, type: :request do
     it "shows the soft validation errors with confirmation question" do
       get "/sales-logs/bulk-upload-soft-validations-check/#{bulk_upload.id}/confirm-soft-errors"
 
-      expect(response.body).to include("Bulk upload for sales")
+      expect(response.body).to include("Upload sales logs in bulk")
       expect(response.body).to include(bulk_upload.year_combo)
       expect(response.body).to include("Check these 2 answers")
       expect(response.body).to include(bulk_upload.filename)

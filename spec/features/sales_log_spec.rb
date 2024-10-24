@@ -191,7 +191,7 @@ RSpec.describe "Sales Log Features" do
 
       context "when one year filter is selected" do
         before do
-          check("2024")
+          check("2024 to 2025")
           click_button("Apply filters")
         end
 

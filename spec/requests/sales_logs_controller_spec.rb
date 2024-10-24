@@ -954,7 +954,7 @@ RSpec.describe SalesLogsController, type: :request do
           expect(completed_sales_log.form.new_logs_end_date).to eq(Time.zone.local(2022, 12, 31))
           expect(completed_sales_log.status).to eq("completed")
           follow_redirect!
-          expect(page).to have_content("This log is from the 2021/2022 collection window, which is now closed.")
+          expect(page).to have_content("This log is from the 2021 to 2022 collection window, which is now closed.")
         end
       end
     end

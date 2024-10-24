@@ -55,7 +55,7 @@ module TasklistHelper
     else
       start_year = log.startdate ? collection_start_year_for_date(log.startdate) : log.form.start_date.year
 
-      "This log is from the #{start_year}/#{start_year + 1} collection window, which is now closed."
+      "This log is from the #{start_year} to #{start_year + 1} collection window, which is now closed."
     end
   end
 

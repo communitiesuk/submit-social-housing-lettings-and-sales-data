@@ -38,7 +38,7 @@ RSpec.describe "Bulk upload sales log" do
       click_button("Continue")
 
       expect(page).to have_content("You must select a collection period to upload for")
-      choose("2023/2024")
+      choose("2023 to 2024")
       click_button("Continue")
 
       click_link("Back")
@@ -46,7 +46,7 @@ RSpec.describe "Bulk upload sales log" do
       expect(page.find_field("form-year-2023-field")).to be_checked
       click_button("Continue")
 
-      expect(page).to have_content("Upload sales logs in bulk (2023/24)")
+      expect(page).to have_content("Upload sales logs in bulk (2023 to 2024)")
       click_button("Continue")
 
       expect(page).to have_content("Upload your file")
@@ -88,7 +88,7 @@ RSpec.describe "Bulk upload sales log" do
       expect(page).to have_link("Upload sales logs in bulk")
       click_link("Upload sales logs in bulk")
 
-      expect(page).to have_content("Upload sales logs in bulk (2023/24)")
+      expect(page).to have_content("Upload sales logs in bulk (2023 to 2024)")
       click_button("Continue")
 
       expect(page).to have_content("Upload your file")
