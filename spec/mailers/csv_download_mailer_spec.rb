@@ -42,7 +42,7 @@ RSpec.describe CsvDownloadMailer do
 ## Missing town or city
 The town or city in some logs is missing. This data is required in the new version of CORE.\n",
           how_to_fix: "You need to:\n
-- download [this spreadsheet for lettings logs](#{link}). This link will expire in one week. To request another link, [contact the CORE helpdesk](https://dluhcdigital.atlassian.net/servicedesk/customer/portal/6/group/11).
+- download [this spreadsheet for lettings logs](#{link}). This link will expire in one week. To request another link, [contact the CORE helpdesk](https://mhclgdigital.atlassian.net/servicedesk/customer/portal/6/group/11).
 - fill in the missing address data
 - check that the existing address data is correct\n",
           duration: "20 minutes",
@@ -70,7 +70,7 @@ In some of your logs, the UPRN is the same as the purchaser code, but these are 
 
 If a log has the correct UPRN, leave the UPRN unchanged. If the UPRN is incorrect, clear the value and provide the full address instead. Alternatively, you can change the UPRN on the CORE system.\n",
           how_to_fix: "You need to:\n
-- download [this spreadsheet for sales logs](#{link}). This link will expire in one week. To request another link, [contact the CORE helpdesk](https://dluhcdigital.atlassian.net/servicedesk/customer/portal/6/group/11).
+- download [this spreadsheet for sales logs](#{link}). This link will expire in one week. To request another link, [contact the CORE helpdesk](https://mhclgdigital.atlassian.net/servicedesk/customer/portal/6/group/11).
 - check that the address data is correct
 - correct any address errors\n",
           duration: "20 minutes",
