@@ -2,8 +2,7 @@ class Form::Sales::Questions::Buyer2AgeKnown < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "age2_known"
-    @check_answer_label = "Buyer 2’s age"
-    @header = "Do you know buyer 2’s age?"
+    @copy_key = "sales.household_characteristics.age2.buyer.age2_known"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @conditional_for = {

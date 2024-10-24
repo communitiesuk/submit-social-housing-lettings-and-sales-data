@@ -1,6 +1,7 @@
 class Form::Sales::Pages::PersonWorkingSituation < Form::Sales::Pages::Person
   def initialize(id, hsh, subsection, person_index:)
     super
+    @copy_key = "sales.household_characteristics.ecstat2.person" if person_index == 2
     @depends_on = [
       {
         "details_known_#{person_index}" => 1,

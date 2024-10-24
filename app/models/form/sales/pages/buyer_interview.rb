@@ -2,7 +2,7 @@ class Form::Sales::Pages::BuyerInterview < ::Form::Page
   def initialize(id, hsh, subsection, joint_purchase:)
     super(id, hsh, subsection)
     @joint_purchase = joint_purchase
-    @copy_key = "sales.setup.noint.#{joint_purchase ? 'joint_purchase' : 'not_joint_purchase'}"
+    @copy_key = "sales.#{subsection.id}.noint.#{joint_purchase ? 'joint_purchase' : 'not_joint_purchase'}"
   end
 
   def questions
