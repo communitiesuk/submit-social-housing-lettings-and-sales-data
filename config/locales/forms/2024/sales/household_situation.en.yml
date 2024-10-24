@@ -41,7 +41,7 @@ en:
             page_header: ""
             check_answer_label: "Buyer 2 living at the same address"
             hint_text: ""
-            header: "At the time of purchase, was buyer 2 living at the same address as buyer 1?"
+            question_text: "At the time of purchase, was buyer 2 living at the same address as buyer 1?"
 
           prevtenbuy2:
             page_header: ""
