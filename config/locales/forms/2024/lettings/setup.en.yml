@@ -42,7 +42,7 @@ en:
           location_id_search:
             page_header: "Location"
             check_answer_label: "Location"
-            hint_text: ''<div class="govuk-inset-text">This scheme has 20 or more locations.</div>Enter postcode or address.'
+            hint_text: '<div class="govuk-inset-text">This scheme has 20 or more locations.</div>Enter postcode or address.'
             question_text: "Which location is this letting for?"
 
           renewal:
