@@ -36,12 +36,21 @@ module Storage
              .body.read
     end
 
-    def write_file(file_name, data)
-      @client.put_object(
-        body: data,
-        bucket: @configuration.bucket_name,
-        key: file_name,
-      )
+    def write_file(file_name, data, content_type: nil)
+      if content_type.nil?
+        @client.put_object(
+          body: data,
+          bucket: @configuration.bucket_name,
+          key: file_name,
+        )
+      else
+        @client.put_object(
+          body: data,
+          bucket: @configuration.bucket_name,
+          key: file_name,
+          content_type:,
+        )
+      end
     end
 
     def get_file_metadata(file_name)
@@ -53,6 +62,10 @@ module Storage
       true
     rescue Aws::S3::Errors::NotFound
       false
+    end
+
+    def delete_file(file_name)
+      @client.delete_object(bucket: @configuration.bucket_name, key: file_name)
     end
 
   private
