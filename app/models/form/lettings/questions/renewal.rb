@@ -4,7 +4,6 @@ class Form::Lettings::Questions::Renewal < ::Form::Question
     @id = "renewal"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
-    @hint_text = hint_text
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max] if form.start_date.present?
   end
 
