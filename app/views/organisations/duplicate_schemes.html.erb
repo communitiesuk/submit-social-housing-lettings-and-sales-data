@@ -56,6 +56,8 @@
           </ul>
         <% end %>
 
+        <p class="govuk-body">The links below open in a new tab.</p>
+
         <%= govuk_table do |table| %>
           <%= table.with_head do |head| %>
             <% head.with_row do |row| %>
@@ -69,7 +71,7 @@
                     <ol class="govuk-list govuk-list--number">
                       <% duplicate_set.each do |scheme| %>
                         <li>
-                          <%= govuk_link_to scheme.service_name, scheme %>
+                          <%= govuk_link_to scheme.service_name, scheme, target: "#" %>
                         </li>
                       <% end %>
                     </ol>
@@ -93,6 +95,8 @@
           </ul>
         <% end %>
 
+        <p class="govuk-body">The links below open in a new tab.</p>
+
         <%= govuk_table do |table| %>
           <%= table.with_head do |head| %>
             <% head.with_row do |row| %>
@@ -107,13 +111,13 @@
                       <ol class="govuk-list govuk-list--number">
                         <% duplicate_set[:locations].each do |location| %>
                           <li>
-                            <%= govuk_link_to location.name, scheme_location_path(location) %>
+                            <%= govuk_link_to location.name, scheme_location_path(location), target: "#" %>
                           </li>
                         <% end %>
                       </ol>
                   <% end %>
                   <% row.with_cell do %>
-                    <%= govuk_link_to duplicate_set[:scheme].service_name, duplicate_set[:scheme] %>
+                    <%= govuk_link_to duplicate_set[:scheme].service_name, duplicate_set[:scheme], target: "#" %>
                   <% end %>
                 <% end %>
               <% end %>
