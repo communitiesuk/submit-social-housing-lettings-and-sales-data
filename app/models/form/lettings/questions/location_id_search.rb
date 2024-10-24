@@ -1,10 +1,7 @@
 class Form::Lettings::Questions::LocationIdSearch < ::Form::Question
   def initialize(id, hsh, page)
     super
-    @id = "location_id"
-    @check_answer_label = "Location"
-    @header = header_text
-    @hint_text = '<div class="govuk-inset-text">This scheme has 20 or more locations.</div>Enter postcode or address.'
+    @id = "location_id_search"
     @type = "select"
     @answer_options = answer_options
     @inferred_answers = {
@@ -50,14 +47,6 @@ private
 
   def selected_answer_option_is_derived?(_lettings_log)
     false
-  end
-
-  def header_text
-    if form.start_date && form.start_date.year >= 2023
-      "Which location is this letting for?"
-    else
-      "Which location is this log for?"
-    end
   end
 
   QUESTION_NUMBER_FROM_YEAR = { 2023 => 10, 2024 => 5 }.freeze
