@@ -1,8 +1,9 @@
 class Form::Lettings::Questions::LocationIdSearch < ::Form::Question
   def initialize(id, hsh, page)
     super
-    @id = "location_id_search"
+    @id = "location_id"
     @type = "select"
+    @hint = I18n.t("forms.#{form.start_date.year}.#{copy_key}.search_hint_text", default: "")
     @answer_options = answer_options
     @inferred_answers = {
       "location.name": {
