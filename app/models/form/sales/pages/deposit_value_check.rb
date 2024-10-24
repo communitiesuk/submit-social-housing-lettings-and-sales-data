@@ -1,12 +1,13 @@
 class Form::Sales::Pages::DepositValueCheck < ::Form::Page
   def initialize(id, hsh, subsection, joint_purchase:)
     super(id, hsh, subsection)
+    @copy_key = "sales.soft_validations.deposit_value_check.#{joint_purchase ? 'joint_purchase' : 'not_joint_purchase'}"
     @informative_text = {
-      "translation" => "soft_validations.deposit.hint_text",
+      "translation" => "forms.#{form.start_date.year}.#{@copy_key}.informative_text",
       "arguments" => [],
     }
     @title_text = {
-      "translation" => "soft_validations.deposit.title_text.#{joint_purchase ? 'two' : 'one'}",
+      "translation" => "forms.#{form.start_date.year}.#{@copy_key}.title_text",
       "arguments" => [
         {
           "key" => "field_formatted_as_currency",

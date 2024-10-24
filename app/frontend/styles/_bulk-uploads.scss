@@ -12,6 +12,11 @@
   border-bottom: 1px solid #b1b4b6;
 }
 
+.no-bottom-border,
+.no-bottom-border > tbody > tr:last-of-type td {
+  border-bottom: none;
+}
+
 .text-normal-break {
   white-space: normal;
   word-break: break-all;

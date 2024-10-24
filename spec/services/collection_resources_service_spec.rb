@@ -12,7 +12,7 @@ describe CollectionResourcesService do
     end
 
     it "calls write_file on S3 service" do
-      expect(storage_service).to receive(:write_file).with("2025_26_lettings_paper_form.pdf", some_file)
+      expect(storage_service).to receive(:write_file).with("2025_26_lettings_paper_form.pdf", some_file, content_type: "application/pdf")
       service.upload_collection_resource("2025_26_lettings_paper_form.pdf", some_file)
     end
   end
