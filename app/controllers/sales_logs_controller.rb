@@ -39,7 +39,7 @@ class SalesLogsController < LogsController
     if @log.collection_closed_for_editing?
       redirect_to review_sales_log_path(@log, sales_log: true)
     else
-      render "logs/edit", locals: { current_user: }
+      render "logs/edit", locals: { current_user:, bulk_upload_filter_applied: session_filters["bulk_upload_id"].present? }
     end
   end
 

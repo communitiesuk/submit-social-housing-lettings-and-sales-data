@@ -2,8 +2,8 @@ module LogActionsHelper
   include GovukLinkHelper
   include GovukVisuallyHiddenHelper
 
-  def edit_actions_for_log(log)
-    back = back_button_for(log)
+  def edit_actions_for_log(log, bulk_upload_filter_applied)
+    back = back_button_for(log, bulk_upload_filter_applied)
     delete = delete_button_for_log(log)
 
     return if back.nil? && delete.nil?
@@ -15,9 +15,9 @@ module LogActionsHelper
 
 private
 
-  def back_button_for(log)
+  def back_button_for(log, bulk_upload_filter_applied)
     if log.completed?
-      if log.creation_method_bulk_upload? && log.bulk_upload.present?
+      if log.creation_method_bulk_upload? && log.bulk_upload.present? && bulk_upload_filter_applied
         if log.lettings?
           govuk_button_link_to "Back to uploaded logs", resume_bulk_upload_lettings_result_path(log.bulk_upload)
         else
