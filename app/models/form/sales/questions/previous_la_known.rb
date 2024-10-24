@@ -2,11 +2,9 @@ class Form::Sales::Questions::PreviousLaKnown < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "previous_la_known"
-    @check_answer_label = "Local authority of buyer 1’s last settled accommodation"
-    @header = "Do you know the local authority of buyer 1’s last settled accommodation?"
+    @copy_key = "sales.household_situation.last_accommodation_la.previous_la_known"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
-    @hint_text = "This is also known as the household’s 'last settled home'"
     @hidden_in_check_answers = {
       "depends_on" => [
         {
