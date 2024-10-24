@@ -2,8 +2,6 @@ class Form::Lettings::Questions::StockOwner < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "owning_organisation_id"
-    @check_answer_label = "Stock owner"
-    @header = "Which organisation owns this property?"
     @derived = true
     @type = "select"
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max] if form.start_date.present?

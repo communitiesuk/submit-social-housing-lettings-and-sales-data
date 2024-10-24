@@ -2,8 +2,7 @@ class Form::Lettings::Questions::IrproductOther < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "irproduct_other"
-    @check_answer_label = "Product name"
-    @header = "Name of rent product"
+    @copy_key = "lettings.setup.rent_type.irproduct_other"
     @type = "text"
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max] if form.start_date.present?
   end
