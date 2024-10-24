@@ -2,8 +2,6 @@ class Form::Sales::Questions::BuyerStillServing < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "hhregresstill"
-    @check_answer_label = "Are they still serving in the UK armed forces?"
-    @header = "Is the buyer still serving in the UK armed forces?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
