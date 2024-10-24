@@ -2,8 +2,7 @@ class Form::Lettings::Questions::Uprn < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "uprn"
-    @check_answer_label = "UPRN"
-    @header = "What is the property's UPRN?"
+    @copy_key = "lettings.property_information.uprn.uprn"
     @type = "text"
     @width = 10
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]

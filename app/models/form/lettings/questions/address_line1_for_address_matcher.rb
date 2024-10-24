@@ -2,7 +2,7 @@ class Form::Lettings::Questions::AddressLine1ForAddressMatcher < ::Form::Questio
   def initialize(id, hsh, page)
     super
     @id = "address_line1_input"
-    @header = "Address line 1"
+    @copy_key = "lettings.property_information.address.address_line1"
     @error_label = "Address line 1"
     @type = "text"
     @plain_label = true
