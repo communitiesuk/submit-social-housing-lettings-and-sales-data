@@ -2,6 +2,7 @@ class Form::Lettings::Questions::LocationId < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "location_id"
+    @copy_key = "lettings.setup.location_id.less_than_twenty"
     @type = "radio"
     @answer_options = answer_options
     @inferred_answers = {

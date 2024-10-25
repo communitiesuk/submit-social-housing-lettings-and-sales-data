@@ -8,6 +8,7 @@ class Form::Lettings::Pages::LocationSearch < ::Form::Page
         "scheme_has_large_number_of_locations?" => true,
       },
     ]
+    @copy_key = "lettings.setup.location_id.twenty_or_more"
     @next_unresolved_page_id = :check_answers
   end
 

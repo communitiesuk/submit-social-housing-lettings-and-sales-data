@@ -3,7 +3,7 @@ class Form::Lettings::Questions::LocationIdSearch < ::Form::Question
     super
     @id = "location_id"
     @type = "select"
-    @hint = I18n.t("forms.#{form.start_date.year}.#{copy_key}.search_hint_text", default: "") if form.start_date.present?
+    @copy_key = "lettings.setup.location_id.twenty_or_more"
     @answer_options = answer_options
     @inferred_answers = {
       "location.name": {

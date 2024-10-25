@@ -34,11 +34,16 @@ en:
             question_text: "What scheme is this log for?"
 
           location_id:
-            page_header: "Location"
-            check_answer_label: "Location"
-            hint_text: ""
-            search_hint_text: '<div class="govuk-inset-text">This scheme has 20 or more locations.</div>Enter postcode or address.'
-            question_text: "Which location is this log for?"
+            less_than_twenty:
+              page_header: "Location"
+              check_answer_label: "Location"
+              hint_text: ""
+              question_text: "Which location is this letting for?"
+            twenty_or_more:
+              page_header: "Location"
+              check_answer_label: "Location"
+              hint_text: '<div class="govuk-inset-text">This scheme has 20 or more locations.</div>Enter postcode or address.'
+              question_text: "Which location is this letting for?"
 
           renewal:
             page_header: ""
