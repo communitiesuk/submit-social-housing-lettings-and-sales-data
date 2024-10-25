@@ -2,8 +2,6 @@ class Form::Lettings::Questions::Offered < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "offered"
-    @check_answer_label = I18n.t("check_answer_labels.offered")
-    @header = I18n.t("questions.offered")
     @type = "numeric"
     @width = 2
     @check_answers_card_number = 0

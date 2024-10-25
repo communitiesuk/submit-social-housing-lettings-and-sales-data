@@ -49,13 +49,31 @@ en:
               hint_text: ""
               question_text: "What is the property’s local authority?"
 
-            beds:
+            first_time_property_let_as_social_housing:
               page_header: ""
-              check_answer_label: "Number of bedrooms"
-              hint_text: "A bedsit has 1 bedroom."
-              question_text: "How many bedrooms does the property have?"
+              check_answer_label: "First time being let as social-housing?"
+              hint_text: ""
+              question_text: "Is this the first time the property has been let as social housing?"
 
-            proptype:
+            unitletas:
+              page_header: ""
+              check_answer_label: "Most recent let type"
+              hint_text: ""
+              question_text: "What type was the property most recently let as?"
+
+            rsnvac:
+              page_header: ""
+              check_answer_label: "Vacancy reason"
+              hint_text: ""
+              question_text: "What is the reason for the property being vacant?"
+
+            offered:
+              page_header: ""
+              check_answer_label: "Times previously offered since becoming available."
+              hint_text: "Do not include the offer that led to this letting. This is after the last tenancy ended. If the property is being offered for let for the first time, enter 0."
+              question_text: "How many times was the property offered between becoming vacant and this letting?"
+
+            unittype_gn:
               page_header: ""
               check_answer_label: "Type of unit"
               hint_text: ""
@@ -72,3 +90,15 @@ en:
               check_answer_label: "Property built or adapted to wheelchair-user standards"
               hint_text: ""
               question_text: "Is the property built or adapted to wheelchair-user standards?"
+
+            beds:
+              page_header: ""
+              check_answer_label: "Number of bedrooms"
+              hint_text: "If shared accommodation, enter the number of bedrooms occupied by this household. A bedsit has 1 bedroom."
+              question_text: "How many bedrooms does the property have?"
+
+            voiddate:
+              page_header: "Void date"
+              check_answer_label: "Void date"
+              hint_text: ""
+              question_text: "What is the void date?"

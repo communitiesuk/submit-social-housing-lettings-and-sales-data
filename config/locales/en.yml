@@ -234,7 +234,7 @@ en:
     scheme_deleted: "%{service_name} has been deleted."
     user_deleted: "%{name} has been deleted."
     organisation_deleted: "%{name} has been deleted."
-    user_updated: 
+    user_updated:
       self: "Your account details have been updated."
       other: "%{name}’s details have been updated."
 
@@ -828,7 +828,6 @@ Make sure these answers are correct."
     stairowned:
       one: "What percentage of the property does the buyer now own in total?"
       other: "What percentage of the property do the buyers now own in total?"
-    offered: "How many times was the property offered between becoming vacant and this letting?"
 
   hints:
     location:
@@ -841,7 +840,6 @@ Make sure these answers are correct."
       toggle_active: "If the date is before %{date}, select ‘From the start of the open collection period’ because the previous period has now closed."
     bulk_upload:
       needstype: "General needs housing includes both self-contained and shared housing without support or specific adaptations. Supported housing can include direct access hostels, group homes, residential care and nursing homes."
-    offered: "Do not include the offer that led to this letting. This is after the last tenancy ended. If the property is being offered for let for the first time, enter 0."
 
   check_answer_labels:
     soctenant:
@@ -850,7 +848,6 @@ Make sure these answers are correct."
     stairowned:
       one: "Percentage the buyer now owns in total."
       other: "Percentage the buyers now own in total."
-    offered: "Times previously offered since becoming available."
 
   warnings:
     organisation:
