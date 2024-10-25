@@ -262,6 +262,7 @@ RSpec.describe "Lettings Log Features" do
         click_button("Save and continue")
         log_id = page.current_path.scan(/\d/).join
         visit("lettings-logs/#{log_id}/setup/check-answers")
+        expect(page).to have_content("Stock owner User org", normalize_ws: true)
         expect(page).to have_content("You have answered 2 of 8 questions")
       end
     end
