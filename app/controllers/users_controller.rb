@@ -261,6 +261,8 @@ private
         params.require(:user).permit(:email, :phone, :phone_extension, :name, :password, :password_confirmation, :role, :is_dpo, :is_key_contact, :initial_confirmation_sent)
       elsif current_user.support?
         params.require(:user).permit(:email, :phone, :phone_extension, :name, :password, :password_confirmation, :role, :is_dpo, :is_key_contact, :initial_confirmation_sent, :organisation_id)
+      elsif Rails.env.staging? && Rails.application.credentials[:staging_role_update_email_allowlist].include?(email.split("@").last.downcase)
+        params.require(:user).permit(:email, :phone, :phone_extension, :name, :password, :password_confirmation, :role, :initial_confirmation_sent)
       else
         params.require(:user).permit(:email, :phone, :phone_extension, :name, :password, :password_confirmation, :initial_confirmation_sent)
       end
