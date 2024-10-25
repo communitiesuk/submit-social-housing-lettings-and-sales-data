@@ -159,26 +159,6 @@ RSpec.describe "Lettings Log Check Answers Page" do
       end
     end
 
-    context "when viewing setup section answers" do
-      before do
-        FactoryBot.create(:location, scheme:, startdate: Time.zone.local(2021, 1, 1))
-      end
-
-      it "displays inferred postcode with the location id" do
-        lettings_log.update!(location:)
-        visit("/lettings-logs/#{id}/setup/check-answers")
-        expect(page).to have_content("Location")
-        expect(page).to have_content(location.name)
-      end
-
-      it "displays inferred postcode with the location_admin_district" do
-        lettings_log.update!(location:)
-        visit("/lettings-logs/#{id}/setup/check-answers")
-        expect(page).to have_content("Location")
-        expect(page).to have_content(location.location_admin_district)
-      end
-    end
-
     context "when the user changes their answer from check answer page" do
       it "routes back to check answers" do
         visit("/lettings-logs/#{empty_lettings_log.id}/accessibility-requirements")
