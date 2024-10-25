@@ -257,20 +257,21 @@ private
 
   def user_params
     if @user == current_user
-      if current_user.data_coordinator?
-        params.require(:user).permit(:email, :phone, :phone_extension, :name, :password, :password_confirmation, :role, :is_dpo, :is_key_contact, :initial_confirmation_sent)
-      elsif current_user.support?
-        params.require(:user).permit(:email, :phone, :phone_extension, :name, :password, :password_confirmation, :role, :is_dpo, :is_key_contact, :initial_confirmation_sent, :organisation_id)
-      elsif Rails.env.staging? && Rails.application.credentials[:staging_role_update_email_allowlist].include?(email.split("@").last.downcase)
-        params.require(:user).permit(:email, :phone, :phone_extension, :name, :password, :password_confirmation, :role, :initial_confirmation_sent)
-      else
-        params.require(:user).permit(:email, :phone, :phone_extension, :name, :password, :password_confirmation, :initial_confirmation_sent)
-      end
+      current_user_params
     elsif current_user.data_coordinator?
       params.require(:user).permit(:email, :phone, :phone_extension, :name, :role, :is_dpo, :is_key_contact, :active, :initial_confirmation_sent)
     elsif current_user.support?
       params.require(:user).permit(:email, :phone, :phone_extension, :name, :role, :is_dpo, :is_key_contact, :organisation_id, :active, :initial_confirmation_sent)
     end
+  end
+
+  def current_user_params
+    base_params = %i[email phone phone_extension name password password_confirmation initial_confirmation_sent]
+    return params.require(:user).permit(*(base_params + %i[role is_dpo is_key_contact])) if current_user.data_coordinator?
+    return params.require(:user).permit(*(base_params + %i[role is_dpo is_key_contact organisation_id])) if current_user.support?
+    return params.require(:user).permit(*(base_params + [:role])) if Rails.env.staging? && current_user.in_staging_role_update_email_allowlist?
+
+    params.require(:user).permit(*base_params)
   end
 
   def user_params_without_org
