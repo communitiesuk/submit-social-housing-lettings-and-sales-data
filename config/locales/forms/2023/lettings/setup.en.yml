@@ -34,7 +34,7 @@ en:
             question_text: "What scheme is this log for?"
 
           location_id:
-            page_header: ""
+            page_header: "Location"
             check_answer_label: "Location"
             hint_text: ""
             search_hint_text: '<div class="govuk-inset-text">This scheme has 20 or more locations.</div>Enter postcode or address.'
