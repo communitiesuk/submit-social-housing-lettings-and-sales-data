@@ -746,6 +746,7 @@ RSpec.describe FormController, type: :request do
           it "re-renders the same page with errors if validation fails" do
             post "/lettings-logs/#{lettings_log.id}/managing-organisation", params: params
             expect(page).to have_content("There is a problem")
+            expect(page).to have_content("Error: Which organisation manages this letting?")
           end
         end
 
