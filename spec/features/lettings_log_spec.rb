@@ -243,7 +243,7 @@ RSpec.describe "Lettings Log Features" do
 
     context "when completing the setup lettings log section", :aggregate_failure do
       before do
-        Timecop.freeze(Time.zone.local(2023, 3, 3))
+        Timecop.freeze(Time.zone.local(2023, 4, 3))
         Singleton.__init__(FormHandler)
       end
 
