@@ -67,117 +67,111 @@ en:
               hint_text: ""
               question_text: "How much does the household pay every month?"
 
-            rent_weekly:
-              page_header: "Household rent and charges"
-              brent:
-                check_answer_label: "Basic rent"
-                hint_text: "This is the amount paid before any charges are added for services (for example, hot water or cleaning). Households may receive housing benefit or Universal Credit towards basic rent."
-                question_text: "What is the basic rent?"
-              scharge:
-                check_answer_label: "Service charge"
-                hint_text: "For example, for cleaning. Households may receive housing benefit or Universal Credit towards the service charge."
-                question_text: "What is the service charge?"
-              pscharge:
-                check_answer_label: "Personal service charge"
-                hint_text: "For example, for heating or hot water. This doesn’t include housing benefit or Universal Credit."
-                question_text: "What is the personal service charge?"
-              supcharg:
-                check_answer_label: "Support charge"
-                hint_text: "Any charges made to fund support services included in tenancy agreement."
-                question_text: "What is the support charge?"
-              tcharge:
-                check_answer_label: "Household rent and charges"
-                hint_text: "This is the total for rent and all charges."
-                question_text: "Total charge"
+          rent_weekly:
+            page_header: "Household rent and charges"
+            brent:
+              check_answer_label: "Basic rent"
+              hint_text: "This is the amount paid before any charges are added for services (for example, hot water or cleaning). Households may receive housing benefit or Universal Credit towards basic rent."
+              question_text: "What is the basic rent?"
+            scharge:
+              check_answer_label: "Service charge"
+              hint_text: "For example, for cleaning. Households may receive housing benefit or Universal Credit towards the service charge."
+              question_text: "What is the service charge?"
+            pscharge:
+              check_answer_label: "Personal service charge"
+              hint_text: "For example, for heating or hot water. This doesn’t include housing benefit or Universal Credit."
+              question_text: "What is the personal service charge?"
+            supcharg:
+              check_answer_label: "Support charge"
+              hint_text: "Any charges made to fund support services included in tenancy agreement."
+              question_text: "What is the support charge?"
+            tcharge:
+              check_answer_label: "Household rent and charges"
+              hint_text: "This is the total for rent and all charges."
+              question_text: "Total charge"
 
-            rent_bi_weekly:
-              page_header: "Household rent and charges"
-              brent:
-                check_answer_label: "Basic rent"
-                hint_text: "This is the amount paid before any charges are added for services (for example, hot water or cleaning). Households may receive housing benefit or Universal Credit towards basic rent."
-                question_text: "What is the basic rent?"
-              scharge:
-                check_answer_label: "Service charge"
-                hint_text: "For example, for cleaning. Households may receive housing benefit or Universal Credit towards the service charge."
-                question_text: "What is the service charge?"
-              pscharge:
-                check_answer_label: "Personal service charge"
-                hint_text: "For example, for heating or hot water. This doesn’t include housing benefit or Universal Credit."
-                question_text: "What is the personal service charge?"
-              supcharg:
-                check_answer_label: "Support charge"
-                hint_text: "Any charges made to fund support services included in tenancy agreement."
-                question_text: "What is the support charge?"
-              tcharge:
-                check_answer_label: "Household rent and charges"
-                hint_text: "This is the total for rent and all charges."
-                question_text: "Total charge"
+          rent_bi_weekly:
+            page_header: "Household rent and charges"
+            brent:
+              check_answer_label: "Basic rent"
+              hint_text: "This is the amount paid before any charges are added for services (for example, hot water or cleaning). Households may receive housing benefit or Universal Credit towards basic rent."
+              question_text: "What is the basic rent?"
+            scharge:
+              check_answer_label: "Service charge"
+              hint_text: "For example, for cleaning. Households may receive housing benefit or Universal Credit towards the service charge."
+              question_text: "What is the service charge?"
+            pscharge:
+              check_answer_label: "Personal service charge"
+              hint_text: "For example, for heating or hot water. This doesn’t include housing benefit or Universal Credit."
+              question_text: "What is the personal service charge?"
+            supcharg:
+              check_answer_label: "Support charge"
+              hint_text: "Any charges made to fund support services included in tenancy agreement."
+              question_text: "What is the support charge?"
+            tcharge:
+              check_answer_label: "Household rent and charges"
+              hint_text: "This is the total for rent and all charges."
+              question_text: "Total charge"
 
-            rent_4_weekly:
-              page_header: "Household rent and charges"
-              brent:
-                check_answer_label: "Basic rent"
-                hint_text: "This is the amount paid before any charges are added for services (for example, hot water or cleaning). Households may receive housing benefit or Universal Credit towards basic rent."
-                question_text: "What is the basic rent?"
-              scharge:
-                check_answer_label: "Service charge"
-                hint_text: "For example, for cleaning. Households may receive housing benefit or Universal Credit towards the service charge."
-                question_text: "What is the service charge?"
-              pscharge:
-                check_answer_label: "Personal service charge"
-                hint_text: "For example, for heating or hot water. This doesn’t include housing benefit or Universal Credit."
-                question_text: "What is the personal service charge?"
-              supcharg:
-                check_answer_label: "Support charge"
-                hint_text: "Any charges made to fund support services included in tenancy agreement."
-                question_text: "What is the support charge?"
-              tcharge:
-                check_answer_label: "Household rent and charges"
-                hint_text: "This is the total for rent and all charges."
-                question_text: "Total charge"
+          rent_4_weekly:
+            page_header: "Household rent and charges"
+            brent:
+              check_answer_label: "Basic rent"
+              hint_text: "This is the amount paid before any charges are added for services (for example, hot water or cleaning). Households may receive housing benefit or Universal Credit towards basic rent."
+              question_text: "What is the basic rent?"
+            scharge:
+              check_answer_label: "Service charge"
+              hint_text: "For example, for cleaning. Households may receive housing benefit or Universal Credit towards the service charge."
+              question_text: "What is the service charge?"
+            pscharge:
+              check_answer_label: "Personal service charge"
+              hint_text: "For example, for heating or hot water. This doesn’t include housing benefit or Universal Credit."
+              question_text: "What is the personal service charge?"
+            supcharg:
+              check_answer_label: "Support charge"
+              hint_text: "Any charges made to fund support services included in tenancy agreement."
+              question_text: "What is the support charge?"
+            tcharge:
+              check_answer_label: "Household rent and charges"
+              hint_text: "This is the total for rent and all charges."
+              question_text: "Total charge"
 
-            rent_monthly:
-              page_header: "Household rent and charges"
-              brent:
-                check_answer_label: "Basic rent"
-                hint_text: "This is the amount paid before any charges are added for services (for example, hot water or cleaning). Households may receive housing benefit or Universal Credit towards basic rent."
-                question_text: "What is the basic rent?"
-              scharge:
-                check_answer_label: "Service charge"
-                hint_text: "For example, for cleaning. Households may receive housing benefit or Universal Credit towards the service charge."
-                question_text: "What is the service charge?"
-              pscharge:
-                check_answer_label: "Personal service charge"
-                hint_text: "For example, for heating or hot water. This doesn’t include housing benefit or Universal Credit."
-                question_text: "What is the personal service charge?"
-              supcharg:
-                check_answer_label: "Support charge"
-                hint_text: "Any charges made to fund support services included in tenancy agreement."
-                question_text: "What is the support charge?"
-              tcharge:
-                check_answer_label: "Household rent and charges"
-                hint_text: "This is the total for rent and all charges."
-                question_text: "Total charge"
+          rent_monthly:
+            page_header: "Household rent and charges"
+            brent:
+              check_answer_label: "Basic rent"
+              hint_text: "This is the amount paid before any charges are added for services (for example, hot water or cleaning). Households may receive housing benefit or Universal Credit towards basic rent."
+              question_text: "What is the basic rent?"
+            scharge:
+              check_answer_label: "Service charge"
+              hint_text: "For example, for cleaning. Households may receive housing benefit or Universal Credit towards the service charge."
+              question_text: "What is the service charge?"
+            pscharge:
+              check_answer_label: "Personal service charge"
+              hint_text: "For example, for heating or hot water. This doesn’t include housing benefit or Universal Credit."
+              question_text: "What is the personal service charge?"
+            supcharg:
+              check_answer_label: "Support charge"
+              hint_text: "Any charges made to fund support services included in tenancy agreement."
+              question_text: "What is the support charge?"
+            tcharge:
+              check_answer_label: "Household rent and charges"
+              hint_text: "This is the total for rent and all charges."
+              question_text: "Total charge"
 
-            hbrentshortfall:
-              page_header: ""
-              check_answer_label: "Any outstanding amount for basic rent and charges"
+          hbrentshortfall:
+            page_header: ""
+            check_answer_label: "Any outstanding amount for basic rent and charges"
+            hint_text: "Also known as the ‘outstanding amount’."
+            question_text: ""
+
+          outstanding_amount:
+            page_header: ""
+            tshortfall_known:
+              check_answer_label: "Do you know the outstanding amount?"
+              hint_text: "You only need to give an approximate figure."
+              question_text: "Can you estimate the outstanding amount?"
+            tshortfall:
+              check_answer_label: "Estimated outstanding amountt"
               hint_text: "Also known as the ‘outstanding amount’."
-              question_text: ""
-
-            outstanding_amount:
-              page_header: ""
-              tshortfall_known:
-                check_answer_label: "Do you know the outstanding amount?"
-                hint_text: "You only need to give an approximate figure."
-                question_text: "Can you estimate the outstanding amount?"
-              tshortfall:
-                check_answer_label: "Estimated outstanding amountt"
-                hint_text: "Also known as the ‘outstanding amount’."
-                question_text: "Estimated outstanding amount"
-
-
-
-
-
-
+              question_text: "Estimated outstanding amount"
