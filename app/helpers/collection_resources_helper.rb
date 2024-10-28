@@ -49,7 +49,7 @@ module CollectionResourcesHelper
   def document_list_component_items(resources)
     resources.map do |resource|
       {
-        name: "Download the #{resource.display_name}",
+        name: "Download the #{resource.display_name.downcase}",
         href: resource.download_path,
         metadata: file_type_size_and_pages(resource.download_filename),
       }

@@ -328,8 +328,8 @@ class BulkUpload::Sales::Year2023::RowParser
               category: :setup,
             },
             format: {
-              with: /\A\d{2}\z/,
-              message: I18n.t("validations.setup.saledate.year_not_two_digits"),
+              with: /\A(\d{2}|\d{4})\z/,
+              message: I18n.t("validations.setup.saledate.year_not_two_or_four_digits"),
               category: :setup,
               if: proc { field_5.present? },
             }, on: :after_log
@@ -954,19 +954,22 @@ private
   end
 
   def saledate
-    Date.new(field_5 + 2000, field_4, field_3) if field_5.present? && field_4.present? && field_3.present?
+    year = field_5.to_s.strip.length.between?(1, 2) ? field_5 + 2000 : field_5
+    Date.new(year, field_4, field_3) if field_5.present? && field_4.present? && field_3.present?
   rescue Date::Error
     Date.new
   end
 
   def hodate
-    Date.new(field_97 + 2000, field_96, field_95) if field_97.present? && field_96.present? && field_95.present?
+    year = field_97.to_s.strip.length.between?(1, 2) ? field_97 + 2000 : field_97
+    Date.new(year, field_96, field_95) if field_97.present? && field_96.present? && field_95.present?
   rescue Date::Error
     Date.new
   end
 
   def exdate
-    Date.new(field_94 + 2000, field_93, field_92) if field_94.present? && field_93.present? && field_92.present?
+    year = field_94.to_s.strip.length.between?(1, 2) ? field_94 + 2000 : field_94
+    Date.new(year, field_93, field_92) if field_94.present? && field_93.present? && field_92.present?
   rescue Date::Error
     Date.new
   end

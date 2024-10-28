@@ -122,7 +122,7 @@ en:
             file:
               error_uploading: There was an error uploading this file.
               blank: Select which file to upload.
-              above_100_mb: The file is above 100MB.
+              above_100_mb: File must be 100MB or less.
               must_be_pdf: The paper form must be a PDF.
               must_be_xlsx: The %{resource} must be a Microsoft Excel file.
 
@@ -212,9 +212,12 @@ en:
             file:
               error_uploading: There was an error uploading this file.
               blank: Select which file to upload.
-              above_100_mb: The file is above 100MB.
+              above_100_mb: File must be 100MB or less.
               must_be_pdf: The paper form must be a PDF.
               must_be_xlsx: The %{resource} must be a Microsoft Excel file.
+            short_display_name:
+              blank: "You must answer resource type."
+
   notification:
     logs_deleted:
       one: "%{count} log has been deleted."
@@ -281,7 +284,7 @@ en:
       intermediate_rent_product_name:
         blank: "Enter name of other intermediate rent product."
       saledate:
-        year_not_two_digits: "Sale completion year must be 2 digits."
+        year_not_two_or_four_digits: "Sale completion year must be 2 or 4 digits."
       type:
         percentage_bought_must_be_at_least_threshold: "The minimum increase in equity while staircasing is %{threshold}% for this shared ownership type."
 
@@ -294,7 +297,7 @@ en:
         before_scheme_end_date: "The tenancy start date must be before the end date for this supported housing scheme."
         after_void_date: "Enter a tenancy start date that is after the void date."
         after_major_repair_date: "Enter a tenancy start date that is after the major repair date."
-        year_not_two_digits: "Tenancy start year must be 2 digits."
+        year_not_two_or_four_digits: "Tenancy start year must be 2 or 4 digits."
         ten_years_after_void_date: "Enter a tenancy start date that is no more than 10 years after the void date."
         ten_years_after_mrc_date: "Enter a tenancy start date that is no more than 10 years after the major repairs completion date."
         invalid_merged_organisations_start_date:
@@ -382,12 +385,6 @@ en:
         one_bedroom_bedsit: "A bedsit can only have one bedroom."
         one_seven_bedroom_shared: "A shared house must have 1 to 7 bedrooms."
         one_three_bedroom_single_tenant_shared: "A shared house with fewer than two tenants must have 1 to 3 bedrooms."
-      beds:
-        bedsits_have_max_one_bedroom: "Number of bedrooms must be 1 if the property is a bedsit."
-      proptype:
-        bedsits_have_max_one_bedroom: "Answer cannot be 'Bedsit' if the property has 2 or more bedrooms."
-      postcode:
-        must_match_previous: "%{buyer_possessive} last accommodation and discounted ownership postcodes must match."
 
     financial:
       tshortfall:
@@ -501,11 +498,8 @@ en:
         retired_female: "A female tenant who is retired must be 60 or over."
         retired_over_70: "Answer cannot be over 70 as person %{person_num} has economic status that is not ‘retired’."
         child_under_16_relat_lettings: "Answer cannot be under 16 as person %{person_num}'s relationship to the lead tenant is ‘partner’."
-        child_under_16_relat_sales: "Answer cannot be under 16 as person %{person_num}'s relationship to buyer 1 is ‘partner’."
         child_under_16_ecstat: "Answer cannot be under 16 as person %{person_num}’s working situation is not ‘child under 16’, ‘other’ or ‘prefers not to say’."
         child_over_16: "Answer cannot be over 16 as person’s %{person_num} working situation is ‘child under 16‘."
-        child_over_20: "Answer cannot be 20 or over as the relationship is ‘child’."
-        child_12_years_younger: "A child must be at least 12 years younger than their parent."
         not_student_16_19: "Answer cannot be between 16 and 19 as person %{person_num} is a child of the lead tenant but is not a full-time student."
         student_16_19:
           cannot_be_16_19:
@@ -528,12 +522,8 @@ en:
         retired_female: "Answer cannot be ‘retired’ as the female tenant is under 60."
         not_child_16_19:
           cannot_be_student: "Person cannot be a student if they are aged 16-19 but are not a child."
-        buyer_cannot_be_child: "Buyer %{buyer_index} cannot have a working situation of child under 16."
-        buyer_cannot_be_over_16_and_child: "Buyer %{buyer_index}'s age cannot be 16 or over if their working situation is child under 16."
       relat:
-        child_under_16_sales: "Answer cannot be ‘partner’ as you told us person %{person_num}'s age is under 16."
         child_under_16_lettings: "Answer cannot be ‘partner’ as you told us person %{person_num}'s age is under 16."
-        child_over_20: "Answer cannot be ‘child’ if the person's age is 20 or over."
         one_partner: "Number of partners cannot be greater than 1."
         not_student_16_19: "Answer cannot be ‘child’ as you told us the person %{person_num} is between 16 and 19 and is not a full-time student."
         student_16_19:
@@ -556,7 +546,6 @@ en:
         internal_transfer: "Answer cannot be %{prevten} as this tenancy is an internal transfer."
         la_general_needs:
           internal_transfer: "Answer cannot be a fixed-term or lifetime local authority general needs tenancy as it’s an internal transfer and a private registered provider is on the tenancy agreement."
-        invalid_for_discounted_sale: "Buyer 1’s previous tenure should be “local authority tenant” or “private registered provider or housing association tenant” for discounted sales."
       referral:
         secure_tenancy: "Answer must be internal transfer as this is a secure tenancy."
         rsnvac_non_temp: "Answer cannot be this source of referral as this is a re-let to tenant who occupied the same property as temporary accommodation."
@@ -596,9 +585,6 @@ en:
         no_choices: "You cannot answer this question as you told us nobody in the household has a physical or mental health condition (or other illness) expected to last 12 months or more."
       postcode:
         discounted_ownership: "Last settled accommodation and discounted ownership property postcodes must match."
-      buylivein:
-        buyers_will_live_in_property_values_inconsistent_setup: "You have already told us that both buyer 1 and buyer 2 will not live in the property."
-        buyers_will_live_in_property_values_inconsistent: "You have already told us that the buyers will live in the property. Either buyer 1 or buyer 2 must live in the property."
       nationality: "Select a valid nationality."
 
     tenancy:
@@ -703,13 +689,6 @@ en:
         message: "Net income is lower than expected based on the household’s working situation. Are you sure this is correct?"
       in_soft_max_range:
         message: "Net income is higher than expected based on the household’s working situation. Are you sure this is correct?"
-    income:
-      under_soft_min_for_economic_status:
-        title_text: "You told us income was %{income}."
-        hint_text: "This is less than we would expect for someone in this working situation."
-      over_soft_max_for_la_buyer_1: "You told us the income of buyer 1 is %{income}. This seems high.  Are you sure this is correct?"
-      over_soft_max_for_la_buyer_2: "You told us the income of buyer 2 is %{income}. This seems high.  Are you sure this is correct?"
-      over_soft_max_for_la_combined: "You told us the combined income of this household is %{combined_income}. This seems high.  Are you sure this is correct?"
     rent:
       outside_range_title: "You told us the rent is %{brent}."
       informative_text: "This is %{higher_or_lower} than we would expect."
@@ -772,24 +751,9 @@ Make sure these answers are correct."
     percentage_discount_value:
       title_text: "You told us that the percentage discount is %{discount}."
       hint_text: "This is higher than we would expect."
-    savings:
-      title_text:
-        one: "You told us the buyer’s savings were %{savings}."
-        two: "You told us the buyers’ savings were %{savings}."
-      hint_text: "This is higher than we would expect."
-    deposit:
-      title_text:
-        one: "You told us the buyer’s deposit was %{deposit} and their savings were %{savings}."
-        two: "You told us the buyers’ deposit was %{deposit} and their savings were %{savings}."
-      hint_text: "The deposit amount is higher than we would expect for the amount of savings they have."
     grant:
       title_text: "You told us that the grant amount is %{grant}."
       hint_text: "Loans, grants and subsidies are usually between £9,000 and £16,000."
-    wheelchair:
-      title_text: "You told us that someone in the household uses a wheelchair."
-    mortgage:
-      title_text: "You told us that the mortgage amount is %{mortgage}."
-      hint_text: "This is more than 5 times the income, which is higher than we would expect."
     referral:
       title_text: "Are you sure?"
       hint_text: "This is a general needs log, and this referral type is for supported housing."
@@ -859,9 +823,6 @@ Make sure these answers are correct."
     soctenant:
       one: "Was the buyer a private registered provider, housing association or local authority tenant immediately before this sale?"
       other: "Were any of the buyers private registered providers, housing association or local authority tenants immediately before this sale?"
-    prevown:
-      one: "Has the buyer previously owned a property?"
-      other: "Have any of the buyers previously owned a property?"
     stairowned:
       one: "What percentage of the property does the buyer now own in total?"
       other: "What percentage of the property do the buyers now own in total?"
@@ -884,9 +845,6 @@ Make sure these answers are correct."
     soctenant:
       one: "Buyer was a registered provider, housing association or local authority tenant immediately before this sale?"
       other: "Any buyers were registered providers, housing association or local authority tenants immediately before this sale?"
-    prevown:
-      one: "Buyer previously owned a property."
-      other: "Buyers previously owned a property."
     stairowned:
       one: "Percentage the buyer now owns in total."
       other: "Percentage the buyers now own in total."

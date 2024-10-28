@@ -65,7 +65,7 @@ class LettingsLogsController < LogsController
     elsif @log.collection_closed_for_editing?
       redirect_to review_lettings_log_path(@log)
     else
-      render("logs/edit", locals: { current_user: })
+      render("logs/edit", locals: { current_user:, bulk_upload_filter_applied: session_filters["bulk_upload_id"].present? })
     end
   end
 

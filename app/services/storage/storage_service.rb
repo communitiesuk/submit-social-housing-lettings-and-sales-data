@@ -15,5 +15,13 @@ module Storage
     def write_file(_file_name, _data)
       raise NotImplementedError
     end
+
+    def get_file(_file_name, _data)
+      raise NotImplementedError
+    end
+
+    def delete_file(_file_name, _data)
+      raise NotImplementedError
+    end
   end
 end
