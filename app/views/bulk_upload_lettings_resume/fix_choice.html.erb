@@ -3,7 +3,7 @@
     <%= form_with model: @form, scope: :form, url: page_bulk_upload_lettings_resume_path(@bulk_upload, page: "fix-choice"), method: :patch do |f| %>
       <%= f.govuk_error_summary %>
 
-      <span class="govuk-caption-l">Bulk upload for lettings (<%= @bulk_upload.year_combo %>)</span>
+      <span class="govuk-caption-l">Upload lettings logs in bulk (<%= @bulk_upload.year_combo %>)</span>
       <h1 class="govuk-heading-l">How would you like to fix the errors?</h1>
 
       <div class="govuk-body-l">

@@ -212,7 +212,7 @@ class User < ApplicationRecord
   end
 
   def assignable_roles
-    if Rails.env.staging? && Rails.application.credentials[:staging_role_update_email_allowlist].include?(email.split("@").last.downcase)
+    if Rails.env.staging? && in_staging_role_update_email_allowlist?
       return ROLES
     end
 
@@ -220,6 +220,10 @@ class User < ApplicationRecord
     return ROLES if support?
 
     ROLES.except(:support)
+  end
+
+  def in_staging_role_update_email_allowlist?
+    Rails.application.credentials[:staging_role_update_email_allowlist].include?(email.split("@").last.downcase)
   end
 
   def logs_filters(specific_org: false)
