@@ -1522,6 +1522,13 @@ RSpec.describe LettingsLogsController, type: :request do
         sign_in user
       end
 
+      it "routes to the tenancy date question" do
+        get "/lettings-logs/#{affected_lettings_log.id}", headers:, params: {}
+        expect(response).to redirect_to("/lettings-logs/#{affected_lettings_log.id}/tenancy-start-date")
+        follow_redirect!
+        expect(page).to have_content("What is the tenancy start date?")
+      end
+
       it "tenancy start date page links to the scheme page" do
         get "/lettings-logs/#{affected_lettings_log.id}/tenancy-start-date", headers:, params: {}
         expect(page).to have_link("Skip for now", href: "/lettings-logs/#{affected_lettings_log.id}/scheme")
