@@ -14,91 +14,91 @@ en:
               hint_text: ""
               question_text: "What is the property's UPRN?"
 
-            uprn_confirmed:
-              page_header: "We found an address that might be this property"
-              check_answer_label: "Is this the right address?"
+          uprn_confirmed:
+            page_header: "We found an address that might be this property"
+            check_answer_label: "Is this the right address?"
+            hint_text: ""
+            question_text: "Is this the property address?"
+
+          address:
+            page_header: "Q12 - What is the property's address?"
+            address_line1:
+              check_answer_label: "Address lines 1 and 2"
               hint_text: ""
-              question_text: "Is this the property address?"
-
-            address:
-              page_header: "Q12 - What is the property's address?"
-              address_line1:
-                check_answer_label: "Address lines 1 and 2"
-                hint_text: ""
-                question_text: "Address line 1"
-              address_line2:
-                check_answer_label: ""
-                hint_text: ""
-                question_text: "Address line 2 (optional)"
-              town_or_city:
-                check_answer_label: "Town or city"
-                hint_text: ""
-                question_text: "Town or city"
-              county:
-                check_answer_label: "County"
-                hint_text: ""
-                question_text: "County (optional)"
-              postcode_full:
-                check_answer_label: "Postcode"
-                hint_text: ""
-                question_text: "Postcode"
-
-            la:
-              page_header: ""
-              check_answer_label: "Local authority"
+              question_text: "Address line 1"
+            address_line2:
+              check_answer_label: ""
               hint_text: ""
-              question_text: "What is the property’s local authority?"
-
-            first_time_property_let_as_social_housing:
-              page_header: ""
-              check_answer_label: "First time being let as social-housing?"
+              question_text: "Address line 2 (optional)"
+            town_or_city:
+              check_answer_label: "Town or city"
               hint_text: ""
-              question_text: "Is this the first time the property has been let as social housing?"
-
-            unitletas:
-              page_header: ""
-              check_answer_label: "Most recent let type"
+              question_text: "Town or city"
+            county:
+              check_answer_label: "County"
               hint_text: ""
-              question_text: "What type was the property most recently let as?"
-
-            rsnvac:
-              page_header: ""
-              check_answer_label: "Vacancy reason"
+              question_text: "County (optional)"
+            postcode_full:
+              check_answer_label: "Postcode"
               hint_text: ""
-              question_text: "What is the reason for the property being vacant?"
+              question_text: "Postcode"
 
-            offered:
-              page_header: ""
-              check_answer_label: "Times previously offered since becoming available."
-              hint_text: "Do not include the offer that led to this letting. This is after the last tenancy ended. If the property is being offered for let for the first time, enter 0."
-              question_text: "How many times was the property offered between becoming vacant and this letting?"
+          la:
+            page_header: ""
+            check_answer_label: "Local authority"
+            hint_text: ""
+            question_text: "What is the property’s local authority?"
 
-            unittype_gn:
-              page_header: ""
-              check_answer_label: "Type of unit"
-              hint_text: ""
-              question_text: "What type of unit is the property?"
+          first_time_property_let_as_social_housing:
+            page_header: ""
+            check_answer_label: "First time being let as social-housing?"
+            hint_text: ""
+            question_text: "Is this the first time the property has been let as social housing?"
 
-            builtype:
-              page_header: ""
-              check_answer_label: "Type of building"
-              hint_text: ""
-              question_text: "What type of building is the property?"
+          unitletas:
+            page_header: ""
+            check_answer_label: "Most recent let type"
+            hint_text: ""
+            question_text: "What type was the property most recently let as?"
 
-            wchair:
-              page_header: ""
-              check_answer_label: "Property built or adapted to wheelchair-user standards"
-              hint_text: ""
-              question_text: "Is the property built or adapted to wheelchair-user standards?"
+          rsnvac:
+            page_header: ""
+            check_answer_label: "Vacancy reason"
+            hint_text: ""
+            question_text: "What is the reason for the property being vacant?"
 
-            beds:
-              page_header: ""
-              check_answer_label: "Number of bedrooms"
-              hint_text: "If shared accommodation, enter the number of bedrooms occupied by this household. A bedsit has 1 bedroom."
-              question_text: "How many bedrooms does the property have?"
+          offered:
+            page_header: ""
+            check_answer_label: "Times previously offered since becoming available."
+            hint_text: "Do not include the offer that led to this letting. This is after the last tenancy ended. If the property is being offered for let for the first time, enter 0."
+            question_text: "How many times was the property offered between becoming vacant and this letting?"
 
-            voiddate:
-              page_header: "Void date"
-              check_answer_label: "Void date"
-              hint_text: ""
-              question_text: "What is the void date?"
+          unittype_gn:
+            page_header: ""
+            check_answer_label: "Type of unit"
+            hint_text: ""
+            question_text: "What type of unit is the property?"
+
+          builtype:
+            page_header: ""
+            check_answer_label: "Type of building"
+            hint_text: ""
+            question_text: "What type of building is the property?"
+
+          wchair:
+            page_header: ""
+            check_answer_label: "Property built or adapted to wheelchair-user standards"
+            hint_text: ""
+            question_text: "Is the property built or adapted to wheelchair-user standards?"
+
+          beds:
+            page_header: ""
+            check_answer_label: "Number of bedrooms"
+            hint_text: "If shared accommodation, enter the number of bedrooms occupied by this household. A bedsit has 1 bedroom."
+            question_text: "How many bedrooms does the property have?"
+
+          voiddate:
+            page_header: "Void date"
+            check_answer_label: "Void date"
+            hint_text: ""
+            question_text: "What is the void date?"
