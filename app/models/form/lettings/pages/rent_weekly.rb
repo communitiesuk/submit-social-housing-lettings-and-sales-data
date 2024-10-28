@@ -2,7 +2,7 @@ class Form::Lettings::Pages::RentWeekly < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "rent_weekly"
-    @header = "Household rent and charges"
+    @copy_key = "lettings.income_and_benefits.rent_weekly"
     @depends_on = [
       { "rent_and_charges_paid_weekly?" => true, "household_charge" => 0, "is_carehome?" => false },
       { "rent_and_charges_paid_weekly?" => true, "household_charge" => nil, "is_carehome?" => false },
