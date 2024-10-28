@@ -23,6 +23,10 @@ RSpec.describe Form::Sales::Questions::UprnConfirmation, type: :model do
     expect(question.derived?(nil)).to be false
   end
 
+  it "has the correct unanswered_error_message" do
+    expect(question.unanswered_error_message).to eq("You must answer is this the right address?")
+  end
+
   describe "notification_banner" do
     context "when address is not present" do
       it "returns nil" do
