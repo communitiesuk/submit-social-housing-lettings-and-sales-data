@@ -17,7 +17,7 @@ RSpec.describe Forms::BulkUploadSales::Year do
 
       it "returns current and previous years" do
         expect(form.options.map(&:id)).to eql([2024, 2023])
-        expect(form.options.map(&:name)).to eql(%w[2024/2025 2023/2024])
+        expect(form.options.map(&:name)).to eql(["2024 to 2025", "2023 to 2024"])
       end
     end
 
@@ -28,7 +28,7 @@ RSpec.describe Forms::BulkUploadSales::Year do
 
       it "returns the current year" do
         expect(form.options.map(&:id)).to eql([2024])
-        expect(form.options.map(&:name)).to eql(%w[2024/2025])
+        expect(form.options.map(&:name)).to eql(["2024 to 2025"])
       end
     end
 
@@ -44,7 +44,7 @@ RSpec.describe Forms::BulkUploadSales::Year do
 
       it "returns current and next years" do
         expect(form.options.map(&:id)).to eql([2024, 2025])
-        expect(form.options.map(&:name)).to eql(%w[2024/2025 2025/2026])
+        expect(form.options.map(&:name)).to eql(["2024 to 2025", "2025 to 2026"])
       end
     end
   end

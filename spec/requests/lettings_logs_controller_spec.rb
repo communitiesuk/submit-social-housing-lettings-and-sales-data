@@ -1202,7 +1202,7 @@ RSpec.describe LettingsLogsController, type: :request do
 
             it "displays a closed collection window message for previous collection year logs" do
               follow_redirect!
-              expect(page).to have_content(/This log is from the \d{4}\/\d{4} collection window, which is now closed\./)
+              expect(page).to have_content(/This log is from the \d{4} to \d{4} collection window, which is now closed\./)
             end
           end
 
