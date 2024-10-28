@@ -59,7 +59,7 @@ class BulkUpload < ApplicationRecord
   end
 
   def year_combo
-    "#{year}/#{year - 2000 + 1}"
+    "#{year} to #{year + 1}"
   end
 
   def end_year

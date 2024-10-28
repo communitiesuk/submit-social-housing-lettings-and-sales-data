@@ -3,7 +3,7 @@
     <div class="govuk-grid-column-two-thirds">
         <%= f.govuk_error_summary %>
 
-        <span class="govuk-caption-l">Bulk upload for lettings (<%= @bulk_upload.year_combo %>)</span>
+        <span class="govuk-caption-l">Upload lettings logs in bulk (<%= @bulk_upload.year_combo %>)</span>
         <h1 class="govuk-heading-l">Check these <%= pluralize(@bulk_upload.bulk_upload_errors.count, "answer") %> </h1>
 
         <p class="govuk-body-l">Some data from your bulk upload might not be right. Check your file for any errors in the fields below.</p>
