@@ -52,7 +52,7 @@ RSpec.describe Form::Sales::Pages::PartnerUnder16ValueCheck, type: :model do
     end
 
     it "has correct informative_text" do
-      expect(page.informative_text).to eq({})
+      expect(page.informative_text).to eq({ "arguments" => [], "translation" => "forms.2024.sales.soft_validations.partner_under_16_value_check.informative_text" })
     end
 
     it "has correct interruption_screen_question_ids" do
@@ -90,7 +90,7 @@ RSpec.describe Form::Sales::Pages::PartnerUnder16ValueCheck, type: :model do
     end
 
     it "has correct informative_text" do
-      expect(page.informative_text).to eq({})
+      expect(page.informative_text).to eq({ "arguments" => [], "translation" => "forms.2024.sales.soft_validations.partner_under_16_value_check.informative_text" })
     end
 
     it "has correct interruption_screen_question_ids" do
@@ -128,7 +128,7 @@ RSpec.describe Form::Sales::Pages::PartnerUnder16ValueCheck, type: :model do
     end
 
     it "has correct informative_text" do
-      expect(page.informative_text).to eq({})
+      expect(page.informative_text).to eq({ "arguments" => [], "translation" => "forms.2024.sales.soft_validations.partner_under_16_value_check.informative_text" })
     end
 
     it "has correct interruption_screen_question_ids" do
@@ -166,7 +166,7 @@ RSpec.describe Form::Sales::Pages::PartnerUnder16ValueCheck, type: :model do
     end
 
     it "has correct informative_text" do
-      expect(page.informative_text).to eq({})
+      expect(page.informative_text).to eq({ "arguments" => [], "translation" => "forms.2024.sales.soft_validations.partner_under_16_value_check.informative_text" })
     end
 
     it "has correct interruption_screen_question_ids" do
@@ -204,7 +204,7 @@ RSpec.describe Form::Sales::Pages::PartnerUnder16ValueCheck, type: :model do
     end
 
     it "has correct informative_text" do
-      expect(page.informative_text).to eq({})
+      expect(page.informative_text).to eq({ "arguments" => [], "translation" => "forms.2024.sales.soft_validations.partner_under_16_value_check.informative_text" })
     end
 
     it "has correct interruption_screen_question_ids" do
@@ -242,7 +242,7 @@ RSpec.describe Form::Sales::Pages::PartnerUnder16ValueCheck, type: :model do
     end
 
     it "has correct informative_text" do
-      expect(page.informative_text).to eq({})
+      expect(page.informative_text).to eq({ "arguments" => [], "translation" => "forms.2024.sales.soft_validations.partner_under_16_value_check.informative_text" })
     end
 
     it "has correct interruption_screen_question_ids" do

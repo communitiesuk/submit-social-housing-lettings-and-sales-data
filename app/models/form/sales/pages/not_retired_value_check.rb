@@ -13,6 +13,7 @@ class Form::Sales::Pages::NotRetiredValueCheck < Form::Sales::Pages::Person
     }
     @informative_text = {
       "translation" => "forms.#{form.start_date.year}.#{@copy_key}.informative_text",
+      "arguments" => [],
     }
   end
 

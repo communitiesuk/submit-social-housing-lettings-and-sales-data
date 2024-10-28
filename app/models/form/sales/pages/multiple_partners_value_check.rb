@@ -12,7 +12,10 @@ class Form::Sales::Pages::MultiplePartnersValueCheck < Form::Sales::Pages::Perso
       "translation" => "forms.#{form.start_date.year}.#{@copy_key}.title_text",
       "arguments" => [],
     }
-    @informative_text = {}
+    @informative_text = {
+      "translation" => "forms.#{form.start_date.year}.#{@copy_key}.informative_text",
+      "arguments" => [],
+    }
   end
 
   def questions

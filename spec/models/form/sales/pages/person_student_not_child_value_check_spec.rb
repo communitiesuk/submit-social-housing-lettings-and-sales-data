@@ -29,7 +29,7 @@ RSpec.describe Form::Sales::Pages::PersonStudentNotChildValueCheck, type: :model
   end
 
   it "has correct informative_text" do
-    expect(page.informative_text).to eq({})
+    expect(page.informative_text).to eq({ "arguments" => [], "translation" => "forms.2024.sales.soft_validations.student_not_child_value_check.informative_text" })
   end
 
   it "has correct questions" do

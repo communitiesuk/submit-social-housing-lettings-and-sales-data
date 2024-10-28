@@ -2,7 +2,7 @@ class Form::Sales::Questions::Buyer1EthnicBackgroundArab < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "ethnic"
-    @copy_key = "sales.household_characteristics.ethnic.ethnic_background_asian"
+    @copy_key = "sales.household_characteristics.ethnic.ethnic_background_arab"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @check_answers_card_number = 1

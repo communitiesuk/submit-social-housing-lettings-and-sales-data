@@ -3,6 +3,7 @@ class Form::Sales::Questions::GenderIdentity2 < ::Form::Question
     super
     @id = "sex2"
     @type = "radio"
+    @copy_key = "sales.household_characteristics.sex2.buyer"
     @answer_options = ANSWER_OPTIONS
     @check_answers_card_number = 2
     @inferred_check_answers_value = [{

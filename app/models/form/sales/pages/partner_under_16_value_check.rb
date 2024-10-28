@@ -18,7 +18,10 @@ class Form::Sales::Pages::PartnerUnder16ValueCheck < Form::Sales::Pages::Person
         },
       ],
     }
-    @informative_text = {}
+    @informative_text = {
+      "translation" => "forms.#{form.start_date.year}.#{@copy_key}.informative_text",
+      "arguments" => [],
+    }
   end
 
   def questions

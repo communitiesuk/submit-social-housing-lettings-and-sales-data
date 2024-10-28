@@ -2,6 +2,7 @@ class Form::Sales::Questions::Buyer2WorkingSituation < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "ecstat2"
+    @copy_key = "sales.household_characteristics.ecstat2.buyer"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @check_answers_card_number = 2

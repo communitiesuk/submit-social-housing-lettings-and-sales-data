@@ -46,7 +46,7 @@ RSpec.describe Form::Sales::Pages::MultiplePartnersValueCheck, type: :model do
     end
 
     it "has correct informative_text" do
-      expect(page.informative_text).to eq({})
+      expect(page.informative_text).to eq({ "arguments" => [], "translation" => "forms.2024.sales.soft_validations.multiple_partners_value_check.informative_text" })
     end
 
     it "has correct interruption_screen_question_ids" do
@@ -78,7 +78,7 @@ RSpec.describe Form::Sales::Pages::MultiplePartnersValueCheck, type: :model do
     end
 
     it "has correct informative_text" do
-      expect(page.informative_text).to eq({})
+      expect(page.informative_text).to eq({ "arguments" => [], "translation" => "forms.2024.sales.soft_validations.multiple_partners_value_check.informative_text" })
     end
 
     it "has correct interruption_screen_question_ids" do
