@@ -2,6 +2,7 @@ class Form::Lettings::Subsections::HouseholdNeeds < ::Form::Subsection
   def initialize(id, hsh, section)
     super
     @id = "household_needs"
+    @copy_key = "lettings.household_needs.housingneeds_type"
     @label = "Household needs"
     @depends_on = [{ "non_location_setup_questions_completed?" => true }]
   end
