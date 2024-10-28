@@ -80,7 +80,7 @@ RSpec.describe "Bulk upload sales log" do
       expect(page).to have_content("Which year")
       click_button("Continue")
       click_button("Continue")
-      choose("2023/2024")
+      choose("2023 to 2024")
       click_button("Continue")
       click_button("Continue")
 
