@@ -50,23 +50,22 @@ en:
               check_answer_label: "Care home accommodation"
               hint_text: ""
               question_text: "Is this accommodation a care home?"
-            chcharge:
-              weekly:
-                check_answer_label: "Care home charges"
-                hint_text: ""
-                question_text: "How much does the household pay every week?"
-              bi_weekly:
-                check_answer_label: "Care home charges"
-                hint_text: ""
-                question_text: "How much does the household pay every 2 weeks?"
-              four_weekly:
-                check_answer_label: "Care home charges"
-                hint_text: ""
-                question_text: "How much does the household pay every 4 weeks?"
-              monthly:
-                check_answer_label: "Care home charges"
-                hint_text: ""
-                question_text: "How much does the household pay every month?"
+            chcharge_weekly:
+              check_answer_label: "Care home charges"
+              hint_text: ""
+              question_text: "How much does the household pay every week?"
+            chcharge_bi_weekly:
+              check_answer_label: "Care home charges"
+              hint_text: ""
+              question_text: "How much does the household pay every 2 weeks?"
+            chcharge_4_weekly:
+              check_answer_label: "Care home charges"
+              hint_text: ""
+              question_text: "How much does the household pay every 4 weeks?"
+            chcharge_monthly:
+              check_answer_label: "Care home charges"
+              hint_text: ""
+              question_text: "How much does the household pay every month?"
 
             rent_weekly:
               page_header: "Household rent and charges"
