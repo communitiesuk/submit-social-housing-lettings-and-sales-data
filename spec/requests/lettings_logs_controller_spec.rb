@@ -1513,7 +1513,7 @@ RSpec.describe LettingsLogsController, type: :request do
     end
 
     context "when viewing a specific log affected by deactivated location" do
-      let!(:affected_lettings_log) { FactoryBot.create(:lettings_log, unresolved: true, assigned_to: user, needstype: 2) }
+      let!(:affected_lettings_log) { FactoryBot.create(:lettings_log, unresolved: true, assigned_to: user, needstype: 2, startdate: Time.zone.local(2024, 4, 1)) }
       let(:headers) { { "Accept" => "text/html" } }
 
       before do
