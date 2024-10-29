@@ -113,5 +113,19 @@ en:
               question_text: "Are you sure?"
               title_text: "You told us the support charge is %{supcharg}."
               informative_text: "This is higher than we would expect."
-
           
+          void_date_value_check:
+              page_header: ""
+              check_answer_label: "Void date confirmation"
+              hint_text: ""
+              question_text: "Are you sure the property has been vacant for this long?"
+              title_text: "You told us that the property has been vacant for more than 2 years."
+              informative_text: "This is higher than we would expect."
+
+          major_repairs_date_value_check:
+              page_header: ""
+              check_answer_label: "Major repairs date confirmation"
+              hint_text: ""
+              question_text: "Are you sure the property has been vacant for this long?"
+              title_text: "You told us the property has been vacant for 2 years."
+              informative_text: "This is higher than we would expect."

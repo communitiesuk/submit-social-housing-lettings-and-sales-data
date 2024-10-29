@@ -651,12 +651,6 @@ Make sure these answers are correct."
     extra_borrowing:
       title_text: "You told us that the mortgage and deposit total is %{mortgage_and_deposit_total}."
       hint_text: "This is higher than the purchase price minus the discount."
-    major_repairs_date:
-      title_text: "You told us the property has been vacant for 2 years."
-      hint_text: "This is higher than we would expect."
-    void_date:
-      title_text: "You told us that the property has been vacant for more than 2 years."
-      hint_text: "This is higher than we would expect."
     shared_ownership_deposit:
       title_text: "You told us that the %{mortgage_deposit_and_discount_error_fields} add up to %{mortgage_deposit_and_discount_total}."
     staircase_bought_seems_high:
