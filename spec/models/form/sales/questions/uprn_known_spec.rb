@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Form::Sales::Questions::UprnKnown, type: :model do
+  include FormattingHelper
+
   subject(:question) { described_class.new(question_id, question_definition, page) }
 
   let(:question_id) { nil }
@@ -35,7 +37,7 @@ RSpec.describe Form::Sales::Questions::UprnKnown, type: :model do
   end
 
   it "has the correct unanswered_error_message" do
-    expect(question.unanswered_error_message).to eq("You must answer UPRN known?")
+    expect(question.unanswered_error_message).to eq("You must answer #{format_ending(I18n.t("forms.2023.sales.property_information.uprn.uprn_known.check_answer_label"))}")
   end
 
   it "has the correct hidden_in_check_answers" do
