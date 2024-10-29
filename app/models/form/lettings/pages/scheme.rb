@@ -6,7 +6,6 @@ class Form::Lettings::Pages::Scheme < ::Form::Page
         "needstype" => 2,
       },
     ]
-    @header = "Scheme"
     @next_unresolved_page_id = "location"
   end
 

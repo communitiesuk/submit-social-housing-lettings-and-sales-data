@@ -735,12 +735,17 @@ RSpec.describe FormController, type: :request do
           end
 
           before do
+            Timecop.freeze(Time.zone.local(2023, 12, 1))
             organisation.stock_owners << stock_owner
             organisation.managing_agents << managing_organisation
             organisation.managing_agents << managing_organisation_too
             organisation.reload
-            lettings_log.update!(owning_organisation: stock_owner, assigned_to: user, managing_organisation: organisation)
+            lettings_log.update!(owning_organisation: stock_owner, assigned_to: user, managing_organisation: organisation, startdate: Time.zone.local(2023, 5, 1))
             lettings_log.reload
+          end
+
+          after do
+            Timecop.unfreeze
           end
 
           it "re-renders the same page with errors if validation fails" do
