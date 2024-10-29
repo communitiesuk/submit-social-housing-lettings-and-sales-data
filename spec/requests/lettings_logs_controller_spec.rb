@@ -1158,6 +1158,31 @@ RSpec.describe LettingsLogsController, type: :request do
                 expect(page).to have_link("review and make changes to this log", href: "/lettings-logs/#{lettings_log.id}/review")
               end
             end
+
+            context "with bulk_upload_id filter" do
+              let(:bulk_upload) { create(:bulk_upload, :lettings, user:) }
+              let(:lettings_log) { create(:lettings_log, :completed, age1: nil, bulk_upload:, assigned_to: user, creation_method: "bulk upload") }
+
+              before do
+                lettings_log.status = "completed"
+                lettings_log.skip_update_status = true
+                lettings_log.save!(validate: false)
+              end
+
+              context "with bulk_upload_id filter in session" do
+                it "displays back to uploaded logs link" do
+                  get "/lettings-logs/#{lettings_log.id}?bulk_upload_id[]=#{bulk_upload.id}"
+                  expect(page).to have_link("Back to uploaded logs")
+                end
+              end
+
+              context "without bulk_upload_id filter in session" do
+                it "does not display back to uploaded logs link" do
+                  get "/lettings-logs/#{lettings_log.id}"
+                  expect(page).not_to have_link("Back to uploaded logs")
+                end
+              end
+            end
           end
 
           context "with lettings logs from a closed collection period before the previous collection" do
@@ -1177,7 +1202,7 @@ RSpec.describe LettingsLogsController, type: :request do
 
             it "displays a closed collection window message for previous collection year logs" do
               follow_redirect!
-              expect(page).to have_content(/This log is from the \d{4}\/\d{4} collection window, which is now closed\./)
+              expect(page).to have_content(/This log is from the \d{4} to \d{4} collection window, which is now closed\./)
             end
           end
 

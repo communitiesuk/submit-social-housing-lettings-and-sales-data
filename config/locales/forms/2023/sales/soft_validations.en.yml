@@ -87,3 +87,9 @@ en:
             not_joint_purchase:
               title_text: "You told us the buyer’s deposit was %{deposit} and their savings were %{savings}."
               informative_text: "The deposit amount is higher than we would expect for the amount of savings they have."
+          wheel_value_check:
+            page_header: ""
+            check_answer_label: "Does anyone in the household use a wheelchair?"
+            hint_text: ""
+            question_text: "You told us that someone in the household uses a wheelchair."
+            title_text: "You told us that someone in the household uses a wheelchair."
