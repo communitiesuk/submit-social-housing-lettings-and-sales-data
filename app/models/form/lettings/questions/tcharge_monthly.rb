@@ -2,7 +2,7 @@ class Form::Lettings::Questions::TchargeMonthly < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "tcharge"
-    @copy_key = "lettings.income_and_benefits.rent.tcharge"
+    @copy_key = "lettings.income_and_benefits.rent_and_charges.tcharge"
     @type = "numeric_output"
     @width = 5
     @check_answers_card_number = 0

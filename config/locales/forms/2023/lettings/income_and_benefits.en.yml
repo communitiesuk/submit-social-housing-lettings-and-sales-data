@@ -67,7 +67,7 @@ en:
               hint_text: ""
               question_text: "How much does the household pay every month?"
 
-          rent:
+          rent_and_charges:
             page_header: "Household rent and charges"
             brent:
               check_answer_label: "Basic rent"
