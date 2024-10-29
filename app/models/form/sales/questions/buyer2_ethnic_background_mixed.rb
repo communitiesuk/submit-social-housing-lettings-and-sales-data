@@ -2,8 +2,7 @@ class Form::Sales::Questions::Buyer2EthnicBackgroundMixed < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "ethnicbuy2"
-    @check_answer_label = "Buyer 2’s ethnic background"
-    @header = "Which of the following best describes buyer 2’s Mixed or Multiple ethnic groups background?"
+    @copy_key = "sales.household_characteristics.ethnicbuy2.ethnic_background_mixed"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @check_answers_card_number = 2
