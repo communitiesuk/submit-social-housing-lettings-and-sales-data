@@ -2,11 +2,8 @@ class Form::Sales::Questions::Buyer1EthnicGroup < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "ethnic_group"
-    @check_answer_label = "Buyer 1’s ethnic group"
-    @header = "What is buyer 1’s ethnic group?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
-    @hint_text = form.start_year_after_2024? ? "" : "Buyer 1 is the person in the household who does the most paid work. If it’s a joint purchase and the buyers do the same amount of paid work, buyer 1 is whoever is the oldest."
     @check_answers_card_number = 1
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
   end
