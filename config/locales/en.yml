@@ -639,17 +639,6 @@ en:
       organisation_not_selected: "Select an organisation from the search list."
 
   soft_validations:
-    net_income:
-      title_text: "You told us that the household’s income is %{earnings} %{incfreq}."
-      hint_text: "This is %{net_income_higher_or_lower_text} than we would expect for the household’s working situation."
-      in_soft_min_range:
-        message: "Net income is lower than expected based on the household’s working situation. Are you sure this is correct?"
-      in_soft_max_range:
-        message: "Net income is higher than expected based on the household’s working situation. Are you sure this is correct?"
-    rent:
-      outside_range_title: "You told us the rent is %{brent}."
-      informative_text: "This is %{higher_or_lower} than we would expect."
-      hint_text: "Check the following:<ul class=\"govuk-body-l app-panel--interruption\"><li>the decimal point</li><li>the frequency, for example every week or every calendar month</li><li>the rent type is correct, for example affordable or social rent</li></ul>"
     purchase_price:
       title_text: "You told us the purchase price is %{value}."
       hint_text: "This is %{higher_or_lower} than we would expect."
@@ -679,20 +668,12 @@ Make sure these answers are correct."
     discounted_sale_value:
       title_text: "Mortgage, deposit, and grant total must equal %{value_with_discount}."
       informative_text: "Your given mortgage, deposit and grant total is %{mortgage_deposit_and_grant_total}."
-    care_home_charges:
-      title_text: "Care home charges should be provided if this is a care home accommodation."
     percentage_discount_value:
       title_text: "You told us that the percentage discount is %{discount}."
       hint_text: "This is higher than we would expect."
     grant:
       title_text: "You told us that the grant amount is %{grant}."
       hint_text: "Loans, grants and subsidies are usually between £9,000 and £16,000."
-    scharge:
-      over_soft_max_title: "You told us the service charge is %{scharge}."
-    pscharge:
-      over_soft_max_title: "You told us the personal service charge is %{pscharge}."
-    supcharg:
-      over_soft_max_title: "You told us the support charge is %{supcharg}."
     charges:
       informative_text: "This is higher than we would expect."
       hint_text: "Check the following:<ul class=\"govuk-body-l app-panel--interruption\"><li>the decimal point</li><li>the frequency, for example every week or every calendar month</li><li>the needs type</li></ul>"

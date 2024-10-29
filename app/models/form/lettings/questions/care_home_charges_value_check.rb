@@ -2,8 +2,7 @@ class Form::Lettings::Questions::CareHomeChargesValueCheck < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "carehome_charges_value_check"
-    @check_answer_label = "Care home charges confirmation"
-    @header = "Are you sure there are no care home charges?"
+    @copy_key = "lettings.soft_validations.carehome_charges_value_check"
     @type = "interruption_screen"
     @check_answers_card_number = 0
     @answer_options = ANSWER_OPTIONS

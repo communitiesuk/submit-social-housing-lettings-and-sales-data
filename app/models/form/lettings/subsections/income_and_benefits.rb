@@ -10,7 +10,7 @@ class Form::Lettings::Subsections::IncomeAndBenefits < ::Form::Subsection
     @pages ||= [
       Form::Lettings::Pages::IncomeKnown.new(nil, nil, self),
       Form::Lettings::Pages::IncomeAmount.new(nil, nil, self),
-      Form::Lettings::Pages::NetIncomeValueCheck.new(nil, nil, self),
+      Form::Lettings::Pages::NetIncomeValueCheck.new(nil, nil, self),n
       Form::Lettings::Pages::HousingBenefit.new("housing_benefit", nil, self),
       Form::Lettings::Pages::BenefitsProportion.new("benefits_proportion", nil, self),
       Form::Lettings::Pages::RentOrOtherCharges.new(nil, nil, self),
@@ -25,9 +25,9 @@ class Form::Lettings::Subsections::IncomeAndBenefits < ::Form::Subsection
       Form::Lettings::Pages::Rent4Weekly.new(nil, nil, self),
       Form::Lettings::Pages::RentMonthly.new(nil, nil, self),
       Form::Lettings::Pages::RentValueCheck.new("brent_rent_value_check", nil, self, check_answers_card_number: 0),
-      Form::Lettings::Pages::SchargeValueCheck.new(nil, nil, self),
-      Form::Lettings::Pages::PschargeValueCheck.new(nil, nil, self),
-      Form::Lettings::Pages::SupchargValueCheck.new(nil, nil, self),
+      Form::Lettings::Pages::SchargeValueCheck.new(nil, nil, self), # soft validation
+      Form::Lettings::Pages::PschargeValueCheck.new(nil, nil, self), # soft validation
+      Form::Lettings::Pages::SupchargValueCheck.new(nil, nil, self), # soft validation
       Form::Lettings::Pages::Outstanding.new(nil, nil, self),
       Form::Lettings::Pages::OutstandingAmount.new(nil, nil, self),
     ].compact
