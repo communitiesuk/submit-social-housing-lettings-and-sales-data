@@ -721,27 +721,14 @@ Make sure these answers are correct."
       hint_text: "This is higher than we would expect."
     shared_ownership_deposit:
       title_text: "You told us that the %{mortgage_deposit_and_discount_error_fields} add up to %{mortgage_deposit_and_discount_total}."
-    old_persons_shared_ownership:
-      title_text:
-        one: "You told us the buyer is using the Older Persons Shared Ownership scheme."
-        two: "You told us the buyers are using the Older Persons Shared Ownership scheme."
-      hint_text: "At least one buyer must be aged 65 years and over to use this scheme."
     staircase_bought_seems_high:
       title_text: "You told us that %{percentage}% was bought in this staircasing transaction."
       hint_text: "Most staircasing transactions are less than 50%"
-    student_not_child:
-      title_text: "You told us this person is a student aged between 16 and 19."
     discounted_sale_value:
       title_text: "Mortgage, deposit, and grant total must equal %{value_with_discount}."
       informative_text: "Your given mortgage, deposit and grant total is %{mortgage_deposit_and_grant_total}."
     care_home_charges:
       title_text: "Care home charges should be provided if this is a care home accommodation."
-    buyer1_livein_wrong_for_ownership_type:
-      title_text: "You told us that buyer 1 will not live in the property."
-      hint_text: " For %{ownership_scheme} types, the buyer usually lives in the property."
-    buyer2_livein_wrong_for_ownership_type:
-      title_text: "You told us that buyer 2 will not live in the property."
-      hint_text: " For %{ownership_scheme} types, the buyer usually lives in the property."
     grant:
       title_text: "You told us that the grant amount is %{grant}."
       hint_text: "Loans, grants and subsidies are usually between £9,000 and £16,000."
@@ -769,15 +756,10 @@ Make sure these answers are correct."
       must_be_less_than_3_years_from_saledate: "You told us practical completion or handover date is more than 3 years before sale completion date."
     saledate:
       must_be_less_than_3_years_from_hodate: "You told us sale completion date is more than 3 years after practical completion or handover date."
-      informative_text: "We could not find an address that matches your search. You can search again or continue to enter the address manually."
     partner_under_16_lettings:
       title: "You told us this person is aged %{age} years and has 'Partner' relationship to the lead tenant."
-    partner_under_16_sales:
-      title: "You told us this person is aged %{age} years and has 'Partner' relationship to buyer 1."
     multiple_partners_lettings:
       title: "You told us there are more than 1 persons with 'Partner' relationship to the lead tenant."
-    multiple_partners_sales:
-      title: "You told us there are more than 1 persons with 'Partner' relationship to buyer 1."
 
   devise:
     two_factor_authentication:
