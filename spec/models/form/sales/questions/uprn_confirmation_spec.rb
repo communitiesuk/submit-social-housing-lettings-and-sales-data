@@ -26,7 +26,7 @@ RSpec.describe Form::Sales::Questions::UprnConfirmation, type: :model do
   end
 
   it "has the correct unanswered_error_message" do
-    expect(question.unanswered_error_message).to eq("You must answer #{format_ending(I18n.t("forms.2023.sales.property_information.uprn_confirmed.check_answer_label"))}")
+    expect(question.unanswered_error_message).to eq("You must answer #{format_ending(I18n.t('forms.2023.sales.property_information.uprn_confirmed.check_answer_label'))}")
   end
 
   describe "notification_banner" do
