@@ -67,7 +67,7 @@ RSpec.describe Form::Lettings::Questions::Declaration, type: :model do
     end
 
     it "uses the expected top guidance partial" do
-      expect(question.top_guidance_partial).to eq("privacy_notice_tenant_2024")
+      expect(question.top_guidance_partial).to eq("privacy_notice_tenant")
     end
 
     it "has check_answers_card_number nil" do
