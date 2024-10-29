@@ -24,6 +24,11 @@ class CollectionResourcesService
   end
 
   def upload_collection_resource(filename, file)
-    @storage_service.write_file(filename, file)
+    content_type = MiniMime.lookup_by_filename(filename)&.content_type
+    @storage_service.write_file(filename, file, content_type:)
+  end
+
+  def delete_collection_resource(filename)
+    @storage_service.delete_file(filename)
   end
 end

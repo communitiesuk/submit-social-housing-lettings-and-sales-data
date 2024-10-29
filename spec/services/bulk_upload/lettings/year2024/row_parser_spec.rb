@@ -1303,11 +1303,21 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
       end
 
       context "when field_10 is 4 digits instead of 2" do
-        let(:attributes) { { bulk_upload:, field_10: "2023" } }
+        let(:attributes) { setup_section_params.merge({ bulk_upload:, field_10: "2024", field_9: "4", field_8: "5" }) }
+
+        it "correctly sets the date" do
+          parser.valid?
+          expect(parser.errors[:field_10]).to be_empty
+          expect(parser.log.startdate).to eq(Time.zone.local(2024, 4, 5))
+        end
+      end
+
+      context "when field_10 is not 4 or 2 digits" do
+        let(:attributes) { { bulk_upload:, field_10: "204" } }
 
         it "returns an error" do
           parser.valid?
-          expect(parser.errors[:field_10]).to include("Tenancy start year must be 2 digits.")
+          expect(parser.errors[:field_10]).to include("Tenancy start year must be 2 or 4 digits.")
         end
       end
 
@@ -2659,6 +2669,14 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
         end
       end
 
+      context "when valid (4 digit year)" do
+        let(:attributes) { { bulk_upload:, field_33: "13", field_34: "12", field_35: "2022" } }
+
+        it "sets value given" do
+          expect(parser.log.mrcdate).to eq(Date.new(2022, 12, 13))
+        end
+      end
+
       context "when invalid" do
         let(:attributes) { { bulk_upload:, field_33: "13", field_34: "13", field_35: "22" } }
 
@@ -2695,6 +2713,14 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
         end
       end
 
+      context "when valid (4 digit year)" do
+        let(:attributes) { { bulk_upload:, field_30: "13", field_31: "12", field_32: "2022" } }
+
+        it "sets value given" do
+          expect(parser.log.voiddate).to eq(Date.new(2022, 12, 13))
+        end
+      end
+
       context "when invalid" do
         let(:attributes) { { bulk_upload:, field_30: "13", field_31: "13", field_32: "22" } }
 
@@ -2717,6 +2743,14 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
 
       it "strips whitespace" do
         expect(parser.log.postcode_full).to eql("EC1N 2TD")
+      end
+
+      context "when a partial postcode is provided" do
+        let(:attributes) { { bulk_upload:, field_4: 1, field_21: "EC1N", field_22: "" } }
+
+        it "is set to the partial value" do
+          expect(parser.log.postcode_full).to eql("EC1N")
+        end
       end
     end
 
@@ -2937,12 +2971,12 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
     end
   end
 
-  describe "#start_date" do
+  describe "#startdate" do
     context "when year of 9 is passed to represent 2009" do
       let(:attributes) { { bulk_upload:, field_8: "1", field_9: "1", field_10: "9" } }
 
       it "uses the year 2009" do
-        expect(parser.send(:start_date)).to eql(Date.new(2009, 1, 1))
+        expect(parser.send(:startdate)).to eql(Date.new(2009, 1, 1))
       end
     end
   end

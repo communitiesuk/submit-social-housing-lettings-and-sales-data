@@ -88,10 +88,10 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
       field_90: "1",
       field_92: "30",
       field_93: "3",
-      field_94: "22",
+      field_94: "2022",
       field_95: "24",
       field_96: "3",
-      field_97: "22",
+      field_97: "2022",
       field_98: "3",
       field_99: "1",
       field_100: "1",
@@ -594,10 +594,21 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
       end
 
       context "when field 5 is 4 digits instead of 2" do
-        let(:attributes) { setup_section_params.merge({ bulk_upload:, field_5: "2022" }) }
+        let(:attributes) { setup_section_params.merge({ bulk_upload:, field_5: "2023", field_4: "4", field_3: "3" }) }
+
+        it "correctly sets the date" do
+          parser.valid?
+          expect(parser.errors.where(:field_5, category: :setup)).to be_empty
+          expect(parser.log.saledate).to eq(Time.zone.local(2023, 4, 3))
+        end
+      end
+
+      context "when field 5 is not 2 or 4 digits" do
+        let(:attributes) { setup_section_params.merge({ bulk_upload:, field_5: "202" }) }
 
         it "returns a setup error" do
-          expect(parser.errors.where(:field_5, category: :setup).map(&:message)).to include("Sale completion year must be 2 digits.")
+          parser.valid?
+          expect(parser.errors.where(:field_5, category: :setup).map(&:message)).to include("Sale completion year must be 2 or 4 digits.")
         end
       end
 
@@ -1018,8 +1029,8 @@ RSpec.describe BulkUpload::Sales::Year2023::RowParser do
         end
 
         it "populates with correct error message" do
-          expect(parser.errors.where(:field_30, category: :soft_validation).first.message).to eql("You told us this person is aged 22 years and retired.")
-          expect(parser.errors.where(:field_30, category: :soft_validation).first.message).to eql("You told us this person is aged 22 years and retired.")
+          expect(parser.errors.where(:field_30, category: :soft_validation).first.message).to eql("You told us this person is aged 22 years and retired. The minimum expected retirement age in England is 66.")
+          expect(parser.errors.where(:field_30, category: :soft_validation).first.message).to eql("You told us this person is aged 22 years and retired. The minimum expected retirement age in England is 66.")
         end
       end
 

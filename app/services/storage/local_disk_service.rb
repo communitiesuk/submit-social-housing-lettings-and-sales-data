@@ -19,7 +19,9 @@ module Storage
       File.open(path, "r")
     end
 
-    def write_file(filename, data)
+    # rubocop:disable Lint/UnusedMethodArgument
+    def write_file(filename, data, content_type: nil)
+      # rubocop:enable Lint/UnusedMethodArgument
       path = Rails.root.join("tmp/storage", filename)
 
       FileUtils.mkdir_p(path.dirname)
@@ -42,6 +44,12 @@ module Storage
       path = Rails.root.join("tmp/storage", filename)
 
       File.exist?(path)
+    end
+
+    def delete_file(filename)
+      path = Rails.root.join("tmp/storage", filename)
+
+      File.delete(path)
     end
   end
 end
