@@ -91,7 +91,7 @@ RSpec.describe "Bulk upload lettings log" do
       attach_file "file", file_fixture("2023_24_lettings_bulk_upload.xlsx")
       click_button("Upload")
 
-      expect(page).to have_content("File must be 10MB or less")
+      expect(page).to have_content("File must be 10MB or less. Check your file and delete data that does not need to be uploaded.")
     end
   end
   # rubocop:enable RSpec/AnyInstance
