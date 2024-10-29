@@ -3,25 +3,51 @@ en:
     2024:
       sales:
         soft_validations:
-          income1_value_check:
+          retirement_value_check:
+            max:
+              page_header: ""
+              check_answer_label: "Retirement confirmation"
+              hint_text: ""
+              question_text: "Are you sure this person isn't retired?"
+              title_text: "You told us this person is over 66 and not retired."
+              informative_text: "The minimum expected retirement age in England is 66."
+            min:
+              page_header: ""
+              check_answer_label: "Retirement confirmation"
+              hint_text: ""
+              question_text: "Are you sure this person is retired?"
+              title_text: "You told us this person is aged %{age} years and retired."
+              informative_text: "The minimum expected retirement age in England is 66."
+          old_persons_shared_ownership_value_check:
             page_header: ""
+            check_answer_label: "Shared ownership confirmation"
+            hint_text: ""
+            question_text: "Are you sure this is correct?"
+            title_text:
+              joint_purchase: "You told us the buyers are using the Older Persons Shared Ownership scheme."
+              not_joint_purchase: "You told us the buyer is using the Older Persons Shared Ownership scheme."
+            informative_text: "At least one buyer must be aged 65 years and over to use this scheme."
+          income1_value_check:
             check_answer_label: "Buyer 1 income confirmation"
             hint_text: ""
             question_text: "Are you sure this is correct?"
             min:
+              page_header: ""
               title_text: "You told us income was %{income}."
               informative_text: "This is less than we would expect for someone in this working situation."
             max:
+              page_header: ""
               title_text: "You told us the income of buyer 1 is %{income}. This seems high. Are you sure this is correct?"
           income2_value_check:
-            page_header: ""
             check_answer_label: "Buyer 2 income confirmation"
             hint_text: ""
             question_text: "Are you sure this is correct?"
             min:
+              page_header: ""
               title_text: "You told us income was %{income}."
               informative_text: "This is less than we would expect for someone in this working situation."
             max:
+              page_header: ""
               title_text: "You told us the income of buyer 2 is %{income}. This seems high. Are you sure this is correct?"
           combined_income_value_check:
             page_header: ""
@@ -58,3 +84,45 @@ en:
             not_joint_purchase:
               title_text: "You told us the buyer’s deposit was %{deposit} and their savings were %{savings}."
               informative_text: "The deposit amount is higher than we would expect for the amount of savings they have."
+          wheel_value_check:
+            page_header: ""
+            check_answer_label: "Does anyone in the household use a wheelchair?"
+            hint_text: ""
+            question_text: "You told us that someone in the household uses a wheelchair."
+            title_text: "You told us that someone in the household uses a wheelchair."
+          buyer_livein_value_check:
+            buyer1:
+              page_header: ""
+              check_answer_label: "Buyer live in confirmation"
+              hint_text: ""
+              question_text: "Are you sure this is correct?"
+              title_text: "You told us that buyer 1 will not live in the property."
+              informative_text: "For %{ownership_scheme} types, the buyer usually lives in the property."
+            buyer2:
+              page_header: ""
+              check_answer_label: "Buyer live in confirmation"
+              hint_text: ""
+              question_text: "Are you sure this is correct?"
+              title_text: "You told us that buyer 2 will not live in the property."
+              informative_text: "For %{ownership_scheme} types, the buyer usually lives in the property."
+          student_not_child_value_check:
+            page_header: ""
+            check_answer_label: "Student not a child confirmation"
+            hint_text: ""
+            question_text: "Are you sure this person is not a child?"
+            title_text: "You told us this person is a student aged between 16 and 19."
+            informative_text: "Are you sure this person is not a child?"
+          partner_under_16_value_check:
+            page_header: ""
+            check_answer_label: "Partner under 16 confirmation"
+            hint_text: ""
+            question_text: "Are you sure this is correct?"
+            title_text: "You told us this person is aged %{age} years and has 'Partner' relationship to buyer 1."
+            informative_text: "Are you sure this is correct?"
+          multiple_partners_value_check:
+            page_header: ""
+            check_answer_label: "Multiple partners confirmation"
+            hint_text: ""
+            question_text: "Are you sure this is correct?"
+            title_text: "You told us there are more than 1 persons with 'Partner' relationship to buyer 1."
+            informative_text: "Are you sure this is correct?"

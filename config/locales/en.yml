@@ -290,9 +290,9 @@ en:
 
       startdate:
         current_collection_year:
-          "Enter a date within the %{current_start_year_short}/%{current_end_year_short} collection year, which is between %{current_start_year_long} and %{current_end_year_long}."
+          "Enter a date within the %{current_start_year_short} to %{current_end_year_short} collection year, which is between %{current_start_year_long} and %{current_end_year_long}."
         previous_and_current_collection_year:
-          "Enter a date within the %{previous_start_year_short}/%{previous_end_year_short} or %{previous_end_year_short}/%{current_end_year_short} collection years, which is between %{previous_start_year_long} and %{current_end_year_long}."
+          "Enter a date within the %{previous_start_year_short} to %{previous_end_year_short} or %{previous_end_year_short} to %{current_end_year_short} collection years, which is between %{previous_start_year_long} and %{current_end_year_long}."
         later_than_14_days_after: "The tenancy start date must not be later than 14 days from today’s date."
         before_scheme_end_date: "The tenancy start date must be before the end date for this supported housing scheme."
         after_void_date: "Enter a tenancy start date that is after the void date."
@@ -724,38 +724,23 @@ Make sure these answers are correct."
       hint_text: "This is higher than we would expect."
     shared_ownership_deposit:
       title_text: "You told us that the %{mortgage_deposit_and_discount_error_fields} add up to %{mortgage_deposit_and_discount_total}."
-    old_persons_shared_ownership:
-      title_text:
-        one: "You told us the buyer is using the Older Persons Shared Ownership scheme."
-        two: "You told us the buyers are using the Older Persons Shared Ownership scheme."
-      hint_text: "At least one buyer must be aged 65 years and over to use this scheme."
     staircase_bought_seems_high:
       title_text: "You told us that %{percentage}% was bought in this staircasing transaction."
       hint_text: "Most staircasing transactions are less than 50%"
     monthly_charges_over_soft_max:
       title_text: "You told us that the monthly charges were %{mscharge}."
       hint_text: "This is higher than we would expect."
-    student_not_child:
-      title_text: "You told us this person is a student aged between 16 and 19."
     discounted_sale_value:
       title_text: "Mortgage, deposit, and grant total must equal %{value_with_discount}."
       informative_text: "Your given mortgage, deposit and grant total is %{mortgage_deposit_and_grant_total}."
     care_home_charges:
       title_text: "Care home charges should be provided if this is a care home accommodation."
-    buyer1_livein_wrong_for_ownership_type:
-      title_text: "You told us that buyer 1 will not live in the property."
-      hint_text: " For %{ownership_scheme} types, the buyer usually lives in the property."
-    buyer2_livein_wrong_for_ownership_type:
-      title_text: "You told us that buyer 2 will not live in the property."
-      hint_text: " For %{ownership_scheme} types, the buyer usually lives in the property."
     percentage_discount_value:
       title_text: "You told us that the percentage discount is %{discount}."
       hint_text: "This is higher than we would expect."
     grant:
       title_text: "You told us that the grant amount is %{grant}."
       hint_text: "Loans, grants and subsidies are usually between £9,000 and £16,000."
-    wheelchair:
-      title_text: "You told us that someone in the household uses a wheelchair."
     referral:
       title_text: "Are you sure?"
       hint_text: "This is a general needs log, and this referral type is for supported housing."
@@ -785,12 +770,8 @@ Make sure these answers are correct."
       informative_text: "We could not find an address that matches your search. You can search again or continue to enter the address manually."
     partner_under_16_lettings:
       title: "You told us this person is aged %{age} years and has 'Partner' relationship to the lead tenant."
-    partner_under_16_sales:
-      title: "You told us this person is aged %{age} years and has 'Partner' relationship to buyer 1."
     multiple_partners_lettings:
       title: "You told us there are more than 1 persons with 'Partner' relationship to the lead tenant."
-    multiple_partners_sales:
-      title: "You told us there are more than 1 persons with 'Partner' relationship to buyer 1."
 
   devise:
     two_factor_authentication:

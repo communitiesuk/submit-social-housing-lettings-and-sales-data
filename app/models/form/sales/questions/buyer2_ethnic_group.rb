@@ -2,8 +2,6 @@ class Form::Sales::Questions::Buyer2EthnicGroup < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "ethnic_group2"
-    @check_answer_label = "Buyer 2’s ethnic group"
-    @header = "What is buyer 2’s ethnic group?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @check_answers_card_number = 2
