@@ -6,7 +6,7 @@ RSpec.describe Form::Lettings::Subsections::HouseholdCharacteristics, type: :mod
   let(:subsection_id) { nil }
   let(:subsection_definition) { nil }
   let(:section) { instance_double(Form::Lettings::Sections::Household) }
-  let(:form) { instance_double(Form) }
+  let(:form) { instance_double(Form, start_date: Time.zone.local(2024, 4, 1)) }
 
   before do
     allow(section).to receive(:form).and_return(form)
