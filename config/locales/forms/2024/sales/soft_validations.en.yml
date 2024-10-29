@@ -96,3 +96,10 @@ en:
             question_text: ""
             title_text: "No address found."
             informative_text: "We could not find an address that matches your search. You can search again or continue to enter the address manually."
+
+          wheel_value_check:
+            page_header: ""
+            check_answer_label: "Does anyone in the household use a wheelchair?"
+            hint_text: ""
+            question_text: "You told us that someone in the household uses a wheelchair."
+            title_text: "You told us that someone in the household uses a wheelchair."

@@ -25,7 +25,7 @@ module Forms
       end
 
       def year_combo
-        "#{year}/#{year + 1 - 2000}"
+        "#{year} to #{year + 1}"
       end
 
       def next_path

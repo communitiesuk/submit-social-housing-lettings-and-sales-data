@@ -16,7 +16,7 @@ module Forms
 
       def options
         possible_years.map do |year|
-          OpenStruct.new(id: year, name: "#{year}/#{year + 1}")
+          OpenStruct.new(id: year, name: "#{year} to #{year + 1}")
         end
       end
 

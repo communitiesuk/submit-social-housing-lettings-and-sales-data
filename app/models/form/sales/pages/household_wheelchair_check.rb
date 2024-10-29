@@ -6,8 +6,8 @@ class Form::Sales::Pages::HouseholdWheelchairCheck < ::Form::Page
         "wheelchair_when_not_disabled?" => true,
       },
     ]
-    @informative_text = {}
-    @title_text = { "translation" => "soft_validations.wheelchair.title_text" }
+    @copy_key = "sales.soft_validations.wheel_value_check"
+    @title_text = { "translation" => "forms.#{form.start_date.year}.#{@copy_key}.title_text" }
   end
 
   def questions

@@ -491,7 +491,7 @@ RSpec.describe FiltersHelper do
         it "has the correct options" do
           expect(collection_year_options).to eq(
             {
-              "2023" => "2023/24", "2022" => "2022/23", "2021" => "2021/22"
+              "2023" => "2023 to 2024", "2022" => "2022 to 2023", "2021" => "2021 to 2022"
             },
           )
         end
@@ -505,7 +505,7 @@ RSpec.describe FiltersHelper do
         it "has the correct options" do
           expect(collection_year_options).to eq(
             {
-              "2023" => "2023/24", "2022" => "2022/23"
+              "2023" => "2023 to 2024", "2022" => "2022 to 2023"
             },
           )
         end
@@ -520,7 +520,7 @@ RSpec.describe FiltersHelper do
       it "has the correct options" do
         expect(collection_year_options).to eq(
           {
-            "2024" => "2024/25", "2023" => "2023/24", "2022" => "2022/23"
+            "2024" => "2024 to 2025", "2023" => "2023 to 2024", "2022" => "2022 to 2023"
           },
         )
       end
@@ -541,7 +541,7 @@ RSpec.describe FiltersHelper do
         it "has the correct options" do
           expect(collection_year_radio_options).to eq(
             {
-              "2023" => { label: "2023/24" }, "2022" => { label: "2022/23" }, "2021" => { label: "2021/22" }
+              "2023" => { label: "2023 to 2024" }, "2022" => { label: "2022 to 2023" }, "2021" => { label: "2021 to 2022" }
             },
           )
         end
@@ -555,7 +555,7 @@ RSpec.describe FiltersHelper do
         it "has the correct options" do
           expect(collection_year_radio_options).to eq(
             {
-              "2023" => { label: "2023/24" }, "2022" => { label: "2022/23" }
+              "2023" => { label: "2023 to 2024" }, "2022" => { label: "2022 to 2023" }
             },
           )
         end
@@ -570,7 +570,7 @@ RSpec.describe FiltersHelper do
       it "has the correct options" do
         expect(collection_year_radio_options).to eq(
           {
-            "2024" => { label: "2024/25" }, "2023" => { label: "2023/24" }, "2022" => { label: "2022/23" }
+            "2024" => { label: "2024 to 2025" }, "2023" => { label: "2023 to 2024" }, "2022" => { label: "2022 to 2023" }
           },
         )
       end
