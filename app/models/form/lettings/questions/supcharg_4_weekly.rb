@@ -2,7 +2,7 @@ class Form::Lettings::Questions::Supcharg4Weekly < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "supcharg"
-    @copy_key = "lettings.income_and_benefits.rent_4_weekly.supcharg"
+    @copy_key = "lettings.income_and_benefits.rent.supcharg"
     @type = "numeric"
     @width = 5
     @check_answers_card_number = 0
