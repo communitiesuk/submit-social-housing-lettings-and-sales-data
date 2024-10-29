@@ -648,6 +648,13 @@ en:
         two: "You told us that the buyers now own %{stairowned} of the property."
       hint_text: "The maximum percentage that can be owned under the Older Persons Shared Ownership scheme is 75%, unless the property was funded outside the Affordable Homes Programme.
 Make sure these answers are correct."
+    retirement:
+      min:
+        title: "You told us this person is aged %{age} years and retired."
+        hint_text: "The minimum expected retirement age in England is 66."
+      max:
+        title: "You told us this person is over 66 and not retired."
+        hint_text: "The minimum expected retirement age in England is 66."
     extra_borrowing:
       title_text: "You told us that the mortgage and deposit total is %{mortgage_and_deposit_total}."
       hint_text: "This is higher than the purchase price minus the discount."
