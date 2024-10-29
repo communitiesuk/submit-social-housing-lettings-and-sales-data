@@ -2,7 +2,7 @@ en:
   forms:
     2024:
       sales:
-        property:
+        property_information:
           uprn:
             page_header: ""
             uprn_known:
