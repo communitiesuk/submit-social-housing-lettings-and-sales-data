@@ -687,9 +687,6 @@ Make sure these answers are correct."
     grant:
       title_text: "You told us that the grant amount is %{grant}."
       hint_text: "Loans, grants and subsidies are usually between £9,000 and £16,000."
-    referral:
-      title_text: "Are you sure?"
-      hint_text: "This is a general needs log, and this referral type is for supported housing."
     scharge:
       over_soft_max_title: "You told us the service charge is %{scharge}."
     pscharge:
@@ -702,11 +699,6 @@ Make sure these answers are correct."
     deposit_and_mortgage:
       title_text: "You told us the mortgage amount was %{mortgage}, the cash deposit was %{deposit} and the discount was %{discount}."
       hint_text: "We would expect the mortgage amount and the deposit added together to be the same as the purchase price minus the discount."
-    reasonother:
-      title_text: "You told us that the tenant’s main reason for leaving their last settled home was %{reasonother}."
-      informative_text: "The reason you have entered looks very similar to one of the existing response categories.
-                         Please check the categories and select the appropriate one.
-                         If the existing categories are not suitable, please confirm here to move onto the next question."
     hodate:
       must_be_less_than_3_years_from_saledate: "You told us practical completion or handover date is more than 3 years before sale completion date."
     saledate:

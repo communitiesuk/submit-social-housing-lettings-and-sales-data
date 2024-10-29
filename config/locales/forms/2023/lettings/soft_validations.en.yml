@@ -49,3 +49,21 @@ en:
               question_text: "Are you sure this is correct?"
               title_text: "You told us there are more than 1 persons with 'Partner' relationship to the lead tenant."
               informative_text: "Are you sure this is correct?"
+
+          reasonother_value_check:
+              page_header: ""
+              check_answer_label: "Reason other confirmation"
+              hint_text: ""
+              question_text: "Are you sure this doesn’t fit an existing category?"
+              title_text: "You told us that the tenant’s main reason for leaving their last settled home was %{reasonother}."
+              informative_text: "The reason you have entered looks very similar to one of the existing response categories. Please check the categories and select the appropriate one. If the existing categories are not suitable, please confirm here to move onto the next question."
+          
+          referral_value_check:
+              page_header: ""
+              check_answer_label: "Referral confirmation"
+              hint_text: ""
+              question_text: "Are you sure?"
+              title_text: "Are you sure?"
+              informative_text: "This is a general needs log, and this referral type is for supported housing."
+
+          
