@@ -2,8 +2,7 @@ class Form::Lettings::Questions::RentType < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "rent_type"
-    @check_answer_label = "Rent type"
-    @header = "What is the rent type?"
+    @copy_key = "lettings.setup.rent_type.rent_type"
     @type = "radio"
     @top_guidance_partial = form.start_year_after_2024? ? "rent_type_definitions_2024" : "rent_type_definitions"
     @answer_options = form.start_year_after_2024? ? ANSWER_OPTIONS_2024 : ANSWER_OPTIONS

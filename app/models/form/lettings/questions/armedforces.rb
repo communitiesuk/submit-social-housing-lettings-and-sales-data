@@ -2,11 +2,8 @@ class Form::Lettings::Questions::Armedforces < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "armedforces"
-    @check_answer_label = "Household links to UK armed forces"
-    @header = "Does anybody in the household have any links to the UK armed forces?"
     @type = "radio"
     @check_answers_card_number = 0
-    @hint_text = "This excludes national service.<br><br>If there are several people in the household with links to the UK armed forces, you should answer for the regular. If there’s no regular, answer for the reserve. If there’s no reserve, answer for the spouse or civil partner."
     @answer_options = ANSWER_OPTIONS
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
   end
