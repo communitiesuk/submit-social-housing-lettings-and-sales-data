@@ -1,0 +1,51 @@
+en:
+  forms:
+    2023:
+      lettings:
+        soft_validations:
+          pregnancy_value_check:
+            no_females_pregnant_household_value_check:
+              page_header: ""
+              check_answer_label: "Pregnancy confirmation"
+              hint_text: ""
+              question_text: "Are you sure this is correct?"
+              title_text: "You told us somebody in the household is pregnant."
+              informative_text: "You also told us that all the tenants living at the property are male."
+            females_in_soft_age_range_in_pregnant_household_value_check:
+              page_header: ""
+              check_answer_label: "Pregnancy confirmation"
+              hint_text: ""
+              question_text: "Are you sure this is correct?"
+              title_text: "You told us somebody in the household is pregnant."
+              informative_text: "You also told us that any female tenants living at the property are in the following age ranges:<ul><li>under 16 years old</li><li>over 50 years old</li></ul>"
+
+          no_retirement_value_check:
+              page_header: ""
+              check_answer_label: "Retirement confirmation"
+              hint_text: ""
+              question_text: "Are you sure this person is retired?"
+              title_text: "You told us this person is aged %{age} years and retired."
+              informative_text: "The minimum expected retirement age in England is 66."
+
+          retirement_value_check:
+              page_header: ""
+              check_answer_label: "Retirement confirmation"
+              hint_text: ""
+              question_text: "Are you sure this person isn’t retired?"
+              title_text: "You told us this person is over 66 and not retired."
+
+          partner_under_16_value_check:
+              page_header: ""
+              check_answer_label: "Partner under 16 confirmation"
+              hint_text: ""
+              question_text: "Are you sure this is correct?"
+              title_text: "You told us this person is aged %{age} years and has 'Partner' relationship to the lead tenant."
+              informative_text: "Are you sure this is correct?"
+
+          multiple_partners_value_check:
+              page_header: ""
+              check_answer_label: "Multiple partners confirmation"
+              hint_text: ""
+              question_text: "Are you sure this is correct?"
+              title_text: "You told us there are more than 1 persons with 'Partner' relationship to the lead tenant."
+              informative_text: "Are you sure this is correct?"

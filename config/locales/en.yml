@@ -659,20 +659,9 @@ en:
         two: "You told us that the buyers now own %{stairowned} of the property."
       hint_text: "The maximum percentage that can be owned under the Older Persons Shared Ownership scheme is 75%, unless the property was funded outside the Affordable Homes Programme.
 Make sure these answers are correct."
-    retirement:
-      min:
-        title: "You told us this person is aged %{age} years and retired."
-        hint_text: "The minimum expected retirement age in England is 66."
-      max:
-        title: "You told us this person is over 66 and not retired."
-        hint_text: "The minimum expected retirement age in England is 66."
     extra_borrowing:
       title_text: "You told us that the mortgage and deposit total is %{mortgage_and_deposit_total}."
       hint_text: "This is higher than the purchase price minus the discount."
-    pregnancy:
-      title: "You told us somebody in the household is pregnant."
-      all_male_tenants: "You also told us that all the tenants living at the property are male."
-      females_not_in_soft_age_range: "You also told us that any female tenants living at the property are in the following age ranges:<ul><li>under 16 years old</li><li>over 50 years old</li></ul>"
     major_repairs_date:
       title_text: "You told us the property has been vacant for 2 years."
       hint_text: "This is higher than we would expect."
@@ -725,10 +714,6 @@ Make sure these answers are correct."
     no_address_found:
       title_text: "No address found."
       informative_text: "We could not find an address that matches your search. You can search again or continue to enter the address manually."
-    partner_under_16_lettings:
-      title: "You told us this person is aged %{age} years and has 'Partner' relationship to the lead tenant."
-    multiple_partners_lettings:
-      title: "You told us there are more than 1 persons with 'Partner' relationship to the lead tenant."
 
   devise:
     two_factor_authentication:
