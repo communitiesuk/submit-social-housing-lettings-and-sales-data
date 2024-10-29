@@ -113,7 +113,7 @@ en:
             question_text: "Which of these best describes person 2’s working situation?"
 
           details_known_3:
-            page_header: "You’ve given us the details for 1 person in the household"
+            page_header: "You’ve given us the details for 2 people in the household"
             check_answer_label: "Details known for person 3"
             hint_text: "You must provide details for everyone in the household if you know them."
             question_text: "Do you know details for person 3?"
@@ -148,7 +148,7 @@ en:
             question_text: "Which of these best describes person 3’s working situation?"
 
           details_known_4:
-            page_header: "You’ve given us the details for 1 person in the household"
+            page_header: "You’ve given us the details for 3 people in the household"
             check_answer_label: "Details known for person 4"
             hint_text: "You must provide details for everyone in the household if you know them."
             question_text: "Do you know details for person 4?"
@@ -183,7 +183,7 @@ en:
             question_text: "Which of these best describes person 4’s working situation?"
 
           details_known_5:
-            page_header: "You’ve given us the details for 1 person in the household"
+            page_header: "You’ve given us the details for 4 people in the household"
             check_answer_label: "Details known for person 5"
             hint_text: "You must provide details for everyone in the household if you know them."
             question_text: "Do you know details for person 5?"
@@ -218,7 +218,7 @@ en:
             question_text: "Which of these best describes person 5’s working situation?"
 
           details_known_6:
-            page_header: "You’ve given us the details for 1 person in the household"
+            page_header: "You’ve given us the details for 5 people in the household"
             check_answer_label: "Details known for person 6"
             hint_text: "You must provide details for everyone in the household if you know them."
             question_text: "Do you know details for person 6?"
@@ -253,7 +253,7 @@ en:
             question_text: "Which of these best describes person 6’s working situation?"
 
           details_known_7:
-            page_header: "You’ve given us the details for 1 person in the household"
+            page_header: "You’ve given us the details for 6 people in the household"
             check_answer_label: "Details known for person 7"
             hint_text: "You must provide details for everyone in the household if you know them."
             question_text: "Do you know details for person 7?"
@@ -288,7 +288,7 @@ en:
             question_text: "Which of these best describes person 7’s working situation?"
 
           details_known_8:
-            page_header: "You’ve given us the details for 1 person in the household"
+            page_header: "You’ve given us the details for 7 people in the household"
             check_answer_label: "Details known for person 8"
             hint_text: "You must provide details for everyone in the household if you know them."
             question_text: "Do you know details for person 8?"
