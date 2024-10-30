@@ -1,8 +1,6 @@
 class Form::Sales::Questions::NationalityAll < ::Form::Question
   def initialize(id, hsh, page, buyer_index)
     super(id, hsh, page)
-    @check_answer_label = "Buyer #{buyer_index}’s nationality"
-    @header = "Enter a nationality"
     @type = "select"
     @answer_options = GlobalConstants::COUNTRIES_ANSWER_OPTIONS
     @check_answers_card_number = buyer_index

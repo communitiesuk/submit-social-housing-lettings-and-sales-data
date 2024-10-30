@@ -2,11 +2,9 @@ class Form::Lettings::Questions::HousingneedsOther < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "housingneeds_other"
-    @check_answer_label = "Other disabled access needs"
-    @header = "Do they have any other disabled access needs?"
+    @copy_key = "lettings.household_needs.housingneeds_type.housingneeds_other"
     @type = "radio"
     @check_answers_card_number = 0
-    @hint_text = ""
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
   end
 

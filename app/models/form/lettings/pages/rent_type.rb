@@ -2,7 +2,7 @@ class Form::Lettings::Pages::RentType < ::Form::Page
   def initialize(_id, hsh, subsection)
     super("rent_type", hsh, subsection)
     @derived = true
-    @header = "Rent Type"
+    @copy_key = "lettings.setup.rent_type"
   end
 
   def questions
