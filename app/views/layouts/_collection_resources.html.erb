@@ -12,12 +12,12 @@
   <%= govuk_tabs(title: "Collection resources", classes: %w[app-tab__small-headers]) do |c| %>
     <% @mandatory_lettings_collection_resources_per_year.each do |year, resources| %>
       <% c.with_tab(label: "Lettings #{year_range_format(year)}") do %>
-          <%= render DocumentListComponent.new(items: document_list_component_items(resources), label: "Lettings #{text_year_range_format(year)}") %>
+          <%= render DocumentListComponent.new(items: document_list_component_items(resources.concat(@additional_lettings_collection_resources_per_year[year] || [])), label: "Lettings #{text_year_range_format(year)}") %>
       <% end %>
     <% end %>
     <% @mandatory_sales_collection_resources_per_year.each do |year, resources| %>
       <% c.with_tab(label: "Sales #{year_range_format(year)}") do %>
-          <%= render DocumentListComponent.new(items: document_list_component_items(resources), label: "Sales #{text_year_range_format(year)}") %>
+          <%= render DocumentListComponent.new(items: document_list_component_items(resources.concat(@additional_sales_collection_resources_per_year[year] || [])), label: "Sales #{text_year_range_format(year)}") %>
       <% end %>
     <% end %>
   <% end %>

@@ -2,8 +2,7 @@ class Form::Lettings::Questions::NationalityAll < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "nationality_all"
-    @check_answer_label = "Lead tenant’s nationality"
-    @header = "Enter a nationality"
+    @copy_key = "lettings.household_characteristics.nationality_all.nationality_all"
     @type = "select"
     @check_answers_card_number = 1
     @answer_options = GlobalConstants::COUNTRIES_ANSWER_OPTIONS

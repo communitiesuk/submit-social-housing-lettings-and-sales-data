@@ -14,16 +14,13 @@
 <% end %>
 <h1 class="govuk-heading-l"><%= title %></h1>
 
-<% @mandatory_lettings_collection_resources_per_year.each do |year, mandatory_resources| %>
+<% editable_collection_resource_years.each do |year| %>
   <h2 class="govuk-heading-m">
     Lettings <%= text_year_range_format(year) %>
   </h2>
-  <%= render partial: "collection_resource_summary_list", locals: { mandatory_resources: } %>
-<% end %>
-
-<% @mandatory_sales_collection_resources_per_year.each do |year, mandatory_resources| %>
+  <%= render partial: "collection_resource_summary_list", locals: { mandatory_resources: @mandatory_lettings_collection_resources_per_year[year], additional_resources: @additional_lettings_collection_resources_per_year[year] } %>
   <h2 class="govuk-heading-m">
     Sales <%= text_year_range_format(year) %>
   </h2>
-  <%= render partial: "collection_resource_summary_list", locals: { mandatory_resources: } %>
+  <%= render partial: "collection_resource_summary_list", locals: { mandatory_resources: @mandatory_sales_collection_resources_per_year[year], additional_resources: @additional_sales_collection_resources_per_year[year] } %>
 <% end %>

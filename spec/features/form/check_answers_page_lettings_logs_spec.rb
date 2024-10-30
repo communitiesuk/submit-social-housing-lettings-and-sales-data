@@ -167,14 +167,12 @@ RSpec.describe "Lettings Log Check Answers Page" do
       it "displays inferred postcode with the location id" do
         lettings_log.update!(location:)
         visit("/lettings-logs/#{id}/setup/check-answers")
-        expect(page).to have_content("Location")
         expect(page).to have_content(location.name)
       end
 
       it "displays inferred postcode with the location_admin_district" do
         lettings_log.update!(location:)
         visit("/lettings-logs/#{id}/setup/check-answers")
-        expect(page).to have_content("Location")
         expect(page).to have_content(location.location_admin_district)
       end
     end

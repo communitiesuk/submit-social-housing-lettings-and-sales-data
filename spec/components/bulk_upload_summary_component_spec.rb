@@ -12,7 +12,7 @@ RSpec.describe BulkUploadSummaryComponent, type: :component do
 
   it "shows the collection year" do
     result = render_inline(described_class.new(bulk_upload:))
-    expect(result).to have_content("2024/2025")
+    expect(result).to have_content("2024 to 2025")
   end
 
   it "includes a download file link" do

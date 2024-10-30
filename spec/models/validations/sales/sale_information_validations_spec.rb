@@ -197,8 +197,8 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
 
       it "does add an error if it's a bedsit" do
         sale_information_validator.validate_previous_property_unit_type(record)
-        expect(record.errors["fromprop"]).to include(I18n.t("validations.sale_information.previous_property_type.property_type_bedsit"))
-        expect(record.errors["frombeds"]).to include(I18n.t("validations.sale_information.previous_property_type.property_type_bedsit"))
+        expect(record.errors["fromprop"]).to include(I18n.t("validations.sales.sale_information.fromprop.previous_property_type_bedsit"))
+        expect(record.errors["frombeds"]).to include(I18n.t("validations.sales.sale_information.frombeds.previous_property_type_bedsit"))
       end
     end
   end
@@ -648,8 +648,8 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
       it "adds an error" do
         sale_information_validator.validate_basic_monthly_rent(record)
 
-        expect(record.errors[:mrent]).to include(I18n.t("validations.sale_information.monthly_rent.higher_than_expected"))
-        expect(record.errors[:type]).to include(I18n.t("validations.sale_information.monthly_rent.higher_than_expected"))
+        expect(record.errors[:mrent]).to include(I18n.t("validations.sales.sale_information.mrent.monthly_rent_higher_than_expected"))
+        expect(record.errors[:type]).to include(I18n.t("validations.sales.sale_information.type.monthly_rent_higher_than_expected"))
       end
     end
   end

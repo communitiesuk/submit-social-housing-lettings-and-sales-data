@@ -2,8 +2,7 @@ class Form::Sales::Questions::MortgageValueCheck < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "mortgage_value_check"
-    @check_answer_label = "Mortgage confirmation"
-    @header = "Are you sure that the mortgage is more than 5 times the income used for the mortgage application?"
+    @copy_key = "sales.soft_validations.mortgage_value_check"
     @type = "interruption_screen"
     @answer_options = {
       "0" => { "value" => "Yes" },
