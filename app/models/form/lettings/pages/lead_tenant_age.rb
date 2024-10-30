@@ -2,6 +2,7 @@ class Form::Lettings::Pages::LeadTenantAge < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "lead_tenant_age"
+    @copy_key = "lettings.household_characteristics.age1"
     @depends_on = [{ "declaration" => 1 }]
   end
 

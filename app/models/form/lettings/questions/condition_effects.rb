@@ -2,11 +2,8 @@ class Form::Lettings::Questions::ConditionEffects < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "condition_effects"
-    @check_answer_label = "How is person affected by condition or illness"
-    @header = "How is the person affected by their condition or illness?"
     @type = "checkbox"
     @check_answers_card_number = 0
-    @hint_text = "Select all that apply."
     @answer_options = ANSWER_OPTIONS
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
   end

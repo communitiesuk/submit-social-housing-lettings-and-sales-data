@@ -290,9 +290,9 @@ en:
 
       startdate:
         current_collection_year:
-          "Enter a date within the %{current_start_year_short}/%{current_end_year_short} collection year, which is between %{current_start_year_long} and %{current_end_year_long}."
+          "Enter a date within the %{current_start_year_short} to %{current_end_year_short} collection year, which is between %{current_start_year_long} and %{current_end_year_long}."
         previous_and_current_collection_year:
-          "Enter a date within the %{previous_start_year_short}/%{previous_end_year_short} or %{previous_end_year_short}/%{current_end_year_short} collection years, which is between %{previous_start_year_long} and %{current_end_year_long}."
+          "Enter a date within the %{previous_start_year_short} to %{previous_end_year_short} or %{previous_end_year_short} to %{current_end_year_short} collection years, which is between %{previous_start_year_long} and %{current_end_year_long}."
         later_than_14_days_after: "The tenancy start date must not be later than 14 days from today’s date."
         before_scheme_end_date: "The tenancy start date must be before the end date for this supported housing scheme."
         after_void_date: "Enter a tenancy start date that is after the void date."
@@ -476,9 +476,6 @@ en:
         over_max: "The maximum initial equity stake is %{max_equity}%."
         over_stairowned_minus_stairbought: "The initial equity stake is %{equity}% and the percentage owned in total minus the percentage bought is %{staircase_difference}%. In a staircasing transaction, the equity stake purchased cannot be larger than the percentage the %{buyer_owns} minus the percentage bought."
       mortgage: "Mortgage value cannot be £0 if a mortgage was used for the purchase of this property."
-      mortgage_used:
-        year: "You must answer either ‘yes’ or ‘no’ to the question ‘was a mortgage used’ for the selected year."
-        staircasing: "You must answer either ‘yes’ or ‘no’ to the question ‘was a mortgage used’ for staircasing transactions."
       shared_ownership_deposit: "The %{mortgage_deposit_and_discount_error_fields} added together is %{mortgage_deposit_and_discount_total}. The value times the equity percentage is %{value_times_equity}. These figures should be the same."
 
     household:
@@ -637,46 +634,6 @@ en:
         before_deactivation: "This location was deactivated on %{date}. The reactivation date must be on or after deactivation date."
       deactivation:
         during_deactivated_period: "The location is already deactivated during this date, please enter a different date."
-    sale_information:
-      proplen:
-        social_homebuy: "Social HomeBuy buyers should not have lived here before."
-        rent_to_buy: "Rent to Buy buyers should not have lived here before."
-      hodate:
-        must_be_before_saledate: "Practical completion or handover date must be before sale completion date."
-        must_be_less_than_3_years_from_saledate: "Practical completion or handover date must be less than 3 years before sale completion date."
-      exdate:
-        must_be_before_saledate: "Contract exchange date must be before sale completion date."
-        must_be_less_than_1_year_from_saledate: "Contract exchange date must be less than 1 year before sale completion date."
-      saledate:
-        must_be_after_exdate: "Sale completion date must be after contract exchange date."
-        must_be_less_than_1_year_from_exdate: "Sale completion date must be less than 1 year after contract exchange date."
-        must_be_less_than_3_years_from_hodate: "Sale completion date must be less than 3 years after practical completion or handover date."
-        must_be_after_hodate: "Sale completion date must be after practical completion or handover date."
-      previous_property_type:
-        property_type_bedsit: "A bedsit cannot have more than 1 bedroom."
-      discounted_ownership_value: "The mortgage%{mortgage}%{deposit_and_grant_sentence} added together is %{mortgage_deposit_and_grant_total}.</br></br>The full purchase price%{discount_sentence} is %{value_with_discount}.</br></br>These two amounts should be the same."
-      outright_sale_value: "The mortgage%{mortgage} and cash deposit (%{deposit}) when added together is %{mortgage_and_deposit_total}.</br></br>The full purchase price is %{value}.</br></br>These two amounts should be the same."
-      monthly_rent:
-        higher_than_expected: "Basic monthly rent must be between £0.00 and £9,999.00."
-      grant:
-        out_of_range: "Loan, grants or subsidies must be between £9,000 and £16,000."
-      stairbought:
-        over_max: "The percentage bought in this staircasing transaction cannot be higher than %{max_stairbought}% for %{type} sales."
-      value:
-        over_discounted_london_max: "The percentage discount multiplied by the purchase price is %{discount_value}. This figure should not be more than £136,400 for properties in London."
-        over_discounted_max: "The percentage discount multiplied by the purchase price is %{discount_value}. This figure should not be more than £102,400 for properties outside of London."
-      non_staircasing_mortgage:
-        mortgage_used: "The mortgage (%{mortgage}) and cash deposit (%{deposit}) added together is %{mortgage_and_deposit_total}.</br></br>The full purchase price (%{value}) multiplied by the percentage equity stake purchased (%{equity}) is %{expected_shared_ownership_deposit_value}.</br></br>These two amounts should be the same."
-        mortgage_not_used: "The cash deposit is %{deposit}.</br></br>The full purchase price (%{value}) multiplied by the percentage bought is %{expected_shared_ownership_deposit_value}.</br></br>These two amounts should be the same."
-        mortgage_used_socialhomebuy: "The mortgage amount (%{mortgage}), cash deposit (%{deposit}), and cash discount (%{cashdis}) added together is %{mortgage_deposit_and_discount_total}.</br></br>The full purchase price (%{value}) multiplied by the percentage equity stake purchased (%{equity}) is %{expected_shared_ownership_deposit_value}.</br></br>These two amounts should be the same."
-        mortgage_not_used_socialhomebuy: "The cash deposit (%{deposit}) and cash discount (%{cashdis}) added together is %{deposit_and_discount_total}.</br></br>The full purchase price (%{value}) multiplied by the percentage bought (%{equity}) is %{expected_shared_ownership_deposit_value}.</br></br>These two amounts should be the same."
-      staircasing_mortgage:
-        mortgage_used: "The mortgage (%{mortgage}) and cash deposit (%{deposit}) added together is %{mortgage_and_deposit_total}.</br></br>The full purchase price (%{value}) multiplied by the percentage bought is %{stairbought_part_of_value}.</br></br>These two amounts should be the same."
-        mortgage_not_used: "The cash deposit is %{deposit}.</br></br>The full purchase price (%{value}) multiplied by the percentage bought is %{stairbought_part_of_value}.</br></br>These two amounts should be the same."
-        mortgage_used_socialhomebuy: "The mortgage amount (%{mortgage}), cash deposit (%{deposit}), and cash discount (%{cashdis}) added together is %{mortgage_deposit_and_discount_total}.</br></br>The full purchase price (%{value}) multiplied by the percentage bought (%{stairbought}) is %{stairbought_part_of_value}.</br></br>These two amounts should be the same."
-        mortgage_not_used_socialhomebuy: "The cash deposit (%{deposit}) and cash discount (%{cashdis}) added together is %{deposit_and_discount_total}.</br></br>The full purchase price (%{value}) multiplied by the percentage bought (%{stairbought}) is %{stairbought_part_of_value}.</br></br>These two amounts should be the same."
-      stairowned:
-        mortgageused_dont_know: "The percentage owned has to be 100% if the mortgage used is 'Don’t know'"
     merge_request:
       organisation_part_of_another_merge: "This organisation is part of another merge - select a different one."
       organisation_not_selected: "Select an organisation from the search list."
@@ -724,38 +681,23 @@ Make sure these answers are correct."
       hint_text: "This is higher than we would expect."
     shared_ownership_deposit:
       title_text: "You told us that the %{mortgage_deposit_and_discount_error_fields} add up to %{mortgage_deposit_and_discount_total}."
-    old_persons_shared_ownership:
-      title_text:
-        one: "You told us the buyer is using the Older Persons Shared Ownership scheme."
-        two: "You told us the buyers are using the Older Persons Shared Ownership scheme."
-      hint_text: "At least one buyer must be aged 65 years and over to use this scheme."
     staircase_bought_seems_high:
       title_text: "You told us that %{percentage}% was bought in this staircasing transaction."
       hint_text: "Most staircasing transactions are less than 50%"
     monthly_charges_over_soft_max:
       title_text: "You told us that the monthly charges were %{mscharge}."
       hint_text: "This is higher than we would expect."
-    student_not_child:
-      title_text: "You told us this person is a student aged between 16 and 19."
     discounted_sale_value:
       title_text: "Mortgage, deposit, and grant total must equal %{value_with_discount}."
       informative_text: "Your given mortgage, deposit and grant total is %{mortgage_deposit_and_grant_total}."
     care_home_charges:
       title_text: "Care home charges should be provided if this is a care home accommodation."
-    buyer1_livein_wrong_for_ownership_type:
-      title_text: "You told us that buyer 1 will not live in the property."
-      hint_text: " For %{ownership_scheme} types, the buyer usually lives in the property."
-    buyer2_livein_wrong_for_ownership_type:
-      title_text: "You told us that buyer 2 will not live in the property."
-      hint_text: " For %{ownership_scheme} types, the buyer usually lives in the property."
     percentage_discount_value:
       title_text: "You told us that the percentage discount is %{discount}."
       hint_text: "This is higher than we would expect."
     grant:
       title_text: "You told us that the grant amount is %{grant}."
       hint_text: "Loans, grants and subsidies are usually between £9,000 and £16,000."
-    wheelchair:
-      title_text: "You told us that someone in the household uses a wheelchair."
     referral:
       title_text: "Are you sure?"
       hint_text: "This is a general needs log, and this referral type is for supported housing."
@@ -785,12 +727,8 @@ Make sure these answers are correct."
       informative_text: "We could not find an address that matches your search. You can search again or continue to enter the address manually."
     partner_under_16_lettings:
       title: "You told us this person is aged %{age} years and has 'Partner' relationship to the lead tenant."
-    partner_under_16_sales:
-      title: "You told us this person is aged %{age} years and has 'Partner' relationship to buyer 1."
     multiple_partners_lettings:
       title: "You told us there are more than 1 persons with 'Partner' relationship to the lead tenant."
-    multiple_partners_sales:
-      title: "You told us there are more than 1 persons with 'Partner' relationship to buyer 1."
 
   devise:
     two_factor_authentication:

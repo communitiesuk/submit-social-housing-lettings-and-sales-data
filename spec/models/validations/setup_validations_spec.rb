@@ -7,7 +7,7 @@ RSpec.describe Validations::SetupValidations do
   let(:record) { build(:lettings_log) }
 
   describe "tenancy start date" do
-    context "when in 22/23 collection" do
+    context "when in 2022 to 2023 collection" do
       context "when in the crossover period" do
         before do
           allow(Time).to receive(:now).and_return(Time.zone.local(2022, 4, 1))
@@ -18,14 +18,14 @@ RSpec.describe Validations::SetupValidations do
           record.startdate = Time.zone.local(2021, 1, 1)
           setup_validator.validate_startdate_setup(record)
           setup_validator.validate_merged_organisations_start_date(record)
-          expect(record.errors["startdate"]).to include(match "Enter a date within the 21/22 or 22/23 collection years, which is between 1st April 2021 and 31st March 2023")
+          expect(record.errors["startdate"]).to include(match "Enter a date within the 2021 to 2022 or 2022 to 2023 collection years, which is between 1st April 2021 and 31st March 2023")
         end
 
         it "cannot be after the second collection window end date" do
           record.startdate = Time.zone.local(2023, 7, 1, 6)
           setup_validator.validate_startdate_setup(record)
           setup_validator.validate_merged_organisations_start_date(record)
-          expect(record.errors["startdate"]).to include(match "Enter a date within the 21/22 or 22/23 collection years, which is between 1st April 2021 and 31st March 2023")
+          expect(record.errors["startdate"]).to include(match "Enter a date within the 2021 to 2022 or 2022 to 2023 collection years, which is between 1st April 2021 and 31st March 2023")
         end
       end
 
@@ -39,19 +39,19 @@ RSpec.describe Validations::SetupValidations do
           record.startdate = Time.zone.local(2022, 1, 1)
           setup_validator.validate_startdate_setup(record)
           setup_validator.validate_merged_organisations_start_date(record)
-          expect(record.errors["startdate"]).to include(match "Enter a date within the 22/23 collection year, which is between 1st April 2022 and 31st March 2023")
+          expect(record.errors["startdate"]).to include(match "Enter a date within the 2022 to 2023 collection year, which is between 1st April 2022 and 31st March 2023")
         end
 
         it "cannot be after the second collection window end date" do
           record.startdate = Time.zone.local(2023, 7, 1, 6)
           setup_validator.validate_startdate_setup(record)
           setup_validator.validate_merged_organisations_start_date(record)
-          expect(record.errors["startdate"]).to include(match "Enter a date within the 22/23 collection year, which is between 1st April 2022 and 31st March 2023")
+          expect(record.errors["startdate"]).to include(match "Enter a date within the 2022 to 2023 collection year, which is between 1st April 2022 and 31st March 2023")
         end
       end
     end
 
-    context "when in 23/24 collection" do
+    context "when in 2023 to 2024 collection" do
       context "when in the crossover period" do
         before do
           allow(Time).to receive(:now).and_return(Time.zone.local(2023, 4, 1))
@@ -62,14 +62,14 @@ RSpec.describe Validations::SetupValidations do
           record.startdate = Time.zone.local(2022, 1, 1)
           setup_validator.validate_startdate_setup(record)
           setup_validator.validate_merged_organisations_start_date(record)
-          expect(record.errors["startdate"]).to include(match "Enter a date within the 22/23 or 23/24 collection years, which is between 1st April 2022 and 31st March 2024")
+          expect(record.errors["startdate"]).to include(match "Enter a date within the 2022 to 2023 or 2023 to 2024 collection years, which is between 1st April 2022 and 31st March 2024")
         end
 
         it "cannot be after the second collection window end date" do
           record.startdate = Time.zone.local(2024, 7, 1, 6)
           setup_validator.validate_startdate_setup(record)
           setup_validator.validate_merged_organisations_start_date(record)
-          expect(record.errors["startdate"]).to include(match "Enter a date within the 22/23 or 23/24 collection years, which is between 1st April 2022 and 31st March 2024")
+          expect(record.errors["startdate"]).to include(match "Enter a date within the 2022 to 2023 or 2023 to 2024 collection years, which is between 1st April 2022 and 31st March 2024")
         end
       end
 
@@ -83,14 +83,14 @@ RSpec.describe Validations::SetupValidations do
           record.startdate = Time.zone.local(2023, 1, 1)
           setup_validator.validate_startdate_setup(record)
           setup_validator.validate_merged_organisations_start_date(record)
-          expect(record.errors["startdate"]).to include(match "Enter a date within the 23/24 collection year, which is between 1st April 2023 and 31st March 2024")
+          expect(record.errors["startdate"]).to include(match "Enter a date within the 2023 to 2024 collection year, which is between 1st April 2023 and 31st March 2024")
         end
 
         it "cannot be after the second collection window end date" do
           record.startdate = Time.zone.local(2024, 7, 1, 6)
           setup_validator.validate_startdate_setup(record)
           setup_validator.validate_merged_organisations_start_date(record)
-          expect(record.errors["startdate"]).to include(match "Enter a date within the 23/24 collection year, which is between 1st April 2023 and 31st March 2024")
+          expect(record.errors["startdate"]).to include(match "Enter a date within the 2023 to 2024 collection year, which is between 1st April 2023 and 31st March 2024")
         end
       end
 
@@ -104,7 +104,7 @@ RSpec.describe Validations::SetupValidations do
           record.startdate = Time.zone.local(2023, 1, 1)
           setup_validator.validate_startdate_setup(record)
           setup_validator.validate_merged_organisations_start_date(record)
-          expect(record.errors["startdate"]).to include(match "Enter a date within the 23/24 collection year, which is between 1st April 2023 and 31st March 2024")
+          expect(record.errors["startdate"]).to include(match "Enter a date within the 2023 to 2024 collection year, which is between 1st April 2023 and 31st March 2024")
         end
 
         xit "can edit already created logs for the previous collection year" do
@@ -113,7 +113,7 @@ RSpec.describe Validations::SetupValidations do
           record.startdate = Time.zone.local(2023, 1, 1)
           setup_validator.validate_startdate_setup(record)
           setup_validator.validate_merged_organisations_start_date(record)
-          expect(record.errors["startdate"]).not_to include(match "Enter a date within the 23/24 collection year, which is between 1st April 2023 and 31st March 2024")
+          expect(record.errors["startdate"]).not_to include(match "Enter a date within the 2023 to 2024 collection year, which is between 1st April 2023 and 31st March 2024")
         end
       end
 
@@ -127,7 +127,7 @@ RSpec.describe Validations::SetupValidations do
           record.startdate = Time.zone.local(2023, 1, 1)
           setup_validator.validate_startdate_setup(record)
           setup_validator.validate_merged_organisations_start_date(record)
-          expect(record.errors["startdate"]).to include(match "Enter a date within the 23/24 collection year, which is between 1st April 2023 and 31st March 2024")
+          expect(record.errors["startdate"]).to include(match "Enter a date within the 2023 to 2024 collection year, which is between 1st April 2023 and 31st March 2024")
         end
 
         it "cannot edit already created logs for the previous collection year" do
@@ -136,7 +136,7 @@ RSpec.describe Validations::SetupValidations do
           record.startdate = Time.zone.local(2023, 1, 1)
           setup_validator.validate_startdate_setup(record)
           setup_validator.validate_merged_organisations_start_date(record)
-          expect(record.errors["startdate"]).to include(match "Enter a date within the 23/24 collection year, which is between 1st April 2023 and 31st March 2024")
+          expect(record.errors["startdate"]).to include(match "Enter a date within the 2023 to 2024 collection year, which is between 1st April 2023 and 31st March 2024")
         end
       end
     end
@@ -157,7 +157,7 @@ RSpec.describe Validations::SetupValidations do
           record.startdate = Time.zone.local(2024, 4, 1)
           setup_validator.validate_startdate_setup(record)
           expect(record.errors["startdate"].length).to be >= 2
-          expect(record.errors["startdate"][0]).to eq("Enter a date within the 23/24 collection year, which is between 1st April 2023 and 31st March 2024.")
+          expect(record.errors["startdate"][0]).to eq("Enter a date within the 2023 to 2024 collection year, which is between 1st April 2023 and 31st March 2024.")
           expect(record.errors["startdate"][1]).to eq(I18n.t("validations.setup.startdate.later_than_14_days_after"))
         end
       end

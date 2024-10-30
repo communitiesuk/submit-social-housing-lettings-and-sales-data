@@ -2,8 +2,7 @@ class Form::Sales::Questions::PreviousPostcode < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "ppostcode_full"
-    @check_answer_label = "Postcode of buyer 1’s last settled accommodation"
-    @header = "Postcode"
+    @copy_key = "sales.household_situation.last_accommodation.ppostcode_full"
     @type = "text"
     @width = 5
     @inferred_check_answers_value = [{
