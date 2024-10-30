@@ -2,8 +2,7 @@ class Form::Sales::Questions::Prevloc < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "prevloc"
-    @check_answer_label = "Local authority of buyer 1’s last settled accommodation"
-    @header = "Select a local authority"
+    @copy_key = "sales.household_situation.last_accommodation_la.prevloc"
     @type = "select"
     @inferred_check_answers_value = [{
       "condition" => {
