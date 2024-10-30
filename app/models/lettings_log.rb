@@ -508,12 +508,6 @@ class LettingsLog < Log
     hb == 10
   end
 
-  # Option 7 has been removed starting from 22/23
-  def receives_universal_credit_but_no_housing_benefit?
-    # 7: Universal Credit (without housing element)
-    hb == 7
-  end
-
   def receives_housing_related_benefits?
     if collection_start_year <= 2021
       receives_housing_benefit_only? || receives_uc_with_housing_element_excl_housing_benefit? ||
