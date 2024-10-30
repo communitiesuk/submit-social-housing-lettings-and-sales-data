@@ -265,24 +265,11 @@ en:
       owning_organisation:
         data_sharing_agreement_not_signed: "The organisation must accept the Data Sharing Agreement before it can be selected as the owning organisation."
     property:
-      uprn:
-        invalid: "UPRN must be 12 digits or less."
       uprn_known:
         invalid: "You must answer UPRN known?"
       la:
         la_invalid_for_org: "%{org_name} does not operate in %{la_name}."
         postcode_invalid_for_org: "Enter a postcode in an area covered by %{org_name}."
-      rsnvac:
-        first_let_not_social: "Enter a reason for vacancy that is not 'first let' if unit has been previously let as social housing."
-        first_let_social: "Reason for vacancy must be first let if unit has been previously let as social housing."
-        previous_let_social: "Property cannot have a previous let type if being let as social housing for the first time."
-        non_temp_accommodation: "Answer cannot be re-let to tenant who occupied the same property as temporary accommodation as this accommodation is not temporary."
-        referral_invalid: "Answer cannot be re-let to tenant who occupied the same property as temporary accommodation as a different source of referral for this letting."
-        not_a_renewal: "Reason for vacancy cannot be 'Renewal of fixed-term tenancy' if letting is not a renewal."
-      unittype_gn:
-        one_bedroom_bedsit: "A bedsit can only have one bedroom."
-        one_seven_bedroom_shared: "A shared house must have 1 to 7 bedrooms."
-        one_three_bedroom_single_tenant_shared: "A shared house with fewer than two tenants must have 1 to 3 bedrooms."
 
     financial:
       income:
@@ -370,7 +357,6 @@ en:
           internal_transfer: "Answer cannot be a fixed-term or lifetime local authority general needs tenancy as it’s an internal transfer and a private registered provider is on the tenancy agreement."
       referral:
         secure_tenancy: "Answer must be internal transfer as this is a secure tenancy."
-        rsnvac_non_temp: "Answer cannot be this source of referral as this is a re-let to tenant who occupied the same property as temporary accommodation."
         cannot_be_secure_tenancy: "Answer cannot be secure tenancy as this is not an internal transfer."
         assessed_homeless: "Answer cannot be internal transfer as the tenant was assessed as homeless."
         other_homeless: "Answer cannot be internal transfer as the tenant was considered homeless by their landlord."

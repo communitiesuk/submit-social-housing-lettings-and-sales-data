@@ -54,8 +54,8 @@ RSpec.describe Validations::PropertyValidations do
 
           property_validator.validate_shared_housing_rooms(log)
 
-          expect(log.errors["unittype_gn"]).to include(I18n.t("validations.property.unittype_gn.one_bedroom_bedsit"))
-          expect(log.errors["beds"]).to include(I18n.t("validations.property.unittype_gn.one_bedroom_bedsit"))
+          expect(log.errors["unittype_gn"]).to include(I18n.t("validations.lettings.property.unittype_gn.one_bedroom_bedsit"))
+          expect(log.errors["beds"]).to include(I18n.t("validations.lettings.property.unittype_gn.one_bedroom_bedsit"))
         end
       end
     end
@@ -80,14 +80,14 @@ RSpec.describe Validations::PropertyValidations do
 
           property_validator.validate_shared_housing_rooms(log)
 
-          expect(log.errors["unittype_gn"]).to include(I18n.t("validations.property.unittype_gn.one_bedroom_bedsit"))
-          expect(log.errors["beds"]).to include(I18n.t("validations.property.unittype_gn.one_bedroom_bedsit"))
+          expect(log.errors["unittype_gn"]).to include(I18n.t("validations.lettings.property.unittype_gn.one_bedroom_bedsit"))
+          expect(log.errors["beds"]).to include(I18n.t("validations.lettings.property.unittype_gn.one_bedroom_bedsit"))
         end
       end
     end
 
     context "when shared housing has more than 7 bedrooms" do
-      let(:expected_error) { I18n.t("validations.property.unittype_gn.one_seven_bedroom_shared") }
+      let(:expected_error) { I18n.t("validations.lettings.property.unittype_gn.one_seven_bedroom_shared") }
 
       it "adds an error if the number of bedrooms is not between 1 and 7" do
         log.beds = 8
@@ -95,12 +95,12 @@ RSpec.describe Validations::PropertyValidations do
         log.hhmemb = 3
         property_validator.validate_shared_housing_rooms(log)
         expect(log.errors["unittype_gn"]).to include(match(expected_error))
-        expect(log.errors["beds"]).to include(I18n.t("validations.property.unittype_gn.one_seven_bedroom_shared"))
+        expect(log.errors["beds"]).to include(I18n.t("validations.lettings.property.unittype_gn.one_seven_bedroom_shared"))
       end
     end
 
     context "when shared housing has less than 1 bedrooms" do
-      let(:expected_error) { I18n.t("validations.property.unittype_gn.one_seven_bedroom_shared") }
+      let(:expected_error) { I18n.t("validations.lettings.property.unittype_gn.one_seven_bedroom_shared") }
 
       it "adds an error if the number of bedrooms is not between 1 and 7" do
         log.beds = 0
@@ -108,12 +108,12 @@ RSpec.describe Validations::PropertyValidations do
         log.hhmemb = 3
         property_validator.validate_shared_housing_rooms(log)
         expect(log.errors["unittype_gn"]).to include(match(expected_error))
-        expect(log.errors["beds"]).to include(I18n.t("validations.property.unittype_gn.one_seven_bedroom_shared"))
+        expect(log.errors["beds"]).to include(I18n.t("validations.lettings.property.unittype_gn.one_seven_bedroom_shared"))
       end
     end
 
     context "when there are too many bedrooms for the number of household members and unit type" do
-      let(:expected_error) { I18n.t("validations.property.unittype_gn.one_three_bedroom_single_tenant_shared") }
+      let(:expected_error) { I18n.t("validations.lettings.property.unittype_gn.one_three_bedroom_single_tenant_shared") }
 
       it "adds an error" do
         log.beds = 4
@@ -121,7 +121,7 @@ RSpec.describe Validations::PropertyValidations do
         log.hhmemb = 1
         property_validator.validate_shared_housing_rooms(log)
         expect(log.errors["unittype_gn"]).to include(match(expected_error))
-        expect(log.errors["beds"]).to include(I18n.t("validations.property.unittype_gn.one_three_bedroom_single_tenant_shared"))
+        expect(log.errors["beds"]).to include(I18n.t("validations.lettings.property.unittype_gn.one_three_bedroom_single_tenant_shared"))
       end
     end
   end
@@ -133,19 +133,19 @@ RSpec.describe Validations::PropertyValidations do
         log.unitletas = 0
         property_validator.validate_unitletas(log)
         expect(log.errors["unitletas"])
-          .to include(match I18n.t("validations.property.rsnvac.previous_let_social"))
+          .to include(match I18n.t("validations.lettings.property.unitletas.previous_let_social"))
         log.unitletas = 1
         property_validator.validate_unitletas(log)
         expect(log.errors["unitletas"])
-          .to include(match I18n.t("validations.property.rsnvac.previous_let_social"))
+          .to include(match I18n.t("validations.lettings.property.unitletas.previous_let_social"))
         log.unitletas = 2
         property_validator.validate_unitletas(log)
         expect(log.errors["unitletas"])
-          .to include(match I18n.t("validations.property.rsnvac.previous_let_social"))
+          .to include(match I18n.t("validations.lettings.property.unitletas.previous_let_social"))
         log.unitletas = 3
         property_validator.validate_unitletas(log)
         expect(log.errors["unitletas"])
-          .to include(match I18n.t("validations.property.rsnvac.previous_let_social"))
+          .to include(match I18n.t("validations.lettings.property.unitletas.previous_let_social"))
       end
     end
 
@@ -166,7 +166,7 @@ RSpec.describe Validations::PropertyValidations do
         log.rsnvac = 6
         property_validator.validate_rsnvac(log)
         expect(log.errors["rsnvac"])
-          .to include(match I18n.t("validations.property.rsnvac.first_let_social"))
+          .to include(match I18n.t("validations.lettings.property.rsnvac.first_let_social"))
       end
 
       it "expects to have a first let reason for vacancy" do
@@ -189,15 +189,15 @@ RSpec.describe Validations::PropertyValidations do
         log.rsnvac = 15
         property_validator.validate_rsnvac(log)
         expect(log.errors["rsnvac"])
-          .to include(match I18n.t("validations.property.rsnvac.first_let_not_social"))
+          .to include(match I18n.t("validations.lettings.property.rsnvac.first_let_not_social"))
         log.rsnvac = 16
         property_validator.validate_rsnvac(log)
         expect(log.errors["rsnvac"])
-          .to include(match I18n.t("validations.property.rsnvac.first_let_not_social"))
+          .to include(match I18n.t("validations.lettings.property.rsnvac.first_let_not_social"))
         log.rsnvac = 17
         property_validator.validate_rsnvac(log)
         expect(log.errors["rsnvac"])
-          .to include(match I18n.t("validations.property.rsnvac.first_let_not_social"))
+          .to include(match I18n.t("validations.lettings.property.rsnvac.first_let_not_social"))
       end
 
       it "expects the reason for vacancy to be a first let as social housing reason" do
@@ -220,7 +220,7 @@ RSpec.describe Validations::PropertyValidations do
           log.rsnvac = 14
           property_validator.validate_rsnvac(log)
           expect(log.errors["rsnvac"])
-                .to include(match I18n.t("validations.property.rsnvac.not_a_renewal"))
+                .to include(match I18n.t("validations.lettings.property.rsnvac.not_a_renewal"))
         end
       end
     end
@@ -237,7 +237,7 @@ RSpec.describe Validations::PropertyValidations do
             log.prevten = prevten
             property_validator.validate_rsnvac(log)
             expect(log.errors["rsnvac"])
-              .to include(match I18n.t("validations.property.rsnvac.non_temp_accommodation"))
+              .to include(match I18n.t("validations.lettings.property.rsnvac.non_temp_accommodation"))
           end
         end
 
@@ -247,7 +247,7 @@ RSpec.describe Validations::PropertyValidations do
             log.referral = src
             property_validator.validate_rsnvac(log)
             expect(log.errors["rsnvac"])
-              .to include(match I18n.t("validations.property.rsnvac.referral_invalid"))
+              .to include(match I18n.t("validations.lettings.property.rsnvac.referral_invalid"))
           end
         end
       end
