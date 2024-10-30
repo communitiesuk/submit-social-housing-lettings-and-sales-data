@@ -637,9 +637,6 @@ en:
       outside_range_title: "You told us the rent is %{brent}."
       informative_text: "This is %{higher_or_lower} than we would expect."
       hint_text: "Check the following:<ul class=\"govuk-body-l app-panel--interruption\"><li>the decimal point</li><li>the frequency, for example every week or every calendar month</li><li>the rent type is correct, for example affordable or social rent</li></ul>"
-    purchase_price:
-      title_text: "You told us the purchase price is %{value}."
-      hint_text: "This is %{higher_or_lower} than we would expect."
     staircase_owned:
       title_text:
         one: "You told us that the buyer now owns %{stairowned} of the property."
@@ -671,17 +668,11 @@ Make sure these answers are correct."
     staircase_bought_seems_high:
       title_text: "You told us that %{percentage}% was bought in this staircasing transaction."
       hint_text: "Most staircasing transactions are less than 50%"
-    monthly_charges_over_soft_max:
-      title_text: "You told us that the monthly charges were %{mscharge}."
-      hint_text: "This is higher than we would expect."
     discounted_sale_value:
       title_text: "Mortgage, deposit, and grant total must equal %{value_with_discount}."
       informative_text: "Your given mortgage, deposit and grant total is %{mortgage_deposit_and_grant_total}."
     care_home_charges:
       title_text: "Care home charges should be provided if this is a care home accommodation."
-    percentage_discount_value:
-      title_text: "You told us that the percentage discount is %{discount}."
-      hint_text: "This is higher than we would expect."
     grant:
       title_text: "You told us that the grant amount is %{grant}."
       hint_text: "Loans, grants and subsidies are usually between £9,000 and £16,000."
@@ -709,9 +700,6 @@ Make sure these answers are correct."
       must_be_less_than_3_years_from_saledate: "You told us practical completion or handover date is more than 3 years before sale completion date."
     saledate:
       must_be_less_than_3_years_from_hodate: "You told us sale completion date is more than 3 years after practical completion or handover date."
-    no_address_found:
-      title_text: "No address found."
-      informative_text: "We could not find an address that matches your search. You can search again or continue to enter the address manually."
     partner_under_16_lettings:
       title: "You told us this person is aged %{age} years and has 'Partner' relationship to the lead tenant."
     multiple_partners_lettings:
