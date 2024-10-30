@@ -2,10 +2,7 @@ class Form::Sales::Questions::Buyer1Nationality < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "national"
-    @check_answer_label = "Buyer 1’s nationality"
-    @header = "What is buyer 1’s nationality?"
     @type = "radio"
-    @hint_text = "Buyer 1 is the person in the household who does the most paid work. If it’s a joint purchase and the buyers do the same amount of paid work, buyer 1 is whoever is the oldest."
     @answer_options = ANSWER_OPTIONS
     @check_answers_card_number = 1
     @inferred_check_answers_value = [{
