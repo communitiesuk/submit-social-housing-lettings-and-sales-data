@@ -1,15 +1,22 @@
 class BulkUpload::Processor
+  include CollectionTimeHelper
   attr_reader :bulk_upload
 
-  BLANK_TEMPLATE_ERRORS = [
-    I18n.t("activemodel.errors.models.bulk_upload/lettings/validator.attributes.base.blank_file"),
-    I18n.t("validations.sales.2024.bulk_upload.blank_file"),
-  ].freeze
+  def blank_template_errors
+    [
+      I18n.t("activemodel.errors.models.bulk_upload/lettings/validator.attributes.base.blank_file"),
+      I18n.t("validations.sales.#{current_collection_start_year}.bulk_upload.blank_file"),
+      I18n.t("validations.sales.#{previous_collection_start_year}.bulk_upload.blank_file"),
+    ].freeze
+  end
 
-  WRONG_TEMPLATE_ERRORS = [
-    *I18n.t("activemodel.errors.models.bulk_upload/lettings/validator.attributes.base", default: {}).values,
-    *I18n.t("validations.sales.2024", default: {}).values,
-  ].freeze
+  def wrong_template_errors
+    [
+      *I18n.t("activemodel.errors.models.bulk_upload/lettings/validator.attributes.base", default: {}).values,
+      *I18n.t("validations.sales.#{current_collection_start_year}.bulk_upload.wrong_template", default: {}).values,
+      *I18n.t("validations.sales.#{previous_collection_start_year}.bulk_upload.wrong_template", default: {}).values,
+    ].freeze
+  end
 
   def initialize(bulk_upload:)
     @bulk_upload = bulk_upload
@@ -157,9 +164,9 @@ private
   end
 
   def handle_invalid_validator
-    if BLANK_TEMPLATE_ERRORS.any? { |error| validator.errors.full_messages.include?(error) }
+    if blank_template_errors.any? { |error| validator.errors.full_messages.include?(error) }
       @bulk_upload.update!(failure_reason: "blank_template")
-    elsif WRONG_TEMPLATE_ERRORS.any? { |error| validator.errors.full_messages.include?(error) }
+    elsif wrong_template_errors.any? { |error| validator.errors.full_messages.include?(error) }
       @bulk_upload.update!(failure_reason: "wrong_template")
     end
 

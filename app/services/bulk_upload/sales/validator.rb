@@ -164,20 +164,20 @@ private
 
     column_count = rows.map(&:size).max
 
-    errors.add(:base, I18n.t("validations.sales.#{@bulk_upload.year}.bulk_upload.over_max_column_count")) if column_count > csv_parser.class::MAX_COLUMNS
+    errors.add(:base, I18n.t("validations.sales.#{@bulk_upload.year}.bulk_upload.wrong_template.over_max_column_count")) if column_count > csv_parser.class::MAX_COLUMNS
   end
 
   def validate_correct_template
     return if halt_validations?
 
-    errors.add(:base, I18n.t("validations.sales.#{@bulk_upload.year}.bulk_upload.wrong_template")) if csv_parser.wrong_template_for_year?
+    errors.add(:base, I18n.t("validations.sales.#{@bulk_upload.year}.bulk_upload.wrong_template.wrong_template")) if csv_parser.wrong_template_for_year?
   end
 
   def validate_missing_required_headers
     return if halt_validations?
 
     if csv_parser.missing_required_headers?
-      errors.add :base, I18n.t("validations.sales.#{@bulk_upload.year}.bulk_upload.no_headers", guidance_link: bulk_upload_sales_log_url(id: "guidance", form: { year: bulk_upload.year }, host: ENV["APP_HOST"], anchor: "using-the-bulk-upload-template"))
+      errors.add :base, I18n.t("validations.sales.#{@bulk_upload.year}.bulk_upload.wrong_template.no_headers", guidance_link: bulk_upload_sales_log_url(id: "guidance", form: { year: bulk_upload.year }, host: ENV["APP_HOST"], anchor: "using-the-bulk-upload-template"))
     end
   end
 
@@ -185,7 +185,7 @@ private
     return if halt_validations?
 
     unless csv_parser.correct_field_count?
-      errors.add(:base, I18n.t("validations.sales.#{@bulk_upload.year}.bulk_upload.wrong_field_numbers_count"))
+      errors.add(:base, I18n.t("validations.sales.#{@bulk_upload.year}.bulk_upload.wrong_template.wrong_field_numbers_count"))
       halt_validations!
     end
   end

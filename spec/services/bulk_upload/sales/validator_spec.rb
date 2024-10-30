@@ -54,7 +54,7 @@ RSpec.describe BulkUpload::Sales::Validator do
 
       it "is not valid" do
         expect(validator).not_to be_valid
-        expect(validator.errors["base"]).to eql([I18n.t("validations.sales.2024.bulk_upload.wrong_template")])
+        expect(validator.errors["base"]).to eql([I18n.t("validations.sales.2024.bulk_upload.wrong_template.wrong_template")])
       end
     end
 
