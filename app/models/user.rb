@@ -19,7 +19,7 @@ class User < ApplicationRecord
   validates :password, presence: { if: :password_required? }
   validates :password, length: { within: Devise.password_length, allow_blank: true }
   validates :password, confirmation: { if: :password_required? }
-  validates :phone_extension, format: { with: /\A\d+\z/, allow_blank: true, message: I18n.t("validations.numeric.format", field: "") }
+  validates :phone_extension, format: { with: /\A\d+\z/, allow_blank: true, message: I18n.t("validations.shared.numeric.format", field: "") }
 
   after_validation :send_data_protection_confirmation_reminder, if: :is_dpo_changed?
 

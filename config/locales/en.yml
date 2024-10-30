@@ -234,7 +234,7 @@ en:
     scheme_deleted: "%{service_name} has been deleted."
     user_deleted: "%{name} has been deleted."
     organisation_deleted: "%{name} has been deleted."
-    user_updated: 
+    user_updated:
       self: "Your account details have been updated."
       other: "%{name}’s details have been updated."
 
@@ -257,19 +257,7 @@ en:
     invalid_number: "Enter a number for %{question}"
     no_address_found: "We could not find this address. Check the address data in your CSV file is correct and complete, or select the correct address using the CORE site."
 
-    other_field_missing: "If %{main_field_label} is other then %{other_field_label} must be provided."
-    other_field_not_required: "%{other_field_label} must not be provided if %{main_field_label} was not other."
-    numeric:
-      within_range: "%{field} must be between %{min} and %{max}."
-      above_min: "%{field} must be at least %{min}."
-      whole_number: "%{field} must be a whole number."
-      nearest_ten: "%{field} must be given to the nearest ten."
-      nearest_hundredth: "%{field} must be given to the nearest hundredth."
-      normal_format: "Enter a number."
-      format: "%{field} must be a number."
-
     date:
-      invalid_date: "Enter a date in the correct format, for example 31 1 2024."
       outside_collection_window: "Enter a date within the %{year_combo} collection year, which is between 1st April %{start_year} and 31st March %{end_year}."
     postcode: "Enter a postcode in the correct format, for example AA1 1AA."
     location_admin_district: "Select a local authority."

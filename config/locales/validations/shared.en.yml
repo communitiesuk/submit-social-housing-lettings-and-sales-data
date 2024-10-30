@@ -1,0 +1,27 @@
+en:
+  validations:
+    shared:
+      other_field_missing: "If %{main_field_label} is other then %{other_field_label} must be provided."
+      other_field_not_required: "%{other_field_label} must not be provided if %{main_field_label} was not other."
+
+      numeric:
+        within_range: "%{field} must be between %{min} and %{max}."
+        above_min: "%{field} must be at least %{min}."
+        whole_number: "%{field} must be a whole number."
+        nearest_ten: "%{field} must be given to the nearest ten."
+        nearest_hundredth: "%{field} must be given to the nearest hundredth."
+        normal_format: "Enter a number."
+        format: "%{field} must be a number."
+
+      postcode: "Enter a postcode in the correct format, for example AA1 1AA."
+
+      date:
+        invalid_date: "Enter a date in the correct format, for example 31 1 2024."
+
+      setup:
+        owning_organisation:
+          data_sharing_agreement_not_signed: "The organisation must accept the Data Sharing Agreement before it can be selected as the owning organisation."
+
+
+
+

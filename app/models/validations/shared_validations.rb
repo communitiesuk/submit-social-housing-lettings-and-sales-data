@@ -7,12 +7,12 @@ module Validations::SharedValidations
     main_field_label = main_label || main_field.to_s.humanize(capitalize: false)
     other_field_label = other_label || other_field.to_s.humanize(capitalize: false)
     if record[main_field] == value_other && record[other_field].blank?
-      record.errors.add main_field.to_sym, I18n.t("validations.other_field_missing", main_field_label:, other_field_label:)
-      record.errors.add other_field.to_sym, I18n.t("validations.other_field_missing", main_field_label:, other_field_label:)
+      record.errors.add main_field.to_sym, I18n.t("validations.shared.other_field_missing", main_field_label:, other_field_label:)
+      record.errors.add other_field.to_sym, I18n.t("validations.shared.other_field_missing", main_field_label:, other_field_label:)
     end
 
     if record[main_field] != value_other && record[other_field].present?
-      record.errors.add other_field.to_sym, I18n.t("validations.other_field_not_required", main_field_label:, other_field_label:)
+      record.errors.add other_field.to_sym, I18n.t("validations.shared.other_field_not_required", main_field_label:, other_field_label:)
     end
   end
 
@@ -22,7 +22,7 @@ module Validations::SharedValidations
       next if record.send("#{question.id}_before_type_cast").to_s.match?(/\A\d+(\.\d+)?\z/)
 
       field = question.check_answer_label || question.id
-      record.errors.add question.id.to_sym, I18n.t("validations.numeric.format", field:)
+      record.errors.add question.id.to_sym, I18n.t("validations.shared.numeric.format", field:)
     end
   end
 
@@ -55,12 +55,12 @@ module Validations::SharedValidations
       incorrect_accuracy = (value.to_d * 100) % (question.step * 100) != 0
 
       if question.step < 1 && incorrect_accuracy
-        record.errors.add question.id.to_sym, I18n.t("validations.numeric.nearest_hundredth", field:)
+        record.errors.add question.id.to_sym, I18n.t("validations.shared.numeric.nearest_hundredth", field:)
       elsif incorrect_accuracy || value.to_d != value.to_i    # if the user enters a value in exponent notation (eg '4e1') the to_i method does not convert this to the correct value
         field = question.check_answer_label || question.id
         case question.step
-        when 1 then record.errors.add question.id.to_sym, :not_integer, message: I18n.t("validations.numeric.whole_number", field:)
-        when 10 then record.errors.add question.id.to_sym, I18n.t("validations.numeric.nearest_ten", field:)
+        when 1 then record.errors.add question.id.to_sym, :not_integer, message: I18n.t("validations.shared.numeric.whole_number", field:)
+        when 10 then record.errors.add question.id.to_sym, I18n.t("validations.shared.numeric.nearest_ten", field:)
         end
       end
     end
@@ -69,7 +69,7 @@ module Validations::SharedValidations
   def validate_property_postcode(record)
     postcode = record.postcode_full
     if record.postcode_known? && (postcode.blank? || !postcode.match(POSTCODE_REGEXP))
-      error_message = I18n.t("validations.postcode")
+      error_message = I18n.t("validations.shared.postcode")
       record.errors.add :postcode_full, :wrong_format, message: error_message
     end
   end
@@ -142,7 +142,7 @@ module Validations::SharedValidations
 
   def date_valid?(question, record)
     if record[question].is_a?(ActiveSupport::TimeWithZone) && record[question].year.zero?
-      record.errors.add question, I18n.t("validations.date.invalid_date")
+      record.errors.add question, I18n.t("validations.shared.date.invalid_date")
       false
     else
       true
@@ -153,7 +153,7 @@ module Validations::SharedValidations
     return if record.skip_dpo_validation
 
     if record.owning_organisation_id_changed? && record.owning_organisation.present? && !record.owning_organisation.data_protection_confirmed?
-      record.errors.add :owning_organisation_id, I18n.t("validations.setup.owning_organisation.data_sharing_agreement_not_signed")
+      record.errors.add :owning_organisation_id, I18n.t("validations.shared.setup.owning_organisation.data_sharing_agreement_not_signed")
     end
   end
 
@@ -169,9 +169,9 @@ private
     max = [question.prefix, number_with_delimiter(question.max, delimiter: ","), question.suffix].join("") if question.max
 
     if min && max
-      record.errors.add question.id.to_sym, :outside_the_range, message: I18n.t("validations.numeric.within_range", field:, min:, max:)
+      record.errors.add question.id.to_sym, :outside_the_range, message: I18n.t("validations.shared.numeric.within_range", field:, min:, max:)
     elsif min
-      record.errors.add question.id.to_sym, :under_min, message: I18n.t("validations.numeric.above_min", field:, min:)
+      record.errors.add question.id.to_sym, :under_min, message: I18n.t("validations.shared.numeric.above_min", field:, min:)
     end
   end
 end

@@ -369,7 +369,7 @@ class BulkUpload::Sales::Year2024::RowParser
 
   validates :field_116,
             numericality: {
-              message: I18n.t("validations.numeric.within_range", field: "Percentage discount", min: "0%", max: "70%"),
+              message: I18n.t("validations.shared.numeric.within_range", field: "Percentage discount", min: "0%", max: "70%"),
               greater_than_or_equal_to: 0,
               less_than_or_equal_to: 70,
               if: :discounted_ownership?,
