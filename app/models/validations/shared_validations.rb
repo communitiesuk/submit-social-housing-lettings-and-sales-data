@@ -134,7 +134,7 @@ module Validations::SharedValidations
         if record.sales?
           record.errors.add "relat#{n}", I18n.t("validations.sales.household.relat.one_partner")
         else
-          record.errors.add "relat#{n}", I18n.t("validations.household.relat.one_partner")
+          record.errors.add "relat#{n}", I18n.t("validations.lettings.household.relat.one_partner")
         end
       end
     end
