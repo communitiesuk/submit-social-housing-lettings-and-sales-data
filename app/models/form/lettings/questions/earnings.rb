@@ -2,6 +2,7 @@ class Form::Lettings::Questions::Earnings < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "earnings"
+    @copy_key = "lettings.income_and_benefits.income_amount.earnings"
     @type = "numeric"
     @width = 5
     @check_answers_card_number = 0
