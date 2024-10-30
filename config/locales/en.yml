@@ -281,36 +281,18 @@ en:
       invalid: "Role must be data accessor, data provider or data coordinator."
 
     setup:
-      intermediate_rent_product_name:
-        blank: "Enter name of other intermediate rent product." #
       saledate:
         year_not_two_or_four_digits: "Sale completion year must be 2 or 4 digits."
       type:
         percentage_bought_must_be_at_least_threshold: "The minimum increase in equity while staircasing is %{threshold}% for this shared ownership type."
 
       startdate:
-        current_collection_year: #
-          "Enter a date within the %{current_start_year_short} to %{current_end_year_short} collection year, which is between %{current_start_year_long} and %{current_end_year_long}." #
-        previous_and_current_collection_year: #
-          "Enter a date within the %{previous_start_year_short} to %{previous_end_year_short} or %{previous_end_year_short} to %{current_end_year_short} collection years, which is between %{previous_start_year_long} and %{current_end_year_long}." #
-        later_than_14_days_after: "The tenancy start date must not be later than 14 days from today’s date." #
         before_scheme_end_date: "The tenancy start date must be before the end date for this supported housing scheme."
         after_void_date: "Enter a tenancy start date that is after the void date."
         after_major_repair_date: "Enter a tenancy start date that is after the major repair date."
         year_not_two_or_four_digits: "Tenancy start year must be 2 or 4 digits."
         ten_years_after_void_date: "Enter a tenancy start date that is no more than 10 years after the void date."
         ten_years_after_mrc_date: "Enter a tenancy start date that is no more than 10 years after the major repairs completion date."
-        invalid_merged_organisations_start_date: #
-          same_organisation: "Enter a date when the owning and managing organisation was active. %{owning_organisation} became inactive on %{owning_organisation_merge_date} and was replaced by %{owning_absorbing_organisation}." #
-          same_merge: "Enter a date when the owning and managing organisations were active. %{owning_organisation} and %{managing_organisation} became inactive on %{owning_organisation_merge_date} and were replaced by %{owning_absorbing_organisation}."#
-          owning_organisation: "Enter a date when the owning organisation was active. %{owning_organisation} became inactive on %{owning_organisation_merge_date} and was replaced by %{owning_absorbing_organisation}."#
-          managing_organisation: "Enter a date when the managing organisation was active. %{managing_organisation} became inactive on %{managing_organisation_merge_date} and was replaced by %{managing_absorbing_organisation}."#
-          different_merge: "Enter a date when the owning and managing organisations were active. %{owning_organisation} became inactive on %{owning_organisation_merge_date} and was replaced by %{owning_absorbing_organisation}. %{managing_organisation} became inactive on %{managing_organisation_merge_date} and was replaced by %{managing_absorbing_organisation}."#
-        invalid_absorbing_organisations_start_date: #
-          same_organisation: "Enter a date when the owning and managing organisation was active. %{owning_organisation} became active on %{owning_organisation_available_from}."#
-          owning_organisation: "Enter a date when the owning organisation was active. %{owning_organisation} became active on %{owning_organisation_available_from}."#
-          managing_organisation: "Enter a date when the managing organisation was active. %{managing_organisation} became active on %{managing_organisation_available_from}."#
-          different_organisations: "Enter a date when the owning and managing organisations were active. %{owning_organisation} became active on %{owning_organisation_active_from}, and %{managing_organisation} became active on %{managing_organisation_active_from}."#
 
         location:
           deactivated:
@@ -333,17 +315,7 @@ en:
             startdate: "The scheme %{name} has no locations that are active on this date. Enter another date or choose another scheme."
             scheme_id: "The scheme %{name} has no locations that are active on this date. Enter another date or choose another scheme."
       owning_organisation:
-        invalid: "Please select the owning organisation or managing organisation that you belong to." #
         data_sharing_agreement_not_signed: "The organisation must accept the Data Sharing Agreement before it can be selected as the owning organisation."
-        inactive_merged_organisation: "The owning organisation must be active on the tenancy start date. %{owning_organisation} became inactive on %{owning_organisation_merge_date} and was replaced by %{owning_absorbing_organisation}." #
-        inactive_absorbing_organisation: "The owning organisation must be active on the tenancy start date. %{owning_organisation} became active on %{owning_organisation_available_from}." #
-      managing_organisation:
-        invalid: "Please select the owning organisation or managing organisation that you belong to." #
-        data_sharing_agreement_not_signed: "The organisation must accept the Data Sharing Agreement before it can be selected as the managing organisation." #
-        inactive_merged_organisation: "The managing organisation must be active on the tenancy start date. %{managing_organisation} became inactive on %{managing_organisation_merge_date} and was replaced by %{managing_absorbing_organisation}." #
-        inactive_absorbing_organisation: "The managing organisation must be active on the tenancy start date. %{managing_organisation} became active on %{managing_organisation_available_from}." #
-      assigned_to:
-        invalid: "Please select the owning organisation or managing organisation that you belong to." #
       lettype:
         general_needs_mismatch: "Lettings type must be a general needs type because you selected general needs when uploading the file."
         supported_housing_mismatch: "Lettings type must be a supported housing type because you selected supported housing when uploading the file."
@@ -352,10 +324,6 @@ en:
       needstype:
         lettype_not_general_needs: "This letting type is supported housing, but the needs type is general needs. Change either the needs type or the letting type."
         lettype_not_supported_housing: "This letting type is general needs, but the needs type is supported housing. Change either the needs type or the letting type."
-      location:
-        incomplete: "This location is incomplete. Select another location or update this one." #
-      scheme:
-        incomplete: "This scheme is incomplete. Select another scheme or update this one." #
 
     property:
       uprn:
@@ -616,7 +584,6 @@ en:
         during_deactivated_period: "The scheme is already deactivated during this date, please enter a different date."
       owning_organisation:
         does_not_own_stock: "Enter an organisation that owns housing stock."
-      no_completed_locations: "This scheme cannot be chosen as it has no completed locations." #
 
     location:
       postcode_blank: "Enter a postcode."
