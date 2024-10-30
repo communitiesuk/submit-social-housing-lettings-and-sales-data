@@ -21,7 +21,7 @@ RSpec.describe Validations::HouseholdValidations do
         record.rp_medwel = 1
         household_validator.validate_reasonable_preference(record)
         expect(record.errors["reasonable_preference_reason"])
-          .to include(match I18n.t("validations.household.reasonable_preference_reason.reason_not_required"))
+          .to include(match I18n.t("validations.lettings.household.reasonable_preference_reason.reason_not_required"))
       end
     end
   end
@@ -69,7 +69,7 @@ RSpec.describe Validations::HouseholdValidations do
             record.reason = 20
             record.reasonother = "Temp accommodation"
             household_validator.validate_reason_for_leaving_last_settled_home(record)
-            expect(record.errors["reason"]).to include(I18n.t("validations.household.reason.other_not_settled"))
+            expect(record.errors["reason"]).to include(I18n.t("validations.lettings.household.reason.other_not_settled"))
           end
 
           it "allows reasons that don't exactly match a phrase indicating homelessness" do
@@ -83,7 +83,7 @@ RSpec.describe Validations::HouseholdValidations do
             record.reason = 20
             record.reasonother = "  0homelessness ! "
             household_validator.validate_reason_for_leaving_last_settled_home(record)
-            expect(record.errors["reason"]).to include(I18n.t("validations.household.reason.other_not_settled"))
+            expect(record.errors["reason"]).to include(I18n.t("validations.lettings.household.reason.other_not_settled"))
           end
         end
       end
@@ -107,7 +107,7 @@ RSpec.describe Validations::HouseholdValidations do
     end
 
     context "when reason is don't know" do
-      let(:expected_error) { I18n.t("validations.household.underoccupation_benefitcap.dont_know_required") }
+      let(:expected_error) { I18n.t("validations.lettings.household.underoccupation_benefitcap.dont_know_required") }
 
       it "validates that under occupation benefit cap is also not known" do
         record.reason = 32
@@ -134,9 +134,9 @@ RSpec.describe Validations::HouseholdValidations do
         record.referral = 2
         household_validator.validate_reason_for_leaving_last_settled_home(record)
         expect(record.errors["reason"])
-          .to include(match(I18n.t("validations.household.reason.not_internal_transfer")))
+          .to include(match(I18n.t("validations.lettings.household.reason.not_internal_transfer")))
         expect(record.errors["referral"])
-          .to include(match(I18n.t("validations.household.referral.reason_permanently_decanted")))
+          .to include(match(I18n.t("validations.lettings.household.referral.reason_permanently_decanted")))
       end
     end
 
@@ -157,16 +157,16 @@ RSpec.describe Validations::HouseholdValidations do
         record.referral = 1
         household_validator.validate_referral(record)
         expect(record.errors["referral"])
-          .to include(match(I18n.t("validations.household.referral.la_general_needs.internal_transfer")))
+          .to include(match(I18n.t("validations.lettings.household.referral.la_general_needs.internal_transfer")))
         expect(record.errors["prevten"])
-          .to include(match(I18n.t("validations.household.prevten.la_general_needs.internal_transfer")))
+          .to include(match(I18n.t("validations.lettings.household.prevten.la_general_needs.internal_transfer")))
 
         record.prevten = 31
         household_validator.validate_referral(record)
         expect(record.errors["referral"])
-          .to include(match(I18n.t("validations.household.referral.la_general_needs.internal_transfer")))
+          .to include(match(I18n.t("validations.lettings.household.referral.la_general_needs.internal_transfer")))
         expect(record.errors["prevten"])
-          .to include(match(I18n.t("validations.household.prevten.la_general_needs.internal_transfer")))
+          .to include(match(I18n.t("validations.lettings.household.prevten.la_general_needs.internal_transfer")))
       end
     end
   end
@@ -178,7 +178,7 @@ RSpec.describe Validations::HouseholdValidations do
         record.reservist = 1
         household_validator.validate_armed_forces(record)
         expect(record.errors["reservist"])
-          .to include(match I18n.t("validations.household.reservist.injury_not_required"))
+          .to include(match I18n.t("validations.lettings.household.reservist.injury_not_required"))
       end
     end
 
@@ -188,7 +188,7 @@ RSpec.describe Validations::HouseholdValidations do
         record.reservist = 1
         household_validator.validate_armed_forces(record)
         expect(record.errors["reservist"])
-          .to include(match I18n.t("validations.household.reservist.injury_not_required"))
+          .to include(match I18n.t("validations.lettings.household.reservist.injury_not_required"))
       end
     end
 
@@ -225,7 +225,7 @@ RSpec.describe Validations::HouseholdValidations do
         record.leftreg = 0
         household_validator.validate_armed_forces(record)
         expect(record.errors["leftreg"])
-          .to include(match I18n.t("validations.household.leftreg.question_not_required"))
+          .to include(match I18n.t("validations.lettings.household.leftreg.question_not_required"))
       end
 
       it "expects that they served in the armed forces" do
@@ -300,9 +300,9 @@ RSpec.describe Validations::HouseholdValidations do
           record.relat2 = "P"
           household_validator.validate_person_age_matches_relationship(record)
           expect(record.errors["relat2"])
-            .to include(match I18n.t("validations.household.relat.child_under_16_lettings", person_num: 2))
+            .to include(match I18n.t("validations.lettings.household.relat.child_under_16_lettings", person_num: 2))
           expect(record.errors["age2"])
-            .to include(match I18n.t("validations.household.age.child_under_16_relat_lettings", person_num: 2))
+            .to include(match I18n.t("validations.lettings.household.age.child_under_16_relat_lettings", person_num: 2))
         end
 
         it "expects that person is a child of the tenant" do
@@ -346,9 +346,9 @@ RSpec.describe Validations::HouseholdValidations do
           record.ecstat2 = 1
           household_validator.validate_person_age_matches_economic_status(record)
           expect(record.errors["ecstat2"])
-            .to include(match I18n.t("validations.household.ecstat.child_under_16", person_num: 2))
+            .to include(match I18n.t("validations.lettings.household.ecstat.child_under_16", person_num: 2))
           expect(record.errors["age2"])
-            .to include(match I18n.t("validations.household.age.child_under_16_ecstat", person_num: 2))
+            .to include(match I18n.t("validations.lettings.household.age.child_under_16_ecstat", person_num: 2))
         end
 
         it "expects that person's economic status is Child" do
@@ -365,9 +365,9 @@ RSpec.describe Validations::HouseholdValidations do
           record.ecstat2 = 9
           household_validator.validate_person_age_matches_economic_status(record)
           expect(record.errors["ecstat2"])
-            .to include(match I18n.t("validations.household.ecstat.child_over_16", person_num: 2))
+            .to include(match I18n.t("validations.lettings.household.ecstat.child_over_16", person_num: 2))
           expect(record.errors["age2"])
-            .to include(match I18n.t("validations.household.age.child_over_16", person_num: 2))
+            .to include(match I18n.t("validations.lettings.household.age.child_over_16", person_num: 2))
         end
       end
     end
@@ -380,9 +380,9 @@ RSpec.describe Validations::HouseholdValidations do
         record.ecstat2 = 1
         household_validator.validate_person_age_matches_economic_status(record)
         expect(record.errors["ecstat2"])
-          .not_to include(match I18n.t("validations.household.ecstat.child_under_16", person_num: 2))
+          .not_to include(match I18n.t("validations.lettings.household.ecstat.child_under_16", person_num: 2))
         expect(record.errors["age2"])
-          .not_to include(match I18n.t("validations.household.age.child_under_16_ecstat", person_num: 2))
+          .not_to include(match I18n.t("validations.lettings.household.age.child_under_16_ecstat", person_num: 2))
       end
     end
   end
@@ -398,11 +398,11 @@ RSpec.describe Validations::HouseholdValidations do
           record.ecstat2 = 1
           household_validator.validate_person_age_and_relationship_matches_economic_status(record)
           expect(record.errors["ecstat2"])
-            .to include(match I18n.t("validations.household.ecstat.student_16_19.must_be_student", person_num: 2))
+            .to include(match I18n.t("validations.lettings.household.ecstat.student_16_19.must_be_student", person_num: 2))
           expect(record.errors["age2"])
-            .to include(match I18n.t("validations.household.age.student_16_19.cannot_be_16_19.child_not_student", person_num: 2))
+            .to include(match I18n.t("validations.lettings.household.age.student_16_19.cannot_be_16_19.child_not_student", person_num: 2))
           expect(record.errors["relat2"])
-            .to include(match I18n.t("validations.household.relat.student_16_19.cannot_be_child.16_19_not_student", person_num: 2))
+            .to include(match I18n.t("validations.lettings.household.relat.student_16_19.cannot_be_child.16_19_not_student", person_num: 2))
         end
 
         it "expects that person can be a full time student" do
@@ -452,11 +452,11 @@ RSpec.describe Validations::HouseholdValidations do
         record.relat2 = "C"
         household_validator.validate_person_age_and_relationship_matches_economic_status(record)
         expect(record.errors["relat2"])
-          .to include(match I18n.t("validations.household.relat.student_16_19.cannot_be_child.student_not_16_19"))
+          .to include(match I18n.t("validations.lettings.household.relat.student_16_19.cannot_be_child.student_not_16_19"))
         expect(record.errors["age2"])
-          .to include(match I18n.t("validations.household.age.student_16_19.must_be_16_19"))
+          .to include(match I18n.t("validations.lettings.household.age.student_16_19.must_be_16_19"))
         expect(record.errors["ecstat2"])
-          .to include(match I18n.t("validations.household.ecstat.student_16_19.cannot_be_student.child_not_16_19"))
+          .to include(match I18n.t("validations.lettings.household.ecstat.student_16_19.cannot_be_student.child_not_16_19"))
       end
     end
 
@@ -516,7 +516,7 @@ RSpec.describe Validations::HouseholdValidations do
       record.illness_type_1 = 1
       household_validator.validate_condition_effects(record)
       expect(record.errors["condition_effects"])
-        .to include(match I18n.t("validations.household.condition_effects.no_choices"))
+        .to include(match I18n.t("validations.lettings.household.condition_effects.no_choices"))
     end
 
     it "validates hearing can't be selected if answer to anyone in household with health condition is not yes" do
@@ -524,7 +524,7 @@ RSpec.describe Validations::HouseholdValidations do
       record.illness_type_2 = 1
       household_validator.validate_condition_effects(record)
       expect(record.errors["condition_effects"])
-        .to include(match I18n.t("validations.household.condition_effects.no_choices"))
+        .to include(match I18n.t("validations.lettings.household.condition_effects.no_choices"))
     end
 
     it "validates mobility can't be selected if answer to anyone in household with health condition is not yes" do
@@ -532,7 +532,7 @@ RSpec.describe Validations::HouseholdValidations do
       record.illness_type_3 = 1
       household_validator.validate_condition_effects(record)
       expect(record.errors["condition_effects"])
-        .to include(match I18n.t("validations.household.condition_effects.no_choices"))
+        .to include(match I18n.t("validations.lettings.household.condition_effects.no_choices"))
     end
 
     it "validates dexterity can't be selected if answer to anyone in household with health condition is not yes" do
@@ -540,7 +540,7 @@ RSpec.describe Validations::HouseholdValidations do
       record.illness_type_4 = 1
       household_validator.validate_condition_effects(record)
       expect(record.errors["condition_effects"])
-        .to include(match I18n.t("validations.household.condition_effects.no_choices"))
+        .to include(match I18n.t("validations.lettings.household.condition_effects.no_choices"))
     end
 
     it "validates learning or understanding or concentrating can't be selected if answer to anyone in household with health condition is not yes" do
@@ -548,7 +548,7 @@ RSpec.describe Validations::HouseholdValidations do
       record.illness_type_5 = 1
       household_validator.validate_condition_effects(record)
       expect(record.errors["condition_effects"])
-        .to include(match I18n.t("validations.household.condition_effects.no_choices"))
+        .to include(match I18n.t("validations.lettings.household.condition_effects.no_choices"))
     end
 
     it "validates memory can't be selected if answer to anyone in household with health condition is not yes" do
@@ -556,7 +556,7 @@ RSpec.describe Validations::HouseholdValidations do
       record.illness_type_6 = 1
       household_validator.validate_condition_effects(record)
       expect(record.errors["condition_effects"])
-        .to include(match I18n.t("validations.household.condition_effects.no_choices"))
+        .to include(match I18n.t("validations.lettings.household.condition_effects.no_choices"))
     end
 
     it "validates mental health can't be selected if answer to anyone in household with health condition is not yes" do
@@ -564,7 +564,7 @@ RSpec.describe Validations::HouseholdValidations do
       record.illness_type_7 = 1
       household_validator.validate_condition_effects(record)
       expect(record.errors["condition_effects"])
-        .to include(match I18n.t("validations.household.condition_effects.no_choices"))
+        .to include(match I18n.t("validations.lettings.household.condition_effects.no_choices"))
     end
 
     it "validates stamina or breathing or fatigue can't be selected if answer to anyone in household with health condition is not yes" do
@@ -572,7 +572,7 @@ RSpec.describe Validations::HouseholdValidations do
       record.illness_type_8 = 1
       household_validator.validate_condition_effects(record)
       expect(record.errors["condition_effects"])
-        .to include(match I18n.t("validations.household.condition_effects.no_choices"))
+        .to include(match I18n.t("validations.lettings.household.condition_effects.no_choices"))
     end
 
     it "validates socially or behaviourally can't be selected if answer to anyone in household with health condition is not yes" do
@@ -580,7 +580,7 @@ RSpec.describe Validations::HouseholdValidations do
       record.illness_type_9 = 1
       household_validator.validate_condition_effects(record)
       expect(record.errors["condition_effects"])
-        .to include(match I18n.t("validations.household.condition_effects.no_choices"))
+        .to include(match I18n.t("validations.lettings.household.condition_effects.no_choices"))
     end
 
     it "validates other can't be selected if answer to anyone in household with health condition is not yes" do
@@ -588,7 +588,7 @@ RSpec.describe Validations::HouseholdValidations do
       record.illness_type_10 = 1
       household_validator.validate_condition_effects(record)
       expect(record.errors["condition_effects"])
-        .to include(match I18n.t("validations.household.condition_effects.no_choices"))
+        .to include(match I18n.t("validations.lettings.household.condition_effects.no_choices"))
     end
 
     it "expects that an illness can be selected if answer to anyone in household with health condition is yes " do
@@ -647,7 +647,7 @@ RSpec.describe Validations::HouseholdValidations do
         record.previous_la_known = 1
         household_validator.validate_prevloc(record)
         expect(record.errors["prevloc"])
-          .to include(match I18n.t("validations.household.previous_la_known"))
+          .to include(match I18n.t("validations.lettings.household.previous_la_known"))
       end
     end
 
@@ -657,9 +657,9 @@ RSpec.describe Validations::HouseholdValidations do
         record.renewal = 1
         household_validator.validate_layear(record)
         expect(record.errors["layear"])
-          .to include(match I18n.t("validations.household.renewal_just_moved_to_area.layear"))
+          .to include(match I18n.t("validations.lettings.household.renewal_just_moved_to_area.layear"))
         expect(record.errors["renewal"])
-          .to include(match I18n.t("validations.household.renewal_just_moved_to_area.renewal"))
+          .to include(match I18n.t("validations.lettings.household.renewal_just_moved_to_area.renewal"))
       end
 
       context "when validating layear and prevloc" do
@@ -670,17 +670,17 @@ RSpec.describe Validations::HouseholdValidations do
           record.startdate = Time.zone.now
           household_validator.validate_layear_and_prevloc(record)
           expect(record.errors["layear"])
-            .to include(match I18n.t("validations.household.same_la_just_moved_to_area.layear"))
+            .to include(match I18n.t("validations.lettings.household.same_la_just_moved_to_area.layear"))
           expect(record.errors["prevloc"])
-            .to include(match I18n.t("validations.household.same_la_just_moved_to_area.previous_la"))
+            .to include(match I18n.t("validations.lettings.household.same_la_just_moved_to_area.previous_la"))
           expect(record.errors["ppostcode_full"])
-          .to include(match I18n.t("validations.household.same_la_just_moved_to_area.previous_la"))
+          .to include(match I18n.t("validations.lettings.household.same_la_just_moved_to_area.previous_la"))
           expect(record.errors["la"])
-            .to include(match I18n.t("validations.household.same_la_just_moved_to_area.current_la"))
+            .to include(match I18n.t("validations.lettings.household.same_la_just_moved_to_area.current_la"))
           expect(record.errors["postcode_full"])
-            .to include(match I18n.t("validations.household.same_la_just_moved_to_area.current_la"))
+            .to include(match I18n.t("validations.lettings.household.same_la_just_moved_to_area.current_la"))
           expect(record.errors["uprn"])
-            .to include(match I18n.t("validations.household.same_la_just_moved_to_area.current_la"))
+            .to include(match I18n.t("validations.lettings.household.same_la_just_moved_to_area.current_la"))
         end
       end
     end
@@ -693,7 +693,7 @@ RSpec.describe Validations::HouseholdValidations do
         record.prevten = 4
         household_validator.validate_previous_housing_situation(record)
         expect(record.errors["prevten"])
-          .to include(match I18n.t("validations.household.prevten.non_temp_accommodation"))
+          .to include(match I18n.t("validations.lettings.household.prevten.non_temp_accommodation"))
       end
     end
 
@@ -703,9 +703,9 @@ RSpec.describe Validations::HouseholdValidations do
         record.age1 = 26
         household_validator.validate_previous_housing_situation(record)
         expect(record.errors["prevten"])
-          .to include(match I18n.t("validations.household.prevten.over_25_foster_care"))
+          .to include(match I18n.t("validations.lettings.household.prevten.over_25_foster_care"))
         expect(record.errors["age1"])
-          .to include(match I18n.t("validations.household.age.lead.over_25"))
+          .to include(match I18n.t("validations.lettings.household.age.lead.over_25"))
       end
     end
 
@@ -740,9 +740,9 @@ RSpec.describe Validations::HouseholdValidations do
           record.prevten = prevten[:code]
           household_validator.validate_previous_housing_situation(record)
           expect(record.errors["prevten"])
-            .to include(match I18n.t("validations.household.prevten.internal_transfer", prevten: prevten[:label]))
+            .to include(match I18n.t("validations.lettings.household.prevten.internal_transfer", prevten: prevten[:label]))
           expect(record.errors["referral"])
-            .to include(match I18n.t("validations.household.referral.prevten_invalid", prevten: ""))
+            .to include(match I18n.t("validations.lettings.household.referral.prevten_invalid", prevten: ""))
         end
       end
     end
