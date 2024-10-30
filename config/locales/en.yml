@@ -234,7 +234,7 @@ en:
     scheme_deleted: "%{service_name} has been deleted."
     user_deleted: "%{name} has been deleted."
     organisation_deleted: "%{name} has been deleted."
-    user_updated: 
+    user_updated:
       self: "Your account details have been updated."
       other: "%{name}’s details have been updated."
 
@@ -362,15 +362,6 @@ en:
         invalid: "UPRN must be 12 digits or less."
       uprn_known:
         invalid: "You must answer UPRN known?"
-      mrcdate:
-        before_tenancy_start: "Enter a major repairs date that is before the tenancy start date."
-        not_first_let: "Major repairs date must not be completed if the tenancy is a first let."
-        ten_years_before_tenancy_start: "Enter a major repairs completion date that is no more than 10 years before the tenancy start date."
-        before_void_date: "Major repairs date must be after the void date if provided."
-      void_date:
-        ten_years_before_tenancy_start: "Enter a void date no more than 10 years before the tenancy start date."
-        before_tenancy_start: "Enter a void date that is before the tenancy start date."
-        after_mrcdate: "Void date must be before the major repairs date if provided."
       la:
         la_invalid_for_org: "%{org_name} does not operate in %{la_name}."
         postcode_invalid_for_org: "Enter a postcode in an area covered by %{org_name}."
