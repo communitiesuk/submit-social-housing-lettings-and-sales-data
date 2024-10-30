@@ -5,7 +5,7 @@ RSpec.describe Form::Lettings::Questions::StarterTenancyType, type: :model do
 
   let(:question_id) { nil }
   let(:question_definition) { nil }
-  let(:page) { instance_double(Form::Page) }
+  let(:page) { instance_double(Form::Page, id: "starter_tenancy_type") }
   let(:subsection) { instance_double(Form::Subsection) }
   let(:form) { instance_double(Form, start_date: Time.zone.local(2023, 4, 1)) }
 

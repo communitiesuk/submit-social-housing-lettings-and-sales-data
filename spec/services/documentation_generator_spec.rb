@@ -89,7 +89,7 @@ describe DocumentationGenerator do
   end
 
   describe ":describe_soft_validations" do
-    let(:all_validation_methods) { ["rent_in_soft_min_range?"] }
+    let(:all_validation_methods) { ["rent_soft_validation_triggered?"] }
     let(:response) do
       { "choices" => [{ "message" => { "tool_calls" => [{ "function" => { "arguments" =>
               "{\n  \"description\": \"Validates the format.\",\n  \"validation_type\": \"format\",\n  \"other_validated_models\": \"User\"}" } }] } }] }
@@ -100,7 +100,7 @@ describe DocumentationGenerator do
 
       it "creates new validation documentation records" do
         expect { described_class.new.describe_soft_validations(client, all_validation_methods, all_helper_methods, log_type) }.to change(LogValidation, :count)
-        expect(LogValidation.where(validation_name: "rent_in_soft_min_range?").count).to be_positive
+        expect(LogValidation.where(validation_name: "rent_soft_validation_triggered?").count).to be_positive
         any_validation = LogValidation.first
         expect(any_validation.description).to eq("Validates the format.")
         expect(any_validation.field).not_to be_empty
