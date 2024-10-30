@@ -2,6 +2,7 @@ class Form::Sales::Pages::Age1 < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "buyer_1_age"
+    @copy_key = "sales.household_characteristics.age1"
     @depends_on = [
       {
         "buyer_has_seen_privacy_notice?" => true,

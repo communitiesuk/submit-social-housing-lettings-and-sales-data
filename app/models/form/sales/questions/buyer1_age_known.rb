@@ -2,11 +2,9 @@ class Form::Sales::Questions::Buyer1AgeKnown < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "age1_known"
-    @check_answer_label = "Buyer 1’s age"
-    @header = "Do you know buyer 1’s age?"
     @type = "radio"
+    @copy_key = "sales.household_characteristics.age1.age1_known"
     @answer_options = ANSWER_OPTIONS
-    @hint_text = "Buyer 1 is the person in the household who does the most paid work. If it’s a joint purchase and the buyers do the same amount of paid work, buyer 1 is whoever is the oldest."
     @conditional_for = {
       "age1" => [0],
     }
