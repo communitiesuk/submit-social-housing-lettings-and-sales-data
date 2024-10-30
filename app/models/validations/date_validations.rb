@@ -35,19 +35,19 @@ module Validations::DateValidations
     return unless record.startdate && date_valid?("startdate", record)
 
     if record["voiddate"].present? && record.startdate < record["voiddate"]
-      record.errors.add :startdate, I18n.t("validations.setup.startdate.after_void_date")
+      record.errors.add :startdate, I18n.t("validations.lettings.date.startdate.after_void_date")
     end
 
     if record["mrcdate"].present? && record.startdate < record["mrcdate"]
-      record.errors.add :startdate, I18n.t("validations.setup.startdate.after_major_repair_date")
+      record.errors.add :startdate, I18n.t("validations.lettings.date.startdate.after_major_repair_date")
     end
 
     if record["voiddate"].present? && record["startdate"].to_date - record["voiddate"].to_date > 3650
-      record.errors.add :startdate, I18n.t("validations.setup.startdate.ten_years_after_void_date")
+      record.errors.add :startdate, I18n.t("validations.lettings.date.startdate.ten_years_after_void_date")
     end
 
     if record["mrcdate"].present? && record["startdate"].to_date - record["mrcdate"].to_date > 3650
-      record.errors.add :startdate, I18n.t("validations.setup.startdate.ten_years_after_mrc_date")
+      record.errors.add :startdate, I18n.t("validations.lettings.date.startdate.ten_years_after_mrc_date")
     end
   end
 

@@ -295,11 +295,7 @@ en:
           "Enter a date within the %{previous_start_year_short} to %{previous_end_year_short} or %{previous_end_year_short} to %{current_end_year_short} collection years, which is between %{previous_start_year_long} and %{current_end_year_long}."
         later_than_14_days_after: "The tenancy start date must not be later than 14 days from today’s date."
         before_scheme_end_date: "The tenancy start date must be before the end date for this supported housing scheme."
-        after_void_date: "Enter a tenancy start date that is after the void date."
-        after_major_repair_date: "Enter a tenancy start date that is after the major repair date."
         year_not_two_or_four_digits: "Tenancy start year must be 2 or 4 digits."
-        ten_years_after_void_date: "Enter a tenancy start date that is no more than 10 years after the void date."
-        ten_years_after_mrc_date: "Enter a tenancy start date that is no more than 10 years after the major repairs completion date."
         invalid_merged_organisations_start_date:
           same_organisation: "Enter a date when the owning and managing organisation was active. %{owning_organisation} became inactive on %{owning_organisation_merge_date} and was replaced by %{owning_absorbing_organisation}."
           same_merge: "Enter a date when the owning and managing organisations were active. %{owning_organisation} and %{managing_organisation} became inactive on %{owning_organisation_merge_date} and were replaced by %{owning_absorbing_organisation}."
