@@ -10,7 +10,7 @@ module Validations::TenancyValidations
     min_tenancy_length = 1
     return if record.tenancylength.to_i.between?(min_tenancy_length, 99)
 
-    message = I18n.t("validations.tenancy.length.invalid_fixed", min_tenancy_length:)
+    message = I18n.t("validations.lettings.tenancy.length.invalid_fixed", min_tenancy_length:)
     record.errors.add :needstype, message
     record.errors.add :tenancylength, :tenancylength_invalid, message: message
     record.errors.add :tenancy, message
@@ -23,7 +23,7 @@ module Validations::TenancyValidations
     min_tenancy_length = 2
     return if record.tenancylength.to_i.between?(min_tenancy_length, 99)
 
-    message = I18n.t("validations.tenancy.length.invalid_fixed", min_tenancy_length:)
+    message = I18n.t("validations.lettings.tenancy.length.invalid_fixed", min_tenancy_length:)
     record.errors.add :needstype, message
     record.errors.add :rent_type, message
     record.errors.add :tenancylength, :tenancylength_invalid, message: message
@@ -37,7 +37,7 @@ module Validations::TenancyValidations
     min_tenancy_length = 1
     return if record.tenancylength.to_i.between?(min_tenancy_length, 99)
 
-    message = I18n.t("validations.tenancy.length.invalid_fixed", min_tenancy_length:)
+    message = I18n.t("validations.lettings.tenancy.length.invalid_fixed", min_tenancy_length:)
     record.errors.add :needstype, message
     record.errors.add :rent_type, message
     record.errors.add :tenancylength, :tenancylength_invalid, message: message
@@ -50,7 +50,7 @@ module Validations::TenancyValidations
     min_tenancy_length = 1
     return if record.tenancylength.to_i.between?(min_tenancy_length, 99)
 
-    message = I18n.t("validations.tenancy.length.invalid_periodic", min_tenancy_length:)
+    message = I18n.t("validations.lettings.tenancy.length.invalid_periodic", min_tenancy_length:)
     record.errors.add :tenancylength, :tenancylength_invalid, message: message
     record.errors.add :tenancy, message
   end
@@ -59,7 +59,7 @@ module Validations::TenancyValidations
     return if record.tenancylength.blank?
     return if record.tenancy_type_fixed_term? || record.is_periodic_tenancy?
 
-    message = I18n.t("validations.tenancy.length.fixed_term_not_required")
+    message = I18n.t("validations.lettings.tenancy.length.fixed_term_not_required")
     record.errors.add :tenancylength, :tenancylength_invalid, message: message
     record.errors.add :tenancy, message
   end
@@ -72,8 +72,8 @@ module Validations::TenancyValidations
     return unless record.collection_start_year && record.joint
 
     if record.hhmemb == 1 && record.joint == 1 && record.collection_start_year >= 2022
-      record.errors.add :joint, :not_joint_tenancy, message: I18n.t("validations.tenancy.not_joint")
-      record.errors.add :hhmemb, I18n.t("validations.tenancy.joint_more_than_one_member")
+      record.errors.add :joint, :not_joint_tenancy, message: I18n.t("validations.lettings.tenancy.joint.sole_tenancy")
+      record.errors.add :hhmemb, I18n.t("validations.lettings.tenancy.joint.multiple_members_required")
     end
   end
 end
