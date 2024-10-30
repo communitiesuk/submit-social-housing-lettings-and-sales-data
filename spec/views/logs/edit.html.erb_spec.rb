@@ -1,11 +1,13 @@
 require "rails_helper"
 
 RSpec.describe "logs/edit.html.erb" do
+  let(:current_user) { create(:user, :support) }
+
   before do
     Timecop.freeze(Time.zone.local(2024, 3, 1))
     Singleton.__init__(FormHandler)
     assign(:log, log)
-    sign_in create(:user, :support)
+    sign_in current_user
   end
 
   after do
@@ -17,7 +19,7 @@ RSpec.describe "logs/edit.html.erb" do
     let(:log) { create(:lettings_log, :in_progress) }
 
     it "there is no link back to log type root" do
-      render
+      render template: "logs/edit", locals: { current_user:, bulk_upload_filter_applied: false }
 
       fragment = Capybara::Node::Simple.new(rendered)
 
@@ -25,7 +27,7 @@ RSpec.describe "logs/edit.html.erb" do
     end
 
     it "has link 'Delete log'" do
-      render
+      render template: "logs/edit", locals: { current_user:, bulk_upload_filter_applied: false }
 
       fragment = Capybara::Node::Simple.new(rendered)
 
@@ -38,7 +40,7 @@ RSpec.describe "logs/edit.html.erb" do
       let(:log) { create(:lettings_log, :completed) }
 
       it "has link 'Back to lettings logs'" do
-        render
+        render template: "logs/edit", locals: { current_user:, bulk_upload_filter_applied: false }
 
         fragment = Capybara::Node::Simple.new(rendered)
 
@@ -46,7 +48,7 @@ RSpec.describe "logs/edit.html.erb" do
       end
 
       it "has link 'Delete log'" do
-        render
+        render template: "logs/edit", locals: { current_user:, bulk_upload_filter_applied: false }
 
         fragment = Capybara::Node::Simple.new(rendered)
 
@@ -58,7 +60,7 @@ RSpec.describe "logs/edit.html.erb" do
       let(:log) { create(:sales_log, :completed) }
 
       it "has link 'Back to sales logs'" do
-        render
+        render template: "logs/edit", locals: { current_user:, bulk_upload_filter_applied: false }
 
         fragment = Capybara::Node::Simple.new(rendered)
 
@@ -66,7 +68,7 @@ RSpec.describe "logs/edit.html.erb" do
       end
 
       it "has link 'Delete log'" do
-        render
+        render template: "logs/edit", locals: { current_user:, bulk_upload_filter_applied: false }
 
         fragment = Capybara::Node::Simple.new(rendered)
 
@@ -79,7 +81,7 @@ RSpec.describe "logs/edit.html.erb" do
       let(:log) { create(:lettings_log, :completed, bulk_upload:, creation_method: "bulk upload") }
 
       it "has link 'Back to uploaded logs'" do
-        render
+        render template: "logs/edit", locals: { current_user:, bulk_upload_filter_applied: true }
 
         fragment = Capybara::Node::Simple.new(rendered)
 
@@ -87,7 +89,7 @@ RSpec.describe "logs/edit.html.erb" do
       end
 
       it "has link 'Delete log'" do
-        render
+        render template: "logs/edit", locals: { current_user:, bulk_upload_filter_applied: true }
 
         fragment = Capybara::Node::Simple.new(rendered)
 
@@ -99,7 +101,7 @@ RSpec.describe "logs/edit.html.erb" do
       let(:log) { create(:lettings_log, :completed, bulk_upload: nil, creation_method: "bulk upload") }
 
       it "does not have link 'Back to uploaded logs'" do
-        render
+        render template: "logs/edit", locals: { current_user:, bulk_upload_filter_applied: false }
 
         fragment = Capybara::Node::Simple.new(rendered)
 
@@ -112,7 +114,7 @@ RSpec.describe "logs/edit.html.erb" do
       let(:log) { create(:sales_log, :completed, bulk_upload:, creation_method: "bulk upload") }
 
       it "has link 'Back to uploaded logs'" do
-        render
+        render template: "logs/edit", locals: { current_user:, bulk_upload_filter_applied: true }
 
         fragment = Capybara::Node::Simple.new(rendered)
 
@@ -120,7 +122,7 @@ RSpec.describe "logs/edit.html.erb" do
       end
 
       it "has link 'Delete log'" do
-        render
+        render template: "logs/edit", locals: { current_user:, bulk_upload_filter_applied: true }
 
         fragment = Capybara::Node::Simple.new(rendered)
 

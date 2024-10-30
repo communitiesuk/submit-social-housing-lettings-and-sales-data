@@ -27,8 +27,7 @@ RSpec.describe Form::Lettings::Subsections::PropertyInformation, type: :model do
             uprn_confirmation
             address
             property_local_authority
-            local_authority_min_rent_value_check
-            local_authority_max_rent_value_check
+            local_authority_rent_value_check
             first_time_property_let_as_social_housing
             property_let_type
             property_vacancy_reason_not_first_let
@@ -38,8 +37,7 @@ RSpec.describe Form::Lettings::Subsections::PropertyInformation, type: :model do
             property_building_type
             property_wheelchair_accessible
             property_number_of_bedrooms
-            beds_min_rent_value_check
-            beds_max_rent_value_check
+            beds_rent_value_check
             void_date
             void_date_value_check
             property_major_repairs
@@ -66,8 +64,7 @@ RSpec.describe Form::Lettings::Subsections::PropertyInformation, type: :model do
             uprn_selection
             address
             property_local_authority
-            local_authority_min_rent_value_check
-            local_authority_max_rent_value_check
+            local_authority_rent_value_check
             first_time_property_let_as_social_housing
             property_let_type
             property_vacancy_reason_not_first_let
@@ -76,8 +73,7 @@ RSpec.describe Form::Lettings::Subsections::PropertyInformation, type: :model do
             property_building_type
             property_wheelchair_accessible
             property_number_of_bedrooms
-            beds_min_rent_value_check
-            beds_max_rent_value_check
+            beds_rent_value_check
             void_date
             void_date_value_check
             property_major_repairs
