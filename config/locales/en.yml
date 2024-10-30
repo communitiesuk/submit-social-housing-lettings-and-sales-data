@@ -603,12 +603,6 @@ en:
       outside_range_title: "You told us the rent is %{brent}."
       informative_text: "This is %{higher_or_lower} than we would expect."
       hint_text: "Check the following:<ul class=\"govuk-body-l app-panel--interruption\"><li>the decimal point</li><li>the frequency, for example every week or every calendar month</li><li>the rent type is correct, for example affordable or social rent</li></ul>"
-    staircase_owned:
-      title_text:
-        one: "You told us that the buyer now owns %{stairowned} of the property."
-        two: "You told us that the buyers now own %{stairowned} of the property."
-      hint_text: "The maximum percentage that can be owned under the Older Persons Shared Ownership scheme is 75%, unless the property was funded outside the Affordable Homes Programme.
-Make sure these answers are correct."
     retirement:
       min:
         title: "You told us this person is aged %{age} years and retired."
@@ -616,9 +610,6 @@ Make sure these answers are correct."
       max:
         title: "You told us this person is over 66 and not retired."
         hint_text: "The minimum expected retirement age in England is 66."
-    extra_borrowing:
-      title_text: "You told us that the mortgage and deposit total is %{mortgage_and_deposit_total}."
-      hint_text: "This is higher than the purchase price minus the discount."
     pregnancy:
       title: "You told us somebody in the household is pregnant."
       all_male_tenants: "You also told us that all the tenants living at the property are male."
@@ -629,19 +620,6 @@ Make sure these answers are correct."
     void_date:
       title_text: "You told us that the property has been vacant for more than 2 years."
       hint_text: "This is higher than we would expect."
-    shared_ownership_deposit:
-      title_text: "You told us that the %{mortgage_deposit_and_discount_error_fields} add up to %{mortgage_deposit_and_discount_total}."
-    staircase_bought_seems_high:
-      title_text: "You told us that %{percentage}% was bought in this staircasing transaction."
-      hint_text: "Most staircasing transactions are less than 50%"
-    discounted_sale_value:
-      title_text: "Mortgage, deposit, and grant total must equal %{value_with_discount}."
-      informative_text: "Your given mortgage, deposit and grant total is %{mortgage_deposit_and_grant_total}."
-    care_home_charges:
-      title_text: "Care home charges should be provided if this is a care home accommodation."
-    grant:
-      title_text: "You told us that the grant amount is %{grant}."
-      hint_text: "Loans, grants and subsidies are usually between £9,000 and £16,000."
     referral:
       title_text: "Are you sure?"
       hint_text: "This is a general needs log, and this referral type is for supported housing."
@@ -654,16 +632,11 @@ Make sure these answers are correct."
     charges:
       informative_text: "This is higher than we would expect."
       hint_text: "Check the following:<ul class=\"govuk-body-l app-panel--interruption\"><li>the decimal point</li><li>the frequency, for example every week or every calendar month</li><li>the needs type</li></ul>"
-    deposit_and_mortgage:
-      title_text: "You told us the mortgage amount was %{mortgage}, the cash deposit was %{deposit} and the discount was %{discount}."
-      hint_text: "We would expect the mortgage amount and the deposit added together to be the same as the purchase price minus the discount."
     reasonother:
       title_text: "You told us that the tenant’s main reason for leaving their last settled home was %{reasonother}."
       informative_text: "The reason you have entered looks very similar to one of the existing response categories.
                          Please check the categories and select the appropriate one.
                          If the existing categories are not suitable, please confirm here to move onto the next question."
-    hodate:
-      must_be_less_than_3_years_from_saledate: "You told us practical completion or handover date is more than 3 years before sale completion date."
     saledate:
       must_be_less_than_3_years_from_hodate: "You told us sale completion date is more than 3 years after practical completion or handover date."
     partner_under_16_lettings:
