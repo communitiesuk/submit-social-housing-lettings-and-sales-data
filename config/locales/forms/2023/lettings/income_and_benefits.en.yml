@@ -23,7 +23,7 @@ en:
           hb:
             page_header: ""
             check_answer_label: "Housing-related benefits received"
-            hint_text: ""
+            hint_text: "This is about when the tenant is in their new let. If they are unsure about the situation for their new let and their financial and working situation hasn’t changed significantly, answer based on what housing-related benefits they currently receive."
             question_text: "Is the household likely to be receiving any of these housing-related benefits?"
 
           benefits:
@@ -94,7 +94,7 @@ en:
             page_header: ""
             check_answer_label: "Any outstanding amount for basic rent and charges"
             hint_text: "Also known as the ‘outstanding amount’."
-            question_text: ""
+            question_text: "After the household has received any housing-related benefits, will they still need to pay for rent and charges?"
 
           outstanding_amount:
             page_header: ""
