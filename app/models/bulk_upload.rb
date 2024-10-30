@@ -32,6 +32,8 @@ class BulkUpload < ApplicationRecord
   scope :filter_by_user, ->(user_id, _user = nil) { user_id.present? ? where(user_id:) : all }
   scope :filter_by_uploading_organisation, ->(organisation_id, _user = nil) { where(organisation_id:) }
 
+  has_paper_trail
+
   def completed?
     incomplete_logs = logs.where.not(status: "completed")
     !incomplete_logs.exists?
