@@ -76,12 +76,12 @@ RSpec.describe Validations::TenancyValidations do
       {
         name: "assured shorthold",
         code: 4,
-        expected_error: ->(min_tenancy_length) { I18n.t("validations.lettings.tenancy.length.invalid_fixed", min_tenancy_length:) },
+        expected_error: ->(min_tenancy_length) { I18n.t("validations.lettings.tenancy.tenancylength.invalid_fixed_tenancylength", min_tenancy_length:) },
       },
       {
         name: "secure fixed term",
         code: 6,
-        expected_error: ->(min_tenancy_length) { I18n.t("validations.lettings.tenancy.length.invalid_fixed", min_tenancy_length:) },
+        expected_error: ->(min_tenancy_length) { I18n.t("validations.lettings.tenancy.tenancylength.invalid_fixed_tenancylength", min_tenancy_length:) },
       },
     ]
 
@@ -211,7 +211,7 @@ RSpec.describe Validations::TenancyValidations do
       periodic_tenancy_case = {
         name: "periodic",
         code: 8,
-        expected_error: ->(min_tenancy_length) { I18n.t("validations.lettings.tenancy.length.invalid_periodic", min_tenancy_length:) },
+        expected_error: ->(min_tenancy_length) { I18n.t("validations.lettings.tenancy.tenancylength.invalid_periodic_tenancylength", min_tenancy_length:) },
       }
       error_fields = %w[tenancylength tenancy]
       include_examples "adds expected errors based on the tenancy length", periodic_tenancy_case, error_fields, 1
@@ -237,9 +237,8 @@ RSpec.describe Validations::TenancyValidations do
 
             it "adds errors to tenancylength and tenancy" do
               tenancy_validator.validate_tenancy_length_blank_when_not_required(record)
-              expected_error = I18n.t("validations.lettings.tenancy.length.fixed_term_not_required")
-              expect(record.errors["tenancylength"]).to include(expected_error)
-              expect(record.errors["tenancy"]).to include(expected_error)
+              expect(record.errors["tenancylength"]).to include(I18n.t("validations.lettings.tenancy.tenancylength.fixed_term_not_required"))
+              expect(record.errors["tenancy"]).to include(I18n.t("validations.lettings.tenancy.tenancy.fixed_term_not_required"))
             end
           end
 

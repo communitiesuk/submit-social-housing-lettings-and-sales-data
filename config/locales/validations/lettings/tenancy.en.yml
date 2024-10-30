@@ -2,10 +2,23 @@ en:
   validations:
     lettings:
       tenancy:
-        length:
+        needstype:
+          invalid_fixed_tenancylength: "Enter a tenancy length between %{min_tenancy_length} and 99 years for a tenancy of this type."
+          invalid_periodic_tenancylength: "Enter a tenancy length between %{min_tenancy_length} and 99 years (or don't specify the length) for a tenancy of this type."
+
+        tenancylength:
+          invalid_fixed_tenancylength: "Enter a tenancy length between %{min_tenancy_length} and 99 years for a tenancy of this type."
+          invalid_periodic_tenancylength: "Enter a tenancy length between %{min_tenancy_length} and 99 years (or don't specify the length) for a tenancy of this type."
           fixed_term_not_required: "You must only answer the length of the tenancy if it's fixed-term."
-          invalid_fixed: "Enter a tenancy length between %{min_tenancy_length} and 99 years for a tenancy of this type."
-          invalid_periodic: "Enter a tenancy length between %{min_tenancy_length} and 99 years (or don't specify the length) for a tenancy of this type."
+
+        tenancy:
+          invalid_fixed_tenancylength: "Enter a tenancy length between %{min_tenancy_length} and 99 years for a tenancy of this type."
+          invalid_periodic_tenancylength: "Enter a tenancy length between %{min_tenancy_length} and 99 years (or don't specify the length) for a tenancy of this type."
+          fixed_term_not_required: "You must only answer the length of the tenancy if it's fixed-term."
+
+        rent_type:
+          invalid_fixed_tenancylength: "Enter a tenancy length between %{min_tenancy_length} and 99 years for a tenancy of this type."
+          invalid_periodic_tenancylength: "Enter a tenancy length between %{min_tenancy_length} and 99 years (or don't specify the length) for a tenancy of this type."
 
         joint:
           sole_tenancy: "This cannot be a joint tenancy as you've told us there's only one person in the household."

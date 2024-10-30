@@ -10,10 +10,9 @@ module Validations::TenancyValidations
     min_tenancy_length = 1
     return if record.tenancylength.to_i.between?(min_tenancy_length, 99)
 
-    message = I18n.t("validations.lettings.tenancy.length.invalid_fixed", min_tenancy_length:)
-    record.errors.add :needstype, message
-    record.errors.add :tenancylength, :tenancylength_invalid, message: message
-    record.errors.add :tenancy, message
+    record.errors.add :needstype, I18n.t("validations.lettings.tenancy.needstype.invalid_fixed_tenancylength", min_tenancy_length:)
+    record.errors.add :tenancylength, :tenancylength_invalid, message: I18n.t("validations.lettings.tenancy.tenancylength.invalid_fixed_tenancylength", min_tenancy_length:)
+    record.errors.add :tenancy, I18n.t("validations.lettings.tenancy.tenancy.invalid_fixed_tenancylength", min_tenancy_length:)
   end
 
   def validate_general_needs_fixed_tenancy_length_affordable_social_rent(record)
@@ -23,11 +22,10 @@ module Validations::TenancyValidations
     min_tenancy_length = 2
     return if record.tenancylength.to_i.between?(min_tenancy_length, 99)
 
-    message = I18n.t("validations.lettings.tenancy.length.invalid_fixed", min_tenancy_length:)
-    record.errors.add :needstype, message
-    record.errors.add :rent_type, message
-    record.errors.add :tenancylength, :tenancylength_invalid, message: message
-    record.errors.add :tenancy, message
+    record.errors.add :needstype, I18n.t("validations.lettings.tenancy.needstype.invalid_fixed_tenancylength", min_tenancy_length:)
+    record.errors.add :rent_type, I18n.t("validations.lettings.tenancy.rent_type.invalid_fixed_tenancylength", min_tenancy_length:)
+    record.errors.add :tenancylength, :tenancylength_invalid, message: I18n.t("validations.lettings.tenancy.tenancylength.invalid_fixed_tenancylength", min_tenancy_length:)
+    record.errors.add :tenancy, I18n.t("validations.lettings.tenancy.tenancy.invalid_fixed_tenancylength", min_tenancy_length:)
   end
 
   def validate_general_needs_fixed_tenancy_length_intermediate_rent(record)
@@ -37,11 +35,10 @@ module Validations::TenancyValidations
     min_tenancy_length = 1
     return if record.tenancylength.to_i.between?(min_tenancy_length, 99)
 
-    message = I18n.t("validations.lettings.tenancy.length.invalid_fixed", min_tenancy_length:)
-    record.errors.add :needstype, message
-    record.errors.add :rent_type, message
-    record.errors.add :tenancylength, :tenancylength_invalid, message: message
-    record.errors.add :tenancy, message
+    record.errors.add :needstype, I18n.t("validations.lettings.tenancy.needstype.invalid_fixed_tenancylength", min_tenancy_length:)
+    record.errors.add :rent_type, I18n.t("validations.lettings.tenancy.rent_type.invalid_fixed_tenancylength", min_tenancy_length:)
+    record.errors.add :tenancylength, :tenancylength_invalid, message: I18n.t("validations.lettings.tenancy.tenancylength.invalid_fixed_tenancylength", min_tenancy_length:)
+    record.errors.add :tenancy, I18n.t("validations.lettings.tenancy.tenancy.invalid_fixed_tenancylength", min_tenancy_length:)
   end
 
   def validate_periodic_tenancy_length(record)
@@ -50,18 +47,16 @@ module Validations::TenancyValidations
     min_tenancy_length = 1
     return if record.tenancylength.to_i.between?(min_tenancy_length, 99)
 
-    message = I18n.t("validations.lettings.tenancy.length.invalid_periodic", min_tenancy_length:)
-    record.errors.add :tenancylength, :tenancylength_invalid, message: message
-    record.errors.add :tenancy, message
+    record.errors.add :tenancylength, :tenancylength_invalid, message: I18n.t("validations.lettings.tenancy.tenancylength.invalid_periodic_tenancylength", min_tenancy_length:)
+    record.errors.add :tenancy, I18n.t("validations.lettings.tenancy.tenancy.invalid_periodic_tenancylength", min_tenancy_length:)
   end
 
   def validate_tenancy_length_blank_when_not_required(record)
     return if record.tenancylength.blank?
     return if record.tenancy_type_fixed_term? || record.is_periodic_tenancy?
 
-    message = I18n.t("validations.lettings.tenancy.length.fixed_term_not_required")
-    record.errors.add :tenancylength, :tenancylength_invalid, message: message
-    record.errors.add :tenancy, message
+    record.errors.add :tenancylength, :tenancylength_invalid, message: I18n.t("validations.lettings.tenancy.tenancylength.fixed_term_not_required")
+    record.errors.add :tenancy, I18n.t("validations.lettings.tenancy.tenancy.fixed_term_not_required")
   end
 
   def validate_other_tenancy_type(record)
