@@ -312,26 +312,6 @@ en:
           managing_organisation: "Enter a date when the managing organisation was active. %{managing_organisation} became active on %{managing_organisation_available_from}."
           different_organisations: "Enter a date when the owning and managing organisations were active. %{owning_organisation} became active on %{owning_organisation_active_from}, and %{managing_organisation} became active on %{managing_organisation_active_from}."
 
-        location:
-          deactivated:
-            startdate: "The location %{postcode} is inactive on this date. Enter another date or choose another location."
-            location_id: "This location is not active on the tenancy start date. Choose another location or edit the tenancy start date."
-          activating_soon:
-            startdate: "The location %{postcode} is not available until %{date}. Enter a tenancy start date after %{date}."
-            location_id: "The location %{postcode} is not available until %{date}. Select another location or edit the tenancy start date."
-          reactivating_soon:
-            startdate: "The location %{postcode} is not available until %{date}. Enter a tenancy start date after %{date}."
-            location_id: "The location %{postcode} is not available until %{date}. Select another location or edit the tenancy start date."
-        scheme:
-          deactivated:
-            startdate: "The scheme %{name} was deactivated on %{date} and was not available on the day you entered. Select another scheme or edit the tenancy start date."
-            scheme_id: "The scheme %{name} was deactivated on %{date} and was not available on the day you entered. Select another scheme or edit the tenancy start date."
-          reactivating_soon:
-            startdate: "The scheme %{name} is not available until %{date}. Enter a tenancy start date after %{date}."
-            scheme_id: "The scheme %{name} is not available until %{date}. Select another scheme or edit the tenancy start date."
-          locations_inactive:
-            startdate: "The scheme %{name} has no locations that are active on this date. Enter another date or choose another scheme."
-            scheme_id: "The scheme %{name} has no locations that are active on this date. Enter another date or choose another scheme."
       owning_organisation:
         invalid: "Please select the owning organisation or managing organisation that you belong to."
         data_sharing_agreement_not_signed: "The organisation must accept the Data Sharing Agreement before it can be selected as the owning organisation."
