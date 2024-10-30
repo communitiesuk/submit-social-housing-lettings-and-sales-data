@@ -2,11 +2,8 @@ class Form::Lettings::Questions::PersonWorkingSituation < ::Form::Question
   def initialize(id, hsh, page, person_index:)
     super(id, hsh, page)
     @id = "ecstat#{person_index}"
-    @check_answer_label = "Person #{person_index}’s working situation"
-    @header = "Which of these best describes person #{person_index}’s working situation?"
     @type = "radio"
     @check_answers_card_number = person_index
-    @hint_text = ""
     @person_index = person_index
     @question_number = question_number
     @answer_options = answer_options
