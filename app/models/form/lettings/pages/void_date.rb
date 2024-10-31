@@ -2,7 +2,6 @@ class Form::Lettings::Pages::VoidDate < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "void_date"
-    @header = "Void date"
     @depends_on = [{ "is_renewal?" => false }]
   end
 
