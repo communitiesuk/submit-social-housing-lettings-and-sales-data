@@ -1,9 +1,8 @@
 class Form::Sales::Questions::StaircaseOwnedValueCheck < ::Form::Question
-  def initialize(id, hsh, page)
-    super
+  def initialize(id, hsh, page, joint_purchase:)
+    super(id, hsh, page)
     @id = "stairowned_value_check"
-    @check_answer_label = "Percentage owned confirmation"
-    @header = "Are you sure?"
+    @copy_key = "sales.soft_validations.stairowned_value_check.#{joint_purchase ? 'joint_purchase' : 'not_joint_purchase'}"
     @type = "interruption_screen"
     @answer_options = {
       "0" => { "value" => "Yes" },
