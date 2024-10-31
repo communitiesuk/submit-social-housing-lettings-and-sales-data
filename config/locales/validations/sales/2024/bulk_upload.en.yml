@@ -27,7 +27,7 @@ en:
             managing_organisation_not_related: "This organisation does not have a relationship with the owning organisation."
           saledate:
             outside_collection_window: "Enter a date within the %{year_combo} collection year, which is between 1st April %{start_year} and 31st March %{end_year}."
-            year_not_two_or_four_digits: "Sale completion year must be 2 digits."
+            year_not_two_or_four_digits: "Sale completion year must be 2 or 4 digits."
           ecstat1:
             buyer_cannot_be_over_16_and_child: "Buyer 1's age cannot be 16 or over if their working situation is child under 16."
             buyer_cannot_be_child: "Buyer 1 cannot have a working situation of child under 16."
