@@ -66,7 +66,6 @@ RSpec.describe DuplicateLogsController, type: :request do
             it "displays check your answers for each log with correct questions" do
               expect(page).to have_content("Q5 - Tenancy start date", count: 3)
               expect(page).to have_content("Q7 - Tenant code", count: 3)
-              expect(page).to have_content("Q12 - Postcode", count: 3)
               expect(page).to have_content("Q32 - Lead tenant’s age", count: 3)
               expect(page).to have_content("Q33 - Lead tenant’s gender identity", count: 3)
               expect(page).to have_content("Q37 - Lead tenant’s working situation", count: 3)
@@ -84,7 +83,6 @@ RSpec.describe DuplicateLogsController, type: :request do
 
               expect(page).to have_content("Q5 - Tenancy start date", count: 3)
               expect(page).to have_content("Q7 - Tenant code", count: 3)
-              expect(page).to have_content("Q12 - Postcode", count: 1)
               expect(page).to have_content("Postcode (from UPRN)", count: 2)
               expect(page).to have_content("Q32 - Lead tenant’s age", count: 3)
               expect(page).to have_content("Q33 - Lead tenant’s gender identity", count: 3)
@@ -114,7 +112,6 @@ RSpec.describe DuplicateLogsController, type: :request do
               it "displays check your answers for each log with correct questions" do
                 expect(page).to have_content("Q5 - Tenancy start date", count: 1)
                 expect(page).to have_content("Q7 - Tenant code", count: 1)
-                expect(page).to have_content("Q12 - Postcode", count: 1)
                 expect(page).to have_content("Q32 - Lead tenant’s age", count: 1)
                 expect(page).to have_content("Q33 - Lead tenant’s gender identity", count: 1)
                 expect(page).to have_content("Q37 - Lead tenant’s working situation", count: 1)
@@ -141,7 +138,6 @@ RSpec.describe DuplicateLogsController, type: :request do
               it "displays check your answers for each log with correct questions" do
                 expect(page).to have_content("Q5 - Tenancy start date", count: 1)
                 expect(page).to have_content("Q7 - Tenant code", count: 1)
-                expect(page).to have_content("Q12 - Postcode", count: 1)
                 expect(page).to have_content("Q32 - Lead tenant’s age", count: 1)
                 expect(page).to have_content("Q33 - Lead tenant’s gender identity", count: 1)
                 expect(page).to have_content("Q37 - Lead tenant’s working situation", count: 1)
@@ -295,7 +291,6 @@ RSpec.describe DuplicateLogsController, type: :request do
             it "displays check your answers for each log with correct questions" do
               expect(page).to have_content("Q5 - Tenancy start date", count: 3)
               expect(page).to have_content("Q7 - Tenant code", count: 3)
-              expect(page).to have_content("Q12 - Postcode", count: 3)
               expect(page).to have_content("Q32 - Lead tenant’s age", count: 3)
               expect(page).to have_content("Q33 - Lead tenant’s gender identity", count: 3)
               expect(page).to have_content("Q37 - Lead tenant’s working situation", count: 3)
@@ -324,7 +319,6 @@ RSpec.describe DuplicateLogsController, type: :request do
               it "displays check your answers for each log with correct questions" do
                 expect(page).to have_content("Q5 - Tenancy start date", count: 1)
                 expect(page).to have_content("Q7 - Tenant code", count: 1)
-                expect(page).to have_content("Q12 - Postcode", count: 1)
                 expect(page).to have_content("Q32 - Lead tenant’s age", count: 1)
                 expect(page).to have_content("Q33 - Lead tenant’s gender identity", count: 1)
                 expect(page).to have_content("Q37 - Lead tenant’s working situation", count: 1)
@@ -351,7 +345,6 @@ RSpec.describe DuplicateLogsController, type: :request do
               it "displays check your answers for each log with correct questions" do
                 expect(page).to have_content("Q5 - Tenancy start date", count: 1)
                 expect(page).to have_content("Q7 - Tenant code", count: 1)
-                expect(page).to have_content("Q12 - Postcode", count: 1)
                 expect(page).to have_content("Q32 - Lead tenant’s age", count: 1)
                 expect(page).to have_content("Q33 - Lead tenant’s gender identity", count: 1)
                 expect(page).to have_content("Q37 - Lead tenant’s working situation", count: 1)
