@@ -2,6 +2,7 @@ class Form::Sales::Pages::LastAccommodationLa < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "last_accommodation_la"
+    @copy_key = "sales.household_situation.last_accommodation_la"
     @depends_on = [{
       "is_previous_la_inferred" => false,
     }]

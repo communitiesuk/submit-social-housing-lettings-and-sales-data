@@ -497,7 +497,7 @@ RSpec.describe OrganisationsController, type: :request do
 
           it "displays a link to merge organisations" do
             expect(page).to have_content("To report a merge or update your organisation details, ")
-            expect(page).to have_link("contact the helpdesk", href: "https://dluhcdigital.atlassian.net/servicedesk/customer/portal/6/group/11")
+            expect(page).to have_link("contact the helpdesk", href: "https://mhclgdigital.atlassian.net/servicedesk/customer/portal/6/group/11")
           end
 
           it "does not display merge history if there is none" do

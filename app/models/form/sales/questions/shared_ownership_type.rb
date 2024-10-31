@@ -3,7 +3,7 @@ class Form::Sales::Questions::SharedOwnershipType < ::Form::Question
     super
     @id = "type"
     @copy_key = "sales.setup.type.shared_ownership"
-    @top_guidance_partial = guidance_partial
+    @top_guidance_partial = "shared_ownership_type_definitions"
     @type = "radio"
     @answer_options = answer_options
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
@@ -31,14 +31,6 @@ class Form::Sales::Questions::SharedOwnershipType < ::Form::Question
         "31" => { "value" => "Right to Shared Ownership" },
         "30" => { "value" => "Shared Ownership - 2021 model lease" },
       }
-    end
-  end
-
-  def guidance_partial
-    if form.start_year_after_2024?
-      "shared_ownership_type_definitions_2024"
-    elsif form.start_date.year >= 2023
-      "shared_ownership_type_definitions"
     end
   end
 

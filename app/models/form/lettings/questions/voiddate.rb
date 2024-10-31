@@ -2,8 +2,6 @@ class Form::Lettings::Questions::Voiddate < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "voiddate"
-    @check_answer_label = "Void date"
-    @header = "What is the void date?"
     @type = "date"
     @check_answers_card_number = 0
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
