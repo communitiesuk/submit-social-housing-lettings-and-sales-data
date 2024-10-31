@@ -4,7 +4,7 @@ class Form::Lettings::Questions::RentType < ::Form::Question
     @id = "rent_type"
     @copy_key = "lettings.setup.rent_type.rent_type"
     @type = "radio"
-    @top_guidance_partial = form.start_year_after_2024? ? "rent_type_definitions_2024" : "rent_type_definitions"
+    @top_guidance_partial = "rent_type_definitions"
     @answer_options = form.start_year_after_2024? ? ANSWER_OPTIONS_2024 : ANSWER_OPTIONS
     @conditional_for = { "irproduct_other" => [5] }
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max] if form.start_date.present?

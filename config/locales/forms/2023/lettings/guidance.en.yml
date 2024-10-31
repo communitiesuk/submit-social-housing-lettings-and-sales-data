@@ -1,0 +1,63 @@
+en:
+  forms:
+    2023:
+      lettings:
+        guidance:
+          finding_location:
+            title: "What is a location?"
+            content: "A location is a postcode area where supported housing is provided under a scheme. A scheme can have multiple locations, and a location can have multiple units at the same postcode."
+            scheme_changes_link_text: "Read more about schemes and locations"
+
+          finding_scheme:
+            title: "Can’t find your scheme?"
+            content: "<p>Schemes are attached to the organisation that owns the property. Check you have correctly answered question 1 \"Which organisation owns this property?\"</p>
+              <p>If your organisation’s schemes were migrated from old CORE, they may have new names and codes. Search by postcode to find your scheme.</p>"
+            scheme_changes_link_text: "Read more about how schemes have changed"
+            view_schemes_link_text: "View your organisation’s schemes"
+            
+          privacy_notice_tenant:
+            content: "Make sure the tenant has seen %{privacy_notice_link} before completing this log."
+            privacy_notice_link_text: "the Ministry of Housing, Communities and Local Government (MHCLG) privacy notice"
+
+          rent_type_definitions:
+            title: "Rent type definitions"
+            content: "<p><b>Affordable Rent:</b> where up to 80% of market rent can be charged. A new supply agreement is signed with Homes England or the Greater London Authority (GLA).</p>
+              <p><b>London Affordable Rent:</b> a tenure of affordable housing available in London by the GLA. It is an affordable rent which must be set in accordance with the Regulator of Social Housing’s Affordable Rent guidance. The landlord of these homes must be registered with the Regulator of Social Housing. These are a type of Affordable Rent lettings.</p>
+              <p><b>London Living Rent:</b> a tenure of affordable housing available in London by the GLA. It was introduced in Affordable Homes Programme 2016 to 2021. These are a type of Intermediate Rent lettings.</p>
+              <p><b>Rent to Buy: </b> a discount of up to 20% market rent is charged for a single rental period for a minimum of 5 years. After that period, the tenant is offered first chance to purchase the property (either shared ownership or outright) at full market value. These are a type of Intermediate Rent lettings.</p>
+              <p><b>Social Rent:</b> where target rents are determined through the national rent regime. This is sometimes also known as 'formula rent'.</p>
+              <p><b>Other intermediate rent:</b> any other specific scheme where up to 80% of market rent can be charged. This includes schemes with reduced rent so tenants can save towards a house purchasing deposit and schemes with an in-built future opportunity to buy the property being rented.</p>"
+
+          scheme_selection:
+            data_provider:
+              content: "If you’re not sure which scheme to choose, ask a data coordinator. Find your data coordinators on the %{users_page_link}."
+              users_page_link_text: "users page"
+            data_coordinator:
+              create_scheme_link_text: "Create a new supported housing scheme"
+
+          void_date:
+            title: "What is a void date?"
+            content: "<p>Date the property was (legally or contractually) available to let, or for:</p>
+              <ul class=\"govuk-list govuk-list--bullet\">
+                <li>re-lets: the day after the previous tenant's contract ended</li>
+                <li>new builds: the day the landlord legally first owned the property (‘completion date’)</li>
+                <li>new conversions or acquisitions: completion date, or the day after rehabilitation work ended</li>
+                <li>new leases: the day the landlord got contractual property rights and could let it out to tenants</li>
+              </ul>"
+
+          what_counts_as_income:
+            title: "What counts as income?"
+            content: "<p>You should include any income after tax from:</p>
+              <ul class=\"govuk-list govuk-list--bullet\">
+                <li>employment</li>
+                <li>pensions</li>
+                <li>Universal Credit</li>
+              </ul>
+
+              <p>Don’t include:</p>
+              <ul class=\"govuk-list govuk-list--bullet\">
+                <li>National Insurance (NI) contributions and tax</li>
+                <li>housing benefit</li>
+                <li>child benefit</li>
+                <li>council tax support</li>
+              </ul>"

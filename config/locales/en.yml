@@ -236,7 +236,7 @@ en:
     scheme_deleted: "%{service_name} has been deleted."
     user_deleted: "%{name} has been deleted."
     organisation_deleted: "%{name} has been deleted."
-    user_updated: 
+    user_updated:
       self: "Your account details have been updated."
       other: "%{name}’s details have been updated."
 
@@ -283,37 +283,14 @@ en:
       invalid: "Role must be data accessor, data provider or data coordinator."
 
     setup:
-      intermediate_rent_product_name:
-        blank: "Enter name of other intermediate rent product."
       saledate:
         year_not_two_or_four_digits: "Sale completion year must be 2 or 4 digits."
       type:
         percentage_bought_must_be_at_least_threshold: "The minimum increase in equity while staircasing is %{threshold}% for this shared ownership type."
 
       startdate:
-        current_collection_year:
-          "Enter a date within the %{current_start_year_short} to %{current_end_year_short} collection year, which is between %{current_start_year_long} and %{current_end_year_long}."
-        previous_and_current_collection_year:
-          "Enter a date within the %{previous_start_year_short} to %{previous_end_year_short} or %{previous_end_year_short} to %{current_end_year_short} collection years, which is between %{previous_start_year_long} and %{current_end_year_long}."
-        later_than_14_days_after: "The tenancy start date must not be later than 14 days from today’s date."
         before_scheme_end_date: "The tenancy start date must be before the end date for this supported housing scheme."
-        after_void_date: "Enter a tenancy start date that is after the void date."
-        after_major_repair_date: "Enter a tenancy start date that is after the major repair date."
         year_not_two_or_four_digits: "Tenancy start year must be 2 or 4 digits."
-        ten_years_after_void_date: "Enter a tenancy start date that is no more than 10 years after the void date."
-        ten_years_after_mrc_date: "Enter a tenancy start date that is no more than 10 years after the major repairs completion date."
-        invalid_merged_organisations_start_date:
-          same_organisation: "Enter a date when the owning and managing organisation was active. %{owning_organisation} became inactive on %{owning_organisation_merge_date} and was replaced by %{owning_absorbing_organisation}."
-          same_merge: "Enter a date when the owning and managing organisations were active. %{owning_organisation} and %{managing_organisation} became inactive on %{owning_organisation_merge_date} and were replaced by %{owning_absorbing_organisation}."
-          owning_organisation: "Enter a date when the owning organisation was active. %{owning_organisation} became inactive on %{owning_organisation_merge_date} and was replaced by %{owning_absorbing_organisation}."
-          managing_organisation: "Enter a date when the managing organisation was active. %{managing_organisation} became inactive on %{managing_organisation_merge_date} and was replaced by %{managing_absorbing_organisation}."
-          different_merge: "Enter a date when the owning and managing organisations were active. %{owning_organisation} became inactive on %{owning_organisation_merge_date} and was replaced by %{owning_absorbing_organisation}. %{managing_organisation} became inactive on %{managing_organisation_merge_date} and was replaced by %{managing_absorbing_organisation}."
-        invalid_absorbing_organisations_start_date:
-          same_organisation: "Enter a date when the owning and managing organisation was active. %{owning_organisation} became active on %{owning_organisation_available_from}."
-          owning_organisation: "Enter a date when the owning organisation was active. %{owning_organisation} became active on %{owning_organisation_available_from}."
-          managing_organisation: "Enter a date when the managing organisation was active. %{managing_organisation} became active on %{managing_organisation_available_from}."
-          different_organisations: "Enter a date when the owning and managing organisations were active. %{owning_organisation} became active on %{owning_organisation_active_from}, and %{managing_organisation} became active on %{managing_organisation_active_from}."
-
         location:
           deactivated:
             startdate: "The location %{postcode} is inactive on this date. Enter another date or choose another location."
@@ -335,17 +312,7 @@ en:
             startdate: "The scheme %{name} has no locations that are active on this date. Enter another date or choose another scheme."
             scheme_id: "The scheme %{name} has no locations that are active on this date. Enter another date or choose another scheme."
       owning_organisation:
-        invalid: "Please select the owning organisation or managing organisation that you belong to."
         data_sharing_agreement_not_signed: "The organisation must accept the Data Sharing Agreement before it can be selected as the owning organisation."
-        inactive_merged_organisation: "The owning organisation must be active on the tenancy start date. %{owning_organisation} became inactive on %{owning_organisation_merge_date} and was replaced by %{owning_absorbing_organisation}."
-        inactive_absorbing_organisation: "The owning organisation must be active on the tenancy start date. %{owning_organisation} became active on %{owning_organisation_available_from}."
-      managing_organisation:
-        invalid: "Please select the owning organisation or managing organisation that you belong to."
-        data_sharing_agreement_not_signed: "The organisation must accept the Data Sharing Agreement before it can be selected as the managing organisation."
-        inactive_merged_organisation: "The managing organisation must be active on the tenancy start date. %{managing_organisation} became inactive on %{managing_organisation_merge_date} and was replaced by %{managing_absorbing_organisation}."
-        inactive_absorbing_organisation: "The managing organisation must be active on the tenancy start date. %{managing_organisation} became active on %{managing_organisation_available_from}."
-      assigned_to:
-        invalid: "Please select the owning organisation or managing organisation that you belong to."
       lettype:
         general_needs_mismatch: "Lettings type must be a general needs type because you selected general needs when uploading the file."
         supported_housing_mismatch: "Lettings type must be a supported housing type because you selected supported housing when uploading the file."
@@ -354,25 +321,12 @@ en:
       needstype:
         lettype_not_general_needs: "This letting type is supported housing, but the needs type is general needs. Change either the needs type or the letting type."
         lettype_not_supported_housing: "This letting type is general needs, but the needs type is supported housing. Change either the needs type or the letting type."
-      location:
-        incomplete: "This location is incomplete. Select another location or update this one."
-      scheme:
-        incomplete: "This scheme is incomplete. Select another scheme or update this one."
 
     property:
       uprn:
         invalid: "UPRN must be 12 digits or less."
       uprn_known:
         invalid: "You must answer UPRN known?"
-      mrcdate:
-        before_tenancy_start: "Enter a major repairs date that is before the tenancy start date."
-        not_first_let: "Major repairs date must not be completed if the tenancy is a first let."
-        ten_years_before_tenancy_start: "Enter a major repairs completion date that is no more than 10 years before the tenancy start date."
-        before_void_date: "Major repairs date must be after the void date if provided."
-      void_date:
-        ten_years_before_tenancy_start: "Enter a void date no more than 10 years before the tenancy start date."
-        before_tenancy_start: "Enter a void date that is before the tenancy start date."
-        after_mrcdate: "Void date must be before the major repairs date if provided."
       la:
         la_invalid_for_org: "%{org_name} does not operate in %{la_name}."
         postcode_invalid_for_org: "Enter a postcode in an area covered by %{org_name}."
@@ -618,7 +572,6 @@ en:
         during_deactivated_period: "The scheme is already deactivated during this date, please enter a different date."
       owning_organisation:
         does_not_own_stock: "Enter an organisation that owns housing stock."
-      no_completed_locations: "This scheme cannot be chosen as it has no completed locations."
 
     location:
       postcode_blank: "Enter a postcode."
@@ -652,9 +605,6 @@ en:
       outside_range_title: "You told us the rent is %{brent}."
       informative_text: "This is %{higher_or_lower} than we would expect."
       hint_text: "Check the following:<ul class=\"govuk-body-l app-panel--interruption\"><li>the decimal point</li><li>the frequency, for example every week or every calendar month</li><li>the rent type is correct, for example affordable or social rent</li></ul>"
-    purchase_price:
-      title_text: "You told us the purchase price is %{value}."
-      hint_text: "This is %{higher_or_lower} than we would expect."
     staircase_owned:
       title_text:
         one: "You told us that the buyer now owns %{stairowned} of the property."
@@ -686,17 +636,11 @@ Make sure these answers are correct."
     staircase_bought_seems_high:
       title_text: "You told us that %{percentage}% was bought in this staircasing transaction."
       hint_text: "Most staircasing transactions are less than 50%"
-    monthly_charges_over_soft_max:
-      title_text: "You told us that the monthly charges were %{mscharge}."
-      hint_text: "This is higher than we would expect."
     discounted_sale_value:
       title_text: "Mortgage, deposit, and grant total must equal %{value_with_discount}."
       informative_text: "Your given mortgage, deposit and grant total is %{mortgage_deposit_and_grant_total}."
     care_home_charges:
       title_text: "Care home charges should be provided if this is a care home accommodation."
-    percentage_discount_value:
-      title_text: "You told us that the percentage discount is %{discount}."
-      hint_text: "This is higher than we would expect."
     grant:
       title_text: "You told us that the grant amount is %{grant}."
       hint_text: "Loans, grants and subsidies are usually between £9,000 and £16,000."
@@ -724,9 +668,6 @@ Make sure these answers are correct."
       must_be_less_than_3_years_from_saledate: "You told us practical completion or handover date is more than 3 years before sale completion date."
     saledate:
       must_be_less_than_3_years_from_hodate: "You told us sale completion date is more than 3 years after practical completion or handover date."
-    no_address_found:
-      title_text: "No address found."
-      informative_text: "We could not find an address that matches your search. You can search again or continue to enter the address manually."
     partner_under_16_lettings:
       title: "You told us this person is aged %{age} years and has 'Partner' relationship to the lead tenant."
     multiple_partners_lettings:
@@ -768,7 +709,6 @@ Make sure these answers are correct."
     stairowned:
       one: "What percentage of the property does the buyer now own in total?"
       other: "What percentage of the property do the buyers now own in total?"
-    offered: "How many times was the property offered between becoming vacant and this letting?"
 
   hints:
     location:
@@ -781,7 +721,6 @@ Make sure these answers are correct."
       toggle_active: "If the date is before %{date}, select ‘From the start of the open collection period’ because the previous period has now closed."
     bulk_upload:
       needstype: "General needs housing includes both self-contained and shared housing without support or specific adaptations. Supported housing can include direct access hostels, group homes, residential care and nursing homes."
-    offered: "Do not include the offer that led to this letting. This is after the last tenancy ended. If the property is being offered for let for the first time, enter 0."
 
   check_answer_labels:
     soctenant:
@@ -790,7 +729,6 @@ Make sure these answers are correct."
     stairowned:
       one: "Percentage the buyer now owns in total."
       other: "Percentage the buyers now own in total."
-    offered: "Times previously offered since becoming available."
 
   warnings:
     organisation:

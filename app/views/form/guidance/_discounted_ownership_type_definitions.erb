@@ -1,23 +1,5 @@
-<%= govuk_details(summary_text: "Discounted ownership type definitions") do %>
-  <p class="govuk-body">
-    <b>Right to Acquire (RTA):</b>  a discounted sale of a property built or purchased after 31 March 1997 to tenants of a private registered provider.
-  </p>
-  <p class="govuk-body">
-    <b>Preserved Right to Buy (PRTB):</b>  a discounted sale of a property that used to be owned by a council to tenants of a private registered provider.
-  </p>
-  <p class="govuk-body">
-    <b>Voluntary Right to Buy (VRTB):</b>  a discounted sale to tenants in this PRP owned property, as part of a pilot scheme.
-  </p>
-  <p class="govuk-body">
-    <b>Right to Buy (RTB):</b>  a discounted sale to tenants in this council owned property.
-  </p>
-  <p class="govuk-body">
-    <b>Rent to Buy full ownership:</b> a sale on full ownership terms following a period of discounted rent.
-  </p>
-  <p class="govuk-body">
-    <b>Social HomeBuy for outright purchase:</b> a discounted sale to tenants of a private registered provider on full ownership terms.
-  </p>
-  <p class="govuk-body">
-    <b>Any other equity loan scheme:</b> any scheme, not covered elsewhere, in which a loan is used to purchase equity.
-  </p>
-<% end %>
+<div class="govuk-body">
+  <%= govuk_details(summary_text: I18n.t("forms.#{@log.form.start_date.year}.sales.guidance.discounted_ownership_type_definitions.title")) do %>
+    <%= I18n.t("forms.#{@log.form.start_date.year}.sales.guidance.discounted_ownership_type_definitions.content").html_safe %>
+  <% end %>
+</div>
