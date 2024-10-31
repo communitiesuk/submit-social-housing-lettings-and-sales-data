@@ -2,7 +2,7 @@ class Form::Lettings::Pages::AddressMatcher < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "address_matcher"
-    @header = "Find an address"
+    @copy_key = "lettings.property_information.address_matcher"
     @depends_on = [
       { "is_supported_housing?" => false, "uprn_known" => nil },
       { "is_supported_housing?" => false, "uprn_known" => 0 },
