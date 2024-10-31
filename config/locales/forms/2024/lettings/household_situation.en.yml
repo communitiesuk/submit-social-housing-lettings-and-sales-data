@@ -15,12 +15,6 @@ en:
             hint_text: ""
             question_text: "How long has the household been on the local authority waiting list for the area of the new letting?"
 
-          waityear:
-            page_header: ""
-            check_answer_label: "Length of time on local authority waiting list"
-            hint_text: ""
-            question_text: "How long has the household been on the local authority waiting list for the area of the new letting?"
-
           reason:
             reason_for_leaving_last_settled_home_renewal:
               page_header: ""
@@ -75,7 +69,7 @@ en:
           previous_local_authority:
             page_header: ""
             previous_la_known:
-              check_answer_label: "Do you know the local authority of the household’s last settled accommodation?"
+              check_answer_label: ""
               hint_text: "This is the tenant’s last long-standing home. It is where the tenant was living before any period in temporary accommodation, sleeping rough or otherwise homeless."
               question_text: "Do you know the local authority of the household’s last settled accommodation?"
             prevloc:
@@ -94,12 +88,6 @@ en:
             check_answer_label: "Reason for reasonable preference"
             hint_text: "Select all that apply."
             question_text: "Why was the household given ‘reasonable preference’?"
-
-          letting_allocation:
-            page_header: ""
-            check_answer_label: "Allocation system"
-            hint_text: "Select all that apply."
-            question_text: "How was this letting allocated?"
 
           letting_allocation:
             page_header: ""

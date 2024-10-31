@@ -3,7 +3,7 @@ class Form::Lettings::Questions::ReasonRenewal < ::Form::Question
     super
     @id = "reason"
     @type = "radio"
-    @copy_key = "lettings.household_situation.reason.renewal.#{page.id}.reason"
+    @copy_key = "lettings.household_situation.reason.#{page.id}.reason"
     @check_answers_card_number = 0
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
     @conditional_for = {

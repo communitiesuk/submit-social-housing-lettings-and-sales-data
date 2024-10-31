@@ -2,7 +2,7 @@ class Form::Lettings::Questions::Reason < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "reason"
-    @copy_key = "lettings.household_situation.reason.renewal.#{page.id}.reason"
+    @copy_key = "lettings.household_situation.reason.#{page.id}.reason"
     @type = "radio"
     @check_answers_card_number = 0
     @conditional_for = {
