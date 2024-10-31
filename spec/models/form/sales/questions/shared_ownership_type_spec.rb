@@ -63,7 +63,7 @@ RSpec.describe Form::Sales::Questions::SharedOwnershipType, type: :model do
     end
 
     it "shows shows correct top_guidance_partial" do
-      expect(question.top_guidance_partial).to eq("shared_ownership_type_definitions_2024")
+      expect(question.top_guidance_partial).to eq("shared_ownership_type_definitions")
     end
   end
 end
