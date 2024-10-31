@@ -30,8 +30,7 @@ RSpec.describe Form::Lettings::Subsections::IncomeAndBenefits, type: :model do
         rent_bi_weekly
         rent_4_weekly
         rent_monthly
-        brent_min_rent_value_check
-        brent_max_rent_value_check
+        brent_rent_value_check
         scharge_value_check
         pscharge_value_check
         supcharg_value_check

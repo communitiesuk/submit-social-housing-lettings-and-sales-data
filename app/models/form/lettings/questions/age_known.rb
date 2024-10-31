@@ -2,11 +2,9 @@ class Form::Lettings::Questions::AgeKnown < ::Form::Question
   def initialize(id, hsh, page, person_index:)
     super(id, hsh, page)
     @id = "age#{person_index}_known"
-    @check_answer_label = ""
-    @header = "Do you know person #{person_index}’s age?"
+    @copy_key = "lettings.household_characteristics.age#{person_index}.age#{person_index}_known"
     @type = "radio"
     @check_answers_card_number = person_index
-    @hint_text = ""
     @answer_options = ANSWER_OPTIONS
     @conditional_for = { "age#{person_index}" => [0] }
     @hidden_in_check_answers = {
