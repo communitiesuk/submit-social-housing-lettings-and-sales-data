@@ -436,25 +436,25 @@ RSpec.describe Validations::Sales::FinancialValidations do
       let(:saledate) { Time.zone.local(2024, 4, 1) }
 
       it "adds errors if equity is more than stairowned - stairbought for joint purchase" do
-        record.stairbought = 2
+        record.stairbought = 2.5
         record.stairowned = 3
         record.equity = 2
         record.jointpur = 1
         financial_validator.validate_equity_less_than_staircase_difference(record)
-        expect(record.errors["equity"]).to include(I18n.t("validations.sales.financial.equity.equity_over_stairowned_minus_stairbought.joint_purchase", equity: 2, staircase_difference: 1))
-        expect(record.errors["stairowned"]).to include(I18n.t("validations.sales.financial.stairowned.equity_over_stairowned_minus_stairbought.joint_purchase", equity: 2, staircase_difference: 1))
-        expect(record.errors["stairbought"]).to include(I18n.t("validations.sales.financial.stairbought.equity_over_stairowned_minus_stairbought.joint_purchase", equity: 2, staircase_difference: 1))
+        expect(record.errors["equity"]).to include(I18n.t("validations.sales.financial.equity.equity_over_stairowned_minus_stairbought.joint_purchase", equity: 2, staircase_difference: 0.5))
+        expect(record.errors["stairowned"]).to include(I18n.t("validations.sales.financial.stairowned.equity_over_stairowned_minus_stairbought.joint_purchase", equity: 2, staircase_difference: 0.5))
+        expect(record.errors["stairbought"]).to include(I18n.t("validations.sales.financial.stairbought.equity_over_stairowned_minus_stairbought.joint_purchase", equity: 2, staircase_difference: 0.5))
       end
 
       it "adds errors if equity is more than stairowned - stairbought for non joint purchase" do
         record.stairbought = 2
         record.stairowned = 3
-        record.equity = 2
+        record.equity = 2.5
         record.jointpur = 2
         financial_validator.validate_equity_less_than_staircase_difference(record)
-        expect(record.errors["equity"]).to include(I18n.t("validations.sales.financial.equity.equity_over_stairowned_minus_stairbought.not_joint_purchase", equity: 2, staircase_difference: 1))
-        expect(record.errors["stairowned"]).to include(I18n.t("validations.sales.financial.stairowned.equity_over_stairowned_minus_stairbought.not_joint_purchase", equity: 2, staircase_difference: 1))
-        expect(record.errors["stairbought"]).to include(I18n.t("validations.sales.financial.stairbought.equity_over_stairowned_minus_stairbought.not_joint_purchase", equity: 2, staircase_difference: 1))
+        expect(record.errors["equity"]).to include(I18n.t("validations.sales.financial.equity.equity_over_stairowned_minus_stairbought.not_joint_purchase", equity: 2.5, staircase_difference: 1.0))
+        expect(record.errors["stairowned"]).to include(I18n.t("validations.sales.financial.stairowned.equity_over_stairowned_minus_stairbought.not_joint_purchase", equity: 2.5, staircase_difference: 1.0))
+        expect(record.errors["stairbought"]).to include(I18n.t("validations.sales.financial.stairbought.equity_over_stairowned_minus_stairbought.not_joint_purchase", equity: 2.5, staircase_difference: 1.0))
       end
 
       it "does not add errors if equity is less than stairowned - stairbought" do
