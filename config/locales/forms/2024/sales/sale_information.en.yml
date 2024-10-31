@@ -38,13 +38,17 @@ en:
                 question_text: "What percentage of the property has been bought in this staircasing transaction?"
               stairowned:
                 joint_purchase:
-                  check_answer_label: "Percentage the buyers now own in total."
+                  check_answer_label: "Percentage the buyers now own in total"
                   hint_text: ""
                   question_text: "What percentage of the property do the buyers now own in total?"
                 not_joint_purchase:
                   check_answer_label: "Percentage the buyer now owns in total."
                   hint_text: ""
                   question_text: "What percentage of the property does the buyer now own in total?"
+              staircasesale:
+                check_answer_label: "Part of a back-to-back staircasing transaction"
+                hint_text: ""
+                question_text: "Is this transaction part of a back-to-back staircasing transaction to facilitate sale of the home on the open market?"
 
           resale:
             page_header: ""
@@ -52,7 +56,7 @@ en:
             hint_text: "If the social landlord has previously sold the property to another buyer and is now reselling the property, select 'yes'. If this is the first time the property has been sold, select 'no'."
             question_text: "Is this a resale?"
 
-          exchange_contracts":
+          exchange_date:
             page_header: ""
             check_answer_label: "Exchange of contracts date"
             hint_text: ""
@@ -178,11 +182,6 @@ en:
               question_text: "Enter the total monthly charge"
 
           purchase_price:
-            shared_ownership:
-              page_header: "About the price of the property"
-              check_answer_label: "Purchase price"
-              hint_text: "For all schemes, including Right to Acquire (RTA), Right to Buy (RTB), Voluntary Right to Buy (VRTB) or Preserved Right to Buy (PRTB) sales, enter the full price of the property without any discount"
-              question_text: "What is the full purchase price?"
             discounted_ownership:
               page_header: "About the price of the property"
               check_answer_label: "Purchase price"

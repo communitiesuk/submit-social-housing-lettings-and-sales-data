@@ -19,8 +19,6 @@ class Form::Sales::Questions::PurchasePrice < ::Form::Question
 
   def copy_key
     case @ownership_sch
-    when 1
-      "sales.sale_information.purchase_price.shared_ownership"
     when 2
       "sales.sale_information.purchase_price.discounted_ownership"
     when 3

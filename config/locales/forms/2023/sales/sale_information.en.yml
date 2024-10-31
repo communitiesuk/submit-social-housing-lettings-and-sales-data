@@ -38,7 +38,7 @@ en:
                 question_text: "What percentage of the property has been bought in this staircasing transaction?"
               stairowned:
                 joint_purchase:
-                  check_answer_label: "Percentage the buyers now own in total."
+                  check_answer_label: "Percentage the buyers now own in total"
                   hint_text: ""
                   question_text: "What percentage of the property do the buyers now own in total?"
                 not_joint_purchase:
@@ -52,7 +52,7 @@ en:
             hint_text: "If the social landlord has previously sold the property to another buyer and is now reselling the property, select 'yes'. If this is the first time the property has been sold, select 'no'."
             question_text: "Is this a resale?"
 
-          exchange_contracts":
+          exchange_date:
             page_header: ""
             check_answer_label: "Exchange of contracts date"
             hint_text: ""
