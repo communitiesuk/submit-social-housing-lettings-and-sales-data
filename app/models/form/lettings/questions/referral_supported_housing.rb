@@ -2,11 +2,9 @@ class Form::Lettings::Questions::ReferralSupportedHousing < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "referral"
-    @check_answer_label = "Source of referral for letting"
-    @header = "What was the source of referral for this letting?"
+    @copy_key = "lettings.household_situation.referral.supported_housing.la"
     @type = "radio"
     @check_answers_card_number = 0
-    @hint_text = "You told us that you are a local authority. We have removed some options because of this."
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
   end
 

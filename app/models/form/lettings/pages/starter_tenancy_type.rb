@@ -2,6 +2,7 @@ class Form::Lettings::Pages::StarterTenancyType < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "starter_tenancy_type"
+    @copy_key = "lettings.tenancy_information.tenancy.starter_tenancy_type"
     @depends_on = [{ "starter_tenancy?" => true }]
   end
 

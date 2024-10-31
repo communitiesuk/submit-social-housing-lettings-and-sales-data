@@ -1,0 +1,53 @@
+en:
+  validations:
+    lettings:
+      setup:
+        startdate:
+          not_within:
+            next_two_weeks: "The tenancy start date must not be later than 14 days from today’s date."
+          must_be_within:
+            current_collection_year:
+              "Enter a date within the %{current_start_year_short} to %{current_end_year_short} collection year, which is between %{current_start_year_long} and %{current_end_year_long}."
+            previous_and_current_collection_year:
+              "Enter a date within the %{previous_start_year_short} to %{previous_end_year_short} or %{previous_end_year_short} to %{current_end_year_short} collection years, which is between %{previous_start_year_long} and %{current_end_year_long}."
+          invalid_merged_organisations_start_date:
+            same_organisation: "Enter a date when the owning and managing organisation was active. %{owning_organisation} became inactive on %{merge_date} and was replaced by %{absorbing_organisation}."
+            same_merge: "Enter a date when the owning and managing organisations were active. %{owning_organisation} and %{managing_organisation} became inactive on %{owning_organisation_merge_date} and were replaced by %{owning_absorbing_organisation}."
+            owning_organisation: "Enter a date when the owning organisation was active. %{owning_organisation} became inactive on %{merge_date} and was replaced by %{absorbing_organisation}."
+            managing_organisation: "Enter a date when the managing organisation was active. %{managing_organisation} became inactive on %{merge_date} and was replaced by %{absorbing_organisation}."
+            different_merge: "Enter a date when the owning and managing organisations were active. %{owning_organisation} became inactive on %{owning_organisation_merge_date} and was replaced by %{owning_absorbing_organisation}. %{managing_organisation} became inactive on %{managing_organisation_merge_date} and was replaced by %{managing_absorbing_organisation}."
+          invalid_absorbing_organisations_start_date:
+            same_organisation: "Enter a date when the owning and managing organisation was active. %{owning_organisation} became active on %{available_from}."
+            owning_organisation: "Enter a date when the owning organisation was active. %{owning_organisation} became active on %{available_from}."
+            managing_organisation: "Enter a date when the managing organisation was active. %{managing_organisation} became active on %{available_from}."
+            different_organisations: "Enter a date when the owning and managing organisations were active. %{owning_organisation} became active on %{owning_organisation_active_from}, and %{managing_organisation} became active on %{managing_organisation_active_from}."
+
+        assigned_to:
+          invalid: "Please select the owning organisation or managing organisation that you belong to."
+
+        owning_organisation:
+          invalid: "Please select the owning organisation or managing organisation that you belong to."
+          inactive:
+            merged_organisation:
+              "The owning organisation must be active on the tenancy start date. %{owning_organisation} became inactive on %{merge_date} and was replaced by %{absorbing_organisation}."
+            absorbing_organisation:
+              "The owning organisation must be active on the tenancy start date. %{owning_organisation} became active on %{available_from}."
+
+        managing_organisation:
+          invalid: "Please select the owning organisation or managing organisation that you belong to."
+          data_sharing_agreement_not_signed: "The organisation must accept the Data Sharing Agreement before it can be selected as the managing organisation."
+          inactive:
+            merged_organisation:
+              "The managing organisation must be active on the tenancy start date. %{managing_organisation} became inactive on %{merge_date} and was replaced by %{absorbing_organisation}."
+            absorbing_organisation:
+              "The managing organisation must be active on the tenancy start date. %{managing_organisation} became active on %{available_from}."
+
+        intermediate_rent_product_name:
+          blank: "Enter name of other intermediate rent product."
+
+        scheme:
+          incomplete: "This scheme is incomplete. Select another scheme or update this one."
+          no_completed_locations: "This scheme cannot be chosen as it has no completed locations."
+
+        location:
+          incomplete: "This location is incomplete. Select another location or update this one."

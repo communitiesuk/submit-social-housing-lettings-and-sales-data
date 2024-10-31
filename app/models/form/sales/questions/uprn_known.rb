@@ -2,13 +2,9 @@ class Form::Sales::Questions::UprnKnown < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "uprn_known"
-    @check_answer_label = "UPRN known?"
-    @header = "Do you know the property's UPRN?"
+    @copy_key = "sales.property_information.uprn.uprn_known"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
-    @hint_text = "The Unique Property Reference Number (UPRN) is a unique number system created by Ordnance Survey and used by housing providers and various industries across the UK. An example UPRN is 10010457355.<br><br>
-      The UPRN may not be the same as the property reference assigned by your organisation.<br><br>
-      If you don’t know the UPRN you can enter the address of the property instead on the next screen."
     @conditional_for = { "uprn" => [1] }
     @inferred_check_answers_value = [
       {
@@ -31,7 +27,7 @@ class Form::Sales::Questions::UprnKnown < ::Form::Question
   }.freeze
 
   def unanswered_error_message
-    I18n.t("validations.property.uprn_known.invalid")
+    I18n.t("validations.sales.property_information.uprn_known.invalid")
   end
 
   QUESTION_NUMBER_FROM_YEAR = { 2023 => 14, 2024 => 15 }.freeze

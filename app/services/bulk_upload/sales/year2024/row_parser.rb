@@ -320,8 +320,8 @@ class BulkUpload::Sales::Year2024::RowParser
               category: :setup,
             },
             format: {
-              with: /\A\d{2}\z/,
-              message: I18n.t("validations.setup.saledate.year_not_two_digits"),
+              with: /\A(\d{2}|\d{4})\z/,
+              message: I18n.t("validations.setup.saledate.year_not_two_or_four_digits"),
               category: :setup,
               if: proc { field_6.present? },
             }, on: :after_log
@@ -994,19 +994,22 @@ private
   end
 
   def saledate
-    Date.new(field_6 + 2000, field_5, field_4) if field_6.present? && field_5.present? && field_4.present?
+    year = field_6.to_s.strip.length.between?(1, 2) ? field_6 + 2000 : field_6
+    Date.new(year, field_5, field_4) if field_6.present? && field_5.present? && field_4.present?
   rescue Date::Error
     Date.new
   end
 
   def hodate
-    Date.new(field_96 + 2000, field_95, field_94) if field_96.present? && field_95.present? && field_94.present?
+    year = field_96.to_s.strip.length.between?(1, 2) ? field_96 + 2000 : field_96
+    Date.new(year, field_95, field_94) if field_96.present? && field_95.present? && field_94.present?
   rescue Date::Error
     Date.new
   end
 
   def exdate
-    Date.new(field_93 + 2000, field_92, field_91) if field_93.present? && field_92.present? && field_91.present?
+    year = field_93.to_s.strip.length.between?(1, 2) ? field_93 + 2000 : field_93
+    Date.new(year, field_92, field_91) if field_93.present? && field_92.present? && field_91.present?
   rescue Date::Error
     Date.new
   end
@@ -1469,10 +1472,10 @@ private
   def validate_buyer1_economic_status
     if field_35 == 9
       if field_31.present? && field_31.to_i >= 16
-        errors.add(:field_35, I18n.t("validations.household.ecstat.buyer_cannot_be_over_16_and_child", buyer_index: "1"))
-        errors.add(:field_31, I18n.t("validations.household.ecstat.buyer_cannot_be_over_16_and_child", buyer_index: "1"))
+        errors.add(:field_35, I18n.t("validations.sales.household.ecstat.buyer_cannot_be_over_16_and_child", buyer_index: "1"))
+        errors.add(:field_31, I18n.t("validations.sales.household.ecstat.buyer_cannot_be_over_16_and_child", buyer_index: "1"))
       else
-        errors.add(:field_35, I18n.t("validations.household.ecstat.buyer_cannot_be_child", buyer_index: "1"))
+        errors.add(:field_35, I18n.t("validations.sales.household.ecstat1.buyer_cannot_be_child"))
       end
     end
   end
@@ -1482,10 +1485,10 @@ private
 
     if field_42 == 9
       if field_38.present? && field_38.to_i >= 16
-        errors.add(:field_42, I18n.t("validations.household.ecstat.buyer_cannot_be_over_16_and_child", buyer_index: "2"))
-        errors.add(:field_38, I18n.t("validations.household.ecstat.buyer_cannot_be_over_16_and_child", buyer_index: "2"))
+        errors.add(:field_42, I18n.t("validations.sales.household.ecstat.buyer_cannot_be_over_16_and_child", buyer_index: "2"))
+        errors.add(:field_38, I18n.t("validations.sales.household.ecstat.buyer_cannot_be_over_16_and_child", buyer_index: "2"))
       else
-        errors.add(:field_42, I18n.t("validations.household.ecstat.buyer_cannot_be_child", buyer_index: "2"))
+        errors.add(:field_42, I18n.t("validations.sales.household.ecstat2.buyer_cannot_be_child"))
       end
     end
   end

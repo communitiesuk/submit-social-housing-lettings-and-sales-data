@@ -5,8 +5,7 @@ RSpec.describe "Bulk upload lettings log" do
 
   let(:user) { create(:user) }
   let(:current_year) { current_collection_start_year }
-  let(:current_formatted_year) { "#{current_year}/#{current_year + 1}" }
-  let(:current_formatted_short_year) { "#{current_year}/#{current_year - 2000 + 1}" }
+  let(:current_formatted_year) { "#{current_year} to #{current_year + 1}" }
 
   let(:stub_file_upload) do
     vcap_services = { "aws-s3-bucket" => {} }
@@ -47,12 +46,12 @@ RSpec.describe "Bulk upload lettings log" do
       expect(page.find_field("form-year-#{current_year}-field")).to be_checked
       click_button("Continue")
 
-      expect(page).to have_content("Upload lettings logs in bulk (#{current_formatted_short_year})")
+      expect(page).to have_content("Upload lettings logs in bulk (#{current_formatted_year})")
       click_button("Continue")
 
       expect(page).not_to have_content("What is the needs type?")
 
-      expect(page).to have_content("Upload lettings logs in bulk (#{current_formatted_short_year})")
+      expect(page).to have_content("Upload lettings logs in bulk (#{current_formatted_year})")
       expect(page).to have_content("Upload your file")
       click_button("Upload")
 
@@ -75,6 +74,25 @@ RSpec.describe "Bulk upload lettings log" do
 
       expect(page).to have_content("Upload lettings logs in bulk")
     end
+
+    it "shows file to large error" do
+      stub_const("Forms::BulkUploadLettings::UploadYourFile::MAX_FILE_SIZE", 1.bytes)
+      visit("/lettings-logs")
+
+      click_link("Upload lettings logs in bulk")
+      expect(page).to have_content("Which year")
+      click_button("Continue")
+      choose(current_formatted_year)
+      click_button("Continue")
+      click_button("Continue")
+
+      allow_any_instance_of(Forms::BulkUploadLettings::UploadYourFile).to receive(:`).and_return("text/csv")
+
+      attach_file "file", file_fixture("2023_24_lettings_bulk_upload.xlsx")
+      click_button("Upload")
+
+      expect(page).to have_content("File must be 10MB or less. Check your file and delete data that does not need to be uploaded.")
+    end
   end
   # rubocop:enable RSpec/AnyInstance
 
@@ -88,7 +106,7 @@ RSpec.describe "Bulk upload lettings log" do
       expect(page).to have_link("Upload lettings logs in bulk")
       click_link("Upload lettings logs in bulk")
 
-      expect(page).to have_content("Upload lettings logs in bulk (#{current_formatted_short_year})")
+      expect(page).to have_content("Upload lettings logs in bulk (#{current_formatted_year})")
       click_button("Continue")
 
       expect(page).to have_content("Upload your file")
@@ -107,7 +125,7 @@ RSpec.describe "Bulk upload lettings log" do
       expect(page).to have_content("Prepare your file")
       click_button("Continue")
 
-      expect(page).to have_content("Upload lettings logs in bulk (#{current_formatted_short_year})")
+      expect(page).to have_content("Upload lettings logs in bulk (#{current_formatted_year})")
 
       expect(page).to have_content("Upload your file")
       click_button("Upload")

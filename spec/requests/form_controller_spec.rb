@@ -412,7 +412,7 @@ RSpec.describe FormController, type: :request do
         context "with a form page that has custom guidance" do
           it "displays the correct partial" do
             get "/lettings-logs/#{lettings_log.id}/net-income", headers: headers, params: {}
-            expect(response.body).to match("What counts as income?")
+            expect(response.body).to match(I18n.t("forms.2021.lettings.guidance.what_counts_as_income.title"))
           end
         end
 
@@ -735,12 +735,17 @@ RSpec.describe FormController, type: :request do
           end
 
           before do
+            Timecop.freeze(Time.zone.local(2023, 12, 1))
             organisation.stock_owners << stock_owner
             organisation.managing_agents << managing_organisation
             organisation.managing_agents << managing_organisation_too
             organisation.reload
-            lettings_log.update!(owning_organisation: stock_owner, assigned_to: user, managing_organisation: organisation)
+            lettings_log.update!(owning_organisation: stock_owner, assigned_to: user, managing_organisation: organisation, startdate: Time.zone.local(2023, 5, 1))
             lettings_log.reload
+          end
+
+          after do
+            Timecop.unfreeze
           end
 
           it "re-renders the same page with errors if validation fails" do

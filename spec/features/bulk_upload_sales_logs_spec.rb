@@ -38,7 +38,7 @@ RSpec.describe "Bulk upload sales log" do
       click_button("Continue")
 
       expect(page).to have_content("You must select a collection period to upload for")
-      choose("2023/2024")
+      choose("2023 to 2024")
       click_button("Continue")
 
       click_link("Back")
@@ -46,7 +46,7 @@ RSpec.describe "Bulk upload sales log" do
       expect(page.find_field("form-year-2023-field")).to be_checked
       click_button("Continue")
 
-      expect(page).to have_content("Upload sales logs in bulk (2023/24)")
+      expect(page).to have_content("Upload sales logs in bulk (2023 to 2024)")
       click_button("Continue")
 
       expect(page).to have_content("Upload your file")
@@ -71,6 +71,26 @@ RSpec.describe "Bulk upload sales log" do
 
       expect(page).to have_content("Upload sales logs in bulk")
     end
+
+    it "shows file to large error" do
+      stub_const("Forms::BulkUploadSales::UploadYourFile::MAX_FILE_SIZE", 1.bytes)
+      visit("/sales-logs")
+      click_link("Upload sales logs in bulk")
+
+      expect(page).to have_content("Which year")
+      click_button("Continue")
+      click_button("Continue")
+      choose("2023 to 2024")
+      click_button("Continue")
+      click_button("Continue")
+
+      allow_any_instance_of(Forms::BulkUploadSales::UploadYourFile).to receive(:`).and_return("text/csv")
+
+      attach_file "file", file_fixture("2023_24_lettings_bulk_upload.xlsx")
+      click_button("Upload")
+
+      expect(page).to have_content("File must be 10MB or less. Check your file and delete data that does not need to be uploaded.")
+    end
   end
   # rubocop:enable RSpec/AnyInstance
 
@@ -88,7 +108,7 @@ RSpec.describe "Bulk upload sales log" do
       expect(page).to have_link("Upload sales logs in bulk")
       click_link("Upload sales logs in bulk")
 
-      expect(page).to have_content("Upload sales logs in bulk (2023/24)")
+      expect(page).to have_content("Upload sales logs in bulk (2023 to 2024)")
       click_button("Continue")
 
       expect(page).to have_content("Upload your file")

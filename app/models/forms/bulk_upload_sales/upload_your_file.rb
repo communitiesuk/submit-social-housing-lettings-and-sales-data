@@ -14,6 +14,7 @@ module Forms
 
       validates :file, presence: true
       validate :validate_file_is_csv
+      validate :validate_file_size
 
       def view_path
         "bulk_upload_sales_logs/forms/upload_your_file"
@@ -24,7 +25,7 @@ module Forms
       end
 
       def year_combo
-        "#{year}/#{year + 1 - 2000}"
+        "#{year} to #{year + 1}"
       end
 
       def next_path
@@ -65,6 +66,16 @@ module Forms
 
         unless output.match?(/text\/csv|text\/plain/)
           errors.add(:file, :not_csv)
+        end
+      end
+
+      MAX_FILE_SIZE = 10.megabytes
+
+      def validate_file_size
+        return unless file
+
+        if file.size > MAX_FILE_SIZE
+          errors.add(:file, :file_too_large)
         end
       end
     end

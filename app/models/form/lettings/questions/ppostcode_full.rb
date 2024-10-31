@@ -2,8 +2,7 @@ class Form::Lettings::Questions::PpostcodeFull < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "ppostcode_full"
-    @check_answer_label = "Postcode of household’s last settled accommodation"
-    @header = "Postcode for the previous accommodation"
+    @copy_key = "lettings.household_situation.previous_postcode.ppostcode_full"
     @type = "text"
     @width = 5
     @inferred_check_answers_value = [{
@@ -13,7 +12,6 @@ class Form::Lettings::Questions::PpostcodeFull < ::Form::Question
       "value" => "Not known",
     }]
     @check_answers_card_number = 0
-    @hint_text = ""
     @inferred_answers = { "prevloc" => { "is_previous_la_inferred" => true } }
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
     @disable_clearing_if_not_routed_or_dynamic_answer_options = true
