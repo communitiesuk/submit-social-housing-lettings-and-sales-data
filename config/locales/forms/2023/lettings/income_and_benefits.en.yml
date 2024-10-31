@@ -23,7 +23,7 @@ en:
           hb:
             page_header: ""
             check_answer_label: "Housing-related benefits received"
-            hint_text: "This is about when the tenant is in their new let. If they are unsure about the situation for their new let and their financial and working situation hasn’t changed significantly, answer based on what housing-related benefits they currently receive."
+            hint_text: ""
             question_text: "Is the household likely to be receiving any of these housing-related benefits?"
 
           benefits:
