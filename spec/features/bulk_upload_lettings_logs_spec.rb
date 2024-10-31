@@ -74,6 +74,25 @@ RSpec.describe "Bulk upload lettings log" do
 
       expect(page).to have_content("Upload lettings logs in bulk")
     end
+
+    it "shows file to large error" do
+      stub_const("Forms::BulkUploadLettings::UploadYourFile::MAX_FILE_SIZE", 1.bytes)
+      visit("/lettings-logs")
+
+      click_link("Upload lettings logs in bulk")
+      expect(page).to have_content("Which year")
+      click_button("Continue")
+      choose(current_formatted_year)
+      click_button("Continue")
+      click_button("Continue")
+
+      allow_any_instance_of(Forms::BulkUploadLettings::UploadYourFile).to receive(:`).and_return("text/csv")
+
+      attach_file "file", file_fixture("2023_24_lettings_bulk_upload.xlsx")
+      click_button("Upload")
+
+      expect(page).to have_content("File must be 10MB or less. Check your file and delete data that does not need to be uploaded.")
+    end
   end
   # rubocop:enable RSpec/AnyInstance
 

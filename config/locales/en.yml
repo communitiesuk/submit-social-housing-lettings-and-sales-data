@@ -90,11 +90,13 @@ en:
             file:
               blank: "Select which file to upload."
               not_csv: "Your file must be in CSV format."
+              file_too_large: "File must be 10MB or less. Check your file and delete data that does not need to be uploaded."
         forms/bulk_upload_sales/upload_your_file:
           attributes:
             file:
               blank: "Select which file to upload."
               not_csv: "Your file must be in CSV format."
+              file_too_large: "File must be 10MB or less. Check your file and delete data that does not need to be uploaded."
         forms/bulk_upload_lettings/needstype:
           attributes:
             needstype:
