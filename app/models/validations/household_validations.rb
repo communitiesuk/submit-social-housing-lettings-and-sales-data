@@ -194,12 +194,12 @@ module Validations::HouseholdValidations
     return unless record.layear && record.la && record.prevloc && record.collection_start_year
 
     if record.la == record.prevloc && record.layear == 1 && record.collection_start_year >= 2023
-      record.errors.add :layear, :renewal_just_moved, message: I18n.t("validations.lettings.household.layear.same_la_just_moved_to_area.current_la")
-      record.errors.add :la, :renewal_just_moved, message: I18n.t("validations.lettings.household.la.same_la_just_moved_to_area.current_la")
-      record.errors.add :postcode_full, :renewal_just_moved, message: I18n.t("validations.lettings.household.postcode_full.same_la_just_moved_to_area.current_la")
-      record.errors.add :uprn, :renewal_just_moved, message: I18n.t("validations.lettings.household.uprn.same_la_just_moved_to_area.current_la")
-      record.errors.add :ppostcode_full, :renewal_just_moved, message: I18n.t("validations.lettings.household.ppostcode_full.same_la_just_moved_to_area.previous_la")
-      record.errors.add :prevloc, :renewal_just_moved, message: I18n.t("validations.lettings.household.prevloc.same_la_just_moved_to_area.previous_la")
+      record.errors.add :layear, :renewal_just_moved, message: I18n.t("validations.lettings.household.layear.same_la_just_moved_to_area")
+      record.errors.add :la, :renewal_just_moved, message: I18n.t("validations.lettings.household.la.same_la_just_moved_to_area")
+      record.errors.add :postcode_full, :renewal_just_moved, message: I18n.t("validations.lettings.household.postcode_full.same_la_just_moved_to_area")
+      record.errors.add :uprn, :renewal_just_moved, message: I18n.t("validations.lettings.household.uprn.same_la_just_moved_to_area")
+      record.errors.add :ppostcode_full, :renewal_just_moved, message: I18n.t("validations.lettings.household.ppostcode_full.same_la_just_moved_to_area")
+      record.errors.add :prevloc, :renewal_just_moved, message: I18n.t("validations.lettings.household.prevloc.same_la_just_moved_to_area")
     end
   end
 

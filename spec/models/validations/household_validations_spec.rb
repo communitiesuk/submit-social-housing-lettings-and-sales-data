@@ -668,17 +668,17 @@ RSpec.describe Validations::HouseholdValidations do
           record.startdate = Time.zone.now
           household_validator.validate_layear_and_prevloc(record)
           expect(record.errors["layear"])
-            .to include(match I18n.t("validations.lettings.household.layear.same_la_just_moved_to_area.current_la"))
+            .to include(match I18n.t("validations.lettings.household.layear.same_la_just_moved_to_area"))
           expect(record.errors["prevloc"])
-            .to include(match I18n.t("validations.lettings.household.prevloc.same_la_just_moved_to_area.previous_la"))
+            .to include(match I18n.t("validations.lettings.household.prevloc.same_la_just_moved_to_area"))
           expect(record.errors["ppostcode_full"])
-          .to include(match I18n.t("validations.lettings.household.ppostcode_full.same_la_just_moved_to_area.previous_la"))
+          .to include(match I18n.t("validations.lettings.household.ppostcode_full.same_la_just_moved_to_area"))
           expect(record.errors["la"])
-            .to include(match I18n.t("validations.lettings.household.la.same_la_just_moved_to_area.current_la"))
+            .to include(match I18n.t("validations.lettings.household.la.same_la_just_moved_to_area"))
           expect(record.errors["postcode_full"])
-            .to include(match I18n.t("validations.lettings.household.postcode_full.same_la_just_moved_to_area.current_la"))
+            .to include(match I18n.t("validations.lettings.household.postcode_full.same_la_just_moved_to_area"))
           expect(record.errors["uprn"])
-            .to include(match I18n.t("validations.lettings.household.uprn.same_la_just_moved_to_area.current_la"))
+            .to include(match I18n.t("validations.lettings.household.uprn.same_la_just_moved_to_area"))
         end
       end
     end

@@ -36,33 +36,26 @@ en:
 
         prevloc:
           previous_la_known: "Enter name of local authority."
-          same_la_just_moved_to_area:
-            previous_la: 'The local authority of the previous property should not be the same as the current local authority, as you told us they had just moved to the local authority area. Check your answers are correct.'
+          same_la_just_moved_to_area:  "The local authority of the previous property should not be the same as the current local authority, as you told us they had just moved to the local authority area. Check your answers are correct."
 
         renewal:
-          renewal_just_moved_to_area: 'This letting cannot be a renewal if the household has just moved to the local authority area'
+          renewal_just_moved_to_area: "This letting cannot be a renewal if the household has just moved to the local authority area"
 
         layear:
-          renewal_just_moved_to_area: 'The household cannot have just moved to the local authority area if this letting is a renewal'
-          same_la_just_moved_to_area:
-            current_la: 'You told us this tenant previously lived in this local authority. Check your answers are correct.'
+          renewal_just_moved_to_area: "The household cannot have just moved to the local authority area if this letting is a renewal"
+          same_la_just_moved_to_area: "You told us this tenant previously lived in this local authority. Check your answers are correct."
 
         la:
-          same_la_just_moved_to_area:
-            current_la: 'You told us the tenant had just moved into the local authority, but this location is in the same local authority. Check your answers are correct'
+          same_la_just_moved_to_area: "You told us the tenant had just moved into the local authority, but this location is in the same local authority. Check your answers are correct"
 
         postcode_full:
-          same_la_just_moved_to_area:
-            current_la: 'You told us the tenant had just moved into the local authority, but this location is in the same local authority. Check your answers are correct'
-            previous_la: 'The local authority of the previous property should not be the same as the current local authority, as you told us they had just moved to the local authority area. Check your answers are correct.'
+          same_la_just_moved_to_area: "You told us the tenant had just moved into the local authority, but this location is in the same local authority. Check your answers are correct"
 
         ppostcode_full:
-          same_la_just_moved_to_area:
-            previous_la: 'The local authority of the previous property should not be the same as the current local authority, as you told us they had just moved to the local authority area. Check your answers are correct.'
+          same_la_just_moved_to_area: "The local authority of the previous property should not be the same as the current local authority, as you told us they had just moved to the local authority area. Check your answers are correct."
 
         uprn:
-          same_la_just_moved_to_area:
-            current_la: 'You told us the tenant had just moved into the local authority, but this location is in the same local authority. Check your answers are correct'
+          same_la_just_moved_to_area: "You told us the tenant had just moved into the local authority, but this location is in the same local authority. Check your answers are correct"
 
         age:
           child_under_16_relat: "Answer cannot be under 16 as person %{person_num}'s relationship to the lead tenant is ‘partner’."
