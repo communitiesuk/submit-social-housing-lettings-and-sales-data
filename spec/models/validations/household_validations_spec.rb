@@ -112,9 +112,9 @@ RSpec.describe Validations::HouseholdValidations do
         record.underoccupation_benefitcap = 1
         household_validator.validate_reason_for_leaving_last_settled_home(record)
         expect(record.errors["underoccupation_benefitcap"])
-          .to include(match( I18n.t("validations.lettings.household.underoccupation_benefitcap.leaving_last_settled_home.dont_know_required")))
+          .to include(match(I18n.t("validations.lettings.household.underoccupation_benefitcap.leaving_last_settled_home.dont_know_required")))
         expect(record.errors["reason"])
-          .to include(match( I18n.t("validations.lettings.household.reason.leaving_last_settled_home.dont_know_required")))
+          .to include(match(I18n.t("validations.lettings.household.reason.leaving_last_settled_home.dont_know_required")))
       end
 
       it "expects that under occupation benefit cap is also not known" do
