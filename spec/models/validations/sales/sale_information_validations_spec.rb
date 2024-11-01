@@ -1206,11 +1206,11 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
 
             it "adds an error" do
               sale_information_validator.validate_staircasing_mortgage(record)
-              expect(record.errors["mortgageused"]).to include(I18n.t("validations.sales.sale_information.mortgageused.staircasing_mortgage.mortgage_not_used", deposit: "£5,000.00", value: "£30,000.00", stairbought_part_of_value: "£8,400.00" ))
-              expect(record.errors["value"]).to include(I18n.t("validations.sales.sale_information.value.staircasing_mortgage.mortgage_not_used", deposit: "£5,000.00", value: "£30,000.00", stairbought_part_of_value: "£8,400.00" ))
-              expect(record.errors["deposit"]).to include(I18n.t("validations.sales.sale_information.deposit.staircasing_mortgage.mortgage_not_used", deposit: "£5,000.00", value: "£30,000.00", stairbought_part_of_value: "£8,400.00" ))
-              expect(record.errors["stairbought"]).to include(I18n.t("validations.sales.sale_information.stairbought.staircasing_mortgage.mortgage_not_used", deposit: "£5,000.00", value: "£30,000.00", stairbought_part_of_value: "£8,400.00" ))
-              expect(record.errors["type"]).to include(I18n.t("validations.sales.sale_information.type.staircasing_mortgage.mortgage_not_used", deposit: "£5,000.00", value: "£30,000.00", stairbought_part_of_value: "£8,400.00" ))
+              expect(record.errors["mortgageused"]).to include(I18n.t("validations.sales.sale_information.mortgageused.staircasing_mortgage.mortgage_not_used", deposit: "£5,000.00", value: "£30,000.00", stairbought_part_of_value: "£8,400.00"))
+              expect(record.errors["value"]).to include(I18n.t("validations.sales.sale_information.value.staircasing_mortgage.mortgage_not_used", deposit: "£5,000.00", value: "£30,000.00", stairbought_part_of_value: "£8,400.00"))
+              expect(record.errors["deposit"]).to include(I18n.t("validations.sales.sale_information.deposit.staircasing_mortgage.mortgage_not_used", deposit: "£5,000.00", value: "£30,000.00", stairbought_part_of_value: "£8,400.00"))
+              expect(record.errors["stairbought"]).to include(I18n.t("validations.sales.sale_information.stairbought.staircasing_mortgage.mortgage_not_used", deposit: "£5,000.00", value: "£30,000.00", stairbought_part_of_value: "£8,400.00"))
+              expect(record.errors["type"]).to include(I18n.t("validations.sales.sale_information.type.staircasing_mortgage.mortgage_not_used", deposit: "£5,000.00", value: "£30,000.00", stairbought_part_of_value: "£8,400.00"))
             end
 
             context "and it is a social homebuy" do
