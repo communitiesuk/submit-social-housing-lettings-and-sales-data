@@ -69,7 +69,7 @@ RSpec.describe Validations::HouseholdValidations do
             record.reason = 20
             record.reasonother = "Temp accommodation"
             household_validator.validate_reason_for_leaving_last_settled_home(record)
-            expect(record.errors["reason"]).to include(I18n.t("validations.lettings.household.reason.other_not_settled"))
+            expect(record.errors["reason"]).to include(I18n.t("validations.lettings.household.reason.leaving_last_settled_home.other_not_settled"))
           end
 
           it "allows reasons that don't exactly match a phrase indicating homelessness" do
@@ -83,7 +83,7 @@ RSpec.describe Validations::HouseholdValidations do
             record.reason = 20
             record.reasonother = "  0homelessness ! "
             household_validator.validate_reason_for_leaving_last_settled_home(record)
-            expect(record.errors["reason"]).to include(I18n.t("validations.lettings.household.reason.other_not_settled"))
+            expect(record.errors["reason"]).to include(I18n.t("validations.lettings.household.reason.leaving_last_settled_home.other_not_settled"))
           end
         end
       end
@@ -107,16 +107,14 @@ RSpec.describe Validations::HouseholdValidations do
     end
 
     context "when reason is don't know" do
-      let(:expected_error) { I18n.t("validations.lettings.household.underoccupation_benefitcap.dont_know_required") }
-
       it "validates that under occupation benefit cap is also not known" do
         record.reason = 32
         record.underoccupation_benefitcap = 1
         household_validator.validate_reason_for_leaving_last_settled_home(record)
         expect(record.errors["underoccupation_benefitcap"])
-          .to include(match(expected_error))
+          .to include(match( I18n.t("validations.lettings.household.underoccupation_benefitcap.leaving_last_settled_home.dont_know_required")))
         expect(record.errors["reason"])
-          .to include(match(expected_error))
+          .to include(match( I18n.t("validations.lettings.household.reason.leaving_last_settled_home.dont_know_required")))
       end
 
       it "expects that under occupation benefit cap is also not known" do
@@ -134,9 +132,9 @@ RSpec.describe Validations::HouseholdValidations do
         record.referral = 2
         household_validator.validate_reason_for_leaving_last_settled_home(record)
         expect(record.errors["reason"])
-          .to include(match(I18n.t("validations.lettings.household.reason.not_internal_transfer")))
+          .to include(match(I18n.t("validations.lettings.household.reason.leaving_last_settled_home.not_internal_transfer")))
         expect(record.errors["referral"])
-          .to include(match(I18n.t("validations.lettings.household.referral.reason_permanently_decanted")))
+          .to include(match(I18n.t("validations.lettings.household.referral.leaving_last_settled_home.reason_permanently_decanted")))
       end
     end
 
@@ -300,9 +298,9 @@ RSpec.describe Validations::HouseholdValidations do
           record.relat2 = "P"
           household_validator.validate_person_age_matches_relationship(record)
           expect(record.errors["relat2"])
-            .to include(match I18n.t("validations.lettings.household.relat.child_under_16_lettings", person_num: 2))
+            .to include(match I18n.t("validations.lettings.household.relat.child_under_16", person_num: 2))
           expect(record.errors["age2"])
-            .to include(match I18n.t("validations.lettings.household.age.child_under_16_relat_lettings", person_num: 2))
+            .to include(match I18n.t("validations.lettings.household.age.child_under_16_relat", person_num: 2))
         end
 
         it "expects that person is a child of the tenant" do
@@ -647,7 +645,7 @@ RSpec.describe Validations::HouseholdValidations do
         record.previous_la_known = 1
         household_validator.validate_prevloc(record)
         expect(record.errors["prevloc"])
-          .to include(match I18n.t("validations.lettings.household.previous_la_known"))
+          .to include(match I18n.t("validations.lettings.household.prevloc.previous_la_known"))
       end
     end
 
@@ -657,9 +655,9 @@ RSpec.describe Validations::HouseholdValidations do
         record.renewal = 1
         household_validator.validate_layear(record)
         expect(record.errors["layear"])
-          .to include(match I18n.t("validations.lettings.household.renewal_just_moved_to_area.layear"))
+          .to include(match I18n.t("validations.lettings.household.layear.renewal_just_moved_to_area"))
         expect(record.errors["renewal"])
-          .to include(match I18n.t("validations.lettings.household.renewal_just_moved_to_area.renewal"))
+          .to include(match I18n.t("validations.lettings.household.renewal.renewal_just_moved_to_area"))
       end
 
       context "when validating layear and prevloc" do
@@ -670,17 +668,17 @@ RSpec.describe Validations::HouseholdValidations do
           record.startdate = Time.zone.now
           household_validator.validate_layear_and_prevloc(record)
           expect(record.errors["layear"])
-            .to include(match I18n.t("validations.lettings.household.same_la_just_moved_to_area.layear"))
+            .to include(match I18n.t("validations.lettings.household.layear.same_la_just_moved_to_area.current_la"))
           expect(record.errors["prevloc"])
-            .to include(match I18n.t("validations.lettings.household.same_la_just_moved_to_area.previous_la"))
+            .to include(match I18n.t("validations.lettings.household.prevloc.same_la_just_moved_to_area.previous_la"))
           expect(record.errors["ppostcode_full"])
-          .to include(match I18n.t("validations.lettings.household.same_la_just_moved_to_area.previous_la"))
+          .to include(match I18n.t("validations.lettings.household.ppostcode_full.same_la_just_moved_to_area.previous_la"))
           expect(record.errors["la"])
-            .to include(match I18n.t("validations.lettings.household.same_la_just_moved_to_area.current_la"))
+            .to include(match I18n.t("validations.lettings.household.la.same_la_just_moved_to_area.current_la"))
           expect(record.errors["postcode_full"])
-            .to include(match I18n.t("validations.lettings.household.same_la_just_moved_to_area.current_la"))
+            .to include(match I18n.t("validations.lettings.household.postcode_full.same_la_just_moved_to_area.current_la"))
           expect(record.errors["uprn"])
-            .to include(match I18n.t("validations.lettings.household.same_la_just_moved_to_area.current_la"))
+            .to include(match I18n.t("validations.lettings.household.uprn.same_la_just_moved_to_area.current_la"))
         end
       end
     end

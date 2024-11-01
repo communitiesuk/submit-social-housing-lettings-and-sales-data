@@ -25,20 +25,20 @@ module Validations::HouseholdValidations
 
   def validate_reason_for_leaving_last_settled_home(record)
     if record.reason == 32 && record.underoccupation_benefitcap != 4
-      record.errors.add :underoccupation_benefitcap, I18n.t("validations.lettings.household.underoccupation_benefitcap.dont_know_required")
-      record.errors.add :reason, I18n.t("validations.lettings.household.underoccupation_benefitcap.dont_know_required")
+      record.errors.add :underoccupation_benefitcap, I18n.t("validations.lettings.household.underoccupation_benefitcap.leaving_last_settled_home.dont_know_required")
+      record.errors.add :reason, I18n.t("validations.lettings.household.reason.leaving_last_settled_home.dont_know_required")
     end
     validate_other_field(record, 20, :reason, :reasonother)
 
     if record.is_reason_permanently_decanted? && record.referral.present? && !record.is_internal_transfer?
-      record.errors.add :referral, I18n.t("validations.lettings.household.referral.reason_permanently_decanted")
-      record.errors.add :reason, I18n.t("validations.lettings.household.reason.not_internal_transfer")
+      record.errors.add :referral, I18n.t("validations.lettings.household.referral.leaving_last_settled_home.reason_permanently_decanted")
+      record.errors.add :reason, I18n.t("validations.lettings.household.reason.leaving_last_settled_home.not_internal_transfer")
     end
 
     return unless record.form.start_year_after_2024?
 
     if record.reason == 20 && PHRASES_INDICATING_HOMELESSNESS_REGEX.match?(record.reasonother)
-      record.errors.add :reason, I18n.t("validations.lettings.household.reason.other_not_settled")
+      record.errors.add :reason, I18n.t("validations.lettings.household.reason.leaving_last_settled_home.other_not_settled")
     end
   end
 
@@ -94,8 +94,8 @@ module Validations::HouseholdValidations
       next unless age && relationship
 
       if age < 16 && !relationship_is_child_other_or_refused?(relationship)
-        record.errors.add "relat#{person_num}", I18n.t("validations.lettings.household.relat.child_under_16_lettings", person_num:)
-        record.errors.add "age#{person_num}", I18n.t("validations.lettings.household.age.child_under_16_relat_lettings", person_num:)
+        record.errors.add "relat#{person_num}", I18n.t("validations.lettings.household.relat.child_under_16", person_num:)
+        record.errors.add "age#{person_num}", I18n.t("validations.lettings.household.age.child_under_16_relat", person_num:)
       end
     end
   end
@@ -177,7 +177,7 @@ module Validations::HouseholdValidations
 
   def validate_prevloc(record)
     if record.previous_la_known? && record.prevloc.blank?
-      record.errors.add :prevloc, I18n.t("validations.lettings.household.previous_la_known")
+      record.errors.add :prevloc, I18n.t("validations.lettings.household.prevloc.previous_la_known")
     end
   end
 
@@ -185,8 +185,8 @@ module Validations::HouseholdValidations
     return unless record.layear && record.renewal
 
     if record.is_renewal? && record.layear == 1
-      record.errors.add :layear, :renewal_just_moved, message: I18n.t("validations.lettings.household.renewal_just_moved_to_area.layear")
-      record.errors.add :renewal, I18n.t("validations.lettings.household.renewal_just_moved_to_area.renewal")
+      record.errors.add :layear, :renewal_just_moved, message: I18n.t("validations.lettings.household.layear.renewal_just_moved_to_area")
+      record.errors.add :renewal, I18n.t("validations.lettings.household.renewal.renewal_just_moved_to_area")
     end
   end
 
@@ -194,20 +194,20 @@ module Validations::HouseholdValidations
     return unless record.layear && record.la && record.prevloc && record.collection_start_year
 
     if record.la == record.prevloc && record.layear == 1 && record.collection_start_year >= 2023
-      record.errors.add :layear, :renewal_just_moved, message: I18n.t("validations.lettings.household.same_la_just_moved_to_area.layear")
-      record.errors.add :la, :renewal_just_moved, message: I18n.t("validations.lettings.household.same_la_just_moved_to_area.current_la")
-      record.errors.add :postcode_full, :renewal_just_moved, message: I18n.t("validations.lettings.household.same_la_just_moved_to_area.current_la")
-      record.errors.add :uprn, :renewal_just_moved, message: I18n.t("validations.lettings.household.same_la_just_moved_to_area.current_la")
-      record.errors.add :ppostcode_full, :renewal_just_moved, message: I18n.t("validations.lettings.household.same_la_just_moved_to_area.previous_la")
-      record.errors.add :prevloc, :renewal_just_moved, message: I18n.t("validations.lettings.household.same_la_just_moved_to_area.previous_la")
+      record.errors.add :layear, :renewal_just_moved, message: I18n.t("validations.lettings.household.layear.same_la_just_moved_to_area.current_la")
+      record.errors.add :la, :renewal_just_moved, message: I18n.t("validations.lettings.household.la.same_la_just_moved_to_area.current_la")
+      record.errors.add :postcode_full, :renewal_just_moved, message: I18n.t("validations.lettings.household.postcode_full.same_la_just_moved_to_area.current_la")
+      record.errors.add :uprn, :renewal_just_moved, message: I18n.t("validations.lettings.household.uprn.same_la_just_moved_to_area.current_la")
+      record.errors.add :ppostcode_full, :renewal_just_moved, message: I18n.t("validations.lettings.household.ppostcode_full.same_la_just_moved_to_area.previous_la")
+      record.errors.add :prevloc, :renewal_just_moved, message: I18n.t("validations.lettings.household.prevloc.same_la_just_moved_to_area.previous_la")
     end
   end
 
   def validate_combination_of_housing_needs_responses(record)
     if record.has_housingneeds? && record.housingneeds_type_not_listed? && record.no_or_unknown_other_housing_needs?
       record.errors.add :housingneeds, I18n.t("validations.lettings.household.housingneeds.invalid")
-      record.errors.add :housingneeds_type, I18n.t("validations.lettings.household.housingneeds.invalid")
-      record.errors.add :housingneeds_other, I18n.t("validations.lettings.household.housingneeds.invalid")
+      record.errors.add :housingneeds_type, I18n.t("validations.lettings.household.housingneeds_type.invalid")
+      record.errors.add :housingneeds_other, I18n.t("validations.lettings.household.housingneeds_other.invalid")
     end
   end
 
