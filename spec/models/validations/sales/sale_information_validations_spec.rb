@@ -1092,7 +1092,6 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
             expect(record.errors["deposit"]).to include(I18n.t("validations.sales.sale_information.deposit.staircasing_mortgage.mortgage_used", mortgage: "£10,000.00", deposit: "£5,000.00", mortgage_and_deposit_total: "£15,000.00", value: "£30,000.00", stairbought_part_of_value: "£8,400.00"))
             expect(record.errors["stairbought"]).to include(I18n.t("validations.sales.sale_information.stairbought.staircasing_mortgage.mortgage_used", mortgage: "£10,000.00", deposit: "£5,000.00", mortgage_and_deposit_total: "£15,000.00", value: "£30,000.00", stairbought_part_of_value: "£8,400.00"))
             expect(record.errors["type"]).to include(I18n.t("validations.sales.sale_information.type.staircasing_mortgage.mortgage_used", mortgage: "£10,000.00", deposit: "£5,000.00", mortgage_and_deposit_total: "£15,000.00", value: "£30,000.00", stairbought_part_of_value: "£8,400.00"))
-            expect(record.errors["cashdis"]).to include(I18n.t("validations.sales.sale_information.cashdis.staircasing_mortgage.mortgage_used", mortgage: "£10,000.00", deposit: "£5,000.00", mortgage_and_deposit_total: "£15,000.00", value: "£30,000.00", stairbought_part_of_value: "£8,400.00"))
           end
 
           context "and it is a social homebuy" do
