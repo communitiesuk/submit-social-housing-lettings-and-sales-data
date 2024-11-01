@@ -30,7 +30,7 @@ RSpec.describe "merge_requests/show.html.erb", type: :view do
   it "displays the helpdesk ticket details" do
     expect(rendered).to have_selector("dt", text: "Helpdesk ticket")
     if merge_request.helpdesk_ticket.present?
-      expect(rendered).to have_link(merge_request.helpdesk_ticket, href: "https://dluhcdigital.atlassian.net/browse/#{merge_request.helpdesk_ticket}")
+      expect(rendered).to have_link(merge_request.helpdesk_ticket, href: "https://mhclgdigital.atlassian.net/browse/#{merge_request.helpdesk_ticket}")
     else
       expect(rendered).to have_selector("dd", text: "You didn't answer this question")
     end
