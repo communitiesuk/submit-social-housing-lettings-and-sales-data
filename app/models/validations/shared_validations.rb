@@ -74,27 +74,6 @@ module Validations::SharedValidations
     end
   end
 
-  def location_during_startdate_validation(record)
-    location_inactive_status = inactive_status(record.startdate, record.location)
-
-    if location_inactive_status.present?
-      date, scope, deactivation_date = location_inactive_status.values_at(:date, :scope, :deactivation_date)
-      record.errors.add :startdate, :not_active, message: I18n.t("validations.lettings.setup.startdate.location.#{scope}.startdate", postcode: record.location.postcode, date:, deactivation_date:)
-      record.errors.add :location_id, :not_active, message: I18n.t("validations.lettings.setup.startdate.location.#{scope}.location_id", postcode: record.location.postcode, date:, deactivation_date:)
-      record.errors.add :scheme_id, :not_active, message: I18n.t("validations.lettings.setup.startdate.location.#{scope}.location_id", postcode: record.location.postcode, date:, deactivation_date:)
-    end
-  end
-
-  def scheme_during_startdate_validation(record)
-    scheme_inactive_status = inactive_status(record.startdate, record.scheme)
-
-    if scheme_inactive_status.present?
-      date, scope, deactivation_date = scheme_inactive_status.values_at(:date, :scope, :deactivation_date)
-      record.errors.add :startdate, I18n.t("validations.lettings.setup.startdate.scheme.#{scope}.startdate", name: record.scheme.service_name, date:, deactivation_date:)
-      record.errors.add :scheme_id, I18n.t("validations.lettings.setup.startdate.scheme.#{scope}.scheme_id", name: record.scheme.service_name, date:, deactivation_date:)
-    end
-  end
-
   def inactive_status(date, resource)
     return if date.blank? || resource.blank?
 
@@ -115,14 +94,6 @@ module Validations::SharedValidations
            end
 
     { scope: status, date: date&.to_formatted_s(:govuk_date), deactivation_date: closest_reactivation&.deactivation_date&.to_formatted_s(:govuk_date) }
-  end
-
-  def tenancy_startdate_with_scheme_locations(record)
-    return if record.scheme.blank? || record.startdate.blank?
-    return if record.scheme.has_active_locations_on_date?(record.startdate)
-
-    record.errors.add :startdate, I18n.t("validations.lettings.setup.startdate.scheme.locations_inactive.startdate", name: record.scheme.service_name)
-    record.errors.add :scheme_id, I18n.t("validations.lettings.setup.startdate.scheme.locations_inactive.scheme_id", name: record.scheme.service_name)
   end
 
   def shared_validate_partner_count(record, max_people)
