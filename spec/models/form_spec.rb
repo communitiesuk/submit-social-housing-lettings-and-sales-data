@@ -282,10 +282,10 @@ RSpec.describe Form, type: :model do
 
       context "and attribute Y is changed such that it is no longer routed to" do
         it "the value of this attribute is cleared" do
-          expect(log.stairbought).to be 25
+          expect(log.stairbought).to eq 25
           log.staircase = 2
           log.form.reset_not_routed_questions_and_invalid_answers(log)
-          expect(log.stairbought).to be nil
+          expect(log.stairbought).to be_nil
         end
       end
     end
