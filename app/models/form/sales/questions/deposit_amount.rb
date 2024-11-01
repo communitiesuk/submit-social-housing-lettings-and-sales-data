@@ -2,8 +2,7 @@ class Form::Sales::Questions::DepositAmount < ::Form::Question
   def initialize(id, hsh, subsection, ownershipsch:, optional:)
     super(id, hsh, subsection)
     @id = "deposit"
-    @check_answer_label = "Cash deposit"
-    @header = "How much cash deposit was paid on the property?"
+    @copy_key = "sales.sale_information.deposit"
     @type = "numeric"
     @min = 0
     @max = 999_999
@@ -24,14 +23,6 @@ class Form::Sales::Questions::DepositAmount < ::Form::Question
     2023 => { 1 => 95, 2 => 108, 3 => 116 },
     2024 => { 1 => 96, 2 => 109, 3 => 116 },
   }.freeze
-
-  def hint_text
-    if @optional
-      "Enter the total cash sum paid by the buyer towards the property that was not funded by the mortgage. This excludes any grant or loan. As this is a fully staircased sale this question is optional. If you do not have the information available click save and continue"
-    else
-      "Enter the total cash sum paid by the buyer towards the property that was not funded by the mortgage. This excludes any grant or loan"
-    end
-  end
 
   def top_guidance_partial
     return "financial_calculations_shared_ownership" if @ownershipsch == 1

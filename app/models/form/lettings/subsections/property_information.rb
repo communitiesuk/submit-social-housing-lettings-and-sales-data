@@ -34,19 +34,15 @@ class Form::Lettings::Subsections::PropertyInformation < ::Form::Subsection
         Form::Lettings::Pages::Uprn.new(nil, nil, self),
         Form::Lettings::Pages::UprnConfirmation.new(nil, nil, self),
         Form::Lettings::Pages::AddressMatcher.new(nil, nil, self),
-        Form::Lettings::Pages::NoAddressFound.new(nil, nil, self),
+        Form::Lettings::Pages::NoAddressFound.new(nil, nil, self), # soft validation
         Form::Lettings::Pages::UprnSelection.new(nil, nil, self),
         Form::Lettings::Pages::AddressFallback.new(nil, nil, self),
       ]
-    elsif form.start_date.year == 2023
+    else
       [
         Form::Lettings::Pages::Uprn.new(nil, nil, self),
         Form::Lettings::Pages::UprnConfirmation.new(nil, nil, self),
         Form::Lettings::Pages::Address.new(nil, nil, self),
-      ]
-    else
-      [
-        Form::Lettings::Pages::PropertyPostcode.new(nil, nil, self),
       ]
     end
   end

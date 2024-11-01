@@ -2,6 +2,7 @@ class Form::Lettings::Pages::Uprn < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "uprn"
+    @copy_key = "lettings.property_information.uprn"
     @depends_on = [{ "is_supported_housing?" => false }]
   end
 

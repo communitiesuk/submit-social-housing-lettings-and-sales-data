@@ -149,7 +149,7 @@ RSpec.describe Validations::SetupValidations do
       it "adds an error to startdate" do
         record.startdate = Time.zone.local(2024, 3, 31)
         setup_validator.validate_startdate_setup(record)
-        expect(record.errors["startdate"]).to include(match I18n.t("validations.setup.startdate.later_than_14_days_after"))
+        expect(record.errors["startdate"]).to include(match I18n.t("validations.lettings.setup.startdate.not_within.next_two_weeks"))
       end
 
       context "and the attempted startdate is in a future collection year" do
@@ -158,7 +158,7 @@ RSpec.describe Validations::SetupValidations do
           setup_validator.validate_startdate_setup(record)
           expect(record.errors["startdate"].length).to be >= 2
           expect(record.errors["startdate"][0]).to eq("Enter a date within the 2023 to 2024 collection year, which is between 1st April 2023 and 31st March 2024.")
-          expect(record.errors["startdate"][1]).to eq(I18n.t("validations.setup.startdate.later_than_14_days_after"))
+          expect(record.errors["startdate"][1]).to eq(I18n.t("validations.lettings.setup.startdate.not_within.next_two_weeks"))
         end
       end
     end
@@ -401,7 +401,7 @@ RSpec.describe Validations::SetupValidations do
       record.irproduct_other = nil
       setup_validator.validate_irproduct_other(record)
       expect(record.errors["irproduct_other"])
-        .to include(match I18n.t("validations.setup.intermediate_rent_product_name.blank"))
+        .to include(match I18n.t("validations.lettings.setup.intermediate_rent_product_name.blank"))
     end
 
     it "adds an error when the intermediate rent product name is blank but the rent type was given as other intermediate rent product" do
@@ -409,7 +409,7 @@ RSpec.describe Validations::SetupValidations do
       record.irproduct_other = ""
       setup_validator.validate_irproduct_other(record)
       expect(record.errors["irproduct_other"])
-        .to include(match I18n.t("validations.setup.intermediate_rent_product_name.blank"))
+        .to include(match I18n.t("validations.lettings.setup.intermediate_rent_product_name.blank"))
     end
 
     it "Does not add an error when the intermediate rent product name is provided and the rent type was given as other intermediate rent product" do
@@ -572,7 +572,7 @@ RSpec.describe Validations::SetupValidations do
       it "adds an error to scheme_id" do
         record.scheme = scheme
         setup_validator.validate_scheme(record)
-        expect(record.errors["scheme_id"]).to include(I18n.t("validations.setup.scheme.incomplete"))
+        expect(record.errors["scheme_id"]).to include(I18n.t("validations.lettings.setup.scheme.incomplete"))
       end
     end
   end
@@ -748,9 +748,9 @@ RSpec.describe Validations::SetupValidations do
       record.managing_organisation = other_organisation
 
       setup_validator.validate_organisation(record)
-      expect(record.errors["assigned_to"]).to include(I18n.t("validations.setup.assigned_to.invalid"))
-      expect(record.errors["owning_organisation_id"]).to include(I18n.t("validations.setup.owning_organisation.invalid"))
-      expect(record.errors["managing_organisation_id"]).to include(I18n.t("validations.setup.managing_organisation.invalid"))
+      expect(record.errors["assigned_to"]).to include(I18n.t("validations.lettings.setup.assigned_to.invalid"))
+      expect(record.errors["owning_organisation_id"]).to include(I18n.t("validations.lettings.setup.owning_organisation.invalid"))
+      expect(record.errors["managing_organisation_id"]).to include(I18n.t("validations.lettings.setup.managing_organisation.invalid"))
     end
 
     it "does not validate if either managing or owning organisation is the same as current user organisation" do
@@ -902,7 +902,7 @@ RSpec.describe Validations::SetupValidations do
         record.scheme = scheme
         setup_validator.validate_scheme_has_confirmed_locations_validation(record)
         expect(record.errors["scheme_id"])
-          .to include(match I18n.t("validations.scheme.no_completed_locations"))
+          .to include(match I18n.t("validations.lettings.setup.scheme.no_completed_locations"))
       end
     end
 

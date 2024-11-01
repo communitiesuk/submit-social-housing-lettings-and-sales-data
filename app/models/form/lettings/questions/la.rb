@@ -2,8 +2,6 @@ class Form::Lettings::Questions::La < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "la"
-    @check_answer_label = "Local Authority"
-    @header = "What is the property’s local authority?"
     @type = "select"
     @check_answers_card_number = nil
     @hint_text = ""

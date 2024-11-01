@@ -8,8 +8,9 @@ class Form::Sales::Pages::StaircaseOwnedValueCheck < ::Form::Page
         "joint_purchase?" => joint_purchase,
       },
     ]
+    @copy_key = "sales.soft_validations.stairowned_value_check.#{joint_purchase ? 'joint_purchase' : 'not_joint_purchase'}"
     @title_text = {
-      "translation" => joint_purchase ? "soft_validations.staircase_owned.title_text.two" : "soft_validations.staircase_owned.title_text.one",
+      "translation" => "forms.#{form.start_date.year}.#{@copy_key}.title_text",
       "arguments" => [
         {
           "key" => "stairowned",
@@ -19,14 +20,14 @@ class Form::Sales::Pages::StaircaseOwnedValueCheck < ::Form::Page
       ],
     }
     @informative_text = {
-      "translation" => "soft_validations.staircase_owned.hint_text",
+      "translation" => "forms.#{form.start_date.year}.#{@copy_key}.informative_text",
       "arguments" => [],
     }
   end
 
   def questions
     @questions ||= [
-      Form::Sales::Questions::StaircaseOwnedValueCheck.new(nil, nil, self),
+      Form::Sales::Questions::StaircaseOwnedValueCheck.new(nil, nil, self, joint_purchase: @joint_purchase),
     ]
   end
 

@@ -16,42 +16,42 @@ module Validations::SetupValidations
     end
 
     if record.startdate > Time.zone.today + 14.days
-      record.errors.add :startdate, I18n.t("validations.setup.startdate.later_than_14_days_after")
+      record.errors.add :startdate, I18n.t("validations.lettings.setup.startdate.not_within.next_two_weeks")
     end
   end
 
   def validate_organisation(record)
     assigned_to, managing_organisation, owning_organisation = record.values_at("assigned_to", "managing_organisation", "owning_organisation")
     unless [assigned_to, managing_organisation, owning_organisation].any?(&:blank?) || ((assigned_to.organisation.absorbed_organisations + [assigned_to.organisation]) & [managing_organisation, owning_organisation]).present?
-      record.errors.add :assigned_to, I18n.t("validations.setup.assigned_to.invalid")
-      record.errors.add :owning_organisation_id, I18n.t("validations.setup.owning_organisation.invalid")
-      record.errors.add :managing_organisation_id, I18n.t("validations.setup.managing_organisation.invalid")
+      record.errors.add :assigned_to, I18n.t("validations.lettings.setup.assigned_to.invalid")
+      record.errors.add :owning_organisation_id, I18n.t("validations.lettings.setup.owning_organisation.invalid")
+      record.errors.add :managing_organisation_id, I18n.t("validations.lettings.setup.managing_organisation.invalid")
     end
     return unless record.startdate
 
     if owning_organisation.present?
       if owning_organisation&.merge_date.present? && owning_organisation.merge_date <= record.startdate
-        record.errors.add :owning_organisation_id, I18n.t("validations.setup.owning_organisation.inactive_merged_organisation",
+        record.errors.add :owning_organisation_id, I18n.t("validations.lettings.setup.owning_organisation.inactive.merged_organisation",
                                                           owning_organisation: record.owning_organisation.name,
-                                                          owning_organisation_merge_date: record.owning_organisation.merge_date.to_formatted_s(:govuk_date),
-                                                          owning_absorbing_organisation: record.owning_organisation.absorbing_organisation.name)
+                                                          merge_date: record.owning_organisation.merge_date.to_formatted_s(:govuk_date),
+                                                          absorbing_organisation: record.owning_organisation.absorbing_organisation.name)
       elsif owning_organisation&.absorbed_organisations.present? && owning_organisation.available_from.present? && owning_organisation.available_from.to_date > record.startdate.to_date
-        record.errors.add :owning_organisation_id, I18n.t("validations.setup.owning_organisation.inactive_absorbing_organisation",
+        record.errors.add :owning_organisation_id, I18n.t("validations.lettings.setup.owning_organisation.inactive.absorbing_organisation",
                                                           owning_organisation: record.owning_organisation.name,
-                                                          owning_organisation_available_from: record.owning_organisation.available_from.to_formatted_s(:govuk_date))
+                                                          available_from: record.owning_organisation.available_from.to_formatted_s(:govuk_date))
       end
     end
 
     if managing_organisation.present?
       if managing_organisation&.merge_date.present? && managing_organisation.merge_date <= record.startdate
-        record.errors.add :managing_organisation_id, I18n.t("validations.setup.managing_organisation.inactive_merged_organisation",
+        record.errors.add :managing_organisation_id, I18n.t("validations.lettings.setup.managing_organisation.inactive.merged_organisation",
                                                             managing_organisation: record.managing_organisation.name,
-                                                            managing_organisation_merge_date: record.managing_organisation.merge_date.to_formatted_s(:govuk_date),
-                                                            managing_absorbing_organisation: record.managing_organisation.absorbing_organisation.name)
+                                                            merge_date: record.managing_organisation.merge_date.to_formatted_s(:govuk_date),
+                                                            absorbing_organisation: record.managing_organisation.absorbing_organisation.name)
       elsif managing_organisation&.absorbed_organisations.present? && managing_organisation.available_from.present? && managing_organisation.available_from.to_date > record.startdate.to_date
-        record.errors.add :managing_organisation_id, I18n.t("validations.setup.managing_organisation.inactive_absorbing_organisation",
+        record.errors.add :managing_organisation_id, I18n.t("validations.lettings.setup.managing_organisation.inactive.absorbing_organisation",
                                                             managing_organisation: record.managing_organisation.name,
-                                                            managing_organisation_available_from: record.managing_organisation.available_from.to_formatted_s(:govuk_date))
+                                                            available_from: record.managing_organisation.available_from.to_formatted_s(:govuk_date))
       end
     end
   end
@@ -68,7 +68,7 @@ module Validations::SetupValidations
 
   def validate_irproduct_other(record)
     if intermediate_product_rent_type?(record) && record.irproduct_other.blank?
-      record.errors.add :irproduct_other, I18n.t("validations.setup.intermediate_rent_product_name.blank")
+      record.errors.add :irproduct_other, I18n.t("validations.lettings.setup.intermediate_rent_product_name.blank")
     end
   end
 
@@ -76,13 +76,13 @@ module Validations::SetupValidations
     return unless record.scheme
 
     unless record.scheme.locations.confirmed.any?
-      record.errors.add :scheme_id, :no_completed_locations, message: I18n.t("validations.scheme.no_completed_locations")
+      record.errors.add :scheme_id, :no_completed_locations, message: I18n.t("validations.lettings.setup.scheme.no_completed_locations")
     end
   end
 
   def validate_scheme(record)
     if record.scheme&.status == :incomplete
-      record.errors.add :scheme_id, :incomplete, message: I18n.t("validations.setup.scheme.incomplete")
+      record.errors.add :scheme_id, :incomplete, message: I18n.t("validations.lettings.setup.scheme.incomplete")
     end
 
     scheme_during_startdate_validation(record)
@@ -93,8 +93,8 @@ module Validations::SetupValidations
     location_during_startdate_validation(record)
 
     if record.location&.status == :incomplete
-      record.errors.add :location_id, :incomplete, message: I18n.t("validations.setup.location.incomplete")
-      record.errors.add :scheme_id, :incomplete, message: I18n.t("validations.setup.location.incomplete")
+      record.errors.add :location_id, :incomplete, message: I18n.t("validations.lettings.setup.location.incomplete")
+      record.errors.add :scheme_id, :incomplete, message: I18n.t("validations.lettings.setup.location.incomplete")
     end
   end
 
@@ -131,7 +131,7 @@ module Validations::SetupValidations
     return if record.skip_dpo_validation
 
     if record.managing_organisation_id_changed? && record.managing_organisation.present? && !record.managing_organisation.data_protection_confirmed?
-      record.errors.add :managing_organisation_id, I18n.t("validations.setup.managing_organisation.data_sharing_agreement_not_signed")
+      record.errors.add :managing_organisation_id, I18n.t("validations.lettings.setup.managing_organisation.data_sharing_agreement_not_signed")
     end
   end
 
@@ -158,7 +158,7 @@ private
 
     if FormHandler.instance.lettings_in_crossover_period?
       I18n.t(
-        "validations.setup.startdate.previous_and_current_collection_year",
+        "validations.lettings.setup.startdate.must_be_within.previous_and_current_collection_year",
         previous_start_year_short: previous_collection_start_date.strftime("%Y"),
         previous_end_year_short: previous_collection_end_date.strftime("%Y"),
         previous_start_year_long: previous_collection_start_date.strftime("#{previous_collection_start_date.day.ordinalize} %B %Y"),
@@ -167,7 +167,7 @@ private
       )
     else
       I18n.t(
-        "validations.setup.startdate.current_collection_year",
+        "validations.lettings.setup.startdate.must_be_within.current_collection_year",
         current_start_year_short: current_collection_start_date.strftime("%Y"),
         current_end_year_short: current_collection_end_date.strftime("%Y"),
         current_start_year_long: current_collection_start_date.strftime("#{current_collection_start_date.day.ordinalize} %B %Y"),
@@ -182,20 +182,20 @@ private
 
   def add_same_merge_organisation_error(record)
     if merged_owning_organisation_inactive?(record)
-      record.errors.add :startdate, I18n.t("validations.setup.startdate.invalid_merged_organisations_start_date.same_organisation",
+      record.errors.add :startdate, I18n.t("validations.lettings.setup.startdate.invalid_merged_organisations_start_date.same_organisation",
                                            owning_organisation: record.owning_organisation.name,
-                                           owning_organisation_merge_date: record.owning_organisation.merge_date.to_formatted_s(:govuk_date),
-                                           owning_absorbing_organisation: record.owning_organisation.absorbing_organisation.name)
+                                           merge_date: record.owning_organisation.merge_date.to_formatted_s(:govuk_date),
+                                           absorbing_organisation: record.owning_organisation.absorbing_organisation.name)
     elsif absorbing_owning_organisation_inactive?(record)
-      record.errors.add :startdate, I18n.t("validations.setup.startdate.invalid_absorbing_organisations_start_date.same_organisation",
+      record.errors.add :startdate, I18n.t("validations.lettings.setup.startdate.invalid_absorbing_organisations_start_date.same_organisation",
                                            owning_organisation: record.owning_organisation.name,
-                                           owning_organisation_available_from: record.owning_organisation.available_from.to_formatted_s(:govuk_date))
+                                           available_from: record.owning_organisation.available_from.to_formatted_s(:govuk_date))
     end
   end
 
   def add_same_merge_error(record)
     if merged_owning_organisation_inactive?(record)
-      record.errors.add :startdate, I18n.t("validations.setup.startdate.invalid_merged_organisations_start_date.same_merge",
+      record.errors.add :startdate, I18n.t("validations.lettings.setup.startdate.invalid_merged_organisations_start_date.same_merge",
                                            owning_organisation: record.owning_organisation.name,
                                            managing_organisation: record.managing_organisation.name,
                                            owning_organisation_merge_date: record.owning_organisation.merge_date.to_formatted_s(:govuk_date),
@@ -205,7 +205,7 @@ private
 
   def add_merged_organisations_errors(record)
     if merged_owning_organisation_inactive?(record) && merged_managing_organisation_inactive?(record)
-      record.errors.add :startdate, I18n.t("validations.setup.startdate.invalid_merged_organisations_start_date.different_merge",
+      record.errors.add :startdate, I18n.t("validations.lettings.setup.startdate.invalid_merged_organisations_start_date.different_merge",
                                            owning_organisation: record.owning_organisation.name,
                                            owning_organisation_merge_date: record.owning_organisation.merge_date.to_formatted_s(:govuk_date),
                                            owning_absorbing_organisation: record.owning_organisation.absorbing_organisation.name,
@@ -214,39 +214,39 @@ private
                                            managing_absorbing_organisation: record.managing_organisation.absorbing_organisation.name)
     else
       if merged_owning_organisation_inactive?(record)
-        record.errors.add :startdate, I18n.t("validations.setup.startdate.invalid_merged_organisations_start_date.owning_organisation",
+        record.errors.add :startdate, I18n.t("validations.lettings.setup.startdate.invalid_merged_organisations_start_date.owning_organisation",
                                              owning_organisation: record.owning_organisation.name,
-                                             owning_organisation_merge_date: record.owning_organisation.merge_date.to_formatted_s(:govuk_date),
-                                             owning_absorbing_organisation: record.owning_organisation.absorbing_organisation.name)
+                                             merge_date: record.owning_organisation.merge_date.to_formatted_s(:govuk_date),
+                                             absorbing_organisation: record.owning_organisation.absorbing_organisation.name)
       end
 
       if merged_managing_organisation_inactive?(record)
-        record.errors.add :startdate, I18n.t("validations.setup.startdate.invalid_merged_organisations_start_date.managing_organisation",
+        record.errors.add :startdate, I18n.t("validations.lettings.setup.startdate.invalid_merged_organisations_start_date.managing_organisation",
                                              managing_organisation: record.managing_organisation.name,
-                                             managing_organisation_merge_date: record.managing_organisation.merge_date.to_formatted_s(:govuk_date),
-                                             managing_absorbing_organisation: record.managing_organisation.absorbing_organisation.name)
+                                             merge_date: record.managing_organisation.merge_date.to_formatted_s(:govuk_date),
+                                             absorbing_organisation: record.managing_organisation.absorbing_organisation.name)
       end
     end
   end
 
   def add_absorbing_organisations_errors(record)
     if absorbing_owning_organisation_inactive?(record) && absorbing_managing_organisation_inactive?(record)
-      record.errors.add :startdate, I18n.t("validations.setup.startdate.invalid_absorbing_organisations_start_date.different_organisations",
+      record.errors.add :startdate, I18n.t("validations.lettings.setup.startdate.invalid_absorbing_organisations_start_date.different_organisations",
                                            owning_organisation: record.owning_organisation.name,
                                            owning_organisation_active_from: record.owning_organisation.available_from.to_formatted_s(:govuk_date),
                                            managing_organisation: record.managing_organisation.name,
                                            managing_organisation_active_from: record.managing_organisation.available_from.to_formatted_s(:govuk_date))
     else
       if absorbing_owning_organisation_inactive?(record)
-        record.errors.add :startdate, I18n.t("validations.setup.startdate.invalid_absorbing_organisations_start_date.owning_organisation",
+        record.errors.add :startdate, I18n.t("validations.lettings.setup.startdate.invalid_absorbing_organisations_start_date.owning_organisation",
                                              owning_organisation: record.owning_organisation.name,
-                                             owning_organisation_available_from: record.owning_organisation.available_from.to_formatted_s(:govuk_date))
+                                             available_from: record.owning_organisation.available_from.to_formatted_s(:govuk_date))
       end
 
       if absorbing_managing_organisation_inactive?(record)
-        record.errors.add :startdate, I18n.t("validations.setup.startdate.invalid_absorbing_organisations_start_date.managing_organisation",
+        record.errors.add :startdate, I18n.t("validations.lettings.setup.startdate.invalid_absorbing_organisations_start_date.managing_organisation",
                                              managing_organisation: record.managing_organisation.name,
-                                             managing_organisation_available_from: record.managing_organisation.available_from.to_formatted_s(:govuk_date))
+                                             available_from: record.managing_organisation.available_from.to_formatted_s(:govuk_date))
       end
     end
   end
