@@ -26,7 +26,7 @@ class Form::Sales::Pages::DepositValueCheck < ::Form::Page
 
   def questions
     @questions ||= [
-      Form::Sales::Questions::DepositValueCheck.new(nil, nil, self),
+      Form::Sales::Questions::DepositValueCheck.new(nil, nil, self, joint_purchase: @joint_purchase),
     ]
   end
 

@@ -6,9 +6,9 @@ class Form::Sales::Pages::SharedOwnershipDepositValueCheck < ::Form::Page
         "shared_ownership_deposit_invalid?" => true,
       },
     ]
-    @informative_text = {}
+    @copy_key = "sales.soft_validations.shared_ownership_deposit_value_check"
     @title_text = {
-      "translation" => "soft_validations.shared_ownership_deposit.title_text",
+      "translation" => "forms.#{form.start_date.year}.#{@copy_key}.title_text",
       "arguments" => [
         {
           "key" => "mortgage_deposit_and_discount_error_fields",

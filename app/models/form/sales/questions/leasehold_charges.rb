@@ -2,8 +2,7 @@ class Form::Sales::Questions::LeaseholdCharges < ::Form::Question
   def initialize(id, hsh, subsection, ownershipsch:)
     super(id, hsh, subsection)
     @id = "mscharge"
-    @check_answer_label = "Monthly leasehold charges"
-    @header = "Enter the total monthly charge"
+    @copy_key = "sales.sale_information.leaseholdcharges.mscharge"
     @type = "numeric"
     @min = 1
     @step = 0.01

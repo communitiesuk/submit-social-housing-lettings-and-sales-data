@@ -2,7 +2,7 @@ class Form::Lettings::Pages::IncomeAmount < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "income_amount"
-    @header = "Total household income"
+    @copy_key = "lettings.income_and_benefits.income_amount"
     @depends_on = [{ "net_income_known" => 0 }]
   end
 

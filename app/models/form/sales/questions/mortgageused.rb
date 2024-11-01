@@ -2,8 +2,7 @@ class Form::Sales::Questions::Mortgageused < ::Form::Question
   def initialize(id, hsh, subsection, ownershipsch:)
     super(id, hsh, subsection)
     @id = "mortgageused"
-    @check_answer_label = "Mortgage used"
-    @header = "Was a mortgage used for the purchase of this property?"
+    @copy_key = "sales.sale_information.mortgageused"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @ownershipsch = ownershipsch
