@@ -2,11 +2,8 @@ class Form::Lettings::Questions::Layear < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "layear"
-    @check_answer_label = "Length of time in local authority area"
-    @header = "How long has the household continuously lived in the local authority area of the new letting?"
     @type = "radio"
     @check_answers_card_number = 0
-    @hint_text = ""
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
   end
 

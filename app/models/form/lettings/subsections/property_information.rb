@@ -10,8 +10,7 @@ class Form::Lettings::Subsections::PropertyInformation < ::Form::Subsection
     @pages ||= [
       uprn_questions,
       Form::Lettings::Pages::PropertyLocalAuthority.new(nil, nil, self),
-      Form::Lettings::Pages::MinRentValueCheck.new("local_authority_min_rent_value_check", nil, self, check_answers_card_number: nil),
-      Form::Lettings::Pages::MaxRentValueCheck.new("local_authority_max_rent_value_check", nil, self, check_answers_card_number: nil),
+      Form::Lettings::Pages::RentValueCheck.new("local_authority_rent_value_check", nil, self, check_answers_card_number: nil),
       Form::Lettings::Pages::FirstTimePropertyLetAsSocialHousing.new(nil, nil, self),
       Form::Lettings::Pages::PropertyLetType.new(nil, nil, self),
       Form::Lettings::Pages::PropertyVacancyReasonNotFirstLet.new(nil, nil, self),
@@ -21,8 +20,7 @@ class Form::Lettings::Subsections::PropertyInformation < ::Form::Subsection
       Form::Lettings::Pages::PropertyBuildingType.new(nil, nil, self),
       Form::Lettings::Pages::PropertyWheelchairAccessible.new(nil, nil, self),
       Form::Lettings::Pages::PropertyNumberOfBedrooms.new(nil, nil, self),
-      Form::Lettings::Pages::MinRentValueCheck.new("beds_min_rent_value_check", nil, self, check_answers_card_number: 0),
-      Form::Lettings::Pages::MaxRentValueCheck.new("beds_max_rent_value_check", nil, self, check_answers_card_number: 0),
+      Form::Lettings::Pages::RentValueCheck.new("beds_rent_value_check", nil, self, check_answers_card_number: 0),
       Form::Lettings::Pages::VoidDate.new(nil, nil, self),
       Form::Lettings::Pages::VoidDateValueCheck.new(nil, nil, self),
       Form::Lettings::Pages::PropertyMajorRepairs.new(nil, nil, self),
@@ -36,19 +34,15 @@ class Form::Lettings::Subsections::PropertyInformation < ::Form::Subsection
         Form::Lettings::Pages::Uprn.new(nil, nil, self),
         Form::Lettings::Pages::UprnConfirmation.new(nil, nil, self),
         Form::Lettings::Pages::AddressMatcher.new(nil, nil, self),
-        Form::Lettings::Pages::NoAddressFound.new(nil, nil, self),
+        Form::Lettings::Pages::NoAddressFound.new(nil, nil, self), # soft validation
         Form::Lettings::Pages::UprnSelection.new(nil, nil, self),
         Form::Lettings::Pages::AddressFallback.new(nil, nil, self),
       ]
-    elsif form.start_date.year == 2023
+    else
       [
         Form::Lettings::Pages::Uprn.new(nil, nil, self),
         Form::Lettings::Pages::UprnConfirmation.new(nil, nil, self),
         Form::Lettings::Pages::Address.new(nil, nil, self),
-      ]
-    else
-      [
-        Form::Lettings::Pages::PropertyPostcode.new(nil, nil, self),
       ]
     end
   end

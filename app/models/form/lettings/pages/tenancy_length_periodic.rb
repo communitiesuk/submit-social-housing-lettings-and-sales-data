@@ -2,6 +2,7 @@ class Form::Lettings::Pages::TenancyLengthPeriodic < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "tenancy_length_periodic"
+    @copy_key = "lettings.tenancy_information.tenancylength.tenancy_length_periodic"
     @depends_on = [{ "tenancy_type_periodic?" => true }]
   end
 
