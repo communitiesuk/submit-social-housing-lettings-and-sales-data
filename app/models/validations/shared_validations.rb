@@ -124,7 +124,11 @@ module Validations::SharedValidations
     return if record.skip_dpo_validation
 
     if record.owning_organisation_id_changed? && record.owning_organisation.present? && !record.owning_organisation.data_protection_confirmed?
-      record.errors.add :owning_organisation_id, I18n.t("validations.shared.setup.owning_organisation.data_sharing_agreement_not_signed")
+      if record.sales?
+        record.errors.add :owning_organisation_id, I18n.t("validations.sales.setup.owning_organisation.data_sharing_agreement_not_signed")
+      else
+        record.errors.add :owning_organisation_id, I18n.t("validations.lettings.setup.owning_organisation.data_sharing_agreement_not_signed")
+      end
     end
   end
 
