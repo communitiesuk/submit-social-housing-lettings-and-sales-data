@@ -82,11 +82,13 @@ en:
             file:
               blank: "Select which file to upload."
               not_csv: "Your file must be in CSV format."
+              file_too_large: "File must be 10MB or less. Check your file and delete data that does not need to be uploaded."
         forms/bulk_upload_sales/upload_your_file:
           attributes:
             file:
               blank: "Select which file to upload."
               not_csv: "Your file must be in CSV format."
+              file_too_large: "File must be 10MB or less. Check your file and delete data that does not need to be uploaded."
         forms/bulk_upload_lettings/needstype:
           attributes:
             needstype:
@@ -512,14 +514,8 @@ en:
       nationality: "Select a valid nationality."
 
     tenancy:
-      length:
-        fixed_term_not_required: "You must only answer the length of the tenancy if it's fixed-term."
-        invalid_fixed: "Enter a tenancy length between %{min_tenancy_length} and 99 years for a tenancy of this type."
-        invalid_periodic: "Enter a tenancy length between %{min_tenancy_length} and 99 years (or don't specify the length) for a tenancy of this type."
       internal_transfer: "Answer must be secure tenancy as this tenancy is an internal transfer."
       cannot_be_internal_transfer: "Answer cannot be internal transfer as this is not a secure tenancy."
-      not_joint: "This cannot be a joint tenancy as you've told us there's only one person in the household."
-      joint_more_than_one_member: "There must be more than one person in the household as you've told us this is a joint tenancy."
 
     declaration:
       missing:
@@ -576,12 +572,6 @@ en:
       outside_range_title: "You told us the rent is %{brent}."
       informative_text: "This is %{higher_or_lower} than we would expect."
       hint_text: "Check the following:<ul class=\"govuk-body-l app-panel--interruption\"><li>the decimal point</li><li>the frequency, for example every week or every calendar month</li><li>the rent type is correct, for example affordable or social rent</li></ul>"
-    staircase_owned:
-      title_text:
-        one: "You told us that the buyer now owns %{stairowned} of the property."
-        two: "You told us that the buyers now own %{stairowned} of the property."
-      hint_text: "The maximum percentage that can be owned under the Older Persons Shared Ownership scheme is 75%, unless the property was funded outside the Affordable Homes Programme.
-Make sure these answers are correct."
     retirement:
       min:
         title: "You told us this person is aged %{age} years and retired."
@@ -589,9 +579,6 @@ Make sure these answers are correct."
       max:
         title: "You told us this person is over 66 and not retired."
         hint_text: "The minimum expected retirement age in England is 66."
-    extra_borrowing:
-      title_text: "You told us that the mortgage and deposit total is %{mortgage_and_deposit_total}."
-      hint_text: "This is higher than the purchase price minus the discount."
     pregnancy:
       title: "You told us somebody in the household is pregnant."
       all_male_tenants: "You also told us that all the tenants living at the property are male."
@@ -602,19 +589,6 @@ Make sure these answers are correct."
     void_date:
       title_text: "You told us that the property has been vacant for more than 2 years."
       hint_text: "This is higher than we would expect."
-    shared_ownership_deposit:
-      title_text: "You told us that the %{mortgage_deposit_and_discount_error_fields} add up to %{mortgage_deposit_and_discount_total}."
-    staircase_bought_seems_high:
-      title_text: "You told us that %{percentage}% was bought in this staircasing transaction."
-      hint_text: "Most staircasing transactions are less than 50%"
-    discounted_sale_value:
-      title_text: "Mortgage, deposit, and grant total must equal %{value_with_discount}."
-      informative_text: "Your given mortgage, deposit and grant total is %{mortgage_deposit_and_grant_total}."
-    care_home_charges:
-      title_text: "Care home charges should be provided if this is a care home accommodation."
-    grant:
-      title_text: "You told us that the grant amount is %{grant}."
-      hint_text: "Loans, grants and subsidies are usually between £9,000 and £16,000."
     referral:
       title_text: "Are you sure?"
       hint_text: "This is a general needs log, and this referral type is for supported housing."
@@ -627,16 +601,11 @@ Make sure these answers are correct."
     charges:
       informative_text: "This is higher than we would expect."
       hint_text: "Check the following:<ul class=\"govuk-body-l app-panel--interruption\"><li>the decimal point</li><li>the frequency, for example every week or every calendar month</li><li>the needs type</li></ul>"
-    deposit_and_mortgage:
-      title_text: "You told us the mortgage amount was %{mortgage}, the cash deposit was %{deposit} and the discount was %{discount}."
-      hint_text: "We would expect the mortgage amount and the deposit added together to be the same as the purchase price minus the discount."
     reasonother:
       title_text: "You told us that the tenant’s main reason for leaving their last settled home was %{reasonother}."
       informative_text: "The reason you have entered looks very similar to one of the existing response categories.
                          Please check the categories and select the appropriate one.
                          If the existing categories are not suitable, please confirm here to move onto the next question."
-    hodate:
-      must_be_less_than_3_years_from_saledate: "You told us practical completion or handover date is more than 3 years before sale completion date."
     saledate:
       must_be_less_than_3_years_from_hodate: "You told us sale completion date is more than 3 years after practical completion or handover date."
     partner_under_16_lettings:
@@ -674,12 +643,6 @@ Make sure these answers are correct."
           W: "Suitable for someone who uses a wheelchair and offers the full use of all rooms and facilities."
           A: "Fitted with stairlifts, ramps, level access showers or grab rails."
           N: "Not designed to wheelchair-user standards or fitted with any equipment or adaptations."
-    soctenant:
-      one: "Was the buyer a private registered provider, housing association or local authority tenant immediately before this sale?"
-      other: "Were any of the buyers private registered providers, housing association or local authority tenants immediately before this sale?"
-    stairowned:
-      one: "What percentage of the property does the buyer now own in total?"
-      other: "What percentage of the property do the buyers now own in total?"
 
   hints:
     location:
@@ -692,14 +655,6 @@ Make sure these answers are correct."
       toggle_active: "If the date is before %{date}, select ‘From the start of the open collection period’ because the previous period has now closed."
     bulk_upload:
       needstype: "General needs housing includes both self-contained and shared housing without support or specific adaptations. Supported housing can include direct access hostels, group homes, residential care and nursing homes."
-
-  check_answer_labels:
-    soctenant:
-      one: "Buyer was a registered provider, housing association or local authority tenant immediately before this sale?"
-      other: "Any buyers were registered providers, housing association or local authority tenants immediately before this sale?"
-    stairowned:
-      one: "Percentage the buyer now owns in total."
-      other: "Percentage the buyers now own in total."
 
   warnings:
     organisation:

@@ -2,12 +2,9 @@ class Form::Lettings::Questions::PreviousTenureRenewal < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "prevten"
-    @check_answer_label = "Where was the household immediately before this letting?"
-    @header = "Where was the household immediately before this letting?"
+    @copy_key = "lettings.household_situation.prevten.renewal"
     @type = "radio"
     @check_answers_card_number = 0
-    @hint_text = "You told us this letting is a renewal. We have removed some options because of this.<br><br>
-      This is where the household was the night before they moved into this new let."
     @answer_options = ANSWER_OPTIONS
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
   end

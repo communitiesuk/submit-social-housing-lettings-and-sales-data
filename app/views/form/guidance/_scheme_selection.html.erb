@@ -1,5 +1,5 @@
 <% if current_user.data_provider? %>
-  <p class="govuk-body">If you’re not sure which scheme to choose, ask a data coordinator. Find your data coordinators on the <%= govuk_link_to("users page", users_path) %>.</p>
+  <p class="govuk-body"><%= I18n.t("forms.#{@log.form.start_date.year}.lettings.guidance.scheme_selection.data_provider.content", users_page_link: govuk_link_to(I18n.t("forms.#{@log.form.start_date.year}.lettings.guidance.scheme_selection.data_provider.users_page_link_text"), users_path).to_s).html_safe %></p>
 <% elsif current_user.data_coordinator? %>
-  <p class="govuk-body"><%= govuk_link_to "Create a new supported housing scheme", new_scheme_path %></p>
+  <p class="govuk-body"><%= govuk_link_to I18n.t("forms.#{@log.form.start_date.year}.lettings.guidance.scheme_selection.data_coordinator.create_scheme_link_text"), new_scheme_path %></p>
 <% end %>

@@ -2,8 +2,7 @@ class Form::Sales::Questions::StaircaseBought < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "stairbought"
-    @check_answer_label = "Percentage bought in this staircasing transaction"
-    @header = "What percentage of the property has been bought in this staircasing transaction?"
+    @copy_key = "sales.sale_information.about_staircasing.stairbought"
     @type = "numeric"
     @width = 5
     @min = 0
