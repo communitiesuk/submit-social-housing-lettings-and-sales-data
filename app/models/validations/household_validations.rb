@@ -57,7 +57,7 @@ module Validations::HouseholdValidations
     partner_numbers = (2..8).select { |n| person_is_partner?(record["relat#{n}"]) }
     if partner_numbers.count > 1
       partner_numbers.each do |n|
-          record.errors.add "relat#{n}", I18n.t("validations.lettings.household.relat.one_partner")
+        record.errors.add "relat#{n}", I18n.t("validations.lettings.household.relat.one_partner")
       end
     end
   end
