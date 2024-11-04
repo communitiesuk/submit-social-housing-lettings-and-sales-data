@@ -88,21 +88,6 @@ module Validations::SharedValidations
     { scope: status, date: date&.to_formatted_s(:govuk_date), deactivation_date: closest_reactivation&.deactivation_date&.to_formatted_s(:govuk_date) }
   end
 
-  def shared_validate_partner_count(record, max_people)
-    return if record.form.start_year_after_2024?
-
-    partner_numbers = (2..max_people).select { |n| person_is_partner?(record["relat#{n}"]) }
-    if partner_numbers.count > 1
-      partner_numbers.each do |n|
-        if record.sales?
-          record.errors.add "relat#{n}", I18n.t("validations.sales.household.relat.one_partner")
-        else
-          record.errors.add "relat#{n}", I18n.t("validations.lettings.household.relat.one_partner")
-        end
-      end
-    end
-  end
-
   def date_valid?(question, record)
     if record[question].is_a?(ActiveSupport::TimeWithZone) && record[question].year.zero?
       record.errors.add question, I18n.t("validations.shared.date.invalid_date")

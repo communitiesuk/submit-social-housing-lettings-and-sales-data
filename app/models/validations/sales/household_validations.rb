@@ -2,7 +2,14 @@ module Validations::Sales::HouseholdValidations
   include Validations::SharedValidations
 
   def validate_partner_count(record)
-    shared_validate_partner_count(record, 6)
+    return if record.form.start_year_after_2024?
+
+    partner_numbers = (2..6).select { |n| person_is_partner?(record["relat#{n}"]) }
+    if partner_numbers.count > 1
+      partner_numbers.each do |n|
+        record.errors.add "relat#{n}", I18n.t("validations.sales.household.relat.one_partner")
+      end
+    end
   end
 
   def validate_buyers_living_in_property(record)

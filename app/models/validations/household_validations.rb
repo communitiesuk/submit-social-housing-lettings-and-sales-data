@@ -52,7 +52,14 @@ module Validations::HouseholdValidations
   end
 
   def validate_partner_count(record)
-    shared_validate_partner_count(record, 8)
+    return if record.form.start_year_after_2024?
+
+    partner_numbers = (2..8).select { |n| person_is_partner?(record["relat#{n}"]) }
+    if partner_numbers.count > 1
+      partner_numbers.each do |n|
+          record.errors.add "relat#{n}", I18n.t("validations.lettings.household.relat.one_partner")
+      end
+    end
   end
 
   def validate_person_1_economic(record)
