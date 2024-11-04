@@ -2,11 +2,8 @@ class Form::Lettings::Questions::Waityear < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "waityear"
-    @check_answer_label = "Length of time on local authority waiting list"
-    @header = form.start_year_after_2024? ? "How long has the household been on the local authority waiting list for the area of the new letting?" : "How long has the household been on the local authority waiting list for the new letting?"
     @type = "radio"
     @check_answers_card_number = 0
-    @hint_text = ""
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
   end
 

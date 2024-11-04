@@ -1,16 +1,5 @@
-<%= govuk_details(summary_text: "What counts as income?") do %>
-  <p class="govuk-body">You should include any income after tax from:</p>
-  <ul class="govuk-list govuk-list--bullet">
-    <li>employment</li>
-    <li>pensions</li>
-    <li>Universal Credit</li>
-  </ul>
-
-  <p class="govuk-body">Don’t include:</p>
-  <ul class="govuk-list govuk-list--bullet">
-    <li>National Insurance (NI) contributions and tax</li>
-    <li>housing benefit</li>
-    <li>child benefit</li>
-    <li>council tax support</li>
-  </ul>
-<% end %>
+<div class="govuk-body">
+  <%= govuk_details(summary_text: I18n.t("forms.#{@log.form.start_date.year}.lettings.guidance.what_counts_as_income.title")) do %>
+    <%= I18n.t("forms.#{@log.form.start_date.year}.lettings.guidance.what_counts_as_income.content").html_safe %>
+  <% end %>
+</div>

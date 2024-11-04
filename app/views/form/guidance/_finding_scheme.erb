@@ -1,6 +1,7 @@
-<%= govuk_details(summary_text: "Can’t find your scheme?") do %>
-  <p class="govuk-body">Schemes are attached to the organisation that owns the property. Check you have correctly answered question 1 "Which organisation owns this property?"</p>
-  <p class="govuk-body">If your organisation’s schemes were migrated from old CORE, they may have new names and codes. Search by postcode to find your scheme.</p>
-  <p class="govuk-body"><%= govuk_link_to("View your organisation’s schemes", clear_filters_url(filter_type: "schemes")) %></p>
-  <p class="govuk-body"><%= govuk_link_to("Read more about how schemes have changed", scheme_changes_path) %></p>
-<% end %>
+<div class="govuk-body">
+  <%= govuk_details(summary_text: I18n.t("forms.#{@log.form.start_date.year}.lettings.guidance.finding_scheme.title")) do %>
+    <%= I18n.t("forms.#{@log.form.start_date.year}.lettings.guidance.finding_scheme.content").html_safe %>
+    <p><%= govuk_link_to(I18n.t("forms.#{@log.form.start_date.year}.lettings.guidance.finding_scheme.view_schemes_link_text"), clear_filters_url(filter_type: "schemes")) %></p>
+    <p><%= govuk_link_to(I18n.t("forms.#{@log.form.start_date.year}.lettings.guidance.finding_scheme.scheme_changes_link_text"), scheme_changes_path) %></p>
+  <% end %>
+</div>
