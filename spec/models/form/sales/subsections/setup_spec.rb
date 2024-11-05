@@ -86,7 +86,7 @@ RSpec.describe Form::Sales::Subsections::Setup, type: :model do
 
     it "has correct pages" do
       expect(setup.pages.map(&:id)).to eq(
-                                         %w[
+        %w[
           owning_organisation
           managing_organisation
           assigned_to
@@ -104,7 +104,7 @@ RSpec.describe Form::Sales::Subsections::Setup, type: :model do
           privacy_notice_joint_purchase
           privacy_notice
         ],
-                                         )
+      )
     end
   end
 end
