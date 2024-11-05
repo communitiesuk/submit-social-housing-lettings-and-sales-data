@@ -4,7 +4,8 @@ class BulkUpload::Processor
 
   def blank_template_errors
     [
-      I18n.t("activemodel.errors.models.bulk_upload/lettings/validator.attributes.base.blank_file"),
+      I18n.t("validations.lettings.#{current_collection_start_year}.bulk_upload.blank_file"),
+      I18n.t("validations.lettings.#{previous_collection_start_year}.bulk_upload.blank_file"),
       I18n.t("validations.sales.#{current_collection_start_year}.bulk_upload.blank_file"),
       I18n.t("validations.sales.#{previous_collection_start_year}.bulk_upload.blank_file"),
     ].freeze
@@ -12,7 +13,8 @@ class BulkUpload::Processor
 
   def wrong_template_errors
     [
-      *I18n.t("activemodel.errors.models.bulk_upload/lettings/validator.attributes.base", default: {}).values,
+      *I18n.t("validations.lettings.#{current_collection_start_year}.bulk_upload.wrong_template", default: {}).values,
+      *I18n.t("validations.lettings.#{previous_collection_start_year}.bulk_upload.wrong_template", default: {}).values,
       *I18n.t("validations.sales.#{current_collection_start_year}.bulk_upload.wrong_template", default: {}).values,
       *I18n.t("validations.sales.#{previous_collection_start_year}.bulk_upload.wrong_template", default: {}).values,
     ].freeze
