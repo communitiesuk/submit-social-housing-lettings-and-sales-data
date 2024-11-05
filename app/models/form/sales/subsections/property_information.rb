@@ -21,7 +21,7 @@ class Form::Sales::Subsections::PropertyInformation < ::Form::Subsection
   end
 
   def uprn_questions
-    if form.start_year_after_2024?
+    if form.start_year_2024_or_later?
       [
         Form::Sales::Pages::Uprn.new(nil, nil, self),
         Form::Sales::Pages::UprnConfirmation.new(nil, nil, self),

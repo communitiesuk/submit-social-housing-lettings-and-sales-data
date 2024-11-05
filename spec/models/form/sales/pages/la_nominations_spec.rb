@@ -8,7 +8,7 @@ RSpec.describe Form::Sales::Pages::LaNominations, type: :model do
   let(:page_id) { nil }
   let(:page_definition) { nil }
   let(:start_year_after_2024) { false }
-  let(:form) { instance_double(Form, start_date: Time.zone.local(2023, 4, 1), start_year_after_2024?: start_year_after_2024) }
+  let(:form) { instance_double(Form, start_date: Time.zone.local(2023, 4, 1), start_year_2024_or_later?: start_year_after_2024) }
   let(:subsection) { instance_double(Form::Subsection, form:) }
 
   before do

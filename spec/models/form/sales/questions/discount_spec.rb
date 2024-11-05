@@ -10,7 +10,7 @@ RSpec.describe Form::Sales::Questions::Discount, type: :model do
 
   before do
     allow(page).to receive(:subsection).and_return(subsection)
-    allow(subsection).to receive(:form).and_return(instance_double(Form, start_year_after_2024?: false, start_date: Time.zone.local(2023, 4, 1)))
+    allow(subsection).to receive(:form).and_return(instance_double(Form, start_year_2024_or_later?: false, start_date: Time.zone.local(2023, 4, 1)))
   end
 
   it "has correct page" do
@@ -47,7 +47,7 @@ RSpec.describe Form::Sales::Questions::Discount, type: :model do
 
   context "with form start year after 2024" do
     before do
-      allow(subsection).to receive(:form).and_return(instance_double(Form, start_year_after_2024?: true, start_date: Time.zone.local(2024, 4, 1)))
+      allow(subsection).to receive(:form).and_return(instance_double(Form, start_year_2024_or_later?: true, start_date: Time.zone.local(2024, 4, 1)))
     end
 
     it "has correct max" do
