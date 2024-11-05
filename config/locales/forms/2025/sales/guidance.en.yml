@@ -1,0 +1,46 @@
+en:
+  forms:
+    2025:
+      sales:
+        guidance:
+          shared_ownership_type_definitions:
+            title: "Shared Ownership Type Definitions"
+            content: "<p><b>Shared Ownership (old model lease):</b> Cannot be used for homes funded through the Affordable Homes Programme 2021 to 2026. Use the new model lease for these properties.</p>
+              <p><b>Shared Ownership (new model lease):</b> Homes bought using the  Affordable Homes Programme 2021 to 2026.</p>
+              <p><b>Social HomeBuy — shared ownership purchase:</b> Tenants of private registered providers purchase their home at discount on Shared Ownership terms.</p>
+              <p><b>Home Ownership for people with Long-Term Disabilities (HOLD):</b> A shared ownership sale for those with long term disabilities.</p>
+              <p><b>Older Persons Shared Ownership:</b> A type of shared ownership for those 55 years and over.</p>
+              <p><b>Rent to Buy — Shared Ownership:</b> A sale following a period of discounted rent.</p>
+              <p><b>Right to Shared Ownership (RtSO):</b> A sale of a share of a rented home to a tenant using this scheme.</p>
+              <p><b>London Living Rent — Shared Ownership:</b> A shared ownership sale following a period of discounted rent as part of the London Living Rent scheme.</p>"
+
+          discounted_ownership_type_definitions:
+            title: "Discounted Ownership Type Definitions"
+            content: "<p><b>Right to Acquire (RTA):</b>  a discounted sale of a property built or purchased after 31 March 1997 to tenants of a private registered provider.</p>
+              <p><b>Preserved Right to Buy (PRTB):</b>  a discounted sale of a property that used to be owned by a council to tenants of a private registered provider.</p>
+              <p><b>Voluntary Right to Buy (VRTB):</b>  a discounted sale to tenants in this PRP owned property, as part of a pilot scheme.</p>
+              <p><b>Right to Buy (RTB):</b>  a discounted sale to tenants in this council owned property.</p>
+              <p><b>Rent to Buy full ownership:</b> a sale on full ownership terms following a period of discounted rent.</p>
+              <p><b>Social HomeBuy for outright purchase:</b> a discounted sale to tenants of a private registered provider on full ownership terms.</p>
+              <p><b>Any other equity loan scheme:</b> any scheme, not covered elsewhere, in which a loan is used to purchase equity.</p>"
+
+          mortgage_lender:
+            title: "Can’t find the mortgage lender you’re looking for?"
+            content: "<ul class=\"govuk-list govuk-list--bullet\">
+                <li>Double check the spelling and try again</li>
+                <li>Type the first few letters to see the suggestions</li>
+                <li>Type Other and continue - we’ll ask you to type in your answer in the next question</li>
+              </ul>"
+
+          outright_sale_type_definitions:
+            title: "Outright sale type definitions"
+            content: "<p><b>Outright sale:</b> the full purchase of a property, usually with a mortgage or cash.</p>
+              <p><b>Other sale:</b> any sale which does not fit the criteria of any of the remaining options.</p>"
+
+          privacy_notice_buyer_joint_purchase:
+            content: "Make sure the buyers have seen or been given access to %{privacy_notice_link} before completing this log. This is a legal requirement under data protection legislation."
+            privacy_notice_link_text: "the Ministry of Housing, Communities and Local Government (MHCLG) privacy notice"
+
+          privacy_notice_buyer:
+            content: "Make sure the buyer has seen or been given access to %{privacy_notice_link} before completing this log. This is a legal requirement under data protection legislation."
+            privacy_notice_link_text: "the Ministry of Housing, Communities and Local Government (MHCLG) privacy notice"
