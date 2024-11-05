@@ -67,12 +67,6 @@ en:
             hint_text: ""
             question_text: "Is the buyer a company?"
 
-          buylivein:
-            page_header: ""
-            check_answer_label: "Buyers living in property"
-            hint_text: ""
-            question_text: "Will any buyers live in the property?"
-
           jointpur:
             page_header: ""
             check_answer_label: "Joint purchase"
