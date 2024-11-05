@@ -23,6 +23,7 @@ RSpec.describe Form::Sales::Subsections::Setup, type: :model do
   context "when start year is before 2024" do
     before do
       allow(section.form).to receive(:start_year_2024_or_later?).and_return(false)
+      allow(section.form).to receive(:start_year_2025_or_later?).and_return(false)
     end
 
     it "has correct pages" do
@@ -49,6 +50,7 @@ RSpec.describe Form::Sales::Subsections::Setup, type: :model do
   context "when start year is >= 2024" do
     before do
       allow(section.form).to receive(:start_year_2024_or_later?).and_return(true)
+      allow(section.form).to receive(:start_year_2025_or_later?).and_return(false)
     end
 
     it "has correct pages" do
