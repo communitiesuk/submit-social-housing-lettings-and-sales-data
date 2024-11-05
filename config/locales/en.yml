@@ -61,14 +61,6 @@ en:
           <<: *bulk_upload__row_parser__base
         bulk_upload/sales/year2023/row_parser:
           <<: *bulk_upload__row_parser__base
-        bulk_upload/lettings/validator:
-          attributes:
-            base:
-              blank_file: "Template is blank - The template must be filled in for us to create the logs and check if data is correct."
-              wrong_field_numbers_count: "Incorrect number of fields, please ensure you have used the correct template."
-              over_max_column_count: "Too many columns, please ensure you have used the correct template."
-              wrong_template: "Incorrect start dates, please ensure you have used the correct template."
-              no_headers: "Your file does not contain the required header rows. Add or check the header rows and upload your file again. [Read more about using the template headers](%{guidance_link})."
         bulk_upload/sales/validator:
           attributes:
             base:
@@ -290,7 +282,6 @@ en:
 
       startdate:
         before_scheme_end_date: "The tenancy start date must be before the end date for this supported housing scheme."
-        year_not_two_or_four_digits: "Tenancy start year must be 2 or 4 digits."
         location:
           deactivated:
             startdate: "The location %{postcode} is inactive on this date. Enter another date or choose another location."
@@ -313,15 +304,6 @@ en:
             scheme_id: "The scheme %{name} has no locations that are active on this date. Enter another date or choose another scheme."
       owning_organisation:
         data_sharing_agreement_not_signed: "The organisation must accept the Data Sharing Agreement before it can be selected as the owning organisation."
-      lettype:
-        general_needs_mismatch: "Lettings type must be a general needs type because you selected general needs when uploading the file."
-        supported_housing_mismatch: "Lettings type must be a supported housing type because you selected supported housing when uploading the file."
-        needstype_general_needs: "This needs type is general needs, but the letting type is supported housing. Change either the needs type or the letting type."
-        needstype_supported_housing: "This needs type is supported housing, but the letting type is general needs. Change either the needs type or the letting type."
-      needstype:
-        lettype_not_general_needs: "This letting type is supported housing, but the needs type is general needs. Change either the needs type or the letting type."
-        lettype_not_supported_housing: "This letting type is general needs, but the needs type is supported housing. Change either the needs type or the letting type."
-
     property:
       uprn:
         invalid: "UPRN must be 12 digits or less."
@@ -486,13 +468,8 @@ en:
         child_over_19: "Answer cannot be child as you told us person %{person_num} is over 19."
       housingneeds_a:
         one_or_two_choices: "You can only select one option or ‘other disabled access needs’ plus ‘wheelchair-accessible housing’, ‘wheelchair access to essential rooms’ or ‘level access housing’."
-      housingneeds_type:
-        only_one_option_permitted: "Only one disabled access need: fully wheelchair-accessible housing, wheelchair access to essential rooms or level access housing, can be selected."
       housingneeds:
         invalid: "If somebody in the household has disabled access needs, they must have the access needs listed, or other access needs."
-        no_disabled_needs_conjunction: "No disabled access needs can’t be selected if you have selected fully wheelchair-accessible housing, wheelchair access to essential rooms, level access housing or other disabled access needs."
-        dont_know_disabled_needs_conjunction: "Don’t know disabled access needs can’t be selected if you have selected fully wheelchair-accessible housing, wheelchair access to essential rooms, level access housing or other disabled access needs."
-        no_and_dont_know_disabled_needs_conjunction: "No disabled access needs and don’t know disabled access needs cannot be selected together."
       prevten:
         non_temp_accommodation: "Answer cannot be non-temporary accommodation as this is a re-let to a tenant who occupied the same property as temporary accommodation."
         over_25_foster_care: "Answer cannot be a children’s home or foster care as the lead tenant is 26 or older."
@@ -507,10 +484,8 @@ en:
         other_homeless: "Answer cannot be internal transfer as the tenant was considered homeless by their landlord."
         prevten_invalid: "Answer cannot be internal transfer as the household situation immediately before this letting was %{prevten}."
         reason_permanently_decanted: "Answer must be internal transfer as the tenant was permanently decanted from another property owned by this landlord."
-        nominated_by_local_ha_but_la: "The source of the referral cannot be Nominated by local housing authority as your organisation is a local authority."
         la_general_needs:
           internal_transfer: "Answer cannot be internal transfer as it’s the same landlord on the tenancy agreement and the household had either a fixed-term or lifetime local authority general needs tenancy immediately before this letting."
-          prp_referred_by_la: "The source of the referral cannot be referred by local authority housing department for a general needs log."
       homeless:
         assessed:
           internal_transfer: "Answer cannot be 'assessed as homeless' as this tenancy is an internal transfer."
@@ -531,8 +506,6 @@ en:
         retired_female: "Answer cannot be ‘female’ as tenant is under 60 and retired."
       reason:
         not_internal_transfer: "Answer cannot be ‘permanently decanted from another property owned by this landlord’ as you told us the source of referral for this tenancy was not an internal transfer."
-        renewal_reason_needed: 'The reason for leaving must be "End of assured shorthold tenancy - no fault" or "End of fixed term tenancy - no fault" if the letting is a renewal.'
-        renewal_reason_needed_2024: 'The reason for leaving must be "End of social or private sector tenancy - no fault", "End of social or private sector tenancy - evicted due to anti-social behaviour (ASB)", "End of social or private sector tenancy - evicted due to rent arrears" or "End of social or private sector tenancy - evicted for any other reason".'
         other_not_settled: "Please give the reason for the tenant leaving their last settled home. This is where they were living before they became homeless, were living in temporary accommodation or sleeping rough."
       condition_effects:
         no_choices: "You cannot answer this question as you told us nobody in the household has a physical or mental health condition (or other illness) expected to last 12 months or more."
