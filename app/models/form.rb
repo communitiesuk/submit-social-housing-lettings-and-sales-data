@@ -334,7 +334,14 @@ class Form
     type == "sales" || (start_year && start_year.to_i > 2022)
   end
 
-  def start_year_after_2024?
+  def start_year_2024_or_later?
     start_date && start_date.year >= 2024
+  end
+
+  def start_year_2025_or_later?
+    start_date && start_date.year >= 2025
+  end
+  def start_year_after_2024?
+    start_date && start_date.year > 2024
   end
 end

@@ -27,7 +27,7 @@ class Form::Lettings::Questions::Age < ::Form::Question
   end
 
   def hint_text
-    if form.start_year_after_2024?
+    if form.start_year_2024_or_later?
       "Answer 1 for children aged under 1 year old"
     end
   end
