@@ -558,7 +558,6 @@ RSpec.describe FiltersHelper do
           end
         end
       end
-
     end
   end
 
