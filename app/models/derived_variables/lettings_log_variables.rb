@@ -65,7 +65,7 @@ module DerivedVariables::LettingsLogVariables
     self.has_benefits = get_has_benefits
     self.tshortfall_known = 0 if tshortfall
     self.nocharge = household_charge&.zero? ? 1 : 0
-    if form.start_year_after_2024? && is_bedsit?
+    if form.start_year_2024_or_later? && is_bedsit?
       self.beds = 1
     end
 
@@ -186,7 +186,7 @@ private
       self.wchair = nil
       self.location_id = nil
     end
-    if form.start_year_after_2024? && (unittype_gn_changed? && unittype_gn_was == 2)
+    if form.start_year_2024_or_later? && (unittype_gn_changed? && unittype_gn_was == 2)
       self.beds = nil
     end
   end

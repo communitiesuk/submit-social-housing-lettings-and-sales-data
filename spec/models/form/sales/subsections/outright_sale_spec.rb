@@ -22,7 +22,7 @@ RSpec.describe Form::Sales::Subsections::OutrightSale, type: :model do
     context "when 2022" do
       before do
         allow(form).to receive(:start_date).and_return(Time.zone.local(2022, 2, 8))
-        allow(form).to receive(:start_year_after_2024?).and_return(false)
+        allow(form).to receive(:start_year_2024_or_later?).and_return(false)
       end
 
       it "has correct pages" do
@@ -51,7 +51,7 @@ RSpec.describe Form::Sales::Subsections::OutrightSale, type: :model do
       before do
         allow(form).to receive(:start_date).and_return(Time.zone.local(2023, 2, 8))
 
-        allow(form).to receive(:start_year_after_2024?).and_return(false)
+        allow(form).to receive(:start_year_2024_or_later?).and_return(false)
       end
 
       it "has correct pages" do
@@ -80,7 +80,7 @@ RSpec.describe Form::Sales::Subsections::OutrightSale, type: :model do
     context "when 2024" do
       before do
         allow(form).to receive(:start_date).and_return(Time.zone.local(2024, 2, 8))
-        allow(form).to receive(:start_year_after_2024?).and_return(true)
+        allow(form).to receive(:start_year_2024_or_later?).and_return(true)
       end
 
       it "has correct pages" do

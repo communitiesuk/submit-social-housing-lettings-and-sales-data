@@ -5,7 +5,7 @@ RSpec.describe Form::Lettings::Pages::PreviousLocalAuthority, type: :model do
 
   let(:page_id) { nil }
   let(:page_definition) { nil }
-  let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_year_after_2024?: false, start_date: Time.zone.local(2023, 4, 1))) }
+  let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_year_2024_or_later?: false, start_date: Time.zone.local(2023, 4, 1))) }
 
   it "has correct subsection" do
     expect(page.subsection).to eq(subsection)

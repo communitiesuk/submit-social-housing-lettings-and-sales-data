@@ -12,7 +12,7 @@ RSpec.describe Form::Lettings::Questions::SchemeId, type: :model do
   before do
     allow(page).to receive(:subsection).and_return(subsection)
     allow(subsection).to receive(:form).and_return(form)
-    allow(form).to receive(:start_year_after_2024?).and_return(false)
+    allow(form).to receive(:start_year_2024_or_later?).and_return(false)
   end
 
   it "has correct page" do
