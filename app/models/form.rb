@@ -341,7 +341,4 @@ class Form
   def start_year_2025_or_later?
     start_date && start_date.year >= 2025
   end
-  def start_year_after_2024?
-    start_date && start_date.year > 2024
-  end
 end
