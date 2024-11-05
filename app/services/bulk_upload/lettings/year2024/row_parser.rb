@@ -146,6 +146,8 @@ class BulkUpload::Lettings::Year2024::RowParser
     6 => 5,
   }.freeze
 
+  ERROR_BASE_KEY = "validations.lettings.2024.bulk_upload".freeze
+
   attribute :bulk_upload
   attribute :block_log_creation, :boolean, default: -> { false }
 
@@ -286,12 +288,12 @@ class BulkUpload::Lettings::Year2024::RowParser
 
   validates :field_11,
             presence: {
-              message: I18n.t("validations.not_answered", question: "rent type."),
+              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "rent type."),
               category: :setup,
             },
             inclusion: {
               in: (1..6).to_a,
-              message: I18n.t("validations.invalid_option", question: "rent type."),
+              message: I18n.t("#{ERROR_BASE_KEY}.invalid_option", question: "rent type."),
               unless: -> { field_11.blank? },
               category: :setup,
             },
@@ -299,33 +301,33 @@ class BulkUpload::Lettings::Year2024::RowParser
 
   validates :field_7,
             presence: {
-              message: I18n.t("validations.not_answered", question: "property renewal."),
+              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "property renewal."),
               category: :setup,
             },
             on: :after_log
 
   validates :field_8,
             presence: {
-              message: I18n.t("validations.not_answered", question: "tenancy start date (day)."),
+              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "tenancy start date (day)."),
               category: :setup,
             },
             on: :after_log
 
   validates :field_9,
             presence: {
-              message: I18n.t("validations.not_answered", question: "tenancy start date (month)."),
+              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "tenancy start date (month)."),
               category: :setup,
             },
             on: :after_log
 
   validates :field_10,
             presence: {
-              message: I18n.t("validations.not_answered", question: "tenancy start date (year)."),
+              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "tenancy start date (year)."),
               category: :setup,
             },
             format: {
               with: /\A(\d{2}|\d{4})\z/,
-              message: I18n.t("validations.setup.startdate.year_not_two_or_four_digits"),
+              message: I18n.t("#{ERROR_BASE_KEY}.startdate.year_not_two_or_four_digits"),
               category: :setup,
               unless: -> { field_10.blank? },
             },
@@ -334,7 +336,7 @@ class BulkUpload::Lettings::Year2024::RowParser
   validates :field_5,
             presence: {
               if: proc { supported_housing? },
-              message: I18n.t("validations.not_answered", question: "scheme code."),
+              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "scheme code."),
               category: :setup,
             },
             on: :after_log
@@ -342,67 +344,67 @@ class BulkUpload::Lettings::Year2024::RowParser
   validates :field_6,
             presence: {
               if: proc { supported_housing? },
-              message: I18n.t("validations.not_answered", question: "location code."),
+              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "location code."),
               category: :setup,
             },
             on: :after_log
 
   validates :field_112,
             presence: {
-              message: I18n.t("validations.not_answered", question: "was the letting made under the Choice-Based Lettings (CBL)?"),
+              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "was the letting made under the Choice-Based Lettings (CBL)?"),
               category: :not_answered,
             },
             inclusion: {
               in: [1, 2],
-              message: I18n.t("validations.invalid_option", question: "was the letting made under the Choice-Based Lettings (CBL)?"),
+              message: I18n.t("#{ERROR_BASE_KEY}.invalid_option", question: "was the letting made under the Choice-Based Lettings (CBL)?"),
               if: -> { field_112.present? },
             },
             on: :after_log
 
   validates :field_113,
             presence: {
-              message: I18n.t("validations.not_answered", question: "was the letting made under the Common Allocation Policy (CAP)?"),
+              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "was the letting made under the Common Allocation Policy (CAP)?"),
               category: :not_answered,
             },
             inclusion: {
               in: [1, 2],
-              message: I18n.t("validations.invalid_option", question: "was the letting made under the Common Allocation Policy (CAP)?"),
+              message: I18n.t("#{ERROR_BASE_KEY}.invalid_option", question: "was the letting made under the Common Allocation Policy (CAP)?"),
               if: -> { field_113.present? },
             },
             on: :after_log
 
   validates :field_114,
             presence: {
-              message: I18n.t("validations.not_answered", question: "was the letting made under the Common Housing Register (CHR)?"),
+              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "was the letting made under the Common Housing Register (CHR)?"),
               category: :not_answered,
             },
             inclusion: {
               in: [1, 2],
-              message: I18n.t("validations.invalid_option", question: "was the letting made under the Common Housing Register (CHR)?"),
+              message: I18n.t("#{ERROR_BASE_KEY}.invalid_option", question: "was the letting made under the Common Housing Register (CHR)?"),
               if: -> { field_114.present? },
             },
             on: :after_log
 
   validates :field_115,
             presence: {
-              message: I18n.t("validations.not_answered", question: "was the letting made under the Accessible Register?"),
+              message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "was the letting made under the Accessible Register?"),
               category: :not_answered,
             },
             inclusion: {
               in: [1, 2],
-              message: I18n.t("validations.invalid_option", question: "was the letting made under the Accessible Register?"),
+              message: I18n.t("#{ERROR_BASE_KEY}.invalid_option", question: "was the letting made under the Accessible Register?"),
               if: -> { field_115.present? },
             },
             on: :after_log
 
-  validates :field_42, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 1 must be a number or the letter R" }, on: :after_log
-  validates :field_48, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 2 must be a number or the letter R" }, on: :after_log, if: proc { details_known?(2).zero? }
-  validates :field_52, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 3 must be a number or the letter R" }, on: :after_log, if: proc { details_known?(3).zero? }
-  validates :field_56, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 4 must be a number or the letter R" }, on: :after_log, if: proc { details_known?(4).zero? }
-  validates :field_60, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 5 must be a number or the letter R" }, on: :after_log, if: proc { details_known?(5).zero? }
-  validates :field_64, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 6 must be a number or the letter R" }, on: :after_log, if: proc { details_known?(6).zero? }
-  validates :field_68, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 7 must be a number or the letter R" }, on: :after_log, if: proc { details_known?(7).zero? }
-  validates :field_72, format: { with: /\A\d{1,3}\z|\AR\z/, message: "Age of person 8 must be a number or the letter R" }, on: :after_log, if: proc { details_known?(8).zero? }
+  validates :field_42, format: { with: /\A\d{1,3}\z|\AR\z/, message: I18n.t("#{ERROR_BASE_KEY}.age.invalid", person_num: 1) }, on: :after_log
+  validates :field_48, format: { with: /\A\d{1,3}\z|\AR\z/, message: I18n.t("#{ERROR_BASE_KEY}.age.invalid", person_num: 2) }, on: :after_log, if: proc { details_known?(2).zero? }
+  validates :field_52, format: { with: /\A\d{1,3}\z|\AR\z/, message: I18n.t("#{ERROR_BASE_KEY}.age.invalid", person_num: 3) }, on: :after_log, if: proc { details_known?(3).zero? }
+  validates :field_56, format: { with: /\A\d{1,3}\z|\AR\z/, message: I18n.t("#{ERROR_BASE_KEY}.age.invalid", person_num: 4) }, on: :after_log, if: proc { details_known?(4).zero? }
+  validates :field_60, format: { with: /\A\d{1,3}\z|\AR\z/, message: I18n.t("#{ERROR_BASE_KEY}.age.invalid", person_num: 5) }, on: :after_log, if: proc { details_known?(5).zero? }
+  validates :field_64, format: { with: /\A\d{1,3}\z|\AR\z/, message: I18n.t("#{ERROR_BASE_KEY}.age.invalid", person_num: 6) }, on: :after_log, if: proc { details_known?(6).zero? }
+  validates :field_68, format: { with: /\A\d{1,3}\z|\AR\z/, message: I18n.t("#{ERROR_BASE_KEY}.age.invalid", person_num: 7) }, on: :after_log, if: proc { details_known?(7).zero? }
+  validates :field_72, format: { with: /\A\d{1,3}\z|\AR\z/, message: I18n.t("#{ERROR_BASE_KEY}.age.invalid", person_num: 8) }, on: :after_log, if: proc { details_known?(8).zero? }
 
   validate :validate_needs_type_present, on: :after_log
   validate :validate_data_types, on: :after_log
@@ -547,10 +549,10 @@ class BulkUpload::Lettings::Year2024::RowParser
     spreadsheet_duplicate_hash.each_key do |field|
       if field == "tcharge"
         %w[field_125 field_126 field_127 field_128].each do |sub_field|
-          errors.add(sub_field, :spreadsheet_dupe, category: :setup)
+          errors.add(sub_field, I18n.t("#{ERROR_BASE_KEY}.spreadsheet_dupe"), category: :setup)
         end
       else
-        errors.add(field, :spreadsheet_dupe, category: :setup)
+        errors.add(field, I18n.t("#{ERROR_BASE_KEY}.spreadsheet_dupe"), category: :setup)
       end
     end
   end
@@ -568,9 +570,9 @@ private
 
       fields.each do |field|
         if setup_question?(question)
-          errors.add(field, I18n.t("validations.invalid_option", question: format_ending(QUESTIONS[field])), category: :setup)
+          errors.add(field, I18n.t("#{ERROR_BASE_KEY}.invalid_option", question: format_ending(QUESTIONS[field])), category: :setup)
         else
-          errors.add(field, I18n.t("validations.invalid_option", question: format_ending(QUESTIONS[field])))
+          errors.add(field, I18n.t("#{ERROR_BASE_KEY}.invalid_option", question: format_ending(QUESTIONS[field])))
         end
       end
     end
@@ -580,13 +582,13 @@ private
     return if field_3.blank?
 
     unless assigned_to
-      errors.add(:field_3, "User with the specified email could not be found.")
+      errors.add(:field_3, I18n.t("#{ERROR_BASE_KEY}.assigned_to.not_found"))
     end
   end
 
   def validate_assigned_to_when_support
     if field_3.blank? && bulk_upload.user.support?
-      errors.add(:field_3, category: :setup, message: I18n.t("validations.not_answered", question: "what is the CORE username of the account this letting log should be assigned to?"))
+      errors.add(:field_3, category: :setup, message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "what is the CORE username of the account this letting log should be assigned to?"))
     end
   end
 
@@ -596,7 +598,7 @@ private
     return if assigned_to.organisation == owning_organisation&.absorbing_organisation || assigned_to.organisation == managing_organisation&.absorbing_organisation
 
     block_log_creation!
-    errors.add(:field_3, "User must be related to owning organisation or managing organisation.")
+    errors.add(:field_3, I18n.t("#{ERROR_BASE_KEY}.assigned_to.organisation_not_related"))
   end
 
   def assigned_to
@@ -605,14 +607,14 @@ private
 
   def validate_uprn_exists_if_any_key_address_fields_are_blank
     if field_16.blank? && !key_address_fields_provided?
-      errors.add(:field_16, I18n.t("validations.not_answered", question: "UPRN."))
+      errors.add(:field_16, I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "UPRN."))
     end
   end
 
   def validate_address_option_found
     if log.uprn.nil? && field_16.blank? && key_address_fields_provided?
       %i[field_17 field_18 field_19 field_20 field_21 field_22].each do |field|
-        errors.add(field, I18n.t("validations.no_address_found"))
+        errors.add(field, I18n.t("#{ERROR_BASE_KEY}.address.not_found"))
       end
     end
   end
@@ -624,19 +626,19 @@ private
   def validate_address_fields
     if field_16.blank? || log.errors.attribute_names.include?(:uprn)
       if field_17.blank?
-        errors.add(:field_17, I18n.t("validations.not_answered", question: "address line 1."))
+        errors.add(:field_17, I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "address line 1."))
       end
 
       if field_19.blank?
-        errors.add(:field_19, I18n.t("validations.not_answered", question: "town or city."))
+        errors.add(:field_19, I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "town or city."))
       end
 
       if field_21.blank?
-        errors.add(:field_21, I18n.t("validations.not_answered", question: "part 1 of postcode."))
+        errors.add(:field_21, I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "part 1 of postcode."))
       end
 
       if field_22.blank?
-        errors.add(:field_22, I18n.t("validations.not_answered", question: "part 2 of postcode."))
+        errors.add(:field_22, I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "part 2 of postcode."))
       end
     end
   end
@@ -661,7 +663,7 @@ private
 
   def validate_nationality
     if field_45.present? && !valid_nationality_options.include?(field_45.to_s)
-      errors.add(:field_45, I18n.t("validations.household.nationality"))
+      errors.add(:field_45, I18n.t("#{ERROR_BASE_KEY}.nationality.invalid"))
     end
   end
 
@@ -682,21 +684,21 @@ private
 
   def validate_needs_type_present
     if field_4.blank?
-      errors.add(:field_4, I18n.t("validations.not_answered", question: "needs type."), category: :setup)
+      errors.add(:field_4, I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "needs type."), category: :setup)
     end
   end
 
   def validate_no_and_dont_know_disabled_needs_conjunction
     if field_83 == 1 && field_84 == 1
-      errors.add(:field_83, I18n.t("validations.household.housingneeds.no_and_dont_know_disabled_needs_conjunction"))
-      errors.add(:field_84, I18n.t("validations.household.housingneeds.no_and_dont_know_disabled_needs_conjunction"))
+      errors.add(:field_83, I18n.t("#{ERROR_BASE_KEY}.housingneeds.no_and_dont_know_disabled_needs_conjunction"))
+      errors.add(:field_84, I18n.t("#{ERROR_BASE_KEY}.housingneeds.no_and_dont_know_disabled_needs_conjunction"))
     end
   end
 
   def validate_dont_know_disabled_needs_conjunction
     if field_84 == 1 && [field_79, field_80, field_81, field_82].count(1).positive?
       %i[field_84 field_79 field_80 field_81 field_82].each do |field|
-        errors.add(field, I18n.t("validations.household.housingneeds.dont_know_disabled_needs_conjunction")) if send(field) == 1
+        errors.add(field, I18n.t("#{ERROR_BASE_KEY}.housingneeds.dont_know_disabled_needs_conjunction")) if send(field) == 1
       end
     end
   end
@@ -704,7 +706,7 @@ private
   def validate_no_disabled_needs_conjunction
     if field_83 == 1 && [field_79, field_80, field_81, field_82].count(1).positive?
       %i[field_83 field_79 field_80 field_81 field_82].each do |field|
-        errors.add(field, I18n.t("validations.household.housingneeds.no_disabled_needs_conjunction")) if send(field) == 1
+        errors.add(field, I18n.t("#{ERROR_BASE_KEY}.housingneeds.no_disabled_needs_conjunction")) if send(field) == 1
       end
     end
   end
@@ -712,17 +714,17 @@ private
   def validate_only_one_housing_needs_type
     if [field_79, field_80, field_81].count(1) > 1
       %i[field_79 field_80 field_81].each do |field|
-        errors.add(field, I18n.t("validations.household.housingneeds_type.only_one_option_permitted")) if send(field) == 1
+        errors.add(field, I18n.t("#{ERROR_BASE_KEY}.housingneeds_type.only_one_option_permitted")) if send(field) == 1
       end
     end
   end
 
   def validate_no_housing_needs_questions_answered
     if [field_79, field_80, field_81, field_82, field_83, field_84].all?(&:blank?)
-      errors.add(:field_83, I18n.t("validations.not_answered", question: "anybody with disabled access needs."))
-      errors.add(:field_82, I18n.t("validations.not_answered", question: "other access needs."))
+      errors.add(:field_83, I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "anybody with disabled access needs."))
+      errors.add(:field_82, I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "other access needs."))
       %i[field_79 field_80 field_81].each do |field|
-        errors.add(field, I18n.t("validations.not_answered", question: "disabled access needs type."))
+        errors.add(field, I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "disabled access needs type."))
       end
     end
   end
@@ -731,7 +733,7 @@ private
     reason_fields = %i[field_107 field_108 field_109 field_110 field_111]
     if field_106 == 1 && reason_fields.all? { |field| attributes[field.to_s].blank? }
       reason_fields.each do |field|
-        errors.add(field, I18n.t("validations.not_answered", question: "reason for reasonable preference."))
+        errors.add(field, I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "reason for reasonable preference."))
       end
     end
   end
@@ -741,12 +743,12 @@ private
     if household_no_illness?
       illness_option_fields.each do |field|
         if attributes[field.to_s] == 1
-          errors.add(field, I18n.t("validations.household.condition_effects.no_choices"))
+          errors.add(field, I18n.t("#{ERROR_BASE_KEY}.condition_effects.no_choices"))
         end
       end
     elsif illness_option_fields.all? { |field| attributes[field.to_s].blank? }
       illness_option_fields.each do |field|
-        errors.add(field, I18n.t("validations.not_answered", question: "how is person affected by condition or illness."))
+        errors.add(field, I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "how is person affected by condition or illness."))
       end
     end
   end
@@ -757,7 +759,7 @@ private
 
   def validate_leaving_reason_for_renewal
     if field_7 == 1 && ![50, 51, 52, 53].include?(field_98)
-      errors.add(:field_98, I18n.t("validations.household.reason.renewal_reason_needed_2024"))
+      errors.add(:field_98, I18n.t("#{ERROR_BASE_KEY}.reason.renewal_reason_needed"))
     end
   end
 
@@ -771,13 +773,13 @@ private
 
   def validate_cannot_be_la_referral_if_general_needs_and_la
     if field_116 == 4 && general_needs? && owning_organisation && owning_organisation.la?
-      errors.add :field_116, I18n.t("validations.household.referral.la_general_needs.prp_referred_by_la")
+      errors.add :field_116, I18n.t("#{ERROR_BASE_KEY}.referral.general_needs_prp_referred_by_la")
     end
   end
 
   def validate_la_with_local_housing_referral
     if field_116 == 3 && owning_organisation && owning_organisation.la?
-      errors.add(:field_116, I18n.t("validations.household.referral.nominated_by_local_ha_but_la"))
+      errors.add(:field_116, I18n.t("#{ERROR_BASE_KEY}.referral.nominated_by_local_ha_but_la"))
     end
   end
 
@@ -785,15 +787,15 @@ private
     return if startdate.blank? || bulk_upload.form.blank?
 
     unless bulk_upload.form.valid_start_date_for_form?(startdate)
-      errors.add(:field_8, I18n.t("validations.date.outside_collection_window", year_combo: bulk_upload.year_combo, start_year: bulk_upload.year, end_year: bulk_upload.end_year), category: :setup)
-      errors.add(:field_9, I18n.t("validations.date.outside_collection_window", year_combo: bulk_upload.year_combo, start_year: bulk_upload.year, end_year: bulk_upload.end_year), category: :setup)
-      errors.add(:field_10, I18n.t("validations.date.outside_collection_window", year_combo: bulk_upload.year_combo, start_year: bulk_upload.year, end_year: bulk_upload.end_year), category: :setup)
+      errors.add(:field_8, I18n.t("#{ERROR_BASE_KEY}.startdate.outside_collection_window", year_combo: bulk_upload.year_combo, start_year: bulk_upload.year, end_year: bulk_upload.end_year), category: :setup)
+      errors.add(:field_9, I18n.t("#{ERROR_BASE_KEY}.startdate.outside_collection_window", year_combo: bulk_upload.year_combo, start_year: bulk_upload.year, end_year: bulk_upload.end_year), category: :setup)
+      errors.add(:field_10, I18n.t("#{ERROR_BASE_KEY}.startdate.outside_collection_window", year_combo: bulk_upload.year_combo, start_year: bulk_upload.year, end_year: bulk_upload.end_year), category: :setup)
     end
   end
 
   def validate_data_types
     unless attribute_set["field_11"].value_before_type_cast&.match?(/^\d+\.?0*$/)
-      errors.add(:field_11, I18n.t("validations.invalid_number", question: "rent type."))
+      errors.add(:field_11, I18n.t("#{ERROR_BASE_KEY}.invalid_number", question: "rent type."))
     end
   end
 
@@ -825,14 +827,14 @@ private
   def validate_related_location_exists
     if scheme && field_6.present? && location.nil? && :field_6.present?
       block_log_creation!
-      errors.add(:field_6, "Location code must relate to a location that is owned by the owning organisation or managing organisation.", category: :setup)
+      errors.add(:field_6, I18n.t("#{ERROR_BASE_KEY}.location.must_relate_to_org"), category: :setup)
     end
   end
 
   def validate_related_scheme_exists
     if field_5.present? && :field_5.present? && owning_organisation.present? && managing_organisation.present? && scheme.nil?
       block_log_creation!
-      errors.add(:field_5, "This scheme code does not belong to the owning organisation or managing organisation.", category: :setup)
+      errors.add(:field_5, I18n.t("#{ERROR_BASE_KEY}.scheme.must_relate_to_org"), category: :setup)
     end
   end
 
@@ -841,7 +843,7 @@ private
       block_log_creation!
 
       if errors[:field_2].blank?
-        errors.add(:field_2, "This managing organisation does not have a relationship with the owning organisation.", category: :setup)
+        errors.add(:field_2, I18n.t("#{ERROR_BASE_KEY}.managing_organisation.no_relationship"), category: :setup)
       end
     end
   end
@@ -851,7 +853,7 @@ private
       block_log_creation!
 
       if field_2.present? && errors[:field_2].blank?
-        errors.add(:field_2, "The managing organisation code is incorrect.", category: :setup)
+        errors.add(:field_2, I18n.t("#{ERROR_BASE_KEY}.managing_organisation.not_found"), category: :setup)
       end
     end
   end
@@ -859,7 +861,7 @@ private
   def validate_managing_org_data_given
     if field_2.blank?
       block_log_creation!
-      errors.add(:field_2, I18n.t("validations.not_answered", question: "managing organisation."), category: :setup)
+      errors.add(:field_2, I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "managing organisation."), category: :setup)
     end
   end
 
@@ -868,7 +870,7 @@ private
       block_log_creation!
 
       if errors[:field_1].blank?
-        errors.add(:field_1, "The owning organisation code provided is for an organisation that does not own stock.", category: :setup)
+        errors.add(:field_1, I18n.t("#{ERROR_BASE_KEY}.owning_organisation.not_stock_owner"), category: :setup)
       end
     end
   end
@@ -878,7 +880,7 @@ private
       block_log_creation!
 
       if field_1.present? && errors[:field_1].blank?
-        errors.add(:field_1, "The owning organisation code is incorrect.", category: :setup)
+        errors.add(:field_1, I18n.t("#{ERROR_BASE_KEY}.owning_organisation.not_found"), category: :setup)
       end
     end
   end
@@ -886,7 +888,7 @@ private
   def validate_owning_org_data_given
     if field_1.blank?
       block_log_creation!
-      errors.add(:field_1, I18n.t("validations.not_answered", question: "owning organisation."), category: :setup)
+      errors.add(:field_1, I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "owning organisation."), category: :setup)
     end
   end
 
@@ -899,9 +901,9 @@ private
     return if errors[:field_1].present?
 
     if bulk_upload.user.support?
-      errors.add(:field_1, "This owning organisation is not affiliated with #{bulk_upload_organisation.name}.", category: :setup)
+      errors.add(:field_1, I18n.t("#{ERROR_BASE_KEY}.owning_organisation.not_permitted.support", org_name: bulk_upload_organisation.name), category: :setup)
     else
-      errors.add(:field_1, "You do not have permission to add logs for this owning organisation.", category: :setup)
+      errors.add(:field_1, I18n.t("#{ERROR_BASE_KEY}.owning_organisation.not_permitted.not_support"), category: :setup)
     end
   end
 
@@ -916,12 +918,12 @@ private
     }.partition { |field, _| public_send(field).blank? }.map(&:to_h)
 
     blank_charge_fields.each do |field, charge|
-      errors.add(field, I18n.t("validations.financial.charges.missing_charges", sentence_fragment: charge))
+      errors.add(field, I18n.t("#{ERROR_BASE_KEY}.charges.missing_charges", sentence_fragment: charge))
     end
 
     other_charge_fields.each do |field, _charge|
       blank_charge_fields.each do |_blank_field, blank_charge|
-        errors.add(field, I18n.t("validations.financial.charges.missing_charges", sentence_fragment: blank_charge))
+        errors.add(field, I18n.t("#{ERROR_BASE_KEY}.charges.missing_charges", sentence_fragment: blank_charge))
       end
     end
   end
@@ -936,7 +938,7 @@ private
 
   def validate_if_log_already_exists
     if log_already_exists?
-      error_message = "This is a duplicate log."
+      error_message = I18n.t("#{ERROR_BASE_KEY}.duplicate")
 
       errors.add(:field_1, error_message) # owning_organisation
       errors.add(:field_8, error_message) # startdate
