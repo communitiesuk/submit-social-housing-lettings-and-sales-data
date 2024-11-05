@@ -61,12 +61,6 @@ en:
                 hint_text: ""
                 question_text: "What type of sale is it?"
 
-          companybuy:
-            page_header: ""
-            check_answer_label: "Company buyer"
-            hint_text: ""
-            question_text: "Is the buyer a company?"
-
           buylivein:
             page_header: ""
             check_answer_label: "Buyers living in property"
