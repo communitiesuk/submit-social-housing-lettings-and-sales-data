@@ -11,6 +11,7 @@ RSpec.describe Form::Sales::Questions::OwnershipScheme, type: :model do
 
   before do
     allow(form).to receive(:start_year_2024_or_later?).and_return(false)
+    allow(form).to receive(:start_year_2025_or_later?).and_return(false)
     allow(page).to receive(:subsection).and_return(subsection)
     allow(subsection).to receive(:form).and_return(form)
   end
