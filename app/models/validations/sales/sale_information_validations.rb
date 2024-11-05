@@ -12,7 +12,7 @@ module Validations::Sales::SaleInformationValidations
       record.errors.add :saledate, I18n.t("validations.sales.sale_information.saledate.must_be_after_hodate")
     end
 
-    if record.saledate - record.hodate >= 3.years && record.form.start_year_after_2024?
+    if record.saledate - record.hodate >= 3.years && record.form.start_year_2024_or_later?
       record.errors.add :hodate, I18n.t("validations.sales.sale_information.hodate.must_be_less_than_3_years_from_saledate")
       record.errors.add :saledate, I18n.t("validations.sales.sale_information.saledate.must_be_less_than_3_years_from_hodate")
     end
@@ -42,7 +42,7 @@ module Validations::Sales::SaleInformationValidations
   end
 
   def validate_discounted_ownership_value(record)
-    return unless record.saledate && record.form.start_year_after_2024?
+    return unless record.saledate && record.form.start_year_2024_or_later?
     return unless record.value && record.deposit && record.ownershipsch
     return unless record.mortgage || record.mortgageused == 2 || record.mortgageused == 3
     return unless record.discount || record.grant || record.type == 29
@@ -65,7 +65,7 @@ module Validations::Sales::SaleInformationValidations
   end
 
   def validate_outright_sale_value_matches_mortgage_plus_deposit(record)
-    return unless record.saledate && record.form.start_year_after_2024?
+    return unless record.saledate && record.form.start_year_2024_or_later?
     return unless record.outright_sale?
     return unless record.mortgage_used? && record.mortgage
     return unless record.deposit && record.value
@@ -96,7 +96,7 @@ module Validations::Sales::SaleInformationValidations
   end
 
   def validate_grant_amount(record)
-    return unless record.saledate && record.form.start_year_after_2024?
+    return unless record.saledate && record.form.start_year_2024_or_later?
     return unless record.grant && (record.type == 8 || record.type == 21)
 
     unless record.grant.between?(9_000, 16_000)
@@ -106,7 +106,7 @@ module Validations::Sales::SaleInformationValidations
 
   def validate_stairbought(record)
     return unless record.stairbought && record.type
-    return unless record.saledate && record.form.start_year_after_2024?
+    return unless record.saledate && record.form.start_year_2024_or_later?
 
     max_stairbought = case record.type
                       when 30, 16, 28, 31, 32
@@ -124,7 +124,7 @@ module Validations::Sales::SaleInformationValidations
   end
 
   def validate_discount_and_value(record)
-    return unless record.saledate && record.form.start_year_after_2024?
+    return unless record.saledate && record.form.start_year_2024_or_later?
     return unless record.discount && record.value && record.la
 
     if record.london_property? && record.discount_value > 136_400
@@ -139,7 +139,7 @@ module Validations::Sales::SaleInformationValidations
   end
 
   def validate_non_staircasing_mortgage(record)
-    return unless record.saledate && record.form.start_year_after_2024?
+    return unless record.saledate && record.form.start_year_2024_or_later?
     return unless record.value && record.deposit && record.equity
     return unless record.shared_ownership_scheme? && record.type && record.mortgageused && record.is_not_staircasing?
 
@@ -151,7 +151,7 @@ module Validations::Sales::SaleInformationValidations
   end
 
   def validate_staircasing_mortgage(record)
-    return unless record.saledate && record.form.start_year_after_2024?
+    return unless record.saledate && record.form.start_year_2024_or_later?
     return unless record.value && record.deposit && record.stairbought
     return unless record.shared_ownership_scheme? && record.type && record.mortgageused && record.is_staircase?
 
@@ -334,7 +334,7 @@ module Validations::Sales::SaleInformationValidations
     if record.discounted_ownership_sale?
       record.errors.add :mortgageused, I18n.t("validations.invalid_option", question: "was a mortgage used for the purchase of this property?")
     end
-    if record.outright_sale? && record.saledate && !record.form.start_year_after_2024?
+    if record.outright_sale? && record.saledate && !record.form.start_year_2024_or_later?
       record.errors.add :mortgageused, I18n.t("validations.invalid_option", question: "was a mortgage used for the purchase of this property?")
       record.errors.add :saledate, I18n.t("validations.sales.sale_information.saledate.mortgage_used_year")
     end

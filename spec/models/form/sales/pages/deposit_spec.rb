@@ -6,7 +6,7 @@ RSpec.describe Form::Sales::Pages::Deposit, type: :model do
   let(:page_id) { nil }
   let(:page_definition) { nil }
   let(:subsection) { instance_double(Form::Subsection, enabled?: true, depends_on: true) }
-  let(:form) { instance_double(Form, start_year_after_2024?: false, start_date: Time.zone.local(2023, 4, 1), depends_on_met: true) }
+  let(:form) { instance_double(Form, start_year_2024_or_later?: false, start_date: Time.zone.local(2023, 4, 1), depends_on_met: true) }
   let(:optional) { false }
 
   before do
@@ -31,7 +31,7 @@ RSpec.describe Form::Sales::Pages::Deposit, type: :model do
 
   context "when routing with start year after 2024" do
     before do
-      allow(form).to receive(:start_year_after_2024?).and_return(true)
+      allow(form).to receive(:start_year_2024_or_later?).and_return(true)
     end
 
     context "and optional is false" do
@@ -131,7 +131,7 @@ RSpec.describe Form::Sales::Pages::Deposit, type: :model do
 
   context "when routing with start year before 2024" do
     before do
-      allow(form).to receive(:start_year_after_2024?).and_return(false)
+      allow(form).to receive(:start_year_2024_or_later?).and_return(false)
     end
 
     context "and optional is false" do
