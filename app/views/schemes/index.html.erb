@@ -7,7 +7,7 @@
 
 <div class="app-filter-layout" data-controller="filter-layout">
   <% display_actions = SchemePolicy.new(current_user, nil).create? %>
-  <div class="govuk-button-group app-filter-toggle <%= "govuk-!-margin-bottom-6"  if display_actions  %>">
+  <div class="govuk-button-group app-filter-toggle <%= "govuk-!-margin-bottom-6"  if display_actions %>">
     <% if display_actions %>
         <%= govuk_button_link_to "Create a new supported housing scheme", new_scheme_path, html: { method: :post } %>
     <% end %>

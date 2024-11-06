@@ -7,7 +7,7 @@
 
 <div class="app-filter-layout" data-controller="filter-layout">
   <% display_actions = current_user.data_coordinator? || current_user.support? %>
-  <div class="govuk-button-group app-filter-toggle <%= "govuk-!-margin-bottom-6"  if display_actions  %>">
+  <div class="govuk-button-group app-filter-toggle <%= "govuk-!-margin-bottom-6"  if display_actions %>">
     <% if display_actions %>
       <%= govuk_button_link_to "Invite user", new_user_path, html: { method: :get } %>
     <% end %>
