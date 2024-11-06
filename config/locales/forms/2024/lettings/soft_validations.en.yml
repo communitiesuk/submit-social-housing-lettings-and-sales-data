@@ -121,7 +121,7 @@ en:
               hint_text: ""
               question_text: "Are you sure the property has been vacant for this long?"
               title_text: "You told us that the property has been vacant for more than 2 years."
-              informative_text: "This is higher than we would expect."
+              informative_text: "This is longer than we would expect."
 
           major_repairs_date_value_check:
               page_header: ""
