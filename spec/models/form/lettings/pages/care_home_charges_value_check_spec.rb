@@ -30,7 +30,7 @@ RSpec.describe Form::Lettings::Pages::CareHomeChargesValueCheck, type: :model do
 
   it "has the correct title_text" do
     expect(page.title_text).to eq({
-      "translation" => "forms.2024.lettings.soft_validations.carehome_charges_value_check.title_text",
+      "translation" => "forms.2024.lettings.soft_validations.care_home_charges_value_check.title_text",
     })
   end
 
