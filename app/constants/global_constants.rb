@@ -1,5 +1,5 @@
 module GlobalConstants
-  HELPDESK_URL = "https://dluhcdigital.atlassian.net/servicedesk/customer/portal/6/group/11".freeze
+  HELPDESK_URL = "https://mhclgdigital.atlassian.net/servicedesk/customer/portal/6/group/11".freeze
 
   COUNTRIES_ANSWER_OPTIONS = {
     "" => "Select an option",

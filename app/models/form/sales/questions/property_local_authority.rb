@@ -2,8 +2,6 @@ class Form::Sales::Questions::PropertyLocalAuthority < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "la"
-    @check_answer_label = "Local authority"
-    @header = "What is the property’s local authority?"
     @type = "select"
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
     @disable_clearing_if_not_routed_or_dynamic_answer_options = true

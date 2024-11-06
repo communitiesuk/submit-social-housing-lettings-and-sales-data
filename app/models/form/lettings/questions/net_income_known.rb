@@ -2,12 +2,9 @@ class Form::Lettings::Questions::NetIncomeKnown < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "net_income_known"
-    @check_answer_label = "Do you know the household’s combined total income after tax?"
-    @header = "Do you know the household’s combined income after tax?"
     @type = "radio"
     @check_answers_card_number = 0
     @top_guidance_partial = "what_counts_as_income"
-    @hint_text = ""
     @answer_options = ANSWER_OPTIONS
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
   end
