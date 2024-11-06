@@ -35,7 +35,7 @@ RSpec.describe Form::Lettings::Pages::CareHomeChargesValueCheck, type: :model do
   end
 
   it "has the correct informative_text" do
-    expect(page.informative_text).to eq({ "arguments" => [], "translation" => "forms.2024.lettings.soft_validations.carehome_charges_value_check.informative_text" })
+    expect(page.informative_text).to eq({ "arguments" => [], "translation" => "forms.2024.lettings.soft_validations.care_home_charges_value_check.informative_text" })
   end
 
   it "has the correct interruption_screen_question_ids" do
