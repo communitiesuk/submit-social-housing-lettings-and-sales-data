@@ -6,7 +6,7 @@ class Form::Lettings::Pages::PropertyMajorRepairsValueCheck < ::Form::Page
     @depends_on = [{ "major_repairs_date_in_soft_range?" => true }]
     @title_text = { "translation" => "forms.#{form.start_date.year}.#{@copy_key}.title_text" }
     @informative_text = {
-      "translation" => "forms.#{form.start_date.year}.#{@copy_key}.title_text",
+      "translation" => "forms.#{form.start_date.year}.#{@copy_key}.informative_text",
       "arguments" => [],
     }
   end

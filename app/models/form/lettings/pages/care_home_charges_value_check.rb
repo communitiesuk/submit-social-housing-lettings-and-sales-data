@@ -2,7 +2,7 @@ class Form::Lettings::Pages::CareHomeChargesValueCheck < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "care_home_charges_value_check"
-    @copy_key = "lettings.soft_validations.carehome_charges_value_check"
+    @copy_key = "lettings.soft_validations.care_home_charges_value_check"
     @depends_on = [{ "care_home_charge_expected_not_provided?" => true }]
     @title_text = {
       "translation" => "forms.#{form.start_date.year}.#{@copy_key}.title_text",
