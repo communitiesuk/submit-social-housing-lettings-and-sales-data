@@ -412,7 +412,7 @@ RSpec.describe FormController, type: :request do
         context "with a form page that has custom guidance" do
           it "displays the correct partial" do
             get "/lettings-logs/#{lettings_log.id}/net-income", headers: headers, params: {}
-            expect(response.body).to match("What counts as income?")
+            expect(response.body).to match(I18n.t("forms.2021.lettings.guidance.what_counts_as_income.title"))
           end
         end
 

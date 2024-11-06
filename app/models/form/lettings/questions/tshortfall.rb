@@ -2,8 +2,7 @@ class Form::Lettings::Questions::Tshortfall < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "tshortfall"
-    @check_answer_label = "Estimated outstanding amount"
-    @header = "Estimated outstanding amount"
+    @copy_key = "lettings.income_and_benefits.outstanding_amount.tshortfall"
     @type = "numeric"
     @width = 5
     @check_answers_card_number = 0

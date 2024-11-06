@@ -1,1 +1,3 @@
-<p class="govuk-body">Make sure the buyer has seen <%= govuk_link_to "the Ministry of Housing, Communities and Local Government (MHCLG) privacy notice", privacy_notice_path, target: :_blank %> before completing this log.</p>
+<p class="govuk-body">
+    <%= I18n.t("forms.#{@log.form.start_date.year}.sales.guidance.privacy_notice_buyer.content", privacy_notice_link: "#{govuk_link_to I18n.t("forms.#{@log.form.start_date.year}.sales.guidance.privacy_notice_buyer.privacy_notice_link_text"), privacy_notice_path, target: :_blank}").html_safe %>
+</p>

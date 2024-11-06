@@ -3,12 +3,13 @@ class Form::Sales::Pages::LivingBeforePurchase < ::Form::Page
     super(id, hsh, subsection)
     @ownershipsch = ownershipsch
     @joint_purchase = joint_purchase
+    @copy_key = "sales.sale_information.living_before_purchase.#{joint_purchase ? 'joint_purchase' : 'not_joint_purchase'}"
   end
 
   def questions
     @questions ||= [
       living_before_purchase,
-      Form::Sales::Questions::LivingBeforePurchaseYears.new(nil, nil, self, ownershipsch: @ownershipsch),
+      Form::Sales::Questions::LivingBeforePurchaseYears.new(nil, nil, self, ownershipsch: @ownershipsch, joint_purchase: @joint_purchase),
     ].compact
   end
 

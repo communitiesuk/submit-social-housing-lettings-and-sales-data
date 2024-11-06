@@ -15,7 +15,7 @@ RSpec.describe BulkUpload::Sales::Validator do
     context "when file is empty" do
       it "is not valid" do
         expect(validator).not_to be_valid
-        expect(validator.errors["base"]).to eql(["Template is blank - The template must be filled in for us to create the logs and check if data is correct."])
+        expect(validator.errors["base"]).to eql([I18n.t("validations.sales.2024.bulk_upload.blank_file")])
       end
     end
 
@@ -27,7 +27,7 @@ RSpec.describe BulkUpload::Sales::Validator do
 
       it "is not valid" do
         expect(validator).not_to be_valid
-        expect(validator.errors["base"]).to eql(["Template is blank - The template must be filled in for us to create the logs and check if data is correct."])
+        expect(validator.errors["base"]).to eql([I18n.t("validations.sales.2024.bulk_upload.blank_file")])
       end
     end
 
@@ -54,7 +54,7 @@ RSpec.describe BulkUpload::Sales::Validator do
 
       it "is not valid" do
         expect(validator).not_to be_valid
-        expect(validator.errors["base"]).to eql(["Incorrect sale dates, please ensure you have used the correct template."])
+        expect(validator.errors["base"]).to eql([I18n.t("validations.sales.2024.bulk_upload.wrong_template.wrong_template")])
       end
     end
 

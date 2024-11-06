@@ -158,7 +158,7 @@ private
 
   def validate_file_not_empty
     if File.size(path).zero? || csv_parser.body_rows.flatten.compact.empty?
-      errors.add(:base, :blank_file)
+      errors.add(:base, I18n.t("validations.lettings.#{@bulk_upload.year}.bulk_upload.blank_file"))
 
       halt_validations!
     end
@@ -168,7 +168,7 @@ private
     return if halt_validations?
 
     unless csv_parser.correct_field_count?
-      errors.add(:base, :wrong_field_numbers_count)
+      errors.add(:base, I18n.t("validations.lettings.#{@bulk_upload.year}.bulk_upload.wrong_template.wrong_field_numbers_count"))
       halt_validations!
     end
   end
@@ -177,7 +177,7 @@ private
     return if halt_validations?
 
     if csv_parser.too_many_columns?
-      errors.add(:base, :over_max_column_count)
+      errors.add(:base, I18n.t("validations.lettings.#{@bulk_upload.year}.bulk_upload.wrong_template.over_max_column_count"))
       halt_validations!
     end
   end
@@ -185,14 +185,14 @@ private
   def validate_correct_template
     return if halt_validations?
 
-    errors.add(:base, :wrong_template) if csv_parser.wrong_template_for_year?
+    errors.add(:base, I18n.t("validations.lettings.#{@bulk_upload.year}.bulk_upload.wrong_template.wrong_template")) if csv_parser.wrong_template_for_year?
   end
 
   def validate_missing_required_headers
     return if halt_validations?
 
     if csv_parser.missing_required_headers?
-      errors.add :base, I18n.t("activemodel.errors.models.bulk_upload/lettings/validator.attributes.base.no_headers", guidance_link: bulk_upload_lettings_log_url(id: "guidance", form: { year: bulk_upload.year }, host: ENV["APP_HOST"], anchor: "using-the-bulk-upload-template"))
+      errors.add :base, I18n.t("validations.lettings.#{@bulk_upload.year}.bulk_upload.wrong_template.no_headers", guidance_link: bulk_upload_lettings_log_url(id: "guidance", form: { year: bulk_upload.year }, host: ENV["APP_HOST"], anchor: "using-the-bulk-upload-template"))
       halt_validations!
     end
   end

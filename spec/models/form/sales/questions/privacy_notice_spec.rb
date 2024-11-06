@@ -94,7 +94,7 @@ RSpec.describe Form::Sales::Questions::PrivacyNotice, type: :model do
       end
 
       it "uses the expected top guidance partial" do
-        expect(question.top_guidance_partial).to eq("privacy_notice_buyer_2024")
+        expect(question.top_guidance_partial).to eq("privacy_notice_buyer")
       end
 
       it "returns correct unanswered_error_message" do
@@ -116,7 +116,7 @@ RSpec.describe Form::Sales::Questions::PrivacyNotice, type: :model do
       end
 
       it "uses the expected top guidance partial" do
-        expect(question.top_guidance_partial).to eq("privacy_notice_buyer_2024_joint_purchase")
+        expect(question.top_guidance_partial).to eq("privacy_notice_buyer_joint_purchase")
       end
 
       it "returns correct unanswered_error_message" do

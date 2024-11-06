@@ -2,7 +2,8 @@ module FormattingHelper
   def format_ending(text)
     return text if text.blank?
 
-    modified_text  = lowercase_first_letter(text)
+    first_word = text.split.first
+    modified_text = first_word == first_word.upcase ? text : lowercase_first_letter(text)
     ensure_sentence_ending(modified_text)
   end
 
