@@ -12,10 +12,12 @@
   <h2 class="govuk-visually-hidden">Users</h2>
 <% end %>
 
-<% if current_user.data_coordinator? || current_user.support? %>
-  <%= govuk_button_link_to "Invite user", new_user_path(organisation_id: @organisation.id), html: { method: :get } %>
-<% end %>
 <div class="app-filter-layout" data-controller="filter-layout">
+  <div class="govuk-button-group app-filter-toggle govuk-!-margin-bottom-6">
+    <% if current_user.data_coordinator? || current_user.support? %>
+      <%= govuk_button_link_to "Invite user", new_user_path(organisation_id: @organisation.id), html: { method: :get } %>
+    <% end %>
+  </div>
   <%= render partial: "users/user_filters" %>
   <div class="app-filter-layout__content">
 
