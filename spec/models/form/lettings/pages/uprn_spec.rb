@@ -9,7 +9,7 @@ RSpec.describe Form::Lettings::Pages::Uprn, type: :model do
   let(:form) { instance_double(Form, start_date: Time.zone.local(2023, 4, 1)) }
 
   before do
-    allow(form).to receive(:start_year_after_2024?).and_return(false)
+    allow(form).to receive(:start_year_2024_or_later?).and_return(false)
     allow(subsection).to receive(:form).and_return(form)
   end
 
@@ -57,7 +57,7 @@ RSpec.describe Form::Lettings::Pages::Uprn, type: :model do
 
       context "with 2024/25 form" do
         before do
-          allow(form).to receive(:start_year_after_2024?).and_return(true)
+          allow(form).to receive(:start_year_2024_or_later?).and_return(true)
         end
 
         it "points to address search page" do

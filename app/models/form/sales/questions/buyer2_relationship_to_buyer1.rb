@@ -16,7 +16,7 @@ class Form::Sales::Questions::Buyer2RelationshipToBuyer1 < ::Form::Question
   end
 
   def answer_options
-    if form.start_year_after_2024?
+    if form.start_year_2024_or_later?
 
       {
         "P" => { "value" => "Partner" },
