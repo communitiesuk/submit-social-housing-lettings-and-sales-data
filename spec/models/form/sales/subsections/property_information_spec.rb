@@ -15,6 +15,7 @@ RSpec.describe Form::Sales::Subsections::PropertyInformation, type: :model do
 
     before do
       allow(form).to receive(:start_year_2024_or_later?).and_return(false)
+      allow(form).to receive(:start_year_2025_or_later?).and_return(false)
     end
 
     context "when 2023" do
@@ -48,6 +49,7 @@ RSpec.describe Form::Sales::Subsections::PropertyInformation, type: :model do
 
       before do
         allow(form).to receive(:start_year_2024_or_later?).and_return(true)
+        allow(form).to receive(:start_year_2025_or_later?).and_return(false)
       end
 
       it "has correct pages" do
