@@ -517,12 +517,46 @@ RSpec.describe FiltersHelper do
         allow(Time).to receive(:now).and_return(Time.zone.local(2024, 5, 1))
       end
 
-      it "has the correct options" do
-        expect(collection_year_options).to eq(
-          {
-            "2024" => "2024 to 2025", "2023" => "2023 to 2024", "2022" => "2022 to 2023"
-          },
-        )
+      context "and in crossover period" do
+        before do
+          allow(FormHandler.instance).to receive(:in_crossover_period?).and_return(true)
+        end
+
+        it "has the correct options" do
+          expect(collection_year_options).to eq(
+            {
+              "2024" => "2024 to 2025", "2023" => "2023 to 2024", "2022" => "2022 to 2023"
+            },
+          )
+        end
+      end
+
+      context "and not in crossover period" do
+        before do
+          allow(FormHandler.instance).to receive(:in_crossover_period?).and_return(false)
+        end
+
+        it "has the correct options" do
+          expect(collection_year_options).to eq(
+            {
+              "2024" => "2024 to 2025", "2023" => "2023 to 2024"
+            },
+          )
+        end
+
+        context "with future form use turned on" do
+          before do
+            allow(FeatureToggle).to receive(:allow_future_form_use?).and_return(true)
+          end
+
+          it "includes next year in the options" do
+            expect(collection_year_options).to eq(
+              {
+                "2025" => "2025 to 2026", "2024" => "2024 to 2025", "2023" => "2023 to 2024"
+              },
+            )
+          end
+        end
       end
     end
   end
