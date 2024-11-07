@@ -35,7 +35,7 @@ RSpec.describe Form::Sales::Questions::Mortgageused, type: :model do
 
       context "and the saledate is before 24/25" do
         before do
-          allow(form).to receive(:start_year_after_2024?).and_return false
+          allow(form).to receive(:start_year_2024_or_later?).and_return false
         end
 
         it "does not show the don't know option" do
@@ -45,7 +45,7 @@ RSpec.describe Form::Sales::Questions::Mortgageused, type: :model do
 
       context "and the saledate is 24/25 or after" do
         before do
-          allow(form).to receive(:start_year_after_2024?).and_return true
+          allow(form).to receive(:start_year_2024_or_later?).and_return true
         end
 
         it "shows the don't know option" do

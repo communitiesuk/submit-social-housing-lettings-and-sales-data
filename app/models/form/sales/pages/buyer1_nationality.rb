@@ -13,7 +13,7 @@ class Form::Sales::Pages::Buyer1Nationality < ::Form::Page
   end
 
   def questions
-    @questions ||= if form.start_year_after_2024?
+    @questions ||= if form.start_year_2024_or_later?
                      [
                        Form::Sales::Questions::NationalityAllGroup.new("nationality_all_group", nil, self, 1),
                        Form::Sales::Questions::NationalityAll.new("nationality_all", nil, self, 1),

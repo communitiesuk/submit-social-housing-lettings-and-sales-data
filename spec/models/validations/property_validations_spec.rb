@@ -50,7 +50,7 @@ RSpec.describe Validations::PropertyValidations do
 
       context "and the log is from before 24/25" do
         it "adds an error" do
-          allow(log.form).to receive(:start_year_after_2024?).and_return false
+          allow(log.form).to receive(:start_year_2024_or_later?).and_return false
 
           property_validator.validate_shared_housing_rooms(log)
 
@@ -76,7 +76,7 @@ RSpec.describe Validations::PropertyValidations do
 
       context "and the log is from before 24/25" do
         it "adds an error" do
-          allow(log.form).to receive(:start_year_after_2024?).and_return false
+          allow(log.form).to receive(:start_year_2024_or_later?).and_return false
 
           property_validator.validate_shared_housing_rooms(log)
 
