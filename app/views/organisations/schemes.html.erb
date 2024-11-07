@@ -23,7 +23,9 @@
 
 <div class="app-filter-layout" data-controller="filter-layout">
   <% if SchemePolicy.new(current_user, nil).create? %>
-    <%= govuk_button_link_to "Create a new supported housing scheme", new_scheme_path, html: { method: :post } %>
+    <div class="govuk-button-group app-filter-toggle govuk-!-margin-bottom-6">
+      <%= govuk_button_link_to "Create a new supported housing scheme", new_scheme_path, html: { method: :post } %>
+    </div>
   <% end %>
 
   <%= govuk_details(
