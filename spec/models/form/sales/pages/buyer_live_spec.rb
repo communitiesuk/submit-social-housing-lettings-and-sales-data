@@ -11,7 +11,7 @@ RSpec.describe Form::Sales::Pages::BuyerLive, type: :model do
   let(:form) { instance_double(Form, start_date: current_collection_start_date) }
 
   before do
-    allow(form).to receive(:start_year_after_2024?).and_return(true)
+    allow(form).to receive(:start_year_2024_or_later?).and_return(true)
     allow(subsection).to receive(:form).and_return(form)
   end
 

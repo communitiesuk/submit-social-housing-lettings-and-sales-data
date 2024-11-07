@@ -12,7 +12,7 @@ RSpec.describe Form::Lettings::Questions::RentType, type: :model do
   before do
     allow(page).to receive(:subsection).and_return(subsection)
     allow(subsection).to receive(:form).and_return(form)
-    allow(form).to receive(:start_year_after_2024?).and_return(false)
+    allow(form).to receive(:start_year_2024_or_later?).and_return(false)
   end
 
   it "has correct page" do
@@ -37,7 +37,7 @@ RSpec.describe Form::Lettings::Questions::RentType, type: :model do
 
   context "when 2023" do
     before do
-      allow(form).to receive(:start_year_after_2024?).and_return(false)
+      allow(form).to receive(:start_year_2024_or_later?).and_return(false)
     end
 
     it "has the correct answer_options" do
@@ -58,7 +58,7 @@ RSpec.describe Form::Lettings::Questions::RentType, type: :model do
 
   context "when 2024" do
     before do
-      allow(form).to receive(:start_year_after_2024?).and_return(true)
+      allow(form).to receive(:start_year_2024_or_later?).and_return(true)
     end
 
     it "has the correct answer_options" do

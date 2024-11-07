@@ -18,7 +18,7 @@ RSpec.describe Form::Lettings::Subsections::HouseholdSituation, type: :model do
 
   context "with form year before 2024" do
     before do
-      allow(form).to receive(:start_year_after_2024?).and_return(false)
+      allow(form).to receive(:start_year_2024_or_later?).and_return(false)
     end
 
     it "has correct pages" do
@@ -48,7 +48,7 @@ RSpec.describe Form::Lettings::Subsections::HouseholdSituation, type: :model do
 
   context "with form year >= 2024" do
     before do
-      allow(form).to receive(:start_year_after_2024?).and_return(true)
+      allow(form).to receive(:start_year_2024_or_later?).and_return(true)
     end
 
     it "has correct pages" do

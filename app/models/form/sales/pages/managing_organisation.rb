@@ -13,7 +13,7 @@ class Form::Sales::Pages::ManagingOrganisation < ::Form::Page
   def routed_to?(log, current_user)
     return false unless current_user
 
-    if form.start_year_after_2024?
+    if form.start_year_2024_or_later?
       organisation = current_user.support? ? log.owning_organisation : current_user.organisation
 
       return false unless organisation
