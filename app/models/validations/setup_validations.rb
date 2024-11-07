@@ -77,7 +77,7 @@ module Validations::SetupValidations
       record.errors.add :scheme_id, :incomplete, message: I18n.t("validations.lettings.setup.scheme.incomplete")
     end
 
-    unless record.scheme&.locations&.confirmed&.any?
+    if record.scheme&.locations.present? && !record.scheme.locations.confirmed.any?
       record.errors.add :scheme_id, :no_completed_locations, message: I18n.t("validations.lettings.setup.scheme.no_completed_locations")
     end
 
