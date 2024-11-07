@@ -72,17 +72,13 @@ module Validations::SetupValidations
     end
   end
 
-  def validate_scheme_has_confirmed_locations_validation(record)
-    return unless record.scheme
-
-    unless record.scheme.locations.confirmed.any?
-      record.errors.add :scheme_id, :no_completed_locations, message: I18n.t("validations.lettings.setup.scheme.no_completed_locations")
-    end
-  end
-
   def validate_scheme(record)
     if record.scheme&.status == :incomplete
       record.errors.add :scheme_id, :incomplete, message: I18n.t("validations.lettings.setup.scheme.incomplete")
+    end
+
+    unless record.scheme&.locations&.confirmed&.any?
+      record.errors.add :scheme_id, :no_completed_locations, message: I18n.t("validations.lettings.setup.scheme.no_completed_locations")
     end
 
     scheme_during_startdate_validation(record)

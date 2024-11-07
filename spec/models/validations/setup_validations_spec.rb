@@ -900,7 +900,7 @@ RSpec.describe Validations::SetupValidations do
 
       it "produces an error" do
         record.scheme = scheme
-        setup_validator.validate_scheme_has_confirmed_locations_validation(record)
+        setup_validator.validate_scheme(record)
         expect(record.errors["scheme_id"])
           .to include(match I18n.t("validations.lettings.setup.scheme.no_completed_locations"))
       end
@@ -914,7 +914,7 @@ RSpec.describe Validations::SetupValidations do
 
       it "does not produce an error" do
         record.scheme = scheme
-        setup_validator.validate_scheme_has_confirmed_locations_validation(record)
+        setup_validator.validate_scheme(record)
         expect(record.errors["scheme_id"])
           .to be_empty
       end
