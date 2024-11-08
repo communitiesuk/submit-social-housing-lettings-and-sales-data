@@ -48,7 +48,7 @@ RSpec.describe Form::Sales::Questions::BuyerPrevious, type: :model do
 
   context "when form year is before 2024" do
     before do
-      allow(form).to receive(:start_year_after_2024?).and_return(false)
+      allow(form).to receive(:start_year_2024_or_later?).and_return(false)
     end
 
     it "is not marked as derived" do
@@ -58,7 +58,7 @@ RSpec.describe Form::Sales::Questions::BuyerPrevious, type: :model do
 
   context "when form year is >= 2024" do
     before do
-      allow(form).to receive(:start_year_after_2024?).and_return(true)
+      allow(form).to receive(:start_year_2024_or_later?).and_return(true)
     end
 
     it "is marked as derived" do

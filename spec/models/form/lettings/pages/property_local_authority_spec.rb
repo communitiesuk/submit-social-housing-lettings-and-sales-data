@@ -37,7 +37,7 @@ RSpec.describe Form::Lettings::Pages::PropertyLocalAuthority, type: :model do
 
     context "with form before 2024" do
       before do
-        allow(form).to receive(:start_year_after_2024?).and_return(false)
+        allow(form).to receive(:start_year_2024_or_later?).and_return(false)
       end
 
       it "is routed to when la is not inferred and it is general needs log" do
@@ -61,7 +61,7 @@ RSpec.describe Form::Lettings::Pages::PropertyLocalAuthority, type: :model do
 
     context "with form after 2024" do
       before do
-        allow(form).to receive(:start_year_after_2024?).and_return(true)
+        allow(form).to receive(:start_year_2024_or_later?).and_return(true)
       end
 
       it "is routed to when la is not inferred, it is general needs log and address search has been given" do

@@ -11,7 +11,7 @@ class Form::Sales::Questions::Mortgageused < ::Form::Question
   end
 
   def displayed_answer_options(log, _user = nil)
-    if log.outright_sale? && log.saledate && !form.start_year_after_2024?
+    if log.outright_sale? && log.saledate && !form.start_year_2024_or_later?
       answer_options_without_dont_know
     elsif log.stairowned == 100 || log.outright_sale?
       ANSWER_OPTIONS

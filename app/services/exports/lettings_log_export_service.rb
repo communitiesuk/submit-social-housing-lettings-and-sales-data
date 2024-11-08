@@ -146,8 +146,8 @@ module Exports
       field_name.starts_with?(details_known_prefix) ||
         pattern_age.match(field_name) ||
         !EXPORT_FIELDS.include?(field_name) ||
-        (lettings_log.form.start_year_after_2024? && PRE_2024_EXPORT_FIELDS.include?(field_name)) ||
-        (!lettings_log.form.start_year_after_2024? && POST_2024_EXPORT_FIELDS.include?(field_name))
+        (lettings_log.form.start_year_2024_or_later? && PRE_2024_EXPORT_FIELDS.include?(field_name)) ||
+        (!lettings_log.form.start_year_2024_or_later? && POST_2024_EXPORT_FIELDS.include?(field_name))
     end
 
     def build_export_xml(lettings_logs)
