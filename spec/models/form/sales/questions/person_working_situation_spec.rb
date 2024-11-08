@@ -6,7 +6,7 @@ RSpec.describe Form::Sales::Questions::PersonWorkingSituation, type: :model do
   let(:question_id) { "ecstat2" }
   let(:question_definition) { nil }
   let(:form) { instance_double(Form, start_date: Time.zone.local(2024, 4, 1), start_year_2025_or_later?: false) }
-  let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form: form)) }
+  let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form:)) }
   let(:person_index) { 2 }
 
   it "has correct page" do
