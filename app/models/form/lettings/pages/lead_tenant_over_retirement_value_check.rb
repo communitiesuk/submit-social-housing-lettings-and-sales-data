@@ -2,11 +2,13 @@ class Form::Lettings::Pages::LeadTenantOverRetirementValueCheck < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @depends_on = [{ "person_1_not_retired_over_soft_max_age?" => true }]
+    @copy_key = "lettings.soft_validations.retirement_value_check"
     @title_text = {
-      "translation" => "soft_validations.retirement.max.title",
+      "translation" => "forms.#{form.start_date.year}.#{@copy_key}.title_text",
     }
     @informative_text = {
-      "translation" => "soft_validations.retirement.max.hint_text",
+      "translation" => "forms.#{form.start_date.year}.#{@copy_key}.informative_text",
+      "arguments" => [],
     }
   end
 
