@@ -9,7 +9,7 @@ class Form::Lettings::Pages::NoFemalesPregnantHouseholdLeadValueCheck < ::Form::
       "arguments" => [],
     }
     @informative_text = {
-      "translation" => "forms.#{form.start_date.year}.#{@copy_key}.title_text",
+      "translation" => "forms.#{form.start_date.year}.#{@copy_key}.informative_text",
       "arguments" => [],
     }
   end

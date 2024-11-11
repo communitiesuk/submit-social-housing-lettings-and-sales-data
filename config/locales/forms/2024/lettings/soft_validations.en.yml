@@ -33,7 +33,7 @@ en:
               hint_text: ""
               question_text: "Are you sure this person isn’t retired?"
               title_text: "You told us this person is over 66 and not retired."
-              informative_text: ""
+              informative_text: "Are you sure this person isn’t retired?"
 
           partner_under_16_value_check:
               page_header: ""
