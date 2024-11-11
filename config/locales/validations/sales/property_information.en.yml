@@ -34,3 +34,5 @@ en:
           not_in_england: "It looks like you have entered a UPRN for a local authority outside of England - only submit Sales forms for Sales that occur in England"
         uprn_selection:
           not_in_england: "It looks like you have selected an address for a local authority outside of England - only submit Sales forms for Sales that occur in England"
+        saledate:
+          not_in_england: "It looks like you have selected a local authority outside of England - only submit Sales forms for Sales that occur in England"

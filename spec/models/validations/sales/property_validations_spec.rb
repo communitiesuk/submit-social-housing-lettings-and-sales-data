@@ -159,6 +159,7 @@ RSpec.describe Validations::Sales::PropertyValidations do
           expect(log.errors["uprn"]).to include(I18n.t("validations.sales.property_information.uprn.not_in_england"))
           expect(log.errors["uprn_confirmation"]).to include(I18n.t("validations.sales.property_information.uprn_confirmation.not_in_england"))
           expect(log.errors["uprn_selection"]).to include(I18n.t("validations.sales.property_information.uprn_selection.not_in_england"))
+          expect(log.errors["saledate"]).to include(I18n.t("validations.sales.property_information.saledate.not_in_england"))
         end
       end
 
@@ -172,6 +173,7 @@ RSpec.describe Validations::Sales::PropertyValidations do
           expect(log.errors["uprn"]).to be_empty
           expect(log.errors["uprn_confirmation"]).to be_empty
           expect(log.errors["uprn_selection"]).to be_empty
+          expect(log.errors["saledate"]).to be_empty
         end
       end
     end
@@ -191,6 +193,7 @@ RSpec.describe Validations::Sales::PropertyValidations do
           expect(log.errors["uprn"]).to be_empty
           expect(log.errors["uprn_confirmation"]).to be_empty
           expect(log.errors["uprn_selection"]).to be_empty
+          expect(log.errors["saledate"]).to be_empty
         end
       end
     end

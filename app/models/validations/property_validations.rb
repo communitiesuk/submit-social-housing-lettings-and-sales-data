@@ -59,12 +59,14 @@ module Validations::PropertyValidations
       record.errors.add :uprn, I18n.t("validations.lettings.property.uprn.not_in_england")
       record.errors.add :uprn_confirmation, I18n.t("validations.lettings.property.uprn_confirmation.not_in_england")
       record.errors.add :uprn_selection, I18n.t("validations.lettings.property.uprn_selection.not_in_england")
+      record.errors.add :startdate, I18n.t("validations.lettings.property.startdate.not_in_england")
     elsif record.is_supported_housing?
       return unless record.location
       return if record.location.location_code.in?(LocalAuthority.england.pluck(:code))
 
       record.errors.add :location_id, I18n.t("validations.lettings.property.location_id.not_in_england")
       record.errors.add :scheme_id, I18n.t("validations.lettings.property.scheme_id.not_in_england")
+      record.errors.add :startdate, I18n.t("validations.lettings.property.startdate.not_in_england")
     end
   end
 end

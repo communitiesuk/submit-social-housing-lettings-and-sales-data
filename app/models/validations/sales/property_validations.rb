@@ -46,5 +46,6 @@ module Validations::Sales::PropertyValidations
     record.errors.add :uprn, I18n.t("validations.sales.property_information.uprn.not_in_england")
     record.errors.add :uprn_confirmation, I18n.t("validations.sales.property_information.uprn_confirmation.not_in_england")
     record.errors.add :uprn_selection, I18n.t("validations.sales.property_information.uprn_selection.not_in_england")
+    record.errors.add :saledate, I18n.t("validations.sales.property_information.saledate.not_in_england")
   end
 end
