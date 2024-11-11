@@ -28,7 +28,7 @@ RSpec.describe Form::Lettings::Pages::PersonUnderRetirementValueCheck, type: :mo
 
     it "has the correct title_text" do
       expect(page.title_text).to eq({
-        "translation" => "soft_validations.retirement.min.title",
+        "translation" => "forms.2024.lettings.soft_validations.no_retirement_value_check.title_text",
         "arguments" => [
           {
             "key" => "age2",
@@ -40,7 +40,7 @@ RSpec.describe Form::Lettings::Pages::PersonUnderRetirementValueCheck, type: :mo
     end
 
     it "has the correct informative_text" do
-      expect(page.informative_text).to eq({})
+      expect(page.informative_text).to eq({ "arguments" => [], "translation" => "forms.2024.lettings.soft_validations.no_retirement_value_check.informative_text" })
     end
   end
 
@@ -55,7 +55,7 @@ RSpec.describe Form::Lettings::Pages::PersonUnderRetirementValueCheck, type: :mo
 
     it "has the correct title_text" do
       expect(page.title_text).to eq({
-        "translation" => "soft_validations.retirement.min.title",
+        "translation" => "forms.2024.lettings.soft_validations.no_retirement_value_check.title_text",
         "arguments" => [
           {
             "key" => "age3",
@@ -67,7 +67,7 @@ RSpec.describe Form::Lettings::Pages::PersonUnderRetirementValueCheck, type: :mo
     end
 
     it "has the correct informative_text" do
-      expect(page.informative_text).to eq({})
+      expect(page.informative_text).to eq({ "arguments" => [], "translation" => "forms.2024.lettings.soft_validations.no_retirement_value_check.informative_text" })
     end
   end
 end

@@ -436,9 +436,9 @@ RSpec.describe Validations::SetupValidations do
         record.scheme = scheme
         setup_validator.validate_scheme(record)
         expect(record.errors["startdate"])
-          .to include(match I18n.t("validations.setup.startdate.scheme.deactivated.startdate", name: scheme.service_name, date: "4 June 2022"))
+          .to include(match I18n.t("validations.lettings.setup.startdate.scheme.deactivated.startdate", name: scheme.service_name, date: "4 June 2022"))
         expect(record.errors["scheme_id"])
-          .to include(match I18n.t("validations.setup.startdate.scheme.deactivated.scheme_id", name: scheme.service_name, date: "4 June 2022"))
+          .to include(match I18n.t("validations.lettings.setup.startdate.scheme.deactivated.scheme_id", name: scheme.service_name, date: "4 June 2022"))
       end
 
       it "produces no error when tenancy start date is during an active scheme period" do
@@ -465,9 +465,9 @@ RSpec.describe Validations::SetupValidations do
         record.scheme = scheme
         setup_validator.validate_scheme(record)
         expect(record.errors["startdate"])
-          .to include(match I18n.t("validations.setup.startdate.scheme.reactivating_soon.startdate", name: scheme.service_name, date: "4 August 2022"))
+          .to include(match I18n.t("validations.lettings.setup.startdate.scheme.reactivating_soon.startdate", name: scheme.service_name, date: "4 August 2022"))
         expect(record.errors["scheme_id"])
-          .to include(match I18n.t("validations.setup.startdate.scheme.reactivating_soon.scheme_id", name: scheme.service_name, date: "4 August 2022"))
+          .to include(match I18n.t("validations.lettings.setup.startdate.scheme.reactivating_soon.scheme_id", name: scheme.service_name, date: "4 August 2022"))
       end
 
       it "produces no error when tenancy start date is during an active scheme period" do
@@ -498,9 +498,9 @@ RSpec.describe Validations::SetupValidations do
         record.scheme = scheme
         setup_validator.validate_scheme(record)
         expect(record.errors["startdate"])
-          .to include(match I18n.t("validations.setup.startdate.scheme.reactivating_soon.startdate", name: scheme.service_name, date: "4 September 2022"))
+          .to include(match I18n.t("validations.lettings.setup.startdate.scheme.reactivating_soon.startdate", name: scheme.service_name, date: "4 September 2022"))
         expect(record.errors["scheme_id"])
-          .to include(match I18n.t("validations.setup.startdate.scheme.reactivating_soon.scheme_id", name: scheme.service_name, date: "4 September 2022"))
+          .to include(match I18n.t("validations.lettings.setup.startdate.scheme.reactivating_soon.scheme_id", name: scheme.service_name, date: "4 September 2022"))
       end
 
       it "produces no error when tenancy start date is during an active scheme period" do
@@ -526,8 +526,8 @@ RSpec.describe Validations::SetupValidations do
         record.startdate = Time.zone.local(2022, 7, 5)
         record.scheme = scheme
         setup_validator.validate_scheme(record)
-        expect(record.errors["startdate"]).to include(match I18n.t("validations.setup.startdate.scheme.locations_inactive.startdate", name: scheme.service_name))
-        expect(record.errors["scheme_id"]).to include(match I18n.t("validations.setup.startdate.scheme.locations_inactive.startdate", name: scheme.service_name))
+        expect(record.errors["startdate"]).to include(match I18n.t("validations.lettings.setup.startdate.scheme.locations_inactive.startdate", name: scheme.service_name))
+        expect(record.errors["scheme_id"]).to include(match I18n.t("validations.lettings.setup.startdate.scheme.locations_inactive.startdate", name: scheme.service_name))
       end
 
       it "produces no error when scheme has active locations on the tenancy start date" do
@@ -553,8 +553,8 @@ RSpec.describe Validations::SetupValidations do
         record.scheme = scheme
         record.location = location
         setup_validator.validate_scheme(record)
-        expect(record.errors["startdate"]).to include(match I18n.t("validations.setup.startdate.scheme.locations_inactive.startdate", name: scheme.service_name))
-        expect(record.errors["startdate"]).not_to include(match I18n.t("validations.setup.startdate.location.deactivated.startdate", postcode: location.postcode))
+        expect(record.errors["startdate"]).to include(match I18n.t("validations.lettings.setup.startdate.scheme.locations_inactive.startdate", name: scheme.service_name))
+        expect(record.errors["startdate"]).not_to include(match I18n.t("validations.lettings.setup.startdate.location.deactivated.startdate", postcode: location.postcode))
       end
 
       it "produces no error when scheme has active locations on the tenancy start date" do
@@ -593,9 +593,9 @@ RSpec.describe Validations::SetupValidations do
         record.location = location
         setup_validator.validate_location(record)
         expect(record.errors["startdate"])
-          .to include(match I18n.t("validations.setup.startdate.location.deactivated.startdate", postcode: location.postcode, date: "4 June 2022"))
+          .to include(match I18n.t("validations.lettings.setup.startdate.location.deactivated.startdate", postcode: location.postcode, date: "4 June 2022"))
         expect(record.errors["location_id"])
-          .to include(match I18n.t("validations.setup.startdate.location.deactivated.location_id", postcode: location.postcode, date: "4 June 2022"))
+          .to include(match I18n.t("validations.lettings.setup.startdate.location.deactivated.location_id", postcode: location.postcode, date: "4 June 2022"))
       end
 
       it "produces no error when tenancy start date is during an active location period" do
@@ -622,9 +622,9 @@ RSpec.describe Validations::SetupValidations do
         record.location = location
         setup_validator.validate_location(record)
         expect(record.errors["startdate"])
-          .to include(match I18n.t("validations.setup.startdate.location.reactivating_soon.startdate", postcode: location.postcode, date: "4 August 2022"))
+          .to include(match I18n.t("validations.lettings.setup.startdate.location.reactivating_soon.startdate", postcode: location.postcode, date: "4 August 2022"))
         expect(record.errors["location_id"])
-          .to include(match I18n.t("validations.setup.startdate.location.reactivating_soon.location_id", postcode: location.postcode, date: "4 August 2022"))
+          .to include(match I18n.t("validations.lettings.setup.startdate.location.reactivating_soon.location_id", postcode: location.postcode, date: "4 August 2022"))
       end
 
       it "produces no error when tenancy start date is during an active location period" do
@@ -655,9 +655,9 @@ RSpec.describe Validations::SetupValidations do
         record.location = location
         setup_validator.validate_location(record)
         expect(record.errors["startdate"])
-          .to include(match I18n.t("validations.setup.startdate.location.reactivating_soon.startdate", postcode: location.postcode, date: "4 September 2022"))
+          .to include(match I18n.t("validations.lettings.setup.startdate.location.reactivating_soon.startdate", postcode: location.postcode, date: "4 September 2022"))
         expect(record.errors["location_id"])
-          .to include(match I18n.t("validations.setup.startdate.location.reactivating_soon.location_id", postcode: location.postcode, date: "4 September 2022"))
+          .to include(match I18n.t("validations.lettings.setup.startdate.location.reactivating_soon.location_id", postcode: location.postcode, date: "4 September 2022"))
       end
 
       it "produces no error when tenancy start date is during an active location period" do
@@ -686,9 +686,9 @@ RSpec.describe Validations::SetupValidations do
         record.location = location
         setup_validator.validate_location(record)
         expect(record.errors["startdate"])
-          .to include(match I18n.t("validations.setup.startdate.location.activating_soon.startdate", postcode: location.postcode, date: "15 September 2022"))
+          .to include(match I18n.t("validations.lettings.setup.startdate.location.activating_soon.startdate", postcode: location.postcode, date: "15 September 2022"))
         expect(record.errors["location_id"])
-          .to include(match I18n.t("validations.setup.startdate.location.activating_soon.location_id", postcode: location.postcode, date: "15 September 2022"))
+          .to include(match I18n.t("validations.lettings.setup.startdate.location.activating_soon.location_id", postcode: location.postcode, date: "15 September 2022"))
       end
     end
 
@@ -726,7 +726,7 @@ RSpec.describe Validations::SetupValidations do
         record.startdate = Time.zone.local(2022, 7, 5)
         record.location = location
         setup_validator.validate_location(record)
-        expect(record.errors["startdate"]).to include(match I18n.t("validations.setup.startdate.location.deactivated.startdate", postcode: location.postcode))
+        expect(record.errors["startdate"]).to include(match I18n.t("validations.lettings.setup.startdate.location.deactivated.startdate", postcode: location.postcode))
       end
 
       it "produces no error when the chosen location is active on the tenancy start date" do
@@ -900,7 +900,7 @@ RSpec.describe Validations::SetupValidations do
 
       it "produces an error" do
         record.scheme = scheme
-        setup_validator.validate_scheme_has_confirmed_locations_validation(record)
+        setup_validator.validate_scheme(record)
         expect(record.errors["scheme_id"])
           .to include(match I18n.t("validations.lettings.setup.scheme.no_completed_locations"))
       end
@@ -914,7 +914,7 @@ RSpec.describe Validations::SetupValidations do
 
       it "does not produce an error" do
         record.scheme = scheme
-        setup_validator.validate_scheme_has_confirmed_locations_validation(record)
+        setup_validator.validate_scheme(record)
         expect(record.errors["scheme_id"])
           .to be_empty
       end

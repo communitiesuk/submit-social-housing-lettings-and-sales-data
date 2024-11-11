@@ -37,27 +37,15 @@ RSpec.describe Form::Lettings::Pages::NoFemalesPregnantHouseholdPersonAgeValueCh
 
     it "has the correct title_text" do
       expect(page.title_text).to eq({
-        "translation" => "soft_validations.pregnancy.title",
-        "arguments" => [
-          {
-            "key" => "sex1",
-            "label" => true,
-            "i18n_template" => "sex1",
-          },
-        ],
+        "translation" => "forms.2024.lettings.soft_validations.pregnancy_value_check.no_females_pregnant_household_value_check.title_text",
+        "arguments" => [],
       })
     end
 
     it "has the correct informative_text" do
       expect(page.informative_text).to eq({
-        "translation" => "soft_validations.pregnancy.all_male_tenants",
-        "arguments" => [
-          {
-            "key" => "sex1",
-            "label" => true,
-            "i18n_template" => "sex1",
-          },
-        ],
+        "translation" => "forms.2024.lettings.soft_validations.pregnancy_value_check.no_females_pregnant_household_value_check.informative_text",
+        "arguments" => [],
       })
     end
   end
@@ -82,27 +70,15 @@ RSpec.describe Form::Lettings::Pages::NoFemalesPregnantHouseholdPersonAgeValueCh
 
     it "has the correct title_text" do
       expect(page.title_text).to eq({
-        "translation" => "soft_validations.pregnancy.title",
-        "arguments" => [
-          {
-            "key" => "sex1",
-            "label" => true,
-            "i18n_template" => "sex1",
-          },
-        ],
+        "translation" => "forms.2024.lettings.soft_validations.pregnancy_value_check.no_females_pregnant_household_value_check.title_text",
+        "arguments" => [],
       })
     end
 
     it "has the correct informative_text" do
       expect(page.informative_text).to eq({
-        "translation" => "soft_validations.pregnancy.all_male_tenants",
-        "arguments" => [
-          {
-            "key" => "sex1",
-            "label" => true,
-            "i18n_template" => "sex1",
-          },
-        ],
+        "translation" => "forms.2024.lettings.soft_validations.pregnancy_value_check.no_females_pregnant_household_value_check.informative_text",
+        "arguments" => [],
       })
     end
   end
