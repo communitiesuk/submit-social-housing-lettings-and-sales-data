@@ -2,10 +2,8 @@ class Form::Sales::Questions::PreviousTenure < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "socprevten"
-    @check_answer_label = "Previous property tenure"
-    @header = "What was the previous tenure of the buyer?"
+    @copy_key = "sales.sale_information.socprevten"
     @type = "radio"
-    @hint_text = ""
     @page = page
     @answer_options = ANSWER_OPTIONS
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]

@@ -2,11 +2,9 @@ class Form::Lettings::Questions::ReasonRenewal < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "reason"
-    @check_answer_label = "Reason for leaving last settled home"
-    @header = "What is the tenant’s main reason for the household leaving their last settled home?"
     @type = "radio"
+    @copy_key = "lettings.household_situation.reason.#{page.id}.reason"
     @check_answers_card_number = 0
-    @hint_text = "You told us this letting is a renewal. We have removed some options because of this."
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
     @conditional_for = {
       "reasonother" => [
@@ -16,7 +14,7 @@ class Form::Lettings::Questions::ReasonRenewal < ::Form::Question
   end
 
   def answer_options
-    if form.start_year_after_2024?
+    if form.start_year_2024_or_later?
       {
         "50" => { "value" => "End of social or private sector tenancy - no fault" },
         "51" => { "value" => "End of social or private sector tenancy - evicted due to anti-social behaviour (ASB)" },

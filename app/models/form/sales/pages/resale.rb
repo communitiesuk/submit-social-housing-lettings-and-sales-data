@@ -2,6 +2,7 @@ class Form::Sales::Pages::Resale < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "resale"
+    @copy_key = "sales.sale_information.resale"
     @depends_on = [
       {
         "staircase" => 2,

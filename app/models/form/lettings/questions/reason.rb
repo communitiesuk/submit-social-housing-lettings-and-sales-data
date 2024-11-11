@@ -2,11 +2,9 @@ class Form::Lettings::Questions::Reason < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "reason"
-    @check_answer_label = "Reason for leaving last settled home"
-    @header = "What is the tenant’s main reason for the household leaving their last settled home?"
+    @copy_key = "lettings.household_situation.reason.#{page.id}.reason"
     @type = "radio"
     @check_answers_card_number = 0
-    @hint_text = form.start_year_after_2024? ? "The tenant’s ‘last settled home’ is their last long-standing home. For tenants who were in temporary accommodation, sleeping rough or otherwise homeless, their last settled home is where they were living previously." : "The tenant’s ‘last settled home’ is their last long-standing home. For tenants who were in temporary accommodation or sleeping rough, their last settled home is where they were living previously."
     @conditional_for = {
       "reasonother" => [
         20,
@@ -16,7 +14,7 @@ class Form::Lettings::Questions::Reason < ::Form::Question
   end
 
   def answer_options
-    if form.start_year_after_2024?
+    if form.start_year_2024_or_later?
       {
         "50" => { "value" => "End of social or private sector tenancy - no fault" },
         "51" => { "value" => "End of social or private sector tenancy - evicted due to anti-social behaviour (ASB)" },

@@ -1,4 +1,6 @@
-<%= govuk_details(summary_text: "What is a location?") do %>
-  <p class="govuk-body">A location is a postcode area where supported housing is provided under a scheme. A scheme can have multiple locations, and a location can have multiple units at the same postcode.</p>
-  <p class="govuk-body"><%= govuk_link_to("Read more about schemes and locations", scheme_changes_path) %></p>
-<% end %>
+<div class="govuk-body">
+  <%= govuk_details(summary_text: I18n.t("forms.#{@log.form.start_date.year}.lettings.guidance.finding_location.title")) do %>
+    <p><%= I18n.t("forms.#{@log.form.start_date.year}.lettings.guidance.finding_location.content").html_safe %></p>
+    <p><%= govuk_link_to(I18n.t("forms.#{@log.form.start_date.year}.lettings.guidance.finding_location.scheme_changes_link_text"), scheme_changes_path) %></p>
+  <% end %>
+</div>

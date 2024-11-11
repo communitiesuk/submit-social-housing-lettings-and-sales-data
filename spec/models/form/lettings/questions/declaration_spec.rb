@@ -10,7 +10,7 @@ RSpec.describe Form::Lettings::Questions::Declaration, type: :model do
   let(:form) { instance_double(Form, start_date: Time.zone.local(2023, 4, 1)) }
 
   before do
-    allow(form).to receive(:start_year_after_2024?)
+    allow(form).to receive(:start_year_2024_or_later?)
     allow(page).to receive(:subsection).and_return(subsection)
     allow(subsection).to receive(:form).and_return(form)
   end
@@ -33,7 +33,7 @@ RSpec.describe Form::Lettings::Questions::Declaration, type: :model do
 
   context "when the form year is before 2024" do
     before do
-      allow(form).to receive(:start_year_after_2024?).and_return(false)
+      allow(form).to receive(:start_year_2024_or_later?).and_return(false)
     end
 
     it "has the correct answer_options" do
@@ -57,7 +57,7 @@ RSpec.describe Form::Lettings::Questions::Declaration, type: :model do
 
   context "when the form year is >= 2024" do
     before do
-      allow(form).to receive(:start_year_after_2024?).and_return(true)
+      allow(form).to receive(:start_year_2024_or_later?).and_return(true)
     end
 
     it "has the correct answer_options" do
@@ -67,7 +67,7 @@ RSpec.describe Form::Lettings::Questions::Declaration, type: :model do
     end
 
     it "uses the expected top guidance partial" do
-      expect(question.top_guidance_partial).to eq("privacy_notice_tenant_2024")
+      expect(question.top_guidance_partial).to eq("privacy_notice_tenant")
     end
 
     it "has check_answers_card_number nil" do

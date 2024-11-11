@@ -18,19 +18,6 @@ RSpec.describe Form::Sales::Pages::PropertyLocalAuthority, type: :model do
   end
 
   describe "has correct questions" do
-    context "when 2022" do
-      let(:start_date) { Time.utc(2022, 2, 8) }
-
-      it "has correct questions" do
-        expect(page.questions.map(&:id)).to eq(
-          %w[
-            la_known
-            la
-          ],
-        )
-      end
-    end
-
     context "when 2023" do
       let(:start_date) { Time.utc(2023, 2, 8) }
 
@@ -57,7 +44,7 @@ RSpec.describe Form::Sales::Pages::PropertyLocalAuthority, type: :model do
 
     context "with form before 2024" do
       before do
-        allow(form).to receive(:start_year_after_2024?).and_return(false)
+        allow(form).to receive(:start_year_2024_or_later?).and_return(false)
       end
 
       it "is routed to when la is not inferred" do
@@ -73,7 +60,7 @@ RSpec.describe Form::Sales::Pages::PropertyLocalAuthority, type: :model do
 
     context "with form after 2024" do
       before do
-        allow(form).to receive(:start_year_after_2024?).and_return(true)
+        allow(form).to receive(:start_year_2024_or_later?).and_return(true)
       end
 
       it "is routed to when la is not inferred and address search has been given" do

@@ -2,16 +2,13 @@ class Form::Lettings::Questions::Rsnvac < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "rsnvac"
-    @check_answer_label = "Vacancy reason"
-    @header = "What is the reason for the property being vacant?"
     @type = "radio"
     @check_answers_card_number = 0
-    @hint_text = ""
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
   end
 
   def answer_options
-    if form.start_year_after_2024?
+    if form.start_year_2024_or_later?
       {
         "14" => {
           "value" => "Renewal of fixed-term tenancy",

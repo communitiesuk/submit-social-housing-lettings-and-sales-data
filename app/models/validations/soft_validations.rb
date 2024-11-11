@@ -27,6 +27,14 @@ module Validations::SoftValidations
     weekly_net_income.between?(applicable_income_range.hard_min, applicable_income_range.soft_min)
   end
 
+  def rent_soft_validation_triggered?
+    rent_in_soft_min_range? || rent_in_soft_max_range?
+  end
+
+  def rent_soft_validation_higher_or_lower_text
+    rent_in_soft_min_range? ? "lower" : "higher"
+  end
+
   def rent_in_soft_min_range?
     return unless brent && weekly_value(brent) && startdate
 

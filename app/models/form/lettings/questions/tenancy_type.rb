@@ -2,17 +2,15 @@ class Form::Lettings::Questions::TenancyType < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "tenancy"
-    @check_answer_label = "Type of main tenancy"
-    @header = "What is the type of tenancy?"
+    @copy_key = "lettings.tenancy_information.tenancy.#{page.id}.tenancy"
     @type = "radio"
     @check_answers_card_number = 0
-    @hint_text = ""
     @conditional_for = { "tenancyother" => [3] }
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
   end
 
   def answer_options
-    if form.start_year_after_2024?
+    if form.start_year_2024_or_later?
       {
         "4" => {
           "value" => "Assured Shorthold Tenancy (AST) – Fixed term",

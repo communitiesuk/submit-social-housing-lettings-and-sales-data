@@ -10,7 +10,7 @@ class Form::Sales::Questions::PrivacyNotice < ::Form::Question
   end
 
   def answer_options
-    declaration_text = if form.start_year_after_2024?
+    declaration_text = if form.start_year_2024_or_later?
                          "The #{@joint_purchase ? 'buyers have' : 'buyer has'} seen or been given access to the MHCLG privacy notice"
                        else
                          "The #{@joint_purchase ? 'buyers have' : 'buyer has'} seen the MHCLG privacy notice"
@@ -21,7 +21,7 @@ class Form::Sales::Questions::PrivacyNotice < ::Form::Question
 
   def unanswered_error_message
     buyer_or_buyers = @joint_purchase ? "buyers" : "buyer"
-    if form.start_year_after_2024?
+    if form.start_year_2024_or_later?
       I18n.t("validations.privacynotice.missing.post_2024", buyer_or_buyers:)
     else
       I18n.t("validations.privacynotice.missing.pre_2024", buyer_or_buyers:)
@@ -29,11 +29,7 @@ class Form::Sales::Questions::PrivacyNotice < ::Form::Question
   end
 
   def guidance
-    if form.start_year_after_2024?
-      @joint_purchase ? "privacy_notice_buyer_2024_joint_purchase" : "privacy_notice_buyer_2024"
-    else
-      @joint_purchase ? "privacy_notice_buyer_joint_purchase" : "privacy_notice_buyer"
-    end
+    @joint_purchase ? "privacy_notice_buyer_joint_purchase" : "privacy_notice_buyer"
   end
 
   QUESTION_NUMBER_FROM_YEAR = { 2023 => 19, 2024 => 14 }.freeze

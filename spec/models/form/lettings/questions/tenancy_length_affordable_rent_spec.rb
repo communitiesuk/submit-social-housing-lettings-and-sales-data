@@ -5,12 +5,12 @@ RSpec.describe Form::Lettings::Questions::TenancyLengthAffordableRent, type: :mo
 
   let(:question_id) { nil }
   let(:question_definition) { nil }
-  let(:page) { instance_double(Form::Page) }
+  let(:page) { instance_double(Form::Page, id: "affordable_tenancy_length") }
   let(:subsection) { instance_double(Form::Subsection) }
   let(:form) { instance_double(Form, start_date: Time.zone.local(2023, 4, 1)) }
 
   before do
-    allow(form).to receive(:start_year_after_2024?).and_return(false)
+    allow(form).to receive(:start_year_2024_or_later?).and_return(false)
     allow(page).to receive(:subsection).and_return(subsection)
     allow(subsection).to receive(:form).and_return(form)
   end

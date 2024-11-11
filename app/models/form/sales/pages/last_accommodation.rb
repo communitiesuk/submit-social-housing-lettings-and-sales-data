@@ -2,6 +2,7 @@ class Form::Sales::Pages::LastAccommodation < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "last_accommodation"
+    @copy_key = "sales.household_situation.last_accommodation"
   end
 
   def questions
@@ -12,7 +13,7 @@ class Form::Sales::Pages::LastAccommodation < ::Form::Page
   end
 
   def routed_to?(log, _user)
-    return false if form.start_year_after_2024? && log.discounted_ownership_sale?
+    return false if form.start_year_2024_or_later? && log.discounted_ownership_sale?
 
     super
   end

@@ -2,18 +2,15 @@ class Form::Lettings::Questions::PersonRelationship < ::Form::Question
   def initialize(id, hsh, page, person_index:)
     super(id, hsh, page)
     @id = "relat#{person_index}"
-    @check_answer_label = "Person #{person_index}’s relationship to the lead tenant"
-    @header = "What is person #{person_index}’s relationship to the lead tenant?"
     @type = "radio"
     @check_answers_card_number = person_index
-    @hint_text = ""
     @answer_options = answer_options
     @person_index = person_index
     @question_number = question_number
   end
 
   def answer_options
-    if form.start_year_after_2024?
+    if form.start_year_2024_or_later?
       {
         "P" => { "value" => "Partner" },
         "C" => { "value" => "Child" },

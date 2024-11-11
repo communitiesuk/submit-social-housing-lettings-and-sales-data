@@ -1,9 +1,8 @@
 class Form::Lettings::Questions::Age < ::Form::Question
-  def initialize(id, hsh, page, person_index:, person_type:)
+  def initialize(id, hsh, page, person_index:)
     super(id, hsh, page)
     @id = "age#{person_index}"
-    @check_answer_label = "Person #{person_index}’s age"
-    @header = "Age"
+    @copy_key = "lettings.household_characteristics.age#{person_index}.age#{person_index}"
     @type = "numeric"
     @width = 2
     @inferred_check_answers_value = [{ "condition" => { "age#{person_index}_known" => 1 }, "value" => "Not known" }]
@@ -13,7 +12,6 @@ class Form::Lettings::Questions::Age < ::Form::Question
     @step = 1
     @person_index = person_index
     @question_number = question_number
-    @person_type = person_type
     @hint_text = hint_text
   end
 
@@ -29,10 +27,8 @@ class Form::Lettings::Questions::Age < ::Form::Question
   end
 
   def hint_text
-    if form.start_year_after_2024?
+    if form.start_year_2024_or_later?
       "Answer 1 for children aged under 1 year old"
-    elsif @person_type == "child"
-      "For a child under 1, enter 1"
     end
   end
 end

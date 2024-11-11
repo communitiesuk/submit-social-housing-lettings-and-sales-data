@@ -2,8 +2,7 @@ class Form::Lettings::Questions::Age1 < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "age1"
-    @check_answer_label = "Lead tenant’s age"
-    @header = "Age"
+    @copy_key = "lettings.household_characteristics.age1.age1"
     @type = "numeric"
     @width = 2
     @inferred_check_answers_value = [{ "condition" => { "age1_known" => 1 }, "value" => "Not known" }]

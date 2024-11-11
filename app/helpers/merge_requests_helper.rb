@@ -9,7 +9,7 @@ module MergeRequestsHelper
   def request_details(merge_request)
     [
       { label: "Requester", value: display_value_or_placeholder(merge_request.requester&.name) },
-      { label: "Helpdesk ticket", value: merge_request.helpdesk_ticket.present? ? link_to("#{merge_request.helpdesk_ticket} (opens in a new tab)", "https://dluhcdigital.atlassian.net/browse/#{merge_request.helpdesk_ticket}", target: "_blank", rel: "noopener noreferrer") : display_value_or_placeholder(nil), action: merge_request_action(merge_request, "helpdesk_ticket") },
+      { label: "Helpdesk ticket", value: merge_request.helpdesk_ticket.present? ? link_to("#{merge_request.helpdesk_ticket} (opens in a new tab)", "https://mhclgdigital.atlassian.net/browse/#{merge_request.helpdesk_ticket}", target: "_blank", rel: "noopener noreferrer") : display_value_or_placeholder(nil), action: merge_request_action(merge_request, "helpdesk_ticket") },
       { label: "Status", value: status_tag(merge_request.status) },
     ]
   end

@@ -2,16 +2,13 @@ class Form::Lettings::Questions::LettingAllocation < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "letting_allocation"
-    @check_answer_label = "Allocation system"
-    @header = "How was this letting allocated?"
     @type = "checkbox"
     @check_answers_card_number = 0
-    @hint_text = "Select all that apply."
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
   end
 
   def answer_options
-    if form.start_year_after_2024?
+    if form.start_year_2024_or_later?
       {
         "cbl" => { "value" => "Choice-based lettings (CBL)", "hint" => "Where available vacant properties are advertised and applicants are able to bid for specific properties." },
         "cap" => { "value" => "Common Allocation Policy (CAP)", "hint" => "Where a common system agreed between a group of housing providers is used to determine applicant’s priority for housing." },

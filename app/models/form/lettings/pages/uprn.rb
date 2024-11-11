@@ -2,6 +2,7 @@ class Form::Lettings::Pages::Uprn < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "uprn"
+    @copy_key = "lettings.property_information.uprn"
     @depends_on = [{ "is_supported_housing?" => false }]
   end
 
@@ -13,7 +14,7 @@ class Form::Lettings::Pages::Uprn < ::Form::Page
   end
 
   def skip_text
-    if form.start_year_after_2024?
+    if form.start_year_2024_or_later?
       "Search for address instead"
     else
       "Enter address instead"
@@ -23,7 +24,7 @@ class Form::Lettings::Pages::Uprn < ::Form::Page
   def skip_href(log = nil)
     return unless log
 
-    if form.start_year_after_2024?
+    if form.start_year_2024_or_later?
       "address-matcher"
     else
       "address"
