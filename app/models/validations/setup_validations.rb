@@ -73,11 +73,11 @@ module Validations::SetupValidations
   end
 
   def validate_scheme(record)
-    if record.scheme&.status == :incomplete
-      record.errors.add :scheme_id, :incomplete, message: I18n.t("validations.lettings.setup.scheme.incomplete")
-    end
+    return unless record.scheme
 
-    if record.scheme&.locations.nil? || (record.scheme&.locations.present? && record.scheme.locations.confirmed.none?)
+    if record.scheme.status == :incomplete
+      record.errors.add :scheme_id, :incomplete, message: I18n.t("validations.lettings.setup.scheme.incomplete")
+    elsif record.scheme.locations.nil? || (record.scheme.locations.present? && record.scheme.locations.confirmed.none?)
       record.errors.add :scheme_id, :no_completed_locations, message: I18n.t("validations.lettings.setup.scheme.no_completed_locations")
     end
 
