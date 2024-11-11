@@ -9,7 +9,7 @@ RSpec.describe Form::Lettings::Pages::LeadTenantEthnicBackgroundWhite, type: :mo
   let(:form) { instance_double(Form, start_date: Time.zone.local(2024, 4, 1)) }
 
   before do
-    allow(form).to receive(:start_year_after_2024?).and_return(false)
+    allow(form).to receive(:start_year_2024_or_later?).and_return(false)
     allow(subsection).to receive(:form).and_return(form)
   end
 

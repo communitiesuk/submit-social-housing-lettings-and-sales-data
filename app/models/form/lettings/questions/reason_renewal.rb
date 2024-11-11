@@ -14,7 +14,7 @@ class Form::Lettings::Questions::ReasonRenewal < ::Form::Question
   end
 
   def answer_options
-    if form.start_year_after_2024?
+    if form.start_year_2024_or_later?
       {
         "50" => { "value" => "End of social or private sector tenancy - no fault" },
         "51" => { "value" => "End of social or private sector tenancy - evicted due to anti-social behaviour (ASB)" },

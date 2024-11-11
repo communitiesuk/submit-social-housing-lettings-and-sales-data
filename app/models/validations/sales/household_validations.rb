@@ -23,7 +23,7 @@ module Validations::Sales::HouseholdValidations
   end
 
   def validate_buyer1_previous_tenure(record)
-    return unless record.saledate && record.form.start_year_after_2024?
+    return unless record.saledate && record.form.start_year_2024_or_later?
     return unless record.discounted_ownership_sale? && record.prevten
 
     if [3, 4, 5, 6, 7, 9, 0].include?(record.prevten)
@@ -33,7 +33,7 @@ module Validations::Sales::HouseholdValidations
   end
 
   def validate_person_age_matches_relationship(record)
-    return unless record.saledate && !record.form.start_year_after_2024?
+    return unless record.saledate && !record.form.start_year_2024_or_later?
 
     (2..6).each do |person_num|
       age = record.public_send("age#{person_num}")
@@ -51,7 +51,7 @@ module Validations::Sales::HouseholdValidations
   end
 
   def validate_person_age_and_relationship_matches_economic_status(record)
-    return unless record.saledate && !record.form.start_year_after_2024?
+    return unless record.saledate && !record.form.start_year_2024_or_later?
 
     (2..6).each do |person_num|
       age = record.public_send("age#{person_num}")
@@ -84,7 +84,7 @@ module Validations::Sales::HouseholdValidations
       economic_status = record.public_send("ecstat#{person_num}")
       next unless age && economic_status
 
-      if age < 16 && !economic_status_is_child_other_or_refused?(economic_status) && !record.form.start_year_after_2024?
+      if age < 16 && !economic_status_is_child_other_or_refused?(economic_status) && !record.form.start_year_2024_or_later?
         record.errors.add "ecstat#{person_num}", I18n.t("validations.sales.household.ecstat.child_under_16", person_num:)
         record.errors.add "age#{person_num}", I18n.t("validations.sales.household.age.child_under_16_ecstat", person_num:)
       end
@@ -96,7 +96,7 @@ module Validations::Sales::HouseholdValidations
   end
 
   def validate_child_12_years_younger(record)
-    return unless record.saledate && !record.form.start_year_after_2024?
+    return unless record.saledate && !record.form.start_year_2024_or_later?
 
     (2..6).each do |person_num|
       buyer_1_age = record.public_send("age1")
@@ -113,7 +113,7 @@ module Validations::Sales::HouseholdValidations
   end
 
   def validate_buyer_not_child(record)
-    return unless record.saledate && record.form.start_year_after_2024?
+    return unless record.saledate && record.form.start_year_2024_or_later?
 
     record.errors.add "ecstat1", I18n.t("validations.sales.household.ecstat1.buyer_cannot_be_child") if person_is_economic_child?(record.ecstat1)
     record.errors.add "ecstat2", I18n.t("validations.sales.household.ecstat2.buyer_cannot_be_child") if person_is_economic_child?(record.ecstat2) && record.joint_purchase?

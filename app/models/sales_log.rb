@@ -131,7 +131,7 @@ class SalesLog < Log
     not_required << "proplen" if proplen_optional?
     not_required << "mortlen" if mortlen_optional?
     not_required << "frombeds" if frombeds_optional?
-    not_required << "deposit" if form.start_year_after_2024? && stairowned_100?
+    not_required << "deposit" if form.start_year_2024_or_later? && stairowned_100?
 
     not_required |= %w[address_line2 county postcode_full] if saledate && collection_start_year_for_date(saledate) >= 2023
 
@@ -453,7 +453,7 @@ class SalesLog < Log
   def should_process_address_change?
     return unless uprn_selection || select_best_address_match
     return unless saledate
-    return unless form.start_year_after_2024?
+    return unless form.start_year_2024_or_later?
 
     if select_best_address_match
       address_line1_input.present? && postcode_full_input.present?
@@ -515,7 +515,7 @@ class SalesLog < Log
   end
 
   def soctenant_is_inferred?
-    form.start_year_after_2024?
+    form.start_year_2024_or_later?
   end
 
   def duplicates

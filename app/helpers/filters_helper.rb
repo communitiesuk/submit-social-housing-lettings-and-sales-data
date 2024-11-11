@@ -143,7 +143,11 @@ module FiltersHelper
     }
 
     if FormHandler.instance.in_crossover_period?
-      return years.merge({ archived_collection_start_year.to_s => year_combo(archived_collection_start_year) })
+      years = years.merge({ archived_collection_start_year.to_s => year_combo(archived_collection_start_year) })
+    end
+
+    if FeatureToggle.allow_future_form_use?
+      years = { next_collection_start_year.to_s => year_combo(next_collection_start_year) }.merge(years)
     end
 
     years

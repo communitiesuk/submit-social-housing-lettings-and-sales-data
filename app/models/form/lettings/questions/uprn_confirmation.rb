@@ -8,7 +8,7 @@ class Form::Lettings::Questions::UprnConfirmation < ::Form::Question
   end
 
   def answer_options
-    if form.start_year_after_2024?
+    if form.start_year_2024_or_later?
       {
         "1" => { "value" => "Yes" },
         "0" => { "value" => "No, I want to search for the address instead" },

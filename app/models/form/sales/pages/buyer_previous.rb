@@ -13,7 +13,7 @@ class Form::Sales::Pages::BuyerPrevious < ::Form::Page
   end
 
   def routed_to?(log, _current_user)
-    return false if log.is_staircase? && form.start_year_after_2024?
+    return false if log.is_staircase? && form.start_year_2024_or_later?
 
     super
   end

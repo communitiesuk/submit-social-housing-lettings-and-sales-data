@@ -8,7 +8,7 @@ RSpec.describe Form::Sales::Pages::Buyer1Nationality, type: :model do
 
   before do
     allow(subsection).to receive(:form).and_return(form)
-    allow(form).to receive(:start_year_after_2024?).and_return(false)
+    allow(form).to receive(:start_year_2024_or_later?).and_return(false)
   end
 
   it "has correct subsection" do
@@ -33,7 +33,7 @@ RSpec.describe Form::Sales::Pages::Buyer1Nationality, type: :model do
 
   context "with year 2024" do
     before do
-      allow(form).to receive(:start_year_after_2024?).and_return(true)
+      allow(form).to receive(:start_year_2024_or_later?).and_return(true)
     end
 
     it "has correct questions" do
