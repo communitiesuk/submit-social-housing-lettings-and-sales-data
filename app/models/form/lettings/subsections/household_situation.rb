@@ -12,7 +12,7 @@ class Form::Lettings::Subsections::HouseholdSituation < ::Form::Subsection
       Form::Lettings::Pages::TimeOnWaitingList.new(nil, nil, self),
       Form::Lettings::Pages::ReasonForLeavingLastSettledHome.new(nil, nil, self),
       Form::Lettings::Pages::ReasonForLeavingLastSettledHomeRenewal.new(nil, nil, self),
-      (Form::Lettings::Pages::ReasonotherValueCheck.new(nil, nil, self) if form.start_year_after_2024?),
+      (Form::Lettings::Pages::ReasonotherValueCheck.new(nil, nil, self) if form.start_year_2024_or_later?),
       Form::Lettings::Pages::PreviousHousingSituation.new(nil, nil, self),
       Form::Lettings::Pages::PreviousHousingSituationRenewal.new(nil, nil, self),
       Form::Lettings::Pages::Homelessness.new("homelessness", nil, self),

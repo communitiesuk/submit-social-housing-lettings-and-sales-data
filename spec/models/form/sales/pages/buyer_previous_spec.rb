@@ -9,7 +9,7 @@ RSpec.describe Form::Sales::Pages::BuyerPrevious, type: :model do
   let(:page_definition) { nil }
   let(:subsection) { instance_double(Form::Subsection, depends_on: nil, enabled?: true, form:) }
   let(:start_date_after_2024) { false }
-  let(:form) { instance_double(Form, start_date: Time.zone.local(2023, 4, 1), start_year_after_2024?: start_date_after_2024, depends_on_met: true) }
+  let(:form) { instance_double(Form, start_date: Time.zone.local(2023, 4, 1), start_year_2024_or_later?: start_date_after_2024, depends_on_met: true) }
   let(:joint_purchase) { false }
 
   it "has correct subsection" do
