@@ -2,7 +2,7 @@ module Validations::Sales::HouseholdValidations
   include Validations::SharedValidations
 
   def validate_partner_count(record)
-    return if record.form.start_year_after_2024?
+    return if record.form.start_year_2024_or_later?
 
     partner_numbers = (2..6).select { |n| person_is_partner?(record["relat#{n}"]) }
     if partner_numbers.count > 1
