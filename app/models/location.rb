@@ -54,13 +54,13 @@ class Location < ApplicationRecord
   }
 
   scope :deactivated, lambda { |date = Time.zone.now|
-    deactivated_by_organisation
+    deactivated_by_organisation(date)
       .or(deactivated_directly(date))
       .or(deactivated_by_scheme(date))
   }
 
-  scope :deactivated_by_organisation, lambda {
-    merge(Organisation.filter_by_inactive)
+  scope :deactivated_by_organisation, lambda { |date = Time.zone.now|
+    merge(Organisation.filter_by_inactive.or(Organisation.where("merge_date <= ?", date)))
   }
 
   scope :deactivated_by_scheme, lambda { |date = Time.zone.now|
