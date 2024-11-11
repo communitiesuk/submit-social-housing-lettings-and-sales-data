@@ -18,42 +18,42 @@ RSpec.describe Validations::SharedValidations do
         lettings_log.age1 = "random"
         shared_validator.validate_numeric_min_max(lettings_log)
         expect(lettings_log.errors["age1"])
-          .to include(match I18n.t("validations.numeric.within_range", field: "Lead tenant’s age", min: 16, max: 120))
+          .to include(match I18n.t("validations.shared.numeric.within_range", field: "Lead tenant’s age", min: 16, max: 120))
       end
 
       it "validates that other household member ages are a number" do
         lettings_log.age2 = "random"
         shared_validator.validate_numeric_min_max(lettings_log)
         expect(lettings_log.errors["age2"])
-          .to include(match I18n.t("validations.numeric.within_range", field: "Person 2’s age", min: 1, max: 120))
+          .to include(match I18n.t("validations.shared.numeric.within_range", field: "Person 2’s age", min: 1, max: 120))
       end
 
       it "validates that person 1's age is greater than 16" do
         lettings_log.age1 = 15
         shared_validator.validate_numeric_min_max(lettings_log)
         expect(lettings_log.errors["age1"])
-          .to include(match I18n.t("validations.numeric.within_range", field: "Lead tenant’s age", min: 16, max: 120))
+          .to include(match I18n.t("validations.shared.numeric.within_range", field: "Lead tenant’s age", min: 16, max: 120))
       end
 
       it "validates that other household member ages are greater than 1" do
         lettings_log.age2 = 0
         shared_validator.validate_numeric_min_max(lettings_log)
         expect(lettings_log.errors["age2"])
-          .to include(match I18n.t("validations.numeric.within_range", field: "Person 2’s age", min: 1, max: 120))
+          .to include(match I18n.t("validations.shared.numeric.within_range", field: "Person 2’s age", min: 1, max: 120))
       end
 
       it "validates that person 1's age is less than 121" do
         lettings_log.age1 = 121
         shared_validator.validate_numeric_min_max(lettings_log)
         expect(lettings_log.errors["age1"])
-          .to include(match I18n.t("validations.numeric.within_range", field: "Lead tenant’s age", min: 16, max: 120))
+          .to include(match I18n.t("validations.shared.numeric.within_range", field: "Lead tenant’s age", min: 16, max: 120))
       end
 
       it "validates that other household member ages are greater than 121" do
         lettings_log.age2 = 123
         shared_validator.validate_numeric_min_max(lettings_log)
         expect(lettings_log.errors["age2"])
-          .to include(match I18n.t("validations.numeric.within_range", field: "Person 2’s age", min: 1, max: 120))
+          .to include(match I18n.t("validations.shared.numeric.within_range", field: "Person 2’s age", min: 1, max: 120))
       end
 
       it "validates that person 1's age is between 16 and 120" do
@@ -91,7 +91,7 @@ RSpec.describe Validations::SharedValidations do
       sales_log.savings = -10
       sales_log.jointpur = 1
       shared_validator.validate_numeric_min_max(sales_log)
-      expect(sales_log.errors["savings"]).to include(match I18n.t("validations.numeric.above_min", field: "Buyers’ total savings before any deposit paid", min: "£0"))
+      expect(sales_log.errors["savings"]).to include(match I18n.t("validations.shared.numeric.above_min", field: "Buyers’ total savings before any deposit paid", min: "£0"))
     end
 
     context "when validating percent" do
@@ -101,7 +101,7 @@ RSpec.describe Validations::SharedValidations do
         sales_log.stairbought = 150
         shared_validator.validate_numeric_min_max(sales_log)
         expect(sales_log.errors["stairbought"])
-          .to include(match I18n.t("validations.numeric.within_range", field: "Percentage bought in this staircasing transaction", min: "0%", max: "100%"))
+          .to include(match I18n.t("validations.shared.numeric.within_range", field: "Percentage bought in this staircasing transaction", min: "0%", max: "100%"))
       end
     end
 
@@ -110,7 +110,7 @@ RSpec.describe Validations::SharedValidations do
         sales_log.income1 = -5
         shared_validator.validate_numeric_min_max(sales_log)
         expect(sales_log.errors["income1"])
-          .to include(match I18n.t("validations.numeric.within_range", field: "Buyer 1’s gross annual income", min: "£0", max: "£999,999"))
+          .to include(match I18n.t("validations.shared.numeric.within_range", field: "Buyer 1’s gross annual income", min: "£0", max: "£999,999"))
       end
     end
   end
@@ -120,13 +120,13 @@ RSpec.describe Validations::SharedValidations do
       it "adds an error if input is a decimal" do
         sales_log.income1 = 30_000.5
         shared_validator.validate_numeric_step(sales_log)
-        expect(sales_log.errors[:income1]).to include I18n.t("validations.numeric.whole_number", field: "Buyer 1’s gross annual income")
+        expect(sales_log.errors[:income1]).to include I18n.t("validations.shared.numeric.whole_number", field: "Buyer 1’s gross annual income")
       end
 
       it "adds an error if the user attempts to input a number in exponent format" do
         sales_log.income1 = "3e5"
         shared_validator.validate_numeric_step(sales_log)
-        expect(sales_log.errors[:income1]).to include I18n.t("validations.numeric.whole_number", field: "Buyer 1’s gross annual income")
+        expect(sales_log.errors[:income1]).to include I18n.t("validations.shared.numeric.whole_number", field: "Buyer 1’s gross annual income")
       end
 
       it "does not add an error if input is an integer" do
@@ -141,14 +141,14 @@ RSpec.describe Validations::SharedValidations do
         sales_log.savings = 30_005
         sales_log.jointpur = 1
         shared_validator.validate_numeric_step(sales_log)
-        expect(sales_log.errors[:savings]).to include I18n.t("validations.numeric.nearest_ten", field: "Buyers’ total savings before any deposit paid")
+        expect(sales_log.errors[:savings]).to include I18n.t("validations.shared.numeric.nearest_ten", field: "Buyers’ total savings before any deposit paid")
       end
 
       it "adds an error if the user attempts to input a number in exponent format" do
         sales_log.savings = "3e5"
         sales_log.jointpur = 1
         shared_validator.validate_numeric_step(sales_log)
-        expect(sales_log.errors[:savings]).to include I18n.t("validations.numeric.nearest_ten", field: "Buyers’ total savings before any deposit paid")
+        expect(sales_log.errors[:savings]).to include I18n.t("validations.shared.numeric.nearest_ten", field: "Buyers’ total savings before any deposit paid")
       end
 
       it "does not add an error if input is a multiple of ten" do
@@ -162,7 +162,7 @@ RSpec.describe Validations::SharedValidations do
       it "adds an error if input has more than 2 decimal places" do
         sales_log.mscharge = 30.7418
         shared_validator.validate_numeric_step(sales_log)
-        expect(sales_log.errors[:mscharge]).to include I18n.t("validations.numeric.nearest_hundredth", field: "Monthly leasehold charges")
+        expect(sales_log.errors[:mscharge]).to include I18n.t("validations.shared.numeric.nearest_hundredth", field: "Monthly leasehold charges")
       end
 
       it "does not add an error if the user attempts to input a number in exponent format" do
@@ -220,13 +220,13 @@ RSpec.describe Validations::SharedValidations do
     it "does not allow letters" do
       sales_log.income1 = "abc"
       shared_validator.validate_numeric_input(sales_log)
-      expect(sales_log.errors[:income1]).to include I18n.t("validations.numeric.format", field: "Buyer 1’s gross annual income")
+      expect(sales_log.errors[:income1]).to include I18n.t("validations.shared.numeric.format", field: "Buyer 1’s gross annual income")
     end
 
     it "does not allow special characters" do
       sales_log.income1 = "3%5"
       shared_validator.validate_numeric_input(sales_log)
-      expect(sales_log.errors[:income1]).to include I18n.t("validations.numeric.format", field: "Buyer 1’s gross annual income")
+      expect(sales_log.errors[:income1]).to include I18n.t("validations.shared.numeric.format", field: "Buyer 1’s gross annual income")
     end
 
     it "allows a digit" do
@@ -244,7 +244,7 @@ RSpec.describe Validations::SharedValidations do
     it "does not allow decimal point in a wrong format" do
       sales_log.income1 = "300.09.78"
       shared_validator.validate_numeric_input(sales_log)
-      expect(sales_log.errors[:income1]).to include I18n.t("validations.numeric.format", field: "Buyer 1’s gross annual income")
+      expect(sales_log.errors[:income1]).to include I18n.t("validations.shared.numeric.format", field: "Buyer 1’s gross annual income")
     end
   end
 end
