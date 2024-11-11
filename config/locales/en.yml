@@ -553,17 +553,6 @@ en:
       organisation_not_selected: "Select an organisation from the search list."
 
   soft_validations:
-    net_income:
-      title_text: "You told us that the household’s income is %{earnings} %{incfreq}."
-      hint_text: "This is %{net_income_higher_or_lower_text} than we would expect for the household’s working situation."
-      in_soft_min_range:
-        message: "Net income is lower than expected based on the household’s working situation. Are you sure this is correct?"
-      in_soft_max_range:
-        message: "Net income is higher than expected based on the household’s working situation. Are you sure this is correct?"
-    rent:
-      outside_range_title: "You told us the rent is %{brent}."
-      informative_text: "This is %{higher_or_lower} than we would expect."
-      hint_text: "Check the following:<ul class=\"govuk-body-l app-panel--interruption\"><li>the decimal point</li><li>the frequency, for example every week or every calendar month</li><li>the rent type is correct, for example affordable or social rent</li></ul>"
     retirement:
       min:
         title: "You told us this person is aged %{age} years and retired."
@@ -571,40 +560,6 @@ en:
       max:
         title: "You told us this person is over 66 and not retired."
         hint_text: "The minimum expected retirement age in England is 66."
-    pregnancy:
-      title: "You told us somebody in the household is pregnant."
-      all_male_tenants: "You also told us that all the tenants living at the property are male."
-      females_not_in_soft_age_range: "You also told us that any female tenants living at the property are in the following age ranges:<ul><li>under 16 years old</li><li>over 50 years old</li></ul>"
-    major_repairs_date:
-      title_text: "You told us the property has been vacant for 2 years."
-      hint_text: "This is higher than we would expect."
-    void_date:
-      title_text: "You told us that the property has been vacant for more than 2 years."
-      hint_text: "This is higher than we would expect."
-    referral:
-      title_text: "Are you sure?"
-      hint_text: "This is a general needs log, and this referral type is for supported housing."
-    scharge:
-      over_soft_max_title: "You told us the service charge is %{scharge}."
-    pscharge:
-      over_soft_max_title: "You told us the personal service charge is %{pscharge}."
-    supcharg:
-      over_soft_max_title: "You told us the support charge is %{supcharg}."
-    charges:
-      informative_text: "This is higher than we would expect."
-      hint_text: "Check the following:<ul class=\"govuk-body-l app-panel--interruption\"><li>the decimal point</li><li>the frequency, for example every week or every calendar month</li><li>the needs type</li></ul>"
-    reasonother:
-      title_text: "You told us that the tenant’s main reason for leaving their last settled home was %{reasonother}."
-      informative_text: "The reason you have entered looks very similar to one of the existing response categories.
-                         Please check the categories and select the appropriate one.
-                         If the existing categories are not suitable, please confirm here to move onto the next question."
-    saledate:
-      must_be_less_than_3_years_from_hodate: "You told us sale completion date is more than 3 years after practical completion or handover date."
-    partner_under_16_lettings:
-      title: "You told us this person is aged %{age} years and has 'Partner' relationship to the lead tenant."
-    multiple_partners_lettings:
-      title: "You told us there are more than 1 persons with 'Partner' relationship to the lead tenant."
-
   devise:
     two_factor_authentication:
       success: "Two-factor authentication successful."
