@@ -211,8 +211,8 @@ RSpec.describe Validations::PropertyValidations do
         allow(log.form).to receive(:start_year_2025_or_later?).and_return true
       end
 
-      context "and the local authority is not in England" do
-        let(:log) { build(:lettings_log, la: "S12000019") }
+      context "and the local authority is not in England for general needs log" do
+        let(:log) { build(:lettings_log, la: "S12000019", needstype: 1) }
 
         it "adds an error" do
           property_validator.validate_la_in_england(log)
@@ -221,6 +221,24 @@ RSpec.describe Validations::PropertyValidations do
           expect(log.errors["uprn"]).to include(I18n.t("validations.lettings.property.uprn.not_in_england"))
           expect(log.errors["uprn_confirmation"]).to include(I18n.t("validations.lettings.property.uprn_confirmation.not_in_england"))
           expect(log.errors["uprn_selection"]).to include(I18n.t("validations.lettings.property.uprn_selection.not_in_england"))
+          expect(log.errors["scheme_id"]).to be_empty
+          expect(log.errors["location_id"]).to be_empty
+        end
+      end
+
+      context "and the local authority is not in England for supported housing log" do
+        let(:location) { create(:location, location_code: "S12000019") }
+        let(:log) { build(:lettings_log, la: "S12000019", needstype: 2, location:) }
+
+        it "adds an error" do
+          property_validator.validate_la_in_england(log)
+          expect(log.errors["scheme_id"]).to include(I18n.t("validations.lettings.property.scheme_id.not_in_england"))
+          expect(log.errors["location_id"]).to include(I18n.t("validations.lettings.property.location_id.not_in_england"))
+          expect(log.errors["la"]).to be_empty
+          expect(log.errors["postcode_full"]).to be_empty
+          expect(log.errors["uprn"]).to be_empty
+          expect(log.errors["uprn_confirmation"]).to be_empty
+          expect(log.errors["uprn_selection"]).to be_empty
         end
       end
 

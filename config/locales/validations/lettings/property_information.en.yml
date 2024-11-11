@@ -26,3 +26,7 @@ en:
           not_in_england: "It looks like you have selected an address for a local authority outside of England - only submit Lettings forms for Lettings that occur in England"
         la:
           not_in_england: "It looks like you have entered a local authority outside of England - only submit Lettings forms for Lettings that occur in England"
+        scheme_id:
+          not_in_england: "It looks like you have selected a location with a local authority outside of England - only submit Lettings forms for Lettings that occur in England"
+        location_id:
+          not_in_england: "It looks like you have selected a location with a local authority outside of England - only submit Lettings forms for Lettings that occur in England"

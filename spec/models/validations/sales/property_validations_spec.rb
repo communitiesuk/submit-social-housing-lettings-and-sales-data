@@ -150,7 +150,7 @@ RSpec.describe Validations::Sales::PropertyValidations do
       end
 
       context "and the local authority is not in England" do
-        let(:log) { build(:lettings_log, la: "S12000019") }
+        let(:log) { build(:sales_log, la: "S12000019") }
 
         it "adds an error" do
           property_validator.validate_la_in_england(log)
@@ -163,7 +163,7 @@ RSpec.describe Validations::Sales::PropertyValidations do
       end
 
       context "and the local authority is in England" do
-        let(:log) { build(:lettings_log, la: "E06000002") }
+        let(:log) { build(:sales_log, la: "E06000002") }
 
         it "does not add an error" do
           property_validator.validate_la_in_england(log)
@@ -182,7 +182,7 @@ RSpec.describe Validations::Sales::PropertyValidations do
       end
 
       context "and the local authority is not in England" do
-        let(:log) { build(:lettings_log, la: "S12000019") }
+        let(:log) { build(:sales_log, la: "S12000019") }
 
         it "does not add an error" do
           property_validator.validate_la_in_england(log)
