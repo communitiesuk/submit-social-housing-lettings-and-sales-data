@@ -142,4 +142,57 @@ RSpec.describe Validations::Sales::PropertyValidations do
       end
     end
   end
+
+  describe "#validate_la_in_england" do
+    context "with a log on or after 2025" do
+      before do
+        allow(log.form).to receive(:start_year_2025_or_later?).and_return true
+      end
+
+      context "and the local authority is not in England" do
+        let(:log) { build(:lettings_log, la: "S12000019") }
+
+        it "adds an error" do
+          property_validator.validate_la_in_england(log)
+          expect(log.errors["la"]).to include(I18n.t("validations.sales.property_information.la.not_in_england"))
+          expect(log.errors["postcode_full"]).to include(I18n.t("validations.sales.property_information.postcode_full.not_in_england"))
+          expect(log.errors["uprn"]).to include(I18n.t("validations.sales.property_information.uprn.not_in_england"))
+          expect(log.errors["uprn_confirmation"]).to include(I18n.t("validations.sales.property_information.uprn_confirmation.not_in_england"))
+          expect(log.errors["uprn_selection"]).to include(I18n.t("validations.sales.property_information.uprn_selection.not_in_england"))
+        end
+      end
+
+      context "and the local authority is in England" do
+        let(:log) { build(:lettings_log, la: "E06000002") }
+
+        it "does not add an error" do
+          property_validator.validate_la_in_england(log)
+          expect(log.errors["la"]).to be_empty
+          expect(log.errors["postcode_full"]).to be_empty
+          expect(log.errors["uprn"]).to be_empty
+          expect(log.errors["uprn_confirmation"]).to be_empty
+          expect(log.errors["uprn_selection"]).to be_empty
+        end
+      end
+    end
+
+    context "with a log before 2025" do
+      before do
+        allow(log.form).to receive(:start_year_2025_or_later?).and_return false
+      end
+
+      context "and the local authority is not in England" do
+        let(:log) { build(:lettings_log, la: "S12000019") }
+
+        it "does not add an error" do
+          property_validator.validate_la_in_england(log)
+          expect(log.errors["la"]).to be_empty
+          expect(log.errors["postcode_full"]).to be_empty
+          expect(log.errors["uprn"]).to be_empty
+          expect(log.errors["uprn_confirmation"]).to be_empty
+          expect(log.errors["uprn_selection"]).to be_empty
+        end
+      end
+    end
+  end
 end

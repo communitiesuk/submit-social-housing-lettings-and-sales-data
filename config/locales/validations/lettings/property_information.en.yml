@@ -4,6 +4,7 @@ en:
       property:
         postcode_full:
           invalid: "Enter a postcode in the correct format, for example AA1 1AA."
+          not_in_england: "It looks like you have entered a postcode for a local authority outside of England - only submit Lettings forms for Lettings that occur in England"
         rsnvac:
           non_temp_accommodation: "Answer cannot be re-let to tenant who occupied the same property as temporary accommodation as this accommodation is not temporary."
           referral_invalid: "Answer cannot be re-let to tenant who occupied the same property as temporary accommodation as a different source of referral for this letting."
@@ -18,4 +19,10 @@ en:
           one_seven_bedroom_shared: "A shared house must have 1 to 7 bedrooms."
         uprn:
           invalid: "UPRN must be 12 digits or less."
-        
+          not_in_england: "It looks like you have entered a UPRN for a local authority outside of England - only submit Lettings forms for Lettings that occur in England"
+        uprn_confirmation:
+          not_in_england: "It looks like you have entered a UPRN for a local authority outside of England - only submit Lettings forms for Lettings that occur in England"
+        uprn_selection:
+          not_in_england: "It looks like you have selected an address for a local authority outside of England - only submit Lettings forms for Lettings that occur in England"
+        la:
+          not_in_england: "It looks like you have entered a local authority outside of England - only submit Lettings forms for Lettings that occur in England"
