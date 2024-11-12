@@ -239,23 +239,12 @@ en:
       merged: "That organisation has already been merged. Select a different organisation."
       scheme_duplicates_not_resolved: "You must resolve all duplicates or indicate that there are no duplicates"
     not_answered: "You must answer %{question}"
+    not_number: "%{field} must be a number."
     invalid_option: "Enter a valid value for %{question}"
     invalid_number: "Enter a number for %{question}"
     no_address_found: "We could not find this address. Check the address data in your CSV file is correct and complete, or select the correct address using the CORE site."
 
-    other_field_missing: "If %{main_field_label} is other then %{other_field_label} must be provided."
-    other_field_not_required: "%{other_field_label} must not be provided if %{main_field_label} was not other."
-    numeric:
-      within_range: "%{field} must be between %{min} and %{max}."
-      above_min: "%{field} must be at least %{min}."
-      whole_number: "%{field} must be a whole number."
-      nearest_ten: "%{field} must be given to the nearest ten."
-      nearest_hundredth: "%{field} must be given to the nearest hundredth."
-      normal_format: "Enter a number."
-      format: "%{field} must be a number."
-
     date:
-      invalid_date: "Enter a date in the correct format, for example 31 1 2024."
       outside_collection_window: "Enter a date within the %{year_combo} collection year, which is between 1st April %{start_year} and 31st March %{end_year}."
     postcode: "Enter a postcode in the correct format, for example AA1 1AA."
     location_admin_district: "Select a local authority."
@@ -271,29 +260,8 @@ en:
         year_not_two_or_four_digits: "Sale completion year must be 2 or 4 digits."
       type:
         percentage_bought_must_be_at_least_threshold: "The minimum increase in equity while staircasing is %{threshold}% for this shared ownership type."
-
       startdate:
         before_scheme_end_date: "The tenancy start date must be before the end date for this supported housing scheme."
-        location:
-          deactivated:
-            startdate: "The location %{postcode} is inactive on this date. Enter another date or choose another location."
-            location_id: "This location is not active on the tenancy start date. Choose another location or edit the tenancy start date."
-          activating_soon:
-            startdate: "The location %{postcode} is not available until %{date}. Enter a tenancy start date after %{date}."
-            location_id: "The location %{postcode} is not available until %{date}. Select another location or edit the tenancy start date."
-          reactivating_soon:
-            startdate: "The location %{postcode} is not available until %{date}. Enter a tenancy start date after %{date}."
-            location_id: "The location %{postcode} is not available until %{date}. Select another location or edit the tenancy start date."
-        scheme:
-          deactivated:
-            startdate: "The scheme %{name} was deactivated on %{date} and was not available on the day you entered. Select another scheme or edit the tenancy start date."
-            scheme_id: "The scheme %{name} was deactivated on %{date} and was not available on the day you entered. Select another scheme or edit the tenancy start date."
-          reactivating_soon:
-            startdate: "The scheme %{name} is not available until %{date}. Enter a tenancy start date after %{date}."
-            scheme_id: "The scheme %{name} is not available until %{date}. Select another scheme or edit the tenancy start date."
-          locations_inactive:
-            startdate: "The scheme %{name} has no locations that are active on this date. Enter another date or choose another scheme."
-            scheme_id: "The scheme %{name} has no locations that are active on this date. Enter another date or choose another scheme."
       owning_organisation:
         data_sharing_agreement_not_signed: "The organisation must accept the Data Sharing Agreement before it can be selected as the owning organisation."
     property:
@@ -384,7 +352,6 @@ en:
           cannot_be_student: "Person cannot be a student if they are aged 16-19 but are not a child."
       relat:
         child_under_16_lettings: "Answer cannot be ‘partner’ as you told us person %{person_num}'s age is under 16."
-        one_partner: "Number of partners cannot be greater than 1."
         not_student_16_19: "Answer cannot be ‘child’ as you told us the person %{person_num} is between 16 and 19 and is not a full-time student."
         student_16_19:
           cannot_be_child:
