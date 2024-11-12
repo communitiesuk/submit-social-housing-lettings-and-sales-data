@@ -2,8 +2,7 @@ class Form::Lettings::Questions::NetIncomeValueCheck < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "net_income_value_check"
-    @check_answer_label = "Net income confirmation"
-    @header = "Are you sure this is correct?"
+    @copy_key = "lettings.soft_validations.net_income_value_check"
     @type = "interruption_screen"
     @check_answers_card_number = 0
     @answer_options = ANSWER_OPTIONS

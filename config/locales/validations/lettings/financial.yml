@@ -1,0 +1,86 @@
+en:
+  validations:
+    lettings:
+      financial:
+        tshortfall:
+          outstanding_amount_not_expected: "You cannot answer the outstanding amount question if you don’t have outstanding rent or charges."
+          more_than_total_charge: "Enter a value less than the total charge."
+          more_than_carehome_charge: "Enter a value less than the care home charge."
+          must_be_positive: "Enter a value over £0.01 as you told us there is an outstanding amount."
+          outstanding_no_benefits: "Answer cannot be ‘yes’ to outstanding amount for basic rent or charges if tenant does not receive housing benefit or Universal Credit or you‘re not sure."
+        hbrentshortfall:
+          outstanding_amount_not_expected: "Answer must be ‘yes’ as you have answered the outstanding amount question."
+        benefits:
+          part_or_full_time: "Answer cannot be ‘all’ for income from Universal Credit, state pensions or benefits if the tenant or their partner works part-time or full-time."
+        earnings:
+          over_hard_max: "The household’s income cannot be greater than %{hard_max} per week given the household’s working situation."
+          under_hard_min: "The household’s income cannot be less than %{hard_min} per week given the household’s working situation."
+          incfreq_missing: "Select how often the household receives income."
+          earnings_missing: "Enter how much income the household has in total."
+          negative_currency: "Enter an amount above 0."
+        hhmemb:
+          earnings_over_hard_max: "The household’s income of %{earnings} %{frequency} is too high for this number of tenants. Change either the household income or number of tenants."
+          earnings_under_hard_min: "The household’s income of %{earnings} %{frequency} is too low for this number of tenants. Change either the household income or number of tenants."
+        ecstat:
+          earnings_over_hard_max: "The household’s income of %{earnings} %{frequency} is too high given the household’s working situation."
+          earnings_under_hard_min: "The household’s income of %{earnings} %{frequency} is too low given the household’s working situation."
+        age:
+          earnings_over_hard_max: "The household’s income of %{earnings} %{frequency} is too high for the number of adults. Change either the household income or the age of the tenants."
+        incfreq:
+          incfreq_missing: "Select how often the household receives income."
+          earnings_missing: "Enter how much income the household has in total."
+        brent:
+          negative_currency: "Enter an amount above 0."
+          below_hard_min: "Rent is below the absolute minimum expected for a property of this type. Please check the rent, rent period, local authority and (if general needs) number of bedrooms."
+          above_hard_max: "Rent is higher than the absolute maximum expected for a property of this type. Please check the rent, rent period, local authority and (if general needs) number of bedrooms."
+        scharge:
+          negative_currency: "Enter an amount above 0."
+          rent_out_of_range: "Enter a value for the %{charge_name} between £0 and %{maximum_per_period} paid %{frequency}. %{maximum_per_period} is the max limit for rent and charges paid %{frequency} for %{letting_type} lettings owned by a %{provider_type}."
+        pscharge:
+          negative_currency: "Enter an amount above 0."
+          rent_out_of_range: "Enter a value for the %{charge_name} between £0 and %{maximum_per_period} paid %{frequency}. %{maximum_per_period} is the max limit for rent and charges paid %{frequency} for %{letting_type} lettings owned by a %{provider_type}."
+        supcharg:
+          negative_currency: "Enter an amount above 0."
+          rent_out_of_range: "Enter a value for the %{charge_name} between £0 and %{maximum_per_period} paid %{frequency}. %{maximum_per_period} is the max limit for rent and charges paid %{frequency} for %{letting_type} lettings owned by a %{provider_type}."
+        chcharge:
+          less_than_shortfall: "The care home charge must be more than the outstanding amount."
+          complete_1_of_3: "Answer either the ‘household rent and charges’ question or ‘is this accommodation a care home‘, or select ‘no’ for ‘does the household pay rent or charges for the accommodation?’"
+          out_of_range: "Household rent and other charges must be between %{min_chcharge} and %{max_chcharge} if paying %{period}."
+        tcharge:
+          under_10: "Enter a total charge that is at least £10.00 per week."
+          less_than_shortfall: "The total charge must be more than the outstanding amount."
+          complete_1_of_3: "Answer either the ‘household rent and charges’ question or ‘is this accommodation a care home‘, or select ‘no’ for ‘does the household pay rent or charges for the accommodation?’"
+        household_charge:
+          complete_1_of_3: "Answer either the ‘household rent and charges’ question or ‘is this accommodation a care home‘, or select ‘no’ for ‘does the household pay rent or charges for the accommodation?’"
+        period:
+          invalid_period_for_org: "%{org_name} does not use %{rent_period} as a rent period. Choose another rent period, or a data coordinator can add rent periods to your organisation."
+          chcharge_out_of_range: "Household rent and other charges must be between %{min_chcharge} and %{max_chcharge} if paying %{period}."
+          rent_out_of_range: "Enter a value for the %{charge_name} between £0 and %{maximum_per_period} paid %{frequency}. %{maximum_per_period} is the max limit for rent and charges paid %{frequency} for %{letting_type} lettings owned by a %{provider_type}."
+          rent_below_hard_min: "Rent is below the absolute minimum expected for a property of this type based on this period."
+          rent_above_hard_max: "Rent is higher than the absolute maximum expected for a property of this type based on this period."
+        managing_organisation_id:
+          invalid_period_for_org: "%{org_name} does not use %{rent_period} as a rent period. Set another rent period on this log, or a data coordinator can add rent periods to this organisation."
+        beds:
+          rent_below_hard_min: "Rent is below the absolute minimum expected for a property of this type based on this number of bedrooms."
+          rent_above_hard_max: "Rent is higher than the absolute maximum expected for a property of this type based on this number of bedrooms."
+        uprn:
+          rent_below_hard_min: "Rent is below the absolute minimum expected for a property of this type based on this UPRN."
+          rent_above_hard_max: "Rent is higher than the absolute maximum expected for a property of this type based on this UPRN."
+        la:
+          rent_below_hard_min: "Rent is below the absolute minimum expected for a property of this type based on this local authority."
+          rent_above_hard_max: "Rent is higher than the absolute maximum expected for a property of this type based on this local authority."
+        postcode_known:
+          rent_below_hard_min: "Rent is below the absolute minimum expected for a property of this type. Please check the rent, rent period, local authority and number of bedrooms."
+          rent_above_hard_max: "Rent is higher than the absolute maximum expected for a property of this type. Please check the rent, rent period, local authority and number of bedrooms."
+        scheme_id:
+          rent_below_hard_min: "Rent is below the absolute minimum expected for a property of this type. Please check the rent, rent period and local authority."
+          rent_above_hard_max: "Rent is higher than the absolute maximum expected for a property of this type. Please check the rent, rent period and local authority."
+        location_id:
+          rent_below_hard_min: "Rent is below the absolute minimum expected for a property of this type. Please check the rent, rent period and local authority."
+          rent_above_hard_max: "Rent is higher than the absolute maximum expected for a property of this type. Please check the rent, rent period and local authority."
+        rent_type:
+          rent_below_hard_min: "Rent is below the absolute minimum expected for a property of this type based on this lettings type."
+          rent_above_hard_max: "Rent is higher than the absolute maximum expected for a property of this type based on this lettings type."
+        needstype:
+          rent_below_hard_min: "Rent is below the absolute minimum expected for a property of this type based on this lettings type."
+          rent_above_hard_max: "Rent is higher than the absolute maximum expected for a property of this type based on this lettings type."

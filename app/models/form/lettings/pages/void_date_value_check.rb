@@ -2,10 +2,11 @@ class Form::Lettings::Pages::VoidDateValueCheck < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "void_date_value_check"
+    @copy_key = "lettings.soft_validations.void_date_value_check"
     @depends_on = [{ "voiddate_in_soft_range?" => true }]
-    @title_text = { "translation" => "soft_validations.void_date.title_text" }
+    @title_text = { "translation" => "forms.#{form.start_date.year}.#{@copy_key}.title_text" }
     @informative_text = {
-      "translation" => "soft_validations.void_date.hint_text",
+      "translation" => "forms.#{form.start_date.year}.#{@copy_key}.informative_text",
       "arguments" => [],
     }
   end

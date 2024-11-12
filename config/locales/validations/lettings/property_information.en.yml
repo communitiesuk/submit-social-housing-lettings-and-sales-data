@@ -1,0 +1,6 @@
+en:
+  validations:
+    lettings:
+      property_information:
+        postcode_full:
+          invalid: "Enter a postcode in the correct format, for example AA1 1AA."
