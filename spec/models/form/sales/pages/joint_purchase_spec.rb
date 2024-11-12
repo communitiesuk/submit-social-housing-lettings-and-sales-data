@@ -54,5 +54,4 @@ RSpec.describe Form::Sales::Pages::JointPurchase, type: :model do
       ])
     end
   end
-
 end
