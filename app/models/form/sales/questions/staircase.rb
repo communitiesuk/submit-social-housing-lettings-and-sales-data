@@ -2,7 +2,7 @@ class Form::Sales::Questions::Staircase < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "staircase"
-    @copy_key = "sales.#{subsection.id}.staircasing"
+    @copy_key = "sales.#{page.subsection.id}.staircasing"
     @type = "radio"
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
   end
