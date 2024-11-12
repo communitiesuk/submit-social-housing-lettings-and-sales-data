@@ -2,8 +2,7 @@ class Form::Lettings::Questions::PregnancyValueCheck < ::Form::Question
   def initialize(id, hsh, page, person_index:)
     super(id, hsh, page)
     @id = "pregnancy_value_check"
-    @check_answer_label = "Pregnancy confirmation"
-    @header = "Are you sure this is correct?"
+    @copy_key = page.copy_key
     @type = "interruption_screen"
     @check_answers_card_number = person_index
     @answer_options = ANSWER_OPTIONS

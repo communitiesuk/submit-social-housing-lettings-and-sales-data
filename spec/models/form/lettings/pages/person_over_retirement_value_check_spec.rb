@@ -28,13 +28,14 @@ RSpec.describe Form::Lettings::Pages::PersonOverRetirementValueCheck, type: :mod
 
     it "has the correct title_text" do
       expect(page.title_text).to eq({
-        "translation" => "soft_validations.retirement.max.title",
+        "translation" => "forms.2024.lettings.soft_validations.retirement_value_check.title_text",
       })
     end
 
     it "has the correct informative_text" do
       expect(page.informative_text).to eq({
-        "translation" => "soft_validations.retirement.max.hint_text",
+        "translation" => "forms.2024.lettings.soft_validations.retirement_value_check.informative_text",
+        "arguments" => [],
       })
     end
   end
@@ -50,13 +51,14 @@ RSpec.describe Form::Lettings::Pages::PersonOverRetirementValueCheck, type: :mod
 
     it "has the correct title_text" do
       expect(page.title_text).to eq({
-        "translation" => "soft_validations.retirement.max.title",
+        "translation" => "forms.2024.lettings.soft_validations.retirement_value_check.title_text",
       })
     end
 
     it "has the correct informative_text" do
       expect(page.informative_text).to eq({
-        "translation" => "soft_validations.retirement.max.hint_text",
+        "translation" => "forms.2024.lettings.soft_validations.retirement_value_check.informative_text",
+        "arguments" => [],
       })
     end
   end

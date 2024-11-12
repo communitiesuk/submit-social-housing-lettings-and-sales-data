@@ -2,6 +2,7 @@ class Form::Lettings::Pages::FemalesInSoftAgeRangeInPregnantHouseholdPersonAgeVa
   def initialize(id, hsh, subsection, person_index:)
     super(id, hsh, subsection)
     @id = "females_in_soft_age_range_in_pregnant_household_person_#{person_index}_age_value_check"
+    @copy_key = "lettings.soft_validations.pregnancy_value_check.females_in_soft_age_range_in_pregnant_household_value_check"
     @depends_on = [
       {
         "female_in_pregnant_household_in_soft_validation_range?" => true,
@@ -9,24 +10,12 @@ class Form::Lettings::Pages::FemalesInSoftAgeRangeInPregnantHouseholdPersonAgeVa
       },
     ]
     @title_text = {
-      "translation" => "soft_validations.pregnancy.title",
-      "arguments" => [
-        {
-          "key" => "sex1",
-          "label" => true,
-          "i18n_template" => "sex1",
-        },
-      ],
+      "translation" => "forms.#{form.start_date.year}.#{@copy_key}.title_text",
+      "arguments" => [],
     }
     @informative_text = {
-      "translation" => "soft_validations.pregnancy.females_not_in_soft_age_range",
-      "arguments" => [
-        {
-          "key" => "sex1",
-          "label" => true,
-          "i18n_template" => "sex1",
-        },
-      ],
+      "translation" => "forms.#{form.start_date.year}.#{@copy_key}.informative_text",
+      "arguments" => [],
     }
     @person_index = person_index
   end
