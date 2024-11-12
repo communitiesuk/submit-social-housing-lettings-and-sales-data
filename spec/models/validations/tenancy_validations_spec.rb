@@ -276,7 +276,7 @@ RSpec.describe Validations::TenancyValidations do
 
   describe "tenancy type validations" do
     let(:record) { FactoryBot.build(:lettings_log, :setup_completed) }
-    let(:field) { "validations.other_field_missing" }
+    let(:field) { "validations.shared.other_field_missing" }
     let(:main_field_label) { "tenancy type" }
     let(:other_field) { "tenancyother" }
     let(:other_field_label) { "other tenancy type" }
@@ -299,7 +299,7 @@ RSpec.describe Validations::TenancyValidations do
     end
 
     context "when tenancy type is not other" do
-      let(:field) { "validations.other_field_not_required" }
+      let(:field) { "validations.shared.other_field_not_required" }
 
       it "validates that other tenancy type is not provided" do
         record.tenancy = 2

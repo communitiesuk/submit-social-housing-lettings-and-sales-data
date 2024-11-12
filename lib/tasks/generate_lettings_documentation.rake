@@ -60,13 +60,13 @@ namespace :generate_lettings_documentation do
       min = [question.prefix, question.min].join("") if question.min
       max = [question.prefix, question.max].join("") if question.max
 
-      error_message = I18n.t("validations.numeric.above_min", field:, min:)
+      error_message = I18n.t("validations.shared.numeric.above_min", field:, min:)
       validation_name = "minimum"
       validation_description = "Field value is lower than the minimum value"
 
       if min && max
         validation_name = "range"
-        error_message = I18n.t("validations.numeric.within_range", field:, min:, max:)
+        error_message = I18n.t("validations.shared.numeric.within_range", field:, min:, max:)
         validation_description = "Field value is lower than the minimum value or higher than the maximum value"
       end
 

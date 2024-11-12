@@ -2,8 +2,7 @@ class Form::Lettings::Questions::NoRetirementValueCheck < ::Form::Question
   def initialize(id, hsh, page, person_index:)
     super(id, hsh, page)
     @id = "retirement_value_check"
-    @check_answer_label = "Retirement confirmation"
-    @header = "Are you sure this person is retired?"
+    @copy_key = "lettings.soft_validations.no_retirement_value_check"
     @type = "interruption_screen"
     @check_answers_card_number = person_index
     @answer_options = ANSWER_OPTIONS

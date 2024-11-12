@@ -50,16 +50,6 @@ en:
               check_answer_label: "Type of discounted ownership sale"
               hint_text: ""
               question_text: "What is the type of discounted ownership sale?"
-            outright_ownership:
-              page_header: "Type of outright sale"
-              type:
-                check_answer_label: "Type of outright sale"
-                hint_text: ""
-                question_text: "What is the type of outright sale?"
-              othtype:
-                check_answer_label: "Type of other sale"
-                hint_text: ""
-                question_text: "What type of sale is it?"
 
           buylivein:
             page_header: ""

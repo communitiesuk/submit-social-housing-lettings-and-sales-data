@@ -2,8 +2,9 @@ class Form::Lettings::Pages::RentValueCheck < ::Form::Page
   def initialize(id, hsh, subsection, check_answers_card_number: nil)
     super(id, hsh, subsection)
     @depends_on = [{ "rent_soft_validation_triggered?" => true }]
+    @copy_key = "lettings.soft_validations.rent_value_check"
     @title_text = {
-      "translation" => "soft_validations.rent.outside_range_title",
+      "translation" => "forms.#{form.start_date.year}.#{@copy_key}.title_text",
       "arguments" => [
         {
           "key" => "brent",
@@ -13,7 +14,7 @@ class Form::Lettings::Pages::RentValueCheck < ::Form::Page
       ],
     }
     @informative_text = {
-      "translation" => "soft_validations.rent.informative_text",
+      "translation" => "forms.#{form.start_date.year}.#{@copy_key}.informative_text",
       "arguments" => [
         {
           "key" => "rent_soft_validation_higher_or_lower_text",
