@@ -42,5 +42,4 @@ RSpec.describe Form::Sales::Pages::Staircase, type: :model do
       expect(page.subsection).to eq(subsection)
     end
   end
-
 end
