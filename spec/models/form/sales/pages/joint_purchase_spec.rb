@@ -5,7 +5,6 @@ RSpec.describe Form::Sales::Pages::JointPurchase, type: :model do
 
   let(:page_id) { nil }
   let(:page_definition) { nil }
-  # let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2023, 4, 1))) }
 
   context "when start year is 2024" do
     let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2024, 4, 1))) }
