@@ -72,17 +72,15 @@ module Validations::SetupValidations
     end
   end
 
-  def validate_scheme_has_confirmed_locations_validation(record)
+  def validate_scheme(record)
     return unless record.scheme
 
-    unless record.scheme.locations.confirmed.any?
-      record.errors.add :scheme_id, :no_completed_locations, message: I18n.t("validations.lettings.setup.scheme.no_completed_locations")
-    end
-  end
-
-  def validate_scheme(record)
-    if record.scheme&.status == :incomplete
+    if record.scheme.status == :incomplete
       record.errors.add :scheme_id, :incomplete, message: I18n.t("validations.lettings.setup.scheme.incomplete")
+    end
+
+    if record.scheme.locations.nil? || (record.scheme.locations.present? && record.scheme.locations.confirmed.none?)
+      record.errors.add :scheme_id, :no_completed_locations, message: I18n.t("validations.lettings.setup.scheme.no_completed_locations")
     end
 
     scheme_during_startdate_validation(record)
@@ -98,11 +96,48 @@ module Validations::SetupValidations
     end
   end
 
+  def location_during_startdate_validation(record)
+    location_inactive_status = inactive_status(record.startdate, record.location)
+
+    if location_inactive_status.present?
+      date, scope, deactivation_date = location_inactive_status.values_at(:date, :scope, :deactivation_date)
+      record.errors.add :startdate, :not_active, message: I18n.t("validations.lettings.setup.startdate.location.#{scope}.startdate", postcode: record.location.postcode, date:, deactivation_date:)
+      record.errors.add :location_id, :not_active, message: I18n.t("validations.lettings.setup.startdate.location.#{scope}.location_id", postcode: record.location.postcode, date:, deactivation_date:)
+      record.errors.add :scheme_id, :not_active, message: I18n.t("validations.lettings.setup.startdate.location.#{scope}.location_id", postcode: record.location.postcode, date:, deactivation_date:)
+    end
+  end
+
+  def scheme_during_startdate_validation(record)
+    scheme_inactive_status = inactive_status(record.startdate, record.scheme)
+
+    if scheme_inactive_status.present?
+      date, scope, deactivation_date = scheme_inactive_status.values_at(:date, :scope, :deactivation_date)
+      record.errors.add :startdate, I18n.t("validations.lettings.setup.startdate.scheme.#{scope}.startdate", name: record.scheme.service_name, date:, deactivation_date:)
+      record.errors.add :scheme_id, I18n.t("validations.lettings.setup.startdate.scheme.#{scope}.scheme_id", name: record.scheme.service_name, date:, deactivation_date:)
+    end
+  end
+
+  def tenancy_startdate_with_scheme_locations(record)
+    return if record.scheme.blank? || record.startdate.blank?
+    return if record.scheme.has_active_locations_on_date?(record.startdate)
+
+    record.errors.add :startdate, I18n.t("validations.lettings.setup.startdate.scheme.locations_inactive.startdate", name: record.scheme.service_name)
+    record.errors.add :scheme_id, I18n.t("validations.lettings.setup.startdate.scheme.locations_inactive.scheme_id", name: record.scheme.service_name)
+  end
+
   def validate_managing_organisation_data_sharing_agremeent_signed(record)
     return if record.skip_dpo_validation
 
     if record.managing_organisation_id_changed? && record.managing_organisation.present? && !record.managing_organisation.data_protection_confirmed?
       record.errors.add :managing_organisation_id, I18n.t("validations.lettings.setup.managing_organisation.data_sharing_agreement_not_signed")
+    end
+  end
+
+  def validate_owning_organisation_data_sharing_agremeent_signed(record)
+    return if record.skip_dpo_validation
+
+    if record.owning_organisation_id_changed? && record.owning_organisation.present? && !record.owning_organisation.data_protection_confirmed?
+      record.errors.add :owning_organisation_id, I18n.t("validations.lettings.setup.owning_organisation.data_sharing_agreement_not_signed")
     end
   end
 

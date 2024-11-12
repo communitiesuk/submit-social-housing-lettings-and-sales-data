@@ -1,0 +1,7 @@
+en:
+  validations:
+    lettings:
+      household:
+        relat:
+          one_partner: "Number of partners cannot be greater than 1."
+
