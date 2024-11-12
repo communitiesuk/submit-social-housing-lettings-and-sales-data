@@ -87,10 +87,10 @@ RSpec.describe Form::Sales::Subsections::Setup, type: :model do
     it "has correct pages" do
       expect(setup.pages.map(&:id)).to eq(
         %w[
+          completion_date
           owning_organisation
           managing_organisation
           assigned_to
-          completion_date
           purchaser_code
           ownership_scheme
           shared_ownership_type
