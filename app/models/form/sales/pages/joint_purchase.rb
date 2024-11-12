@@ -7,9 +7,9 @@ class Form::Sales::Pages::JointPurchase < ::Form::Page
   def depends_on
     if form.start_year_2025_or_later?
       [
-         { "ownershipsch" => 1 },
-         { "ownershipsch" => 2 },
-       ]
+        { "ownershipsch" => 1 },
+        { "ownershipsch" => 2 },
+      ]
     else
       [
         { "ownershipsch" => 1 },
