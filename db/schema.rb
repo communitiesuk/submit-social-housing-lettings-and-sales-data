@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_10_11_112158) do
+ActiveRecord::Schema[7.0].define(version: 2024_10_31_102744) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -627,8 +627,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_11_112158) do
     t.integer "deposit_value_check"
     t.integer "frombeds"
     t.integer "staircase"
-    t.integer "stairbought"
-    t.integer "stairowned"
+    t.decimal "stairbought"
+    t.decimal "stairowned"
     t.decimal "mrent", precision: 10, scale: 2
     t.datetime "exdate"
     t.integer "exday"
