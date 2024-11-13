@@ -6,7 +6,7 @@ class Form::Sales::Questions::PersonRelationshipToBuyer1YesNo < ::Form::Question
     @answer_options = {
       "P" => { "value" => "Yes" },
       "X" => { "value" => "No" },
-      "R" => { "value" => "Buyer prefers not to say" },
+      "R" => { "value" => "Person prefers not to say" },
     }
     @inferred_check_answers_value = [{
       "condition" => {
