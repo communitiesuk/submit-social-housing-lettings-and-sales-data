@@ -11,6 +11,7 @@ RSpec.describe Form::Sales::Questions::OwnershipScheme, type: :model do
 
   before do
     allow(form).to receive(:start_year_2024_or_later?).and_return(false)
+    allow(form).to receive(:start_year_2025_or_later?).and_return(false)
     allow(page).to receive(:subsection).and_return(subsection)
     allow(subsection).to receive(:form).and_return(form)
   end
@@ -39,7 +40,7 @@ RSpec.describe Form::Sales::Questions::OwnershipScheme, type: :model do
     })
   end
 
-  context "with collection year on or after 2024" do
+  context "with collection year in 2024" do
     before do
       allow(form).to receive(:start_year_2024_or_later?).and_return(true)
     end
@@ -49,6 +50,20 @@ RSpec.describe Form::Sales::Questions::OwnershipScheme, type: :model do
         "1" => { "value" => "Yes - a shared ownership scheme", "hint" => "When the purchaser buys an initial share of up to 75% of the property value and pays rent to the Private Registered Provider (PRP) on the remaining portion, or a subsequent staircasing transaction" },
         "2" => { "value" => "Yes - a discounted ownership scheme" },
         "3" => { "value" => "No - this is an outright or other sale" },
+      })
+    end
+  end
+
+  context "with collection year on or after 2025" do
+    before do
+      allow(form).to receive(:start_year_2024_or_later?).and_return(true)
+      allow(form).to receive(:start_year_2025_or_later?).and_return(true)
+    end
+
+    it "has the correct answer_options" do
+      expect(question.answer_options).to eq({
+        "1" => { "value" => "Yes - a shared ownership scheme", "hint" => "When the purchaser buys an initial share of up to 75% of the property value and pays rent to the Private Registered Provider (PRP) on the remaining portion, or a subsequent staircasing transaction" },
+        "2" => { "value" => "Yes - a discounted ownership scheme" },
       })
     end
   end
