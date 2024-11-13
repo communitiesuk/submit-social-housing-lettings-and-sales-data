@@ -396,6 +396,10 @@ class SalesLog < Log
     proptype == 2
   end
 
+  def is_beds_inferred?
+    form.start_year_2025_or_later? && is_bedsit?
+  end
+
   def shared_ownership_scheme?
     ownershipsch == 1
   end
