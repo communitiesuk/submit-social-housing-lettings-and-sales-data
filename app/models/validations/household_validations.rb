@@ -82,8 +82,8 @@ module Validations::HouseholdValidations
       next unless age && economic_status
 
       if age < 16 && !economic_status_is_child_other_or_refused?(economic_status) && !record.form.start_year_2024_or_later?
-        record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.child_under_16", person_num:)
-        record.errors.add "age#{person_num}", I18n.t("validations.household.age.child_under_16_ecstat", person_num:)
+        record.errors.add "ecstat#{person_num}", I18n.t("validations.lettings.household.ecstat.child_under_16", person_num:)
+        record.errors.add "age#{person_num}", I18n.t("validations.lettings.household.age.child_under_16_ecstat", person_num:)
 
       end
       if tenant_is_economic_child?(economic_status) && age > 16
