@@ -2,11 +2,21 @@ class Form::Sales::Pages::JointPurchase < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "joint_purchase"
-    @depends_on = [
-      { "ownershipsch" => 1 },
-      { "ownershipsch" => 2 },
-      { "companybuy" => 2 },
-    ]
+  end
+
+  def depends_on
+    if form.start_year_2025_or_later?
+      [
+        { "ownershipsch" => 1 },
+        { "ownershipsch" => 2 },
+      ]
+    else
+      [
+        { "ownershipsch" => 1 },
+        { "ownershipsch" => 2 },
+        { "companybuy" => 2 },
+      ]
+    end
   end
 
   def questions

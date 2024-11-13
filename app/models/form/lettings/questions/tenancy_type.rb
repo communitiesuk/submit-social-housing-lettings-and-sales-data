@@ -10,7 +10,7 @@ class Form::Lettings::Questions::TenancyType < ::Form::Question
   end
 
   def answer_options
-    if form.start_year_after_2024?
+    if form.start_year_2024_or_later?
       {
         "4" => {
           "value" => "Assured Shorthold Tenancy (AST) – Fixed term",

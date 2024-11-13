@@ -391,7 +391,7 @@ class LettingsLog < Log
   end
 
   def is_beds_inferred?
-    form.start_year_after_2024? && is_bedsit?
+    form.start_year_2024_or_later? && is_bedsit?
   end
 
   def is_shared_housing?
@@ -506,12 +506,6 @@ class LettingsLog < Log
 
   def tenant_refuses_to_say_benefits?
     hb == 10
-  end
-
-  # Option 7 has been removed starting from 22/23
-  def receives_universal_credit_but_no_housing_benefit?
-    # 7: Universal Credit (without housing element)
-    hb == 7
   end
 
   def receives_housing_related_benefits?
@@ -899,7 +893,7 @@ private
   def should_process_address_change?
     return unless uprn_selection || select_best_address_match
     return unless startdate
-    return unless form.start_year_after_2024?
+    return unless form.start_year_2024_or_later?
 
     if select_best_address_match
       address_line1_input.present? && postcode_full_input.present?

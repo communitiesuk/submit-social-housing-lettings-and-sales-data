@@ -20,7 +20,7 @@ class Form::Lettings::Subsections::Setup < ::Form::Subsection
       Form::Lettings::Pages::RentType.new(nil, nil, self),
       Form::Lettings::Pages::TenantCode.new(nil, nil, self),
       Form::Lettings::Pages::PropertyReference.new(nil, nil, self),
-      (Form::Lettings::Pages::Declaration.new(nil, nil, self) if form.start_year_after_2024?),
+      (Form::Lettings::Pages::Declaration.new(nil, nil, self) if form.start_year_2024_or_later?),
     ].compact
   end
 

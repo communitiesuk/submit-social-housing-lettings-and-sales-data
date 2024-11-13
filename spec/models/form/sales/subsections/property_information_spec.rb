@@ -14,7 +14,8 @@ RSpec.describe Form::Sales::Subsections::PropertyInformation, type: :model do
     let(:form) { instance_double(Form, start_date:) }
 
     before do
-      allow(form).to receive(:start_year_after_2024?).and_return(false)
+      allow(form).to receive(:start_year_2024_or_later?).and_return(false)
+      allow(form).to receive(:start_year_2025_or_later?).and_return(false)
     end
 
     context "when 2023" do
@@ -47,7 +48,8 @@ RSpec.describe Form::Sales::Subsections::PropertyInformation, type: :model do
       let(:start_date) { Time.utc(2024, 2, 8) }
 
       before do
-        allow(form).to receive(:start_year_after_2024?).and_return(true)
+        allow(form).to receive(:start_year_2024_or_later?).and_return(true)
+        allow(form).to receive(:start_year_2025_or_later?).and_return(false)
       end
 
       it "has correct pages" do
@@ -67,6 +69,40 @@ RSpec.describe Form::Sales::Subsections::PropertyInformation, type: :model do
             property_number_of_bedrooms
             about_price_bedrooms_value_check
             property_unit_type
+            monthly_charges_property_type_value_check
+            percentage_discount_proptype_value_check
+            property_building_type
+            property_wheelchair_accessible
+          ],
+        )
+      end
+    end
+
+    context "when 2025" do
+      let(:start_date) { Time.utc(2025, 2, 8) }
+
+      before do
+        allow(form).to receive(:start_year_2024_or_later?).and_return(true)
+        allow(form).to receive(:start_year_2025_or_later?).and_return(true)
+      end
+
+      it "has correct pages" do
+        expect(property_information.pages.map(&:id)).to eq(
+          %w[
+            uprn
+            uprn_confirmation
+            address_matcher
+            no_address_found
+            uprn_selection
+            address
+            property_local_authority
+            local_authority_buyer_1_income_max_value_check
+            local_authority_buyer_2_income_max_value_check
+            local_authority_combined_income_max_value_check
+            about_price_la_value_check
+            property_unit_type
+            property_number_of_bedrooms
+            about_price_bedrooms_value_check
             monthly_charges_property_type_value_check
             percentage_discount_proptype_value_check
             property_building_type

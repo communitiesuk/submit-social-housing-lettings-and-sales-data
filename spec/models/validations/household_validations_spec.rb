@@ -27,13 +27,13 @@ RSpec.describe Validations::HouseholdValidations do
   end
 
   describe "reason for leaving last settled home validations" do
-    let(:field) { "validations.other_field_not_required" }
+    let(:field) { "validations.shared.other_field_not_required" }
     let(:main_field_label) { "reason" }
     let(:other_field_label) { "reasonother" }
     let(:expected_error) { I18n.t(field, main_field_label:, other_field_label:) }
 
     context "when reason is other" do
-      let(:field) { "validations.other_field_missing" }
+      let(:field) { "validations.shared.other_field_missing" }
 
       it "validates that a reason is provided" do
         record.reason = 20
@@ -249,14 +249,14 @@ RSpec.describe Validations::HouseholdValidations do
       record.hhmemb = 0
       household_validator.validate_numeric_min_max(record)
       expect(record.errors["hhmemb"])
-        .to include(match I18n.t("validations.numeric.within_range", field: "Number of household members", min: 1, max: 8))
+        .to include(match I18n.t("validations.shared.numeric.within_range", field: "Number of household members", min: 1, max: 8))
     end
 
     it "validates that the number of household members cannot be more than 8" do
       record.hhmemb = 9
       household_validator.validate_numeric_min_max(record)
       expect(record.errors["hhmemb"])
-        .to include(match I18n.t("validations.numeric.within_range", field: "Number of household members", min: 1, max: 8))
+        .to include(match I18n.t("validations.shared.numeric.within_range", field: "Number of household members", min: 1, max: 8))
     end
 
     it "expects that the number of other household members is between the min and max" do
@@ -274,11 +274,11 @@ RSpec.describe Validations::HouseholdValidations do
       record.relat3 = "P"
       household_validator.validate_partner_count(record)
       expect(record.errors["relat2"])
-        .to include(match I18n.t("validations.household.relat.one_partner"))
+        .to include(match I18n.t("validations.lettings.household.relat.one_partner"))
       expect(record.errors["relat3"])
-        .to include(match I18n.t("validations.household.relat.one_partner"))
+        .to include(match I18n.t("validations.lettings.household.relat.one_partner"))
       expect(record.errors["relat4"])
-        .not_to include(match I18n.t("validations.household.relat.one_partner"))
+        .not_to include(match I18n.t("validations.lettings.household.relat.one_partner"))
     end
 
     it "expects that a tenant can have a partner" do

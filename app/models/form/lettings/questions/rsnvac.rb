@@ -8,7 +8,7 @@ class Form::Lettings::Questions::Rsnvac < ::Form::Question
   end
 
   def answer_options
-    if form.start_year_after_2024?
+    if form.start_year_2024_or_later?
       {
         "14" => {
           "value" => "Renewal of fixed-term tenancy",

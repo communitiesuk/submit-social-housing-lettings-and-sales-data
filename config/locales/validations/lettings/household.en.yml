@@ -77,6 +77,7 @@ en:
             must_be_student: "Person must be a student if they are aged 16-19 and have relationship ‘child’."
 
         relat:
+          one_partner: "Number of partners cannot be greater than 1."
           child_under_16: "Answer cannot be ‘partner’ as you told us person %{person_num}'s age is under 16."
           student_16_19:
             cannot_be_child:
@@ -96,3 +97,4 @@ en:
             reason_permanently_decanted: "Answer must be internal transfer as the tenant was permanently decanted from another property owned by this landlord."
           la_general_needs:
             internal_transfer: "Answer cannot be internal transfer as it’s the same landlord on the tenancy agreement and the household had either a fixed-term or lifetime local authority general needs tenancy immediately before this letting."
+
