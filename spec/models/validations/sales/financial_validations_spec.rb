@@ -20,6 +20,7 @@ RSpec.describe Validations::Sales::FinancialValidations do
         expect(record.errors["ownershipsch"]).to include(match I18n.t("validations.sales.financial.ownershipsch.outside_non_london_income_range"))
         expect(record.errors["la"]).to include(match I18n.t("validations.sales.financial.la.outside_non_london_income_range"))
         expect(record.errors["postcode_full"]).to include(match I18n.t("validations.sales.financial.postcode_full.outside_non_london_income_range"))
+        expect(record.errors["uprn_selection"]).to include(match I18n.t("validations.sales.financial.uprn_selection.outside_non_london_income_range"))
       end
 
       it "adds errors if buyer 2 has income over 80,000" do
@@ -29,6 +30,7 @@ RSpec.describe Validations::Sales::FinancialValidations do
         expect(record.errors["ownershipsch"]).to include(match I18n.t("validations.sales.financial.ownershipsch.outside_non_london_income_range"))
         expect(record.errors["la"]).to include(match I18n.t("validations.sales.financial.la.outside_non_london_income_range"))
         expect(record.errors["postcode_full"]).to include(match I18n.t("validations.sales.financial.postcode_full.outside_non_london_income_range"))
+        expect(record.errors["uprn_selection"]).to include(match I18n.t("validations.sales.financial.uprn_selection.outside_non_london_income_range"))
       end
 
       it "does not add errors if buyer 1 has income above 0 and below 80_000" do
@@ -50,6 +52,7 @@ RSpec.describe Validations::Sales::FinancialValidations do
         expect(record.errors["ownershipsch"]).to include(match I18n.t("validations.sales.financial.ownershipsch.outside_non_london_income_range"))
         expect(record.errors["la"]).to include(match I18n.t("validations.sales.financial.la.outside_non_london_income_range"))
         expect(record.errors["postcode_full"]).to include(match I18n.t("validations.sales.financial.postcode_full.outside_non_london_income_range"))
+        expect(record.errors["uprn_selection"]).to include(match I18n.t("validations.sales.financial.uprn_selection.outside_non_london_income_range"))
       end
 
       it "adds errors if buyer 2 has income below 0" do
@@ -59,6 +62,7 @@ RSpec.describe Validations::Sales::FinancialValidations do
         expect(record.errors["ownershipsch"]).to include(match I18n.t("validations.sales.financial.ownershipsch.outside_non_london_income_range"))
         expect(record.errors["la"]).to include(match I18n.t("validations.sales.financial.la.outside_non_london_income_range"))
         expect(record.errors["postcode_full"]).to include(match I18n.t("validations.sales.financial.postcode_full.outside_non_london_income_range"))
+        expect(record.errors["uprn_selection"]).to include(match I18n.t("validations.sales.financial.uprn_selection.outside_non_london_income_range"))
       end
 
       it "adds errors when combined income is over 80_000" do
@@ -89,6 +93,7 @@ RSpec.describe Validations::Sales::FinancialValidations do
         expect(record.errors["ownershipsch"]).to include(match I18n.t("validations.sales.financial.ownershipsch.outside_london_income_range"))
         expect(record.errors["la"]).to include(match I18n.t("validations.sales.financial.la.outside_london_income_range"))
         expect(record.errors["postcode_full"]).to include(match I18n.t("validations.sales.financial.postcode_full.outside_london_income_range"))
+        expect(record.errors["uprn_selection"]).to include(match I18n.t("validations.sales.financial.uprn_selection.outside_london_income_range"))
       end
 
       it "adds errors if buyer 2 has income over 90,000" do
@@ -98,6 +103,7 @@ RSpec.describe Validations::Sales::FinancialValidations do
         expect(record.errors["ownershipsch"]).to include(match I18n.t("validations.sales.financial.ownershipsch.outside_london_income_range"))
         expect(record.errors["la"]).to include(match I18n.t("validations.sales.financial.la.outside_london_income_range"))
         expect(record.errors["postcode_full"]).to include(match I18n.t("validations.sales.financial.postcode_full.outside_london_income_range"))
+        expect(record.errors["uprn_selection"]).to include(match I18n.t("validations.sales.financial.uprn_selection.outside_london_income_range"))
       end
 
       it "does not add errors if buyer 1 has income above 0 and below 90_000" do
@@ -119,6 +125,7 @@ RSpec.describe Validations::Sales::FinancialValidations do
         expect(record.errors["ownershipsch"]).to include(match I18n.t("validations.sales.financial.ownershipsch.outside_london_income_range"))
         expect(record.errors["la"]).to include(match I18n.t("validations.sales.financial.la.outside_london_income_range"))
         expect(record.errors["postcode_full"]).to include(match I18n.t("validations.sales.financial.postcode_full.outside_london_income_range"))
+        expect(record.errors["uprn_selection"]).to include(match I18n.t("validations.sales.financial.uprn_selection.outside_london_income_range"))
       end
 
       it "adds errors if buyer 2 has income below 0" do
@@ -128,6 +135,7 @@ RSpec.describe Validations::Sales::FinancialValidations do
         expect(record.errors["ownershipsch"]).to include(match I18n.t("validations.sales.financial.ownershipsch.outside_london_income_range"))
         expect(record.errors["la"]).to include(match I18n.t("validations.sales.financial.la.outside_london_income_range"))
         expect(record.errors["postcode_full"]).to include(match I18n.t("validations.sales.financial.postcode_full.outside_london_income_range"))
+        expect(record.errors["uprn_selection"]).to include(match I18n.t("validations.sales.financial.uprn_selection.outside_london_income_range"))
       end
 
       it "adds errors when combined income is over 90_000" do
