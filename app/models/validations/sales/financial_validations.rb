@@ -55,7 +55,7 @@ module Validations::Sales::FinancialValidations
 
   def validate_percentage_bought_not_equal_percentage_owned(record)
     return unless record.stairbought && record.stairowned
-    return unless record.saledate && record.form.start_year_after_2024?
+    return unless record.saledate && record.form.start_year_2024_or_later?
 
     if record.stairbought == record.stairowned
       record.errors.add :stairbought, I18n.t("validations.sales.financial.stairbought.percentage_bought_equal_percentage_owned", stairbought: sprintf("%g", record.stairbought), stairowned: sprintf("%g", record.stairowned))
@@ -106,7 +106,7 @@ module Validations::Sales::FinancialValidations
 
   def validate_equity_less_than_staircase_difference(record)
     return unless record.equity && record.stairbought && record.stairowned
-    return unless record.saledate && record.form.start_year_after_2024?
+    return unless record.saledate && record.form.start_year_2024_or_later?
 
     if record.equity > record.stairowned - record.stairbought
       formatted_equity = sprintf("%g", record.equity)

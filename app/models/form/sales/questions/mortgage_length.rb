@@ -2,14 +2,12 @@ class Form::Sales::Questions::MortgageLength < ::Form::Question
   def initialize(id, hsh, subsection, ownershipsch:)
     super(id, hsh, subsection)
     @id = "mortlen"
-    @check_answer_label = "Length of mortgage"
-    @header = "What is the length of the mortgage?"
+    @copy_key = "sales.sale_information.mortlen"
     @type = "numeric"
     @min = 0
     @max = 60
     @step = 1
     @width = 5
-    @hint_text = "You should round up to the nearest year. Value should not exceed 60 years."
     @ownershipsch = ownershipsch
     @question_number = QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP.fetch(form.start_date.year, QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP.max_by { |k, _v| k }.last)[ownershipsch]
   end

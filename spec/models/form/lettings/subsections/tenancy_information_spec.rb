@@ -12,11 +12,11 @@ RSpec.describe Form::Lettings::Subsections::TenancyInformation, type: :model do
   end
 
   describe "pages" do
-    let(:section) { instance_double(Form::Sales::Sections::Household, form:) }
+    let(:section) { instance_double(Form::Lettings::Sections::TenancyAndProperty, form:) }
     let(:form) { instance_double(Form, start_date:) }
 
     before do
-      allow(form).to receive(:start_year_after_2024?).and_return(false)
+      allow(form).to receive(:start_year_2024_or_later?).and_return(false)
     end
 
     context "when 2023" do
@@ -33,7 +33,7 @@ RSpec.describe Form::Lettings::Subsections::TenancyInformation, type: :model do
       let(:start_date) { Time.utc(2024, 2, 8) }
 
       before do
-        allow(form).to receive(:start_year_after_2024?).and_return(true)
+        allow(form).to receive(:start_year_2024_or_later?).and_return(true)
       end
 
       it "has correct pages" do

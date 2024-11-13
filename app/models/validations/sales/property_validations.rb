@@ -1,6 +1,6 @@
 module Validations::Sales::PropertyValidations
   def validate_postcodes_match_if_discounted_ownership(record)
-    return unless record.saledate && !record.form.start_year_after_2024?
+    return unless record.saledate && !record.form.start_year_2024_or_later?
     return unless record.ppostcode_full.present? && record.postcode_full.present?
 
     if record.discounted_ownership_sale? && record.ppostcode_full != record.postcode_full
@@ -27,5 +27,13 @@ module Validations::Sales::PropertyValidations
     return if record.uprn.match?(/^[0-9]{1,12}$/)
 
     record.errors.add :uprn, I18n.t("validations.sales.property_information.uprn.invalid")
+  end
+
+  def validate_property_postcode(record)
+    postcode = record.postcode_full
+    if record.postcode_known? && (postcode.blank? || !postcode.match(POSTCODE_REGEXP))
+      error_message = I18n.t("validations.sales.property_information.postcode_full.invalid")
+      record.errors.add :postcode_full, :wrong_format, message: error_message
+    end
   end
 end

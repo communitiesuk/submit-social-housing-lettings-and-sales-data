@@ -40,7 +40,7 @@ en:
             max:
               page_header: ""
               title_text: "You told us the income of buyer 1 is %{income}. This seems high. Are you sure this is correct?"
-
+              
           income2_value_check:
             check_answer_label: "Buyer 2 income confirmation"
             hint_text: ""
@@ -60,14 +60,6 @@ en:
             question_text: "Are you sure this is correct?"
             title_text: "You told us the combined income of this household is %{combined_income}. This seems high.  Are you sure this is correct?"
 
-          value_value_check:
-            page_header: ""
-            check_answer_label: "Purchase price confirmation"
-            hint_text: ""
-            question_text: "Are you sure?"
-            title_text: "You told us the purchase price is %{value}."
-            informative_text: "This is %{higher_or_lower} than we would expect."
-
           mortgage_value_check:
             page_header: ""
             check_answer_label: "Mortgage confirmation"
@@ -75,22 +67,6 @@ en:
             question_text: "Are you sure that the mortgage is more than 5 times the income used for the mortgage application?"
             title_text: "You told us that the mortgage amount is %{mortgage}."
             informative_text: "This is more than 5 times the income, which is higher than we would expect."
-
-          monthly_charges_value_check:
-            page_header: ""
-            check_answer_label: "Monthly charges confirmation"
-            hint_text: ""
-            question_text: "Are you sure this is correct?"
-            title_text: "You told us that the monthly charges were %{mscharge}."
-            informative_text: "This is higher than we would expect."
-
-          percentage_discount_value_check:
-            page_header: ""
-            check_answer_label: "Percentage discount confirmation"
-            hint_text: ""
-            question_text: "Are you sure this is correct?"
-            title_text: "You told us that the percentage discount is %{discount}."
-            informative_text: "This is higher than we would expect."
 
           savings_value_check:
             page_header: ""
@@ -104,15 +80,65 @@ en:
               title_text: "You told us the buyer’s savings were %{savings}."
               informative_text: "This is higher than we would expect."
 
-          deposit_value_check:
+          staircase_bought_value_check:
             page_header: ""
-            check_answer_label: "Deposit confirmation"
+            check_answer_label: "Percentage bought confirmation"
             hint_text: ""
-            question_text: "Are you sure that the deposit is this much higher than the buyer's savings?"
+            question_text: "Are you sure this is correct?"
+            title_text: "You told us that %{percentage}% was bought in this staircasing transaction."
+            informative_text: "Most staircasing transactions are less than 50%"
+
+          stairowned_value_check:
             joint_purchase:
+              page_header: ""
+              check_answer_label: "Percentage owned confirmation"
+              hint_text: ""
+              question_text:  "Are you sure?"
+              title_text: "You told us that the buyers now own %{stairowned} of the property."
+              informative_text: "The maximum percentage that can be owned under the Older Persons Shared Ownership scheme is 75%, unless the property was funded outside the Affordable Homes Programme. Make sure these answers are correct."
+            not_joint_purchase:
+              page_header: ""
+              check_answer_label: "Percentage owned confirmation"
+              hint_text: ""
+              question_text:  "Are you sure?"
+              title_text: "You told us that the buyer now owns %{stairowned} of the property."
+              informative_text: "The maximum percentage that can be owned under the Older Persons Shared Ownership scheme is 75%, unless the property was funded outside the Affordable Homes Programme. Make sure these answers are correct."
+
+          hodate_check:
+            page_header: ""
+            check_answer_label: "Practical completion or handover date check"
+            hint_text: ""
+            question_text:  "Are you sure?"
+            title_text: "You told us practical completion or handover date is more than 3 years before sale completion date."
+          
+          value_value_check:
+            page_header: ""
+            check_answer_label: "Purchase price confirmation"
+            hint_text: ""
+            question_text:  "Are you sure?"
+            title_text: "You told us the purchase price is %{value}."
+            informative_text: "This is %{higher_or_lower} than we would expect."
+
+          shared_ownership_deposit_value_check:
+            page_header: ""
+            check_answer_label: "Shared ownership deposit confirmation"
+            hint_text: ""
+            question_text: "Are you sure this is correct?"
+            title_text: "You told us that the %{mortgage_deposit_and_discount_error_fields} add up to %{mortgage_deposit_and_discount_total}."
+
+          deposit_value_check:
+            joint_purchase:
+              page_header: ""
+              check_answer_label: "Deposit confirmation"
+              hint_text: ""
+              question_text: "Are you sure that the deposit is this much higher than the buyer's savings?"
               title_text: "You told us the buyers’ deposit was %{deposit} and their savings were %{savings}."
               informative_text: "The deposit amount is higher than we would expect for the amount of savings they have."
             not_joint_purchase:
+              page_header: ""
+              check_answer_label: "Deposit confirmation"
+              hint_text: ""
+              question_text: "Are you sure that the deposit is this much higher than the buyer's savings?"
               title_text: "You told us the buyer’s deposit was %{deposit} and their savings were %{savings}."
               informative_text: "The deposit amount is higher than we would expect for the amount of savings they have."
               
@@ -162,3 +188,51 @@ en:
             question_text: "Are you sure this is correct?"
             title_text: "You told us there are more than 1 persons with 'Partner' relationship to buyer 1."
             informative_text: "Are you sure this is correct?"
+
+          monthly_charges_value_check:
+            page_header: ""
+            check_answer_label: "Monthly charges confirmation"
+            hint_text: ""
+            question_text: "Are you sure this is correct?"
+            title_text: "You told us that the monthly charges were %{mscharge}."
+            informative_text: "This is higher than we would expect."
+    
+          extra_borrowing_value_check:
+            page_header: ""
+            check_answer_label: "Extra borrowing confirmation"
+            hint_text: ""
+            question_text: "Are you sure there is no extra borrowing?"
+            title_text: "You told us that the mortgage and deposit total is %{mortgage_and_deposit_total}."
+            informative_text: "This is higher than the purchase price minus the discount."
+
+          percentage_discount_value_check:
+            page_header: ""
+            check_answer_label: "Percentage discount confirmation"
+            hint_text: ""
+            question_text: "Are you sure this is correct?"
+            title_text: "You told us that the percentage discount is %{discount}."
+            informative_text: "This is higher than we would expect."
+
+          grant_value_check:
+            page_header: ""
+            check_answer_label: "Grant value confirmation"
+            hint_text: ""
+            question_text: "Are you sure? Grants are usually £9,000 - £16,000"
+            title_text: "You told us that the grant amount is %{grant}."
+            informative_text: "Loans, grants and subsidies are usually between £9,000 and £16,000."
+
+          discounted_sale_value_check:
+            page_header: ""
+            check_answer_label: "Discounted sale value confirmation"
+            hint_text: ""
+            question_text: "Are you sure this is correct?"
+            title_text: "Mortgage, deposit, and grant total must equal %{value_with_discount}."
+            informative_text: "Your given mortgage, deposit and grant total is %{mortgage_deposit_and_grant_total}."
+
+          deposit_and_mortgage_value_check:
+            page_header: ""
+            check_answer_label: "Deposit and mortgage against discount confirmation"
+            hint_text: ""
+            question_text: "Are you sure? Mortgage and deposit usually equal or are more than (value - discount)"
+            title_text: "You told us the mortgage amount was %{mortgage}, the cash deposit was %{deposit} and the discount was %{discount}."
+            informative_text: "We would expect the mortgage amount and the deposit added together to be the same as the purchase price minus the discount."

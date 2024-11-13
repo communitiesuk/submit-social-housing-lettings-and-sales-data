@@ -6,7 +6,7 @@ RSpec.describe Form::Lettings::Questions::GenderIdentity1, type: :model do
   let(:question_definition) { nil }
   let(:page) { instance_double(Form::Page) }
   let(:subsection) { instance_double(Form::Subsection) }
-  let(:form) { instance_double(Form, start_date: Time.zone.local(2023, 4, 1), start_year_after_2024?: false) }
+  let(:form) { instance_double(Form, start_date: Time.zone.local(2023, 4, 1), start_year_2024_or_later?: false) }
 
   before do
     allow(page).to receive(:subsection).and_return(subsection)

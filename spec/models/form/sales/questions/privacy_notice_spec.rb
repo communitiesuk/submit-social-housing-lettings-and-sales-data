@@ -10,7 +10,7 @@ RSpec.describe Form::Sales::Questions::PrivacyNotice, type: :model do
   let(:form) { instance_double(Form, start_date: Time.zone.local(2023, 4, 1)) }
 
   before do
-    allow(form).to receive(:start_year_after_2024?)
+    allow(form).to receive(:start_year_2024_or_later?)
     allow(page).to receive(:subsection).and_return(subsection)
     allow(subsection).to receive(:form).and_return(form)
   end
@@ -35,7 +35,7 @@ RSpec.describe Form::Sales::Questions::PrivacyNotice, type: :model do
     let(:subsection) { instance_double(Form::Subsection, id: "household_characteristics") }
 
     before do
-      allow(form).to receive(:start_year_after_2024?).and_return(false)
+      allow(form).to receive(:start_year_2024_or_later?).and_return(false)
     end
 
     context "and there is a single buyer" do
@@ -83,7 +83,7 @@ RSpec.describe Form::Sales::Questions::PrivacyNotice, type: :model do
 
   context "when the form year is >= 2024" do
     before do
-      allow(form).to receive(:start_year_after_2024?).and_return(true)
+      allow(form).to receive(:start_year_2024_or_later?).and_return(true)
     end
 
     context "and there is a single buyer" do

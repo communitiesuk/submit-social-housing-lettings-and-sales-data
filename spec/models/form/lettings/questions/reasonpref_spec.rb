@@ -9,7 +9,7 @@ RSpec.describe Form::Lettings::Questions::Reasonpref, type: :model do
   let(:form) { instance_double(Form, start_date: Time.zone.local(2023, 4, 1)) }
 
   before do
-    allow(form).to receive(:start_year_after_2024?).and_return(false)
+    allow(form).to receive(:start_year_2024_or_later?).and_return(false)
     allow(page).to receive(:subsection).and_return(subsection)
     allow(subsection).to receive(:form).and_return(form)
   end

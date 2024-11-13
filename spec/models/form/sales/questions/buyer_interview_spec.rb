@@ -5,7 +5,7 @@ RSpec.describe Form::Sales::Questions::BuyerInterview, type: :model do
 
   let(:question_id) { nil }
   let(:question_definition) { nil }
-  let(:form) { instance_double(Form, start_date: Time.zone.local(2023, 4, 1), start_year_after_2024?: true) }
+  let(:form) { instance_double(Form, start_date: Time.zone.local(2023, 4, 1), start_year_2024_or_later?: true) }
   let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form:, id: "setup")) }
 
   it "has correct page" do
@@ -36,7 +36,7 @@ RSpec.describe Form::Sales::Questions::BuyerInterview, type: :model do
 
     context "when the form start year is before 2024" do
       let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form:, id: "household_characteristics")) }
-      let(:form) { instance_double(Form, start_date: Time.zone.local(2024, 3, 1), start_year_after_2024?: false) }
+      let(:form) { instance_double(Form, start_date: Time.zone.local(2024, 3, 1), start_year_2024_or_later?: false) }
 
       it "has the expected copy_key" do
         expect(question.copy_key).to eq("sales.household_characteristics.noint.joint_purchase")
@@ -44,7 +44,7 @@ RSpec.describe Form::Sales::Questions::BuyerInterview, type: :model do
     end
 
     context "when the form start year is after 2024" do
-      let(:form) { instance_double(Form, start_date: Time.zone.local(2024, 4, 1), start_year_after_2024?: true) }
+      let(:form) { instance_double(Form, start_date: Time.zone.local(2024, 4, 1), start_year_2024_or_later?: true) }
 
       it "has the expected copy_key" do
         expect(question.copy_key).to eq("sales.setup.noint.joint_purchase")
@@ -57,7 +57,7 @@ RSpec.describe Form::Sales::Questions::BuyerInterview, type: :model do
 
     context "when the form start year is before 2024" do
       let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form:, id: "household_characteristics")) }
-      let(:form) { instance_double(Form, start_date: Time.zone.local(2023, 4, 1), start_year_after_2024?: false) }
+      let(:form) { instance_double(Form, start_date: Time.zone.local(2023, 4, 1), start_year_2024_or_later?: false) }
 
       it "has the expected copy_key" do
         expect(question.copy_key).to eq("sales.household_characteristics.noint.not_joint_purchase")
@@ -65,7 +65,7 @@ RSpec.describe Form::Sales::Questions::BuyerInterview, type: :model do
     end
 
     context "when the form start year is after 2024" do
-      let(:form) { instance_double(Form, start_date: Time.zone.local(2024, 4, 1), start_year_after_2024?: true) }
+      let(:form) { instance_double(Form, start_date: Time.zone.local(2024, 4, 1), start_year_2024_or_later?: true) }
 
       it "has the expected copy_key" do
         expect(question.copy_key).to eq("sales.setup.noint.not_joint_purchase")

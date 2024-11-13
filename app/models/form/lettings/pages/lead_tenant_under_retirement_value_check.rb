@@ -2,8 +2,9 @@ class Form::Lettings::Pages::LeadTenantUnderRetirementValueCheck < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @depends_on = [{ "person_1_retired_under_soft_min_age?" => true }]
+    @copy_key = "lettings.soft_validations.no_retirement_value_check"
     @title_text = {
-      "translation" => "soft_validations.retirement.min.title",
+      "translation" => "forms.#{form.start_date.year}.#{@copy_key}.title_text",
       "arguments" => [
         {
           "key" => "age1",
@@ -12,7 +13,10 @@ class Form::Lettings::Pages::LeadTenantUnderRetirementValueCheck < ::Form::Page
         },
       ],
     }
-    @informative_text = {}
+    @informative_text = {
+      "translation" => "forms.#{form.start_date.year}.#{@copy_key}.informative_text",
+      "arguments" => [],
+    }
   end
 
   def questions
