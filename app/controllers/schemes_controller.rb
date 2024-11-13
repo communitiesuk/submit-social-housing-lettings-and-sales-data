@@ -293,9 +293,9 @@ private
   def scheme_params
     required_params = params.require(:scheme).permit(:service_name,
                                                      :sensitive,
-                                                     :owning_organisation_id,
                                                      :scheme_type,
                                                      :registered_under_care_act,
+                                                     :owning_organisation_id,
                                                      :id,
                                                      :has_other_client_group,
                                                      :primary_client_group,
