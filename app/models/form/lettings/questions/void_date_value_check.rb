@@ -2,8 +2,7 @@ class Form::Lettings::Questions::VoidDateValueCheck < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "void_date_value_check"
-    @check_answer_label = "Void date confirmation"
-    @header = "Are you sure the property has been vacant for this long?"
+    @copy_key = "lettings.soft_validations.void_date_value_check"
     @type = "interruption_screen"
     @check_answers_card_number = 0
     @answer_options = ANSWER_OPTIONS

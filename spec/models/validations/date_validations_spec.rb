@@ -12,7 +12,7 @@ RSpec.describe Validations::DateValidations do
     it "must be a valid date" do
       record.startdate = Time.zone.local(0, 7, 1)
       date_validator.validate_startdate(record)
-      expect(record.errors["startdate"]).to include(match I18n.t("validations.date.invalid_date"))
+      expect(record.errors["startdate"]).to include(match I18n.t("validations.shared.date.invalid_date"))
     end
 
     it "does not raise an error when valid" do

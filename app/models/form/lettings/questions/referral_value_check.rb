@@ -2,8 +2,7 @@ class Form::Lettings::Questions::ReferralValueCheck < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "referral_value_check"
-    @check_answer_label = "Referral confirmation"
-    @header = "Are you sure?"
+    @copy_key = "lettings.soft_validations.referral_value_check"
     @type = "interruption_screen"
     @check_answers_card_number = 0
     @answer_options = ANSWER_OPTIONS
