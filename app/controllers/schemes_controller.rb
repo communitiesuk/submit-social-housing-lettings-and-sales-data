@@ -146,7 +146,7 @@ class SchemesController < ApplicationController
       @scheme.update!(secondary_client_group: nil) if @scheme.has_other_client_group == "No"
       if scheme_params[:confirmed] == "true" || @scheme.confirmed?
         if check_answers && confirm_secondary_page?(page)
-          redirect_to scheme_secondary_client_group_path(@scheme, check_answers: "true")
+          redirect_to scheme_secondary_client_group_path(@scheme, referrer: "check-answers")
         else
           @scheme.locations.update!(confirmed: true)
           flash[:notice] = if scheme_previously_confirmed
@@ -158,7 +158,7 @@ class SchemesController < ApplicationController
         end
       elsif check_answers
         if confirm_secondary_page?(page)
-          redirect_to scheme_secondary_client_group_path(@scheme, check_answers: "true")
+          redirect_to scheme_secondary_client_group_path(@scheme, referrer: "check-answers")
         else
           redirect_to scheme_check_answers_path(@scheme)
         end

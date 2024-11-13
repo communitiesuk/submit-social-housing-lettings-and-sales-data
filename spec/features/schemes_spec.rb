@@ -644,8 +644,8 @@ RSpec.describe "Schemes scheme Features" do
           end
 
           it "allows changing details questions" do
-            click_link("Change", href: "/schemes/#{scheme.id}/details?check_answers=true", match: :first)
-            expect(page).to have_current_path("/schemes/#{scheme.id}/details?check_answers=true")
+            click_link("Change", href: "/schemes/#{scheme.id}/details?referrer=check-answers", match: :first)
+            expect(page).to have_current_path("/schemes/#{scheme.id}/details?referrer=check-answers")
 
             fill_in "Scheme name", with: "Example"
             click_button "Save changes"
@@ -655,14 +655,14 @@ RSpec.describe "Schemes scheme Features" do
           end
 
           it "lets me select the support answers after navigating back" do
-            click_link("Change", href: "/schemes/#{scheme.id}/details?check_answers=true", match: :first)
+            click_link("Change", href: "/schemes/#{scheme.id}/details?referrer=check-answers", match: :first)
             click_link "Back"
             expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
             expect(page).to have_content "Check your changes before creating this scheme"
           end
 
           it "indicates if the scheme is not complete" do
-            click_link("Change", href: "/schemes/#{scheme.id}/confirm-secondary-client-group?check_answers=true", match: :first)
+            click_link("Change", href: "/schemes/#{scheme.id}/confirm-secondary-client-group?referrer=check-answers", match: :first)
             choose "Yes"
             click_button "Save changes"
             visit("/schemes/#{scheme.id}/check-answers")
@@ -710,8 +710,8 @@ RSpec.describe "Schemes scheme Features" do
             end
 
             it "allows changing details questions" do
-              click_link("Change", href: "/schemes/#{scheme.id}/details?check_answers=true", match: :first)
-              expect(page).to have_current_path("/schemes/#{scheme.id}/details?check_answers=true")
+              click_link("Change", href: "/schemes/#{scheme.id}/details?referrer=check-answers", match: :first)
+              expect(page).to have_current_path("/schemes/#{scheme.id}/details?referrer=check-answers")
 
               fill_in "Scheme name", with: "Example"
               click_button "Save changes"
@@ -721,21 +721,21 @@ RSpec.describe "Schemes scheme Features" do
             end
 
             it "lets me select the support answers after navigating back" do
-              click_link("Change", href: "/schemes/#{scheme.id}/details?check_answers=true", match: :first)
+              click_link("Change", href: "/schemes/#{scheme.id}/details?referrer=check-answers", match: :first)
               click_link "Back"
               expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
               expect(page).to have_content "Check your changes before creating this scheme"
             end
 
             it "keeps the provider answer when switching between other provider options" do
-              click_link("Change", href: "/schemes/#{scheme.id}/confirm-secondary-client-group?check_answers=true", match: :first)
+              click_link("Change", href: "/schemes/#{scheme.id}/confirm-secondary-client-group?referrer=check-answers", match: :first)
               choose "Yes"
               click_button "Save changes"
               expect(find_field("Offenders and people at risk of offending")).to be_checked
             end
 
             it "does not display the answer if it's changed to the same support provider" do
-              click_link("Change", href: "/schemes/#{scheme.id}/details?check_answers=true", match: :first)
+              click_link("Change", href: "/schemes/#{scheme.id}/details?referrer=check-answers", match: :first)
               choose "The same organisation that owns the housing stock"
               click_button "Save changes"
               expect(page).not_to have_content("Organisation providing support")
@@ -787,11 +787,11 @@ RSpec.describe "Schemes scheme Features" do
 
           context "when I click to change scheme name" do
             before do
-              click_link("Change", href: "/schemes/#{scheme.id}/details?check_answers=true", match: :first)
+              click_link("Change", href: "/schemes/#{scheme.id}/details?referrer=check-answers", match: :first)
             end
 
             it "shows available fields to edit" do
-              expect(page).to have_current_path("/schemes/#{scheme.id}/details?check_answers=true")
+              expect(page).to have_current_path("/schemes/#{scheme.id}/details?referrer=check-answers")
               expect(page).to have_content "Scheme details"
             end
 

@@ -1,9 +1,9 @@
 <% content_for :title, "What client group is this scheme intended for?" %>
 
-<% if request.referer&.include?("new") || request.referer&.include?("details") %>
+<% if request.referer&.include?("new") %>
   <% back_button_path = scheme_details_path(@scheme) %>
-<% elsif request.query_parameters["check_answers"] %>
-  <% back_button_path = scheme_check_answers_path(@scheme) %>
+<% else %>
+  <% back_button_path = :back %>
 <% end %>
 
 <% content_for :before_content do %>
@@ -30,7 +30,7 @@
         <%= f.hidden_field :check_answers, value: "true" %>
       <% end %>
 
-      <% if request.query_parameters["check_answers"] == "true" %>
+      <% if params[:referrer] == "check_answers" %>
         <%= f.hidden_field :check_answers, value: "true" %>
         <%= f.govuk_submit "Save changes" %>
       <% else %>
