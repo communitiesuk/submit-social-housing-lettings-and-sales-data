@@ -69,7 +69,7 @@ en:
           beds:
             page_header: ""
             check_answer_label: "Number of bedrooms"
-            hint_text: "A bedsit has 1 bedroom."
+            hint_text: ""
             question_text: "How many bedrooms does the property have?"
 
           proptype:
