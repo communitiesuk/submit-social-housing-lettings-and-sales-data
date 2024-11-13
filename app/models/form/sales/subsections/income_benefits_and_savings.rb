@@ -3,7 +3,14 @@ class Form::Sales::Subsections::IncomeBenefitsAndSavings < ::Form::Subsection
     super
     @id = "income_benefits_and_savings"
     @label = "Income, benefits and savings"
-    @depends_on = [{ "setup_completed?" => true }]
+  end
+
+  def depends_on
+    if form.start_year_2025_or_later?
+      [{ "setup_completed?" => true, "is_staircase?" => true }]
+    else
+      [{ "setup_completed?" => true }]
+    end
   end
 
   def pages

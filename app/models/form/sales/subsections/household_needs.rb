@@ -3,7 +3,14 @@ class Form::Sales::Subsections::HouseholdNeeds < ::Form::Subsection
     super
     @id = "household_needs"
     @label = "Other household information"
-    @depends_on = [{ "setup_completed?" => true }]
+  end
+
+  def depends_on
+    if form.start_year_2025_or_later?
+      [{ "setup_completed?" => true, "is_staircase?" => true }]
+    else
+      [{ "setup_completed?" => true }]
+    end
   end
 
   def pages
