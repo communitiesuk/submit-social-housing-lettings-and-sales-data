@@ -5,21 +5,15 @@ en:
         postcode_full:
           invalid: "Enter a postcode in the correct format, for example AA1 1AA."
         rsnvac:
-          first_let_not_social: "Enter a reason for vacancy that is not 'first let' if unit has been previously let as social housing."
-          first_let_social: "Reason for vacancy must be first let if unit has been previously let as social housing."
           non_temp_accommodation: "Answer cannot be re-let to tenant who occupied the same property as temporary accommodation as this accommodation is not temporary."
           referral_invalid: "Answer cannot be re-let to tenant who occupied the same property as temporary accommodation as a different source of referral for this letting."
           not_a_renewal: "Reason for vacancy cannot be 'Renewal of fixed-term tenancy' if letting is not a renewal."
         referral:
           rsnvac_non_temp: "Answer cannot be this source of referral as this is a re-let to tenant who occupied the same property as temporary accommodation."
-        unitletas:
-          previous_let_social: "Property cannot have a previous let type if being let as social housing for the first time."
         unittype_gn:
-          one_bedroom_bedsit: "A bedsit can only have one bedroom."
           one_three_bedroom_single_tenant_shared: "A shared house with fewer than two tenants must have 1 to 3 bedrooms."
           one_seven_bedroom_shared: "A shared house must have 1 to 7 bedrooms."
         beds:
-          one_bedroom_bedsit: "A bedsit can only have one bedroom."
           one_three_bedroom_single_tenant_shared: "A shared house with fewer than two tenants must have 1 to 3 bedrooms."
           one_seven_bedroom_shared: "A shared house must have 1 to 7 bedrooms."
         uprn:

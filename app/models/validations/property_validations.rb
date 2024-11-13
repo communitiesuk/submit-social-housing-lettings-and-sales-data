@@ -4,14 +4,6 @@ module Validations::PropertyValidations
 
   REFERRAL_INVALID_TMP = [8, 10, 12, 13, 14, 15].freeze
   def validate_rsnvac(record)
-    if !record.first_time_property_let_as_social_housing? && record.has_first_let_vacancy_reason?
-      record.errors.add :rsnvac, I18n.t("validations.lettings.property.rsnvac.first_let_not_social")
-    end
-
-    if record.first_time_property_let_as_social_housing? && record.rsnvac.present? && !record.has_first_let_vacancy_reason?
-      record.errors.add :rsnvac, I18n.t("validations.lettings.property.rsnvac.first_let_social")
-    end
-
     if record.is_relet_to_temp_tenant? && !record.previous_tenancy_was_temporary?
       record.errors.add :rsnvac, I18n.t("validations.lettings.property.rsnvac.non_temp_accommodation")
     end
@@ -26,19 +18,8 @@ module Validations::PropertyValidations
     end
   end
 
-  def validate_unitletas(record)
-    if record.first_time_property_let_as_social_housing? && record.unitletas.present?
-      record.errors.add :unitletas, I18n.t("validations.lettings.property.unitletas.previous_let_social")
-    end
-  end
-
   def validate_shared_housing_rooms(record)
     return unless record.unittype_gn
-
-    if record.is_bedsit? && record.beds != 1 && record.beds.present? && !record.form.start_year_2024_or_later?
-      record.errors.add :unittype_gn, I18n.t("validations.lettings.property.unittype_gn.one_bedroom_bedsit")
-      record.errors.add :beds, I18n.t("validations.lettings.property.beds.one_bedroom_bedsit")
-    end
 
     if record.hhmemb == 1 && record.is_shared_housing? &&
         !record.beds.to_i.between?(1, 3) && record.beds.present?
