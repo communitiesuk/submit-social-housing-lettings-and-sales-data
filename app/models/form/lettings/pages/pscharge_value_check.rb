@@ -2,16 +2,20 @@ class Form::Lettings::Pages::PschargeValueCheck < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "pscharge_value_check"
+    @copy_key = "lettings.soft_validations.pscharge_value_check"
     @depends_on = [{ "pscharge_in_soft_max_range?" => true }]
     @title_text = {
-      "translation" => "soft_validations.pscharge.over_soft_max_title",
+      "translation" => "forms.#{form.start_date.year}.#{@copy_key}.title_text",
       "arguments" => [{
         "key" => "pscharge",
         "label" => true,
         "i18n_template" => "pscharge",
       }],
     }
-    @informative_text = I18n.t("soft_validations.charges.informative_text")
+    @informative_text = {
+      "translation" => "forms.#{form.start_date.year}.#{@copy_key}.informative_text",
+      "arguments" => [],
+    }
   end
 
   def questions

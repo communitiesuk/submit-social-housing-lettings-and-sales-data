@@ -5,7 +5,8 @@ RSpec.describe Form::Lettings::Subsections::IncomeAndBenefits, type: :model do
 
   let(:subsection_id) { nil }
   let(:subsection_definition) { nil }
-  let(:section) { instance_double(Form::Lettings::Sections::RentAndCharges) }
+  let(:form) { instance_double(Form, start_date: Time.zone.local(2024, 4, 1)) }
+  let(:section) { instance_double(Form::Lettings::Sections::RentAndCharges, form:) }
 
   it "has correct section" do
     expect(income_and_benefits.section).to eq(section)

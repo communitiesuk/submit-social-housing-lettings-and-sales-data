@@ -6,9 +6,10 @@ class Form::Lettings::Pages::PartnerUnder16ValueCheck < Form::Page
         "person_#{person_index}_partner_under_16?" => true,
       },
     ]
+    @copy_key = "lettings.soft_validations.partner_under_16_value_check"
     @person_index = person_index
     @title_text = {
-      "translation" => "soft_validations.partner_under_16_lettings.title",
+      "translation" => "forms.#{form.start_date.year}.#{@copy_key}.title_text",
       "arguments" => [
         {
           "key" => "age#{person_index}",
@@ -17,7 +18,10 @@ class Form::Lettings::Pages::PartnerUnder16ValueCheck < Form::Page
         },
       ],
     }
-    @informative_text = {}
+    @informative_text = {
+      "translation" => "forms.#{form.start_date.year}.#{@copy_key}.informative_text",
+      "arguments" => [],
+    }
   end
 
   def questions
