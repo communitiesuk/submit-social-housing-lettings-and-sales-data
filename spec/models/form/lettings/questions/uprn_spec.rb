@@ -28,7 +28,7 @@ RSpec.describe Form::Lettings::Questions::Uprn, type: :model do
   end
 
   it "has the correct unanswered_error_message" do
-    expect(question.unanswered_error_message).to eq("UPRN must be 12 digits or less.")
+    expect(question.unanswered_error_message).to eq(I18n.t("validations.lettings.property.uprn.invalid"))
   end
 
   describe "get_extra_check_answer_value" do
