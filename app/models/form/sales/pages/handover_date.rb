@@ -2,6 +2,7 @@ class Form::Sales::Pages::HandoverDate < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "handover_date"
+    @copy_key = "sales.sale_information.handover_date"
     @depends_on = [
       { "ownershipsch" => 1, "resale" => 2 },
     ]

@@ -68,7 +68,7 @@ module Validations::Sales::SoftValidations
   end
 
   def extra_borrowing_expected_but_not_reported?
-    return unless saledate && !form.start_year_after_2024?
+    return unless saledate && !form.start_year_2024_or_later?
     return unless extrabor && mortgage && deposit && value && discount
 
     extrabor != 1 && mortgage + deposit > value - value * discount / 100
@@ -118,7 +118,7 @@ module Validations::Sales::SoftValidations
 
   def grant_outside_common_range?
     return unless grant && type && saledate
-    return if form.start_year_after_2024? && (type == 21 || type == 8)
+    return if form.start_year_2024_or_later? && (type == 21 || type == 8)
 
     !grant.between?(9_000, 16_000)
   end

@@ -2,7 +2,7 @@ class Form::Sales::Pages::DepositDiscount < ::Form::Page
   def initialize(id, hsh, subsection, optional:)
     super(id, hsh, subsection)
     @optional = optional
-    @header = "About the deposit"
+    @copy_key = "sales.sale_information.cashdis"
   end
 
   def questions
@@ -12,7 +12,7 @@ class Form::Sales::Pages::DepositDiscount < ::Form::Page
   end
 
   def depends_on
-    if form.start_year_after_2024?
+    if form.start_year_2024_or_later?
       [{ "social_homebuy?" => true, "stairowned_100?" => @optional }]
     else
       [{ "social_homebuy?" => true }]

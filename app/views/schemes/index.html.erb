@@ -5,12 +5,13 @@
 
 <%= render partial: "organisations/headings", locals: current_user.support? ? { main: "Supported housing schemes", sub: nil } : { main: "Supported housing schemes", sub: current_user.organisation.name } %>
 
-<% if SchemePolicy.new(current_user, nil).create? %>
-  <div class="govuk-button-group govuk-!-margin-bottom-6">
-    <%= govuk_button_link_to "Create a new supported housing scheme", new_scheme_path, html: { method: :post } %>
-  </div>
-<% end %>
 <div class="app-filter-layout" data-controller="filter-layout">
+  <% display_actions = SchemePolicy.new(current_user, nil).create? %>
+  <div class="govuk-button-group app-filter-toggle <%= "govuk-!-margin-bottom-6" if display_actions %>">
+    <% if display_actions %>
+        <%= govuk_button_link_to "Create a new supported housing scheme", new_scheme_path, html: { method: :post } %>
+    <% end %>
+  </div>
   <%= render partial: "schemes/scheme_filters" %>
   <div class="app-filter-layout__content">
     <%= render SearchComponent.new(current_user:, search_label: "Search by postcode, scheme name, scheme code or location name", value: @searched) %>

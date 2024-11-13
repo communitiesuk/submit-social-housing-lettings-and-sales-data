@@ -93,7 +93,7 @@ RSpec.describe InterruptionScreenHelper do
     context "when 1 out of 2 arguments are given" do
       it "returns an empty string" do
         informative_text = {
-          "translation" => "soft_validations.net_income.hint_text",
+          "translation" => "forms.2024.lettings.soft_validations.net_income_value_check.informative_text",
           "arguments" => [
             {
               "key" => "ecstat1",

@@ -1,0 +1,56 @@
+en:
+  validations:
+    lettings:
+      2023:
+        bulk_upload:
+          not_answered: "You must answer %{question}"
+          invalid_option: "Enter a valid value for %{question}"
+          invalid_number: "Enter a number for %{question}"
+          spreadsheet_dupe: "This is a duplicate of a log in your file."
+          duplicate: "This is a duplicate log."
+          blank_file: "Template is blank - The template must be filled in for us to create the logs and check if data is correct."
+          wrong_template:
+            wrong_template: "Incorrect start dates, please ensure you have used the correct template."
+            no_headers: "Your file does not contain the required header rows. Add or check the header rows and upload your file again. [Read more about using the template headers](%{guidance_link})."
+            wrong_field_numbers_count: "Incorrect number of fields, please ensure you have used the correct template."
+            over_max_column_count: "Too many columns, please ensure you have used the correct template."
+          owning_organisation:
+            not_found: "The owning organisation code is incorrect."
+            not_stock_owner: "The owning organisation code provided is for an organisation that does not own stock."
+            not_permitted: "You do not have permission to add logs for this owning organisation."
+          managing_organisation:
+            no_relationship: "This managing organisation does not have a relationship with the owning organisation."
+            not_found: "The managing organisation code is incorrect."
+            not_answered: "The managing organisation code is incorrect."
+          assigned_to:
+            not_found: "User with the specified email could not be found."
+            organisation_not_related: "User must be related to owning organisation or managing organisation."
+          startdate:
+            outside_collection_window: "Enter a date within the %{year_combo} collection year, which is between 1st April %{start_year} and 31st March %{end_year}."
+            year_not_two_or_four_digits: "Tenancy start year must be 2 or 4 digits."
+          housingneeds:
+            no_and_dont_know_disabled_needs_conjunction: "No disabled access needs and don’t know disabled access needs cannot be selected together."
+            dont_know_disabled_needs_conjunction: "Don’t know disabled access needs can’t be selected if you have selected fully wheelchair-accessible housing, wheelchair access to essential rooms, level access housing or other disabled access needs."
+            no_disabled_needs_conjunction: "No disabled access needs can’t be selected if you have selected fully wheelchair-accessible housing, wheelchair access to essential rooms, level access housing or other disabled access needs."
+          housingneeds_type:
+            only_one_option_permitted: "Only one disabled access need: fully wheelchair-accessible housing, wheelchair access to essential rooms or level access housing, can be selected."
+          condition_effects:
+            no_choices: "You cannot answer this question as you told us nobody in the household has a physical or mental health condition (or other illness) expected to last 12 months or more."
+          lettype:
+            needstype_general_needs: "This needs type is general needs, but the letting type is supported housing. Change either the needs type or the letting type."
+            needstype_supported_housing: "This needs type is supported housing, but the letting type is general needs. Change either the needs type or the letting type."
+          needstype:
+            lettype_not_general_needs: "This letting type is supported housing, but the needs type is general needs. Change either the needs type or the letting type."
+            lettype_not_supported_housing: "This letting type is general needs, but the needs type is supported housing. Change either the needs type or the letting type."
+          reason:
+            renewal_reason_needed: "The reason for leaving must be \"End of assured shorthold tenancy - no fault\" or \"End of fixed term tenancy - no fault\" if the letting is a renewal."
+          referral:
+            general_needs_prp_referred_by_la: "The source of the referral cannot be referred by local authority housing department for a general needs log."
+            nominated_by_local_ha_but_la: "The source of the referral cannot be Nominated by local housing authority as your organisation is a local authority."
+          scheme:
+            must_relate_to_org: "%{capitalised_location_or_scheme} code must relate to a %{location_or_scheme} that is owned by the owning organisation or managing organisation."
+            does_not_belong_to_org: "This %{scheme_or_management_group} code does not belong to the owning organisation or managing organisation."
+          declaration:
+            missing: "You must show the MHCLG privacy notice to the tenant before you can submit this log."
+          age:
+            invalid: "Age of person %{person_num} must be a number or the letter R"

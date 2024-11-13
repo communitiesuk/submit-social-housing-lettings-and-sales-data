@@ -35,7 +35,7 @@ module Validations::PropertyValidations
   def validate_shared_housing_rooms(record)
     return unless record.unittype_gn
 
-    if record.is_bedsit? && record.beds != 1 && record.beds.present? && !record.form.start_year_after_2024?
+    if record.is_bedsit? && record.beds != 1 && record.beds.present? && !record.form.start_year_2024_or_later?
       record.errors.add :unittype_gn, I18n.t("validations.property.unittype_gn.one_bedroom_bedsit")
       record.errors.add :beds, I18n.t("validations.property.unittype_gn.one_bedroom_bedsit")
     end
@@ -56,5 +56,13 @@ module Validations::PropertyValidations
     return if record.uprn.match?(/^[0-9]{1,12}$/)
 
     record.errors.add :uprn, I18n.t("validations.property.uprn.invalid")
+  end
+
+  def validate_property_postcode(record)
+    postcode = record.postcode_full
+    if record.postcode_known? && (postcode.blank? || !postcode.match(POSTCODE_REGEXP))
+      error_message = I18n.t("validations.lettings.property_information.postcode_full.invalid")
+      record.errors.add :postcode_full, :wrong_format, message: error_message
+    end
   end
 end

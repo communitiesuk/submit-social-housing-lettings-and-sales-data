@@ -76,12 +76,12 @@ RSpec.describe Validations::TenancyValidations do
       {
         name: "assured shorthold",
         code: 4,
-        expected_error: ->(min_tenancy_length) { I18n.t("validations.tenancy.length.invalid_fixed", min_tenancy_length:) },
+        expected_error: ->(min_tenancy_length) { I18n.t("validations.lettings.tenancy.tenancylength.invalid_fixed_tenancylength", min_tenancy_length:) },
       },
       {
         name: "secure fixed term",
         code: 6,
-        expected_error: ->(min_tenancy_length) { I18n.t("validations.tenancy.length.invalid_fixed", min_tenancy_length:) },
+        expected_error: ->(min_tenancy_length) { I18n.t("validations.lettings.tenancy.tenancylength.invalid_fixed_tenancylength", min_tenancy_length:) },
       },
     ]
 
@@ -211,7 +211,7 @@ RSpec.describe Validations::TenancyValidations do
       periodic_tenancy_case = {
         name: "periodic",
         code: 8,
-        expected_error: ->(min_tenancy_length) { I18n.t("validations.tenancy.length.invalid_periodic", min_tenancy_length:) },
+        expected_error: ->(min_tenancy_length) { I18n.t("validations.lettings.tenancy.tenancylength.invalid_periodic_tenancylength", min_tenancy_length:) },
       }
       error_fields = %w[tenancylength tenancy]
       include_examples "adds expected errors based on the tenancy length", periodic_tenancy_case, error_fields, 1
@@ -237,9 +237,8 @@ RSpec.describe Validations::TenancyValidations do
 
             it "adds errors to tenancylength and tenancy" do
               tenancy_validator.validate_tenancy_length_blank_when_not_required(record)
-              expected_error = I18n.t("validations.tenancy.length.fixed_term_not_required")
-              expect(record.errors["tenancylength"]).to include(expected_error)
-              expect(record.errors["tenancy"]).to include(expected_error)
+              expect(record.errors["tenancylength"]).to include(I18n.t("validations.lettings.tenancy.tenancylength.fixed_term_not_required"))
+              expect(record.errors["tenancy"]).to include(I18n.t("validations.lettings.tenancy.tenancy.fixed_term_not_required"))
             end
           end
 
@@ -277,7 +276,7 @@ RSpec.describe Validations::TenancyValidations do
 
   describe "tenancy type validations" do
     let(:record) { FactoryBot.build(:lettings_log, :setup_completed) }
-    let(:field) { "validations.other_field_missing" }
+    let(:field) { "validations.shared.other_field_missing" }
     let(:main_field_label) { "tenancy type" }
     let(:other_field) { "tenancyother" }
     let(:other_field_label) { "other tenancy type" }
@@ -300,7 +299,7 @@ RSpec.describe Validations::TenancyValidations do
     end
 
     context "when tenancy type is not other" do
-      let(:field) { "validations.other_field_not_required" }
+      let(:field) { "validations.shared.other_field_not_required" }
 
       it "validates that other tenancy type is not provided" do
         record.tenancy = 2
@@ -321,8 +320,8 @@ RSpec.describe Validations::TenancyValidations do
   describe "joint tenancy validation" do
     context "when the data inputter has said that there is only one member in the household" do
       let(:record) { FactoryBot.build(:lettings_log, :setup_completed, hhmemb: 1) }
-      let(:expected_error) { I18n.t("validations.tenancy.not_joint") }
-      let(:hhmemb_expected_error) { I18n.t("validations.tenancy.joint_more_than_one_member") }
+      let(:expected_error) { I18n.t("validations.lettings.tenancy.joint.sole_tenancy") }
+      let(:hhmemb_expected_error) { I18n.t("validations.lettings.tenancy.joint.multiple_members_required") }
 
       it "displays an error if the data inputter says the letting is a joint tenancy" do
         record.joint = 1

@@ -7,8 +7,8 @@ RSpec.describe Form::Sales::Pages::LastAccommodation, type: :model do
 
   let(:page_id) { nil }
   let(:page_definition) { nil }
-  let(:start_year_after_2024) { false }
-  let(:form) { instance_double(Form, start_date: Time.zone.local(2023, 4, 1), start_year_after_2024?: start_year_after_2024) }
+  let(:start_year_2024_or_later) { false }
+  let(:form) { instance_double(Form, start_date: Time.zone.local(2023, 4, 1), start_year_2024_or_later?: start_year_2024_or_later) }
   let(:subsection) { instance_double(Form::Subsection, form:, depends_on: nil) }
 
   it "has correct subsection" do
@@ -37,7 +37,7 @@ RSpec.describe Form::Sales::Pages::LastAccommodation, type: :model do
   end
 
   context "with 2024 form" do
-    let(:start_year_after_2024) { true }
+    let(:start_year_2024_or_later) { true }
 
     it "is routed to for 2024 non discounted sale logs" do
       log.update!(ownershipsch: 1)

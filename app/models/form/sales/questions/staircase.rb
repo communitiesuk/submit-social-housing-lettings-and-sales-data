@@ -2,19 +2,25 @@ class Form::Sales::Questions::Staircase < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "staircase"
-    @check_answer_label = "Staircasing transaction"
-    @header = "Is this a staircasing transaction?"
+    @copy_key = "sales.#{page.subsection.id}.staircasing"
     @type = "radio"
-    @answer_options = ANSWER_OPTIONS
-    @hint_text = "A staircasing transaction is when the household purchases more shares in their property, increasing the proportion they own and decreasing the proportion the housing association owns. Once the household purchases 100% of the shares, they own the property"
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
   end
 
-  ANSWER_OPTIONS = {
-    "1" => { "value" => "Yes" },
-    "2" => { "value" => "No" },
-    "3" => { "value" => "Don’t know" },
-  }.freeze
+  def answer_options
+    if form.start_year_2025_or_later?
+      {
+        "1" => { "value" => "Yes" },
+        "2" => { "value" => "No" },
+      }.freeze
+    else
+      {
+        "1" => { "value" => "Yes" },
+        "2" => { "value" => "No" },
+        "3" => { "value" => "Don’t know" },
+      }.freeze
+    end
+  end
 
   QUESTION_NUMBER_FROM_YEAR = { 2023 => 76, 2024 => 78 }.freeze
 end

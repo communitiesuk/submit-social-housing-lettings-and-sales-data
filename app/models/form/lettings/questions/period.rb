@@ -2,11 +2,8 @@ class Form::Lettings::Questions::Period < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "period"
-    @check_answer_label = "Frequency of household rent and charges"
-    @header = "How often does the household pay rent and other charges?"
     @type = "radio"
     @check_answers_card_number = 0
-    @hint_text = "Select how often the household is charged. This may be different to how often they pay."
     @answer_options = ANSWER_OPTIONS
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
   end

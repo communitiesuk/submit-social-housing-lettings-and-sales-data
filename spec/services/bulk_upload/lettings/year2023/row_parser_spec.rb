@@ -263,7 +263,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
             it "adds an error to all (and only) the fields used to determine duplicates" do
               parser.valid?
 
-              error_message = "This is a duplicate log."
+              error_message = I18n.t("validations.lettings.2023.bulk_upload.duplicate")
 
               [
                 :field_1, # owning_organisation
@@ -300,7 +300,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
             it "adds an error to all the fields used to determine duplicates" do
               parser.valid?
 
-              error_message = "This is a duplicate log."
+              error_message = I18n.t("validations.lettings.2023.bulk_upload.duplicate")
 
               [
                 :field_1, # owning_organisation
@@ -338,7 +338,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
               it "adds an error to all the fields used to determine duplicates" do
                 parser.valid?
 
-                error_message = "This is a duplicate log."
+                error_message = I18n.t("validations.lettings.2023.bulk_upload.duplicate")
 
                 [
                   :field_1, # owning_organisation
@@ -385,7 +385,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
               it "adds an error to all the fields used to determine duplicates" do
                 parser.valid?
 
-                error_message = "This is a duplicate log."
+                error_message = I18n.t("validations.lettings.2023.bulk_upload.duplicate")
 
                 [
                   :field_1, # owning_organisation
@@ -444,7 +444,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
               it "does not add an error to all the fields used to determine duplicates" do
                 parser_too.valid?
 
-                error_message = "This is a duplicate log."
+                error_message = I18n.t("validations.lettings.2023.bulk_upload.duplicate")
 
                 [
                   :field_1, # owning_organisation
@@ -479,7 +479,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
               it "adds an error to all the fields used to determine duplicates" do
                 parser.valid?
 
-                error_message = "This is a duplicate log."
+                error_message = I18n.t("validations.lettings.2023.bulk_upload.duplicate")
 
                 [
                   :field_1, # owning_organisation
@@ -526,7 +526,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
               it "adds an error to all the fields used to determine duplicates" do
                 parser.valid?
 
-                error_message = "This is a duplicate log."
+                error_message = I18n.t("validations.lettings.2023.bulk_upload.duplicate")
 
                 [
                   :field_1, # owning_organisation
@@ -585,7 +585,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
               it "does not add an error to all the fields used to determine duplicates" do
                 parser_too.valid?
 
-                error_message = "This is a duplicate log."
+                error_message = I18n.t("validations.lettings.2023.bulk_upload.duplicate")
 
                 [
                   :field_1, # owning_organisation
@@ -686,7 +686,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
           it "cannot be nulled" do
             parser.valid?
-            expect(parser.errors[:field_45]).to eq(["You must show the MHCLG privacy notice to the tenant before you can submit this log."])
+            expect(parser.errors[:field_45]).to eq([I18n.t("validations.lettings.2023.bulk_upload.declaration.missing")])
           end
         end
       end
@@ -697,8 +697,8 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
           it "fetches the question's check_answer_label if it exists" do
             parser.valid?
-            expect(parser.errors[:field_19]).to eql(["You must answer address line 1."])
-            expect(parser.errors[:field_21]).to eql(["You must answer town or city."])
+            expect(parser.errors[:field_19]).to eql([I18n.t("validations.lettings.2023.bulk_upload.not_answered", question: "address line 1.")])
+            expect(parser.errors[:field_21]).to eql([I18n.t("validations.lettings.2023.bulk_upload.not_answered", question: "town or city.")])
           end
         end
       end
@@ -846,7 +846,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
           parser.valid?
 
           expect(parser.errors[:field_5]).to be_present
-          expect(parser.errors[:field_11]).to eq(["You must answer intermediate rent type."])
+          expect(parser.errors[:field_11]).to eq([I18n.t("validations.lettings.2023.bulk_upload.not_answered", question: "intermediate rent type.")])
         end
       end
 
@@ -857,7 +857,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
           parser.valid?
 
           expect(parser.errors[:field_5]).to be_present
-          expect(parser.errors[:field_11]).to eq(["You must answer intermediate rent type."])
+          expect(parser.errors[:field_11]).to eq([I18n.t("validations.lettings.2023.bulk_upload.not_answered", question: "intermediate rent type.")])
         end
       end
 
@@ -868,7 +868,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
           parser.valid?
 
           expect(parser.errors[:field_5]).to be_present
-          expect(parser.errors[:field_10]).to eq(["You must answer is this a London Affordable Rent letting."])
+          expect(parser.errors[:field_10]).to eq([I18n.t("validations.lettings.2023.bulk_upload.not_answered", question: "is this a London Affordable Rent letting.")])
         end
       end
 
@@ -879,7 +879,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
           parser.valid?
 
           expect(parser.errors[:field_5]).to be_present
-          expect(parser.errors[:field_10]).to eq(["You must answer is this a London Affordable Rent letting."])
+          expect(parser.errors[:field_10]).to eq([I18n.t("validations.lettings.2023.bulk_upload.not_answered", question: "is this a London Affordable Rent letting.")])
         end
       end
 
@@ -888,7 +888,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
         it "adds error on field_12" do
           parser.valid?
-          expect(parser.errors[:field_12]).to eq(["You must answer product name."])
+          expect(parser.errors[:field_12]).to eq([I18n.t("validations.lettings.2023.bulk_upload.not_answered", question: "product name.")])
         end
       end
 
@@ -910,8 +910,8 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
           it "is not permitted" do
             parser.valid?
 
-            expect(parser.errors[:field_4]).to include("This letting type is supported housing, but the needs type is general needs. Change either the needs type or the letting type.")
-            expect(parser.errors[:field_5]).to include("This needs type is general needs, but the letting type is supported housing. Change either the needs type or the letting type.")
+            expect(parser.errors[:field_4]).to include(I18n.t("validations.lettings.2023.bulk_upload.needstype.lettype_not_general_needs"))
+            expect(parser.errors[:field_5]).to include(I18n.t("validations.lettings.2023.bulk_upload.lettype.needstype_general_needs"))
           end
         end
       end
@@ -925,8 +925,8 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
           it "is not permitted" do
             parser.valid?
 
-            expect(parser.errors[:field_4]).to include("This letting type is general needs, but the needs type is supported housing. Change either the needs type or the letting type.")
-            expect(parser.errors[:field_5]).to include("This needs type is supported housing, but the letting type is general needs. Change either the needs type or the letting type.")
+            expect(parser.errors[:field_4]).to include(I18n.t("validations.lettings.2023.bulk_upload.needstype.lettype_not_supported_housing"))
+            expect(parser.errors[:field_5]).to include(I18n.t("validations.lettings.2023.bulk_upload.lettype.needstype_supported_housing"))
           end
         end
 
@@ -951,7 +951,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
           parser.valid?
 
           expect(parser.errors[:field_15]).to be_blank
-          expect(parser.errors[:field_16]).to eq(["You must answer scheme code."])
+          expect(parser.errors[:field_16]).to eq([I18n.t("validations.lettings.2023.bulk_upload.not_answered", question: "scheme code.")])
           expect(parser.errors[:field_17]).to be_blank
         end
       end
@@ -979,7 +979,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
             parser.valid?
 
             expect(parser.errors[:field_15]).to be_blank
-            expect(parser.errors.where(:field_16, category: :setup).map(&:message)).to eq(["This scheme code does not belong to the owning organisation or managing organisation."])
+            expect(parser.errors.where(:field_16, category: :setup).map(&:message)).to eq([I18n.t("validations.lettings.2023.bulk_upload.scheme.does_not_belong_to_org", scheme_or_management_group: "scheme")])
             expect(parser.errors[:field_17]).to be_blank
           end
         end
@@ -992,7 +992,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
             expect(parser.errors[:field_15]).to be_blank
             expect(parser.errors[:field_16]).to be_blank
-            expect(parser.errors.where(:field_17, category: :setup).map(&:message)).to eq(["You must answer location code."])
+            expect(parser.errors.where(:field_17, category: :setup).map(&:message)).to eq([I18n.t("validations.lettings.2023.bulk_upload.not_answered", question: "location code.")])
             expect(parser.errors[:field_17].count).to eq(1)
           end
         end
@@ -1005,7 +1005,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
             expect(parser.errors[:field_16]).to be_blank
             expect(parser.errors[:field_17]).to be_blank
-            expect(parser.errors.where(:field_15, category: :setup).map(&:message)).to eq(["You must answer management group code."])
+            expect(parser.errors.where(:field_15, category: :setup).map(&:message)).to eq([I18n.t("validations.lettings.2023.bulk_upload.not_answered", question: "management group code.")])
             expect(parser.errors[:field_15].count).to eq(1)
           end
         end
@@ -1018,7 +1018,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
             expect(parser.errors[:field_15]).to be_blank
             expect(parser.errors[:field_16]).to be_blank
-            expect(parser.errors.where(:field_17, category: :setup).map(&:message)).to eq(["Location code must relate to a location that is owned by the owning organisation or managing organisation."])
+            expect(parser.errors.where(:field_17, category: :setup).map(&:message)).to eq([I18n.t("validations.lettings.2023.bulk_upload.scheme.must_relate_to_org", capitalised_location_or_scheme: "Location", location_or_scheme: "location")])
           end
         end
 
@@ -1054,7 +1054,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
             expect(parser.errors[:field_15]).to be_blank
             expect(parser.errors[:field_16]).to be_blank
-            expect(parser.errors.where(:field_17, category: :setup).map(&:message)).to eq(["Location code must relate to a location that is owned by the owning organisation or managing organisation."])
+            expect(parser.errors.where(:field_17, category: :setup).map(&:message)).to eq([I18n.t("validations.lettings.2023.bulk_upload.scheme.must_relate_to_org", capitalised_location_or_scheme: "Location", location_or_scheme: "location")])
           end
         end
 
@@ -1067,7 +1067,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
             parser.valid?
 
             expect(parser.errors[:field_15]).to be_blank
-            expect(parser.errors.where(:field_16, category: :setup).map(&:message)).to eq(["This scheme code does not belong to the owning organisation or managing organisation."])
+            expect(parser.errors.where(:field_16, category: :setup).map(&:message)).to eq([I18n.t("validations.lettings.2023.bulk_upload.scheme.does_not_belong_to_org", scheme_or_management_group: "scheme")])
             expect(parser.errors[:field_17]).to be_blank
           end
         end
@@ -1093,7 +1093,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
             parser.valid?
 
             expect(parser.errors[:field_15]).to be_blank
-            expect(parser.errors[:field_16]).to include("You must answer scheme name.")
+            expect(parser.errors[:field_16]).to include(I18n.t("validations.lettings.2023.bulk_upload.not_answered", question: "scheme name."))
             expect(parser.errors[:field_17]).to be_blank
           end
         end
@@ -1122,7 +1122,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
           it "returns a setup error" do
             parser.valid?
 
-            expect(parser.errors.where(:field_15, category: :setup).map(&:message)).to eq(["This management group code does not belong to the owning organisation or managing organisation."])
+            expect(parser.errors.where(:field_15, category: :setup).map(&:message)).to eq([I18n.t("validations.lettings.2023.bulk_upload.scheme.does_not_belong_to_org", scheme_or_management_group: "management group")])
             expect(parser.errors[:field_16]).to be_blank
             expect(parser.errors[:field_17]).to be_blank
           end
@@ -1135,7 +1135,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
             parser.valid?
 
             expect(parser.errors[:field_15]).to be_blank
-            expect(parser.errors.where(:field_16, category: :setup).map(&:message)).to eq(["You must answer scheme code."])
+            expect(parser.errors.where(:field_16, category: :setup).map(&:message)).to eq([I18n.t("validations.lettings.2023.bulk_upload.not_answered", question: "scheme code.")])
             expect(parser.errors[:field_17]).to be_blank
           end
         end
@@ -1147,7 +1147,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
             parser.valid?
 
             expect(parser.errors[:field_15]).to be_blank
-            expect(parser.errors.where(:field_16, category: :setup).map(&:message)).to eq(["Scheme code must relate to a scheme that is owned by the owning organisation or managing organisation."])
+            expect(parser.errors.where(:field_16, category: :setup).map(&:message)).to eq([I18n.t("validations.lettings.2023.bulk_upload.scheme.must_relate_to_org", capitalised_location_or_scheme: "Scheme", location_or_scheme: "scheme")])
             expect(parser.errors[:field_17]).to be_blank
           end
         end
@@ -1173,7 +1173,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
             parser.valid?
 
             expect(parser.errors[:field_15]).to be_blank
-            expect(parser.errors.where(:field_16, category: :setup).map(&:message)).to eq(["Scheme code must relate to a scheme that is owned by the owning organisation or managing organisation."])
+            expect(parser.errors.where(:field_16, category: :setup).map(&:message)).to eq([I18n.t("validations.lettings.2023.bulk_upload.scheme.must_relate_to_org", capitalised_location_or_scheme: "Scheme", location_or_scheme: "scheme")])
             expect(parser.errors[:field_17]).to be_blank
           end
         end
@@ -1186,7 +1186,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
           it "returns a setup error" do
             parser.valid?
 
-            expect(parser.errors.where(:field_15, category: :setup).map(&:message)).to eq(["This management group code does not belong to the owning organisation or managing organisation."])
+            expect(parser.errors.where(:field_15, category: :setup).map(&:message)).to eq([I18n.t("validations.lettings.2023.bulk_upload.scheme.does_not_belong_to_org", scheme_or_management_group: "management group")])
             expect(parser.errors[:field_16]).to be_blank
             expect(parser.errors[:field_17]).to be_blank
           end
@@ -1212,7 +1212,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
           it "clears the scheme answer" do
             parser.valid?
 
-            expect(parser.errors[:field_15]).to include("You must answer scheme name.")
+            expect(parser.errors[:field_15]).to include(I18n.t("validations.lettings.2023.bulk_upload.not_answered", question: "scheme name."))
             expect(parser.errors[:field_16]).to be_blank
             expect(parser.errors[:field_17]).to be_blank
           end
@@ -1255,7 +1255,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
         it "returns an error" do
           parser.valid?
-          expect(parser.errors[:field_102]).to include("Enter a valid value for what is the tenant’s main reason for the household leaving their last settled home?")
+          expect(parser.errors[:field_102]).to include(I18n.t("validations.lettings.2023.bulk_upload.invalid_option", question: "what is the tenant’s main reason for the household leaving their last settled home?"))
         end
       end
     end
@@ -1490,7 +1490,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
         it "returns an error" do
           parser.valid?
-          expect(parser.errors[:field_9]).to include("Tenancy start year must be 2 or 4 digits.")
+          expect(parser.errors[:field_9]).to include(I18n.t("validations.lettings.2023.bulk_upload.startdate.year_not_two_or_four_digits"))
         end
       end
 
@@ -1537,7 +1537,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
         it "is not permitted as setup error" do
           parser.valid?
-          expect(parser.errors.where(:field_1, category: :setup).map(&:message)).to eql(["You must answer owning organisation."])
+          expect(parser.errors.where(:field_1, category: :setup).map(&:message)).to eql([I18n.t("validations.lettings.2023.bulk_upload.not_answered", question: "owning organisation.")])
         end
 
         it "blocks log creation" do
@@ -1553,7 +1553,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
           parser.valid?
 
           setup_errors = parser.errors.select { |e| e.options[:category] == :setup }
-          expect(setup_errors.find { |e| e.attribute == :field_1 }.message).to eql("The owning organisation code is incorrect.")
+          expect(setup_errors.find { |e| e.attribute == :field_1 }.message).to eql(I18n.t("validations.lettings.2023.bulk_upload.owning_organisation.not_found"))
         end
 
         it "blocks log creation" do
@@ -1571,7 +1571,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
           parser.valid?
 
           setup_errors = parser.errors.select { |e| e.options[:category] == :setup }
-          expect(setup_errors.find { |e| e.attribute == :field_1 }.message).to eql("The owning organisation code provided is for an organisation that does not own stock.")
+          expect(setup_errors.find { |e| e.attribute == :field_1 }.message).to eql(I18n.t("validations.lettings.2023.bulk_upload.owning_organisation.not_stock_owner"))
         end
 
         it "blocks log creation" do
@@ -1589,7 +1589,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
           parser.valid?
 
           setup_errors = parser.errors.select { |e| e.options[:category] == :setup }
-          expect(setup_errors.find { |e| e.attribute == :field_1 }.message).to eql("You do not have permission to add logs for this owning organisation.")
+          expect(setup_errors.find { |e| e.attribute == :field_1 }.message).to eql(I18n.t("validations.lettings.2023.bulk_upload.owning_organisation.not_permitted"))
         end
 
         it "blocks log creation" do
@@ -1652,7 +1652,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
           parser.valid?
 
           setup_errors = parser.errors.select { |e| e.options[:category] == :setup }
-          expect(setup_errors.find { |e| e.attribute == :field_2 }.message).to eql("The managing organisation code is incorrect.")
+          expect(setup_errors.find { |e| e.attribute == :field_2 }.message).to eql(I18n.t("validations.lettings.2023.bulk_upload.managing_organisation.not_answered"))
         end
 
         it "blocks log creation" do
@@ -1668,7 +1668,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
           parser.valid?
 
           setup_errors = parser.errors.select { |e| e.options[:category] == :setup }
-          expect(setup_errors.find { |e| e.attribute == :field_2 }.message).to eql("The managing organisation code is incorrect.")
+          expect(setup_errors.find { |e| e.attribute == :field_2 }.message).to eql(I18n.t("validations.lettings.2023.bulk_upload.managing_organisation.not_found"))
         end
 
         it "blocks log creation" do
@@ -1686,7 +1686,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
           parser.valid?
 
           setup_errors = parser.errors.select { |e| e.options[:category] == :setup }
-          expect(setup_errors.find { |e| e.attribute == :field_2 }.message).to eql("This managing organisation does not have a relationship with the owning organisation.")
+          expect(setup_errors.find { |e| e.attribute == :field_2 }.message).to eql(I18n.t("validations.lettings.2023.bulk_upload.managing_organisation.no_relationship"))
         end
 
         it "blocks log creation" do
@@ -1702,7 +1702,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
         it "is reported as a setup error" do
           parser.valid?
-          expect(parser.errors.where(:field_4, category: :setup).map(&:message)).to eql(["You must answer needs type."])
+          expect(parser.errors.where(:field_4, category: :setup).map(&:message)).to eql([I18n.t("validations.lettings.2023.bulk_upload.not_answered", question: "needs type.")])
         end
       end
     end
@@ -1713,7 +1713,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
         it "has setup errors on the field" do
           parser.valid?
-          expect(parser.errors.where(:field_6, category: :setup).map(&:message)).to eql(["You must answer property renewal."])
+          expect(parser.errors.where(:field_6, category: :setup).map(&:message)).to eql([I18n.t("validations.lettings.2023.bulk_upload.not_answered", question: "property renewal.")])
         end
       end
 
@@ -1722,7 +1722,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
         it "adds a setup error" do
           parser.valid?
-          expect(parser.errors.where(:field_6, category: :setup).map(&:message)).to include("Enter a valid value for is this letting a renewal?")
+          expect(parser.errors.where(:field_6, category: :setup).map(&:message)).to include(I18n.t("validations.lettings.2023.bulk_upload.invalid_option", question: "is this letting a renewal?"))
         end
       end
     end
@@ -1743,9 +1743,9 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
         it "adds appropriate errors" do
           parser.valid?
 
-          expect(parser.errors[:field_18]).to eql(["You must answer UPRN."])
-          expect(parser.errors[:field_19]).to eql(["You must answer address line 1."])
-          expect(parser.errors[:field_21]).to eql(["You must answer town or city."])
+          expect(parser.errors[:field_18]).to eql([I18n.t("validations.lettings.2023.bulk_upload.not_answered", question: "UPRN.")])
+          expect(parser.errors[:field_19]).to eql([I18n.t("validations.lettings.2023.bulk_upload.not_answered", question: "address line 1.")])
+          expect(parser.errors[:field_21]).to eql([I18n.t("validations.lettings.2023.bulk_upload.not_answered", question: "town or city.")])
         end
       end
 
@@ -1821,7 +1821,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
         it "populates with correct error message" do
           parser.valid?
-          expect(parser.errors[:field_30]).to eql(["You must answer type of building."])
+          expect(parser.errors[:field_30]).to eql([I18n.t("validations.lettings.2023.bulk_upload.not_answered", question: "type of building.")])
         end
       end
     end
@@ -1851,8 +1851,8 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
         it "populates with correct error message" do
           parser.valid?
 
-          expect(parser.errors.where(:field_46, category: :soft_validation).first.message).to eql("You told us this person is aged 22 years and retired.")
-          expect(parser.errors.where(:field_50, category: :soft_validation).first.message).to eql("You told us this person is aged 22 years and retired.")
+          expect(parser.errors.where(:field_46, category: :soft_validation).first.message).to eql("You told us this person is aged 22 years and retired. The minimum expected retirement age in England is 66.")
+          expect(parser.errors.where(:field_50, category: :soft_validation).first.message).to eql("You told us this person is aged 22 years and retired. The minimum expected retirement age in England is 66.")
         end
       end
 
@@ -2170,7 +2170,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
         it "adds an error" do
           parser.valid?
-          expect(parser.errors[:field_116]).to include("Enter a valid value for was the letting made under the Choice-Based Lettings (CBL)?")
+          expect(parser.errors[:field_116]).to include(I18n.t("validations.lettings.2023.bulk_upload.invalid_option", question: "was the letting made under the Choice-Based Lettings (CBL)?"))
         end
       end
     end
@@ -2197,7 +2197,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
         it "adds an error" do
           parser.valid?
-          expect(parser.errors[:field_118]).to include("Enter a valid value for was the letting made under the Common Housing Register (CHR)?")
+          expect(parser.errors[:field_118]).to include(I18n.t("validations.lettings.2023.bulk_upload.invalid_option", question: "was the letting made under the Common Housing Register (CHR)?"))
         end
       end
     end
@@ -2224,7 +2224,7 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
         it "adds an error" do
           parser.valid?
-          expect(parser.errors[:field_117]).to include("Enter a valid value for was the letting made under the Common Allocation Policy (CAP)?")
+          expect(parser.errors[:field_117]).to include(I18n.t("validations.lettings.2023.bulk_upload.invalid_option", question: "was the letting made under the Common Allocation Policy (CAP)?"))
         end
       end
     end
@@ -2736,8 +2736,8 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
         it "sets error on housingneeds a and b" do
           parser.valid?
-          expect(parser.errors[:field_83]).to include("Only one disabled access need: fully wheelchair-accessible housing, wheelchair access to essential rooms or level access housing, can be selected.")
-          expect(parser.errors[:field_84]).to include("Only one disabled access need: fully wheelchair-accessible housing, wheelchair access to essential rooms or level access housing, can be selected.")
+          expect(parser.errors[:field_83]).to include(I18n.t("validations.lettings.2023.bulk_upload.housingneeds_type.only_one_option_permitted"))
+          expect(parser.errors[:field_84]).to include(I18n.t("validations.lettings.2023.bulk_upload.housingneeds_type.only_one_option_permitted"))
           expect(parser.errors[:field_85]).to be_blank
         end
       end
@@ -2747,8 +2747,8 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
         it "sets error on housingneeds a and c" do
           parser.valid?
-          expect(parser.errors[:field_83]).to include("Only one disabled access need: fully wheelchair-accessible housing, wheelchair access to essential rooms or level access housing, can be selected.")
-          expect(parser.errors[:field_85]).to include("Only one disabled access need: fully wheelchair-accessible housing, wheelchair access to essential rooms or level access housing, can be selected.")
+          expect(parser.errors[:field_83]).to include(I18n.t("validations.lettings.2023.bulk_upload.housingneeds_type.only_one_option_permitted"))
+          expect(parser.errors[:field_85]).to include(I18n.t("validations.lettings.2023.bulk_upload.housingneeds_type.only_one_option_permitted"))
           expect(parser.errors[:field_84]).to be_blank
         end
       end
@@ -2758,8 +2758,8 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
         it "sets error on housingneeds b and c" do
           parser.valid?
-          expect(parser.errors[:field_84]).to include("Only one disabled access need: fully wheelchair-accessible housing, wheelchair access to essential rooms or level access housing, can be selected.")
-          expect(parser.errors[:field_85]).to include("Only one disabled access need: fully wheelchair-accessible housing, wheelchair access to essential rooms or level access housing, can be selected.")
+          expect(parser.errors[:field_84]).to include(I18n.t("validations.lettings.2023.bulk_upload.housingneeds_type.only_one_option_permitted"))
+          expect(parser.errors[:field_85]).to include(I18n.t("validations.lettings.2023.bulk_upload.housingneeds_type.only_one_option_permitted"))
           expect(parser.errors[:field_83]).to be_blank
         end
       end
@@ -2769,8 +2769,8 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
         it "sets error on housingneeds a and g" do
           parser.valid?
-          expect(parser.errors[:field_87]).to include("No disabled access needs can’t be selected if you have selected fully wheelchair-accessible housing, wheelchair access to essential rooms, level access housing or other disabled access needs.")
-          expect(parser.errors[:field_83]).to include("No disabled access needs can’t be selected if you have selected fully wheelchair-accessible housing, wheelchair access to essential rooms, level access housing or other disabled access needs.")
+          expect(parser.errors[:field_87]).to include(I18n.t("validations.lettings.2023.bulk_upload.housingneeds.no_disabled_needs_conjunction"))
+          expect(parser.errors[:field_83]).to include(I18n.t("validations.lettings.2023.bulk_upload.housingneeds.no_disabled_needs_conjunction"))
           expect(parser.errors[:field_84]).to be_blank
           expect(parser.errors[:field_85]).to be_blank
         end
@@ -2793,8 +2793,8 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
 
         it "sets error on housingneeds a and h" do
           parser.valid?
-          expect(parser.errors[:field_88]).to include("Don’t know disabled access needs can’t be selected if you have selected fully wheelchair-accessible housing, wheelchair access to essential rooms, level access housing or other disabled access needs.")
-          expect(parser.errors[:field_83]).to include("Don’t know disabled access needs can’t be selected if you have selected fully wheelchair-accessible housing, wheelchair access to essential rooms, level access housing or other disabled access needs.")
+          expect(parser.errors[:field_88]).to include(I18n.t("validations.lettings.2023.bulk_upload.housingneeds.dont_know_disabled_needs_conjunction"))
+          expect(parser.errors[:field_83]).to include(I18n.t("validations.lettings.2023.bulk_upload.housingneeds.dont_know_disabled_needs_conjunction"))
           expect(parser.errors[:field_84]).to be_blank
           expect(parser.errors[:field_85]).to be_blank
         end

@@ -2,9 +2,10 @@ class Form::Lettings::Pages::NetIncomeValueCheck < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "net_income_value_check"
+    @copy_key = "lettings.soft_validations.net_income_value_check"
     @depends_on = [{ "net_income_soft_validation_triggered?" => true }]
     @title_text = {
-      "translation" => "soft_validations.net_income.title_text",
+      "translation" => "forms.#{form.start_date.year}.#{@copy_key}.title_text",
       "arguments" => [
         {
           "key" => "incfreq",
@@ -20,7 +21,7 @@ class Form::Lettings::Pages::NetIncomeValueCheck < ::Form::Page
     }
 
     @informative_text = {
-      "translation" => "soft_validations.net_income.hint_text",
+      "translation" => "forms.#{form.start_date.year}.#{@copy_key}.informative_text",
       "arguments" => [
         {
           "key" => "net_income_higher_or_lower_text",

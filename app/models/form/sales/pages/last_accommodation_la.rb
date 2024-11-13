@@ -16,7 +16,7 @@ class Form::Sales::Pages::LastAccommodationLa < ::Form::Page
   end
 
   def routed_to?(log, _user)
-    return false if form.start_year_after_2024? && log.discounted_ownership_sale?
+    return false if form.start_year_2024_or_later? && log.discounted_ownership_sale?
 
     super
   end

@@ -16,27 +16,51 @@ class Form::Sales::Questions::PersonWorkingSituation < ::Form::Question
   end
 
   def answer_options
-    {
-      "1" => { "value" => "Full-time - 30 hours or more" },
-      "2" => { "value" => "Part-time - Less than 30 hours" },
-      "3" => { "value" => "In government training into work" },
-      "4" => { "value" => "Jobseeker" },
-      "6" => { "value" => "Not seeking work" },
-      "8" => { "value" => "Unable to work due to long term sick or disability" },
-      "5" => { "value" => "Retired" },
-      "0" => { "value" => "Other" },
-      "10" => { "value" => "Person prefers not to say" },
-      "7" => { "value" => "Full-time student" },
-      "9" => {
-        "value" => "Child under 16",
-        "depends_on" => [
-          { "saledate" => { "operator" => "<", "operand" => Time.zone.local(2024, 4, 1) } },
-          { "age#{@person_index}_known" => 1 },
-          { "age#{@person_index}_known" => nil },
-          { "age#{@person_index}" => { "operator" => "<", "operand" => 16 } },
-        ],
-      },
-    }
+    if form.start_year_2025_or_later?
+      {
+        "1" => { "value" => "Full-time - 30 hours or more" },
+        "2" => { "value" => "Part-time - Less than 30 hours" },
+        "3" => { "value" => "In government training into work" },
+        "4" => { "value" => "Jobseeker" },
+        "5" => { "value" => "Retired" },
+        "6" => { "value" => "Not seeking work" },
+        "7" => { "value" => "Full-time student" },
+        "8" => { "value" => "Unable to work due to long term sick or disability" },
+        "9" => {
+          "value" => "Child under 16",
+          "depends_on" => [
+            { "saledate" => { "operator" => "<", "operand" => Time.zone.local(2024, 4, 1) } },
+            { "age#{@person_index}_known" => 1 },
+            { "age#{@person_index}_known" => nil },
+            { "age#{@person_index}" => { "operator" => "<", "operand" => 16 } },
+          ],
+        },
+        "0" => { "value" => "Other" },
+        "10" => { "value" => "Person prefers not to say" },
+      }
+    else
+      {
+        "1" => { "value" => "Full-time - 30 hours or more" },
+        "2" => { "value" => "Part-time - Less than 30 hours" },
+        "3" => { "value" => "In government training into work" },
+        "4" => { "value" => "Jobseeker" },
+        "6" => { "value" => "Not seeking work" },
+        "8" => { "value" => "Unable to work due to long term sick or disability" },
+        "5" => { "value" => "Retired" },
+        "0" => { "value" => "Other" },
+        "10" => { "value" => "Person prefers not to say" },
+        "7" => { "value" => "Full-time student" },
+        "9" => {
+          "value" => "Child under 16",
+          "depends_on" => [
+            { "saledate" => { "operator" => "<", "operand" => Time.zone.local(2024, 4, 1) } },
+            { "age#{@person_index}_known" => 1 },
+            { "age#{@person_index}_known" => nil },
+            { "age#{@person_index}" => { "operator" => "<", "operand" => 16 } },
+          ],
+        },
+      }
+    end
   end
 
   def question_number

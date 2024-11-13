@@ -2,8 +2,7 @@ class Form::Sales::Questions::Mortgageused < ::Form::Question
   def initialize(id, hsh, subsection, ownershipsch:)
     super(id, hsh, subsection)
     @id = "mortgageused"
-    @check_answer_label = "Mortgage used"
-    @header = "Was a mortgage used for the purchase of this property?"
+    @copy_key = "sales.sale_information.mortgageused"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @ownershipsch = ownershipsch
@@ -12,7 +11,7 @@ class Form::Sales::Questions::Mortgageused < ::Form::Question
   end
 
   def displayed_answer_options(log, _user = nil)
-    if log.outright_sale? && log.saledate && !form.start_year_after_2024?
+    if log.outright_sale? && log.saledate && !form.start_year_2024_or_later?
       answer_options_without_dont_know
     elsif log.stairowned == 100 || log.outright_sale?
       ANSWER_OPTIONS
