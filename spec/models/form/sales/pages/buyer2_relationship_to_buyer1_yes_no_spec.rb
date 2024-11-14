@@ -27,12 +27,7 @@ RSpec.describe Form::Sales::Pages::Buyer2RelationshipToBuyer1YesNo, type: :model
     expect(page.depends_on).to eq([
       {
         "joint_purchase?" => true,
-        "buyer_has_seen_privacy_notice?" => true,
-      },
-      {
-        "joint_purchase?" => true,
-        "buyer_not_interviewed?" => true,
-      },
+      }
     ])
   end
 end
