@@ -20,13 +20,10 @@ class Form::Sales::Questions::PersonRelationshipToBuyer1YesNo < ::Form::Question
   end
 
   def question_number
-    base_question_number = case form.start_date.year
-                           when 2023
-                             28
-                           else
-                             30
-                           end
+    base_question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
 
     base_question_number + (4 * @person_index)
   end
+
+  QUESTION_NUMBER_FROM_YEAR = { 2025 => 30 }.freeze
 end
