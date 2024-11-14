@@ -30,5 +30,4 @@ class Form::Sales::Subsections::OtherHouseholdInformation < ::Form::Subsection
 
     log.staircase != 1
   end
-
 end
