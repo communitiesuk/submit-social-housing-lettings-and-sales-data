@@ -3,16 +3,7 @@ class Form::Sales::Pages::Buyer2RelationshipToBuyer1YesNo < ::Form::Page
     super
     @id = "buyer_2_relationship_to_buyer_1"
     @copy_key = "sales.household_characteristics.relat2.buyer"
-    @depends_on = [
-      {
-        "joint_purchase?" => true,
-        "buyer_has_seen_privacy_notice?" => true,
-      },
-      {
-        "joint_purchase?" => true,
-        "buyer_not_interviewed?" => true,
-      },
-    ]
+    @depends_on = [{ "joint_purchase?" => true }]
   end
 
   def questions
