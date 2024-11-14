@@ -109,7 +109,7 @@ en:
             page_header: "About the price of the property"
             check_answer_label: "Initial percentage equity stake"
             hint_text: "Enter the amount of initial equity held by the purchaser (for example, 25% or 50%)"
-            question_text: "What was the initial percentage equity stake purchased?"
+            question_text: "What was the initial percentage share purchased?"
 
           mortgageused:
             page_header: "Mortgage Amount"
@@ -168,9 +168,9 @@ en:
           leaseholdcharges:
             page_header: ""
             has_mscharge:
-              check_answer_label: "Does the property have any monthly leasehold charges?"
+              check_answer_label: "Does the property have any service charges?"
               hint_text: "For example, service and management charges"
-              question_text: "Does the property have any monthly leasehold charges?"
+              question_text: "Does the property have any service charges?"
             mscharge:
               check_answer_label:  "Monthly leasehold charges"
               hint_text: ""
