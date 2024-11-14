@@ -93,8 +93,8 @@ RSpec.describe Form::Sales::Subsections::Setup, type: :model do
           assigned_to
           purchaser_code
           ownership_scheme
-          staircasing
           shared_ownership_type
+          staircasing
           discounted_ownership_type
           joint_purchase
           number_joint_buyers
