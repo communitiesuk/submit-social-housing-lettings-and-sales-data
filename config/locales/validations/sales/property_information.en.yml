@@ -35,5 +35,5 @@ en:
         uprn_selection:
           not_in_england: "It looks like you have entered an address outside of England - only submit Lettings forms for Lettings that occur in England"
         saledate:
-          postcode_not_in_england: "It looks like you have entered an address outside of England - only submit Lettings forms for Lettings that occur in England"
-          address_not_in_england: "It looks like you have entered a postcode outside of England - only submit Lettings forms for Lettings that occur in England"
+          postcode_not_in_england: "It looks like you have entered a postcode outside of England - only submit Lettings forms for Lettings that occur in England"
+          address_not_in_england: "It looks like you have entered an address outside of England - only submit Lettings forms for Lettings that occur in England"
