@@ -19,11 +19,17 @@ class Form::Sales::Pages::LivingBeforePurchase < ::Form::Page
     end
   end
 
-  def depends_on
-    if @joint_purchase
-      [{ "joint_purchase?" => true }]
+  def routed_to?(log, _user)
+    super && page_routed_to?(log)
+  end
+
+  def page_routed_to?(log)
+    if form.start_year_2025_or_later?
+      log.resale == 2
+    elsif @joint_purchase
+      log.joint_purchase?
     else
-      [{ "not_joint_purchase?" => true }, { "jointpur" => nil }]
+      log.not_joint_purchase? || log.jointpur.nil?
     end
   end
 end
