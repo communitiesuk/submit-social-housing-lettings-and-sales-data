@@ -58,7 +58,9 @@ module Validations::Sales::SoftValidations
   end
 
   def savings_over_soft_max?
-    savings && savings > 100_000
+    soft_max = form.start_year_2025_or_later? && type == 24 ? 200_000 : 100_000
+
+    savings && savings > soft_max
   end
 
   def deposit_over_soft_max?
