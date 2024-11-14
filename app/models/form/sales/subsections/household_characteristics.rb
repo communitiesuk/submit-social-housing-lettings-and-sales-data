@@ -3,7 +3,14 @@ class Form::Sales::Subsections::HouseholdCharacteristics < ::Form::Subsection
     super
     @id = "household_characteristics"
     @label = "Household characteristics"
-    @depends_on = [{ "setup_completed?" => true, "company_buyer?" => false }]
+  end
+
+  def depends_on
+    if form.start_year_2025_or_later?
+      [{ "setup_completed?" => true }]
+    else
+      [{ "setup_completed?" => true, "company_buyer?" => false }]
+    end
   end
 
   def pages
@@ -143,6 +150,8 @@ class Form::Sales::Subsections::HouseholdCharacteristics < ::Form::Subsection
   end
 
   def displayed_in_tasklist?(log)
+    return true if form.start_year_2025_or_later?
+
     !log.company_buyer?
   end
 end
