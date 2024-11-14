@@ -4,7 +4,7 @@ RSpec.describe Form::Sales::Pages::PersonWorkingSituation, type: :model do
   subject(:page) { described_class.new(page_id, page_definition, subsection, person_index:) }
 
   let(:page_definition) { nil }
-  let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2023, 4, 1))) }
+  let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2023, 4, 1), start_year_2025_or_later?: false)) }
   let(:person_index) { 2 }
 
   let(:page_id) { "person_2_working_situation" }

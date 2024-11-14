@@ -57,12 +57,6 @@ en:
               hint_text: ""
               question_text: "What is the type of discounted ownership sale?"
 
-          companybuy:
-            page_header: ""
-            check_answer_label: "Company buyer"
-            hint_text: ""
-            question_text: "Is the buyer a company?"
-
           jointpur:
             page_header: ""
             check_answer_label: "Joint purchase"

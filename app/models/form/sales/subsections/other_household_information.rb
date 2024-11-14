@@ -1,7 +1,7 @@
-class Form::Sales::Subsections::HouseholdNeeds < ::Form::Subsection
+class Form::Sales::Subsections::OtherHouseholdInformation < ::Form::Subsection
   def initialize(id, hsh, section)
     super
-    @id = "household_needs"
+    @id = "other_household_information"
     @label = "Other household information"
   end
 

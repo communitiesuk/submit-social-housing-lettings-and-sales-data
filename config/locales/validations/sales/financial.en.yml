@@ -1,0 +1,85 @@
+en:
+  validations:
+    sales:
+      financial:
+        ownershipsch:
+          outside_london_income_range: "Income must be between £0 and £90,000 for properties within a London local authority."
+          outside_non_london_income_range: "Income must be between £0 and £80,000 for properties in a non-London local authority."
+          combined_over_hard_max_for_london: "Combined income must be £90,000 or lower for properties within a London local authority."
+          combined_over_hard_max_for_outside_london: "Combined income must be £80,000 or lower for properties outside London local authorities."
+
+        uprn:
+          outside_london_income_range: "Income must be between £0 and £90,000 for properties within a London local authority."
+          outside_non_london_income_range: "Income must be between £0 and £80,000 for properties in a non-London local authority."
+          combined_over_hard_max_for_london: "Combined income must be £90,000 or lower for properties within a London local authority."
+          combined_over_hard_max_for_outside_london: "Combined income must be £80,000 or lower for properties outside London local authorities."
+
+        la:
+          outside_london_income_range: "Income must be between £0 and £90,000 for properties within a London local authority."
+          outside_non_london_income_range: "Income must be between £0 and £80,000 for properties in a non-London local authority."
+          combined_over_hard_max_for_london: "Combined income must be £90,000 or lower for properties within a London local authority."
+          combined_over_hard_max_for_outside_london: "Combined income must be £80,000 or lower for properties outside London local authorities."
+
+        postcode_full:
+          outside_london_income_range: "Income must be between £0 and £90,000 for properties within a London local authority."
+          outside_non_london_income_range: "Income must be between £0 and £80,000 for properties in a non-London local authority."
+          combined_over_hard_max_for_london: "Combined income must be £90,000 or lower for properties within a London local authority."
+          combined_over_hard_max_for_outside_london: "Combined income must be £80,000 or lower for properties outside London local authorities."
+
+        income1:
+          outside_london_income_range: "Income must be between £0 and £90,000 for properties within a London local authority."
+          outside_non_london_income_range: "Income must be between £0 and £80,000 for properties in a non-London local authority."
+          combined_over_hard_max_for_london: "Combined income must be £90,000 or lower for properties within a London local authority."
+          combined_over_hard_max_for_outside_london: "Combined income must be £80,000 or lower for properties outside London local authorities."
+
+        income2:
+          outside_london_income_range: "Income must be between £0 and £90,000 for properties within a London local authority."
+          outside_non_london_income_range: "Income must be between £0 and £80,000 for properties in a non-London local authority."
+          combined_over_hard_max_for_london: "Combined income must be £90,000 or lower for properties within a London local authority."
+          combined_over_hard_max_for_outside_london: "Combined income must be £80,000 or lower for properties outside London local authorities."
+          child_has_income: "Child's income must be £0."
+
+        ecstat2:
+          child_has_income: "Child's income must be £0."
+
+        mortgage:
+          mortgage_zero: "Mortgage value cannot be £0 if a mortgage was used for the purchase of this property."
+
+        mscharge:
+          monthly_leasehold_charges:
+            not_zero: "Monthly leasehold charges cannot be £0 if the property has monthly charges."
+
+        resale:
+          equity_over_max: "The maximum initial equity stake is %{max_equity}%."
+
+        type:
+          equity_under_min: "The minimum initial equity stake for this type of shared ownership sale is %{min_equity}%."
+          equity_over_max: "The maximum initial equity stake is %{max_equity}%."
+          percentage_bought_must_be_at_least_threshold: "The minimum increase in equity while staircasing is %{threshold}% for this shared ownership type."
+
+        equity:
+          equity_under_min: "The minimum initial equity stake for this type of shared ownership sale is %{min_equity}%."
+          equity_over_max: "The maximum initial equity stake is %{max_equity}%."
+          equity_over_stairowned_minus_stairbought:
+            joint_purchase: "The initial equity stake is %{equity}% and the percentage owned in total minus the percentage bought is %{staircase_difference}%. In a staircasing transaction, the equity stake purchased cannot be larger than the percentage the buyers own minus the percentage bought."
+            not_joint_purchase: "The initial equity stake is %{equity}% and the percentage owned in total minus the percentage bought is %{staircase_difference}%. In a staircasing transaction, the equity stake purchased cannot be larger than the percentage the buyer owns minus the percentage bought."
+
+        stairowned:
+          equity_over_stairowned_minus_stairbought:
+            joint_purchase: "The initial equity stake is %{equity}% and the percentage owned in total minus the percentage bought is %{staircase_difference}%. In a staircasing transaction, the equity stake purchased cannot be larger than the percentage the buyers own minus the percentage bought."
+            not_joint_purchase: "The initial equity stake is %{equity}% and the percentage owned in total minus the percentage bought is %{staircase_difference}%. In a staircasing transaction, the equity stake purchased cannot be larger than the percentage the buyer owns minus the percentage bought."
+          percentage_bought_must_be_greater_than_percentage_owned:
+            joint_purchase: "Total percentage buyers now own must be more than percentage bought in this transaction."
+            not_joint_purchase: "Total percentage buyer now owns must be more than percentage bought in this transaction."
+          percentage_bought_equal_percentage_owned: "The percentage bought is %{stairbought}% and the percentage owned in total is %{stairowned}%. These figures cannot be the same."
+
+        stairbought:
+          equity_over_stairowned_minus_stairbought:
+            joint_purchase: "The initial equity stake is %{equity}% and the percentage owned in total minus the percentage bought is %{staircase_difference}%. In a staircasing transaction, the equity stake purchased cannot be larger than the percentage the buyers own minus the percentage bought."
+            not_joint_purchase: "The initial equity stake is %{equity}% and the percentage owned in total minus the percentage bought is %{staircase_difference}%. In a staircasing transaction, the equity stake purchased cannot be larger than the percentage the buyer owns minus the percentage bought."
+          percentage_bought_must_be_at_least_threshold: "The minimum increase in equity while staircasing is %{threshold}%."
+          percentage_bought_equal_percentage_owned: "The percentage bought is %{stairbought}% and the percentage owned in total is %{stairowned}%. These figures cannot be the same."
+        
+        uprn_selection:
+          outside_london_income_range: "Income must be between £0 and £90,000 for properties within a London local authority."
+          outside_non_london_income_range: "Income must be between £0 and £80,000 for properties in a non-London local authority."

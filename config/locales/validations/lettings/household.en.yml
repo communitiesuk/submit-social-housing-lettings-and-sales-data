@@ -2,6 +2,99 @@ en:
   validations:
     lettings:
       household:
+        reasonable_preference_reason:
+          reason_not_required: "Do not enter a reason if you've answered 'no' to reasonable preference."
+
+        underoccupation_benefitcap:
+          leaving_last_settled_home:
+            dont_know_required: "Answer must be ‘don’t know’ as you told us you don’t know the tenant’s main reason for leaving."
+
+        reservist:
+          injury_not_required: "You cannot answer this question as you told us the person has not served in the UK armed forces or prefers not to say."
+
+        leftreg:
+          question_required: "Tell us whether the person is still serving in the UK armed forces as you told us they’re a current or former regular."
+          question_not_required: "You cannot answer whether the person is still serving in the UK armed forces as you told us they’re not a current or former regular."
+
+        housingneeds:
+          invalid: "If somebody in the household has disabled access needs, they must have the access needs listed, or other access needs."
+
+        housingneeds_other:
+          invalid: "If somebody in the household has disabled access needs, they must have the access needs listed, or other access needs."
+
+        housingneeds_type:
+          invalid: "If somebody in the household has disabled access needs, they must have the access needs listed, or other access needs."
+
+        reason:
+          leaving_last_settled_home:
+            dont_know_required: "Answer must be ‘don’t know’ as you told us you don’t know the tenant’s main reason for leaving."
+            not_internal_transfer: "Answer cannot be ‘permanently decanted from another property owned by this landlord’ as you told us the source of referral for this tenancy was not an internal transfer."
+            other_not_settled: "Please give the reason for the tenant leaving their last settled home. This is where they were living before they became homeless, were living in temporary accommodation or sleeping rough."
+
+        condition_effects:
+          no_choices: "You cannot answer this question as you told us nobody in the household has a physical or mental health condition (or other illness) expected to last 12 months or more."
+
+        prevloc:
+          previous_la_known: "Enter name of local authority."
+          same_la_just_moved_to_area:  "The local authority of the previous property should not be the same as the current local authority, as you told us they had just moved to the local authority area. Check your answers are correct."
+
+        renewal:
+          renewal_just_moved_to_area: "This letting cannot be a renewal if the household has just moved to the local authority area"
+
+        layear:
+          renewal_just_moved_to_area: "The household cannot have just moved to the local authority area if this letting is a renewal"
+          same_la_just_moved_to_area: "You told us this tenant previously lived in this local authority. Check your answers are correct."
+
+        la:
+          same_la_just_moved_to_area: "You told us the tenant had just moved into the local authority, but this location is in the same local authority. Check your answers are correct"
+
+        postcode_full:
+          same_la_just_moved_to_area: "You told us the tenant had just moved into the local authority, but this location is in the same local authority. Check your answers are correct"
+
+        ppostcode_full:
+          same_la_just_moved_to_area: "The local authority of the previous property should not be the same as the current local authority, as you told us they had just moved to the local authority area. Check your answers are correct."
+
+        uprn:
+          same_la_just_moved_to_area: "You told us the tenant had just moved into the local authority, but this location is in the same local authority. Check your answers are correct"
+
+        age:
+          child_under_16_relat: "Answer cannot be under 16 as person %{person_num}'s relationship to the lead tenant is ‘partner’."
+          child_under_16_ecstat: "Answer cannot be under 16 as person %{person_num}’s working situation is not ‘child under 16’, ‘other’ or ‘prefers not to say’."
+          child_over_16: "Answer cannot be over 16 as person’s %{person_num} working situation is ‘child under 16‘."
+          student_16_19:
+            cannot_be_16_19:
+              child_not_student: "Person cannot be aged 16-19 if they have relationship ‘child’ but are not a student."
+            must_be_16_19: "Person must be aged 16-19 if they are a student and have relationship ‘child’."
+          lead:
+            over_25: "The lead tenant must be under 26 as you told us their housing situation immediately before this letting was a children’s home or foster care."
+
+        ecstat:
+          child_under_16: "Person %{person_num}’s working situation must be ‘child under 16’, ‘other’ or ‘prefers not to say’ as you told us they’re under 16."
+          child_over_16: "Answer cannot be ‘child under 16’ as you told us the person %{person_num} is older than 16."
+          student_16_19:
+            cannot_be_student:
+              child_not_16_19: "Person cannot be a student if they are not aged 16-19 but have relationship ‘child’."
+            must_be_student: "Person must be a student if they are aged 16-19 and have relationship ‘child’."
+
         relat:
           one_partner: "Number of partners cannot be greater than 1."
+          child_under_16: "Answer cannot be ‘partner’ as you told us person %{person_num}'s age is under 16."
+          student_16_19:
+            cannot_be_child:
+              student_not_16_19: "Answer cannot be ‘child’ if the person is a student but not aged 16-19."
+              16_19_not_student: "Answer cannot be ‘child’ if the person is aged 16-19 but not a student."
+
+        prevten:
+          non_temp_accommodation: "Answer cannot be non-temporary accommodation as this is a re-let to a tenant who occupied the same property as temporary accommodation."
+          over_25_foster_care: "Answer cannot be a children’s home or foster care as the lead tenant is 26 or older."
+          internal_transfer: "Answer cannot be %{prevten} as this tenancy is an internal transfer."
+          la_general_needs:
+            internal_transfer: "Answer cannot be a fixed-term or lifetime local authority general needs tenancy as it’s an internal transfer and a private registered provider is on the tenancy agreement."
+
+        referral:
+          prevten_invalid: "Answer cannot be internal transfer as the household situation immediately before this letting was %{prevten}."
+          leaving_last_settled_home:
+            reason_permanently_decanted: "Answer must be internal transfer as the tenant was permanently decanted from another property owned by this landlord."
+          la_general_needs:
+            internal_transfer: "Answer cannot be internal transfer as it’s the same landlord on the tenancy agreement and the household had either a fixed-term or lifetime local authority general needs tenancy immediately before this letting."
 
