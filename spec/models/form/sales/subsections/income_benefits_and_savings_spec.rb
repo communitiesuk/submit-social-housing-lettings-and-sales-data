@@ -12,17 +12,17 @@ RSpec.describe Form::Sales::Subsections::IncomeBenefitsAndSavings, type: :model 
   end
 
   describe "pages" do
-    let(:section) { instance_double(Form::Sales::Sections::Household, form: instance_double(Form, start_date:)) }
+    let(:section) { instance_double(Form::Sales::Sections::Household, form:) }
 
-    context "when 2022" do
-      let(:start_date) { Time.utc(2022, 2, 8) }
+    context "when before 2025" do
+      let(:form) { instance_double(Form, start_date: Time.utc(2024, 4, 1), start_year_2025_or_later?: false)}
 
       it "has correct pages" do
-        expect(subsection.pages.compact.map(&:id)).to eq(
+        expect(subsection.pages.map(&:id)).to eq(
           %w[
             buyer_1_income
             buyer_1_income_min_value_check
-            buyer_1_income_max_value_check
+            buyer_1_income_discounted_max_value_check
             buyer_1_combined_income_max_value_check
             buyer_1_income_mortgage_value_check
             buyer_1_mortgage
@@ -30,7 +30,7 @@ RSpec.describe Form::Sales::Subsections::IncomeBenefitsAndSavings, type: :model 
             buyer_2_income
             buyer_2_income_mortgage_value_check
             buyer_2_income_min_value_check
-            buyer_2_income_max_value_check
+            buyer_2_income_discounted_max_value_check
             buyer_2_combined_income_max_value_check
             buyer_2_mortgage
             buyer_2_mortgage_value_check
@@ -44,20 +44,22 @@ RSpec.describe Form::Sales::Subsections::IncomeBenefitsAndSavings, type: :model 
             savings_deposit_value_check
             previous_ownership_joint_purchase
             previous_ownership_not_joint_purchase
+            previous_shared
           ],
         )
       end
     end
 
-    context "when 2023" do
-      let(:start_date) { Time.utc(2023, 2, 8) }
+    context "when 2025" do
+      let(:form) { instance_double(Form, start_date: Time.utc(2025, 4, 1), start_year_2025_or_later?: true)}
 
       it "has correct pages" do
         expect(subsection.pages.map(&:id)).to eq(
           %w[
             buyer_1_income
             buyer_1_income_min_value_check
-            buyer_1_income_max_value_check
+            buyer_1_income_ecstat_max_value_check
+            buyer_1_income_discounted_max_value_check
             buyer_1_combined_income_max_value_check
             buyer_1_income_mortgage_value_check
             buyer_1_mortgage
@@ -65,7 +67,8 @@ RSpec.describe Form::Sales::Subsections::IncomeBenefitsAndSavings, type: :model 
             buyer_2_income
             buyer_2_income_mortgage_value_check
             buyer_2_income_min_value_check
-            buyer_2_income_max_value_check
+            buyer_2_income_ecstat_max_value_check
+            buyer_2_income_discounted_max_value_check
             buyer_2_combined_income_max_value_check
             buyer_2_mortgage
             buyer_2_mortgage_value_check

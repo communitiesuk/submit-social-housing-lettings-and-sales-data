@@ -1,12 +1,12 @@
-class Form::Sales::Pages::Buyer2IncomeMaxValueCheck < ::Form::Page
+class Form::Sales::Pages::Buyer2IncomeDiscountedMaxValueCheck < ::Form::Page
   def initialize(id, hsh, subsection, check_answers_card_number:)
     super(id, hsh, subsection)
     @depends_on = [
       {
-        "income2_over_soft_max?" => true,
+        "income2_over_soft_max_for_discounted_ownership?" => true,
       },
     ]
-    @copy_key = "sales.soft_validations.income2_value_check.max"
+    @copy_key = "sales.soft_validations.income2_value_check.max.discounted"
     @title_text = {
       "translation" => "forms.#{form.start_date.year}.#{@copy_key}.title_text",
       "arguments" => [
