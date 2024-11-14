@@ -23,7 +23,7 @@ RSpec.describe Form::Sales::Pages::Buyer1IncomeDiscountedMaxValueCheck, type: :m
   it "has correct depends_on" do
     expect(page.depends_on).to eq([
       {
-        "income1_over_soft_max?" => true,
+        "income1_over_soft_max_for_discounted_ownership?" => true,
       },
     ])
   end

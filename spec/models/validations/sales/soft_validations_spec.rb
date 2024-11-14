@@ -3,85 +3,254 @@ require "rails_helper"
 RSpec.describe Validations::Sales::SoftValidations do
   let(:record) { build(:sales_log) }
 
-  describe "income1 min validations" do
+  describe "income validations" do
     context "when validating soft min" do
-      it "returns false if no income1 is given" do
+      it "does not trigger for income1 if no income1 is given" do
         record.income1 = nil
-
         expect(record).not_to be_income1_under_soft_min
       end
 
-      it "returns false if no ecstat1 is given" do
+      it "does not trigger for income1 if no ecstat1 is given" do
+        record.income1 = 50
         record.ecstat1 = nil
-
         expect(record).not_to be_income1_under_soft_min
       end
 
-      [
-        {
-          income1: 4500,
-          ecstat1: 1,
-        },
-        {
-          income1: 1400,
-          ecstat1: 2,
-        },
-        {
-          income1: 999,
-          ecstat1: 3,
-        },
-        {
-          income1: 1899,
-          ecstat1: 5,
-        },
-        {
-          income1: 1888,
-          ecstat1: 0,
-        },
-      ].each do |test_case|
-        it "returns true if income1 is below soft min for ecstat1 #{test_case[:ecstat1]}" do
-          record.income1 = test_case[:income1]
-          record.ecstat1 = test_case[:ecstat1]
-          expect(record)
-            .to be_income1_under_soft_min
+      it "does not trigger for income2 if no income2 is given" do
+        record.income2 = nil
+        expect(record).not_to be_income2_under_soft_min
+      end
+
+      it "does not trigger for income2 if no ecstat2 is given" do
+        record.income2 = 50
+        record.ecstat2 = nil
+        expect(record).not_to be_income2_under_soft_min
+      end
+
+      context "when log year is before 2025" do
+        let(:record) { build(:sales_log, saledate: Time.zone.local(2024, 12, 25)) }
+
+        it "does not trigger for income1 if ecstat1 has no soft min" do
+          record.income1 = 50
+          record.ecstat1 = 4
+          expect(record).not_to be_income1_under_soft_min
+        end
+
+        it "returns true if income1 is below soft min for ecstat1" do
+          record.income1 = 4500
+          record.ecstat1 = 1
+          expect(record).to be_income1_under_soft_min
+        end
+
+        it "returns false if income1 is >= soft min for ecstat1" do
+          record.income1 = 1500
+          record.ecstat1 = 2
+          expect(record).not_to be_income1_under_soft_min
+        end
+
+        it "does not trigger for income2 if ecstat2 has no soft min" do
+          record.income2 = 50
+          record.ecstat2 = 8
+          expect(record).not_to be_income2_under_soft_min
+        end
+
+        it "returns true if income2 is below soft min for ecstat2" do
+          record.income2 = 999
+          record.ecstat2 = 3
+          expect(record).to be_income2_under_soft_min
+        end
+
+        it "returns false if income2 is >= soft min for ecstat2" do
+          record.income2 = 2500
+          record.ecstat2 = 5
+          expect(record).not_to be_income2_under_soft_min
         end
       end
 
-      [
-        {
-          income1: 5001,
-          ecstat1: 1,
-        },
-        {
-          income1: 1600,
-          ecstat1: 2,
-        },
-        {
-          income1: 1004,
-          ecstat1: 3,
-        },
-        {
-          income1: 2899,
-          ecstat1: 4,
-        },
-        {
-          income1: 2899,
-          ecstat1: 5,
-        },
-        {
-          income1: 5,
-          ecstat1: 6,
-        },
-        {
-          income1: 10_888,
-          ecstat1: 0,
-        },
-      ].each do |test_case|
-        it "returns false if income1 is over soft min for ecstat1 #{test_case[:ecstat1]}" do
-          record.income1 = test_case[:income1]
-          record.ecstat1 = test_case[:ecstat1]
-          expect(record)
-            .not_to be_income1_under_soft_min
+      context "when log year is 2025" do
+        let(:record) { build(:sales_log, saledate: Time.zone.local(2025, 12, 25)) }
+
+        it "returns true if income1 is below soft min for ecstat1" do
+          record.income1 = 13_399
+          record.ecstat1 = 1
+          expect(record).to be_income1_under_soft_min
+        end
+
+        it "returns false if income1 is >= soft min for ecstat1" do
+          record.income1 = 2600
+          record.ecstat1 = 2
+          expect(record).not_to be_income1_under_soft_min
+        end
+
+        it "returns true if income2 is below soft min for ecstat2" do
+          record.income2 = 2079
+          record.ecstat2 = 3
+          expect(record).to be_income2_under_soft_min
+        end
+
+        it "returns false if income2 is >= soft min for ecstat2" do
+          record.income2 = 520
+          record.ecstat2 = 5
+          expect(record).not_to be_income2_under_soft_min
+        end
+      end
+    end
+
+    context "when validating soft max based on ecstat" do
+      context "when log year is before 2025" do
+        let(:record) { build(:sales_log, saledate: Time.zone.local(2024, 12, 25)) }
+
+        it "does not trigger" do
+          record.ecstat1 = 1
+          record.income1 = 200_000
+          record.ecstat2 = 2
+          record.income2 = 100_000
+          expect(record).not_to be_income1_over_soft_max_for_ecstat
+          expect(record).not_to be_income2_over_soft_max_for_ecstat
+        end
+      end
+
+      context "when log year is 2025" do
+        let(:record) { build(:sales_log, saledate: Time.zone.local(2025, 12, 25)) }
+
+        it "does not trigger for income1 if no income1 is given" do
+          record.income1 = nil
+          expect(record).not_to be_income1_over_soft_max_for_ecstat
+        end
+
+        it "does not trigger for income1 if no ecstat1 is given" do
+          record.income1 = 50
+          record.ecstat1 = nil
+          expect(record).not_to be_income1_over_soft_max_for_ecstat
+        end
+
+        it "does not trigger for income2 if no income2 is given" do
+          record.income2 = nil
+          expect(record).not_to be_income2_over_soft_max_for_ecstat
+        end
+
+        it "does not trigger for income2 if no ecstat2 is given" do
+          record.income2 = 50
+          record.ecstat2 = nil
+          expect(record).not_to be_income2_over_soft_max_for_ecstat
+        end
+
+        it "returns true if income1 is above soft max for ecstat1" do
+          record.income1 = 80_001
+          record.ecstat1 = 2
+          expect(record).to be_income1_over_soft_max_for_ecstat
+        end
+
+        it "returns false if income1 is <= soft max for ecstat1" do
+          record.income1 = 80_000
+          record.ecstat1 = 2
+          expect(record).not_to be_income1_over_soft_max_for_ecstat
+        end
+
+        it "returns true if income2 is above soft max for ecstat2" do
+          record.income2 = 50_001
+          record.ecstat2 = 6
+          expect(record).to be_income2_over_soft_max_for_ecstat
+        end
+
+        it "returns false if income2 is <= soft max for ecstat2" do
+          record.income2 = 50_000
+          record.ecstat2 = 6
+          expect(record).not_to be_income2_over_soft_max_for_ecstat
+        end
+      end
+    end
+
+    context "when validating soft max for discounted ownership" do
+      it "does not trigger if la is not set" do
+        record.la = nil
+        record.income1 = 100_000
+        record.income2 = 95_000
+        record.ownershipsch = 2
+        expect(record).not_to be_income1_over_soft_max_for_discounted_ownership
+        expect(record).not_to be_income2_over_soft_max_for_discounted_ownership
+        expect(record).not_to be_combined_income_over_soft_max_for_discounted_ownership
+      end
+
+      it "does not trigger if sale is not discounted ownership" do
+        record.la = "E09000001"
+        record.income1 = 100_000
+        record.income2 = 95_000
+        record.ownershipsch = 1
+        expect(record).not_to be_income1_over_soft_max_for_discounted_ownership
+        expect(record).not_to be_income2_over_soft_max_for_discounted_ownership
+        expect(record).not_to be_combined_income_over_soft_max_for_discounted_ownership
+      end
+
+      context "when property is in London for a discounted ownership sale" do
+        let(:record) { build(:sales_log, ownershipsch: 2, la: "E09000001") }
+
+        it "returns true for income1 if income1 > London threshold" do
+          record.income1 = 90_001
+          expect(record).to be_income1_over_soft_max_for_discounted_ownership
+        end
+
+        it "returns false for income1 if income1 <= London threshold" do
+          record.income1 = 90_000
+          expect(record).not_to be_income1_over_soft_max_for_discounted_ownership
+        end
+
+        it "returns true for income2 if income2 > London threshold" do
+          record.income2 = 100_000
+          expect(record).to be_income2_over_soft_max_for_discounted_ownership
+        end
+
+        it "returns false for income2 if income2 <= London threshold" do
+          record.income2 = 30_000
+          expect(record).not_to be_income2_over_soft_max_for_discounted_ownership
+        end
+
+        it "returns true for combined income if > London threshold" do
+          record.income1 = 61_000
+          record.income2 = 30_000
+          expect(record).to be_combined_income_over_soft_max_for_discounted_ownership
+        end
+
+        it "returns false for combined income if <= London threshold" do
+          record.income1 = 40_000
+          record.income2 = 20_000
+          expect(record).not_to be_combined_income_over_soft_max_for_discounted_ownership
+        end
+      end
+
+      context "when property is not in London for a discounted ownership sale" do
+        let(:record) { build(:sales_log, ownershipsch: 2, la: "E08000001") }
+
+        it "returns true for income1 if income1 > non-London threshold" do
+          record.income1 = 80_001
+          expect(record).to be_income1_over_soft_max_for_discounted_ownership
+        end
+
+        it "returns false for income1 if income1 <= non-London threshold" do
+          record.income1 = 80_000
+          expect(record).not_to be_income1_over_soft_max_for_discounted_ownership
+        end
+
+        it "returns true for income2 if income2 > non-London threshold" do
+          record.income2 = 85_000
+          expect(record).to be_income2_over_soft_max_for_discounted_ownership
+        end
+
+        it "returns false for income2 if income2 <= non-London threshold" do
+          record.income2 = 30_000
+          expect(record).not_to be_income2_over_soft_max_for_discounted_ownership
+        end
+
+        it "returns true for combined income if > non-London threshold" do
+          record.income1 = 61_000
+          record.income2 = 20_000
+          expect(record).to be_combined_income_over_soft_max_for_discounted_ownership
+        end
+
+        it "returns false for combined income if <= non-London threshold" do
+          record.income1 = 40_000
+          record.income2 = 20_000
+          expect(record).not_to be_combined_income_over_soft_max_for_discounted_ownership
         end
       end
     end
