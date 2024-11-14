@@ -758,6 +758,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_18_104046) do
     t.integer "partner_under_16_value_check"
     t.integer "multiple_partners_value_check"
     t.bigint "created_by_id"
+    t.integer "has_management_fee"
+    t.decimal "management_fee", precision: 10, scale: 2
     t.index ["assigned_to_id"], name: "index_sales_logs_on_assigned_to_id"
     t.index ["bulk_upload_id"], name: "index_sales_logs_on_bulk_upload_id"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"

@@ -48,6 +48,7 @@ RSpec.describe Form::Sales::Subsections::SharedOwnershipInitialPurchase, type: :
         monthly_rent
         leasehold_charges_shared_ownership
         monthly_charges_shared_ownership_value_check
+        estate_management_fee
       ],
     )
   end
