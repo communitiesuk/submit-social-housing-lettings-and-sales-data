@@ -391,7 +391,7 @@ RSpec.describe Form::Sales::Subsections::HouseholdCharacteristics, type: :model 
           working_situation_6_not_retired_value_check
           working_situation_6_student_not_child_value_check
         ],
-                                                             )
+      )
     end
   end
 

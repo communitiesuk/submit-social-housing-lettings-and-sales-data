@@ -15,7 +15,7 @@ RSpec.describe Form::Sales::Subsections::IncomeBenefitsAndSavings, type: :model 
     let(:section) { instance_double(Form::Sales::Sections::Household, form:) }
 
     context "when before 2025" do
-      let(:form) { instance_double(Form, start_date: Time.utc(2024, 4, 1), start_year_2025_or_later?: false)}
+      let(:form) { instance_double(Form, start_date: Time.utc(2024, 4, 1), start_year_2025_or_later?: false) }
 
       it "has correct pages" do
         expect(subsection.pages.map(&:id)).to eq(
@@ -51,7 +51,7 @@ RSpec.describe Form::Sales::Subsections::IncomeBenefitsAndSavings, type: :model 
     end
 
     context "when 2025" do
-      let(:form) { instance_double(Form, start_date: Time.utc(2025, 4, 1), start_year_2025_or_later?: true)}
+      let(:form) { instance_double(Form, start_date: Time.utc(2025, 4, 1), start_year_2025_or_later?: true) }
 
       it "has correct pages" do
         expect(subsection.pages.map(&:id)).to eq(
