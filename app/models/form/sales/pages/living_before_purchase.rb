@@ -24,9 +24,9 @@ class Form::Sales::Pages::LivingBeforePurchase < ::Form::Page
   end
 
   def page_routed_to?(log)
-    if form.start_year_2025_or_later?
-      log.resale == 2
-    elsif @joint_purchase
+    return false if form.start_year_2025_or_later? && log.resale != 2
+
+    if @joint_purchase
       log.joint_purchase?
     else
       log.not_joint_purchase? || log.jointpur.nil?
