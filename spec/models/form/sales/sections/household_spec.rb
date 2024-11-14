@@ -16,7 +16,7 @@ RSpec.describe Form::Sales::Sections::Household, type: :model do
       %w[
         household_characteristics
         household_situation
-        household_needs
+        other_household_information
       ],
     )
   end

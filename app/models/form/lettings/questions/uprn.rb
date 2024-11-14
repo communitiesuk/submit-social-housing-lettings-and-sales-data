@@ -15,7 +15,7 @@ class Form::Lettings::Questions::Uprn < ::Form::Question
   end
 
   def unanswered_error_message
-    I18n.t("validations.property.uprn.invalid")
+    I18n.t("validations.lettings.property.uprn.invalid")
   end
 
   def get_extra_check_answer_value(log)

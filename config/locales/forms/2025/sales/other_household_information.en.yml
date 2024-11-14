@@ -1,8 +1,8 @@
 en:
   forms:
-    2023:
+    2025:
       sales:
-        household_needs:
+        other_household_information:
           hhregres:
             page_header: ""
             check_answer_label: "Have any of the buyers ever served as a regular in the UK armed forces?"

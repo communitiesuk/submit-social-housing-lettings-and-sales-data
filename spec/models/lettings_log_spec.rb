@@ -194,10 +194,6 @@ RSpec.describe LettingsLog do
       expect(validator).to receive(:validate_tshortfall)
     end
 
-    it "validates let type" do
-      expect(validator).to receive(:validate_unitletas)
-    end
-
     it "validates reason for vacancy" do
       expect(validator).to receive(:validate_rsnvac)
     end
@@ -1010,8 +1006,8 @@ RSpec.describe LettingsLog do
         end
 
         it "does not impact other validations" do
-          expect { lettings_log.update!(startdate: Time.zone.yesterday, first_time_property_let_as_social_housing: 0, rsnvac: 16) }
-            .to raise_error(ActiveRecord::RecordInvalid, /Enter a reason for vacancy that is not 'first let' if unit has been previously let as social housing/)
+          expect { lettings_log.update!(startdate: Time.zone.yesterday, referral: 8, rsnvac: 9) }
+            .to raise_error(ActiveRecord::RecordInvalid, /#{I18n.t("validations.lettings.property.rsnvac.referral_invalid")}/)
         end
       end
 
@@ -1046,8 +1042,8 @@ RSpec.describe LettingsLog do
         end
 
         it "does not impact other validations" do
-          expect { lettings_log.update!(location:, scheme:, first_time_property_let_as_social_housing: 0, rsnvac: 16) }
-            .to raise_error(ActiveRecord::RecordInvalid, /Enter a reason for vacancy that is not 'first let' if unit has been previously let as social housing/)
+          expect { lettings_log.update!(startdate: Time.zone.yesterday, referral: 8, rsnvac: 9) }
+            .to raise_error(ActiveRecord::RecordInvalid, /#{I18n.t("validations.lettings.property.rsnvac.referral_invalid")}/)
         end
       end
     end
