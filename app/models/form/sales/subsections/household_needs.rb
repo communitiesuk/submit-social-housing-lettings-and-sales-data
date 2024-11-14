@@ -7,7 +7,7 @@ class Form::Sales::Subsections::HouseholdNeeds < ::Form::Subsection
 
   def depends_on
     if form.start_year_2025_or_later?
-      [{ "setup_completed?" => true, "is_staircase?" => true }]
+      [{ "setup_completed?" => true, "is_staircase?" => false }]
     else
       [{ "setup_completed?" => true }]
     end
@@ -24,4 +24,11 @@ class Form::Sales::Subsections::HouseholdNeeds < ::Form::Subsection
       Form::Sales::Pages::HouseholdWheelchairCheck.new("wheelchair_check", nil, self),
     ]
   end
+
+  def displayed_in_tasklist?(log)
+    return true unless form.start_year_2025_or_later?
+
+    log.staircase != 1
+  end
+
 end
