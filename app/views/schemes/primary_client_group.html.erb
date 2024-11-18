@@ -30,7 +30,7 @@
         <%= f.hidden_field :check_answers, value: "true" %>
       <% end %>
 
-      <% if params[:referrer] == "check_answers" %>
+      <% if params[:referrer] == "check-answers" %>
         <%= f.hidden_field :check_answers, value: "true" %>
         <%= f.govuk_submit "Save changes" %>
       <% else %>
