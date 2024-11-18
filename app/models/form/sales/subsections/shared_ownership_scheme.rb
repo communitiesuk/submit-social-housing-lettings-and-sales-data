@@ -26,7 +26,7 @@ class Form::Sales::Subsections::SharedOwnershipScheme < ::Form::Subsection
       Form::Sales::Pages::PreviousBedrooms.new(nil, nil, self),
       Form::Sales::Pages::PreviousPropertyType.new(nil, nil, self),
       Form::Sales::Pages::PreviousTenure.new(nil, nil, self),
-      Form::Sales::Pages::ValueSharedOwnership.new(nil, nil, self),
+      Form::Sales::Pages::ValueSharedOwnership.new("value_shared_ownership", nil, self),
       Form::Sales::Pages::AboutPriceValueCheck.new("about_price_shared_ownership_value_check", nil, self),
       Form::Sales::Pages::Equity.new(nil, nil, self),
       Form::Sales::Pages::SharedOwnershipDepositValueCheck.new("shared_ownership_equity_value_check", nil, self),
