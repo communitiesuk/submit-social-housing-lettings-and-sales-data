@@ -1,9 +1,7 @@
 <% content_for :title, "What is the other client group?" %>
 
 <% content_for :before_content do %>
-  <%= govuk_back_link(
-    href: request.query_parameters["check_answers"] ? "check-answers" : "confirm-secondary-client-group",
-  ) %>
+  <%= govuk_back_link(href: :back) %>
 <% end %>
 
 <%= form_for(@scheme, method: :patch) do |f| %>
@@ -22,7 +20,7 @@
         legend: nil %>
 
       <%= f.hidden_field :page, value: "secondary-client-group" %>
-      <% if request.query_parameters["check_answers"] == "true" %>
+      <% if params[:referrer] == "check-answers" %>
         <%= f.hidden_field :check_answers, value: "true" %>
         <%= f.govuk_submit "Save changes" %>
       <% else %>
