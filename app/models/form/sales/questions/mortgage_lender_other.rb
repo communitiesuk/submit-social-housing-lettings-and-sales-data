@@ -2,7 +2,6 @@ class Form::Sales::Questions::MortgageLenderOther < ::Form::Question
   def initialize(id, hsh, subsection, ownershipsch:)
     super(id, hsh, subsection)
     @id = "mortgagelenderother"
-    @copy_key = "sales.sale_information.mortgagelenderother"
     @type = "text"
     @page = page
     @ownershipsch = ownershipsch

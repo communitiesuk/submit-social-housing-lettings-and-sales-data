@@ -2,7 +2,6 @@ class Form::Sales::Questions::Grant < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "grant"
-    @copy_key = "sales.sale_information.grant"
     @type = "numeric"
     @min = 0
     @max = 999_999

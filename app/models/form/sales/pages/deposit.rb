@@ -3,7 +3,6 @@ class Form::Sales::Pages::Deposit < ::Form::Page
     super(id, hsh, subsection)
     @ownershipsch = ownershipsch
     @optional = optional
-    @copy_key = "sales.sale_information.deposit"
   end
 
   def questions
