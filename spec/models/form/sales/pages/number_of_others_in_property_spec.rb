@@ -6,7 +6,8 @@ RSpec.describe Form::Sales::Pages::NumberOfOthersInProperty, type: :model do
   let(:page_id) { "number_of_others_in_property" }
   let(:page_definition) { nil }
   let(:joint_purchase) { false }
-  let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2023, 4, 1))) }
+  let(:form) { Form.new(nil, 2024, [], "sales") }
+  let(:subsection) { instance_double(Form::Subsection, form:, enabled?: true, depends_on: nil) }
 
   it "has correct subsection" do
     expect(page.subsection).to eq(subsection)
@@ -24,19 +25,6 @@ RSpec.describe Form::Sales::Pages::NumberOfOthersInProperty, type: :model do
     expect(page.description).to be_nil
   end
 
-  it "has the correct depends_on" do
-    expect(page.depends_on).to eq([
-      {
-        "buyer_has_seen_privacy_notice?" => true,
-        "joint_purchase?" => joint_purchase,
-      },
-      {
-        "buyer_not_interviewed?" => true,
-        "joint_purchase?" => joint_purchase,
-      },
-    ])
-  end
-
   context "with joint purchase" do
     let(:page_id) { "number_of_others_in_property_joint_purchase" }
     let(:joint_purchase) { true }
@@ -45,17 +33,100 @@ RSpec.describe Form::Sales::Pages::NumberOfOthersInProperty, type: :model do
       expect(page.id).to eq("number_of_others_in_property_joint_purchase")
     end
 
-    it "has the correct depends_on" do
-      expect(page.depends_on).to eq([
-        {
-          "buyer_has_seen_privacy_notice?" => true,
-          "joint_purchase?" => joint_purchase,
-        },
-        {
-          "buyer_not_interviewed?" => true,
-          "joint_purchase?" => joint_purchase,
-        },
-      ])
+    context "when routing" do
+      before do
+        allow(log).to receive(:form).and_return(form)
+      end
+
+      context "with 2024 logs" do
+        context "with joint purchase" do
+          context "when buyer has seen privacy notice and buyer interviewed" do
+            let(:log) { build(:sales_log, privacynotice: 1, jointpur: 1, noint: 0) }
+
+            it "routes to the page" do
+              expect(page.routed_to?(log, nil)).to eq(true)
+            end
+          end
+
+          context "when buyer has seen privacy notice and buyer not interviewed" do
+            let(:log) { build(:sales_log, privacynotice: 1, jointpur: 1, noint: 1) }
+
+            it "routes to the page" do
+              expect(page.routed_to?(log, nil)).to eq(true)
+            end
+          end
+
+          context "and buyer has not seen privacy notice and buyer interviewed" do
+            let(:log) { build(:sales_log, privacynotice: nil, jointpur: 1, noint: 0) }
+
+            it "does not route to the page" do
+              expect(page).not_to be_routed_to(log, nil)
+            end
+          end
+
+          context "and buyer has not seen privacy notice and buyer not interviewed" do
+            let(:log) { build(:sales_log, privacynotice: nil, jointpur: 1, noint: 1) }
+
+            it "routes to the page" do
+              expect(page.routed_to?(log, nil)).to eq(true)
+            end
+          end
+        end
+
+        context "with non joint purchase" do
+          context "when buyer has seen privacy notice and buyer interviewed" do
+            let(:log) { build(:sales_log, privacynotice: 1, jointpur: 2, noint: 0) }
+
+            it "routes to the page" do
+              expect(page).not_to be_routed_to(log, nil)
+            end
+          end
+
+          context "when buyer has seen privacy notice and buyer not interviewed" do
+            let(:log) { build(:sales_log, privacynotice: 1, jointpur: 2, noint: 1) }
+
+            it "routes to the page" do
+              expect(page).not_to be_routed_to(log, nil)
+            end
+          end
+
+          context "and buyer has not seen privacy notice and buyer interviewed" do
+            let(:log) { build(:sales_log, privacynotice: nil, jointpur: 2, noint: 0) }
+
+            it "does not route to the page" do
+              expect(page).not_to be_routed_to(log, nil)
+            end
+          end
+
+          context "and buyer has not seen privacy notice and buyer not interviewed" do
+            let(:log) { build(:sales_log, privacynotice: nil, jointpur: 2, noint: 1) }
+
+            it "routes to the page" do
+              expect(page).not_to be_routed_to(log, nil)
+            end
+          end
+        end
+      end
+
+      context "with 2025 logs" do
+        let(:form) { Form.new(nil, 2025, [], "sales") }
+
+        context "and staircase is not 1" do
+          let(:log) { build(:sales_log, privacynotice: 1, jointpur: 1, noint: 0, staircase: 2) }
+
+          it "routes to the page" do
+            expect(page.routed_to?(log, nil)).to eq(true)
+          end
+        end
+
+        context "and staircase is 1" do
+          let(:log) { build(:sales_log, privacynotice: 1, jointpur: 1, noint: 0, staircase: 1) }
+
+          it "does not route to the page" do
+            expect(page).not_to be_routed_to(log, nil)
+          end
+        end
+      end
     end
   end
 end

@@ -68,6 +68,10 @@ module DerivedVariables::SalesLogVariables
       self.la = nil
     end
 
+    if form.start_year_2025_or_later? && is_bedsit?
+      self.beds = 1
+    end
+
     self.nationality_all = nationality_all_group if nationality_uk_or_prefers_not_to_say?
     self.nationality_all_buyer2 = nationality_all_buyer2_group if nationality2_uk_or_prefers_not_to_say?
 
