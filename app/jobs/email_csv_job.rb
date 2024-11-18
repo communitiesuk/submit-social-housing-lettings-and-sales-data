@@ -21,7 +21,12 @@ class EmailCsvJob < ApplicationJob
 
     filename = "#{[log_type, 'logs', organisation&.name, Time.zone.now].compact.join('-')}.csv"
 
-    storage_service = Storage::S3Service.new(Configuration::EnvConfigurationService.new, ENV["BULK_UPLOAD_BUCKET"])
+    storage_service = if FeatureToggle.upload_enabled?
+                        Storage::S3Service.new(Configuration::EnvConfigurationService.new, ENV["BULK_UPLOAD_BUCKET"])
+                      else
+                        Storage::LocalDiskService.new
+                      end
+
     storage_service.write_file(filename, BYTE_ORDER_MARK + csv_string)
     csv_download = CsvDownload.create!(user:, organisation: user.organisation, filename:, download_type: log_type)
 
