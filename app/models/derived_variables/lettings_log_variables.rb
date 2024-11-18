@@ -124,6 +124,13 @@ module DerivedVariables::LettingsLogVariables
 
     self.nationality_all = nationality_all_group if nationality_uk_or_prefers_not_to_say?
 
+    if self.startdate_changed?
+      unless LocalAuthority.active(self.startdate).where(code: la).exists?
+        self.la = nil
+        self.is_la_inferred = false
+      end
+    end
+    
     reset_address_fields! if is_supported_housing?
   end
 
