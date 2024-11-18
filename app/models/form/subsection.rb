@@ -14,6 +14,10 @@ class Form::Subsection
 
   delegate :form, to: :section
 
+  def copy_key
+    @copy_key ||= @id
+  end
+
   def questions
     @questions ||= pages.flat_map(&:questions)
   end
