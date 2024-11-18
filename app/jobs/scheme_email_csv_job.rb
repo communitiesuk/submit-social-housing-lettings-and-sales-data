@@ -1,4 +1,5 @@
 class SchemeEmailCsvJob < ApplicationJob
+  include Rails.application.routes.url_helpers
   queue_as :default
 
   BYTE_ORDER_MARK = "\uFEFF".freeze # Required to ensure Excel always reads CSV as UTF-8
@@ -25,9 +26,9 @@ class SchemeEmailCsvJob < ApplicationJob
 
     storage_service = Storage::S3Service.new(Configuration::EnvConfigurationService.new, ENV["BULK_UPLOAD_BUCKET"])
     storage_service.write_file(filename, BYTE_ORDER_MARK + csv_string)
-    CsvDownload.create!(user:, organisation: user.organisation, filename:, download_type:)
+    csv_download = CsvDownload.create!(user:, organisation: user.organisation, filename:, download_type:)
 
-    url = storage_service.get_presigned_url(filename, EXPIRATION_TIME)
+    url = download_csv_download_path(csv_download.id)
 
     CsvDownloadMailer.new.send_csv_download_mail(user, url, EXPIRATION_TIME)
   end

@@ -3,10 +3,8 @@ require "rails_helper"
 describe SchemeEmailCsvJob do
   include Helpers
 
-  test_url = :test_url
-
   let(:job) { described_class.new }
-  let(:storage_service) { instance_double(Storage::S3Service, write_file: nil, get_presigned_url: test_url) }
+  let(:storage_service) { instance_double(Storage::S3Service, write_file: nil) }
   let(:mailer) { instance_double(CsvDownloadMailer, send_csv_download_mail: nil) }
   let(:user) { FactoryBot.create(:user) }
 
@@ -144,7 +142,7 @@ describe SchemeEmailCsvJob do
   end
 
   it "sends an E-mail with the presigned URL and duration" do
-    expect(mailer).to receive(:send_csv_download_mail).with(user, test_url, instance_of(Integer))
+    expect(mailer).to receive(:send_csv_download_mail).with(user, /csv-downloads/, instance_of(Integer))
     job.perform(user)
   end
 end

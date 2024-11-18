@@ -3,8 +3,6 @@ require "rails_helper"
 describe EmailCsvJob do
   include Helpers
 
-  test_url = :test_url
-
   let(:job) { described_class.new }
   let(:user) { FactoryBot.create(:user) }
   let(:storage_service) { instance_double(Storage::S3Service) }
@@ -22,7 +20,6 @@ describe EmailCsvJob do
   before do
     allow(Storage::S3Service).to receive(:new).and_return(storage_service)
     allow(storage_service).to receive(:write_file)
-    allow(storage_service).to receive(:get_presigned_url).and_return(test_url)
 
     allow(Csv::SalesLogCsvService).to receive(:new).and_return(sales_log_csv_service)
     allow(sales_log_csv_service).to receive(:prepare_csv).and_return("")
@@ -123,7 +120,7 @@ describe EmailCsvJob do
   end
 
   it "sends an E-mail with the presigned URL and duration" do
-    expect(mailer).to receive(:send_csv_download_mail).with(user, test_url, instance_of(Integer))
+    expect(mailer).to receive(:send_csv_download_mail).with(user, /csv-downloads/, instance_of(Integer))
     job.perform(user)
   end
 end
