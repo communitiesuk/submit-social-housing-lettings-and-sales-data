@@ -7,6 +7,10 @@ RSpec.describe Form::Sales::Sections::SaleInformation, type: :model do
   let(:section_definition) { nil }
   let(:form) { instance_double(Form) }
 
+  before do
+    allow(form).to receive(:start_year_2025_or_later?).and_return(false)
+  end
+
   it "has correct form" do
     expect(sale_information.form).to eq(form)
   end
