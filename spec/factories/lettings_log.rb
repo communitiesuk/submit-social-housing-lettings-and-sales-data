@@ -88,7 +88,7 @@ FactoryBot.define do
       wchair { 1 }
       earnings { 268 }
       incfreq { 1 }
-      benefits { 4 }
+      benefits { 1 }
       period { 2 }
       brent { 200 }
       scharge { 50 }
