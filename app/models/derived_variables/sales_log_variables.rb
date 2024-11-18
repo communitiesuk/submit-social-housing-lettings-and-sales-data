@@ -75,11 +75,9 @@ module DerivedVariables::SalesLogVariables
     self.nationality_all = nationality_all_group if nationality_uk_or_prefers_not_to_say?
     self.nationality_all_buyer2 = nationality_all_buyer2_group if nationality2_uk_or_prefers_not_to_say?
 
-    if self.saledate_changed?
-      unless LocalAuthority.active(self.saledate).where(code: la).exists?
+    if saledate_changed? && !LocalAuthority.active(saledate).where(code: la).exists?
         self.la = nil
         self.is_la_inferred = false
-      end
     end
 
     set_encoded_derived_values!(DEPENDENCIES)
