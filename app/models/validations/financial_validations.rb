@@ -17,7 +17,7 @@ module Validations::FinancialValidations
       economic_status = record["ecstat#{n}"]
       is_employed = EMPLOYED_STATUSES.include?(economic_status)
       relationship = record["relat#{n}"]
-      is_partner_or_main = relationship == "P" || (relationship.nil? && economic_status.present?)
+      is_partner_or_main = relationship == "P" || n == 1
       if is_employed && is_partner_or_main && record.benefits == 1
         record.errors.add :benefits, I18n.t("validations.lettings.financial.benefits.part_or_full_time")
       end
