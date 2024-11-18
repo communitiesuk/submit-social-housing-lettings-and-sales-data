@@ -1,6 +1,6 @@
 <ol class="app-task-list govuk-!-margin-top-8">
   <% @log.form.sections.each do |section| %>
-    <% next if section.subsections.none? { |subsection| subsection.displayed_in_tasklist?(@log) } %>
+    <% next unless section.displayed_in_tasklist?(@log) %>
     <li>
       <h2 class="app-task-list__section-heading">
         <%= section.label %>
