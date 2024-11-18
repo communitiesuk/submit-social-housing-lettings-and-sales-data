@@ -1393,9 +1393,9 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
 
         it "does not add errors and sets mortgage used to 3" do
           parser.valid?
-          expect(parser.log.mortgageused).to be(3)
-          expect(parser.log.stairowned).to be(100)
-          expect(parser.log.deposit).to be(nil)
+          expect(parser.log.mortgageused).to eq(3)
+          expect(parser.log.stairowned).to eq(100)
+          expect(parser.log.deposit).to be_nil
           expect(parser.errors[:field_103]).to be_empty
           expect(parser.errors[:field_109]).to be_empty
         end

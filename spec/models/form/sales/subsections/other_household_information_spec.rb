@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Form::Sales::Subsections::HouseholdNeeds, type: :model do
+RSpec.describe Form::Sales::Subsections::OtherHouseholdInformation, type: :model do
   subject(:household_characteristics) { described_class.new(subsection_id, subsection_definition, section) }
 
   let(:subsection_id) { nil }
@@ -27,7 +27,7 @@ RSpec.describe Form::Sales::Subsections::HouseholdNeeds, type: :model do
   end
 
   it "has the correct id" do
-    expect(household_characteristics.id).to eq("household_needs")
+    expect(household_characteristics.id).to eq("other_household_information")
   end
 
   it "has the correct label" do
