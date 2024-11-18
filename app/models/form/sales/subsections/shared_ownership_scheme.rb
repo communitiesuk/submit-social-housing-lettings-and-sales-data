@@ -4,6 +4,7 @@ class Form::Sales::Subsections::SharedOwnershipScheme < ::Form::Subsection
     @id = "shared_ownership_scheme"
     @label = "Shared ownership scheme"
     @depends_on = [{ "ownershipsch" => 1, "setup_completed?" => true }]
+    @copy_key = "sale_information"
   end
 
   def pages
