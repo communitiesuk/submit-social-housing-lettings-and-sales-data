@@ -145,7 +145,7 @@ class SchemesController < ApplicationController
     if @scheme.errors.empty? && @scheme.update(scheme_params)
       @scheme.update!(secondary_client_group: nil) if @scheme.has_other_client_group == "No"
       if scheme_params[:confirmed] == "true" || @scheme.confirmed?
-        if check_answers && confirm_secondary_page?(page)
+        if check_answers && should_direct_via_secondary_client_group_page?(page)
           redirect_to scheme_secondary_client_group_path(@scheme, referrer: "check-answers")
         else
           @scheme.locations.update!(confirmed: true)
@@ -157,7 +157,7 @@ class SchemesController < ApplicationController
           redirect_to scheme_path(@scheme)
         end
       elsif check_answers
-        if confirm_secondary_page?(page)
+        if should_direct_via_secondary_client_group_page?(page)
           redirect_to scheme_secondary_client_group_path(@scheme, referrer: "check-answers")
         else
           redirect_to scheme_check_answers_path(@scheme)
@@ -249,8 +249,8 @@ private
     end
   end
 
-  def confirm_secondary_page?(page)
-    page == "confirm-secondary" && @scheme.has_other_client_group == "Yes"
+  def should_direct_via_secondary_client_group_page?(page)
+    page == "confirm-secondary" && @scheme.has_other_client_group == "Yes" && @scheme.secondary_client_group.nil?
   end
 
   def current_template(page)

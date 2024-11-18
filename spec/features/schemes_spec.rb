@@ -727,13 +727,6 @@ RSpec.describe "Schemes scheme Features" do
               expect(page).to have_content "Check your changes before creating this scheme"
             end
 
-            it "keeps the provider answer when switching between other provider options" do
-              click_link("Change", href: "/schemes/#{scheme.id}/confirm-secondary-client-group?referrer=check-answers", match: :first)
-              choose "Yes"
-              click_button "Save changes"
-              expect(find_field("Offenders and people at risk of offending")).to be_checked
-            end
-
             it "does not display the answer if it's changed to the same support provider" do
               click_link("Change", href: "/schemes/#{scheme.id}/details?referrer=check-answers", match: :first)
               choose "The same organisation that owns the housing stock"
