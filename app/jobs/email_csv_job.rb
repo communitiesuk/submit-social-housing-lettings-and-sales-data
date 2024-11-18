@@ -22,6 +22,7 @@ class EmailCsvJob < ApplicationJob
 
     storage_service = Storage::S3Service.new(Configuration::EnvConfigurationService.new, ENV["BULK_UPLOAD_BUCKET"])
     storage_service.write_file(filename, BYTE_ORDER_MARK + csv_string)
+    CsvDownload.create!(user:, organisation: user.organisation, filename:, download_type: log_type)
 
     url = storage_service.get_presigned_url(filename, EXPIRATION_TIME)
 

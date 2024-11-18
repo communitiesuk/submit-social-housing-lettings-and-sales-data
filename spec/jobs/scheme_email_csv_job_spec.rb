@@ -53,6 +53,15 @@ describe SchemeEmailCsvJob do
           job.perform(user, nil, {}, nil, nil, download_type)
         end
       end
+
+      it "creates a CsvDownload record" do
+        job.perform(user, nil, {}, nil, nil, download_type)
+        expect(CsvDownload.count).to eq(1)
+        expect(CsvDownload.first.user).to eq(user)
+        expect(CsvDownload.first.organisation).to eq(user.organisation)
+        expect(CsvDownload.first.filename).to match(/schemes-.*\.csv/)
+        expect(CsvDownload.first.download_type).to eq("schemes")
+      end
     end
 
     context "when download type locations" do
@@ -62,6 +71,15 @@ describe SchemeEmailCsvJob do
         expect(storage_service).to receive(:write_file).with(/locations-.*\.csv/, anything)
         job.perform(user, nil, {}, nil, nil, download_type)
       end
+
+      it "creates a CsvDownload record" do
+        job.perform(user, nil, {}, nil, nil, download_type)
+        expect(CsvDownload.count).to eq(1)
+        expect(CsvDownload.first.user).to eq(user)
+        expect(CsvDownload.first.organisation).to eq(user.organisation)
+        expect(CsvDownload.first.filename).to match(/locations-.*\.csv/)
+        expect(CsvDownload.first.download_type).to eq("locations")
+      end
     end
 
     context "when download type combined" do
@@ -70,6 +88,15 @@ describe SchemeEmailCsvJob do
       it "uses an appropriate filename in S3" do
         expect(storage_service).to receive(:write_file).with(/schemes-and-locations.*\.csv/, anything)
         job.perform(user, nil, {}, nil, nil, download_type)
+      end
+
+      it "creates a CsvDownload record" do
+        job.perform(user, nil, {}, nil, nil, download_type)
+        expect(CsvDownload.count).to eq(1)
+        expect(CsvDownload.first.user).to eq(user)
+        expect(CsvDownload.first.organisation).to eq(user.organisation)
+        expect(CsvDownload.first.filename).to match(/schemes-and-locations-.*\.csv/)
+        expect(CsvDownload.first.download_type).to eq("combined")
       end
     end
 

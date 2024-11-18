@@ -67,6 +67,15 @@ describe EmailCsvJob do
       expect(lettings_log_csv_service).to receive(:prepare_csv).with(lettings_logs)
       job.perform(user, nil, {}, nil, nil, codes_only_export)
     end
+
+    it "creates a CsvDownload record" do
+      job.perform(user, nil, {}, nil, nil, codes_only_export, "lettings")
+      expect(CsvDownload.count).to eq(1)
+      expect(CsvDownload.first.user).to eq(user)
+      expect(CsvDownload.first.organisation).to eq(user.organisation)
+      expect(CsvDownload.first.filename).to match(/lettings-logs-.*\.csv/)
+      expect(CsvDownload.first.download_type).to eq("lettings")
+    end
   end
 
   context "when exporting sales logs" do
@@ -101,6 +110,15 @@ describe EmailCsvJob do
     it "passes the logs returned by the filter manager to the csv service" do
       expect(sales_log_csv_service).to receive(:prepare_csv).with(sales_logs)
       job.perform(user, nil, {}, nil, nil, codes_only_export, "sales")
+    end
+
+    it "creates a CsvDownload record" do
+      job.perform(user, nil, {}, nil, nil, codes_only_export, "sales")
+      expect(CsvDownload.count).to eq(1)
+      expect(CsvDownload.first.user).to eq(user)
+      expect(CsvDownload.first.organisation).to eq(user.organisation)
+      expect(CsvDownload.first.filename).to match(/sales-logs-.*\.csv/)
+      expect(CsvDownload.first.download_type).to eq("sales")
     end
   end
 
