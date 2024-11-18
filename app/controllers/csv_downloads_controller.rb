@@ -5,6 +5,8 @@ class CsvDownloadsController < ApplicationController
     csv_download = CsvDownload.find(params[:id])
     authorize csv_download
 
+    return render "errors/download_link_expired" if csv_download.expired?
+
     downloader = Csv::Downloader.new(csv_download:)
 
     if Rails.env.development?

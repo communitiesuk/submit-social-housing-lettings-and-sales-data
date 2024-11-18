@@ -3,4 +3,8 @@ class CsvDownload < ApplicationRecord
 
   belongs_to :user
   belongs_to :organisation
+
+  def expired?
+    created_at < 24.hours.ago
+  end
 end
