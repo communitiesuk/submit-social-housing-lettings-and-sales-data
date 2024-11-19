@@ -75,7 +75,7 @@ module DerivedVariables::SalesLogVariables
     self.nationality_all = nationality_all_group if nationality_uk_or_prefers_not_to_say?
     self.nationality_all_buyer2 = nationality_all_buyer2_group if nationality2_uk_or_prefers_not_to_say?
 
-    self.numstair = is_firststair? ? 1 : nil if self.numstair == 1 && self.firststair_changed?
+    self.numstair = is_firststair? ? 1 : nil if numstair == 1 && firststair_changed?
     self.mrent = 0 if stairowned_100?
 
     set_encoded_derived_values!(DEPENDENCIES)
