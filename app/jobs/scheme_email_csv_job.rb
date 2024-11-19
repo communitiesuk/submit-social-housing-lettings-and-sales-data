@@ -33,7 +33,7 @@ class SchemeEmailCsvJob < ApplicationJob
     storage_service.write_file(filename, BYTE_ORDER_MARK + csv_string)
     csv_download = CsvDownload.create!(user:, organisation: user.organisation, filename:, download_type:, expiration_time: EXPIRATION_TIME)
 
-    url = download_csv_download_path(csv_download.id)
+    url = download_csv_download_url(csv_download.id, host: ENV["APP_HOST"])
 
     CsvDownloadMailer.new.send_csv_download_mail(user, url, EXPIRATION_TIME)
   end
