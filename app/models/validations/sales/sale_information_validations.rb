@@ -356,18 +356,6 @@ module Validations::Sales::SaleInformationValidations
     end
   end
 
-  def validate_number_of_staircase_transactions(record)
-    return unless record.numstair
-
-    if record.firststair == 1 && record.numstair >= 2 || record.firststair != 1 && record.numstair == 1
-      record.errors.add :numstair, I18n.t("validations.sales.sale_information.numstair.must_be_greater_than_one")
-      record.errors.add :firststair, I18n.t("validations.sales.sale_information.firststair.more_than_one_transaction")
-    end
-    if record.numstair > 10
-      record.errors.add :numstair, I18n.t("validations.sales.sale_information.numstair.must_be_ten_or_less")
-    end
-  end
-
   def over_tolerance?(expected, actual, tolerance, strict: false)
     if strict
       (expected - actual).abs > tolerance
