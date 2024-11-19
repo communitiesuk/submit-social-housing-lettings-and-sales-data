@@ -59,7 +59,7 @@ describe SchemeEmailCsvJob do
         expect(CsvDownload.first.organisation).to eq(user.organisation)
         expect(CsvDownload.first.filename).to match(/schemes-.*\.csv/)
         expect(CsvDownload.first.download_type).to eq("schemes")
-        expect(CsvDownload.first.expiration_time).to eq(86_400)
+        expect(CsvDownload.first.expiration_time).to eq(172_800)
       end
     end
 
@@ -78,7 +78,7 @@ describe SchemeEmailCsvJob do
         expect(CsvDownload.first.organisation).to eq(user.organisation)
         expect(CsvDownload.first.filename).to match(/locations-.*\.csv/)
         expect(CsvDownload.first.download_type).to eq("locations")
-        expect(CsvDownload.first.expiration_time).to eq(86_400)
+        expect(CsvDownload.first.expiration_time).to eq(172_800)
       end
     end
 
@@ -97,7 +97,7 @@ describe SchemeEmailCsvJob do
         expect(CsvDownload.first.organisation).to eq(user.organisation)
         expect(CsvDownload.first.filename).to match(/schemes-and-locations-.*\.csv/)
         expect(CsvDownload.first.download_type).to eq("combined")
-        expect(CsvDownload.first.expiration_time).to eq(86_400)
+        expect(CsvDownload.first.expiration_time).to eq(172_800)
       end
     end
 

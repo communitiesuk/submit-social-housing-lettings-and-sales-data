@@ -4,7 +4,7 @@ class EmailCsvJob < ApplicationJob
 
   BYTE_ORDER_MARK = "\uFEFF".freeze # Required to ensure Excel always reads CSV as UTF-8
 
-  EXPIRATION_TIME = 24.hours.to_i
+  EXPIRATION_TIME = 48.hours.to_i
 
   def perform(user, search_term = nil, filters = {}, all_orgs = false, organisation = nil, codes_only_export = false, log_type = "lettings", year = nil) # rubocop:disable Style/OptionalBooleanParameter - sidekiq can't serialise named params
     export_type = codes_only_export ? "codes" : "labels"
