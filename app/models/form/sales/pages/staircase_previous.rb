@@ -13,6 +13,6 @@ class Form::Sales::Pages::StaircasePrevious < ::Form::Page
       Form::Sales::Questions::StaircaseCount.new(nil, nil, self),
       Form::Sales::Questions::StaircaseLastDate.new(nil, nil, self),
       Form::Sales::Questions::StaircaseInitialDate.new(nil, nil, self),
-    ].compact
+    ]
   end
 end
