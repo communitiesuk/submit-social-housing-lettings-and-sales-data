@@ -72,7 +72,7 @@ describe EmailCsvJob do
       expect(CsvDownload.first.organisation).to eq(user.organisation)
       expect(CsvDownload.first.filename).to match(/lettings-logs-.*\.csv/)
       expect(CsvDownload.first.download_type).to eq("lettings")
-      expect(CsvDownload.first.expiration_time).to eq(86400)
+      expect(CsvDownload.first.expiration_time).to eq(86_400)
     end
   end
 
@@ -117,7 +117,7 @@ describe EmailCsvJob do
       expect(CsvDownload.first.organisation).to eq(user.organisation)
       expect(CsvDownload.first.filename).to match(/sales-logs-.*\.csv/)
       expect(CsvDownload.first.download_type).to eq("sales")
-      expect(CsvDownload.first.expiration_time).to eq(86400)
+      expect(CsvDownload.first.expiration_time).to eq(86_400)
     end
   end
 
