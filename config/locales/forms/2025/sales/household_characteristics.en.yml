@@ -80,14 +80,14 @@ en:
           relat2:
             buyer:
               page_header: ""
-              check_answer_label: "Buyer 2's relationship to buyer 1"
+              check_answer_label: "Buyer 2 is the partner of buyer 1"
               hint_text: ""
-              question_text: "What is buyer 2's relationship to buyer 1?"
+              question_text: "Is buyer 2 the partner of buyer 1?"
             person:
               page_header: ""
-              check_answer_label: "Person 2’s relationship to Buyer 1"
+              check_answer_label: "Person 2 is the partner of buyer 1"
               hint_text: ""
-              question_text: "What is Person 2’s relationship to Buyer 1?"
+              question_text: "Is person 2 the partner of buyer 1?"
 
           age2:
             buyer:
@@ -212,9 +212,9 @@ en:
 
           relat3:
             page_header: ""
-            check_answer_label: "Person 3’s relationship to Buyer 1"
+            check_answer_label: "Person 3 is the partner of buyer 1"
             hint_text: ""
-            question_text: "What is Person 3’s relationship to Buyer 1?"
+            question_text: "Is person 3 the partner of buyer 1?"
 
           age3:
             page_header: ""
@@ -247,9 +247,9 @@ en:
 
           relat4:
             page_header: ""
-            check_answer_label: "Person 4’s relationship to Buyer 1"
+            check_answer_label: "Person 4 is the partner of buyer 1"
             hint_text: ""
-            question_text: "What is Person 4’s relationship to Buyer 1?"
+            question_text: "Is person 4 the partner of buyer 1?"
 
           age4:
             page_header: ""
@@ -282,9 +282,9 @@ en:
 
           relat5:
             page_header: ""
-            check_answer_label: "Person 5’s relationship to Buyer 1"
+            check_answer_label: "Person 5 is the partner of buyer 1"
             hint_text: ""
-            question_text: "What is Person 5’s relationship to Buyer 1?"
+            question_text: "Is person 5 the partner of buyer 1?"
 
           age5:
             page_header: ""
@@ -317,9 +317,9 @@ en:
 
           relat6:
             page_header: ""
-            check_answer_label: "Person 6’s relationship to Buyer 1"
+            check_answer_label: "Person 6 is the partner of buyer 1"
             hint_text: ""
-            question_text: "What is Person 6’s relationship to Buyer 1?"
+            question_text: "Is person 6 the partner of buyer 1?"
 
           age6:
             page_header: ""
