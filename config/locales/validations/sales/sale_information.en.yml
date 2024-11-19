@@ -127,5 +127,7 @@ en:
           value_over_discounted_max: "The percentage discount multiplied by the purchase price is %{discount_value}. This figure should not be more than £102,400 for properties outside of London."
         numstair:
           must_be_greater_than_one: "The number of staircasing transactions must be greater than 1 when this is not the first staircasing transaction."
+          must_be_one: "The number of staircasing transactions must be 1 when this is the first staircasing transaction."
         firststair:
-          more_than_one_transaction: "The answer to 'Is this the first staircasing transaction?' cannot be 'yes' if the number of staircasing transactions is more than 1."
+          cannot_be_no: "The answer to 'Is this the first staircasing transaction?' cannot be 'no' if the number of staircasing transactions is 1."
+          cannot_be_yes: "The answer to 'Is this the first staircasing transaction?' cannot be 'yes' if the number of staircasing transactions is greater than 1."

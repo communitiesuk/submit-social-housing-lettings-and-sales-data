@@ -1406,4 +1406,54 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
       end
     end
   end
+
+  describe "#validate_number_of_staircase_transactions" do
+    let(:record) { build(:sales_log, numstair:, firststair:) }
+
+    before do
+      sale_information_validator.validate_number_of_staircase_transactions(record)
+    end
+
+    context "when it is not the first staircasing transaction" do
+      context "and the number of staircasing transactions is between 2 and 10" do
+        let(:numstair) { 6 }
+        let(:firststair) { 2 }
+
+        it "does not add an error" do
+          expect(record.errors).to be_empty
+        end
+      end
+
+      context "and the number of staircasing transactions is less than 2" do
+        let(:numstair) { 1 }
+        let(:firststair) { 2 }
+
+        it "adds an error" do
+          expect(record.errors[:numstair]).to include(I18n.t("validations.sales.sale_information.numstair.must_be_greater_than_one"))
+          expect(record.errors[:firststair]).to include(I18n.t("validations.sales.sale_information.firststair.cannot_be_no"))
+        end
+      end
+    end
+
+    context "when it is the first staircasing transaction" do
+      context "and numstair is also 1" do
+        let(:numstair) { 1 }
+        let(:firststair) { 1 }
+
+        it "does not add an error" do
+          expect(record.errors).to be_empty
+        end
+      end
+
+      context "and numstair is greater than 1" do
+        let(:numstair) { 2 }
+        let(:firststair) { 1 }
+
+        it "adds an error" do
+          expect(record.errors[:numstair]).to include(I18n.t("validations.sales.sale_information.numstair.must_be_one"))
+          expect(record.errors[:firststair]).to include(I18n.t("validations.sales.sale_information.firststair.cannot_be_yes"))
+        end
+      end
+    end
+  end
 end
