@@ -32,7 +32,7 @@ RSpec.describe Form::Sales::Pages::StaircaseSale, type: :model do
       {
         "staircase" => 1,
         "stairowned" => 100,
-      }
+      },
     ])
   end
 end
