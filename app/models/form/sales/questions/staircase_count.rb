@@ -6,6 +6,7 @@ class Form::Sales::Questions::StaircaseCount < ::Form::Question
     @type = "numeric"
     @width = 2
     @min = 2
+    @max = 10
     @step = 1
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
   end
