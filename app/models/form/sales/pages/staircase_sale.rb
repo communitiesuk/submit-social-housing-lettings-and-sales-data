@@ -12,6 +12,6 @@ class Form::Sales::Pages::StaircaseSale < ::Form::Page
   def questions
     @questions ||= [
       Form::Sales::Questions::StaircaseSale.new(nil, nil, self),
-    ].compact
+    ]
   end
 end

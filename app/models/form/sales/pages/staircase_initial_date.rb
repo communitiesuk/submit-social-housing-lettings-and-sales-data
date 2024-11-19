@@ -10,6 +10,6 @@ class Form::Sales::Pages::StaircaseInitialDate < ::Form::Page
   def questions
     @questions ||= [
       Form::Sales::Questions::StaircaseInitialDate.new(nil, nil, self),
-    ].compact
+    ]
   end
 end
