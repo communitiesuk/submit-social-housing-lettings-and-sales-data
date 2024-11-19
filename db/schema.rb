@@ -67,6 +67,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_18_104046) do
   create_table "csv_downloads", force: :cascade do |t|
     t.string "download_type"
     t.string "filename"
+    t.integer "expiration_time"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id"

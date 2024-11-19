@@ -31,7 +31,7 @@ class SchemeEmailCsvJob < ApplicationJob
                       end
 
     storage_service.write_file(filename, BYTE_ORDER_MARK + csv_string)
-    csv_download = CsvDownload.create!(user:, organisation: user.organisation, filename:, download_type:)
+    csv_download = CsvDownload.create!(user:, organisation: user.organisation, filename:, download_type:, expiration_time: EXPIRATION_TIME)
 
     url = download_csv_download_path(csv_download.id)
 

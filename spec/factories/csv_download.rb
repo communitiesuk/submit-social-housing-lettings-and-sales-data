@@ -4,5 +4,6 @@ FactoryBot.define do
     user { create(:user) }
     organisation { user.organisation }
     filename { "lettings.csv" }
+    expiration_time { 24.hours.to_i }
   end
 end
