@@ -12,14 +12,12 @@ module Validations::Sales::SaleInformationValidations
       record.errors.add :saledate, I18n.t("validations.sales.sale_information.saledate.must_be_after_hodate")
     end
 
-    if record.saledate - record.hodate >= 3.years && record.startdate.year <= 2024
-      record.errors.add :hodate, I18n.t("validations.sales.sale_information.hodate.must_be_less_than_3_years_from_saledate")
-      record.errors.add :saledate, I18n.t("validations.sales.sale_information.saledate.must_be_less_than_3_years_from_hodate")
-    end
-
     if record.saledate - record.hodate >= 5.years && record.form.start_year_2025_or_later?
       record.errors.add :hodate, I18n.t("validations.sales.sale_information.hodate.must_be_less_than_5_years_from_saledate")
       record.errors.add :saledate, I18n.t("validations.sales.sale_information.saledate.must_be_less_than_5_years_from_hodate")
+    elsif record.saledate - record.hodate >= 3.years && record.startdate.year <= 2024
+      record.errors.add :hodate, I18n.t("validations.sales.sale_information.hodate.must_be_less_than_3_years_from_saledate")
+      record.errors.add :saledate, I18n.t("validations.sales.sale_information.saledate.must_be_less_than_3_years_from_hodate")
     end
   end
 
