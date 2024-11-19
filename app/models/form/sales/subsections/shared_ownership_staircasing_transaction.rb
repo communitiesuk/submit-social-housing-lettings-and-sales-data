@@ -30,6 +30,6 @@ class Form::Sales::Subsections::SharedOwnershipStaircasingTransaction < ::Form::
   end
 
   def displayed_in_tasklist?(log)
-    (log.ownershipsch.nil? || log.ownershipsch == 1) && (log.staircase.nil? || log.staircase == 1)
+    log.staircase == 1 && (log.ownershipsch.nil? || log.ownershipsch == 1)
   end
 end
