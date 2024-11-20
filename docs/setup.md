@@ -79,15 +79,24 @@ We recommend using [nvm](https://github.com/nvm-sh/nvm) to manage NodeJS version
    macOS (using nvm):
 
    ```bash
-   nvm install 16
-   nvm use 16
+   nvm install 20
+   nvm use 20
    brew install yarn
    ```
+
+   or you could run it without specifying the version and it should use the version from .nvmrc
+
+   ```bash
+   nvm install
+   nvm use
+   brew install yarn
+   ```
+
 
    Linux (Debian):
 
    ```bash
-   curl -sL https://deb.nodesource.com/setup_16.x | sudo bash -
+   curl -sL https://deb.nodesource.com/setup_20.x | sudo bash - 
    sudo apt -y install nodejs
    mkdir -p ~/.npm-packages
    npm config set prefix ~/.npm-packages

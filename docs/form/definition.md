@@ -6,25 +6,15 @@ nav_order: 3
 
 # Form definition
 
-The current system is built around a form definition written in JSON. At the top level every form will expect to have the following attributes:
+The current system is built around a form definition constructed from various Form subclasses. At the top level every form will expect to have the following attributes:
 
 - Form type: this is to define whether the form is a lettings form or a sales form. The questions will differ between the types.
 - Start date: the start of the collection window for the form, this will usually be in April.
-- End date: the end date of the collection window for the form, this will usually be in July, a year after the start date.
+- Submission deadline: the official end date of the collection window for the form, this will usually be in July, a year after the start date.
+- New logs end date: the end date for creating any new logs for this form
+- Edit end date: the end date for editing any existing logs for this form
 - Sections: the sections in the form, this block is where the bulk of the form definition will be.
 
-An example of this might look like the following:
-
-```json
-{
-  "form_type": "lettings",
-  "start_date": "2021-04-01T00:00:00.000+01:00",
-  "end_date": "2022-07-01T00:00:00.000+01:00",
-  "sections": {
-    ...
-  }
-}
-```
 
 Note that the end date of one form will overlap the start date of another to allow for late submissions. This means that every year there will be a period of time in which two forms are running simultaneously.
 
@@ -39,24 +29,24 @@ Rails uses the model, view, controller (MVC) pattern which we follow.
 
 ## Form model
 
-There is no need to manually initialise a form object as this is handled by the FormHandler class at boot time. If a new form needs to be added then a JSON file containing the form definition should be added to `config/forms` where the FormHandler will be able to locate it and instantiate it.
+There is no need to manually initialise a form object as this is handled by the FormHandler class at boot time.
 
 A form has the following attributes:
 
 - `name`: The name of the form
-- `setup_sections`: The setup section (this is not defined in the JSON, for more information see this)
-- `form_definition`: The parsed form JSON
-- `form_sections`: The sections found within the form definition JSON
+- `setup_sections`: The setup section
+- `form_sections`: The sections passed to form on init
 - `type`: The type of form (this is used to indicate if the form is for a sale or a letting)
-- `sections`: The combination of the setup section with those found in the JSON definition
+- `sections`: The combination of the setup section with form sections
 - `subsections`: The subsections of the form (these live under the sections)
 - `pages`: The pages of the form (these live under the subsections)
 - `questions`: The questions of the form (these live under the pages)
 - `start_date`: The start date of the form, in ISO 8601 format
-- `end_date`: The end date of the form, in ISO 8601 format
+- `submission_deadline`: The official end date of the form, in ISO 8601 format
+- `new_logs_end_date`: The new logs end date of the form, in ISO 8601 format
+- `edit_end_date`: The edit end date of the form, in ISO 8601 format
 
-Each form has an `end_date` which for JSON forms is defined in the form definition JSON file and for code defined forms it is set to 1st July, 1 year after the start year.
-Logs with a form that has `end_date` in the past can no longer be edited through the UI.
+Logs with a form that has `edit_end_date` in the past can no longer be edited through the UI.
 
 ## Form views
 
