@@ -47,7 +47,7 @@ class Form::Sales::Pages::PropertyPostcode < ::Form::Page
 end
 ```
 
-In the above example the the subsection has the id `property_postcode`. This id is used for the url of the web page, but the underscore is replaced with a hash, so the url for this page would be `[environment-url]/logs/[log-id]/property-postcode` e.g. on staging this url might look like the following: `https://staging.submit-social-housing-data.communities.gov.uk/logs/1234/property-postcode`.
+In the above example the the subsection has the id `property_postcode`. This id is used for the url of the web page, but the underscore is replaced with a dash, so the url for this page would be `[environment-url]/logs/[log-id]/property-postcode` e.g. on staging this url might look like the following: `https://staging.submit-social-housing-data.communities.gov.uk/logs/1234/property-postcode`.
 
 The header is optional but if provided is used for the heading displayed on the page.
 
