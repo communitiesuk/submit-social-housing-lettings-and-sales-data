@@ -704,7 +704,7 @@ RSpec.describe Validations::SetupValidations do
       end
 
       it "produces no error when location is completes" do
-        location.update!(units: 1)
+        location.update!(mobility_type: "A")
         location.reload
         record.location = location
         setup_validator.validate_location(record)
