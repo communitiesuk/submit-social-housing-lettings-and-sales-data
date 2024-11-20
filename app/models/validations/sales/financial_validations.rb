@@ -73,8 +73,9 @@ module Validations::Sales::FinancialValidations
                 end
 
     if threshold && record.stairbought < threshold
-      record.errors.add :stairbought, I18n.t("validations.sales.financial.stairbought.percentage_bought_must_be_at_least_threshold", threshold:)
-      record.errors.add :type, I18n.t("validations.sales.financial.type.percentage_bought_must_be_at_least_threshold", threshold:)
+      shared_ownership_type = record.form.get_question("type", record).label_from_value(record.type).downcase
+      record.errors.add :stairbought, I18n.t("validations.sales.financial.stairbought.percentage_bought_must_be_at_least_threshold", threshold:, shared_ownership_type:)
+      record.errors.add :type, I18n.t("validations.sales.financial.type.percentage_bought_must_be_at_least_threshold", threshold:, shared_ownership_type:)
     end
   end
 
