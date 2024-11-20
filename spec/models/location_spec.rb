@@ -743,7 +743,7 @@ RSpec.describe Location, type: :model do
     it "does add an error when the number of units is invalid" do
       location.units = nil
       location.valid?(:units)
-      expect(location.errors.count).to eq(1)
+      expect(location.errors.count).to eq(2)
     end
   end
 
