@@ -22,7 +22,7 @@ FactoryBot.define do
     end
 
     trait :incomplete do
-      units { nil }
+      mobility_type { nil }
       confirmed { false }
     end
 
