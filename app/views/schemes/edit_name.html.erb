@@ -39,7 +39,7 @@
 
       <%= f.hidden_field :page, value: "edit-name" %>
 
-      <% if request.query_parameters["check_answers"] %>
+      <% if params[:referrer] == "check-answers" %>
         <%= f.hidden_field :check_answers, value: "true" %>
       <% end %>
 
