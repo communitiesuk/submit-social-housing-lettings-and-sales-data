@@ -12,10 +12,10 @@ module Validations::Sales::SaleInformationValidations
       record.errors.add :saledate, I18n.t("validations.sales.sale_information.saledate.must_be_after_hodate")
     end
 
-    if record.saledate - record.hodate >= 5.years && record.form.start_year_2025_or_later?
+    if date_difference_in_years?(record.hodate, record.saledate, 5) && record.form.start_year_2025_or_later?
       record.errors.add :hodate, I18n.t("validations.sales.sale_information.hodate.must_be_less_than_5_years_from_saledate")
       record.errors.add :saledate, I18n.t("validations.sales.sale_information.saledate.must_be_less_than_5_years_from_hodate")
-    elsif record.saledate - record.hodate >= 3.years && record.startdate.year <= 2024
+    elsif date_difference_in_years?(record.hodate, record.saledate, 3) && record.startdate.year <= 2024
       record.errors.add :hodate, I18n.t("validations.sales.sale_information.hodate.must_be_less_than_3_years_from_saledate")
       record.errors.add :saledate, I18n.t("validations.sales.sale_information.saledate.must_be_less_than_3_years_from_hodate")
     end
@@ -357,5 +357,12 @@ module Validations::Sales::SaleInformationValidations
     else
       (expected - actual).abs >= tolerance
     end
+  end
+
+  def date_difference_in_years?(start_date, end_date, year)
+    year_difference = (end_date.year - start_date.year).abs
+    same_day_and_month = start_date.day == end_date.day && start_date.month == end_date.month
+
+    (end_date - start_date).abs >= year.years || (same_day_and_month && year_difference == year)
   end
 end
