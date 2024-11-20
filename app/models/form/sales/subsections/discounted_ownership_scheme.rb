@@ -29,8 +29,7 @@ class Form::Sales::Subsections::DiscountedOwnershipScheme < ::Form::Subsection
       Form::Sales::Pages::DiscountedSaleValueCheck.new("discounted_sale_mortgage_value_check", nil, self),
       Form::Sales::Pages::ExtraBorrowingValueCheck.new("extra_borrowing_mortgage_value_check", nil, self),
       Form::Sales::Pages::DepositAndMortgageValueCheck.new("discounted_ownership_deposit_and_mortgage_value_check_after_mortgage", nil, self),
-      Form::Sales::Pages::MortgageLender.new("mortgage_lender_discounted_ownership", nil, self, ownershipsch: 2),
-      Form::Sales::Pages::MortgageLenderOther.new("mortgage_lender_other_discounted_ownership", nil, self, ownershipsch: 2),
+      mortgage_lender_questions,
       Form::Sales::Pages::MortgageLength.new("mortgage_length_discounted_ownership", nil, self, ownershipsch: 2),
       Form::Sales::Pages::ExtraBorrowing.new("extra_borrowing_discounted_ownership", nil, self, ownershipsch: 2),
       Form::Sales::Pages::ExtraBorrowingValueCheck.new("extra_borrowing_value_check", nil, self),
@@ -42,10 +41,19 @@ class Form::Sales::Subsections::DiscountedOwnershipScheme < ::Form::Subsection
       Form::Sales::Pages::DiscountedSaleValueCheck.new("discounted_sale_deposit_value_check", nil, self),
       Form::Sales::Pages::LeaseholdCharges.new("leasehold_charges_discounted_ownership", nil, self, ownershipsch: 2),
       Form::Sales::Pages::MonthlyChargesValueCheck.new("monthly_charges_discounted_ownership_value_check", nil, self),
-    ]
+    ].flatten.compact
   end
 
   def displayed_in_tasklist?(log)
     log.ownershipsch.nil? || log.ownershipsch == 2
+  end
+
+  def mortgage_lender_questions
+    unless form.start_year_2025_or_later?
+      [
+        Form::Sales::Pages::MortgageLender.new("mortgage_lender_discounted_ownership", nil, self, ownershipsch: 2),
+        Form::Sales::Pages::MortgageLenderOther.new("mortgage_lender_other_discounted_ownership", nil, self, ownershipsch: 2),
+      ]
+    end
   end
 end
