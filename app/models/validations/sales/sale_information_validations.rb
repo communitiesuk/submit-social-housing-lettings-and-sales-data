@@ -363,11 +363,6 @@ module Validations::Sales::SaleInformationValidations
       record.errors.add :numstair, I18n.t("validations.sales.sale_information.numstair.must_be_greater_than_one")
       record.errors.add :firststair, I18n.t("validations.sales.sale_information.firststair.cannot_be_no")
     end
-
-    if record.firststair == 1 && record.numstair > 1
-      record.errors.add :numstair, I18n.t("validations.sales.sale_information.numstair.must_be_one")
-      record.errors.add :firststair, I18n.t("validations.sales.sale_information.firststair.cannot_be_yes")
-    end
   end
 
   def over_tolerance?(expected, actual, tolerance, strict: false)

@@ -1444,16 +1444,6 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
           expect(record.errors).to be_empty
         end
       end
-
-      context "and numstair is greater than 1" do
-        let(:numstair) { 2 }
-        let(:firststair) { 1 }
-
-        it "adds an error" do
-          expect(record.errors[:numstair]).to include(I18n.t("validations.sales.sale_information.numstair.must_be_one"))
-          expect(record.errors[:firststair]).to include(I18n.t("validations.sales.sale_information.firststair.cannot_be_yes"))
-        end
-      end
     end
   end
 end

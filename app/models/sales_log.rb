@@ -561,8 +561,4 @@ class SalesLog < Log
   def is_firststair?
     firststair == 1
   end
-
-  def is_not_firststair?
-    firststair != 1
-  end
 end
