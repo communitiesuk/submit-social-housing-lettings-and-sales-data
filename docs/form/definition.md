@@ -15,7 +15,6 @@ The current system is built around a form definition constructed from various Fo
 - Edit end date: the end date for editing any existing logs for this form
 - Sections: the sections in the form, this block is where the bulk of the form definition will be.
 
-
 Note that the end date of one form will overlap the start date of another to allow for late submissions. This means that every year there will be a period of time in which two forms are running simultaneously.
 
 A form is split up is as follows:

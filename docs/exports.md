@@ -9,6 +9,7 @@ All data collected by the application needs to be exported to the Consolidated D
 This is done via XML exports saved in an S3 bucket.
 We currently export lettings logs, users and organisations.
 The data mapping for these exports can be found in:
+
 - Lettings logs `app/services/exports/lettings_log_export_service.rb`
 - Organisations `app/services/exports/organisation_export_service.rb`
 - Users `app/services/exports/user_export_service.rb`

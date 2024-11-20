@@ -18,7 +18,7 @@ class Form::Sales::Sections::TenancyAndProperty < ::Form::Section
     @label =  "Property and tenancy information"
     @description = ""
     @subsections = [
-      Form::Sales::Subsections::PropertyInformation.new(nil, nil, self), 
+      Form::Sales::Subsections::PropertyInformation.new(nil, nil, self),
       Form::Sales::Subsections::TenancyInformation.new(nil, nil, self)
     ]
   end

@@ -49,7 +49,7 @@ the `hidden_in_check_answers` is used to hide a value from displaying on the che
 @hidden_in_check_answers = {
   "depends_on" => [
     { "age6_known" => 0 },
-    { "age6_known" => 1 } 
+    { "age6_known" => 1 }
   ]
 }
 ```

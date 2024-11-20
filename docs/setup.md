@@ -92,11 +92,10 @@ We recommend using [nvm](https://github.com/nvm-sh/nvm) to manage NodeJS version
    brew install yarn
    ```
 
-
    Linux (Debian):
 
    ```bash
-   curl -sL https://deb.nodesource.com/setup_20.x | sudo bash - 
+   curl -sL https://deb.nodesource.com/setup_20.x | sudo bash -
    sudo apt -y install nodejs
    mkdir -p ~/.npm-packages
    npm config set prefix ~/.npm-packages
