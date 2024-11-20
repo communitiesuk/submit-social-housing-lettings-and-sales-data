@@ -110,6 +110,12 @@ module Validations::Sales::SoftValidations
     saledate - hodate >= 3.years
   end
 
+  def hodate_5_years_or_more_saledate?
+    return unless hodate && saledate
+
+    saledate - hodate >= 5.years
+  end
+
   def purchase_price_higher_or_lower_text
     value < sale_range.soft_min ? "lower" : "higher"
   end
