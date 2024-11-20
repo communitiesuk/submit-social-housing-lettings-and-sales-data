@@ -36,6 +36,15 @@ RSpec.describe Form::Sales::Questions::Buyer2WorkingSituation, type: :model do
       "0" => { "value" => "Other" },
       "10" => { "value" => "Buyer prefers not to say" },
       "7" => { "value" => "Full-time student" },
+      "9" => {
+        "value" => "Child under 16",
+        "depends_on" => [
+          { "saledate" => { "operator" => "<", "operand" => Time.zone.local(2024, 4, 1) } },
+          { "age2_known" => 1 },
+          { "age2_known" => nil },
+          { "age2" => { "operator" => "<", "operand" => 16 } },
+        ],
+      },
     })
   end
 
@@ -43,7 +52,7 @@ RSpec.describe Form::Sales::Questions::Buyer2WorkingSituation, type: :model do
     let(:form) { instance_double(Form, start_date: Time.zone.local(2024, 4, 1), start_year_2025_or_later?: false) }
 
     it "uses the old ordering for answer options" do
-      expect(question.answer_options.keys).to eq(%w[1 2 3 4 6 8 5 0 10 7])
+      expect(question.answer_options.keys).to eq(%w[1 2 3 4 6 8 5 0 10 7 9])
     end
   end
 
@@ -51,7 +60,7 @@ RSpec.describe Form::Sales::Questions::Buyer2WorkingSituation, type: :model do
     let(:form) { instance_double(Form, start_date: Time.zone.local(2025, 4, 1), start_year_2025_or_later?: true) }
 
     it "uses the new ordering for answer options" do
-      expect(question.answer_options.keys).to eq(%w[1 2 3 4 5 6 7 8 0 10])
+      expect(question.answer_options.keys).to eq(%w[1 2 3 4 5 6 7 8 9 0 10])
     end
   end
 
