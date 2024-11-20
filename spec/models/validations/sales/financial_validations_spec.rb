@@ -275,18 +275,20 @@ RSpec.describe Validations::Sales::FinancialValidations do
       record.stairbought = 9
       [2, 16, 18, 24].each do |type|
         record.type = type
+        shared_ownership_type = record.form.get_question("type", record).label_from_value(record.type).downcase
         financial_validator.validate_percentage_bought_at_least_threshold(record)
-        expect(record.errors["stairbought"]).to eq([I18n.t("validations.sales.financial.stairbought.percentage_bought_must_be_at_least_threshold", threshold: 10)])
-        expect(record.errors["type"]).to eq([I18n.t("validations.sales.financial.type.percentage_bought_must_be_at_least_threshold", threshold: 10)])
+        expect(record.errors["stairbought"]).to eq([I18n.t("validations.sales.financial.stairbought.percentage_bought_must_be_at_least_threshold", threshold: 10, shared_ownership_type:)])
+        expect(record.errors["type"]).to eq([I18n.t("validations.sales.financial.type.percentage_bought_must_be_at_least_threshold", threshold: 10, shared_ownership_type:)])
         record.errors.clear
       end
 
       record.stairbought = 0
       [28, 30, 31, 32].each do |type|
         record.type = type
+        shared_ownership_type = record.form.get_question("type", record).label_from_value(record.type).downcase
         financial_validator.validate_percentage_bought_at_least_threshold(record)
-        expect(record.errors["stairbought"]).to eq([I18n.t("validations.sales.financial.stairbought.percentage_bought_must_be_at_least_threshold", threshold: 1)])
-        expect(record.errors["type"]).to eq([I18n.t("validations.sales.financial.type.percentage_bought_must_be_at_least_threshold", threshold: 1)])
+        expect(record.errors["stairbought"]).to eq([I18n.t("validations.sales.financial.stairbought.percentage_bought_must_be_at_least_threshold", threshold: 1, shared_ownership_type:)])
+        expect(record.errors["type"]).to eq([I18n.t("validations.sales.financial.type.percentage_bought_must_be_at_least_threshold", threshold: 1, shared_ownership_type:)])
         record.errors.clear
       end
     end
