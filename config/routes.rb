@@ -384,6 +384,7 @@ Rails.application.routes.draw do
 
   resources :csv_downloads, path: "csv-downloads" do
     member do
+      get "/", to: "csv_downloads#show", as: "show"
       get "download", to: "csv_downloads#download"
     end
   end
