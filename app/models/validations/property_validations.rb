@@ -46,4 +46,31 @@ module Validations::PropertyValidations
       record.errors.add :postcode_full, :wrong_format, message: error_message
     end
   end
+
+  def validate_la_in_england(record)
+    return unless record.form.start_year_2025_or_later?
+
+    if record.is_general_needs?
+      return unless record.la
+      return if record.la.in?(LocalAuthority.england.pluck(:code))
+
+      record.errors.add :la, I18n.t("validations.lettings.property.la.not_in_england")
+      record.errors.add :postcode_full, I18n.t("validations.lettings.property.postcode_full.not_in_england")
+      record.errors.add :uprn, I18n.t("validations.lettings.property.uprn.not_in_england")
+      record.errors.add :uprn_confirmation, I18n.t("validations.lettings.property.uprn_confirmation.not_in_england")
+      record.errors.add :uprn_selection, I18n.t("validations.lettings.property.uprn_selection.not_in_england")
+      if record.uprn.present?
+        record.errors.add :startdate, I18n.t("validations.lettings.property.startdate.address_not_in_england")
+      else
+        record.errors.add :startdate, I18n.t("validations.lettings.property.startdate.postcode_not_in_england")
+      end
+    elsif record.is_supported_housing?
+      return unless record.location
+      return if record.location.location_code.in?(LocalAuthority.england.pluck(:code))
+
+      record.errors.add :location_id, I18n.t("validations.lettings.property.location_id.not_in_england")
+      record.errors.add :scheme_id, I18n.t("validations.lettings.property.scheme_id.not_in_england")
+      record.errors.add :startdate, I18n.t("validations.lettings.property.startdate.location_not_in_england")
+    end
+  end
 end

@@ -3,12 +3,13 @@ class Form::Lettings::Pages::NoAddressFound < ::Form::Page
     super
     @id = "no_address_found"
     @type = "interruption_screen"
+    @copy_key = "lettings.soft_validations.no_address_found"
     @title_text = {
-      "translation" => "soft_validations.no_address_found.title_text",
+      "translation" => "forms.#{form.start_date.year}.#{@copy_key}.title_text",
       "arguments" => [],
     }
     @informative_text = {
-      "translation" => "soft_validations.no_address_found.informative_text",
+      "translation" => "forms.#{form.start_date.year}.#{@copy_key}.informative_text",
       "arguments" => [],
     }
     @depends_on = [

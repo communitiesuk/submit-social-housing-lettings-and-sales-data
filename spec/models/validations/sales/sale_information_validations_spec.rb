@@ -60,10 +60,11 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
       context "and form year is 2023 or earlier" do
         let(:record) { build(:sales_log, hodate: Date.new(2020, 12, 1), saledate: Date.new(2023, 12, 1)) }
 
-        it "does not add an error" do
+        it "does add an error" do
           sale_information_validator.validate_practical_completion_date(record)
 
-          expect(record.errors).not_to be_present
+          expect(record.errors[:hodate]).to be_present
+          expect(record.errors[:saledate]).to be_present
         end
       end
 

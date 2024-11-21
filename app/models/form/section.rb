@@ -10,4 +10,8 @@ class Form::Section
       @subsections = hsh["subsections"].map { |s_id, s| Form::Subsection.new(s_id, s, self) }
     end
   end
+
+  def displayed_in_tasklist?(log)
+    subsections.any? { |subsection| subsection.displayed_in_tasklist?(log) }
+  end
 end
