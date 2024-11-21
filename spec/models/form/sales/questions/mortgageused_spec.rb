@@ -143,7 +143,7 @@ RSpec.describe Form::Sales::Questions::Mortgageused, type: :model do
     end
   end
 
-  private
+private
 
   def expect_the_question_not_to_show_dont_know
     expect(question.displayed_answer_options(log)).to eq({
