@@ -15,7 +15,7 @@ class Form::Sales::Questions::Buyer2WorkingSituation < ::Form::Question
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
   end
 
-  def displayed_answer_options(log, _user = nil)
+  def displayed_answer_options(_log, _user = nil)
     answer_options.reject { |key, _| key == "9" }
   end
 
