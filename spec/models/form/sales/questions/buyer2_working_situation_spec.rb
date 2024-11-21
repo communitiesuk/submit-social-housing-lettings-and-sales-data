@@ -36,15 +36,22 @@ RSpec.describe Form::Sales::Questions::Buyer2WorkingSituation, type: :model do
       "0" => { "value" => "Other" },
       "10" => { "value" => "Buyer prefers not to say" },
       "7" => { "value" => "Full-time student" },
-      "9" => {
-        "value" => "Child under 16",
-        "depends_on" => [
-          { "saledate" => { "operator" => "<", "operand" => Time.zone.local(2024, 4, 1) } },
-          { "age2_known" => 1 },
-          { "age2_known" => nil },
-          { "age2" => { "operator" => "<", "operand" => 16 } },
-        ],
-      },
+      "9" => { "value" => "Child under 16" },
+    })
+  end
+
+  it "has the correct displayed_answer_options" do
+    expect(question.displayed_answer_options(nil)).to eq({
+      "1" => { "value" => "Full-time - 30 hours or more" },
+      "2" => { "value" => "Part-time - Less than 30 hours" },
+      "3" => { "value" => "In government training into work" },
+      "4" => { "value" => "Jobseeker" },
+      "6" => { "value" => "Not seeking work" },
+      "8" => { "value" => "Unable to work due to long term sick or disability" },
+      "5" => { "value" => "Retired" },
+      "0" => { "value" => "Other" },
+      "10" => { "value" => "Buyer prefers not to say" },
+      "7" => { "value" => "Full-time student" },
     })
   end
 
@@ -54,6 +61,10 @@ RSpec.describe Form::Sales::Questions::Buyer2WorkingSituation, type: :model do
     it "uses the old ordering for answer options" do
       expect(question.answer_options.keys).to eq(%w[1 2 3 4 6 8 5 0 10 7 9])
     end
+
+    it "uses the old ordering for displayed answer options" do
+      expect(question.displayed_answer_options(nil).keys).to eq(%w[1 2 3 4 6 8 5 0 10 7])
+    end
   end
 
   context "with start year from 2025" do
@@ -61,6 +72,10 @@ RSpec.describe Form::Sales::Questions::Buyer2WorkingSituation, type: :model do
 
     it "uses the new ordering for answer options" do
       expect(question.answer_options.keys).to eq(%w[1 2 3 4 5 6 7 8 9 0 10])
+    end
+
+    it "uses the new ordering for displayed answer options" do
+      expect(question.displayed_answer_options(nil).keys).to eq(%w[1 2 3 4 5 6 7 8 0 10])
     end
   end
 
