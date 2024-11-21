@@ -2006,5 +2006,17 @@ RSpec.describe LettingsLog do
       end
     end
   end
+
+  describe "#process_address_change!" do
+    context "when uprn_selection is uprn_not_listed" do
+      let(:log) { build(:lettings_log, uprn_selection: "uprn_not_listed", address_line1_input: "Address line 1", postcode_full_input: "AA1 1AA") }
+
+      it "sets log address fields, including postcode known" do
+        expect { log.process_address_change! }.to change(log, :address_line1).from(nil).to("Address line 1")
+                                              .and change(log, :postcode_full).from(nil).to("AA1 1AA")
+                                              .and change(log, :postcode_known).from(nil).to(1)
+      end
+    end
+  end
 end
 # rubocop:enable RSpec/MessageChain
