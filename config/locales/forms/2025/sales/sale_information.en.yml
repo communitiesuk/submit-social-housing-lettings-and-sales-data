@@ -54,7 +54,7 @@ en:
             question_text: "Is this the first time the shared owner has engaged in staircasing in the home?"
 
           stairprevious:
-            page_header: "About the staircasing transaction"
+            page_header: "About previous staircasing transactions"
             numstair:
               check_answer_label: "Number of staircasing transactions"
               hint_text: ""
