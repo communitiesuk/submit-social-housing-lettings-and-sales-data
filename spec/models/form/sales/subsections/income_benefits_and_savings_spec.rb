@@ -11,8 +11,16 @@ RSpec.describe Form::Sales::Subsections::IncomeBenefitsAndSavings, type: :model 
     expect(subsection.section).to eq(section)
   end
 
+  it "has the correct id" do
+    expect(subsection.id).to eq("income_benefits_and_savings")
+  end
+
+  it "has the correct label" do
+    expect(subsection.label).to eq("Income, benefits and savings")
+  end
+
   describe "pages" do
-    let(:section) { instance_double(Form::Sales::Sections::Household, form: instance_double(Form, start_date:)) }
+    let(:section) { instance_double(Form::Sales::Sections::Household, form: instance_double(Form, start_date:, start_year_2025_or_later?: false)) }
 
     context "when 2022" do
       let(:start_date) { Time.utc(2022, 2, 8) }
@@ -83,18 +91,19 @@ RSpec.describe Form::Sales::Subsections::IncomeBenefitsAndSavings, type: :model 
           ],
         )
       end
+
+      it "has correct depends on" do
+        expect(subsection.depends_on).to eq([{ "setup_completed?" => true }])
+      end
     end
   end
 
-  it "has the correct id" do
-    expect(subsection.id).to eq("income_benefits_and_savings")
-  end
+  context "when 2025" do
+    let(:start_date) { Time.utc(2025, 2, 8) }
+    let(:section) { instance_double(Form::Sales::Sections::Household, form: instance_double(Form, start_date:, start_year_2025_or_later?: true)) }
 
-  it "has the correct label" do
-    expect(subsection.label).to eq("Income, benefits and savings")
-  end
-
-  it "has correct depends on" do
-    expect(subsection.depends_on).to eq([{ "setup_completed?" => true }])
+    it "has correct depends on" do
+      expect(subsection.depends_on).to eq([{ "setup_completed?" => true, "is_staircase?" => false }])
+    end
   end
 end
