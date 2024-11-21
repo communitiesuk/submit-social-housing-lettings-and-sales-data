@@ -1,9 +1,7 @@
 <% content_for :title, "Does this scheme provide for another client group?" %>
 
 <% content_for :before_content do %>
-  <%= govuk_back_link(
-    href: request.query_parameters["check_answers"] ? "check-answers" : "primary-client-group",
-  ) %>
+  <%= govuk_back_link(href: :back) %>
 <% end %>
 
 <%= render partial: "organisations/headings", locals: { main: "Does this scheme provide for another client group?", sub: @scheme.service_name } %>
@@ -22,7 +20,7 @@
         legend: nil %>
 
       <%= f.hidden_field :page, value: "confirm-secondary" %>
-      <% if request.query_parameters["check_answers"] == "true" %>
+      <% if params[:referrer] == "check-answers" %>
         <%= f.hidden_field :check_answers, value: "true" %>
         <%= f.govuk_submit "Save changes" %>
       <% else %>

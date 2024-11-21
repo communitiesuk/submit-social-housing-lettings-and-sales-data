@@ -3,7 +3,14 @@ class Form::Sales::Subsections::HouseholdCharacteristics < ::Form::Subsection
     super
     @id = "household_characteristics"
     @label = "Household characteristics"
-    @depends_on = [{ "setup_completed?" => true, "company_buyer?" => false }]
+  end
+
+  def depends_on
+    if form.start_year_2025_or_later?
+      [{ "setup_completed?" => true }]
+    else
+      [{ "setup_completed?" => true, "company_buyer?" => false }]
+    end
   end
 
   def pages
@@ -31,7 +38,7 @@ class Form::Sales::Subsections::HouseholdCharacteristics < ::Form::Subsection
       Form::Sales::Pages::Buyer1IncomeMinValueCheck.new("working_situation_buyer_1_income_min_value_check", nil, self),
       Form::Sales::Pages::Buyer1LiveInProperty.new(nil, nil, self),
       Form::Sales::Pages::BuyerLiveInValueCheck.new("buyer_1_live_in_property_value_check", nil, self, person_index: 1),
-      Form::Sales::Pages::Buyer2RelationshipToBuyer1.new(nil, nil, self),
+      (form.start_year_2025_or_later? ? Form::Sales::Pages::Buyer2RelationshipToBuyer1YesNo.new(nil, nil, self) : Form::Sales::Pages::Buyer2RelationshipToBuyer1.new(nil, nil, self)),
       Form::Sales::Pages::PersonStudentNotChildValueCheck.new("buyer_2_relationship_student_not_child_value_check", nil, self, person_index: 2),
       Form::Sales::Pages::Age2.new(nil, nil, self),
       Form::Sales::Pages::OldPersonsSharedOwnershipValueCheck.new("age_2_old_persons_shared_ownership_joint_purchase_value_check", nil, self, joint_purchase: true),
@@ -51,7 +58,7 @@ class Form::Sales::Subsections::HouseholdCharacteristics < ::Form::Subsection
       Form::Sales::Pages::NumberOfOthersInProperty.new("number_of_others_in_property", nil, self, joint_purchase: false),
       Form::Sales::Pages::NumberOfOthersInProperty.new("number_of_others_in_property_joint_purchase", nil, self, joint_purchase: true),
       Form::Sales::Pages::PersonKnown.new("person_2_known", nil, self, person_index: 2),
-      Form::Sales::Pages::PersonRelationshipToBuyer1.new("person_2_relationship_to_buyer_1", nil, self, person_index: 2),
+      (form.start_year_2025_or_later? ? Form::Sales::Pages::PersonRelationshipToBuyer1YesNo.new("person_2_relationship_to_buyer_1", nil, self, person_index: 2) : Form::Sales::Pages::PersonRelationshipToBuyer1.new("person_2_relationship_to_buyer_1", nil, self, person_index: 2)),
       (Form::Sales::Pages::PartnerUnder16ValueCheck.new("relationship_2_partner_under_16_value_check", nil, self, person_index: 2) if form.start_year_2024_or_later?),
       (Form::Sales::Pages::MultiplePartnersValueCheck.new("relationship_2_multiple_partners_value_check", nil, self, person_index: 2) if form.start_year_2024_or_later?),
       Form::Sales::Pages::PersonStudentNotChildValueCheck.new("relationship_2_student_not_child_value_check", nil, self, person_index: 2),
@@ -66,7 +73,7 @@ class Form::Sales::Subsections::HouseholdCharacteristics < ::Form::Subsection
       (Form::Sales::Pages::NotRetiredValueCheck.new("working_situation_2_not_retired_value_check", nil, self, person_index: 2) if form.start_year_2024_or_later?),
       Form::Sales::Pages::PersonStudentNotChildValueCheck.new("working_situation_2_student_not_child_value_check", nil, self, person_index: 2),
       Form::Sales::Pages::PersonKnown.new("person_3_known", nil, self, person_index: 3),
-      Form::Sales::Pages::PersonRelationshipToBuyer1.new("person_3_relationship_to_buyer_1", nil, self, person_index: 3),
+      (form.start_year_2025_or_later? ? Form::Sales::Pages::PersonRelationshipToBuyer1YesNo.new("person_3_relationship_to_buyer_1", nil, self, person_index: 3) : Form::Sales::Pages::PersonRelationshipToBuyer1.new("person_3_relationship_to_buyer_1", nil, self, person_index: 3)),
       (Form::Sales::Pages::PartnerUnder16ValueCheck.new("relationship_3_partner_under_16_value_check", nil, self, person_index: 3) if form.start_year_2024_or_later?),
       (Form::Sales::Pages::MultiplePartnersValueCheck.new("relationship_3_multiple_partners_value_check", nil, self, person_index: 3) if form.start_year_2024_or_later?),
       Form::Sales::Pages::PersonStudentNotChildValueCheck.new("relationship_3_student_not_child_value_check", nil, self, person_index: 3),
@@ -81,7 +88,7 @@ class Form::Sales::Subsections::HouseholdCharacteristics < ::Form::Subsection
       (Form::Sales::Pages::NotRetiredValueCheck.new("working_situation_3_not_retired_value_check", nil, self, person_index: 3) if form.start_year_2024_or_later?),
       Form::Sales::Pages::PersonStudentNotChildValueCheck.new("working_situation_3_student_not_child_value_check", nil, self, person_index: 3),
       Form::Sales::Pages::PersonKnown.new("person_4_known", nil, self, person_index: 4),
-      Form::Sales::Pages::PersonRelationshipToBuyer1.new("person_4_relationship_to_buyer_1", nil, self, person_index: 4),
+      (form.start_year_2025_or_later? ? Form::Sales::Pages::PersonRelationshipToBuyer1YesNo.new("person_4_relationship_to_buyer_1", nil, self, person_index: 4) : Form::Sales::Pages::PersonRelationshipToBuyer1.new("person_4_relationship_to_buyer_1", nil, self, person_index: 4)),
       (Form::Sales::Pages::PartnerUnder16ValueCheck.new("relationship_4_partner_under_16_value_check", nil, self, person_index: 4) if form.start_year_2024_or_later?),
       (Form::Sales::Pages::MultiplePartnersValueCheck.new("relationship_4_multiple_partners_value_check", nil, self, person_index: 4) if form.start_year_2024_or_later?),
       Form::Sales::Pages::PersonStudentNotChildValueCheck.new("relationship_4_student_not_child_value_check", nil, self, person_index: 4),
@@ -96,7 +103,7 @@ class Form::Sales::Subsections::HouseholdCharacteristics < ::Form::Subsection
       (Form::Sales::Pages::NotRetiredValueCheck.new("working_situation_4_not_retired_value_check", nil, self, person_index: 4) if form.start_year_2024_or_later?),
       Form::Sales::Pages::PersonStudentNotChildValueCheck.new("working_situation_4_student_not_child_value_check", nil, self, person_index: 4),
       Form::Sales::Pages::PersonKnown.new("person_5_known", nil, self, person_index: 5),
-      Form::Sales::Pages::PersonRelationshipToBuyer1.new("person_5_relationship_to_buyer_1", nil, self, person_index: 5),
+      (form.start_year_2025_or_later? ? Form::Sales::Pages::PersonRelationshipToBuyer1YesNo.new("person_5_relationship_to_buyer_1", nil, self, person_index: 5) : Form::Sales::Pages::PersonRelationshipToBuyer1.new("person_5_relationship_to_buyer_1", nil, self, person_index: 5)),
       (Form::Sales::Pages::PartnerUnder16ValueCheck.new("relationship_5_partner_under_16_value_check", nil, self, person_index: 5) if form.start_year_2024_or_later?),
       (Form::Sales::Pages::MultiplePartnersValueCheck.new("relationship_5_multiple_partners_value_check", nil, self, person_index: 5) if form.start_year_2024_or_later?),
       Form::Sales::Pages::PersonStudentNotChildValueCheck.new("relationship_5_student_not_child_value_check", nil, self, person_index: 5),
@@ -111,7 +118,7 @@ class Form::Sales::Subsections::HouseholdCharacteristics < ::Form::Subsection
       (Form::Sales::Pages::NotRetiredValueCheck.new("working_situation_5_not_retired_value_check", nil, self, person_index: 5) if form.start_year_2024_or_later?),
       Form::Sales::Pages::PersonStudentNotChildValueCheck.new("working_situation_5_student_not_child_value_check", nil, self, person_index: 5),
       Form::Sales::Pages::PersonKnown.new("person_6_known", nil, self, person_index: 6),
-      Form::Sales::Pages::PersonRelationshipToBuyer1.new("person_6_relationship_to_buyer_1", nil, self, person_index: 6),
+      (form.start_year_2025_or_later? ? Form::Sales::Pages::PersonRelationshipToBuyer1YesNo.new("person_6_relationship_to_buyer_1", nil, self, person_index: 6) : Form::Sales::Pages::PersonRelationshipToBuyer1.new("person_6_relationship_to_buyer_1", nil, self, person_index: 6)),
       (Form::Sales::Pages::PartnerUnder16ValueCheck.new("relationship_6_partner_under_16_value_check", nil, self, person_index: 6) if form.start_year_2024_or_later?),
       (Form::Sales::Pages::MultiplePartnersValueCheck.new("relationship_6_multiple_partners_value_check", nil, self, person_index: 6) if form.start_year_2024_or_later?),
       Form::Sales::Pages::PersonStudentNotChildValueCheck.new("relationship_6_student_not_child_value_check", nil, self, person_index: 6),
@@ -143,6 +150,8 @@ class Form::Sales::Subsections::HouseholdCharacteristics < ::Form::Subsection
   end
 
   def displayed_in_tasklist?(log)
+    return true if form.start_year_2025_or_later?
+
     !log.company_buyer?
   end
 end

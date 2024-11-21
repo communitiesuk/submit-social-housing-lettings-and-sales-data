@@ -14,6 +14,6 @@ module FormPageErrorHelper
   end
 
   def all_questions_affected_by_errors(log)
-    log.errors.map(&:attribute) - [:base]
+    (log.errors.map(&:attribute) - [:base]).uniq
   end
 end
