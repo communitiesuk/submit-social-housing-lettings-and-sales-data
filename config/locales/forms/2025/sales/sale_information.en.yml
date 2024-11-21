@@ -194,6 +194,7 @@ en:
             question_text: "What is the basic monthly rent?"
 
           mrent_staircasing:
+            page_header: "Monthly rent"
             prestaircasing:
               check_answer_label: "Monthly rent prior to staircasing"
               hint_text: "Amount paid before any charges"

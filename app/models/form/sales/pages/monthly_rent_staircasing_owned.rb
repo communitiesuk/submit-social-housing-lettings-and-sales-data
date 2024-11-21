@@ -3,6 +3,7 @@ class Form::Sales::Pages::MonthlyRentStaircasingOwned < ::Form::Page
     super
     @id = "monthly_rent_staircasing_owned"
     @copy_key = "sales.sale_information.mrent_staircasing"
+    @header = ""
     @depends_on = [{
       "stairowned_100?" => true,
     }]
