@@ -8,7 +8,6 @@ class Form::Sales::Subsections::SharedOwnershipStaircasingTransaction < ::Form::
 
   def pages
     @pages ||= [
-      (Form::Sales::Pages::Staircase.new(nil, nil, self) unless form.start_year_2025_or_later?),
       Form::Sales::Pages::AboutStaircase.new("about_staircasing_joint_purchase", nil, self, joint_purchase: true),
       Form::Sales::Pages::AboutStaircase.new("about_staircasing_not_joint_purchase", nil, self, joint_purchase: false),
       Form::Sales::Pages::StaircaseSale.new(nil, nil, self),
