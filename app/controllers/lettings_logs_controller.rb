@@ -156,6 +156,13 @@ class LettingsLogsController < LogsController
     redirect_to lettings_log_path(log)
   end
 
+  def create_setup_test_log
+    return render_not_found unless FeatureToggle.create_test_logs_enabled?
+
+    log = FactoryBot.create(:lettings_log, :setup_completed, assigned_to: current_user)
+    redirect_to lettings_log_path(log)
+  end
+
 private
 
   def session_filters

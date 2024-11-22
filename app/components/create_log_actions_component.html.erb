@@ -10,6 +10,7 @@
 
     <% if FeatureToggle.create_test_logs_enabled? %>
       <%= govuk_button_link_to "Create test log", create_test_log_href, secondary: true %>
+      <%= govuk_button_link_to "Create test log (setup only)", create_setup_test_log_href, secondary: true %>
     <% end %>
 <% end %>
 </div>
