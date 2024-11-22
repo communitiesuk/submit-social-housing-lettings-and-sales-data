@@ -39,7 +39,7 @@ FactoryBot.define do
       ownershipsch { 2 }
       type { 9 }
       jointpur { 1 }
-      jointmor { 1 }
+      jointmore { 1 }
       noint { 2 }
       privacynotice { 1 }
       purchid { rand(999_999_999).to_s }
