@@ -63,6 +63,7 @@ gem "possessive"
 gem "auto_strip_attributes"
 # Use sidekiq for background processing
 gem "factory_bot_rails"
+gem "faker"
 gem "method_source", "~> 1.1"
 gem "rails_admin", "~> 3.1"
 gem "ruby-openai"
@@ -76,7 +77,6 @@ group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem "byebug", platforms: %i[mri mingw x64_mingw]
   gem "dotenv-rails"
-  gem "faker"
   gem "pry-byebug"
 
   gem "parallel_tests"
