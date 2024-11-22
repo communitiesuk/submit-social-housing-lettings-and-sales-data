@@ -382,6 +382,13 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :csv_downloads, path: "csv-downloads" do
+    member do
+      get "/", to: "csv_downloads#show", as: "show"
+      get "download", to: "csv_downloads#download"
+    end
+  end
+
   scope via: :all do
     match "/404", to: "errors#not_found"
     match "/429", to: "errors#too_many_requests", status: 429
