@@ -46,4 +46,8 @@ class FeatureToggle
   def self.managing_resources_enabled?
     !Rails.env.production?
   end
+
+  def self.create_test_logs_enabled?
+    Rails.env.development?
+  end
 end

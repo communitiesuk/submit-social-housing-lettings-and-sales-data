@@ -7,5 +7,9 @@
     <% if user.support? %>
       <%= govuk_button_link_to view_uploads_button_copy, view_uploads_button_href, secondary: true %>
     <% end %>
+
+    <% if FeatureToggle.create_test_logs_enabled? %>
+      <%= govuk_button_link_to "Create test log", create_test_log_href, secondary: true %>
+    <% end %>
 <% end %>
 </div>

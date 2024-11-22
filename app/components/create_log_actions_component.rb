@@ -34,6 +34,10 @@ class CreateLogActionsComponent < ViewComponent::Base
     send("bulk_upload_#{log_type}_log_path", id: "start")
   end
 
+  def create_test_log_href
+    send("create_test_#{log_type}_log_path")
+  end
+
   def view_uploads_button_copy
     "View #{log_type} bulk uploads"
   end

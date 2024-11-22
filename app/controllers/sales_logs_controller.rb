@@ -119,6 +119,13 @@ class SalesLogsController < LogsController
     end
   end
 
+  def create_test_log
+    return render_not_found unless FeatureToggle.create_test_logs_enabled?
+
+    log = FactoryBot.create(:sales_log, :completed, assigned_to: current_user)
+    redirect_to sales_log_path(log)
+  end
+
 private
 
   def session_filters
