@@ -48,6 +48,6 @@ class FeatureToggle
   end
 
   def self.create_test_logs_enabled?
-    Rails.env.development?
+    Rails.env.development? || Rails.env.review? 
   end
 end
