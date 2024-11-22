@@ -119,7 +119,8 @@ class SchemesController < ApplicationController
 
     if @scheme.errors.empty? && @scheme.save
       if @scheme.owning_organisation.merge_date.present?
-        @scheme.scheme_deactivation_periods.create!(deactivation_date: @scheme.owning_organisation.merge_date)
+        deactivation = SchemeDeactivationPeriod.new(scheme: @scheme, deactivation_date: @scheme.owning_organisation.merge_date)
+        deactivation.save!(validate: false)
       end
       redirect_to scheme_primary_client_group_path(@scheme)
     else
