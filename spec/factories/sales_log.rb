@@ -32,6 +32,17 @@ FactoryBot.define do
       jointpur { 2 }
       noint { 2 }
       privacynotice { 1 }
+      purchid { rand(999_999_999).to_s }
+    end
+    trait :discounted_ownership_setup_complete do
+      saledate_today
+      ownershipsch { 2 }
+      type { 9 }
+      jointpur { 1 }
+      jointmore { 1 }
+      noint { 2 }
+      privacynotice { 1 }
+      purchid { rand(999_999_999).to_s }
     end
     trait :outright_sale_setup_complete do
       saledate_today

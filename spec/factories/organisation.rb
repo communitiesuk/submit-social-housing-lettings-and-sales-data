@@ -41,7 +41,13 @@ FactoryBot.define do
     trait :prp do
       provider_type { "PRP" }
     end
+    trait :la do
+      provider_type { "LA" }
+    end
 
+    trait :holds_own_stock do
+      holds_own_stock { true }
+    end
     trait :does_not_own_stock do
       holds_own_stock { false }
     end
@@ -52,6 +58,10 @@ FactoryBot.define do
       end
 
       data_protection_confirmation { nil }
+    end
+
+    trait :if_unique do
+      initialize_with { Organisation.find_or_create_by(name:) }
     end
   end
 
