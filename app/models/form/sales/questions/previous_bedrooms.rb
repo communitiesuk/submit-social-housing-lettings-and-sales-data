@@ -2,7 +2,6 @@ class Form::Sales::Questions::PreviousBedrooms < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "frombeds"
-    @copy_key = "sales.sale_information.frombeds"
     @type = "numeric"
     @width = 5
     @min = 1
