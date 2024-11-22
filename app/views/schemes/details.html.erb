@@ -50,7 +50,7 @@
                                            legend: { text: "Is this scheme registered under the Care Standards Act 2000?", size: "m" } %>
 
       <% scheme_owning_organisation_options = owning_organisation_options(current_user) %>
-      
+
       <% if scheme_owning_organisation_options.count == 1 %>
         <%= f.hidden_field :owning_organisation_id, value: current_user.organisation.id %>
       <% else %>
