@@ -30,6 +30,29 @@ RSpec.describe BulkUpload::Lettings::Year2024::CsvParser do
     end
   end
 
+  context "when some csv headers are empty (and we don't care about them)" do
+    before do
+      file.write("Question\n")
+      file.write("Additional info\n")
+      file.write("Values\n")
+      file.write("\n")
+      file.write("Type of letting the question applies to\n")
+      file.write("Duplicate check field?\n")
+      file.write(BulkUpload::LettingsLogToCsv.new(log:).default_2024_field_numbers_row)
+      file.write(BulkUpload::LettingsLogToCsv.new(log:).to_2024_csv_row)
+      file.rewind
+    end
+
+    it "returns correct offsets" do
+      expect(service.row_offset).to eq(7)
+      expect(service.col_offset).to eq(1)
+    end
+
+    it "parses csv correctly" do
+      expect(service.row_parsers[0].field_13).to eql(log.tenancycode)
+    end
+  end
+
   context "when parsing csv with headers with extra rows" do
     before do
       file.write("Section\n")
