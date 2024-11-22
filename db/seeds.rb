@@ -100,100 +100,6 @@ unless Rails.env.test?
     provider_type: "LA",
   )
 
-  User.find_or_create_by!(
-    name: "Provider Owns Stock",
-    email: "provider.owner1@example.com",
-    organisation: standalone_owns_stock,
-    role: "data_provider",
-    is_dpo: true,
-  ) do |user|
-    user.password = ENV["REVIEW_APP_USER_PASSWORD"]
-    user.confirmed_at = Time.zone.now
-    create_data_protection_confirmation(user)
-  end
-
-  User.find_or_create_by!(
-    name: "Coordinator Owns Stock",
-    email: "coordinator.owner1@example.com",
-    organisation: standalone_owns_stock,
-    role: "data_coordinator",
-    is_dpo: true,
-  ) do |user|
-    user.password = ENV["REVIEW_APP_USER_PASSWORD"]
-    user.confirmed_at = Time.zone.now
-    create_data_protection_confirmation(user)
-  end
-
-  User.find_or_create_by!(
-    name: "Provider No Stock",
-    email: "provider.nostock@example.com",
-    organisation: standalone_no_stock,
-    role: "data_provider",
-    is_dpo: true,
-  ) do |user|
-    user.password = ENV["REVIEW_APP_USER_PASSWORD"]
-    user.confirmed_at = Time.zone.now
-    create_data_protection_confirmation(user)
-  end
-
-  User.find_or_create_by!(
-    name: "Coordinator No Stock",
-    email: "coordinator.nostock@example.com",
-    organisation: standalone_no_stock,
-    role: "data_coordinator",
-  ) do |user|
-    user.password = ENV["REVIEW_APP_USER_PASSWORD"]
-    user.confirmed_at = Time.zone.now
-  end
-
-  User.find_or_create_by!(
-    name: "Stock owner 1",
-    email: "stock_owner1_dpo@example.com",
-    organisation: stock_owner1,
-    role: "data_coordinator",
-    is_dpo: true,
-  ) do |user|
-    user.password = ENV["REVIEW_APP_USER_PASSWORD"]
-    user.confirmed_at = Time.zone.now
-    create_data_protection_confirmation(user)
-  end
-
-  User.find_or_create_by!(
-    name: "Stock owner 2",
-    email: "stock_owner2_dpo@example.com",
-    organisation: stock_owner2,
-    role: "data_coordinator",
-    is_dpo: true,
-  ) do |user|
-    user.password = ENV["REVIEW_APP_USER_PASSWORD"]
-    user.confirmed_at = Time.zone.now
-    create_data_protection_confirmation(user)
-  end
-
-  User.find_or_create_by!(
-    name: "Managing agent 1",
-    email: "managing_agent1_dpo@example.com",
-    organisation: managing_agent1,
-    role: "data_coordinator",
-    is_dpo: true,
-  ) do |user|
-    user.password = ENV["REVIEW_APP_USER_PASSWORD"]
-    user.confirmed_at = Time.zone.now
-    create_data_protection_confirmation(user)
-  end
-
-  User.find_or_create_by!(
-    name: "Managing agent 2",
-    email: "managing_agent2_dpo@example.com",
-    organisation: managing_agent2,
-    role: "data_coordinator",
-    is_dpo: true,
-  ) do |user|
-    user.password = ENV["REVIEW_APP_USER_PASSWORD"]
-    user.confirmed_at = Time.zone.now
-    create_data_protection_confirmation(user)
-  end
-
   OrganisationRelationship.find_or_create_by!(
     parent_organisation: stock_owner1,
     child_organisation: org,
@@ -212,6 +118,100 @@ unless Rails.env.test?
   )
 
   if Rails.env.development? || Rails.env.review?
+    User.find_or_create_by!(
+      name: "Provider Owns Stock",
+      email: "provider.owner1@example.com",
+      organisation: standalone_owns_stock,
+      role: "data_provider",
+      is_dpo: true,
+      ) do |user|
+      user.password = ENV["REVIEW_APP_USER_PASSWORD"]
+      user.confirmed_at = Time.zone.now
+      create_data_protection_confirmation(user)
+    end
+
+    User.find_or_create_by!(
+      name: "Coordinator Owns Stock",
+      email: "coordinator.owner1@example.com",
+      organisation: standalone_owns_stock,
+      role: "data_coordinator",
+      is_dpo: true,
+      ) do |user|
+      user.password = ENV["REVIEW_APP_USER_PASSWORD"]
+      user.confirmed_at = Time.zone.now
+      create_data_protection_confirmation(user)
+    end
+
+    User.find_or_create_by!(
+      name: "Provider No Stock",
+      email: "provider.nostock@example.com",
+      organisation: standalone_no_stock,
+      role: "data_provider",
+      is_dpo: true,
+      ) do |user|
+      user.password = ENV["REVIEW_APP_USER_PASSWORD"]
+      user.confirmed_at = Time.zone.now
+      create_data_protection_confirmation(user)
+    end
+
+    User.find_or_create_by!(
+      name: "Coordinator No Stock",
+      email: "coordinator.nostock@example.com",
+      organisation: standalone_no_stock,
+      role: "data_coordinator",
+      ) do |user|
+      user.password = ENV["REVIEW_APP_USER_PASSWORD"]
+      user.confirmed_at = Time.zone.now
+    end
+
+    User.find_or_create_by!(
+      name: "Stock owner 1",
+      email: "stock_owner1_dpo@example.com",
+      organisation: stock_owner1,
+      role: "data_coordinator",
+      is_dpo: true,
+      ) do |user|
+      user.password = ENV["REVIEW_APP_USER_PASSWORD"]
+      user.confirmed_at = Time.zone.now
+      create_data_protection_confirmation(user)
+    end
+
+    User.find_or_create_by!(
+      name: "Stock owner 2",
+      email: "stock_owner2_dpo@example.com",
+      organisation: stock_owner2,
+      role: "data_coordinator",
+      is_dpo: true,
+      ) do |user|
+      user.password = ENV["REVIEW_APP_USER_PASSWORD"]
+      user.confirmed_at = Time.zone.now
+      create_data_protection_confirmation(user)
+    end
+
+    User.find_or_create_by!(
+      name: "Managing agent 1",
+      email: "managing_agent1_dpo@example.com",
+      organisation: managing_agent1,
+      role: "data_coordinator",
+      is_dpo: true,
+      ) do |user|
+      user.password = ENV["REVIEW_APP_USER_PASSWORD"]
+      user.confirmed_at = Time.zone.now
+      create_data_protection_confirmation(user)
+    end
+
+    User.find_or_create_by!(
+      name: "Managing agent 2",
+      email: "managing_agent2_dpo@example.com",
+      organisation: managing_agent2,
+      role: "data_coordinator",
+      is_dpo: true,
+      ) do |user|
+      user.password = ENV["REVIEW_APP_USER_PASSWORD"]
+      user.confirmed_at = Time.zone.now
+      create_data_protection_confirmation(user)
+    end
+
     User.find_or_create_by!(
       name: "Provider",
       email: "provider@example.com",
@@ -251,42 +251,10 @@ unless Rails.env.test?
   end
 
   if (Rails.env.development? || Rails.env.review?) && SalesLog.count.zero?
-    SalesLog.find_or_create_by!(
-      assigned_to: support_user,
-      owning_organisation: org,
-      managing_organisation: org,
-      saledate: Time.zone.today,
-      purchid: "1",
-      ownershipsch: 1,
-      type: 2,
-      jointpur: 1,
-      jointmore: 1,
-    )
+    FactoryBot.create(:sales_log, :shared_ownership_setup_complete, assigned_to: support_user)
+    FactoryBot.create(:sales_log, :discounted_ownership_setup_complete, assigned_to: support_user)
+    FactoryBot.create(:sales_log, :outright_sale_setup_complete, assigned_to: support_user)
 
-    SalesLog.find_or_create_by!(
-      assigned_to: support_user,
-      owning_organisation: org,
-      managing_organisation: org,
-      saledate: Time.zone.today,
-      purchid: "1",
-      ownershipsch: 2,
-      type: 9,
-      jointpur: 1,
-      jointmore: 1,
-    )
-
-    SalesLog.find_or_create_by!(
-      assigned_to: support_user,
-      owning_organisation: org,
-      managing_organisation: org,
-      saledate: Time.zone.today,
-      purchid: "1",
-      ownershipsch: 3,
-      type: 10,
-      companybuy: 1,
-    )
-
-    pp "Seeded a sales log of each type"
   end
 
   if Rails.env.development? || Rails.env.review?
