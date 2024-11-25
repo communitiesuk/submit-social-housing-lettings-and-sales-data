@@ -11,7 +11,7 @@ def find_or_create_user(organisation, email, role)
   when :data_provider
     FactoryBot.create(:user, :if_unique, :data_provider, email:, organisation:, password: ENV["REVIEW_APP_USER_PASSWORD"])
   when :data_coordinator
-    FactoryBot.create(:user, :if_unique, :data_coordinator, :data_protection_officer, :with_dsa, email:, organisation:, password: ENV["REVIEW_APP_USER_PASSWORD"])
+    FactoryBot.create(:user, :if_unique, :data_coordinator, email:, organisation:, password: ENV["REVIEW_APP_USER_PASSWORD"])
   when :support
     FactoryBot.create(:user, :if_unique, :support, email:, organisation:, password: ENV["REVIEW_APP_USER_PASSWORD"])
   end
