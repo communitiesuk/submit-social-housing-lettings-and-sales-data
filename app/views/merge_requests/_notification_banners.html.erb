@@ -19,3 +19,11 @@
     No changes have been made. Try beginning the merge again.
   <% end %>
 <% end %>
+
+<% if @merge_request.merge_date&.future? %>
+  <%= govuk_notification_banner(title_text: "Important") do %>
+    <p class="govuk-notification-banner__heading govuk-!-width-full" style="max-width: fit-content">
+      This merge is happening in the future. Wait until the merge date to begin this merge.
+    </p>
+  <% end %>
+<% end %>
