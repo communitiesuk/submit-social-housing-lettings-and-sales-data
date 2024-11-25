@@ -6,14 +6,14 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-def find_or_create_user(organisation, email, role)
+def find_or_create_user(organisation, email, name, role)
   case role
   when :data_provider
-    FactoryBot.create(:user, :if_unique, :data_provider, email:, organisation:, password: ENV["REVIEW_APP_USER_PASSWORD"])
+    FactoryBot.create(:user, :if_unique, :data_provider, organisation:, email:, name:, password: ENV["REVIEW_APP_USER_PASSWORD"])
   when :data_coordinator
-    FactoryBot.create(:user, :if_unique, :data_coordinator, email:, organisation:, password: ENV["REVIEW_APP_USER_PASSWORD"])
+    FactoryBot.create(:user, :if_unique, :data_coordinator, organisation:, email:, name:, password: ENV["REVIEW_APP_USER_PASSWORD"])
   when :support
-    FactoryBot.create(:user, :if_unique, :support, email:, organisation:, password: ENV["REVIEW_APP_USER_PASSWORD"])
+    FactoryBot.create(:user, :if_unique, :support, organisation:, email:, name:, password: ENV["REVIEW_APP_USER_PASSWORD"])
   end
 end
 
@@ -81,21 +81,21 @@ unless Rails.env.test?
       child_organisation: managing_agent2,
     )
 
-    provider = find_or_create_user(mhclg, "provider@example.com", :data_provider)
-    coordinator = find_or_create_user(mhclg, "coordinator@example.com", :data_coordinator)
-    support = find_or_create_user(mhclg, "support@example.com", :support)
+    provider = find_or_create_user(mhclg, "provider@example.com", "Provider", :data_provider)
+    coordinator = find_or_create_user(mhclg, "coordinator@example.com", "Coordinator", :data_coordinator)
+    support = find_or_create_user(mhclg, "support@example.com", "Support", :support)
 
-    stock_owner1_user = find_or_create_user(stock_owner1, "stock_owner1_dpo@example.com", :data_coordinator)
-    stock_owner2_user = find_or_create_user(stock_owner2, "stock_owner2_dpo@example.com", :data_coordinator)
+    stock_owner1_user = find_or_create_user(stock_owner1, "stock_owner1_dpo@example.com", "Stock owner 1", :data_coordinator)
+    stock_owner2_user = find_or_create_user(stock_owner2, "stock_owner2_dpo@example.com", "Stock owner 2", :data_coordinator)
 
-    managing_agent1_user = find_or_create_user(managing_agent1, "managing_agent1_dpo@example.com", :data_coordinator)
-    managing_agent2_user = find_or_create_user(managing_agent2, "managing_agent2_dpo@example.com", :data_coordinator)
+    managing_agent1_user = find_or_create_user(managing_agent1, "managing_agent1_dpo@example.com", "Managing agent 1", :data_coordinator)
+    managing_agent2_user = find_or_create_user(managing_agent2, "managing_agent2_dpo@example.com", "Managing agent 2", :data_coordinator)
 
-    provider_owner1 = find_or_create_user(standalone_owns_stock, "provider.owner1@example.com", :data_provider)
-    coordinator_owner1 = find_or_create_user(standalone_owns_stock, "coordinator.owner1@example.com", :data_coordinator)
+    provider_owner1 = find_or_create_user(standalone_owns_stock, "provider.owner1@example.com", "Provider Owns Stock", :data_provider)
+    coordinator_owner1 = find_or_create_user(standalone_owns_stock, "coordinator.owner1@example.com", "Coordinator Owns Stock", :data_coordinator)
 
-    find_or_create_user(standalone_no_stock, "provider.nostock@example.com", :data_provider)
-    find_or_create_user(standalone_no_stock, "coordinator.nostock@example.com", :data_coordinator)
+    find_or_create_user(standalone_no_stock, "provider.nostock@example.com", "Provider No Stock",:data_provider)
+    find_or_create_user(standalone_no_stock, "coordinator.nostock@example.com", "Coordinator No Stock", :data_coordinator)
 
     if Scheme.count.zero?
       scheme1 = FactoryBot.create(:scheme, service_name: "Beulahside Care", owning_organisation: mhclg)
