@@ -17,7 +17,10 @@ class Form::Sales::Pages::Buyer2IncomeEcstatMaxValueCheck < ::Form::Page
         },
       ],
     }
-    @informative_text = {}
+    @informative_text = {
+      "translation" => "forms.#{form.start_date.year}.#{@copy_key}.informative_text",
+      "arguments" => [],
+    }
     @check_answers_card_number = check_answers_card_number
   end
 
