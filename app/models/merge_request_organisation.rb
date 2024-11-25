@@ -29,5 +29,12 @@ private
     if merging_organisation_id.blank? || !Organisation.where(id: merging_organisation_id).exists?
       merge_request.errors.add(:merging_organisation, I18n.t("validations.merge_request.organisation_not_selected"))
     end
+
+    existing_merges = MergeRequestOrganisation.with_merging_organisation(merging_organisation)
+    if existing_merges.count.positive?
+      existing_merge_request = existing_merges.first.merge_request
+      errors.add(:merging_organisation, I18n.t("validations.merge_request.organisation_part_of_another_merge"))
+      merge_request.errors.add(:merging_organisation, I18n.t("validations.merge_request.organisation_part_of_another_incomplete_merge", organisation: merging_organisation.name, absorbing_organisation: existing_merge_request.absorbing_organisation&.name, merge_date: existing_merge_request.merge_date&.to_fs(:govuk_date)))
+    end
   end
 end
