@@ -183,6 +183,7 @@ en:
             merge_date:
               blank: "Enter a merge date."
               invalid: "Enter a valid merge date."
+              more_than_year_from_today: "The merge date must not be later than a year from today’s date."
             existing_absorbing_organisation:
               blank: "You must answer absorbing organisation already active?"
         notification:

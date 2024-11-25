@@ -396,6 +396,24 @@ RSpec.describe MergeRequestsController, type: :request do
             }.from(nil).to(Time.zone.local(2022, 4, 10))
           end
         end
+
+        context "when merge date set to a date more than 1 year in the future" do
+          let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation) }
+          let(:params) do
+            { merge_request: { page: "merge_date", "merge_date(3i)": "#{Time.zone.now.day + 1}", "merge_date(2i)": "#{Time.zone.now.month}", "merge_date(1i)": "#{Time.zone.now.year + 1}" } }
+          end
+
+          let(:request) do
+            patch "/merge-request/#{merge_request.id}", headers:, params:
+          end
+
+          it "displays the page with an error message" do
+            request
+
+            expect(response).to have_http_status(:unprocessable_entity)
+            expect(page).to have_content("The merge date must not be later than a year from today’s date.")
+          end
+        end
       end
 
       describe "from merging_organisations page" do
