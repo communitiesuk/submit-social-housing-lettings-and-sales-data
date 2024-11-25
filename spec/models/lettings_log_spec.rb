@@ -809,6 +809,21 @@ RSpec.describe LettingsLog do
         expect { lettings_log.update!(nationality_all_group: nil, declaration: 1) }.not_to change(lettings_log, :nationality_all)
       end
     end
+
+    context "when form year changes and LA is no longer active" do
+      before do
+        LocalAuthority.find_by(code: "E08000003").update!(end_date: Time.zone.today)
+      end
+
+      it "removes the LA" do
+        lettings_log.update!(startdate: Time.zone.yesterday, la: "E08000003")
+        expect(lettings_log.reload.la).to eq("E08000003")
+
+        lettings_log.update!(startdate: Time.zone.tomorrow)
+        expect(lettings_log.reload.la).to eq(nil)
+        expect(lettings_log.reload.is_la_inferred).to eq(false)
+      end
+    end
   end
 
   describe "optional fields" do
