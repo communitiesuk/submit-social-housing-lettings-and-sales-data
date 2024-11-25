@@ -39,6 +39,38 @@ RSpec.describe BulkUpload::Sales::Year2024::CsvParser do
     end
   end
 
+  context "when some csv headers are empty (and we don't care about them)" do
+    before do
+      file.write("Question\n")
+      file.write("Additional info\n")
+      file.write("Values\n")
+      file.write("\n")
+      file.write("Type of letting the question applies to\n")
+      file.write("Duplicate check field?\n")
+      file.write(BulkUpload::SalesLogToCsv.new(log:).default_2024_field_numbers_row)
+      file.write(BulkUpload::SalesLogToCsv.new(log:).to_2024_csv_row)
+      file.write("\n")
+      file.rewind
+    end
+
+    it "returns correct offsets" do
+      expect(service.row_offset).to eq(7)
+      expect(service.col_offset).to eq(1)
+    end
+
+    it "parses csv correctly" do
+      expect(service.row_parsers[0].field_22).to eql(log.uprn)
+    end
+
+    it "counts the number of valid field numbers correctly" do
+      expect(service).to be_correct_field_count
+    end
+
+    it "does not parse the last empty row" do
+      expect(service.row_parsers.count).to eq(1)
+    end
+  end
+
   context "when parsing csv with headers in arbitrary order" do
     let(:seed) { rand }
 

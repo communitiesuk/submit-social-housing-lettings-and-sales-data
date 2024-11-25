@@ -94,9 +94,9 @@ RSpec.describe CollectionResourcesHelper do
 
       context "and next year resources were manually released" do
         before do
-          create(:collection_resource, year: 2025, resource_type: "paper_form", display_name: "lettings log for tenants (2025 to 2026)", download_filename: "file.pdf", mandatory: true, released_to_user: true)
+          create(:collection_resource, year: 2025, resource_type: "paper_form", display_name: "lettings paper form (2025 to 2026)", download_filename: "file.pdf", mandatory: true, released_to_user: true)
           create(:collection_resource, year: 2025, resource_type: "bulk_upload_template", display_name: "bulk upload template (2025 to 2026)", download_filename: "file.xlsx", mandatory: true, released_to_user: true)
-          create(:collection_resource, year: 2025, resource_type: "bulk_upload_specification", display_name: "sales log for tenants (2025 to 2026)", download_filename: "file.xlsx", mandatory: true, released_to_user: true)
+          create(:collection_resource, year: 2025, resource_type: "bulk_upload_specification", display_name: "sales paper form (2025 to 2026)", download_filename: "file.xlsx", mandatory: true, released_to_user: true)
         end
 
         it "reutrns current and next years" do
@@ -121,7 +121,7 @@ RSpec.describe CollectionResourcesHelper do
   describe "#document_list_component_items" do
     let(:resources) do
       [
-        build(:collection_resource, year: 2023, resource_type: "paper_form", display_name: "lettings log for tenants (2023 to 2024)", download_filename: "2023_24_lettings_paper_form.pdf"),
+        build(:collection_resource, year: 2023, resource_type: "paper_form", display_name: "lettings paper form (2023 to 2024)", download_filename: "2023_24_lettings_paper_form.pdf"),
         build(:collection_resource, year: 2023, resource_type: "bulk_upload_template", display_name: "bulk upload template (2023 to 2024)", download_filename: "2023_24_lettings_bulk_upload_template.xlsx"),
       ]
     end
@@ -134,7 +134,7 @@ RSpec.describe CollectionResourcesHelper do
     it "returns component items" do
       expect(document_list_component_items(resources)).to eq([
         {
-          name: "Download the lettings log for tenants (2023 to 2024)",
+          name: "Download the lettings paper form (2023 to 2024)",
           href: "/collection-resources/lettings/2023/paper_form/download",
           metadata: "PDF, 286 KB",
         },
@@ -150,7 +150,7 @@ RSpec.describe CollectionResourcesHelper do
   describe "#document_list_edit_component_items" do
     let(:resources) do
       [
-        build(:collection_resource, year: 2023, resource_type: "paper_form", display_name: "lettings log for tenants (2023 to 2024)", download_filename: "2023_24_lettings_paper_form.pdf"),
+        build(:collection_resource, year: 2023, resource_type: "paper_form", display_name: "lettings paper form (2023 to 2024)", download_filename: "2023_24_lettings_paper_form.pdf"),
         build(:collection_resource, year: 2023, resource_type: "bulk_upload_template", display_name: "bulk upload template (2023 to 2024)", download_filename: "2023_24_lettings_bulk_upload_template.xlsx"),
       ]
     end
@@ -199,9 +199,9 @@ RSpec.describe CollectionResourcesHelper do
 
       context "and the resources have been manually released" do
         before do
-          create(:collection_resource, year: 2025, resource_type: "paper_form", display_name: "lettings log for tenants (2025 to 2026)", download_filename: "file.pdf", mandatory: true, released_to_user: true)
+          create(:collection_resource, year: 2025, resource_type: "paper_form", display_name: "lettings paper form (2025 to 2026)", download_filename: "file.pdf", mandatory: true, released_to_user: true)
           create(:collection_resource, year: 2025, resource_type: "bulk_upload_template", display_name: "bulk upload template (2025 to 2026)", download_filename: "file.xlsx", mandatory: true, released_to_user: true)
-          create(:collection_resource, year: 2025, resource_type: "bulk_upload_specification", display_name: "sales log for tenants (2025 to 2026)", download_filename: "file.xlsx", mandatory: true, released_to_user: true)
+          create(:collection_resource, year: 2025, resource_type: "bulk_upload_specification", display_name: "sales paper form (2025 to 2026)", download_filename: "file.xlsx", mandatory: true, released_to_user: true)
         end
 
         it "returns false" do

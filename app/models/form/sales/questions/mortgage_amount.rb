@@ -2,7 +2,6 @@ class Form::Sales::Questions::MortgageAmount < ::Form::Question
   def initialize(id, hsh, subsection, ownershipsch:)
     super(id, hsh, subsection)
     @id = "mortgage"
-    @copy_key = "sales.sale_information.mortgage"
     @type = "numeric"
     @min = 1
     @step = 1

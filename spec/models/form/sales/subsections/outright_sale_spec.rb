@@ -109,6 +109,10 @@ RSpec.describe Form::Sales::Subsections::OutrightSale, type: :model do
     expect(outright_sale.id).to eq("outright_sale")
   end
 
+  it "has the correct copy key" do
+    expect(outright_sale.copy_key).to eq("sale_information")
+  end
+
   it "has the correct label" do
     expect(outright_sale.label).to eq("Outright sale")
   end

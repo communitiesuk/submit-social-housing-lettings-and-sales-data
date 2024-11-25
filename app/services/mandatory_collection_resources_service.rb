@@ -46,7 +46,7 @@ class MandatoryCollectionResourcesService
     year_range = "#{year} to #{year + 1}"
     case resource
     when "paper_form"
-      "#{log_type} log for tenants (#{year_range})"
+      "#{log_type} paper form (#{year_range})"
     when "bulk_upload_template"
       "#{log_type} bulk upload template (#{year_range})"
     when "bulk_upload_specification"

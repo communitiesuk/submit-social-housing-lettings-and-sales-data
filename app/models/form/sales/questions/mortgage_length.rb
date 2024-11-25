@@ -2,7 +2,6 @@ class Form::Sales::Questions::MortgageLength < ::Form::Question
   def initialize(id, hsh, subsection, ownershipsch:)
     super(id, hsh, subsection)
     @id = "mortlen"
-    @copy_key = "sales.sale_information.mortlen"
     @type = "numeric"
     @min = 0
     @max = 60
