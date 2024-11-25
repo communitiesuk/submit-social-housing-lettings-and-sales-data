@@ -56,8 +56,8 @@ FactoryBot.define do
       status { 2 }
       tenancycode { Faker::Name.initials(number: 10) }
       age1_known { 0 }
-      age1 { 35 }
-      sex1 { "F" }
+      age1 { Faker::Number.within(range: 25..55) }
+      sex1 { %w[F M X R].sample }
       ethnic_group { 0 }
       ethnic { 2 }
       national { 13 }
@@ -67,8 +67,8 @@ FactoryBot.define do
       relat2 { "P" }
       age2_known { 0 }
       details_known_2 { 0 }
-      age2 { 32 }
-      sex2 { "M" }
+      age2 { Faker::Number.within(range: 25..55) }
+      sex2 { %w[F M X R].sample }
       ecstat2 { 6 }
       homeless { 1 }
       underoccupation_benefitcap { 0 }
@@ -162,8 +162,8 @@ FactoryBot.define do
       referral { 2 }
       uprn_known { 0 }
       joint { 3 }
-      address_line1 { "Address line 1" }
-      town_or_city { "London" }
+      address_line1 { Faker::Address.street_address }
+      town_or_city { Faker::Address.city }
       ppcodenk { 1 }
       tshortfall_known { 1 }
       after(:build) do |log, _evaluator|

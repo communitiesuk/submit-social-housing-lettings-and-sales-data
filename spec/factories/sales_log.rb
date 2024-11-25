@@ -78,14 +78,14 @@ FactoryBot.define do
       noint { 2 }
       privacynotice { 1 }
       age1_known { 0 }
-      age1 { 30 }
-      sex1 { "X" }
+      age1 { Faker::Number.within(range: 25..55) }
+      sex1 { %w[F M X R].sample }
       national { 18 }
       buy1livein { 1 }
       relat2 { "P" }
       proptype { 1 }
       age2_known { 0 }
-      age2 { 35 }
+      age2 { Faker::Number.within(range: 25..55) }
       builtype { 1 }
       ethnic { 3 }
       ethnic_group { 17 }
@@ -114,17 +114,17 @@ FactoryBot.define do
       income2 { 10_000 }
       inc2mort { 1 }
       uprn_known { 0 }
-      address_line1 { "Address line 1" }
-      town_or_city { "Town or city" }
+      address_line1 { Faker::Address.street_address }
+      town_or_city { Faker::Address.city }
       la_known { 1 }
       la { "E09000003" }
       savingsnk { 1 }
       prevown { 1 }
       prevshared { 2 }
-      sex3 { "X" }
-      sex4 { "X" }
-      sex5 { "X" }
-      sex6 { "X" }
+      sex3 { %w[F M X R].sample }
+      sex4 { %w[F M X R].sample }
+      sex5 { %w[F M X R].sample }
+      sex6 { %w[F M X R].sample }
       mortgage { 20_000 }
       ecstat3 { 9 }
       ecstat4 { 3 }
@@ -155,7 +155,7 @@ FactoryBot.define do
       mscharge { 100 }
       mortlen { 10 }
       pcodenk { 0 }
-      postcode_full { "SW1A 1AA" }
+      postcode_full { Faker::Address.postcode }
       is_la_inferred { false }
       mortgagelender { 5 }
       extrabor { 1 }
