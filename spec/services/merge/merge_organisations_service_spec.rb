@@ -964,7 +964,8 @@ RSpec.describe Merge::MergeOrganisationsService do
           expect(Rails.logger).to receive(:info).with("\t#{merging_organisation.data_protection_officers.first.name} (#{merging_organisation.data_protection_officers.first.email})")
           expect(Rails.logger).to receive(:info).with("\tfake name (fake@email.com)")
           expect(Rails.logger).to receive(:info).with("Merged users from second org:")
-          expect(Rails.logger).to receive(:info).with(/\tDanny Rojas/).exactly(6).times
+          expect(Rails.logger).to receive(:info).with(/\tDanny Rojas/).exactly(5).times
+          expect(Rails.logger).to receive(:info).with(/\t#{merging_organisation_too.data_protection_officers.first.name}/)
           expect(Rails.logger).to receive(:info).with("New schemes from fake org:")
           expect(Rails.logger).to receive(:info).with("New schemes from second org:")
           merge_organisations_service.call
@@ -1598,7 +1599,8 @@ RSpec.describe Merge::MergeOrganisationsService do
         expect(Rails.logger).to receive(:info).with("\t#{merging_organisation.data_protection_officers.first.name} (#{merging_organisation.data_protection_officers.first.email})")
         expect(Rails.logger).to receive(:info).with("\tfake name (fake@email.com)")
         expect(Rails.logger).to receive(:info).with("Merged users from second org:")
-        expect(Rails.logger).to receive(:info).with(/\tDanny Rojas/).exactly(6).times
+        expect(Rails.logger).to receive(:info).with(/\tDanny Rojas/).exactly(5).times
+        expect(Rails.logger).to receive(:info).with(/\t#{merging_organisation_too.data_protection_officers.first.name}/)
         expect(Rails.logger).to receive(:info).with("New schemes from fake org:")
         expect(Rails.logger).to receive(:info).with("New schemes from second org:")
         merge_organisations_service.call
