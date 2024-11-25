@@ -58,7 +58,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
 
           context "when adding a stock owner" do
             let!(:active_organisation) { FactoryBot.create(:organisation, name: "Active Org", active: true) }
-            let!(:inactive_organisation) { FactoryBot.create(:organisation, name: "Inactive LTD", active: false) }
+            let!(:inactive_organisation) { FactoryBot.create(:organisation, name: "Inactive LTD 2", active: false) }
 
             before do
               get "/organisations/#{organisation.id}/stock-owners/add", headers:, params: {}
@@ -115,7 +115,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
           let!(:managing_agent) { FactoryBot.create(:organisation) }
           let!(:other_org_managing_agent) { FactoryBot.create(:organisation, name: "Foobar LTD") }
           let!(:inactive_managing_agent) { FactoryBot.create(:organisation, name: "Inactive LTD", active: false) }
-          let!(:other_organisation) { FactoryBot.create(:organisation, name: "Foobar LTD") }
+          let!(:other_organisation) { FactoryBot.create(:organisation, name: "Foobar LTD 3") }
 
           before do
             FactoryBot.create(:organisation_relationship, parent_organisation: organisation, child_organisation: managing_agent)
@@ -316,7 +316,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
         context "with an organisation that the user belongs to" do
           let!(:stock_owner) { FactoryBot.create(:organisation) }
           let!(:other_org_stock_owner) { FactoryBot.create(:organisation, name: "Foobar LTD") }
-          let!(:other_organisation) { FactoryBot.create(:organisation, name: "Foobar LTD") }
+          let!(:other_organisation) { FactoryBot.create(:organisation, name: "Foobar LTD 2") }
 
           before do
             FactoryBot.create(:organisation_relationship, child_organisation: organisation, parent_organisation: stock_owner)
@@ -452,7 +452,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
         context "with an organisation that the user belongs to" do
           let!(:managing_agent) { FactoryBot.create(:organisation) }
           let!(:other_org_managing_agent) { FactoryBot.create(:organisation, name: "Foobar LTD") }
-          let!(:other_organisation) { FactoryBot.create(:organisation, name: "Foobar LTD") }
+          let!(:other_organisation) { FactoryBot.create(:organisation, name: "Foobar LTD 5") }
 
           before do
             FactoryBot.create(:organisation_relationship, parent_organisation: organisation, child_organisation: managing_agent)

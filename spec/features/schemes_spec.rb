@@ -197,6 +197,7 @@ RSpec.describe "Schemes scheme Features" do
 
       context "when I visit schemes page" do
         before do
+          user.organisation.update!(name: "MHCLG")
           visit("schemes")
         end
 

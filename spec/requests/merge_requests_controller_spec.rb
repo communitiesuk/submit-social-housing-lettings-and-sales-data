@@ -12,6 +12,7 @@ RSpec.describe MergeRequestsController, type: :request do
 
   context "when user is signed in with a support user" do
     before do
+      organisation.update!(name: "MHCLG")
       allow(support_user).to receive(:need_two_factor_authentication?).and_return(false)
       sign_in support_user
     end

@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe TabNavHelper do
-  let(:organisation) { FactoryBot.create(:organisation) }
+  let(:organisation) { FactoryBot.create(:organisation, name: "MHCLG") }
   let(:current_user) { FactoryBot.build(:user, organisation:) }
   let(:scheme) { FactoryBot.create(:scheme, service_name: "Some name") }
   let(:location) { FactoryBot.create(:location, scheme:) }
