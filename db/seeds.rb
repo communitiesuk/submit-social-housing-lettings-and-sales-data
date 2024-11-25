@@ -85,11 +85,11 @@ unless Rails.env.test?
     coordinator = find_or_create_user(mhclg, "coordinator@example.com", :data_coordinator)
     support = find_or_create_user(mhclg, "support@example.com", :support)
 
-    stock_owner1 = find_or_create_user(stock_owner1, "stock_owner1_dpo@example.com", :data_coordinator)
-    stock_owner2 = find_or_create_user(stock_owner2, "stock_owner2_dpo@example.com", :data_coordinator)
+    stock_owner1_user = find_or_create_user(stock_owner1, "stock_owner1_dpo@example.com", :data_coordinator)
+    stock_owner2_user = find_or_create_user(stock_owner2, "stock_owner2_dpo@example.com", :data_coordinator)
 
-    managing_agent1 = find_or_create_user(managing_agent1, "managing_agent1_dpo@example.com", :data_coordinator)
-    managing_agent2 = find_or_create_user(managing_agent2, "managing_agent2_dpo@example.com", :data_coordinator)
+    managing_agent1_user = find_or_create_user(managing_agent1, "managing_agent1_dpo@example.com", :data_coordinator)
+    managing_agent2_user = find_or_create_user(managing_agent2, "managing_agent2_dpo@example.com", :data_coordinator)
 
     provider_owner1 = find_or_create_user(standalone_owns_stock, "provider.owner1@example.com", :data_provider)
     coordinator_owner1 = find_or_create_user(standalone_owns_stock, "coordinator.owner1@example.com", :data_coordinator)
@@ -111,7 +111,7 @@ unless Rails.env.test?
       end
     end
 
-    users_with_logs = [support, coordinator, provider, provider_owner1, coordinator_owner1, managing_agent1, managing_agent2, stock_owner1, stock_owner2]
+    users_with_logs = [provider, coordinator, support, stock_owner1_user, stock_owner2_user, managing_agent1_user, managing_agent2_user, provider_owner1, coordinator_owner1]
 
     if SalesLog.count.zero?
       users_with_logs.each do |user|
@@ -121,7 +121,7 @@ unless Rails.env.test?
         FactoryBot.create(:sales_log, :completed, assigned_to: user)
       end
 
-      FactoryBot.create(:sales_log, :completed, assigned_to: managing_agent1, owning_organisation: mhclg)
+      FactoryBot.create(:sales_log, :completed, assigned_to: managing_agent1_user, owning_organisation: mhclg)
       FactoryBot.create(:sales_log, :completed, assigned_to: provider, owning_organisation: stock_owner1)
     end
 
@@ -135,7 +135,7 @@ unless Rails.env.test?
         end
       end
 
-      FactoryBot.create(:lettings_log, :completed, assigned_to: managing_agent1, owning_organisation: mhclg)
+      FactoryBot.create(:lettings_log, :completed, assigned_to: managing_agent1_user, owning_organisation: mhclg)
       FactoryBot.create(:lettings_log, :completed, assigned_to: provider, owning_organisation: stock_owner1)
     end
 
