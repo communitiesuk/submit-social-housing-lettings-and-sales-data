@@ -28,7 +28,7 @@ RSpec.describe Merge::MergeOrganisationsService do
 
       it "moves the users from merging organisation to absorbing organisation" do
         expect(Rails.logger).to receive(:info).with("Merged users from fake org:")
-        expect(Rails.logger).to receive(:info).with("\tDanny Rojas (#{merging_organisation.data_protection_officers.first.email})")
+        expect(Rails.logger).to receive(:info).with("\t#{merging_organisation.data_protection_officers.first.name} (#{merging_organisation.data_protection_officers.first.email})")
         expect(Rails.logger).to receive(:info).with("\tfake name (fake@email.com)")
         expect(Rails.logger).to receive(:info).with("New schemes from fake org:")
         merge_organisations_service.call
@@ -477,7 +477,7 @@ RSpec.describe Merge::MergeOrganisationsService do
 
           it "logs the merged schemes and locations" do
             expect(Rails.logger).to receive(:info).with("Merged users from fake org:")
-            expect(Rails.logger).to receive(:info).with("\tDanny Rojas (#{merging_organisation.data_protection_officers.first.email})")
+            expect(Rails.logger).to receive(:info).with("\t#{merging_organisation.data_protection_officers.first.name} (#{merging_organisation.data_protection_officers.first.email})")
             expect(Rails.logger).to receive(:info).with("\tfake name (fake@email.com)")
             expect(Rails.logger).to receive(:info).with("New schemes from fake org:")
             expect(Rails.logger).to receive(:info).with(/\t#{scheme.service_name} \(S/)
@@ -744,7 +744,7 @@ RSpec.describe Merge::MergeOrganisationsService do
 
             it "logs the merged schemes" do
               expect(Rails.logger).to receive(:info).with("Merged users from fake org:")
-              expect(Rails.logger).to receive(:info).with("\tDanny Rojas (#{merging_organisation.data_protection_officers.first.email})")
+              expect(Rails.logger).to receive(:info).with("\t#{merging_organisation.data_protection_officers.first.name} (#{merging_organisation.data_protection_officers.first.email})")
               expect(Rails.logger).to receive(:info).with("\tfake name (fake@email.com)")
               expect(Rails.logger).to receive(:info).with("New schemes from fake org:")
               expect(Rails.logger).to receive(:info).with(/\t#{scheme.service_name} \(S/)
@@ -922,7 +922,7 @@ RSpec.describe Merge::MergeOrganisationsService do
       let!(:merging_organisation_user) { create(:user, organisation: merging_organisation, name: "fake name", email: "fake@email.com") }
 
       before do
-        create_list(:user, 5, organisation: merging_organisation_too)
+        create_list(:user, 5, organisation: merging_organisation_too, name: "Danny Rojas")
       end
 
       it "sets merge date and absorbing organisation on merged organisations" do
@@ -961,7 +961,7 @@ RSpec.describe Merge::MergeOrganisationsService do
       context "and merging users" do
         it "moves the users from merging organisations to absorbing organisation" do
           expect(Rails.logger).to receive(:info).with("Merged users from fake org:")
-          expect(Rails.logger).to receive(:info).with("\tDanny Rojas (#{merging_organisation.data_protection_officers.first.email})")
+          expect(Rails.logger).to receive(:info).with("\t#{merging_organisation.data_protection_officers.first.name} (#{merging_organisation.data_protection_officers.first.email})")
           expect(Rails.logger).to receive(:info).with("\tfake name (fake@email.com)")
           expect(Rails.logger).to receive(:info).with("Merged users from second org:")
           expect(Rails.logger).to receive(:info).with(/\tDanny Rojas/).exactly(6).times
@@ -1113,7 +1113,7 @@ RSpec.describe Merge::MergeOrganisationsService do
 
       it "moves the users from merging organisation to absorbing organisation" do
         expect(Rails.logger).to receive(:info).with("Merged users from fake org:")
-        expect(Rails.logger).to receive(:info).with("\tDanny Rojas (#{merging_organisation.data_protection_officers.first.email})")
+        expect(Rails.logger).to receive(:info).with("\t#{merging_organisation.data_protection_officers.first.name} (#{merging_organisation.data_protection_officers.first.email})")
         expect(Rails.logger).to receive(:info).with("\tfake name (fake@email.com)")
         expect(Rails.logger).to receive(:info).with("New schemes from fake org:")
         merge_organisations_service.call
@@ -1251,7 +1251,7 @@ RSpec.describe Merge::MergeOrganisationsService do
 
         it "logs the merged schemes" do
           expect(Rails.logger).to receive(:info).with("Merged users from fake org:")
-          expect(Rails.logger).to receive(:info).with("\tDanny Rojas (#{merging_organisation.data_protection_officers.first.email})")
+          expect(Rails.logger).to receive(:info).with("\t#{merging_organisation.data_protection_officers.first.name} (#{merging_organisation.data_protection_officers.first.email})")
           expect(Rails.logger).to receive(:info).with("\tfake name (fake@email.com)")
           expect(Rails.logger).to receive(:info).with("New schemes from fake org:")
           expect(Rails.logger).to receive(:info).with(/\t#{scheme.service_name} \(S/)
@@ -1462,7 +1462,7 @@ RSpec.describe Merge::MergeOrganisationsService do
 
           it "logs the merged schemes" do
             expect(Rails.logger).to receive(:info).with("Merged users from fake org:")
-            expect(Rails.logger).to receive(:info).with("\tDanny Rojas (#{merging_organisation.data_protection_officers.first.email})")
+            expect(Rails.logger).to receive(:info).with("\t#{merging_organisation.data_protection_officers.first.name} (#{merging_organisation.data_protection_officers.first.email})")
             expect(Rails.logger).to receive(:info).with("\tfake name (fake@email.com)")
             expect(Rails.logger).to receive(:info).with("New schemes from fake org:")
             expect(Rails.logger).to receive(:info).with(/\t#{scheme.service_name} \(S/)
@@ -1590,12 +1590,12 @@ RSpec.describe Merge::MergeOrganisationsService do
       let!(:merging_organisation_user) { create(:user, organisation: merging_organisation, name: "fake name", email: "fake@email.com") }
 
       before do
-        create_list(:user, 5, organisation: merging_organisation_too)
+        create_list(:user, 5, organisation: merging_organisation_too, name: "Danny Rojas")
       end
 
       it "moves the users from merging organisations to absorbing organisation" do
         expect(Rails.logger).to receive(:info).with("Merged users from fake org:")
-        expect(Rails.logger).to receive(:info).with("\tDanny Rojas (#{merging_organisation.data_protection_officers.first.email})")
+        expect(Rails.logger).to receive(:info).with("\t#{merging_organisation.data_protection_officers.first.name} (#{merging_organisation.data_protection_officers.first.email})")
         expect(Rails.logger).to receive(:info).with("\tfake name (fake@email.com)")
         expect(Rails.logger).to receive(:info).with("Merged users from second org:")
         expect(Rails.logger).to receive(:info).with(/\tDanny Rojas/).exactly(6).times

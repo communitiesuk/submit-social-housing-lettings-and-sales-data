@@ -42,7 +42,7 @@ RSpec.describe Exports::UserExportService do
     end
 
     context "and one user is available for export" do
-      let!(:user) { create(:user, organisation:, phone_extension: "123") }
+      let!(:user) { create(:user, organisation:, name: "Danny Rojas", phone_extension: "123") }
 
       it "generates a ZIP export file with the expected filename" do
         expect(storage_service).to receive(:write_file).with(expected_zip_filename, any_args)

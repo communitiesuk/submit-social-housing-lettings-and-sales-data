@@ -1261,8 +1261,8 @@ RSpec.describe UsersController, type: :request do
   end
 
   context "when user is signed in as a support user" do
-    let(:user) { create(:user, :support, organisation: create(:organisation, :without_dpc)) }
-    let(:other_user) { create(:user, organisation: user.organisation, last_sign_in_at: Time.zone.now) }
+    let(:user) { create(:user, :support, name: "Danny Rojas", organisation: create(:organisation, :without_dpc)) }
+    let(:other_user) { create(:user, name: "Danny Rojas", organisation: user.organisation, last_sign_in_at: Time.zone.now) }
 
     before do
       allow(user).to receive(:need_two_factor_authentication?).and_return(false)
