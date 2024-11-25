@@ -12,7 +12,7 @@
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds-from-desktop">
           <%= f.govuk_radio_buttons_fieldset :has_helpdesk_ticket,
-            legend: { text: "Was this merge reported by a helpdesk ticket?", size: "l"} do %>
+            legend: { text: "Was this merge reported by a helpdesk ticket?", size: "l" } do %>
 
             <%= f.govuk_radio_button "has_helpdesk_ticket",
               true,
@@ -20,7 +20,7 @@
               **basic_conditional_html_attributes({ "helpdesk_ticket" => [true] }, "merge_request") do %>
               <%= f.govuk_text_field :helpdesk_ticket,
                 caption: { text: "Ticket number", class: "govuk-label govuk-label--s" },
-                label:  { text: "For example, MSD-12345", class: "app-!-colour-muted" } %>
+                label: { text: "For example, MSD-12345", class: "app-!-colour-muted" } %>
             <% end %>
 
             <%= f.govuk_radio_button "has_helpdesk_ticket",
