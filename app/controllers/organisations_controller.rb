@@ -155,6 +155,7 @@ class OrganisationsController < ApplicationController
         end
         redirect_to details_organisation_path(@organisation)
       else
+        @used_rent_periods = @organisation.lettings_logs.pluck(:period).uniq.compact.map(&:to_s)
         @rent_periods = helpers.rent_periods_with_checked_attr(checked_periods: selected_rent_periods)
         render :edit, status: :unprocessable_entity
       end
