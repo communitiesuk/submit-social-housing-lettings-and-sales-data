@@ -107,7 +107,7 @@ unless Rails.env.test?
         FactoryBot.create(:location, scheme:)
       end
       [scheme2, scheme3].each do |scheme|
-        FactoryBot.create_list(3, :location, scheme:)
+        FactoryBot.create_list(:location, 3, scheme:)
       end
     end
 
