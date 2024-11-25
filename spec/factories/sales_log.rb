@@ -185,5 +185,12 @@ FactoryBot.define do
     trait :imported do
       old_id { Random.hex }
     end
+    trait :ignore_validation_errors do
+      to_create do |instance|
+        instance.valid?
+        instance.errors.clear
+        instance.save!(validate: false)
+      end
+    end
   end
 end
