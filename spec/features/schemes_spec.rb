@@ -677,7 +677,7 @@ RSpec.describe "Schemes scheme Features" do
           end
 
           it "adds scheme to the list of schemes" do
-            expect(page).to have_content "#{scheme.service_name} has been created. It does not require helpdesk approval."
+            expect(page).to have_content "#{scheme.service_name} has been created."
             click_link "Schemes"
             expect(page).to have_content "Supported housing schemes"
             expect(page).to have_content scheme.id_to_display
