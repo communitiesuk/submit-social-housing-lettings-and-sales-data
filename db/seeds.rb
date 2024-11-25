@@ -94,7 +94,7 @@ unless Rails.env.test?
     provider_owner1 = find_or_create_user(standalone_owns_stock, "provider.owner1@example.com", "Provider Owns Stock", :data_provider)
     coordinator_owner1 = find_or_create_user(standalone_owns_stock, "coordinator.owner1@example.com", "Coordinator Owns Stock", :data_coordinator)
 
-    find_or_create_user(standalone_no_stock, "provider.nostock@example.com", "Provider No Stock",:data_provider)
+    find_or_create_user(standalone_no_stock, "provider.nostock@example.com", "Provider No Stock", :data_provider)
     find_or_create_user(standalone_no_stock, "coordinator.nostock@example.com", "Coordinator No Stock", :data_coordinator)
 
     if Scheme.count.zero?
