@@ -162,7 +162,7 @@ FactoryBot.define do
       referral { 2 }
       uprn_known { 0 }
       joint { 3 }
-      address_line1 { Faker::Address.street_address }
+      address_line1 { "Address line 1" }
       town_or_city { Faker::Address.city }
       ppcodenk { 1 }
       tshortfall_known { 1 }

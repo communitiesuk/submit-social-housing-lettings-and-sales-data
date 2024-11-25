@@ -114,7 +114,7 @@ FactoryBot.define do
       income2 { 10_000 }
       inc2mort { 1 }
       uprn_known { 0 }
-      address_line1 { Faker::Address.street_address }
+      address_line1 { "Address line 1" }
       town_or_city { Faker::Address.city }
       la_known { 1 }
       la { "E09000003" }
@@ -155,7 +155,7 @@ FactoryBot.define do
       mscharge { 100 }
       mortlen { 10 }
       pcodenk { 0 }
-      postcode_full { Faker::Address.postcode }
+      postcode_full { "SW1A 1AA" }
       is_la_inferred { false }
       mortgagelender { 5 }
       extrabor { 1 }
