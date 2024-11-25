@@ -4,7 +4,7 @@ RSpec.describe LettingsLogSummaryComponent, type: :component do
   let(:support_user) { FactoryBot.create(:user, :support) }
   let(:coordinator_user) { FactoryBot.create(:user) }
   let(:organisation) { create(:organisation, name: "MHCLG") }
-  let(:log_user) { create(:user, name: "Danny Rojas", organisation:)}
+  let(:log_user) { create(:user, name: "Danny Rojas", organisation:) }
   let(:propcode) { "P3647" }
   let(:tenancycode) { "T62863" }
   let(:lettings_log) { FactoryBot.create(:lettings_log, assigned_to: log_user, needstype: 1, tenancycode:, propcode:, startdate: Time.zone.today) }
