@@ -84,11 +84,11 @@ module SchemesHelper
     when :deactivating_soon
       "This scheme deactivates on #{scheme.last_deactivation_date.to_formatted_s(:govuk_date)}. Any locations you add will be deactivated on the same date. Reactivate the scheme to add locations active after this date."
     when :deactivated
-      case scheme.organisation.status
+      case scheme.owning_organisation.status
       when :active
         "This scheme deactivated on #{scheme.last_deactivation_date.to_formatted_s(:govuk_date)}. Any locations you add will be deactivated on the same date. Reactivate the scheme to add locations active after this date."
       when :merged
-        "This scheme has been deactivated due to its organisation merging on #{scheme.organisation.merge_date.to_formatted_s(:govuk_date)}. Any locations you add will be deactivated on the same date. Use the new (after merge) organisation for schemes and locations active after this date."
+        "This scheme has been deactivated due to #{scheme.owning_organisation.name} merging into #{scheme.owning_organisation.absorbing_organisation.name} on #{scheme.owning_organisation.merge_date.to_formatted_s(:govuk_date)}. Any locations you add will be deactivated on the same date. Use the after merge organisation for schemes and locations active after this date."
       end
     end
   end
