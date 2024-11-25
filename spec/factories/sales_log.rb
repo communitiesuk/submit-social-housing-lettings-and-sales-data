@@ -133,6 +133,7 @@ FactoryBot.define do
       disabled { 1 }
       deposit { 80_000 }
       value { 110_000 }
+      value_value_check { 0 }
       grant { 10_000 }
       proplen { 10 }
       pregyrha { 1 }
