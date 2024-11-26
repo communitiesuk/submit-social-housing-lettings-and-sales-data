@@ -4,66 +4,75 @@ RSpec.describe Validations::Sales::SoftValidations do
   let(:record) { build(:sales_log) }
 
   describe "income validations" do
-    context "when validating soft min" do
+    context "when validating soft range based on ecstat" do
       it "does not trigger for income1 if no income1 is given" do
         record.income1 = nil
-        expect(record).not_to be_income1_under_soft_min
+        expect(record).not_to be_income1_outside_soft_range_for_ecstat
       end
 
-      it "does not trigger for income1 if no ecstat1 is given" do
+      it "does not trigger for low income1 if no ecstat1 is given" do
         record.income1 = 50
         record.ecstat1 = nil
-        expect(record).not_to be_income1_under_soft_min
+        expect(record).not_to be_income1_outside_soft_range_for_ecstat
       end
 
       it "does not trigger for income2 if no income2 is given" do
         record.income2 = nil
-        expect(record).not_to be_income2_under_soft_min
+        expect(record).not_to be_income2_outside_soft_range_for_ecstat
       end
 
-      it "does not trigger for income2 if no ecstat2 is given" do
+      it "does not trigger for low income2 if no ecstat2 is given" do
         record.income2 = 50
         record.ecstat2 = nil
-        expect(record).not_to be_income2_under_soft_min
+        expect(record).not_to be_income2_outside_soft_range_for_ecstat
       end
 
       context "when log year is before 2025" do
         let(:record) { build(:sales_log, saledate: Time.zone.local(2024, 12, 25)) }
 
-        it "does not trigger for income1 if ecstat1 has no soft min" do
+        it "does not trigger for low income1 if ecstat1 has no soft min" do
           record.income1 = 50
           record.ecstat1 = 4
-          expect(record).not_to be_income1_under_soft_min
+          expect(record).not_to be_income1_outside_soft_range_for_ecstat
         end
 
         it "returns true if income1 is below soft min for ecstat1" do
           record.income1 = 4500
           record.ecstat1 = 1
-          expect(record).to be_income1_under_soft_min
+          expect(record).to be_income1_outside_soft_range_for_ecstat
         end
 
         it "returns false if income1 is >= soft min for ecstat1" do
           record.income1 = 1500
           record.ecstat1 = 2
-          expect(record).not_to be_income1_under_soft_min
+          expect(record).not_to be_income1_outside_soft_range_for_ecstat
         end
 
         it "does not trigger for income2 if ecstat2 has no soft min" do
           record.income2 = 50
           record.ecstat2 = 8
-          expect(record).not_to be_income2_under_soft_min
+          expect(record).not_to be_income2_outside_soft_range_for_ecstat
         end
 
         it "returns true if income2 is below soft min for ecstat2" do
           record.income2 = 999
           record.ecstat2 = 3
-          expect(record).to be_income2_under_soft_min
+          expect(record).to be_income2_outside_soft_range_for_ecstat
         end
 
         it "returns false if income2 is >= soft min for ecstat2" do
           record.income2 = 2500
           record.ecstat2 = 5
-          expect(record).not_to be_income2_under_soft_min
+          expect(record).not_to be_income2_outside_soft_range_for_ecstat
+        end
+
+        it "does not trigger for being over maxima" do
+          record.ecstat1 = 1
+          record.income1 = 200_000
+          record.ecstat2 = 2
+          record.income2 = 100_000
+          expect(record).not_to be_income1_outside_soft_range_for_ecstat
+          expect(record).not_to be_income2_outside_soft_range_for_ecstat
         end
       end
 
@@ -73,90 +82,49 @@ RSpec.describe Validations::Sales::SoftValidations do
         it "returns true if income1 is below soft min for ecstat1" do
           record.income1 = 13_399
           record.ecstat1 = 1
-          expect(record).to be_income1_under_soft_min
+          expect(record).to be_income1_outside_soft_range_for_ecstat
         end
 
         it "returns false if income1 is >= soft min for ecstat1" do
           record.income1 = 2600
           record.ecstat1 = 2
-          expect(record).not_to be_income1_under_soft_min
+          expect(record).not_to be_income1_outside_soft_range_for_ecstat
         end
 
         it "returns true if income2 is below soft min for ecstat2" do
           record.income2 = 2079
           record.ecstat2 = 3
-          expect(record).to be_income2_under_soft_min
+          expect(record).to be_income2_outside_soft_range_for_ecstat
         end
 
         it "returns false if income2 is >= soft min for ecstat2" do
           record.income2 = 520
           record.ecstat2 = 5
-          expect(record).not_to be_income2_under_soft_min
-        end
-      end
-    end
-
-    context "when validating soft max based on ecstat" do
-      context "when log year is before 2025" do
-        let(:record) { build(:sales_log, saledate: Time.zone.local(2024, 12, 25)) }
-
-        it "does not trigger" do
-          record.ecstat1 = 1
-          record.income1 = 200_000
-          record.ecstat2 = 2
-          record.income2 = 100_000
-          expect(record).not_to be_income1_over_soft_max_for_ecstat
-          expect(record).not_to be_income2_over_soft_max_for_ecstat
-        end
-      end
-
-      context "when log year is 2025" do
-        let(:record) { build(:sales_log, saledate: Time.zone.local(2025, 12, 25)) }
-
-        it "does not trigger for income1 if no income1 is given" do
-          record.income1 = nil
-          expect(record).not_to be_income1_over_soft_max_for_ecstat
-        end
-
-        it "does not trigger for income1 if no ecstat1 is given" do
-          record.income1 = 50
-          record.ecstat1 = nil
-          expect(record).not_to be_income1_over_soft_max_for_ecstat
-        end
-
-        it "does not trigger for income2 if no income2 is given" do
-          record.income2 = nil
-          expect(record).not_to be_income2_over_soft_max_for_ecstat
-        end
-
-        it "does not trigger for income2 if no ecstat2 is given" do
-          record.income2 = 50
-          record.ecstat2 = nil
-          expect(record).not_to be_income2_over_soft_max_for_ecstat
+          expect(record).not_to be_income2_outside_soft_range_for_ecstat
         end
 
         it "returns true if income1 is above soft max for ecstat1" do
           record.income1 = 80_001
           record.ecstat1 = 2
-          expect(record).to be_income1_over_soft_max_for_ecstat
+          expect(record).to be_income1_outside_soft_range_for_ecstat
         end
 
         it "returns false if income1 is <= soft max for ecstat1" do
           record.income1 = 80_000
           record.ecstat1 = 2
-          expect(record).not_to be_income1_over_soft_max_for_ecstat
+          expect(record).not_to be_income1_outside_soft_range_for_ecstat
         end
 
         it "returns true if income2 is above soft max for ecstat2" do
           record.income2 = 50_001
           record.ecstat2 = 6
-          expect(record).to be_income2_over_soft_max_for_ecstat
+          expect(record).to be_income2_outside_soft_range_for_ecstat
         end
 
         it "returns false if income2 is <= soft max for ecstat2" do
           record.income2 = 50_000
           record.ecstat2 = 6
-          expect(record).not_to be_income2_over_soft_max_for_ecstat
+          expect(record).not_to be_income2_outside_soft_range_for_ecstat
         end
       end
     end
