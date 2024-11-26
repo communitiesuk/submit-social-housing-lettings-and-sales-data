@@ -1,11 +1,11 @@
 FactoryBot.define do
   factory :organisation do
-    name { "MHCLG" }
-    address_line1 { "2 Marsham Street" }
-    address_line2 { "London" }
+    name { Faker::Company.name }
+    address_line1 { Faker::Address.street_address }
+    address_line2 { Faker::Address.city }
     provider_type { "LA" }
-    housing_registration_no { "1234" }
-    postcode { "SW1P 4DF" }
+    housing_registration_no { rand(99_999).to_s }
+    postcode { Faker::Address.postcode }
     created_at { Time.zone.now }
     updated_at { Time.zone.now }
     holds_own_stock { true }
