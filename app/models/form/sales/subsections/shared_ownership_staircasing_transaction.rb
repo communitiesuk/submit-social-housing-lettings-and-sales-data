@@ -4,6 +4,7 @@ class Form::Sales::Subsections::SharedOwnershipStaircasingTransaction < ::Form::
     @id = "shared_ownership_staircasing_transaction"
     @label = "Shared ownership - staircasing transaction"
     @depends_on = [{ "ownershipsch" => 1, "setup_completed?" => true, "staircase" => 1 }]
+    @copy_key = "sale_information"
   end
 
   def pages
@@ -17,11 +18,11 @@ class Form::Sales::Subsections::SharedOwnershipStaircasingTransaction < ::Form::
       Form::Sales::Pages::StaircaseFirstTime.new(nil, nil, self),
       Form::Sales::Pages::StaircasePrevious.new(nil, nil, self),
       Form::Sales::Pages::StaircaseInitialDate.new(nil, nil, self),
-      Form::Sales::Pages::ValueSharedOwnership.new("value_shared_ownership_staircasing", nil, self),
+      Form::Sales::Pages::ValueSharedOwnership.new("value_shared_ownership_staircase", nil, self),
       Form::Sales::Pages::AboutPriceValueCheck.new("about_price_shared_ownership_value_check", nil, self),
-      Form::Sales::Pages::Equity.new(nil, nil, self),
+      Form::Sales::Pages::Equity.new("staircase_equity", nil, self),
       Form::Sales::Pages::SharedOwnershipDepositValueCheck.new("shared_ownership_equity_value_check", nil, self),
-      Form::Sales::Pages::Mortgageused.new("mortgage_used_shared_ownership", nil, self, ownershipsch: 1),
+      Form::Sales::Pages::Mortgageused.new("staircase_mortgage_used_shared_ownership", nil, self, ownershipsch: 1),
       Form::Sales::Pages::MonthlyRentStaircasingOwned.new(nil, nil, self),
       Form::Sales::Pages::MonthlyRentStaircasing.new(nil, nil, self),
       Form::Sales::Pages::MonthlyChargesValueCheck.new("monthly_charges_shared_ownership_value_check", nil, self),

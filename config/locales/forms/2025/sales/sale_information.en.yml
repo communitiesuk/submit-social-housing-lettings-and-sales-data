@@ -122,26 +122,31 @@ en:
             hint_text: ""
             question_text: "What was the previous tenure of the buyer?"
 
-          value: #TODO rename non-staircasing and staircasing versions
+          value:
             page_header: "About the price of the property"
             value_shared_ownership:
               check_answer_label: "Full purchase price"
               hint_text: "Enter the full purchase price of the property before any discounts are applied. For shared ownership, enter the full purchase price paid for 100% equity (this is equal to the value of the share owned by the PRP plus the value bought by the purchaser)."
               question_text: "What was the full purchase price?"
-            value_shared_ownership_staircasing:
+            value_shared_ownership_staircase:
               check_answer_label: "Full purchase price"
               hint_text: "Enter the full purchase price paid for the equity bought in this staircasing transaction (this is equal to the value of the share bought by the purchaser)."
               question_text: "What was the full purchase price for this staircasing transaction?"
 
-          equity: #TODO split non-staircasing and staircasing versions
+          equity:
             page_header: "About the price of the property"
-            check_answer_label: "Initial percentage equity share"
-            hint_text: "Enter the amount of initial equity share held by the purchaser (for example, 25% or 50%)"
-            question_text: "What was the initial percentage share purchased?"
+            initial_equity:
+              check_answer_label: "Initial percentage equity share"
+              hint_text: "Enter the amount of initial equity share held by the purchaser (for example, 25% or 50%)"
+              question_text: "What was the initial percentage share purchased?"
+            staircase_equity:
+              check_answer_label: "Initial percentage equity share"
+              hint_text: "Enter the amount of initial equity share held by the purchaser (for example, 25% or 50%)"
+              question_text: "What was the percentage shared purchased in the initial transaction?"
 
           mortgageused:
             page_header: "Mortgage Amount"
-            check_answer_label: "Mortgage used"
+            check_answer_label: "Mortgage used?"
             hint_text: ""
             question_text: "Was a mortgage used for the purchase of this property?"
 
