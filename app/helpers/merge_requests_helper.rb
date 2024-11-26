@@ -276,4 +276,8 @@ module MergeRequestsHelper
   def any_organisations_share_logs?(organisations, type)
     organisations.any? { |organisation| organisation.send("#{type}_logs").filter_by_managing_organisation(organisations.where.not(id: organisation.id)).exists? }
   end
+
+  def begin_merge_disabled?(merge_request)
+    merge_request.status != "ready_to_merge" || merge_request.merge_date.future?
+  end
 end

@@ -152,7 +152,7 @@ class SchemesController < ApplicationController
           flash[:notice] = if scheme_previously_confirmed
                              "#{@scheme.service_name} has been updated."
                            else
-                             "#{@scheme.service_name} has been created. It does not require helpdesk approval."
+                             "#{@scheme.service_name} has been created."
                            end
           redirect_to scheme_path(@scheme)
         end

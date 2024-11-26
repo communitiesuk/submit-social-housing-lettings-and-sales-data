@@ -5,18 +5,32 @@ RSpec.describe Form::Sales::Sections::SaleInformation, type: :model do
 
   let(:section_id) { nil }
   let(:section_definition) { nil }
-  let(:form) { instance_double(Form) }
+  let(:form) { instance_double(Form, start_year_2025_or_later?: false) }
 
   it "has correct form" do
     expect(sale_information.form).to eq(form)
   end
 
-  it "has correct subsections" do
-    expect(sale_information.subsections.map(&:id)).to eq(%w[
-      shared_ownership_scheme
-      discounted_ownership_scheme
-      outright_sale
-    ])
+  context "when form is before 2025" do
+    it "has correct subsections" do
+      expect(sale_information.subsections.map(&:id)).to eq(%w[
+        shared_ownership_scheme
+        discounted_ownership_scheme
+        outright_sale
+      ])
+    end
+  end
+
+  context "when form is 2025 or later" do
+    let(:form) { instance_double(Form, start_year_2025_or_later?: true) }
+
+    it "has correct subsections" do
+      expect(sale_information.subsections.map(&:id)).to eq(%w[
+        shared_ownership_initial_purchase
+        discounted_ownership_scheme
+        outright_sale
+      ])
+    end
   end
 
   it "has the correct id" do

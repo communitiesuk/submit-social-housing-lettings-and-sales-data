@@ -143,6 +143,7 @@ private
 
       if [day, month, year].none?(&:blank?) && Date.valid_date?(year.to_i, month.to_i, day.to_i)
         merge_request_params["merge_date"] = Time.zone.local(year.to_i, month.to_i, day.to_i)
+        @merge_request.errors.add(:merge_date, :more_than_year_from_today) if Time.zone.local(year.to_i, month.to_i, day.to_i) - 1.year > Time.zone.today
       else
         @merge_request.errors.add(:merge_date, :invalid)
       end

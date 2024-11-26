@@ -2,7 +2,6 @@ class Form::Sales::Questions::PreviousTenure < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "socprevten"
-    @copy_key = "sales.sale_information.socprevten"
     @type = "radio"
     @page = page
     @answer_options = ANSWER_OPTIONS
