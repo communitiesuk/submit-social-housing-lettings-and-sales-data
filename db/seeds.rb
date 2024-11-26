@@ -35,6 +35,8 @@ unless Rails.env.test?
     end
   end
 
+  first_run = Organisation.count.zero?
+
   all_rent_periods = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
 
   mhclg = FactoryBot.create(
@@ -48,7 +50,7 @@ unless Rails.env.test?
     other_stock_owners: "None",
     managing_agents_label: "None",
     provider_type: "LA",
-    housing_registration_number: nil,
+    housing_registration_no: nil,
     rent_periods: all_rent_periods,
   )
 
@@ -59,6 +61,8 @@ unless Rails.env.test?
     managing_agent2 = FactoryBot.create(:organisation, :if_unique, :la, :holds_own_stock, name: "Managing Agent 2", rent_periods: all_rent_periods.sample(5))
     standalone_owns_stock = FactoryBot.create(:organisation, :if_unique, :la, :holds_own_stock, name: "Standalone Owns Stock 1 Ltd", rent_periods: all_rent_periods)
     standalone_no_stock = FactoryBot.create(:organisation, :if_unique, :la, :does_not_own_stock, name: "Standalone No Stock 1 Ltd", rent_periods: all_rent_periods)
+
+    other_orgs = FactoryBot.create_list(:organisation, 5, :prp, rent_periods: all_rent_periods.sample(3)) if first_run
 
     OrganisationRelationship.find_or_create_by!(
       parent_organisation: stock_owner1,
@@ -94,20 +98,22 @@ unless Rails.env.test?
     find_or_create_user(standalone_no_stock, "coordinator.nostock@example.com", "Coordinator No Stock", :data_coordinator)
 
     if Scheme.count.zero?
-      scheme1 = FactoryBot.create(:scheme, service_name: "Beulahside Care", owning_organisation: mhclg)
-      scheme2 = FactoryBot.create(:scheme, service_name: "Abdullahview Point", owning_organisation: mhclg)
-      scheme3 = FactoryBot.create(:scheme, :created_now, owning_organisation: mhclg)
-      scheme4 = FactoryBot.create(:scheme, owning_organisation: stock_owner1)
+      beulahside = FactoryBot.create(:scheme, service_name: "Beulahside Care", owning_organisation: mhclg)
+      abdullah = FactoryBot.create(:scheme, service_name: "Abdullahview Point", owning_organisation: mhclg)
+      mhclg_scheme = FactoryBot.create(:scheme, :created_now, owning_organisation: mhclg)
+      stock_owner_scheme = FactoryBot.create(:scheme, owning_organisation: stock_owner1)
 
-      [scheme1, scheme2, scheme3, scheme4].each do |scheme|
+      other_schemes = other_orgs ? other_orgs.sample(3).map { |org| FactoryBot.create(:scheme, owning_organisation: org) } : []
+
+      [beulahside, abdullah, mhclg_scheme, stock_owner_scheme, *other_schemes].each do |scheme|
         FactoryBot.create(:location, scheme:)
       end
-      [scheme2, scheme3].each do |scheme|
+      [abdullah, mhclg_scheme, *other_schemes].each do |scheme|
         FactoryBot.create_list(:location, 3, scheme:)
       end
     end
 
-    users_with_logs = [provider, coordinator, support, stock_owner1_user, stock_owner2_user, managing_agent1_user, managing_agent2_user, provider_owner1, coordinator_owner1]
+    users_with_logs = [provider, coordinator, support, stock_owner1_user, stock_owner2_user, managing_agent1_user, managing_agent2_user, provider_owner1, coordinator_owner1, *other_orgs.map { |o| o.users.first }]
 
     if SalesLog.count.zero?
       users_with_logs.each do |user|
