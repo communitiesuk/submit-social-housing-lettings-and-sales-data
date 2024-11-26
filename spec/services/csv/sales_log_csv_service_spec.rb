@@ -4,7 +4,7 @@ RSpec.describe Csv::SalesLogCsvService do
   subject(:task) { Rake::Task["data_import:add_variable_definitions"] }
 
   let(:form_handler_mock) { instance_double(FormHandler) }
-  let(:organisation) { create(:organisation) }
+  let(:organisation) { create(:organisation, name: "MHCLG") }
   let(:fixed_time) { now }
   let(:now) { Time.zone.now }
   let(:user) { create(:user, :support, email: "billyboy@eyeKLAUD.com") }
@@ -17,6 +17,7 @@ RSpec.describe Csv::SalesLogCsvService do
       created_at: fixed_time,
       updated_at: now,
       owning_organisation: organisation,
+      managing_organisation: organisation,
       purchid: nil,
       hholdcount: 3,
       age1: 30,

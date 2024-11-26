@@ -15,7 +15,8 @@ RSpec.describe Exports::LettingsLogExportService do
   let(:expected_data_filename) { "core_2021_2022_apr_mar_f0001_inc0001_pt001.xml" }
   let(:expected_manifest_filename) { "manifest.xml" }
   let(:start_time) { Time.zone.local(2022, 5, 1) }
-  let(:user) { FactoryBot.create(:user, email: "test1@example.com") }
+  let(:organisation) { create(:organisation, name: "MHCLG", housing_registration_no: 1234) }
+  let(:user) { FactoryBot.create(:user, email: "test1@example.com", organisation:) }
 
   def replace_entity_ids(lettings_log, export_template)
     export_template.sub!(/\{id\}/, (lettings_log["id"] + Exports::LettingsLogExportService::LOG_ID_OFFSET).to_s)
@@ -450,7 +451,7 @@ RSpec.describe Exports::LettingsLogExportService do
 
   context "when exporting a supported housing lettings logs in XML" do
     let(:export_file) { File.open("spec/fixtures/exports/supported_housing_logs.xml", "r:UTF-8") }
-    let(:organisation) { FactoryBot.create(:organisation, provider_type: "LA") }
+    let(:organisation) { FactoryBot.create(:organisation, name: "MHCLG", provider_type: "LA", housing_registration_no: 1234) }
     let(:user) { FactoryBot.create(:user, organisation:, email: "fake@email.com") }
     let(:other_user) { FactoryBot.create(:user, organisation:, email: "other@email.com") }
     let(:scheme) { FactoryBot.create(:scheme, :export, owning_organisation: organisation) }

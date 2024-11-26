@@ -1643,6 +1643,11 @@ RSpec.describe OrganisationsController, type: :request do
             context "when search results require pagination" do
               let(:search_param) { "MHCLG" }
 
+              before do
+                create_list(:organisation, 27, name: "MHCLG")
+                get "/organisations?search=#{search_param}"
+              end
+
               it "has search and pagination in the title" do
                 expect(page).to have_title("Organisations (27 organisations matching ‘#{search_param}’) (page 1 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
               end

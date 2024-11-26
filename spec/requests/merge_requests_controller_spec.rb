@@ -49,7 +49,7 @@ RSpec.describe MergeRequestsController, type: :request do
         end
 
         it "shows the correct content" do
-          expect(page).to have_content("Which organisations are merging into MHCLG?")
+          expect(page).to have_content("Which organisations are merging into #{organisation.name}?")
         end
       end
     end
@@ -64,7 +64,7 @@ RSpec.describe MergeRequestsController, type: :request do
 
         it "adds merging organisation to the page" do
           merge_request.reload
-          expect(page).to have_content("MHCLG")
+          expect(page).to have_content(organisation.name)
           expect(page).to have_content("Other Test Org")
           expect(page).to have_link("Remove")
         end
@@ -623,7 +623,7 @@ RSpec.describe MergeRequestsController, type: :request do
       it "shows user outcomes after merge" do
         expect(page).to have_link("View all 4 Organisation with some users users (opens in a new tab)", href: users_organisation_path(organisation_with_some_users))
         expect(page).to have_link("View all 12 Organisation with many users users (opens in a new tab)", href: users_organisation_path(organisation_with_some_more_users))
-        expect(page).to have_link("View all 3 MHCLG users (opens in a new tab)", href: users_organisation_path(organisation))
+        expect(page).to have_link("View all 3 #{organisation.name} users (opens in a new tab)", href: users_organisation_path(organisation))
         expect(page).to have_content("Organisation with no users and Organisation with no users too have no users.")
         expect(page).to have_content("19 users after merge")
       end
@@ -650,7 +650,7 @@ RSpec.describe MergeRequestsController, type: :request do
       it "shows scheme outcomes after merge" do
         expect(page).to have_link("View all 4 Organisation with some schemes schemes (opens in a new tab)", href: schemes_organisation_path(organisation_with_some_schemes))
         expect(page).to have_link("View all 6 Organisation with many schemes schemes (opens in a new tab)", href: schemes_organisation_path(organisation_with_some_more_schemes))
-        expect(page).to have_link("View all 3 MHCLG schemes (opens in a new tab)", href: schemes_organisation_path(organisation))
+        expect(page).to have_link("View all 3 #{organisation.name} schemes (opens in a new tab)", href: schemes_organisation_path(organisation))
         expect(page).to have_content("Organisation with no schemes and Organisation with no schemes too have no schemes.")
         expect(page).to have_content("13 schemes after merge")
       end
@@ -676,8 +676,8 @@ RSpec.describe MergeRequestsController, type: :request do
       it "shows logs outcomes after merge" do
         expect(page).to have_link("View all 4 Organisation with some logs lettings logs (opens in a new tab)", href: lettings_logs_organisation_path(organisation_with_some_logs))
         expect(page).to have_link("View all 2 Organisation with some logs sales logs (opens in a new tab)", href: sales_logs_organisation_path(organisation_with_some_logs))
-        expect(page).to have_link("View all 2 MHCLG lettings logs (opens in a new tab)", href: lettings_logs_organisation_path(organisation))
-        expect(page).to have_link("View all 3 MHCLG sales logs (opens in a new tab)", href: sales_logs_organisation_path(organisation))
+        expect(page).to have_link("View all 2 #{organisation.name} lettings logs (opens in a new tab)", href: lettings_logs_organisation_path(organisation))
+        expect(page).to have_link("View all 3 #{organisation.name} sales logs (opens in a new tab)", href: sales_logs_organisation_path(organisation))
         expect(page).to have_content("Organisation with no logs and Organisation with no logs too have no lettings logs.")
         expect(page).to have_content("Organisation with no logs and Organisation with no logs too have no sales logs.")
         expect(page).to have_content("6 lettings logs after merge")
