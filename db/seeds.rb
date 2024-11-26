@@ -122,6 +122,13 @@ unless Rails.env.test?
         FactoryBot.create(:sales_log, :outright_sale_setup_complete, assigned_to: user)
         FactoryBot.create(:sales_log, :completed, assigned_to: user)
         FactoryBot.create_list(:sales_log, 2, :completed, :ignore_validation_errors, saledate: Time.zone.today - 1.year, assigned_to: user)
+
+        next unless FeatureToggle.allow_future_form_use?
+
+        FactoryBot.create(:sales_log, :shared_ownership_setup_complete, saledate: Time.zone.today + 1.year, assigned_to: user)
+        FactoryBot.create(:sales_log, :discounted_ownership_setup_complete, saledate: Time.zone.today + 1.year, assigned_to: user)
+        FactoryBot.create(:sales_log, :outright_sale_setup_complete, saledate: Time.zone.today + 1.year, assigned_to: user)
+        FactoryBot.create(:sales_log, :completed, saledate: TIme.zone.today + 1.year, assigned_to: user)
       end
 
       FactoryBot.create(:sales_log, :completed, assigned_to: managing_agent1_user, owning_organisation: mhclg)
@@ -137,6 +144,15 @@ unless Rails.env.test?
           FactoryBot.create(:lettings_log, :setup_completed, :sh, scheme:, location: scheme.locations.first, assigned_to: user)
         end
         FactoryBot.create_list(:lettings_log, 2, :completed, :ignore_validation_errors, startdate: Time.zone.today - 1.year, assigned_to: user)
+
+        next unless FeatureToggle.allow_future_form_use?
+
+        FactoryBot.create(:lettings_log, :setup_completed, startdate: Time.zone.today + 1.year, assigned_to: user)
+        FactoryBot.create(:lettings_log, :completed, startdate: Time.zone.today + 1.year, assigned_to: user)
+        if user.organisation.owned_schemes.any?
+          scheme = user.organisation.owned_schemes.first
+          FactoryBot.create(:lettings_log, :setup_completed, :sh, scheme:, location: scheme.locations.first, startdate: Time.zone.today + 1.year, assigned_to: user)
+        end
       end
 
       FactoryBot.create(:lettings_log, :completed, assigned_to: managing_agent1_user, owning_organisation: mhclg)
