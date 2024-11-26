@@ -1999,7 +1999,7 @@ RSpec.describe UsersController, type: :request do
         end
 
         context "when the user is not part of the same organisation as the current user" do
-          let(:other_user) { create(:user) }
+          let(:other_user) { create(:user, organisation: create(:organisation, name: "Another org")) }
           let(:params) { { id: other_user.id, user: { name: new_name } } }
 
           it "updates the user" do
