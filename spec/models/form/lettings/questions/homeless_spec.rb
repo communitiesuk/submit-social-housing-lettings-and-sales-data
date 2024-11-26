@@ -28,10 +28,6 @@ RSpec.describe Form::Lettings::Questions::Homeless, type: :model do
     })
   end
 
-  it "has no hint text" do
-    expect(question.hint_text).to be_empty
-  end
-
   it "has the correct check_answers_card_number" do
     expect(question.check_answers_card_number).to eq(0)
   end

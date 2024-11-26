@@ -183,8 +183,11 @@ en:
             merge_date:
               blank: "Enter a merge date."
               invalid: "Enter a valid merge date."
+              more_than_year_from_today: "The merge date must not be later than a year from today’s date."
             existing_absorbing_organisation:
               blank: "You must answer absorbing organisation already active?"
+            merging_organisation_id:
+              part_of_another_merge: "Another merge request records %{organisation} as merging into %{absorbing_organisation} on %{merge_date}. Select another organisation or remove this organisation from the other merge request."
         notification:
           attributes:
             title:
@@ -370,6 +373,7 @@ en:
         during_deactivated_period: "The location is already deactivated during this date, please enter a different date."
     merge_request:
       organisation_part_of_another_merge: "This organisation is part of another merge - select a different one."
+      organisation_part_of_another_incomplete_merge: "Another merge request records %{organisation} as merging into %{absorbing_organisation} on %{merge_date}. Select another organisation or remove this organisation from the other merge request."
       organisation_not_selected: "Select an organisation from the search list."
 
   soft_validations:

@@ -2,7 +2,6 @@ class Form::Sales::Questions::ExtraBorrowing < ::Form::Question
   def initialize(id, hsh, subsection, ownershipsch:)
     super(id, hsh, subsection)
     @id = "extrabor"
-    @copy_key = "sales.sale_information.extrabor"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @page = page

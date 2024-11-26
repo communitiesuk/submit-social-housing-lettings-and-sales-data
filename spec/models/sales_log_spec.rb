@@ -979,6 +979,23 @@ RSpec.describe SalesLog, type: :model do
     end
   end
 
+  context "when form year changes and LA is no longer active" do
+    let!(:sales_log) { create(:sales_log) }
+
+    before do
+      LocalAuthority.find_by(code: "E08000003").update!(end_date: Time.zone.today)
+    end
+
+    it "removes the LA" do
+      sales_log.update!(saledate: Time.zone.yesterday, la: "E08000003")
+      expect(sales_log.reload.la).to eq("E08000003")
+
+      sales_log.update!(saledate: Time.zone.tomorrow)
+      expect(sales_log.reload.la).to eq(nil)
+      expect(sales_log.reload.is_la_inferred).to eq(false)
+    end
+  end
+
   describe "#process_address_change!" do
     context "when uprn_selection is uprn_not_listed" do
       let(:log) { build(:sales_log, uprn_selection: "uprn_not_listed", address_line1_input: "Address line 1", postcode_full_input: "AA1 1AA") }

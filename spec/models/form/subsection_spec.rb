@@ -19,6 +19,10 @@ RSpec.describe Form::Subsection, type: :model do
     expect(subsection.id).to eq(subsection_id)
   end
 
+  it "has a copy_key defaulting to the id" do
+    expect(subsection.copy_key).to eq(subsection_id)
+  end
+
   it "has a label" do
     expect(subsection.label).to eq("Household characteristics")
   end

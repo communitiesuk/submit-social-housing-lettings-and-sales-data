@@ -2,7 +2,6 @@ class Form::Sales::Questions::Fromprop < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "fromprop"
-    @copy_key = "sales.sale_information.fromprop"
     @type = "radio"
     @page = page
     @answer_options = ANSWER_OPTIONS

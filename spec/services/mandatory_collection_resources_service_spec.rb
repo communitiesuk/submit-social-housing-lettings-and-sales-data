@@ -17,7 +17,7 @@ describe MandatoryCollectionResourcesService do
     it "returns a CollectionResource object with the correct attributes" do
       resource = service.generate_resource("lettings", 2024, "paper_form")
       expect(resource.resource_type).to eq("paper_form")
-      expect(resource.display_name).to eq("lettings log for tenants (2024 to 2025)")
+      expect(resource.display_name).to eq("lettings paper form (2024 to 2025)")
       expect(resource.short_display_name).to eq("Paper form")
       expect(resource.year).to eq(2024)
       expect(resource.log_type).to eq("lettings")

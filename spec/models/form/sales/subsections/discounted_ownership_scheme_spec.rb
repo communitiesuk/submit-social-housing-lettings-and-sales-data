@@ -56,6 +56,10 @@ RSpec.describe Form::Sales::Subsections::DiscountedOwnershipScheme, type: :model
     expect(discounted_ownership_scheme.id).to eq("discounted_ownership_scheme")
   end
 
+  it "has the correct copy key" do
+    expect(discounted_ownership_scheme.copy_key).to eq("sale_information")
+  end
+
   it "has the correct label" do
     expect(discounted_ownership_scheme.label).to eq("Discounted ownership scheme")
   end
