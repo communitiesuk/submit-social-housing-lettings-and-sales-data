@@ -128,7 +128,7 @@ unless Rails.env.test?
         FactoryBot.create(:sales_log, :shared_ownership_setup_complete, saledate: Time.zone.today + 1.year, assigned_to: user)
         FactoryBot.create(:sales_log, :discounted_ownership_setup_complete, saledate: Time.zone.today + 1.year, assigned_to: user)
         FactoryBot.create(:sales_log, :outright_sale_setup_complete, saledate: Time.zone.today + 1.year, assigned_to: user)
-        FactoryBot.create(:sales_log, :completed, saledate: TIme.zone.today + 1.year, assigned_to: user)
+        FactoryBot.create(:sales_log, :completed, saledate: Time.zone.today + 1.year, assigned_to: user)
       end
 
       FactoryBot.create(:sales_log, :completed, assigned_to: managing_agent1_user, owning_organisation: mhclg)
