@@ -540,6 +540,33 @@ RSpec.describe Validations::Sales::SoftValidations do
         expect(record)
           .not_to be_mortgage_over_soft_max
       end
+
+      context "with log for 2025 of after" do
+        before do
+          record.saledate = Time.zone.local(2025, 5, 1)
+        end
+
+        it "allows savings over 100_000 for old persons shared ownership" do
+          record.savings = 100_001
+          record.type = 24
+          expect(record)
+            .not_to be_savings_over_soft_max
+        end
+
+        it "does not allows savings over 200_000 for old persons shared ownership" do
+          record.savings = 200_001
+          record.type = 24
+          expect(record)
+            .to be_savings_over_soft_max
+        end
+
+        it "does not allows savings over 100_000 for other type" do
+          record.savings = 100_001
+          record.type = 8
+          expect(record)
+            .to be_savings_over_soft_max
+        end
+      end
     end
   end
 

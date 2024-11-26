@@ -5,7 +5,8 @@ RSpec.describe Form::Sales::Pages::Buyer1WorkingSituation, type: :model do
 
   let(:page_id) { nil }
   let(:page_definition) { nil }
-  let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2023, 4, 1), start_year_2024_or_later?: true, start_year_2025_or_later?: false)) }
+  let(:form) { Form.new(nil, 2023, [], "sales") }
+  let(:subsection) { instance_double(Form::Subsection, form:, enabled?: true) }
 
   it "has correct subsection" do
     expect(page.subsection).to eq(subsection)
@@ -17,5 +18,73 @@ RSpec.describe Form::Sales::Pages::Buyer1WorkingSituation, type: :model do
 
   it "has the correct id" do
     expect(page.id).to eq("buyer_1_working_situation")
+  end
+
+  context "with year 2024" do
+    let(:form) { Form.new(nil, 2024, [], "sales") }
+
+    context "when routing" do
+      before do
+        allow(log).to receive(:form).and_return(form)
+      end
+
+      context "when buyer has seen privacy notice and buyer interviewed" do
+        let(:log) { build(:sales_log, privacynotice: 1, jointpur: 1, noint: 0, staircase: 2) }
+
+        it "routes to the page" do
+          expect(page.routed_to?(log, nil)).to eq(true)
+        end
+      end
+
+      context "when buyer has seen privacy notice and buyer not interviewed" do
+        let(:log) { build(:sales_log, privacynotice: 1, jointpur: 1, noint: 1, staircase: 2) }
+
+        it "routes to the page" do
+          expect(page.routed_to?(log, nil)).to eq(true)
+        end
+      end
+
+      context "and buyer has not seen privacy notice and buyer interviewed" do
+        let(:log) { build(:sales_log, privacynotice: nil, jointpur: 1, noint: 0, staircase: 2) }
+
+        it "does not route to the page" do
+          expect(page).not_to be_routed_to(log, nil)
+        end
+      end
+
+      context "and buyer has not seen privacy notice and buyer not interviewed" do
+        let(:log) { build(:sales_log, privacynotice: nil, jointpur: 1, noint: 1, staircase: 2) }
+
+        it "routes to the page" do
+          expect(page.routed_to?(log, nil)).to eq(true)
+        end
+      end
+    end
+  end
+
+  context "with year 2025" do
+    let(:form) { Form.new(nil, 2025, [], "sales") }
+
+    before do
+      allow(log).to receive(:form).and_return(form)
+    end
+
+    context "when routing" do
+      context "and staircase is not 1" do
+        let(:log) { build(:sales_log, privacynotice: 1, jointpur: 1, noint: 0, staircase: 2) }
+
+        it "routes to the page" do
+          expect(page.routed_to?(log, nil)).to eq(true)
+        end
+      end
+
+      context "and staircase is 1" do
+        let(:log) { build(:sales_log, privacynotice: 1, jointpur: 1, noint: 0, staircase: 1) }
+
+        it "does not route to the page" do
+          expect(page).not_to be_routed_to(log, nil)
+        end
+      end
+    end
   end
 end

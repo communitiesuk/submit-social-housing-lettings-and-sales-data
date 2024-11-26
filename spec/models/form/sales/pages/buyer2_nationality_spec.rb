@@ -3,13 +3,8 @@ require "rails_helper"
 RSpec.describe Form::Sales::Pages::Buyer2Nationality, type: :model do
   subject(:page) { described_class.new(nil, nil, subsection) }
 
-  let(:subsection) { instance_double(Form::Subsection) }
-  let(:form) { instance_double(Form, start_date: Time.zone.local(2023, 4, 1)) }
-
-  before do
-    allow(subsection).to receive(:form).and_return(form)
-    allow(form).to receive(:start_year_2024_or_later?).and_return(false)
-  end
+  let(:form) { Form.new(nil, 2023, [], "sales") }
+  let(:subsection) { instance_double(Form::Subsection, form:, enabled?: true, depends_on: nil) }
 
   it "has correct subsection" do
     expect(page.subsection).to be subsection
@@ -27,26 +22,83 @@ RSpec.describe Form::Sales::Pages::Buyer2Nationality, type: :model do
     expect(page.description).to be_nil
   end
 
-  it "has correct depends_on" do
-    expect(page.depends_on).to eq [
-      {
-        "joint_purchase?" => true,
-        "buyer_has_seen_privacy_notice?" => true,
-      },
-      {
-        "joint_purchase?" => true,
-        "buyer_not_interviewed?" => true,
-      },
-    ]
-  end
-
   context "with year 2024" do
-    before do
-      allow(form).to receive(:start_year_2024_or_later?).and_return(true)
-    end
+    let(:form) { Form.new(nil, 2024, [], "sales") }
 
     it "has correct questions" do
       expect(page.questions.map(&:id)).to eq %w[nationality_all_buyer2_group nationality_all_buyer2]
+    end
+
+    context "when routing" do
+      before do
+        allow(log).to receive(:form).and_return(form)
+      end
+
+      context "when buyer has seen privacy notice and buyer interviewed" do
+        let(:log) { build(:sales_log, privacynotice: 1, jointpur: 1, noint: 0, staircase: 2) }
+
+        it "routes to the page" do
+          expect(page.routed_to?(log, nil)).to eq(true)
+        end
+      end
+
+      context "when buyer has seen privacy notice and buyer not interviewed" do
+        let(:log) { build(:sales_log, privacynotice: 1, jointpur: 1, noint: 1, staircase: 2) }
+
+        it "routes to the page" do
+          expect(page.routed_to?(log, nil)).to eq(true)
+        end
+      end
+
+      context "and buyer has not seen privacy notice and buyer interviewed" do
+        let(:log) { build(:sales_log, privacynotice: nil, jointpur: 1, noint: 0, staircase: 2) }
+
+        it "does not route to the page" do
+          expect(page).not_to be_routed_to(log, nil)
+        end
+      end
+
+      context "and buyer has not seen privacy notice and buyer not interviewed" do
+        let(:log) { build(:sales_log, privacynotice: nil, jointpur: 1, noint: 1, staircase: 2) }
+
+        it "routes to the page" do
+          expect(page.routed_to?(log, nil)).to eq(true)
+        end
+      end
+
+      context "when it's not a joint purchase" do
+        let(:log) { build(:sales_log, privacynotice: nil, jointpur: 2, noint: 1, staircase: 2) }
+
+        it "does not route to the page" do
+          expect(page).not_to be_routed_to(log, nil)
+        end
+      end
+    end
+  end
+
+  context "with year 2025" do
+    let(:form) { Form.new(nil, 2025, [], "sales") }
+
+    before do
+      allow(log).to receive(:form).and_return(form)
+    end
+
+    context "when routing" do
+      context "and staircase is not 1" do
+        let(:log) { build(:sales_log, privacynotice: 1, jointpur: 1, noint: 0, staircase: 2) }
+
+        it "routes to the page" do
+          expect(page.routed_to?(log, nil)).to eq(true)
+        end
+      end
+
+      context "and staircase is 1" do
+        let(:log) { build(:sales_log, privacynotice: 1, jointpur: 1, noint: 0, staircase: 1) }
+
+        it "does not route to the page" do
+          expect(page).not_to be_routed_to(log, nil)
+        end
+      end
     end
   end
 end

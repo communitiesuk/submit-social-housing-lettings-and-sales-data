@@ -4,6 +4,7 @@ class Form::Sales::Subsections::OutrightSale < ::Form::Subsection
     @id = "outright_sale"
     @label = "Outright sale"
     @depends_on = [{ "ownershipsch" => 3, "setup_completed?" => true }]
+    @copy_key = "sale_information"
   end
 
   def pages

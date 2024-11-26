@@ -15,7 +15,7 @@ class BulkUpload::Sales::Year2024::CsvParser
 
   def row_offset
     if with_headers?
-      rows.find_index { |row| row[0].match(/field number/i) } + 1
+      rows.find_index { |row| row[0].present? && row[0].match(/field number/i) } + 1
     else
       0
     end

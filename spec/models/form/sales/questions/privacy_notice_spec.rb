@@ -6,7 +6,7 @@ RSpec.describe Form::Sales::Questions::PrivacyNotice, type: :model do
   let(:question_id) { nil }
   let(:question_definition) { nil }
   let(:page) { instance_double(Form::Page) }
-  let(:subsection) { instance_double(Form::Subsection, id: "setup") }
+  let(:subsection) { instance_double(Form::Subsection, id: "setup", copy_key: "setup") }
   let(:form) { instance_double(Form, start_date: Time.zone.local(2023, 4, 1)) }
 
   before do
@@ -32,7 +32,7 @@ RSpec.describe Form::Sales::Questions::PrivacyNotice, type: :model do
   end
 
   context "when the form year is before 2024" do
-    let(:subsection) { instance_double(Form::Subsection, id: "household_characteristics") }
+    let(:subsection) { instance_double(Form::Subsection, id: "household_characteristics", copy_key: "household_characteristics") }
 
     before do
       allow(form).to receive(:start_year_2024_or_later?).and_return(false)

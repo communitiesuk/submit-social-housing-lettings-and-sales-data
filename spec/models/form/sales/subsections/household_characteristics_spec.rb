@@ -132,6 +132,26 @@ RSpec.describe Form::Sales::Subsections::HouseholdCharacteristics, type: :model 
       allow(form).to receive(:start_year_2025_or_later?).and_return(false)
     end
 
+    it "has correct depends on" do
+      expect(household_characteristics.depends_on).to eq([{ "setup_completed?" => true, "company_buyer?" => false }])
+    end
+
+    context "when the sale is to a company buyer" do
+      let(:log) { FactoryBot.build(:sales_log, ownershipsch: 3, companybuy: 1) }
+
+      it "is not displayed in tasklist" do
+        expect(household_characteristics.displayed_in_tasklist?(log)).to eq(false)
+      end
+    end
+
+    context "when the sale is not to a company buyer" do
+      let(:log) { FactoryBot.build(:sales_log, ownershipsch: 3, companybuy: 2) }
+
+      it "is displayed in tasklist" do
+        expect(household_characteristics.displayed_in_tasklist?(log)).to eq(true)
+      end
+    end
+
     it "has correct pages" do
       expect(household_characteristics.pages.map(&:id)).to eq(
         %w[
@@ -393,33 +413,9 @@ RSpec.describe Form::Sales::Subsections::HouseholdCharacteristics, type: :model 
         ],
       )
     end
-  end
 
-  it "has the correct id" do
-    expect(household_characteristics.id).to eq("household_characteristics")
-  end
-
-  it "has the correct label" do
-    expect(household_characteristics.label).to eq("Household characteristics")
-  end
-
-  it "has correct depends on" do
-    expect(household_characteristics.depends_on).to eq([{ "setup_completed?" => true, "company_buyer?" => false }])
-  end
-
-  context "when the sale is to a company buyer" do
-    let(:log) { FactoryBot.build(:sales_log, ownershipsch: 3, companybuy: 1) }
-
-    it "is not displayed in tasklist" do
-      expect(household_characteristics.displayed_in_tasklist?(log)).to eq(false)
-    end
-  end
-
-  context "when the sale is not to a company buyer" do
-    let(:log) { FactoryBot.build(:sales_log, ownershipsch: 3, companybuy: 2) }
-
-    it "is displayed in tasklist" do
-      expect(household_characteristics.displayed_in_tasklist?(log)).to eq(true)
+    it "has correct depends on" do
+      expect(household_characteristics.depends_on).to eq([{ "setup_completed?" => true }])
     end
   end
 end

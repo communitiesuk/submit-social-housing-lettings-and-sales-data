@@ -25,6 +25,14 @@ RSpec.describe Form::Sales::Subsections::HouseholdSituation, type: :model do
         ],
       )
     end
+
+    it "has the correct id" do
+      expect(household_characteristics.id).to eq("household_situation")
+    end
+
+    it "has the correct label" do
+      expect(household_characteristics.label).to eq("Household situation")
+    end
   end
 
   context "when the start year is 2025" do
@@ -41,17 +49,9 @@ RSpec.describe Form::Sales::Subsections::HouseholdSituation, type: :model do
         ],
       )
     end
-  end
 
-  it "has the correct id" do
-    expect(household_characteristics.id).to eq("household_situation")
-  end
-
-  it "has the correct label" do
-    expect(household_characteristics.label).to eq("Household situation")
-  end
-
-  it "has correct depends on" do
-    expect(household_characteristics.depends_on).to eq([{ "setup_completed?" => true }])
+    it "has correct depends on" do
+      expect(household_characteristics.depends_on).to eq([{ "setup_completed?" => true, "is_staircase?" => false }])
+    end
   end
 end

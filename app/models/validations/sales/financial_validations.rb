@@ -5,7 +5,7 @@ module Validations::Sales::FinancialValidations
   def validate_income1(record)
     return unless record.income1 && record.la && record.shared_ownership_scheme?
 
-    relevant_fields = %i[income1 ownershipsch uprn la postcode_full]
+    relevant_fields = %i[income1 ownershipsch uprn la postcode_full uprn_selection]
     if record.london_property? && !record.income1.between?(0, 90_000)
       relevant_fields.each { |field| record.errors.add field, :outside_london_income_range, message: I18n.t("validations.sales.financial.#{field}.outside_london_income_range") }
     elsif record.property_not_in_london? && !record.income1.between?(0, 80_000)
@@ -16,7 +16,7 @@ module Validations::Sales::FinancialValidations
   def validate_income2(record)
     return unless record.income2 && record.la && record.shared_ownership_scheme?
 
-    relevant_fields = %i[income2 ownershipsch uprn la postcode_full]
+    relevant_fields = %i[income2 ownershipsch uprn la postcode_full uprn_selection]
     if record.london_property? && !record.income2.between?(0, 90_000)
       relevant_fields.each { |field| record.errors.add field, :outside_london_income_range, message: I18n.t("validations.sales.financial.#{field}.outside_london_income_range") }
     elsif record.property_not_in_london? && !record.income2.between?(0, 80_000)
@@ -73,8 +73,9 @@ module Validations::Sales::FinancialValidations
                 end
 
     if threshold && record.stairbought < threshold
-      record.errors.add :stairbought, I18n.t("validations.sales.financial.stairbought.percentage_bought_must_be_at_least_threshold", threshold:)
-      record.errors.add :type, I18n.t("validations.sales.financial.type.percentage_bought_must_be_at_least_threshold", threshold:)
+      shared_ownership_type = record.form.get_question("type", record).label_from_value(record.type).downcase
+      record.errors.add :stairbought, I18n.t("validations.sales.financial.stairbought.percentage_bought_must_be_at_least_threshold", threshold:, shared_ownership_type:)
+      record.errors.add :type, I18n.t("validations.sales.financial.type.percentage_bought_must_be_at_least_threshold", threshold:, shared_ownership_type:)
     end
   end
 

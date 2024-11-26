@@ -7,7 +7,7 @@ RSpec.describe Form::Sales::Questions::Staircase, type: :model do
   let(:question_definition) { nil }
 
   context "when start year is 2024" do
-    let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2024, 4, 1)), id: "sale_information")) }
+    let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2024, 4, 1)), id: "shared_ownership_scheme", copy_key: "sale_information")) }
 
     before do
       allow(page.subsection.form).to receive(:start_year_2025_or_later?).and_return(false)
@@ -43,7 +43,7 @@ RSpec.describe Form::Sales::Questions::Staircase, type: :model do
   end
 
   context "when start year is 2025" do
-    let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2025, 4, 1)), id: "setup")) }
+    let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2025, 4, 1)), id: "setup", copy_key: "setup")) }
 
     before do
       allow(page.subsection.form).to receive(:start_year_2025_or_later?).and_return(true)

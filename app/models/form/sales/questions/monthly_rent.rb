@@ -2,7 +2,6 @@ class Form::Sales::Questions::MonthlyRent < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "mrent"
-    @copy_key = "sales.sale_information.mrent"
     @type = "numeric"
     @min = 0
     @step = 0.01
