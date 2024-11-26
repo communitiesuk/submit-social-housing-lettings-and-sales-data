@@ -180,7 +180,7 @@ RSpec.describe LocationsController, type: :request do
 
     context "when signed in as a data coordinator user" do
       let(:user) { create(:user, :data_coordinator) }
-      let(:scheme) { create(:scheme, owning_organisation: user.organisation, service_name: "Some name") }
+      let(:scheme) { create(:scheme, owning_organisation: user.organisation) }
       let!(:locations) { create_list(:location, 3, scheme:, startdate: Time.zone.local(2022, 4, 1)) }
 
       before do
@@ -215,7 +215,7 @@ RSpec.describe LocationsController, type: :request do
       end
 
       it "has correct title" do
-        expected_title = CGI.escapeHTML("#{scheme.service_name} - Submit social housing lettings and sales data (CORE) - GOV.UK")
+        expected_title = CGI.unescapeHTML("#{scheme.service_name} - Submit social housing lettings and sales data (CORE) - GOV.UK")
         expect(page).to have_title(expected_title)
       end
 
@@ -232,7 +232,7 @@ RSpec.describe LocationsController, type: :request do
           end
 
           it "has correct page 1 of 2 title" do
-            expected_title = CGI.escapeHTML("#{scheme.service_name} (page 1 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+            expected_title = CGI.unescapeHTML("#{scheme.service_name} (page 1 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
             expect(page).to have_title(expected_title)
           end
 
@@ -254,7 +254,7 @@ RSpec.describe LocationsController, type: :request do
           end
 
           it "has correct page 2 of 2 title" do
-            expected_title = CGI.escapeHTML("#{scheme.service_name} (page 2 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+            expected_title = CGI.unescapeHTML("#{scheme.service_name} (page 2 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
             expect(page).to have_title(expected_title)
           end
 
@@ -287,7 +287,7 @@ RSpec.describe LocationsController, type: :request do
         end
 
         it "has search in the title" do
-          expected_title = CGI.escapeHTML("#{scheme.service_name} (1 location matching ‘#{search_param}’) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+          expected_title = CGI.unescapeHTML("#{scheme.service_name} (1 location matching ‘#{search_param}’) - Submit social housing lettings and sales data (CORE) - GOV.UK")
           expect(page.title).to eq(expected_title)
         end
       end
@@ -343,7 +343,7 @@ RSpec.describe LocationsController, type: :request do
       end
 
       it "has correct title" do
-        expected_title = CGI.escapeHTML("#{scheme.service_name} - Submit social housing lettings and sales data (CORE) - GOV.UK")
+        expected_title = CGI.unescapeHTML("#{scheme.service_name} - Submit social housing lettings and sales data (CORE) - GOV.UK")
         expect(page).to have_title(expected_title)
       end
 
@@ -360,7 +360,7 @@ RSpec.describe LocationsController, type: :request do
           end
 
           it "has correct page 1 of 2 title" do
-            expected_title = CGI.escapeHTML("#{scheme.service_name} (page 1 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+            expected_title = CGI.unescapeHTML("#{scheme.service_name} (page 1 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
             expect(page).to have_title(expected_title)
           end
 
@@ -382,7 +382,7 @@ RSpec.describe LocationsController, type: :request do
           end
 
           it "has correct page 1 of 2 title" do
-            expected_title = CGI.escapeHTML("#{scheme.service_name} (page 2 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+            expected_title = CGI.unescapeHTML("#{scheme.service_name} (page 2 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
             expect(page).to have_title(expected_title)
           end
 
@@ -415,7 +415,7 @@ RSpec.describe LocationsController, type: :request do
         end
 
         it "has search in the title" do
-          expected_title = CGI.escapeHTML("#{scheme.service_name} (1 location matching ‘#{search_param}’) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+          expected_title = CGI.unescapeHTML("#{scheme.service_name} (1 location matching ‘#{search_param}’) - Submit social housing lettings and sales data (CORE) - GOV.UK")
           expect(page).to have_title(expected_title)
         end
       end

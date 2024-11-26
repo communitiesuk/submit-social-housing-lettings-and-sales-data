@@ -5,7 +5,8 @@ RSpec.describe Form::Lettings::Pages::NoAddressFound, type: :model do
 
   let(:page_id) { nil }
   let(:page_definition) { nil }
-  let(:subsection) { instance_double(Form::Subsection) }
+  let(:form) { instance_double(Form, start_date: Time.zone.local(2024, 4, 1)) }
+  let(:subsection) { instance_double(Form::Subsection, form:) }
   let(:log) { create(:lettings_log) }
 
   it "has correct subsection" do
@@ -37,11 +38,11 @@ RSpec.describe Form::Lettings::Pages::NoAddressFound, type: :model do
   end
 
   it "has the correct title_text" do
-    expect(page.title_text).to eq({ "arguments" => [], "translation" => "soft_validations.no_address_found.title_text" })
+    expect(page.title_text).to eq({ "arguments" => [], "translation" => "forms.2024.lettings.soft_validations.no_address_found.title_text" })
   end
 
   it "has the correct informative_text" do
-    expect(page.informative_text).to eq({ "arguments" => [], "translation" => "soft_validations.no_address_found.informative_text" })
+    expect(page.informative_text).to eq({ "arguments" => [], "translation" => "forms.2024.lettings.soft_validations.no_address_found.informative_text" })
   end
 
   it "has the correct interruption_screen_question_ids" do

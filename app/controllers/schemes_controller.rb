@@ -149,20 +149,20 @@ class SchemesController < ApplicationController
     if @scheme.errors.empty? && @scheme.update(scheme_params)
       @scheme.update!(secondary_client_group: nil) if @scheme.has_other_client_group == "No"
       if scheme_params[:confirmed] == "true" || @scheme.confirmed?
-        if check_answers && confirm_secondary_page?(page)
-          redirect_to scheme_secondary_client_group_path(@scheme, check_answers: "true")
+        if check_answers && should_direct_via_secondary_client_group_page?(page)
+          redirect_to scheme_secondary_client_group_path(@scheme, referrer: "check-answers")
         else
           @scheme.locations.update!(confirmed: true)
           flash[:notice] = if scheme_previously_confirmed
                              "#{@scheme.service_name} has been updated."
                            else
-                             "#{@scheme.service_name} has been created. It does not require helpdesk approval."
+                             "#{@scheme.service_name} has been created."
                            end
           redirect_to scheme_path(@scheme)
         end
       elsif check_answers
-        if confirm_secondary_page?(page)
-          redirect_to scheme_secondary_client_group_path(@scheme, check_answers: "true")
+        if should_direct_via_secondary_client_group_page?(page)
+          redirect_to scheme_secondary_client_group_path(@scheme, referrer: "check-answers")
         else
           redirect_to scheme_check_answers_path(@scheme)
         end
@@ -253,8 +253,8 @@ private
     end
   end
 
-  def confirm_secondary_page?(page)
-    page == "confirm-secondary" && @scheme.has_other_client_group == "Yes"
+  def should_direct_via_secondary_client_group_page?(page)
+    page == "confirm-secondary" && @scheme.has_other_client_group == "Yes" && @scheme.secondary_client_group.nil?
   end
 
   def current_template(page)
@@ -297,9 +297,9 @@ private
   def scheme_params
     required_params = params.require(:scheme).permit(:service_name,
                                                      :sensitive,
-                                                     :owning_organisation_id,
                                                      :scheme_type,
                                                      :registered_under_care_act,
+                                                     :owning_organisation_id,
                                                      :id,
                                                      :has_other_client_group,
                                                      :primary_client_group,

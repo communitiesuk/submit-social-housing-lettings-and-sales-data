@@ -15,7 +15,7 @@ RSpec.describe Form::Question, type: :model do
   let(:inferred_check_answers_value) { [{ "condition" => { "postcode_known" => 0 }, "value" => "Weekly" }] }
 
   let(:form) { instance_double(Form, depends_on_met:, conditional_question_conditions:, type: "form-type", start_date: Time.utc(2024, 12, 25)) }
-  let(:subsection) { instance_double(Form::Subsection, form:, id: "subsection-id") }
+  let(:subsection) { instance_double(Form::Subsection, form:, id: "subsection-id", copy_key: "subsection-copy-key") }
   let(:page) { instance_double(Form::Page, subsection:, routed_to?: true, questions: form_questions) }
   let(:question_id) { "earnings" }
   let(:question_definition) do
@@ -39,7 +39,7 @@ RSpec.describe Form::Question, type: :model do
   end
 
   it "sets copy_key in the default style" do
-    expect(question.copy_key).to eq("#{form.type}.#{subsection.id}.#{question_id}")
+    expect(question.copy_key).to eq("#{form.type}.#{subsection.copy_key}.#{question_id}")
   end
 
   context "when copy is not provided" do

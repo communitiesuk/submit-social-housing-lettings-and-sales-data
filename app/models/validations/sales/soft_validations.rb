@@ -58,7 +58,9 @@ module Validations::Sales::SoftValidations
   end
 
   def savings_over_soft_max?
-    savings && savings > 100_000
+    soft_max = form.start_year_2025_or_later? && type == 24 ? 200_000 : 100_000
+
+    savings && savings > soft_max
   end
 
   def deposit_over_soft_max?
@@ -106,6 +108,12 @@ module Validations::Sales::SoftValidations
     return unless hodate && saledate
 
     saledate - hodate >= 3.years
+  end
+
+  def hodate_5_years_or_more_saledate?
+    return unless hodate && saledate
+
+    saledate - hodate >= 5.years
   end
 
   def purchase_price_higher_or_lower_text

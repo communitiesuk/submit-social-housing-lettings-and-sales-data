@@ -2,11 +2,10 @@ class Form::Sales::Questions::Equity < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "equity"
-    @copy_key = "sales.sale_information.equity"
     @type = "numeric"
     @min = 0
     @max = 100
-    @step = 1
+    @step = 0.1
     @width = 5
     @suffix = "%"
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]

@@ -1489,13 +1489,30 @@ RSpec.describe SchemesController, type: :request do
           expect(scheme_to_update.reload.has_other_client_group).to eq("Yes")
         end
 
-        context "when updating from check answers page with the answer YES" do
+        context "when updating from check answers page with the answer YES and no secondary client group set" do
+          let(:scheme_to_update) { create(:scheme, owning_organisation: user.organisation, confirmed: nil, secondary_client_group: nil) }
+          let(:params) { { scheme: { has_other_client_group: "Yes", page: "confirm-secondary", check_answers: "true" } } }
+
+          it "renders secondary client group page after successful update" do
+            follow_redirect!
+            expect(response).to have_http_status(:ok)
+            expect(page).to have_content("What is the other client group?")
+          end
+
+          it "updates a scheme with valid params" do
+            follow_redirect!
+            expect(scheme_to_update.reload.has_other_client_group).to eq("Yes")
+          end
+        end
+
+        context "when updating from check answers page with the answer YES and a secondary client group set" do
+          let(:scheme_to_update) { create(:scheme, owning_organisation: user.organisation, confirmed: nil, secondary_client_group: "F") }
           let(:params) { { scheme: { has_other_client_group: "Yes", page: "confirm-secondary", check_answers: "true" } } }
 
           it "renders check answers page after successful update" do
             follow_redirect!
             expect(response).to have_http_status(:ok)
-            expect(page).to have_content("What is the other client group?")
+            expect(page).to have_content("Check your changes before creating this scheme")
           end
 
           it "updates a scheme with valid params" do
@@ -1800,13 +1817,30 @@ RSpec.describe SchemesController, type: :request do
           expect(scheme_to_update.reload.has_other_client_group).to eq("Yes")
         end
 
-        context "when updating from check answers page with the answer YES" do
+        context "when updating from check answers page with the answer YES and no existing secondary client group set" do
+          let(:scheme_to_update) { create(:scheme, owning_organisation: user.organisation, confirmed: nil, secondary_client_group: nil) }
+          let(:params) { { scheme: { has_other_client_group: "Yes", page: "confirm-secondary", check_answers: "true" } } }
+
+          it "renders secondary client group page after successful update" do
+            follow_redirect!
+            expect(response).to have_http_status(:ok)
+            expect(page).to have_content("What is the other client group?")
+          end
+
+          it "updates a scheme with valid params" do
+            follow_redirect!
+            expect(scheme_to_update.reload.has_other_client_group).to eq("Yes")
+          end
+        end
+
+        context "when updating from check answers page with the answer YES and an existing secondary client group set" do
+          let(:scheme_to_update) { create(:scheme, owning_organisation: user.organisation, confirmed: nil, secondary_client_group: "F") }
           let(:params) { { scheme: { has_other_client_group: "Yes", page: "confirm-secondary", check_answers: "true" } } }
 
           it "renders check answers page after successful update" do
             follow_redirect!
             expect(response).to have_http_status(:ok)
-            expect(page).to have_content("What is the other client group?")
+            expect(page).to have_content("Check your changes before creating this scheme")
           end
 
           it "updates a scheme with valid params" do

@@ -28,4 +28,28 @@ module Validations::Sales::PropertyValidations
 
     record.errors.add :uprn, I18n.t("validations.sales.property_information.uprn.invalid")
   end
+
+  def validate_property_postcode(record)
+    postcode = record.postcode_full
+    if record.postcode_known? && (postcode.blank? || !postcode.match(POSTCODE_REGEXP))
+      error_message = I18n.t("validations.sales.property_information.postcode_full.invalid")
+      record.errors.add :postcode_full, :wrong_format, message: error_message
+    end
+  end
+
+  def validate_la_in_england(record)
+    return unless record.form.start_year_2025_or_later? && record.la.present?
+    return if record.la.in?(LocalAuthority.england.pluck(:code))
+
+    record.errors.add :la, I18n.t("validations.sales.property_information.la.not_in_england")
+    record.errors.add :postcode_full, I18n.t("validations.sales.property_information.postcode_full.not_in_england")
+    record.errors.add :uprn, I18n.t("validations.sales.property_information.uprn.not_in_england")
+    record.errors.add :uprn_confirmation, I18n.t("validations.sales.property_information.uprn_confirmation.not_in_england")
+    record.errors.add :uprn_selection, I18n.t("validations.sales.property_information.uprn_selection.not_in_england")
+    if record.uprn.present?
+      record.errors.add :saledate, I18n.t("validations.sales.property_information.saledate.address_not_in_england")
+    else
+      record.errors.add :saledate, I18n.t("validations.sales.property_information.saledate.postcode_not_in_england")
+    end
+  end
 end

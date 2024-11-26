@@ -30,7 +30,7 @@ en:
           scheme_id:
             page_header: "Scheme"
             check_answer_label: "Scheme name"
-            hint_text: "Enter postcode or scheme name.<br><br>A supported housing scheme provides shared or self-contained housing for a particular client group, for example younger or vulnerable people."
+            hint_text: "Enter postcode, scheme name, or scheme code (for example, S123).<br><br>A supported housing scheme provides shared or self-contained housing for a particular client group, for example younger or vulnerable people."
             question_text: "What scheme is this log for?"
 
           location_id:

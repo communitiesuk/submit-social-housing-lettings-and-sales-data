@@ -194,10 +194,6 @@ RSpec.describe LettingsLog do
       expect(validator).to receive(:validate_tshortfall)
     end
 
-    it "validates let type" do
-      expect(validator).to receive(:validate_unitletas)
-    end
-
     it "validates reason for vacancy" do
       expect(validator).to receive(:validate_rsnvac)
     end
@@ -813,6 +809,21 @@ RSpec.describe LettingsLog do
         expect { lettings_log.update!(nationality_all_group: nil, declaration: 1) }.not_to change(lettings_log, :nationality_all)
       end
     end
+
+    context "when form year changes and LA is no longer active" do
+      before do
+        LocalAuthority.find_by(code: "E08000003").update!(end_date: Time.zone.today)
+      end
+
+      it "removes the LA" do
+        lettings_log.update!(startdate: Time.zone.yesterday, la: "E08000003")
+        expect(lettings_log.reload.la).to eq("E08000003")
+
+        lettings_log.update!(startdate: Time.zone.tomorrow)
+        expect(lettings_log.reload.la).to eq(nil)
+        expect(lettings_log.reload.is_la_inferred).to eq(false)
+      end
+    end
   end
 
   describe "optional fields" do
@@ -1010,8 +1021,8 @@ RSpec.describe LettingsLog do
         end
 
         it "does not impact other validations" do
-          expect { lettings_log.update!(startdate: Time.zone.yesterday, first_time_property_let_as_social_housing: 0, rsnvac: 16) }
-            .to raise_error(ActiveRecord::RecordInvalid, /Enter a reason for vacancy that is not 'first let' if unit has been previously let as social housing/)
+          expect { lettings_log.update!(startdate: Time.zone.yesterday, referral: 8, rsnvac: 9) }
+            .to raise_error(ActiveRecord::RecordInvalid, /#{I18n.t("validations.lettings.property.rsnvac.referral_invalid")}/)
         end
       end
 
@@ -1046,8 +1057,8 @@ RSpec.describe LettingsLog do
         end
 
         it "does not impact other validations" do
-          expect { lettings_log.update!(location:, scheme:, first_time_property_let_as_social_housing: 0, rsnvac: 16) }
-            .to raise_error(ActiveRecord::RecordInvalid, /Enter a reason for vacancy that is not 'first let' if unit has been previously let as social housing/)
+          expect { lettings_log.update!(startdate: Time.zone.yesterday, referral: 8, rsnvac: 9) }
+            .to raise_error(ActiveRecord::RecordInvalid, /#{I18n.t("validations.lettings.property.rsnvac.referral_invalid")}/)
         end
       end
     end
@@ -2007,6 +2018,18 @@ RSpec.describe LettingsLog do
 
       it "returns true" do
         expect(lettings_log).to be_non_location_setup_questions_completed
+      end
+    end
+  end
+
+  describe "#process_address_change!" do
+    context "when uprn_selection is uprn_not_listed" do
+      let(:log) { build(:lettings_log, uprn_selection: "uprn_not_listed", address_line1_input: "Address line 1", postcode_full_input: "AA1 1AA") }
+
+      it "sets log address fields, including postcode known" do
+        expect { log.process_address_change! }.to change(log, :address_line1).from(nil).to("Address line 1")
+                                              .and change(log, :postcode_full).from(nil).to("AA1 1AA")
+                                              .and change(log, :postcode_known).from(nil).to(1)
       end
     end
   end

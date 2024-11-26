@@ -60,10 +60,11 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
       context "and form year is 2023 or earlier" do
         let(:record) { build(:sales_log, hodate: Date.new(2020, 12, 1), saledate: Date.new(2023, 12, 1)) }
 
-        it "does not add an error" do
+        it "does add an error" do
           sale_information_validator.validate_practical_completion_date(record)
 
-          expect(record.errors).not_to be_present
+          expect(record.errors[:hodate]).to be_present
+          expect(record.errors[:saledate]).to be_present
         end
       end
 
@@ -1087,12 +1088,11 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
 
           it "adds an error" do
             sale_information_validator.validate_staircasing_mortgage(record)
-            expect(record.errors["mortgage"]).to include("The mortgage (£10,000.00) and cash deposit (£5,000.00) added together is £15,000.00.</br></br>The full purchase price (£30,000.00) multiplied by the percentage bought is £8,400.00.</br></br>These two amounts should be the same.")
-            expect(record.errors["value"]).to include("The mortgage (£10,000.00) and cash deposit (£5,000.00) added together is £15,000.00.</br></br>The full purchase price (£30,000.00) multiplied by the percentage bought is £8,400.00.</br></br>These two amounts should be the same.")
-            expect(record.errors["deposit"]).to include("The mortgage (£10,000.00) and cash deposit (£5,000.00) added together is £15,000.00.</br></br>The full purchase price (£30,000.00) multiplied by the percentage bought is £8,400.00.</br></br>These two amounts should be the same.")
-            expect(record.errors["stairbought"]).to include("The mortgage (£10,000.00) and cash deposit (£5,000.00) added together is £15,000.00.</br></br>The full purchase price (£30,000.00) multiplied by the percentage bought is £8,400.00.</br></br>These two amounts should be the same.")
-            expect(record.errors["type"]).to include("The mortgage (£10,000.00) and cash deposit (£5,000.00) added together is £15,000.00.</br></br>The full purchase price (£30,000.00) multiplied by the percentage bought is £8,400.00.</br></br>These two amounts should be the same.")
-            expect(record.errors["cashdis"]).not_to include("The mortgage (£10,000.00) and cash deposit (£5,000.00) added together is £15,000.00.</br></br>The full purchase price (£30,000.00) multiplied by the percentage bought is £8,400.00.</br></br>These two amounts should be the same.")
+            expect(record.errors["mortgage"]).to include(I18n.t("validations.sales.sale_information.mortgage.staircasing_mortgage.mortgage_used", mortgage: "£10,000.00", deposit: "£5,000.00", mortgage_and_deposit_total: "£15,000.00", value: "£30,000.00", stairbought_part_of_value: "£8,400.00"))
+            expect(record.errors["value"]).to include(I18n.t("validations.sales.sale_information.value.staircasing_mortgage.mortgage_used", mortgage: "£10,000.00", deposit: "£5,000.00", mortgage_and_deposit_total: "£15,000.00", value: "£30,000.00", stairbought_part_of_value: "£8,400.00"))
+            expect(record.errors["deposit"]).to include(I18n.t("validations.sales.sale_information.deposit.staircasing_mortgage.mortgage_used", mortgage: "£10,000.00", deposit: "£5,000.00", mortgage_and_deposit_total: "£15,000.00", value: "£30,000.00", stairbought_part_of_value: "£8,400.00"))
+            expect(record.errors["stairbought"]).to include(I18n.t("validations.sales.sale_information.stairbought.staircasing_mortgage.mortgage_used", mortgage: "£10,000.00", deposit: "£5,000.00", mortgage_and_deposit_total: "£15,000.00", value: "£30,000.00", stairbought_part_of_value: "£8,400.00"))
+            expect(record.errors["type"]).to include(I18n.t("validations.sales.sale_information.type.staircasing_mortgage.mortgage_used", mortgage: "£10,000.00", deposit: "£5,000.00", mortgage_and_deposit_total: "£15,000.00", value: "£30,000.00", stairbought_part_of_value: "£8,400.00"))
           end
 
           context "and it is a social homebuy" do
@@ -1103,12 +1103,12 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
 
             it "adds an error" do
               sale_information_validator.validate_staircasing_mortgage(record)
-              expect(record.errors["mortgage"]).to include("The mortgage amount (£10,000.00), cash deposit (£5,000.00), and cash discount (£200.00) added together is £15,200.00.</br></br>The full purchase price (£30,000.00) multiplied by the percentage bought (28%) is £8,400.00.</br></br>These two amounts should be the same.")
-              expect(record.errors["value"]).to include("The mortgage amount (£10,000.00), cash deposit (£5,000.00), and cash discount (£200.00) added together is £15,200.00.</br></br>The full purchase price (£30,000.00) multiplied by the percentage bought (28%) is £8,400.00.</br></br>These two amounts should be the same.")
-              expect(record.errors["deposit"]).to include("The mortgage amount (£10,000.00), cash deposit (£5,000.00), and cash discount (£200.00) added together is £15,200.00.</br></br>The full purchase price (£30,000.00) multiplied by the percentage bought (28%) is £8,400.00.</br></br>These two amounts should be the same.")
-              expect(record.errors["stairbought"]).to include("The mortgage amount (£10,000.00), cash deposit (£5,000.00), and cash discount (£200.00) added together is £15,200.00.</br></br>The full purchase price (£30,000.00) multiplied by the percentage bought (28%) is £8,400.00.</br></br>These two amounts should be the same.")
-              expect(record.errors["cashdis"]).to include("The mortgage amount (£10,000.00), cash deposit (£5,000.00), and cash discount (£200.00) added together is £15,200.00.</br></br>The full purchase price (£30,000.00) multiplied by the percentage bought (28%) is £8,400.00.</br></br>These two amounts should be the same.")
-              expect(record.errors["type"]).to include("The mortgage amount (£10,000.00), cash deposit (£5,000.00), and cash discount (£200.00) added together is £15,200.00.</br></br>The full purchase price (£30,000.00) multiplied by the percentage bought (28%) is £8,400.00.</br></br>These two amounts should be the same.")
+              expect(record.errors["mortgage"]).to include(I18n.t("validations.sales.sale_information.mortgage.staircasing_mortgage.mortgage_used_socialhomebuy", mortgage: "£10,000.00", deposit: "£5,000.00", cashdis: "£200.00", mortgage_deposit_and_discount_total: "£15,200.00", value: "£30,000.00", stairbought_part_of_value: "£8,400.00", stairbought: "28.0%"))
+              expect(record.errors["value"]).to include(I18n.t("validations.sales.sale_information.value.staircasing_mortgage.mortgage_used_socialhomebuy", mortgage: "£10,000.00", deposit: "£5,000.00", cashdis: "£200.00", mortgage_deposit_and_discount_total: "£15,200.00", value: "£30,000.00", stairbought_part_of_value: "£8,400.00", stairbought: "28.0%"))
+              expect(record.errors["deposit"]).to include(I18n.t("validations.sales.sale_information.deposit.staircasing_mortgage.mortgage_used_socialhomebuy", mortgage: "£10,000.00", deposit: "£5,000.00", cashdis: "£200.00", mortgage_deposit_and_discount_total: "£15,200.00", value: "£30,000.00", stairbought_part_of_value: "£8,400.00", stairbought: "28.0%"))
+              expect(record.errors["stairbought"]).to include(I18n.t("validations.sales.sale_information.stairbought.staircasing_mortgage.mortgage_used_socialhomebuy", mortgage: "£10,000.00", deposit: "£5,000.00", cashdis: "£200.00", mortgage_deposit_and_discount_total: "£15,200.00", value: "£30,000.00", stairbought_part_of_value: "£8,400.00", stairbought: "28.0%"))
+              expect(record.errors["cashdis"]).to include(I18n.t("validations.sales.sale_information.cashdis.staircasing_mortgage.mortgage_used_socialhomebuy", mortgage: "£10,000.00", deposit: "£5,000.00", cashdis: "£200.00", mortgage_deposit_and_discount_total: "£15,200.00", value: "£30,000.00", stairbought_part_of_value: "£8,400.00", stairbought: "28.0%"))
+              expect(record.errors["type"]).to include(I18n.t("validations.sales.sale_information.type.staircasing_mortgage.mortgage_used_socialhomebuy", mortgage: "£10,000.00", deposit: "£5,000.00", cashdis: "£200.00", mortgage_deposit_and_discount_total: "£15,200.00", value: "£30,000.00", stairbought_part_of_value: "£8,400.00", stairbought: "28.0%"))
             end
           end
 
@@ -1206,12 +1206,11 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
 
             it "adds an error" do
               sale_information_validator.validate_staircasing_mortgage(record)
-              expect(record.errors["mortgageused"]).to include("The cash deposit is £5,000.00.</br></br>The full purchase price (£30,000.00) multiplied by the percentage bought is £8,400.00.</br></br>These two amounts should be the same.")
-              expect(record.errors["value"]).to include("The cash deposit is £5,000.00.</br></br>The full purchase price (£30,000.00) multiplied by the percentage bought is £8,400.00.</br></br>These two amounts should be the same.")
-              expect(record.errors["deposit"]).to include("The cash deposit is £5,000.00.</br></br>The full purchase price (£30,000.00) multiplied by the percentage bought is £8,400.00.</br></br>These two amounts should be the same.")
-              expect(record.errors["stairbought"]).to include("The cash deposit is £5,000.00.</br></br>The full purchase price (£30,000.00) multiplied by the percentage bought is £8,400.00.</br></br>These two amounts should be the same.")
-              expect(record.errors["type"]).to include("The cash deposit is £5,000.00.</br></br>The full purchase price (£30,000.00) multiplied by the percentage bought is £8,400.00.</br></br>These two amounts should be the same.")
-              expect(record.errors["cashdis"]).not_to include("The cash deposit is £5,000.00.</br></br>The full purchase price (£30,000.00) multiplied by the percentage bought is £8,400.00.</br></br>These two amounts should be the same.")
+              expect(record.errors["mortgageused"]).to include(I18n.t("validations.sales.sale_information.mortgageused.staircasing_mortgage.mortgage_not_used", deposit: "£5,000.00", value: "£30,000.00", stairbought_part_of_value: "£8,400.00"))
+              expect(record.errors["value"]).to include(I18n.t("validations.sales.sale_information.value.staircasing_mortgage.mortgage_not_used", deposit: "£5,000.00", value: "£30,000.00", stairbought_part_of_value: "£8,400.00"))
+              expect(record.errors["deposit"]).to include(I18n.t("validations.sales.sale_information.deposit.staircasing_mortgage.mortgage_not_used", deposit: "£5,000.00", value: "£30,000.00", stairbought_part_of_value: "£8,400.00"))
+              expect(record.errors["stairbought"]).to include(I18n.t("validations.sales.sale_information.stairbought.staircasing_mortgage.mortgage_not_used", deposit: "£5,000.00", value: "£30,000.00", stairbought_part_of_value: "£8,400.00"))
+              expect(record.errors["type"]).to include(I18n.t("validations.sales.sale_information.type.staircasing_mortgage.mortgage_not_used", deposit: "£5,000.00", value: "£30,000.00", stairbought_part_of_value: "£8,400.00"))
             end
 
             context "and it is a social homebuy" do
@@ -1222,12 +1221,12 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
 
               it "adds an error" do
                 sale_information_validator.validate_staircasing_mortgage(record)
-                expect(record.errors["mortgageused"]).to include("The cash deposit (£5,000.00) and cash discount (£200.00) added together is £5,200.00.</br></br>The full purchase price (£30,000.00) multiplied by the percentage bought (28%) is £8,400.00.</br></br>These two amounts should be the same.")
-                expect(record.errors["value"]).to include("The cash deposit (£5,000.00) and cash discount (£200.00) added together is £5,200.00.</br></br>The full purchase price (£30,000.00) multiplied by the percentage bought (28%) is £8,400.00.</br></br>These two amounts should be the same.")
-                expect(record.errors["deposit"]).to include("The cash deposit (£5,000.00) and cash discount (£200.00) added together is £5,200.00.</br></br>The full purchase price (£30,000.00) multiplied by the percentage bought (28%) is £8,400.00.</br></br>These two amounts should be the same.")
-                expect(record.errors["stairbought"]).to include("The cash deposit (£5,000.00) and cash discount (£200.00) added together is £5,200.00.</br></br>The full purchase price (£30,000.00) multiplied by the percentage bought (28%) is £8,400.00.</br></br>These two amounts should be the same.")
-                expect(record.errors["cashdis"]).to include("The cash deposit (£5,000.00) and cash discount (£200.00) added together is £5,200.00.</br></br>The full purchase price (£30,000.00) multiplied by the percentage bought (28%) is £8,400.00.</br></br>These two amounts should be the same.")
-                expect(record.errors["type"]).to include("The cash deposit (£5,000.00) and cash discount (£200.00) added together is £5,200.00.</br></br>The full purchase price (£30,000.00) multiplied by the percentage bought (28%) is £8,400.00.</br></br>These two amounts should be the same.")
+                expect(record.errors["mortgageused"]).to include(I18n.t("validations.sales.sale_information.mortgageused.staircasing_mortgage.mortgage_not_used_socialhomebuy", deposit: "£5,000.00", cashdis: "£200.00", deposit_and_discount_total: "£5,200.00", value: "£30,000.00", stairbought: "28.0%", stairbought_part_of_value: "£8,400.00"))
+                expect(record.errors["value"]).to include(I18n.t("validations.sales.sale_information.value.staircasing_mortgage.mortgage_not_used_socialhomebuy", deposit: "£5,000.00", cashdis: "£200.00", deposit_and_discount_total: "£5,200.00", value: "£30,000.00", stairbought: "28.0%", stairbought_part_of_value: "£8,400.00"))
+                expect(record.errors["deposit"]).to include(I18n.t("validations.sales.sale_information.deposit.staircasing_mortgage.mortgage_not_used_socialhomebuy", deposit: "£5,000.00", cashdis: "£200.00", deposit_and_discount_total: "£5,200.00", value: "£30,000.00", stairbought: "28.0%", stairbought_part_of_value: "£8,400.00"))
+                expect(record.errors["stairbought"]).to include(I18n.t("validations.sales.sale_information.stairbought.staircasing_mortgage.mortgage_not_used_socialhomebuy", deposit: "£5,000.00", cashdis: "£200.00", deposit_and_discount_total: "£5,200.00", value: "£30,000.00", stairbought: "28.0%", stairbought_part_of_value: "£8,400.00"))
+                expect(record.errors["cashdis"]).to include(I18n.t("validations.sales.sale_information.cashdis.staircasing_mortgage.mortgage_not_used_socialhomebuy", deposit: "£5,000.00", cashdis: "£200.00", deposit_and_discount_total: "£5,200.00", value: "£30,000.00", stairbought: "28.0%", stairbought_part_of_value: "£8,400.00"))
+                expect(record.errors["type"]).to include(I18n.t("validations.sales.sale_information.type.staircasing_mortgage.mortgage_not_used_socialhomebuy", deposit: "£5,000.00", cashdis: "£200.00", deposit_and_discount_total: "£5,200.00", value: "£30,000.00", stairbought: "28.0%", stairbought_part_of_value: "£8,400.00"))
               end
             end
 

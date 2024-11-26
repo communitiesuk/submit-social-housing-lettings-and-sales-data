@@ -8,7 +8,7 @@ RSpec.describe Form::Sales::Subsections::SharedOwnershipScheme, type: :model do
   let(:section) { instance_double(Form::Sales::Sections::SaleInformation) }
 
   before do
-    allow(section).to receive(:form).and_return(instance_double(Form, start_year_2024_or_later?: false, start_date: Time.zone.local(2023, 4, 1)))
+    allow(section).to receive(:form).and_return(instance_double(Form, start_year_2024_or_later?: false, start_year_2025_or_later?: false, start_date: Time.zone.local(2023, 4, 1)))
   end
 
   it "has correct section" do
@@ -63,6 +63,10 @@ RSpec.describe Form::Sales::Subsections::SharedOwnershipScheme, type: :model do
 
   it "has the correct id" do
     expect(shared_ownership_scheme.id).to eq("shared_ownership_scheme")
+  end
+
+  it "has the correct copy key" do
+    expect(shared_ownership_scheme.copy_key).to eq("sale_information")
   end
 
   it "has the correct label" do

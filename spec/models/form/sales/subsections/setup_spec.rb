@@ -23,15 +23,16 @@ RSpec.describe Form::Sales::Subsections::Setup, type: :model do
   context "when start year is before 2024" do
     before do
       allow(section.form).to receive(:start_year_2024_or_later?).and_return(false)
+      allow(section.form).to receive(:start_year_2025_or_later?).and_return(false)
     end
 
     it "has correct pages" do
       expect(setup.pages.map(&:id)).to eq(
         %w[
+          completion_date
           owning_organisation
           managing_organisation
           assigned_to
-          completion_date
           purchaser_code
           ownership_scheme
           shared_ownership_type
@@ -46,18 +47,19 @@ RSpec.describe Form::Sales::Subsections::Setup, type: :model do
     end
   end
 
-  context "when start year is >= 2024" do
+  context "when start year is 2024" do
     before do
       allow(section.form).to receive(:start_year_2024_or_later?).and_return(true)
+      allow(section.form).to receive(:start_year_2025_or_later?).and_return(false)
     end
 
     it "has correct pages" do
       expect(setup.pages.map(&:id)).to eq(
         %w[
+          completion_date
           owning_organisation
           managing_organisation
           assigned_to
-          completion_date
           purchaser_code
           ownership_scheme
           shared_ownership_type
@@ -65,6 +67,35 @@ RSpec.describe Form::Sales::Subsections::Setup, type: :model do
           outright_ownership_type
           buyer_company
           buyer_live
+          joint_purchase
+          number_joint_buyers
+          buyer_interview_joint_purchase
+          buyer_interview
+          privacy_notice_joint_purchase
+          privacy_notice
+        ],
+      )
+    end
+  end
+
+  context "when start year is >= 2025" do
+    before do
+      allow(section.form).to receive(:start_year_2024_or_later?).and_return(true)
+      allow(section.form).to receive(:start_year_2025_or_later?).and_return(true)
+    end
+
+    it "has correct pages" do
+      expect(setup.pages.map(&:id)).to eq(
+        %w[
+          completion_date
+          owning_organisation
+          managing_organisation
+          assigned_to
+          purchaser_code
+          ownership_scheme
+          shared_ownership_type
+          staircasing
+          discounted_ownership_type
           joint_purchase
           number_joint_buyers
           buyer_interview_joint_purchase

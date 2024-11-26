@@ -17,6 +17,7 @@ en:
               "Enter a date when the owning organisation was active. %{owning_organisation} became active on %{available_from}."
 
         owning_organisation:
+          data_sharing_agreement_not_signed: "The organisation must accept the Data Sharing Agreement before it can be selected as the owning organisation."
           inactive:
             merged_organisation:
               "The owning organisation must be active on the sale completion date. %{owning_organisation} became inactive on %{merge_date} and was replaced by %{absorbing_organisation}."

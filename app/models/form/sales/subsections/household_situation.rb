@@ -3,7 +3,14 @@ class Form::Sales::Subsections::HouseholdSituation < ::Form::Subsection
     super
     @id = "household_situation"
     @label = "Household situation"
-    @depends_on = [{ "setup_completed?" => true }]
+  end
+
+  def depends_on
+    if form.start_year_2025_or_later?
+      [{ "setup_completed?" => true, "is_staircase?" => false }]
+    else
+      [{ "setup_completed?" => true }]
+    end
   end
 
   def pages
@@ -11,17 +18,15 @@ class Form::Sales::Subsections::HouseholdSituation < ::Form::Subsection
       Form::Sales::Pages::Buyer1PreviousTenure.new(nil, nil, self),
       Form::Sales::Pages::LastAccommodation.new(nil, nil, self),
       Form::Sales::Pages::LastAccommodationLa.new(nil, nil, self),
-      Form::Sales::Pages::BuyersOrganisations.new(nil, nil, self),
-      buyer_2_situation_pages,
+      (Form::Sales::Pages::BuyersOrganisations.new(nil, nil, self) unless form.start_year_2025_or_later?),
+      Form::Sales::Pages::Buyer2LivingIn.new(nil, nil, self),
+      Form::Sales::Pages::Buyer2PreviousHousingSituation.new(nil, nil, self),
     ].flatten.compact
   end
 
-  def buyer_2_situation_pages
-    if form.start_date.year >= 2023
-      [
-        Form::Sales::Pages::Buyer2LivingIn.new(nil, nil, self),
-        Form::Sales::Pages::Buyer2PreviousHousingSituation.new(nil, nil, self),
-      ]
-    end
+  def displayed_in_tasklist?(log)
+    return true unless form.start_year_2025_or_later?
+
+    log.staircase != 1
   end
 end

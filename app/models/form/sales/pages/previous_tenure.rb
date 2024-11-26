@@ -2,7 +2,6 @@ class Form::Sales::Pages::PreviousTenure < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "shared_ownership_previous_tenure"
-    @copy_key = "sales.sale_information.socprevten"
     @header = ""
     @description = ""
     @subsection = subsection

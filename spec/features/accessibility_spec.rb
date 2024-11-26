@@ -138,15 +138,18 @@ RSpec.describe "Accessibility", js: true do
 
       routes = find_routes("sales-log", sales_log, bulk_upload)
 
-      routes.reject { |path|
+      routes = routes.reject { |path|
         path.include?("/edit") || path.include?("/new") || path.include?("*page") ||
           path.include?("/sales-logs/bulk-upload-logs/#{bulk_upload.id}") ||
           path.include?("bulk-upload-soft-validations-check") || path.include?("filters/update") ||
           path == "/sales-logs/bulk-upload-resume/#{bulk_upload.id}" ||
           path == "/sales-logs/bulk-upload-logs" ||
+          path.include?("/check-answers") ||
           other_form_page_ids.any? { |page_id| path.include?(page_id.dasherize) } ||
           sales_log_pages.any? { |page| path.include?(page.id.dasherize) && !page.routed_to?(sales_log, user) }
       }.uniq
+
+      routes + sales_log.form.subsections.map(&:id).map { |id| "/sales-logs/#{sales_log.id}/#{id.dasherize}/check-answers" }
     end
 
     before do

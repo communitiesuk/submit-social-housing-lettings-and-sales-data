@@ -67,15 +67,15 @@ module SchemesHelper
   def change_answer_link(scheme, question_id, user)
     case question_id
     when "service_name", "sensitive", "scheme_type", "registered_under_care_act", "owning_organisation_id", "arrangement_type"
-      user.support? || !scheme.confirmed? ? scheme_details_path(scheme, check_answers: true) : scheme_edit_name_path(scheme)
+      user.support? || !scheme.confirmed? ? scheme_details_path(scheme, referrer: "check-answers") : scheme_edit_name_path(scheme)
     when "primary_client_group"
-      scheme_primary_client_group_path(scheme, check_answers: true)
+      scheme_primary_client_group_path(scheme, referrer: "check-answers")
     when "has_other_client_group"
-      scheme_confirm_secondary_client_group_path(scheme, check_answers: true)
+      scheme_confirm_secondary_client_group_path(scheme, referrer: "check-answers")
     when "secondary_client_group"
-      scheme_secondary_client_group_path(scheme, check_answers: true)
+      scheme_secondary_client_group_path(scheme, referrer: "check-answers")
     when "support_type", "intended_stay"
-      scheme_support_path(scheme, check_answers: true)
+      scheme_support_path(scheme, referrer: "check-answers")
     end
   end
 

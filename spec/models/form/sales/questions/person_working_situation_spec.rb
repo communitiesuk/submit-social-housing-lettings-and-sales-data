@@ -5,7 +5,8 @@ RSpec.describe Form::Sales::Questions::PersonWorkingSituation, type: :model do
 
   let(:question_id) { "ecstat2" }
   let(:question_definition) { nil }
-  let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2023, 4, 1)))) }
+  let(:form) { instance_double(Form, start_date: Time.zone.local(2024, 4, 1), start_year_2025_or_later?: false) }
+  let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form:)) }
   let(:person_index) { 2 }
 
   it "has correct page" do
@@ -39,6 +40,22 @@ RSpec.describe Form::Sales::Questions::PersonWorkingSituation, type: :model do
          { "age2_known" => nil },
          { "age2" => { "operator" => "<", "operand" => 16 } }] },
     })
+  end
+
+  context "with start year before 2025" do
+    let(:form) { instance_double(Form, start_date: Time.zone.local(2024, 4, 1), start_year_2025_or_later?: false) }
+
+    it "uses the old ordering for answer options" do
+      expect(question.answer_options.keys).to eq(%w[1 2 3 4 6 8 5 0 10 7 9])
+    end
+  end
+
+  context "with start year from 2025" do
+    let(:form) { instance_double(Form, start_date: Time.zone.local(2025, 4, 1), start_year_2025_or_later?: true) }
+
+    it "uses the new ordering for answer options" do
+      expect(question.answer_options.keys).to eq(%w[1 2 3 4 5 6 7 8 9 0 10])
+    end
   end
 
   context "when person 2" do

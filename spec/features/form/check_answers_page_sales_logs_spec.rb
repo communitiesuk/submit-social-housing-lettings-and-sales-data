@@ -35,7 +35,7 @@ RSpec.describe "Sales Log Check Answers Page" do
     let(:last_question_for_subsection) { "propcode" }
 
     it "does not group questions into summary cards if the questions in the subsection don't have a check_answers_card_number attribute" do
-      visit("/sales-logs/#{completed_sales_log_joint_purchase.id}/household-needs/check-answers")
+      visit("/sales-logs/#{completed_sales_log_joint_purchase.id}/other-household-information/check-answers")
       assert_selector ".govuk-summary-card__title", count: 0
     end
 

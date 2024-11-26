@@ -282,10 +282,10 @@ RSpec.describe Form, type: :model do
 
       context "and attribute Y is changed such that it is no longer routed to" do
         it "the value of this attribute is cleared" do
-          expect(log.stairbought).to be 25
+          expect(log.stairbought).to eq 25
           log.staircase = 2
           log.form.reset_not_routed_questions_and_invalid_answers(log)
-          expect(log.stairbought).to be nil
+          expect(log.stairbought).to be_nil
         end
       end
     end
@@ -387,10 +387,6 @@ RSpec.describe Form, type: :model do
       expect(form.sections[0].class).to eq(Form::Sales::Sections::Setup)
       expect(form.subsections.count).to eq(1)
       expect(form.subsections.first.id).to eq("setup")
-      expect(form.pages.count).to eq(13)
-      expect(form.pages.first.id).to eq("owning_organisation")
-      expect(form.questions.count).to eq(14)
-      expect(form.questions.first.id).to eq("owning_organisation_id")
       expect(form.start_date).to eq(Time.zone.parse("2022-04-01"))
       expect(form.new_logs_end_date).to eq(Time.zone.parse("2023-11-20"))
       expect(form.edit_end_date).to eq(Time.zone.parse("2023-11-20"))

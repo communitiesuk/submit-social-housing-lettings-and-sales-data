@@ -77,7 +77,7 @@
                                            legend: { text: "Who provides the support services used by this scheme?", size: "m" } %>
 
       <%= f.hidden_field :page, value: "details" %>
-      <% if request.query_parameters["check_answers"] %>
+      <% if params[:referrer] == "check-answers" %>
         <%= f.hidden_field :check_answers, value: "true" %>
         <%= f.govuk_submit "Save changes" %>
       <% else %>
