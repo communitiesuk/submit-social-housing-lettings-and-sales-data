@@ -3,8 +3,6 @@ require "rails_helper"
 describe EmailCsvJob do
   include Helpers
 
-  test_url = :test_url
-
   let(:job) { described_class.new }
   let(:user) { FactoryBot.create(:user) }
   let(:storage_service) { instance_double(Storage::S3Service) }
@@ -22,7 +20,6 @@ describe EmailCsvJob do
   before do
     allow(Storage::S3Service).to receive(:new).and_return(storage_service)
     allow(storage_service).to receive(:write_file)
-    allow(storage_service).to receive(:get_presigned_url).and_return(test_url)
 
     allow(Csv::SalesLogCsvService).to receive(:new).and_return(sales_log_csv_service)
     allow(sales_log_csv_service).to receive(:prepare_csv).and_return("")
@@ -67,6 +64,16 @@ describe EmailCsvJob do
       expect(lettings_log_csv_service).to receive(:prepare_csv).with(lettings_logs)
       job.perform(user, nil, {}, nil, nil, codes_only_export)
     end
+
+    it "creates a CsvDownload record" do
+      job.perform(user, nil, {}, nil, nil, codes_only_export, "lettings")
+      expect(CsvDownload.count).to eq(1)
+      expect(CsvDownload.first.user).to eq(user)
+      expect(CsvDownload.first.organisation).to eq(user.organisation)
+      expect(CsvDownload.first.filename).to match(/lettings-logs-.*\.csv/)
+      expect(CsvDownload.first.download_type).to eq("lettings")
+      expect(CsvDownload.first.expiration_time).to eq(172_800)
+    end
   end
 
   context "when exporting sales logs" do
@@ -102,10 +109,20 @@ describe EmailCsvJob do
       expect(sales_log_csv_service).to receive(:prepare_csv).with(sales_logs)
       job.perform(user, nil, {}, nil, nil, codes_only_export, "sales")
     end
+
+    it "creates a CsvDownload record" do
+      job.perform(user, nil, {}, nil, nil, codes_only_export, "sales")
+      expect(CsvDownload.count).to eq(1)
+      expect(CsvDownload.first.user).to eq(user)
+      expect(CsvDownload.first.organisation).to eq(user.organisation)
+      expect(CsvDownload.first.filename).to match(/sales-logs-.*\.csv/)
+      expect(CsvDownload.first.download_type).to eq("sales")
+      expect(CsvDownload.first.expiration_time).to eq(172_800)
+    end
   end
 
   it "sends an E-mail with the presigned URL and duration" do
-    expect(mailer).to receive(:send_csv_download_mail).with(user, test_url, instance_of(Integer))
+    expect(mailer).to receive(:send_csv_download_mail).with(user, /csv-downloads/, instance_of(Integer))
     job.perform(user)
   end
 end

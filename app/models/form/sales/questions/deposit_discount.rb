@@ -2,7 +2,6 @@ class Form::Sales::Questions::DepositDiscount < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "cashdis"
-    @copy_key = "sales.sale_information.cashdis"
     @type = "numeric"
     @min = 0
     @max = 999_999

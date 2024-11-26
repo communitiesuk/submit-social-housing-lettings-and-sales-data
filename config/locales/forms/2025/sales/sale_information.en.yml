@@ -122,7 +122,7 @@ en:
             hint_text: ""
             question_text: "What was the previous tenure of the buyer?"
 
-          value:
+          value: #TODO rename non-staircasing and staircasing versions
             page_header: "About the price of the property"
             value_shared_ownership:
               check_answer_label: "Full purchase price"
@@ -133,11 +133,11 @@ en:
               hint_text: "Enter the full purchase price paid for the equity bought in this staircasing transaction (this is equal to the value of the share bought by the purchaser)."
               question_text: "What was the full purchase price for this staircasing transaction?"
 
-          equity:
+          equity: #TODO split non-staircasing and staircasing versions
             page_header: "About the price of the property"
-            check_answer_label: "Initial percentage equity stake"
-            hint_text: "Enter the amount of initial equity held by the purchaser (for example, 25% or 50%)"
-            question_text: "What was the percentage shared purchased in the initial transaction?"
+            check_answer_label: "Initial percentage equity share"
+            hint_text: "Enter the amount of initial equity share held by the purchaser (for example, 25% or 50%)"
+            question_text: "What was the initial percentage share purchased?"
 
           mortgageused:
             page_header: "Mortgage Amount"
@@ -207,9 +207,9 @@ en:
           leaseholdcharges:
             page_header: ""
             has_mscharge:
-              check_answer_label: "Does the property have any monthly leasehold charges?"
+              check_answer_label: "Does the property have any service charges?"
               hint_text: "For example, service and management charges"
-              question_text: "Does the property have any monthly leasehold charges?"
+              question_text: "Does the property have any service charges?"
             mscharge:
               check_answer_label:  "Monthly leasehold charges"
               hint_text: ""
@@ -238,3 +238,14 @@ en:
             check_answer_label: "Amount of any loan, grant or subsidy"
             hint_text: "For all schemes except Right to Buy (RTB), Preserved Right to Buy (PRTB), Voluntary Right to Buy (VRTB) and Rent to Buy"
             question_text: "What was the amount of any loan, grant, discount or subsidy given?"
+
+          management_fee:
+            page_header: ""
+            has_management_fee:
+              check_answer_label: "Does the property have an estate management fee?"
+              hint_text: "Estate management fees are typically used for the maintenance of communal gardens, payments, private roads, car parks and/or play areas within new build estates."
+              question_text: "Does the property have an estate management fee?"
+            management_fee:
+              check_answer_label:  "Monthly estate management fee"
+              hint_text: ""
+              question_text: "Enter the total monthly management fee"

@@ -2,7 +2,6 @@ class Form::Sales::Questions::Mortgageused < ::Form::Question
   def initialize(id, hsh, subsection, ownershipsch:)
     super(id, hsh, subsection)
     @id = "mortgageused"
-    @copy_key = "sales.sale_information.mortgageused"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @ownershipsch = ownershipsch

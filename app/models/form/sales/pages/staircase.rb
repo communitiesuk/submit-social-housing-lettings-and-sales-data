@@ -3,7 +3,7 @@ class Form::Sales::Pages::Staircase < ::Form::Page
     super
     @id = "staircasing"
     @depends_on = [{ "ownershipsch" => 1 }]
-    @copy_key = "sales.#{subsection.id}.staircasing"
+    @copy_key = "sales.#{subsection.copy_key}.staircasing"
   end
 
   def questions

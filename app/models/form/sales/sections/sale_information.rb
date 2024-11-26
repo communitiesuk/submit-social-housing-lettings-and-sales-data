@@ -13,6 +13,7 @@ class Form::Sales::Sections::SaleInformation < ::Form::Section
 
   def shared_ownership_scheme_subsection
     if form.start_year_2025_or_later?
+      Form::Sales::Subsections::SharedOwnershipInitialPurchase.new(nil, nil, self)
       Form::Sales::Subsections::SharedOwnershipStaircasingTransaction.new(nil, nil, self)
     else
       Form::Sales::Subsections::SharedOwnershipScheme.new(nil, nil, self)

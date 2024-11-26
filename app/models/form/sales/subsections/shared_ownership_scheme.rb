@@ -11,7 +11,7 @@ class Form::Sales::Subsections::SharedOwnershipScheme < ::Form::Subsection
     @pages ||= [
       Form::Sales::Pages::LivingBeforePurchase.new("living_before_purchase_shared_ownership_joint_purchase", nil, self, ownershipsch: 1, joint_purchase: true),
       Form::Sales::Pages::LivingBeforePurchase.new("living_before_purchase_shared_ownership", nil, self, ownershipsch: 1, joint_purchase: false),
-      (Form::Sales::Pages::Staircase.new(nil, nil, self) unless form.start_year_2025_or_later?),
+      Form::Sales::Pages::Staircase.new(nil, nil, self),
       Form::Sales::Pages::AboutStaircase.new("about_staircasing_joint_purchase", nil, self, joint_purchase: true),
       Form::Sales::Pages::AboutStaircase.new("about_staircasing_not_joint_purchase", nil, self, joint_purchase: false),
       Form::Sales::Pages::StaircaseBoughtValueCheck.new(nil, nil, self),
