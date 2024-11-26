@@ -103,7 +103,7 @@ unless Rails.env.test?
       mhclg_scheme = FactoryBot.create(:scheme, :created_now, owning_organisation: mhclg)
       stock_owner_scheme = FactoryBot.create(:scheme, owning_organisation: stock_owner1)
 
-      other_schemes = other_orgs ? other_orgs.sample(3).map { |org| FactoryBot.create(:scheme, owning_organisation: org) } : []
+      other_schemes = first_run ? other_orgs.sample(3).map { |org| FactoryBot.create(:scheme, owning_organisation: org) } : []
 
       [beulahside, abdullah, mhclg_scheme, stock_owner_scheme, *other_schemes].each do |scheme|
         FactoryBot.create(:location, scheme:)
@@ -113,7 +113,8 @@ unless Rails.env.test?
       end
     end
 
-    users_with_logs = [provider, coordinator, support, stock_owner1_user, stock_owner2_user, managing_agent1_user, managing_agent2_user, provider_owner1, coordinator_owner1, *other_orgs.map { |o| o.users.first }]
+    other_org_users = first_run ? other_orgs.map { |org| org.users.first } : []
+    users_with_logs = [provider, coordinator, support, stock_owner1_user, stock_owner2_user, managing_agent1_user, managing_agent2_user, provider_owner1, coordinator_owner1, *other_org_users]
 
     if SalesLog.count.zero?
       users_with_logs.each do |user|
