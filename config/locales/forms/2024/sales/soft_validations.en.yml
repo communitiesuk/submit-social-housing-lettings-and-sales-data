@@ -31,27 +31,25 @@ en:
             check_answer_label: "Buyer 1 income confirmation"
             hint_text: ""
             question_text: "Are you sure this is correct?"
-            min:
+            ecstat:
               page_header: ""
               title_text: "You told us income was %{income}."
-              informative_text: "This is less than we would expect for someone in this working situation."
-            max:
-              discounted:
-                page_header: ""
-                title_text: "You told us the income of buyer 1 is %{income}. This seems high. Are you sure this is correct?"
+              informative_text: "This is %{more_or_less} than we would expect for someone in this working situation."
+            discounted:
+              page_header: ""
+              title_text: "You told us the income of buyer 1 is %{income}. This seems high. Are you sure this is correct?"
 
           income2_value_check:
             check_answer_label: "Buyer 2 income confirmation"
             hint_text: ""
             question_text: "Are you sure this is correct?"
-            min:
+            ecstat:
               page_header: ""
               title_text: "You told us income was %{income}."
-              informative_text: "This is less than we would expect for someone in this working situation."
-            max:
-              discounted:
-                page_header: ""
-                title_text: "You told us the income of buyer 2 is %{income}. This seems high. Are you sure this is correct?"
+              informative_text: "This is %{more_or_less} than we would expect for someone in this working situation."
+            discounted:
+              page_header: ""
+              title_text: "You told us the income of buyer 2 is %{income}. This seems high. Are you sure this is correct?"
 
           combined_income_value_check:
             page_header: ""

@@ -23,12 +23,20 @@ module Validations::Sales::SoftValidations
     },
   }.freeze
 
-  def income1_under_soft_min?
-    income_under_soft_min?(income1, ecstat1)
+  def income1_outside_soft_range_for_ecstat?
+    income1_under_soft_min? || income1_over_soft_max_for_ecstat?
   end
 
-  def income2_under_soft_min?
-    income_under_soft_min?(income2, ecstat2)
+  def income1_more_or_less_text
+    income1_under_soft_min? ? "less" : "more"
+  end
+
+  def income2_outside_soft_range_for_ecstat?
+    income2_under_soft_min? || income2_over_soft_max_for_ecstat?
+  end
+
+  def income2_more_or_less_text
+    income2_under_soft_min? ? "less" : "more"
   end
 
   def income1_over_soft_max_for_discounted_ownership?
@@ -37,18 +45,10 @@ module Validations::Sales::SoftValidations
     income_over_discounted_sale_soft_max?(income1)
   end
 
-  def income1_over_soft_max_for_ecstat?
-    income_over_soft_max?(income1, ecstat1)
-  end
-
   def income2_over_soft_max_for_discounted_ownership?
     return unless income2 && la && discounted_ownership_sale?
 
     income_over_discounted_sale_soft_max?(income2)
-  end
-
-  def income2_over_soft_max_for_ecstat?
-    income_over_soft_max?(income2, ecstat2)
   end
 
   def combined_income_over_soft_max_for_discounted_ownership?
@@ -210,6 +210,14 @@ private
     )
   end
 
+  def income1_under_soft_min?
+    income_under_soft_min?(income1, ecstat1)
+  end
+
+  def income2_under_soft_min?
+    income_under_soft_min?(income2, ecstat2)
+  end
+
   def income_under_soft_min?(income, ecstat)
     return unless income && ecstat
 
@@ -219,8 +227,18 @@ private
     income < income_ranges[ecstat][:soft_min]
   end
 
+  def income1_over_soft_max_for_ecstat?
+    income_over_soft_max?(income1, ecstat1)
+  end
+
+  def income2_over_soft_max_for_ecstat?
+    income_over_soft_max?(income2, ecstat2)
+  end
+
   def income_over_soft_max?(income, ecstat)
     return unless income && ecstat && form.start_year_2025_or_later?
+
+    return false unless ALLOWED_INCOME_RANGES_SALES[2025][ecstat]
 
     income > ALLOWED_INCOME_RANGES_SALES[2025][ecstat][:soft_max]
   end

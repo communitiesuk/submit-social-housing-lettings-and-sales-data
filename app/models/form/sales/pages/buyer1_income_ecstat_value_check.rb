@@ -1,12 +1,12 @@
-class Form::Sales::Pages::Buyer1IncomeEcstatMaxValueCheck < ::Form::Page
-  def initialize(id, hsh, subsection, check_answers_card_number:)
-    super(id, hsh, subsection)
+class Form::Sales::Pages::Buyer1IncomeEcstatValueCheck < ::Form::Page
+  def initialize(id, hsh, subsection)
+    super
     @depends_on = [
       {
-        "income1_over_soft_max_for_ecstat?" => true,
+        "income1_out_of_soft_range?" => true,
       },
     ]
-    @copy_key = "sales.soft_validations.income1_value_check.max.ecstat"
+    @copy_key = "sales.soft_validations.income1_value_check.ecstat"
     @title_text = {
       "translation" => "forms.#{form.start_date.year}.#{@copy_key}.title_text",
       "arguments" => [
@@ -19,14 +19,18 @@ class Form::Sales::Pages::Buyer1IncomeEcstatMaxValueCheck < ::Form::Page
     }
     @informative_text = {
       "translation" => "forms.#{form.start_date.year}.#{@copy_key}.informative_text",
-      "arguments" => [],
+      "arguments" => [
+        {
+          "key" => "income1_more_or_less_text",
+          "i18n_template" => "more_or_less",
+        },
+      ],
     }
-    @check_answers_card_number = check_answers_card_number
   end
 
   def questions
     @questions ||= [
-      Form::Sales::Questions::Buyer1IncomeValueCheck.new(nil, nil, self, check_answers_card_number: @check_answers_card_number),
+      Form::Sales::Questions::Buyer1IncomeValueCheck.new(nil, nil, self, check_answers_card_number: 1),
     ]
   end
 

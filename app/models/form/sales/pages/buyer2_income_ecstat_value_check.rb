@@ -1,40 +1,40 @@
-class Form::Sales::Pages::Buyer1IncomeMinValueCheck < ::Form::Page
+class Form::Sales::Pages::Buyer2IncomeEcstatValueCheck < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @depends_on = [
       {
-        "income1_under_soft_min?" => true,
+        "income2_out_of_soft_range?" => true,
       },
     ]
-    @copy_key = "sales.soft_validations.income1_value_check.min"
+    @copy_key = "sales.soft_validations.income2_value_check.ecstat"
     @title_text = {
       "translation" => "forms.#{form.start_date.year}.#{@copy_key}.title_text",
       "arguments" => [
         {
           "key" => "field_formatted_as_currency",
-          "arguments_for_key" => "income1",
+          "arguments_for_key" => "income2",
           "i18n_template" => "income",
-        },
-        {
-          "key" => "income_soft_min_for_ecstat",
-          "arguments_for_key" => "ecstat1",
-          "i18n_template" => "minimum",
         },
       ],
     }
     @informative_text = {
       "translation" => "forms.#{form.start_date.year}.#{@copy_key}.informative_text",
-      "arguments" => [],
+      "arguments" => [
+        {
+          "key" => "income2_more_or_less_text",
+          "i18n_template" => "more_or_less",
+        },
+      ],
     }
   end
 
   def questions
     @questions ||= [
-      Form::Sales::Questions::Buyer1IncomeValueCheck.new(nil, nil, self, check_answers_card_number: 1),
+      Form::Sales::Questions::Buyer2IncomeValueCheck.new(nil, nil, self, check_answers_card_number: 2),
     ]
   end
 
   def interruption_screen_question_ids
-    %w[ecstat1 income1]
+    %w[ecstat2 income2]
   end
 end
