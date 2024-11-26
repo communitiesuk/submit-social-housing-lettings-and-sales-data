@@ -703,8 +703,8 @@ RSpec.describe Validations::SetupValidations do
           .to include("This location is incomplete. Select another location or update this one.")
       end
 
-      it "produces no error when location is completes" do
-        location.update!(mobility_type: "A")
+      it "produces no error when location is complete" do
+        location.update!(units: 1)
         location.reload
         record.location = location
         setup_validator.validate_location(record)
