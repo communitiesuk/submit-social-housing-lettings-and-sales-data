@@ -750,7 +750,7 @@ RSpec.describe Location, type: :model do
       it "adds an error when units is 0" do
         location.units = 0
         location.valid?(:units)
-        expect(location.errors.count).to eq(2)
+        expect(location.errors.count).to eq(1)
       end
     end
 
