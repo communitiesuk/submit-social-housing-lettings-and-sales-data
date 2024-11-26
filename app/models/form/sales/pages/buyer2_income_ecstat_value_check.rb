@@ -3,7 +3,7 @@ class Form::Sales::Pages::Buyer2IncomeEcstatValueCheck < ::Form::Page
     super
     @depends_on = [
       {
-        "income2_out_of_soft_range?" => true,
+        "income2_outside_soft_range_for_ecstat?" => true,
       },
     ]
     @copy_key = "sales.soft_validations.income2_value_check.ecstat"
