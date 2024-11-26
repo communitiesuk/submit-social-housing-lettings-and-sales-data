@@ -623,7 +623,7 @@ RSpec.describe Merge::MergeOrganisationsService do
 
         context "and merging sales logs" do
           let(:owning_organisation) { create(:organisation, holds_own_stock: true) }
-          let!(:sales_log) { create(:sales_log, saledate: Time.zone.today, owning_organisation: merging_organisation, purchid: "owned") }
+          let!(:sales_log) { create(:sales_log, saledate: Time.zone.today, owning_organisation: merging_organisation, managing_organisation: merging_organisation, purchid: "owned") }
           let!(:managed_sales_log) { create(:sales_log, saledate: Time.zone.today, purchid: "managed") }
 
           before do
