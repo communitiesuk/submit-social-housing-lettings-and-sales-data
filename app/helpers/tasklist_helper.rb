@@ -41,7 +41,7 @@ module TasklistHelper
   def subsection_link(subsection, log, current_user)
     if subsection.status(log) != :cannot_start_yet
       next_page_path = next_page_or_check_answers(subsection, log, current_user).to_s
-      govuk_link_to(subsection.label, next_page_path.dasherize, aria: { describedby: subsection.id.dasherize })
+      govuk_link_to(subsection.label, next_page_path.dasherize, class: "govuk-task-list__link", aria: { describedby: subsection.id.dasherize })
     else
       subsection.label
     end
@@ -57,6 +57,10 @@ module TasklistHelper
 
       "This log is from the #{start_year} to #{start_year + 1} collection window, which is now closed."
     end
+  end
+
+  def tasklist_link_class(status)
+    status == :cannot_start_yet ? "" : "govuk-task-list__item--with-link"
   end
 
 private
