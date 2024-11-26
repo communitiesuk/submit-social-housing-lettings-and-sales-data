@@ -47,6 +47,13 @@ module TasklistHelper
     end
   end
 
+  def subsection_href(subsection, log, current_user)
+    if subsection.status(log) != :cannot_start_yet
+      next_page_path = next_page_or_check_answers(subsection, log, current_user).to_s
+      next_page_path.dasherize
+    end
+  end
+
   def review_log_text(log)
     if log.collection_period_open?
       path = log.sales? ? review_sales_log_path(id: log, sales_log: true) : review_lettings_log_path(log)

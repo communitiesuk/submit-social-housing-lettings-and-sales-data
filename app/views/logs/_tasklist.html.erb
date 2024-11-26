@@ -8,19 +8,21 @@
       <% if section.description %>
         <p class="govuk-body"><%= section.description.html_safe %></p>
       <% end %>
-      <ul class="govuk-task-list app-task-list__items">
-        <% section.subsections.each do |subsection| %>
-          <% if subsection.displayed_in_tasklist?(@log) && (subsection.applicable_questions(@log).count > 0 || !subsection.enabled?(@log)) %>
-            <% subsection_status = subsection.status(@log) %>
-            <li class="govuk-task-list__item <%= tasklist_link_class(subsection_status) %> app-task-list__item">
-              <div class="govuk-task-list__name-and-hint app-task-list__task-name" id="<%= subsection.id.dasherize %>">
-                <%= subsection_link(subsection, @log, current_user) %>
-              </div>
-              <%= status_tag(subsection_status, "app-task-list__tag") %>
-            </li>
-          <% end %>
-        <% end %>
-      </ul>
+      <%= govuk_task_list(id_prefix: "logs", classes: "app-task-list__items") do |task_list|
+            section.subsections.each do |subsection|
+              next unless subsection.displayed_in_tasklist?(@log) && (subsection.applicable_questions(@log).count.positive? || !subsection.enabled?(@log))
+
+              subsection_status = subsection.status(@log)
+              task_list.with_item(classes: "#{tasklist_link_class(subsection_status)} app-task-list__item") do |item|
+                item.with_title(text: subsection.label, href: subsection_href(subsection, @log, current_user), classes: "app-task-list__name-and-hint--my-modifier")
+                if status_tag(subsection_status, "app-task-list__tag").present?
+                  item.with_status(text: status_tag(subsection_status), classes: "app-task-list__tag")
+                else
+                  item.with_status(text: status_text(subsection_status), classes: "app-task-list__tag")
+                end
+              end
+            end
+          end %>
     </li>
   <% end %>
 </ol>
