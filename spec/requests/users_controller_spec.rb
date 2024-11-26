@@ -1043,6 +1043,9 @@ RSpec.describe UsersController, type: :request do
 
       it "invites a new user" do
         expect { request }.to change(User, :count).by(1)
+        follow_redirect!
+        expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
+        expect(page).to have_content("Invitation sent to new_user@example.com")
       end
 
       it "sends an invitation email" do
