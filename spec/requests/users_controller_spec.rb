@@ -2188,9 +2188,9 @@ RSpec.describe UsersController, type: :request do
 
               context "when different organisations manage the logs" do
                 before do
-                  create(:lettings_log, managing_organisation: other_user.organisation, assigned_to: other_user)
-                  create(:lettings_log, managing_organisation: new_organisation_2, assigned_to: other_user)
-                  create(:sales_log, managing_organisation: new_organisation_3, assigned_to: other_user)
+                  create(:lettings_log, owning_organisation: other_user.organisation, managing_organisation: other_user.organisation, assigned_to: other_user)
+                  create(:lettings_log, owning_organisation: other_user.organisation, managing_organisation: new_organisation_2, assigned_to: other_user)
+                  create(:sales_log, owning_organisation: other_user.organisation, managing_organisation: new_organisation_3, assigned_to: other_user)
                   patch "/users/#{other_user.id}/log-reassignment", headers:, params:
                 end
 
@@ -2206,8 +2206,8 @@ RSpec.describe UsersController, type: :request do
 
               context "when users organisation manages the logs" do
                 before do
-                  create(:lettings_log, owning_organisation: other_user.organisation, assigned_to: other_user)
-                  create(:sales_log, owning_organisation: other_user.organisation, assigned_to: other_user)
+                  create(:lettings_log, owning_organisation: other_user.organisation, managing_organisation: other_user.organisation, assigned_to: other_user)
+                  create(:sales_log, owning_organisation: other_user.organisation, managing_organisation: other_user.organisation, assigned_to: other_user)
                   patch "/users/#{other_user.id}/log-reassignment", headers:, params:
                 end
 
@@ -2219,15 +2219,15 @@ RSpec.describe UsersController, type: :request do
 
               context "when different organisations manage the logs" do
                 before do
-                  create(:lettings_log, owning_organisation: other_user.organisation, assigned_to: other_user)
-                  create(:lettings_log, owning_organisation: new_organisation_2, assigned_to: other_user)
+                  create(:lettings_log, owning_organisation: other_user.organisation, managing_organisation: other_user.organisation, assigned_to: other_user)
+                  create(:lettings_log, owning_organisation: new_organisation_2, managing_organisation: other_user.organisation, assigned_to: other_user)
                   create(:sales_log, owning_organisation: new_organisation_3, managing_organisation: other_user.organisation, assigned_to: other_user)
                   patch "/users/#{other_user.id}/log-reassignment", headers:, params:
                 end
 
                 it "required the new org to have managing agent relationship with owning organisations" do
                   expect(response).to have_http_status(:unprocessable_entity)
-                  expect(page).to have_content("New org must be a managing agent of #{other_user.organisation_name}, #{new_organisation_2.name}, and #{new_organisation_3.name} to make this change.")
+                  expect(page).to have_content("New org must be a managing agent of #{other_user.organisation.name}, #{new_organisation_2.name}, and #{new_organisation_3.name} to make this change.")
                 end
               end
             end
