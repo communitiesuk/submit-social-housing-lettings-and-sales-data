@@ -5,7 +5,7 @@ FactoryBot.define do
 
     created_by { assigned_to }
     owning_organisation { assigned_to.organisation }
-    managing_organisation { owning_organisation }
+    managing_organisation { assigned_to.organisation }
     created_at { Time.zone.now }
     updated_at { Time.zone.now }
     trait :in_progress do
