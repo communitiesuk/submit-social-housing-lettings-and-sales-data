@@ -78,14 +78,14 @@ FactoryBot.define do
       noint { 2 }
       privacynotice { 1 }
       age1_known { 0 }
-      age1 { Faker::Number.within(range: 27..55) }
+      age1 { Faker::Number.within(range: 27..45) }
       sex1 { %w[F M X R].sample }
       national { 18 }
       buy1livein { 1 }
       relat2 { "P" }
       proptype { 1 }
       age2_known { 0 }
-      age2 { Faker::Number.within(range: 25..55) }
+      age2 { Faker::Number.within(range: 25..45) }
       builtype { 1 }
       ethnic { 3 }
       ethnic_group { 17 }
