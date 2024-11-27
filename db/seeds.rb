@@ -120,7 +120,7 @@ unless Rails.env.test?
       users_with_logs.each do |user|
         FactoryBot.create(:sales_log, :shared_ownership_setup_complete, assigned_to: user)
         FactoryBot.create(:sales_log, :discounted_ownership_setup_complete, assigned_to: user)
-        FactoryBot.create(:sales_log, :outright_sale_setup_complete, assigned_to: user)
+        FactoryBot.create(:sales_log, :outright_sale_setup_complete, assigned_to: user) if Time.zone.today < Time.zone.local(2025, 4, 1)
         FactoryBot.create(:sales_log, :completed, assigned_to: user)
         FactoryBot.create_list(:sales_log, 2, :completed, :ignore_validation_errors, saledate: Time.zone.today - 1.year, assigned_to: user)
 
@@ -128,7 +128,6 @@ unless Rails.env.test?
 
         FactoryBot.create(:sales_log, :shared_ownership_setup_complete, saledate: Time.zone.today + 1.year, assigned_to: user)
         FactoryBot.create(:sales_log, :discounted_ownership_setup_complete, saledate: Time.zone.today + 1.year, assigned_to: user)
-        FactoryBot.create(:sales_log, :outright_sale_setup_complete, saledate: Time.zone.today + 1.year, assigned_to: user)
         FactoryBot.create(:sales_log, :completed, saledate: Time.zone.today + 1.year, assigned_to: user)
       end
 
