@@ -100,15 +100,20 @@ unless Rails.env.test?
     if Scheme.count.zero?
       beulahside = FactoryBot.create(:scheme, service_name: "Beulahside Care", owning_organisation: mhclg)
       abdullah = FactoryBot.create(:scheme, service_name: "Abdullahview Point", owning_organisation: mhclg)
+
+      FactoryBot.create(:location, scheme: beulahside, name: "Rectory Road", postcode: "CU193AA", location_code: "E09000033", location_admin_district: "Westminster", type_of_unit: 4, mobility_type: "N")
+      FactoryBot.create(:location, scheme: beulahside, name: "Smithy Lane", postcode: "DM25ODC", location_code: "E09000033", location_admin_district: "Westminster", type_of_unit: 1, mobility_type: "W")
+      FactoryBot.create(:location, scheme: abdullah, name: "Smithy Lane", postcode: "YX130WP", location_code: "E09000033", location_admin_district: "Westminster", type_of_unit: 2, mobility_type: "W")
+
       mhclg_scheme = FactoryBot.create(:scheme, :created_now, owning_organisation: mhclg)
       stock_owner_scheme = FactoryBot.create(:scheme, owning_organisation: stock_owner1)
 
       other_schemes = first_run ? other_orgs.sample(3).map { |org| FactoryBot.create(:scheme, owning_organisation: org) } : []
 
-      [beulahside, abdullah, mhclg_scheme, stock_owner_scheme, *other_schemes].each do |scheme|
+      [mhclg_scheme, stock_owner_scheme, *other_schemes].each do |scheme|
         FactoryBot.create(:location, scheme:)
       end
-      [abdullah, mhclg_scheme, *other_schemes].each do |scheme|
+      [beulahside, mhclg_scheme, *other_schemes].each do |scheme|
         FactoryBot.create_list(:location, 3, scheme:)
       end
     end
