@@ -18,7 +18,7 @@
   legend: legend(question, page_header, conditional),
   hint: { text: question.hint_text&.html_safe } do %>
 
-  <% question.displayed_answer_options(@log, current_user).map do |key, options| %>
+  <% question.displayed_answer_options(@log, current_user).each_with_index do |(key, options), index| %>
     <% if key.starts_with?("divider") %>
       <%= f.govuk_radio_divider %>
     <% else %>
@@ -28,12 +28,14 @@
           key,
           label: { text: options["value"] },
           hint: { text: options["hint"] },
+          link_errors: index.zero? ? true : nil,
           **stimulus_html_attributes(question) %>
       <% else %>
         <%= f.govuk_radio_button question.id,
           key,
           label: { text: options["value"] },
           hint: { text: options["hint"] },
+          link_errors: index.zero? ? true : nil,
           **stimulus_html_attributes(question) do %>
             <%= render partial: "#{conditional_question.type}_question", locals: {
               question: conditional_question,
