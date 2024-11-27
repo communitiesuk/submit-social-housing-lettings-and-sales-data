@@ -294,7 +294,7 @@ RSpec.describe CheckErrorsController, type: :request do
 
         it "displays correct clear links" do
           expect(page).to have_content("Make sure these answers are correct")
-          expect(page).to have_content("You didn’t answer this question")
+          expect(page).to have_content("No answer provided")
           expect(page).to have_link("Answer")
           expect(lettings_log.reload.earnings).to eq(nil)
         end
@@ -349,7 +349,7 @@ RSpec.describe CheckErrorsController, type: :request do
 
         it "displays correct clear links" do
           expect(page).to have_content("Make sure these answers are correct")
-          expect(page).to have_content("You didn’t answer this question")
+          expect(page).to have_content("No answer provided")
           expect(page).to have_link("Answer")
           expect(sales_log.reload.income1).to eq(nil)
         end
@@ -440,7 +440,7 @@ RSpec.describe CheckErrorsController, type: :request do
 
         it "correctly clears the values" do
           expect(page).to have_content("Make sure these answers are correct")
-          expect(page).to have_content("You didn’t answer this question")
+          expect(page).to have_content("No answer provided")
           expect(page.all(:button, value: "Clear").count).to eq(0)
           expect(lettings_log.reload.earnings).to eq(nil)
           expect(lettings_log.reload.incfreq).to eq(nil)
@@ -470,7 +470,7 @@ RSpec.describe CheckErrorsController, type: :request do
 
         it "displays correct clear links" do
           expect(page).to have_content("Make sure these answers are correct")
-          expect(page).to have_content("You didn’t answer this question")
+          expect(page).to have_content("No answer provided")
           expect(page.all(:button, value: "Clear").count).to eq(0)
           expect(sales_log.reload.income1).to eq(nil)
           expect(sales_log.reload.la).to eq(nil)

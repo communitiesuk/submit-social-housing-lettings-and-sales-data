@@ -1300,7 +1300,7 @@ RSpec.describe LettingsLogsController, type: :request do
 
       it "shows `you haven't answered this question` if the question wasn’t answered" do
         get "/lettings-logs/#{id}/income-and-benefits/check-answers"
-        expect(CGI.unescape_html(response.body)).to include("You didn’t answer this question")
+        expect(CGI.unescape_html(response.body)).to include("No answer provided")
       end
 
       it "does not allow you to change the answers for previous collection year logs" do

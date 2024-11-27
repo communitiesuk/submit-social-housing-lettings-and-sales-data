@@ -46,7 +46,7 @@ RSpec.describe CheckAnswersSummaryListCardComponent, type: :component do
     let(:log) { create(:lettings_log, :in_progress) }
 
     it "displays normal copy with muted colour " do
-      expect(rendered).to have_selector("span", class: "app-!-colour-muted", text: "You didn’t answer this question")
+      expect(rendered).to have_selector("span", class: "app-!-colour-muted", text: "No answer provided")
     end
   end
 
@@ -56,7 +56,7 @@ RSpec.describe CheckAnswersSummaryListCardComponent, type: :component do
     let(:log) { create(:lettings_log, :completed, creation_method: "bulk upload", tenancycode: nil, bulk_upload:) }
 
     it "displays tweaked copy in red" do
-      expect(rendered).to have_selector("span", class: "app-!-colour-muted", text: "You didn’t answer this question")
+      expect(rendered).to have_selector("span", class: "app-!-colour-muted", text: "No answer provided")
       expect(rendered).not_to have_selector("span", class: "app-!-colour-red", text: "You still need to answer this question")
     end
   end

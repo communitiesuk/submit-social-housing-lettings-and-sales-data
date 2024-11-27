@@ -577,7 +577,7 @@ RSpec.describe "Schemes scheme Features" do
             fill_in_and_save_location
             location.update!(location_code: nil)
             visit "/schemes/#{scheme.id}/locations/#{location.id}/check-answers"
-            expect(page).to have_content "You didn’t answer this question"
+            expect(page).to have_content "No answer provided"
           end
         end
 
@@ -666,7 +666,7 @@ RSpec.describe "Schemes scheme Features" do
             choose "Yes"
             click_button "Save changes"
             visit("/schemes/#{scheme.id}/check-answers")
-            expect(page).to have_content("You didn’t answer this question")
+            expect(page).to have_content("No answer provided")
           end
         end
 

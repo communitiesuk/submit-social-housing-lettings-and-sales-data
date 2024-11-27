@@ -281,7 +281,6 @@ RSpec.describe Form::Question, type: :model do
     end
 
     it "has an update answer link text helper" do
-      expect(question.action_text(lettings_log)).to match(/Answer/)
       lettings_log["incfreq"] = 0
       expect(question.action_text(lettings_log)).to match(/Change/)
     end
