@@ -41,6 +41,6 @@ en:
           address:
             not_found: "We could not find this address. Check the address data in your CSV file is correct and complete, or select the correct address using the CORE site."
             not_determined: "We could not find this address. Check the address data in your CSV file is correct and complete, or select the correct address using the CORE site."
-            not_answered: "Enter either the URPR or the address."
+            not_answered: "Enter either the UPRN or the address."
           nationality:
             invalid: "Select a valid nationality."
