@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Csv::SchemeCsvService do
-  let(:organisation) { create(:organisation) }
+  let(:organisation) { create(:organisation, name: "MHCLG") }
   let(:fixed_time) { Time.zone.local(2023, 6, 26) }
   let(:scheme) { create(:scheme, :export, owning_organisation: organisation, service_name: "Test name") }
   let(:location) { create(:location, :export, scheme:) }

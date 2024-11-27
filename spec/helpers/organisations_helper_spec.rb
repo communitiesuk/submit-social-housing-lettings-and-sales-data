@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe OrganisationsHelper do
   include TagHelper
   describe "display_organisation_attributes" do
-    let(:organisation) { create(:organisation) }
+    let(:organisation) { create(:organisation, :la, :holds_own_stock, address_line1: "2 Marsham Street", address_line2: "London", postcode: "SW1P 4DF", housing_registration_no: 1234, organisation_rent_periods: []) }
 
     it "has the correct values" do
       expect(display_organisation_attributes(organisation)).to eq(

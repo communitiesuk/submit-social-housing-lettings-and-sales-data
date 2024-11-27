@@ -41,5 +41,8 @@ FactoryBot.define do
       support_type { 2 }
       intended_stay { "M" }
     end
+    trait :created_now do
+      created_at { Time.zone.now }
+    end
   end
 end

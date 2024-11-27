@@ -5,7 +5,7 @@ FactoryBot.define do
 
     created_by { assigned_to }
     owning_organisation { assigned_to.organisation }
-    managing_organisation { owning_organisation }
+    managing_organisation { assigned_to.organisation }
     created_at { Time.zone.now }
     updated_at { Time.zone.now }
     trait :in_progress do
@@ -32,6 +32,17 @@ FactoryBot.define do
       jointpur { 2 }
       noint { 2 }
       privacynotice { 1 }
+      purchid { rand(999_999_999).to_s }
+    end
+    trait :discounted_ownership_setup_complete do
+      saledate_today
+      ownershipsch { 2 }
+      type { 9 }
+      jointpur { 1 }
+      jointmore { 1 }
+      noint { 2 }
+      privacynotice { 1 }
+      purchid { rand(999_999_999).to_s }
     end
     trait :outright_sale_setup_complete do
       saledate_today
@@ -67,14 +78,14 @@ FactoryBot.define do
       noint { 2 }
       privacynotice { 1 }
       age1_known { 0 }
-      age1 { 30 }
-      sex1 { "X" }
+      age1 { Faker::Number.within(range: 27..45) }
+      sex1 { %w[F M X R].sample }
       national { 18 }
       buy1livein { 1 }
       relat2 { "P" }
       proptype { 1 }
       age2_known { 0 }
-      age2 { 35 }
+      age2 { Faker::Number.within(range: 25..45) }
       builtype { 1 }
       ethnic { 3 }
       ethnic_group { 17 }
@@ -104,16 +115,16 @@ FactoryBot.define do
       inc2mort { 1 }
       uprn_known { 0 }
       address_line1 { "Address line 1" }
-      town_or_city { "Town or city" }
+      town_or_city { Faker::Address.city }
       la_known { 1 }
       la { "E09000003" }
       savingsnk { 1 }
       prevown { 1 }
       prevshared { 2 }
-      sex3 { "X" }
-      sex4 { "X" }
-      sex5 { "X" }
-      sex6 { "X" }
+      sex3 { %w[F M X R].sample }
+      sex4 { %w[F M X R].sample }
+      sex5 { %w[F M X R].sample }
+      sex6 { %w[F M X R].sample }
       mortgage { 20_000 }
       ecstat3 { 9 }
       ecstat4 { 3 }
@@ -122,6 +133,7 @@ FactoryBot.define do
       disabled { 1 }
       deposit { 80_000 }
       value { 110_000 }
+      value_value_check { 0 }
       grant { 10_000 }
       proplen { 10 }
       pregyrha { 1 }
@@ -161,6 +173,13 @@ FactoryBot.define do
           log.uprn = "10033558653"
           log.uprn_selection = 1
         end
+        if log.saledate >= Time.zone.local(2025, 4, 1)
+          log.relat2 = "X" if log.relat2 == "C"
+          log.relat3 = "X" if log.relat3 == "C"
+          log.relat4 = "X" if log.relat4 == "C"
+          log.relat5 = "X" if log.relat5 == "C"
+          log.relat6 = "X" if log.relat6 == "C"
+        end
       end
     end
     trait :with_uprn do
@@ -173,6 +192,13 @@ FactoryBot.define do
     end
     trait :imported do
       old_id { Random.hex }
+    end
+    trait :ignore_validation_errors do
+      to_create do |instance|
+        instance.valid?
+        instance.errors.clear
+        instance.save!(validate: false)
+      end
     end
   end
 end
