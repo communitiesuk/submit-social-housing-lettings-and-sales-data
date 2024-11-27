@@ -84,6 +84,22 @@ RSpec.describe MergeRequestsController, type: :request do
         end
       end
 
+      context "when the user updates merge request with organisation that is already part of another merge" do
+        let(:another_organisation) { create(:organisation) }
+        let(:other_merge_request) { create(:merge_request, merge_date: Time.zone.local(2022, 5, 4)) }
+        let(:params) { { merge_request: { merging_organisation: another_organisation.id, new_merging_org_ids: [] } } }
+
+        before do
+          MergeRequestOrganisation.create!(merge_request_id: other_merge_request.id, merging_organisation_id: another_organisation.id)
+          patch "/merge-request/#{merge_request.id}/merging-organisations", headers:, params:
+        end
+
+        it "displays the page with an error message" do
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(page).to have_content("Another merge request records #{another_organisation.name} as merging into #{other_merge_request.absorbing_organisation&.name} on 4 May 2022. Select another organisation or remove this organisation from the other merge request.")
+        end
+      end
+
       context "when the user selects an organisation that is a part of another merge" do
         let(:another_organisation) { create(:organisation) }
         let(:params) { { merge_request: { merging_organisation: another_organisation.id, new_merging_org_ids: [] } } }
@@ -394,6 +410,24 @@ RSpec.describe MergeRequestsController, type: :request do
             expect { request }.to change {
               merge_request.reload.merge_date
             }.from(nil).to(Time.zone.local(2022, 4, 10))
+          end
+        end
+
+        context "when merge date set to a date more than 1 year in the future" do
+          let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation) }
+          let(:params) do
+            { merge_request: { page: "merge_date", "merge_date(3i)": (Time.zone.now.day + 1).to_s, "merge_date(2i)": Time.zone.now.month.to_s, "merge_date(1i)": (Time.zone.now.year + 1).to_s } }
+          end
+
+          let(:request) do
+            patch "/merge-request/#{merge_request.id}", headers:, params:
+          end
+
+          it "displays the page with an error message" do
+            request
+
+            expect(response).to have_http_status(:unprocessable_entity)
+            expect(page).to have_content("The merge date must not be later than a year from today’s date.")
           end
         end
       end
