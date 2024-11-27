@@ -929,6 +929,11 @@ RSpec.describe Location, type: :model do
         expect(location.status).to eq(:deactivated)
       end
 
+      it "returns deactivated if the owning organisation has been merged" do
+        location.scheme.owning_organisation.merge_date = 2.days.ago
+        expect(location.status).to eq(:deactivated)
+      end
+
       it "returns deactivated if deactivation_date is in the past" do
         FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.yesterday, location:)
         location.save!

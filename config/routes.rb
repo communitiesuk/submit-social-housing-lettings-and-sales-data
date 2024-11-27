@@ -389,6 +389,11 @@ Rails.application.routes.draw do
     end
   end
 
+  get "create-test-lettings-log", to: "lettings_logs#create_test_log"
+  get "create-test-sales-log", to: "sales_logs#create_test_log"
+  get "create-setup-test-lettings-log", to: "lettings_logs#create_setup_test_log"
+  get "create-setup-test-sales-log", to: "sales_logs#create_setup_test_log"
+
   scope via: :all do
     match "/404", to: "errors#not_found"
     match "/429", to: "errors#too_many_requests", status: 429
