@@ -56,7 +56,7 @@ module Validations::Sales::SaleInformationValidations
     if over_tolerance?(record.mortgage_deposit_and_grant_total, record.value_with_discount, tolerance, strict: !record.discount.nil?) && record.discounted_ownership_sale?
       deposit_and_grant_sentence = record.grant.present? ? ", cash deposit (#{record.field_formatted_as_currency('deposit')}), and grant (#{record.field_formatted_as_currency('grant')})" : " and cash deposit (#{record.field_formatted_as_currency('deposit')})"
       discount_sentence = record.discount.present? ? " (#{record.field_formatted_as_currency('value')}) subtracted by the sum of the full purchase price (#{record.field_formatted_as_currency('value')}) multiplied by the percentage discount (#{record.discount}%)" : ""
-      %i[mortgageused mortgage value deposit ownershipsch discount grant].each do |field|
+      %i[mortgageused mortgage value deposit discount grant].each do |field|
         record.errors.add field, I18n.t("validations.sales.sale_information.#{field}.discounted_ownership_value",
                                         mortgage: record.mortgage&.positive? ? " (#{record.field_formatted_as_currency('mortgage')})" : "",
                                         deposit_and_grant_sentence:,
@@ -64,6 +64,12 @@ module Validations::Sales::SaleInformationValidations
                                         discount_sentence:,
                                         value_with_discount: record.field_formatted_as_currency("value_with_discount")).html_safe
       end
+      record.errors.add :ownershipsch, :skip_bu_error, message: I18n.t("validations.sales.sale_information.ownershipsch.discounted_ownership_value",
+                                                                       mortgage: record.mortgage&.positive? ? " (#{record.field_formatted_as_currency('mortgage')})" : "",
+                                                                       deposit_and_grant_sentence:,
+                                                                       mortgage_deposit_and_grant_total: record.field_formatted_as_currency("mortgage_deposit_and_grant_total"),
+                                                                       discount_sentence:,
+                                                                       value_with_discount: record.field_formatted_as_currency("value_with_discount")).html_safe
     end
   end
 
