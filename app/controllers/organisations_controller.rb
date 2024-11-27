@@ -24,7 +24,7 @@ class OrganisationsController < ApplicationController
   end
 
   def schemes
-    organisation_schemes = Scheme.visible.where(owning_organisation: [@organisation] + @organisation.parent_organisations)
+    organisation_schemes = Scheme.visible.where(owning_organisation: [@organisation] + @organisation.parent_organisations + @organisation.absorbed_organisations.visible.merged_during_open_collection_period)
 
     @pagy, @schemes = pagy(filter_manager.filtered_schemes(organisation_schemes, search_term, session_filters))
     @searched = search_term.presence

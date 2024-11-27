@@ -2,7 +2,6 @@ class Form::Sales::Pages::PreviousBedrooms < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "previous_bedrooms"
-    @copy_key = "sales.sale_information.frombeds"
     @depends_on = [
       {
         "soctenant" => 1,

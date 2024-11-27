@@ -2,7 +2,6 @@ class Form::Sales::Questions::DepositAmount < ::Form::Question
   def initialize(id, hsh, subsection, ownershipsch:, optional:)
     super(id, hsh, subsection)
     @id = "deposit"
-    @copy_key = "sales.sale_information.deposit"
     @type = "numeric"
     @min = 0
     @max = 999_999

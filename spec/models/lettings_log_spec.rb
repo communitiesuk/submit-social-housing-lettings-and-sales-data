@@ -809,6 +809,21 @@ RSpec.describe LettingsLog do
         expect { lettings_log.update!(nationality_all_group: nil, declaration: 1) }.not_to change(lettings_log, :nationality_all)
       end
     end
+
+    context "when form year changes and LA is no longer active" do
+      before do
+        LocalAuthority.find_by(code: "E08000003").update!(end_date: Time.zone.today)
+      end
+
+      it "removes the LA" do
+        lettings_log.update!(startdate: Time.zone.yesterday, la: "E08000003")
+        expect(lettings_log.reload.la).to eq("E08000003")
+
+        lettings_log.update!(startdate: Time.zone.tomorrow)
+        expect(lettings_log.reload.la).to eq(nil)
+        expect(lettings_log.reload.is_la_inferred).to eq(false)
+      end
+    end
   end
 
   describe "optional fields" do
@@ -2003,6 +2018,18 @@ RSpec.describe LettingsLog do
 
       it "returns true" do
         expect(lettings_log).to be_non_location_setup_questions_completed
+      end
+    end
+  end
+
+  describe "#process_address_change!" do
+    context "when uprn_selection is uprn_not_listed" do
+      let(:log) { build(:lettings_log, uprn_selection: "uprn_not_listed", address_line1_input: "Address line 1", postcode_full_input: "AA1 1AA") }
+
+      it "sets log address fields, including postcode known" do
+        expect { log.process_address_change! }.to change(log, :address_line1).from(nil).to("Address line 1")
+                                              .and change(log, :postcode_full).from(nil).to("AA1 1AA")
+                                              .and change(log, :postcode_known).from(nil).to(1)
       end
     end
   end

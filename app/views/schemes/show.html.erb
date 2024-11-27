@@ -52,7 +52,7 @@
   </div>
 </div>
 
-<% if @scheme.owning_organisation.active? && SchemePolicy.new(current_user, @scheme).deactivate? %>
+<% if @scheme.owning_organisation.status == :active && SchemePolicy.new(current_user, @scheme).deactivate? %>
   <%= toggle_scheme_link(@scheme) %>
 <% end %>
 

@@ -9,13 +9,11 @@ nav_order: 1
 
 The setup this log section is treated slightly differently from the rest of the form. It is more accurately viewed as providing metadata about the form than as being part of the form itself. It also needs to know far more about the application specific context than other parts of the form such as who the current user is, what organisation they’re part of and what role they have etc.
 
-As a result it’s not modelled as part of the config but rather as code. It still uses the same [Form Runner](/form/runner) components though.
-
-## Features the Form Config supports
+## Features the Form supports
 
 - Defining sections, subsections, pages and questions that fit the GOV.UK task list pattern
 
-- Auto-generated routes – URLs are automatically created from dasherized page names
+- Auto-generated routes – URLs are automatically created from dasherized page names (ids)
 
 - Data persistence requires a database field to exist which matches the name/id for each question (and answer option for checkbox questions)
 
@@ -39,63 +37,84 @@ As a result it’s not modelled as part of the config but rather as code. It sti
 
 - For complex HTML guidance partials can be referenced
 
-## JSON Config
+## Form definition
 
-The form for this is driven by a JSON file in `/config/forms/{start_year}_{end_year}.json`
+The Form should follow the structure:
 
-The JSON should follow the structure:
+```
+SECTIONS = [
+  Form::Sales::Sections::Section
+].freeze
 
-```jsonc
-{
-  "form_type": "lettings" / "sales",
-  "start_year": Integer, // i.e. 2020
-  "end_year": Integer, // i.e. 2021
-  "sections": {
-    "[snake_case_section_name_string]": {
-      "label": String,
-      "description": String,
-      "subsections": {
-        "[snake_case_subsection_name_string]": {
-          "label": String,
-          "pages": {
-            "[snake_case_page_name_string]": {
-              "header": String,
-              "description": String,
-              "questions": {
-                "[snake_case_question_name_string]": {
-                  "header": String,
-                  "hint_text": String,
-                  "check_answer_label": String,
-                  "type": "text" / "numeric" / "radio" / "checkbox" / "date",
-                  "min": Integer, // numeric only
-                  "max": Integer, // numeric only
-                  "step": Integer, // numeric only
-                  "width": 2 / 3 / 4 / 5 / 10 / 20, // text and numeric only
-                  "prefix": String, // numeric only
-                  "suffix": String, //numeric only
-                  "answer_options": { // checkbox and radio only
-                    "0": String,
-                    "1": String
-                  },
-                  "conditional_for": {
-                    "[snake_case_question_to_enable_1_name_string]": ["condition-that-enables"],
-                    "[snake_case_question_to_enable_2_name_string]": ["condition-that-enables"]
-                  },
-                  "inferred_answers": { "field_that_gets_inferred_from_current_field": { "is_that_field_inferred": true } },
-                  "inferred_check_answers_value": [{
-                    "condition": { "field_name_for_inferred_check_answers_condition": "field_value_for_inferred_check_answers_condition" },
-                    "value": "Inferred value that gets displayed if condition is met"
-                  }]
-                }
-              },
-              "depends_on": [{ "question_key": "answer_value_required_for_this_page_to_be_shown" }]
-            }
-          }
-        }
-      }
-    }
-  }
-}
+Form.new(nil, start_year, SECTIONS, form_type - "lettings" / "sales")
+
+class Form::Sales::Sections::Section < ::Form::Section
+  def initialize(id, hsh, form)
+    super
+    @id = [snake_case_section_name_string]
+    @label = [String]
+    @description = [String]
+    @subsections = [Form::Sales::Subsections::Subsection.new(nil, nil, self)]
+  end
+end
+
+class Form::Sales::Subsections::Subsection < ::Form::Subsection
+  def initialize(id, hsh, section)
+    super
+    @id = [snake_case_subsection_name_string]
+    @label = [String]
+    @depends_on = [{ "question_key/method_key": "answer_value_required_for_this_subsection_to_be_shown" }]
+  end
+
+  def pages
+    @pages ||= [Form::Sales::Pages::Page.new(nil, nil, self),]
+  end
+end
+
+class Form::Sales::Pages::Page < ::Form::Page
+  def initialize(id, hsh, subsection)
+    super
+    @id = [snake_case_page_name_string]
+    @header = [String,]
+    @depends_on = [{ "question_key": "answer_value_required_for_this_page_to_be_shown" }]
+  end
+
+  def questions
+    @questions ||= [
+      Form::Sales::Questions::Question.new(nil, nil, self),
+    ]
+  end
+end
+
+class Form::Sales::Questions::Question < ::Form::Question
+  def initialize(id, hsh, page)
+    super
+    @id = [snake_case_question_name_string]
+    @hint_text = [String,]
+    @check_answer_label = [String,]
+    @type = ["text" / "numeric" / "radio" / "checkbox" / "date",]
+    @min = [Integer, // numeric only]
+    @max = [Integer, // numeric only]
+    @step = [Integer, // numeric only]
+    @width = [2 / 3 / 4 / 5 / 10 / 20, // text and numeric only]
+    @prefix = [String, // numeric only]
+    @suffix = [String, //numeric only]
+    @answer_options = { // checkbox and radio only
+      "0": String,
+      "1": String
+    },
+    @conditional_for = {
+      "[snake_case_question_to_enable_1_name_string]": ["condition-that-enables"],
+      "[snake_case_question_to_enable_2_name_string]": ["condition-that-enables"]
+    },
+    @inferred_answers = { "field_that_gets_inferred_from_current_field": { "is_that_field_inferred": true } },
+    @inferred_check_answers_value = [{
+      "condition": { "field_name_for_inferred_check_answers_condition": "field_value_for_inferred_check_answers_condition" },
+      "value": "Inferred value that gets displayed if condition is met"
+    }]
+    @question_number = Integer
+  end
+end
 ```
 
 Assumptions made by the format:
@@ -127,47 +146,8 @@ Assumptions made by the format:
 
 Form navigation works by stepping sequentially through every page defined in the JSON form definition for the given subsection. For every page it checks if it has "depends_on" conditions. If it does, it evaluates them to determine whether that page should be show or not.
 
-In this way we can build up whole branches by having:
-
-```jsonc
-"page_1": { "questions": { "question_1: "answer_options": ["A", "B"] } },
-"page_2": { "questions": { "question_2: "answer_options": ["C", "D"] }, "depends_on": [{ "question_1": "A" }] },
-"page_3": { "questions": { "question_3: "answer_options": ["E", "F"] }, "depends_on": [{ "question_1": "A" }] },
-"page_4": { "questions": { "question_4: "answer_options": ["G", "H"] }, "depends_on": [{ "question_1": "B" }] },
-```
-
-## JSON form validation against Schema
-
-To validate the form JSON against the schema you can run:
-
-```bash
-rake form_definition:validate["config/forms/2021_2022.json"]
-```
-
-Note: you may have to escape square brackets in zsh:
-
-```bash
-rake form_definition:validate\["config/forms/2021_2022.json"\]
-```
-
-This will validate the given form definition against the schema in `config/forms/schema/generic.json`.
-
-You can also run:
-
-```bash
-rake form_definition:validate_all
-```
-
-This will validate all forms in directories `["config/forms", "spec/fixtures/forms"]`
+We can also define custom `routed_to?` methods on pages for more complex routing logic.
 
 ## Form models and definition
 
 For information about the form model and related models (section, subsection, page, question) and how these relate to each other see [form definition](/form/definition).
-
-## Improvements that could be made
-
-- JSON schema definition could be expanded such that we can better automatically validate that a given config is valid and internally consistent
-
-- Generators could parse a given valid JSON form and generate the required database migrations to ensure all the expected fields exist and are of a compatible type
-
-- The parsed form could be visualised using something like GraphViz to help manually verify the coded config meets requirements

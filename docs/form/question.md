@@ -10,25 +10,25 @@ Questions are under the page level of the form definition.
 
 An example question might look something like this:
 
-```json
-"postcode_known": {
-  "check_answer_label": "Do you know the property postcode?",
-  "header": "Do you know the property’s postcode?",
-  "hint_text": "",
-  "type": "radio",
-  "answer_options": {
-    "1": {
-      "value": "Yes"
+```
+class Form::Sales::Questions::PostcodeKnown < ::Form::Question
+  def initialize(id, hsh, page)
+    super
+    @id = postcode_known
+    @hint_text = ""
+    @header =  "Do you know the property postcode?"
+    @check_answer_label =  "Do you know the property postcode?"
+    @type = "radio"
+    @answer_options = {
+      "1" => { "value" => "Yes" },
+      "0" => { "value" => "No" }
     },
-    "0": {
-      "value": "No"
-    }
-  },
-  "conditional_for": {
-    "postcode_full": [1]
-  },
-  "hidden_in_check_answers": true
-}
+    @conditional_for = {
+      "postcode_full" => [1]
+    },
+    @hidden_in_check_answers = true
+  end
+end
 ```
 
 In the above example the the question has the id `postcode_known`.
@@ -45,15 +45,11 @@ The `conditional_for` contains the value needed to be selected by the data input
 
 the `hidden_in_check_answers` is used to hide a value from displaying on the check answers page. You only need to provide this if you want to set it to true in order to hide the value for some reason e.g. it's one of two questions appearing on a page and the other question is displayed on the check answers page. It's also worth noting that you can declare this as a with a `depends_on` which can be useful for conditionally displaying values on the check answers page. For example:
 
-```json
-"hidden_in_check_answers": {
-  "depends_on": [
-    {
-      "age6_known": 0
-    },
-    {
-      "age6_known": 1
-    }
+```
+@hidden_in_check_answers = {
+  "depends_on" => [
+    { "age6_known" => 0 },
+    { "age6_known" => 1 }
   ]
 }
 ```
@@ -62,25 +58,25 @@ Would mean the question the above is attached to would be hidden in the check an
 
 The answer the data inputter provides to some questions allows us to infer the values of other questions we might have asked in the form, allowing us to save the data inputters some time. An example of how this might look is as follows:
 
-```json
-"postcode_full": {
-  "check_answer_label": "Postcode",
-  "header": "What is the property’s postcode?",
-  "hint_text": "",
-  "type": "text",
-  "width": 5,
-  "inferred_answers": {
-    "la": {
-      "is_la_inferred": true
+```
+class Form::Sales::Questions::PostcodeFull < ::Form::Question
+  def initialize(id, hsh, page)
+    super
+    @id = postcode_full
+    @hint_text = ""
+    @header =  "What is the property’s postcode?""
+    @check_answer_label =  "Postcode""
+    @type = "text"
+    @width = 5
+    @inferred_answers = {
+      "la" => { "is_la_inferred" => true }
     }
-  },
-  "inferred_check_answers_value": [{
-    "condition": {
-      "postcode_known": 0
-    },
-    "value": "Not known"
-  }]
-}
+    @inferred_check_answers_value => [{
+      "condition" => { "postcode_known" => 0 },
+      "value": "Not known"
+    }]
+  end
+end
 ```
 
 In the above example the width is an optional attribute and can be provided for text type questions to determine the width of the text box on the page when when the question is displayed to a user (this allows you to match the width of the text box on the page to that of the design for a question).

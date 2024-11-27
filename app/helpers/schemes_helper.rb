@@ -20,11 +20,14 @@ module SchemesHelper
   end
 
   def owning_organisation_options(current_user)
-    all_orgs = Organisation.visible.map { |org| OpenStruct.new(id: org.id, name: org.name) }
-    user_org = [OpenStruct.new(id: current_user.organisation_id, name: current_user.organisation.name)]
-    stock_owners = current_user.organisation.stock_owners.visible.map { |org| OpenStruct.new(id: org.id, name: org.name) }
-    merged_organisations = current_user.organisation.absorbed_organisations.visible.merged_during_open_collection_period.map { |org| OpenStruct.new(id: org.id, name: org.name) }
-    current_user.support? ? all_orgs : user_org + stock_owners + merged_organisations
+    if current_user.support?
+      Organisation.visible.map { |org| OpenStruct.new(id: org.id, name: org.name) }
+    else
+      user_org = [current_user.organisation]
+      stock_owners = current_user.organisation.stock_owners.visible.filter { |org| org.status == :active || (org.status == :merged && org.merge_date >= FormHandler.instance.start_date_of_earliest_open_for_editing_collection_period) }
+      merged_organisations = current_user.organisation.absorbed_organisations.visible.merged_during_open_collection_period
+      (user_org + stock_owners + merged_organisations).map { |org| OpenStruct.new(id: org.id, name: org.name) }
+    end
   end
 
   def null_option
@@ -81,7 +84,12 @@ module SchemesHelper
     when :deactivating_soon
       "This scheme deactivates on #{scheme.last_deactivation_date.to_formatted_s(:govuk_date)}. Any locations you add will be deactivated on the same date. Reactivate the scheme to add locations active after this date."
     when :deactivated
-      "This scheme deactivated on #{scheme.last_deactivation_date.to_formatted_s(:govuk_date)}. Any locations you add will be deactivated on the same date. Reactivate the scheme to add locations active after this date."
+      case scheme.owning_organisation.status
+      when :active
+        "This scheme deactivated on #{scheme.last_deactivation_date.to_formatted_s(:govuk_date)}. Any locations you add will be deactivated on the same date. Reactivate the scheme to add locations active after this date."
+      when :merged
+        "This scheme has been deactivated due to #{scheme.owning_organisation.name} merging into #{scheme.owning_organisation.absorbing_organisation.name} on #{scheme.owning_organisation.merge_date.to_formatted_s(:govuk_date)}. Any locations you add will be deactivated on the same date. Use the after merge organisation for schemes and locations active after this date."
+      end
     end
   end
 

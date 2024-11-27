@@ -51,7 +51,7 @@ class Form::Question
   delegate :form, to: :subsection
 
   def copy_key
-    @copy_key ||= "#{form.type}.#{subsection.id}.#{id}"
+    @copy_key ||= "#{form.type}.#{subsection.copy_key}.#{id}"
   end
 
   def check_answer_label

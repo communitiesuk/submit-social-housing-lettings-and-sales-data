@@ -89,9 +89,47 @@ RSpec.describe SchemesController, type: :request do
         end
       end
 
+      context "when a recently absorbed organisation has schemes" do
+        let(:absorbed_org) { create(:organisation) }
+        let!(:absorbed_org_schemes) { create_list(:scheme, 2, owning_organisation: absorbed_org) }
+
+        before do
+          absorbed_org.merge_date = 2.days.ago
+          absorbed_org.absorbing_organisation = user.organisation
+          absorbed_org.save!
+        end
+
+        it "shows absorbed organisation schemes" do
+          get "/schemes"
+          follow_redirect!
+          absorbed_org_schemes.each do |scheme|
+            expect(page).to have_content(scheme.id_to_display)
+          end
+        end
+      end
+
+      context "when a non-recently absorbed organisation has schemes" do
+        let(:absorbed_org) { create(:organisation) }
+        let!(:absorbed_org_schemes) { create_list(:scheme, 2, owning_organisation: absorbed_org) }
+
+        before do
+          absorbed_org.merge_date = 2.years.ago
+          absorbed_org.absorbing_organisation = user.organisation
+          absorbed_org.save!
+        end
+
+        it "shows absorbed organisation schemes" do
+          get "/schemes"
+          follow_redirect!
+          absorbed_org_schemes.each do |scheme|
+            expect(page).not_to have_content(scheme.id_to_display)
+          end
+        end
+      end
+
       context "when filtering" do
         context "with owning organisation filter" do
-          context "when user org does not have owning orgs" do
+          context "when user org does not have owning orgs or recently absorbed orgs" do
             it "does not show filter" do
               expect(page).not_to have_content("Owned by")
             end
@@ -700,6 +738,27 @@ RSpec.describe SchemesController, type: :request do
         end
       end
 
+      context "when coordinator attempts to see scheme belonging to a recently absorbed organisation" do
+        let(:absorbed_organisation) { create(:organisation) }
+        let!(:specific_scheme) { create(:scheme, owning_organisation: absorbed_organisation) }
+
+        before do
+          absorbed_organisation.merge_date = 2.days.ago
+          absorbed_organisation.absorbing_organisation = user.organisation
+          absorbed_organisation.save!
+
+          get "/schemes/#{specific_scheme.id}"
+        end
+
+        it "shows the scheme" do
+          expect(page).to have_content(specific_scheme.id_to_display)
+        end
+
+        it "allows editing" do
+          expect(page).to have_link("Change")
+        end
+      end
+
       context "when the scheme has all details but no confirmed locations" do
         it "shows the scheme as incomplete with text to explain" do
           get scheme_path(specific_scheme)
@@ -1144,6 +1203,31 @@ RSpec.describe SchemesController, type: :request do
             post "/schemes", params: params
             expect(Scheme.last.owning_organisation_id).to eq(user.organisation.stock_owners.first.id)
           end
+        end
+      end
+
+      context "when making a scheme in an organisation recently absorbed by the users organisation" do
+        let(:absorbed_organisation) { create(:organisation) }
+        let(:params) do
+          { scheme: { service_name: "  testy ",
+                      sensitive: "1",
+                      scheme_type: "Foyer",
+                      registered_under_care_act: "No",
+                      owning_organisation_id: absorbed_organisation.id,
+                      arrangement_type: "D" } }
+        end
+
+        before do
+          absorbed_organisation.merge_date = 2.days.ago
+          absorbed_organisation.absorbing_organisation = user.organisation
+          absorbed_organisation.save!
+        end
+
+        it "creates a new scheme for this organisation and renders correct page" do
+          expect { post "/schemes", params: }.to change(Scheme, :count).by(1)
+          follow_redirect!
+          expect(response).to have_http_status(:ok)
+          expect(page).to have_content("What client group is this scheme intended for?")
         end
       end
     end
