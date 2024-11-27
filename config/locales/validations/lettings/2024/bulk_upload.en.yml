@@ -50,6 +50,8 @@ en:
             invalid: "Age of person %{person_num} must be a number or the letter R"
           address:
             not_found: "We could not find this address. Check the address data in your CSV file is correct and complete, or select the correct address using the CORE site."
+            not_determined: "There are multiple matches for this address, you can choose to correct the log in the service and select the address manually or answer correct UPRN in the csv."
+            not_answered: "Enter either the URPR or the address."
           nationality:
             invalid: "Select a valid nationality."
           charges:
