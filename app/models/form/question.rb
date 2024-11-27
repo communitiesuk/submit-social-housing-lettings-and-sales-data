@@ -130,9 +130,11 @@ class Form::Question
   end
 
   def action_text(log, correcting_hard_validation: false)
-    return "Answer" unless displayed_as_answered?(log)
-
-    correcting_hard_validation ? "Clear" : "Change"
+    if displayed_as_answered?(log)
+      correcting_hard_validation ? "Clear" : "Change"
+    else
+      ""
+    end
   end
 
   def displayed_as_answered?(log)
@@ -237,6 +239,22 @@ class Form::Question
   def unanswered_error_message
     question_text = error_display_label.presence || "this question."
     I18n.t("validations.not_answered", question: question_text.downcase)
+  end
+
+  def summary_error_message
+    question_text = lowercase_first_letter(error_label.presence || check_answer_label.presence || header.presence || id.humanize) || "this question."
+    case type
+    when "checkbox"
+      "Answer #{question_text}"
+    when "radio"
+      "Select #{question_text}"
+    when "select"
+      "Select #{question_text}"
+    when "date"
+      "Set #{question_text}"
+    else
+      "Enter #{question_text}"
+    end
   end
 
   def suffix_label(log)

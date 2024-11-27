@@ -55,11 +55,16 @@ private
     [question.question_number_string, question.check_answer_label.to_s.presence || question.header.to_s].compact.join(" - ")
   end
 
+  def unanswered_action_href(question, log)
+    referrer = question.displayed_as_answered?(log) ? "check_answers" : "check_answers_new_answer"
+    send("#{log.model_name.param_key}_#{question.page.id}_path", log, referrer:)
+  end
+
   def unanswered_value(log:, question:)
     if log.creation_method_bulk_upload? && log.bulk_upload.present? && !log.optional_fields.include?(question.id)
       "<span class=\"app-!-colour-red\">You still need to answer this question</span>".html_safe
     else
-      "<span class=\"app-!-colour-muted\">You didn’t answer this question</span>".html_safe
+      govuk_link_to question.summary_error_message, unanswered_action_href(question, log), class: "govuk-link govuk-link--no-visited-state"
     end
   end
 end

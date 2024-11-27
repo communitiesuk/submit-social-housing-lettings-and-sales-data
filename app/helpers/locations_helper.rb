@@ -64,8 +64,8 @@ module LocationsHelper
     send("scheme_location_#{attribute}_path", location.scheme, location, referrer: "check_answers", route: params[:route])
   end
 
-  def action_text_helper(attr, location)
-    attr[:value].blank? || (attr[:attribute] == "availability" && location.startdate.blank?) ? "Answer" : "Change"
+  def location_action_text_helper(attr, location)
+    attr[:value].blank? || (attr[:attribute] == "availability" && location.startdate.blank?) ? "" : "Change"
   end
 
   def toggle_location_link(location)
@@ -93,6 +93,17 @@ module LocationsHelper
     elsif user.data_coordinator? && user.organisation.parent_organisations.include?(scheme.owning_organisation)
       "This location belongs to your stock owner #{scheme.owning_organisation.name}."
     end
+  end
+
+  def location_details_link_message(attribute)
+    text = lowercase_first_letter(attribute[:name])
+    messages = {
+      "local_authority" => "Select #{text}",
+      "type_of_unit" => "Select #{text}",
+      "mobility_standards" => "Select #{text}",
+      "availability" => "Set #{text}",
+    }
+    messages[attribute[:attribute]] || "Enter #{text}"
   end
 
 private

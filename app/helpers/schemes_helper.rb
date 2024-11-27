@@ -76,6 +76,11 @@ module SchemesHelper
     end
   end
 
+  def change_link_text(question_id, scheme)
+    attribute_value = scheme.public_send(question_id)
+    attribute_value.nil? ? "" : "Change"
+  end
+
   def scheme_status_hint(scheme)
     case scheme.status
     when :deactivating_soon
@@ -91,6 +96,31 @@ module SchemesHelper
     return if organisation.schemes_deduplicated_at.present? && organisation.schemes_deduplicated_at > organisation.absorbed_organisations.map(&:merge_date).max
 
     organisation.owned_schemes.duplicate_sets.any? || organisation.owned_schemes.any? { |scheme| scheme.locations.duplicate_sets.any? }
+  end
+
+  def scheme_edit_path(scheme, attribute)
+    case attribute[:id]
+    when "primary_client_group"
+      scheme_primary_client_group_path(scheme, referrer: "check-answers")
+    when "has_other_client_group"
+      scheme_confirm_secondary_client_group_path(scheme, referrer: "check-answers")
+    when "secondary_client_group"
+      scheme_secondary_client_group_path(scheme, referrer: "check-answers")
+    when "support_type", "intended_stay"
+      scheme_support_path(scheme, referrer: "check-answers")
+    end
+  end
+
+  def scheme_details_link_message(attribute)
+    text = lowercase_first_letter(attribute[:name])
+    messages = {
+      "primary_client_group" => "Select #{text}",
+      "secondary_client_group" => "Select #{text}",
+      "support_type" => "Select #{text}",
+      "intended_stay" => "Select #{text}",
+      "has_other_client_group" => "Answer if it #{text}",
+    }
+    messages[attribute[:id]] || "Enter #{text}"
   end
 
 private
