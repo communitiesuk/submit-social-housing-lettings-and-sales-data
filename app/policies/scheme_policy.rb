@@ -12,7 +12,7 @@ class SchemePolicy
     if scheme == Scheme
       true
     else
-      scheme_owned_by_user_org_or_stock_owner
+      scheme_owned_by_user_org_or_stock_owner_or_recently_absorbed_org
     end
   end
 
@@ -27,7 +27,7 @@ class SchemePolicy
   def update?
     return true if user.support?
 
-    user.data_coordinator? && scheme_owned_by_user_org_or_stock_owner
+    user.data_coordinator? && scheme_owned_by_user_org_or_stock_owner_or_recently_absorbed_org
   end
 
   def changes?
@@ -41,7 +41,7 @@ class SchemePolicy
     define_method method_name do
       return true if user.support?
 
-      scheme_owned_by_user_org_or_stock_owner
+      scheme_owned_by_user_org_or_stock_owner_or_recently_absorbed_org
     end
   end
 
@@ -61,7 +61,7 @@ class SchemePolicy
     define_method method_name do
       return true if user.support?
 
-      user.data_coordinator? && scheme_owned_by_user_org_or_stock_owner
+      user.data_coordinator? && scheme_owned_by_user_org_or_stock_owner_or_recently_absorbed_org
     end
   end
 
@@ -78,8 +78,11 @@ class SchemePolicy
 
 private
 
-  def scheme_owned_by_user_org_or_stock_owner
-    scheme&.owning_organisation == user.organisation || user.organisation.stock_owners.exists?(scheme&.owning_organisation_id)
+  def scheme_owned_by_user_org_or_stock_owner_or_recently_absorbed_org
+    scheme_owned_by_user_org = scheme&.owning_organisation == user.organisation
+    scheme_owned_by_stock_owner = user.organisation.stock_owners.exists?(scheme&.owning_organisation_id)
+    scheme_owned_by_recently_absorbed_org = user.organisation.absorbed_organisations.visible.merged_during_open_collection_period.exists?(scheme&.owning_organisation_id)
+    scheme_owned_by_user_org || scheme_owned_by_stock_owner || scheme_owned_by_recently_absorbed_org
   end
 
   def has_any_logs_in_editable_collection_period

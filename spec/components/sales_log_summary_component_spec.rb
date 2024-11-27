@@ -16,7 +16,7 @@ RSpec.describe SalesLogSummaryComponent, type: :component do
     it "shows the log summary with organisational relationships" do
       result = render_inline(described_class.new(current_user: support_user, log: sales_log))
 
-      expect(result).to have_content("Owned by\n              MHCLG")
+      expect(result).to have_content("Owned by\n              #{sales_log.owning_organisation.name}")
       expect(result).not_to have_content("Managed by")
     end
   end
