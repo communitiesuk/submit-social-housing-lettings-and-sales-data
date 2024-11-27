@@ -118,6 +118,10 @@ class SchemesController < ApplicationController
     validation_errors scheme_params
 
     if @scheme.errors.empty? && @scheme.save
+      if @scheme.owning_organisation.merge_date.present?
+        deactivation = SchemeDeactivationPeriod.new(scheme: @scheme, deactivation_date: @scheme.owning_organisation.merge_date)
+        deactivation.save!(validate: false)
+      end
       redirect_to scheme_primary_client_group_path(@scheme)
     else
       if @scheme.errors.any? { |error| error.attribute == :owning_organisation }
@@ -152,7 +156,7 @@ class SchemesController < ApplicationController
           flash[:notice] = if scheme_previously_confirmed
                              "#{@scheme.service_name} has been updated."
                            else
-                             "#{@scheme.service_name} has been created. It does not require helpdesk approval."
+                             "#{@scheme.service_name} has been created."
                            end
           redirect_to scheme_path(@scheme)
         end

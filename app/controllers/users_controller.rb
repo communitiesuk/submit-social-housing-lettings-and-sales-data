@@ -114,6 +114,7 @@ class UsersController < ApplicationController
 
     validate_attributes
     if @user.errors.empty? && @user.save
+      flash[:notice] = "Invitation sent to #{@user.email}"
       redirect_to created_user_redirect_path
     else
       unless @user.errors[:organisation].empty?
