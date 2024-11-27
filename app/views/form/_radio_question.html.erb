@@ -24,14 +24,14 @@
     <% else %>
       <% conditional_question = find_conditional_question(@page, question, key) %>
       <% if conditional_question.nil? %>
-        <%= f.govuk_radio_button question.id,
+        <%= f.govuk_radio_button question.id.to_sym,
           key,
           label: { text: options["value"] },
           hint: { text: options["hint"] },
           link_errors: index.zero? ? true : nil,
           **stimulus_html_attributes(question) %>
       <% else %>
-        <%= f.govuk_radio_button question.id,
+        <%= f.govuk_radio_button question.id.to_sym,
           key,
           label: { text: options["value"] },
           hint: { text: options["hint"] },
