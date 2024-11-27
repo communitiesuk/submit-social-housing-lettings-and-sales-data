@@ -529,7 +529,7 @@ RSpec.describe MergeRequestsController, type: :request do
             patch "/merge-request/#{merge_request.id}", headers:, params:
           end
 
-          it "updates has_helpdesk ticket and clears helpdesk_ticket" do
+          it "updates has_helpdesk_ticket and clears helpdesk_ticket" do
             request
             expect(merge_request.reload.has_helpdesk_ticket).to eq(false)
             expect(merge_request.helpdesk_ticket).to eq(nil)
@@ -545,7 +545,7 @@ RSpec.describe MergeRequestsController, type: :request do
             patch "/merge-request/#{merge_request.id}", headers:, params:
           end
 
-          it "updates has_helpdesk ticket and clears helpdesk_ticket" do
+          it "updates has_helpdesk_ticket and clears helpdesk_ticket" do
             request
             expect(merge_request.reload.has_helpdesk_ticket).to eq(true)
             expect(merge_request.helpdesk_ticket).to eq("321")
