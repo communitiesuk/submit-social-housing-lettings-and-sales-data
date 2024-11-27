@@ -173,6 +173,13 @@ FactoryBot.define do
           log.uprn = "10033558653"
           log.uprn_selection = 1
         end
+        if log.saledate >= Time.zone.local(2025, 4, 1)
+          log.relat2 = "X" if log.relat2 == "C"
+          log.relat3 = "X" if log.relat3 == "C"
+          log.relat4 = "X" if log.relat4 == "C"
+          log.relat5 = "X" if log.relat5 == "C"
+          log.relat6 = "X" if log.relat6 == "C"
+        end
       end
     end
     trait :with_uprn do
