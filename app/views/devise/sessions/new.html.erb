@@ -11,6 +11,8 @@
       <h1 class="govuk-heading-l">
         <%= content_for(:title) %>
       </h1>
+      
+      <%= render "devise/shared/links" %>
 
       <%= f.govuk_email_field :email,
         label: { text: "Email address" },
@@ -25,5 +27,3 @@
     </div>
   </div>
 <% end %>
-
-<%= render "devise/shared/links" %>

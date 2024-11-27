@@ -61,7 +61,7 @@ RSpec.describe "User Features" do
   context "when the user has forgotten their password" do
     it "is redirected to the reset password page when they click the reset password link" do
       visit("/lettings-logs")
-      click_link("reset your password")
+      click_link("Forgot password")
       expect(page).to have_current_path("/account/password/new")
     end
 
@@ -744,7 +744,7 @@ RSpec.describe "User Features" do
 
       it "is redirected to the reset password page when they click the reset password link" do
         visit("/account/sign-in")
-        click_link("reset your password")
+        click_link("Forgot password")
         expect(page).to have_current_path("/account/password/new")
       end
 
