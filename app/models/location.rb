@@ -54,13 +54,13 @@ class Location < ApplicationRecord
   }
 
   scope :deactivated, lambda { |date = Time.zone.now|
-    deactivated_by_organisation
+    deactivated_by_organisation(date)
       .or(deactivated_directly(date))
       .or(deactivated_by_scheme(date))
   }
 
-  scope :deactivated_by_organisation, lambda {
-    merge(Organisation.filter_by_inactive)
+  scope :deactivated_by_organisation, lambda { |date = Time.zone.now|
+    merge(Organisation.filter_by_inactive.or(Organisation.where("merge_date <= ?", date)))
   }
 
   scope :deactivated_by_scheme, lambda { |date = Time.zone.now|
@@ -206,7 +206,7 @@ class Location < ApplicationRecord
   def status_at(date)
     return :deleted if discarded_at.present?
     return :incomplete unless confirmed
-    return :deactivated if scheme.owning_organisation.status_at(date) == :deactivated ||
+    return :deactivated if scheme.owning_organisation.status_at(date) == :deactivated || scheme.owning_organisation.status_at(date) == :merged ||
       open_deactivation&.deactivation_date.present? && date >= open_deactivation.deactivation_date || scheme.status_at(date) == :deactivated
     return :deactivating_soon if open_deactivation&.deactivation_date.present? && date < open_deactivation.deactivation_date || scheme.status_at(date) == :deactivating_soon
     return :activating_soon if startdate.present? && date < startdate

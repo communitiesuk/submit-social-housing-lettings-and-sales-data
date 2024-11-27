@@ -47,7 +47,7 @@
   </div>
 </div>
 
-<% if @location.scheme.owning_organisation.active? && LocationPolicy.new(current_user, @location).deactivate? %>
+<% if @location.scheme.owning_organisation.status == :active && LocationPolicy.new(current_user, @location).deactivate? %>
   <%= toggle_location_link(@location) %>
 <% end %>
 

@@ -111,6 +111,7 @@ class Log < ApplicationRecord
         self.town_or_city = nil
         self.county = nil
         self.postcode_full = postcode_full_input
+        process_postcode_changes!
       else
         self.uprn = uprn_selection
         self.uprn_confirmed = 1

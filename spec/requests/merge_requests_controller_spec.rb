@@ -49,7 +49,7 @@ RSpec.describe MergeRequestsController, type: :request do
         end
 
         it "shows the correct content" do
-          expect(page).to have_content("Which organisations are merging into MHCLG?")
+          expect(page).to have_content("Which organisations are merging into #{organisation.name}?")
         end
       end
     end
@@ -64,7 +64,7 @@ RSpec.describe MergeRequestsController, type: :request do
 
         it "adds merging organisation to the page" do
           merge_request.reload
-          expect(page).to have_content("MHCLG")
+          expect(page).to have_content(organisation.name)
           expect(page).to have_content("Other Test Org")
           expect(page).to have_link("Remove")
         end
@@ -81,6 +81,22 @@ RSpec.describe MergeRequestsController, type: :request do
         it "does not error" do
           merge_request.reload
           expect(page).not_to have_content(I18n.t("validations.merge_request.organisation_part_of_another_merge"))
+        end
+      end
+
+      context "when the user updates merge request with organisation that is already part of another merge" do
+        let(:another_organisation) { create(:organisation) }
+        let(:other_merge_request) { create(:merge_request, merge_date: Time.zone.local(2022, 5, 4)) }
+        let(:params) { { merge_request: { merging_organisation: another_organisation.id, new_merging_org_ids: [] } } }
+
+        before do
+          MergeRequestOrganisation.create!(merge_request_id: other_merge_request.id, merging_organisation_id: another_organisation.id)
+          patch "/merge-request/#{merge_request.id}/merging-organisations", headers:, params:
+        end
+
+        it "displays the page with an error message" do
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(page).to have_content("Another merge request records #{another_organisation.name} as merging into #{other_merge_request.absorbing_organisation&.name} on 4 May 2022. Select another organisation or remove this organisation from the other merge request.")
         end
       end
 
@@ -396,6 +412,24 @@ RSpec.describe MergeRequestsController, type: :request do
             }.from(nil).to(Time.zone.local(2022, 4, 10))
           end
         end
+
+        context "when merge date set to a date more than 1 year in the future" do
+          let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation) }
+          let(:params) do
+            { merge_request: { page: "merge_date", "merge_date(3i)": (Time.zone.now.day + 1).to_s, "merge_date(2i)": Time.zone.now.month.to_s, "merge_date(1i)": (Time.zone.now.year + 1).to_s } }
+          end
+
+          let(:request) do
+            patch "/merge-request/#{merge_request.id}", headers:, params:
+          end
+
+          it "displays the page with an error message" do
+            request
+
+            expect(response).to have_http_status(:unprocessable_entity)
+            expect(page).to have_content("The merge date must not be later than a year from today’s date.")
+          end
+        end
       end
 
       describe "from merging_organisations page" do
@@ -623,7 +657,7 @@ RSpec.describe MergeRequestsController, type: :request do
       it "shows user outcomes after merge" do
         expect(page).to have_link("View all 4 Organisation with some users users (opens in a new tab)", href: users_organisation_path(organisation_with_some_users))
         expect(page).to have_link("View all 12 Organisation with many users users (opens in a new tab)", href: users_organisation_path(organisation_with_some_more_users))
-        expect(page).to have_link("View all 3 MHCLG users (opens in a new tab)", href: users_organisation_path(organisation))
+        expect(page).to have_link("View all 3 #{organisation.name} users (opens in a new tab)", href: users_organisation_path(organisation))
         expect(page).to have_content("Organisation with no users and Organisation with no users too have no users.")
         expect(page).to have_content("19 users after merge")
       end
@@ -650,7 +684,7 @@ RSpec.describe MergeRequestsController, type: :request do
       it "shows scheme outcomes after merge" do
         expect(page).to have_link("View all 4 Organisation with some schemes schemes (opens in a new tab)", href: schemes_organisation_path(organisation_with_some_schemes))
         expect(page).to have_link("View all 6 Organisation with many schemes schemes (opens in a new tab)", href: schemes_organisation_path(organisation_with_some_more_schemes))
-        expect(page).to have_link("View all 3 MHCLG schemes (opens in a new tab)", href: schemes_organisation_path(organisation))
+        expect(page).to have_link("View all 3 #{organisation.name} schemes (opens in a new tab)", href: schemes_organisation_path(organisation))
         expect(page).to have_content("Organisation with no schemes and Organisation with no schemes too have no schemes.")
         expect(page).to have_content("13 schemes after merge")
       end
@@ -676,8 +710,8 @@ RSpec.describe MergeRequestsController, type: :request do
       it "shows logs outcomes after merge" do
         expect(page).to have_link("View all 4 Organisation with some logs lettings logs (opens in a new tab)", href: lettings_logs_organisation_path(organisation_with_some_logs))
         expect(page).to have_link("View all 2 Organisation with some logs sales logs (opens in a new tab)", href: sales_logs_organisation_path(organisation_with_some_logs))
-        expect(page).to have_link("View all 2 MHCLG lettings logs (opens in a new tab)", href: lettings_logs_organisation_path(organisation))
-        expect(page).to have_link("View all 3 MHCLG sales logs (opens in a new tab)", href: sales_logs_organisation_path(organisation))
+        expect(page).to have_link("View all 2 #{organisation.name} lettings logs (opens in a new tab)", href: lettings_logs_organisation_path(organisation))
+        expect(page).to have_link("View all 3 #{organisation.name} sales logs (opens in a new tab)", href: sales_logs_organisation_path(organisation))
         expect(page).to have_content("Organisation with no logs and Organisation with no logs too have no lettings logs.")
         expect(page).to have_content("Organisation with no logs and Organisation with no logs too have no sales logs.")
         expect(page).to have_content("6 lettings logs after merge")

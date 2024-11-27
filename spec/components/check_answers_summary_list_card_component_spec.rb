@@ -6,7 +6,7 @@ RSpec.describe CheckAnswersSummaryListCardComponent, type: :component do
   let(:rendered) { render_inline(component) }
 
   let(:user) { create(:user) }
-  let(:log) { create(:lettings_log, :completed, age2: 99, retirement_value_check: 1) }
+  let(:log) { create(:lettings_log, :completed, sex1: "F", age2: 99, retirement_value_check: 1) }
   let(:subsection_id) { "household_characteristics" }
   let(:subsection) { log.form.get_subsection(subsection_id) }
   let(:questions) { subsection.applicable_questions(log) }
