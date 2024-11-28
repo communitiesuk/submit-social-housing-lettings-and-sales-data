@@ -14,6 +14,7 @@ module MergeRequestsHelper
     messages = {
       "existing_absorbing_organisation" => "Answer if absorbing organisation is already active",
       "helpdesk_ticket" => "Enter helpdesk ticket number",
+      "merging_organisations" => "Add merging organisations",
     }
     messages[page] || "Enter #{lowercase_first_letter(page.humanize)}"
   end
