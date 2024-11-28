@@ -6,7 +6,7 @@ en:
           net_income_known:
             page_header: "Household’s combined income after tax"
             check_answer_label: "Do you know the household’s combined total income after tax?"
-            check_answer_prompt: ""
+            check_answer_prompt: "Confirm if you know the household’s combined total income after tax"
             hint_text: ""
             question_text: "Do you know the household’s combined income after tax?"
 
@@ -26,14 +26,14 @@ en:
           hb:
             page_header: ""
             check_answer_label: "Housing-related benefits received"
-            check_answer_prompt: ""
+            check_answer_prompt: "Answer if household receives housing-related benefits"
             hint_text: "This is about when the tenant is in their new let. If they are unsure about the situation for their new let and their financial and working situation hasn’t changed significantly, answer based on what housing-related benefits they currently receive."
             question_text: "Is the household likely to be receiving any of these housing-related benefits?"
 
           benefits:
             page_header: ""
             check_answer_label: "Household income from Universal Credit, state pension or benefit"
-            check_answer_prompt: ""
+            check_answer_prompt: "Answer if household income is from Universal Credit, state pension or benefit"
             hint_text: "This excludes child and housing benefit, council tax support and tax credits."
             question_text: "How much of the household’s income is from Universal Credit, state pensions or benefits?"
 

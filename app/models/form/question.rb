@@ -250,7 +250,7 @@ class Form::Question
     question_text = lowercase_first_letter(error_label.presence || check_answer_label.presence || header.presence || id.humanize) || "this question."
     case type
     when "checkbox"
-      "Answer #{question_text}"
+      "Select #{question_text}"
     when "radio"
       "Select #{question_text}"
     when "select"

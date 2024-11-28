@@ -6,14 +6,14 @@ en:
           declaration:
             page_header: "Ministry of Housing, Communities and Local Government privacy notice"
             check_answer_label: "Tenant has seen the privacy notice"
-            check_answer_prompt: ""
+            check_answer_prompt: "Confirm tenant has seen the privacy notice"
             hint_text: ""
             question_text: "Declaration"
 
           hhmemb:
             page_header: ""
             check_answer_label: "Number of household members"
-            check_answer_prompt: ""
+            check_answer_prompt: "Enter total number of household members"
             hint_text: "You can provide details for a maximum of 8 people."
             question_text: "How many people live in the household for this letting?"
 
@@ -21,7 +21,7 @@ en:
             page_header: ""
             age1_known:
               check_answer_label: ""
-              check_answer_prompt: ""
+              check_answer_prompt: "Answer if you know the lead tenant's age"
               hint_text: "The ’lead’ or ’main’ tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest."
               question_text: "Do you know the lead tenant’s age?"
             age1:
@@ -93,7 +93,7 @@ en:
           details_known_2:
             page_header: "You’ve given us the details for 1 person in the household"
             check_answer_label: "Details known for person 2"
-            check_answer_prompt: ""
+            check_answer_prompt: "Answer if you know person 2's details"
             hint_text: "You must provide details for everyone in the household if you know them."
             question_text: "Do you know details for person 2?"
 
@@ -108,7 +108,7 @@ en:
             page_header: ""
             age2_known:
               check_answer_label: ""
-              check_answer_prompt: ""
+              check_answer_prompt: "Answer if you know person 2's age"
               hint_text: ""
               question_text: "Do you know person 2’s age?"
             age2:
@@ -134,7 +134,7 @@ en:
           details_known_3:
             page_header: "You’ve given us the details for 2 people in the household"
             check_answer_label: "Details known for person 3"
-            check_answer_prompt: ""
+            check_answer_prompt: "Answer if you know person 3's details"
             hint_text: "You must provide details for everyone in the household if you know them."
             question_text: "Do you know details for person 3?"
 
@@ -149,7 +149,7 @@ en:
             page_header: ""
             age3_known:
               check_answer_label: ""
-              check_answer_prompt: ""
+              check_answer_prompt: "Answer if you know person 3's age"
               hint_text: ""
               question_text: "Do you know person 3’s age?"
             age3:
@@ -175,7 +175,7 @@ en:
           details_known_4:
             page_header: "You’ve given us the details for 3 people in the household"
             check_answer_label: "Details known for person 4"
-            check_answer_prompt: ""
+            check_answer_prompt: "Answer if you know person 4's details"
             hint_text: "You must provide details for everyone in the household if you know them."
             question_text: "Do you know details for person 4?"
 
@@ -190,7 +190,7 @@ en:
             page_header: ""
             age4_known:
               check_answer_label: ""
-              check_answer_prompt: ""
+              check_answer_prompt: "Answer if you know person 4's age"
               hint_text: ""
               question_text: "Do you know person 4’s age?"
             age4:
@@ -216,7 +216,7 @@ en:
           details_known_5:
             page_header: "You’ve given us the details for 4 people in the household"
             check_answer_label: "Details known for person 5"
-            check_answer_prompt: ""
+            check_answer_prompt: "Answer if you know person 5's details"
             hint_text: "You must provide details for everyone in the household if you know them."
             question_text: "Do you know details for person 5?"
 
@@ -231,7 +231,7 @@ en:
             page_header: ""
             age5_known:
               check_answer_label: ""
-              check_answer_prompt: ""
+              check_answer_prompt: "Answer if you know person 5's age"
               hint_text: ""
               question_text: "Do you know person 5’s age?"
             age5:
@@ -257,7 +257,7 @@ en:
           details_known_6:
             page_header: "You’ve given us the details for 5 people in the household"
             check_answer_label: "Details known for person 6"
-            check_answer_prompt: ""
+            check_answer_prompt: "Answer if you know person 6's details"
             hint_text: "You must provide details for everyone in the household if you know them."
             question_text: "Do you know details for person 6?"
 
@@ -272,7 +272,7 @@ en:
             page_header: ""
             age6_known:
               check_answer_label: ""
-              check_answer_prompt: ""
+              check_answer_prompt: "Answer if you know person 6's age"
               hint_text: ""
               question_text: "Do you know person 6’s age?"
             age6:
@@ -298,7 +298,7 @@ en:
           details_known_7:
             page_header: "You’ve given us the details for 6 people in the household"
             check_answer_label: "Details known for person 7"
-            check_answer_prompt: ""
+            check_answer_prompt: "Answer if you know person 7's details"
             hint_text: "You must provide details for everyone in the household if you know them."
             question_text: "Do you know details for person 7?"
 
@@ -313,7 +313,7 @@ en:
             page_header: ""
             age7_known:
               check_answer_label: ""
-              check_answer_prompt: ""
+              check_answer_prompt: "Answer if you know person 7's age"
               hint_text: ""
               question_text: "Do you know person 7’s age?"
             age7:
@@ -339,7 +339,7 @@ en:
           details_known_8:
             page_header: "You’ve given us the details for 7 people in the household"
             check_answer_label: "Details known for person 8"
-            check_answer_prompt: ""
+            check_answer_prompt: "Answer if you know person 8's details"
             hint_text: "You must provide details for everyone in the household if you know them."
             question_text: "Do you know details for person 8?"
 
@@ -354,7 +354,7 @@ en:
             page_header: ""
             age8_known:
               check_answer_label: ""
-              check_answer_prompt: ""
+              check_answer_prompt: "Answer if you know person 8's age"
               hint_text: ""
               question_text: "Do you know person 8’s age?"
             age8:

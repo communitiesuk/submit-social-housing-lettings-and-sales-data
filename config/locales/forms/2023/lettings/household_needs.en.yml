@@ -6,7 +6,7 @@ en:
           armedforces:
             page_header: ""
             check_answer_label: "Household links to UK armed forces"
-            check_answer_prompt: ""
+            check_answer_prompt: "Answer if there are any household links to UK armed forces"
             hint_text: "This excludes national service.<br><br>If there are several people in the household with links to the UK armed forces, you should answer for the regular. If there’s no regular, answer for the reserve. If there’s no reserve, answer for the spouse or civil partner."
             question_text: "Does anybody in the household have any links to the UK armed forces?"
 
@@ -27,14 +27,14 @@ en:
           preg_occ:
             page_header: ""
             check_answer_label: "Anybody in household pregnant"
-            check_answer_prompt: ""
+            check_answer_prompt: "Answer if anybody in the household is pregnant"
             hint_text: ""
             question_text: "Is anybody in the household pregnant?"
 
           housingneeds:
             page_header: ""
             check_answer_label: "Anybody with disabled access needs"
-            check_answer_prompt: ""
+            check_answer_prompt: "Answer if there is anybody with disabled access needs"
             hint_text: ""
             question_text: "Does anybody in the household have any disabled access needs?"
 
@@ -54,7 +54,7 @@ en:
           illness:
             page_header: ""
             check_answer_label: "Anybody in household with physical or mental health condition"
-            check_answer_prompt: ""
+            check_answer_prompt: "Answer if there is anybody in household with physical or mental health condition"
             hint_text: ""
             question_text: "Does anybody in the household have a physical or mental health condition (or other illness) expected to last 12 months or more?"
 
