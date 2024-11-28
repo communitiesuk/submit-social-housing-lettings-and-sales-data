@@ -116,6 +116,7 @@ private
   def merge_request_params
     merge_params = params.fetch(:merge_request, {}).permit(
       :requesting_organisation_id,
+      :has_helpdesk_ticket,
       :helpdesk_ticket,
       :status,
       :absorbing_organisation_id,
@@ -124,6 +125,7 @@ private
     )
 
     merge_params[:requesting_organisation_id] = current_user.organisation.id
+    merge_params[:helpdesk_ticket] = nil if merge_params[:has_helpdesk_ticket] == "false"
 
     merge_params
   end
@@ -150,6 +152,14 @@ private
     when "existing_absorbing_organisation"
       if merge_request_params[:existing_absorbing_organisation].nil?
         @merge_request.errors.add(:existing_absorbing_organisation, :blank)
+      end
+    when "helpdesk_ticket"
+      @merge_request.has_helpdesk_ticket = merge_request_params[:has_helpdesk_ticket]
+      @merge_request.helpdesk_ticket = merge_request_params[:helpdesk_ticket]
+      if merge_request_params[:has_helpdesk_ticket].blank?
+        @merge_request.errors.add(:has_helpdesk_ticket, :blank)
+      elsif merge_request_params[:has_helpdesk_ticket] == "true" && merge_request_params[:helpdesk_ticket].blank?
+        @merge_request.errors.add(:helpdesk_ticket, :blank)
       end
     end
   end

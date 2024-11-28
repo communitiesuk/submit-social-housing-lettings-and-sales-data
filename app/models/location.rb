@@ -144,6 +144,29 @@ class Location < ApplicationRecord
     scope.pluck("ARRAY_AGG(id)")
   }
 
+  scope :duplicate_active_sets, lambda {
+    scope = active
+    .group(*DUPLICATE_LOCATION_ATTRIBUTES)
+    .where.not(scheme_id: nil)
+    .where.not(postcode: nil)
+    .where.not(mobility_type: nil)
+    .having(
+      "COUNT(*) > 1",
+    )
+    scope.pluck("ARRAY_AGG(id)")
+  }
+
+  scope :duplicate_active_sets_within_given_schemes, lambda {
+    scope = active
+    .group(*DUPLICATE_LOCATION_ATTRIBUTES - %w[scheme_id])
+    .where.not(postcode: nil)
+    .where.not(mobility_type: nil)
+    .having(
+      "COUNT(*) > 1",
+    )
+    scope.pluck("ARRAY_AGG(id)")
+  }
+
   DUPLICATE_LOCATION_ATTRIBUTES = %w[scheme_id postcode mobility_type].freeze
   LOCAL_AUTHORITIES = LocalAuthority.all.map { |la| [la.name, la.code] }.to_h
 

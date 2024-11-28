@@ -260,7 +260,7 @@ RSpec.describe MergeRequestsController, type: :request do
         end
 
         it "shows the correct content" do
-          expect(page).to have_content("Which helpdesk ticket reported this merge?")
+          expect(page).to have_content("Was this merge reported by a helpdesk ticket?")
           expect(page).to have_link("Back", href: existing_absorbing_organisation_merge_request_path(merge_request))
           expect(page).to have_button("Save and continue")
         end
@@ -473,6 +473,82 @@ RSpec.describe MergeRequestsController, type: :request do
 
           it "does not update the request" do
             expect { request }.not_to(change { merge_request.reload.attributes })
+          end
+        end
+      end
+
+      describe "from helpdesk_ticket page" do
+        context "when not answering the question" do
+          let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation, absorbing_organisation: other_organisation) }
+          let(:params) do
+            { merge_request: { page: "helpdesk_ticket" } }
+          end
+          let(:request) do
+            patch "/merge-request/#{merge_request.id}", headers:, params:
+          end
+
+          it "renders the error" do
+            request
+
+            expect(response).to have_http_status(:unprocessable_entity)
+            expect(page).to have_content("You must answer was this merge reported by a helpdesk ticket?")
+          end
+
+          it "does not update the request" do
+            expect { request }.not_to(change { merge_request.reload.attributes })
+          end
+        end
+
+        context "when has_helpdesk_ticket is true but no ticket is given" do
+          let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation, absorbing_organisation: other_organisation) }
+          let(:params) do
+            { merge_request: { page: "helpdesk_ticket", has_helpdesk_ticket: true } }
+          end
+          let(:request) do
+            patch "/merge-request/#{merge_request.id}", headers:, params:
+          end
+
+          it "renders the error" do
+            request
+
+            expect(response).to have_http_status(:unprocessable_entity)
+            expect(page).to have_content("You must answer the ticket number")
+          end
+
+          it "does not update the request" do
+            expect { request }.not_to(change { merge_request.reload.attributes })
+          end
+        end
+
+        context "when has_helpdesk_ticket is false" do
+          let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation, absorbing_organisation: other_organisation, helpdesk_ticket: "123") }
+          let(:params) do
+            { merge_request: { page: "helpdesk_ticket", has_helpdesk_ticket: false } }
+          end
+          let(:request) do
+            patch "/merge-request/#{merge_request.id}", headers:, params:
+          end
+
+          it "updates has_helpdesk_ticket and clears helpdesk_ticket" do
+            request
+            expect(merge_request.reload.has_helpdesk_ticket).to eq(false)
+            expect(merge_request.helpdesk_ticket).to eq(nil)
+          end
+        end
+
+        context "when has_helpdesk_ticket is true and ticket is given" do
+          let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation, absorbing_organisation: other_organisation) }
+          let(:params) do
+            { merge_request: { page: "helpdesk_ticket", has_helpdesk_ticket: true, helpdesk_ticket: "321" } }
+          end
+          let(:request) do
+            patch "/merge-request/#{merge_request.id}", headers:, params:
+          end
+
+          it "updates has_helpdesk_ticket and clears helpdesk_ticket" do
+            request
+            expect(merge_request.reload.has_helpdesk_ticket).to eq(true)
+            expect(merge_request.helpdesk_ticket).to eq("321")
           end
         end
       end
