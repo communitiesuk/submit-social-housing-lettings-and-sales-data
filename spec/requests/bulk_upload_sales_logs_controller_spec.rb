@@ -99,7 +99,6 @@ RSpec.describe BulkUploadSalesLogsController, type: :request do
     end
   end
 
-
   pages_requiring_year_specification = %w[prepare-your-file upload-your-file checking-file]
   pages_requiring_year_specification.each do |page_id|
     describe "GET /sales-logs/bulk-upload-logs/#{page_id}" do
