@@ -31,8 +31,8 @@ class Form::Sales::Subsections::PropertyInformation < ::Form::Subsection
         Form::Sales::Pages::UprnSelection.new(nil, nil, self),
         Form::Sales::Pages::AddressFallback.new(nil, nil, self),
         Form::Sales::Pages::PropertyLocalAuthority.new(nil, nil, self),
-        Form::Sales::Pages::Buyer1IncomeMaxValueCheck.new("local_authority_buyer_1_income_max_value_check", nil, self, check_answers_card_number: nil),
-        Form::Sales::Pages::Buyer2IncomeMaxValueCheck.new("local_authority_buyer_2_income_max_value_check", nil, self, check_answers_card_number: nil),
+        Form::Sales::Pages::Buyer1IncomeDiscountedMaxValueCheck.new("local_authority_buyer_1_income_max_value_check", nil, self, check_answers_card_number: nil),
+        Form::Sales::Pages::Buyer2IncomeDiscountedMaxValueCheck.new("local_authority_buyer_2_income_max_value_check", nil, self, check_answers_card_number: nil),
         Form::Sales::Pages::CombinedIncomeMaxValueCheck.new("local_authority_combined_income_max_value_check", nil, self, check_answers_card_number: nil),
         Form::Sales::Pages::AboutPriceValueCheck.new("about_price_la_value_check", nil, self),
       ]
@@ -42,8 +42,8 @@ class Form::Sales::Subsections::PropertyInformation < ::Form::Subsection
         Form::Sales::Pages::UprnConfirmation.new(nil, nil, self),
         Form::Sales::Pages::Address.new(nil, nil, self),
         Form::Sales::Pages::PropertyLocalAuthority.new(nil, nil, self),
-        Form::Sales::Pages::Buyer1IncomeMaxValueCheck.new("local_authority_buyer_1_income_max_value_check", nil, self, check_answers_card_number: nil),
-        Form::Sales::Pages::Buyer2IncomeMaxValueCheck.new("local_authority_buyer_2_income_max_value_check", nil, self, check_answers_card_number: nil),
+        Form::Sales::Pages::Buyer1IncomeDiscountedMaxValueCheck.new("local_authority_buyer_1_income_max_value_check", nil, self, check_answers_card_number: nil),
+        Form::Sales::Pages::Buyer2IncomeDiscountedMaxValueCheck.new("local_authority_buyer_2_income_max_value_check", nil, self, check_answers_card_number: nil),
         Form::Sales::Pages::CombinedIncomeMaxValueCheck.new("local_authority_combined_income_max_value_check", nil, self, check_answers_card_number: nil),
         Form::Sales::Pages::AboutPriceValueCheck.new("about_price_la_value_check", nil, self),
       ]

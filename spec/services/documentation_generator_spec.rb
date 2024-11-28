@@ -127,11 +127,11 @@ describe DocumentationGenerator do
 
     context "when the service is run for sales" do
       let(:log_type) { "sales" }
-      let(:all_validation_methods) { ["income2_under_soft_min?"] }
+      let(:all_validation_methods) { ["income2_outside_soft_range_for_ecstat?"] }
 
       it "creates new validation documentation records" do
         expect { described_class.new.describe_soft_validations(client, all_validation_methods, all_helper_methods, log_type) }.to change(LogValidation, :count)
-        expect(LogValidation.where(validation_name: "income2_under_soft_min?").count).to be_positive
+        expect(LogValidation.where(validation_name: "income2_outside_soft_range_for_ecstat?").count).to be_positive
         any_validation = LogValidation.first
         expect(any_validation.description).to eq("Validates the format.")
         expect(any_validation.field).not_to be_empty

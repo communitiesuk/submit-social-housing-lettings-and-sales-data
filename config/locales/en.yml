@@ -188,6 +188,10 @@ en:
               blank: "You must answer absorbing organisation already active?"
             merging_organisation_id:
               part_of_another_merge: "Another merge request records %{organisation} as merging into %{absorbing_organisation} on %{merge_date}. Select another organisation or remove this organisation from the other merge request."
+            has_helpdesk_ticket:
+              blank: "You must answer was this merge reported by a helpdesk ticket?"
+            helpdesk_ticket:
+              blank: "You must answer the ticket number"
         notification:
           attributes:
             title:
