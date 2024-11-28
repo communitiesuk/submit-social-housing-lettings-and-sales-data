@@ -1,6 +1,7 @@
 class BulkUploadSalesLogsController < ApplicationController
   before_action :authenticate_user!
   before_action :validate_data_protection_agrement_signed!
+  before_action :validate_year!
 
   def start
     if have_choice_of_year?
@@ -28,6 +29,21 @@ private
     return if @current_user.organisation.data_protection_confirmed?
 
     redirect_to sales_logs_path
+  end
+
+  def validate_year!
+    return if params[:action] == "start"
+    return if params[:id] == "year"
+    return if params[:id] == "guidance" && (params[:form].nil? || params[:form][:year].nil?)
+
+    allowed_years = [current_year]
+    allowed_years.push(current_year - 1) if FormHandler.instance.sales_in_crossover_period?
+    allowed_years.push(current_year + 1) if FeatureToggle.allow_future_form_use?
+
+    provided_year = params.dig(:form, :year)&.to_i
+    return if allowed_years.include?(provided_year)
+
+    render_not_found
   end
 
   def current_year

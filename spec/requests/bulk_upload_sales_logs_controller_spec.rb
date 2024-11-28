@@ -73,5 +73,117 @@ RSpec.describe BulkUploadSalesLogsController, type: :request do
         expect(response.body).to include("How to upload logs in bulk")
       end
     end
+
+    context "when no year is specified" do
+      it "shows guidance page with links defaulting to the current year" do
+        get "/sales-logs/bulk-upload-logs/guidance"
+
+        expect(response.body).to include("Download the sales bulk upload template (#{current_collection_start_year} to #{current_collection_start_year + 1})")
+      end
+    end
+
+    context "when an invalid year is specified" do
+      it "shows not found" do
+        get "/sales-logs/bulk-upload-logs/guidance?form%5Byear%5D=10000"
+
+        expect(response).to be_not_found
+      end
+    end
+  end
+
+  describe "GET /sales-logs/bulk-upload-logs/year" do
+    it "does not require a year to be specified" do
+      get "/sales-logs/bulk-upload-logs/year"
+
+      expect(response).to be_ok
+    end
+  end
+
+
+  pages_requiring_year_specification = %w[prepare-your-file upload-your-file checking-file]
+  pages_requiring_year_specification.each do |page_id|
+    describe "GET /sales-logs/bulk-upload-logs/#{page_id}" do
+      context "when no year is provided" do
+        it "returns not found" do
+          get "/sales-logs/bulk-upload-logs/#{page_id}"
+
+          expect(response).to be_not_found
+        end
+      end
+
+      context "when requesting the previous year in a crossover period" do
+        before do
+          allow(FormHandler.instance).to receive(:sales_in_crossover_period?).and_return(true)
+        end
+
+        it "succeeds" do
+          get "/sales-logs/bulk-upload-logs/#{page_id}?form%5Byear%5D=#{current_collection_start_year - 1}"
+
+          expect(response).to be_ok
+        end
+      end
+
+      context "when requesting the previous year outside a crossover period" do
+        before do
+          allow(FormHandler.instance).to receive(:sales_in_crossover_period?).and_return(false)
+        end
+
+        it "returns not found" do
+          get "/sales-logs/bulk-upload-logs/#{page_id}?form%5Byear%5D=#{current_collection_start_year - 1}"
+
+          expect(response).to be_not_found
+        end
+      end
+
+      context "when requesting the current year" do
+        it "succeeds" do
+          get "/sales-logs/bulk-upload-logs/#{page_id}?form%5Byear%5D=#{current_collection_start_year}"
+
+          expect(response).to be_ok
+        end
+      end
+
+      if page_id != "prepare-your-file"
+        context "when requesting the next year with future form use toggled on" do
+          before do
+            allow(FeatureToggle).to receive(:allow_future_form_use?).and_return(true)
+          end
+
+          it "succeeds" do
+            get "/sales-logs/bulk-upload-logs/#{page_id}?form%5Byear%5D=#{current_collection_start_year + 1}"
+
+            expect(response).to be_ok
+          end
+        end
+      end
+
+      context "when requesting the next year with future form use toggled off" do
+        before do
+          allow(FeatureToggle).to receive(:allow_future_form_use?).and_return(false)
+        end
+
+        it "returns not found" do
+          get "/sales-logs/bulk-upload-logs/#{page_id}?form%5Byear%5D=#{current_collection_start_year + 1}"
+
+          expect(response).to be_not_found
+        end
+      end
+
+      context "when requesting a far future year" do
+        it "returns not found" do
+          get "/sales-logs/bulk-upload-logs/#{page_id}?form%5Byear%5D=9990"
+
+          expect(response).to be_not_found
+        end
+      end
+
+      context "when requesting a nonsense value for year" do
+        it "returns not found" do
+          get "/sales-logs/bulk-upload-logs/#{page_id}?form%5Byear%5D=thisisnotayear"
+
+          expect(response).to be_not_found
+        end
+      end
+    end
   end
 end
