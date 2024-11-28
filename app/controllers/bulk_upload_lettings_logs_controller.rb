@@ -1,7 +1,7 @@
 class BulkUploadLettingsLogsController < ApplicationController
   before_action :authenticate_user!
-  before_action :validate_data_protection_agrement_signed!
-  before_action :validate_year!
+  before_action :validate_data_protection_agreement_signed!
+  before_action :validate_year!, except: %w[start]
 
   def start
     if have_choice_of_year?
@@ -25,16 +25,15 @@ class BulkUploadLettingsLogsController < ApplicationController
 
 private
 
-  def validate_data_protection_agrement_signed!
+  def validate_data_protection_agreement_signed!
     return if @current_user.organisation.data_protection_confirmed?
 
     redirect_to lettings_logs_path
   end
 
   def validate_year!
-    return if params[:action] == "start"
     return if params[:id] == "year"
-    return if params[:id] == "guidance" && (params[:form].nil? || params[:form][:year].nil?)
+    return if params[:id] == "guidance" && params.dig(:form, :year).nil?
 
     allowed_years = [current_year]
     allowed_years.push(current_year - 1) if FormHandler.instance.lettings_in_crossover_period?
