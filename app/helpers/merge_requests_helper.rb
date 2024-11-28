@@ -19,7 +19,7 @@ module MergeRequestsHelper
   end
 
   def merge_request_action_text_helper(attribute, merge_request)
-    merge_request.send(attribute).blank? ? "" : "Change"
+    merge_request.send(attribute).present? || (attribute == "helpdesk_ticket" && merge_request.has_helpdesk_ticket == false) ? "Change" : ""
   end
 
   def request_details(merge_request)
