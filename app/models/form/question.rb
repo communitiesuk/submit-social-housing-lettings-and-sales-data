@@ -243,19 +243,17 @@ class Form::Question
 
   def check_answer_prompt_message
     question_text = lowercase_first_letter(error_label.presence || check_answer_label.presence || header.presence || id.humanize) || "this question."
-    if type == "checkbox" || question_text.end_with?("?")
+    case type
+    when "checkbox"
       "Answer #{question_text}"
+    when "radio"
+      "Select #{question_text}"
+    when "select"
+      "Select #{question_text}"
+    when "date"
+      "Set #{question_text}"
     else
-      case type
-      when "radio"
-        "Select #{question_text}"
-      when "select"
-        "Select #{question_text}"
-      when "date"
-        "Set #{question_text}"
-      else
-        "Enter #{question_text}"
-      end
+      "Enter #{question_text}"
     end
   end
 

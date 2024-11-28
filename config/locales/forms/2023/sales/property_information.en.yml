@@ -69,6 +69,6 @@ en:
 
           wchair:
             page_header: ""
-            check_answer_label: "Property built or adapted to wheelchair-user standards?"
+            check_answer_label: "Property built or adapted to wheelchair-user standards"
             hint_text: ""
             question_text: "Is the property built or adapted to wheelchair-user standards?"

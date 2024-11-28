@@ -51,7 +51,7 @@ en:
 
           homeless:
             page_header: ""
-            check_answer_label: "Household homeless immediately before letting?"
+            check_answer_label: "Household homeless immediately before letting"
             hint_text: ""
             question_text: "Did the household experience homelessness immediately before this letting?"
 
@@ -79,7 +79,7 @@ en:
 
           reasonpref:
             page_header: ""
-            check_answer_label: "Household given reasonable preference?"
+            check_answer_label: "Household given reasonable preference"
             hint_text: "Households may be given ‘reasonable preference’ for social housing under one or more specific categories by the local authority. This is also known as ‘priority need’."
             question_text: "Was the household given ‘reasonable preference’ by the local authority?"
 

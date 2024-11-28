@@ -5,7 +5,7 @@ en:
         household_characteristics:
           declaration:
             page_header: "Ministry of Housing, Communities and Local Government privacy notice"
-            check_answer_label: "Tenant has seen the privacy notice?"
+            check_answer_label: "Tenant has seen the privacy notice"
             hint_text: ""
             question_text: "Declaration"
 
@@ -25,17 +25,17 @@ en:
               check_answer_label: "Lead tenant’s age"
               hint_text: ""
               question_text: "Age"
-
+          
           sex1:
             page_header: ""
             check_answer_label: "Lead tenant’s gender identity"
             hint_text: "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest."
             question_text: "Which of these best describes the lead tenant’s gender identity?"
-
+          
           ethnic_group:
             page_header: ""
             check_answer_label: "Lead tenant’s ethnic group"
-            hint_text: "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest."
+            hint_text: "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest." 
             question_text: "What is the lead tenant’s ethnic group?"
 
           ethnic:
@@ -79,7 +79,7 @@ en:
 
           details_known_2:
             page_header: "You’ve given us the details for 1 person in the household"
-            check_answer_label: "Details known for person 2?"
+            check_answer_label: "Details known for person 2"
             hint_text: "You must provide details for everyone in the household if you know them."
             question_text: "Do you know details for person 2?"
 
@@ -97,13 +97,13 @@ en:
               question_text: "Do you know person 2’s age?"
             age2:
               check_answer_label: "Person 2’s age"
-              hint_text: ""
+              hint_text: "" 
               question_text: "Age"
 
           sex2:
             page_header: ""
             check_answer_label: "Person 2’s gender identity"
-            hint_text: ""
+            hint_text: "" 
             question_text: "Which of these best describes person 2’s gender identity?"
 
           ecstat2:
@@ -114,7 +114,7 @@ en:
 
           details_known_3:
             page_header: "You’ve given us the details for 2 people in the household"
-            check_answer_label: "Details known for person 3?"
+            check_answer_label: "Details known for person 3"
             hint_text: "You must provide details for everyone in the household if you know them."
             question_text: "Do you know details for person 3?"
 
@@ -132,13 +132,13 @@ en:
               question_text: "Do you know person 3’s age?"
             age3:
               check_answer_label: "Person 3’s age"
-              hint_text: ""
+              hint_text: "" 
               question_text: "Age"
 
           sex3:
             page_header: ""
             check_answer_label: "Person 3’s gender identity"
-            hint_text: ""
+            hint_text: "" 
             question_text: "Which of these best describes person 3’s gender identity?"
 
           ecstat3:
@@ -149,7 +149,7 @@ en:
 
           details_known_4:
             page_header: "You’ve given us the details for 3 people in the household"
-            check_answer_label: "Details known for person 4?"
+            check_answer_label: "Details known for person 4"
             hint_text: "You must provide details for everyone in the household if you know them."
             question_text: "Do you know details for person 4?"
 
@@ -167,13 +167,13 @@ en:
               question_text: "Do you know person 4’s age?"
             age4:
               check_answer_label: "Person 4’s age"
-              hint_text: ""
+              hint_text: "" 
               question_text: "Age"
 
           sex4:
             page_header: ""
             check_answer_label: "Person 4’s gender identity"
-            hint_text: ""
+            hint_text: "" 
             question_text: "Which of these best describes person 4’s gender identity?"
 
           ecstat4:
@@ -184,7 +184,7 @@ en:
 
           details_known_5:
             page_header: "You’ve given us the details for 4 people in the household"
-            check_answer_label: "Details known for person 5?"
+            check_answer_label: "Details known for person 5"
             hint_text: "You must provide details for everyone in the household if you know them."
             question_text: "Do you know details for person 5?"
 
@@ -202,13 +202,13 @@ en:
               question_text: "Do you know person 5’s age?"
             age5:
               check_answer_label: "Person 5’s age"
-              hint_text: ""
+              hint_text: "" 
               question_text: "Age"
 
           sex5:
             page_header: ""
             check_answer_label: "Person 5’s gender identity"
-            hint_text: ""
+            hint_text: "" 
             question_text: "Which of these best describes person 5’s gender identity?"
 
           ecstat5:
@@ -219,7 +219,7 @@ en:
 
           details_known_6:
             page_header: "You’ve given us the details for 5 people in the household"
-            check_answer_label: "Details known for person 6?"
+            check_answer_label: "Details known for person 6"
             hint_text: "You must provide details for everyone in the household if you know them."
             question_text: "Do you know details for person 6?"
 
@@ -237,13 +237,13 @@ en:
               question_text: "Do you know person 6’s age?"
             age6:
               check_answer_label: "Person 6’s age"
-              hint_text: ""
+              hint_text: "" 
               question_text: "Age"
 
           sex6:
             page_header: ""
             check_answer_label: "Person 6’s gender identity"
-            hint_text: ""
+            hint_text: "" 
             question_text: "Which of these best describes person 6’s gender identity?"
 
           ecstat6:
@@ -254,7 +254,7 @@ en:
 
           details_known_7:
             page_header: "You’ve given us the details for 6 people in the household"
-            check_answer_label: "Details known for person 7?"
+            check_answer_label: "Details known for person 7"
             hint_text: "You must provide details for everyone in the household if you know them."
             question_text: "Do you know details for person 7?"
 
@@ -272,13 +272,13 @@ en:
               question_text: "Do you know person 7’s age?"
             age7:
               check_answer_label: "Person 7’s age"
-              hint_text: ""
+              hint_text: "" 
               question_text: "Age"
 
           sex7:
             page_header: ""
             check_answer_label: "Person 7’s gender identity"
-            hint_text: ""
+            hint_text: "" 
             question_text: "Which of these best describes person 7’s gender identity?"
 
           ecstat7:
@@ -289,7 +289,7 @@ en:
 
           details_known_8:
             page_header: "You’ve given us the details for 7 people in the household"
-            check_answer_label: "Details known for person 8?"
+            check_answer_label: "Details known for person 8"
             hint_text: "You must provide details for everyone in the household if you know them."
             question_text: "Do you know details for person 8?"
 
@@ -307,13 +307,13 @@ en:
               question_text: "Do you know person 8’s age?"
             age8:
               check_answer_label: "Person 8’s age"
-              hint_text: ""
+              hint_text: "" 
               question_text: "Age"
 
           sex8:
             page_header: ""
             check_answer_label: "Person 8’s gender identity"
-            hint_text: ""
+            hint_text: "" 
             question_text: "Which of these best describes person 8’s gender identity?"
 
           ecstat8:
