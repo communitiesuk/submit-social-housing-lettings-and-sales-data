@@ -4,6 +4,7 @@ task clear_invalid_benefits: :environment do
   LettingsLog.filter_by_year(2024).where(status: "pending", status_cache: "completed", benefits: 1).where(validation_trigger_condition).find_each do |log|
     log.status_cache = log.calculate_status
     log.skip_update_status = true
+    log.benefits = nil
 
     unless log.save
       Rails.logger.info "Could not save changes to pending lettings log #{log.id}"
@@ -11,6 +12,7 @@ task clear_invalid_benefits: :environment do
   end
 
   LettingsLog.filter_by_year(2024).visible.where(benefits: 1).where(validation_trigger_condition).find_each do |log|
+    log.benefits = nil
     unless log.save
       Rails.logger.info "Could not save changes to lettings log #{log.id}"
     end

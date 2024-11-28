@@ -13,7 +13,7 @@ RSpec.describe "clear_invalid_benefits" do
 
     context "when the rake task is run" do
       context "and there is a completed lettings log that trips the validation" do
-        let(:log) { build(:lettings_log, :completed, ecstat1: 1, benefits: 1) }
+        let(:log) { build(:lettings_log, :completed, ecstat1: 1, benefits: 1, assigned_to: create(:user), period: nil) }
 
         before do
           log.status = "completed"
@@ -22,6 +22,7 @@ RSpec.describe "clear_invalid_benefits" do
         end
 
         it "clear benefits and sets the log to in progress" do
+          expect(log.reload.benefits).to eq(1)
           task.invoke
           log.reload
           expect(log.benefits).to eq(nil)
@@ -30,7 +31,7 @@ RSpec.describe "clear_invalid_benefits" do
       end
 
       context "and there is a lettings log that trips the validation for person 2" do
-        let(:log) { build(:lettings_log, :completed, ecstat2: 2, benefits: 1, relat2: "P") }
+        let(:log) { build(:lettings_log, :completed, ecstat2: 2, benefits: 1, relat2: "P", assigned_to: create(:user), period: nil) }
 
         before do
           log.status = "completed"
@@ -39,6 +40,7 @@ RSpec.describe "clear_invalid_benefits" do
         end
 
         it "clear benefits and sets the log to in progress" do
+          expect(log.reload.benefits).to eq(1)
           task.invoke
           log.reload
           expect(log.benefits).to eq(nil)
@@ -47,7 +49,7 @@ RSpec.describe "clear_invalid_benefits" do
       end
 
       context "and there is a lettings log that trips the validation for person 8" do
-        let(:log) { build(:lettings_log, :completed, ecstat8: 1, benefits: 1, relat8: "P") }
+        let(:log) { build(:lettings_log, :completed, ecstat8: 1, benefits: 1, relat8: "P", assigned_to: create(:user), period: nil) }
 
         before do
           log.status = "completed"
@@ -56,6 +58,7 @@ RSpec.describe "clear_invalid_benefits" do
         end
 
         it "clear benefits and sets the log to in progress" do
+          expect(log.reload.benefits).to eq(1)
           task.invoke
           log.reload
           expect(log.benefits).to eq(nil)
@@ -64,7 +67,7 @@ RSpec.describe "clear_invalid_benefits" do
       end
 
       context "and there is a pending lettings log that trips the validation" do
-        let(:log) { build(:lettings_log, :completed, ecstat1: 1, benefits: 1) }
+        let(:log) { build(:lettings_log, :completed, ecstat1: 1, benefits: 1, assigned_to: create(:user), period: nil) }
 
         before do
           log.status = "pending"
@@ -74,6 +77,7 @@ RSpec.describe "clear_invalid_benefits" do
         end
 
         it "clears benefits and updates the status cache" do
+          expect(log.reload.benefits).to eq(1)
           task.invoke
           log.reload
           expect(log.benefits).to eq(nil)
