@@ -242,7 +242,7 @@ class Form::Question
   end
 
   def check_answer_prompt_message
-    question_text = lowercase_first_letter(check_answer_label.presence) || "this question."
+    question_text = lowercase_first_letter(error_label.presence || check_answer_label.presence || header.presence || id.humanize) || "this question."
     if type == "checkbox" || question_text.end_with?("?")
       "Answer #{question_text}"
     else
