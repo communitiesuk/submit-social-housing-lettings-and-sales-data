@@ -12,7 +12,7 @@ module MergeRequestsHelper
 
   def merge_request_details_link_message(page)
     messages = {
-      "existing_absorbing_organisation" => "Answer absorbing organisation is already active",
+      "existing_absorbing_organisation" => "Answer if absorbing organisation is already active",
       "helpdesk_ticket" => "Enter helpdesk ticket number",
     }
     messages[page] || "Enter #{lowercase_first_letter(page.humanize)}"
