@@ -30,6 +30,7 @@ en:
             page_header: "Find an address"
             address_line1_input:
               check_answer_label: "Find address"
+              check_answer_prompt: "Try find address"
               hint_text: ""
               question_text: "Address line 1"
             postcode_full_input:
