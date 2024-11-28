@@ -16,9 +16,7 @@ module FormattingHelper
   end
 
   def lowercase_first_letter(text)
-    first_word = text.split.first
-    return text if first_word == first_word.upcase
-    return text if text.blank?
+    return text if text.blank? || text.split.first == text.split.first.upcase
 
     text[0].downcase + text[1..]
   end
