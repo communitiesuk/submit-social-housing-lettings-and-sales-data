@@ -103,6 +103,7 @@ module SchemesHelper
 
   def scheme_back_button_path(scheme, current_page)
     return scheme_check_answers_path(scheme) if request.params[:referrer] == "check-answers"
+    return scheme_confirm_secondary_client_group_path(scheme, referrer: "check-answers") if request.params[:referrer] == "has-other-client-group"
 
     case current_page
     when "details"

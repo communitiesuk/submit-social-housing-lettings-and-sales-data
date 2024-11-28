@@ -2222,6 +2222,13 @@ RSpec.describe SchemesController, type: :request do
         end
       end
 
+      context "and accessed from has other client group" do
+        it "has correct back link" do
+          get "/schemes/#{scheme.id}/secondary-client-group?referrer=has-other-client-group"
+          expect(page).to have_link("Back", href: "/schemes/#{scheme.id}/confirm-secondary-client-group?referrer=check-answers")
+        end
+      end
+
       context "when attempting to access secondary-client-group scheme page for another organisation" do
         before do
           get "/schemes/#{another_scheme.id}/secondary-client-group"
