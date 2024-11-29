@@ -106,7 +106,7 @@ private
     return unless previous_responses
 
     previous_responses_to_reset = previous_responses.reject do |key, _|
-      @log.form.get_question(key, @log).type == "date"
+      @log.form.get_question(key, @log)&.type == "date"
     end
 
     @log.assign_attributes(previous_responses_to_reset)
