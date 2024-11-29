@@ -80,7 +80,6 @@ class FormController < ApplicationController
       page_id = request.path.split("/")[-1].underscore
       @page = form.get_page(page_id)
       @subsection = form.subsection_for_page(@page)
-
       if @page.routed_to?(@log, current_user) || is_referrer_type?("interruption_screen") || adding_answer_from_check_errors_page?
         if updated_answer_from_check_errors_page?
           @questions = request.params["related_question_ids"].map { |id| @log.form.get_question(id, @log) }
