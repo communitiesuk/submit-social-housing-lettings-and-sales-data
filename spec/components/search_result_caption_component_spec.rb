@@ -57,9 +57,10 @@ RSpec.describe SearchResultCaptionComponent, type: :component do
 
     context "with 1 result" do
       let(:count) { 1 }
+
       it "renders table caption with total count only" do
         expect(result.to_html).to eq("<span>\n    <span class=\"govuk-!-margin-right-4\">\n      <strong>1</strong> total scheme\n    </span>\n</span>\n")
-      end  
+      end
     end
   end
 
