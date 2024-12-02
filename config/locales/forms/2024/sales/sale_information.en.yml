@@ -28,7 +28,7 @@ en:
           staircasing:
             page_header: ""
             check_answer_label: "Staircasing transaction"
-            hint_text: "A staircasing transaction is when the household purchases more shares in their property, increasing the proportion they own and decreasing the proportion the housing association owns. Once the household purchases 100% of the shares, they own the property"
+            hint_text: "A staircasing transaction is when the household purchases more shares in their property, increasing the proportion they own and decreasing the proportion the housing association owns. Once the household purchases 100% of the shares, they own the property."
             question_text: "Is this a staircasing transaction?"
           about_staircasing:
               page_header: "About the staircasing transaction"
@@ -73,7 +73,7 @@ en:
             check_answer_label: "Household rehoused under a local authority nominations agreement?"
             hint_text: "A local authority nominations agreement is a written agreement between a local authority and private registered provider (PRP) that some or all of its sales vacancies are offered to local authorities for rehousing"
             question_text: "Was the household rehoused under a 'local authority nominations agreement'?"
-          
+
           soctenant:
             joint_purchase:
               page_header: ""
@@ -85,11 +85,11 @@ en:
               check_answer_label: "Buyer was a registered provider, housing association or local authority tenant immediately before this sale?"
               hint_text: ""
               question_text: "Was the buyer a private registered provider, housing association or local authority tenant immediately before this sale?"
-          
+
           frombeds:
-            page_header: "About the buyers’ previous property"
+            page_header: ""
             check_answer_label: "Number of bedrooms in previous property"
-            hint_text: "For bedsits enter 1"
+            hint_text: "A bedsit has 1 bedroom."
             question_text: "How many bedrooms did the property have?"
 
           fromprop:
@@ -123,7 +123,7 @@ en:
             question_text: "Was a mortgage used for the purchase of this property?"
 
           mortgage:
-            page_header: "Mortgage Amount"
+            page_header: ""
             check_answer_label: "Mortgage amount"
             hint_text: "Enter the amount of mortgage agreed with the mortgage lender. Exclude any deposits or cash payments. Numeric in pounds. Rounded to the nearest pound."
             question_text: "What is the mortgage amount?"
@@ -139,7 +139,7 @@ en:
             check_answer_label: "Other Mortgage Lender"
             hint_text: ""
             question_text: "What is the other mortgage lender?"
-            
+
           mortlen:
             page_header: ""
             check_answer_label: "Length of mortgage"
@@ -151,7 +151,7 @@ en:
             check_answer_label: "Any other borrowing?"
             hint_text: ""
             question_text: "Does this include any extra borrowing?"
-          
+
           deposit:
             page_header: "About the deposit"
             check_answer_label: "Deposit amount"
@@ -169,7 +169,7 @@ en:
             check_answer_label: "Monthly rent"
             hint_text: "Amount paid before any charges"
             question_text: "What is the basic monthly rent?"
-          
+
           leaseholdcharges:
             page_header: ""
             has_mscharge:
@@ -198,10 +198,9 @@ en:
             check_answer_label: "Percentage discount"
             hint_text: "For Right to Buy (RTB), Preserved Right to Buy (PRTB), and Voluntary Right to Buy (VRTB)</br></br>If discount capped, enter capped %</br></br>If the property is being sold to an existing tenant under the RTB, PRTB, or VRTB schemes, enter the % discount from the full market value that is being given."
             question_text: "What was the percentage discount?"
-          
+
           grant:
             page_header: "About the price of the property"
             check_answer_label: "Amount of any loan, grant or subsidy"
             hint_text: "For all schemes except Right to Buy (RTB), Preserved Right to Buy (PRTB), Voluntary Right to Buy (VRTB) and Rent to Buy"
             question_text: "What was the amount of any loan, grant, discount or subsidy given?"
-          
