@@ -80,6 +80,9 @@ module DerivedVariables::SalesLogVariables
       self.is_la_inferred = false
     end
 
+    self.numstair = is_firststair? ? 1 : nil if numstair == 1 && firststair_changed?
+    self.mrent = 0 if stairowned_100?
+
     set_encoded_derived_values!(DEPENDENCIES)
   end
 

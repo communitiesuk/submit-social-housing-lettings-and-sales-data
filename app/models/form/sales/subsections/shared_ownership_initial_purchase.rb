@@ -4,6 +4,7 @@ class Form::Sales::Subsections::SharedOwnershipInitialPurchase < ::Form::Subsect
     @id = "shared_ownership_initial_purchase"
     @label = "Shared ownership - initial purchase"
     @depends_on = [{ "ownershipsch" => 1, "setup_completed?" => true, "staircase" => 2 }]
+    @copy_key = "sale_information"
   end
 
   def pages
@@ -18,9 +19,9 @@ class Form::Sales::Subsections::SharedOwnershipInitialPurchase < ::Form::Subsect
       Form::Sales::Pages::PreviousBedrooms.new(nil, nil, self),
       Form::Sales::Pages::PreviousPropertyType.new(nil, nil, self),
       Form::Sales::Pages::PreviousTenure.new(nil, nil, self),
-      Form::Sales::Pages::ValueSharedOwnership.new(nil, nil, self),
+      Form::Sales::Pages::ValueSharedOwnership.new("value_shared_ownership", nil, self),
       Form::Sales::Pages::AboutPriceValueCheck.new("about_price_shared_ownership_value_check", nil, self),
-      Form::Sales::Pages::Equity.new(nil, nil, self),
+      Form::Sales::Pages::Equity.new("initial_equity", nil, self),
       Form::Sales::Pages::SharedOwnershipDepositValueCheck.new("shared_ownership_equity_value_check", nil, self),
       Form::Sales::Pages::Mortgageused.new("mortgage_used_shared_ownership", nil, self, ownershipsch: 1),
       Form::Sales::Pages::MortgageValueCheck.new("mortgage_used_mortgage_value_check", nil, self),

@@ -47,11 +47,38 @@ en:
                 check_answer_prompt: ""
                 hint_text: ""
                 question_text: "What percentage of the property does the buyer now own in total?"
-            staircasesale:
-              check_answer_label: "Part of a back-to-back staircasing transaction"
+
+          staircasesale:
+            page_header: ""
+            check_answer_label: "Part of a back-to-back staircasing transaction"
+            check_answer_prompt: ""
+            hint_text: ""
+            question_text: "Is this transaction part of a back-to-back staircasing transaction to facilitate sale of the home on the open market?"
+
+          firststair:
+            page_header: ""
+            check_answer_label: "First time staircasing"
+            check_answer_prompt: ""
+            hint_text: ""
+            question_text: "Is this the first time the shared owner has engaged in staircasing in the home?"
+
+          stairprevious:
+            page_header: "About previous staircasing transactions"
+            numstair:
+              check_answer_label: "Number of staircasing transactions"
               check_answer_prompt: ""
               hint_text: ""
-              question_text: "Is this transaction part of a back-to-back staircasing transaction to facilitate sale of the home on the open market?"
+              question_text: "Including this time, how many times has the shared owner engaged in staircasing in the home?"
+            initialpurchase:
+              check_answer_label: "Initial staircasing transaction"
+              check_answer_prompt: ""
+              hint_text: ""
+              question_text: "What was the date of the initial purchase of a share in the property?"
+            lasttransaction:
+              check_answer_label: "Last staircasing transaction"
+              check_answer_prompt: ""
+              hint_text: ""
+              question_text: "What was the date of the last staircasing transaction?"
 
           resale:
             page_header: ""
@@ -118,17 +145,29 @@ en:
 
           value:
             page_header: "About the price of the property"
-            check_answer_label: "Full purchase price"
-            check_answer_prompt: ""
-            hint_text: "Enter the full purchase price of the property before any discounts are applied. For shared ownership, enter the full purchase price paid for 100% equity (this is equal to the value of the share owned by the PRP plus the value bought by the purchaser)"
-            question_text: "What was the full purchase price?"
+            value_shared_ownership:
+              check_answer_label: "Full purchase price"
+              check_answer_prompt: ""
+              hint_text: "Enter the full purchase price of the property before any discounts are applied. For shared ownership, enter the full purchase price paid for 100% equity (this is equal to the value of the share owned by the PRP plus the value bought by the purchaser)."
+              question_text: "What was the full purchase price?"
+            value_shared_ownership_staircase:
+              check_answer_label: "Full purchase price"
+              check_answer_prompt: ""
+              hint_text: "Enter the full purchase price paid for the equity bought in this staircasing transaction (this is equal to the value of the share bought by the purchaser)."
+              question_text: "What was the full purchase price for this staircasing transaction?"
 
           equity:
             page_header: "About the price of the property"
-            check_answer_label: "Initial percentage equity share"
-            check_answer_prompt: ""
-            hint_text: "Enter the amount of initial equity share held by the purchaser (for example, 25% or 50%)"
-            question_text: "What was the initial percentage share purchased?"
+            initial_equity:
+              check_answer_label: "Initial percentage equity share"
+              check_answer_prompt: ""
+              hint_text: "Enter the amount of initial equity share held by the purchaser (for example, 25% or 50%)"
+              question_text: "What was the initial percentage share purchased?"
+            staircase_equity:
+              check_answer_label: "Initial percentage equity share"
+              check_answer_prompt: ""
+              hint_text: "Enter the amount of initial equity share held by the purchaser (for example, 25% or 50%)"
+              question_text: "What was the percentage shared purchased in the initial transaction?"
 
           mortgageused:
             page_header: "Mortgage Amount"
@@ -192,6 +231,19 @@ en:
             check_answer_prompt: ""
             hint_text: "Amount paid before any charges"
             question_text: "What is the basic monthly rent?"
+
+          mrent_staircasing:
+            page_header: "Monthly rent"
+            prestaircasing:
+              check_answer_label: "Monthly rent prior to staircasing"
+              check_answer_prompt: ""
+              hint_text: "Amount paid before any charges"
+              question_text: "What was the basic monthly rent prior to staircasing?"
+            poststaircasing:
+              check_answer_label: "Monthly rent after staircasing"
+              check_answer_prompt: ""
+              hint_text: "Amount paid before any charges"
+              question_text: "What is the basic monthly rent after staircasing?"
 
           leaseholdcharges:
             page_header: ""

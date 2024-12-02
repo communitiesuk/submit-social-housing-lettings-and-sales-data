@@ -761,6 +761,11 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_22_154743) do
     t.bigint "created_by_id"
     t.integer "has_management_fee"
     t.decimal "management_fee", precision: 10, scale: 2
+    t.integer "firststair"
+    t.integer "numstair"
+    t.decimal "mrentprestaircasing", precision: 10, scale: 2
+    t.datetime "lasttransaction"
+    t.datetime "initialpurchase"
     t.index ["assigned_to_id"], name: "index_sales_logs_on_assigned_to_id"
     t.index ["bulk_upload_id"], name: "index_sales_logs_on_bulk_upload_id"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
