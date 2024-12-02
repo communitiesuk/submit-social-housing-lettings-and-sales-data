@@ -100,9 +100,10 @@ private
     return unless questions
 
     questions.each do |question|
-      if question&.type == "date" && @log.attributes.key?(question.id)
-        @log[question.id] = @log.send("#{question.id}_was")
-      end
+      next unless question&.type == "date" && @log.attributes.key?(question.id)
+      next unless @log[question.id]&.year&.zero?
+
+      @log[question.id] = @log.send("#{question.id}_was")
     end
   end
 
@@ -419,7 +420,7 @@ private
       @log.valid?
       @log.reload
       error_attributes = @log.errors.map(&:attribute)
-      @questions = @log.form.questions.select { |q| error_attributes.include?(q.id.to_sym) }
+      @questions = @log.form.questions.select { |q| error_attributes.include?(q.id.to_sym) && q.page.routed_to?(@log, current_user) }
     end
     render "form/check_errors"
   end
