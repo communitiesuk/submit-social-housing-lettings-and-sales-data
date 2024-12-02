@@ -26,11 +26,16 @@ RSpec.describe Form::Sales::Sections::SaleInformation, type: :model do
   end
 
   context "when form is 2025 or later" do
-    let(:form) { instance_double(Form, start_year_2025_or_later?: true) }
+    let(:form) { instance_double(Form) }
+
+    before do
+      allow(form).to receive(:start_year_2025_or_later?).and_return(true)
+    end
 
     it "has correct subsections" do
       expect(sale_information.subsections.map(&:id)).to eq(%w[
         shared_ownership_initial_purchase
+        shared_ownership_staircasing_transaction
         discounted_ownership_scheme
         outright_sale
       ])
