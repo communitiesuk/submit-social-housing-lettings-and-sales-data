@@ -40,20 +40,6 @@ class BulkUpload::Lettings::Validator
     end
   end
 
-  # def create_logs?
-  #   if block_log_creation_reason.present?
-  #     case block_log_creation_reason
-  #     when "row_parser_block_log_creation"
-  #       Sentry.capture_message("Bulk upload log creation blocked: #{bulk_upload.id}.")
-  #     when "logs_invalid"
-  #       Sentry.capture_message("Bulk upload log creation blocked due to invalid logs after blanking non setup fields: #{bulk_upload.id}.")
-  #     end
-  #     return false
-  #   end
-
-  #   true
-  # end
-
   def block_log_creation_reason
     return "setup_errors" if any_setup_errors?
 
