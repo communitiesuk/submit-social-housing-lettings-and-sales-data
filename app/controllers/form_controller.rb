@@ -5,6 +5,7 @@ class FormController < ApplicationController
   before_action :find_resource, only: %i[review]
   before_action :find_resource_by_named_id, except: %i[review]
   before_action :check_collection_period, only: %i[submit_form show_page]
+  before_action :set_cache_headers, only: [:show_page]
 
   def submit_form
     if @log
@@ -443,5 +444,11 @@ private
 
   def updated_answer_from_check_errors_page?
     params["check_errors"]
+  end
+
+  def set_cache_headers
+    response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "Mon, 01 Jan 1990 00:00:00 GMT"
   end
 end
