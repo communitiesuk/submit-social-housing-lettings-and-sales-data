@@ -95,6 +95,8 @@ class BulkUploadMailer < NotifyMailer
     )
   end
 
+  def send_correct_duplicates_and_upload_again_mail(bulk_upload:); end
+
   def send_bulk_upload_failed_file_setup_error_mail(bulk_upload:)
     bulk_upload_link = if BulkUploadErrorSummaryTableComponent.new(bulk_upload:).errors?
                          bulk_upload.sales? ? summary_bulk_upload_sales_result_url(bulk_upload) : summary_bulk_upload_lettings_result_url(bulk_upload)
