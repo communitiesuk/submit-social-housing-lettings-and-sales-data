@@ -329,7 +329,7 @@ RSpec.describe Form, type: :model do
     end
 
     context "when a value is changed such that a radio and free input questions are no longer routed to" do
-      let(:log) { FactoryBot.create(:lettings_log, :completed, startdate: now) }
+      let(:log) { FactoryBot.create(:lettings_log, :completed, startdate: now, hhmemb: 2, details_known_2: 0, sex2: "M", relat2: "P", age2_known: 0, age2: 32, ecstat2: 6) }
 
       it "all attributes relating to that checkbox question are cleared" do
         expect(log.hhmemb).to be 2

@@ -2,7 +2,8 @@ class Location < ApplicationRecord
   validates :postcode, on: :postcode, presence: { message: I18n.t("validations.location.postcode_blank") }
   validate :validate_postcode, on: :postcode, if: proc { |model| model.postcode.presence }
   validates :location_admin_district, on: :location_admin_district, presence: { message: I18n.t("validations.location_admin_district") }
-  validates :units, on: :units, presence: { message: I18n.t("validations.location.units") }
+  validates :units, on: :units, presence: { message: I18n.t("validations.location.units.must_be_number") }
+  validates :units, on: :units, numericality: { greater_than_or_equal_to: 1, message: I18n.t("validations.location.units.must_be_one_or_more") }
   validates :type_of_unit, on: :type_of_unit, presence: { message: I18n.t("validations.location.type_of_unit") }
   validates :mobility_type, on: :mobility_type, presence: { message: I18n.t("validations.location.mobility_standards") }
   validates :startdate, on: :startdate, presence: { message: I18n.t("validations.location.startdate_invalid") }
@@ -54,13 +55,13 @@ class Location < ApplicationRecord
   }
 
   scope :deactivated, lambda { |date = Time.zone.now|
-    deactivated_by_organisation
+    deactivated_by_organisation(date)
       .or(deactivated_directly(date))
       .or(deactivated_by_scheme(date))
   }
 
-  scope :deactivated_by_organisation, lambda {
-    merge(Organisation.filter_by_inactive)
+  scope :deactivated_by_organisation, lambda { |date = Time.zone.now|
+    merge(Organisation.filter_by_inactive.or(Organisation.where("merge_date <= ?", date)))
   }
 
   scope :deactivated_by_scheme, lambda { |date = Time.zone.now|
@@ -144,6 +145,29 @@ class Location < ApplicationRecord
     scope.pluck("ARRAY_AGG(id)")
   }
 
+  scope :duplicate_active_sets, lambda {
+    scope = active
+    .group(*DUPLICATE_LOCATION_ATTRIBUTES)
+    .where.not(scheme_id: nil)
+    .where.not(postcode: nil)
+    .where.not(mobility_type: nil)
+    .having(
+      "COUNT(*) > 1",
+    )
+    scope.pluck("ARRAY_AGG(id)")
+  }
+
+  scope :duplicate_active_sets_within_given_schemes, lambda {
+    scope = active
+    .group(*DUPLICATE_LOCATION_ATTRIBUTES - %w[scheme_id])
+    .where.not(postcode: nil)
+    .where.not(mobility_type: nil)
+    .having(
+      "COUNT(*) > 1",
+    )
+    scope.pluck("ARRAY_AGG(id)")
+  }
+
   DUPLICATE_LOCATION_ATTRIBUTES = %w[scheme_id postcode mobility_type].freeze
   LOCAL_AUTHORITIES = LocalAuthority.all.map { |la| [la.name, la.code] }.to_h
 
@@ -206,7 +230,7 @@ class Location < ApplicationRecord
   def status_at(date)
     return :deleted if discarded_at.present?
     return :incomplete unless confirmed
-    return :deactivated if scheme.owning_organisation.status_at(date) == :deactivated ||
+    return :deactivated if scheme.owning_organisation.status_at(date) == :deactivated || scheme.owning_organisation.status_at(date) == :merged ||
       open_deactivation&.deactivation_date.present? && date >= open_deactivation.deactivation_date || scheme.status_at(date) == :deactivated
     return :deactivating_soon if open_deactivation&.deactivation_date.present? && date < open_deactivation.deactivation_date || scheme.status_at(date) == :deactivating_soon
     return :activating_soon if startdate.present? && date < startdate

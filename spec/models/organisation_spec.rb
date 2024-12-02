@@ -207,7 +207,7 @@ RSpec.describe Organisation, type: :model do
   end
 
   describe "paper trail" do
-    let(:organisation) { create(:organisation) }
+    let(:organisation) { create(:organisation, name: "MHCLG") }
 
     it "creates a record of changes to a log" do
       expect { organisation.update!(name: "new test name") }.to change(organisation.versions, :count).by(1)

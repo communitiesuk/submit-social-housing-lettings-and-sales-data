@@ -56,14 +56,13 @@
       <% end %>
     <% end %>
 
-    <% if status_hint_message = scheme_status_hint(@scheme) %>
-      <div class="govuk-hint">
-        <%= status_hint_message %>
-      </div>
-      <br>
-    <% end %>
-
-    <% if LocationPolicy.new(current_user, @scheme.locations.new).create? %>
+    <% if LocationPolicy.new(current_user, @scheme.locations.new).create? && [:active, :merged].include?(@scheme.owning_organisation.status) %>
+      <% if status_hint_message = scheme_status_hint(@scheme) %>
+        <div class="govuk-hint">
+          <%= status_hint_message %>
+        </div>
+        <br>
+      <% end %>
       <%= govuk_button_to "Add a location", scheme_locations_path(@scheme), method: "post" %>
     <% end %>
     <br>

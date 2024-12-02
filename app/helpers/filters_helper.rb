@@ -192,9 +192,15 @@ module FiltersHelper
   end
 
   def show_scheme_managing_org_filter?(user)
-    org = user.organisation
+    return true if user.support?
 
-    user.support? || org.stock_owners.count > 1 || (org.holds_own_stock? && org.stock_owners.count.positive?)
+    org = user.organisation
+    stock_owners = org.stock_owners.count
+    recently_absorbed_with_stock = org.absorbed_organisations.visible.merged_during_open_collection_period.where(holds_own_stock: true).count
+
+    relevant_orgs_count = stock_owners + recently_absorbed_with_stock + (org.holds_own_stock? ? 1 : 0)
+
+    relevant_orgs_count > 1
   end
 
   def logs_for_both_needstypes_present?(organisation)

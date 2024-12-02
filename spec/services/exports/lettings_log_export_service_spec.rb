@@ -15,7 +15,8 @@ RSpec.describe Exports::LettingsLogExportService do
   let(:expected_data_filename) { "core_2021_2022_apr_mar_f0001_inc0001_pt001.xml" }
   let(:expected_manifest_filename) { "manifest.xml" }
   let(:start_time) { Time.zone.local(2022, 5, 1) }
-  let(:user) { FactoryBot.create(:user, email: "test1@example.com") }
+  let(:organisation) { create(:organisation, name: "MHCLG", housing_registration_no: 1234) }
+  let(:user) { FactoryBot.create(:user, email: "test1@example.com", organisation:) }
 
   def replace_entity_ids(lettings_log, export_template)
     export_template.sub!(/\{id\}/, (lettings_log["id"] + Exports::LettingsLogExportService::LOG_ID_OFFSET).to_s)
@@ -79,7 +80,7 @@ RSpec.describe Exports::LettingsLogExportService do
     end
 
     context "and one lettings log is available for export" do
-      let!(:lettings_log) { FactoryBot.create(:lettings_log, :completed, assigned_to: user, propcode: "123", ppostcode_full: "SE2 6RT", postcode_full: "NW1 5TY", tenancycode: "BZ737", startdate: Time.zone.local(2022, 2, 2, 10, 36, 49), voiddate: Time.zone.local(2019, 11, 3), mrcdate: Time.zone.local(2020, 5, 5, 10, 36, 49), tenancylength: 5, underoccupation_benefitcap: 4) }
+      let!(:lettings_log) { FactoryBot.create(:lettings_log, :completed, assigned_to: user, age1: 35, sex1: "F", age2: 32, sex2: "M", propcode: "123", ppostcode_full: "SE2 6RT", postcode_full: "NW1 5TY", town_or_city: "London", tenancycode: "BZ737", startdate: Time.zone.local(2022, 2, 2, 10, 36, 49), voiddate: Time.zone.local(2019, 11, 3), mrcdate: Time.zone.local(2020, 5, 5, 10, 36, 49), tenancylength: 5, underoccupation_benefitcap: 4) }
 
       it "generates a ZIP export file with the expected filename" do
         expect(storage_service).to receive(:write_file).with(expected_zip_filename, any_args)
@@ -123,7 +124,7 @@ RSpec.describe Exports::LettingsLogExportService do
     end
 
     context "and one lettings log with unknown user details is available for export" do
-      let!(:lettings_log) { FactoryBot.create(:lettings_log, :completed, details_known_2: 1, assigned_to: user, propcode: "123", ppostcode_full: "SE2 6RT", postcode_full: "NW1 5TY", tenancycode: "BZ737", startdate: Time.zone.local(2022, 2, 2, 10, 36, 49), voiddate: Time.zone.local(2019, 11, 3), mrcdate: Time.zone.local(2020, 5, 5, 10, 36, 49), tenancylength: 5, underoccupation_benefitcap: 4) }
+      let!(:lettings_log) { FactoryBot.create(:lettings_log, :completed, details_known_2: 1, assigned_to: user, age1: 35, sex1: "F", propcode: "123", ppostcode_full: "SE2 6RT", postcode_full: "NW1 5TY", town_or_city: "London", tenancycode: "BZ737", startdate: Time.zone.local(2022, 2, 2, 10, 36, 49), voiddate: Time.zone.local(2019, 11, 3), mrcdate: Time.zone.local(2020, 5, 5, 10, 36, 49), tenancylength: 5, underoccupation_benefitcap: 4) }
 
       def replace_person_details(export_file)
         export_file.sub!("<age2>32</age2>", "<age2>-9</age2>")
@@ -176,7 +177,7 @@ RSpec.describe Exports::LettingsLogExportService do
       end
 
       context "and one lettings log is available for export" do
-        let!(:lettings_log) { FactoryBot.create(:lettings_log, :completed, assigned_to: user, uprn_known: 1, uprn: "100023336956", propcode: "123", postcode_full: "SE2 6RT", ppostcode_full: "SE2 6RT", tenancycode: "BZ737", startdate: Time.zone.local(2023, 4, 2, 10, 36, 49), voiddate: Time.zone.local(2021, 11, 3), mrcdate: Time.zone.local(2022, 5, 5, 10, 36, 49), tenancylength: 5, underoccupation_benefitcap: 4) }
+        let!(:lettings_log) { FactoryBot.create(:lettings_log, :completed, assigned_to: user, age1: 35, sex1: "F", age2: 32, sex2: "M", uprn_known: 1, uprn: "100023336956", propcode: "123", postcode_full: "SE2 6RT", ppostcode_full: "SE2 6RT", tenancycode: "BZ737", startdate: Time.zone.local(2023, 4, 2, 10, 36, 49), voiddate: Time.zone.local(2021, 11, 3), mrcdate: Time.zone.local(2022, 5, 5, 10, 36, 49), tenancylength: 5, underoccupation_benefitcap: 4) }
         let(:expected_zip_filename) { "core_2023_2024_apr_mar_f0001_inc0001.zip" }
         let(:expected_data_filename) { "core_2023_2024_apr_mar_f0001_inc0001_pt001.xml" }
         let(:xml_export_file) { File.open("spec/fixtures/exports/general_needs_log_23_24.xml", "r:UTF-8") }
@@ -396,7 +397,7 @@ RSpec.describe Exports::LettingsLogExportService do
     end
 
     context "and one lettings log with duplicate reference is available for export" do
-      let!(:lettings_log) { FactoryBot.create(:lettings_log, :completed, assigned_to: user, propcode: "123", ppostcode_full: "SE2 6RT", postcode_full: "NW1 5TY", tenancycode: "BZ737", startdate: Time.zone.local(2022, 2, 2, 10, 36, 49), voiddate: Time.zone.local(2019, 11, 3), mrcdate: Time.zone.local(2020, 5, 5, 10, 36, 49), tenancylength: 5, underoccupation_benefitcap: 4, duplicate_set_id: 123) }
+      let!(:lettings_log) { FactoryBot.create(:lettings_log, :completed, assigned_to: user, age1: 35, sex1: "F", age2: 32, sex2: "M", propcode: "123", ppostcode_full: "SE2 6RT", postcode_full: "NW1 5TY", town_or_city: "London", tenancycode: "BZ737", startdate: Time.zone.local(2022, 2, 2, 10, 36, 49), voiddate: Time.zone.local(2019, 11, 3), mrcdate: Time.zone.local(2020, 5, 5, 10, 36, 49), tenancylength: 5, underoccupation_benefitcap: 4, duplicate_set_id: 123) }
 
       def replace_duplicate_set_id(export_file)
         export_file.sub!("<duplicate_set_id/>", "<duplicate_set_id>123</duplicate_set_id>")
@@ -429,7 +430,7 @@ RSpec.describe Exports::LettingsLogExportService do
       end
 
       context "and one lettings log is available for export" do
-        let!(:lettings_log) { FactoryBot.create(:lettings_log, :completed, assigned_to: user, ppostcode_full: "A1 1AA", nationality_all_group: 13, propcode: "123", postcode_full: "SE2 6RT", tenancycode: "BZ737", startdate: Time.zone.local(2024, 4, 2, 10, 36, 49), voiddate: Time.zone.local(2021, 11, 3), mrcdate: Time.zone.local(2022, 5, 5, 10, 36, 49), tenancylength: 5, underoccupation_benefitcap: 4, creation_method: 2, bulk_upload_id: 1, address_line1_as_entered: "address line 1 as entered", address_line2_as_entered: "address line 2 as entered", town_or_city_as_entered: "town or city as entered", county_as_entered: "county as entered", postcode_full_as_entered: "AB1 2CD", la_as_entered: "la as entered") }
+        let!(:lettings_log) { FactoryBot.create(:lettings_log, :completed, assigned_to: user, age1: 35, sex1: "F", age2: 32, sex2: "M", ppostcode_full: "A1 1AA", nationality_all_group: 13, propcode: "123", postcode_full: "SE2 6RT", tenancycode: "BZ737", startdate: Time.zone.local(2024, 4, 2, 10, 36, 49), voiddate: Time.zone.local(2021, 11, 3), mrcdate: Time.zone.local(2022, 5, 5, 10, 36, 49), tenancylength: 5, underoccupation_benefitcap: 4, creation_method: 2, bulk_upload_id: 1, address_line1_as_entered: "address line 1 as entered", address_line2_as_entered: "address line 2 as entered", town_or_city_as_entered: "town or city as entered", county_as_entered: "county as entered", postcode_full_as_entered: "AB1 2CD", la_as_entered: "la as entered") }
         let(:expected_zip_filename) { "core_2024_2025_apr_mar_f0001_inc0001.zip" }
         let(:expected_data_filename) { "core_2024_2025_apr_mar_f0001_inc0001_pt001.xml" }
         let(:xml_export_file) { File.open("spec/fixtures/exports/general_needs_log_24_25.xml", "r:UTF-8") }
@@ -450,13 +451,13 @@ RSpec.describe Exports::LettingsLogExportService do
 
   context "when exporting a supported housing lettings logs in XML" do
     let(:export_file) { File.open("spec/fixtures/exports/supported_housing_logs.xml", "r:UTF-8") }
-    let(:organisation) { FactoryBot.create(:organisation, provider_type: "LA") }
+    let(:organisation) { FactoryBot.create(:organisation, name: "MHCLG", provider_type: "LA", housing_registration_no: 1234) }
     let(:user) { FactoryBot.create(:user, organisation:, email: "fake@email.com") }
     let(:other_user) { FactoryBot.create(:user, organisation:, email: "other@email.com") }
     let(:scheme) { FactoryBot.create(:scheme, :export, owning_organisation: organisation) }
     let(:location) { FactoryBot.create(:location, :export, scheme:, startdate: Time.zone.local(2021, 4, 1), old_id: "1a") }
 
-    let(:lettings_log) { FactoryBot.create(:lettings_log, :completed, :export, :sh, scheme:, location:, assigned_to: user, updated_by: other_user, owning_organisation: organisation, startdate: Time.zone.local(2022, 2, 2, 10, 36, 49), voiddate: Time.zone.local(2019, 11, 3), mrcdate: Time.zone.local(2020, 5, 5, 10, 36, 49), underoccupation_benefitcap: 4, sheltered: 1) }
+    let(:lettings_log) { FactoryBot.create(:lettings_log, :completed, :export, :sh, scheme:, location:, assigned_to: user, updated_by: other_user, owning_organisation: organisation, age1: 35, sex1: "F", age2: 32, sex2: "M", startdate: Time.zone.local(2022, 2, 2, 10, 36, 49), voiddate: Time.zone.local(2019, 11, 3), mrcdate: Time.zone.local(2020, 5, 5, 10, 36, 49), underoccupation_benefitcap: 4, sheltered: 1) }
 
     before do
       lettings_log.postcode_full = nil

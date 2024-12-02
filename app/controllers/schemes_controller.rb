@@ -118,6 +118,10 @@ class SchemesController < ApplicationController
     validation_errors scheme_params
 
     if @scheme.errors.empty? && @scheme.save
+      if @scheme.owning_organisation.merge_date.present?
+        deactivation = SchemeDeactivationPeriod.new(scheme: @scheme, deactivation_date: @scheme.owning_organisation.merge_date)
+        deactivation.save!(validate: false)
+      end
       redirect_to scheme_primary_client_group_path(@scheme)
     else
       if @scheme.errors.any? { |error| error.attribute == :owning_organisation }

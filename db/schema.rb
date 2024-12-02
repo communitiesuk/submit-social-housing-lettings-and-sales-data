@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_11_18_104046) do
+ActiveRecord::Schema[7.0].define(version: 2024_11_22_154743) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -478,6 +478,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_18_104046) do
     t.boolean "request_merged"
     t.boolean "processing"
     t.boolean "existing_absorbing_organisation"
+    t.boolean "has_helpdesk_ticket"
   end
 
   create_table "notifications", force: :cascade do |t|

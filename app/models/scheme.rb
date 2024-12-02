@@ -57,8 +57,8 @@ class Scheme < ApplicationRecord
       .or(deactivated_directly)
   }
 
-  scope :deactivated_by_organisation, lambda {
-    merge(Organisation.filter_by_inactive)
+  scope :deactivated_by_organisation, lambda { |date = Time.zone.now|
+    merge(Organisation.filter_by_inactive.or(Organisation.where("merge_date <= ?", date)))
   }
 
   scope :deactivated_directly, lambda { |date = Time.zone.now|
@@ -96,7 +96,7 @@ class Scheme < ApplicationRecord
   scope :active, lambda { |date = Time.zone.now|
     where.not(id: joins(:scheme_deactivation_periods).reactivating_soon(date).pluck(:id))
     .where.not(id: incomplete.pluck(:id))
-      .where.not(id: joins(:owning_organisation).deactivated_by_organisation.pluck(:id))
+      .where.not(id: joins(:owning_organisation).deactivated_by_organisation(date).pluck(:id))
       .where.not(id: joins(:owning_organisation).joins(:scheme_deactivation_periods).deactivated_directly(date).pluck(:id))
       .where.not(id: activating_soon(date).pluck(:id))
   }
@@ -105,6 +105,22 @@ class Scheme < ApplicationRecord
 
   scope :duplicate_sets, lambda {
     scope = visible
+    .group(*DUPLICATE_SCHEME_ATTRIBUTES)
+    .where.not(scheme_type: nil)
+    .where.not(registered_under_care_act: nil)
+    .where.not(primary_client_group: nil)
+    .where.not(has_other_client_group: nil)
+    .where.not(secondary_client_group: nil).or(where(has_other_client_group: 0))
+    .where.not(support_type: nil)
+    .where.not(intended_stay: nil)
+    .having(
+      "COUNT(*) > 1",
+    )
+    scope.pluck("ARRAY_AGG(id)")
+  }
+
+  scope :duplicate_active_sets, lambda {
+    scope = active
     .group(*DUPLICATE_SCHEME_ATTRIBUTES)
     .where.not(scheme_type: nil)
     .where.not(registered_under_care_act: nil)
@@ -314,7 +330,7 @@ class Scheme < ApplicationRecord
   def status_at(date)
     return :deleted if discarded_at.present?
     return :incomplete unless confirmed && locations.confirmed.any?
-    return :deactivated if owning_organisation.status_at(date) == :deactivated ||
+    return :deactivated if owning_organisation.status_at(date) == :deactivated || owning_organisation.status_at(date) == :merged ||
       (open_deactivation&.deactivation_date.present? && date >= open_deactivation.deactivation_date)
     return :deactivating_soon if open_deactivation&.deactivation_date.present? && date < open_deactivation.deactivation_date
     return :reactivating_soon if last_deactivation_before(date)&.reactivation_date.present? && date < last_deactivation_before(date).reactivation_date

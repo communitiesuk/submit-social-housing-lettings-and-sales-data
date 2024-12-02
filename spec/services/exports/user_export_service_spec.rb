@@ -12,7 +12,7 @@ RSpec.describe Exports::UserExportService do
   let(:expected_data_filename) { "users_2024_2025_apr_mar_f0001_inc0001_pt001.xml" }
   let(:expected_manifest_filename) { "manifest.xml" }
   let(:start_time) { Time.zone.local(2022, 5, 1) }
-  let(:organisation) { create(:organisation, with_dsa: false) }
+  let(:organisation) { create(:organisation, name: "MHCLG", with_dsa: false) }
 
   def replace_entity_ids(user, export_template)
     export_template.sub!(/\{id\}/, user["id"].to_s)
@@ -42,7 +42,7 @@ RSpec.describe Exports::UserExportService do
     end
 
     context "and one user is available for export" do
-      let!(:user) { create(:user, organisation:, phone_extension: "123") }
+      let!(:user) { create(:user, organisation:, name: "Danny Rojas", phone_extension: "123") }
 
       it "generates a ZIP export file with the expected filename" do
         expect(storage_service).to receive(:write_file).with(expected_zip_filename, any_args)
