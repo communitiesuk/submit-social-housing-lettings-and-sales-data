@@ -7,7 +7,7 @@ en:
             no_females_pregnant_household_value_check:
               page_header: ""
               check_answer_label: "Pregnancy confirmation"
-              check_answer_prompt: ""
+              check_answer_prompt: "Confirm pregnancy answer"
               hint_text: ""
               question_text: "Are you sure this is correct?"
               title_text: "You told us somebody in the household is pregnant."
@@ -15,7 +15,7 @@ en:
             females_in_soft_age_range_in_pregnant_household_value_check:
               page_header: ""
               check_answer_label: "Pregnancy confirmation"
-              check_answer_prompt: ""
+              check_answer_prompt: "Confirm pregnancy status"
               hint_text: ""
               question_text: "Are you sure this is correct?"
               title_text: "You told us somebody in the household is pregnant."
@@ -24,7 +24,7 @@ en:
           no_retirement_value_check:
             page_header: ""
             check_answer_label: "Retirement confirmation"
-            check_answer_prompt: ""
+            check_answer_prompt: "Confirm retirement status"
             hint_text: ""
             question_text: "Are you sure this person is retired?"
             title_text: "You told us this person is aged %{age} years and retired."
@@ -33,7 +33,7 @@ en:
           retirement_value_check:
             page_header: ""
             check_answer_label: "Retirement confirmation"
-            check_answer_prompt: ""
+            check_answer_prompt: "Confirm retirement status"
             hint_text: ""
             question_text: "Are you sure this person isn’t retired?"
             title_text: "You told us this person is over 66 and not retired."
@@ -42,7 +42,7 @@ en:
           partner_under_16_value_check:
             page_header: ""
             check_answer_label: "Partner under 16 confirmation"
-            check_answer_prompt: ""
+            check_answer_prompt: "Confirm partner's age"
             hint_text: ""
             question_text: "Are you sure this is correct?"
             title_text: "You told us this person is aged %{age} years and has 'Partner' relationship to the lead tenant."
@@ -51,7 +51,7 @@ en:
           multiple_partners_value_check:
             page_header: ""
             check_answer_label: "Multiple partners confirmation"
-            check_answer_prompt: ""
+            check_answer_prompt: "Confirm multiple partners"
             hint_text: ""
             question_text: "Are you sure this is correct?"
             title_text: "You told us there are more than 1 persons with 'Partner' relationship to the lead tenant."
@@ -60,7 +60,7 @@ en:
           reasonother_value_check:
             page_header: ""
             check_answer_label: "Reason other confirmation"
-            check_answer_prompt: ""
+            check_answer_prompt: "Confirm reason for leaving"
             hint_text: ""
             question_text: "Are you sure this doesn’t fit an existing category?"
             title_text: "You told us that the tenant’s main reason for leaving their last settled home was %{reasonother}."
@@ -69,7 +69,7 @@ en:
           referral_value_check:
             page_header: ""
             check_answer_label: "Referral confirmation"
-            check_answer_prompt: ""
+            check_answer_prompt: "Confirm referral type"
             hint_text: ""
             question_text: "Are you sure?"
             title_text: "Are you sure?"
@@ -78,7 +78,7 @@ en:
           net_income_value_check:
             page_header: ""
             check_answer_label: "Net income confirmation"
-            check_answer_prompt: ""
+            check_answer_prompt: "Confirm net income"
             hint_text: ""
             question_text: "Are you sure this is correct?"
             title_text: "You told us that the household’s income is %{earnings} %{incfreq}."
@@ -87,7 +87,7 @@ en:
           care_home_charges_value_check:
             page_header: ""
             check_answer_label: "Care home charges confirmation"
-            check_answer_prompt: ""
+            check_answer_prompt: "Confirm care home charges"
             hint_text: ""
             question_text: "Are you sure there are no care home charges?"
             title_text: "Care home charges should be provided if this is a care home accommodation."
@@ -96,7 +96,7 @@ en:
           rent_value_check:
             page_header: ""
             check_answer_label: "Total rent confirmation"
-            check_answer_prompt: ""
+            check_answer_prompt: "Confirm total rent"
             hint_text: "Check the following:<ul class=\"govuk-body-l app-panel--interruption\"><li>the decimal point</li><li>the frequency, for example every week or every calendar month</li><li>the rent type is correct, for example affordable or social rent</li></ul>"
             question_text:  "Are you sure this is correct?"
             title_text: "You told us the rent is %{brent}."
@@ -105,7 +105,7 @@ en:
           scharge_value_check:
             page_header: ""
             check_answer_label: "Service charge confirmation"
-            check_answer_prompt: ""
+            check_answer_prompt: "Confirm service charge"
             hint_text: "Check the following:<ul class=\"govuk-body-l app-panel--interruption\"><li>the decimal point</li><li>the frequency, for example every week or every calendar month</li><li>the needs type</li></ul>"
             question_text: "Are you sure?"
             title_text: "You told us the service charge is %{scharge}."
@@ -114,7 +114,7 @@ en:
           pscharge_value_check:
             page_header: ""
             check_answer_label: "Personal service charge confirmation"
-            check_answer_prompt: ""
+            check_answer_prompt: "Confirm personal service charge"
             hint_text: "Check the following:<ul class=\"govuk-body-l app-panel--interruption\"><li>the decimal point</li><li>the frequency, for example every week or every calendar month</li><li>the needs type</li></ul>"
             question_text: "Are you sure?"
             title_text: "You told us the personal service charge is %{pscharge}."
@@ -123,7 +123,7 @@ en:
           supcharg_value_check:
             page_header: ""
             check_answer_label: "Support charge confirmation"
-            check_answer_prompt: ""
+            check_answer_prompt: "Confirm support charge"
             hint_text: "Check the following:<ul class=\"govuk-body-l app-panel--interruption\"><li>the decimal point</li><li>the frequency, for example every week or every calendar month</li><li>the needs type</li></ul>"
             question_text: "Are you sure?"
             title_text: "You told us the support charge is %{supcharg}."
@@ -132,7 +132,7 @@ en:
           void_date_value_check:
             page_header: ""
             check_answer_label: "Void date confirmation"
-            check_answer_prompt: ""
+            check_answer_prompt: "Confirm void date"
             hint_text: ""
             question_text: "Are you sure the property has been vacant for this long?"
             title_text: "You told us that the property has been vacant for more than 2 years."
@@ -141,7 +141,7 @@ en:
           major_repairs_date_value_check:
             page_header: ""
             check_answer_label: "Major repairs date confirmation"
-            check_answer_prompt: ""
+            check_answer_prompt: "Confirm major repairs date"
             hint_text: ""
             question_text: "Are you sure the property has been vacant for this long?"
             title_text: "You told us the property has been vacant for 2 years."
@@ -150,7 +150,7 @@ en:
           no_address_found:
             page_header: ""
             check_answer_label: "No address found"
-            check_answer_prompt: ""
+            check_answer_prompt: "Try find address"
             hint_text: ""
             question_text: "We could not find an address that matches your search. You can search again or continue to enter the address manually."
             title_text: "No address found"
