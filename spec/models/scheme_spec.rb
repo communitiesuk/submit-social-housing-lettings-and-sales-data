@@ -363,6 +363,11 @@ RSpec.describe Scheme, type: :model do
         expect(scheme.status).to eq(:deactivated)
       end
 
+      it "returns deactivated if the owning organisation has been merged" do
+        scheme.owning_organisation.merge_date = 2.days.ago
+        expect(scheme.status).to eq(:deactivated)
+      end
+
       it "returns deactivated if deactivation_date is in the past" do
         FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.yesterday, scheme:)
         scheme.reload

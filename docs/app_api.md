@@ -12,4 +12,4 @@ In order to use the app as an API, you will need to configure requests to the AP
   - `Content-Type = application/json`
   - `Action = application/json` N.B. If you use `*/*` instead, the request won't be recognised as an API request`
 
-Currently only the logs controller is configured to accept and authenticate API requests, when the above API environment variables are set.
+Currently, only the Logs Controller is configured to accept and authenticate API requests, provided that the specified API environment variables are set. Please note that the API has not been actively maintained for an extended period and may not function as expected. Additionally, the required environment variables are not configured on any of the environments deployed on AWS, rendering API requests to those environments non-functional.

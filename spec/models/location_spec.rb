@@ -740,10 +740,38 @@ RSpec.describe Location, type: :model do
   describe "#units" do
     let(:location) { FactoryBot.build(:location) }
 
-    it "does add an error when the number of units is invalid" do
-      location.units = nil
-      location.valid?(:units)
-      expect(location.errors.count).to eq(1)
+    context "when the number of units is invalid" do
+      it "adds an error when units is nil" do
+        location.units = nil
+        location.valid?(:units)
+        expect(location.errors.count).to eq(2)
+      end
+
+      it "adds an error when units is 0" do
+        location.units = 0
+        location.valid?(:units)
+        expect(location.errors.count).to eq(1)
+      end
+    end
+
+    context "when the number of units is valid" do
+      it "does not add an error when units is 1" do
+        location.units = 1
+        location.valid?(:units)
+        expect(location.errors.count).to eq(0)
+      end
+
+      it "does not add an error when units is 10" do
+        location.units = 10
+        location.valid?(:units)
+        expect(location.errors.count).to eq(0)
+      end
+
+      it "does not add an error when units is 200" do
+        location.units = 200
+        location.valid?(:units)
+        expect(location.errors.count).to eq(0)
+      end
     end
   end
 
@@ -926,6 +954,11 @@ RSpec.describe Location, type: :model do
 
       it "returns deactivated if the owning organisation is deactivated" do
         location.scheme.owning_organisation.active = false
+        expect(location.status).to eq(:deactivated)
+      end
+
+      it "returns deactivated if the owning organisation has been merged" do
+        location.scheme.owning_organisation.merge_date = 2.days.ago
         expect(location.status).to eq(:deactivated)
       end
 

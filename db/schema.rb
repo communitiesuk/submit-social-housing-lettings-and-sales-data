@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_10_31_102744) do
+ActiveRecord::Schema[7.0].define(version: 2024_11_22_154743) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -62,6 +62,18 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_31_102744) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "discarded_at"
+  end
+
+  create_table "csv_downloads", force: :cascade do |t|
+    t.string "download_type"
+    t.string "filename"
+    t.integer "expiration_time"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id"
+    t.bigint "organisation_id"
+    t.index ["organisation_id"], name: "index_csv_downloads_on_organisation_id"
+    t.index ["user_id"], name: "index_csv_downloads_on_user_id"
   end
 
   create_table "csv_variable_definitions", force: :cascade do |t|
@@ -466,6 +478,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_31_102744) do
     t.boolean "request_merged"
     t.boolean "processing"
     t.boolean "existing_absorbing_organisation"
+    t.boolean "has_helpdesk_ticket"
   end
 
   create_table "notifications", force: :cascade do |t|
@@ -746,6 +759,13 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_31_102744) do
     t.integer "partner_under_16_value_check"
     t.integer "multiple_partners_value_check"
     t.bigint "created_by_id"
+    t.integer "has_management_fee"
+    t.decimal "management_fee", precision: 10, scale: 2
+    t.integer "firststair"
+    t.integer "numstair"
+    t.decimal "mrentprestaircasing", precision: 10, scale: 2
+    t.datetime "lasttransaction"
+    t.datetime "initialpurchase"
     t.index ["assigned_to_id"], name: "index_sales_logs_on_assigned_to_id"
     t.index ["bulk_upload_id"], name: "index_sales_logs_on_bulk_upload_id"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"

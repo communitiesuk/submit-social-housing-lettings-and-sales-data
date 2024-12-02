@@ -65,6 +65,10 @@ RSpec.describe Form::Sales::Subsections::SharedOwnershipScheme, type: :model do
     expect(shared_ownership_scheme.id).to eq("shared_ownership_scheme")
   end
 
+  it "has the correct copy key" do
+    expect(shared_ownership_scheme.copy_key).to eq("sale_information")
+  end
+
   it "has the correct label" do
     expect(shared_ownership_scheme.label).to eq("Shared ownership scheme")
   end

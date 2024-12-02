@@ -26,24 +26,47 @@ en:
                 question_text: "Did the buyer live in the property before purchasing it?"
 
           about_staircasing:
-              page_header: "About the staircasing transaction"
-              stairbought:
-                check_answer_label: "Percentage bought in this staircasing transaction"
+            page_header: "About the staircasing transaction"
+            stairbought:
+              check_answer_label: "Percentage bought in this staircasing transaction"
+              hint_text: ""
+              question_text: "What percentage of the property has been bought in this staircasing transaction?"
+            stairowned:
+              joint_purchase:
+                check_answer_label: "Percentage the buyers now own in total"
                 hint_text: ""
-                question_text: "What percentage of the property has been bought in this staircasing transaction?"
-              stairowned:
-                joint_purchase:
-                  check_answer_label: "Percentage the buyers now own in total"
-                  hint_text: ""
-                  question_text: "What percentage of the property do the buyers now own in total?"
-                not_joint_purchase:
-                  check_answer_label: "Percentage the buyer now owns in total"
-                  hint_text: ""
-                  question_text: "What percentage of the property does the buyer now own in total?"
-              staircasesale:
-                check_answer_label: "Part of a back-to-back staircasing transaction"
+                question_text: "What percentage of the property do the buyers now own in total?"
+              not_joint_purchase:
+                check_answer_label: "Percentage the buyer now owns in total"
                 hint_text: ""
-                question_text: "Is this transaction part of a back-to-back staircasing transaction to facilitate sale of the home on the open market?"
+                question_text: "What percentage of the property does the buyer now own in total?"
+
+          staircasesale:
+            page_header: ""
+            check_answer_label: "Part of a back-to-back staircasing transaction?"
+            hint_text: ""
+            question_text: "Is this transaction part of a back-to-back staircasing transaction to facilitate sale of the home on the open market?"
+
+          firststair:
+            page_header: ""
+            check_answer_label: "First time staircasing?"
+            hint_text: ""
+            question_text: "Is this the first time the shared owner has engaged in staircasing in the home?"
+
+          stairprevious:
+            page_header: "About previous staircasing transactions"
+            numstair:
+              check_answer_label: "Number of staircasing transactions"
+              hint_text: ""
+              question_text: "Including this time, how many times has the shared owner engaged in staircasing in the home?"
+            initialpurchase:
+              check_answer_label: "Initial staircasing transaction"
+              hint_text: ""
+              question_text: "What was the date of the initial purchase of a share in the property?"
+            lasttransaction:
+              check_answer_label: "Last staircasing transaction"
+              hint_text: ""
+              question_text: "What was the date of the last staircasing transaction?"
 
           resale:
             page_header: ""
@@ -101,19 +124,29 @@ en:
 
           value:
             page_header: "About the price of the property"
-            check_answer_label: "Full purchase price"
-            hint_text: "Enter the full purchase price of the property before any discounts are applied. For shared ownership, enter the full purchase price paid for 100% equity (this is equal to the value of the share owned by the PRP plus the value bought by the purchaser)"
-            question_text: "What was the full purchase price?"
+            value_shared_ownership:
+              check_answer_label: "Full purchase price"
+              hint_text: "Enter the full purchase price of the property before any discounts are applied. For shared ownership, enter the full purchase price paid for 100% equity (this is equal to the value of the share owned by the PRP plus the value bought by the purchaser)."
+              question_text: "What was the full purchase price?"
+            value_shared_ownership_staircase:
+              check_answer_label: "Full purchase price"
+              hint_text: "Enter the full purchase price paid for the equity bought in this staircasing transaction (this is equal to the value of the share bought by the purchaser)."
+              question_text: "What was the full purchase price for this staircasing transaction?"
 
           equity:
             page_header: "About the price of the property"
-            check_answer_label: "Initial percentage equity stake"
-            hint_text: "Enter the amount of initial equity held by the purchaser (for example, 25% or 50%)"
-            question_text: "What was the initial percentage equity stake purchased?"
+            initial_equity:
+              check_answer_label: "Initial percentage equity share"
+              hint_text: "Enter the amount of initial equity share held by the purchaser (for example, 25% or 50%)"
+              question_text: "What was the initial percentage share purchased?"
+            staircase_equity:
+              check_answer_label: "Initial percentage equity share"
+              hint_text: "Enter the amount of initial equity share held by the purchaser (for example, 25% or 50%)"
+              question_text: "What was the percentage shared purchased in the initial transaction?"
 
           mortgageused:
             page_header: "Mortgage Amount"
-            check_answer_label: "Mortgage used"
+            check_answer_label: "Mortgage used?"
             hint_text: ""
             question_text: "Was a mortgage used for the purchase of this property?"
 
@@ -165,12 +198,23 @@ en:
             hint_text: "Amount paid before any charges"
             question_text: "What is the basic monthly rent?"
 
+          mrent_staircasing:
+            page_header: "Monthly rent"
+            prestaircasing:
+              check_answer_label: "Monthly rent prior to staircasing"
+              hint_text: "Amount paid before any charges"
+              question_text: "What was the basic monthly rent prior to staircasing?"
+            poststaircasing:
+              check_answer_label: "Monthly rent after staircasing"
+              hint_text: "Amount paid before any charges"
+              question_text: "What is the basic monthly rent after staircasing?"
+
           leaseholdcharges:
             page_header: ""
             has_mscharge:
-              check_answer_label: "Does the property have any monthly leasehold charges?"
+              check_answer_label: "Does the property have any service charges?"
               hint_text: "For example, service and management charges"
-              question_text: "Does the property have any monthly leasehold charges?"
+              question_text: "Does the property have any service charges?"
             mscharge:
               check_answer_label:  "Monthly leasehold charges"
               hint_text: ""
@@ -199,3 +243,14 @@ en:
             check_answer_label: "Amount of any loan, grant or subsidy"
             hint_text: "For all schemes except Right to Buy (RTB), Preserved Right to Buy (PRTB), Voluntary Right to Buy (VRTB) and Rent to Buy"
             question_text: "What was the amount of any loan, grant, discount or subsidy given?"
+
+          management_fee:
+            page_header: ""
+            has_management_fee:
+              check_answer_label: "Does the property have an estate management fee?"
+              hint_text: "Estate management fees are typically used for the maintenance of communal gardens, payments, private roads, car parks and/or play areas within new build estates."
+              question_text: "Does the property have an estate management fee?"
+            management_fee:
+              check_answer_label:  "Monthly estate management fee"
+              hint_text: ""
+              question_text: "Enter the total monthly management fee"

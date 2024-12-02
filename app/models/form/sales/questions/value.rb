@@ -2,7 +2,7 @@ class Form::Sales::Questions::Value < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "value"
-    @copy_key = "sales.sale_information.value"
+    @copy_key = "sales.sale_information.value.#{page.id}"
     @type = "numeric"
     @min = 0
     @step = 1

@@ -2,7 +2,7 @@ class Form::Sales::Questions::Equity < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "equity"
-    @copy_key = "sales.sale_information.equity"
+    @copy_key = "sales.sale_information.equity.#{page.id}"
     @type = "numeric"
     @min = 0
     @max = 100

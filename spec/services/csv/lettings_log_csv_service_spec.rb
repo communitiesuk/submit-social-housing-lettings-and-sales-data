@@ -196,7 +196,7 @@ RSpec.describe Csv::LettingsLogCsvService do
     describe "the full CSV output" do
       context "when the requested log year is 2024" do
         let(:year) { 2024 }
-        let(:organisation) { create(:organisation, provider_type: "LA") }
+        let(:organisation) { create(:organisation, provider_type: "LA", name: "MHCLG") }
         let(:log) do
           create(
             :lettings_log,
@@ -389,7 +389,7 @@ RSpec.describe Csv::LettingsLogCsvService do
 
       context "when the requested log year is 2023" do
         let(:year) { 2023 }
-        let(:organisation) { create(:organisation, provider_type: "LA") }
+        let(:organisation) { create(:organisation, provider_type: "LA", name: "MHCLG") }
         let(:log) do
           create(
             :lettings_log,

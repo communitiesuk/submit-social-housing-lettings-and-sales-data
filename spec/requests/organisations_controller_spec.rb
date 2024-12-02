@@ -1431,7 +1431,7 @@ RSpec.describe OrganisationsController, type: :request do
           end
 
           context "when a search parameter is passed" do
-            let!(:matching_user) { create(:user, organisation:, name: "joe", email: "matching@example.com") }
+            let!(:matching_user) { create(:user, organisation:, name: "abcdefghijklmnopqrstuvwxyz", email: "matching@example.com") }
             let(:org_user_count) { User.where(organisation:).count }
 
             before do
@@ -1439,7 +1439,7 @@ RSpec.describe OrganisationsController, type: :request do
             end
 
             context "when our search string matches case" do
-              let(:search_param) { "joe" }
+              let(:search_param) { "abcdefghijklmnopqrstuvwxyz" }
 
               it "returns only matching results" do
                 expect(page).to have_content(matching_user.name)
@@ -1459,7 +1459,7 @@ RSpec.describe OrganisationsController, type: :request do
               end
 
               context "when we need case insensitive search" do
-                let(:search_param) { "Joe" }
+                let(:search_param) { "Abcdefghijklmnopqrstuvwxyz" }
 
                 it "returns only matching results" do
                   expect(page).to have_content(matching_user.name)
@@ -1642,6 +1642,11 @@ RSpec.describe OrganisationsController, type: :request do
 
             context "when search results require pagination" do
               let(:search_param) { "MHCLG" }
+
+              before do
+                create_list(:organisation, 27, name: "MHCLG")
+                get "/organisations?search=#{search_param}"
+              end
 
               it "has search and pagination in the title" do
                 expect(page).to have_title("Organisations (27 organisations matching ‘#{search_param}’) (page 1 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")

@@ -183,8 +183,15 @@ en:
             merge_date:
               blank: "Enter a merge date."
               invalid: "Enter a valid merge date."
+              more_than_year_from_today: "The merge date must not be later than a year from today’s date."
             existing_absorbing_organisation:
               blank: "You must answer absorbing organisation already active?"
+            merging_organisation_id:
+              part_of_another_merge: "Another merge request records %{organisation} as merging into %{absorbing_organisation} on %{merge_date}. Select another organisation or remove this organisation from the other merge request."
+            has_helpdesk_ticket:
+              blank: "You must answer was this merge reported by a helpdesk ticket?"
+            helpdesk_ticket:
+              blank: "You must answer the ticket number"
         notification:
           attributes:
             title:
@@ -354,7 +361,9 @@ en:
 
     location:
       postcode_blank: "Enter a postcode."
-      units: "The units at this location must be a number."
+      units:
+        must_be_number: "The units at this location must be a number."
+        must_be_one_or_more: "Number of units must be at least 1."
       type_of_unit: "Select the most common type of unit at this location."
       mobility_standards: "Select the mobility standard for the majority of the units at this location."
       startdate_invalid: "Enter a valid day, month and year when the first property became available at this location."
@@ -370,6 +379,7 @@ en:
         during_deactivated_period: "The location is already deactivated during this date, please enter a different date."
     merge_request:
       organisation_part_of_another_merge: "This organisation is part of another merge - select a different one."
+      organisation_part_of_another_incomplete_merge: "Another merge request records %{organisation} as merging into %{absorbing_organisation} on %{merge_date}. Select another organisation or remove this organisation from the other merge request."
       organisation_not_selected: "Select an organisation from the search list."
 
   soft_validations:

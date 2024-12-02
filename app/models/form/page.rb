@@ -25,7 +25,7 @@ class Form::Page
   delegate :form, to: :subsection
 
   def copy_key
-    @copy_key ||= "#{form.type}.#{subsection.id}.#{questions[0].id}"
+    @copy_key ||= "#{form.type}.#{subsection.copy_key}.#{questions[0].id}"
   end
 
   def header

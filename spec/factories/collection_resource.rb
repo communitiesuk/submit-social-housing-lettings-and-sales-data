@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :collection_resource, class: "CollectionResource" do
     resource_type { "paper_form" }
-    display_name { "lettings log for tenants (2021 to 2022)" }
+    display_name { "lettings paper form (2021 to 2022)" }
     short_display_name { "Paper Form" }
     year { 2024 }
     log_type { "lettings" }

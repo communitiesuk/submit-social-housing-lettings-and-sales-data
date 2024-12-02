@@ -2,7 +2,7 @@ class Form::Sales::Questions::StaircaseSale < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "staircasesale"
-    @copy_key = "sales.sale_information.about_staircasing.staircasesale"
+    @copy_key = form.start_year_2025_or_later? ? "sales.sale_information.staircasesale" : "sales.sale_information.about_staircasing.staircasesale"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]

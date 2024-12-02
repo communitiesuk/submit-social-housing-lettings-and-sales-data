@@ -2,7 +2,6 @@ class Form::Sales::Pages::ExtraBorrowing < ::Form::Page
   def initialize(id, hsh, subsection, ownershipsch:)
     super(id, hsh, subsection)
     @ownershipsch = ownershipsch
-    @copy_key = "sales.sale_information.extrabor"
     @description = ""
     @subsection = subsection
     @depends_on = [{
