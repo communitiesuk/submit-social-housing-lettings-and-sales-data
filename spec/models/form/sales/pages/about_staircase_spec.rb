@@ -15,6 +15,10 @@ RSpec.describe Form::Sales::Pages::AboutStaircase, type: :model do
   describe "questions" do
     let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date:)) }
 
+    before do
+      allow(subsection.form).to receive(:start_year_2025_or_later?).and_return(false)
+    end
+
     context "when 2022" do
       let(:start_date) { Time.utc(2022, 2, 8) }
 

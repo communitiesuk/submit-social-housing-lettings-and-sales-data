@@ -1,22 +1,22 @@
 require "rails_helper"
 
-RSpec.describe Form::Sales::Pages::ValueSharedOwnership, type: :model do
+RSpec.describe Form::Sales::Pages::StaircaseInitialDate, type: :model do
   subject(:page) { described_class.new(page_id, page_definition, subsection) }
 
-  let(:page_id) { "value_shared_ownership" }
+  let(:page_id) { nil }
   let(:page_definition) { nil }
-  let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2023, 4, 1))) }
+  let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2025, 4, 1))) }
 
   it "has correct subsection" do
     expect(page.subsection).to eq(subsection)
   end
 
   it "has correct questions" do
-    expect(page.questions.map(&:id)).to eq(%w[value])
+    expect(page.questions.map(&:id)).to eq(%w[initialpurchase])
   end
 
   it "has the correct id" do
-    expect(page.id).to eq("value_shared_ownership")
+    expect(page.id).to eq("staircase_initial_date")
   end
 
   it "has the correct description" do
@@ -24,6 +24,8 @@ RSpec.describe Form::Sales::Pages::ValueSharedOwnership, type: :model do
   end
 
   it "has correct depends_on" do
-    expect(page.depends_on).to be_nil
+    expect(page.depends_on).to eq([
+      { "is_firststair?" => true },
+    ])
   end
 end
