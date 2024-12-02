@@ -984,12 +984,14 @@ RSpec.describe SalesLog, type: :model do
 
     it "sets ecstat2 to 9 when age2 is under 16" do
       sales_log.age2 = 14
+      sales_log.age2_known = 1
       sales_log.set_derived_fields!
       expect(sales_log.ecstat2).to eq(9)
     end
 
     it "does not clear ecstat2 if it is not 9" do
       sales_log.age2 = 22
+      sales_log.age2_known = 1
       sales_log.ecstat2 = 3
       sales_log.set_derived_fields!
       expect(sales_log.ecstat2).to eq(3)
@@ -997,6 +999,7 @@ RSpec.describe SalesLog, type: :model do
 
     it "clears ecstat3 if it is 9 and age3 is not under 16" do
       sales_log.age3 = 22
+      sales_log.age3_known = 1
       sales_log.ecstat3 = 9
       sales_log.set_derived_fields!
       expect(sales_log.ecstat3).to be_nil
@@ -1004,6 +1007,7 @@ RSpec.describe SalesLog, type: :model do
 
     it "does not clear ecstat3 if it is not 9" do
       sales_log.age3 = 22
+      sales_log.age3_known = 1
       sales_log.ecstat3 = 8
       sales_log.set_derived_fields!
       expect(sales_log.ecstat3).to eq(8)
@@ -1012,6 +1016,7 @@ RSpec.describe SalesLog, type: :model do
     context "when a user changes their answer" do
       before do
         sales_log.age2 = 14
+        sales_log.age2_known = 1
         sales_log.ecstat2 = 9
       end
 
