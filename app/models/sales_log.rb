@@ -557,4 +557,8 @@ class SalesLog < Log
   def is_resale?
     resale == 1
   end
+
+  def is_firststair?
+    firststair == 1
+  end
 end
