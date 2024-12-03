@@ -145,7 +145,7 @@ en:
               question_text: "What was the percentage shared purchased in the initial transaction?"
 
           mortgageused:
-            page_header: "Mortgage Amount"
+            page_header: ""
             check_answer_label: "Mortgage used?"
             hint_text: ""
             question_text: "Was a mortgage used for the purchase of this property?"
