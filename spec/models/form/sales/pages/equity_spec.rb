@@ -15,10 +15,6 @@ RSpec.describe Form::Sales::Pages::Equity, type: :model do
     expect(page.questions.map(&:id)).to eq(%w[equity])
   end
 
-  it "has the correct id" do
-    expect(page.id).to eq("equity")
-  end
-
   it "has the correct description" do
     expect(page.description).to be_nil
   end

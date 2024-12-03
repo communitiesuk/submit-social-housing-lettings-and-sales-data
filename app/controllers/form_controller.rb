@@ -5,6 +5,7 @@ class FormController < ApplicationController
   before_action :find_resource, only: %i[review]
   before_action :find_resource_by_named_id, except: %i[review]
   before_action :check_collection_period, only: %i[submit_form show_page]
+  before_action :set_cache_headers, only: [:show_page]
 
   def submit_form
     if @log
@@ -37,8 +38,9 @@ class FormController < ApplicationController
         error_attributes = @log.errors.map(&:attribute)
         Rails.logger.info "User triggered validation(s) on: #{error_attributes.join(', ')}"
         @subsection = form.subsection_for_page(@page)
-        restore_error_field_values(@page&.questions)
-        render "form/page"
+        flash[:errors] = @log.errors
+        flash[:log_data] = responses_for_page
+        redirect_to send("#{@log.class.name.underscore}_#{@page.id}_path", @log, { referrer: request.params["referrer"], original_page_id: request.params["original_page_id"], related_question_ids: request.params["related_question_ids"] })
       end
     else
       render_not_found
@@ -84,6 +86,10 @@ class FormController < ApplicationController
           @questions = request.params["related_question_ids"].map { |id| @log.form.get_question(id, @log) }
           render "form/check_errors"
         else
+          if flash[:errors].present?
+            restore_previous_errors(flash[:errors])
+            restore_error_field_values(flash[:log_data])
+          end
           render "form/page"
         end
       else
@@ -96,13 +102,21 @@ class FormController < ApplicationController
 
 private
 
-  def restore_error_field_values(questions)
-    return unless questions
+  def restore_error_field_values(previous_responses)
+    return unless previous_responses
 
-    questions.each do |question|
-      if question&.type == "date" && @log.attributes.key?(question.id)
-        @log[question.id] = @log.send("#{question.id}_was")
-      end
+    previous_responses_to_reset = previous_responses.reject do |key, _|
+      @log.form.get_question(key, @log)&.type == "date"
+    end
+
+    @log.assign_attributes(previous_responses_to_reset)
+  end
+
+  def restore_previous_errors(previous_errors)
+    return unless previous_errors
+
+    previous_errors.each do |attribute, message|
+      @log.errors.add attribute, message.first
     end
   end
 
@@ -430,5 +444,11 @@ private
 
   def updated_answer_from_check_errors_page?
     params["check_errors"]
+  end
+
+  def set_cache_headers
+    response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "Mon, 01 Jan 1990 00:00:00 GMT"
   end
 end

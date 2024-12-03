@@ -380,7 +380,7 @@ RSpec.describe User, type: :model do
   end
 
   describe "paper trail" do
-    let(:user) { create(:user) }
+    let(:user) { create(:user, name: "Danny Rojas") }
 
     it "creates a record of changes to a log" do
       expect { user.update!(name: "new test name") }.to change(user.versions, :count).by(1)

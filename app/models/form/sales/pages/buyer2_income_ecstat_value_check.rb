@@ -1,12 +1,12 @@
-class Form::Sales::Pages::Buyer2IncomeMinValueCheck < ::Form::Page
+class Form::Sales::Pages::Buyer2IncomeEcstatValueCheck < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @depends_on = [
       {
-        "income2_under_soft_min?" => true,
+        "income2_outside_soft_range_for_ecstat?" => true,
       },
     ]
-    @copy_key = "sales.soft_validations.income2_value_check.min"
+    @copy_key = "sales.soft_validations.income2_value_check.ecstat"
     @title_text = {
       "translation" => "forms.#{form.start_date.year}.#{@copy_key}.title_text",
       "arguments" => [
@@ -15,16 +15,16 @@ class Form::Sales::Pages::Buyer2IncomeMinValueCheck < ::Form::Page
           "arguments_for_key" => "income2",
           "i18n_template" => "income",
         },
-        {
-          "key" => "income_soft_min_for_ecstat",
-          "arguments_for_key" => "ecstat2",
-          "i18n_template" => "minimum",
-        },
       ],
     }
     @informative_text = {
       "translation" => "forms.#{form.start_date.year}.#{@copy_key}.informative_text",
-      "arguments" => [],
+      "arguments" => [
+        {
+          "key" => "income2_more_or_less_text",
+          "i18n_template" => "more_or_less",
+        },
+      ],
     }
   end
 

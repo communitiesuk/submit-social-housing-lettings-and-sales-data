@@ -35,6 +35,14 @@ module Validations::Sales::SaleInformationValidations
     end
   end
 
+  def validate_staircasing_initial_purchase_date(record)
+    return unless record.initialpurchase
+
+    if record.initialpurchase < Time.zone.local(1980, 1, 1)
+      record.errors.add :initialpurchase, I18n.t("validations.sales.sale_information.initialpurchase.must_be_after_1980")
+    end
+  end
+
   def validate_previous_property_unit_type(record)
     return unless record.fromprop && record.frombeds
 
@@ -348,6 +356,15 @@ module Validations::Sales::SaleInformationValidations
     if record.stairowned && !record.stairowned_100?
       record.errors.add :stairowned, I18n.t("validations.sales.sale_information.stairowned.mortgageused_dont_know")
       record.errors.add :mortgageused, I18n.t("validations.sales.sale_information.mortgageused.mortgageused_dont_know")
+    end
+  end
+
+  def validate_number_of_staircase_transactions(record)
+    return unless record.numstair
+
+    if record.firststair == 2 && record.numstair < 2
+      record.errors.add :numstair, I18n.t("validations.sales.sale_information.numstair.must_be_greater_than_one")
+      record.errors.add :firststair, I18n.t("validations.sales.sale_information.firststair.cannot_be_no")
     end
   end
 

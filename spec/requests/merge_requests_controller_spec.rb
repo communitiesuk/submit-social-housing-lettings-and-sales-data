@@ -49,7 +49,7 @@ RSpec.describe MergeRequestsController, type: :request do
         end
 
         it "shows the correct content" do
-          expect(page).to have_content("Which organisations are merging into MHCLG?")
+          expect(page).to have_content("Which organisations are merging into #{organisation.name}?")
         end
       end
     end
@@ -64,7 +64,7 @@ RSpec.describe MergeRequestsController, type: :request do
 
         it "adds merging organisation to the page" do
           merge_request.reload
-          expect(page).to have_content("MHCLG")
+          expect(page).to have_content(organisation.name)
           expect(page).to have_content("Other Test Org")
           expect(page).to have_link("Remove")
         end
@@ -260,7 +260,7 @@ RSpec.describe MergeRequestsController, type: :request do
         end
 
         it "shows the correct content" do
-          expect(page).to have_content("Which helpdesk ticket reported this merge?")
+          expect(page).to have_content("Was this merge reported by a helpdesk ticket?")
           expect(page).to have_link("Back", href: existing_absorbing_organisation_merge_request_path(merge_request))
           expect(page).to have_button("Save and continue")
         end
@@ -476,6 +476,82 @@ RSpec.describe MergeRequestsController, type: :request do
           end
         end
       end
+
+      describe "from helpdesk_ticket page" do
+        context "when not answering the question" do
+          let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation, absorbing_organisation: other_organisation) }
+          let(:params) do
+            { merge_request: { page: "helpdesk_ticket" } }
+          end
+          let(:request) do
+            patch "/merge-request/#{merge_request.id}", headers:, params:
+          end
+
+          it "renders the error" do
+            request
+
+            expect(response).to have_http_status(:unprocessable_entity)
+            expect(page).to have_content("You must answer was this merge reported by a helpdesk ticket?")
+          end
+
+          it "does not update the request" do
+            expect { request }.not_to(change { merge_request.reload.attributes })
+          end
+        end
+
+        context "when has_helpdesk_ticket is true but no ticket is given" do
+          let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation, absorbing_organisation: other_organisation) }
+          let(:params) do
+            { merge_request: { page: "helpdesk_ticket", has_helpdesk_ticket: true } }
+          end
+          let(:request) do
+            patch "/merge-request/#{merge_request.id}", headers:, params:
+          end
+
+          it "renders the error" do
+            request
+
+            expect(response).to have_http_status(:unprocessable_entity)
+            expect(page).to have_content("You must answer the ticket number")
+          end
+
+          it "does not update the request" do
+            expect { request }.not_to(change { merge_request.reload.attributes })
+          end
+        end
+
+        context "when has_helpdesk_ticket is false" do
+          let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation, absorbing_organisation: other_organisation, helpdesk_ticket: "123") }
+          let(:params) do
+            { merge_request: { page: "helpdesk_ticket", has_helpdesk_ticket: false } }
+          end
+          let(:request) do
+            patch "/merge-request/#{merge_request.id}", headers:, params:
+          end
+
+          it "updates has_helpdesk_ticket and clears helpdesk_ticket" do
+            request
+            expect(merge_request.reload.has_helpdesk_ticket).to eq(false)
+            expect(merge_request.helpdesk_ticket).to eq(nil)
+          end
+        end
+
+        context "when has_helpdesk_ticket is true and ticket is given" do
+          let(:merge_request) { MergeRequest.create!(requesting_organisation: organisation, absorbing_organisation: other_organisation) }
+          let(:params) do
+            { merge_request: { page: "helpdesk_ticket", has_helpdesk_ticket: true, helpdesk_ticket: "321" } }
+          end
+          let(:request) do
+            patch "/merge-request/#{merge_request.id}", headers:, params:
+          end
+
+          it "updates has_helpdesk_ticket and clears helpdesk_ticket" do
+            request
+            expect(merge_request.reload.has_helpdesk_ticket).to eq(true)
+            expect(merge_request.helpdesk_ticket).to eq("321")
+          end
+        end
+      end
     end
 
     describe "#merge_start_confirmation" do
@@ -657,7 +733,7 @@ RSpec.describe MergeRequestsController, type: :request do
       it "shows user outcomes after merge" do
         expect(page).to have_link("View all 4 Organisation with some users users (opens in a new tab)", href: users_organisation_path(organisation_with_some_users))
         expect(page).to have_link("View all 12 Organisation with many users users (opens in a new tab)", href: users_organisation_path(organisation_with_some_more_users))
-        expect(page).to have_link("View all 3 MHCLG users (opens in a new tab)", href: users_organisation_path(organisation))
+        expect(page).to have_link("View all 3 #{organisation.name} users (opens in a new tab)", href: users_organisation_path(organisation))
         expect(page).to have_content("Organisation with no users and Organisation with no users too have no users.")
         expect(page).to have_content("19 users after merge")
       end
@@ -684,7 +760,7 @@ RSpec.describe MergeRequestsController, type: :request do
       it "shows scheme outcomes after merge" do
         expect(page).to have_link("View all 4 Organisation with some schemes schemes (opens in a new tab)", href: schemes_organisation_path(organisation_with_some_schemes))
         expect(page).to have_link("View all 6 Organisation with many schemes schemes (opens in a new tab)", href: schemes_organisation_path(organisation_with_some_more_schemes))
-        expect(page).to have_link("View all 3 MHCLG schemes (opens in a new tab)", href: schemes_organisation_path(organisation))
+        expect(page).to have_link("View all 3 #{organisation.name} schemes (opens in a new tab)", href: schemes_organisation_path(organisation))
         expect(page).to have_content("Organisation with no schemes and Organisation with no schemes too have no schemes.")
         expect(page).to have_content("13 schemes after merge")
       end
@@ -710,8 +786,8 @@ RSpec.describe MergeRequestsController, type: :request do
       it "shows logs outcomes after merge" do
         expect(page).to have_link("View all 4 Organisation with some logs lettings logs (opens in a new tab)", href: lettings_logs_organisation_path(organisation_with_some_logs))
         expect(page).to have_link("View all 2 Organisation with some logs sales logs (opens in a new tab)", href: sales_logs_organisation_path(organisation_with_some_logs))
-        expect(page).to have_link("View all 2 MHCLG lettings logs (opens in a new tab)", href: lettings_logs_organisation_path(organisation))
-        expect(page).to have_link("View all 3 MHCLG sales logs (opens in a new tab)", href: sales_logs_organisation_path(organisation))
+        expect(page).to have_link("View all 2 #{organisation.name} lettings logs (opens in a new tab)", href: lettings_logs_organisation_path(organisation))
+        expect(page).to have_link("View all 3 #{organisation.name} sales logs (opens in a new tab)", href: sales_logs_organisation_path(organisation))
         expect(page).to have_content("Organisation with no logs and Organisation with no logs too have no lettings logs.")
         expect(page).to have_content("Organisation with no logs and Organisation with no logs too have no sales logs.")
         expect(page).to have_content("6 lettings logs after merge")

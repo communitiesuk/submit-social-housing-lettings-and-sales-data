@@ -18,7 +18,7 @@ class Form::Sales::Pages::AboutStaircase < ::Form::Page
   end
 
   def staircase_sale_question
-    if form.start_date.year >= 2023
+    if [2023, 2024].include?(form.start_date.year)
       Form::Sales::Questions::StaircaseSale.new(nil, nil, self)
     end
   end

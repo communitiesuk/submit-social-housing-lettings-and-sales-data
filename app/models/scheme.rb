@@ -119,6 +119,22 @@ class Scheme < ApplicationRecord
     scope.pluck("ARRAY_AGG(id)")
   }
 
+  scope :duplicate_active_sets, lambda {
+    scope = active
+    .group(*DUPLICATE_SCHEME_ATTRIBUTES)
+    .where.not(scheme_type: nil)
+    .where.not(registered_under_care_act: nil)
+    .where.not(primary_client_group: nil)
+    .where.not(has_other_client_group: nil)
+    .where.not(secondary_client_group: nil).or(where(has_other_client_group: 0))
+    .where.not(support_type: nil)
+    .where.not(intended_stay: nil)
+    .having(
+      "COUNT(*) > 1",
+    )
+    scope.pluck("ARRAY_AGG(id)")
+  }
+
   validate :validate_confirmed
   validate :validate_owning_organisation
 

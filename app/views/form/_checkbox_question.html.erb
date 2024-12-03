@@ -6,16 +6,17 @@
     hint: { text: question.hint_text&.html_safe } do %>
     <% after_divider = false %>
 
-    <% question.displayed_answer_options(@log).map do |key, option| %>
+    <% question.displayed_answer_options(@log).each_with_index do |(key, option), index| %>
       <% if key.starts_with?("divider") %>
         <% after_divider = true %>
         <%= f.govuk_check_box_divider %>
       <% else %>
-        <%= f.govuk_check_box question.id, key,
+        <%= f.govuk_check_box question.id.to_sym, key,
           label: { text: option["value"] },
           hint: { text: option["hint"] },
           checked: @log[key] == 1,
           exclusive: after_divider,
+          link_errors: index.zero? ? true : nil,
           **stimulus_html_attributes(question) %>
       <% end %>
     <% end %>
