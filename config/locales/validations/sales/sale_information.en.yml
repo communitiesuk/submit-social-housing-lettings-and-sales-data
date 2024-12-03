@@ -19,6 +19,8 @@ en:
         exdate:
           must_be_before_saledate: "Contract exchange date must be before sale completion date."
           must_be_less_than_1_year_from_saledate: "Contract exchange date must be less than 1 year before sale completion date."
+        initialpurchase:
+          must_be_after_1980: "The initial purchase date must be after January 1, 1980."
         fromprop:
           previous_property_type_bedsit: "A bedsit cannot have more than 1 bedroom."
         frombeds:
@@ -125,3 +127,7 @@ en:
         postcode_full:
           value_over_discounted_london_max: "The percentage discount multiplied by the purchase price is %{discount_value}. This figure should not be more than £136,400 for properties in London."
           value_over_discounted_max: "The percentage discount multiplied by the purchase price is %{discount_value}. This figure should not be more than £102,400 for properties outside of London."
+        numstair:
+          must_be_greater_than_one: "The number of staircasing transactions must be greater than 1 when this is not the first staircasing transaction."
+        firststair:
+          cannot_be_no: "The answer to 'Is this the first staircasing transaction?' cannot be 'no' if the number of staircasing transactions is 1."

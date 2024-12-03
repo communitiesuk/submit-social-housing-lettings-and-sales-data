@@ -7,7 +7,7 @@
 <% end %>
 
 <%- if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations' %>
-  <p class="govuk-body">You can <%= govuk_link_to "reset your password", new_password_path(resource_name) %> if you’ve forgotten it.</p>
+  <p class="govuk-body"><%= govuk_link_to "Forgot password", new_password_path(resource_name) %></p>
 <% end %>
 
 <%- if devise_mapping.confirmable? && controller_name != 'confirmations' %>
