@@ -38,7 +38,7 @@
 
     <% if potential_errors.any? %>
       <h2 class="govuk-heading-m">Potential errors</h2>
-      <p class="govuk-body">The following groups of cells might have conflicting data. Check the answers and fix any incorrect data.<br><br>If the answers are correct, fix the critical errors and reupload the file. You'll need to confirm that the following data is correct when the file only contains potential errors.</p>
+      <p class="govuk-body">The following groups of cells might have conflicting data. Check the answers and fix any incorrect data.<br><br>If the answers are correct, fix the critical errors and upload the file again. You'll need to confirm that the following data is correct when the file only contains potential errors.</p>
         <%= govuk_table(html_attributes: { class: "no-bottom-border" })  do |table| %>
           <%= table.with_head do |head| %>
             <% head.with_row do |row| %>

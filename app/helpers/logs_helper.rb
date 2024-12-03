@@ -10,7 +10,7 @@ module LogsHelper
 
   def bulk_upload_options(bulk_upload)
     array = bulk_upload ? [bulk_upload.id] : []
-    array.index_with { |_bulk_upload_id| "With logs from bulk upload" }
+    array.index_with { |_bulk_upload_id| "Only logs from this bulk upload" }
   end
 
   def search_label_for_controller(controller)
