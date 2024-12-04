@@ -1658,11 +1658,11 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
 
             it "adds appropriate errors to UPRN and key address fields" do
               parser.valid?
-              expect(parser.errors[:field_16]).to eql([I18n.t("validations.lettings.2024.bulk_upload.not_answered", question: "UPRN.")])
-              expect(parser.errors[:field_17]).to eql([I18n.t("validations.lettings.2024.bulk_upload.not_answered", question: "address line 1.")])
-              expect(parser.errors[:field_19]).to eql([I18n.t("validations.lettings.2024.bulk_upload.not_answered", question: "town or city.")])
-              expect(parser.errors[:field_21]).to eql([I18n.t("validations.lettings.2024.bulk_upload.not_answered", question: "part 1 of postcode.")])
-              expect(parser.errors[:field_22]).to eql([I18n.t("validations.lettings.2024.bulk_upload.not_answered", question: "part 2 of postcode.")])
+              expect(parser.errors[:field_16]).to eql([I18n.t("validations.lettings.2024.bulk_upload.address.not_answered")])
+              expect(parser.errors[:field_17]).to eql([I18n.t("validations.lettings.2024.bulk_upload.address.not_answered")])
+              expect(parser.errors[:field_19]).to eql([I18n.t("validations.lettings.2024.bulk_upload.address.not_answered")])
+              expect(parser.errors[:field_21]).to eql([I18n.t("validations.lettings.2024.bulk_upload.address.not_answered")])
+              expect(parser.errors[:field_22]).to eql([I18n.t("validations.lettings.2024.bulk_upload.address.not_answered")])
             end
           end
 
@@ -1671,8 +1671,8 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
 
             it "adds errors to UPRN and the missing key address field" do
               parser.valid?
-              expect(parser.errors[:field_16]).to eql([I18n.t("validations.lettings.2024.bulk_upload.not_answered", question: "UPRN.")])
-              expect(parser.errors[:field_17]).to eql([I18n.t("validations.lettings.2024.bulk_upload.not_answered", question: "address line 1.")])
+              expect(parser.errors[:field_16]).to eql([I18n.t("validations.lettings.2024.bulk_upload.address.not_answered")])
+              expect(parser.errors[:field_17]).to eql([I18n.t("validations.lettings.2024.bulk_upload.address.not_answered")])
               expect(parser.errors[:field_19]).to be_empty
               expect(parser.errors[:field_21]).to be_empty
               expect(parser.errors[:field_22]).to be_empty
@@ -1721,7 +1721,7 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
                 parser.valid?
                 expect(parser.errors[:field_16]).to be_empty
                 %i[field_17 field_18 field_19 field_20 field_21 field_22].each do |field|
-                  expect(parser.errors[field]).to eql([I18n.t("validations.lettings.2024.bulk_upload.address.not_found")])
+                  expect(parser.errors[field]).to eql([I18n.t("validations.lettings.2024.bulk_upload.address.not_determined")])
                 end
               end
             end
