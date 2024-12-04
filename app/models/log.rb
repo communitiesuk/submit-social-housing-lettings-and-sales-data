@@ -126,9 +126,11 @@ class Log < ApplicationRecord
   end
 
   def address_options
-    return @address_options if @address_options
+    return @address_options if @address_options && @last_searched_address_string == address_string
 
     if [address_line1_input, postcode_full_input].all?(&:present?)
+      @last_searched_address_string = address_string
+
       service = AddressClient.new(address_string)
       service.call
       if service.result.blank? || service.error.present?
