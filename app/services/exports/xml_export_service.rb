@@ -32,7 +32,7 @@ module Exports
     end
 
     def write_export_archive(export, year, recent_export, full_update)
-      archive = get_archive_name(year, export.base_number, export.increment_number) # archive name would be the same for all logs because they're already filtered by year (?)
+      archive = get_archive_name(year, export.base_number, export.increment_number)
 
       initial_count = retrieve_resources(recent_export, full_update, year).count
       @logger.info("Creating #{archive} - #{initial_count} resources")
