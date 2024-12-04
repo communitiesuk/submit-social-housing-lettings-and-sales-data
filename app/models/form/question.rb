@@ -15,6 +15,7 @@ class Form::Question
     @page = page
     if hsh
       @check_answer_label = hsh["check_answer_label"]
+      @check_answer_prompt = hsh["check_answer_prompt"]
       @header = hsh["header"]
       @top_guidance_partial = hsh["top_guidance_partial"]
       @bottom_guidance_partial = hsh["bottom_guidance_partial"]
@@ -56,6 +57,10 @@ class Form::Question
 
   def check_answer_label
     @check_answer_label ||= I18n.t("forms.#{form.start_date.year}.#{copy_key}.check_answer_label", default: "")
+  end
+
+  def check_answer_prompt
+    @check_answer_prompt || I18n.t("forms.#{form.start_date.year}.#{copy_key}.check_answer_prompt", default: nil).presence || generate_check_answer_prompt
   end
 
   def header
@@ -130,9 +135,11 @@ class Form::Question
   end
 
   def action_text(log, correcting_hard_validation: false)
-    return "Answer" unless displayed_as_answered?(log)
-
-    correcting_hard_validation ? "Clear" : "Change"
+    if displayed_as_answered?(log)
+      correcting_hard_validation ? "Clear" : "Change"
+    else
+      ""
+    end
   end
 
   def displayed_as_answered?(log)
@@ -237,6 +244,22 @@ class Form::Question
   def unanswered_error_message
     question_text = error_display_label.presence || "this question."
     I18n.t("validations.not_answered", question: question_text.downcase)
+  end
+
+  def generate_check_answer_prompt
+    question_text = lowercase_first_letter(error_label.presence || check_answer_label.presence || header.presence || id.humanize) || "this question."
+    case type
+    when "checkbox"
+      "Select #{question_text}"
+    when "radio"
+      "Select #{question_text}"
+    when "select"
+      "Select #{question_text}"
+    when "date"
+      "Set #{question_text}"
+    else
+      "Enter #{question_text}"
+    end
   end
 
   def suffix_label(log)
