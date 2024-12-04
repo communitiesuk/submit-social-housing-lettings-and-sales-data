@@ -1480,7 +1480,7 @@ RSpec.describe LettingsLogsController, type: :request do
     end
 
     context "when viewing a collection of logs affected by deactivated location" do
-      let!(:affected_lettings_logs) { FactoryBot.create_list(:lettings_log, 3, unresolved: true, assigned_to: user) }
+      let!(:affected_lettings_logs) { FactoryBot.create_list(:lettings_log, 3, unresolved: true, assigned_to: user, tenancycode: "affected tenancycode", propcode: "affected propcode") }
       let!(:other_user_affected_lettings_log) { FactoryBot.create(:lettings_log, unresolved: true) }
       let!(:non_affected_lettings_logs) { FactoryBot.create_list(:lettings_log, 4, assigned_to: user) }
       let(:other_user) { FactoryBot.create(:user, organisation: user.organisation) }

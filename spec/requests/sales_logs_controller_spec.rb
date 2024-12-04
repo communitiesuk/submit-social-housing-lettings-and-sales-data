@@ -298,7 +298,7 @@ RSpec.describe SalesLogsController, type: :request do
 
           it "does not render pending logs" do
             get "/sales-logs", headers: headers, params: {}
-            expect(page).not_to have_link(invisible_log.id, href: "sales-logs/#{invisible_log.id}")
+            expect(page).not_to have_link(invisible_log.id.to_s, href: "sales-logs/#{invisible_log.id}")
           end
         end
 

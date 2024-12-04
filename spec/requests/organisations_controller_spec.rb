@@ -487,7 +487,7 @@ RSpec.describe OrganisationsController, type: :request do
           it "shows a summary list of org details" do
             expected_html = "<dl class=\"govuk-summary-list\""
             expect(response.body).to include(expected_html)
-            expect(response.body).to include(organisation.name)
+            expect(CGI.unescapeHTML(response.body)).to include(organisation.name)
           end
 
           it "does not include a change details link" do
@@ -663,7 +663,7 @@ RSpec.describe OrganisationsController, type: :request do
           end
 
           it "shows an edit form without name field" do
-            expect(response.body).to include("Change #{organisation.name}’s details")
+            expect(CGI.unescapeHTML(response.body)).to include("Change #{organisation.name}’s details")
             expect(page).not_to have_field("organisation-name-field")
             expect(page).to have_field("organisation-phone-field")
           end
@@ -945,7 +945,7 @@ RSpec.describe OrganisationsController, type: :request do
           it "shows a summary list of org details" do
             expected_html = "<dl class=\"govuk-summary-list\""
             expect(response.body).to include(expected_html)
-            expect(response.body).to include(organisation.name)
+            expect(CGI.unescapeHTML(response.body)).to include(organisation.name)
           end
 
           it "does not have a change details link" do
