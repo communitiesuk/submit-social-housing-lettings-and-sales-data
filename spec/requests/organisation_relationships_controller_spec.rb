@@ -40,7 +40,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
           it "shows a table of stock owners" do
             expected_html = "<table class=\"govuk-table\""
             expect(response.body).to include(expected_html)
-            expect(response.body).to include(stock_owner.name)
+            expect(CGI.unescapeHTML(response.body)).to include(stock_owner.name)
           end
 
           it "shows only stock owners for the current user's organisation" do
@@ -136,7 +136,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
           it "shows a table of managing-agents" do
             expected_html = "<table class=\"govuk-table\""
             expect(response.body).to include(expected_html)
-            expect(response.body).to include(managing_agent.name)
+            expect(CGI.unescapeHTML(response.body)).to include(managing_agent.name)
           end
 
           it "shows only managing-agents for the current user's organisation" do
@@ -336,7 +336,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
           it "shows a table of stock owners" do
             expected_html = "<table class=\"govuk-table\""
             expect(response.body).to include(expected_html)
-            expect(response.body).to include(stock_owner.name)
+            expect(CGI.unescapeHTML(response.body)).to include(stock_owner.name)
           end
 
           it "shows only stock owners for the current user's organisation" do
@@ -472,7 +472,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
           it "shows a table of managing agents" do
             expected_html = "<table class=\"govuk-table\""
             expect(response.body).to include(expected_html)
-            expect(response.body).to include(managing_agent.name)
+            expect(CGI.unescapeHTML(response.body)).to include(managing_agent.name)
           end
 
           it "shows only managing agents for the current user's organisation" do
