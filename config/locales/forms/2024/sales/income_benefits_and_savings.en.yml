@@ -13,7 +13,7 @@ en:
               check_answer_label: "Buyer 1’s gross annual income"
               hint_text: "Provide the gross annual income (i.e. salary before tax) plus the annual amount of benefits, Universal Credit or pensions, and income from investments."
               question_text: "Buyer 1’s gross annual income"
-        
+
           inc1mort:
             page_header: ""
             check_answer_label: "Buyer 1’s income used for mortgage application"
@@ -48,14 +48,14 @@ en:
               check_answer_label: "Housing-related benefits buyer received before buying this property"
               hint_text: ""
               question_text:  "Was the buyer receiving any of these housing-related benefits immediately before buying this property?"
-            
+
           savings:
             joint_purchase:
               page_header: ""
               savingsnk:
                 check_answer_label:  "Buyers’ total savings known?"
                 hint_text: ""
-                question_text: "Do you know how much the 'buyers' had in savings before they paid any deposit for the property?"
+                question_text: "Do you know how much the buyers had in savings before they paid any deposit for the property?"
               savings:
                 check_answer_label: "Buyers’ total savings before any deposit paid"
                 hint_text: "Include any savings, investments, ISAs, premium bonds, shares, or money held in a bank or building society account."
