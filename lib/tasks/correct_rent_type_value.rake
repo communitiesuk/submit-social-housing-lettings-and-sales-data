@@ -9,7 +9,6 @@ task correct_rent_type_value: :environment do
 
       new_rent_type_value = BulkUpload::Lettings::Year2024::RowParser::RENT_TYPE_BU_MAPPING[rent_type_at_upload]
       log.rent_type = new_rent_type_value
-      log.skip_update_status = true if log.status == "pending"
       if log.save
         Rails.logger.info("Log #{log.id} rent_type updated from #{rent_type_at_upload} to #{log.rent_type}")
       else

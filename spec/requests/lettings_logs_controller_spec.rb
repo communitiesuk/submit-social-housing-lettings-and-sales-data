@@ -244,7 +244,6 @@ RSpec.describe LettingsLogsController, type: :request do
         assigned_to: user,
         tenancycode: "LC999",
         status: "pending",
-        skip_update_status: true,
       )
     end
 
@@ -1107,7 +1106,6 @@ RSpec.describe LettingsLogsController, type: :request do
             :in_progress,
             assigned_to: user,
             status: "pending",
-            skip_update_status: true,
           )
         end
 
@@ -1165,7 +1163,6 @@ RSpec.describe LettingsLogsController, type: :request do
 
               before do
                 lettings_log.status = "completed"
-                lettings_log.skip_update_status = true
                 lettings_log.save!(validate: false)
               end
 
