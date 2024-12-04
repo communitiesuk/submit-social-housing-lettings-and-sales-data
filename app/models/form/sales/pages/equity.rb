@@ -1,7 +1,7 @@
 class Form::Sales::Pages::Equity < ::Form::Page
   def initialize(id, hsh, subsection)
     super
-    @id = "equity"
+    @copy_key = "sales.sale_information.equity"
   end
 
   def questions

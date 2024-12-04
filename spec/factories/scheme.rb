@@ -44,5 +44,10 @@ FactoryBot.define do
     trait :created_now do
       created_at { Time.zone.now }
     end
+    trait :with_location do
+      after(:create) do |scheme|
+        create(:location, scheme:)
+      end
+    end
   end
 end
