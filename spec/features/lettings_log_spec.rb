@@ -286,10 +286,6 @@ RSpec.describe "Lettings Log Features" do
     context "when reviewing a complete log" do
       let(:lettings_log) { create(:lettings_log, :completed) }
 
-      before do
-        lettings_log.owning_organisation.update!(name: "MHCLG")
-      end
-
       it "has the correct breadcrumbs with the correct links" do
         visit review_lettings_log_path(lettings_log)
         breadcrumbs = page.find_all(".govuk-breadcrumbs__link")
