@@ -5,9 +5,9 @@ module Exports
 
     def export_xml_users(full_update: false)
       collection = "users"
-      recent_export = Export.where(collection:).order("started_at").last
+      recent_export = Export.users.order("started_at").last
 
-      base_number = Export.where(empty_export: false, collection:).maximum(:base_number) || 1
+      base_number = Export.users.where(empty_export: false).maximum(:base_number) || 1
       export = build_export_run(collection, base_number, full_update)
       archives_for_manifest = write_export_archive(export, collection, recent_export, full_update)
 
@@ -19,15 +19,13 @@ module Exports
 
   private
 
-    def get_archive_name(collection, base_number, increment)
-      return unless collection
-
+    def get_archive_name(_year, base_number, increment)
       base_number_str = "f#{base_number.to_s.rjust(4, '0')}"
       increment_str = "inc#{increment.to_s.rjust(4, '0')}"
-      "#{collection}_2024_2025_apr_mar_#{base_number_str}_#{increment_str}".downcase
+      "users_2024_2025_apr_mar_#{base_number_str}_#{increment_str}".downcase
     end
 
-    def retrieve_resources(recent_export, full_update, _collection)
+    def retrieve_resources(recent_export, full_update, _year)
       if !full_update && recent_export
         params = { from: recent_export.started_at, to: @start_time }
         User.where("(updated_at >= :from AND updated_at <= :to)", params)
