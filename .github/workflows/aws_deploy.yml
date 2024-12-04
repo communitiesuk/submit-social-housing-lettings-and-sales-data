@@ -41,19 +41,17 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v3
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-region: ${{ env.aws_region }}
           role-to-assume: ${{ env.app_repo_role }}
 
       - name: Login to Amazon ECR
         id: ecr-login
-        uses: aws-actions/amazon-ecr-login@v1
-        with:
-          mask-password: "true"
+        uses: aws-actions/amazon-ecr-login@v2
 
       - name: Check if image with tag already exists
         run: |
@@ -81,16 +79,14 @@ jobs:
 
     steps:
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v3
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-region: ${{ env.aws_region }}
           role-to-assume: ${{ env.app_repo_role }}
 
       - name: Login to Amazon ECR
         id: ecr-login
-        uses: aws-actions/amazon-ecr-login@v1
-        with:
-          mask-password: "true"
+        uses: aws-actions/amazon-ecr-login@v2
 
       - name: Get timestamp
         id: timestamp
@@ -112,7 +108,7 @@ jobs:
           echo "image=$registry/$repository:$readable_tag" >> $GITHUB_ENV
 
       - name: Configure AWS credentials for environment
-        uses: aws-actions/configure-aws-credentials@v3
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-region: ${{ env.aws_region }}
           role-to-assume: arn:aws:iam::${{ inputs.aws_account_id }}:role/${{ inputs.aws_role_prefix }}-deployment
@@ -133,7 +129,7 @@ jobs:
           image: ${{ env.image }}
 
       - name: Update ad hoc task definition
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
         with:
           task-definition: ${{ steps.ad-hoc-task-def.outputs.task-definition }}
 
@@ -185,7 +181,7 @@ jobs:
           image: ${{ env.image }}
 
       - name: Deploy updated application
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
         with:
           cluster: ${{ inputs.aws_task_prefix }}-app
           service: ${{ inputs.aws_task_prefix }}-app
@@ -207,7 +203,7 @@ jobs:
           image: ${{ env.image }}
 
       - name: Deploy updated sidekiq
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
         with:
           cluster: ${{ inputs.aws_task_prefix }}-app
           service: ${{ inputs.aws_task_prefix }}-sidekiq
