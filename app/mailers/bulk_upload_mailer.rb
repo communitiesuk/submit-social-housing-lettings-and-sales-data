@@ -3,6 +3,7 @@ class BulkUploadMailer < NotifyMailer
 
   COMPLETE_TEMPLATE_ID = "83279578-c890-4168-838b-33c9cf0dc9f0".freeze
   FAILED_CSV_ERRORS_TEMPLATE_ID = "e27abcd4-5295-48c2-b127-e9ee4b781b75".freeze
+  FAILED_CSV_DUPLICATE_ERRORS_TEMPLATE_ID = "931d5bda-a08f-4de6-a455-38a63bff1956".freeze
   FAILED_FILE_SETUP_ERROR_TEMPLATE_ID = "24c9f4c7-96ad-470a-ba31-eb51b7cbafd9".freeze
   FAILED_SERVICE_ERROR_TEMPLATE_ID = "c3f6288c-7a74-4e77-99ee-6c4a0f6e125a".freeze
   HOW_TO_FIX_UPLOAD_TEMPLATE_ID = "21a07b26-f625-4846-9f4d-39e30937aa24".freeze
@@ -85,6 +86,26 @@ class BulkUploadMailer < NotifyMailer
     send_email(
       bulk_upload.user.email,
       FAILED_CSV_ERRORS_TEMPLATE_ID,
+      {
+        filename: bulk_upload.filename,
+        upload_timestamp: bulk_upload.created_at.to_fs(:govuk_date_and_time),
+        year_combo: bulk_upload.year_combo,
+        lettings_or_sales: bulk_upload.log_type,
+        summary_report_link:,
+      },
+    )
+  end
+
+  def send_correct_duplicates_and_upload_again_mail(bulk_upload:)
+    summary_report_link = if BulkUploadErrorSummaryTableComponent.new(bulk_upload:).errors?
+                            bulk_upload.sales? ? summary_bulk_upload_sales_result_url(bulk_upload) : summary_bulk_upload_lettings_result_url(bulk_upload)
+                          else
+                            bulk_upload.sales? ? bulk_upload_sales_result_url(bulk_upload) : bulk_upload_lettings_result_url(bulk_upload)
+                          end
+
+    send_email(
+      bulk_upload.user.email,
+      FAILED_CSV_DUPLICATE_ERRORS_TEMPLATE_ID,
       {
         filename: bulk_upload.filename,
         upload_timestamp: bulk_upload.created_at.to_fs(:govuk_date_and_time),
