@@ -177,6 +177,8 @@ private
     (start_index..6).each do |idx|
       if age_under_16?(idx)
         self["ecstat#{idx}"] = 9
+      elsif self["ecstat#{idx}"] == 9 && age_known?(idx) == false
+        self["ecstat#{idx}"] = nil
       end
     end
   end
