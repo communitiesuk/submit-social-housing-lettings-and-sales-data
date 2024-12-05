@@ -1159,7 +1159,7 @@ RSpec.describe LettingsLogsController, type: :request do
 
             context "with bulk_upload_id filter" do
               let(:bulk_upload) { create(:bulk_upload, :lettings, user:) }
-              let(:lettings_log) { create(:lettings_log, :completed, age1: nil, bulk_upload:, assigned_to: user, creation_method: "bulk upload") }
+              let(:lettings_log) { create(:lettings_log, :completed, bulk_upload:, assigned_to: user, creation_method: "bulk upload") }
 
               before do
                 lettings_log.status = "completed"
