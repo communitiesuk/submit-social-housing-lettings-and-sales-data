@@ -304,7 +304,7 @@ jobs:
 
       - name: Run tests
         run: |
-          bundle exec rspec spec/services --fail-fast
+          bundle exec rake parallel:spec['spec\/services']
 
   accessibility_test:
     name: Accessibility tests
