@@ -18,7 +18,7 @@ gem "jsbundling-rails"
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", ">= 1.4.4", require: false
 # GOV UK frontend components
-gem "govuk-components", "~> 5.1"
+gem "govuk-components", "~> 5.7"
 # GOV UK component form builder DSL
 gem "govuk_design_system_formbuilder", "~> 5.0"
 # Convert Markdown into GOV.UK frontend-styled HTML
