@@ -57,7 +57,7 @@ class Log < ApplicationRecord
   scope :filter_by_owning_organisation_text_search, ->(param, _user) { where(owning_organisation: Organisation.search_by(param)) }
   scope :filter_by_managing_organisation_text_search, ->(param, _user) { where(managing_organisation: Organisation.search_by(param)) }
 
-  attr_accessor :skip_update_uprn_confirmed, :select_best_address_match, :skip_dpo_validation
+  attr_accessor :skip_update_status, :skip_update_uprn_confirmed, :select_best_address_match, :skip_dpo_validation
 
   delegate :present?, to: :address_options, prefix: true
 
@@ -315,6 +315,8 @@ private
   end
 
   def update_status!
+    return if skip_update_status
+
     if status == "pending"
       self.status_cache = calculate_status
     else

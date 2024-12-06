@@ -116,6 +116,7 @@ class BulkUpload < ApplicationRecord
 
   def unpend
     logs.find_each do |log|
+      log.skip_update_status = true
       log.status = log.status_cache
       log.save!
     end
