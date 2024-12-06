@@ -1,17 +1,5 @@
-<nav class="app-primary-navigation" aria-label="primary">
-  <div class="govuk-width-container">
-    <ul class="app-primary-navigation__list">
-      <% items.each do |item| %>
-        <% if item.current %>
-          <li class="app-primary-navigation__item app-primary-navigation__item--current">
-            <%= govuk_link_to item[:text], item[:href], class: "app-primary-navigation__link", aria: { current: "page" } %>
-          </li>
-        <% else %>
-          <li class="app-primary-navigation__item">
-            <%= govuk_link_to item[:text], item[:href], class: "app-primary-navigation__link" %>
-          </li>
-        <% end %>
-      <% end %>
-    </ul>
-  </div>
-</nav>
+<%= govuk_service_navigation(navigation_id: 'primary-navigation', classes: 'app-service-navigation') do |sn|
+  items.each do |item|
+    sn.with_navigation_item(text: item[:text], href: item[:href], classes: "", current: item[:current])
+  end
+end %>

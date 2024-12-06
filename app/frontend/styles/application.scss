@@ -86,3 +86,42 @@ $govuk-breakpoints: (
 .govuk-notification-banner__content > * {
   max-width: fit-content;
 }
+
+.govuk-service-navigation__active-fallback, .govuk-service-navigation__list {
+  font-weight: bold;
+}
+
+.govuk-service-navigation__link{
+  @include govuk-link-common;
+  @include govuk-link-style-no-visited-state;
+  @include govuk-link-style-no-underline;
+  @include govuk-typography-weight-bold;
+
+  // Extend the touch area of the link to the list
+  &::after {
+    bottom: 0;
+    content: "";
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+}
+
+.govuk-service-navigation__item--active {
+  border-bottom-width: 4px;
+}
+.govuk-service-navigation__item {
+  padding-right: 15px;
+  padding-left: 15px;
+  margin: 0;
+}
+
+.govuk-service-navigation__item:not(:last-child) {
+  margin-right: 0;
+}
+
+.govuk-service-navigation__container {
+  left: -15px;
+  position: relative;
+}
