@@ -147,10 +147,10 @@
     <duplicate_set_id/>
     <formid>{id}</formid>
     <owningorgid>{owning_org_id}</owningorgid>
-    <owningorgname>MHCLG</owningorgname>
+    <owningorgname>{owning_org_name}</owningorgname>
     <hcnum>1234</hcnum>
     <maningorgid>{managing_org_id}</maningorgid>
-    <maningorgname>MHCLG</maningorgname>
+    <maningorgname>{managing_org_name}</maningorgname>
     <manhcnum>1234</manhcnum>
     <createddate>2022-05-01T00:00:00+01:00</createddate>
     <uploaddate>2022-05-01T00:00:00+01:00</uploaddate>

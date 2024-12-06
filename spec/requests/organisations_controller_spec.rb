@@ -1555,7 +1555,10 @@ RSpec.describe OrganisationsController, type: :request do
           let(:total_organisations_count) { Organisation.all.count }
 
           before do
-            create_list(:organisation, 25)
+            build_list(:organisation, 25) do |organisation, index|
+              organisation.name = "Organisation #{index}"
+              organisation.save!
+            end
             get "/organisations"
           end
 
@@ -1644,7 +1647,10 @@ RSpec.describe OrganisationsController, type: :request do
               let(:search_param) { "MHCLG" }
 
               before do
-                create_list(:organisation, 27, name: "MHCLG")
+                build_list(:organisation, 27) do |organisation, index|
+                  organisation.name = "MHCLG #{index}"
+                  organisation.save!
+                end
                 get "/organisations?search=#{search_param}"
               end
 
