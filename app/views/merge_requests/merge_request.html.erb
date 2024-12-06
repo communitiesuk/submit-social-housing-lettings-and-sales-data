@@ -14,13 +14,13 @@
 
     <h2 class="govuk-heading-m">Before you start</h2>
     <p class="govuk-body">Regardless of the merge type, you’ll be asked for:</p>
-    <ul class="govuk-list govuk-list--bullet">
-        <li>the organisations merging in CORE</li>
-        <li>the merge type: for example one organisation absorbing the rest, or them all creating a new organisation</li>
-        <li>to confirm or update the telephone number</li>
-        <li>the merge date</li>
-        <li>if user email addresses will change with this merge</li>
-    </ul>
+    <%= govuk_list [
+      "the organisations merging in CORE",
+      "the merge type: for example one organisation absorbing the rest, or them all creating a new organisation",
+      "to confirm or update the telephone number",
+      "the merge date",
+      "if user email addresses will change with this merge",
+      ], type: :bullet %>
 
     <h2 class="govuk-heading-m">If email addresses are changing</h2>
     <%= govuk_inset_text(text: "Update all user email addresses on CORE as soon as they change, so that everyone can still access their CORE account. ") %>
@@ -30,14 +30,14 @@
 
     <h2 class="govuk-heading-m">If merging into a new organisation</h2>
     <p class="govuk-body">You'll also be asked for the new organisation’s:</p>
-    <ul class="govuk-list govuk-list--bullet">
-        <li>name</li>
-        <li>address</li>
-        <li>telephone number</li>
-        <li>housing provider type</li>
-        <li>Regulator of Social Housing registration number</li>
-        <li>held stock details</li>
-    </ul>
+     <%= govuk_list [
+        "name",
+        "address",
+        "telephone number",
+        "housing provider type",
+        "Regulator of Social Housing registration number",
+        "held stock details",
+      ], type: :bullet %>
 
     <%= govuk_warning_text text: "You will not be able to submit your request without the above information. Do not start the form until you have obtained all of the information. " %>
 

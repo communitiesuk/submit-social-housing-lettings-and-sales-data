@@ -35,30 +35,26 @@
     <p class="govuk-body-m"><strong>It is now agreed</strong> as follows:</p>
     <h3 id="2-definitions-and-interpretation" class="govuk-heading-m">2. Definitions and interpretation</h3>
     <p class="govuk-body-m">2.1. In this Agreement the following words and phrases shall have the following meanings, unless expressly stated to the contrary:</p>
-    <ul class="govuk-list govuk-list--bullet">
-      <li>“Act” means the Data Protection Act 2018;</li>
-    <li>“Authorised Representatives” means the nominated lead officer representing each of the
-    parties with delegated authority to handle the day-to-day matters arising from this Agreement;</li>
-    <li>“Data Subject” means social housing lettings tenants and participants in discounted sales where their data is reported via the CORE system.</li>
-    <li>“Data Controller” has the meaning in Article 4(7) of the GDPR and section 5(2) of the Act.</li>
-    <li>“Data Processor” has the meaning in Article 4(8) of the GDPR.</li>
-    <li>“Data Protection Legislation” means the Data Protection Act 2018 and all applicable laws and regulations relating to the processing of personal data and privacy, including where applicable the guidance and codes of practice issued by the Information Commissioner; it includes the General Data Protection Regulation (GDPR).</li>
-    <li>“Data” means the data supplied by the CORE data providers via the CORE system and the data that is calculated or derived via the CORE system based on that initial data;</li>
-    <li>“GDPR” means the General Data Protection Regulation.</li>
-    <li>“Parties” means the parties to this Agreement, namely MHCLG and the CORE data providers. CORE data providers include social housing providers and managing organisations that provide data on behalf of the social housing providers.</li>
-    <li>“Personal Data” has the meaning in Article 4(1) of the GDPR. “Processing” has the meaning in Article 4(2) of the GDPR.</li>
-    <li>“Request for Information” means a request for information or a request under the Freedom of Information Act 2000.</li>
-    <li>“Special category personal data” has the meaning in Article 9(1) of the GDPR. In this Agreement:
-    <ul class="govuk-list govuk-list--bullet">
-      <li>A. The masculine includes the feminine and neuter;</li>
-    <li>B. Person means a natural person;</li>
-    <li>C. The singular includes the plural and vice versa;</li>
-    <li>D. A reference to any statute, enactment, order, regulation or other similar instrument
-    shall be construed as a reference to the statute, enactment, order, regulation or instrument as amended by any subsequent statute, enactment, order, regulation or instrument or as contained in any subsequent re-enactment.</li>
-
-    </ul></li>
-
-    </ul>
+    <%= govuk_list [
+      "“Act” means the Data Protection Act 2018;",
+      "“Authorised Representatives” means the nominated lead officer representing each of the parties with delegated authority to handle the day-to-day matters arising from this Agreement;",
+      "“Data Subject” means social housing lettings tenants and participants in discounted sales where their data is reported via the CORE system.",
+      "“Data Controller” has the meaning in Article 4(7) of the GDPR and section 5(2) of the Act.",
+      "“Data Processor” has the meaning in Article 4(8) of the GDPR.",
+      "“Data Protection Legislation” means the Data Protection Act 2018 and all applicable laws and regulations relating to the processing of personal data and privacy, including where applicable the guidance and codes of practice issued by the Information Commissioner; it includes the General Data Protection Regulation (GDPR).",
+      "“Data” means the data supplied by the CORE data providers via the CORE system and the data that is calculated or derived via the CORE system based on that initial data;",
+      "“GDPR” means the General Data Protection Regulation.",
+      "“Parties” means the parties to this Agreement, namely MHCLG and the CORE data providers. CORE data providers include social housing providers and managing organisations that provide data on behalf of the social housing providers.",
+      "“Personal Data” has the meaning in Article 4(1) of the GDPR. “Processing” has the meaning in Article 4(2) of the GDPR.",
+      "“Request for Information” means a request for information or a request under the Freedom of Information Act 2000.",
+      "“Special category personal data” has the meaning in Article 9(1) of the GDPR. In this Agreement:
+      #{ govuk_list([
+        'A. The masculine includes the feminine and neuter;',
+        'B. Person means a natural person;',
+        'C. The singular includes the plural and vice versa;',
+        'D. A reference to any statute, enactment, order, regulation or other similar instrument shall be construed as a reference to the statute, enactment, order, regulation or instrument as amended by any subsequent statute, enactment, order, regulation or instrument or as contained in any subsequent re-enactment.',
+        ], type: :bullet)}".html_safe,
+      ], type: :bullet %>
     <p class="govuk-body-m">2.2. Headings are included in this Agreement for ease of reference only and shall not affect the interpretation or construction of this Agreement.</p>
     <p class="govuk-body-m">2.3. References in this Agreement to Clauses, Paragraphs and Annexes are, unless otherwise provided, references to the Clauses, Paragraphs and Annexes of this Agreement.</p>
     <p class="govuk-body-m">2.4. In the event and to the extent only of any conflict or inconsistency between the provisions of this Agreement and the provisions of any document referred to or referenced herein, the provisions of this Agreement shall prevail.</p>
@@ -95,11 +91,13 @@
     <p class="govuk-body-m">8.5. All work carried out by MHCLG will follow appropriate security measures and procedures to ensure the protection of the data.</p>
     <h3 id="9-protection-of-personal-data" class="govuk-heading-m">9. Protection of personal data</h3>
     <p class="govuk-body-m">9.1. CORE data providers and MHCLG agree that they shall:</p>
-    <ul class="govuk-list govuk-list--bullet">
-      <li>A. Implement appropriate technical and organisational measures to protect the Personal Data against unauthorised or unlawful Processing and against accidental loss, destruction, damage, alteration or disclosure. These measures shall ensure a level of security appropriate to the harm which might result from any unauthorised or unlawful Processing, accidental loss, destruction or damage to the Personal Data and having regard to the nature of the Personal Data which is to be protected;</li>
-    <li>B. Take reasonable steps to ensure the reliability of any personnel who have access to the Personal Data. MHCLG and Data providers will ensure such personnel will be a limited number of analysts assigned to the data collection.</li>
 
-    </ul>
+    <%= govuk_list [
+      "A. Implement appropriate technical and organisational measures to protect the Personal Data against unauthorised or unlawful Processing and against accidental loss, destruction, damage, alteration or disclosure. These measures shall ensure a level of security appropriate to the harm which might result from any unauthorised or unlawful Processing, accidental loss, destruction or damage to the Personal Data and having regard to the nature of the Personal Data which is to be protected;",
+      "B. Take reasonable steps to ensure the reliability of any personnel who have access to the Personal Data. MHCLG and Data providers will ensure such personnel will be a limited number of analysts assigned to the data collection.",
+],
+      type: :bullet %>
+
     <p class="govuk-body-m">9.2. The data providers and MHCLG shall comply at all times with the Data Protection Legislation and shall ensure that they each perform their obligations under this agreement in full compliance with the Data Protection Legislation and any other applicable law, in particular the Human Rights Act 1998 and the common law duty of confidentiality.</p>
     <p class="govuk-body-m">9.3. CORE data providers should limit access to CORE to a small number of individuals who can be named on request. CORE access is limited to registered users only via password, but it is the responsibility of the CORE data providers to ensure that all individuals granted access to the datasets should be briefed on the legal requirements around handling and storing the Data from CORE.</p>
     <h3 id="10-freedom-of-information" class="govuk-heading-m">10. Freedom of information</h3>
@@ -128,15 +126,10 @@
     <p class="govuk-body-m">16.1. The Parties shall comply with all relevant legislation, regulations, orders, statutory instruments and any amendments or re-enactments thereof from the commencement of this agreement.</p>
     <p class="govuk-body-m">As witness of which the parties have set their hands on the day and year first above written
     signed for and on behalf of the Data Protection Officer for <%= org_name_for_data_sharing_agreement(@data_protection_confirmation, current_user) %>, by:</p>
-    <ul class="govuk-list govuk-list--bullet">
-      <li>Name: <%= name_for_data_sharing_agreement(@data_protection_confirmation, current_user) %></li>
-      <li>Title: Data Protection Officer</li>
-    </ul>
+    <%= govuk_list ["Name: #{name_for_data_sharing_agreement(@data_protection_confirmation, current_user)}".html_safe, "Title: Data Protection Officer"], type: :bullet %>
+
     <p class="govuk-body-m">SIGNED for and on behalf of the deputy director of the data, analytics &amp; statistics in the Ministry of Housing, Communities and Local Government, by:</p>
-    <ul class="govuk-list govuk-list--bullet">
-      <li>Name: Sandra Tudor</li>
-      <li>Title: Deputy Director</li>
-    </ul>
+    <%= govuk_list ["Name: Sandra Tudor", "Title: Deputy Director"], type: :bullet %>
 
     <% if current_user.is_dpo? && !(@organisation.data_protection_confirmed?) %>
       <div class="govuk-button-group govuk-!-margin-top-9">

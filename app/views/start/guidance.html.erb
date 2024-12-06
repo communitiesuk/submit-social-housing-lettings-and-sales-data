@@ -21,46 +21,50 @@
 
       <%= accordion.with_section(heading_text: "Types of lettings you should create logs for") do %>
         <p class="govuk-body">You’ll need to create a log for:</p>
-        <ul class="govuk-list govuk-list--bullet">
-          <li>Tenants in general needs housing allocated a new letting. This includes tenants moving into the social rented sector from outside, existing social tenants moving between properties or landlords, and existing social tenants renewing lettings in the same property. If fixed-term and social or affordable rent, only include tenancies of 2 years or more.</li>
-          <li>Tenants in supported housing (social housing, sheltered accommodation and care homes) allocated a new letting. This includes tenants moving into the social rented sector from outside, existing social tenants moving between properties or landlords, and existing social tenants renewing lettings in the same property. All supported housing tenancies should be reported regardless of length.</li>
-          <li>Starter tenancies provided by local authorities (LAs) and lettings with an introductory period provided by private registered providers (PRPs) should be completed in CORE at the beginning of the starter or introductory period. The tenancy type and length entered should be based on the tenancy the tenant will roll onto once the starter or introductory period has been completed. You do not need to submit another CORE log once the period has been completed.</li>
-          <li>Room moves within a shared housing unit that result in a different property type or support needs – this is classed as an internal transfer of an existing social tenant to another property.</li>
-          <li>Existing tenants who are issued with a new tenancy agreement when stock is acquired, transferred or permanently decanted.</li>
-          <li>Tenants under the Rough Sleepers Initiative or Rough Sleeping Accommodation Programme, where accommodation is permanent.</li>
-          <li>Households previously provided with temporary accommodation to meet a duty under the homelessness legislation who are allocated a tenancy as a settled home ending the duty (this may be the same property).</li>
-          <li>Refugees and asylum seekers who have been granted indefinite leave to remain, humanitarian protection or exceptional leave to remain.</li>
-          <li>Affordable Rent lettings – where up to 80% of market rent can be charged and a new supply agreement is signed.</li>
-          <li>London Affordable Rent lettings – a type of Affordable Rent available in London through the Greater London Authority (GLA).</li>
-          <li>Intermediate Rent lettings – where the rent must not exceed 80% of the current market rate (including any service charges).</li>
-          <li>Rent to Buy lettings – where a discount of up to 20% market rent is charged for a single rental period for a minimum of 5 years. After that period, the tenant is offered the chance to purchase the property (either shared ownership or outright) at full market value.</li>
-          <li>London Living Rent lettings – a type of Intermediate Rent available in London through the Greater London Authority (GLA).</li>
-        </ul>
+        <%= govuk_list [
+          "Tenants in general needs housing allocated a new letting. This includes tenants moving into the social rented sector from outside, existing social tenants moving between properties or landlords, and existing social tenants renewing lettings in the same property. If fixed-term and social or affordable rent, only include tenancies of 2 years or more.",
+          "Tenants in supported housing (social housing, sheltered accommodation and care homes) allocated a new letting. This includes tenants moving into the social rented sector from outside, existing social tenants moving between properties or landlords, and existing social tenants renewing lettings in the same property. All supported housing tenancies should be reported regardless of length.",
+          "Starter tenancies provided by local authorities (LAs) and lettings with an introductory period provided by private registered providers (PRPs) should be completed in CORE at the beginning of the starter or introductory period. The tenancy type and length entered should be based on the tenancy the tenant will roll onto once the starter or introductory period has been completed. You do not need to submit another CORE log once the period has been completed.",
+          "Room moves within a shared housing unit that result in a different property type or support needs – this is classed as an internal transfer of an existing social tenant to another property.",
+          "Existing tenants who are issued with a new tenancy agreement when stock is acquired, transferred or permanently decanted.",
+          "Tenants under the Rough Sleepers Initiative or Rough Sleeping Accommodation Programme, where accommodation is permanent.",
+          "Households previously provided with temporary accommodation to meet a duty under the homelessness legislation who are allocated a tenancy as a settled home ending the duty (this may be the same property).",
+          "Refugees and asylum seekers who have been granted indefinite leave to remain, humanitarian protection or exceptional leave to remain.",
+          "Affordable Rent lettings – where up to 80% of market rent can be charged and a new supply agreement is signed.",
+          "London Affordable Rent lettings – a type of Affordable Rent available in London through the Greater London Authority (GLA).",
+          "Intermediate Rent lettings – where the rent must not exceed 80% of the current market rate (including any service charges).",
+          "Rent to Buy lettings – where a discount of up to 20% market rent is charged for a single rental period for a minimum of 5 years. After that period, the tenant is offered the chance to purchase the property (either shared ownership or outright) at full market value.",
+          "London Living Rent lettings – a type of Intermediate Rent available in London through the Greater London Authority (GLA).",
+        ],
+        type: :bullet %>
       <% end %>
 
       <%= accordion.with_section(heading_text: "Types of lettings you should not create logs for") do %>
         <p class="govuk-body">You don’t need to create a log for:</p>
-        <ul class="govuk-list govuk-list--bullet">
-          <li>Temporary general needs housing with a fixed period of less than 2 years if they are social or affordable rent. (Temporary lettings for intermediate rent and supported housing should be recorded).</li>
-          <li>Starter tenancies or lettings with an introductory period that roll onto or convert into the main tenancy. The CORE log should be completed at the beginning of this period.</li>
-          <li>Changes from sole to joint or joint to sole tenancies, where the number of people in the household has not changed.</li>
-          <li>Moves within a shared housing unit resulting in the same support needs or property type, even if a new tenancy or licence agreement is issued.</li>
-          <li>Lettings where no new tenancy agreement is signed.</li>
-          <li>Where stock is acquired, transferred or permanently decanted and the existing tenants are not issued with a new tenancy agreement.</li>
-          <li>Mutual exchanges including lettings where registered provider tenants have exchanged homes, for example through the national HOMESWAP system.</li>
-          <li>Successions and assignments.</li>
-          <li>Demotion of a secure or assured tenancy, and any subsequent conversion of the demoted tenancy to a secure or assured tenancy.</li>
-          <li>Lettings made to asylum seekers who are awaiting a decision on their applications for asylum under the Immigration and Asylum Act 1999.</li>
-          <li>Non-social lettings, including market-rented properties, employer-provided housing where the employer provides financial support, homes for staff of social landlords linked to employment, homes social landlords manage for organisations who are not social landlords, homes social landlords own but lease in entirety to organisations who are not social landlords, and freehold housing with variable charges for services and communal facilities.</li>
-      </ul>
+        <%= govuk_list [
+          "Temporary general needs housing with a fixed period of less than 2 years if they are social or affordable rent. (Temporary lettings for intermediate rent and supported housing should be recorded).",
+          "Starter tenancies or lettings with an introductory period that roll onto or convert into the main tenancy. The CORE log should be completed at the beginning of this period.",
+          "Changes from sole to joint or joint to sole tenancies, where the number of people in the household has not changed.",
+          "Moves within a shared housing unit resulting in the same support needs or property type, even if a new tenancy or licence agreement is issued.",
+          "Lettings where no new tenancy agreement is signed.",
+          "Where stock is acquired, transferred or permanently decanted and the existing tenants are not issued with a new tenancy agreement.",
+          "Mutual exchanges including lettings where registered provider tenants have exchanged homes, for example through the national HOMESWAP system.",
+          "Successions and assignments.",
+          "Demotion of a secure or assured tenancy, and any subsequent conversion of the demoted tenancy to a secure or assured tenancy.",
+          "Lettings made to asylum seekers who are awaiting a decision on their applications for asylum under the Immigration and Asylum Act 1999.",
+          "Non-social lettings, including market-rented properties, employer-provided housing where the employer provides financial support, homes for staff of social landlords linked to employment, homes social landlords manage for organisations who are not social landlords, homes social landlords own but lease in entirety to organisations who are not social landlords, and freehold housing with variable charges for services and communal facilities.",
+      ],
+      type: :bullet %>
       <% end %>
 
       <%= accordion.with_section(heading_text: "What if someone is reluctant to answer any questions?") do %>
         <p class="govuk-body">If a tenant or buyer is reluctant to answer questions as part of a log, you should explain that:</p>
-        <ul class="govuk-list govuk-list--bullet">
-          <li>all information they provide is anonymous and will not affect their housing, benefits or other services they receive.</li>
-          <li>the data they provide is vital in helping to build a complete picture of social housing in England and is used to inform social housing policy.</li>
-        </ul>
+        <%= govuk_list [
+          "all information they provide is anonymous and will not affect their housing, benefits or other services they receive.",
+          "the data they provide is vital in helping to build a complete picture of social housing in England and is used to inform social housing policy.",
+        ],
+        type: :bullet %>
+
         <p class="govuk-body">If a tenant or buyer is still unwilling or unable to answer questions, select the ‘Don’t know’ or ‘Tenant/person prefers not to say’ options.</p>
       <% end %>
     <% end %>
