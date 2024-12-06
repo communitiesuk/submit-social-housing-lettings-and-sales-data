@@ -171,6 +171,7 @@ class Location < ApplicationRecord
   DUPLICATE_LOCATION_ATTRIBUTES = %w[scheme_id postcode mobility_type].freeze
   LOCAL_AUTHORITIES = LocalAuthority.all.map { |la| [la.name, la.code] }.to_h
 
+  attribute :local_authorities, :string
   enum local_authorities: LOCAL_AUTHORITIES
   def self.local_authorities_for_current_year
     LocalAuthority.all.active(Time.zone.today).england.map { |la| [la.code, la.name] }.to_h
