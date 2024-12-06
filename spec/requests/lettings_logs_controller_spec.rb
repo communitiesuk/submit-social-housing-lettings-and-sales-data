@@ -244,7 +244,6 @@ RSpec.describe LettingsLogsController, type: :request do
         assigned_to: user,
         tenancycode: "LC999",
         status: "pending",
-        skip_update_status: true,
       )
     end
 
@@ -1107,7 +1106,6 @@ RSpec.describe LettingsLogsController, type: :request do
             :in_progress,
             assigned_to: user,
             status: "pending",
-            skip_update_status: true,
           )
         end
 
@@ -1161,11 +1159,10 @@ RSpec.describe LettingsLogsController, type: :request do
 
             context "with bulk_upload_id filter" do
               let(:bulk_upload) { create(:bulk_upload, :lettings, user:) }
-              let(:lettings_log) { create(:lettings_log, :completed, age1: nil, bulk_upload:, assigned_to: user, creation_method: "bulk upload") }
+              let(:lettings_log) { create(:lettings_log, :completed, bulk_upload:, assigned_to: user, creation_method: "bulk upload") }
 
               before do
                 lettings_log.status = "completed"
-                lettings_log.skip_update_status = true
                 lettings_log.save!(validate: false)
               end
 

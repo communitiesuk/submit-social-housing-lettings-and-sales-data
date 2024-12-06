@@ -35,7 +35,6 @@ RSpec.describe "correct_rent_type_value" do
 
         it "updates the rent_type value on a pending log where it was set to 1 on create" do
           log = build(:lettings_log, :completed, rent_type: 1, bulk_upload:, status: "pending")
-          log.skip_update_status = true
           log.save!
           initial_updated_at = log.updated_at
           expect(log.status).to eq("pending")
@@ -166,7 +165,6 @@ RSpec.describe "correct_rent_type_value" do
 
         it "updates the rent_type value on a pending log where it was set to 2 on create" do
           log = build(:lettings_log, :completed, rent_type: 2, bulk_upload:, status: "pending")
-          log.skip_update_status = true
           log.save!
           initial_updated_at = log.updated_at
           expect(log.status).to eq("pending")
