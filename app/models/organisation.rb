@@ -53,7 +53,7 @@ class Organisation < ApplicationRecord
     PRP: 2,
   }.freeze
 
-  enum provider_type: PROVIDER_TYPE
+  enum :provider_type, PROVIDER_TYPE
 
   alias_method :la?, :LA?
 

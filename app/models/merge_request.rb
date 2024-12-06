@@ -15,7 +15,7 @@ class MergeRequest < ApplicationRecord
   }.freeze
 
   attribute :status, :string
-  enum status: STATUS
+  enum :status, STATUS
 
   scope :not_merged, -> { where(request_merged: [false, nil]) }
   scope :merged, -> { where(request_merged: true) }
