@@ -377,14 +377,14 @@ private
   end
 
   def reset_location_fields!
-    reset_location(is_la_inferred, "la", "is_la_inferred", "postcode_full", 1)
+    reset_log_location(is_la_inferred, "la", "is_la_inferred", "postcode_full", 1)
   end
 
   def reset_previous_location_fields!
-    reset_location(is_previous_la_inferred, "prevloc", "is_previous_la_inferred", "ppostcode_full", previous_la_known)
+    reset_log_location(is_previous_la_inferred, "prevloc", "is_previous_la_inferred", "ppostcode_full", previous_la_known)
   end
 
-  def reset_location(is_inferred, la_key, is_inferred_key, postcode_key, is_la_known)
+  def reset_log_location(is_inferred, la_key, is_inferred_key, postcode_key, is_la_known)
     if is_inferred || is_la_known != 1
       self[la_key] = nil
     end
