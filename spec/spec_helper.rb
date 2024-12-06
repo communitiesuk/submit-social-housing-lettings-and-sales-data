@@ -123,8 +123,6 @@ RSpec.configure do |config|
     RequestHelper.real_http_requests
     Singleton.__init__(FormHandler)
   end
-
-  config.profile_examples = 20
 end
 
 RSpec::Matchers.define_negated_matcher :not_change, :change
