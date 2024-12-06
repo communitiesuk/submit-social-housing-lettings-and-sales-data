@@ -207,7 +207,7 @@ GEM
       html-attributes-utils (~> 1.0.0, >= 1.0.0)
       pagy (>= 6, < 10)
       view_component (>= 3.9, < 3.17)
-    govuk_design_system_formbuilder (5.2.0)
+    govuk_design_system_formbuilder (5.7.1)
       actionview (>= 6.1)
       activemodel (>= 6.1)
       activesupport (>= 6.1)
@@ -533,7 +533,7 @@ DEPENDENCIES
   factory_bot_rails
   faker
   govuk-components (~> 5.7)
-  govuk_design_system_formbuilder (~> 5.0)
+  govuk_design_system_formbuilder (~> 5.7)
   govuk_markdown
   jsbundling-rails
   json-schema
