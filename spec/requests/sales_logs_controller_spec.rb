@@ -610,7 +610,7 @@ RSpec.describe SalesLogsController, type: :request do
 
           it "has search results in the title" do
             get "/sales-logs?search=#{log_to_search.id}", headers: headers, params: {}
-            expect(page).to have_title("Sales logs (1 logs matching ‘#{log_to_search.id}’) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+            expect(page).to have_title("Sales logs (1 log matching ‘#{log_to_search.id}’) - Submit social housing lettings and sales data (CORE) - GOV.UK")
           end
 
           it "shows sales logs matching the id" do
@@ -692,7 +692,7 @@ RSpec.describe SalesLogsController, type: :request do
           end
 
           it "shows the total log count" do
-            expect(CGI.unescape_html(response.body)).to match("<strong>1</strong> total logs")
+            expect(CGI.unescape_html(response.body)).to match("<strong>1</strong> total log")
           end
 
           it "does not show the pagination links" do
