@@ -44,7 +44,7 @@ gem "view_component", "~> 3.9"
 # Use the AWS S3 SDK as storage mechanism
 gem "aws-sdk-s3"
 # Track changes to models for auditing or versioning.
-gem "paper_trail"
+gem "paper_trail", "~> 15.2"
 # Store active record objects in version whodunnits
 gem "paper_trail-globalid"
 
