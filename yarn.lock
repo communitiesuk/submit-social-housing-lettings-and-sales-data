@@ -3961,7 +3961,7 @@ jest-worker@^27.4.5:
     merge-stream "^2.0.0"
     supports-color "^8.0.0"
 
-jquery-ui@^1.12.1:
+"jquery-ui@^1.12.1 <1.14.0":
   version "1.13.3"
   resolved "https://registry.yarnpkg.com/jquery-ui/-/jquery-ui-1.13.3.tgz#d9f5292b2857fa1f2fdbbe8f2e66081664eb9bc5"
   integrity sha512-D2YJfswSJRh/B8M/zCowDpNFfwsDmtfnMPwjJTyvl+CBqzpYwQ+gFYIbUUlzijy/Qvoy30H1YhoSui4MNYpRwA==
@@ -4824,10 +4824,10 @@ queue-tick@^1.0.1:
   resolved "https://registry.yarnpkg.com/queue-tick/-/queue-tick-1.0.1.tgz#f6f07ac82c1fd60f82e098b417a80e52f1f4c142"
   integrity sha512-kJt5qhMxoszgU/62PLP1CJytzd2NKetjSRnyuj31fDd3Rlcz3fzlFdFLD1SItunPwyqEOkca6GbV612BWfaBag==
 
-rails_admin@3.1.3:
-  version "3.1.3"
-  resolved "https://registry.yarnpkg.com/rails_admin/-/rails_admin-3.1.3.tgz#1da3f2214876f4ffd3a1db01452c28a8f7d4d989"
-  integrity sha512-79CBB2BMB3fSGPz1P8eNxCboHVlkBWBaxKxfo4QwCAFxsA3WAjfM0MeWUtGHI8Mn8XEZxCdEDz9oYlvlBpMtng==
+rails_admin@3.3.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/rails_admin/-/rails_admin-3.3.0.tgz#58701b189e40b7c7f9a0a8ba2b996a41d5842017"
+  integrity sha512-sgdLMdJDOQmkEWYXY0uqLYxi7eMdhCEU4ZuKpVKdSssMoOr9iqCX8/sOP4ErRiC8Iez5x1vXVOv0Iki4ZKCNug==
   dependencies:
     "@babel/runtime" "^7.16.7"
     "@fortawesome/fontawesome-free" ">=5.15.0 <7.0.0"
@@ -4837,7 +4837,7 @@ rails_admin@3.1.3:
     bootstrap "^5.1.3"
     flatpickr "^4.6.9"
     jquery "^3.6.0"
-    jquery-ui "^1.12.1"
+    jquery-ui "^1.12.1 <1.14.0"
 
 random-bytes@~1.0.0:
   version "1.0.0"
