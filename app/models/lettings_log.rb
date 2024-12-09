@@ -779,8 +779,7 @@ private
     not_required << "previous_la_known" if postcode_known?
     not_required << "tshortfall" if tshortfall_unknown?
     not_required << "tenancylength" if tenancylength_optional?
-
-    not_required |= %w[address_line2 county postcode_full] if startdate && collection_start_year_for_date(startdate) >= 2023
+    not_required += %w[address_line2 county]
 
     not_required
   end
