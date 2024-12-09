@@ -165,9 +165,9 @@ module FiltersHelper
     applied_filters_count(filter_type).zero? ? "No filters applied" : "#{pluralize(applied_filters_count(filter_type), 'filter')} applied"
   end
 
-  def reset_filters_link(filter_type, path_params = {})
+  def reset_filters_link(filter_type, filter_path_params = {})
     if applied_filters_count(filter_type).positive?
-      govuk_link_to "Clear", clear_filters_path(filter_type:, path_params:)
+      govuk_link_to "Clear", clear_filters_path(filter_type:, filter_path_params:)
     end
   end
 
