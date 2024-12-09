@@ -145,7 +145,7 @@ class Scheme < ApplicationRecord
     Yes: 1,
   }.freeze
 
-  enum :sensitive, SENSITIVE, _suffix: true
+  enum :sensitive, SENSITIVE, suffix: true
 
   REGISTERED_UNDER_CARE_ACT = {
     "Yes – registered care home providing nursing care": 4,
@@ -164,7 +164,7 @@ class Scheme < ApplicationRecord
     "Missing": 0,
   }.freeze
 
-  enum :scheme_type, SCHEME_TYPE, _suffix: true
+  enum :scheme_type, SCHEME_TYPE, suffix: true
 
   SUPPORT_TYPE = {
     "Missing": 0,
@@ -175,7 +175,7 @@ class Scheme < ApplicationRecord
     "Floating support": 6,
   }.freeze
 
-  enum :support_type, SUPPORT_TYPE, _suffix: true
+  enum :support_type, SUPPORT_TYPE, suffix: true
 
   PRIMARY_CLIENT_GROUP = {
     "Homeless families with support needs": "O",
@@ -197,8 +197,8 @@ class Scheme < ApplicationRecord
     "Missing": "X",
   }.freeze
 
-  enum :primary_client_group, PRIMARY_CLIENT_GROUP, _suffix: true
-  enum :secondary_client_group, PRIMARY_CLIENT_GROUP, _suffix: true
+  enum :primary_client_group, PRIMARY_CLIENT_GROUP, suffix: true
+  enum :secondary_client_group, PRIMARY_CLIENT_GROUP, suffix: true
 
   INTENDED_STAY = {
     "Very short stay": "V",
@@ -213,8 +213,8 @@ class Scheme < ApplicationRecord
     Yes: 1,
   }.freeze
 
-  enum :intended_stay, INTENDED_STAY, _suffix: true
-  enum :has_other_client_group, HAS_OTHER_CLIENT_GROUP, _suffix: true
+  enum :intended_stay, INTENDED_STAY, suffix: true
+  enum :has_other_client_group, HAS_OTHER_CLIENT_GROUP, suffix: true
 
   ARRANGEMENT_TYPE = {
     "The same organisation that owns the housing stock": "D",
@@ -226,7 +226,7 @@ class Scheme < ApplicationRecord
 
   DUPLICATE_SCHEME_ATTRIBUTES = %w[scheme_type registered_under_care_act primary_client_group secondary_client_group has_other_client_group support_type intended_stay].freeze
 
-  enum :arrangement_type, ARRANGEMENT_TYPE, _suffix: true
+  enum :arrangement_type, ARRANGEMENT_TYPE, suffix: true
 
   def self.find_by_id_on_multiple_fields(scheme_id, location_id)
     return if scheme_id.nil?

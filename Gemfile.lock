@@ -301,7 +301,7 @@ GEM
       iniparse (~> 1.4)
       rexml (~> 3.2)
     pagy (9.3.2)
-    paper_trail (15.1.0)
+    paper_trail (15.2.0)
       activerecord (>= 6.1)
       request_store (~> 1.4)
     paper_trail-globalid (0.2.0)
@@ -397,7 +397,7 @@ GEM
     regexp_parser (2.9.0)
     reline (0.5.12)
       io-console (~> 0.5)
-    request_store (1.6.0)
+    request_store (1.7.0)
       rack (>= 1.4)
     responders (3.1.1)
       actionpack (>= 5.2)
@@ -569,7 +569,7 @@ DEPENDENCIES
   method_source (~> 1.1)
   notifications-ruby-client
   overcommit (>= 0.37.0)
-  paper_trail
+  paper_trail (~> 15.2)
   paper_trail-globalid
   parallel_tests
   pg (~> 1.1)
