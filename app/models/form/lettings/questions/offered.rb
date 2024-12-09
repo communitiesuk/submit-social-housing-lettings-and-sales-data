@@ -7,7 +7,6 @@ class Form::Lettings::Questions::Offered < ::Form::Question
     @check_answers_card_number = 0
     @max = 150
     @min = 0
-    @hint_text = I18n.t("hints.offered")
     @step = 1
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
   end

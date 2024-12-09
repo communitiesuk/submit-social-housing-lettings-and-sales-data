@@ -171,7 +171,8 @@ class Location < ApplicationRecord
   DUPLICATE_LOCATION_ATTRIBUTES = %w[scheme_id postcode mobility_type].freeze
   LOCAL_AUTHORITIES = LocalAuthority.all.map { |la| [la.name, la.code] }.to_h
 
-  enum local_authorities: LOCAL_AUTHORITIES
+  attribute :local_authorities, :string
+  enum :local_authorities, LOCAL_AUTHORITIES
   def self.local_authorities_for_current_year
     LocalAuthority.all.active(Time.zone.today).england.map { |la| [la.code, la.name] }.to_h
   end
@@ -184,7 +185,7 @@ class Location < ApplicationRecord
     "Missing": "X",
   }.freeze
 
-  enum mobility_type: MOBILITY_TYPE
+  enum :mobility_type, MOBILITY_TYPE
 
   TYPE_OF_UNIT = {
     "Bungalow": 6,
@@ -195,7 +196,7 @@ class Location < ApplicationRecord
     "Shared house or hostel": 4,
   }.freeze
 
-  enum type_of_unit: TYPE_OF_UNIT
+  enum :type_of_unit, TYPE_OF_UNIT
 
   def self.find_by_id_on_multiple_fields(id)
     return if id.nil?

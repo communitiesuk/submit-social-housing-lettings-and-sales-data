@@ -56,7 +56,7 @@ class User < ApplicationRecord
     unassign: "No, unassign the logs",
   }.freeze
 
-  enum role: ROLES
+  enum :role, ROLES
 
   scope :search_by_name, ->(name) { where("users.name ILIKE ?", "%#{name}%") }
   scope :search_by_email, ->(email) { where("email ILIKE ?", "%#{email}%") }

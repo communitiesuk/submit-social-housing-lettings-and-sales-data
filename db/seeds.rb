@@ -12,13 +12,13 @@ def find_or_create_user(organisation, email, name, role)
   end
 end
 
-unless Rails.env.test?
-  if LocalAuthority.count.zero?
-    la_path = "config/local_authorities_data/initial_local_authorities.csv"
-    service = Imports::LocalAuthoritiesService.new(path: la_path)
-    service.call
-  end
+if LocalAuthority.count.zero?
+  la_path = "config/local_authorities_data/initial_local_authorities.csv"
+  service = Imports::LocalAuthoritiesService.new(path: la_path)
+  service.call
+end
 
+unless Rails.env.test?
   if LaRentRange.count.zero?
     Dir.glob("config/rent_range_data/*.csv").each do |path|
       start_year = File.basename(path, ".csv")

@@ -1883,7 +1883,7 @@ RSpec.describe OrganisationsController, type: :request do
 
           it "displays the form with an error message" do
             request
-            expect(response).to have_http_status(:unprocessable_entity)
+            expect(response).to have_http_status(:unprocessable_content)
             expect(page).to have_content(I18n.t("validations.organisation.name_missing"))
             expect(page).to have_content(I18n.t("validations.organisation.provider_type_missing"))
           end
@@ -2049,7 +2049,7 @@ RSpec.describe OrganisationsController, type: :request do
           end
 
           it "has clear filters link" do
-            expect(page).to have_link("Clear", href: clear_filters_path(filter_type: "lettings_logs", path_params: { organisation_id: organisation.id }))
+            expect(page).to have_link("Clear", href: clear_filters_path(filter_type: "lettings_logs", filter_path_params: { organisation_id: organisation.id }))
           end
         end
       end
@@ -2411,7 +2411,7 @@ RSpec.describe OrganisationsController, type: :request do
           it "displays an error" do
             post "/organisations/#{organisation.id}/schemes/duplicates", headers: headers, params: params
 
-            expect(response).to have_http_status(:unprocessable_entity)
+            expect(response).to have_http_status(:unprocessable_content)
             expect(page).to have_content("You must resolve all duplicates or indicate that there are no duplicates")
           end
         end

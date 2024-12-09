@@ -95,7 +95,7 @@ RSpec.describe MergeRequestsController, type: :request do
         end
 
         it "displays the page with an error message" do
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
           expect(page).to have_content("Another merge request records #{another_organisation.name} as merging into #{other_merge_request.absorbing_organisation&.name} on 4 May 2022. Select another organisation or remove this organisation from the other merge request.")
         end
       end
@@ -113,7 +113,7 @@ RSpec.describe MergeRequestsController, type: :request do
         it "does not update the merge request" do
           merge_request.reload
           expect(merge_request.merging_organisations.count).to eq(0)
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
           expect(page).to have_content(I18n.t("validations.merge_request.organisation_part_of_another_merge"))
         end
       end
@@ -159,7 +159,7 @@ RSpec.describe MergeRequestsController, type: :request do
         it "does not update the merge request" do
           merge_request.reload
           expect(merge_request.merging_organisations.count).to eq(0)
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
           expect(page).to have_content(I18n.t("validations.merge_request.organisation_not_selected"))
         end
       end
@@ -174,7 +174,7 @@ RSpec.describe MergeRequestsController, type: :request do
         it "does not update the merge request" do
           merge_request.reload
           expect(merge_request.merging_organisations.count).to eq(0)
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
           expect(page).to have_content(I18n.t("validations.merge_request.organisation_not_selected"))
         end
       end
@@ -363,7 +363,7 @@ RSpec.describe MergeRequestsController, type: :request do
           it "renders the error" do
             request
 
-            expect(response).to have_http_status(:unprocessable_entity)
+            expect(response).to have_http_status(:unprocessable_content)
             expect(page).to have_content("Enter a merge date")
           end
 
@@ -385,7 +385,7 @@ RSpec.describe MergeRequestsController, type: :request do
           it "displays the page with an error message" do
             request
 
-            expect(response).to have_http_status(:unprocessable_entity)
+            expect(response).to have_http_status(:unprocessable_content)
             expect(page).to have_content("Enter a valid merge date")
           end
         end
@@ -426,7 +426,7 @@ RSpec.describe MergeRequestsController, type: :request do
           it "displays the page with an error message" do
             request
 
-            expect(response).to have_http_status(:unprocessable_entity)
+            expect(response).to have_http_status(:unprocessable_content)
             expect(page).to have_content("The merge date must not be later than a year from today’s date.")
           end
         end
@@ -467,7 +467,7 @@ RSpec.describe MergeRequestsController, type: :request do
           it "renders the error" do
             request
 
-            expect(response).to have_http_status(:unprocessable_entity)
+            expect(response).to have_http_status(:unprocessable_content)
             expect(page).to have_content("You must answer absorbing organisation already active?")
           end
 
@@ -490,7 +490,7 @@ RSpec.describe MergeRequestsController, type: :request do
           it "renders the error" do
             request
 
-            expect(response).to have_http_status(:unprocessable_entity)
+            expect(response).to have_http_status(:unprocessable_content)
             expect(page).to have_content("You must answer was this merge reported by a helpdesk ticket?")
           end
 
@@ -511,7 +511,7 @@ RSpec.describe MergeRequestsController, type: :request do
           it "renders the error" do
             request
 
-            expect(response).to have_http_status(:unprocessable_entity)
+            expect(response).to have_http_status(:unprocessable_content)
             expect(page).to have_content("You must answer the ticket number")
           end
 
