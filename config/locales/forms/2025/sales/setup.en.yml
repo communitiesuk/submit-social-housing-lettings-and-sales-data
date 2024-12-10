@@ -6,7 +6,7 @@ en:
           owning_organisation_id:
             page_header: ""
             check_answer_label: "Owning organisation"
-            hint_text: "Active organisation has active status"
+            hint_text: "Active organisation has currenty active status"
             question_text: "Which active organisation owns this log?"
 
           managing_organisation_id:
