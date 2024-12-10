@@ -5,9 +5,9 @@ en:
         setup:
           owning_organisation_id:
             page_header: ""
-            check_answer_label: "Stock owner"
+            check_answer_label: "Active stock owner"
             hint_text: ""
-            question_text: "Which organisation owns this property?"
+            question_text: "Which active organisation owns this property?"
 
           managing_organisation_id:
             page_header: ""
