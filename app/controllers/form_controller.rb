@@ -106,7 +106,7 @@ private
     return unless previous_responses
 
     previous_responses_to_reset = previous_responses.reject do |key, value|
-      if @log.form.get_question(key, @log)&.type == "date" && @log[key]
+      if @log.form.get_question(key, @log)&.type == "date" && value.present?
         year = value.split("-").first.to_i
         year&.zero?
       else
