@@ -6,7 +6,7 @@ en:
           declaration:
             page_header: "Ministry of Housing, Communities and Local Government privacy notice"
             check_answer_label: "Tenant has seen the privacy notice"
-            check_answer_prompt: "Confirm tenant has seen the privacy notice"
+            check_answer_prompt: "Answer if tenant has seen the privacy notice"
             hint_text: ""
             question_text: "Declaration"
 
