@@ -6,8 +6,8 @@ en:
           owning_organisation_id:
             page_header: ""
             check_answer_label: "Owning organisation"
-            hint_text: ""
-            question_text: "Which organisation owns this log?"
+            hint_text: "Active organisation has active status"
+            question_text: "Which active organisation owns this log?"
 
           managing_organisation_id:
             page_header: ""
@@ -29,9 +29,9 @@ en:
 
           purchid:
             page_header: ""
-            check_answer_label: "Purchaser code"
-            hint_text: "This is how you usually refer to the purchaser on your own systems."
-            question_text: "What is the purchaser code?"
+            check_answer_label: "Full purchaser code"
+            hint_text: ""
+            question_text: "What is the full purchaser code?"
 
           ownershipsch:
             page_header: ""
