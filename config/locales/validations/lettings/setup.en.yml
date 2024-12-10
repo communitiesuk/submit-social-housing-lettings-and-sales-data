@@ -4,7 +4,7 @@ en:
       setup:
         startdate:
           not_within:
-            next_two_weeks: "The tenancy start date must not be later than 14 days from today’s date."
+            next_two_weeks: "The tenancy start date must not be later than 15 days from today’s date."
           must_be_within:
             current_collection_year:
               "Enter a date within the %{current_start_year_short} to %{current_end_year_short} collection year, which is between %{current_start_year_long} and %{current_end_year_long}."
