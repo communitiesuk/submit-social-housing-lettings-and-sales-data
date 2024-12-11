@@ -12,9 +12,4 @@ module FormPageErrorHelper
       errors.each { |error| lettings_log.errors.delete(error.attribute) }
     end
   end
-
-  def all_pages_affected_by_errors(log)
-    question_ids = (log.errors.map(&:attribute) - [:base]).uniq
-    question_ids.map { |id| log.form.get_question(id, log)&.page&.id }.compact.uniq
-  end
 end
