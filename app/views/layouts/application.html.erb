@@ -103,7 +103,7 @@
     <% feedback_link = govuk_link_to "giving us your feedback (opens in a new tab)", t("feedback_form"), rel: "noreferrer noopener", target: "_blank" %>
 
     <%= govuk_phase_banner(
-      classes: "govuk-width-container",
+      classes: "#{current_user.present? ? "no-bottom-border " : ""}govuk-width-container",
       tag: govuk_phase_banner_tag(current_user),
       text: "This is a new service – help us improve it by #{feedback_link}".html_safe,
     ) %>
