@@ -185,7 +185,7 @@ class OrganisationsController < ApplicationController
     @total_count = organisation_logs.size
     @log_type = :lettings
     @filter_type = "lettings_logs"
-    @duplicate_sets_count = FeatureToggle.duplicate_summary_enabled? ? duplicate_sets_count(current_user, @organisation) : 0
+    @duplicate_sets_count = duplicate_sets_count(current_user, @organisation)
     render "logs", layout: "application"
   end
 
@@ -217,7 +217,7 @@ class OrganisationsController < ApplicationController
         @total_count = organisation_logs.size
         @log_type = :sales
         @filter_type = "sales_logs"
-        @duplicate_sets_count = FeatureToggle.duplicate_summary_enabled? ? duplicate_sets_count(current_user, @organisation) : 0
+        @duplicate_sets_count = duplicate_sets_count(current_user, @organisation)
         render "logs", layout: "application"
       end
 
