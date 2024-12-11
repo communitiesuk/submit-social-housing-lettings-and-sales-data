@@ -5,8 +5,8 @@ en:
         income_and_benefits:
           net_income_known:
             page_header: "Household’s combined income after tax"
-            check_answer_label: "Do you know the household’s combined total income after tax?"
-            check_answer_prompt: "Confirm if you know the household’s combined total income after tax"
+            check_answer_label: "Household’s combined total income after tax"
+            check_answer_prompt: "Answer if you know the household’s combined total income after tax"
             hint_text: ""
             question_text: "Do you know the household’s combined income after tax?"
 
@@ -40,7 +40,7 @@ en:
           household_charge:
             page_header: ""
             check_answer_label: "Does the household pay rent or charges"
-            check_answer_prompt: ""
+            check_answer_prompt: "Answer if the household pay rent or charges"
             hint_text: "If rent is charged on the property then answer Yes to this question, even if the tenants do not pay it themselves."
             question_text: "Does the household pay rent or other charges for the accommodation?"
 
@@ -55,7 +55,7 @@ en:
             page_header: ""
             is_carehome:
               check_answer_label: "Care home accommodation"
-              check_answer_prompt: ""
+              check_answer_prompt: "Answer if care home accommodation"
               hint_text: ""
               question_text: "Is this accommodation a care home?"
             chcharge_weekly:
@@ -110,15 +110,15 @@ en:
           hbrentshortfall:
             page_header: ""
             check_answer_label: "Any outstanding amount for basic rent and charges"
-            check_answer_prompt: ""
+            check_answer_prompt: "Answer if any outstanding amount for basic rent and charges"
             hint_text: "Also known as the ‘outstanding amount’."
             question_text: "After the household has received any housing-related benefits, will they still need to pay for rent and charges?"
 
           outstanding_amount:
             page_header: ""
             tshortfall_known:
-              check_answer_label: "Do you know the outstanding amount?"
-              check_answer_prompt: ""
+              check_answer_label: "Outstanding amount known"
+              check_answer_prompt: "Answer if you know the outstanding amount"
               hint_text: "You only need to give an approximate figure."
               question_text: "Can you estimate the outstanding amount?"
             tshortfall:

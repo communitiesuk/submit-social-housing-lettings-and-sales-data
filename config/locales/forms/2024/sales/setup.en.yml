@@ -13,7 +13,7 @@ en:
           managing_organisation_id:
             page_header: ""
             check_answer_label: "Reported by"
-            check_answer_prompt: ""
+            check_answer_prompt: "Answer reported by"
             hint_text: ""
             question_text: "Which organisation is reporting this sale?"
 

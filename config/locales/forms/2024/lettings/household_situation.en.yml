@@ -46,13 +46,13 @@ en:
           prevten:
             renewal:
               page_header: ""
-              check_answer_label: "Where was the household immediately before this letting?"
+              check_answer_label: "Where household was immediately before this letting"
               check_answer_prompt: ""
               hint_text:  "You told us this letting is a renewal. We have removed some options because of this.<br><br>This is where the household was the night before they moved into this new let."
               question_text: "Where was the household immediately before this letting?"
             not_renewal:
               page_header: ""
-              check_answer_label: "Where was the household immediately before this letting?"
+              check_answer_label: "Where household was immediately before this letting"
               check_answer_prompt: ""
               hint_text: "This is where the household was the night before they moved into this new let."
               question_text: "Where was the household immediately before this letting?"
@@ -60,7 +60,7 @@ en:
           homeless:
             page_header: ""
             check_answer_label: "Household homeless immediately before letting"
-            check_answer_prompt: "Answer if homeless immediately before letting"
+            check_answer_prompt: "Answer if household homeless immediately before letting"
             hint_text: ""
             question_text: "Did the household experience homelessness immediately before this letting?"
 
