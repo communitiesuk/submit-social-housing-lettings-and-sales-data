@@ -36,20 +36,28 @@ class BulkUpload::Processor
 
     if validator.any_setup_errors?
       send_setup_errors_mail
-
-    elsif validator.create_logs?
-      create_logs
-
-      if validator.soft_validation_errors_only?
-        send_check_soft_validations_mail
-      elsif created_logs_but_incompleted?
-        send_how_to_fix_upload_mail
-      elsif created_logs_and_all_completed?
-        bulk_upload.unpend
-        send_success_mail
-      end
     else
-      send_correct_and_upload_again_mail # summary/full report
+      block_creation_reason = validator.block_log_creation_reason
+
+      if block_creation_reason.present?
+        case block_creation_reason
+        when "duplicate_logs"
+          send_correct_duplicates_and_upload_again_mail
+        else
+          send_correct_and_upload_again_mail # summary/full report
+        end
+      else
+        create_logs
+
+        if validator.soft_validation_errors_only?
+          send_check_soft_validations_mail
+        elsif created_logs_but_incompleted?
+          send_how_to_fix_upload_mail
+        elsif created_logs_and_all_completed?
+          bulk_upload.unpend
+          send_success_mail
+        end
+      end
     end
   rescue StandardError => e
     Sentry.capture_exception(e)
@@ -94,6 +102,12 @@ private
   def send_correct_and_upload_again_mail
     BulkUploadMailer
       .send_correct_and_upload_again_mail(bulk_upload:)
+      .deliver_later
+  end
+
+  def send_correct_duplicates_and_upload_again_mail
+    BulkUploadMailer
+      .send_correct_duplicates_and_upload_again_mail(bulk_upload:)
       .deliver_later
   end
 
