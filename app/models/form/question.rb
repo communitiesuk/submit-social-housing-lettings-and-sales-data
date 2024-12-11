@@ -143,7 +143,7 @@ class Form::Question
   end
 
   def displayed_as_answered?(log)
-    if is_derived_or_has_inferred_check_answers_value?(log)
+    if is_derived_or_has_inferred_check_answers_value?(log) && log[id].present?
       true
     elsif type == "checkbox"
       answer_options.keys.any? { |key| value_is_yes?(log[key]) }
