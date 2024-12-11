@@ -20,7 +20,7 @@ en:
           assigned_to_id:
             page_header: ""
             check_answer_label: "Log owner"
-            check_answer_prompt: ""
+            check_answer_prompt: "Select user"
             hint_text: ""
             question_text: "Which user are you creating this log for?"
 

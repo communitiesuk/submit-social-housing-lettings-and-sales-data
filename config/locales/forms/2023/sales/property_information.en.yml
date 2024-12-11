@@ -19,7 +19,7 @@ en:
           uprn_confirmed:
             page_header: "We found an address that might be this property"
             check_answer_label: "Is this the right address?"
-            check_answer_prompt: ""
+            check_answer_prompt: "Answer if this is the right address"
             hint_text: ""
             question_text: "Is this the property address?"
 
@@ -82,6 +82,6 @@ en:
           wchair:
             page_header: ""
             check_answer_label: "Property built or adapted to wheelchair-user standards"
-            check_answer_prompt: "Answer if property built or adapted to wheelchair-user standards"
+            check_answer_prompt: "Answer if property is built or adapted to wheelchair-user standards"
             hint_text: ""
             question_text: "Is the property built or adapted to wheelchair-user standards?"

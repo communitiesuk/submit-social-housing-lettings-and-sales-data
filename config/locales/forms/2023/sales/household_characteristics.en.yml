@@ -6,28 +6,28 @@ en:
           noint:
             joint_purchase:
               page_header: ""
-              check_answer_label: "Buyers interviewed in person?"
-              check_answer_prompt: ""
+              check_answer_label: "Buyers interviewed in person"
+              check_answer_prompt: "Answer if buyers interviewed in person"
               hint_text: "You should still try to answer all questions even if the buyers weren’t interviewed in person"
               question_text: "Were the buyers interviewed for any of the answers you will provide on this log?"
             not_joint_purchase:
               page_header: ""
-              check_answer_label: "Buyer interviewed in person?"
-              check_answer_prompt: ""
+              check_answer_label: "Buyer interviewed in person"
+              check_answer_prompt: "Answer if buyer interviewed in person"
               hint_text: "You should still try to answer all questions even if the buyer wasn’t interviewed in person"
               question_text: "Was the buyer interviewed for any of the answers you will provide on this log?"
 
           privacynotice:
             joint_purchase:
               page_header: ""
-              check_answer_label: "Buyers have seen the privacy notice?"
-              check_answer_prompt: ""
+              check_answer_label: "Buyers have seen the privacy notice"
+              check_answer_prompt: "Answer if buyers have seen the privacy notice"
               hint_text: ""
               question_text: "Declaration"
             not_joint_purchase:
               page_header: ""
-              check_answer_label: "Buyer has seen the privacy notice?"
-              check_answer_prompt: ""
+              check_answer_label: "Buyer has seen the privacy notice"
+              check_answer_prompt: "Answer if buyer has seen the privacy notice"
               hint_text: ""
               question_text: "Declaration"
 
@@ -35,12 +35,12 @@ en:
             page_header: ""
             age1_known:
               check_answer_label: "Buyer 1’s age"
-              check_answer_prompt: ""
+              check_answer_prompt: "Enter buyer 1's age"
               hint_text: "Buyer 1 is the person in the household who does the most paid work. If it’s a joint purchase and the buyers do the same amount of paid work, buyer 1 is whoever is the oldest."
               question_text: "Do you know buyer 1’s age?"
             age1:
               check_answer_label: "Buyer 1’s age"
-              check_answer_prompt: ""
+              check_answer_prompt: "Enter buyer 1's age"
               hint_text: ""
               question_text: "Age"
 
@@ -106,8 +106,8 @@ en:
 
           buy1livein:
             page_header: ""
-            check_answer_label: "Will buyer 1 live in the property?"
-            check_answer_prompt: ""
+            check_answer_label: "Buyer 1 lives in the property"
+            check_answer_prompt: "Answer if buyer 1 lives in the property"
             hint_text: "Buyer 1 is the person in the household who does the most paid work. If it’s a joint purchase and the buyers do the same amount of paid work, buyer 1 is whoever is the oldest."
             question_text: "Will buyer 1 live in the property?"
 
@@ -227,8 +227,8 @@ en:
 
           buy2livein:
             page_header: ""
-            check_answer_label: "Will buyer 2 live in the property?"
-            check_answer_prompt: ""
+            check_answer_label: "Buyer 2 lives in the property"
+            check_answer_prompt: "Answer if buyer 2 lives in the property"
             hint_text: ""
             question_text: "Will buyer 2 live in the property?"
 
