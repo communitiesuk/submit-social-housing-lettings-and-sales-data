@@ -300,6 +300,7 @@ RSpec.describe User, type: :model do
     context "when the user is in staging environment" do
       before do
         allow(Rails.env).to receive(:staging?).and_return(true)
+        allow(Rails.application.credentials).to receive(:[]).with(:staging_role_update_email_allowlist).and_return(["not_one_of_the_examples.com"])
       end
 
       context "and the user is not in the staging role update email allowlist" do

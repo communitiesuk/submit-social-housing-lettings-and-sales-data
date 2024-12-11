@@ -12,6 +12,6 @@
     <is_dpo>false</is_dpo>
     <is_key_contact>false</is_key_contact>
     <active>true</active>
-    <organisation_name>MHCLG</organisation_name>
+    <organisation_name>{organisation_name}</organisation_name>
   </form>
 </forms>

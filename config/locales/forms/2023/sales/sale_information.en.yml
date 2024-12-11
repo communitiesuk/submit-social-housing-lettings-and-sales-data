@@ -33,7 +33,7 @@ en:
             page_header: ""
             check_answer_label: "Staircasing transaction"
             check_answer_prompt: ""
-            hint_text: "A staircasing transaction is when the household purchases more shares in their property, increasing the proportion they own and decreasing the proportion the housing association owns. Once the household purchases 100% of the shares, they own the property"
+            hint_text: "A staircasing transaction is when the household purchases more shares in their property, increasing the proportion they own and decreasing the proportion the housing association owns. Once the household purchases 100% of the shares, they own the property."
             question_text: "Is this a staircasing transaction?"
           about_staircasing:
             page_header: "About the staircasing transaction"
@@ -86,7 +86,6 @@ en:
             joint_purchase:
               page_header: ""
               check_answer_label: "Any buyers were registered providers, housing association or local authority tenants immediately before this sale?"
-              check_answer_prompt: ""
               hint_text: ""
               question_text: "Were any of the buyers private registered providers, housing association or local authority tenants immediately before this sale?"
             not_joint_purchase:
@@ -97,10 +96,10 @@ en:
               question_text: "Was the buyer a private registered provider, housing association or local authority tenant immediately before this sale?"
 
           frombeds:
-            page_header: "About the buyers’ previous property"
+            page_header: ""
             check_answer_label: "Number of bedrooms in previous property"
             check_answer_prompt: ""
-            hint_text: "For bedsits enter 1"
+            hint_text: "A bedsit has 1 bedroom."
             question_text: "How many bedrooms did the property have?"
 
           fromprop:
@@ -132,14 +131,14 @@ en:
             question_text: "What was the initial percentage equity stake purchased?"
 
           mortgageused:
-            page_header: "Mortgage Amount"
+            page_header: ""
             check_answer_label: "Mortgage used"
             check_answer_prompt: ""
             hint_text: ""
             question_text: "Was a mortgage used for the purchase of this property?"
 
           mortgage:
-            page_header: "Mortgage Amount"
+            page_header: ""
             check_answer_label: "Mortgage amount"
             check_answer_prompt: ""
             hint_text: "Enter the amount of mortgage agreed with the mortgage lender. Exclude any deposits or cash payments. Numeric in pounds. Rounded to the nearest pound."

@@ -25,13 +25,13 @@ jobs:
 
     steps:
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v3
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-region: ${{ env.aws_region }}
           role-to-assume: ${{ env.app_repo_role }}
 
       - name: Configure AWS credentials for review environment
-        uses: aws-actions/configure-aws-credentials@v3
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-region: ${{ env.aws_region }}
           role-to-assume: arn:aws:iam::${{ env.aws_account_id }}:role/${{ env.aws_role_prefix }}-deployment
@@ -46,7 +46,7 @@ jobs:
           network=$(aws ecs describe-services --cluster $cluster --services $service --query services[0].networkConfiguration)
           overrides='{ "containerOverrides" : [{ "name" : "app", "command" : ["bundle", "exec", "rake", "db:drop"]}]}'
           arn=$(aws ecs run-task --cluster $cluster --task-definition $ad_hoc_task_definition --network-configuration "$network" --overrides "$overrides" --group migrations --launch-type FARGATE --query tasks[0].taskArn)
-          echo "Waiting for db prepare task to complete"
+          echo "Waiting for db drop task to complete"
           temp=${arn##*/}
           id=${temp%*\"}
           aws ecs wait tasks-stopped --cluster $cluster --tasks $id

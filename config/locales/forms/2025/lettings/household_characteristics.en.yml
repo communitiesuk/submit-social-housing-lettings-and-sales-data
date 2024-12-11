@@ -15,7 +15,7 @@ en:
             age1_known:
               check_answer_label: ""
               check_answer_prompt: "Answer if you know the lead tenant's age"
-              hint_text: "The ’lead’ or ’main’ tenant is the person in the household who does the most paid work. If several people do the same amount of paid work, the lead tenant is whoever is the oldest."
+              hint_text: "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest."
               question_text: "Do you know the lead tenant’s age?"
             age1:
               check_answer_label: "Lead tenant’s age"

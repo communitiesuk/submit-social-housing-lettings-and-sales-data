@@ -5,11 +5,11 @@ module Exports
 
     def export_xml_lettings_logs(full_update: false, collection_year: nil)
       archives_for_manifest = {}
-      collection_years_to_export(collection_year).each do |collection|
-        recent_export = Export.where(collection:).order("started_at").last
-        base_number = Export.where(empty_export: false, collection:).maximum(:base_number) || 1
-        export = build_export_run(collection, base_number, full_update)
-        archives = write_export_archive(export, collection, recent_export, full_update)
+      collection_years_to_export(collection_year).each do |year|
+        recent_export = Export.lettings.where(year:).order("started_at").last
+        base_number = Export.lettings.where(empty_export: false, year:).maximum(:base_number) || 1
+        export = build_export_run("lettings", base_number, full_update, year)
+        archives = write_export_archive(export, year, recent_export, full_update)
 
         archives_for_manifest.merge!(archives)
 
@@ -22,21 +22,21 @@ module Exports
 
   private
 
-    def get_archive_name(collection, base_number, increment)
-      return unless collection
+    def get_archive_name(year, base_number, increment)
+      return unless year
 
       base_number_str = "f#{base_number.to_s.rjust(4, '0')}"
       increment_str = "inc#{increment.to_s.rjust(4, '0')}"
-      "core_#{collection}_#{collection + 1}_apr_mar_#{base_number_str}_#{increment_str}".downcase
+      "core_#{year}_#{year + 1}_apr_mar_#{base_number_str}_#{increment_str}".downcase
     end
 
-    def retrieve_resources(recent_export, full_update, collection)
+    def retrieve_resources(recent_export, full_update, year)
       if !full_update && recent_export
         params = { from: recent_export.started_at, to: @start_time }
-        LettingsLog.exportable.where("(updated_at >= :from AND updated_at <= :to) OR (values_updated_at IS NOT NULL AND values_updated_at >= :from AND values_updated_at <= :to)", params).filter_by_year(collection)
+        LettingsLog.exportable.where("(updated_at >= :from AND updated_at <= :to) OR (values_updated_at IS NOT NULL AND values_updated_at >= :from AND values_updated_at <= :to)", params).filter_by_year(year)
       else
         params = { to: @start_time }
-        LettingsLog.exportable.where("updated_at <= :to", params).filter_by_year(collection)
+        LettingsLog.exportable.where("updated_at <= :to", params).filter_by_year(year)
       end
     end
 
