@@ -17,6 +17,7 @@ RSpec.describe Exports::UserExportService do
   def replace_entity_ids(user, export_template)
     export_template.sub!(/\{id\}/, user["id"].to_s)
     export_template.sub!(/\{organisation_id\}/, user["organisation_id"].to_s)
+    export_template.sub!(/\{organisation_name\}/, user.organisation.name)
     export_template.sub!(/\{email\}/, user["email"].to_s)
   end
 
