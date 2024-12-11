@@ -38,7 +38,11 @@ class FormController < ApplicationController
         error_attributes = @log.errors.map(&:attribute)
         Rails.logger.info "User triggered validation(s) on: #{error_attributes.join(', ')}"
         @subsection = form.subsection_for_page(@page)
-        flash[:errors] = @log.errors
+        flash[:errors] = @log.errors.each_with_object({}) do |error, result|
+          if @page.questions.map(&:id).include?(error.attribute.to_s)
+            result[error.attribute.to_s] = error.message
+          end
+        end
         flash[:log_data] = responses_for_page
         redirect_to send("#{@log.class.name.underscore}_#{@page.id}_path", @log, { referrer: request.params["referrer"], original_page_id: request.params["original_page_id"], related_question_ids: request.params["related_question_ids"] })
       end
@@ -116,7 +120,7 @@ private
     return unless previous_errors
 
     previous_errors.each do |attribute, message|
-      @log.errors.add attribute, message.first
+      @log.errors.add attribute, message.html_safe
     end
   end
 
