@@ -17,7 +17,6 @@ RSpec.describe "recalculate_status_after_sales_over_retirement_age_validation" d
 
         before do
           log.status = "completed"
-          log.skip_update_status = true
           log.save!
         end
 
@@ -34,7 +33,6 @@ RSpec.describe "recalculate_status_after_sales_over_retirement_age_validation" d
         before do
           log.status = "pending"
           log.status_cache = "completed"
-          log.skip_update_status = true
           log.save!
         end
 

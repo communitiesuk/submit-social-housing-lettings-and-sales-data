@@ -281,7 +281,7 @@ RSpec.describe BulkUpload::Processor do
   end
 
   describe "#approve" do
-    let!(:log) { create(:lettings_log, :in_progress, bulk_upload:, status: "pending", skip_update_status: true, status_cache: "in_progress") }
+    let!(:log) { create(:lettings_log, :in_progress, bulk_upload:, status: "pending", status_cache: "in_progress") }
 
     it "makes pending logs no longer pending" do
       expect(log.status).to eql("pending")

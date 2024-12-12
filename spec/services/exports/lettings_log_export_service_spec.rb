@@ -62,7 +62,6 @@ RSpec.describe Exports::LettingsLogExportService do
           :lettings_log,
           :completed,
           status: "pending",
-          skip_update_status: true,
           propcode: "123",
           ppostcode_full: "SE2 6RT",
           postcode_full: "NW1 5TY",
