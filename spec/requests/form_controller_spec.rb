@@ -723,6 +723,26 @@ RSpec.describe FormController, type: :request do
               end
             end
           end
+
+          context "with long error messages" do
+            let(:sales_log) { create(:sales_log, :completed, assigned_to: user) }
+            let(:page_id) { "purchase_price" }
+            let(:params) do
+              {
+                id: sales_log.id,
+                sales_log: {
+                  page: page_id,
+                  "value" => 1,
+                },
+              }
+            end
+
+            it "can deal with long error messages" do
+              post "/sales-logs/#{sales_log.id}/#{page_id.dasherize}", params: params
+              follow_redirect!
+              expect(page).to have_content("There is a problem")
+            end
+          end
         end
 
         context "with invalid organisation answers" do
