@@ -599,6 +599,33 @@ RSpec.describe "Sales Log Features" do
           end
         end
 
+        context "and the user selects 'address_not_listed' when partial postcode is given" do
+          before do
+            fill_in("sales_log[address_line1_input]", with: "Address line 1")
+            fill_in("sales_log[postcode_full_input]", with: "1AA")
+            click_button("Search")
+            choose "The address is not listed, I want to enter the address manually"
+            click_button("Save and continue")
+          end
+
+          it "sets correct address fields" do
+            sales_log.reload
+            expect(sales_log.uprn_known).to eq(0) # no
+            expect(sales_log.uprn).to eq(nil)
+            expect(sales_log.uprn_confirmed).to eq(nil)
+            expect(sales_log.uprn_selection).to eq("uprn_not_listed")
+            expect(sales_log.pcodenk).to eq(nil)
+            expect(sales_log.postcode_full).to eq(nil)
+            expect(sales_log.address_line1).to eq("Address line 1")
+            expect(sales_log.address_line2).to eq(nil)
+            expect(sales_log.town_or_city).to eq(nil)
+            expect(sales_log.address_line1_input).to eq("Address line 1")
+            expect(sales_log.postcode_full_input).to eq("1AA")
+            expect(sales_log.address_search_value_check).to eq(nil)
+            expect(sales_log.la).to eq(nil)
+          end
+        end
+
         context "and the user selects 'address_not_listed' and then changes their mind and selects an address" do
           before do
             fill_in("sales_log[address_line1_input]", with: "Address line 1")
