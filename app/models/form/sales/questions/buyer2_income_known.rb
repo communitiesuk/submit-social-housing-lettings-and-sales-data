@@ -2,7 +2,7 @@ class Form::Sales::Questions::Buyer2IncomeKnown < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "income2nk"
-    @copy_key = "sales.income_benefits_and_savings.buyer_2_income.income2"
+    @copy_key = "sales.income_benefits_and_savings.buyer_2_income.income2nk"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @conditional_for = {
