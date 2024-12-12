@@ -56,6 +56,6 @@
   <%= toggle_scheme_link(@scheme) %>
 <% end %>
 
-<% if SchemePolicy.new(current_user, @scheme).delete? && FeatureToggle.delete_scheme_enabled? %>
+<% if SchemePolicy.new(current_user, @scheme).delete? %>
   <%= delete_scheme_link(@scheme) %>
 <% end %>

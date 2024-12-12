@@ -11,28 +11,12 @@ class FeatureToggle
     !Rails.env.development?
   end
 
-  def self.duplicate_summary_enabled?
-    true
-  end
-
   def self.service_unavailable?
     false
   end
 
   def self.service_moved?
     false
-  end
-
-  def self.delete_scheme_enabled?
-    true
-  end
-
-  def self.delete_location_enabled?
-    true
-  end
-
-  def self.delete_user_enabled?
-    true
   end
 
   def self.local_storage?
