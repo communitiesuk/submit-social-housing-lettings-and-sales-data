@@ -38,7 +38,7 @@ private
   API_ACTIONS = %w[create show update].freeze
 
   def json_api_request?
-    API_ACTIONS.include?(request["action"]) && request.format.json?
+    API_ACTIONS.include?(params["action"]) && request.format.json?
   end
 
   def authenticate
