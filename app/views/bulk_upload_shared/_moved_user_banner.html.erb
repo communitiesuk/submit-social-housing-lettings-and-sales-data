@@ -4,9 +4,9 @@
       This error report is out of date.
     <p>
     <% if current_user.id == @bulk_upload.moved_user_id %>
-      You moved to a different organisation since this file was uploaded. Reupload the file to get an accurate error report.
+      You moved to a different organisation since this file was uploaded. Upload the file again to get an accurate error report.
     <% else %>
-      Some logs in this upload are assigned to <%= @bulk_upload.moved_user_name %>, who has moved to a different organisation since this file was uploaded. Reupload the file to get an accurate error report.
+      Some logs in this upload are assigned to <%= @bulk_upload.moved_user_name %>, who has moved to a different organisation since this file was uploaded. Upload the file again to get an accurate error report.
     <% end %>
   <% end %>
 <% end %>
