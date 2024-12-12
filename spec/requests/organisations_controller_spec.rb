@@ -1203,7 +1203,7 @@ RSpec.describe OrganisationsController, type: :request do
 
             it "has search results in the title" do
               get "/organisations/#{organisation.id}/lettings-logs?search=#{log_to_search.id}", headers: headers, params: {}
-              expect(page).to have_title("#{organisation.name} (1 logs matching ‘#{log_to_search.id}’) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+              expect(page).to have_title("#{organisation.name} (1 log matching ‘#{log_to_search.id}’) - Submit social housing lettings and sales data (CORE) - GOV.UK")
             end
 
             it "has search term in the search box" do
@@ -1352,7 +1352,7 @@ RSpec.describe OrganisationsController, type: :request do
 
             it "has search results in the title" do
               get "/organisations/#{organisation.id}/sales-logs?search=#{log_to_search.id}", headers: headers, params: {}
-              expect(page).to have_title("#{organisation.name} (1 logs matching ‘#{log_to_search.id}’) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+              expect(page).to have_title("#{organisation.name} (1 log matching ‘#{log_to_search.id}’) - Submit social housing lettings and sales data (CORE) - GOV.UK")
             end
 
             it "shows sales logs matching the id" do
@@ -1555,7 +1555,10 @@ RSpec.describe OrganisationsController, type: :request do
           let(:total_organisations_count) { Organisation.all.count }
 
           before do
-            create_list(:organisation, 25)
+            build_list(:organisation, 25) do |organisation, index|
+              organisation.name = "Organisation #{index}"
+              organisation.save!
+            end
             get "/organisations"
           end
 
@@ -1616,11 +1619,11 @@ RSpec.describe OrganisationsController, type: :request do
             end
 
             it "updates the table caption" do
-              expect(page).to have_content("1 organisations matching search")
+              expect(page).to have_content("1 organisation matching search")
             end
 
             it "has search in the title" do
-              expect(page).to have_title("Organisations (1 organisations matching ‘#{search_param}’) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+              expect(page).to have_title("Organisations (1 organisation matching ‘#{search_param}’) - Submit social housing lettings and sales data (CORE) - GOV.UK")
             end
 
             context "when the search term matches more than 1 result" do
@@ -1644,7 +1647,10 @@ RSpec.describe OrganisationsController, type: :request do
               let(:search_param) { "MHCLG" }
 
               before do
-                create_list(:organisation, 27, name: "MHCLG")
+                build_list(:organisation, 27) do |organisation, index|
+                  organisation.name = "MHCLG #{index}"
+                  organisation.save!
+                end
                 get "/organisations?search=#{search_param}"
               end
 

@@ -2,7 +2,7 @@
 <forms>
   <form>
     <id>{id}</id>
-    <name>MHCLG</name>
+    <name>{name}</name>
     <phone/>
     <provider_type>1</provider_type>
     <address_line1>2 Marsham Street</address_line1>

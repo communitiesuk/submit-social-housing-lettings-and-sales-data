@@ -20,11 +20,13 @@ class Form::Sales::Pages::OwningOrganisation < ::Form::Page
     if current_user.organisation.holds_own_stock?
       return true if current_user.organisation.absorbed_organisations.any?(&:holds_own_stock?)
       return true if stock_owners.count >= 1
+      return false if log.owning_organisation == current_user.organisation
 
       log.update!(owning_organisation: current_user.organisation)
     else
       return false if stock_owners.count.zero?
       return true if stock_owners.count > 1
+      return false if log.owning_organisation == stock_owners.first
 
       log.update!(owning_organisation: stock_owners.first)
     end

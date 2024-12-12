@@ -105,8 +105,13 @@ private
   def restore_error_field_values(previous_responses)
     return unless previous_responses
 
-    previous_responses_to_reset = previous_responses.reject do |key, _|
-      @log.form.get_question(key, @log)&.type == "date"
+    previous_responses_to_reset = previous_responses.reject do |key, value|
+      if @log.form.get_question(key, @log)&.type == "date" && value.present?
+        year = value.split("-").first.to_i
+        year&.zero?
+      else
+        false
+      end
     end
 
     @log.assign_attributes(previous_responses_to_reset)
@@ -433,7 +438,7 @@ private
       @log.valid?
       @log.reload
       error_attributes = @log.errors.map(&:attribute)
-      @questions = @log.form.questions.select { |q| error_attributes.include?(q.id.to_sym) }
+      @questions = @log.form.questions.select { |q| error_attributes.include?(q.id.to_sym) && q.page.routed_to?(@log, current_user) }
     end
     render "form/check_errors"
   end
