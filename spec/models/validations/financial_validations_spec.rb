@@ -36,36 +36,36 @@ RSpec.describe Validations::FinancialValidations do
   describe "benefits proportion validations" do
     context "when the proportion is all" do
       it "validates that the lead tenant is not in full time employment" do
-        record.benefits = 0
+        record.benefits = 1
         record.ecstat1 = 1
         financial_validator.validate_net_income_uc_proportion(record)
         expect(record.errors["benefits"]).to include(match I18n.t("validations.lettings.financial.benefits.part_or_full_time"))
       end
 
       it "validates that the lead tenant is not in part time employment" do
-        record.benefits = 0
-        record.ecstat1 = 0
+        record.benefits = 1
+        record.ecstat1 = 2
         financial_validator.validate_net_income_uc_proportion(record)
         expect(record.errors["benefits"]).to include(match I18n.t("validations.lettings.financial.benefits.part_or_full_time"))
       end
 
       it "expects that the lead tenant is not in full-time or part-time employment" do
-        record.benefits = 0
+        record.benefits = 1
         record.ecstat1 = 4
         financial_validator.validate_net_income_uc_proportion(record)
         expect(record.errors["benefits"]).to be_empty
       end
 
       it "validates that the tenant’s partner is not in full time employment" do
-        record.benefits = 0
-        record.ecstat2 = 0
+        record.benefits = 1
+        record.ecstat2 = 2
         record.relat2 = "P"
         financial_validator.validate_net_income_uc_proportion(record)
         expect(record.errors["benefits"]).to include(match I18n.t("validations.lettings.financial.benefits.part_or_full_time"))
       end
 
       it "expects that the tenant’s partner is not in full-time or part-time employment" do
-        record.benefits = 0
+        record.benefits = 1
         record.ecstat2 = 4
         record.relat2 = "P"
         financial_validator.validate_net_income_uc_proportion(record)
