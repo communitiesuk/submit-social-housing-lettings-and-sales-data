@@ -40,29 +40,25 @@ class BulkUpload::Lettings::Validator
     end
   end
 
-  def create_logs?
-    return false if any_setup_errors?
+  def block_log_creation_reason
+    return "setup_errors" if any_setup_errors?
 
     if row_parsers.any?(&:block_log_creation?)
       Sentry.capture_message("Bulk upload log creation blocked: #{bulk_upload.id}.")
-      return false
+      return "row_parser_block_log_creation"
     end
 
     if any_logs_already_exist? && FeatureToggle.bulk_upload_duplicate_log_check_enabled?
-      Sentry.capture_message("Bulk upload log creation blocked due to duplicate logs: #{bulk_upload.id}.")
-      return false
+      return "duplicate_logs"
     end
 
     row_parsers.each do |row_parser|
       row_parser.log.blank_invalid_non_setup_fields!
     end
-
     if any_logs_invalid?
       Sentry.capture_message("Bulk upload log creation blocked due to invalid logs after blanking non setup fields: #{bulk_upload.id}.")
-      return false
+      "logs_invalid"
     end
-
-    true
   end
 
   def self.question_for_field(field)

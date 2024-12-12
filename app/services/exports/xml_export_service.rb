@@ -11,9 +11,9 @@ module Exports
 
   private
 
-    def build_export_run(collection, base_number, full_update)
-      @logger.info("Building export run for #{collection}")
-      previous_exports_with_data = Export.where(collection:, empty_export: false)
+    def build_export_run(collection, base_number, full_update, year = nil)
+      @logger.info("Building export run for #{[collection, year].join(' ')}")
+      previous_exports_with_data = Export.where(collection:, year:, empty_export: false)
 
       increment_number = previous_exports_with_data.where(base_number:).maximum(:increment_number) || 1
 
@@ -25,16 +25,16 @@ module Exports
       end
 
       if previous_exports_with_data.empty?
-        return Export.new(collection:, base_number:, started_at: @start_time)
+        return Export.new(collection:, year:, base_number:, started_at: @start_time)
       end
 
-      Export.new(collection:, started_at: @start_time, base_number:, increment_number:)
+      Export.new(collection:, year:, started_at: @start_time, base_number:, increment_number:)
     end
 
-    def write_export_archive(export, collection, recent_export, full_update)
-      archive = get_archive_name(collection, export.base_number, export.increment_number) # archive name would be the same for all logs because they're already filtered by year (?)
+    def write_export_archive(export, year, recent_export, full_update)
+      archive = get_archive_name(year, export.base_number, export.increment_number)
 
-      initial_count = retrieve_resources(recent_export, full_update, collection).count
+      initial_count = retrieve_resources(recent_export, full_update, year).count
       @logger.info("Creating #{archive} - #{initial_count} resources")
       return {} if initial_count.zero?
 
@@ -46,12 +46,12 @@ module Exports
 
       loop do
         slice = if last_processed_marker.present?
-                  retrieve_resources(recent_export, full_update, collection)
+                  retrieve_resources(recent_export, full_update, year)
                         .where("created_at > ?", last_processed_marker)
                         .order(:created_at)
                         .limit(MAX_XML_RECORDS).to_a
                 else
-                  retrieve_resources(recent_export, full_update, collection)
+                  retrieve_resources(recent_export, full_update, year)
                   .order(:created_at)
                   .limit(MAX_XML_RECORDS).to_a
                 end

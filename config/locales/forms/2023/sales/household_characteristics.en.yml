@@ -37,7 +37,7 @@ en:
               check_answer_label: "Buyer 1’s age"
               hint_text: ""
               question_text: "Age"
-          
+
           sex1:
             page_header: ""
             check_answer_label: "Buyer 1’s gender identity"
@@ -49,7 +49,7 @@ en:
             check_answer_label: "Buyer 1’s ethnic group"
             hint_text: "Buyer 1 is the person in the household who does the most paid work. If it’s a joint purchase and the buyers do the same amount of paid work, buyer 1 is whoever is the oldest."
             question_text: "What is buyer 1’s ethnic group?"
-          
+
           ethnic:
             ethnic_background_black:
               page_header: ""
@@ -103,9 +103,9 @@ en:
               question_text: "What is buyer 2's relationship to buyer 1?"
             person:
               page_header: ""
-              check_answer_label: "Person 2’s relationship to Buyer 1"
+              check_answer_label: "Person 2’s relationship to buyer 1"
               hint_text: ""
-              question_text: "What is Person 2’s relationship to Buyer 1?"
+              question_text: "What is person 2’s relationship to buyer 1?"
 
           age2:
             buyer:
@@ -139,14 +139,14 @@ en:
               page_header: ""
               check_answer_label: "Person 2’s gender identity"
               hint_text: ""
-              question_text: "Which of these best describes Person 2’s gender identity?"
+              question_text: "Which of these best describes person 2’s gender identity?"
 
           ethnic_group2:
               page_header: ""
               check_answer_label: "Buyer 2’s ethnic group"
               hint_text: ""
               question_text: "What is buyer 2’s ethnic group?"
-            
+
           ethnicbuy2:
             ethnic_background_black:
               page_header: ""
@@ -179,7 +179,7 @@ en:
             check_answer_label: "Buyer 2’s nationality"
             hint_text: ""
             question_text: "What is buyer 2’s nationality?"
-          
+
           ecstat2:
             buyer:
               page_header: ""
@@ -190,14 +190,14 @@ en:
               page_header: ""
               check_answer_label: "Person 2’s working situation"
               hint_text: ""
-              question_text: "Which of these best describes Person 2’s working situation?"
+              question_text: "Which of these best describes person 2’s working situation?"
 
           buy2livein:
             page_header: ""
             check_answer_label: "Will buyer 2 live in the property?"
             hint_text: ""
             question_text: "Will buyer 2 live in the property?"
-          
+
           hholdcount:
             joint_purchase:
               page_header: ""
@@ -224,9 +224,9 @@ en:
 
           relat3:
             page_header: ""
-            check_answer_label: "Person 3’s relationship to Buyer 1"
+            check_answer_label: "Person 3’s relationship to buyer 1"
             hint_text: ""
-            question_text: "What is Person 3’s relationship to Buyer 1?"
+            question_text: "What is person 3’s relationship to buyer 1?"
 
           age3:
             page_header: ""
@@ -238,18 +238,18 @@ en:
               check_answer_label: "Person 3’s age"
               hint_text: ""
               question_text: "Age"
-          
+
           sex3:
             page_header: ""
             check_answer_label: "Person 3’s gender identity"
             hint_text: ""
-            question_text: "Which of these best describes Person 3’s gender identity?"
+            question_text: "Which of these best describes person 3’s gender identity?"
 
           ecstat3:
             page_header: ""
             check_answer_label: "Person 3’s working situation"
             hint_text: ""
-            question_text: "Which of these best describes Person 3’s working situation?"
+            question_text: "Which of these best describes person 3’s working situation?"
 
           details_known_4:
             page_header: ""
@@ -259,9 +259,9 @@ en:
 
           relat4:
             page_header: ""
-            check_answer_label: "Person 4’s relationship to Buyer 1"
+            check_answer_label: "Person 4’s relationship to buyer 1"
             hint_text: ""
-            question_text: "What is Person 4’s relationship to Buyer 1?"
+            question_text: "What is person 4’s relationship to buyer 1?"
 
           age4:
             page_header: ""
@@ -273,18 +273,18 @@ en:
               check_answer_label: "Person 4’s age"
               hint_text: ""
               question_text: "Age"
-          
+
           sex4:
             page_header: ""
             check_answer_label: "Person 4’s gender identity"
             hint_text: ""
-            question_text: "Which of these best describes Person 4’s gender identity?"
+            question_text: "Which of these best describes person 4’s gender identity?"
 
           ecstat4:
             page_header: ""
             check_answer_label: "Person 4’s working situation"
             hint_text: ""
-            question_text: "Which of these best describes Person 4’s working situation?"
+            question_text: "Which of these best describes person 4’s working situation?"
 
           details_known_5:
             page_header: ""
@@ -294,9 +294,9 @@ en:
 
           relat5:
             page_header: ""
-            check_answer_label: "Person 5’s relationship to Buyer 1"
+            check_answer_label: "Person 5’s relationship to buyer 1"
             hint_text: ""
-            question_text: "What is Person 5’s relationship to Buyer 1?"
+            question_text: "What is person 5’s relationship to buyer 1?"
 
           age5:
             page_header: ""
@@ -308,18 +308,18 @@ en:
               check_answer_label: "Person 5’s age"
               hint_text: ""
               question_text: "Age"
-          
+
           sex5:
             page_header: ""
             check_answer_label: "Person 5’s gender identity"
             hint_text: ""
-            question_text: "Which of these best describes Person 5’s gender identity?"
+            question_text: "Which of these best describes person 5’s gender identity?"
 
           ecstat5:
             page_header: ""
             check_answer_label: "Person 5’s working situation"
             hint_text: ""
-            question_text: "Which of these best describes Person 5’s working situation?"
+            question_text: "Which of these best describes person 5’s working situation?"
 
           details_known_6:
             page_header: ""
@@ -329,9 +329,9 @@ en:
 
           relat6:
             page_header: ""
-            check_answer_label: "Person 6’s relationship to Buyer 1"
+            check_answer_label: "Person 6’s relationship to buyer 1"
             hint_text: ""
-            question_text: "What is Person 6’s relationship to Buyer 1?"
+            question_text: "What is person 6’s relationship to buyer 1?"
 
           age6:
             page_header: ""
@@ -343,15 +343,15 @@ en:
               check_answer_label: "Person 6’s age"
               hint_text: ""
               question_text: "Age"
-          
+
           sex6:
             page_header: ""
             check_answer_label: "Person 6’s gender identity"
             hint_text: ""
-            question_text: "Which of these best describes Person 6’s gender identity?"
+            question_text: "Which of these best describes person 6’s gender identity?"
 
           ecstat6:
             page_header: ""
             check_answer_label: "Person 6’s working situation"
             hint_text: ""
-            question_text: "Which of these best describes Person 6’s working situation?"
+            question_text: "Which of these best describes person 6’s working situation?"

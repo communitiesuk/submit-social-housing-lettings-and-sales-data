@@ -5,7 +5,7 @@ RSpec.describe SearchResultCaptionComponent, type: :component do
   let(:count) { 2 }
   let(:item_label) { "user" }
   let(:total_count) { 3 }
-  let(:item) { "schemes" }
+  let(:item) { "scheme" }
   let(:filters_count) { 1 }
   let(:result) { render_inline(described_class.new(searched:, count:, item_label:, total_count:, item:, filters_count:)) }
 
@@ -21,6 +21,14 @@ RSpec.describe SearchResultCaptionComponent, type: :component do
     it "renders table caption including the search results and total" do
       expect(result.to_html).to eq("<span>\n    <strong>2</strong> users matching search<br>\n</span>\n")
     end
+
+    context "with 1 result" do
+      let(:count) { 1 }
+
+      it "renders table caption including the search results and total" do
+        expect(result.to_html).to eq("<span>\n    <strong>1</strong> user matching search<br>\n</span>\n")
+      end
+    end
   end
 
   context "when filter results are found" do
@@ -28,6 +36,14 @@ RSpec.describe SearchResultCaptionComponent, type: :component do
 
     it "renders table caption including the search results and total" do
       expect(result.to_html).to eq("<span>\n    <strong>2</strong> users matching filters<br>\n</span>\n")
+    end
+
+    context "with 1 result" do
+      let(:count) { 1 }
+
+      it "renders table caption including the search results and total" do
+        expect(result.to_html).to eq("<span>\n    <strong>1</strong> user matching filters<br>\n</span>\n")
+      end
     end
   end
 
@@ -37,6 +53,14 @@ RSpec.describe SearchResultCaptionComponent, type: :component do
 
     it "renders table caption with total count only" do
       expect(result.to_html).to eq("<span>\n    <span class=\"govuk-!-margin-right-4\">\n      <strong>2</strong> total schemes\n    </span>\n</span>\n")
+    end
+
+    context "with 1 result" do
+      let(:count) { 1 }
+
+      it "renders table caption with total count only" do
+        expect(result.to_html).to eq("<span>\n    <span class=\"govuk-!-margin-right-4\">\n      <strong>1</strong> total scheme\n    </span>\n</span>\n")
+      end
     end
   end
 

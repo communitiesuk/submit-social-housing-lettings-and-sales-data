@@ -101,6 +101,24 @@ module SchemesHelper
     organisation.owned_schemes.duplicate_sets.any? || organisation.owned_schemes.any? { |scheme| scheme.locations.duplicate_sets.any? }
   end
 
+  def scheme_back_button_path(scheme, current_page)
+    return scheme_check_answers_path(scheme) if request.params[:referrer] == "check-answers"
+    return scheme_confirm_secondary_client_group_path(scheme, referrer: "check-answers") if request.params[:referrer] == "has-other-client-group"
+
+    case current_page
+    when "details"
+      schemes_path
+    when "primary_client_group"
+      scheme_details_path(scheme)
+    when "confirm_secondary_client_group"
+      scheme_primary_client_group_path(scheme)
+    when "secondary_client_group"
+      scheme_confirm_secondary_client_group_path(scheme)
+    when "support"
+      scheme.has_other_client_group == "Yes" ? scheme_secondary_client_group_path(scheme) : scheme_confirm_secondary_client_group_path(scheme)
+    end
+  end
+
 private
 
   ActivePeriod = Struct.new(:from, :to)

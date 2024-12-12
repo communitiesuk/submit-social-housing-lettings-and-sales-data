@@ -390,6 +390,13 @@ RSpec.describe Scheme, type: :model do
         scheme.startdate = Time.zone.today + 2.weeks
         expect(scheme.status).to eq(:activating_soon)
       end
+
+      it "returns deactivated if scheme is deactivated and incomplete" do
+        scheme.update!(support_type: nil, confirmed: nil)
+        FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.yesterday, scheme:)
+        scheme.reload
+        expect(scheme.status).to eq(:deactivated)
+      end
     end
 
     context "when there have been previous deactivations" do

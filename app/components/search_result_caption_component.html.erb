@@ -7,7 +7,7 @@
     <strong><%= count %></strong> <%= item_label.pluralize(count) %> matching filters<br>
   <% else %>
     <span class="govuk-!-margin-right-4">
-      <strong><%= count %></strong> total <%= item %>
+      <strong><%= count %></strong> total <%= item.pluralize(count) %>
     </span>
   <% end %>
 </span>

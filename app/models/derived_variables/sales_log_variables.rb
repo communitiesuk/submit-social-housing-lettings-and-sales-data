@@ -53,6 +53,15 @@ module DerivedVariables::SalesLogVariables
 
     if uprn_known&.zero?
       self.uprn = nil
+      if uprn_known_was == 1
+        self.address_line1 = nil
+        self.address_line2 = nil
+        self.town_or_city = nil
+        self.county = nil
+        self.pcodenk = nil
+        self.postcode_full = nil
+        self.la = nil
+      end
     end
 
     if uprn_known == 1 && uprn_confirmed&.zero?

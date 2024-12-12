@@ -13,19 +13,19 @@ en:
             page_header: ""
             age1_known:
               check_answer_label: ""
-              hint_text: "The ’lead’ or ’main’ tenant is the person in the household who does the most paid work. If several people do the same amount of paid work, the lead tenant is whoever is the oldest."
+              hint_text: "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest."
               question_text: "Do you know the lead tenant’s age?"
             age1:
               check_answer_label: "Lead tenant’s age"
               hint_text: ""
               question_text: "Age"
-          
+
           sex1:
             page_header: ""
             check_answer_label: "Lead tenant’s gender identity"
             hint_text: "This should be however they personally choose to identify from the options below. This may or may not be the same as their biological sex or the sex they were assigned at birth."
             question_text: "Which of these best describes the lead tenant’s gender identity?"
-          
+
           ethnic_group:
             page_header: ""
             check_answer_label: "Lead tenant’s ethnic group"

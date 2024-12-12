@@ -607,14 +607,22 @@ private
 
   def validate_uprn_exists_if_any_key_address_fields_are_blank
     if field_16.blank? && !key_address_fields_provided?
-      errors.add(:field_16, I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "UPRN."))
+      %i[field_17 field_19 field_21 field_22].each do |field|
+        errors.add(field, I18n.t("#{ERROR_BASE_KEY}.address.not_answered")) if send(field).blank?
+      end
+      errors.add(:field_16, I18n.t("#{ERROR_BASE_KEY}.address.not_answered", question: "UPRN."))
     end
   end
 
   def validate_address_option_found
     if log.uprn.nil? && field_16.blank? && key_address_fields_provided?
+      error_message = if log.address_options_present?
+                        I18n.t("#{ERROR_BASE_KEY}.address.not_determined")
+                      else
+                        I18n.t("#{ERROR_BASE_KEY}.address.not_found")
+                      end
       %i[field_17 field_18 field_19 field_20 field_21 field_22].each do |field|
-        errors.add(field, I18n.t("#{ERROR_BASE_KEY}.address.not_found"))
+        errors.add(field, error_message) if errors[field].blank?
       end
     end
   end
@@ -625,19 +633,19 @@ private
 
   def validate_address_fields
     if field_16.blank? || log.errors.attribute_names.include?(:uprn)
-      if field_17.blank?
+      if field_17.blank? && errors[:field_17].blank?
         errors.add(:field_17, I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "address line 1."))
       end
 
-      if field_19.blank?
+      if field_19.blank? && errors[:field_19].blank?
         errors.add(:field_19, I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "town or city."))
       end
 
-      if field_21.blank?
+      if field_21.blank? && errors[:field_21].blank?
         errors.add(:field_21, I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "part 1 of postcode."))
       end
 
-      if field_22.blank?
+      if field_22.blank? && errors[:field_22].blank?
         errors.add(:field_22, I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "part 2 of postcode."))
       end
     end

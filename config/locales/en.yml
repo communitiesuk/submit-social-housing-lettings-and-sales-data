@@ -235,6 +235,7 @@ en:
     organisation:
       data_sharing_agreement_not_signed: "Your organisation must accept the Data Sharing Agreement before you can create any logs."
       name_missing: "Enter the name of the organisation."
+      name_not_unique: "An organisation with this name already exists. Use the organisation that already exists or add a location or other identifier to the name. For example: Organisation name (City)."
       provider_type_missing: "Select the organisation type."
       stock_owner:
         blank: "You must choose a stock owner."

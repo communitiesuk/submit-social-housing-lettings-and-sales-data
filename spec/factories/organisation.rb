@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :organisation do
-    name { Faker::Company.name }
+    sequence(:name) { |n| "#{Faker::Company.name} #{n}" }
     address_line1 { Faker::Address.street_address }
     address_line2 { Faker::Address.city }
     provider_type { "LA" }

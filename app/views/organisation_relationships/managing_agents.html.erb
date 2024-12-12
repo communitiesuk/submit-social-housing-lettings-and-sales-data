@@ -1,4 +1,4 @@
-<% item_label = format_label(@pagy.count, "managing agents") %>
+<% item_label = format_label(@pagy.count, "managing agent") %>
 
 <% if current_user.support? %>
   <%= render partial: "organisations/headings", locals: { main: @organisation.name, sub: nil } %>
@@ -44,7 +44,7 @@
     pagy: @pagy,
     searched: @searched,
     item_label:,
-    search_item: "managing agents",
+    search_item: "managing agent",
     total_count: @total_count,
     remove_path: ->(org_id) { managing_agents_remove_organisation_path(target_organisation_id: org_id) },
   } %>

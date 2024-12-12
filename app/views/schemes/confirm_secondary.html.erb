@@ -1,7 +1,7 @@
 <% content_for :title, "Does this scheme provide for another client group?" %>
 
 <% content_for :before_content do %>
-  <%= govuk_back_link(href: :back) %>
+  <%= govuk_back_link(href: scheme_back_button_path(@scheme, "confirm_secondary_client_group")) %>
 <% end %>
 
 <%= render partial: "organisations/headings", locals: { main: "Does this scheme provide for another client group?", sub: @scheme.service_name } %>

@@ -55,7 +55,7 @@ en:
               savingsnk:
                 check_answer_label:  "Buyers’ total savings known?"
                 hint_text: ""
-                question_text: "Do you know how much the 'buyers' had in savings before they paid any deposit for the property?"
+                question_text: "Do you know how much the buyers had in savings before they paid any deposit for the property?"
               savings:
                 check_answer_label: "Buyers’ total savings before any deposit paid"
                 hint_text: "Include any savings, investments, ISAs, premium bonds, shares, or money held in a bank or building society account."

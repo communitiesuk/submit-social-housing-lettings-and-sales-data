@@ -30,7 +30,7 @@ describe "rake core:data_export", type: task do
 
     context "with all available years" do
       it "calls the export service" do
-        expect(export_service).to receive(:export_xml).with(full_update: true, collection: nil)
+        expect(export_service).to receive(:export_xml).with(full_update: true, collection: nil, year: nil)
 
         task.invoke
       end
@@ -38,9 +38,9 @@ describe "rake core:data_export", type: task do
 
     context "with a specific collection" do
       it "calls the export service" do
-        expect(export_service).to receive(:export_xml).with(full_update: true, collection: 2022)
+        expect(export_service).to receive(:export_xml).with(full_update: true, collection: "lettings", year: 2022)
 
-        task.invoke("2022")
+        task.invoke("lettings", "2022")
       end
     end
   end

@@ -232,7 +232,7 @@ RSpec.describe BulkUpload::Lettings::Validator do
     end
   end
 
-  describe "#create_logs?" do
+  describe "#block_log_creation_reason" do
     context "when a log has a clearable, non-setup error" do
       let(:log_1) { build(:lettings_log, :completed, period: 2, assigned_to: user) }
       let(:log_2) { build(:lettings_log, :completed, period: 2, assigned_to: user, age1: 5) }
@@ -245,7 +245,7 @@ RSpec.describe BulkUpload::Lettings::Validator do
 
       it "returns false" do
         validator.call
-        expect(validator).to be_create_logs
+        expect(validator.block_log_creation_reason).to be_nil
       end
     end
 
@@ -261,7 +261,7 @@ RSpec.describe BulkUpload::Lettings::Validator do
 
       it "returns true" do
         validator.call
-        expect(validator).to be_create_logs
+        expect(validator.block_log_creation_reason).to be_nil
       end
     end
 
@@ -277,7 +277,7 @@ RSpec.describe BulkUpload::Lettings::Validator do
 
       it "will not create logs" do
         validator.call
-        expect(validator).not_to be_create_logs
+        expect(validator.block_log_creation_reason).to eq("setup_errors")
       end
     end
 
@@ -291,7 +291,7 @@ RSpec.describe BulkUpload::Lettings::Validator do
 
       it "returns false" do
         validator.call
-        expect(validator).not_to be_create_logs
+        expect(validator.block_log_creation_reason).to eq("setup_errors")
       end
     end
   end

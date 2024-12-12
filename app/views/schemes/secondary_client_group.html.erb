@@ -1,7 +1,7 @@
 <% content_for :title, "What is the other client group?" %>
 
 <% content_for :before_content do %>
-  <%= govuk_back_link(href: :back) %>
+  <%= govuk_back_link(href: scheme_back_button_path(@scheme, "secondary_client_group")) %>
 <% end %>
 
 <%= form_for(@scheme, method: :patch) do |f| %>

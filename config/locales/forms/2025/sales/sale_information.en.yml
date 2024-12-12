@@ -105,9 +105,9 @@ en:
               question_text: "Was the buyer a private registered provider, housing association or local authority tenant immediately before this sale?"
 
           frombeds:
-            page_header: "About the buyers’ previous property"
+            page_header: ""
             check_answer_label: "Number of bedrooms in previous property"
-            hint_text: "For bedsits enter 1"
+            hint_text: "A bedsit has 1 bedroom."
             question_text: "How many bedrooms did the property have?"
 
           fromprop:
@@ -145,13 +145,13 @@ en:
               question_text: "What was the percentage shared purchased in the initial transaction?"
 
           mortgageused:
-            page_header: "Mortgage Amount"
+            page_header: ""
             check_answer_label: "Mortgage used?"
             hint_text: ""
             question_text: "Was a mortgage used for the purchase of this property?"
 
           mortgage:
-            page_header: "Mortgage Amount"
+            page_header: ""
             check_answer_label: "Mortgage amount"
             hint_text: "Enter the amount of mortgage agreed with the mortgage lender. Exclude any deposits or cash payments. Numeric in pounds. Rounded to the nearest pound."
             question_text: "What is the mortgage amount?"

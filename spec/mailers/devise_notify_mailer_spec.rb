@@ -36,8 +36,11 @@ RSpec.describe DeviseNotifyMailer do
       end
 
       context "when the email domain is in the allowlist" do
-        let(:domain) { Rails.application.credentials[:email_allowlist].first }
-        let(:email) { "test@#{domain}" }
+        before do
+          allow(Rails.application.credentials).to receive(:[]).with(:email_allowlist).and_return(["example.com"])
+        end
+
+        let(:email) { "test@example.com" }
 
         it "does send emails" do
           expect(notify_client).to receive(:send_email).once
@@ -48,10 +51,10 @@ RSpec.describe DeviseNotifyMailer do
       context "when notify mailer raises BadRequestError" do
         before do
           allow(notify_client).to receive(:send_email).and_raise(bad_request_error)
+          allow(Rails.application.credentials).to receive(:[]).with(:email_allowlist).and_return(["example.com"])
         end
 
-        let(:domain) { Rails.application.credentials[:email_allowlist].first }
-        let(:email) { "test@#{domain}" }
+        let(:email) { "test@example.com" }
 
         it "does not raise an error" do
           expect {

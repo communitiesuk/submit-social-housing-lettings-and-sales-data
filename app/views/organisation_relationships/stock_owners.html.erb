@@ -1,4 +1,4 @@
-<% item_label = format_label(@pagy.count, "stock owners") %>
+<% item_label = format_label(@pagy.count, "stock owner") %>
 <% if current_user.support? %>
   <%= render partial: "organisations/headings", locals: { main: @organisation.name, sub: nil } %>
   <%= render SubNavigationComponent.new(items: secondary_items(request.path, @organisation.id)) %>
@@ -41,7 +41,7 @@
     pagy: @pagy,
     searched: @searched,
     item_label:,
-    search_item: "stock owners",
+    search_item: "stock owner",
     total_count: @total_count,
     remove_path: ->(org_id) { stock_owners_remove_organisation_path(target_organisation_id: org_id) },
   } %>

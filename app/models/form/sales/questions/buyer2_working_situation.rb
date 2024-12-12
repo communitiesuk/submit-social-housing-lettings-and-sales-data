@@ -15,6 +15,10 @@ class Form::Sales::Questions::Buyer2WorkingSituation < ::Form::Question
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
   end
 
+  def displayed_answer_options(_log, _user = nil)
+    answer_options.reject { |key, _| key == "9" }
+  end
+
   def answer_options
     if form.start_year_2025_or_later?
       {
@@ -26,6 +30,7 @@ class Form::Sales::Questions::Buyer2WorkingSituation < ::Form::Question
         "6" => { "value" => "Not seeking work" },
         "7" => { "value" => "Full-time student" },
         "8" => { "value" => "Unable to work due to long term sick or disability" },
+        "9" => { "value" => "Child under 16" },
         "0" => { "value" => "Other" },
         "10" => { "value" => "Buyer prefers not to say" },
       }.freeze
@@ -41,6 +46,7 @@ class Form::Sales::Questions::Buyer2WorkingSituation < ::Form::Question
         "0" => { "value" => "Other" },
         "10" => { "value" => "Buyer prefers not to say" },
         "7" => { "value" => "Full-time student" },
+        "9" => { "value" => "Child under 16" },
       }.freeze
     end
   end

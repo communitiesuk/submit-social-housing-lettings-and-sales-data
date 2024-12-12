@@ -185,7 +185,7 @@ RSpec.describe Form::Lettings::Questions::ManagingOrganisation, type: :model do
     context "when organisation has merged" do
       let(:absorbing_org) { create(:organisation, name: "Absorbing org", holds_own_stock: true) }
       let!(:merged_org) { create(:organisation, name: "Merged org", holds_own_stock: false) }
-      let!(:merged_deleted_org) { create(:organisation, name: "Merged org", holds_own_stock: false, discarded_at: Time.zone.yesterday) }
+      let!(:merged_deleted_org) { create(:organisation, name: "Merged org 2", holds_own_stock: false, discarded_at: Time.zone.yesterday) }
       let(:user) { create(:user, :data_coordinator, organisation: absorbing_org) }
 
       let(:log) do
