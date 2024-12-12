@@ -6,8 +6,8 @@ en:
           buyer_1_income:
             page_header: ""
             income1nk:
-              check_answer_label: "Buyer 1’s gross annual income known?"
-              check_answer_prompt: ""
+              check_answer_label: "Buyer 1’s gross annual income known"
+              check_answer_prompt: "Enter buyer 1's gross annual income if known"
               hint_text: ""
               question_text: "Do you know buyer 1’s annual income?"
             income1:
@@ -19,7 +19,7 @@ en:
           inc1mort:
             page_header: ""
             check_answer_label: "Buyer 1’s income used for mortgage application"
-            check_answer_prompt: ""
+            check_answer_prompt: "Confirm if buyer 1’s income used for mortgage application"
             hint_text: ""
             question_text: "Was buyer 1’s income used for a mortgage application?"
 

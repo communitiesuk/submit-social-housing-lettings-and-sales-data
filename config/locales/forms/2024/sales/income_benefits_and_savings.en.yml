@@ -6,8 +6,8 @@ en:
           buyer_1_income:
             page_header: ""
             income1nk:
-              check_answer_label: "Buyer 1’s gross annual income known?"
-              check_answer_prompt: ""
+              check_answer_label: "Buyer 1’s gross annual income known"
+              check_answer_prompt: "Enter buyer 1's gross annual income if known"
               hint_text: ""
               question_text: "Do you know buyer 1’s annual income?"
             income1:
@@ -19,7 +19,7 @@ en:
           inc1mort:
             page_header: ""
             check_answer_label: "Buyer 1’s income used for mortgage application"
-            check_answer_prompt: ""
+            check_answer_prompt: "Confirm if buyer 1’s income used for mortgage application"
             hint_text: ""
             question_text: "Was buyer 1’s income used for a mortgage application?"
 
@@ -27,12 +27,12 @@ en:
             page_header: ""
             income2nk:
               check_answer_label: "Buyer 2’s gross annual income known?"
-              check_answer_prompt: ""
+              check_answer_prompt: "Enter buyer 2's gross annual income if known"
               hint_text: ""
               question_text: "Do you know buyer 2’s annual income?"
             income2:
               check_answer_label: "Buyer 2’s gross annual income"
-              check_answer_prompt: ""
+              check_answer_prompt: "Confirm if buyer 2’s income used for mortgage application"
               hint_text: "Provide the gross annual income (i.e. salary before tax) plus the annual amount of benefits, Universal Credit or pensions, and income from investments."
               question_text: "Buyer 2’s gross annual income"
 
@@ -61,7 +61,7 @@ en:
             joint_purchase:
               page_header: ""
               savingsnk:
-                check_answer_label:  "Buyers’ total savings known?"
+                check_answer_label:  "Buyers’ total savings known"
                 check_answer_prompt: ""
                 hint_text: ""
                 question_text: "Do you know how much the buyers had in savings before they paid any deposit for the property?"
