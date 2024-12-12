@@ -34,12 +34,7 @@
           <p class="govuk-body">The bulk upload templates contain 8 rows of ‘headers’ with information about how to fill in the template, including:</p>
         <% end %>
 
-        <ul class="govuk-list govuk-list--bullet">
-          <li>the CORE form questions and their field numbers</li>
-          <li>each field’s valid responses</li>
-          <li>if/when certain fields can be left blank</li>
-          <li>which fields are used to check for duplicate logs</li>
-        </ul>
+        <%= govuk_list ["the CORE form questions and their field numbers", "each field’s valid responses", "if/when certain fields can be left blank", "which fields are used to check for duplicate logs"], type: :bullet %>
 
         <p class="govuk-body">You can paste your data below the headers or copy the headers and insert them above the data in your file. The bulk upload fields start at column B. Leave column A blank.</p>
         <p class="govuk-body">Make sure that each column of data aligns with the corresponding question in the headers. We recommend ordering your data to match the headers, but you can also reorder the headers to match your data. When processing the file, we check what each column of data represents based on the headers above.</p>

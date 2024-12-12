@@ -29,7 +29,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
           end
 
           it "shows the tab navigation" do
-            expected_html = "<nav class=\"app-primary-navigation\""
+            expected_html = "<nav aria-label=\"Menu\" class=\"govuk-service-navigation__wrapper\""
             expect(response.body).to include(expected_html)
           end
 
@@ -125,7 +125,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
           end
 
           it "shows the tab navigation" do
-            expected_html = "<nav class=\"app-primary-navigation\""
+            expected_html = "<nav aria-label=\"Menu\" class=\"govuk-service-navigation__wrapper\""
             expect(response.body).to include(expected_html)
           end
 
@@ -325,7 +325,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
           end
 
           it "shows the tab navigation" do
-            expected_html = "<nav class=\"app-primary-navigation\""
+            expected_html = "<nav aria-label=\"Menu\" class=\"govuk-service-navigation__wrapper\""
             expect(response.body).to include(expected_html)
           end
 
@@ -461,7 +461,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
           end
 
           it "shows the tab navigation" do
-            expected_html = "<nav class=\"app-primary-navigation\""
+            expected_html = "<nav aria-label=\"Menu\" class=\"govuk-service-navigation__wrapper\""
             expect(response.body).to include(expected_html)
           end
 
