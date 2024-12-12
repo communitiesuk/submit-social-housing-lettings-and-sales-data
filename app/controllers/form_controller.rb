@@ -44,8 +44,8 @@ class FormController < ApplicationController
           end
         end
         flash[:log_data] = responses_for_page
-        question_ids = (log.errors.map(&:attribute) - [:base]).uniq
-        flash[:pages_with_errors_count] = question_ids.map { |id| log.form.get_question(id, log)&.page&.id }.compact.uniq.count
+        question_ids = (@log.errors.map(&:attribute) - [:base]).uniq
+        flash[:pages_with_errors_count] = question_ids.map { |id| @log.form.get_question(id, @log)&.page&.id }.compact.uniq.count
         redirect_to send("#{@log.class.name.underscore}_#{@page.id}_path", @log, { referrer: request.params["referrer"], original_page_id: request.params["original_page_id"], related_question_ids: request.params["related_question_ids"] })
       end
     else

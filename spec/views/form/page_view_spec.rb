@@ -29,7 +29,7 @@ RSpec.describe "form/page" do
     assign(:log, lettings_log)
     assign(:page, page)
     assign(:subsection, subsection)
-    assign(:questions_with_errors_count, 0)
+    assign(:pages_with_errors_count, 0)
     assign_attributes(page, page_attributes)
     assign_attributes(question, question_attributes)
     render
