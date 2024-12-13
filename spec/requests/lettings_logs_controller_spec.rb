@@ -81,7 +81,7 @@ RSpec.describe LettingsLogsController, type: :request do
 
         it "validates lettings log parameters" do
           json_response = JSON.parse(response.body)
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
           expect(json_response["errors"]).to match_array([["offered", [I18n.t("validations.shared.numeric.within_range", field: "Times previously offered since becoming available", min: 0, max: 20)]], ["age1", [I18n.t("validations.shared.numeric.within_range", field: "Lead tenant’s age", min: 16, max: 120)]]])
         end
       end
@@ -1612,7 +1612,7 @@ RSpec.describe LettingsLogsController, type: :request do
       let(:params) { { age1: 200 } }
 
       it "returns 422" do
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
       end
 
       it "returns an error message" do
