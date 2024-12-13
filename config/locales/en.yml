@@ -188,6 +188,10 @@ en:
               blank: "You must answer absorbing organisation already active?"
             merging_organisation_id:
               part_of_another_merge: "Another merge request records %{organisation} as merging into %{absorbing_organisation} on %{merge_date}. Select another organisation or remove this organisation from the other merge request."
+            has_helpdesk_ticket:
+              blank: "You must answer was this merge reported by a helpdesk ticket?"
+            helpdesk_ticket:
+              blank: "You must answer the ticket number"
         notification:
           attributes:
             title:
@@ -231,6 +235,7 @@ en:
     organisation:
       data_sharing_agreement_not_signed: "Your organisation must accept the Data Sharing Agreement before you can create any logs."
       name_missing: "Enter the name of the organisation."
+      name_not_unique: "An organisation with this name already exists. Use the organisation that already exists or add a location or other identifier to the name. For example: Organisation name (City)."
       provider_type_missing: "Select the organisation type."
       stock_owner:
         blank: "You must choose a stock owner."
@@ -357,7 +362,9 @@ en:
 
     location:
       postcode_blank: "Enter a postcode."
-      units: "The units at this location must be a number."
+      units:
+        must_be_number: "The units at this location must be a number."
+        must_be_one_or_more: "Number of units must be at least 1."
       type_of_unit: "Select the most common type of unit at this location."
       mobility_standards: "Select the mobility standard for the majority of the units at this location."
       startdate_invalid: "Enter a valid day, month and year when the first property became available at this location."

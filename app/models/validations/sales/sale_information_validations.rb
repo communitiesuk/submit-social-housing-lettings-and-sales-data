@@ -35,6 +35,14 @@ module Validations::Sales::SaleInformationValidations
     end
   end
 
+  def validate_staircasing_initial_purchase_date(record)
+    return unless record.initialpurchase
+
+    if record.initialpurchase < Time.zone.local(1980, 1, 1)
+      record.errors.add :initialpurchase, I18n.t("validations.sales.sale_information.initialpurchase.must_be_after_1980")
+    end
+  end
+
   def validate_previous_property_unit_type(record)
     return unless record.fromprop && record.frombeds
 
@@ -56,7 +64,7 @@ module Validations::Sales::SaleInformationValidations
     if over_tolerance?(record.mortgage_deposit_and_grant_total, record.value_with_discount, tolerance, strict: !record.discount.nil?) && record.discounted_ownership_sale?
       deposit_and_grant_sentence = record.grant.present? ? ", cash deposit (#{record.field_formatted_as_currency('deposit')}), and grant (#{record.field_formatted_as_currency('grant')})" : " and cash deposit (#{record.field_formatted_as_currency('deposit')})"
       discount_sentence = record.discount.present? ? " (#{record.field_formatted_as_currency('value')}) subtracted by the sum of the full purchase price (#{record.field_formatted_as_currency('value')}) multiplied by the percentage discount (#{record.discount}%)" : ""
-      %i[mortgageused mortgage value deposit ownershipsch discount grant].each do |field|
+      %i[mortgageused mortgage value deposit discount grant].each do |field|
         record.errors.add field, I18n.t("validations.sales.sale_information.#{field}.discounted_ownership_value",
                                         mortgage: record.mortgage&.positive? ? " (#{record.field_formatted_as_currency('mortgage')})" : "",
                                         deposit_and_grant_sentence:,
@@ -64,6 +72,12 @@ module Validations::Sales::SaleInformationValidations
                                         discount_sentence:,
                                         value_with_discount: record.field_formatted_as_currency("value_with_discount")).html_safe
       end
+      record.errors.add :ownershipsch, :skip_bu_error, message: I18n.t("validations.sales.sale_information.ownershipsch.discounted_ownership_value",
+                                                                       mortgage: record.mortgage&.positive? ? " (#{record.field_formatted_as_currency('mortgage')})" : "",
+                                                                       deposit_and_grant_sentence:,
+                                                                       mortgage_deposit_and_grant_total: record.field_formatted_as_currency("mortgage_deposit_and_grant_total"),
+                                                                       discount_sentence:,
+                                                                       value_with_discount: record.field_formatted_as_currency("value_with_discount")).html_safe
     end
   end
 
@@ -348,6 +362,15 @@ module Validations::Sales::SaleInformationValidations
     if record.stairowned && !record.stairowned_100?
       record.errors.add :stairowned, I18n.t("validations.sales.sale_information.stairowned.mortgageused_dont_know")
       record.errors.add :mortgageused, I18n.t("validations.sales.sale_information.mortgageused.mortgageused_dont_know")
+    end
+  end
+
+  def validate_number_of_staircase_transactions(record)
+    return unless record.numstair
+
+    if record.firststair == 2 && record.numstair < 2
+      record.errors.add :numstair, I18n.t("validations.sales.sale_information.numstair.must_be_greater_than_one")
+      record.errors.add :firststair, I18n.t("validations.sales.sale_information.firststair.cannot_be_no")
     end
   end
 

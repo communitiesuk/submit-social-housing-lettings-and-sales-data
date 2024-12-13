@@ -9,13 +9,13 @@ RSpec.describe TabNavHelper do
   describe "#user_cell" do
     it "returns user link and email separated by a newline character" do
       expected_html = "<a class=\"govuk-link\" href=\"/users\">#{current_user.name}</a>\n<span class=\"govuk-visually-hidden\">User </span><span class=\"govuk-!-font-weight-regular app-!-colour-muted\">#{current_user.email}</span>"
-      expect(user_cell(current_user)).to match(expected_html)
+      expect(CGI.unescapeHTML(user_cell(current_user))).to match(expected_html)
     end
   end
 
   describe "#org_cell" do
     it "returns the users org name and role separated by a newline character" do
-      expected_html = "MHCLG\n<span class=\"app-!-colour-muted\">Data provider</span>"
+      expected_html = "#{organisation.name}\n<span class=\"app-!-colour-muted\">Data provider</span>"
       expect(org_cell(current_user)).to match(expected_html)
     end
   end

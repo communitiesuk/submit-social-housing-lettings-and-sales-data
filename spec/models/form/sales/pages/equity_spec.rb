@@ -7,16 +7,16 @@ RSpec.describe Form::Sales::Pages::Equity, type: :model do
   let(:page_definition) { nil }
   let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2023, 4, 1))) }
 
+  before do
+    allow(page.subsection.form).to receive(:start_year_2025_or_later?).and_return(false)
+  end
+
   it "has correct subsection" do
     expect(page.subsection).to eq(subsection)
   end
 
   it "has correct questions" do
     expect(page.questions.map(&:id)).to eq(%w[equity])
-  end
-
-  it "has the correct id" do
-    expect(page.id).to eq("equity")
   end
 
   it "has the correct description" do

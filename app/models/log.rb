@@ -126,9 +126,11 @@ class Log < ApplicationRecord
   end
 
   def address_options
-    return @address_options if @address_options
+    return @address_options if @address_options && @last_searched_address_string == address_string
 
     if [address_line1_input, postcode_full_input].all?(&:present?)
+      @last_searched_address_string = address_string
+
       service = AddressClient.new(address_string)
       service.call
       if service.result.blank? || service.error.present?
@@ -315,7 +317,11 @@ private
   def update_status!
     return if skip_update_status
 
-    self.status = calculate_status
+    if status == "pending"
+      self.status_cache = calculate_status
+    else
+      self.status = calculate_status
+    end
   end
 
   def all_subsections_completed?

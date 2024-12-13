@@ -300,6 +300,7 @@ RSpec.describe User, type: :model do
     context "when the user is in staging environment" do
       before do
         allow(Rails.env).to receive(:staging?).and_return(true)
+        allow(Rails.application.credentials).to receive(:[]).with(:staging_role_update_email_allowlist).and_return(["not_one_of_the_examples.com"])
       end
 
       context "and the user is not in the staging role update email allowlist" do
@@ -380,7 +381,7 @@ RSpec.describe User, type: :model do
   end
 
   describe "paper trail" do
-    let(:user) { create(:user) }
+    let(:user) { create(:user, name: "Danny Rojas") }
 
     it "creates a record of changes to a log" do
       expect { user.update!(name: "new test name") }.to change(user.versions, :count).by(1)
@@ -725,15 +726,8 @@ RSpec.describe User, type: :model do
       context "and the user has pending logs assigned to them" do
         let(:lettings_bu) { create(:bulk_upload, :lettings) }
         let(:sales_bu) { create(:bulk_upload, :sales) }
-        let!(:pending_lettings_log) { build(:lettings_log, status: "pending", assigned_to: user, bulk_upload: lettings_bu) }
-        let!(:pending_sales_log) { build(:sales_log, status: "pending", assigned_to: user, bulk_upload: sales_bu) }
-
-        before do
-          pending_lettings_log.skip_update_status = true
-          pending_lettings_log.save!
-          pending_sales_log.skip_update_status = true
-          pending_sales_log.save!
-        end
+        let!(:pending_lettings_log) { create(:lettings_log, status: "pending", assigned_to: user, bulk_upload: lettings_bu) }
+        let!(:pending_sales_log) { create(:sales_log, status: "pending", assigned_to: user, bulk_upload: sales_bu) }
 
         it "sets choice for fixing the logs to cancelled-by-moved-user" do
           user.reassign_logs_and_update_organisation(new_organisation, "reassign_all")

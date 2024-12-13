@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Form::Sales::Pages::Buyer2IncomeMaxValueCheck, type: :model do
+RSpec.describe Form::Sales::Pages::Buyer2IncomeDiscountedMaxValueCheck, type: :model do
   subject(:page) { described_class.new(page_id, page_definition, subsection, check_answers_card_number: 2) }
 
   let(:page_id) { "prefix_buyer_2_income_max_value_check" }
@@ -23,7 +23,7 @@ RSpec.describe Form::Sales::Pages::Buyer2IncomeMaxValueCheck, type: :model do
   it "has correct depends_on" do
     expect(page.depends_on).to eq([
       {
-        "income2_over_soft_max?" => true,
+        "income2_over_soft_max_for_discounted_ownership?" => true,
       },
     ])
   end

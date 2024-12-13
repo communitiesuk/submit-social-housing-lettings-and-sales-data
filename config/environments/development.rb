@@ -81,6 +81,8 @@ Rails.application.configure do
   # Uncomment if you wish to allow Action Cable access from any origin.
   # config.action_cable.disable_request_forgery_protection = true
 
+  Faker::Config.locale = "en-GB"
+
   # see https://discuss.rubyonrails.org/t/cve-2022-32224-possible-rce-escalation-bug-with-serialized-columns-in-active-record/81017
   config.active_record.yaml_column_permitted_classes = [Time, BigDecimal]
 

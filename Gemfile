@@ -6,7 +6,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby "3.1.4"
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails', branch: 'main'
-gem "rails", "~> 7.0.8.5"
+gem "rails", "~> 7.0.8.7"
 # Use postgresql as the database for Active Record
 gem "pg", "~> 1.1"
 # Use Puma as the app server
@@ -18,9 +18,9 @@ gem "jsbundling-rails"
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", ">= 1.4.4", require: false
 # GOV UK frontend components
-gem "govuk-components", "~> 5.1"
+gem "govuk-components", "~> 5.7"
 # GOV UK component form builder DSL
-gem "govuk_design_system_formbuilder", "~> 5.0"
+gem "govuk_design_system_formbuilder", "~> 5.7"
 # Convert Markdown into GOV.UK frontend-styled HTML
 gem "govuk_markdown"
 gem "redcarpet", "~> 3.6"

@@ -703,7 +703,7 @@ RSpec.describe Validations::SetupValidations do
           .to include("This location is incomplete. Select another location or update this one.")
       end
 
-      it "produces no error when location is completes" do
+      it "produces no error when location is complete" do
         location.update!(units: 1)
         location.reload
         record.location = location

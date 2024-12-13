@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :user do
     sequence(:email) { "test#{SecureRandom.hex}@example.com" }
-    name { "Danny Rojas" }
+    name { Faker::Name.name }
     password { "pAssword1" }
     organisation { association :organisation, with_dsa: is_dpo ? false : true }
     role { "data_provider" }
@@ -39,6 +39,10 @@ FactoryBot.define do
           data_protection_officer: user,
         )
       end
+    end
+
+    trait :if_unique do
+      initialize_with { User.find_or_create_by(email:) }
     end
   end
 end

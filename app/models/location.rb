@@ -2,7 +2,8 @@ class Location < ApplicationRecord
   validates :postcode, on: :postcode, presence: { message: I18n.t("validations.location.postcode_blank") }
   validate :validate_postcode, on: :postcode, if: proc { |model| model.postcode.presence }
   validates :location_admin_district, on: :location_admin_district, presence: { message: I18n.t("validations.location_admin_district") }
-  validates :units, on: :units, presence: { message: I18n.t("validations.location.units") }
+  validates :units, on: :units, presence: { message: I18n.t("validations.location.units.must_be_number") }
+  validates :units, on: :units, numericality: { greater_than_or_equal_to: 1, message: I18n.t("validations.location.units.must_be_one_or_more") }
   validates :type_of_unit, on: :type_of_unit, presence: { message: I18n.t("validations.location.type_of_unit") }
   validates :mobility_type, on: :mobility_type, presence: { message: I18n.t("validations.location.mobility_standards") }
   validates :startdate, on: :startdate, presence: { message: I18n.t("validations.location.startdate_invalid") }
@@ -135,6 +136,29 @@ class Location < ApplicationRecord
 
   scope :duplicate_sets_within_given_schemes, lambda {
     scope = visible
+    .group(*DUPLICATE_LOCATION_ATTRIBUTES - %w[scheme_id])
+    .where.not(postcode: nil)
+    .where.not(mobility_type: nil)
+    .having(
+      "COUNT(*) > 1",
+    )
+    scope.pluck("ARRAY_AGG(id)")
+  }
+
+  scope :duplicate_active_sets, lambda {
+    scope = active
+    .group(*DUPLICATE_LOCATION_ATTRIBUTES)
+    .where.not(scheme_id: nil)
+    .where.not(postcode: nil)
+    .where.not(mobility_type: nil)
+    .having(
+      "COUNT(*) > 1",
+    )
+    scope.pluck("ARRAY_AGG(id)")
+  }
+
+  scope :duplicate_active_sets_within_given_schemes, lambda {
+    scope = active
     .group(*DUPLICATE_LOCATION_ATTRIBUTES - %w[scheme_id])
     .where.not(postcode: nil)
     .where.not(mobility_type: nil)

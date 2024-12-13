@@ -103,6 +103,6 @@ en:
               hint_text: "You only need to give an approximate figure."
               question_text: "Can you estimate the outstanding amount?"
             tshortfall:
-              check_answer_label: "Estimated outstanding amountt"
+              check_answer_label: "Estimated outstanding amount"
               hint_text: "Also known as the ‘outstanding amount’."
               question_text: "Estimated outstanding amount"

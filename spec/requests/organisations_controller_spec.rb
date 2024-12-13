@@ -480,14 +480,14 @@ RSpec.describe OrganisationsController, type: :request do
           end
 
           it "shows the tab navigation" do
-            expected_html = "<nav class=\"app-primary-navigation\""
+            expected_html = "<nav aria-label=\"Menu\" class=\"govuk-service-navigation__wrapper\""
             expect(response.body).to include(expected_html)
           end
 
           it "shows a summary list of org details" do
             expected_html = "<dl class=\"govuk-summary-list\""
             expect(response.body).to include(expected_html)
-            expect(response.body).to include(organisation.name)
+            expect(CGI.unescapeHTML(response.body)).to include(organisation.name)
           end
 
           it "does not include a change details link" do
@@ -612,7 +612,7 @@ RSpec.describe OrganisationsController, type: :request do
           end
 
           it "shows the tab navigation" do
-            expected_html = "<nav class=\"app-primary-navigation\""
+            expected_html = "<nav aria-label=\"Menu\" class=\"govuk-service-navigation__wrapper\""
             expect(response.body).to include(expected_html)
           end
 
@@ -663,7 +663,7 @@ RSpec.describe OrganisationsController, type: :request do
           end
 
           it "shows an edit form without name field" do
-            expect(response.body).to include("Change #{organisation.name}’s details")
+            expect(CGI.unescapeHTML(response.body)).to include("Change #{organisation.name}’s details")
             expect(page).not_to have_field("organisation-name-field")
             expect(page).to have_field("organisation-phone-field")
           end
@@ -938,14 +938,14 @@ RSpec.describe OrganisationsController, type: :request do
           end
 
           it "shows the tab navigation" do
-            expected_html = "<nav class=\"app-primary-navigation\""
+            expected_html = "<nav aria-label=\"Menu\" class=\"govuk-service-navigation__wrapper\""
             expect(response.body).to include(expected_html)
           end
 
           it "shows a summary list of org details" do
             expected_html = "<dl class=\"govuk-summary-list\""
             expect(response.body).to include(expected_html)
-            expect(response.body).to include(organisation.name)
+            expect(CGI.unescapeHTML(response.body)).to include(organisation.name)
           end
 
           it "does not have a change details link" do
@@ -1160,7 +1160,7 @@ RSpec.describe OrganisationsController, type: :request do
             create_list(:lettings_log, number_of_owned_org1_lettings_logs, assigned_to: user, owning_organisation: organisation, managing_organisation: child_organisation)
             create_list(:lettings_log, number_of_managed_org1_lettings_logs, assigned_to: user, owning_organisation: parent_organisation, managing_organisation: organisation)
             create_list(:lettings_log, number_of_owned_and_managed_org1_lettings_logs, assigned_to: user, owning_organisation: organisation, managing_organisation: organisation)
-            create(:lettings_log, assigned_to: user, status: "pending", skip_update_status: true)
+            create(:lettings_log, assigned_to: user, status: "pending")
             create_list(:lettings_log, number_of_org2_lettings_logs, assigned_to: nil, owning_organisation_id: unauthorised_organisation.id, managing_organisation_id: unauthorised_organisation.id)
 
             get "/organisations/#{organisation.id}/lettings-logs", headers:, params: {}
@@ -1203,7 +1203,7 @@ RSpec.describe OrganisationsController, type: :request do
 
             it "has search results in the title" do
               get "/organisations/#{organisation.id}/lettings-logs?search=#{log_to_search.id}", headers: headers, params: {}
-              expect(page).to have_title("#{organisation.name} (1 logs matching ‘#{log_to_search.id}’) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+              expect(page).to have_title("#{organisation.name} (1 log matching ‘#{log_to_search.id}’) - Submit social housing lettings and sales data (CORE) - GOV.UK")
             end
 
             it "has search term in the search box" do
@@ -1352,7 +1352,7 @@ RSpec.describe OrganisationsController, type: :request do
 
             it "has search results in the title" do
               get "/organisations/#{organisation.id}/sales-logs?search=#{log_to_search.id}", headers: headers, params: {}
-              expect(page).to have_title("#{organisation.name} (1 logs matching ‘#{log_to_search.id}’) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+              expect(page).to have_title("#{organisation.name} (1 log matching ‘#{log_to_search.id}’) - Submit social housing lettings and sales data (CORE) - GOV.UK")
             end
 
             it "shows sales logs matching the id" do
@@ -1431,7 +1431,7 @@ RSpec.describe OrganisationsController, type: :request do
           end
 
           context "when a search parameter is passed" do
-            let!(:matching_user) { create(:user, organisation:, name: "joe", email: "matching@example.com") }
+            let!(:matching_user) { create(:user, organisation:, name: "abcdefghijklmnopqrstuvwxyz", email: "matching@example.com") }
             let(:org_user_count) { User.where(organisation:).count }
 
             before do
@@ -1439,7 +1439,7 @@ RSpec.describe OrganisationsController, type: :request do
             end
 
             context "when our search string matches case" do
-              let(:search_param) { "joe" }
+              let(:search_param) { "abcdefghijklmnopqrstuvwxyz" }
 
               it "returns only matching results" do
                 expect(page).to have_content(matching_user.name)
@@ -1459,7 +1459,7 @@ RSpec.describe OrganisationsController, type: :request do
               end
 
               context "when we need case insensitive search" do
-                let(:search_param) { "Joe" }
+                let(:search_param) { "Abcdefghijklmnopqrstuvwxyz" }
 
                 it "returns only matching results" do
                   expect(page).to have_content(matching_user.name)
@@ -1555,7 +1555,10 @@ RSpec.describe OrganisationsController, type: :request do
           let(:total_organisations_count) { Organisation.all.count }
 
           before do
-            create_list(:organisation, 25)
+            build_list(:organisation, 25) do |organisation, index|
+              organisation.name = "Organisation #{index}"
+              organisation.save!
+            end
             get "/organisations"
           end
 
@@ -1616,11 +1619,11 @@ RSpec.describe OrganisationsController, type: :request do
             end
 
             it "updates the table caption" do
-              expect(page).to have_content("1 organisations matching search")
+              expect(page).to have_content("1 organisation matching search")
             end
 
             it "has search in the title" do
-              expect(page).to have_title("Organisations (1 organisations matching ‘#{search_param}’) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+              expect(page).to have_title("Organisations (1 organisation matching ‘#{search_param}’) - Submit social housing lettings and sales data (CORE) - GOV.UK")
             end
 
             context "when the search term matches more than 1 result" do
@@ -1642,6 +1645,14 @@ RSpec.describe OrganisationsController, type: :request do
 
             context "when search results require pagination" do
               let(:search_param) { "MHCLG" }
+
+              before do
+                build_list(:organisation, 27) do |organisation, index|
+                  organisation.name = "MHCLG #{index}"
+                  organisation.save!
+                end
+                get "/organisations?search=#{search_param}"
+              end
 
               it "has search and pagination in the title" do
                 expect(page).to have_title("Organisations (27 organisations matching ‘#{search_param}’) (page 1 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
@@ -2002,7 +2013,7 @@ RSpec.describe OrganisationsController, type: :request do
           let(:lettings_log_start_year) { lettings_logs[0].form.start_date.year }
 
           before do
-            create(:lettings_log, :in_progress, owning_organisation: organisation, status: "pending", skip_update_status: true)
+            create(:lettings_log, :in_progress, owning_organisation: organisation, status: "pending")
             create_list(:lettings_log, 2, :in_progress, owning_organisation: other_organisation)
           end
 
@@ -2066,7 +2077,7 @@ RSpec.describe OrganisationsController, type: :request do
 
           before do
             create_list(:sales_log, 2, :in_progress, owning_organisation: organisation)
-            create(:sales_log, :in_progress, owning_organisation: organisation, status: "pending", skip_update_status: true)
+            create(:sales_log, :in_progress, owning_organisation: organisation, status: "pending")
             create_list(:sales_log, 2, :in_progress, owning_organisation: other_organisation)
           end
 

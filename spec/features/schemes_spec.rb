@@ -5,9 +5,10 @@ RSpec.describe "Schemes scheme Features" do
   include SchemesHelpers
   context "when viewing list of schemes" do
     context "when I am signed as a coordinator user and there are schemes in the database" do
-      let!(:user) { FactoryBot.create(:user, :data_coordinator, last_sign_in_at: Time.zone.now) }
-      let!(:schemes) { FactoryBot.create_list(:scheme, 5, owning_organisation: user.organisation) }
-      let!(:scheme_to_search) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
+      let(:organisation) { FactoryBot.create(:organisation, name: "MHCLG") }
+      let!(:user) { FactoryBot.create(:user, :data_coordinator, organisation:, last_sign_in_at: Time.zone.now) }
+      let!(:schemes) { FactoryBot.create_list(:scheme, 5, owning_organisation: organisation) }
+      let!(:scheme_to_search) { FactoryBot.create(:scheme, owning_organisation: organisation) }
 
       before do
         Timecop.freeze(Time.zone.local(2024, 3, 1))
@@ -225,7 +226,7 @@ RSpec.describe "Schemes scheme Features" do
             end
 
             it "shows list of links to the organisation's schemes" do
-              click_on("Schemes (MHCLG)")
+              click_on("Schemes (#{user.organisation.name})")
               same_organisation_schemes.each do |scheme|
                 expect(page).to have_link(scheme.service_name)
                 expect(page).to have_content(scheme.id_to_display)

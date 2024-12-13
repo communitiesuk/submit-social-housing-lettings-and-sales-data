@@ -21,7 +21,8 @@ RSpec.describe "seeding process", type: task do
     allow(Rails.env).to receive(:review?).and_return(true)
   end
 
-  it "sets up correct data" do
+  # Doing this in one test should save ~2 minutes
+  it "sets up correct data idempotently" do
     expect {
       Rails.application.load_seed
     }.to change(User, :count)
@@ -30,10 +31,6 @@ RSpec.describe "seeding process", type: task do
      .and change(Scheme, :count)
      .and change(Location, :count)
      .and change(LaRentRange, :count)
-  end
-
-  it "is idempotent" do
-    Rails.application.load_seed
 
     expect {
       Rails.application.load_seed

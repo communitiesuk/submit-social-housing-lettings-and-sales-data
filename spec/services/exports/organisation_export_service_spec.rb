@@ -16,6 +16,7 @@ RSpec.describe Exports::OrganisationExportService do
 
   def replace_entity_ids(organisation, export_template)
     export_template.sub!(/\{id\}/, organisation["id"].to_s)
+    export_template.sub!(/\{name\}/, organisation["name"])
     export_template.sub!(/\{dsa_signed_at\}/, organisation.data_protection_confirmation&.signed_at.to_s)
     export_template.sub!(/\{dpo_email\}/, organisation.data_protection_confirmation&.data_protection_officer_email)
   end
@@ -42,7 +43,7 @@ RSpec.describe Exports::OrganisationExportService do
     end
 
     context "and one organisation is available for export" do
-      let!(:organisation) { create(:organisation) }
+      let!(:organisation) { create(:organisation, name: "MHCLG", address_line1: "2 Marsham Street", address_line2: "London", postcode: "SW1P 4DF", housing_registration_no: "1234") }
 
       it "generates a ZIP export file with the expected filename" do
         expect(storage_service).to receive(:write_file).with(expected_zip_filename, any_args)

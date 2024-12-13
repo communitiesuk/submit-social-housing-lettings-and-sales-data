@@ -30,8 +30,7 @@ module TagHelper
   }.freeze
 
   COLOUR = {
-    not_started: "grey",
-    cannot_start_yet: "grey",
+    not_started: "light-blue",
     in_progress: "blue",
     completed: "green",
     active: "green",
@@ -58,11 +57,17 @@ module TagHelper
   }.freeze
 
   def status_tag(status, classes = [])
+    return nil if COLOUR[status.to_sym].nil?
+
     govuk_tag(
       classes:,
       colour: COLOUR[status.to_sym],
       text: TEXT[status.to_sym],
     )
+  end
+
+  def status_text(status)
+    TEXT[status.to_sym]
   end
 
   def status_tag_from_resource(resource, classes = [])

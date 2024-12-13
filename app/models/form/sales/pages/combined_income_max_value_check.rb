@@ -3,7 +3,7 @@ class Form::Sales::Pages::CombinedIncomeMaxValueCheck < ::Form::Page
     super(id, hsh, subsection)
     @depends_on = [
       {
-        "combined_income_over_soft_max?" => true,
+        "combined_income_over_soft_max_for_discounted_ownership?" => true,
       },
     ]
     @copy_key = "sales.soft_validations.combined_income_value_check"

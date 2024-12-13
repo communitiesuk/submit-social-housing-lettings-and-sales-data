@@ -29,11 +29,11 @@
       <p class="govuk-body">Since your organisation recently merged, we’ve reviewed your schemes for possible duplicates.</p>
       <p class="govuk-body">These sets of schemes and locations might be duplicates because they have the same answers for certain fields.</p>
       <h2 class="govuk-heading-m">What you need to do</h2>
-      <ul class="govuk-list govuk-list--bullet">
-        <li>Review each set of schemes or locations and decide if they are duplicates.</li>
-        <li>If they are, choose one to keep and deactivate the others on the date your organisation merged.</li>
-        <li>When you have resolved all duplicates, confirm below.</li>
-      </ul>
+      <%= govuk_list [
+        "Review each set of schemes or locations and decide if they are duplicates.",
+        "If they are, choose one to keep and deactivate the others on the date your organisation merged.",
+        "When you have resolved all duplicates, confirm below.",
+      ], type: :bullet %>
       <p class="govuk-body">If you need help with this, <%= govuk_link_to "contact the helpdesk (opens in a new tab)", GlobalConstants::HELPDESK_URL, target: "#" %>.</p>
 
       <% if @duplicate_schemes.any? %>
@@ -43,17 +43,17 @@
           <p class="govuk-body">
             These schemes have the same answers for the following fields:
           </p>
-          <ul class="govuk-list govuk-list--bullet">
-            <li>Type of scheme</li>
-            <li>Registered under Care Standards Act 2000</li>
-            <li>Housing stock owned by</li>
-            <li>Support services provided by</li>
-            <li>Primary client group</li>
-            <li>Has another client group</li>
-            <li>Secondary client group</li>
-            <li>Level of support given</li>
-            <li>Intended length of stay</li>
-          </ul>
+          <%= govuk_list [
+            "Type of scheme",
+            "Registered under Care Standards Act 2000",
+            "Housing stock owned by",
+            "Support services provided by",
+            "Primary client group",
+            "Has another client group",
+            "Secondary client group",
+            "Level of support given",
+            "Intended length of stay",
+          ], type: :bullet %>
         <% end %>
 
         <p class="govuk-body">The links below open in a new tab.</p>
@@ -68,13 +68,7 @@
               <% @duplicate_schemes.each do |duplicate_set| %>
                 <% body.with_row do |row| %>
                 <% row.with_cell do %>
-                    <ol class="govuk-list govuk-list--number">
-                      <% duplicate_set.each do |scheme| %>
-                        <li>
-                          <%= govuk_link_to scheme.service_name, scheme, target: "#" %>
-                        </li>
-                      <% end %>
-                    </ol>
+                    <%= govuk_list duplicate_set.map { |scheme| govuk_link_to(scheme.service_name, scheme, target: "#") }, type: :number %>
                   <% end %>
                 <% end %>
               <% end %>
@@ -89,10 +83,7 @@
           <p class="govuk-body">
             These locations belong to the same scheme and have the same answers for the following fields:
           </p>
-          <ul class="govuk-list govuk-list--bullet">
-            <li>Postcode</li>
-            <li>Mobility standards</li>
-          </ul>
+          <%= govuk_list ["Postcode", "Mobility standards"], type: :bullet %>
         <% end %>
 
         <p class="govuk-body">The links below open in a new tab.</p>
@@ -108,13 +99,7 @@
               <% @duplicate_locations.each do |duplicate_set| %>
                 <% body.with_row do |row| %>
                   <% row.with_cell do %>
-                      <ol class="govuk-list govuk-list--number">
-                        <% duplicate_set[:locations].each do |location| %>
-                          <li>
-                            <%= govuk_link_to location.name, scheme_location_path(location), target: "#" %>
-                          </li>
-                        <% end %>
-                      </ol>
+                    <%= govuk_list duplicate_set[:locations].map { |location| govuk_link_to(location.name, scheme_location_path(location), target: "#") }, type: :number %>
                   <% end %>
                   <% row.with_cell do %>
                     <%= govuk_link_to duplicate_set[:scheme].service_name, duplicate_set[:scheme], target: "#" %>

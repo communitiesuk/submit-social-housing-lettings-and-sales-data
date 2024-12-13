@@ -19,6 +19,12 @@ RSpec.describe Organisation, type: :model do
         .to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Provider type #{I18n.t('validations.organisation.provider_type_missing')}")
     end
 
+    it "validates uniqueness of name" do
+      org = build(:organisation, name: organisation.name.downcase)
+      org.valid?
+      expect(org.errors[:name]).to include(I18n.t("validations.organisation.name_not_unique"))
+    end
+
     context "with parent/child associations", :aggregate_failures do
       let!(:child_organisation) { create(:organisation, name: "MHCLG Child") }
       let!(:grandchild_organisation) { create(:organisation, name: "MHCLG Grandchild") }
@@ -207,7 +213,7 @@ RSpec.describe Organisation, type: :model do
   end
 
   describe "paper trail" do
-    let(:organisation) { create(:organisation) }
+    let(:organisation) { create(:organisation, name: "MHCLG") }
 
     it "creates a record of changes to a log" do
       expect { organisation.update!(name: "new test name") }.to change(organisation.versions, :count).by(1)

@@ -626,7 +626,6 @@ RSpec.describe BulkUpload::Lettings::Year2023::RowParser do
           context "when a hidden log already exists in db" do
             before do
               parser.log.status = "pending"
-              parser.log.skip_update_status = true
               parser.log.save!
             end
 

@@ -244,7 +244,6 @@ RSpec.describe LettingsLogsController, type: :request do
         assigned_to: user,
         tenancycode: "LC999",
         status: "pending",
-        skip_update_status: true,
       )
     end
 
@@ -759,7 +758,7 @@ RSpec.describe LettingsLogsController, type: :request do
 
           it "has search results in the title" do
             get "/lettings-logs?search=#{log_to_search.id}", headers:, params: {}
-            expect(page).to have_title("Lettings logs (1 logs matching ‘#{log_to_search.id}’) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+            expect(page).to have_title("Lettings logs (1 log matching ‘#{log_to_search.id}’) - Submit social housing lettings and sales data (CORE) - GOV.UK")
           end
 
           it "shows lettings logs matching the id" do
@@ -895,7 +894,7 @@ RSpec.describe LettingsLogsController, type: :request do
           end
 
           it "shows the total log count" do
-            expect(CGI.unescape_html(response.body)).to match("<strong>1</strong> total logs")
+            expect(CGI.unescape_html(response.body)).to match("<strong>1</strong> total log")
           end
 
           it "does not show the pagination links" do
@@ -1107,7 +1106,6 @@ RSpec.describe LettingsLogsController, type: :request do
             :in_progress,
             assigned_to: user,
             status: "pending",
-            skip_update_status: true,
           )
         end
 
@@ -1161,11 +1159,10 @@ RSpec.describe LettingsLogsController, type: :request do
 
             context "with bulk_upload_id filter" do
               let(:bulk_upload) { create(:bulk_upload, :lettings, user:) }
-              let(:lettings_log) { create(:lettings_log, :completed, age1: nil, bulk_upload:, assigned_to: user, creation_method: "bulk upload") }
+              let(:lettings_log) { create(:lettings_log, :completed, bulk_upload:, assigned_to: user, creation_method: "bulk upload") }
 
               before do
                 lettings_log.status = "completed"
-                lettings_log.skip_update_status = true
                 lettings_log.save!(validate: false)
               end
 
@@ -1483,7 +1480,7 @@ RSpec.describe LettingsLogsController, type: :request do
     end
 
     context "when viewing a collection of logs affected by deactivated location" do
-      let!(:affected_lettings_logs) { FactoryBot.create_list(:lettings_log, 3, unresolved: true, assigned_to: user) }
+      let!(:affected_lettings_logs) { FactoryBot.create_list(:lettings_log, 3, unresolved: true, assigned_to: user, tenancycode: "affected tenancycode", propcode: "affected propcode") }
       let!(:other_user_affected_lettings_log) { FactoryBot.create(:lettings_log, unresolved: true) }
       let!(:non_affected_lettings_logs) { FactoryBot.create_list(:lettings_log, 4, assigned_to: user) }
       let(:other_user) { FactoryBot.create(:user, organisation: user.organisation) }
