@@ -11,7 +11,7 @@
     "@hotwired/stimulus": "^3.0.0",
     "@stimulus/polyfills": "^2.0.0",
     "@webcomponents/webcomponentsjs": "^2.6.0",
-    "@x-govuk/govuk-prototype-components": "^3.0.1",
+    "@x-govuk/govuk-prototype-components": "^3.0.9",
     "accessible-autocomplete": "^2.0.3",
     "babel-loader": "^8.2.3",
     "babel-plugin-macros": "^3.1.0",
