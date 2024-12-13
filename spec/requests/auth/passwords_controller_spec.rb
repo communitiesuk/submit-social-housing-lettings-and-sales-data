@@ -70,7 +70,7 @@ RSpec.describe Auth::PasswordsController, type: :request do
         put "/account/password", params: update_password_params
         # Devise redirects once after re-sign in with new password and then root redirects as well.
         follow_redirect!
-        expect(page).to have_css("div", class: "govuk-notification-banner__heading", text: message)
+        expect(page).to have_css("p", class: "govuk-notification-banner__heading", text: message)
       end
     end
   end
