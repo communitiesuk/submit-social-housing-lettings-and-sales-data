@@ -16,7 +16,7 @@ RSpec.describe Merge::MergeOrganisationsService do
     end
 
     context "when merging a single organisation into an existing organisation" do
-      subject(:merge_organisations_service) { described_class.new(absorbing_organisation_id: absorbing_organisation.id, merging_organisation_ids: [merging_organisation_ids], merge_date: nil) }
+      subject(:merge_organisations_service) { described_class.new(absorbing_organisation_id: absorbing_organisation.id, merging_organisation_ids:, merge_date: nil) }
 
       let(:absorbing_organisation) { create(:organisation, holds_own_stock: false, name: "absorbing org") }
       let(:absorbing_organisation_user) { create(:user, organisation: absorbing_organisation) }
@@ -53,7 +53,7 @@ RSpec.describe Merge::MergeOrganisationsService do
       end
 
       it "rolls back if there's an error" do
-        allow(Organisation).to receive(:find).with([merging_organisation_ids]).and_return(Organisation.find(merging_organisation_ids))
+        allow(Organisation).to receive(:find).with(merging_organisation_ids).and_return(Organisation.find(merging_organisation_ids))
         allow(Organisation).to receive(:find).with(absorbing_organisation.id).and_return(absorbing_organisation)
         allow(absorbing_organisation).to receive(:save!).and_raise(ActiveRecord::RecordInvalid)
         expect(Rails.logger).to receive(:error).with("Organisation merge failed with: Record invalid")
@@ -97,7 +97,7 @@ RSpec.describe Merge::MergeOrganisationsService do
         end
 
         it "rolls back if there's an error" do
-          allow(Organisation).to receive(:find).with([merging_organisation_ids]).and_return(Organisation.find(merging_organisation_ids))
+          allow(Organisation).to receive(:find).with(merging_organisation_ids).and_return(Organisation.find(merging_organisation_ids))
           allow(Organisation).to receive(:find).with(absorbing_organisation.id).and_return(absorbing_organisation)
           allow(absorbing_organisation).to receive(:save!).and_raise(ActiveRecord::RecordInvalid)
           expect(Rails.logger).to receive(:error).with("Organisation merge failed with: Record invalid")
@@ -134,7 +134,7 @@ RSpec.describe Merge::MergeOrganisationsService do
         end
 
         it "rolls back if there's an error" do
-          allow(Organisation).to receive(:find).with([merging_organisation_ids]).and_return(Organisation.find(merging_organisation_ids))
+          allow(Organisation).to receive(:find).with(merging_organisation_ids).and_return(Organisation.find(merging_organisation_ids))
           allow(Organisation).to receive(:find).with(absorbing_organisation.id).and_return(absorbing_organisation)
           allow(absorbing_organisation).to receive(:save!).and_raise(ActiveRecord::RecordInvalid)
           expect(Rails.logger).to receive(:error).with("Organisation merge failed with: Record invalid")
@@ -327,7 +327,7 @@ RSpec.describe Merge::MergeOrganisationsService do
           end
 
           context "and deactivation is after the merge date and before an open collection window" do
-            subject(:merge_organisations_service) { described_class.new(absorbing_organisation_id: absorbing_organisation.id, merging_organisation_ids: [merging_organisation_ids], merge_date: Time.zone.today - 6.years) }
+            subject(:merge_organisations_service) { described_class.new(absorbing_organisation_id: absorbing_organisation.id, merging_organisation_ids:, merge_date: Time.zone.today - 6.years) }
 
             let!(:scheme) { create(:scheme, owning_organisation: merging_organisation, old_id: "scheme_old_id", old_visible_id: "scheme_old_visible_id", startdate: nil) }
             let!(:location) { create(:location, scheme:, old_id: "location_old_id", old_visible_id: "location_old_visible_id", startdate: nil) }
@@ -551,7 +551,7 @@ RSpec.describe Merge::MergeOrganisationsService do
           end
 
           it "rolls back if there's an error" do
-            allow(Organisation).to receive(:find).with([merging_organisation_ids]).and_return(Organisation.find(merging_organisation_ids))
+            allow(Organisation).to receive(:find).with(merging_organisation_ids).and_return(Organisation.find(merging_organisation_ids))
             allow(Organisation).to receive(:find).with(absorbing_organisation.id).and_return(absorbing_organisation)
             allow(absorbing_organisation).to receive(:save!).and_raise(ActiveRecord::RecordInvalid)
             expect(Rails.logger).to receive(:error).with("Organisation merge failed with: Record invalid")
@@ -584,7 +584,7 @@ RSpec.describe Merge::MergeOrganisationsService do
         end
 
         it "rolls back if there's an error" do
-          allow(Organisation).to receive(:find).with([merging_organisation_ids]).and_return(Organisation.find(merging_organisation_ids))
+          allow(Organisation).to receive(:find).with(merging_organisation_ids).and_return(Organisation.find(merging_organisation_ids))
           allow(Organisation).to receive(:find).with(absorbing_organisation.id).and_return(absorbing_organisation)
           allow(absorbing_organisation).to receive(:save!).and_raise(ActiveRecord::RecordInvalid)
           expect(Rails.logger).to receive(:error).with("Organisation merge failed with: Record invalid")
@@ -596,7 +596,7 @@ RSpec.describe Merge::MergeOrganisationsService do
         end
 
         context "with merge date in closed collection year" do
-          subject(:merge_organisations_service) { described_class.new(absorbing_organisation_id: absorbing_organisation.id, merging_organisation_ids: [merging_organisation_ids], merge_date: Time.zone.local(2021, 3, 3)) }
+          subject(:merge_organisations_service) { described_class.new(absorbing_organisation_id: absorbing_organisation.id, merging_organisation_ids:, merge_date: Time.zone.local(2021, 3, 3)) }
 
           it "does not validate saledate for closed collection years" do
             sales_log.saledate = Time.zone.local(2022, 5, 1)
@@ -611,7 +611,7 @@ RSpec.describe Merge::MergeOrganisationsService do
       end
 
       context "and merge date is provided" do
-        subject(:merge_organisations_service) { described_class.new(absorbing_organisation_id: absorbing_organisation.id, merging_organisation_ids: [merging_organisation_ids], merge_date: Time.zone.yesterday) }
+        subject(:merge_organisations_service) { described_class.new(absorbing_organisation_id: absorbing_organisation.id, merging_organisation_ids:, merge_date: Time.zone.yesterday) }
 
         it "sets merge date on merged organisation" do
           merge_organisations_service.call
@@ -646,7 +646,7 @@ RSpec.describe Merge::MergeOrganisationsService do
           end
 
           it "rolls back if there's an error" do
-            allow(Organisation).to receive(:find).with([merging_organisation_ids]).and_return(Organisation.find(merging_organisation_ids))
+            allow(Organisation).to receive(:find).with(merging_organisation_ids).and_return(Organisation.find(merging_organisation_ids))
             allow(Organisation).to receive(:find).with(absorbing_organisation.id).and_return(absorbing_organisation)
             allow(absorbing_organisation).to receive(:save!).and_raise(ActiveRecord::RecordInvalid)
             expect(Rails.logger).to receive(:error).with("Organisation merge failed with: Record invalid")
@@ -682,7 +682,7 @@ RSpec.describe Merge::MergeOrganisationsService do
           end
 
           it "rolls back if there's an error" do
-            allow(Organisation).to receive(:find).with([merging_organisation_ids]).and_return(Organisation.find(merging_organisation_ids))
+            allow(Organisation).to receive(:find).with(merging_organisation_ids).and_return(Organisation.find(merging_organisation_ids))
             allow(Organisation).to receive(:find).with(absorbing_organisation.id).and_return(absorbing_organisation)
             allow(absorbing_organisation).to receive(:save!).and_raise(ActiveRecord::RecordInvalid)
             expect(Rails.logger).to receive(:error).with("Organisation merge failed with: Record invalid")
@@ -706,7 +706,7 @@ RSpec.describe Merge::MergeOrganisationsService do
           end
 
           context "with merge date in closed collection year" do
-            subject(:merge_organisations_service) { described_class.new(absorbing_organisation_id: absorbing_organisation.id, merging_organisation_ids: [merging_organisation_ids], merge_date: Time.zone.local(2021, 3, 3)) }
+            subject(:merge_organisations_service) { described_class.new(absorbing_organisation_id: absorbing_organisation.id, merging_organisation_ids:, merge_date: Time.zone.local(2021, 3, 3)) }
 
             it "does not validate startdate for closed collection years" do
               owned_lettings_log.startdate = Time.zone.local(2022, 4, 1)
@@ -825,7 +825,7 @@ RSpec.describe Merge::MergeOrganisationsService do
           end
 
           it "rolls back if there's an error" do
-            allow(Organisation).to receive(:find).with([merging_organisation_ids]).and_return(Organisation.find(merging_organisation_ids))
+            allow(Organisation).to receive(:find).with(merging_organisation_ids).and_return(Organisation.find(merging_organisation_ids))
             allow(Organisation).to receive(:find).with(absorbing_organisation.id).and_return(absorbing_organisation)
             allow(absorbing_organisation).to receive(:save!).and_raise(ActiveRecord::RecordInvalid)
             expect(Rails.logger).to receive(:error).with("Organisation merge failed with: Record invalid")
@@ -842,7 +842,7 @@ RSpec.describe Merge::MergeOrganisationsService do
         end
 
         context "and absorbing_organisation_active_from_merge_date is true" do
-          subject(:merge_organisations_service) { described_class.new(absorbing_organisation_id: absorbing_organisation.id, merging_organisation_ids: [merging_organisation_ids], merge_date: Time.zone.yesterday, absorbing_organisation_active_from_merge_date: true) }
+          subject(:merge_organisations_service) { described_class.new(absorbing_organisation_id: absorbing_organisation.id, merging_organisation_ids:, merge_date: Time.zone.yesterday, absorbing_organisation_active_from_merge_date: true) }
 
           it "sets available from to merge_date for absorbing organisation" do
             merge_organisations_service.call
@@ -854,7 +854,7 @@ RSpec.describe Merge::MergeOrganisationsService do
       end
 
       context "and absorbing_organisation_active_from_merge_date is true" do
-        subject(:merge_organisations_service) { described_class.new(absorbing_organisation_id: absorbing_organisation.id, merging_organisation_ids: [merging_organisation_ids], absorbing_organisation_active_from_merge_date: true) }
+        subject(:merge_organisations_service) { described_class.new(absorbing_organisation_id: absorbing_organisation.id, merging_organisation_ids:, absorbing_organisation_active_from_merge_date: true) }
 
         it "sets available from to merge_date (today) for absorbing organisation" do
           merge_organisations_service.call
@@ -910,7 +910,7 @@ RSpec.describe Merge::MergeOrganisationsService do
     end
 
     context "when merging a multiple organisations into an existing organisation" do
-      subject(:merge_organisations_service) { described_class.new(absorbing_organisation_id: absorbing_organisation.id, merging_organisation_ids: [merging_organisation_ids], merge_date: nil) }
+      subject(:merge_organisations_service) { described_class.new(absorbing_organisation_id: absorbing_organisation.id, merging_organisation_ids:, merge_date: nil) }
 
       let(:absorbing_organisation) { create(:organisation, holds_own_stock: false, name: "absorbing org") }
       let(:absorbing_organisation_user) { create(:user, organisation: absorbing_organisation) }
@@ -944,7 +944,7 @@ RSpec.describe Merge::MergeOrganisationsService do
       end
 
       it "rolls back if there's an error" do
-        allow(Organisation).to receive(:find).with([merging_organisation_ids]).and_return(Organisation.find(merging_organisation_ids))
+        allow(Organisation).to receive(:find).with(merging_organisation_ids).and_return(Organisation.find(merging_organisation_ids))
         allow(Organisation).to receive(:find).with(absorbing_organisation.id).and_return(absorbing_organisation)
         allow(absorbing_organisation).to receive(:save!).and_raise(ActiveRecord::RecordInvalid)
         expect(Rails.logger).to receive(:error).with("Organisation merge failed with: Record invalid")
@@ -1069,7 +1069,7 @@ RSpec.describe Merge::MergeOrganisationsService do
         end
 
         it "rolls back if there's an error" do
-          allow(Organisation).to receive(:find).with([merging_organisation_ids]).and_return(Organisation.find(merging_organisation_ids))
+          allow(Organisation).to receive(:find).with(merging_organisation_ids).and_return(Organisation.find(merging_organisation_ids))
           allow(Organisation).to receive(:find).with(absorbing_organisation.id).and_return(absorbing_organisation)
           allow(absorbing_organisation).to receive(:save!).and_raise(ActiveRecord::RecordInvalid)
           expect(Rails.logger).to receive(:error).with("Organisation merge failed with: Record invalid")
@@ -1086,7 +1086,7 @@ RSpec.describe Merge::MergeOrganisationsService do
       end
 
       context "and merge date is provided" do
-        subject(:merge_organisations_service) { described_class.new(absorbing_organisation_id: absorbing_organisation.id, merging_organisation_ids: [merging_organisation_ids], merge_date: Time.zone.yesterday) }
+        subject(:merge_organisations_service) { described_class.new(absorbing_organisation_id: absorbing_organisation.id, merging_organisation_ids:, merge_date: Time.zone.yesterday) }
 
         it "sets merge date and absorbing organisation on merged organisations" do
           merge_organisations_service.call
@@ -1102,7 +1102,7 @@ RSpec.describe Merge::MergeOrganisationsService do
     end
 
     context "when merging a single organisation into a new organisation" do
-      subject(:merge_organisations_service) { described_class.new(absorbing_organisation_id: new_absorbing_organisation.id, merging_organisation_ids: [merging_organisation_ids], merge_date: nil) }
+      subject(:merge_organisations_service) { described_class.new(absorbing_organisation_id: new_absorbing_organisation.id, merging_organisation_ids:, merge_date: nil) }
 
       let(:new_absorbing_organisation) { create(:organisation, :without_dpc, holds_own_stock: false) }
       let(:new_absorbing_organisation_user) { create(:user, organisation: new_absorbing_organisation) }
@@ -1139,7 +1139,7 @@ RSpec.describe Merge::MergeOrganisationsService do
       end
 
       it "rolls back if there's an error" do
-        allow(Organisation).to receive(:find).with([merging_organisation_ids]).and_return(Organisation.find(merging_organisation_ids))
+        allow(Organisation).to receive(:find).with(merging_organisation_ids).and_return(Organisation.find(merging_organisation_ids))
         allow(Organisation).to receive(:find).with(new_absorbing_organisation.id).and_return(new_absorbing_organisation)
         allow(new_absorbing_organisation).to receive(:save!).and_raise(ActiveRecord::RecordInvalid)
         expect(Rails.logger).to receive(:error).with("Organisation merge failed with: Record invalid")
@@ -1183,7 +1183,7 @@ RSpec.describe Merge::MergeOrganisationsService do
         end
 
         it "rolls back if there's an error" do
-          allow(Organisation).to receive(:find).with([merging_organisation_ids]).and_return(Organisation.find(merging_organisation_ids))
+          allow(Organisation).to receive(:find).with(merging_organisation_ids).and_return(Organisation.find(merging_organisation_ids))
           allow(Organisation).to receive(:find).with(new_absorbing_organisation.id).and_return(new_absorbing_organisation)
           allow(new_absorbing_organisation).to receive(:save!).and_raise(ActiveRecord::RecordInvalid)
           expect(Rails.logger).to receive(:error).with("Organisation merge failed with: Record invalid")
@@ -1220,7 +1220,7 @@ RSpec.describe Merge::MergeOrganisationsService do
         end
 
         it "rolls back if there's an error" do
-          allow(Organisation).to receive(:find).with([merging_organisation_ids]).and_return(Organisation.find(merging_organisation_ids))
+          allow(Organisation).to receive(:find).with(merging_organisation_ids).and_return(Organisation.find(merging_organisation_ids))
           allow(Organisation).to receive(:find).with(new_absorbing_organisation.id).and_return(new_absorbing_organisation)
           allow(new_absorbing_organisation).to receive(:save!).and_raise(ActiveRecord::RecordInvalid)
           expect(Rails.logger).to receive(:error).with("Organisation merge failed with: Record invalid")
@@ -1325,7 +1325,7 @@ RSpec.describe Merge::MergeOrganisationsService do
         end
 
         it "rolls back if there's an error" do
-          allow(Organisation).to receive(:find).with([merging_organisation_ids]).and_return(Organisation.find(merging_organisation_ids))
+          allow(Organisation).to receive(:find).with(merging_organisation_ids).and_return(Organisation.find(merging_organisation_ids))
           allow(Organisation).to receive(:find).with(new_absorbing_organisation.id).and_return(new_absorbing_organisation)
           allow(new_absorbing_organisation).to receive(:save!).and_raise(ActiveRecord::RecordInvalid)
           expect(Rails.logger).to receive(:error).with("Organisation merge failed with: Record invalid")
@@ -1357,7 +1357,7 @@ RSpec.describe Merge::MergeOrganisationsService do
         end
 
         it "rolls back if there's an error" do
-          allow(Organisation).to receive(:find).with([merging_organisation_ids]).and_return(Organisation.find(merging_organisation_ids))
+          allow(Organisation).to receive(:find).with(merging_organisation_ids).and_return(Organisation.find(merging_organisation_ids))
           allow(Organisation).to receive(:find).with(new_absorbing_organisation.id).and_return(new_absorbing_organisation)
           allow(new_absorbing_organisation).to receive(:save!).and_raise(ActiveRecord::RecordInvalid)
           expect(Rails.logger).to receive(:error).with("Organisation merge failed with: Record invalid")
@@ -1370,7 +1370,7 @@ RSpec.describe Merge::MergeOrganisationsService do
       end
 
       context "and merge date is provided" do
-        subject(:merge_organisations_service) { described_class.new(absorbing_organisation_id: new_absorbing_organisation.id, merging_organisation_ids: [merging_organisation_ids], merge_date: Time.zone.yesterday) }
+        subject(:merge_organisations_service) { described_class.new(absorbing_organisation_id: new_absorbing_organisation.id, merging_organisation_ids:, merge_date: Time.zone.yesterday) }
 
         it "sets merge date on merged organisation" do
           merge_organisations_service.call
@@ -1396,7 +1396,7 @@ RSpec.describe Merge::MergeOrganisationsService do
           end
 
           it "rolls back if there's an error" do
-            allow(Organisation).to receive(:find).with([merging_organisation_ids]).and_return(Organisation.find(merging_organisation_ids))
+            allow(Organisation).to receive(:find).with(merging_organisation_ids).and_return(Organisation.find(merging_organisation_ids))
             allow(Organisation).to receive(:find).with(new_absorbing_organisation.id).and_return(new_absorbing_organisation)
             allow(new_absorbing_organisation).to receive(:save!).and_raise(ActiveRecord::RecordInvalid)
             expect(Rails.logger).to receive(:error).with("Organisation merge failed with: Record invalid")
@@ -1432,7 +1432,7 @@ RSpec.describe Merge::MergeOrganisationsService do
           end
 
           it "rolls back if there's an error" do
-            allow(Organisation).to receive(:find).with([merging_organisation_ids]).and_return(Organisation.find(merging_organisation_ids))
+            allow(Organisation).to receive(:find).with(merging_organisation_ids).and_return(Organisation.find(merging_organisation_ids))
             allow(Organisation).to receive(:find).with(new_absorbing_organisation.id).and_return(new_absorbing_organisation)
             allow(new_absorbing_organisation).to receive(:save!).and_raise(ActiveRecord::RecordInvalid)
             expect(Rails.logger).to receive(:error).with("Organisation merge failed with: Record invalid")
@@ -1538,7 +1538,7 @@ RSpec.describe Merge::MergeOrganisationsService do
           end
 
           it "rolls back if there's an error" do
-            allow(Organisation).to receive(:find).with([merging_organisation_ids]).and_return(Organisation.find(merging_organisation_ids))
+            allow(Organisation).to receive(:find).with(merging_organisation_ids).and_return(Organisation.find(merging_organisation_ids))
             allow(Organisation).to receive(:find).with(new_absorbing_organisation.id).and_return(new_absorbing_organisation)
             allow(new_absorbing_organisation).to receive(:save!).and_raise(ActiveRecord::RecordInvalid)
             expect(Rails.logger).to receive(:error).with("Organisation merge failed with: Record invalid")
@@ -1555,7 +1555,7 @@ RSpec.describe Merge::MergeOrganisationsService do
         end
 
         context "and absorbing_organisation_active_from_merge_date is true" do
-          subject(:merge_organisations_service) { described_class.new(absorbing_organisation_id: new_absorbing_organisation.id, merging_organisation_ids: [merging_organisation_ids], merge_date: Time.zone.yesterday, absorbing_organisation_active_from_merge_date: true) }
+          subject(:merge_organisations_service) { described_class.new(absorbing_organisation_id: new_absorbing_organisation.id, merging_organisation_ids:, merge_date: Time.zone.yesterday, absorbing_organisation_active_from_merge_date: true) }
 
           it "sets available from to merge_date for absorbing organisation" do
             merge_organisations_service.call
@@ -1567,7 +1567,7 @@ RSpec.describe Merge::MergeOrganisationsService do
       end
 
       context "and absorbing_organisation_active_from_merge_date is true" do
-        subject(:merge_organisations_service) { described_class.new(absorbing_organisation_id: new_absorbing_organisation.id, merging_organisation_ids: [merging_organisation_ids], absorbing_organisation_active_from_merge_date: true) }
+        subject(:merge_organisations_service) { described_class.new(absorbing_organisation_id: new_absorbing_organisation.id, merging_organisation_ids:, absorbing_organisation_active_from_merge_date: true) }
 
         it "sets available from to merge_date (today) for absorbing organisation" do
           merge_organisations_service.call
@@ -1579,7 +1579,7 @@ RSpec.describe Merge::MergeOrganisationsService do
     end
 
     context "when merging multiple organisations into a new organisation" do
-      subject(:merge_organisations_service) { described_class.new(absorbing_organisation_id: new_absorbing_organisation.id, merging_organisation_ids: [merging_organisation_ids], merge_date: nil) }
+      subject(:merge_organisations_service) { described_class.new(absorbing_organisation_id: new_absorbing_organisation.id, merging_organisation_ids:, merge_date: nil) }
 
       let(:new_absorbing_organisation) { create(:organisation, :without_dpc, holds_own_stock: false) }
       let(:new_absorbing_organisation_user) { create(:user, organisation: new_absorbing_organisation) }
@@ -1628,7 +1628,7 @@ RSpec.describe Merge::MergeOrganisationsService do
       end
 
       it "rolls back if there's an error" do
-        allow(Organisation).to receive(:find).with([merging_organisation_ids]).and_return(Organisation.find(merging_organisation_ids))
+        allow(Organisation).to receive(:find).with(merging_organisation_ids).and_return(Organisation.find(merging_organisation_ids))
         allow(Organisation).to receive(:find).with(new_absorbing_organisation.id).and_return(new_absorbing_organisation)
         allow(new_absorbing_organisation).to receive(:save!).and_raise(ActiveRecord::RecordInvalid)
         expect(Rails.logger).to receive(:error).with("Organisation merge failed with: Record invalid")
@@ -1670,7 +1670,7 @@ RSpec.describe Merge::MergeOrganisationsService do
         end
 
         it "rolls back if there's an error" do
-          allow(Organisation).to receive(:find).with([merging_organisation_ids]).and_return(Organisation.find(merging_organisation_ids))
+          allow(Organisation).to receive(:find).with(merging_organisation_ids).and_return(Organisation.find(merging_organisation_ids))
           allow(Organisation).to receive(:find).with(new_absorbing_organisation.id).and_return(new_absorbing_organisation)
           allow(new_absorbing_organisation).to receive(:save!).and_raise(ActiveRecord::RecordInvalid)
           expect(Rails.logger).to receive(:error).with("Organisation merge failed with: Record invalid")
@@ -1687,7 +1687,7 @@ RSpec.describe Merge::MergeOrganisationsService do
       end
 
       context "and merge date is provided" do
-        subject(:merge_organisations_service) { described_class.new(absorbing_organisation_id: new_absorbing_organisation.id, merging_organisation_ids: [merging_organisation_ids], merge_date: Time.zone.yesterday) }
+        subject(:merge_organisations_service) { described_class.new(absorbing_organisation_id: new_absorbing_organisation.id, merging_organisation_ids:, merge_date: Time.zone.yesterday) }
 
         it "sets merge date and absorbing organisation on merged organisations" do
           merge_organisations_service.call

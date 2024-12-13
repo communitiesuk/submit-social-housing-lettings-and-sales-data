@@ -1,7 +1,7 @@
 class BulkUpload < ApplicationRecord
-  enum log_type: { lettings: "lettings", sales: "sales" }
-  enum rent_type_fix_status: { not_applied: "not_applied", applied: "applied", not_needed: "not_needed" }
-  enum failure_reason: { blank_template: "blank_template", wrong_template: "wrong_template" }
+  enum :log_type, { lettings: "lettings", sales: "sales" }
+  enum :rent_type_fix_status, { not_applied: "not_applied", applied: "applied", not_needed: "not_needed" }
+  enum :failure_reason, { blank_template: "blank_template", wrong_template: "wrong_template" }
 
   belongs_to :user
 
