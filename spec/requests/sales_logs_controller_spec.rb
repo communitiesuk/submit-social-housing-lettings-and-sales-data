@@ -293,7 +293,6 @@ RSpec.describe SalesLogsController, type: :request do
               :sales_log,
               owning_organisation: organisation,
               status: "pending",
-              skip_update_status: true,
             )
           end
 

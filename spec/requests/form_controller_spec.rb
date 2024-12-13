@@ -512,7 +512,6 @@ RSpec.describe FormController, type: :request do
               owning_organisation: organisation,
               assigned_to: user,
               status: "pending",
-              skip_update_status: true,
             )
           end
 

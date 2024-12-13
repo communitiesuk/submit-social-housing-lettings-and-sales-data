@@ -317,7 +317,11 @@ private
   def update_status!
     return if skip_update_status
 
-    self.status = calculate_status
+    if status == "pending"
+      self.status_cache = calculate_status
+    else
+      self.status = calculate_status
+    end
   end
 
   def all_subsections_completed?
