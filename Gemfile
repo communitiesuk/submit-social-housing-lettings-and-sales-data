@@ -90,7 +90,7 @@ group :development do
   # Display performance information such as SQL time and flame graphs for each request in your browser.
   # Can be configured to work on production as well see: https://github.com/MiniProfiler/rack-mini-profiler/blob/master/README.md
   gem "erb_lint", require: false
-  gem "rack-mini-profiler", "~> 2.0"
+  gem "rack-mini-profiler", "~> 3.3.0"
   gem "rubocop-govuk", "4.3.0", require: false
   gem "rubocop-performance", require: false
   gem "rubocop-rails", require: false
