@@ -4,7 +4,8 @@
   @include govuk-link-style-text;
 }
 
-.app-red-link:link, .app-red-link---no-visited-state:visited {
+.app-red-link:link,
+.app-red-link---no-visited-state:visited {
   color: govuk-colour("red");
 }
 
