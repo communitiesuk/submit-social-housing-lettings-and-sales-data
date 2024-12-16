@@ -19,7 +19,7 @@ en:
           inc1mort:
             page_header: ""
             check_answer_label: "Buyer 1’s income used for mortgage application"
-            check_answer_prompt: "Confirm if buyer 1’s income used for mortgage application"
+            check_answer_prompt: "Answer if buyer 1’s income used for mortgage application"
             hint_text: ""
             question_text: "Was buyer 1’s income used for a mortgage application?"
 
@@ -32,7 +32,7 @@ en:
               question_text: "Do you know buyer 2’s annual income?"
             income2:
               check_answer_label: "Buyer 2’s gross annual income"
-              check_answer_prompt: "Confirm if buyer 2’s income used for mortgage application"
+              check_answer_prompt: "Answer if buyer 2’s income used for mortgage application"
               hint_text: "Provide the gross annual income (i.e. salary before tax) plus the annual amount of benefits, Universal Credit or pensions, and income from investments."
               question_text: "Buyer 2’s gross annual income"
 

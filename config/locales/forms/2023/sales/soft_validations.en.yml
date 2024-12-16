@@ -160,8 +160,8 @@ en:
 
           wheel_value_check:
             page_header: ""
-            check_answer_label: "Does anyone in the household use a wheelchair?"
-            check_answer_prompt: ""
+            check_answer_label: "Household member uses a wheelchair"
+            check_answer_prompt: "Answer is someone uses a wheelchair"
             hint_text: ""
             question_text: "You told us that someone in the household uses a wheelchair."
             title_text: "You told us that someone in the household uses a wheelchair."
