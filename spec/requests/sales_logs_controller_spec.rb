@@ -452,7 +452,7 @@ RSpec.describe SalesLogsController, type: :request do
 
               it "displays filter" do
                 get "/sales-logs?bulk_upload_id[]=#{bulk_upload.id}"
-                expect(page).to have_content("With logs from bulk upload")
+                expect(page).to have_content("Only logs from this bulk upload")
               end
 
               it "hides collection year filter" do
@@ -536,7 +536,7 @@ RSpec.describe SalesLogsController, type: :request do
           context "without bulk_upload_id" do
             it "does not display filter" do
               get "/sales-logs"
-              expect(page).not_to have_content("With logs from bulk upload")
+              expect(page).not_to have_content("Only logs from this bulk upload")
             end
 
             it "displays button to create a new log" do
