@@ -58,15 +58,15 @@ private
   def form
     @form ||= case params[:id]
               when "year"
-                Forms::BulkUploadLettings::Year.new(form_params)
+                Forms::BulkUploadForm::Year.new(form_params.merge(log_type: "lettings"))
               when "prepare-your-file"
-                Forms::BulkUploadLettings::PrepareYourFile.new(form_params)
+                Forms::BulkUploadForm::PrepareYourFile.new(form_params.merge(log_type: "lettings"))
               when "guidance"
-                Forms::BulkUploadLettings::Guidance.new(form_params.merge(referrer: params[:referrer]))
+                Forms::BulkUploadForm::Guidance.new(form_params.merge(referrer: params[:referrer], log_type: "lettings"))
               when "upload-your-file"
-                Forms::BulkUploadLettings::UploadYourFile.new(form_params.merge(current_user:))
+                Forms::BulkUploadForm::UploadYourFile.new(form_params.merge(current_user:, log_type: "lettings"))
               when "checking-file"
-                Forms::BulkUploadLettings::CheckingFile.new(form_params)
+                Forms::BulkUploadForm::CheckingFile.new(form_params.merge(log_type: "lettings"))
               else
                 raise "Page not found for path #{params[:id]}"
               end

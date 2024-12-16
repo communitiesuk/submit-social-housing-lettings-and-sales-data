@@ -1,17 +1,18 @@
 module Forms
-  module BulkUploadLettings
+  module BulkUploadForm
     class Year
       include ActiveModel::Model
       include ActiveModel::Attributes
       include Rails.application.routes.url_helpers
 
+      attribute :log_type
       attribute :year, :integer
       attribute :organisation_id, :integer
 
       validates :year, presence: true
 
       def view_path
-        "bulk_upload_lettings_logs/forms/year"
+        "bulk_upload_#{log_type}_logs/forms/year"
       end
 
       def options
@@ -22,14 +23,14 @@ module Forms
 
       def back_path
         if organisation_id.present?
-          lettings_logs_organisation_path(organisation_id)
+          send("#{log_type}_logs_organisation_path", organisation_id)
         else
-          lettings_logs_path
+          send("#{log_type}_logs_path")
         end
       end
 
       def next_path
-        bulk_upload_lettings_log_path(id: "prepare-your-file", form: { year:, organisation_id: }.compact)
+        send("bulk_upload_#{log_type}_log_path", id: "prepare-your-file", form: { year:, organisation_id: }.compact)
       end
 
       def save!
@@ -40,9 +41,9 @@ module Forms
 
       def possible_years
         [
-          FormHandler.instance.lettings_forms["current_lettings"].start_date.year,
-          (FormHandler.instance.previous_lettings_form.start_date.year if FormHandler.instance.lettings_in_crossover_period?),
-          (FormHandler.instance.next_lettings_form.start_date.year if FeatureToggle.allow_future_form_use?),
+          FormHandler.instance.send("#{log_type}_forms")["current_#{log_type}"].start_date.year,
+          (FormHandler.instance.send("previous_#{log_type}_form").start_date.year if FormHandler.instance.send("#{log_type}_in_crossover_period?")),
+          (FormHandler.instance.send("next_#{log_type}_form").start_date.year if FeatureToggle.allow_future_form_use?),
         ].compact
       end
     end

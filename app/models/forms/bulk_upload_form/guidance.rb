@@ -1,11 +1,12 @@
 module Forms
-  module BulkUploadSales
+  module BulkUploadForm
     class Guidance
       include ActiveModel::Model
       include ActiveModel::Attributes
       include Rails.application.routes.url_helpers
       include CollectionTimeHelper
 
+      attribute :log_type
       attribute :year, :integer
       attribute :referrer
       attribute :organisation_id, :integer
@@ -23,7 +24,7 @@ module Forms
       def back_path
         case referrer
         when "prepare-your-file"
-          bulk_upload_sales_log_path(id: "prepare-your-file", form: { year:, organisation_id: }.compact)
+          send("bulk_upload_#{log_type}_log_path", id: "prepare-your-file", form: { year:, organisation_id: }.compact)
         when "home"
           root_path
         else
