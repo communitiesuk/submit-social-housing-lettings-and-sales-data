@@ -67,6 +67,6 @@ private
                    "govuk-link govuk-link--no-visited-state"
                  end
 
-    govuk_link_to question.check_answer_prompt, correct_validation_action_href(question, log, nil, @correcting_hard_validation), class: link_class
+    govuk_link_to question.check_answer_prompt, unanswered_action_href(question, log), class: link_class
   end
 end
