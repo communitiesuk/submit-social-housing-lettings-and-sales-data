@@ -245,11 +245,11 @@ class Form::Question
   end
 
   def generate_check_answer_prompt
-    question_text = lowercase_first_letter(error_label.presence || check_answer_label.presence || header.presence || id.humanize) || "this question."
-    return "Select #{question_text}" if %w[checkbox radio select].include?(type)
-    return "Set #{question_text}" if type == "date"
+    prompt_ending = lowercase_first_letter(error_label.presence || check_answer_label.presence || header.presence || id.humanize) || "this question."
+    return "Select #{prompt_ending}" if %w[checkbox radio select].include?(type)
+    return "Set #{prompt_ending}" if type == "date"
 
-    "Enter #{question_text}"
+    "Enter #{prompt_ending}"
   end
 
   def suffix_label(log)
