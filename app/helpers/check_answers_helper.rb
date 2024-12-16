@@ -62,7 +62,7 @@ private
 
   def unanswered_value(log:, question:)
     if log.creation_method_bulk_upload? && log.bulk_upload.present? && !log.optional_fields.include?(question.id)
-      "<span class=\"app-!-colour-red\">You still need to answer this question</span>".html_safe
+      govuk_link_to question.check_answer_prompt, unanswered_action_href(question, log), class: "govuk-link govuk-link--no-visited-state app-!-colour-red"
     else
       govuk_link_to question.check_answer_prompt, unanswered_action_href(question, log), class: "govuk-link govuk-link--no-visited-state"
     end
