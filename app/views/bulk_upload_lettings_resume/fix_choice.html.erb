@@ -24,17 +24,9 @@
 
       <%= govuk_details(summary_text: "How to choose between fixing errors on the CORE site or in the CSV") do %>
         <p class="govuk-body govuk-!-margin-bottom-2">You may find it easier to fix the errors in the CSV file if:</p>
-        <ul class="govuk-list govuk-list--bullet">
-          <li>you have a lot of errors</li>
-          <li>the CSV file is formatted incorrectly and you can see where the errors are</li>
-          <li>you need to fix multiple errors at once</li>
-        </ul>
+        <%= govuk_list ["you have a lot of errors", "the CSV file is formatted incorrectly and you can see where the errors are", "you need to fix multiple errors at once"], type: :bullet %>
         <p class="govuk-body govuk-!-margin-bottom-2">You may find it easier to fix the errors on the CORE site if:</p>
-        <ul class="govuk-list govuk-list--bullet">
-          <li>you need to see the data in context</li>
-          <li>you have a smaller file, with a few errors</li>
-          <li>you are not sure where the errors are</li>
-        </ul>
+        <%= govuk_list ["you need to see the data in context", "you have a smaller file, with a few errors", "you are not sure where the errors are"], type: :bullet %>
       <% end %>
 
       <%= f.govuk_collection_radio_buttons :choice,

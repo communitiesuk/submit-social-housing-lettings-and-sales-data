@@ -3405,15 +3405,15 @@ gopd@^1.0.1:
   dependencies:
     get-intrinsic "^1.1.3"
 
-govuk-frontend@5.1.0:
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/govuk-frontend/-/govuk-frontend-5.1.0.tgz#55e520940b587ddd023e96251efaa076acc9bd5f"
-  integrity sha512-Dc3J+uOI4i2VR3BVyfxbf6qVjTT4n4bBqbD0/Io6feP8pt/4IfKdP1vWimZf+BwMKKMXacw10hmdy5UcD6Cr8w==
-
 govuk-frontend@5.2.0:
   version "5.2.0"
   resolved "https://registry.yarnpkg.com/govuk-frontend/-/govuk-frontend-5.2.0.tgz#f8e0bf98b771b8ee1501fd45bbba24a091f3846d"
   integrity sha512-beD3wztHpkKz6JUpPwnwop1ejb4rTFMPLCutKLCIDmUS4BPpW59ggVUfctsRqHd2Zjw9wxljdRdeIJ8AZFyyTw==
+
+govuk-frontend@5.7.1:
+  version "5.7.1"
+  resolved "https://registry.yarnpkg.com/govuk-frontend/-/govuk-frontend-5.7.1.tgz#d4c561ebf8c0b76130f31df8c2e4d70d340cd63f"
+  integrity sha512-jF1cq5rn57kxZmJRprUZhTQ31zaBBK4b5AyeJaPX3Yhg22lk90Mx/dQLvOk/ycV3wM7e0y+s4IPvb2fFaPlCGg==
 
 govuk-prototype-kit@^13.14.1:
   version "13.16.2"
@@ -3961,7 +3961,7 @@ jest-worker@^27.4.5:
     merge-stream "^2.0.0"
     supports-color "^8.0.0"
 
-jquery-ui@^1.12.1:
+"jquery-ui@^1.12.1 <1.14.0":
   version "1.13.3"
   resolved "https://registry.yarnpkg.com/jquery-ui/-/jquery-ui-1.13.3.tgz#d9f5292b2857fa1f2fdbbe8f2e66081664eb9bc5"
   integrity sha512-D2YJfswSJRh/B8M/zCowDpNFfwsDmtfnMPwjJTyvl+CBqzpYwQ+gFYIbUUlzijy/Qvoy30H1YhoSui4MNYpRwA==
@@ -4335,9 +4335,9 @@ mute-stream@0.0.8:
   integrity sha512-nnbWWOkoWyUsTjKrhgD0dcz22mdkSnpYqbEjIm2nhwhuxlSkpywJmBo8h0ZqJdkp73mb90SssHkN4rsRaBAfAA==
 
 nanoid@^3.3.7:
-  version "3.3.7"
-  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.3.7.tgz#d0c301a691bc8d54efa0a2226ccf3fe2fd656bd8"
-  integrity sha512-eSRppjcPIatRIMC1U6UngP8XFcz8MQWGQdt1MTBQ7NaAmvXDfvNxbvWV3x2y6CdEUciCSsDHDQZbhYaB8QEo2g==
+  version "3.3.8"
+  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.3.8.tgz#b1be3030bee36aaff18bacb375e5cce521684baf"
+  integrity sha512-WNLf5Sd8oZxOm+TzppcYk8gVOgP+l58xNy58D0nbUnOxOWRWvlcCV4kUF7ltmI6PsrLl/BgKEyS4mqsGChFN0w==
 
 natural-compare@^1.4.0:
   version "1.4.0"
@@ -4824,10 +4824,10 @@ queue-tick@^1.0.1:
   resolved "https://registry.yarnpkg.com/queue-tick/-/queue-tick-1.0.1.tgz#f6f07ac82c1fd60f82e098b417a80e52f1f4c142"
   integrity sha512-kJt5qhMxoszgU/62PLP1CJytzd2NKetjSRnyuj31fDd3Rlcz3fzlFdFLD1SItunPwyqEOkca6GbV612BWfaBag==
 
-rails_admin@3.1.3:
-  version "3.1.3"
-  resolved "https://registry.yarnpkg.com/rails_admin/-/rails_admin-3.1.3.tgz#1da3f2214876f4ffd3a1db01452c28a8f7d4d989"
-  integrity sha512-79CBB2BMB3fSGPz1P8eNxCboHVlkBWBaxKxfo4QwCAFxsA3WAjfM0MeWUtGHI8Mn8XEZxCdEDz9oYlvlBpMtng==
+rails_admin@3.3.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/rails_admin/-/rails_admin-3.3.0.tgz#58701b189e40b7c7f9a0a8ba2b996a41d5842017"
+  integrity sha512-sgdLMdJDOQmkEWYXY0uqLYxi7eMdhCEU4ZuKpVKdSssMoOr9iqCX8/sOP4ErRiC8Iez5x1vXVOv0Iki4ZKCNug==
   dependencies:
     "@babel/runtime" "^7.16.7"
     "@fortawesome/fontawesome-free" ">=5.15.0 <7.0.0"
@@ -4837,7 +4837,7 @@ rails_admin@3.1.3:
     bootstrap "^5.1.3"
     flatpickr "^4.6.9"
     jquery "^3.6.0"
-    jquery-ui "^1.12.1"
+    jquery-ui "^1.12.1 <1.14.0"
 
 random-bytes@~1.0.0:
   version "1.0.0"

@@ -67,7 +67,7 @@ RSpec.describe UsersController, type: :request do
         end
 
         it "shows an error on the same page if passwords don't match" do
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
           expect(page).to have_css("h1", class: "govuk-heading-l", text: "Change your password")
           expect(page).to have_selector(".govuk-error-summary__title")
           expect(page).to have_content("passwords you entered do not match")
@@ -349,7 +349,7 @@ RSpec.describe UsersController, type: :request do
         end
 
         it "show an error" do
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
         end
       end
 
@@ -377,7 +377,7 @@ RSpec.describe UsersController, type: :request do
         end
 
         it "shows an error if passwords don't match" do
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
           expect(page).to have_selector(".govuk-error-summary__title")
         end
       end
@@ -792,9 +792,8 @@ RSpec.describe UsersController, type: :request do
 
       context "when the current user does not match the user ID" do
         it "there is no route" do
-          expect {
-            get "/users/#{other_user.id}/password/edit", headers:, params: {}
-          }.to raise_error(ActionController::RoutingError)
+          get "/users/#{other_user.id}/password/edit", headers:, params: {}
+          expect(response).to have_http_status(:not_found)
         end
       end
     end
@@ -840,7 +839,7 @@ RSpec.describe UsersController, type: :request do
           end
 
           it "shows an error if passwords don't match" do
-            expect(response).to have_http_status(:unprocessable_entity)
+            expect(response).to have_http_status(:unprocessable_content)
             expect(page).to have_selector(".govuk-error-summary__title")
           end
         end
@@ -955,7 +954,7 @@ RSpec.describe UsersController, type: :request do
         end
 
         it "show an error" do
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
         end
       end
 
@@ -976,7 +975,7 @@ RSpec.describe UsersController, type: :request do
           let(:phone) { "" }
 
           it "validates telephone number" do
-            expect(response).to have_http_status(:unprocessable_entity)
+            expect(response).to have_http_status(:unprocessable_content)
             expect(page).to have_content(I18n.t("activerecord.errors.models.user.attributes.phone.blank"))
           end
         end
@@ -985,7 +984,7 @@ RSpec.describe UsersController, type: :request do
           let(:phone) { "randomstring" }
 
           it "validates telephone number" do
-            expect(response).to have_http_status(:unprocessable_entity)
+            expect(response).to have_http_status(:unprocessable_content)
             expect(page).to have_content(I18n.t("activerecord.errors.models.user.attributes.phone.invalid"))
           end
         end
@@ -994,7 +993,7 @@ RSpec.describe UsersController, type: :request do
           let(:phone) { "123" }
 
           it "validates telephone number" do
-            expect(response).to have_http_status(:unprocessable_entity)
+            expect(response).to have_http_status(:unprocessable_content)
             expect(page).to have_content(I18n.t("activerecord.errors.models.user.attributes.phone.invalid"))
           end
         end
@@ -1075,7 +1074,7 @@ RSpec.describe UsersController, type: :request do
 
         it "shows an error" do
           request
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
           expect(page).to have_content(I18n.t("validations.email.taken"))
         end
       end
@@ -1093,7 +1092,7 @@ RSpec.describe UsersController, type: :request do
 
         it "shows an error" do
           request
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
           expect(page).to have_content(I18n.t("validations.role.invalid"))
         end
       end
@@ -1111,7 +1110,7 @@ RSpec.describe UsersController, type: :request do
 
         it "shows an error" do
           request
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
           expect(page).to have_content(I18n.t("activerecord.errors.models.user.attributes.name.blank"))
           expect(page).to have_content(I18n.t("activerecord.errors.models.user.attributes.email.blank"))
         end
@@ -1131,7 +1130,7 @@ RSpec.describe UsersController, type: :request do
 
           it "validates telephone number" do
             request
-            expect(response).to have_http_status(:unprocessable_entity)
+            expect(response).to have_http_status(:unprocessable_content)
             expect(page).to have_content(I18n.t("activerecord.errors.models.user.attributes.phone.invalid"))
           end
         end
@@ -1141,7 +1140,7 @@ RSpec.describe UsersController, type: :request do
 
           it "validates telephone number" do
             request
-            expect(response).to have_http_status(:unprocessable_entity)
+            expect(response).to have_http_status(:unprocessable_content)
             expect(page).to have_content(I18n.t("activerecord.errors.models.user.attributes.phone.invalid"))
           end
         end
@@ -1748,9 +1747,8 @@ RSpec.describe UsersController, type: :request do
 
       context "when the current user does not match the user ID" do
         it "there is no route" do
-          expect {
-            get "/users/#{other_user.id}/password/edit", headers:, params: {}
-          }.to raise_error(ActionController::RoutingError)
+          get "/users/#{other_user.id}/password/edit", headers:, params: {}
+          expect(response).to have_http_status(:not_found)
         end
       end
     end
@@ -1912,7 +1910,7 @@ RSpec.describe UsersController, type: :request do
           end
 
           it "shows an error if passwords don't match" do
-            expect(response).to have_http_status(:unprocessable_entity)
+            expect(response).to have_http_status(:unprocessable_content)
             expect(page).to have_selector(".govuk-error-summary__title")
           end
         end
@@ -1928,7 +1926,7 @@ RSpec.describe UsersController, type: :request do
             let(:params) { { id: user.id, user: { organisation_id: "" } } }
 
             it "does not update the organisation" do
-              expect(response).to have_http_status(:unprocessable_entity)
+              expect(response).to have_http_status(:unprocessable_content)
               expect(page).to have_selector(".govuk-error-summary__title")
             end
           end
@@ -2097,7 +2095,7 @@ RSpec.describe UsersController, type: :request do
               let(:params) { { id: other_user.id, user: { organisation_id: "" } } }
 
               it "does not update the organisation" do
-                expect(response).to have_http_status(:unprocessable_entity)
+                expect(response).to have_http_status(:unprocessable_content)
                 expect(page).to have_selector(".govuk-error-summary__title")
               end
             end
@@ -2136,7 +2134,7 @@ RSpec.describe UsersController, type: :request do
               end
 
               it "displays the error message" do
-                expect(response).to have_http_status(:unprocessable_entity)
+                expect(response).to have_http_status(:unprocessable_content)
                 expect(page).to have_content("Select if you want to reassign logs")
               end
             end
@@ -2184,7 +2182,7 @@ RSpec.describe UsersController, type: :request do
                 end
 
                 it "required the new org to have stock owner relationship with the current user org" do
-                  expect(response).to have_http_status(:unprocessable_entity)
+                  expect(response).to have_http_status(:unprocessable_content)
                   expect(page).to have_content("New org must be a stock owner of #{other_user.organisation_name} to make this change.")
                 end
               end
@@ -2198,7 +2196,7 @@ RSpec.describe UsersController, type: :request do
                 end
 
                 it "required the new org to have stock owner relationship with the managing organisations" do
-                  expect(response).to have_http_status(:unprocessable_entity)
+                  expect(response).to have_http_status(:unprocessable_content)
                   expect(page).to have_content("New org must be a stock owner of #{other_user.organisation_name}, #{new_organisation_2.name}, and #{new_organisation_3.name} to make this change.")
                 end
               end
@@ -2215,7 +2213,7 @@ RSpec.describe UsersController, type: :request do
                 end
 
                 it "required the new org to have managing agent relationship with the current user org" do
-                  expect(response).to have_http_status(:unprocessable_entity)
+                  expect(response).to have_http_status(:unprocessable_content)
                   expect(page).to have_content("New org must be a managing agent of #{other_user.organisation_name} to make this change.")
                 end
               end
@@ -2229,7 +2227,7 @@ RSpec.describe UsersController, type: :request do
                 end
 
                 it "required the new org to have managing agent relationship with owning organisations" do
-                  expect(response).to have_http_status(:unprocessable_entity)
+                  expect(response).to have_http_status(:unprocessable_content)
                   expect(page).to have_content("New org must be a managing agent of #{other_user.organisation.name}, #{new_organisation_2.name}, and #{new_organisation_3.name} to make this change.")
                 end
               end
@@ -2246,7 +2244,7 @@ RSpec.describe UsersController, type: :request do
         end
 
         it "show an error" do
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
         end
       end
     end
@@ -2309,7 +2307,7 @@ RSpec.describe UsersController, type: :request do
 
         it "shows an error messages for all failed validations" do
           request
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
           expect(page).to have_content(I18n.t("activerecord.errors.models.user.attributes.name.blank"))
           expect(page).to have_content(I18n.t("activerecord.errors.models.user.attributes.email.blank"))
           expect(page).to have_content(I18n.t("activerecord.errors.models.user.attributes.organisation_id.blank"))
@@ -2324,7 +2322,7 @@ RSpec.describe UsersController, type: :request do
 
         it "shows an error" do
           request
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
           expect(page).to have_content(I18n.t("activerecord.errors.models.user.attributes.email.taken"))
         end
       end

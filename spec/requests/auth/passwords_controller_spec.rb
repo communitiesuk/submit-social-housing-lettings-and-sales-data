@@ -70,7 +70,7 @@ RSpec.describe Auth::PasswordsController, type: :request do
         put "/account/password", params: update_password_params
         # Devise redirects once after re-sign in with new password and then root redirects as well.
         follow_redirect!
-        expect(page).to have_css("div", class: "govuk-notification-banner__heading", text: message)
+        expect(page).to have_css("p", class: "govuk-notification-banner__heading", text: message)
       end
     end
   end
@@ -107,7 +107,7 @@ RSpec.describe Auth::PasswordsController, type: :request do
 
         it "shows an error on the same page" do
           put "/account/password", headers: headers, params: params
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
           expect(page).to have_css("h1", text: "Reset your password")
           expect(page).to have_content("passwords you entered do not match")
         end

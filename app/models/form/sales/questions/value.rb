@@ -2,6 +2,7 @@ class Form::Sales::Questions::Value < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "value"
+    @copy_key = form.start_year_2025_or_later? ? "sales.sale_information.value.#{page.id}" : "sales.sale_information.value"
     @type = "numeric"
     @min = 0
     @step = 1

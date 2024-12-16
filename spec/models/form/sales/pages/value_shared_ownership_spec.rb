@@ -3,9 +3,13 @@ require "rails_helper"
 RSpec.describe Form::Sales::Pages::ValueSharedOwnership, type: :model do
   subject(:page) { described_class.new(page_id, page_definition, subsection) }
 
-  let(:page_id) { nil }
+  let(:page_id) { "value_shared_ownership" }
   let(:page_definition) { nil }
   let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2023, 4, 1))) }
+
+  before do
+    allow(page.subsection.form).to receive(:start_year_2025_or_later?).and_return(false)
+  end
 
   it "has correct subsection" do
     expect(page.subsection).to eq(subsection)

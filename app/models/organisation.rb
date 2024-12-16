@@ -53,11 +53,12 @@ class Organisation < ApplicationRecord
     PRP: 2,
   }.freeze
 
-  enum provider_type: PROVIDER_TYPE
+  enum :provider_type, PROVIDER_TYPE
 
   alias_method :la?, :LA?
 
   validates :name, presence: { message: I18n.t("validations.organisation.name_missing") }
+  validates :name, uniqueness: { case_sensitive: false, message: I18n.t("validations.organisation.name_not_unique") }
   validates :provider_type, presence: { message: I18n.t("validations.organisation.provider_type_missing") }
 
   def self.find_by_id_on_multiple_fields(id)

@@ -310,7 +310,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
 
           it "only has one error added to the field" do
             parser.valid?
-            expect(parser.errors[:field_23]).to eql([I18n.t("validations.sales.2024.bulk_upload.not_answered", question: "address line 1.")])
+            expect(parser.errors[:field_23]).to eql([I18n.t("validations.sales.2024.bulk_upload.address.not_answered")])
           end
         end
 
@@ -824,7 +824,6 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
     context "when a hidden log already exists in db" do
       before do
         parser.log.status = "pending"
-        parser.log.skip_update_status = true
         parser.log.save!
       end
 
@@ -1042,11 +1041,11 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
 
           it "adds appropriate errors to UPRN and key address fields" do
             parser.valid?
-            expect(parser.errors[:field_22]).to eql([I18n.t("validations.sales.2024.bulk_upload.not_answered", question: "UPRN.")])
-            expect(parser.errors[:field_23]).to eql([I18n.t("validations.sales.2024.bulk_upload.not_answered", question: "address line 1.")])
-            expect(parser.errors[:field_25]).to eql([I18n.t("validations.sales.2024.bulk_upload.not_answered", question: "town or city.")])
-            expect(parser.errors[:field_27]).to eql([I18n.t("validations.sales.2024.bulk_upload.not_answered", question: "part 1 of postcode.")])
-            expect(parser.errors[:field_28]).to eql([I18n.t("validations.sales.2024.bulk_upload.not_answered", question: "part 2 of postcode.")])
+            expect(parser.errors[:field_22]).to eql([I18n.t("validations.sales.2024.bulk_upload.address.not_answered")])
+            expect(parser.errors[:field_23]).to eql([I18n.t("validations.sales.2024.bulk_upload.address.not_answered")])
+            expect(parser.errors[:field_25]).to eql([I18n.t("validations.sales.2024.bulk_upload.address.not_answered")])
+            expect(parser.errors[:field_27]).to eql([I18n.t("validations.sales.2024.bulk_upload.address.not_answered")])
+            expect(parser.errors[:field_28]).to eql([I18n.t("validations.sales.2024.bulk_upload.address.not_answered")])
           end
         end
 
@@ -1055,8 +1054,8 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
 
           it "adds errors to UPRN and the missing key address field" do
             parser.valid?
-            expect(parser.errors[:field_22]).to eql([I18n.t("validations.sales.2024.bulk_upload.not_answered", question: "UPRN.")])
-            expect(parser.errors[:field_23]).to eql([I18n.t("validations.sales.2024.bulk_upload.not_answered", question: "address line 1.")])
+            expect(parser.errors[:field_22]).to eql([I18n.t("validations.sales.2024.bulk_upload.address.not_answered")])
+            expect(parser.errors[:field_23]).to eql([I18n.t("validations.sales.2024.bulk_upload.address.not_answered")])
             expect(parser.errors[:field_25]).to be_empty
             expect(parser.errors[:field_27]).to be_empty
             expect(parser.errors[:field_28]).to be_empty
@@ -1105,7 +1104,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
               parser.valid?
               expect(parser.errors[:field_22]).to be_empty
               %i[field_23 field_24 field_25 field_26 field_27 field_28].each do |field|
-                expect(parser.errors[field]).to eql([I18n.t("validations.sales.2024.bulk_upload.address.not_found")])
+                expect(parser.errors[field]).to eql([I18n.t("validations.sales.2024.bulk_upload.address.not_determined")])
               end
             end
           end

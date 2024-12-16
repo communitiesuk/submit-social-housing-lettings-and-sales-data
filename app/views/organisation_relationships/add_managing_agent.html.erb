@@ -28,12 +28,10 @@
     <%= govuk_button_link_to("Cancel", managing_agents_organisation_path(@organisation), secondary: true) %>
   </div>
   <%= govuk_details(summary_text: "Can't find the managing agent you're looking for?") do %>
-    <ul class="govuk-list govuk-list--bullet">
-      <li>Double check the spelling and try again</li>
-      <li>Type the first few letters to see the suggestions</li>
-      <li>If you still can't find it,
-        <%= govuk_link_to("contact the MHCLG service desk", GlobalConstants::HELPDESK_URL, rel: "noreferrer noopener", target: "_blank") %>
-      </li>
-    </ul>
+    <%= govuk_list [
+      "Double check the spelling and try again",
+      "Type the first few letters to see the suggestions",
+      "If you still can't find it, #{govuk_link_to('contact the MHCLG service desk', GlobalConstants::HELPDESK_URL, rel: 'noreferrer noopener', target: '_blank')}",
+      ], type: :bullet %>
   <% end %>
 <% end %>

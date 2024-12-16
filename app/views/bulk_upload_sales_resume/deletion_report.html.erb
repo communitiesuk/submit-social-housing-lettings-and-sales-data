@@ -28,6 +28,6 @@
 <div class="govuk-button-group">
   <%= form_with model: @form, scope: :form, url: page_bulk_upload_sales_resume_path(@bulk_upload, "confirm"), method: :patch do |f| %>
     <%= f.govuk_submit "Clear this data and upload the logs" %>
-    <%= govuk_button_link_to "I have fixed these errors and I want to reupload the file", start_bulk_upload_sales_logs_path, secondary: true %>
+    <%= govuk_button_link_to "I have fixed these errors and I want to upload the file again", start_bulk_upload_sales_logs_path, secondary: true %>
   <% end %>
 </div>

@@ -5,8 +5,8 @@ require "shared/shared_log_examples"
 # rubocop:disable RSpec/MessageChain
 RSpec.describe LettingsLog do
   let(:different_managing_organisation) { create(:organisation) }
-  let(:assigned_to_user) { create(:user) }
-  let(:owning_organisation) { assigned_to_user.organisation }
+  let(:owning_organisation) { create(:organisation, rent_periods: [2]) }
+  let(:assigned_to_user) { create(:user, organisation: owning_organisation) }
   let(:fake_2021_2022_form) { Form.new("spec/fixtures/forms/2021_2022.json") }
 
   around do |example|
@@ -219,6 +219,31 @@ RSpec.describe LettingsLog do
         expect(completed_lettings_log.not_started?).to be(false)
         expect(completed_lettings_log.completed?).to be(true)
       end
+    end
+
+    it "sets the correct status for a completed lettings log" do
+      complete_lettings_log = build(:lettings_log, :completed, assigned_to: assigned_to_user)
+      complete_lettings_log.save!
+      expect(complete_lettings_log.reload.status).to eq "completed"
+    end
+
+    it "returns the correct status for an in progress lettings log" do
+      in_progress_lettings_log = build(:lettings_log, :in_progress, assigned_to: assigned_to_user)
+      in_progress_lettings_log.save!
+      expect(in_progress_lettings_log.reload.status).to eq "in_progress"
+    end
+
+    it "recalculates the status if it's currently set incorrectly" do
+      complete_lettings_log = build(:lettings_log, :completed, assigned_to: assigned_to_user, status: "in_progress")
+      complete_lettings_log.save!
+      expect(complete_lettings_log.reload.status).to eq "completed"
+    end
+
+    it "recalculates status_cache if the log is pending" do
+      complete_lettings_log = build(:lettings_log, :completed, assigned_to: assigned_to_user, status_cache: "in_progress", status: "pending")
+      complete_lettings_log.save!
+      expect(complete_lettings_log.reload.status_cache).to eq "completed"
+      expect(complete_lettings_log.status).to eq "pending"
     end
   end
 

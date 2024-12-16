@@ -29,7 +29,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
           end
 
           it "shows the tab navigation" do
-            expected_html = "<nav class=\"app-primary-navigation\""
+            expected_html = "<nav aria-label=\"Menu\" class=\"govuk-service-navigation__wrapper\""
             expect(response.body).to include(expected_html)
           end
 
@@ -40,7 +40,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
           it "shows a table of stock owners" do
             expected_html = "<table class=\"govuk-table\""
             expect(response.body).to include(expected_html)
-            expect(response.body).to include(stock_owner.name)
+            expect(CGI.unescapeHTML(response.body)).to include(stock_owner.name)
           end
 
           it "shows only stock owners for the current user's organisation" do
@@ -53,12 +53,12 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
           end
 
           it "shows the pagination count" do
-            expect(page).to have_content("1 total stock owners")
+            expect(page).to have_content("1 total stock owner")
           end
 
           context "when adding a stock owner" do
             let!(:active_organisation) { FactoryBot.create(:organisation, name: "Active Org", active: true) }
-            let!(:inactive_organisation) { FactoryBot.create(:organisation, name: "Inactive LTD", active: false) }
+            let!(:inactive_organisation) { FactoryBot.create(:organisation, name: "Inactive LTD 2", active: false) }
 
             before do
               get "/organisations/#{organisation.id}/stock-owners/add", headers:, params: {}
@@ -115,7 +115,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
           let!(:managing_agent) { FactoryBot.create(:organisation) }
           let!(:other_org_managing_agent) { FactoryBot.create(:organisation, name: "Foobar LTD") }
           let!(:inactive_managing_agent) { FactoryBot.create(:organisation, name: "Inactive LTD", active: false) }
-          let!(:other_organisation) { FactoryBot.create(:organisation, name: "Foobar LTD") }
+          let!(:other_organisation) { FactoryBot.create(:organisation, name: "Foobar LTD 3") }
 
           before do
             FactoryBot.create(:organisation_relationship, parent_organisation: organisation, child_organisation: managing_agent)
@@ -125,7 +125,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
           end
 
           it "shows the tab navigation" do
-            expected_html = "<nav class=\"app-primary-navigation\""
+            expected_html = "<nav aria-label=\"Menu\" class=\"govuk-service-navigation__wrapper\""
             expect(response.body).to include(expected_html)
           end
 
@@ -136,7 +136,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
           it "shows a table of managing-agents" do
             expected_html = "<table class=\"govuk-table\""
             expect(response.body).to include(expected_html)
-            expect(response.body).to include(managing_agent.name)
+            expect(CGI.unescapeHTML(response.body)).to include(managing_agent.name)
           end
 
           it "shows only managing-agents for the current user's organisation" do
@@ -149,7 +149,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
           end
 
           it "shows the pagination count" do
-            expect(page).to have_content("1 total managing agents")
+            expect(page).to have_content("1 total managing agent")
           end
 
           context "and current organisation is deactivated" do
@@ -316,7 +316,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
         context "with an organisation that the user belongs to" do
           let!(:stock_owner) { FactoryBot.create(:organisation) }
           let!(:other_org_stock_owner) { FactoryBot.create(:organisation, name: "Foobar LTD") }
-          let!(:other_organisation) { FactoryBot.create(:organisation, name: "Foobar LTD") }
+          let!(:other_organisation) { FactoryBot.create(:organisation, name: "Foobar LTD 2") }
 
           before do
             FactoryBot.create(:organisation_relationship, child_organisation: organisation, parent_organisation: stock_owner)
@@ -325,7 +325,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
           end
 
           it "shows the tab navigation" do
-            expected_html = "<nav class=\"app-primary-navigation\""
+            expected_html = "<nav aria-label=\"Menu\" class=\"govuk-service-navigation__wrapper\""
             expect(response.body).to include(expected_html)
           end
 
@@ -336,7 +336,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
           it "shows a table of stock owners" do
             expected_html = "<table class=\"govuk-table\""
             expect(response.body).to include(expected_html)
-            expect(response.body).to include(stock_owner.name)
+            expect(CGI.unescapeHTML(response.body)).to include(stock_owner.name)
           end
 
           it "shows only stock owners for the current user's organisation" do
@@ -345,7 +345,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
           end
 
           it "shows the pagination count" do
-            expect(page).to have_content("1 total stock owners")
+            expect(page).to have_content("1 total stock owner")
           end
         end
 
@@ -452,7 +452,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
         context "with an organisation that the user belongs to" do
           let!(:managing_agent) { FactoryBot.create(:organisation) }
           let!(:other_org_managing_agent) { FactoryBot.create(:organisation, name: "Foobar LTD") }
-          let!(:other_organisation) { FactoryBot.create(:organisation, name: "Foobar LTD") }
+          let!(:other_organisation) { FactoryBot.create(:organisation, name: "Foobar LTD 5") }
 
           before do
             FactoryBot.create(:organisation_relationship, parent_organisation: organisation, child_organisation: managing_agent)
@@ -461,7 +461,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
           end
 
           it "shows the tab navigation" do
-            expected_html = "<nav class=\"app-primary-navigation\""
+            expected_html = "<nav aria-label=\"Menu\" class=\"govuk-service-navigation__wrapper\""
             expect(response.body).to include(expected_html)
           end
 
@@ -472,7 +472,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
           it "shows a table of managing agents" do
             expected_html = "<table class=\"govuk-table\""
             expect(response.body).to include(expected_html)
-            expect(response.body).to include(managing_agent.name)
+            expect(CGI.unescapeHTML(response.body)).to include(managing_agent.name)
           end
 
           it "shows only managing agents for the current user's organisation" do
@@ -481,7 +481,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
           end
 
           it "shows the pagination count" do
-            expect(page).to have_content("1 total managing agents")
+            expect(page).to have_content("1 total managing agent")
           end
         end
 
@@ -647,7 +647,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
         end
 
         it "shows the pagination count" do
-          expect(page).to have_content("1 total stock owners")
+          expect(page).to have_content("1 total stock owner")
         end
 
         context "when adding a stock owner" do
@@ -697,7 +697,7 @@ RSpec.describe OrganisationRelationshipsController, type: :request do
         end
 
         it "shows the pagination count" do
-          expect(page).to have_content("1 total managing agents")
+          expect(page).to have_content("1 total managing agent")
         end
 
         it "shows remove link(s)" do

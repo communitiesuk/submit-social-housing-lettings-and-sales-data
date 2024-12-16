@@ -1192,7 +1192,7 @@ RSpec.describe LocationsController, type: :request do
         end
 
         it "displays the new page with an error message" do
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
           expect(page).to have_content(I18n.t("validations.location.startdate_invalid"))
         end
       end
@@ -1266,7 +1266,7 @@ RSpec.describe LocationsController, type: :request do
         end
 
         it "displays the new page with an error message" do
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
           expect(page).to have_content(I18n.t("validations.location.startdate_invalid"))
         end
       end
@@ -1702,7 +1702,7 @@ RSpec.describe LocationsController, type: :request do
         let(:params) { { location_deactivation_period: { "deactivation_date": "" } } }
 
         it "displays the new page with an error message" do
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
           expect(page).to have_content(I18n.t("validations.location.toggle_date.not_selected"))
         end
       end
@@ -1711,7 +1711,7 @@ RSpec.describe LocationsController, type: :request do
         let(:params) { { location_deactivation_period: { deactivation_date_type: "other", "deactivation_date(3i)": "10", "deactivation_date(2i)": "44", "deactivation_date(1i)": "2022" } } }
 
         it "displays the new page with an error message" do
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
           expect(page).to have_content(I18n.t("validations.location.toggle_date.invalid"))
         end
       end
@@ -1720,7 +1720,7 @@ RSpec.describe LocationsController, type: :request do
         let(:params) { { location_deactivation_period: { deactivation_date_type: "other", "deactivation_date(3i)": "10", "deactivation_date(2i)": "4", "deactivation_date(1i)": "2020" } } }
 
         it "displays the new page with an error message" do
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
           expect(page).to have_content(I18n.t("validations.location.toggle_date.out_of_range", date: "1 April 2022"))
         end
       end
@@ -1729,7 +1729,7 @@ RSpec.describe LocationsController, type: :request do
         let(:params) { { location_deactivation_period: { deactivation_date_type: "other", "deactivation_date(3i)": "", "deactivation_date(2i)": "2", "deactivation_date(1i)": "2022" } } }
 
         it "displays page with an error message" do
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
           expect(page).to have_content(I18n.t("validations.location.toggle_date.invalid"))
         end
       end
@@ -1738,7 +1738,7 @@ RSpec.describe LocationsController, type: :request do
         let(:params) { { location_deactivation_period: { deactivation_date_type: "other", "deactivation_date(3i)": "2", "deactivation_date(2i)": "", "deactivation_date(1i)": "2022" } } }
 
         it "displays page with an error message" do
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
           expect(page).to have_content(I18n.t("validations.location.toggle_date.invalid"))
         end
       end
@@ -1747,7 +1747,7 @@ RSpec.describe LocationsController, type: :request do
         let(:params) { { location_deactivation_period: { deactivation_date_type: "other", "deactivation_date(3i)": "2", "deactivation_date(2i)": "2", "deactivation_date(1i)": "" } } }
 
         it "displays page with an error message" do
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
           expect(page).to have_content(I18n.t("validations.location.toggle_date.invalid"))
         end
       end
@@ -1758,7 +1758,7 @@ RSpec.describe LocationsController, type: :request do
         let(:add_deactivations) { create(:location_deactivation_period, deactivation_date: Time.zone.local(2022, 5, 5), reactivation_date: Time.zone.local(2022, 10, 12), location:) }
 
         it "displays page with an error message" do
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
           expect(page).to have_content(I18n.t("validations.location.deactivation.during_deactivated_period"))
         end
       end
@@ -2110,7 +2110,7 @@ RSpec.describe LocationsController, type: :request do
         let(:params) { { location_deactivation_period: { "reactivation_date": "" } } }
 
         it "displays the new page with an error message" do
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
           expect(page).to have_content(I18n.t("validations.location.toggle_date.not_selected"))
         end
       end
@@ -2119,7 +2119,7 @@ RSpec.describe LocationsController, type: :request do
         let(:params) { { location_deactivation_period: { reactivation_date_type: "other", "reactivation_date(3i)": "10", "reactivation_date(2i)": "44", "reactivation_date(1i)": "2022" } } }
 
         it "displays the new page with an error message" do
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
           expect(page).to have_content(I18n.t("validations.location.toggle_date.invalid"))
         end
       end
@@ -2128,7 +2128,7 @@ RSpec.describe LocationsController, type: :request do
         let(:params) { { location_deactivation_period: { reactivation_date_type: "other", "reactivation_date(3i)": "10", "reactivation_date(2i)": "4", "reactivation_date(1i)": "2020" } } }
 
         it "displays the new page with an error message" do
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
           expect(page).to have_content(I18n.t("validations.location.toggle_date.out_of_range", date: "1 April 2022"))
         end
       end
@@ -2137,7 +2137,7 @@ RSpec.describe LocationsController, type: :request do
         let(:params) { { location_deactivation_period: { reactivation_date_type: "other", "reactivation_date(3i)": "", "reactivation_date(2i)": "2", "reactivation_date(1i)": "2022" } } }
 
         it "displays page with an error message" do
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
           expect(page).to have_content(I18n.t("validations.location.toggle_date.invalid"))
         end
       end
@@ -2146,7 +2146,7 @@ RSpec.describe LocationsController, type: :request do
         let(:params) { { location_deactivation_period: { reactivation_date_type: "other", "reactivation_date(3i)": "2", "reactivation_date(2i)": "", "reactivation_date(1i)": "2022" } } }
 
         it "displays page with an error message" do
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
           expect(page).to have_content(I18n.t("validations.location.toggle_date.invalid"))
         end
       end
@@ -2155,7 +2155,7 @@ RSpec.describe LocationsController, type: :request do
         let(:params) { { location_deactivation_period: { reactivation_date_type: "other", "reactivation_date(3i)": "2", "reactivation_date(2i)": "2", "reactivation_date(1i)": "" } } }
 
         it "displays page with an error message" do
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
           expect(page).to have_content(I18n.t("validations.location.toggle_date.invalid"))
         end
       end
@@ -2165,7 +2165,7 @@ RSpec.describe LocationsController, type: :request do
         let(:params) { { location_deactivation_period: { reactivation_date_type: "other", "reactivation_date(3i)": "8", "reactivation_date(2i)": "9", "reactivation_date(1i)": "2022" } } }
 
         it "displays page with an error message" do
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
           expect(page).to have_content(I18n.t("validations.location.reactivation.before_deactivation", date: "10 October 2022"))
         end
       end

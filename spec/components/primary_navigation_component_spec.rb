@@ -14,7 +14,7 @@ RSpec.describe PrimaryNavigationComponent, type: :component do
     it "then that item appears as selected" do
       result = render_inline(described_class.new(items:))
 
-      expect(result.css('.app-primary-navigation__link[aria-current="page"]').text).to include("Organisations")
+      expect(result.css('.govuk-service-navigation__link[aria-current="page"]').text).to include("Organisations")
     end
   end
 

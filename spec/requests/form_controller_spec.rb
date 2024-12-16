@@ -512,7 +512,6 @@ RSpec.describe FormController, type: :request do
               owning_organisation: organisation,
               assigned_to: user,
               status: "pending",
-              skip_update_status: true,
             )
           end
 
@@ -582,8 +581,9 @@ RSpec.describe FormController, type: :request do
             allow(Rails.logger).to receive(:info)
           end
 
-          it "re-renders the same page with errors if validation fails" do
+          it "redirects to the same page with errors if validation fails" do
             post "/lettings-logs/#{lettings_log.id}/#{page_id.dasherize}", params: params
+            follow_redirect!
             expect(page).to have_content("There is a problem")
             expect(page).to have_content("Error: What is the tenant’s age?")
           end
@@ -591,6 +591,8 @@ RSpec.describe FormController, type: :request do
           it "resets errors when fixed" do
             post "/lettings-logs/#{lettings_log.id}/#{page_id.dasherize}", params: params
             post "/lettings-logs/#{lettings_log.id}/#{page_id.dasherize}", params: valid_params
+            follow_redirect!
+            expect(page).not_to have_content("There is a problem")
             get "/lettings-logs/#{lettings_log.id}/#{page_id.dasherize}"
             expect(page).not_to have_content("There is a problem")
           end
@@ -616,6 +618,7 @@ RSpec.describe FormController, type: :request do
 
             it "validates the date correctly" do
               post "/lettings-logs/#{lettings_log.id}/#{page_id.dasherize}", params: params
+              follow_redirect!
               expect(page).to have_content("There is a problem")
             end
           end
@@ -693,6 +696,7 @@ RSpec.describe FormController, type: :request do
 
               it "validates the date correctly" do
                 post "/lettings-logs/#{lettings_log.id}/#{page_id.dasherize}", params: params
+                follow_redirect!
                 expect(page).to have_content("There is a problem")
               end
             end
@@ -713,8 +717,29 @@ RSpec.describe FormController, type: :request do
 
               it "validates the date correctly" do
                 post "/sales-logs/#{sales_log.id}/#{page_id.dasherize}", params: params
+                follow_redirect!
                 expect(page).to have_content("There is a problem")
               end
+            end
+          end
+
+          context "with long error messages" do
+            let(:sales_log) { create(:sales_log, :completed, assigned_to: user) }
+            let(:page_id) { "purchase_price" }
+            let(:params) do
+              {
+                id: sales_log.id,
+                sales_log: {
+                  page: page_id,
+                  "value" => 1,
+                },
+              }
+            end
+
+            it "can deal with long error messages" do
+              post "/sales-logs/#{sales_log.id}/#{page_id.dasherize}", params: params
+              follow_redirect!
+              expect(page).to have_content("There is a problem")
             end
           end
         end
@@ -776,8 +801,9 @@ RSpec.describe FormController, type: :request do
             Timecop.unfreeze
           end
 
-          it "re-renders the same page with errors if validation fails" do
+          it "redirects the same page with errors if validation fails" do
             post "/lettings-logs/#{lettings_log.id}/managing-organisation", params: params
+            follow_redirect!
             expect(page).to have_content("There is a problem")
             expect(page).to have_content("Error: Which organisation manages this letting?")
           end
@@ -1161,7 +1187,6 @@ RSpec.describe FormController, type: :request do
 
           it "displays a success banner" do
             follow_redirect!
-            follow_redirect!
 
             expect(response.body).to include("You have successfully updated Q31: lead tenant’s age")
           end
@@ -1184,7 +1209,6 @@ RSpec.describe FormController, type: :request do
           end
 
           it "displays a success banner without crashing" do
-            follow_redirect!
             follow_redirect!
             expect(response.body).to include("You have successfully updated")
           end

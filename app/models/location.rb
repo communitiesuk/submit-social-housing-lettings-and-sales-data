@@ -2,7 +2,8 @@ class Location < ApplicationRecord
   validates :postcode, on: :postcode, presence: { message: I18n.t("validations.location.postcode_blank") }
   validate :validate_postcode, on: :postcode, if: proc { |model| model.postcode.presence }
   validates :location_admin_district, on: :location_admin_district, presence: { message: I18n.t("validations.location_admin_district") }
-  validates :units, on: :units, presence: { message: I18n.t("validations.location.units") }
+  validates :units, on: :units, presence: { message: I18n.t("validations.location.units.must_be_number") }
+  validates :units, on: :units, numericality: { greater_than_or_equal_to: 1, message: I18n.t("validations.location.units.must_be_one_or_more") }
   validates :type_of_unit, on: :type_of_unit, presence: { message: I18n.t("validations.location.type_of_unit") }
   validates :mobility_type, on: :mobility_type, presence: { message: I18n.t("validations.location.mobility_standards") }
   validates :startdate, on: :startdate, presence: { message: I18n.t("validations.location.startdate_invalid") }
@@ -170,7 +171,8 @@ class Location < ApplicationRecord
   DUPLICATE_LOCATION_ATTRIBUTES = %w[scheme_id postcode mobility_type].freeze
   LOCAL_AUTHORITIES = LocalAuthority.all.map { |la| [la.name, la.code] }.to_h
 
-  enum local_authorities: LOCAL_AUTHORITIES
+  attribute :local_authorities, :string
+  enum :local_authorities, LOCAL_AUTHORITIES
   def self.local_authorities_for_current_year
     LocalAuthority.all.active(Time.zone.today).england.map { |la| [la.code, la.name] }.to_h
   end
@@ -183,7 +185,7 @@ class Location < ApplicationRecord
     "Missing": "X",
   }.freeze
 
-  enum mobility_type: MOBILITY_TYPE
+  enum :mobility_type, MOBILITY_TYPE
 
   TYPE_OF_UNIT = {
     "Bungalow": 6,
@@ -194,7 +196,7 @@ class Location < ApplicationRecord
     "Shared house or hostel": 4,
   }.freeze
 
-  enum type_of_unit: TYPE_OF_UNIT
+  enum :type_of_unit, TYPE_OF_UNIT
 
   def self.find_by_id_on_multiple_fields(id)
     return if id.nil?

@@ -98,7 +98,7 @@ RSpec.describe BulkUploadSalesSoftValidationsCheckController, type: :request do
 
       expect(response).to be_successful
 
-      expect(response.body).to include("You have chosen to upload all logs from this bulk upload.")
+      expect(response.body).to include("Are you sure you want to upload all logs from this bulk upload?")
       expect(response.body).to include("You will upload 2 logs. There are unexpected answers in 2 logs, and 2 unexpected answers in total. These unexpected answers will be marked as correct.")
       expect(response.body).not_to include("You’ve successfully uploaded")
     end

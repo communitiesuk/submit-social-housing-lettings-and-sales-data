@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_11_22_154743) do
+ActiveRecord::Schema[7.2].define(version: 2024_12_06_142944) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -113,6 +113,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_22_154743) do
     t.integer "increment_number", default: 1, null: false
     t.boolean "empty_export", default: false, null: false
     t.string "collection"
+    t.integer "year"
   end
 
   create_table "la_rent_ranges", force: :cascade do |t|
@@ -545,6 +546,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_22_154743) do
     t.datetime "discarded_at"
     t.datetime "schemes_deduplicated_at"
     t.index ["absorbing_organisation_id"], name: "index_organisations_on_absorbing_organisation_id"
+    t.index ["name"], name: "index_organisations_on_name", unique: true
     t.index ["old_visible_id"], name: "index_organisations_on_old_visible_id", unique: true
   end
 
@@ -761,6 +763,11 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_22_154743) do
     t.bigint "created_by_id"
     t.integer "has_management_fee"
     t.decimal "management_fee", precision: 10, scale: 2
+    t.integer "firststair"
+    t.integer "numstair"
+    t.decimal "mrentprestaircasing", precision: 10, scale: 2
+    t.datetime "lasttransaction"
+    t.datetime "initialpurchase"
     t.index ["assigned_to_id"], name: "index_sales_logs_on_assigned_to_id"
     t.index ["bulk_upload_id"], name: "index_sales_logs_on_bulk_upload_id"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
