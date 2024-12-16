@@ -84,7 +84,7 @@ RSpec.describe CheckErrorsController, type: :request do
         end
 
         it "displays correct clear and change links" do
-          expect(page.all(:button, value: "Clear").count).to eq(2)
+          expect(page.all(:button, value: "Clear").count).to eq(1)
           expect(page).to have_link("Change", count: 1)
           expect(page).to have_button("Clear all")
         end

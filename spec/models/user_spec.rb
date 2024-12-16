@@ -726,15 +726,8 @@ RSpec.describe User, type: :model do
       context "and the user has pending logs assigned to them" do
         let(:lettings_bu) { create(:bulk_upload, :lettings) }
         let(:sales_bu) { create(:bulk_upload, :sales) }
-        let!(:pending_lettings_log) { build(:lettings_log, status: "pending", assigned_to: user, bulk_upload: lettings_bu) }
-        let!(:pending_sales_log) { build(:sales_log, status: "pending", assigned_to: user, bulk_upload: sales_bu) }
-
-        before do
-          pending_lettings_log.skip_update_status = true
-          pending_lettings_log.save!
-          pending_sales_log.skip_update_status = true
-          pending_sales_log.save!
-        end
+        let!(:pending_lettings_log) { create(:lettings_log, status: "pending", assigned_to: user, bulk_upload: lettings_bu) }
+        let!(:pending_sales_log) { create(:sales_log, status: "pending", assigned_to: user, bulk_upload: sales_bu) }
 
         it "sets choice for fixing the logs to cancelled-by-moved-user" do
           user.reassign_logs_and_update_organisation(new_organisation, "reassign_all")

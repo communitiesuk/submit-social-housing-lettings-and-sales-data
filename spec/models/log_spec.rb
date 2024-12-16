@@ -29,6 +29,17 @@ RSpec.describe Log, type: :model do
       in_progress_lettings_log = build(:lettings_log, :in_progress, assigned_to: user)
       expect(in_progress_lettings_log.calculate_status).to eq "in_progress"
     end
+
+    it "recalculates the status if it's currently set incorrectly" do
+      complete_lettings_log = build(:lettings_log, :completed, assigned_to: user, status: "in_progress")
+      expect(complete_lettings_log.calculate_status).to eq "completed"
+    end
+
+    it "recalculates status_cache if the log is pending" do
+      complete_lettings_log = build(:lettings_log, :completed, assigned_to: user, status_cache: "in_progress", status: "pending")
+      expect(complete_lettings_log.calculate_status).to eq "completed"
+      expect(complete_lettings_log.calculate_status).to eq "completed"
+    end
   end
 
   describe "#blank_invalid_non_setup_fields!" do

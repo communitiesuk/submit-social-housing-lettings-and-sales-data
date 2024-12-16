@@ -44,6 +44,8 @@ class FormController < ApplicationController
           end
         end
         flash[:log_data] = responses_for_page
+        question_ids = (@log.errors.map(&:attribute) - [:base]).uniq
+        flash[:pages_with_errors_count] = question_ids.map { |id| @log.form.get_question(id, @log)&.page&.id }.compact.uniq.count
         redirect_to send("#{@log.class.name.underscore}_#{@page.id}_path", @log, { referrer: request.params["referrer"], original_page_id: request.params["original_page_id"], related_question_ids: request.params["related_question_ids"] })
       end
     else
@@ -85,6 +87,7 @@ class FormController < ApplicationController
       page_id = request.path.split("/")[-1].underscore
       @page = form.get_page(page_id)
       @subsection = form.subsection_for_page(@page)
+      @pages_with_errors_count = 0
       if @page.routed_to?(@log, current_user) || is_referrer_type?("interruption_screen") || adding_answer_from_check_errors_page?
         if updated_answer_from_check_errors_page?
           @questions = request.params["related_question_ids"].map { |id| @log.form.get_question(id, @log) }
@@ -93,6 +96,7 @@ class FormController < ApplicationController
           if flash[:errors].present?
             restore_previous_errors(flash[:errors])
             restore_error_field_values(flash[:log_data])
+            @pages_with_errors_count = flash[:pages_with_errors_count]
           end
           render "form/page"
         end
@@ -109,8 +113,13 @@ private
   def restore_error_field_values(previous_responses)
     return unless previous_responses
 
-    previous_responses_to_reset = previous_responses.reject do |key, _|
-      @log.form.get_question(key, @log)&.type == "date"
+    previous_responses_to_reset = previous_responses.reject do |key, value|
+      if @log.form.get_question(key, @log)&.type == "date" && value.present?
+        year = value.split("-").first.to_i
+        year&.zero?
+      else
+        false
+      end
     end
 
     @log.assign_attributes(previous_responses_to_reset)
@@ -437,7 +446,7 @@ private
       @log.valid?
       @log.reload
       error_attributes = @log.errors.map(&:attribute)
-      @questions = @log.form.questions.select { |q| error_attributes.include?(q.id.to_sym) }
+      @questions = @log.form.questions.select { |q| error_attributes.include?(q.id.to_sym) && q.page.routed_to?(@log, current_user) }
     end
     render "form/check_errors"
   end

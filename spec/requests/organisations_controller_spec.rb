@@ -480,7 +480,7 @@ RSpec.describe OrganisationsController, type: :request do
           end
 
           it "shows the tab navigation" do
-            expected_html = "<nav class=\"app-primary-navigation\""
+            expected_html = "<nav aria-label=\"Menu\" class=\"govuk-service-navigation__wrapper\""
             expect(response.body).to include(expected_html)
           end
 
@@ -612,7 +612,7 @@ RSpec.describe OrganisationsController, type: :request do
           end
 
           it "shows the tab navigation" do
-            expected_html = "<nav class=\"app-primary-navigation\""
+            expected_html = "<nav aria-label=\"Menu\" class=\"govuk-service-navigation__wrapper\""
             expect(response.body).to include(expected_html)
           end
 
@@ -938,7 +938,7 @@ RSpec.describe OrganisationsController, type: :request do
           end
 
           it "shows the tab navigation" do
-            expected_html = "<nav class=\"app-primary-navigation\""
+            expected_html = "<nav aria-label=\"Menu\" class=\"govuk-service-navigation__wrapper\""
             expect(response.body).to include(expected_html)
           end
 
@@ -1160,7 +1160,7 @@ RSpec.describe OrganisationsController, type: :request do
             create_list(:lettings_log, number_of_owned_org1_lettings_logs, assigned_to: user, owning_organisation: organisation, managing_organisation: child_organisation)
             create_list(:lettings_log, number_of_managed_org1_lettings_logs, assigned_to: user, owning_organisation: parent_organisation, managing_organisation: organisation)
             create_list(:lettings_log, number_of_owned_and_managed_org1_lettings_logs, assigned_to: user, owning_organisation: organisation, managing_organisation: organisation)
-            create(:lettings_log, assigned_to: user, status: "pending", skip_update_status: true)
+            create(:lettings_log, assigned_to: user, status: "pending")
             create_list(:lettings_log, number_of_org2_lettings_logs, assigned_to: nil, owning_organisation_id: unauthorised_organisation.id, managing_organisation_id: unauthorised_organisation.id)
 
             get "/organisations/#{organisation.id}/lettings-logs", headers:, params: {}
@@ -1889,7 +1889,7 @@ RSpec.describe OrganisationsController, type: :request do
 
           it "displays the form with an error message" do
             request
-            expect(response).to have_http_status(:unprocessable_entity)
+            expect(response).to have_http_status(:unprocessable_content)
             expect(page).to have_content(I18n.t("validations.organisation.name_missing"))
             expect(page).to have_content(I18n.t("validations.organisation.provider_type_missing"))
           end
@@ -2013,7 +2013,7 @@ RSpec.describe OrganisationsController, type: :request do
           let(:lettings_log_start_year) { lettings_logs[0].form.start_date.year }
 
           before do
-            create(:lettings_log, :in_progress, owning_organisation: organisation, status: "pending", skip_update_status: true)
+            create(:lettings_log, :in_progress, owning_organisation: organisation, status: "pending")
             create_list(:lettings_log, 2, :in_progress, owning_organisation: other_organisation)
           end
 
@@ -2055,7 +2055,7 @@ RSpec.describe OrganisationsController, type: :request do
           end
 
           it "has clear filters link" do
-            expect(page).to have_link("Clear", href: clear_filters_path(filter_type: "lettings_logs", path_params: { organisation_id: organisation.id }))
+            expect(page).to have_link("Clear", href: clear_filters_path(filter_type: "lettings_logs", filter_path_params: { organisation_id: organisation.id }))
           end
         end
       end
@@ -2077,7 +2077,7 @@ RSpec.describe OrganisationsController, type: :request do
 
           before do
             create_list(:sales_log, 2, :in_progress, owning_organisation: organisation)
-            create(:sales_log, :in_progress, owning_organisation: organisation, status: "pending", skip_update_status: true)
+            create(:sales_log, :in_progress, owning_organisation: organisation, status: "pending")
             create_list(:sales_log, 2, :in_progress, owning_organisation: other_organisation)
           end
 
@@ -2417,7 +2417,7 @@ RSpec.describe OrganisationsController, type: :request do
           it "displays an error" do
             post "/organisations/#{organisation.id}/schemes/duplicates", headers: headers, params: params
 
-            expect(response).to have_http_status(:unprocessable_entity)
+            expect(response).to have_http_status(:unprocessable_content)
             expect(page).to have_content("You must resolve all duplicates or indicate that there are no duplicates")
           end
         end

@@ -512,7 +512,6 @@ RSpec.describe FormController, type: :request do
               owning_organisation: organisation,
               assigned_to: user,
               status: "pending",
-              skip_update_status: true,
             )
           end
 
@@ -1160,7 +1159,6 @@ RSpec.describe FormController, type: :request do
 
           it "displays a success banner" do
             follow_redirect!
-            follow_redirect!
 
             expect(response.body).to include("You have successfully updated Q31: lead tenant’s age")
           end
@@ -1183,7 +1181,6 @@ RSpec.describe FormController, type: :request do
           end
 
           it "displays a success banner without crashing" do
-            follow_redirect!
             follow_redirect!
             expect(response.body).to include("You have successfully updated")
           end

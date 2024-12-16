@@ -269,7 +269,7 @@ RSpec.describe "User Features" do
 
           it "displays the filters component with a correct count and clear button" do
             expect(page).to have_content("2 filters applied")
-            expect(page).to have_link("Clear", href: /clear-filters\?filter_type=users/)
+            expect(page).to have_link("Clear", href: /clear-filters\?.*filter_type=users/)
           end
 
           context "when clearing the filters" do
@@ -678,7 +678,7 @@ RSpec.describe "User Features" do
           fill_in("code", with: otp)
           click_button("Submit")
           expect(page).to have_content("Check your email")
-          expect(page).to have_http_status(:unprocessable_entity)
+          expect(page).to have_http_status(:unprocessable_content)
           expect(page).to have_title("Error")
           expect(page).to have_selector(".govuk-error-summary__title")
         end
@@ -691,7 +691,7 @@ RSpec.describe "User Features" do
         fill_in("code", with: otp)
         click_button("Submit")
         expect(page).to have_content("Check your email")
-        expect(page).to have_http_status(:unprocessable_entity)
+        expect(page).to have_http_status(:unprocessable_content)
         expect(page).to have_title("Error")
         expect(page).to have_selector(".govuk-error-summary__title")
       end

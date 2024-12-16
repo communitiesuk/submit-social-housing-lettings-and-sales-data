@@ -1,5 +1,5 @@
 class CsvDownload < ApplicationRecord
-  enum download_type: { lettings: "lettings", sales: "sales", schemes: "schemes", locations: "locations", combined: "combined" }
+  enum :download_type, { lettings: "lettings", sales: "sales", schemes: "schemes", locations: "locations", combined: "combined" }
 
   belongs_to :user
   belongs_to :organisation

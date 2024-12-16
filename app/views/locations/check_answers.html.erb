@@ -42,7 +42,7 @@
 <% if LocationPolicy.new(current_user, @location).create? %>
   <div class="govuk-button-group">
     <%= govuk_button_to "Save and return to locations", scheme_location_confirm_path(@scheme, @location, route: params[:route]), method: :patch %>
-    <% if LocationPolicy.new(current_user, @location).delete? && FeatureToggle.delete_location_enabled? %>
+    <% if LocationPolicy.new(current_user, @location).delete? %>
       <%= delete_location_link(@location) %>
     <% end %>
     <%= govuk_button_link_to "Cancel", scheme_locations_path(@scheme), secondary: true %>

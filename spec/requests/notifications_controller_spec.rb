@@ -37,7 +37,7 @@ RSpec.describe NotificationsController, type: :request do
 
         it "gives an error response" do
           request
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
         end
       end
 

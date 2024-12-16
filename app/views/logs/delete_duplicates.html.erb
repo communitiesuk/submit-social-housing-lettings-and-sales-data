@@ -15,15 +15,7 @@
     <p class="govuk-body govuk-!-margin-bottom-2">
       <%= @duplicate_logs.count == 1 ? "This log" : "These logs" %> will be deleted:
     </p>
-    <ul class="govuk-list govuk-!-margin-bottom-6">
-      <% @duplicate_logs.each do |duplicate_log| %>
-        <li>
-          <strong>
-            <%= govuk_link_to "Log #{duplicate_log.id}", url_for(duplicate_log) %>
-          </strong>
-        </li>
-      <% end %>
-    </ul>
+    <%= govuk_list(@duplicate_logs.map { |log| "<strong>#{govuk_link_to "Log #{log.id}", url_for(log)}</strong>".html_safe }) %>
 
     <div class="govuk-button-group">
       <%= govuk_button_to @duplicate_logs.count == 1 ? "Delete this log" : "Delete these logs",
