@@ -1,14 +1,15 @@
 module Forms
-  module BulkUploadLettingsResume
+  module BulkUploadResume
     class DeletionReport
       include ActiveModel::Model
       include ActiveModel::Attributes
       include Rails.application.routes.url_helpers
 
+      attribute :log_type
       attribute :bulk_upload
 
       def view_path
-        "bulk_upload_lettings_resume/deletion_report"
+        "bulk_upload_#{log_type}_resume/deletion_report"
       end
 
       def preflight_valid?
@@ -18,9 +19,9 @@ module Forms
       def preflight_redirect
         case bulk_upload.choice
         when "create-fix-inline"
-          page_bulk_upload_lettings_resume_path(bulk_upload, :chosen)
+          send("page_bulk_upload_#{log_type}_resume_path", bulk_upload, :chosen)
         when "bulk-confirm-soft-validations"
-          page_bulk_upload_lettings_soft_validations_check_path(bulk_upload, :chosen)
+          send("page_bulk_upload_#{log_type}_soft_validations_check_path", bulk_upload, :chosen)
         end
       end
     end
