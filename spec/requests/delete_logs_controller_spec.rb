@@ -61,8 +61,9 @@ RSpec.describe "DeleteLogs", type: :request do
       allow(FilterManager).to receive(:filter_logs).and_return LettingsLog.all
     end
 
-    it "throws an error if selected ids are not provided" do
-      expect { post delete_logs_lettings_logs_path }.to raise_error ActionController::ParameterMissing
+    it "returns bad request if selected ids are not provided" do
+      post delete_logs_lettings_logs_path
+      expect(response).to have_http_status(:bad_request)
     end
 
     it "calls the filter service with the filters in the session and the search term from the query params" do
@@ -120,7 +121,8 @@ RSpec.describe "DeleteLogs", type: :request do
     end
 
     it "requires delete logs form data to be provided" do
-      expect { post delete_logs_confirmation_lettings_logs_path }.to raise_error(ActionController::ParameterMissing)
+      post delete_logs_confirmation_lettings_logs_path
+      expect(response).to have_http_status(:bad_request)
     end
 
     it "shows the correct title" do
@@ -346,8 +348,9 @@ RSpec.describe "DeleteLogs", type: :request do
       allow(FilterManager).to receive(:filter_logs).and_return SalesLog.all
     end
 
-    it "throws an error if selected ids are not provided" do
-      expect { post delete_logs_sales_logs_path }.to raise_error ActionController::ParameterMissing
+    it "returns bad request if selected ids are not provided" do
+      post delete_logs_sales_logs_path
+      expect(response).to have_http_status(:bad_request)
     end
 
     it "calls the filter service with the filters in the session and the search term from the query params" do
@@ -405,7 +408,8 @@ RSpec.describe "DeleteLogs", type: :request do
     end
 
     it "requires delete logs form data to be provided" do
-      expect { post delete_logs_confirmation_sales_logs_path }.to raise_error(ActionController::ParameterMissing)
+      post delete_logs_confirmation_sales_logs_path
+      expect(response).to have_http_status(:bad_request)
     end
 
     it "shows the correct title" do
@@ -635,8 +639,9 @@ RSpec.describe "DeleteLogs", type: :request do
         allow(FilterManager).to receive(:filter_logs).and_return LettingsLog.all
       end
 
-      it "throws an error if selected ids are not provided" do
-        expect { post delete_lettings_logs_organisation_path(id: organisation) }.to raise_error ActionController::ParameterMissing
+      it "returns bad request if selected ids are not provided" do
+        post delete_lettings_logs_organisation_path(id: organisation)
+        expect(response).to have_http_status(:bad_request)
       end
 
       it "calls the filter service with the filters in the session and the search term from the query params" do
@@ -694,7 +699,8 @@ RSpec.describe "DeleteLogs", type: :request do
       end
 
       it "requires delete logs form data to be provided" do
-        expect { post delete_lettings_logs_confirmation_organisation_path(id: organisation) }.to raise_error(ActionController::ParameterMissing)
+        post delete_lettings_logs_confirmation_organisation_path(id: organisation)
+        expect(response).to have_http_status(:bad_request)
       end
 
       it "shows the correct title" do
@@ -858,8 +864,9 @@ RSpec.describe "DeleteLogs", type: :request do
         allow(FilterManager).to receive(:filter_logs).and_return SalesLog.all
       end
 
-      it "throws an error if selected ids are not provided" do
-        expect { post delete_sales_logs_organisation_path(id: organisation) }.to raise_error ActionController::ParameterMissing
+      it "returns bad request if selected ids are not provided" do
+        post delete_sales_logs_organisation_path(id: organisation)
+        expect(response).to have_http_status(:bad_request)
       end
 
       it "calls the filter service with the filters in the session and the search term from the query params" do
@@ -917,7 +924,8 @@ RSpec.describe "DeleteLogs", type: :request do
       end
 
       it "requires delete logs form data to be provided" do
-        expect { post delete_sales_logs_confirmation_organisation_path(id: organisation) }.to raise_error(ActionController::ParameterMissing)
+        post delete_sales_logs_confirmation_organisation_path
+        expect(response).to have_http_status(:bad_request)
       end
 
       it "shows the correct title" do
