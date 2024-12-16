@@ -135,11 +135,9 @@ class Form::Question
   end
 
   def action_text(log, correcting_hard_validation: false)
-    if displayed_as_answered?(log)
-      correcting_hard_validation ? "Clear" : "Change"
-    else
-      ""
-    end
+    return "" unless displayed_as_answered?(log)
+
+    correcting_hard_validation ? "Clear" : "Change"
   end
 
   def displayed_as_answered?(log)
@@ -248,18 +246,10 @@ class Form::Question
 
   def generate_check_answer_prompt
     question_text = lowercase_first_letter(error_label.presence || check_answer_label.presence || header.presence || id.humanize) || "this question."
-    case type
-    when "checkbox"
-      "Select #{question_text}"
-    when "radio"
-      "Select #{question_text}"
-    when "select"
-      "Select #{question_text}"
-    when "date"
-      "Set #{question_text}"
-    else
-      "Enter #{question_text}"
-    end
+    return "Select #{question_text}" if %w[checkbox radio select].include?(type)
+    return "Set #{question_text}" if type == "date"
+
+    "Enter #{question_text}"
   end
 
   def suffix_label(log)

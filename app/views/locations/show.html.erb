@@ -34,11 +34,11 @@
               <%= row.with_value { details_html(attr, @location) } %>
             <% end %>
             <% if LocationPolicy.new(current_user, @location).update? %>
-              <% row.with_action(text: "Change", href: scheme_location_postcode_path(@scheme, @location, referrer: "details")) if attr[:attribute] == "postcode" && current_user.support? && attr[:value].present? %>
-              <% row.with_action(text: "Change", href: scheme_location_name_path(@scheme, @location, referrer: "details")) if attr[:attribute] == "name" && attr[:value].present? %>
-              <% row.with_action(text: "Change", href: scheme_location_units_path(@scheme, @location, referrer: "details")) if attr[:attribute] == "units" && current_user.support? && attr[:value].present? %>
-              <% row.with_action(text: "Change", href: scheme_location_type_of_unit_path(@scheme, @location, referrer: "details")) if attr[:attribute] == "type_of_unit" && current_user.support? && attr[:value].present? %>
-              <% row.with_action(text: "Change", href: scheme_location_mobility_standards_path(@scheme, @location, referrer: "details")) if attr[:attribute] == "mobility_standards" && current_user.support? && attr[:value].present? %>
+              <% %w[postcode name units type_of_unit mobility_standards].each do |attribute| %>
+                <% if attr[:attribute] == attribute %>
+                  <%= row.with_action(text: "Change", href: location_action_link(attr, @scheme, @location, current_user)) %>
+                <% end %>
+              <% end %>
             <% end %>
           <% end %>
         <% end %>

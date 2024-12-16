@@ -65,7 +65,24 @@ module LocationsHelper
   end
 
   def location_action_text_helper(attr, location)
-    attr[:value].blank? || (attr[:attribute] == "availability" && location.startdate.blank?) ? "" : "Change"
+    return "" if attr[:value].blank? || (attr[:attribute] == "availability" && location.startdate.blank?)
+
+    "Change"
+  end
+
+  def location_action_link(attr, scheme, location, current_user)
+    return unless LocationPolicy.new(current_user, location).update?
+    return unless current_user.support? && attr[:value].present?
+
+    paths = {
+      "postcode" => scheme_location_postcode_path(scheme, location, referrer: "details"),
+      "name" => scheme_location_name_path(scheme, location, referrer: "details"),
+      "units" => scheme_location_units_path(scheme, location, referrer: "details"),
+      "type_of_unit" => scheme_location_type_of_unit_path(scheme, location, referrer: "details"),
+      "mobility_standards" => scheme_location_mobility_standards_path(scheme, location, referrer: "details"),
+    }
+
+    paths[attr[:attribute]]
   end
 
   def toggle_location_link(location)
@@ -97,13 +114,10 @@ module LocationsHelper
 
   def location_details_link_message(attribute)
     text = lowercase_first_letter(attribute[:name])
-    messages = {
-      "local_authority" => "Select #{text}",
-      "type_of_unit" => "Select #{text}",
-      "mobility_standards" => "Select #{text}",
-      "availability" => "Set #{text}",
-    }
-    messages[attribute[:attribute]] || "Enter #{text}"
+    return "Select #{text}" if %w[local_authority type_of_unit mobility_standards].include?(attribute[:attribute])
+    return "Set #{text}" if attribute[:attribute] == "availability"
+
+    "Enter #{text}"
   end
 
 private

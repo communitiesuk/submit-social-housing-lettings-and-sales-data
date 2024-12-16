@@ -61,10 +61,12 @@ private
   end
 
   def unanswered_value(log:, question:)
-    if log.creation_method_bulk_upload? && log.bulk_upload.present? && !log.optional_fields.include?(question.id)
-      govuk_link_to question.check_answer_prompt, unanswered_action_href(question, log), class: "app-red-link app-red-link---no-visited-state"
-    else
-      govuk_link_to question.check_answer_prompt, unanswered_action_href(question, log), class: "govuk-link govuk-link--no-visited-state"
-    end
+    link_class = if log.creation_method_bulk_upload? && log.bulk_upload.present? && !log.optional_fields.include?(question.id)
+                   "app-red-link app-red-link---no-visited-state"
+                 else
+                   "govuk-link govuk-link--no-visited-state"
+                 end
+
+    govuk_link_to question.check_answer_prompt, correct_validation_action_href(question, log, nil, @correcting_hard_validation), class: link_class
   end
 end

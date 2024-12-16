@@ -80,8 +80,9 @@ module SchemesHelper
   end
 
   def change_link_text(question_id, scheme)
-    attribute_value = scheme.public_send(question_id)
-    attribute_value.nil? ? "" : "Change"
+    return "" if scheme.public_send(question_id).nil?
+
+    "Change"
   end
 
   def scheme_status_hint(scheme)
@@ -121,14 +122,10 @@ module SchemesHelper
 
   def scheme_details_link_message(attribute)
     text = lowercase_first_letter(attribute[:name])
-    messages = {
-      "primary_client_group" => "Select #{text}",
-      "secondary_client_group" => "Select #{text}",
-      "support_type" => "Select #{text}",
-      "intended_stay" => "Select #{text}",
-      "has_other_client_group" => "Answer if it #{text}",
-    }
-    messages[attribute[:id]] || "Enter #{text}"
+    return "Select #{text}" if %w[primary_client_group secondary_client_group support_type intended_stay].include?(attribute[:id])
+    return "Answer if it #{text}" if attribute[:id] == "has_other_client_group"
+
+    "Enter #{text}"
   end
 
   def scheme_back_button_path(scheme, current_page)

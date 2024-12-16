@@ -56,14 +56,15 @@ module OrganisationsHelper
   end
 
   def organisation_action_text_helper(attr, organisation)
-    attr[:value].blank? || (attr[:attribute] == "phone" && organisation.phone.blank?) ? "" : "Change"
+    return "" if attr[:value].blank? || (attr[:attribute] == "phone" && organisation.phone.blank?)
+
+    "Change"
   end
 
   def organisation_details_link_message(attribute)
     text = lowercase_first_letter(attribute[:name])
-    messages = {
-      "Rent periods" => "Add #{text}",
-    }
-    messages[attribute[:name]] || "Enter #{text}"
+    return "Add #{text}" if attribute[:name] == "Rent periods"
+
+    "Enter #{text}"
   end
 end
