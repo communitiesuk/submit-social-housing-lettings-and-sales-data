@@ -56,11 +56,13 @@ module Exports
 
     def apply_cds_transformation(organisation)
       attribute_hash = organisation.attributes
-      attribute_hash["deleted_at"] = organisation.discarded_at
+      attribute_hash["deleted_at"] = organisation.discarded_at&.iso8601
       attribute_hash["dsa_signed"] = organisation.data_protection_confirmed?
-      attribute_hash["dsa_signed_at"] = organisation.data_protection_confirmation&.signed_at
+      attribute_hash["dsa_signed_at"] = organisation.data_protection_confirmation&.signed_at&.iso8601
       attribute_hash["dpo_email"] = organisation.data_protection_confirmation&.data_protection_officer_email
       attribute_hash["provider_type"] = organisation.provider_type_before_type_cast
+      attribute_hash["merge_date"] = organisation.merge_date&.iso8601
+      attribute_hash["available_from"] = organisation.available_from&.iso8601
       attribute_hash["profit_status"] = nil # will need update when we add the field to the org
       attribute_hash["group"] = nil # will need update when we add the field to the org
 
