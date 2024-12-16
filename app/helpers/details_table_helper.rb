@@ -13,7 +13,7 @@ module DetailsTableHelper
     end
   end
 
-  private
+private
 
   def determine_value(attribute, resource, resource_class)
     attribute[:value].presence || case resource_class
