@@ -17,7 +17,7 @@ RSpec.describe Exports::OrganisationExportService do
   def replace_entity_ids(organisation, export_template)
     export_template.sub!(/\{id\}/, organisation["id"].to_s)
     export_template.sub!(/\{name\}/, organisation["name"])
-    export_template.sub!(/\{dsa_signed_at\}/, organisation.data_protection_confirmation&.signed_at.to_s)
+    export_template.sub!(/\{dsa_signed_at\}/, organisation.data_protection_confirmation&.signed_at&.iso8601)
     export_template.sub!(/\{dpo_email\}/, organisation.data_protection_confirmation&.data_protection_officer_email)
   end
 
