@@ -33,19 +33,19 @@ module Forms
       end
 
       def lettings_template_path
-        Forms::BulkUploadLettings::PrepareYourFile.new(year:).template_path
+        Forms::BulkUploadForm::PrepareYourFile.new(year:, log_type: "lettings").template_path
       end
 
       def lettings_specification_path
-        Forms::BulkUploadLettings::PrepareYourFile.new(year:).specification_path
+        Forms::BulkUploadForm::PrepareYourFile.new(year:, log_type: "lettings").specification_path
       end
 
       def sales_template_path
-        Forms::BulkUploadSales::PrepareYourFile.new(year:).template_path
+        Forms::BulkUploadForm::PrepareYourFile.new(year:, log_type: "sales").template_path
       end
 
       def sales_specification_path
-        Forms::BulkUploadSales::PrepareYourFile.new(year:).specification_path
+        Forms::BulkUploadForm::PrepareYourFile.new(year:, log_type: "sales").specification_path
       end
     end
   end
