@@ -6,6 +6,10 @@ module MergeRequestsHelper
     value.presence || content_tag(:span, placeholder, class: "app-!-colour-muted")
   end
 
+  def value_exists?(merge_request, attribute)
+    merge_request.send(attribute).present? || (attribute == "helpdesk_ticket" && merge_request.has_helpdesk_ticket == false)
+  end
+
   def details_prompt_link(page, merge_request)
     govuk_link_to(merge_request_details_prompt(page), send("#{page}_merge_request_path", merge_request, referrer: "check_answers"), class: "govuk-link govuk-link--no-visited-state")
   end
@@ -20,8 +24,8 @@ module MergeRequestsHelper
     messages[page] || "Enter #{lowercase_first_letter(page.humanize)}"
   end
 
-  def merge_request_action_text(attribute, merge_request)
-    merge_request.send(attribute).present? || (attribute == "helpdesk_ticket" && merge_request.has_helpdesk_ticket == false) ? "Change" : ""
+  def merge_request_action_text(merge_request, attribute)
+    value_exists?(merge_request, attribute) ? "Change" : ""
   end
 
   def request_details(merge_request)
@@ -95,8 +99,10 @@ module MergeRequestsHelper
 
   def merge_request_action(merge_request, page, attribute = nil)
     attribute = page if attribute.nil?
+    return nil unless value_exists?(merge_request, attribute)
+
     unless merge_request.status == "request_merged" || merge_request.status == "processing"
-      { text: merge_request_action_text(attribute, merge_request), href: send("#{page}_merge_request_path", merge_request, referrer: "check_answers"), visually_hidden_text: page.humanize }
+      { text: merge_request_action_text(merge_request, attribute), href: send("#{page}_merge_request_path", merge_request, referrer: "check_answers"), visually_hidden_text: page.humanize }
     end
   end
 
