@@ -64,10 +64,10 @@ module SchemesHelper
     schemes_csv_download_organisation_path(organisation, search:, download_type:)
   end
 
-  def scheme_edit_path(scheme, question_id, user = nil)
+  def change_answer_link(scheme, question_id, user)
     case question_id
     when "service_name", "sensitive", "scheme_type", "registered_under_care_act", "owning_organisation_id", "arrangement_type"
-      user&.support? || !scheme.confirmed? ? scheme_details_path(scheme, referrer: "check-answers") : scheme_edit_name_path(scheme)
+      user.support? || !scheme.confirmed? ? scheme_details_path(scheme, referrer: "check-answers") : scheme_edit_name_path(scheme)
     when "primary_client_group"
       scheme_primary_client_group_path(scheme, referrer: "check-answers")
     when "has_other_client_group"
@@ -105,6 +105,19 @@ module SchemesHelper
     return if organisation.schemes_deduplicated_at.present? && organisation.schemes_deduplicated_at > organisation.absorbed_organisations.map(&:merge_date).max
 
     organisation.owned_schemes.duplicate_sets.any? || organisation.owned_schemes.any? { |scheme| scheme.locations.duplicate_sets.any? }
+  end
+
+  def scheme_edit_path(scheme, attribute)
+    case attribute[:id]
+    when "primary_client_group"
+      scheme_primary_client_group_path(scheme, referrer: "check-answers")
+    when "has_other_client_group"
+      scheme_confirm_secondary_client_group_path(scheme, referrer: "check-answers")
+    when "secondary_client_group"
+      scheme_secondary_client_group_path(scheme, referrer: "check-answers")
+    when "support_type", "intended_stay"
+      scheme_support_path(scheme, referrer: "check-answers")
+    end
   end
 
   def scheme_details_link_message(attribute)

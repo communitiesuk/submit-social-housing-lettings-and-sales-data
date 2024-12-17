@@ -29,10 +29,8 @@
             <% else %>
               <% row.with_value { details_html(attr, @location) if user_can_edit_scheme?(current_user, @scheme) } %>
             <% end %>
-            <% if LocationPolicy.new(current_user, @location).update? && attr[:value] %>
+            <% if LocationPolicy.new(current_user, @location).update? %>
               <% row.with_action(text: location_action_text(attr, @location), href: location_edit_path(@location, attr[:attribute])) %>
-            <% else %>
-              <% row.with_action %>
             <% end %>
           <% end %>
         <% end %>
