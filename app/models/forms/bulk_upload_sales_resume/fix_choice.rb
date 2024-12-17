@@ -14,7 +14,7 @@ module Forms
       def options
         [
           OpenStruct.new(id: "create-fix-inline", name: "Upload these logs and fix errors on CORE site"),
-          OpenStruct.new(id: "upload-again", name: "Fix errors in the CSV and re-upload"),
+          OpenStruct.new(id: "upload-again", name: "Fix errors in the CSV and upload the file again"),
         ]
       end
 

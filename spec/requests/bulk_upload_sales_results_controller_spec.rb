@@ -30,7 +30,7 @@ RSpec.describe BulkUploadSalesResultsController, type: :request do
           get "/sales-logs/bulk-upload-results/#{bulk_upload.id}/summary"
 
           expect(response.body).to include("This error report is out of date.")
-          expect(response.body).to include("Some logs in this upload are assigned to #{user.name}, who has moved to a different organisation since this file was uploaded. Reupload the file to get an accurate error report.")
+          expect(response.body).to include("Some logs in this upload are assigned to #{user.name}, who has moved to a different organisation since this file was uploaded. Upload the file again to get an accurate error report.")
         end
       end
 
@@ -41,7 +41,7 @@ RSpec.describe BulkUploadSalesResultsController, type: :request do
           get "/sales-logs/bulk-upload-results/#{bulk_upload.id}/summary"
 
           expect(response.body).to include("This error report is out of date.")
-          expect(response.body).to include("You moved to a different organisation since this file was uploaded. Reupload the file to get an accurate error report.")
+          expect(response.body).to include("You moved to a different organisation since this file was uploaded. Upload the file again to get an accurate error report.")
         end
       end
     end
@@ -113,7 +113,7 @@ RSpec.describe BulkUploadSalesResultsController, type: :request do
         get "/sales-logs/bulk-upload-results/#{bulk_upload.id}/summary"
 
         expect(response.body).to include("This error report is out of date.")
-        expect(response.body).to include("Some logs in this upload are assigned to #{other_user.name}, who has moved to a different organisation since this file was uploaded. Reupload the file to get an accurate error report.")
+        expect(response.body).to include("Some logs in this upload are assigned to #{other_user.name}, who has moved to a different organisation since this file was uploaded. Upload the file again to get an accurate error report.")
       end
     end
 
@@ -124,7 +124,7 @@ RSpec.describe BulkUploadSalesResultsController, type: :request do
         get "/sales-logs/bulk-upload-results/#{bulk_upload.id}/summary"
 
         expect(response.body).to include("This error report is out of date.")
-        expect(response.body).to include("You moved to a different organisation since this file was uploaded. Reupload the file to get an accurate error report.")
+        expect(response.body).to include("You moved to a different organisation since this file was uploaded. Upload the file again to get an accurate error report.")
       end
     end
   end

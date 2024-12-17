@@ -81,7 +81,7 @@ RSpec.describe LettingsLogsController, type: :request do
 
         it "validates lettings log parameters" do
           json_response = JSON.parse(response.body)
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
           expect(json_response["errors"]).to match_array([["offered", [I18n.t("validations.shared.numeric.within_range", field: "Times previously offered since becoming available", min: 0, max: 20)]], ["age1", [I18n.t("validations.shared.numeric.within_range", field: "Lead tenant’s age", min: 16, max: 120)]]])
         end
       end
@@ -609,7 +609,7 @@ RSpec.describe LettingsLogsController, type: :request do
 
               it "displays filter" do
                 get "/lettings-logs?bulk_upload_id[]=#{bulk_upload.id}"
-                expect(page).to have_content("With logs from bulk upload")
+                expect(page).to have_content("Only logs from this bulk upload")
               end
 
               it "hides collection year filter" do
@@ -695,7 +695,7 @@ RSpec.describe LettingsLogsController, type: :request do
           context "without bulk_upload_id" do
             it "does not display filter" do
               get "/lettings-logs"
-              expect(page).not_to have_content("With logs from bulk upload")
+              expect(page).not_to have_content("Only logs from this bulk upload")
             end
 
             it "displays button to create a new log" do
@@ -1612,7 +1612,7 @@ RSpec.describe LettingsLogsController, type: :request do
       let(:params) { { age1: 200 } }
 
       it "returns 422" do
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
       end
 
       it "returns an error message" do

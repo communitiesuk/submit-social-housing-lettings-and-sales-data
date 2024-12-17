@@ -1,0 +1,17 @@
+en:
+  forms:
+    2021:
+      lettings:
+        guidance:
+          what_counts_as_income:
+            title: "What counts as income?"
+            content: "What counts as income?"
+          finding_scheme:
+            title: "Can’t find your scheme?"
+            content: "<p>Schemes are attached to the organisation that owns the property. Check you have correctly answered question 1 \"Which organisation owns this property?\"</p>
+              <p>If your organisation’s schemes were migrated from old CORE, they may have new names and codes. Search by postcode to find your scheme.</p>"
+            scheme_changes_link_text: "Read more about how schemes have changed"
+            view_schemes_link_text: "View your organisation’s schemes"
+  soft_validations:
+    net_income:
+      hint_text: "hint text"
