@@ -5,7 +5,7 @@ volumes:
 
 services:
   db:
-    image: postgres:13.5-alpine
+    image: postgres:13.18-alpine
     restart: always
     # To preserve data between runs of docker-compose, we mount a folder from the host machine.
     volumes:
