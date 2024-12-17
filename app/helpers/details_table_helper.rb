@@ -14,10 +14,10 @@ module DetailsTableHelper
 private
 
   def determine_value(attribute, resource)
-    return attribute[:value] if attribute[:value].present?
+    return attribute[:value].presence if attribute[:value].present?
 
     method_name = "#{resource.class.name.downcase}_value"
-    return send(method_name, attribute, resource) if respond_to?(method_name)
+    return send(method_name, attribute, resource) if respond_to?(method_name, true)
 
     "<span class=\"app-!-colour-muted\">No answer provided</span>".html_safe
   end
@@ -37,6 +37,6 @@ private
   def scheme_value(attribute, resource)
     return nil unless can_change_scheme_answer?(attribute[:name], resource)
 
-    govuk_link_to(scheme_details_link_message(attribute), scheme_edit_path(resource, attribute), class: "govuk-link govuk-link--no-visited-state")
+    govuk_link_to(scheme_details_link_message(attribute), scheme_edit_path(resource, attribute[:id]), class: "govuk-link govuk-link--no-visited-state")
   end
 end
