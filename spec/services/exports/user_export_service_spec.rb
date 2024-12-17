@@ -17,6 +17,7 @@ RSpec.describe Exports::UserExportService do
   def replace_entity_ids(user, export_template)
     export_template.sub!(/\{id\}/, user["id"].to_s)
     export_template.sub!(/\{organisation_id\}/, user["organisation_id"].to_s)
+    export_template.sub!(/\{organisation_name\}/, user.organisation.name)
     export_template.sub!(/\{email\}/, user["email"].to_s)
   end
 
@@ -42,7 +43,7 @@ RSpec.describe Exports::UserExportService do
     end
 
     context "and one user is available for export" do
-      let!(:user) { create(:user, organisation:, name: "Danny Rojas", phone_extension: "123") }
+      let!(:user) { create(:user, organisation:, name: "Danny Rojas", phone_extension: "123", last_sign_in_at: Time.zone.local(2022, 3, 3)) }
 
       it "generates a ZIP export file with the expected filename" do
         expect(storage_service).to receive(:write_file).with(expected_zip_filename, any_args)

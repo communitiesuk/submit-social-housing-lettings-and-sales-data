@@ -18,8 +18,8 @@ en:
           owning_organisation:
             not_found: "The owning organisation code is incorrect."
             not_stock_owner: "The owning organisation code provided is for an organisation that does not own stock."
-            not_permitted: 
-              support: "This owning organisation is not affiliated with %(name)."
+            not_permitted:
+              support: "This owning organisation is not affiliated with %{name}."
               not_support: "You do not have permission to add logs for this owning organisation."
           assigned_to:
             not_found: "User with the specified email could not be found."

@@ -21,7 +21,9 @@ RSpec.describe Exports::LettingsLogExportService do
   def replace_entity_ids(lettings_log, export_template)
     export_template.sub!(/\{id\}/, (lettings_log["id"] + Exports::LettingsLogExportService::LOG_ID_OFFSET).to_s)
     export_template.sub!(/\{owning_org_id\}/, (lettings_log["owning_organisation_id"] + Exports::LettingsLogExportService::LOG_ID_OFFSET).to_s)
+    export_template.sub!(/\{owning_org_name\}/, lettings_log.owning_organisation.name)
     export_template.sub!(/\{managing_org_id\}/, (lettings_log["managing_organisation_id"] + Exports::LettingsLogExportService::LOG_ID_OFFSET).to_s)
+    export_template.sub!(/\{managing_org_name\}/, lettings_log.managing_organisation.name)
     export_template.sub!(/\{location_id\}/, (lettings_log["location_id"]).to_s) if lettings_log.needstype == 2
     export_template.sub!(/\{scheme_id\}/, (lettings_log["scheme_id"]).to_s) if lettings_log.needstype == 2
     export_template.sub!(/\{log_id\}/, lettings_log["id"].to_s)
@@ -60,7 +62,6 @@ RSpec.describe Exports::LettingsLogExportService do
           :lettings_log,
           :completed,
           status: "pending",
-          skip_update_status: true,
           propcode: "123",
           ppostcode_full: "SE2 6RT",
           postcode_full: "NW1 5TY",

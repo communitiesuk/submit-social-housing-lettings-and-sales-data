@@ -6,12 +6,12 @@
     <name>Danny Rojas</name>
     <organisation_id>{organisation_id}</organisation_id>
     <sign_in_count>5</sign_in_count>
-    <last_sign_in_at/>
+    <last_sign_in_at>2022-03-03T00:00:00+00:00</last_sign_in_at>
     <role>data_provider</role>
     <phone>1234512345123 123</phone>
     <is_dpo>false</is_dpo>
     <is_key_contact>false</is_key_contact>
     <active>true</active>
-    <organisation_name>MHCLG</organisation_name>
+    <organisation_name>{organisation_name}</organisation_name>
   </form>
 </forms>

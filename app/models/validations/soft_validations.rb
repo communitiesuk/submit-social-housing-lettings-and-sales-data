@@ -84,6 +84,8 @@ module Validations::SoftValidations
   end
 
   def all_tenants_age_and_gender_information_completed?
+    return false if hhmemb.present? && hhmemb > 8
+
     person_count = hhmemb || 8
 
     (1..person_count).all? do |n|
@@ -235,6 +237,8 @@ private
   end
 
   def all_male_tenants_in_the_household?
+    return false if hhmemb.present? && hhmemb > 8
+
     person_count = hhmemb || 8
 
     (1..person_count).all? do |n|

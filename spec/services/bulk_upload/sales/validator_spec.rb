@@ -204,7 +204,7 @@ RSpec.describe BulkUpload::Sales::Validator do
     end
   end
 
-  describe "#create_logs?" do
+  describe "#block_log_creation_reason" do
     context "when all logs are valid" do
       let(:log_1) { build(:sales_log, :completed, assigned_to: user) }
       let(:log_2) { build(:sales_log, :completed, assigned_to: user) }
@@ -214,9 +214,9 @@ RSpec.describe BulkUpload::Sales::Validator do
         file.write(BulkUpload::SalesLogToCsv.new(log: log_2).to_csv_row)
       end
 
-      it "returns truthy" do
+      it "returns nil" do
         validator.call
-        expect(validator).to be_create_logs
+        expect(validator.block_log_creation_reason).to be_nil
       end
     end
 
@@ -229,9 +229,9 @@ RSpec.describe BulkUpload::Sales::Validator do
         file.write(BulkUpload::SalesLogToCsv.new(log: log_2).to_csv_row)
       end
 
-      it "returns truthy" do
+      it "returns nil" do
         validator.call
-        expect(validator).to be_create_logs
+        expect(validator.block_log_creation_reason).to be_nil
       end
     end
 
@@ -245,9 +245,9 @@ RSpec.describe BulkUpload::Sales::Validator do
         file.close
       end
 
-      it "returns false" do
+      it "returns the reason" do
         validator.call
-        expect(validator).not_to be_create_logs
+        expect(validator.block_log_creation_reason).to eq("setup_errors")
       end
     end
 
@@ -262,7 +262,7 @@ RSpec.describe BulkUpload::Sales::Validator do
 
       it "will not create logs" do
         validator.call
-        expect(validator).not_to be_create_logs
+        expect(validator.block_log_creation_reason).to eq("setup_errors")
       end
     end
   end

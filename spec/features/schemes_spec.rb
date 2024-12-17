@@ -87,7 +87,7 @@ RSpec.describe "Schemes scheme Features" do
 
             it "displays the filters component with a correct count and clear button" do
               expect(page).to have_content("2 filters applied")
-              expect(page).to have_link("Clear", href: /clear-filters\?filter_type=schemes/)
+              expect(page).to have_link("Clear", href: /clear-filters\?.*filter_type=schemes/)
             end
 
             context "when clearing the filters" do
@@ -326,7 +326,7 @@ RSpec.describe "Schemes scheme Features" do
 
                 it "displays the filters component with a correct count and clear button" do
                   expect(page).to have_content("2 filters applied")
-                  expect(page).to have_link("Clear", href: /\/clear-filters\?filter_type=scheme_locations/)
+                  expect(page).to have_link("Clear", href: /\/clear-filters\?.*filter_type=scheme_locations/)
                 end
 
                 context "when clearing the filters" do

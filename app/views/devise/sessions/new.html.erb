@@ -22,7 +22,7 @@
       <%= f.govuk_password_field :password,
         autocomplete: "current-password" %>
 
-      <%= f.hidden_field :start, value: request["start"] %>
+      <%= f.hidden_field :start, value: request.params["start"] %>
       <%= f.govuk_submit "Sign in" %>
     </div>
   </div>

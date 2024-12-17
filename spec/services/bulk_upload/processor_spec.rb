@@ -14,7 +14,7 @@ RSpec.describe BulkUpload::Processor do
       call: nil,
       total_logs_count: 1,
       any_setup_errors?: false,
-      create_logs?: true,
+      block_log_creation_reason: nil,
       soft_validation_errors_only?: false,
     )
   end
@@ -165,7 +165,7 @@ RSpec.describe BulkUpload::Processor do
       let(:log) { build(:lettings_log, :setup_completed, assigned_to: user) }
 
       before do
-        allow(mock_validator).to receive(:create_logs?).and_return(true)
+        allow(mock_validator).to receive(:block_log_creation_reason).and_return(nil)
         allow(mock_validator).to receive(:soft_validation_errors_only?).and_return(false)
         allow(FeatureToggle).to receive(:bulk_upload_duplicate_log_check_enabled?).and_return(true)
       end
@@ -198,7 +198,7 @@ RSpec.describe BulkUpload::Processor do
 
     context "when a bulk upload has logs with only soft validations triggered" do
       before do
-        allow(mock_validator).to receive(:create_logs?).and_return(true)
+        allow(mock_validator).to receive(:block_log_creation_reason).and_return(nil)
         allow(mock_validator).to receive(:soft_validation_errors_only?).and_return(true)
         allow(FeatureToggle).to receive(:bulk_upload_duplicate_log_check_enabled?).and_return(true)
       end
@@ -239,7 +239,7 @@ RSpec.describe BulkUpload::Processor do
           call: nil,
           total_logs_count: 1,
           any_setup_errors?: false,
-          create_logs?: false,
+          block_log_creation_reason: "row_parser_block_log_creation",
         )
       end
 
@@ -254,10 +254,34 @@ RSpec.describe BulkUpload::Processor do
         expect(mail_double).to have_received(:deliver_later)
       end
     end
+
+    context "when upload has duplicate logs blocking log creation" do
+      let(:mock_validator) do
+        instance_double(
+          BulkUpload::Lettings::Validator,
+          invalid?: false,
+          call: nil,
+          total_logs_count: 1,
+          any_setup_errors?: false,
+          block_log_creation_reason: "duplicate_logs",
+        )
+      end
+
+      it "sends correct_and_upload_again_mail" do
+        mail_double = instance_double("ActionMailer::MessageDelivery", deliver_later: nil)
+
+        allow(BulkUploadMailer).to receive(:send_correct_duplicates_and_upload_again_mail).and_return(mail_double)
+
+        processor.call
+
+        expect(BulkUploadMailer).to have_received(:send_correct_duplicates_and_upload_again_mail)
+        expect(mail_double).to have_received(:deliver_later)
+      end
+    end
   end
 
   describe "#approve" do
-    let!(:log) { create(:lettings_log, :in_progress, bulk_upload:, status: "pending", skip_update_status: true, status_cache: "in_progress") }
+    let!(:log) { create(:lettings_log, :in_progress, bulk_upload:, status: "pending", status_cache: "in_progress") }
 
     it "makes pending logs no longer pending" do
       expect(log.status).to eql("pending")
