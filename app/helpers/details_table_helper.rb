@@ -14,7 +14,7 @@ module DetailsTableHelper
 private
 
   def determine_value(attribute, resource)
-    return attribute[:value].presence if attribute[:value].present?
+    return attribute[:value] if attribute[:value].present?
 
     method_name = "#{resource.class.name.downcase}_value"
     return send(method_name, attribute, resource) if respond_to?(method_name, true)
