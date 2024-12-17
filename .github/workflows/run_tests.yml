@@ -20,7 +20,7 @@ jobs:
 
     services:
       postgres:
-        image: postgres:13.5
+        image: postgres:13.18
         env:
           POSTGRES_PASSWORD: password
           POSTGRES_USER: postgres
@@ -79,7 +79,7 @@ jobs:
 
     services:
       postgres:
-        image: postgres:13.5
+        image: postgres:13.18
         env:
           POSTGRES_PASSWORD: password
           POSTGRES_USER: postgres
@@ -137,7 +137,7 @@ jobs:
 
     services:
       postgres:
-        image: postgres:13.5
+        image: postgres:13.18
         env:
           POSTGRES_PASSWORD: password
           POSTGRES_USER: postgres
@@ -195,7 +195,7 @@ jobs:
 
     services:
       postgres:
-        image: postgres:13.5
+        image: postgres:13.18
         env:
           POSTGRES_PASSWORD: password
           POSTGRES_USER: postgres
@@ -254,7 +254,7 @@ jobs:
 
     services:
       postgres:
-        image: postgres:13.5
+        image: postgres:13.18
         env:
           POSTGRES_PASSWORD: password
           POSTGRES_USER: postgres
@@ -313,7 +313,7 @@ jobs:
 
     services:
       postgres:
-        image: postgres:13.5
+        image: postgres:13.18
         env:
           POSTGRES_PASSWORD: password
           POSTGRES_USER: postgres
