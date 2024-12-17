@@ -29,7 +29,7 @@
                      visually_hidden_text: attr[:name].to_s.humanize.downcase,
                      href: edit_organisation_path(@organisation),
                      html_attributes: { "data-qa": "change-#{attr[:name].downcase}" },
-                     ) %>
+                   ) %>
               <% else %>
                 <% row.with_action %>
               <% end %>
