@@ -37,6 +37,6 @@ private
   end
 
   def scheme_value(attribute, resource)
-    can_change_scheme_answer?(attribute[:name], resource) ? govuk_link_to(scheme_details_link_message(attribute), scheme_edit_path(resource, attribute), class: "govuk-link govuk-link--no-visited-state") : "<span class=\"app-!-colour-muted\">No answer provided</span>".html_safe
+    can_change_scheme_answer?(attribute[:name], resource) ? govuk_link_to(scheme_details_link_message(attribute), scheme_edit_path(resource, attribute[:id]), class: "govuk-link govuk-link--no-visited-state") : "<span class=\"app-!-colour-muted\">No answer provided</span>".html_safe
   end
 end
