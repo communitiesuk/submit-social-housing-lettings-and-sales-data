@@ -20,7 +20,7 @@ module MergeRequestsHelper
     messages[page] || "Enter #{lowercase_first_letter(page.humanize)}"
   end
 
-  def merge_request_action_text_helper(attribute, merge_request)
+  def merge_request_action_text(attribute, merge_request)
     merge_request.send(attribute).present? || (attribute == "helpdesk_ticket" && merge_request.has_helpdesk_ticket == false) ? "Change" : ""
   end
 
@@ -96,7 +96,7 @@ module MergeRequestsHelper
   def merge_request_action(merge_request, page, attribute = nil)
     attribute = page if attribute.nil?
     unless merge_request.status == "request_merged" || merge_request.status == "processing"
-      { text: merge_request_action_text_helper(attribute, merge_request), href: send("#{page}_merge_request_path", merge_request, referrer: "check_answers"), visually_hidden_text: page.humanize }
+      { text: merge_request_action_text(attribute, merge_request), href: send("#{page}_merge_request_path", merge_request, referrer: "check_answers"), visually_hidden_text: page.humanize }
     end
   end
 

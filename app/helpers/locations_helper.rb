@@ -8,6 +8,10 @@ module LocationsHelper
     selection_options(%w[Yes No])
   end
 
+  def location_editable_attributes
+    %w[postcode name units type_of_unit mobility_standards]
+  end
+
   def type_of_units_selection
     selection_options(Location.type_of_units)
   end
@@ -64,7 +68,7 @@ module LocationsHelper
     send("scheme_location_#{attribute}_path", location.scheme, location, referrer: "check_answers", route: params[:route])
   end
 
-  def location_action_text_helper(attr, location)
+  def location_action_text(attr, location)
     return "" if attr[:value].blank? || (attr[:attribute] == "availability" && location.startdate.blank?)
 
     "Change"

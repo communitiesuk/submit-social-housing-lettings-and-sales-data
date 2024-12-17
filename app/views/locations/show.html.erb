@@ -34,11 +34,7 @@
               <%= row.with_value { details_html(attr, @location) } %>
             <% end %>
             <% if LocationPolicy.new(current_user, @location).update? %>
-              <% %w[postcode name units type_of_unit mobility_standards].each do |attribute| %>
-                <% if attr[:attribute] == attribute %>
-                  <%= row.with_action(text: "Change", href: location_action_link(attr, @scheme, @location, current_user)) %>
-                <% end %>
-              <% end %>
+              <%= row.with_action(text: "Change", href: location_action_link(attr, @scheme, @location, current_user)) if location_editable_attributes.include?(attr[:attribute]) %>
             <% end %>
           <% end %>
         <% end %>

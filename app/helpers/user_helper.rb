@@ -90,7 +90,7 @@ module UserHelper
     end
   end
 
-  def user_action_text_helper(user, attribute)
+  def user_action_text(user, attribute)
     return "Change" if %w[role phone].include?(attribute) && user.send(attribute).present?
 
     ""

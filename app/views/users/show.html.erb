@@ -55,7 +55,7 @@
             row.with_value { user_details_html(@user, current_user, "phone") }
             if UserPolicy.new(current_user, @user).edit_telephone_numbers?
               row.with_action(
-                text: user_action_text_helper(@user, "phone"),
+                text: user_action_text(@user, "phone"),
                 visually_hidden_text: "telephone number",
                 href: aliased_user_edit(@user, current_user),
                 html_attributes: { "data-qa": "change-telephone-number" },
@@ -98,7 +98,7 @@
             row.with_value { user_details_html(@user, current_user, "role") }
             if UserPolicy.new(current_user, @user).edit_roles?
               row.with_action(
-                text: user_action_text_helper(@user, "role"),
+                text: user_action_text(@user, "role"),
                 visually_hidden_text: "role",
                 href: aliased_user_edit(@user, current_user),
                 html_attributes: { "data-qa": "change-role" },

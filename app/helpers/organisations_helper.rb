@@ -55,7 +55,7 @@ module OrganisationsHelper
     govuk_button_link_to "Delete this organisation", delete_confirmation_organisation_path(organisation), warning: true
   end
 
-  def organisation_action_text_helper(attr, organisation)
+  def organisation_action_text(attr, organisation)
     return "" if attr[:value].blank? || (attr[:attribute] == "phone" && organisation.phone.blank?)
 
     "Change"
