@@ -15,7 +15,7 @@
         </dd>
     <% end %>
 
-    <% if can_change_scheme_answer?(attribute[:name], scheme) && attribute[:edit] %>
+    <% if can_change_scheme_answer?(attribute[:name], scheme) && attribute[:edit] && attribute[:value] %>
       <dd class="govuk-summary-list__actions">
         <a class="govuk-link" href="<%= change_link %>"><%= change_link_text(attribute[:id], @scheme) %></a>
       </dd>
