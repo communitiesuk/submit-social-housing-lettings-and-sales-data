@@ -2,10 +2,12 @@ class BulkUpload::SalesLogToCsv
   attr_reader :log, :line_ending, :col_offset, :overrides
 
   def initialize(log:, line_ending: "\n", col_offset: 1, overrides: {})
+    # rubocop:disable Rails/HelperInstanceVariable
     @log = log
     @line_ending = line_ending
     @col_offset = col_offset
     @overrides = overrides
+    # rubocop:enable Rails/HelperInstanceVariable
   end
 
   def row_prefix
@@ -187,7 +189,7 @@ class BulkUpload::SalesLogToCsv
       log.prevloc, # 40
       ((log.ppostcode_full || "").split(" ") || [""]).first,
       ((log.ppostcode_full || "").split(" ") || [""]).last,
-      log.ppcodenk == 0 ? 1 : nil,
+      log.ppcodenk&.zero? ? 1 : nil,
 
       log.pregyrha,
       log.pregla,
@@ -311,10 +313,10 @@ class BulkUpload::SalesLogToCsv
 
       log.builtype,
       log.uprn,
-      log.address_line1,
-      log.address_line2,
-      log.town_or_city,
-      log.county,
+      log.address_line1&.tr(",", " "),
+      log.address_line2&.tr(",", " "),
+      log.town_or_city&.tr(",", " "),
+      log.county&.tr(",", " "),
       ((log.postcode_full || "").split(" ") || [""]).first,
       ((log.postcode_full || "").split(" ") || [""]).last,
       log.la,

@@ -2,10 +2,12 @@ class BulkUpload::LettingsLogToCsv
   attr_reader :log, :line_ending, :col_offset, :overrides
 
   def initialize(log:, line_ending: "\n", col_offset: 1, overrides: {})
+    # rubocop:disable Rails/HelperInstanceVariable
     @log = log
     @line_ending = line_ending
     @col_offset = col_offset
     @overrides = overrides
+    # rubocop:enable Rails/HelperInstanceVariable
   end
 
   def row_prefix
@@ -145,8 +147,8 @@ class BulkUpload::LettingsLogToCsv
 
   def to_2024_row
     [
-      log.owning_organisation&.old_visible_id, # 1
-      log.managing_organisation&.old_visible_id,
+      overrides[:organisation_id] || log.owning_organisation&.old_visible_id, # 1
+      overrides[:managing_organisation_id] || log.managing_organisation&.old_visible_id,
       log.assigned_to&.email,
       log.needstype,
       log.scheme&.id ? "S#{log.scheme&.id}" : "",
@@ -162,10 +164,10 @@ class BulkUpload::LettingsLogToCsv
       log.propcode,
       log.declaration,
       log.uprn,
-      log.address_line1,
-      log.address_line2,
-      log.town_or_city,
-      log.county, # 20
+      log.address_line1&.tr(",", " "),
+      log.address_line2&.tr(",", " "),
+      log.town_or_city&.tr(",", " "),
+      log.county&.tr(",", " "), # 20
 
       ((log.postcode_full || "").split(" ") || [""]).first,
       ((log.postcode_full || "").split(" ") || [""]).last,
