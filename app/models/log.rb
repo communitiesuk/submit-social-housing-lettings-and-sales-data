@@ -110,7 +110,7 @@ class Log < ApplicationRecord
         self.address_line2 = nil
         self.town_or_city = nil
         self.county = nil
-        self.postcode_full = postcode_full_input
+        self.postcode_full = postcode_full_input if postcode_full_input.match(POSTCODE_REGEXP)
         process_postcode_changes!
       else
         self.uprn = uprn_selection

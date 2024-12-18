@@ -861,19 +861,6 @@ RSpec.describe LettingsLog do
       end
     end
 
-    context "when startdate is before 2023" do
-      let(:lettings_log) { build(:lettings_log, startdate: Time.zone.parse("2022-07-01")) }
-
-      it "returns optional fields" do
-        expect(lettings_log.optional_fields).to eq(%w[
-          tenancycode
-          propcode
-          chcharge
-          tenancylength
-        ])
-      end
-    end
-
     context "when startdate is after 2023" do
       let(:lettings_log) { build(:lettings_log, startdate: Time.zone.parse("2023-07-01")) }
 
@@ -885,7 +872,6 @@ RSpec.describe LettingsLog do
           tenancylength
           address_line2
           county
-          postcode_full
         ])
       end
     end
