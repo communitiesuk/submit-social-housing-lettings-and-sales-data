@@ -33,6 +33,7 @@ FactoryBot.define do
       noint { 2 }
       privacynotice { 1 }
       purchid { rand(999_999_999).to_s }
+      staircase { 1 }
     end
     trait :discounted_ownership_setup_complete do
       saledate_today
@@ -66,6 +67,7 @@ FactoryBot.define do
       postcode_full { "A1 1AA" }
       noint { 2 }
       uprn_known { 0 }
+      staircase { 1 }
     end
     trait :completed do
       purchid { rand(999_999_999).to_s }

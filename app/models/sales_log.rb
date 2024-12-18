@@ -61,13 +61,14 @@ class SalesLog < Log
              [by_postcode, param_without_spaces, param_without_spaces])
   }
   scope :age1_answered, -> { where.not(age1: nil).or(where(age1_known: [1, 2])) }
+  scope :ecstat1_answered, -> { where.not(ecstat1: nil).or(where("saledate >= ?", Time.zone.local(2025, 4, 1))) }
   scope :duplicate_logs, lambda { |log|
     visible.where(log.slice(*DUPLICATE_LOG_ATTRIBUTES))
     .where.not(id: log.id)
     .where.not(saledate: nil)
     .where.not(sex1: nil)
-    .where.not(ecstat1: nil)
     .where.not(postcode_full: nil)
+    .ecstat1_answered
     .age1_answered
   }
   scope :after_date, ->(date) { where("saledate >= ?", date) }
@@ -77,9 +78,9 @@ class SalesLog < Log
     .group(*DUPLICATE_LOG_ATTRIBUTES)
     .where.not(saledate: nil)
     .where.not(sex1: nil)
-    .where.not(ecstat1: nil)
     .where.not(postcode_full: nil)
     .age1_answered
+    .ecstat1_answered
     .having("COUNT(*) > 1")
 
     if assigned_to_id
