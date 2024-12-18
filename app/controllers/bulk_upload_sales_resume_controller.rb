@@ -42,13 +42,13 @@ private
   def form
     @form ||= case params[:page]
               when "fix-choice"
-                Forms::BulkUploadSalesResume::FixChoice.new(form_params.merge(bulk_upload: @bulk_upload))
+                Forms::BulkUploadResume::FixChoice.new(form_params.merge(bulk_upload: @bulk_upload, log_type: "sales"))
               when "chosen"
-                Forms::BulkUploadSalesResume::Chosen.new(form_params.merge(bulk_upload: @bulk_upload))
+                Forms::BulkUploadResume::Chosen.new(form_params.merge(bulk_upload: @bulk_upload, log_type: "sales"))
               when "confirm"
-                Forms::BulkUploadSalesResume::Confirm.new(form_params.merge(bulk_upload: @bulk_upload))
+                Forms::BulkUploadResume::Confirm.new(form_params.merge(bulk_upload: @bulk_upload, log_type: "sales"))
               when "deletion-report"
-                Forms::BulkUploadSalesResume::DeletionReport.new(form_params.merge(bulk_upload: @bulk_upload))
+                Forms::BulkUploadResume::DeletionReport.new(form_params.merge(bulk_upload: @bulk_upload, log_type: "sales"))
               else
                 raise "invalid form"
               end

@@ -1,22 +1,23 @@
 module Forms
-  module BulkUploadSalesSoftValidationsCheck
+  module BulkUploadSoftValidationsCheck
     class Confirm
       include ActiveModel::Model
       include ActiveModel::Attributes
       include Rails.application.routes.url_helpers
 
+      attribute :log_type
       attribute :bulk_upload
 
       def view_path
-        "bulk_upload_sales_soft_validations_check/confirm"
+        "bulk_upload_#{log_type}_soft_validations_check/confirm"
       end
 
       def back_path
-        page_bulk_upload_sales_soft_validations_check_path(bulk_upload, page: "confirm-soft-errors")
+        send("page_bulk_upload_#{log_type}_soft_validations_check_path", bulk_upload, page: "confirm-soft-errors")
       end
 
       def next_path
-        sales_logs_path
+        send("#{log_type}_logs_path")
       end
 
       def save!
@@ -37,9 +38,9 @@ module Forms
       def preflight_redirect
         case bulk_upload.choice
         when "bulk-confirm-soft-validations"
-          page_bulk_upload_sales_soft_validations_check_path(bulk_upload, :chosen)
+          send("page_bulk_upload_#{log_type}_soft_validations_check_path", bulk_upload, :chosen)
         when "create-fix-inline"
-          page_bulk_upload_sales_resume_path(bulk_upload, :chosen)
+          send("page_bulk_upload_#{log_type}_resume_path", bulk_upload, :chosen)
         end
       end
     end

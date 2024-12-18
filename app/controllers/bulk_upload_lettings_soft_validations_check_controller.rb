@@ -36,11 +36,11 @@ private
   def form
     @form ||= case params[:page]
               when "confirm-soft-errors"
-                Forms::BulkUploadLettingsSoftValidationsCheck::ConfirmSoftErrors.new(form_params.merge(bulk_upload: @bulk_upload))
+                Forms::BulkUploadSoftValidationsCheck::ConfirmSoftErrors.new(form_params.merge(bulk_upload: @bulk_upload, log_type: "lettings"))
               when "chosen"
-                Forms::BulkUploadLettingsSoftValidationsCheck::Chosen.new(form_params.merge(bulk_upload: @bulk_upload))
+                Forms::BulkUploadSoftValidationsCheck::Chosen.new(form_params.merge(bulk_upload: @bulk_upload, log_type: "lettings"))
               when "confirm"
-                Forms::BulkUploadLettingsSoftValidationsCheck::Confirm.new(form_params.merge(bulk_upload: @bulk_upload))
+                Forms::BulkUploadSoftValidationsCheck::Confirm.new(form_params.merge(bulk_upload: @bulk_upload, log_type: "lettings"))
               else
                 raise "invalid form"
               end
