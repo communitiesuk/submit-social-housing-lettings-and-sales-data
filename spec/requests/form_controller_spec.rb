@@ -371,8 +371,10 @@ RSpec.describe FormController, type: :request do
     end
 
     describe "GET" do
+      let(:current_time) { Time.zone.local(2022, 5, 1) }
+
       around do |example|
-        Timecop.freeze(Time.zone.local(2022, 5, 1)) do
+        Timecop.freeze(current_time) do
           Singleton.__init__(FormHandler)
           example.run
         end
@@ -440,6 +442,21 @@ RSpec.describe FormController, type: :request do
                 get "/lettings-logs/#{lettings_log.id}/scheme", headers: headers, params: {}
                 expect(response.body.scan("<option value=").count).to eq(6)
               end
+            end
+          end
+        end
+
+        context "when viewing the manual adress entry page" do
+          let(:current_time) { Time.zone.local(2024, 5, 1) }
+
+          context "and postcode input exists but postcode is not set" do
+            let(:user) { create(:user, :support) }
+            let(:lettings_log) { create(:lettings_log, :setup_completed, postcode_full_input: "A1", address_line1_input: "xx", postcode_full: nil, uprn_known: 0, uprn_selection: "uprn_not_listed") }
+
+            it "displays the postcode_full_input in postcode_full field" do
+              get "/lettings-logs/#{lettings_log.id}/address", headers: headers, params: {}
+              expect(page).to have_field("lettings-log-postcode-full-field", with: "A1")
+              expect(lettings_log.reload.postcode_full).to eq(nil)
             end
           end
         end
