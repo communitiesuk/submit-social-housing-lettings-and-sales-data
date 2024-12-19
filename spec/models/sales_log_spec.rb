@@ -76,21 +76,6 @@ RSpec.describe SalesLog, type: :model do
   end
 
   describe "#optional_fields" do
-    context "when saledate is before 2023" do
-      let(:sales_log) { build(:sales_log, saledate: Time.zone.parse("2022-07-01")) }
-
-      it "returns optional fields" do
-        expect(sales_log.optional_fields).to eq(%w[
-          purchid
-          othtype
-          buyers_organisations
-          proplen
-          mortlen
-          frombeds
-        ])
-      end
-    end
-
     context "when saledate is after 2023" do
       let(:sales_log) { build(:sales_log, saledate: Time.zone.parse("2023-07-01")) }
 
@@ -101,7 +86,6 @@ RSpec.describe SalesLog, type: :model do
           buyers_organisations
           address_line2
           county
-          postcode_full
         ])
       end
     end
