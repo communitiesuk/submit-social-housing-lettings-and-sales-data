@@ -4,6 +4,8 @@ RSpec.describe Validations::Sales::SetupValidations do
   subject(:setup_validator) { validator_class.new }
 
   let(:validator_class) { Class.new { include Validations::Sales::SetupValidations } }
+  let(:current_year) { FormHandler.instance.current_sales_form.start_date.year }
+  let(:previous_year) { FormHandler.instance.previous_sales_form.start_date.year }
 
   describe "#validate_saledate_collection_year" do
     context "with sales_in_crossover_period == false" do
@@ -68,7 +70,7 @@ RSpec.describe Validations::Sales::SetupValidations do
       end
 
       context "when saledate is in an open previous collection year" do
-        let(:record) { build(:sales_log, saledate: Time.zone.local(2024, 1, 1)) }
+        let(:record) { build(:sales_log, saledate: Time.zone.local(current_year, 1, 1)) }
 
         before do
           allow(FormHandler.instance).to receive(:sales_in_crossover_period?).and_return(true)
@@ -91,12 +93,12 @@ RSpec.describe Validations::Sales::SetupValidations do
         it "adds error" do
           setup_validator.validate_saledate_collection_year(record)
 
-          expect(record.errors[:saledate]).to include("Enter a date within the 2023 to 2024 or 2024 to 2025 collection years, which is between 1st April 2023 and 31st March 2025.")
+          expect(record.errors[:saledate]).to include("Enter a date within the #{previous_year} to #{previous_year + 1} or #{current_year} to #{current_year + 1} collection years, which is between 1st April #{previous_year} and 31st March #{current_year + 1}.")
         end
       end
 
       context "when saledate is after an open collection year" do
-        let(:record) { build(:sales_log, saledate: Time.zone.local(2025, 4, 1)) }
+        let(:record) { build(:sales_log, saledate: Time.zone.local(current_year + 1, 4, 1)) }
 
         before do
           allow(FormHandler.instance).to receive(:sales_in_crossover_period?).and_return(true)
@@ -105,21 +107,17 @@ RSpec.describe Validations::Sales::SetupValidations do
         it "adds error" do
           setup_validator.validate_saledate_collection_year(record)
 
-          expect(record.errors[:saledate]).to include("Enter a date within the 2023 to 2024 or 2024 to 2025 collection years, which is between 1st April 2023 and 31st March 2025.")
+          expect(record.errors[:saledate]).to include("Enter a date within the #{previous_year} to #{previous_year + 1} or #{current_year} to #{current_year + 1} collection years, which is between 1st April #{previous_year} and 31st March #{current_year + 1}.")
         end
       end
 
       context "when current time is after the new logs end date but before edit end date for the previous period" do
         let(:record) { build(:sales_log, saledate: nil) }
 
-        before do
-          allow(Time).to receive(:now).and_return(Time.zone.local(2025, 1, 8))
-        end
-
         it "cannot create new logs for the archived collection year" do
           record.saledate = Time.zone.local(2023, 1, 1)
           setup_validator.validate_saledate_collection_year(record)
-          expect(record.errors["saledate"]).to include(match "Enter a date within the 2023 to 2024 or 2024 to 2025 collection years, which is between 1st April 2023 and 31st March 2025.")
+          expect(record.errors["saledate"]).to include(match "Enter a date within the #{previous_year} to #{previous_year + 1} or #{current_year} to #{current_year + 1} collection years, which is between 1st April #{previous_year} and 31st March #{current_year + 1}.")
         end
 
         it "can edit already created logs for the previous collection year" do
@@ -127,7 +125,7 @@ RSpec.describe Validations::Sales::SetupValidations do
           record.save!(validate: false)
           record.saledate = Time.zone.local(2024, 1, 1)
           setup_validator.validate_saledate_collection_year(record)
-          expect(record.errors["saledate"]).not_to include(match "Enter a date within the 2024 to 2025 collection year, which is between 1st April 2024 and 31st March 2025.")
+          expect(record.errors["saledate"]).not_to include(match "Enter a date within the #{current_year} to #{current_year + 1} collection year, which is between 1st April #{current_year} and 31st March #{current_year + 1}.")
         end
       end
 

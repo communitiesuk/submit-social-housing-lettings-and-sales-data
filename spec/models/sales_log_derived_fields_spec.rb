@@ -67,13 +67,13 @@ RSpec.describe SalesLog, type: :model do
     end
 
     it "clears mortgage value if mortgage used is changed from no to don't know" do
-      log = create(:sales_log, :outright_sale_setup_complete, mortgage: 0, mortgageused: 2)
+      log = create(:sales_log, :shared_ownership_setup_complete, stairowned: 100, mortgage: 0, mortgageused: 2)
       log.mortgageused = 3
       expect { log.set_derived_fields! }.to change(log, :mortgage).from(0).to(nil)
     end
 
     it "clears mortgage value if mortgage used is changed from yes to don't know" do
-      log = create(:sales_log, :outright_sale_setup_complete, mortgage: 50_000, mortgageused: 1)
+      log = create(:sales_log, :shared_ownership_setup_complete, staircase: 2, mortgage: 50_000, mortgageused: 1)
       log.mortgageused = 3
       expect { log.set_derived_fields! }.to change(log, :mortgage).from(50_000).to(nil)
     end
@@ -101,29 +101,35 @@ RSpec.describe SalesLog, type: :model do
         expect { log.set_derived_fields! }.to change(log, :deposit).from(0).to(nil)
       end
 
-      it "clears derived deposit when setting mortgage used to yes" do
-        log = create(:sales_log, :outright_sale_setup_complete, value: 123_400, deposit: 123_400, mortgageused: 2)
-        log.mortgageused = 1
-        expect { log.set_derived_fields! }.to change(log, :deposit).from(123_400).to(nil)
+      context "with outright sales log" do
+        before do
+          allow(Time).to receive(:now).and_return(Time.zone.local(2024, 5, 4))
+        end
+
+        it "clears derived deposit when setting mortgage used to yes" do
+          log = create(:sales_log, :outright_sale_setup_complete, value: 123_400, deposit: 123_400, mortgageused: 2)
+          log.mortgageused = 1
+          expect { log.set_derived_fields! }.to change(log, :deposit).from(123_400).to(nil)
+        end
+
+        it "clears that buyer 1 will live in the property if joint purchase is updated" do
+          log = create(:sales_log, :outright_sale_setup_complete, buylivein: 1, jointpur: 2)
+          log.jointpur = 1
+          expect { log.set_derived_fields! }.to change(log, :buy1livein).from(1).to(nil)
+        end
       end
 
       context "when buyers will live in the property" do
         context "and the sale is not a joint purchase" do
           it "derives that buyer 1 will live in the property" do
-            log = build(:sales_log, :outright_sale_setup_complete, buylivein: 1, jointpur: 2)
+            log = build(:sales_log, :shared_ownership_setup_complete, staircase: 2, buylivein: 1, jointpur: 2)
             expect { log.set_derived_fields! }.to change(log, :buy1livein).from(nil).to(1)
           end
 
           it "does not derive a value for whether buyer 2 will live in the property" do
-            log = build(:sales_log, :outright_sale_setup_complete, buylivein: 1, jointpur: 2)
+            log = build(:sales_log, :shared_ownership_setup_complete, staircase: 2, buylivein: 1, jointpur: 2)
             log.set_derived_fields!
             expect(log.buy2livein).to be_nil
-          end
-
-          it "clears that buyer 1 will live in the property if joint purchase is updated" do
-            log = create(:sales_log, :outright_sale_setup_complete, buylivein: 1, jointpur: 2)
-            log.jointpur = 1
-            expect { log.set_derived_fields! }.to change(log, :buy1livein).from(1).to(nil)
           end
         end
 
