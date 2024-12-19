@@ -60,6 +60,7 @@ module Exports
       attribute_hash["organisation_name"] = user.organisation.name
       attribute_hash["active"] = user.active?
       attribute_hash["phone"] = [user.phone, user.phone_extension].compact.join(" ")
+      attribute_hash["last_sign_in_at"] = user.last_sign_in_at&.iso8601
       attribute_hash
     end
   end

@@ -235,6 +235,7 @@ en:
     organisation:
       data_sharing_agreement_not_signed: "Your organisation must accept the Data Sharing Agreement before you can create any logs."
       name_missing: "Enter the name of the organisation."
+      name_not_unique: "An organisation with this name already exists. Use the organisation that already exists or add a location or other identifier to the name. For example: Organisation name (City)."
       provider_type_missing: "Select the organisation type."
       stock_owner:
         blank: "You must choose a stock owner."
@@ -381,6 +382,10 @@ en:
       organisation_part_of_another_merge: "This organisation is part of another merge - select a different one."
       organisation_part_of_another_incomplete_merge: "Another merge request records %{organisation} as merging into %{absorbing_organisation} on %{merge_date}. Select another organisation or remove this organisation from the other merge request."
       organisation_not_selected: "Select an organisation from the search list."
+      merge_request_id:
+        blank: "Select a merge request."
+      merging_organisation_id:
+        blank: "Select an organisation to merge."
 
   soft_validations:
     retirement:

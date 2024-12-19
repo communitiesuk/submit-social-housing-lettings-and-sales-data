@@ -121,4 +121,29 @@ RSpec.describe BulkUploadMailer do
       mailer.send_check_soft_validations_mail(bulk_upload:)
     end
   end
+
+  describe "#send_correct_duplicates_and_upload_again_mail" do
+    context "when 2 columns with errors" do
+      before do
+        create(:bulk_upload_error, bulk_upload:, col: "A")
+        create(:bulk_upload_error, bulk_upload:, col: "B")
+      end
+
+      it "sends correctly formed email" do
+        expect(notify_client).to receive(:send_email).with(
+          email_address: user.email,
+          template_id: described_class::FAILED_CSV_DUPLICATE_ERRORS_TEMPLATE_ID,
+          personalisation: {
+            filename: bulk_upload.filename,
+            upload_timestamp: bulk_upload.created_at.to_fs(:govuk_date_and_time),
+            year_combo: bulk_upload.year_combo,
+            lettings_or_sales: bulk_upload.log_type,
+            summary_report_link: "http://localhost:3000/lettings-logs/bulk-upload-results/#{bulk_upload.id}",
+          },
+        )
+
+        mailer.send_correct_duplicates_and_upload_again_mail(bulk_upload:)
+      end
+    end
+  end
 end

@@ -1057,7 +1057,7 @@ RSpec.describe SchemesController, type: :request do
 
           it "renders the same page with error message" do
             post "/schemes", params: params
-            expect(response).to have_http_status(:unprocessable_entity)
+            expect(response).to have_http_status(:unprocessable_content)
             expect(page).to have_content("Create a new supported housing scheme")
             expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.scheme_type.invalid"))
             expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.registered_under_care_act.invalid"))
@@ -1185,7 +1185,7 @@ RSpec.describe SchemesController, type: :request do
 
           it "renders the same page with error message" do
             post "/schemes", params: params
-            expect(response).to have_http_status(:unprocessable_entity)
+            expect(response).to have_http_status(:unprocessable_content)
             expect(page).to have_content("Create a new supported housing scheme")
             expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.scheme_type.invalid"))
             expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.registered_under_care_act.invalid"))
@@ -1318,7 +1318,7 @@ RSpec.describe SchemesController, type: :request do
 
         it "renders the same page with error message" do
           post "/schemes", params: params
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
           expect(page).to have_content("Create a new supported housing scheme")
           expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.scheme_type.invalid"))
           expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.registered_under_care_act.invalid"))
@@ -1334,7 +1334,7 @@ RSpec.describe SchemesController, type: :request do
 
         it "displays the new page with an error message" do
           post "/schemes", params: params
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
           expect(page).to have_content("Enter an organisation that owns housing stock")
         end
       end
@@ -1375,7 +1375,7 @@ RSpec.describe SchemesController, type: :request do
         let(:params) { { scheme: { owning_organisation_id: user.organisation.id, arrangement_type: nil, confirmed: true, page: "check-answers" } } }
 
         it "does not allow the scheme to be confirmed" do
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
           expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.arrangement_type.invalid"))
         end
       end
@@ -1417,7 +1417,7 @@ RSpec.describe SchemesController, type: :request do
         end
 
         it "renders the same page with error message" do
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
           expect(page).to have_content("Create a new supported housing scheme")
           expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.service_name.invalid"))
           expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.scheme_type.invalid"))
@@ -1684,7 +1684,7 @@ RSpec.describe SchemesController, type: :request do
         let(:params) { { scheme: { owning_organisation_id: user.organisation.id, arrangement_type: nil, confirmed: true, page: "check-answers" } } }
 
         it "does not allow the scheme to be confirmed" do
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
           expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.arrangement_type.invalid"))
         end
       end
@@ -1728,7 +1728,7 @@ RSpec.describe SchemesController, type: :request do
         end
 
         it "renders the same page with error message" do
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
           expect(page).to have_content("Create a new supported housing scheme")
           expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.owning_organisation_id.invalid"))
           expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.service_name.invalid"))
@@ -2035,6 +2035,17 @@ RSpec.describe SchemesController, type: :request do
         expect(page).to have_content("What client group is this scheme intended for?")
       end
 
+      it "has correct back link" do
+        expect(page).to have_link("Back", href: "/schemes/#{scheme.id}/details")
+      end
+
+      context "and accessed from check answers" do
+        it "has correct back link" do
+          get "/schemes/#{scheme.id}/primary-client-group?referrer=check-answers"
+          expect(page).to have_link("Back", href: "/schemes/#{scheme.id}/check-answers")
+        end
+      end
+
       context "when attempting to access primary-client-group scheme page for another organisation" do
         before do
           get "/schemes/#{another_scheme.id}/primary-client-group"
@@ -2110,6 +2121,17 @@ RSpec.describe SchemesController, type: :request do
       it "returns a template for a confirm-secondary-client-group" do
         expect(response).to have_http_status(:ok)
         expect(page).to have_content("Does this scheme provide for another client group?")
+      end
+
+      it "has correct back link" do
+        expect(page).to have_link("Back", href: "/schemes/#{scheme.id}/primary-client-group")
+      end
+
+      context "and accessed from check answers" do
+        it "has correct back link" do
+          get "/schemes/#{scheme.id}/confirm-secondary-client-group?referrer=check-answers"
+          expect(page).to have_link("Back", href: "/schemes/#{scheme.id}/check-answers")
+        end
       end
 
       context "when attempting to access confirm-secondary-client-group scheme page for another organisation" do
@@ -2189,6 +2211,24 @@ RSpec.describe SchemesController, type: :request do
         expect(page).to have_content("What is the other client group?")
       end
 
+      it "has correct back link" do
+        expect(page).to have_link("Back", href: "/schemes/#{scheme.id}/confirm-secondary-client-group")
+      end
+
+      context "and accessed from check answers" do
+        it "has correct back link" do
+          get "/schemes/#{scheme.id}/secondary-client-group?referrer=check-answers"
+          expect(page).to have_link("Back", href: "/schemes/#{scheme.id}/check-answers")
+        end
+      end
+
+      context "and accessed from has other client group" do
+        it "has correct back link" do
+          get "/schemes/#{scheme.id}/secondary-client-group?referrer=has-other-client-group"
+          expect(page).to have_link("Back", href: "/schemes/#{scheme.id}/confirm-secondary-client-group?referrer=check-answers")
+        end
+      end
+
       context "when attempting to access secondary-client-group scheme page for another organisation" do
         before do
           get "/schemes/#{another_scheme.id}/secondary-client-group"
@@ -2258,7 +2298,7 @@ RSpec.describe SchemesController, type: :request do
 
     context "when signed in as a data coordinator" do
       let(:user) { create(:user, :data_coordinator) }
-      let(:scheme) { create(:scheme, owning_organisation: user.organisation, confirmed: nil) }
+      let(:scheme) { create(:scheme, owning_organisation: user.organisation, confirmed: nil, has_other_client_group: "Yes") }
       let(:another_scheme) { create(:scheme, confirmed: nil) }
 
       before do
@@ -2269,6 +2309,27 @@ RSpec.describe SchemesController, type: :request do
       it "returns a template for a support" do
         expect(response).to have_http_status(:ok)
         expect(page).to have_content("What support does this scheme provide?")
+      end
+
+      context "when scheme has secondary client group" do
+        it "has correct back link" do
+          expect(page).to have_link("Back", href: "/schemes/#{scheme.id}/secondary-client-group")
+        end
+      end
+
+      context "when scheme has no secondary client group" do
+        let(:scheme) { create(:scheme, owning_organisation: user.organisation, confirmed: nil, has_other_client_group: "No") }
+
+        it "has correct back link" do
+          expect(page).to have_link("Back", href: "/schemes/#{scheme.id}/confirm-secondary-client-group")
+        end
+      end
+
+      context "and accessed from check answers" do
+        it "has correct back link" do
+          get "/schemes/#{scheme.id}/support?referrer=check-answers"
+          expect(page).to have_link("Back", href: "/schemes/#{scheme.id}/check-answers")
+        end
       end
 
       context "when attempting to access secondary-client-group scheme page for another organisation" do
@@ -2431,6 +2492,17 @@ RSpec.describe SchemesController, type: :request do
       it "returns a template for a support" do
         expect(response).to have_http_status(:ok)
         expect(page).to have_content("Create a new supported housing scheme")
+      end
+
+      it "has correct back link" do
+        expect(page).to have_link("Back", href: "/schemes")
+      end
+
+      context "and accessed from check answers" do
+        it "has correct back link" do
+          get "/schemes/#{scheme.id}/details?referrer=check-answers"
+          expect(page).to have_link("Back", href: "/schemes/#{scheme.id}/check-answers")
+        end
       end
 
       context "when attempting to access check-answers scheme page for another organisation" do
@@ -2823,7 +2895,7 @@ RSpec.describe SchemesController, type: :request do
         let(:params) { { scheme_deactivation_period: { "deactivation_date": "" } } }
 
         it "displays the new page with an error message" do
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
           expect(page).to have_content(I18n.t("validations.scheme.toggle_date.not_selected"))
         end
       end
@@ -2832,7 +2904,7 @@ RSpec.describe SchemesController, type: :request do
         let(:params) { { scheme_deactivation_period: { deactivation_date_type: "other", "deactivation_date(3i)": "10", "deactivation_date(2i)": "44", "deactivation_date(1i)": "2022" } } }
 
         it "displays the new page with an error message" do
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
           expect(page).to have_content(I18n.t("validations.scheme.toggle_date.invalid"))
         end
       end
@@ -2841,7 +2913,7 @@ RSpec.describe SchemesController, type: :request do
         let(:params) { { scheme_deactivation_period: { deactivation_date_type: "other", "deactivation_date(3i)": "10", "deactivation_date(2i)": "4", "deactivation_date(1i)": "2020" } } }
 
         it "displays the new page with an error message" do
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
           expect(page).to have_content(I18n.t("validations.scheme.toggle_date.out_of_range", date: "1 April 2022"))
         end
       end
@@ -2850,7 +2922,7 @@ RSpec.describe SchemesController, type: :request do
         let(:params) { { scheme_deactivation_period: { deactivation_date_type: "other", "deactivation_date(3i)": "", "deactivation_date(2i)": "2", "deactivation_date(1i)": "2022" } } }
 
         it "displays page with an error message" do
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
           expect(page).to have_content(I18n.t("validations.scheme.toggle_date.invalid"))
         end
       end
@@ -2859,7 +2931,7 @@ RSpec.describe SchemesController, type: :request do
         let(:params) { { scheme_deactivation_period: { deactivation_date_type: "other", "deactivation_date(3i)": "2", "deactivation_date(2i)": "", "deactivation_date(1i)": "2022" } } }
 
         it "displays page with an error message" do
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
           expect(page).to have_content(I18n.t("validations.scheme.toggle_date.invalid"))
         end
       end
@@ -2868,7 +2940,7 @@ RSpec.describe SchemesController, type: :request do
         let(:params) { { scheme_deactivation_period: { deactivation_date_type: "other", "deactivation_date(3i)": "2", "deactivation_date(2i)": "2", "deactivation_date(1i)": "" } } }
 
         it "displays page with an error message" do
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
           expect(page).to have_content(I18n.t("validations.scheme.toggle_date.invalid"))
         end
       end

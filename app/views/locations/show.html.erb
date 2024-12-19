@@ -51,6 +51,6 @@
   <%= toggle_location_link(@location) %>
 <% end %>
 
-<% if LocationPolicy.new(current_user, @location).delete? && FeatureToggle.delete_location_enabled? %>
+<% if LocationPolicy.new(current_user, @location).delete? %>
   <%= delete_location_link(@location) %>
 <% end %>

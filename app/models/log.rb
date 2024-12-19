@@ -18,14 +18,14 @@ class Log < ApplicationRecord
     "pending" => 3,
     "deleted" => 4,
   }.freeze
-  enum status: STATUS
-  enum status_cache: STATUS, _prefix: true
+  enum :status, STATUS
+  enum :status_cache, STATUS, prefix: true
 
   CREATION_METHOD = {
     "single log" => 1,
     "bulk upload" => 2,
   }.freeze
-  enum creation_method: CREATION_METHOD, _prefix: true
+  enum :creation_method, CREATION_METHOD, prefix: true
 
   scope :visible, -> { where(status: %w[not_started in_progress completed]) }
   scope :exportable, -> { where(status: %w[not_started in_progress completed deleted]) }
@@ -110,7 +110,7 @@ class Log < ApplicationRecord
         self.address_line2 = nil
         self.town_or_city = nil
         self.county = nil
-        self.postcode_full = postcode_full_input
+        self.postcode_full = postcode_full_input if postcode_full_input.match(POSTCODE_REGEXP)
         process_postcode_changes!
       else
         self.uprn = uprn_selection
@@ -317,7 +317,11 @@ private
   def update_status!
     return if skip_update_status
 
-    self.status = calculate_status
+    if status == "pending"
+      self.status_cache = calculate_status
+    else
+      self.status = calculate_status
+    end
   end
 
   def all_subsections_completed?
@@ -373,14 +377,14 @@ private
   end
 
   def reset_location_fields!
-    reset_location(is_la_inferred, "la", "is_la_inferred", "postcode_full", 1)
+    reset_log_location(is_la_inferred, "la", "is_la_inferred", "postcode_full", 1)
   end
 
   def reset_previous_location_fields!
-    reset_location(is_previous_la_inferred, "prevloc", "is_previous_la_inferred", "ppostcode_full", previous_la_known)
+    reset_log_location(is_previous_la_inferred, "prevloc", "is_previous_la_inferred", "ppostcode_full", previous_la_known)
   end
 
-  def reset_location(is_inferred, la_key, is_inferred_key, postcode_key, is_la_known)
+  def reset_log_location(is_inferred, la_key, is_inferred_key, postcode_key, is_la_known)
     if is_inferred || is_la_known != 1
       self[la_key] = nil
     end

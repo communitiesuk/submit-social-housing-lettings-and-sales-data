@@ -6,11 +6,11 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby "3.1.4"
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails', branch: 'main'
-gem "rails", "~> 7.0.8.5"
+gem "rails", "~> 7.2.2"
 # Use postgresql as the database for Active Record
 gem "pg", "~> 1.1"
 # Use Puma as the app server
-gem "puma", "~> 5.6"
+gem "puma", "~> 6.4"
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem "propshaft"
 # Bundle and transpile JavaScript [https://github.com/rails/jsbundling-rails]
@@ -18,9 +18,9 @@ gem "jsbundling-rails"
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", ">= 1.4.4", require: false
 # GOV UK frontend components
-gem "govuk-components", "~> 5.1"
+gem "govuk-components", "~> 5.7"
 # GOV UK component form builder DSL
-gem "govuk_design_system_formbuilder", "~> 5.0"
+gem "govuk_design_system_formbuilder", "~> 5.7"
 # Convert Markdown into GOV.UK frontend-styled HTML
 gem "govuk_markdown"
 gem "redcarpet", "~> 3.6"
@@ -44,7 +44,7 @@ gem "view_component", "~> 3.9"
 # Use the AWS S3 SDK as storage mechanism
 gem "aws-sdk-s3"
 # Track changes to models for auditing or versioning.
-gem "paper_trail"
+gem "paper_trail", "~> 15.2"
 # Store active record objects in version whodunnits
 gem "paper_trail-globalid"
 
@@ -90,7 +90,7 @@ group :development do
   # Display performance information such as SQL time and flame graphs for each request in your browser.
   # Can be configured to work on production as well see: https://github.com/MiniProfiler/rack-mini-profiler/blob/master/README.md
   gem "erb_lint", require: false
-  gem "rack-mini-profiler", "~> 2.0"
+  gem "rack-mini-profiler", "~> 3.3.0"
   gem "rubocop-govuk", "4.3.0", require: false
   gem "rubocop-performance", require: false
   gem "rubocop-rails", require: false

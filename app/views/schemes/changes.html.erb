@@ -15,11 +15,11 @@
     <p class="govuk-body">We have restructured the way we group supported housing scheme data.</p>
     <p class="govuk-body">On old CORE, a scheme’s data was split into management group and scheme. On new CORE, the data is split into scheme and location.</p>
     <p class="govuk-body">These are the main changes:</p>
-    <ul class="govuk-list govuk-list--bullet">
-      <li>Schemes now store data about the stock owner and support provider. This was previously stored in management group.</li>
-      <li>Schemes still store data about the type of support, as they did in old CORE.</li>
-      <li>Schemes no longer store data about postcodes where support is provided. These are now in locations.</li>
-    </ul>
+    <%= govuk_list [
+      "Schemes now store data about the stock owner and support provider. This was previously stored in management group.",
+      "Schemes still store data about the type of support, as they did in old CORE.",
+      "Schemes no longer store data about postcodes where support is provided. These are now in locations.",
+    ], type: :bullet %>
     <p class="govuk-body">This new structure means data coordinators only needs to fill in support details once.</p>
     <h2 class="govuk-heading-m">How schemes are migrated from old CORE</h2>
     <p class="govuk-body">If your organisation has migrated from old CORE to new CORE, your existing schemes are on the <%= govuk_link_to("schemes page", schemes_path) %>, with the same details.</p>

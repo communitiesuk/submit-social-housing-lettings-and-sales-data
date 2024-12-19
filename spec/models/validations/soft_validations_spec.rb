@@ -174,6 +174,20 @@ RSpec.describe Validations::SoftValidations do
       end
     end
 
+    context "when all tenants are male and household members are over 8" do
+      it "does not show the interruption screen" do
+        (1..8).each do |n|
+          record.send("sex#{n}=", "M")
+          record.send("age#{n}=", 30)
+          record.send("age#{n}_known=", 0)
+          record.send("details_known_#{n}=", 0) unless n == 1
+        end
+        record.preg_occ = 1
+        record.hhmemb = 9
+        expect(record.all_male_tenants_in_a_pregnant_household?).to be false
+      end
+    end
+
     context "when female tenants are under 16" do
       it "shows the interruption screen" do
         record.age2 = 14
@@ -216,6 +230,20 @@ RSpec.describe Validations::SoftValidations do
         record.preg_occ = 1
         record.hhmemb = 2
         expect(record.all_male_tenants_in_a_pregnant_household?).to be false
+        expect(record.female_in_pregnant_household_in_soft_validation_range?).to be false
+      end
+    end
+
+    context "when number of household members is over 8" do
+      it "does not show the interruption screen" do
+        (1..8).each do |n|
+          record.send("sex#{n}=", "F")
+          record.send("age#{n}=", 50)
+          record.send("age#{n}_known=", 0)
+          record.send("details_known_#{n}=", 0) unless n == 1
+        end
+        record.preg_occ = 1
+        record.hhmemb = 9
         expect(record.female_in_pregnant_household_in_soft_validation_range?).to be false
       end
     end
