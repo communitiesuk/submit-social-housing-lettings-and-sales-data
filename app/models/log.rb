@@ -294,6 +294,10 @@ class Log < ApplicationRecord
     !!public_send("age#{person_num}_known")&.zero?
   end
 
+  def postcode_full_input_placeholder
+    postcode_full_input
+  end
+
 private
 
   # Handle logs that are older than previous collection start date

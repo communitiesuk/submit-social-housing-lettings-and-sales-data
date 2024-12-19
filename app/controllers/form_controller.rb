@@ -93,6 +93,7 @@ class FormController < ApplicationController
           @questions = request.params["related_question_ids"].map { |id| @log.form.get_question(id, @log) }
           render "form/check_errors"
         else
+          restore_placeholder_values(@log, @page)
           if flash[:errors].present?
             restore_previous_errors(flash[:errors])
             restore_error_field_values(flash[:log_data])
@@ -123,6 +124,14 @@ private
     end
 
     @log.assign_attributes(previous_responses_to_reset)
+  end
+
+  def restore_placeholder_values(log, page)
+    page.questions.each do |question|
+      next if question.placeholder_method.blank?
+
+      log[question.id] ||= log.send(question.placeholder_method)
+    end
   end
 
   def restore_previous_errors(previous_errors)

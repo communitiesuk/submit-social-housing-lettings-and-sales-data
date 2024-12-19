@@ -8,7 +8,7 @@ class Form::Question
                 :top_guidance_partial, :bottom_guidance_partial, :prefix, :suffix,
                 :requires_js, :fields_added, :derived, :check_answers_card_number,
                 :unresolved_hint_text, :question_number, :hide_question_number_on_page,
-                :plain_label, :error_label
+                :plain_label, :error_label, :placeholder_method
 
   def initialize(id, hsh, page)
     @id = id

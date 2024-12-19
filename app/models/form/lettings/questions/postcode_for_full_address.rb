@@ -20,6 +20,7 @@ class Form::Lettings::Questions::PostcodeForFullAddress < ::Form::Question
     @disable_clearing_if_not_routed_or_dynamic_answer_options = true
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
     @hide_question_number_on_page = true
+    @placeholder_method = "postcode_full_input_placeholder"
   end
 
   QUESTION_NUMBER_FROM_YEAR = { 2023 => 12, 2024 => 13 }.freeze
