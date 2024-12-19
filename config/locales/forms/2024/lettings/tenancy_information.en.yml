@@ -6,14 +6,14 @@ en:
           joint:
             page_header: ""
             check_answer_label: "Joint tenancy"
-            check_answer_prompt: "Answer if joint tenancy"
+            check_answer_prompt: "Tell us if joint tenancy"
             hint_text: "This is where two or more people are named on the tenancy agreement"
             question_text: "Is this a joint tenancy?"
 
           startertenancy:
             page_header: ""
             check_answer_label: "Starter or introductory tenancy"
-            check_answer_prompt: "Answer if starter or introductory tenancy"
+            check_answer_prompt: "Tell us if starter or introductory tenancy"
             hint_text: "If the tenancy has an ‘introductory period’ answer ‘yes’.<br><br>You should submit a CORE log at the beginning of the starter tenancy or introductory period, with the best information you have at the time. You do not need to submit a log when a tenant later rolls onto the main tenancy."
             question_text: "Is this a starter tenancy?"
 
@@ -72,6 +72,6 @@ en:
           sheltered:
             page_header: ""
             check_answer_label: "Letting in sheltered accommodation"
-            check_answer_prompt: "Answer if letting is in sheltered accommodation"
+            check_answer_prompt: "Tell us if letting is in sheltered accommodation"
             hint_text: "Sheltered housing and special retirement housing are for tenants with low-level care and support needs. This typically provides some limited support to enable independent living, such as alarm-based assistance or a scheme manager.</br></br>Extra care housing is for tenants with medium to high care and support needs, often with 24 hour access to support staff provided by an agency registered with the Care Quality Commission."
             question_text: "Is this letting in sheltered accommodation?"

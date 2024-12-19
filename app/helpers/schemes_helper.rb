@@ -110,7 +110,7 @@ module SchemesHelper
   def scheme_details_link_message(attribute)
     text = lowercase_first_letter(attribute[:name])
     return "Select #{text}" if %w[primary_client_group secondary_client_group support_type intended_stay].include?(attribute[:id])
-    return "Answer if it #{text}" if attribute[:id] == "has_other_client_group"
+    return "Tell us if it #{text}" if attribute[:id] == "has_other_client_group"
 
     "Enter #{text}"
   end

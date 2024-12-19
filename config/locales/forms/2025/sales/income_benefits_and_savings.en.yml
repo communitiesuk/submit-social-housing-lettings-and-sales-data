@@ -19,7 +19,7 @@ en:
           inc1mort:
             page_header: ""
             check_answer_label: "Buyer 1’s income used for mortgage application"
-            check_answer_prompt: "Answer if buyer 1’s income used for mortgage application"
+            check_answer_prompt: "Tell us if buyer 1’s income used for mortgage application"
             hint_text: ""
             question_text: "Was buyer 1’s income used for a mortgage application?"
 

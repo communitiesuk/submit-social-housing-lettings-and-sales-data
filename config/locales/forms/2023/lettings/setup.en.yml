@@ -55,7 +55,7 @@ en:
           renewal:
             page_header: ""
             check_answer_label: "Property renewal"
-            check_answer_prompt: "Answer if it's a property renewal"
+            check_answer_prompt: "Tell us if it's a property renewal"
             hint_text: "A renewal is a letting to the same tenant in the same property. If the property was previously being used as temporary accommodation, then answer 'no'."
             question_text: "Is this letting a renewal?"
 

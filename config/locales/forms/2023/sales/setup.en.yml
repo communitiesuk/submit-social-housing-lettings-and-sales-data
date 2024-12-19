@@ -41,7 +41,7 @@ en:
           ownershipsch:
             page_header: ""
             check_answer_label: "Purchase made under ownership scheme"
-            check_answer_prompt: "Answer if purchase made under ownership scheme"
+            check_answer_prompt: "Tell us if purchase made under ownership scheme"
             hint_text: ""
             question_text: "Was this purchase made through an ownership scheme?"
 
@@ -81,21 +81,21 @@ en:
           buylivein:
             page_header: ""
             check_answer_label: "Buyers living in property"
-            check_answer_prompt: "Answer if buyers live in the property"
+            check_answer_prompt: "Tell us if buyers live in the property"
             hint_text: ""
             question_text: "Will the buyers live in the property?"
 
           jointpur:
             page_header: ""
             check_answer_label: "Joint purchase"
-            check_answer_prompt: "Answer if joint purchase"
+            check_answer_prompt: "Tell us if joint purchase"
             hint_text: ""
             question_text: "Is this a joint purchase?"
 
           jointmore:
             page_header: ""
             check_answer_label: "More than 2 joint buyers"
-            check_answer_prompt: "Answer if there are more than 2 joint buyers"
+            check_answer_prompt: "Tell us if there are more than 2 joint buyers"
             hint_text: "You should still try to answer all questions even if the buyers weren’t interviewed in person"
             question_text: "Are there more than 2 joint buyers of this property?"
 
@@ -103,13 +103,13 @@ en:
             joint_purchase:
               page_header: ""
               check_answer_label: "Buyers interviewed in person"
-              check_answer_prompt: "Answer if buyers interviewed in person"
+              check_answer_prompt: "Tell us if buyers interviewed in person"
               hint_text: "You should still try to answer all questions even if the buyers weren’t interviewed in person"
               question_text: "Were the buyers interviewed for any of the answers you will provide on this log?"
             not_joint_purchase:
               page_header: ""
               check_answer_label: "Buyer interviewed in person"
-              check_answer_prompt: "Answer if buyer interviewed in person"
+              check_answer_prompt: "Tell us if buyer interviewed in person"
               hint_text: "You should still try to answer all questions even if the buyer wasn’t interviewed in person"
               question_text: "Was the buyer interviewed for any of the answers you will provide on this log?"
 
@@ -117,12 +117,12 @@ en:
             joint_purchase:
               page_header: ""
               check_answer_label: "Buyers have seen the privacy notice"
-              check_answer_prompt: "Answer if buyers have seen the privacy notice"
+              check_answer_prompt: "Tell us if buyers have seen the privacy notice"
               hint_text: ""
               question_text: "Declaration"
             not_joint_purchase:
               page_header: ""
               check_answer_label: "Buyer has seen the privacy notice"
-              check_answer_prompt: "Answer if buyer has seen the privacy notice"
+              check_answer_prompt: "Tell us if buyer has seen the privacy notice"
               hint_text: ""
               question_text: "Declaration"

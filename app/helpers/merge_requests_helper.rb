@@ -16,7 +16,7 @@ module MergeRequestsHelper
 
   def merge_request_details_prompt(page)
     messages = {
-      "existing_absorbing_organisation" => "Answer if absorbing organisation is already active",
+      "existing_absorbing_organisation" => "Tell us if absorbing organisation is already active",
       "helpdesk_ticket" => "Enter helpdesk ticket number",
       "merging_organisations" => "Add merging organisations",
       "merge_date" => "Set merge date",

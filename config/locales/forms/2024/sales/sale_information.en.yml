@@ -13,7 +13,7 @@ en:
                 question_text: "How long did they live there?"
               proplen_asked:
                 check_answer_label: "Buyers lived in the property before purchasing"
-                check_answer_prompt: "Answer if buyer lived in the property before purchase"
+                check_answer_prompt: "Tell us if buyer lived in the property before purchase"
                 hint_text: ""
                 question_text: "Did the buyers live in the property before purchasing it?"
             not_joint_purchase:
@@ -32,7 +32,7 @@ en:
           staircasing:
             page_header: ""
             check_answer_label: "Staircasing transaction"
-            check_answer_prompt: "Answer if staircasing transaction"
+            check_answer_prompt: "Tell us if staircasing transaction"
             hint_text: "A staircasing transaction is when the household purchases more shares in their property, increasing the proportion they own and decreasing the proportion the housing association owns. Once the household purchases 100% of the shares, they own the property."
             question_text: "Is this a staircasing transaction?"
           about_staircasing:
@@ -83,7 +83,7 @@ en:
           la_nominations:
             page_header: ""
             check_answer_label: "Household rehoused under a local authority nominations agreement"
-            check_answer_prompt: "Answer if household rehoused under a local authority nominations agreement"
+            check_answer_prompt: "Tell us if household rehoused under a local authority nominations agreement"
             hint_text: "A local authority nominations agreement is a written agreement between a local authority and private registered provider (PRP) that some or all of its sales vacancies are offered to local authorities for rehousing"
             question_text: "Was the household rehoused under a 'local authority nominations agreement'?"
 
@@ -139,7 +139,7 @@ en:
           mortgageused:
             page_header: ""
             check_answer_label: "Mortgage used"
-            check_answer_prompt: "Answer if mortgage was used"
+            check_answer_prompt: "Tell us if mortgage was used"
             hint_text: ""
             question_text: "Was a mortgage used for the purchase of this property?"
 
@@ -174,7 +174,7 @@ en:
           extrabor:
             page_header: ""
             check_answer_label: "Any other borrowing"
-            check_answer_prompt: "Answer if there is any other borrowing"
+            check_answer_prompt: "Tell us if there is any other borrowing"
             hint_text: ""
             question_text: "Does this include any extra borrowing?"
 
@@ -203,7 +203,7 @@ en:
             page_header: ""
             has_mscharge:
               check_answer_label: "Property has monthly leasehold charges"
-              check_answer_prompt: "Answer if the property has any monthly leasehold charges"
+              check_answer_prompt: "Tell us if the property has any monthly leasehold charges"
               hint_text: "For example, service and management charges"
               question_text: "Does the property have any monthly leasehold charges?"
             mscharge:

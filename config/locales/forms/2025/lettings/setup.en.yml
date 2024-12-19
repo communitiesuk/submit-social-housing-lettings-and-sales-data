@@ -55,7 +55,7 @@ en:
           renewal:
             page_header: ""
             check_answer_label: "Property renewal"
-            check_answer_prompt: "Answer if it's a property renewal"
+            check_answer_prompt: "Tell us if it's a property renewal"
             hint_text: "If the property was previously being used as temporary accommodation, then answer 'no'."
             question_text: "Is this letting a renewal of social housing to the same tenant in the same property?"
 
@@ -96,6 +96,6 @@ en:
           declaration:
             page_header: "Ministry of Housing, Communities and Local Government privacy notice"
             check_answer_label: "Tenant has seen the privacy notice"
-            check_answer_prompt: "Answer if tenant has seen the privacy notice"
+            check_answer_prompt: "Tell us if tenant has seen the privacy notice"
             hint_text: ""
             question_text: "Declaration"

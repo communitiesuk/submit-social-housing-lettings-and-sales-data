@@ -7,13 +7,13 @@ en:
             joint_purchase:
               page_header: ""
               check_answer_label: "Buyers interviewed in person"
-              check_answer_prompt: "Answer if buyers interviewed in person"
+              check_answer_prompt: "Tell us if buyers interviewed in person"
               hint_text: "You should still try to answer all questions even if the buyers weren’t interviewed in person"
               question_text: "Were the buyers interviewed for any of the answers you will provide on this log?"
             not_joint_purchase:
               page_header: ""
               check_answer_label: "Buyer interviewed in person"
-              check_answer_prompt: "Answer if buyer interviewed in person"
+              check_answer_prompt: "Tell us if buyer interviewed in person"
               hint_text: "You should still try to answer all questions even if the buyer wasn’t interviewed in person"
               question_text: "Was the buyer interviewed for any of the answers you will provide on this log?"
 
@@ -21,13 +21,13 @@ en:
             joint_purchase:
               page_header: ""
               check_answer_label: "Buyers have seen the privacy notice"
-              check_answer_prompt: "Answer if buyers have seen the privacy notice"
+              check_answer_prompt: "Tell us if buyers have seen the privacy notice"
               hint_text: ""
               question_text: "Declaration"
             not_joint_purchase:
               page_header: ""
               check_answer_label: "Buyer has seen the privacy notice"
-              check_answer_prompt: "Answer if buyer has seen the privacy notice"
+              check_answer_prompt: "Tell us if buyer has seen the privacy notice"
               hint_text: ""
               question_text: "Declaration"
 
@@ -107,7 +107,7 @@ en:
           buy1livein:
             page_header: ""
             check_answer_label: "Buyer 1 lives in the property"
-            check_answer_prompt: "Answer if buyer 1 lives in the property"
+            check_answer_prompt: "Tell us if buyer 1 lives in the property"
             hint_text: "Buyer 1 is the person in the household who does the most paid work. If it’s a joint purchase and the buyers do the same amount of paid work, buyer 1 is whoever is the oldest."
             question_text: "Will buyer 1 live in the property?"
 
@@ -130,7 +130,7 @@ en:
               page_header: ""
               age2_known:
                 check_answer_label: "Buyer 2’s age"
-                check_answer_prompt: "Answer if you know buyer 2's age"
+                check_answer_prompt: "Tell us if you know buyer 2's age"
                 hint_text: ""
                 question_text: "Do you know buyer 2’s age?"
               age2:
@@ -142,7 +142,7 @@ en:
               page_header: ""
               age2_known:
                 check_answer_label: "Person 2’s age known?"
-                check_answer_prompt: "Answer if you know person 2's age"
+                check_answer_prompt: "Tell us if you know person 2's age"
                 hint_text: ""
                 question_text: "Do you know person 2’s age?"
               age:
@@ -228,7 +228,7 @@ en:
           buy2livein:
             page_header: ""
             check_answer_label: "Buyer 2 lives in the property"
-            check_answer_prompt: "Answer if buyer 2 lives in the property"
+            check_answer_prompt: "Tell us if buyer 2 lives in the property"
             hint_text: ""
             question_text: "Will buyer 2 live in the property?"
 
@@ -249,14 +249,14 @@ en:
           details_known_2:
             page_header: ""
             check_answer_label: "Details known for person 2?"
-            check_answer_prompt: "Answer if you know person 2's details"
+            check_answer_prompt: "Tell us if you know person 2's details"
             hint_text: ""
             question_text: "Do you know the details for person 2?"
 
           details_known_3:
             page_header: ""
             check_answer_label: "Details known for person 3?"
-            check_answer_prompt: "Answer if you know person 3's details"
+            check_answer_prompt: "Tell us if you know person 3's details"
             hint_text: ""
             question_text: "Do you know the details for person 3?"
 
@@ -271,7 +271,7 @@ en:
             page_header: ""
             age3_known:
               check_answer_label: "Person 3’s age known?"
-              check_answer_prompt: "Answer if you know person 3's age"
+              check_answer_prompt: "Tell us if you know person 3's age"
               hint_text: ""
               question_text: "Do you know person 3’s age?"
             age3:
@@ -297,7 +297,7 @@ en:
           details_known_4:
             page_header: ""
             check_answer_label: "Details known for person 4?"
-            check_answer_prompt: "Answer if you know person 4's details"
+            check_answer_prompt: "Tell us if you know person 4's details"
             hint_text: ""
             question_text: "Do you know the details for person 4?"
 
@@ -312,7 +312,7 @@ en:
             page_header: ""
             age4_known:
               check_answer_label: "Person 4’s age known?"
-              check_answer_prompt: "Answer if you know person 4's age"
+              check_answer_prompt: "Tell us if you know person 4's age"
               hint_text: ""
               question_text: "Do you know person 4’s age?"
             age4:
@@ -338,7 +338,7 @@ en:
           details_known_5:
             page_header: ""
             check_answer_label: "Details known for person 5?"
-            check_answer_prompt: "Answer if you know person 5's details"
+            check_answer_prompt: "Tell us if you know person 5's details"
             hint_text: ""
             question_text: "Do you know the details for person 5?"
 
@@ -353,7 +353,7 @@ en:
             page_header: ""
             age5_known:
               check_answer_label: "Person 5’s age known?"
-              check_answer_prompt: "Answer if you know person 5's age"
+              check_answer_prompt: "Tell us if you know person 5's age"
               hint_text: ""
               question_text: "Do you know person 5’s age?"
             age5:
@@ -379,7 +379,7 @@ en:
           details_known_6:
             page_header: ""
             check_answer_label: "Details known for person 6?"
-            check_answer_prompt: "Answer if you know person 6's details"
+            check_answer_prompt: "Tell us if you know person 6's details"
             hint_text: ""
             question_text: "Do you know the details for person 6?"
 
@@ -394,7 +394,7 @@ en:
             page_header: ""
             age6_known:
               check_answer_label: "Person 6’s age known?"
-              check_answer_prompt: "Answer if you know person 6's age"
+              check_answer_prompt: "Tell us if you know person 6's age"
               hint_text: ""
               question_text: "Do you know person 6’s age?"
             age6:
