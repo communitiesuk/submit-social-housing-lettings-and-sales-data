@@ -281,8 +281,17 @@ RSpec.describe SalesLog, type: :model do
       end
     end
 
-    context "when there is a log with a different ecstat1" do
+    context "when there is a 2024 log with a different ecstat1" do
       let!(:different_ecstat1) { create(:sales_log, :duplicate, ecstat1: 0, owning_organisation: organisation) }
+
+      before do
+        Timecop.freeze(Time.zone.local(2024, 5, 2))
+        Singleton.__init__(FormHandler)
+      end
+
+      after do
+        Timecop.return
+      end
 
       it "does not return a log with a different ecstat1 as a duplicate" do
         expect(described_class.duplicate_logs(log)).not_to include(different_ecstat1)
