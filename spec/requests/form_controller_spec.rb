@@ -764,6 +764,7 @@ RSpec.describe FormController, type: :request do
 
           it "shows not answered and invalid answer errors at the same time" do
             post "/lettings-logs/#{lettings_log.id}/#{page_id.dasherize}", params: params
+            follow_redirect!
             expect(page).to have_content("There is a problem")
             expect(page).to have_content("Support Charge must be between 0 and 300.")
             expect(page).to have_content("You must answer basic rent.")
