@@ -32,6 +32,7 @@ class FormController < ApplicationController
         pages_requiring_update = pages_requiring_update(shown_page_ids_with_unanswered_questions_before_update)
         redirect_to(successful_redirect_path(pages_requiring_update))
       else
+        @log.valid? if mandatory_questions_with_no_response.any?
         mandatory_questions_with_no_response.map do |question|
           @log.errors.add question.id.to_sym, question.unanswered_error_message, category: :not_answered
         end
