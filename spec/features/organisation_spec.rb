@@ -132,6 +132,7 @@ RSpec.describe "User Features" do
       let!(:other_general_needs_logs) { FactoryBot.create_list(:lettings_log, 4, assigned_to: user, needstype: 1) }
       let!(:other_supported_housing_logs) { FactoryBot.create_list(:lettings_log, 4, assigned_to: user, needstype: 2) }
       let(:number_of_lettings_logs) { LettingsLog.count }
+      let(:previous_year) { FormHandler.instance.previous_lettings_form.start_date.year }
 
       before do
         allow(FormHandler.instance).to receive(:in_crossover_period?).and_return(true)
@@ -204,9 +205,9 @@ RSpec.describe "User Features" do
       end
 
       it "can filter lettings logs by year" do
-        check("years-2022-field")
+        check("years-#{previous_year}-field")
         click_button("Apply filters")
-        expect(page).to have_current_path("/organisations/#{org_id}/lettings-logs?%5Byears%5D[]=&years[]=2022&%5Bstatus%5D[]=&%5Bneedstypes%5D[]=&assigned_to=all&user_text_search=&user=&owning_organisation_select=all&owning_organisation_text_search=&owning_organisation=&managing_organisation_select=all&managing_organisation_text_search=&managing_organisation=")
+        expect(page).to have_current_path("/organisations/#{org_id}/lettings-logs?%5Byears%5D[]=&years[]=#{previous_year}&%5Bstatus%5D[]=&%5Bneedstypes%5D[]=&assigned_to=all&user_text_search=&user=&owning_organisation_select=all&owning_organisation_text_search=&owning_organisation=&managing_organisation_select=all&managing_organisation_text_search=&managing_organisation=")
         expect(page).not_to have_link first_log.id.to_s, href: "/lettings-logs/#{first_log.id}"
       end
 
@@ -226,6 +227,7 @@ RSpec.describe "User Features" do
     context "when viewing sales logs for specific organisation" do
       let(:first_log) { organisation.sales_logs.first }
       let(:number_of_sales_logs) { SalesLog.count }
+      let(:previous_year) { FormHandler.instance.previous_sales_form.start_date.year }
 
       before do
         allow(FormHandler.instance).to receive(:in_crossover_period?).and_return(true)
@@ -254,9 +256,9 @@ RSpec.describe "User Features" do
         organisation.sales_logs.map(&:id).each do |sales_log_id|
           expect(page).to have_link sales_log_id.to_s, href: "/sales-logs/#{sales_log_id}"
         end
-        check("years-2022-field")
+        check("years-#{previous_year}-field")
         click_button("Apply filters")
-        expect(page).to have_current_path("/organisations/#{org_id}/sales-logs?%5Byears%5D[]=&years[]=2022&%5Bstatus%5D[]=&assigned_to=all&user_text_search=&user=&owning_organisation_select=all&owning_organisation_text_search=&owning_organisation=&managing_organisation_select=all&managing_organisation_text_search=&managing_organisation=")
+        expect(page).to have_current_path("/organisations/#{org_id}/sales-logs?%5Byears%5D[]=&years[]=#{previous_year}&%5Bstatus%5D[]=&assigned_to=all&user_text_search=&user=&owning_organisation_select=all&owning_organisation_text_search=&owning_organisation=&managing_organisation_select=all&managing_organisation_text_search=&managing_organisation=")
         expect(page).not_to have_link first_log.id.to_s, href: "/sales-logs/#{first_log.id}"
       end
     end

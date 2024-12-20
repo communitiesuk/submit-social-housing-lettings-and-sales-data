@@ -142,6 +142,7 @@ RSpec.describe "Sales Log Features" do
   context "when downloading logs" do
     let(:user) { create(:user, :support) }
     let(:other_user) { create(:user, organisation: user.organisation) }
+    let(:current_year) { FormHandler.instance.current_sales_form.start_date.year }
 
     context "when I am signed in" do
       before do
@@ -191,7 +192,7 @@ RSpec.describe "Sales Log Features" do
 
       context "when one year filter is selected" do
         before do
-          check("2024 to 2025")
+          check("#{current_year} to #{current_year + 1}")
           click_button("Apply filters")
         end
 
