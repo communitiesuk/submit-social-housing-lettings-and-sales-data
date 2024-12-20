@@ -1,10 +1,11 @@
 module Forms
-  module BulkUploadLettingsResume
+  module BulkUploadResume
     class FixChoice
       include ActiveModel::Model
       include ActiveModel::Attributes
       include Rails.application.routes.url_helpers
 
+      attribute :log_type
       attribute :bulk_upload
       attribute :choice, :string
 
@@ -19,13 +20,13 @@ module Forms
       end
 
       def view_path
-        "bulk_upload_lettings_resume/fix_choice"
+        "bulk_upload_#{log_type}_resume/fix_choice"
       end
 
       def next_path
         case choice
         when "create-fix-inline"
-          page_bulk_upload_lettings_resume_path(bulk_upload, page: "confirm")
+          send("page_bulk_upload_#{log_type}_resume_path", bulk_upload, page: "confirm")
         when "upload-again"
           error_report_path
         else
@@ -35,9 +36,9 @@ module Forms
 
       def error_report_path
         if BulkUploadErrorSummaryTableComponent.new(bulk_upload:).errors?
-          summary_bulk_upload_lettings_result_path(bulk_upload)
+          send("summary_bulk_upload_#{log_type}_result_path", bulk_upload)
         else
-          bulk_upload_lettings_result_path(bulk_upload)
+          send("bulk_upload_#{log_type}_result_path", bulk_upload)
         end
       end
 
@@ -62,11 +63,11 @@ module Forms
       def preflight_redirect
         case bulk_upload.choice
         when "create-fix-inline"
-          page_bulk_upload_lettings_resume_path(bulk_upload, :chosen)
+          send("page_bulk_upload_#{log_type}_resume_path", bulk_upload, :chosen)
         when "bulk-confirm-soft-validations"
-          page_bulk_upload_lettings_soft_validations_check_path(bulk_upload, :chosen)
+          send("page_bulk_upload_#{log_type}_soft_validations_check_path", bulk_upload, :chosen)
         else
-          bulk_upload_lettings_result_path(bulk_upload)
+          send("bulk_upload_#{log_type}_result_path", bulk_upload)
         end
       end
     end

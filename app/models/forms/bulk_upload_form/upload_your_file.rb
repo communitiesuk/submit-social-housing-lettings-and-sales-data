@@ -1,12 +1,13 @@
 require "shellwords"
 
 module Forms
-  module BulkUploadSales
+  module BulkUploadForm
     class UploadYourFile
       include ActiveModel::Model
       include ActiveModel::Attributes
       include Rails.application.routes.url_helpers
 
+      attribute :log_type
       attribute :year, :integer
       attribute :file
       attribute :current_user
@@ -17,11 +18,11 @@ module Forms
       validate :validate_file_size
 
       def view_path
-        "bulk_upload_sales_logs/forms/upload_your_file"
+        "bulk_upload_#{log_type}_logs/forms/upload_your_file"
       end
 
       def back_path
-        bulk_upload_sales_log_path(id: "prepare-your-file", form: { year:, organisation_id: }.compact)
+        send("bulk_upload_#{log_type}_log_path", id: "prepare-your-file", form: { year:, organisation_id: }.compact)
       end
 
       def year_combo
@@ -29,13 +30,13 @@ module Forms
       end
 
       def next_path
-        bulk_upload_sales_log_path(id: "checking-file", form: { year:, organisation_id: }.compact)
+        send("bulk_upload_#{log_type}_log_path", id: "checking-file", form: { year:, organisation_id: }.compact)
       end
 
       def save!
         bulk_upload = BulkUpload.create!(
           user: current_user,
-          log_type: BulkUpload.log_types[:sales],
+          log_type: BulkUpload.log_types[log_type.to_sym],
           year:,
           filename: file.original_filename,
           organisation_id: (organisation_id if current_user.support?) || current_user.organisation_id,
@@ -50,8 +51,12 @@ module Forms
 
     private
 
+      def upload_enabled?
+        FeatureToggle.upload_enabled?
+      end
+
       def storage_service
-        @storage_service ||= if FeatureToggle.upload_enabled?
+        @storage_service ||= if upload_enabled?
                                Storage::S3Service.new(Configuration::EnvConfigurationService.new, ENV["BULK_UPLOAD_BUCKET"])
                              else
                                Storage::LocalDiskService.new
