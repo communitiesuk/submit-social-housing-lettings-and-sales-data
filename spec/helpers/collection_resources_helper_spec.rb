@@ -4,10 +4,18 @@ RSpec.describe CollectionResourcesHelper do
   let(:current_user) { create(:user, :data_coordinator) }
   let(:user) { create(:user, :data_coordinator) }
   let(:storage_service) { instance_double(Storage::S3Service, get_file_metadata: nil) }
+  let(:current_date) { Time.zone.local(2024, 8, 8) }
 
   before do
     allow(Storage::S3Service).to receive(:new).and_return(storage_service)
     allow(storage_service).to receive(:configuration).and_return(OpenStruct.new(bucket_name: "core-test-collection-resources"))
+    Timecop.travel(current_date)
+    Singleton.__init__(FormHandler)
+  end
+
+  after do
+    Timecop.return
+    Singleton.__init__(FormHandler)
   end
 
   describe "when displaying file metadata" do
@@ -34,9 +42,10 @@ RSpec.describe CollectionResourcesHelper do
 
   describe "#editable_collection_resource_years" do
     context "when in crossover period" do
+      let(:current_date) { Time.zone.local(2024, 4, 8) }
+
       before do
         allow(FormHandler.instance).to receive(:in_edit_crossover_period?).and_return(true)
-        allow(Time.zone).to receive(:today).and_return(Time.zone.local(2024, 4, 8))
       end
 
       it "returns previous and current years" do
@@ -50,9 +59,7 @@ RSpec.describe CollectionResourcesHelper do
       end
 
       context "and after 1st January" do
-        before do
-          allow(Time.zone).to receive(:today).and_return(Time.zone.local(2025, 2, 1))
-        end
+        let(:current_date) { Time.zone.local(2025, 2, 1) }
 
         it "returns current and next years" do
           expect(editable_collection_resource_years).to match_array([2024, 2025])
@@ -60,9 +67,7 @@ RSpec.describe CollectionResourcesHelper do
       end
 
       context "and before 1st January" do
-        before do
-          allow(Time.zone).to receive(:today).and_return(Time.zone.local(2024, 12, 1))
-        end
+        let(:current_date) { Time.zone.local(2024, 12, 1) }
 
         it "returns current year" do
           expect(editable_collection_resource_years).to eq([2024])
@@ -73,9 +78,10 @@ RSpec.describe CollectionResourcesHelper do
 
   describe "#displayed_collection_resource_years" do
     context "when in crossover period" do
+      let(:current_date) { Time.zone.local(2024, 4, 8) }
+
       before do
         allow(FormHandler.instance).to receive(:in_edit_crossover_period?).and_return(true)
-        allow(Time.zone).to receive(:today).and_return(Time.zone.local(2024, 4, 8))
       end
 
       it "returns previous and current years" do
@@ -188,9 +194,10 @@ RSpec.describe CollectionResourcesHelper do
     end
 
     context "when next year is editable" do
+      let(:current_date) { Time.zone.local(2025, 1, 1) }
+
       before do
         allow(FormHandler.instance).to receive(:in_edit_crossover_period?).and_return(false)
-        allow(Time.zone).to receive(:today).and_return(Time.zone.local(2025, 1, 1))
       end
 
       it "returns true" do
