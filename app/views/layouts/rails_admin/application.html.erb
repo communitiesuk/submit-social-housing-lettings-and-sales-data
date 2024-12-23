@@ -1,0 +1,66 @@
+</html><!DOCTYPE html>
+<html lang="en" class="govuk-template">
+  <head>
+    <title>Admin</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= tag.meta name: "viewport", content: "width=device-width, initial-scale=1" %>
+    <%= tag.meta property: "og:image", content: asset_path("images/govuk-opengraph-image.png") %>
+    <%= tag.meta name: "theme-color", content: "#0b0c0c" %>
+    <%= favicon_link_tag asset_path("images/favicon.ico"), type: nil, sizes: "48x48" %>
+    <%= favicon_link_tag asset_path("images/favicon.svg"), type: "image/svg+xml", sizes: "any" %>
+    <%= favicon_link_tag asset_path("images/govuk-icon-mask.svg"), rel: "mask-icon", color: "#0b0c0c", type: nil %>
+    <%= favicon_link_tag asset_path("images/govuk-icon-180.png"), rel: "apple-touch-icon", type: nil %>
+    <%= stylesheet_link_tag "application" %>
+    <%= javascript_include_tag "vendor/html5shiv.min.js" %>
+    <script>
+      window.html5.elements = "output";
+      html5.shivDocument(document);
+    </script>
+    <%= javascript_include_tag "vendor/polyfill-output-value.js" %>
+    <%= javascript_include_tag "vendor/outerHTML.js" %>
+    <%= javascript_include_tag "application", defer: true %>
+
+    <% if content_for?(:head) %>
+      <%= yield(:head) %>
+    <% end %>
+    <%= capybara_lockstep if defined?(Capybara::Lockstep) %>
+
+    <% if Rails.env.development? %>
+      <script>
+        console.log(<%= session.to_json.html_safe %>)
+      </script>
+    <% end %>
+    <%= render "layouts/rails_admin/head" %>
+  </head>
+
+  <body class="govuk-template__body app-template--wide">
+    <script>
+      document.body.className += " js-enabled" + ("noModule" in HTMLScriptElement.prototype ? " govuk-frontend-supported" : "");
+    </script>
+
+    <%= govuk_skip_link %>
+
+    <%= render "layouts/rails_admin/navigation" %>
+
+    <% feedback_link = govuk_link_to "giving us your feedback (opens in a new tab)", t("feedback_form"), rel: "noreferrer noopener", target: "_blank" %>
+
+    <%= govuk_phase_banner(
+      classes: "#{current_user.present? ? 'no-bottom-border ' : ''}govuk-width-container",
+      tag: { colour: "orange", text: "Support beta" },
+      text: "This is a new service – help us improve it by #{feedback_link}".html_safe,
+    ) %>
+
+    <div class="govuk-width-container">
+      <main class="govuk-main-wrapper govuk-main-wrapper--auto-spacing" id="main-content" role="main">
+        <%= render template: 'layouts/rails_admin/content' %>
+      </main>
+    </div>
+    <%= render partial: "layouts/feedback" %>
+    <%= render partial: "layouts/footer", locals: { 
+        accessibility_statement_path: Rails.application.routes.url_helpers.accessibility_statement_path,
+        privacy_notice_path: Rails.application.routes.url_helpers.privacy_notice_path,
+        cookies_path: Rails.application.routes.url_helpers.cookies_path
+        } %>
+  </body>
+</html>
