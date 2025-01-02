@@ -53,14 +53,14 @@
 
     <div class="govuk-width-container">
       <main class="govuk-main-wrapper govuk-main-wrapper--auto-spacing" id="main-content" role="main">
-        <%= render template: 'layouts/rails_admin/content' %>
+        <%= render template: "layouts/rails_admin/content" %>
       </main>
     </div>
     <%= render partial: "layouts/feedback" %>
-    <%= render partial: "layouts/footer", locals: { 
+    <%= render partial: "layouts/footer", locals: {
         accessibility_statement_path: Rails.application.routes.url_helpers.accessibility_statement_path,
         privacy_notice_path: Rails.application.routes.url_helpers.privacy_notice_path,
-        cookies_path: Rails.application.routes.url_helpers.cookies_path
+        cookies_path: Rails.application.routes.url_helpers.cookies_path,
         } %>
   </body>
 </html>
