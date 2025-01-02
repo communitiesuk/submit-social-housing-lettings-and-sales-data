@@ -259,7 +259,7 @@ RSpec.describe BulkUpload, type: :model do
   end
 
   describe "#unpend_and_confirm_soft_validations" do
-    let(:bulk_upload) { create(:bulk_upload) }
+    let(:bulk_upload) { create(:bulk_upload, :lettings) }
     let(:log) { create(:lettings_log, :completed, bulk_upload:, status: "pending", status_cache: "in_progress", supcharg: 183.24) }
 
     it "resets the fields to confirm and updates the status to status_cache" do
