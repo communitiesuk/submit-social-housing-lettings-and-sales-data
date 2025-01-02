@@ -5,8 +5,8 @@ RSpec.describe HomepagePresenter do
   let(:user) { create(:user, organisation:) }
   let(:in_crossover_period) { true }
   let(:presenter) { described_class.new(user) }
-  let(:date_this_year) { Time.zone.today }
-  let(:date_last_year) { Time.zone.today - 1.year }
+  let(:date_this_year) { FormHandler.instance.current_collection_start_date }
+  let(:date_last_year) { FormHandler.instance.previous_collection_start_date }
   let(:expected_count) { rand 1..10 }
 
   before do
