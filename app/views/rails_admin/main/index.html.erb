@@ -1,20 +1,19 @@
-query = params[:query]
-  params = request.params.except(:authenticity_token, :action, :controller, :utf8, :bulk_export)
-  params.delete(:query) if params[:query].blank?
-  params.delete(:sort_reverse) unless params[:sort_reverse] == "true"
-  sort_reverse = params[:sort_reverse]
-  sort = params[:sort]
-  params.delete(:sort) if params[:sort] == @model_config.list.sort_by.to_s
-  export_action = RailsAdmin::Config::Actions.find(:export, { controller: controller, abstract_model: @abstract_model })
-  export_action = nil unless export_action && authorized?(export_action.authorization_key, @abstract_model)
-  description = RailsAdmin.config(@abstract_model.model_name).description
-  properties = @model_config.list.with(controller: controller, view: self, object: @abstract_model.model.new).fields_for_table
-  checkboxes = @model_config.list.checkboxes?
-  table_table_header_count = begin
-    count = checkboxes ? 1 : 0
-    count += properties.count
-  end
-%>
+<% query = params[:query] %>
+<% params = request.params.except(:authenticity_token, :action, :controller, :utf8, :bulk_export) %>
+<% params.delete(:query) if params[:query].blank? %>
+<% params.delete(:sort_reverse) unless params[:sort_reverse] == "true" %>
+<% sort_reverse = params[:sort_reverse] %>
+<% sort = params[:sort] %>
+<% params.delete(:sort) if params[:sort] == @model_config.list.sort_by.to_s %>
+<% export_action = RailsAdmin::Config::Actions.find(:export, { controller:, abstract_model: @abstract_model }) %>
+<% export_action = nil unless export_action && authorized?(export_action.authorization_key, @abstract_model) %>
+<% description = RailsAdmin.config(@abstract_model.model_name).description %>
+<% properties = @model_config.list.with(controller:, view: self, object: @abstract_model.model.new).fields_for_table %>
+<% checkboxes = @model_config.list.checkboxes? %>
+<% table_table_header_count = begin
+     count = checkboxes ? 1 : 0
+     count += properties.count
+   end %>
 
 <% content_for :contextual_tabs do %>
   <% if filterable_fields.present? %>
@@ -57,7 +56,7 @@ query = params[:query]
       <div class="row">
         <div class="col-sm-6">
           <div class="input-group">
-            <input class="form-control" name="query" placeholder="<%= t("admin.misc.filter") %>" type="search" value="<%= query %>">
+            <input class="form-control" name="query" placeholder="<%= t("admin.misc.filter") %>" type="search" value="<%= query %>" autocomplete="off">
             <button class="btn btn-primary" data-disable-with="<%= "<i class=\"fas fa-sync\"></i>#{t('admin.misc.refresh')}" %>" type="submit">
               <i class="fas fa-sync"></i>
               <%= t("admin.misc.refresh") %>
