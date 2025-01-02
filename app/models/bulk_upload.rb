@@ -129,6 +129,7 @@ class BulkUpload < ApplicationRecord
   def unpend_and_confirm_soft_validations
     logs.find_each do |log|
       fields_to_confirm(log).each { |field| log[field] = 0 }
+      log.status = log.status_cache
       log.save!
     end
   end
