@@ -54,24 +54,28 @@
       <div class="row rails-admin-filters-box" data-options="<%= ordered_filter_options.to_json %>" id="filters_box"></div>
       <hr class="filters_box" style="display:<%= ordered_filters.empty? ? "none" : "block" %>">
       <div class="row">
-        <div class="col-sm-6">
+        <div class="col-sm-8">
           <div class="input-group">
-            <input class="form-control" name="query" placeholder="<%= t("admin.misc.filter") %>" type="search" value="<%= query %>" autocomplete="off">
-            <button class="btn btn-primary" data-disable-with="<%= "<i class=\"fas fa-sync\"></i>#{t('admin.misc.refresh')}" %>" type="submit">
+            <input class="govuk-input govuk-input--width-20" name="query" placeholder="<%= t("admin.misc.filter") %>" type="search" value="<%= query %>" autocomplete="off">
+            <div class="govuk-!-margin-left-2">
+              <button class="govuk-button govuk-!-margin-bottom-0" data-disable-with="<%= "<i class=\"fas fa-sync\"></i>#{t('admin.misc.refresh')}" %>" type="submit">
               <i class="fas fa-sync"></i>
               <%= t("admin.misc.refresh") %>
-            </button>
-            <button class="btn btn-info" id="remove_filter" title="<%= t("admin.misc.reset_filters") %>">
-              <i class="fas fa-times"></i>
-            </button>
+              </button>
+            </div>
+            <div id="remove_filter" title="<%= t("admin.misc.reset_filters") %>">
+              <button class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
           </div>
           <% if @model_config.list.search_help.present? %>
             <div class="form-text"><%= @model_config.list.search_help %></div>
           <% end %>
         </div>
-        <div class="col-sm-6 text-end">
+        <div class="col-sm-4 text-end">
           <% if export_action %>
-            <%= govuk_link_to wording_for(:link, export_action), export_path(params.except("page")), class: "btn btn-info" %>
+            <%= govuk_button_link_to wording_for(:link, export_action), export_path(params.except("page")), class: "govuk-!-margin-bottom-0" %>
           <% end %>
         </div>
       </div>
@@ -168,7 +172,7 @@
       </div>
       <div class="row">
         <div class="col-md-6">
-          <%= link_to(t("admin.misc.show_all"), index_path(params.merge(all: true)), class: "show-all btn btn-light clearfix") unless total_count > 100 || total_count <= @objects.to_a.size %>
+          <%= link_to(t("admin.misc.show_all"), index_path(params.merge(all: true)), class: "govuk-button govuk-button--secondary") unless total_count > 100 || total_count <= @objects.to_a.size %>
         </div>
       </div>
       <div class="clearfix total-count">
