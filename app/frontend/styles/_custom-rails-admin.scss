@@ -13,3 +13,11 @@
 .rails-admin-error_message_field {
   min-width: 500px;
 }
+
+.rails-admin-actions {
+  min-width: 160px;
+
+  ul {
+    float: right;
+  }
+}
