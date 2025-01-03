@@ -21,3 +21,14 @@
     float: right;
   }
 }
+
+.rails-admin-filters-box {
+  .filter {
+    // stylelint-disable-next-line declaration-no-important
+    display: flex !important;
+  }
+
+  button {
+    min-width: 20%;
+  }
+}
