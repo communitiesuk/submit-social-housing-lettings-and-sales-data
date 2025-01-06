@@ -61,7 +61,7 @@ class BulkUpload::Processor
     end
   rescue StandardError => e
     Sentry.capture_exception(e)
-    @bulk_upload.update!(failure_reason: "invalid_upload")
+    @bulk_upload.update!(failure_reason: "processing_error")
     send_failure_mail
   ensure
     downloader.delete_local_file!
