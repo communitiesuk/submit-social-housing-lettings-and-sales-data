@@ -26,6 +26,7 @@ class Form::Sales::Subsections::PropertyInformation < ::Form::Subsection
       [
         Form::Sales::Pages::Uprn.new(nil, nil, self),
         Form::Sales::Pages::UprnConfirmation.new(nil, nil, self),
+        Form::Sales::Pages::AddressSearch.new(nil, nil, self),
         Form::Sales::Pages::AddressMatcher.new(nil, nil, self),
         Form::Sales::Pages::NoAddressFound.new(nil, nil, self),
         Form::Sales::Pages::UprnSelection.new(nil, nil, self),

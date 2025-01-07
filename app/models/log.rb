@@ -89,7 +89,7 @@ class Log < ApplicationRecord
   def process_address_change!
     if uprn_selection.present? || select_best_address_match.present?
       if select_best_address_match
-        service = AddressClient.new(address_string)
+        service = AddressClient.new(address: address_string)
         service.call
         return nil if service.result.blank? || service.error.present?
 
@@ -125,27 +125,29 @@ class Log < ApplicationRecord
     "#{address_line1_input}, #{postcode_full_input}"
   end
 
-  def address_options
-    return @address_options if @address_options && @last_searched_address_string == address_string
+  def address_options # TODO: use this method for autocomplete
+    search_query = address_search.presence || address_string
+    return @address_options if @address_options && @last_searched_address_string == search_query
 
-    if [address_line1_input, postcode_full_input].all?(&:present?)
-      @last_searched_address_string = address_string
+    search_query = address_search.presence || address_string
+    return if search_query.blank?
 
-      service = AddressClient.new(address_string)
-      service.call
-      if service.result.blank? || service.error.present?
-        @address_options = []
-        return @answer_options
-      end
+    @last_searched_address_string = search_query
 
-      address_opts = []
-      service.result.first(10).each do |result|
-        presenter = AddressDataPresenter.new(result)
-        address_opts.append({ address: presenter.address, uprn: presenter.uprn })
-      end
-
-      @address_options = address_opts
+    service = AddressClient.new(address: address_string)
+    service.call
+    if service.result.blank? || service.error.present?
+      @address_options = []
+      return @answer_options
     end
+
+    address_opts = []
+    service.result.first(10).each do |result|
+      presenter = AddressDataPresenter.new(result)
+      address_opts.append({ address: presenter.address, uprn: presenter.uprn })
+    end
+
+    @address_options = address_opts
   end
 
   def collection_start_year

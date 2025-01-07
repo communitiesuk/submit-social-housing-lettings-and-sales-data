@@ -7,7 +7,7 @@ RSpec.describe Form::Lettings::Questions::UprnSelection, type: :model do
   let(:question_definition) { nil }
   let(:page) { instance_double(Form::Page, skip_href: "skip_href") }
   let(:log) { build(:lettings_log, :in_progress, address_line1_input: "Address line 1", postcode_full_input: "AA1 1AA") }
-  let(:address_client_instance) { AddressClient.new(log.address_string) }
+  let(:address_client_instance) { AddressClient.new(address: log.address_string) }
 
   before do
     allow(AddressClient).to receive(:new).and_return(address_client_instance)

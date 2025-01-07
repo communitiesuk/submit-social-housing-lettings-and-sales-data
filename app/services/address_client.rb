@@ -1,14 +1,14 @@
-require "net/http"
-
 class AddressClient
-  attr_reader :address
+  attr_reader :address, :uprn
   attr_accessor :error
 
   ADDRESS = "api.os.uk".freeze
-  PATH = "/search/places/v1/find".freeze
+  PATH_FIND = "/search/places/v1/find".freeze
+  PATH_UPRN = "/search/places/v1/uprn".freeze
 
-  def initialize(address)
+  def initialize(address: nil, uprn: nil)
     @address = address
+    @uprn = uprn
   end
 
   def call
@@ -27,7 +27,15 @@ class AddressClient
     end
   end
 
-private
+  def result_by_uprn
+    if response.is_a?(Net::HTTPSuccess)
+      @result ||= JSON.parse(response.body)["result"]
+    else
+      @result = nil
+    end
+  end
+
+  private
 
   def http_client
     client = Net::HTTP.new(ADDRESS, 443)
@@ -39,7 +47,7 @@ private
   end
 
   def endpoint_uri
-    uri = URI(PATH)
+    uri = URI(PATH_FIND)
     params = {
       query: address,
       key: ENV["OS_DATA_KEY"],
@@ -50,7 +58,17 @@ private
     uri.to_s
   end
 
+  def endpoint_uri_by_uprn
+    uri = URI(PATH_UPRN)
+    params = {
+      uprn: uprn,
+      key: ENV["OS_DATA_KEY"],
+    }
+    uri.query = URI.encode_www_form(params)
+    uri.to_s
+  end
+
   def response
-    @response ||= http_client.request_get(endpoint_uri)
+    @response ||= http_client.request_get(address ? endpoint_uri : endpoint_uri_by_uprn)
   end
 end

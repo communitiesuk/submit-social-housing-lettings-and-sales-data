@@ -84,7 +84,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_06_142944) do
     t.datetime "last_accessed"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.check_constraint "log_type::text = ANY (ARRAY['lettings'::character varying, 'sales'::character varying]::text[])", name: "log_type_check"
+    t.check_constraint "log_type::text = ANY (ARRAY['lettings'::character varying::text, 'sales'::character varying::text])", name: "log_type_check"
     t.check_constraint "year >= 2000 AND year <= 2099", name: "year_check"
   end
 
@@ -761,13 +761,14 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_06_142944) do
     t.integer "partner_under_16_value_check"
     t.integer "multiple_partners_value_check"
     t.bigint "created_by_id"
-    t.integer "has_management_fee"
-    t.decimal "management_fee", precision: 10, scale: 2
     t.integer "firststair"
     t.integer "numstair"
     t.decimal "mrentprestaircasing", precision: 10, scale: 2
     t.datetime "lasttransaction"
     t.datetime "initialpurchase"
+    t.integer "has_management_fee"
+    t.decimal "management_fee", precision: 10, scale: 2
+    t.string "address_search"
     t.index ["assigned_to_id"], name: "index_sales_logs_on_assigned_to_id"
     t.index ["bulk_upload_id"], name: "index_sales_logs_on_bulk_upload_id"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
