@@ -24,6 +24,21 @@ class Form
     },
   }.freeze
 
+  QUARTERLY_DEADLINES = {
+    2024 => {
+      first_quarter_deadline: Time.zone.local(2024, 7, 12),
+      second_quarter_deadline: Time.zone.local(2024, 10, 11),
+      third_quarter_deadline: Time.zone.local(2025, 1, 10),
+      fourth_quarter_deadline: Time.zone.local(2025, 6, 6), # Same as submission deadline, can be refactored
+    },
+    2025 => {
+      first_quarter_deadline: Time.zone.local(2025, 7, 11),
+      second_quarter_deadline: Time.zone.local(2025, 10, 10),
+      third_quarter_deadline: Time.zone.local(2026, 1, 16),
+      fourth_quarter_deadline: Time.zone.local(2026, 6, 5), # Same as submission deadline, can be refactored
+    },
+  }.freeze
+
   def initialize(form_path, start_year = "", sections_in_form = [], type = "lettings")
     if sales_or_start_year_after_2022?(type, start_year)
       @start_date = Time.zone.local(start_year, 4, 1)

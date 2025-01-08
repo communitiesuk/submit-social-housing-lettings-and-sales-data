@@ -30,6 +30,10 @@ module CollectionTimeHelper
     Time.zone.local(current_collection_start_year + 1, 3, 31).end_of_day
   end
 
+  def current_collection_end_year
+    current_collection_start_year + 1
+  end
+
   def previous_collection_end_date
     current_collection_end_date - 1.year
   end
@@ -50,12 +54,56 @@ module CollectionTimeHelper
     current_collection_start_year - 2
   end
 
-  def quarter_for_date(date: Time.zone.now)
-    quarters = [
-      { quarter: "Q1", cutoff_date: Time.zone.local(2024, 7, 12), start_date: Time.zone.local(2024, 4, 1), end_date: Time.zone.local(2024, 6, 30) },
-      { quarter: "Q2", cutoff_date: Time.zone.local(2024, 10, 11), start_date: Time.zone.local(2024, 7, 1), end_date: Time.zone.local(2024, 9, 30) },
-      { quarter: "Q3", cutoff_date: Time.zone.local(2025, 1, 10), start_date: Time.zone.local(2024, 10, 1), end_date: Time.zone.local(2024, 12, 31) },
+  def quarter_deadlines
+    Form::QUARTERLY_DEADLINES
+  end
+
+  def quarter_deadlines_for_year(year)
+    quarter_deadlines[year]
+  end
+
+  def first_quarter(year)
+    {
+      cutoff_date: quarter_deadlines_for_year(year)[:first_quarter_deadline],
+      start_date: Time.zone.local(year, 4, 1),
+      end_date: Time.zone.local(year, 6, 30),
+    }
+  end
+
+  def second_quarter(year)
+    {
+      cutoff_date: quarter_deadlines_for_year(year)[:second_quarter_deadline],
+      start_date: Time.zone.local(year, 7, 1),
+      end_date: Time.zone.local(year, 9, 30),
+    }
+  end
+
+  def third_quarter(year)
+    {
+      cutoff_date: quarter_deadlines_for_year(year)[:third_quarter_deadline],
+      start_date: Time.zone.local(year, 10, 1),
+      end_date: Time.zone.local(year, 12, 31),
+    }
+  end
+
+  def fourth_quarter(year)
+    {
+      cutoff_date: quarter_deadlines_for_year(year)[:fourth_quarter_deadline],
+      start_date: Time.zone.local(year + 1, 1, 1),
+      end_date: Time.zone.local(year + 1, 3, 31),
+    }
+  end
+
+  def quarter_dates(year)
+    [
+      first_quarter(year).merge(quarter: "Q1"),
+      second_quarter(year).merge(quarter: "Q2"),
+      third_quarter(year).merge(quarter: "Q3"),
     ]
+  end
+
+  def quarter_for_date(date: Time.zone.now)
+    quarters = quarter_dates(current_collection_start_year)
 
     quarter = quarters.find { |q| date.between?(q[:start_date], q[:cutoff_date] + 1.day) }
 
