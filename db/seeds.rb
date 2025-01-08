@@ -175,7 +175,9 @@ unless Rails.env.test?
 end
 
 if LocalAuthority.count.zero?
-  path = "config/local_authorities_data/initial_local_authorities.csv"
-  service = Imports::LocalAuthoritiesService.new(path:)
-  service.call
+  paths = ["config/local_authorities_data/initial_local_authorities.csv", "config/local_authorities_data/2025_local_authorities.csv"]
+  paths.each do |path|
+    service = Imports::LocalAuthoritiesService.new(path:)
+    service.call
+  end
 end
