@@ -138,9 +138,9 @@ private
     page.questions.each_with_object({}) do |question, result|
       question_params = params[@log.model_name.param_key][question.id]
       if question.type == "date"
-        day = params[@log.model_name.param_key]["#{question.id}(3i)"]
-        month = params[@log.model_name.param_key]["#{question.id}(2i)"]
-        year = params[@log.model_name.param_key]["#{question.id}(1i)"]
+        day = params[@log.model_name.param_key][question.id].split("/")[0]
+        month = params[@log.model_name.param_key][question.id].split("/")[1]
+        year = params[@log.model_name.param_key][question.id].split("/")[2]
         next unless [day, month, year].any?(&:present?)
 
         result[question.id] = if Date.valid_date?(year.to_i, month.to_i, day.to_i) && year.to_i.positive?
@@ -160,7 +160,7 @@ private
         question.answer_keys_without_dividers.each do |option|
           result[option] = question_params.include?(option) ? 1 : 0
         end
-      else
+      elsif question.type != "date"
         result[question.id] = question_params
       end
 
