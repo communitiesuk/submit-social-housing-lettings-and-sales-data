@@ -18,8 +18,8 @@ import { initAll as MOJFrontend } from '@ministryofjustice/frontend'
 import './controllers'
 import './cookie-banner'
 import './styles/application.scss'
-import 'moj-frontend';
-import $ from 'jquery';
+import 'moj-frontend'
+import $ from 'jquery'
 window.$ = $
 
 require.context('govuk-frontend/dist/govuk/assets')
