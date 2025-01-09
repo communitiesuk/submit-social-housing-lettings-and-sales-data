@@ -137,9 +137,7 @@ class LocationsController < ApplicationController
   def availability; end
 
   def update_availability
-    day = location_params["startdate"].split("/")[0]
-    month = location_params["startdate"].split("/")[1]
-    year = location_params["startdate"].split("/")[2]
+    day, month, year = location_params["startdate"].split("/")
     @location.startdate = if [day, month, year].none?(&:blank?) && Date.valid_date?(year.to_i, month.to_i, day.to_i)
                             Time.zone.local(year.to_i, month.to_i, day.to_i)
                           end
@@ -299,9 +297,7 @@ private
       return FormHandler.instance.start_date_of_earliest_open_for_editing_collection_period
     end
 
-    day = params[:location_deactivation_period][key.to_s].split("/")[0]
-    month = params[:location_deactivation_period][key.to_s].split("/")[1]
-    year = params[:location_deactivation_period][key.to_s].split("/")[2]
+    day, month, year = params[:location_deactivation_period][key.to_s].split("/")
     return nil if [day, month, year].any?(&:blank?)
 
     Time.zone.local(year.to_i, month.to_i, day.to_i) if Date.valid_date?(year.to_i, month.to_i, day.to_i)
