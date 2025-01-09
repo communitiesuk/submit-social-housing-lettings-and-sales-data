@@ -3,7 +3,7 @@
         {
           resource: @log,
           question_id: question.id,
-          legend: { text: legend(question, page_header, conditional)[:text], caption: caption(caption_text, page_header, conditional) },
+          legend: { text: legend(question, page_header, conditional)[:text], size: "l", caption: caption(caption_text, page_header, conditional) },
           resource_type: @log.log_type,
           hint: (question.hint_text.blank? ? "" : (question.hint_text.html_safe + "</br></br>".html_safe)) + "For example, #{date_mid_collection_year_formatted(@log.startdate).tr(' ', '/')}",
           f:,

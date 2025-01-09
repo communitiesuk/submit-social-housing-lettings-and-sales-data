@@ -2,7 +2,7 @@
   <% question_has_errors = resource.errors[question_id].any? %>
   <div class="govuk-form-group<%= " govuk-form-group--error" if question_has_errors %>">
     <% if legend.present? %>
-        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--<%= legend[:size] %>">
         <h1 class="govuk-fieldset__heading">
             <span class="govuk-caption-l">
             <%= legend[:caption][:text] if legend[:caption].present? %>
@@ -12,11 +12,11 @@
         </legend>
     <% end %>
 
-    <div id=<%= [resource_type.dasherize, question_id.dasherize, "hint"].join("-") %>>
+    <div class="govuk-hint" id="<%= [resource_type.dasherize, question_id.to_s.dasherize, "hint"].join("-") %>">
         <%= hint %>
     </div>
     <% if question_has_errors %>
-    <p id=<%= [resource_type.dasherize, question_id.dasherize, "error"].join("-") %>>
+    <p class="govuk-error-message" id="<%= [resource_type.dasherize, question_id.to_s.dasherize, "error"].join("-") %>">
       <span class="govuk-visually-hidden">Error:</span> <%= resource.errors[question_id].first %>
     </p>
     <% end %>
