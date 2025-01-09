@@ -356,13 +356,11 @@ private
       return
     elsif params[:scheme_deactivation_period]["#{key}_type".to_sym] == "default"
       return FormHandler.instance.start_date_of_earliest_open_for_editing_collection_period
-    elsif params[:scheme_deactivation_period][key.to_sym].present?
-      return params[:scheme_deactivation_period][key.to_sym]
     end
 
-    day = params[:scheme_deactivation_period]["#{key}(3i)"]
-    month = params[:scheme_deactivation_period]["#{key}(2i)"]
-    year = params[:scheme_deactivation_period]["#{key}(1i)"]
+    day = params[:scheme_deactivation_period][key.to_s].split("/")[0]
+    month = params[:scheme_deactivation_period][key.to_s].split("/")[1]
+    year = params[:scheme_deactivation_period][key.to_s].split("/")[2]
     return nil if [day, month, year].any?(&:blank?)
 
     Time.zone.local(year.to_i, month.to_i, day.to_i) if Date.valid_date?(year.to_i, month.to_i, day.to_i)
