@@ -78,6 +78,7 @@ RSpec.describe "Home Page Features" do
       scenario "displays correct text for quarters" do
         Timecop.freeze(Time.zone.local(next_collection_year, 4, 1)) do
           visit root_path
+          save_and_open_page
           find("span.govuk-details__summary-text", text: "Quarterly cut-off dates for 2025 to 2026").click
           expect(page).to have_content("Q1 - Friday 11 July 2025")
           expect(page).to have_content("Q2 - Friday 10 October 2025")
