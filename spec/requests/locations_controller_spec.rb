@@ -1151,7 +1151,7 @@ RSpec.describe LocationsController, type: :request do
       end
 
       context "when startdate is submitted" do
-        let(:params) { { location: { "startdate(1i)": "2022", "startdate(2i)": "1", "startdate(3i)": "2" } } }
+        let(:params) { { location: { "startdate": "2/1/2022" } } }
 
         before do
           patch "/schemes/#{scheme.id}/locations/#{location.id}/availability", params:
@@ -1168,7 +1168,7 @@ RSpec.describe LocationsController, type: :request do
       end
 
       context "when startdate is submitted with leading zeroes" do
-        let(:params) { { location: { "startdate(1i)": "2022", "startdate(2i)": "01", "startdate(3i)": "02" } } }
+        let(:params) { { location: { "startdate": "02/01/2022" } } }
 
         before do
           patch "/schemes/#{scheme.id}/locations/#{location.id}/availability", params:
@@ -1185,7 +1185,7 @@ RSpec.describe LocationsController, type: :request do
       end
 
       context "when startdate is missing" do
-        let(:params) { { location: { "startdate(1i)": "", "startdate(2i)": "", "startdate(3i)": "" } } }
+        let(:params) { { location: { "startdate": "" } } }
 
         before do
           patch "/schemes/#{scheme.id}/locations/#{location.id}/availability", params:
@@ -1225,7 +1225,7 @@ RSpec.describe LocationsController, type: :request do
       end
 
       context "when startdate is submitted" do
-        let(:params) { { location: { "startdate(1i)": "2022", "startdate(2i)": "1", "startdate(3i)": "2" } } }
+        let(:params) { { location: { "startdate": "2/1/2022" } } }
 
         before do
           patch "/schemes/#{scheme.id}/locations/#{location.id}/availability", params:
@@ -1242,7 +1242,7 @@ RSpec.describe LocationsController, type: :request do
       end
 
       context "when startdate is submitted with leading zeroes" do
-        let(:params) { { location: { "startdate(1i)": "2022", "startdate(2i)": "01", "startdate(3i)": "02" } } }
+        let(:params) { { location: { "startdate": "02/01/2022" } } }
 
         before do
           patch "/schemes/#{scheme.id}/locations/#{location.id}/availability", params:
@@ -1259,7 +1259,7 @@ RSpec.describe LocationsController, type: :request do
       end
 
       context "when startdate is missing" do
-        let(:params) { { location: { "startdate(1i)": "", "startdate(2i)": "", "startdate(3i)": "" } } }
+        let(:params) { { location: { "startdate": "" } } }
 
         before do
           patch "/schemes/#{scheme.id}/locations/#{location.id}/availability", params:

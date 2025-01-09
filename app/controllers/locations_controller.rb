@@ -137,9 +137,9 @@ class LocationsController < ApplicationController
   def availability; end
 
   def update_availability
-    day = location_params["startdate(3i)"]
-    month = location_params["startdate(2i)"]
-    year = location_params["startdate(1i)"]
+    day = location_params["startdate"].split("/")[0]
+    month = location_params["startdate"].split("/")[1]
+    year = location_params["startdate"].split("/")[2]
     @location.startdate = if [day, month, year].none?(&:blank?) && Date.valid_date?(year.to_i, month.to_i, day.to_i)
                             Time.zone.local(year.to_i, month.to_i, day.to_i)
                           end
@@ -258,7 +258,7 @@ private
   end
 
   def location_params
-    required_params = params.require(:location).permit(:postcode, :location_admin_district, :location_code, :name, :units, :type_of_unit, :mobility_type, "startdate(1i)", "startdate(2i)", "startdate(3i)").merge(scheme_id: @scheme.id)
+    required_params = params.require(:location).permit(:postcode, :location_admin_district, :location_code, :name, :units, :type_of_unit, :mobility_type, :startdate).merge(scheme_id: @scheme.id)
     required_params[:postcode] = PostcodeService.clean(required_params[:postcode]) if required_params[:postcode]
     required_params[:location_admin_district] = nil if required_params[:location_admin_district] == "Select an option"
     required_params

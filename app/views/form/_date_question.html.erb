@@ -1,29 +1,14 @@
 <%= render partial: "form/guidance/#{question.top_guidance_partial}" if question.top_guidance? %>
+<%= render partial: "components/date_picker", locals:
+        {
+          resource: @log,
+          question_id: question.id,
+          legend: { text: legend(question, page_header, conditional)[:text], caption: caption(caption_text, page_header, conditional) },
+          resource_type: @log.log_type,
+          hint: (question.hint_text.blank? ? "" : (question.hint_text.html_safe + "</br></br>".html_safe)) + "For example, #{date_mid_collection_year_formatted(@log.startdate).tr(' ', '/')}",
+          f:,
+        } %>
 
-<div class="moj-datepicker" data-module="moj-date-picker">
-  <% question_has_errors = @log.errors[question.id].any? %>
-  <div class="govuk-form-group<%= " govuk-form-group--error" if question_has_errors %>">
-    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-      <h1 class="govuk-fieldset__heading">
-        <span class="govuk-caption-l">
-          <% caption = caption(caption_text, page_header, conditional) %>
-          <%= caption[:text] if caption.present? %>
-        </span>
-        <%= legend(question, page_header, conditional)[:text] %>
-      </h1>
-    </legend>
-
-    <div id=<%= [@log.log_type.dasherize, question.id.dasherize, "hint"].join("-") %> class="govuk-hint">
-      <%= (question.hint_text.blank? ? "" : (question.hint_text.html_safe + "</br></br>".html_safe)) + "For example, #{date_mid_collection_year_formatted(@log.startdate).tr(' ', '/')}" %>
-    </div>
-    <% if question_has_errors %>
-    <p id=<%= [@log.log_type.dasherize, question.id.dasherize, "error"].join("-") %>>
-      <span class="govuk-visually-hidden">Error:</span> <%= @log.errors[question.id].first %>
-    </p>
-    <% end %>
-    <%= f.text_field question.id.to_sym, class: "govuk-input moj-js-datepicker-input#{' govuk-input--error' if question_has_errors}", id: "date", aria: { describedby: "date-hint#{' date-error' if question_has_errors}" }, autocomplete: "off", value: @log[question.id]&.strftime("%d/%m/%Y") %>
-  </div>
-</div>
 <%= govuk_inset_text(text: question.unresolved_hint_text) if question.unresolved_hint_text.present? && @log.unresolved %>
 
 <%= render partial: "form/guidance/#{question.bottom_guidance_partial}" if question.bottom_guidance? %>
