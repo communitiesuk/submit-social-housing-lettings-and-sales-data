@@ -54,5 +54,4 @@ module CollectionTimeHelper
     current_collection_start_year - 2
   end
 
-
 end
