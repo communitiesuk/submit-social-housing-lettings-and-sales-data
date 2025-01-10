@@ -192,7 +192,7 @@ RSpec.describe Validations::SharedValidations do
       let(:step) { 0.001 }
 
       it "adds an appropriate error if input does not match" do
-        sales_log.income1 = 30_123.74
+        sales_log.income1 = 30_123.7419
         shared_validator.validate_numeric_step(sales_log)
         expect(sales_log.errors[:income1]).to include I18n.t("validations.shared.numeric.nearest_step", field: "Buyer 1’s gross annual income", step: 0.001)
       end
