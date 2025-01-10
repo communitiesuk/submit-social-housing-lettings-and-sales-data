@@ -123,12 +123,6 @@ RSpec.describe Validations::SharedValidations do
         expect(sales_log.errors[:income1]).to include I18n.t("validations.shared.numeric.whole_number", field: "Buyer 1’s gross annual income")
       end
 
-      it "adds an error if the user attempts to input a number in exponent format" do
-        sales_log.income1 = "3e5"
-        shared_validator.validate_numeric_step(sales_log)
-        expect(sales_log.errors[:income1]).to include I18n.t("validations.shared.numeric.whole_number", field: "Buyer 1’s gross annual income")
-      end
-
       it "does not add an error if input is an integer" do
         sales_log.income1 = 30_000
         shared_validator.validate_numeric_step(sales_log)
@@ -139,13 +133,6 @@ RSpec.describe Validations::SharedValidations do
     context "when validating a question with a step of 10" do
       it "adds an error if input is not a multiple of ten" do
         sales_log.savings = 30_005
-        sales_log.jointpur = 1
-        shared_validator.validate_numeric_step(sales_log)
-        expect(sales_log.errors[:savings]).to include I18n.t("validations.shared.numeric.nearest_ten", field: "Buyers’ total savings before any deposit paid")
-      end
-
-      it "adds an error if the user attempts to input a number in exponent format" do
-        sales_log.savings = "3e5"
         sales_log.jointpur = 1
         shared_validator.validate_numeric_step(sales_log)
         expect(sales_log.errors[:savings]).to include I18n.t("validations.shared.numeric.nearest_ten", field: "Buyers’ total savings before any deposit paid")
@@ -163,12 +150,6 @@ RSpec.describe Validations::SharedValidations do
         sales_log.mscharge = 30.7418
         shared_validator.validate_numeric_step(sales_log)
         expect(sales_log.errors[:mscharge]).to include I18n.t("validations.shared.numeric.nearest_hundredth", field: "Monthly leasehold charges")
-      end
-
-      it "does not add an error if the user attempts to input a number in exponent format" do
-        sales_log.mscharge = "3e1"
-        shared_validator.validate_numeric_step(sales_log)
-        expect(sales_log.errors).to be_empty
       end
 
       it "does not add an error if input has 2 or fewer decimal places" do
@@ -225,6 +206,12 @@ RSpec.describe Validations::SharedValidations do
 
     it "does not allow special characters" do
       sales_log.income1 = "3%5"
+      shared_validator.validate_numeric_input(sales_log)
+      expect(sales_log.errors[:income1]).to include I18n.t("validations.shared.numeric.format", field: "Buyer 1’s gross annual income")
+    end
+
+    it "does not allow exponent format" do
+      sales_log.income1 = "1e4"
       shared_validator.validate_numeric_input(sales_log)
       expect(sales_log.errors[:income1]).to include I18n.t("validations.shared.numeric.format", field: "Buyer 1’s gross annual income")
     end

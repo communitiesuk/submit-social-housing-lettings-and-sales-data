@@ -54,14 +54,15 @@ module Validations::SharedValidations
       field = question.check_answer_label || question.id
       incorrect_accuracy = (value.to_d * 100) % (question.step * 100) != 0
 
-      if question.step < 1 && incorrect_accuracy
-        record.errors.add question.id.to_sym, I18n.t("validations.shared.numeric.nearest_hundredth", field:)
-      elsif incorrect_accuracy || value.to_d != value.to_i    # if the user enters a value in exponent notation (eg '4e1') the to_i method does not convert this to the correct value
-        field = question.check_answer_label || question.id
-        case question.step
-        when 1 then record.errors.add question.id.to_sym, :not_integer, message: I18n.t("validations.shared.numeric.whole_number", field:)
-        when 10 then record.errors.add question.id.to_sym, I18n.t("validations.shared.numeric.nearest_ten", field:)
-        end
+      next unless incorrect_accuracy
+
+      case question.step
+      when 0.01 then record.errors.add question.id.to_sym, I18n.t("validations.shared.numeric.nearest_hundredth", field:)
+      when 0.1 then record.errors.add question.id.to_sym, I18n.t("validations.shared.numeric.nearest_tenth", field:)
+      when 1 then record.errors.add question.id.to_sym, :not_integer, message: I18n.t("validations.shared.numeric.whole_number", field:)
+      when 10 then record.errors.add question.id.to_sym, I18n.t("validations.shared.numeric.nearest_ten", field:)
+      else
+        record.errors.add question.id.to_sym, I18n.t("validations.shared.numeric.nearest_step", field:, step: question.step)
       end
     end
   end
