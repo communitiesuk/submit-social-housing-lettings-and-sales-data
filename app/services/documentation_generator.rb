@@ -18,14 +18,16 @@ class DocumentationGenerator
         next
       end
 
-      validation_source = method(meth).source
+      validation = method(meth)
+      validation_source = validation.source
+      file_path = validation.source_location[0]
       helper_methods_source = all_helper_methods.map { |helper_method|
         if validation_source.include?(helper_method.to_s)
           method(helper_method).source
         end
       }.compact.join("\n")
 
-      response = describe_hard_validation(client, meth, validation_source, helper_methods_source, form)
+      response = describe_hard_validation(client, meth, validation_source, helper_methods_source, form, file_path)
       next unless response
 
       begin
@@ -45,15 +47,15 @@ class DocumentationGenerator
         Rails.logger.info("Validation #{meth} already exists for #{form.start_date.year}")
         next
       end
-
-      validation_source = row_parser_class.instance_method(meth).source
+      validation = row_parser_class.instance_method(meth)
+      validation_source = validation.source
       helper_methods_source = all_helper_methods.map { |helper_method|
         if validation_source.include?(helper_method.to_s)
           row_parser_class.instance_method(helper_method).source
         end
       }.compact.join("\n")
 
-      response = describe_hard_validation(client, meth, validation_source, helper_methods_source, form)
+      response = describe_hard_validation(client, meth, validation_source, helper_methods_source, form, validation.source_location[0])
       next unless response
 
       begin
@@ -69,7 +71,7 @@ class DocumentationGenerator
 
   def describe_soft_validations(client, all_validation_methods, all_helper_methods, log_type)
     validation_descriptions = {}
-    all_validation_methods.each do |meth|
+    all_validation_methods[0..5].each do |meth|
       validation_source = method(meth).source
       helper_methods_source = all_helper_methods.map { |helper_method|
         if validation_source.include?(helper_method.to_s)
@@ -101,8 +103,8 @@ class DocumentationGenerator
 
 private
 
-  def describe_hard_validation(client, meth, validation_source, helper_methods_source, form)
-    en_yml = File.read("./config/locales/en.yml")
+  def describe_hard_validation(client, meth, validation_source, helper_methods_source, form, file_path)
+    en_yml = File.read(translation_file_path(form, file_path))
 
     begin
       client.chat(
@@ -367,5 +369,24 @@ Look at these helper methods where needed to understand what is being checked in
                           other_validated_models: result["other_validated_models"])
 
     Rails.logger.info("******** described #{validation_depends_on_hash.keys.first} for #{page_the_validation_applied_to.questions.first.id} ********")
+  end
+
+  TRANSLATION_FILE_MAPPINGS = {
+    "property" => "property_information",
+  }.freeze
+
+  def translation_file_path(form, file_path)
+    return "./config/locales/validations/#{form.type}/#{form.start_date.year}/bulk_upload.en.yml" if file_path.include?("bulk_upload")
+      
+    file_name = file_path.split("/").last.gsub("_validations.rb", "")
+    translation_file_name = TRANSLATION_FILE_MAPPINGS[file_name] || file_name
+
+    file_path = "./config/locales/validations/#{form.type}/#{translation_file_name}.en.yml"
+    return file_path if File.exist?(file_path)
+
+    shared_file_path = "./config/locales/validations/#{translation_file_name}.en.yml"
+    return shared_file_path if File.exist?(shared_file_path)
+    
+    "./config/locales/en.yml"
   end
 end
