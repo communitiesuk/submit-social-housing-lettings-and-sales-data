@@ -43,7 +43,7 @@ class DocumentationGenerator
 
   def describe_bu_validations(client, form, row_parser_class, all_validation_methods, all_helper_methods, field_mapping_for_errors, log_type)
     all_validation_methods.each do |meth|
-      if LogValidation.where(validation_name: meth.to_s, bulk_upload_specific: true, from: form.start_date, log_type:).exists?
+      if LogValidation.where(validation_name: meth.to_s, bulk_upload_specific: true, collection_year: "#{form.start_date.year}/#{form.start_date.year + 1}", log_type:).exists?
         Rails.logger.info("Validation #{meth} already exists for #{form.start_date.year}")
         next
       end
@@ -168,14 +168,6 @@ private
                               required: %w[error_message field],
                             },
                           },
-                          from: {
-                            type: :number,
-                            description: "the year from which the validation starts. If this validation runs for logs with a startdate after a certain year, specify that year here, only if it is not specified in the validation method, leave this field blank",
-                          },
-                          to: {
-                            type: :number,
-                            description: "the year in which the validation ends. If this validation runs for logs with a startdate before a certain year, specify that year here, only if it is not specified in the validation method, leave this field blank",
-                          },
                           validation_type: {
                             type: :string,
                             enum: %w[presence format minimum maximum range inclusion length other],
@@ -273,8 +265,7 @@ Look at these helper methods where needed to understand what is being checked in
                               error_message: error["error_message"],
                               case: case_info["case_description"],
                               section: form.get_question(error["field"], nil)&.subsection&.id,
-                              from: case_info["from"] || "",
-                              to: case_info["to"] || "",
+                              collection_year: "#{form.start_date.year}/#{form.start_date.year + 1}",
                               validation_type: case_info["validation_type"],
                               hard_soft: "hard",
                               other_validated_models: case_info["other_validated_models"])
@@ -297,8 +288,7 @@ Look at these helper methods where needed to understand what is being checked in
                                 error_message: error["error_message"],
                                 case: case_info["case_description"],
                                 section: form.get_question(error_field, nil)&.subsection&.id,
-                                from: form.start_date,
-                                to: form.start_date + 1.year,
+                                collection_year: "#{form.start_date.year}/#{form.start_date.year + 1}",
                                 validation_type: case_info["validation_type"],
                                 hard_soft: "hard",
                                 other_validated_models: case_info["other_validated_models"],
@@ -335,7 +325,7 @@ Look at these helper methods where needed to understand what is being checked in
       return
     end
 
-    if LogValidation.where(validation_name: validation_depends_on_hash.keys.first, field: page_the_validation_applied_to.questions.first.id, from: form.start_date, log_type:).exists?
+    if LogValidation.where(validation_name: validation_depends_on_hash.keys.first, field: page_the_validation_applied_to.questions.first.id, collection_year: "#{form.start_date.year}/#{form.start_date.year + 1}", log_type:).exists?
       Rails.logger.info("Validation #{validation_depends_on_hash.keys.first} already exists for #{page_the_validation_applied_to.questions.first.id} for start year #{form.start_date.year}")
       return
     end
@@ -362,8 +352,7 @@ Look at these helper methods where needed to understand what is being checked in
                           error_message:,
                           case: case_info,
                           section: form.get_question(page_the_validation_applied_to.questions.first.id, nil)&.subsection&.id,
-                          from: form.start_date,
-                          to: form.start_date + 1.year,
+                          collection_year: "#{form.start_date.year}/#{form.start_date.year + 1}",
                           validation_type: result["validation_type"],
                           hard_soft: "soft",
                           other_validated_models: result["other_validated_models"])
@@ -377,7 +366,7 @@ Look at these helper methods where needed to understand what is being checked in
 
   def translation_file_path(form, file_path)
     return "./config/locales/validations/#{form.type}/#{form.start_date.year}/bulk_upload.en.yml" if file_path.include?("bulk_upload")
-      
+
     file_name = file_path.split("/").last.gsub("_validations.rb", "")
     translation_file_name = TRANSLATION_FILE_MAPPINGS[file_name] || file_name
 
@@ -386,7 +375,7 @@ Look at these helper methods where needed to understand what is being checked in
 
     shared_file_path = "./config/locales/validations/#{translation_file_name}.en.yml"
     return shared_file_path if File.exist?(shared_file_path)
-    
+
     "./config/locales/en.yml"
   end
 end
