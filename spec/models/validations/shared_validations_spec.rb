@@ -116,7 +116,17 @@ RSpec.describe Validations::SharedValidations do
   end
 
   describe "validating level of accuracy or rounding for numeric questions" do
+    let(:sales_log) { build(:sales_log, :completed) }
+
+    before do
+      income_question = instance_double(Form::Question, step:, type: "numeric", id: "income1", check_answer_label: "Buyer 1’s gross annual income", page: instance_double(Form::Page, routed_to?: true))
+      form = instance_double(Form, numeric_questions: [income_question])
+      allow(FormHandler.instance).to receive(:get_form).and_return(form)
+    end
+
     context "when validating a question with a step of 1" do
+      let(:step) { 1 }
+
       it "adds an error if input is a decimal" do
         sales_log.income1 = 30_000.5
         shared_validator.validate_numeric_step(sales_log)
@@ -131,67 +141,96 @@ RSpec.describe Validations::SharedValidations do
     end
 
     context "when validating a question with a step of 10" do
+      let(:step) { 10 }
+
       it "adds an error if input is not a multiple of ten" do
-        sales_log.savings = 30_005
-        sales_log.jointpur = 1
+        sales_log.income1 = 30_005
         shared_validator.validate_numeric_step(sales_log)
-        expect(sales_log.errors[:savings]).to include I18n.t("validations.shared.numeric.nearest_ten", field: "Buyers’ total savings before any deposit paid")
+        expect(sales_log.errors[:income1]).to include I18n.t("validations.shared.numeric.nearest_ten", field: "Buyer 1’s gross annual income")
       end
 
       it "does not add an error if input is a multiple of ten" do
-        sales_log.savings = 30_000
+        sales_log.income1 = 30_000
         shared_validator.validate_numeric_step(sales_log)
         expect(sales_log.errors).to be_empty
       end
     end
 
     context "when validating a question with a step of 0.01" do
+      let(:step) { 0.01 }
+
       it "adds an error if input has more than 2 decimal places" do
-        sales_log.mscharge = 30.7418
+        sales_log.income1 = 30_123.7418
         shared_validator.validate_numeric_step(sales_log)
-        expect(sales_log.errors[:mscharge]).to include I18n.t("validations.shared.numeric.nearest_hundredth", field: "Monthly leasehold charges")
+        expect(sales_log.errors[:income1]).to include I18n.t("validations.shared.numeric.nearest_hundredth", field: "Buyer 1’s gross annual income")
       end
 
       it "does not add an error if input has 2 or fewer decimal places" do
-        sales_log.mscharge = 30.74
+        sales_log.income1 = 30_123.74
         shared_validator.validate_numeric_step(sales_log)
         expect(sales_log.errors).to be_empty
       end
     end
 
-    %i[sales_log lettings_log].each do |log_type|
-      describe "validate_owning_organisation_data_sharing_agremeent_signed" do
-        it "is valid if the Data Protection Confirmation is signed" do
-          log = build(log_type, :in_progress, owning_organisation: create(:organisation))
+    context "when validating a question with a step of 0.1" do
+      let(:step) { 0.1 }
 
-          expect(log).to be_valid
+      it "adds an error if input has more than 1 decimal place" do
+        sales_log.income1 = 30_123.74
+        shared_validator.validate_numeric_step(sales_log)
+        expect(sales_log.errors[:income1]).to include I18n.t("validations.shared.numeric.nearest_tenth", field: "Buyer 1’s gross annual income")
+      end
+
+      it "does not add an error if input has 1 or fewer decimal places" do
+        sales_log.income1 = 30_123.8
+        shared_validator.validate_numeric_step(sales_log)
+        expect(sales_log.errors).to be_empty
+      end
+    end
+
+    context "when validating a question with an unusual step" do
+      let(:step) { 0.001 }
+
+      it "adds an appropriate error if input does not match" do
+        sales_log.income1 = 30_123.74
+        shared_validator.validate_numeric_step(sales_log)
+        expect(sales_log.errors[:income1]).to include I18n.t("validations.shared.numeric.nearest_step", field: "Buyer 1’s gross annual income", step: 0.001)
+      end
+    end
+  end
+
+  %i[sales_log lettings_log].each do |log_type|
+    describe "validate_owning_organisation_data_sharing_agremeent_signed" do
+      it "is valid if the Data Protection Confirmation is signed" do
+        log = build(log_type, :in_progress, owning_organisation: create(:organisation))
+
+        expect(log).to be_valid
+      end
+
+      it "is valid when owning_organisation nil" do
+        log = build(log_type, owning_organisation: nil)
+
+        expect(log).to be_valid
+      end
+
+      it "is not valid if the Data Protection Confirmation is not signed" do
+        log = build(log_type, owning_organisation: create(:organisation, :without_dpc))
+
+        expect(log).not_to be_valid
+        expect(log.errors[:owning_organisation_id]).to eq(["The organisation must accept the Data Sharing Agreement before it can be selected as the owning organisation."])
+      end
+
+      context "when updating" do
+        let(:log) { create(log_type, :in_progress) }
+        let(:org_with_dpc) { create(:organisation) }
+        let(:org_without_dpc) { create(:organisation, :without_dpc) }
+
+        it "is valid when changing to another org with a signed Data Protection Confirmation" do
+          expect { log.owning_organisation = org_with_dpc }.not_to change(log, :valid?)
         end
 
-        it "is valid when owning_organisation nil" do
-          log = build(log_type, owning_organisation: nil)
-
-          expect(log).to be_valid
-        end
-
-        it "is not valid if the Data Protection Confirmation is not signed" do
-          log = build(log_type, owning_organisation: create(:organisation, :without_dpc))
-
-          expect(log).not_to be_valid
-          expect(log.errors[:owning_organisation_id]).to eq(["The organisation must accept the Data Sharing Agreement before it can be selected as the owning organisation."])
-        end
-
-        context "when updating" do
-          let(:log) { create(log_type, :in_progress) }
-          let(:org_with_dpc) { create(:organisation) }
-          let(:org_without_dpc) { create(:organisation, :without_dpc) }
-
-          it "is valid when changing to another org with a signed Data Protection Confirmation" do
-            expect { log.owning_organisation = org_with_dpc }.not_to change(log, :valid?)
-          end
-
-          it "invalid when changing to another org without a signed Data Protection Confirmation" do
-            expect { log.owning_organisation = org_without_dpc }.to change(log, :valid?).from(true).to(false).and(change { log.errors[:owning_organisation_id] }.to(["The organisation must accept the Data Sharing Agreement before it can be selected as the owning organisation."]))
-          end
+        it "invalid when changing to another org without a signed Data Protection Confirmation" do
+          expect { log.owning_organisation = org_without_dpc }.to change(log, :valid?).from(true).to(false).and(change { log.errors[:owning_organisation_id] }.to(["The organisation must accept the Data Sharing Agreement before it can be selected as the owning organisation."]))
         end
       end
     end
