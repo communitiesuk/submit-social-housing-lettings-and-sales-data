@@ -15,11 +15,7 @@ class Form::Lettings::Subsections::IncomeAndBenefits < ::Form::Subsection
       Form::Lettings::Pages::BenefitsProportion.new("benefits_proportion", nil, self),
       Form::Lettings::Pages::RentOrOtherCharges.new(nil, nil, self),
       Form::Lettings::Pages::RentPeriod.new(nil, nil, self),
-      Form::Lettings::Pages::CareHomeWeekly.new(nil, nil, self),
-      Form::Lettings::Pages::CareHomeBiWeekly.new(nil, nil, self),
-      Form::Lettings::Pages::CareHome4Weekly.new(nil, nil, self),
-      Form::Lettings::Pages::CareHomeMonthly.new(nil, nil, self),
-      Form::Lettings::Pages::CareHomeChargesValueCheck.new(nil, nil, self),
+      carehome_questions,
       Form::Lettings::Pages::RentWeekly.new(nil, nil, self),
       Form::Lettings::Pages::RentBiWeekly.new(nil, nil, self),
       Form::Lettings::Pages::Rent4Weekly.new(nil, nil, self),
@@ -30,6 +26,20 @@ class Form::Lettings::Subsections::IncomeAndBenefits < ::Form::Subsection
       Form::Lettings::Pages::SupchargValueCheck.new(nil, nil, self),
       Form::Lettings::Pages::Outstanding.new(nil, nil, self),
       Form::Lettings::Pages::OutstandingAmount.new(nil, nil, self),
-    ].compact
+    ].flatten.compact
+  end
+
+private
+
+  def carehome_questions
+    return [] if form.start_year_2025_or_later?
+
+    [
+      Form::Lettings::Pages::CareHomeWeekly.new(nil, nil, self),
+      Form::Lettings::Pages::CareHomeBiWeekly.new(nil, nil, self),
+      Form::Lettings::Pages::CareHome4Weekly.new(nil, nil, self),
+      Form::Lettings::Pages::CareHomeMonthly.new(nil, nil, self),
+      Form::Lettings::Pages::CareHomeChargesValueCheck.new(nil, nil, self),
+    ]
   end
 end

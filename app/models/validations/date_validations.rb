@@ -2,53 +2,56 @@ module Validations::DateValidations
   include Validations::SharedValidations
 
   def validate_property_major_repairs(record)
-    date_valid?("mrcdate", record)
-    if record["startdate"].present? && record["mrcdate"].present? && record["startdate"] < record["mrcdate"]
-      record.errors.add :mrcdate, I18n.t("validations.lettings.date.mrcdate.before_tenancy_start")
-    end
+    return unless record["mrcdate"].present? && date_valid?("mrcdate", record)
 
     if is_rsnvac_first_let?(record) && record["mrcdate"].present?
       record.errors.add :mrcdate, I18n.t("validations.lettings.date.mrcdate.not_first_let")
     end
+    return unless record["startdate"].present? && date_valid?("startdate", record)
 
-    if record["mrcdate"].present? && record["startdate"].present? && record["startdate"].to_date - record["mrcdate"].to_date > 3650
+    if record["startdate"].present? && record["mrcdate"].present? && record["startdate"] < record["mrcdate"]
+      record.errors.add :mrcdate, I18n.t("validations.lettings.date.mrcdate.before_tenancy_start")
+      record.errors.add :startdate, I18n.t("validations.lettings.date.startdate.after_major_repair_date")
+    end
+
+    if record.form.start_year_2025_or_later?
+      if record["startdate"].to_date - 20.years > record["mrcdate"].to_date
+        record.errors.add :mrcdate, I18n.t("validations.lettings.date.mrcdate.twenty_years_before_tenancy_start")
+        record.errors.add :startdate, I18n.t("validations.lettings.date.startdate.twenty_years_after_mrc_date")
+      end
+    elsif record["startdate"].to_date - 10.years > record["mrcdate"].to_date
       record.errors.add :mrcdate, I18n.t("validations.lettings.date.mrcdate.ten_years_before_tenancy_start")
+      record.errors.add :startdate, I18n.t("validations.lettings.date.startdate.ten_years_after_mrc_date")
     end
   end
 
   def validate_property_void_date(record)
-    if record["voiddate"].present? && record["startdate"].present? && record["startdate"].to_date - record["voiddate"].to_date > 3650
-      record.errors.add :voiddate, I18n.t("validations.lettings.date.void_date.ten_years_before_tenancy_start")
-    end
+    return unless record["voiddate"].present? && date_valid?("voiddate", record)
 
-    if record["voiddate"].present? && record["startdate"].present? && record["startdate"].to_date < record["voiddate"].to_date
-      record.errors.add :voiddate, I18n.t("validations.lettings.date.void_date.before_tenancy_start")
-    end
-
-    if record["voiddate"].present? && record["mrcdate"].present? && record["mrcdate"].to_date < record["voiddate"].to_date
+    if record["mrcdate"].present? && record["mrcdate"].to_date < record["voiddate"].to_date
       record.errors.add :voiddate, :after_mrcdate, message: I18n.t("validations.lettings.date.void_date.after_mrcdate")
       record.errors.add :mrcdate, I18n.t("validations.lettings.date.mrcdate.before_void_date")
+    end
+    return unless record["startdate"].present? && date_valid?("startdate", record)
+
+    if record["startdate"].to_date < record["voiddate"].to_date
+      record.errors.add :voiddate, I18n.t("validations.lettings.date.void_date.before_tenancy_start")
+      record.errors.add :startdate, I18n.t("validations.lettings.date.startdate.after_void_date")
+    end
+
+    if record.form.start_year_2025_or_later?
+      if record["startdate"].to_date - 20.years > record["voiddate"].to_date
+        record.errors.add :voiddate, I18n.t("validations.lettings.date.void_date.twenty_years_before_tenancy_start")
+        record.errors.add :startdate, I18n.t("validations.lettings.date.startdate.twenty_years_after_void_date")
+      end
+    elsif record["startdate"].to_date - 10.years > record["voiddate"].to_date
+      record.errors.add :voiddate, I18n.t("validations.lettings.date.void_date.ten_years_before_tenancy_start")
+      record.errors.add :startdate, I18n.t("validations.lettings.date.startdate.ten_years_after_void_date")
     end
   end
 
   def validate_startdate(record)
-    return unless record.startdate && date_valid?("startdate", record)
-
-    if record["voiddate"].present? && record.startdate < record["voiddate"]
-      record.errors.add :startdate, I18n.t("validations.lettings.date.startdate.after_void_date")
-    end
-
-    if record["mrcdate"].present? && record.startdate < record["mrcdate"]
-      record.errors.add :startdate, I18n.t("validations.lettings.date.startdate.after_major_repair_date")
-    end
-
-    if record["voiddate"].present? && record["startdate"].to_date - record["voiddate"].to_date > 3650
-      record.errors.add :startdate, I18n.t("validations.lettings.date.startdate.ten_years_after_void_date")
-    end
-
-    if record["mrcdate"].present? && record["startdate"].to_date - record["mrcdate"].to_date > 3650
-      record.errors.add :startdate, I18n.t("validations.lettings.date.startdate.ten_years_after_mrc_date")
-    end
+    date_valid?("startdate", record)
   end
 
 private

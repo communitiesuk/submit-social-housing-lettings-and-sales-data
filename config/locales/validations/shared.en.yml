@@ -9,7 +9,9 @@ en:
         above_min: "%{field} must be at least %{min}."
         whole_number: "%{field} must be a whole number."
         nearest_ten: "%{field} must be given to the nearest ten."
+        nearest_tenth: "%{field} must be given to the nearest tenth."
         nearest_hundredth: "%{field} must be given to the nearest hundredth."
+        nearest_step: "${field} must be given to the nearest %{step}."
         normal_format: "Enter a number."
         format: "%{field} must be a number."
 

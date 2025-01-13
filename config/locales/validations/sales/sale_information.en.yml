@@ -47,8 +47,8 @@ en:
         value:
           discounted_ownership_value: "The mortgage%{mortgage}%{deposit_and_grant_sentence} added together is %{mortgage_deposit_and_grant_total}.</br></br>The full purchase price%{discount_sentence} is %{value_with_discount}.</br></br>These two amounts should be the same."
           outright_sale_value: "The mortgage%{mortgage} and cash deposit (%{deposit}) when added together is %{mortgage_and_deposit_total}.</br></br>The full purchase price is %{value}.</br></br>These two amounts should be the same."
-          value_over_discounted_london_max: "The percentage discount multiplied by the purchase price is %{discount_value}. This figure should not be more than £136,400 for properties in London."
-          value_over_discounted_max: "The percentage discount multiplied by the purchase price is %{discount_value}. This figure should not be more than £102,400 for properties outside of London."
+          value_over_discounted_london_max: "The percentage discount multiplied by the purchase price is %{discount_value}. This figure should not be more than £137,400 for properties in London."
+          value_over_discounted_max: "The percentage discount multiplied by the purchase price is %{discount_value}. This figure should not be more than £103,400 for properties outside of London."
           non_staircasing_mortgage:
             mortgage_used: "The mortgage (%{mortgage}) and cash deposit (%{deposit}) added together is %{mortgage_and_deposit_total}.</br></br>The full purchase price (%{value}) multiplied by the percentage equity stake purchased (%{equity}) is %{expected_shared_ownership_deposit_value}.</br></br>These two amounts should be the same."
             mortgage_not_used: "The cash deposit is %{deposit}.</br></br>The full purchase price (%{value}) multiplied by the percentage bought is %{expected_shared_ownership_deposit_value}.</br></br>These two amounts should be the same."
@@ -87,8 +87,8 @@ en:
             mortgage_not_used_socialhomebuy: "The cash deposit (%{deposit}) and cash discount (%{cashdis}) added together is %{deposit_and_discount_total}.</br></br>The full purchase price (%{value}) multiplied by the percentage bought (%{equity}) is %{expected_shared_ownership_deposit_value}.</br></br>These two amounts should be the same."
         discount:
           discounted_ownership_value: "The mortgage%{mortgage}%{deposit_and_grant_sentence} added together is %{mortgage_deposit_and_grant_total}.</br></br>The full purchase price%{discount_sentence} is %{value_with_discount}.</br></br>These two amounts should be the same."
-          value_over_discounted_london_max: "The percentage discount multiplied by the purchase price is %{discount_value}. This figure should not be more than £136,400 for properties in London."
-          value_over_discounted_max: "The percentage discount multiplied by the purchase price is %{discount_value}. This figure should not be more than £102,400 for properties outside of London."
+          value_over_discounted_london_max: "The percentage discount multiplied by the purchase price is %{discount_value}. This figure should not be more than £137,400 for properties in London."
+          value_over_discounted_max: "The percentage discount multiplied by the purchase price is %{discount_value}. This figure should not be more than £103,400 for properties outside of London."
         grant:
           discounted_ownership_value: "The mortgage%{mortgage}%{deposit_and_grant_sentence} added together is %{mortgage_deposit_and_grant_total}.</br></br>The full purchase price%{discount_sentence} is %{value_with_discount}.</br></br>These two amounts should be the same."
           out_of_range: "Loan, grants or subsidies must be between £9,000 and £16,000."
@@ -119,14 +119,14 @@ en:
         staircase:
           mortgage_used_value: "You must answer either ‘yes’ or ‘no’ to the question ‘was a mortgage used’ for staircasing transactions."
         la:
-          value_over_discounted_london_max: "The percentage discount multiplied by the purchase price is %{discount_value}. This figure should not be more than £136,400 for properties in London."
-          value_over_discounted_max: "The percentage discount multiplied by the purchase price is %{discount_value}. This figure should not be more than £102,400 for properties outside of London."
+          value_over_discounted_london_max: "The percentage discount multiplied by the purchase price is %{discount_value}. This figure should not be more than £137,400 for properties in London."
+          value_over_discounted_max: "The percentage discount multiplied by the purchase price is %{discount_value}. This figure should not be more than £103,400 for properties outside of London."
         uprn:
-          value_over_discounted_london_max: "The percentage discount multiplied by the purchase price is %{discount_value}. This figure should not be more than £136,400 for properties in London."
-          value_over_discounted_max: "The percentage discount multiplied by the purchase price is %{discount_value}. This figure should not be more than £102,400 for properties outside of London."
+          value_over_discounted_london_max: "The percentage discount multiplied by the purchase price is %{discount_value}. This figure should not be more than £137,400 for properties in London."
+          value_over_discounted_max: "The percentage discount multiplied by the purchase price is %{discount_value}. This figure should not be more than £103,400 for properties outside of London."
         postcode_full:
-          value_over_discounted_london_max: "The percentage discount multiplied by the purchase price is %{discount_value}. This figure should not be more than £136,400 for properties in London."
-          value_over_discounted_max: "The percentage discount multiplied by the purchase price is %{discount_value}. This figure should not be more than £102,400 for properties outside of London."
+          value_over_discounted_london_max: "The percentage discount multiplied by the purchase price is %{discount_value}. This figure should not be more than £137,400 for properties in London."
+          value_over_discounted_max: "The percentage discount multiplied by the purchase price is %{discount_value}. This figure should not be more than £103,400 for properties outside of London."
         numstair:
           must_be_greater_than_one: "The number of staircasing transactions must be greater than 1 when this is not the first staircasing transaction."
         firststair:
