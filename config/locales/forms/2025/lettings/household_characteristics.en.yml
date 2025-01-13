@@ -84,9 +84,9 @@ en:
 
           relat2:
             page_header: ""
-            check_answer_label: "Person 2’s relationship to the lead tenant"
+            check_answer_label: "Person 2 lead tenant’s partner"
             hint_text: ""
-            question_text: "What is person 2’s relationship to the lead tenant?"
+            question_text: "Is tenant 2 the partner of tenant 1?"
 
           age2:
             page_header: ""
@@ -119,9 +119,9 @@ en:
 
           relat3:
             page_header: ""
-            check_answer_label: "Person 3’s relationship to the lead tenant"
+            check_answer_label: "Person 3 lead tenant’s partner"
             hint_text: ""
-            question_text: "What is person 3’s relationship to the lead tenant?"
+            question_text: "Is tenant 3 the partner of tenant 1?"
 
           age3:
             page_header: ""
@@ -154,9 +154,9 @@ en:
 
           relat4:
             page_header: ""
-            check_answer_label: "Person 4’s relationship to the lead tenant"
+            check_answer_label: "Person 4 lead tenant’s partner"
             hint_text: ""
-            question_text: "What is person 4’s relationship to the lead tenant?"
+            question_text: "Is tenant 4 the partner of tenant 1?"
 
           age4:
             page_header: ""
@@ -189,9 +189,9 @@ en:
 
           relat5:
             page_header: ""
-            check_answer_label: "Person 5’s relationship to the lead tenant"
+            check_answer_label: "Person 5 lead tenant’s partner"
             hint_text: ""
-            question_text: "What is person 5’s relationship to the lead tenant?"
+            question_text: "Is tenant 5 the partner of tenant 1?"
 
           age5:
             page_header: ""
@@ -224,9 +224,9 @@ en:
 
           relat6:
             page_header: ""
-            check_answer_label: "Person 6’s relationship to the lead tenant"
+            check_answer_label: "Person 6 lead tenant’s partner"
             hint_text: ""
-            question_text: "What is person 6’s relationship to the lead tenant?"
+            question_text: "Is tenant 6 the partner of tenant 1?"
 
           age6:
             page_header: ""
@@ -259,9 +259,9 @@ en:
 
           relat7:
             page_header: ""
-            check_answer_label: "Person 7’s relationship to the lead tenant"
+            check_answer_label: "Person 7 lead tenant’s partner"
             hint_text: ""
-            question_text: "What is person 7’s relationship to the lead tenant?"
+            question_text: "Is tenant 7 the partner of tenant 1?"
 
           age7:
             page_header: ""
@@ -294,9 +294,9 @@ en:
 
           relat8:
             page_header: ""
-            check_answer_label: "Person 8’s relationship to the lead tenant"
+            check_answer_label: "Person 8 lead tenant’s partner"
             hint_text: ""
-            question_text: "What is person 8’s relationship to the lead tenant?"
+            question_text: "Is tenant 8 the partner of tenant 1?"
 
           age8:
             page_header: ""
