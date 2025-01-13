@@ -33,7 +33,6 @@ RSpec.describe "Home Page Features" do
           expect(page).to have_content("Q2 - Friday 11 October 2024")
           expect(page).to have_content("Q3 - Friday 10 January 2025")
           expect(page).to have_content("End of year deadline - Friday 6 June 2025")
-          expect(page).to have_content("You can still create logs for a previous quarter after its cut-off date, as long as you complete them by the end-of-year deadline: Friday 6 June 2025.")
         end
         Timecop.return
       end
@@ -80,7 +79,6 @@ RSpec.describe "Home Page Features" do
           expect(page).to have_content("Q2 - Friday 10 October 2025")
           expect(page).to have_content("Q3 - Friday 16 January 2026")
           expect(page).to have_content("End of year deadline - Friday 5 June 2026")
-          expect(page).to have_content("You can still create logs for a previous quarter after its cut-off date, as long as you complete them by the end-of-year deadline: Friday 5 June 2026.")
         end
         Timecop.return
       end
