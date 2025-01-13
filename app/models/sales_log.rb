@@ -440,9 +440,9 @@ class SalesLog < Log
   def income_soft_min_for_ecstat(ecstat_field)
     economic_status_code = public_send(ecstat_field)
 
-    return unless ALLOWED_INCOME_RANGES_SALES
+    return unless ALLOWED_INCOME_RANGES_SALES && ALLOWED_INCOME_RANGES_SALES[economic_status_code]
 
-    soft_min = ALLOWED_INCOME_RANGES_SALES[economic_status_code]&.soft_min
+    soft_min = ALLOWED_INCOME_RANGES_SALES[economic_status_code].soft_min
     format_as_currency(soft_min)
   end
 
