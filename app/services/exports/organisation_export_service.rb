@@ -65,6 +65,7 @@ module Exports
       attribute_hash["available_from"] = organisation.available_from&.iso8601
       attribute_hash["profit_status"] = nil # will need update when we add the field to the org
       attribute_hash["group"] = nil # will need update when we add the field to the org
+      attribute_hash["active"] = organisation.status == :active
 
       attribute_hash
     end
