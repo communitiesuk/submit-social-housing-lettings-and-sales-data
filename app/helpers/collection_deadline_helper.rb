@@ -76,6 +76,6 @@ module CollectionDeadlineHelper
       cutoff_date: quarter[:cutoff_date],
       quarter_start_date: quarter[:start_date],
       quarter_end_date: quarter[:end_date],
-      )
+      ) # rubocop:disable Layout/ClosingParenthesisIndentation
   end
 end
