@@ -13,8 +13,6 @@ module Validations::Sales::HouseholdValidations
   end
 
   def validate_buyers_living_in_property(record)
-    return unless record.form.start_date.year >= 2023
-
     if record.buyers_will_live_in? && record.buyer_one_will_not_live_in_property? && record.buyer_two_will_not_live_in_property?
       record.errors.add :buylivein, I18n.t("validations.sales.household.buylivein.buyers_will_live_in_property_values_inconsistent")
       record.errors.add :buy1livein, I18n.t("validations.sales.household.buy1livein.buyers_will_live_in_property_values_inconsistent")

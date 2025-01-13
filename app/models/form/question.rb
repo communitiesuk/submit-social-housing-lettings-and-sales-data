@@ -276,7 +276,7 @@ class Form::Question
   end
 
   def question_number_string(hidden: false)
-    if @question_number && !hidden && form.start_date.year >= 2023
+    if @question_number && !hidden
       "Q#{@question_number}"
     end
   end
