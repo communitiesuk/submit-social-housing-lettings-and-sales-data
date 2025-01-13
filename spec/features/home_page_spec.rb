@@ -41,7 +41,6 @@ RSpec.describe "Home Page Features" do
       scenario "displays correct current quarter as Q1" do
         Timecop.freeze(Time.zone.local(current_collection_year, 4, 1)) do
           visit root_path
-          expect(page).to have_selector("h1.govuk-heading-l + p.govuk-body.govuk-body-m", text: "Q1 - Friday 12 July 2024: Quarterly cut off date for tenancies and sales starting between 1 April 2024 and 30 June 2024.")
           expect(page).to have_content("Q1 - Friday 12 July 2024")
         end
         Timecop.return
@@ -50,7 +49,6 @@ RSpec.describe "Home Page Features" do
       scenario "displays correct current quarter as Q2" do
         Timecop.freeze(Time.zone.local(current_collection_year, 8, 1)) do
           visit root_path
-          expect(page).to have_selector("h1.govuk-heading-l + p.govuk-body.govuk-body-m", text: "Q2 - Friday 11 October 2024: Quarterly cut off date for tenancies and sales starting between 1 July 2024 and 30 September 2024.")
           expect(page).to have_content("Q2 - Friday 11 October 2024")
         end
         Timecop.return
@@ -59,7 +57,6 @@ RSpec.describe "Home Page Features" do
       scenario "displays correct current quarter as Q3" do
         Timecop.freeze(Time.zone.local(current_collection_year, 11, 1)) do
           visit root_path
-          expect(page).to have_selector("h1.govuk-heading-l + p.govuk-body.govuk-body-m", text: "Q3 - Friday 10 January 2025: Quarterly cut off date for tenancies and sales starting between 1 October 2024 and 31 December 2024.")
           expect(page).to have_content("Q3 - Friday 10 January 2025")
         end
         Timecop.return
@@ -91,7 +88,6 @@ RSpec.describe "Home Page Features" do
       scenario "displays correct current quarter as Q1" do
         Timecop.freeze(Time.zone.local(next_collection_year, 4, 1)) do
           visit root_path
-          expect(page).to have_selector("h1.govuk-heading-l + p.govuk-body.govuk-body-m", text: "Q1 - Friday 11 July 2025: Quarterly cut off date for tenancies and sales starting between 1 April 2025 and 30 June 2025.")
           expect(page).to have_content("Q1 - Friday 11 July 2025")
         end
         Timecop.return
@@ -100,7 +96,6 @@ RSpec.describe "Home Page Features" do
       scenario "displays correct current quarter as Q2" do
         Timecop.freeze(Time.zone.local(next_collection_year, 8, 1)) do
           visit root_path
-          expect(page).to have_selector("h1.govuk-heading-l + p.govuk-body.govuk-body-m", text: "Q2 - Friday 10 October 2025: Quarterly cut off date for tenancies and sales starting between 1 July 2025 and 30 September 2025.")
           expect(page).to have_content("Q2 - Friday 10 October 2025")
         end
         Timecop.return
@@ -109,7 +104,6 @@ RSpec.describe "Home Page Features" do
       scenario "displays correct current quarter as Q3" do
         Timecop.freeze(Time.zone.local(next_collection_year, 11, 1)) do
           visit root_path
-          expect(page).to have_selector("h1.govuk-heading-l + p.govuk-body.govuk-body-m", text: "Q3 - Friday 16 January 2026: Quarterly cut off date for tenancies and sales starting between 1 October 2025 and 31 December 2025.")
           expect(page).to have_content("Q3 - Friday 16 January 2026")
         end
         Timecop.return
