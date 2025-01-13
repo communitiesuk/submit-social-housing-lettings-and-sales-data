@@ -22,7 +22,7 @@ RSpec.describe "Bulk upload sales log" do
   # rubocop:disable RSpec/AnyInstance
   context "when during crossover period" do
     before do
-      Timecop.freeze(2023, 5, 1)
+      Timecop.freeze(2024, 5, 1)
     end
 
     after do
@@ -38,15 +38,15 @@ RSpec.describe "Bulk upload sales log" do
       click_button("Continue")
 
       expect(page).to have_content("You must select a collection period to upload for")
-      choose("2023 to 2024")
+      choose("2024 to 2025")
       click_button("Continue")
 
       click_link("Back")
 
-      expect(page.find_field("form-year-2023-field")).to be_checked
+      expect(page.find_field("form-year-2024-field")).to be_checked
       click_button("Continue")
 
-      expect(page).to have_content("Upload sales logs in bulk (2023 to 2024)")
+      expect(page).to have_content("Upload sales logs in bulk (2024 to 2025)")
       click_button("Continue")
 
       expect(page).to have_content("Upload your file")
@@ -80,7 +80,7 @@ RSpec.describe "Bulk upload sales log" do
       expect(page).to have_content("Which year")
       click_button("Continue")
       click_button("Continue")
-      choose("2023 to 2024")
+      choose("2024 to 2025")
       click_button("Continue")
       click_button("Continue")
 
@@ -96,7 +96,7 @@ RSpec.describe "Bulk upload sales log" do
 
   context "when not in crossover period" do
     before do
-      Timecop.freeze(2024, 2, 1)
+      Timecop.freeze(2025, 2, 1)
     end
 
     after do
@@ -108,7 +108,7 @@ RSpec.describe "Bulk upload sales log" do
       expect(page).to have_link("Upload sales logs in bulk")
       click_link("Upload sales logs in bulk")
 
-      expect(page).to have_content("Upload sales logs in bulk (2023 to 2024)")
+      expect(page).to have_content("Upload sales logs in bulk (2024 to 2025)")
       click_button("Continue")
 
       expect(page).to have_content("Upload your file")
