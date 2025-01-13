@@ -53,5 +53,4 @@ module CollectionTimeHelper
   def archived_collection_start_year
     current_collection_start_year - 2
   end
-
 end
