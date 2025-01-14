@@ -112,6 +112,7 @@ RSpec.describe BulkUploadSalesLogsController, type: :request do
 
       context "when requesting the previous year in a crossover period" do
         before do
+          allow(Time.zone).to receive(:now).and_return(Time.zone.now + 1.year)
           allow(FormHandler.instance).to receive(:sales_in_crossover_period?).and_return(true)
         end
 

@@ -129,31 +129,10 @@ class SalesLog < Log
 
   def dynamically_not_required
     not_required = []
-    not_required << "proplen" if proplen_optional?
-    not_required << "mortlen" if mortlen_optional?
-    not_required << "frombeds" if frombeds_optional?
     not_required << "deposit" if form.start_year_2024_or_later? && stairowned_100?
     not_required += %w[address_line2 county]
 
     not_required
-  end
-
-  def proplen_optional?
-    return false unless collection_start_year
-
-    collection_start_year < 2023
-  end
-
-  def mortlen_optional?
-    return false unless collection_start_year
-
-    collection_start_year < 2023
-  end
-
-  def frombeds_optional?
-    return false unless collection_start_year
-
-    collection_start_year < 2023
   end
 
   def unresolved
@@ -449,7 +428,6 @@ class SalesLog < Log
   def should_process_uprn_change?
     return unless uprn
     return unless saledate
-    return unless collection_start_year_for_date(saledate) >= 2023
 
     uprn_changed? || saledate_changed?
   end
@@ -514,8 +492,7 @@ class SalesLog < Log
      "age1",
      "sex1",
      "ecstat1",
-     form.start_date.year < 2023 || uprn.blank? ? "postcode_full" : nil,
-     form.start_date.year >= 2023 && uprn.present? ? "uprn" : nil].compact
+     uprn.blank? ? "postcode_full" : "uprn"].compact
   end
 
   def soctenant_is_inferred?
