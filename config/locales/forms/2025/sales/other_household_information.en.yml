@@ -20,7 +20,7 @@ en:
           armedforcesspouse:
             page_header: ""
             check_answer_label: "Any buyer is a spouse or civil partner of a UK armed forces regular who died in service within the last 2 years"
-            check_answer_prompt: "Tell us if any buyers are a spouse or civil partner of a UK armed forces regular who dies in service within the last 2 years"
+            check_answer_prompt: "Tell us if any buyers are a spouse or civil partner of a UK armed forces regular who died in service within the last 2 years"
             hint_text: ""
             question_text: "Are any of the buyers a spouse or civil partner of a UK armed forces regular who died in service within the last 2 years?"
 
