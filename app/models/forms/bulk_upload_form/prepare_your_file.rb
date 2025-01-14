@@ -11,8 +11,6 @@ module Forms
 
       def view_path
         case year
-        when 2023
-          "bulk_upload_#{log_type}_logs/forms/prepare_your_file_2023"
         when 2024
           "bulk_upload_#{log_type}_logs/forms/prepare_your_file_2024"
         end
