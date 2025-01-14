@@ -13,7 +13,7 @@ en:
                 question_text: "How long did they live there?"
               proplen_asked:
                 check_answer_label: "Buyers lived in the property before purchasing"
-                check_answer_prompt: "Tell us if buyer lived in the property before purchase"
+                check_answer_prompt: "Tell us if buyers lived in the property before purchase"
                 hint_text: ""
                 question_text: "Did the buyers live in the property before purchasing it?"
             not_joint_purchase:
@@ -25,14 +25,14 @@ en:
                 question_text: "How long did they live there?"
               proplen_asked:
                 check_answer_label: "Buyer lived in the property before purchasing"
-                check_answer_prompt: ""
+                check_answer_prompt: "Tell us if the buyer lived in the property before purchasing"
                 hint_text: ""
                 question_text: "Did the buyer live in the property before purchasing it?"
 
           staircasing:
             page_header: ""
             check_answer_label: "Staircasing transaction"
-            check_answer_prompt: "Tell us if staircasing transaction"
+            check_answer_prompt: "Tell us if it's a staircasing transaction"
             hint_text: "A staircasing transaction is when the household purchases more shares in their property, increasing the proportion they own and decreasing the proportion the housing association owns. Once the household purchases 100% of the shares, they own the property."
             question_text: "Is this a staircasing transaction?"
           about_staircasing:
@@ -139,7 +139,7 @@ en:
           mortgageused:
             page_header: ""
             check_answer_label: "Mortgage used"
-            check_answer_prompt: "Tell us if mortgage was used"
+            check_answer_prompt: "Tell us if a mortgage was used"
             hint_text: ""
             question_text: "Was a mortgage used for the purchase of this property?"
 

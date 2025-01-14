@@ -48,7 +48,7 @@ en:
           staircasing:
             page_header: ""
             check_answer_label: "Staircasing transaction"
-            check_answer_prompt: "Tell us if staircasing transaction"
+            check_answer_prompt: "Tell us if it's a staircasing transaction"
             hint_text: "A staircasing transaction is when the household purchases more shares in their property, increasing the proportion they own and decreasing the proportion the housing association owns. Once the household purchases 100% of the shares, they own the property."
             question_text: "Is this a staircasing transaction?"
 

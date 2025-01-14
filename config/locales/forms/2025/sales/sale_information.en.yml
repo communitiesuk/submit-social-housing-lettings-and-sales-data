@@ -13,7 +13,7 @@ en:
                 question_text: "How long did they live there?"
               proplen_asked:
                 check_answer_label: "Buyers lived in the property before purchasing"
-                check_answer_prompt: "Tell us if buyer lived in the property before purchase"
+                check_answer_prompt: "Tell us if buyers lived in the property before purchase"
                 hint_text: ""
                 question_text: "Did the buyers live in the property before purchasing it?"
             not_joint_purchase:
@@ -25,7 +25,7 @@ en:
                 question_text: "How long did they live there?"
               proplen_asked:
                 check_answer_label: "Buyer lived in the property before purchasing"
-                check_answer_prompt: ""
+                check_answer_prompt: "Tell us if the buyer lived in the property before purchasing"
                 hint_text: ""
                 question_text: "Did the buyer live in the property before purchasing it?"
 
@@ -172,7 +172,7 @@ en:
           mortgageused:
             page_header: ""
             check_answer_label: "Mortgage used"
-            check_answer_prompt: "Tell us if mortgage was used"
+            check_answer_prompt: "Tell us if a mortgage was used"
             hint_text: ""
             question_text: "Was a mortgage used for the purchase of this property?"
 

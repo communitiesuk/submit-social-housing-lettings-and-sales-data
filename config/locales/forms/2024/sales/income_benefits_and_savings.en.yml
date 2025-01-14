@@ -19,14 +19,14 @@ en:
           inc1mort:
             page_header: ""
             check_answer_label: "Buyer 1’s income used for mortgage application"
-            check_answer_prompt: "Tell us if buyer 1’s income used for mortgage application"
+            check_answer_prompt: "Tell us if buyer 1’s income used for a mortgage application"
             hint_text: ""
             question_text: "Was buyer 1’s income used for a mortgage application?"
 
           buyer_2_income:
             page_header: ""
             income2nk:
-              check_answer_label: "Buyer 2’s gross annual income known?"
+              check_answer_label: "Buyer 2’s gross annual income known"
               check_answer_prompt: "Enter buyer 2's gross annual income if known"
               hint_text: ""
               question_text: "Do you know buyer 2’s annual income?"
@@ -61,8 +61,8 @@ en:
             joint_purchase:
               page_header: ""
               savingsnk:
-                check_answer_label:  "Buyers’ total savings known"
-                check_answer_prompt: ""
+                check_answer_label:  "Buyers’ total savings"
+                check_answer_prompt: "Enter buyers' total savings if known"
                 hint_text: ""
                 question_text: "Do you know how much the buyers had in savings before they paid any deposit for the property?"
               savings:
@@ -73,8 +73,8 @@ en:
             not_joint_purchase:
               page_header: ""
               savingsnk:
-                check_answer_label:  "Buyer’s total savings known?"
-                check_answer_prompt: ""
+                check_answer_label:  "Buyer’s total savings"
+                check_answer_prompt: "Enter buyer's total savings if known"
                 hint_text: ""
                 question_text: "Do you know how much the buyer had in savings before they paid any deposit for the property?"
               savings:
@@ -92,8 +92,8 @@ en:
               question_text: "Have any of the buyers previously owned a property?"
             not_joint_purchase:
               page_header: ""
-              check_answer_label: "Buyer previously owned a property."
-              check_answer_prompt: ""
+              check_answer_label: "Buyer previously owned a property"
+              check_answer_prompt: "Tell us if the buyer previously owned a property"
               hint_text: ""
               question_text: "Has the buyer previously owned a property?"
 
