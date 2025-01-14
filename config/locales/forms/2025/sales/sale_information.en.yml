@@ -248,8 +248,8 @@ en:
           leaseholdcharges:
             page_header: ""
             has_mscharge:
-              check_answer_label: "Does the property have any service charges?"
-              check_answer_prompt: ""
+              check_answer_label: "Property service charges"
+              check_answer_prompt: "Enter service charges if any"
               hint_text: "For example, service and management charges"
               question_text: "Does the property have any service charges?"
             mscharge:
