@@ -124,7 +124,7 @@ en:
                 check_answer_prompt: "Enter person 2's age if known"
                 hint_text: ""
                 question_text: "Do you know person 2’s age?"
-              age:
+              age2:
                 check_answer_label: "Person 2’s age"
                 check_answer_prompt: "Enter person 2's age"
                 hint_text: ""
