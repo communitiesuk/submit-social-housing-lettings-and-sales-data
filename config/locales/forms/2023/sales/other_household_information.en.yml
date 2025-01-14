@@ -34,6 +34,6 @@ en:
           wheel:
             page_header: ""
             check_answer_label: "Household member uses a wheelchair"
-            check_answer_prompt: "Answer is someone uses a wheelchair"
+            check_answer_prompt: "Tell us if someone uses a wheelchair"
             hint_text: "This can be inside or outside the home"
             question_text: "Does anyone in the household use a wheelchair?"
