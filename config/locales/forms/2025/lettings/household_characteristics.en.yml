@@ -13,8 +13,8 @@ en:
           age1:
             page_header: ""
             age1_known:
-              check_answer_label: ""
-              check_answer_prompt: "Tell us if you know the lead tenant's age"
+              check_answer_label: "Lead tenant's age"
+              check_answer_prompt: "Enter lead tenant's age if known"
               hint_text: "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest."
               question_text: "Do you know the lead tenant’s age?"
             age1:
@@ -106,8 +106,8 @@ en:
           age2:
             page_header: ""
             age2_known:
-              check_answer_label: ""
-              check_answer_prompt: "Tell us if you know person 2's age"
+              check_answer_label: "Person 2’s age"
+              check_answer_prompt: "Enter person 2's age if known"
               hint_text: ""
               question_text: "Do you know person 2’s age?"
             age2:
@@ -147,8 +147,8 @@ en:
           age3:
             page_header: ""
             age3_known:
-              check_answer_label: ""
-              check_answer_prompt: "Tell us if you know person 3's age"
+              check_answer_label: "Person 3’s age"
+              check_answer_prompt: "Enter person 3's age if known"
               hint_text: ""
               question_text: "Do you know person 3’s age?"
             age3:
@@ -188,8 +188,8 @@ en:
           age4:
             page_header: ""
             age4_known:
-              check_answer_label: ""
-              check_answer_prompt: "Tell us if you know person 4's age"
+              check_answer_label: "Person 4’s age"
+              check_answer_prompt: "Enter person 4's age if known"
               hint_text: ""
               question_text: "Do you know person 4’s age?"
             age4:
@@ -229,8 +229,8 @@ en:
           age5:
             page_header: ""
             age5_known:
-              check_answer_label: ""
-              check_answer_prompt: "Tell us if you know person 5's age"
+              check_answer_label: "Person 5’s age"
+              check_answer_prompt: "Enter person 5's age if known"
               hint_text: ""
               question_text: "Do you know person 5’s age?"
             age5:
@@ -270,8 +270,8 @@ en:
           age6:
             page_header: ""
             age6_known:
-              check_answer_label: ""
-              check_answer_prompt: "Tell us if you know person 6's age"
+              check_answer_label: "Person 6’s age"
+              check_answer_prompt: "Enter person 6's age if known"
               hint_text: ""
               question_text: "Do you know person 6’s age?"
             age6:
@@ -311,8 +311,8 @@ en:
           age7:
             page_header: ""
             age7_known:
-              check_answer_label: ""
-              check_answer_prompt: "Tell us if you know person 7's age"
+              check_answer_label: "Person 7’s age"
+              check_answer_prompt: "Enter person 7's age if known"
               hint_text: ""
               question_text: "Do you know person 7’s age?"
             age7:
@@ -352,8 +352,8 @@ en:
           age8:
             page_header: ""
             age8_known:
-              check_answer_label: ""
-              check_answer_prompt: "Tell us if you know person 8's age"
+              check_answer_label: "Person 8’s age"
+              check_answer_prompt: "Enter person 8's age if known"
               hint_text: ""
               question_text: "Do you know person 8’s age?"
             age8:
