@@ -25,24 +25,6 @@ RSpec.describe Form::Lettings::Questions::Sheltered, type: :model do
     expect(question.type).to eq "radio"
   end
 
-  context "with 2023/24 form" do
-    before do
-      allow(form).to receive(:start_year_2024_or_later?).and_return(false)
-      allow(form).to receive(:start_year_2025_or_later?).and_return(false)
-    end
-
-    it "has the correct answer_options" do
-      expect(question.answer_options).to eq({
-        "2" => { "value" => "Yes – extra care housing" },
-        "1" => { "value" => "Yes – specialist retirement housing" },
-        "5" => { "value" => "Yes – sheltered housing for adults aged under 55 years" },
-        "3" => { "value" => "No" },
-        "divider" => { "value" => true },
-        "4" => { "value" => "Don’t know" },
-      })
-    end
-  end
-
   context "with 2024/25 form" do
     before do
       allow(form).to receive(:start_year_2024_or_later?).and_return(true)

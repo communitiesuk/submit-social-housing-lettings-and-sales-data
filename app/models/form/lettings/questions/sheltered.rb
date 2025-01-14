@@ -15,18 +15,11 @@ class Form::Lettings::Questions::Sheltered < ::Form::Question
         "3" => { "value" => "No" },
         "divider" => { "value" => true },
         "4" => { "value" => "Don’t know" } }
-    elsif form.start_year_2024_or_later?
+    else
       { "1" => { "value" => "Yes – specialist retirement housing" },
         "2" => { "value" => "Yes – extra care housing" },
         "5" => { "value" => "Yes – sheltered housing for adults aged under 55 years" },
         "6" => { "value" => "Yes – sheltered housing for adults aged 55 years and over who are not retired" },
-        "3" => { "value" => "No" },
-        "divider" => { "value" => true },
-        "4" => { "value" => "Don’t know" } }
-    else
-      { "2" => { "value" => "Yes – extra care housing" },
-        "1" => { "value" => "Yes – specialist retirement housing" },
-        "5" => { "value" => "Yes – sheltered housing for adults aged under 55 years" },
         "3" => { "value" => "No" },
         "divider" => { "value" => true },
         "4" => { "value" => "Don’t know" } }
