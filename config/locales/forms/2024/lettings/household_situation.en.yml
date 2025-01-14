@@ -67,8 +67,8 @@ en:
           previous_postcode:
             page_header: ""
             ppcodenk:
-              check_answer_label: ""
-              check_answer_prompt: ""
+              check_answer_label: "Postcode of the household’s last settled accommodation"
+              check_answer_prompt: "Enter the postcode of the household’s last settled accommodation if known"
               hint_text: "This is the tenant’s last long-standing home. It is where the tenant was living before any period in temporary accommodation, sleeping rough or otherwise homeless."
               question_text: "Do you know the postcode of the household’s last settled accommodation?"
             ppostcode_full:
@@ -80,8 +80,8 @@ en:
           previous_local_authority:
             page_header: ""
             previous_la_known:
-              check_answer_label: ""
-              check_answer_prompt: ""
+              check_answer_label: "Local authority of household's last settled accommodation"
+              check_answer_prompt: "Enter the local authority of the buyer's last settled accommodation if known"
               hint_text: "This is the tenant’s last long-standing home. It is where the tenant was living before any period in temporary accommodation, sleeping rough or otherwise homeless."
               question_text: "Do you know the local authority of the household’s last settled accommodation?"
             prevloc:
