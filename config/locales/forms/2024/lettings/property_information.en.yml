@@ -5,8 +5,8 @@ en:
         property_information:
           first_time_property_let_as_social_housing:
             page_header: ""
-            check_answer_label: "First time being let as social-housing"
-            check_answer_prompt: "Tell us if it's the first time being let as social-housing"
+            check_answer_label: "First time being let as social housing"
+            check_answer_prompt: "Tell us if it's the first time being let as social housing"
             hint_text: ""
             question_text: "Is this the first time the property has been let as social housing?"
 
