@@ -99,7 +99,7 @@ en:
           relat2:
             page_header: ""
             check_answer_label: "Person 2 lead tenant’s partner"
-            check_answer_prompt: ""
+            check_answer_prompt: "Tell us if person 2 is the lead tenant’s partner"
             hint_text: ""
             question_text: "Is tenant 2 the partner of tenant 1?"
 
@@ -140,7 +140,7 @@ en:
           relat3:
             page_header: ""
             check_answer_label: "Person 3 lead tenant’s partner"
-            check_answer_prompt: ""
+            check_answer_prompt: "Tell us if person 3 is the lead tenant’s partner"
             hint_text: ""
             question_text: "Is tenant 3 the partner of tenant 1?"
 
@@ -181,7 +181,7 @@ en:
           relat4:
             page_header: ""
             check_answer_label: "Person 4 lead tenant’s partner"
-            check_answer_prompt: ""
+            check_answer_prompt: "Tell us if person 4 is the lead tenant’s partner"
             hint_text: ""
             question_text: "Is tenant 4 the partner of tenant 1?"
 
@@ -222,7 +222,7 @@ en:
           relat5:
             page_header: ""
             check_answer_label: "Person 5 lead tenant’s partner"
-            check_answer_prompt: ""
+            check_answer_prompt: "Tell us if person 5 is the lead tenant’s partner"
             hint_text: ""
             question_text: "Is tenant 5 the partner of tenant 1?"
 
@@ -263,7 +263,7 @@ en:
           relat6:
             page_header: ""
             check_answer_label: "Person 6 lead tenant’s partner"
-            check_answer_prompt: ""
+            check_answer_prompt: "Tell us if person 6 is the lead tenant’s partner"
             hint_text: ""
             question_text: "Is tenant 6 the partner of tenant 1?"
 
@@ -304,7 +304,7 @@ en:
           relat7:
             page_header: ""
             check_answer_label: "Person 7 lead tenant’s partner"
-            check_answer_prompt: ""
+            check_answer_prompt: "Tell us if person 7 is the lead tenant’s partner"
             hint_text: ""
             question_text: "Is tenant 7 the partner of tenant 1?"
 
@@ -345,7 +345,7 @@ en:
           relat8:
             page_header: ""
             check_answer_label: "Person 8 lead tenant’s partner"
-            check_answer_prompt: ""
+            check_answer_prompt: "Tell us if person 8 is the lead tenant’s partner"
             hint_text: ""
             question_text: "Is tenant 8 the partner of tenant 1?"
 

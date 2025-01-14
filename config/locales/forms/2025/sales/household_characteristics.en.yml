@@ -94,13 +94,13 @@ en:
             buyer:
               page_header: ""
               check_answer_label: "Buyer 2 is the partner of buyer 1"
-              check_answer_prompt: ""
+              check_answer_prompt: "Tell us if buyer 2 is the partner of buyer 1"
               hint_text: ""
               question_text: "Is buyer 2 the partner of buyer 1?"
             person:
               page_header: ""
               check_answer_label: "Person 2 is the partner of buyer 1"
-              check_answer_prompt: ""
+              check_answer_prompt: "Tell us if person 2 is the partner of buyer 1"
               hint_text: ""
               question_text: "Is person 2 the partner of buyer 1?"
 
@@ -249,7 +249,7 @@ en:
           relat3:
             page_header: ""
             check_answer_label: "Person 3 is the partner of buyer 1"
-            check_answer_prompt: ""
+            check_answer_prompt: "Tell us if person 3 is the partner of buyer 1"
             hint_text: ""
             question_text: "Is person 3 the partner of buyer 1?"
 
@@ -290,7 +290,7 @@ en:
           relat4:
             page_header: ""
             check_answer_label: "Person 4 is the partner of buyer 1"
-            check_answer_prompt: ""
+            check_answer_prompt: "Tell us if person 4 is the partner of buyer 1"
             hint_text: ""
             question_text: "Is person 4 the partner of buyer 1?"
 
@@ -331,7 +331,7 @@ en:
           relat5:
             page_header: ""
             check_answer_label: "Person 5 is the partner of buyer 1"
-            check_answer_prompt: ""
+            check_answer_prompt: "Tell us if person 5 is the partner of buyer 1"
             hint_text: ""
             question_text: "Is person 5 the partner of buyer 1?"
 
@@ -372,7 +372,7 @@ en:
           relat6:
             page_header: ""
             check_answer_label: "Person 6 is the partner of buyer 1"
-            check_answer_prompt: ""
+            check_answer_prompt: "Tell us if person 6 is the partner of buyer 1"
             hint_text: ""
             question_text: "Is person 6 the partner of buyer 1?"
 
