@@ -11,21 +11,21 @@ module Validations::FinancialValidations
     end
   end
 
-  EMPLOYED_STATUSES = [1, 0].freeze
+  EMPLOYED_STATUSES = [1, 2].freeze
   def validate_net_income_uc_proportion(record)
     (1..8).any? do |n|
       economic_status = record["ecstat#{n}"]
       is_employed = EMPLOYED_STATUSES.include?(economic_status)
       relationship = record["relat#{n}"]
-      is_partner_or_main = relationship == "P" || (relationship.nil? && economic_status.present?)
-      if is_employed && is_partner_or_main && record.benefits&.zero?
+      is_partner_or_main = relationship == "P" || n == 1
+      if is_employed && is_partner_or_main && record.benefits == 1
         record.errors.add :benefits, I18n.t("validations.lettings.financial.benefits.part_or_full_time")
       end
     end
   end
 
   def validate_net_income(record)
-    if record.ecstat1 && record.hhmemb && record.weekly_net_income && record.startdate && record.form.start_date.year >= 2023
+    if record.ecstat1 && record.hhmemb && record.weekly_net_income && record.startdate
       if record.weekly_net_income > record.applicable_income_range.hard_max
         frequency = record.form.get_question("incfreq", record).label_from_value(record.incfreq).downcase
         hard_max = format_as_currency(record.applicable_income_range.hard_max)

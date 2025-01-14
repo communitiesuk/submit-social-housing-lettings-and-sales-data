@@ -61,13 +61,14 @@ class SalesLog < Log
              [by_postcode, param_without_spaces, param_without_spaces])
   }
   scope :age1_answered, -> { where.not(age1: nil).or(where(age1_known: [1, 2])) }
+  scope :ecstat1_answered, -> { where.not(ecstat1: nil).or(where("saledate >= ?", Time.zone.local(2025, 4, 1))) }
   scope :duplicate_logs, lambda { |log|
     visible.where(log.slice(*DUPLICATE_LOG_ATTRIBUTES))
     .where.not(id: log.id)
     .where.not(saledate: nil)
     .where.not(sex1: nil)
-    .where.not(ecstat1: nil)
     .where.not(postcode_full: nil)
+    .ecstat1_answered
     .age1_answered
   }
   scope :after_date, ->(date) { where("saledate >= ?", date) }
@@ -77,9 +78,9 @@ class SalesLog < Log
     .group(*DUPLICATE_LOG_ATTRIBUTES)
     .where.not(saledate: nil)
     .where.not(sex1: nil)
-    .where.not(ecstat1: nil)
     .where.not(postcode_full: nil)
     .age1_answered
+    .ecstat1_answered
     .having("COUNT(*) > 1")
 
     if assigned_to_id
@@ -128,32 +129,10 @@ class SalesLog < Log
 
   def dynamically_not_required
     not_required = []
-    not_required << "proplen" if proplen_optional?
-    not_required << "mortlen" if mortlen_optional?
-    not_required << "frombeds" if frombeds_optional?
     not_required << "deposit" if form.start_year_2024_or_later? && stairowned_100?
-
-    not_required |= %w[address_line2 county postcode_full] if saledate && collection_start_year_for_date(saledate) >= 2023
+    not_required += %w[address_line2 county]
 
     not_required
-  end
-
-  def proplen_optional?
-    return false unless collection_start_year
-
-    collection_start_year < 2023
-  end
-
-  def mortlen_optional?
-    return false unless collection_start_year
-
-    collection_start_year < 2023
-  end
-
-  def frombeds_optional?
-    return false unless collection_start_year
-
-    collection_start_year < 2023
   end
 
   def unresolved
@@ -440,16 +419,15 @@ class SalesLog < Log
   def income_soft_min_for_ecstat(ecstat_field)
     economic_status_code = public_send(ecstat_field)
 
-    return unless ALLOWED_INCOME_RANGES_SALES
+    return unless ALLOWED_INCOME_RANGES_SALES && ALLOWED_INCOME_RANGES_SALES[economic_status_code]
 
-    soft_min = ALLOWED_INCOME_RANGES_SALES[economic_status_code]&.soft_min
+    soft_min = ALLOWED_INCOME_RANGES_SALES[economic_status_code].soft_min
     format_as_currency(soft_min)
   end
 
   def should_process_uprn_change?
     return unless uprn
     return unless saledate
-    return unless collection_start_year_for_date(saledate) >= 2023
 
     uprn_changed? || saledate_changed?
   end
@@ -514,8 +492,7 @@ class SalesLog < Log
      "age1",
      "sex1",
      "ecstat1",
-     form.start_date.year < 2023 || uprn.blank? ? "postcode_full" : nil,
-     form.start_date.year >= 2023 && uprn.present? ? "uprn" : nil].compact
+     uprn.blank? ? "postcode_full" : "uprn"].compact
   end
 
   def soctenant_is_inferred?

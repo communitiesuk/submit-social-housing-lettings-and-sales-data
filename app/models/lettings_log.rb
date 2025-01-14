@@ -240,7 +240,7 @@ class LettingsLog < Log
   end
 
   def applicable_income_range
-    return unless ecstat1 && hhmemb
+    return unless ecstat1 && hhmemb && ALLOWED_INCOME_RANGES[ecstat1]
 
     range = ALLOWED_INCOME_RANGES[ecstat1].clone
 
@@ -670,8 +670,7 @@ class LettingsLog < Log
     ["owning_organisation_id",
      "startdate",
      "tenancycode",
-     form.start_date.year < 2023 || uprn.blank? ? "postcode_full" : nil,
-     form.start_date.year >= 2023 && uprn.present? ? "uprn" : nil,
+     uprn.blank? ? "postcode_full" : "uprn",
      "scheme_id",
      "location_id",
      "age1",
@@ -779,8 +778,7 @@ private
     not_required << "previous_la_known" if postcode_known?
     not_required << "tshortfall" if tshortfall_unknown?
     not_required << "tenancylength" if tenancylength_optional?
-
-    not_required |= %w[address_line2 county postcode_full] if startdate && collection_start_year_for_date(startdate) >= 2023
+    not_required += %w[address_line2 county]
 
     not_required
   end
@@ -885,7 +883,6 @@ private
   def should_process_uprn_change?
     return unless uprn
     return unless startdate
-    return unless collection_start_year_for_date(startdate) >= 2023
 
     uprn_changed? || startdate_changed?
   end
