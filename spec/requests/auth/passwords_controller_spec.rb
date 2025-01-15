@@ -72,6 +72,19 @@ RSpec.describe Auth::PasswordsController, type: :request do
         follow_redirect!
         expect(page).to have_css("p", class: "govuk-notification-banner__heading", text: message)
       end
+
+      context "when the user had been locked out" do
+        let(:user) { create(:user, locked_at: Time.zone.now, failed_attempts: 5) }
+
+        it "after password change, unlocks the user account and signs them in" do
+          put "/account/password", params: update_password_params
+          follow_redirect!
+          user.reload
+          expect(user.locked_at).to be_nil
+          expect(user.failed_attempts).to be 0
+          expect(page).to have_content("Welcome back, #{user.name}")
+        end
+      end
     end
   end
 
