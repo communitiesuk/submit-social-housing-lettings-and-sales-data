@@ -83,6 +83,7 @@ namespace :generate_lettings_documentation do
                             error_message:,
                             case: validation_description,
                             section: form.get_question(field, nil)&.subsection&.id,
+                            collection_year: "#{form.start_date.year}/#{form.start_date.year + 1}",
                             validation_type: validation_name,
                             hard_soft: "hard")
     end
