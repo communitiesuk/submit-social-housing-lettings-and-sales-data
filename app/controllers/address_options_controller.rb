@@ -1,13 +1,42 @@
 class AddressOptionsController < ApplicationController
   def index
     query = params[:query]
-    service = AddressClient.new(address: query)
-    service.call
 
-    if service.error.present?
-      render json: { error: service.error }, status: :unprocessable_entity
+    if query.match?(/\A\d+\z/) && query.length > 5
+      # Query is all numbers and greater than 5 digits, assume it's a UPRN
+      service = AddressClient.new(uprn: query)
+      service.call
+
+      if service.error.present?
+        render json: { error: service.error }, status: :unprocessable_entity
+      else
+        render json: service.result_by_uprn.map { |result| { address: result["ADDRESS"], uprn: result["UPRN"] } }
+      end
+    elsif query.match?(/[a-zA-Z]/)
+      # Query contains letters, assume it's an address
+      service = AddressClient.new(address: query)
+      service.call
+
+      if service.error.present?
+        render json: { error: service.error }, status: :unprocessable_entity
+      else
+        render json: service.result.map { |result| { address: result["ADDRESS"], uprn: result["UPRN"] } }
+      end
     else
-      render json: service.result.map { |result| { address: result["ADDRESS"], uprn: result["UPRN"] } }
+      # Query is ambiguous, use both APIs and merge results
+      address_service = AddressClient.new(address: query)
+      uprn_service = AddressClient.new(uprn: query)
+
+      address_service.call
+      uprn_service.call
+
+      results = (address_service.result || []) + (uprn_service.result_by_uprn || [])
+
+      if address_service.error.present? && uprn_service.error.present?
+        render json: { error: "Address and UPRN are not recognised. Check the input." }, status: :unprocessable_entity
+      else
+        render json: results.map { |result| { address: result["ADDRESS"], uprn: result["UPRN"] } }
+      end
     end
   end
 
