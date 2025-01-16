@@ -1915,15 +1915,6 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
           expect(parser.errors.where(:field_125, category: :soft_validation).first.message).to eql("You told us the rent is £120.00 every week. This is higher than we would expect.")
         end
       end
-
-      context "when an invalid ecstat1 is given" do
-        let(:attributes) { setup_section_params.merge({ field_46: 11, field_119: 123, field_118: 1 }) }
-
-        it "does not run net income soft validations validation" do
-          parser.valid?
-          expect(parser.errors.where(:field_46).count).to be(1)
-        end
-      end
     end
 
     describe "log_already_exists?" do

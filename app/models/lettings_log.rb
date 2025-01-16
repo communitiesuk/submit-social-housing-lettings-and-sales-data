@@ -240,7 +240,7 @@ class LettingsLog < Log
   end
 
   def applicable_income_range
-    return unless ecstat1 && hhmemb && ALLOWED_INCOME_RANGES[ecstat1]
+    return unless ecstat1 && hhmemb
 
     range = ALLOWED_INCOME_RANGES[ecstat1].clone
 
