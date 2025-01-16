@@ -11,6 +11,7 @@ RSpec.describe Form::Lettings::Pages::RentType, type: :model do
   before do
     allow(subsection).to receive(:form).and_return(form)
     allow(form).to receive(:start_year_2024_or_later?).and_return(true)
+    allow(form).to receive(:start_year_2025_or_later?).and_return(false)
   end
 
   it "has correct subsection" do
