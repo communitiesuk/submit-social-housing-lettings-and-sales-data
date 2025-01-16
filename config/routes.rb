@@ -391,15 +391,19 @@ Rails.application.routes.draw do
     end
   end
 
-  get "create-test-lettings-log", to: "lettings_logs#create_test_log"
-  get "create-test-sales-log", to: "sales_logs#create_test_log"
-  get "create-setup-test-lettings-log", to: "lettings_logs#create_setup_test_log"
-  get "create-setup-test-sales-log", to: "sales_logs#create_setup_test_log"
-
   scope via: :all do
     match "/404", to: "errors#not_found"
     match "/429", to: "errors#too_many_requests", status: 429
     match "/422", to: "errors#unprocessable_entity"
     match "/500", to: "errors#internal_server_error"
+  end
+
+  if FeatureToggle.create_test_logs_enabled?
+    get "create-test-lettings-log", to: "test_data#create_test_lettings_log"
+    get "create-setup-test-lettings-log", to: "test_data#create_setup_test_lettings_log"
+    get "create-2024-test-lettings-bulk-upload", to: "test_data#create_2024_test_lettings_bulk_upload"
+    get "create-test-sales-log", to: "test_data#create_test_sales_log"
+    get "create-setup-test-sales-log", to: "test_data#create_setup_test_sales_log"
+    get "create-2024-test-sales-bulk-upload", to: "test_data#create_2024_test_sales_bulk_upload"
   end
 end

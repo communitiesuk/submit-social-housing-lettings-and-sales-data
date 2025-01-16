@@ -1,7 +1,7 @@
 class BulkUpload < ApplicationRecord
   enum :log_type, { lettings: "lettings", sales: "sales" }
   enum :rent_type_fix_status, { not_applied: "not_applied", applied: "applied", not_needed: "not_needed" }
-  enum :failure_reason, { blank_template: "blank_template", wrong_template: "wrong_template" }
+  enum :failure_reason, { blank_template: "blank_template", wrong_template: "wrong_template", processing_error: "processing_error" }
 
   belongs_to :user
 
@@ -43,6 +43,7 @@ class BulkUpload < ApplicationRecord
     return :processing if processing
     return :blank_template if failure_reason == "blank_template"
     return :wrong_template if failure_reason == "wrong_template"
+    return :processing_error if failure_reason == "processing_error"
 
     if logs.visible.exists?
       return :errors_fixed_in_service if completed? && bulk_upload_errors.any?
@@ -129,6 +130,7 @@ class BulkUpload < ApplicationRecord
   def unpend_and_confirm_soft_validations
     logs.find_each do |log|
       fields_to_confirm(log).each { |field| log[field] = 0 }
+      log.status = log.status_cache
       log.save!
     end
   end

@@ -6,7 +6,7 @@
     <h1 class="govuk-heading-l">Fix <%= pluralize(@bulk_upload.bulk_upload_errors.count, "error") %> and upload file again</h1>
 
     <p class="govuk-body">
-      We could not create logs from your bulk upload because of the following errors. Download the <%= govuk_link_to "specification", Forms::BulkUploadSales::PrepareYourFile.new(year: @bulk_upload.year).specification_path, target: "_blank" %> to help you fix the cells in your CSV file.
+      We could not create logs from your bulk upload because of the following errors. Download the <%= govuk_link_to "specification", Forms::BulkUploadForm::PrepareYourFile.new(year: @bulk_upload.year, log_type: "sales").specification_path, target: "_blank" %> to help you fix the cells in your CSV file.
     </p>
 
     <p class="govuk-!-font-size-19 govuk-!-margin-bottom-2"><strong>File name: </strong><%= @bulk_upload.filename %></p>

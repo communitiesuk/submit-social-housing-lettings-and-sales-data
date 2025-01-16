@@ -28,29 +28,14 @@
 
       <%= accordion.with_section(heading_text: "Using the bulk upload template") do %>
         <p class="govuk-body">For each collection year, we publish a bulk upload template and specification.</p>
-        <% if @form.year == 2023 %>
-          <p class="govuk-body">The bulk upload templates contain 7 or 8 rows of ‘headers’ with information about how to fill in the template, including:</p>
-        <% else %>
-          <p class="govuk-body">The bulk upload templates contain 8 rows of ‘headers’ with information about how to fill in the template, including:</p>
-        <% end %>
+        <p class="govuk-body">The bulk upload templates contain 8 rows of ‘headers’ with information about how to fill in the template, including:</p>
 
         <%= govuk_list ["the CORE form questions and their field numbers", "each field’s valid responses", "if/when certain fields can be left blank", "which fields are used to check for duplicate logs"], type: :bullet %>
 
         <p class="govuk-body">You can paste your data below the headers or copy the headers and insert them above the data in your file. The bulk upload fields start at column B. Leave column A blank.</p>
         <p class="govuk-body">Make sure that each column of data aligns with the corresponding question in the headers. We recommend ordering your data to match the headers, but you can also reorder the headers to match your data. When processing the file, we check what each column of data represents based on the headers above.</p>
-        <% if @form.year == 2023 %>
-          <p class="govuk-body">For 2023/24 uploads, there are 2 templates to choose from, a new template and a legacy template. They outline suggested ways of ordering your data.</p>
-          <p class="govuk-body">You must include the headers in your file when you upload, unless your data matches the exact order of the legacy template. If you choose to remove the headers, you must also remove the blank column A.</p>
-
-          <p class="govuk-body"><strong>New template</strong>: In this template, the questions are in the same order as the 2023/24 paper form and web form. Use this template if your organisation is new to bulk upload or if your housing management system matches the new column ordering.</p>
-          <p class="govuk-body"><%= govuk_link_to "Download the lettings bulk upload template (2023 to 2024) – New question ordering", @form.lettings_template_path %></p>
-          <p class="govuk-body"><%= govuk_link_to "Download the sales bulk upload template (2023 to 2024) – New question ordering", @form.sales_template_path %></p>
-
-          <p class="govuk-body"><strong>Legacy template</strong>: In this template, the questions are in the same order as the 2022/23 template, with new questions added on to the end. Use this template if you have not updated your system to match the new template yet.</p>
-        <% else %>
-          <p class="govuk-body"><%= govuk_link_to "Download the lettings bulk upload template (2024 to 2025)", @form.lettings_template_path %></p>
-          <p class="govuk-body"><%= govuk_link_to "Download the sales bulk upload template (2024 to 2025)", @form.sales_template_path %></p>
-        <% end %>
+        <p class="govuk-body"><%= govuk_link_to "Download the lettings bulk upload template (2024 to 2025)", @form.lettings_template_path %></p>
+        <p class="govuk-body"><%= govuk_link_to "Download the sales bulk upload template (2024 to 2025)", @form.sales_template_path %></p>
       <% end %>
 
       <%= accordion.with_section(heading_text: "Using the bulk upload specification") do %>

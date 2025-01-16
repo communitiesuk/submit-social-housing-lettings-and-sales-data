@@ -338,20 +338,6 @@ RSpec.describe Validations::FinancialValidations do
           expect(record.errors["ecstat#{n}"]).to be_empty
         end
       end
-
-      context "when the net income is lower than the hard min for their employment status for 22/23 collection" do
-        it "does not add an error" do
-          record.startdate = Time.zone.local(2022, 5, 1)
-          record.earnings = 50
-          record.incfreq = 1
-          record.hhmemb = 1
-          record.ecstat1 = 1
-          financial_validator.validate_net_income(record)
-          expect(record.errors["earnings"]).to be_empty
-          expect(record.errors["ecstat1"]).to be_empty
-          expect(record.errors["hhmemb"]).to be_empty
-        end
-      end
     end
   end
 

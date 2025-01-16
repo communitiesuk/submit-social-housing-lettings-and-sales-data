@@ -61,45 +61,26 @@ en:
           <<: *bulk_upload__row_parser__base
         bulk_upload/sales/year2023/row_parser:
           <<: *bulk_upload__row_parser__base
-        forms/bulk_upload_lettings/year:
+        forms/bulk_upload_form/year:
           attributes:
             year:
               blank: "You must select a collection period to upload for."
-        forms/bulk_upload_sales/year:
-          attributes:
-            year:
-              blank: "You must select a collection period to upload for."
-        forms/bulk_upload_lettings/upload_your_file:
+        forms/bulk_upload_form/upload_your_file:
           attributes:
             file:
               blank: "Select which file to upload."
               not_csv: "Your file must be in CSV format."
               file_too_large: "File must be 10MB or less. Check your file and delete data that does not need to be uploaded."
-        forms/bulk_upload_sales/upload_your_file:
-          attributes:
-            file:
-              blank: "Select which file to upload."
-              not_csv: "Your file must be in CSV format."
-              file_too_large: "File must be 10MB or less. Check your file and delete data that does not need to be uploaded."
-        forms/bulk_upload_lettings/needstype:
+        forms/bulk_upload_form/needstype:
           attributes:
             needstype:
               blank: "You must answer needs type."
-        forms/bulk_upload_lettings_resume/fix_choice:
+        forms/bulk_upload_resume/fix_choice:
           attributes:
             choice:
               blank: "Select how you would like to fix these errors."
               inclusion: "You must select one of the following options for how you would like to fix these errors."
-        forms/bulk_upload_sales_resume/fix_choice:
-          attributes:
-            choice:
-              blank: "Select how you would like to fix these errors."
-              inclusion: "You must select one of the following options for how you would like to fix these errors."
-        forms/bulk_upload_lettings_soft_validations_check/confirm_soft_errors:
-          attributes:
-            confirm_soft_errors:
-              blank: "You must select if there are errors in these fields."
-        forms/bulk_upload_sales_soft_validations_check/confirm_soft_errors:
+        forms/bulk_upload_soft_validations_check/confirm_soft_errors:
           attributes:
             confirm_soft_errors:
               blank: "You must select if there are errors in these fields."

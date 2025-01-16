@@ -120,14 +120,6 @@ RSpec.describe SalesLog, type: :model do
         allow(Time).to receive(:now).and_return(Time.zone.local(2023, 5, 1))
       end
 
-      it "is set to completed for a log with a saledate before 23/24" do
-        completed_sales_log.update!(proplen: nil, proplen_asked: 0, saledate: Time.zone.local(2022, 5, 1))
-        expect(completed_sales_log.in_progress?).to be(false)
-        expect(completed_sales_log.not_started?).to be(false)
-        expect(completed_sales_log.completed?).to be(true)
-        expect(completed_sales_log.deleted?).to be(false)
-      end
-
       it "is set to in_progress for a log with a saledate after 23/24" do
         completed_sales_log.update!(proplen: nil, proplen_asked: 0, saledate: Time.zone.local(2023, 5, 1))
         expect(completed_sales_log.in_progress?).to be(true)
@@ -281,8 +273,17 @@ RSpec.describe SalesLog, type: :model do
       end
     end
 
-    context "when there is a log with a different ecstat1" do
+    context "when there is a 2024 log with a different ecstat1" do
       let!(:different_ecstat1) { create(:sales_log, :duplicate, ecstat1: 0, owning_organisation: organisation) }
+
+      before do
+        Timecop.freeze(Time.zone.local(2024, 5, 2))
+        Singleton.__init__(FormHandler)
+      end
+
+      after do
+        Timecop.return
+      end
 
       it "does not return a log with a different ecstat1 as a duplicate" do
         expect(described_class.duplicate_logs(log)).not_to include(different_ecstat1)

@@ -55,13 +55,13 @@ RSpec.describe "Bulk upload lettings log" do
       expect(page).to have_content("Upload your file")
       click_button("Upload")
 
-      allow_any_instance_of(Forms::BulkUploadLettings::UploadYourFile).to receive(:`).and_return("not a csv")
+      allow_any_instance_of(Forms::BulkUploadForm::UploadYourFile).to receive(:`).and_return("not a csv")
 
       expect(page).to have_content("Select which file to upload")
       attach_file "file", file_fixture("2023_24_lettings_bulk_upload.xlsx")
       click_button("Upload")
 
-      allow_any_instance_of(Forms::BulkUploadLettings::UploadYourFile).to receive(:`).and_return("text/csv")
+      allow_any_instance_of(Forms::BulkUploadForm::UploadYourFile).to receive(:`).and_return("text/csv")
 
       expect(page).to have_content("Your file must be in CSV format")
       attach_file "file", file_fixture("blank_bulk_upload_sales.csv")
@@ -76,7 +76,7 @@ RSpec.describe "Bulk upload lettings log" do
     end
 
     it "shows file to large error" do
-      stub_const("Forms::BulkUploadLettings::UploadYourFile::MAX_FILE_SIZE", 1.bytes)
+      stub_const("Forms::BulkUploadForm::UploadYourFile::MAX_FILE_SIZE", 1.bytes)
       visit("/lettings-logs")
 
       click_link("Upload lettings logs in bulk")
@@ -86,7 +86,7 @@ RSpec.describe "Bulk upload lettings log" do
       click_button("Continue")
       click_button("Continue")
 
-      allow_any_instance_of(Forms::BulkUploadLettings::UploadYourFile).to receive(:`).and_return("text/csv")
+      allow_any_instance_of(Forms::BulkUploadForm::UploadYourFile).to receive(:`).and_return("text/csv")
 
       attach_file "file", file_fixture("2023_24_lettings_bulk_upload.xlsx")
       click_button("Upload")

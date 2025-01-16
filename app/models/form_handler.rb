@@ -36,12 +36,20 @@ class FormHandler
     forms["next_lettings"]
   end
 
+  def archived_lettings_form
+    forms["archived_lettings"]
+  end
+
   def current_sales_form
     forms["current_sales"]
   end
 
   def previous_sales_form
     forms["previous_sales"]
+  end
+
+  def archived_sales_form
+    forms["archived_sales"]
   end
 
   def next_sales_form
