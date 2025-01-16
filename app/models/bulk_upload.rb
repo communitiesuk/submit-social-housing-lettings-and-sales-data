@@ -1,7 +1,7 @@
 class BulkUpload < ApplicationRecord
   enum :log_type, { lettings: "lettings", sales: "sales" }
   enum :rent_type_fix_status, { not_applied: "not_applied", applied: "applied", not_needed: "not_needed" }
-  enum :failure_reason, { blank_template: "blank_template", wrong_template: "wrong_template", processing_error: "processing_error" }
+  enum :failure_reason, { blank_template: "blank_template", wrong_template: "wrong_template" }
 
   belongs_to :user
 
@@ -43,7 +43,6 @@ class BulkUpload < ApplicationRecord
     return :processing if processing
     return :blank_template if failure_reason == "blank_template"
     return :wrong_template if failure_reason == "wrong_template"
-    return :processing_error if failure_reason == "processing_error"
 
     if logs.visible.exists?
       return :errors_fixed_in_service if completed? && bulk_upload_errors.any?

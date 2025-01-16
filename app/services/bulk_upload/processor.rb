@@ -61,7 +61,6 @@ class BulkUpload::Processor
     end
   rescue StandardError => e
     Sentry.capture_exception(e)
-    @bulk_upload.update!(failure_reason: "processing_error")
     send_failure_mail
   ensure
     downloader.delete_local_file!
@@ -185,8 +184,6 @@ private
       @bulk_upload.update!(failure_reason: "blank_template")
     elsif wrong_template_errors.any? { |error| validator.errors.full_messages.include?(error) }
       @bulk_upload.update!(failure_reason: "wrong_template")
-    else
-      @bulk_upload.update!(failure_reason: "processing_error")
     end
 
     send_failure_mail(errors: validator.errors.full_messages)

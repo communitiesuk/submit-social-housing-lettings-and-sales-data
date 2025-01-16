@@ -101,11 +101,6 @@ RSpec.describe BulkUpload::Processor do
         allow(mock_validator).to receive(:call).and_raise(StandardError)
       end
 
-      it "updates the failure_reason to invalid_upload" do
-        processor.call
-        expect(bulk_upload.reload.failure_reason).to eq("processing_error")
-      end
-
       it "sends failure email" do
         mail_double = instance_double("ActionMailer::MessageDelivery", deliver_later: nil)
 
