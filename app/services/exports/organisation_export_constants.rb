@@ -22,6 +22,7 @@ module Exports::OrganisationExportConstants
    "dsa_signed_at",
    "dpo_email",
    "profit_status",
-   "group"
+   "group",
+   "status"
   ]
 end
