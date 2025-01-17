@@ -13,7 +13,7 @@ en:
             page_header: ""
             check_answer_label: "Length of time on local authority waiting list"
             hint_text: ""
-            question_text: "How long has the household been on the local authority waiting list for the area of the new letting?"
+            question_text: "How long has the household been on the local authority housing register (or waiting list) for the area of the new letting?"
 
           reason:
             reason_for_leaving_last_settled_home_renewal:
@@ -25,7 +25,7 @@ en:
               reasonother:
                 check_answer_label: "Length of time on local authority waiting list"
                 hint_text: ""
-                question_text: "How long has the household been on the local authority waiting list for the area of the new letting?"
+                question_text: "What is the reason?"
             reason_for_leaving_last_settled_home:
               page_header: ""
               reason:
