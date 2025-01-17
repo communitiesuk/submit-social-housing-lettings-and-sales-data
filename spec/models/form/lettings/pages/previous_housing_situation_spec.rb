@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe Form::Lettings::Pages::PreviousHousingSituation, type: :model do
   subject(:page) { described_class.new(nil, nil, subsection) }
 
-  let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2024, 4, 1))) }
+  let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2024, 4, 1), start_year_2025_or_later?: false)) }
 
   it "has correct subsection" do
     expect(page.subsection).to eq(subsection)
