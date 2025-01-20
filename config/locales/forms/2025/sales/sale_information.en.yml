@@ -51,7 +51,7 @@ en:
           staircasesale:
             page_header: ""
             check_answer_label: "Part of a back-to-back staircasing transaction"
-            check_answer_prompt: ""
+            check_answer_prompt: "Tell us if this is part of a back-to-back staircasing transaction"
             hint_text: "Back-to-back staircasing transactions are used as a way for shared owners who own less than 100% of their property to sell on the open market. It involves the shared owner purchasing the remaining share from their landlord and immediately selling 100% of the property to a buyer on the open market. The landlord is then reimbursed for the staircasing transaction through the proceeds of sale to the buyer."
             question_text: "Is this transaction part of a back-to-back staircasing transaction to facilitate sale of the home on the open market?"
 
@@ -66,7 +66,7 @@ en:
             page_header: "About previous staircasing transactions"
             numstair:
               check_answer_label: "Number of staircasing transactions"
-              check_answer_prompt: "Enter number of staircasing transaction"
+              check_answer_prompt: ""
               hint_text: ""
               question_text: "Including this time, how many times has the shared owner engaged in staircasing in the home?"
             initialpurchase:
