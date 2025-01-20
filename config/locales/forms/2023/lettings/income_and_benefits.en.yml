@@ -13,8 +13,8 @@ en:
           income_amount:
             page_header: "Total household income"
             incfreq:
-              check_answer_label: "How often does the household receive this amount?"
-              check_answer_prompt: ""
+              check_answer_label: "How often the household receives this amount"
+              check_answer_prompt: "Tell us how often does the household receives this amount"
               hint_text: ""
               question_text: "How often does the household receive this amount?"
             earnings:

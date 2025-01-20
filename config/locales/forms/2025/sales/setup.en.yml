@@ -83,7 +83,7 @@ en:
           noint:
             joint_purchase:
               page_header: ""
-              check_answer_label: "Buyers interviewed in person?"
+              check_answer_label: "Buyers interviewed in person"
               check_answer_prompt: "Tell us if buyers interviewed in person"
               hint_text: "You should still try to answer all questions even if the buyers weren’t interviewed in person"
               question_text: "Were the buyers interviewed for any of the answers you will provide on this log?"

@@ -97,7 +97,7 @@ en:
 
           prevshared:
             page_header: ""
-            check_answer_label: "Previous property shared ownership?"
-            check_answer_prompt: ""
+            check_answer_label: "Previous property shared ownership"
+            check_answer_prompt: "Tell us if the previous property was shared ownership"
             hint_text: "For any buyer"
             question_text: "Was the previous property under shared ownership?"

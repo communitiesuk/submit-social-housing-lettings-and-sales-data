@@ -117,7 +117,7 @@ en:
               question_text: "Were any of the buyers private registered providers, housing association or local authority tenants immediately before this sale?"
             not_joint_purchase:
               page_header: ""
-              check_answer_label: "Buyer was a registered provider, housing association or local authority tenant immediately before this sale?"
+              check_answer_label: "Buyer was a registered provider, housing association or local authority tenant immediately before this sale"
               check_answer_prompt: "Tell us if buyer was a registered provider, housing association or local authority tenant"
               hint_text: ""
               question_text: "Was the buyer a private registered provider, housing association or local authority tenant immediately before this sale?"
@@ -289,8 +289,8 @@ en:
           management_fee:
             page_header: ""
             has_management_fee:
-              check_answer_label: "Does the property have an estate management fee?"
-              check_answer_prompt: ""
+              check_answer_label: "Monthly estate management fee"
+              check_answer_prompt: "Tell us if the property has an estate management fee"
               hint_text: "Estate management fees are typically used for the maintenance of communal gardens, payments, private roads, car parks and/or play areas within new build estates."
               question_text: "Does the property have an estate management fee?"
             management_fee:

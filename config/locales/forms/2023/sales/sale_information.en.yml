@@ -56,8 +56,8 @@ en:
 
           resale:
             page_header: ""
-            check_answer_label: "Is this a resale?"
-            check_answer_prompt: ""
+            check_answer_label: "Resale"
+            check_answer_prompt: "Tell us if this is a resale"
             hint_text: "If the social landlord has previously sold the property to another buyer and is now reselling the property, select 'yes'. If this is the first time the property has been sold, select 'no'."
             question_text: "Is this a resale?"
 
@@ -85,13 +85,14 @@ en:
           soctenant:
             joint_purchase:
               page_header: ""
-              check_answer_label: "Any buyers were registered providers, housing association or local authority tenants immediately before this sale?"
+              check_answer_label: "Buyers were registered providers, housing association or local authority tenants immediately before this sale"
+              check_answer_prompt: "Tell us if buyers were registered providers, housing association or local authority tenants"
               hint_text: ""
               question_text: "Were any of the buyers private registered providers, housing association or local authority tenants immediately before this sale?"
             not_joint_purchase:
               page_header: ""
-              check_answer_label: "Buyer was a registered provider, housing association or local authority tenant immediately before this sale?"
-              check_answer_prompt: ""
+              check_answer_label: "Buyer was a registered provider, housing association or local authority tenant immediately before this sale"
+              check_answer_prompt: "Tell us if buyer was a registered provider, housing association or local authority tenant"
               hint_text: ""
               question_text: "Was the buyer a private registered provider, housing association or local authority tenant immediately before this sale?"
 

@@ -12,8 +12,8 @@ en:
 
           hhregresstill:
             page_header: ""
-            check_answer_label: "Are they still serving in the UK armed forces?"
-            check_answer_prompt: ""
+            check_answer_label: "Buyer still serving in the UK armed forces"
+            check_answer_prompt: "Tell us if the buyer is still serving in the UK armed forces"
             hint_text: ""
             question_text: "Is the buyer still serving in the UK armed forces?"
 
