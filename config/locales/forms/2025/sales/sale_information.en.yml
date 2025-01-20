@@ -52,13 +52,13 @@ en:
             page_header: ""
             check_answer_label: "Part of a back-to-back staircasing transaction"
             check_answer_prompt: ""
-            hint_text: ""
+            hint_text: "Back-to-back staircasing transactions are used as a way for shared owners who own less than 100% of their property to sell on the open market. It involves the shared owner purchasing the remaining share from their landlord and immediately selling 100% of the property to a buyer on the open market. The landlord is then reimbursed for the staircasing transaction through the proceeds of sale to the buyer."
             question_text: "Is this transaction part of a back-to-back staircasing transaction to facilitate sale of the home on the open market?"
 
           firststair:
             page_header: ""
             check_answer_label: "First time staircasing"
-            check_answer_prompt: ""
+            check_answer_prompt: "Tell us if this is the first time staircasing"
             hint_text: ""
             question_text: "Is this the first time the shared owner has engaged in staircasing in the home?"
 
@@ -66,24 +66,24 @@ en:
             page_header: "About previous staircasing transactions"
             numstair:
               check_answer_label: "Number of staircasing transactions"
-              check_answer_prompt: ""
+              check_answer_prompt: "Enter number of staircasing transaction"
               hint_text: ""
               question_text: "Including this time, how many times has the shared owner engaged in staircasing in the home?"
             initialpurchase:
               check_answer_label: "Initial staircasing transaction"
-              check_answer_prompt: ""
+              check_answer_prompt: "Enter initial staircasing transaction date"
               hint_text: ""
               question_text: "What was the date of the initial purchase of a share in the property?"
             lasttransaction:
               check_answer_label: "Last staircasing transaction"
-              check_answer_prompt: ""
+              check_answer_prompt: "Enter last staircasing transaction date"
               hint_text: ""
               question_text: "What was the date of the last staircasing transaction?"
 
           resale:
             page_header: ""
-            check_answer_label: "Is this a resale?"
-            check_answer_prompt: ""
+            check_answer_label: "Resale"
+            check_answer_prompt: "Tell us if this is a resale"
             hint_text: "If the social landlord has previously sold the property to another buyer and is now reselling the property, select 'yes'. If this is the first time the property has been sold, select 'no'."
             question_text: "Is this a resale?"
 
@@ -111,14 +111,14 @@ en:
           soctenant:
             joint_purchase:
               page_header: ""
-              check_answer_label: "Any buyers were registered providers, housing association or local authority tenants immediately before this sale?"
-              check_answer_prompt: ""
+              check_answer_label: "Buyers were registered providers, housing association or local authority tenants immediately before this sale"
+              check_answer_prompt: "Tell us if buyers were registered providers, housing association or local authority tenants"
               hint_text: ""
               question_text: "Were any of the buyers private registered providers, housing association or local authority tenants immediately before this sale?"
             not_joint_purchase:
               page_header: ""
               check_answer_label: "Buyer was a registered provider, housing association or local authority tenant immediately before this sale?"
-              check_answer_prompt: ""
+              check_answer_prompt: "Tell us if buyer was a registered provider, housing association or local authority tenant"
               hint_text: ""
               question_text: "Was the buyer a private registered provider, housing association or local authority tenant immediately before this sale?"
 
