@@ -36,8 +36,8 @@ en:
           ownershipsch:
             page_header: ""
             check_answer_label: "Purchase made under ownership scheme"
-            hint_text: ""
-            question_text: "Was this purchase made through an ownership scheme?"
+            hint_text: "Sales logs are no longer required for outright and other sales FROM 1 APRIL 2025" #Remove this hint text for 2026
+            question_text: "Is this a shared ownership or a discounted ownership sale?"
 
           staircasing:
             page_header: ""
