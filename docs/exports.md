@@ -29,7 +29,7 @@ Typically, **one lettings logs collection (current)** is exported most of the ti
 
 Initially the application database field names and field types were chosen to match the existing CDS data as closely as possible to minimise the amount of transformation needed. This has led to a less than optimal data model though and increasingly we should look to transform at the mapping layer where beneficial for our application.
 
-A **cron job** triggers the export service daily at **5 a.m.**.
+A **cron job** triggers the export service daily at **5 a.m.** in the timezone configured in Rails ("London").
 
 ---
 
