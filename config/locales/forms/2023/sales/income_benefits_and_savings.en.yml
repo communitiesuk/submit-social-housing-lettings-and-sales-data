@@ -46,14 +46,14 @@ en:
           housing_benefits:
             joint_purchase:
               page_header: ""
-              check_answer_label: "Housing-related benefits buyers received before buying this property"
+              check_answer_label: "Housing related benefits buyers received before buying this property"
               hint_text: ""
-              question_text:  "Were the buyers receiving any of these housing-related benefits immediately before buying this property?"
+              question_text:  "Were the buyers receiving any of these housing related benefits immediately before buying this property?"
             not_joint_purchase:
               page_header: ""
-              check_answer_label: "Housing-related benefits buyer received before buying this property"
+              check_answer_label: "Housing related benefits buyer received before buying this property"
               hint_text: ""
-              question_text:  "Was the buyer receiving any of these housing-related benefits immediately before buying this property?"
+              question_text:  "Was the buyer receiving any of these housing related benefits immediately before buying this property?"
 
           savings:
             joint_purchase:
