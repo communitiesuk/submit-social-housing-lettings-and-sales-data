@@ -22,5 +22,6 @@
     <dpo_email>{dpo_email}</dpo_email>
     <profit_status/>
     <group/>
+    <status>active</status>
   </form>
 </forms>

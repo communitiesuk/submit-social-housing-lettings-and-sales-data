@@ -32,7 +32,7 @@ class Form::Lettings::Subsections::HouseholdCharacteristics < ::Form::Subsection
       Form::Lettings::Pages::LeadTenantUnderRetirementValueCheck.new("working_situation_lead_tenant_under_retirement_value_check", nil, self),
       Form::Lettings::Pages::LeadTenantOverRetirementValueCheck.new("working_situation_lead_tenant_over_retirement_value_check", nil, self),
       Form::Lettings::Pages::PersonKnown.new(nil, nil, self, person_index: 2),
-      Form::Lettings::Pages::PersonRelationshipToLead.new(nil, nil, self, person_index: 2),
+      relationship_question(person_index: 2),
       (Form::Lettings::Pages::PartnerUnder16ValueCheck.new("relationship_2_partner_under_16_value_check", nil, self, person_index: 2) if form.start_year_2024_or_later?),
       (Form::Lettings::Pages::MultiplePartnersValueCheck.new("relationship_2_multiple_partners_value_check", nil, self, person_index: 2) if form.start_year_2024_or_later?),
       Form::Lettings::Pages::PersonAge.new(nil, nil, self, person_index: 2),
@@ -52,7 +52,7 @@ class Form::Lettings::Subsections::HouseholdCharacteristics < ::Form::Subsection
       Form::Lettings::Pages::PersonUnderRetirementValueCheck.new("working_situation_2_under_retirement_value_check", nil, self, person_index: 2),
       Form::Lettings::Pages::PersonOverRetirementValueCheck.new("working_situation_2_over_retirement_value_check", nil, self, person_index: 2),
       Form::Lettings::Pages::PersonKnown.new(nil, nil, self, person_index: 3),
-      Form::Lettings::Pages::PersonRelationshipToLead.new(nil, nil, self, person_index: 3),
+      relationship_question(person_index: 3),
       (Form::Lettings::Pages::PartnerUnder16ValueCheck.new("relationship_3_partner_under_16_value_check", nil, self, person_index: 3) if form.start_year_2024_or_later?),
       (Form::Lettings::Pages::MultiplePartnersValueCheck.new("relationship_3_multiple_partners_value_check", nil, self, person_index: 3) if form.start_year_2024_or_later?),
       Form::Lettings::Pages::PersonAge.new(nil, nil, self, person_index: 3),
@@ -72,7 +72,7 @@ class Form::Lettings::Subsections::HouseholdCharacteristics < ::Form::Subsection
       Form::Lettings::Pages::PersonUnderRetirementValueCheck.new("working_situation_3_under_retirement_value_check", nil, self, person_index: 3),
       Form::Lettings::Pages::PersonOverRetirementValueCheck.new("working_situation_3_over_retirement_value_check", nil, self, person_index: 3),
       Form::Lettings::Pages::PersonKnown.new(nil, nil, self, person_index: 4),
-      Form::Lettings::Pages::PersonRelationshipToLead.new(nil, nil, self, person_index: 4),
+      relationship_question(person_index: 4),
       (Form::Lettings::Pages::PartnerUnder16ValueCheck.new("relationship_4_partner_under_16_value_check", nil, self, person_index: 4) if form.start_year_2024_or_later?),
       (Form::Lettings::Pages::MultiplePartnersValueCheck.new("relationship_4_multiple_partners_value_check", nil, self, person_index: 4) if form.start_year_2024_or_later?),
       Form::Lettings::Pages::PersonAge.new(nil, nil, self, person_index: 4),
@@ -92,7 +92,7 @@ class Form::Lettings::Subsections::HouseholdCharacteristics < ::Form::Subsection
       Form::Lettings::Pages::PersonUnderRetirementValueCheck.new("working_situation_4_under_retirement_value_check", nil, self, person_index: 4),
       Form::Lettings::Pages::PersonOverRetirementValueCheck.new("working_situation_4_over_retirement_value_check", nil, self, person_index: 4),
       Form::Lettings::Pages::PersonKnown.new(nil, nil, self, person_index: 5),
-      Form::Lettings::Pages::PersonRelationshipToLead.new(nil, nil, self, person_index: 5),
+      relationship_question(person_index: 5),
       (Form::Lettings::Pages::PartnerUnder16ValueCheck.new("relationship_5_partner_under_16_value_check", nil, self, person_index: 5) if form.start_year_2024_or_later?),
       (Form::Lettings::Pages::MultiplePartnersValueCheck.new("relationship_5_multiple_partners_value_check", nil, self, person_index: 5) if form.start_year_2024_or_later?),
       Form::Lettings::Pages::PersonAge.new(nil, nil, self, person_index: 5),
@@ -112,7 +112,7 @@ class Form::Lettings::Subsections::HouseholdCharacteristics < ::Form::Subsection
       Form::Lettings::Pages::PersonUnderRetirementValueCheck.new("working_situation_5_under_retirement_value_check", nil, self, person_index: 5),
       Form::Lettings::Pages::PersonOverRetirementValueCheck.new("working_situation_5_over_retirement_value_check", nil, self, person_index: 5),
       Form::Lettings::Pages::PersonKnown.new(nil, nil, self, person_index: 6),
-      Form::Lettings::Pages::PersonRelationshipToLead.new(nil, nil, self, person_index: 6),
+      relationship_question(person_index: 6),
       (Form::Lettings::Pages::PartnerUnder16ValueCheck.new("relationship_6_partner_under_16_value_check", nil, self, person_index: 6) if form.start_year_2024_or_later?),
       (Form::Lettings::Pages::MultiplePartnersValueCheck.new("relationship_6_multiple_partners_value_check", nil, self, person_index: 6) if form.start_year_2024_or_later?),
       Form::Lettings::Pages::PersonAge.new(nil, nil, self, person_index: 6),
@@ -132,7 +132,7 @@ class Form::Lettings::Subsections::HouseholdCharacteristics < ::Form::Subsection
       Form::Lettings::Pages::PersonUnderRetirementValueCheck.new("working_situation_6_under_retirement_value_check", nil, self, person_index: 6),
       Form::Lettings::Pages::PersonOverRetirementValueCheck.new("working_situation_6_over_retirement_value_check", nil, self, person_index: 6),
       Form::Lettings::Pages::PersonKnown.new(nil, nil, self, person_index: 7),
-      Form::Lettings::Pages::PersonRelationshipToLead.new(nil, nil, self, person_index: 7),
+      relationship_question(person_index: 7),
       (Form::Lettings::Pages::PartnerUnder16ValueCheck.new("relationship_7_partner_under_16_value_check", nil, self, person_index: 7) if form.start_year_2024_or_later?),
       (Form::Lettings::Pages::MultiplePartnersValueCheck.new("relationship_7_multiple_partners_value_check", nil, self, person_index: 7) if form.start_year_2024_or_later?),
       Form::Lettings::Pages::PersonAge.new(nil, nil, self, person_index: 7),
@@ -152,7 +152,7 @@ class Form::Lettings::Subsections::HouseholdCharacteristics < ::Form::Subsection
       Form::Lettings::Pages::PersonUnderRetirementValueCheck.new("working_situation_7_under_retirement_value_check", nil, self, person_index: 7),
       Form::Lettings::Pages::PersonOverRetirementValueCheck.new("working_situation_7_over_retirement_value_check", nil, self, person_index: 7),
       Form::Lettings::Pages::PersonKnown.new(nil, nil, self, person_index: 8),
-      Form::Lettings::Pages::PersonRelationshipToLead.new(nil, nil, self, person_index: 8),
+      relationship_question(person_index: 8),
       (Form::Lettings::Pages::PartnerUnder16ValueCheck.new("relationship_8_partner_under_16_value_check", nil, self, person_index: 8) if form.start_year_2024_or_later?),
       (Form::Lettings::Pages::MultiplePartnersValueCheck.new("relationship_8_multiple_partners_value_check", nil, self, person_index: 8) if form.start_year_2024_or_later?),
       Form::Lettings::Pages::PersonAge.new(nil, nil, self, person_index: 8),
@@ -172,5 +172,13 @@ class Form::Lettings::Subsections::HouseholdCharacteristics < ::Form::Subsection
       Form::Lettings::Pages::PersonUnderRetirementValueCheck.new("working_situation_8_under_retirement_value_check", nil, self, person_index: 8),
       Form::Lettings::Pages::PersonOverRetirementValueCheck.new("working_situation_8_over_retirement_value_check", nil, self, person_index: 8),
     ].compact
+  end
+
+  def relationship_question(person_index:)
+    if form.start_year_2025_or_later?
+      Form::Lettings::Pages::PersonLeadPartner.new(nil, nil, self, person_index:)
+    else
+      Form::Lettings::Pages::PersonRelationshipToLead.new(nil, nil, self, person_index:)
+    end
   end
 end

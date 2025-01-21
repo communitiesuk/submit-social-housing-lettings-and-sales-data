@@ -106,8 +106,7 @@ describe DocumentationGenerator do
         expect(any_validation.field).not_to be_empty
         expect(any_validation.error_message).not_to be_empty
         expect(any_validation.case).to eq("Provided values fulfill the description")
-        expect(any_validation.from).not_to be_nil
-        expect(any_validation.to).not_to be_nil
+        expect(any_validation.collection_year).not_to be_nil
         expect(any_validation.validation_type).to eq("format")
         expect(any_validation.hard_soft).to eq("soft")
         expect(any_validation.other_validated_models).to eq("User")
@@ -137,8 +136,7 @@ describe DocumentationGenerator do
         expect(any_validation.field).not_to be_empty
         expect(any_validation.error_message).not_to be_empty
         expect(any_validation.case).to eq("Provided values fulfill the description")
-        expect(any_validation.from).not_to be_nil
-        expect(any_validation.to).not_to be_nil
+        expect(any_validation.collection_year).not_to be_nil
         expect(any_validation.validation_type).to eq("format")
         expect(any_validation.hard_soft).to eq("soft")
         expect(any_validation.other_validated_models).to eq("User")
@@ -165,8 +163,7 @@ describe DocumentationGenerator do
         expect(any_validation.field).to eq("ppostcode_full")
         expect(any_validation.error_message).to eq("Enter a valid postcode")
         expect(any_validation.case).to eq("Previous postcode is known and current postcode is blank")
-        expect(any_validation.from).not_to be_nil
-        expect(any_validation.to).not_to be_nil
+        expect(any_validation.collection_year).to eq("2023/2024")
         expect(any_validation.validation_type).to eq("format")
         expect(any_validation.hard_soft).to eq("hard")
         expect(any_validation.other_validated_models).to eq("User")
@@ -218,8 +215,7 @@ describe DocumentationGenerator do
         expect(any_validation.field).to eq("ppostcode_full")
         expect(any_validation.error_message).to eq("Enter a valid postcode")
         expect(any_validation.case).to eq("Previous postcode is known and current postcode is blank")
-        expect(any_validation.from).not_to be_nil
-        expect(any_validation.to).not_to be_nil
+        expect(any_validation.collection_year).to eq("2023/2024")
         expect(any_validation.validation_type).to eq("format")
         expect(any_validation.hard_soft).to eq("hard")
         expect(any_validation.other_validated_models).to eq("User")

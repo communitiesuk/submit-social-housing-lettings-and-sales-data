@@ -240,7 +240,7 @@ class LettingsLog < Log
   end
 
   def applicable_income_range
-    return unless ecstat1 && hhmemb
+    return unless ecstat1 && hhmemb && ALLOWED_INCOME_RANGES[ecstat1]
 
     range = ALLOWED_INCOME_RANGES[ecstat1].clone
 
@@ -670,8 +670,7 @@ class LettingsLog < Log
     ["owning_organisation_id",
      "startdate",
      "tenancycode",
-     form.start_date.year < 2023 || uprn.blank? ? "postcode_full" : nil,
-     form.start_date.year >= 2023 && uprn.present? ? "uprn" : nil,
+     uprn.blank? ? "postcode_full" : "uprn",
      "scheme_id",
      "location_id",
      "age1",
@@ -734,6 +733,10 @@ class LettingsLog < Log
 
     scheme_locations_count ||= scheme.locations.active_in_2_weeks.size
     scheme_locations_count > 19
+  end
+
+  def log_type
+    "lettings_log"
   end
 
 private
@@ -884,7 +887,6 @@ private
   def should_process_uprn_change?
     return unless uprn
     return unless startdate
-    return unless collection_start_year_for_date(startdate) >= 2023
 
     uprn_changed? || startdate_changed?
   end

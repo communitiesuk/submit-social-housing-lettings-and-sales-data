@@ -201,7 +201,7 @@ module Validations::HouseholdValidations
   def validate_layear_and_prevloc(record)
     return unless record.layear && record.la && record.prevloc && record.collection_start_year
 
-    if record.la == record.prevloc && record.layear == 1 && record.collection_start_year >= 2023
+    if record.la == record.prevloc && record.layear == 1
       record.errors.add :layear, I18n.t("validations.lettings.household.layear.same_la_just_moved_to_area")
       record.errors.add :la, I18n.t("validations.lettings.household.la.same_la_just_moved_to_area")
       record.errors.add :postcode_full, I18n.t("validations.lettings.household.postcode_full.same_la_just_moved_to_area")

@@ -25,7 +25,7 @@ module Validations::FinancialValidations
   end
 
   def validate_net_income(record)
-    if record.ecstat1 && record.hhmemb && record.weekly_net_income && record.startdate && record.form.start_date.year >= 2023
+    if record.ecstat1 && record.hhmemb && record.weekly_net_income && record.startdate
       if record.weekly_net_income > record.applicable_income_range.hard_max
         frequency = record.form.get_question("incfreq", record).label_from_value(record.incfreq).downcase
         hard_max = format_as_currency(record.applicable_income_range.hard_max)

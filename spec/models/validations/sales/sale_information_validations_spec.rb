@@ -795,17 +795,22 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
           record.la = "E09000001"
         end
 
-        it "adds an error if value * discount is more than 136,400" do
+        it "adds an error if value * discount is more than 137,400" do
+          record.value = 200_000
           record.discount = 80
+          discount_value = "£160,000.00"
           sale_information_validator.validate_discount_and_value(record)
-          expect(record.errors["value"]).to include("The percentage discount multiplied by the purchase price is £160,000.00. This figure should not be more than £136,400 for properties in London.")
-          expect(record.errors["discount"]).to include("The percentage discount multiplied by the purchase price is £160,000.00. This figure should not be more than £136,400 for properties in London.")
-          expect(record.errors["la"]).to include("The percentage discount multiplied by the purchase price is £160,000.00. This figure should not be more than £136,400 for properties in London.")
-          expect(record.errors["postcode_full"]).to include("The percentage discount multiplied by the purchase price is £160,000.00. This figure should not be more than £136,400 for properties in London.")
-          expect(record.errors["uprn"]).to include("The percentage discount multiplied by the purchase price is £160,000.00. This figure should not be more than £136,400 for properties in London.")
+          expect(record.errors["value"]).to include(I18n.t("validations.sales.sale_information.value.value_over_discounted_london_max", discount_value:))
+          expect(record.errors["discount"]).to include(I18n.t("validations.sales.sale_information.discount.value_over_discounted_london_max", discount_value:))
+          expect(record.errors["la"]).to include(I18n.t("validations.sales.sale_information.la.value_over_discounted_london_max", discount_value:))
+          expect(record.errors["postcode_full"]).to include(I18n.t("validations.sales.sale_information.postcode_full.value_over_discounted_london_max", discount_value:))
+          expect(record.errors["uprn"]).to include(I18n.t("validations.sales.sale_information.uprn.value_over_discounted_london_max", discount_value:))
         end
 
-        it "does not add an error value * discount is less than 136,400" do
+        it "does not add an error value * discount is less than 137,400" do
+          record.value = 200_000
+          record.discount = 50
+          # Discount value: 100,000
           sale_information_validator.validate_discount_and_value(record)
           expect(record.errors["value"]).to be_empty
           expect(record.errors["discount"]).to be_empty
@@ -820,17 +825,22 @@ RSpec.describe Validations::Sales::SaleInformationValidations do
           record.la = "E06000015"
         end
 
-        it "adds an error if value * discount is more than 136,400" do
+        it "adds an error if value * discount is more than 103,400" do
+          record.value = 200_000
           record.discount = 52
+          discount_value = "£104,000.00"
           sale_information_validator.validate_discount_and_value(record)
-          expect(record.errors["value"]).to include("The percentage discount multiplied by the purchase price is £104,000.00. This figure should not be more than £102,400 for properties outside of London.")
-          expect(record.errors["discount"]).to include("The percentage discount multiplied by the purchase price is £104,000.00. This figure should not be more than £102,400 for properties outside of London.")
-          expect(record.errors["la"]).to include("The percentage discount multiplied by the purchase price is £104,000.00. This figure should not be more than £102,400 for properties outside of London.")
-          expect(record.errors["postcode_full"]).to include("The percentage discount multiplied by the purchase price is £104,000.00. This figure should not be more than £102,400 for properties outside of London.")
-          expect(record.errors["uprn"]).to include("The percentage discount multiplied by the purchase price is £104,000.00. This figure should not be more than £102,400 for properties outside of London.")
+          expect(record.errors["value"]).to include(I18n.t("validations.sales.sale_information.value.value_over_discounted_max", discount_value:))
+          expect(record.errors["discount"]).to include(I18n.t("validations.sales.sale_information.discount.value_over_discounted_max", discount_value:))
+          expect(record.errors["la"]).to include(I18n.t("validations.sales.sale_information.la.value_over_discounted_max", discount_value:))
+          expect(record.errors["postcode_full"]).to include(I18n.t("validations.sales.sale_information.postcode_full.value_over_discounted_max", discount_value:))
+          expect(record.errors["uprn"]).to include(I18n.t("validations.sales.sale_information.uprn.value_over_discounted_max", discount_value:))
         end
 
-        it "does not add an error value * discount is less than 136,400" do
+        it "does not add an error value * discount is less than 103,400" do
+          record.value = 200_000
+          record.discount = 50
+          # Discount value: 100,000
           sale_information_validator.validate_discount_and_value(record)
           expect(record.errors["value"]).to be_empty
           expect(record.errors["discount"]).to be_empty
