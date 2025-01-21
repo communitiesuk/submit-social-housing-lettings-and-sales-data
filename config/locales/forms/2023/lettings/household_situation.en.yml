@@ -26,10 +26,10 @@ en:
                 hint_text: "You told us this letting is a renewal. We have removed some options because of this."
                 question_text: "What is the tenant’s main reason for the household leaving their last settled home?"
               reasonother:
-                check_answer_label: "Length of time on local authority waiting list"
+                check_answer_label: ""
                 check_answer_prompt: ""
                 hint_text: ""
-                question_text: "How long has the household been on the local authority waiting list for the new letting?"
+                question_text: "What is the reason?"
             reason_for_leaving_last_settled_home:
               page_header: ""
               reason:
