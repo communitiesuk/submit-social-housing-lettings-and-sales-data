@@ -1,6 +1,6 @@
 <h1 class="govuk-heading-l">Upcoming deadlines</h1>
 
-<% open_lettings_form = FormHandler.instance.in_crossover_period? ? FormHandler.instance.previous_lettings_form : FormHandler.instance.current_lettings_form %>
+<% open_lettings_form = FormHandler.instance.in_crossover_period? && FormHandler.instance.previous_lettings_form.submission_deadline > Time.zone.now ? FormHandler.instance.previous_lettings_form : FormHandler.instance.current_lettings_form %>
 <% formatted_deadline = open_lettings_form.submission_deadline.strftime("%A %-d %B %Y") %>
 <% if FormHandler.instance.in_crossover_period? && open_lettings_form.submission_deadline > Time.zone.now %>
   <p class="govuk-body govuk-body-m"><strong>End of year deadline - <%= formatted_deadline %>:</strong> Deadline to submit logs for tenancies starting between <%= open_lettings_form.start_date.to_formatted_s(:govuk_date) %> to <%= collection_end_date(open_lettings_form.start_date).to_formatted_s(:govuk_date) %></p>
