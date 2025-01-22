@@ -1,0 +1,34 @@
+.rails-admin-sidescroll {
+  overflow-x: scroll;
+}
+
+.rails-admin-description_field {
+  min-width: 500px;
+}
+
+.rails-admin-case_field {
+  min-width: 500px;
+}
+
+.rails-admin-error_message_field {
+  min-width: 500px;
+}
+
+.rails-admin-actions {
+  min-width: 160px;
+
+  ul {
+    float: right;
+  }
+}
+
+.rails-admin-filters-box {
+  .filter {
+    // stylelint-disable-next-line declaration-no-important
+    display: flex !important;
+  }
+
+  button {
+    min-width: 20%;
+  }
+}

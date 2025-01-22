@@ -1,0 +1,9 @@
+<%= govuk_header(
+      classes: "app-header app-header--orange",
+      homepage_url: Rails.application.routes.url_helpers.root_path,
+      navigation_classes: "govuk-header__navigation--end",
+    ) do |component|
+      component.with_product_name(name: t("service_name"))
+      component.with_navigation_item(text: "Your account", href: Rails.application.routes.url_helpers.account_path)
+      component.with_navigation_item(text: "Sign out", href: Rails.application.routes.url_helpers.destroy_user_session_path)
+    end %>
