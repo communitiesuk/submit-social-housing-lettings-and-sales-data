@@ -62,8 +62,8 @@ RSpec.describe Form::Sales::Questions::OwnershipScheme, type: :model do
 
     it "has the correct answer_options" do
       expect(question.answer_options).to eq({
-        "1" => { "value" => "Yes - a shared ownership scheme", "hint" => "When the purchaser buys an initial share of up to 75% of the property value and pays rent to the Private Registered Provider (PRP) on the remaining portion, or a subsequent staircasing transaction" },
-        "2" => { "value" => "Yes - a discounted ownership scheme" },
+        "1" => { "value" => "Shared Ownership", "hint" => "When the purchaser buys an initial share of up to 75% of the property value and pays rent to the Private Registered Provider (PRP) on the remaining portion, or a subsequent staircasing transaction" },
+        "2" => { "value" => "Discounted Ownership" },
       })
     end
   end
