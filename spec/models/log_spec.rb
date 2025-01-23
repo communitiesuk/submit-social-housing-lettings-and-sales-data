@@ -103,7 +103,7 @@ RSpec.describe Log, type: :model do
     end
 
     context "when postcode_full is invalid" do
-      context "for a lettings log" do
+      context "with a lettings log" do
         subject(:model) { build_stubbed(:lettings_log, :setup_completed, postcode_full: "not a postcode", postcode_known: 1) }
 
         it "blanks it and postcode_known" do
@@ -114,7 +114,7 @@ RSpec.describe Log, type: :model do
         end
       end
 
-      context "for a sales log" do
+      context "with a sales log" do
         subject(:model) { build_stubbed(:sales_log, :discounted_ownership_setup_complete, postcode_full: "not a postcode", pcodenk: 0) }
 
         it "blanks it and pcodenk" do
