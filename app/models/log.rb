@@ -248,11 +248,6 @@ class Log < ApplicationRecord
   end
 
   def blank_compound_invalid_non_setup_fields!
-    if errors.attribute_names.include? :postcode_full
-      self.postcode_known = nil if lettings?
-      self.pcodenk = nil if sales?
-    end
-
     self.ppcodenk = nil if errors.attribute_names.include? :ppostcode_full
     self.previous_la_known = nil if errors.attribute_names.include? :prevloc
 
@@ -263,8 +258,6 @@ class Log < ApplicationRecord
       self.address_line2 = nil
       self.town_or_city = nil
       self.postcode_full = nil
-      self.postcode_known = nil if lettings?
-      self.pcodenk = nil if sales?
       self.county = nil
       process_postcode_changes!
     end
