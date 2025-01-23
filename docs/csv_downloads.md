@@ -101,10 +101,10 @@ In cases where internal values differ from the expected export format, such as t
 CSV variable definitions describe each header in the logs downloads.
 Definitions are saved in a `csv_variable_definitions` table and have been populated with initial values on production. The definitions are expected to be updated manually from `/admin` page when an update is needed, this is so that the definitions could be updated by support users.
 
-To populate initial CSV variable definitions locally or on a review app run `data_import:add_variable_definitions` rake task with the path to one of the variable definitions in `config/csv/definitions`
+To populate initial CSV variable definitions locally or on a review app run `data_import:add_variable_definitions` rake task with the folder path to the variable definitions `config/csv/definitions`
 
 ```
-rake data_import:add_variable_definitions\[config/csv/definitions/lettings_download_24_25.csv\]
+rake data_import:add_variable_definitions[config/csv/definitions]
 ```
 
 ## Viewing and Updating CSV variable definitions
