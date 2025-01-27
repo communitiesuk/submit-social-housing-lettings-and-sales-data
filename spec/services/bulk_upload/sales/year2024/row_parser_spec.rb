@@ -1104,7 +1104,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
               parser.valid?
               expect(parser.errors[:field_22]).to be_empty
               %i[field_23 field_24 field_25 field_26 field_27 field_28].each do |field|
-                expect(parser.errors[field]).to eql([I18n.t("validations.sales.2024.bulk_upload.address.not_determined")])
+                expect(parser.errors[field]).to eql([I18n.t("validations.sales.2024.bulk_upload.address.not_found")])
               end
             end
           end
