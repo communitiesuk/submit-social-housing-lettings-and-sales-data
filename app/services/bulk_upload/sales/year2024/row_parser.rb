@@ -615,7 +615,9 @@ private
   def validate_address_option_found
     if log.uprn.nil? && field_22.blank? && key_address_fields_provided?
       error_message = if log.address_options_present? && log.address_options.size > 1
-                        I18n.t("#{ERROR_BASE_KEY}.address.not_determined")
+                        I18n.t("#{ERROR_BASE_KEY}.address.not_determined.multiple")
+                      elsif log.address_options_present?
+                        I18n.t("#{ERROR_BASE_KEY}.address.not_determined.one")
                       else
                         I18n.t("#{ERROR_BASE_KEY}.address.not_found")
                       end

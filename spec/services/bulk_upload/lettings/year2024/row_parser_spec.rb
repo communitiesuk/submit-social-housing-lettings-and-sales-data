@@ -1710,7 +1710,7 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
               end
             end
 
-            context "when no address has a high enough match rating" do
+            context "when a single address with not a high enough match rating is returned" do
               before do
                 stub_request(:get, /api\.os\.uk\/search\/places\/v1\/find/)
                   .to_return(status: 200, body: { results: [{ DPA: { MATCH: 0.6, BUILDING_NAME: "", POST_TOWN: "", POSTCODE: "AA1 1AA", UPRN: "1" } }] }.to_json, headers: {})
@@ -1720,7 +1720,31 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
                 parser.valid?
                 expect(parser.errors[:field_16]).to be_empty
                 %i[field_17 field_18 field_19 field_20 field_21 field_22].each do |field|
-                  expect(parser.errors[field]).to eql([I18n.t("validations.lettings.2024.bulk_upload.address.not_determined")])
+                  expect(parser.errors[field]).to eql([I18n.t("validations.lettings.2024.bulk_upload.address.not_determined.one")])
+                end
+              end
+            end
+
+            context "when no addresses have a high enough match rating" do
+              before do
+                stub_request(:get, /api\.os\.uk\/search\/places\/v1\/find/)
+                  .to_return(
+                    status: 200,
+                    body: {
+                      results: [
+                        { DPA: { MATCH: 0.6, BUILDING_NAME: "", POST_TOWN: "", POSTCODE: "AA1 1AA", UPRN: "1" } },
+                        { DPA: { MATCH: 0.8, BUILDING_NAME: "", POST_TOWN: "", POSTCODE: "BB2 2BB", UPRN: "2" } },
+                      ]
+                    }.to_json,
+                    headers: {},
+                    )
+              end
+
+              it "adds address not found errors to address fields only" do
+                parser.valid?
+                expect(parser.errors[:field_16]).to be_empty
+                %i[field_17 field_18 field_19 field_20 field_21 field_22].each do |field|
+                  expect(parser.errors[field]).to eql([I18n.t("validations.lettings.2024.bulk_upload.address.not_determined.multiple")])
                 end
               end
             end
