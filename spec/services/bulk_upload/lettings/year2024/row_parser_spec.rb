@@ -1734,7 +1734,7 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
                       results: [
                         { DPA: { MATCH: 0.6, BUILDING_NAME: "", POST_TOWN: "", POSTCODE: "AA1 1AA", UPRN: "1" } },
                         { DPA: { MATCH: 0.8, BUILDING_NAME: "", POST_TOWN: "", POSTCODE: "BB2 2BB", UPRN: "2" } },
-                      ]
+                      ],
                     }.to_json,
                     headers: {},
                     )
