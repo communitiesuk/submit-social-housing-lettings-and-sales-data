@@ -1094,7 +1094,7 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
             end
           end
 
-          context "when no address has a high enough match rating" do
+          context "when a single address with not a high enough match rating is returned" do
             before do
               stub_request(:get, /api\.os\.uk\/search\/places\/v1\/find/)
                 .to_return(status: 200, body: { results: [{ DPA: { MATCH: 0.6, BUILDING_NAME: "", POST_TOWN: "", POSTCODE: "AA1 1AA", UPRN: "1" } }] }.to_json, headers: {})
@@ -1105,6 +1105,30 @@ RSpec.describe BulkUpload::Sales::Year2024::RowParser do
               expect(parser.errors[:field_22]).to be_empty
               %i[field_23 field_24 field_25 field_26 field_27 field_28].each do |field|
                 expect(parser.errors[field]).to eql([I18n.t("validations.sales.2024.bulk_upload.address.not_found")])
+              end
+            end
+          end
+
+          context "when no addresses have a high enough match rating" do
+            before do
+              stub_request(:get, /api\.os\.uk\/search\/places\/v1\/find/)
+                .to_return(
+                  status: 200,
+                  body: {
+                    results: [
+                      { DPA: { MATCH: 0.6, BUILDING_NAME: "", POST_TOWN: "", POSTCODE: "AA1 1AA", UPRN: "1" } },
+                      { DPA: { MATCH: 0.8, BUILDING_NAME: "", POST_TOWN: "", POSTCODE: "BB2 2BB", UPRN: "2" } },
+                    ]
+                  }.to_json,
+                  headers: {},
+                )
+            end
+
+            it "adds address not found errors to address fields only" do
+              parser.valid?
+              expect(parser.errors[:field_22]).to be_empty
+              %i[field_23 field_24 field_25 field_26 field_27 field_28].each do |field|
+                expect(parser.errors[field]).to eql([I18n.t("validations.sales.2024.bulk_upload.address.not_determined")])
               end
             end
           end
