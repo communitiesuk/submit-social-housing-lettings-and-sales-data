@@ -101,5 +101,29 @@ RSpec.describe Log, type: :model do
         expect(model.joint).to be_nil
       end
     end
+
+    context "when postcode_full is invalid" do
+      context "with a lettings log" do
+        subject(:model) { build_stubbed(:lettings_log, :setup_completed, postcode_full: "not a postcode", postcode_known: 1) }
+
+        it "blanks it and postcode_known" do
+          model.valid?
+          model.blank_invalid_non_setup_fields!
+          expect(model.postcode_full).to be_nil
+          expect(model.postcode_known).to be_nil
+        end
+      end
+
+      context "with a sales log" do
+        subject(:model) { build_stubbed(:sales_log, :discounted_ownership_setup_complete, postcode_full: "not a postcode", pcodenk: 0) }
+
+        it "blanks it and pcodenk" do
+          model.valid?
+          model.blank_invalid_non_setup_fields!
+          expect(model.postcode_full).to be_nil
+          expect(model.pcodenk).to be_nil
+        end
+      end
+    end
   end
 end
