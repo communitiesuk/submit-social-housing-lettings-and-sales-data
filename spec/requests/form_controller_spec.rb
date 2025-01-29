@@ -619,6 +619,25 @@ RSpec.describe FormController, type: :request do
             end
           end
 
+          context "when the date input doesn't match the required format" do
+            let(:page_id) { "tenancy_start_date" }
+            let(:params) do
+              {
+                id: lettings_log.id,
+                lettings_log: {
+                  page: page_id,
+                  "startdate" => "31620224352342",
+                },
+              }
+            end
+
+            it "validates the date correctly" do
+              post "/lettings-logs/#{lettings_log.id}/#{page_id.dasherize}", params: params
+              follow_redirect!
+              expect(page).to have_content("There is a problem")
+            end
+          end
+
           context "when allow_future_form_use? is enabled" do
             before do
               allow(FeatureToggle).to receive(:allow_future_form_use?).and_return(true)
@@ -631,7 +650,7 @@ RSpec.describe FormController, type: :request do
                   id: lettings_log.id,
                   lettings_log: {
                     page: page_id,
-                    "startdate" => "1/1/1",
+                    "startdate" => "1/1/1000",
                   },
                 }
               end
@@ -652,7 +671,7 @@ RSpec.describe FormController, type: :request do
                   id: sales_log.id,
                   sales_log: {
                     page: page_id,
-                    "saledate" => "1/1/1",
+                    "saledate" => "1/1/1000",
                   },
                 }
               end

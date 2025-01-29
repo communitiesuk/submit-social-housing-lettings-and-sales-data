@@ -124,7 +124,7 @@ en:
         location:
           attributes:
             startdate:
-              invalid: "Enter a date in the correct format, for example 31 1 2022."
+              invalid: "Enter a date in the correct format, for example 31/1/2022."
             units:
               blank: "Enter the total number of units at this location."
             type_of_unit:
