@@ -1,3 +1,3 @@
-<%= govuk_details(summary_text: I18n.t("forms.#{@log.form.start_date.year}.sales.guidance.address_search.title")) do %>
-  <%= I18n.t("forms.#{@log.form.start_date.year}.sales.guidance.address_search.content").html_safe %>
+<%= govuk_details(summary_text: I18n.t("forms.#{@log.form.start_date.year}.#{@log.form.type}.guidance.address_search.title")) do %>
+  <%= I18n.t("forms.#{@log.form.start_date.year}.#{@log.form.type}.guidance.address_search.content").html_safe %>
 <% end %>
