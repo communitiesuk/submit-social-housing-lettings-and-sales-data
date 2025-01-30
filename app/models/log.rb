@@ -125,7 +125,7 @@ class Log < ApplicationRecord
     "#{address_line1_input}, #{postcode_full_input}"
   end
 
-  def address_options # TODO: use this method for autocomplete
+  def address_options
     search_query = address_search.presence || address_string
     return @address_options if @address_options && @last_searched_address_string == search_query
 

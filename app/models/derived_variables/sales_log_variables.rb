@@ -80,7 +80,7 @@ module DerivedVariables::SalesLogVariables
     end
 
     if address_search
-      self.uprn = self.address_search
+      self.uprn = address_search
       self.uprn_known = 1
       self.uprn_confirmed = 1
     end
