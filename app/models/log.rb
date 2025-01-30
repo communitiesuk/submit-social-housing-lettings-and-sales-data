@@ -89,7 +89,7 @@ class Log < ApplicationRecord
   def process_address_change!
     if uprn_selection.present? || select_best_address_match.present?
       if select_best_address_match
-        service = AddressClient.new(address: address_string)
+        service = AddressClient.new(address_string)
         service.call
         return nil if service.result.blank? || service.error.present?
 
@@ -134,7 +134,7 @@ class Log < ApplicationRecord
 
     @last_searched_address_string = search_query
 
-    service = AddressClient.new(address: address_string)
+    service = AddressClient.new(address_string)
     service.call
     if service.result.blank? || service.error.present?
       @address_options = []

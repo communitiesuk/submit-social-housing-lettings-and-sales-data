@@ -4,7 +4,7 @@ class AddressOptionsController < ApplicationController
 
     if query.match?(/\A\d+\z/) && query.length > 5
       # Query is all numbers and greater than 5 digits, assume it's a UPRN
-      service = AddressClient.new(uprn: query)
+      service = UprnClient.new(query)
       service.call
 
       if service.error.present?
@@ -14,7 +14,7 @@ class AddressOptionsController < ApplicationController
       end
     elsif query.match?(/[a-zA-Z]/)
       # Query contains letters, assume it's an address
-      service = AddressClient.new(address: query)
+      service = AddressClient.new(query)
       service.call
 
       if service.error.present?
@@ -24,8 +24,8 @@ class AddressOptionsController < ApplicationController
       end
     else
       # Query is ambiguous, use both APIs and merge results
-      address_service = AddressClient.new(address: query)
-      uprn_service = AddressClient.new(uprn: query)
+      address_service = AddressClient.new(query)
+      uprn_service = UprnClient.new(query)
 
       address_service.call
       uprn_service.call
@@ -46,7 +46,7 @@ class AddressOptionsController < ApplicationController
     uprn = sales_log&.address_search
 
     if uprn.present?
-      service = AddressClient.new(uprn: uprn)
+      service = UprnClient.new(uprn)
       service.call
 
       if service.error.present?
