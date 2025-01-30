@@ -28,7 +28,7 @@ class FeatureToggle
   end
 
   def self.managing_resources_enabled?
-    !Rails.env.production?
+    true
   end
 
   def self.create_test_logs_enabled?
