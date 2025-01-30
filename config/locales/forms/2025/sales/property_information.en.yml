@@ -78,12 +78,6 @@ en:
               hint_text: ""
               question_text: "Postcode"
 
-          address_search:
-            page_header: "Search and find address"
-            check_answer_label: "Search - Find address"
-            hint_text: ""
-            question_text: "Find an address"
-
           la:
             page_header: ""
             check_answer_label: "Local authority"
