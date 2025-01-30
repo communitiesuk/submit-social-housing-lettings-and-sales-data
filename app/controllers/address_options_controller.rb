@@ -10,7 +10,7 @@ class AddressOptionsController < ApplicationController
       if service.error.present?
         render json: { error: service.error }, status: :unprocessable_entity
       else
-        render json: service.result_by_uprn.map { |result| { address: result["ADDRESS"], uprn: result["UPRN"] } }
+        render json: [{ address: service.result["ADDRESS"], uprn: service.result["UPRN"] }]
       end
     elsif query.match?(/[a-zA-Z]/)
       # Query contains letters, assume it's an address
@@ -30,7 +30,7 @@ class AddressOptionsController < ApplicationController
       address_service.call
       uprn_service.call
 
-      results = (address_service.result || []) + (uprn_service.result_by_uprn || [])
+      results = (address_service.result || []) + (uprn_service.result || [])
 
       if address_service.error.present? && uprn_service.error.present?
         render json: { error: "Address and UPRN are not recognised. Check the input." }, status: :unprocessable_entity
