@@ -21,10 +21,10 @@ RSpec.describe BulkUpload, type: :model do
 
   describe "value check clearing" do
     context "with a lettings log bulk upload" do
-      let(:log) { build(:lettings_log, :startdate_today, bulk_upload:) }
+      let(:log) { build(:lettings_log, startdate: Time.zone.local(2025, 4, 2), bulk_upload:) }
 
       it "has the correct number of value checks to be set as confirmed" do
-        expect(bulk_upload.fields_to_confirm(log)).to match_array %w[rent_value_check void_date_value_check major_repairs_date_value_check pregnancy_value_check retirement_value_check referral_value_check net_income_value_check carehome_charges_value_check scharge_value_check pscharge_value_check supcharg_value_check address_search_value_check multiple_partners_value_check partner_under_16_value_check reasonother_value_check]
+        expect(bulk_upload.fields_to_confirm(log)).to match_array %w[rent_value_check void_date_value_check major_repairs_date_value_check pregnancy_value_check retirement_value_check referral_value_check net_income_value_check scharge_value_check pscharge_value_check supcharg_value_check address_search_value_check multiple_partners_value_check partner_under_16_value_check reasonother_value_check]
       end
     end
 

@@ -80,6 +80,7 @@ FactoryBot.define do
       noint { 2 }
       privacynotice { 1 }
       age1_known { 0 }
+      staircase { 1 }
       age1 { Faker::Number.within(range: 27..45) }
       sex1 { %w[F M X R].sample }
       national { 18 }
@@ -110,10 +111,10 @@ FactoryBot.define do
       age6_known { 0 }
       age6 { 40 }
       income1nk { 0 }
-      income1 { 10_000 }
+      income1 { 13_400 }
       inc1mort { 1 }
       income2nk { 0 }
-      income2 { 10_000 }
+      income2 { 13_400 }
       inc2mort { 1 }
       uprn_known { 0 }
       address_line1 { "Address line 1" }
