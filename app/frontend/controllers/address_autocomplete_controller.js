@@ -1,7 +1,6 @@
-import {Controller} from '@hotwired/stimulus'
+import { Controller } from '@hotwired/stimulus'
 import accessibleAutocomplete from 'accessible-autocomplete'
 import 'accessible-autocomplete/dist/accessible-autocomplete.min.css'
-import {searchableName} from "../modules/search";
 
 const options = []
 
@@ -58,6 +57,4 @@ export default class extends Controller {
       }
     })
   }
-
-
 }
