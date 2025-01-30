@@ -1,4 +1,4 @@
-class Form::Sales::Pages::AddressSearch < ::Form::Page
+class Form::Lettings::Pages::AddressSearch < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "address_search"
@@ -11,13 +11,13 @@ class Form::Sales::Pages::AddressSearch < ::Form::Page
 
   def questions
     @questions ||= [
-      Form::Sales::Questions::AddressSearch.new(nil, nil, self),
+      Form::Lettings::Questions::AddressSearch.new(nil, nil, self),
     ]
   end
 
   def skip_href(log = nil)
     return unless log
 
-    "/#{log.model_name.param_key.dasherize}s/#{log.id}/property-number-of-bedrooms"
+    "/#{log.model_name.param_key.dasherize}s/#{log.id}/property-unit-type"
   end
 end

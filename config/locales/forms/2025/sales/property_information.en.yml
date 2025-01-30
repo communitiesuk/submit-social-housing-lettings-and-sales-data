@@ -43,6 +43,13 @@ en:
             hint_text: ""
             question_text: "Select the correct address"
 
+          address_search:
+            page_header: "Find address"
+            check_answer_label: "Find address"
+            check_answer_prompt: "Search for address or UPRN"
+            hint_text: "Start typing an address to see suggestions and select the correct one. Some properties may not be available yet; you might need to enter them manually in the next question. For UPRN (Unique Property Reference Number), please enter the full value."
+            question_text: "Enter the address or UPRN to search"
+
           address:
             page_header: "Q12 - What is the property's address?"
             address_line1:

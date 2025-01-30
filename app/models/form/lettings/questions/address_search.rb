@@ -1,4 +1,4 @@
-class Form::Sales::Questions::AddressSearch < ::Form::Question
+class Form::Lettings::Questions::AddressSearch < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "address_search"
