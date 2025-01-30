@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_01_30_175808) do
+ActiveRecord::Schema[7.2].define(version: 2025_01_30_180704) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -770,6 +770,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_30_175808) do
     t.datetime "initialpurchase"
     t.integer "has_management_fee"
     t.decimal "management_fee", precision: 10, scale: 2
+    t.string "address_search"
     t.index ["assigned_to_id"], name: "index_sales_logs_on_assigned_to_id"
     t.index ["bulk_upload_id"], name: "index_sales_logs_on_bulk_upload_id"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
