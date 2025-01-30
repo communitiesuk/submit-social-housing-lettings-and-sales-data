@@ -105,7 +105,7 @@ RSpec.describe "Form Page Routing" do
       it "displays the entered date if it's in a valid format" do
         lettings_log.update!(startdate: "2021/10/13")
         visit("/lettings-logs/#{id}/tenancy-start-date")
-        fill_in("lettings_log[startdate]", with: "1/12/202")
+        fill_in("lettings_log[startdate]", with: "1/12/0202")
         click_button("Save and continue")
 
         expect(page).to have_current_path("/lettings-logs/#{id}/tenancy-start-date")

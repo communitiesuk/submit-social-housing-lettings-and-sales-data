@@ -141,7 +141,8 @@ private
         day, month, year = params[@log.log_type][question.id].split("/")
         next unless [day, month, year].any?(&:present?)
 
-        result[question.id] = if Date.valid_date?(year.to_i, month.to_i, day.to_i) && year.to_i.positive?
+        date_matches_format = params[@log.log_type][question.id].match?(/\A\d{1,2}\/\d{1,2}\/\d{4}\z/)
+        result[question.id] = if date_matches_format && Date.valid_date?(year.to_i, month.to_i, day.to_i) && year.to_i.positive?
                                 Date.new(year.to_i, month.to_i, day.to_i)
                               else
                                 Date.new(0, 1, 1)

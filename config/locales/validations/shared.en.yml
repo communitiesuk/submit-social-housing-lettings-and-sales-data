@@ -18,4 +18,4 @@ en:
       postcode: "Enter a postcode in the correct format, for example AA1 1AA."
 
       date:
-        invalid_date: "Enter a date in the correct format, for example 31 1 2024."
+        invalid_date: "Enter a date in the correct format, for example 31/1/2024."
