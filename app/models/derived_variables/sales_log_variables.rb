@@ -61,6 +61,8 @@ module DerivedVariables::SalesLogVariables
         self.pcodenk = nil
         self.postcode_full = nil
         self.la = nil
+        self.address_line1_input = nil
+        self.postcode_full_input = nil
         self.address_search = nil
       end
     end
@@ -76,11 +78,25 @@ module DerivedVariables::SalesLogVariables
       self.pcodenk = nil
       self.postcode_full = nil
       self.la = nil
+      self.address_line1_input = nil
+      self.postcode_full_input = nil
       self.address_search = nil
     end
 
     if address_search
       self.uprn = address_search
+      if uprn_known_was == 1
+        self.address_line1 = nil
+        self.address_line2 = nil
+        self.town_or_city = nil
+        self.county = nil
+        self.pcodenk = nil
+        self.postcode_full = nil
+        self.la = nil
+        self.address_line1_input = nil
+        self.postcode_full_input = nil
+        self.address_search = nil
+      end
       self.uprn_known = 1
       self.uprn_confirmed = 1
     end
