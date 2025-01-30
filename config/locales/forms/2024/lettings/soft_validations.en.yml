@@ -150,7 +150,7 @@ en:
           no_address_found:
             page_header: ""
             check_answer_label: "No address found"
-            check_answer_prompt: "Try find address"
+            check_answer_prompt: "Confirm no address found"
             hint_text: ""
             question_text: "We could not find an address that matches your search. You can search again or continue to enter the address manually."
             title_text: "No address found"
