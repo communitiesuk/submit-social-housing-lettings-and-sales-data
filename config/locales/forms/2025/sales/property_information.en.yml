@@ -47,7 +47,7 @@ en:
             page_header: "Find address"
             check_answer_label: "Find address"
             check_answer_prompt: "Search for address or UPRN"
-            hint_text: "Start typing an address to see suggestions and select the correct one. Some properties may not be available yet; you might need to enter them manually in the next question. For UPRN (Unique Property Reference Number), please enter the full value."
+            hint_text: "For example, '1 Victoria Road' or '10010457355'"
             question_text: "Enter the address or UPRN to search"
 
           address:

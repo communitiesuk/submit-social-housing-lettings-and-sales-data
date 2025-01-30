@@ -4,6 +4,7 @@ class Form::Sales::Questions::AddressSearch < ::Form::Question
     @id = "address_search"
     @type = "address_autocomplete"
     @plain_label = true
+    @bottom_guidance_partial = "address_search"
   end
 
   def answer_options(log = nil, _user = nil)
