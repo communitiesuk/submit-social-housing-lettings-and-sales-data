@@ -68,7 +68,7 @@ jobs:
       - name: Compile assets
         run: |
           bundle exec rake assets:precompile
-      
+
       # This is temporary to fix flaky parallel tests due to `secret_key_base` being read before it's set
       - name: Create local secret
         run: |
