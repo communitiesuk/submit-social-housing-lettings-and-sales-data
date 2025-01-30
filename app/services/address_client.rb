@@ -27,7 +27,7 @@ class AddressClient
     end
   end
 
-  private
+private
 
   def http_client
     client = Net::HTTP.new(ADDRESS, 443)
