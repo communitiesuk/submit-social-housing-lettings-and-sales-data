@@ -4,7 +4,7 @@
 
 <%= f.govuk_select(question.id.to_sym,
                    label: legend(question, page_header, conditional),
-                   "data-controller": "accessible-autocomplete",
+                   "data-controller": "address-autocomplete",
                    caption: caption(caption_text, page_header, conditional),
                    hint: { text: question.hint_text&.html_safe }) do %>
   <% if answers.any? %>
