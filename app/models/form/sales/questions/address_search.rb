@@ -6,6 +6,7 @@ class Form::Sales::Questions::AddressSearch < ::Form::Question
     @plain_label = true
     @bottom_guidance_partial = "address_search"
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
+    @hide_question_number_on_page = true
   end
 
   def answer_options(log = nil, _user = nil)

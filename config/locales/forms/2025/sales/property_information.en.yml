@@ -46,9 +46,9 @@ en:
           address_search:
             page_header: "Find address"
             check_answer_label: "Address"
-            check_answer_prompt: "Search for address or UPRN"
+            check_answer_prompt: "Search by address or UPRN"
             hint_text: "For example, '1 Victoria Road' or '10010457355'"
-            question_text: "Enter the address or UPRN to search"
+            question_text: "Search by address or UPRN"
 
           address:
             page_header: "Q12 - What is the property's address?"
