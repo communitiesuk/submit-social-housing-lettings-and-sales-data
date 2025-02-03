@@ -5,6 +5,7 @@ class Form::Sales::Questions::AddressSearch < ::Form::Question
     @type = "address_autocomplete"
     @plain_label = true
     @bottom_guidance_partial = "address_search"
+    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
   end
 
   def answer_options(log = nil, _user = nil)
@@ -21,11 +22,30 @@ class Form::Sales::Questions::AddressSearch < ::Form::Question
     answer_opts
   end
 
+  def get_extra_check_answer_value(log)
+    return unless log.uprn_known == 1
+
+    value = [
+      log.address_line1,
+      log.address_line2,
+      log.town_or_city,
+      log.county,
+      log.postcode_full,
+      (LocalAuthority.find_by(code: log.la)&.name if log.la.present?),
+    ].select(&:present?)
+
+    return unless value.any?
+
+    "\n\n#{value.join("\n")}"
+  end
+
   def displayed_answer_options(log, user = nil)
     answer_options(log, user).transform_values { |value| value["value"] } || {}
   end
 
-  def hidden_in_check_answers?(log, _current_user = nil)
-    (log.uprn_known == 1 || log.uprn_confirmed == 1)
-  end
+  # def hidden_in_check_answers?(log, _current_user = nil)
+  #   (log.uprn_known == 1 || log.uprn_confirmed == 1)
+  # end
+
+  QUESTION_NUMBER_FROM_YEAR = { 2024 => 15, 2025 => 15 }.freeze
 end

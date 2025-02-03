@@ -24,8 +24,8 @@ class Form::Sales::Subsections::PropertyInformation < ::Form::Subsection
   def uprn_questions
     if form.start_year_2024_or_later?
       [
-        Form::Sales::Pages::Uprn.new(nil, nil, self),
-        Form::Sales::Pages::UprnConfirmation.new(nil, nil, self),
+        # Form::Sales::Pages::Uprn.new(nil, nil, self),
+        # Form::Sales::Pages::UprnConfirmation.new(nil, nil, self),
         Form::Sales::Pages::AddressSearch.new(nil, nil, self),
         # Form::Sales::Pages::AddressMatcher.new(nil, nil, self),
         # Form::Sales::Pages::NoAddressFound.new(nil, nil, self),
