@@ -128,7 +128,6 @@ module DerivedVariables::LettingsLogVariables
         self.la = nil
         self.address_line1_input = nil
         self.postcode_full_input = nil
-        self.address_search = nil
       end
       self.uprn_known = 1
       self.uprn_confirmed = 1
