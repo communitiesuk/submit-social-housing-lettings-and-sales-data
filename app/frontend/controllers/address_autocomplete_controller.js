@@ -4,16 +4,16 @@ import 'accessible-autocomplete/dist/accessible-autocomplete.min.css'
 
 const options = []
 
-const fetchOptions = async (query) => {
-  const response = await fetch(`/address_options?query=${query}`)
+const fetchOptions = async (query, searchUrl) => {
+  const response = await fetch(`${searchUrl}?query=${encodeURIComponent(query)}`)
   const data = await response.json()
   console.log(data)
   return data
 }
 
-const fetchAndPopulateSearchResults = async (query, populateResults, populateOptions, selectEl) => {
+const fetchAndPopulateSearchResults = async (query, populateResults, searchUrl, populateOptions, selectEl) => {
   if (/\S/.test(query)) {
-    const results = await fetchOptions(query)
+    const results = await fetchOptions(query, searchUrl)
     console.log(results) // address and uprn keys returned per result
     populateOptions(results, selectEl)
     populateResults(Object.values(results).map((o) => o.address))
@@ -35,6 +35,7 @@ const populateOptions = (results, selectEl) => {
 
 export default class extends Controller {
   connect () {
+    const searchUrl = JSON.parse(this.element.dataset.info).search_url
     const selectEl = this.element
 
     accessibleAutocomplete.enhanceSelectElement({
@@ -42,7 +43,7 @@ export default class extends Controller {
       selectElement: selectEl,
       minLength: 1,
       source: (query, populateResults) => {
-        fetchAndPopulateSearchResults(query, populateResults, populateOptions, selectEl)
+        fetchAndPopulateSearchResults(query, populateResults, searchUrl, populateOptions, selectEl)
       },
       autoselect: true,
       showNoOptionsFound: true,
