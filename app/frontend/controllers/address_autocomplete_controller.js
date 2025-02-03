@@ -8,6 +8,7 @@ const fetchOptions = async (query, searchUrl) => {
   const response = await fetch(`${searchUrl}?query=${encodeURIComponent(query)}`)
   const data = await response.json()
   console.log(data)
+  console.log("Test 004")
   return data
 }
 
@@ -50,8 +51,10 @@ export default class extends Controller {
       placeholder: 'Start typing to search',
       templates: { suggestion: (value) => value },
       onConfirm: (val) => {
-        const selectedResult = Array.from(selectEl.options).find(option => option.address === val)
+        console.log({val})
+        const selectedResult = Array.from(selectEl.options).find(option => option.text === val)
 
+        console.log({selectedResult})
         if (selectedResult) {
           selectedResult.selected = true
         }
