@@ -1,4 +1,6 @@
 class AddressOptionsController < ApplicationController
+  before_action :authenticate_user!
+
   def index
     query = params[:query]
 
