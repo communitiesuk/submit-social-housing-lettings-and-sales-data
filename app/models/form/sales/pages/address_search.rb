@@ -14,4 +14,14 @@ class Form::Sales::Pages::AddressSearch < ::Form::Page
       Form::Sales::Questions::AddressSearch.new(nil, nil, self),
     ]
   end
+
+  def skip_text
+    "Enter the address manually instead"
+  end
+
+  def skip_href(log = nil)
+    return unless log
+
+    "address"
+  end
 end
