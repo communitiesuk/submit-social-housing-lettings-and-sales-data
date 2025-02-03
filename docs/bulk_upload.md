@@ -21,8 +21,8 @@ When a bulk upload file is successfully uploaded on the service, it:
 There are several outcomes to a bulk upload:
 
 - Successful upload
-- Partial upload: upload has errors but partial logs can be created, need a user approval
-- Errors in bulk upload: errors on important fields, or in the template. Logs can't be created and email with errors is sent to the user
+- Partial upload: upload has errors but partial logs can be created. Email to error report is sent to the user and the bulk upload needs a user approval
+- Errors in bulk upload: errors on important fields, or in the template. Logs can't be created and an email with errors (or a link to error report) is sent to the user
 
 ![Bulk Upload Flow](https://raw.githubusercontent.com/communitiesuk/submit-social-housing-lettings-and-sales-data/main/docs/images/bu_flow_diagram.png)
 
