@@ -27,10 +27,6 @@ class FeatureToggle
     !Rails.env.production? && !Rails.env.test?
   end
 
-  def self.managing_resources_enabled?
-    true
-  end
-
   def self.create_test_logs_enabled?
     Rails.env.development? || Rails.env.review?
   end
