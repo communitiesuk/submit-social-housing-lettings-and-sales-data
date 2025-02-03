@@ -1024,6 +1024,7 @@ RSpec.describe Location, type: :model do
       it "returns reactivating soon if the location had a deactivation during another deactivation" do
         FactoryBot.create(:location_deactivation_period, deactivation_date: Time.zone.today - 1.month, reactivation_date: Time.zone.today + 2.days, location:)
         location.save!
+        location.reload
         expect(location.status).to eq(:reactivating_soon)
       end
 
