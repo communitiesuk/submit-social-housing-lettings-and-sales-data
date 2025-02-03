@@ -22,3 +22,7 @@
 <% end %>
 
 <%= render partial: "form/guidance/#{question.bottom_guidance_partial}" if question.bottom_guidance? %>
+
+<div class="govuk-button-group">
+  <%= govuk_link_to "Enter the address manually instead" , manual_address_link(@log), class: "govuk-button govuk-button--secondary" %>
+</div>
