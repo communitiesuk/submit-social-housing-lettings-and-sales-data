@@ -39,8 +39,10 @@ en:
           age2:
             buyer_cannot_be_over_16_and_child: "Buyer 2's age cannot be 16 or over if their working situation is child under 16."
           address:
-            not_found: "We could not find this address. Check the address data in your CSV file is correct and complete, or select the correct address using the CORE site."
-            not_determined: "There are multiple matches for this address. Either select the correct address manually or correct the UPRN in the CSV file."
+            not_found: "We could not find this address. Check the address data in your CSV file is correct and complete, or find the correct address in the service."
+            not_determined:
+              one: "There is a possible match for this address which doesn't look right. Check the address data in your CSV file is correct and complete, or confirm the address in the service."
+              multiple: "There are multiple matches for this address. Check the address data in your CSV file is correct and complete, or select the correct address in the service."
             not_answered: "Enter either the UPRN or the full address."
           nationality:
             invalid: "Select a valid nationality."
