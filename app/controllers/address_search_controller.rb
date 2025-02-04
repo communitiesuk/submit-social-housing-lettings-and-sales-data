@@ -43,14 +43,18 @@ class AddressSearchController < ApplicationController
   end
 
   def manual_input
-    log = params[:log_type] == "lettings" ? LettingsLog.find(params[:log_id]) : SalesLog.find(params[:log_id])
+    log = params[:log_type] == "lettings_log" ? LettingsLog.find(params[:log_id]) : SalesLog.find(params[:log_id])
     log.update!(uprn: nil, uprn_known: 0, uprn_confirmed: nil, address_search: nil)
     redirect_to manual_address_link(log)
   end
 
   def search_input
-    log = params[:log_type] == "lettings" ? LettingsLog.find(params[:log_id]) : SalesLog.find(params[:log_id])
-    log.update!(uprn: nil, uprn_known: 0, uprn_confirmed: nil, address_search: nil, address_line1: nil, address_line2: nil, town_or_city: nil, county: nil, postcode_full: nil, is_la_inferred: false, pcode1: nil, pcode2: nil)
+    log = params[:log_type] == "lettings_log" ? LettingsLog.find(params[:log_id]) : SalesLog.find(params[:log_id])
+    if log.log_type == "lettings_log"
+      log.update!(uprn: nil, uprn_known: 0, uprn_confirmed: nil, address_search: nil, address_line1: nil, address_line2: nil, town_or_city: nil, county: nil, postcode_full: nil, is_la_inferred: false)
+    else
+      log.update!(uprn: nil, uprn_known: 0, uprn_confirmed: nil, address_search: nil, address_line1: nil, address_line2: nil, town_or_city: nil, county: nil, postcode_full: nil, is_la_inferred: false, pcode1: nil, pcode2: nil)
+    end
     redirect_to search_address_link(log)
   end
 
