@@ -11,6 +11,7 @@ class Form::Sales::Pages::AddressFallback < ::Form::Page
       { "uprn_known" => 0, "address_options_present?" => false },
       { "uprn_confirmed" => 0, "address_options_present?" => false },
     ]
+    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
   end
 
   def questions
@@ -22,4 +23,6 @@ class Form::Sales::Pages::AddressFallback < ::Form::Page
       Form::Sales::Questions::PostcodeForFullAddress.new(nil, nil, self),
     ]
   end
+
+  QUESTION_NUMBER_FROM_YEAR = { 2024 => 16, 2025 => 16 }.freeze
 end

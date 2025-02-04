@@ -44,7 +44,7 @@ en:
             question_text: "Select the correct address"
 
           address:
-            page_header: "Q12 - What is the property's address?"
+            page_header: "What is the property's address?"
             address_line1:
               check_answer_label: "Address lines 1 and 2"
               check_answer_prompt: "Enter address lines 1 and 2"
