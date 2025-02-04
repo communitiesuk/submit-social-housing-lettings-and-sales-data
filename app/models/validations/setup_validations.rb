@@ -97,6 +97,8 @@ module Validations::SetupValidations
   end
 
   def location_during_startdate_validation(record)
+    return unless date_valid?("startdate", record)
+
     location_inactive_status = inactive_status(record.startdate, record.location)
 
     if location_inactive_status.present?
@@ -108,6 +110,8 @@ module Validations::SetupValidations
   end
 
   def scheme_during_startdate_validation(record)
+    return unless date_valid?("startdate", record)
+
     scheme_inactive_status = inactive_status(record.startdate, record.scheme)
 
     if scheme_inactive_status.present?
@@ -120,6 +124,7 @@ module Validations::SetupValidations
   def tenancy_startdate_with_scheme_locations(record)
     return if record.scheme.blank? || record.startdate.blank?
     return if record.scheme.has_active_locations_on_date?(record.startdate)
+    return unless date_valid?("startdate", record)
 
     record.errors.add :startdate, I18n.t("validations.lettings.setup.startdate.scheme.locations_inactive.startdate", name: record.scheme.service_name)
     record.errors.add :scheme_id, I18n.t("validations.lettings.setup.startdate.scheme.locations_inactive.scheme_id", name: record.scheme.service_name)
