@@ -63,7 +63,6 @@ module DerivedVariables::SalesLogVariables
         self.la = nil
         self.address_line1_input = nil
         self.postcode_full_input = nil
-        self.address_search = nil
       end
     end
 
@@ -80,7 +79,6 @@ module DerivedVariables::SalesLogVariables
       self.la = nil
       self.address_line1_input = nil
       self.postcode_full_input = nil
-      self.address_search = nil
     end
 
     if address_search

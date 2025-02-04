@@ -180,6 +180,10 @@ class Log < ApplicationRecord
     ethnic_group == 17
   end
 
+  def address_manually_entered?
+    uprn.nil? && address_search.nil? && address_line1.present? && town_or_city.present?
+  end
+
   def collection_period_open?
     return false if older_than_previous_collection_year?
 

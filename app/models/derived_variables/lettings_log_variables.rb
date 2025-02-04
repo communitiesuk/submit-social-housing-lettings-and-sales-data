@@ -97,7 +97,6 @@ module DerivedVariables::LettingsLogVariables
         self.la = nil
         self.address_line1_input = nil
         self.postcode_full_input = nil
-        self.address_search = nil
       end
     end
 
@@ -113,7 +112,6 @@ module DerivedVariables::LettingsLogVariables
       self.postcode_full = nil
       self.la = nil
       self.previous_la_known = nil if is_renewal?
-      self.address_search = nil
     end
 
     if address_search

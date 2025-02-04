@@ -46,9 +46,4 @@ module FormPageHelper
       page.skip_href(log) || send(log.form.next_page_redirect_path(page, log, current_user, ignore_answered: true), log)
     end
   end
-
-  def manual_address_link(log)
-    base_url = send("#{log.log_type}_url", log)
-    "#{base_url}/address"
-  end
 end

@@ -39,10 +39,10 @@ Rails.application.routes.draw do
   get "/data-sharing-agreement", to: "content#data_sharing_agreement"
   get "/service-moved", to: "maintenance#service_moved"
   get "/service-unavailable", to: "maintenance#service_unavailable"
-  get "/address_options", to: "address_options#index"
-  get "/address_options/current", to: "address_options#current"
   get "/address_search", to: "address_search#index"
   get "/address_search/current", to: "address_search#current"
+  get "/address_search/manual_input/:log_type/:log_id", to: "address_search#manual_input", as: "address_manual_input"
+  get "/address_search/search_input/:log_type/:log_id", to: "address_search#search_input", as: "address_search_input"
 
   get "collection-resources", to: "collection_resources#index"
   get "/collection-resources/:log_type/:year/:resource_type/download", to: "collection_resources#download_mandatory_collection_resource", as: :download_mandatory_collection_resource
