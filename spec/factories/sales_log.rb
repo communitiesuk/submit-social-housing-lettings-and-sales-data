@@ -80,7 +80,6 @@ FactoryBot.define do
       noint { 2 }
       privacynotice { 1 }
       age1_known { 0 }
-      staircase { 1 }
       age1 { Faker::Number.within(range: 27..45) }
       sex1 { %w[F M X R].sample }
       national { 18 }
