@@ -17,13 +17,15 @@
         <p class="govuk-body">For general needs, you should complete a log for each new tenancy intended to last 2 years or more if it is social rent or affordable rent, or of any length if it is intermediate rent.</p>
         <p class="govuk-body">For supported housing, you should complete a log for each new letting of any length.</p>
         <p class="govuk-body">If a new tenancy agreement is signed, create a new log.</p>
+        <p class="govuk-body">Sales logs are required after the completion date of the sale of all or part of a social property in England, of the types below.</p>
+        <p class="govuk-body">A Sales log should be completed for each Shared Ownership staircasing transaction(s).</p>
       <% end %>
 
       <%= accordion.with_section(heading_text: "Types of lettings you should create logs for") do %>
         <p class="govuk-body">You’ll need to create a log for:</p>
         <%= govuk_list [
           "Tenants in general needs housing allocated a new letting. This includes tenants moving into the social rented sector from outside, existing social tenants moving between properties or landlords, and existing social tenants renewing lettings in the same property. If fixed-term and social or affordable rent, only include tenancies of 2 years or more.",
-          "Tenants in supported housing (social housing, sheltered accommodation and care homes) allocated a new letting. This includes tenants moving into the social rented sector from outside, existing social tenants moving between properties or landlords, and existing social tenants renewing lettings in the same property. All supported housing tenancies should be reported regardless of length.",
+          "Tenants in supported housing (social housing and sheltered accommodation) allocated a new letting. This includes tenants moving into the social rented sector from outside, existing social tenants moving between properties or landlords, and existing social tenants renewing lettings in the same property. All supported housing tenancies should be reported regardless of length.",
           "Starter tenancies provided by local authorities (LAs) and lettings with an introductory period provided by private registered providers (PRPs) should be completed in CORE at the beginning of the starter or introductory period. The tenancy type and length entered should be based on the tenancy the tenant will roll onto once the starter or introductory period has been completed. You do not need to submit another CORE log once the period has been completed.",
           "Room moves within a shared housing unit that result in a different property type or support needs – this is classed as an internal transfer of an existing social tenant to another property.",
           "Existing tenants who are issued with a new tenancy agreement when stock is acquired, transferred or permanently decanted.",
@@ -46,6 +48,7 @@
           "Starter tenancies or lettings with an introductory period that roll onto or convert into the main tenancy. The CORE log should be completed at the beginning of this period.",
           "Changes from sole to joint or joint to sole tenancies, where the number of people in the household has not changed.",
           "Moves within a shared housing unit resulting in the same support needs or property type, even if a new tenancy or licence agreement is issued.",
+          "Supported housing lettings in a care home.",
           "Lettings where no new tenancy agreement is signed.",
           "Where stock is acquired, transferred or permanently decanted and the existing tenants are not issued with a new tenancy agreement.",
           "Mutual exchanges including lettings where registered provider tenants have exchanged homes, for example through the national HOMESWAP system.",
@@ -53,6 +56,25 @@
           "Demotion of a secure or assured tenancy, and any subsequent conversion of the demoted tenancy to a secure or assured tenancy.",
           "Lettings made to asylum seekers who are awaiting a decision on their applications for asylum under the Immigration and Asylum Act 1999.",
           "Non-social lettings, including market-rented properties, employer-provided housing where the employer provides financial support, homes for staff of social landlords linked to employment, homes social landlords manage for organisations who are not social landlords, homes social landlords own but lease in entirety to organisations who are not social landlords, and freehold housing with variable charges for services and communal facilities.",
+      ],
+      type: :bullet %>
+      <% end %>
+
+       <%= accordion.with_section(heading_text: "Types of sales you should create logs for") do %>
+        <p class="govuk-body">You’ll need to create a log for:</p>
+        <%= govuk_list [
+          "Shared ownership – this is when the purchaser buys an initial share of up to 75% of the property value and pays rent to the Private Registered Provider (PRP) on the remaining portion, or later staircasing transaction(s).",
+          "Discounted ownership – this is when the entirety of the property is sold in one transaction for less than market rent, according to one of a number of sale products. A mortgage may or may not be used. Examples of discounted ownership include, but are not limited to, Right to Acquire, Right to Buy, Preserved Right to Buy or Social HomeBuy.",
+          "Sales involving staircasing transactions – this is when the household purchases more shares in their property, increasing the proportion they own and decreasing the proportion the housing association owns. Once the household purchases 100% of the shares, they own the property.",
+          "Include sales to individuals, whether they intend to live in the property or not, as well as sales to companies.",
+        ],
+        type: :bullet %>
+      <% end %>
+
+      <%= accordion.with_section(heading_text: "Types of sales you should not create logs for") do %>
+        <p class="govuk-body">You don’t need to create a log for:</p>
+        <%= govuk_list [
+          "Outright sales – this is where the buyer purchases the entirety of the home in one transaction at market price. A mortgage may or may not be used. We have previously collected this information in CORE sales, but have removed it from the 2025-26 form.",
       ],
       type: :bullet %>
       <% end %>
