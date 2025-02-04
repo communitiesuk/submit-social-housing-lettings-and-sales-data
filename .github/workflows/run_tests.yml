@@ -369,7 +369,7 @@ jobs:
 
       - name: Create database
         run: |
-          bundle exec rake parallel:setup
+          bundle exec rake db:prepare
 
       - name: Compile assets
         run: |

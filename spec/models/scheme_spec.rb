@@ -433,9 +433,9 @@ RSpec.describe Scheme, type: :model do
       end
 
       it "returns reactivating soon if the scheme had a deactivation during another deactivation" do
-        FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.today - 2.months, reactivation_date: Time.zone.today + 2.days, scheme:)
+        deactivation_period = FactoryBot.create(:scheme_deactivation_period, deactivation_date: Time.zone.today - 2.months, reactivation_date: Time.zone.today + 2.days, scheme:)
         scheme.save!
-        scheme.reload
+        expect(deactivation_period.deactivation_date).to eq(Time.zone.today - 2.months)
         expect(scheme.status).to eq(:reactivating_soon)
       end
 
