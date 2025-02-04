@@ -27,7 +27,7 @@
           <% if @page.header_partial.present? %>
             <%= render partial: "form/headers/#{@page.header_partial}", locals: { log: @log } %>
           <% else %>
-            <%= @page.header %>
+            <%= @page.question_number ? "Q#{@page.question_number} - #{@page.header}" : @page.header %>
           <% end %>
         </h1>
       <% end %>
@@ -73,6 +73,12 @@
       <%= f.hidden_field :original_page_id, value: @original_page_id %>
       <% if @check_errors %>
         <%= f.hidden_field :check_errors, value: @check_errors %>
+      <% end %>
+
+      <% if @page.id == "address" %>
+        <div class="govuk-button-group">
+          <%= govuk_link_to "Clear address and search instead", address_search_input_path(@log.log_type, @log.id), class: "govuk-button govuk-button--secondary" %>
+        </div>
       <% end %>
 
       <% if @pages_with_errors_count > 1 %>

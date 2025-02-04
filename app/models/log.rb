@@ -126,26 +126,28 @@ class Log < ApplicationRecord
   end
 
   def address_options
-    return @address_options if @address_options && @last_searched_address_string == address_string
+    search_query = address_search.presence || address_string
+    return @address_options if @address_options && @last_searched_address_string == search_query
 
-    if [address_line1_input, postcode_full_input].all?(&:present?)
-      @last_searched_address_string = address_string
+    search_query = address_search.presence || address_string
+    return if search_query.blank?
 
-      service = AddressClient.new(address_string)
-      service.call
-      if service.result.blank? || service.error.present?
-        @address_options = []
-        return @answer_options
-      end
+    @last_searched_address_string = search_query
 
-      address_opts = []
-      service.result.first(10).each do |result|
-        presenter = AddressDataPresenter.new(result)
-        address_opts.append({ address: presenter.address, uprn: presenter.uprn })
-      end
-
-      @address_options = address_opts
+    service = AddressClient.new(address_string)
+    service.call
+    if service.result.blank? || service.error.present?
+      @address_options = []
+      return @answer_options
     end
+
+    address_opts = []
+    service.result.first(10).each do |result|
+      presenter = AddressDataPresenter.new(result)
+      address_opts.append({ address: presenter.address, uprn: presenter.uprn })
+    end
+
+    @address_options = address_opts
   end
 
   def collection_start_year
@@ -176,6 +178,10 @@ class Log < ApplicationRecord
 
   def ethnic_refused?
     ethnic_group == 17
+  end
+
+  def address_manually_entered?
+    uprn.nil? && address_search.nil? && address_line1.present? && town_or_city.present?
   end
 
   def collection_period_open?
