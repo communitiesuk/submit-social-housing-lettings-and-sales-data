@@ -19,7 +19,7 @@ import FilterLayoutController from './filter_layout_controller.js'
 
 import TabsController from './tabs_controller.js'
 
-import AddressAutocompleteController from './address_autocomplete_controller'
+import AddressSearchController from './address_search_controller.js'
 
 application.register('accessible-autocomplete', AccessibleAutocompleteController)
 application.register('conditional-filter', ConditionalFilterController)
@@ -29,4 +29,4 @@ application.register('numeric-question', NumericQuestionController)
 application.register('filter-layout', FilterLayoutController)
 application.register('search', SearchController)
 application.register('tabs', TabsController)
-application.register('address-autocomplete', AddressAutocompleteController)
+application.register('address-search', AddressSearchController)

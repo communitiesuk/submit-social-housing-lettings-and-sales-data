@@ -41,6 +41,8 @@ Rails.application.routes.draw do
   get "/service-unavailable", to: "maintenance#service_unavailable"
   get "/address_options", to: "address_options#index"
   get "/address_options/current", to: "address_options#current"
+  get "/address_search", to: "address_search#index"
+  get "/address_search/current", to: "address_search#current"
 
   get "collection-resources", to: "collection_resources#index"
   get "/collection-resources/:log_type/:year/:resource_type/download", to: "collection_resources#download_mandatory_collection_resource", as: :download_mandatory_collection_resource

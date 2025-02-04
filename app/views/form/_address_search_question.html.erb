@@ -4,8 +4,8 @@
 
 <%= f.govuk_select(question.id.to_sym,
                    label: legend(question, page_header, conditional),
-                   "data-controller": "address-autocomplete",
-                   "data-info": { search_url: address_options_url }.to_json,
+                   "data-controller": "address-search",
+                   "data-info": { search_url: address_search_url }.to_json,
                    caption: caption(caption_text, page_header, conditional),
                    hint: { text: question.hint_text&.html_safe }) do %>
   <% if answers.any? %>
@@ -24,5 +24,5 @@
 <%= render partial: "form/guidance/#{question.bottom_guidance_partial}" if question.bottom_guidance? %>
 
 <div class="govuk-button-group">
-  <%= govuk_link_to "Enter the address manually instead" , manual_address_link(@log), class: "govuk-button govuk-button--secondary" %>
+  <%= govuk_link_to "Enter the address manually instead", address_manual_input_path(@log.log_type, @log.id), class: "govuk-button govuk-button--secondary" %>
 </div>

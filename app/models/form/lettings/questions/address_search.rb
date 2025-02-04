@@ -2,7 +2,7 @@ class Form::Lettings::Questions::AddressSearch < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "address_search"
-    @type = "address_autocomplete"
+    @type = "address_search"
     @plain_label = true
     @bottom_guidance_partial = "address_search"
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
@@ -43,10 +43,6 @@ class Form::Lettings::Questions::AddressSearch < ::Form::Question
   def displayed_answer_options(log, user = nil)
     answer_options(log, user).transform_values { |value| value["value"] } || {}
   end
-
-  # def hidden_in_check_answers?(log, _current_user = nil)
-  #   (log.uprn_known == 1 || log.uprn_confirmed == 1)
-  # end
 
   QUESTION_NUMBER_FROM_YEAR = { 2024 => 12, 2025 => 12 }.freeze
 end
