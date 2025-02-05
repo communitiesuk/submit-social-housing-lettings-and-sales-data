@@ -13,8 +13,8 @@ class DocumentationGenerator
     form = FormHandler.instance.forms["current_#{log_type}"]
 
     all_validation_methods.each do |meth|
-      if LogValidation.where(validation_name: meth.to_s, bulk_upload_specific: false, log_type:).exists?
-        Rails.logger.info("Validation #{meth} already exists")
+      if LogValidation.where(validation_name: meth.to_s, bulk_upload_specific: false, log_type:, collection_year: "#{form.start_date.year}/#{form.start_date.year + 1}").exists?
+        Rails.logger.info("Validation #{meth} already exists for #{form.start_date.year}")
         next
       end
 
