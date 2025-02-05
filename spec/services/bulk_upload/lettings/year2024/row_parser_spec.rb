@@ -1246,6 +1246,32 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
           expect(parser.errors[:field_111]).to be_present
         end
       end
+
+      context "when some reasonable preference options are seleceted" do
+        let(:attributes) { setup_section_params.merge({ bulk_upload:, field_106: "1", field_107: "1", field_108: nil, field_109: "1", field_110: nil, field_111: nil }) }
+
+        it "sets the rest of the options to 0" do
+          parser.valid?
+          expect(parser.log.rp_homeless).to eq(1)
+          expect(parser.log.rp_insan_unsat).to eq(0)
+          expect(parser.log.rp_medwel).to eq(1)
+          expect(parser.log.rp_hardship).to eq(0)
+          expect(parser.log.rp_dontknow).to eq(0)
+        end
+      end
+
+      context "when some reasonable preference options are seleceted but reasonpref is No" do
+        let(:attributes) { setup_section_params.merge({ bulk_upload:, field_106: "2", field_107: "1", field_108: nil, field_109: "1", field_110: nil, field_111: nil }) }
+
+        it "sets the options to nil" do
+          parser.valid?
+          expect(parser.log.rp_homeless).to be_nil
+          expect(parser.log.rp_insan_unsat).to be_nil
+          expect(parser.log.rp_medwel).to be_nil
+          expect(parser.log.rp_hardship).to be_nil
+          expect(parser.log.rp_dontknow).to be_nil
+        end
+      end
     end
 
     describe "#field_116" do # referral
@@ -2482,6 +2508,42 @@ RSpec.describe BulkUpload::Lettings::Year2024::RowParser do
               expect(parser.log.public_send(hash[:attribute])).to be_nil
             end
           end
+        end
+      end
+
+      context "when some illness type values are seleceted" do
+        let(:attributes) { setup_section_params.merge({ bulk_upload:, field_85: "1", field_94: "1", field_87: "1" }) }
+
+        it "sets the rest of the values to 0" do
+          parser.valid?
+          expect(parser.log.illness_type_1).to eq(1)
+          expect(parser.log.illness_type_2).to eq(0)
+          expect(parser.log.illness_type_3).to eq(0)
+          expect(parser.log.illness_type_4).to eq(0)
+          expect(parser.log.illness_type_5).to eq(1)
+          expect(parser.log.illness_type_6).to eq(0)
+          expect(parser.log.illness_type_7).to eq(0)
+          expect(parser.log.illness_type_8).to eq(0)
+          expect(parser.log.illness_type_9).to eq(0)
+          expect(parser.log.illness_type_10).to eq(0)
+        end
+      end
+
+      context "when none of the illness type values are seleceted" do
+        let(:attributes) { setup_section_params.merge({ bulk_upload:, field_85: "1" }) }
+
+        it "sets the values to nil" do
+          parser.valid?
+          expect(parser.log.illness_type_1).to be_nil
+          expect(parser.log.illness_type_2).to be_nil
+          expect(parser.log.illness_type_3).to be_nil
+          expect(parser.log.illness_type_4).to be_nil
+          expect(parser.log.illness_type_5).to be_nil
+          expect(parser.log.illness_type_6).to be_nil
+          expect(parser.log.illness_type_7).to be_nil
+          expect(parser.log.illness_type_8).to be_nil
+          expect(parser.log.illness_type_9).to be_nil
+          expect(parser.log.illness_type_10).to be_nil
         end
       end
     end
