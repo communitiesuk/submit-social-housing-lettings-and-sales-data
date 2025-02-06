@@ -24,7 +24,7 @@ module TagHelper
     processing_error: "Error processing CSV",
     important_errors: "Errors on important questions in CSV",
     critical_errors: "Critical errors in CSV",
-    potential_errors: "Potential errors in CSV",
+    potential_errors: "Confirmation needed in CSV",
     logs_uploaded_with_errors: "Logs uploaded with errors",
     errors_fixed_in_service: "Errors fixed on site",
     logs_uploaded_no_errors: "Logs uploaded with no errors",
