@@ -37,7 +37,7 @@ RSpec.describe "correct_checkbox_values" do
         end
 
         it "updates the reasonable preference reason values on a pending log" do
-          log = build(:lettings_log, :completed, status: "pending", reasonpref: 1, rp_homeless: 1, rp_hardship: nil, rp_medwel: nil, rp_insan_unsat: nil, rp_dontknow: nil, bulk_upload:, assigned_to: user)
+          log = build(:lettings_log, :completed, status: "pending", reasonpref: 1, rp_homeless: 1, rp_hardship: nil, rp_medwel: 1, rp_insan_unsat: nil, rp_dontknow: nil, bulk_upload:, assigned_to: user)
           log.save!(validate: false)
           initial_updated_at = log.updated_at
           expect(log.status).to eq("pending")
@@ -46,7 +46,7 @@ RSpec.describe "correct_checkbox_values" do
           log.reload
           expect(log.rp_homeless).to be(1)
           expect(log.rp_hardship).to be(0)
-          expect(log.rp_medwel).to be(0)
+          expect(log.rp_medwel).to be(1)
           expect(log.rp_insan_unsat).to be(0)
           expect(log.rp_dontknow).to be(0)
           expect(log.status).to eq("pending")
