@@ -27,7 +27,7 @@
           <% if @page.header_partial.present? %>
             <%= render partial: "form/headers/#{@page.header_partial}", locals: { log: @log } %>
           <% else %>
-            <%= @page.header %>
+            <%= @page.question_number ? "Q#{@page.question_number} - #{@page.header}" : @page.header %>
           <% end %>
         </h1>
       <% end %>
