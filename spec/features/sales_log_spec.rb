@@ -861,5 +861,4 @@ RSpec.describe "Sales Log Features" do
       end
     end
   end
-
 end
