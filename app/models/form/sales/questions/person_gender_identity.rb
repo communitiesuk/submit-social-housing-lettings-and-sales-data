@@ -22,13 +22,9 @@ class Form::Sales::Questions::PersonGenderIdentity < ::Form::Question
     "R" => { "value" => "Person prefers not to say" },
   }.freeze
 
+  BASE_QUESTION_NUMBERS = { 2023 => 30, 2024 => 32, 2025 => 30 }.freeze
   def question_number
-    base_question_number = case form.start_date.year
-                           when 2023
-                             30
-                           else
-                             32
-                           end
+    base_question_number = BASE_QUESTION_NUMBERS[form.start_date.year] || BASE_QUESTION_NUMBERS[BASE_QUESTION_NUMBERS.keys.max]
 
     base_question_number + (4 * @person_index)
   end

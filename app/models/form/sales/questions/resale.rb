@@ -12,5 +12,5 @@ class Form::Sales::Questions::Resale < ::Form::Question
     "2" => { "value" => "No" },
   }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 80, 2024 => 82 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 80, 2024 => 82, 2025 => 74 }.freeze
 end

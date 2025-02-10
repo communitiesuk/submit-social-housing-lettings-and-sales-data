@@ -18,5 +18,5 @@ class Form::Sales::Questions::AddressLine1 < ::Form::Question
     ].select(&:present?).join("\n")
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 15, 2024 => 16 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 15, 2024 => 16, 2025 => 14 }.freeze
 end

@@ -21,5 +21,5 @@ class Form::Sales::Questions::Buyer1Mortgage < ::Form::Question
     }
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 68, 2024 => 70 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 68, 2024 => 70, 2025 => 67 }.freeze
 end

@@ -20,5 +20,5 @@ class Form::Sales::Questions::PreviousPostcode < ::Form::Question
     @disable_clearing_if_not_routed_or_dynamic_answer_options = true
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 57, 2024 => 59 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 57, 2024 => 59, 2025 => 57 }.freeze
 end

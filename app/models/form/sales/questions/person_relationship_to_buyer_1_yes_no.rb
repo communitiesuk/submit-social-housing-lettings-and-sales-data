@@ -25,5 +25,5 @@ class Form::Sales::Questions::PersonRelationshipToBuyer1YesNo < ::Form::Question
     base_question_number + (4 * @person_index)
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2025 => 30 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2025 => 28 }.freeze
 end

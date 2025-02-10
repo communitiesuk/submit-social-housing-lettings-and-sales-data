@@ -33,5 +33,5 @@ class Form::Sales::Questions::Buyer2RelationshipToBuyer1 < ::Form::Question
     end
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 27, 2024 => 29 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 27, 2024 => 29, 2025 => 27 }.freeze
 end

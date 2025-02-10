@@ -13,5 +13,5 @@ class Form::Sales::Questions::Buyer2LivingIn < ::Form::Question
     "3" => { "value" => "Don't know" },
   }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 60, 2024 => 62 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 60, 2024 => 62, 2025 => 59 }.freeze
 end

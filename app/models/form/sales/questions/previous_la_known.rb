@@ -27,5 +27,5 @@ class Form::Sales::Questions::PreviousLaKnown < ::Form::Question
     "0" => { "value" => "No" },
   }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 58, 2024 => 60 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 58, 2024 => 60, 2025 => 58 }.freeze
 end

@@ -30,5 +30,5 @@ class Form::Sales::Questions::UprnKnown < ::Form::Question
     I18n.t("validations.sales.property_information.uprn_known.invalid")
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 14, 2024 => 15 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 14, 2024 => 15, 2025 => 13 }.freeze
 end

@@ -15,5 +15,6 @@ class Form::Sales::Questions::LeaseholdCharges < ::Form::Question
   QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP = {
     2023 => { 1 => 98, 2 => 109, 3 => 117 },
     2024 => { 1 => 99, 2 => 110, 3 => 117 },
+    2025 => { 1 => 88, 2 => 111 },
   }.freeze
 end
