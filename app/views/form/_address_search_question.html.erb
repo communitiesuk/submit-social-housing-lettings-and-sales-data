@@ -17,7 +17,7 @@
               <%= question.answer_selected?(@log, answer) ? "selected" : "" %>><%= answer.name || answer.resource %></option>
     <% end %>
   <% else %>
-    <option value="" disabled></option>
+    <option value="" disabled>Javascript is disabled. Please enter the address manually.</option>
   <% end %>
 <% end %>
 
