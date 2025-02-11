@@ -4,9 +4,9 @@ class Form::Sales::Pages::AddressMatcher < ::Form::Page
     @id = "address_matcher"
     @copy_key = "sales.property_information.address_matcher"
     @depends_on = [
-      { "uprn_known" => nil },
-      { "uprn_known" => 0 },
-      { "uprn_confirmed" => 0 },
+      { "uprn_known" => nil, "address_export_and_display?" => true },
+      { "uprn_known" => 0, "address_export_and_display?" => true },
+      { "uprn_confirmed" => 0, "address_export_and_display?" => true },
     ]
   end
 
@@ -25,5 +25,9 @@ class Form::Sales::Pages::AddressMatcher < ::Form::Page
     return unless log
 
     "/#{log.log_type.dasherize}s/#{log.id}/property-number-of-bedrooms"
+  end
+
+  def routed_to?(log, _current_user)
+    false if form.start_year_2024_or_later?
   end
 end
