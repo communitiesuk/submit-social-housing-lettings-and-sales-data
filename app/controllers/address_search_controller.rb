@@ -12,7 +12,8 @@ class AddressSearchController < ApplicationController
       if service.error.present?
         render json: { error: service.error }, status: :unprocessable_entity
       else
-        render json: [{ address: service.result["ADDRESS"], uprn: service.result["UPRN"] }]
+        presenter = AddressDataPresenter.new(service.result)
+        render json: [{ address: presenter.address, uprn: presenter.uprn }]
       end
     elsif query.match?(/[a-zA-Z]/)
       # Query contains letters, assume it's an address
@@ -22,7 +23,11 @@ class AddressSearchController < ApplicationController
       if service.error.present?
         render json: { error: service.error }, status: :unprocessable_entity
       else
-        render json: service.result.map { |result| { address: result["ADDRESS"], uprn: result["UPRN"] } }
+        results = service.result.map do |result|
+          presenter = AddressDataPresenter.new(result)
+          { address: presenter.address, uprn: presenter.uprn }
+        end
+        render json: results
       end
     else
       # Query is ambiguous, use both APIs and merge results
@@ -37,7 +42,11 @@ class AddressSearchController < ApplicationController
       if address_service.error.present? && uprn_service.error.present?
         render json: { error: "Address and UPRN are not recognised. Check the input." }, status: :unprocessable_entity
       else
-        render json: results.map { |result| { address: result["ADDRESS"], uprn: result["UPRN"] } }
+        formatted_results = results.map do |result|
+          presenter = AddressDataPresenter.new(result)
+          { address: presenter.address, uprn: presenter.uprn }
+        end
+        render json: formatted_results
       end
     end
   end
