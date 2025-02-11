@@ -27,7 +27,7 @@ class Form::Lettings::Pages::AddressMatcher < ::Form::Page
     "/#{log.log_type.dasherize}s/#{log.id}/property-unit-type"
   end
 
-  def routed_to?(log, _current_user = nil)
+  def routed_to?(_log, _current_user = nil)
     false if form.start_year_2024_or_later?
   end
 end
