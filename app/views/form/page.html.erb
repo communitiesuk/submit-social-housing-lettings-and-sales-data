@@ -76,13 +76,9 @@
       <% end %>
 
       <% if @page.id == "address" %>
-        <div  id="js-enabled-button" style="display: none;" class="govuk-button-group">
+        <div class="govuk-button-group">
           <%= govuk_link_to "Clear address and search instead", address_search_input_path(@log.log_type, @log.id), class: "govuk-button govuk-button--secondary" %>
         </div>
-
-        <script>
-          document.getElementById('js-enabled-button').style.display = 'block';
-        </script>
       <% end %>
 
       <% if @pages_with_errors_count > 1 %>
