@@ -4,7 +4,8 @@ RSpec.describe Form::Lettings::Pages::PersonWorkingSituation, type: :model do
   subject(:page) { described_class.new(nil, page_definition, subsection, person_index:) }
 
   let(:page_definition) { nil }
-  let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2024, 4, 1))) }
+  let(:form) { Form.new(nil, 2024, [], "lettings") }
+  let(:subsection) { instance_double(Form::Subsection, enabled?: true, form:, depends_on: nil) }
   let(:person_index) { 2 }
 
   it "has correct subsection" do
@@ -24,13 +25,38 @@ RSpec.describe Form::Lettings::Pages::PersonWorkingSituation, type: :model do
       expect(page.id).to eq("person_2_working_situation")
     end
 
-    it "has correct depends_on" do
-      expect(page.depends_on).to eq(
-        [
-          { "age2" => { "operand" => 15, "operator" => ">" }, "details_known_2" => 0 },
-          { "age2" => nil, "details_known_2" => 0 },
-        ],
-      )
+    describe "routed_to?" do
+      context "with details_known_2 = 0 and age2 > 15" do
+        let(:log) { build(:lettings_log, details_known_2: 0, age2: 16) }
+
+        it "is routed to" do
+          expect(page.routed_to?(log, nil)).to eq(true)
+        end
+      end
+
+      context "with details_known_2 = 0 and age2 = nil" do
+        let(:log) { build(:lettings_log, details_known_2: 0, age2: nil) }
+
+        it "is routed to" do
+          expect(page.routed_to?(log, nil)).to eq(true)
+        end
+      end
+
+      context "with details_known_2 not 0" do
+        let(:log) { build(:lettings_log, details_known_2: 1, age2: 16) }
+
+        it "is not routed to" do
+          expect(page.routed_to?(log, nil)).to eq(false)
+        end
+      end
+
+      context "with age2 < 15" do
+        let(:log) { build(:lettings_log, details_known_2: 0, age2: 15) }
+
+        it "is not routed to" do
+          expect(page.routed_to?(log, nil)).to eq(false)
+        end
+      end
     end
   end
 
@@ -43,15 +69,6 @@ RSpec.describe Form::Lettings::Pages::PersonWorkingSituation, type: :model do
 
     it "has the correct id" do
       expect(page.id).to eq("person_3_working_situation")
-    end
-
-    it "has correct depends_on" do
-      expect(page.depends_on).to eq(
-        [
-          { "age3" => { "operand" => 15, "operator" => ">" }, "details_known_3" => 0 },
-          { "age3" => nil, "details_known_3" => 0 },
-        ],
-      )
     end
   end
 end
