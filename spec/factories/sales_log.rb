@@ -160,6 +160,7 @@ FactoryBot.define do
       mortlen { 10 }
       pcodenk { 0 }
       postcode_full { "SW1A 1AA" }
+      address_search { "10033544614" }
       is_la_inferred { false }
       mortgagelender { 5 }
       extrabor { 1 }
@@ -173,7 +174,7 @@ FactoryBot.define do
           log.postcode_full_input = log.postcode_full
           log.nationality_all_group = 826
           log.nationality_all_buyer2_group = 826
-          log.uprn = "10033558653"
+          log.uprn = "10033544614"
           log.uprn_selection = 1
         end
         if log.saledate >= Time.zone.local(2025, 4, 1)
