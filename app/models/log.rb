@@ -134,7 +134,7 @@ class Log < ApplicationRecord
         return @address_options
       end
 
-      presenter = AddressDataPresenter.new(service.result)
+      presenter = UprnDataPresenter.new(service.result)
       @address_options = [{ address: presenter.address, uprn: presenter.uprn }]
     else
       return @address_options if @address_options && @last_searched_address_string == address_string

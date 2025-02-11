@@ -12,7 +12,7 @@ class AddressSearchController < ApplicationController
       if service.error.present?
         render json: { error: service.error }, status: :unprocessable_entity
       else
-        presenter = AddressDataPresenter.new(service.result)
+        presenter = UprnDataPresenter.new(service.result)
         render json: [{ address: presenter.address, uprn: presenter.uprn }]
       end
     elsif query.match?(/[a-zA-Z]/)
