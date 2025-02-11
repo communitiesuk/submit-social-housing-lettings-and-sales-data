@@ -17,7 +17,7 @@ en:
           owning_organisation:
             not_found: "The owning organisation code is incorrect."
             not_stock_owner: "The owning organisation code provided is for an organisation that does not own stock."
-            not_permitted: 
+            not_permitted:
               not_support: "You do not have permission to add logs for this owning organisation."
               support: "This owning organisation is not affiliated with %{org_name}."
           managing_organisation:
@@ -49,8 +49,10 @@ en:
           age:
             invalid: "Age of person %{person_num} must be a number or the letter R"
           address:
-            not_found: "We could not find this address. Check the address data in your CSV file is correct and complete, or select the correct address using the CORE site."
-            not_determined: "There are multiple matches for this address. Either select the correct address manually or correct the UPRN in the CSV file."
+            not_found: "We could not find this address. Check the address data in your CSV file is correct and complete, or find the correct address in the service."
+            not_determined:
+              one: "There is a possible match for this address which doesn't look right. Check the address data in your CSV file is correct and complete, or confirm the address in the service."
+              multiple: "There are multiple matches for this address. Check the address data in your CSV file is correct and complete, or select the correct address in the service."
             not_answered: "Enter either the UPRN or the full address."
           nationality:
             invalid: "Select a valid nationality."

@@ -5,7 +5,7 @@ class Form::Lettings::Questions::PreviousTenureRenewal < ::Form::Question
     @copy_key = "lettings.household_situation.prevten.renewal"
     @type = "radio"
     @check_answers_card_number = 0
-    @answer_options = ANSWER_OPTIONS
+    @answer_options =  form.start_year_2025_or_later? ? ANSWER_OPTIONS_2025 : ANSWER_OPTIONS
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
   end
 
@@ -13,6 +13,12 @@ class Form::Lettings::Questions::PreviousTenureRenewal < ::Form::Question
     "34" => { "value" => "Specialist retirement housing" },
     "36" => { "value" => "Sheltered housing for adults aged under 55 years" },
     "35" => { "value" => "Extra care housing" },
+    "6" => { "value" => "Other supported housing" },
+  }.freeze
+
+  ANSWER_OPTIONS_2025 = {
+    "35" => { "value" => "Extra care housing" },
+    "38" => { "value" => "Older people’s housing for tenants with low support needs" },
     "6" => { "value" => "Other supported housing" },
   }.freeze
 

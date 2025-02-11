@@ -61,6 +61,11 @@ jobs:
           cache: yarn
           node-version: 20
 
+      # This is temporary to fix flaky parallel tests due to `secret_key_base` being read before it's set
+      - name: Create local secret
+        run: |
+          echo $(ruby -e "require 'securerandom'; puts SecureRandom.hex(64)") > tmp/local_secret.txt
+
       - name: Create database
         run: |
           bundle exec rake parallel:setup
@@ -68,11 +73,6 @@ jobs:
       - name: Compile assets
         run: |
           bundle exec rake assets:precompile
-
-      # This is temporary to fix flaky parallel tests due to `secret_key_base` being read before it's set
-      - name: Create local secret
-        run: |
-          echo $(ruby -e "require 'securerandom'; puts SecureRandom.hex(64)") > tmp/local_secret.txt
 
       - name: Run tests
         run: |
@@ -241,6 +241,10 @@ jobs:
           cache: yarn
           node-version: 20
 
+      - name: Create local secret
+        run: |
+          echo $(ruby -e "require 'securerandom'; puts SecureRandom.hex(64)") > tmp/local_secret.txt
+
       - name: Create database
         run: |
           bundle exec rake parallel:setup
@@ -248,10 +252,6 @@ jobs:
       - name: Compile assets
         run: |
           bundle exec rake assets:precompile
-
-      - name: Create local secret
-        run: |
-          echo $(ruby -e "require 'securerandom'; puts SecureRandom.hex(64)") > tmp/local_secret.txt
 
       - name: Run tests
         run: |
@@ -304,6 +304,10 @@ jobs:
           cache: yarn
           node-version: 20
 
+      - name: Create local secret
+        run: |
+          echo $(ruby -e "require 'securerandom'; puts SecureRandom.hex(64)") > tmp/local_secret.txt
+
       - name: Create database
         run: |
           bundle exec rake parallel:setup
@@ -311,10 +315,6 @@ jobs:
       - name: Compile assets
         run: |
           bundle exec rake assets:precompile
-
-      - name: Create local secret
-        run: |
-          echo $(ruby -e "require 'securerandom'; puts SecureRandom.hex(64)") > tmp/local_secret.txt
 
       - name: Run tests
         run: |
@@ -369,7 +369,7 @@ jobs:
 
       - name: Create database
         run: |
-          bundle exec rake parallel:setup
+          bundle exec rake db:prepare
 
       - name: Compile assets
         run: |

@@ -228,6 +228,30 @@ RSpec.describe "Sales Log Features" do
           expect(page).to have_current_path("/sales-logs/csv-download?codes_only=false&search=1")
         end
       end
+
+      context "when displaying the question number in the page header" do
+        let(:sales_log) { FactoryBot.create(:sales_log, :shared_ownership_setup_complete, jointpur: 2, owning_organisation: user.organisation, assigned_to: user) }
+
+        context "when visiting the address page" do
+          before do
+            visit("/sales-logs/#{sales_log.id}/address")
+          end
+
+          it "displays the question number in the page header" do
+            expect(page).to have_content("Q16")
+          end
+        end
+
+        context "when visiting the about staircasing page" do
+          before do
+            visit("/sales-logs/#{sales_log.id}/about-staircasing-not-joint-purchase")
+          end
+
+          it "displays the question number in the page header" do
+            expect(page).to have_content(/Shared ownership scheme\s*About the staircasing transaction/)
+          end
+        end
+      end
     end
   end
 
