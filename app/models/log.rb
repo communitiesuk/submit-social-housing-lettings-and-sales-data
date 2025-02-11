@@ -126,28 +126,37 @@ class Log < ApplicationRecord
   end
 
   def address_options
-    search_query = address_search.presence || address_string
-    return @address_options if @address_options && @last_searched_address_string == search_query
+    if address_search.present?
+      service = UprnClient.new(address_search)
+      service.call
+      if service.result.blank? || service.error.present?
+        @address_options = []
+        return @address_options
+      end
 
-    search_query = address_search.presence || address_string
-    return if search_query.blank?
+      presenter = AddressDataPresenter.new(service.result)
+      @address_options = [{ address: presenter.address, uprn: presenter.uprn }]
+    else
+      return @address_options if @address_options && @last_searched_address_string == address_string
+      return if address_string.blank?
 
-    @last_searched_address_string = search_query
+      @last_searched_address_string = address_string
 
-    service = AddressClient.new(address_string)
-    service.call
-    if service.result.blank? || service.error.present?
-      @address_options = []
-      return @answer_options
+      service = AddressClient.new(address_string)
+      service.call
+      if service.result.blank? || service.error.present?
+        @address_options = []
+        return @address_options
+      end
+
+      address_opts = []
+      service.result.first(10).each do |result|
+        presenter = AddressDataPresenter.new(result)
+        address_opts.append({ address: presenter.address, uprn: presenter.uprn })
+      end
+
+      @address_options = address_opts
     end
-
-    address_opts = []
-    service.result.first(10).each do |result|
-      presenter = AddressDataPresenter.new(result)
-      address_opts.append({ address: presenter.address, uprn: presenter.uprn })
-    end
-
-    @address_options = address_opts
   end
 
   def collection_start_year

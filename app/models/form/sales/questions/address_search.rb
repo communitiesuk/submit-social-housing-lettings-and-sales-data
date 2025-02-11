@@ -19,7 +19,6 @@ class Form::Sales::Questions::AddressSearch < ::Form::Question
       answer_opts[log.address_options[i][:uprn]] = { "value" => log.address_options[i][:address] }
     end
 
-    answer_opts["divider"] = { "value" => true }
     answer_opts
   end
 
