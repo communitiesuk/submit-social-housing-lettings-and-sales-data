@@ -9,6 +9,8 @@ class BulkUpload::Lettings::Year2025::RowParser
     field_2: "Which organisation manages this letting?",
     field_3: "What is the CORE username of the account this letting log should be assigned to?",
     field_4: "What is the needs type?",
+    field_5: "What scheme does this letting belong to?",
+    field_6: "Which location is this letting for?",
     field_7: "Is this letting a renewal?",
     field_8: "What is the tenancy start date?",
     field_9: "What is the tenancy start date?",
@@ -17,18 +19,17 @@ class BulkUpload::Lettings::Year2025::RowParser
     field_12: "Which 'Other' type of Intermediate Rent is this letting?",
     field_13: "What is the tenant code?",
     field_14: "What is the property reference?",
-    field_5: "What scheme does this letting belong to?",
-    field_6: "Which location is this letting for?",
-    field_16: "If known, provide this property’s UPRN",
-    field_17: "Address line 1",
-    field_18: "Address line 2",
-    field_19: "Town or city",
-    field_20: "County",
-    field_21: "Part 1 of the property's postcode",
-    field_22: "Part 2 of the property's postcode",
-    field_23: "What is the property's local authority?",
-    field_25: "What type was the property most recently let as?",
-    field_24: "What is the reason for the property being vacant?",
+    field_15: "Has tenant seen the MHCLG privacy notice?",
+    field_16: "What is the reason for the property being vacant?",
+    field_17: "What type was the property most recently let as?",
+    field_18: "If known, provide this property’s UPRN",
+    field_19: "Address line 1",
+    field_20: "Address line 2",
+    field_21: "Town or city",
+    field_22: "County",
+    field_23: "Part 1 of the property's postcode",
+    field_24: "Part 2 of the property's postcode",
+    field_25: "What is the property's local authority?",
     field_26: "What type of unit is the property?",
     field_27: "Which type of building is the property?",
     field_28: "Is the property built or adapted to wheelchair-user standards?",
@@ -39,43 +40,42 @@ class BulkUpload::Lettings::Year2025::RowParser
     field_33: "What date were any major repairs completed on?",
     field_34: "What date were any major repairs completed on?",
     field_35: "What date were any major repairs completed on?",
-    field_36: "Is this a joint tenancy?",
-    field_37: "Is this a starter tenancy?",
-    field_38: "What is the type of tenancy?",
-    field_39: "If 'Other', what is the type of tenancy?",
-    field_40: "What is the length of the fixed-term tenancy to the nearest year?",
-    field_41: "Is this letting sheltered accommodation?",
-    field_15: "Has tenant seen the MHCLG privacy notice?",
+    field_36: "Is this letting sheltered accommodation?",
+    field_37: "Is this a joint tenancy?",
+    field_38: "Is this a starter tenancy?",
+    field_39: "What is the type of tenancy?",
+    field_40: "If 'Other', what is the type of tenancy?",
+    field_41: "What is the length of the fixed-term tenancy to the nearest year?",
     field_42: "What is the lead tenant's age?",
     field_43: "Which of these best describes the lead tenant's gender identity?",
     field_44: "Which of these best describes the lead tenant's ethnic background?",
     field_45: "What is the lead tenant's nationality?",
     field_46: "Which of these best describes the lead tenant's working situation?",
-    field_47: "What is person 2's relationship to the lead tenant?",
+    field_47: "Is person 2 the partner of the lead tenant?",
     field_48: "What is person 2's age?",
     field_49: "Which of these best describes person 2's gender identity?",
     field_50: "Which of these best describes person 2's working situation?",
-    field_51: "What is person 3's relationship to the lead tenant?",
+    field_51: "Is person 3 the partner of the lead tenant?",
     field_52: "What is person 3's age?",
     field_53: "Which of these best describes person 3's gender identity?",
     field_54: "Which of these best describes person 3's working situation?",
-    field_55: "What is person 4's relationship to the lead tenant?",
+    field_55: "Is person 4 the partner of the lead tenant?",
     field_56: "What is person 4's age?",
     field_57: "Which of these best describes person 4's gender identity?",
     field_58: "Which of these best describes person 4's working situation?",
-    field_59: "What is person 5's relationship to the lead tenant?",
+    field_59: "Is person 5 the partner of the lead tenant?",
     field_60: "What is person 5's age?",
     field_61: "Which of these best describes person 5's gender identity?",
     field_62: "Which of these best describes person 5's working situation?",
-    field_63: "What is person 6's relationship to the lead tenant?",
+    field_63: "Is person 6 the partner of the lead tenant?",
     field_64: "What is person 6's age?",
     field_65: "Which of these best describes person 6's gender identity?",
     field_66: "Which of these best describes person 6's working situation?",
-    field_67: "What is person 7's relationship to the lead tenant?",
+    field_67: "Is person 7 the partner of the lead tenant?",
     field_68: "What is person 7's age?",
     field_69: "Which of these best describes person 7's gender identity?",
     field_70: "Which of these best describes person 7's working situation?",
-    field_71: "What is person 8's relationship to the lead tenant?",
+    field_71: "Is person 8 the partner of the lead tenant?",
     field_72: "What is person 8's age?",
     field_73: "Which of these best describes person 8's gender identity?",
     field_74: "Which of these best describes person 8's working situation?",
@@ -128,13 +128,12 @@ class BulkUpload::Lettings::Year2025::RowParser
     field_121: "How much of the household's income is from Universal Credit, state pensions or benefits?",
     field_122: "Does the household pay rent or other charges for the accommodation?",
     field_123: "How often does the household pay rent and other charges?",
-    field_124: "If this is a care home, how much does the household pay every [time period]?",
-    field_125: "What is the basic rent?",
-    field_126: "What is the service charge?",
-    field_127: "What is the personal service charge?",
-    field_128: "What is the support charge?",
-    field_129: "After the household has received any housing-related benefits, will they still need to pay for rent and charges?",
-    field_130: "What do you expect the outstanding amount to be?",
+    field_124: "What is the basic rent?",
+    field_125: "What is the service charge?",
+    field_126: "What is the personal service charge?",
+    field_127: "What is the support charge?",
+    field_128: "After the household has received any housing-related benefits, will they still need to pay for rent and charges?",
+    field_129: "What do you expect the outstanding amount to be?",
   }.freeze
 
   RENT_TYPE_BU_MAPPING = {
@@ -146,7 +145,7 @@ class BulkUpload::Lettings::Year2025::RowParser
     6 => 5,
   }.freeze
 
-  ERROR_BASE_KEY = "validations.lettings.2024.bulk_upload".freeze
+  ERROR_BASE_KEY = "validations.lettings.2025.bulk_upload".freeze
 
   attribute :bulk_upload
   attribute :block_log_creation, :boolean, default: -> { false }
@@ -167,16 +166,16 @@ class BulkUpload::Lettings::Year2025::RowParser
   attribute :field_14, :string
   attribute :field_5, :string
   attribute :field_6, :string
-  attribute :field_16, :string
-  attribute :field_17, :string
   attribute :field_18, :string
   attribute :field_19, :string
   attribute :field_20, :string
   attribute :field_21, :string
   attribute :field_22, :string
   attribute :field_23, :string
-  attribute :field_25, :integer
-  attribute :field_24, :integer
+  attribute :field_24, :string
+  attribute :field_25, :string
+  attribute :field_17, :integer
+  attribute :field_16, :integer
   attribute :field_26, :integer
   attribute :field_27, :integer
   attribute :field_28, :integer
@@ -187,43 +186,43 @@ class BulkUpload::Lettings::Year2025::RowParser
   attribute :field_33, :integer
   attribute :field_34, :integer
   attribute :field_35, :integer
-  attribute :field_36, :integer
   attribute :field_37, :integer
   attribute :field_38, :integer
-  attribute :field_39, :string
-  attribute :field_40, :integer
+  attribute :field_39, :integer
+  attribute :field_40, :string
   attribute :field_41, :integer
+  attribute :field_36, :integer
   attribute :field_15, :integer
   attribute :field_42, :string
   attribute :field_43, :string
   attribute :field_44, :integer
   attribute :field_45, :integer
   attribute :field_46, :integer
-  attribute :field_47, :string
+  attribute :field_47, :integer
   attribute :field_48, :string
   attribute :field_49, :string
   attribute :field_50, :integer
-  attribute :field_51, :string
+  attribute :field_51, :integer
   attribute :field_52, :string
   attribute :field_53, :string
   attribute :field_54, :integer
-  attribute :field_55, :string
+  attribute :field_55, :integer
   attribute :field_56, :string
   attribute :field_57, :string
   attribute :field_58, :integer
-  attribute :field_59, :string
+  attribute :field_59, :integer
   attribute :field_60, :string
   attribute :field_61, :string
   attribute :field_62, :integer
-  attribute :field_63, :string
+  attribute :field_63, :integer
   attribute :field_64, :string
   attribute :field_65, :string
   attribute :field_66, :integer
-  attribute :field_67, :string
+  attribute :field_67, :integer
   attribute :field_68, :string
   attribute :field_69, :string
   attribute :field_70, :integer
-  attribute :field_71, :string
+  attribute :field_71, :integer
   attribute :field_72, :string
   attribute :field_73, :string
   attribute :field_74, :integer
@@ -280,9 +279,8 @@ class BulkUpload::Lettings::Year2025::RowParser
   attribute :field_125, :decimal
   attribute :field_126, :decimal
   attribute :field_127, :decimal
-  attribute :field_128, :decimal
-  attribute :field_129, :integer
-  attribute :field_130, :decimal
+  attribute :field_128, :integer
+  attribute :field_129, :decimal
 
   validate :validate_valid_radio_option, on: :before_log
 
@@ -436,7 +434,7 @@ class BulkUpload::Lettings::Year2025::RowParser
   validate :validate_assigned_to_exists, on: :after_log
   validate :validate_assigned_to_related, on: :after_log
   validate :validate_assigned_to_when_support, on: :after_log
-  validate :validate_all_charges_given, on: :after_log, if: proc { is_carehome.zero? }
+  validate :validate_all_charges_given, on: :after_log
 
   validate :validate_address_option_found, on: :after_log, unless: -> { supported_housing? }
   validate :validate_uprn_exists_if_any_key_address_fields_are_blank, on: :after_log, unless: -> { supported_housing? }
@@ -532,14 +530,14 @@ class BulkUpload::Lettings::Year2025::RowParser
       "field_10", # startdate
       "field_13", # tenancycode
       !general_needs? ? :field_6.to_s : nil, # location
-      !supported_housing? ? "field_21" : nil,  # postcode
-      !supported_housing? ? "field_22" : nil,  # postcode
-      "field_42",  # age1
+      !supported_housing? ? "field_23" : nil,  # postcode
+      !supported_housing? ? "field_24" : nil,  # postcode
+      "field_42", # age1
       "field_43",  # sex1
       "field_46",  # ecstat1
     )
-    if [field_125, field_126, field_127, field_128].all?(&:present?)
-      hash.merge({ "tcharge" => [field_125, field_126, field_127, field_128].sum })
+    if [field_124, field_125, field_126, field_127].all?(&:present?)
+      hash.merge({ "tcharge" => [field_124, field_125, field_126, field_127].sum })
     else
       hash
     end
@@ -548,7 +546,7 @@ class BulkUpload::Lettings::Year2025::RowParser
   def add_duplicate_found_in_spreadsheet_errors
     spreadsheet_duplicate_hash.each_key do |field|
       if field == "tcharge"
-        %w[field_125 field_126 field_127 field_128].each do |sub_field|
+        %w[field_124 field_125 field_126 field_127].each do |sub_field|
           errors.add(sub_field, I18n.t("#{ERROR_BASE_KEY}.spreadsheet_dupe"), category: :setup)
         end
       else
@@ -606,16 +604,16 @@ private
   end
 
   def validate_uprn_exists_if_any_key_address_fields_are_blank
-    if field_16.blank? && !key_address_fields_provided?
-      %i[field_17 field_19 field_21 field_22].each do |field|
+    if field_18.blank? && !key_address_fields_provided?
+      %i[field_19 field_21 field_23 field_24].each do |field|
         errors.add(field, I18n.t("#{ERROR_BASE_KEY}.address.not_answered")) if send(field).blank?
       end
-      errors.add(:field_16, I18n.t("#{ERROR_BASE_KEY}.address.not_answered", question: "UPRN."))
+      errors.add(:field_18, I18n.t("#{ERROR_BASE_KEY}.address.not_answered", question: "UPRN."))
     end
   end
 
   def validate_address_option_found
-    if log.uprn.nil? && field_16.blank? && key_address_fields_provided?
+    if log.uprn.nil? && field_18.blank? && key_address_fields_provided?
       error_message = if log.address_options_present? && log.address_options.size > 1
                         I18n.t("#{ERROR_BASE_KEY}.address.not_determined.multiple")
                       elsif log.address_options_present?
@@ -623,32 +621,32 @@ private
                       else
                         I18n.t("#{ERROR_BASE_KEY}.address.not_found")
                       end
-      %i[field_17 field_18 field_19 field_20 field_21 field_22].each do |field|
+      %i[field_19 field_20 field_21 field_22 field_23 field_24].each do |field|
         errors.add(field, error_message) if errors[field].blank?
       end
     end
   end
 
   def key_address_fields_provided?
-    field_17.present? && field_19.present? && postcode_full.present?
+    field_19.present? && field_21.present? && postcode_full.present?
   end
 
   def validate_address_fields
-    if field_16.blank? || log.errors.attribute_names.include?(:uprn)
-      if field_17.blank? && errors[:field_17].blank?
-        errors.add(:field_17, I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "address line 1."))
-      end
-
+    if field_18.blank? || log.errors.attribute_names.include?(:uprn)
       if field_19.blank? && errors[:field_19].blank?
-        errors.add(:field_19, I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "town or city."))
+        errors.add(:field_19, I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "address line 1."))
       end
 
       if field_21.blank? && errors[:field_21].blank?
-        errors.add(:field_21, I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "part 1 of postcode."))
+        errors.add(:field_21, I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "town or city."))
       end
 
-      if field_22.blank? && errors[:field_22].blank?
-        errors.add(:field_22, I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "part 2 of postcode."))
+      if field_23.blank? && errors[:field_23].blank?
+        errors.add(:field_23, I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "part 1 of postcode."))
+      end
+
+      if field_24.blank? && errors[:field_24].blank?
+        errors.add(:field_24, I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "part 2 of postcode."))
       end
     end
   end
@@ -918,13 +916,13 @@ private
   end
 
   def validate_all_charges_given
-    return if supported_housing? && field_125 == 1
+    return if supported_housing? && field_124 == 1
 
     blank_charge_fields, other_charge_fields = {
-      field_125: "basic rent",
-      field_126: "service charge",
-      field_127: "personal service charge",
-      field_128: "support charge",
+      field_124: "basic rent",
+      field_125: "service charge",
+      field_126: "personal service charge",
+      field_127: "support charge",
     }.partition { |field, _| public_send(field).blank? }.map(&:to_h)
 
     blank_charge_fields.each do |field, charge|
@@ -939,7 +937,7 @@ private
   end
 
   def all_charges_given?
-    field_125.present? && field_126.present? && field_127.present? && field_128.present?
+    field_124.present? && field_125.present? && field_126.present? && field_127.present?
   end
 
   def setup_question?(question)
@@ -957,18 +955,17 @@ private
       errors.add(:field_13, error_message) # tenancycode
       errors.add(:field_6, error_message) if !general_needs? && :field_6.present? # location
       errors.add(:field_5, error_message) if !general_needs? && :field_6.blank? # add to Scheme field as unclear whether log uses New or Old CORE ids
-      errors.add(:field_21, error_message) unless supported_housing? # postcode_full
-      errors.add(:field_22, error_message) unless supported_housing? # postcode_full
-      errors.add(:field_23, error_message) unless supported_housing? # la
+      errors.add(:field_23, error_message) unless supported_housing? # postcode_full
+      errors.add(:field_24, error_message) unless supported_housing? # postcode_full
+      errors.add(:field_25, error_message) unless supported_housing? # la
       errors.add(:field_42, error_message) # age1
       errors.add(:field_43, error_message) # sex1
       errors.add(:field_46, error_message) # ecstat1
-      errors.add(:field_124, error_message) if log.chcharge.present? # chcharge
       errors.add(:field_122, error_message) unless general_needs? # household_charge
-      errors.add(:field_125, error_message) # brent
-      errors.add(:field_126, error_message) # scharge
-      errors.add(:field_127, error_message) # pscharge
-      errors.add(:field_128, error_message) # chcharge
+      errors.add(:field_124, error_message) # brent
+      errors.add(:field_125, error_message) # scharge
+      errors.add(:field_126, error_message) # pscharge
+      errors.add(:field_127, error_message) # chcharge
     end
   end
 
@@ -976,9 +973,9 @@ private
     {
       lettype: [:field_11],
       tenancycode: [:field_13],
-      postcode_known: %i[field_23 field_21 field_22],
-      postcode_full: %i[field_23 field_21 field_22],
-      la: %i[field_23],
+      postcode_known: %i[field_25 field_23 field_24],
+      postcode_full: %i[field_25 field_23 field_24],
+      la: %i[field_25],
       owning_organisation: [:field_1],
       managing_organisation: [:field_2],
       owning_organisation_id: [:field_1],
@@ -996,11 +993,11 @@ private
       builtype: %i[field_27],
       wchair: %i[field_28],
       beds: %i[field_29],
-      joint: %i[field_36],
-      startertenancy: %i[field_37],
-      tenancy: %i[field_38],
-      tenancyother: %i[field_39],
-      tenancylength: %i[field_40],
+      joint: %i[field_37],
+      startertenancy: %i[field_38],
+      tenancy: %i[field_39],
+      tenancyother: %i[field_40],
+      tenancylength: %i[field_41],
       declaration: %i[field_15],
 
       age1_known: %i[field_42],
@@ -1093,19 +1090,18 @@ private
       benefits: %i[field_121],
 
       period: %i[field_123],
-      brent: %i[field_125],
-      scharge: %i[field_126],
-      pscharge: %i[field_127],
-      supcharg: %i[field_128],
-      chcharge: %i[field_124],
-      tcharge: %i[field_125 field_126 field_127 field_128],
+      brent: %i[field_124],
+      scharge: %i[field_125],
+      pscharge: %i[field_126],
+      supcharg: %i[field_127],
+      tcharge: %i[field_124 field_125 field_126 field_127],
       household_charge: %i[field_122],
-      hbrentshortfall: %i[field_129],
-      tshortfall: %i[field_130],
+      hbrentshortfall: %i[field_128],
+      tshortfall: %i[field_129],
 
-      unitletas: %i[field_25],
-      rsnvac: %i[field_24],
-      sheltered: %i[field_41],
+      unitletas: %i[field_17],
+      rsnvac: %i[field_16],
+      sheltered: %i[field_36],
 
       illness_type_1: %i[field_94],
       illness_type_2: %i[field_88],
@@ -1127,12 +1123,12 @@ private
 
       voiddate: %i[field_30 field_31 field_32],
 
-      uprn: [:field_16],
-      address_line1: [:field_17],
-      address_line2: [:field_18],
-      town_or_city: [:field_19],
-      county: [:field_20],
-      uprn_selection: [:field_17],
+      uprn: [:field_18],
+      address_line1: [:field_19],
+      address_line2: [:field_20],
+      town_or_city: [:field_21],
+      county: [:field_22],
+      uprn_selection: [:field_19],
     }.compact
   end
 
@@ -1163,11 +1159,11 @@ private
     attributes["builtype"] = field_27
     attributes["wchair"] = field_28
     attributes["beds"] = field_26 == 2 ? 1 : field_29
-    attributes["joint"] = field_36
-    attributes["startertenancy"] = field_37
-    attributes["tenancy"] = field_38
-    attributes["tenancyother"] = field_39
-    attributes["tenancylength"] = field_40
+    attributes["joint"] = field_37
+    attributes["startertenancy"] = field_38
+    attributes["tenancy"] = field_39
+    attributes["tenancyother"] = field_40
+    attributes["tenancylength"] = field_41
     attributes["declaration"] = field_15
 
     attributes["age1_known"] = age1_known?
@@ -1208,13 +1204,13 @@ private
     attributes["nationality_all"] = field_45 if field_45.present? && valid_nationality_options.include?(field_45.to_s)
     attributes["nationality_all_group"] = nationality_group(attributes["nationality_all"])
 
-    attributes["relat2"] = field_47
-    attributes["relat3"] = field_51
-    attributes["relat4"] = field_55
-    attributes["relat5"] = field_59
-    attributes["relat6"] = field_63
-    attributes["relat7"] = field_67
-    attributes["relat8"] = field_71
+    attributes["relat2"] = relationship_from_input_value(field_47)
+    attributes["relat3"] = relationship_from_input_value(field_51)
+    attributes["relat4"] = relationship_from_input_value(field_55)
+    attributes["relat5"] = relationship_from_input_value(field_59)
+    attributes["relat6"] = relationship_from_input_value(field_63)
+    attributes["relat7"] = relationship_from_input_value(field_67)
+    attributes["relat8"] = relationship_from_input_value(field_71)
 
     attributes["ecstat1"] = field_46
     attributes["ecstat2"] = field_50
@@ -1279,22 +1275,20 @@ private
     attributes["benefits"] = field_121
 
     attributes["period"] = field_123
-    attributes["brent"] = field_125 if all_charges_given?
-    attributes["scharge"] = field_126 if all_charges_given?
-    attributes["pscharge"] = field_127 if all_charges_given?
-    attributes["supcharg"] = field_128 if all_charges_given?
-    attributes["chcharge"] = field_124
-    attributes["is_carehome"] = is_carehome
+    attributes["brent"] = field_124 if all_charges_given?
+    attributes["scharge"] = field_125 if all_charges_given?
+    attributes["pscharge"] = field_126 if all_charges_given?
+    attributes["supcharg"] = field_127 if all_charges_given?
     attributes["household_charge"] = supported_housing? ? field_122 : nil
-    attributes["hbrentshortfall"] = field_129
+    attributes["hbrentshortfall"] = field_128
     attributes["tshortfall_known"] = tshortfall_known
-    attributes["tshortfall"] = field_130
+    attributes["tshortfall"] = field_129
 
     attributes["hhmemb"] = hhmemb
 
-    attributes["unitletas"] = field_25
+    attributes["unitletas"] = field_17
     attributes["rsnvac"] = rsnvac
-    attributes["sheltered"] = field_41
+    attributes["sheltered"] = field_36
 
     attributes["illness_type_1"] = field_94
     attributes["illness_type_2"] = field_88
@@ -1320,46 +1314,46 @@ private
     attributes["first_time_property_let_as_social_housing"] = first_time_property_let_as_social_housing
 
     if general_needs?
-      attributes["uprn_known"] = field_16.present? ? 1 : 0
-      attributes["uprn_confirmed"] = 1 if field_16.present?
+      attributes["uprn_known"] = field_18.present? ? 1 : 0
+      attributes["uprn_confirmed"] = 1 if field_18.present?
       attributes["skip_update_uprn_confirmed"] = true
-      attributes["uprn"] = field_16
-      attributes["address_line1"] = field_17
-      attributes["address_line1_as_entered"] = field_17
-      attributes["address_line2"] = field_18
-      attributes["address_line2_as_entered"] = field_18
-      attributes["town_or_city"] = field_19
-      attributes["town_or_city_as_entered"] = field_19
-      attributes["county"] = field_20
-      attributes["county_as_entered"] = field_20
+      attributes["uprn"] = field_18
+      attributes["address_line1"] = field_19
+      attributes["address_line1_as_entered"] = field_19
+      attributes["address_line2"] = field_20
+      attributes["address_line2_as_entered"] = field_20
+      attributes["town_or_city"] = field_21
+      attributes["town_or_city_as_entered"] = field_21
+      attributes["county"] = field_22
+      attributes["county_as_entered"] = field_22
       attributes["postcode_full"] = postcode_full
       attributes["postcode_full_as_entered"] = postcode_full
       attributes["postcode_known"] = postcode_known
-      attributes["la"] = field_23
-      attributes["la_as_entered"] = field_23
+      attributes["la"] = field_25
+      attributes["la_as_entered"] = field_25
 
       attributes["address_line1_input"] = address_line1_input
       attributes["postcode_full_input"] = postcode_full
-      attributes["select_best_address_match"] = true if field_16.blank?
+      attributes["select_best_address_match"] = true if field_18.blank?
     end
 
     attributes
   end
 
   def address_line1_input
-    [field_17, field_18, field_19].compact.join(", ")
+    [field_19, field_20, field_21].compact.join(", ")
   end
 
   def postcode_known
     if postcode_full.present?
       1
-    elsif field_23.present?
+    elsif field_25.present?
       0
     end
   end
 
   def postcode_full
-    [field_21, field_22].compact_blank.join(" ") if field_21 || field_22
+    [field_23, field_24].compact_blank.join(" ") if field_23 || field_24
   end
 
   def owning_organisation
@@ -1382,7 +1376,7 @@ private
   end
 
   def rsnvac
-    field_24
+    field_16
   end
 
   def scheme
@@ -1584,7 +1578,7 @@ private
   end
 
   def tshortfall_known
-    field_129 == 1 ? 0 : 1
+    field_128 == 1 ? 0 : 1
   end
 
   def hhmemb
@@ -1638,15 +1632,22 @@ private
     12
   end
 
-  def is_carehome
-    field_124.present? ? 1 : 0
-  end
-
   def reason_is_other?
     field_98 == 20
   end
 
   def bulk_upload_organisation
     Organisation.find(bulk_upload.organisation_id)
+  end
+
+  def relationship_from_input_value(value)
+    case value
+    when 1
+      "P" # yes
+    when 2
+      "X" # no
+    when 3
+      "R" # refused
+    end
   end
 end

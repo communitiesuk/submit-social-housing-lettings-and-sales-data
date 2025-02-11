@@ -3,10 +3,10 @@ require "rails_helper"
 RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
   subject(:parser) { described_class.new(attributes) }
 
-  let(:now) { Time.zone.local(2024, 4, 5) }
+  let(:now) { Time.zone.local(2025, 4, 5) }
 
   let(:attributes) { { bulk_upload: } }
-  let(:bulk_upload) { create(:bulk_upload, :lettings, user:, needstype: nil, year: 2024) }
+  let(:bulk_upload) { create(:bulk_upload, :lettings, user:, needstype: nil, year: 2025) }
   let(:user) { create(:user, organisation: owning_org) }
 
   let(:owning_org) { create(:organisation, :with_old_visible_id) }
@@ -42,12 +42,12 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
       soft_max: 118.85,
       hard_min: 9.87,
       hard_max: 200.99,
-      start_year: 2024,
+      start_year: 2025,
     )
   end
 
   around do |example|
-    Timecop.freeze(Date.new(2024, 10, 1)) do
+    Timecop.freeze(Date.new(2025, 10, 1)) do
       FormHandler.instance.use_real_forms!
       example.run
     end
@@ -63,7 +63,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
 
     context "when the only populated fields are whitespace" do
       before do
-        parser.field_16 = " "
+        parser.field_18 = " "
       end
 
       it "returns true" do
@@ -116,7 +116,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
       end
 
       context "when calling the method multiple times" do
-        let(:attributes) { { bulk_upload:, field_130: 2 } }
+        let(:attributes) { { bulk_upload:, field_129: 2 } }
 
         it "does not add keep adding errors to the pile" do
           parser.valid?
@@ -132,8 +132,8 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
             field_8: now.day.to_s,
             field_9: now.month.to_s,
             field_10: now.strftime("%g"),
-            field_21: "EC1N",
-            field_22: "2TD",
+            field_23: "EC1N",
+            field_24: "2TD",
             field_1: owning_org.old_visible_id,
             field_2: managing_org.old_visible_id,
             field_11: "1",
@@ -142,9 +142,9 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
             field_27: "1",
             field_28: "1",
             field_29: "1",
-            field_36: "2",
-            field_37: "1",
-            field_38: "2",
+            field_37: "2",
+            field_38: "1",
+            field_39: "2",
             field_15: "1",
 
             field_42: "42",
@@ -168,13 +168,13 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
             field_44: "17",
             field_45: "826",
 
-            field_47: "P",
-            field_51: "C",
-            field_55: "C",
-            field_59: "R",
-            field_63: "C",
-            field_67: "C",
-            field_71: "X",
+            field_47: "1",
+            field_51: "2",
+            field_55: "2",
+            field_59: "3",
+            field_63: "2",
+            field_67: "2",
+            field_71: "2",
 
             field_46: "1",
             field_50: "2",
@@ -230,21 +230,21 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
             field_121: "4",
 
             field_123: "4",
-            field_125: "1234.56",
-            field_126: "43.32",
-            field_127: "13.14",
-            field_128: "101.11",
-            field_129: "1",
-            field_130: "34.56",
+            field_124: "1234.56",
+            field_125: "43.32",
+            field_126: "13.14",
+            field_127: "101.11",
+            field_128: "1",
+            field_129: "34.56",
 
-            field_24: "15",
+            field_16: "15",
             field_30: now.day.to_s,
             field_31: now.month.to_s,
             field_32: now.strftime("%g"),
 
             field_4: "1",
 
-            field_16: "12",
+            field_18: "12",
           }
         end
 
@@ -283,7 +283,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
             it "adds an error to all (and only) the fields used to determine duplicates" do
               parser.valid?
 
-              error_message = I18n.t("validations.lettings.2024.bulk_upload.duplicate")
+              error_message = I18n.t("validations.lettings.2025.bulk_upload.duplicate")
 
               [
                 :field_1, # owning_organisation
@@ -291,16 +291,16 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
                 :field_9, # startdate
                 :field_10, # startdate
                 :field_13, # tenancycode
-                :field_21, # postcode_full
-                :field_22, # postcode_full
                 :field_23, # postcode_full
+                :field_24, # postcode_full
+                :field_25, # postcode_full
                 :field_42, # age1
                 :field_43, # sex1
                 :field_46, # ecstat1
-                :field_125, # brent
-                :field_126, # scharge
-                :field_127, # pscharge
-                :field_128, # supcharg
+                :field_124, # brent
+                :field_125, # scharge
+                :field_126, # pscharge
+                :field_127, # supcharg
               ].each do |field|
                 expect(parser.errors[field]).to include(error_message)
               end
@@ -325,7 +325,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
           end
 
           context "when a supported housing log already exists in the db" do
-            let(:attributes) { valid_attributes.merge({ field_4: "2", field_5: "S#{scheme.id}", field_6: location.old_visible_id, field_41: 3, field_122: 0 }) }
+            let(:attributes) { valid_attributes.merge({ field_4: "2", field_5: "S#{scheme.id}", field_6: location.old_visible_id, field_36: 3, field_122: 0 }) }
 
             before do
               parser.log.save!
@@ -339,7 +339,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
             it "adds an error to all the fields used to determine duplicates" do
               parser.valid?
 
-              error_message = I18n.t("validations.lettings.2024.bulk_upload.duplicate")
+              error_message = I18n.t("validations.lettings.2025.bulk_upload.duplicate")
 
               [
                 :field_1, # owning_organisation
@@ -351,17 +351,17 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
                 :field_42, # age1
                 :field_43, # sex1
                 :field_46, # ecstat1
-                :field_125, # brent
-                :field_126, # scharge
-                :field_127, # pscharge
-                :field_128, # supcharg
+                :field_124, # brent
+                :field_125, # scharge
+                :field_126, # pscharge
+                :field_127, # supcharg
               ].each do |field|
                 expect(parser.errors[field]).to include(error_message)
               end
 
-              expect(parser.errors[:field_21]).not_to include(error_message)
-              expect(parser.errors[:field_22]).not_to include(error_message)
               expect(parser.errors[:field_23]).not_to include(error_message)
+              expect(parser.errors[:field_24]).not_to include(error_message)
+              expect(parser.errors[:field_25]).not_to include(error_message)
             end
           end
 
@@ -381,7 +381,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
               it "adds an error to all the fields used to determine duplicates" do
                 parser.valid?
 
-                error_message = I18n.t("validations.lettings.2024.bulk_upload.duplicate")
+                error_message = I18n.t("validations.lettings.2025.bulk_upload.duplicate")
 
                 [
                   :field_1, # owning_organisation
@@ -393,21 +393,21 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
                   :field_42, # age1
                   :field_43, # sex1
                   :field_46, # ecstat1
-                  :field_125, # brent
-                  :field_126, # scharge
-                  :field_127, # pscharge
-                  :field_128, # supcharg
+                  :field_124, # brent
+                  :field_125, # scharge
+                  :field_126, # pscharge
+                  :field_127, # supcharg
                 ].each do |field|
                   expect(parser.errors[field]).to include(error_message)
                 end
 
-                expect(parser.errors[:field_21]).not_to include(error_message)
-                expect(parser.errors[:field_22]).not_to include(error_message)
                 expect(parser.errors[:field_23]).not_to include(error_message)
+                expect(parser.errors[:field_24]).not_to include(error_message)
+                expect(parser.errors[:field_25]).not_to include(error_message)
               end
             end
 
-            context "when a supported housing log with chcharges already exists in the db" do
+            context "when a supported housing log with already exists in the db (2)" do
               let(:bulk_upload) { create(:bulk_upload, :lettings, user:, needstype: 2) }
               let(:attributes) do
                 valid_attributes.merge({ field_5: "S#{scheme.id}",
@@ -416,8 +416,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
                                          field_6: location.old_visible_id,
                                          field_1: owning_org.old_visible_id,
                                          field_122: 0,
-                                         field_41: 4,
-                                         field_124: "88" })
+                                         field_36: 4 })
               end
 
               before do
@@ -432,7 +431,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
               it "adds an error to all the fields used to determine duplicates" do
                 parser.valid?
 
-                error_message = I18n.t("validations.lettings.2024.bulk_upload.duplicate")
+                error_message = I18n.t("validations.lettings.2025.bulk_upload.duplicate")
 
                 [
                   :field_1, # owning_organisation
@@ -444,69 +443,14 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
                   :field_42, # age1
                   :field_43, # sex1
                   :field_46, # ecstat1
-                  :field_124, # chcharge
                   :field_122, # household_charge
                 ].each do |field|
                   expect(parser.errors[field]).to include(error_message)
                 end
 
-                expect(parser.errors[:field_21]).not_to include(error_message)
-                expect(parser.errors[:field_22]).not_to include(error_message)
                 expect(parser.errors[:field_23]).not_to include(error_message)
-              end
-            end
-
-            context "when a supported housing log different chcharges already exists in the db" do
-              let(:bulk_upload) { create(:bulk_upload, :lettings, user:, needstype: 2) }
-              let(:attributes) do
-                valid_attributes.merge({ field_5: "S#{scheme.id}",
-                                         field_4: "2",
-                                         field_11: "2",
-                                         field_6: location.old_visible_id,
-                                         field_1: owning_org.old_visible_id,
-                                         field_122: 0,
-                                         field_41: 4,
-                                         field_124: "88" })
-              end
-              let(:attributes_too) do
-                valid_attributes.merge({ field_5: "S#{scheme.id}",
-                                         field_4: "2",
-                                         field_11: "2",
-                                         field_6: location.old_visible_id,
-                                         field_1: owning_org.old_visible_id,
-                                         field_122: 0,
-                                         field_41: 4,
-                                         field_124: "98" })
-              end
-              let(:parser_too) { described_class.new(attributes_too) }
-
-              before do
-                parser.log.save!
-                parser.instance_variable_set(:@valid, nil)
-              end
-
-              it "is a valid row" do
-                expect(parser_too).to be_valid
-              end
-
-              it "does not add an error to all the fields used to determine duplicates" do
-                parser_too.valid?
-
-                error_message = I18n.t("validations.lettings.2024.bulk_upload.duplicate")
-
-                [
-                  :field_1, # owning_organisation
-                  :field_8, # startdate
-                  :field_9, # startdate
-                  :field_10, # startdate
-                  :field_13, # tenancycode
-                  :field_5, # location
-                  :field_42, # age1
-                  :field_43, # sex1
-                  :field_46, # ecstat1
-                ].each do |field|
-                  expect(parser_too.errors[field]).not_to include(error_message)
-                end
+                expect(parser.errors[:field_24]).not_to include(error_message)
+                expect(parser.errors[:field_25]).not_to include(error_message)
               end
             end
           end
@@ -527,7 +471,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
               it "adds an error to all the fields used to determine duplicates" do
                 parser.valid?
 
-                error_message = I18n.t("validations.lettings.2024.bulk_upload.duplicate")
+                error_message = I18n.t("validations.lettings.2025.bulk_upload.duplicate")
 
                 [
                   :field_1, # owning_organisation
@@ -543,13 +487,13 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
                   expect(parser.errors[field]).to include(error_message)
                 end
 
-                expect(parser.errors[:field_21]).not_to include(error_message)
-                expect(parser.errors[:field_22]).not_to include(error_message)
                 expect(parser.errors[:field_23]).not_to include(error_message)
+                expect(parser.errors[:field_24]).not_to include(error_message)
+                expect(parser.errors[:field_25]).not_to include(error_message)
               end
             end
 
-            context "when a supported housing log with chcharges already exists in the db" do
+            context "when a supported housing log already exists in the db (2)" do
               let(:bulk_upload) { create(:bulk_upload, :lettings, user:, needstype: 2) }
               let(:attributes) do
                 valid_attributes.merge({ field_5: "S#{scheme.id}",
@@ -558,8 +502,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
                                          field_6: location.id,
                                          field_1: owning_org.old_visible_id,
                                          field_122: 0,
-                                         field_41: 4,
-                                         field_124: "88" })
+                                         field_36: 4 })
               end
 
               before do
@@ -574,7 +517,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
               it "adds an error to all the fields used to determine duplicates" do
                 parser.valid?
 
-                error_message = I18n.t("validations.lettings.2024.bulk_upload.duplicate")
+                error_message = I18n.t("validations.lettings.2025.bulk_upload.duplicate")
 
                 [
                   :field_1, # owning_organisation
@@ -586,73 +529,14 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
                   :field_42, # age1
                   :field_43, # sex1
                   :field_46, # ecstat1
-                  :field_124, # chcharge
                   :field_122, # household_charge
                 ].each do |field|
                   expect(parser.errors[field]).to include(error_message)
                 end
 
-                expect(parser.errors[:field_21]).not_to include(error_message)
-                expect(parser.errors[:field_22]).not_to include(error_message)
                 expect(parser.errors[:field_23]).not_to include(error_message)
-              end
-            end
-
-            context "when a supported housing log different chcharges already exists in the db" do
-              let(:bulk_upload) { create(:bulk_upload, :lettings, user:, needstype: 2) }
-              let(:attributes) do
-                valid_attributes.merge({ field_5: "S#{scheme.id}",
-                                         field_4: "2",
-                                         field_11: "2",
-                                         field_6: location.id,
-                                         field_1: owning_org.old_visible_id,
-                                         field_122: 0,
-                                         field_41: 4,
-                                         field_124: "88" })
-              end
-              let(:attributes_too) do
-                valid_attributes.merge({ field_5: "S#{scheme.id}",
-                                         field_4: "2",
-                                         field_11: "2",
-                                         field_6: location.id,
-                                         field_1: owning_org.old_visible_id,
-                                         field_122: 0,
-                                         field_41: 4,
-                                         field_124: "98" })
-              end
-              let(:parser_too) { described_class.new(attributes_too) }
-
-              before do
-                parser.log.save!
-                parser.instance_variable_set(:@valid, nil)
-              end
-
-              it "is a valid row" do
-                expect(parser_too).to be_valid
-              end
-
-              it "does not add an error to all the fields used to determine duplicates" do
-                parser_too.valid?
-
-                error_message = I18n.t("validations.lettings.2024.bulk_upload.duplicate")
-
-                [
-                  :field_1, # owning_organisation
-                  :field_8, # startdate
-                  :field_9, # startdate
-                  :field_10, # startdate
-                  :field_13, # tenancycode
-                  :field_6, # location
-                  :field_42, # age1
-                  :field_43, # sex1
-                  :field_46, # ecstat1
-                  :field_125, # brent
-                  :field_126, # scharge
-                  :field_127, # pscharge
-                  :field_128, # supcharg
-                ].each do |field|
-                  expect(parser_too.errors[field]).not_to include(error_message)
-                end
+                expect(parser.errors[:field_24]).not_to include(error_message)
+                expect(parser.errors[:field_25]).not_to include(error_message)
               end
             end
           end
@@ -661,12 +545,12 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
             let(:attributes) do
               setup_section_params.merge({ field_5: nil,
                                            field_6: nil,
-                                           field_125: 300,
+                                           field_124: 300,
                                            field_123: 1,
                                            field_29: 1,
                                            field_4: 1,
                                            field_11: "2",
-                                           field_23: "E09000008" })
+                                           field_25: "E09000008" })
             end
 
             it "is not a valid row" do
@@ -693,9 +577,9 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
                 :field_9, # startdate
                 :field_10, # startdate
                 :field_6, # location
-                :field_21, # postcode_full
-                :field_22, # postcode_full
                 :field_23, # postcode_full
+                :field_24, # postcode_full
+                :field_25, # postcode_full
                 :field_42, # age1
                 :field_43, # sex1
                 :field_46, # ecstat1
@@ -752,7 +636,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
 
         context "when there is a :skip_bu_error error" do
           let(:managing_org) { create(:organisation, :with_old_visible_id, rent_periods: [4, 1]) }
-          let(:attributes) { valid_attributes.merge({ field_123: 3, field_128: 80 }) }
+          let(:attributes) { valid_attributes.merge({ field_123: 3, field_127: 80 }) }
 
           it "does not add that error" do
             parser.valid?
@@ -769,7 +653,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
 
           it "fetches the question's check_answer_label if it exists" do
             parser.valid?
-            expect(parser.errors[:field_43]).to eql([I18n.t("validations.lettings.2024.bulk_upload.not_answered", question: "lead tenant’s gender identity.")])
+            expect(parser.errors[:field_43]).to eql([I18n.t("validations.lettings.2025.bulk_upload.not_answered", question: "lead tenant’s gender identity.")])
           end
         end
 
@@ -778,7 +662,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
 
           it "only has one error added to the field" do
             parser.valid?
-            expect(parser.errors[:field_112]).to eql([I18n.t("validations.lettings.2024.bulk_upload.not_answered", question: "was the letting made under the Choice-Based Lettings (CBL)?")])
+            expect(parser.errors[:field_112]).to eql([I18n.t("validations.lettings.2025.bulk_upload.not_answered", question: "was the letting made under the Choice-Based Lettings (CBL)?")])
           end
         end
 
@@ -788,7 +672,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
           it "does not add an additional error" do
             parser.valid?
             expect(parser.errors[:field_116].length).to eq(1)
-            expect(parser.errors[:field_116]).to include(match I18n.t("validations.lettings.2024.bulk_upload.invalid_option", question: ""))
+            expect(parser.errors[:field_116]).to include(match I18n.t("validations.lettings.2025.bulk_upload.invalid_option", question: ""))
           end
         end
       end
@@ -825,14 +709,14 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
       end
 
       context "when blank and bulk upload user is support" do
-        let(:bulk_upload) { create(:bulk_upload, :sales, user: create(:user, :support), year: 2024) }
+        let(:bulk_upload) { create(:bulk_upload, :sales, user: create(:user, :support), year: 2025) }
 
         let(:attributes) { setup_section_params.merge(bulk_upload:, field_3: nil) }
 
         it "is not permitted" do
           parser.valid?
           expect(parser.errors[:field_3]).to be_present
-          expect(parser.errors[:field_3]).to include(I18n.t("validations.lettings.2024.bulk_upload.not_answered", question: "what is the CORE username of the account this letting log should be assigned to?"))
+          expect(parser.errors[:field_3]).to include(I18n.t("validations.lettings.2025.bulk_upload.not_answered", question: "what is the CORE username of the account this letting log should be assigned to?"))
         end
 
         it "blocks log creation" do
@@ -914,8 +798,8 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
 
         it "cannot be nulled" do
           parser.valid?
-          expect(parser.errors[:field_5]).to eq([I18n.t("validations.lettings.2024.bulk_upload.not_answered", question: "scheme code.")])
-          expect(parser.errors[:field_6]).to eq([I18n.t("validations.lettings.2024.bulk_upload.not_answered", question: "location code.")])
+          expect(parser.errors[:field_5]).to eq([I18n.t("validations.lettings.2025.bulk_upload.not_answered", question: "scheme code.")])
+          expect(parser.errors[:field_6]).to eq([I18n.t("validations.lettings.2025.bulk_upload.not_answered", question: "location code.")])
         end
       end
 
@@ -941,7 +825,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
           let(:attributes) { { bulk_upload:, field_1: owning_org.old_visible_id, field_2: owning_org.old_visible_id, field_4: "2", field_11: "2", field_5: "S123", field_6: location.id } }
 
           it "returns a setup error" do
-            expect(parser.errors.where(:field_5, category: :setup).map(&:message)).to eq([I18n.t("validations.lettings.2024.bulk_upload.scheme.must_relate_to_org")])
+            expect(parser.errors.where(:field_5, category: :setup).map(&:message)).to eq([I18n.t("validations.lettings.2025.bulk_upload.scheme.must_relate_to_org")])
             expect(parser.errors[:field_6]).to be_blank
           end
         end
@@ -951,7 +835,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
 
           it "returns a setup error" do
             expect(parser.errors[:field_5]).to be_blank
-            expect(parser.errors.where(:field_6, category: :setup).map(&:message)).to eq([I18n.t("validations.lettings.2024.bulk_upload.not_answered", question: "location code.")])
+            expect(parser.errors.where(:field_6, category: :setup).map(&:message)).to eq([I18n.t("validations.lettings.2025.bulk_upload.not_answered", question: "location code.")])
             expect(parser.errors[:field_6].count).to eq(1)
           end
         end
@@ -961,7 +845,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
 
           it "returns a setup error" do
             expect(parser.errors[:field_5]).to be_blank
-            expect(parser.errors.where(:field_6, category: :setup).map(&:message)).to eq([I18n.t("validations.lettings.2024.bulk_upload.location.must_relate_to_org")])
+            expect(parser.errors.where(:field_6, category: :setup).map(&:message)).to eq([I18n.t("validations.lettings.2025.bulk_upload.location.must_relate_to_org")])
           end
         end
 
@@ -990,7 +874,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
 
           it "returns a setup error" do
             expect(parser.errors[:field_5]).to be_blank
-            expect(parser.errors.where(:field_6, category: :setup).map(&:message)).to eq([I18n.t("validations.lettings.2024.bulk_upload.location.must_relate_to_org")])
+            expect(parser.errors.where(:field_6, category: :setup).map(&:message)).to eq([I18n.t("validations.lettings.2025.bulk_upload.location.must_relate_to_org")])
           end
         end
 
@@ -1000,7 +884,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
           let(:attributes) { { bulk_upload:, field_4: "2", field_11: "2", field_5: "S#{other_scheme.id}", field_6: other_location.id, field_1: owning_org.old_visible_id, field_2: owning_org.old_visible_id } }
 
           it "returns a setup error" do
-            expect(parser.errors.where(:field_5, category: :setup).map(&:message)).to eq([I18n.t("validations.lettings.2024.bulk_upload.scheme.must_relate_to_org")])
+            expect(parser.errors.where(:field_5, category: :setup).map(&:message)).to eq([I18n.t("validations.lettings.2025.bulk_upload.scheme.must_relate_to_org")])
             expect(parser.errors[:field_6]).to be_blank
           end
         end
@@ -1080,7 +964,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
 
           it "is not permitted" do
             parser.valid?
-            expect(parser.errors[:field_98]).to include(I18n.t("validations.lettings.2024.bulk_upload.reason.renewal_reason_needed"))
+            expect(parser.errors[:field_98]).to include(I18n.t("validations.lettings.2025.bulk_upload.reason.renewal_reason_needed"))
           end
         end
       end
@@ -1090,7 +974,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
 
         it "returns an error" do
           parser.valid?
-          expect(parser.errors[:field_98]).to include(I18n.t("validations.lettings.2024.bulk_upload.invalid_option", question: "what is the tenant’s main reason for the household leaving their last settled home?"))
+          expect(parser.errors[:field_98]).to include(I18n.t("validations.lettings.2025.bulk_upload.invalid_option", question: "what is the tenant’s main reason for the household leaving their last settled home?"))
         end
       end
     end
@@ -1302,12 +1186,12 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
       end
 
       context "when field_10 is 4 digits instead of 2" do
-        let(:attributes) { setup_section_params.merge({ bulk_upload:, field_10: "2024", field_9: "4", field_8: "5" }) }
+        let(:attributes) { setup_section_params.merge({ bulk_upload:, field_10: "2025", field_9: "4", field_8: "5" }) }
 
         it "correctly sets the date" do
           parser.valid?
           expect(parser.errors[:field_10]).to be_empty
-          expect(parser.log.startdate).to eq(Time.zone.local(2024, 4, 5))
+          expect(parser.log.startdate).to eq(Time.zone.local(2025, 4, 5))
         end
       end
 
@@ -1316,7 +1200,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
 
         it "returns an error" do
           parser.valid?
-          expect(parser.errors[:field_10]).to include(I18n.t("validations.lettings.2024.bulk_upload.startdate.year_not_two_or_four_digits"))
+          expect(parser.errors[:field_10]).to include(I18n.t("validations.lettings.2025.bulk_upload.startdate.year_not_two_or_four_digits"))
         end
       end
 
@@ -1329,9 +1213,8 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
       end
 
       context "when inside of collection year" do
-        let(:attributes) { { bulk_upload:, field_8: "1", field_9: "10", field_10: "23" } }
-
-        let(:bulk_upload) { create(:bulk_upload, :lettings, user:, year: 2022) }
+        let(:attributes) { { bulk_upload:, field_8: "1", field_9: "10", field_10: "25" } }
+        let(:bulk_upload) { create(:bulk_upload, :lettings, user:, year: 2025) }
 
         it "does not return errors" do
           parser.valid?
@@ -1343,14 +1226,14 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
 
       context "when outside of collection year" do
         around do |example|
-          Timecop.freeze(Date.new(2023, 4, 2)) do
+          Timecop.freeze(Date.new(2024, 4, 2)) do
             example.run
           end
         end
 
         let(:attributes) { { bulk_upload:, field_8: "1", field_9: "1", field_10: "23" } }
 
-        let(:bulk_upload) { create(:bulk_upload, :lettings, user:, year: 2023) }
+        let(:bulk_upload) { create(:bulk_upload, :lettings, user:, year: 2024) }
 
         it "returns setup errors" do
           parser.valid?
@@ -1367,7 +1250,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
 
         it "is not permitted as setup error" do
           parser.valid?
-          expect(parser.errors.where(:field_1, category: :setup).map(&:message)).to eql([I18n.t("validations.lettings.2024.bulk_upload.not_answered", question: "owning organisation.")])
+          expect(parser.errors.where(:field_1, category: :setup).map(&:message)).to eql([I18n.t("validations.lettings.2025.bulk_upload.not_answered", question: "owning organisation.")])
         end
 
         it "blocks log creation" do
@@ -1384,7 +1267,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
 
           setup_errors = parser.errors.select { |e| e.options[:category] == :setup }
 
-          expect(setup_errors.find { |e| e.attribute == :field_1 }.message).to eql(I18n.t("validations.lettings.2024.bulk_upload.owning_organisation.not_found"))
+          expect(setup_errors.find { |e| e.attribute == :field_1 }.message).to eql(I18n.t("validations.lettings.2025.bulk_upload.owning_organisation.not_found"))
         end
 
         it "blocks log creation" do
@@ -1403,7 +1286,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
 
           setup_errors = parser.errors.select { |e| e.options[:category] == :setup }
 
-          expect(setup_errors.find { |e| e.attribute == :field_1 }.message).to eql(I18n.t("validations.lettings.2024.bulk_upload.owning_organisation.not_stock_owner"))
+          expect(setup_errors.find { |e| e.attribute == :field_1 }.message).to eql(I18n.t("validations.lettings.2025.bulk_upload.owning_organisation.not_stock_owner"))
         end
 
         it "blocks log creation" do
@@ -1422,7 +1305,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
 
           setup_errors = parser.errors.select { |e| e.options[:category] == :setup }
 
-          expect(setup_errors.find { |e| e.attribute == :field_1 }.message).to eql(I18n.t("validations.lettings.2024.bulk_upload.owning_organisation.not_permitted.not_support"))
+          expect(setup_errors.find { |e| e.attribute == :field_1 }.message).to eql(I18n.t("validations.lettings.2025.bulk_upload.owning_organisation.not_permitted.not_support"))
         end
 
         it "blocks log creation" do
@@ -1491,7 +1374,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
           parser = described_class.new(attributes)
           parser.valid?
           expect(parser).to be_block_log_creation
-          expect(parser.errors[:field_1]).to include(I18n.t("validations.lettings.2024.bulk_upload.owning_organisation.not_permitted.not_support"))
+          expect(parser.errors[:field_1]).to include(I18n.t("validations.lettings.2025.bulk_upload.owning_organisation.not_permitted.not_support"))
         end
       end
 
@@ -1509,7 +1392,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
         it "does not block log creation and does not add an error to field_1" do
           parser = described_class.new(attributes)
           parser.valid?
-          expect(parser.errors[:field_1]).not_to include(I18n.t("validations.lettings.2024.bulk_upload.owning_organisation.not_permitted"))
+          expect(parser.errors[:field_1]).not_to include(I18n.t("validations.lettings.2025.bulk_upload.owning_organisation.not_permitted"))
         end
       end
     end
@@ -1523,7 +1406,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
 
           setup_errors = parser.errors.select { |e| e.options[:category] == :setup }
 
-          expect(setup_errors.find { |e| e.attribute == :field_2 }.message).to eql(I18n.t("validations.lettings.2024.bulk_upload.not_answered", question: "managing organisation."))
+          expect(setup_errors.find { |e| e.attribute == :field_2 }.message).to eql(I18n.t("validations.lettings.2025.bulk_upload.not_answered", question: "managing organisation."))
         end
 
         it "blocks log creation" do
@@ -1540,7 +1423,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
 
           setup_errors = parser.errors.select { |e| e.options[:category] == :setup }
 
-          expect(setup_errors.find { |e| e.attribute == :field_2 }.message).to eql(I18n.t("validations.lettings.2024.bulk_upload.managing_organisation.not_found"))
+          expect(setup_errors.find { |e| e.attribute == :field_2 }.message).to eql(I18n.t("validations.lettings.2025.bulk_upload.managing_organisation.not_found"))
         end
 
         it "blocks log creation" do
@@ -1559,7 +1442,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
 
           setup_errors = parser.errors.select { |e| e.options[:category] == :setup }
 
-          expect(setup_errors.find { |e| e.attribute == :field_2 }.message).to eql(I18n.t("validations.lettings.2024.bulk_upload.managing_organisation.no_relationship"))
+          expect(setup_errors.find { |e| e.attribute == :field_2 }.message).to eql(I18n.t("validations.lettings.2025.bulk_upload.managing_organisation.no_relationship"))
         end
 
         it "blocks log creation" do
@@ -1575,7 +1458,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
 
         it "is reported as a setup error" do
           parser.valid?
-          expect(parser.errors.where(:field_4, category: :setup).map(&:message)).to eql([I18n.t("validations.lettings.2024.bulk_upload.not_answered", question: "needs type.")])
+          expect(parser.errors.where(:field_4, category: :setup).map(&:message)).to eql([I18n.t("validations.lettings.2025.bulk_upload.not_answered", question: "needs type.")])
         end
       end
     end
@@ -1586,7 +1469,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
 
         it "has setup errors on the field" do
           parser.valid?
-          expect(parser.errors.where(:field_7, category: :setup).map(&:message)).to eql([I18n.t("validations.lettings.2024.bulk_upload.not_answered", question: "property renewal.")])
+          expect(parser.errors.where(:field_7, category: :setup).map(&:message)).to eql([I18n.t("validations.lettings.2025.bulk_upload.not_answered", question: "property renewal.")])
         end
       end
 
@@ -1595,7 +1478,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
 
         it "adds a setup error" do
           parser.valid?
-          expect(parser.errors.where(:field_7, category: :setup).map(&:message)).to include(I18n.t("validations.lettings.2024.bulk_upload.invalid_option", question: "is this letting a renewal?"))
+          expect(parser.errors.where(:field_7, category: :setup).map(&:message)).to include(I18n.t("validations.lettings.2025.bulk_upload.invalid_option", question: "is this letting a renewal?"))
         end
       end
     end
@@ -1604,11 +1487,11 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
       context "with a general needs log" do
         context "when a valid UPRN is given" do
           context "and address fields are not given" do
-            let(:attributes) { setup_section_params.merge({ field_4: 1, field_16: "123456789012" }) }
+            let(:attributes) { setup_section_params.merge({ field_4: 1, field_18: "123456789012" }) }
 
             it "does not add errors" do
               parser.valid?
-              %i[field_16 field_17 field_18 field_19 field_20 field_21 field_22].each do |field|
+              %i[field_18 field_19 field_20 field_21 field_22 field_23 field_24].each do |field|
                 expect(parser.errors[field]).to be_empty
               end
             end
@@ -1617,29 +1500,29 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
 
         context "when an invalid UPRN is given" do
           context "and address fields are not given" do
-            let(:attributes) { setup_section_params.merge({ field_4: 1, field_16: "1234567890123" }) }
+            let(:attributes) { setup_section_params.merge({ field_4: 1, field_18: "1234567890123" }) }
 
             it "adds an appropriate error to the UPRN field" do
               parser.valid?
-              expect(parser.errors[:field_16]).to eql(["UPRN must be 12 digits or less."])
+              expect(parser.errors[:field_18]).to eql(["UPRN must be 12 digits or less."])
             end
 
             it "adds errors to missing key address fields" do
               parser.valid?
-              expect(parser.errors[:field_17]).to eql([I18n.t("validations.lettings.2024.bulk_upload.not_answered", question: "address line 1.")])
-              expect(parser.errors[:field_19]).to eql([I18n.t("validations.lettings.2024.bulk_upload.not_answered", question: "town or city.")])
-              expect(parser.errors[:field_21]).to eql([I18n.t("validations.lettings.2024.bulk_upload.not_answered", question: "part 1 of postcode.")])
-              expect(parser.errors[:field_22]).to eql([I18n.t("validations.lettings.2024.bulk_upload.not_answered", question: "part 2 of postcode.")])
+              expect(parser.errors[:field_19]).to eql([I18n.t("validations.lettings.2025.bulk_upload.not_answered", question: "address line 1.")])
+              expect(parser.errors[:field_21]).to eql([I18n.t("validations.lettings.2025.bulk_upload.not_answered", question: "town or city.")])
+              expect(parser.errors[:field_23]).to eql([I18n.t("validations.lettings.2025.bulk_upload.not_answered", question: "part 1 of postcode.")])
+              expect(parser.errors[:field_24]).to eql([I18n.t("validations.lettings.2025.bulk_upload.not_answered", question: "part 2 of postcode.")])
             end
           end
 
           context "and address fields are given" do
-            let(:attributes) { setup_section_params.merge({ field_4: 1, field_16: "1234567890123", field_17: "address line 1", field_19: "town or city", field_21: "AA1", field_22: "1AA" }) }
+            let(:attributes) { setup_section_params.merge({ field_4: 1, field_18: "1234567890123", field_19: "address line 1", field_21: "town or city", field_23: "AA1", field_24: "1AA" }) }
 
             it "adds an error to the UPRN field only" do
               parser.valid?
-              expect(parser.errors[:field_16]).to eql(["UPRN must be 12 digits or less."])
-              %i[field_17 field_19 field_21 field_22].each do |field|
+              expect(parser.errors[:field_18]).to eql(["UPRN must be 12 digits or less."])
+              %i[field_19 field_21 field_23 field_24].each do |field|
                 expect(parser.errors[field]).to be_empty
               end
             end
@@ -1657,29 +1540,29 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
 
             it "adds appropriate errors to UPRN and key address fields" do
               parser.valid?
-              expect(parser.errors[:field_16]).to eql([I18n.t("validations.lettings.2024.bulk_upload.address.not_answered")])
-              expect(parser.errors[:field_17]).to eql([I18n.t("validations.lettings.2024.bulk_upload.address.not_answered")])
-              expect(parser.errors[:field_19]).to eql([I18n.t("validations.lettings.2024.bulk_upload.address.not_answered")])
-              expect(parser.errors[:field_21]).to eql([I18n.t("validations.lettings.2024.bulk_upload.address.not_answered")])
-              expect(parser.errors[:field_22]).to eql([I18n.t("validations.lettings.2024.bulk_upload.address.not_answered")])
+              expect(parser.errors[:field_18]).to eql([I18n.t("validations.lettings.2025.bulk_upload.address.not_answered")])
+              expect(parser.errors[:field_19]).to eql([I18n.t("validations.lettings.2025.bulk_upload.address.not_answered")])
+              expect(parser.errors[:field_21]).to eql([I18n.t("validations.lettings.2025.bulk_upload.address.not_answered")])
+              expect(parser.errors[:field_23]).to eql([I18n.t("validations.lettings.2025.bulk_upload.address.not_answered")])
+              expect(parser.errors[:field_24]).to eql([I18n.t("validations.lettings.2025.bulk_upload.address.not_answered")])
             end
           end
 
           context "and some key address field is missing" do
-            let(:attributes) { setup_section_params.merge({ field_4: 1, field_19: "town or city", field_21: "AA1", field_22: "1AA" }) }
+            let(:attributes) { setup_section_params.merge({ field_4: 1, field_21: "town or city", field_23: "AA1", field_24: "1AA" }) }
 
             it "adds errors to UPRN and the missing key address field" do
               parser.valid?
-              expect(parser.errors[:field_16]).to eql([I18n.t("validations.lettings.2024.bulk_upload.address.not_answered")])
-              expect(parser.errors[:field_17]).to eql([I18n.t("validations.lettings.2024.bulk_upload.address.not_answered")])
-              expect(parser.errors[:field_19]).to be_empty
+              expect(parser.errors[:field_18]).to eql([I18n.t("validations.lettings.2025.bulk_upload.address.not_answered")])
+              expect(parser.errors[:field_19]).to eql([I18n.t("validations.lettings.2025.bulk_upload.address.not_answered")])
               expect(parser.errors[:field_21]).to be_empty
-              expect(parser.errors[:field_22]).to be_empty
+              expect(parser.errors[:field_23]).to be_empty
+              expect(parser.errors[:field_24]).to be_empty
             end
           end
 
           context "and all key address fields are present" do
-            let(:attributes) { setup_section_params.merge({ field_4: 1, field_16: nil, field_17: "address line 1", field_19: "town or city", field_21: "AA1", field_22: "1AA" }) }
+            let(:attributes) { setup_section_params.merge({ field_4: 1, field_18: nil, field_19: "address line 1", field_21: "town or city", field_23: "AA1", field_24: "1AA" }) }
 
             context "and an address can be found with a high enough match rating" do
               before do
@@ -1689,7 +1572,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
 
               it "does not add errors" do
                 parser.valid?
-                %i[field_16 field_17 field_18 field_19 field_20 field_21 field_22].each do |field|
+                %i[field_18 field_19 field_20 field_21 field_22 field_23 field_24].each do |field|
                   expect(parser.errors[field]).to be_empty
                 end
               end
@@ -1703,9 +1586,9 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
 
               it "adds address not found errors to address fields only" do
                 parser.valid?
-                expect(parser.errors[:field_16]).to be_empty
-                %i[field_17 field_18 field_19 field_20 field_21 field_22].each do |field|
-                  expect(parser.errors[field]).to eql([I18n.t("validations.lettings.2024.bulk_upload.address.not_found")])
+                expect(parser.errors[:field_18]).to be_empty
+                %i[field_19 field_20 field_21 field_22 field_23 field_24].each do |field|
+                  expect(parser.errors[field]).to eql([I18n.t("validations.lettings.2025.bulk_upload.address.not_found")])
                 end
               end
             end
@@ -1718,9 +1601,9 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
 
               it "adds address not found errors to address fields only" do
                 parser.valid?
-                expect(parser.errors[:field_16]).to be_empty
-                %i[field_17 field_18 field_19 field_20 field_21 field_22].each do |field|
-                  expect(parser.errors[field]).to eql([I18n.t("validations.lettings.2024.bulk_upload.address.not_determined.one")])
+                expect(parser.errors[:field_18]).to be_empty
+                %i[field_19 field_20 field_21 field_22 field_23 field_24].each do |field|
+                  expect(parser.errors[field]).to eql([I18n.t("validations.lettings.2025.bulk_upload.address.not_determined.one")])
                 end
               end
             end
@@ -1733,9 +1616,9 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
 
               it "adds address not found errors to address fields only" do
                 parser.valid?
-                expect(parser.errors[:field_16]).to be_empty
-                %i[field_17 field_18 field_19 field_20 field_21 field_22].each do |field|
-                  expect(parser.errors[field]).to eql([I18n.t("validations.lettings.2024.bulk_upload.address.not_determined.multiple")])
+                expect(parser.errors[:field_18]).to be_empty
+                %i[field_19 field_20 field_21 field_22 field_23 field_24].each do |field|
+                  expect(parser.errors[field]).to eql([I18n.t("validations.lettings.2025.bulk_upload.address.not_determined.multiple")])
                 end
               end
             end
@@ -1745,11 +1628,11 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
 
       context "with a supported housing log" do
         context "when neither UPRN nor address fields are provided" do
-          let(:attributes) { setup_section_params.merge({ field_4: 2, field_5: "S#{scheme.id}", field_6: location.old_visible_id, field_16: nil, field_17: nil, field_19: nil, field_21: nil, field_22: nil }) }
+          let(:attributes) { setup_section_params.merge({ field_4: 2, field_5: "S#{scheme.id}", field_6: location.old_visible_id, field_18: nil, field_19: nil, field_21: nil, field_23: nil, field_24: nil }) }
 
           it "does not add missing field errors" do
             parser.valid?
-            %i[field_16 field_17 field_18 field_19 field_20 field_21 field_22].each do |field|
+            %i[field_18 field_19 field_20 field_21 field_22 field_23 field_24].each do |field|
               expect(parser.errors[field]).to be_empty
             end
           end
@@ -1757,13 +1640,13 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
       end
     end
 
-    describe "#field_25" do # unitletas
+    describe "#field_17" do # unitletas
       context "when no longer a valid option from previous year" do
-        let(:attributes) { setup_section_params.merge({ field_25: "4" }) }
+        let(:attributes) { setup_section_params.merge({ field_17: "4" }) }
 
         it "returns an error" do
           parser.valid?
-          expect(parser.errors[:field_25]).to be_present
+          expect(parser.errors[:field_17]).to be_present
         end
       end
     end
@@ -1779,7 +1662,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
 
         it "populates with correct error message" do
           parser.valid?
-          expect(parser.errors[:field_27]).to eql([I18n.t("validations.lettings.2024.bulk_upload.not_answered", question: "type of building.")])
+          expect(parser.errors[:field_27]).to eql([I18n.t("validations.lettings.2025.bulk_upload.not_answered", question: "type of building.")])
         end
       end
     end
@@ -1878,7 +1761,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
 
         it "adds an error to field_45" do
           parser.valid?
-          expect(parser.errors["field_45"]).to include(I18n.t("validations.lettings.2024.bulk_upload.nationality.invalid"))
+          expect(parser.errors["field_45"]).to include(I18n.t("validations.lettings.2025.bulk_upload.nationality.invalid"))
         end
       end
     end
@@ -1917,17 +1800,17 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
       end
 
       context "when soft validation is triggered and not required" do
-        let(:attributes) { setup_section_params.merge({ field_125: 120, field_126: 120, field_127: 120, field_128: 120, field_123: 1, field_29: 1, field_4: 1, field_11: "2", field_23: "E09000008" }) }
+        let(:attributes) { setup_section_params.merge({ field_124: 120, field_125: 120, field_126: 120, field_127: 120, field_123: 1, field_29: 1, field_4: 1, field_11: "2", field_25: "E09000008" }) }
 
         it "adds an error to the relevant fields" do
           parser.valid?
-          expect(parser.errors.where(:field_125, category: :soft_validation)).to be_present
+          expect(parser.errors.where(:field_124, category: :soft_validation)).to be_present
         end
 
         it "populates with correct error message" do
           parser.valid?
-          expect(parser.errors.where(:field_125, category: :soft_validation).count).to be(1)
-          expect(parser.errors.where(:field_125, category: :soft_validation).first.message).to eql("You told us the rent is £120.00 every week. This is higher than we would expect.")
+          expect(parser.errors.where(:field_124, category: :soft_validation).count).to be(1)
+          expect(parser.errors.where(:field_124, category: :soft_validation).first.message).to eql("You told us the rent is £120.00 every week. This is higher than we would expect.")
         end
       end
 
@@ -1976,7 +1859,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
     end
 
     describe "#uprn" do
-      let(:attributes) { { bulk_upload:, field_4: 1, field_16: "12" } }
+      let(:attributes) { { bulk_upload:, field_4: 1, field_18: "12" } }
 
       it "sets to given value" do
         expect(parser.log.uprn).to eql("12")
@@ -1985,7 +1868,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
 
     describe "#uprn_known" do
       context "when uprn specified" do
-        let(:attributes) { { bulk_upload:, field_4: 1, field_16: "12" } }
+        let(:attributes) { { bulk_upload:, field_4: 1, field_18: "12" } }
 
         it "sets to 1" do
           expect(parser.log.uprn_known).to be(1)
@@ -1994,7 +1877,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
       end
 
       context "when uprn blank" do
-        let(:attributes) { { bulk_upload:, field_4: 1, field_16: "" } }
+        let(:attributes) { { bulk_upload:, field_4: 1, field_18: "" } }
 
         it "sets to 0" do
           expect(parser.log.uprn_known).to be(0)
@@ -2003,7 +1886,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
     end
 
     describe "#address_line1" do
-      let(:attributes) { { bulk_upload:, field_4: 1, field_17: "123 Sesame Street" } }
+      let(:attributes) { { bulk_upload:, field_4: 1, field_19: "123 Sesame Street" } }
 
       it "sets to given value" do
         expect(parser.log.address_line1).to eql("123 Sesame Street")
@@ -2011,7 +1894,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
     end
 
     describe "#address_line2" do
-      let(:attributes) { { bulk_upload:, field_4: 1, field_18: "Cookie Town" } }
+      let(:attributes) { { bulk_upload:, field_4: 1, field_20: "Cookie Town" } }
 
       it "sets to given value" do
         expect(parser.log.address_line2).to eql("Cookie Town")
@@ -2019,7 +1902,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
     end
 
     describe "#town_or_city" do
-      let(:attributes) { { bulk_upload:, field_4: 1, field_19: "London" } }
+      let(:attributes) { { bulk_upload:, field_4: 1, field_21: "London" } }
 
       it "sets to given value" do
         expect(parser.log.town_or_city).to eql("London")
@@ -2027,7 +1910,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
     end
 
     describe "#county" do
-      let(:attributes) { { bulk_upload:, field_4: 1, field_20: "Greater London" } }
+      let(:attributes) { { bulk_upload:, field_4: 1, field_22: "Greater London" } }
 
       it "sets to given value" do
         expect(parser.log.county).to eql("Greater London")
@@ -2036,7 +1919,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
 
     describe "address related fields for supported housing logs" do
       context "when address data is provided for a supported housing log" do
-        let(:attributes) { { bulk_upload:, field_4: 2, field_16: nil, field_17: "Flat 1", field_18: "Example Place", field_19: "London", field_20: "Greater London", field_21: "SW1A", field_22: "1AA" } }
+        let(:attributes) { { bulk_upload:, field_4: 2, field_18: nil, field_19: "Flat 1", field_20: "Example Place", field_21: "London", field_22: "Greater London", field_23: "SW1A", field_24: "1AA" } }
 
         it "is not set on the log" do
           expect(parser.log.uprn).to be_nil
@@ -2208,7 +2091,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
 
         it "adds an error" do
           parser.valid?
-          expect(parser.errors[:field_112]).to include(I18n.t("validations.lettings.2024.bulk_upload.invalid_option", question: "was the letting made under the Choice-Based Lettings (CBL)?"))
+          expect(parser.errors[:field_112]).to include(I18n.t("validations.lettings.2025.bulk_upload.invalid_option", question: "was the letting made under the Choice-Based Lettings (CBL)?"))
         end
       end
     end
@@ -2235,7 +2118,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
 
         it "adds an error" do
           parser.valid?
-          expect(parser.errors[:field_114]).to include(I18n.t("validations.lettings.2024.bulk_upload.invalid_option", question: "was the letting made under the Common Housing Register (CHR)?"))
+          expect(parser.errors[:field_114]).to include(I18n.t("validations.lettings.2025.bulk_upload.invalid_option", question: "was the letting made under the Common Housing Register (CHR)?"))
         end
       end
     end
@@ -2262,7 +2145,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
 
         it "adds an error" do
           parser.valid?
-          expect(parser.errors[:field_113]).to include(I18n.t("validations.lettings.2024.bulk_upload.invalid_option", question: "was the letting made under the Common Allocation Policy (CAP)?"))
+          expect(parser.errors[:field_113]).to include(I18n.t("validations.lettings.2025.bulk_upload.invalid_option", question: "was the letting made under the Common Allocation Policy (CAP)?"))
         end
       end
     end
@@ -2289,7 +2172,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
 
         it "adds an error" do
           parser.valid?
-          expect(parser.errors[:field_115]).to include(I18n.t("validations.lettings.2024.bulk_upload.invalid_option", question: "was the letting made under the Accessible Register?"))
+          expect(parser.errors[:field_115]).to include(I18n.t("validations.lettings.2025.bulk_upload.invalid_option", question: "was the letting made under the Accessible Register?"))
         end
       end
     end
@@ -2380,23 +2263,23 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
       let(:attributes) do
         {
           bulk_upload:,
-          field_47: "P",
-          field_51: "C",
-          field_55: "X",
-          field_59: "R",
-          field_63: "P",
-          field_67: "C",
-          field_71: "X",
+          field_47: "1",
+          field_51: "2",
+          field_55: "2",
+          field_59: "3",
+          field_63: "1",
+          field_67: "2",
+          field_71: "2",
         }
       end
 
       it "sets value from correct mapping", aggregate_failures: true do
         expect(parser.log.relat2).to eq("P")
-        expect(parser.log.relat3).to eq("C")
+        expect(parser.log.relat3).to eq("X")
         expect(parser.log.relat4).to eq("X")
         expect(parser.log.relat5).to eq("R")
         expect(parser.log.relat6).to eq("P")
-        expect(parser.log.relat7).to eq("C")
+        expect(parser.log.relat7).to eq("X")
         expect(parser.log.relat8).to eq("X")
       end
     end
@@ -2428,7 +2311,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
     end
 
     describe "#unitletas" do
-      let(:attributes) { { bulk_upload:, field_25: "1" } }
+      let(:attributes) { { bulk_upload:, field_17: "1" } }
 
       it "sets value from correct mapping" do
         expect(parser.log.unitletas).to eq(1)
@@ -2436,7 +2319,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
     end
 
     describe "#rsnvac" do
-      let(:attributes) { { bulk_upload:, field_24: "5" } }
+      let(:attributes) { { bulk_upload:, field_16: "5" } }
 
       it "sets value from correct mapping" do
         expect(parser.log.rsnvac).to eq(5)
@@ -2444,7 +2327,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
     end
 
     describe "#sheltered" do
-      let(:attributes) { { bulk_upload:, field_41: "1" } }
+      let(:attributes) { { bulk_upload:, field_36: "1" } }
 
       it "sets value from correct mapping" do
         expect(parser.log.sheltered).to eq(1)
@@ -2495,7 +2378,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
     end
 
     describe "#tenancyother" do
-      let(:attributes) { { bulk_upload:, field_39: "some other tenancy" } }
+      let(:attributes) { { bulk_upload:, field_40: "some other tenancy" } }
 
       it "sets value to given free text string" do
         expect(parser.log.tenancyother).to eql("some other tenancy")
@@ -2503,7 +2386,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
     end
 
     describe "#tenancylength" do
-      let(:attributes) { { bulk_upload:, field_40: "2" } }
+      let(:attributes) { { bulk_upload:, field_41: "2" } }
 
       it "sets value to given free text string" do
         expect(parser.log.tenancylength).to eq(2)
@@ -2562,105 +2445,59 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
       end
     end
 
-    describe "#chcharge" do
-      let(:attributes) { setup_section_params.merge({ field_124: "123.45", field_125: "123.45", field_126: "123.45", field_127: "123.45", field_128: "123.45" }) }
-
-      it "sets value given" do
-        expect(parser.log.chcharge).to eq(123.45)
-      end
-
-      it "sets is care home to yes" do
-        expect(parser.log.is_carehome).to eq(1)
-      end
-
-      it "clears any other given charges" do
-        parser.log.save!
-        expect(parser.log.tcharge).to be_nil
-        expect(parser.log.brent).to be_nil
-        expect(parser.log.supcharg).to be_nil
-        expect(parser.log.pscharge).to be_nil
-        expect(parser.log.scharge).to be_nil
-      end
-    end
-
     describe "#supcharg" do
-      let(:attributes) { setup_section_params.merge({ field_125: "330", field_126: "0", field_127: "0", field_128: "123.45" }) }
+      let(:attributes) { setup_section_params.merge({ field_124: "330", field_125: "0", field_126: "0", field_127: "123.45" }) }
 
       it "sets value given" do
         expect(parser.log.supcharg).to eq(123.45)
       end
 
       context "when other charges are not given" do
-        context "and it is carehome" do
-          let(:attributes) { setup_section_params.merge({ field_128: "123.45", field_124: "123.45", field_125: nil, field_126: nil, field_127: nil }) }
+        let(:attributes) { setup_section_params.merge({ field_127: "123.45", field_124: nil, field_125: nil, field_126: nil }) }
 
-          it "does not set charges values" do
-            parser.log.save!
-            expect(parser.log.tcharge).to be_nil
-            expect(parser.log.brent).to be_nil
-            expect(parser.log.supcharg).to be_nil
-            expect(parser.log.pscharge).to be_nil
-            expect(parser.log.scharge).to be_nil
-          end
-
-          it "does not add errors to missing charges" do
-            parser.valid?
-            expect(parser.errors[:field_125]).to be_empty
-            expect(parser.errors[:field_126]).to be_empty
-            expect(parser.errors[:field_127]).to be_empty
-            expect(parser.errors[:field_128]).to be_empty
-          end
+        it "does not set charges values" do
+          parser.log.save!
+          expect(parser.log.tcharge).to be_nil
+          expect(parser.log.brent).to be_nil
+          expect(parser.log.supcharg).to be_nil
+          expect(parser.log.pscharge).to be_nil
+          expect(parser.log.scharge).to be_nil
         end
 
-        context "and it is not carehome" do
-          let(:attributes) { setup_section_params.merge({ field_128: "123.45", field_124: nil, field_125: nil, field_126: nil, field_127: nil }) }
-
-          it "does not set charges values" do
-            parser.log.save!
-            expect(parser.log.tcharge).to be_nil
-            expect(parser.log.brent).to be_nil
-            expect(parser.log.supcharg).to be_nil
-            expect(parser.log.pscharge).to be_nil
-            expect(parser.log.scharge).to be_nil
-          end
-
-          it "adds an error to all missing charges" do
-            parser.valid?
-            expect(parser.errors[:field_125]).to eql([I18n.t("validations.lettings.2024.bulk_upload.charges.missing_charges", sentence_fragment: "basic rent")])
-            expect(parser.errors[:field_126]).to eql([I18n.t("validations.lettings.2024.bulk_upload.charges.missing_charges", sentence_fragment: "service charge")])
-            expect(parser.errors[:field_127]).to eql([I18n.t("validations.lettings.2024.bulk_upload.charges.missing_charges", sentence_fragment: "personal service charge")])
-            expect(parser.errors[:field_128]).to eql([I18n.t("validations.lettings.2024.bulk_upload.charges.missing_charges", sentence_fragment: "basic rent"), I18n.t("validations.lettings.2024.bulk_upload.charges.missing_charges", sentence_fragment: "service charge"), I18n.t("validations.lettings.2024.bulk_upload.charges.missing_charges", sentence_fragment: "personal service charge")])
-          end
+        it "adds an error to all missing charges" do
+          parser.valid?
+          expect(parser.errors[:field_124]).to eql([I18n.t("validations.lettings.2025.bulk_upload.charges.missing_charges", sentence_fragment: "basic rent")])
+          expect(parser.errors[:field_125]).to eql([I18n.t("validations.lettings.2025.bulk_upload.charges.missing_charges", sentence_fragment: "service charge")])
+          expect(parser.errors[:field_126]).to eql([I18n.t("validations.lettings.2025.bulk_upload.charges.missing_charges", sentence_fragment: "personal service charge")])
+          expect(parser.errors[:field_127]).to eql([I18n.t("validations.lettings.2025.bulk_upload.charges.missing_charges", sentence_fragment: "basic rent"), I18n.t("validations.lettings.2025.bulk_upload.charges.missing_charges", sentence_fragment: "service charge"), I18n.t("validations.lettings.2025.bulk_upload.charges.missing_charges", sentence_fragment: "personal service charge")])
         end
       end
 
       context "when supscharg is not given" do
-        context "and it is not carehome" do
-          let(:attributes) { setup_section_params.merge({ field_123: 1, field_124: nil, field_125: "350.45", field_126: "0", field_127: "0", field_128: nil }) }
+        let(:attributes) { setup_section_params.merge({ field_123: 1, field_124: "350.45", field_125: "0", field_126: "0", field_127: nil }) }
 
-          it "does not set charges values" do
-            parser.log.save!
-            expect(parser.log.period).not_to be_nil
-            expect(parser.log.tcharge).to be_nil
-            expect(parser.log.brent).to be_nil
-            expect(parser.log.supcharg).to be_nil
-            expect(parser.log.pscharge).to be_nil
-            expect(parser.log.scharge).to be_nil
-          end
+        it "does not set charges values" do
+          parser.log.save!
+          expect(parser.log.period).not_to be_nil
+          expect(parser.log.tcharge).to be_nil
+          expect(parser.log.brent).to be_nil
+          expect(parser.log.supcharg).to be_nil
+          expect(parser.log.pscharge).to be_nil
+          expect(parser.log.scharge).to be_nil
+        end
 
-          it "adds an error to all charges" do
-            parser.valid?
-            expect(parser.errors[:field_125]).to eql([I18n.t("validations.lettings.2024.bulk_upload.charges.missing_charges", sentence_fragment: "support charge")])
-            expect(parser.errors[:field_126]).to eql([I18n.t("validations.lettings.2024.bulk_upload.charges.missing_charges", sentence_fragment: "support charge")])
-            expect(parser.errors[:field_127]).to eql([I18n.t("validations.lettings.2024.bulk_upload.charges.missing_charges", sentence_fragment: "support charge")])
-            expect(parser.errors[:field_128]).to eql([I18n.t("validations.lettings.2024.bulk_upload.charges.missing_charges", sentence_fragment: "support charge")])
-          end
+        it "adds an error to all charges" do
+          parser.valid?
+          expect(parser.errors[:field_124]).to eql([I18n.t("validations.lettings.2025.bulk_upload.charges.missing_charges", sentence_fragment: "support charge")])
+          expect(parser.errors[:field_125]).to eql([I18n.t("validations.lettings.2025.bulk_upload.charges.missing_charges", sentence_fragment: "support charge")])
+          expect(parser.errors[:field_126]).to eql([I18n.t("validations.lettings.2025.bulk_upload.charges.missing_charges", sentence_fragment: "support charge")])
+          expect(parser.errors[:field_127]).to eql([I18n.t("validations.lettings.2025.bulk_upload.charges.missing_charges", sentence_fragment: "support charge")])
         end
       end
     end
 
     describe "#pscharge" do
-      let(:attributes) { { bulk_upload:, field_125: "111.45", field_126: "0", field_127: "123.45", field_128: "0" } }
+      let(:attributes) { { bulk_upload:, field_124: "111.45", field_125: "0", field_126: "123.45", field_127: "0" } }
 
       it "sets value given" do
         expect(parser.log.pscharge).to eq(123.45)
@@ -2668,7 +2505,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
     end
 
     describe "#scharge" do
-      let(:attributes) { { bulk_upload:, field_125: "111.45", field_126: "123.45", field_127: "0", field_128: "0" } }
+      let(:attributes) { { bulk_upload:, field_124: "111.45", field_125: "123.45", field_126: "0", field_127: "0" } }
 
       it "sets value given" do
         expect(parser.log.scharge).to eq(123.45)
@@ -2762,14 +2599,14 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
     end
 
     describe "#postcode_full" do
-      let(:attributes) { { bulk_upload:, field_4: 1, field_21: " EC1N ", field_22: " 2TD " } }
+      let(:attributes) { { bulk_upload:, field_4: 1, field_23: " EC1N ", field_24: " 2TD " } }
 
       it "strips whitespace" do
         expect(parser.log.postcode_full).to eql("EC1N 2TD")
       end
 
       context "when a partial postcode is provided" do
-        let(:attributes) { { bulk_upload:, field_4: 1, field_21: "EC1N", field_22: "" } }
+        let(:attributes) { { bulk_upload:, field_4: 1, field_23: "EC1N", field_24: "" } }
 
         it "is set to the partial value" do
           expect(parser.log.postcode_full).to eql("EC1N")
@@ -2778,7 +2615,7 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
     end
 
     describe "#la" do
-      let(:attributes) { { bulk_upload:, field_4: 1, field_23: "E07000223" } }
+      let(:attributes) { { bulk_upload:, field_4: 1, field_25: "E07000223" } }
 
       it "sets to given value" do
         expect(parser.log.la).to eql("E07000223")
@@ -2812,16 +2649,16 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
     end
 
     describe "#first_time_property_let_as_social_housing" do
-      context "when field_24 is 15, 16, or 17" do
-        let(:attributes) { { bulk_upload:, field_24: %w[15 16 17].sample } }
+      context "when field_16 is 15, 16, or 17" do
+        let(:attributes) { { bulk_upload:, field_16: %w[15 16 17].sample } }
 
         it "sets to 1" do
           expect(parser.log.first_time_property_let_as_social_housing).to eq(1)
         end
       end
 
-      context "when field_24 is not 15, 16, or 17" do
-        let(:attributes) { { bulk_upload:, field_24: "1" } }
+      context "when field_16 is not 15, 16, or 17" do
+        let(:attributes) { { bulk_upload:, field_16: "1" } }
 
         it "sets to 0" do
           expect(parser.log.first_time_property_let_as_social_housing).to eq(0)
@@ -2880,8 +2717,8 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
 
         it "sets error on housingneeds a and b" do
           parser.valid?
-          expect(parser.errors[:field_79]).to include(I18n.t("validations.lettings.2024.bulk_upload.housingneeds_type.only_one_option_permitted"))
-          expect(parser.errors[:field_80]).to include(I18n.t("validations.lettings.2024.bulk_upload.housingneeds_type.only_one_option_permitted"))
+          expect(parser.errors[:field_79]).to include(I18n.t("validations.lettings.2025.bulk_upload.housingneeds_type.only_one_option_permitted"))
+          expect(parser.errors[:field_80]).to include(I18n.t("validations.lettings.2025.bulk_upload.housingneeds_type.only_one_option_permitted"))
           expect(parser.errors[:field_81]).to be_blank
         end
       end
@@ -2891,8 +2728,8 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
 
         it "sets error on housingneeds a and c" do
           parser.valid?
-          expect(parser.errors[:field_79]).to include(I18n.t("validations.lettings.2024.bulk_upload.housingneeds_type.only_one_option_permitted"))
-          expect(parser.errors[:field_81]).to include(I18n.t("validations.lettings.2024.bulk_upload.housingneeds_type.only_one_option_permitted"))
+          expect(parser.errors[:field_79]).to include(I18n.t("validations.lettings.2025.bulk_upload.housingneeds_type.only_one_option_permitted"))
+          expect(parser.errors[:field_81]).to include(I18n.t("validations.lettings.2025.bulk_upload.housingneeds_type.only_one_option_permitted"))
           expect(parser.errors[:field_80]).to be_blank
         end
       end
@@ -2902,8 +2739,8 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
 
         it "sets error on housingneeds b and c" do
           parser.valid?
-          expect(parser.errors[:field_80]).to include(I18n.t("validations.lettings.2024.bulk_upload.housingneeds_type.only_one_option_permitted"))
-          expect(parser.errors[:field_81]).to include(I18n.t("validations.lettings.2024.bulk_upload.housingneeds_type.only_one_option_permitted"))
+          expect(parser.errors[:field_80]).to include(I18n.t("validations.lettings.2025.bulk_upload.housingneeds_type.only_one_option_permitted"))
+          expect(parser.errors[:field_81]).to include(I18n.t("validations.lettings.2025.bulk_upload.housingneeds_type.only_one_option_permitted"))
           expect(parser.errors[:field_79]).to be_blank
         end
       end
@@ -2913,8 +2750,8 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
 
         it "sets error on housingneeds a and g" do
           parser.valid?
-          expect(parser.errors[:field_83]).to include(I18n.t("validations.lettings.2024.bulk_upload.housingneeds.no_disabled_needs_conjunction"))
-          expect(parser.errors[:field_79]).to include(I18n.t("validations.lettings.2024.bulk_upload.housingneeds.no_disabled_needs_conjunction"))
+          expect(parser.errors[:field_83]).to include(I18n.t("validations.lettings.2025.bulk_upload.housingneeds.no_disabled_needs_conjunction"))
+          expect(parser.errors[:field_79]).to include(I18n.t("validations.lettings.2025.bulk_upload.housingneeds.no_disabled_needs_conjunction"))
           expect(parser.errors[:field_80]).to be_blank
           expect(parser.errors[:field_81]).to be_blank
         end
@@ -2937,8 +2774,8 @@ RSpec.describe BulkUpload::Lettings::Year2025::RowParser do
 
         it "sets error on housingneeds a and h" do
           parser.valid?
-          expect(parser.errors[:field_84]).to include(I18n.t("validations.lettings.2024.bulk_upload.housingneeds.dont_know_disabled_needs_conjunction"))
-          expect(parser.errors[:field_79]).to include(I18n.t("validations.lettings.2024.bulk_upload.housingneeds.dont_know_disabled_needs_conjunction"))
+          expect(parser.errors[:field_84]).to include(I18n.t("validations.lettings.2025.bulk_upload.housingneeds.dont_know_disabled_needs_conjunction"))
+          expect(parser.errors[:field_79]).to include(I18n.t("validations.lettings.2025.bulk_upload.housingneeds.dont_know_disabled_needs_conjunction"))
           expect(parser.errors[:field_80]).to be_blank
           expect(parser.errors[:field_81]).to be_blank
         end
