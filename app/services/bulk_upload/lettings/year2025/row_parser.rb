@@ -143,6 +143,7 @@ class BulkUpload::Lettings::Year2025::RowParser
     4 => 3,
     5 => 4,
     6 => 5,
+    7 => 6,
   }.freeze
 
   ERROR_BASE_KEY = "validations.lettings.2025.bulk_upload".freeze
@@ -290,7 +291,7 @@ class BulkUpload::Lettings::Year2025::RowParser
               category: :setup,
             },
             inclusion: {
-              in: (1..6).to_a,
+              in: (1..7).to_a,
               message: I18n.t("#{ERROR_BASE_KEY}.invalid_option", question: "rent type."),
               unless: -> { field_11.blank? },
               category: :setup,
