@@ -99,7 +99,7 @@ FactoryBot.define do
       waityear { 7 }
       postcode_known { 1 }
       postcode_full { "SW1A 1AA" }
-      address_search { "10033544614" }
+      address_search { "10033558653" }
       reasonpref { 1 }
       cbl { 0 }
       chr { 1 }
@@ -172,7 +172,7 @@ FactoryBot.define do
           log.address_line1_input = log.address_line1
           log.postcode_full_input = log.postcode_full
           log.nationality_all_group = 826
-          log.uprn = "10033544614"
+          log.uprn = "10033558653"
           log.uprn_selection = 1
         end
       end
