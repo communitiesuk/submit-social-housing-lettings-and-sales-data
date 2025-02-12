@@ -52,9 +52,9 @@ RSpec.describe Form::Lettings::Questions::Sheltered, type: :model do
 
     it "has the correct answer_options" do
       expect(question.answer_options).to eq({
-        "1" => { "value" => "Yes – sheltered housing for tenants with low support needs" },
+        "7" => { "value" => "Yes – for tenants with low support needs" },
         "2" => { "value" => "Yes – extra care housing" },
-        "7" => { "value" => "Yes - other" },
+        "8" => { "value" => "Yes – other" },
         "3" => { "value" => "No" },
         "divider" => { "value" => true },
         "4" => { "value" => "Don’t know" },
