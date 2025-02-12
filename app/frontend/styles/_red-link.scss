@@ -9,6 +9,10 @@
   color: govuk-colour("red");
 }
 
+.app-red-text {
+  color: govuk-colour("red");
+}
+
 .app-red-link:hover {
   color: govuk-shade(govuk-colour("red"), 20);
 }

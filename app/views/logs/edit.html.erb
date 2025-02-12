@@ -37,6 +37,7 @@
       </p>
     <% end %>
 
+    <%= deadline_text(@log) %>
     <%= render "tasklist" %>
 
     <%= edit_actions_for_log(@log, bulk_upload_filter_applied) %>

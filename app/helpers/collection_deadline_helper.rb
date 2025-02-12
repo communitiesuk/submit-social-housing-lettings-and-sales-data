@@ -61,11 +61,12 @@ module CollectionDeadlineHelper
       first_quarter(year).merge(quarter: "Q1"),
       second_quarter(year).merge(quarter: "Q2"),
       third_quarter(year).merge(quarter: "Q3"),
+      fourth_quarter(year).merge(quarter: "Q4"),
     ]
   end
 
   def quarter_for_date(date: Time.zone.now)
-    quarters = quarter_dates(current_collection_start_year)
+    quarters = quarter_dates(collection_start_year_for_date(date))
 
     quarter = quarters.find { |q| date.between?(q[:start_date], q[:cutoff_date] + 1.day) }
 
