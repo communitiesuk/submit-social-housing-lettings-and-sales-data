@@ -16,66 +16,30 @@ class BulkUpload::LettingsLogToCsv
 
   def to_csv_row(seed: nil)
     year = log.collection_start_year
-    case year
-    when 2022
-      to_2022_csv_row(seed:)
-    when 2023
-      to_2023_csv_row(seed:)
-    when 2024
-      to_2024_csv_row(seed:)
-    when 2025
-      to_2025_csv_row(seed:)
-    else
-      raise NotImplementedError "No mapping function implemented for year #{year}"
-    end
+    send("to_#{year}_csv_row", seed:)
+  rescue NoMethodError
+    raise NotImplementedError, "No mapping function implemented for year #{year}"
   end
 
   def to_row
     year = log.collection_start_year
-    case year
-    when 2022
-      to_2022_row
-    when 2023
-      to_2023_row
-    when 2024
-      to_2024_row
-    when 2025
-      to_2025_row
-    else
-      raise NotImplementedError "No mapping function implemented for year #{year}"
-    end
+    send("to_#{year}_row")
+  rescue NoMethodError
+    raise NotImplementedError "No mapping function implemented for year #{year}"
   end
 
   def default_field_numbers_row(seed: nil)
     year = log.collection_start_year
-    case year
-    when 2022
-      default_2022_field_numbers_row(seed:)
-    when 2023
-      default_2023_field_numbers_row(seed:)
-    when 2024
-      default_2024_field_numbers_row(seed:)
-    when 2025
-      default_2025_field_numbers_row(seed:)
-    else
-      raise NotImplementedError "No mapping function implemented for year #{year}"
-    end
+    send("default_#{year}_field_numbers_row", seed:)
+  rescue NoMethodError
+    raise NotImplementedError "No mapping function implemented for year #{year}"
   end
 
   def default_field_numbers
     year = log.collection_start_year
-    case year
-    when 2022
-      default_2022_field_numbers
-    when 2023
-      default_2023_field_numbers
-    when 2024
-      default_2024_field_numbers
-    when 2025
-      default_2025_field_numbers
-    else
-      raise NotImplementedError "No mapping function implemented for year #{year}"
-    end
+    send("default_#{year}_field_numbers")
+  rescue NoMethodError
+    raise NotImplementedError "No mapping function implemented for year #{year}"
   end
 
   def to_2022_csv_row(seed: nil)
@@ -192,18 +156,18 @@ class BulkUpload::LettingsLogToCsv
       log.tenancycode,
       log.propcode,
       log.declaration,
-      log.unittype_gn,
+      log.rsnvac,
       log.unitletas,
       log.uprn,
       log.address_line1&.tr(",", " "),
       log.address_line2&.tr(",", " "), # 20
+
       log.town_or_city&.tr(",", " "),
       log.county&.tr(",", " "),
-
       ((log.postcode_full || "").split(" ") || [""]).first,
       ((log.postcode_full || "").split(" ") || [""]).last,
       log.la,
-      log.rsnvac,
+      log.unittype_gn,
       log.builtype,
       log.wchair,
       log.beds,
@@ -226,34 +190,34 @@ class BulkUpload::LettingsLogToCsv
       log.ethnic,
       log.nationality_all_group,
       log.ecstat1,
-      log.relat2,
+      relat_number(log.relat2),
       log.age2 || overrides[:age2],
       log.sex2,
       log.ecstat2, # 50
 
-      log.relat3,
+      relat_number(log.relat3),
       log.age3 || overrides[:age3],
       log.sex3,
       log.ecstat3,
-      log.relat4,
+      relat_number(log.relat4),
       log.age4 || overrides[:age4],
       log.sex4,
       log.ecstat4,
-      log.relat5,
+      relat_number(log.relat5),
       log.age5 || overrides[:age5], # 60
 
       log.sex5,
       log.ecstat5,
-      log.relat6,
+      relat_number(log.relat6),
       log.age6 || overrides[:age6],
       log.sex6,
       log.ecstat6,
-      log.relat7,
+      relat_number(log.relat7),
       log.age7 || overrides[:age7],
       log.sex7,
       log.ecstat7, # 70
 
-      log.relat8,
+      relat_number(log.relat8),
       log.age8 || overrides[:age8],
       log.sex8,
       log.ecstat8,
@@ -724,6 +688,17 @@ private
       log.hhregresstill
     else
       log.hhregres
+    end
+  end
+
+  def relat_number(value)
+    case value
+    when "P"
+      1
+    when "R"
+      3
+    when "C", "X"
+      2
     end
   end
 end
