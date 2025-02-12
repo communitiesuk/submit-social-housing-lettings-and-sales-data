@@ -79,7 +79,7 @@ module TasklistHelper
     deadline_for_log = log_quarter.cutoff_date
 
     if deadline_for_log > Time.zone.now
-      "<p class=\"govuk-body\">Deadline: #{log_quarter.cutoff_date.strftime('%A %-d %B %Y')}.<p>".html_safe
+      "<p class=\"govuk-body\">#{log_quarter.quarter} Deadline: #{log_quarter.cutoff_date.strftime('%A %-d %B %Y')}.<p>".html_safe
     else
       "<p class=\"govuk-body app-red-text\"><strong>Overdue: #{log_quarter.quarter} deadline #{log_quarter.cutoff_date.strftime('%A %-d %B %Y')}.</strong></p>".html_safe
     end
