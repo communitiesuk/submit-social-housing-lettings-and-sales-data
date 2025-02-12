@@ -35,6 +35,8 @@ class TestDataController < ApplicationController
     end
   end
 
+  def create_2025_test_sales_bulk_upload; end
+
   def create_test_sales_log
     return render_not_found unless FeatureToggle.create_test_logs_enabled?
 
