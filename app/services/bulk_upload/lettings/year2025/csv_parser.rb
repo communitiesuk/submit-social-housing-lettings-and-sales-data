@@ -3,9 +3,9 @@ require "csv"
 class BulkUpload::Lettings::Year2025::CsvParser
   include CollectionTimeHelper
 
-  FIELDS = 130
-  MAX_COLUMNS = 131
-  FORM_YEAR = 2024
+  FIELDS = 129
+  MAX_COLUMNS = 130
+  FORM_YEAR = 2025
 
   attr_reader :path
 
@@ -26,7 +26,7 @@ class BulkUpload::Lettings::Year2025::CsvParser
   end
 
   def cols
-    @cols ||= ("A".."EA").to_a
+    @cols ||= ("A".."DZ").to_a
   end
 
   def row_parsers
@@ -37,7 +37,7 @@ class BulkUpload::Lettings::Year2025::CsvParser
 
       hash = Hash[field_numbers.zip(stripped_row)]
 
-      BulkUpload::Lettings::Year2024::RowParser.new(hash)
+      BulkUpload::Lettings::Year2025::RowParser.new(hash)
     }.compact
   end
 
