@@ -61,6 +61,8 @@ module DerivedVariables::SalesLogVariables
         self.pcodenk = nil
         self.postcode_full = nil
         self.la = nil
+        self.address_line1_input = nil
+        self.postcode_full_input = nil
       end
     end
 
@@ -75,6 +77,25 @@ module DerivedVariables::SalesLogVariables
       self.pcodenk = nil
       self.postcode_full = nil
       self.la = nil
+      self.address_line1_input = nil
+      self.postcode_full_input = nil
+    end
+
+    if address_search
+      self.uprn = address_search
+      if uprn_known_was == 1
+        self.address_line1 = nil
+        self.address_line2 = nil
+        self.town_or_city = nil
+        self.county = nil
+        self.pcodenk = nil
+        self.postcode_full = nil
+        self.la = nil
+        self.address_line1_input = nil
+        self.postcode_full_input = nil
+      end
+      self.uprn_known = 1
+      self.uprn_confirmed = 1
     end
 
     if form.start_year_2025_or_later? && is_bedsit?

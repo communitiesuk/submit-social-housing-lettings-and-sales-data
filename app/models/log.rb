@@ -126,16 +126,27 @@ class Log < ApplicationRecord
   end
 
   def address_options
-    return @address_options if @address_options && @last_searched_address_string == address_string
+    if address_search.present?
+      service = UprnClient.new(address_search)
+      service.call
+      if service.result.blank? || service.error.present?
+        @address_options = []
+        return @address_options
+      end
 
-    if [address_line1_input, postcode_full_input].all?(&:present?)
+      presenter = UprnDataPresenter.new(service.result)
+      @address_options = [{ address: presenter.address, uprn: presenter.uprn }]
+    else
+      return @address_options if @address_options && @last_searched_address_string == address_string
+      return if address_string.blank?
+
       @last_searched_address_string = address_string
 
       service = AddressClient.new(address_string)
       service.call
       if service.result.blank? || service.error.present?
         @address_options = []
-        return @answer_options
+        return @address_options
       end
 
       address_opts = []
@@ -176,6 +187,10 @@ class Log < ApplicationRecord
 
   def ethnic_refused?
     ethnic_group == 17
+  end
+
+  def address_manually_entered?
+    uprn.nil? && address_search.nil? && address_line1.present? && town_or_city.present?
   end
 
   def collection_period_open?
