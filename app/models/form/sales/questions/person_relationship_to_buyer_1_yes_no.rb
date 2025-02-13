@@ -20,10 +20,10 @@ class Form::Sales::Questions::PersonRelationshipToBuyer1YesNo < ::Form::Question
   end
 
   def question_number
-    base_question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
+    base_question_number = BASE_QUESTION_NUMBERS[form.start_date.year] || BASE_QUESTION_NUMBERS[BASE_QUESTION_NUMBERS.keys.max]
 
     base_question_number + (4 * @person_index)
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2025 => 28 }.freeze
+  BASE_QUESTION_NUMBERS = { 2025 => 28 }.freeze
 end
