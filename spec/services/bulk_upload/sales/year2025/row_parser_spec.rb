@@ -1340,7 +1340,6 @@ RSpec.describe BulkUpload::Sales::Year2025::RowParser do
       end
     end
 
-
     describe "soft validations" do
       context "when soft validation is triggered" do
         let(:attributes) { valid_attributes.merge({ field_28: 22, field_32: 5 }) }

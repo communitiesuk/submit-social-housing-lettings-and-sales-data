@@ -273,7 +273,6 @@ class BulkUpload::Sales::Year2025::RowParser
   attribute :field_120, :integer
   attribute :field_121, :integer
 
-
   validates :field_4,
             presence: {
               message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "sale completion date (day)."),
@@ -507,7 +506,7 @@ class BulkUpload::Sales::Year2025::RowParser
             presence: {
               message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "buyer 2's previous tenure."),
               category: :setup,
-              if: :shared_or_discounted_but_not_staircasing? && two_buyers_share_address,
+              if: :shared_or_discounted_but_not_staircasing? && :two_buyers_share_address?,
             },
             on: :after_log
 
@@ -515,7 +514,7 @@ class BulkUpload::Sales::Year2025::RowParser
             presence: {
               message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "whether a buyer has served in the armed forces."),
               category: :setup,
-              unless: staircasing?,
+              unless: :staircasing?,
             },
             on: :after_log
 
@@ -523,7 +522,7 @@ class BulkUpload::Sales::Year2025::RowParser
             presence: {
               message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "whether a buyer is currently in the armed forces."),
               category: :setup,
-              unless: staircasing?,
+              unless: :staircasing?,
             },
             on: :after_log
 
@@ -531,7 +530,7 @@ class BulkUpload::Sales::Year2025::RowParser
             presence: {
               message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "whether a buyer's spouse recently died in service."),
               category: :setup,
-              unless: staircasing?,
+              unless: :staircasing?,
             },
             on: :after_log
 
@@ -539,7 +538,7 @@ class BulkUpload::Sales::Year2025::RowParser
             presence: {
               message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "whether any buyer has a disability."),
               category: :setup,
-              unless: staircasing?,
+              unless: :staircasing?,
             },
             on: :after_log
 
@@ -547,7 +546,7 @@ class BulkUpload::Sales::Year2025::RowParser
             presence: {
               message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "whether any buyer uses a wheelchair."),
               category: :setup,
-              unless: staircasing?,
+              unless: :staircasing?,
             },
             on: :after_log
 
@@ -555,7 +554,7 @@ class BulkUpload::Sales::Year2025::RowParser
             presence: {
               message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "buyer 1's annual income."),
               category: :setup,
-              unless: staircasing?,
+              unless: :staircasing?,
             },
             on: :after_log
 
@@ -563,7 +562,8 @@ class BulkUpload::Sales::Year2025::RowParser
             presence: {
               message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "buyer 2's annual income."),
               category: :setup,
-              if: :joint_purchase && !:staircasing?,
+              if: :joint_purchase,
+              unless: :staircasing?,
             },
             on: :after_log
 
@@ -571,7 +571,7 @@ class BulkUpload::Sales::Year2025::RowParser
             presence: {
               message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "whether buyers were receiving housing benefits."),
               category: :setup,
-              unless: staircasing?,
+              unless: :staircasing?,
             },
             on: :after_log
 
@@ -579,7 +579,7 @@ class BulkUpload::Sales::Year2025::RowParser
             presence: {
               message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "the buyers' total savings."),
               category: :setup,
-              unless: staircasing?,
+              unless: :staircasing?,
             },
             on: :after_log
 
@@ -587,7 +587,7 @@ class BulkUpload::Sales::Year2025::RowParser
             presence: {
               message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "whether the buyers have previously owned a property."),
               category: :setup,
-              unless: staircasing?,
+              unless: :staircasing?,
             },
             on: :after_log
 
@@ -635,7 +635,7 @@ class BulkUpload::Sales::Year2025::RowParser
             presence: {
               message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "number of bedrooms in previous property."),
               category: :setup,
-              if: :shared_ownership_initial_purchase? & :buyer_1_previous_tenure_not_1_or_2?,
+              if: :shared_ownership_initial_purchase? && :buyer_1_previous_tenure_not_1_or_2?,
             },
             on: :after_log
 
@@ -643,7 +643,7 @@ class BulkUpload::Sales::Year2025::RowParser
             presence: {
               message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "previous property type."),
               category: :setup,
-              if: :shared_ownership_initial_purchase? & :buyer_1_previous_tenure_not_1_or_2?,
+              if: :shared_ownership_initial_purchase? && :buyer_1_previous_tenure_not_1_or_2?,
             },
             on: :after_log
 
@@ -651,7 +651,7 @@ class BulkUpload::Sales::Year2025::RowParser
             presence: {
               message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "buyer's previous tenure."),
               category: :setup,
-              if: :shared_ownership_initial_purchase? & :buyer_1_previous_tenure_not_1_or_2?,
+              if: :shared_ownership_initial_purchase? && :buyer_1_previous_tenure_not_1_or_2?,
             },
             on: :after_log
 
@@ -692,7 +692,7 @@ class BulkUpload::Sales::Year2025::RowParser
             presence: {
               message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "mortgage amount."),
               category: :setup,
-              if: :shared_ownership_initial_purchase? & :mortgage_used?,
+              if: :shared_ownership_initial_purchase? && :mortgage_used?,
             },
             on: :after_log
 
@@ -700,7 +700,7 @@ class BulkUpload::Sales::Year2025::RowParser
             presence: {
               message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "mortgage length."),
               category: :setup,
-              if: :shared_ownership_initial_purchase? & :mortgage_used?,
+              if: :shared_ownership_initial_purchase? && :mortgage_used?,
             },
             on: :after_log
 
@@ -716,7 +716,8 @@ class BulkUpload::Sales::Year2025::RowParser
             presence: {
               message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "deposit amount."),
               category: :setup,
-              if: :shared_ownership_initial_purchase? & !:social_homebuy?,
+              if: :shared_ownership_initial_purchase?,
+              unless: :social_homebuy?,
             },
             on: :after_log
 
@@ -819,7 +820,7 @@ class BulkUpload::Sales::Year2025::RowParser
 
   validates :field_103,
             inclusion: {
-              in: [2, 3, 4, 5, 6, 7, 8, 9, 10 ],
+              in: [2, 3, 4, 5, 6, 7, 8, 9, 10],
               if: proc { field_103.present? },
               category: :setup,
               question: QUESTIONS[:field_103].downcase,
@@ -886,7 +887,8 @@ class BulkUpload::Sales::Year2025::RowParser
             presence: {
               message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "basic monthly rent after staircasing."),
               category: :setup,
-              if: :staircasing? && !:buyers_own_all?,
+              if: :staircasing?,
+              unless: :buyers_own_all?,
             },
             on: :after_log
 
@@ -910,7 +912,8 @@ class BulkUpload::Sales::Year2025::RowParser
             presence: {
               message: I18n.t("#{ERROR_BASE_KEY}.not_answered", question: "amount of loan or subsidy."),
               category: :setup,
-              if: :discounted_ownership? && !:rtb_like_sale_type?,
+              if: :discounted_ownership?,
+              unless: :rtb_like_sale_type?,
             },
             on: :after_log
 
@@ -1170,35 +1173,35 @@ private
     field_8 == 1 && field_10 == 1
   end
 
-  def two_buyers_share_address
+  def two_buyers_share_address?
     field_63 == 2
   end
 
-  def not_resale
+  def not_resale?
     field_78 == 2
   end
 
-  def buyer_1_previous_tenure_not_1_or_2
+  def buyer_1_previous_tenure_not_1_or_2?
     field_58 != 1 && field_58 != 2
   end
 
-  def mortgage_used
+  def mortgage_used?
     field_88 == 2
   end
 
-  def social_homebuy
+  def social_homebuy?
     field_9 == 18
   end
 
-  def buyers_own_all
+  def buyers_own_all?
     field_97 == 100
   end
 
-  def buyer_staircased_before
+  def buyer_staircased_before?
     field_99 == 1
   end
 
-  def rtb_like_sale_type
+  def rtb_like_sale_type?
     [9, 14, 27, 29].includes(field_11)
   end
 
@@ -1375,11 +1378,31 @@ private
     attributes["sex5"] = field_52
     attributes["sex6"] = field_56
 
-    attributes["relat2"] = field_34 == 1 ? "P" : (field_34 == 2 ? "X" : "R")
-    attributes["relat3"] = field_42 == 1 ? "P" : (field_42 == 2 ? "X" : "R")
-    attributes["relat4"] = field_46 == 1 ? "P" : (field_46 == 2 ? "X" : "R")
-    attributes["relat5"] = field_49 == 1 ? "P" : (field_49 == 2 ? "X" : "R")
-    attributes["relat6"] = field_54 == 1 ? "P" : (field_54 == 2 ? "X" : "R")
+    attributes["relat2"] = if field_34 == 1
+                             "P"
+                           else
+                             (field_34 == 2 ? "X" : "R")
+                           end
+    attributes["relat3"] = if field_42 == 1
+                             "P"
+                           else
+                             (field_42 == 2 ? "X" : "R")
+                           end
+    attributes["relat4"] = if field_46 == 1
+                             "P"
+                           else
+                             (field_46 == 2 ? "X" : "R")
+                           end
+    attributes["relat5"] = if field_49 == 1
+                             "P"
+                           else
+                             (field_49 == 2 ? "X" : "R")
+                           end
+    attributes["relat6"] = if field_54 == 1
+                             "P"
+                           else
+                             (field_54 == 2 ? "X" : "R")
+                           end
 
     attributes["ecstat1"] = field_32
     attributes["ecstat2"] = field_39
@@ -1519,7 +1542,9 @@ private
     attributes["initialpurchase"] = initialpurchase
 
     attributes["management_fee"] = field_95
-    attributes["has_management_fee"] = field_95.present? && field_95 > 0 ? 1 : 0
+    attributes["has_management_fee"] = field_95.present? && field_95.positive? ? 1 : 0
+
+    attributes
   end
 
   def address_line1_input
@@ -1658,6 +1683,7 @@ private
     return field_93 if shared_ownership_initial_purchase?
     return field_111 if staircasing?
   end
+
   def mscharge
     return field_94 if shared_ownership?
     return field_121 if discounted_ownership?
