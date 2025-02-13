@@ -76,9 +76,11 @@ module TasklistHelper
     return if log.startdate.nil?
 
     log_quarter = quarter_for_date(date: log.startdate)
+    return if log_quarter.nil?
+
     deadline_for_log = log_quarter.cutoff_date
 
-    if deadline_for_log > Time.zone.now
+    if deadline_for_log.beginning_of_day >= Time.zone.today.beginning_of_day
       "<p class=\"govuk-body\">#{log_quarter.quarter} Deadline: #{log_quarter.cutoff_date.strftime('%A %-d %B %Y')}.<p>".html_safe
     else
       "<p class=\"govuk-body app-red-text\"><strong>Overdue: #{log_quarter.quarter} deadline #{log_quarter.cutoff_date.strftime('%A %-d %B %Y')}.</strong></p>".html_safe

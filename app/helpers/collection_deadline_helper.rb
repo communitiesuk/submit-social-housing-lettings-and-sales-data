@@ -66,8 +66,10 @@ module CollectionDeadlineHelper
   end
 
   def quarter_for_date(date: Time.zone.now)
-    quarters = quarter_dates(collection_start_year_for_date(date))
+    collection_start_year = collection_start_year_for_date(date)
+    return unless QUARTERLY_DEADLINES.key?(collection_start_year)
 
+    quarters = quarter_dates(collection_start_year)
     quarter = quarters.find { |q| date.between?(q[:start_date], q[:cutoff_date] + 1.day) }
 
     return unless quarter
