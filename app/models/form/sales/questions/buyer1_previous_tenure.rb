@@ -21,5 +21,5 @@ class Form::Sales::Questions::Buyer1PreviousTenure < ::Form::Question
     }
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 56, 2024 => 58 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 56, 2024 => 58, 2025 => 56 }.freeze
 end

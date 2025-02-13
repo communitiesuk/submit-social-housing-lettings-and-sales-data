@@ -21,6 +21,7 @@ class Form::Sales::Questions::DepositAmount < ::Form::Question
   QUESTION_NUMBER_FROM_YEAR_AND_OWNERSHIP = {
     2023 => { 1 => 95, 2 => 108, 3 => 116 },
     2024 => { 1 => 96, 2 => 109, 3 => 116 },
+    2025 => { 1 => 85, 2 => 110 },
   }.freeze
 
   def top_guidance_partial

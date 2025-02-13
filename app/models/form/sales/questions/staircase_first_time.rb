@@ -12,5 +12,5 @@ class Form::Sales::Questions::StaircaseFirstTime < ::Form::Question
     "2" => { "value" => "No" },
   }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2025 => 81 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2025 => 93 }.freeze
 end

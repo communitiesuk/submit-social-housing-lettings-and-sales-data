@@ -14,5 +14,5 @@ class Form::Sales::Questions::ArmedForces < ::Form::Question
     "8" => { "value" => "Don't know" },
   }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 62, 2024 => 64 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 62, 2024 => 64, 2025 => 61 }.freeze
 end

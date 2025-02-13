@@ -23,5 +23,5 @@ class Form::Sales::Questions::SavingsNk < ::Form::Question
     "1" => { "value" => "No" },
   }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 72, 2024 => 74 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 72, 2024 => 74, 2025 => 71 }.freeze
 end

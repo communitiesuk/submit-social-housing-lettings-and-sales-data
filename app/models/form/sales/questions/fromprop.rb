@@ -27,5 +27,5 @@ class Form::Sales::Questions::Fromprop < ::Form::Question
     }
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 86, 2024 => 87 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 86, 2024 => 87, 2025 => 78 }.freeze
 end

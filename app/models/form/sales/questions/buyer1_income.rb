@@ -13,5 +13,5 @@ class Form::Sales::Questions::Buyer1Income < ::Form::Question
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 67, 2024 => 69 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 67, 2024 => 69, 2025 => 66 }.freeze
 end
