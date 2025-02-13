@@ -6,13 +6,13 @@ RSpec.describe BulkUpload::Sales::LogCreator do
   let(:owning_org) { create(:organisation, old_visible_id: 123) }
   let(:user) { create(:user, organisation: owning_org) }
 
-  let(:bulk_upload) { create(:bulk_upload, :sales, user:, year: 2024) }
-  let(:csv_parser) { instance_double(BulkUpload::Sales::Year2024::CsvParser) }
-  let(:row_parser) { instance_double(BulkUpload::Sales::Year2024::RowParser) }
+  let(:bulk_upload) { create(:bulk_upload, :sales, user:, year: 2025) }
+  let(:csv_parser) { instance_double(BulkUpload::Sales::Year2025::CsvParser) }
+  let(:row_parser) { instance_double(BulkUpload::Sales::Year2025::RowParser) }
   let(:log) { build(:sales_log, :completed, assigned_to: user, owning_organisation: owning_org, managing_organisation: owning_org) }
 
   before do
-    allow(BulkUpload::Sales::Year2024::CsvParser).to receive(:new).and_return(csv_parser)
+    allow(BulkUpload::Sales::Year2025::CsvParser).to receive(:new).and_return(csv_parser)
     allow(csv_parser).to receive(:row_parsers).and_return([row_parser])
     allow(row_parser).to receive(:log).and_return(log)
     allow(row_parser).to receive(:bulk_upload=).and_return(true)
