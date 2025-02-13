@@ -1,7 +1,7 @@
 en:
   validations:
     sales:
-      2024:
+      2025:
         bulk_upload:
           not_answered: "You must answer %{question}"
           invalid_option: "Enter a valid value for %{question}"

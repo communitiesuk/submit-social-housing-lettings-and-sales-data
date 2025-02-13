@@ -417,7 +417,7 @@ class BulkUpload::SalesLogToCsv
 
       log.proptype,
       log.beds,
-            log.builtype,
+      log.builtype,
       log.uprn,
       log.address_line1&.tr(",", " "), # 20
       log.address_line2&.tr(",", " "),
