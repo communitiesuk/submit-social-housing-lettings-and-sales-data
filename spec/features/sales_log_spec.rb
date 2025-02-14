@@ -230,7 +230,7 @@ RSpec.describe "Sales Log Features" do
       end
 
       context "when displaying the question number in the page header" do
-        let(:sales_log) { FactoryBot.create(:sales_log, :shared_ownership_setup_complete, jointpur: 2, owning_organisation: user.organisation, assigned_to: user) }
+        let(:sales_log) { FactoryBot.create(:sales_log, :shared_ownership_setup_complete, jointpur: 2, address_search_input: false, owning_organisation: user.organisation, assigned_to: user) }
 
         context "when visiting the address page" do
           before do
