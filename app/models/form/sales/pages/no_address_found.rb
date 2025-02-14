@@ -29,7 +29,7 @@ class Form::Sales::Pages::NoAddressFound < ::Form::Page
     %w[address_line1_input]
   end
 
-  def routed_to?(log, _current_user)
+  def routed_to?(_log, _current_user)
     false if form.start_year_2024_or_later?
   end
 end
