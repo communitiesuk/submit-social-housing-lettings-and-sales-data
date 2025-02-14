@@ -54,48 +54,25 @@ module DerivedVariables::SalesLogVariables
     if uprn_known&.zero?
       self.uprn = nil
       if uprn_known_was == 1
-        self.address_line1 = nil
-        self.address_line2 = nil
-        self.town_or_city = nil
-        self.county = nil
-        self.pcodenk = nil
-        self.postcode_full = nil
-        self.la = nil
-        self.address_line1_input = nil
-        self.postcode_full_input = nil
+        reset_address_fields!
       end
     end
 
     if uprn_known == 1 && uprn_confirmed&.zero?
-      self.uprn = nil
-      self.uprn_known = 0
-      self.uprn_confirmed = nil
-      self.address_line1 = nil
-      self.address_line2 = nil
-      self.town_or_city = nil
-      self.county = nil
-      self.pcodenk = nil
-      self.postcode_full = nil
-      self.la = nil
-      self.address_line1_input = nil
-      self.postcode_full_input = nil
+      reset_address_fields!
     end
 
-    if address_search
+    self.address_search_input = true if address_search_input.nil?
+
+    if address_search_input
       self.uprn = address_search
-      if uprn_known_was == 1
-        self.address_line1 = nil
-        self.address_line2 = nil
-        self.town_or_city = nil
-        self.county = nil
-        self.pcodenk = nil
-        self.postcode_full = nil
-        self.la = nil
-        self.address_line1_input = nil
-        self.postcode_full_input = nil
-      end
       self.uprn_known = 1
       self.uprn_confirmed = 1
+    else
+      self.uprn = nil
+      self.uprn_known = 0
+      self.uprn_confirmed = 0
+      reset_address_fields! if address_search_input_was == true
     end
 
     if form.start_year_2025_or_later? && is_bedsit?
@@ -258,5 +235,23 @@ private
 
   def prevten_was_social_housing?
     [1, 2].include?(prevten) || [1, 2].include?(prevtenbuy2)
+  end
+
+  def reset_address_fields!
+    # binding.pry
+    self.uprn = nil
+    self.uprn_known = nil
+    self.uprn_confirmed = nil
+    self.address_line1 = nil
+    self.address_line2 = nil
+    self.town_or_city = nil
+    self.county = nil
+    self.pcode1 = nil
+    self.pcode2 = nil
+    self.pcodenk = nil
+    self.address_line1_input = nil
+    self.postcode_full_input = nil
+    self.postcode_full = nil
+    self.is_la_inferred = nil
   end
 end

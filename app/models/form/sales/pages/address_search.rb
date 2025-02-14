@@ -2,9 +2,7 @@ class Form::Sales::Pages::AddressSearch < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "address_search"
-    @depends_on = [
-      { "address_manually_entered?" => false },
-    ]
+    @depends_on = [{ "address_search_input" => true }]
   end
 
   def questions
