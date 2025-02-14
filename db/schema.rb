@@ -374,7 +374,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_14_133727) do
     t.integer "multiple_partners_value_check"
     t.bigint "created_by_id"
     t.string "address_search"
-    t.boolean "address_search_input", default: true
+    t.boolean "address_search_input"
     t.index ["assigned_to_id"], name: "index_lettings_logs_on_assigned_to_id"
     t.index ["bulk_upload_id"], name: "index_lettings_logs_on_bulk_upload_id"
     t.index ["created_by_id"], name: "index_lettings_logs_on_created_by_id"
@@ -772,7 +772,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_14_133727) do
     t.integer "has_management_fee"
     t.decimal "management_fee", precision: 10, scale: 2
     t.string "address_search"
-    t.boolean "address_search_input", default: true
+    t.boolean "address_search_input"
     t.index ["assigned_to_id"], name: "index_sales_logs_on_assigned_to_id"
     t.index ["bulk_upload_id"], name: "index_sales_logs_on_bulk_upload_id"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"

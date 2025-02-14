@@ -9,6 +9,7 @@ class Log < ApplicationRecord
   belongs_to :updated_by, class_name: "User", optional: true
   belongs_to :bulk_upload, optional: true
 
+  before_create :set_default_address_search_input
   before_save :update_status!
 
   STATUS = {
@@ -404,5 +405,9 @@ private
     end
     self[is_inferred_key] = false
     self[postcode_key] = nil
+  end
+
+  def set_default_address_search_input
+    self.address_search_input = true if address_search_input.nil?
   end
 end
