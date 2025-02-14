@@ -238,7 +238,6 @@ private
   end
 
   def reset_address_fields!
-    # binding.pry
     self.uprn = nil
     self.uprn_known = nil
     self.uprn_confirmed = nil
