@@ -2,7 +2,6 @@ class Form::Sales::Pages::UprnConfirmation < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "uprn_confirmation"
-    @depends_on = [{ "address_export_and_display?" => true }]
   end
 
   def questions

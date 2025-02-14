@@ -4,9 +4,9 @@ class Form::Sales::Pages::AddressMatcher < ::Form::Page
     @id = "address_matcher"
     @copy_key = "sales.property_information.address_matcher"
     @depends_on = [
-      { "uprn_known" => nil, "address_export_and_display?" => true },
-      { "uprn_known" => 0, "address_export_and_display?" => true },
-      { "uprn_confirmed" => 0, "address_export_and_display?" => true },
+      { "uprn_known" => nil },
+      { "uprn_known" => 0 },
+      { "uprn_confirmed" => 0 },
     ]
   end
 
