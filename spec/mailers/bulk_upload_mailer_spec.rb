@@ -113,7 +113,7 @@ RSpec.describe BulkUploadMailer do
           title: "Check your file data",
           filename: bulk_upload.filename,
           upload_timestamp: bulk_upload.created_at.to_fs(:govuk_date_and_time),
-          description: "Some of your #{bulk_upload.year_combo} lettings data might not be right. Click the link below to review the potential errors, and check your file to see if the data is correct.",
+          description: "We’ve identified potential discrepancies in your #{bulk_upload.year_combo} lettings data. Please review the flagged information via the link below and cross-reference it with your records to confirm data accuracy.",
           cta_link: bulk_upload_lettings_soft_validations_check_url(bulk_upload, page: "confirm-soft-errors"),
         },
       )
