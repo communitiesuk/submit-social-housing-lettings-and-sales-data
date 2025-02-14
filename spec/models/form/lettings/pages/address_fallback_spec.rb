@@ -24,6 +24,6 @@ RSpec.describe Form::Lettings::Pages::AddressFallback, type: :model do
   end
 
   it "has correct depends_on" do
-    expect(page.depends_on).to eq([{"address_search_input" => false, "is_supported_housing?" => false}])
+    expect(page.depends_on).to eq([{ "address_search_input" => false, "is_supported_housing?" => false }])
   end
 end
