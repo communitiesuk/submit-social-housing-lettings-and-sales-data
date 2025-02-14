@@ -57,6 +57,7 @@ RSpec.describe Form::Sales::Subsections::PropertyInformation, type: :model do
           %w[
             uprn
             uprn_confirmation
+            address_search
             address_matcher
             no_address_found
             uprn_selection
@@ -91,6 +92,7 @@ RSpec.describe Form::Sales::Subsections::PropertyInformation, type: :model do
           %w[
             uprn
             uprn_confirmation
+            address_search
             address_matcher
             no_address_found
             uprn_selection

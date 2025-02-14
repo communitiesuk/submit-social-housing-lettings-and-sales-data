@@ -162,7 +162,7 @@ module Csv
 
     def sales_log_attributes
       ordered_questions = FormHandler.instance.ordered_questions_for_year(@year, "sales")
-      ordered_questions.reject! { |q| q.id.match?(/((?<!la)_known)|(_check)|(_asked)|nationality_all_group|nationality_all_buyer2_group/) }
+      ordered_questions.reject! { |q| q.id.match?(/((?<!la)_known)|(_check)|(_asked)|nationality_all_group|nationality_all_buyer2_group|address_search/) }
       attributes = insert_derived_and_related_attributes(ordered_questions)
       order_address_fields_for_support(attributes)
       final_attributes = non_question_fields + attributes

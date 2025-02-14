@@ -26,4 +26,8 @@ class Form::Sales::Pages::AddressMatcher < ::Form::Page
 
     "/#{log.log_type.dasherize}s/#{log.id}/property-number-of-bedrooms"
   end
+
+  def routed_to?(_log, _current_user)
+    false if form.start_year_2024_or_later?
+  end
 end

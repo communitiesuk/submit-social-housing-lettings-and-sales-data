@@ -9,6 +9,7 @@ class Log < ApplicationRecord
   belongs_to :updated_by, class_name: "User", optional: true
   belongs_to :bulk_upload, optional: true
 
+  before_create :set_default_address_search_input
   before_save :update_status!
 
   STATUS = {
@@ -126,16 +127,27 @@ class Log < ApplicationRecord
   end
 
   def address_options
-    return @address_options if @address_options && @last_searched_address_string == address_string
+    if address_search.present?
+      service = UprnClient.new(address_search)
+      service.call
+      if service.result.blank? || service.error.present?
+        @address_options = []
+        return @address_options
+      end
 
-    if [address_line1_input, postcode_full_input].all?(&:present?)
+      presenter = UprnDataPresenter.new(service.result)
+      @address_options = [{ address: presenter.address, uprn: presenter.uprn }]
+    else
+      return @address_options if @address_options && @last_searched_address_string == address_string
+      return if address_string.blank?
+
       @last_searched_address_string = address_string
 
       service = AddressClient.new(address_string)
       service.call
       if service.result.blank? || service.error.present?
         @address_options = []
-        return @answer_options
+        return @address_options
       end
 
       address_opts = []
@@ -393,5 +405,9 @@ private
     end
     self[is_inferred_key] = false
     self[postcode_key] = nil
+  end
+
+  def set_default_address_search_input
+    self.address_search_input = true if address_search_input.nil?
   end
 end
