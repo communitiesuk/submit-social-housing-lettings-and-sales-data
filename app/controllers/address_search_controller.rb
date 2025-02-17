@@ -52,13 +52,13 @@ class AddressSearchController < ApplicationController
   end
 
   def manual_input
-    log = params[:log_type] == "lettings_log" ? LettingsLog.find(params[:log_id]) : SalesLog.find(params[:log_id])
+    log = params[:log_type] == "lettings_log" ? current_user.lettings_logs.find(params[:log_id]) : current_user.sales_logs.find(params[:log_id])
     log.update!(address_search_input: false)
     redirect_to manual_address_link(log)
   end
 
   def search_input
-    log = params[:log_type] == "lettings_log" ? LettingsLog.find(params[:log_id]) : SalesLog.find(params[:log_id])
+    log = params[:log_type] == "lettings_log" ? current_user.lettings_logs.find(params[:log_id]) : current_user.sales_logs.find(params[:log_id])
     log.update!(address_search_input: true)
     redirect_to search_address_link(log)
   end
