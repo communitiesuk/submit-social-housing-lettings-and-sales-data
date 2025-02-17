@@ -100,7 +100,6 @@ FactoryBot.define do
       waityear { 7 }
       postcode_known { 1 }
       postcode_full { "SW1A 1AA" }
-      address_search { "10033558653" }
       reasonpref { 1 }
       cbl { 0 }
       chr { 1 }

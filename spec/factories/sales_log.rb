@@ -161,7 +161,6 @@ FactoryBot.define do
       mortlen { 10 }
       pcodenk { 0 }
       postcode_full { "SW1A 1AA" }
-      address_search { "10033558653" }
       is_la_inferred { false }
       mortgagelender { 5 }
       extrabor { 1 }

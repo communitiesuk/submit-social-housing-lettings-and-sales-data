@@ -869,7 +869,6 @@ RSpec.describe LettingsLog do
           tenancycode
           propcode
           chcharge
-          address_search
           tenancylength
           address_line2
           county

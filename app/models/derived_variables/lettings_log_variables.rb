@@ -116,8 +116,8 @@ module DerivedVariables::LettingsLogVariables
       self.uprn_known = 0
       self.uprn_selection = nil
     else
-      self.uprn = address_search
       self.uprn_confirmed = 1 if uprn.present?
+      self.uprn_known = 1 if uprn.present?
       reset_address_fields! if uprn.blank?
     end
 

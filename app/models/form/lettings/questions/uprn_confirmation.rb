@@ -37,6 +37,6 @@ class Form::Lettings::Questions::UprnConfirmation < ::Form::Question
   end
 
   def hidden_in_check_answers?(log, _current_user = nil)
-    log.uprn_known != 1 || log.uprn_confirmed.present? || log.address_search.present?
+    log.uprn_known != 1 || log.uprn_confirmed.present?
   end
 end

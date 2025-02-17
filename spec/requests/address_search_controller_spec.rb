@@ -14,7 +14,6 @@ RSpec.describe AddressSearchController, type: :request do
       it "correctly sets address fields" do
         sales_log.reload
         expect(sales_log.manual_address_entry_selected).to eq(false)
-        expect(sales_log.address_search).to eq(nil)
         expect(sales_log.uprn_known).to eq(nil)
         expect(sales_log.uprn).to eq(nil)
         expect(sales_log.uprn_confirmed).to eq(nil)
@@ -48,7 +47,6 @@ RSpec.describe AddressSearchController, type: :request do
 
       it "correctly sets address fields" do
         lettings_log.reload
-        expect(lettings_log.address_search).to eq("10033558653")
         expect(lettings_log.uprn_known).to eq(1)
         expect(lettings_log.uprn).to eq("10033558653")
         expect(lettings_log.uprn_confirmed).to eq(1)
@@ -94,7 +92,6 @@ RSpec.describe AddressSearchController, type: :request do
         expect(lettings_log.address_line1).to eq(nil)
         expect(lettings_log.address_line2).to eq(nil)
         expect(lettings_log.town_or_city).to eq(nil)
-        expect(lettings_log.address_search_value_check).to eq(nil)
         expect(lettings_log.la).to eq(nil)
 
         get "/address-search/search-input/lettings_log/#{lettings_log.id}"
@@ -120,7 +117,6 @@ RSpec.describe AddressSearchController, type: :request do
       it "correctly sets address fields" do
         sales_log.reload
         expect(sales_log.manual_address_entry_selected).to eq(true)
-        expect(sales_log.address_search).to eq(nil)
         expect(sales_log.uprn_known).to eq(0)
         expect(sales_log.uprn).to eq(nil)
         expect(sales_log.uprn_confirmed).to eq(nil)
@@ -136,7 +132,6 @@ RSpec.describe AddressSearchController, type: :request do
 
         sales_log.reload
         expect(sales_log.manual_address_entry_selected).to eq(false)
-        expect(sales_log.address_search).to eq(nil)
         expect(sales_log.uprn_known).to eq(nil)
         expect(sales_log.uprn).to eq(nil)
         expect(sales_log.uprn_confirmed).to eq(nil)

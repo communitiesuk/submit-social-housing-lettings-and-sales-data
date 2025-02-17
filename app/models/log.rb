@@ -126,8 +126,8 @@ class Log < ApplicationRecord
   end
 
   def address_options
-    if address_search.present?
-      service = UprnClient.new(address_search)
+    if uprn.present?
+      service = UprnClient.new(uprn)
       service.call
       if service.result.blank? || service.error.present?
         @address_options = []

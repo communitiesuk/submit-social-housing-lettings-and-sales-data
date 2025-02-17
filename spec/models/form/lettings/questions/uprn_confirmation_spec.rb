@@ -51,16 +51,16 @@ RSpec.describe Form::Lettings::Questions::UprnConfirmation, type: :model do
   end
 
   describe "has the correct hidden_in_check_answers" do
-    context "when uprn_known != 1 && uprn_confirmed == nil && address_search == nil" do
-      let(:log) { build(:lettings_log, uprn_known: 0, uprn_confirmed: nil, address_search: nil) }
+    context "when uprn_known != 1 && uprn_confirmed == nil" do
+      let(:log) { build(:lettings_log, uprn_known: 0, uprn_confirmed: nil) }
 
       it "returns true" do
         expect(question.hidden_in_check_answers?(log)).to eq(true)
       end
     end
 
-    context "when uprn_known == 1 && uprn_confirmed == nil && address_search == 1" do
-      let(:log) { build(:lettings_log, :completed, uprn_known: 1, uprn: 1, address_search: nil, uprn_confirmed: nil) }
+    context "when uprn_known == 1 && uprn_confirmed == nil" do
+      let(:log) { build(:lettings_log, :completed, uprn_known: 1, uprn: 1, uprn_confirmed: nil) }
 
       it "returns false" do
         expect(question.hidden_in_check_answers?(log)).to eq(false)

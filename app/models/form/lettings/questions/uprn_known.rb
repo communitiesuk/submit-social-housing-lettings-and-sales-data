@@ -5,7 +5,7 @@ class Form::Lettings::Questions::UprnKnown < ::Form::Question
     @copy_key = "lettings.property_information.uprn.uprn_known"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
-    @conditional_for = { "uprn" => [1] }
+    # @conditional_for = { "uprn" => [1] } #TODO: DELETE
     @inferred_check_answers_value = [
       {
         "condition" => { "uprn_known" => 0 },

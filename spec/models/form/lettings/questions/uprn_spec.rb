@@ -52,7 +52,6 @@ RSpec.describe Form::Lettings::Questions::Uprn, type: :model do
           la: "E09000003",
           uprn_known:,
           uprn:,
-          address_search:,
           manual_address_entry_selected:,
         )
       end
@@ -60,7 +59,6 @@ RSpec.describe Form::Lettings::Questions::Uprn, type: :model do
       context "when uprn known nil" do
         let(:uprn_known) { nil }
         let(:uprn) { nil }
-        let(:address_search) { nil }
         let(:manual_address_entry_selected) { true }
 
         it "returns formatted value" do
@@ -71,7 +69,6 @@ RSpec.describe Form::Lettings::Questions::Uprn, type: :model do
       context "when uprn known" do
         let(:uprn_known) { 1 }
         let(:uprn) { 1 }
-        let(:address_search) { 1 }
         let(:manual_address_entry_selected) { false }
 
         it "returns formatted value" do
@@ -84,7 +81,6 @@ RSpec.describe Form::Lettings::Questions::Uprn, type: :model do
       context "when uprn not known" do
         let(:uprn_known) { 0 }
         let(:uprn) { nil }
-        let(:address_search) { nil }
         let(:manual_address_entry_selected) { true }
 
         it "returns formatted value" do

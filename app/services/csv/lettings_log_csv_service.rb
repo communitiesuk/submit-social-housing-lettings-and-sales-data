@@ -258,7 +258,7 @@ module Csv
     def lettings_log_attributes
       ordered_questions = FormHandler.instance.ordered_questions_for_year(@year, "lettings")
       soft_validations_attributes = soft_validations_attributes(ordered_questions)
-      ordered_questions.reject! { |q| q.id.match?(/age\d_known|nationality_all_group|rent_value_check|address_search/) }
+      ordered_questions.reject! { |q| q.id.match?(/age\d_known|nationality_all_group|rent_value_check/) }
       attributes = insert_derived_and_related_attributes(ordered_questions)
       order_address_fields_for_support(attributes)
       final_attributes = non_question_fields + attributes + SCHEME_AND_LOCATION_ATTRIBUTES
