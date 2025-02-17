@@ -38,7 +38,7 @@ export default class extends Controller {
     accessibleAutocomplete.enhanceSelectElement({
       defaultValue: '',
       selectElement: selectEl,
-      minLength: 1,
+      minLength: 3,
       source: (query, populateResults) => {
         fetchAndPopulateSearchResults(query, populateResults, searchUrl, populateOptions, selectEl)
       },
