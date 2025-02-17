@@ -2,7 +2,7 @@ class Form::Sales::Pages::AddressSearch < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "address_search"
-    @depends_on = [{ "address_search_input" => true }]
+    @depends_on = [{ "manual_address_entry_selected" => false }]
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
   end
 

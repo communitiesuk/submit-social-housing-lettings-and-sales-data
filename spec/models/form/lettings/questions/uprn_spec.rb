@@ -53,7 +53,7 @@ RSpec.describe Form::Lettings::Questions::Uprn, type: :model do
           uprn_known:,
           uprn:,
           address_search:,
-          address_search_input:,
+          manual_address_entry_selected:,
         )
       end
 
@@ -61,7 +61,7 @@ RSpec.describe Form::Lettings::Questions::Uprn, type: :model do
         let(:uprn_known) { nil }
         let(:uprn) { nil }
         let(:address_search) { nil }
-        let(:address_search_input) { false }
+        let(:manual_address_entry_selected) { true }
 
         it "returns formatted value" do
           expect(question.get_extra_check_answer_value(log)).to be_nil
@@ -72,7 +72,7 @@ RSpec.describe Form::Lettings::Questions::Uprn, type: :model do
         let(:uprn_known) { 1 }
         let(:uprn) { 1 }
         let(:address_search) { 1 }
-        let(:address_search_input) { true }
+        let(:manual_address_entry_selected) { false }
 
         it "returns formatted value" do
           expect(question.get_extra_check_answer_value(log)).to eq(
@@ -85,7 +85,7 @@ RSpec.describe Form::Lettings::Questions::Uprn, type: :model do
         let(:uprn_known) { 0 }
         let(:uprn) { nil }
         let(:address_search) { nil }
-        let(:address_search_input) { false }
+        let(:manual_address_entry_selected) { true }
 
         it "returns formatted value" do
           expect(question.get_extra_check_answer_value(log)).to be_nil

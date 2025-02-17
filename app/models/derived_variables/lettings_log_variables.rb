@@ -95,8 +95,6 @@ module DerivedVariables::LettingsLogVariables
         self.postcode_known = nil
         self.postcode_full = nil
         self.la = nil
-        self.address_line1_input = nil
-        self.postcode_full_input = nil
       end
     end
 
@@ -114,15 +112,13 @@ module DerivedVariables::LettingsLogVariables
       self.previous_la_known = nil if is_renewal?
     end
 
-    if address_search_input
-      self.uprn = address_search
-      self.uprn_known = 1
-      self.uprn_confirmed = 1
-    else
-      self.uprn = nil
+    if manual_address_entry_selected
       self.uprn_known = 0
-      self.uprn_confirmed = 0
-      reset_address_fields! if address_search_input_was == true
+      self.uprn_selection = nil
+    else
+      self.uprn = address_search
+      self.uprn_confirmed = 1 if uprn.present?
+      reset_address_fields! if uprn.blank?
     end
 
     if is_renewal?

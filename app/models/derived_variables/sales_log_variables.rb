@@ -60,19 +60,16 @@ module DerivedVariables::SalesLogVariables
 
     if uprn_known == 1 && uprn_confirmed&.zero?
       reset_address_fields!
+      self.uprn_known = 0
     end
 
-    self.address_search_input = true if address_search_input.nil?
-
-    if address_search_input
-      self.uprn = address_search
-      self.uprn_known = 1
-      self.uprn_confirmed = 1
-    else
-      self.uprn = nil
+    if manual_address_entry_selected
       self.uprn_known = 0
-      self.uprn_confirmed = 0
-      reset_address_fields! if address_search_input_was == true
+      self.uprn_selection = nil
+    else
+      self.uprn = address_search
+      self.uprn_confirmed = 1 if uprn
+      reset_address_fields! if uprn.blank?
     end
 
     if form.start_year_2025_or_later? && is_bedsit?
@@ -240,7 +237,6 @@ private
   def reset_address_fields!
     self.uprn = nil
     self.uprn_known = nil
-    self.uprn_confirmed = nil
     self.address_line1 = nil
     self.address_line2 = nil
     self.town_or_city = nil
@@ -252,5 +248,6 @@ private
     self.postcode_full_input = nil
     self.postcode_full = nil
     self.is_la_inferred = nil
+    self.la = nil
   end
 end

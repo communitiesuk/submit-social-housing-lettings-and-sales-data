@@ -9,7 +9,6 @@ class Log < ApplicationRecord
   belongs_to :updated_by, class_name: "User", optional: true
   belongs_to :bulk_upload, optional: true
 
-  before_create :set_default_address_search_input
   before_save :update_status!
 
   STATUS = {
@@ -76,7 +75,7 @@ class Log < ApplicationRecord
       presenter = UprnDataPresenter.new(service.result)
 
       self.uprn_known = 1
-      self.uprn_confirmed = nil unless skip_update_uprn_confirmed
+      # self.uprn_confirmed = nil unless skip_update_uprn_confirmed  TODO: REMOVE
       self.uprn_selection = nil
       self.address_line1 = presenter.address_line1
       self.address_line2 = presenter.address_line2
@@ -405,9 +404,5 @@ private
     end
     self[is_inferred_key] = false
     self[postcode_key] = nil
-  end
-
-  def set_default_address_search_input
-    self.address_search_input = true if address_search_input.nil?
   end
 end
