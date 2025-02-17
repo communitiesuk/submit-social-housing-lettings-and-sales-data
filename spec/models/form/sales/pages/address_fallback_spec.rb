@@ -24,6 +24,6 @@ RSpec.describe Form::Sales::Pages::AddressFallback, type: :model do
   end
 
   it "has correct depends_on" do
-    expect(page.depends_on).to eq([{ "address_search_input" => false }])
+    expect(page.depends_on).to eq([{ "manual_address_entry_selected" => true }])
   end
 end

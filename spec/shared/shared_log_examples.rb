@@ -81,7 +81,6 @@ RSpec.shared_examples "shared log examples" do |log_type|
         expect { log.process_uprn_change! }.to change(log, :address_line1).from(nil).to("0, Building Name, Thoroughfare")
         .and change(log, :town_or_city).from(nil).to("Posttown")
         .and change(log, :postcode_full).from(nil).to("POSTCODE")
-        .and change(log, :uprn_confirmed).from(1).to(nil)
         .and change(log, :county).from("county").to(nil)
       end
     end

@@ -61,6 +61,7 @@ module DerivedVariables::SalesLogVariables
     if uprn_known == 1 && uprn_confirmed&.zero?
       reset_address_fields!
       self.uprn_known = 0
+      self.uprn_confirmed = nil
     end
 
     if manual_address_entry_selected
