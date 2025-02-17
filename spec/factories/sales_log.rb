@@ -8,6 +8,8 @@ FactoryBot.define do
     managing_organisation { assigned_to.organisation }
     created_at { Time.zone.now }
     updated_at { Time.zone.now }
+    manual_address_entry_selected { true }
+
     trait :in_progress do
       purchid { "PC123" }
       ownershipsch { 2 }

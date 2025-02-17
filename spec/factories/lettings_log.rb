@@ -6,6 +6,7 @@ FactoryBot.define do
     managing_organisation { assigned_to.organisation }
     created_at { Time.zone.today }
     updated_at { Time.zone.today }
+    manual_address_entry_selected { true }
 
     before(:create) do |log, _evaluator|
       if log.period && !log.managing_organisation.organisation_rent_periods.exists?(rent_period: log.period)
