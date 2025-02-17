@@ -9,7 +9,7 @@ RSpec.describe AddressSearchController, type: :request do
 
   describe "#manual input" do
     context "when no address data is given and user chooses to enter address manually" do
-      let(:sales_log) { create(:sales_log, :shared_ownership_setup_complete, assigned_to: user) }
+      let(:sales_log) { create(:sales_log, :shared_ownership_setup_complete, manual_address_entry_selected: false, assigned_to: user) }
 
       it "correctly sets address fields" do
         sales_log.reload
