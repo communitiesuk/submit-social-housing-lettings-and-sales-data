@@ -679,13 +679,13 @@ private
   end
 
   def validate_reasonpref_reason_values
-    valid_reasonpref_reason_options = ["0","1"]
-   ["field_107", "field_108", "field_109", "field_110", "field_111"].each do |field|
-      if send(field).present? && !valid_reasonpref_reason_options.include?(send(field).to_s)
-        question_text = QUESTIONS[field.to_sym]
-        question_text[0] = question_text[0].downcase
-        errors.add(field.to_sym, I18n.t("#{ERROR_BASE_KEY}.invalid_option", question: question_text))
-      end
+    valid_reasonpref_reason_options = %w[0 1]
+    %w[field_107 field_108 field_109 field_110 field_111].each do |field|
+      next unless send(field).present? && !valid_reasonpref_reason_options.include?(send(field).to_s)
+
+      question_text = QUESTIONS[field.to_sym]
+      question_text[0] = question_text[0].downcase
+      errors.add(field.to_sym, I18n.t("#{ERROR_BASE_KEY}.invalid_option", question: question_text))
     end
   end
 
