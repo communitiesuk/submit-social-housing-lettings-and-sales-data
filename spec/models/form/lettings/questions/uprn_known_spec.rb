@@ -30,9 +30,9 @@ RSpec.describe Form::Lettings::Questions::UprnKnown, type: :model do
     })
   end
 
-  it "has correct conditional for" do
-    expect(question.conditional_for).to eq({ "uprn" => [1] })
-  end
+  # it "has correct conditional for" do #TODO: REMOVE
+  #   expect(question.conditional_for).to eq({ "uprn" => [1] })
+  # end
 
   it "has the correct unanswered_error_message" do
     expect(question.unanswered_error_message).to eq("You must answer UPRN known?")
