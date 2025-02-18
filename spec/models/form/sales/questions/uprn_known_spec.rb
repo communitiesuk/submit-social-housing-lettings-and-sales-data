@@ -32,9 +32,9 @@ RSpec.describe Form::Sales::Questions::UprnKnown, type: :model do
     })
   end
 
-  # it "has correct conditional for" do #TODO: REMOVE
-  #   expect(question.conditional_for).to eq({ "uprn" => [1] })
-  # end
+  it "has correct conditional for" do
+    expect(question.conditional_for).to eq({ "uprn" => [1] })
+  end
 
   it "has the correct unanswered_error_message" do
     expect(question.unanswered_error_message).to eq(I18n.t("validations.sales.property_information.uprn_known.invalid"))
