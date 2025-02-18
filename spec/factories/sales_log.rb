@@ -168,14 +168,14 @@ FactoryBot.define do
       nationalbuy2 { 13 }
       buy2living { 3 }
       proplen_asked { 1 }
-      after(:build) do |log, _evaluator|
+      after(:build) do |log, evaluator|
         if log.saledate >= Time.zone.local(2024, 4, 1)
           log.address_line1_input = log.address_line1
           log.postcode_full_input = log.postcode_full
           log.nationality_all_group = 826
           log.nationality_all_buyer2_group = 826
-          log.uprn = "10033558653"
-          log.uprn_selection = 1
+          log.uprn = evaluator.uprn || "10033558653"
+          log.uprn_selection = evaluator.uprn_selection || "1"
         end
         if log.saledate >= Time.zone.local(2025, 4, 1)
           log.relat2 = "X" if log.relat2 == "C"
