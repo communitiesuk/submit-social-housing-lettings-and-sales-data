@@ -116,6 +116,7 @@ module DerivedVariables::LettingsLogVariables
       if manual_address_entry_selected
         self.uprn_known = 0
         self.uprn_selection = nil
+        self.uprn_confirmed = nil
       else
         self.uprn_confirmed = 1 if uprn.present?
         self.uprn_known = 1 if uprn.present?

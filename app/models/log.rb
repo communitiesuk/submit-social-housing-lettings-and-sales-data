@@ -75,8 +75,7 @@ class Log < ApplicationRecord
       presenter = UprnDataPresenter.new(service.result)
 
       self.uprn_known = 1
-      # self.uprn_confirmed = nil unless skip_update_uprn_confirmed  TODO: REMOVE
-      self.uprn_selection = nil
+      self.uprn_selection = uprn
       self.address_line1 = presenter.address_line1
       self.address_line2 = presenter.address_line2
       self.town_or_city = presenter.town_or_city

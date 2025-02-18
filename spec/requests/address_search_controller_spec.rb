@@ -50,7 +50,7 @@ RSpec.describe AddressSearchController, type: :request do
         expect(lettings_log.uprn_known).to eq(1)
         expect(lettings_log.uprn).to eq("10033558653")
         expect(lettings_log.uprn_confirmed).to eq(1)
-        expect(lettings_log.uprn_selection).to eq(nil)
+        expect(lettings_log.uprn_selection).to eq("10033558653")
         expect(lettings_log.postcode_known).to eq(1)
         expect(lettings_log.postcode_full).to eq("SW1A 1AA")
         expect(lettings_log.address_line1).to eq("The Mall, City Of Westminster")
