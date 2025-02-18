@@ -175,7 +175,7 @@ FactoryBot.define do
           log.nationality_all_group = 826
           log.nationality_all_buyer2_group = 826
           log.uprn = evaluator.uprn || "10033558653"
-          log.uprn_selection = evaluator.uprn_selection || "1"
+          log.uprn_selection = evaluator.uprn_selection || "10033558653"
         end
         if log.saledate >= Time.zone.local(2025, 4, 1)
           log.relat2 = "X" if log.relat2 == "C"
