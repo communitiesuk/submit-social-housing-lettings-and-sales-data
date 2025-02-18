@@ -11,8 +11,6 @@ class Form::Sales::Pages::UprnConfirmation < ::Form::Page
   end
 
   def routed_to?(log, _current_user = nil)
-    return false if form.start_year_2024_or_later?
-
     log.uprn.present? && log.uprn_known == 1
   end
 end

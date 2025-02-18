@@ -28,8 +28,4 @@ class Form::Sales::Pages::NoAddressFound < ::Form::Page
   def interruption_screen_question_ids
     %w[address_line1_input]
   end
-
-  def routed_to?(_log, _current_user)
-    false if form.start_year_2024_or_later?
-  end
 end

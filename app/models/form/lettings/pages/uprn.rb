@@ -30,8 +30,4 @@ class Form::Lettings::Pages::Uprn < ::Form::Page
       "address"
     end
   end
-
-  def routed_to?(_log, _current_user = nil)
-    false if form.start_year_2024_or_later?
-  end
 end
