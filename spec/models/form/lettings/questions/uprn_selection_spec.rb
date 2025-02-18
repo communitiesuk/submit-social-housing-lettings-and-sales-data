@@ -90,6 +90,7 @@ RSpec.describe Form::Lettings::Questions::UprnSelection, type: :model do
 
   context "when the log has address line 1 input only" do
     before do
+      allow(address_client_instance).to receive(:result).and_return(nil)
       log.address_line1_input = "Address line 1"
       log.postcode_full_input = nil
       log.save!(validate: false)
@@ -102,6 +103,7 @@ RSpec.describe Form::Lettings::Questions::UprnSelection, type: :model do
 
   context "when the log has postcode input only" do
     before do
+      allow(address_client_instance).to receive(:result).and_return(nil)
       log.address_line1_input = nil
       log.postcode_full_input = "A1 1AA"
       log.save!(validate: false)

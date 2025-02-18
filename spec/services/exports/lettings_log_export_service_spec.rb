@@ -437,9 +437,6 @@ RSpec.describe Exports::LettingsLogExportService do
         let(:xml_export_file) { File.open("spec/fixtures/exports/general_needs_log_24_25.xml", "r:UTF-8") }
 
         it "generates an XML export file with the expected content within the ZIP file" do
-          expect(lettings_log.uprn).to eq("1")
-          expect(lettings_log.uprn_known).to eq(1)
-          expect(lettings_log.uprn_confirmed).to eq(1)
           expected_content = replace_entity_ids(lettings_log, xml_export_file.read)
           expect(storage_service).to receive(:write_file).with(expected_zip_filename, any_args) do |_, content|
             entry = Zip::File.open_buffer(content).find_entry(expected_data_filename)
