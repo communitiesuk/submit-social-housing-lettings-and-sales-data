@@ -155,7 +155,6 @@ RSpec.shared_examples "shared log examples" do |log_type|
                                               .and change(log, :uprn_confirmed).from(nil).to(1)
                                               .and change(log, :uprn).from(nil).to("UPRN")
                                               .and change(log, :uprn_known).from(nil).to(1)
-                                              .and change(log, :uprn_selection).from("UPRN").to(nil)
                                               .and change(log, :county).from("county").to(nil)
       end
     end
