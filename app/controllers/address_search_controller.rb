@@ -1,5 +1,6 @@
 class AddressSearchController < ApplicationController
   before_action :authenticate_user!
+  before_action :set_log, only: %i[manual_input search_input]
 
   def index
     query = params[:query]
@@ -40,7 +41,7 @@ class AddressSearchController < ApplicationController
       results = (address_service.result || []) + (uprn_service.result || [])
 
       if address_service.error.present? && uprn_service.error.present?
-        render json: { error: "Address and UPRN are not recognised. Check the input." }, status: :unprocessable_entity
+        render json: { error: "Address and UPRN are not recognised." }, status: :unprocessable_entity
       else
         formatted_results = results.map do |result|
           presenter = AddressDataPresenter.new(result)
@@ -52,26 +53,18 @@ class AddressSearchController < ApplicationController
   end
 
   def manual_input
-    log = params[:log_type] == "lettings_log" ? current_user.lettings_logs.find(params[:log_id]) : current_user.sales_logs.find(params[:log_id])
-    log.update!(manual_address_entry_selected: true)
-    redirect_to manual_address_link(log)
+    @log.update!(manual_address_entry_selected: true)
+    redirect_to polymorphic_url([@log, :address])
   end
 
   def search_input
-    log = params[:log_type] == "lettings_log" ? current_user.lettings_logs.find(params[:log_id]) : current_user.sales_logs.find(params[:log_id])
-    log.update!(manual_address_entry_selected: false)
-    redirect_to search_address_link(log)
+    @log.update!(manual_address_entry_selected: false)
+    redirect_to polymorphic_url([@log, :address_search])
   end
 
 private
 
-  def manual_address_link(log)
-    base_url = send("#{log.log_type}_url", log)
-    "#{base_url}/address"
-  end
-
-  def search_address_link(log)
-    base_url = send("#{log.log_type}_url", log)
-    "#{base_url}/address-search"
+  def set_log
+    @log = current_user.send("#{params[:log_type]}s").find(params[:log_id])
   end
 end
