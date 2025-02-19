@@ -22,5 +22,5 @@ class Form::Lettings::Questions::FirstTimePropertyLetAsSocialHousing < ::Form::Q
     form.start_year_2024_or_later? ? "This is a re-let of existing social housing stock." : "This is a re-let of existing social housing."
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 14, 2024 => 15 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 14, 2024 => 15, 2025 => 12 }.freeze
 end

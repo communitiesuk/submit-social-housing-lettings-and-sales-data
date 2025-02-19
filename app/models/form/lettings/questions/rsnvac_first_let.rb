@@ -14,5 +14,5 @@ class Form::Lettings::Questions::RsnvacFirstLet < ::Form::Question
     "15" => { "value" => "First let of new-build property" },
   }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 15, 2024 => 16 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 15, 2024 => 16, 2025 => 13 }.freeze
 end
