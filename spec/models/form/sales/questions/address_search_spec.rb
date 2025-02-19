@@ -48,7 +48,6 @@ RSpec.describe Form::Sales::Questions::AddressSearch, type: :model do
       end
 
       context "when uprn known" do
-
         it "returns formatted value" do
           expect(question.get_extra_check_answer_value(log)).to eq(
             "\n\n19, Charlton Gardens\nBristol\nBS10 6LU\nBristol, City of",
