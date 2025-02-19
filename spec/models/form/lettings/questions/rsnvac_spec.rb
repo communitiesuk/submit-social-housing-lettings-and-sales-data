@@ -152,6 +152,4 @@ RSpec.describe Form::Lettings::Questions::Rsnvac, type: :model do
       expect(question.question_number).to eq(15)
     end
   end
-
-
 end
