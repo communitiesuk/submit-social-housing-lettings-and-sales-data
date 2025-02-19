@@ -45,5 +45,5 @@ class Form::Sales::Questions::AddressSearch < ::Form::Question
     answer_options(log, user).transform_values { |value| value["value"] } || {}
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2024 => 15, 2025 => 15 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2024 => 15, 2025 => 13 }.freeze
 end

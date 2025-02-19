@@ -17,5 +17,5 @@ class Form::Sales::Pages::AddressFallback < ::Form::Page
     ]
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2024 => 16, 2025 => 16 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2024 => 16, 2025 => 14 }.freeze
 end

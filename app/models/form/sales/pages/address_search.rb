@@ -19,5 +19,5 @@ class Form::Sales::Pages::AddressSearch < ::Form::Page
     "/#{log.log_type.dasherize}s/#{log.id}/property-number-of-bedrooms"
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2024 => 15, 2025 => 15 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2024 => 15, 2025 => 13 }.freeze
 end

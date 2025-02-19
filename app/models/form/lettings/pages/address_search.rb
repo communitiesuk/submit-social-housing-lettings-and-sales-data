@@ -13,11 +13,5 @@ class Form::Lettings::Pages::AddressSearch < ::Form::Page
     ]
   end
 
-  def skip_href(log = nil)
-    return unless log
-
-    "/#{log.log_type.dasherize}s/#{log.id}/first-time-property-let-as-social-housing"
-  end
-
-  QUESTION_NUMBER_FROM_YEAR = { 2024 => 12, 2025 => 12 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2024 => 12, 2025 => 16 }.freeze
 end

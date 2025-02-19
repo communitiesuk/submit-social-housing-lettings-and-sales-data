@@ -17,5 +17,5 @@ class Form::Lettings::Pages::AddressFallback < ::Form::Page
     ]
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2024 => 13, 2025 => 13 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2024 => 13, 2025 => 17 }.freeze
 end
