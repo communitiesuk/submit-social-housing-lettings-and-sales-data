@@ -12,15 +12,9 @@ class Form::Lettings::Questions::AddressSearch < ::Form::Question
 
   def answer_options(log = nil, _user = nil)
     return {} unless ActiveRecord::Base.connected?
-    return {} unless log&.address_options
+    return {} unless log&.address_options&.any?
 
-    answer_opts = {}
-
-    (0...[log.address_options.count, 10].min).each do |i|
-      answer_opts[log.address_options[i][:uprn]] = { "value" => log.address_options[i][:address] }
-    end
-
-    answer_opts
+    { log.address_options.first[:uprn] => { "value" => log.address_options.first[:address] } }
   end
 
   def get_extra_check_answer_value(log)
