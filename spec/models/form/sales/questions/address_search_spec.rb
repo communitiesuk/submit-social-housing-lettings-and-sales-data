@@ -5,7 +5,8 @@ RSpec.describe Form::Sales::Questions::AddressSearch, type: :model do
 
   let(:question_id) { nil }
   let(:question_definition) { nil }
-  let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2025, 4, 1)))) }
+  let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, form: instance_double(Form, start_date:))) }
+  let(:start_date) { Time.utc(2024, 4, 1) }
 
   it "has correct page" do
     expect(question.page).to eq(page)
@@ -19,8 +20,16 @@ RSpec.describe Form::Sales::Questions::AddressSearch, type: :model do
     expect(question.type).to eq("address_search")
   end
 
-  it "has the correct question_number" do
+  it "has the correct question number" do
     expect(question.question_number).to eq(15)
+  end
+
+  context "with 2025/26 form" do
+    let(:start_date) { Time.utc(2025, 4, 1) }
+
+    it "has the correct question number" do
+      expect(question.question_number).to eq(13)
+    end
   end
 
   describe "get_extra_check_answer_value" do

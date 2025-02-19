@@ -5,7 +5,8 @@ RSpec.describe Form::Sales::Pages::AddressSearch, type: :model do
 
   let(:page_id) { nil }
   let(:page_definition) { nil }
-  let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date: Time.zone.local(2025, 4, 1))) }
+  let(:subsection) { instance_double(Form::Subsection, form: instance_double(Form, start_date:)) }
+  let(:start_date) { Time.utc(2024, 4, 1) }
 
   it "has correct subsection" do
     expect(page.subsection).to eq(subsection)
@@ -27,7 +28,15 @@ RSpec.describe Form::Sales::Pages::AddressSearch, type: :model do
     expect(page.depends_on).to eq([{ "manual_address_entry_selected" => false }])
   end
 
-  it "has the correct question_number" do
+  it "has the correct question number" do
     expect(page.question_number).to eq(15)
+  end
+
+  context "with 2025/26 form" do
+    let(:start_date) { Time.utc(2025, 4, 1) }
+
+    it "has the correct question number" do
+      expect(page.question_number).to eq(13)
+    end
   end
 end
