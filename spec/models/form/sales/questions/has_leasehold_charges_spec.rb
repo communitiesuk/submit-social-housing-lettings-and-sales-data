@@ -3,9 +3,10 @@ require "rails_helper"
 RSpec.describe Form::Sales::Questions::HasLeaseholdCharges, type: :model do
   subject(:question) { described_class.new(question_id, question_definition, page, ownershipsch: 1) }
 
+  let(:form) { instance_double(Form, start_date: Time.zone.local(2025, 4, 4)) }
   let(:question_id) { nil }
   let(:question_definition) { nil }
-  let(:page) { instance_double(Form::Page) }
+  let(:page) { instance_double(Form::Page, subsection: instance_double(Form::Subsection, id: "shared_ownership", form:)) }
 
   it "has correct page" do
     expect(question.page).to eq(page)

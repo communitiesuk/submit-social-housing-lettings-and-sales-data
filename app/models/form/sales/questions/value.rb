@@ -8,9 +8,11 @@ class Form::Sales::Questions::Value < ::Form::Question
     @step = 1
     @width = 5
     @prefix = "£"
-    @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
+    @question_number = question_number_from_year[form.start_date.year] || question_number_from_year[question_number_from_year.keys.max]
     @top_guidance_partial = "financial_calculations_shared_ownership"
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 88, 2024 => 89 }.freeze
+  def question_number_from_year
+    { 2023 => 88, 2024 => 89, 2025 => subsection.id == "shared_ownership_staircasing_transaction" ? 97 : 80 }
+  end
 end

@@ -10,5 +10,5 @@ class Form::Sales::Questions::TownOrCity < ::Form::Question
     @hide_question_number_on_page = true
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 15, 2024 => 16 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 15, 2024 => 16, 2025 => 14 }.freeze
 end

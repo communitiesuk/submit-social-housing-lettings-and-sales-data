@@ -16,5 +16,5 @@ class Form::Sales::Questions::HousingBenefits < ::Form::Question
     "4" => { "value" => "Don’t know " },
   }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 71, 2024 => 73 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 71, 2024 => 73, 2025 => 70 }.freeze
 end

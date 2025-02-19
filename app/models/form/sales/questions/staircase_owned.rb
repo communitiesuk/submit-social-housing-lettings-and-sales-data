@@ -12,5 +12,5 @@ class Form::Sales::Questions::StaircaseOwned < ::Form::Question
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 78, 2024 => 80 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 78, 2024 => 80, 2025 => 91 }.freeze
 end

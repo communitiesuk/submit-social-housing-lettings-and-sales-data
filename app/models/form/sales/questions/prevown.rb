@@ -14,5 +14,5 @@ class Form::Sales::Questions::Prevown < ::Form::Question
     "3" => { "value" => "Don’t know" },
   }.freeze
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 73, 2024 => 75 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 73, 2024 => 75, 2025 => 72 }.freeze
 end
