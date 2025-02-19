@@ -1,0 +1,60 @@
+en:
+  validations:
+    lettings:
+      2025:
+        bulk_upload:
+          not_answered: "You must answer %{question}"
+          invalid_option: "Enter a valid value for %{question}"
+          invalid_number: "Enter a number for %{question}"
+          spreadsheet_dupe: "This is a duplicate of a log in your file."
+          duplicate: "This is a duplicate log."
+          blank_file: "Template is blank - The template must be filled in for us to create the logs and check if data is correct."
+          wrong_template:
+            wrong_template: "Incorrect start dates, please ensure you have used the correct template."
+            no_headers: "Your file does not contain the required header rows. Add or check the header rows and upload your file again. [Read more about using the template headers](%{guidance_link})."
+            wrong_field_numbers_count: "Incorrect number of fields, please ensure you have used the correct template."
+            over_max_column_count: "Too many columns, please ensure you have used the correct template."
+          owning_organisation:
+            not_found: "The owning organisation code is incorrect."
+            not_stock_owner: "The owning organisation code provided is for an organisation that does not own stock."
+            not_permitted:
+              not_support: "You do not have permission to add logs for this owning organisation."
+              support: "This owning organisation is not affiliated with %{org_name}."
+          managing_organisation:
+            no_relationship: "This managing organisation does not have a relationship with the owning organisation."
+            not_found: "The managing organisation code is incorrect."
+          assigned_to:
+            not_found: "User with the specified email could not be found."
+            organisation_not_related: "User must be related to owning organisation or managing organisation."
+          startdate:
+            outside_collection_window: "Enter a date within the %{year_combo} collection year, which is between 1st April %{start_year} and 31st March %{end_year}."
+            year_not_two_or_four_digits: "Tenancy start year must be 2 or 4 digits."
+          housingneeds:
+            no_and_dont_know_disabled_needs_conjunction: "No disabled access needs and don’t know disabled access needs cannot be selected together."
+            dont_know_disabled_needs_conjunction: "Don’t know disabled access needs can’t be selected if you have selected fully wheelchair-accessible housing, wheelchair access to essential rooms, level access housing or other disabled access needs."
+            no_disabled_needs_conjunction: "No disabled access needs can’t be selected if you have selected fully wheelchair-accessible housing, wheelchair access to essential rooms, level access housing or other disabled access needs."
+          housingneeds_type:
+            only_one_option_permitted: "Only one disabled access need: fully wheelchair-accessible housing, wheelchair access to essential rooms or level access housing, can be selected."
+          condition_effects:
+            no_choices: "You cannot answer this question as you told us nobody in the household has a physical or mental health condition (or other illness) expected to last 12 months or more."
+          reason:
+            renewal_reason_needed: "The reason for leaving must be \"End of social or private sector tenancy - no fault\", \"End of social or private sector tenancy - evicted due to anti-social behaviour (ASB)\", \"End of social or private sector tenancy - evicted due to rent arrears\" or \"End of social or private sector tenancy - evicted for any other reason\"."
+          referral:
+            general_needs_prp_referred_by_la: "The source of the referral cannot be referred by local authority housing department for a general needs log."
+            nominated_by_local_ha_but_la: "The source of the referral cannot be Nominated by local housing authority as your organisation is a local authority."
+          scheme:
+            must_relate_to_org: "This scheme code does not belong to the owning organisation or managing organisation."
+          location:
+            must_relate_to_org: "Location code must relate to a location that is owned by the owning organisation or managing organisation."
+          age:
+            invalid: "Age of person %{person_num} must be a number or the letter R"
+          address:
+            not_found: "We could not find this address. Check the address data in your CSV file is correct and complete, or find the correct address in the service."
+            not_determined:
+              one: "There is a possible match for this address which doesn't look right. Check the address data in your CSV file is correct and complete, or confirm the address in the service."
+              multiple: "There are multiple matches for this address. Check the address data in your CSV file is correct and complete, or select the correct address in the service."
+            not_answered: "Enter either the UPRN or the full address."
+          nationality:
+            invalid: "Select a valid nationality."
+          charges:
+            missing_charges: "Please enter the %{sentence_fragment}. If there is no %{sentence_fragment}, please enter '0'."

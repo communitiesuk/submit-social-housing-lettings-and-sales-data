@@ -42,8 +42,8 @@ class CreateLogActionsComponent < ViewComponent::Base
     send("create_setup_test_#{log_type}_log_path")
   end
 
-  def create_2024_test_bulk_upload_href
-    send("create_2024_test_#{log_type}_bulk_upload_path")
+  def create_test_bulk_upload_href(year)
+    send("create_#{year}_test_#{log_type}_bulk_upload_path")
   end
 
   def view_uploads_button_copy
