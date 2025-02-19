@@ -42,8 +42,8 @@ en:
             page_header: ""
             check_answer_label: "Purchase made under ownership scheme"
             check_answer_prompt: "Tell us if purchase made under ownership scheme"
-            hint_text: ""
-            question_text: "Was this purchase made through an ownership scheme?"
+            hint_text: "Sales logs are not required for outright and other sales."
+            question_text: "Select the type of sale"
 
           staircasing:
             page_header: ""
