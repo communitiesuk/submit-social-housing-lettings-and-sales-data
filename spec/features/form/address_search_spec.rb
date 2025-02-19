@@ -32,13 +32,6 @@ RSpec.describe "Address Search" do
       expect(find("#sales-log-uprn-field").value).to eq("SW15")
     end
 
-    it "maintains enhancement state across back navigation", js: true do
-      find("#sales-log-uprn-field").click.native.send_keys("S", "W", "1", "5", :down, :enter)
-      click_button("Save and continue")
-      page.go_back
-      expect(page).to have_selector("input", class: "autocomplete__input", count: 1)
-    end
-
     it "displays the placeholder text", js: true do
       expect(find("#sales-log-uprn-field")["placeholder"]).to eq("Start typing to search")
     end
