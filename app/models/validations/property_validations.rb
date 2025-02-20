@@ -34,9 +34,14 @@ module Validations::PropertyValidations
   def validate_uprn(record)
     return unless record.uprn
 
-    return if record.uprn.match?(/^[0-9]{1,12}$/)
+    unless record.uprn.match?(/^[0-9]{1,12}$/)
+      record.errors.add :uprn, I18n.t("validations.lettings.property.uprn.invalid")
+      return
+    end
 
-    record.errors.add :uprn, I18n.t("validations.lettings.property.uprn.invalid")
+    unless record.la.in?(LocalAuthority.england.pluck(:code))
+      record.errors.add :uprn, I18n.t("validations.lettings.property.uprn.not_in_england")
+    end
   end
 
   def validate_property_postcode(record)
