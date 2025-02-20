@@ -1155,6 +1155,21 @@ RSpec.describe LettingsLogsController, type: :request do
                 expect(lettings_log.status).to eq("completed")
                 expect(page).to have_link("review and make changes to this log", href: "/lettings-logs/#{lettings_log.id}/review")
               end
+
+              it "does not show guidance link" do
+                expect(page).not_to have_content("Guidance for submitting social housing lettings and sales data (opens in a new tab)")
+              end
+            end
+
+            context "and the log is not started" do
+              let(:lettings_log) { create(:lettings_log, status: "not_started", assigned_to: user) }
+
+              it "shows guidance link" do
+                allow(Time.zone).to receive(:now).and_return(lettings_log.form.edit_end_date - 1.day)
+                get lettings_log_path(lettings_log)
+                expect(lettings_log.status).to eq("not_started")
+                expect(page).to have_content("Guidance for submitting social housing lettings and sales data (opens in a new tab)")
+              end
             end
 
             context "with bulk_upload_id filter" do
