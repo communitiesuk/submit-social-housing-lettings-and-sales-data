@@ -755,6 +755,7 @@ private
       dont_know_selected = field_111 == 1
 
       if selected_reasons.positive? && dont_know_selected
+        block_log_creation!
         errors.add(:field_111, I18n.t("#{ERROR_BASE_KEY}.reasonpref.conflict"))
       end
     end
