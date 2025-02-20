@@ -27,7 +27,7 @@ RSpec.describe BulkUpload::Sales::Year2025::CsvParser do
     end
 
     it "parses csv correctly" do
-      expect(service.row_parsers[0].field_22).to eql(log.uprn)
+      expect(service.row_parsers[0].field_19).to eql(log.uprn)
     end
 
     it "counts the number of valid field numbers correctly" do
@@ -59,7 +59,7 @@ RSpec.describe BulkUpload::Sales::Year2025::CsvParser do
     end
 
     it "parses csv correctly" do
-      expect(service.row_parsers[0].field_22).to eql(log.uprn)
+      expect(service.row_parsers[0].field_19).to eql(log.uprn)
     end
 
     it "counts the number of valid field numbers correctly" do
@@ -92,7 +92,7 @@ RSpec.describe BulkUpload::Sales::Year2025::CsvParser do
     end
 
     it "parses csv correctly" do
-      expect(service.row_parsers[0].field_22).to eql(log.uprn)
+      expect(service.row_parsers[0].field_19).to eql(log.uprn)
     end
   end
 
@@ -112,7 +112,7 @@ RSpec.describe BulkUpload::Sales::Year2025::CsvParser do
     end
 
     it "parses csv correctly" do
-      expect(service.row_parsers[0].field_22).to eql(log.uprn)
+      expect(service.row_parsers[0].field_19).to eql(log.uprn)
     end
   end
 
@@ -129,7 +129,7 @@ RSpec.describe BulkUpload::Sales::Year2025::CsvParser do
     end
 
     it "parses csv correctly" do
-      expect(service.row_parsers[0].field_22).to eql(log.uprn)
+      expect(service.row_parsers[0].field_19).to eql(log.uprn)
     end
   end
 
@@ -146,7 +146,7 @@ RSpec.describe BulkUpload::Sales::Year2025::CsvParser do
     end
 
     it "parses csv correctly" do
-      expect(service.row_parsers[0].field_22).to eql(log.uprn)
+      expect(service.row_parsers[0].field_19).to eql(log.uprn)
     end
   end
 
@@ -185,7 +185,7 @@ RSpec.describe BulkUpload::Sales::Year2025::CsvParser do
     end
 
     it "parses csv correctly" do
-      expect(service.row_parsers[0].field_22).to eql(log.uprn)
+      expect(service.row_parsers[0].field_19).to eql(log.uprn)
     end
   end
 end
