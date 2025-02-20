@@ -15,5 +15,5 @@ class Form::Lettings::Questions::Pscharge4Weekly < ::Form::Question
     @question_number = QUESTION_NUMBER_FROM_YEAR[form.start_date.year] || QUESTION_NUMBER_FROM_YEAR[QUESTION_NUMBER_FROM_YEAR.keys.max]
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 97, 2024 => 96 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 97, 2024 => 96, 2025 => 94 }.freeze
 end

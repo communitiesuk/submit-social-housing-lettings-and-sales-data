@@ -35,5 +35,5 @@ class Form::Lettings::Questions::Uprn < ::Form::Question
     "\n\n#{value.join("\n")}"
   end
 
-  QUESTION_NUMBER_FROM_YEAR = { 2023 => 11, 2024 => 12 }.freeze
+  QUESTION_NUMBER_FROM_YEAR = { 2023 => 11, 2024 => 12, 2025 => 16 }.freeze
 end
